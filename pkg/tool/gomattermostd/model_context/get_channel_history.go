@@ -2,12 +2,12 @@ package model_context
 
 import (
 	"context"
+	"fmt"
 	"github.com/funtimecoding/go-library/pkg/chat/mattermost/post"
 	"github.com/funtimecoding/go-library/pkg/generative/mark/response"
 	"github.com/funtimecoding/go-library/pkg/tool/gomattermostd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mattermost/mattermost/server/public/model"
-	"time"
 )
 
 func (s *Server) GetChannelHistory(
@@ -45,6 +45,7 @@ func (s *Server) GetChannelHistory(
 
 	var posts []*post.Post
 	var g error
+	truncated := 0
 
 	if a.Since != "" {
 		since, f := parseSince(a.Since)
@@ -61,17 +62,16 @@ func (s *Server) GetChannelHistory(
 		if g != nil {
 			return s.captureDetail(g)
 		}
+
+		if len(posts) > limit {
+			truncated = len(posts) - limit
+			posts = posts[truncated:]
+		}
 	} else {
-		posts, g = s.client.PostsBefore(ch, time.Now(), limit)
+		posts, g = s.client.LatestPosts(ch, limit)
 
 		if g != nil {
 			return s.captureDetail(g)
-		}
-
-		h := s.client.Enrich(posts)
-
-		if h != nil {
-			return s.captureDetail(h)
 		}
 	}
 
@@ -107,10 +107,19 @@ func (s *Server) GetChannelHistory(
 		rows[i] = r
 	}
 
-	return response.SuccessAny(
-		map[string]any{
-			"posts":    rows,
-			"per_page": limit,
-		},
-	)
+	result := map[string]any{
+		"posts": rows,
+		"limit": limit,
+	}
+
+	if truncated > 0 {
+		result["note"] = fmt.Sprintf(
+			"showing the newest %d of %d posts since %s — narrow since or raise limit for more",
+			limit,
+			limit+truncated,
+			a.Since,
+		)
+	}
+
+	return response.SuccessAny(result)
 }

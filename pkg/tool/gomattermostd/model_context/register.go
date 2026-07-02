@@ -200,13 +200,15 @@ func (s *Server) register() {
 			),
 			mcp.WithNumber(
 				"limit",
-				mcp.Description("Number of messages (default 30)"),
+				mcp.Description(
+					"Number of messages (default 30). Also caps since results, keeping the newest.",
+				),
 				mcp.DefaultNumber(30),
 			),
 			mcp.WithString(
 				"since",
 				mcp.Description(
-					"Only messages since this time (e.g. \"2026-04-22 15:00\"). Overrides limit.",
+					"Only messages since this time (e.g. \"2026-04-22 15:00\").",
 				),
 			),
 		),

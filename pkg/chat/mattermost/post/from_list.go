@@ -8,7 +8,15 @@ func FromList(
 ) []*model.Post {
 	var result []*model.Post
 
-	for _, v := range l.Posts {
+	// Posts also contains thread-parent posts that are not part of
+	// the requested page — only Order reflects the page itself.
+	for _, identifier := range l.Order {
+		v, found := l.Posts[identifier]
+
+		if !found {
+			continue
+		}
+
 		result = append(result, v)
 	}
 

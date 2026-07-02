@@ -7,9 +7,10 @@ import (
 )
 
 func main() {
-	mattermost.Before()
+	mattermost.Latest()
 
 	if false {
+		mattermost.Before()
 		discord.DeleteLoop()
 		mattermost.Team()
 		mattermost.Dialog()
