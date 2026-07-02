@@ -3,6 +3,7 @@ package main
 import (
 	confluence "github.com/funtimecoding/go-library/pkg/atlassian/confluence/example"
 	jira "github.com/funtimecoding/go-library/pkg/atlassian/jira/example"
+	"github.com/funtimecoding/go-library/pkg/atlassian/jira/example/search"
 	"github.com/funtimecoding/go-library/pkg/atlassian/jira/example/token_check"
 	opsgenie "github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/example"
 )
@@ -22,7 +23,7 @@ func main() {
 		confluence.User()
 		jira.Customer()
 		jira.Issue()
-		jira.Search()
+		search.Search()
 		jira.Watch()
 		jira.CustomValue()
 		token_check.TokenCheck()

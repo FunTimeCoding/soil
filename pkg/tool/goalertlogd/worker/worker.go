@@ -1,6 +1,7 @@
 package worker
 
 import (
+	"github.com/funtimecoding/go-library/pkg/errors/sentry/recovery"
 	"github.com/funtimecoding/go-library/pkg/log/logger"
 	"github.com/funtimecoding/go-library/pkg/tool/goalertlogd/store"
 	"github.com/prometheus/client_golang/prometheus"
@@ -12,6 +13,7 @@ type Worker struct {
 	client    AlertSource
 	store     *store.Store
 	logger    *logger.Logger
+	recovery  *recovery.Recovery
 	interval  time.Duration
 	retention time.Duration
 	firing    map[string]string

@@ -2,13 +2,8 @@
 
 package main
 
-import (
-	"fmt"
-	"github.com/getlantern/systray"
-)
+import "github.com/funtimecoding/go-library/pkg/systray/example/tray"
 
 func main() {
-	fmt.Println("Start")
-	systray.Run(onReady, onExit)
-	fmt.Println("After run")
+	tray.Tray()
 }

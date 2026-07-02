@@ -18,7 +18,9 @@ func describeTable(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			p := &client.DescribeTableParams{Instance: instance}
+			p := &client.DescribeTableParams{
+				Instance: instancePointer(instance),
+			}
 
 			if schema != "" {
 				p.Schema = &schema
@@ -37,7 +39,7 @@ func describeTable(c *client.Client) *cobra.Command {
 		&instance,
 		"instance",
 		"",
-		"Instance name (required)",
+		"Instance name (optional when only one instance is configured)",
 	)
 	result.Flags().StringVar(
 		&schema,
@@ -45,7 +47,6 @@ func describeTable(c *client.Client) *cobra.Command {
 		"",
 		"Schema name (default: public)",
 	)
-	errors.PanicOnError(result.MarkFlagRequired("instance"))
 
 	return result
 }

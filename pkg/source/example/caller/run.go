@@ -1,10 +1,10 @@
 package caller
 
-import "github.com/funtimecoding/go-library/pkg/source/example"
+import "github.com/funtimecoding/go-library/pkg/source/example/target"
 
 func Run(name string) string {
-	if example.IsValid(name) {
-		return example.Check(name)
+	if target.IsValid(name) {
+		return target.Check(name)
 	}
 
 	return ""

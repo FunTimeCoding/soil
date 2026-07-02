@@ -17,7 +17,7 @@ func (s *Server) resolveDirectory(x context.Context) (string, error) {
 
 	if !okay {
 		return "", fmt.Errorf(
-			"no active module — call use_module first",
+			"no active module - call use_module first",
 		)
 	}
 

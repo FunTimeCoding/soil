@@ -19,7 +19,7 @@ func listIndexes(c *client.Client) *cobra.Command {
 			_ []string,
 		) {
 			p := &client.ListIndexesParams{
-				Instance: instance,
+				Instance: instancePointer(instance),
 				Table:    table,
 			}
 
@@ -36,7 +36,7 @@ func listIndexes(c *client.Client) *cobra.Command {
 		&instance,
 		"instance",
 		"",
-		"Instance name (required)",
+		"Instance name (optional when only one instance is configured)",
 	)
 	result.Flags().StringVar(
 		&table,
@@ -50,7 +50,6 @@ func listIndexes(c *client.Client) *cobra.Command {
 		"",
 		"Schema name (default: public)",
 	)
-	errors.PanicOnError(result.MarkFlagRequired("instance"))
 	errors.PanicOnError(result.MarkFlagRequired("table"))
 
 	return result

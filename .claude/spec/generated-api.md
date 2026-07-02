@@ -63,15 +63,13 @@ Run via taskfile:
 ```yaml
 generate:
   cmds:
-  - cd pkg/<service>/generated/server && oapi-codegen --config config.yaml openapi.yaml
   - cd pkg/<service>/generated/client && oapi-codegen --config config.yaml ../server/openapi.yaml
+  - cd pkg/<service>/generated/server && oapi-codegen --config config.yaml openapi.yaml
 ```
 
-Add generated files to golint skip list:
-```yaml
-lint:
-  cmds: ['golint --fix --skip tmp,pkg/<service>/generated/server/generated.go,pkg/<service>/generated/client/generated.go']
-```
+No lint exclusions needed - the lint tools skip generated files
+automatically by detecting the `Code generated ... DO NOT EDIT.`
+header.
 
 ## Implementing the Server
 
@@ -123,11 +121,41 @@ func (s *Server) GetIssue(
 }
 ```
 
+## CLI Access
+
+Multi-command CLIs call the generated client directly. `Main()`
+constructs it once and hands it to every subcommand:
+
+```go
+v, e := client.NewClient(
+    locator.New(
+        environment.Fallback(constant.HostEnvironment, web.Localhost),
+    ).Port(web.ListenPort).Insecure().String(),
+)
+errors.PanicOnError(e)
+o.AddCommand(listItems(v))
+```
+
+Each subcommand builds its typed request and prints the response - a
+hand-written pass-through method per operation would add code without
+behavior. Don't write wrapper methods just to hide generated types
+from the CLI.
+
 ## Client Wrapper
 
-The `client/` package wraps the generated REST client, giving the CLI
-a clean interface independent of generated types. This is the internal
-REST client - it talks to our own daemon, not to a third-party service.
+The `client/` package wraps the generated REST client with a clean
+interface independent of generated types. This is the internal REST
+client - it talks to our own daemon, not to a third-party service.
+It earns its existence when there is a consumer the raw generated
+client doesn't serve well:
+
+- **Daemon-to-daemon calls** - a service layer in one daemon calling
+  another daemon wants domain methods, not request objects
+- **Test mocks** - a `mock_client/` next to the wrapper lets
+  consumers test without a live daemon
+- **Domain formatting** - when responses should flow back into
+  domain entities with `Format()` support (the daemon bridge
+  factory pattern - see `entity-wrapper.md`)
 
 `client/client.go`:
 ```go
@@ -157,9 +185,9 @@ func (c *Client) Alerts() string {
 
 For services with a third-party upstream, the external API client lives
 at `pkg/<domain>/` (see `service-tool.md`). The `client/` wrapper and
-the external API client serve different consumers - `client/` is for the
-CLI talking to the daemon, `pkg/<domain>/` is for the daemon (and
-MCP-only services) talking to the upstream.
+the external API client serve different consumers - `client/` talks to
+our own daemon, `pkg/<domain>/` is for the daemon (and MCP-only
+services) talking to the upstream.
 
 ## Wiring into run.go
 
@@ -234,6 +262,8 @@ and the `convert/` layer.
 
 - Don't put hand-written code in `generated/` - that's machine output
 - Don't edit `generated.go` - regenerate from the spec instead
-- Don't import generated types in the CLI - use the `client/` wrapper
+- Don't write a `client/` wrapper just to hide generated types from
+  the CLI - wrappers exist for daemon-to-daemon consumers, mocks,
+  and domain formatting
 - Don't manually register routes that the spec already defines -
   let `HandlerFromMux` do it

@@ -12,19 +12,17 @@ func (s *Server) deleteSilence(
 	_ mcp.CallToolRequest,
 	a argument.DeleteSilence,
 ) (*mcp.CallToolResult, error) {
-	instance, okay := s.activeInstance(x)
-
-	if !okay {
-		return response.Fail(
-			"no instance selected - use use_instance first",
-		)
-	}
-
 	if a.ID == "" {
 		return response.Fail("id is required")
 	}
 
-	e := s.service.DeleteSilence(instance, a.ID)
+	instance, e := s.service.ResolveInstance(s.activeInstanceName(x))
+
+	if e != nil {
+		return response.Fail("%s", e)
+	}
+
+	e = s.service.DeleteSilence(instance, a.ID)
 
 	if e != nil {
 		return s.captureDetail(e)

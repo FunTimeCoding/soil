@@ -15,12 +15,10 @@ func (s *Server) listAlerts(
 	_ mcp.CallToolRequest,
 	a argument.ListAlerts,
 ) (*mcp.CallToolResult, error) {
-	instance, okay := s.activeInstance(x)
+	instance, e := s.service.ResolveInstance(s.activeInstanceName(x))
 
-	if !okay {
-		return response.Fail(
-			"no instance selected - use use_instance first",
-		)
+	if e != nil {
+		return response.Fail("%s", e)
 	}
 
 	var f *alert_filter.Filter

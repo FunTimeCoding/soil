@@ -11,7 +11,7 @@ func (s *Server) ListInstances(
 ) (server.ListInstancesResponseObject, error) {
 	var result []server.Instance
 
-	for _, i := range s.store.Instances() {
+	for _, i := range s.service.Instances() {
 		result = append(
 			result,
 			server.Instance{

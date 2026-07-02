@@ -38,7 +38,17 @@ pkg/tool/go<tool>/
 
 See `entrypoint.md` for linker variables, `Main()`, and sentry setup.
 
-`Main()` registers the `--port` flag, builds the option struct, and calls `Run()`. Sentry and argument parsing are handled per the entrypoint convention.
+Whether `Main()` registers a `--port` flag depends on where the daemon
+runs - the criterion is deployment target, not what the daemon does:
+
+**Kubernetes-only daemons** take no `--port`. `run.go` passes
+`webConstant.ListenAddress` (`":8080"`) to the lifecycle server
+directly. Pod network isolation means the fixed port never collides.
+
+**Local daemons** (run on the workstation via the Procfile, because
+they interact with local resources) register `--port` - all local
+daemons share one localhost, and each gets a unique port assignment
+in the Procfile:
 
 ```go
 a := argument.NewInstance(constant.Identity)
@@ -52,12 +62,16 @@ Run(o)
 - `web.ListenPort` (8080) is the default; override with `--port`
 - `a.RequiredInteger` reads the flag value from the scoped instance
 - Port lives in the option struct as `int`, not as a formatted address string
+- `Run()` uses `web.AddressPort(o.Port)` to format the address
+
+A Kubernetes-only daemon that later needs to run locally gains the
+flag back with a three-line change - don't add it speculatively.
 
 ## Run Function
 
 `Run(o, r)` constructs components and wires lifecycle. It receives the
 reporter from `Main()` as `face.Reporter` - not on the option struct.
-See `three-pillars.md` for the full wiring rationale.
+See `pillars.md` for the full wiring rationale.
 
 ```go
 func Run(o *option.Log, r face.Reporter) {
@@ -81,8 +95,8 @@ func Run(o *option.Log, r face.Reporter) {
 
 Key conventions:
 - Logger constructed first, threaded to workers and lifecycle
-- Reporter threaded to workers (for `withRecovery`) and recovery middleware
-- Use `WithServer(server.New(...).WithMiddleware(web.RecoveryMiddleware(r)))` — add `.WithProtected()` for plain REST servers
+- Reporter threaded to workers (for `recovery.New`) and recovery middleware
+- Use `WithServer(server.New(...).WithMiddleware(web.RecoveryMiddleware(r)))` - add `.WithProtected()` for plain REST servers
 - Server address uses `web.AddressPort(o.Port)` to format the port as `":8080"`
 - Routes registered in the `func(*http.ServeMux)` callback
 - `RunUntilSignal()` handles run, signal block, and reverse-order stop
@@ -171,9 +185,9 @@ func New(s *store.Store) *Server {
 
 **Summary strip** - `layout.WithSummary(items ...string)` renders
 a dot-separated muted line inside main. The view exposes
-`RenderPageWithSummary(w, title, path, summary, content...)` for
-pages that need dynamic summary values. The strip is absent when
-the summary slice is nil or empty.
+`RenderLivePageWithSummary` for pages that need dynamic summary
+values (alongside `RenderLivePage` for live pages without one).
+The strip is absent when the summary slice is nil or empty.
 
 **Live updates** - `layout.WithLiveEndpoint(path)` adds the htmx
 SSE extension script and `hx-ext="sse"` + `sse-connect` attributes
@@ -225,9 +239,10 @@ const (
 ### Themes
 
 Theme constants in `pkg/web/theme/constant/` are pico.css custom property
-overrides. Each service picks one in its `New`. Available palettes:
-Sentinel, Archive, Tyria. Additional palettes can be defined in downstream
-repos.
+overrides. Each service picks one in its `New`. One file per palette in
+that package (Amethyst, Archive, Cortex, Ember, Hearth, Sentinel, Slate,
+Sprout, Tangerine, Tyria - check the directory for the current set).
+Additional palettes can be defined in downstream repos.
 
 Key conventions:
 - `Server` struct holds dependencies and a `*view.View`
@@ -250,7 +265,10 @@ Long-running services come in pairs:
 | `go<tool>d` | `pkg/tool/go<tool>d/` | Daemon - lifecycle, store, HTTP server |
 | `go<tool>` | `pkg/tool/go<tool>/` | CLI - calls the daemon's REST API, prints output |
 
-The CLI tool is a thin wrapper around the domain client library (see below). After the standard entrypoint setup (see `entrypoint.md`), it calls a single method on the domain client.
+After the standard entrypoint setup (see `entrypoint.md`), the CLI
+constructs the daemon's generated REST client once and hands it to
+its subcommands - see `generated-api.md` for the access pattern and
+when a hand-written `client/` wrapper is warranted instead.
 
 ## External API Client
 
@@ -308,9 +326,11 @@ expect panics.
 
 ## Internal REST Client
 
-When a daemon exposes a REST API (via OpenAPI codegen), the CLI needs
-a clean interface to call it. This wrapper lives inside the daemon's
-tree at `<toold>/client/`, not at `pkg/<domain>/`. See
+When a daemon exposes a REST API (via OpenAPI codegen), consumers
+that want domain methods instead of generated request objects -
+other daemons, test mocks, formatting layers - use a hand-written
+wrapper inside the daemon's tree at `<toold>/client/`, not at
+`pkg/<domain>/`. CLIs call the generated client directly. See
 `generated-api.md` for the full pattern.
 
 The distinction:

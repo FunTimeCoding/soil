@@ -91,8 +91,8 @@ Constants in `status/tag/`:
 
 ```
 Age, Assignee, Category, Changes, Cluster, Comment, Concerns, Copyable,
-Dense, Description, Emoji, Filter, Fingerprint, Graph, Identifier,
-Instance, Investigate, Key, Markdown, Name, Project, Runbook,
+Dense, Description, Emoji, Filter, Fingerprint, Graph, Host, Identifier,
+Instance, Investigate, Key, Labels, Markdown, Name, Project, Runbook,
 Score, State, Status, Timestamp, Type, Usage, Wiki
 ```
 
@@ -141,7 +141,7 @@ alert-name | firing | 2h
 ## Formattable Interface
 
 ```go
-// face/formatable.go
+// face/formattable.go
 type Formattable interface {
     Format(f *option.Format) string
     Meta() *description.Description

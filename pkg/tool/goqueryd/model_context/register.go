@@ -299,7 +299,7 @@ func (s *Server) register() {
 		mcp.NewTool(
 			constant.ListMetadata,
 			mcp.WithDescription(
-				"List distinct metadata keys and value distributions for a collection. Shows which fields exist and what values they take — use before filtering to discover available metadata.",
+				"List distinct metadata keys and value distributions for a collection. Shows which fields exist and what values they take - use before filtering to discover available metadata.",
 			),
 			mcp.WithString(
 				constant.Collection,

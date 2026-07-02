@@ -32,8 +32,8 @@ type ExplainRequest struct {
 	// Analyze Run EXPLAIN ANALYZE.
 	Analyze *bool `json:"analyze,omitempty"`
 
-	// Instance Instance name.
-	Instance string `json:"instance"`
+	// Instance Instance name. Optional when only one instance is configured.
+	Instance *string `json:"instance,omitempty"`
 
 	// Sql SQL to explain.
 	Sql string `json:"sql"`
@@ -49,8 +49,8 @@ type Instance struct {
 
 // QueryRequest defines model for QueryRequest.
 type QueryRequest struct {
-	// Instance Instance name.
-	Instance string `json:"instance"`
+	// Instance Instance name. Optional when only one instance is configured.
+	Instance *string `json:"instance,omitempty"`
 
 	// Sql SQL to execute.
 	Sql string `json:"sql"`
@@ -63,8 +63,8 @@ type QueryResult struct {
 
 // ListIndexesParams defines parameters for ListIndexes.
 type ListIndexesParams struct {
-	// Instance Instance name.
-	Instance string `form:"instance" json:"instance"`
+	// Instance Instance name. Optional when only one instance is configured.
+	Instance *string `form:"instance,omitempty" json:"instance,omitempty"`
 
 	// Table Table name.
 	Table string `form:"table" json:"table"`
@@ -75,14 +75,14 @@ type ListIndexesParams struct {
 
 // ListSchemasParams defines parameters for ListSchemas.
 type ListSchemasParams struct {
-	// Instance Instance name.
-	Instance string `form:"instance" json:"instance"`
+	// Instance Instance name. Optional when only one instance is configured.
+	Instance *string `form:"instance,omitempty" json:"instance,omitempty"`
 }
 
 // TableSizesParams defines parameters for TableSizes.
 type TableSizesParams struct {
-	// Instance Instance name.
-	Instance string `form:"instance" json:"instance"`
+	// Instance Instance name. Optional when only one instance is configured.
+	Instance *string `form:"instance,omitempty" json:"instance,omitempty"`
 
 	// Schema Schema name.
 	Schema *string `form:"schema,omitempty" json:"schema,omitempty"`
@@ -90,8 +90,8 @@ type TableSizesParams struct {
 
 // ListTablesParams defines parameters for ListTables.
 type ListTablesParams struct {
-	// Instance Instance name.
-	Instance string `form:"instance" json:"instance"`
+	// Instance Instance name. Optional when only one instance is configured.
+	Instance *string `form:"instance,omitempty" json:"instance,omitempty"`
 
 	// Schema Schema name.
 	Schema *string `form:"schema,omitempty" json:"schema,omitempty"`
@@ -99,8 +99,8 @@ type ListTablesParams struct {
 
 // DescribeTableParams defines parameters for DescribeTable.
 type DescribeTableParams struct {
-	// Instance Instance name.
-	Instance string `form:"instance" json:"instance"`
+	// Instance Instance name. Optional when only one instance is configured.
+	Instance *string `form:"instance,omitempty" json:"instance,omitempty"`
 
 	// Schema Schema name.
 	Schema *string `form:"schema,omitempty" json:"schema,omitempty"`
@@ -402,12 +402,16 @@ func NewListIndexesRequest(server string, params *ListIndexesParams) (*http.Requ
 		// per the OpenAPI spec (e.g. "color=blue,black,brown").
 		var rawQueryFragments []string
 
-		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "instance", params.Instance, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
-			return nil, err
-		} else {
-			for _, qp := range strings.Split(queryFrag, "&") {
-				rawQueryFragments = append(rawQueryFragments, qp)
+		if params.Instance != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "instance", *params.Instance, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
 			}
+
 		}
 
 		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "table", params.Table, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
@@ -539,12 +543,16 @@ func NewListSchemasRequest(server string, params *ListSchemasParams) (*http.Requ
 		// per the OpenAPI spec (e.g. "color=blue,black,brown").
 		var rawQueryFragments []string
 
-		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "instance", params.Instance, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
-			return nil, err
-		} else {
-			for _, qp := range strings.Split(queryFrag, "&") {
-				rawQueryFragments = append(rawQueryFragments, qp)
+		if params.Instance != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "instance", *params.Instance, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
 			}
+
 		}
 
 		if encoded := queryValues.Encode(); encoded != "" {
@@ -589,12 +597,16 @@ func NewTableSizesRequest(server string, params *TableSizesParams) (*http.Reques
 		// per the OpenAPI spec (e.g. "color=blue,black,brown").
 		var rawQueryFragments []string
 
-		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "instance", params.Instance, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
-			return nil, err
-		} else {
-			for _, qp := range strings.Split(queryFrag, "&") {
-				rawQueryFragments = append(rawQueryFragments, qp)
+		if params.Instance != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "instance", *params.Instance, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
 			}
+
 		}
 
 		if params.Schema != nil {
@@ -651,12 +663,16 @@ func NewListTablesRequest(server string, params *ListTablesParams) (*http.Reques
 		// per the OpenAPI spec (e.g. "color=blue,black,brown").
 		var rawQueryFragments []string
 
-		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "instance", params.Instance, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
-			return nil, err
-		} else {
-			for _, qp := range strings.Split(queryFrag, "&") {
-				rawQueryFragments = append(rawQueryFragments, qp)
+		if params.Instance != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "instance", *params.Instance, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
 			}
+
 		}
 
 		if params.Schema != nil {
@@ -720,12 +736,16 @@ func NewDescribeTableRequest(server string, table string, params *DescribeTableP
 		// per the OpenAPI spec (e.g. "color=blue,black,brown").
 		var rawQueryFragments []string
 
-		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "instance", params.Instance, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
-			return nil, err
-		} else {
-			for _, qp := range strings.Split(queryFrag, "&") {
-				rawQueryFragments = append(rawQueryFragments, qp)
+		if params.Instance != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "instance", *params.Instance, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
 			}
+
 		}
 
 		if params.Schema != nil {

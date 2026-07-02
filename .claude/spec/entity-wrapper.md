@@ -209,7 +209,8 @@ func NewSlice(v []*gitlab.Job) []*Job {
 When a CLI calls a daemon's REST API instead of the upstream
 directly, the generated client returns its own types (e.g.
 `client.Link`). A `FromDaemon()` constructor maps these back
-to domain types so `Format()` stays available:
+to domain types so `Format()` stays available. (No implementation
+in go-library yet - the pattern lives in downstream repos.)
 
 ```go
 package link
@@ -232,7 +233,8 @@ The `host` parameter enables `Format()` to build clickable URLs.
 ### Page Type (`page/page.go`)
 
 When an upstream API paginates, expose page-level access via a
-generic page type alongside the fetch-all methods:
+generic page type alongside the fetch-all methods (like
+`FromDaemon`, currently implemented in downstream repos):
 
 ```go
 package page

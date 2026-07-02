@@ -8,29 +8,32 @@ import (
 )
 
 func (s *Server) register() {
-	s.server.AddTool(
-		mcp.NewTool(
-			constant.ListInstances,
-			mcp.WithDescription(
-				"List all configured Prometheus instances. Shows which instance is currently active.",
+	if len(s.service.Instances()) > 1 {
+		s.server.AddTool(
+			mcp.NewTool(
+				constant.ListInstances,
+				mcp.WithDescription(
+					"List all configured Prometheus instances. Shows which instance is currently active.",
+				),
 			),
-		),
-		mcp.NewTypedToolHandler(s.listInstances),
-	)
-	s.server.AddTool(
-		mcp.NewTool(
-			constant.UseInstance,
-			mcp.WithDescription(
-				"Set the active Prometheus instance for this session. Required before using any query tool.",
+			mcp.NewTypedToolHandler(s.listInstances),
+		)
+		s.server.AddTool(
+			mcp.NewTool(
+				constant.UseInstance,
+				mcp.WithDescription(
+					"Set the active Prometheus instance for this session. Required before using any query tool.",
+				),
+				mcp.WithString(
+					"instance",
+					mcp.Required(),
+					mcp.Description("Instance name from list_instances"),
+				),
 			),
-			mcp.WithString(
-				"instance",
-				mcp.Required(),
-				mcp.Description("Instance name from list_instances"),
-			),
-		),
-		mcp.NewTypedToolHandler(s.useInstance),
-	)
+			mcp.NewTypedToolHandler(s.useInstance),
+		)
+	}
+
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.Query,

@@ -1,7 +1,7 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/example"
+import "github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/example/notify"
 
 func main() {
-	example.Notify()
+	notify.Notify()
 }

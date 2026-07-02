@@ -15,12 +15,10 @@ func (s *Server) queryRules(
 	_ mcp.CallToolRequest,
 	a argument.QueryRules,
 ) (*mcp.CallToolResult, error) {
-	instance, okay := s.activeInstance(x)
+	instance, e := s.service.ResolveInstance(s.activeInstanceName(x))
 
-	if !okay {
-		return response.Fail(
-			"no instance selected - use use_instance first",
-		)
+	if e != nil {
+		return response.Fail("%s", e)
 	}
 
 	v, e := s.service.Rules(instance)

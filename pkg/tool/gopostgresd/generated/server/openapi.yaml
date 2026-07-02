@@ -78,10 +78,10 @@ paths:
       parameters:
       - name: instance
         in: query
-        required: true
+        required: false
         schema:
           type: string
-        description: Instance name.
+        description: Instance name. Optional when only one instance is configured.
       responses:
         "200":
           description: Schemas in the database.
@@ -107,10 +107,10 @@ paths:
       parameters:
       - name: instance
         in: query
-        required: true
+        required: false
         schema:
           type: string
-        description: Instance name.
+        description: Instance name. Optional when only one instance is configured.
       - name: schema
         in: query
         required: false
@@ -149,10 +149,10 @@ paths:
         description: Table name.
       - name: instance
         in: query
-        required: true
+        required: false
         schema:
           type: string
-        description: Instance name.
+        description: Instance name. Optional when only one instance is configured.
       - name: schema
         in: query
         required: false
@@ -185,10 +185,10 @@ paths:
       parameters:
       - name: instance
         in: query
-        required: true
+        required: false
         schema:
           type: string
-        description: Instance name.
+        description: Instance name. Optional when only one instance is configured.
       - name: table
         in: query
         required: true
@@ -227,10 +227,10 @@ paths:
       parameters:
       - name: instance
         in: query
-        required: true
+        required: false
         schema:
           type: string
-        description: Instance name.
+        description: Instance name. Optional when only one instance is configured.
       - name: schema
         in: query
         required: false
@@ -278,24 +278,22 @@ components:
     QueryRequest:
       type: object
       required:
-      - instance
       - sql
       properties:
         instance:
           type: string
-          description: Instance name.
+          description: Instance name. Optional when only one instance is configured.
         sql:
           type: string
           description: SQL to execute.
     ExplainRequest:
       type: object
       required:
-      - instance
       - sql
       properties:
         instance:
           type: string
-          description: Instance name.
+          description: Instance name. Optional when only one instance is configured.
         sql:
           type: string
           description: SQL to explain.

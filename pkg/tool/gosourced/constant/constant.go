@@ -7,7 +7,7 @@ var Identity = identity.New(
 	"Go source transformation daemon",
 	"gosourced",
 ).WithInstructions(
-	"Go source transformation daemon. AST-based rewriting for visibility changes, imports, package moves, and symbol renames. Multi-module — call list_modules and use_module before other operations.",
+	"Go source transformation daemon. AST-based rewriting for visibility changes, imports, package moves, and symbol renames. Multi-module - call list_modules and use_module before other operations.",
 )
 
 const (

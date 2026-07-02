@@ -1,7 +1,15 @@
 # Naming Conventions
 
 Enforced by the `goanalyze` naming analyzer (`pkg/lint/analyzer/naming/`). Auto-fixed by `gofix`.
-Banned segments cause a lint error; this spec documents the resolution pattern for each.
+
+The full banned-segment list lives in `pkg/lint/segment/` - `suggestions.go`
+(~50 abbreviations with letter/word replacements: `id`, `url`, `mcp`, `dir`,
+`src`, `ctx`, `msg`, `req`, `json`, `cfg`, `err`, `val`, `args`, `opt`, ...)
+and `no_suggestion.go` (banned with no auto-suggestion: `handler`, `data`,
+`info`). That code is the source of truth; don't duplicate it here.
+
+Banned segments cause a lint error; this spec documents the resolution
+pattern for the segments where the fix isn't a mechanical replacement.
 
 ## Banned segments and replacements
 

@@ -38,8 +38,8 @@ type ExplainRequest struct {
 	// Analyze Run EXPLAIN ANALYZE.
 	Analyze *bool `json:"analyze,omitempty"`
 
-	// Instance Instance name.
-	Instance string `json:"instance"`
+	// Instance Instance name. Optional when only one instance is configured.
+	Instance *string `json:"instance,omitempty"`
 
 	// Sql SQL to explain.
 	Sql string `json:"sql"`
@@ -55,8 +55,8 @@ type Instance struct {
 
 // QueryRequest defines model for QueryRequest.
 type QueryRequest struct {
-	// Instance Instance name.
-	Instance string `json:"instance"`
+	// Instance Instance name. Optional when only one instance is configured.
+	Instance *string `json:"instance,omitempty"`
 
 	// Sql SQL to execute.
 	Sql string `json:"sql"`
@@ -69,8 +69,8 @@ type QueryResult struct {
 
 // ListIndexesParams defines parameters for ListIndexes.
 type ListIndexesParams struct {
-	// Instance Instance name.
-	Instance string `form:"instance" json:"instance"`
+	// Instance Instance name. Optional when only one instance is configured.
+	Instance *string `form:"instance,omitempty" json:"instance,omitempty"`
 
 	// Table Table name.
 	Table string `form:"table" json:"table"`
@@ -81,14 +81,14 @@ type ListIndexesParams struct {
 
 // ListSchemasParams defines parameters for ListSchemas.
 type ListSchemasParams struct {
-	// Instance Instance name.
-	Instance string `form:"instance" json:"instance"`
+	// Instance Instance name. Optional when only one instance is configured.
+	Instance *string `form:"instance,omitempty" json:"instance,omitempty"`
 }
 
 // TableSizesParams defines parameters for TableSizes.
 type TableSizesParams struct {
-	// Instance Instance name.
-	Instance string `form:"instance" json:"instance"`
+	// Instance Instance name. Optional when only one instance is configured.
+	Instance *string `form:"instance,omitempty" json:"instance,omitempty"`
 
 	// Schema Schema name.
 	Schema *string `form:"schema,omitempty" json:"schema,omitempty"`
@@ -96,8 +96,8 @@ type TableSizesParams struct {
 
 // ListTablesParams defines parameters for ListTables.
 type ListTablesParams struct {
-	// Instance Instance name.
-	Instance string `form:"instance" json:"instance"`
+	// Instance Instance name. Optional when only one instance is configured.
+	Instance *string `form:"instance,omitempty" json:"instance,omitempty"`
 
 	// Schema Schema name.
 	Schema *string `form:"schema,omitempty" json:"schema,omitempty"`
@@ -105,8 +105,8 @@ type ListTablesParams struct {
 
 // DescribeTableParams defines parameters for DescribeTable.
 type DescribeTableParams struct {
-	// Instance Instance name.
-	Instance string `form:"instance" json:"instance"`
+	// Instance Instance name. Optional when only one instance is configured.
+	Instance *string `form:"instance,omitempty" json:"instance,omitempty"`
 
 	// Schema Schema name.
 	Schema *string `form:"schema,omitempty" json:"schema,omitempty"`
@@ -178,9 +178,9 @@ func (siw *ServerInterfaceWrapper) ListIndexes(w http.ResponseWriter, r *http.Re
 	// Parameter object where we will unmarshal all parameters from the context
 	var params ListIndexesParams
 
-	// ------------- Required query parameter "instance" -------------
+	// ------------- Optional query parameter "instance" -------------
 
-	err = runtime.BindQueryParameterWithOptions("form", true, true, "instance", r.URL.Query(), &params.Instance, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "instance", r.URL.Query(), &params.Instance, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
 	if err != nil {
 		var requiredError *runtime.RequiredParameterError
 		if errors.As(err, &requiredError) {
@@ -265,9 +265,9 @@ func (siw *ServerInterfaceWrapper) ListSchemas(w http.ResponseWriter, r *http.Re
 	// Parameter object where we will unmarshal all parameters from the context
 	var params ListSchemasParams
 
-	// ------------- Required query parameter "instance" -------------
+	// ------------- Optional query parameter "instance" -------------
 
-	err = runtime.BindQueryParameterWithOptions("form", true, true, "instance", r.URL.Query(), &params.Instance, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "instance", r.URL.Query(), &params.Instance, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
 	if err != nil {
 		var requiredError *runtime.RequiredParameterError
 		if errors.As(err, &requiredError) {
@@ -298,9 +298,9 @@ func (siw *ServerInterfaceWrapper) TableSizes(w http.ResponseWriter, r *http.Req
 	// Parameter object where we will unmarshal all parameters from the context
 	var params TableSizesParams
 
-	// ------------- Required query parameter "instance" -------------
+	// ------------- Optional query parameter "instance" -------------
 
-	err = runtime.BindQueryParameterWithOptions("form", true, true, "instance", r.URL.Query(), &params.Instance, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "instance", r.URL.Query(), &params.Instance, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
 	if err != nil {
 		var requiredError *runtime.RequiredParameterError
 		if errors.As(err, &requiredError) {
@@ -344,9 +344,9 @@ func (siw *ServerInterfaceWrapper) ListTables(w http.ResponseWriter, r *http.Req
 	// Parameter object where we will unmarshal all parameters from the context
 	var params ListTablesParams
 
-	// ------------- Required query parameter "instance" -------------
+	// ------------- Optional query parameter "instance" -------------
 
-	err = runtime.BindQueryParameterWithOptions("form", true, true, "instance", r.URL.Query(), &params.Instance, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "instance", r.URL.Query(), &params.Instance, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
 	if err != nil {
 		var requiredError *runtime.RequiredParameterError
 		if errors.As(err, &requiredError) {
@@ -399,9 +399,9 @@ func (siw *ServerInterfaceWrapper) DescribeTable(w http.ResponseWriter, r *http.
 	// Parameter object where we will unmarshal all parameters from the context
 	var params DescribeTableParams
 
-	// ------------- Required query parameter "instance" -------------
+	// ------------- Optional query parameter "instance" -------------
 
-	err = runtime.BindQueryParameterWithOptions("form", true, true, "instance", r.URL.Query(), &params.Instance, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "instance", r.URL.Query(), &params.Instance, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
 	if err != nil {
 		var requiredError *runtime.RequiredParameterError
 		if errors.As(err, &requiredError) {
@@ -1219,21 +1219,21 @@ func (sh *strictHandler) DescribeTable(w http.ResponseWriter, r *http.Request, t
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"7FjNbuM2EH4Vgu1Rtbz9uejmtilgwFhs4hzaLhYFLY5tLmiSJil3vYHfveCQkmVL9gaIgwR1cokgzs83",
-	"M9/MUH6gpV4ZrUB5R4sH6solrBg+3lirbXgwVhuwXgC+hvq13xqgBXXeCrWgu11GLawrYYHT4mMS+5TV",
-	"Ynr2GUpPd1m0ewfOaOXg8fYzChtQ/h/BQXkxF/BoED2avbi+GMmEuoN1Bc53gTHF5PYrIuYwZ5X0tJgz",
-	"6SCjHFxphfFCK1rQu0qRmz8/TEbj92T0fjT56++bAW0czrSWwFTwKJTzTJXJZNvEOJ0QxVbQUt4nw61l",
-	"V216OyFeE4iR9Ogd5acBEO31ZWXcwniYD848m7FYwg68pY4p7ByEgHoPjLZtDaE8LMB2IKN+sp+Usj2U",
-	"vghuK7Dbk1V9vhpAWXm4SA1SBA4pdxyA1f/GQDysIk85FwELkx9agt5W0GM6vWDWsm0HGpruAtohdeca",
-	"qyW8DGcLbbTzCwuO04xuwLqYjXeD4WAYHGkDihlBC/oTvsqoYX6JgHNmRL55lyfaYoiJPgE/C8GMOS3q",
-	"DqURJTj/q+bbIFZq5UGhBjNGihJ18s9Oq/1QC0/fW5jTgn6X76denkZeftT/u8NshPzhizi3EPiPw+HF",
-	"vLdrjK4PWZXAESOZGoR8/nxB33HS93gdqw2TgpOao+j5l0t7bnZBD4I/mJDAWw21H247FK/JIxSHL7Es",
-	"C+jhzkQ4P04ygXuWrcCDdbT4+M3GD5yk61AgWg+wdtsekiRrhd7p/GNX92wmz/vxQeJpTqYoetZLstY2",
-	"2+w4aqqZFGXPIPv0cv2QSkm0In4JBLN0nX0hhfMksb/bFBHft9qilnpiPZsVdC605kLR3T6dKEdSklKr",
-	"uVhUFvbp7sQZ2Xxyb9wmsj/H1ji4XbyunYHHxOI5Cbv8uhcHkuSYOa3vnZP9MU0yL7Y2XnDOptiJiHO2",
-	"vmhf8ahNesdEwg30gxNfzwxb3PZTFHk9V5D/4+0gXquwGIQpHoYfKXWl/JWOQKxnvCTFrPSy9/wUvI8i",
-	"b8R9duI20zYqXfGsjbTsJ2v+gP93J0n7O1qewX36gjrL254PMcP88qLfYW+98aTe+E3LaqUIh7lQ+APX",
-	"lQ5znnjdfPTi338BAAD//w==",
+	"7Fhfjxo3EP8qltvHLUv652XfaHuVkFCaO+6hbRRVZj2AI2Mb20tCTnz3ymPvsrALTVtOdw13L7eyx/P3",
+	"N7+xeaClXhmtQHlHiwfqyiWsGH7eWKtt+DBWG7BeAC5Dvey3BmhBnbdCLehul1EL60pY4LR4m8TeZbWY",
+	"nr2H0tNdFvXegTNaOfh8/RmFDSj/p+CgvJgL+Gwnek72+vXRSCbUHawrcL7rGFNMbj+hxxzmrJKeFnMm",
+	"HWSUgyutMF5oRQt6Vyly89ubyWj8moxejya//3EzoI3BmdYSmAoWhXKeqTKpbKsYpx2i2AoG5FdcZ5J8",
+	"WIIiWskt0QpIfZ4IR0qt5mJRWeAtW/vcubXsWpneTojXBGLgPeeO0hmU9GVu3IrjMGeceTZjscwdn5Y6",
+	"prmzEYLu3TDatk8I5WEBtuMnnk/606Fs70pfBLcV2O3Jyj+bOkFZefj3dUpROoTucZBWf4jBelhFvHMu",
+	"YjhvWoLeVtCjOi0wa9m24w+q7jq0wxaYa6yo8DLsLbTRzi8sOE4zugHrYgpeDYaDYTCkDShmBC3od7iU",
+	"UcP8Eh3OmRH55lWe8IwhJogF/1kIZsxpUXc6jV6C8z9qvg1ipVYeFJ5gxkhR4pn8vdNqT47h62sLc1rQ",
+	"r/I9e+aJOvMjHtkdZiPkDxci/6Hj3w6HF7PerjGaPoRSco4YydQg5PP7C9qOE6PH6lhtmBS8aQS0/MOl",
+	"LTczpceDX5iQwFtdtGe9HYrX4BGKw8dYlgX0YGcinB8nmYA9y1bgwTpavL00OQQI03WoJ605cU9FWSsz",
+	"HTY49uSezWRy44ReHyToMVD/kZEpip61krS11TajlJpqJkXZQ27vnq5dUqWJVsQvgWCWrrNtpHCepObo",
+	"9kz07++6ppb6j/VsJtS50Jo7SXc4daIcSdlqvSbdnTgjmk+OldsE9scYKgcXlOc1UnCbWNwnYdRf91xB",
+	"kBwjp/WsOtkf0yTzXKfKE9JwSg0RkYbrq/wVM3E6d4wzHFDfOPHpDBfjZWCKIv+bC8yXeLeIlzKsFWGK",
+	"B+okpa6Uv1ICxXrGK1bMSi+4z3PofRR5wfVT47rh6njoipk6orYfy/kD/t+dxPTPqHkG9+l5dhbWPa88",
+	"w/zyoo+8l9Z5zNb5SctqpQiHuVD429uVjgKeYN88uPHvrwAAAP//",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

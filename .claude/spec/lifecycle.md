@@ -68,19 +68,19 @@ lifecycle.WithServer(
 ```
 
 Builder methods on `*server.Server`:
-- `WithMiddleware(fn)` — wraps the mux handler. Typically
+- `WithMiddleware(fn)` - wraps the mux handler. Typically
   `web.RecoveryMiddleware(r)` for panic recovery + sentry.
-- `WithProtected()` — adds 10s read/write timeout (slowloris
+- `WithProtected()` - adds 10s read/write timeout (slowloris
   protection). Use for plain REST servers that don't serve
   streaming or long-lived connections.
-- `WithCertificate(cert, key)` — enables TLS. Go enables HTTP/2
+- `WithCertificate(cert, key)` - enables TLS. Go enables HTTP/2
   automatically over TLS.
-- `WithProfiling()` — registers pprof endpoints at `/debug/pprof/`.
-- `WithListener(l)` — serves on a pre-bound listener instead of
+- `WithProfiling()` - registers pprof endpoints at `/debug/pprof/`.
+- `WithListener(l)` - serves on a pre-bound listener instead of
   an address. Used in tests with `system.ClaimPort()`.
 
 Mixed servers (REST routes + MCP/SSE on the same mux) omit
-`WithProtected()` — the streaming endpoint governs the timeout.
+`WithProtected()` - the streaming endpoint governs the timeout.
 
 ## Registration Order Matters
 
@@ -121,7 +121,7 @@ func Run(o *option.Config, r face.Reporter) {
 }
 ```
 
-See `three-pillars.md` for the full wiring pattern including Main()
+See `pillars.md` for the full wiring pattern including Main()
 reporter creation.
 
 ## Adapting Existing Types

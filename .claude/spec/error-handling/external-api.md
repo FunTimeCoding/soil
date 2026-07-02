@@ -2,7 +2,7 @@
 
 Services that wrap external APIs (NetBox, Jira, Confluence, Alertmanager,
 Proxmox) encounter errors that don't fit cleanly into tier 1 or tier 2.
-A NetBox "name must be unique" is the caller's mistake — but we haven't
+A NetBox "name must be unique" is the caller's mistake - but we haven't
 seen enough of these errors to know which are safe to exclude from Sentry.
 
 **Default posture: capture everything to Sentry.** The 400/500 split
@@ -10,7 +10,7 @@ is for the caller. The Sentry capture is for us. These are independent
 decisions. An error can be a 400 to the caller (they sent a duplicate
 name) AND captured to Sentry (we want visibility into what errors our
 services encounter). Only stop capturing specific errors after they've
-been seen enough to be identified as noise — by adding sentinel-based
+been seen enough to be identified as noise - by adding sentinel-based
 exclusions, not by skipping the tier.
 
 **Upstream errors are always 500.** We haven't classified which
@@ -27,10 +27,10 @@ message is all we can offer.
 
 **The captureDetail pattern:** a per-service method that checks
 for the upstream's error types and extracts the best message.
-Returns `*server.ErrorResponse` — always 500, always Sentry.
+Returns `*server.ErrorResponse` - always 500, always Sentry.
 
 ```go
-// gonetboxd — NetBox returns GenericOpenAPIError with parseable bodies
+// gonetboxd - NetBox returns GenericOpenAPIError with parseable bodies
 func (s *Server) captureDetail(e error) *server.ErrorResponse {
     if m, okay := common.ExtractMessage(e); okay {
         return s.captureFail(e, m)
@@ -50,14 +50,14 @@ if e != nil {
 
 **MCP layer equivalent:** MCP handlers use the same `captureDetail`
 pattern but return `(*mcp.CallToolResult, error)` via `captureFail`
-+ `response.CaptureFail`. The extraction logic is identical — only
++ `response.CaptureFail`. The extraction logic is identical - only
 the return type differs.
 
 **When to add captureDetail vs just captureFail:** if the service
 wraps an external API with parseable errors, use `captureDetail`
 to extract the best message. If the service only has internal
 stores (GORM, BoltDB, pgx), use `captureFail` with
-`constant.UnexpectedError` — there's no meaningful message to
+`constant.UnexpectedError` - there's no meaningful message to
 extract for the caller.
 
 ## Sentinel classification
@@ -80,11 +80,11 @@ proven otherwise.
 
 **Two shapes for classified errors:**
 
-*Simple sentinel* — `var ErrorBrowserUnreachable = errors.New("browser unreachable")`.
+*Simple sentinel* - `var ErrorBrowserUnreachable = errors.New("browser unreachable")`.
 Fixed message, matched with `errors.Is`. Use when the message
-doesn't vary by instance — the condition is the full story.
+doesn't vary by instance - the condition is the full story.
 
-*Typed error* — a struct carrying a formatted message, matched
+*Typed error* - a struct carrying a formatted message, matched
 with `errors.As`. Use when the message needs instance context
 (which resource, which identifier). The type provides
 classification, the instance carries the specifics.
@@ -104,10 +104,10 @@ func (e *NotFoundError) Is(target error) bool {
 The dividing line: does the message need context from the call
 site? If yes, typed error. If no, simple sentinel.
 
-**Message format:** `"subject condition: identifier"` — the what
+**Message format:** `"subject condition: identifier"` - the what
 before the which. Examples: `"machine not found: 123"`,
 `"collection not found: favorites"`, `"browser unreachable"`.
 The subject tells you what failed. The identifier tells you
-which one. Construct the message where the knowledge is — the
+which one. Construct the message where the knowledge is - the
 function that did the lookup, not the handler that routes the
 response.

@@ -18,11 +18,12 @@ Design and coding specs live in `.claude/spec/`:
 - `locator.md` - fluent URL builder (`pkg/web/locator`)
 - `generated-api.md` - OpenAPI codegen pattern (generated/, client/, server/ structure)
 - `error-handling/` - error handling strategies (README for principle + strategy, leaves: mcp, rest, external-api, infrastructure)
-- `three-pillars.md` - unified service wiring: logger + sentry hub + recovery middleware
+- `pillars.md` - unified service wiring: reporter, logger, recovery, telemetry
 - `stdlib-wrappers.md` - PanicOnError wrappers for filesystem, JSON, and time stdlib calls
 - `example.md` - example code conventions (pkg/<domain>/example/, cmd/example/)
 - `fixture.md` - test fixture patterns (fixture/ at repo root, helpers, constants)
 - `model-context.md` - MCP tool exposure pattern (model_context/ subpackage, HTTP transport)
+- `multi-instance.md` - multi-backend services (inventory, service layer, instance resolution)
 - `package-design.md` - one struct with receivers per package rule (when to extract sub-packages)
 - `package-taxonomy.md` - package roles, dependency direction, and promotion criteria for growing service tools
 

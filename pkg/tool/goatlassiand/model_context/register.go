@@ -102,7 +102,7 @@ func (s *Server) register() {
 		mcp.NewTool(
 			constant.ConfluenceGetPageDraft,
 			mcp.WithDescription(
-				"Get the draft layer of a Confluence page. Confluence maintains a draft layer for every page — this always returns content, even if there are no unpublished changes. Compare against the published version (confluence_get_page) to detect actual differences.",
+				"Get the draft layer of a Confluence page. Confluence maintains a draft layer for every page - this always returns content, even if there are no unpublished changes. Compare against the published version (confluence_get_page) to detect actual differences.",
 			),
 			mcp.WithString(
 				parameter.Identifier,
@@ -216,7 +216,7 @@ func (s *Server) register() {
 		mcp.NewTool(
 			constant.ConfluenceListPages,
 			mcp.WithDescription(
-				"List pages in a Confluence space. Defaults to published pages. Set status to 'draft' to find draft pages — returns all drafts visible to the current user (the v1 API does not filter drafts by space).",
+				"List pages in a Confluence space. Defaults to published pages. Set status to 'draft' to find draft pages - returns all drafts visible to the current user (the v1 API does not filter drafts by space).",
 			),
 			mcp.WithString(
 				constant.SpaceIdentifier,
@@ -257,7 +257,7 @@ func (s *Server) register() {
 		mcp.NewTool(
 			constant.ConfluenceDeletePage,
 			mcp.WithDescription(
-				"Delete a Confluence page. For draft pages, set draft to true — draft pages are permanently deleted, not sent to trash. Draft overlays (unpublished changes on published pages) cannot be deleted via the API.",
+				"Delete a Confluence page. For draft pages, set draft to true - draft pages are permanently deleted, not sent to trash. Draft overlays (unpublished changes on published pages) cannot be deleted via the API.",
 			),
 			mcp.WithString(
 				parameter.Identifier,

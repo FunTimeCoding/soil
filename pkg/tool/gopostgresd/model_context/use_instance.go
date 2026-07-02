@@ -17,7 +17,7 @@ func (s *Server) useInstance(
 		return response.Fail("instance is required")
 	}
 
-	if _, okay := s.store.Instance(a.Instance); !okay {
+	if _, okay := s.service.Instance(a.Instance); !okay {
 		return response.Fail("unknown instance: %s", a.Instance)
 	}
 
@@ -27,7 +27,7 @@ func (s *Server) useInstance(
 		return response.Fail("no session")
 	}
 
-	s.store.SetActiveInstance(session.SessionID(), a.Instance)
+	s.service.SetActiveInstance(session.SessionID(), a.Instance)
 
 	return response.Success("active instance set to %s", a.Instance)
 }

@@ -1,6 +1,8 @@
 package worker
 
 import (
+	"github.com/funtimecoding/go-library/pkg/errors/sentry/recovery"
+	"github.com/funtimecoding/go-library/pkg/face"
 	"github.com/funtimecoding/go-library/pkg/log/logger"
 	"github.com/funtimecoding/go-library/pkg/tool/goalertlogd/store"
 	"github.com/prometheus/client_golang/prometheus"
@@ -11,23 +13,25 @@ func New(
 	a AlertSource,
 	s *store.Store,
 	l *logger.Logger,
+	r face.Reporter,
 	interval time.Duration,
 	retention time.Duration,
-	r *prometheus.Registry,
+	y *prometheus.Registry,
 ) *Worker {
 	p := &Worker{
 		client:    a,
 		store:     s,
 		logger:    l,
+		recovery:  recovery.New(l, r),
 		interval:  interval,
 		retention: retention,
 		firing:    make(map[string]string),
 		stop:      make(chan struct{}),
-		registry:  r,
+		registry:  y,
 	}
 
-	if r != nil {
-		p.metrics = newMetrics(r)
+	if y != nil {
+		p.metrics = newMetrics(y)
 	}
 
 	return p

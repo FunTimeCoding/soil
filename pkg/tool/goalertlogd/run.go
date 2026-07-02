@@ -34,6 +34,7 @@ func Run(
 		alertmanager.NewEnvironment(),
 		s,
 		g,
+		r,
 		1*time.Minute,
 		30*24*time.Hour,
 		m.Registry(),

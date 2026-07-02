@@ -16,7 +16,7 @@ func (s *Service) ResolveInstance(explicit string) (string, error) {
 	}
 
 	return "", fmt.Errorf(
-		"no instance selected — %d instances configured, selection required",
+		"no instance selected - %d instances configured, selection required",
 		len(s.inventory.Instances),
 	)
 }

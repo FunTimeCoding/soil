@@ -6,6 +6,7 @@ import (
 	anthropic "github.com/funtimecoding/go-library/pkg/generative/anthropic/example"
 	gguf "github.com/funtimecoding/go-library/pkg/generative/gguf/example"
 	langchain "github.com/funtimecoding/go-library/pkg/generative/langchain/example"
+	"github.com/funtimecoding/go-library/pkg/generative/langchain/example/function"
 	mistral "github.com/funtimecoding/go-library/pkg/generative/mistral/example"
 	anthropicServer "github.com/funtimecoding/go-library/pkg/generative/model_context/example/anthropic"
 	"github.com/funtimecoding/go-library/pkg/generative/model_context/example/mark"
@@ -45,7 +46,7 @@ func main() {
 		anthropic.Official()
 		anthropic.Alternate()
 		langchain.Chroma()
-		langchain.Function()
+		function.Function()
 		langchain.Local()
 		openWebUI.Load()
 		anthropicServer.Run()

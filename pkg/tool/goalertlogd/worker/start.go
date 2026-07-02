@@ -6,13 +6,13 @@ func (w *Worker) Start() {
 	go func() {
 		t := time.NewTicker(w.interval)
 		defer t.Stop()
-		w.RecoverStale()
-		w.Poll()
+		w.recovery.Run(w.RecoverStale)
+		w.recovery.Run(w.Poll)
 
 		for {
 			select {
 			case <-t.C:
-				w.Poll()
+				w.recovery.Run(w.Poll)
 			case <-w.stop:
 				return
 			}

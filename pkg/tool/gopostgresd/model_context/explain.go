@@ -13,16 +13,14 @@ func (s *Server) explain(
 	_ mcp.CallToolRequest,
 	a argument.Explain,
 ) (*mcp.CallToolResult, error) {
-	instance, okay := s.activeInstance(x)
-
-	if !okay {
-		return response.Fail(
-			"no instance selected - use use_instance first",
-		)
-	}
-
 	if a.SQL == "" {
 		return response.Fail("sql is required")
+	}
+
+	instance, e := s.service.ResolveInstance(s.activeInstanceName(x))
+
+	if e != nil {
+		return response.Fail("%s", e)
 	}
 
 	prefix := "EXPLAIN"
@@ -31,7 +29,7 @@ func (s *Server) explain(
 		prefix = "EXPLAIN ANALYZE"
 	}
 
-	v, e := s.store.Query(x, instance, fmt.Sprintf("%s %s", prefix, a.SQL))
+	v, e := s.service.Query(x, instance, fmt.Sprintf("%s %s", prefix, a.SQL))
 
 	if e != nil {
 		return s.captureFail(

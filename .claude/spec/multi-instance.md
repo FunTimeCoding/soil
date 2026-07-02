@@ -28,8 +28,8 @@ pkg/tool/go<tool>d/inventory/
 ```
 
 The Instance struct fields vary by service but always include
-`Name` and `Host`. Credentials belong in the instance — not in
-environment variables — so each instance authenticates independently.
+`Name` and `Host`. Credentials belong in the instance - not in
+environment variables - so each instance authenticates independently.
 
 ## Service Layer
 
@@ -41,11 +41,11 @@ session-scoped instance selection, and instance resolution.
 pkg/tool/go<tool>d/service/
 ├── service.go              # struct: inventory, clients map, sessions sync.Map, mu sync.Mutex
 ├── new.go                  # New(*Inventory) *Service
-├── client.go               # Client(instance string) — lazy creation with mutex
-├── instance.go             # Instance(name string) — lookup by name
-├── instances.go            # Instances() — full list
-├── resolve_instance.go     # ResolveInstance(explicit string) — defaulting logic
-├── active_instance.go      # ActiveInstance(sessionID string) — MCP session state
+├── client.go               # Client(instance string) - lazy creation with mutex
+├── instance.go             # Instance(name string) - lookup by name
+├── instances.go            # Instances() - full list
+├── resolve_instance.go     # ResolveInstance(explicit string) - defaulting logic
+├── active_instance.go      # ActiveInstance(sessionID string) - MCP session state
 └── set_active_instance.go  # SetActiveInstance(sessionID, instance string)
 ```
 
@@ -74,7 +74,7 @@ and credential fields.
 ### Conditional Tool Registration
 
 When exactly one instance is configured, `list_instances` and
-`use_instance` are not registered — there's nothing to list or
+`use_instance` are not registered - there's nothing to list or
 choose. When multiple instances exist, both tools appear.
 
 ```go
@@ -117,14 +117,14 @@ for both cases:
 ```
 
 When there's one instance the tool won't exist, but the instruction
-is still accurate — there's just nothing to list.
+is still accurate - there's just nothing to list.
 
 ## REST Surface
 
 The `instance` query parameter is optional in the OpenAPI spec.
 When omitted, `ResolveInstance("")` applies the same defaulting
 rule. When multiple instances exist, omitting it returns a 400
-`Error` — no Sentry, because it's a caller mistake, not
+`Error` - no Sentry, because it's a caller mistake, not
 an infrastructure failure. See `error-handling/rest.md` for the
 tier 1 vs tier 2 distinction on strict server.
 
@@ -153,5 +153,5 @@ variables. The file secret is the single source for all instance
 configuration.
 
 Sentry and telemetry environment variables remain as ConfigMap
-and Secret envFrom — they configure the daemon itself, not the
+and Secret envFrom - they configure the daemon itself, not the
 upstream connections.

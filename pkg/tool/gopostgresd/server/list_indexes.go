@@ -10,8 +10,10 @@ func (s *Server) ListIndexes(
 	c context.Context,
 	r server.ListIndexesRequestObject,
 ) (server.ListIndexesResponseObject, error) {
-	if fail, okay := s.resolveInstance(r.Params.Instance); !okay {
-		return server.ListIndexes400JSONResponse(*fail), nil
+	instance, e := s.resolveInstance(r.Params.Instance)
+
+	if e != nil {
+		return server.ListIndexes400JSONResponse(*clientError(e)), nil
 	}
 
 	schema := "public"
@@ -20,9 +22,9 @@ func (s *Server) ListIndexes(
 		schema = *r.Params.Schema
 	}
 
-	rows, e := s.store.ListIndexes(
+	rows, e := s.service.ListIndexes(
 		c,
-		r.Params.Instance,
+		instance,
 		schema,
 		r.Params.Table,
 	)

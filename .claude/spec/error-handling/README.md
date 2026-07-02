@@ -16,17 +16,13 @@ panics from the entire program. See `entrypoint.md`.
 **HTTP middleware** (`web.RecoveryMiddleware`): wraps the HTTP mux. Panics from web
 handlers are caught, reported via `r.Recover(v)`, and converted to 500 responses.
 
-**Worker goroutines**: each worker's scheduled function opens with an explicit deferred
-recover. Panics are reported via the reporter and the worker continues running (the
-loop is not killed).
+**Worker goroutines**: per-iteration work runs through the shared
+`recovery.Recovery` component (`pkg/errors/sentry/recovery`). Panics are
+reported via the reporter and the worker continues running (the loop is
+not killed).
 
 ```go
-defer func() {
-    if v := recover(); v != nil {
-        w.reporter.Recover(v)
-        w.logger.Plain("worker recovered from panic: %v", v)
-    }
-}()
+w.recovery.Run(w.poll)
 ```
 
 The reporter is never nil - `Main()` always creates one. Empty locator
@@ -88,10 +84,10 @@ error is surfaced.
 
 ## Leaves
 
-- [mcp.md](mcp.md) — MCP tiers, captureFail, captureDetail, detail_error, parseDetail
-- [rest.md](rest.md) — strict server tiers, clientError, captureFail on REST
-- [external-api.md](external-api.md) — captureDetail pattern, default posture, sentinel classification, typed errors, message format
-- [infrastructure.md](infrastructure.md) — store method rule, worker recovery, HTTP recovery, Sentry enrichment, external process, self-healing
+- [mcp.md](mcp.md) - MCP tiers, captureFail, captureDetail, detail_error, parseDetail
+- [rest.md](rest.md) - strict server tiers, clientError, captureFail on REST
+- [external-api.md](external-api.md) - captureDetail pattern, default posture, sentinel classification, typed errors, message format
+- [infrastructure.md](infrastructure.md) - store method rule, worker recovery, HTTP recovery, Sentry enrichment, external process, self-healing
 
 ## Deviations
 

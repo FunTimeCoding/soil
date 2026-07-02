@@ -293,7 +293,7 @@ generate:
 ### OpenAPI error schemas
 
 Every spec includes two error schemas, defined inline on each
-endpoint (not via `components/responses/` — those generate
+endpoint (not via `components/responses/` - those generate
 struct embeddings instead of direct type aliases, bug #1864):
 
 ```yaml
@@ -313,11 +313,11 @@ ErrorResponse:
       type: string
 ```
 
-`Error` is for 400/404 responses (tier 1 — input validation,
+`Error` is for 400/404 responses (tier 1 - input validation,
 application-level validation like missing instance selection).
 No Sentry event ID.
 
-`ErrorResponse` is for 500 responses (tier 2/3 — infrastructure
+`ErrorResponse` is for 500 responses (tier 2/3 - infrastructure
 failures). Carries the Sentry event ID so the caller can look
 up the full error.
 
@@ -364,15 +364,38 @@ The Server struct holds `reporter face.Reporter` for Sentry capture.
 
 ### REST telemetry middleware
 
-`web.TelemetryMiddleware` receives the operationID from the
-strict server generated code and records baseline telemetry:
+Telemetry is one of the four pillars - see `pillars.md` for where it
+fits in the wiring order and the design posture (required at startup,
+fire-and-forget at runtime).
+
+Each service wires an inline `StrictMiddlewareFunc` that receives
+the operationID from the strict server generated code and records
+baseline telemetry via `web.RecordTelemetry`. The closure is inline
+because each service's generated package defines its own
+`StrictHandlerFunc` type - a shared helper can't satisfy them all
+(the old `web.TelemetryMiddleware` was removed for this reason):
 
 ```go
 generated.HandlerFromMux(
     generated.NewStrictHandler(
         server.New(s, r),
         []generated.StrictMiddlewareFunc{
-            web.TelemetryMiddleware(t),
+            func(
+                f generated.StrictHandlerFunc,
+                operation string,
+            ) generated.StrictHandlerFunc {
+                return func(
+                    x context.Context,
+                    w http.ResponseWriter,
+                    r *http.Request,
+                    request any,
+                ) (any, error) {
+                    response, e := f(x, w, r, request)
+                    web.RecordTelemetry(t, operation, e)
+
+                    return response, e
+                }
+            },
         },
     ),
     m,
@@ -401,7 +424,8 @@ lifecycle.WithServer(
                 generated.NewStrictHandler(
                     server.New(s, r),
                     []generated.StrictMiddlewareFunc{
-                        web.TelemetryMiddleware(t),
+                        // inline telemetry closure - see REST
+                        // telemetry middleware above
                     },
                 ),
                 m,

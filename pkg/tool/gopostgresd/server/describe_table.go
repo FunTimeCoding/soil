@@ -10,8 +10,10 @@ func (s *Server) DescribeTable(
 	c context.Context,
 	r server.DescribeTableRequestObject,
 ) (server.DescribeTableResponseObject, error) {
-	if fail, okay := s.resolveInstance(r.Params.Instance); !okay {
-		return server.DescribeTable400JSONResponse(*fail), nil
+	instance, e := s.resolveInstance(r.Params.Instance)
+
+	if e != nil {
+		return server.DescribeTable400JSONResponse(*clientError(e)), nil
 	}
 
 	schema := "public"
@@ -20,9 +22,9 @@ func (s *Server) DescribeTable(
 		schema = *r.Params.Schema
 	}
 
-	rows, e := s.store.DescribeTable(
+	rows, e := s.service.DescribeTable(
 		c,
-		r.Params.Instance,
+		instance,
 		schema,
 		r.Table,
 	)

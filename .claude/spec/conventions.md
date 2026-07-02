@@ -68,7 +68,8 @@
   | `os.MkdirAll(path, 0755)` | `system.MakeDirectory(path)` |
   | `filepath.Rel(base, target)` | `system.RelativePath(base, target)` |
   | `r.ReadString('\n')` | `system.ReadLine(r)` |
-  | `os.Stat(path)` | `system.FileStat(path)` |
+  | `os.Stat(path)` | `system.Stat(path)` |
+| `f.Stat()` (on `*os.File`) | `system.FileStat(f)` |
   | `io.Copy(dst, src)` | `system.Copy(dst, src)` |
   | `tar.FileInfoHeader(...)` | `system.TarWriteHeader(...)` |
   | `w.Flush()` | `errors.PanicFlush(w)` |

@@ -32,9 +32,11 @@ shapes depending on whether the tool uses flat flags or subcommands.
 ### Choosing between flat flags and subcommands
 
 **Flat flags** (`argument.NewInstance` + identity): daemons and
-single-purpose tools. Daemons should always use flat flags - they
-take a port and maybe a config path, nothing more. Standalone tools
-that do one thing also use flat flags.
+single-purpose tools. Daemons should always use flat flags - a
+config path, maybe `--port`, nothing more. Whether a daemon takes
+`--port` at all depends on its deployment target - see
+`service-tool.md`. Standalone tools that do one thing also use
+flat flags.
 
 **Subcommands** (cobra + identity): tools with multiple distinct
 operations. Typically CLI clients that talk to a daemon (gopostgres,
@@ -168,7 +170,7 @@ Run(o, r)
 - `Run()` accepts `face.Reporter` (the interface), not the concrete
   `*reporter.Reporter`
 
-See `three-pillars.md` for the full wiring pattern including logger and
+See `pillars.md` for the full wiring pattern including logger and
 recovery middleware.
 
 ### `os.Exit` and reporter

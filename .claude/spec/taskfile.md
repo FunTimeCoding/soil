@@ -13,10 +13,9 @@ tasks:
   test: ...
   build: ...
   check: ...
+  generate: ...
   update: ...
   tool: ...
-  install: ...
-  coverage: ...
 ```
 
 ### Pipeline Tasks
@@ -30,14 +29,13 @@ tasks:
 
 | Task | Command | Purpose |
 |------|---------|---------|
-| `lint` | `golint --fix` + `golangci-lint run` + `gofix ./...` + `goanalyze ./...` | Lint with auto-fix, static analysis, then AST fix and check. `goanalyze --rename` includes variable naming. |
-| `test` | `gotestsum --format dots` | Run tests with minimal output |
+| `lint` | `golint --fix` + `golangci-lint run --build-tags local` + `gofix ./...` + `goanalyze ./...` + `goaudit .` | Lint with auto-fix, static analysis, AST fix and check, then compliance audit |
+| `test` | `gotestsum --format dots -- --tags local ./...` | Run tests (including local-tagged) with minimal output |
 | `build` | `go run cmd/gobuild/main.go` | Cross-compile all binaries via gobuild |
 | `check` | `gosec -fmt=json ...` | Security scan |
+| `generate` | `oapi-codegen --config config.yaml ...` per service | Regenerate OpenAPI clients and servers (see `generated-api.md`) |
 | `update` | `goupdate` with pinned downgrades | Dependency update with known-bad version pins |
-| `tool` | installs gotestsum, golint, goanalyze, gofix, gobuild, golangci-lint, gocover-cobertura | Dev tooling bootstrap |
-| `install` | gobuild --copy-to-bin | Build all binaries and install to ~/bin |
-| `coverage` | go test -coverprofile + gocover-cobertura | Coverage report in Cobertura XML |
+| `tool` | installs gotestsum, golint, goanalyze, gofix, goaudit, gobuild, golangci-lint, oapi-codegen | Dev tooling bootstrap |
 
 ## Lefthook Integration
 
@@ -45,7 +43,7 @@ tasks:
 pre-push: {jobs: [{run: task pre-push}]}
 ```
 
-The `pre-push` hook runs lint + test before every push. Configured in `lefthook.yaml`.
+The `pre-push` hook runs lint + test before every push. Configured in `.lefthook.yaml`.
 
 ## GitHub Actions
 

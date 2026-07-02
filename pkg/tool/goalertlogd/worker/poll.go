@@ -1,7 +1,6 @@
 package worker
 
 import (
-	"fmt"
 	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert/advanced_option"
 	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/constant"
 	"github.com/funtimecoding/go-library/pkg/tool/goalertlogd/store"
@@ -17,14 +16,6 @@ func (w *Worker) Poll() {
 	}
 
 	defer func() {
-		if v := recover(); v != nil {
-			w.logger.Structured(
-				"poll failed",
-				"error",
-				fmt.Sprint(v),
-			)
-		}
-
 		if w.metrics != nil {
 			w.metrics.pollDuration.Observe(
 				time.Since(start).Seconds(),

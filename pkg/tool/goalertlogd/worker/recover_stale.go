@@ -1,21 +1,11 @@
 package worker
 
 import (
-	"fmt"
 	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert/advanced_option"
 	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/constant"
 )
 
 func (w *Worker) RecoverStale() {
-	defer func() {
-		if v := recover(); v != nil {
-			w.logger.Structured(
-				"recover stale failed",
-				"error",
-				fmt.Sprint(v),
-			)
-		}
-	}()
 	alerts, _ := w.client.MustAlerts(advanced_option.New(), nil)
 	current := make(map[string]bool)
 

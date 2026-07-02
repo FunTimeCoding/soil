@@ -17,7 +17,9 @@ func tableSizes(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			p := &client.TableSizesParams{Instance: instance}
+			p := &client.TableSizesParams{
+				Instance: instancePointer(instance),
+			}
 
 			if schema != "" {
 				p.Schema = &schema
@@ -32,7 +34,7 @@ func tableSizes(c *client.Client) *cobra.Command {
 		&instance,
 		"instance",
 		"",
-		"Instance name (required)",
+		"Instance name (optional when only one instance is configured)",
 	)
 	result.Flags().StringVar(
 		&schema,
@@ -40,7 +42,6 @@ func tableSizes(c *client.Client) *cobra.Command {
 		"",
 		"Schema name (default: public)",
 	)
-	errors.PanicOnError(result.MarkFlagRequired("instance"))
 
 	return result
 }

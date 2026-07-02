@@ -13,12 +13,10 @@ func (s *Server) listTables(
 	_ mcp.CallToolRequest,
 	a argument.ListTables,
 ) (*mcp.CallToolResult, error) {
-	instance, okay := s.activeInstance(x)
+	instance, e := s.service.ResolveInstance(s.activeInstanceName(x))
 
-	if !okay {
-		return response.Fail(
-			"no instance selected - use use_instance first",
-		)
+	if e != nil {
+		return response.Fail("%s", e)
 	}
 
 	schema := a.Schema
@@ -27,7 +25,7 @@ func (s *Server) listTables(
 		schema = "public"
 	}
 
-	v, e := s.store.ListTables(x, instance, schema)
+	v, e := s.service.ListTables(x, instance, schema)
 
 	if e != nil {
 		return s.captureFail(

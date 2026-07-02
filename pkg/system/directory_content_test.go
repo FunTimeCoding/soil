@@ -12,12 +12,12 @@ func TestDirectoryContent(t *testing.T) {
 	assert.Strings(
 		t,
 		[]string{
-			"hypertext",
-			"markdown",
-			"memory",
-			"notation",
-			"search",
-			"wiki",
+			constant.HypertextPath,
+			constant.MarkdownPath,
+			constant.MemoryPath,
+			constant.NotationPath,
+			constant.SearchPath,
+			constant.WikiPath,
 		},
 		DirectoryContent(
 			join.Absolute(

@@ -10,8 +10,10 @@ func (s *Server) TableSizes(
 	c context.Context,
 	r server.TableSizesRequestObject,
 ) (server.TableSizesResponseObject, error) {
-	if fail, okay := s.resolveInstance(r.Params.Instance); !okay {
-		return server.TableSizes400JSONResponse(*fail), nil
+	instance, e := s.resolveInstance(r.Params.Instance)
+
+	if e != nil {
+		return server.TableSizes400JSONResponse(*clientError(e)), nil
 	}
 
 	schema := "public"
@@ -20,7 +22,7 @@ func (s *Server) TableSizes(
 		schema = *r.Params.Schema
 	}
 
-	rows, e := s.store.TableSizes(c, r.Params.Instance, schema)
+	rows, e := s.service.TableSizes(c, instance, schema)
 
 	if e != nil {
 		return server.TableSizes500JSONResponse(

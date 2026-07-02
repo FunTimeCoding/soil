@@ -27,10 +27,5 @@ func TestRank(t *testing.T) {
 		},
 	)
 	assert.FatalOnError(t, f)
-
-	for _, result := range results {
-		t.Logf("index=%d score=%.4f", result.Index, result.Score)
-	}
-
 	assert.Greater(t, results[1].Score, results[0].Score)
 }

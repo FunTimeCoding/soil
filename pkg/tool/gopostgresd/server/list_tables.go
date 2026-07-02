@@ -10,8 +10,10 @@ func (s *Server) ListTables(
 	c context.Context,
 	r server.ListTablesRequestObject,
 ) (server.ListTablesResponseObject, error) {
-	if fail, okay := s.resolveInstance(r.Params.Instance); !okay {
-		return server.ListTables400JSONResponse(*fail), nil
+	instance, e := s.resolveInstance(r.Params.Instance)
+
+	if e != nil {
+		return server.ListTables400JSONResponse(*clientError(e)), nil
 	}
 
 	schema := "public"
@@ -20,7 +22,7 @@ func (s *Server) ListTables(
 		schema = *r.Params.Schema
 	}
 
-	rows, e := s.store.ListTables(c, r.Params.Instance, schema)
+	rows, e := s.service.ListTables(c, instance, schema)
 
 	if e != nil {
 		return server.ListTables500JSONResponse(

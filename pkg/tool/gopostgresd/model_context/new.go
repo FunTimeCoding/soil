@@ -4,11 +4,11 @@ import (
 	"github.com/funtimecoding/go-library/pkg/face"
 	"github.com/funtimecoding/go-library/pkg/generative/mark/server"
 	"github.com/funtimecoding/go-library/pkg/tool/gopostgresd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gopostgresd/store"
+	"github.com/funtimecoding/go-library/pkg/tool/gopostgresd/service"
 )
 
 func New(
-	s *store.Store,
+	s *service.Service,
 	r face.Reporter,
 	t face.Recorder,
 	version string,
@@ -18,7 +18,7 @@ func New(
 			constant.Identity,
 			version,
 		).WithRecorder(t).Server(),
-		store:    s,
+		service:  s,
 		reporter: r,
 	}
 	result.register()

@@ -114,7 +114,7 @@ func (s *Server) GetChannelHistory(
 
 	if truncated > 0 {
 		result["note"] = fmt.Sprintf(
-			"showing the newest %d of %d posts since %s — narrow since or raise limit for more",
+			"showing the newest %d of %d posts since %s - narrow since or raise limit for more",
 			limit,
 			limit+truncated,
 			a.Since,

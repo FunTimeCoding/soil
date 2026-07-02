@@ -13,16 +13,14 @@ func (s *Server) describeTable(
 	_ mcp.CallToolRequest,
 	a argument.DescribeTable,
 ) (*mcp.CallToolResult, error) {
-	instance, okay := s.activeInstance(x)
-
-	if !okay {
-		return response.Fail(
-			"no instance selected - use use_instance first",
-		)
-	}
-
 	if a.Table == "" {
 		return response.Fail("table is required")
+	}
+
+	instance, e := s.service.ResolveInstance(s.activeInstanceName(x))
+
+	if e != nil {
+		return response.Fail("%s", e)
 	}
 
 	schema := a.Schema
@@ -31,7 +29,7 @@ func (s *Server) describeTable(
 		schema = "public"
 	}
 
-	v, e := s.store.DescribeTable(x, instance, schema, a.Table)
+	v, e := s.service.DescribeTable(x, instance, schema, a.Table)
 
 	if e != nil {
 		return s.captureFail(

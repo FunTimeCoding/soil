@@ -13,22 +13,19 @@ func (s *Server) createSilence(
 	_ mcp.CallToolRequest,
 	a argument.CreateSilence,
 ) (*mcp.CallToolResult, error) {
-	instance, okay := s.activeInstance(x)
-
-	if !okay {
-		return response.Fail(
-			"no instance selected - use use_instance first",
-		)
-	}
-
 	if a.Alert == "" {
 		return response.Fail("alert is required")
+	}
+
+	instance, e := s.service.ResolveInstance(s.activeInstanceName(x))
+
+	if e != nil {
+		return response.Fail("%s", e)
 	}
 
 	var d time.Duration
 
 	if a.Duration != "" {
-		var e error
 		d, e = time.ParseDuration(a.Duration)
 
 		if e != nil {

@@ -11,7 +11,7 @@ import (
 	"github.com/funtimecoding/go-library/pkg/tool/gopostgresd/model_context"
 	"github.com/funtimecoding/go-library/pkg/tool/gopostgresd/option"
 	"github.com/funtimecoding/go-library/pkg/tool/gopostgresd/server"
-	"github.com/funtimecoding/go-library/pkg/tool/gopostgresd/store"
+	"github.com/funtimecoding/go-library/pkg/tool/gopostgresd/service"
 	"github.com/funtimecoding/go-library/pkg/web"
 	"net/http"
 )
@@ -26,7 +26,7 @@ func Run(
 			lifecycleServer.New(
 				web.AddressPort(o.Port),
 				func(m *http.ServeMux) {
-					s := store.New(o.Inventory)
+					s := service.New(o.Inventory)
 					t := telemetry.NewEnvironment()
 					generated.HandlerFromMux(
 						generated.NewStrictHandler(

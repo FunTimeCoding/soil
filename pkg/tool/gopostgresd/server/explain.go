@@ -11,8 +11,10 @@ func (s *Server) Explain(
 	c context.Context,
 	r server.ExplainRequestObject,
 ) (server.ExplainResponseObject, error) {
-	if fail, okay := s.resolveInstance(r.Body.Instance); !okay {
-		return server.Explain400JSONResponse(*fail), nil
+	instance, e := s.resolveInstance(r.Body.Instance)
+
+	if e != nil {
+		return server.Explain400JSONResponse(*clientError(e)), nil
 	}
 
 	prefix := "EXPLAIN"
@@ -21,9 +23,9 @@ func (s *Server) Explain(
 		prefix = "EXPLAIN ANALYZE"
 	}
 
-	rows, e := s.store.Query(
+	rows, e := s.service.Query(
 		c,
-		r.Body.Instance,
+		instance,
 		fmt.Sprintf("%s %s", prefix, r.Body.Sql),
 	)
 

@@ -15,20 +15,18 @@ func (s *Server) queryRange(
 	_ mcp.CallToolRequest,
 	a argument.QueryRange,
 ) (*mcp.CallToolResult, error) {
-	instance, okay := s.activeInstance(x)
-
-	if !okay {
-		return response.Fail(
-			"no instance selected - use use_instance first",
-		)
-	}
-
 	if a.Query == "" {
 		return response.Fail("query is required")
 	}
 
 	if a.Start == "" {
 		return response.Fail("start is required")
+	}
+
+	instance, e := s.service.ResolveInstance(s.activeInstanceName(x))
+
+	if e != nil {
+		return response.Fail("%s", e)
 	}
 
 	start, e := parseDurationOrTime(a.Start)

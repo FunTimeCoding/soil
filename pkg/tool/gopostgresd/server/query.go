@@ -10,11 +10,13 @@ func (s *Server) Query(
 	c context.Context,
 	r server.QueryRequestObject,
 ) (server.QueryResponseObject, error) {
-	if fail, okay := s.resolveInstance(r.Body.Instance); !okay {
-		return server.Query400JSONResponse(*fail), nil
+	instance, e := s.resolveInstance(r.Body.Instance)
+
+	if e != nil {
+		return server.Query400JSONResponse(*clientError(e)), nil
 	}
 
-	rows, e := s.store.Query(c, r.Body.Instance, r.Body.Sql)
+	rows, e := s.service.Query(c, instance, r.Body.Sql)
 
 	if e != nil {
 		return server.Query500JSONResponse(

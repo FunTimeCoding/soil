@@ -13,16 +13,14 @@ func (s *Server) listIndexes(
 	_ mcp.CallToolRequest,
 	a argument.ListIndexes,
 ) (*mcp.CallToolResult, error) {
-	instance, okay := s.activeInstance(x)
-
-	if !okay {
-		return response.Fail(
-			"no instance selected - use use_instance first",
-		)
-	}
-
 	if a.Table == "" {
 		return response.Fail("table is required")
+	}
+
+	instance, e := s.service.ResolveInstance(s.activeInstanceName(x))
+
+	if e != nil {
+		return response.Fail("%s", e)
 	}
 
 	schema := a.Schema
@@ -31,7 +29,7 @@ func (s *Server) listIndexes(
 		schema = "public"
 	}
 
-	v, e := s.store.ListIndexes(x, instance, schema, a.Table)
+	v, e := s.service.ListIndexes(x, instance, schema, a.Table)
 
 	if e != nil {
 		return s.captureFail(

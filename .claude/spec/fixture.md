@@ -78,3 +78,6 @@ func TestParse(t *testing.T) {
 Do not put fixtures inside packages as `testdata/` directories. All fixtures belong at the
 repo root under `fixture/`. This keeps fixtures discoverable, shareable across packages, and
 consistent with the repo-root resolution pattern.
+
+**Exception:** analyzers under `pkg/lint/analyzer/` use `testdata/` because Go's
+`analysistest` framework requires that exact layout. That is the only sanctioned use.

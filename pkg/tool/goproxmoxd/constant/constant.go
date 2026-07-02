@@ -7,12 +7,12 @@ import (
 )
 
 var ErrorCDROMCloudInitConflict = errors.New(
-	"cdrom and cloud-init are mutually exclusive — both use ide2",
+	"cdrom and cloud-init are mutually exclusive - both use ide2",
 )
 
 var (
 	ErrorNoChanges         = errors.New("no changes specified")
-	ErrorMachineRunning    = errors.New("vm is running — stop it before deleting")
+	ErrorMachineRunning    = errors.New("vm is running - stop it before deleting")
 	ErrorSetDeleteConflict = errors.New("cannot set and delete the same field")
 )
 var Identity = identity.New(

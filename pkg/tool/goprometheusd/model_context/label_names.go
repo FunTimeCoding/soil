@@ -15,12 +15,10 @@ func (s *Server) labelNames(
 	_ mcp.CallToolRequest,
 	a argument.LabelNames,
 ) (*mcp.CallToolResult, error) {
-	instance, okay := s.activeInstance(x)
+	instance, e := s.service.ResolveInstance(s.activeInstanceName(x))
 
-	if !okay {
-		return response.Fail(
-			"no instance selected - use use_instance first",
-		)
+	if e != nil {
+		return response.Fail("%s", e)
 	}
 
 	var matches []string
@@ -32,10 +30,10 @@ func (s *Server) labelNames(
 	since := time.Now().Add(-1 * time.Hour)
 
 	if a.Since != "" {
-		d, e := time.ParseDuration(a.Since)
+		d, f := time.ParseDuration(a.Since)
 
-		if e != nil {
-			return response.Fail("invalid since: %s", e)
+		if f != nil {
+			return response.Fail("invalid since: %s", f)
 		}
 
 		since = time.Now().Add(-d)

@@ -21,7 +21,7 @@ func explain(c *client.Client) *cobra.Command {
 			r, e := c.Explain(
 				context.Background(),
 				client.ExplainJSONRequestBody{
-					Instance: instance,
+					Instance: instancePointer(instance),
 					Sql:      arguments[0],
 					Analyze:  &analyze,
 				},
@@ -34,7 +34,7 @@ func explain(c *client.Client) *cobra.Command {
 		&instance,
 		"instance",
 		"",
-		"Instance name (required)",
+		"Instance name (optional when only one instance is configured)",
 	)
 	result.Flags().BoolVar(
 		&analyze,
@@ -42,7 +42,6 @@ func explain(c *client.Client) *cobra.Command {
 		false,
 		"Run EXPLAIN ANALYZE",
 	)
-	errors.PanicOnError(result.MarkFlagRequired("instance"))
 
 	return result
 }

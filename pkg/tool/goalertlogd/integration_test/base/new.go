@@ -42,9 +42,9 @@ func New(t *testing.T) *Server {
 		),
 	)
 	l := logger.New(context.Background())
-	w := worker.New(c, s, l, 1*time.Minute, 30*24*time.Hour, nil)
-	w.Poll()
 	r := memory.New()
+	w := worker.New(c, s, l, r, 1*time.Minute, 30*24*time.Hour, nil)
+	w.Poll()
 	v := model_context_server.New(
 		t,
 		func(m *http.ServeMux) {

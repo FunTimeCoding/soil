@@ -17,7 +17,9 @@ func listTables(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			p := &client.ListTablesParams{Instance: instance}
+			p := &client.ListTablesParams{
+				Instance: instancePointer(instance),
+			}
 
 			if schema != "" {
 				p.Schema = &schema
@@ -32,7 +34,7 @@ func listTables(c *client.Client) *cobra.Command {
 		&instance,
 		"instance",
 		"",
-		"Instance name (required)",
+		"Instance name (optional when only one instance is configured)",
 	)
 	result.Flags().StringVar(
 		&schema,
@@ -40,7 +42,6 @@ func listTables(c *client.Client) *cobra.Command {
 		"",
 		"Schema name (default: public)",
 	)
-	errors.PanicOnError(result.MarkFlagRequired("instance"))
 
 	return result
 }

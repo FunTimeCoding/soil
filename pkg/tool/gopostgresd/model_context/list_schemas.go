@@ -13,15 +13,13 @@ func (s *Server) listSchemas(
 	_ mcp.CallToolRequest,
 	_ argument.ListSchemas,
 ) (*mcp.CallToolResult, error) {
-	instance, okay := s.activeInstance(x)
+	instance, e := s.service.ResolveInstance(s.activeInstanceName(x))
 
-	if !okay {
-		return response.Fail(
-			"no instance selected - use use_instance first",
-		)
+	if e != nil {
+		return response.Fail("%s", e)
 	}
 
-	v, e := s.store.ListSchemas(x, instance)
+	v, e := s.service.ListSchemas(x, instance)
 
 	if e != nil {
 		return s.captureFail(

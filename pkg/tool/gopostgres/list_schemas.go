@@ -18,7 +18,9 @@ func listSchemas(c *client.Client) *cobra.Command {
 		) {
 			r, e := c.ListSchemas(
 				context.Background(),
-				&client.ListSchemasParams{Instance: instance},
+				&client.ListSchemasParams{
+					Instance: instancePointer(instance),
+				},
 			)
 			errors.PanicOnError(e)
 			printResponse(r)
@@ -28,9 +30,8 @@ func listSchemas(c *client.Client) *cobra.Command {
 		&instance,
 		"instance",
 		"",
-		"Instance name (required)",
+		"Instance name (optional when only one instance is configured)",
 	)
-	errors.PanicOnError(result.MarkFlagRequired("instance"))
 
 	return result
 }

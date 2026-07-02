@@ -16,7 +16,7 @@ func (s *Server) listInstances(
 	var active string
 
 	if session := server.ClientSessionFromContext(x); session != nil {
-		active, _ = s.store.ActiveInstance(session.SessionID())
+		active, _ = s.service.ActiveInstance(session.SessionID())
 	}
 
 	type entry struct {
@@ -28,7 +28,7 @@ func (s *Server) listInstances(
 	}
 	var result []entry
 
-	for _, i := range s.store.Instances() {
+	for _, i := range s.service.Instances() {
 		result = append(
 			result,
 			entry{

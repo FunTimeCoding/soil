@@ -6,8 +6,8 @@ Three caller categories determine how store methods handle errors:
 
 | Caller | Store returns | Caller handles |
 |--------|-------------|----------------|
-| Web handler (HTML, recovery middleware) | `error` | `PanicOnError` — recovery middleware catches, returns 500 |
-| Worker / sweep | void, `PanicOnError` inside | `withRecovery` catches, worker continues |
+| Web handler (HTML, recovery middleware) | `error` | `PanicOnError` - recovery middleware catches, returns 500 |
+| Worker / sweep | void, `PanicOnError` inside | `recovery.Run` catches, worker continues |
 | MCP handler | `error` | `captureFail` / `captureDetail` → structured tool result |
 | REST handler (strict server) | `error` | `captureFail` → typed 500 response with Sentry event ID |
 
@@ -17,22 +17,22 @@ store methods may `PanicOnError` internally when they have no other
 callers.
 
 ```go
-// Returns error — called from MCP, REST, and web
+// Returns error - called from MCP, REST, and web
 func (s *Store) UpdateStatus(identifier string, status string) error {
     return s.database.Model(&Record{}).
         Where("identifier = ?", identifier).
         Update("status", status).Error
 }
 
-// Web caller — panics, caught by recovery middleware
+// Web caller - panics, caught by recovery middleware
 errors.PanicOnError(s.store.UpdateStatus(id, status))
 
-// MCP caller — captures to Sentry, returns structured error
+// MCP caller - captures to Sentry, returns structured error
 if e := s.store.UpdateStatus(id, status); e != nil {
     return s.captureFail(e, "update status failed")
 }
 
-// REST caller (strict server) — returns typed error response
+// REST caller (strict server) - returns typed error response
 if e := s.service.UpdateStatus(id, status); e != nil {
     return server.PostUpdate500JSONResponse(
         *s.captureFail(e, constant.UnexpectedError),
@@ -41,25 +41,33 @@ if e := s.service.UpdateStatus(id, status); e != nil {
 ```
 
 Web handlers rely on panic + recovery middleware because there is no
-structured error rendering in the web UI yet. This is intentional —
+structured error rendering in the web UI yet. This is intentional -
 the panic path is correct and visible via Sentry until a proper error
 display mechanism (toast/notification) is built into `pkg/web/layout`.
 
 ## Worker Recovery Pattern
 
 Workers that loop (pollers, watchers, schedulers) wrap per-iteration work
-in a `withRecovery` method. This catches panics from a single iteration,
-reports via the reporter, and lets the loop continue.
+in the shared `recovery.Recovery` component
+(`pkg/errors/sentry/recovery`). It catches panics from a single
+iteration, reports via `r.Recover(v)`, logs, and lets the loop continue.
+
+The worker constructor builds it from the logger and reporter it
+already receives:
 
 ```go
-func (w *Worker) withRecovery(f func()) {
-    defer func() {
-        if v := recover(); v != nil {
-            w.reporter.Recover(v)
-            w.logger.Plain("worker recovered from panic: %v", v)
-        }
-    }()
-    f()
+func New(
+    v *service.Service,
+    interval time.Duration,
+    l *logger.Logger,
+    r face.Reporter,
+) *Worker {
+    return &Worker{
+        service:  v,
+        interval: interval,
+        recovery: recovery.New(l, r),
+        stop:     make(chan struct{}),
+    }
 }
 ```
 
@@ -68,17 +76,16 @@ Usage in a loop:
 ```go
 for {
     select {
-    case <-ticker.C:
-        w.withRecovery(w.poll)
-    case <-w.done:
+    case <-t.C:
+        w.recovery.Run(w.poll)
+    case <-w.stop:
         return
     }
 }
 ```
 
-The `withRecovery` method lives on each worker struct that holds
-reporter + logger. See `three-pillars.md` for where this fits in the
-overall recovery layer design.
+See `pillars.md` for where this fits in the overall recovery
+layer design.
 
 ## HTTP Recovery Middleware
 

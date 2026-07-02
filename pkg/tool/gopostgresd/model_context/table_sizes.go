@@ -13,12 +13,10 @@ func (s *Server) tableSizes(
 	_ mcp.CallToolRequest,
 	a argument.TableSizes,
 ) (*mcp.CallToolResult, error) {
-	instance, okay := s.activeInstance(x)
+	instance, e := s.service.ResolveInstance(s.activeInstanceName(x))
 
-	if !okay {
-		return response.Fail(
-			"no instance selected - use use_instance first",
-		)
+	if e != nil {
+		return response.Fail("%s", e)
 	}
 
 	schema := a.Schema
@@ -27,7 +25,7 @@ func (s *Server) tableSizes(
 		schema = "public"
 	}
 
-	v, e := s.store.TableSizes(x, instance, schema)
+	v, e := s.service.TableSizes(x, instance, schema)
 
 	if e != nil {
 		return s.captureFail(

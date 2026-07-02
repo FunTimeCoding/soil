@@ -3,6 +3,7 @@ package main
 import (
 	grafana "github.com/funtimecoding/go-library/pkg/grafana/example"
 	alertmanager "github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/example"
+	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/example/notify"
 	prometheus "github.com/funtimecoding/go-library/pkg/prometheus/example"
 	loki "github.com/funtimecoding/go-library/pkg/prometheus/loki/example"
 )
@@ -15,7 +16,7 @@ func main() {
 		alertmanager.Alert()
 		alertmanager.Create()
 		alertmanager.DeleteSilence()
-		alertmanager.Notify()
+		notify.Notify()
 		alertmanager.SetSilence()
 		alertmanager.Silence()
 		alertmanager.Status()

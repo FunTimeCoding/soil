@@ -13,19 +13,17 @@ func (s *Server) query(
 	_ mcp.CallToolRequest,
 	a argument.Query,
 ) (*mcp.CallToolResult, error) {
-	instance, okay := s.activeInstance(x)
-
-	if !okay {
-		return response.Fail(
-			"no instance selected - use use_instance first",
-		)
-	}
-
 	if a.SQL == "" {
 		return response.Fail("sql is required")
 	}
 
-	v, e := s.store.Query(x, instance, a.SQL)
+	instance, e := s.service.ResolveInstance(s.activeInstanceName(x))
+
+	if e != nil {
+		return response.Fail("%s", e)
+	}
+
+	v, e := s.service.Query(x, instance, a.SQL)
 
 	if e != nil {
 		return s.captureFail(
