@@ -15,7 +15,7 @@ func Alternate() {
 	r, e := c.CreateMessages(
 		context.Background(),
 		anthropic.MessagesRequest{
-			Model: anthropic.ModelClaude3Haiku20240307,
+			Model: anthropic.ModelClaudeHaiku4Dot5,
 			Messages: []anthropic.Message{
 				anthropic.NewUserTextMessage("What is your name?"),
 			},
