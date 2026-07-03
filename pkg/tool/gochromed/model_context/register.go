@@ -10,7 +10,7 @@ func (s *Server) register() {
 		mcp.NewTool(
 			constant.ListTabs,
 			mcp.WithDescription(
-				"List all open browser tabs with title, URL, and tab ID.",
+				"List all open browser tabs with title, URL, and tab ID. Cross-origin iframes are separate targets and listed after the tabs (type iframe, parent set to the owning tab ID) - all tools accept their IDs and URLs like tabs.",
 			),
 		),
 		mcp.NewTypedToolHandler(s.ListTabs),
@@ -19,11 +19,11 @@ func (s *Server) register() {
 		mcp.NewTool(
 			constant.Snapshot,
 			mcp.WithDescription(
-				"Take an accessibility tree snapshot of a browser tab. Returns structured text with UIDs for each element. Targets the active tab by default.",
+				"Take an accessibility tree snapshot of a browser tab. Returns structured text with UIDs for each element. Targets the active tab by default. Cross-origin iframe content appears as a bare Iframe node - snapshot the iframe target itself (listed in the result footer and in list_tabs) to read it.",
 			),
 			mcp.WithString(
 				"tab_id",
-				mcp.Description("Target tab by ID (from list_tabs)"),
+				mcp.Description("Target tab or iframe target by ID (from list_tabs)"),
 			),
 			mcp.WithString(
 				"title",
@@ -31,7 +31,7 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				"url",
-				mcp.Description("Target tab by URL substring"),
+				mcp.Description("Target tab or iframe target by URL substring"),
 			),
 		),
 		mcp.NewTypedToolHandler(s.Snapshot),
@@ -44,7 +44,7 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				"tab_id",
-				mcp.Description("Target tab by ID (from list_tabs)"),
+				mcp.Description("Target tab or iframe target by ID (from list_tabs)"),
 			),
 			mcp.WithString(
 				"title",
@@ -52,7 +52,7 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				"url",
-				mcp.Description("Target tab by URL substring"),
+				mcp.Description("Target tab or iframe target by URL substring"),
 			),
 		),
 		mcp.NewTypedToolHandler(s.Screenshot),
@@ -70,7 +70,7 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				"tab_id",
-				mcp.Description("Target tab by ID (from list_tabs)"),
+				mcp.Description("Target tab or iframe target by ID (from list_tabs)"),
 			),
 		),
 		mcp.NewTypedToolHandler(s.Navigate),
@@ -96,7 +96,7 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				"url",
-				mcp.Description("Target tab by URL substring"),
+				mcp.Description("Target tab or iframe target by URL substring"),
 			),
 		),
 		mcp.NewTypedToolHandler(s.Evaluate),
@@ -115,7 +115,7 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				"url",
-				mcp.Description("Target tab by URL substring"),
+				mcp.Description("Target tab or iframe target by URL substring"),
 			),
 		),
 		mcp.NewTypedToolHandler(s.CloseTab),
@@ -148,7 +148,7 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				"url",
-				mcp.Description("Target tab by URL substring"),
+				mcp.Description("Target tab or iframe target by URL substring"),
 			),
 		),
 		mcp.NewTypedToolHandler(s.ReadBody),
@@ -174,7 +174,7 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				"url",
-				mcp.Description("Target tab by URL substring"),
+				mcp.Description("Target tab or iframe target by URL substring"),
 			),
 			mcp.WithBoolean(
 				constant.Snapshot,
@@ -211,7 +211,7 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				"url",
-				mcp.Description("Target tab by URL substring"),
+				mcp.Description("Target tab or iframe target by URL substring"),
 			),
 			mcp.WithBoolean(
 				constant.Snapshot,
@@ -244,7 +244,7 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				"url",
-				mcp.Description("Target tab by URL substring"),
+				mcp.Description("Target tab or iframe target by URL substring"),
 			),
 		),
 		mcp.NewTypedToolHandler(s.Wake),
@@ -265,7 +265,7 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				"url",
-				mcp.Description("Target tab by URL substring"),
+				mcp.Description("Target tab or iframe target by URL substring"),
 			),
 		),
 		mcp.NewTypedToolHandler(s.History),

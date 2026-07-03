@@ -7,7 +7,8 @@ const (
 
 	BodySelector = "body"
 
-	PageTabType = "page"
+	PageTabType   = "page"
+	IframeTabType = "iframe"
 
 	NotationPath = "/json"
 )

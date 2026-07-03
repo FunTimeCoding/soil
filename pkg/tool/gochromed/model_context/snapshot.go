@@ -34,5 +34,9 @@ func (s *Server) Snapshot(
 
 	s.cacheSnapshot(t.Identifier, nodes)
 
-	return response.Success(snapshot.Format(nodes, 0))
+	return response.Success(
+		"%s%s",
+		snapshot.Format(nodes, 0),
+		s.frameHint(t.Identifier),
+	)
 }

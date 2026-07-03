@@ -9,4 +9,7 @@ type Tab struct {
 	Locator        string `json:"url"`
 	WebSocketDebug string `json:"webSocketDebuggerUrl"`
 	FaviconLocator string `json:"faviconUrl,omitempty"`
+	// ParentIdentifier is set on iframe targets and holds the
+	// identifier of the tab the frame renders in.
+	ParentIdentifier string `json:"parentId,omitempty"`
 }

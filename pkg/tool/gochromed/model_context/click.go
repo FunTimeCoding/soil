@@ -63,8 +63,9 @@ func (s *Server) Click(
 	s.cacheSnapshot(t.Identifier, nodes)
 
 	return response.Success(
-		"clicked %s\n\n%s",
+		"clicked %s\n\n%s%s",
 		a.UID,
 		snapshot.Format(nodes, 0),
+		s.frameHint(t.Identifier),
 	)
 }
