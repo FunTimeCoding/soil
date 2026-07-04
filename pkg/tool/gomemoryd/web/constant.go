@@ -1,7 +1,6 @@
 package web
 
 const inlineCSS = `
-	main a { text-decoration: none; }
 	.tag-pip {
 		font-size: 0.75rem;
 		padding: 0.1rem 0.4rem;

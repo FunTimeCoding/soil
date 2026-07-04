@@ -90,6 +90,49 @@ func TestStrayConstantExemptByPackage(t *testing.T) {
 	assertReport(t, "Charlie", false, nil, "", l)
 }
 
+func TestStrayConstantExemptByConstantDirectory(t *testing.T) {
+	l := StrayConstant(
+		"pkg/tool/example/constant/color/item.go",
+		strings.NewReader(
+			"package color\n\nconst Foo = 1\n",
+		),
+	)
+	assertReport(
+		t,
+		"pkg/tool/example/constant/color/item.go",
+		false,
+		nil,
+		"",
+		l,
+	)
+}
+
+func TestStrayConstantDirectoryMatchesExactly(t *testing.T) {
+	l := StrayConstant(
+		"pkg/example/constants/foo.go",
+		strings.NewReader(
+			"package example\n\nconst Foo = 1\n",
+		),
+	)
+	assertReport(
+		t,
+		"pkg/example/constants/foo.go",
+		true,
+		[]*concern.Concern{
+			{
+				Key:      constant.StrayConstantKey,
+				Text:     constant.StrayConstantText,
+				Path:     "pkg/example/constants/foo.go",
+				Type:     concern.Line,
+				Line:     3,
+				LineText: "const Foo = 1",
+			},
+		},
+		"",
+		l,
+	)
+}
+
 func TestStrayConstantInsideFunctionNotFlagged(t *testing.T) {
 	l := StrayConstant(
 		upper.Delta,

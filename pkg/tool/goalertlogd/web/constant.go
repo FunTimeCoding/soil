@@ -11,8 +11,6 @@ const inlineCSS = `
 .summary-cards { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
 .summary-cards article { flex: 1; min-width: 150px; text-align: center; }
 table { margin-top: 1rem; }
-.alert-link { text-decoration: none; }
-.alert-link:hover { text-decoration: underline; }
 .filter-form { margin-bottom: 1rem; }
 .filter-form .grid { align-items: end; }
 `

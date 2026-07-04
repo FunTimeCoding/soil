@@ -1,0 +1,36 @@
+connection:
+  prometheus: {host: prometheus.example, secure: true}
+  nextcloud: {host: nextcloud.example, secure: true}
+
+top:
+  - name: monitoring
+    sections:
+      - name: Monitor
+        entries:
+          - label: Prometheus
+            link: https://prometheus.example
+            icon: prometheus.png
+            rows:
+              - {label: Up, query: count(up == 1)}
+              - {label: Down, query: count(up == 0) or vector(0)}
+          - label: Grafana
+            link: https://grafana.example
+            icon: grafana.png
+  - name: home
+    sections:
+      - name: Home
+        entries:
+          - label: Nextcloud
+            link: https://nextcloud.example
+            icon: nextcloud.png
+            widget: nextcloud
+
+tail:
+  columns: 2
+  sections:
+    - name: Pair
+      entries:
+        - {label: Linkwarden, link: https://linkwarden.example, icon: linkwarden.png}
+        - {label: LinkAce, link: https://linkace.example, icon: linkace.png}
+    - entries:
+        - {label: Habitica, link: https://habitica.example, icon: habitica.png}

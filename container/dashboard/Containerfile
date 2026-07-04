@@ -1,0 +1,3 @@
+FROM alpine:3.24.1
+COPY tmp/godashboardd/linux-amd64/godashboardd /usr/local/bin
+ENTRYPOINT ["godashboardd"]

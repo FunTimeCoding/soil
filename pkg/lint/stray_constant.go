@@ -15,7 +15,9 @@ func StrayConstant(
 	s := file_report.New(path, r)
 	base := filepath.Base(path)
 
-	if base == "constant.go" || base == "constant_test.go" {
+	if base == "constant.go" ||
+		base == "constant_test.go" ||
+		constantDirectory(path) {
 		for s.Scan() {
 			line, _ := s.Text()
 			s.PassLine(line)

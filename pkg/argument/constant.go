@@ -4,6 +4,7 @@ const (
 	Action         = "action"
 	All            = "all"
 	Arm            = "arm"
+	Board          = "board"
 	Body           = "body"
 	Branch         = "branch"
 	BuildTags      = "build-tags"

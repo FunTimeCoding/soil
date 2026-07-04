@@ -1,6 +1,10 @@
 package layout
 
 const SummaryStrip = "summary_strip"
+const baseStyle = `
+a { text-decoration: none; }
+a:hover { text-decoration: none; color: var(--pico-primary-hover); }
+`
 const paletteStyle = `
 .palette-dialog {
 	position: fixed;

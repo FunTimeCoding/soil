@@ -1,0 +1,18 @@
+tail:
+  columns: 2
+  sections:
+    - name: five
+      entries:
+        - {label: a1, link: https://a1.example}
+        - {label: a2, link: https://a2.example}
+        - {label: a3, link: https://a3.example}
+        - {label: a4, link: https://a4.example}
+        - {label: a5, link: https://a5.example}
+    - name: two
+      entries:
+        - {label: b1, link: https://b1.example}
+        - {label: b2, link: https://b2.example}
+    - entries:
+        - {label: c1, link: https://c1.example}
+    - entries:
+        - {label: d1, link: https://d1.example}

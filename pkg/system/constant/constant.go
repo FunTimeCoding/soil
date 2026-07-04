@@ -17,6 +17,7 @@ const (
 	DarwinAMD64 = "darwin-amd64"
 
 	CommandPath                 = "cmd"
+	BoardPath                   = "board"
 	ConfigurationPath           = ".config"
 	DocumentPath                = "doc"
 	DownloadsPath               = "Downloads"

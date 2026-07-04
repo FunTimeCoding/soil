@@ -24,6 +24,7 @@ func (p *Page) Render() gomponents.Node {
 		),
 		html.TitleEl(gomponents.Text(title)),
 		html.Link(html.Rel("stylesheet"), html.Href(constant.Pico)),
+		html.StyleEl(gomponents.Raw(baseStyle)),
 		html.Script(html.Src(constant.Extended)),
 	)
 

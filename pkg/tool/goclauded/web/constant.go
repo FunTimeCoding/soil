@@ -47,7 +47,6 @@ const inlineCSS = `
 	.kind-complete { background: #2ecc40; color: #fff; }
 	.kind-update { background: #0074d9; color: #fff; }
 	table { margin-bottom: 0; }
-	main a { text-decoration: none; }
 `
 
 const connectionIndicatorJS = `
