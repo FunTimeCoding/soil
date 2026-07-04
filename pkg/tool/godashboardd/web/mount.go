@@ -31,4 +31,5 @@ func (s *Server) Mount(m *http.ServeMux) {
 	m.HandleFunc("GET /heatmap", s.require(s.heatmap))
 	m.HandleFunc("POST /click", s.require(s.click))
 	m.Handle("GET /event", s.require(s.event()))
+	m.HandleFunc("GET /favicon.ico", s.favicon)
 }
