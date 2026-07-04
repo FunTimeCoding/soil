@@ -12,6 +12,7 @@ func TestDirectoryContent(t *testing.T) {
 	assert.Strings(
 		t,
 		[]string{
+			constant.BoardPath,
 			constant.HypertextPath,
 			constant.MarkdownPath,
 			constant.MemoryPath,
