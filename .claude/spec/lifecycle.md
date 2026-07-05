@@ -141,3 +141,30 @@ These types implement the Worker interface:
 | `pkg/metric`                 | `Server`   | Prometheus metrics HTTP endpoint |
 | `pkg/ticker`                 | `Ticker`   | Periodic function execution      |
 | `pkg/errors/sentry/reporter` | `Reporter` | Error capture + panic recovery   |
+| `pkg/system/reaper`          | `Reaper`   | Zombie process reaper            |
+
+## Reaper
+
+Services that spawn subprocesses (`git`, `ansible-playbook`,
+`terraform`) run as PID 1 inside their container. When a
+subprocess spawns its own children (e.g. `git` spawns `ssh`)
+and the child outlives its parent, it gets reparented to PID 1.
+Go's runtime does not reap adopted orphans, so they accumulate
+as zombies.
+
+`reaper.New(reporter)` starts a goroutine that calls
+`wait4(-1, WNOHANG)` every 30 seconds and reports each reaped
+process to Sentry. Register it as a lifecycle worker before
+other workers so it starts reaping before subprocesses begin.
+
+```go
+lifecycle.New(
+    l,
+    lifecycle.WithWorker(reaper.New(r)),
+    lifecycle.WithWorker(provisionRunner),
+    lifecycle.WithServer(srv),
+)
+```
+
+Only needed for services that exec subprocesses. Pure HTTP
+clients and MCP bridges do not need it.

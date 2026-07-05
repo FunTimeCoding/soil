@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/go-library/pkg/log/logger"
 	"github.com/funtimecoding/go-library/pkg/provision/store"
 	"github.com/funtimecoding/go-library/pkg/relational"
+	"github.com/funtimecoding/go-library/pkg/system/reaper"
 	"github.com/funtimecoding/go-library/pkg/telemetry"
 	"github.com/funtimecoding/go-library/pkg/tool/goansibled/model_context"
 	"github.com/funtimecoding/go-library/pkg/tool/goansibled/option"
@@ -28,6 +29,7 @@ func Run(
 	n := runner.New(o, s, l, r)
 	lifecycle.New(
 		l,
+		lifecycle.WithWorker(reaper.New(r)),
 		lifecycle.WithWorker(n),
 		lifecycle.WithServer(
 			server.New(
