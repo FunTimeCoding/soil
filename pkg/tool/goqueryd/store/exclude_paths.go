@@ -1,6 +1,9 @@
 package store
 
-func ExcludePaths(results []SearchResult, exclude []string) []SearchResult {
+func ExcludePaths(
+	results []SearchResult,
+	exclude []string,
+) []SearchResult {
 	if len(exclude) == 0 {
 		return results
 	}

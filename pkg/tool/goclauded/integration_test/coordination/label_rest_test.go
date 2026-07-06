@@ -9,7 +9,11 @@ import (
 	"testing"
 )
 
-func labelBody(key string, value string, from string) client.LabelRequest {
+func labelBody(
+	key string,
+	value string,
+	from string,
+) client.LabelRequest {
 	return client.LabelRequest{Key: key, Value: &value, From: &from}
 }
 

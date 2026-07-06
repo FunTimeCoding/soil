@@ -1,6 +1,9 @@
 package trie
 
-func (t *Trie) LongestMatch(text string, position int) int {
+func (t *Trie) LongestMatch(
+	text string,
+	position int,
+) int {
 	node := t.root
 	best := 0
 

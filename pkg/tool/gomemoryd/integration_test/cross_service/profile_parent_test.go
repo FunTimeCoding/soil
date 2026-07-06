@@ -35,9 +35,12 @@ func TestProfileCollapsesChildrenUnderParent(t *testing.T) {
 		s.Gomemoryd.MustCallTool(
 			constant.SaveMemory,
 			map[string]any{
-				constant.MemoryName:       name,
-				constant.Content:          fmt.Sprintf("%s content", name),
-				constant.Description:      fmt.Sprintf("%s description", name),
+				constant.MemoryName: name,
+				constant.Content:    fmt.Sprintf("%s content", name),
+				constant.Description: fmt.Sprintf(
+					"%s description",
+					name,
+				),
 				constant.ParentIdentifier: parentID,
 			},
 		)

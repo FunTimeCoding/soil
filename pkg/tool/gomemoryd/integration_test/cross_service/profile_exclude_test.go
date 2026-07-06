@@ -57,7 +57,7 @@ func TestProfileExcludesAlwaysMemoriesFromRelevant(t *testing.T) {
 		constant.TagMemory,
 		map[string]any{
 			constant.MemoryIdentifier: identifier,
-			constant.Add:             "always",
+			constant.Add:              "always",
 		},
 	)
 	s.Gomemoryd.MustCallTool(

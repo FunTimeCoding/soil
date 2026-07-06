@@ -15,7 +15,10 @@ func profile(l **client.Client) *cobra.Command {
 	c := &cobra.Command{
 		Use:   "profile",
 		Short: "Load memory profile",
-		Run: func(_ *cobra.Command, _ []string) {
+		Run: func(
+			_ *cobra.Command,
+			_ []string,
+		) {
 			params := &client.GetProfileParams{}
 
 			if topic != "" {
