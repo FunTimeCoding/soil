@@ -41,6 +41,7 @@ osquery
 qdrant
 shiin
 treminio
+technitium
 trivy
 
 # Go
@@ -260,6 +261,7 @@ highstate
 saltstack
 
 # Postgres
+sslmode
 datdba
 datistemplate
 datname
