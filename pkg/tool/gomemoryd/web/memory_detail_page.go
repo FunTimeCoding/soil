@@ -132,46 +132,32 @@ func (s *Server) memoryDetailPage(
 		)
 	}
 
-	relations, e := s.service.ListRelations(identifier)
+	related, e := s.service.ListRelated(identifier)
 
-	if e == nil && len(relations) > 0 {
+	if e == nil && len(related) > 0 {
 		var links []gomponents.Node
 
-		for _, rel := range relations {
-			other := rel.TargetIdentifier
-
-			if other == identifier {
-				other = rel.SourceIdentifier
-			}
-
-			related, re := s.service.GetMemory(other)
-
-			if re != nil {
-				continue
-			}
-
+		for _, r := range related {
 			links = append(
 				links,
 				html.Li(
 					html.A(
 						gomponents.Attr(
 							"href",
-							fmt.Sprintf("/memories/%d", other),
+							fmt.Sprintf("/memories/%d", r.Identifier),
 						),
-						gomponents.Text(related.Name),
+						gomponents.Text(r.Name),
 					),
-					gomponents.Textf(" - %s", related.Description),
+					gomponents.Textf(" - %s", r.Description),
 				),
 			)
 		}
 
-		if len(links) > 0 {
-			content = append(
-				content,
-				html.H4(gomponents.Text("Relations")),
-				html.Ul(links...),
-			)
-		}
+		content = append(
+			content,
+			html.H4(gomponents.Text("Relations")),
+			html.Ul(links...),
+		)
 	}
 
 	s.view.RenderPage(w, m.Name, constant.MemoriesPath, content...)

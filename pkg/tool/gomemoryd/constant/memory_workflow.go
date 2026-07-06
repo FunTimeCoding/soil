@@ -42,12 +42,20 @@ Each memory has:
 Tags organize memories for retrieval. Use tag_memory to add,
 remove, or replace tags on a memory.
 
-The "always" tag has special meaning - always-tagged memories
-load in full on every profile call. Use sparingly for content
-that every session needs.
+Two tags have special meaning:
 
-Tags are freeform strings. No fixed vocabulary - create tags
-that serve the retrieval patterns you need.
+- **always** - always-tagged memories load in full on every
+  profile call. Use sparingly for content that every session
+  needs.
+- **no-index** - removes a memory from the profile index tier.
+  The memory stays reachable through topic matching, search,
+  and relations. Use for depth leaves that should be found by
+  relevance instead of occupying index space. A no-index
+  memory with no relations and no parent is a hidden memory -
+  it only surfaces when something searches for it specifically.
+
+All other tags are freeform strings. No fixed vocabulary -
+create tags that serve the retrieval patterns you need.
 
 ## Search and retrieval
 
@@ -63,9 +71,15 @@ tag filters.
 ## Relations
 
 relate_memories creates a bidirectional link between two
-memories. Querying either memory surfaces the relation.
-Use for memories that inform each other but shouldn't be
-merged.
+memories. get_memory returns each neighbor under "related" -
+identifier, name, description, and tags. Use for memories
+that inform each other but shouldn't be merged.
+
+Relations enable incremental deepening: land on a memory via
+the index or search, read its edges, follow the ones that
+pull. Search teleports you to a door; relations tell you
+which rooms adjoin. A neighbor's tags may point at a whole
+tag category worth listing, not just the one memory.
 
 ## Deletion
 

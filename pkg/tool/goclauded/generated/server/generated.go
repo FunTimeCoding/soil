@@ -106,6 +106,21 @@ type LabelEntry struct {
 	Value string `json:"value"`
 }
 
+// LabelRequest defines model for LabelRequest.
+type LabelRequest struct {
+	// From Actor name for the event log.
+	From *string `json:"from,omitempty"`
+	Key  string  `json:"key"`
+
+	// Value Empty or omitted removes the label.
+	Value *string `json:"value,omitempty"`
+}
+
+// LabelResponse defines model for LabelResponse.
+type LabelResponse struct {
+	Change string `json:"change"`
+}
+
 // ListenRequest defines model for ListenRequest.
 type ListenRequest struct {
 	Callsign  string `json:"callsign"`
@@ -393,6 +408,9 @@ type PostSendJSONRequestBody = SendRequest
 // PostEditSessionJSONRequestBody defines body for PostEditSession for application/json ContentType.
 type PostEditSessionJSONRequestBody = EditSessionRequest
 
+// PostSessionLabelJSONRequestBody defines body for PostSessionLabel for application/json ContentType.
+type PostSessionLabelJSONRequestBody = LabelRequest
+
 // PostSessionPulseJSONRequestBody defines body for PostSessionPulse for application/json ContentType.
 type PostSessionPulseJSONRequestBody = PulseRequest
 
@@ -455,6 +473,9 @@ type ServerInterface interface {
 
 	// (POST /api/sessions/{identifier}/export)
 	PostSessionExport(w http.ResponseWriter, r *http.Request, identifier string)
+
+	// (POST /api/sessions/{identifier}/label)
+	PostSessionLabel(w http.ResponseWriter, r *http.Request, identifier string)
 
 	// (GET /api/sessions/{identifier}/messages)
 	GetSessionMessages(w http.ResponseWriter, r *http.Request, identifier string)
@@ -941,6 +962,32 @@ func (siw *ServerInterfaceWrapper) PostSessionExport(w http.ResponseWriter, r *h
 	handler.ServeHTTP(w, r)
 }
 
+// PostSessionLabel operation middleware
+func (siw *ServerInterfaceWrapper) PostSessionLabel(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "identifier" -------------
+	var identifier string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "identifier", r.PathValue("identifier"), &identifier, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "identifier", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PostSessionLabel(w, r, identifier)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
 // GetSessionMessages operation middleware
 func (siw *ServerInterfaceWrapper) GetSessionMessages(w http.ResponseWriter, r *http.Request) {
 
@@ -1372,6 +1419,7 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/sessions/{identifier}", wrapper.DeleteSessionById)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/sessions/{identifier}/detail", wrapper.GetSessionDetail)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/sessions/{identifier}/export", wrapper.PostSessionExport)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/sessions/{identifier}/label", wrapper.PostSessionLabel)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/sessions/{identifier}/messages", wrapper.GetSessionMessages)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/sessions/{identifier}/peek", wrapper.GetSessionPeek)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/sessions/{identifier}/pulse", wrapper.PostSessionPulse)
@@ -2074,6 +2122,43 @@ func (response PostSessionExport500JSONResponse) VisitPostSessionExportResponse(
 	return err
 }
 
+type PostSessionLabelRequestObject struct {
+	Identifier string `json:"identifier"`
+	Body       *PostSessionLabelJSONRequestBody
+}
+
+type PostSessionLabelResponseObject interface {
+	VisitPostSessionLabelResponse(w http.ResponseWriter) error
+}
+
+type PostSessionLabel200JSONResponse LabelResponse
+
+func (response PostSessionLabel200JSONResponse) VisitPostSessionLabelResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type PostSessionLabel500JSONResponse ErrorResponse
+
+func (response PostSessionLabel500JSONResponse) VisitPostSessionLabelResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type GetSessionMessagesRequestObject struct {
 	Identifier string `json:"identifier"`
 }
@@ -2459,6 +2544,9 @@ type StrictServerInterface interface {
 
 	// (POST /api/sessions/{identifier}/export)
 	PostSessionExport(ctx context.Context, request PostSessionExportRequestObject) (PostSessionExportResponseObject, error)
+
+	// (POST /api/sessions/{identifier}/label)
+	PostSessionLabel(ctx context.Context, request PostSessionLabelRequestObject) (PostSessionLabelResponseObject, error)
 
 	// (GET /api/sessions/{identifier}/messages)
 	GetSessionMessages(ctx context.Context, request GetSessionMessagesRequestObject) (GetSessionMessagesResponseObject, error)
@@ -3040,6 +3128,39 @@ func (sh *strictHandler) PostSessionExport(w http.ResponseWriter, r *http.Reques
 	}
 }
 
+// PostSessionLabel operation middleware
+func (sh *strictHandler) PostSessionLabel(w http.ResponseWriter, r *http.Request, identifier string) {
+	var request PostSessionLabelRequestObject
+
+	request.Identifier = identifier
+
+	var body PostSessionLabelJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.PostSessionLabel(ctx, request.(PostSessionLabelRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "PostSessionLabel")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(PostSessionLabelResponseObject); ok {
+		if err := validResponse.VisitPostSessionLabelResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // GetSessionMessages operation middleware
 func (sh *strictHandler) GetSessionMessages(w http.ResponseWriter, r *http.Request, identifier string) {
 	var request GetSessionMessagesRequestObject
@@ -3283,48 +3404,50 @@ func (sh *strictHandler) GetWait(w http.ResponseWriter, r *http.Request, params 
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
+	"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",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

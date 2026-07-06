@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/go-library/pkg/strings/separator"
 	"github.com/funtimecoding/go-library/pkg/tool/gomemoryd/constant"
+	"slices"
 	"strings"
 )
 
@@ -60,6 +61,10 @@ func (s *Service) Profile(
 		}
 
 		if m.ParentIdentifier != nil {
+			continue
+		}
+
+		if slices.Contains(m.Tags, constant.NoIndexTag) {
 			continue
 		}
 

@@ -39,6 +39,7 @@ const (
 	IncludeHistory   = "include_history"
 	Topic            = "topic"
 	AlwaysTag        = "always"
+	NoIndexTag       = "no-index"
 	Add              = "add"
 	Remove           = "remove"
 	ReplaceAll       = "replace_all"

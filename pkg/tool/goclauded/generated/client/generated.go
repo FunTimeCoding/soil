@@ -100,6 +100,21 @@ type LabelEntry struct {
 	Value string `json:"value"`
 }
 
+// LabelRequest defines model for LabelRequest.
+type LabelRequest struct {
+	// From Actor name for the event log.
+	From *string `json:"from,omitempty"`
+	Key  string  `json:"key"`
+
+	// Value Empty or omitted removes the label.
+	Value *string `json:"value,omitempty"`
+}
+
+// LabelResponse defines model for LabelResponse.
+type LabelResponse struct {
+	Change string `json:"change"`
+}
+
 // ListenRequest defines model for ListenRequest.
 type ListenRequest struct {
 	Callsign  string `json:"callsign"`
@@ -387,6 +402,9 @@ type PostSendJSONRequestBody = SendRequest
 // PostEditSessionJSONRequestBody defines body for PostEditSession for application/json ContentType.
 type PostEditSessionJSONRequestBody = EditSessionRequest
 
+// PostSessionLabelJSONRequestBody defines body for PostSessionLabel for application/json ContentType.
+type PostSessionLabelJSONRequestBody = LabelRequest
+
 // PostSessionPulseJSONRequestBody defines body for PostSessionPulse for application/json ContentType.
 type PostSessionPulseJSONRequestBody = PulseRequest
 
@@ -533,6 +551,11 @@ type ClientInterface interface {
 
 	// PostSessionExport request
 	PostSessionExport(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostSessionLabelWithBody request with any body
+	PostSessionLabelWithBody(ctx context.Context, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	PostSessionLabel(ctx context.Context, identifier string, body PostSessionLabelJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GetSessionMessages request
 	GetSessionMessages(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -866,6 +889,30 @@ func (c *Client) GetSessionDetail(ctx context.Context, identifier string, reqEdi
 
 func (c *Client) PostSessionExport(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewPostSessionExportRequest(c.Server, identifier)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PostSessionLabelWithBody(ctx context.Context, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostSessionLabelRequestWithBody(c.Server, identifier, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) PostSessionLabel(ctx context.Context, identifier string, body PostSessionLabelJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostSessionLabelRequest(c.Server, identifier, body)
 	if err != nil {
 		return nil, err
 	}
@@ -1787,6 +1834,53 @@ func NewPostSessionExportRequest(server string, identifier string) (*http.Reques
 	return req, nil
 }
 
+// NewPostSessionLabelRequest calls the generic PostSessionLabel builder with application/json body
+func NewPostSessionLabelRequest(server string, identifier string, body PostSessionLabelJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPostSessionLabelRequestWithBody(server, identifier, "application/json", bodyReader)
+}
+
+// NewPostSessionLabelRequestWithBody generates requests for PostSessionLabel with any type of body
+func NewPostSessionLabelRequestWithBody(server string, identifier string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "identifier", identifier, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/sessions/%s/label", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
 // NewGetSessionMessagesRequest generates requests for GetSessionMessages
 func NewGetSessionMessagesRequest(server string, identifier string) (*http.Request, error) {
 	var err error
@@ -2312,6 +2406,11 @@ type ClientWithResponsesInterface interface {
 
 	// PostSessionExportWithResponse request
 	PostSessionExportWithResponse(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*PostSessionExportResponse, error)
+
+	// PostSessionLabelWithBodyWithResponse request with any body
+	PostSessionLabelWithBodyWithResponse(ctx context.Context, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostSessionLabelResponse, error)
+
+	PostSessionLabelWithResponse(ctx context.Context, identifier string, body PostSessionLabelJSONRequestBody, reqEditors ...RequestEditorFn) (*PostSessionLabelResponse, error)
 
 	// GetSessionMessagesWithResponse request
 	GetSessionMessagesWithResponse(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*GetSessionMessagesResponse, error)
@@ -2928,6 +3027,37 @@ func (r PostSessionExportResponse) ContentType() string {
 	return ""
 }
 
+type PostSessionLabelResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *LabelResponse
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r PostSessionLabelResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostSessionLabelResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r PostSessionLabelResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type GetSessionMessagesResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -3431,6 +3561,23 @@ func (c *ClientWithResponses) PostSessionExportWithResponse(ctx context.Context,
 		return nil, err
 	}
 	return ParsePostSessionExportResponse(rsp)
+}
+
+// PostSessionLabelWithBodyWithResponse request with arbitrary body returning *PostSessionLabelResponse
+func (c *ClientWithResponses) PostSessionLabelWithBodyWithResponse(ctx context.Context, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostSessionLabelResponse, error) {
+	rsp, err := c.PostSessionLabelWithBody(ctx, identifier, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostSessionLabelResponse(rsp)
+}
+
+func (c *ClientWithResponses) PostSessionLabelWithResponse(ctx context.Context, identifier string, body PostSessionLabelJSONRequestBody, reqEditors ...RequestEditorFn) (*PostSessionLabelResponse, error) {
+	rsp, err := c.PostSessionLabel(ctx, identifier, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostSessionLabelResponse(rsp)
 }
 
 // GetSessionMessagesWithResponse request returning *GetSessionMessagesResponse
@@ -4108,6 +4255,39 @@ func ParsePostSessionExportResponse(rsp *http.Response) (*PostSessionExportRespo
 			return nil, err
 		}
 		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePostSessionLabelResponse parses an HTTP response from a PostSessionLabelWithResponse call
+func ParsePostSessionLabelResponse(rsp *http.Response) (*PostSessionLabelResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostSessionLabelResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest LabelResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse

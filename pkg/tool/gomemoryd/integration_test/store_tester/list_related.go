@@ -5,9 +5,9 @@ import (
 	"github.com/funtimecoding/go-library/pkg/tool/gomemoryd/store"
 )
 
-func (o *Tester) ListRelations(identifier int64) []store.Relation {
+func (o *Tester) ListRelated(identifier int64) []store.Related {
 	o.t.Helper()
-	result, e := o.Store.ListRelations(identifier)
+	result, e := o.Store.ListRelated(identifier)
 	assert.FatalOnError(o.t, e)
 
 	return result

@@ -521,6 +521,34 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/sessions/{identifier}/label:
+    post:
+      operationId: postSessionLabel
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LabelRequest"
+      responses:
+        "200":
+          description: Label set or removed.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LabelResponse"
+        "500":
+          description: Internal error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /api/sessions/{identifier}/pulse:
     post:
       operationId: postSessionPulse
@@ -795,6 +823,26 @@ components:
       - body
       properties:
         body:
+          type: string
+    LabelRequest:
+      type: object
+      required:
+      - key
+      properties:
+        key:
+          type: string
+        value:
+          description: Empty or omitted removes the label.
+          type: string
+        from:
+          description: Actor name for the event log.
+          type: string
+    LabelResponse:
+      type: object
+      required:
+      - change
+      properties:
+        change:
           type: string
     MemoryActivityEntry:
       type: object

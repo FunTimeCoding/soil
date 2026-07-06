@@ -110,7 +110,7 @@ func (s *Server) register() {
 		mcp.NewTool(
 			constant.GetMemory,
 			mcp.WithDescription(
-				"Get a memory by ID. Returns full content, description, type, tags. Optionally includes version history.",
+				"Get a memory by ID. Returns full content, description, type, tags, and related memories (identifier, name, description, tags per neighbor). Optionally includes version history.",
 			),
 			mcp.WithNumber(
 				constant.MemoryIdentifier,
@@ -168,7 +168,7 @@ func (s *Server) register() {
 		mcp.NewTool(
 			constant.RelateMemories,
 			mcp.WithDescription(
-				"Create a relation between two memories. Relations are bidirectional - querying either memory returns the link.",
+				"Create a relation between two memories. Relations are bidirectional - get_memory on either shows the other under related.",
 			),
 			mcp.WithNumber(
 				constant.SourceIdentifier,
@@ -196,7 +196,7 @@ func (s *Server) register() {
 		mcp.NewTool(
 			constant.TagMemory,
 			mcp.WithDescription(
-				"Add, remove, or replace tags on a memory. At least one of add, remove, or replace_all is required. Tags are comma-separated.",
+				"Add, remove, or replace tags on a memory. At least one of add, remove, or replace_all is required. Tags are comma-separated. Special tags: 'always' loads the memory in full on every profile call, 'no-index' hides it from the profile index (still reachable via topic matching, search, and relations).",
 			),
 			mcp.WithNumber(
 				constant.MemoryIdentifier,

@@ -24,7 +24,13 @@ func (s *Server) get(
 		return s.captureFail(e, "memory not found")
 	}
 
-	result := memoryWithHistory{Memory: *m}
+	related, f := s.service.ListRelated(identifier)
+
+	if f != nil {
+		return s.captureFail(f, "failed to load relations")
+	}
+
+	result := memoryWithHistory{Memory: *m, Related: related}
 
 	if q.GetBool(constant.IncludeHistory, false) {
 		result.History, e = s.service.GetMemoryHistory(identifier)
