@@ -2,7 +2,7 @@ package constant
 
 import (
 	"errors"
-	"github.com/funtimecoding/go-library/pkg/identity"
+	"github.com/funtimecoding/soil/pkg/identity"
 )
 
 var (

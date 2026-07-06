@@ -3,7 +3,7 @@ package jenkins
 import (
 	"context"
 	"github.com/bndr/gojenkins"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 )
 
 func (c *Client) Jobs() []*gojenkins.Job {

@@ -3,10 +3,10 @@
 package importer
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert/fixture"
-	"github.com/funtimecoding/go-library/pkg/constant"
-	system "github.com/funtimecoding/go-library/pkg/system/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gomemoryd/store"
+	"github.com/funtimecoding/soil/pkg/assert/fixture"
+	"github.com/funtimecoding/soil/pkg/constant"
+	system "github.com/funtimecoding/soil/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
 	"path/filepath"
 	"testing"
 )

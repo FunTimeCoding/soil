@@ -1,6 +1,6 @@
 package face
 
-import "github.com/funtimecoding/go-library/pkg/web/web_client/web_response"
+import "github.com/funtimecoding/soil/pkg/web/web_client/web_response"
 
 type WebClient interface {
 	IsWebClient()

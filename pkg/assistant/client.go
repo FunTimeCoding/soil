@@ -2,8 +2,8 @@ package assistant
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/assistant/connection"
-	"github.com/funtimecoding/go-library/pkg/face"
+	"github.com/funtimecoding/soil/pkg/assistant/connection"
+	"github.com/funtimecoding/soil/pkg/face"
 )
 
 type Client struct {

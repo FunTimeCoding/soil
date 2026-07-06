@@ -2,12 +2,12 @@ package model_context
 
 import (
 	"context"
-	library "github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/generative/mark/response"
-	"github.com/funtimecoding/go-library/pkg/strings/join"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/service/argument"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/timeline"
+	library "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/generative/mark/response"
+	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/argument"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/timeline"
 	"github.com/mark3labs/mcp-go/mcp"
 	"strings"
 	"time"

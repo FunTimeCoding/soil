@@ -1,8 +1,8 @@
 package server
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goalertlogd/generated/server"
-	"github.com/funtimecoding/go-library/pkg/tool/goalertlogd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/generated/server"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store"
 )
 
 func toResponse(records []store.Record) []server.AlertsResponse {

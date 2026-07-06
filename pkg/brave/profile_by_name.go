@@ -1,6 +1,6 @@
 package brave
 
-import "github.com/funtimecoding/go-library/pkg/brave/profile"
+import "github.com/funtimecoding/soil/pkg/brave/profile"
 
 func ProfileByName(name string) *profile.Profile {
 	for _, p := range Profiles() {

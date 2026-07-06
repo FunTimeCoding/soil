@@ -2,7 +2,7 @@ package assistant
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/assistant/connection"
+	"github.com/funtimecoding/soil/pkg/assistant/connection"
 )
 
 func New(

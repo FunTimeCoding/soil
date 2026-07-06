@@ -1,8 +1,8 @@
 package convert
 
 import (
-	"github.com/funtimecoding/go-library/pkg/netbox/network"
-	"github.com/funtimecoding/go-library/pkg/tool/gonetboxd/generated/server"
+	"github.com/funtimecoding/soil/pkg/netbox/network"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 )
 
 func Interfaces(v []*network.Interface) []*server.Interface {

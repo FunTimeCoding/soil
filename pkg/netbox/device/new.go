@@ -1,9 +1,9 @@
 package device
 
 import (
-	"github.com/funtimecoding/go-library/pkg/netbox/constant"
-	"github.com/funtimecoding/go-library/pkg/netbox/helper"
-	"github.com/funtimecoding/go-library/pkg/netbox/tag"
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
+	"github.com/funtimecoding/soil/pkg/netbox/helper"
+	"github.com/funtimecoding/soil/pkg/netbox/tag"
 	"github.com/netbox-community/go-netbox/v4"
 )
 

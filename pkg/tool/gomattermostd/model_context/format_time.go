@@ -1,7 +1,7 @@
 package model_context
 
 import (
-	timeLibrary "github.com/funtimecoding/go-library/pkg/time"
+	timeLibrary "github.com/funtimecoding/soil/pkg/time"
 	"time"
 )
 

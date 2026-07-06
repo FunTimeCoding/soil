@@ -1,7 +1,7 @@
 package gmail
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"google.golang.org/api/gmail/v1"
 )
 

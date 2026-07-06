@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/store/ensure_result"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/ensure_result"
 )
 
 func (s *Service) Register(sessionIdentifier string) (*ensure_result.Result, error) {

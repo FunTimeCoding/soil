@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/goprocess"
+import "github.com/funtimecoding/soil/pkg/tool/goprocess"
 
 var (
 	Version   string

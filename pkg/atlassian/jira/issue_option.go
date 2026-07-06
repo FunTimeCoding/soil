@@ -1,6 +1,6 @@
 package jira
 
-import "github.com/funtimecoding/go-library/pkg/atlassian/jira/issue/option"
+import "github.com/funtimecoding/soil/pkg/atlassian/jira/issue/option"
 
 func (c *Client) IssueOption() (*option.Issue, error) {
 	if c.issueOption != nil {

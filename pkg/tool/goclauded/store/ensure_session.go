@@ -1,8 +1,8 @@
 package store
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/store/ensure_result"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/store/session"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/ensure_result"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/session"
 )
 
 func (s *Store) EnsureSession(identifier string) (*ensure_result.Result, error) {

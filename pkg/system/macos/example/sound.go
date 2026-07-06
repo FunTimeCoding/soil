@@ -2,8 +2,8 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/sound"
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/sound"
+	"github.com/funtimecoding/soil/pkg/system"
 )
 
 func Sound() {

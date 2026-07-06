@@ -1,10 +1,10 @@
 package main
 
 import (
-	brave "github.com/funtimecoding/go-library/pkg/brave/example"
-	chromium "github.com/funtimecoding/go-library/pkg/chromium/example"
-	"github.com/funtimecoding/go-library/pkg/chromium/example/frame_probe"
-	anthropic "github.com/funtimecoding/go-library/pkg/generative/anthropic/site/example"
+	brave "github.com/funtimecoding/soil/pkg/brave/example"
+	chromium "github.com/funtimecoding/soil/pkg/chromium/example"
+	"github.com/funtimecoding/soil/pkg/chromium/example/frame_probe"
+	anthropic "github.com/funtimecoding/soil/pkg/generative/anthropic/site/example"
 )
 
 func main() {

@@ -2,9 +2,9 @@ package example
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/web"
-	"github.com/funtimecoding/go-library/pkg/web/location"
-	"github.com/funtimecoding/go-library/pkg/web/request_context"
+	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/location"
+	"github.com/funtimecoding/soil/pkg/web/request_context"
 	"log/slog"
 	"net/http"
 	"os"

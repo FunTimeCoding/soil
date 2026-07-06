@@ -1,8 +1,8 @@
 package gitlab
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/gitlab/commit"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/gitlab/commit"
 )
 
 func (c *Client) MustMergeRequestCommits(

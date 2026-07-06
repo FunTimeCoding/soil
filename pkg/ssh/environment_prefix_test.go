@@ -1,9 +1,9 @@
 package ssh
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/ssh/command"
-	"github.com/funtimecoding/go-library/pkg/strings/upper"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/ssh/command"
+	"github.com/funtimecoding/soil/pkg/strings/upper"
 	"testing"
 )
 

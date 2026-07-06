@@ -1,6 +1,6 @@
 package github
 
-import "github.com/funtimecoding/go-library/pkg/github/user"
+import "github.com/funtimecoding/soil/pkg/github/user"
 
 func (c *Client) User() (*user.User, error) {
 	result, _, e := c.client.Users.Get(c.context, "")

@@ -1,9 +1,9 @@
 package brew
 
 import (
-	"github.com/funtimecoding/go-library/pkg/system/macos/brew/constant"
-	"github.com/funtimecoding/go-library/pkg/system/macos/brew/response"
-	"github.com/funtimecoding/go-library/pkg/system/run"
+	"github.com/funtimecoding/soil/pkg/system/macos/brew/constant"
+	"github.com/funtimecoding/soil/pkg/system/macos/brew/response"
+	"github.com/funtimecoding/soil/pkg/system/run"
 )
 
 func (c *Client) Installed() *response.Installed {

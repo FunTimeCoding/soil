@@ -1,8 +1,8 @@
 package power_panel
 
 import (
-	"github.com/funtimecoding/go-library/pkg/console"
-	"github.com/funtimecoding/go-library/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/console/status/option"
 )
 
 func (p *Panel) formatName(f *option.Format) string {

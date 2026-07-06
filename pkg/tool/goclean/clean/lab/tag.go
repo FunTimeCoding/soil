@@ -2,10 +2,10 @@ package lab
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/git"
-	"github.com/funtimecoding/go-library/pkg/gitlab"
-	"github.com/funtimecoding/go-library/pkg/gitlab/project"
-	"github.com/funtimecoding/go-library/pkg/gitlab/tag"
+	"github.com/funtimecoding/soil/pkg/git"
+	"github.com/funtimecoding/soil/pkg/gitlab"
+	"github.com/funtimecoding/soil/pkg/gitlab/project"
+	"github.com/funtimecoding/soil/pkg/gitlab/tag"
 )
 
 func Tag(

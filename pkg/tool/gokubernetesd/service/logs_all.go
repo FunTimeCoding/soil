@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/tool/gokubernetesd/service/response"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/response"
 )
 
 func (s *Service) LogsAll(

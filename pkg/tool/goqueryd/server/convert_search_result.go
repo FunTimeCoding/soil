@@ -1,8 +1,8 @@
 package server
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/generated/server"
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/server"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
 )
 
 func convertSearchResult(r store.SearchResult) *server.SearchResult {

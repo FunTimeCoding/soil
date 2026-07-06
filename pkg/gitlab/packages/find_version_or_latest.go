@@ -1,7 +1,7 @@
 package packages
 
 import (
-	"github.com/funtimecoding/go-library/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/constant"
 	"gitlab.com/gitlab-org/api/client-go/v2"
 	"log"
 )

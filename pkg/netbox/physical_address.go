@@ -2,8 +2,8 @@ package netbox
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/netbox/constant"
-	"github.com/funtimecoding/go-library/pkg/netbox/physical_address"
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
+	"github.com/funtimecoding/soil/pkg/netbox/physical_address"
 	"net"
 )
 

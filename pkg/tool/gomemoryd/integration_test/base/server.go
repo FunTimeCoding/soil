@@ -1,9 +1,9 @@
 package base
 
 import (
-	"github.com/funtimecoding/go-library/pkg/generative/model_context_server"
-	"github.com/funtimecoding/go-library/pkg/tool/gomemoryd/store"
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/mock_indexer"
+	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/mock_indexer"
 	"testing"
 )
 

@@ -1,7 +1,7 @@
 package web
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/godashboardd/board"
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )

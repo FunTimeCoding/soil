@@ -1,8 +1,8 @@
 package convert
 
 import (
-	"github.com/funtimecoding/go-library/pkg/netbox/tenant"
-	"github.com/funtimecoding/go-library/pkg/tool/gonetboxd/generated/server"
+	"github.com/funtimecoding/soil/pkg/netbox/tenant"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 )
 
 func Tenant(t *tenant.Tenant) *server.Tenant {

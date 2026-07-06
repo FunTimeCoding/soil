@@ -1,9 +1,9 @@
 package goc
 
 import (
-	"github.com/funtimecoding/go-library/pkg/strings/split"
-	"github.com/funtimecoding/go-library/pkg/system"
-	"github.com/funtimecoding/go-library/pkg/system/join"
+	"github.com/funtimecoding/soil/pkg/strings/split"
+	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/system/join"
 	"strings"
 )
 

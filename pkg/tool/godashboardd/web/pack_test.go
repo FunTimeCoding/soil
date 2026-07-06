@@ -1,10 +1,10 @@
 package web
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/assert/fixture"
-	"github.com/funtimecoding/go-library/pkg/system/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/godashboardd/board"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/assert/fixture"
+	"github.com/funtimecoding/soil/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
 	"testing"
 )
 

@@ -1,8 +1,8 @@
 package source
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/monitor/helper"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/monitor/helper"
 	"testing"
 )
 

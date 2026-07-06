@@ -2,7 +2,7 @@ package status
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/console"
+	"github.com/funtimecoding/soil/pkg/console"
 )
 
 func (s *Status) Raw(

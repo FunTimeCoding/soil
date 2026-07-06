@@ -1,6 +1,6 @@
 package web
 
-import "github.com/funtimecoding/go-library/pkg/web/constant"
+import "github.com/funtimecoding/soil/pkg/web/constant"
 
 func Scheme(secure bool) string {
 	if secure {

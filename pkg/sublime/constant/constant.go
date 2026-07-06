@@ -1,6 +1,6 @@
 package constant
 
-import "github.com/funtimecoding/go-library/pkg/console/status/option"
+import "github.com/funtimecoding/soil/pkg/console/status/option"
 
 const (
 	HostEnvironment = "SUBLIME_HOST"

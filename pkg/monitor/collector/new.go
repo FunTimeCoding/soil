@@ -1,7 +1,7 @@
 package collector
 
 import (
-	"github.com/funtimecoding/go-library/pkg/monitor/item/source"
+	"github.com/funtimecoding/soil/pkg/monitor/item/source"
 	"time"
 )
 

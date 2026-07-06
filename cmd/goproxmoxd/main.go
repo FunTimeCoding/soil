@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/goproxmoxd"
+import "github.com/funtimecoding/soil/pkg/tool/goproxmoxd"
 
 var (
 	Version   string

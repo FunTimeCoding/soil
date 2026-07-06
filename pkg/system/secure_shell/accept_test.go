@@ -1,7 +1,7 @@
 package secure_shell
 
 import (
-	"github.com/funtimecoding/go-library/pkg/system/secure_shell/mock_listener"
+	"github.com/funtimecoding/soil/pkg/system/secure_shell/mock_listener"
 	"testing"
 )
 

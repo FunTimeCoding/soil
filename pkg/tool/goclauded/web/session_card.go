@@ -2,9 +2,9 @@ package web
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/store/label"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/store/pulse"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/store/session"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/label"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/pulse"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/session"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"strings"

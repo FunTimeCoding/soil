@@ -2,9 +2,9 @@ package gitlab
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/forge"
-	"github.com/funtimecoding/go-library/pkg/gitlab/constant"
-	"github.com/funtimecoding/go-library/pkg/gitlab/job"
+	"github.com/funtimecoding/soil/pkg/forge"
+	"github.com/funtimecoding/soil/pkg/gitlab/constant"
+	"github.com/funtimecoding/soil/pkg/gitlab/job"
 )
 
 func (c *Client) Jobs() []*job.Job {

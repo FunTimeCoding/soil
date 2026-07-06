@@ -1,8 +1,8 @@
 package netbox
 
 import (
-	"github.com/funtimecoding/go-library/pkg/netbox/constant"
-	"github.com/funtimecoding/go-library/pkg/netbox/user_group"
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
+	"github.com/funtimecoding/soil/pkg/netbox/user_group"
 )
 
 func (c *Client) UserGroups() ([]*user_group.Group, error) {

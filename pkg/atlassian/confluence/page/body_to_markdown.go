@@ -1,9 +1,9 @@
 package page
 
 import (
-	"github.com/funtimecoding/go-library/pkg/atlassian/confluence/basic/response"
-	"github.com/funtimecoding/go-library/pkg/text"
-	"github.com/funtimecoding/go-library/pkg/text/option"
+	"github.com/funtimecoding/soil/pkg/atlassian/confluence/basic/response"
+	"github.com/funtimecoding/soil/pkg/text"
+	"github.com/funtimecoding/soil/pkg/text/option"
 )
 
 func bodyToMarkdown(b response.Body) string {

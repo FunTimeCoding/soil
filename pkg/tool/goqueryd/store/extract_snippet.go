@@ -2,8 +2,8 @@ package store
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/strings/separator"
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/constant"
+	"github.com/funtimecoding/soil/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"strings"
 )
 

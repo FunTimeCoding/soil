@@ -1,7 +1,7 @@
 package monitor
 
 import (
-	"github.com/funtimecoding/go-library/pkg/bubbletea/table/item"
+	"github.com/funtimecoding/soil/pkg/bubbletea/table/item"
 	"log"
 )
 

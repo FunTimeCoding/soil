@@ -1,11 +1,11 @@
 package web_service_tester
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/tool/gomaintlogd/generated/client"
-	"github.com/funtimecoding/go-library/pkg/tool/gomaintlogd/integration_test/base"
-	"github.com/funtimecoding/go-library/pkg/web/constant"
-	"github.com/funtimecoding/go-library/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/integration_test/base"
+	"github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"testing"
 )
 

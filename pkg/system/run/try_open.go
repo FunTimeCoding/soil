@@ -1,7 +1,7 @@
 package run
 
 import (
-	"github.com/funtimecoding/go-library/pkg/system/run/process"
+	"github.com/funtimecoding/soil/pkg/system/run/process"
 	"os"
 )
 

@@ -1,8 +1,8 @@
 package netbox
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/netbox/tenant"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/netbox/tenant"
 )
 
 func (c *Client) MustTenants() []*tenant.Tenant {

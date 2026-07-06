@@ -1,7 +1,7 @@
 package status
 
 import (
-	"github.com/funtimecoding/go-library/pkg/strings/join/key_value"
+	"github.com/funtimecoding/soil/pkg/strings/join/key_value"
 	"slices"
 	"strings"
 )

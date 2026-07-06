@@ -1,9 +1,9 @@
 package netbox
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/netbox/network"
-	"github.com/funtimecoding/go-library/pkg/netbox/physical_address"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/netbox/network"
+	"github.com/funtimecoding/soil/pkg/netbox/physical_address"
 )
 
 func (c *Client) MustUpdatePhysicalAddress(

@@ -1,8 +1,8 @@
 package store
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/store/usage_snapshot"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/usage_snapshot"
 )
 
 func (s *Store) SaveUsageSnapshot(

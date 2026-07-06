@@ -1,8 +1,8 @@
 package convert
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goatlassiand/generated/server"
-	"github.com/funtimecoding/go-library/pkg/tool/goatlassiand/types/checklist_item"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/server"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/types/checklist_item"
 )
 
 type IssueWithCustomFields struct {

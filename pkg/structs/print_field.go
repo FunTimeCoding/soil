@@ -2,7 +2,7 @@ package structs
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/structs/constant"
+	"github.com/funtimecoding/soil/pkg/structs/constant"
 	"reflect"
 )
 

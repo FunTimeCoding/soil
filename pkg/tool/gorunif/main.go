@@ -1,12 +1,12 @@
 package gorunif
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/tool/gorunif/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gorunif/run_if"
-	runIfConstant "github.com/funtimecoding/go-library/pkg/tool/gorunif/run_if/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gorunif/run_if/option"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/tool/gorunif/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gorunif/run_if"
+	runIfConstant "github.com/funtimecoding/soil/pkg/tool/gorunif/run_if/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gorunif/run_if/option"
 )
 
 func Main(

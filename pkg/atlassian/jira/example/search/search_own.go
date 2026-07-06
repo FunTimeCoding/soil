@@ -2,8 +2,8 @@ package search
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
 )
 
 func searchOwn(

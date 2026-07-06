@@ -1,6 +1,6 @@
 package commit
 
-import "github.com/funtimecoding/go-library/pkg/tool/gocommit/commit/option"
+import "github.com/funtimecoding/soil/pkg/tool/gocommit/commit/option"
 
 func validate(o *option.Commit) {
 	if o.Host == "" {

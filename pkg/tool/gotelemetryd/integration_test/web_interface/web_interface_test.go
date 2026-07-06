@@ -3,8 +3,8 @@
 package web_interface
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/gotelemetryd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gotelemetryd/integration_test/web_interface_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/integration_test/web_interface_tester"
 	"net/http"
 	"testing"
 )

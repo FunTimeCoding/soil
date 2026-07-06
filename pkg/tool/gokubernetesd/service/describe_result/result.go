@@ -1,6 +1,6 @@
 package describe_result
 
-import "github.com/funtimecoding/go-library/pkg/tool/gokubernetesd/service/response"
+import "github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/response"
 
 type Result struct {
 	Resource map[string]any

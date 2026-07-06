@@ -2,7 +2,7 @@ package goatlassian
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/tool/goatlassiand/client"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
 )
 

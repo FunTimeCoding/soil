@@ -2,12 +2,12 @@ package job
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/console/status/tag"
-	"github.com/funtimecoding/go-library/pkg/github"
-	"github.com/funtimecoding/go-library/pkg/github/check/job/option"
-	"github.com/funtimecoding/go-library/pkg/github/constant"
-	"github.com/funtimecoding/go-library/pkg/monitor"
-	item "github.com/funtimecoding/go-library/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/console/status/tag"
+	"github.com/funtimecoding/soil/pkg/github"
+	"github.com/funtimecoding/soil/pkg/github/check/job/option"
+	"github.com/funtimecoding/soil/pkg/github/constant"
+	"github.com/funtimecoding/soil/pkg/monitor"
+	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
 )
 
 func Check(o *option.Job) {

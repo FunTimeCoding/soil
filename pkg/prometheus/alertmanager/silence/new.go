@@ -2,11 +2,11 @@ package silence
 
 import (
 	"fmt"
-	item "github.com/funtimecoding/go-library/pkg/monitor/item/constant"
-	"github.com/funtimecoding/go-library/pkg/openapi"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/constant"
-	"github.com/funtimecoding/go-library/pkg/strings/join"
-	"github.com/funtimecoding/go-library/pkg/web/locator"
+	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/openapi"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
+	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/prometheus/alertmanager/api/v2/models"
 )
 

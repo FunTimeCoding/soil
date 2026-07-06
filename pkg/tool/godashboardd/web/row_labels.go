@@ -1,6 +1,6 @@
 package web
 
-import "github.com/funtimecoding/go-library/pkg/tool/godashboardd/board"
+import "github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
 
 func rowLabels(v *board.Entry) []string {
 	if v.Widget == board.NextcloudWidget {

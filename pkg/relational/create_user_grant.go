@@ -2,7 +2,7 @@ package relational
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/jackc/pgx/v5"
 	"log"
 )

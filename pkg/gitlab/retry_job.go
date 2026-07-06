@@ -2,7 +2,7 @@ package gitlab
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/gitlab/job"
+	"github.com/funtimecoding/soil/pkg/gitlab/job"
 )
 
 func (c *Client) RetryJob(j *job.Job) (*job.Job, error) {

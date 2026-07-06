@@ -2,9 +2,9 @@ package rule
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/console"
-	"github.com/funtimecoding/go-library/pkg/console/status"
-	"github.com/funtimecoding/go-library/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/console/status"
+	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"slices"
 	"time"
 )

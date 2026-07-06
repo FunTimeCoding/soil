@@ -1,7 +1,7 @@
 package issue
 
 import (
-	library "github.com/funtimecoding/go-library/pkg/time"
+	library "github.com/funtimecoding/soil/pkg/time"
 	"time"
 )
 

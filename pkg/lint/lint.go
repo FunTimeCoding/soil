@@ -2,13 +2,13 @@ package lint
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/lint/concern"
-	lintConstant "github.com/funtimecoding/go-library/pkg/lint/constant"
-	"github.com/funtimecoding/go-library/pkg/lint/option"
-	"github.com/funtimecoding/go-library/pkg/lint/output"
-	"github.com/funtimecoding/go-library/pkg/system"
-	"github.com/funtimecoding/go-library/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/lint/concern"
+	lintConstant "github.com/funtimecoding/soil/pkg/lint/constant"
+	"github.com/funtimecoding/soil/pkg/lint/option"
+	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"os"
 )
 

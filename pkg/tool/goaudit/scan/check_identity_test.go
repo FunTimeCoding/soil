@@ -1,8 +1,8 @@
 package scan
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"testing"
 )
 
@@ -10,7 +10,7 @@ func TestCheckIdentityValid(t *testing.T) {
 	v := virtual_file_system.New()
 	v.WriteString(
 		"pkg/tool/gotestd/constant/constant.go",
-		"package constant\n\nimport \"github.com/funtimecoding/go-library/pkg/identity\"\n\nvar Identity = identity.New(\"gotestd\", \"test\", \"gotestd\")\n",
+		"package constant\n\nimport \"github.com/funtimecoding/soil/pkg/identity\"\n\nvar Identity = identity.New(\"gotestd\", \"test\", \"gotestd\")\n",
 	)
 	assert.Integer(
 		t,
@@ -23,7 +23,7 @@ func TestCheckIdentityMismatch(t *testing.T) {
 	v := virtual_file_system.New()
 	v.WriteString(
 		"pkg/tool/gotestd/constant/constant.go",
-		"package constant\n\nimport \"github.com/funtimecoding/go-library/pkg/identity\"\n\nvar Identity = identity.New(\"wrong\", \"test\", \"wrong\")\n",
+		"package constant\n\nimport \"github.com/funtimecoding/soil/pkg/identity\"\n\nvar Identity = identity.New(\"wrong\", \"test\", \"wrong\")\n",
 	)
 	r := identityConcerns(v, "pkg/tool/gotestd", "gotestd")
 	assert.Integer(t, 1, len(r))

@@ -1,8 +1,8 @@
 package github
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/github/job"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/github/job"
 )
 
 func (c *Client) MustJobs(

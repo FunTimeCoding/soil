@@ -1,7 +1,7 @@
 package runner_tester
 
 import (
-	"github.com/funtimecoding/go-library/pkg/provision/runner"
+	"github.com/funtimecoding/soil/pkg/provision/runner"
 	"sync"
 	"testing"
 )

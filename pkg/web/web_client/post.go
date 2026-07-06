@@ -2,9 +2,9 @@ package web_client
 
 import (
 	"bytes"
-	"github.com/funtimecoding/go-library/pkg/notation"
-	"github.com/funtimecoding/go-library/pkg/web/constant"
-	"github.com/funtimecoding/go-library/pkg/web/web_client/web_response"
+	"github.com/funtimecoding/soil/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/web_client/web_response"
 	"net/http"
 	"time"
 )

@@ -1,6 +1,6 @@
 package netbox
 
-import "github.com/funtimecoding/go-library/pkg/netbox/cluster_type"
+import "github.com/funtimecoding/soil/pkg/netbox/cluster_type"
 
 func (c *Client) ClusterTypes() ([]*cluster_type.Type, error) {
 	result, _, e := c.client.VirtualizationAPI.VirtualizationClusterTypesList(

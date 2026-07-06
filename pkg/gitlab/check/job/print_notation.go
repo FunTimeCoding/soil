@@ -1,12 +1,12 @@
 package job
 
 import (
-	"github.com/funtimecoding/go-library/pkg/gitlab/check/job/option"
-	"github.com/funtimecoding/go-library/pkg/gitlab/constant"
-	"github.com/funtimecoding/go-library/pkg/gitlab/job"
-	monitor "github.com/funtimecoding/go-library/pkg/monitor/constant"
-	item "github.com/funtimecoding/go-library/pkg/monitor/item/constant"
-	"github.com/funtimecoding/go-library/pkg/monitor/report"
+	"github.com/funtimecoding/soil/pkg/gitlab/check/job/option"
+	"github.com/funtimecoding/soil/pkg/gitlab/constant"
+	"github.com/funtimecoding/soil/pkg/gitlab/job"
+	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
+	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/monitor/report"
 )
 
 func printNotation(

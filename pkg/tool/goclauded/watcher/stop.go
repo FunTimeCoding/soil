@@ -1,6 +1,6 @@
 package watcher
 
-import "github.com/funtimecoding/go-library/pkg/errors"
+import "github.com/funtimecoding/soil/pkg/errors"
 
 func (w *Watcher) Stop() {
 	if w.notifier != nil {

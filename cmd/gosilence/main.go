@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/gosilence"
+import "github.com/funtimecoding/soil/pkg/tool/gosilence"
 
 var (
 	Version   string

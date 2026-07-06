@@ -2,7 +2,7 @@ package habitica
 
 import (
 	"encoding/json"
-	"github.com/funtimecoding/go-library/pkg/habitica/envelope"
+	"github.com/funtimecoding/soil/pkg/habitica/envelope"
 	"io"
 	"net/http"
 )

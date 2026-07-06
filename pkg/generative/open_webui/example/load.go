@@ -2,7 +2,7 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/generative/open_webui"
+	"github.com/funtimecoding/soil/pkg/generative/open_webui"
 )
 
 func Load() {

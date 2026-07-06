@@ -2,7 +2,7 @@ package discord
 
 import (
 	"github.com/bwmarrin/discordgo"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 )
 
 func (c *Client) UserChannel(

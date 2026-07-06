@@ -1,9 +1,9 @@
 package web
 
 import (
-	"github.com/funtimecoding/go-library/pkg/face"
-	"github.com/funtimecoding/go-library/pkg/telemetry/constant"
-	"github.com/funtimecoding/go-library/pkg/telemetry/record"
+	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/telemetry/constant"
+	"github.com/funtimecoding/soil/pkg/telemetry/record"
 )
 
 func RecordTelemetry(

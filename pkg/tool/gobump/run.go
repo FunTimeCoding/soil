@@ -3,11 +3,11 @@ package gobump
 import (
 	"fmt"
 	"github.com/coreos/go-semver/semver"
-	"github.com/funtimecoding/go-library/pkg/git"
-	"github.com/funtimecoding/go-library/pkg/git/constant"
-	"github.com/funtimecoding/go-library/pkg/strings/join/key_value"
-	"github.com/funtimecoding/go-library/pkg/system"
-	"github.com/funtimecoding/go-library/pkg/tool/gobump/option"
+	"github.com/funtimecoding/soil/pkg/git"
+	"github.com/funtimecoding/soil/pkg/git/constant"
+	"github.com/funtimecoding/soil/pkg/strings/join/key_value"
+	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/tool/gobump/option"
 )
 
 func Run(o *option.Bump) {

@@ -1,8 +1,8 @@
 package netbox
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/netbox/power_panel"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/netbox/power_panel"
 )
 
 func (c *Client) MustPowerPanels() []*power_panel.Panel {

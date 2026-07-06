@@ -2,8 +2,8 @@ package example
 
 import (
 	"github.com/chromedp/chromedp"
-	"github.com/funtimecoding/go-library/pkg/chromium"
-	"github.com/funtimecoding/go-library/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/chromium"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"log"
 	"strings"
 	"time"

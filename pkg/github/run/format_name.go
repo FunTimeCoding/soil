@@ -1,8 +1,8 @@
 package run
 
 import (
-	"github.com/funtimecoding/go-library/pkg/console"
-	"github.com/funtimecoding/go-library/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/console/status/option"
 )
 
 func (r *Run) formatName(f *option.Format) string {

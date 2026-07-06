@@ -3,9 +3,9 @@ package iterm
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/iterm/history"
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/iterm/history"
+	"github.com/funtimecoding/soil/pkg/system"
 	"net/http"
 )
 

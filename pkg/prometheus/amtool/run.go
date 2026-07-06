@@ -2,13 +2,13 @@ package amtool
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/maps"
-	alertmanager "github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/constant"
-	"github.com/funtimecoding/go-library/pkg/strings/split/key_value"
-	"github.com/funtimecoding/go-library/pkg/system"
-	"github.com/funtimecoding/go-library/pkg/system/constant"
-	"github.com/funtimecoding/go-library/pkg/system/join"
-	"github.com/funtimecoding/go-library/pkg/system/run"
+	"github.com/funtimecoding/soil/pkg/maps"
+	alertmanager "github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
+	"github.com/funtimecoding/soil/pkg/strings/split/key_value"
+	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/system/join"
+	"github.com/funtimecoding/soil/pkg/system/run"
 	"slices"
 	"strings"
 )

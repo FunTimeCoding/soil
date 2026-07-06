@@ -1,10 +1,10 @@
 package repository
 
 import (
-	"github.com/funtimecoding/go-library/pkg/console/status"
-	"github.com/funtimecoding/go-library/pkg/console/status/option"
-	"github.com/funtimecoding/go-library/pkg/console/status/tag"
-	"github.com/funtimecoding/go-library/pkg/strings/split"
+	"github.com/funtimecoding/soil/pkg/console/status"
+	"github.com/funtimecoding/soil/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/console/status/tag"
+	"github.com/funtimecoding/soil/pkg/strings/split"
 )
 
 func (r *Repository) Format(f *option.Format) string {

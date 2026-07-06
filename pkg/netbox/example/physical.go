@@ -2,9 +2,9 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/netbox"
-	"github.com/funtimecoding/go-library/pkg/network"
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/netbox"
+	"github.com/funtimecoding/soil/pkg/network"
 )
 
 func Physical() {

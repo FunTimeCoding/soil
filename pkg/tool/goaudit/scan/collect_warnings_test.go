@@ -1,8 +1,8 @@
 package scan
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"testing"
 )
 
@@ -133,7 +133,7 @@ func TestCleanServiceNoConcerns(t *testing.T) {
 	)
 	v.WriteString(
 		"pkg/tool/gotestd/constant/constant.go",
-		"package constant\n\nimport \"github.com/funtimecoding/go-library/pkg/identity\"\n\nvar Identity = identity.New(\"gotestd\", \"test\", \"gotestd\")\n",
+		"package constant\n\nimport \"github.com/funtimecoding/soil/pkg/identity\"\n\nvar Identity = identity.New(\"gotestd\", \"test\", \"gotestd\")\n",
 	)
 	v.WriteString(
 		"pkg/tool/gotestd/option/o.go",

@@ -1,6 +1,6 @@
 package store
 
-import "github.com/funtimecoding/go-library/pkg/errors"
+import "github.com/funtimecoding/soil/pkg/errors"
 
 func (s *Store) RecentImpressions(since string) ([]Impression, error) {
 	rows, e := s.database.Query(

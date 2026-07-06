@@ -2,7 +2,7 @@ package claude
 
 import (
 	"encoding/json"
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/claude/content_block"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/content_block"
 	"strings"
 )
 

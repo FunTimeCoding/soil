@@ -1,8 +1,8 @@
 package firefox
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/firefox/tab"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/firefox/tab"
 )
 
 func (c *Client) MustTabs() []*tab.Tab {

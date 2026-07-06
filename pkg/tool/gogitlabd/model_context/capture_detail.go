@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"errors"
-	"github.com/funtimecoding/go-library/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 	"gitlab.com/gitlab-org/api/client-go/v2"
 )

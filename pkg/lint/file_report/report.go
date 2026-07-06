@@ -2,7 +2,7 @@ package file_report
 
 import (
 	"bufio"
-	"github.com/funtimecoding/go-library/pkg/lint/concern"
+	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"strings"
 )
 

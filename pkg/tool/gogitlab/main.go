@@ -1,11 +1,11 @@
 package gogitlab
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/gitlab/check/job"
-	"github.com/funtimecoding/go-library/pkg/gitlab/check/job/option"
-	"github.com/funtimecoding/go-library/pkg/tool/gogitlabd/constant"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/gitlab/check/job"
+	"github.com/funtimecoding/soil/pkg/gitlab/check/job/option"
+	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
 )
 
 func Main(

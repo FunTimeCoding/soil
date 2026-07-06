@@ -1,6 +1,6 @@
 package user_map
 
-import "github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/user"
+import "github.com/funtimecoding/soil/pkg/atlassian/opsgenie/user"
 
 func New(v []*user.User) *Map {
 	m := make(map[string]*user.User, len(v))

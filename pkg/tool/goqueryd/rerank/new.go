@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/amikos-tech/pure-onnx/ort"
 	"github.com/amikos-tech/pure-tokenizers"
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 )
 
 func New(

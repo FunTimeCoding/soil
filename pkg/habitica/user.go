@@ -1,7 +1,7 @@
 package habitica
 
 import (
-	"github.com/funtimecoding/go-library/pkg/habitica/user"
+	"github.com/funtimecoding/soil/pkg/habitica/user"
 	"net/http"
 )
 

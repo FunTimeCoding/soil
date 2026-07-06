@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/claude/tracker"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/tracker"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"time"
 )
 

@@ -2,7 +2,7 @@ package store
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/notation"
 	"go.etcd.io/bbolt"
 )
 

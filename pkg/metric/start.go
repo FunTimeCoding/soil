@@ -2,7 +2,7 @@ package metric
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func (s *Server) Start() {

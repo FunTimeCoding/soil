@@ -3,10 +3,10 @@
 package model_context
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/firefox/tab"
-	"github.com/funtimecoding/go-library/pkg/tool/gofirefoxd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gofirefoxd/integration_test/model_context_tester"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/firefox/tab"
+	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/integration_test/model_context_tester"
 	"testing"
 )
 

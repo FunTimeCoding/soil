@@ -1,7 +1,7 @@
 package connection
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assistant/message"
+	"github.com/funtimecoding/soil/pkg/assistant/message"
 	"github.com/gorilla/websocket"
 )
 

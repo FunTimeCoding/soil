@@ -1,6 +1,6 @@
 package monitor
 
-import "github.com/funtimecoding/go-library/pkg/face"
+import "github.com/funtimecoding/soil/pkg/face"
 
 func OnlyConcerns[T face.Validator](
 	v []T,

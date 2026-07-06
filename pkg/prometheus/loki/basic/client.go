@@ -1,6 +1,6 @@
 package basic
 
-import "github.com/funtimecoding/go-library/pkg/web/locator"
+import "github.com/funtimecoding/soil/pkg/web/locator"
 
 type Client struct {
 	user     string

@@ -2,11 +2,11 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/brave"
-	"github.com/funtimecoding/go-library/pkg/brave/bookmark"
-	"github.com/funtimecoding/go-library/pkg/brave/bookmark/node"
-	"github.com/funtimecoding/go-library/pkg/brave/constant"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/brave"
+	"github.com/funtimecoding/soil/pkg/brave/bookmark"
+	"github.com/funtimecoding/soil/pkg/brave/bookmark/node"
+	"github.com/funtimecoding/soil/pkg/brave/constant"
 )
 
 func BookmarkSearch() {

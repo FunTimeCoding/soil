@@ -1,6 +1,6 @@
 package site
 
-import "github.com/funtimecoding/go-library/pkg/chromium/protocol"
+import "github.com/funtimecoding/soil/pkg/chromium/protocol"
 
 func (s *Site) printNewButton() {
 	s.protocol.PrintNode(NewSelector, usefulAttributes)

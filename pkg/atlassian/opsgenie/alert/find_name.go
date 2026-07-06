@@ -2,7 +2,7 @@ package alert
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
 	"strings"
 )
 

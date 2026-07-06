@@ -2,7 +2,7 @@ package store
 
 import (
 	"database/sql"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 	_ "github.com/glebarez/go-sqlite"
 )
 

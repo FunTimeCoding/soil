@@ -3,9 +3,9 @@ package anthropic
 import (
 	"context"
 	"fmt"
-	library "github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/generative/model_context/constant"
+	library "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/generative/model_context/constant"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
 

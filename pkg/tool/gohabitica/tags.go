@@ -2,7 +2,7 @@ package gohabitica
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/tool/gohabiticad/client"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/client"
 	"github.com/spf13/cobra"
 )
 

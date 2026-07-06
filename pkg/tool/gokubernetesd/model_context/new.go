@@ -1,10 +1,10 @@
 package model_context
 
 import (
-	"github.com/funtimecoding/go-library/pkg/face"
-	"github.com/funtimecoding/go-library/pkg/generative/mark/server"
-	"github.com/funtimecoding/go-library/pkg/tool/gokubernetesd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gokubernetesd/service"
+	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/generative/mark/server"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service"
 )
 
 func New(

@@ -1,8 +1,8 @@
 package store
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/store/pool_name"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/pool_name"
 )
 
 func (s *Store) poolNames() ([]string, error) {

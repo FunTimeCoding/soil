@@ -1,15 +1,15 @@
 package gomonitord
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/monitor/coder"
-	"github.com/funtimecoding/go-library/pkg/monitor/gorilla"
-	"github.com/funtimecoding/go-library/pkg/monitor/gorilla/example_client"
-	"github.com/funtimecoding/go-library/pkg/tool/gomonitord/constant"
-	"github.com/funtimecoding/go-library/pkg/web"
-	webConstant "github.com/funtimecoding/go-library/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/monitor/coder"
+	"github.com/funtimecoding/soil/pkg/monitor/gorilla"
+	"github.com/funtimecoding/soil/pkg/monitor/gorilla/example_client"
+	"github.com/funtimecoding/soil/pkg/tool/gomonitord/constant"
+	"github.com/funtimecoding/soil/pkg/web"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 )
 
 func Main(

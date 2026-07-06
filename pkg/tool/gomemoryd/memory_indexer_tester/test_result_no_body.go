@@ -2,7 +2,7 @@ package memory_indexer_tester
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 )
 
 func TestResultNoBody(path string) *client.SearchResult {

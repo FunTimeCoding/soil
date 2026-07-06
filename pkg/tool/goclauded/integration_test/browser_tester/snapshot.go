@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/chromedp/cdproto/accessibility"
 	"github.com/chromedp/chromedp"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 )
 
 func (b *Browser) Snapshot() []*SnapshotNode {

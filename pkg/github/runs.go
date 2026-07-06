@@ -2,9 +2,9 @@ package github
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/forge"
-	"github.com/funtimecoding/go-library/pkg/github/constant"
-	"github.com/funtimecoding/go-library/pkg/github/run"
+	"github.com/funtimecoding/soil/pkg/forge"
+	"github.com/funtimecoding/soil/pkg/github/constant"
+	"github.com/funtimecoding/soil/pkg/github/run"
 )
 
 func (c *Client) Runs(

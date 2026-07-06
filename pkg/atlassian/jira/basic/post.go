@@ -1,7 +1,7 @@
 package basic
 
 import (
-	"github.com/funtimecoding/go-library/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"io"
 	"net/http"
 	"strings"

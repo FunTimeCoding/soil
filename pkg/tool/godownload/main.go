@@ -1,14 +1,14 @@
 package godownload
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	library "github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/system/environment"
-	"github.com/funtimecoding/go-library/pkg/tool/common"
-	"github.com/funtimecoding/go-library/pkg/tool/godownload/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/godownload/download"
-	"github.com/funtimecoding/go-library/pkg/tool/godownload/download/option"
+	"github.com/funtimecoding/soil/pkg/argument"
+	library "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/tool/common"
+	"github.com/funtimecoding/soil/pkg/tool/godownload/constant"
+	"github.com/funtimecoding/soil/pkg/tool/godownload/download"
+	"github.com/funtimecoding/soil/pkg/tool/godownload/download/option"
 )
 
 func Main(

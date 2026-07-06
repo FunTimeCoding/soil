@@ -1,11 +1,11 @@
 package gowait
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/tool/gowait/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gowait/wait"
-	"github.com/funtimecoding/go-library/pkg/tool/gowait/wait/option"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/tool/gowait/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gowait/wait"
+	"github.com/funtimecoding/soil/pkg/tool/gowait/wait/option"
 	"time"
 )
 

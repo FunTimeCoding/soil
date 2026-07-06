@@ -4,10 +4,10 @@ import (
 	"context"
 	"github.com/andygrunwald/go-jira"
 	"github.com/ctreminiom/go-atlassian/v2/jira/sm"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/basic"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/field_map"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/issue/issue_enricher"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/issue/option"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/basic"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/field_map"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue/issue_enricher"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue/option"
 )
 
 type Client struct {

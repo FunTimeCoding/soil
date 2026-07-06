@@ -1,8 +1,8 @@
 package minute
 
 import (
-	"github.com/funtimecoding/go-library/pkg/time"
-	"github.com/funtimecoding/go-library/pkg/time/second"
+	"github.com/funtimecoding/soil/pkg/time"
+	"github.com/funtimecoding/soil/pkg/time/second"
 )
 
 func Readable(minutes int) string {

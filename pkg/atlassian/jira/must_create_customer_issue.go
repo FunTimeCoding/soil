@@ -2,7 +2,7 @@ package jira
 
 import (
 	"github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 )
 
 func (c *Client) MustCreateCustomerIssue(

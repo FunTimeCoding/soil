@@ -1,8 +1,8 @@
 package github
 
 import (
-	"github.com/funtimecoding/go-library/pkg/github/constant"
-	"github.com/funtimecoding/go-library/pkg/github/container"
+	"github.com/funtimecoding/soil/pkg/github/constant"
+	"github.com/funtimecoding/soil/pkg/github/container"
 	"github.com/google/go-github/v88/github"
 )
 

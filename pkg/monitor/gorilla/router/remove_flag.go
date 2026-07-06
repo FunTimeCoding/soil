@@ -1,6 +1,6 @@
 package router
 
-import "github.com/funtimecoding/go-library/pkg/monitor/gorilla/router/flag"
+import "github.com/funtimecoding/soil/pkg/monitor/gorilla/router/flag"
 
 func (r *Router) RemoveFlag(f *flag.Flag) {
 	for i, l := range r.Flag {

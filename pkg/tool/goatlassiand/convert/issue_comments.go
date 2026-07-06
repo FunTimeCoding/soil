@@ -1,6 +1,6 @@
 package convert
 
-import "github.com/funtimecoding/go-library/pkg/atlassian/jira/issue"
+import "github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
 
 func issueComments(i *issue.Issue) []*IssueComment {
 	if i.Raw.Fields.Comments == nil {

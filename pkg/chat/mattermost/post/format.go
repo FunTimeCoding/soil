@@ -1,12 +1,12 @@
 package post
 
 import (
-	"github.com/funtimecoding/go-library/pkg/console/status"
-	"github.com/funtimecoding/go-library/pkg/console/status/option"
-	"github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/strings/split"
-	"github.com/funtimecoding/go-library/pkg/text"
-	"github.com/funtimecoding/go-library/pkg/time"
+	"github.com/funtimecoding/soil/pkg/console/status"
+	"github.com/funtimecoding/soil/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/strings/split"
+	"github.com/funtimecoding/soil/pkg/text"
+	"github.com/funtimecoding/soil/pkg/time"
 )
 
 func (p *Post) Format(f *option.Format) string {

@@ -1,8 +1,8 @@
 package proxmox
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/proxmox/node_status"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/proxmox/node_status"
 )
 
 func (c *Client) MustNodeStatus(name string) *node_status.Status {

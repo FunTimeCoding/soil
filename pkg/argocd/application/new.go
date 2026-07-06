@@ -1,6 +1,6 @@
 package application
 
-import "github.com/funtimecoding/go-library/pkg/argocd/response"
+import "github.com/funtimecoding/soil/pkg/argocd/response"
 
 func New(v response.Application) *Application {
 	return &Application{

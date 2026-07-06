@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/gmail"
-	"github.com/funtimecoding/go-library/pkg/gmail/constant"
+	"github.com/funtimecoding/soil/pkg/gmail"
+	"github.com/funtimecoding/soil/pkg/gmail/constant"
 )
 
 func main() {

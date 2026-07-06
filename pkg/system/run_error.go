@@ -1,6 +1,6 @@
 package system
 
-import "github.com/funtimecoding/go-library/pkg/system/run"
+import "github.com/funtimecoding/soil/pkg/system/run"
 
 func RunError(s ...string) (string, error) {
 	r := run.New().NoPanic()

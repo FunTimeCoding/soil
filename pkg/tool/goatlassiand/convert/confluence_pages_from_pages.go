@@ -1,8 +1,8 @@
 package convert
 
 import (
-	"github.com/funtimecoding/go-library/pkg/atlassian/confluence/page"
-	"github.com/funtimecoding/go-library/pkg/tool/goatlassiand/generated/server"
+	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/server"
 )
 
 func ConfluencePagesFromPages(v []*page.Page) []*server.ConfluencePage {

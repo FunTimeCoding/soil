@@ -1,8 +1,8 @@
 package in_range
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/math/ranges"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/math/ranges"
 	"testing"
 )
 

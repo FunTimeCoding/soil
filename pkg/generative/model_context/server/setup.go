@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/funtimecoding/go-library/pkg/web/location"
+	"github.com/funtimecoding/soil/pkg/web/location"
 	"github.com/mark3labs/mcp-go/server"
 	"net/http"
 	"time"

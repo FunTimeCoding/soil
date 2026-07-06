@@ -2,7 +2,7 @@ package client
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/kubernetes/filter"
+	"github.com/funtimecoding/soil/pkg/kubernetes/filter"
 )
 
 func (c *Client) selectClients(f *filter.Filter) []*Client {

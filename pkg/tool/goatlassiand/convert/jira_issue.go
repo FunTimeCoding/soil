@@ -1,8 +1,8 @@
 package convert
 
 import (
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/issue"
-	"github.com/funtimecoding/go-library/pkg/tool/goatlassiand/generated/server"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/server"
 	"time"
 )
 

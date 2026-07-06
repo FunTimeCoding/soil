@@ -1,10 +1,10 @@
 package goc
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/tool/goc/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goc/option"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/tool/goc/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goc/option"
 )
 
 func Main(

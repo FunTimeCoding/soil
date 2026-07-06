@@ -1,6 +1,6 @@
 package alert
 
-import "github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/alert/detail"
+import "github.com/funtimecoding/soil/pkg/atlassian/opsgenie/alert/detail"
 
 func (a *Alert) descriptionToDetail() *detail.Prometheus {
 	var result *detail.Prometheus

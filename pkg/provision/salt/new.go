@@ -1,6 +1,6 @@
 package salt
 
-import "github.com/funtimecoding/go-library/pkg/provision/salt/basic"
+import "github.com/funtimecoding/soil/pkg/provision/salt/basic"
 
 func New(
 	host string,

@@ -1,6 +1,6 @@
 package range_mapping
 
-import "github.com/funtimecoding/go-library/pkg/math/ranges"
+import "github.com/funtimecoding/soil/pkg/math/ranges"
 
 type Mapping struct {
 	Range ranges.Range

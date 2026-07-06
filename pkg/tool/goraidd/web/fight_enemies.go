@@ -2,7 +2,7 @@ package web
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/raid"
+	"github.com/funtimecoding/soil/pkg/raid"
 )
 
 func fightEnemies(f raid.Fight) string {

@@ -2,11 +2,11 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/chat/telegram"
-	"github.com/funtimecoding/go-library/pkg/chat/telegram/constant"
-	"github.com/funtimecoding/go-library/pkg/generative/ollama"
-	"github.com/funtimecoding/go-library/pkg/system/environment"
-	"github.com/funtimecoding/go-library/pkg/text/multi_line"
+	"github.com/funtimecoding/soil/pkg/chat/telegram"
+	"github.com/funtimecoding/soil/pkg/chat/telegram/constant"
+	"github.com/funtimecoding/soil/pkg/generative/ollama"
+	"github.com/funtimecoding/soil/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/text/multi_line"
 )
 
 func OllamaReply() {

@@ -1,8 +1,8 @@
 package mock_service
 
 import (
-	"github.com/funtimecoding/go-library/pkg/proxmox/node_status"
-	"github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/face"
+	"github.com/funtimecoding/soil/pkg/proxmox/node_status"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
 )
 
 func (s *Service) GetNodeStatus(

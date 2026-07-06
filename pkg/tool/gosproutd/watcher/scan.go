@@ -1,6 +1,6 @@
 package watcher
 
-import "github.com/funtimecoding/go-library/pkg/tool/gosproutd/service"
+import "github.com/funtimecoding/soil/pkg/tool/gosproutd/service"
 
 func (w *Watcher) scan() {
 	walked := w.walkDirectory()

@@ -1,7 +1,7 @@
 package web
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/gomemoryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )

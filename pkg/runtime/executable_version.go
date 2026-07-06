@@ -2,9 +2,9 @@ package runtime
 
 import (
 	"github.com/coreos/go-semver/semver"
-	"github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/expression"
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/expression"
+	"github.com/funtimecoding/soil/pkg/system"
 )
 
 func ExecutableVersion() *semver.Version {

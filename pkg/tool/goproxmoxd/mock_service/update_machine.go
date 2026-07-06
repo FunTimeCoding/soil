@@ -1,8 +1,8 @@
 package mock_service
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/face"
-	"github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/model_context/argument/update_machine"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/model_context/argument/update_machine"
 )
 
 func (s *Service) UpdateMachine(

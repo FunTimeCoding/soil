@@ -1,8 +1,8 @@
 package netbox
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/netbox/rack_role"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/netbox/rack_role"
 )
 
 func (c *Client) MustRackRoles() []*rack_role.Role {

@@ -2,8 +2,8 @@ package service
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/strings/separator"
-	"github.com/funtimecoding/go-library/pkg/tool/gomemoryd/constant"
+	"github.com/funtimecoding/soil/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"slices"
 	"strings"
 )

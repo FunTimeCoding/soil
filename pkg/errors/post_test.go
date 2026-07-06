@@ -1,8 +1,8 @@
 package errors
 
 import (
-	"github.com/funtimecoding/go-library/pkg/web/constant"
-	"github.com/funtimecoding/go-library/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"testing"
 )
 

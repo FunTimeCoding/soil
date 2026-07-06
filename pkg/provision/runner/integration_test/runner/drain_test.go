@@ -4,10 +4,10 @@ package runner
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/go-library/pkg/log/logger"
-	"github.com/funtimecoding/go-library/pkg/provision/runner"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/provision/runner"
 	"testing"
 	"time"
 )

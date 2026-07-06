@@ -2,11 +2,11 @@ package outdated
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/console/status/tag"
-	"github.com/funtimecoding/go-library/pkg/monitor"
-	item "github.com/funtimecoding/go-library/pkg/monitor/item/constant"
-	"github.com/funtimecoding/go-library/pkg/system/macos/brew/constant"
-	"github.com/funtimecoding/go-library/pkg/system/macos/check/brew/outdated/option"
+	"github.com/funtimecoding/soil/pkg/console/status/tag"
+	"github.com/funtimecoding/soil/pkg/monitor"
+	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/system/macos/brew/constant"
+	"github.com/funtimecoding/soil/pkg/system/macos/check/brew/outdated/option"
 )
 
 func Check(o *option.Outdated) {

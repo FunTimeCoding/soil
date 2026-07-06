@@ -1,8 +1,8 @@
 package technitium
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/technitium/record"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/technitium/record"
 )
 
 func (c *Client) MustAddRecord(

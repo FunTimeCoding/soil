@@ -2,9 +2,9 @@ package alliance
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/gw2"
-	"github.com/funtimecoding/go-library/pkg/gw2/constant"
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/gw2"
+	"github.com/funtimecoding/soil/pkg/gw2/constant"
+	"github.com/funtimecoding/soil/pkg/system"
 )
 
 func Guild(path string) {

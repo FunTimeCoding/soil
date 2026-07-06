@@ -1,7 +1,7 @@
 package web
 
 import (
-	"github.com/funtimecoding/go-library/pkg/web/location"
+	"github.com/funtimecoding/soil/pkg/web/location"
 	"net/http"
 	"time"
 )

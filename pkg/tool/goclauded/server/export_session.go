@@ -2,11 +2,11 @@ package server
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/claude/session"
-	"github.com/funtimecoding/go-library/pkg/system"
-	"github.com/funtimecoding/go-library/pkg/system/writer"
-	"github.com/funtimecoding/go-library/pkg/time"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/session"
+	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/system/writer"
+	"github.com/funtimecoding/soil/pkg/time"
 	"os"
 	"path/filepath"
 	"strings"

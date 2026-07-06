@@ -1,6 +1,6 @@
 package model_context_tester
 
-import "github.com/funtimecoding/go-library/pkg/tool/goqueryd/constant"
+import "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 
 func (t *Tester) SearchKeywordWithMetadata(
 	query string,

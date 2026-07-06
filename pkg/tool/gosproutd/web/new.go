@@ -1,12 +1,12 @@
 package web
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/gosproutd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gosproutd/service"
-	"github.com/funtimecoding/go-library/pkg/web/layout"
-	"github.com/funtimecoding/go-library/pkg/web/palette"
-	theme "github.com/funtimecoding/go-library/pkg/web/theme/constant"
-	"github.com/funtimecoding/go-library/pkg/web/view"
+	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosproutd/service"
+	"github.com/funtimecoding/soil/pkg/web/layout"
+	"github.com/funtimecoding/soil/pkg/web/palette"
+	theme "github.com/funtimecoding/soil/pkg/web/theme/constant"
+	"github.com/funtimecoding/soil/pkg/web/view"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )

@@ -1,11 +1,11 @@
 package issue
 
 import (
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/check/issue/option"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/issue"
-	"github.com/funtimecoding/go-library/pkg/monitor/constant"
-	item "github.com/funtimecoding/go-library/pkg/monitor/item/constant"
-	"github.com/funtimecoding/go-library/pkg/monitor/report"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/check/issue/option"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
+	"github.com/funtimecoding/soil/pkg/monitor/constant"
+	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/monitor/report"
 )
 
 func printNotation(

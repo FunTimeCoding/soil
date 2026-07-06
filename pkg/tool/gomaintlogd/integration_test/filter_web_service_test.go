@@ -4,9 +4,9 @@ package integration_test
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/tool/gomaintlogd/generated/client"
-	"github.com/funtimecoding/go-library/pkg/tool/gomaintlogd/integration_test/web_service_tester"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/integration_test/web_service_tester"
 	"net/http"
 	"testing"
 )

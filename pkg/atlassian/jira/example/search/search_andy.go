@@ -2,9 +2,9 @@ package search
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/constant"
-	"github.com/funtimecoding/go-library/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
+	"github.com/funtimecoding/soil/pkg/console/status/option"
 )
 
 func searchAndy(

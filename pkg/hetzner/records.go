@@ -1,9 +1,9 @@
 package hetzner
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/hetzner/record"
-	"github.com/funtimecoding/go-library/pkg/hetzner/zone"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/hetzner/record"
+	"github.com/funtimecoding/soil/pkg/hetzner/zone"
 	"github.com/hetznercloud/hcloud-go/v2/hcloud"
 )
 

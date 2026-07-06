@@ -1,7 +1,7 @@
 package gofix
 
 import (
-	"github.com/funtimecoding/go-library/pkg/lint/segment"
+	"github.com/funtimecoding/soil/pkg/lint/segment"
 	"go/ast"
 	"go/types"
 )

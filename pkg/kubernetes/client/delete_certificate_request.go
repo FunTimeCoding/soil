@@ -1,8 +1,8 @@
 package client
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/kubernetes/constant"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/kubernetes/constant"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 

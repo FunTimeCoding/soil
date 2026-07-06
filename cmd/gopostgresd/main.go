@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/gopostgresd"
+import "github.com/funtimecoding/soil/pkg/tool/gopostgresd"
 
 var (
 	Version   string

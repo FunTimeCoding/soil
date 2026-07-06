@@ -1,9 +1,9 @@
 package server
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goprocessd/environment"
-	"github.com/funtimecoding/go-library/pkg/tool/goprocessd/process"
-	"github.com/funtimecoding/go-library/pkg/tool/goprocessd/procfile"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/environment"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/process"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/procfile"
 )
 
 func New(

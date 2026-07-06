@@ -2,8 +2,8 @@ package read
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/netbox"
-	"github.com/funtimecoding/go-library/pkg/netbox/constant"
+	"github.com/funtimecoding/soil/pkg/netbox"
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
 )
 
 func Read() {

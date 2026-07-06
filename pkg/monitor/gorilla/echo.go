@@ -1,8 +1,8 @@
 package gorilla
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/monitor/constant"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/monitor/constant"
 	"log"
 	"net/http"
 )

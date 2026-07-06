@@ -1,7 +1,7 @@
 package usage
 
 import (
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/claude/example/common"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/example/common"
 	"time"
 )
 

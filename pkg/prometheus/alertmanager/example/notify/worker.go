@@ -2,11 +2,11 @@ package notify
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert/advanced_option"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/constant"
-	"github.com/funtimecoding/go-library/pkg/sound"
-	"github.com/funtimecoding/go-library/pkg/system/macos"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/advanced_option"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
+	"github.com/funtimecoding/soil/pkg/sound"
+	"github.com/funtimecoding/soil/pkg/system/macos"
 	"time"
 )
 

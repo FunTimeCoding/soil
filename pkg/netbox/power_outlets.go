@@ -1,8 +1,8 @@
 package netbox
 
 import (
-	"github.com/funtimecoding/go-library/pkg/netbox/constant"
-	"github.com/funtimecoding/go-library/pkg/netbox/power_outlet"
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
+	"github.com/funtimecoding/soil/pkg/netbox/power_outlet"
 )
 
 func (c *Client) PowerOutlets() ([]*power_outlet.Outlet, error) {

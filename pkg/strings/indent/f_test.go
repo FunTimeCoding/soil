@@ -1,7 +1,7 @@
 package indent
 
 import (
-	"github.com/funtimecoding/go-library/pkg/strings/upper"
+	"github.com/funtimecoding/soil/pkg/strings/upper"
 	"testing"
 )
 

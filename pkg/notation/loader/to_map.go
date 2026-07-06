@@ -1,6 +1,6 @@
 package loader
 
-import "github.com/funtimecoding/go-library/pkg/notation"
+import "github.com/funtimecoding/soil/pkg/notation"
 
 func (l *Loader) ToMap() map[string]map[string]string {
 	var result = map[string]map[string]string{}

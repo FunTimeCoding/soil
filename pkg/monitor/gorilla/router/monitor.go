@@ -1,13 +1,13 @@
 package router
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/monitor/constant"
-	"github.com/funtimecoding/go-library/pkg/monitor/gorilla/router/client"
-	"github.com/funtimecoding/go-library/pkg/monitor/gorilla/router/flag"
-	"github.com/funtimecoding/go-library/pkg/network"
-	"github.com/funtimecoding/go-library/pkg/strings/join"
-	"github.com/funtimecoding/go-library/pkg/strings/split"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/monitor/constant"
+	"github.com/funtimecoding/soil/pkg/monitor/gorilla/router/client"
+	"github.com/funtimecoding/soil/pkg/monitor/gorilla/router/flag"
+	"github.com/funtimecoding/soil/pkg/network"
+	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/strings/split"
 	"log"
 	"net"
 	"net/http"

@@ -2,8 +2,8 @@ package runner
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/provision/store"
-	"github.com/funtimecoding/go-library/pkg/tool/goterraformd/constant"
+	"github.com/funtimecoding/soil/pkg/provision/store"
+	"github.com/funtimecoding/soil/pkg/tool/goterraformd/constant"
 	"path/filepath"
 	"time"
 )

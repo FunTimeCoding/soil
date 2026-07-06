@@ -2,7 +2,7 @@ package netboot
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
 func Link(

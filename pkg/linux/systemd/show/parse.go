@@ -1,8 +1,8 @@
 package show
 
 import (
-	"github.com/funtimecoding/go-library/pkg/linux/systemd/constant"
-	"github.com/funtimecoding/go-library/pkg/linux/systemd/helper"
+	"github.com/funtimecoding/soil/pkg/linux/systemd/constant"
+	"github.com/funtimecoding/soil/pkg/linux/systemd/helper"
 )
 
 func Parse(m map[string]string) *Result {

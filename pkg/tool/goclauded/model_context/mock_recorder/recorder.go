@@ -1,6 +1,6 @@
 package mock_recorder
 
-import "github.com/funtimecoding/go-library/pkg/telemetry/record"
+import "github.com/funtimecoding/soil/pkg/telemetry/record"
 
 type Recorder struct {
 	Calls []*record.Record

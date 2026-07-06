@@ -1,9 +1,9 @@
 package alertmanager
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/prometheus"
-	"github.com/funtimecoding/go-library/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/prometheus"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	transport "github.com/go-openapi/runtime/client"
 	"github.com/prometheus/alertmanager/api/v2/client"
 )

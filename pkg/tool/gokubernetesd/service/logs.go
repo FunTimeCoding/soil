@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/tool/gokubernetesd/service/ambiguous_pods"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/ambiguous_pods"
 )
 
 func (s *Service) Logs(

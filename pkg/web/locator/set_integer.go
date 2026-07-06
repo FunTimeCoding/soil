@@ -1,6 +1,6 @@
 package locator
 
-import "github.com/funtimecoding/go-library/pkg/integers"
+import "github.com/funtimecoding/soil/pkg/integers"
 
 func (l *Locator) SetInteger(
 	k string,

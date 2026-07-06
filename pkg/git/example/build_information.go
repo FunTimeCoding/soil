@@ -2,9 +2,9 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/git"
-	"github.com/funtimecoding/go-library/pkg/system"
-	library "github.com/funtimecoding/go-library/pkg/time"
+	"github.com/funtimecoding/soil/pkg/git"
+	"github.com/funtimecoding/soil/pkg/system"
+	library "github.com/funtimecoding/soil/pkg/time"
 	"time"
 )
 

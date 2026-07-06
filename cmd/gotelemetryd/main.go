@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/gotelemetryd"
+import "github.com/funtimecoding/soil/pkg/tool/gotelemetryd"
 
 var (
 	Version   string

@@ -1,8 +1,8 @@
 package parse
 
 import (
-	"github.com/funtimecoding/go-library/pkg/prometheus/constant"
-	"github.com/funtimecoding/go-library/pkg/prometheus/result/generic"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/result/generic"
 	"github.com/prometheus/common/model"
 	"log"
 )

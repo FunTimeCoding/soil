@@ -1,10 +1,10 @@
 package goalertlogd
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/tool/goalertlogd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goalertlogd/option"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/option"
 )
 
 func Main(

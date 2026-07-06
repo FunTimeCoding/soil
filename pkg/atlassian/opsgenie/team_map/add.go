@@ -1,6 +1,6 @@
 package team_map
 
-import "github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/team"
+import "github.com/funtimecoding/soil/pkg/atlassian/opsgenie/team"
 import rawTeam "github.com/opsgenie/opsgenie-go-sdk-v2/team"
 
 func (m *Map) Add(

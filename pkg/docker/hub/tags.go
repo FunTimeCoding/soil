@@ -2,12 +2,12 @@ package hub
 
 import (
 	"encoding/json"
-	"github.com/funtimecoding/go-library/pkg/docker/hub/constant"
-	"github.com/funtimecoding/go-library/pkg/docker/hub/tag"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/strings/join"
-	"github.com/funtimecoding/go-library/pkg/web"
-	webConstant "github.com/funtimecoding/go-library/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/docker/hub/constant"
+	"github.com/funtimecoding/soil/pkg/docker/hub/tag"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/web"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 )
 
 func (c *Client) Tags(image string) []*tag.Tag {

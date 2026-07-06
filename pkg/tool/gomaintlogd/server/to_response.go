@@ -1,8 +1,8 @@
 package server
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/gomaintlogd/generated/server"
-	"github.com/funtimecoding/go-library/pkg/tool/gomaintlogd/store/entry"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/generated/server"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store/entry"
 )
 
 func toResponse(entries []entry.Entry) []server.EntryResponse {

@@ -2,7 +2,7 @@ package branch
 
 import (
 	"github.com/docker/go-units"
-	"github.com/funtimecoding/go-library/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/console/status/option"
 )
 
 func (b *Branch) formatAge(f *option.Format) string {

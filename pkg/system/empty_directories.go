@@ -2,8 +2,8 @@ package system
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/git/constant"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/git/constant"
 	"os"
 	"path/filepath"
 	"strings"

@@ -2,7 +2,7 @@ package store
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 )
 
 func (s *Store) documentIdentifiers(keys []documentKey) map[documentKey]int {

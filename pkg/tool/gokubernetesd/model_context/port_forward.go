@@ -3,9 +3,9 @@ package model_context
 import (
 	"context"
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/generative/mark/response"
-	"github.com/funtimecoding/go-library/pkg/tool/gokubernetesd/model_context/argument"
-	"github.com/funtimecoding/go-library/pkg/tool/gokubernetesd/service/port_forward_state"
+	"github.com/funtimecoding/soil/pkg/generative/mark/response"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/model_context/argument"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/port_forward_state"
 	"github.com/mark3labs/mcp-go/mcp"
 	"k8s.io/client-go/tools/portforward"
 	"k8s.io/client-go/transport/spdy"

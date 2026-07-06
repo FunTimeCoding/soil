@@ -2,8 +2,8 @@ package notify
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/system"
-	"github.com/funtimecoding/go-library/pkg/tool/common"
+	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/tool/common"
 )
 
 func Notify() {

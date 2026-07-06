@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/monitor/check/collect"
+import "github.com/funtimecoding/soil/pkg/monitor/check/collect"
 
 func main() {
 	collect.LoopIndividual()

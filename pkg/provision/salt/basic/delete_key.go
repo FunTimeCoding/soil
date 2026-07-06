@@ -3,8 +3,8 @@ package basic
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/provision/salt/basic/response"
-	"github.com/funtimecoding/go-library/pkg/provision/salt/constant"
+	"github.com/funtimecoding/soil/pkg/provision/salt/basic/response"
+	"github.com/funtimecoding/soil/pkg/provision/salt/constant"
 )
 
 func (c *Client) DeleteKey(minion string) ([]string, error) {

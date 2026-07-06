@@ -1,6 +1,6 @@
 package mock_client
 
-import "github.com/funtimecoding/go-library/pkg/tool/gomemoryd/client"
+import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/client"
 
 func (c *Client) VersionsSince(
 	_ string,

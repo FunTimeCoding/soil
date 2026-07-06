@@ -1,7 +1,7 @@
 package gitlab
 
 import (
-	"github.com/funtimecoding/go-library/pkg/gitlab/commit"
+	"github.com/funtimecoding/soil/pkg/gitlab/commit"
 	"gitlab.com/gitlab-org/api/client-go/v2"
 )
 

@@ -1,8 +1,8 @@
 package convert
 
 import (
-	"github.com/funtimecoding/go-library/pkg/netbox/internet_address"
-	"github.com/funtimecoding/go-library/pkg/tool/gonetboxd/generated/server"
+	"github.com/funtimecoding/soil/pkg/netbox/internet_address"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 )
 
 func Address(a *internet_address.Address) *server.Address {

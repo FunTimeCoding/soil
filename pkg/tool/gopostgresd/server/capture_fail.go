@@ -1,6 +1,6 @@
 package server
 
-import "github.com/funtimecoding/go-library/pkg/tool/gopostgresd/generated/server"
+import "github.com/funtimecoding/soil/pkg/tool/gopostgresd/generated/server"
 
 func (s *Server) captureFail(
 	e error,

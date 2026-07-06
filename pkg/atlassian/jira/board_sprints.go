@@ -2,7 +2,7 @@ package jira
 
 import (
 	"github.com/andygrunwald/go-jira"
-	"github.com/funtimecoding/go-library/pkg/integers"
+	"github.com/funtimecoding/soil/pkg/integers"
 )
 
 func (c *Client) BoardSprints(identifier int) ([]*jira.Sprint, error) {

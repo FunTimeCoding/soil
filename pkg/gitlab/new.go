@@ -2,10 +2,10 @@ package gitlab
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/gitlab/constant"
-	"github.com/funtimecoding/go-library/pkg/gitlab/project"
-	"github.com/funtimecoding/go-library/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/gitlab/constant"
+	"github.com/funtimecoding/soil/pkg/gitlab/project"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"gitlab.com/gitlab-org/api/client-go/v2"
 )
 

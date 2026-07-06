@@ -1,8 +1,8 @@
 package scan
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"testing"
 )
 

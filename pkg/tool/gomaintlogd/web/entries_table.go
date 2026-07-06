@@ -2,7 +2,7 @@ package web
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/tool/gomaintlogd/store/entry"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store/entry"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents-htmx"
 	"maragu.dev/gomponents/html"

@@ -3,8 +3,8 @@
 package web_interface
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goalertlogd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goalertlogd/integration_test/web_interface_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/integration_test/web_interface_tester"
 	"net/http"
 	"testing"
 )

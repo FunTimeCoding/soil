@@ -1,9 +1,9 @@
 package loki
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/prometheus/loki/basic/constant"
-	"github.com/funtimecoding/go-library/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/prometheus/loki/basic/constant"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/grafana/loki-client-go/loki"
 	"github.com/samber/slog-loki/v3"
 	"log/slog"

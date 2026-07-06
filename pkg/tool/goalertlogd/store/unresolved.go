@@ -1,8 +1,8 @@
 package store
 
 import (
-	"github.com/funtimecoding/go-library/pkg/bolt"
-	"github.com/funtimecoding/go-library/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/bolt"
+	"github.com/funtimecoding/soil/pkg/notation"
 	"go.etcd.io/bbolt"
 	"sort"
 )

@@ -2,8 +2,8 @@ package store
 
 import (
 	"github.com/fsnotify/fsnotify"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/gw2/constant"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/gw2/constant"
 	"path/filepath"
 	"strings"
 	"time"

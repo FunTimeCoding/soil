@@ -2,7 +2,7 @@ package console
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/console/reader"
+	"github.com/funtimecoding/soil/pkg/console/reader"
 	"strings"
 )
 

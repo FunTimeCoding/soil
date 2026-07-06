@@ -2,7 +2,7 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/provision/salt"
+	"github.com/funtimecoding/soil/pkg/provision/salt"
 )
 
 func Jobs() {

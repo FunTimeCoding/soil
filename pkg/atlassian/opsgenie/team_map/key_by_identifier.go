@@ -2,7 +2,7 @@ package team_map
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/constant"
 )
 
 func (m *Map) KeyByIdentifier(identifier string) string {

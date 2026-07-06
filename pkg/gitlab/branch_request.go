@@ -2,8 +2,8 @@ package gitlab
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/gitlab/constant"
-	"github.com/funtimecoding/go-library/pkg/gitlab/merge_request"
+	"github.com/funtimecoding/soil/pkg/gitlab/constant"
+	"github.com/funtimecoding/soil/pkg/gitlab/merge_request"
 	"gitlab.com/gitlab-org/api/client-go/v2"
 )
 

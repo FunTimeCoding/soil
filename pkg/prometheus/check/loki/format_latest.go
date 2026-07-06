@@ -1,6 +1,6 @@
 package loki
 
-import "github.com/funtimecoding/go-library/pkg/time"
+import "github.com/funtimecoding/soil/pkg/time"
 
 func formatLatest(e *overview) string {
 	if e.Latest.IsZero() {

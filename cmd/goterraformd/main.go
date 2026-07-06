@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/goterraformd"
+import "github.com/funtimecoding/soil/pkg/tool/goterraformd"
 
 var (
 	Version   string

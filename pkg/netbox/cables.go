@@ -1,8 +1,8 @@
 package netbox
 
 import (
-	"github.com/funtimecoding/go-library/pkg/netbox/cable"
-	"github.com/funtimecoding/go-library/pkg/netbox/constant"
+	"github.com/funtimecoding/soil/pkg/netbox/cable"
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
 )
 
 func (c *Client) Cables() ([]*cable.Cable, error) {

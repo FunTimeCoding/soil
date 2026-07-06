@@ -1,7 +1,7 @@
 package store
 
 import (
-	"github.com/funtimecoding/go-library/pkg/bolt"
+	"github.com/funtimecoding/soil/pkg/bolt"
 	"go.etcd.io/bbolt"
 )
 

@@ -1,8 +1,8 @@
 package log
 
 import (
-	"github.com/funtimecoding/go-library/pkg/strings/split/key_value"
-	library "github.com/funtimecoding/go-library/pkg/time"
+	"github.com/funtimecoding/soil/pkg/strings/split/key_value"
+	library "github.com/funtimecoding/soil/pkg/time"
 	"path/filepath"
 	"time"
 )

@@ -1,7 +1,7 @@
 package web
 
 import (
-	"github.com/funtimecoding/go-library/pkg/raid"
+	"github.com/funtimecoding/soil/pkg/raid"
 	"k8s.io/apimachinery/pkg/util/duration"
 	"time"
 )

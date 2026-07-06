@@ -2,8 +2,8 @@ package image
 
 import (
 	"github.com/coreos/go-semver/semver"
-	"github.com/funtimecoding/go-library/pkg/system/debian/constant"
-	"github.com/funtimecoding/go-library/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/system/debian/constant"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
 func DirectoryLink(

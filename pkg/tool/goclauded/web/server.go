@@ -1,11 +1,11 @@
 package web
 
 import (
-	"github.com/funtimecoding/go-library/pkg/face"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/service"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/web/conversations"
-	"github.com/funtimecoding/go-library/pkg/web/palette"
-	"github.com/funtimecoding/go-library/pkg/web/view"
+	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/web/conversations"
+	"github.com/funtimecoding/soil/pkg/web/palette"
+	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
 type Server struct {

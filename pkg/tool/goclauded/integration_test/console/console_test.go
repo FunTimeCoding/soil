@@ -3,9 +3,9 @@
 package console
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/integration_test/base"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/integration_test/console_tester"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration_test/base"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration_test/console_tester"
 	"testing"
 	"time"
 )

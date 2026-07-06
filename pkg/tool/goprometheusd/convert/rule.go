@@ -1,7 +1,7 @@
 package convert
 
 import (
-	"github.com/funtimecoding/go-library/pkg/prometheus/rule"
+	"github.com/funtimecoding/soil/pkg/prometheus/rule"
 	"time"
 )
 

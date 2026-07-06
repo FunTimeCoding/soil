@@ -1,7 +1,7 @@
 package sweep
 
 import (
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/system"
 	"path/filepath"
 )
 

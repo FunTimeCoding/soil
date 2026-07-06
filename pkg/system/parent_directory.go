@@ -1,6 +1,6 @@
 package system
 
-import "github.com/funtimecoding/go-library/pkg/system/join"
+import "github.com/funtimecoding/soil/pkg/system/join"
 
 func ParentDirectory(levels int) string {
 	var dots []string

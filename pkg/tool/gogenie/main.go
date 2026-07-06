@@ -1,11 +1,11 @@
 package gogenie
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/check/alert"
-	"github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/check/alert/option"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/tool/gogenie/constant"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/check/alert"
+	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/check/alert/option"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/tool/gogenie/constant"
 )
 
 func Main(

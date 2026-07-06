@@ -1,7 +1,7 @@
 package web_client
 
 import (
-	"github.com/funtimecoding/go-library/pkg/web/web_client/web_response"
+	"github.com/funtimecoding/soil/pkg/web/web_client/web_response"
 	"net/http"
 	"time"
 )

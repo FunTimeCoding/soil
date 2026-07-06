@@ -1,11 +1,11 @@
 package gov11y
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/tool/gov11y/constant"
-	"github.com/funtimecoding/go-library/pkg/vulnerability/check/vulnerability"
-	"github.com/funtimecoding/go-library/pkg/vulnerability/check/vulnerability/option"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/tool/gov11y/constant"
+	"github.com/funtimecoding/soil/pkg/vulnerability/check/vulnerability"
+	"github.com/funtimecoding/soil/pkg/vulnerability/check/vulnerability/option"
 )
 
 func Main(

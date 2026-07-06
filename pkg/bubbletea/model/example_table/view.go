@@ -3,8 +3,8 @@ package example_table
 import (
 	"charm.land/bubbletea/v2"
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/bubbletea/constant"
-	"github.com/funtimecoding/go-library/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/bubbletea/constant"
+	"github.com/funtimecoding/soil/pkg/strings/separator"
 )
 
 func (m *Model) View() tea.View {

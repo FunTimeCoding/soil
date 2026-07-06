@@ -3,7 +3,7 @@ package sentry
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/basic/response"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/basic/response"
 )
 
 func (c *Client) LatestEvent(

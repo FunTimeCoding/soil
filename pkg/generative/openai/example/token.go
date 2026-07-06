@@ -2,9 +2,9 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/console/scanner"
-	"github.com/funtimecoding/go-library/pkg/generative/token"
-	"github.com/funtimecoding/go-library/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/console/scanner"
+	"github.com/funtimecoding/soil/pkg/generative/token"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 )
 
 func Token() {

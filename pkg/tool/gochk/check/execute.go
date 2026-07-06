@@ -1,7 +1,7 @@
 package check
 
 import (
-	"github.com/funtimecoding/go-library/pkg/system/run"
+	"github.com/funtimecoding/soil/pkg/system/run"
 	"strings"
 )
 

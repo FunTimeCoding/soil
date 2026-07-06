@@ -3,9 +3,9 @@ package model_context
 import (
 	"context"
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/generated/client"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/integration_test/base"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration_test/base"
 	"testing"
 )
 

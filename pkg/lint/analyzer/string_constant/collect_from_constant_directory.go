@@ -1,7 +1,7 @@
 package string_constant
 
 import (
-	"github.com/funtimecoding/go-library/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/constant"
 	"os"
 	"path/filepath"
 	"strings"

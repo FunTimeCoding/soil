@@ -1,8 +1,8 @@
 package gitlab
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/gitlab/branch"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/gitlab/branch"
 )
 
 func (c *Client) MustBranches(project int64) []*branch.Branch {

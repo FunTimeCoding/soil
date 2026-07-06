@@ -2,7 +2,7 @@ package netbox
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/netbox/manufacturer"
+	"github.com/funtimecoding/soil/pkg/netbox/manufacturer"
 )
 
 func (c *Client) ManufacturerByName(n string) (*manufacturer.Manufacturer, error) {

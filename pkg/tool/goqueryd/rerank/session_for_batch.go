@@ -3,7 +3,7 @@ package rerank
 import (
 	"fmt"
 	"github.com/amikos-tech/pure-onnx/ort"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 )
 
 func (r *Reranker) sessionForBatch(batch int) (*rerankSession, error) {

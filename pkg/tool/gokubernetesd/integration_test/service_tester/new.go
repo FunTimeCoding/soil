@@ -1,9 +1,9 @@
 package service_tester
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/gokubernetesd/integration_test/store_tester"
-	"github.com/funtimecoding/go-library/pkg/tool/gokubernetesd/service"
-	"github.com/funtimecoding/go-library/pkg/tool/gokubernetesd/service/cluster"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/integration_test/store_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/cluster"
 	"k8s.io/apimachinery/pkg/runtime"
 	dynamicFake "k8s.io/client-go/dynamic/fake"
 	kubernetesFake "k8s.io/client-go/kubernetes/fake"

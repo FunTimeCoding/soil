@@ -2,7 +2,7 @@ package issue
 
 import (
 	"github.com/docker/go-units"
-	"github.com/funtimecoding/go-library/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/console/status/option"
 )
 
 func (i *Issue) FormatAge(f *option.Format) string {

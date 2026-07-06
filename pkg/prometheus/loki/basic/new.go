@@ -1,8 +1,8 @@
 package basic
 
 import (
-	"github.com/funtimecoding/go-library/pkg/prometheus/loki/basic/constant"
-	"github.com/funtimecoding/go-library/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/prometheus/loki/basic/constant"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
 func New(

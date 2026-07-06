@@ -1,7 +1,7 @@
 package reaper
 
 import (
-	"github.com/funtimecoding/go-library/pkg/face"
+	"github.com/funtimecoding/soil/pkg/face"
 	"sync"
 )
 

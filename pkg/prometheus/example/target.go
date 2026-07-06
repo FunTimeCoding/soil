@@ -2,7 +2,7 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/prometheus"
+	"github.com/funtimecoding/soil/pkg/prometheus"
 	"github.com/prometheus/common/model"
 )
 

@@ -1,7 +1,7 @@
 package prometheus
 
 import (
-	"github.com/funtimecoding/go-library/pkg/prometheus/query_result"
+	"github.com/funtimecoding/soil/pkg/prometheus/query_result"
 	"time"
 )
 

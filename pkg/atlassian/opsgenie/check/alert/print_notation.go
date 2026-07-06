@@ -1,11 +1,11 @@
 package alert
 
 import (
-	"github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/alert"
-	"github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/check/alert/option"
-	"github.com/funtimecoding/go-library/pkg/monitor/constant"
-	item "github.com/funtimecoding/go-library/pkg/monitor/item/constant"
-	"github.com/funtimecoding/go-library/pkg/monitor/report"
+	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/alert"
+	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/check/alert/option"
+	"github.com/funtimecoding/soil/pkg/monitor/constant"
+	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/monitor/report"
 )
 
 func printNotation(

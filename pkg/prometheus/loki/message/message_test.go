@@ -1,8 +1,8 @@
 package message
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/prometheus/loki/basic/query_result"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/prometheus/loki/basic/query_result"
 	"testing"
 )
 

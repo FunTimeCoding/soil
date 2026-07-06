@@ -1,6 +1,6 @@
 package mock_indexer
 
-import "github.com/funtimecoding/go-library/pkg/tool/goqueryd/face"
+import "github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 
 func (i *Indexer) List(
 	_ string,

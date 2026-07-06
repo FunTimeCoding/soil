@@ -1,7 +1,7 @@
 package web
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/timeline"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/timeline"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )

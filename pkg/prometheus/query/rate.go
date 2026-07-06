@@ -2,7 +2,7 @@ package query
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/prometheus/query/filter"
+	"github.com/funtimecoding/soil/pkg/prometheus/query/filter"
 )
 
 func Rate(

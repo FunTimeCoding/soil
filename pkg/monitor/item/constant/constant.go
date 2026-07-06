@@ -1,9 +1,9 @@
 package constant
 
 import (
-	"github.com/funtimecoding/go-library/pkg/monitor/collector"
-	"github.com/funtimecoding/go-library/pkg/monitor/helper"
-	"github.com/funtimecoding/go-library/pkg/monitor/item/source"
+	"github.com/funtimecoding/soil/pkg/monitor/collector"
+	"github.com/funtimecoding/soil/pkg/monitor/helper"
+	"github.com/funtimecoding/soil/pkg/monitor/item/source"
 	"time"
 )
 

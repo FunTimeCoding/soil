@@ -1,8 +1,8 @@
 package web
 
 import (
-	"github.com/funtimecoding/go-library/pkg/strings/join/key_value"
-	"github.com/funtimecoding/go-library/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/strings/join/key_value"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
 

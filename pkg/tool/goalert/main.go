@@ -1,11 +1,11 @@
 package goalert
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/prometheus/check/alert"
-	"github.com/funtimecoding/go-library/pkg/prometheus/check/alert/option"
-	"github.com/funtimecoding/go-library/pkg/tool/goalert/constant"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/prometheus/check/alert"
+	"github.com/funtimecoding/soil/pkg/prometheus/check/alert/option"
+	"github.com/funtimecoding/soil/pkg/tool/goalert/constant"
 )
 
 func Main(

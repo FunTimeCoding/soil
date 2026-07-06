@@ -1,6 +1,6 @@
 package search_result
 
-import "github.com/funtimecoding/go-library/pkg/atlassian/confluence/basic/response"
+import "github.com/funtimecoding/soil/pkg/atlassian/confluence/basic/response"
 
 func NewSlice(v []*response.Result) []*Result {
 	var result []*Result

@@ -1,9 +1,9 @@
 package tab
 
 import (
-	"github.com/funtimecoding/go-library/pkg/console"
-	"github.com/funtimecoding/go-library/pkg/console/status/option"
-	"github.com/funtimecoding/go-library/pkg/firefox/constant"
+	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/firefox/constant"
 )
 
 func (t *Tab) formatTitle(f *option.Format) string {

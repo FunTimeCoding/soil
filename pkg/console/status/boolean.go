@@ -1,6 +1,6 @@
 package status
 
-import "github.com/funtimecoding/go-library/pkg/booleans"
+import "github.com/funtimecoding/soil/pkg/booleans"
 
 func (s *Status) Boolean(v ...bool) *Status {
 	for _, e := range v {

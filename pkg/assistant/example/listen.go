@@ -2,9 +2,9 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/assistant"
-	"github.com/funtimecoding/go-library/pkg/assistant/message"
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/assistant"
+	"github.com/funtimecoding/soil/pkg/assistant/message"
+	"github.com/funtimecoding/soil/pkg/system"
 )
 
 func Listen() {

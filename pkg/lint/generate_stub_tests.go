@@ -2,9 +2,9 @@ package lint
 
 import (
 	"fmt"
-	library "github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/lint/constant"
-	"github.com/funtimecoding/go-library/pkg/system/virtual_file_system"
+	library "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/lint/constant"
+	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"path/filepath"
 	"sort"
 	"strings"

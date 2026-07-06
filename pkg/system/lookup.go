@@ -1,8 +1,8 @@
 package system
 
 import (
-	"github.com/funtimecoding/go-library/pkg/strings/separator"
-	"github.com/funtimecoding/go-library/pkg/strings/slice"
+	"github.com/funtimecoding/soil/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/strings/slice"
 	"net"
 )
 

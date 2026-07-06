@@ -2,7 +2,7 @@ package virtual_file_system
 
 import (
 	"errors"
-	"github.com/funtimecoding/go-library/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/assert"
 	"os"
 	"path/filepath"
 	"testing"

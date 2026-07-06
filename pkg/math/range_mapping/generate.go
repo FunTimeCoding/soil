@@ -1,7 +1,7 @@
 package range_mapping
 
 import (
-	"github.com/funtimecoding/go-library/pkg/math/ranges"
+	"github.com/funtimecoding/soil/pkg/math/ranges"
 	"sort"
 )
 

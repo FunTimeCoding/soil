@@ -5,10 +5,10 @@ package cross_service
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/tool/gomemoryd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gomemoryd/integration_test/cross_service_tester"
-	goquerydConstant "github.com/funtimecoding/go-library/pkg/tool/goqueryd/constant"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/integration_test/cross_service_tester"
+	goquerydConstant "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"slices"
 	"testing"
 )

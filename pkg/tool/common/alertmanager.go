@@ -1,12 +1,12 @@
 package common
 
 import (
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert/alert_enricher"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert/field_changer"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert/label_filter"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert/name_filter"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/alert_enricher"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/field_changer"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/label_filter"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/name_filter"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
 )
 
 func Alertmanager() *alertmanager.Client {

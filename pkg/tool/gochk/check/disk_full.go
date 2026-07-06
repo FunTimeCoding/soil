@@ -2,9 +2,9 @@ package check
 
 import (
 	"fmt"
-	stringLibrary "github.com/funtimecoding/go-library/pkg/strings"
-	"github.com/funtimecoding/go-library/pkg/strings/split"
-	"github.com/funtimecoding/go-library/pkg/system/run"
+	stringLibrary "github.com/funtimecoding/soil/pkg/strings"
+	"github.com/funtimecoding/soil/pkg/strings/split"
+	"github.com/funtimecoding/soil/pkg/system/run"
 	"strings"
 )
 

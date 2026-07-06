@@ -1,8 +1,8 @@
 package layout
 
 import (
-	"github.com/funtimecoding/go-library/pkg/face"
-	"github.com/funtimecoding/go-library/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 	"time"
 )

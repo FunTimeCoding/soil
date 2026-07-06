@@ -1,6 +1,6 @@
 package netbox
 
-import "github.com/funtimecoding/go-library/pkg/netbox/configuration_context"
+import "github.com/funtimecoding/soil/pkg/netbox/configuration_context"
 
 func (c *Client) ConfigurationContexts() ([]*configuration_context.Context, error) {
 	result, _, e := c.client.ExtrasAPI.ExtrasConfigContextsList(

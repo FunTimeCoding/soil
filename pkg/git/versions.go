@@ -2,7 +2,7 @@ package git
 
 import (
 	"github.com/coreos/go-semver/semver"
-	"github.com/funtimecoding/go-library/pkg/git/constant"
+	"github.com/funtimecoding/soil/pkg/git/constant"
 	"strings"
 )
 

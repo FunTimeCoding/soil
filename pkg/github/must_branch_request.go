@@ -1,8 +1,8 @@
 package github
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/github/pull_request"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/github/pull_request"
 )
 
 func (c *Client) MustBranchRequest(

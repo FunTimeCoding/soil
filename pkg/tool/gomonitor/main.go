@@ -1,13 +1,13 @@
 package gomonitor
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/bubbletea"
-	"github.com/funtimecoding/go-library/pkg/bubbletea/model/monitor"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/monitor/check/collect"
-	"github.com/funtimecoding/go-library/pkg/tool/gomonitor/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gomonitor/option"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/bubbletea"
+	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/monitor/check/collect"
+	"github.com/funtimecoding/soil/pkg/tool/gomonitor/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomonitor/option"
 )
 
 func Main(

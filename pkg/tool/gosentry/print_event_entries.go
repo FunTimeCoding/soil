@@ -2,7 +2,7 @@ package gosentry
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/basic/response"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/basic/response"
 )
 
 func printEventEntries(entries []response.EventEntry) {

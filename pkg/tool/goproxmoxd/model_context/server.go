@@ -1,8 +1,8 @@
 package model_context
 
 import (
-	"github.com/funtimecoding/go-library/pkg/face"
-	proxFace "github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/face"
+	"github.com/funtimecoding/soil/pkg/face"
+	proxFace "github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
 	"github.com/mark3labs/mcp-go/server"
 )
 

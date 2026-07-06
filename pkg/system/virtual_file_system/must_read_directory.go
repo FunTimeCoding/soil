@@ -1,6 +1,6 @@
 package virtual_file_system
 
-import "github.com/funtimecoding/go-library/pkg/errors"
+import "github.com/funtimecoding/soil/pkg/errors"
 
 func (s *System) MustReadDirectory(path string) []string {
 	result, e := s.ReadDirectory(path)

@@ -1,9 +1,9 @@
 package gw2
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/gw2/log_manager"
-	"github.com/funtimecoding/go-library/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/gw2/log_manager"
+	"github.com/funtimecoding/soil/pkg/notation"
 )
 
 func ParseGuilds(s string) []*log_manager.Guild {

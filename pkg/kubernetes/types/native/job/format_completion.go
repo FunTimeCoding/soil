@@ -1,6 +1,6 @@
 package job
 
-import "github.com/funtimecoding/go-library/pkg/time"
+import "github.com/funtimecoding/soil/pkg/time"
 
 func (j *Job) formatCompletion() string {
 	if j.Raw.Status.CompletionTime != nil {

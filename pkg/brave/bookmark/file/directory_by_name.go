@@ -1,6 +1,6 @@
 package file
 
-import "github.com/funtimecoding/go-library/pkg/brave/bookmark"
+import "github.com/funtimecoding/soil/pkg/brave/bookmark"
 
 func DirectoryByName(
 	n *Node,

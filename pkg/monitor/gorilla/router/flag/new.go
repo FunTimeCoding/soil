@@ -1,6 +1,6 @@
 package flag
 
-import "github.com/funtimecoding/go-library/pkg/monitor/gorilla/router/client"
+import "github.com/funtimecoding/soil/pkg/monitor/gorilla/router/client"
 
 func New(
 	identifier string,

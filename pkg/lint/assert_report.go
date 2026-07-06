@@ -1,9 +1,9 @@
 package lint
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/lint/concern"
-	"github.com/funtimecoding/go-library/pkg/lint/file_report"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/lint/concern"
+	"github.com/funtimecoding/soil/pkg/lint/file_report"
 	"testing"
 )
 

@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/store"
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/store/search_option"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search_option"
 )
 
 func (s *Service) Search(o *search_option.Option) *store.SearchOutcome {

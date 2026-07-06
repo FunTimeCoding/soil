@@ -3,10 +3,10 @@ package server
 import (
 	"context"
 	"errors"
-	"github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/errors/not_found"
-	"github.com/funtimecoding/go-library/pkg/tool/gomaintlogd/generated/server"
-	"github.com/funtimecoding/go-library/pkg/tool/gomaintlogd/store/entry"
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/generated/server"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store/entry"
 )
 
 func (s *Server) UpdateEntry(

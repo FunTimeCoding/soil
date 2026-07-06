@@ -1,9 +1,9 @@
 package lint
 
 import (
-	"github.com/funtimecoding/go-library/pkg/lint/concern"
-	"github.com/funtimecoding/go-library/pkg/lint/constant"
-	"github.com/funtimecoding/go-library/pkg/strings/upper"
+	"github.com/funtimecoding/soil/pkg/lint/concern"
+	"github.com/funtimecoding/soil/pkg/lint/constant"
+	"github.com/funtimecoding/soil/pkg/strings/upper"
 	"strings"
 	"testing"
 )

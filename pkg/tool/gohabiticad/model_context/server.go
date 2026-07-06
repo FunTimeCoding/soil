@@ -1,8 +1,8 @@
 package model_context
 
 import (
-	"github.com/funtimecoding/go-library/pkg/face"
-	habitica "github.com/funtimecoding/go-library/pkg/tool/gohabiticad/face"
+	"github.com/funtimecoding/soil/pkg/face"
+	habitica "github.com/funtimecoding/soil/pkg/tool/gohabiticad/face"
 	"github.com/mark3labs/mcp-go/server"
 )
 

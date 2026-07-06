@@ -1,6 +1,6 @@
 package web
 
-import "github.com/funtimecoding/go-library/pkg/tool/godashboardd/board"
+import "github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
 
 func weight(v *board.Section) int {
 	result := len(v.Entries)

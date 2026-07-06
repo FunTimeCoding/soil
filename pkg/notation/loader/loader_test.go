@@ -1,11 +1,11 @@
 package loader
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/git/constant"
-	"github.com/funtimecoding/go-library/pkg/system"
-	systemConstant "github.com/funtimecoding/go-library/pkg/system/constant"
-	"github.com/funtimecoding/go-library/pkg/system/join"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/git/constant"
+	"github.com/funtimecoding/soil/pkg/system"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/system/join"
 	"testing"
 )
 

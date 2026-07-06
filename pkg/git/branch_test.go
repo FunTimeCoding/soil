@@ -1,13 +1,13 @@
 package git
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/git/constant"
-	"github.com/funtimecoding/go-library/pkg/github/action"
-	github "github.com/funtimecoding/go-library/pkg/github/constant"
-	"github.com/funtimecoding/go-library/pkg/strings/contains"
-	"github.com/funtimecoding/go-library/pkg/system"
-	"github.com/funtimecoding/go-library/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/git/constant"
+	"github.com/funtimecoding/soil/pkg/github/action"
+	github "github.com/funtimecoding/soil/pkg/github/constant"
+	"github.com/funtimecoding/soil/pkg/strings/contains"
+	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/system/environment"
 	"testing"
 )
 

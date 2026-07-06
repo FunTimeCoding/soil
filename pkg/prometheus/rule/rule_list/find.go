@@ -1,6 +1,6 @@
 package rule_list
 
-import "github.com/funtimecoding/go-library/pkg/prometheus/rule"
+import "github.com/funtimecoding/soil/pkg/prometheus/rule"
 
 func (l *List) Find(name string) *rule.Rule {
 	for _, r := range l.rules {

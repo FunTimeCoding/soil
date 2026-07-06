@@ -2,9 +2,9 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/netbox/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gonetboxd/convert"
-	"github.com/funtimecoding/go-library/pkg/tool/gonetboxd/generated/server"
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 )
 
 func (s *Server) CreateDeviceTunnelTermination(

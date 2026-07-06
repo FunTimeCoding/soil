@@ -1,6 +1,6 @@
 package mock_client
 
-import "github.com/funtimecoding/go-library/pkg/iterm/screen"
+import "github.com/funtimecoding/soil/pkg/iterm/screen"
 
 func New() *Client {
 	return &Client{

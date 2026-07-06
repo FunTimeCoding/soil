@@ -1,8 +1,8 @@
 package client
 
 import (
-	"github.com/funtimecoding/go-library/pkg/kubernetes/client/operation/get"
-	"github.com/funtimecoding/go-library/pkg/kubernetes/types/native/cron_job"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client/operation/get"
+	"github.com/funtimecoding/soil/pkg/kubernetes/types/native/cron_job"
 )
 
 func (c *Client) CronJob(

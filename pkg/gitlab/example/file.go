@@ -2,8 +2,8 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/gitlab"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/gitlab"
 )
 
 func File() {

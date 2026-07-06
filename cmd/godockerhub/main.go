@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/godockerhub"
+import "github.com/funtimecoding/soil/pkg/tool/godockerhub"
 
 var (
 	Version   string

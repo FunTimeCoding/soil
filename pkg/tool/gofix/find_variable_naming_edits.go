@@ -2,11 +2,11 @@ package gofix
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/lint/analyzer/variable_naming"
-	"github.com/funtimecoding/go-library/pkg/lint/concern"
-	"github.com/funtimecoding/go-library/pkg/lint/output"
-	"github.com/funtimecoding/go-library/pkg/source/resolve"
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/variable_naming"
+	"github.com/funtimecoding/soil/pkg/lint/concern"
+	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"go/ast"
 	"go/token"
 	"golang.org/x/tools/go/packages"

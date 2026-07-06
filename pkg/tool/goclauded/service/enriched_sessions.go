@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/service/enriched_session"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/enriched_session"
 	"time"
 )
 

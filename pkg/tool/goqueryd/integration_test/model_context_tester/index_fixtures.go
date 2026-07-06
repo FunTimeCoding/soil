@@ -1,9 +1,9 @@
 package model_context_tester
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert/fixture"
-	system "github.com/funtimecoding/go-library/pkg/system/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/constant"
+	"github.com/funtimecoding/soil/pkg/assert/fixture"
+	system "github.com/funtimecoding/soil/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 )
 
 func (t *Tester) IndexFixtures() {

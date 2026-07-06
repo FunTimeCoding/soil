@@ -2,10 +2,10 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/generative/mark/response"
-	netboxconstant "github.com/funtimecoding/go-library/pkg/netbox/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gonetboxd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gonetboxd/convert"
+	"github.com/funtimecoding/soil/pkg/generative/mark/response"
+	netboxconstant "github.com/funtimecoding/soil/pkg/netbox/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 

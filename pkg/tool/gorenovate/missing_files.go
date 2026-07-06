@@ -1,6 +1,6 @@
 package gorenovate
 
-import "github.com/funtimecoding/go-library/pkg/system"
+import "github.com/funtimecoding/soil/pkg/system"
 
 func missingFiles(c *Configuration) []string {
 	var result []string

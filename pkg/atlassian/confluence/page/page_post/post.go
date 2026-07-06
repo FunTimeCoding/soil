@@ -1,6 +1,6 @@
 package page_post
 
-import "github.com/funtimecoding/go-library/pkg/atlassian/confluence/basic/response"
+import "github.com/funtimecoding/soil/pkg/atlassian/confluence/basic/response"
 
 type Post struct {
 	SpaceIdentifier  string           `json:"spaceId"`

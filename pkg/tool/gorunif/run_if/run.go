@@ -2,9 +2,9 @@ package run_if
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/strings/split"
-	"github.com/funtimecoding/go-library/pkg/system/run"
-	"github.com/funtimecoding/go-library/pkg/tool/gorunif/run_if/option"
+	"github.com/funtimecoding/soil/pkg/strings/split"
+	"github.com/funtimecoding/soil/pkg/system/run"
+	"github.com/funtimecoding/soil/pkg/tool/gorunif/run_if/option"
 	"strings"
 )
 

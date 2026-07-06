@@ -1,6 +1,6 @@
 package lifecycle
 
-import "github.com/funtimecoding/go-library/pkg/system"
+import "github.com/funtimecoding/soil/pkg/system"
 
 func (l *Lifecycle) RunUntilSignal() {
 	l.Run()

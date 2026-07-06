@@ -2,7 +2,7 @@ package sentry
 
 import (
 	"errors"
-	"github.com/funtimecoding/go-library/pkg/face"
+	"github.com/funtimecoding/soil/pkg/face"
 )
 
 func extractBody(e error) []byte {

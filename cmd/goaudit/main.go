@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/goaudit"
+import "github.com/funtimecoding/soil/pkg/tool/goaudit"
 
 var (
 	Version   string

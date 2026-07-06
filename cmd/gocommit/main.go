@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/gocommit"
+import "github.com/funtimecoding/soil/pkg/tool/gocommit"
 
 var (
 	Version   string

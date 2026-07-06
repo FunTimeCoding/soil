@@ -2,11 +2,11 @@ package model_context
 
 import (
 	"context"
-	library "github.com/funtimecoding/go-library/pkg/constant"
-	markResponse "github.com/funtimecoding/go-library/pkg/generative/mark/response"
-	"github.com/funtimecoding/go-library/pkg/tool/gotelemetryd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gotelemetryd/model_context/response"
-	"github.com/funtimecoding/go-library/pkg/tool/gotelemetryd/store"
+	library "github.com/funtimecoding/soil/pkg/constant"
+	markResponse "github.com/funtimecoding/soil/pkg/generative/mark/response"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/model_context/response"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/store"
 	"github.com/mark3labs/mcp-go/mcp"
 	"time"
 )

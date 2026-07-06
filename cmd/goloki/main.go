@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/goloki"
+import "github.com/funtimecoding/soil/pkg/tool/goloki"
 
 var (
 	Version   string

@@ -1,6 +1,6 @@
 package token_check
 
-import "github.com/funtimecoding/go-library/pkg/web/locator"
+import "github.com/funtimecoding/soil/pkg/web/locator"
 
 func rawMyself(
 	host string,

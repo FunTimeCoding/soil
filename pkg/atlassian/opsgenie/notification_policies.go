@@ -1,7 +1,7 @@
 package opsgenie
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/opsgenie/opsgenie-go-sdk-v2/policy"
 )
 

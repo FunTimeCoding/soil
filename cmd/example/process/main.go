@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/system/process"
+	"github.com/funtimecoding/soil/pkg/system/process"
 )
 
 func main() {

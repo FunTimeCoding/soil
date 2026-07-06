@@ -1,6 +1,6 @@
 package mock_client
 
-import "github.com/funtimecoding/go-library/pkg/habitica/task"
+import "github.com/funtimecoding/soil/pkg/habitica/task"
 
 func (c *Client) Tasks(taskType string) ([]*task.Task, error) {
 	if taskType == "" {

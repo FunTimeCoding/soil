@@ -2,7 +2,7 @@ package firefox
 
 import (
 	"github.com/coder/websocket"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"log"
 	"net/http"
 )

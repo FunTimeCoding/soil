@@ -1,8 +1,8 @@
 package github
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/github/issue"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/github/issue"
 )
 
 func (c *Client) MustIssues() []*issue.Issue {

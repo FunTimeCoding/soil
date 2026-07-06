@@ -2,7 +2,7 @@ package netbox
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/netbox/device_type"
+	"github.com/funtimecoding/soil/pkg/netbox/device_type"
 )
 
 func (c *Client) DeviceTypeByName(n string) (*device_type.Type, error) {

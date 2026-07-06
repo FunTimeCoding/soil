@@ -2,8 +2,8 @@ package web
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/tool/godashboardd/constant"
-	"github.com/funtimecoding/go-library/pkg/web/palette"
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/constant"
+	"github.com/funtimecoding/soil/pkg/web/palette"
 	"net/http"
 )
 

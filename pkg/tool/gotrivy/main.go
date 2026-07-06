@@ -2,11 +2,11 @@ package gotrivy
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/kubernetes/client"
-	kubernetes "github.com/funtimecoding/go-library/pkg/kubernetes/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gotrivy/constant"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client"
+	kubernetes "github.com/funtimecoding/soil/pkg/kubernetes/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gotrivy/constant"
 )
 
 func Main(

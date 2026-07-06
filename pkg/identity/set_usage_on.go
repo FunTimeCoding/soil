@@ -1,7 +1,7 @@
 package identity
 
 import (
-	"github.com/funtimecoding/go-library/pkg/system/writer"
+	"github.com/funtimecoding/soil/pkg/system/writer"
 	"github.com/spf13/pflag"
 	"os"
 )

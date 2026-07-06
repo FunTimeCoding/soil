@@ -2,9 +2,9 @@ package alertmanager
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/constant"
-	prometheus "github.com/funtimecoding/go-library/pkg/prometheus/constant"
-	"github.com/funtimecoding/go-library/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
+	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/go-openapi/strfmt"
 	"github.com/prometheus/alertmanager/api/v2/client/alert"
 	"github.com/prometheus/alertmanager/api/v2/models"

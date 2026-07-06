@@ -2,8 +2,8 @@ package wdutil
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/system/macos/constant"
-	"github.com/funtimecoding/go-library/pkg/system/run"
+	"github.com/funtimecoding/soil/pkg/system/macos/constant"
+	"github.com/funtimecoding/soil/pkg/system/run"
 )
 
 func collect() *Result {

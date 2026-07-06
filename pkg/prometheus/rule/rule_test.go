@@ -1,8 +1,8 @@
 package rule
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/strings/upper"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/strings/upper"
 	"github.com/prometheus/client_golang/api/prometheus/v1"
 	"testing"
 )

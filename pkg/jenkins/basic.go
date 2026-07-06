@@ -1,6 +1,6 @@
 package jenkins
 
-import "github.com/funtimecoding/go-library/pkg/jenkins/basic"
+import "github.com/funtimecoding/soil/pkg/jenkins/basic"
 
 func (c *Client) Basic() *basic.Client {
 	return c.basic

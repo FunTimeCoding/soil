@@ -1,8 +1,8 @@
 package build
 
 import (
-	"github.com/funtimecoding/go-library/pkg/provision/packer/build/builder"
-	"github.com/funtimecoding/go-library/pkg/provision/packer/build/provisioner"
+	"github.com/funtimecoding/soil/pkg/provision/packer/build/builder"
+	"github.com/funtimecoding/soil/pkg/provision/packer/build/provisioner"
 )
 
 type Build struct {

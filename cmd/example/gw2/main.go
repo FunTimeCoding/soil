@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/gw2/example"
+import "github.com/funtimecoding/soil/pkg/gw2/example"
 
 func main() {
 	example.Guild()

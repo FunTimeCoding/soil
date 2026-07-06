@@ -1,6 +1,6 @@
 package mock_client
 
-import "github.com/funtimecoding/go-library/pkg/generative/anthropic/claude/session"
+import "github.com/funtimecoding/soil/pkg/generative/anthropic/claude/session"
 
 func (c *Client) Sessions() []*session.Session {
 	var result []*session.Session

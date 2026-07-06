@@ -2,7 +2,7 @@ package strings
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"regexp"
 )
 

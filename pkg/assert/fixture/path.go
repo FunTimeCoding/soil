@@ -1,8 +1,8 @@
 package fixture
 
 import (
-	"github.com/funtimecoding/go-library/pkg/project"
-	"github.com/funtimecoding/go-library/pkg/system/join"
+	"github.com/funtimecoding/soil/pkg/project"
+	"github.com/funtimecoding/soil/pkg/system/join"
 )
 
 func Path(path ...string) string {

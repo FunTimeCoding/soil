@@ -1,6 +1,6 @@
 package service
 
-import "github.com/funtimecoding/go-library/pkg/tool/godashboardd/board"
+import "github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
 
 func (s *Service) rowValues(rows []*board.Row) []string {
 	var result []string

@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/goclean"
+import "github.com/funtimecoding/soil/pkg/tool/goclean"
 
 var (
 	Version   string

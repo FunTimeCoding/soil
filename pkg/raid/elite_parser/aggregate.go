@@ -1,6 +1,6 @@
 package elite_parser
 
-import "github.com/funtimecoding/go-library/pkg/strings/join"
+import "github.com/funtimecoding/soil/pkg/strings/join"
 
 func Aggregate(v []*PlayerFightStatistic) map[string]*AggregatedPlayer {
 	players := map[string]*AggregatedPlayer{}

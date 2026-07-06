@@ -1,14 +1,14 @@
 package web
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goalertlogd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goalertlogd/store"
-	"github.com/funtimecoding/go-library/pkg/tool/goalertlogd/worker"
-	"github.com/funtimecoding/go-library/pkg/web/layout"
-	"github.com/funtimecoding/go-library/pkg/web/layout/navigation_item"
-	"github.com/funtimecoding/go-library/pkg/web/palette"
-	theme "github.com/funtimecoding/go-library/pkg/web/theme/constant"
-	"github.com/funtimecoding/go-library/pkg/web/view"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/worker"
+	"github.com/funtimecoding/soil/pkg/web/layout"
+	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
+	"github.com/funtimecoding/soil/pkg/web/palette"
+	theme "github.com/funtimecoding/soil/pkg/web/theme/constant"
+	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
 func New(

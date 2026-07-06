@@ -1,10 +1,10 @@
 package client
 
 import (
-	"github.com/funtimecoding/go-library/pkg/kubernetes/client/operation/list"
-	"github.com/funtimecoding/go-library/pkg/kubernetes/constant"
-	"github.com/funtimecoding/go-library/pkg/kubernetes/filter"
-	"github.com/funtimecoding/go-library/pkg/kubernetes/types/native/pod"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client/operation/list"
+	"github.com/funtimecoding/soil/pkg/kubernetes/constant"
+	"github.com/funtimecoding/soil/pkg/kubernetes/filter"
+	"github.com/funtimecoding/soil/pkg/kubernetes/types/native/pod"
 	"k8s.io/api/core/v1"
 )
 

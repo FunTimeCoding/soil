@@ -1,6 +1,6 @@
 package thread
 
-import "github.com/funtimecoding/go-library/pkg/chat/mattermost/post"
+import "github.com/funtimecoding/soil/pkg/chat/mattermost/post"
 
 type Thread struct {
 	Root     *post.Post

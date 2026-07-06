@@ -1,6 +1,6 @@
 package netbox
 
-import "github.com/funtimecoding/go-library/pkg/netbox/contact_role"
+import "github.com/funtimecoding/soil/pkg/netbox/contact_role"
 
 func (c *Client) ContactRoles() ([]*contact_role.Role, error) {
 	result, _, e := c.client.TenancyAPI.TenancyContactRolesList(

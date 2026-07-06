@@ -1,10 +1,10 @@
 package web
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/strings"
-	"github.com/funtimecoding/go-library/pkg/tool/gomaintlogd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gomaintlogd/store/entry"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/strings"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store/entry"
 	"net/http"
 )
 

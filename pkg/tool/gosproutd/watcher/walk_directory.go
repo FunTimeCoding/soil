@@ -3,8 +3,8 @@ package watcher
 import (
 	"crypto/sha256"
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"os"
 	"path/filepath"
 	"strings"

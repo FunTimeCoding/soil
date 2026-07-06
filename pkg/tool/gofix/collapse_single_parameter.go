@@ -1,7 +1,7 @@
 package gofix
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/gofix/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/constant"
 	"go/ast"
 	"go/token"
 )

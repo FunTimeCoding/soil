@@ -1,9 +1,9 @@
 package scan
 
 import (
-	"github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/lint/concern"
-	"github.com/funtimecoding/go-library/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/lint/concern"
+	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"path/filepath"
 	"sort"
 	"strings"

@@ -1,10 +1,10 @@
 package opsgenie
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/override"
-	"github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/rotation"
-	"github.com/funtimecoding/go-library/pkg/strings/upper"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/override"
+	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/rotation"
+	"github.com/funtimecoding/soil/pkg/strings/upper"
 	"github.com/opsgenie/opsgenie-go-sdk-v2/og"
 	"testing"
 )

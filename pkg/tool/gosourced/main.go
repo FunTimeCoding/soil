@@ -1,13 +1,13 @@
 package gosourced
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/system"
-	"github.com/funtimecoding/go-library/pkg/tool/gosourced/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gosourced/inventory"
-	"github.com/funtimecoding/go-library/pkg/tool/gosourced/option"
-	web "github.com/funtimecoding/go-library/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/inventory"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/option"
+	web "github.com/funtimecoding/soil/pkg/web/constant"
 	"path/filepath"
 )
 

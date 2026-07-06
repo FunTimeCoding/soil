@@ -2,10 +2,10 @@ package token_check
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/atlassian/constant"
-	jiraConstant "github.com/funtimecoding/go-library/pkg/atlassian/jira/constant"
-	"github.com/funtimecoding/go-library/pkg/system/environment"
-	"github.com/funtimecoding/go-library/pkg/tool/common"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
+	jiraConstant "github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
+	"github.com/funtimecoding/soil/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/tool/common"
 )
 
 func TokenCheck() {

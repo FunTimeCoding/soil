@@ -1,10 +1,10 @@
 package netbox
 
 import (
-	"github.com/funtimecoding/go-library/pkg/integers64"
-	"github.com/funtimecoding/go-library/pkg/netbox/constant"
-	"github.com/funtimecoding/go-library/pkg/netbox/device"
-	"github.com/funtimecoding/go-library/pkg/netbox/network"
+	"github.com/funtimecoding/soil/pkg/integers64"
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
+	"github.com/funtimecoding/soil/pkg/netbox/device"
+	"github.com/funtimecoding/soil/pkg/netbox/network"
 	"github.com/netbox-community/go-netbox/v4"
 	"net"
 )

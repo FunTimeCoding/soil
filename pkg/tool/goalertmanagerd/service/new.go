@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager"
-	"github.com/funtimecoding/go-library/pkg/tool/goalertmanagerd/inventory"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager"
+	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/inventory"
 )
 
 func New(i *inventory.Inventory) *Service {

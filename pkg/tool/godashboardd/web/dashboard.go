@@ -1,7 +1,7 @@
 package web
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/godashboardd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/constant"
 	"net/http"
 )
 

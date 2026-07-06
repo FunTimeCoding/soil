@@ -1,8 +1,8 @@
 package service_tester
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/service/check_result"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/check_result"
 )
 
 func (o *Tester) Check(sessionIdentifier string) *check_result.Result {

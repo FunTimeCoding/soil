@@ -1,6 +1,6 @@
 package netbox
 
-import "github.com/funtimecoding/go-library/pkg/netbox/network"
+import "github.com/funtimecoding/soil/pkg/netbox/network"
 
 func (c *Client) DeviceInterfaces(device int32) ([]*network.Interface, error) {
 	result, _, e := c.client.DcimAPI.DcimInterfacesList(

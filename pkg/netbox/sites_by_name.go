@@ -1,6 +1,6 @@
 package netbox
 
-import "github.com/funtimecoding/go-library/pkg/netbox/site"
+import "github.com/funtimecoding/soil/pkg/netbox/site"
 
 func (c *Client) SitesByName(n string) ([]*site.Site, error) {
 	result, _, e := c.client.DcimAPI.DcimSitesList(

@@ -1,9 +1,9 @@
 package service
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/event_query"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/service/argument"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/timeline"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/event_query"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/argument"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/timeline"
 	"time"
 )
 

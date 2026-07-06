@@ -1,7 +1,7 @@
 package gitlab
 
 import (
-	"github.com/funtimecoding/go-library/pkg/gitlab/constant"
+	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"gitlab.com/gitlab-org/api/client-go/v2"
 )
 

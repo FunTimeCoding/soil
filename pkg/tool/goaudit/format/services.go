@@ -1,7 +1,7 @@
 package format
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goaudit/scan"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
 	"strings"
 )
 

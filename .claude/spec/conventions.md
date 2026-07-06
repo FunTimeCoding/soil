@@ -115,7 +115,7 @@ Enforced by the `goanalyze` `forbidden_import` analyzer (AST-based, no false pos
 | Forbidden | Use instead |
 |-----------|-------------|
 | `"flag"` | `"github.com/spf13/pflag"` |
-| `"github.com/stretchr/testify"` | `"github.com/funtimecoding/go-library/pkg/assert"` |
+| `"github.com/stretchr/testify"` | `"github.com/funtimecoding/soil/pkg/assert"` |
 
 ## Import Aliases
 

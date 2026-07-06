@@ -1,12 +1,12 @@
 package goprocessd
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/tool/goprocessd/environment"
-	"github.com/funtimecoding/go-library/pkg/tool/goprocessd/option"
-	"github.com/funtimecoding/go-library/pkg/tool/goprocessd/procfile"
-	"github.com/funtimecoding/go-library/pkg/tool/goprocessd/server"
-	"github.com/funtimecoding/go-library/pkg/tool/goprocessd/socket"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/environment"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/option"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/procfile"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/server"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/socket"
 	"os"
 )
 

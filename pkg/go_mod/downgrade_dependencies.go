@@ -2,8 +2,8 @@ package go_mod
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/system"
 )
 
 func DowngradeDependencies(v []string) {

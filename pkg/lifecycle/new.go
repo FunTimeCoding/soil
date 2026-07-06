@@ -1,6 +1,6 @@
 package lifecycle
 
-import "github.com/funtimecoding/go-library/pkg/log/logger"
+import "github.com/funtimecoding/soil/pkg/log/logger"
 
 func New(
 	l *logger.Logger,

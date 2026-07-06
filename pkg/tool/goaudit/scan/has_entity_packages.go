@@ -2,7 +2,7 @@ package scan
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"path/filepath"
 )
 

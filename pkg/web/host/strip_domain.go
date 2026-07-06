@@ -1,6 +1,6 @@
 package host
 
-import "github.com/funtimecoding/go-library/pkg/strings/split"
+import "github.com/funtimecoding/soil/pkg/strings/split"
 
 func StripDomain(s string) string {
 	if HasDot(s) {

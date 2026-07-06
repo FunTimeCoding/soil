@@ -1,9 +1,9 @@
 package alert
 
 import (
-	"github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/alert/option"
-	"github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/team"
-	"github.com/funtimecoding/go-library/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/alert/option"
+	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/team"
+	"github.com/funtimecoding/soil/pkg/monitor/item/constant"
 )
 
 func (a *Alert) enrich(

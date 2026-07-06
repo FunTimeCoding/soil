@@ -2,10 +2,10 @@ package kestra
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/kestra/transport"
-	"github.com/funtimecoding/go-library/pkg/strings/join/key_value"
-	"github.com/funtimecoding/go-library/pkg/web"
-	"github.com/funtimecoding/go-library/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/kestra/transport"
+	"github.com/funtimecoding/soil/pkg/strings/join/key_value"
+	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/kestra-io/client-sdk/go-sdk/kestra_api_client"
 	"net/http"
 )

@@ -2,8 +2,8 @@ package service
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/prometheus"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager"
+	"github.com/funtimecoding/soil/pkg/prometheus"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager"
 )
 
 func (s *Service) Client(instance string) (*alertmanager.Client, error) {

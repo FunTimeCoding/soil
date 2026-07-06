@@ -2,8 +2,8 @@ package assistant
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/assistant/constant"
-	"github.com/funtimecoding/go-library/pkg/assistant/message"
+	"github.com/funtimecoding/soil/pkg/assistant/constant"
+	"github.com/funtimecoding/soil/pkg/assistant/message"
 )
 
 func (c *Client) Start() {

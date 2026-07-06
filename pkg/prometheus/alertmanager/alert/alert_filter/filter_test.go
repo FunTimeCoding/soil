@@ -1,9 +1,9 @@
 package alert_filter
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert/advanced_option"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/advanced_option"
 	"testing"
 )
 

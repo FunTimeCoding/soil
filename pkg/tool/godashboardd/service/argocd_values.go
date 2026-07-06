@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argocd/application"
-	"github.com/funtimecoding/go-library/pkg/tool/godashboardd/constant"
+	"github.com/funtimecoding/soil/pkg/argocd/application"
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/constant"
 	"strconv"
 )
 

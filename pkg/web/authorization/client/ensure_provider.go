@@ -3,7 +3,7 @@ package client
 import (
 	"context"
 	"github.com/coreos/go-oidc/v3/oidc"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 )
 
 func (c *Client) ensureProvider() {

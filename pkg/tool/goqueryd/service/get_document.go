@@ -1,6 +1,6 @@
 package service
 
-import "github.com/funtimecoding/go-library/pkg/tool/goqueryd/store/result"
+import "github.com/funtimecoding/soil/pkg/tool/goqueryd/store/result"
 
 func (s *Service) GetDocument(path string) (*result.Document, []string, error) {
 	document, e := s.store.GetDocument(path)

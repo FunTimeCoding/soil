@@ -1,7 +1,7 @@
 package math
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/assert"
 	"testing"
 )
 

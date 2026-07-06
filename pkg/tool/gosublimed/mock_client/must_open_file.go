@@ -1,8 +1,8 @@
 package mock_client
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/sublime/view"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/sublime/view"
 )
 
 func (c *Client) MustOpenFile(path string) *view.View {

@@ -1,6 +1,6 @@
 package server
 
-import "github.com/funtimecoding/go-library/pkg/log/logger"
+import "github.com/funtimecoding/soil/pkg/log/logger"
 
 func (b *Builder) WithLogger(
 	l *logger.Logger,

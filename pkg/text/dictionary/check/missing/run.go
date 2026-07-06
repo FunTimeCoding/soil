@@ -2,10 +2,10 @@ package missing
 
 import (
 	"fmt"
-	library "github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/text/dictionary"
-	"github.com/funtimecoding/go-library/pkg/text/dictionary/constant"
+	library "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/text/dictionary"
+	"github.com/funtimecoding/soil/pkg/text/dictionary/constant"
 	"io/fs"
 	"path/filepath"
 	"strings"

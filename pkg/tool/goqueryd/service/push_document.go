@@ -1,9 +1,9 @@
 package service
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/store"
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/store/chunk"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/chunk"
 	"time"
 )
 

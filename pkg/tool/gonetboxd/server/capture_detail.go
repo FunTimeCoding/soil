@@ -1,9 +1,9 @@
 package server
 
 import (
-	"github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gonetboxd/common"
-	"github.com/funtimecoding/go-library/pkg/tool/gonetboxd/generated/server"
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/common"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 )
 
 func (s *Server) captureDetail(e error) *server.ErrorResponse {

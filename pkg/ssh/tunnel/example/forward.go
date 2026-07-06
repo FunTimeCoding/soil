@@ -2,10 +2,10 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/ssh/tunnel"
-	"github.com/funtimecoding/go-library/pkg/ssh/tunnel/constant"
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/ssh/tunnel"
+	"github.com/funtimecoding/soil/pkg/ssh/tunnel/constant"
+	"github.com/funtimecoding/soil/pkg/system"
 )
 
 func Forward() {

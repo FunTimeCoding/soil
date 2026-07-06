@@ -1,6 +1,6 @@
 package generic
 
-import "github.com/funtimecoding/go-library/pkg/prometheus/result/metric"
+import "github.com/funtimecoding/soil/pkg/prometheus/result/metric"
 
 func MapForLabel(
 	r []*Result,

@@ -3,9 +3,9 @@ package server
 import (
 	"context"
 	"encoding/json"
-	"github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gotelemetryd/generated/server"
-	"github.com/funtimecoding/go-library/pkg/tool/gotelemetryd/store"
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/generated/server"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/store"
 )
 
 func (s *Server) GetEvents(

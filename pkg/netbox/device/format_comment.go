@@ -2,12 +2,12 @@ package device
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/console"
-	"github.com/funtimecoding/go-library/pkg/console/status/option"
-	library "github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/netbox/constant"
-	"github.com/funtimecoding/go-library/pkg/strings"
-	"github.com/funtimecoding/go-library/pkg/text"
+	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/console/status/option"
+	library "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
+	"github.com/funtimecoding/soil/pkg/strings"
+	"github.com/funtimecoding/soil/pkg/text"
 )
 
 func (d *Device) formatComment(f *option.Format) string {

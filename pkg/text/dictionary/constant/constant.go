@@ -1,6 +1,6 @@
 package constant
 
-import "github.com/funtimecoding/go-library/pkg/project"
+import "github.com/funtimecoding/soil/pkg/project"
 
 const File = "dictionary.dic"
 

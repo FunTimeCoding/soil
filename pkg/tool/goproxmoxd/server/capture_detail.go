@@ -2,8 +2,8 @@ package server
 
 import (
 	"errors"
-	"github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/generated/server"
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 	"github.com/luthermonson/go-proxmox"
 )
 

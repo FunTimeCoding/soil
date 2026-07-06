@@ -1,8 +1,8 @@
 package jira
 
 import (
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/custom_field_value"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/custom_field_value"
+	"github.com/funtimecoding/soil/pkg/errors"
 )
 
 func (c *Client) MustCustomFieldValues(

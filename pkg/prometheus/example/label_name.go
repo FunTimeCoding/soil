@@ -2,8 +2,8 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/prometheus"
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus"
 )
 
 func LabelName() {

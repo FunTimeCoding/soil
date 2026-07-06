@@ -2,7 +2,7 @@ package convert
 
 import (
 	"github.com/andygrunwald/go-jira"
-	"github.com/funtimecoding/go-library/pkg/tool/goatlassiand/generated/server"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/server"
 )
 
 func JiraProject(p *jira.Project) *server.JiraProject {

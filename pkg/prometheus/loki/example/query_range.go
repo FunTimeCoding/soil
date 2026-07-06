@@ -2,11 +2,11 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/console"
-	"github.com/funtimecoding/go-library/pkg/prometheus/loki"
-	"github.com/funtimecoding/go-library/pkg/prometheus/loki/basic/constant"
-	timeLibrary "github.com/funtimecoding/go-library/pkg/time"
-	telemetry "github.com/funtimecoding/go-library/pkg/web/telemetry/constant"
+	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/prometheus/loki"
+	"github.com/funtimecoding/soil/pkg/prometheus/loki/basic/constant"
+	timeLibrary "github.com/funtimecoding/soil/pkg/time"
+	telemetry "github.com/funtimecoding/soil/pkg/web/telemetry/constant"
 	"strings"
 	"time"
 )

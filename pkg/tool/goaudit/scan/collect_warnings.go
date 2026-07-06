@@ -1,6 +1,6 @@
 package scan
 
-import "github.com/funtimecoding/go-library/pkg/system/virtual_file_system"
+import "github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 
 func (s *Service) collectWarnings(
 	v *virtual_file_system.System,

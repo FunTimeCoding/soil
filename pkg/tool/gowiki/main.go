@@ -2,12 +2,12 @@ package gowiki
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/atlassian/confluence"
-	wiki "github.com/funtimecoding/go-library/pkg/atlassian/confluence/constant"
-	"github.com/funtimecoding/go-library/pkg/console/status/tag"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/tool/gowiki/constant"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/atlassian/confluence"
+	wiki "github.com/funtimecoding/soil/pkg/atlassian/confluence/constant"
+	"github.com/funtimecoding/soil/pkg/console/status/tag"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/tool/gowiki/constant"
 )
 
 func Main(

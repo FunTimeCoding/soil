@@ -1,12 +1,12 @@
 package version
 
 import (
-	"github.com/funtimecoding/go-library/pkg/go_mod"
-	"github.com/funtimecoding/go-library/pkg/go_mod/check/version/option"
-	"github.com/funtimecoding/go-library/pkg/go_mod/project"
-	"github.com/funtimecoding/go-library/pkg/monitor/constant"
-	item "github.com/funtimecoding/go-library/pkg/monitor/item/constant"
-	"github.com/funtimecoding/go-library/pkg/monitor/report"
+	"github.com/funtimecoding/soil/pkg/go_mod"
+	"github.com/funtimecoding/soil/pkg/go_mod/check/version/option"
+	"github.com/funtimecoding/soil/pkg/go_mod/project"
+	"github.com/funtimecoding/soil/pkg/monitor/constant"
+	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/monitor/report"
 	"time"
 )
 

@@ -1,6 +1,6 @@
 package mock_client
 
-import "github.com/funtimecoding/go-library/pkg/sublime/view"
+import "github.com/funtimecoding/soil/pkg/sublime/view"
 
 func (c *Client) OpenFile(path string) (*view.View, error) {
 	v := view.Stub()

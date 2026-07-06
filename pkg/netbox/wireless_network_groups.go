@@ -1,6 +1,6 @@
 package netbox
 
-import "github.com/funtimecoding/go-library/pkg/netbox/wireless_network_group"
+import "github.com/funtimecoding/soil/pkg/netbox/wireless_network_group"
 
 func (c *Client) WirelessNetworkGroups() ([]*wireless_network_group.Group, error) {
 	result, _, e := c.client.WirelessAPI.WirelessWirelessLanGroupsList(

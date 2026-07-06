@@ -1,8 +1,8 @@
 package router
 
 import (
-	"github.com/funtimecoding/go-library/pkg/monitor/gorilla/router/client"
-	"github.com/funtimecoding/go-library/pkg/monitor/gorilla/router/flag"
+	"github.com/funtimecoding/soil/pkg/monitor/gorilla/router/client"
+	"github.com/funtimecoding/soil/pkg/monitor/gorilla/router/flag"
 )
 
 type Router struct {

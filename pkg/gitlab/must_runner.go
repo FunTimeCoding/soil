@@ -1,8 +1,8 @@
 package gitlab
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/gitlab/runner"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/gitlab/runner"
 )
 
 func (c *Client) MustRunner(identifier int64) *runner.Runner {

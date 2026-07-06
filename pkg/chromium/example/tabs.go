@@ -2,13 +2,13 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/chromium"
-	"github.com/funtimecoding/go-library/pkg/chromium/constant"
-	library "github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/strings/split/key_value"
-	"github.com/funtimecoding/go-library/pkg/system"
-	systemConstant "github.com/funtimecoding/go-library/pkg/system/constant"
-	"github.com/funtimecoding/go-library/pkg/system/join"
+	"github.com/funtimecoding/soil/pkg/chromium"
+	"github.com/funtimecoding/soil/pkg/chromium/constant"
+	library "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/strings/split/key_value"
+	"github.com/funtimecoding/soil/pkg/system"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/system/join"
 	"strings"
 )
 

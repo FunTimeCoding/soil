@@ -2,7 +2,7 @@ package function
 
 import (
 	"encoding/json"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 )
 
 func getCurrentWeather(

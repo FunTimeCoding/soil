@@ -2,9 +2,9 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/console"
-	"github.com/funtimecoding/go-library/pkg/gitlab"
-	"github.com/funtimecoding/go-library/pkg/gitlab/constant"
+	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/gitlab"
+	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 )
 
 func Issue() {

@@ -1,8 +1,8 @@
 package runner
 
 import (
-	"github.com/funtimecoding/go-library/pkg/provision/store"
-	"github.com/funtimecoding/go-library/pkg/tool/goansibled/constant"
+	"github.com/funtimecoding/soil/pkg/provision/store"
+	"github.com/funtimecoding/soil/pkg/tool/goansibled/constant"
 	"path/filepath"
 	"time"
 )

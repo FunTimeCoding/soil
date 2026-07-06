@@ -1,9 +1,9 @@
 package packer
 
 import (
-	"github.com/funtimecoding/go-library/pkg/provision/packer/constant"
-	"github.com/funtimecoding/go-library/pkg/system"
-	"github.com/funtimecoding/go-library/pkg/system/join"
+	"github.com/funtimecoding/soil/pkg/provision/packer/constant"
+	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/system/join"
 )
 
 func New(workDirectory string) *Client {

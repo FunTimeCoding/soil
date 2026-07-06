@@ -1,9 +1,9 @@
 package nextcloud
 
 import (
-	"github.com/funtimecoding/go-library/pkg/nextcloud/basic"
-	"github.com/funtimecoding/go-library/pkg/nextcloud/helper"
-	"github.com/funtimecoding/go-library/pkg/web/author"
+	"github.com/funtimecoding/soil/pkg/nextcloud/basic"
+	"github.com/funtimecoding/soil/pkg/nextcloud/helper"
+	"github.com/funtimecoding/soil/pkg/web/author"
 )
 
 func New(

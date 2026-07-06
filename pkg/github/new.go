@@ -2,7 +2,7 @@ package github
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/google/go-github/v88/github"
 	"golang.org/x/oauth2"
 )

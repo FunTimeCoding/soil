@@ -1,7 +1,7 @@
 package page
 
 import (
-	"github.com/funtimecoding/go-library/pkg/system/writer"
+	"github.com/funtimecoding/soil/pkg/system/writer"
 	"strings"
 )
 

@@ -3,7 +3,7 @@ package checksum
 import (
 	"fmt"
 	"github.com/coreos/go-semver/semver"
-	"github.com/funtimecoding/go-library/pkg/system/debian/image"
+	"github.com/funtimecoding/soil/pkg/system/debian/image"
 )
 
 func Link(

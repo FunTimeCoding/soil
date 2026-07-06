@@ -1,6 +1,6 @@
 package store
 
-import "github.com/funtimecoding/go-library/pkg/tool/goclauded/store/event_metadata"
+import "github.com/funtimecoding/soil/pkg/tool/goclauded/store/event_metadata"
 
 func (s *Store) EventMetadataByEvent(eventIdentifier uint) map[string]string {
 	var rows []event_metadata.EventMetadata

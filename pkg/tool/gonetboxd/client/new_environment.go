@@ -1,8 +1,8 @@
 package client
 
 import (
-	"github.com/funtimecoding/go-library/pkg/system/environment"
-	"github.com/funtimecoding/go-library/pkg/tool/gonetboxd/client/constant"
+	"github.com/funtimecoding/soil/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client/constant"
 )
 
 func NewEnvironment() *Client {

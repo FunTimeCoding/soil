@@ -2,7 +2,7 @@ package mock_client
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/firefox/content"
+	"github.com/funtimecoding/soil/pkg/firefox/content"
 )
 
 func (c *Client) ReadTab(

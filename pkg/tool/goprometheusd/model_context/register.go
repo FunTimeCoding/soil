@@ -1,9 +1,9 @@
 package model_context
 
 import (
-	libraryConstant "github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/generative/model_context/parameter"
-	"github.com/funtimecoding/go-library/pkg/tool/goprometheusd/constant"
+	libraryConstant "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/generative/model_context/parameter"
+	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 

@@ -1,6 +1,6 @@
 package netbox
 
-import "github.com/funtimecoding/go-library/pkg/netbox/custom_field"
+import "github.com/funtimecoding/soil/pkg/netbox/custom_field"
 
 func (c *Client) CustomFields() ([]*custom_field.Field, error) {
 	result, _, e := c.client.ExtrasAPI.ExtrasCustomFieldsList(

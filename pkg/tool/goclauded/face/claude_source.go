@@ -1,11 +1,11 @@
 package face
 
 import (
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/claude"
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/claude/message"
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/claude/peek"
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/claude/session"
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/claude/tool_call"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/message"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/peek"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/session"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/tool_call"
 )
 
 type ClaudeSource interface {

@@ -2,7 +2,7 @@ package gotechnitium
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/technitium"
+	"github.com/funtimecoding/soil/pkg/technitium"
 	"github.com/spf13/cobra"
 )
 

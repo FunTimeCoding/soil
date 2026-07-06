@@ -2,7 +2,7 @@ package basic
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func (c *Client) Get(l string) string {

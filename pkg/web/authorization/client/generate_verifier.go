@@ -1,7 +1,7 @@
 package client
 
 import (
-	"github.com/funtimecoding/go-library/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/google/uuid"
 )
 

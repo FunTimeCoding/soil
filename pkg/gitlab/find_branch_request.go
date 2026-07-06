@@ -2,8 +2,8 @@ package gitlab
 
 import (
 	"errors"
-	"github.com/funtimecoding/go-library/pkg/gitlab/constant"
-	"github.com/funtimecoding/go-library/pkg/gitlab/merge_request"
+	"github.com/funtimecoding/soil/pkg/gitlab/constant"
+	"github.com/funtimecoding/soil/pkg/gitlab/merge_request"
 )
 
 func (c *Client) FindBranchRequest(

@@ -1,6 +1,6 @@
 package caller
 
-import "github.com/funtimecoding/go-library/pkg/source/example/target"
+import "github.com/funtimecoding/soil/pkg/source/example/target"
 
 func Lookup(
 	e *target.Entry,

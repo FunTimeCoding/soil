@@ -2,8 +2,8 @@ package gomemoryd
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/tool/gomemoryd/service"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service"
 )
 
 func reconcileMemories(s *service.Service) {

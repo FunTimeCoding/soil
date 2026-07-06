@@ -1,8 +1,8 @@
 package monitor
 
 import (
-	"github.com/funtimecoding/go-library/pkg/chat/mattermost/post"
-	"github.com/funtimecoding/go-library/pkg/system/writer"
+	"github.com/funtimecoding/soil/pkg/chat/mattermost/post"
+	"github.com/funtimecoding/soil/pkg/system/writer"
 	"strings"
 	"time"
 )

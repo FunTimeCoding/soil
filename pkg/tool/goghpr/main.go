@@ -1,11 +1,11 @@
 package goghpr
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/github/check/pull_request"
-	"github.com/funtimecoding/go-library/pkg/github/check/pull_request/option"
-	"github.com/funtimecoding/go-library/pkg/tool/goghpr/constant"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/github/check/pull_request"
+	"github.com/funtimecoding/soil/pkg/github/check/pull_request/option"
+	"github.com/funtimecoding/soil/pkg/tool/goghpr/constant"
 )
 
 func Main(

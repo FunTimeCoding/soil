@@ -1,6 +1,6 @@
 package common
 
-import "github.com/funtimecoding/go-library/pkg/argument"
+import "github.com/funtimecoding/soil/pkg/argument"
 
 func ValidateArguments(a *argument.Instance) {
 	a.Required(argument.Host)

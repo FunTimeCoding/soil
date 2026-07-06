@@ -2,9 +2,9 @@ package mattermost
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/chat/mattermost/constant"
-	"github.com/funtimecoding/go-library/pkg/chat/mattermost/post"
-	library "github.com/funtimecoding/go-library/pkg/time"
+	"github.com/funtimecoding/soil/pkg/chat/mattermost/constant"
+	"github.com/funtimecoding/soil/pkg/chat/mattermost/post"
+	library "github.com/funtimecoding/soil/pkg/time"
 	"github.com/mattermost/mattermost/server/public/model"
 	"time"
 )

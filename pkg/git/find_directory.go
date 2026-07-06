@@ -1,8 +1,8 @@
 package git
 
 import (
-	"github.com/funtimecoding/go-library/pkg/git/constant"
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/git/constant"
+	"github.com/funtimecoding/soil/pkg/system"
 )
 
 func FindDirectory() string {

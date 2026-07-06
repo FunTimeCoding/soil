@@ -2,7 +2,7 @@ package memory_indexer
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 )
 
 func (i *Indexer) Push(

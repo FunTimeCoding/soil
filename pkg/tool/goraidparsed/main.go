@@ -1,11 +1,11 @@
 package goraidparsed
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/tool/goraidparsed/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goraidparsed/option"
-	web "github.com/funtimecoding/go-library/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/option"
+	web "github.com/funtimecoding/soil/pkg/web/constant"
 )
 
 func Main(

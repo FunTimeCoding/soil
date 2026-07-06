@@ -1,8 +1,8 @@
 package issue
 
 import (
-	"github.com/funtimecoding/go-library/pkg/console/status"
-	"github.com/funtimecoding/go-library/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/console/status"
+	"github.com/funtimecoding/soil/pkg/console/status/option"
 )
 
 func (i *Issue) Format(f *option.Format) string {

@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/goclaude"
+import "github.com/funtimecoding/soil/pkg/tool/goclaude"
 
 var (
 	Version   string

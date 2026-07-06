@@ -2,9 +2,9 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/console/status/option"
-	"github.com/funtimecoding/go-library/pkg/prometheus"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/constant"
+	"github.com/funtimecoding/soil/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/prometheus"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
 	"slices"
 )
 

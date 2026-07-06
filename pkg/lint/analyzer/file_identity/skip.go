@@ -1,7 +1,7 @@
 package file_identity
 
 import (
-	"github.com/funtimecoding/go-library/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/constant"
 	"strings"
 )
 

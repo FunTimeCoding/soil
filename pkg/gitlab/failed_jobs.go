@@ -1,6 +1,6 @@
 package gitlab
 
-import "github.com/funtimecoding/go-library/pkg/gitlab/job"
+import "github.com/funtimecoding/soil/pkg/gitlab/job"
 
 func (c *Client) FailedJobs() []*job.Job {
 	var result []*job.Job

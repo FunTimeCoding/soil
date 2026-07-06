@@ -1,11 +1,11 @@
 package gobrew
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/system/macos/check/brew/outdated"
-	"github.com/funtimecoding/go-library/pkg/system/macos/check/brew/outdated/option"
-	"github.com/funtimecoding/go-library/pkg/tool/gobrew/constant"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/system/macos/check/brew/outdated"
+	"github.com/funtimecoding/soil/pkg/system/macos/check/brew/outdated/option"
+	"github.com/funtimecoding/soil/pkg/tool/gobrew/constant"
 )
 
 func Main(

@@ -2,7 +2,7 @@ package job
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/kubernetes/client"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client"
 )
 
 func printJobs(

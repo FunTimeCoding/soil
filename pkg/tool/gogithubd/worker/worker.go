@@ -1,8 +1,8 @@
 package worker
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/recovery"
-	"github.com/funtimecoding/go-library/pkg/github"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
+	"github.com/funtimecoding/soil/pkg/github"
 	"github.com/prometheus/client_golang/prometheus"
 	"time"
 )

@@ -2,8 +2,8 @@ package github
 
 import (
 	"errors"
-	"github.com/funtimecoding/go-library/pkg/github/constant"
-	"github.com/funtimecoding/go-library/pkg/github/pull_request"
+	"github.com/funtimecoding/soil/pkg/github/constant"
+	"github.com/funtimecoding/soil/pkg/github/pull_request"
 )
 
 func (c *Client) FindBranchRequest(

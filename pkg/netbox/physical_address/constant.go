@@ -1,6 +1,6 @@
 package physical_address
 
-import "github.com/funtimecoding/go-library/pkg/netbox/constant"
+import "github.com/funtimecoding/soil/pkg/netbox/constant"
 
 const (
 	NoDevice     = "no device"

@@ -2,7 +2,7 @@ package issue
 
 import (
 	"github.com/andygrunwald/go-jira"
-	library "github.com/funtimecoding/go-library/pkg/time"
+	library "github.com/funtimecoding/soil/pkg/time"
 	"time"
 )
 

@@ -1,6 +1,6 @@
 package go_mod
 
-import "github.com/funtimecoding/go-library/pkg/console/status/option"
+import "github.com/funtimecoding/soil/pkg/console/status/option"
 
 const ModFile = "go.mod"
 

@@ -2,8 +2,8 @@ package convert
 
 import (
 	"github.com/andygrunwald/go-jira"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/issue"
-	"github.com/funtimecoding/go-library/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"strings"
 )
 

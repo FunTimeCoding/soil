@@ -1,12 +1,12 @@
 package alert
 
 import (
-	"github.com/funtimecoding/go-library/pkg/monitor/constant"
-	item "github.com/funtimecoding/go-library/pkg/monitor/item/constant"
-	"github.com/funtimecoding/go-library/pkg/monitor/report"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert"
-	alertmanager "github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/constant"
-	"github.com/funtimecoding/go-library/pkg/prometheus/check/alert/option"
+	"github.com/funtimecoding/soil/pkg/monitor/constant"
+	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/monitor/report"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
+	alertmanager "github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/check/alert/option"
 )
 
 func printNotation(

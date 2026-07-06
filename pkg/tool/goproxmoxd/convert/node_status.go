@@ -1,8 +1,8 @@
 package convert
 
 import (
-	"github.com/funtimecoding/go-library/pkg/proxmox/node_status"
-	"github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/generated/server"
+	"github.com/funtimecoding/soil/pkg/proxmox/node_status"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 )
 
 func NodeStatus(s *node_status.Status) *server.NodeStatus {

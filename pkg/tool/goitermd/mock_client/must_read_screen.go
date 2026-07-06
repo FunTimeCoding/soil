@@ -1,8 +1,8 @@
 package mock_client
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/iterm/screen"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/iterm/screen"
 )
 
 func (c *Client) MustReadScreen(identifier string) *screen.Screen {

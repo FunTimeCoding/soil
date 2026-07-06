@@ -1,7 +1,7 @@
 package integer
 
 import (
-	"github.com/funtimecoding/go-library/pkg/prometheus/result/generic"
+	"github.com/funtimecoding/soil/pkg/prometheus/result/generic"
 	"time"
 )
 

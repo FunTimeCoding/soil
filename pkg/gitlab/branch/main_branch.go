@@ -1,8 +1,8 @@
 package branch
 
 import (
-	"github.com/funtimecoding/go-library/pkg/git/constant"
-	"github.com/funtimecoding/go-library/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/git/constant"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"log"
 	"slices"
 )

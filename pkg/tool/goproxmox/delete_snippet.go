@@ -2,7 +2,7 @@ package goproxmox
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/tool/goproxmox/command_context"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmox/command_context"
 	"github.com/spf13/cobra"
 )
 

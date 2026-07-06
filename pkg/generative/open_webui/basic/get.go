@@ -1,8 +1,8 @@
 package basic
 
 import (
-	"github.com/funtimecoding/go-library/pkg/web"
-	"github.com/funtimecoding/go-library/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
 func (c *Client) Get(path string) string {

@@ -3,12 +3,12 @@
 package model_context
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/generative/model_context/parameter"
-	"github.com/funtimecoding/go-library/pkg/habitica/tag"
-	"github.com/funtimecoding/go-library/pkg/habitica/task"
-	"github.com/funtimecoding/go-library/pkg/tool/gohabiticad/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gohabiticad/integration_test/model_context_tester"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/generative/model_context/parameter"
+	"github.com/funtimecoding/soil/pkg/habitica/tag"
+	"github.com/funtimecoding/soil/pkg/habitica/task"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/integration_test/model_context_tester"
 	"testing"
 )
 

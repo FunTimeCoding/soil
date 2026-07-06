@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/goraidparsed"
+import "github.com/funtimecoding/soil/pkg/tool/goraidparsed"
 
 var (
 	Version   string

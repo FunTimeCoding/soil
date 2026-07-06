@@ -1,9 +1,9 @@
 package face
 
 import (
-	"github.com/funtimecoding/go-library/pkg/atlassian/confluence/page"
-	"github.com/funtimecoding/go-library/pkg/atlassian/confluence/search_result"
-	"github.com/funtimecoding/go-library/pkg/atlassian/confluence/space"
+	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page"
+	"github.com/funtimecoding/soil/pkg/atlassian/confluence/search_result"
+	"github.com/funtimecoding/soil/pkg/atlassian/confluence/space"
 )
 
 type ConfluenceSource interface {

@@ -2,7 +2,7 @@ package netbox
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/netbox/device"
+	"github.com/funtimecoding/soil/pkg/netbox/device"
 )
 
 func (c *Client) DevicesByCluster(s string) ([]*device.Device, error) {

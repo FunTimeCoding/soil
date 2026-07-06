@@ -1,13 +1,13 @@
 package gocommit
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	git "github.com/funtimecoding/go-library/pkg/git/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/common"
-	"github.com/funtimecoding/go-library/pkg/tool/gocommit/commit"
-	"github.com/funtimecoding/go-library/pkg/tool/gocommit/commit/option"
-	"github.com/funtimecoding/go-library/pkg/tool/gocommit/constant"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	git "github.com/funtimecoding/soil/pkg/git/constant"
+	"github.com/funtimecoding/soil/pkg/tool/common"
+	"github.com/funtimecoding/soil/pkg/tool/gocommit/commit"
+	"github.com/funtimecoding/soil/pkg/tool/gocommit/commit/option"
+	"github.com/funtimecoding/soil/pkg/tool/gocommit/constant"
 )
 
 func Main(

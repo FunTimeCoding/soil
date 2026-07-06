@@ -3,7 +3,7 @@ package jenkins
 import (
 	"context"
 	"github.com/bndr/gojenkins"
-	"github.com/funtimecoding/go-library/pkg/jenkins/basic"
+	"github.com/funtimecoding/soil/pkg/jenkins/basic"
 )
 
 type Client struct {

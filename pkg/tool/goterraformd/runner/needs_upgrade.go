@@ -2,8 +2,8 @@ package runner
 
 import (
 	"encoding/json"
-	"github.com/funtimecoding/go-library/pkg/strings/split"
-	"github.com/funtimecoding/go-library/pkg/tool/goterraformd/output"
+	"github.com/funtimecoding/soil/pkg/strings/split"
+	"github.com/funtimecoding/soil/pkg/tool/goterraformd/output"
 	"strings"
 )
 

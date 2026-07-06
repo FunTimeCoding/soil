@@ -1,6 +1,6 @@
 package store
 
-import "github.com/funtimecoding/go-library/pkg/tool/goclauded/store/queue"
+import "github.com/funtimecoding/soil/pkg/tool/goclauded/store/queue"
 
 func (s *Store) PushQueue(
 	callsign string,

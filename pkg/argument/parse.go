@@ -2,8 +2,8 @@ package argument
 
 import (
 	"errors"
-	"github.com/funtimecoding/go-library/pkg/build"
-	libraryErrors "github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/build"
+	libraryErrors "github.com/funtimecoding/soil/pkg/errors"
 	"github.com/spf13/pflag"
 	"os"
 )

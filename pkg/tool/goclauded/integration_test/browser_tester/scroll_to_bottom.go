@@ -3,7 +3,7 @@ package browser_tester
 import (
 	"fmt"
 	"github.com/chromedp/chromedp"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 )
 
 func (b *Browser) ScrollToBottom(selector string) {

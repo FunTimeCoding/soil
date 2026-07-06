@@ -1,8 +1,8 @@
 package post
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/chat/mattermost/constant"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/chat/mattermost/constant"
 	"github.com/mattermost/mattermost/server/public/model"
 	"testing"
 )

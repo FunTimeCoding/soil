@@ -1,7 +1,7 @@
 package round_tripper
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/prometheus/common/config"
 	"net/http"
 )

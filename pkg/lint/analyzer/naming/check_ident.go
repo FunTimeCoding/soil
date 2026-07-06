@@ -2,9 +2,9 @@ package naming
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/lint/concern"
-	"github.com/funtimecoding/go-library/pkg/lint/output"
-	"github.com/funtimecoding/go-library/pkg/lint/segment"
+	"github.com/funtimecoding/soil/pkg/lint/concern"
+	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/lint/segment"
 	"go/ast"
 	"go/types"
 	"golang.org/x/tools/go/packages"

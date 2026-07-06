@@ -1,8 +1,8 @@
 package model_context
 
 import (
-	"github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gonetboxd/common"
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/common"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 

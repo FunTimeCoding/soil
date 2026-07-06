@@ -2,9 +2,9 @@ package jira
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/constant"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/custom_field_value"
-	"github.com/funtimecoding/go-library/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/custom_field_value"
+	"github.com/funtimecoding/soil/pkg/notation"
 )
 
 func (c *Client) CustomFieldValues(

@@ -1,6 +1,6 @@
 package gitlab
 
-import "github.com/funtimecoding/go-library/pkg/gitlab/project"
+import "github.com/funtimecoding/soil/pkg/gitlab/project"
 
 func (c *Client) Project(identifier int64) (*project.Project, error) {
 	if p, okay := c.projectCache[identifier]; okay {

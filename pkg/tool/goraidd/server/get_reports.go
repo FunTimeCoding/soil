@@ -2,10 +2,10 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/system"
-	"github.com/funtimecoding/go-library/pkg/time"
-	"github.com/funtimecoding/go-library/pkg/tool/goraidd/generated/server"
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/time"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/generated/server"
 	"strings"
 )
 

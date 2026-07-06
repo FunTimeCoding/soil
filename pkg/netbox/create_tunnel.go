@@ -1,8 +1,8 @@
 package netbox
 
 import (
-	"github.com/funtimecoding/go-library/pkg/netbox/tunnel"
-	"github.com/funtimecoding/go-library/pkg/netbox/tunnel_group"
+	"github.com/funtimecoding/soil/pkg/netbox/tunnel"
+	"github.com/funtimecoding/soil/pkg/netbox/tunnel_group"
 	"github.com/netbox-community/go-netbox/v4"
 )
 

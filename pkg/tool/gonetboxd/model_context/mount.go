@@ -1,7 +1,7 @@
 package model_context
 
 import (
-	"github.com/funtimecoding/go-library/pkg/generative/model_context/server"
+	"github.com/funtimecoding/soil/pkg/generative/model_context/server"
 	"net/http"
 )
 

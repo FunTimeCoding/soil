@@ -1,6 +1,6 @@
 package command
 
-import "github.com/funtimecoding/go-library/pkg/linux/systemd/constant"
+import "github.com/funtimecoding/soil/pkg/linux/systemd/constant"
 
 func Failed() []string {
 	return []string{

@@ -1,9 +1,9 @@
 package option
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/constant"
-	"github.com/funtimecoding/go-library/pkg/strings/upper"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
+	"github.com/funtimecoding/soil/pkg/strings/upper"
 	"testing"
 )
 

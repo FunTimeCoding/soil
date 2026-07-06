@@ -2,8 +2,8 @@ package service
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/proxmox"
-	"github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/face"
+	"github.com/funtimecoding/soil/pkg/proxmox"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
 	"time"
 )
 

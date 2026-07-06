@@ -1,8 +1,8 @@
 package systemd
 
 import (
-	"github.com/funtimecoding/go-library/pkg/linux/systemd/constant"
-	"github.com/funtimecoding/go-library/pkg/linux/systemd/show"
+	"github.com/funtimecoding/soil/pkg/linux/systemd/constant"
+	"github.com/funtimecoding/soil/pkg/linux/systemd/show"
 )
 
 func (c *Client) IsFailed(name string) bool {

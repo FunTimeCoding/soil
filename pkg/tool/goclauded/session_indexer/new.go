@@ -1,6 +1,6 @@
 package session_indexer
 
-import "github.com/funtimecoding/go-library/pkg/tool/goqueryd/generated/client"
+import "github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 
 func New(
 	c *client.Client,

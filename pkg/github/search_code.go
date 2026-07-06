@@ -2,7 +2,7 @@ package github
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/github/code"
+	"github.com/funtimecoding/soil/pkg/github/code"
 )
 
 func (c *Client) SearchCode(

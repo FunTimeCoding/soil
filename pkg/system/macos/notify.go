@@ -2,7 +2,7 @@ package macos
 
 import (
 	"github.com/andybrewer/mack"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 )
 
 func Notify(

@@ -1,6 +1,6 @@
 package nextcloud
 
-import "github.com/funtimecoding/go-library/pkg/system"
+import "github.com/funtimecoding/soil/pkg/system"
 
 func (c *Client) DownloadFile(
 	path string,

@@ -1,8 +1,8 @@
 package action
 
 import (
-	"github.com/funtimecoding/go-library/pkg/github/constant"
-	"github.com/funtimecoding/go-library/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/github/constant"
+	"github.com/funtimecoding/soil/pkg/system/environment"
 )
 
 func IsActionRun() bool {

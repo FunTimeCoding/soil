@@ -1,8 +1,8 @@
 package habitica
 
 import (
-	"github.com/funtimecoding/go-library/pkg/habitica/task"
-	"github.com/funtimecoding/go-library/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/habitica/task"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 )
 
 func (c *Client) Tasks(taskType string) ([]*task.Task, error) {

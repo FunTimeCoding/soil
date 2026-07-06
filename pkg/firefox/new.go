@@ -1,6 +1,6 @@
 package firefox
 
-import "github.com/funtimecoding/go-library/pkg/firefox/constant"
+import "github.com/funtimecoding/soil/pkg/firefox/constant"
 
 func New(o ...Option) *Client {
 	result := &Client{

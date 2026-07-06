@@ -1,7 +1,7 @@
 package user_map
 
 import (
-	"github.com/funtimecoding/go-library/pkg/face"
+	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/mattermost/mattermost/server/public/model"
 )
 

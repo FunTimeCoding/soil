@@ -1,7 +1,7 @@
 package network
 
 import (
-	"github.com/funtimecoding/go-library/pkg/network"
+	"github.com/funtimecoding/soil/pkg/network"
 	"github.com/netbox-community/go-netbox/v4"
 	"net"
 )

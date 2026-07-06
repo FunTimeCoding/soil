@@ -1,6 +1,6 @@
 package field_changer
 
-import "github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert"
+import "github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
 
 func (a *Changer) Run(v []*alert.Alert) []*alert.Alert {
 	for _, e := range v {

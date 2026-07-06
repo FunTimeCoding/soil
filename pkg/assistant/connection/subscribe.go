@@ -1,8 +1,8 @@
 package connection
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assistant/connection/subscribe_command"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/assistant/connection/subscribe_command"
+	"github.com/funtimecoding/soil/pkg/errors"
 )
 
 func (c *Connection) Subscribe(

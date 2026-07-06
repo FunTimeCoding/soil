@@ -1,12 +1,12 @@
 package clean
 
 import (
-	"github.com/funtimecoding/go-library/pkg/git"
-	"github.com/funtimecoding/go-library/pkg/git/constant"
-	"github.com/funtimecoding/go-library/pkg/git/remote"
-	"github.com/funtimecoding/go-library/pkg/git/remote/provider_map"
-	"github.com/funtimecoding/go-library/pkg/system"
-	"github.com/funtimecoding/go-library/pkg/tool/goclean/clean/option"
+	"github.com/funtimecoding/soil/pkg/git"
+	"github.com/funtimecoding/soil/pkg/git/constant"
+	"github.com/funtimecoding/soil/pkg/git/remote"
+	"github.com/funtimecoding/soil/pkg/git/remote/provider_map"
+	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/tool/goclean/clean/option"
 )
 
 func originRemote(

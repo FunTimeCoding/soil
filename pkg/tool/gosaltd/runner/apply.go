@@ -2,9 +2,9 @@ package runner
 
 import (
 	"encoding/json"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/provision/store"
-	"github.com/funtimecoding/go-library/pkg/tool/gosaltd/constant"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/provision/store"
+	"github.com/funtimecoding/soil/pkg/tool/gosaltd/constant"
 	"time"
 )
 

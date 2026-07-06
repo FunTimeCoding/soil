@@ -1,6 +1,6 @@
 package mattermost
 
-import "github.com/funtimecoding/go-library/pkg/web/verbose_transport"
+import "github.com/funtimecoding/soil/pkg/web/verbose_transport"
 
 func WithVerbose(v bool) Option {
 	return func(c *Client) {

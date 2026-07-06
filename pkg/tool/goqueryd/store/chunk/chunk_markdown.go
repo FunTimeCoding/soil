@@ -1,6 +1,6 @@
 package chunk
 
-import "github.com/funtimecoding/go-library/pkg/tool/goqueryd/constant"
+import "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 
 func chunkMarkdown(content string) []Chunk {
 	points := scanBreakPoints(content)

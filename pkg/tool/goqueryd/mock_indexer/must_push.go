@@ -1,6 +1,6 @@
 package mock_indexer
 
-import "github.com/funtimecoding/go-library/pkg/errors"
+import "github.com/funtimecoding/soil/pkg/errors"
 
 func (i *Indexer) MustPush(
 	name string,

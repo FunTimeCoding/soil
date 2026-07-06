@@ -2,7 +2,7 @@ package console
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/face"
+	"github.com/funtimecoding/soil/pkg/face"
 )
 
 func Gradient(

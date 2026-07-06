@@ -1,6 +1,6 @@
 package mock_client
 
-import "github.com/funtimecoding/go-library/pkg/habitica/cron"
+import "github.com/funtimecoding/soil/pkg/habitica/cron"
 
 func (c *Client) MustCron() *cron.Cron {
 	return cron.New()

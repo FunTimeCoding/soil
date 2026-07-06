@@ -2,7 +2,7 @@ package mock_notifier
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/strings/join/key_value"
+	"github.com/funtimecoding/soil/pkg/strings/join/key_value"
 )
 
 func (n *Notifier) Notify(

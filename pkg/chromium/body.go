@@ -3,7 +3,7 @@ package chromium
 import (
 	"github.com/chromedp/cdproto/target"
 	"github.com/chromedp/chromedp"
-	"github.com/funtimecoding/go-library/pkg/chromium/constant"
+	"github.com/funtimecoding/soil/pkg/chromium/constant"
 )
 
 func (c *Client) Body(identifier string) string {

@@ -3,8 +3,8 @@ package server
 import (
 	"context"
 	"errors"
-	"github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/generated/server"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 )
 
 func (s *Server) CreateMachine(

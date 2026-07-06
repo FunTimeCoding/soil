@@ -2,7 +2,7 @@ package netbox
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/netbox/prefix"
+	"github.com/funtimecoding/soil/pkg/netbox/prefix"
 )
 
 func (c *Client) PrefixByDescription(d string) (*prefix.Prefix, error) {

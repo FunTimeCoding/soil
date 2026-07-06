@@ -3,9 +3,9 @@ package server
 import (
 	"errors"
 	"github.com/andygrunwald/go-jira"
-	"github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goatlassiand/generated/server"
-	"github.com/funtimecoding/go-library/pkg/web/detail_error"
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/server"
+	"github.com/funtimecoding/soil/pkg/web/detail_error"
 )
 
 func (s *Server) captureDetail(e error) *server.ErrorResponse {

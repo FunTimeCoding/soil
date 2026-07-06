@@ -2,10 +2,10 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/console/status/option"
-	"github.com/funtimecoding/go-library/pkg/github"
-	"github.com/funtimecoding/go-library/pkg/github/constant"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/github"
+	"github.com/funtimecoding/soil/pkg/github/constant"
 )
 
 func BranchRequest() {

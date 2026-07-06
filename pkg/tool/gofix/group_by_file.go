@@ -1,7 +1,7 @@
 package gofix
 
 import (
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/system"
 	"go/token"
 	"strings"
 )

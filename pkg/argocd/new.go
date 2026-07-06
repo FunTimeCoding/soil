@@ -1,6 +1,6 @@
 package argocd
 
-import "github.com/funtimecoding/go-library/pkg/web"
+import "github.com/funtimecoding/soil/pkg/web"
 
 func New(
 	host string,

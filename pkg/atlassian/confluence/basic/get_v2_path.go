@@ -1,8 +1,8 @@
 package basic
 
 import (
-	"github.com/funtimecoding/go-library/pkg/atlassian/confluence/constant"
-	"github.com/funtimecoding/go-library/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/atlassian/confluence/constant"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
 func (c *Client) GetV2Path(p string) (string, error) {

@@ -2,9 +2,9 @@ package store
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/raid"
-	"github.com/funtimecoding/go-library/pkg/time"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/raid"
+	"github.com/funtimecoding/soil/pkg/time"
 )
 
 func (s *Store) CreateRaid(filenames []string) uint {

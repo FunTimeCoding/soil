@@ -1,6 +1,6 @@
 package store
 
-import "github.com/funtimecoding/go-library/pkg/tool/goclauded/store/label"
+import "github.com/funtimecoding/soil/pkg/tool/goclauded/store/label"
 
 func (s *Store) GetLabel(
 	sessionIdentifier string,

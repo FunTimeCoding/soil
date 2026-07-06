@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/gomonitord"
+import "github.com/funtimecoding/soil/pkg/tool/gomonitord"
 
 var (
 	Version   string

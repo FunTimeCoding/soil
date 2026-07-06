@@ -1,6 +1,6 @@
 package service
 
-import "github.com/funtimecoding/go-library/pkg/errors"
+import "github.com/funtimecoding/soil/pkg/errors"
 
 func (s *Service) MustIndexMemory(
 	path string,

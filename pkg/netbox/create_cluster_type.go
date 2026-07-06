@@ -1,7 +1,7 @@
 package netbox
 
 import (
-	"github.com/funtimecoding/go-library/pkg/netbox/cluster_type"
+	"github.com/funtimecoding/soil/pkg/netbox/cluster_type"
 	"github.com/netbox-community/go-netbox/v4"
 )
 

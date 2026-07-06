@@ -2,10 +2,10 @@ package prometheus
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/prometheus/client"
-	"github.com/funtimecoding/go-library/pkg/prometheus/round_tripper"
-	"github.com/funtimecoding/go-library/pkg/web"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/prometheus/client"
+	"github.com/funtimecoding/soil/pkg/prometheus/round_tripper"
+	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func New(

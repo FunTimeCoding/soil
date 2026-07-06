@@ -1,8 +1,8 @@
 package client_context
 
 import (
-	"github.com/funtimecoding/go-library/pkg/kubernetes/constant"
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/kubernetes/constant"
+	"github.com/funtimecoding/soil/pkg/system"
 	"strings"
 )
 

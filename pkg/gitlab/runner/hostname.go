@@ -1,6 +1,6 @@
 package runner
 
-import "github.com/funtimecoding/go-library/pkg/system"
+import "github.com/funtimecoding/soil/pkg/system"
 
 func (r *Runner) hostname() string {
 	if s := system.LookupFirst(r.Address); s != "" {

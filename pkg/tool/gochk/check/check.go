@@ -2,12 +2,12 @@ package check
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/linux"
-	"github.com/funtimecoding/go-library/pkg/linux/systemd/command"
-	"github.com/funtimecoding/go-library/pkg/strings/join"
-	"github.com/funtimecoding/go-library/pkg/strings/split"
-	"github.com/funtimecoding/go-library/pkg/system/constant"
-	"github.com/funtimecoding/go-library/pkg/system/run"
+	"github.com/funtimecoding/soil/pkg/linux"
+	"github.com/funtimecoding/soil/pkg/linux/systemd/command"
+	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/strings/split"
+	"github.com/funtimecoding/soil/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/system/run"
 	"runtime"
 	"slices"
 )

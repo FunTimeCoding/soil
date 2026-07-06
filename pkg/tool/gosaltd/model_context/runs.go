@@ -2,10 +2,10 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/generative/mark/response"
-	"github.com/funtimecoding/go-library/pkg/provision/model_context"
-	"github.com/funtimecoding/go-library/pkg/time"
-	"github.com/funtimecoding/go-library/pkg/tool/gosaltd/constant"
+	"github.com/funtimecoding/soil/pkg/generative/mark/response"
+	"github.com/funtimecoding/soil/pkg/provision/model_context"
+	"github.com/funtimecoding/soil/pkg/time"
+	"github.com/funtimecoding/soil/pkg/tool/gosaltd/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 

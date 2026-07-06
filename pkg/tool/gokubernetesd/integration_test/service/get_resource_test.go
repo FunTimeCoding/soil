@@ -4,10 +4,10 @@ package service
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/tool/gokubernetesd/integration_test/service_tester"
-	"github.com/funtimecoding/go-library/pkg/tool/gokubernetesd/integration_test/service_tester/pod"
-	"github.com/funtimecoding/go-library/pkg/tool/gokubernetesd/service"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/integration_test/service_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/integration_test/service_tester/pod"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service"
 	"testing"
 )
 

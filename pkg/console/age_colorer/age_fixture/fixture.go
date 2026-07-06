@@ -1,7 +1,7 @@
 package age_fixture
 
 import (
-	"github.com/funtimecoding/go-library/pkg/face"
+	"github.com/funtimecoding/soil/pkg/face"
 	"time"
 )
 

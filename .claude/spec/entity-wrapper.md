@@ -34,7 +34,7 @@ Pure data, no client references:
 package job
 
 import (
-    "github.com/funtimecoding/go-library/pkg/gitlab/project"
+    "github.com/funtimecoding/soil/pkg/gitlab/project"
     "gitlab.com/gitlab-org/api/client-go/v2"
     "time"
 )
@@ -82,9 +82,9 @@ Composes field formatters into a status line:
 package job
 
 import (
-    "github.com/funtimecoding/go-library/pkg/console/status"
-    "github.com/funtimecoding/go-library/pkg/console/status/option"
-    "github.com/funtimecoding/go-library/pkg/console/status/tag"
+    "github.com/funtimecoding/soil/pkg/console/status"
+    "github.com/funtimecoding/soil/pkg/console/status/option"
+    "github.com/funtimecoding/soil/pkg/console/status/tag"
 )
 
 func (j *Job) Format(f *option.Format) string {
@@ -119,8 +119,8 @@ Each field has its own formatter with color support:
 package job
 
 import (
-    "github.com/funtimecoding/go-library/pkg/console"
-    "github.com/funtimecoding/go-library/pkg/console/status/option"
+    "github.com/funtimecoding/soil/pkg/console"
+    "github.com/funtimecoding/soil/pkg/console/status/option"
 )
 
 func (j *Job) formatName(f *option.Format) string {
@@ -140,9 +140,9 @@ Handle missing values gracefully:
 package job
 
 import (
-    "github.com/funtimecoding/go-library/pkg/console"
-    "github.com/funtimecoding/go-library/pkg/console/status/option"
-    "github.com/funtimecoding/go-library/pkg/strings/join"
+    "github.com/funtimecoding/soil/pkg/console"
+    "github.com/funtimecoding/soil/pkg/console/status/option"
+    "github.com/funtimecoding/soil/pkg/strings/join"
 )
 
 func (j *Job) formatConcern(f *option.Format) string {
@@ -168,7 +168,7 @@ Wraps the external library type into a pure entity:
 package job
 
 import (
-    "github.com/funtimecoding/go-library/pkg/monitor/item/constant"
+    "github.com/funtimecoding/soil/pkg/monitor/item/constant"
     "gitlab.com/gitlab-org/api/client-go/v2"
 )
 
@@ -262,8 +262,8 @@ Client handles the library call, delegates parsing to the entity package:
 package gitlab
 
 import (
-    "github.com/funtimecoding/go-library/pkg/gitlab/job"
-    "github.com/funtimecoding/go-library/pkg/gitlab/project"
+    "github.com/funtimecoding/soil/pkg/gitlab/job"
+    "github.com/funtimecoding/soil/pkg/gitlab/project"
 )
 
 func (c *Client) ProjectJobs(p *project.Project) ([]*job.Job, error) {

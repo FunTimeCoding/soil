@@ -2,7 +2,7 @@ package gmail
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/web/authorization/callback"
+	"github.com/funtimecoding/soil/pkg/web/authorization/callback"
 )
 
 func New(directory string) *Client {

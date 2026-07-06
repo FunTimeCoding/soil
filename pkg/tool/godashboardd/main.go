@@ -1,14 +1,14 @@
 package godashboardd
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/relational/postgres"
-	"github.com/funtimecoding/go-library/pkg/system/environment"
-	"github.com/funtimecoding/go-library/pkg/tool/godashboardd/board"
-	"github.com/funtimecoding/go-library/pkg/tool/godashboardd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/godashboardd/option"
-	web "github.com/funtimecoding/go-library/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/relational/postgres"
+	"github.com/funtimecoding/soil/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/option"
+	web "github.com/funtimecoding/soil/pkg/web/constant"
 )
 
 func Main(

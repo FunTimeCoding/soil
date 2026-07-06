@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/gogitlab"
+import "github.com/funtimecoding/soil/pkg/tool/gogitlab"
 
 var (
 	Version   string

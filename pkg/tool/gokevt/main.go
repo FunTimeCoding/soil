@@ -1,11 +1,11 @@
 package gokevt
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/kubernetes/check/event"
-	"github.com/funtimecoding/go-library/pkg/kubernetes/check/event/option"
-	"github.com/funtimecoding/go-library/pkg/tool/gokevt/constant"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/kubernetes/check/event"
+	"github.com/funtimecoding/soil/pkg/kubernetes/check/event/option"
+	"github.com/funtimecoding/soil/pkg/tool/gokevt/constant"
 )
 
 func Main(

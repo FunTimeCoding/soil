@@ -1,9 +1,9 @@
 package age_colorer
 
 import (
-	"github.com/funtimecoding/go-library/pkg/console"
-	"github.com/funtimecoding/go-library/pkg/face"
-	"github.com/funtimecoding/go-library/pkg/math/in_range"
+	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/math/in_range"
 )
 
 func (c *Colorer) Set(i face.AgeColorable) {

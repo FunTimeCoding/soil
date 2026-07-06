@@ -1,6 +1,6 @@
 package service
 
-import "github.com/funtimecoding/go-library/pkg/tool/goprometheusd/inventory"
+import "github.com/funtimecoding/soil/pkg/tool/goprometheusd/inventory"
 
 func (s *Service) Instance(name string) (*inventory.Instance, bool) {
 	for i := range s.inventory.Instances {

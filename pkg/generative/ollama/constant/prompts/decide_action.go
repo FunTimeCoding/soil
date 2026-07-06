@@ -1,6 +1,6 @@
 package prompts
 
-import "github.com/funtimecoding/go-library/pkg/generative/ollama/decide_action_prompt"
+import "github.com/funtimecoding/soil/pkg/generative/ollama/decide_action_prompt"
 
 func DecideAction() *decide_action_prompt.Prompt {
 	p := decide_action_prompt.New()

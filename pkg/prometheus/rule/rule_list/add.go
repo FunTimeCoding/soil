@@ -2,7 +2,7 @@ package rule_list
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/prometheus/rule"
+	"github.com/funtimecoding/soil/pkg/prometheus/rule"
 	"github.com/go-test/deep"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"

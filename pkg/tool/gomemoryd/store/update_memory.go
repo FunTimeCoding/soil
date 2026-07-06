@@ -1,7 +1,7 @@
 package store
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/gomemoryd/store/save_option"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/save_option"
 	"time"
 )
 

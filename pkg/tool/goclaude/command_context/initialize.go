@@ -1,9 +1,9 @@
 package command_context
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/generated/client"
-	"github.com/funtimecoding/go-library/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
 func (c *Context) Initialize(

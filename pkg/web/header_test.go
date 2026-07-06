@@ -1,8 +1,8 @@
 package web
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/web/writer_mock"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/web/writer_mock"
 	"net/http"
 	"testing"
 )

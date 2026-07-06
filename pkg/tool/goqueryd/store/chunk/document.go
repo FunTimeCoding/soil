@@ -1,8 +1,8 @@
 package chunk
 
 import (
-	library "github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/constant"
+	library "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"strings"
 )
 

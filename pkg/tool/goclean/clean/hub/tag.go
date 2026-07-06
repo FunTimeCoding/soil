@@ -2,10 +2,10 @@ package hub
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/git"
-	"github.com/funtimecoding/go-library/pkg/github"
-	"github.com/funtimecoding/go-library/pkg/github/tag"
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/git"
+	"github.com/funtimecoding/soil/pkg/github"
+	"github.com/funtimecoding/soil/pkg/github/tag"
+	"github.com/funtimecoding/soil/pkg/system"
 )
 
 func Tag(

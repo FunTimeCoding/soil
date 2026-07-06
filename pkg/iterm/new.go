@@ -1,8 +1,8 @@
 package iterm
 
 import (
-	"github.com/funtimecoding/go-library/pkg/iterm/constant"
-	"github.com/funtimecoding/go-library/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/iterm/constant"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"net/http"
 )
 

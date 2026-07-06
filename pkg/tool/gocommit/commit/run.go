@@ -1,11 +1,11 @@
 package commit
 
 import (
-	"github.com/funtimecoding/go-library/pkg/gitlab"
-	"github.com/funtimecoding/go-library/pkg/strings"
-	"github.com/funtimecoding/go-library/pkg/system"
-	"github.com/funtimecoding/go-library/pkg/tool/common"
-	"github.com/funtimecoding/go-library/pkg/tool/gocommit/commit/option"
+	"github.com/funtimecoding/soil/pkg/gitlab"
+	"github.com/funtimecoding/soil/pkg/strings"
+	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/tool/common"
+	"github.com/funtimecoding/soil/pkg/tool/gocommit/commit/option"
 )
 
 func Run(o *option.Commit) {

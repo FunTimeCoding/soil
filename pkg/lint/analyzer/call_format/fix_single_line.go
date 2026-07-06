@@ -1,7 +1,7 @@
 package call_format
 
 import (
-	"github.com/funtimecoding/go-library/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"go/ast"
 )
 

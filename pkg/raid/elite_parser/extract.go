@@ -1,6 +1,6 @@
 package elite_parser
 
-import "github.com/funtimecoding/go-library/pkg/raid/elite"
+import "github.com/funtimecoding/soil/pkg/raid/elite"
 
 func Extract(fight *elite.Fight) []*PlayerFightStatistic {
 	var result []*PlayerFightStatistic

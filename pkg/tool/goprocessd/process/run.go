@@ -1,8 +1,8 @@
 package process
 
 import (
-	"github.com/funtimecoding/go-library/pkg/system/run"
-	"github.com/funtimecoding/go-library/pkg/system/writer"
+	"github.com/funtimecoding/soil/pkg/system/run"
+	"github.com/funtimecoding/soil/pkg/system/writer"
 )
 
 func (p *Process) run(environment []string) {

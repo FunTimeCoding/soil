@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/telemetry/record"
+	"github.com/funtimecoding/soil/pkg/telemetry/record"
 )
 
 func (c *Client) send(r *record.Record) {

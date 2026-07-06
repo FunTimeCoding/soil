@@ -2,8 +2,8 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/kubernetes/client"
-	"github.com/funtimecoding/go-library/pkg/kubernetes/constant"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client"
+	"github.com/funtimecoding/soil/pkg/kubernetes/constant"
 )
 
 func Pod() {

@@ -2,8 +2,8 @@ package token_check
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/constant"
-	"github.com/funtimecoding/go-library/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
 func rawSearch(

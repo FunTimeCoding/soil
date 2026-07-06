@@ -1,11 +1,11 @@
 package gmail
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/gmail/constant"
-	keyValueJoin "github.com/funtimecoding/go-library/pkg/strings/join/key_value"
-	"github.com/funtimecoding/go-library/pkg/strings/split/key_value"
-	"github.com/funtimecoding/go-library/pkg/system/join"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/gmail/constant"
+	keyValueJoin "github.com/funtimecoding/soil/pkg/strings/join/key_value"
+	"github.com/funtimecoding/soil/pkg/strings/split/key_value"
+	"github.com/funtimecoding/soil/pkg/system/join"
 	"google.golang.org/api/gmail/v1"
 	"google.golang.org/api/option"
 	"strings"

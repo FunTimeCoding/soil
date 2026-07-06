@@ -1,11 +1,11 @@
 package gofile
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/monitor/check/file"
-	"github.com/funtimecoding/go-library/pkg/monitor/check/file/option"
-	"github.com/funtimecoding/go-library/pkg/tool/gofile/constant"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/monitor/check/file"
+	"github.com/funtimecoding/soil/pkg/monitor/check/file/option"
+	"github.com/funtimecoding/soil/pkg/tool/gofile/constant"
 )
 
 func Main(

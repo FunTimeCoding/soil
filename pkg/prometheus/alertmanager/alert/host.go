@@ -1,8 +1,8 @@
 package alert
 
 import (
-	"github.com/funtimecoding/go-library/pkg/web/address"
-	"github.com/funtimecoding/go-library/pkg/web/host"
+	"github.com/funtimecoding/soil/pkg/web/address"
+	"github.com/funtimecoding/soil/pkg/web/host"
 )
 
 func (a *Alert) Host() string {

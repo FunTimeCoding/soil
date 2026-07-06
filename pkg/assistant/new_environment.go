@@ -1,8 +1,8 @@
 package assistant
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assistant/constant"
-	"github.com/funtimecoding/go-library/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/assistant/constant"
+	"github.com/funtimecoding/soil/pkg/system/environment"
 )
 
 func NewEnvironment(o ...Option) *Client {

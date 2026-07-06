@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/web/example"
+import "github.com/funtimecoding/soil/pkg/web/example"
 
 func main() {
 	example.Log()

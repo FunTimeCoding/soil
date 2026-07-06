@@ -1,6 +1,6 @@
 package github
 
-import "github.com/funtimecoding/go-library/pkg/github/workflow"
+import "github.com/funtimecoding/soil/pkg/github/workflow"
 
 func (c *Client) Workflows(
 	owner string,

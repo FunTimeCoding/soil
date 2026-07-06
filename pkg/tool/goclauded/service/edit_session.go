@@ -2,8 +2,8 @@ package service
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/service/argument/edit_session"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/argument/edit_session"
 )
 
 func (s *Service) EditSession(

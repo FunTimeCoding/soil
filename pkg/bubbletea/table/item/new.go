@@ -2,7 +2,7 @@ package item
 
 import (
 	"charm.land/bubbles/v2/table"
-	"github.com/funtimecoding/go-library/pkg/bubbletea/style"
+	"github.com/funtimecoding/soil/pkg/bubbletea/style"
 )
 
 func New(user bool) *table.Model {

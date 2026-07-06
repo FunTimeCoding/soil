@@ -3,7 +3,7 @@ package monitor
 import (
 	"charm.land/bubbletea/v2"
 	"charm.land/lipgloss/v2"
-	"github.com/funtimecoding/go-library/pkg/bubbletea/constant"
+	"github.com/funtimecoding/soil/pkg/bubbletea/constant"
 )
 
 func (m *Model) View() tea.View {

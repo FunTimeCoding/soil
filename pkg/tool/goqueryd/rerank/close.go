@@ -1,6 +1,6 @@
 package rerank
 
-import "github.com/funtimecoding/go-library/pkg/errors"
+import "github.com/funtimecoding/soil/pkg/errors"
 
 func (r *Reranker) Close() error {
 	r.mutex.Lock()

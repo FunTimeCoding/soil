@@ -2,8 +2,8 @@ package loki
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/prometheus/loki"
-	"github.com/funtimecoding/go-library/pkg/prometheus/loki/basic/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/loki"
+	"github.com/funtimecoding/soil/pkg/prometheus/loki/basic/constant"
 	"time"
 )
 

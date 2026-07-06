@@ -2,8 +2,8 @@ package message
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/prometheus/loki/basic/response"
-	"github.com/funtimecoding/go-library/pkg/time"
+	"github.com/funtimecoding/soil/pkg/prometheus/loki/basic/response"
+	"github.com/funtimecoding/soil/pkg/time"
 )
 
 func New(

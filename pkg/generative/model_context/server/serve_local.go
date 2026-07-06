@@ -1,8 +1,8 @@
 package server
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/log"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/log"
 	"github.com/mark3labs/mcp-go/server"
 )
 

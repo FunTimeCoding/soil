@@ -1,7 +1,7 @@
 package store
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/store/queue"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/queue"
 	"time"
 )
 

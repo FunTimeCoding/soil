@@ -1,6 +1,6 @@
 package netbox
 
-import "github.com/funtimecoding/go-library/pkg/netbox/contact"
+import "github.com/funtimecoding/soil/pkg/netbox/contact"
 
 func (c *Client) Contacts() ([]*contact.Contact, error) {
 	result, _, e := c.client.TenancyAPI.TenancyContactsList(

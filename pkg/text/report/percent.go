@@ -2,8 +2,8 @@ package report
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/floats"
-	"github.com/funtimecoding/go-library/pkg/text/report/line"
+	"github.com/funtimecoding/soil/pkg/floats"
+	"github.com/funtimecoding/soil/pkg/text/report/line"
 )
 
 func (s *Section) Percent(

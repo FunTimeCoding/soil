@@ -1,8 +1,8 @@
 package watcher
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/sweep"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/sweep"
 )
 
 func (w *Watcher) scanChanged() {

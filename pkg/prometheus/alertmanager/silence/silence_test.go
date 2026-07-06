@@ -1,10 +1,10 @@
 package silence
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/constant"
-	"github.com/funtimecoding/go-library/pkg/strings/upper"
-	"github.com/funtimecoding/go-library/pkg/time"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
+	"github.com/funtimecoding/soil/pkg/strings/upper"
+	"github.com/funtimecoding/soil/pkg/time"
 	"github.com/prometheus/alertmanager/api/v2/models"
 	"testing"
 )

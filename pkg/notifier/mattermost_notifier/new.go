@@ -1,6 +1,6 @@
 package mattermost_notifier
 
-import "github.com/funtimecoding/go-library/pkg/chat/mattermost"
+import "github.com/funtimecoding/soil/pkg/chat/mattermost"
 
 func New(
 	m *mattermost.Client,

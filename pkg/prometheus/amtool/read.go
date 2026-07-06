@@ -1,8 +1,8 @@
 package amtool
 
 import (
-	"github.com/funtimecoding/go-library/pkg/markup"
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/markup"
+	"github.com/funtimecoding/soil/pkg/system"
 )
 
 func Read(

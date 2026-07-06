@@ -2,8 +2,8 @@ package usage
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/claude"
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/claude/example/common"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/example/common"
 	"sort"
 )
 

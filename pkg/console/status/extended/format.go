@@ -1,8 +1,8 @@
 package extended
 
 import (
-	"github.com/funtimecoding/go-library/pkg/console/status"
-	"github.com/funtimecoding/go-library/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/console/status"
+	"github.com/funtimecoding/soil/pkg/console/status/option"
 )
 
 func (e *Extended) Format(f *option.Format) string {

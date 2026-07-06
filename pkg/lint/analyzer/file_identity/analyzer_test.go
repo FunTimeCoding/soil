@@ -1,7 +1,7 @@
 package file_identity
 
 import (
-	"github.com/funtimecoding/go-library/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"testing"
 )
 

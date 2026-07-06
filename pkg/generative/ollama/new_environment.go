@@ -1,9 +1,9 @@
 package ollama
 
 import (
-	"github.com/funtimecoding/go-library/pkg/generative/ollama/constant"
-	"github.com/funtimecoding/go-library/pkg/strings"
-	"github.com/funtimecoding/go-library/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/generative/ollama/constant"
+	"github.com/funtimecoding/soil/pkg/strings"
+	"github.com/funtimecoding/soil/pkg/system/environment"
 )
 
 func NewEnvironment(o ...Option) *Client {

@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/gomattermost"
+import "github.com/funtimecoding/soil/pkg/tool/gomattermost"
 
 var (
 	Version   string

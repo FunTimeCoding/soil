@@ -2,7 +2,7 @@ package jira
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/basic/response"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/basic/response"
 )
 
 func (c *Client) SearchLimitV3(

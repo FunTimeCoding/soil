@@ -1,7 +1,7 @@
 package collect
 
 import (
-	"github.com/funtimecoding/go-library/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/monitor/item/constant"
 	"time"
 )
 

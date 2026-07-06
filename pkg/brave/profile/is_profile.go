@@ -1,7 +1,7 @@
 package profile
 
 import (
-	"github.com/funtimecoding/go-library/pkg/brave/constant"
+	"github.com/funtimecoding/soil/pkg/brave/constant"
 	"os"
 	"strings"
 )

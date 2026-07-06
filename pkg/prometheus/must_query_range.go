@@ -1,8 +1,8 @@
 package prometheus
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/prometheus/query_result"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/prometheus/query_result"
 	"github.com/prometheus/client_golang/api/prometheus/v1"
 )
 

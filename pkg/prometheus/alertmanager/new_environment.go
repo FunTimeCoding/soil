@@ -1,9 +1,9 @@
 package alertmanager
 
 import (
-	"github.com/funtimecoding/go-library/pkg/prometheus"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/constant"
-	"github.com/funtimecoding/go-library/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/prometheus"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
+	"github.com/funtimecoding/soil/pkg/system/environment"
 )
 
 func NewEnvironment() *Client {

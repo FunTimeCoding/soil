@@ -2,9 +2,9 @@ package alert
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/console/status/option"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager"
-	"github.com/funtimecoding/go-library/pkg/prometheus/rule"
+	"github.com/funtimecoding/soil/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager"
+	"github.com/funtimecoding/soil/pkg/prometheus/rule"
 	"time"
 )
 

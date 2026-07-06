@@ -1,6 +1,6 @@
 package rotation
 
-import "github.com/funtimecoding/go-library/pkg/face"
+import "github.com/funtimecoding/soil/pkg/face"
 
 func ContainsUser(
 	r *Rotation,

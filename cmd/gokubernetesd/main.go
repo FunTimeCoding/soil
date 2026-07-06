@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/gokubernetesd"
+import "github.com/funtimecoding/soil/pkg/tool/gokubernetesd"
 
 var (
 	Version   string

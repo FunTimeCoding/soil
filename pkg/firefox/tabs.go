@@ -3,7 +3,7 @@ package firefox
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/firefox/tab"
+	"github.com/funtimecoding/soil/pkg/firefox/tab"
 )
 
 func (c *Client) Tabs() ([]*tab.Tab, error) {

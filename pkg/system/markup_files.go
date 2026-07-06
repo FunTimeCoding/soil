@@ -1,6 +1,6 @@
 package system
 
-import "github.com/funtimecoding/go-library/pkg/constant"
+import "github.com/funtimecoding/soil/pkg/constant"
 
 func MarkupFiles(root string) []string {
 	return FilesByExtension(

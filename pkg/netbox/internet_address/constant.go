@@ -1,6 +1,6 @@
 package internet_address
 
-import "github.com/funtimecoding/go-library/pkg/netbox/constant"
+import "github.com/funtimecoding/soil/pkg/netbox/constant"
 
 const (
 	// DeviceAddress when assigning an IP address to a device

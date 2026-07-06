@@ -1,11 +1,11 @@
 package score_colorer
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/console"
-	"github.com/funtimecoding/go-library/pkg/console/score_colorer/score_fixture"
-	"github.com/funtimecoding/go-library/pkg/math/range_mapping"
-	"github.com/funtimecoding/go-library/pkg/math/ranges"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/console/score_colorer/score_fixture"
+	"github.com/funtimecoding/soil/pkg/math/range_mapping"
+	"github.com/funtimecoding/soil/pkg/math/ranges"
 	"testing"
 )
 

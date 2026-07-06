@@ -2,7 +2,7 @@ package server
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 )
 
 func (s *Server) validateOpenToken(token string) bool {

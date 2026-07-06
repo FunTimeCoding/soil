@@ -2,10 +2,10 @@ package gosentry
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/constant"
-	"github.com/funtimecoding/go-library/pkg/system/environment"
-	"github.com/funtimecoding/go-library/pkg/time"
+	"github.com/funtimecoding/soil/pkg/errors/sentry"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/constant"
+	"github.com/funtimecoding/soil/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/time"
 )
 
 func showIssue(shortIdentifier string) {

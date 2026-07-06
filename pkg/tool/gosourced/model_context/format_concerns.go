@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/lint/concern"
+	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"strings"
 )
 

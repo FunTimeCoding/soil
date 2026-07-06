@@ -2,7 +2,7 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/generative/ollama"
+	"github.com/funtimecoding/soil/pkg/generative/ollama"
 )
 
 func Fast() {

@@ -1,12 +1,12 @@
 package god8y
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/text/dictionary/check/duplicate"
-	"github.com/funtimecoding/go-library/pkg/text/dictionary/check/missing"
-	"github.com/funtimecoding/go-library/pkg/text/dictionary/check/order"
-	"github.com/funtimecoding/go-library/pkg/tool/god8y/constant"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/text/dictionary/check/duplicate"
+	"github.com/funtimecoding/soil/pkg/text/dictionary/check/missing"
+	"github.com/funtimecoding/soil/pkg/text/dictionary/check/order"
+	"github.com/funtimecoding/soil/pkg/tool/god8y/constant"
 	"os"
 )
 

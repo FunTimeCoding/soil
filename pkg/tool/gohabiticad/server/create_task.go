@@ -2,9 +2,9 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/habitica/request"
-	"github.com/funtimecoding/go-library/pkg/tool/gohabiticad/convert"
-	"github.com/funtimecoding/go-library/pkg/tool/gohabiticad/generated/server"
+	"github.com/funtimecoding/soil/pkg/habitica/request"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/convert"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/generated/server"
 )
 
 func (s *Server) CreateTask(

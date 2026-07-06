@@ -2,8 +2,8 @@ package confluence
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/atlassian/confluence/basic"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/atlassian/confluence/basic"
+	"github.com/funtimecoding/soil/pkg/errors"
 )
 
 func New(

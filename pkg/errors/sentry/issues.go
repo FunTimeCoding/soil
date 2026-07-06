@@ -3,10 +3,10 @@ package sentry
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/basic/response"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/constant"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/issue"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/validate"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/basic/response"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/constant"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/issue"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/validate"
 )
 
 func (c *Client) Issues(

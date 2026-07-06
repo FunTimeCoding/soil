@@ -1,6 +1,6 @@
 package server
 
-import "github.com/funtimecoding/go-library/pkg/tool/goatlassiand/generated/server"
+import "github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/server"
 
 func (s *Server) captureFail(
 	e error,

@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/system/macos/example"
+import "github.com/funtimecoding/soil/pkg/system/macos/example"
 
 func main() {
 	example.Bundle()

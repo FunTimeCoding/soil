@@ -1,8 +1,8 @@
 package vault
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/hashicorp/vault-client-go"
 	"time"
 )

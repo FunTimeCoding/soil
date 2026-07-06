@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/funtimecoding/go-library/pkg/kubernetes/check/job"
-	"github.com/funtimecoding/go-library/pkg/kubernetes/example"
+	"github.com/funtimecoding/soil/pkg/kubernetes/check/job"
+	"github.com/funtimecoding/soil/pkg/kubernetes/example"
 )
 
 func main() {

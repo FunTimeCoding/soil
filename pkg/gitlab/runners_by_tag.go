@@ -1,7 +1,7 @@
 package gitlab
 
 import (
-	"github.com/funtimecoding/go-library/pkg/gitlab/runner"
+	"github.com/funtimecoding/soil/pkg/gitlab/runner"
 	"slices"
 )
 

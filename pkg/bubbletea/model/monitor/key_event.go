@@ -2,11 +2,11 @@ package monitor
 
 import (
 	"charm.land/bubbletea/v2"
-	"github.com/funtimecoding/go-library/pkg/bubbletea/key"
-	"github.com/funtimecoding/go-library/pkg/bubbletea/model/monitor/fetch"
-	"github.com/funtimecoding/go-library/pkg/monitor/constant"
-	"github.com/funtimecoding/go-library/pkg/strings/join"
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/bubbletea/key"
+	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/fetch"
+	"github.com/funtimecoding/soil/pkg/monitor/constant"
+	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/system"
 )
 
 func (m *Model) keyEvent(g tea.KeyMsg) (tea.Model, tea.Cmd) {

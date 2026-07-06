@@ -1,9 +1,9 @@
 package debian
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/constant"
-	system "github.com/funtimecoding/go-library/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/constant"
+	system "github.com/funtimecoding/soil/pkg/system/constant"
 	"testing"
 )
 

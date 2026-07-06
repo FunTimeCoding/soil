@@ -1,7 +1,7 @@
 package errors
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors/unexpected"
+	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"net/http"
 )
 

@@ -1,6 +1,6 @@
 package protocol
 
-import "github.com/funtimecoding/go-library/pkg/chromium"
+import "github.com/funtimecoding/soil/pkg/chromium"
 
 func New(tab string) *Protocol {
 	c := chromium.NewEnvironment()

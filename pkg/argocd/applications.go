@@ -3,11 +3,11 @@ package argocd
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/argocd/application"
-	"github.com/funtimecoding/go-library/pkg/argocd/response"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/strings/join"
-	"github.com/funtimecoding/go-library/pkg/web"
+	"github.com/funtimecoding/soil/pkg/argocd/application"
+	"github.com/funtimecoding/soil/pkg/argocd/response"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/web"
 	"net/http"
 )
 

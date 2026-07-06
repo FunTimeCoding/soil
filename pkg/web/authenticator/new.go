@@ -1,8 +1,8 @@
 package authenticator
 
 import (
-	"github.com/funtimecoding/go-library/pkg/network/constant"
-	"github.com/funtimecoding/go-library/pkg/web/session_store"
+	"github.com/funtimecoding/soil/pkg/network/constant"
+	"github.com/funtimecoding/soil/pkg/web/session_store"
 	"os"
 )
 

@@ -1,6 +1,6 @@
 package issue
 
-import "github.com/funtimecoding/go-library/pkg/atlassian/jira/issue/customer"
+import "github.com/funtimecoding/soil/pkg/atlassian/jira/issue/customer"
 
 func FromValue(v Values) *Issue {
 	result := New()

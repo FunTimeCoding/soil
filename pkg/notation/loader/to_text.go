@@ -2,8 +2,8 @@ package loader
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/maps"
-	"github.com/funtimecoding/go-library/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/maps"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 )
 
 func (l *Loader) ToText(m map[string]map[string]string) string {

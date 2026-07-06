@@ -2,11 +2,11 @@ package sentry
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/basic/response"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/constant"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/issue"
-	"github.com/funtimecoding/go-library/pkg/strings/split"
-	"github.com/funtimecoding/go-library/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/basic/response"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/constant"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/issue"
+	"github.com/funtimecoding/soil/pkg/strings/split"
+	"github.com/funtimecoding/soil/pkg/system/environment"
 	"slices"
 )
 

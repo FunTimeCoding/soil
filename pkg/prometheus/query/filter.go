@@ -1,8 +1,8 @@
 package query
 
 import (
-	"github.com/funtimecoding/go-library/pkg/prometheus/query/filter"
-	"github.com/funtimecoding/go-library/pkg/strings/join/key_value"
+	"github.com/funtimecoding/soil/pkg/prometheus/query/filter"
+	"github.com/funtimecoding/soil/pkg/strings/join/key_value"
 )
 
 func Filter(

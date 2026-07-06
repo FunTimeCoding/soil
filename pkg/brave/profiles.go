@@ -1,10 +1,10 @@
 package brave
 
 import (
-	"github.com/funtimecoding/go-library/pkg/brave/helper"
-	"github.com/funtimecoding/go-library/pkg/brave/preference"
-	"github.com/funtimecoding/go-library/pkg/brave/profile"
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/brave/helper"
+	"github.com/funtimecoding/soil/pkg/brave/preference"
+	"github.com/funtimecoding/soil/pkg/brave/profile"
+	"github.com/funtimecoding/soil/pkg/system"
 )
 
 func Profiles() []*profile.Profile {

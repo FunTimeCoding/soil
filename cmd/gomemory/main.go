@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/gomemory"
+import "github.com/funtimecoding/soil/pkg/tool/gomemory"
 
 var (
 	Version   string

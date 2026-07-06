@@ -1,9 +1,9 @@
 package importer
 
 import (
-	"github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gomemoryd/store"
-	"github.com/funtimecoding/go-library/pkg/tool/gomemoryd/store/save_option"
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/save_option"
 	"os"
 	"path/filepath"
 	"strings"

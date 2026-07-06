@@ -1,9 +1,9 @@
 package scan
 
 import (
-	"github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/parse"
-	"github.com/funtimecoding/go-library/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/parse"
+	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"path/filepath"
 	"strings"
 )
@@ -29,7 +29,7 @@ func hasSentryReporter(
 		for _, name := range []string{"New", "NewOptional"} {
 			if parse.HasCall(
 				f,
-				"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter",
+				"github.com/funtimecoding/soil/pkg/errors/sentry/reporter",
 				name,
 			) {
 				return true

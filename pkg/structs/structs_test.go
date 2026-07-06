@@ -1,9 +1,9 @@
 package structs
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/structs/notation_tag"
-	"github.com/funtimecoding/go-library/pkg/structs/relational_tag"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/structs/notation_tag"
+	"github.com/funtimecoding/soil/pkg/structs/relational_tag"
 	"reflect"
 	"testing"
 )

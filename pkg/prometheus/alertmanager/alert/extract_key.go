@@ -1,7 +1,7 @@
 package alert
 
 import (
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
 	"github.com/prometheus/alertmanager/api/v2/models"
 )
 

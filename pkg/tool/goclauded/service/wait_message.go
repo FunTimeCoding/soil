@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/store/message"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/message"
 	"time"
 )
 

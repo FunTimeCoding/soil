@@ -3,7 +3,7 @@ package fetch
 import (
 	"charm.land/bubbletea/v2"
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/monitor/item/constant"
 	"strings"
 )
 

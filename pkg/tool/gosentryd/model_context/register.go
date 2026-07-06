@@ -1,8 +1,8 @@
 package model_context
 
 import (
-	library "github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gosentryd/constant"
+	library "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosentryd/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 

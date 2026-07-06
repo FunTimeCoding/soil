@@ -1,8 +1,8 @@
 package relational
 
 import (
-	"github.com/funtimecoding/go-library/pkg/relational/postgres"
-	"github.com/funtimecoding/go-library/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/relational/postgres"
+	"github.com/funtimecoding/soil/pkg/system/environment"
 )
 
 func NewAdministrator() *Database {

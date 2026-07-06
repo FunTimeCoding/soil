@@ -1,8 +1,8 @@
 package store_tester
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/store/completion"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/completion"
 )
 
 func (o *Tester) RecentCompletions() []completion.Completion {

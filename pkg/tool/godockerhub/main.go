@@ -2,11 +2,11 @@ package godockerhub
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/docker/hub"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/time"
-	"github.com/funtimecoding/go-library/pkg/tool/godockerhub/constant"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/docker/hub"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/time"
+	"github.com/funtimecoding/soil/pkg/tool/godockerhub/constant"
 )
 
 func Main(

@@ -1,7 +1,7 @@
 package request
 
 import (
-	"github.com/funtimecoding/go-library/pkg/gitlab/constant"
+	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"net/http"
 )
 

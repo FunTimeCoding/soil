@@ -2,7 +2,7 @@ package gonetbox
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/tool/gonetboxd/client"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
 

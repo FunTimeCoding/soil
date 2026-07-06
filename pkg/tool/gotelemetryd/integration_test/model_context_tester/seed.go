@@ -1,9 +1,9 @@
 package model_context_tester
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/tool/gotelemetryd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gotelemetryd/store"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/store"
 )
 
 func (o *Tester) Seed(

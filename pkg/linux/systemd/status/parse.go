@@ -1,7 +1,7 @@
 package status
 
 import (
-	"github.com/funtimecoding/go-library/pkg/expression"
+	"github.com/funtimecoding/soil/pkg/expression"
 	"strings"
 )
 

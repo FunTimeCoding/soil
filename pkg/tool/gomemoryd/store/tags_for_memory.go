@@ -1,6 +1,6 @@
 package store
 
-import "github.com/funtimecoding/go-library/pkg/errors"
+import "github.com/funtimecoding/soil/pkg/errors"
 
 func (s *Store) tagsForMemory(identifier int64) []string {
 	rows, e := s.database.Query(

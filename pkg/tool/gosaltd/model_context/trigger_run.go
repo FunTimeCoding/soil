@@ -2,9 +2,9 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/generative/mark/response"
-	"github.com/funtimecoding/go-library/pkg/provision/runner"
-	"github.com/funtimecoding/go-library/pkg/tool/gosaltd/constant"
+	"github.com/funtimecoding/soil/pkg/generative/mark/response"
+	"github.com/funtimecoding/soil/pkg/provision/runner"
+	"github.com/funtimecoding/soil/pkg/tool/gosaltd/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 

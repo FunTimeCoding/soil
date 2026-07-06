@@ -1,6 +1,6 @@
 package testutil
 
-import "github.com/funtimecoding/go-library/pkg/lint/output"
+import "github.com/funtimecoding/soil/pkg/lint/output"
 
 func countBlocked(results *output.Results) int {
 	var count int

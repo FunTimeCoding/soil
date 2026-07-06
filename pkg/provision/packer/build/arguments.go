@@ -2,7 +2,7 @@ package build
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/system/constant"
 )
 
 func (b *Build) arguments(headless bool) [][]string {

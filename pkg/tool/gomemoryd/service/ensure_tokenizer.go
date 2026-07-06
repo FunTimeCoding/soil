@@ -1,6 +1,6 @@
 package service
 
-import "github.com/funtimecoding/go-library/pkg/generative/anthropic/tokenizer"
+import "github.com/funtimecoding/soil/pkg/generative/anthropic/tokenizer"
 
 func (s *Service) ensureTokenizer() error {
 	if s.tokenizer != nil {

@@ -1,8 +1,8 @@
 package goupdate
 
 import (
-	"github.com/funtimecoding/go-library/pkg/project"
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/project"
+	"github.com/funtimecoding/soil/pkg/system"
 )
 
 func ContainerFileName() string {

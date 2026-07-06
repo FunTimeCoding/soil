@@ -1,9 +1,9 @@
 package alert_processor
 
 import (
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert/alert_filter"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert/statistic"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/alert_filter"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/statistic"
 )
 
 func (p *Processor) Process(v []*alert.Alert) ([]*alert.Alert, *statistic.Statistic) {

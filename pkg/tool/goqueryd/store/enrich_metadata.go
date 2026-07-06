@@ -1,6 +1,6 @@
 package store
 
-import "github.com/funtimecoding/go-library/pkg/tool/goqueryd/constant"
+import "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 
 func (s *Store) enrichMetadata(
 	results []SearchResult,

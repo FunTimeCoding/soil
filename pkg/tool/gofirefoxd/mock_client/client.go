@@ -1,6 +1,6 @@
 package mock_client
 
-import "github.com/funtimecoding/go-library/pkg/firefox/tab"
+import "github.com/funtimecoding/soil/pkg/firefox/tab"
 
 type Client struct {
 	tabs    []*tab.Tab

@@ -1,6 +1,6 @@
 package convert
 
-import "github.com/funtimecoding/go-library/pkg/generative/model_context/paginate"
+import "github.com/funtimecoding/soil/pkg/generative/model_context/paginate"
 
 func NewSilenceResult(
 	v []*SlimSilence,

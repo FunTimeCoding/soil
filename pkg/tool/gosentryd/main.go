@@ -1,12 +1,12 @@
 package gosentryd
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	sentry "github.com/funtimecoding/go-library/pkg/errors/sentry/constant"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/system/environment"
-	"github.com/funtimecoding/go-library/pkg/tool/gosentryd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gosentryd/option"
+	"github.com/funtimecoding/soil/pkg/argument"
+	sentry "github.com/funtimecoding/soil/pkg/errors/sentry/constant"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/tool/gosentryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosentryd/option"
 )
 
 func Main(

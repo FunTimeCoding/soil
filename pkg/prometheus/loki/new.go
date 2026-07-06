@@ -1,6 +1,6 @@
 package loki
 
-import "github.com/funtimecoding/go-library/pkg/prometheus/loki/basic"
+import "github.com/funtimecoding/soil/pkg/prometheus/loki/basic"
 
 // Conflicts with github.com/prometheus/common/config
 //import "github.com/grafana/loki/v3/integration/client"

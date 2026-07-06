@@ -2,7 +2,7 @@ package system
 
 import (
 	"compress/gzip"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"io"
 )
 

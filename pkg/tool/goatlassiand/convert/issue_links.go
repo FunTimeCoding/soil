@@ -1,6 +1,6 @@
 package convert
 
-import "github.com/funtimecoding/go-library/pkg/atlassian/jira/issue"
+import "github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
 
 func issueLinks(i *issue.Issue) []*IssueLink {
 	if i.Raw.Fields.IssueLinks == nil {

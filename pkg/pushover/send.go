@@ -2,12 +2,12 @@ package pushover
 
 import (
 	"bytes"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/notation"
-	"github.com/funtimecoding/go-library/pkg/pushover/constant"
-	"github.com/funtimecoding/go-library/pkg/pushover/notification"
-	web "github.com/funtimecoding/go-library/pkg/web/constant"
-	"github.com/funtimecoding/go-library/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/pushover/constant"
+	"github.com/funtimecoding/soil/pkg/pushover/notification"
+	web "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"net/http"
 )
 

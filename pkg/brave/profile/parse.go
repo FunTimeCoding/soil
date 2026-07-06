@@ -1,9 +1,9 @@
 package profile
 
 import (
-	"github.com/funtimecoding/go-library/pkg/brave/helper"
-	"github.com/funtimecoding/go-library/pkg/strings/base64"
-	"github.com/funtimecoding/go-library/pkg/system/join"
+	"github.com/funtimecoding/soil/pkg/brave/helper"
+	"github.com/funtimecoding/soil/pkg/strings/base64"
+	"github.com/funtimecoding/soil/pkg/system/join"
 )
 
 func Parse(

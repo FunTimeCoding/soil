@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/argument"
 )
 
 func main() {

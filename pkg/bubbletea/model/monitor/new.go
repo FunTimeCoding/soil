@@ -1,11 +1,11 @@
 package monitor
 
 import (
-	"github.com/funtimecoding/go-library/pkg/bubbletea/table/item"
-	"github.com/funtimecoding/go-library/pkg/monitor/constant"
-	"github.com/funtimecoding/go-library/pkg/monitor/gorilla/client"
-	"github.com/funtimecoding/go-library/pkg/system"
-	"github.com/funtimecoding/go-library/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/bubbletea/table/item"
+	"github.com/funtimecoding/soil/pkg/monitor/constant"
+	"github.com/funtimecoding/soil/pkg/monitor/gorilla/client"
+	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/system/environment"
 )
 
 func New(connect bool) *Model {

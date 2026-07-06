@@ -1,8 +1,8 @@
 package alert
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/constant"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
 	"testing"
 	"time"
 )

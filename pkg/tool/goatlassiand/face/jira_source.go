@@ -2,9 +2,9 @@ package face
 
 import (
 	"github.com/andygrunwald/go-jira"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/basic"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/field_map"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/issue"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/basic"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/field_map"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
 )
 
 type JiraSource interface {

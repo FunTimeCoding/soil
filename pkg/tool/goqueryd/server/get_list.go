@@ -2,9 +2,9 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/constant"
-	queryConstant "github.com/funtimecoding/go-library/pkg/tool/goqueryd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/generated/server"
+	"github.com/funtimecoding/soil/pkg/constant"
+	queryConstant "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/server"
 )
 
 func (s *Server) GetList(

@@ -1,8 +1,8 @@
 package memory_indexer_tester
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/generated/client"
-	"github.com/funtimecoding/go-library/pkg/web"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/web"
 	"net/http"
 )
 

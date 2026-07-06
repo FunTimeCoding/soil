@@ -1,10 +1,10 @@
 package web
 
 import (
-	"github.com/funtimecoding/go-library/pkg/raid"
-	"github.com/funtimecoding/go-library/pkg/strings/join"
-	timeLibrary "github.com/funtimecoding/go-library/pkg/time"
-	"github.com/funtimecoding/go-library/pkg/tool/goraidd/constant"
+	"github.com/funtimecoding/soil/pkg/raid"
+	"github.com/funtimecoding/soil/pkg/strings/join"
+	timeLibrary "github.com/funtimecoding/soil/pkg/time"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"

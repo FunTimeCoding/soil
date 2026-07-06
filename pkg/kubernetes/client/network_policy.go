@@ -1,7 +1,7 @@
 package client
 
 import (
-	"github.com/funtimecoding/go-library/pkg/kubernetes/client/operation/get"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client/operation/get"
 	"k8s.io/api/networking/v1"
 )
 

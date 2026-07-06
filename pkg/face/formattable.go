@@ -1,8 +1,8 @@
 package face
 
 import (
-	"github.com/funtimecoding/go-library/pkg/console/description"
-	"github.com/funtimecoding/go-library/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/console/description"
+	"github.com/funtimecoding/soil/pkg/console/status/option"
 )
 
 type Formattable interface {

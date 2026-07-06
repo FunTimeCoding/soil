@@ -1,6 +1,6 @@
 package mattermost
 
-import "github.com/funtimecoding/go-library/pkg/errors"
+import "github.com/funtimecoding/soil/pkg/errors"
 
 func (c *Client) MustConfiguration() map[string]string {
 	result, e := c.Configuration()

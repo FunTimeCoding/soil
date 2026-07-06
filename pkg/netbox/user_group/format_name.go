@@ -1,8 +1,8 @@
 package user_group
 
 import (
-	"github.com/funtimecoding/go-library/pkg/console"
-	"github.com/funtimecoding/go-library/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/console/status/option"
 )
 
 func (g *Group) formatName(f *option.Format) string {

@@ -1,6 +1,6 @@
 package mattermost
 
-import "github.com/funtimecoding/go-library/pkg/chat/mattermost/post"
+import "github.com/funtimecoding/soil/pkg/chat/mattermost/post"
 
 func (c *Client) Enrich(v []*post.Post) error {
 	for _, p := range v {

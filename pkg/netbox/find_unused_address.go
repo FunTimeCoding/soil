@@ -1,7 +1,7 @@
 package netbox
 
 import (
-	"github.com/funtimecoding/go-library/pkg/netbox/internet_address"
+	"github.com/funtimecoding/soil/pkg/netbox/internet_address"
 	"net"
 )
 

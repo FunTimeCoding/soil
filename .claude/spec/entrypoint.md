@@ -9,7 +9,7 @@ Every `cmd/<name>/main.go` declares linker variables and delegates to `Main()`:
 ```go
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/go<tool>"
+import "github.com/funtimecoding/soil/pkg/tool/go<tool>"
 
 var (
     Version   string

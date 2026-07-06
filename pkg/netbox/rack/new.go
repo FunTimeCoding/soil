@@ -1,7 +1,7 @@
 package rack
 
 import (
-	"github.com/funtimecoding/go-library/pkg/netbox/helper"
+	"github.com/funtimecoding/soil/pkg/netbox/helper"
 	"github.com/netbox-community/go-netbox/v4"
 )
 

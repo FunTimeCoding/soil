@@ -1,8 +1,8 @@
 package client
 
 import (
-	"github.com/funtimecoding/go-library/pkg/kubernetes/client/operation/delete_operation"
-	"github.com/funtimecoding/go-library/pkg/kubernetes/filter"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client/operation/delete_operation"
+	"github.com/funtimecoding/soil/pkg/kubernetes/filter"
 )
 
 func (c *Client) DeleteEvent(f *filter.Filter) {

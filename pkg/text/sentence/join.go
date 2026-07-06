@@ -2,7 +2,7 @@ package sentence
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 )
 
 func (s *Sentence) Join() string {

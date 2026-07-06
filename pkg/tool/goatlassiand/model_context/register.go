@@ -1,8 +1,8 @@
 package model_context
 
 import (
-	"github.com/funtimecoding/go-library/pkg/generative/model_context/parameter"
-	"github.com/funtimecoding/go-library/pkg/tool/goatlassiand/constant"
+	"github.com/funtimecoding/soil/pkg/generative/model_context/parameter"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 

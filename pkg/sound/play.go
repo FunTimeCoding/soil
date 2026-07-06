@@ -2,9 +2,9 @@ package sound
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/errors/unexpected"
-	"github.com/funtimecoding/go-library/pkg/system"
-	"github.com/funtimecoding/go-library/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/errors/unexpected"
+	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/system/constant"
 	"runtime"
 )
 

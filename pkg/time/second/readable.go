@@ -2,9 +2,9 @@ package second
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/floats"
-	"github.com/funtimecoding/go-library/pkg/math/round"
-	"github.com/funtimecoding/go-library/pkg/strings/join/key_value"
+	"github.com/funtimecoding/soil/pkg/floats"
+	"github.com/funtimecoding/soil/pkg/math/round"
+	"github.com/funtimecoding/soil/pkg/strings/join/key_value"
 )
 
 func Readable(seconds int) string {

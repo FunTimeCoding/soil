@@ -1,8 +1,8 @@
 package team_map
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/team"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/team"
 	"testing"
 )
 

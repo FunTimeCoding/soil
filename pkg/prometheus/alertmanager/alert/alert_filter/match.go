@@ -1,9 +1,9 @@
 package alert_filter
 
 import (
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/constant"
-	"github.com/funtimecoding/go-library/pkg/strings/contains"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
+	"github.com/funtimecoding/soil/pkg/strings/contains"
 )
 
 func (f *Filter) match(a *alert.Alert) bool {

@@ -2,8 +2,8 @@ package frame_probe
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/chromium"
-	"github.com/funtimecoding/go-library/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/chromium"
+	"github.com/funtimecoding/soil/pkg/notation"
 )
 
 func printTargets(c *chromium.Client) {

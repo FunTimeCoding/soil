@@ -1,7 +1,7 @@
 package github
 
 import (
-	"github.com/funtimecoding/go-library/pkg/github/run"
+	"github.com/funtimecoding/soil/pkg/github/run"
 	"github.com/google/go-github/v88/github"
 )
 

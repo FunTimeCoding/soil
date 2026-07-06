@@ -1,6 +1,6 @@
 package opsgenie
 
-import "github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/team_map"
+import "github.com/funtimecoding/soil/pkg/atlassian/opsgenie/team_map"
 
 func (c *Client) TeamMap() *team_map.Map {
 	if c.teamMap == nil {

@@ -2,12 +2,12 @@ package bubbletea
 
 import (
 	"charm.land/bubbletea/v2"
-	"github.com/funtimecoding/go-library/pkg/bubbletea/constant"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	library "github.com/funtimecoding/go-library/pkg/runtime"
-	"github.com/funtimecoding/go-library/pkg/system"
-	systemConstant "github.com/funtimecoding/go-library/pkg/system/constant"
-	"github.com/funtimecoding/go-library/pkg/system/join"
+	"github.com/funtimecoding/soil/pkg/bubbletea/constant"
+	"github.com/funtimecoding/soil/pkg/errors"
+	library "github.com/funtimecoding/soil/pkg/runtime"
+	"github.com/funtimecoding/soil/pkg/system"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/system/join"
 	"runtime"
 )
 

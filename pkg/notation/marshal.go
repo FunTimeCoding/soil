@@ -2,7 +2,7 @@ package notation
 
 import (
 	"encoding/json"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 )
 
 func Marshal(a any) []byte {

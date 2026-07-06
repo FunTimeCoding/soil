@@ -196,7 +196,7 @@ server in `NewStrictHandler` and pass to `HandlerFromMux`:
 
 ```go
 import (
-    generated "github.com/funtimecoding/go-library/pkg/tool/go<tool>d/generated/server"
+    generated "github.com/funtimecoding/soil/pkg/tool/go<tool>d/generated/server"
 )
 
 lifecycle.WithServer(
@@ -217,8 +217,8 @@ When MCP is also mounted, add the `model_context` import and call
 
 ```go
 import (
-    "github.com/funtimecoding/go-library/pkg/tool/go<tool>d/model_context"
-    generated "github.com/funtimecoding/go-library/pkg/tool/go<tool>d/generated/server"
+    "github.com/funtimecoding/soil/pkg/tool/go<tool>d/model_context"
+    generated "github.com/funtimecoding/soil/pkg/tool/go<tool>d/generated/server"
 )
 
 lifecycle.WithServer(

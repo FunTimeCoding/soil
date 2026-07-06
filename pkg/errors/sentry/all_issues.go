@@ -1,8 +1,8 @@
 package sentry
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/constant"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/issue"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/constant"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/issue"
 )
 
 func (c *Client) AllIssues() ([]*issue.Issue, error) {

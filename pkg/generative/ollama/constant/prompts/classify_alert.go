@@ -1,6 +1,6 @@
 package prompts
 
-import "github.com/funtimecoding/go-library/pkg/generative/ollama/classify_prompt"
+import "github.com/funtimecoding/soil/pkg/generative/ollama/classify_prompt"
 
 func ClassifyAlert() *classify_prompt.Prompt {
 	p := classify_prompt.New()

@@ -2,9 +2,9 @@ package lab
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/gitlab"
-	"github.com/funtimecoding/go-library/pkg/gitlab/packages"
-	"github.com/funtimecoding/go-library/pkg/gitlab/project"
+	"github.com/funtimecoding/soil/pkg/gitlab"
+	"github.com/funtimecoding/soil/pkg/gitlab/packages"
+	"github.com/funtimecoding/soil/pkg/gitlab/project"
 )
 
 func Package(

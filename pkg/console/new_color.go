@@ -3,7 +3,7 @@ package console
 import (
 	"charm.land/lipgloss/v2"
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/face"
+	"github.com/funtimecoding/soil/pkg/face"
 )
 
 func NewColor(hex string) face.SprintFunction {

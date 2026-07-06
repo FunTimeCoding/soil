@@ -2,7 +2,7 @@ package netbox
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/netbox/tag"
+	"github.com/funtimecoding/soil/pkg/netbox/tag"
 )
 
 func (c *Client) TagByName(n string) (*tag.Tag, error) {

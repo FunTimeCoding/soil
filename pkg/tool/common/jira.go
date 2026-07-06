@@ -1,10 +1,10 @@
 package common
 
 import (
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/issue"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/issue/issue_enricher"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/issue/validator"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue/issue_enricher"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue/validator"
 )
 
 func Jira() *jira.Client {

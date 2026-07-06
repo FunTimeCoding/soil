@@ -2,8 +2,8 @@ package store
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/system"
-	"github.com/funtimecoding/go-library/pkg/tool/gokubernetesd/constant"
+	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/constant"
 	"path/filepath"
 )
 

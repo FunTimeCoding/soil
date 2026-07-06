@@ -3,9 +3,9 @@ package model_context
 import (
 	"context"
 	"errors"
-	"github.com/funtimecoding/go-library/pkg/errors/not_found"
-	"github.com/funtimecoding/go-library/pkg/generative/mark/response"
-	"github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/model_context/argument"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/generative/mark/response"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/model_context/argument"
 	"github.com/luthermonson/go-proxmox"
 	"github.com/mark3labs/mcp-go/mcp"
 )

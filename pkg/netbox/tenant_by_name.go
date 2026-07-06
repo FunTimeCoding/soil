@@ -2,7 +2,7 @@ package netbox
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/netbox/tenant"
+	"github.com/funtimecoding/soil/pkg/netbox/tenant"
 )
 
 func (c *Client) TenantByName(n string) (*tenant.Tenant, error) {

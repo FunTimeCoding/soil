@@ -1,6 +1,6 @@
 package convert
 
-import "github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/silence"
+import "github.com/funtimecoding/soil/pkg/prometheus/alertmanager/silence"
 
 func Silences(v []*silence.Silence) []*SlimSilence {
 	var result []*SlimSilence

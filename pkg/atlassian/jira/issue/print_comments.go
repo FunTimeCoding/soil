@@ -2,10 +2,10 @@ package issue
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/console"
-	"github.com/funtimecoding/go-library/pkg/text"
-	"github.com/funtimecoding/go-library/pkg/text/option"
-	"github.com/funtimecoding/go-library/pkg/time"
+	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/text"
+	"github.com/funtimecoding/soil/pkg/text/option"
+	"github.com/funtimecoding/soil/pkg/time"
 	"slices"
 )
 

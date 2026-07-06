@@ -1,7 +1,7 @@
 package search_cache
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
 	"time"
 )
 

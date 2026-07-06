@@ -2,7 +2,7 @@ package gitlab
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/gitlab/response"
+	"github.com/funtimecoding/soil/pkg/gitlab/response"
 )
 
 func (c *Client) GraphRunner(identifier int64) *response.Runner {

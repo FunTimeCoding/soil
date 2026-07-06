@@ -1,6 +1,6 @@
 package format
 
-import "github.com/funtimecoding/go-library/pkg/tool/goaudit/scan"
+import "github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
 
 func Clients(clients []*scan.Client) string {
 	t := newTable(

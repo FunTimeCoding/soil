@@ -2,10 +2,10 @@ package connection
 
 import (
 	"fmt"
-	assistant "github.com/funtimecoding/go-library/pkg/assistant/constant"
-	"github.com/funtimecoding/go-library/pkg/assistant/message"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/web/constant"
+	assistant "github.com/funtimecoding/soil/pkg/assistant/constant"
+	"github.com/funtimecoding/soil/pkg/assistant/message"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/gorilla/websocket"
 	"net/url"
 )

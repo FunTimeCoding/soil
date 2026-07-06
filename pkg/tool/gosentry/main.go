@@ -1,11 +1,11 @@
 package gosentry
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/check/issue"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/check/issue/option"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/tool/gosentry/constant"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/check/issue"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/check/issue/option"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/tool/gosentry/constant"
 )
 
 func Main(

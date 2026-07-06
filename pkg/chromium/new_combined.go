@@ -1,6 +1,6 @@
 package chromium
 
-import "github.com/funtimecoding/go-library/pkg/web"
+import "github.com/funtimecoding/soil/pkg/web"
 
 func NewCombined(combined string) *Client {
 	host, port := web.HostPortFromLocatorSplit(combined)

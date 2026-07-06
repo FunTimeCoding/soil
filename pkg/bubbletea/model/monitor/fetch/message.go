@@ -1,6 +1,6 @@
 package fetch
 
-import "github.com/funtimecoding/go-library/pkg/monitor/item"
+import "github.com/funtimecoding/soil/pkg/monitor/item"
 
 type Message struct {
 	Items []*item.Item

@@ -1,6 +1,6 @@
 package convert
 
-import "github.com/funtimecoding/go-library/pkg/tool/goalertmanagerd/inventory"
+import "github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/inventory"
 
 func Instance(
 	i *inventory.Instance,

@@ -2,7 +2,7 @@ package store
 
 import (
 	"database/sql"
-	"github.com/funtimecoding/go-library/pkg/tool/gomemoryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 )
 
 func migrate(d *sql.DB) {

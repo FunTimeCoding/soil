@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/ssh"
-	"github.com/funtimecoding/go-library/pkg/system"
-	"github.com/funtimecoding/go-library/pkg/system/join"
-	"github.com/funtimecoding/go-library/pkg/system/secure_shell"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/ssh"
+	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/system/join"
+	"github.com/funtimecoding/soil/pkg/system/secure_shell"
 )
 
 func main() {

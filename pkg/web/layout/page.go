@@ -1,8 +1,8 @@
 package layout
 
 import (
-	"github.com/funtimecoding/go-library/pkg/identity"
-	"github.com/funtimecoding/go-library/pkg/web/layout/navigation_item"
+	"github.com/funtimecoding/soil/pkg/identity"
+	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"maragu.dev/gomponents"
 )
 

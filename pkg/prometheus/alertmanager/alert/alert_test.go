@@ -1,10 +1,10 @@
 package alert
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	libraryConstant "github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/linux/systemd/constant"
-	"github.com/funtimecoding/go-library/pkg/strings/upper"
+	"github.com/funtimecoding/soil/pkg/assert"
+	libraryConstant "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/linux/systemd/constant"
+	"github.com/funtimecoding/soil/pkg/strings/upper"
 	"github.com/go-openapi/strfmt"
 	"github.com/prometheus/alertmanager/api/v2/models"
 	"testing"

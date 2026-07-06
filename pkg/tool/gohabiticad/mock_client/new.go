@@ -1,8 +1,8 @@
 package mock_client
 
 import (
-	"github.com/funtimecoding/go-library/pkg/habitica/gear"
-	"github.com/funtimecoding/go-library/pkg/habitica/statistic"
+	"github.com/funtimecoding/soil/pkg/habitica/gear"
+	"github.com/funtimecoding/soil/pkg/habitica/statistic"
 )
 
 func New() *Client {

@@ -1,6 +1,6 @@
 package watcher
 
-import "github.com/funtimecoding/go-library/pkg/tool/goclauded/sweep"
+import "github.com/funtimecoding/soil/pkg/tool/goclauded/sweep"
 
 func (w *Watcher) scan() {
 	sweep.Run(w.harbor)

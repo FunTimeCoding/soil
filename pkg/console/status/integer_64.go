@@ -1,6 +1,6 @@
 package status
 
-import "github.com/funtimecoding/go-library/pkg/integers64"
+import "github.com/funtimecoding/soil/pkg/integers64"
 
 func (s *Status) Integer64(v ...int64) *Status {
 	for _, e := range v {

@@ -2,7 +2,7 @@ package console
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 )
 
 func parseHex(hex string) (int, int, int) {

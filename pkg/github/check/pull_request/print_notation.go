@@ -1,11 +1,11 @@
 package pull_request
 
 import (
-	"github.com/funtimecoding/go-library/pkg/github/check/pull_request/option"
-	"github.com/funtimecoding/go-library/pkg/github/run"
-	"github.com/funtimecoding/go-library/pkg/monitor/constant"
-	item "github.com/funtimecoding/go-library/pkg/monitor/item/constant"
-	"github.com/funtimecoding/go-library/pkg/monitor/report"
+	"github.com/funtimecoding/soil/pkg/github/check/pull_request/option"
+	"github.com/funtimecoding/soil/pkg/github/run"
+	"github.com/funtimecoding/soil/pkg/monitor/constant"
+	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/monitor/report"
 )
 
 func printNotation(

@@ -2,10 +2,10 @@ package client
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/kubernetes/client/client"
-	"github.com/funtimecoding/go-library/pkg/kubernetes/client/client_configuration"
-	"github.com/funtimecoding/go-library/pkg/kubernetes/client/metrics"
-	"github.com/funtimecoding/go-library/pkg/kubernetes/client/operation"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client/client"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client/client_configuration"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client/metrics"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client/operation"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 

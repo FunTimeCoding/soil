@@ -1,9 +1,9 @@
 package ssh
 
 import (
-	"github.com/funtimecoding/go-library/pkg/ssh/result"
-	"github.com/funtimecoding/go-library/pkg/strings/trim"
-	"github.com/funtimecoding/go-library/pkg/system/secure_shell"
+	"github.com/funtimecoding/soil/pkg/ssh/result"
+	"github.com/funtimecoding/soil/pkg/strings/trim"
+	"github.com/funtimecoding/soil/pkg/system/secure_shell"
 )
 
 func (c *Client) Run(command string) *result.Result {

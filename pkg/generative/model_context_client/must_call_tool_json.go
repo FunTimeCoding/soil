@@ -1,6 +1,6 @@
 package model_context_client
 
-import "github.com/funtimecoding/go-library/pkg/assert"
+import "github.com/funtimecoding/soil/pkg/assert"
 
 func (c *Client) MustCallToolJSON(
 	name string,

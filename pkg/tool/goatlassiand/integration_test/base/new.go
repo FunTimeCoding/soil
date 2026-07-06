@@ -1,13 +1,13 @@
 package base
 
 import (
-	"github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/go-library/pkg/generative/model_context_server"
-	"github.com/funtimecoding/go-library/pkg/tool/goatlassiand/mock_client"
-	"github.com/funtimecoding/go-library/pkg/tool/goatlassiand/mock_client/mock_jira"
-	"github.com/funtimecoding/go-library/pkg/tool/goatlassiand/model_context"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/model_context/mock_recorder"
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/mock_client"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/mock_client/mock_jira"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/model_context"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/model_context/mock_recorder"
 	"net/http"
 	"testing"
 )

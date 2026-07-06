@@ -1,6 +1,6 @@
 package gitlab
 
-import "github.com/funtimecoding/go-library/pkg/gitlab/runner"
+import "github.com/funtimecoding/soil/pkg/gitlab/runner"
 
 func (c *Client) Runner(identifier int64) (*runner.Runner, error) {
 	result, _, e := c.client.Runners.GetRunnerDetails(identifier)

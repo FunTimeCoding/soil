@@ -1,8 +1,8 @@
 package authenticator
 
 import (
-	"github.com/funtimecoding/go-library/pkg/web/constant"
-	"github.com/funtimecoding/go-library/pkg/web/request_context"
+	"github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/request_context"
 )
 
 func (a *Authenticator) Logout(c *request_context.Context) {

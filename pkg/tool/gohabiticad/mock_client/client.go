@@ -1,10 +1,10 @@
 package mock_client
 
 import (
-	"github.com/funtimecoding/go-library/pkg/habitica/gear"
-	"github.com/funtimecoding/go-library/pkg/habitica/statistic"
-	"github.com/funtimecoding/go-library/pkg/habitica/tag"
-	"github.com/funtimecoding/go-library/pkg/habitica/task"
+	"github.com/funtimecoding/soil/pkg/habitica/gear"
+	"github.com/funtimecoding/soil/pkg/habitica/statistic"
+	"github.com/funtimecoding/soil/pkg/habitica/tag"
+	"github.com/funtimecoding/soil/pkg/habitica/task"
 )
 
 type Client struct {

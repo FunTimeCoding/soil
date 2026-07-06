@@ -1,6 +1,6 @@
 package user_items
 
-import "github.com/funtimecoding/go-library/pkg/habitica/gear"
+import "github.com/funtimecoding/soil/pkg/habitica/gear"
 
 type Items struct {
 	Gear *gear.Gear `json:"gear"`

@@ -2,7 +2,7 @@ package store
 
 import (
 	"github.com/bmatcuk/doublestar/v4"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"os"
 )
 

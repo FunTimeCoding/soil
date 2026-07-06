@@ -3,9 +3,9 @@ package server
 import (
 	"context"
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/raid"
-	"github.com/funtimecoding/go-library/pkg/time"
-	"github.com/funtimecoding/go-library/pkg/tool/goraidd/generated/server"
+	"github.com/funtimecoding/soil/pkg/raid"
+	"github.com/funtimecoding/soil/pkg/time"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/generated/server"
 )
 
 func (s *Server) GetLogs(

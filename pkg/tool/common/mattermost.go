@@ -1,8 +1,8 @@
 package common
 
 import (
-	"github.com/funtimecoding/go-library/pkg/chat/mattermost"
-	"github.com/funtimecoding/go-library/pkg/chat/mattermost/user_map"
+	"github.com/funtimecoding/soil/pkg/chat/mattermost"
+	"github.com/funtimecoding/soil/pkg/chat/mattermost/user_map"
 )
 
 func Mattermost(o ...mattermost.Option) *mattermost.Client {

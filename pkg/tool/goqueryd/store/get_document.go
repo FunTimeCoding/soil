@@ -2,9 +2,9 @@ package store
 
 import (
 	"database/sql"
-	"github.com/funtimecoding/go-library/pkg/strings/join"
-	"github.com/funtimecoding/go-library/pkg/strings/separator"
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/store/result"
+	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/result"
 	"strings"
 )
 

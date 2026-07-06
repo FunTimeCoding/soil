@@ -3,7 +3,7 @@ package common
 import (
 	"encoding/json"
 	"errors"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/basic/response"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/basic/response"
 	"github.com/netbox-community/go-netbox/v4"
 )
 

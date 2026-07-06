@@ -2,7 +2,7 @@ package duplicate
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/text/dictionary"
+	"github.com/funtimecoding/soil/pkg/text/dictionary"
 )
 
 func Run() {

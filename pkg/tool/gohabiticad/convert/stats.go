@@ -1,8 +1,8 @@
 package convert
 
 import (
-	"github.com/funtimecoding/go-library/pkg/habitica/statistic"
-	"github.com/funtimecoding/go-library/pkg/tool/gohabiticad/generated/server"
+	"github.com/funtimecoding/soil/pkg/habitica/statistic"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/generated/server"
 )
 
 func Stats(s *statistic.Statistic) *server.Stats {

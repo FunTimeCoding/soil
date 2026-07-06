@@ -2,7 +2,7 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/chat/mattermost"
+	"github.com/funtimecoding/soil/pkg/chat/mattermost"
 )
 
 func Team() {

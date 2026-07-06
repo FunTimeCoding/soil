@@ -2,9 +2,9 @@ package lint
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/lint/option"
-	"github.com/funtimecoding/go-library/pkg/strings/separator"
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/lint/option"
+	"github.com/funtimecoding/soil/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/system"
 	"path/filepath"
 	"strings"
 )

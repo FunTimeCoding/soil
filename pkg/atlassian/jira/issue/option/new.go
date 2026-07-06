@@ -1,7 +1,7 @@
 package option
 
 import (
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/field_map"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/field_map"
 	"log"
 )
 

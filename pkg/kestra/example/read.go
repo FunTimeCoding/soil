@@ -2,7 +2,7 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/kestra"
+	"github.com/funtimecoding/soil/pkg/kestra"
 )
 
 func Read() {

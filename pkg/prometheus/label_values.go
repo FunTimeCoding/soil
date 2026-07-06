@@ -1,8 +1,8 @@
 package prometheus
 
 import (
-	"github.com/funtimecoding/go-library/pkg/prometheus/helper"
-	"github.com/funtimecoding/go-library/pkg/prometheus/label_result"
+	"github.com/funtimecoding/soil/pkg/prometheus/helper"
+	"github.com/funtimecoding/soil/pkg/prometheus/label_result"
 	"time"
 )
 

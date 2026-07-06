@@ -2,8 +2,8 @@ package ssh
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/ssh/command"
-	"github.com/funtimecoding/go-library/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/ssh/command"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 )
 
 func environmentPrefix(o *command.Command) string {

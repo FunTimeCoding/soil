@@ -2,12 +2,12 @@ package worker_tester
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/go-library/pkg/log/logger"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/mock_client"
-	"github.com/funtimecoding/go-library/pkg/tool/goalertlogd/store"
-	"github.com/funtimecoding/go-library/pkg/tool/goalertlogd/worker"
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/mock_client"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/worker"
 	"path/filepath"
 	"testing"
 	"time"

@@ -1,7 +1,7 @@
 package netbox
 
 import (
-	"github.com/funtimecoding/go-library/pkg/netbox/network"
+	"github.com/funtimecoding/soil/pkg/netbox/network"
 	"github.com/netbox-community/go-netbox/v4"
 )
 

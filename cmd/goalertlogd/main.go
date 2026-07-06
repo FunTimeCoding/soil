@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/goalertlogd"
+import "github.com/funtimecoding/soil/pkg/tool/goalertlogd"
 
 var (
 	Version   string

@@ -1,6 +1,6 @@
 package netbox
 
-import "github.com/funtimecoding/go-library/pkg/netbox/device"
+import "github.com/funtimecoding/soil/pkg/netbox/device"
 
 func (c *Client) DevicesByName(s string) ([]*device.Device, error) {
 	result, _, e := c.client.DcimAPI.DcimDevicesList(

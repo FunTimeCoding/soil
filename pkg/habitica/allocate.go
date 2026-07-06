@@ -1,8 +1,8 @@
 package habitica
 
 import (
-	"github.com/funtimecoding/go-library/pkg/habitica/statistic"
-	"github.com/funtimecoding/go-library/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/habitica/statistic"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 )
 
 func (c *Client) Allocate(stat string) (*statistic.Statistic, error) {

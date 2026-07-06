@@ -3,8 +3,8 @@ package basic
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/basic/response"
-	"github.com/funtimecoding/go-library/pkg/web/detail_error"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/basic/response"
+	"github.com/funtimecoding/soil/pkg/web/detail_error"
 )
 
 func parseDetail(

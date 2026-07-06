@@ -2,9 +2,9 @@ package issue
 
 import (
 	"github.com/andygrunwald/go-jira"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/field_map"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/issue/option"
-	"github.com/funtimecoding/go-library/pkg/face"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/field_map"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue/option"
+	"github.com/funtimecoding/soil/pkg/face"
 	"time"
 )
 

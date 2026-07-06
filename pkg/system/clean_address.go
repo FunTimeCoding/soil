@@ -1,7 +1,7 @@
 package system
 
 import (
-	"github.com/funtimecoding/go-library/pkg/strings/split/key_value"
+	"github.com/funtimecoding/soil/pkg/strings/split/key_value"
 	"net"
 	"strings"
 )

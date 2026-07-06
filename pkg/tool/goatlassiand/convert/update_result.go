@@ -1,6 +1,6 @@
 package convert
 
-import "github.com/funtimecoding/go-library/pkg/tool/goatlassiand/generated/server"
+import "github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/server"
 
 type UpdateResult struct {
 	Issue   *server.JiraIssue `json:"issue"`

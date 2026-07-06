@@ -3,7 +3,7 @@ package chromium
 import (
 	"context"
 	"github.com/chromedp/chromedp"
-	"github.com/funtimecoding/go-library/pkg/chromium/snapshot"
+	"github.com/funtimecoding/soil/pkg/chromium/snapshot"
 )
 
 func (c *Client) Snapshot(x context.Context) ([]*snapshot.Node, error) {

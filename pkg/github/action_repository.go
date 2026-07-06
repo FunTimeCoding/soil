@@ -1,6 +1,6 @@
 package github
 
-import "github.com/funtimecoding/go-library/pkg/github/repository"
+import "github.com/funtimecoding/soil/pkg/github/repository"
 
 func (c *Client) ActionRepository() []*repository.Repository {
 	var result []*repository.Repository

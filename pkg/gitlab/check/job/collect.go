@@ -1,10 +1,10 @@
 package job
 
 import (
-	"github.com/funtimecoding/go-library/pkg/gitlab"
-	"github.com/funtimecoding/go-library/pkg/gitlab/check/job/option"
-	"github.com/funtimecoding/go-library/pkg/gitlab/job"
-	"github.com/funtimecoding/go-library/pkg/monitor"
+	"github.com/funtimecoding/soil/pkg/gitlab"
+	"github.com/funtimecoding/soil/pkg/gitlab/check/job/option"
+	"github.com/funtimecoding/soil/pkg/gitlab/job"
+	"github.com/funtimecoding/soil/pkg/monitor"
 )
 
 func collect(o *option.Job) []*job.Job {

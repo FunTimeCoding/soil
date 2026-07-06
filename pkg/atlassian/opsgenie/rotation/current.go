@@ -1,7 +1,7 @@
 package rotation
 
 import (
-	"github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/compact"
+	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/compact"
 	"time"
 )
 

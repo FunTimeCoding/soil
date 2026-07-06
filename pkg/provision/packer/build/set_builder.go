@@ -2,9 +2,9 @@ package build
 
 import (
 	"github.com/coreos/go-semver/semver"
-	"github.com/funtimecoding/go-library/pkg/provision/packer/build/builder"
-	qemu "github.com/funtimecoding/go-library/pkg/qemu/constant"
-	"github.com/funtimecoding/go-library/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/provision/packer/build/builder"
+	qemu "github.com/funtimecoding/soil/pkg/qemu/constant"
+	"github.com/funtimecoding/soil/pkg/system/constant"
 )
 
 func (b *Build) SetBuilder(

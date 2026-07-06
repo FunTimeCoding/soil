@@ -2,7 +2,7 @@ package watcher
 
 import (
 	"github.com/fsnotify/fsnotify"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"os"
 	"path/filepath"
 )

@@ -2,8 +2,8 @@ package aleeva_report
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/notation"
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/system"
 )
 
 func Parse(

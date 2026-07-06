@@ -1,8 +1,8 @@
 package prometheus
 
 import (
-	"github.com/funtimecoding/go-library/pkg/prometheus/constant"
-	"github.com/funtimecoding/go-library/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
 func (c *Client) GraphLink(expression string) string {

@@ -1,10 +1,10 @@
 package base
 
 import (
-	"github.com/funtimecoding/go-library/pkg/generative/model_context_server"
-	"github.com/funtimecoding/go-library/pkg/generative/ollama"
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/rerank"
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/store"
+	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
+	"github.com/funtimecoding/soil/pkg/generative/ollama"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/rerank"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
 	"testing"
 )
 

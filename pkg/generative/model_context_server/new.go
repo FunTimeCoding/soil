@@ -2,11 +2,11 @@ package model_context_server
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/lifecycle"
-	"github.com/funtimecoding/go-library/pkg/lifecycle/server"
-	"github.com/funtimecoding/go-library/pkg/log/logger"
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/lifecycle"
+	"github.com/funtimecoding/soil/pkg/lifecycle/server"
+	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/system"
 	"net/http"
 	"testing"
 )

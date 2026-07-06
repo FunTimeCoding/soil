@@ -2,7 +2,7 @@ package mock_client
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/sublime/view"
+	"github.com/funtimecoding/soil/pkg/sublime/view"
 )
 
 func (c *Client) View(identifier int) (*view.View, error) {

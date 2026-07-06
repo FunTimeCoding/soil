@@ -2,8 +2,8 @@ package gmail
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/maps"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/maps"
 	"golang.org/x/oauth2"
 	"log"
 )

@@ -1,8 +1,8 @@
 package gitlab
 
 import (
-	"github.com/funtimecoding/go-library/pkg/gitlab/project"
-	library "github.com/funtimecoding/go-library/pkg/project"
+	"github.com/funtimecoding/soil/pkg/gitlab/project"
+	library "github.com/funtimecoding/soil/pkg/project"
 )
 
 func (c *Client) PipelineProjects() []*project.Project {

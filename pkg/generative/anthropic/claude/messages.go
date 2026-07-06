@@ -3,11 +3,11 @@ package claude
 import (
 	"bufio"
 	"encoding/json"
-	"github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/claude/message"
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/claude/notation"
-	"github.com/funtimecoding/go-library/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/message"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/notation"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"os"
 	"path/filepath"
 )

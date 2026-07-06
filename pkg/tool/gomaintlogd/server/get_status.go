@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/tool/gomaintlogd/generated/server"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/generated/server"
 )
 
 func (s *Server) GetStatus(

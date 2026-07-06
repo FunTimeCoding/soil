@@ -2,8 +2,8 @@ package store
 
 import (
 	"errors"
-	"github.com/funtimecoding/go-library/pkg/errors/not_found"
-	"github.com/funtimecoding/go-library/pkg/tool/gomaintlogd/store/entry"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store/entry"
 	"gorm.io/gorm"
 )
 

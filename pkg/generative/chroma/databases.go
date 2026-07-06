@@ -2,7 +2,7 @@ package chroma
 
 import (
 	"github.com/amikos-tech/chroma-go/pkg/api/v2"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 )
 
 func (c *Client) Databases(t v2.Tenant) []v2.Database {

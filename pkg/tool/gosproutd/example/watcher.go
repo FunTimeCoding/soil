@@ -3,8 +3,8 @@ package example
 import (
 	"fmt"
 	"github.com/fsnotify/fsnotify"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/system"
 	"os"
 	"path/filepath"
 	"time"

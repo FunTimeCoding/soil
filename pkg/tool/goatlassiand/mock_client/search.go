@@ -1,6 +1,6 @@
 package mock_client
 
-import "github.com/funtimecoding/go-library/pkg/atlassian/confluence/search_result"
+import "github.com/funtimecoding/soil/pkg/atlassian/confluence/search_result"
 
 func (c *Client) Search(
 	query string,

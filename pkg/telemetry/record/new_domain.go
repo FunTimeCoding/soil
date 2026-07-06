@@ -1,6 +1,6 @@
 package record
 
-import "github.com/funtimecoding/go-library/pkg/telemetry/constant"
+import "github.com/funtimecoding/soil/pkg/telemetry/constant"
 
 func NewDomain(
 	tool string,

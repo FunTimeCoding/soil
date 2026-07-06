@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/proxmox/example"
+import "github.com/funtimecoding/soil/pkg/proxmox/example"
 
 func main() {
 	example.Read()

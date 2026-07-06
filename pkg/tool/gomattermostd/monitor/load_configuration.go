@@ -1,8 +1,8 @@
 package monitor
 
 import (
-	"github.com/funtimecoding/go-library/pkg/strings"
-	"github.com/funtimecoding/go-library/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/strings"
+	"github.com/funtimecoding/soil/pkg/system/environment"
 	"os"
 )
 

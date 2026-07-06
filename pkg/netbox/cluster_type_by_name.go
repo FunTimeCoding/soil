@@ -2,7 +2,7 @@ package netbox
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/netbox/cluster_type"
+	"github.com/funtimecoding/soil/pkg/netbox/cluster_type"
 )
 
 func (c *Client) ClusterTypeByName(n string) (*cluster_type.Type, error) {

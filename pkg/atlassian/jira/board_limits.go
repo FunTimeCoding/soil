@@ -2,8 +2,8 @@ package jira
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/board_limit"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/board_limit"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
 )
 
 func (c *Client) BoardLimits(identifier int) ([]*board_limit.Limit, error) {

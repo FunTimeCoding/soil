@@ -2,8 +2,8 @@ package wait
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/system/run"
-	"github.com/funtimecoding/go-library/pkg/tool/gowait/wait/option"
+	"github.com/funtimecoding/soil/pkg/system/run"
+	"github.com/funtimecoding/soil/pkg/tool/gowait/wait/option"
 	"time"
 )
 

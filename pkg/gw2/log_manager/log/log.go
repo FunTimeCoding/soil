@@ -1,7 +1,7 @@
 package log
 
 import (
-	"github.com/funtimecoding/go-library/pkg/gw2/log_manager"
+	"github.com/funtimecoding/soil/pkg/gw2/log_manager"
 	"time"
 )
 

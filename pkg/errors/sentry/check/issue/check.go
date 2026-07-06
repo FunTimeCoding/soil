@@ -2,13 +2,13 @@ package issue
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/console/age_colorer"
-	"github.com/funtimecoding/go-library/pkg/console/status/tag"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/check/issue/option"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/constant"
-	"github.com/funtimecoding/go-library/pkg/monitor"
-	item "github.com/funtimecoding/go-library/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/console/age_colorer"
+	"github.com/funtimecoding/soil/pkg/console/status/tag"
+	"github.com/funtimecoding/soil/pkg/errors/sentry"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/check/issue/option"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/constant"
+	"github.com/funtimecoding/soil/pkg/monitor"
+	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
 )
 
 func Check(o *option.Issue) {

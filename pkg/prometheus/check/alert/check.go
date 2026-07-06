@@ -2,11 +2,11 @@ package alert
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/console/status/tag"
-	item "github.com/funtimecoding/go-library/pkg/monitor/item/constant"
-	"github.com/funtimecoding/go-library/pkg/prometheus/check/alert/option"
-	"github.com/funtimecoding/go-library/pkg/prometheus/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/common"
+	"github.com/funtimecoding/soil/pkg/console/status/tag"
+	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/check/alert/option"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
+	"github.com/funtimecoding/soil/pkg/tool/common"
 )
 
 func Check(o *option.Alert) {

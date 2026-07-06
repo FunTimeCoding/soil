@@ -1,11 +1,11 @@
 package outdated
 
 import (
-	"github.com/funtimecoding/go-library/pkg/monitor/constant"
-	item "github.com/funtimecoding/go-library/pkg/monitor/item/constant"
-	"github.com/funtimecoding/go-library/pkg/monitor/report"
-	"github.com/funtimecoding/go-library/pkg/system/macos/brew/formula"
-	"github.com/funtimecoding/go-library/pkg/system/macos/check/brew/outdated/option"
+	"github.com/funtimecoding/soil/pkg/monitor/constant"
+	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/monitor/report"
+	"github.com/funtimecoding/soil/pkg/system/macos/brew/formula"
+	"github.com/funtimecoding/soil/pkg/system/macos/check/brew/outdated/option"
 )
 
 func printNotation(

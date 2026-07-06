@@ -1,8 +1,8 @@
 package convert
 
 import (
-	"github.com/funtimecoding/go-library/pkg/habitica/score"
-	"github.com/funtimecoding/go-library/pkg/tool/gohabiticad/generated/server"
+	"github.com/funtimecoding/soil/pkg/habitica/score"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/generated/server"
 )
 
 func ScoreResult(r *score.Score) *server.ScoreResult {

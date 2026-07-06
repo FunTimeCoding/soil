@@ -1,9 +1,9 @@
 package server
 
 import (
-	"github.com/funtimecoding/go-library/pkg/atlassian/confluence"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira"
-	"github.com/funtimecoding/go-library/pkg/face"
+	"github.com/funtimecoding/soil/pkg/atlassian/confluence"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira"
+	"github.com/funtimecoding/soil/pkg/face"
 )
 
 type Server struct {

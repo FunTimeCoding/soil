@@ -2,10 +2,10 @@ package dictionary
 
 import (
 	"bufio"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	library "github.com/funtimecoding/go-library/pkg/strings"
-	"github.com/funtimecoding/go-library/pkg/strings/separator"
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/errors"
+	library "github.com/funtimecoding/soil/pkg/strings"
+	"github.com/funtimecoding/soil/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/system"
 	"strings"
 )
 

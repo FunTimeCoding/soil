@@ -1,6 +1,6 @@
 package sed
 
-import "github.com/funtimecoding/go-library/pkg/strings/split/key_value"
+import "github.com/funtimecoding/soil/pkg/strings/split/key_value"
 
 func Parse(replaces []string) map[string]string {
 	result := make(map[string]string)

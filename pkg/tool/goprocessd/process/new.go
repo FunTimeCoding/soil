@@ -1,7 +1,7 @@
 package process
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goprocessd/log"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/log"
 	"sync"
 )
 

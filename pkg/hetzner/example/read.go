@@ -2,8 +2,8 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/hetzner"
-	"github.com/funtimecoding/go-library/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/hetzner"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 )
 
 func Read() {

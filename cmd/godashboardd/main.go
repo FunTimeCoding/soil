@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/godashboardd"
+import "github.com/funtimecoding/soil/pkg/tool/godashboardd"
 
 var (
 	Version   string

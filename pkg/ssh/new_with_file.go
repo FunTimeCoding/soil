@@ -2,8 +2,8 @@ package ssh
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/system"
-	"github.com/funtimecoding/go-library/pkg/system/secure_shell"
+	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/system/secure_shell"
 	"golang.org/x/crypto/ssh"
 	"net"
 )

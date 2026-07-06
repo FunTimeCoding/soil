@@ -1,6 +1,6 @@
 package service
 
-import "github.com/funtimecoding/go-library/pkg/tool/goclauded/store/message"
+import "github.com/funtimecoding/soil/pkg/tool/goclauded/store/message"
 
 func (s *Service) AllMessages(
 	limit int,

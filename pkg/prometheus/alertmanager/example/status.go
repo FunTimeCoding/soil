@@ -2,7 +2,7 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/tool/common"
+	"github.com/funtimecoding/soil/pkg/tool/common"
 )
 
 func Status() {

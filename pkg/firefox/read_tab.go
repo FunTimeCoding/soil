@@ -3,7 +3,7 @@ package firefox
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/firefox/content"
+	"github.com/funtimecoding/soil/pkg/firefox/content"
 )
 
 func (c *Client) ReadTab(

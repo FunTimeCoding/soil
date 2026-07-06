@@ -2,7 +2,7 @@ package service
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/prometheus"
+	"github.com/funtimecoding/soil/pkg/prometheus"
 )
 
 func (s *Service) Client(instance string) (*prometheus.Client, error) {

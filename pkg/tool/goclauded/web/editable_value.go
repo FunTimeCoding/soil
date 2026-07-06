@@ -1,6 +1,6 @@
 package web
 
-import "github.com/funtimecoding/go-library/pkg/tool/goclauded/constant"
+import "github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 
 func editableValue(
 	kind string,

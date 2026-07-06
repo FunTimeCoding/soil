@@ -7,7 +7,7 @@ func Chroma() {
 	   import (
 	   	"context"
 	   	"fmt"
-	   	"github.com/funtimecoding/go-library/pkg/errors"
+	   	"github.com/funtimecoding/soil/pkg/errors"
 	   	"github.com/google/uuid"
 	   	"github.com/tmc/langchaingo/embeddings"
 	   	"github.com/tmc/langchaingo/llms/ollama"

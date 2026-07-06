@@ -1,8 +1,8 @@
 package gofix
 
 import (
-	"github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/lint/segment"
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/lint/segment"
 	"path/filepath"
 	"strings"
 )

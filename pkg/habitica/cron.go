@@ -1,6 +1,6 @@
 package habitica
 
-import "github.com/funtimecoding/go-library/pkg/habitica/cron"
+import "github.com/funtimecoding/soil/pkg/habitica/cron"
 
 func (c *Client) Cron() (*cron.Cron, error) {
 	before, e := c.user()

@@ -2,12 +2,12 @@ package tunnel
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/ssh/constant"
-	"github.com/funtimecoding/go-library/pkg/system"
-	systemConstant "github.com/funtimecoding/go-library/pkg/system/constant"
-	"github.com/funtimecoding/go-library/pkg/system/run"
-	web "github.com/funtimecoding/go-library/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/ssh/constant"
+	"github.com/funtimecoding/soil/pkg/system"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/system/run"
+	web "github.com/funtimecoding/soil/pkg/web/constant"
 	"log"
 	"net"
 	"time"

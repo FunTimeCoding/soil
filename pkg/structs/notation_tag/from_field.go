@@ -1,7 +1,7 @@
 package notation_tag
 
 import (
-	"github.com/funtimecoding/go-library/pkg/structs/constant"
+	"github.com/funtimecoding/soil/pkg/structs/constant"
 	"reflect"
 )
 

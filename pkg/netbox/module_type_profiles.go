@@ -1,6 +1,6 @@
 package netbox
 
-import "github.com/funtimecoding/go-library/pkg/netbox/module_type_profile"
+import "github.com/funtimecoding/soil/pkg/netbox/module_type_profile"
 
 func (c *Client) ModuleTypeProfiles() ([]*module_type_profile.Profile, error) {
 	result, _, e := c.client.DcimAPI.DcimModuleTypeProfilesList(

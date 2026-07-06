@@ -1,6 +1,6 @@
 package request_context
 
-import "github.com/funtimecoding/go-library/pkg/system"
+import "github.com/funtimecoding/soil/pkg/system"
 
 func (c *Context) readBody() {
 	if c.bodyRead {

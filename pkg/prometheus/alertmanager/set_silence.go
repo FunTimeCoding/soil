@@ -2,8 +2,8 @@ package alertmanager
 
 import (
 	"errors"
-	"github.com/funtimecoding/go-library/pkg/errors/validation"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/constant"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
 	"time"
 )
 

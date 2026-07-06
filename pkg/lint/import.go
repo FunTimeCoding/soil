@@ -2,10 +2,10 @@ package lint
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/lint/constant"
-	"github.com/funtimecoding/go-library/pkg/lint/file_report"
-	"github.com/funtimecoding/go-library/pkg/strings/join"
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/lint/constant"
+	"github.com/funtimecoding/soil/pkg/lint/file_report"
+	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/system"
 	"io"
 	"slices"
 	"strings"

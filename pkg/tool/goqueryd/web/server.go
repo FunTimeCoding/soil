@@ -1,10 +1,10 @@
 package web
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/service"
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/web/search_cache"
-	"github.com/funtimecoding/go-library/pkg/web/palette"
-	"github.com/funtimecoding/go-library/pkg/web/view"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/web/search_cache"
+	"github.com/funtimecoding/soil/pkg/web/palette"
+	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
 type Server struct {

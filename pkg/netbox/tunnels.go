@@ -1,6 +1,6 @@
 package netbox
 
-import "github.com/funtimecoding/go-library/pkg/netbox/tunnel"
+import "github.com/funtimecoding/soil/pkg/netbox/tunnel"
 
 func (c *Client) Tunnels() ([]*tunnel.Tunnel, error) {
 	result, _, e := c.client.VpnAPI.VpnTunnelsList(

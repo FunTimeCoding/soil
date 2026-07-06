@@ -2,10 +2,10 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/maps"
-	"github.com/funtimecoding/go-library/pkg/prometheus"
-	"github.com/funtimecoding/go-library/pkg/prometheus/constant"
-	"github.com/funtimecoding/go-library/pkg/prometheus/parse"
+	"github.com/funtimecoding/soil/pkg/maps"
+	"github.com/funtimecoding/soil/pkg/prometheus"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/parse"
 	"time"
 )
 

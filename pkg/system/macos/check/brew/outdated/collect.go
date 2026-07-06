@@ -1,8 +1,8 @@
 package outdated
 
 import (
-	"github.com/funtimecoding/go-library/pkg/system/macos/brew"
-	"github.com/funtimecoding/go-library/pkg/system/macos/brew/formula"
+	"github.com/funtimecoding/soil/pkg/system/macos/brew"
+	"github.com/funtimecoding/soil/pkg/system/macos/brew/formula"
 )
 
 func collect() []*formula.Formula {

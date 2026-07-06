@@ -1,6 +1,6 @@
 package github
 
-import "github.com/funtimecoding/go-library/pkg/github/job"
+import "github.com/funtimecoding/soil/pkg/github/job"
 
 func (c *Client) Jobs(
 	owner string,

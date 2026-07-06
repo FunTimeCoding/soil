@@ -2,8 +2,8 @@ package gobundle
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/system/macos"
-	"github.com/funtimecoding/go-library/pkg/tool/gobundle/option"
+	"github.com/funtimecoding/soil/pkg/system/macos"
+	"github.com/funtimecoding/soil/pkg/tool/gobundle/option"
 )
 
 func Run(o *option.Bundle) {

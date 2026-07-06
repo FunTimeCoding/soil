@@ -2,7 +2,7 @@ package sentry
 
 import (
 	"encoding/json"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/basic/response"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/basic/response"
 )
 
 func (c *Client) Organizations() ([]response.Organization, error) {

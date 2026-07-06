@@ -2,9 +2,9 @@ package collect
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/bubbletea/model/monitor/fetch"
-	"github.com/funtimecoding/go-library/pkg/strings/join"
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/fetch"
+	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/system"
 	"time"
 )
 

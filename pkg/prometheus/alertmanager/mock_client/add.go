@@ -1,8 +1,8 @@
 package mock_client
 
 import (
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
 )
 
 func (c *Client) Add(a *alert.Alert) {

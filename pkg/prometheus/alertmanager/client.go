@@ -1,12 +1,12 @@
 package alertmanager
 
 import (
-	"github.com/funtimecoding/go-library/pkg/prometheus"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert/alert_enricher"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert/field_changer"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert/label_filter"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert/name_filter"
-	"github.com/funtimecoding/go-library/pkg/prometheus/rule/rule_list"
+	"github.com/funtimecoding/soil/pkg/prometheus"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/alert_enricher"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/field_changer"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/label_filter"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/name_filter"
+	"github.com/funtimecoding/soil/pkg/prometheus/rule/rule_list"
 	"github.com/prometheus/alertmanager/api/v2/client"
 )
 

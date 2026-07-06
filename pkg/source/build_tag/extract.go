@@ -2,7 +2,7 @@ package build_tag
 
 import (
 	"bufio"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"go/build/constraint"
 	"os"
 	"strings"

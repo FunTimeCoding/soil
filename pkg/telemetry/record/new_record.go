@@ -2,7 +2,7 @@ package record
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/telemetry/constant"
+	"github.com/funtimecoding/soil/pkg/telemetry/constant"
 )
 
 func newRecord(

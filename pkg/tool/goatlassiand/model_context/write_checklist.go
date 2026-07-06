@@ -3,11 +3,11 @@ package model_context
 import (
 	"context"
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/issue"
-	"github.com/funtimecoding/go-library/pkg/generative/mark/response"
-	"github.com/funtimecoding/go-library/pkg/system"
-	"github.com/funtimecoding/go-library/pkg/tool/goatlassiand/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goatlassiand/types/checklist_item"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
+	"github.com/funtimecoding/soil/pkg/generative/mark/response"
+	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/types/checklist_item"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/trivago/tgo/tcontainer"
 )

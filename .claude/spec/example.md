@@ -49,7 +49,7 @@ from that file via imports.
 ```go
 package main
 
-import "github.com/funtimecoding/go-library/pkg/gitlab/example"
+import "github.com/funtimecoding/soil/pkg/gitlab/example"
 
 func main() {
     example.Runner()

@@ -1,8 +1,8 @@
 package telegram
 
 import (
-	"github.com/funtimecoding/go-library/pkg/bolt"
-	"github.com/funtimecoding/go-library/pkg/chat/telegram/client"
+	"github.com/funtimecoding/soil/pkg/bolt"
+	"github.com/funtimecoding/soil/pkg/chat/telegram/client"
 )
 
 func New(

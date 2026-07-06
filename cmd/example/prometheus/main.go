@@ -1,11 +1,11 @@
 package main
 
 import (
-	grafana "github.com/funtimecoding/go-library/pkg/grafana/example"
-	alertmanager "github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/example"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/example/notify"
-	prometheus "github.com/funtimecoding/go-library/pkg/prometheus/example"
-	loki "github.com/funtimecoding/go-library/pkg/prometheus/loki/example"
+	grafana "github.com/funtimecoding/soil/pkg/grafana/example"
+	alertmanager "github.com/funtimecoding/soil/pkg/prometheus/alertmanager/example"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/example/notify"
+	prometheus "github.com/funtimecoding/soil/pkg/prometheus/example"
+	loki "github.com/funtimecoding/soil/pkg/prometheus/loki/example"
 )
 
 func main() {

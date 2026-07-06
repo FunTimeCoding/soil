@@ -1,8 +1,8 @@
 package base
 
 import (
-	"github.com/funtimecoding/go-library/pkg/generative/model_context_server"
-	"github.com/funtimecoding/go-library/pkg/tool/gomaintlogd/store"
+	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store"
 )
 
 type Server struct {

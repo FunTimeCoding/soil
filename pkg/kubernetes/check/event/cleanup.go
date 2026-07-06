@@ -1,9 +1,9 @@
 package event
 
 import (
-	"github.com/funtimecoding/go-library/pkg/kubernetes"
-	"github.com/funtimecoding/go-library/pkg/kubernetes/check/event/option"
-	"github.com/funtimecoding/go-library/pkg/kubernetes/client"
+	"github.com/funtimecoding/soil/pkg/kubernetes"
+	"github.com/funtimecoding/soil/pkg/kubernetes/check/event/option"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client"
 	"time"
 )
 

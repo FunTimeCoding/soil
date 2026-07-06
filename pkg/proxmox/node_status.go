@@ -2,7 +2,7 @@ package proxmox
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/proxmox/node_status"
+	"github.com/funtimecoding/soil/pkg/proxmox/node_status"
 )
 
 func (c *Client) NodeStatus(name string) (*node_status.Status, error) {

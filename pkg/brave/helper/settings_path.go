@@ -1,8 +1,8 @@
 package helper
 
 import (
-	"github.com/funtimecoding/go-library/pkg/brave/constant"
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/brave/constant"
+	"github.com/funtimecoding/soil/pkg/system"
 	"path/filepath"
 )
 

@@ -1,7 +1,7 @@
 package watcher
 
 import (
-	"github.com/funtimecoding/go-library/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/constant"
 	"path/filepath"
 	"strings"
 )

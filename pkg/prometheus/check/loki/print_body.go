@@ -2,8 +2,8 @@ package loki
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/prometheus/loki/message"
-	"github.com/funtimecoding/go-library/pkg/web/telemetry/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/loki/message"
+	"github.com/funtimecoding/soil/pkg/web/telemetry/constant"
 )
 
 func printBody(messages []*message.Message) {

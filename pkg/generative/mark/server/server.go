@@ -2,8 +2,8 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/telemetry/constant"
-	"github.com/funtimecoding/go-library/pkg/telemetry/record"
+	"github.com/funtimecoding/soil/pkg/telemetry/constant"
+	"github.com/funtimecoding/soil/pkg/telemetry/record"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 )

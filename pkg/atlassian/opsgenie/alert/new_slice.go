@@ -2,7 +2,7 @@ package alert
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/alert/option"
+	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/alert/option"
 	"github.com/opsgenie/opsgenie-go-sdk-v2/alert"
 )
 

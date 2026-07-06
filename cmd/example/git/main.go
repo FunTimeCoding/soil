@@ -1,11 +1,11 @@
 package main
 
 import (
-	git "github.com/funtimecoding/go-library/pkg/git/example"
-	github "github.com/funtimecoding/go-library/pkg/github/example"
-	"github.com/funtimecoding/go-library/pkg/gitlab/check/clean_job"
-	gitlab "github.com/funtimecoding/go-library/pkg/gitlab/example"
-	"github.com/funtimecoding/go-library/pkg/gitlab/example/graph_query"
+	git "github.com/funtimecoding/soil/pkg/git/example"
+	github "github.com/funtimecoding/soil/pkg/github/example"
+	"github.com/funtimecoding/soil/pkg/gitlab/check/clean_job"
+	gitlab "github.com/funtimecoding/soil/pkg/gitlab/example"
+	"github.com/funtimecoding/soil/pkg/gitlab/example/graph_query"
 )
 
 func main() {

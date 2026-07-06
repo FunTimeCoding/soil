@@ -1,6 +1,6 @@
 package service
 
-import "github.com/funtimecoding/go-library/pkg/tool/goclauded/timeline"
+import "github.com/funtimecoding/soil/pkg/tool/goclauded/timeline"
 
 func (s *Service) FetchVersions(
 	since string,

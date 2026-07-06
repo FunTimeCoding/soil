@@ -1,7 +1,7 @@
 package kubernetes
 
 import (
-	"github.com/funtimecoding/go-library/pkg/kubernetes/constant"
+	"github.com/funtimecoding/soil/pkg/kubernetes/constant"
 	"log"
 )
 

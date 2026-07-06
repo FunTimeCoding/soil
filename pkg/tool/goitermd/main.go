@@ -1,11 +1,11 @@
 package goitermd
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/tool/goitermd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goitermd/option"
-	web "github.com/funtimecoding/go-library/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/tool/goitermd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goitermd/option"
+	web "github.com/funtimecoding/soil/pkg/web/constant"
 )
 
 func Main(

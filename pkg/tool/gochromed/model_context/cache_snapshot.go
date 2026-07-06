@@ -1,6 +1,6 @@
 package model_context
 
-import "github.com/funtimecoding/go-library/pkg/chromium/snapshot"
+import "github.com/funtimecoding/soil/pkg/chromium/snapshot"
 
 func (s *Server) cacheSnapshot(
 	tabID string,

@@ -2,14 +2,14 @@ package silence
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/console/status/tag"
-	item "github.com/funtimecoding/go-library/pkg/monitor/item/constant"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert/advanced_option"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/check/silence/matcher"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/check/silence/option"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/constant"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/silence"
-	"github.com/funtimecoding/go-library/pkg/tool/common"
+	"github.com/funtimecoding/soil/pkg/console/status/tag"
+	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/advanced_option"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/check/silence/matcher"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/check/silence/option"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/silence"
+	"github.com/funtimecoding/soil/pkg/tool/common"
 	"time"
 )
 

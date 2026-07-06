@@ -1,9 +1,9 @@
 package goaudit
 
 import (
-	"github.com/funtimecoding/go-library/pkg/system/virtual_file_system"
-	"github.com/funtimecoding/go-library/pkg/tool/goaudit/option"
-	"github.com/funtimecoding/go-library/pkg/tool/goaudit/scan"
+	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/option"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
 	"path/filepath"
 )
 

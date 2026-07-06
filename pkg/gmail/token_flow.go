@@ -2,7 +2,7 @@ package gmail
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/system"
 	"golang.org/x/oauth2"
 )
 

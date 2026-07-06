@@ -4,8 +4,8 @@ package store
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/integration_test/store_tester"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration_test/store_tester"
 	"testing"
 )
 

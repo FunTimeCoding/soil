@@ -1,8 +1,8 @@
 package example
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/generative/openai/site"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/generative/openai/site"
 )
 
 func Send() {

@@ -1,6 +1,6 @@
 package opsgenie
 
-import "github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/user_map"
+import "github.com/funtimecoding/soil/pkg/atlassian/opsgenie/user_map"
 
 func (c *Client) UserMap() *user_map.Map {
 	if c.userMap == nil {

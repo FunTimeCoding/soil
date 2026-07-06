@@ -2,8 +2,8 @@ package netboot
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/system"
-	"github.com/funtimecoding/go-library/pkg/web"
+	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func Download(

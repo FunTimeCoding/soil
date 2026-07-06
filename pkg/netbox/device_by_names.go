@@ -2,8 +2,8 @@ package netbox
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/netbox/device"
-	"github.com/funtimecoding/go-library/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/netbox/device"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 )
 
 func (c *Client) DeviceByNames(n []string) (*device.Device, error) {

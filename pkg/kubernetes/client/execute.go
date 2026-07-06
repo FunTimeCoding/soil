@@ -1,9 +1,9 @@
 package client
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/kubernetes/client/executor"
-	"github.com/funtimecoding/go-library/pkg/kubernetes/constant"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client/executor"
+	"github.com/funtimecoding/soil/pkg/kubernetes/constant"
 	"io"
 	"k8s.io/api/core/v1"
 	"k8s.io/client-go/kubernetes/scheme"

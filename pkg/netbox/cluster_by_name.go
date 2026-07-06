@@ -2,7 +2,7 @@ package netbox
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/netbox/cluster"
+	"github.com/funtimecoding/soil/pkg/netbox/cluster"
 )
 
 func (c *Client) ClusterByName(n string) (*cluster.Cluster, error) {

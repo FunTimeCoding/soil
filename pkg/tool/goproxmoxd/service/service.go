@@ -1,9 +1,9 @@
 package service
 
 import (
-	"github.com/funtimecoding/go-library/pkg/proxmox"
-	"github.com/funtimecoding/go-library/pkg/ssh"
-	"github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/inventory"
+	"github.com/funtimecoding/soil/pkg/proxmox"
+	"github.com/funtimecoding/soil/pkg/ssh"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/inventory"
 	"sync"
 )
 

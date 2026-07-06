@@ -2,7 +2,7 @@ package mock_client
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/iterm/screen"
+	"github.com/funtimecoding/soil/pkg/iterm/screen"
 )
 
 func (c *Client) ReadScreen(identifier string) (*screen.Screen, error) {

@@ -1,6 +1,6 @@
 package item
 
-import "github.com/funtimecoding/go-library/pkg/monitor/constant"
+import "github.com/funtimecoding/soil/pkg/monitor/constant"
 
 func (i *Item) triageScore() float64 {
 	if i.Status == constant.Open && i.Assignee == "" {

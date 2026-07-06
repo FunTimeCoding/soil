@@ -1,9 +1,9 @@
 package thread
 
 import (
-	"github.com/funtimecoding/go-library/pkg/console/status/option"
-	"github.com/funtimecoding/go-library/pkg/strings"
-	"github.com/funtimecoding/go-library/pkg/text/multi_line"
+	"github.com/funtimecoding/soil/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/strings"
+	"github.com/funtimecoding/soil/pkg/text/multi_line"
 )
 
 func (t *Thread) Format(f *option.Format) string {

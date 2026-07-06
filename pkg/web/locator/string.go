@@ -2,8 +2,8 @@ package locator
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/strings/separator"
-	"github.com/funtimecoding/go-library/pkg/system/join"
+	"github.com/funtimecoding/soil/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/system/join"
 	"net"
 	"net/url"
 	"strconv"

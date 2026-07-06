@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/goansibled"
+import "github.com/funtimecoding/soil/pkg/tool/goansibled"
 
 var (
 	Version   string

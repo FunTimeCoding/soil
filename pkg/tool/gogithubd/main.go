@@ -1,11 +1,11 @@
 package gogithubd
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/system/environment"
-	"github.com/funtimecoding/go-library/pkg/tool/gogithubd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gogithubd/option"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/tool/gogithubd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gogithubd/option"
 	"time"
 )
 

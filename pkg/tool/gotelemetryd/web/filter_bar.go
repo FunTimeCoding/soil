@@ -2,8 +2,8 @@ package web
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/tool/gotelemetryd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gotelemetryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/store"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )

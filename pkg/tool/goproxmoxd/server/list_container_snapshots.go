@@ -3,9 +3,9 @@ package server
 import (
 	"context"
 	"errors"
-	"github.com/funtimecoding/go-library/pkg/errors/not_found"
-	"github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/convert"
-	"github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/generated/server"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/convert"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 )
 
 func (s *Server) ListContainerSnapshots(

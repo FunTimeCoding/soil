@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/god8y"
+import "github.com/funtimecoding/soil/pkg/tool/god8y"
 
 var (
 	Version   string

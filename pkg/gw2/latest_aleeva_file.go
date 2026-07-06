@@ -2,8 +2,8 @@ package gw2
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/gw2/constant"
-	timeLibrary "github.com/funtimecoding/go-library/pkg/time"
+	"github.com/funtimecoding/soil/pkg/gw2/constant"
+	timeLibrary "github.com/funtimecoding/soil/pkg/time"
 	"strings"
 	"time"
 )

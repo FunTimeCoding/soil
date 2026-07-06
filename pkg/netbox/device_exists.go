@@ -2,7 +2,7 @@ package netbox
 
 import (
 	"errors"
-	"github.com/funtimecoding/go-library/pkg/netbox/constant"
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
 )
 
 func (c *Client) DeviceExists(name string) (bool, error) {

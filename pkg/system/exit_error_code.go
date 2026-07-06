@@ -2,7 +2,7 @@ package system
 
 import (
 	"errors"
-	errorLibrary "github.com/funtimecoding/go-library/pkg/errors"
+	errorLibrary "github.com/funtimecoding/soil/pkg/errors"
 	"os/exec"
 )
 

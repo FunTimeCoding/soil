@@ -1,7 +1,7 @@
 package ollama
 
 import (
-	"github.com/funtimecoding/go-library/pkg/generative/ollama/constant"
+	"github.com/funtimecoding/soil/pkg/generative/ollama/constant"
 	"github.com/ollama/ollama/api"
 )
 

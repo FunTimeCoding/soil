@@ -1,7 +1,7 @@
 package environment
 
 import (
-	"github.com/funtimecoding/go-library/pkg/strings"
+	"github.com/funtimecoding/soil/pkg/strings"
 	"os"
 )
 

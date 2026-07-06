@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/funtimecoding/go-library/pkg/source/resolve"
+	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"go/ast"
 	"go/token"
 	"sort"

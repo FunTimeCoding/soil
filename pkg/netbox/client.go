@@ -2,7 +2,7 @@ package netbox
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/netbox/cache"
+	"github.com/funtimecoding/soil/pkg/netbox/cache"
 	"github.com/netbox-community/go-netbox/v4"
 )
 

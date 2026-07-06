@@ -1,6 +1,6 @@
 package alertmanager
 
-import "github.com/funtimecoding/go-library/pkg/prometheus/rule/rule_list"
+import "github.com/funtimecoding/soil/pkg/prometheus/rule/rule_list"
 
 func (c *Client) Rules() (*rule_list.List, error) {
 	if c.rules != nil {

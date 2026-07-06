@@ -1,9 +1,9 @@
 package main
 
 import (
-	discord "github.com/funtimecoding/go-library/pkg/chat/discord/example"
-	mattermost "github.com/funtimecoding/go-library/pkg/chat/mattermost/example"
-	telegram "github.com/funtimecoding/go-library/pkg/chat/telegram/example"
+	discord "github.com/funtimecoding/soil/pkg/chat/discord/example"
+	mattermost "github.com/funtimecoding/soil/pkg/chat/mattermost/example"
+	telegram "github.com/funtimecoding/soil/pkg/chat/telegram/example"
 )
 
 func main() {

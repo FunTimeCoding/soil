@@ -3,8 +3,8 @@ package service
 import (
 	"context"
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/strings/join"
-	"github.com/funtimecoding/go-library/pkg/tool/gokubernetesd/service/cluster"
+	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/cluster"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 

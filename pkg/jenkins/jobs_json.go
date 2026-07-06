@@ -3,8 +3,8 @@ package jenkins
 import (
 	"fmt"
 	"github.com/bndr/gojenkins"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/web"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func (c *Client) JobsJSON() {

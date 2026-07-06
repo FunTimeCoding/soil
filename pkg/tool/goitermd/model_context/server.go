@@ -1,8 +1,8 @@
 package model_context
 
 import (
-	"github.com/funtimecoding/go-library/pkg/face"
-	iterm "github.com/funtimecoding/go-library/pkg/tool/goitermd/face"
+	"github.com/funtimecoding/soil/pkg/face"
+	iterm "github.com/funtimecoding/soil/pkg/tool/goitermd/face"
 	"github.com/mark3labs/mcp-go/server"
 )
 

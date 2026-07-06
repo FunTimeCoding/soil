@@ -1,8 +1,8 @@
 package netbox
 
 import (
-	"github.com/funtimecoding/go-library/pkg/netbox/device_type"
-	"github.com/funtimecoding/go-library/pkg/netbox/manufacturer"
+	"github.com/funtimecoding/soil/pkg/netbox/device_type"
+	"github.com/funtimecoding/soil/pkg/netbox/manufacturer"
 	"github.com/netbox-community/go-netbox/v4"
 )
 

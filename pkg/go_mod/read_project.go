@@ -1,8 +1,8 @@
 package go_mod
 
 import (
-	"github.com/funtimecoding/go-library/pkg/go_mod/project"
-	"github.com/funtimecoding/go-library/pkg/system/join"
+	"github.com/funtimecoding/soil/pkg/go_mod/project"
+	"github.com/funtimecoding/soil/pkg/system/join"
 )
 
 func ReadProject(

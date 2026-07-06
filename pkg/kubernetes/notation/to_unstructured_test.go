@@ -1,7 +1,7 @@
 package notation
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/assert"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"testing"
 )

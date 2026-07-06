@@ -2,7 +2,7 @@ package token_check
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"io"
 	"net/http"
 )

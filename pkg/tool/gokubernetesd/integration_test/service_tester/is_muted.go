@@ -1,6 +1,6 @@
 package service_tester
 
-import "github.com/funtimecoding/go-library/pkg/errors"
+import "github.com/funtimecoding/soil/pkg/errors"
 
 func (t *Tester) IsMuted(
 	reason string,

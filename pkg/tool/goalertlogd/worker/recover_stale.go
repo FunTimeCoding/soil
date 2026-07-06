@@ -1,8 +1,8 @@
 package worker
 
 import (
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert/advanced_option"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/advanced_option"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
 )
 
 func (w *Worker) RecoverStale() {

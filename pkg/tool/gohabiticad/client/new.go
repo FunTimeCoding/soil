@@ -2,9 +2,9 @@ package client
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/tool/gohabiticad/generated/client"
-	"github.com/funtimecoding/go-library/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/generated/client"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
 func New(

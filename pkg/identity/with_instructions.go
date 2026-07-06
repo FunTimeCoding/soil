@@ -1,6 +1,6 @@
 package identity
 
-import "github.com/funtimecoding/go-library/pkg/identity/paragraph"
+import "github.com/funtimecoding/soil/pkg/identity/paragraph"
 
 func (t *Tool) WithInstructions(
 	v string,

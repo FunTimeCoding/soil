@@ -1,7 +1,7 @@
 package generic
 
 import (
-	"github.com/funtimecoding/go-library/pkg/prometheus/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"slices"
 )
 

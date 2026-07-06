@@ -1,8 +1,8 @@
 package prometheus
 
 import (
-	library "github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/prometheus/constant"
+	library "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 )
 
 func (c *Client) AllMetrics() []string {

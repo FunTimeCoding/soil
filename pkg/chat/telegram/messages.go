@@ -1,6 +1,6 @@
 package telegram
 
-import "github.com/funtimecoding/go-library/pkg/chat/telegram/message"
+import "github.com/funtimecoding/soil/pkg/chat/telegram/message"
 
 func (c *Client) Messages() []*message.Message {
 	var result []*message.Message

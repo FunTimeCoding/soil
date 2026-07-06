@@ -1,7 +1,7 @@
 package record
 
 import (
-	"github.com/funtimecoding/go-library/pkg/hetzner/zone"
+	"github.com/funtimecoding/soil/pkg/hetzner/zone"
 	"github.com/hetznercloud/hcloud-go/v2/hcloud"
 )
 

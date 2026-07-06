@@ -1,6 +1,6 @@
 package cron
 
-import "github.com/funtimecoding/go-library/pkg/habitica/statistic"
+import "github.com/funtimecoding/soil/pkg/habitica/statistic"
 
 type Cron struct {
 	RolledOver bool                 `json:"rolled_over"`

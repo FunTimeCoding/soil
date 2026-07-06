@@ -3,8 +3,8 @@ package model_context
 import (
 	"errors"
 	"github.com/andygrunwald/go-jira"
-	"github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/web/detail_error"
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/web/detail_error"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 

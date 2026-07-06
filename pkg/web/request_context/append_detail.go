@@ -1,8 +1,8 @@
 package request_context
 
 import (
-	"github.com/funtimecoding/go-library/pkg/strings/join"
-	"github.com/funtimecoding/go-library/pkg/text/multi_line"
+	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/text/multi_line"
 )
 
 func AppendDetail(

@@ -1,7 +1,7 @@
 package conversations
 
 import (
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/claude/message"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/message"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )

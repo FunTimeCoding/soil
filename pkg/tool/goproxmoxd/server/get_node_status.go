@@ -2,8 +2,8 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/convert"
-	"github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/generated/server"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/convert"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 )
 
 func (s *Server) GetNodeStatus(

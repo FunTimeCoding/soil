@@ -1,6 +1,6 @@
 package option
 
-import "github.com/funtimecoding/go-library/pkg/console/status/option/pair"
+import "github.com/funtimecoding/soil/pkg/console/status/option/pair"
 
 type Format struct {
 	UseColor bool

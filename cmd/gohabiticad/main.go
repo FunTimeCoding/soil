@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/gohabiticad"
+import "github.com/funtimecoding/soil/pkg/tool/gohabiticad"
 
 var (
 	Version   string

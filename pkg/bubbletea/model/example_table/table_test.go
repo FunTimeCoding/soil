@@ -2,7 +2,7 @@ package example_table
 
 import (
 	"charm.land/bubbles/v2/table"
-	"github.com/funtimecoding/go-library/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/assert"
 	"testing"
 )
 

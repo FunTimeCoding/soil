@@ -2,7 +2,7 @@ package client
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
 )
 
 type Client struct {

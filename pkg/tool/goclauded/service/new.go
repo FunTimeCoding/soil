@@ -1,13 +1,13 @@
 package service
 
 import (
-	library "github.com/funtimecoding/go-library/pkg/face"
-	"github.com/funtimecoding/go-library/pkg/log/logger"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/face"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/session_cache"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/store"
-	"github.com/funtimecoding/go-library/pkg/tool/gomemoryd/client"
-	queryd "github.com/funtimecoding/go-library/pkg/tool/goqueryd/face"
+	library "github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/face"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/session_cache"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/client"
+	queryd "github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 	"time"
 )
 

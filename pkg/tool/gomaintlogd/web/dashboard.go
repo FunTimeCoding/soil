@@ -1,7 +1,7 @@
 package web
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/gomaintlogd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents-htmx"
 	"maragu.dev/gomponents/html"

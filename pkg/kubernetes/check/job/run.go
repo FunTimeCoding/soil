@@ -1,9 +1,9 @@
 package job
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/kubernetes/client"
-	"github.com/funtimecoding/go-library/pkg/kubernetes/constant"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client"
+	"github.com/funtimecoding/soil/pkg/kubernetes/constant"
 )
 
 func Run() {

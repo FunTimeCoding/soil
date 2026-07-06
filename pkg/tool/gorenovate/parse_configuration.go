@@ -1,8 +1,8 @@
 package gorenovate
 
 import (
-	"github.com/funtimecoding/go-library/pkg/notation"
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/system"
 )
 
 func parseConfiguration() *Configuration {

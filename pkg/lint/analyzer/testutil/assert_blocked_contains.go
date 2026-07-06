@@ -1,7 +1,7 @@
 package testutil
 
 import (
-	"github.com/funtimecoding/go-library/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/lint/output"
 	"strings"
 	"testing"
 )

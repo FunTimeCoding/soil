@@ -1,6 +1,6 @@
 package report
 
-import "github.com/funtimecoding/go-library/pkg/notation"
+import "github.com/funtimecoding/soil/pkg/notation"
 
 func (r *Report) Encode() string {
 	r.Count = len(r.Items)

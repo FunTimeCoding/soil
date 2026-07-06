@@ -1,6 +1,6 @@
 package download
 
-import "github.com/funtimecoding/go-library/pkg/tool/godownload/download/option"
+import "github.com/funtimecoding/soil/pkg/tool/godownload/download/option"
 
 func validate(o *option.Download) {
 	if o.Host == "" {

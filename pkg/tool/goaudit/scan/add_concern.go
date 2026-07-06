@@ -1,6 +1,6 @@
 package scan
 
-import "github.com/funtimecoding/go-library/pkg/lint/concern"
+import "github.com/funtimecoding/soil/pkg/lint/concern"
 
 func (s *Service) addConcern(
 	key string,

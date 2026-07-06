@@ -1,9 +1,9 @@
 package log
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/system/writer"
-	"github.com/funtimecoding/go-library/pkg/tool/goprocessd/constant"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/system/writer"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/constant"
 	"os"
 	"strings"
 	"time"

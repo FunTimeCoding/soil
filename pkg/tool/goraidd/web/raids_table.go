@@ -2,9 +2,9 @@ package web
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/time"
-	"github.com/funtimecoding/go-library/pkg/tool/goraidd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goraidd/store"
+	"github.com/funtimecoding/soil/pkg/time"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/store"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )

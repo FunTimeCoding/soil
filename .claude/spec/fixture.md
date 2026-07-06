@@ -8,7 +8,7 @@ independent.
 ## Helpers
 
 ```go
-import "github.com/funtimecoding/go-library/pkg/assert/fixture"
+import "github.com/funtimecoding/soil/pkg/assert/fixture"
 
 fixture.Path("hypertext", "test.html")   // → absolute path string
 fixture.File("hypertext", "test.html")   // → *os.File (already opened)
@@ -50,9 +50,9 @@ one entry per fixture subdirectory whenever a new one is created.
 
 ```go
 import (
-    "github.com/funtimecoding/go-library/pkg/assert"
-    "github.com/funtimecoding/go-library/pkg/assert/fixture"
-    "github.com/funtimecoding/go-library/pkg/system/constant"
+    "github.com/funtimecoding/soil/pkg/assert"
+    "github.com/funtimecoding/soil/pkg/assert/fixture"
+    "github.com/funtimecoding/soil/pkg/system/constant"
     "testing"
 )
 

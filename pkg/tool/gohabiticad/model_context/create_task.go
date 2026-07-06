@@ -2,10 +2,10 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/generative/mark/response"
-	"github.com/funtimecoding/go-library/pkg/habitica/request"
-	"github.com/funtimecoding/go-library/pkg/tool/gohabiticad/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gohabiticad/convert"
+	"github.com/funtimecoding/soil/pkg/generative/mark/response"
+	"github.com/funtimecoding/soil/pkg/habitica/request"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/convert"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 

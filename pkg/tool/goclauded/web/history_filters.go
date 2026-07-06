@@ -1,7 +1,7 @@
 package web
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )

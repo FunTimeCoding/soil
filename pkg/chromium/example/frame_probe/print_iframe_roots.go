@@ -2,8 +2,8 @@ package frame_probe
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/chromium"
-	"github.com/funtimecoding/go-library/pkg/chromium/constant"
+	"github.com/funtimecoding/soil/pkg/chromium"
+	"github.com/funtimecoding/soil/pkg/chromium/constant"
 )
 
 func printIframeRoots(c *chromium.Client) {

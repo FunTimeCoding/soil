@@ -1,8 +1,8 @@
 package server
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/generated/server"
-	"github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/model_context/argument/update_machine"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/model_context/argument/update_machine"
 )
 
 func convertUpdateMachine(

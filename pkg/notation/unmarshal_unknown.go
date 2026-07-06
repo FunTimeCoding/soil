@@ -2,7 +2,7 @@ package notation
 
 import (
 	"encoding/json"
-	"github.com/funtimecoding/go-library/pkg/structs/constant"
+	"github.com/funtimecoding/soil/pkg/structs/constant"
 	"reflect"
 )
 

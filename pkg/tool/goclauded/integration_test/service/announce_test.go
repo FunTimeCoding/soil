@@ -3,10 +3,10 @@
 package service
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/event_query"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/integration_test/service_tester"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/event_query"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration_test/service_tester"
 	"testing"
 )
 

@@ -2,11 +2,11 @@ package option
 
 import (
 	"fmt"
-	library "github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/git/constant"
-	"github.com/funtimecoding/go-library/pkg/strings/join"
-	"github.com/funtimecoding/go-library/pkg/strings/split"
-	system "github.com/funtimecoding/go-library/pkg/system/constant"
+	library "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/git/constant"
+	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/strings/split"
+	system "github.com/funtimecoding/soil/pkg/system/constant"
 	"slices"
 )
 

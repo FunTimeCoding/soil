@@ -2,7 +2,7 @@ package formula
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/system/macos/brew/response"
+	"github.com/funtimecoding/soil/pkg/system/macos/brew/response"
 )
 
 func New(r *response.Formula) *Formula {

@@ -1,10 +1,10 @@
 package face
 
 import (
-	"github.com/funtimecoding/go-library/pkg/proxmox/node_status"
-	"github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/inventory"
-	"github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/model_context/argument/create_machine"
-	"github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/model_context/argument/update_machine"
+	"github.com/funtimecoding/soil/pkg/proxmox/node_status"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/inventory"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/model_context/argument/create_machine"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/model_context/argument/update_machine"
 	"github.com/luthermonson/go-proxmox"
 )
 

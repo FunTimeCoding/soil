@@ -1,10 +1,10 @@
 package godashboardd
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argocd"
-	"github.com/funtimecoding/go-library/pkg/argocd/constant"
-	"github.com/funtimecoding/go-library/pkg/system/environment"
-	"github.com/funtimecoding/go-library/pkg/tool/godashboardd/board"
+	"github.com/funtimecoding/soil/pkg/argocd"
+	"github.com/funtimecoding/soil/pkg/argocd/constant"
+	"github.com/funtimecoding/soil/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
 )
 
 func argocdClient(b *board.Board) *argocd.Client {

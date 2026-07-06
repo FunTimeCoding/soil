@@ -2,10 +2,10 @@ package loki
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/console/status"
-	"github.com/funtimecoding/go-library/pkg/console/status/option"
-	"github.com/funtimecoding/go-library/pkg/prometheus/loki/message"
-	"github.com/funtimecoding/go-library/pkg/time"
+	"github.com/funtimecoding/soil/pkg/console/status"
+	"github.com/funtimecoding/soil/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/prometheus/loki/message"
+	"github.com/funtimecoding/soil/pkg/time"
 )
 
 func printLog(

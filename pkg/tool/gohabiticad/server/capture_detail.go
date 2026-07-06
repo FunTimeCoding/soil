@@ -2,9 +2,9 @@ package server
 
 import (
 	"errors"
-	"github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gohabiticad/generated/server"
-	"github.com/funtimecoding/go-library/pkg/web/detail_error"
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/generated/server"
+	"github.com/funtimecoding/soil/pkg/web/detail_error"
 )
 
 func (s *Server) captureDetail(e error) *server.ErrorResponse {

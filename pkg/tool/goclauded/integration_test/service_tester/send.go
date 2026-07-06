@@ -1,6 +1,6 @@
 package service_tester
 
-import "github.com/funtimecoding/go-library/pkg/assert"
+import "github.com/funtimecoding/soil/pkg/assert"
 
 func (o *Tester) Send(
 	name string,

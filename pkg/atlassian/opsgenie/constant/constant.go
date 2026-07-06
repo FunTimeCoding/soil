@@ -1,9 +1,9 @@
 package constant
 
 import (
-	"github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/alert/detail"
-	"github.com/funtimecoding/go-library/pkg/console/status/option"
-	"github.com/funtimecoding/go-library/pkg/console/status/tag"
+	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/alert/detail"
+	"github.com/funtimecoding/soil/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/console/status/tag"
 )
 
 const (

@@ -2,9 +2,9 @@ package monitor
 
 import (
 	"charm.land/bubbles/v2/table"
-	"github.com/funtimecoding/go-library/pkg/bubbletea/model/monitor/toast"
-	"github.com/funtimecoding/go-library/pkg/monitor/gorilla/client"
-	"github.com/funtimecoding/go-library/pkg/monitor/item"
+	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/toast"
+	"github.com/funtimecoding/soil/pkg/monitor/gorilla/client"
+	"github.com/funtimecoding/soil/pkg/monitor/item"
 	"time"
 )
 

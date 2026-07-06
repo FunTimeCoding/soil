@@ -1,11 +1,11 @@
 package store
 
 import (
-	"github.com/funtimecoding/go-library/pkg/gw2"
-	"github.com/funtimecoding/go-library/pkg/gw2/constant"
-	"github.com/funtimecoding/go-library/pkg/gw2/log_manager/log"
-	"github.com/funtimecoding/go-library/pkg/raid"
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/gw2"
+	"github.com/funtimecoding/soil/pkg/gw2/constant"
+	"github.com/funtimecoding/soil/pkg/gw2/log_manager/log"
+	"github.com/funtimecoding/soil/pkg/raid"
+	"github.com/funtimecoding/soil/pkg/system"
 	"path/filepath"
 )
 

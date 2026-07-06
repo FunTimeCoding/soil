@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/goanalyze"
+import "github.com/funtimecoding/soil/pkg/tool/goanalyze"
 
 var (
 	Version   string

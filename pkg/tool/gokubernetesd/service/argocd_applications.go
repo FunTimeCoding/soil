@@ -3,9 +3,9 @@ package service
 import (
 	"context"
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/tool/gokubernetesd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gokubernetesd/service/resource"
-	"github.com/funtimecoding/go-library/pkg/tool/gokubernetesd/service/response"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/resource"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/response"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"sort"

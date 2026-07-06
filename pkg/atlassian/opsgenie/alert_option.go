@@ -1,6 +1,6 @@
 package opsgenie
 
-import "github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/alert/option"
+import "github.com/funtimecoding/soil/pkg/atlassian/opsgenie/alert/option"
 
 func (c *Client) AlertOption() *option.Alert {
 	return option.New(

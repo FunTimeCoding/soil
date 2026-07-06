@@ -1,6 +1,6 @@
 package face
 
-import "github.com/funtimecoding/go-library/pkg/tool/goqueryd/face/search_option"
+import "github.com/funtimecoding/soil/pkg/tool/goqueryd/face/search_option"
 
 type Searcher interface {
 	Search(

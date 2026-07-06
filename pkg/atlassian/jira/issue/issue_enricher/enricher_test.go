@@ -1,8 +1,8 @@
 package issue_enricher
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/issue"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
 	"testing"
 )
 

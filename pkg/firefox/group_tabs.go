@@ -2,7 +2,7 @@ package firefox
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/firefox/response"
+	"github.com/funtimecoding/soil/pkg/firefox/response"
 )
 
 func (c *Client) GroupTabs(

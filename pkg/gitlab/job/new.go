@@ -1,7 +1,7 @@
 package job
 
 import (
-	"github.com/funtimecoding/go-library/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/monitor/item/constant"
 	"gitlab.com/gitlab-org/api/client-go/v2"
 )
 

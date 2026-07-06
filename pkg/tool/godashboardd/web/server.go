@@ -1,12 +1,12 @@
 package web
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/godashboardd/board"
-	"github.com/funtimecoding/go-library/pkg/tool/godashboardd/service"
-	"github.com/funtimecoding/go-library/pkg/tool/godashboardd/store"
-	"github.com/funtimecoding/go-library/pkg/web/authorization/client"
-	"github.com/funtimecoding/go-library/pkg/web/palette"
-	"github.com/funtimecoding/go-library/pkg/web/view"
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/service"
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/store"
+	"github.com/funtimecoding/soil/pkg/web/authorization/client"
+	"github.com/funtimecoding/soil/pkg/web/palette"
+	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
 type Server struct {

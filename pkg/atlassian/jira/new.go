@@ -3,12 +3,12 @@ package jira
 import (
 	"context"
 	"github.com/andygrunwald/go-jira"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/basic"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/client"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/constant"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/service_client"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/basic"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/client"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/service_client"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
 func New(

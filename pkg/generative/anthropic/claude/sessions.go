@@ -1,7 +1,7 @@
 package claude
 
 import (
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/claude/session"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/session"
 	"path/filepath"
 	"sort"
 )

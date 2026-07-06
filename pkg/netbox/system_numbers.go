@@ -1,6 +1,6 @@
 package netbox
 
-import "github.com/funtimecoding/go-library/pkg/netbox/system_number"
+import "github.com/funtimecoding/soil/pkg/netbox/system_number"
 
 func (c *Client) SystemNumbers() ([]*system_number.Number, error) {
 	result, _, e := c.client.IpamAPI.IpamAsnsList(

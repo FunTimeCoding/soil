@@ -1,6 +1,6 @@
 package netbox
 
-import "github.com/funtimecoding/go-library/pkg/netbox/cluster_group"
+import "github.com/funtimecoding/soil/pkg/netbox/cluster_group"
 
 func (c *Client) ClusterGroups() ([]*cluster_group.Group, error) {
 	result, _, e := c.client.VirtualizationAPI.VirtualizationClusterGroupsList(

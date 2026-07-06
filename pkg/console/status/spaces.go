@@ -1,7 +1,7 @@
 package status
 
 import (
-	"github.com/funtimecoding/go-library/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/strings/separator"
 	"strings"
 )
 

@@ -2,9 +2,9 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/console/status/option"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/constant"
+	"github.com/funtimecoding/soil/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/errors/sentry"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/constant"
 )
 
 func Issue() {

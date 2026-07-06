@@ -1,9 +1,9 @@
 package example
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/chat/discord"
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/chat/discord"
+	"github.com/funtimecoding/soil/pkg/system"
 )
 
 func DeleteLoop() {

@@ -1,8 +1,8 @@
 package event
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/strings/upper"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/strings/upper"
 	events "k8s.io/api/events/v1"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"testing"

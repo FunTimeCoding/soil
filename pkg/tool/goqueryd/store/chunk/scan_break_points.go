@@ -1,8 +1,8 @@
 package chunk
 
 import (
-	"github.com/funtimecoding/go-library/pkg/strings/join"
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/store/chunk/break_pattern"
+	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/chunk/break_pattern"
 	"regexp"
 	"sort"
 )

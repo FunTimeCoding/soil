@@ -1,7 +1,7 @@
 package model_context
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/model_context/machine_detail"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/model_context/machine_detail"
 	"github.com/luthermonson/go-proxmox"
 )
 

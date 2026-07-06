@@ -1,11 +1,11 @@
 package netbox
 
 import (
-	"github.com/funtimecoding/go-library/pkg/netbox/device"
-	"github.com/funtimecoding/go-library/pkg/netbox/device_role"
-	"github.com/funtimecoding/go-library/pkg/netbox/device_type"
-	"github.com/funtimecoding/go-library/pkg/netbox/site"
-	"github.com/funtimecoding/go-library/pkg/netbox/tenant"
+	"github.com/funtimecoding/soil/pkg/netbox/device"
+	"github.com/funtimecoding/soil/pkg/netbox/device_role"
+	"github.com/funtimecoding/soil/pkg/netbox/device_type"
+	"github.com/funtimecoding/soil/pkg/netbox/site"
+	"github.com/funtimecoding/soil/pkg/netbox/tenant"
 	"github.com/netbox-community/go-netbox/v4"
 )
 

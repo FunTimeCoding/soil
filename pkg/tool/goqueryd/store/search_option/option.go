@@ -1,6 +1,6 @@
 package search_option
 
-import "github.com/funtimecoding/go-library/pkg/tool/goqueryd/rerank"
+import "github.com/funtimecoding/soil/pkg/tool/goqueryd/rerank"
 
 type Option struct {
 	Query      string

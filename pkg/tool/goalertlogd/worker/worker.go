@@ -1,9 +1,9 @@
 package worker
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/recovery"
-	"github.com/funtimecoding/go-library/pkg/log/logger"
-	"github.com/funtimecoding/go-library/pkg/tool/goalertlogd/store"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
+	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store"
 	"github.com/prometheus/client_golang/prometheus"
 	"sync/atomic"
 	"time"

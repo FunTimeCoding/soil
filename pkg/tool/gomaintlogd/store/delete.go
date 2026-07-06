@@ -2,7 +2,7 @@ package store
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/tool/gomaintlogd/store/entry"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store/entry"
 )
 
 func (s *Store) Delete(identifier uint) error {

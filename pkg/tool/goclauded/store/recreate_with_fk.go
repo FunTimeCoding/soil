@@ -2,7 +2,7 @@ package store
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"gorm.io/gorm"
 )
 

@@ -2,7 +2,7 @@ package client
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/tool/gomaintlogd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/generated/client"
 )
 
 type Client struct {

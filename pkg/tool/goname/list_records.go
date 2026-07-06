@@ -2,8 +2,8 @@ package goname
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/hetzner"
-	"github.com/funtimecoding/go-library/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/hetzner"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/spf13/cobra"
 )
 

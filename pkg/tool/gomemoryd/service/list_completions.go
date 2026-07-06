@@ -1,6 +1,6 @@
 package service
 
-import "github.com/funtimecoding/go-library/pkg/tool/goqueryd/face"
+import "github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 
 func (s *Service) ListCompletions() ([]face.SearchResult, error) {
 	outcome, e := s.lister.List(

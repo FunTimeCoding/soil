@@ -2,7 +2,7 @@ package server
 
 import (
 	"github.com/coder/websocket"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"golang.org/x/time/rate"
 	"log"
 	"net/http"

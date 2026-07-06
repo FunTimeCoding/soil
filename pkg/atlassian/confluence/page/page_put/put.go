@@ -1,6 +1,6 @@
 package page_put
 
-import "github.com/funtimecoding/go-library/pkg/atlassian/confluence/basic/response"
+import "github.com/funtimecoding/soil/pkg/atlassian/confluence/basic/response"
 
 type Put struct {
 	Identifier string           `json:"id"`

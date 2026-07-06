@@ -2,13 +2,13 @@ package alert
 
 import (
 	"github.com/docker/go-units"
-	"github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/constant"
-	"github.com/funtimecoding/go-library/pkg/console"
-	"github.com/funtimecoding/go-library/pkg/console/status"
-	"github.com/funtimecoding/go-library/pkg/console/status/option"
-	"github.com/funtimecoding/go-library/pkg/console/status/tag"
-	"github.com/funtimecoding/go-library/pkg/strings/join"
-	timeLibrary "github.com/funtimecoding/go-library/pkg/time"
+	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/constant"
+	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/console/status"
+	"github.com/funtimecoding/soil/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/console/status/tag"
+	"github.com/funtimecoding/soil/pkg/strings/join"
+	timeLibrary "github.com/funtimecoding/soil/pkg/time"
 	"github.com/opsgenie/opsgenie-go-sdk-v2/alert"
 	"time"
 )

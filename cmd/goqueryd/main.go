@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/goqueryd"
+import "github.com/funtimecoding/soil/pkg/tool/goqueryd"
 
 var (
 	Version   string

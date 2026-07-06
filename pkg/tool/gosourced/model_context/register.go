@@ -1,7 +1,7 @@
 package model_context
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/gosourced/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -44,7 +44,7 @@ func (s *Server) register() {
 				"package_path",
 				mcp.Required(),
 				mcp.Description(
-					"Full import path of the package, e.g. github.com/funtimecoding/go-library/pkg/lint.",
+					"Full import path of the package, e.g. github.com/funtimecoding/soil/pkg/lint.",
 				),
 			),
 			mcp.WithString(

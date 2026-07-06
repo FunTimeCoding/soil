@@ -2,11 +2,11 @@ package issue
 
 import (
 	"github.com/andygrunwald/go-jira"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/constant"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/field_map"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/issue/option"
-	webConstant "github.com/funtimecoding/go-library/pkg/web/constant"
-	"github.com/funtimecoding/go-library/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/field_map"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue/option"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
 func fixtureOption() *option.Issue {

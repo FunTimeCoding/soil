@@ -1,7 +1,7 @@
 package decide_action_prompt
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/assert"
 	"testing"
 )
 

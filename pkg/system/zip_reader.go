@@ -2,7 +2,7 @@ package system
 
 import (
 	"archive/zip"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 )
 
 func ZipReader(path string) *zip.ReadCloser {

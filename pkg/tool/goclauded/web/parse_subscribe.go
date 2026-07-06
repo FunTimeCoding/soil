@@ -1,7 +1,7 @@
 package web
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/web/subscription"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/web/subscription"
 	"net/http"
 	"strings"
 )

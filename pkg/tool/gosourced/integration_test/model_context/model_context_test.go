@@ -1,9 +1,9 @@
 package model_context
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/tool/gosourced/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gosourced/integration_test/model_context_tester"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/integration_test/model_context_tester"
 	"os"
 	"path/filepath"
 	"testing"

@@ -2,7 +2,7 @@ package struct_literal
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/lint"
+	"github.com/funtimecoding/soil/pkg/lint"
 	"go/ast"
 	"go/types"
 	"golang.org/x/tools/go/packages"

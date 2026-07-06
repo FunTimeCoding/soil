@@ -11,6 +11,6 @@ var banned = map[string]ban{
 	},
 	"testify": {
 		substring: true,
-		message:   `use "github.com/funtimecoding/go-library/pkg/assert" instead of testify`,
+		message:   `use "github.com/funtimecoding/soil/pkg/assert" instead of testify`,
 	},
 }

@@ -3,10 +3,10 @@ package monitor
 import (
 	"charm.land/bubbletea/v2"
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/bubbletea/model/monitor/fetch"
-	"github.com/funtimecoding/go-library/pkg/bubbletea/model/monitor/receive"
-	"github.com/funtimecoding/go-library/pkg/bubbletea/model/monitor/tick"
-	"github.com/funtimecoding/go-library/pkg/bubbletea/model/monitor/toast"
+	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/fetch"
+	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/receive"
+	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/tick"
+	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/toast"
 	"time"
 )
 

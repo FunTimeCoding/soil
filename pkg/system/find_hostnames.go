@@ -2,7 +2,7 @@ package system
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/constant"
 	"net"
 	"strings"
 )

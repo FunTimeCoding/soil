@@ -1,6 +1,6 @@
 package environment
 
-import "github.com/funtimecoding/go-library/pkg/strings/split"
+import "github.com/funtimecoding/soil/pkg/strings/split"
 
 func Slice(name string) []string {
 	var result []string

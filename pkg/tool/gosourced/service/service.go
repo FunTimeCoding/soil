@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/gosourced/inventory"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/inventory"
 	"sync"
 )
 

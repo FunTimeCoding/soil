@@ -2,8 +2,8 @@ package close_tab
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/chromium"
-	"github.com/funtimecoding/go-library/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/chromium"
+	"github.com/funtimecoding/soil/pkg/system/environment"
 )
 
 func Wake() {

@@ -1,8 +1,8 @@
 package habitica
 
 import (
-	"github.com/funtimecoding/go-library/pkg/habitica/score"
-	"github.com/funtimecoding/go-library/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/habitica/score"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 )
 
 func (c *Client) Score(

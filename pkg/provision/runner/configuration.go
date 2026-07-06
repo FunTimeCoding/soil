@@ -1,6 +1,6 @@
 package runner
 
-import "github.com/funtimecoding/go-library/pkg/face"
+import "github.com/funtimecoding/soil/pkg/face"
 
 type Configuration struct {
 	Repository    string

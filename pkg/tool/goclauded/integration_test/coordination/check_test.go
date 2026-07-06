@@ -4,10 +4,10 @@ package coordination
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/generated/client"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/integration_test/base"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration_test/base"
 	"github.com/google/uuid"
 	"testing"
 )

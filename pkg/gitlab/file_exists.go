@@ -2,8 +2,8 @@ package gitlab
 
 import (
 	"errors"
-	"github.com/funtimecoding/go-library/pkg/gitlab/constant"
-	"github.com/funtimecoding/go-library/pkg/gitlab/project"
+	"github.com/funtimecoding/soil/pkg/gitlab/constant"
+	"github.com/funtimecoding/soil/pkg/gitlab/project"
 )
 
 func (c *Client) FileExists(

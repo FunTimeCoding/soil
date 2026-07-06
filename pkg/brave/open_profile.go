@@ -2,9 +2,9 @@ package brave
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/brave/constant"
-	"github.com/funtimecoding/go-library/pkg/brave/helper"
-	"github.com/funtimecoding/go-library/pkg/system/run"
+	"github.com/funtimecoding/soil/pkg/brave/constant"
+	"github.com/funtimecoding/soil/pkg/brave/helper"
+	"github.com/funtimecoding/soil/pkg/system/run"
 )
 
 func OpenProfile(profile string) {

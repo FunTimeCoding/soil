@@ -1,10 +1,10 @@
 package confluence
 
 import (
-	"github.com/funtimecoding/go-library/pkg/atlassian/confluence/basic/response"
-	"github.com/funtimecoding/go-library/pkg/atlassian/confluence/constant"
-	"github.com/funtimecoding/go-library/pkg/atlassian/confluence/user"
-	"github.com/funtimecoding/go-library/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/atlassian/confluence/basic/response"
+	"github.com/funtimecoding/soil/pkg/atlassian/confluence/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/confluence/user"
+	"github.com/funtimecoding/soil/pkg/notation"
 )
 
 func (c *Client) User() (*user.User, error) {

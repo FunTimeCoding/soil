@@ -1,6 +1,6 @@
 package request_context
 
-import "github.com/funtimecoding/go-library/pkg/web/constant"
+import "github.com/funtimecoding/soil/pkg/web/constant"
 
 func (c *Context) SetLastLocation() {
 	// Ignore if the referer header is set, favicon.ico is a common example.

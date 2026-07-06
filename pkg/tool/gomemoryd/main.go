@@ -1,12 +1,12 @@
 package gomemoryd
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/tool/gomemoryd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gomemoryd/option"
-	"github.com/funtimecoding/go-library/pkg/tool/gomemoryd/store"
-	web "github.com/funtimecoding/go-library/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/option"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+	web "github.com/funtimecoding/soil/pkg/web/constant"
 )
 
 func Main(

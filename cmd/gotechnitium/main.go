@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/gotechnitium"
+import "github.com/funtimecoding/soil/pkg/tool/gotechnitium"
 
 var (
 	Version   string

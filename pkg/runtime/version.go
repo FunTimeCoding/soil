@@ -2,7 +2,7 @@ package runtime
 
 import (
 	"github.com/coreos/go-semver/semver"
-	"github.com/funtimecoding/go-library/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/constant"
 	"runtime"
 	"strings"
 )

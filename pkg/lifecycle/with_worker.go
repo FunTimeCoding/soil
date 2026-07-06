@@ -1,8 +1,8 @@
 package lifecycle
 
 import (
-	"github.com/funtimecoding/go-library/pkg/face"
-	"github.com/funtimecoding/go-library/pkg/lifecycle/worker"
+	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/lifecycle/worker"
 )
 
 func WithWorker(w face.Worker) Option {

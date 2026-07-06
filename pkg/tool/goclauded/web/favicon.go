@@ -2,8 +2,8 @@ package web
 
 import (
 	_ "embed"
-	"github.com/funtimecoding/go-library/pkg/web"
-	"github.com/funtimecoding/go-library/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
 

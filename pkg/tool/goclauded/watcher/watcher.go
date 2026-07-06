@@ -2,9 +2,9 @@ package watcher
 
 import (
 	"github.com/fsnotify/fsnotify"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/recovery"
-	"github.com/funtimecoding/go-library/pkg/log/logger"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/service"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
+	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service"
 )
 
 type Watcher struct {

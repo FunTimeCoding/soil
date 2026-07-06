@@ -1,6 +1,6 @@
 package fixture
 
-import "github.com/funtimecoding/go-library/pkg/system"
+import "github.com/funtimecoding/soil/pkg/system"
 
 func Read(path ...string) string {
 	f := File(path...)

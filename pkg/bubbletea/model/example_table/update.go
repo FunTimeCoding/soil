@@ -2,7 +2,7 @@ package example_table
 
 import (
 	"charm.land/bubbletea/v2"
-	"github.com/funtimecoding/go-library/pkg/bubbletea/key"
+	"github.com/funtimecoding/soil/pkg/bubbletea/key"
 )
 
 func (m *Model) Update(s tea.Msg) (tea.Model, tea.Cmd) {

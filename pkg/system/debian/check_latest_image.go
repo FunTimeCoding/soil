@@ -2,11 +2,11 @@ package debian
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/strings"
-	"github.com/funtimecoding/go-library/pkg/system/debian/constant"
-	"github.com/funtimecoding/go-library/pkg/system/debian/image"
-	"github.com/funtimecoding/go-library/pkg/web"
-	"github.com/funtimecoding/go-library/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/strings"
+	"github.com/funtimecoding/soil/pkg/system/debian/constant"
+	"github.com/funtimecoding/soil/pkg/system/debian/image"
+	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
 func CheckLatestImage() {

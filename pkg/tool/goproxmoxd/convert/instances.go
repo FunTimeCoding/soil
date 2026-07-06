@@ -1,6 +1,6 @@
 package convert
 
-import "github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/inventory"
+import "github.com/funtimecoding/soil/pkg/tool/goproxmoxd/inventory"
 
 func Instances(
 	v []inventory.Instance,

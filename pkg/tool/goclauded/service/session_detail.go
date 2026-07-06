@@ -1,6 +1,6 @@
 package service
 
-import "github.com/funtimecoding/go-library/pkg/tool/goclauded/service/session_detail"
+import "github.com/funtimecoding/soil/pkg/tool/goclauded/service/session_detail"
 
 func (s *Service) SessionDetail(query string) (*session_detail.Detail, error) {
 	r, e := s.store.ResolveSessionIdentifier(query)

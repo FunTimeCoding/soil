@@ -2,7 +2,7 @@ package base64
 
 import (
 	"encoding/base64"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 )
 
 func Decode(s string) string {

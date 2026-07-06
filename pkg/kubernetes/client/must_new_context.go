@@ -1,6 +1,6 @@
 package client
 
-import "github.com/funtimecoding/go-library/pkg/errors"
+import "github.com/funtimecoding/soil/pkg/errors"
 
 func MustNewContext(cluster string) *Client {
 	result, e := NewContext(cluster)

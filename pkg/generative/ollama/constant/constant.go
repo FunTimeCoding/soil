@@ -1,6 +1,6 @@
 package constant
 
-import "github.com/funtimecoding/go-library/pkg/web/constant"
+import "github.com/funtimecoding/soil/pkg/web/constant"
 
 const (
 	HostEnvironment string = "OLLAMA_HOST"

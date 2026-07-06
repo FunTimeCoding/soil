@@ -1,8 +1,8 @@
 package read
 
 import (
-	"github.com/funtimecoding/go-library/pkg/console/status/option"
-	"github.com/funtimecoding/go-library/pkg/netbox"
+	"github.com/funtimecoding/soil/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/netbox"
 )
 
 func readCore(

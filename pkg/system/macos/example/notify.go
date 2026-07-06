@@ -1,8 +1,8 @@
 package example
 
 import (
-	"github.com/funtimecoding/go-library/pkg/strings/upper"
-	"github.com/funtimecoding/go-library/pkg/system/macos"
+	"github.com/funtimecoding/soil/pkg/strings/upper"
+	"github.com/funtimecoding/soil/pkg/system/macos"
 )
 
 func Notify() {

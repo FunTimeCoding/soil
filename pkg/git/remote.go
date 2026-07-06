@@ -1,8 +1,8 @@
 package git
 
 import (
-	"github.com/funtimecoding/go-library/pkg/git/remote"
-	"github.com/funtimecoding/go-library/pkg/git/remote/provider_map"
+	"github.com/funtimecoding/soil/pkg/git/remote"
+	"github.com/funtimecoding/soil/pkg/git/remote/provider_map"
 )
 
 func Remote(

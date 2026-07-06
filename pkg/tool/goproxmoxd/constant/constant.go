@@ -2,8 +2,8 @@ package constant
 
 import (
 	"errors"
-	"github.com/funtimecoding/go-library/pkg/identity"
-	"github.com/funtimecoding/go-library/pkg/identity/paragraph"
+	"github.com/funtimecoding/soil/pkg/identity"
+	"github.com/funtimecoding/soil/pkg/identity/paragraph"
 )
 
 var ErrorCDROMCloudInitConflict = errors.New(

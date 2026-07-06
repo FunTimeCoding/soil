@@ -2,11 +2,11 @@ package clean_job
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/console"
-	"github.com/funtimecoding/go-library/pkg/console/status/option"
-	"github.com/funtimecoding/go-library/pkg/gitlab"
-	"github.com/funtimecoding/go-library/pkg/gitlab/job"
-	"github.com/funtimecoding/go-library/pkg/gitlab/runner"
+	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/gitlab"
+	"github.com/funtimecoding/soil/pkg/gitlab/job"
+	"github.com/funtimecoding/soil/pkg/gitlab/runner"
 )
 
 func RunnerWay(

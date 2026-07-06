@@ -1,8 +1,8 @@
 package watcher
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/recovery"
-	"github.com/funtimecoding/go-library/pkg/tool/gosproutd/service"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
+	"github.com/funtimecoding/soil/pkg/tool/gosproutd/service"
 )
 
 type Watcher struct {

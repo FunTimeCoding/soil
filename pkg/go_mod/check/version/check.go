@@ -2,9 +2,9 @@ package version
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/go_mod"
-	"github.com/funtimecoding/go-library/pkg/go_mod/check/version/option"
-	"github.com/funtimecoding/go-library/pkg/monitor"
+	"github.com/funtimecoding/soil/pkg/go_mod"
+	"github.com/funtimecoding/soil/pkg/go_mod/check/version/option"
+	"github.com/funtimecoding/soil/pkg/monitor"
 )
 
 func Check(o *option.Version) {

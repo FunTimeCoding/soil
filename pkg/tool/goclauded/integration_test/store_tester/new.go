@@ -1,8 +1,8 @@
 package store_tester
 
 import (
-	"github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/store"
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store"
 	"path/filepath"
 	"testing"
 	"time"

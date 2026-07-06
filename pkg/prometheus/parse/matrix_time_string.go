@@ -1,7 +1,7 @@
 package parse
 
 import (
-	"github.com/funtimecoding/go-library/pkg/prometheus/result/time_string"
+	"github.com/funtimecoding/soil/pkg/prometheus/result/time_string"
 	"github.com/prometheus/common/model"
 	"log"
 )

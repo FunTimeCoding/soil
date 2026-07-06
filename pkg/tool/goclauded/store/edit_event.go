@@ -2,9 +2,9 @@ package store
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/relational"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/store/event"
+	"github.com/funtimecoding/soil/pkg/relational"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/event"
 )
 
 func (s *Store) EditEvent(

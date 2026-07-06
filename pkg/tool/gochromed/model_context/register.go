@@ -1,7 +1,7 @@
 package model_context
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/gochromed/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gochromed/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 

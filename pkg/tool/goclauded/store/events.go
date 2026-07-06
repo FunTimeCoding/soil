@@ -1,8 +1,8 @@
 package store
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/event_query"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/store/event"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/event_query"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/event"
 )
 
 func (s *Store) Events(q *event_query.Query) ([]event.Event, error) {

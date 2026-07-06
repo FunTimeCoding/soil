@@ -1,9 +1,9 @@
 package jira
 
 import (
-	"github.com/funtimecoding/go-library/pkg/atlassian/constant"
-	jira "github.com/funtimecoding/go-library/pkg/atlassian/jira/constant"
-	"github.com/funtimecoding/go-library/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
+	jira "github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
+	"github.com/funtimecoding/soil/pkg/system/environment"
 )
 
 func NewEnvironment(o ...Option) *Client {

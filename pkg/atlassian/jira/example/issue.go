@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"github.com/andygrunwald/go-jira"
 	"github.com/davecgh/go-spew/spew"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/constant"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/issue"
-	"github.com/funtimecoding/go-library/pkg/tool/common"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
+	"github.com/funtimecoding/soil/pkg/tool/common"
 )
 
 func Issue() {

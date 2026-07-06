@@ -1,8 +1,8 @@
 package notation
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/notation/fixture"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/notation/fixture"
 	"testing"
 )
 

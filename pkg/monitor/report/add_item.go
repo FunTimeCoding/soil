@@ -1,9 +1,9 @@
 package report
 
 import (
-	"github.com/funtimecoding/go-library/pkg/monitor/collector"
-	"github.com/funtimecoding/go-library/pkg/monitor/constant"
-	"github.com/funtimecoding/go-library/pkg/monitor/item"
+	"github.com/funtimecoding/soil/pkg/monitor/collector"
+	"github.com/funtimecoding/soil/pkg/monitor/constant"
+	"github.com/funtimecoding/soil/pkg/monitor/item"
 	"time"
 )
 

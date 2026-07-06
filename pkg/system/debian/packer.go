@@ -2,16 +2,16 @@ package debian
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/provision/packer"
-	"github.com/funtimecoding/go-library/pkg/provision/packer/build"
-	"github.com/funtimecoding/go-library/pkg/provision/packer/constant"
-	"github.com/funtimecoding/go-library/pkg/system"
-	systemConstant "github.com/funtimecoding/go-library/pkg/system/constant"
-	"github.com/funtimecoding/go-library/pkg/system/debian/image"
-	"github.com/funtimecoding/go-library/pkg/system/debian/image/checksum"
-	"github.com/funtimecoding/go-library/pkg/system/debian/preseed"
-	"github.com/funtimecoding/go-library/pkg/system/debian/release"
-	"github.com/funtimecoding/go-library/pkg/system/join"
+	"github.com/funtimecoding/soil/pkg/provision/packer"
+	"github.com/funtimecoding/soil/pkg/provision/packer/build"
+	"github.com/funtimecoding/soil/pkg/provision/packer/constant"
+	"github.com/funtimecoding/soil/pkg/system"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/system/debian/image"
+	"github.com/funtimecoding/soil/pkg/system/debian/image/checksum"
+	"github.com/funtimecoding/soil/pkg/system/debian/preseed"
+	"github.com/funtimecoding/soil/pkg/system/debian/release"
+	"github.com/funtimecoding/soil/pkg/system/join"
 	"log"
 )
 

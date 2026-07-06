@@ -2,7 +2,7 @@ package system
 
 import (
 	"archive/tar"
-	"github.com/funtimecoding/go-library/pkg/integers64"
+	"github.com/funtimecoding/soil/pkg/integers64"
 	"os"
 )
 

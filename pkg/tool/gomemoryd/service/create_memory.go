@@ -2,8 +2,8 @@ package service
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/tool/gomemoryd/store"
-	"github.com/funtimecoding/go-library/pkg/tool/gomemoryd/store/save_option"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/save_option"
 )
 
 func (s *Service) CreateMemory(

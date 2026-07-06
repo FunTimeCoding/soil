@@ -1,7 +1,7 @@
 package example
 
 import (
-	"github.com/funtimecoding/go-library/pkg/system/debian"
+	"github.com/funtimecoding/soil/pkg/system/debian"
 	"runtime"
 )
 

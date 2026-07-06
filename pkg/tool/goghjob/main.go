@@ -1,11 +1,11 @@
 package goghjob
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/github/check/job"
-	"github.com/funtimecoding/go-library/pkg/github/check/job/option"
-	"github.com/funtimecoding/go-library/pkg/tool/goghjob/constant"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/github/check/job"
+	"github.com/funtimecoding/soil/pkg/github/check/job/option"
+	"github.com/funtimecoding/soil/pkg/tool/goghjob/constant"
 )
 
 func Main(

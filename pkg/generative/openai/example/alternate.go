@@ -3,9 +3,9 @@ package example
 import (
 	"context"
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/generative/openai/constant"
-	"github.com/funtimecoding/go-library/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/generative/openai/constant"
+	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/sashabaranov/go-openai"
 )
 

@@ -1,10 +1,10 @@
 package monitor
 
 import (
-	"github.com/funtimecoding/go-library/pkg/chat/mattermost"
-	"github.com/funtimecoding/go-library/pkg/face"
-	"github.com/funtimecoding/go-library/pkg/log/logger"
-	"github.com/funtimecoding/go-library/pkg/tool/gomattermostd/monitor/scheduler"
+	"github.com/funtimecoding/soil/pkg/chat/mattermost"
+	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/monitor/scheduler"
 	"github.com/mattermost/mattermost/server/public/model"
 	"sync"
 )

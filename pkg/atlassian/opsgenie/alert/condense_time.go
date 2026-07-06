@@ -3,7 +3,7 @@ package alert
 import (
 	"fmt"
 	"github.com/docker/go-units"
-	library "github.com/funtimecoding/go-library/pkg/time"
+	library "github.com/funtimecoding/soil/pkg/time"
 	"time"
 )
 

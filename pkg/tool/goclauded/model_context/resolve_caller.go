@@ -2,9 +2,9 @@ package model_context
 
 import (
 	"context"
-	telemetry "github.com/funtimecoding/go-library/pkg/telemetry/constant"
-	"github.com/funtimecoding/go-library/pkg/telemetry/record"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/constant"
+	telemetry "github.com/funtimecoding/soil/pkg/telemetry/constant"
+	"github.com/funtimecoding/soil/pkg/telemetry/record"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/mark3labs/mcp-go/server"
 )
 

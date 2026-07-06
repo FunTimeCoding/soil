@@ -1,7 +1,7 @@
 package model_context
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goalertmanagerd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 

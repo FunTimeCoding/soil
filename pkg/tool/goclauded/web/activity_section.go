@@ -1,8 +1,8 @@
 package web
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/service/argument"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/argument"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )

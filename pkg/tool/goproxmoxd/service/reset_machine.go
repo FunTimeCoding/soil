@@ -1,6 +1,6 @@
 package service
 
-import "github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/face"
+import "github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
 
 func (s *Service) ResetMachine(
 	c face.ProxmoxClient,

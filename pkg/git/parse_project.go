@@ -1,9 +1,9 @@
 package git
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors/unexpected"
-	"github.com/funtimecoding/go-library/pkg/git/constant"
-	"github.com/funtimecoding/go-library/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/errors/unexpected"
+	"github.com/funtimecoding/soil/pkg/git/constant"
+	"github.com/funtimecoding/soil/pkg/strings/separator"
 	"strings"
 )
 

@@ -2,8 +2,8 @@ package service_client
 
 import (
 	"github.com/ctreminiom/go-atlassian/v2/jira/sm"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
 func New(

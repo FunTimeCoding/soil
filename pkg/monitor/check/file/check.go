@@ -2,11 +2,11 @@ package file
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/monitor/check/file/option"
-	"github.com/funtimecoding/go-library/pkg/monitor/constant"
-	item "github.com/funtimecoding/go-library/pkg/monitor/item/constant"
-	"github.com/funtimecoding/go-library/pkg/monitor/report"
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/monitor/check/file/option"
+	"github.com/funtimecoding/soil/pkg/monitor/constant"
+	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/monitor/report"
+	"github.com/funtimecoding/soil/pkg/system"
 	"time"
 )
 

@@ -3,7 +3,7 @@ package chromium
 import (
 	"context"
 	"github.com/chromedp/chromedp"
-	"github.com/funtimecoding/go-library/pkg/chromium/constant"
+	"github.com/funtimecoding/soil/pkg/chromium/constant"
 )
 
 func (c *Client) Navigate(

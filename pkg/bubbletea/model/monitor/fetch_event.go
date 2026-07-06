@@ -1,7 +1,7 @@
 package monitor
 
 import (
-	"github.com/funtimecoding/go-library/pkg/bubbletea/model/monitor/fetch"
+	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/fetch"
 	"time"
 )
 

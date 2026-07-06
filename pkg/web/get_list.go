@@ -1,7 +1,7 @@
 package web
 
 import (
-	"github.com/funtimecoding/go-library/pkg/strings/split"
+	"github.com/funtimecoding/soil/pkg/strings/split"
 	"net/http"
 )
 

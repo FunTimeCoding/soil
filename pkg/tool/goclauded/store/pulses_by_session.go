@@ -1,6 +1,6 @@
 package store
 
-import "github.com/funtimecoding/go-library/pkg/tool/goclauded/store/pulse"
+import "github.com/funtimecoding/soil/pkg/tool/goclauded/store/pulse"
 
 func (s *Store) PulsesBySession(sessionIdentifier string) ([]pulse.Pulse, error) {
 	var result []pulse.Pulse

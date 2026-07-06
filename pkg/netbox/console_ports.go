@@ -1,8 +1,8 @@
 package netbox
 
 import (
-	"github.com/funtimecoding/go-library/pkg/netbox/console_port"
-	"github.com/funtimecoding/go-library/pkg/netbox/constant"
+	"github.com/funtimecoding/soil/pkg/netbox/console_port"
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
 )
 
 func (c *Client) ConsolePorts() ([]*console_port.Port, error) {

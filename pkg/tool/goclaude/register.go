@@ -3,10 +3,10 @@ package goclaude
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/system/writer"
-	"github.com/funtimecoding/go-library/pkg/tool/goclaude/command_context"
-	"github.com/funtimecoding/go-library/pkg/tool/goclaude/constant"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/system/writer"
+	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
+	"github.com/funtimecoding/soil/pkg/tool/goclaude/constant"
 	"github.com/spf13/cobra"
 	"os"
 )

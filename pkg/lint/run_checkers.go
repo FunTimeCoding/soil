@@ -2,8 +2,8 @@ package lint
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/lint/output"
-	"github.com/funtimecoding/go-library/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"strings"
 )
 

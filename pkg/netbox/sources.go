@@ -1,6 +1,6 @@
 package netbox
 
-import "github.com/funtimecoding/go-library/pkg/netbox/source"
+import "github.com/funtimecoding/soil/pkg/netbox/source"
 
 func (c *Client) Sources() ([]*source.Source, error) {
 	result, _, e := c.client.CoreAPI.CoreDataSourcesList(

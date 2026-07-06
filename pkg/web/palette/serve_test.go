@@ -1,7 +1,7 @@
 package palette
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/assert"
 	"net/http"
 	"net/http/httptest"
 	"testing"

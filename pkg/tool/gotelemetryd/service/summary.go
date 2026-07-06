@@ -1,6 +1,6 @@
 package service
 
-import "github.com/funtimecoding/go-library/pkg/tool/gotelemetryd/store"
+import "github.com/funtimecoding/soil/pkg/tool/gotelemetryd/store"
 
 func (s *Service) Summary(
 	since string,

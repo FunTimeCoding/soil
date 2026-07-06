@@ -1,6 +1,6 @@
 package server
 
-import "github.com/funtimecoding/go-library/pkg/strings/join"
+import "github.com/funtimecoding/soil/pkg/strings/join"
 
 func (s *Server) handleList() string {
 	names := make([]string, len(s.processes))

@@ -2,15 +2,15 @@ package goraidparsed
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/face"
-	"github.com/funtimecoding/go-library/pkg/lifecycle"
-	lifecycleServer "github.com/funtimecoding/go-library/pkg/lifecycle/server"
-	"github.com/funtimecoding/go-library/pkg/log/logger"
-	"github.com/funtimecoding/go-library/pkg/telemetry"
-	generated "github.com/funtimecoding/go-library/pkg/tool/goraidparsed/generated/server"
-	"github.com/funtimecoding/go-library/pkg/tool/goraidparsed/option"
-	"github.com/funtimecoding/go-library/pkg/tool/goraidparsed/server"
-	"github.com/funtimecoding/go-library/pkg/web"
+	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/lifecycle"
+	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
+	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/telemetry"
+	generated "github.com/funtimecoding/soil/pkg/tool/goraidparsed/generated/server"
+	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/option"
+	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/server"
+	"github.com/funtimecoding/soil/pkg/web"
 	"net/http"
 )
 

@@ -1,8 +1,8 @@
 package generic
 
 import (
-	"github.com/funtimecoding/go-library/pkg/prometheus/result/metric"
-	"github.com/funtimecoding/go-library/pkg/strings"
+	"github.com/funtimecoding/soil/pkg/prometheus/result/metric"
+	"github.com/funtimecoding/soil/pkg/strings"
 )
 
 func RelevantLabels(

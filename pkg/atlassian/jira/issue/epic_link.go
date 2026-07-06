@@ -1,6 +1,6 @@
 package issue
 
-import "github.com/funtimecoding/go-library/pkg/atlassian/jira/constant"
+import "github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
 
 func (i *Issue) EpicLink() string {
 	if i.Type != EpicType {

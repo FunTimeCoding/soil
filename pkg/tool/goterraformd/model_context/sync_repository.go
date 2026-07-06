@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/provision/model_context"
+	"github.com/funtimecoding/soil/pkg/provision/model_context"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 

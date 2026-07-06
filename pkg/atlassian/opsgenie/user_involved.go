@@ -1,8 +1,8 @@
 package opsgenie
 
 import (
-	"github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/override"
-	"github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/rotation"
+	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/override"
+	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/rotation"
 )
 
 func UserInvolved(

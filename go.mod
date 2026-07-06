@@ -1,4 +1,4 @@
-module github.com/funtimecoding/go-library
+module github.com/funtimecoding/soil
 
 go 1.26.4
 

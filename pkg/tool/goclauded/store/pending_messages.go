@@ -1,6 +1,6 @@
 package store
 
-import "github.com/funtimecoding/go-library/pkg/tool/goclauded/store/message"
+import "github.com/funtimecoding/soil/pkg/tool/goclauded/store/message"
 
 func (s *Store) PendingMessages(name string) ([]message.Message, error) {
 	var result []message.Message

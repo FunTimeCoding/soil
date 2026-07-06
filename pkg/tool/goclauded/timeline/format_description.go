@@ -2,7 +2,7 @@ package timeline
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 )
 
 func FormatDescription(e *Entry) string {

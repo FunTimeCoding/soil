@@ -2,8 +2,8 @@ package goc
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/strings/upper"
-	"github.com/funtimecoding/go-library/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/strings/upper"
+	"github.com/funtimecoding/soil/pkg/system/environment"
 	"testing"
 )
 

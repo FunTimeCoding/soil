@@ -1,7 +1,7 @@
 package loki
 
 import (
-	"github.com/funtimecoding/go-library/pkg/prometheus/loki/message"
+	"github.com/funtimecoding/soil/pkg/prometheus/loki/message"
 	"time"
 )
 

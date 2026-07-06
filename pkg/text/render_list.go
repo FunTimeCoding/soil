@@ -1,6 +1,6 @@
 package text
 
-import "github.com/funtimecoding/go-library/pkg/text/multi_line"
+import "github.com/funtimecoding/soil/pkg/text/multi_line"
 
 func RenderList(
 	title string,

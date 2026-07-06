@@ -1,7 +1,7 @@
 package telegram
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 

@@ -1,11 +1,11 @@
 package chromium
 
 import (
-	"github.com/funtimecoding/go-library/pkg/chromium/constant"
-	"github.com/funtimecoding/go-library/pkg/chromium/tab"
-	"github.com/funtimecoding/go-library/pkg/notation"
-	"github.com/funtimecoding/go-library/pkg/web"
-	"github.com/funtimecoding/go-library/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/chromium/constant"
+	"github.com/funtimecoding/soil/pkg/chromium/tab"
+	"github.com/funtimecoding/soil/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
 func (c *Client) Tabs() []*tab.Tab {

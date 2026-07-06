@@ -2,8 +2,8 @@ package mock_client
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/iterm/screen"
-	"github.com/funtimecoding/go-library/pkg/iterm/session"
+	"github.com/funtimecoding/soil/pkg/iterm/screen"
+	"github.com/funtimecoding/soil/pkg/iterm/session"
 )
 
 func (c *Client) CreateTab() (*session.Session, error) {

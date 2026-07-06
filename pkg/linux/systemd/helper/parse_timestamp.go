@@ -1,7 +1,7 @@
 package helper
 
 import (
-	"github.com/funtimecoding/go-library/pkg/linux/systemd/constant"
+	"github.com/funtimecoding/soil/pkg/linux/systemd/constant"
 	"time"
 )
 

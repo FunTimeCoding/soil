@@ -2,9 +2,9 @@ package model_context
 
 import (
 	"errors"
-	"github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/errors/validation"
-	"github.com/funtimecoding/go-library/pkg/generative/mark/response"
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 

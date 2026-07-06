@@ -2,7 +2,7 @@ package gitlab
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/gitlab/project"
+	"github.com/funtimecoding/soil/pkg/gitlab/project"
 	"strings"
 )
 

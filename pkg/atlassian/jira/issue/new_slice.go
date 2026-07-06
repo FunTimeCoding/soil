@@ -2,7 +2,7 @@ package issue
 
 import (
 	"github.com/andygrunwald/go-jira"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/issue/option"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue/option"
 )
 
 func NewSlice(

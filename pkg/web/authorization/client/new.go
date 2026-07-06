@@ -2,7 +2,7 @@ package client
 
 import (
 	"crypto/aes"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 )
 
 func New(

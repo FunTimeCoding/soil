@@ -2,8 +2,8 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/bolt"
-	"github.com/funtimecoding/go-library/pkg/bolt/constant"
+	"github.com/funtimecoding/soil/pkg/bolt"
+	"github.com/funtimecoding/soil/pkg/bolt/constant"
 	"go.etcd.io/bbolt"
 )
 

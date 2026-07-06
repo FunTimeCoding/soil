@@ -1,8 +1,8 @@
 package run
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/system/run/stream"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/system/run/stream"
 )
 
 func (r *Run) Stream(s ...string) *stream.Stream {

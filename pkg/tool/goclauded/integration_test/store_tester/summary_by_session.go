@@ -1,6 +1,6 @@
 package store_tester
 
-import "github.com/funtimecoding/go-library/pkg/assert"
+import "github.com/funtimecoding/soil/pkg/assert"
 
 func (o *Tester) SummaryBySession(sessionIdentifier string) string {
 	result, e := o.Store.SummaryBySession(sessionIdentifier)

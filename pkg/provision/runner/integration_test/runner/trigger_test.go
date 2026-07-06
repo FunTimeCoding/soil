@@ -3,9 +3,9 @@
 package runner
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/provision/runner"
-	"github.com/funtimecoding/go-library/pkg/provision/runner/integration_test/runner_tester"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/provision/runner"
+	"github.com/funtimecoding/soil/pkg/provision/runner/integration_test/runner_tester"
 	"testing"
 )
 

@@ -1,9 +1,9 @@
 package service_tester
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert/fixture"
-	"github.com/funtimecoding/go-library/pkg/system/constant"
-	goqueryd "github.com/funtimecoding/go-library/pkg/tool/goqueryd/constant"
+	"github.com/funtimecoding/soil/pkg/assert/fixture"
+	"github.com/funtimecoding/soil/pkg/system/constant"
+	goqueryd "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 )
 
 func (t *Tester) IndexFixtures() {

@@ -3,8 +3,8 @@ package resource
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/tool/gokubernetesd/service/format"
-	"github.com/funtimecoding/go-library/pkg/tool/gokubernetesd/service/resource/filter_result"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/format"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/resource/filter_result"
 )
 
 func FilterObject(

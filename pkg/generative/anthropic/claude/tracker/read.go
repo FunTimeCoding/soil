@@ -3,9 +3,9 @@ package tracker
 import (
 	"bufio"
 	"encoding/json"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/claude"
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/claude/notation"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/notation"
 	"io"
 	"os"
 )

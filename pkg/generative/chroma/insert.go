@@ -2,7 +2,7 @@ package chroma
 
 import (
 	"github.com/amikos-tech/chroma-go/pkg/api/v2"
-	"github.com/funtimecoding/go-library/pkg/integers"
+	"github.com/funtimecoding/soil/pkg/integers"
 )
 
 func (c *Client) Insert(

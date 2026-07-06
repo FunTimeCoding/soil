@@ -1,7 +1,7 @@
 package goclaude
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goclaude/command_context"
+	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/spf13/cobra"
 )
 

@@ -1,6 +1,6 @@
 package in_range
 
-import "github.com/funtimecoding/go-library/pkg/math/ranges"
+import "github.com/funtimecoding/soil/pkg/math/ranges"
 
 func LeftOpen(
 	value float64,

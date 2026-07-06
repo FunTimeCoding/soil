@@ -2,8 +2,8 @@ package netbox
 
 import (
 	"errors"
-	"github.com/funtimecoding/go-library/pkg/netbox/constant"
-	"github.com/funtimecoding/go-library/pkg/netbox/device"
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
+	"github.com/funtimecoding/soil/pkg/netbox/device"
 )
 
 func (c *Client) DeviceInterfaceExists(

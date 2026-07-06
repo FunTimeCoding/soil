@@ -2,7 +2,7 @@ package jira
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
 )
 
 func (c *Client) DynamicModules() error {

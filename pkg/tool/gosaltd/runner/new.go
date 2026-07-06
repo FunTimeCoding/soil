@@ -1,13 +1,13 @@
 package runner
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/recovery"
-	"github.com/funtimecoding/go-library/pkg/face"
-	"github.com/funtimecoding/go-library/pkg/log/logger"
-	"github.com/funtimecoding/go-library/pkg/provision/runner"
-	"github.com/funtimecoding/go-library/pkg/provision/salt"
-	"github.com/funtimecoding/go-library/pkg/provision/store"
-	"github.com/funtimecoding/go-library/pkg/tool/gosaltd/option"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
+	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/provision/runner"
+	"github.com/funtimecoding/soil/pkg/provision/salt"
+	"github.com/funtimecoding/soil/pkg/provision/store"
+	"github.com/funtimecoding/soil/pkg/tool/gosaltd/option"
 )
 
 func New(

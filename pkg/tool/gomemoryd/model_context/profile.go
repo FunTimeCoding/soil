@@ -3,10 +3,10 @@ package model_context
 import (
 	"context"
 	"errors"
-	"github.com/funtimecoding/go-library/pkg/generative/mark/response"
-	"github.com/funtimecoding/go-library/pkg/notation"
-	"github.com/funtimecoding/go-library/pkg/tool/gomemoryd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gomemoryd/service"
+	"github.com/funtimecoding/soil/pkg/generative/mark/response"
+	"github.com/funtimecoding/soil/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 

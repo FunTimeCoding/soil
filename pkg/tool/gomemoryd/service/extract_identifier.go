@@ -2,7 +2,7 @@ package service
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/strings/separator"
 	"strconv"
 	"strings"
 )

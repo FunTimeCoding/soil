@@ -1,6 +1,6 @@
 package argument
 
-import "github.com/funtimecoding/go-library/pkg/system"
+import "github.com/funtimecoding/soil/pkg/system"
 
 func (i *Instance) RequiredInteger(name string) int {
 	v := i.GetInteger(name)

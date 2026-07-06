@@ -1,6 +1,6 @@
 package helper
 
-import "github.com/funtimecoding/go-library/pkg/monitor/constant"
+import "github.com/funtimecoding/soil/pkg/monitor/constant"
 
 func SeverityWeights(
 	critical float64,

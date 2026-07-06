@@ -1,10 +1,10 @@
 package web
 
 import (
-	"github.com/funtimecoding/go-library/pkg/raid_parser"
-	"github.com/funtimecoding/go-library/pkg/tool/goraidd/store"
-	"github.com/funtimecoding/go-library/pkg/web/palette"
-	"github.com/funtimecoding/go-library/pkg/web/view"
+	"github.com/funtimecoding/soil/pkg/raid_parser"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/store"
+	"github.com/funtimecoding/soil/pkg/web/palette"
+	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
 type Server struct {

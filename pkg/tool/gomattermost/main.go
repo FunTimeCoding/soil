@@ -2,16 +2,16 @@ package gomattermost
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/argument"
-	mattermost "github.com/funtimecoding/go-library/pkg/chat/mattermost/constant"
-	"github.com/funtimecoding/go-library/pkg/chat/mattermost/thread"
-	"github.com/funtimecoding/go-library/pkg/console"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/generative/ollama"
-	"github.com/funtimecoding/go-library/pkg/text/template"
-	timeLibrary "github.com/funtimecoding/go-library/pkg/time"
-	"github.com/funtimecoding/go-library/pkg/tool/common"
-	"github.com/funtimecoding/go-library/pkg/tool/gomattermost/constant"
+	"github.com/funtimecoding/soil/pkg/argument"
+	mattermost "github.com/funtimecoding/soil/pkg/chat/mattermost/constant"
+	"github.com/funtimecoding/soil/pkg/chat/mattermost/thread"
+	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/generative/ollama"
+	"github.com/funtimecoding/soil/pkg/text/template"
+	timeLibrary "github.com/funtimecoding/soil/pkg/time"
+	"github.com/funtimecoding/soil/pkg/tool/common"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermost/constant"
 	"time"
 )
 

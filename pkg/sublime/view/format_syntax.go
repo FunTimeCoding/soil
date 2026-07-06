@@ -1,6 +1,6 @@
 package view
 
-import "github.com/funtimecoding/go-library/pkg/console/status/option"
+import "github.com/funtimecoding/soil/pkg/console/status/option"
 
 func (v *View) formatSyntax(_ *option.Format) string {
 	if v.Syntax == "" {

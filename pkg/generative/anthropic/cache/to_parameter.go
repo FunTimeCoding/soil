@@ -2,7 +2,7 @@ package cache
 
 import (
 	"github.com/anthropics/anthropic-sdk-go"
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/constant"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/constant"
 )
 
 func ToParameter(m constant.Mode) anthropic.CacheControlEphemeralParam {

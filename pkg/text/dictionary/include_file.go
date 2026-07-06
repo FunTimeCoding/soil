@@ -1,7 +1,7 @@
 package dictionary
 
 import (
-	"github.com/funtimecoding/go-library/pkg/text/dictionary/constant"
+	"github.com/funtimecoding/soil/pkg/text/dictionary/constant"
 	"path/filepath"
 	"strings"
 )

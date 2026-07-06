@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/provision/salt/constant"
-	web "github.com/funtimecoding/go-library/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/provision/salt/constant"
+	web "github.com/funtimecoding/soil/pkg/web/constant"
 	"io"
 	"net/http"
 )

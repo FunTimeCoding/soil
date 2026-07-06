@@ -2,11 +2,11 @@ package model_context_client
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/constant"
-	web "github.com/funtimecoding/go-library/pkg/web/constant"
-	"github.com/funtimecoding/go-library/pkg/web/location"
-	"github.com/funtimecoding/go-library/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/constant"
+	web "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/location"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 	"testing"
 )

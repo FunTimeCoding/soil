@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/constant"
-	"github.com/funtimecoding/go-library/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/constant"
+	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/liushuangls/go-anthropic/v2"
 )
 

@@ -2,9 +2,9 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/generated/server"
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/store/search_option"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/server"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search_option"
 )
 
 func (s *Server) GetSearch(

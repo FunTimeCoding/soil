@@ -1,7 +1,7 @@
 package rule
 
 import (
-	stringLibrary "github.com/funtimecoding/go-library/pkg/strings"
+	stringLibrary "github.com/funtimecoding/soil/pkg/strings"
 	"strings"
 )
 

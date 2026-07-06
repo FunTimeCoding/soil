@@ -2,12 +2,12 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/console/status/option"
-	"github.com/funtimecoding/go-library/pkg/system"
-	"github.com/funtimecoding/go-library/pkg/system/environment"
-	"github.com/funtimecoding/go-library/pkg/text/markdown"
-	"github.com/funtimecoding/go-library/pkg/text/markdown/constant"
-	"github.com/funtimecoding/go-library/pkg/text/markdown/file"
+	"github.com/funtimecoding/soil/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/text/markdown"
+	"github.com/funtimecoding/soil/pkg/text/markdown/constant"
+	"github.com/funtimecoding/soil/pkg/text/markdown/file"
 )
 
 func File() {

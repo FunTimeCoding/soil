@@ -2,9 +2,9 @@ package collect
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/bubbletea/model/monitor/fetch"
-	"github.com/funtimecoding/go-library/pkg/monitor/collector"
-	library "github.com/funtimecoding/go-library/pkg/time"
+	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/fetch"
+	"github.com/funtimecoding/soil/pkg/monitor/collector"
+	library "github.com/funtimecoding/soil/pkg/time"
 	"k8s.io/apimachinery/pkg/util/duration"
 	"time"
 )

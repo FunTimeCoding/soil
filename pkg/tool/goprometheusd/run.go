@@ -2,15 +2,15 @@ package goprometheusd
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/face"
-	"github.com/funtimecoding/go-library/pkg/lifecycle"
-	"github.com/funtimecoding/go-library/pkg/lifecycle/server"
-	"github.com/funtimecoding/go-library/pkg/log/logger"
-	"github.com/funtimecoding/go-library/pkg/telemetry"
-	"github.com/funtimecoding/go-library/pkg/tool/goprometheusd/model_context"
-	"github.com/funtimecoding/go-library/pkg/tool/goprometheusd/option"
-	"github.com/funtimecoding/go-library/pkg/tool/goprometheusd/service"
-	"github.com/funtimecoding/go-library/pkg/web"
+	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/lifecycle"
+	"github.com/funtimecoding/soil/pkg/lifecycle/server"
+	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/telemetry"
+	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/model_context"
+	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/option"
+	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/service"
+	"github.com/funtimecoding/soil/pkg/web"
 	"net/http"
 )
 

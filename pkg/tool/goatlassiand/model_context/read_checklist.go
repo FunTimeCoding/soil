@@ -1,9 +1,9 @@
 package model_context
 
 import (
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/issue"
-	"github.com/funtimecoding/go-library/pkg/tool/goatlassiand/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goatlassiand/types/checklist_item"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/types/checklist_item"
 )
 
 func (s *Server) readChecklist(key string) ([]*checklist_item.Item, error) {

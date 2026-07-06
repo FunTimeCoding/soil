@@ -1,6 +1,6 @@
 package job
 
-import "github.com/funtimecoding/go-library/pkg/kubernetes/client"
+import "github.com/funtimecoding/soil/pkg/kubernetes/client"
 
 func start(
 	k *client.Client,

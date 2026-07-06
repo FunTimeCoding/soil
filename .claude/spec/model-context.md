@@ -129,7 +129,7 @@ The factory (`mark/server`) handles tool capabilities, instructions,
 and baseline telemetry hooks. `WithRecorder(t)` registers an
 AfterCallTool hook that records every MCP tool call as a baseline
 telemetry event. Import as
-`mark "github.com/funtimecoding/go-library/pkg/generative/mark/server"`.
+`mark "github.com/funtimecoding/soil/pkg/generative/mark/server"`.
 ```
 
 `mount.go` - wires the MCP server onto the HTTP mux:
@@ -409,10 +409,10 @@ MCP routes (`/mcp`, `/sse`, `/message`) don't conflict:
 
 ```go
 import (
-    "github.com/funtimecoding/go-library/pkg/telemetry"
-    "github.com/funtimecoding/go-library/pkg/tool/go<tool>d/model_context"
-    generated "github.com/funtimecoding/go-library/pkg/tool/go<tool>d/generated/server"
-    "github.com/funtimecoding/go-library/pkg/web"
+    "github.com/funtimecoding/soil/pkg/telemetry"
+    "github.com/funtimecoding/soil/pkg/tool/go<tool>d/model_context"
+    generated "github.com/funtimecoding/soil/pkg/tool/go<tool>d/generated/server"
+    "github.com/funtimecoding/soil/pkg/web"
 )
 
 lifecycle.WithServer(

@@ -1,7 +1,7 @@
 package override
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/opsgenie/opsgenie-go-sdk-v2/schedule"
 	"testing"
 )

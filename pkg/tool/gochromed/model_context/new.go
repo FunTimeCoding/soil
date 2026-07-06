@@ -1,10 +1,10 @@
 package model_context
 
 import (
-	"github.com/funtimecoding/go-library/pkg/chromium"
-	"github.com/funtimecoding/go-library/pkg/face"
-	"github.com/funtimecoding/go-library/pkg/generative/mark/server"
-	"github.com/funtimecoding/go-library/pkg/tool/gochromed/constant"
+	"github.com/funtimecoding/soil/pkg/chromium"
+	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/generative/mark/server"
+	"github.com/funtimecoding/soil/pkg/tool/gochromed/constant"
 )
 
 func New(

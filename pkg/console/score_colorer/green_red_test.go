@@ -1,8 +1,8 @@
 package score_colorer
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/console/score_colorer/score_fixture"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/console/score_colorer/score_fixture"
 	"testing"
 )
 

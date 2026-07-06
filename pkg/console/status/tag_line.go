@@ -2,7 +2,7 @@ package status
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/console/status/tag_line"
+	"github.com/funtimecoding/soil/pkg/console/status/tag_line"
 )
 
 func (s *Status) TagLine(

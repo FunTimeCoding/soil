@@ -1,8 +1,8 @@
 package notation_tag
 
 import (
-	"github.com/funtimecoding/go-library/pkg/strings/split"
-	"github.com/funtimecoding/go-library/pkg/structs/constant"
+	"github.com/funtimecoding/soil/pkg/strings/split"
+	"github.com/funtimecoding/soil/pkg/structs/constant"
 	"reflect"
 )
 

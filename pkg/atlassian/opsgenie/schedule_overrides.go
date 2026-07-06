@@ -1,9 +1,9 @@
 package opsgenie
 
 import (
-	"github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/override"
-	"github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/schedule"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/override"
+	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/schedule"
+	"github.com/funtimecoding/soil/pkg/errors"
 	rawSchedule "github.com/opsgenie/opsgenie-go-sdk-v2/schedule"
 )
 

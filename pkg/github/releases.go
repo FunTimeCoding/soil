@@ -1,6 +1,6 @@
 package github
 
-import "github.com/funtimecoding/go-library/pkg/github/release"
+import "github.com/funtimecoding/soil/pkg/github/release"
 
 func (c *Client) Releases(
 	namespace string,

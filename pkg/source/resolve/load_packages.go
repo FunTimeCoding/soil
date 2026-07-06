@@ -2,7 +2,7 @@ package resolve
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/source/build_tag"
+	"github.com/funtimecoding/soil/pkg/source/build_tag"
 	"go/token"
 	"golang.org/x/tools/go/packages"
 	"strings"

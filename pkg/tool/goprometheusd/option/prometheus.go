@@ -1,6 +1,6 @@
 package option
 
-import "github.com/funtimecoding/go-library/pkg/tool/goprometheusd/inventory"
+import "github.com/funtimecoding/soil/pkg/tool/goprometheusd/inventory"
 
 type Prometheus struct {
 	Port      int

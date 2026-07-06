@@ -1,8 +1,8 @@
 package request_context
 
 import (
-	"github.com/funtimecoding/go-library/pkg/strings/join/key_value"
-	"github.com/funtimecoding/go-library/pkg/web/telemetry/constant"
+	"github.com/funtimecoding/soil/pkg/strings/join/key_value"
+	"github.com/funtimecoding/soil/pkg/web/telemetry/constant"
 	"log/slog"
 	"strings"
 )

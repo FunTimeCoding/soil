@@ -1,6 +1,6 @@
 package team_map
 
-import "github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/team"
+import "github.com/funtimecoding/soil/pkg/atlassian/opsgenie/team"
 
 func New(v []*team.Team) *Map {
 	m := make(map[string]*team.Team, len(v))

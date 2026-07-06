@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/kestra/example"
+import "github.com/funtimecoding/soil/pkg/kestra/example"
 
 func main() {
 	example.Read()

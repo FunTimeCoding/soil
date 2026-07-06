@@ -4,11 +4,11 @@ package web_service
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/habitica/tag"
-	"github.com/funtimecoding/go-library/pkg/habitica/task"
-	"github.com/funtimecoding/go-library/pkg/tool/gohabiticad/generated/client"
-	"github.com/funtimecoding/go-library/pkg/tool/gohabiticad/integration_test/web_service_tester"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/habitica/tag"
+	"github.com/funtimecoding/soil/pkg/habitica/task"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/integration_test/web_service_tester"
 	"net/http"
 	"testing"
 )

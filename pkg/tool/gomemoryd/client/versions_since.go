@@ -2,8 +2,8 @@ package client
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/tool/gomemoryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
 )
 
 func (c *RestClient) VersionsSince(

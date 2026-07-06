@@ -1,10 +1,10 @@
 package loki
 
 import (
-	"github.com/funtimecoding/go-library/pkg/console/status/option"
-	"github.com/funtimecoding/go-library/pkg/console/status/tag"
-	checkOption "github.com/funtimecoding/go-library/pkg/prometheus/check/loki/option"
-	"github.com/funtimecoding/go-library/pkg/prometheus/loki"
+	"github.com/funtimecoding/soil/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/console/status/tag"
+	checkOption "github.com/funtimecoding/soil/pkg/prometheus/check/loki/option"
+	"github.com/funtimecoding/soil/pkg/prometheus/loki"
 )
 
 func Check(o *checkOption.Loki) {

@@ -1,6 +1,6 @@
 package mock_client
 
-import "github.com/funtimecoding/go-library/pkg/generative/anthropic/claude/peek"
+import "github.com/funtimecoding/soil/pkg/generative/anthropic/claude/peek"
 
 func (c *Client) Peek(sessionIdentifier string) *peek.Peek {
 	if messages, okay := c.UserMessages[sessionIdentifier]; okay {

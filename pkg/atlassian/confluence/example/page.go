@@ -1,8 +1,8 @@
 package example
 
 import (
-	"github.com/funtimecoding/go-library/pkg/atlassian/confluence"
-	"github.com/funtimecoding/go-library/pkg/strings/upper"
+	"github.com/funtimecoding/soil/pkg/atlassian/confluence"
+	"github.com/funtimecoding/soil/pkg/strings/upper"
 )
 
 func Page() {

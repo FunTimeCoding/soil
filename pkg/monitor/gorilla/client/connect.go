@@ -1,7 +1,7 @@
 package client
 
 import (
-	"github.com/funtimecoding/go-library/pkg/monitor/gorilla/helper"
+	"github.com/funtimecoding/soil/pkg/monitor/gorilla/helper"
 	"log"
 )
 

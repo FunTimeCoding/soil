@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/keepass"
+	"github.com/funtimecoding/soil/pkg/keepass"
 )
 
 func main() {

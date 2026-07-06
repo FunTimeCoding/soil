@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/gotrivy"
+import "github.com/funtimecoding/soil/pkg/tool/gotrivy"
 
 var (
 	Version   string

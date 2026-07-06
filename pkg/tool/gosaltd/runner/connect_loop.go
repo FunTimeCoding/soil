@@ -1,7 +1,7 @@
 package runner
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/gosaltd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosaltd/constant"
 	"time"
 )
 

@@ -2,9 +2,9 @@ package server
 
 import (
 	"encoding/json"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	library "github.com/funtimecoding/go-library/pkg/web/authorization/constant"
-	"github.com/funtimecoding/go-library/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/errors"
+	library "github.com/funtimecoding/soil/pkg/web/authorization/constant"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
 

@@ -1,6 +1,6 @@
 package mock_client
 
-import "github.com/funtimecoding/go-library/pkg/firefox/tab"
+import "github.com/funtimecoding/soil/pkg/firefox/tab"
 
 func (c *Client) CreateTab(l string) (*tab.Tab, error) {
 	t := tab.New()

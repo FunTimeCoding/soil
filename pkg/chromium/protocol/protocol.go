@@ -2,7 +2,7 @@ package protocol
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/chromium"
+	"github.com/funtimecoding/soil/pkg/chromium"
 )
 
 type Protocol struct {

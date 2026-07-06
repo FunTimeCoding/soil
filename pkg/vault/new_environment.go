@@ -1,8 +1,8 @@
 package vault
 
 import (
-	"github.com/funtimecoding/go-library/pkg/system/environment"
-	"github.com/funtimecoding/go-library/pkg/vault/constant"
+	"github.com/funtimecoding/soil/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/vault/constant"
 )
 
 func NewEnvironment() *Client {

@@ -1,10 +1,10 @@
 package main
 
 import (
-	"github.com/funtimecoding/go-library/pkg/bubbletea"
-	"github.com/funtimecoding/go-library/pkg/bubbletea/model/example_list"
-	"github.com/funtimecoding/go-library/pkg/bubbletea/model/example_table"
-	"github.com/funtimecoding/go-library/pkg/bubbletea/table/example_country"
+	"github.com/funtimecoding/soil/pkg/bubbletea"
+	"github.com/funtimecoding/soil/pkg/bubbletea/model/example_list"
+	"github.com/funtimecoding/soil/pkg/bubbletea/model/example_table"
+	"github.com/funtimecoding/soil/pkg/bubbletea/table/example_country"
 )
 
 func main() {

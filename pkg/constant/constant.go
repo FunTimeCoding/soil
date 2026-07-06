@@ -1,8 +1,8 @@
 package constant
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/text/option"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/text/option"
 )
 
 const (
@@ -54,7 +54,7 @@ const (
 	InvalidRequestBody = "invalid request body"
 	UnexpectedError    = "unexpected error"
 
-	GoLibraryModule = "github.com/funtimecoding/go-library"
+	GoLibraryModule = "github.com/funtimecoding/soil"
 
 	DefaultVersion = "1.0.0"
 

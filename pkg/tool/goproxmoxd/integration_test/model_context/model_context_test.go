@@ -3,9 +3,9 @@
 package model_context
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/integration_test/model_context_tester"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/integration_test/model_context_tester"
 	"testing"
 )
 

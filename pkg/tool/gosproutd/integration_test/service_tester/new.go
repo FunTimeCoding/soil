@@ -1,10 +1,10 @@
 package service_tester
 
 import (
-	"github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/integration_test/mock_notifier"
-	"github.com/funtimecoding/go-library/pkg/tool/gosproutd/service"
-	"github.com/funtimecoding/go-library/pkg/tool/gosproutd/store"
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration_test/mock_notifier"
+	"github.com/funtimecoding/soil/pkg/tool/gosproutd/service"
+	"github.com/funtimecoding/soil/pkg/tool/gosproutd/store"
 	"path/filepath"
 	"testing"
 )

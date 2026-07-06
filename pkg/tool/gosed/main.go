@@ -1,13 +1,13 @@
 package gosed
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	git "github.com/funtimecoding/go-library/pkg/git/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/common"
-	"github.com/funtimecoding/go-library/pkg/tool/gosed/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gosed/sed"
-	"github.com/funtimecoding/go-library/pkg/tool/gosed/sed/option"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	git "github.com/funtimecoding/soil/pkg/git/constant"
+	"github.com/funtimecoding/soil/pkg/tool/common"
+	"github.com/funtimecoding/soil/pkg/tool/gosed/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosed/sed"
+	"github.com/funtimecoding/soil/pkg/tool/gosed/sed/option"
 )
 
 func Main(

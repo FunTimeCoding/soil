@@ -1,12 +1,12 @@
 package lint
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/lint/concern"
-	"github.com/funtimecoding/go-library/pkg/lint/constant"
-	"github.com/funtimecoding/go-library/pkg/lint/option"
-	"github.com/funtimecoding/go-library/pkg/lint/output"
-	"github.com/funtimecoding/go-library/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/lint/concern"
+	"github.com/funtimecoding/soil/pkg/lint/constant"
+	"github.com/funtimecoding/soil/pkg/lint/option"
+	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"testing"
 )
 
@@ -182,7 +182,7 @@ func TestCheckStubCreated(t *testing.T) {
 	v := virtual_file_system.New()
 	v.WriteString(
 		"go.mod",
-		"module example\n\nrequire github.com/funtimecoding/go-library v0.0.1\n",
+		"module example\n\nrequire github.com/funtimecoding/soil v0.0.1\n",
 	)
 	v.WriteString(
 		"pkg/foo/foo.go",
@@ -199,7 +199,7 @@ func TestCheckStubCreated(t *testing.T) {
 	)
 	assert.String(
 		t,
-		"package foo\n\nimport (\n\t\"github.com/funtimecoding/go-library/pkg/assert\"\n\t\"testing\"\n)\n\nfunc TestFoo(t *testing.T) {\n\tassert.Stub(t)\n}\n",
+		"package foo\n\nimport (\n\t\"github.com/funtimecoding/soil/pkg/assert\"\n\t\"testing\"\n)\n\nfunc TestFoo(t *testing.T) {\n\tassert.Stub(t)\n}\n",
 		fixes.ReadString("pkg/foo/foo_test.go"),
 	)
 }
@@ -208,7 +208,7 @@ func TestCheckStubMainPackage(t *testing.T) {
 	v := virtual_file_system.New()
 	v.WriteString(
 		"go.mod",
-		"module example\n\nrequire github.com/funtimecoding/go-library v0.0.1\n",
+		"module example\n\nrequire github.com/funtimecoding/soil v0.0.1\n",
 	)
 	v.WriteString(
 		"cmd/foo/main.go",
@@ -225,7 +225,7 @@ func TestCheckStubMainPackage(t *testing.T) {
 	)
 	assert.String(
 		t,
-		"package main\n\nimport (\n\t\"github.com/funtimecoding/go-library/pkg/assert\"\n\t\"testing\"\n)\n\nfunc TestStub(t *testing.T) {\n\tassert.Stub(t)\n}\n",
+		"package main\n\nimport (\n\t\"github.com/funtimecoding/soil/pkg/assert\"\n\t\"testing\"\n)\n\nfunc TestStub(t *testing.T) {\n\tassert.Stub(t)\n}\n",
 		fixes.ReadString("cmd/foo/main_test.go"),
 	)
 }
@@ -234,7 +234,7 @@ func TestCheckStubToolPackage(t *testing.T) {
 	v := virtual_file_system.New()
 	v.WriteString(
 		"go.mod",
-		"module example\n\nrequire github.com/funtimecoding/go-library v0.0.1\n",
+		"module example\n\nrequire github.com/funtimecoding/soil v0.0.1\n",
 	)
 	v.WriteString(
 		"pkg/tool/gofoo/main.go",
@@ -251,7 +251,7 @@ func TestCheckStubToolPackage(t *testing.T) {
 	)
 	assert.String(
 		t,
-		"package gofoo\n\nimport (\n\t\"github.com/funtimecoding/go-library/pkg/assert\"\n\t\"testing\"\n)\n\nfunc TestStub(t *testing.T) {\n\tassert.Stub(t)\n}\n",
+		"package gofoo\n\nimport (\n\t\"github.com/funtimecoding/soil/pkg/assert\"\n\t\"testing\"\n)\n\nfunc TestStub(t *testing.T) {\n\tassert.Stub(t)\n}\n",
 		fixes.ReadString("pkg/tool/gofoo/main_test.go"),
 	)
 }

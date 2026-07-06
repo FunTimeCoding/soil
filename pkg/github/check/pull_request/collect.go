@@ -1,10 +1,10 @@
 package pull_request
 
 import (
-	"github.com/funtimecoding/go-library/pkg/github"
-	"github.com/funtimecoding/go-library/pkg/github/check/pull_request/option"
-	"github.com/funtimecoding/go-library/pkg/github/run"
-	"github.com/funtimecoding/go-library/pkg/monitor"
+	"github.com/funtimecoding/soil/pkg/github"
+	"github.com/funtimecoding/soil/pkg/github/check/pull_request/option"
+	"github.com/funtimecoding/soil/pkg/github/run"
+	"github.com/funtimecoding/soil/pkg/monitor"
 )
 
 func collect(

@@ -2,7 +2,7 @@ package runbook
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/yuin/goldmark/ast"
 	"strings"
 )

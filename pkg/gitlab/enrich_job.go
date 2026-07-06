@@ -1,6 +1,6 @@
 package gitlab
 
-import "github.com/funtimecoding/go-library/pkg/gitlab/job"
+import "github.com/funtimecoding/soil/pkg/gitlab/job"
 
 func (c *Client) enrichJob(j *job.Job) *job.Job {
 	if j.Raw.Project.ID == 0 {

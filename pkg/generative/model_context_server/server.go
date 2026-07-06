@@ -1,6 +1,6 @@
 package model_context_server
 
-import "github.com/funtimecoding/go-library/pkg/lifecycle"
+import "github.com/funtimecoding/soil/pkg/lifecycle"
 
 type Server struct {
 	Port      int

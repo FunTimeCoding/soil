@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/goghpr"
+import "github.com/funtimecoding/soil/pkg/tool/goghpr"
 
 var (
 	Version   string

@@ -1,8 +1,8 @@
 package firefox
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/firefox/content"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/firefox/content"
 )
 
 func (c *Client) MustReadTab(

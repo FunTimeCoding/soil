@@ -1,7 +1,7 @@
 package iterm
 
 import (
-	"github.com/funtimecoding/go-library/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"net/http"
 )
 

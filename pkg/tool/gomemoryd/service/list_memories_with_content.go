@@ -1,6 +1,6 @@
 package service
 
-import "github.com/funtimecoding/go-library/pkg/tool/gomemoryd/store"
+import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
 
 func (s *Service) ListMemoriesWithContent(tag string) ([]store.Memory, error) {
 	summaries, e := s.store.ListMemories("", tag, true)

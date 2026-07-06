@@ -2,7 +2,7 @@ package goraid
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/raid"
+	"github.com/funtimecoding/soil/pkg/raid"
 	"github.com/spf13/cobra"
 	"time"
 )

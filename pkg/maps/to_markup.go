@@ -2,7 +2,7 @@ package maps
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/strings/base64"
+	"github.com/funtimecoding/soil/pkg/strings/base64"
 )
 
 func ToMarkup(m map[string]string) string {

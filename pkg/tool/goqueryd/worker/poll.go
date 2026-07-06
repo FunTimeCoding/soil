@@ -1,6 +1,6 @@
 package worker
 
-import "github.com/funtimecoding/go-library/pkg/errors"
+import "github.com/funtimecoding/soil/pkg/errors"
 
 func (w *Worker) poll() {
 	_, e := w.service.IndexCollections("")

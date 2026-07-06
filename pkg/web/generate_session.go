@@ -3,7 +3,7 @@ package web
 import (
 	"crypto/rand"
 	"encoding/hex"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 )
 
 func GenerateSession() string {

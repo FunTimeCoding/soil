@@ -2,8 +2,8 @@ package notation
 
 import (
 	"encoding/json"
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"testing"
 )
 

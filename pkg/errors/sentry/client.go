@@ -1,6 +1,6 @@
 package sentry
 
-import "github.com/funtimecoding/go-library/pkg/errors/sentry/basic"
+import "github.com/funtimecoding/soil/pkg/errors/sentry/basic"
 
 type Client struct {
 	basic        *basic.Client

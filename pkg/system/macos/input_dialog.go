@@ -3,7 +3,7 @@ package macos
 import (
 	"fmt"
 	"github.com/andybrewer/mack"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 )
 
 func InputDialog(

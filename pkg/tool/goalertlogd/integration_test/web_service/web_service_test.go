@@ -4,9 +4,9 @@ package web_service
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/tool/goalertlogd/generated/client"
-	"github.com/funtimecoding/go-library/pkg/tool/goalertlogd/integration_test/web_service_tester"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/integration_test/web_service_tester"
 	"net/http"
 	"testing"
 )

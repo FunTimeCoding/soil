@@ -2,9 +2,9 @@ package goprocess
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/tool/goprocessd/client"
-	"github.com/funtimecoding/go-library/pkg/tool/goprocessd/socket"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/client"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/socket"
 	"github.com/spf13/cobra"
 	"strings"
 )

@@ -1,6 +1,6 @@
 package argument
 
-import "github.com/funtimecoding/go-library/pkg/strings/split"
+import "github.com/funtimecoding/soil/pkg/strings/split"
 
 func (i *Instance) Slice(name string) []string {
 	v := i.GetString(name)

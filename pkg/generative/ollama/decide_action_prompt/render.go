@@ -1,6 +1,6 @@
 package decide_action_prompt
 
-import "github.com/funtimecoding/go-library/pkg/text/multi_line"
+import "github.com/funtimecoding/soil/pkg/text/multi_line"
 
 func (p *Prompt) Render() string {
 	m := multi_line.New()

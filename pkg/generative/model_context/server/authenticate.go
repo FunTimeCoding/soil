@@ -2,8 +2,8 @@ package server
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/constant"
-	web "github.com/funtimecoding/go-library/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/constant"
+	web "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
 

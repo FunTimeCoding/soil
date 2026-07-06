@@ -1,6 +1,6 @@
 package query
 
-import "github.com/funtimecoding/go-library/pkg/prometheus/loki/basic/query_result"
+import "github.com/funtimecoding/soil/pkg/prometheus/loki/basic/query_result"
 
 type Query struct {
 	Status string               `json:"status"`

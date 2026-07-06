@@ -2,7 +2,7 @@ package goclaude
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"strings"
 )
 

@@ -1,6 +1,6 @@
 package claude
 
-import "github.com/funtimecoding/go-library/pkg/generative/anthropic/claude/message"
+import "github.com/funtimecoding/soil/pkg/generative/anthropic/claude/message"
 
 type ToolContextResult struct {
 	ToolName string

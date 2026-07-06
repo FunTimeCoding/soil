@@ -2,14 +2,14 @@ package service_tester
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/go-library/pkg/log/logger"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/integration_test/mock_client"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/integration_test/mock_notifier"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/integration_test/store_tester"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/service"
-	memoryMock "github.com/funtimecoding/go-library/pkg/tool/gomemoryd/client/mock_client"
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/mock_indexer"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration_test/mock_client"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration_test/mock_notifier"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration_test/store_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service"
+	memoryMock "github.com/funtimecoding/soil/pkg/tool/gomemoryd/client/mock_client"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/mock_indexer"
 	"testing"
 )
 

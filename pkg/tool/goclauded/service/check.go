@@ -1,6 +1,6 @@
 package service
 
-import "github.com/funtimecoding/go-library/pkg/tool/goclauded/service/check_result"
+import "github.com/funtimecoding/soil/pkg/tool/goclauded/service/check_result"
 
 func (s *Service) Check(sessionIdentifier string) (*check_result.Result, error) {
 	r, e := s.store.EnsureSession(sessionIdentifier)

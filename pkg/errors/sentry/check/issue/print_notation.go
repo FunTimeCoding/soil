@@ -1,11 +1,11 @@
 package issue
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/check/issue/option"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/issue"
-	"github.com/funtimecoding/go-library/pkg/monitor/constant"
-	item "github.com/funtimecoding/go-library/pkg/monitor/item/constant"
-	"github.com/funtimecoding/go-library/pkg/monitor/report"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/check/issue/option"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/issue"
+	"github.com/funtimecoding/soil/pkg/monitor/constant"
+	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/monitor/report"
 )
 
 func printNotation(

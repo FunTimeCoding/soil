@@ -1,7 +1,7 @@
 package parse_elite
 
 import (
-	"github.com/funtimecoding/go-library/pkg/raid/elite_parser"
+	"github.com/funtimecoding/soil/pkg/raid/elite_parser"
 	"sort"
 )
 

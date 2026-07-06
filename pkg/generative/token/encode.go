@@ -1,6 +1,6 @@
 package token
 
-import "github.com/funtimecoding/go-library/pkg/errors"
+import "github.com/funtimecoding/soil/pkg/errors"
 
 func Encode(s string) ([]uint, []string) {
 	identifiers, tokens, e := Encoding("gpt-4o").Encode(

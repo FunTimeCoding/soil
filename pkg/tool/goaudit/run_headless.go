@@ -1,10 +1,10 @@
 package goaudit
 
 import (
-	"github.com/funtimecoding/go-library/pkg/lint/concern"
-	"github.com/funtimecoding/go-library/pkg/lint/output"
-	"github.com/funtimecoding/go-library/pkg/system/virtual_file_system"
-	"github.com/funtimecoding/go-library/pkg/tool/goaudit/scan"
+	"github.com/funtimecoding/soil/pkg/lint/concern"
+	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
 	"os"
 )
 

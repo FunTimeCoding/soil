@@ -1,7 +1,7 @@
 package web
 
 import (
-	"github.com/funtimecoding/go-library/pkg/web/palette"
+	"github.com/funtimecoding/soil/pkg/web/palette"
 	"net/http"
 )
 

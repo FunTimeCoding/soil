@@ -1,9 +1,9 @@
 package confluence
 
 import (
-	"github.com/funtimecoding/go-library/pkg/atlassian/confluence/constant"
-	atlassian "github.com/funtimecoding/go-library/pkg/atlassian/constant"
-	"github.com/funtimecoding/go-library/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/atlassian/confluence/constant"
+	atlassian "github.com/funtimecoding/soil/pkg/atlassian/constant"
+	"github.com/funtimecoding/soil/pkg/system/environment"
 )
 
 func NewEnvironment(o ...Option) *Client {

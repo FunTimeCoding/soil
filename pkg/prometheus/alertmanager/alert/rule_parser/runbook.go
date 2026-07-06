@@ -1,6 +1,6 @@
 package rule_parser
 
-import "github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/constant"
+import "github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
 
 func (p *Parser) Runbook(name string) string {
 	if p.list == nil {

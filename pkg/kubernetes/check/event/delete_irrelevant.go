@@ -1,9 +1,9 @@
 package event
 
 import (
-	"github.com/funtimecoding/go-library/pkg/kubernetes/client"
-	"github.com/funtimecoding/go-library/pkg/kubernetes/constant"
-	"github.com/funtimecoding/go-library/pkg/kubernetes/types/native/event"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client"
+	"github.com/funtimecoding/soil/pkg/kubernetes/constant"
+	"github.com/funtimecoding/soil/pkg/kubernetes/types/native/event"
 	"slices"
 )
 

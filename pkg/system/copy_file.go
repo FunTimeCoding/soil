@@ -1,6 +1,6 @@
 package system
 
-import "github.com/funtimecoding/go-library/pkg/errors"
+import "github.com/funtimecoding/soil/pkg/errors"
 
 func CopyFile(
 	source string,

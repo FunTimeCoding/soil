@@ -1,7 +1,7 @@
 package alertmanager
 
 import (
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/silence"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/silence"
 	rawSilence "github.com/prometheus/alertmanager/api/v2/client/silence"
 )
 

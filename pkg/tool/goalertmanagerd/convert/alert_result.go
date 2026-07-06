@@ -1,9 +1,9 @@
 package convert
 
 import (
-	"github.com/funtimecoding/go-library/pkg/generative/model_context/paginate"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert/statistic"
+	"github.com/funtimecoding/soil/pkg/generative/model_context/paginate"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/statistic"
 )
 
 func AlertResult(

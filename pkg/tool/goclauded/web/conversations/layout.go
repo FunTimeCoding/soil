@@ -1,8 +1,8 @@
 package conversations
 
 import (
-	web "github.com/funtimecoding/go-library/pkg/web/constant"
-	"github.com/funtimecoding/go-library/pkg/web/theme/constant"
+	web "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/theme/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )

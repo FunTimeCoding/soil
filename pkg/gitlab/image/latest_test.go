@@ -1,7 +1,7 @@
 package image
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/assert"
 	"gitlab.com/gitlab-org/api/client-go/v2"
 	"testing"
 )

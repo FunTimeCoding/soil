@@ -2,7 +2,7 @@ package message
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/time"
+	"github.com/funtimecoding/soil/pkg/time"
 )
 
 func (m *Message) FormatChat() string {

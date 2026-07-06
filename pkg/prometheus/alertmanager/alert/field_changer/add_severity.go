@@ -1,6 +1,6 @@
 package field_changer
 
-import "github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert/field_changer/severity"
+import "github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/field_changer/severity"
 
 func (a *Changer) AddSeverity(
 	alert string,

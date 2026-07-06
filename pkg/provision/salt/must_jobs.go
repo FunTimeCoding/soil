@@ -1,8 +1,8 @@
 package salt
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/provision/salt/basic/response"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/provision/salt/basic/response"
 )
 
 func (c *Client) MustJobs() []response.Job {

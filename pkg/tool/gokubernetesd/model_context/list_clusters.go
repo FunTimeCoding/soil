@@ -2,9 +2,9 @@ package model_context
 
 import (
 	"context"
-	mark "github.com/funtimecoding/go-library/pkg/generative/mark/response"
-	"github.com/funtimecoding/go-library/pkg/tool/gokubernetesd/model_context/argument"
-	"github.com/funtimecoding/go-library/pkg/tool/gokubernetesd/service/response"
+	mark "github.com/funtimecoding/soil/pkg/generative/mark/response"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/model_context/argument"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/response"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 )

@@ -2,8 +2,8 @@ package dictionary
 
 import (
 	"fmt"
-	system "github.com/funtimecoding/go-library/pkg/system/constant"
-	"github.com/funtimecoding/go-library/pkg/text/dictionary/constant"
+	system "github.com/funtimecoding/soil/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/text/dictionary/constant"
 	"os"
 	"path/filepath"
 )

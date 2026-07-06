@@ -1,6 +1,6 @@
 package function
 
-import "github.com/funtimecoding/go-library/pkg/notation"
+import "github.com/funtimecoding/soil/pkg/notation"
 
 func unmarshalCall(input string) *Call {
 	var c Call

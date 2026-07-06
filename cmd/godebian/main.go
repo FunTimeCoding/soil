@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/godebian"
+import "github.com/funtimecoding/soil/pkg/tool/godebian"
 
 var (
 	Version   string

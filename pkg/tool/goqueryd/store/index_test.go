@@ -3,10 +3,10 @@
 package store
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	library "github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/constant"
+	"github.com/funtimecoding/soil/pkg/assert"
+	library "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"os"
 	"path/filepath"
 	"testing"

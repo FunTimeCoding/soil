@@ -1,6 +1,6 @@
 package basic
 
-import "github.com/funtimecoding/go-library/pkg/nextcloud/helper"
+import "github.com/funtimecoding/soil/pkg/nextcloud/helper"
 
 func New(
 	host string,

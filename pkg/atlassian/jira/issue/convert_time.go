@@ -1,8 +1,8 @@
 package issue
 
 import (
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/constant"
-	library "github.com/funtimecoding/go-library/pkg/time"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
+	library "github.com/funtimecoding/soil/pkg/time"
 	"time"
 )
 

@@ -2,7 +2,7 @@ package server
 
 import (
 	"github.com/coreos/go-oidc/v3/oidc"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 )
 
 func (s *Server) tokenVerifier() *oidc.IDTokenVerifier {

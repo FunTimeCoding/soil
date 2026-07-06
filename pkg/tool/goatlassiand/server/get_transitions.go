@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/tool/goatlassiand/generated/server"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/server"
 )
 
 func (s *Server) GetTransitions(

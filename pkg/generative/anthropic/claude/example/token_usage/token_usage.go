@@ -2,9 +2,9 @@ package token_usage
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/claude"
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/claude/example/common"
-	library "github.com/funtimecoding/go-library/pkg/time"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/example/common"
+	library "github.com/funtimecoding/soil/pkg/time"
 	"sort"
 	"time"
 )

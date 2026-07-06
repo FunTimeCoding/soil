@@ -3,8 +3,8 @@ package notation
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/strings/separator"
 	"strings"
 )
 

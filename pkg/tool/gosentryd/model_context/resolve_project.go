@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/tool/gosentryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosentryd/constant"
 )
 
 func (s *Server) resolveProject(slug string) (string, error) {

@@ -2,7 +2,7 @@ package server
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 )
 
 func (s *Server) handleLog(arguments []string) string {

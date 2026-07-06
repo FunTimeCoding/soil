@@ -1,6 +1,6 @@
 package user_map
 
-import "github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/user"
+import "github.com/funtimecoding/soil/pkg/atlassian/opsgenie/user"
 
 type Map struct {
 	Users   []*user.User

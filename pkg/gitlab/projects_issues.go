@@ -1,6 +1,6 @@
 package gitlab
 
-import "github.com/funtimecoding/go-library/pkg/gitlab/issue"
+import "github.com/funtimecoding/soil/pkg/gitlab/issue"
 
 func (c *Client) ProjectsIssues() []*issue.Issue {
 	var result []*issue.Issue

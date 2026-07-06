@@ -1,9 +1,9 @@
 package brave
 
 import (
-	"github.com/funtimecoding/go-library/pkg/brave/bookmark/file"
-	"github.com/funtimecoding/go-library/pkg/brave/constant"
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/brave/bookmark/file"
+	"github.com/funtimecoding/soil/pkg/brave/constant"
+	"github.com/funtimecoding/soil/pkg/system"
 )
 
 func Bookmark(profile string) *file.Bookmark {

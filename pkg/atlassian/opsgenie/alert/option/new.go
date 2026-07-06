@@ -1,10 +1,10 @@
 package option
 
 import (
-	"github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/constant"
-	"github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/team_map"
-	"github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/user_map"
-	"github.com/funtimecoding/go-library/pkg/face"
+	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/team_map"
+	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/user_map"
+	"github.com/funtimecoding/soil/pkg/face"
 )
 
 func New(

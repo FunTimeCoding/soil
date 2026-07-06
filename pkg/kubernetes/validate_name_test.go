@@ -1,7 +1,7 @@
 package kubernetes
 
 import (
-	"github.com/funtimecoding/go-library/pkg/strings/lower"
+	"github.com/funtimecoding/soil/pkg/strings/lower"
 	"testing"
 )
 

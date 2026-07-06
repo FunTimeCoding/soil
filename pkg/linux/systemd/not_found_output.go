@@ -1,8 +1,8 @@
 package systemd
 
 import (
-	"github.com/funtimecoding/go-library/pkg/linux/systemd/constant"
-	"github.com/funtimecoding/go-library/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/linux/systemd/constant"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 )
 
 func (c *Client) NotFoundOutput() string {

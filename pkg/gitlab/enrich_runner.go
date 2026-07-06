@@ -1,6 +1,6 @@
 package gitlab
 
-import "github.com/funtimecoding/go-library/pkg/gitlab/runner"
+import "github.com/funtimecoding/soil/pkg/gitlab/runner"
 
 func (c *Client) enrichRunner(r *runner.Runner) *runner.Runner {
 	if n := c.GraphRunner(

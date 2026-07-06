@@ -2,8 +2,8 @@ package job
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/kubernetes/client"
-	"github.com/funtimecoding/go-library/pkg/kubernetes/filter"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client"
+	"github.com/funtimecoding/soil/pkg/kubernetes/filter"
 )
 
 func printLog(

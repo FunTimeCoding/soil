@@ -1,6 +1,6 @@
 package assistant
 
-import "github.com/funtimecoding/go-library/pkg/assistant/connection"
+import "github.com/funtimecoding/soil/pkg/assistant/connection"
 
 func WithSubscriber(h connection.Subscriber) Option {
 	return func(c *Client) {

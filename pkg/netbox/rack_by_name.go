@@ -2,7 +2,7 @@ package netbox
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/netbox/rack"
+	"github.com/funtimecoding/soil/pkg/netbox/rack"
 )
 
 func (c *Client) RackByName(n string) (*rack.Rack, error) {

@@ -1,8 +1,8 @@
 package tokenizer
 
 import (
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/tokenizer/trie"
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/tokenizer/vocabulary"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/tokenizer/trie"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/tokenizer/vocabulary"
 )
 
 func New() (*Encoder, error) {

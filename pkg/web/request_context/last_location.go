@@ -1,8 +1,8 @@
 package request_context
 
 import (
-	"github.com/funtimecoding/go-library/pkg/web/constant"
-	"github.com/funtimecoding/go-library/pkg/web/location"
+	"github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/location"
 )
 
 func (c *Context) LastLocation() string {

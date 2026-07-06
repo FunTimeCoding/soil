@@ -2,7 +2,7 @@ package receive
 
 import (
 	"charm.land/bubbletea/v2"
-	"github.com/funtimecoding/go-library/pkg/monitor/gorilla/client"
+	"github.com/funtimecoding/soil/pkg/monitor/gorilla/client"
 )
 
 func Command(c *client.Client) tea.Cmd {

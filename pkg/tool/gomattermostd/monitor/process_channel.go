@@ -1,6 +1,6 @@
 package monitor
 
-import "github.com/funtimecoding/go-library/pkg/errors/panics"
+import "github.com/funtimecoding/soil/pkg/errors/panics"
 
 func (m *Monitor) processChannel(name string) {
 	m.mutex.RLock()

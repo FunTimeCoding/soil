@@ -2,7 +2,7 @@ package classify_prompt
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 )
 
 func (p *Prompt) Example(

@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/funtimecoding/go-library/pkg/source/imports"
+	"github.com/funtimecoding/soil/pkg/source/imports"
 	"go/ast"
 )
 

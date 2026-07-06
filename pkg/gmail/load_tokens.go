@@ -1,9 +1,9 @@
 package gmail
 
 import (
-	"github.com/funtimecoding/go-library/pkg/gmail/constant"
-	"github.com/funtimecoding/go-library/pkg/system"
-	"github.com/funtimecoding/go-library/pkg/system/join"
+	"github.com/funtimecoding/soil/pkg/gmail/constant"
+	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/system/join"
 	"golang.org/x/oauth2"
 	"strings"
 )

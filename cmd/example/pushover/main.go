@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/pushover"
+import "github.com/funtimecoding/soil/pkg/pushover"
 
 func main() {
 	p := pushover.NewEnvironment()

@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/chromium/constant"
+	"github.com/funtimecoding/soil/pkg/chromium/constant"
 	"strings"
 )
 

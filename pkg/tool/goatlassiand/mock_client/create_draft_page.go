@@ -1,8 +1,8 @@
 package mock_client
 
 import (
-	"github.com/funtimecoding/go-library/pkg/atlassian/confluence/constant"
-	"github.com/funtimecoding/go-library/pkg/atlassian/confluence/page"
+	"github.com/funtimecoding/soil/pkg/atlassian/confluence/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page"
 )
 
 func (c *Client) CreateDraftPage(

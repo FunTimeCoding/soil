@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/console"
+	"github.com/funtimecoding/soil/pkg/console"
 )
 
 var White = console.NewColor("#fff")

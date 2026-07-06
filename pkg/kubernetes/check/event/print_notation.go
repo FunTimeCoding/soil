@@ -1,12 +1,12 @@
 package event
 
 import (
-	"github.com/funtimecoding/go-library/pkg/kubernetes/check/event/option"
-	kubernetes "github.com/funtimecoding/go-library/pkg/kubernetes/constant"
-	"github.com/funtimecoding/go-library/pkg/kubernetes/types/native/event"
-	"github.com/funtimecoding/go-library/pkg/monitor/constant"
-	item "github.com/funtimecoding/go-library/pkg/monitor/item/constant"
-	"github.com/funtimecoding/go-library/pkg/monitor/report"
+	"github.com/funtimecoding/soil/pkg/kubernetes/check/event/option"
+	kubernetes "github.com/funtimecoding/soil/pkg/kubernetes/constant"
+	"github.com/funtimecoding/soil/pkg/kubernetes/types/native/event"
+	"github.com/funtimecoding/soil/pkg/monitor/constant"
+	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/monitor/report"
 	"slices"
 )
 

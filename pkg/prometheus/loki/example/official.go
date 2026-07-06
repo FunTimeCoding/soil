@@ -2,8 +2,8 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/prometheus/loki/constant"
-	"github.com/funtimecoding/go-library/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/prometheus/loki/constant"
+	"github.com/funtimecoding/soil/pkg/system/environment"
 )
 
 func Official() {

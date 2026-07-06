@@ -1,18 +1,18 @@
 package main
 
 import (
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/claude/example/token_usage"
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/claude/example/usage"
-	anthropic "github.com/funtimecoding/go-library/pkg/generative/anthropic/example"
-	gguf "github.com/funtimecoding/go-library/pkg/generative/gguf/example"
-	langchain "github.com/funtimecoding/go-library/pkg/generative/langchain/example"
-	"github.com/funtimecoding/go-library/pkg/generative/langchain/example/function"
-	mistral "github.com/funtimecoding/go-library/pkg/generative/mistral/example"
-	anthropicServer "github.com/funtimecoding/go-library/pkg/generative/model_context/example/anthropic"
-	"github.com/funtimecoding/go-library/pkg/generative/model_context/example/mark"
-	ollama "github.com/funtimecoding/go-library/pkg/generative/ollama/example"
-	openWebUI "github.com/funtimecoding/go-library/pkg/generative/open_webui/example"
-	openai "github.com/funtimecoding/go-library/pkg/generative/openai/example"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/example/token_usage"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/example/usage"
+	anthropic "github.com/funtimecoding/soil/pkg/generative/anthropic/example"
+	gguf "github.com/funtimecoding/soil/pkg/generative/gguf/example"
+	langchain "github.com/funtimecoding/soil/pkg/generative/langchain/example"
+	"github.com/funtimecoding/soil/pkg/generative/langchain/example/function"
+	mistral "github.com/funtimecoding/soil/pkg/generative/mistral/example"
+	anthropicServer "github.com/funtimecoding/soil/pkg/generative/model_context/example/anthropic"
+	"github.com/funtimecoding/soil/pkg/generative/model_context/example/mark"
+	ollama "github.com/funtimecoding/soil/pkg/generative/ollama/example"
+	openWebUI "github.com/funtimecoding/soil/pkg/generative/open_webui/example"
+	openai "github.com/funtimecoding/soil/pkg/generative/openai/example"
 	"time"
 )
 

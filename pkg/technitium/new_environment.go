@@ -1,8 +1,8 @@
 package technitium
 
 import (
-	"github.com/funtimecoding/go-library/pkg/system/environment"
-	"github.com/funtimecoding/go-library/pkg/technitium/constant"
+	"github.com/funtimecoding/soil/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/technitium/constant"
 )
 
 func NewEnvironment() *Client {

@@ -2,7 +2,7 @@ package release
 
 import (
 	"github.com/coreos/go-semver/semver"
-	library "github.com/funtimecoding/go-library/pkg/semver"
+	library "github.com/funtimecoding/soil/pkg/semver"
 )
 
 func LatestCompatible(

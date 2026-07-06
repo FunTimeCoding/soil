@@ -1,6 +1,6 @@
 package option
 
-import "github.com/funtimecoding/go-library/pkg/netbox"
+import "github.com/funtimecoding/soil/pkg/netbox"
 
 type Netbox struct {
 	Client  *netbox.Client

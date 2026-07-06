@@ -1,8 +1,8 @@
 package goanalyze
 
 import (
-	"github.com/funtimecoding/go-library/pkg/lint/output"
-	"github.com/funtimecoding/go-library/pkg/tool/goanalyze/option"
+	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/tool/goanalyze/option"
 	"os"
 )
 

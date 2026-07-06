@@ -2,8 +2,8 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/chat/telegram"
-	"github.com/funtimecoding/go-library/pkg/chat/telegram/constant"
+	"github.com/funtimecoding/soil/pkg/chat/telegram"
+	"github.com/funtimecoding/soil/pkg/chat/telegram/constant"
 )
 
 func Update() {

@@ -2,8 +2,8 @@ package alliance
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/gw2"
-	"github.com/funtimecoding/go-library/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/gw2"
+	"github.com/funtimecoding/soil/pkg/system/environment"
 )
 
 func PrintAccount() {

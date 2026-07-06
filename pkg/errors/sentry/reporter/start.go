@@ -1,6 +1,6 @@
 package reporter
 
-import "github.com/funtimecoding/go-library/pkg/errors/sentry"
+import "github.com/funtimecoding/soil/pkg/errors/sentry"
 
 func (r *Reporter) Start() *Reporter {
 	if r.locator == "" {

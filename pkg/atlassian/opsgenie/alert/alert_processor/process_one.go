@@ -1,6 +1,6 @@
 package alert_processor
 
-import "github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/alert"
+import "github.com/funtimecoding/soil/pkg/atlassian/opsgenie/alert"
 
 func (p *Processor) ProcessOne(v *alert.Alert) *alert.Alert {
 	var result *alert.Alert

@@ -2,7 +2,7 @@ package netbox
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/netbox/device_role"
+	"github.com/funtimecoding/soil/pkg/netbox/device_role"
 )
 
 func (c *Client) DeviceRoleByName(n string) (*device_role.Role, error) {

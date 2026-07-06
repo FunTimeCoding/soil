@@ -1,6 +1,6 @@
 package service
 
-import "github.com/funtimecoding/go-library/pkg/tool/goclauded/sweep"
+import "github.com/funtimecoding/soil/pkg/tool/goclauded/sweep"
 
 func (s *Service) DeleteSession(identifier string) error {
 	s.client.Delete(identifier)

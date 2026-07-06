@@ -2,11 +2,11 @@ package alert
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/check/alert/option"
-	"github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/constant"
-	"github.com/funtimecoding/go-library/pkg/console/status/tag"
-	"github.com/funtimecoding/go-library/pkg/monitor"
-	item "github.com/funtimecoding/go-library/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/check/alert/option"
+	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/constant"
+	"github.com/funtimecoding/soil/pkg/console/status/tag"
+	"github.com/funtimecoding/soil/pkg/monitor"
+	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
 )
 
 func Check(o *option.Alert) {

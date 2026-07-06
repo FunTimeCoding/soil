@@ -1,9 +1,9 @@
 package web
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/tool/gomaintlogd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gomaintlogd/store/entry"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store/entry"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"

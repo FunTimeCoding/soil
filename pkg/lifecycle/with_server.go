@@ -1,6 +1,6 @@
 package lifecycle
 
-import "github.com/funtimecoding/go-library/pkg/lifecycle/server"
+import "github.com/funtimecoding/soil/pkg/lifecycle/server"
 
 func WithServer(s *server.Server) Option {
 	return func(l *Lifecycle) {

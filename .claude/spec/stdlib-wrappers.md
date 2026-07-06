@@ -45,7 +45,7 @@ For HTTP response bodies: `notation.MustDecodeBytes(system.ReadAll(resp.Body), &
 |---------|-------|-------|
 | `time.Parse(layout, s)` | `time.Parse` | Returns `time.Time` |
 
-Import as `"github.com/funtimecoding/go-library/pkg/time"` - shadows
+Import as `"github.com/funtimecoding/soil/pkg/time"` - shadows
 stdlib `time` when the stdlib package is no longer needed directly.
 
 ## When Not to Wrap

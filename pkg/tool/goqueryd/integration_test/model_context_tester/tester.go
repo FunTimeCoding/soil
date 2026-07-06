@@ -1,8 +1,8 @@
 package model_context_tester
 
 import (
-	"github.com/funtimecoding/go-library/pkg/generative/model_context_client"
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/integration_test/base"
+	"github.com/funtimecoding/soil/pkg/generative/model_context_client"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/integration_test/base"
 )
 
 type Tester struct {

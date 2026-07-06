@@ -1,8 +1,8 @@
 package token_usage
 
 import (
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/claude/example/common"
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/claude/usage_entry"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/example/common"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/usage_entry"
 )
 
 func modelCost(

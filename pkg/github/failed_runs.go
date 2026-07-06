@@ -1,6 +1,6 @@
 package github
 
-import "github.com/funtimecoding/go-library/pkg/github/run"
+import "github.com/funtimecoding/soil/pkg/github/run"
 
 func (c *Client) FailedRuns(verbose bool) []*run.Run {
 	var result []*run.Run

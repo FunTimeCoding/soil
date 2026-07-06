@@ -1,6 +1,6 @@
 package web
 
-import "github.com/funtimecoding/go-library/pkg/web/locator"
+import "github.com/funtimecoding/soil/pkg/web/locator"
 
 func Link(
 	host string,

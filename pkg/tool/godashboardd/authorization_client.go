@@ -1,10 +1,10 @@
 package godashboardd
 
 import (
-	"github.com/funtimecoding/go-library/pkg/strings/join"
-	"github.com/funtimecoding/go-library/pkg/tool/godashboardd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/godashboardd/option"
-	"github.com/funtimecoding/go-library/pkg/web/authorization/client"
+	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/option"
+	"github.com/funtimecoding/soil/pkg/web/authorization/client"
 )
 
 func authorizationClient(o *option.Dashboard) *client.Client {

@@ -3,7 +3,7 @@ package model_context
 import (
 	"context"
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/tool/gokubernetesd/service/cluster"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/cluster"
 	"github.com/mark3labs/mcp-go/server"
 )
 

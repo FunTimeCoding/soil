@@ -1,6 +1,6 @@
 package service
 
-import "github.com/funtimecoding/go-library/pkg/prometheus/rule"
+import "github.com/funtimecoding/soil/pkg/prometheus/rule"
 
 func (s *Service) Rules(instance string) ([]*rule.Rule, error) {
 	c, e := s.Client(instance)

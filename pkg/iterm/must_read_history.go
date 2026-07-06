@@ -1,8 +1,8 @@
 package iterm
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/iterm/history"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/iterm/history"
 )
 
 func (c *Client) MustReadHistory(

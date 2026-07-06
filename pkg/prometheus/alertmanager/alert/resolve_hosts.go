@@ -1,6 +1,6 @@
 package alert
 
-import "github.com/funtimecoding/go-library/pkg/system"
+import "github.com/funtimecoding/soil/pkg/system"
 
 func (a *Alert) ResolveHosts() []string {
 	if a.HostResolved() {

@@ -3,8 +3,8 @@
 package service
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/tool/gomemoryd/integration_test/service_tester"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/integration_test/service_tester"
 	"testing"
 )
 

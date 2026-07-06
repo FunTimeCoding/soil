@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/tool/gokubernetesd/service/certificate_detail"
-	"github.com/funtimecoding/go-library/pkg/tool/gokubernetesd/service/resource"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/certificate_detail"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/resource"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 

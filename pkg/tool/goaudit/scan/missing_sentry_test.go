@@ -1,8 +1,8 @@
 package scan
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"testing"
 )
 
@@ -24,7 +24,7 @@ func TestMissingSentryWithReporter(t *testing.T) {
 	v.WriteString("cmd/gotest/main.go", "package main\n")
 	v.WriteString(
 		"pkg/tool/gotest/run.go",
-		"package gotest\n\nimport \"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter\"\n\nfunc Run() {\n\tr := reporter.New(\"gotest\")\n}\n",
+		"package gotest\n\nimport \"github.com/funtimecoding/soil/pkg/errors/sentry/reporter\"\n\nfunc Run() {\n\tr := reporter.New(\"gotest\")\n}\n",
 	)
 	result := MissingSentry(v)
 	assert.Integer(t, 0, len(result))
@@ -35,7 +35,7 @@ func TestMissingSentryWithOptionalReporter(t *testing.T) {
 	v.WriteString("cmd/gotest/main.go", "package main\n")
 	v.WriteString(
 		"pkg/tool/gotest/run.go",
-		"package gotest\n\nimport \"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter\"\n\nfunc Run() {\n\tr := reporter.NewOptional(\"gotest\", \"v0.1.0\")\n}\n",
+		"package gotest\n\nimport \"github.com/funtimecoding/soil/pkg/errors/sentry/reporter\"\n\nfunc Run() {\n\tr := reporter.NewOptional(\"gotest\", \"v0.1.0\")\n}\n",
 	)
 	result := MissingSentry(v)
 	assert.Integer(t, 0, len(result))

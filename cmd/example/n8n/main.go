@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/generative/n8n"
+	"github.com/funtimecoding/soil/pkg/generative/n8n"
 )
 
 func main() {

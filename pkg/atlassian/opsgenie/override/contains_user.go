@@ -1,6 +1,6 @@
 package override
 
-import "github.com/funtimecoding/go-library/pkg/face"
+import "github.com/funtimecoding/soil/pkg/face"
 
 func ContainsUser(
 	o *Override,

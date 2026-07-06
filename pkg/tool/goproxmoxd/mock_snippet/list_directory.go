@@ -1,7 +1,7 @@
 package mock_snippet
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/mock_snippet/mock_entry"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/mock_snippet/mock_entry"
 	"io/fs"
 )
 

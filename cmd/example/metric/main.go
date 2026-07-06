@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/funtimecoding/go-library/pkg/metric"
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/metric"
+	"github.com/funtimecoding/soil/pkg/system"
 	"log"
 )
 

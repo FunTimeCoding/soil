@@ -1,8 +1,8 @@
 package mark
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/generative/model_context/example/mark/option"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/generative/model_context/example/mark/option"
 )
 
 func Main() {

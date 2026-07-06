@@ -1,6 +1,6 @@
 package node
 
-import "github.com/funtimecoding/go-library/pkg/brave/bookmark/file"
+import "github.com/funtimecoding/soil/pkg/brave/bookmark/file"
 
 type Node struct {
 	Type     string

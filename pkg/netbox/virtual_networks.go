@@ -1,6 +1,6 @@
 package netbox
 
-import "github.com/funtimecoding/go-library/pkg/netbox/virtual_network"
+import "github.com/funtimecoding/soil/pkg/netbox/virtual_network"
 
 func (c *Client) VirtualNetworks() ([]*virtual_network.Network, error) {
 	result, _, e := c.client.IpamAPI.IpamVlansList(

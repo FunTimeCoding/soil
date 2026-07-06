@@ -1,11 +1,11 @@
 package main
 
 import (
-	"github.com/funtimecoding/go-library/pkg/text/multi_line"
-	"github.com/funtimecoding/go-library/pkg/web"
-	"github.com/funtimecoding/go-library/pkg/web/authenticator"
-	"github.com/funtimecoding/go-library/pkg/web/location"
-	"github.com/funtimecoding/go-library/pkg/web/request_context"
+	"github.com/funtimecoding/soil/pkg/text/multi_line"
+	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/authenticator"
+	"github.com/funtimecoding/soil/pkg/web/location"
+	"github.com/funtimecoding/soil/pkg/web/request_context"
 	"net/http"
 )
 

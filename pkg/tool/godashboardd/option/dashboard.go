@@ -1,6 +1,6 @@
 package option
 
-import "github.com/funtimecoding/go-library/pkg/tool/godashboardd/board"
+import "github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
 
 type Dashboard struct {
 	Port             int

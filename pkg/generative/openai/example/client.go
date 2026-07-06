@@ -1,6 +1,6 @@
 package example
 
-import "github.com/funtimecoding/go-library/pkg/generative/openai"
+import "github.com/funtimecoding/soil/pkg/generative/openai"
 
 func Client() {
 	openai.NewEnvironment()

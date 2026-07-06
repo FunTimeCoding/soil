@@ -1,6 +1,6 @@
 package keepass
 
-import "github.com/funtimecoding/go-library/pkg/system/environment"
+import "github.com/funtimecoding/soil/pkg/system/environment"
 
 func NewEnvironment() *Client {
 	return New(

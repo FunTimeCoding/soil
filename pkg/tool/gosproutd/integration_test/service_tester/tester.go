@@ -1,8 +1,8 @@
 package service_tester
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/integration_test/mock_notifier"
-	"github.com/funtimecoding/go-library/pkg/tool/gosproutd/service"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration_test/mock_notifier"
+	"github.com/funtimecoding/soil/pkg/tool/gosproutd/service"
 )
 
 type Tester struct {

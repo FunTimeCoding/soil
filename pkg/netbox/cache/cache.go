@@ -1,16 +1,16 @@
 package cache
 
 import (
-	"github.com/funtimecoding/go-library/pkg/netbox/device_role"
-	"github.com/funtimecoding/go-library/pkg/netbox/device_type"
-	"github.com/funtimecoding/go-library/pkg/netbox/internet_address"
-	"github.com/funtimecoding/go-library/pkg/netbox/manufacturer"
-	"github.com/funtimecoding/go-library/pkg/netbox/physical_address"
-	"github.com/funtimecoding/go-library/pkg/netbox/prefix"
-	"github.com/funtimecoding/go-library/pkg/netbox/rack"
-	"github.com/funtimecoding/go-library/pkg/netbox/site"
-	"github.com/funtimecoding/go-library/pkg/netbox/tag"
-	"github.com/funtimecoding/go-library/pkg/netbox/tenant"
+	"github.com/funtimecoding/soil/pkg/netbox/device_role"
+	"github.com/funtimecoding/soil/pkg/netbox/device_type"
+	"github.com/funtimecoding/soil/pkg/netbox/internet_address"
+	"github.com/funtimecoding/soil/pkg/netbox/manufacturer"
+	"github.com/funtimecoding/soil/pkg/netbox/physical_address"
+	"github.com/funtimecoding/soil/pkg/netbox/prefix"
+	"github.com/funtimecoding/soil/pkg/netbox/rack"
+	"github.com/funtimecoding/soil/pkg/netbox/site"
+	"github.com/funtimecoding/soil/pkg/netbox/tag"
+	"github.com/funtimecoding/soil/pkg/netbox/tenant"
 )
 
 type Cache struct {

@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/gochromed"
+import "github.com/funtimecoding/soil/pkg/tool/gochromed"
 
 var (
 	Version   string

@@ -2,7 +2,7 @@ package site
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/chromium/protocol"
+	"github.com/funtimecoding/soil/pkg/chromium/protocol"
 )
 
 func (s *Site) printCloseMemories() {

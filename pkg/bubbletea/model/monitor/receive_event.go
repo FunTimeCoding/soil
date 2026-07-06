@@ -1,9 +1,9 @@
 package monitor
 
 import (
-	"github.com/funtimecoding/go-library/pkg/bubbletea/model/monitor/receive"
-	"github.com/funtimecoding/go-library/pkg/monitor/constant"
-	"github.com/funtimecoding/go-library/pkg/strings/split"
+	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/receive"
+	"github.com/funtimecoding/soil/pkg/monitor/constant"
+	"github.com/funtimecoding/soil/pkg/strings/split"
 	"log"
 )
 

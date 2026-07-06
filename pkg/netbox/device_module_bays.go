@@ -2,7 +2,7 @@ package netbox
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/netbox/module_bay"
+	"github.com/funtimecoding/soil/pkg/netbox/module_bay"
 )
 
 func (c *Client) DeviceModuleBays(device string) ([]*module_bay.Bay, error) {

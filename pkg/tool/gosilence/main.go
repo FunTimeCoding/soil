@@ -1,11 +1,11 @@
 package gosilence
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/check/silence"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/check/silence/option"
-	"github.com/funtimecoding/go-library/pkg/tool/gosilence/constant"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/check/silence"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/check/silence/option"
+	"github.com/funtimecoding/soil/pkg/tool/gosilence/constant"
 )
 
 func Main(

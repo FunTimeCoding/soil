@@ -1,6 +1,6 @@
 package netbox
 
-import "github.com/funtimecoding/go-library/pkg/netbox/internet_address"
+import "github.com/funtimecoding/soil/pkg/netbox/internet_address"
 
 func (c *Client) DeviceAddresses(device string) ([]*internet_address.Address, error) {
 	result, _, e := c.client.IpamAPI.IpamIpAddressesList(

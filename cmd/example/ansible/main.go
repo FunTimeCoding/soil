@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/provision/ansible"
+import "github.com/funtimecoding/soil/pkg/provision/ansible"
 
 func main() {
 	c := ansible.NewEnvironment()

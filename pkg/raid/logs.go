@@ -1,9 +1,9 @@
 package raid
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/tool/goraidd/generated/client"
-	"github.com/funtimecoding/go-library/pkg/web"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/generated/client"
+	"github.com/funtimecoding/soil/pkg/web"
 	"time"
 )
 

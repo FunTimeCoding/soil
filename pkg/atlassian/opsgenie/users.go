@@ -1,8 +1,8 @@
 package opsgenie
 
 import (
-	"github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/user"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/user"
+	"github.com/funtimecoding/soil/pkg/errors"
 	rawUser "github.com/opsgenie/opsgenie-go-sdk-v2/user"
 )
 

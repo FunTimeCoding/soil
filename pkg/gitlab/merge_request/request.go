@@ -1,7 +1,7 @@
 package merge_request
 
 import (
-	"github.com/funtimecoding/go-library/pkg/face"
+	"github.com/funtimecoding/soil/pkg/face"
 	"gitlab.com/gitlab-org/api/client-go/v2"
 	"time"
 )

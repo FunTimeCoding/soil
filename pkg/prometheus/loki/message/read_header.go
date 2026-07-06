@@ -2,7 +2,7 @@ package message
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/web/telemetry/constant"
+	"github.com/funtimecoding/soil/pkg/web/telemetry/constant"
 	"net/http"
 	"strings"
 )

@@ -1,7 +1,7 @@
 package update_machine
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
 	"strings"
 )
 

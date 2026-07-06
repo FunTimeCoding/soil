@@ -1,9 +1,9 @@
 package score_colorer
 
 import (
-	"github.com/funtimecoding/go-library/pkg/console/color_assignment"
-	"github.com/funtimecoding/go-library/pkg/face"
-	"github.com/funtimecoding/go-library/pkg/math/range_mapping"
+	"github.com/funtimecoding/soil/pkg/console/color_assignment"
+	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/math/range_mapping"
 )
 
 func New[T face.ScoreColorable](

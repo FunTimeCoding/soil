@@ -2,7 +2,7 @@ package resource
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/tool/gokubernetesd/service/format"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/format"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )
 

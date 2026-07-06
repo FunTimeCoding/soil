@@ -1,7 +1,7 @@
 package issue
 
 import (
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
 	"time"
 )
 

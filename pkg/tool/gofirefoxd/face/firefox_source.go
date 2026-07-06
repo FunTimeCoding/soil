@@ -1,8 +1,8 @@
 package face
 
 import (
-	"github.com/funtimecoding/go-library/pkg/firefox/content"
-	"github.com/funtimecoding/go-library/pkg/firefox/tab"
+	"github.com/funtimecoding/soil/pkg/firefox/content"
+	"github.com/funtimecoding/soil/pkg/firefox/tab"
 )
 
 type FirefoxSource interface {

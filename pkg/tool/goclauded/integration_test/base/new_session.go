@@ -1,7 +1,7 @@
 package base
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/integration_test/model_context_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration_test/model_context_tester"
 	"testing"
 )
 

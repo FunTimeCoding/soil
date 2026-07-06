@@ -1,9 +1,9 @@
 package clean
 
 import (
-	"github.com/funtimecoding/go-library/pkg/git/remote/provider_map"
-	"github.com/funtimecoding/go-library/pkg/tool/goclean/clean/option"
-	"github.com/funtimecoding/go-library/pkg/web/host"
+	"github.com/funtimecoding/soil/pkg/git/remote/provider_map"
+	"github.com/funtimecoding/soil/pkg/tool/goclean/clean/option"
+	"github.com/funtimecoding/soil/pkg/web/host"
 )
 
 func providerMap(o *option.Clean) *provider_map.Map {

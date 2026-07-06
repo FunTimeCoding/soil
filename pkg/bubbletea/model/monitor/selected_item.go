@@ -1,6 +1,6 @@
 package monitor
 
-import "github.com/funtimecoding/go-library/pkg/monitor/item"
+import "github.com/funtimecoding/soil/pkg/monitor/item"
 
 func (m *Model) selectedItem() *item.Item {
 	identifier := m.table.SelectedRow()[0]

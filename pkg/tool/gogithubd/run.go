@@ -2,13 +2,13 @@ package gogithubd
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/face"
-	"github.com/funtimecoding/go-library/pkg/github"
-	"github.com/funtimecoding/go-library/pkg/lifecycle"
-	"github.com/funtimecoding/go-library/pkg/log/logger"
-	"github.com/funtimecoding/go-library/pkg/metric"
-	"github.com/funtimecoding/go-library/pkg/tool/gogithubd/option"
-	"github.com/funtimecoding/go-library/pkg/tool/gogithubd/worker"
+	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/github"
+	"github.com/funtimecoding/soil/pkg/lifecycle"
+	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/metric"
+	"github.com/funtimecoding/soil/pkg/tool/gogithubd/option"
+	"github.com/funtimecoding/soil/pkg/tool/gogithubd/worker"
 )
 
 func Run(

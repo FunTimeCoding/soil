@@ -1,8 +1,8 @@
 package web
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/gosproutd/constant"
-	"github.com/funtimecoding/go-library/pkg/web/layout"
+	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
+	"github.com/funtimecoding/soil/pkg/web/layout"
 	"net/http"
 )
 

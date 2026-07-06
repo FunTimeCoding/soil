@@ -2,8 +2,8 @@ package web
 
 import (
 	"bytes"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
 

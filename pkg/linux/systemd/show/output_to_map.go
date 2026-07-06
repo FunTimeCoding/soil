@@ -1,8 +1,8 @@
 package show
 
 import (
-	"github.com/funtimecoding/go-library/pkg/strings/split"
-	"github.com/funtimecoding/go-library/pkg/strings/split/key_value"
+	"github.com/funtimecoding/soil/pkg/strings/split"
+	"github.com/funtimecoding/soil/pkg/strings/split/key_value"
 )
 
 func OutputToMap(s string) map[string]string {

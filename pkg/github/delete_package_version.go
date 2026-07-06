@@ -1,6 +1,6 @@
 package github
 
-import "github.com/funtimecoding/go-library/pkg/github/constant"
+import "github.com/funtimecoding/soil/pkg/github/constant"
 
 func (c *Client) DeletePackageVersion(
 	packageName string,

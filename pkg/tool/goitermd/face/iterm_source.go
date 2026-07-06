@@ -1,9 +1,9 @@
 package face
 
 import (
-	"github.com/funtimecoding/go-library/pkg/iterm/history"
-	"github.com/funtimecoding/go-library/pkg/iterm/screen"
-	"github.com/funtimecoding/go-library/pkg/iterm/session"
+	"github.com/funtimecoding/soil/pkg/iterm/history"
+	"github.com/funtimecoding/soil/pkg/iterm/screen"
+	"github.com/funtimecoding/soil/pkg/iterm/session"
 )
 
 type ItermSource interface {

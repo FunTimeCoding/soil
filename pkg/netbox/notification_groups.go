@@ -1,6 +1,6 @@
 package netbox
 
-import "github.com/funtimecoding/go-library/pkg/netbox/notification_group"
+import "github.com/funtimecoding/soil/pkg/netbox/notification_group"
 
 func (c *Client) NotificationGroups() ([]*notification_group.Group, error) {
 	result, _, e := c.client.ExtrasAPI.ExtrasNotificationGroupsList(

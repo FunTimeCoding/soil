@@ -1,8 +1,8 @@
 package mock_service
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/face"
-	"github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/inventory"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/inventory"
 )
 
 func New(

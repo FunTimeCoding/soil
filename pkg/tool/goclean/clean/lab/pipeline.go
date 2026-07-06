@@ -2,12 +2,12 @@ package lab
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/gitlab"
-	"github.com/funtimecoding/go-library/pkg/gitlab/branch"
-	"github.com/funtimecoding/go-library/pkg/gitlab/pipeline"
-	"github.com/funtimecoding/go-library/pkg/gitlab/project"
-	"github.com/funtimecoding/go-library/pkg/tool/goclean/clean/option"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/gitlab"
+	"github.com/funtimecoding/soil/pkg/gitlab/branch"
+	"github.com/funtimecoding/soil/pkg/gitlab/pipeline"
+	"github.com/funtimecoding/soil/pkg/gitlab/project"
+	"github.com/funtimecoding/soil/pkg/tool/goclean/clean/option"
 	"log"
 )
 

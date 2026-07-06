@@ -2,18 +2,18 @@ package goversion
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/argument"
-	library "github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/git/check/status"
-	"github.com/funtimecoding/go-library/pkg/go_mod/check/version"
-	"github.com/funtimecoding/go-library/pkg/go_mod/check/version/option"
-	item "github.com/funtimecoding/go-library/pkg/monitor/item/constant"
-	"github.com/funtimecoding/go-library/pkg/runtime"
-	"github.com/funtimecoding/go-library/pkg/strings/split"
-	"github.com/funtimecoding/go-library/pkg/system"
-	"github.com/funtimecoding/go-library/pkg/system/environment"
-	"github.com/funtimecoding/go-library/pkg/tool/goversion/constant"
+	"github.com/funtimecoding/soil/pkg/argument"
+	library "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/git/check/status"
+	"github.com/funtimecoding/soil/pkg/go_mod/check/version"
+	"github.com/funtimecoding/soil/pkg/go_mod/check/version/option"
+	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/runtime"
+	"github.com/funtimecoding/soil/pkg/strings/split"
+	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/tool/goversion/constant"
 )
 
 func Main(

@@ -1,6 +1,6 @@
 package service
 
-import "github.com/funtimecoding/go-library/pkg/tool/goqueryd/service/index_result"
+import "github.com/funtimecoding/soil/pkg/tool/goqueryd/service/index_result"
 
 func (s *Service) IndexCollections(collection string) ([]*index_result.IndexResult, error) {
 	status, e := s.store.Status()

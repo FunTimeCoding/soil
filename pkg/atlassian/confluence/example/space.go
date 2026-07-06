@@ -2,8 +2,8 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/atlassian/confluence"
-	"github.com/funtimecoding/go-library/pkg/atlassian/confluence/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/confluence"
+	"github.com/funtimecoding/soil/pkg/atlassian/confluence/constant"
 )
 
 func Space() {

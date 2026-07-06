@@ -1,6 +1,6 @@
 package wait
 
-import "github.com/funtimecoding/go-library/pkg/tool/gowait/wait/option"
+import "github.com/funtimecoding/soil/pkg/tool/gowait/wait/option"
 
 func Run(o *option.Wait) {
 	if o.Locator != "" {

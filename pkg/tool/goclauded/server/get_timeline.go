@@ -2,10 +2,10 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/generated/server"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/service/argument"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/timeline"
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/argument"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/timeline"
 )
 
 func (s *Server) GetTimeline(

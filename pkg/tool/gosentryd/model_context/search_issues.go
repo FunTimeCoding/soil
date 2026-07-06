@@ -3,9 +3,9 @@ package model_context
 import (
 	"context"
 	"errors"
-	"github.com/funtimecoding/go-library/pkg/generative/mark/response"
-	"github.com/funtimecoding/go-library/pkg/tool/gosentryd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gosentryd/model_context/argument"
+	"github.com/funtimecoding/soil/pkg/generative/mark/response"
+	"github.com/funtimecoding/soil/pkg/tool/gosentryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosentryd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 

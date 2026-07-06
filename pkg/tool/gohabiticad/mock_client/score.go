@@ -1,6 +1,6 @@
 package mock_client
 
-import "github.com/funtimecoding/go-library/pkg/habitica/score"
+import "github.com/funtimecoding/soil/pkg/habitica/score"
 
 func (c *Client) Score(
 	_ string,

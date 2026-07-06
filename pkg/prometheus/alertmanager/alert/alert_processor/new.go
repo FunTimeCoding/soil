@@ -1,13 +1,13 @@
 package alert_processor
 
 import (
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert/advanced_option"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert/alert_enricher"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert/field_changer"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert/label_filter"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert/name_filter"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert/rule_parser"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert/statistic"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/advanced_option"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/alert_enricher"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/field_changer"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/label_filter"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/name_filter"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/rule_parser"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/statistic"
 )
 
 func New(

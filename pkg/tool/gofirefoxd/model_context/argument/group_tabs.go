@@ -1,6 +1,6 @@
 package argument
 
-import "github.com/funtimecoding/go-library/pkg/generative/mark/request/integer"
+import "github.com/funtimecoding/soil/pkg/generative/mark/request/integer"
 
 type GroupTabs struct {
 	TabIdentifiers  []int           `json:"tab_ids"`

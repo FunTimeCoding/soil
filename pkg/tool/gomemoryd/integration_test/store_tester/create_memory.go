@@ -1,8 +1,8 @@
 package store_tester
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/tool/gomemoryd/store/save_option"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/save_option"
 )
 
 func (o *Tester) CreateMemory(p *save_option.Option) int64 {

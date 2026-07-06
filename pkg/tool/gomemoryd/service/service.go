@@ -1,9 +1,9 @@
 package service
 
 import (
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/tokenizer"
-	"github.com/funtimecoding/go-library/pkg/tool/gomemoryd/store"
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/face"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/tokenizer"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 )
 
 type Service struct {

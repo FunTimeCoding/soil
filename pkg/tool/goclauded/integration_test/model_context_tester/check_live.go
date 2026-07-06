@@ -1,8 +1,8 @@
 package model_context_tester
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/generated/client"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 )
 
 func (s *Session) CheckLive() *client.CheckResponse {

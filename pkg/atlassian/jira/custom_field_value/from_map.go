@@ -1,6 +1,6 @@
 package custom_field_value
 
-import "github.com/funtimecoding/go-library/pkg/notation"
+import "github.com/funtimecoding/soil/pkg/notation"
 
 func FromMap(m map[string]any) *Value {
 	var result Value

@@ -2,10 +2,10 @@ package proxmox
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/proxmox/constant"
-	"github.com/funtimecoding/go-library/pkg/web"
-	"github.com/funtimecoding/go-library/pkg/web/locator"
-	"github.com/funtimecoding/go-library/pkg/web/verbose_transport"
+	"github.com/funtimecoding/soil/pkg/proxmox/constant"
+	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/web/verbose_transport"
 	"github.com/luthermonson/go-proxmox"
 	"net/http"
 )

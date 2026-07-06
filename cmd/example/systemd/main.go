@@ -2,12 +2,12 @@ package main
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/linux/systemd"
-	"github.com/funtimecoding/go-library/pkg/ssh"
-	"github.com/funtimecoding/go-library/pkg/ssh/command"
-	"github.com/funtimecoding/go-library/pkg/system"
-	"github.com/funtimecoding/go-library/pkg/time"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/linux/systemd"
+	"github.com/funtimecoding/soil/pkg/ssh"
+	"github.com/funtimecoding/soil/pkg/ssh/command"
+	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/time"
 )
 
 func main() {

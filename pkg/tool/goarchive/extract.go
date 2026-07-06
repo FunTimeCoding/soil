@@ -2,8 +2,8 @@ package goarchive
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/nwaples/rardecode/v2"
 	"io"
 	"path/filepath"

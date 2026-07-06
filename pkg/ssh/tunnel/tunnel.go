@@ -1,6 +1,6 @@
 package tunnel
 
-import "github.com/funtimecoding/go-library/pkg/system/run/process"
+import "github.com/funtimecoding/soil/pkg/system/run/process"
 
 type Tunnel struct {
 	process   *process.Process

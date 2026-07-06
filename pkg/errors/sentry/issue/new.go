@@ -1,8 +1,8 @@
 package issue
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/basic/response"
-	"github.com/funtimecoding/go-library/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/basic/response"
+	"github.com/funtimecoding/soil/pkg/monitor/item/constant"
 )
 
 func New(v *response.Issue) *Issue {

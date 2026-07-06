@@ -2,7 +2,7 @@ package netbox
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/netbox/site"
+	"github.com/funtimecoding/soil/pkg/netbox/site"
 )
 
 func (c *Client) SiteByName(n string) (*site.Site, error) {

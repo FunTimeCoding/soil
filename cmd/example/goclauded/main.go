@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/goclauded/example"
+import "github.com/funtimecoding/soil/pkg/tool/goclauded/example"
 
 func main() {
 	example.QueryErrors()

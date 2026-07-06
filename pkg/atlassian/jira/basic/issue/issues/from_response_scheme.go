@@ -2,8 +2,8 @@ package issues
 
 import (
 	"github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
-	"github.com/funtimecoding/go-library/pkg/atlassian/jira/basic/issue"
-	"github.com/funtimecoding/go-library/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/atlassian/jira/basic/issue"
+	"github.com/funtimecoding/soil/pkg/notation"
 )
 
 func FromResponseScheme(r *models.ResponseScheme) *Issues {

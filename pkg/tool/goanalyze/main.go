@@ -1,10 +1,10 @@
 package goanalyze
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/tool/goanalyze/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goanalyze/option"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/tool/goanalyze/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goanalyze/option"
 )
 
 func Main(

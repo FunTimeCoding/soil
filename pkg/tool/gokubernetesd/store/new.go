@@ -1,8 +1,8 @@
 package store
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/tool/gokubernetesd/store/mute_rule"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/store/mute_rule"
 	"github.com/glebarez/sqlite"
 	"gorm.io/gorm"
 )

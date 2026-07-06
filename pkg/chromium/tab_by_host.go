@@ -1,7 +1,7 @@
 package chromium
 
 import (
-	"github.com/funtimecoding/go-library/pkg/chromium/tab"
+	"github.com/funtimecoding/soil/pkg/chromium/tab"
 	"strings"
 )
 

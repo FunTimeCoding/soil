@@ -1,6 +1,6 @@
 package sed
 
-import "github.com/funtimecoding/go-library/pkg/tool/gosed/sed/option"
+import "github.com/funtimecoding/soil/pkg/tool/gosed/sed/option"
 
 func validate(o *option.Sed) {
 	if o.Host == "" {

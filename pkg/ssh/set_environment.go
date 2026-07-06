@@ -1,8 +1,8 @@
 package ssh
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/ssh/command"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/ssh/command"
 	"golang.org/x/crypto/ssh"
 )
 

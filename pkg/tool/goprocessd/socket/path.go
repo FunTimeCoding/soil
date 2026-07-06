@@ -3,7 +3,7 @@ package socket
 import (
 	"crypto/sha256"
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/system"
+	"github.com/funtimecoding/soil/pkg/system"
 	"path/filepath"
 )
 

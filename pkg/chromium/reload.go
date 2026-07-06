@@ -4,8 +4,8 @@ import (
 	"context"
 	"github.com/chromedp/cdproto/page"
 	"github.com/chromedp/chromedp"
-	"github.com/funtimecoding/go-library/pkg/chromium/constant"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/chromium/constant"
+	"github.com/funtimecoding/soil/pkg/errors"
 )
 
 func (c *Client) Reload(x context.Context) {

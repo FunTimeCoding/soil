@@ -2,8 +2,8 @@ package anthropic
 
 import (
 	"github.com/anthropics/anthropic-sdk-go"
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/cache"
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/constant"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/cache"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/constant"
 )
 
 func buildSystem(

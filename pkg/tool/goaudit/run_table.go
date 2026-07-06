@@ -2,9 +2,9 @@ package goaudit
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/lint/concern"
-	"github.com/funtimecoding/go-library/pkg/tool/goaudit/format"
-	"github.com/funtimecoding/go-library/pkg/tool/goaudit/scan"
+	"github.com/funtimecoding/soil/pkg/lint/concern"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/format"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
 )
 
 func runTable(

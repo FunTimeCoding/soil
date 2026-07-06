@@ -1,10 +1,10 @@
 package web
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/gw2/constant"
-	"github.com/funtimecoding/go-library/pkg/strings/join"
-	goraidd "github.com/funtimecoding/go-library/pkg/tool/goraidd/constant"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/gw2/constant"
+	"github.com/funtimecoding/soil/pkg/strings/join"
+	goraidd "github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
 	"net/http"
 	"path/filepath"
 	"strings"

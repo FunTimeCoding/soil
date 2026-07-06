@@ -1,8 +1,8 @@
 package technitium
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/technitium/zone"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/technitium/zone"
 )
 
 func (c *Client) MustZones() []*zone.Zone {

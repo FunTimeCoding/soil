@@ -2,7 +2,7 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/proxmox"
+	"github.com/funtimecoding/soil/pkg/proxmox"
 )
 
 func Read() {

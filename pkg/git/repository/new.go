@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"github.com/funtimecoding/go-library/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/monitor/item/constant"
 	"path/filepath"
 	"strings"
 )

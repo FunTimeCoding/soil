@@ -2,10 +2,10 @@ package gomaintlog
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/tool/gomaintlog/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/gomaintlogd/client"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlog/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/client"
 )
 
 func Main(

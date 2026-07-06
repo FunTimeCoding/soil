@@ -1,6 +1,6 @@
 package frame_probe
 
-import "github.com/funtimecoding/go-library/pkg/chromium"
+import "github.com/funtimecoding/soil/pkg/chromium"
 
 // FrameProbe answers the protocol questions in
 // doc/ai/plan/gochromed-iframe-targets.md (devops/go-library):

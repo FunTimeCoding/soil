@@ -1,9 +1,9 @@
 package service
 
 import (
-	"github.com/funtimecoding/go-library/pkg/kubernetes/client"
-	"github.com/funtimecoding/go-library/pkg/kubernetes/client/client_configuration"
-	"github.com/funtimecoding/go-library/pkg/tool/gokubernetesd/service/cluster"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client/client_configuration"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/cluster"
 )
 
 func buildClusters() map[string]*cluster.Cluster {

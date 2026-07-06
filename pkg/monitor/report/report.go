@@ -1,6 +1,6 @@
 package report
 
-import "github.com/funtimecoding/go-library/pkg/monitor/item"
+import "github.com/funtimecoding/soil/pkg/monitor/item"
 
 type Report struct {
 	Count int

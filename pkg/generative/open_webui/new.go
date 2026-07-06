@@ -1,6 +1,6 @@
 package open_webui
 
-import "github.com/funtimecoding/go-library/pkg/generative/open_webui/basic"
+import "github.com/funtimecoding/soil/pkg/generative/open_webui/basic"
 
 func New(
 	host string,

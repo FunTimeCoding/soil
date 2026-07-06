@@ -2,8 +2,8 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/brave"
-	"github.com/funtimecoding/go-library/pkg/brave/constant"
+	"github.com/funtimecoding/soil/pkg/brave"
+	"github.com/funtimecoding/soil/pkg/brave/constant"
 )
 
 func Profile() {

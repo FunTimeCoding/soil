@@ -3,13 +3,13 @@
 package store
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert/fixture"
-	"github.com/funtimecoding/go-library/pkg/constant"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/generative/ollama"
-	system "github.com/funtimecoding/go-library/pkg/system/constant"
-	goqueryd "github.com/funtimecoding/go-library/pkg/tool/goqueryd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/store/chunk"
+	"github.com/funtimecoding/soil/pkg/assert/fixture"
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/generative/ollama"
+	system "github.com/funtimecoding/soil/pkg/system/constant"
+	goqueryd "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/chunk"
 	"os"
 	"path/filepath"
 	"testing"

@@ -2,10 +2,10 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/generative/mark/response"
-	"github.com/funtimecoding/go-library/pkg/prometheus/rule"
-	"github.com/funtimecoding/go-library/pkg/tool/goprometheusd/convert"
-	"github.com/funtimecoding/go-library/pkg/tool/goprometheusd/model_context/argument"
+	"github.com/funtimecoding/soil/pkg/generative/mark/response"
+	"github.com/funtimecoding/soil/pkg/prometheus/rule"
+	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/convert"
+	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 	"strings"
 )

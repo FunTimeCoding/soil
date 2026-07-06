@@ -1,8 +1,8 @@
 package preseed
 
 import (
-	"github.com/funtimecoding/go-library/pkg/system/debian/constant"
-	"github.com/funtimecoding/go-library/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/system/debian/constant"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
 func Link(release string) string {

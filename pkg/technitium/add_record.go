@@ -2,7 +2,7 @@ package technitium
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/technitium/record"
+	"github.com/funtimecoding/soil/pkg/technitium/record"
 	"net/url"
 )
 

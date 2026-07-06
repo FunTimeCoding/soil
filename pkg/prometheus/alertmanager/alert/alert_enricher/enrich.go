@@ -1,6 +1,6 @@
 package alert_enricher
 
-import "github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert"
+import "github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
 
 func (e *Enricher) enrich(a *alert.Alert) {
 	for _, n := range e.enrichments {

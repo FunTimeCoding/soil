@@ -1,11 +1,11 @@
 package gotechnitium
 
 import (
-	"github.com/funtimecoding/go-library/pkg/argument"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/go-library/pkg/technitium"
-	"github.com/funtimecoding/go-library/pkg/tool/gotechnitium/constant"
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/technitium"
+	"github.com/funtimecoding/soil/pkg/tool/gotechnitium/constant"
 	"github.com/spf13/cobra"
 )
 

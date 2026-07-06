@@ -2,7 +2,7 @@ package basic
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/web/detail_error"
+	"github.com/funtimecoding/soil/pkg/web/detail_error"
 	"net/http"
 	"strings"
 )

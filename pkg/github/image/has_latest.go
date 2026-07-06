@@ -1,7 +1,7 @@
 package image
 
 import (
-	"github.com/funtimecoding/go-library/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/constant"
 	"slices"
 )
 

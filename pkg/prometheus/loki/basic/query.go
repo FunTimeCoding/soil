@@ -1,11 +1,11 @@
 package basic
 
 import (
-	"github.com/funtimecoding/go-library/pkg/notation"
-	"github.com/funtimecoding/go-library/pkg/prometheus/loki/basic/constant"
-	"github.com/funtimecoding/go-library/pkg/prometheus/loki/basic/query"
-	"github.com/funtimecoding/go-library/pkg/prometheus/loki/basic/query_result"
-	"github.com/funtimecoding/go-library/pkg/web/parameter"
+	"github.com/funtimecoding/soil/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/prometheus/loki/basic/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/loki/basic/query"
+	"github.com/funtimecoding/soil/pkg/prometheus/loki/basic/query_result"
+	"github.com/funtimecoding/soil/pkg/web/parameter"
 	"log"
 	"time"
 )

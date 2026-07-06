@@ -1,8 +1,8 @@
 package device
 
 import (
-	"github.com/funtimecoding/go-library/pkg/console"
-	"github.com/funtimecoding/go-library/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/console/status/option"
 )
 
 func (d *Device) formatSerial(f *option.Format) string {

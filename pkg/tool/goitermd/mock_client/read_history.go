@@ -2,7 +2,7 @@ package mock_client
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/iterm/history"
+	"github.com/funtimecoding/soil/pkg/iterm/history"
 )
 
 func (c *Client) ReadHistory(

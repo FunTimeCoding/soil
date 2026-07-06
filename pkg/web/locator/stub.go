@@ -1,7 +1,7 @@
 package locator
 
 import (
-	"github.com/funtimecoding/go-library/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"net/url"
 )
 

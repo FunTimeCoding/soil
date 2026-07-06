@@ -1,6 +1,6 @@
 package task
 
-import "github.com/funtimecoding/go-library/pkg/habitica/checklist_item"
+import "github.com/funtimecoding/soil/pkg/habitica/checklist_item"
 
 type Task struct {
 	ID        string                 `json:"id"`

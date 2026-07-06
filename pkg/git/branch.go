@@ -1,6 +1,6 @@
 package git
 
-import "github.com/funtimecoding/go-library/pkg/errors"
+import "github.com/funtimecoding/soil/pkg/errors"
 
 func Branch(path string) string {
 	b, e := Open(path).Head()

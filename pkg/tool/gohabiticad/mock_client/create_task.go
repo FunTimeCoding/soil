@@ -1,8 +1,8 @@
 package mock_client
 
 import (
-	"github.com/funtimecoding/go-library/pkg/habitica/request"
-	"github.com/funtimecoding/go-library/pkg/habitica/task"
+	"github.com/funtimecoding/soil/pkg/habitica/request"
+	"github.com/funtimecoding/soil/pkg/habitica/task"
 	"github.com/google/uuid"
 )
 

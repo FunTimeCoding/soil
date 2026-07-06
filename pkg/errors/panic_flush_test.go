@@ -1,7 +1,7 @@
 package errors
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors/mock_flusher"
+	"github.com/funtimecoding/soil/pkg/errors/mock_flusher"
 	"testing"
 )
 

@@ -3,7 +3,7 @@ package server
 import (
 	"context"
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/generated/server"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
 )
 
 func (s *Server) PostSessionExport(

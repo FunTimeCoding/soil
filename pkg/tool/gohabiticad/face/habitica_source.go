@@ -1,13 +1,13 @@
 package face
 
 import (
-	"github.com/funtimecoding/go-library/pkg/habitica/cron"
-	"github.com/funtimecoding/go-library/pkg/habitica/gear"
-	"github.com/funtimecoding/go-library/pkg/habitica/request"
-	"github.com/funtimecoding/go-library/pkg/habitica/score"
-	"github.com/funtimecoding/go-library/pkg/habitica/statistic"
-	"github.com/funtimecoding/go-library/pkg/habitica/tag"
-	"github.com/funtimecoding/go-library/pkg/habitica/task"
+	"github.com/funtimecoding/soil/pkg/habitica/cron"
+	"github.com/funtimecoding/soil/pkg/habitica/gear"
+	"github.com/funtimecoding/soil/pkg/habitica/request"
+	"github.com/funtimecoding/soil/pkg/habitica/score"
+	"github.com/funtimecoding/soil/pkg/habitica/statistic"
+	"github.com/funtimecoding/soil/pkg/habitica/tag"
+	"github.com/funtimecoding/soil/pkg/habitica/task"
 )
 
 type HabiticaSource interface {

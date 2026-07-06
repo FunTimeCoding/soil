@@ -1,7 +1,7 @@
 package assert
 
 import (
-	"github.com/funtimecoding/go-library/pkg/math/round"
+	"github.com/funtimecoding/soil/pkg/math/round"
 	"testing"
 )
 

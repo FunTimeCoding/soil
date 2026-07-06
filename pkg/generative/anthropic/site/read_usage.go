@@ -1,7 +1,7 @@
 package site
 
 import (
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/site/usage_result"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/site/usage_result"
 	"regexp"
 	"strconv"
 )

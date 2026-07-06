@@ -7,8 +7,8 @@ import (
 	"github.com/chromedp/cdproto/page"
 	"github.com/chromedp/cdproto/target"
 	"github.com/chromedp/chromedp"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	library "github.com/funtimecoding/go-library/pkg/time"
+	"github.com/funtimecoding/soil/pkg/errors"
+	library "github.com/funtimecoding/soil/pkg/time"
 	"time"
 )
 

@@ -3,8 +3,8 @@ package system
 import (
 	"archive/tar"
 	"compress/gzip"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/system/join"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/system/join"
 	"os"
 	"path/filepath"
 )

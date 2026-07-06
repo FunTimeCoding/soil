@@ -1,6 +1,6 @@
 package session_store
 
-import "github.com/funtimecoding/go-library/pkg/web"
+import "github.com/funtimecoding/soil/pkg/web"
 
 func (s *Store) Create(address string) string {
 	s.Lock()

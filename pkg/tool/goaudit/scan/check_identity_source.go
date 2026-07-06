@@ -2,8 +2,8 @@ package scan
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/lint/concern"
-	"github.com/funtimecoding/go-library/pkg/parse"
+	"github.com/funtimecoding/soil/pkg/lint/concern"
+	"github.com/funtimecoding/soil/pkg/parse"
 )
 
 func checkIdentitySource(

@@ -1,8 +1,8 @@
 package mattermost
 
 import (
-	"github.com/funtimecoding/go-library/pkg/chat/mattermost/constant"
-	"github.com/funtimecoding/go-library/pkg/chat/mattermost/post"
+	"github.com/funtimecoding/soil/pkg/chat/mattermost/constant"
+	"github.com/funtimecoding/soil/pkg/chat/mattermost/post"
 	"github.com/mattermost/mattermost/server/public/model"
 )
 

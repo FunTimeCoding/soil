@@ -1,6 +1,6 @@
 package worker
 
-import "github.com/funtimecoding/go-library/pkg/github/run"
+import "github.com/funtimecoding/soil/pkg/github/run"
 
 func (w *Worker) Poll() {
 	type key struct {

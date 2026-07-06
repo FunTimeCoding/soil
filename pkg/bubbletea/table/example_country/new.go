@@ -2,7 +2,7 @@ package example_country
 
 import (
 	"charm.land/bubbles/v2/table"
-	"github.com/funtimecoding/go-library/pkg/bubbletea/style"
+	"github.com/funtimecoding/soil/pkg/bubbletea/style"
 )
 
 func New() *table.Model {

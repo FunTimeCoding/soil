@@ -1,8 +1,8 @@
 package run
 
 import (
-	"github.com/funtimecoding/go-library/pkg/github/job"
-	"github.com/funtimecoding/go-library/pkg/github/repository"
+	"github.com/funtimecoding/soil/pkg/github/job"
+	"github.com/funtimecoding/soil/pkg/github/repository"
 	"github.com/google/go-github/v88/github"
 	"time"
 )

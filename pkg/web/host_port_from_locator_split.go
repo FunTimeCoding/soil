@@ -1,6 +1,6 @@
 package web
 
-import "github.com/funtimecoding/go-library/pkg/strings"
+import "github.com/funtimecoding/soil/pkg/strings"
 
 func HostPortFromLocatorSplit(s string) (string, int) {
 	u := ParseLocator(s)

@@ -1,7 +1,7 @@
 package router
 
 import (
-	"github.com/funtimecoding/go-library/pkg/monitor/gorilla/router/client"
+	"github.com/funtimecoding/soil/pkg/monitor/gorilla/router/client"
 	"net"
 )
 

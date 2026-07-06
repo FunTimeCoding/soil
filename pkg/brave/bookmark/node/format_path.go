@@ -1,6 +1,6 @@
 package node
 
-import "github.com/funtimecoding/go-library/pkg/strings/join"
+import "github.com/funtimecoding/soil/pkg/strings/join"
 
 func (n *Node) FormatPath() string {
 	var result []string

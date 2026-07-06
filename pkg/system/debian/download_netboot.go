@@ -1,11 +1,11 @@
 package debian
 
 import (
-	"github.com/funtimecoding/go-library/pkg/system"
-	"github.com/funtimecoding/go-library/pkg/system/debian/netboot"
-	"github.com/funtimecoding/go-library/pkg/system/debian/preseed"
-	"github.com/funtimecoding/go-library/pkg/system/debian/release"
-	"github.com/funtimecoding/go-library/pkg/system/join"
+	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/system/debian/netboot"
+	"github.com/funtimecoding/soil/pkg/system/debian/preseed"
+	"github.com/funtimecoding/soil/pkg/system/debian/release"
+	"github.com/funtimecoding/soil/pkg/system/join"
 )
 
 func (c *Client) DownloadNetboot(

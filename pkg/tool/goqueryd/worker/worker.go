@@ -1,8 +1,8 @@
 package worker
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors/sentry/recovery"
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/service"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service"
 	"time"
 )
 

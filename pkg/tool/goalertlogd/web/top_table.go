@@ -2,7 +2,7 @@ package web
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/tool/goalertlogd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"time"

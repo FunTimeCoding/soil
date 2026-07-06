@@ -1,8 +1,8 @@
 package runner_tester
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/provision/runner"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/provision/runner"
 )
 
 func (o *Tester) Sync() *runner.SyncResult {

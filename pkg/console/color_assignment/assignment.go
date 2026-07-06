@@ -1,6 +1,6 @@
 package color_assignment
 
-import "github.com/funtimecoding/go-library/pkg/face"
+import "github.com/funtimecoding/soil/pkg/face"
 
 type Assignment struct {
 	Name     string

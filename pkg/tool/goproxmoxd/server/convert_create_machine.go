@@ -1,8 +1,8 @@
 package server
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/generated/server"
-	"github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/model_context/argument/create_machine"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/model_context/argument/create_machine"
 )
 
 func convertCreateMachine(b *server.CreateMachineRequest) *create_machine.Machine {

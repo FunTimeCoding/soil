@@ -1,6 +1,6 @@
 package connection
 
-import "github.com/funtimecoding/go-library/pkg/assistant/message"
+import "github.com/funtimecoding/soil/pkg/assistant/message"
 
 func (c *Connection) consumeEvent(m *message.Message) {
 	c.RLock()

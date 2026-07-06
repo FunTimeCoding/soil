@@ -2,7 +2,7 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/site"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/site"
 )
 
 func Dump() {

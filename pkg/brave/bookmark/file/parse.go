@@ -1,6 +1,6 @@
 package file
 
-import "github.com/funtimecoding/go-library/pkg/notation"
+import "github.com/funtimecoding/soil/pkg/notation"
 
 func Parse(s string) *Bookmark {
 	result := &Bookmark{}

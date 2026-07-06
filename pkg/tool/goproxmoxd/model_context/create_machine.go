@@ -3,9 +3,9 @@ package model_context
 import (
 	"context"
 	"errors"
-	"github.com/funtimecoding/go-library/pkg/generative/mark/response"
-	"github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goproxmoxd/model_context/argument/create_machine"
+	"github.com/funtimecoding/soil/pkg/generative/mark/response"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/model_context/argument/create_machine"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 

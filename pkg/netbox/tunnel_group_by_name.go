@@ -2,7 +2,7 @@ package netbox
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/netbox/tunnel_group"
+	"github.com/funtimecoding/soil/pkg/netbox/tunnel_group"
 )
 
 func (c *Client) TunnelGroupByName(n string) (*tunnel_group.Group, error) {

@@ -1,6 +1,6 @@
 package elite_parser
 
-import "github.com/funtimecoding/go-library/pkg/raid/elite"
+import "github.com/funtimecoding/soil/pkg/raid/elite"
 
 func extractIdentity(p *elite.Player) *Identity {
 	result := &Identity{

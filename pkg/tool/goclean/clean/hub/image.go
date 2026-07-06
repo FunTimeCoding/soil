@@ -2,8 +2,8 @@ package hub
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/github"
-	"github.com/funtimecoding/go-library/pkg/github/image"
+	"github.com/funtimecoding/soil/pkg/github"
+	"github.com/funtimecoding/soil/pkg/github/image"
 )
 
 func Image(

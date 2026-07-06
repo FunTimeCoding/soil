@@ -2,8 +2,8 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/tool/goclauded/constant"
-	web "github.com/funtimecoding/go-library/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	web "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 

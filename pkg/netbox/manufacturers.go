@@ -1,6 +1,6 @@
 package netbox
 
-import "github.com/funtimecoding/go-library/pkg/netbox/manufacturer"
+import "github.com/funtimecoding/soil/pkg/netbox/manufacturer"
 
 func (c *Client) Manufacturers() ([]*manufacturer.Manufacturer, error) {
 	if len(c.cache.Manufacturers) != 0 {

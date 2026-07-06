@@ -2,9 +2,9 @@ package server
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/generative/model_context/constant"
-	"github.com/funtimecoding/go-library/pkg/web"
-	webConstant "github.com/funtimecoding/go-library/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/generative/model_context/constant"
+	"github.com/funtimecoding/soil/pkg/web"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 	"strings"
 )

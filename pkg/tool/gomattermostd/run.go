@@ -2,16 +2,16 @@ package gomattermostd
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/chat/mattermost"
-	"github.com/funtimecoding/go-library/pkg/face"
-	"github.com/funtimecoding/go-library/pkg/lifecycle"
-	"github.com/funtimecoding/go-library/pkg/lifecycle/server"
-	"github.com/funtimecoding/go-library/pkg/log/logger"
-	"github.com/funtimecoding/go-library/pkg/telemetry"
-	"github.com/funtimecoding/go-library/pkg/tool/gomattermostd/model_context"
-	"github.com/funtimecoding/go-library/pkg/tool/gomattermostd/monitor"
-	"github.com/funtimecoding/go-library/pkg/tool/gomattermostd/option"
-	"github.com/funtimecoding/go-library/pkg/web"
+	"github.com/funtimecoding/soil/pkg/chat/mattermost"
+	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/lifecycle"
+	"github.com/funtimecoding/soil/pkg/lifecycle/server"
+	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/telemetry"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/monitor"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/option"
+	"github.com/funtimecoding/soil/pkg/web"
 	"net/http"
 )
 

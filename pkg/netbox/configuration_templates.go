@@ -1,6 +1,6 @@
 package netbox
 
-import "github.com/funtimecoding/go-library/pkg/netbox/configuration_template"
+import "github.com/funtimecoding/soil/pkg/netbox/configuration_template"
 
 func (c *Client) ConfigurationTemplates() ([]*configuration_template.Template, error) {
 	result, _, e := c.client.ExtrasAPI.ExtrasConfigTemplatesList(

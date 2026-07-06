@@ -2,8 +2,8 @@ package opsgenie
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/client"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/client"
+	"github.com/funtimecoding/soil/pkg/errors"
 )
 
 func New(

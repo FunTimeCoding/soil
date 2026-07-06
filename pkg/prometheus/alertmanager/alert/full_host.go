@@ -1,8 +1,8 @@
 package alert
 
 import (
-	"github.com/funtimecoding/go-library/pkg/network"
-	"github.com/funtimecoding/go-library/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/network"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"strings"
 )
 

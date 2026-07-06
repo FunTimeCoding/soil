@@ -1,6 +1,6 @@
 package store
 
-import "github.com/funtimecoding/go-library/pkg/tool/goclauded/store/summary"
+import "github.com/funtimecoding/soil/pkg/tool/goclauded/store/summary"
 
 func (s *Store) SummaryBySession(sessionIdentifier string) (string, error) {
 	var i summary.Summary

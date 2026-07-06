@@ -1,10 +1,10 @@
 package web
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/constant"
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/store/search_option"
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/web/search_cache"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search_option"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/web/search_cache"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"

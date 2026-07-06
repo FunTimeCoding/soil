@@ -1,7 +1,7 @@
 // Setup: ln -s $HOME/src/go-library/py/sublime_bridge "$HOME/Library/Application Support/Sublime Text/Packages/SublimeBridge"
 package main
 
-import "github.com/funtimecoding/go-library/pkg/tool/gosublimed"
+import "github.com/funtimecoding/soil/pkg/tool/gosublimed"
 
 var (
 	Version   string

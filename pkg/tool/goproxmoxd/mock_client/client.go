@@ -1,7 +1,7 @@
 package mock_client
 
 import (
-	"github.com/funtimecoding/go-library/pkg/proxmox/node_status"
+	"github.com/funtimecoding/soil/pkg/proxmox/node_status"
 	"github.com/luthermonson/go-proxmox"
 	"sync"
 )

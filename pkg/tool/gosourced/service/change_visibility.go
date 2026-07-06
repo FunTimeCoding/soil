@@ -1,6 +1,6 @@
 package service
 
-import "github.com/funtimecoding/go-library/pkg/lint/output"
+import "github.com/funtimecoding/soil/pkg/lint/output"
 
 func (s *Service) ChangeVisibility(
 	directory string,

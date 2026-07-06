@@ -2,7 +2,7 @@ package classify_prompt
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/notation"
 )
 
 func (p *Prompt) ParseResponse(s string) string {

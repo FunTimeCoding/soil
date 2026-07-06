@@ -1,9 +1,9 @@
 package board
 
 import (
-	"github.com/funtimecoding/go-library/pkg/assert"
-	"github.com/funtimecoding/go-library/pkg/assert/fixture"
-	"github.com/funtimecoding/go-library/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/assert/fixture"
+	"github.com/funtimecoding/soil/pkg/system/constant"
 	"testing"
 )
 

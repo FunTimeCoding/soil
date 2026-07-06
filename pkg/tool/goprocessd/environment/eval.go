@@ -3,7 +3,7 @@ package environment
 import (
 	"bufio"
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/system/run"
+	"github.com/funtimecoding/soil/pkg/system/run"
 	"strings"
 )
 

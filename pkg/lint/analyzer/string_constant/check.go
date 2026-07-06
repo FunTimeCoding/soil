@@ -1,7 +1,7 @@
 package string_constant
 
 import (
-	"github.com/funtimecoding/go-library/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/lint/output"
 	"go/ast"
 	"golang.org/x/tools/go/packages"
 	"path/filepath"

@@ -1,9 +1,9 @@
 package store
 
 import (
-	"github.com/funtimecoding/go-library/pkg/lint"
-	"github.com/funtimecoding/go-library/pkg/system"
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/store/index"
+	"github.com/funtimecoding/soil/pkg/lint"
+	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/index"
 	"strings"
 	"time"
 )

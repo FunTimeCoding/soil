@@ -2,9 +2,9 @@ package netbox
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/netbox/constant"
-	"github.com/funtimecoding/go-library/pkg/netbox/device"
-	"github.com/funtimecoding/go-library/pkg/netbox/network"
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
+	"github.com/funtimecoding/soil/pkg/netbox/device"
+	"github.com/funtimecoding/soil/pkg/netbox/network"
 )
 
 func (c *Client) DeviceInterfaceByName(

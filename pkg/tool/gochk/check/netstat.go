@@ -2,10 +2,10 @@ package check
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/linux"
-	"github.com/funtimecoding/go-library/pkg/linux/systemd/command"
-	"github.com/funtimecoding/go-library/pkg/linux/systemd/jc"
-	"github.com/funtimecoding/go-library/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/linux"
+	"github.com/funtimecoding/soil/pkg/linux/systemd/command"
+	"github.com/funtimecoding/soil/pkg/linux/systemd/jc"
+	"github.com/funtimecoding/soil/pkg/notation"
 )
 
 func Netstat(verbose bool) []*jc.Output {

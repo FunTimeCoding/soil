@@ -1,7 +1,7 @@
 package web_interface_tester
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/gotelemetryd/integration_test/base"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/integration_test/base"
 	"testing"
 )
 

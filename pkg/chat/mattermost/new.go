@@ -2,8 +2,8 @@ package mattermost
 
 import (
 	"context"
-	"github.com/funtimecoding/go-library/pkg/chat/mattermost/user_map"
-	"github.com/funtimecoding/go-library/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/chat/mattermost/user_map"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/mattermost/mattermost/server/public/model"
 )
 

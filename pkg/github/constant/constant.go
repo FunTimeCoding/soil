@@ -2,7 +2,7 @@ package constant
 
 import (
 	"errors"
-	"github.com/funtimecoding/go-library/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/console/status/option"
 )
 
 const (

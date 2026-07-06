@@ -2,7 +2,7 @@ package confluence
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/notation"
 )
 
 func (c *Client) AddComment(

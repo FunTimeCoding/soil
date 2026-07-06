@@ -1,6 +1,6 @@
 package service
 
-import "github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/silence"
+import "github.com/funtimecoding/soil/pkg/prometheus/alertmanager/silence"
 
 func (s *Service) Silences(
 	instance string,

@@ -1,9 +1,9 @@
 package alertmanager
 
 import (
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert/advanced_option"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert/alert_processor"
-	"github.com/funtimecoding/go-library/pkg/prometheus/alertmanager/alert/rule_parser"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/advanced_option"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/alert_processor"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/rule_parser"
 )
 
 func (c *Client) processor(p *advanced_option.Alert) (*alert_processor.Processor, error) {

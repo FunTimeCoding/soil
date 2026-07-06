@@ -1,9 +1,9 @@
 package git
 
 import (
-	"github.com/funtimecoding/go-library/pkg/git/constant"
-	"github.com/funtimecoding/go-library/pkg/git/repository"
-	"github.com/funtimecoding/go-library/pkg/system/run"
+	"github.com/funtimecoding/soil/pkg/git/constant"
+	"github.com/funtimecoding/soil/pkg/git/repository"
+	"github.com/funtimecoding/soil/pkg/system/run"
 )
 
 func ReadRepository(path string) *repository.Repository {

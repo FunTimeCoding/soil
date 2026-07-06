@@ -1,6 +1,6 @@
 package runner
 
-import "github.com/funtimecoding/go-library/pkg/strings/join"
+import "github.com/funtimecoding/soil/pkg/strings/join"
 
 func (r *Runner) formatTags() string {
 	if len(r.Tags) == 0 {

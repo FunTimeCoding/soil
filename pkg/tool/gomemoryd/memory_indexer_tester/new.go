@@ -1,9 +1,9 @@
 package memory_indexer_tester
 
 import (
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/tool/gomemoryd/memory_indexer"
-	"github.com/funtimecoding/go-library/pkg/tool/goqueryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/memory_indexer"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 	"net/http"
 	"net/http/httptest"
 	"testing"

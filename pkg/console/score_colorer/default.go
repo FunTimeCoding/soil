@@ -1,9 +1,9 @@
 package score_colorer
 
 import (
-	"github.com/funtimecoding/go-library/pkg/console"
-	"github.com/funtimecoding/go-library/pkg/console/color_assignment"
-	"github.com/funtimecoding/go-library/pkg/face"
+	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/console/color_assignment"
+	"github.com/funtimecoding/soil/pkg/face"
 )
 
 func Default[T face.ScoreColorable](v ...T) *Colorer {

@@ -2,7 +2,7 @@ package page
 
 import (
 	"bytes"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/yuin/goldmark"
 )
 

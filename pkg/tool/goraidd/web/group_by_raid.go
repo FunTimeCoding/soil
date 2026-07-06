@@ -1,6 +1,6 @@
 package web
 
-import "github.com/funtimecoding/go-library/pkg/tool/goraidd/store"
+import "github.com/funtimecoding/soil/pkg/tool/goraidd/store"
 
 func groupByRaid(rows []store.PlayerRaidRow) [][]store.PlayerRaidRow {
 	var result [][]store.PlayerRaidRow

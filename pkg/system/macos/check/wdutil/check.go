@@ -2,8 +2,8 @@ package wdutil
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/system"
-	library "github.com/funtimecoding/go-library/pkg/time"
+	"github.com/funtimecoding/soil/pkg/system"
+	library "github.com/funtimecoding/soil/pkg/time"
 	"time"
 )
 

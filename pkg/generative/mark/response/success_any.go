@@ -1,7 +1,7 @@
 package response
 
 import (
-	"github.com/funtimecoding/go-library/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 

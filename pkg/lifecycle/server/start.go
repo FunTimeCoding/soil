@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/funtimecoding/go-library/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web"
 	"net/http"
 	"net/http/pprof"
 )

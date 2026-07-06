@@ -1,6 +1,6 @@
 package face
 
-import "github.com/funtimecoding/go-library/pkg/sublime/view"
+import "github.com/funtimecoding/soil/pkg/sublime/view"
 
 type SublimeSource interface {
 	Views() ([]*view.View, error)

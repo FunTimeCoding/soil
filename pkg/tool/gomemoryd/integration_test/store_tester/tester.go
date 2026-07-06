@@ -1,7 +1,7 @@
 package store_tester
 
 import (
-	"github.com/funtimecoding/go-library/pkg/tool/gomemoryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
 	"testing"
 )
 

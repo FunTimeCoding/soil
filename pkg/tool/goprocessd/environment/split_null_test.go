@@ -2,7 +2,7 @@ package environment
 
 import (
 	"bufio"
-	"github.com/funtimecoding/go-library/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/assert"
 	"strings"
 	"testing"
 )

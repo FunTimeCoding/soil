@@ -1,7 +1,7 @@
 package client
 
 import (
-	"github.com/funtimecoding/go-library/pkg/kubernetes/client/client_configuration"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client/client_configuration"
 	"slices"
 	"sort"
 	"strings"

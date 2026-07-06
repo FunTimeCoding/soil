@@ -2,7 +2,7 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/github"
+	"github.com/funtimecoding/soil/pkg/github"
 )
 
 func PullRequest() {

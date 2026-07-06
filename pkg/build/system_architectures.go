@@ -1,6 +1,6 @@
 package build
 
-import "github.com/funtimecoding/go-library/pkg/system/constant"
+import "github.com/funtimecoding/soil/pkg/system/constant"
 
 func SystemArchitectures() []string {
 	var result []string

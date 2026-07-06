@@ -1,8 +1,8 @@
 package user
 
 import (
-	"github.com/funtimecoding/go-library/pkg/habitica/statistic"
-	"github.com/funtimecoding/go-library/pkg/habitica/user_items"
+	"github.com/funtimecoding/soil/pkg/habitica/statistic"
+	"github.com/funtimecoding/soil/pkg/habitica/user_items"
 )
 
 type User struct {

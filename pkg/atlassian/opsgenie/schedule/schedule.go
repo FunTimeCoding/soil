@@ -1,7 +1,7 @@
 package schedule
 
 import (
-	"github.com/funtimecoding/go-library/pkg/atlassian/opsgenie/team"
+	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/team"
 	"github.com/opsgenie/opsgenie-go-sdk-v2/schedule"
 )
 

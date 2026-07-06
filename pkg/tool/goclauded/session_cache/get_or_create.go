@@ -1,6 +1,6 @@
 package session_cache
 
-import "github.com/funtimecoding/go-library/pkg/generative/anthropic/claude/tracker"
+import "github.com/funtimecoding/soil/pkg/generative/anthropic/claude/tracker"
 
 func (c *Cache) GetOrCreate(identifier string) *tracker.State {
 	c.mutex.Lock()

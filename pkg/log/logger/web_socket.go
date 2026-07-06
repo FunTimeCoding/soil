@@ -2,8 +2,8 @@ package logger
 
 import (
 	"fmt"
-	"github.com/funtimecoding/go-library/pkg/assistant/message"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/assistant/message"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"log/slog"
 	"time"
 )

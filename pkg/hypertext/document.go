@@ -3,7 +3,7 @@ package hypertext
 import (
 	"bufio"
 	"github.com/PuerkitoBio/goquery"
-	"github.com/funtimecoding/go-library/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"io"
 )
 

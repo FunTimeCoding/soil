@@ -3,9 +3,9 @@ package anthropic
 import (
 	"context"
 	"github.com/anthropics/anthropic-sdk-go"
-	"github.com/funtimecoding/go-library/pkg/errors"
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/constant"
-	"github.com/funtimecoding/go-library/pkg/generative/anthropic/message"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/constant"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/message"
 	"log"
 )
 

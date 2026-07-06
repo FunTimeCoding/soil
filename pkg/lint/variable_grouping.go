@@ -1,7 +1,7 @@
 package lint
 
 import (
-	"github.com/funtimecoding/go-library/pkg/lint/file_report"
+	"github.com/funtimecoding/soil/pkg/lint/file_report"
 	"io"
 )
 
