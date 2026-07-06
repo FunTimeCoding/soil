@@ -10,7 +10,7 @@ import (
 func LatestTags() {
 	c := github.NewEnvironment()
 
-	for _, p := range c.MustPackages(constant.LibraryNamespace) {
+	for _, p := range c.MustPackages(constant.Namespace) {
 		var tags []string
 
 		for _, v := range c.MustPackageVersions(p.Name) {

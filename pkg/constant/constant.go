@@ -54,7 +54,7 @@ const (
 	InvalidRequestBody = "invalid request body"
 	UnexpectedError    = "unexpected error"
 
-	GoLibraryModule = "github.com/funtimecoding/soil"
+	SoilModule = "github.com/funtimecoding/soil"
 
 	DefaultVersion = "1.0.0"
 

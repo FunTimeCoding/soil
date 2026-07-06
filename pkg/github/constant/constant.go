@@ -13,8 +13,8 @@ const (
 	DelveNamespace  = "go-delve"
 	DelveRepository = "delve"
 
-	LibraryNamespace  = "funtimecoding"
-	LibraryRepository = "soil"
+	Namespace  = "funtimecoding"
+	Repository = "soil"
 
 	EventHeader     = "X-GitHub-Event"
 	SignatureHeader = "X-Hub-Signature-256"
@@ -22,14 +22,14 @@ const (
 	ContainerPackageType = "container"
 )
 
-var (
-	ErrorNotFound = errors.New("not found")
-	Format        = option.ExtendedColor.Copy()
-)
-
 // Pull request state
 const (
 	All    = "all"
 	Open   = "open"
 	Closed = "closed"
+)
+
+var (
+	ErrorNotFound = errors.New("not found")
+	Format        = option.ExtendedColor.Copy()
 )

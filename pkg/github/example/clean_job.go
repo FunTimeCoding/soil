@@ -10,8 +10,8 @@ import (
 func CleanJob() {
 	c := github.NewEnvironment()
 	f := option.ExtendedColor.Copy()
-	owner := constant.LibraryNamespace
-	repository := constant.LibraryRepository
+	owner := constant.Namespace
+	repository := constant.Repository
 
 	for _, w := range c.MustWorkflows(owner, repository) {
 		fmt.Printf("Workflow: %s\n", w.Format(f))

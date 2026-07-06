@@ -17,8 +17,8 @@ func BranchRequest() {
 	f := option.ExtendedColor.Copy()
 	fmt.Println(
 		c.MustBranchRequest(
-			constant.LibraryNamespace,
-			constant.LibraryRepository,
+			constant.Namespace,
+			constant.Repository,
 			branch,
 		).Format(f),
 	)

@@ -34,7 +34,7 @@ func generateStubTests(
 	sort.Strings(directories)
 	useAssert := strings.Contains(
 		v.ReadString("go.mod"),
-		library.GoLibraryModule,
+		library.SoilModule,
 	)
 
 	for _, d := range directories {

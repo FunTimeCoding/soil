@@ -256,7 +256,7 @@ func TestCheckStubToolPackage(t *testing.T) {
 	)
 }
 
-func TestCheckStubWithoutGoLibrary(t *testing.T) {
+func TestCheckStubWithoutSoil(t *testing.T) {
 	v := virtual_file_system.New()
 	v.WriteString("go.mod", "module example\n")
 	v.WriteString(
