@@ -132,7 +132,7 @@ To make a type usable as a `lifecycle.Worker`:
 - **Move callbacks into options.** If `Start(fn)` takes a callback, add a `WithSubscriber(fn)` option so `Start()` reads from the struct.
 - **HTTP servers become route registrars.** If a server type owns its own `*http.Server`, extract a `Setup(m *http.ServeMux)` method and let lifecycle own the HTTP serving via `WithServer`.
 
-## Go-Library Components with Start()/Stop()
+## Soil Components with Start()/Stop()
 
 These types implement the Worker interface:
 
