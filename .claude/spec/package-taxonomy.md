@@ -21,7 +21,7 @@ direction, and the criteria for introducing them.
 | `web/` | HTML rendering (gomponents). Holds `*view.View` on Server. Flat; file-prefix grouping. | `store/`, `constant/`, `model/`, `web/view/` |
 | `integration_test/` | Cross-package tests using only the public API. External test package. | all exported packages |
 
-### Shared web packages (go-library)
+### Shared web packages (soil)
 
 | Package | Role |
 |---------|------|

@@ -8,12 +8,12 @@ import (
 )
 
 func TestAddConcernRelativizesPath(t *testing.T) {
-	r := NewResultsWithDirectory("/Users/example/src/go-library/")
+	r := NewResultsWithDirectory("/Users/example/src/soil/")
 	r.AddConcern(
 		concern.NewFile(
 			"test",
 			"finding",
-			"/Users/example/src/go-library/pkg/foo/bar.go",
+			"/Users/example/src/soil/pkg/foo/bar.go",
 			false,
 		),
 	)

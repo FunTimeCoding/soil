@@ -60,7 +60,7 @@ nodename
 oapi
 servname
 
-# go-library
+# soil
 alertlog
 exitf
 ghjob

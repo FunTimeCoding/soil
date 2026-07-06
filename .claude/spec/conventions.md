@@ -59,9 +59,9 @@
   - Aim for functions/methods with ~15 calls or fewer to maintain readability
   - Line length: break at 80 characters, prioritizing fewer total lines (break single-arg calls before multi-arg calls)
 - **Multiline function calls** - when args don't fit one line, each arg gets its own line with closing paren separate
-- **Prefer go-library wrappers** - use go-library wrappers instead of stdlib + error checking. Quick reference:
+- **Prefer soil wrappers** - use soil wrappers instead of stdlib + error checking. Quick reference:
 
-  | stdlib call | go-library replacement |
+  | stdlib call | soil replacement |
   |---|---|
   | `os.Open(path)` | `system.Open(path)` |
   | `os.Create(path)` | `system.Create(path)` |
@@ -97,7 +97,7 @@
 - **Reuse existing constants** - use `web/constant.Listen`, `argument.Name`, `parameter.Query`, `parameter.Limit`, etc. Never hardcode strings that already have a constant in the codebase. MCP parameter names shared across tools live in `generative/model_context/parameter/`.
 - **Constant value naming** - abbreviations and acronyms are avoided in constant values, not just names. `Link = "link"` not `Link = "url"`. The value should be the honest, full-word form.
 - **Semantic constant splitting** - when the same string serves different layers (DB column, HTML form field, domain key), use separate constants even if the values are identical today. Example: `NameFieldKey = "name"` (field system), `NameColumn = "name"` (GORM), `NameParameter = "name"` (web routes/forms). They could diverge independently.
-- **Propagate generic constants toward go-library** - when a constant is used across multiple tools or packages (e.g. `FormMethod = "method"` for HTML forms), it belongs in go-library's shared vocabulary (e.g. `web/constant`), not duplicated in each consumer.
+- **Propagate generic constants toward soil** - when a constant is used across multiple tools or packages (e.g. `FormMethod = "method"` for HTML forms), it belongs in soil's shared vocabulary (e.g. `web/constant`), not duplicated in each consumer.
 - **Option struct naming** - named after the domain concept, not `Option` (e.g., `option.Log`, `option.Build`, `option.Commit`). File named after the struct. Constructor in `new.go` returns pointer.
 - Tests use `assert.*` helpers to reduce nesting
 - **`new_environment.go`** - when a package reads from environment variables, the environment constructor lives in `new_environment.go` and calls `New()` after reading the required vars. Pattern: `func NewEnvironment() *Client { return New(environment.Required(constant.HostEnvironment), environment.Required(constant.TokenEnvironment)) }`. The base `New()` always takes explicit params; `NewEnvironment()` is the env-reading wrapper.

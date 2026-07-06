@@ -8,7 +8,7 @@ import (
 func TestFixture(t *testing.T) {
 	assert.Suffix(
 		t,
-		"go-library/fixture/example.txt",
+		"soil/fixture/example.txt",
 		Path("example.txt"),
 	)
 }

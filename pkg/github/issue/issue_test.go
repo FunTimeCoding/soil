@@ -13,7 +13,7 @@ func TestIssue(t *testing.T) {
 		&github.Issue{
 			RepositoryURL: locator.New(
 				"api.github.com",
-			).Path("/repos/funtimecoding/go-library").Pointer(),
+			).Path("/repos/funtimecoding/soil").Pointer(),
 			Title:   new(upper.Alfa),
 			HTMLURL: new(upper.Bravo),
 		},
@@ -22,7 +22,7 @@ func TestIssue(t *testing.T) {
 	assert.Any(
 		t,
 		&Issue{
-			Repository: "funtimecoding/go-library",
+			Repository: "funtimecoding/soil",
 			Title:      upper.Alfa,
 			Link:       upper.Bravo,
 		},

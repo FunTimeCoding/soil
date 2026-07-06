@@ -14,7 +14,7 @@ const (
 	DelveRepository = "delve"
 
 	LibraryNamespace  = "funtimecoding"
-	LibraryRepository = "go-library"
+	LibraryRepository = "soil"
 
 	EventHeader     = "X-GitHub-Event"
 	SignatureHeader = "X-Hub-Signature-256"

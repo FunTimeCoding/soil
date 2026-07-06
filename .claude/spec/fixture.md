@@ -36,7 +36,7 @@ so callers never hardcode bare strings.
 
 Constants keep fixture paths refactorable and prevent bare string literals in tests.
 
-**go-library** - constants live in `pkg/system/constant/constant.go`:
+**soil** - constants live in `pkg/system/constant/constant.go`:
 
 ```go
 HypertextPath = "hypertext"
