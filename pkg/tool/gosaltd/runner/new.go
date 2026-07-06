@@ -16,6 +16,7 @@ func New(
 	s *store.Store,
 	l *logger.Logger,
 	r face.Reporter,
+	registry face.ProcessRegistry,
 ) *Runner {
 	result := &Runner{
 		store:         s,
@@ -32,6 +33,7 @@ func New(
 			ApplyFunction:   result.apply,
 			SetupFunction:   result.connectLoop,
 			CleanupFunction: s.Cleanup,
+			Registry:        registry,
 		},
 		l,
 		r,

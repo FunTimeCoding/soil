@@ -1,15 +1,12 @@
 package runner
 
-import (
-	"fmt"
-	"github.com/funtimecoding/go-library/pkg/system/run"
-)
+import "fmt"
 
 func (r *Runner) gitDiffLog(
 	old string,
 	new string,
 ) string {
-	c := run.New()
+	c := r.newRun()
 	c.Directory = r.clonePath
 	c.Start(
 		"git",

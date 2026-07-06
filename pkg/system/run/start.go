@@ -19,7 +19,7 @@ func (r *Run) Start(s ...string) string {
 	var stderr bytes.Buffer
 	c.Stdout = &stdout
 	c.Stderr = &stderr
-	e := c.Run()
+	e := r.startAndWait(c)
 	r.OutputString = stdout.String()
 	r.ErrorString = stderr.String()
 

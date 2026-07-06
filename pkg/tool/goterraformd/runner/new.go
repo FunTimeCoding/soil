@@ -13,6 +13,7 @@ func New(
 	s *store.Store,
 	l *logger.Logger,
 	r face.Reporter,
+	registry face.ProcessRegistry,
 ) *Runner {
 	result := &Runner{
 		store:         s,
@@ -20,6 +21,7 @@ func New(
 		terraformPath: o.TerraformPath,
 		logger:        l,
 		reporter:      r,
+		registry:      registry,
 	}
 	result.provision = runner.New(
 		runner.Configuration{
@@ -29,6 +31,7 @@ func New(
 			ApplyFunction:   result.apply,
 			InitFunction:    result.terraformInit,
 			CleanupFunction: s.Cleanup,
+			Registry:        registry,
 		},
 		l,
 		r,

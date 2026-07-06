@@ -14,4 +14,5 @@ type Runner struct {
 	terraformPath string
 	logger        *logger.Logger
 	reporter      face.Reporter
+	registry      face.ProcessRegistry
 }

@@ -27,10 +27,11 @@ func Run(
 		relational.New(o.PostgresLocator).Mapper(),
 		"highstate_runs",
 	)
-	n := runner.New(o, salt.NewEnvironment, s, l, r)
+	p := reaper.New(r)
+	n := runner.New(o, salt.NewEnvironment, s, l, r, p)
 	lifecycle.New(
 		l,
-		lifecycle.WithWorker(reaper.New(r)),
+		lifecycle.WithWorker(p),
 		lifecycle.WithWorker(n),
 		lifecycle.WithServer(
 			server.New(

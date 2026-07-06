@@ -6,30 +6,27 @@ import (
 )
 
 func (r *Reaper) reap() {
-	zombies := r.scan()
+	for pid, detail := range r.scan() {
+		if r.Contains(pid) {
+			continue
+		}
 
-	for {
 		var status syscall.WaitStatus
-		pid, e := syscall.Wait4(-1, &status, syscall.WNOHANG, nil)
+		reaped, e := syscall.Wait4(pid, &status, syscall.WNOHANG, nil)
 
-		if pid <= 0 || e != nil {
-			return
-		}
-
-		context := map[string]any{
-			"pid":         pid,
-			"exit_status": status.ExitStatus(),
-		}
-
-		if detail, okay := zombies[pid]; okay {
-			context["comm"] = detail.comm
-			context["ppid"] = detail.ppid
+		if reaped <= 0 || e != nil {
+			continue
 		}
 
 		r.reporter.CaptureWithContext(
 			fmt.Errorf("zombie reaped"),
 			"reaper",
-			context,
+			map[string]any{
+				"pid":         reaped,
+				"exit_status": status.ExitStatus(),
+				"comm":        detail.comm,
+				"ppid":        detail.ppid,
+			},
 		)
 	}
 }

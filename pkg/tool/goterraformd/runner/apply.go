@@ -3,7 +3,6 @@ package runner
 import (
 	"fmt"
 	"github.com/funtimecoding/go-library/pkg/provision/store"
-	"github.com/funtimecoding/go-library/pkg/system/run"
 	"github.com/funtimecoding/go-library/pkg/tool/goterraformd/constant"
 	"path/filepath"
 	"time"
@@ -29,7 +28,7 @@ func (r *Runner) apply(
 	}
 
 	start := time.Now()
-	c := run.New().NoPanic()
+	c := r.newRun().NoPanic()
 	c.Directory = directory
 	c.Start(arguments...)
 	record.DurationMillisecond = time.Since(start).Milliseconds()

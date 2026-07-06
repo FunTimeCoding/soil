@@ -19,6 +19,7 @@ func New(
 		initFunction:    c.InitFunction,
 		setupFunction:   c.SetupFunction,
 		cleanupFunction: c.CleanupFunction,
+		registry:        c.Registry,
 		logger:          l,
 		recovery:        recovery.New(l, r),
 		trigger:         make(chan TriggerRequest, 1),

@@ -2,7 +2,6 @@ package runner
 
 import (
 	"github.com/funtimecoding/go-library/pkg/provision/store"
-	"github.com/funtimecoding/go-library/pkg/system/run"
 	"github.com/funtimecoding/go-library/pkg/tool/goansibled/constant"
 	"path/filepath"
 	"time"
@@ -31,7 +30,7 @@ func (r *Runner) apply(
 		r.store.Create(record)
 		r.logger.Structured("playbook_start", constant.Playbook, p)
 		start := time.Now()
-		c := run.New().NoPanic()
+		c := r.newRun().NoPanic()
 		c.Directory = directory
 		c.Start("ansible-playbook", p)
 		record.DurationMillisecond = time.Since(start).Milliseconds()

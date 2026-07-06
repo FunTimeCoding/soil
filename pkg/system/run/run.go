@@ -14,6 +14,7 @@ type Run struct {
 	stderr         io.Writer
 	reporter       face.Reporter
 	reporterLabel  string
+	registry       face.ProcessRegistry
 	Directory      string
 	Panic          bool
 	Verbose        bool

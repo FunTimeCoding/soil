@@ -13,6 +13,7 @@ func New(
 	s *store.Store,
 	l *logger.Logger,
 	r face.Reporter,
+	registry face.ProcessRegistry,
 ) *Runner {
 	result := &Runner{
 		store:       s,
@@ -20,6 +21,7 @@ func New(
 		clonePath:   o.ClonePath,
 		ansiblePath: o.AnsiblePath,
 		logger:      l,
+		registry:    registry,
 	}
 	result.provision = runner.New(
 		runner.Configuration{
@@ -28,6 +30,7 @@ func New(
 			ToolPath:        o.AnsiblePath,
 			ApplyFunction:   result.apply,
 			CleanupFunction: s.Cleanup,
+			Registry:        registry,
 		},
 		l,
 		r,
