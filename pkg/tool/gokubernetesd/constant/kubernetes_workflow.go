@@ -47,8 +47,7 @@ an application is OutOfSync.
 certificates lists all certs sorted by expiry with renewal health.
 A cert showing "Ready" with "renewal: Failed" means the current
 cert works but renewal is stuck. Pass name + namespace for detail
-including the latest CertificateRequest. For the renewal
-procedure, read .claude/skill/certificate-renewal.md.
+including the latest CertificateRequest.
 
 ## Patch and apply
 

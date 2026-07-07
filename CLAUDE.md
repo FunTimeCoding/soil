@@ -2,7 +2,7 @@
 
 ## Specs
 
-Design and coding specs live in `.claude/spec/`:
+Design and coding specs live in `doc/ai/spec/`:
 
 - `conventions.md` - coding style, error handling, naming, structure
 - `naming.md` - banned identifier segments, replacement patterns, type/field naming rules
@@ -33,4 +33,19 @@ Read the relevant spec before working in that area.
 
 - `cmd/` - service entry points
 - `pkg/` - library and service packages
-- `.claude/spec` - specs
+- `doc/ai/spec/` - design and coding specs
+- `.claude-plugin/` - Claude Code plugin manifest and marketplace catalog
+- `skills/` - plugin skills, invoked as `/soil:<name>` from consuming repositories
+- `doc/ai/runbook/` - operational runbooks backing the skills
+
+## Claude Code plugin
+
+This repository is a Claude Code plugin named `soil` and its own
+marketplace. General-purpose skills (session lifecycle, lint, commit
+messages) live here; skills specific to VirtualMinds infrastructure
+stay in the internal repositories. Skills reference runbooks via
+`${CLAUDE_PLUGIN_ROOT}` so paths resolve from any consuming repository.
+
+- `/plugin marketplace add <path-or-url-to-this-repo>` registers it
+- `/plugin install soil@soil` installs the plugin
+- `/reload-plugins` picks up local edits during development

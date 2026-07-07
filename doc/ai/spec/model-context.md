@@ -96,7 +96,7 @@ const (
 )
 ```
 
-Reusable parameter names shared across multiple MCP tools (`query`, `limit`, `key`, `body`, `identifier`, `title`, `message`) live in `pkg/generative/model_context/parameter/parameter.go` and are referenced as `parameter.Query`, `parameter.Limit`, etc.
+Reusable parameter names shared across multiple MCP tools (`query`, `limit`, `key`, `body`, `identifier`, `title`, `message`) live in `pkg/generative/model_context/parameter/constant.go` and are referenced as `parameter.Query`, `parameter.Limit`, etc.
 
 ## Server Struct
 

@@ -1,0 +1,8 @@
+{
+  "name": "soil",
+  "description": "General-purpose skills from the soil library: session lifecycle, lint, commit messages",
+  "version": "0.1.0",
+  "author": {
+    "name": "Alexander Reitzel"
+  }
+}

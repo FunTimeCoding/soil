@@ -62,6 +62,12 @@ const (
 
 	VariableGroupingKey  = "var_grouping"
 	VariableGroupingText = "Consecutive var declarations should use var (...) block"
+
+	DeadPointerKey  = "dead_pointer"
+	DeadPointerText = "Referenced path does not exist"
+
+	AbsolutePointerKey  = "absolute_pointer"
+	AbsolutePointerText = "Absolute path reference"
 )
 
 var PackageBlocklist = []string{"api"}

@@ -76,4 +76,4 @@ func main() {
 
 - Do not split `cmd/example/` into multiple `.go` files - breaks `go run main.go`
 - Do not put private helpers in `cmd/example/` - move them to `pkg/<domain>/example/`
-- Do not put complex logic directly in `cmd/example/main.go` - extract to a `pkg` example function
+- Do not put complex logic directly in `cmd/example/<name>/main.go` - extract to a `pkg` example function

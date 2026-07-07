@@ -3,6 +3,8 @@ package lint
 import (
 	"github.com/funtimecoding/soil/pkg/lint/option"
 	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/lint/pointer"
+	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 )
 
@@ -43,6 +45,26 @@ func Check(
 		fixes,
 		markupFiles(v, skip, verbose),
 		[]Checker{Markup},
+		fix,
+		verbose,
+		r,
+	)
+	runCheckers(
+		v,
+		fixes,
+		markdownFiles(v, skip, verbose),
+		[]Checker{
+			Pointers(
+				pointer.Roots(v.Files()),
+				func(p string) bool {
+					return v.Has(p) || v.DirectoryExists(p)
+				},
+				func(p string) bool {
+					return system.FileExists(p) ||
+						system.DirectoryExists(p)
+				},
+			),
+		},
 		fix,
 		verbose,
 		r,

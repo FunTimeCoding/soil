@@ -1,0 +1,16 @@
+{
+  "name": "soil",
+  "owner": {
+    "name": "Alexander Reitzel"
+  },
+  "plugins": [
+    {
+      "name": "soil",
+      "source": "./",
+      "description": "General-purpose skills from the soil library: session lifecycle, lint, commit messages"
+    }
+  ],
+  "metadata": {
+    "description": "Skills from the soil library"
+  }
+}
