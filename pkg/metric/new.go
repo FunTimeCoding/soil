@@ -3,8 +3,8 @@ package metric
 import (
 	"context"
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/web"
-	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/location"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -17,14 +17,11 @@ func New(
 	verbose bool,
 	w *sync.WaitGroup,
 ) *Server {
-	var address string
-
 	if port == 0 {
-		port = Port
-		address = constant.MetricAddress
-	} else {
-		address = fmt.Sprintf(":%d", port)
+		port = environment.FallbackInteger(PortEnvironment, Port)
 	}
+
+	address := fmt.Sprintf(":%d", port)
 
 	r := prometheus.NewRegistry()
 	m := http.NewServeMux()
