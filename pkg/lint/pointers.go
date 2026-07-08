@@ -22,19 +22,29 @@ func Pointers(
 			line, number := s.Text()
 			s.PassLine(line)
 
-			for _, candidate := range pointer.Extract(line) {
-				switch pointer.Classify(candidate, roots) {
-				case pointer.Absolute:
-					s.AddConcern(
-						constant.AbsolutePointerKey,
-						constant.AbsolutePointerText,
-						path,
-						number,
-						line,
-						false,
-					)
-				case pointer.Sibling:
-					if !siblingExists(pointer.Normalize(candidate)) {
+			for _, extracted := range pointer.Extract(line) {
+				for _, candidate := range pointer.Expand(extracted) {
+					switch pointer.Classify(candidate, roots) {
+					case pointer.Absolute:
+						s.AddConcern(
+							constant.AbsolutePointerKey,
+							constant.AbsolutePointerText,
+							path,
+							number,
+							line,
+							false,
+						)
+					case pointer.Sibling:
+						if siblingExists(pointer.Normalize(candidate)) {
+							continue
+						}
+
+						relative, inside := pointer.Relative(path, candidate)
+
+						if inside && exists(relative) {
+							continue
+						}
+
 						s.AddConcern(
 							constant.DeadPointerKey,
 							constant.DeadPointerText,
@@ -43,17 +53,17 @@ func Pointers(
 							line,
 							false,
 						)
-					}
-				case pointer.Repository:
-					if !exists(pointer.Normalize(candidate)) {
-						s.AddConcern(
-							constant.DeadPointerKey,
-							constant.DeadPointerText,
-							path,
-							number,
-							line,
-							false,
-						)
+					case pointer.Repository:
+						if !exists(pointer.Normalize(candidate)) {
+							s.AddConcern(
+								constant.DeadPointerKey,
+								constant.DeadPointerText,
+								path,
+								number,
+								line,
+								false,
+							)
+						}
 					}
 				}
 			}

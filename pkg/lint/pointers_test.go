@@ -112,6 +112,82 @@ func TestPointersAbsolute(t *testing.T) {
 	)
 }
 
+func TestPointersRelativeExisting(t *testing.T) {
+	l := pointerChecker("doc/ai/spec/naming.md")(
+		"doc/ai/runbook/lint.md",
+		strings.NewReader("See `../spec/naming.md` for the rules.\n"),
+	)
+	assertReport(t, "doc/ai/runbook/lint.md", false, nil, "", l)
+}
+
+func TestPointersRelativeDead(t *testing.T) {
+	line := "See `../spec/ghost.md` for the rules."
+	l := pointerChecker("doc/ai/spec/naming.md")(
+		"doc/ai/runbook/lint.md",
+		strings.NewReader(fmt.Sprintf("%s\n", line)),
+	)
+	assertReport(
+		t,
+		"doc/ai/runbook/lint.md",
+		true,
+		[]*concern.Concern{
+			{
+				Key:      "dead_pointer",
+				Text:     "Referenced path does not exist",
+				Path:     "doc/ai/runbook/lint.md",
+				Type:     concern.Line,
+				Line:     1,
+				LineText: line,
+			},
+		},
+		"",
+		l,
+	)
+}
+
+func TestPointersSymbolIgnored(t *testing.T) {
+	l := pointerChecker()(
+		upper.Alfa,
+		strings.NewReader(
+			"Wraps `pkg/provision/salt.Client` and `pkg/system/run/New()`.\n",
+		),
+	)
+	assertReport(t, "Alfa", false, nil, "", l)
+}
+
+func TestPointersExpansionExisting(t *testing.T) {
+	l := pointerChecker("doc/ai/spec/naming.md", "doc/ai/spec/build.md")(
+		upper.Alfa,
+		strings.NewReader("Read `doc/ai/spec/{naming,build}.md` first.\n"),
+	)
+	assertReport(t, "Alfa", false, nil, "", l)
+}
+
+func TestPointersExpansionDead(t *testing.T) {
+	line := "Read `doc/ai/spec/{naming,ghost}.md` first."
+	l := pointerChecker("doc/ai/spec/naming.md")(
+		upper.Alfa,
+		strings.NewReader(fmt.Sprintf("%s\n", line)),
+	)
+	assertReport(
+		t,
+		"Alfa",
+		true,
+		[]*concern.Concern{
+			{
+				Key:      "dead_pointer",
+				Text:     "Referenced path does not exist",
+				Path:     "Alfa",
+				Type:     concern.Line,
+				Line:     1,
+				LineText: line,
+			},
+		},
+		"",
+		l,
+	)
+}
+
 func TestPointersSiblingExisting(t *testing.T) {
 	l := pointerChecker("../../github/soil/doc/ai/spec/naming.md")(
 		upper.Alfa,

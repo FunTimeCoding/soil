@@ -32,6 +32,8 @@ func TestClassify(t *testing.T) {
 	assert.String(t, Unknown, Classify("//nolint", roots))
 	assert.String(t, Unknown, Classify("/etc/hosts", roots))
 	assert.String(t, Unknown, Classify("pkg/web/RecoveryMiddleware", roots))
+	assert.String(t, Unknown, Classify("pkg/provision/salt.Client", roots))
+	assert.String(t, Unknown, Classify("pkg/check/memory.LocalLines()", roots))
 	assert.String(t, Placeholder, Classify("doc/ai/runbook/<name>.md", roots))
 	assert.String(t, Placeholder, Classify("pkg/tool/*.go", roots))
 	assert.String(t, Placeholder, Classify("$HOME/notes.md", roots))

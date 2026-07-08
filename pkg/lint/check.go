@@ -57,7 +57,9 @@ func Check(
 			Pointers(
 				pointer.Roots(v.Files()),
 				func(p string) bool {
-					return v.Has(p) || v.DirectoryExists(p)
+					return v.Has(p) ||
+						v.DirectoryExists(p) ||
+						system.DirectoryExists(p)
 				},
 				func(p string) bool {
 					return system.FileExists(p) ||
