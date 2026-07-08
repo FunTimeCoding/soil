@@ -22,7 +22,6 @@ func New(
 	}
 
 	address := fmt.Sprintf(":%d", port)
-
 	r := prometheus.NewRegistry()
 	m := http.NewServeMux()
 	m.Handle(

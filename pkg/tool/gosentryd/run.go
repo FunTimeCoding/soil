@@ -11,7 +11,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/option"
 	"github.com/funtimecoding/soil/pkg/web"
-	"github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
 
@@ -23,7 +22,7 @@ func Run(
 		logger.New(context.Background()),
 		lifecycle.WithServer(
 			server.New(
-				constant.ListenAddress,
+				web.AddressPort(o.Port),
 				func(m *http.ServeMux) {
 					model_context.New(
 						sentry.NewEnvironment(),
