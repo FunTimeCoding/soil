@@ -2,7 +2,7 @@ package tag
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/google/go-github/v88/github"
+	"github.com/google/go-github/v89/github"
 	"testing"
 )
 

@@ -3,7 +3,7 @@ package github
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/google/go-github/v88/github"
+	"github.com/google/go-github/v89/github"
 	"golang.org/x/oauth2"
 )
 

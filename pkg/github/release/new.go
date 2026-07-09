@@ -1,7 +1,7 @@
 package release
 
-import "github.com/google/go-github/v88/github"
+import "github.com/google/go-github/v89/github"
 
 func New(v *github.RepositoryRelease) *Release {
-	return &Release{Name: *v.TagName, Create: v.CreatedAt.Time, Raw: v}
+	return &Release{Name: v.GetTagName(), Create: v.GetCreatedAt().Time, Raw: v}
 }

@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/github/constant"
 	"github.com/funtimecoding/soil/pkg/github/pull_request"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/google/go-github/v88/github"
+	"github.com/google/go-github/v89/github"
 )
 
 func (c *Client) BranchRequest(

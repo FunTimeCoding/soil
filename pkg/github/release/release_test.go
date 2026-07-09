@@ -3,7 +3,7 @@ package release
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/strings/upper"
-	"github.com/google/go-github/v88/github"
+	"github.com/google/go-github/v89/github"
 	"testing"
 	"time"
 )
@@ -11,8 +11,8 @@ import (
 func TestRelease(t *testing.T) {
 	r := New(
 		&github.RepositoryRelease{
-			TagName:   new(upper.Alfa),
-			CreatedAt: &github.Timestamp{},
+			TagName:   upper.Alfa,
+			CreatedAt: github.Timestamp{},
 		},
 	)
 	r.Raw = nil
