@@ -24,7 +24,7 @@ func Run(
 ) {
 	l := logger.New(context.Background())
 	s := store.New(
-		relational.New(o.PostgresLocator).Mapper(),
+		relational.Open(l, o.PostgresLocator, o.LitePath),
 		"highstate_runs",
 	)
 	p := reaper.New(r)
@@ -35,7 +35,7 @@ func Run(
 		lifecycle.WithWorker(n),
 		lifecycle.WithServer(
 			server.New(
-				web.AddressPort(o.Port),
+				o.Address,
 				func(m *http.ServeMux) {
 					model_context.New(
 						n,

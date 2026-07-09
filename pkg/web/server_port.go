@@ -1,13 +1,10 @@
 package web
 
-import (
-	"fmt"
-	"net/http"
-)
+import "net/http"
 
 func ServerPort(
 	h http.Handler,
 	port int,
 ) *http.Server {
-	return Server(h, fmt.Sprintf(":%d", port))
+	return Server(h, AddressPort(port))
 }

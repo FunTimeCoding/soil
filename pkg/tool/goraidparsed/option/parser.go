@@ -1,7 +1,7 @@
 package option
 
 type Parser struct {
-	Port         int
+	Address      string
 	ParserPath   string
 	TemplatePath string
 	OutputPath   string

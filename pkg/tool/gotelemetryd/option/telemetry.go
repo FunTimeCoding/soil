@@ -1,7 +1,7 @@
 package option
 
 type Telemetry struct {
-	Port            int
+	Address         string
 	Version         string
 	PostgresLocator string
 	LitePath        string

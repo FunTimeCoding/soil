@@ -13,26 +13,24 @@ import (
 func New(t *testing.T) *Tester {
 	t.Helper()
 	s := store_tester.New(t)
-	scheme := runtime.NewScheme()
-	clientset := kubernetesFake.NewSimpleClientset()
+	set := kubernetesFake.NewSimpleClientset()
 	dynamic := dynamicFake.NewSimpleDynamicClientWithCustomListKinds(
-		scheme,
+		runtime.NewScheme(),
 		gvrListKinds(),
 	)
 	c := cluster.NewWithResources(
 		"test",
-		clientset,
+		set,
 		dynamic,
 		nil,
 		apiResources(),
 	)
-	svc := service.NewWithCluster(s.Store, c)
 
 	return &Tester{
 		Tester:    s,
-		Service:   svc,
+		Service:   service.NewWithCluster(s.Store, c),
 		Cluster:   c,
-		Clientset: clientset,
+		Clientset: set,
 		Dynamic:   dynamic,
 	}
 }

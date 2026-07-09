@@ -94,7 +94,7 @@
 ### Constants
 
 - **Constants in `constant.go`** - exported constants get their own `constant.go` file in the package. Prefer a single flat `constant.go` per package. When an iota enum is defined with a named type, both the type and the const values belong in the same constant package - separating them creates circular imports.
-- **Reuse existing constants** - use `web/constant.Listen`, `argument.Name`, `parameter.Query`, `parameter.Limit`, etc. Never hardcode strings that already have a constant in the codebase. MCP parameter names shared across tools live in `generative/model_context/parameter/`.
+- **Reuse existing constants** - use `web/constant.ListenPort`, `argument.Name`, `parameter.Query`, `parameter.Limit`, etc. Never hardcode strings that already have a constant in the codebase. MCP parameter names shared across tools live in `generative/model_context/parameter/`.
 - **Constant value naming** - abbreviations and acronyms are avoided in constant values, not just names. `Link = "link"` not `Link = "url"`. The value should be the honest, full-word form.
 - **Semantic constant splitting** - when the same string serves different layers (DB column, HTML form field, domain key), use separate constants even if the values are identical today. Example: `NameFieldKey = "name"` (field system), `NameColumn = "name"` (GORM), `NameParameter = "name"` (web routes/forms). They could diverge independently.
 - **Propagate generic constants toward soil** - when a constant is used across multiple tools or packages (e.g. `FormMethod = "method"` for HTML forms), it belongs in soil's shared vocabulary (e.g. `web/constant`), not duplicated in each consumer.

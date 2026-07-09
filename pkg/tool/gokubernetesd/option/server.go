@@ -1,8 +1,8 @@
 package option
 
 type Server struct {
-	Port     int
+	Address  string
 	ReadOnly bool
-	Path     string
+	LitePath string
 	Version  string
 }

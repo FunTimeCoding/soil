@@ -1,8 +1,8 @@
 package option
 
 type Query struct {
-	Port            int
-	DatabasePath    string
+	Address         string
+	LitePath        string
 	Version         string
 	RerankModel     string
 	RerankTokenizer string

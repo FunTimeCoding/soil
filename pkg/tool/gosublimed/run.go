@@ -22,7 +22,7 @@ func Run(
 		logger.New(context.Background()),
 		lifecycle.WithServer(
 			server.New(
-				web.AddressPort(o.Port),
+				o.Address,
 				func(m *http.ServeMux) {
 					model_context.New(
 						sublime.NewEnvironment(),

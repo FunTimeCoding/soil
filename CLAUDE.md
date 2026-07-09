@@ -12,6 +12,7 @@ Design and coding specs live in `doc/ai/spec/`:
 - `lifecycle.md` - lifecycle manager for servers and workers
 - `entity-wrapper.md` - entity wrapper pattern
 - `console-status.md` - fluent status line builder
+- `database.md` - service persistence (storage paths, sqlite/postgres openers, lite-as-default selection)
 - `testing.md` - integration testing patterns (mocks, lifecycle HTTP, store)
 - `build.md` - gobuild cross-compilation and linker variable convention
 - `taskfile.md` - task runner, git hooks, CI pipeline

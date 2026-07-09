@@ -1,6 +1,6 @@
 package option
 
 type Gitlab struct {
-	Port    int
+	Address string
 	Version string
 }

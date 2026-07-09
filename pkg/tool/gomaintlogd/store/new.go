@@ -1,16 +1,13 @@
 package store
 
-func New(
-	postgresLocator string,
-	litePath string,
-) *Store {
-	if postgresLocator != "" {
-		return newPostgres(postgresLocator)
-	}
+import (
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store/entry"
+	"gorm.io/gorm"
+)
 
-	if litePath != "" {
-		return newLite(litePath)
-	}
+func New(m *gorm.DB) *Store {
+	errors.PanicOnError(m.AutoMigrate(entry.New()))
 
-	panic("set postgresLocator or litePath")
+	return &Store{database: m}
 }

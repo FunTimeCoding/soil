@@ -1,6 +1,6 @@
 package option
 
 type Sublime struct {
-	Port    int
+	Address string
 	Version string
 }

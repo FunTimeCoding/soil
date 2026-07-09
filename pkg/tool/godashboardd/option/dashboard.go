@@ -3,7 +3,7 @@ package option
 import "github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
 
 type Dashboard struct {
-	Port             int
+	Address          string
 	Version          string
 	Board            *board.Board
 	PostgresLocator  string

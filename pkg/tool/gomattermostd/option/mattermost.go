@@ -1,6 +1,6 @@
 package option
 
 type Mattermost struct {
-	Port    int
+	Address string
 	Version string
 }

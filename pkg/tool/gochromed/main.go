@@ -6,7 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/option"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
 )
 
 func Main(
@@ -18,10 +17,10 @@ func Main(
 	r.Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
-	a.Integer(argument.Port, web.ListenPort, web.PortUsage)
+	a.Web()
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
-	o.Port = a.RequiredInteger(argument.Port)
+	o.Address = a.Address()
 	o.Version = version
 	o.DownloadDirectory = environment.Required(
 		constant.DownloadDirectoryEnvironment,

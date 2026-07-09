@@ -38,34 +38,41 @@ pkg/tool/go<tool>/
 
 See `entrypoint.md` for linker variables, `Main()`, and sentry setup.
 
-Whether `Main()` registers a `--port` flag depends on where the daemon
-runs - the criterion is deployment target, not what the daemon does:
-
-**Kubernetes-only daemons** take no `--port`. `run.go` passes
-`webConstant.ListenAddress` (`":8080"`) to the lifecycle server
-directly. Pod network isolation means the fixed port never collides.
-
-**Local daemons** (run on the workstation via the Procfile, because
-they interact with local resources) register `--port` - all local
-daemons share one localhost, and each gets a unique port assignment
-in the Procfile:
+Every serving daemon registers the common web parameters through the
+argument instance - one call, same everywhere:
 
 ```go
 a := argument.NewInstance(constant.Identity)
-a.Integer(argument.Port, web.ListenPort, web.PortUsage)
+a.Web()
 a.Parse(version, gitHash, buildDate)
 o := option.New()
-o.Port = a.RequiredInteger(argument.Port)
+o.Address = a.Address()
 Run(o)
 ```
 
-- `web.ListenPort` (8080) is the default; override with `--port`
-- `a.RequiredInteger` reads the flag value from the scoped instance
-- Port lives in the option struct as `int`, not as a formatted address string
-- `Run()` uses `web.AddressPort(o.Port)` to format the address
+`a.Web()` registers `--port` and `--bind-address`. Each resolves
+through the chain flag > environment > default: `--port` falls back
+to `PORT` then 8080, `--bind-address` falls back to `BIND_ADDRESS`
+then `127.0.0.1`. The chain is implemented by computing the flag
+default through `environment.Fallback` - `--help` therefore shows
+the live resolved default.
 
-A Kubernetes-only daemon that later needs to run locally gains the
-flag back with a three-line change - don't add it speculatively.
+- Local daemons are loopback-only by default; each gets a unique
+  `--port` in the Procfile
+- Kubernetes deployments set `BIND_ADDRESS: '0.0.0.0'` in their
+  environment ConfigMap and keep the port default
+- A local daemon that serves remote clients on other hosts passes
+  `--bind-address 0.0.0.0` in its launch entry
+- The option struct carries `Address string` - the joined listen
+  string from `a.Address()` - not a bare port
+
+Services with a database also call `a.Database()` (registers `--lite`
+with chain `LITE_PATH` > `Identity.LitePath()`, and `--postgres` with
+chain `POSTGRES_LOCATOR` > empty) or `a.Lite()` alone for
+sqlite-only raw stores; key-value (bbolt) stores keep a plain
+`--path` - `--lite` and `LITE_PATH` mean sqlite, nothing else. See
+`database.md` for the selection convention. The locator flag exists for development; credentials
+travel via environment, not argv.
 
 ## Run Function
 
@@ -76,14 +83,14 @@ See `pillars.md` for the full wiring rationale.
 ```go
 func Run(o *option.Log, r face.Reporter) {
     l := logger.New(context.Background())
-    s := store.New(o.DatabasePath)
+    s := store.New(o.LitePath)
     defer s.Close()
     lifecycle.New(
         l,
         lifecycle.WithWorker(worker.New(client, s, l, r, 1*time.Minute)),
         lifecycle.WithServer(
             server.New(
-                web.AddressPort(o.Port),
+                o.Address,
                 func(m *http.ServeMux) {
                     m.HandleFunc("/api/alerts", server.Alerts(s))
                 },
@@ -97,7 +104,11 @@ Key conventions:
 - Logger constructed first, threaded to workers and lifecycle
 - Reporter threaded to workers (for `recovery.New`) and recovery middleware
 - Use `WithServer(server.New(...).WithMiddleware(web.RecoveryMiddleware(r)))` - add `.WithProtected()` for plain REST servers
-- Server address uses `web.AddressPort(o.Port)` to format the port as `":8080"`
+- Server address is `o.Address`, produced by `a.Address()` in
+  `Main()` - see Entry Point. Never format a listen address by hand;
+  surfaces without flags (examples, callback servers) use
+  `web.AddressPort`, which resolves the same `BIND_ADDRESS` >
+  loopback chain
 - Routes registered in the `func(*http.ServeMux)` callback
 - `RunUntilSignal()` handles run, signal block, and reverse-order stop
 - Store closed via `defer` before lifecycle starts

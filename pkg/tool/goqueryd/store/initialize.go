@@ -8,8 +8,6 @@ import (
 
 func initialize(database *sql.DB) {
 	statements := []string{
-		"PRAGMA journal_mode = WAL",
-		"PRAGMA foreign_keys = ON",
 		`CREATE TABLE IF NOT EXISTS collection (
 			name    TEXT PRIMARY KEY,
 			path    TEXT NOT NULL DEFAULT '',

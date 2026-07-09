@@ -59,7 +59,7 @@ func Run(o *option.Config, r face.Reporter) {
         lifecycle.WithWorker(worker.New(l, r)),
         lifecycle.WithServer(
             server.New(
-                web.AddressPort(o.Port),
+                o.Address,
                 func(m *http.ServeMux) {
                     t := telemetry.NewEnvironment()
                     // REST: strict handler + telemetry middleware

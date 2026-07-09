@@ -4,7 +4,20 @@ Integration testing patterns for service tools. Unit testing philosophy lives in
 
 ## Store Testing
 
-Use a real bbolt database on a temporary path:
+Gorm stores test against in-memory sqlite by default - fast, no
+disk, production-matching foreign key enforcement:
+
+```go
+s := store.New(lite.NewMemory())
+```
+
+Raw `database/sql` stores use `store.New(connection.NewMemory())`
+the same way. Use the file openers with `t.TempDir()` only when the
+test genuinely needs a file on disk. Never call
+`gorm.Open` directly - the `restricted_call` analyzer confines it
+to `pkg/relational/` (see `database.md`).
+
+Key-value stores use a real bbolt database on a temporary path:
 
 ```go
 path := filepath.Join(t.TempDir(), constant.TestDatabase)

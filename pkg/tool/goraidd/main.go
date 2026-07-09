@@ -3,11 +3,8 @@ package goraidd
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/soil/pkg/relational/postgres"
-	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/option"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
 )
 
 func Main(
@@ -18,11 +15,13 @@ func Main(
 	r := reporter.New(constant.Identity.Name(), version).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
-	a.Integer(argument.Port, web.ListenPort, web.PortUsage)
+	a.Web()
+	a.Database()
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
-	o.Port = a.RequiredInteger(argument.Port)
-	o.PostgresLocator = environment.Required(postgres.LocatorEnvironment)
+	o.Address = a.Address()
+	o.PostgresLocator = a.GetString(argument.Postgres)
+	o.LitePath = a.GetString(argument.Lite)
 	o.LogCachePath = "/srv/arcdps-config"
 	o.ElitePath = "/srv/elite-insights"
 	o.OutputPath = "/srv/gw2-report"

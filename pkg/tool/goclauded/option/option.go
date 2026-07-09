@@ -1,7 +1,8 @@
 package option
 
 type Option struct {
-	Port              int
+	Address           string
+	LitePath          string
 	Version           string
 	SessionExportPath string
 }

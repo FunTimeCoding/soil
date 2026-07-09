@@ -4,9 +4,9 @@ package store
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert/fixture"
-	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/ollama"
+	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
 	system "github.com/funtimecoding/soil/pkg/system/constant"
 	goqueryd "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/chunk"
@@ -17,9 +17,8 @@ import (
 
 func openTestStore(t *testing.T) (*Store, *ollama.Client) {
 	t.Helper()
-	path := filepath.Join(t.TempDir(), constant.TestDatabase)
 
-	return New(path), ollama.NewEnvironment()
+	return New(connection.NewMemory()), ollama.NewEnvironment()
 }
 
 func writeFixture(

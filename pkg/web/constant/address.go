@@ -1,10 +1,9 @@
 package constant
 
-// Address
 const (
-	ListenAddress = ":8080"
-	MetricAddress = ":9090"
+	MetricAddress   = ":9090"
+	ListenPort      = 8080
+	PortUsage       = "Listen port"
+	PortEnvironment = "PORT"
+	BindUsage       = "Listen bind address"
 )
-
-const ListenPort = 8080
-const PortUsage = "Listen port"

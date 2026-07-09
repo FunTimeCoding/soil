@@ -1,7 +1,7 @@
 package option
 
 type Server struct {
-	Port         int
+	Address      string
 	Organization string
 	Version      string
 }

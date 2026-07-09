@@ -119,6 +119,8 @@ gopostgres
 gopostgresd
 goprometheus
 goprometheusd
+goprocess
+goprocessd
 goproxmox
 goproxmoxd
 goqueryd
@@ -149,6 +151,7 @@ linux
 
 # Unix
 envrc
+unix
 websocat
 whoami
 

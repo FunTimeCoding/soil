@@ -3,7 +3,7 @@ package option
 import "github.com/funtimecoding/soil/pkg/tool/gopostgresd/inventory"
 
 type Postgres struct {
-	Port      int
+	Address   string
 	Inventory *inventory.Inventory
 	Version   string
 }

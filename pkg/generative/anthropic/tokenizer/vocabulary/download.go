@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/constant"
+	"github.com/funtimecoding/soil/pkg/system"
 	"io"
 	"net/http"
 	"os"
@@ -33,15 +34,7 @@ func download() ([]byte, error) {
 	}
 
 	path := cachePath()
-
-	if path == "" {
-		return content, nil
-	}
-
-	if f := os.MkdirAll(filepath.Dir(path), 0o755); f != nil {
-		return content, nil
-	}
-
+	system.MakeDirectory(filepath.Dir(path))
 	errors.PanicOnError(os.WriteFile(path, content, 0o644))
 
 	return content, nil

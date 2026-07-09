@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/option"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
 )
 
 func Main(
@@ -16,7 +15,7 @@ func Main(
 	r := reporter.New(constant.Identity.Name(), version).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
-	a.Integer(argument.Port, web.ListenPort, web.PortUsage)
+	a.Web()
 	a.Integer(
 		constant.BridgePortFlag,
 		6125,
@@ -24,7 +23,7 @@ func Main(
 	)
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
-	o.Port = a.RequiredInteger(argument.Port)
+	o.Address = a.Address()
 	o.BridgePort = a.RequiredInteger(constant.BridgePortFlag)
 	o.Version = version
 	Run(o, r)

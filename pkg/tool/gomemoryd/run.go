@@ -6,6 +6,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/relational"
+	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
 	"github.com/funtimecoding/soil/pkg/telemetry"
 	generated "github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/memory_indexer"
@@ -25,7 +27,8 @@ func Run(
 	r face.Reporter,
 ) {
 	l := logger.New(context.Background())
-	s := store.New(o.DatabasePath)
+	l.Structured(relational.LiteMessage)
+	s := store.New(connection.New(o.LitePath))
 	defer s.Close()
 	idx := memory_indexer.New(connect.Wait(l))
 	v := service.New(s, idx, idx, idx)
@@ -34,7 +37,7 @@ func Run(
 		l,
 		lifecycle.WithServer(
 			lifecycleServer.New(
-				web.AddressPort(o.Port),
+				o.Address,
 				func(m *http.ServeMux) {
 					t := telemetry.NewEnvironment()
 					generated.HandlerFromMux(

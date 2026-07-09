@@ -1,22 +1,13 @@
 package vocabulary
 
 import (
-	"os"
+	"github.com/funtimecoding/soil/pkg/system"
 	"path/filepath"
 )
 
 func cachePath() string {
-	home, e := os.UserHomeDir()
-
-	if e != nil {
-		return ""
-	}
-
 	return filepath.Join(
-		home,
-		".local",
-		"share",
-		"tokenizer",
+		system.StorageDirectory("tokenizer", false),
 		"anthropic.json",
 	)
 }

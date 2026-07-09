@@ -1,6 +1,6 @@
 package option
 
 type Iterm struct {
-	Port    int
+	Address string
 	Version string
 }

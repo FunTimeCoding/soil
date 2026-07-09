@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/prometheus"
+	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/option"
@@ -15,7 +16,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/store"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/web"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/worker"
-	sharedWeb "github.com/funtimecoding/soil/pkg/web"
+	soil "github.com/funtimecoding/soil/pkg/web"
 	"net/http"
 )
 
@@ -24,15 +25,14 @@ func Run(
 	r face.Reporter,
 ) {
 	l := logger.New(context.Background())
-	c := store.New(o.PostgresLocator, o.LitePath)
+	c := store.New(relational.Open(l, o.PostgresLocator, o.LitePath))
 	defer c.Close()
-	target := o.Board.Connection.Prometheus
 	v := service.New(
 		o.Board,
 		prometheus.New(
-			target.Host,
-			board.Port(target),
-			target.Secure,
+			o.Board.Connection.Prometheus.Host,
+			board.Port(o.Board.Connection.Prometheus),
+			o.Board.Connection.Prometheus.Secure,
 			"",
 			"",
 			"",
@@ -49,7 +49,7 @@ func Run(
 		),
 		lifecycle.WithServer(
 			server.New(
-				sharedWeb.AddressPort(o.Port),
+				o.Address,
 				func(m *http.ServeMux) {
 					web.New(
 						o.Board,
@@ -58,7 +58,7 @@ func Run(
 						authorizationClient(o),
 					).Mount(m)
 				},
-			).WithMiddleware(sharedWeb.RecoveryMiddleware(r)),
+			).WithMiddleware(soil.RecoveryMiddleware(r)),
 		),
 	).RunUntilSignal()
 }

@@ -23,7 +23,7 @@ func Run(
 	r face.Reporter,
 ) {
 	l := logger.New(context.Background())
-	s := store.New(store.DefaultDatabasePath())
+	s := store.New(o.LitePath)
 	defer s.Close()
 	v := service.New(s, notifier.New())
 	w := watcher.New(v, l, r, o.SeedDirectory)
@@ -32,7 +32,7 @@ func Run(
 		lifecycle.WithWorker(w),
 		lifecycle.WithServer(
 			server.New(
-				web.AddressPort(o.Port),
+				o.Address,
 				func(m *http.ServeMux) {
 					model_context.New(
 						v,

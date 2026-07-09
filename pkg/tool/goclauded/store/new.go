@@ -2,6 +2,7 @@ package store
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/completion"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/event"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/event_metadata"
@@ -14,8 +15,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/session"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/summary"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/usage_snapshot"
-	"github.com/glebarez/sqlite"
-	"gorm.io/gorm"
 	"time"
 )
 
@@ -23,10 +22,7 @@ func New(
 	path string,
 	clock func() time.Time,
 ) *Store {
-	d, e := gorm.Open(sqlite.Open(path), &gorm.Config{})
-	errors.PanicOnError(e)
-	errors.PanicOnError(d.Exec("PRAGMA journal_mode = WAL").Error)
-	errors.PanicOnError(d.Exec("PRAGMA foreign_keys = ON").Error)
+	d := lite.New(path)
 	migrateColumns(d)
 	errors.PanicOnError(
 		d.AutoMigrate(

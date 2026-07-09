@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_client"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
+	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/model_context/mock_recorder"
 	generated "github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/memory_indexer"
@@ -17,7 +18,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/integration_test/base"
 	"net/http"
-	"path/filepath"
 	"testing"
 )
 
@@ -29,7 +29,7 @@ func New(t *testing.T) *Tester {
 	)
 	errors.PanicOnError(e)
 	idx := memory_indexer.New(c)
-	s := store.New(filepath.Join(t.TempDir(), constant.TestDatabase))
+	s := store.New(connection.NewMemory())
 	v := service.New(s, idx, idx, idx)
 	r := memory.New()
 	gomemorydServer := model_context_server.New(

@@ -33,9 +33,11 @@ const (
 
 	CurrentDirectory = "."
 
+	BoltExtension        = ".db"
 	GoExtension          = ".go"
 	GraphicExtension     = ".png"
 	HypertextExtension   = ".html"
+	LiteExtension        = ".sqlite"
 	MarkdownExtension    = ".md"
 	MarkupExtension      = ".yaml"
 	NotationLogExtension = ".jsonl"

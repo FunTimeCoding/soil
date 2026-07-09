@@ -38,7 +38,7 @@ func Run(
 	elapsed := func() float64 { return time.Since(start).Seconds() }
 	l := logger.New(context.Background())
 	n := notifier.New()
-	s := store.New(store.DefaultDatabasePath(), time.Now)
+	s := store.New(o.LitePath, time.Now)
 	l.Structured("store_ready", "elapsed", elapsed())
 	h := claude.New().Base()
 	result := sweep.Run(h)
@@ -98,7 +98,7 @@ func Run(
 	)
 	memoryTicker := ticker.New(30*time.Second, v.PollMemory, rec)
 	w := watcher.New(v, l, r, h)
-	address := library.AddressPort(o.Port)
+	address := o.Address
 	t := telemetry.NewEnvironment()
 	setup := func(m *http.ServeMux) {
 		generated.HandlerFromMux(
@@ -138,10 +138,7 @@ func Run(
 	srv := lifecycleServer.New(address, setup).
 		WithMiddleware(middleware).
 		WithProfiling().
-		WithCertificate(
-			environment.Required(constant.CertificateFileEnvironment),
-			environment.Required(constant.CertificateKeyFileEnvironment),
-		)
+		WithDefaultCertificate()
 	options := []lifecycle.Option{
 		lifecycle.WithWorker(w),
 		lifecycle.WithServer(srv),

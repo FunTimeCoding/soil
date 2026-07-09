@@ -29,6 +29,7 @@ const (
 	MemoryPath                  = "memory"
 	NotationPath                = "notation"
 	SearchPath                  = "search"
+	StoragePath                 = ".local/share"
 	WikiPath                    = "wiki"
 	QuerySocketPath             = ".osquery/shell.em"
 

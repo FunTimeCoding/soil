@@ -24,7 +24,7 @@ func Run(
 		logger.New(context.Background()),
 		lifecycle.WithServer(
 			lifecycleServer.New(
-				web.AddressPort(o.Port),
+				o.Address,
 				func(m *http.ServeMux) {
 					c := habitica.NewEnvironment()
 					t := telemetry.NewEnvironment()

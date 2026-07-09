@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/generative/ollama"
+	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/model_context/mock_recorder"
 	goqueryd "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
@@ -16,13 +17,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
 	"net/http"
-	"path/filepath"
 	"testing"
 )
 
 func New(t *testing.T) *Server {
 	t.Helper()
-	s := store.New(filepath.Join(t.TempDir(), constant.TestDatabase))
+	s := store.New(connection.NewMemory())
 	l := ollama.NewEnvironment()
 	a, e := rerank.New(
 		environment.Required(goqueryd.ModelEnvironment),

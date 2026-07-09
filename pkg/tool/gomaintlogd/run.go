@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/telemetry"
 	generated "github.com/funtimecoding/soil/pkg/tool/gomaintlogd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/model_context"
@@ -14,7 +15,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store"
 	maintenanceWeb "github.com/funtimecoding/soil/pkg/tool/gomaintlogd/web"
 	"github.com/funtimecoding/soil/pkg/web"
-	"github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
 
@@ -23,13 +23,13 @@ func Run(
 	r face.Reporter,
 ) {
 	g := logger.New(context.Background())
-	s := store.New(o.PostgresLocator, o.LitePath)
+	s := store.New(relational.Open(g, o.PostgresLocator, o.LitePath))
 	defer s.Close()
 	lifecycle.New(
 		g,
 		lifecycle.WithServer(
 			lifecycleServer.New(
-				constant.ListenAddress,
+				o.Address,
 				func(m *http.ServeMux) {
 					t := telemetry.NewEnvironment()
 					generated.HandlerFromMux(

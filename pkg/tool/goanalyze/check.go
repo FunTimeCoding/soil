@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/forbidden_call"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/forbidden_import"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/naming"
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/restricted_call"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/string_concatenation"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/string_constant"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/struct_literal"
@@ -24,6 +25,7 @@ func check(
 ) {
 	naming.Check(p, results)
 	forbidden_call.Check(p, results)
+	restricted_call.Check(p, results)
 	forbidden_import.Check(p, results)
 	string_concatenation.Check(p, results)
 	string_constant.Check(p, results)

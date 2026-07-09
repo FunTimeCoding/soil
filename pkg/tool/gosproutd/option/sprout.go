@@ -1,7 +1,8 @@
 package option
 
 type Sprout struct {
-	Port          int
+	Address       string
+	LitePath      string
 	Version       string
 	SeedDirectory string
 }

@@ -4,9 +4,8 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/session"
-	"github.com/glebarez/sqlite"
-	"gorm.io/gorm"
 	"os"
 	"path/filepath"
 )
@@ -16,9 +15,7 @@ func QueryErrors() {
 	errors.PanicOnError(e)
 	defer func() { errors.PanicOnError(os.RemoveAll(directory)) }()
 	path := filepath.Join(directory, constant.TestDatabase)
-	d, e := gorm.Open(sqlite.Open(path), &gorm.Config{})
-	errors.PanicOnError(e)
-	errors.PanicOnError(d.Exec("PRAGMA foreign_keys = ON").Error)
+	d := lite.New(path)
 	errors.PanicOnError(d.AutoMigrate(session.Stub()))
 	fmt.Println("=== Find on empty table (not found) ===")
 	var i session.Session

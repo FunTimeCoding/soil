@@ -4,17 +4,16 @@ package importer
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert/fixture"
-	"github.com/funtimecoding/soil/pkg/constant"
-	system "github.com/funtimecoding/soil/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
+	"github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
-	"path/filepath"
 	"testing"
 )
 
 func TestImportFromFixtures(t *testing.T) {
-	s := store.New(filepath.Join(t.TempDir(), constant.TestDatabase))
+	s := store.New(connection.NewMemory())
 	defer s.Close()
-	result, e := Import(s, fixture.Path(system.MemoryPath))
+	result, e := Import(s, fixture.Path(constant.MemoryPath))
 
 	if e != nil {
 		t.Fatal(e)
@@ -24,7 +23,7 @@ func TestImportFromFixtures(t *testing.T) {
 		t.Fatalf("expected 2 created, got %d", result.Created)
 	}
 
-	result2, e := Import(s, fixture.Path(system.MemoryPath))
+	result2, e := Import(s, fixture.Path(constant.MemoryPath))
 
 	if e != nil {
 		t.Fatal(e)

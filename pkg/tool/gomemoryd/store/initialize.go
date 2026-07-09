@@ -7,8 +7,6 @@ import (
 
 func initialize(database *sql.DB) {
 	statements := []string{
-		"PRAGMA journal_mode = WAL",
-		"PRAGMA foreign_keys = ON",
 		`CREATE TABLE IF NOT EXISTS memory (
 			identifier  INTEGER PRIMARY KEY AUTOINCREMENT,
 			content     TEXT NOT NULL,

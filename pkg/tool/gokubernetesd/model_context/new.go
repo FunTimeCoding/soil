@@ -8,7 +8,7 @@ import (
 )
 
 func New(
-	svc *service.Service,
+	s *service.Service,
 	readOnly bool,
 	r face.Reporter,
 	t face.Recorder,
@@ -19,7 +19,7 @@ func New(
 			constant.Identity,
 			version,
 		).WithResources().WithRecorder(t).Server(),
-		service:  svc,
+		service:  s,
 		readOnly: readOnly,
 		reporter: r,
 	}

@@ -6,7 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/option"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
 )
 
 func Main(
@@ -17,10 +16,12 @@ func Main(
 	r := reporter.New(constant.Identity.Name(), version).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
-	a.Integer(argument.Port, web.ListenPort, web.PortUsage)
+	a.Web()
+	a.Lite()
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
-	o.Port = a.RequiredInteger(argument.Port)
+	o.Address = a.Address()
+	o.LitePath = a.GetString(argument.Lite)
 	o.SessionExportPath = environment.Required(
 		constant.SessionExportPathEnvironment,
 	)

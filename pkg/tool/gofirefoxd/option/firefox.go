@@ -1,7 +1,7 @@
 package option
 
 type Firefox struct {
-	Port       int
+	Address    string
 	BridgePort int
 	Version    string
 }

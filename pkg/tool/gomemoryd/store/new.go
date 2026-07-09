@@ -1,15 +1,9 @@
 package store
 
-import (
-	"database/sql"
-	"github.com/funtimecoding/soil/pkg/errors"
-	_ "github.com/glebarez/go-sqlite"
-)
+import "database/sql"
 
-func New(path string) *Store {
-	database, e := sql.Open("sqlite", path)
-	errors.PanicOnError(e)
-	initialize(database)
+func New(d *sql.DB) *Store {
+	initialize(d)
 
-	return &Store{database: database}
+	return &Store{database: d}
 }

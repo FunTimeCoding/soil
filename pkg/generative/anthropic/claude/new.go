@@ -8,10 +8,7 @@ import (
 func New() *Client {
 	return &Client{
 		base: filepath.Join(
-			system.Home(),
-			".local",
-			"share",
-			"goclauded",
+			system.StorageDirectory("goclauded", false),
 			"session",
 		),
 	}

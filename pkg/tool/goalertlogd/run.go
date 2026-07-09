@@ -17,7 +17,6 @@ import (
 	alertWeb "github.com/funtimecoding/soil/pkg/tool/goalertlogd/web"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/worker"
 	"github.com/funtimecoding/soil/pkg/web"
-	"github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 	"time"
 )
@@ -45,7 +44,7 @@ func Run(
 		lifecycle.WithWorker(w),
 		lifecycle.WithServer(
 			lifecycleServer.New(
-				constant.ListenAddress,
+				o.Address,
 				func(m *http.ServeMux) {
 					t := telemetry.NewEnvironment()
 					generated.HandlerFromMux(

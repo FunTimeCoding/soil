@@ -3,11 +3,9 @@ package goansibled
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/soil/pkg/relational/postgres"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/option"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
 )
 
 func Main(
@@ -18,7 +16,8 @@ func Main(
 	r := reporter.New(constant.Identity.Name(), version).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
-	a.Integer(argument.Port, web.ListenPort, web.PortUsage)
+	a.Web()
+	a.Database()
 	a.String(argument.Repository, "", "Git repository URL")
 	a.String(argument.ClonePath, "", "Local repository path")
 	a.String(
@@ -28,12 +27,13 @@ func Main(
 	)
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
-	o.Port = a.RequiredInteger(argument.Port)
+	o.Address = a.Address()
 	o.Version = version
 	o.Repository = a.Required(argument.Repository)
 	o.ClonePath = a.Required(argument.ClonePath)
 	o.AnsiblePath = environment.Required(constant.AnsiblePathEnvironment)
 	o.Playbook = a.Slice(argument.Playbook)
-	o.PostgresLocator = environment.Required(postgres.LocatorEnvironment)
+	o.PostgresLocator = a.GetString(argument.Postgres)
+	o.LitePath = a.GetString(argument.Lite)
 	Run(o, r)
 }

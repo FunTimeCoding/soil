@@ -201,7 +201,7 @@ import (
 
 lifecycle.WithServer(
     server.New(
-        web.AddressPort(o.Port),
+        o.Address,
         func(m *http.ServeMux) {
             generated.HandlerFromMux(
                 generated.NewStrictHandler(server.New(dep, r), nil),
@@ -223,7 +223,7 @@ import (
 
 lifecycle.WithServer(
     server.New(
-        web.AddressPort(o.Port),
+        o.Address,
         func(m *http.ServeMux) {
             generated.HandlerFromMux(
                 generated.NewStrictHandler(server.New(dep, r), nil),

@@ -17,12 +17,12 @@ func New(t *testing.T) *Server {
 	t.Helper()
 	c := mock_client.New()
 	c.AddNode("test")
-	svc := mock_service.New("test", c, mock_snippet.New())
+	s := mock_service.New("test", c, mock_snippet.New())
 	v := model_context_server.New(
 		t,
 		func(m *http.ServeMux) {
 			model_context.New(
-				svc,
+				s,
 				memory.New(),
 				mock_recorder.New(),
 				constant.DefaultVersion,

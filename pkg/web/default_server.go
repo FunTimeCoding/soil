@@ -6,5 +6,5 @@ import (
 )
 
 func DefaultServer(h http.Handler) *http.Server {
-	return Server(h, constant.ListenAddress)
+	return Server(h, AddressPort(constant.ListenPort))
 }

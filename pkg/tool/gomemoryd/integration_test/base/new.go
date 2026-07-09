@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
+	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/model_context/mock_recorder"
 	generated "github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/model_context"
@@ -12,13 +13,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/mock_indexer"
 	"net/http"
-	"path/filepath"
 	"testing"
 )
 
 func New(t *testing.T) *Server {
 	t.Helper()
-	s := store.New(filepath.Join(t.TempDir(), constant.TestDatabase))
+	s := store.New(connection.NewMemory())
 	i := mock_indexer.New()
 	v := service.New(s, i, i, i)
 	r := memory.New()

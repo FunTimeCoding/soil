@@ -1,7 +1,7 @@
 package option
 
 type Memory struct {
-	Port         int
-	DatabasePath string
-	Version      string
+	Address  string
+	LitePath string
+	Version  string
 }

@@ -18,7 +18,7 @@ func (i *Instance) Parse(
 		false,
 		"Show version information and exit",
 	)
-	e := i.flags.Parse(os.Args[1:])
+	e := i.ParseArguments(os.Args[1:])
 
 	if errors.Is(e, pflag.ErrHelp) {
 		os.Exit(0)

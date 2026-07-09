@@ -6,5 +6,5 @@ import (
 )
 
 func Listen(m *http.ServeMux) {
-	ListenAddress(m, constant.ListenAddress)
+	ListenAddress(m, AddressPort(constant.ListenPort))
 }

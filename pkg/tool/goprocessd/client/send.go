@@ -6,6 +6,7 @@ import (
 	"fmt"
 	panicErrors "github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/system/writer"
 	"net"
 	"syscall"
 )
@@ -37,8 +38,7 @@ func Send(
 		line = fmt.Sprintf("%s %s", command, join.Space(arguments...))
 	}
 
-	_, e = fmt.Fprintln(connection, line)
-	panicErrors.PanicOnError(e)
+	writer.Print(connection, "%s\n", line)
 	scanner := bufio.NewScanner(connection)
 	var lines []string
 

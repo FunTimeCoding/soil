@@ -1,7 +1,7 @@
 package option
 
 type Chrome struct {
-	Port              int
+	Address           string
 	Version           string
 	DownloadDirectory string
 }

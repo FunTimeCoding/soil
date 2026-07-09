@@ -2,7 +2,7 @@ package gokubernetesd
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
@@ -21,10 +21,10 @@ func Run(
 	o *option.Server,
 	r face.Reporter,
 ) {
-	svc := service.New(store.New(o.Path))
+	s := service.New(store.New(o.LitePath))
 
-	if !svc.HasClusters() {
-		fmt.Fprintln(os.Stderr, "no kubernetes clusters available")
+	if !s.HasClusters() {
+		errors.Println("no kubernetes clusters available")
 		os.Exit(1)
 	}
 
@@ -32,10 +32,10 @@ func Run(
 		logger.New(context.Background()),
 		lifecycle.WithServer(
 			server.New(
-				web.AddressPort(o.Port),
+				o.Address,
 				func(m *http.ServeMux) {
 					model_context.New(
-						svc,
+						s,
 						o.ReadOnly,
 						r,
 						telemetry.NewEnvironment(),

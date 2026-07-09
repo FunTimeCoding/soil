@@ -4,6 +4,6 @@ import "github.com/funtimecoding/soil/pkg/netbox"
 
 type Netbox struct {
 	Client  *netbox.Client
-	Port    int
+	Address string
 	Version string
 }

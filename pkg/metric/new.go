@@ -2,7 +2,6 @@ package metric
 
 import (
 	"context"
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/location"
@@ -21,7 +20,8 @@ func New(
 		port = environment.FallbackInteger(PortEnvironment, Port)
 	}
 
-	address := fmt.Sprintf(":%d", port)
+	// Metrics listen on all interfaces - Prometheus scrapes over the network
+	address := web.AddressHostPort("", port)
 	r := prometheus.NewRegistry()
 	m := http.NewServeMux()
 	m.Handle(

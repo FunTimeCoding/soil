@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
+	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/model_context/mock_recorder"
 	generated "github.com/funtimecoding/soil/pkg/tool/gomaintlogd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/model_context"
@@ -17,7 +18,9 @@ import (
 
 func New(t *testing.T) *Server {
 	t.Helper()
-	s := store.New("", filepath.Join(t.TempDir(), constant.TestDatabase))
+	s := store.New(
+		lite.New(filepath.Join(t.TempDir(), constant.TestDatabase)),
+	)
 	r := memory.New()
 
 	return &Server{

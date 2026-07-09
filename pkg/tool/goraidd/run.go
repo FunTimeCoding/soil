@@ -24,7 +24,7 @@ func Run(
 ) {
 	l := logger.New(context.Background())
 	s := store.New(
-		relational.New(o.PostgresLocator).Mapper(),
+		relational.Open(l, o.PostgresLocator, o.LitePath),
 		o.LogCachePath,
 		o.ElitePath,
 		l,
@@ -35,7 +35,7 @@ func Run(
 		lifecycle.WithWorker(s),
 		lifecycle.WithServer(
 			lifecycleServer.New(
-				web.AddressPort(o.Port),
+				o.Address,
 				func(m *http.ServeMux) {
 					p := raid_parser.New("localhost:8081", true)
 					t := telemetry.NewEnvironment()

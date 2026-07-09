@@ -19,10 +19,8 @@ var (
 )
 
 const (
-	SessionExportPathEnvironment  = "SESSION_EXPORT_PATH"
-	MonitorUsageEnvironment       = "CLAUDE_MONITOR_USAGE"
-	CertificateFileEnvironment    = "CERTIFICATE_FILE"
-	CertificateKeyFileEnvironment = "CERTIFICATE_KEY_FILE"
+	SessionExportPathEnvironment = "SESSION_EXPORT_PATH"
+	MonitorUsageEnvironment      = "CLAUDE_MONITOR_USAGE"
 
 	SessionName = "name"
 	Callsign    = "callsign"

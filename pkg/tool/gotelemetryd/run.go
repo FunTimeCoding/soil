@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/telemetry"
 	generated "github.com/funtimecoding/soil/pkg/tool/gotelemetryd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/model_context"
@@ -22,13 +23,14 @@ func Run(
 	o *option.Telemetry,
 	r face.Reporter,
 ) {
-	s := store.New(o.PostgresLocator, o.LitePath)
+	l := logger.New(context.Background())
+	s := store.New(relational.Open(l, o.PostgresLocator, o.LitePath))
 	defer s.Close()
 	lifecycle.New(
-		logger.New(context.Background()),
+		l,
 		lifecycle.WithServer(
 			lifecycleServer.New(
-				web.AddressPort(o.Port),
+				o.Address,
 				func(m *http.ServeMux) {
 					generated.HandlerFromMux(
 						generated.NewStrictHandler(

@@ -1,6 +1,6 @@
 package option
 
 type Atlassian struct {
-	Port    int
+	Address string
 	Version string
 }

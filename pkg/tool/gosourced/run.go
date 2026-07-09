@@ -24,7 +24,7 @@ func Run(
 		l,
 		lifecycle.WithServer(
 			server.New(
-				web.AddressPort(o.Port),
+				o.Address,
 				func(m *http.ServeMux) {
 					model_context.New(
 						s,

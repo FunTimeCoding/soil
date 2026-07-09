@@ -1,6 +1,6 @@
 package option
 
 type Habitica struct {
-	Port    int
+	Address string
 	Version string
 }
