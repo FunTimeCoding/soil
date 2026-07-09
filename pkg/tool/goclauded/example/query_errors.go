@@ -1,9 +1,11 @@
 package example
 
 import (
+	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/session"
 	"os"
@@ -15,7 +17,7 @@ func QueryErrors() {
 	errors.PanicOnError(e)
 	defer func() { errors.PanicOnError(os.RemoveAll(directory)) }()
 	path := filepath.Join(directory, constant.TestDatabase)
-	d := lite.New(path)
+	d := lite.New(logger.New(context.Background()), path)
 	errors.PanicOnError(d.AutoMigrate(session.Stub()))
 	fmt.Println("=== Find on empty table (not found) ===")
 	var i session.Session

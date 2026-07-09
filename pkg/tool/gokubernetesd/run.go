@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/telemetry"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/option"
@@ -21,7 +22,8 @@ func Run(
 	o *option.Server,
 	r face.Reporter,
 ) {
-	s := service.New(store.New(o.LitePath))
+	l := logger.New(context.Background())
+	s := service.New(store.New(lite.New(l, o.LitePath)))
 
 	if !s.HasClusters() {
 		errors.Println("no kubernetes clusters available")
@@ -29,7 +31,7 @@ func Run(
 	}
 
 	lifecycle.New(
-		logger.New(context.Background()),
+		l,
 		lifecycle.WithServer(
 			server.New(
 				o.Address,

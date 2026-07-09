@@ -12,15 +12,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/web"
 	"net/http"
-	"path/filepath"
 	"testing"
 )
 
 func New(t *testing.T) *Server {
 	t.Helper()
-	s := store.New(
-		lite.New(filepath.Join(t.TempDir(), constant.TestDatabase)),
-	)
+	s := store.New(lite.NewMemory())
 	r := memory.New()
 
 	return &Server{

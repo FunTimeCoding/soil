@@ -41,11 +41,11 @@ One sqlite driver per access style, both pure Go:
 
 Six constructors, each returning what its consumer actually uses:
 
-- `lite.New(path) *gorm.DB` - sqlite; WAL and foreign_keys arrive as
-  DSN `_pragma` parameters, so every pooled connection gets them (an
-  `Exec` would only reach one)
-- `connection.New(path) *sql.DB` - the raw twin of `lite.New` for
-  stores that speak `database/sql` directly; same DSN parameters
+- `lite.New(l, path) *gorm.DB` - sqlite; logs the backend; WAL and
+  foreign_keys arrive as DSN `_pragma` parameters, so every pooled
+  connection gets them (an `Exec` would only reach one)
+- `connection.New(l, path) *sql.DB` - the raw twin of `lite.New` for
+  stores that speak `database/sql` directly; logs; same DSN parameters
 - `connection.NewMemory() *sql.DB` - in-memory for raw-store tests;
   a named shared-cache database, because raw query-while-iterating
   patterns deadlock on a pinned single connection and a plain
@@ -53,11 +53,12 @@ Six constructors, each returning what its consumer actually uses:
 - `lite.NewMemory() *gorm.DB` - in-memory sqlite for tests;
   `foreign_keys = ON`, pool pinned to one connection (a pooled second
   connection would open its own empty database), no WAL
-- `relational.NewMapper(locator) *gorm.DB` - postgres, mapper only;
-  the postgres twin of `lite.New`
+- `relational.NewMapper(l, locator) *gorm.DB` - postgres, mapper
+  only; logs; the postgres twin of `lite.New`
 - `relational.New(locator) *Database` - the full object: pgx pool,
   `database/sql`, mapper. For provisioning tools and services that
-  query outside gorm
+  query outside gorm; silent - a service using it as its store logs
+  `relational.PostgresMessage` itself (gonixd is the one case)
 
 A service that only speaks gorm receives only a mapper. Switching it
 to the full `Database` later is a one-line change at its edge.
@@ -66,9 +67,10 @@ to the full `Database` later is a one-line change at its edge.
 
 `relational.Open(l, locator, litePath) *gorm.DB` encodes the rule:
 postgres when the locator is set, else sqlite at the lite path, panic
-when neither. It logs the winning backend (`database: postgres` or
-`database: sqlite`) through the service logger - the log line
-is the witness when a deployment forgets its locator.
+when neither. The openers themselves log the backend (`database:
+postgres` or `database: sqlite`) - the witness line is emitted where
+the connection is born, never maintained by hand at call sites. The
+log is the witness when a deployment forgets its locator.
 
 Wiring in `Main()` - `a.Database()` registers `--lite` (chain:
 `LITE_PATH` env > `Identity.LitePath()`) and `--postgres` (chain:
@@ -95,9 +97,8 @@ environment Secret, everything else lands on the lite default and says so in
 the log. Raw-sql sqlite stores (gomemoryd, goqueryd) register only
 `a.Lite()` and emit the same log line via `relational.LiteMessage`.
 The line states the backend class and nothing more - the path and
-locator are environment configuration, not log content. A service
-that needs the pool (statistics, raw queries) constructs the full
-`Database` on its postgres branch instead.
+locator are environment configuration, not log content. The memory
+openers are silent - test noise is not essential logging.
 
 ## Store Shape
 

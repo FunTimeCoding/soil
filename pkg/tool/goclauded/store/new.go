@@ -2,7 +2,6 @@ package store
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/completion"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/event"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/event_metadata"
@@ -15,14 +14,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/session"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/summary"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/usage_snapshot"
+	"gorm.io/gorm"
 	"time"
 )
 
 func New(
-	path string,
+	d *gorm.DB,
 	clock func() time.Time,
 ) *Store {
-	d := lite.New(path)
 	migrateColumns(d)
 	errors.PanicOnError(
 		d.AutoMigrate(

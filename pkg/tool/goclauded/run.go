@@ -9,6 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/telemetry"
 	"github.com/funtimecoding/soil/pkg/ticker"
@@ -38,7 +39,7 @@ func Run(
 	elapsed := func() float64 { return time.Since(start).Seconds() }
 	l := logger.New(context.Background())
 	n := notifier.New()
-	s := store.New(o.LitePath, time.Now)
+	s := store.New(lite.New(l, o.LitePath), time.Now)
 	l.Structured("store_ready", "elapsed", elapsed())
 	h := claude.New().Base()
 	result := sweep.Run(h)

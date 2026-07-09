@@ -1,6 +1,3 @@
 package relational
 
-const (
-	PostgresMessage = "database: postgres"
-	LiteMessage     = "database: sqlite"
-)
+const PostgresMessage = "database: postgres"

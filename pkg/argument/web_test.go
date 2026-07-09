@@ -43,8 +43,9 @@ func TestWebFlagOverridesEnvironment(t *testing.T) {
 	assert.Nil(
 		t,
 		a.ParseArguments(
-		[]string{"--port", "7000", "--bind-address", "192.168.0.1"},
-	))
+			[]string{"--port", "7000", "--bind-address", "192.168.0.1"},
+		),
+	)
 	assert.Integer(t, 7000, a.GetInteger(Port))
 	assert.String(t, "192.168.0.1", a.GetString(BindAddress))
 	assert.String(t, "192.168.0.1:7000", a.Address())

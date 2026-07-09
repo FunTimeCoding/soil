@@ -2,6 +2,7 @@ package lite
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/relational/lite/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/system"
@@ -10,7 +11,11 @@ import (
 	"path/filepath"
 )
 
-func New(path string) *gorm.DB {
+func New(
+	l *logger.Logger,
+	path string,
+) *gorm.DB {
+	l.Structured(constant.LiteMessage)
 	system.MakeDirectory(filepath.Dir(path))
 	m, e := gorm.Open(
 		sqlite.Open(join.Empty(path, constant.FileParameters)),

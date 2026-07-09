@@ -23,7 +23,10 @@ func TestLiteDefault(t *testing.T) {
 		join.Empty(name, libraryConstant.LiteExtension),
 	)
 	assert.String(t, expected, a.GetString(Lite))
-	assert.False(t, system.DirectoryExists(system.StorageDirectory(name, false)))
+	assert.False(
+		t,
+		system.DirectoryExists(system.StorageDirectory(name, false)),
+	)
 }
 
 func TestLiteEnvironmentOverridesDefault(t *testing.T) {
@@ -38,7 +41,10 @@ func TestLiteFlagOverridesEnvironment(t *testing.T) {
 	t.Setenv(constant.PathEnvironment, "/somewhere/custom.sqlite")
 	a := testInstance(t)
 	a.Lite()
-	assert.Nil(t, a.ParseArguments([]string{"--lite", "/explicit/flag.sqlite"}))
+	assert.Nil(
+		t,
+		a.ParseArguments([]string{"--lite", "/explicit/flag.sqlite"}),
+	)
 	assert.String(t, "/explicit/flag.sqlite", a.GetString(Lite))
 }
 
@@ -66,7 +72,8 @@ func TestDatabaseFlagOverridesEnvironment(t *testing.T) {
 	assert.Nil(
 		t,
 		a.ParseArguments(
-		[]string{"--postgres", "postgres://flag@localhost/flag"},
-	))
+			[]string{"--postgres", "postgres://flag@localhost/flag"},
+		),
+	)
 	assert.String(t, "postgres://flag@localhost/flag", a.GetString(Postgres))
 }

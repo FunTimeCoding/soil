@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/telemetry"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/option"
@@ -23,7 +24,7 @@ func Run(
 	r face.Reporter,
 ) {
 	l := logger.New(context.Background())
-	s := store.New(o.LitePath)
+	s := store.New(lite.New(l, o.LitePath))
 	defer s.Close()
 	v := service.New(s, notifier.New())
 	w := watcher.New(v, l, r, o.SeedDirectory)

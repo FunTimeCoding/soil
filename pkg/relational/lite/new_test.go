@@ -1,9 +1,11 @@
 package lite
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/system"
 	"gorm.io/gorm"
 	"path/filepath"
@@ -18,7 +20,7 @@ func closeMapper(m *gorm.DB) {
 
 func TestNewCreatesParentDirectory(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "nested", constant.TestDatabase)
-	m := New(path)
+	m := New(logger.New(context.Background()), path)
 	defer closeMapper(m)
 	assert.True(t, system.FileExists(path))
 }

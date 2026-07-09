@@ -6,6 +6,8 @@ const (
 
 	Memory = ":memory:"
 
+	LiteMessage = "database: sqlite"
+
 	DriverName = "sqlite"
 
 	// Applied per pooled connection - an Exec would only reach one

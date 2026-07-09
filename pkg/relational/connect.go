@@ -9,5 +9,5 @@ func (d *Database) connect(locator string) {
 	client, e := pgxpool.New(d.context, locator)
 	errors.PanicOnError(e)
 	d.client = client
-	d.mapper = NewMapper(locator)
+	d.mapper = openMapper(locator)
 }

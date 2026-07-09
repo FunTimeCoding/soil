@@ -12,15 +12,11 @@ func Open(
 	litePath string,
 ) *gorm.DB {
 	if locator != "" {
-		l.Structured(PostgresMessage)
-
-		return NewMapper(locator)
+		return NewMapper(l, locator)
 	}
 
 	if litePath != "" {
-		l.Structured(LiteMessage)
-
-		return lite.New(litePath)
+		return lite.New(l, litePath)
 	}
 
 	panic("no database configured")

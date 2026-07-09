@@ -1,9 +1,11 @@
 package connection
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/system"
 	"path/filepath"
 	"testing"
@@ -15,7 +17,7 @@ func TestNewCreatesParentAndAppliesParameters(t *testing.T) {
 		"nested",
 		constant.TestDatabase,
 	)
-	d := New(p)
+	d := New(logger.New(context.Background()), p)
 	defer func() { errors.PanicOnError(d.Close()) }()
 	var enabled int
 	errors.PanicOnError(
@@ -38,9 +40,11 @@ func TestNewMemoryIsolatesCalls(t *testing.T) {
 	_, e := first.Exec("CREATE TABLE probe (identifier INTEGER)")
 	errors.PanicOnError(e)
 	var count int
-	errors.PanicOnError(second.QueryRow(
-		"SELECT count(*) FROM sqlite_master WHERE name = 'probe'",
-	).Scan(&count))
+	errors.PanicOnError(
+		second.QueryRow(
+			"SELECT count(*) FROM sqlite_master WHERE name = 'probe'",
+		).Scan(&count),
+	)
 	assert.Integer(t, 0, count)
 	var enabled int
 	errors.PanicOnError(
