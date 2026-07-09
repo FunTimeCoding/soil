@@ -23,7 +23,7 @@ require (
 	github.com/chromedp/cdproto v0.0.0-20260704091341-6ca7914c3938
 	github.com/chromedp/chromedp v0.15.1
 	github.com/coder/websocket v1.8.15
-	github.com/coreos/go-oidc/v3 v3.19.0
+	github.com/coreos/go-oidc/v3 v3.20.0
 	github.com/coreos/go-semver v0.3.1
 	github.com/ctreminiom/go-atlassian/v2 v2.12.0
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc
@@ -59,7 +59,7 @@ require (
 	github.com/kestra-io/client-sdk/go-sdk v1.3.0
 	github.com/liushuangls/go-anthropic/v2 v2.23.0
 	github.com/luthermonson/go-proxmox v0.8.0
-	github.com/mark3labs/mcp-go v0.55.1
+	github.com/mark3labs/mcp-go v0.56.0
 	github.com/mattermost/mattermost/server/public v0.4.3
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/modelcontextprotocol/go-sdk v1.6.1
@@ -69,8 +69,8 @@ require (
 	github.com/nwaples/rardecode/v2 v2.2.5
 	github.com/oapi-codegen/runtime v1.4.2
 	github.com/olekukonko/tablewriter v1.1.4
-	github.com/ollama/ollama v0.31.1
-	github.com/openai/openai-go/v3 v3.41.0
+	github.com/ollama/ollama v0.31.2
+	github.com/openai/openai-go/v3 v3.41.1
 	github.com/openvex/go-vex v0.2.8
 	github.com/opsgenie/opsgenie-go-sdk-v2 v1.2.23
 	github.com/pkg/sftp v1.13.10
@@ -87,23 +87,23 @@ require (
 	github.com/slok/go-http-metrics v0.13.0
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/pflag v1.0.10
-	github.com/studio-b12/gowebdav v0.12.0
+	github.com/studio-b12/gowebdav v0.13.0
 	github.com/tmc/langchaingo v0.1.14
 	github.com/tobischo/gokeepasslib/v3 v3.6.2
 	github.com/trivago/tgo v1.0.7
 	github.com/whilp/git-urls v1.0.0
 	github.com/yuin/goldmark v1.8.2
-	gitlab.com/gitlab-org/api/client-go/v2 v2.45.0
+	gitlab.com/gitlab-org/api/client-go/v2 v2.46.0
 	go.etcd.io/bbolt v1.5.0
-	golang.org/x/crypto v0.53.0
-	golang.org/x/mod v0.37.0
-	golang.org/x/net v0.56.0
+	golang.org/x/crypto v0.54.0
+	golang.org/x/mod v0.38.0
+	golang.org/x/net v0.57.0
 	golang.org/x/oauth2 v0.36.0
-	golang.org/x/sys v0.46.0
+	golang.org/x/sys v0.47.0
 	golang.org/x/time v0.15.0
-	golang.org/x/tools v0.47.0
+	golang.org/x/tools v0.48.0
 	gonum.org/v1/gonum v0.17.0
-	google.golang.org/api v0.287.0
+	google.golang.org/api v0.288.0
 	google.golang.org/protobuf v1.36.12-0.20260120151049-f2248ac996af
 	gopkg.in/yaml.v3 v3.0.1
 	gorm.io/driver/postgres v1.6.0
@@ -340,11 +340,11 @@ require (
 	go.yaml.in/yaml/v3 v3.0.4 // indirect
 	go.yaml.in/yaml/v4 v4.0.0-rc.4 // indirect
 	golang.org/x/exp v0.0.0-20260410095643-746e56fc9e2f // indirect
-	golang.org/x/sync v0.21.0 // indirect
-	golang.org/x/term v0.44.0 // indirect
-	golang.org/x/text v0.38.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20260622175928-b703f567277d // indirect
-	google.golang.org/grpc v1.81.1 // indirect
+	golang.org/x/sync v0.22.0 // indirect
+	golang.org/x/term v0.45.0 // indirect
+	golang.org/x/text v0.40.0 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20260630182238-925bb5da69e7 // indirect
+	google.golang.org/grpc v1.82.0 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1 // indirect
 	gopkg.in/validator.v2 v2.0.1 // indirect
