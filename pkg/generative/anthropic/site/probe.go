@@ -3,10 +3,10 @@ package site
 import "fmt"
 
 func (s *Site) Probe() {
-	n := s.protocol.Select("div[role='progressbar']", 0)
+	n := s.protocol.Select("div[role='meter']", 0)
 
 	if n == nil {
-		fmt.Println("no progressbar found")
+		fmt.Println("no meter found")
 
 		return
 	}
@@ -18,7 +18,7 @@ func (s *Site) Probe() {
 	fmt.Println("--- great-grandparent ---")
 	fmt.Println(
 		s.protocol.Outer(
-			"div:has(> div > div > div[role='progressbar'])",
+			"div:has(> div > div > div[role='meter'])",
 		),
 	)
 }

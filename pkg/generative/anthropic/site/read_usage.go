@@ -16,7 +16,7 @@ var valuePattern = regexp.MustCompile(
 
 func (s *Site) ReadUsage() *usage_result.Result {
 	outer := s.protocol.Outer(
-		"div:has(> div > div > div[role='progressbar'])",
+		"div:has(> div > div > div[role='meter'])",
 	)
 
 	if outer == "" {

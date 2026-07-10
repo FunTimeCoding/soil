@@ -3,7 +3,6 @@ package server
 import (
 	"context"
 	library "github.com/funtimecoding/soil/pkg/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
 )
 
@@ -23,15 +22,6 @@ func (s *Server) GetCheck(
 		), nil
 	}
 
-	s.logger.Structured(
-		"hook_check",
-		"claude_session_identifier",
-		r.Params.Session,
-		constant.Callsign,
-		result.Callsign,
-		"changed",
-		result.Changed,
-	)
 	var entries []server.QueueEntry
 
 	for _, e := range result.Entries {
