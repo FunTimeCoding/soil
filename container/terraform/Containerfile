@@ -1,3 +1,3 @@
-FROM docker.io/hashicorp/terraform:1.15.7
+FROM docker.io/hashicorp/terraform:1.15.8
 COPY tmp/goterraformd/linux-amd64/goterraformd /usr/local/bin
 ENTRYPOINT ["goterraformd"]
