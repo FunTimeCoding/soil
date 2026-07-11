@@ -11,7 +11,7 @@ func (c *Client) MustSearchEvents(
 	project string,
 	limit int,
 	cursor string,
-) []response.Event {
+) []response.EventRow {
 	result, e := c.SearchEvents(organization, query, project, limit, cursor)
 	errors.PanicOnError(e)
 

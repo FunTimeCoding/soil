@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/source/imports"
+	"go/ast"
 	"go/parser"
 	"go/token"
 	"os"
@@ -99,7 +100,7 @@ func (s *Service) ExtractToFile(
 	e = writeExtractedFile(
 		file.Name.Name,
 		needed,
-		declaration,
+		[]ast.Decl{declaration},
 		targetPath,
 	)
 

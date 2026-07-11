@@ -7,5 +7,5 @@ type Reporter interface {
 		key string,
 		context map[string]any,
 	) string
-	Recover(v any)
+	Recover(v any) string
 }

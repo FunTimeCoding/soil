@@ -15,6 +15,8 @@ const (
 	UseModule        = "use_module"
 	ChangeVisibility = "change_visibility"
 	RenameSymbol     = "rename_symbol"
+	MoveSymbol       = "move_symbol"
+	MoveSymbols      = "move_symbols"
 	ExtractToFile    = "extract_to_file"
 	AddImport        = "add_import"
 	RemoveImport     = "remove_import"

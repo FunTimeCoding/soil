@@ -25,6 +25,7 @@ func (p *Page) Render() gomponents.Node {
 		html.TitleEl(gomponents.Text(title)),
 		html.Link(html.Rel("stylesheet"), html.Href(constant.Pico)),
 		html.StyleEl(gomponents.Raw(baseStyle)),
+		html.StyleEl(gomponents.Raw(notificationStyle)),
 		html.Script(html.Src(constant.Extended)),
 	)
 
@@ -107,6 +108,13 @@ func (p *Page) Render() gomponents.Node {
 		)
 	}
 
+	body = append(
+		body,
+		html.Div(
+			html.ID(NotificationRegion),
+			html.Class("container"),
+		),
+	)
 	var mainAttrs []gomponents.Node
 	mainAttrs = append(mainAttrs, html.Class("container"))
 
@@ -145,6 +153,10 @@ func (p *Page) Render() gomponents.Node {
 		)
 	}
 
+	body = append(
+		body,
+		html.Script(gomponents.Raw(notificationScript)),
+	)
 	body = append(body, p.footer...)
 
 	return html.Doctype(

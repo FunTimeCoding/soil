@@ -1,9 +1,15 @@
 package reporter
 
-func (r *Reporter) Recover(v any) {
+func (r *Reporter) Recover(v any) string {
 	if r.hub == nil {
-		return
+		return ""
 	}
 
-	r.hub.Recover(v)
+	identifier := r.hub.Recover(v)
+
+	if identifier == nil {
+		return ""
+	}
+
+	return string(*identifier)
 }

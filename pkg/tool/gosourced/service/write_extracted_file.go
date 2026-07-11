@@ -11,7 +11,7 @@ import (
 func writeExtractedFile(
 	packageName string,
 	needed []*ast.ImportSpec,
-	declaration *ast.FuncDecl,
+	declarations []ast.Decl,
 	path string,
 ) error {
 	fileSet := token.NewFileSet()
@@ -35,7 +35,7 @@ func writeExtractedFile(
 		)
 	}
 
-	file.Decls = append(file.Decls, declaration)
+	file.Decls = append(file.Decls, declarations...)
 	var buffer bytes.Buffer
 	e := format.Node(&buffer, fileSet, file)
 

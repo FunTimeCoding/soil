@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/basic/response"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/constant"
+	"net/url"
 	"strconv"
 )
 
@@ -13,26 +15,30 @@ func (c *Client) SearchEvents(
 	project string,
 	limit int,
 	cursor string,
-) ([]response.Event, error) {
-	q := map[string]string{}
+) ([]response.EventRow, error) {
+	q := url.Values{}
+
+	for _, f := range constant.EventFields {
+		q.Add("field", f)
+	}
 
 	if query != "" {
-		q["query"] = query
+		q.Set("query", query)
 	}
 
 	if project != "" {
-		q["project"] = project
+		q.Set("project", project)
 	}
 
 	if limit > 0 {
-		q["limit"] = strconv.Itoa(limit)
+		q.Set("per_page", strconv.Itoa(limit))
 	}
 
 	if cursor != "" {
-		q["cursor"] = cursor
+		q.Set("cursor", cursor)
 	}
 
-	b, e := c.basic.Get(
+	b, e := c.basic.GetValues(
 		fmt.Sprintf("organizations/%s/events", organization),
 		q,
 	)
@@ -41,11 +47,11 @@ func (c *Client) SearchEvents(
 		return nil, e
 	}
 
-	var result []response.Event
+	var result response.EventSearch
 
 	if f := json.Unmarshal(b, &result); f != nil {
 		return nil, f
 	}
 
-	return result, nil
+	return result.Rows, nil
 }

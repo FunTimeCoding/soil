@@ -31,13 +31,13 @@ func (s *Server) register() {
 		mcp.NewTool(
 			constant.ChangeVisibility,
 			mcp.WithDescription(
-				"Change the visibility of a Go function or method by toggling its first letter case. Updates all references across the module.",
+				"Change the visibility of a Go function, method, type, or constant by toggling its first letter case. Updates all references across the module.",
 			),
 			mcp.WithString(
 				"symbol",
 				mcp.Required(),
 				mcp.Description(
-					"Function or method name, e.g. IsGeneratedHeader.",
+					"Symbol name, e.g. IsGeneratedHeader.",
 				),
 			),
 			mcp.WithString(
@@ -91,6 +91,95 @@ func (s *Server) register() {
 			),
 		),
 		mcp.NewTypedToolHandler(s.renameSymbol),
+	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.MoveSymbol,
+			mcp.WithDescription(
+				"Move a top-level Go constant, variable, type, or function to another package. Exports the symbol if needed, qualifies all references, and manages imports on both sides.",
+			),
+			mcp.WithString(
+				"package_path",
+				mcp.Required(),
+				mcp.Description(
+					"Full import path of the package holding the symbol.",
+				),
+			),
+			mcp.WithString(
+				"symbol",
+				mcp.Required(),
+				mcp.Description(
+					"Symbol name to move, e.g. itemFields.",
+				),
+			),
+			mcp.WithString(
+				"target_package_path",
+				mcp.Required(),
+				mcp.Description(
+					"Full import path of the destination package.",
+				),
+			),
+			mcp.WithString(
+				"target_file",
+				mcp.Description(
+					"Destination file name inside the target package, e.g. constant.go. Appends when the file exists, creates it otherwise. Defaults to the snake_case symbol name.",
+				),
+			),
+			mcp.WithBoolean(
+				"create",
+				mcp.Description(
+					"Create the destination package when it does not exist. Refuses by default.",
+				),
+			),
+		),
+		mcp.NewTypedToolHandler(s.moveSymbol),
+	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.MoveSymbols,
+			mcp.WithDescription(
+				"Move multiple top-level Go symbols to another package in one call. Symbols moving together may reference each other - those references stay unqualified. Constants merge into one declaration group. All-or-nothing: any refused symbol blocks the whole batch.",
+			),
+			mcp.WithString(
+				"package_path",
+				mcp.Required(),
+				mcp.Description(
+					"Full import path of the package holding the symbols.",
+				),
+			),
+			mcp.WithArray(
+				"symbols",
+				mcp.Description(
+					"Symbol names to move. Pass this or file, not both.",
+				),
+			),
+			mcp.WithString(
+				"file",
+				mcp.Description(
+					"File path relative to module root - moves every top-level symbol declared in it. Pass this or symbols, not both.",
+				),
+			),
+			mcp.WithString(
+				"target_package_path",
+				mcp.Required(),
+				mcp.Description(
+					"Full import path of the destination package.",
+				),
+			),
+			mcp.WithString(
+				"target_file",
+				mcp.Description(
+					"Destination file name inside the target package, e.g. constant.go. Appends when the file exists, creates it otherwise. Defaults to the snake_case symbol name per symbol.",
+				),
+			),
+			mcp.WithBoolean(
+				"create",
+				mcp.Description(
+					"Create the destination package when it does not exist. Refuses by default.",
+				),
+			),
+		),
+		mcp.NewTypedToolHandler(s.moveSymbols),
 	)
 	s.server.AddTool(
 		mcp.NewTool(

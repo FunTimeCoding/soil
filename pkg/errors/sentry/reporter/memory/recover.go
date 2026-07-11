@@ -1,3 +1,5 @@
 package memory
 
-func (m *Memory) Recover(_ any) {}
+func (m *Memory) Recover(_ any) string {
+	return ""
+}

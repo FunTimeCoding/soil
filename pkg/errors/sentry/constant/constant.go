@@ -30,6 +30,14 @@ const (
 )
 
 var (
+	EventFields = []string{
+		"id",
+		"title",
+		"message",
+		"project",
+		"timestamp",
+	}
+
 	Periods = []string{
 		PeriodEmpty,
 		PeriodDay,

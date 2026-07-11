@@ -127,6 +127,25 @@ func (s *Server) register() {
 	)
 	s.server.AddTool(
 		mcp.NewTool(
+			constant.GetEvent,
+			mcp.WithDescription(
+				"Get a single event by its event ID, including exception and stack trace",
+			),
+			mcp.WithString(
+				"project",
+				mcp.Required(),
+				mcp.Description("Project slug"),
+			),
+			mcp.WithString(
+				"identifier",
+				mcp.Required(),
+				mcp.Description("Event ID (32-character hex)"),
+			),
+		),
+		mcp.NewTypedToolHandler(s.GetEvent),
+	)
+	s.server.AddTool(
+		mcp.NewTool(
 			constant.SearchIssueEvents,
 			mcp.WithDescription(
 				"Search events for a specific Sentry issue",

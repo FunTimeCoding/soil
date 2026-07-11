@@ -25,6 +25,7 @@ const (
 	SearchEvents      = "search_events"
 	UpdateIssue       = "update_issue"
 	GetIssueEvent     = "get_issue_event"
+	GetEvent          = "get_event"
 	DeleteIssue       = "delete_issue"
 )
 

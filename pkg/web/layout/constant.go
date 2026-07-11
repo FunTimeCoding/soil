@@ -1,9 +1,69 @@
 package layout
 
 const SummaryStrip = "summary_strip"
+const NotificationRegion = "notifications"
 const baseStyle = `
 a { text-decoration: none; }
 a:hover { text-decoration: none; color: var(--pico-primary-hover); }
+`
+const notificationStyle = `
+#notifications:empty { display: none; }
+#notifications { margin-bottom: 1rem; }
+.notification-error {
+	display: flex;
+	align-items: baseline;
+	gap: 0.75rem;
+	padding: 0.75rem 1rem;
+	margin-bottom: 0.5rem;
+	border: 1px solid var(--pico-del-color);
+	border-left-width: 4px;
+	border-radius: var(--pico-border-radius);
+	background: var(--pico-card-background-color);
+}
+.notification-message { flex: 1; }
+.notification-event {
+	font-family: monospace;
+	color: var(--pico-muted-color);
+}
+.notification-close {
+	cursor: pointer;
+	background: none;
+	border: none;
+	color: var(--pico-muted-color);
+	padding: 0;
+	width: auto;
+	line-height: 1;
+}
+`
+const notificationScript = `
+document.body.addEventListener('htmx:responseError', function(e) {
+	var region = document.getElementById('notifications');
+
+	if (!region) { return; }
+
+	var xhr = e.detail.xhr;
+
+	if (xhr.getResponseHeader('Notification-Item')) {
+		region.insertAdjacentHTML('beforeend', xhr.responseText);
+
+		return;
+	}
+
+	var item = document.createElement('div');
+	item.className = 'notification-error';
+	item.setAttribute('role', 'alert');
+	var message = document.createElement('span');
+	message.className = 'notification-message';
+	var text = (xhr.responseText || '').slice(0, 300);
+	message.textContent = 'Request failed (' + xhr.status + '): ' + text;
+	var close = document.createElement('button');
+	close.className = 'notification-close';
+	close.textContent = '×';
+	close.addEventListener('click', function() { item.remove(); });
+	item.appendChild(message);
+	item.appendChild(close);
+	region.appendChild(item);
+});
 `
 const paletteStyle = `
 .palette-dialog {

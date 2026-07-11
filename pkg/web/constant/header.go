@@ -13,6 +13,7 @@ const (
 	ContentType       = "Content-Type"
 	ExtendedRequest   = "HX-Request"
 	ForwardedFor      = "X-Forwarded-For"
+	NotificationItem  = "Notification-Item"
 	ForwardedProtocol = "X-Forwarded-Proto"
 	RealAddress       = "X-Real-Ip"
 	Referer           = "Referer"
