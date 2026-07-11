@@ -25,6 +25,7 @@ func Run(
 	g := logger.New(context.Background())
 	s := store.New(relational.Open(g, o.PostgresLocator, o.LitePath))
 	defer s.Close()
+	v := maintenanceWeb.New(s)
 	lifecycle.New(
 		g,
 		lifecycle.WithServer(
@@ -62,9 +63,9 @@ func Run(
 						t,
 						o.Version,
 					).Mount(m)
-					maintenanceWeb.New(s).Mount(m)
+					v.Mount(m)
 				},
-			).WithMiddleware(web.RecoveryMiddleware(r)),
+			).WithMiddleware(v.Recovery(r)),
 		),
 	).RunUntilSignal()
 }

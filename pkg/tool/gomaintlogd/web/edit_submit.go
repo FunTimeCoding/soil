@@ -1,6 +1,7 @@
 package web
 
 import (
+	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
 	"net/http"
@@ -20,9 +21,18 @@ func (s *Server) editSubmit(
 	e.Description = r.FormValue(constant.Description)
 
 	if v := r.FormValue(constant.Timestamp); v != "" {
-		if t, f := time.Parse("2006-01-02T15:04", v); f == nil {
-			e.Timestamp = t
+		t, f := time.Parse("2006-01-02T15:04", v)
+
+		if f != nil {
+			s.view.RenderFragment(
+				w,
+				editForm(e, fmt.Sprintf("invalid timestamp: %s", v)),
+			)
+
+			return
 		}
+
+		e.Timestamp = t
 	}
 
 	errors.PanicOnError(s.store.Update(e))

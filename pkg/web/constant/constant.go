@@ -11,7 +11,8 @@ const (
 
 	OriginAll = "*"
 
-	FormMethod = "method"
+	FormMethod     = "method"
+	ErrorParameter = "error"
 
 	Extended   = "https://unpkg.com/htmx.org@2.0.4"
 	ServerSide = "https://unpkg.com/htmx-ext-sse@2.2.2/sse.js"

@@ -37,6 +37,7 @@ const notificationStyle = `
 	width: auto;
 	line-height: 1;
 }
+.form-alert { color: var(--pico-del-color); }
 #status-line:empty { display: none; }
 .notification-status {
 	display: flex;

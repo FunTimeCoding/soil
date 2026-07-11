@@ -4,19 +4,26 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store/entry"
+	"github.com/funtimecoding/soil/pkg/web/layout"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents-htmx"
 	"maragu.dev/gomponents/html"
 )
 
-func editForm(e *entry.Entry) gomponents.Node {
+func editForm(e *entry.Entry, message string) gomponents.Node {
 	target := fmt.Sprintf("#detail-%d", e.ID)
+	var alert gomponents.Node
+
+	if message != "" {
+		alert = layout.Alert(message)
+	}
 
 	return html.Tr(
 		html.ID(fmt.Sprintf("detail-%d", e.ID)),
 		html.Class("detail-row"),
 		html.Td(
 			gomponents.Attr("colspan", "6"),
+			alert,
 			html.Form(
 				html.Class("edit-form"),
 				htmx.Post(fmt.Sprintf("/entry/edit?id=%d", e.ID)),

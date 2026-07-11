@@ -7,5 +7,5 @@ func (s *Server) edit(
 	r *http.Request,
 ) {
 	e := s.entryFromQuery(r)
-	s.view.RenderFragment(w, editForm(e))
+	s.view.RenderFragment(w, editForm(e, ""))
 }
