@@ -36,6 +36,7 @@ var (
 		"message",
 		"project",
 		"timestamp",
+		"culprit",
 	}
 
 	Periods = []string{

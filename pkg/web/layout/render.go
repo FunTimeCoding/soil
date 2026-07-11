@@ -114,6 +114,10 @@ func (p *Page) Render() gomponents.Node {
 			html.ID(NotificationRegion),
 			html.Class("container"),
 		),
+		html.Div(
+			html.ID(StatusLine),
+			html.Class("container"),
+		),
 	)
 	var mainAttrs []gomponents.Node
 	mainAttrs = append(mainAttrs, html.Class("container"))

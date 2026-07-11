@@ -183,6 +183,94 @@ func (s *Server) register() {
 	)
 	s.server.AddTool(
 		mcp.NewTool(
+			constant.MovePackage,
+			mcp.WithDescription(
+				"Move a package directory to another location in the module. Rewrites every import of the package and its subpackages across the module, then moves the directory with everything in it. The package name stays - the last path segment must match.",
+			),
+			mcp.WithString(
+				"package_path",
+				mcp.Required(),
+				mcp.Description(
+					"Full import path of the package to move.",
+				),
+			),
+			mcp.WithString(
+				"target_package_path",
+				mcp.Required(),
+				mcp.Description(
+					"Full import path of the destination. Last segment must match the source.",
+				),
+			),
+		),
+		mcp.NewTypedToolHandler(s.movePackage),
+	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.RenamePackage,
+			mcp.WithDescription(
+				"Rename a package: the package clause in every file (including test variants), the directory, all import paths of it and its subpackages, and every unaliased qualifier across the module. Aliased imports keep their alias.",
+			),
+			mcp.WithString(
+				"package_path",
+				mcp.Required(),
+				mcp.Description(
+					"Full import path of the package to rename.",
+				),
+			),
+			mcp.WithString(
+				"new_name",
+				mcp.Required(),
+				mcp.Description(
+					"New package name, e.g. depot. Becomes the new last path segment.",
+				),
+			),
+		),
+		mcp.NewTypedToolHandler(s.renamePackage),
+	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.ExtractType,
+			mcp.WithDescription(
+				"Move a named type and its method set to another package as one unit. Members referenced outside the moving set (methods, struct fields) are exported as needed and all references renamed. Declarations land in target files matching their source basenames unless target_file collapses them into one.",
+			),
+			mcp.WithString(
+				"package_path",
+				mcp.Required(),
+				mcp.Description(
+					"Full import path of the package holding the type.",
+				),
+			),
+			mcp.WithString(
+				"type",
+				mcp.Required(),
+				mcp.Description(
+					"Named type to extract, e.g. Store.",
+				),
+			),
+			mcp.WithString(
+				"target_package_path",
+				mcp.Required(),
+				mcp.Description(
+					"Full import path of the destination package.",
+				),
+			),
+			mcp.WithString(
+				"target_file",
+				mcp.Description(
+					"Destination file name inside the target package. Defaults to preserving each declaration's source basename.",
+				),
+			),
+			mcp.WithBoolean(
+				"create",
+				mcp.Description(
+					"Create the destination package when it does not exist. Refuses by default.",
+				),
+			),
+		),
+		mcp.NewTypedToolHandler(s.extractType),
+	)
+	s.server.AddTool(
+		mcp.NewTool(
 			constant.ExtractToFile,
 			mcp.WithDescription(
 				"Extract a function or method from a file into its own file. Carries needed imports, removes unused imports from the source.",

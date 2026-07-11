@@ -7,5 +7,6 @@ type EventRow struct {
 	Title      string     `json:"title"`
 	Message    string     `json:"message"`
 	Project    string     `json:"project"`
+	Culprit    string     `json:"culprit"`
 	Timestamp  *time.Time `json:"timestamp"`
 }

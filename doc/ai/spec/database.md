@@ -63,6 +63,27 @@ Six constructors, each returning what its consumer actually uses:
 A service that only speaks gorm receives only a mapper. Switching it
 to the full `Database` later is a one-line change at its edge.
 
+## Postgres Query Mode
+
+Both postgres openers force pgx to `QueryExecModeExec`: every query
+runs as a one-shot extended-protocol call, parameters still bound
+server-side, but never cached as a named prepared statement on the
+connection.
+
+The pgx default (`cache_statement`) freezes each query's result
+shape into the connection it ran on. Any live `ALTER TABLE` then
+breaks every cached plan on that table with `cached plan must not
+change result type` (SQLSTATE 0A000) - and because gorm selects
+`*`, any column drop qualifies. The error fires once per cached
+statement per connection, then heals - which means an idle pooled
+connection can ambush a caller hours after the schema change. At
+fleet traffic the per-query parse cost of exec mode is
+unmeasurable; the ambush class is gone entirely.
+
+Exec mode does not make live schema changes safe: a binary whose
+model still references a dropped column fails regardless of query
+mode. Cycle the pod when altering a deployed schema.
+
 ## Selection
 
 `relational.Open(l, locator, litePath) *gorm.DB` encodes the rule:

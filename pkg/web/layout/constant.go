@@ -2,6 +2,9 @@ package layout
 
 const SummaryStrip = "summary_strip"
 const NotificationRegion = "notifications"
+const StatusLine = "status-line"
+const StatusSuccess = "success"
+const StatusNotice = "notice"
 const baseStyle = `
 a { text-decoration: none; }
 a:hover { text-decoration: none; color: var(--pico-primary-hover); }
@@ -33,6 +36,21 @@ const notificationStyle = `
 	padding: 0;
 	width: auto;
 	line-height: 1;
+}
+#status-line:empty { display: none; }
+.notification-status {
+	display: flex;
+	align-items: baseline;
+	gap: 0.75rem;
+	padding: 0.75rem 1rem;
+	margin-bottom: 0.5rem;
+	border: 1px solid var(--pico-muted-color);
+	border-left-width: 4px;
+	border-radius: var(--pico-border-radius);
+	background: var(--pico-card-background-color);
+}
+.notification-status.notification-success {
+	border-color: var(--pico-ins-color);
 }
 `
 const notificationScript = `
