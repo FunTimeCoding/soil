@@ -40,10 +40,17 @@ if e := s.service.UpdateStatus(id, status); e != nil {
 }
 ```
 
-Web handlers rely on panic + recovery middleware because there is no
-structured error rendering in the web UI yet. This is intentional -
-the panic path is correct and visible via Sentry until a proper error
-display mechanism (toast/notification) is built into `pkg/web/layout`.
+Web handlers rely on panic + recovery middleware. Services whose
+web package exposes a `Recovery` delegate (wrapping `view.Recovery`)
+render the panic into the page layout: a notification item carrying
+the panic message and the Sentry event ID - a full shell page for
+page loads, a marked fragment for HTMX requests (the layout's
+global `htmx:responseError` listener inserts it into the
+notification region). Services not yet migrated fall back to
+`web.RecoveryMiddleware`, which returns a plain-text 500. Handler
+style is unchanged either way: `PanicOnError`, never explicit error
+rendering. Validation errors that should re-render a form are not
+panics - see the form round-trip convention in `service-tool.md`.
 
 ## Worker Recovery Pattern
 

@@ -151,10 +151,37 @@ pkg/tool/go<tool>d/web/
 ├── server.go           # type Server struct (dependencies + view)
 ├── new.go              # New(deps) *Server - constructs view
 ├── mount.go            # (s *Server) Mount(m *http.ServeMux)
+├── recovery.go         # (s *Server) Recovery(r) - delegates to view.Recovery
 ├── constant.go         # inlineCSS (component CSS specific to this service)
 ├── <route>.go          # handler method: dashboard(), alerts()
 └── <component>.go      # HTML builder: alerts_table.go, add_form.go
 ```
+
+### Recovery
+
+A web service wires the layout-aware recovery middleware instead of
+the generic one: construct the web server before `lifecycle.New`,
+mount with `w.Mount`, and pass `w.Recovery(r)` to `WithMiddleware`.
+Panics then render into the page layout (notification item with the
+Sentry event ID; fragment form for HTMX requests) instead of a
+plain-text 500. The `recovery.go` delegate is two lines:
+
+```go
+func (s *Server) Recovery(r face.Reporter) func(http.Handler) http.Handler {
+    return s.view.Recovery(r)
+}
+```
+
+### Form Errors
+
+Validation errors are not panics. Full-page forms use the round
+trip: the submit handler calls `form.Redirect(w, r, path, message,
+values)` to bounce back with the message and the submitted values
+in query parameters; the GET handler reads `form.ErrorText(r)` and
+renders `layout.Alert(message)` above the repopulated form.
+HTMX-swapped forms re-render the fragment with the alert inside the
+swap target and values preserved. Sentinel-to-friendly-message
+mapping stays in the service, next to the sentinel.
 
 ### View and Layout
 
