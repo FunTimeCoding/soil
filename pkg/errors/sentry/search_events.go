@@ -22,6 +22,8 @@ func (c *Client) SearchEvents(
 		q.Add("field", f)
 	}
 
+	q.Set("sort", constant.SortNewestFirst)
+
 	if query != "" {
 		q.Set("query", query)
 	}

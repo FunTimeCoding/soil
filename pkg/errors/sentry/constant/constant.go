@@ -27,6 +27,8 @@ const (
 	PeriodEmpty     = ""
 	PeriodDay       = "24h"
 	PeriodFortnight = "14d"
+
+	SortNewestFirst = "-timestamp"
 )
 
 var (
