@@ -12,6 +12,12 @@ Must be completely silent on success - any output is a failure.
 Lint has multiple stages - clearing the first may reveal new
 issues from the next.
 
+Run the full pipeline once per completed code scope - it covers
+the whole repository and takes minutes. For doc-only edits, run
+`golint <path>` on the changed files instead (sub-second, same
+markdown checks). Comment-only and other lint-inert edits need
+no run at all.
+
 ## Relevant specs
 
 Read these before fixing lint issues or adding analyzers, relative
