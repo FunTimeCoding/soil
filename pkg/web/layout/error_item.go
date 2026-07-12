@@ -5,7 +5,10 @@ import (
 	"maragu.dev/gomponents/html"
 )
 
-func ErrorItem(message string, event string) gomponents.Node {
+func ErrorItem(
+	message string,
+	event string,
+) gomponents.Node {
 	nodes := []gomponents.Node{
 		gomponents.Attr("role", "alert"),
 		html.Class("notification-error"),

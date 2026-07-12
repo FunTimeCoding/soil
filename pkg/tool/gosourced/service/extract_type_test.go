@@ -101,7 +101,10 @@ func TestExtractTypeDependency(t *testing.T) {
 }
 
 func TestExtractTypeFieldCollision(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, "testdata/extract-field-collision/src")
+	d := testutil.PrepareTestPackage(
+		t,
+		"testdata/extract-field-collision/src",
+	)
 	s := testService()
 	r, e := s.ExtractType(
 		d,
@@ -117,7 +120,10 @@ func TestExtractTypeFieldCollision(t *testing.T) {
 }
 
 func TestExtractTypeUnexported(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, "testdata/extract-unexported-type/src")
+	d := testutil.PrepareTestPackage(
+		t,
+		"testdata/extract-unexported-type/src",
+	)
 	s := testService()
 	r, e := s.ExtractType(
 		d,

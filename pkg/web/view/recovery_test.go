@@ -12,7 +12,10 @@ import (
 	"testing"
 )
 
-func panicServe(http.ResponseWriter, *http.Request) {
+func panicServe(
+	http.ResponseWriter,
+	*http.Request,
+) {
 	panic("store failed")
 }
 

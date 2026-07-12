@@ -10,7 +10,10 @@ func emitDeclarations(entries []*moveEntry) []ast.Decl {
 	ordered := append([]*moveEntry{}, entries...)
 	sort.Slice(
 		ordered,
-		func(i int, j int) bool {
+		func(
+			i int,
+			j int,
+		) bool {
 			return ordered[i].object.Pos() < ordered[j].object.Pos()
 		},
 	)

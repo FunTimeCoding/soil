@@ -10,7 +10,10 @@ import (
 	"maragu.dev/gomponents/html"
 )
 
-func editForm(e *entry.Entry, message string) gomponents.Node {
+func editForm(
+	e *entry.Entry,
+	message string,
+) gomponents.Node {
 	target := fmt.Sprintf("#detail-%d", e.ID)
 	var alert gomponents.Node
 

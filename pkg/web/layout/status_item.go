@@ -6,7 +6,10 @@ import (
 	"maragu.dev/gomponents/html"
 )
 
-func StatusItem(message string, kind string) gomponents.Node {
+func StatusItem(
+	message string,
+	kind string,
+) gomponents.Node {
 	return html.Div(
 		html.ID(StatusLine),
 		html.Class(
