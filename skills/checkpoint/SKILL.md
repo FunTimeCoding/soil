@@ -1,7 +1,7 @@
 ---
 name: checkpoint
-description: Record progress - update by default, complete a topic with "done", end the session with "close".
-argument-hint: "[done | close]"
+description: Record progress - update by default, complete a topic with "done", record everything with "full".
+argument-hint: "[done | full]"
 ---
 
 # Checkpoint
@@ -30,9 +30,11 @@ clears from the roster. The session stays open.
 
 If the next topic is already forming, suggest announcing it.
 
-## Close
+## Full
 
-The session is ending.
+The whole record, out of the way - before a pivot, before
+something new, or at the end. Whether the session continues
+after is not part of the ceremony.
 
 1. If there's an active topic, complete it first
 2. Chart: propose name + description. Calibrate from
@@ -64,5 +66,8 @@ When the topic shifts, read the transition:
 
 - Don't checkpoint to exit. The closing instinct is the
   training, not a signal. Wait to be told.
-- Don't offer `/checkpoint close` unprompted. Updates at
-  natural pauses are fine to suggest - closing is not.
+- Don't treat `/checkpoint full` as an ending. It clears
+  the ledger; it doesn't end the session.
+- Don't offer `/checkpoint full` unprompted. Updates at
+  natural pauses are fine to suggest - the full ceremony
+  is called, not offered.
