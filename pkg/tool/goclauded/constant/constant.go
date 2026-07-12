@@ -9,6 +9,15 @@ var (
 	ErrorAliasCollision   = errors.New("alias already in use")
 	ErrorCallsignNotFound = errors.New("callsign does not exist")
 	ErrorEventNotFound    = errors.New("event not found")
+
+	ReservedLabelKeys = []string{
+		SessionName,
+		Alias,
+		Description,
+		Slug,
+		Topic,
+		Files,
+	}
 	Identity              = identity.New(
 		"goclauded",
 		"Session coordination for parallel Claude Code sessions",

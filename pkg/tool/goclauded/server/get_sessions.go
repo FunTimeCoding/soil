@@ -23,7 +23,13 @@ func (s *Server) GetSessions(
 	}
 
 	peek := r.Params.Peek != nil && *r.Params.Peek
-	sessions, e := s.service.EnrichedSessions(limit, offset)
+	list := s.service.EnrichedSessions
+
+	if r.Params.Unnamed != nil && *r.Params.Unnamed {
+		list = s.service.UnnamedSessions
+	}
+
+	sessions, e := list(limit, offset)
 
 	if e != nil {
 		return server.GetSessions500JSONResponse(

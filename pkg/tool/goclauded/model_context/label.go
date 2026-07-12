@@ -94,6 +94,15 @@ func (s *Server) label(
 		return response.Success(change)
 	}
 
+	for _, reserved := range constant.ReservedLabelKeys {
+		if key == reserved {
+			return response.Fail(
+				"reserved key %q - session metadata belongs in edit_session",
+				key,
+			)
+		}
+	}
+
 	change, h := s.service.SetLabel(
 		sessionIdentifier,
 		c.Callsign,

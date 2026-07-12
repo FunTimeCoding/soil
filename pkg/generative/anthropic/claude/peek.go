@@ -102,15 +102,20 @@ func (c *Client) Peek(sessionIdentifier string) *peek.Peek {
 			clean = clean[:100]
 		}
 
+		if last := len(result.Entries) - 1; last >= 0 {
+			result.Entries[last].AssistantContext = lastAssistantText
+		}
+
 		result.Entries = append(
 			result.Entries,
-			peek.Entry{
-				UserText:         clean,
-				AssistantContext: lastAssistantText,
-			},
+			peek.Entry{UserText: clean},
 		)
 		result.UserMessageCount++
 		lastAssistantText = ""
+	}
+
+	if last := len(result.Entries) - 1; last >= 0 && lastAssistantText != "" {
+		result.Entries[last].AssistantContext = lastAssistantText
 	}
 
 	var sorted []peek.ToolCount

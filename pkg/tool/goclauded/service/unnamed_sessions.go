@@ -5,11 +5,11 @@ import (
 	"time"
 )
 
-func (s *Service) EnrichedSessions(
+func (s *Service) UnnamedSessions(
 	limit int,
 	offset int,
 ) ([]*enriched_session.Session, error) {
-	sessions, e := s.store.AllSessions(limit, offset)
+	sessions, e := s.store.UnnamedSessions(limit, offset)
 
 	if e != nil {
 		return nil, e

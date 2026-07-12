@@ -347,9 +347,10 @@ type GetResolveParams struct {
 
 // GetSessionsParams defines parameters for GetSessions.
 type GetSessionsParams struct {
-	Peek   *bool `form:"peek,omitempty" json:"peek,omitempty"`
-	Limit  *int  `form:"limit,omitempty" json:"limit,omitempty"`
-	Offset *int  `form:"offset,omitempty" json:"offset,omitempty"`
+	Peek    *bool `form:"peek,omitempty" json:"peek,omitempty"`
+	Unnamed *bool `form:"unnamed,omitempty" json:"unnamed,omitempty"`
+	Limit   *int  `form:"limit,omitempty" json:"limit,omitempty"`
+	Offset  *int  `form:"offset,omitempty" json:"offset,omitempty"`
 }
 
 // GetSessionsFindParams defines parameters for GetSessionsFind.
@@ -1487,6 +1488,18 @@ func NewGetSessionsRequest(server string, params *GetSessionsParams) (*http.Requ
 		if params.Peek != nil {
 
 			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "peek", *params.Peek, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "boolean", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if params.Unnamed != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "unnamed", *params.Unnamed, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "boolean", Format: ""}); err != nil {
 				return nil, err
 			} else {
 				for _, qp := range strings.Split(queryFrag, "&") {

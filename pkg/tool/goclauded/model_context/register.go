@@ -64,7 +64,9 @@ func (s *Server) register() {
 			mcp.WithString(
 				constant.Message,
 				mcp.Required(),
-				mcp.Description("What was accomplished in the current scope"),
+				mcp.Description(
+					"What was accomplished in the current scope",
+				),
 			),
 			mcp.WithString(
 				constant.Topic,
@@ -207,6 +209,10 @@ func (s *Server) register() {
 				mcp.Description(
 					"What the session was about (1-3 sentences)",
 				),
+			),
+			mcp.WithString(
+				constant.Slug,
+				mcp.Description("Kebab-case short name for the session"),
 			),
 			mcp.WithString(
 				constant.Topic,

@@ -30,7 +30,11 @@ infrastructure.
 Discrete procedures and lookups: which tools, which
 arguments, taxonomies, conventions, known issues. Read
 on demand, put down after. Multiple independent
-operations in one doc, no single narrative. Runbooks
+operations in one doc, no single narrative. Don't
+duplicate self-documenting surfaces - point at `--help`
+or the spec for inventory and annotate only judgment,
+when to reach for what. A copied list teaches its own
+completeness, then drifts. Runbooks
 backing plugin skills live at
 `${CLAUDE_PLUGIN_ROOT}/doc/ai/runbook/`; repository
 runbooks live in the repository itself.

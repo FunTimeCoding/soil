@@ -12,6 +12,7 @@ import (
 func sessionList(c *command_context.Context) *cobra.Command {
 	var peek bool
 	var detail bool
+	var unnamed bool
 	var limit int
 	var offset int
 	result := &cobra.Command{
@@ -23,6 +24,10 @@ func sessionList(c *command_context.Context) *cobra.Command {
 			_ []string,
 		) {
 			params := &client.GetSessionsParams{Peek: &peek}
+
+			if unnamed {
+				params.Unnamed = &unnamed
+			}
 
 			if limit > 0 {
 				params.Limit = &limit
@@ -105,6 +110,12 @@ func sessionList(c *command_context.Context) *cobra.Command {
 		"detail",
 		false,
 		"Show descriptions",
+	)
+	result.Flags().BoolVar(
+		&unnamed,
+		"unnamed",
+		false,
+		"Only sessions without an alias, oldest first",
 	)
 	result.Flags().IntVar(
 		&limit,

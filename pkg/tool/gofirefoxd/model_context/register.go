@@ -93,7 +93,7 @@ func (s *Server) register() {
 			mcp.WithDescription(
 				"Group Firefox tabs together. Creates a new group or adds to an existing group. Optionally set title and color.",
 			),
-			mcp.WithObject(
+			mcp.WithArray(
 				"tab_ids",
 				mcp.Required(),
 				mcp.Description("Array of tab identifiers to group"),

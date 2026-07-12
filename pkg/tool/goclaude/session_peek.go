@@ -50,11 +50,17 @@ func sessionPeek(c *command_context.Context) *cobra.Command {
 			}
 
 			n := peekBlockSize(lines)
-			m := peekContextDepth(lines)
+			midLimit := (peekContextDepth(lines) - 1) * 100
 
 			if total*2 <= constant.PeekOutputBudget {
-				for _, entry := range p.Entries {
-					printPeekEntry(entry.UserText, entry.AssistantContext, m)
+				for i, entry := range p.Entries {
+					limit := midLimit
+
+					if i == total-1 {
+						limit = constant.PeekContextLimit
+					}
+
+					printPeekEntry(entry.UserText, entry.AssistantContext, limit)
 				}
 
 				return
@@ -85,7 +91,7 @@ func sessionPeek(c *command_context.Context) *cobra.Command {
 			}
 
 			for _, entry := range p.Entries[:head] {
-				printPeekEntry(entry.UserText, entry.AssistantContext, m)
+				printPeekEntry(entry.UserText, entry.AssistantContext, midLimit)
 			}
 
 			if samples > 0 && middle > 0 {
@@ -95,7 +101,7 @@ func sessionPeek(c *command_context.Context) *cobra.Command {
 				for i := 0; i < samples; i++ {
 					idx := head + i*step
 					entry := p.Entries[idx]
-					printPeekEntry(entry.UserText, entry.AssistantContext, m)
+					printPeekEntry(entry.UserText, entry.AssistantContext, midLimit)
 				}
 			} else if middle > 0 {
 				fmt.Printf("--- (%d messages) ---\n", middle)
@@ -104,8 +110,14 @@ func sessionPeek(c *command_context.Context) *cobra.Command {
 			if tail > 0 {
 				fmt.Printf("---\n")
 
-				for _, entry := range p.Entries[total-tail:] {
-					printPeekEntry(entry.UserText, entry.AssistantContext, m)
+				for j, entry := range p.Entries[total-tail:] {
+					limit := midLimit
+
+					if j == tail-1 {
+						limit = constant.PeekContextLimit
+					}
+
+					printPeekEntry(entry.UserText, entry.AssistantContext, limit)
 				}
 			}
 		},

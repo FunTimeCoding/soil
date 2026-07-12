@@ -46,6 +46,8 @@ func (b *Builder) Server() *server.MCPServer {
 		server.WithToolCapabilities(true),
 		server.WithInstructions(b.instructions),
 		server.WithHooks(hooks),
+		server.WithInputSchemaValidation(),
+		server.WithStrictInputSchemaDefault(),
 	}
 
 	if b.logger != nil {

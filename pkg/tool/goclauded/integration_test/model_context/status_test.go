@@ -26,10 +26,7 @@ func TestStatusAfterComplete(t *testing.T) {
 	a.Announce(a.Name(), "some work")
 	a.MustCallTool(
 		constant.Complete,
-		map[string]any{
-			constant.SessionName: a.Name(),
-			constant.Message:     "done",
-		},
+		map[string]any{constant.Message: "done"},
 	)
 	result := a.MustCallTool(constant.Status, map[string]any{})
 	assert.StringContains(t, "(none)", result)
