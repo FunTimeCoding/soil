@@ -14,8 +14,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/store"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/watcher"
-	sproutWeb "github.com/funtimecoding/soil/pkg/tool/gosproutd/web"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/tool/gosproutd/web"
 	"net/http"
 )
 
@@ -28,6 +27,7 @@ func Run(
 	defer s.Close()
 	v := service.New(s, notifier.New())
 	w := watcher.New(v, l, r, o.SeedDirectory)
+	u := web.New(v)
 	lifecycle.New(
 		l,
 		lifecycle.WithWorker(w),
@@ -41,9 +41,9 @@ func Run(
 						telemetry.NewEnvironment(),
 						o.Version,
 					).Mount(m)
-					sproutWeb.New(v).Mount(m)
+					u.Mount(m)
 				},
-			).WithMiddleware(web.RecoveryMiddleware(r)),
+			).WithMiddleware(u.Recovery(r)),
 		),
 	).RunUntilSignal()
 }

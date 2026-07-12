@@ -38,6 +38,7 @@ func Run(
 		30*24*time.Hour,
 		m.Registry(),
 	)
+	u := alertWeb.New(s, w)
 	lifecycle.New(
 		g,
 		lifecycle.WithWorker(m),
@@ -72,9 +73,9 @@ func Run(
 						m,
 					)
 					model_context.New(s, w, r, t, o.Version).Mount(m)
-					alertWeb.New(s, w).Mount(m)
+					u.Mount(m)
 				},
-			).WithMiddleware(web.RecoveryMiddleware(r)),
+			).WithMiddleware(u.Recovery(r)),
 		),
 	).RunUntilSignal()
 }

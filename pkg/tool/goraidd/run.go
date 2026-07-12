@@ -30,6 +30,13 @@ func Run(
 		l,
 		r,
 	)
+	p := raid_parser.New("localhost:8081", true)
+	u := raidWeb.New(
+		s,
+		o.ElitePath,
+		o.OutputPath,
+		p,
+	)
 	lifecycle.New(
 		l,
 		lifecycle.WithWorker(s),
@@ -37,7 +44,6 @@ func Run(
 			lifecycleServer.New(
 				o.Address,
 				func(m *http.ServeMux) {
-					p := raid_parser.New("localhost:8081", true)
 					t := telemetry.NewEnvironment()
 					generated.HandlerFromMux(
 						generated.NewStrictHandler(
@@ -63,14 +69,9 @@ func Run(
 						),
 						m,
 					)
-					raidWeb.New(
-						s,
-						o.ElitePath,
-						o.OutputPath,
-						p,
-					).Mount(m)
+					u.Mount(m)
 				},
-			).WithMiddleware(web.RecoveryMiddleware(r)),
+			).WithMiddleware(u.Recovery(r)),
 		),
 	).RunUntilSignal()
 }

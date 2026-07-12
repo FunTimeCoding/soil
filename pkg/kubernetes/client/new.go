@@ -1,29 +1,26 @@
 package client
 
 import (
-	"context"
-	"github.com/funtimecoding/soil/pkg/kubernetes/client/client"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/kubernetes/client/client_configuration"
 	"github.com/funtimecoding/soil/pkg/kubernetes/client/client_context"
-	"github.com/funtimecoding/soil/pkg/kubernetes/client/metrics"
 )
 
 func New(clusters []string) *Client {
-	result := Stub()
-	result.context = context.Background()
-	result.configuration = client_configuration.New()
-	result.client = client.New(result.configuration)
-	result.metric = metrics.New(result.configuration)
-	result.cluster = client_context.Current()
+	result, e := fromConfiguration(
+		client_configuration.New(),
+		client_context.Current(),
+	)
+	errors.PanicOnError(e)
 
 	if len(clusters) == 0 {
 		clusters = result.ConfigurationContexts(true)
 	}
 
 	for _, l := range clusters {
-		c, e := NewContext(l)
+		c, f := NewContext(l)
 
-		if e != nil {
+		if f != nil {
 			continue
 		}
 

@@ -35,6 +35,7 @@ func Run(
 	errors.PanicOnError(e)
 	defer errors.LogClose(a)
 	v := service.New(s, ollama.NewEnvironment(), a)
+	u := queryWeb.New(v)
 	lifecycle.New(
 		l,
 		lifecycle.WithWorker(
@@ -75,9 +76,9 @@ func Run(
 						t,
 						o.Version,
 					).Mount(m)
-					queryWeb.New(v).Mount(m)
+					u.Mount(m)
 				},
-			).WithMiddleware(web.RecoveryMiddleware(r)),
+			).WithMiddleware(u.Recovery(r)),
 		),
 	).RunUntilSignal()
 }

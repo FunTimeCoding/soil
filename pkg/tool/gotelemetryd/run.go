@@ -14,8 +14,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/server"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/store"
-	telemetryWeb "github.com/funtimecoding/soil/pkg/tool/gotelemetryd/web"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/web"
 	"net/http"
 )
 
@@ -26,6 +25,7 @@ func Run(
 	l := logger.New(context.Background())
 	s := store.New(relational.Open(l, o.PostgresLocator, o.LitePath))
 	defer s.Close()
+	u := web.New(s)
 	lifecycle.New(
 		l,
 		lifecycle.WithServer(
@@ -45,9 +45,9 @@ func Run(
 						telemetry.NewEnvironment(),
 						o.Version,
 					).Mount(m)
-					telemetryWeb.New(s).Mount(m)
+					u.Mount(m)
 				},
-			).WithMiddleware(web.RecoveryMiddleware(r)),
+			).WithMiddleware(u.Recovery(r)),
 		),
 	).RunUntilSignal()
 }

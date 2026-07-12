@@ -31,6 +31,7 @@ func Run(
 	idx := memory_indexer.New(connect.Wait(l))
 	v := service.New(s, idx, idx, idx)
 	reconcileMemories(v)
+	u := memoryWeb.New(v)
 	lifecycle.New(
 		l,
 		lifecycle.WithServer(
@@ -68,9 +69,9 @@ func Run(
 						t,
 						o.Version,
 					).Mount(m)
-					memoryWeb.New(v).Mount(m)
+					u.Mount(m)
 				},
-			).WithMiddleware(web.RecoveryMiddleware(r)),
+			).WithMiddleware(u.Recovery(r)),
 		),
 	).RunUntilSignal()
 }

@@ -101,6 +101,7 @@ func Run(
 	w := watcher.New(v, l, r, h)
 	address := o.Address
 	t := telemetry.NewEnvironment()
+	u := web.New(v)
 	setup := func(m *http.ServeMux) {
 		generated.HandlerFromMux(
 			generated.NewStrictHandler(
@@ -133,9 +134,9 @@ func Run(
 			t,
 			o.Version,
 		).Mount(m)
-		web.New(v).Mount(m)
+		u.Mount(m)
 	}
-	middleware := library.RecoveryMiddleware(r)
+	middleware := u.Recovery(r)
 	srv := lifecycleServer.New(address, setup).
 		WithMiddleware(middleware).
 		WithProfiling().

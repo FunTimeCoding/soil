@@ -16,7 +16,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/store"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/web"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/worker"
-	soil "github.com/funtimecoding/soil/pkg/web"
 	"net/http"
 )
 
@@ -42,6 +41,12 @@ func Run(
 		notifier.New(),
 		l,
 	)
+	u := web.New(
+		o.Board,
+		v,
+		c,
+		authorizationClient(o),
+	)
 	lifecycle.New(
 		l,
 		lifecycle.WithWorker(
@@ -51,14 +56,9 @@ func Run(
 			server.New(
 				o.Address,
 				func(m *http.ServeMux) {
-					web.New(
-						o.Board,
-						v,
-						c,
-						authorizationClient(o),
-					).Mount(m)
+					u.Mount(m)
 				},
-			).WithMiddleware(soil.RecoveryMiddleware(r)),
+			).WithMiddleware(u.Recovery(r)),
 		),
 	).RunUntilSignal()
 }
