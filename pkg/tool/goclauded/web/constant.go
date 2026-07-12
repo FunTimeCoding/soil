@@ -1,6 +1,7 @@
 package web
 
 const inlineCSS = `
+	pre { white-space: pre-wrap; word-break: break-word; }
 	.roster-grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));

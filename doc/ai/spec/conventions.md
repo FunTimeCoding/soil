@@ -26,7 +26,7 @@
 
 - **Never-nesting ideal** - avoid deep indentation
 - **No defensive programming in tests** - "should work or blow up"
-- Remove explanatory comments if code is self-documenting
+- **Default to no comment** - one earns its place only when it states a constraint invisible from the whole file; flags, constant names, tests, and callers all count as the code showing it. Never restate the name, narrate the next line, or justify the change. Match sibling density. Non-obvious design decisions go to the service's design doc, not comments.
 - Helper functions have minimal/no error returns in test code
 - **Short variable names:**
   - `e`/`f`/`g` for errors in nested scopes
@@ -83,6 +83,7 @@
   | `mcp.NewToolResultText(notation.MarshalIndent(v))` | `response.SuccessAny(v)` |
   | `mcp.NewToolResultText("message")` | `response.Success("message")` |
   | `exec.Command(name, args...)` | `run.New().Start(name, args...)` |
+  | `t.Format(...)` for human-facing display | `time.FormatCompact(t)` (`pkg/time`) - today renders clock-only, older renders date and minute |
 
   **Touch pattern in tests:** `errors.PanicClose(system.Create(path))` creates an empty file and closes it in one line.
 

@@ -9,7 +9,9 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ListSeeds,
-			mcp.WithDescription("List all seeds sorted by priority."),
+			mcp.WithDescription(
+				"List all seeds sorted by priority. Each seed carries its file modification time.",
+			),
 		),
 		mcp.NewTypedToolHandler(s.listSeeds),
 	)

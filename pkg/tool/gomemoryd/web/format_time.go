@@ -12,5 +12,5 @@ func formatTime(raw string) string {
 		return raw
 	}
 
-	return t.Local().Format(library.DateMinute)
+	return library.FormatCompact(t)
 }

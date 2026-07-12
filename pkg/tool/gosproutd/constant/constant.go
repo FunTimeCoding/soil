@@ -19,5 +19,9 @@ const (
 	DashboardTitle = "Dashboard"
 	DashboardPath  = "/"
 
-	Seeds = "seeds"
+	Seeds       = "seeds"
+	SeedsRecent = "seeds-recent"
+
+	SortParameter = "sort"
+	SortModified  = "modified"
 )

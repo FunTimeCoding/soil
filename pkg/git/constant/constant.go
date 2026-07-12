@@ -21,6 +21,13 @@ const (
 	Tag     = "tag"
 	Clone   = "clone"
 	Status  = "status"
+	Log     = "log"
+	Diff    = "diff"
+
+	NameOnly         = "--name-only"
+	Relative         = "--relative"
+	CommitTimeFormat = "--format=%ct"
+	Pathspec         = "--"
 
 	RevParse     = "rev-parse"
 	GitDirectory = "--git-dir"

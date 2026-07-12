@@ -14,6 +14,7 @@ func (s *Server) event() http.HandlerFunc {
 			f http.Flusher,
 		) {
 			layout.PushEvent(w, constant.Seeds, s.seedTable())
+			layout.PushEvent(w, constant.SeedsRecent, s.recentSeedTable())
 			f.Flush()
 		},
 	)

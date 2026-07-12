@@ -11,6 +11,7 @@ import (
 )
 
 func (w *Watcher) walkDirectory() []scannedFile {
+	times, dirty := w.gitTimes()
 	var result []scannedFile
 	errors.PanicOnError(
 		filepath.Walk(
@@ -44,6 +45,12 @@ func (w *Watcher) walkDirectory() []scannedFile {
 					return nil
 				}
 
+				modifiedAt := i.ModTime()
+
+				if t, okay := times[relative]; okay && !dirty[relative] {
+					modifiedAt = t
+				}
+
 				result = append(
 					result,
 					scannedFile{
@@ -54,6 +61,7 @@ func (w *Watcher) walkDirectory() []scannedFile {
 						path:        relative,
 						contentHash: fmt.Sprintf("%x", sha256.Sum256(b)),
 						content:     string(b),
+						modifiedAt:  modifiedAt,
 					},
 				)
 

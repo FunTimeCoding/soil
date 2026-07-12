@@ -84,6 +84,18 @@ See `generated-api.md` for the full Server pattern. Summary:
 - Function parameter that accepts a handler func: `serve`, not `handler`
 - Handler methods/functions are named after the resource they serve, without a `handle` prefix: `handleAlerts` → `alerts`, `handleDashboard` → `dashboard`, `handleAddSubmit` → `addSubmit`
 
+## Ordering variants
+
+Query and store methods that differ only in ordering are separate
+named methods, never a boolean direction parameter - Go has no
+named arguments, so `Seeds(since, 10, true)` tells the call-site
+reader nothing. The name carries the semantics:
+
+- `VersionsSince(...)` - forward walk from a point in time,
+  oldest first (streaming consumers: pollers, watermarks)
+- `RecentVersions(...)`, `RecentSeeds()` - `Recent` means
+  newest-first (display consumers: dashboards, tables)
+
 ## HTML node builder naming
 
 Functions returning `g.Node` (gomponents HTML builders) are named after the component they produce, not the action of building it:

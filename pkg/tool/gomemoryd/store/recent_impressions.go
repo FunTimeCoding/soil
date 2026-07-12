@@ -5,7 +5,7 @@ import "github.com/funtimecoding/soil/pkg/errors"
 func (s *Store) RecentImpressions(since string) ([]Impression, error) {
 	rows, e := s.database.Query(
 		`SELECT identifier, content, source, created_at
-		FROM impression WHERE created_at > ? ORDER BY identifier`,
+		FROM impression WHERE created_at > ? ORDER BY identifier DESC`,
 		since,
 	)
 

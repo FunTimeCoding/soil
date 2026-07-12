@@ -9,7 +9,7 @@ import (
 
 func (s *Server) recentVersions() gomponents.Node {
 	since := time.Now().Add(-7 * 24 * time.Hour).UTC().Format(time.RFC3339)
-	versions, e := s.service.VersionsSince(since, 10, 0)
+	versions, e := s.service.RecentVersions(since, 10)
 
 	if e != nil || len(versions) == 0 {
 		return gomponents.Group(

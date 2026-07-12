@@ -14,6 +14,7 @@ func (w *Watcher) scan() {
 				Path:        f.path,
 				ContentHash: f.contentHash,
 				Content:     f.content,
+				ModifiedAt:  f.modifiedAt,
 			},
 		)
 	}

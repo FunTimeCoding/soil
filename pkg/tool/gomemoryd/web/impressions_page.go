@@ -59,20 +59,20 @@ func (s *Server) impressionsPage(
 	} else {
 		var rows []gomponents.Node
 
-		for i := len(impressions) - 1; i >= 0; i-- {
-			imp := impressions[i]
+		for _, i := range impressions {
 			rows = append(
 				rows,
 				html.Tr(
 					html.Td(
+						html.Class(timeCellClass),
 						html.Small(
-							gomponents.Text(formatTime(imp.CreatedAt)),
+							gomponents.Text(formatTime(i.CreatedAt)),
 						),
 					),
 					html.Td(
-						html.Em(gomponents.Text(imp.Source)),
+						html.Em(gomponents.Text(i.Source)),
 					),
-					html.Td(gomponents.Text(imp.Content)),
+					html.Td(gomponents.Text(i.Content)),
 				),
 			)
 		}
