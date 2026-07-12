@@ -1,6 +1,6 @@
 module github.com/funtimecoding/soil
 
-go 1.26.4
+go 1.26.5
 
 require (
 	charm.land/bubbles/v2 v2.1.1
@@ -15,7 +15,7 @@ require (
 	github.com/amikos-tech/pure-tokenizers v0.1.5
 	github.com/andybrewer/mack v0.0.0-20251024001139-afd410b36447
 	github.com/andygrunwald/go-jira v1.17.0
-	github.com/anthropics/anthropic-sdk-go v1.56.0
+	github.com/anthropics/anthropic-sdk-go v1.57.0
 	github.com/apenella/go-ansible/v2 v2.4.1
 	github.com/bmatcuk/doublestar/v4 v4.10.0
 	github.com/bndr/gojenkins v1.2.0
@@ -33,7 +33,7 @@ require (
 	github.com/fsnotify/fsnotify v1.10.1
 	github.com/gage-technologies/mistral-go v1.1.0
 	github.com/gdamore/tcell/v2 v2.13.10
-	github.com/getkin/kin-openapi v0.140.0
+	github.com/getkin/kin-openapi v0.142.0
 	github.com/getlantern/systray v1.2.2
 	github.com/getsentry/sentry-go v0.47.0
 	github.com/glebarez/go-sqlite v1.22.0
@@ -70,14 +70,14 @@ require (
 	github.com/oapi-codegen/runtime v1.4.2
 	github.com/olekukonko/tablewriter v1.1.4
 	github.com/ollama/ollama v0.31.2
-	github.com/openai/openai-go/v3 v3.41.1
+	github.com/openai/openai-go/v3 v3.42.0
 	github.com/openvex/go-vex v0.2.8
 	github.com/opsgenie/opsgenie-go-sdk-v2 v1.2.23
 	github.com/pkg/sftp v1.13.10
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2
 	github.com/prometheus/alertmanager v0.33.1
 	github.com/prometheus/client_golang v1.23.2
-	github.com/prometheus/common v0.69.0
+	github.com/prometheus/common v0.70.0
 	github.com/rivo/tview v0.42.0
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/samber/slog-loki/v3 v3.7.2
@@ -92,7 +92,7 @@ require (
 	github.com/tobischo/gokeepasslib/v3 v3.6.2
 	github.com/trivago/tgo v1.0.7
 	github.com/whilp/git-urls v1.0.0
-	github.com/yuin/goldmark v1.8.2
+	github.com/yuin/goldmark v1.8.4
 	gitlab.com/gitlab-org/api/client-go/v2 v2.46.0
 	go.etcd.io/bbolt v1.5.0
 	golang.org/x/crypto v0.54.0
@@ -275,8 +275,8 @@ require (
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/mwitkow/go-conntrack v0.0.0-20190716064945-2f068394615f // indirect
 	github.com/mxk/go-flowrate v0.0.0-20140419014527-cca7078d478f // indirect
-	github.com/oasdiff/yaml v0.1.0 // indirect
-	github.com/oasdiff/yaml3 v0.0.13 // indirect
+	github.com/oasdiff/yaml v0.1.1 // indirect
+	github.com/oasdiff/yaml3 v0.0.14 // indirect
 	github.com/oklog/run v1.2.0 // indirect
 	github.com/oklog/ulid v1.3.1 // indirect
 	github.com/oklog/ulid/v2 v2.1.1 // indirect
@@ -296,7 +296,7 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pkoukk/tiktoken-go v0.1.6 // indirect
 	github.com/prometheus/client_model v0.6.2 // indirect
-	github.com/prometheus/procfs v0.17.0 // indirect
+	github.com/prometheus/procfs v0.21.0 // indirect
 	github.com/prometheus/prometheus v0.54.1 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
