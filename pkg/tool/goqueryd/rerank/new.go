@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/amikos-tech/pure-onnx/ort"
 	"github.com/amikos-tech/pure-tokenizers"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 )
 
@@ -37,10 +38,17 @@ func New(
 		return nil, fmt.Errorf("load tokenizer: %w", e)
 	}
 
+	session, f := newSession(modelPath, constant.DefaultSequenceLength)
+
+	if f != nil {
+		errors.PanicOnError(tokenizer.Close())
+
+		return nil, f
+	}
+
 	return &Reranker{
-		modelPath:      modelPath,
 		sequenceLength: constant.DefaultSequenceLength,
 		tokenizer:      tokenizer,
-		sessions:       make(map[int]*rerankSession),
+		session:        session,
 	}, nil
 }

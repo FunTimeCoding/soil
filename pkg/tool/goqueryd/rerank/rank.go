@@ -15,14 +15,7 @@ func (r *Reranker) Rank(
 
 	r.mutex.Lock()
 	defer r.mutex.Unlock()
-	batch := len(documents)
-	session, e := r.sessionForBatch(batch)
-
-	if e != nil {
-		return nil, e
-	}
-
-	queries := make([]string, batch)
+	queries := make([]string, len(documents))
 
 	for i := range queries {
 		queries[i] = query
@@ -39,36 +32,37 @@ func (r *Reranker) Rank(
 		return nil, fmt.Errorf("tokenize pairs: %w", e)
 	}
 
-	for i, enc := range encodings {
-		offset := i * r.sequenceLength
+	results := make([]Result, len(documents))
+	scoreByDocument := map[string]float64{}
+
+	for i, encoding := range encodings {
+		if score, okay := scoreByDocument[documents[i]]; okay {
+			results[i] = Result{Index: i, Score: score}
+
+			continue
+		}
 
 		for j := 0; j < r.sequenceLength; j++ {
-			if j < len(enc.IDs) {
-				session.inputIDs[offset+j] = int64(enc.IDs[j])
+			if j < len(encoding.IDs) {
+				r.session.inputIDs[j] = int64(encoding.IDs[j])
 			} else {
-				session.inputIDs[offset+j] = 0
+				r.session.inputIDs[j] = 0
 			}
 
-			if j < len(enc.AttentionMask) {
-				session.attentionMask[offset+j] = int64(enc.AttentionMask[j])
+			if j < len(encoding.AttentionMask) {
+				r.session.attentionMask[j] = int64(encoding.AttentionMask[j])
 			} else {
-				session.attentionMask[offset+j] = 0
+				r.session.attentionMask[j] = 0
 			}
 		}
-	}
 
-	if f := session.session.Run(); f != nil {
-		return nil, fmt.Errorf("rerank inference: %w", f)
-	}
-
-	output := session.outputTensor.GetData()
-	results := make([]Result, batch)
-
-	for i := 0; i < batch; i++ {
-		results[i] = Result{
-			Index: i,
-			Score: sigmoid(float64(output[i])),
+		if f := r.session.session.Run(); f != nil {
+			return nil, fmt.Errorf("rerank inference: %w", f)
 		}
+
+		score := sigmoid(float64(r.session.outputTensor.GetData()[0]))
+		scoreByDocument[documents[i]] = score
+		results[i] = Result{Index: i, Score: score}
 	}
 
 	return results, nil

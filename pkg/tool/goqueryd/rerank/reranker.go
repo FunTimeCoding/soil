@@ -6,9 +6,8 @@ import (
 )
 
 type Reranker struct {
-	modelPath      string
 	sequenceLength int
 	tokenizer      *tokenizers.Tokenizer
-	sessions       map[int]*rerankSession
+	session        *rerankSession
 	mutex          sync.Mutex
 }

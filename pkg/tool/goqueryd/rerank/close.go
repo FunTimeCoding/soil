@@ -6,11 +6,10 @@ func (r *Reranker) Close() error {
 	r.mutex.Lock()
 	defer r.mutex.Unlock()
 
-	for _, s := range r.sessions {
-		destroySession(s)
+	if r.session != nil {
+		destroySession(r.session)
+		r.session = nil
 	}
-
-	r.sessions = nil
 
 	if r.tokenizer != nil {
 		errors.PanicOnError(r.tokenizer.Close())
