@@ -11,6 +11,7 @@ func Pointers(
 	roots []string,
 	exists func(string) bool,
 	siblingExists func(string) bool,
+	ignored func(string) bool,
 ) Checker {
 	return func(
 		path string,
@@ -54,16 +55,20 @@ func Pointers(
 							false,
 						)
 					case pointer.Repository:
-						if !exists(pointer.Normalize(candidate)) {
-							s.AddConcern(
-								constant.DeadPointerKey,
-								constant.DeadPointerText,
-								path,
-								number,
-								line,
-								false,
-							)
+						normalized := pointer.Normalize(candidate)
+
+						if exists(normalized) || ignored(normalized) {
+							continue
 						}
+
+						s.AddConcern(
+							constant.DeadPointerKey,
+							constant.DeadPointerText,
+							path,
+							number,
+							line,
+							false,
+						)
 					}
 				}
 			}

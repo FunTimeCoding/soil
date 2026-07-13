@@ -25,7 +25,27 @@ func pointerChecker(existing ...string) Checker {
 		[]string{".claude", "doc", "pkg"},
 		pointerExists(existing),
 		pointerExists(existing),
+		func(string) bool { return false },
 	)
+}
+
+func gitignoredChecker(ignored ...string) Checker {
+	return Pointers(
+		[]string{".claude", "doc", "pkg"},
+		func(string) bool { return false },
+		func(string) bool { return false },
+		pointerExists(ignored),
+	)
+}
+
+func TestPointersGitignored(t *testing.T) {
+	l := gitignoredChecker(".claude/notes/alfa.md")(
+		upper.Alfa,
+		strings.NewReader(
+			"Style guide at `.claude/notes/alfa.md` today.\n",
+		),
+	)
+	assertReport(t, "Alfa", false, nil, "", l)
 }
 
 func TestPointersClean(t *testing.T) {

@@ -1,6 +1,8 @@
 package lint
 
 import (
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/git"
 	"github.com/funtimecoding/soil/pkg/lint/option"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/lint/pointer"
@@ -65,6 +67,7 @@ func Check(
 					return system.FileExists(p) ||
 						system.DirectoryExists(p)
 				},
+				git.IgnoreMatcher(constant.CurrentDirectory),
 			),
 		},
 		fix,
