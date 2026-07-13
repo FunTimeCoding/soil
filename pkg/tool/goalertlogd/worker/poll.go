@@ -3,7 +3,7 @@ package worker
 import (
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/advanced_option"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store/record"
 	"time"
 )
 
@@ -23,6 +23,12 @@ func (w *Worker) Poll() {
 		}
 	}()
 	alerts, _ := w.client.MustAlerts(advanced_option.New(), nil)
+	open := make(map[string]bool)
+
+	for _, fingerprint := range w.store.MustUnresolvedFingerprints() {
+		open[fingerprint] = true
+	}
+
 	current := make(map[string]bool)
 
 	for _, a := range alerts {
@@ -32,7 +38,7 @@ func (w *Worker) Poll() {
 
 		current[a.Fingerprint] = true
 
-		if _, exists := w.firing[a.Fingerprint]; exists {
+		if open[a.Fingerprint] {
 			continue
 		}
 
@@ -42,28 +48,29 @@ func (w *Worker) Poll() {
 			labels[k] = v
 		}
 
-		r := store.Record{
-			Fingerprint: a.Fingerprint,
-			Name:        a.Name,
-			Severity:    a.Severity,
-			Summary:     a.Summary,
-			Labels:      labels,
-			Start:       time.Now(),
-		}
-		w.firing[a.Fingerprint] = w.store.MustSave(r)
+		w.store.MustCreate(
+			record.Record{
+				Fingerprint: a.Fingerprint,
+				Name:        a.Name,
+				Severity:    a.Severity,
+				Summary:     a.Summary,
+				Labels:      labels,
+				Start:       time.Now(),
+			},
+		)
+		open[a.Fingerprint] = true
 
 		if w.metrics != nil {
 			w.metrics.alertsTotal.Inc()
 		}
 	}
 
-	for fingerprint, key := range w.firing {
+	for fingerprint := range open {
 		if current[fingerprint] {
 			continue
 		}
 
-		w.store.MustResolve(key)
-		delete(w.firing, fingerprint)
+		w.store.MustResolve(fingerprint)
 	}
 
 	if pruned := w.store.MustPrune(time.Now().Add(-w.retention)); pruned > 0 {
@@ -71,7 +78,7 @@ func (w *Worker) Poll() {
 	}
 
 	if w.metrics != nil {
-		w.metrics.alertsFiring.Set(float64(len(w.firing)))
+		w.metrics.alertsFiring.Set(float64(w.store.MustUnresolvedCount()))
 		w.metrics.recordsTotal.Set(float64(w.store.MustCount()))
 	}
 }

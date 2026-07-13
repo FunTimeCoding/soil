@@ -13,4 +13,6 @@ const (
 	EchoAllFlag     = "--echo-all"
 
 	DumpCommand = "pg_dump"
+
+	DialectName = "postgres"
 )

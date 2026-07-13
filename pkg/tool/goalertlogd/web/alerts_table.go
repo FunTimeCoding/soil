@@ -1,12 +1,12 @@
 package web
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store/record"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
 
-func alertsTable(records []store.Record) gomponents.Node {
+func alertsTable(records []record.Record) gomponents.Node {
 	if len(records) == 0 {
 		return html.P(html.Em(gomponents.Text("No occurrences found.")))
 	}
@@ -25,7 +25,7 @@ func alertsTable(records []store.Record) gomponents.Node {
 		html.TBody(
 			gomponents.Map(
 				records,
-				func(r store.Record) gomponents.Node {
+				func(r record.Record) gomponents.Node {
 					status := "firing"
 
 					if r.End != nil {

@@ -1,7 +1,7 @@
 package store
 
-import "github.com/funtimecoding/soil/pkg/bolt"
+import "gorm.io/gorm"
 
 type Store struct {
-	client *bolt.Client
+	database *gorm.DB
 }

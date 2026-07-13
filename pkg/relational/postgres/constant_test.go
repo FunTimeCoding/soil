@@ -13,4 +13,5 @@ func TestConstant(t *testing.T) {
 	assert.String(t, "--file", FileArgument)
 	assert.String(t, "--echo-all", EchoAllFlag)
 	assert.String(t, "pg_dump", DumpCommand)
+	assert.String(t, "postgres", DialectName)
 }

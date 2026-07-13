@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/mock_client"
+	"github.com/funtimecoding/soil/pkg/relational/lite"
 	generated "github.com/funtimecoding/soil/pkg/tool/goalertlogd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/server"
@@ -16,14 +17,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/worker"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/model_context/mock_recorder"
 	"net/http"
-	"path/filepath"
 	"testing"
 	"time"
 )
 
 func New(t *testing.T) *Server {
 	t.Helper()
-	s := store.New(filepath.Join(t.TempDir(), constant.TestDatabase))
+	s := store.New(lite.NewMemory())
 	c := mock_client.New()
 	c.Add(
 		alert.NewBasic(

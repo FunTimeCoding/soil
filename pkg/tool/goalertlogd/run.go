@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/metric"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager"
+	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/telemetry"
 	generated "github.com/funtimecoding/soil/pkg/tool/goalertlogd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/model_context"
@@ -27,7 +28,7 @@ func Run(
 ) {
 	g := logger.New(context.Background())
 	m := metric.New(0, false, nil)
-	s := store.New(o.DatabasePath)
+	s := store.New(relational.Open(g, o.PostgresLocator, o.LitePath))
 	defer s.Close()
 	w := worker.New(
 		alertmanager.NewEnvironment(),

@@ -1,19 +1,13 @@
 package store
 
 import (
-	"github.com/funtimecoding/soil/pkg/bolt"
-	"go.etcd.io/bbolt"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store/record"
+	"gorm.io/gorm"
 )
 
-func New(path string) *Store {
-	c := bolt.New(path)
-	c.MustUpdate(
-		func(t *bbolt.Tx) error {
-			_, e := c.CreateBucket(t, Bucket)
+func New(d *gorm.DB) *Store {
+	errors.PanicOnError(d.AutoMigrate(record.Stub()))
 
-			return e
-		},
-	)
-
-	return &Store{client: c}
+	return &Store{database: d}
 }

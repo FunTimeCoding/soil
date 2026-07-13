@@ -25,7 +25,6 @@ func New(
 		recovery:  recovery.New(l, r),
 		interval:  interval,
 		retention: retention,
-		firing:    make(map[string]string),
 		stop:      make(chan struct{}),
 		registry:  y,
 	}

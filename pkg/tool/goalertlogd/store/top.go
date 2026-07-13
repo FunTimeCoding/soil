@@ -1,10 +1,8 @@
 package store
 
 import (
-	"github.com/funtimecoding/soil/pkg/bolt"
-	"github.com/funtimecoding/soil/pkg/notation"
-	"go.etcd.io/bbolt"
-	"sort"
+	"fmt"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store/record"
 	"time"
 )
 
@@ -13,83 +11,45 @@ func (s *Store) Top(
 	start time.Time,
 	end time.Time,
 ) ([]TopRecord, error) {
-	entries := make(map[string]*topEntry)
-	e := s.client.View(
-		func(t *bbolt.Tx) error {
-			b := s.client.Bucket(t, Bucket)
+	var rows []topRow
+	q := s.database.
+		Model(record.Stub()).
+		Select(
+			fmt.Sprintf(
+				`name,
+				COUNT(*) AS count,
+				SUM(CASE WHEN ended_at IS NULL THEN 1 ELSE 0 END)
+					AS currently_firing,
+				COALESCE(AVG(%s), 0) AS average_seconds,
+				MAX(severity) AS severity`,
+				averageSecondsExpression(s.database),
+			),
+		).
+		Where("started_at >= ? AND started_at < ?", start, end).
+		Group("name").
+		Order("count DESC, name")
 
-			if b == nil {
-				return nil
-			}
+	if n > 0 {
+		q = q.Limit(n)
+	}
 
-			return bolt.For(
-				b,
-				func(
-					_ string,
-					v []byte,
-				) {
-					var r Record
-					notation.MustDecodeBytes(v, &r, false)
-
-					if r.Start.Before(start) || !r.Start.Before(end) {
-						return
-					}
-
-					e, exists := entries[r.Name]
-
-					if !exists {
-						e = &topEntry{name: r.Name}
-						entries[r.Name] = e
-					}
-
-					e.count++
-					e.severity = r.Severity
-
-					if r.End != nil {
-						e.totalDuration += r.End.Sub(r.Start)
-						e.resolvedCount++
-					} else {
-						e.currentlyFiring++
-					}
-				},
-			)
-		},
-	)
-
-	if e != nil {
+	if e := q.Scan(&rows).Error; e != nil {
 		return nil, e
 	}
 
-	result := make([]TopRecord, 0, len(entries))
+	result := make([]TopRecord, 0, len(rows))
 
-	for _, e := range entries {
-		var avg time.Duration
-
-		if e.resolvedCount > 0 {
-			avg = e.totalDuration / time.Duration(e.resolvedCount)
-		}
-
+	for _, r := range rows {
 		result = append(
 			result,
 			TopRecord{
-				Name:            e.name,
-				Count:           e.count,
-				AverageDuration: avg,
-				CurrentlyFiring: e.currentlyFiring,
-				Severity:        e.severity,
+				Name:            r.Name,
+				Count:           r.Count,
+				AverageDuration: time.Duration(r.AverageSeconds * float64(time.Second)),
+				CurrentlyFiring: r.CurrentlyFiring,
+				Severity:        r.Severity,
 			},
 		)
-	}
-
-	sort.Slice(
-		result,
-		func(i, j int) bool {
-			return result[i].Count > result[j].Count
-		},
-	)
-
-	if n > 0 && n < len(result) {
-		result = result[:n]
 	}
 
 	return result, nil

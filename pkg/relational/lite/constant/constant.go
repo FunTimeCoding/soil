@@ -8,7 +8,8 @@ const (
 
 	LiteMessage = "database: sqlite"
 
-	DriverName = "sqlite"
+	DriverName  = "sqlite"
+	DialectName = "sqlite"
 
 	// Applied per pooled connection - an Exec would only reach one
 	FileParameters   = "?_pragma=journal_mode(WAL)&_pragma=foreign_keys(1)"

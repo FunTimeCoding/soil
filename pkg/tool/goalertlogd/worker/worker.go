@@ -16,7 +16,6 @@ type Worker struct {
 	recovery  *recovery.Recovery
 	interval  time.Duration
 	retention time.Duration
-	firing    map[string]string
 	stop      chan struct{}
 	lastPoll  atomic.Value
 	registry  *prometheus.Registry

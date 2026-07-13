@@ -1,7 +1,8 @@
 package option
 
 type Log struct {
-	Address      string
-	DatabasePath string
-	Version      string
+	Address         string
+	PostgresLocator string
+	LitePath        string
+	Version         string
 }

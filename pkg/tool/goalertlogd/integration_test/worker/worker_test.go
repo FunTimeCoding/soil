@@ -51,21 +51,33 @@ func TestPollIgnoresDuplicateFiring(t *testing.T) {
 	assert.Count(t, 1, o.Store.MustByName("HighMemory"))
 }
 
-func TestRecoverStaleAdoptsFiring(t *testing.T) {
+func TestPollIgnoresDuplicateInResponse(t *testing.T) {
+	o := worker_tester.New(t)
+	o.MockClient.Add(
+		alert.NewBasic("abc123", "HighMemory", "critical", ""),
+	)
+	o.MockClient.Add(
+		alert.NewBasic("abc123", "HighMemory", "critical", ""),
+	)
+	o.Worker.Poll()
+	assert.Count(t, 1, o.Store.MustByName("HighMemory"))
+}
+
+func TestRestartPollKeepsFiringOpen(t *testing.T) {
 	o := worker_tester.New(t)
 	o.MockClient.Add(
 		alert.NewBasic("abc123", "HighMemory", "critical", ""),
 	)
 	o.Worker.Poll()
 	fresh := worker_tester.NewWithStore(t, o.Store, o.MockClient)
-	fresh.Worker.RecoverStale()
-	assert.Count(t, 1, o.Store.MustUnresolved())
 	fresh.Worker.Poll()
-	assert.Count(t, 1, o.Store.MustByName("HighMemory"))
-	assert.True(t, o.Store.MustByName("HighMemory")[0].End == nil)
+	assert.Count(t, 1, o.Store.MustUnresolvedFingerprints())
+	records := o.Store.MustByName("HighMemory")
+	assert.Count(t, 1, records)
+	assert.True(t, records[0].End == nil)
 }
 
-func TestRecoverStaleResolvesGone(t *testing.T) {
+func TestRestartPollResolvesGone(t *testing.T) {
 	o := worker_tester.New(t)
 	o.MockClient.Add(
 		alert.NewBasic("abc123", "HighMemory", "critical", ""),
@@ -73,8 +85,8 @@ func TestRecoverStaleResolvesGone(t *testing.T) {
 	o.Worker.Poll()
 	o.MockClient.Remove("abc123")
 	fresh := worker_tester.NewWithStore(t, o.Store, o.MockClient)
-	fresh.Worker.RecoverStale()
-	assert.Count(t, 0, o.Store.MustUnresolved())
+	fresh.Worker.Poll()
+	assert.Count(t, 0, o.Store.MustUnresolvedFingerprints())
 	records := o.Store.MustByName("HighMemory")
 	assert.Count(t, 1, records)
 	assert.True(t, records[0].End != nil)

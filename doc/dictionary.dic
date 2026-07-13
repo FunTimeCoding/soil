@@ -272,6 +272,7 @@ datname
 rolname
 
 # SQLite
+julianday
 rowid
 
 # NetBox

@@ -2,12 +2,12 @@ package web
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store/record"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
 
-func recentTable(records []store.Record) gomponents.Node {
+func recentTable(records []record.Record) gomponents.Node {
 	if len(records) == 0 {
 		return html.P(html.Em(gomponents.Text("No alerts in this time range.")))
 	}
@@ -26,7 +26,7 @@ func recentTable(records []store.Record) gomponents.Node {
 		html.TBody(
 			gomponents.Map(
 				records,
-				func(r store.Record) gomponents.Node {
+				func(r record.Record) gomponents.Node {
 					status := "firing"
 
 					if r.End != nil {

@@ -5,9 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store/record"
 )
 
-func (s *Store) MustByName(name string) []record.Record {
-	result, e := s.ByName(name)
-	errors.PanicOnError(e)
-
-	return result
+func (s *Store) MustCreate(r record.Record) {
+	errors.PanicOnError(s.Create(r))
 }
