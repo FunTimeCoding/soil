@@ -45,19 +45,7 @@ func (s *Server) SearchChannels(
 	var rows []row
 
 	for _, c := range channels {
-		typeName := ""
-
-		switch c.Type {
-		case model.ChannelTypeOpen:
-			typeName = "public"
-		case model.ChannelTypePrivate:
-			typeName = "private"
-		case model.ChannelTypeDirect:
-			typeName = "dm"
-		case model.ChannelTypeGroup:
-			typeName = "group_dm"
-		}
-
+		typeName := channelTypeName(c.Type)
 		displayName := c.DisplayName
 
 		if c.Type == model.ChannelTypeDirect && displayName == "" {

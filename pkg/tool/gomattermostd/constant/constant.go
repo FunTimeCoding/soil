@@ -19,6 +19,7 @@ const (
 	DownloadFile      = "download_file"
 	UploadFile        = "upload_file"
 	ListChannels      = "list_channels"
+	GetChannel        = "get_channel"
 	GetChannelHistory = "get_channel_history"
 	SendDirectMessage = "send_dm"
 	PostMessage       = "post_message"

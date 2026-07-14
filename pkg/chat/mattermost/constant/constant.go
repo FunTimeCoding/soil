@@ -11,7 +11,8 @@ const (
 	TeamEnvironment    = "MATTERMOST_TEAM"
 	ChannelEnvironment = "MATTERMOST_CHANNEL"
 
-	PerPage int = 1000
+	PerPage    int = 1000
+	MaxPerPage int = 200
 
 	EmptyEntityTag = ""
 

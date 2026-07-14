@@ -18,25 +18,12 @@ func (s *Server) ListChannels(
 		limit = 100
 	}
 
-	all, e := s.client.AllChannels()
+	page, e := s.client.AllChannels(limit, a.Page*limit)
 
 	if e != nil {
 		return s.captureDetail(e)
 	}
 
-	start := a.Page * limit
-
-	if start >= len(all) {
-		start = len(all)
-	}
-
-	end := start + limit
-
-	if end > len(all) {
-		end = len(all)
-	}
-
-	page := all[start:end]
 	type row struct {
 		ID          string `json:"id"`
 		Name        string `json:"name"`
@@ -52,7 +39,7 @@ func (s *Server) ListChannels(
 			ID:          c.Id,
 			Name:        c.Name,
 			DisplayName: c.DisplayName,
-			Type:        string(c.Type),
+			Type:        channelTypeName(c.Type),
 			Purpose:     c.Purpose,
 			Header:      c.Header,
 		}
@@ -60,10 +47,10 @@ func (s *Server) ListChannels(
 
 	return response.SuccessAny(
 		map[string]any{
-			"channels":    rows,
-			"total_count": len(all),
-			"page":        a.Page,
-			"per_page":    limit,
+			"channels": rows,
+			"page":     a.Page,
+			"per_page": limit,
+			"has_more": len(rows) == limit,
 		},
 	)
 }

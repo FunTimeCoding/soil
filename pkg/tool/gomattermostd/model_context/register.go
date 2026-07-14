@@ -186,6 +186,23 @@ func (s *Server) register() {
 	)
 	s.server.AddTool(
 		mcp.NewTool(
+			constant.GetChannel,
+			mcp.WithDescription(
+				"Get one channel with its header and purpose. Provide channel_id or channel_name.",
+			),
+			mcp.WithString(
+				"channel_id",
+				mcp.Description("Channel ID"),
+			),
+			mcp.WithString(
+				"channel_name",
+				mcp.Description("Channel name"),
+			),
+		),
+		mcp.NewTypedToolHandler(s.GetChannel),
+	)
+	s.server.AddTool(
+		mcp.NewTool(
 			constant.GetChannelHistory,
 			mcp.WithDescription(
 				"Get recent messages from a channel. Provide channel_id or channel_name.",

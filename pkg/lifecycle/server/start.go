@@ -28,6 +28,10 @@ func (s *Server) Start() {
 	if s.protected {
 		s.http.ReadTimeout = readWriteTimeout
 		s.http.WriteTimeout = readWriteTimeout
+
+		if s.writeTimeout > 0 {
+			s.http.WriteTimeout = s.writeTimeout
+		}
 	}
 
 	if s.certificate != "" {
