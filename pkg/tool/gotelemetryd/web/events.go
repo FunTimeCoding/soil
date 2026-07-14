@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/store"
+	"github.com/funtimecoding/soil/pkg/web/layout"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -44,7 +45,7 @@ func (s *Server) events(
 
 	for _, e := range entries {
 		cells := []gomponents.Node{
-			html.Td(gomponents.Text(e.CreatedAt.Local().Format("Jan 2 15:04"))),
+			layout.TimeCell(e.CreatedAt),
 			html.Td(gomponents.Text(e.Tool)),
 			html.Td(gomponents.Text(e.Surface)),
 			html.Td(gomponents.Text(e.Actor)),

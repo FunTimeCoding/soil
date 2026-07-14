@@ -1,7 +1,7 @@
 package web
 
 import (
-	"github.com/funtimecoding/soil/pkg/time"
+	"github.com/funtimecoding/soil/pkg/web/layout"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
@@ -14,12 +14,7 @@ func (s *Server) recentSeedTable() gomponents.Node {
 		rows = append(
 			rows,
 			html.Tr(
-				html.Td(
-					html.Class("time-cell"),
-					html.Small(
-						gomponents.Text(time.FormatCompact(v.ModifiedAt)),
-					),
-				),
+				layout.TimeCell(v.ModifiedAt),
 				html.Td(gomponents.Text(v.Name)),
 				html.Td(
 					html.Style("color: var(--pico-muted-color);"),

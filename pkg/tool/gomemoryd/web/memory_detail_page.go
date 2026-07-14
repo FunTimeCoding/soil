@@ -2,11 +2,14 @@ package web
 
 import (
 	"fmt"
+	library "github.com/funtimecoding/soil/pkg/time"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
+	"github.com/funtimecoding/soil/pkg/web/layout"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 func (s *Server) memoryDetailPage(
@@ -56,11 +59,15 @@ func (s *Server) memoryDetailPage(
 				),
 				html.Tr(
 					html.Td(html.Strong(gomponents.Text("Created"))),
-					html.Td(gomponents.Text(formatTime(m.CreatedAt))),
+					layout.TimeCell(
+						library.Parse(time.RFC3339, m.CreatedAt),
+					),
 				),
 				html.Tr(
 					html.Td(html.Strong(gomponents.Text("Updated"))),
-					html.Td(gomponents.Text(formatTime(m.UpdatedAt))),
+					layout.TimeCell(
+						library.Parse(time.RFC3339, m.UpdatedAt),
+					),
 				),
 				html.Tr(
 					html.Td(html.Strong(gomponents.Text("Active"))),
@@ -105,8 +112,8 @@ func (s *Server) memoryDetailPage(
 			rows = append(
 				rows,
 				html.Tr(
-					html.Td(
-						html.Small(gomponents.Text(formatTime(v.ChangedAt))),
+					layout.TimeCell(
+						library.Parse(time.RFC3339, v.ChangedAt),
 					),
 					html.Td(gomponents.Text(v.ChangeType)),
 					html.Td(html.Small(gomponents.Text(v.Source))),

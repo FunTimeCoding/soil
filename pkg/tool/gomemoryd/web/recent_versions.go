@@ -2,6 +2,8 @@ package web
 
 import (
 	"fmt"
+	library "github.com/funtimecoding/soil/pkg/time"
+	"github.com/funtimecoding/soil/pkg/web/layout"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"time"
@@ -26,7 +28,9 @@ func (s *Server) recentVersions() gomponents.Node {
 		rows = append(
 			rows,
 			html.Tr(
-				html.Td(html.Small(gomponents.Text(formatTime(v.ChangedAt)))),
+				layout.TimeCell(
+					library.Parse(time.RFC3339, v.ChangedAt),
+				),
 				html.Td(gomponents.Text(v.ChangeType)),
 				html.Td(
 					html.A(

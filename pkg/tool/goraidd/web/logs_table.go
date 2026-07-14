@@ -3,8 +3,8 @@ package web
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/raid"
-	"github.com/funtimecoding/soil/pkg/time"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
+	"github.com/funtimecoding/soil/pkg/web/layout"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
@@ -53,11 +53,7 @@ func logsTable(
 									html.Value(f.Filename),
 								),
 							),
-							html.Td(
-								gomponents.Text(
-									f.Timestamp.Format(time.DateMinute),
-								),
-							),
+							layout.TimeCell(f.Timestamp),
 							html.Td(gomponents.Text(fightDuration(f))),
 							html.Td(gomponents.Text(fightMap(f))),
 							html.Td(

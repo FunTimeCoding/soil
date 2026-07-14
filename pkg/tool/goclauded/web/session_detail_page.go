@@ -3,8 +3,8 @@ package web
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/time"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/web/layout"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -162,13 +162,7 @@ func (s *Server) sessionDetailPage(
 			rows = append(
 				rows,
 				html.Tr(
-					html.Td(
-						html.Small(
-							gomponents.Text(
-								c.CreatedAt.Format(time.DateMinute),
-							),
-						),
-					),
+					layout.TimeCell(c.CreatedAt),
 					html.Td(gomponents.Textf("[%s]", c.Kind)),
 					html.Td(gomponents.Text(c.Topic)),
 					html.Td(html.Small(gomponents.Text(c.Summary))),

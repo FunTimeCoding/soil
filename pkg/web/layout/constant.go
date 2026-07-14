@@ -5,9 +5,11 @@ const NotificationRegion = "notifications"
 const StatusLine = "status-line"
 const StatusSuccess = "success"
 const StatusNotice = "notice"
+const TimeCellClass = "time-cell"
 const baseStyle = `
 a { text-decoration: none; }
 a:hover { text-decoration: none; color: var(--pico-primary-hover); }
+.time-cell { white-space: nowrap; }
 `
 const notificationStyle = `
 #notifications:empty { display: none; }

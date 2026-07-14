@@ -3,6 +3,7 @@ package web
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store/record"
+	"github.com/funtimecoding/soil/pkg/web/layout"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
@@ -48,8 +49,8 @@ func recentTable(records []record.Record) gomponents.Node {
 						),
 						html.Td(severityBadge(r.Severity)),
 						html.Td(gomponents.Text(truncate(r.Summary, 80))),
-						html.Td(gomponents.Text(formatTime(r.Start))),
-						html.Td(gomponents.Text(formatTimePointer(r.End))),
+						layout.TimeCell(r.Start),
+						timeCellPointer(r.End),
 						html.Td(statusBadge(status)),
 					)
 				},

@@ -4,19 +4,13 @@ import (
 	"fmt"
 	library "github.com/funtimecoding/soil/pkg/time"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/timeline"
+	"github.com/funtimecoding/soil/pkg/web/layout"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"time"
 )
 
 func timelineRow(e *timeline.Entry) gomponents.Node {
-	t, f := time.Parse(time.RFC3339, e.Timestamp)
-	display := e.Timestamp
-
-	if f == nil {
-		display = library.FormatCompact(t)
-	}
-
 	description := timeline.FormatDescription(e)
 	eventCell := []gomponents.Node{gomponents.Text(description)}
 
@@ -42,7 +36,7 @@ func timelineRow(e *timeline.Entry) gomponents.Node {
 
 	return html.Tr(
 		html.ID(fmt.Sprintf("event-%d", e.Identifier)),
-		html.Td(gomponents.Text(display)),
+		layout.TimeCell(library.Parse(time.RFC3339, e.Timestamp)),
 		html.Td(gomponents.Group(eventCell)),
 	)
 }

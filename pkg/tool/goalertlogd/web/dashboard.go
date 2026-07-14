@@ -1,6 +1,7 @@
 package web
 
 import (
+	"github.com/funtimecoding/soil/pkg/time"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents-htmx"
@@ -22,7 +23,7 @@ func (s *Server) dashboard(
 	lastPollText := "never"
 
 	if !lastPoll.IsZero() {
-		lastPollText = formatTime(lastPoll)
+		lastPollText = time.FormatCompact(lastPoll)
 	}
 
 	s.view.RenderPage(

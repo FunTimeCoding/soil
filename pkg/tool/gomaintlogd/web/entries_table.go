@@ -3,6 +3,7 @@ package web
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store/entry"
+	"github.com/funtimecoding/soil/pkg/web/layout"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents-htmx"
 	"maragu.dev/gomponents/html"
@@ -25,7 +26,7 @@ func entriesTable(entries []entry.Entry) gomponents.Node {
 				htmx.Get(fmt.Sprintf("/entry/detail?id=%d", e.ID)),
 				htmx.Target(fmt.Sprintf("#%s", target)),
 				htmx.Swap("outerHTML"),
-				html.Td(gomponents.Text(formatTime(e.Timestamp))),
+				layout.TimeCell(e.Timestamp),
 				html.Td(gomponents.Text(e.Action)),
 				html.Td(gomponents.Text(e.User)),
 				html.Td(gomponents.Text(e.System)),

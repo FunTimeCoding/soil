@@ -3,6 +3,7 @@ package web
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/store"
+	"github.com/funtimecoding/soil/pkg/web/layout"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
@@ -23,10 +24,7 @@ func heatmapTable(summaries []store.Summary) gomponents.Node {
 					html.Class("heatmap-count"),
 					gomponents.Text(fmt.Sprintf("%d", v.Count)),
 				),
-				html.Td(
-					html.Class("heatmap-last"),
-					gomponents.Text(v.Last.Format("2006-01-02 15:04")),
-				),
+				layout.TimeCell(v.Last),
 			),
 		)
 	}

@@ -1,7 +1,9 @@
 package web
 
 import (
+	library "github.com/funtimecoding/soil/pkg/time"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
+	"github.com/funtimecoding/soil/pkg/web/layout"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -63,11 +65,8 @@ func (s *Server) impressionsPage(
 			rows = append(
 				rows,
 				html.Tr(
-					html.Td(
-						html.Class(timeCellClass),
-						html.Small(
-							gomponents.Text(formatTime(i.CreatedAt)),
-						),
+					layout.TimeCell(
+						library.Parse(time.RFC3339, i.CreatedAt),
 					),
 					html.Td(
 						html.Em(gomponents.Text(i.Source)),

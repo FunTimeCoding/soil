@@ -2,6 +2,7 @@ package web
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/time"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store/entry"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents-htmx"
@@ -22,7 +23,9 @@ func detailRow(e *entry.Entry) gomponents.Node {
 					html.Class("grid"),
 					html.Div(
 						html.Strong(gomponents.Text("Timestamp: ")),
-						gomponents.Text(formatTime(e.Timestamp)),
+						gomponents.Text(
+							time.FormatCompact(e.Timestamp),
+						),
 					),
 					html.Div(
 						html.Strong(gomponents.Text("Action: ")),
