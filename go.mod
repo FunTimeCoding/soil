@@ -20,7 +20,7 @@ require (
 	github.com/bmatcuk/doublestar/v4 v4.10.0
 	github.com/bndr/gojenkins v1.2.0
 	github.com/bwmarrin/discordgo v0.29.0
-	github.com/chromedp/cdproto v0.0.0-20260704091341-6ca7914c3938
+	github.com/chromedp/cdproto v0.0.0-20260714002449-7ad0ec4e4115
 	github.com/chromedp/chromedp v0.15.1
 	github.com/coder/websocket v1.8.15
 	github.com/coreos/go-oidc/v3 v3.20.0
@@ -35,7 +35,7 @@ require (
 	github.com/gdamore/tcell/v2 v2.13.10
 	github.com/getkin/kin-openapi v0.142.0
 	github.com/getlantern/systray v1.2.2
-	github.com/getsentry/sentry-go v0.47.0
+	github.com/getsentry/sentry-go v0.48.0
 	github.com/glebarez/go-sqlite v1.22.0
 	github.com/glebarez/sqlite v1.11.0
 	github.com/go-git/go-billy/v5 v5.9.0
@@ -48,7 +48,7 @@ require (
 	github.com/google/go-github/v89 v89.0.0
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674
-	github.com/gpustack/gguf-parser-go v0.24.1
+	github.com/gpustack/gguf-parser-go v0.25.0
 	github.com/grafana/grafana-openapi-client-go v0.0.0-20260608140303-399c66621c54
 	github.com/grafana/loki-client-go v0.0.0-20251015150631-c42bbddc310a
 	github.com/hashicorp/vault-client-go v0.4.3
@@ -57,7 +57,7 @@ require (
 	github.com/jackc/pgconn v1.14.3
 	github.com/jackc/pgx/v5 v5.10.0
 	github.com/kestra-io/client-sdk/go-sdk v1.3.0
-	github.com/liushuangls/go-anthropic/v2 v2.23.0
+	github.com/liushuangls/go-anthropic/v2 v2.24.0
 	github.com/luthermonson/go-proxmox v0.8.0
 	github.com/mark3labs/mcp-go v0.56.0
 	github.com/mattermost/mattermost/server/public v0.4.3
@@ -67,13 +67,13 @@ require (
 	github.com/netbox-community/go-netbox/v4 v4.3.0
 	github.com/nsf/termbox-go v1.1.1
 	github.com/nwaples/rardecode/v2 v2.2.5
-	github.com/oapi-codegen/runtime v1.4.2
+	github.com/oapi-codegen/runtime v1.5.0
 	github.com/olekukonko/tablewriter v1.1.4
-	github.com/ollama/ollama v0.31.2
+	github.com/ollama/ollama v0.32.0
 	github.com/openai/openai-go/v3 v3.42.0
 	github.com/openvex/go-vex v0.2.8
 	github.com/opsgenie/opsgenie-go-sdk-v2 v1.2.23
-	github.com/pkg/sftp v1.13.10
+	github.com/pkg/sftp v1.13.11
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2
 	github.com/prometheus/alertmanager v0.33.1
 	github.com/prometheus/client_golang v1.23.2
@@ -93,7 +93,7 @@ require (
 	github.com/trivago/tgo v1.0.7
 	github.com/whilp/git-urls v1.0.0
 	github.com/yuin/goldmark v1.8.4
-	gitlab.com/gitlab-org/api/client-go/v2 v2.46.0
+	gitlab.com/gitlab-org/api/client-go/v2 v2.48.1
 	go.etcd.io/bbolt v1.5.0
 	golang.org/x/crypto v0.54.0
 	golang.org/x/mod v0.38.0
