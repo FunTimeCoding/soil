@@ -10,7 +10,7 @@ import (
 
 func (c *Client) Runners(all bool) ([]*runner.Runner, error) {
 	var result []*gitlab.Runner
-	var number int64
+	number := int64(1)
 
 	for {
 		var page []*gitlab.Runner

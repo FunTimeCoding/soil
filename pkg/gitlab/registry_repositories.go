@@ -11,7 +11,7 @@ func (c *Client) RegistryRepositories(
 	panicOnForbidden bool,
 ) ([]*gitlab.RegistryRepository, error) {
 	var result []*gitlab.RegistryRepository
-	var number int64
+	number := int64(1)
 
 	for {
 		page, r, e := c.client.ContainerRegistry.ListProjectRegistryRepositories(

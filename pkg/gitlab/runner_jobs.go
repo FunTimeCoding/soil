@@ -11,7 +11,7 @@ func (c *Client) RunnerJobs(
 	stopAfter int,
 ) ([]*job.Job, error) {
 	var result []*gitlab.Job
-	var number int64
+	number := int64(1)
 
 	for {
 		page, _, e := c.client.Runners.ListRunnerJobs(

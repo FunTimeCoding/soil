@@ -12,7 +12,7 @@ func (c *Client) Projects() ([]*project.Project, error) {
 	}
 
 	var result []*gitlab.Project
-	var number int64
+	number := int64(1)
 
 	for {
 		page, _, e := c.client.Projects.ListProjects(

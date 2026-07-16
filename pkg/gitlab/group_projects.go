@@ -11,7 +11,7 @@ func (c *Client) GroupProjects(identifier ...int64) ([]*project.Project, error) 
 	var result []*gitlab.Project
 
 	for _, i := range identifier {
-		var number int64
+		number := int64(1)
 
 		for {
 			page, _, e := c.client.Groups.ListGroupProjects(

@@ -11,7 +11,7 @@ func (c *Client) ProjectMergeRequests(
 	all bool,
 ) ([]*merge_request.Request, error) {
 	var result []*gitlab.BasicMergeRequest
-	var number int64
+	number := int64(1)
 
 	for {
 		o := &gitlab.ListProjectMergeRequestsOptions{
