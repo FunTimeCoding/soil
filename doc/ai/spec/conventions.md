@@ -84,6 +84,7 @@
   | `mcp.NewToolResultText("message")` | `response.Success("message")` |
   | `exec.Command(name, args...)` | `run.New().Start(name, args...)` |
   | `t.Format(...)` for human-facing display | `time.FormatCompact(t)` (`pkg/time`) - today renders clock-only, older renders date and minute |
+  | `html.Td(...FormatCompact(t)...)` in dashboard tables | `layout.TimeCell(t)` (`pkg/web/layout`) - compact, small, nowrap; date-only cells take `layout.TimeCellClass` |
 
   **Touch pattern in tests:** `errors.PanicClose(system.Create(path))` creates an empty file and closes it in one line.
 
