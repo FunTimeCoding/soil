@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert/fixture"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/ollama"
+	ollamaConstant "github.com/funtimecoding/soil/pkg/generative/ollama/constant"
 	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
 	system "github.com/funtimecoding/soil/pkg/system/constant"
 	goqueryd "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
@@ -67,7 +68,7 @@ func pushTestDocument(
 		texts[i] = c.Text
 	}
 
-	embeddings, e := o.Embed(goqueryd.EmbedModel, texts)
+	embeddings, e := o.Embed(ollamaConstant.EmbedModel, texts)
 
 	if e != nil {
 		return e
@@ -99,7 +100,7 @@ func embedTestDocuments(
 			texts[i] = c.Text
 		}
 
-		embeddings, e := o.Embed(goqueryd.EmbedModel, texts)
+		embeddings, e := o.Embed(ollamaConstant.EmbedModel, texts)
 
 		if e != nil {
 			return e

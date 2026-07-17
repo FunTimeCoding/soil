@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
+	"github.com/funtimecoding/soil/pkg/generative/ollama/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/chunk"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/embed"
 	"time"

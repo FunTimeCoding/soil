@@ -11,6 +11,7 @@ type Client struct {
 	client       *gitlab.Client
 	user         *gitlab.User
 	verbose      bool
+	insecure     bool
 	groups       []int64
 	projects     []int64
 	projectCache map[int64]*project.Project

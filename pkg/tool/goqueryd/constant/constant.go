@@ -48,7 +48,6 @@ const (
 	ChunkOverlap     = 540
 	ChunkWindow      = 800
 	SnippetMaxLength = 400
-	EmbedModel       = "nomic-embed-text"
 	ExpandModel      = ""
 	DefaultGlob      = "**/*.md"
 	RrfK             = 60

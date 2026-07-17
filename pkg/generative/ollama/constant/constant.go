@@ -13,6 +13,8 @@ const (
 	Llama32   = "llama3.2"    // 3b
 	Llama321b = "llama3.2:1b" // 1b
 
+	EmbedModel = "nomic-embed-text" // 768 dimensions
+
 	SystemRole    = "system"
 	UserRole      = "user"
 	AssistantRole = "assistant"

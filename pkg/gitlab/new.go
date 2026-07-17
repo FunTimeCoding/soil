@@ -26,12 +26,13 @@ func New(
 	var p []gitlab.ClientOptionFunc
 
 	if host != "" {
-		p = append(
-			p,
-			gitlab.WithBaseURL(
-				locator.New(host).Base(constant.Base).String(),
-			),
-		)
+		l := locator.New(host).Base(constant.Base)
+
+		if result.insecure {
+			l.Insecure()
+		}
+
+		p = append(p, gitlab.WithBaseURL(l.String()))
 	}
 
 	client, e := gitlab.NewClient(token, p...)
