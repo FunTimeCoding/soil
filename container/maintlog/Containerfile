@@ -1,4 +1,4 @@
-FROM debian:13.5-slim
+FROM debian:13.6-slim
 RUN apt-get update && apt-get install -y --no-install-recommends libsqlite3-0 && rm -rf /var/lib/apt/lists/*
 COPY tmp/gomaintlogd/linux-amd64/gomaintlogd /usr/local/bin
 ENTRYPOINT ["gomaintlogd"]
