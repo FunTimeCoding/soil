@@ -17,4 +17,7 @@ const (
 
 	EnvironmentFileEnvironment   = "CLAUDE_ENV_FILE"
 	SessionIdentifierEnvironment = "CLAUDE_SESSION_ID"
+
+	GuardBlockExit = 2
+	SedMessage     = "sed on macOS is BSD sed and its flags (notably -i) differ from GNU sed - use gsed instead"
 )

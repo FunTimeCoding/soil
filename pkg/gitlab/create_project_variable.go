@@ -12,6 +12,7 @@ func (c *Client) CreateProjectVariable(
 		&gitlab.CreateProjectVariableOptions{
 			Key:   &key,
 			Value: &value,
+			Raw:   new(true),
 		},
 	)
 

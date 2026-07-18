@@ -102,6 +102,12 @@ type CreateInterfaceRequest struct {
 	Type string `json:"type"`
 }
 
+// CreateJournalEntryRequest defines model for CreateJournalEntryRequest.
+type CreateJournalEntryRequest struct {
+	Comments string  `json:"comments"`
+	Kind     *string `json:"kind,omitempty"`
+}
+
 // CreateNameRequest defines model for CreateNameRequest.
 type CreateNameRequest struct {
 	Name string `json:"name"`
@@ -205,6 +211,14 @@ type Interface struct {
 	Type            *string `json:"type,omitempty"`
 }
 
+// JournalEntry defines model for JournalEntry.
+type JournalEntry struct {
+	Comments   string  `json:"comments"`
+	Created    *string `json:"created,omitempty"`
+	Identifier int32   `json:"identifier"`
+	Kind       *string `json:"kind,omitempty"`
+}
+
 // Manufacturer defines model for Manufacturer.
 type Manufacturer struct {
 	Identifier int32  `json:"identifier"`
@@ -260,6 +274,12 @@ type TunnelTermination struct {
 	Tunnel                *string `json:"tunnel,omitempty"`
 }
 
+// UpdateJournalEntryRequest defines model for UpdateJournalEntryRequest.
+type UpdateJournalEntryRequest struct {
+	Comments *string `json:"comments,omitempty"`
+	Kind     *string `json:"kind,omitempty"`
+}
+
 // VirtualInterface defines model for VirtualInterface.
 type VirtualInterface struct {
 	Identifier int32  `json:"identifier"`
@@ -279,6 +299,24 @@ type VirtualMachine struct {
 type ListDevicesParams struct {
 	// Query Filter devices by name (case-insensitive contains). Omit for all.
 	Query *string `form:"query,omitempty" json:"query,omitempty"`
+}
+
+// ListDeviceJournalEntriesParams defines parameters for ListDeviceJournalEntries.
+type ListDeviceJournalEntriesParams struct {
+	// Limit Maximum entries to return.
+	Limit *int32 `form:"limit,omitempty" json:"limit,omitempty"`
+
+	// Offset Entries to skip.
+	Offset *int32 `form:"offset,omitempty" json:"offset,omitempty"`
+}
+
+// ListVirtualJournalEntriesParams defines parameters for ListVirtualJournalEntries.
+type ListVirtualJournalEntriesParams struct {
+	// Limit Maximum entries to return.
+	Limit *int32 `form:"limit,omitempty" json:"limit,omitempty"`
+
+	// Offset Entries to skip.
+	Offset *int32 `form:"offset,omitempty" json:"offset,omitempty"`
 }
 
 // CreateClusterTypeJSONRequestBody defines body for CreateClusterType for application/json ContentType.
@@ -302,8 +340,14 @@ type CreateAddressJSONRequestBody = CreateAddressRequest
 // CreateInterfaceJSONRequestBody defines body for CreateInterface for application/json ContentType.
 type CreateInterfaceJSONRequestBody = CreateInterfaceRequest
 
+// AddDeviceJournalEntryJSONRequestBody defines body for AddDeviceJournalEntry for application/json ContentType.
+type AddDeviceJournalEntryJSONRequestBody = CreateJournalEntryRequest
+
 // CreateDeviceTunnelTerminationJSONRequestBody defines body for CreateDeviceTunnelTermination for application/json ContentType.
 type CreateDeviceTunnelTerminationJSONRequestBody = CreateTunnelTerminationRequest
+
+// UpdateJournalEntryJSONRequestBody defines body for UpdateJournalEntry for application/json ContentType.
+type UpdateJournalEntryJSONRequestBody = UpdateJournalEntryRequest
 
 // CreateManufacturerJSONRequestBody defines body for CreateManufacturer for application/json ContentType.
 type CreateManufacturerJSONRequestBody = CreateNameRequest
@@ -334,6 +378,9 @@ type CreateVirtualAddressJSONRequestBody = CreateAddressRequest
 
 // CreateVirtualInterfaceJSONRequestBody defines body for CreateVirtualInterface for application/json ContentType.
 type CreateVirtualInterfaceJSONRequestBody = CreateVirtualInterfaceRequest
+
+// AddVirtualJournalEntryJSONRequestBody defines body for AddVirtualJournalEntry for application/json ContentType.
+type AddVirtualJournalEntryJSONRequestBody = CreateJournalEntryRequest
 
 // CreateVirtualTunnelTerminationJSONRequestBody defines body for CreateVirtualTunnelTermination for application/json ContentType.
 type CreateVirtualTunnelTerminationJSONRequestBody = CreateTunnelTerminationRequest
@@ -386,6 +433,12 @@ type ServerInterface interface {
 	// (POST /api/v1/devices/{name}/interfaces/create)
 	CreateInterface(w http.ResponseWriter, r *http.Request, name string)
 
+	// (GET /api/v1/devices/{name}/journal-entries)
+	ListDeviceJournalEntries(w http.ResponseWriter, r *http.Request, name string, params ListDeviceJournalEntriesParams)
+
+	// (POST /api/v1/devices/{name}/journal-entries)
+	AddDeviceJournalEntry(w http.ResponseWriter, r *http.Request, name string)
+
 	// (GET /api/v1/devices/{name}/tags)
 	ListDeviceTags(w http.ResponseWriter, r *http.Request, name string)
 
@@ -397,6 +450,12 @@ type ServerInterface interface {
 
 	// (POST /api/v1/devices/{name}/tunnel-terminations/create)
 	CreateDeviceTunnelTermination(w http.ResponseWriter, r *http.Request, name string)
+
+	// (DELETE /api/v1/journal-entries/{identifier})
+	DeleteJournalEntry(w http.ResponseWriter, r *http.Request, identifier int32)
+
+	// (PATCH /api/v1/journal-entries/{identifier})
+	UpdateJournalEntry(w http.ResponseWriter, r *http.Request, identifier int32)
 
 	// (GET /api/v1/manufacturers)
 	ListManufacturers(w http.ResponseWriter, r *http.Request)
@@ -454,6 +513,12 @@ type ServerInterface interface {
 
 	// (POST /api/v1/virtual-machines/{name}/interfaces/create)
 	CreateVirtualInterface(w http.ResponseWriter, r *http.Request, name string)
+
+	// (GET /api/v1/virtual-machines/{name}/journal-entries)
+	ListVirtualJournalEntries(w http.ResponseWriter, r *http.Request, name string, params ListVirtualJournalEntriesParams)
+
+	// (POST /api/v1/virtual-machines/{name}/journal-entries)
+	AddVirtualJournalEntry(w http.ResponseWriter, r *http.Request, name string)
 
 	// (DELETE /api/v1/virtual-machines/{name}/tags/{tag})
 	RemoveVirtualTag(w http.ResponseWriter, r *http.Request, name string, tag string)
@@ -763,6 +828,87 @@ func (siw *ServerInterfaceWrapper) CreateInterface(w http.ResponseWriter, r *htt
 	handler.ServeHTTP(w, r)
 }
 
+// ListDeviceJournalEntries operation middleware
+func (siw *ServerInterfaceWrapper) ListDeviceJournalEntries(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "name" -------------
+	var name string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "name", r.PathValue("name"), &name, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "name", Err: err})
+		return
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params ListDeviceJournalEntriesParams
+
+	// ------------- Optional query parameter "limit" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "limit", r.URL.Query(), &params.Limit, runtime.BindQueryParameterOptions{Type: "integer", Format: "int32"})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "limit"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "limit", Err: err})
+		}
+		return
+	}
+
+	// ------------- Optional query parameter "offset" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "offset", r.URL.Query(), &params.Offset, runtime.BindQueryParameterOptions{Type: "integer", Format: "int32"})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "offset"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "offset", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ListDeviceJournalEntries(w, r, name, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// AddDeviceJournalEntry operation middleware
+func (siw *ServerInterfaceWrapper) AddDeviceJournalEntry(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "name" -------------
+	var name string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "name", r.PathValue("name"), &name, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "name", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.AddDeviceJournalEntry(w, r, name)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
 // ListDeviceTags operation middleware
 func (siw *ServerInterfaceWrapper) ListDeviceTags(w http.ResponseWriter, r *http.Request) {
 
@@ -876,6 +1022,58 @@ func (siw *ServerInterfaceWrapper) CreateDeviceTunnelTermination(w http.Response
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.CreateDeviceTunnelTermination(w, r, name)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// DeleteJournalEntry operation middleware
+func (siw *ServerInterfaceWrapper) DeleteJournalEntry(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "identifier" -------------
+	var identifier int32
+
+	err = runtime.BindStyledParameterWithOptions("simple", "identifier", r.PathValue("identifier"), &identifier, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "integer", Format: "int32"})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "identifier", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteJournalEntry(w, r, identifier)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// UpdateJournalEntry operation middleware
+func (siw *ServerInterfaceWrapper) UpdateJournalEntry(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "identifier" -------------
+	var identifier int32
+
+	err = runtime.BindStyledParameterWithOptions("simple", "identifier", r.PathValue("identifier"), &identifier, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "integer", Format: "int32"})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "identifier", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.UpdateJournalEntry(w, r, identifier)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -1175,6 +1373,87 @@ func (siw *ServerInterfaceWrapper) CreateVirtualInterface(w http.ResponseWriter,
 	handler.ServeHTTP(w, r)
 }
 
+// ListVirtualJournalEntries operation middleware
+func (siw *ServerInterfaceWrapper) ListVirtualJournalEntries(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "name" -------------
+	var name string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "name", r.PathValue("name"), &name, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "name", Err: err})
+		return
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params ListVirtualJournalEntriesParams
+
+	// ------------- Optional query parameter "limit" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "limit", r.URL.Query(), &params.Limit, runtime.BindQueryParameterOptions{Type: "integer", Format: "int32"})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "limit"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "limit", Err: err})
+		}
+		return
+	}
+
+	// ------------- Optional query parameter "offset" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "offset", r.URL.Query(), &params.Offset, runtime.BindQueryParameterOptions{Type: "integer", Format: "int32"})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "offset"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "offset", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ListVirtualJournalEntries(w, r, name, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// AddVirtualJournalEntry operation middleware
+func (siw *ServerInterfaceWrapper) AddVirtualJournalEntry(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "name" -------------
+	var name string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "name", r.PathValue("name"), &name, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: ""})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "name", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.AddVirtualJournalEntry(w, r, name)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
 // RemoveVirtualTag operation middleware
 func (siw *ServerInterfaceWrapper) RemoveVirtualTag(w http.ResponseWriter, r *http.Request) {
 
@@ -1406,10 +1685,14 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/devices/{name}/addresses/create", wrapper.CreateAddress)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/devices/{name}/interfaces", wrapper.ListInterfaces)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/devices/{name}/interfaces/create", wrapper.CreateInterface)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/devices/{name}/journal-entries", wrapper.ListDeviceJournalEntries)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/devices/{name}/journal-entries", wrapper.AddDeviceJournalEntry)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/devices/{name}/tags", wrapper.ListDeviceTags)
 	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/v1/devices/{name}/tags/{tag}", wrapper.RemoveDeviceTag)
 	m.HandleFunc(http.MethodPut+" "+options.BaseURL+"/api/v1/devices/{name}/tags/{tag}", wrapper.AddDeviceTag)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/devices/{name}/tunnel-terminations/create", wrapper.CreateDeviceTunnelTermination)
+	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/v1/journal-entries/{identifier}", wrapper.DeleteJournalEntry)
+	m.HandleFunc(http.MethodPatch+" "+options.BaseURL+"/api/v1/journal-entries/{identifier}", wrapper.UpdateJournalEntry)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/manufacturers", wrapper.ListManufacturers)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/manufacturers", wrapper.CreateManufacturer)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/prefixes", wrapper.ListPrefixes)
@@ -1429,6 +1712,8 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/virtual-machines", wrapper.CreateVirtualMachine)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/virtual-machines/{name}/addresses/create", wrapper.CreateVirtualAddress)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/virtual-machines/{name}/interfaces/create", wrapper.CreateVirtualInterface)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/virtual-machines/{name}/journal-entries", wrapper.ListVirtualJournalEntries)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/virtual-machines/{name}/journal-entries", wrapper.AddVirtualJournalEntry)
 	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/v1/virtual-machines/{name}/tags/{tag}", wrapper.RemoveVirtualTag)
 	m.HandleFunc(http.MethodPut+" "+options.BaseURL+"/api/v1/virtual-machines/{name}/tags/{tag}", wrapper.AddVirtualTag)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/virtual-machines/{name}/tunnel-terminations/create", wrapper.CreateVirtualTunnelTermination)
@@ -1988,6 +2273,80 @@ func (response CreateInterface500JSONResponse) VisitCreateInterfaceResponse(w ht
 	return err
 }
 
+type ListDeviceJournalEntriesRequestObject struct {
+	Name   string `json:"name"`
+	Params ListDeviceJournalEntriesParams
+}
+
+type ListDeviceJournalEntriesResponseObject interface {
+	VisitListDeviceJournalEntriesResponse(w http.ResponseWriter) error
+}
+
+type ListDeviceJournalEntries200JSONResponse []*JournalEntry
+
+func (response ListDeviceJournalEntries200JSONResponse) VisitListDeviceJournalEntriesResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListDeviceJournalEntries500JSONResponse ErrorResponse
+
+func (response ListDeviceJournalEntries500JSONResponse) VisitListDeviceJournalEntriesResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type AddDeviceJournalEntryRequestObject struct {
+	Name string `json:"name"`
+	Body *AddDeviceJournalEntryJSONRequestBody
+}
+
+type AddDeviceJournalEntryResponseObject interface {
+	VisitAddDeviceJournalEntryResponse(w http.ResponseWriter) error
+}
+
+type AddDeviceJournalEntry201JSONResponse JournalEntry
+
+func (response AddDeviceJournalEntry201JSONResponse) VisitAddDeviceJournalEntryResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(201)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type AddDeviceJournalEntry500JSONResponse ErrorResponse
+
+func (response AddDeviceJournalEntry500JSONResponse) VisitAddDeviceJournalEntryResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type ListDeviceTagsRequestObject struct {
 	Name string `json:"name"`
 }
@@ -2124,6 +2483,73 @@ func (response CreateDeviceTunnelTermination201JSONResponse) VisitCreateDeviceTu
 type CreateDeviceTunnelTermination500JSONResponse ErrorResponse
 
 func (response CreateDeviceTunnelTermination500JSONResponse) VisitCreateDeviceTunnelTerminationResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteJournalEntryRequestObject struct {
+	Identifier int32 `json:"identifier"`
+}
+
+type DeleteJournalEntryResponseObject interface {
+	VisitDeleteJournalEntryResponse(w http.ResponseWriter) error
+}
+
+type DeleteJournalEntry204Response struct {
+}
+
+func (response DeleteJournalEntry204Response) VisitDeleteJournalEntryResponse(w http.ResponseWriter) error {
+	w.WriteHeader(204)
+	return nil
+}
+
+type DeleteJournalEntry500JSONResponse ErrorResponse
+
+func (response DeleteJournalEntry500JSONResponse) VisitDeleteJournalEntryResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateJournalEntryRequestObject struct {
+	Identifier int32 `json:"identifier"`
+	Body       *UpdateJournalEntryJSONRequestBody
+}
+
+type UpdateJournalEntryResponseObject interface {
+	VisitUpdateJournalEntryResponse(w http.ResponseWriter) error
+}
+
+type UpdateJournalEntry200JSONResponse JournalEntry
+
+func (response UpdateJournalEntry200JSONResponse) VisitUpdateJournalEntryResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateJournalEntry500JSONResponse ErrorResponse
+
+func (response UpdateJournalEntry500JSONResponse) VisitUpdateJournalEntryResponse(w http.ResponseWriter) error {
 
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(response); err != nil {
@@ -2812,6 +3238,80 @@ func (response CreateVirtualInterface500JSONResponse) VisitCreateVirtualInterfac
 	return err
 }
 
+type ListVirtualJournalEntriesRequestObject struct {
+	Name   string `json:"name"`
+	Params ListVirtualJournalEntriesParams
+}
+
+type ListVirtualJournalEntriesResponseObject interface {
+	VisitListVirtualJournalEntriesResponse(w http.ResponseWriter) error
+}
+
+type ListVirtualJournalEntries200JSONResponse []*JournalEntry
+
+func (response ListVirtualJournalEntries200JSONResponse) VisitListVirtualJournalEntriesResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListVirtualJournalEntries500JSONResponse ErrorResponse
+
+func (response ListVirtualJournalEntries500JSONResponse) VisitListVirtualJournalEntriesResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type AddVirtualJournalEntryRequestObject struct {
+	Name string `json:"name"`
+	Body *AddVirtualJournalEntryJSONRequestBody
+}
+
+type AddVirtualJournalEntryResponseObject interface {
+	VisitAddVirtualJournalEntryResponse(w http.ResponseWriter) error
+}
+
+type AddVirtualJournalEntry201JSONResponse JournalEntry
+
+func (response AddVirtualJournalEntry201JSONResponse) VisitAddVirtualJournalEntryResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(201)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type AddVirtualJournalEntry500JSONResponse ErrorResponse
+
+func (response AddVirtualJournalEntry500JSONResponse) VisitAddVirtualJournalEntryResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type RemoveVirtualTagRequestObject struct {
 	Name string `json:"name"`
 	Tag  string `json:"tag"`
@@ -2971,6 +3471,12 @@ type StrictServerInterface interface {
 	// (POST /api/v1/devices/{name}/interfaces/create)
 	CreateInterface(ctx context.Context, request CreateInterfaceRequestObject) (CreateInterfaceResponseObject, error)
 
+	// (GET /api/v1/devices/{name}/journal-entries)
+	ListDeviceJournalEntries(ctx context.Context, request ListDeviceJournalEntriesRequestObject) (ListDeviceJournalEntriesResponseObject, error)
+
+	// (POST /api/v1/devices/{name}/journal-entries)
+	AddDeviceJournalEntry(ctx context.Context, request AddDeviceJournalEntryRequestObject) (AddDeviceJournalEntryResponseObject, error)
+
 	// (GET /api/v1/devices/{name}/tags)
 	ListDeviceTags(ctx context.Context, request ListDeviceTagsRequestObject) (ListDeviceTagsResponseObject, error)
 
@@ -2982,6 +3488,12 @@ type StrictServerInterface interface {
 
 	// (POST /api/v1/devices/{name}/tunnel-terminations/create)
 	CreateDeviceTunnelTermination(ctx context.Context, request CreateDeviceTunnelTerminationRequestObject) (CreateDeviceTunnelTerminationResponseObject, error)
+
+	// (DELETE /api/v1/journal-entries/{identifier})
+	DeleteJournalEntry(ctx context.Context, request DeleteJournalEntryRequestObject) (DeleteJournalEntryResponseObject, error)
+
+	// (PATCH /api/v1/journal-entries/{identifier})
+	UpdateJournalEntry(ctx context.Context, request UpdateJournalEntryRequestObject) (UpdateJournalEntryResponseObject, error)
 
 	// (GET /api/v1/manufacturers)
 	ListManufacturers(ctx context.Context, request ListManufacturersRequestObject) (ListManufacturersResponseObject, error)
@@ -3039,6 +3551,12 @@ type StrictServerInterface interface {
 
 	// (POST /api/v1/virtual-machines/{name}/interfaces/create)
 	CreateVirtualInterface(ctx context.Context, request CreateVirtualInterfaceRequestObject) (CreateVirtualInterfaceResponseObject, error)
+
+	// (GET /api/v1/virtual-machines/{name}/journal-entries)
+	ListVirtualJournalEntries(ctx context.Context, request ListVirtualJournalEntriesRequestObject) (ListVirtualJournalEntriesResponseObject, error)
+
+	// (POST /api/v1/virtual-machines/{name}/journal-entries)
+	AddVirtualJournalEntry(ctx context.Context, request AddVirtualJournalEntryRequestObject) (AddVirtualJournalEntryResponseObject, error)
 
 	// (DELETE /api/v1/virtual-machines/{name}/tags/{tag})
 	RemoveVirtualTag(ctx context.Context, request RemoveVirtualTagRequestObject) (RemoveVirtualTagResponseObject, error)
@@ -3500,6 +4018,66 @@ func (sh *strictHandler) CreateInterface(w http.ResponseWriter, r *http.Request,
 	}
 }
 
+// ListDeviceJournalEntries operation middleware
+func (sh *strictHandler) ListDeviceJournalEntries(w http.ResponseWriter, r *http.Request, name string, params ListDeviceJournalEntriesParams) {
+	var request ListDeviceJournalEntriesRequestObject
+
+	request.Name = name
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ListDeviceJournalEntries(ctx, request.(ListDeviceJournalEntriesRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ListDeviceJournalEntries")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ListDeviceJournalEntriesResponseObject); ok {
+		if err := validResponse.VisitListDeviceJournalEntriesResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// AddDeviceJournalEntry operation middleware
+func (sh *strictHandler) AddDeviceJournalEntry(w http.ResponseWriter, r *http.Request, name string) {
+	var request AddDeviceJournalEntryRequestObject
+
+	request.Name = name
+
+	var body AddDeviceJournalEntryJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.AddDeviceJournalEntry(ctx, request.(AddDeviceJournalEntryRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "AddDeviceJournalEntry")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(AddDeviceJournalEntryResponseObject); ok {
+		if err := validResponse.VisitAddDeviceJournalEntryResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // ListDeviceTags operation middleware
 func (sh *strictHandler) ListDeviceTags(w http.ResponseWriter, r *http.Request, name string) {
 	var request ListDeviceTagsRequestObject
@@ -3606,6 +4184,65 @@ func (sh *strictHandler) CreateDeviceTunnelTermination(w http.ResponseWriter, r 
 		sh.options.ResponseErrorHandlerFunc(w, r, err)
 	} else if validResponse, ok := response.(CreateDeviceTunnelTerminationResponseObject); ok {
 		if err := validResponse.VisitCreateDeviceTunnelTerminationResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// DeleteJournalEntry operation middleware
+func (sh *strictHandler) DeleteJournalEntry(w http.ResponseWriter, r *http.Request, identifier int32) {
+	var request DeleteJournalEntryRequestObject
+
+	request.Identifier = identifier
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.DeleteJournalEntry(ctx, request.(DeleteJournalEntryRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "DeleteJournalEntry")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(DeleteJournalEntryResponseObject); ok {
+		if err := validResponse.VisitDeleteJournalEntryResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// UpdateJournalEntry operation middleware
+func (sh *strictHandler) UpdateJournalEntry(w http.ResponseWriter, r *http.Request, identifier int32) {
+	var request UpdateJournalEntryRequestObject
+
+	request.Identifier = identifier
+
+	var body UpdateJournalEntryJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.UpdateJournalEntry(ctx, request.(UpdateJournalEntryRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "UpdateJournalEntry")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(UpdateJournalEntryResponseObject); ok {
+		if err := validResponse.VisitUpdateJournalEntryResponse(w); err != nil {
 			sh.options.ResponseErrorHandlerFunc(w, r, err)
 		}
 	} else if response != nil {
@@ -4143,6 +4780,66 @@ func (sh *strictHandler) CreateVirtualInterface(w http.ResponseWriter, r *http.R
 	}
 }
 
+// ListVirtualJournalEntries operation middleware
+func (sh *strictHandler) ListVirtualJournalEntries(w http.ResponseWriter, r *http.Request, name string, params ListVirtualJournalEntriesParams) {
+	var request ListVirtualJournalEntriesRequestObject
+
+	request.Name = name
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ListVirtualJournalEntries(ctx, request.(ListVirtualJournalEntriesRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ListVirtualJournalEntries")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ListVirtualJournalEntriesResponseObject); ok {
+		if err := validResponse.VisitListVirtualJournalEntriesResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// AddVirtualJournalEntry operation middleware
+func (sh *strictHandler) AddVirtualJournalEntry(w http.ResponseWriter, r *http.Request, name string) {
+	var request AddVirtualJournalEntryRequestObject
+
+	request.Name = name
+
+	var body AddVirtualJournalEntryJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.AddVirtualJournalEntry(ctx, request.(AddVirtualJournalEntryRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "AddVirtualJournalEntry")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(AddVirtualJournalEntryResponseObject); ok {
+		if err := validResponse.VisitAddVirtualJournalEntryResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // RemoveVirtualTag operation middleware
 func (sh *strictHandler) RemoveVirtualTag(w http.ResponseWriter, r *http.Request, name string, tag string) {
 	var request RemoveVirtualTagRequestObject
@@ -4235,45 +4932,50 @@ func (sh *strictHandler) CreateVirtualTunnelTermination(w http.ResponseWriter, r
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
+	"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",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

@@ -961,6 +961,189 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/devices/{name}/journal-entries:
+    get:
+      operationId: listDeviceJournalEntries
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Device name.
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          format: int32
+        description: Maximum entries to return.
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          format: int32
+        description: Entries to skip.
+      responses:
+        "200":
+          description: Journal entries on the device, newest first.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/JournalEntry"
+        "500":
+          description: Failed to list journal entries.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: addDeviceJournalEntry
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Device name.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateJournalEntryRequest"
+      responses:
+        "201":
+          description: Created journal entry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JournalEntry"
+        "500":
+          description: Failed to add journal entry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/virtual-machines/{name}/journal-entries:
+    get:
+      operationId: listVirtualJournalEntries
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Virtual machine name.
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          format: int32
+        description: Maximum entries to return.
+      - name: offset
+        in: query
+        schema:
+          type: integer
+          format: int32
+        description: Entries to skip.
+      responses:
+        "200":
+          description: Journal entries on the virtual machine, newest first.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/JournalEntry"
+        "500":
+          description: Failed to list journal entries.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: addVirtualJournalEntry
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Virtual machine name.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateJournalEntryRequest"
+      responses:
+        "201":
+          description: Created journal entry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JournalEntry"
+        "500":
+          description: Failed to add journal entry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/journal-entries/{identifier}:
+    patch:
+      operationId: updateJournalEntry
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        description: Journal entry identifier.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateJournalEntryRequest"
+      responses:
+        "200":
+          description: Updated journal entry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JournalEntry"
+        "500":
+          description: Failed to update journal entry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteJournalEntry
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        description: Journal entry identifier.
+      responses:
+        "204":
+          description: Journal entry deleted.
+        "500":
+          description: Failed to delete journal entry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 components:
   schemas:
     Device:
@@ -1272,6 +1455,37 @@ components:
         name:
           type: string
           description: Interface name (e.g. ens3, eth0).
+    JournalEntry:
+      type: object
+      required:
+      - identifier
+      - comments
+      properties:
+        identifier:
+          type: integer
+          format: int32
+        kind:
+          type: string
+        comments:
+          type: string
+        created:
+          type: string
+    CreateJournalEntryRequest:
+      type: object
+      required:
+      - comments
+      properties:
+        comments:
+          type: string
+        kind:
+          type: string
+    UpdateJournalEntryRequest:
+      type: object
+      properties:
+        comments:
+          type: string
+        kind:
+          type: string
     Tag:
       type: object
       required:

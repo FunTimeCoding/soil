@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclaude/guard"
 	web "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/spf13/cobra"
 )
@@ -47,6 +48,7 @@ func Main(
 	o.AddCommand(sessionBranch(c))
 	o.AddCommand(register(c))
 	o.AddCommand(check(c))
+	o.AddCommand(guard.New())
 	o.AddCommand(wait(c))
 	o.AddCommand(usage(c))
 	errors.PanicOnError(o.Execute())

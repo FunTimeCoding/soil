@@ -229,6 +229,29 @@ func (s *Server) register() {
 	)
 	s.server.AddTool(
 		mcp.NewTool(
+			constant.RenamePackageClause,
+			mcp.WithDescription(
+				"Rename only the package clause: the package line in every file (including test variants) and every unaliased qualifier across the module. The directory and import paths stay unchanged. Aliased imports keep their alias.",
+			),
+			mcp.WithString(
+				"package_path",
+				mcp.Required(),
+				mcp.Description(
+					"Full import path of the package to rename.",
+				),
+			),
+			mcp.WithString(
+				"new_name",
+				mcp.Required(),
+				mcp.Description(
+					"New package name. The directory and import path keep their names.",
+				),
+			),
+		),
+		mcp.NewTypedToolHandler(s.renamePackageClause),
+	)
+	s.server.AddTool(
+		mcp.NewTool(
 			constant.ExtractType,
 			mcp.WithDescription(
 				"Move a named type and its method set to another package as one unit. Members referenced outside the moving set (methods, struct fields) are exported as needed and all references renamed. Declarations land in target files matching their source basenames unless target_file collapses them into one.",

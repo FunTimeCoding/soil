@@ -32,6 +32,7 @@ func (s *Server) CreateProjectVariable(
 			Value:     &a.Value,
 			Protected: &a.Protected,
 			Masked:    &a.Masked,
+			Raw:       new(!a.Expand),
 		},
 	)
 

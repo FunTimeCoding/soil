@@ -10,10 +10,14 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ListDevices,
-			mcp.WithDescription("List NetBox devices, optionally filtered by name"),
+			mcp.WithDescription(
+				"List NetBox devices, optionally filtered by name",
+			),
 			mcp.WithString(
 				parameter.Query,
-				mcp.Description("Filter by name (case-insensitive contains)"),
+				mcp.Description(
+					"Filter by name (case-insensitive contains)",
+				),
 			),
 		),
 		s.listDevices,
@@ -21,7 +25,9 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.GetDevice,
-			mcp.WithDescription("Get a NetBox device by exact name"),
+			mcp.WithDescription(
+				"Get a NetBox device by exact name",
+			),
 			mcp.WithString(
 				parameter.Name,
 				mcp.Required(),
@@ -33,7 +39,9 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ListInterfaces,
-			mcp.WithDescription("List interfaces for a NetBox device"),
+			mcp.WithDescription(
+				"List interfaces for a NetBox device",
+			),
 			mcp.WithString(
 				parameter.Name,
 				mcp.Required(),
@@ -45,7 +53,9 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ListAddresses,
-			mcp.WithDescription("List IP addresses assigned to a NetBox device"),
+			mcp.WithDescription(
+				"List IP addresses assigned to a NetBox device",
+			),
 			mcp.WithString(
 				parameter.Name,
 				mcp.Required(),
@@ -157,7 +167,9 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.CreateDevice,
-			mcp.WithDescription("Create a NetBox device. Requires site, role, and device type to exist."),
+			mcp.WithDescription(
+				"Create a NetBox device. Requires site, role, and device type to exist.",
+			),
 			mcp.WithString(
 				parameter.Name,
 				mcp.Required(),
@@ -188,7 +200,9 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.CreateInterface,
-			mcp.WithDescription("Create a network interface on a NetBox device"),
+			mcp.WithDescription(
+				"Create a network interface on a NetBox device",
+			),
 			mcp.WithString(
 				constant.Device,
 				mcp.Required(),
@@ -202,7 +216,9 @@ func (s *Server) register() {
 			mcp.WithString(
 				constant.Type,
 				mcp.Required(),
-				mcp.Description("Interface type (e.g. 1000base-t, 10gbase-t)"),
+				mcp.Description(
+					"Interface type (e.g. 1000base-t, 10gbase-t)",
+				),
 			),
 		),
 		s.createInterface,
@@ -210,7 +226,9 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.CreateAddress,
-			mcp.WithDescription("Assign an IP address to a device interface"),
+			mcp.WithDescription(
+				"Assign an IP address to a device interface",
+			),
 			mcp.WithString(
 				constant.Device,
 				mcp.Required(),
@@ -224,7 +242,9 @@ func (s *Server) register() {
 			mcp.WithString(
 				constant.Address,
 				mcp.Required(),
-				mcp.Description("IP address in CIDR notation (e.g. 144.76.220.60/32)"),
+				mcp.Description(
+					"IP address in CIDR notation (e.g. 144.76.220.60/32)",
+				),
 			),
 		),
 		s.createAddress,
@@ -246,7 +266,9 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ListVirtualMachines,
-			mcp.WithDescription("List all NetBox virtual machines"),
+			mcp.WithDescription(
+				"List all NetBox virtual machines",
+			),
 		),
 		s.listVirtualMachines,
 	)
@@ -265,7 +287,9 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.CreateCluster,
-			mcp.WithDescription("Create a NetBox cluster (VM host grouping)"),
+			mcp.WithDescription(
+				"Create a NetBox cluster (VM host grouping)",
+			),
 			mcp.WithString(
 				parameter.Name,
 				mcp.Required(),
@@ -287,7 +311,9 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.CreateVirtualMachine,
-			mcp.WithDescription("Create a NetBox virtual machine assigned to a cluster"),
+			mcp.WithDescription(
+				"Create a NetBox virtual machine assigned to a cluster",
+			),
 			mcp.WithString(
 				parameter.Name,
 				mcp.Required(),
@@ -304,7 +330,9 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.CreateVirtualInterface,
-			mcp.WithDescription("Create an interface on a NetBox virtual machine"),
+			mcp.WithDescription(
+				"Create an interface on a NetBox virtual machine",
+			),
 			mcp.WithString(
 				constant.VirtualMachine,
 				mcp.Required(),
@@ -321,7 +349,9 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.CreateVirtualAddress,
-			mcp.WithDescription("Assign an IP address to a virtual machine interface"),
+			mcp.WithDescription(
+				"Assign an IP address to a virtual machine interface",
+			),
 			mcp.WithString(
 				constant.VirtualMachine,
 				mcp.Required(),
@@ -413,7 +443,9 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.RemoveVirtualTag,
-			mcp.WithDescription("Remove a tag from a virtual machine"),
+			mcp.WithDescription(
+				"Remove a tag from a virtual machine",
+			),
 			mcp.WithString(
 				constant.VirtualMachine,
 				mcp.Required(),
@@ -426,6 +458,136 @@ func (s *Server) register() {
 			),
 		),
 		s.removeVirtualTag,
+	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.AddDeviceJournalEntry,
+			mcp.WithDescription(
+				"Add a journal entry to a device - an append-only timestamped note, visible on the device page in NetBox",
+			),
+			mcp.WithString(
+				constant.Device,
+				mcp.Required(),
+				mcp.Description("Device name"),
+			),
+			mcp.WithString(
+				constant.Comments,
+				mcp.Required(),
+				mcp.Description("Entry text, markdown"),
+			),
+			mcp.WithString(
+				constant.Kind,
+				mcp.Description(
+					"Entry kind: info, success, warning, or danger",
+				),
+			),
+		),
+		s.addDeviceJournalEntry,
+	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.ListDeviceJournalEntries,
+			mcp.WithDescription(
+				"List journal entries for a device, newest first",
+			),
+			mcp.WithString(
+				constant.Device,
+				mcp.Required(),
+				mcp.Description("Device name"),
+			),
+			mcp.WithNumber(
+				parameter.Limit,
+				mcp.Description("Maximum entries to return"),
+			),
+			mcp.WithNumber(
+				parameter.Offset,
+				mcp.Description("Entries to skip"),
+			),
+		),
+		s.listDeviceJournalEntries,
+	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.AddVirtualJournalEntry,
+			mcp.WithDescription(
+				"Add a journal entry to a virtual machine - an append-only timestamped note, visible on the VM page in NetBox",
+			),
+			mcp.WithString(
+				constant.VirtualMachine,
+				mcp.Required(),
+				mcp.Description("VM name"),
+			),
+			mcp.WithString(
+				constant.Comments,
+				mcp.Required(),
+				mcp.Description("Entry text, markdown"),
+			),
+			mcp.WithString(
+				constant.Kind,
+				mcp.Description(
+					"Entry kind: info, success, warning, or danger",
+				),
+			),
+		),
+		s.addVirtualJournalEntry,
+	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.ListVirtualJournalEntries,
+			mcp.WithDescription(
+				"List journal entries for a virtual machine, newest first",
+			),
+			mcp.WithString(
+				constant.VirtualMachine,
+				mcp.Required(),
+				mcp.Description("VM name"),
+			),
+			mcp.WithNumber(
+				parameter.Limit,
+				mcp.Description("Maximum entries to return"),
+			),
+			mcp.WithNumber(
+				parameter.Offset,
+				mcp.Description("Entries to skip"),
+			),
+		),
+		s.listVirtualJournalEntries,
+	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.UpdateJournalEntry,
+			mcp.WithDescription(
+				"Update a journal entry's comments or kind",
+			),
+			mcp.WithNumber(
+				parameter.Identifier,
+				mcp.Required(),
+				mcp.Description("Journal entry identifier"),
+			),
+			mcp.WithString(
+				constant.Comments,
+				mcp.Description("New entry text, markdown"),
+			),
+			mcp.WithString(
+				constant.Kind,
+				mcp.Description(
+					"New entry kind: info, success, warning, or danger",
+				),
+			),
+		),
+		s.updateJournalEntry,
+	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.DeleteJournalEntry,
+			mcp.WithDescription("Delete a journal entry"),
+			mcp.WithNumber(
+				parameter.Identifier,
+				mcp.Required(),
+				mcp.Description("Journal entry identifier"),
+			),
+		),
+		s.deleteJournalEntry,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -472,7 +634,9 @@ func (s *Server) register() {
 			mcp.WithString(
 				constant.Encapsulation,
 				mcp.Required(),
-				mcp.Description("Encapsulation type (e.g. wireguard, gre, openvpn)"),
+				mcp.Description(
+					"Encapsulation type (e.g. wireguard, gre, openvpn)",
+				),
 			),
 			mcp.WithString(
 				constant.Group,
@@ -485,7 +649,9 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.CreateDeviceTunnelTermination,
-			mcp.WithDescription("Create a tunnel termination on a device interface"),
+			mcp.WithDescription(
+				"Create a tunnel termination on a device interface",
+			),
 			mcp.WithString(
 				constant.Device,
 				mcp.Required(),
@@ -512,7 +678,9 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.CreateVirtualTunnelTermination,
-			mcp.WithDescription("Create a tunnel termination on a VM interface"),
+			mcp.WithDescription(
+				"Create a tunnel termination on a VM interface",
+			),
 			mcp.WithString(
 				constant.VirtualMachine,
 				mcp.Required(),
@@ -550,7 +718,9 @@ func (s *Server) register() {
 			mcp.WithString(
 				constant.Prefix,
 				mcp.Required(),
-				mcp.Description("CIDR notation (e.g. 192.168.178.0/24)"),
+				mcp.Description(
+					"CIDR notation (e.g. 192.168.178.0/24)",
+				),
 			),
 			mcp.WithString(
 				constant.Site,

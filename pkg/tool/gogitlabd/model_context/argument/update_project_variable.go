@@ -6,4 +6,5 @@ type UpdateProjectVariable struct {
 	Value     string `json:"value"`
 	Protected bool   `json:"protected"`
 	Masked    bool   `json:"masked"`
+	Expand    bool   `json:"expand"`
 }

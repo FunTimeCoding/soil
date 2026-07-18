@@ -17,8 +17,10 @@ const (
 
 	PageLimit int32 = 1000
 
+	DeviceAddress           = "dcim.device"
 	InterfaceAddress        = "dcim.interface"
 	VirtualInterfaceAddress = "virtualization.vminterface"
+	VirtualMachineAddress   = "virtualization.virtualmachine"
 
 	Interface = "/api"
 

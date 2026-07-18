@@ -470,6 +470,12 @@ func (s *Server) register() {
 				"masked",
 				mcp.Description("Mask value in job logs"),
 			),
+			mcp.WithBoolean(
+				"expand",
+				mcp.Description(
+					"Expand $VARIABLE references in the value; enable only when the value actually contains a reference to expand (default: raw)",
+				),
+			),
 		),
 		mcp.NewTypedToolHandler(s.CreateProjectVariable),
 	)
@@ -501,6 +507,12 @@ func (s *Server) register() {
 			mcp.WithBoolean(
 				"masked",
 				mcp.Description("Mask value in job logs"),
+			),
+			mcp.WithBoolean(
+				"expand",
+				mcp.Description(
+					"Expand $VARIABLE references in the value; enable only when the value actually contains a reference to expand (default: raw)",
+				),
 			),
 		),
 		mcp.NewTypedToolHandler(s.UpdateProjectVariable),

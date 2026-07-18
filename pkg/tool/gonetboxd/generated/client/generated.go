@@ -96,6 +96,12 @@ type CreateInterfaceRequest struct {
 	Type string `json:"type"`
 }
 
+// CreateJournalEntryRequest defines model for CreateJournalEntryRequest.
+type CreateJournalEntryRequest struct {
+	Comments string  `json:"comments"`
+	Kind     *string `json:"kind,omitempty"`
+}
+
 // CreateNameRequest defines model for CreateNameRequest.
 type CreateNameRequest struct {
 	Name string `json:"name"`
@@ -199,6 +205,14 @@ type Interface struct {
 	Type            *string `json:"type,omitempty"`
 }
 
+// JournalEntry defines model for JournalEntry.
+type JournalEntry struct {
+	Comments   string  `json:"comments"`
+	Created    *string `json:"created,omitempty"`
+	Identifier int32   `json:"identifier"`
+	Kind       *string `json:"kind,omitempty"`
+}
+
 // Manufacturer defines model for Manufacturer.
 type Manufacturer struct {
 	Identifier int32  `json:"identifier"`
@@ -254,6 +268,12 @@ type TunnelTermination struct {
 	Tunnel                *string `json:"tunnel,omitempty"`
 }
 
+// UpdateJournalEntryRequest defines model for UpdateJournalEntryRequest.
+type UpdateJournalEntryRequest struct {
+	Comments *string `json:"comments,omitempty"`
+	Kind     *string `json:"kind,omitempty"`
+}
+
 // VirtualInterface defines model for VirtualInterface.
 type VirtualInterface struct {
 	Identifier int32  `json:"identifier"`
@@ -273,6 +293,24 @@ type VirtualMachine struct {
 type ListDevicesParams struct {
 	// Query Filter devices by name (case-insensitive contains). Omit for all.
 	Query *string `form:"query,omitempty" json:"query,omitempty"`
+}
+
+// ListDeviceJournalEntriesParams defines parameters for ListDeviceJournalEntries.
+type ListDeviceJournalEntriesParams struct {
+	// Limit Maximum entries to return.
+	Limit *int32 `form:"limit,omitempty" json:"limit,omitempty"`
+
+	// Offset Entries to skip.
+	Offset *int32 `form:"offset,omitempty" json:"offset,omitempty"`
+}
+
+// ListVirtualJournalEntriesParams defines parameters for ListVirtualJournalEntries.
+type ListVirtualJournalEntriesParams struct {
+	// Limit Maximum entries to return.
+	Limit *int32 `form:"limit,omitempty" json:"limit,omitempty"`
+
+	// Offset Entries to skip.
+	Offset *int32 `form:"offset,omitempty" json:"offset,omitempty"`
 }
 
 // CreateClusterTypeJSONRequestBody defines body for CreateClusterType for application/json ContentType.
@@ -296,8 +334,14 @@ type CreateAddressJSONRequestBody = CreateAddressRequest
 // CreateInterfaceJSONRequestBody defines body for CreateInterface for application/json ContentType.
 type CreateInterfaceJSONRequestBody = CreateInterfaceRequest
 
+// AddDeviceJournalEntryJSONRequestBody defines body for AddDeviceJournalEntry for application/json ContentType.
+type AddDeviceJournalEntryJSONRequestBody = CreateJournalEntryRequest
+
 // CreateDeviceTunnelTerminationJSONRequestBody defines body for CreateDeviceTunnelTermination for application/json ContentType.
 type CreateDeviceTunnelTerminationJSONRequestBody = CreateTunnelTerminationRequest
+
+// UpdateJournalEntryJSONRequestBody defines body for UpdateJournalEntry for application/json ContentType.
+type UpdateJournalEntryJSONRequestBody = UpdateJournalEntryRequest
 
 // CreateManufacturerJSONRequestBody defines body for CreateManufacturer for application/json ContentType.
 type CreateManufacturerJSONRequestBody = CreateNameRequest
@@ -328,6 +372,9 @@ type CreateVirtualAddressJSONRequestBody = CreateAddressRequest
 
 // CreateVirtualInterfaceJSONRequestBody defines body for CreateVirtualInterface for application/json ContentType.
 type CreateVirtualInterfaceJSONRequestBody = CreateVirtualInterfaceRequest
+
+// AddVirtualJournalEntryJSONRequestBody defines body for AddVirtualJournalEntry for application/json ContentType.
+type AddVirtualJournalEntryJSONRequestBody = CreateJournalEntryRequest
 
 // CreateVirtualTunnelTerminationJSONRequestBody defines body for CreateVirtualTunnelTermination for application/json ContentType.
 type CreateVirtualTunnelTerminationJSONRequestBody = CreateTunnelTerminationRequest
@@ -464,6 +511,14 @@ type ClientInterface interface {
 
 	CreateInterface(ctx context.Context, name string, body CreateInterfaceJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// ListDeviceJournalEntries request
+	ListDeviceJournalEntries(ctx context.Context, name string, params *ListDeviceJournalEntriesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// AddDeviceJournalEntryWithBody request with any body
+	AddDeviceJournalEntryWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	AddDeviceJournalEntry(ctx context.Context, name string, body AddDeviceJournalEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// ListDeviceTags request
 	ListDeviceTags(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -477,6 +532,14 @@ type ClientInterface interface {
 	CreateDeviceTunnelTerminationWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	CreateDeviceTunnelTermination(ctx context.Context, name string, body CreateDeviceTunnelTerminationJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteJournalEntry request
+	DeleteJournalEntry(ctx context.Context, identifier int32, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateJournalEntryWithBody request with any body
+	UpdateJournalEntryWithBody(ctx context.Context, identifier int32, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	UpdateJournalEntry(ctx context.Context, identifier int32, body UpdateJournalEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// ListManufacturers request
 	ListManufacturers(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -554,6 +617,14 @@ type ClientInterface interface {
 	CreateVirtualInterfaceWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	CreateVirtualInterface(ctx context.Context, name string, body CreateVirtualInterfaceJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ListVirtualJournalEntries request
+	ListVirtualJournalEntries(ctx context.Context, name string, params *ListVirtualJournalEntriesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// AddVirtualJournalEntryWithBody request with any body
+	AddVirtualJournalEntryWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	AddVirtualJournalEntry(ctx context.Context, name string, body AddVirtualJournalEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// RemoveVirtualTag request
 	RemoveVirtualTag(ctx context.Context, name string, tag string, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -831,6 +902,42 @@ func (c *Client) CreateInterface(ctx context.Context, name string, body CreateIn
 	return c.Client.Do(req)
 }
 
+func (c *Client) ListDeviceJournalEntries(ctx context.Context, name string, params *ListDeviceJournalEntriesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListDeviceJournalEntriesRequest(c.Server, name, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) AddDeviceJournalEntryWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewAddDeviceJournalEntryRequestWithBody(c.Server, name, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) AddDeviceJournalEntry(ctx context.Context, name string, body AddDeviceJournalEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewAddDeviceJournalEntryRequest(c.Server, name, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 func (c *Client) ListDeviceTags(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListDeviceTagsRequest(c.Server, name)
 	if err != nil {
@@ -881,6 +988,42 @@ func (c *Client) CreateDeviceTunnelTerminationWithBody(ctx context.Context, name
 
 func (c *Client) CreateDeviceTunnelTermination(ctx context.Context, name string, body CreateDeviceTunnelTerminationJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateDeviceTunnelTerminationRequest(c.Server, name, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) DeleteJournalEntry(ctx context.Context, identifier int32, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteJournalEntryRequest(c.Server, identifier)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateJournalEntryWithBody(ctx context.Context, identifier int32, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateJournalEntryRequestWithBody(c.Server, identifier, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) UpdateJournalEntry(ctx context.Context, identifier int32, body UpdateJournalEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateJournalEntryRequest(c.Server, identifier, body)
 	if err != nil {
 		return nil, err
 	}
@@ -1229,6 +1372,42 @@ func (c *Client) CreateVirtualInterfaceWithBody(ctx context.Context, name string
 
 func (c *Client) CreateVirtualInterface(ctx context.Context, name string, body CreateVirtualInterfaceJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateVirtualInterfaceRequest(c.Server, name, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ListVirtualJournalEntries(ctx context.Context, name string, params *ListVirtualJournalEntriesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListVirtualJournalEntriesRequest(c.Server, name, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) AddVirtualJournalEntryWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewAddVirtualJournalEntryRequestWithBody(c.Server, name, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) AddVirtualJournalEntry(ctx context.Context, name string, body AddVirtualJournalEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewAddVirtualJournalEntryRequest(c.Server, name, body)
 	if err != nil {
 		return nil, err
 	}
@@ -1845,6 +2024,126 @@ func NewCreateInterfaceRequestWithBody(server string, name string, contentType s
 	return req, nil
 }
 
+// NewListDeviceJournalEntriesRequest generates requests for ListDeviceJournalEntries
+func NewListDeviceJournalEntriesRequest(server string, name string, params *ListDeviceJournalEntriesParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "name", name, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/devices/%s/journal-entries", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if params.Limit != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "limit", *params.Limit, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: "int32"}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if params.Offset != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "offset", *params.Offset, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: "int32"}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewAddDeviceJournalEntryRequest calls the generic AddDeviceJournalEntry builder with application/json body
+func NewAddDeviceJournalEntryRequest(server string, name string, body AddDeviceJournalEntryJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewAddDeviceJournalEntryRequestWithBody(server, name, "application/json", bodyReader)
+}
+
+// NewAddDeviceJournalEntryRequestWithBody generates requests for AddDeviceJournalEntry with any type of body
+func NewAddDeviceJournalEntryRequestWithBody(server string, name string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "name", name, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/devices/%s/journal-entries", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
 // NewListDeviceTagsRequest generates requests for ListDeviceTags
 func NewListDeviceTagsRequest(server string, name string) (*http.Request, error) {
 	var err error
@@ -1999,6 +2298,87 @@ func NewCreateDeviceTunnelTerminationRequestWithBody(server string, name string,
 	}
 
 	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewDeleteJournalEntryRequest generates requests for DeleteJournalEntry
+func NewDeleteJournalEntryRequest(server string, identifier int32) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "identifier", identifier, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int32"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/journal-entries/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodDelete, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewUpdateJournalEntryRequest calls the generic UpdateJournalEntry builder with application/json body
+func NewUpdateJournalEntryRequest(server string, identifier int32, body UpdateJournalEntryJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewUpdateJournalEntryRequestWithBody(server, identifier, "application/json", bodyReader)
+}
+
+// NewUpdateJournalEntryRequestWithBody generates requests for UpdateJournalEntry with any type of body
+func NewUpdateJournalEntryRequestWithBody(server string, identifier int32, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "identifier", identifier, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int32"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/journal-entries/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPatch, queryURL.String(), body)
 	if err != nil {
 		return nil, err
 	}
@@ -2665,6 +3045,126 @@ func NewCreateVirtualInterfaceRequestWithBody(server string, name string, conten
 	return req, nil
 }
 
+// NewListVirtualJournalEntriesRequest generates requests for ListVirtualJournalEntries
+func NewListVirtualJournalEntriesRequest(server string, name string, params *ListVirtualJournalEntriesParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "name", name, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/virtual-machines/%s/journal-entries", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if params.Limit != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "limit", *params.Limit, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: "int32"}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if params.Offset != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "offset", *params.Offset, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: "int32"}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewAddVirtualJournalEntryRequest calls the generic AddVirtualJournalEntry builder with application/json body
+func NewAddVirtualJournalEntryRequest(server string, name string, body AddVirtualJournalEntryJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewAddVirtualJournalEntryRequestWithBody(server, name, "application/json", bodyReader)
+}
+
+// NewAddVirtualJournalEntryRequestWithBody generates requests for AddVirtualJournalEntry with any type of body
+func NewAddVirtualJournalEntryRequestWithBody(server string, name string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "name", name, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/virtual-machines/%s/journal-entries", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
 // NewRemoveVirtualTagRequest generates requests for RemoveVirtualTag
 func NewRemoveVirtualTagRequest(server string, name string, tag string) (*http.Request, error) {
 	var err error
@@ -2896,6 +3396,14 @@ type ClientWithResponsesInterface interface {
 
 	CreateInterfaceWithResponse(ctx context.Context, name string, body CreateInterfaceJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateInterfaceResponse, error)
 
+	// ListDeviceJournalEntriesWithResponse request
+	ListDeviceJournalEntriesWithResponse(ctx context.Context, name string, params *ListDeviceJournalEntriesParams, reqEditors ...RequestEditorFn) (*ListDeviceJournalEntriesResponse, error)
+
+	// AddDeviceJournalEntryWithBodyWithResponse request with any body
+	AddDeviceJournalEntryWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*AddDeviceJournalEntryResponse, error)
+
+	AddDeviceJournalEntryWithResponse(ctx context.Context, name string, body AddDeviceJournalEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*AddDeviceJournalEntryResponse, error)
+
 	// ListDeviceTagsWithResponse request
 	ListDeviceTagsWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*ListDeviceTagsResponse, error)
 
@@ -2909,6 +3417,14 @@ type ClientWithResponsesInterface interface {
 	CreateDeviceTunnelTerminationWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateDeviceTunnelTerminationResponse, error)
 
 	CreateDeviceTunnelTerminationWithResponse(ctx context.Context, name string, body CreateDeviceTunnelTerminationJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateDeviceTunnelTerminationResponse, error)
+
+	// DeleteJournalEntryWithResponse request
+	DeleteJournalEntryWithResponse(ctx context.Context, identifier int32, reqEditors ...RequestEditorFn) (*DeleteJournalEntryResponse, error)
+
+	// UpdateJournalEntryWithBodyWithResponse request with any body
+	UpdateJournalEntryWithBodyWithResponse(ctx context.Context, identifier int32, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateJournalEntryResponse, error)
+
+	UpdateJournalEntryWithResponse(ctx context.Context, identifier int32, body UpdateJournalEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateJournalEntryResponse, error)
 
 	// ListManufacturersWithResponse request
 	ListManufacturersWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListManufacturersResponse, error)
@@ -2986,6 +3502,14 @@ type ClientWithResponsesInterface interface {
 	CreateVirtualInterfaceWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateVirtualInterfaceResponse, error)
 
 	CreateVirtualInterfaceWithResponse(ctx context.Context, name string, body CreateVirtualInterfaceJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateVirtualInterfaceResponse, error)
+
+	// ListVirtualJournalEntriesWithResponse request
+	ListVirtualJournalEntriesWithResponse(ctx context.Context, name string, params *ListVirtualJournalEntriesParams, reqEditors ...RequestEditorFn) (*ListVirtualJournalEntriesResponse, error)
+
+	// AddVirtualJournalEntryWithBodyWithResponse request with any body
+	AddVirtualJournalEntryWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*AddVirtualJournalEntryResponse, error)
+
+	AddVirtualJournalEntryWithResponse(ctx context.Context, name string, body AddVirtualJournalEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*AddVirtualJournalEntryResponse, error)
 
 	// RemoveVirtualTagWithResponse request
 	RemoveVirtualTagWithResponse(ctx context.Context, name string, tag string, reqEditors ...RequestEditorFn) (*RemoveVirtualTagResponse, error)
@@ -3465,6 +3989,68 @@ func (r CreateInterfaceResponse) ContentType() string {
 	return ""
 }
 
+type ListDeviceJournalEntriesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *[]*JournalEntry
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r ListDeviceJournalEntriesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListDeviceJournalEntriesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ListDeviceJournalEntriesResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type AddDeviceJournalEntryResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON201      *JournalEntry
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r AddDeviceJournalEntryResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r AddDeviceJournalEntryResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r AddDeviceJournalEntryResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type ListDeviceTagsResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -3583,6 +4169,67 @@ func (r CreateDeviceTunnelTerminationResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r CreateDeviceTunnelTerminationResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type DeleteJournalEntryResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteJournalEntryResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteJournalEntryResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r DeleteJournalEntryResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type UpdateJournalEntryResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *JournalEntry
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r UpdateJournalEntryResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r UpdateJournalEntryResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r UpdateJournalEntryResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -4178,6 +4825,68 @@ func (r CreateVirtualInterfaceResponse) ContentType() string {
 	return ""
 }
 
+type ListVirtualJournalEntriesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *[]*JournalEntry
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r ListVirtualJournalEntriesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListVirtualJournalEntriesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ListVirtualJournalEntriesResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type AddVirtualJournalEntryResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON201      *JournalEntry
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r AddVirtualJournalEntryResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r AddVirtualJournalEntryResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r AddVirtualJournalEntryResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type RemoveVirtualTagResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -4462,6 +5171,32 @@ func (c *ClientWithResponses) CreateInterfaceWithResponse(ctx context.Context, n
 	return ParseCreateInterfaceResponse(rsp)
 }
 
+// ListDeviceJournalEntriesWithResponse request returning *ListDeviceJournalEntriesResponse
+func (c *ClientWithResponses) ListDeviceJournalEntriesWithResponse(ctx context.Context, name string, params *ListDeviceJournalEntriesParams, reqEditors ...RequestEditorFn) (*ListDeviceJournalEntriesResponse, error) {
+	rsp, err := c.ListDeviceJournalEntries(ctx, name, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListDeviceJournalEntriesResponse(rsp)
+}
+
+// AddDeviceJournalEntryWithBodyWithResponse request with arbitrary body returning *AddDeviceJournalEntryResponse
+func (c *ClientWithResponses) AddDeviceJournalEntryWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*AddDeviceJournalEntryResponse, error) {
+	rsp, err := c.AddDeviceJournalEntryWithBody(ctx, name, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseAddDeviceJournalEntryResponse(rsp)
+}
+
+func (c *ClientWithResponses) AddDeviceJournalEntryWithResponse(ctx context.Context, name string, body AddDeviceJournalEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*AddDeviceJournalEntryResponse, error) {
+	rsp, err := c.AddDeviceJournalEntry(ctx, name, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseAddDeviceJournalEntryResponse(rsp)
+}
+
 // ListDeviceTagsWithResponse request returning *ListDeviceTagsResponse
 func (c *ClientWithResponses) ListDeviceTagsWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*ListDeviceTagsResponse, error) {
 	rsp, err := c.ListDeviceTags(ctx, name, reqEditors...)
@@ -4504,6 +5239,32 @@ func (c *ClientWithResponses) CreateDeviceTunnelTerminationWithResponse(ctx cont
 		return nil, err
 	}
 	return ParseCreateDeviceTunnelTerminationResponse(rsp)
+}
+
+// DeleteJournalEntryWithResponse request returning *DeleteJournalEntryResponse
+func (c *ClientWithResponses) DeleteJournalEntryWithResponse(ctx context.Context, identifier int32, reqEditors ...RequestEditorFn) (*DeleteJournalEntryResponse, error) {
+	rsp, err := c.DeleteJournalEntry(ctx, identifier, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteJournalEntryResponse(rsp)
+}
+
+// UpdateJournalEntryWithBodyWithResponse request with arbitrary body returning *UpdateJournalEntryResponse
+func (c *ClientWithResponses) UpdateJournalEntryWithBodyWithResponse(ctx context.Context, identifier int32, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateJournalEntryResponse, error) {
+	rsp, err := c.UpdateJournalEntryWithBody(ctx, identifier, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateJournalEntryResponse(rsp)
+}
+
+func (c *ClientWithResponses) UpdateJournalEntryWithResponse(ctx context.Context, identifier int32, body UpdateJournalEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateJournalEntryResponse, error) {
+	rsp, err := c.UpdateJournalEntry(ctx, identifier, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateJournalEntryResponse(rsp)
 }
 
 // ListManufacturersWithResponse request returning *ListManufacturersResponse
@@ -4755,6 +5516,32 @@ func (c *ClientWithResponses) CreateVirtualInterfaceWithResponse(ctx context.Con
 		return nil, err
 	}
 	return ParseCreateVirtualInterfaceResponse(rsp)
+}
+
+// ListVirtualJournalEntriesWithResponse request returning *ListVirtualJournalEntriesResponse
+func (c *ClientWithResponses) ListVirtualJournalEntriesWithResponse(ctx context.Context, name string, params *ListVirtualJournalEntriesParams, reqEditors ...RequestEditorFn) (*ListVirtualJournalEntriesResponse, error) {
+	rsp, err := c.ListVirtualJournalEntries(ctx, name, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListVirtualJournalEntriesResponse(rsp)
+}
+
+// AddVirtualJournalEntryWithBodyWithResponse request with arbitrary body returning *AddVirtualJournalEntryResponse
+func (c *ClientWithResponses) AddVirtualJournalEntryWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*AddVirtualJournalEntryResponse, error) {
+	rsp, err := c.AddVirtualJournalEntryWithBody(ctx, name, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseAddVirtualJournalEntryResponse(rsp)
+}
+
+func (c *ClientWithResponses) AddVirtualJournalEntryWithResponse(ctx context.Context, name string, body AddVirtualJournalEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*AddVirtualJournalEntryResponse, error) {
+	rsp, err := c.AddVirtualJournalEntry(ctx, name, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseAddVirtualJournalEntryResponse(rsp)
 }
 
 // RemoveVirtualTagWithResponse request returning *RemoveVirtualTagResponse
@@ -5294,6 +6081,72 @@ func ParseCreateInterfaceResponse(rsp *http.Response) (*CreateInterfaceResponse,
 	return response, nil
 }
 
+// ParseListDeviceJournalEntriesResponse parses an HTTP response from a ListDeviceJournalEntriesWithResponse call
+func ParseListDeviceJournalEntriesResponse(rsp *http.Response) (*ListDeviceJournalEntriesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListDeviceJournalEntriesResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []*JournalEntry
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseAddDeviceJournalEntryResponse parses an HTTP response from a AddDeviceJournalEntryWithResponse call
+func ParseAddDeviceJournalEntryResponse(rsp *http.Response) (*AddDeviceJournalEntryResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &AddDeviceJournalEntryResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest JournalEntry
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseListDeviceTagsResponse parses an HTTP response from a ListDeviceTagsWithResponse call
 func ParseListDeviceTagsResponse(rsp *http.Response) (*ListDeviceTagsResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -5413,6 +6266,65 @@ func ParseCreateDeviceTunnelTerminationResponse(rsp *http.Response) (*CreateDevi
 			return nil, err
 		}
 		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteJournalEntryResponse parses an HTTP response from a DeleteJournalEntryWithResponse call
+func ParseDeleteJournalEntryResponse(rsp *http.Response) (*DeleteJournalEntryResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteJournalEntryResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseUpdateJournalEntryResponse parses an HTTP response from a UpdateJournalEntryWithResponse call
+func ParseUpdateJournalEntryResponse(rsp *http.Response) (*UpdateJournalEntryResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &UpdateJournalEntryResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest JournalEntry
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -6036,6 +6948,72 @@ func ParseCreateVirtualInterfaceResponse(rsp *http.Response) (*CreateVirtualInte
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
 		var dest VirtualInterface
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListVirtualJournalEntriesResponse parses an HTTP response from a ListVirtualJournalEntriesWithResponse call
+func ParseListVirtualJournalEntriesResponse(rsp *http.Response) (*ListVirtualJournalEntriesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListVirtualJournalEntriesResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []*JournalEntry
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseAddVirtualJournalEntryResponse parses an HTTP response from a AddVirtualJournalEntryWithResponse call
+func ParseAddVirtualJournalEntryResponse(rsp *http.Response) (*AddVirtualJournalEntryResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &AddVirtualJournalEntryResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest JournalEntry
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
