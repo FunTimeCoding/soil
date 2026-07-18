@@ -6,9 +6,6 @@ const (
 	TokenEnvironment    = "TELEGRAM_TOKEN"
 	ChannelEnvironment  = "TELEGRAM_CHANNEL"
 	DatabaseEnvironment = "TELEGRAM_DATABASE"
-
-	UserBucket    = "user"
-	ChannelBucket = "channel"
 )
 
 var Format = option.Color.Copy()

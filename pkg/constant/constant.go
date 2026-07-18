@@ -33,7 +33,6 @@ const (
 
 	CurrentDirectory = "."
 
-	BoltExtension        = ".db"
 	GoExtension          = ".go"
 	GraphicExtension     = ".png"
 	HypertextExtension   = ".html"

@@ -69,9 +69,8 @@ the live resolved default.
 Services with a database also call `a.Database()` (registers `--lite`
 with chain `LITE_PATH` > `Identity.LitePath()`, and `--postgres` with
 chain `POSTGRES_LOCATOR` > empty) or `a.Lite()` alone for
-sqlite-only raw stores; key-value (bbolt) stores keep a plain
-`--path` - `--lite` and `LITE_PATH` mean sqlite, nothing else. See
-`database.md` for the selection convention. The locator flag exists for development; credentials
+sqlite-only raw stores - `--lite` and `LITE_PATH` mean sqlite,
+nothing else. See `database.md` for the selection convention. The locator flag exists for development; credentials
 travel via environment, not argv.
 
 ## Run Function

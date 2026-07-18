@@ -47,7 +47,6 @@ trivy
 
 # Go
 GOPROXY
-bbolt
 coverprofile
 errcheck
 goanalyze

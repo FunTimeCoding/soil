@@ -17,15 +17,6 @@ test genuinely needs a file on disk. Never call
 `gorm.Open` directly - the `restricted_call` analyzer confines it
 to `pkg/relational/` (see `database.md`).
 
-Key-value stores use a real bbolt database on a temporary path:
-
-```go
-path := filepath.Join(t.TempDir(), constant.TestDatabase)
-defer system.Remove(path)
-s := store.New(path)
-defer s.Close()
-```
-
 ## Mock Clients
 
 Mock external dependencies using hand-rolled structs (see Interfaces section in `conventions.md`). Mocks expose methods to manipulate state during a test:

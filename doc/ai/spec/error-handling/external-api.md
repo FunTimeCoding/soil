@@ -56,7 +56,7 @@ the return type differs.
 **When to add captureDetail vs just captureFail:** if the service
 wraps an external API with parseable errors, use `captureDetail`
 to extract the best message. If the service only has internal
-stores (GORM, BoltDB, pgx), use `captureFail` with
+stores (GORM, pgx), use `captureFail` with
 `constant.UnexpectedError` - there's no meaningful message to
 extract for the caller.
 

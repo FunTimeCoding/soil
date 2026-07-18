@@ -94,7 +94,6 @@ require (
 	github.com/whilp/git-urls v1.0.0
 	github.com/yuin/goldmark v1.8.4
 	gitlab.com/gitlab-org/api/client-go/v2 v2.50.0
-	go.etcd.io/bbolt v1.5.0
 	golang.org/x/crypto v0.54.0
 	golang.org/x/mod v0.38.0
 	golang.org/x/net v0.57.0

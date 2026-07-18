@@ -28,7 +28,7 @@ func TestClientsExcludesTool(t *testing.T) {
 
 func TestClientsExcludesConfiguration(t *testing.T) {
 	v := virtual_file_system.New()
-	v.WriteString("pkg/bolt/client.go", "package bolt\n")
+	v.WriteString("pkg/relational/client.go", "package relational\n")
 	assert.Integer(
 		t,
 		0,
@@ -36,7 +36,7 @@ func TestClientsExcludesConfiguration(t *testing.T) {
 			Clients(
 				v,
 				"test",
-				&Configuration{Exclude: []string{"pkg/bolt"}},
+				&Configuration{Exclude: []string{"pkg/relational"}},
 			),
 		),
 	)
