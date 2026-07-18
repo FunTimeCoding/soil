@@ -70,7 +70,7 @@ require (
 	github.com/oapi-codegen/runtime v1.6.0
 	github.com/olekukonko/tablewriter v1.1.4
 	github.com/ollama/ollama v0.32.1
-	github.com/openai/openai-go/v3 v3.43.0
+	github.com/openai/openai-go/v3 v3.44.0
 	github.com/openvex/go-vex v0.2.8
 	github.com/opsgenie/opsgenie-go-sdk-v2 v1.2.23
 	github.com/pkg/sftp v1.13.11
@@ -93,7 +93,7 @@ require (
 	github.com/trivago/tgo v1.0.7
 	github.com/whilp/git-urls v1.0.0
 	github.com/yuin/goldmark v1.8.4
-	gitlab.com/gitlab-org/api/client-go/v2 v2.50.0
+	gitlab.com/gitlab-org/api/client-go/v2 v2.51.0
 	golang.org/x/crypto v0.54.0
 	golang.org/x/mod v0.38.0
 	golang.org/x/net v0.57.0
