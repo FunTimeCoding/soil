@@ -161,6 +161,7 @@ type CreateVirtualMachineRequest struct {
 // Device defines model for Device.
 type Device struct {
 	Identifier     int32     `json:"identifier"`
+	Labels         *[]*Label `json:"labels,omitempty"`
 	Link           *string   `json:"link,omitempty"`
 	Name           string    `json:"name"`
 	PrimaryAddress *string   `json:"primaryAddress,omitempty"`
@@ -213,6 +214,12 @@ type JournalEntry struct {
 	Kind       *string `json:"kind,omitempty"`
 }
 
+// Label defines model for Label.
+type Label struct {
+	Key   string `json:"key"`
+	Value string `json:"value"`
+}
+
 // Manufacturer defines model for Manufacturer.
 type Manufacturer struct {
 	Identifier int32  `json:"identifier"`
@@ -225,6 +232,11 @@ type Prefix struct {
 	Identifier  int32   `json:"identifier"`
 	Prefix      string  `json:"prefix"`
 	Site        *string `json:"site,omitempty"`
+}
+
+// SetLabelRequest defines model for SetLabelRequest.
+type SetLabelRequest struct {
+	Value string `json:"value"`
 }
 
 // Site defines model for Site.
@@ -337,6 +349,9 @@ type CreateInterfaceJSONRequestBody = CreateInterfaceRequest
 // AddDeviceJournalEntryJSONRequestBody defines body for AddDeviceJournalEntry for application/json ContentType.
 type AddDeviceJournalEntryJSONRequestBody = CreateJournalEntryRequest
 
+// SetDeviceLabelJSONRequestBody defines body for SetDeviceLabel for application/json ContentType.
+type SetDeviceLabelJSONRequestBody = SetLabelRequest
+
 // CreateDeviceTunnelTerminationJSONRequestBody defines body for CreateDeviceTunnelTermination for application/json ContentType.
 type CreateDeviceTunnelTerminationJSONRequestBody = CreateTunnelTerminationRequest
 
@@ -375,6 +390,9 @@ type CreateVirtualInterfaceJSONRequestBody = CreateVirtualInterfaceRequest
 
 // AddVirtualJournalEntryJSONRequestBody defines body for AddVirtualJournalEntry for application/json ContentType.
 type AddVirtualJournalEntryJSONRequestBody = CreateJournalEntryRequest
+
+// SetVirtualLabelJSONRequestBody defines body for SetVirtualLabel for application/json ContentType.
+type SetVirtualLabelJSONRequestBody = SetLabelRequest
 
 // CreateVirtualTunnelTerminationJSONRequestBody defines body for CreateVirtualTunnelTermination for application/json ContentType.
 type CreateVirtualTunnelTerminationJSONRequestBody = CreateTunnelTerminationRequest
@@ -519,6 +537,17 @@ type ClientInterface interface {
 
 	AddDeviceJournalEntry(ctx context.Context, name string, body AddDeviceJournalEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// ListDeviceLabels request
+	ListDeviceLabels(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// RemoveDeviceLabel request
+	RemoveDeviceLabel(ctx context.Context, name string, key string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// SetDeviceLabelWithBody request with any body
+	SetDeviceLabelWithBody(ctx context.Context, name string, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	SetDeviceLabel(ctx context.Context, name string, key string, body SetDeviceLabelJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// ListDeviceTags request
 	ListDeviceTags(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -625,6 +654,17 @@ type ClientInterface interface {
 	AddVirtualJournalEntryWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	AddVirtualJournalEntry(ctx context.Context, name string, body AddVirtualJournalEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ListVirtualLabels request
+	ListVirtualLabels(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// RemoveVirtualLabel request
+	RemoveVirtualLabel(ctx context.Context, name string, key string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// SetVirtualLabelWithBody request with any body
+	SetVirtualLabelWithBody(ctx context.Context, name string, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	SetVirtualLabel(ctx context.Context, name string, key string, body SetVirtualLabelJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// RemoveVirtualTag request
 	RemoveVirtualTag(ctx context.Context, name string, tag string, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -928,6 +968,54 @@ func (c *Client) AddDeviceJournalEntryWithBody(ctx context.Context, name string,
 
 func (c *Client) AddDeviceJournalEntry(ctx context.Context, name string, body AddDeviceJournalEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewAddDeviceJournalEntryRequest(c.Server, name, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ListDeviceLabels(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListDeviceLabelsRequest(c.Server, name)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) RemoveDeviceLabel(ctx context.Context, name string, key string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewRemoveDeviceLabelRequest(c.Server, name, key)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) SetDeviceLabelWithBody(ctx context.Context, name string, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewSetDeviceLabelRequestWithBody(c.Server, name, key, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) SetDeviceLabel(ctx context.Context, name string, key string, body SetDeviceLabelJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewSetDeviceLabelRequest(c.Server, name, key, body)
 	if err != nil {
 		return nil, err
 	}
@@ -1408,6 +1496,54 @@ func (c *Client) AddVirtualJournalEntryWithBody(ctx context.Context, name string
 
 func (c *Client) AddVirtualJournalEntry(ctx context.Context, name string, body AddVirtualJournalEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewAddVirtualJournalEntryRequest(c.Server, name, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) ListVirtualLabels(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListVirtualLabelsRequest(c.Server, name)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) RemoveVirtualLabel(ctx context.Context, name string, key string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewRemoveVirtualLabelRequest(c.Server, name, key)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) SetVirtualLabelWithBody(ctx context.Context, name string, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewSetVirtualLabelRequestWithBody(c.Server, name, key, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+func (c *Client) SetVirtualLabel(ctx context.Context, name string, key string, body SetVirtualLabelJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewSetVirtualLabelRequest(c.Server, name, key, body)
 	if err != nil {
 		return nil, err
 	}
@@ -2135,6 +2271,135 @@ func NewAddDeviceJournalEntryRequestWithBody(server string, name string, content
 	}
 
 	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewListDeviceLabelsRequest generates requests for ListDeviceLabels
+func NewListDeviceLabelsRequest(server string, name string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "name", name, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/devices/%s/labels", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewRemoveDeviceLabelRequest generates requests for RemoveDeviceLabel
+func NewRemoveDeviceLabelRequest(server string, name string, key string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "name", name, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithOptions("simple", false, "key", key, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/devices/%s/labels/%s", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodDelete, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewSetDeviceLabelRequest calls the generic SetDeviceLabel builder with application/json body
+func NewSetDeviceLabelRequest(server string, name string, key string, body SetDeviceLabelJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewSetDeviceLabelRequestWithBody(server, name, key, "application/json", bodyReader)
+}
+
+// NewSetDeviceLabelRequestWithBody generates requests for SetDeviceLabel with any type of body
+func NewSetDeviceLabelRequestWithBody(server string, name string, key string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "name", name, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithOptions("simple", false, "key", key, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/devices/%s/labels/%s", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPut, queryURL.String(), body)
 	if err != nil {
 		return nil, err
 	}
@@ -3165,6 +3430,135 @@ func NewAddVirtualJournalEntryRequestWithBody(server string, name string, conten
 	return req, nil
 }
 
+// NewListVirtualLabelsRequest generates requests for ListVirtualLabels
+func NewListVirtualLabelsRequest(server string, name string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "name", name, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/virtual-machines/%s/labels", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewRemoveVirtualLabelRequest generates requests for RemoveVirtualLabel
+func NewRemoveVirtualLabelRequest(server string, name string, key string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "name", name, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithOptions("simple", false, "key", key, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/virtual-machines/%s/labels/%s", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodDelete, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewSetVirtualLabelRequest calls the generic SetVirtualLabel builder with application/json body
+func NewSetVirtualLabelRequest(server string, name string, key string, body SetVirtualLabelJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewSetVirtualLabelRequestWithBody(server, name, key, "application/json", bodyReader)
+}
+
+// NewSetVirtualLabelRequestWithBody generates requests for SetVirtualLabel with any type of body
+func NewSetVirtualLabelRequestWithBody(server string, name string, key string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "name", name, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithOptions("simple", false, "key", key, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/virtual-machines/%s/labels/%s", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPut, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
 // NewRemoveVirtualTagRequest generates requests for RemoveVirtualTag
 func NewRemoveVirtualTagRequest(server string, name string, tag string) (*http.Request, error) {
 	var err error
@@ -3404,6 +3798,17 @@ type ClientWithResponsesInterface interface {
 
 	AddDeviceJournalEntryWithResponse(ctx context.Context, name string, body AddDeviceJournalEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*AddDeviceJournalEntryResponse, error)
 
+	// ListDeviceLabelsWithResponse request
+	ListDeviceLabelsWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*ListDeviceLabelsResponse, error)
+
+	// RemoveDeviceLabelWithResponse request
+	RemoveDeviceLabelWithResponse(ctx context.Context, name string, key string, reqEditors ...RequestEditorFn) (*RemoveDeviceLabelResponse, error)
+
+	// SetDeviceLabelWithBodyWithResponse request with any body
+	SetDeviceLabelWithBodyWithResponse(ctx context.Context, name string, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*SetDeviceLabelResponse, error)
+
+	SetDeviceLabelWithResponse(ctx context.Context, name string, key string, body SetDeviceLabelJSONRequestBody, reqEditors ...RequestEditorFn) (*SetDeviceLabelResponse, error)
+
 	// ListDeviceTagsWithResponse request
 	ListDeviceTagsWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*ListDeviceTagsResponse, error)
 
@@ -3510,6 +3915,17 @@ type ClientWithResponsesInterface interface {
 	AddVirtualJournalEntryWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*AddVirtualJournalEntryResponse, error)
 
 	AddVirtualJournalEntryWithResponse(ctx context.Context, name string, body AddVirtualJournalEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*AddVirtualJournalEntryResponse, error)
+
+	// ListVirtualLabelsWithResponse request
+	ListVirtualLabelsWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*ListVirtualLabelsResponse, error)
+
+	// RemoveVirtualLabelWithResponse request
+	RemoveVirtualLabelWithResponse(ctx context.Context, name string, key string, reqEditors ...RequestEditorFn) (*RemoveVirtualLabelResponse, error)
+
+	// SetVirtualLabelWithBodyWithResponse request with any body
+	SetVirtualLabelWithBodyWithResponse(ctx context.Context, name string, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*SetVirtualLabelResponse, error)
+
+	SetVirtualLabelWithResponse(ctx context.Context, name string, key string, body SetVirtualLabelJSONRequestBody, reqEditors ...RequestEditorFn) (*SetVirtualLabelResponse, error)
 
 	// RemoveVirtualTagWithResponse request
 	RemoveVirtualTagWithResponse(ctx context.Context, name string, tag string, reqEditors ...RequestEditorFn) (*RemoveVirtualTagResponse, error)
@@ -4045,6 +4461,98 @@ func (r AddDeviceJournalEntryResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r AddDeviceJournalEntryResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type ListDeviceLabelsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *[]*Label
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r ListDeviceLabelsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListDeviceLabelsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ListDeviceLabelsResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type RemoveDeviceLabelResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r RemoveDeviceLabelResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r RemoveDeviceLabelResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r RemoveDeviceLabelResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type SetDeviceLabelResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Label
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r SetDeviceLabelResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r SetDeviceLabelResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r SetDeviceLabelResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -4887,6 +5395,98 @@ func (r AddVirtualJournalEntryResponse) ContentType() string {
 	return ""
 }
 
+type ListVirtualLabelsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *[]*Label
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r ListVirtualLabelsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListVirtualLabelsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ListVirtualLabelsResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type RemoveVirtualLabelResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r RemoveVirtualLabelResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r RemoveVirtualLabelResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r RemoveVirtualLabelResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type SetVirtualLabelResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	JSON200      *Label
+	JSON500      *ErrorResponse
+}
+
+// Status returns HTTPResponse.Status
+func (r SetVirtualLabelResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r SetVirtualLabelResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r SetVirtualLabelResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type RemoveVirtualTagResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -5195,6 +5795,41 @@ func (c *ClientWithResponses) AddDeviceJournalEntryWithResponse(ctx context.Cont
 		return nil, err
 	}
 	return ParseAddDeviceJournalEntryResponse(rsp)
+}
+
+// ListDeviceLabelsWithResponse request returning *ListDeviceLabelsResponse
+func (c *ClientWithResponses) ListDeviceLabelsWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*ListDeviceLabelsResponse, error) {
+	rsp, err := c.ListDeviceLabels(ctx, name, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListDeviceLabelsResponse(rsp)
+}
+
+// RemoveDeviceLabelWithResponse request returning *RemoveDeviceLabelResponse
+func (c *ClientWithResponses) RemoveDeviceLabelWithResponse(ctx context.Context, name string, key string, reqEditors ...RequestEditorFn) (*RemoveDeviceLabelResponse, error) {
+	rsp, err := c.RemoveDeviceLabel(ctx, name, key, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseRemoveDeviceLabelResponse(rsp)
+}
+
+// SetDeviceLabelWithBodyWithResponse request with arbitrary body returning *SetDeviceLabelResponse
+func (c *ClientWithResponses) SetDeviceLabelWithBodyWithResponse(ctx context.Context, name string, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*SetDeviceLabelResponse, error) {
+	rsp, err := c.SetDeviceLabelWithBody(ctx, name, key, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseSetDeviceLabelResponse(rsp)
+}
+
+func (c *ClientWithResponses) SetDeviceLabelWithResponse(ctx context.Context, name string, key string, body SetDeviceLabelJSONRequestBody, reqEditors ...RequestEditorFn) (*SetDeviceLabelResponse, error) {
+	rsp, err := c.SetDeviceLabel(ctx, name, key, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseSetDeviceLabelResponse(rsp)
 }
 
 // ListDeviceTagsWithResponse request returning *ListDeviceTagsResponse
@@ -5542,6 +6177,41 @@ func (c *ClientWithResponses) AddVirtualJournalEntryWithResponse(ctx context.Con
 		return nil, err
 	}
 	return ParseAddVirtualJournalEntryResponse(rsp)
+}
+
+// ListVirtualLabelsWithResponse request returning *ListVirtualLabelsResponse
+func (c *ClientWithResponses) ListVirtualLabelsWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*ListVirtualLabelsResponse, error) {
+	rsp, err := c.ListVirtualLabels(ctx, name, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListVirtualLabelsResponse(rsp)
+}
+
+// RemoveVirtualLabelWithResponse request returning *RemoveVirtualLabelResponse
+func (c *ClientWithResponses) RemoveVirtualLabelWithResponse(ctx context.Context, name string, key string, reqEditors ...RequestEditorFn) (*RemoveVirtualLabelResponse, error) {
+	rsp, err := c.RemoveVirtualLabel(ctx, name, key, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseRemoveVirtualLabelResponse(rsp)
+}
+
+// SetVirtualLabelWithBodyWithResponse request with arbitrary body returning *SetVirtualLabelResponse
+func (c *ClientWithResponses) SetVirtualLabelWithBodyWithResponse(ctx context.Context, name string, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*SetVirtualLabelResponse, error) {
+	rsp, err := c.SetVirtualLabelWithBody(ctx, name, key, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseSetVirtualLabelResponse(rsp)
+}
+
+func (c *ClientWithResponses) SetVirtualLabelWithResponse(ctx context.Context, name string, key string, body SetVirtualLabelJSONRequestBody, reqEditors ...RequestEditorFn) (*SetVirtualLabelResponse, error) {
+	rsp, err := c.SetVirtualLabel(ctx, name, key, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseSetVirtualLabelResponse(rsp)
 }
 
 // RemoveVirtualTagWithResponse request returning *RemoveVirtualTagResponse
@@ -6134,6 +6804,98 @@ func ParseAddDeviceJournalEntryResponse(rsp *http.Response) (*AddDeviceJournalEn
 			return nil, err
 		}
 		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListDeviceLabelsResponse parses an HTTP response from a ListDeviceLabelsWithResponse call
+func ParseListDeviceLabelsResponse(rsp *http.Response) (*ListDeviceLabelsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListDeviceLabelsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []*Label
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseRemoveDeviceLabelResponse parses an HTTP response from a RemoveDeviceLabelWithResponse call
+func ParseRemoveDeviceLabelResponse(rsp *http.Response) (*RemoveDeviceLabelResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &RemoveDeviceLabelResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseSetDeviceLabelResponse parses an HTTP response from a SetDeviceLabelWithResponse call
+func ParseSetDeviceLabelResponse(rsp *http.Response) (*SetDeviceLabelResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &SetDeviceLabelResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Label
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -7018,6 +7780,98 @@ func ParseAddVirtualJournalEntryResponse(rsp *http.Response) (*AddVirtualJournal
 			return nil, err
 		}
 		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListVirtualLabelsResponse parses an HTTP response from a ListVirtualLabelsWithResponse call
+func ParseListVirtualLabelsResponse(rsp *http.Response) (*ListVirtualLabelsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListVirtualLabelsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []*Label
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseRemoveVirtualLabelResponse parses an HTTP response from a RemoveVirtualLabelWithResponse call
+func ParseRemoveVirtualLabelResponse(rsp *http.Response) (*RemoveVirtualLabelResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &RemoveVirtualLabelResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseSetVirtualLabelResponse parses an HTTP response from a SetVirtualLabelWithResponse call
+func ParseSetVirtualLabelResponse(rsp *http.Response) (*SetVirtualLabelResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &SetVirtualLabelResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Label
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse

@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/generative/model_context/parameter"
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -18,11 +19,23 @@ func (s *Server) getDevice(
 		return response.Fail("name is required: %v", f)
 	}
 
-	result, g := s.client.DeviceByName(name)
+	d, g := s.client.DeviceByName(name)
 
 	if g != nil {
 		return s.captureFail(g, "device not found")
 	}
 
-	return response.SuccessAny(convert.Device(result))
+	labels, e := s.store.Labels(
+		constant.DeviceAddress,
+		d.Identifier,
+	)
+
+	if e != nil {
+		return s.captureFail(e, "labels not listed for device")
+	}
+
+	result := convert.Device(d)
+	result.Labels = new(convert.Labels(labels))
+
+	return response.SuccessAny(result)
 }

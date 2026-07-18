@@ -6,11 +6,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/telemetry"
 	generated "github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/server"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/store"
 	"github.com/funtimecoding/soil/pkg/web"
 	"net/http"
 )
@@ -19,8 +21,11 @@ func Run(
 	o *option.Netbox,
 	r face.Reporter,
 ) {
+	l := logger.New(context.Background())
+	s := store.New(relational.Open(l, o.PostgresLocator, o.LitePath))
+	defer s.Close()
 	lifecycle.New(
-		logger.New(context.Background()),
+		l,
 		lifecycle.WithServer(
 			lifecycleServer.New(
 				o.Address,
@@ -28,7 +33,7 @@ func Run(
 					t := telemetry.NewEnvironment()
 					generated.HandlerFromMux(
 						generated.NewStrictHandler(
-							server.New(o.Client, r),
+							server.New(o.Client, s, r),
 							[]generated.StrictMiddlewareFunc{
 								func(
 									f generated.StrictHandlerFunc,
@@ -52,6 +57,7 @@ func Run(
 					)
 					model_context.New(
 						o.Client,
+						s,
 						r,
 						t,
 						o.Version,

@@ -7,24 +7,27 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 )
 
-func (s *Server) GetDevice(
+func (s *Server) ListDeviceLabels(
 	_ context.Context,
-	r server.GetDeviceRequestObject,
-) (server.GetDeviceResponseObject, error) {
+	r server.ListDeviceLabelsRequestObject,
+) (server.ListDeviceLabelsResponseObject, error) {
 	d, e := s.client.DeviceByName(r.Name)
 
 	if e != nil {
-		return server.GetDevice500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListDeviceLabels500JSONResponse(
+			*s.captureDetail(e),
+		), nil
 	}
 
 	labels, e := s.store.Labels(constant.DeviceAddress, d.Identifier)
 
 	if e != nil {
-		return server.GetDevice500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListDeviceLabels500JSONResponse(
+			*s.captureDetail(e),
+		), nil
 	}
 
-	result := convert.Device(d)
-	result.Labels = new(convert.Labels(labels))
-
-	return server.GetDevice200JSONResponse(*result), nil
+	return server.ListDeviceLabels200JSONResponse(
+		convert.Labels(labels),
+	), nil
 }

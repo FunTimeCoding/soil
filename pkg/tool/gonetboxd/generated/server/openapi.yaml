@@ -961,6 +961,178 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/devices/{name}/labels:
+    get:
+      operationId: listDeviceLabels
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Device name.
+      responses:
+        "200":
+          description: Labels on the device, ordered by key.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/Label"
+        "500":
+          description: Failed to list labels.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/devices/{name}/labels/{key}:
+    put:
+      operationId: setDeviceLabel
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Device name.
+      - name: key
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Label key.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SetLabelRequest"
+      responses:
+        "200":
+          description: Label set.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Label"
+        "500":
+          description: Failed to set label.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: removeDeviceLabel
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Device name.
+      - name: key
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Label key.
+      responses:
+        "204":
+          description: Label removed.
+        "500":
+          description: Failed to remove label.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/virtual-machines/{name}/labels:
+    get:
+      operationId: listVirtualLabels
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Virtual machine name.
+      responses:
+        "200":
+          description: Labels on the virtual machine, ordered by key.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/Label"
+        "500":
+          description: Failed to list labels.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/virtual-machines/{name}/labels/{key}:
+    put:
+      operationId: setVirtualLabel
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Virtual machine name.
+      - name: key
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Label key.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SetLabelRequest"
+      responses:
+        "200":
+          description: Label set.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Label"
+        "500":
+          description: Failed to set label.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: removeVirtualLabel
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Virtual machine name.
+      - name: key
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Label key.
+      responses:
+        "204":
+          description: Label removed.
+        "500":
+          description: Failed to remove label.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /api/v1/devices/{name}/journal-entries:
     get:
       operationId: listDeviceJournalEntries
@@ -1175,6 +1347,12 @@ components:
             type: string
         link:
           type: string
+        labels:
+          type: array
+          items:
+            nullable: true
+            allOf:
+            - $ref: "#/components/schemas/Label"
     Interface:
       type: object
       required:
@@ -1455,6 +1633,23 @@ components:
         name:
           type: string
           description: Interface name (e.g. ens3, eth0).
+    Label:
+      type: object
+      required:
+      - key
+      - value
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+    SetLabelRequest:
+      type: object
+      required:
+      - value
+      properties:
+        value:
+          type: string
     JournalEntry:
       type: object
       required:
