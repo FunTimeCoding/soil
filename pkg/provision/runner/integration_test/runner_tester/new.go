@@ -23,9 +23,14 @@ func New(t *testing.T) *Tester {
 	c.Directory = clone
 	c.Start(
 		"git",
-		"-c", "user.name=runner-tester",
-		"-c", "user.email=runner-tester@localhost",
-		"commit", "--allow-empty", "-m", "initial",
+		"-c",
+		"user.name=runner-tester",
+		"-c",
+		"user.email=runner-tester@localhost",
+		"commit",
+		"--allow-empty",
+		"-m",
+		"initial",
 	)
 	c = run.New()
 	c.Directory = clone

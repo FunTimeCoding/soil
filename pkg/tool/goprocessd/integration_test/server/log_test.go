@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/integration_test/tester"
 	"strings"
 	"testing"
-	"time"
 )
 
 func TestLogCapturesOutput(t *testing.T) {
@@ -14,9 +13,7 @@ func TestLogCapturesOutput(t *testing.T) {
 		"alfa: sh -c 'echo hello-from-alfa && sleep 60'\n",
 		"",
 	)
-	time.Sleep(200 * time.Millisecond)
-	log := s.Send("log", "alfa")
-	assert.True(t, strings.Contains(log, "hello-from-alfa"))
+	s.WaitContains(t, "hello-from-alfa", "log", "alfa")
 }
 
 func TestLogUnknownProcess(t *testing.T) {
