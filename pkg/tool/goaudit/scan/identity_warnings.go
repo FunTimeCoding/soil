@@ -39,7 +39,7 @@ func IdentityWarnings(
 
 		result = append(
 			result,
-			identityConcerns(v, path, name)...,
+			IdentityConcerns(v, path, name)...,
 		)
 	}
 

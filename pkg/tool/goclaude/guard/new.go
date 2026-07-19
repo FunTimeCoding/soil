@@ -23,7 +23,7 @@ func New() *cobra.Command {
 				return
 			}
 
-			v := verdict(runtime.GOOS, i.ToolInput.Command)
+			v := Verdict(runtime.GOOS, i.ToolInput.Command)
 
 			if v == "" {
 				return

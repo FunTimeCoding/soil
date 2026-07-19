@@ -27,7 +27,7 @@ func (s *Service) EditPage(
 	}
 
 	markdown := page.ToMarkdown(current.Raw.Body.Storage.Value)
-	newMarkdown, f := replaceUnique(markdown, oldText, newText)
+	newMarkdown, f := ReplaceUnique(markdown, oldText, newText)
 
 	if f != nil {
 		return nil, f

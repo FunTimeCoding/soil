@@ -2,7 +2,7 @@ package gofix
 
 import "github.com/funtimecoding/soil/pkg/lint/output"
 
-func runVariableNamingFixWithDirectory(
+func RunVariableNamingFixWithDirectory(
 	patterns []string,
 	directory string,
 	diff bool,
@@ -12,12 +12,12 @@ func runVariableNamingFixWithDirectory(
 		patterns = []string{"./..."}
 	}
 
-	all, fileSet := load(directory, patterns)
+	all, fileSet := Load(directory, patterns)
 	edits := findVariableNamingEdits(fileSet, all, r)
 
 	if len(edits) == 0 {
 		return
 	}
 
-	applyEdits(fileSet, edits, directory, diff)
+	ApplyEdits(fileSet, edits, directory, diff)
 }

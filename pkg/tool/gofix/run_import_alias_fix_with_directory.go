@@ -2,7 +2,7 @@ package gofix
 
 import "github.com/funtimecoding/soil/pkg/lint/output"
 
-func runImportAliasFixWithDirectory(
+func RunImportAliasFixWithDirectory(
 	patterns []string,
 	directory string,
 	diff bool,
@@ -12,12 +12,12 @@ func runImportAliasFixWithDirectory(
 		patterns = []string{"./..."}
 	}
 
-	all, fileSet := load(directory, patterns)
+	all, fileSet := Load(directory, patterns)
 	edits := findImportAliasEdits(fileSet, all, r)
 
 	if len(edits) == 0 {
 		return
 	}
 
-	applyEdits(fileSet, edits, directory, diff)
+	ApplyEdits(fileSet, edits, directory, diff)
 }

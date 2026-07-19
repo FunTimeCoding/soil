@@ -7,5 +7,5 @@ func runImportAliasFix(
 	diff bool,
 	r *output.Results,
 ) {
-	runImportAliasFixWithDirectory(patterns, "", diff, r)
+	RunImportAliasFixWithDirectory(patterns, "", diff, r)
 }

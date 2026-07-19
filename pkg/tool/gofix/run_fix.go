@@ -11,18 +11,18 @@ func runFix(
 		patterns = []string{"./..."}
 	}
 
-	all, fileSet := load("", patterns)
-	violations := findViolations(all)
+	all, fileSet := Load("", patterns)
+	violations := FindViolations(all)
 
 	if len(violations) == 0 {
 		return
 	}
 
-	edits := buildAllEdits(fileSet, all, violations, r)
-	applyEdits(fileSet, edits, "", diff)
+	edits := BuildAllEdits(fileSet, all, violations, r)
+	ApplyEdits(fileSet, edits, "", diff)
 
 	if !diff {
-		loadedFiles := buildLoadedFiles(all)
-		fixUnloadedReferences(violations, loadedFiles, "", r)
+		loadedFiles := BuildLoadedFiles(all)
+		FixUnloadedReferences(violations, loadedFiles, "", r)
 	}
 }

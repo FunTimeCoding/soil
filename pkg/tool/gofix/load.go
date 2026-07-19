@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-func load(
+func Load(
 	directory string,
 	patterns []string,
 ) ([]*packages.Package, *token.FileSet) {

@@ -7,5 +7,5 @@ func runVariableNamingFix(
 	diff bool,
 	r *output.Results,
 ) {
-	runVariableNamingFixWithDirectory(patterns, "", diff, r)
+	RunVariableNamingFixWithDirectory(patterns, "", diff, r)
 }

@@ -2,7 +2,7 @@ package gofix
 
 import "github.com/funtimecoding/soil/pkg/lint/output"
 
-func runCallFormatFixWithDirectory(
+func RunCallFormatFixWithDirectory(
 	patterns []string,
 	directory string,
 	r *output.Results,
@@ -11,12 +11,12 @@ func runCallFormatFixWithDirectory(
 		patterns = []string{"./..."}
 	}
 
-	all, fileSet := load(directory, patterns)
+	all, fileSet := Load(directory, patterns)
 	edits := findCallFormatEdits(all, r)
 
 	if len(edits) == 0 {
 		return
 	}
 
-	applyEdits(fileSet, edits, directory, false)
+	ApplyEdits(fileSet, edits, directory, false)
 }

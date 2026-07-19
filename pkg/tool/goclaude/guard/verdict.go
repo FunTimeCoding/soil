@@ -7,7 +7,7 @@ import (
 
 var sedInvocation = regexp.MustCompile(`(^|[|&;(\s])sed(\s|$)`)
 
-func verdict(
+func Verdict(
 	system string,
 	command string,
 ) string {

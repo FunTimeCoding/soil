@@ -6,6 +6,6 @@ var deadTagPattern = regexp.MustCompile(
 	`(\S+)@(\S+): reading .+ unknown revision`,
 )
 
-func isDeadTag(stderr string) bool {
+func IsDeadTag(stderr string) bool {
 	return deadTagPattern.MatchString(stderr)
 }

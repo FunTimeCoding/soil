@@ -5,7 +5,7 @@ import (
 	"golang.org/x/tools/go/packages"
 )
 
-func findViolations(all []*packages.Package) []violation {
+func FindViolations(all []*packages.Package) []violation {
 	var result []violation
 	seen := make(map[token.Pos]bool)
 

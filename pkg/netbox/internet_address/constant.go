@@ -16,7 +16,6 @@ const (
 	SubnetAddress = "ipam.prefix"
 
 	NoObjectType = "no object type"
-
 )
 
 var ObjectTypes = []string{

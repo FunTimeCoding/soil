@@ -21,7 +21,7 @@ func Update(
 
 	r.Start(constant.Go, constant.Get, name)
 
-	if r.Error != nil && isDeadTag(r.ErrorString) {
+	if r.Error != nil && IsDeadTag(r.ErrorString) {
 		if recovered := recoverDeadTag(
 			name,
 			r.ErrorString,

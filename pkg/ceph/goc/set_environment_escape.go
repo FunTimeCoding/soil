@@ -2,7 +2,7 @@ package goc
 
 import "fmt"
 
-func setEnvironmentEscape(
+func SetEnvironmentEscape(
 	k string,
 	v string,
 ) {

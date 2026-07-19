@@ -11,7 +11,7 @@ import (
 	"strings"
 )
 
-func fixUnloadedReferences(
+func FixUnloadedReferences(
 	violations []violation,
 	loadedFiles map[string]bool,
 	directory string,

@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func replaceUnique(
+func ReplaceUnique(
 	content string,
 	oldText string,
 	newText string,

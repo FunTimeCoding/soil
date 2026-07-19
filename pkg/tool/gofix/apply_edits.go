@@ -7,7 +7,7 @@ import (
 	"sort"
 )
 
-func applyEdits(
+func ApplyEdits(
 	fileSet *token.FileSet,
 	edits []edit,
 	directory string,

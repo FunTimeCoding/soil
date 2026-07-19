@@ -2,7 +2,7 @@ package gofix
 
 import "golang.org/x/tools/go/packages"
 
-func buildLoadedFiles(all []*packages.Package) map[string]bool {
+func BuildLoadedFiles(all []*packages.Package) map[string]bool {
 	result := make(map[string]bool)
 
 	for _, p := range all {

@@ -10,5 +10,5 @@ func (s *Service) checkIdentity(
 		return
 	}
 
-	s.Concerns = append(s.Concerns, identityConcerns(v, path, s.Name)...)
+	s.Concerns = append(s.Concerns, IdentityConcerns(v, path, s.Name)...)
 }

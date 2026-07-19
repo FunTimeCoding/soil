@@ -11,7 +11,7 @@ func recoverDeadTag(
 	stderr string,
 	skipProxy bool,
 ) *run.Run {
-	mod, version := parseDeadTag(stderr)
+	mod, version := ParseDeadTag(stderr)
 
 	if mod == "" {
 		return nil

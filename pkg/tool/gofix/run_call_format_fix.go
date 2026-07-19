@@ -7,5 +7,5 @@ func runCallFormatFix(
 	diff bool,
 	r *output.Results,
 ) {
-	runCallFormatFixWithDirectory(patterns, "", r)
+	RunCallFormatFixWithDirectory(patterns, "", r)
 }

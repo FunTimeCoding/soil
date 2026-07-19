@@ -1,6 +1,6 @@
 package go_mod
 
-func parseDeadTag(stderr string) (string, string) {
+func ParseDeadTag(stderr string) (string, string) {
 	m := deadTagPattern.FindStringSubmatch(stderr)
 
 	if m == nil {

@@ -7,5 +7,5 @@ func runSingleParameterFix(
 	diff bool,
 	r *output.Results,
 ) {
-	runSingleParameterFixWithDirectory(patterns, "", r)
+	RunSingleParameterFixWithDirectory(patterns, "", r)
 }

@@ -14,7 +14,7 @@ func runSurvey(patterns []string) {
 
 	counts := make(map[string]int)
 	examples := make(map[string][]string)
-	all, _ := load("", patterns)
+	all, _ := Load("", patterns)
 
 	for _, p := range all {
 		generated := buildGeneratedSet(p)

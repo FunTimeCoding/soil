@@ -18,7 +18,7 @@ var (
 		Topic,
 		Files,
 	}
-	Identity              = identity.New(
+	Identity = identity.New(
 		"goclauded",
 		"Session coordination for parallel Claude Code sessions",
 		"goclauded",

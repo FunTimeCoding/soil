@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 )
 
-func identityConcerns(
+func IdentityConcerns(
 	v *virtual_file_system.System,
 	path string,
 	name string,

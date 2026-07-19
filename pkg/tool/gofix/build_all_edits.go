@@ -10,7 +10,7 @@ import (
 	"golang.org/x/tools/go/packages"
 )
 
-func buildAllEdits(
+func BuildAllEdits(
 	fileSet *token.FileSet,
 	all []*packages.Package,
 	violations []violation,
