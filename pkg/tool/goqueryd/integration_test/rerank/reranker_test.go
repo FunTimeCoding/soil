@@ -7,11 +7,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/rerank"
 	"testing"
 )
 
 func TestRank(t *testing.T) {
-	r, e := New(
+	r, e := rerank.New(
 		environment.Required(constant.ModelEnvironment),
 		environment.Required(constant.TokenizerEnvironment),
 	)

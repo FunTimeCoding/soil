@@ -1,6 +1,4 @@
-//go:build local
-
-package store
+package unit_test
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
@@ -13,14 +11,14 @@ import (
 )
 
 func TestIndexNewDocuments(t *testing.T) {
-	s, _ := indexedTestStore(t)
+	s := indexedTestStore(t)
 	defer s.Close()
 	status := s.MustStatus()
 	assert.Integer(t, 5, status.TotalDocuments)
 }
 
 func TestIndexUnchanged(t *testing.T) {
-	s, _ := indexedTestStore(t)
+	s := indexedTestStore(t)
 	defer s.Close()
 	result := s.Index("test")
 	assert.Integer(t, 0, result.Indexed)
@@ -29,7 +27,7 @@ func TestIndexUnchanged(t *testing.T) {
 }
 
 func TestIndexUpdatedContent(t *testing.T) {
-	s, _ := openTestStore(t)
+	s := openTestStore(t)
 	defer s.Close()
 	directory := t.TempDir()
 	writeFixture(t, directory, "doc.md", "# Original\n\nOriginal content.\n")
@@ -42,7 +40,7 @@ func TestIndexUpdatedContent(t *testing.T) {
 }
 
 func TestIndexRemovedDocument(t *testing.T) {
-	s, _ := openTestStore(t)
+	s := openTestStore(t)
 	defer s.Close()
 	directory := t.TempDir()
 	writeFixture(t, directory, "keep.md", "# Keep\n\nStays.\n")
@@ -57,7 +55,7 @@ func TestIndexRemovedDocument(t *testing.T) {
 }
 
 func TestIndexSkipsHiddenFiles(t *testing.T) {
-	s, _ := openTestStore(t)
+	s := openTestStore(t)
 	defer s.Close()
 	directory := t.TempDir()
 	writeFixture(t, directory, "visible.md", "# Visible\n\nContent.\n")
@@ -68,7 +66,7 @@ func TestIndexSkipsHiddenFiles(t *testing.T) {
 }
 
 func TestIndexSkipsGeneratedFiles(t *testing.T) {
-	s, _ := openTestStore(t)
+	s := openTestStore(t)
 	defer s.Close()
 	directory := t.TempDir()
 	writeFixture(

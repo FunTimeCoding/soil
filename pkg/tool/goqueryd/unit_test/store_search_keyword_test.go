@@ -1,6 +1,4 @@
-//go:build local
-
-package store
+package unit_test
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
@@ -9,7 +7,7 @@ import (
 )
 
 func TestSearchKeywordFindsDocument(t *testing.T) {
-	s, _ := indexedTestStore(t)
+	s := indexedTestStore(t)
 	defer s.Close()
 	results := s.MustSearchKeyword("hybrid search pipeline", 10, "", false)
 	assert.Count(t, 1, results)
@@ -17,7 +15,7 @@ func TestSearchKeywordFindsDocument(t *testing.T) {
 }
 
 func TestSearchKeywordRanking(t *testing.T) {
-	s, _ := indexedTestStore(t)
+	s := indexedTestStore(t)
 	defer s.Close()
 	results := s.MustSearchKeyword("documents", 10, "", false)
 	assert.Greater(t, 0, results[0].Score)
@@ -25,7 +23,7 @@ func TestSearchKeywordRanking(t *testing.T) {
 }
 
 func TestSearchKeywordCollectionFilter(t *testing.T) {
-	s, _ := openTestStore(t)
+	s := openTestStore(t)
 	defer s.Close()
 	first := t.TempDir()
 	second := t.TempDir()
@@ -43,14 +41,14 @@ func TestSearchKeywordCollectionFilter(t *testing.T) {
 }
 
 func TestSearchKeywordVirtualPath(t *testing.T) {
-	s, _ := indexedTestStore(t)
+	s := indexedTestStore(t)
 	defer s.Close()
 	results := s.MustSearchKeyword("hybrid search pipeline", 10, "", false)
 	assert.String(t, "qmd://test/alpha.md", results[0].VirtualPath)
 }
 
 func TestSearchKeywordNegation(t *testing.T) {
-	s, _ := indexedTestStore(t)
+	s := indexedTestStore(t)
 	defer s.Close()
 	all := s.MustSearchKeyword("search documents", 10, "", false)
 	negated := s.MustSearchKeyword("search -pipeline", 10, "", false)
@@ -58,7 +56,7 @@ func TestSearchKeywordNegation(t *testing.T) {
 }
 
 func TestSearchKeywordQuotedPhrase(t *testing.T) {
-	s, _ := openTestStore(t)
+	s := openTestStore(t)
 	defer s.Close()
 	directory := t.TempDir()
 	writeFixture(

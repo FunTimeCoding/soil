@@ -1,16 +1,15 @@
-//go:build local
-
-package store
+package unit_test
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
 	"strings"
 	"testing"
 )
 
 func TestExtractSnippetFindsQueryTerms(t *testing.T) {
-	snippet, line := ExtractSnippet(
+	snippet, line := store.ExtractSnippet(
 		constant.TestBody,
 		"keyword matching",
 		0,
@@ -22,7 +21,7 @@ func TestExtractSnippetFindsQueryTerms(t *testing.T) {
 
 func TestExtractSnippetWithChunkPosition(t *testing.T) {
 	position := strings.Index(constant.TestBody, "## Cross-Encoder Reranking")
-	snippet, line := ExtractSnippet(
+	snippet, line := store.ExtractSnippet(
 		constant.TestBody,
 		"cross-encoder scores pair",
 		position,
@@ -32,7 +31,7 @@ func TestExtractSnippetWithChunkPosition(t *testing.T) {
 }
 
 func TestExtractSnippetEmptyBody(t *testing.T) {
-	snippet, line := ExtractSnippet("", "anything", 0)
+	snippet, line := store.ExtractSnippet("", "anything", 0)
 	assert.String(t, "", snippet)
 	assert.Float(t, 0, float64(line))
 }
@@ -42,7 +41,7 @@ func TestExtractSnippetTruncatesLongResult(t *testing.T) {
 		"keyword matching vector similarity cross-encoder reranking\n",
 		50,
 	)
-	snippet, _ := ExtractSnippet(long, "keyword", 0)
+	snippet, _ := store.ExtractSnippet(long, "keyword", 0)
 	assert.Less(
 		t,
 		float64(constant.SnippetMaxLength+1),

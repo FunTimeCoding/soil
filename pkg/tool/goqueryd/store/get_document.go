@@ -53,7 +53,7 @@ func (s *Store) GetDocument(reference string) (*result.Document, error) {
 
 	d.VirtualPath = buildVirtualPath(d.Collection, d.Path)
 	d.FilePath = join.Empty(d.Collection, separator.Slash, d.Path)
-	d.Context = s.resolveContext(d.Collection, d.Path)
+	d.Context = s.ResolveContext(d.Collection, d.Path)
 
 	return &d, nil
 }

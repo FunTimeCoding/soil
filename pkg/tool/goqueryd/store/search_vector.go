@@ -52,7 +52,7 @@ func (s *Store) SearchVector(
 			Hash:          c.hash,
 			Score:         1 - c.distance,
 			Source:        "vec",
-			Context:       s.resolveContext(c.collection, c.path),
+			Context:       s.ResolveContext(c.collection, c.path),
 			ChunkPosition: c.position,
 		}
 		snippet, line := ExtractSnippet(c.body, query, r.ChunkPosition)

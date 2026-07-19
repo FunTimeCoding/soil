@@ -21,7 +21,7 @@ func ExpandQuery(
 		return nil, e
 	}
 
-	result := parseExpandedQueries(response.Text, query)
+	result := ParseExpandedQueries(response.Text, query)
 
 	if len(result) == 0 {
 		return []ExpandedQuery{

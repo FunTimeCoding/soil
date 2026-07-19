@@ -12,7 +12,7 @@ func (s *Store) SearchKeyword(
 	collection string,
 	full bool,
 ) ([]SearchResult, error) {
-	fullTextSearch := buildFullTextSearchQuery(query)
+	fullTextSearch := BuildFullTextSearchQuery(query)
 
 	if fullTextSearch == "" {
 		return nil, nil
@@ -74,7 +74,7 @@ func (s *Store) SearchKeyword(
 		}
 
 		r.VirtualPath = buildVirtualPath(r.Collection, r.Path)
-		r.Context = s.resolveContext(r.Collection, r.Path)
+		r.Context = s.ResolveContext(r.Collection, r.Path)
 		r.Score = math.Abs(bm25) / (1 + math.Abs(bm25))
 		r.Source = "full_text_search"
 		snippet, line := ExtractSnippet(body, query, 0)

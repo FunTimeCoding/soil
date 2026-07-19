@@ -1,6 +1,4 @@
-//go:build local
-
-package store
+package unit_test
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
@@ -9,7 +7,7 @@ import (
 )
 
 func TestGetDocumentByRelativePath(t *testing.T) {
-	s, _ := indexedTestStore(t)
+	s := indexedTestStore(t)
 	defer s.Close()
 	d := s.MustGetDocument("test/alpha.md")
 	assert.NotNil(t, d)
@@ -18,7 +16,7 @@ func TestGetDocumentByRelativePath(t *testing.T) {
 }
 
 func TestGetDocumentByVirtualPath(t *testing.T) {
-	s, _ := indexedTestStore(t)
+	s := indexedTestStore(t)
 	defer s.Close()
 	d := s.MustGetDocument("qmd://test/alpha.md")
 	assert.NotNil(t, d)
@@ -27,14 +25,14 @@ func TestGetDocumentByVirtualPath(t *testing.T) {
 }
 
 func TestGetDocumentNotFound(t *testing.T) {
-	s, _ := indexedTestStore(t)
+	s := indexedTestStore(t)
 	defer s.Close()
 	d := s.MustGetDocument("test/nonexistent.md")
 	assert.Nil(t, d)
 }
 
 func TestGetDocumentWithContext(t *testing.T) {
-	s, _ := indexedTestStore(t)
+	s := indexedTestStore(t)
 	defer s.Close()
 	s.AddContext("test", separator.Slash, "root context")
 	d := s.MustGetDocument("test/alpha.md")

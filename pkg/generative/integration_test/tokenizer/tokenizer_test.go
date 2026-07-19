@@ -4,11 +4,12 @@ package tokenizer
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/tokenizer"
 	"testing"
 )
 
 func TestCount(t *testing.T) {
-	e, f := New()
+	e, f := tokenizer.New()
 	assert.FatalOnError(t, f)
 	assert.Integer(t, 3, e.Count("Hello world!"))
 	assert.Integer(t, 2, e.Count("The fox"))
@@ -19,7 +20,7 @@ func TestCount(t *testing.T) {
 }
 
 func TestTokens(t *testing.T) {
-	e, f := New()
+	e, f := tokenizer.New()
 	assert.FatalOnError(t, f)
 	tokens := e.Tokens("Hello world!")
 	assert.Count(t, 3, tokens)

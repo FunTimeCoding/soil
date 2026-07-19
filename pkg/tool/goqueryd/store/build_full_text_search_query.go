@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func buildFullTextSearchQuery(query string) string {
+func BuildFullTextSearchQuery(query string) string {
 	s := strings.TrimSpace(query)
 	var positive, negative []string
 	i := 0

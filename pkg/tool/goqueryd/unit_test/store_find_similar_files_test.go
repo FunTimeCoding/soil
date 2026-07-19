@@ -1,6 +1,4 @@
-//go:build local
-
-package store
+package unit_test
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
@@ -8,7 +6,7 @@ import (
 )
 
 func TestFindSimilarFiles(t *testing.T) {
-	s, _ := indexedTestStore(t)
+	s := indexedTestStore(t)
 	defer s.Close()
 	similar := s.MustFindSimilarFiles("test/alfa.md", 5)
 	assert.Greater(t, 0, float64(len(similar)))
@@ -16,7 +14,7 @@ func TestFindSimilarFiles(t *testing.T) {
 }
 
 func TestFindSimilarFilesNoMatch(t *testing.T) {
-	s, _ := indexedTestStore(t)
+	s := indexedTestStore(t)
 	defer s.Close()
 	similar := s.MustFindSimilarFiles("completely-unrelated-path", 5)
 	assert.Count(t, 0, similar)

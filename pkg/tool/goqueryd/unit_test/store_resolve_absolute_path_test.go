@@ -1,6 +1,4 @@
-//go:build local
-
-package store
+package unit_test
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
@@ -8,7 +6,7 @@ import (
 )
 
 func TestResolveAbsolutePath(t *testing.T) {
-	s, _ := indexedTestStore(t)
+	s := indexedTestStore(t)
 	defer s.Close()
 	path := s.ResolveAbsolutePath("test", "alpha.md")
 	assert.StringContains(t, "alpha.md", path)

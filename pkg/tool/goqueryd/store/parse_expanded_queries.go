@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func parseExpandedQueries(
+func ParseExpandedQueries(
 	text string,
 	originalQuery string,
 ) []ExpandedQuery {

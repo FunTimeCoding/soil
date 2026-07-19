@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-func (s *Store) resolveContext(
+func (s *Store) ResolveContext(
 	collection string,
 	filePath string,
 ) string {

@@ -1,6 +1,4 @@
-//go:build local
-
-package store
+package unit_test
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
@@ -10,19 +8,19 @@ import (
 )
 
 func TestContextHierarchicalResolution(t *testing.T) {
-	s, _ := indexedTestStore(t)
+	s := indexedTestStore(t)
 	defer s.Close()
 	s.AddContext("test", separator.Slash, "root context")
 	s.AddContext("test", "/tools/", "tools context")
-	root := s.resolveContext("test", "alpha.md")
+	root := s.ResolveContext("test", "alpha.md")
 	assert.String(t, "root context", root)
-	sub := s.resolveContext("test", "tools/gamma.md")
+	sub := s.ResolveContext("test", "tools/gamma.md")
 	assert.StringContains(t, "root context", sub)
 	assert.StringContains(t, "tools context", sub)
 }
 
 func TestContextAttachedToSearchResults(t *testing.T) {
-	s, _ := indexedTestStore(t)
+	s := indexedTestStore(t)
 	defer s.Close()
 	s.AddContext("test", separator.Slash, "all documents")
 	results := s.MustSearchKeyword("hybrid search pipeline", 10, "", false)
@@ -31,7 +29,7 @@ func TestContextAttachedToSearchResults(t *testing.T) {
 }
 
 func TestContextAddOverwrites(t *testing.T) {
-	s, _ := openTestStore(t)
+	s := openTestStore(t)
 	defer s.Close()
 	directory := t.TempDir()
 	s.AddCollection("test", directory, constant.DefaultGlob)
@@ -43,7 +41,7 @@ func TestContextAddOverwrites(t *testing.T) {
 }
 
 func TestContextRemove(t *testing.T) {
-	s, _ := openTestStore(t)
+	s := openTestStore(t)
 	defer s.Close()
 	directory := t.TempDir()
 	s.AddCollection("test", directory, constant.DefaultGlob)
@@ -55,7 +53,7 @@ func TestContextRemove(t *testing.T) {
 }
 
 func TestContextRemoveNotFound(t *testing.T) {
-	s, _ := openTestStore(t)
+	s := openTestStore(t)
 	defer s.Close()
 	removed := s.RemoveContext("nonexistent", separator.Slash)
 	assert.False(t, removed)
