@@ -16,12 +16,17 @@ func New(t *testing.T) *Tester {
 	remote := filepath.Join(base, "remote")
 	clone := filepath.Join(base, "clone")
 	c := run.New()
-	c.Start("git", "init", "--bare", remote)
+	c.Start("git", "init", "--bare", "--initial-branch=main", remote)
 	c = run.New()
 	c.Start("git", "clone", remote, clone)
 	c = run.New()
 	c.Directory = clone
-	c.Start("git", "commit", "--allow-empty", "-m", "initial")
+	c.Start(
+		"git",
+		"-c", "user.name=runner-tester",
+		"-c", "user.email=runner-tester@localhost",
+		"commit", "--allow-empty", "-m", "initial",
+	)
 	c = run.New()
 	c.Directory = clone
 	c.Start("git", "push", "origin", "main")
