@@ -13,7 +13,7 @@ func NewContext(cluster string) (*Client, error) {
 		return nil, e
 	}
 
-	result, f := fromConfiguration(c, cluster)
+	result, f := FromConfiguration(c, cluster)
 
 	if f != nil {
 		return nil, f

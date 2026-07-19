@@ -25,6 +25,8 @@ const (
 	Interface = "/api"
 
 	SignatureHeader = "X-Hook-Signature"
+
+	FixtureAddress = "192.168.0.1/24"
 )
 
 var (

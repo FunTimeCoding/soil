@@ -15,6 +15,7 @@ func checkEntryGuards(
 	entries []*moveEntry,
 	packagePath string,
 	targetPackagePath string,
+	qualifyBackReferences bool,
 ) string {
 	if target != nil && importsTransitively(target, packagePath) {
 		return fmt.Sprintf(
@@ -31,14 +32,16 @@ func checkEntryGuards(
 	}
 
 	for _, entry := range entries {
-		dependencies := moveDependencies(p, excluded, entry.node)
+		if !qualifyBackReferences {
+			dependencies := moveDependencies(p, excluded, entry.node)
 
-		if len(dependencies) > 0 {
-			return fmt.Sprintf(
-				"%s references package-local symbols: %s",
-				entry.symbol,
-				strings.Join(dependencies, ", "),
-			)
+			if len(dependencies) > 0 {
+				return fmt.Sprintf(
+					"%s references package-local symbols: %s",
+					entry.symbol,
+					strings.Join(dependencies, ", "),
+				)
+			}
 		}
 
 		for _, c := range entry.carried {

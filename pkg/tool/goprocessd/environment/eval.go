@@ -36,7 +36,7 @@ func eval(
 
 	result := make(map[string]string)
 	scanner := bufio.NewScanner(strings.NewReader(output))
-	scanner.Split(splitNull)
+	scanner.Split(SplitNull)
 
 	for scanner.Scan() {
 		line := scanner.Text()

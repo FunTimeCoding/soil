@@ -33,7 +33,7 @@ func (c *Client) RunCommand(o *command.Command) *result.Result {
 	setEnvironment(s, o)
 	var text string
 
-	if prefix := environmentPrefix(o); prefix != "" {
+	if prefix := EnvironmentPrefix(o); prefix != "" {
 		text = key_value.Space(prefix, o.Command)
 	} else {
 		text = o.Command

@@ -9,7 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
-func fixtureOption() *option.Issue {
+func FixtureOption() *option.Issue {
 	return option.New(
 		locator.New(webConstant.Localhost).Insecure().String(),
 		"test",

@@ -131,6 +131,12 @@ func executeMove(
 		}
 	}
 
+	for _, entry := range plan.entries {
+		if len(entry.backIdentifiers) > 0 {
+			rewriteBackReferences(entry, plan.sourceLocalName)
+		}
+	}
+
 	groups := make(map[string][]*moveEntry)
 
 	for _, entry := range plan.entries {

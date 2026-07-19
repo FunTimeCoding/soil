@@ -15,4 +15,5 @@ type movePlan struct {
 	targetPackageName string
 	moveDirectory     string
 	createTarget      bool
+	sourceLocalName   string
 }

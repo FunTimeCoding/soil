@@ -93,7 +93,7 @@ func (s *Service) ExtractType(
 			}
 
 			entry.flipped = true
-			entry.newName = flipName(entry.symbol)
+			entry.newName = FlipName(entry.symbol)
 
 			break
 		}
@@ -135,6 +135,7 @@ func (s *Service) ExtractType(
 		entries,
 		packagePath,
 		targetPackagePath,
+		false,
 	); message != "" {
 		return failValidation(r, message)
 	}

@@ -50,6 +50,7 @@ func (s *Server) moveSymbols(
 		a.TargetPackagePath,
 		a.TargetFile,
 		a.Create,
+		a.QualifyBackReferences,
 	)
 
 	if e != nil {

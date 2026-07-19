@@ -12,7 +12,7 @@ func (s *Service) ChangeVisibility(
 		directory,
 		packagePath,
 		symbol,
-		flipName(symbol),
+		FlipName(symbol),
 		receiver,
 	)
 }

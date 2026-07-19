@@ -5,6 +5,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"go/ast"
+	"go/token"
+	"go/types"
 	"path"
 	"path/filepath"
 )
@@ -17,6 +19,7 @@ func (s *Service) MoveSymbols(
 	targetPackagePath string,
 	targetFile string,
 	create bool,
+	qualifyBackReferences bool,
 ) (*output.Results, error) {
 	r := output.NewResultsWithDirectory(directory)
 
@@ -135,6 +138,59 @@ func (s *Service) MoveSymbols(
 		}
 	}
 
+	sourceName := p.Types.Name()
+
+	if qualifyBackReferences {
+		excluded := make(map[token.Pos]bool)
+		moved := make(map[types.Object]bool)
+
+		for _, entry := range entries {
+			excluded[entry.object.Pos()] = true
+			moved[entry.object] = true
+		}
+
+		back := false
+
+		for _, entry := range entries {
+			idents := backReferenceIdentifiers(p, excluded, entry.node)
+
+			if len(idents) == 0 {
+				continue
+			}
+
+			back = true
+
+			for _, ident := range idents {
+				if o := p.TypesInfo.Uses[ident]; !o.Exported() {
+					return failValidation(
+						r,
+						fmt.Sprintf(
+							"%s references unexported %s - export it first",
+							entry.symbol,
+							o.Name(),
+						),
+					)
+				}
+			}
+
+			entry.backIdentifiers = idents
+			entry.carried = append(
+				entry.carried,
+				sourceImportSpec(packagePath),
+			)
+		}
+
+		if back && sourceReferencesMoved(p, entries, moved) {
+			return failValidation(
+				r,
+				fmt.Sprintf(
+					"move would create an import cycle: %s references a moved symbol",
+					packagePath,
+				),
+			)
+		}
+	}
+
 	if message := checkEntryGuards(
 		all,
 		p,
@@ -142,6 +198,7 @@ func (s *Service) MoveSymbols(
 		entries,
 		packagePath,
 		targetPackagePath,
+		qualifyBackReferences,
 	); message != "" {
 		return failValidation(r, message)
 	}
@@ -205,6 +262,7 @@ func (s *Service) MoveSymbols(
 			targetPackageName: targetPackageName,
 			moveDirectory:     moveDirectory,
 			createTarget:      target == nil,
+			sourceLocalName:   sourceName,
 		},
 	)
 }

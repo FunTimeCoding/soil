@@ -2,7 +2,7 @@ package web
 
 import "github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
 
-func pack(
+func Pack(
 	sections []*board.Section,
 	columns int,
 ) [][]*board.Section {

@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Server) tailGrid(values map[string][]string) gomponents.Node {
-	packed := pack(s.board.Tail.Sections, s.board.Tail.Columns)
+	packed := Pack(s.board.Tail.Sections, s.board.Tail.Columns)
 	var columns []gomponents.Node
 
 	for _, c := range packed {

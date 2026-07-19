@@ -1,6 +1,6 @@
 package environment
 
-func splitNull(
+func SplitNull(
 	content []byte,
 	atEOF bool,
 ) (int, []byte, error) {

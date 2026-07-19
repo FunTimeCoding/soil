@@ -7,7 +7,7 @@ import (
 )
 
 func New(clusters []string) *Client {
-	result, e := fromConfiguration(
+	result, e := FromConfiguration(
 		client_configuration.New(),
 		client_context.Current(),
 	)

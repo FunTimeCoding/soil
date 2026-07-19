@@ -15,7 +15,7 @@ func RelevantLabels(
 		m = append(m, metric.New(e.Metric))
 	}
 
-	return sortLabels(
+	return SortLabels(
 		strings.RemoveFromList(metric.DifferingLabels(m), ignore),
 	)
 }

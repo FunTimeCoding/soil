@@ -18,5 +18,6 @@ func (s *Service) MoveSymbol(
 		targetPackagePath,
 		targetFile,
 		create,
+		false,
 	)
 }

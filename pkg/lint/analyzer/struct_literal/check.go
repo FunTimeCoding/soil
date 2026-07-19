@@ -1,6 +1,7 @@
 package struct_literal
 
 import (
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/assert_call"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"go/ast"
 	"go/token"
@@ -22,6 +23,7 @@ func Check(
 			continue
 		}
 
+		expected := assert_call.ArgumentRanges(p, file)
 		ast.Inspect(
 			file,
 			func(n ast.Node) bool {
@@ -31,11 +33,14 @@ func Check(
 
 				switch node := n.(type) {
 				case *ast.UnaryExpr:
-					if node.Op == token.AND {
+					if node.Op == token.AND &&
+						!inExpectedArgument(expected, node.Pos()) {
 						checkUnary(p, results, node, module)
 					}
 				case *ast.CallExpr:
-					checkNew(p, results, node, module)
+					if !inExpectedArgument(expected, node.Pos()) {
+						checkNew(p, results, node, module)
+					}
 				}
 
 				return true

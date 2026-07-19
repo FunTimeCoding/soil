@@ -5,7 +5,7 @@ import (
 	"slices"
 )
 
-func sortLabels(s []string) []string {
+func SortLabels(s []string) []string {
 	var result []string
 
 	if slices.Contains(s, constant.NamespaceLabel) {

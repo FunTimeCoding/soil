@@ -23,7 +23,7 @@ func chooseImportName(
 	candidates := []string{
 		packageName,
 		subsystem,
-		join.Empty(subsystem, flipName(packageName)),
+		join.Empty(subsystem, FlipName(packageName)),
 	}
 
 	for _, c := range candidates {

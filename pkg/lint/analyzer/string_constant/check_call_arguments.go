@@ -1,6 +1,7 @@
 package string_constant
 
 import (
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/assert_call"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"go/ast"
 	"golang.org/x/tools/go/packages"
@@ -14,7 +15,7 @@ func checkCallArguments(
 ) {
 	skipIndex := -1
 
-	if isAssertCall(p, call) {
+	if assert_call.IsAssertCall(p, call) {
 		skipIndex = 1
 	}
 

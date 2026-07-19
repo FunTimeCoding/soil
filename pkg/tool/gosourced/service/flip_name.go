@@ -6,7 +6,7 @@ import (
 	"unicode/utf8"
 )
 
-func flipName(name string) string {
+func FlipName(name string) string {
 	r, size := utf8.DecodeRuneInString(name)
 
 	if unicode.IsUpper(r) {

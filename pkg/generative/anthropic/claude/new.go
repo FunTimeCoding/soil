@@ -6,10 +6,10 @@ import (
 )
 
 func New() *Client {
-	return &Client{
-		base: filepath.Join(
+	return NewDirectory(
+		filepath.Join(
 			system.StorageDirectory("goclauded", false),
 			"session",
 		),
-	}
+	)
 }

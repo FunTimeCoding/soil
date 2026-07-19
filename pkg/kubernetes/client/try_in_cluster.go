@@ -9,5 +9,5 @@ func TryInCluster(cluster string) (*Client, error) {
 		return nil, e
 	}
 
-	return fromConfiguration(configuration, cluster)
+	return FromConfiguration(configuration, cluster)
 }

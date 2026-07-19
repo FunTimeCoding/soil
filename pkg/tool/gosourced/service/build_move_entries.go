@@ -59,7 +59,7 @@ func buildMoveEntries(
 		flipped := false
 
 		if unicode.IsLower(rune(symbol[0])) {
-			newName = flipName(symbol)
+			newName = FlipName(symbol)
 			flipped = true
 		}
 

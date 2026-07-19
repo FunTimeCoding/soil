@@ -50,7 +50,7 @@ func fieldFlips(
 			)
 		}
 
-		newName := flipName(field.Name())
+		newName := FlipName(field.Name())
 
 		if memberNames[newName] {
 			return nil, fmt.Sprintf(

@@ -7,7 +7,7 @@ import (
 	"k8s.io/client-go/rest"
 )
 
-func fromConfiguration(
+func FromConfiguration(
 	configuration *rest.Config,
 	cluster string,
 ) (*Client, error) {
