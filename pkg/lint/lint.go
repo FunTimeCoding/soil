@@ -108,7 +108,7 @@ func Lint(
 			continue
 		}
 
-		if isExecutable(v.ReadString(p)) {
+		if IsExecutable(v.ReadString(p)) {
 			if fix {
 				system.Remove(p)
 				r.AddConcern(

@@ -2,7 +2,7 @@ package segment
 
 import "go/types"
 
-func parentScopeContains(
+func ParentScopeContains(
 	scope *types.Scope,
 	name string,
 ) bool {

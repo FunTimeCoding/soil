@@ -8,5 +8,5 @@ func ScopeContains(
 ) bool {
 	return s.Lookup(name) != nil ||
 		childScopeContains(s, name) ||
-		parentScopeContains(s, name)
+		ParentScopeContains(s, name)
 }

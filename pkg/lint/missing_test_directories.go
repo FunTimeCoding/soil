@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func missingTestDirectories(
+func MissingTestDirectories(
 	paths []string,
 	generatedPaths []string,
 ) map[string]string {

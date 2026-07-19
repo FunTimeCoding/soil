@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 )
 
-func formatConcern(c *concern.Concern) string {
+func FormatConcern(c *concern.Concern) string {
 	var location string
 
 	if c.Type == concern.Line && c.Line > 0 {

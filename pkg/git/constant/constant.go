@@ -5,8 +5,6 @@ import "github.com/funtimecoding/soil/pkg/console/status/option"
 const (
 	VersionPrefix = "v"
 
-	Depth int = 2 // Test directory depth from repository root
-
 	OriginRemote = "origin"
 
 	Directory = ".git"

@@ -24,7 +24,7 @@ func generateStubTests(
 		}
 	}
 
-	missing := missingTestDirectories(paths, generatedPaths)
+	missing := MissingTestDirectories(paths, generatedPaths)
 	directories := make([]string, 0, len(missing))
 
 	for d := range missing {

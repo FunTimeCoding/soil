@@ -13,7 +13,7 @@ func PrintResults(
 	seen := make(map[string]bool)
 
 	for _, c := range entries {
-		line := formatConcern(c)
+		line := FormatConcern(c)
 
 		if !c.Fixed {
 			hasBlocked = true

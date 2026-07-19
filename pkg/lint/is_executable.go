@@ -1,6 +1,6 @@
 package lint
 
-func isExecutable(content string) bool {
+func IsExecutable(content string) bool {
 	if len(content) < 4 {
 		return false
 	}
