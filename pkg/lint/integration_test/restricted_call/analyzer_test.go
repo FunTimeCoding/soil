@@ -2,6 +2,7 @@ package restricted_call
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/restricted_call"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"go/token"
@@ -9,7 +10,7 @@ import (
 	"testing"
 )
 
-var testRules = []Rule{
+var testRules = []restricted_call.Rule{
 	{
 		Package:   "example/fakegorm",
 		Function:  "Open",
@@ -38,7 +39,7 @@ func TestCheckRules(t *testing.T) {
 			t.Fatalf("package errors: %v", p.Errors)
 		}
 
-		CheckRules(p, results, testRules)
+		restricted_call.CheckRules(p, results, testRules)
 	}
 
 	testutil.AssertBlocked(t, results, 1)

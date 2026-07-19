@@ -1,13 +1,14 @@
 package forbidden_import
 
 import (
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/forbidden_import"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"os"
 	"path/filepath"
 	"testing"
 )
 
-func TestCheck(t *testing.T) {
+func TestBlocked(t *testing.T) {
 	temporary := testutil.PrepareTestPackage(
 		t,
 		"testdata/src/example",
@@ -31,7 +32,7 @@ func TestCheck(t *testing.T) {
 	}
 
 	p, results := testutil.LoadFromDirectory(t, temporary)
-	Check(p, results)
+	forbidden_import.Check(p, results)
 	testutil.AssertBlocked(t, results, 2)
 	testutil.AssertBlockedContains(t, results, "pflag")
 	testutil.AssertBlockedContains(t, results, "testify")
