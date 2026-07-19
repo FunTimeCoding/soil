@@ -1,5 +1,3 @@
-//go:build local
-
 package integration_test
 
 import (

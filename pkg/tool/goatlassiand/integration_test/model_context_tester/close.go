@@ -1,5 +1,6 @@
 package model_context_tester
 
-func (t *Tester) Close() {
-	t.server.Close()
+func (o *Tester) Close() {
+	o.Client.Close()
+	o.server.Close()
 }

@@ -28,11 +28,11 @@ func New(t *testing.T) *Tester {
 		fmt.Sprintf("http://localhost:%d", q.Port()),
 	)
 	errors.PanicOnError(e)
-	idx := memory_indexer.New(c)
+	i := memory_indexer.New(c)
 	s := store.New(connection.NewMemory())
-	v := service.New(s, idx, idx, idx)
+	v := service.New(s, i, i, i)
 	r := memory.New()
-	gomemorydServer := model_context_server.New(
+	memoryServer := model_context_server.New(
 		t,
 		func(m *http.ServeMux) {
 			generated.HandlerFromMux(
@@ -47,18 +47,22 @@ func New(t *testing.T) *Tester {
 			).Mount(m)
 		},
 	)
+	queryClient := model_context_client.New(t, q.Port())
+	memoryClient := model_context_client.New(t, memoryServer.Port)
 	t.Cleanup(
 		func() {
-			gomemorydServer.Stop()
+			queryClient.Close()
+			memoryClient.Close()
+			memoryServer.Stop()
 			s.Close()
 			q.Close()
 		},
 	)
 
 	return &Tester{
-		Goqueryd:       model_context_client.New(t, q.Port()),
-		Gomemoryd:      model_context_client.New(t, gomemorydServer.Port),
-		GomemorydStore: s,
-		goqueryd:       q,
+		QueryClient:  queryClient,
+		MemoryClient: memoryClient,
+		MemoryStore:  s,
+		QueryServer:  q,
 	}
 }

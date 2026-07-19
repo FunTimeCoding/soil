@@ -42,7 +42,7 @@ func collectIDs(memories []profileMemory) []int64 {
 
 func TestProfileExcludesAlwaysMemoriesFromRelevant(t *testing.T) {
 	s := cross_service_tester.New(t)
-	result := s.Gomemoryd.MustCallTool(
+	result := s.MemoryClient.MustCallTool(
 		constant.SaveMemory,
 		map[string]any{
 			constant.MemoryName:  "error handling pattern",
@@ -53,14 +53,14 @@ func TestProfileExcludesAlwaysMemoriesFromRelevant(t *testing.T) {
 	var identifier int
 	_, e := fmt.Sscanf(result, "Created memory %d", &identifier)
 	assert.FatalOnError(t, e)
-	s.Gomemoryd.MustCallTool(
+	s.MemoryClient.MustCallTool(
 		constant.TagMemory,
 		map[string]any{
 			constant.MemoryIdentifier: identifier,
 			constant.Add:              "always",
 		},
 	)
-	s.Gomemoryd.MustCallTool(
+	s.MemoryClient.MustCallTool(
 		constant.SaveMemory,
 		map[string]any{
 			constant.MemoryName:  "deployment pipeline",
@@ -68,11 +68,11 @@ func TestProfileExcludesAlwaysMemoriesFromRelevant(t *testing.T) {
 			constant.Description: "Deployment pipeline conventions",
 		},
 	)
-	s.Goqueryd.MustCallTool(
+	s.QueryClient.MustCallTool(
 		goquerydConstant.Embed,
 		map[string]any{},
 	)
-	raw := s.Gomemoryd.MustCallTool(
+	raw := s.MemoryClient.MustCallTool(
 		constant.Profile,
 		map[string]any{
 			constant.Topic: "error handling patterns in MCP services",

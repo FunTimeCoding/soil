@@ -1,5 +1,3 @@
-//go:build local
-
 package worker
 
 import (

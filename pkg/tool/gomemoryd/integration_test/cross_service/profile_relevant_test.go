@@ -12,7 +12,7 @@ import (
 
 func TestProfileRelevantTierUsesHybridSearch(t *testing.T) {
 	s := cross_service_tester.New(t)
-	s.Gomemoryd.MustCallTool(
+	s.MemoryClient.MustCallTool(
 		constant.SaveMemory,
 		map[string]any{
 			constant.MemoryName:  "error handling pattern",
@@ -20,11 +20,11 @@ func TestProfileRelevantTierUsesHybridSearch(t *testing.T) {
 			constant.Description: "MCP error handling conventions",
 		},
 	)
-	s.Goqueryd.MustCallTool(
+	s.QueryClient.MustCallTool(
 		goquerydConstant.Embed,
 		map[string]any{},
 	)
-	result := s.Gomemoryd.MustCallTool(
+	result := s.MemoryClient.MustCallTool(
 		constant.Profile,
 		map[string]any{
 			constant.Topic: "how to handle errors in model context tools",

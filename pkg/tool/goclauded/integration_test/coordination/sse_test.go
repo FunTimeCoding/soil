@@ -17,7 +17,8 @@ import (
 func TestSSEPushesRosterOnConnect(t *testing.T) {
 	s := base.New(t)
 	defer s.Close()
-	events := connectSSE(t, s)
+	events, disconnect := connectSSE(t, s)
+	defer disconnect()
 	e := nextEvent(t, events)
 	assert.String(t, "roster", e.name)
 	assert.True(t, e.payload != "")
@@ -26,7 +27,8 @@ func TestSSEPushesRosterOnConnect(t *testing.T) {
 func TestSSEPushesActivityOnConnect(t *testing.T) {
 	s := base.New(t)
 	defer s.Close()
-	events := connectSSE(t, s)
+	events, disconnect := connectSSE(t, s)
+	defer disconnect()
 	nextEvent(t, events)
 	e := nextEvent(t, events)
 	assert.String(t, "activity", e.name)
@@ -37,7 +39,8 @@ func TestSSEPushesAfterMutation(t *testing.T) {
 	defer s.Close()
 	a := s.NewSession(t)
 	defer a.Close()
-	events := connectSSE(t, s)
+	events, disconnect := connectSSE(t, s)
+	defer disconnect()
 	nextEvent(t, events)
 	nextEvent(t, events)
 	a.Announce(a.Name(), "trigger notification")
@@ -58,7 +61,8 @@ func TestSSEMultiLineBody(t *testing.T) {
 			constant.Body: "line one\nline two\nline three",
 		},
 	)
-	events := connectSSE(t, s)
+	events, disconnect := connectSSE(t, s)
+	defer disconnect()
 	nextEvent(t, events)
 	activity := nextEvent(t, events)
 	assert.String(t, "activity", activity.name)
@@ -74,7 +78,7 @@ type sseEvent struct {
 func connectSSE(
 	t *testing.T,
 	s *base.Server,
-) <-chan sseEvent {
+) (<-chan sseEvent, func()) {
 	t.Helper()
 	l := fmt.Sprintf(
 		"http://localhost:%d/event?subscribe=roster,activity,summary",
@@ -82,7 +86,6 @@ func connectSSE(
 	)
 	r, e := http.Get(l)
 	assert.FatalOnError(t, e)
-	t.Cleanup(func() { errors.PanicClose(r.Body) })
 	events := make(chan sseEvent, 10)
 	go func() {
 		scanner := bufio.NewScanner(r.Body)
@@ -113,7 +116,7 @@ func connectSSE(
 		close(events)
 	}()
 
-	return events
+	return events, func() { errors.PanicClose(r.Body) }
 }
 
 func nextEvent(

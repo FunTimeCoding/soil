@@ -1,5 +1,3 @@
-//go:build local
-
 package web_interface
 
 import (

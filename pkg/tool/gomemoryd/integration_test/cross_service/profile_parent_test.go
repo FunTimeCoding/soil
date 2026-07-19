@@ -14,7 +14,7 @@ import (
 
 func TestProfileCollapsesChildrenUnderParent(t *testing.T) {
 	s := cross_service_tester.New(t)
-	parentResult := s.Gomemoryd.MustCallTool(
+	parentResult := s.MemoryClient.MustCallTool(
 		constant.SaveMemory,
 		map[string]any{
 			constant.MemoryName:  "error handling",
@@ -32,7 +32,7 @@ func TestProfileCollapsesChildrenUnderParent(t *testing.T) {
 	childNames := []string{"captureFail", "captureDetail", "clientError"}
 
 	for _, name := range childNames {
-		s.Gomemoryd.MustCallTool(
+		s.MemoryClient.MustCallTool(
 			constant.SaveMemory,
 			map[string]any{
 				constant.MemoryName: name,
@@ -46,7 +46,7 @@ func TestProfileCollapsesChildrenUnderParent(t *testing.T) {
 		)
 	}
 
-	raw := s.Gomemoryd.MustCallTool(
+	raw := s.MemoryClient.MustCallTool(
 		constant.Profile,
 		map[string]any{},
 	)

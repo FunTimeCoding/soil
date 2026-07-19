@@ -7,8 +7,8 @@ import (
 )
 
 type Tester struct {
-	Goqueryd       *model_context_client.Client
-	Gomemoryd      *model_context_client.Client
-	GomemorydStore *store.Store
-	goqueryd       *base.Server
+	QueryClient  *model_context_client.Client
+	MemoryClient *model_context_client.Client
+	MemoryStore  *store.Store
+	QueryServer  *base.Server
 }

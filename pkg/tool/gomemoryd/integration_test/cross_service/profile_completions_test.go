@@ -6,25 +6,25 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/integration_test/cross_service_tester"
-	goquerydConstant "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
+	query "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"testing"
 )
 
 func TestProfileShowsCompletions(t *testing.T) {
 	s := cross_service_tester.New(t)
-	s.Goqueryd.MustCallTool(
-		goquerydConstant.Push,
+	s.QueryClient.MustCallTool(
+		query.Push,
 		map[string]any{
-			goquerydConstant.Collection: "completions",
-			goquerydConstant.Path:       "test-session/1",
-			goquerydConstant.Body:       "built the search pipeline",
-			goquerydConstant.Metadata: map[string]string{
+			query.Collection: "completions",
+			query.Path:       "test-session/1",
+			query.Body:       "built the search pipeline",
+			query.Metadata: map[string]string{
 				"source_type":  "session-completion",
 				"session_name": "test-session",
 			},
 		},
 	)
-	result := s.Gomemoryd.MustCallTool(
+	result := s.MemoryClient.MustCallTool(
 		constant.Profile,
 		map[string]any{},
 	)
@@ -34,31 +34,31 @@ func TestProfileShowsCompletions(t *testing.T) {
 
 func TestProfileShowsMultipleCompletionsPerSession(t *testing.T) {
 	s := cross_service_tester.New(t)
-	s.Goqueryd.MustCallTool(
-		goquerydConstant.Push,
+	s.QueryClient.MustCallTool(
+		query.Push,
 		map[string]any{
-			goquerydConstant.Collection: "completions",
-			goquerydConstant.Path:       "test-session/1",
-			goquerydConstant.Body:       "built the API",
-			goquerydConstant.Metadata: map[string]string{
+			query.Collection: "completions",
+			query.Path:       "test-session/1",
+			query.Body:       "built the API",
+			query.Metadata: map[string]string{
 				"source_type":  "session-completion",
 				"session_name": "test-session",
 			},
 		},
 	)
-	s.Goqueryd.MustCallTool(
-		goquerydConstant.Push,
+	s.QueryClient.MustCallTool(
+		query.Push,
 		map[string]any{
-			goquerydConstant.Collection: "completions",
-			goquerydConstant.Path:       "test-session/2",
-			goquerydConstant.Body:       "wrote the tests",
-			goquerydConstant.Metadata: map[string]string{
+			query.Collection: "completions",
+			query.Path:       "test-session/2",
+			query.Body:       "wrote the tests",
+			query.Metadata: map[string]string{
 				"source_type":  "session-completion",
 				"session_name": "test-session",
 			},
 		},
 	)
-	result := s.Gomemoryd.MustCallTool(
+	result := s.MemoryClient.MustCallTool(
 		constant.Profile,
 		map[string]any{},
 	)
@@ -67,10 +67,12 @@ func TestProfileShowsMultipleCompletionsPerSession(t *testing.T) {
 }
 
 func TestProfileCompletionsEmptyWhenNone(t *testing.T) {
-	s := cross_service_tester.New(t)
-	result := s.Gomemoryd.MustCallTool(
-		constant.Profile,
-		map[string]any{},
+	assert.StringNotContains(
+		t,
+		"completions",
+		cross_service_tester.New(t).MemoryClient.MustCallTool(
+			constant.Profile,
+			map[string]any{},
+		),
 	)
-	assert.StringNotContains(t, "completions", result)
 }
