@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"github.com/coreos/go-semver/semver"
 	"github.com/funtimecoding/soil/pkg/git"
-	"github.com/funtimecoding/soil/pkg/git/constant"
+	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join/key_value"
 	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/tool/gobump/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gobump/option"
 )
 
@@ -31,17 +32,17 @@ func Run(o *option.Bump) {
 	}
 
 	switch o.Increase {
-	case patch:
+	case constant.Patch:
 		next.BumpPatch()
-	case minor:
+	case constant.Minor:
 		next.BumpMinor()
-	case major:
+	case constant.Major:
 		next.BumpMajor()
 	default:
 		system.Exitf(1, "unexpected increase: %s\n", o.Increase)
 	}
 
-	nextString := key_value.Empty(constant.VersionPrefix, next.String())
+	nextString := key_value.Empty(gitConstant.VersionPrefix, next.String())
 	fmt.Printf("Tag: %s\n", nextString)
 	git.Tag(nextString)
 	git.Push()

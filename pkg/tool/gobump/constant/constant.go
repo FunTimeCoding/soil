@@ -7,3 +7,9 @@ var Identity = identity.New(
 	"Semantic version bumper",
 	"gobump [flags]",
 )
+
+const (
+	Major = "major"
+	Minor = "minor"
+	Patch = "patch"
+)

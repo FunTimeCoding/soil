@@ -7,3 +7,9 @@ var Identity = identity.New(
 	"Debian package builder",
 	"godebian <executable> <version>",
 )
+
+const (
+	MaintainerNameArgument  = "maintainer-name"
+	MaintainerEmailArgument = "maintainer-email"
+	SystemdUnitFlag         = "systemd-unit"
+)

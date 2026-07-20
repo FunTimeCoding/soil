@@ -5,8 +5,8 @@ import (
 	"gitlab.com/gitlab-org/api/client-go/v2"
 )
 
-func (c *Client) MustOption() *gitlab.Settings {
-	result, e := c.Option()
+func (c *Client) MustSetting() *gitlab.Settings {
+	result, e := c.Setting()
 	errors.PanicOnError(e)
 
 	return result

@@ -7,3 +7,5 @@ var Identity = identity.New(
 	"Docker Hub image manager",
 	"godockerhub [flags]",
 )
+
+const MaxDisplay = 20

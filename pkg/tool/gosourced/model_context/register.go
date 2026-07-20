@@ -1,6 +1,7 @@
 package model_context
 
 import (
+	"github.com/funtimecoding/soil/pkg/generative/model_context/parameter"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -26,6 +27,52 @@ func (s *Server) register() {
 			),
 		),
 		mcp.NewTypedToolHandler(s.useModule),
+	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.FindReferences,
+			mcp.WithDescription(
+				"Find all type-checked references to a Go symbol across the module, or census a file: per top-level symbol, the references outside the declaring file. Read-only, no files change. Counts are module-scoped - references from other modules are invisible, so a zero count only proves the symbol unused within this module.",
+			),
+			mcp.WithString(
+				"package_path",
+				mcp.Required(),
+				mcp.Description(
+					"Full import path of the package holding the symbol or file.",
+				),
+			),
+			mcp.WithString(
+				"symbol",
+				mcp.Description(
+					"Symbol name to look up. Pass this or file, not both.",
+				),
+			),
+			mcp.WithString(
+				"receiver",
+				mcp.Description(
+					"Receiver type name for methods, e.g. Store.",
+				),
+			),
+			mcp.WithString(
+				"file",
+				mcp.Description(
+					"File path relative to module root - censuses every top-level symbol declared in it. Pass this or symbol, not both.",
+				),
+			),
+			mcp.WithNumber(
+				parameter.Limit,
+				mcp.Description(
+					"Maximum locations returned per symbol. Defaults to 25; the exact total is always reported.",
+				),
+			),
+			mcp.WithNumber(
+				parameter.Offset,
+				mcp.Description(
+					"Locations to skip before the limit window - page through large reference lists.",
+				),
+			),
+		),
+		mcp.NewTypedToolHandler(s.findReferences),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -176,6 +223,12 @@ func (s *Server) register() {
 				"create",
 				mcp.Description(
 					"Create the destination package when it does not exist. Refuses by default.",
+				),
+			),
+			mcp.WithBoolean(
+				"qualify_back_references",
+				mcp.Description(
+					"When a moved declaration references symbols staying in the source package, qualify those references and import the source package instead of refusing. Unexported back-reference targets still refuse - export them first.",
 				),
 			),
 		),

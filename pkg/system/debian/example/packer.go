@@ -2,9 +2,10 @@ package example
 
 import (
 	"github.com/funtimecoding/soil/pkg/system/debian"
+	"github.com/funtimecoding/soil/pkg/system/debian/constant"
 	"runtime"
 )
 
 func Packer() {
-	debian.New().Packer(debian.Bookworm, runtime.GOARCH)
+	debian.New().Packer(constant.Bookworm, runtime.GOARCH)
 }

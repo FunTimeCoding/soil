@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/argocd/application"
+	"github.com/funtimecoding/soil/pkg/argocd/constant"
 	"github.com/funtimecoding/soil/pkg/argocd/response"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings/join"
@@ -12,7 +13,7 @@ import (
 )
 
 func (c *Client) Applications() ([]*application.Application, error) {
-	r := web.NewGet(join.Empty(c.base, applicationsPath))
+	r := web.NewGet(join.Empty(c.base, constant.ApplicationsPath))
 	web.Bearer(r, c.token)
 	reply, e := web.Client().Do(r)
 

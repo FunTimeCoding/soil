@@ -35,8 +35,8 @@ func Main(
 	tags := c.Tags(image)
 	limit := len(tags)
 
-	if limit > maxDisplay {
-		limit = maxDisplay
+	if limit > constant.MaxDisplay {
+		limit = constant.MaxDisplay
 	}
 
 	for _, t := range tags[:limit] {

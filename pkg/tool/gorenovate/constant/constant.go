@@ -7,3 +7,5 @@ var Identity = identity.New(
 	"Renovate runner",
 	"gorenovate",
 )
+
+const RenovateFile = "renovate.json"

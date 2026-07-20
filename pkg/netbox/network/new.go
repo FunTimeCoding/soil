@@ -2,6 +2,7 @@ package network
 
 import (
 	"github.com/funtimecoding/soil/pkg/network"
+	"github.com/funtimecoding/soil/pkg/network/constant"
 	"github.com/netbox-community/go-netbox/v4"
 	"net"
 )
@@ -20,7 +21,7 @@ func New(i *netbox.Interface) *Interface {
 	if s := i.GetMacAddress(); s != "" {
 		h = network.PhysicalAddress(s)
 	} else {
-		h = network.NullPhysicalAddress
+		h = constant.NullPhysicalAddress
 	}
 
 	var t netbox.InterfaceTypeValue

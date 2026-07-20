@@ -22,19 +22,19 @@ func Main(
 		"",
 		"Package semantic version: 1.0.0, v-prefix gets trimmed",
 	)
-	a.String(maintainerNameArgument, "", "Maintainer name: AN Other")
+	a.String(constant.MaintainerNameArgument, "", "Maintainer name: AN Other")
 	a.String(
-		maintainerEmailArgument,
+		constant.MaintainerEmailArgument,
 		"",
 		"Maintainer email: another@example.org",
 	)
-	a.Boolean(systemdUnitFlag, false, "Create a systemd unit")
+	a.Boolean(constant.SystemdUnitFlag, false, "Create a systemd unit")
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
 	o.Executable = a.GetString(argument.Executable)
 	o.PackageVersion = semver.Trim(a.GetString(argument.Version))
-	o.MaintainerName = a.GetString(maintainerNameArgument)
-	o.MaintainerEmail = a.GetString(maintainerEmailArgument)
-	o.SystemdUnit = a.GetBoolean(systemdUnitFlag)
+	o.MaintainerName = a.GetString(constant.MaintainerNameArgument)
+	o.MaintainerEmail = a.GetString(constant.MaintainerEmailArgument)
+	o.SystemdUnit = a.GetBoolean(constant.SystemdUnitFlag)
 	Run(o)
 }

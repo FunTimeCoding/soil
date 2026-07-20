@@ -3,13 +3,13 @@ package network
 import (
 	"github.com/funtimecoding/soil/pkg/console/status"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
-	"github.com/funtimecoding/soil/pkg/network"
+	"github.com/funtimecoding/soil/pkg/network/constant"
 )
 
 func (i *Interface) Format(f *option.Format) string {
 	s := status.New(f).String(i.formatName(f), i.formatType()).RawList(i.Raw)
 
-	if i.PhysicalAddress.String() != network.NullPhysicalAddress.String() {
+	if i.PhysicalAddress.String() != constant.NullPhysicalAddress.String() {
 		s.String(i.PhysicalAddress.String())
 	}
 

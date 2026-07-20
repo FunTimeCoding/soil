@@ -13,6 +13,7 @@ var Identity = identity.New(
 const (
 	ListModules         = "list_modules"
 	UseModule           = "use_module"
+	FindReferences      = "find_references"
 	ChangeVisibility    = "change_visibility"
 	RenameSymbol        = "rename_symbol"
 	MoveSymbol          = "move_symbol"
@@ -24,4 +25,9 @@ const (
 	ExtractToFile       = "extract_to_file"
 	AddImport           = "add_import"
 	RemoveImport        = "remove_import"
+)
+
+const (
+	ReferenceLimit  = 25
+	MemberSeparator = "."
 )
