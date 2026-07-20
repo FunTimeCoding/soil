@@ -7,6 +7,7 @@ type Line struct {
 	Slug          string          `json:"slug"`
 	Timestamp     string          `json:"timestamp"`
 	Session       string          `json:"sessionId"`
+	Request       string          `json:"requestId"`
 	WorkDirectory string          `json:"cwd"`
 	Branch        string          `json:"gitBranch"`
 	Meta          bool            `json:"isMeta"`

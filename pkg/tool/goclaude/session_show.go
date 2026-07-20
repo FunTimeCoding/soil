@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/pricing"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/spf13/cobra"
 )
@@ -60,6 +61,34 @@ func sessionShow(c *command_context.Context) *cobra.Command {
 
 			if d.TurnCount != nil {
 				fmt.Printf("Turns: %d\n", *d.TurnCount)
+			}
+
+			if d.Cost != nil {
+				fmt.Printf("Cost: $%.2f\n", *d.Cost)
+			}
+
+			if d.Usage != nil && len(*d.Usage) > 0 {
+				fmt.Println("\nUsage:")
+
+				for _, u := range *d.Usage {
+					marker := ""
+
+					if !pricing.KnownModel(u.Model) {
+						marker = " (unknown model, sonnet rates)"
+					}
+
+					fmt.Printf(
+						"  %-8s %d calls, %s input, %s output, %s cache-write, %s cache-read, $%.2f%s\n",
+						u.Model,
+						u.Calls,
+						pricing.FormatTokens(u.Input),
+						pricing.FormatTokens(u.Output),
+						pricing.FormatTokens(u.CacheCreation),
+						pricing.FormatTokens(u.CacheRead),
+						u.Cost,
+						marker,
+					)
+				}
 			}
 
 			if d.Labels != nil && len(*d.Labels) > 0 {

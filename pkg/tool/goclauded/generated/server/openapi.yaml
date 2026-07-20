@@ -643,6 +643,28 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/cost:
+    get:
+      operationId: getCost
+      parameters:
+      - name: days
+        in: query
+        required: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Token cost aggregated across all sessions for the trailing window.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CostResponse"
+        "500":
+          description: Internal error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /api/usage:
     get:
       operationId: getUsage
@@ -1269,6 +1291,57 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/PulseEntry"
+        cost:
+          type: number
+          format: double
+        usage:
+          type: array
+          items:
+            $ref: "#/components/schemas/ModelUsage"
+    CostResponse:
+      type: object
+      required:
+      - cost
+      properties:
+        cost:
+          type: number
+          format: double
+        models:
+          type: array
+          items:
+            $ref: "#/components/schemas/ModelUsage"
+    ModelUsage:
+      type: object
+      required:
+      - model
+      - calls
+      - input
+      - output
+      - cacheCreation
+      - cacheRead
+      - cache5Minute
+      - cache1Hour
+      - cost
+      properties:
+        model:
+          type: string
+        calls:
+          type: integer
+        input:
+          type: integer
+        output:
+          type: integer
+        cacheCreation:
+          type: integer
+        cacheRead:
+          type: integer
+        cache5Minute:
+          type: integer
+        cache1Hour:
+          type: integer
+        cost:
+          type: number
+          format: double
     SessionDetailCompletion:
       type: object
       required:

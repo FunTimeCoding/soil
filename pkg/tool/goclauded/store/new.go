@@ -13,6 +13,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/queue"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/session"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/summary"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/tracker_state"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/usage_snapshot"
 	"gorm.io/gorm"
 	"time"
@@ -37,6 +38,7 @@ func New(
 			pulse.Stub(),
 			notification.Stub(),
 			queue.Stub(),
+			tracker_state.Stub(),
 		),
 	)
 	migrateEventMetadata(d)

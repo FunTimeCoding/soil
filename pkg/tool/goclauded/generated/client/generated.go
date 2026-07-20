@@ -42,6 +42,12 @@ type CheckResponse struct {
 	Entries  []QueueEntry `json:"entries"`
 }
 
+// CostResponse defines model for CostResponse.
+type CostResponse struct {
+	Cost   float64       `json:"cost"`
+	Models *[]ModelUsage `json:"models,omitempty"`
+}
+
 // EditSessionRequest defines model for EditSessionRequest.
 type EditSessionRequest struct {
 	Description *string `json:"description,omitempty"`
@@ -131,6 +137,19 @@ type Message struct {
 // MessagesResponse defines model for MessagesResponse.
 type MessagesResponse struct {
 	Messages []SessionMessage `json:"messages"`
+}
+
+// ModelUsage defines model for ModelUsage.
+type ModelUsage struct {
+	Cache1Hour    int     `json:"cache1Hour"`
+	Cache5Minute  int     `json:"cache5Minute"`
+	CacheCreation int     `json:"cacheCreation"`
+	CacheRead     int     `json:"cacheRead"`
+	Calls         int     `json:"calls"`
+	Cost          float64 `json:"cost"`
+	Input         int     `json:"input"`
+	Model         string  `json:"model"`
+	Output        int     `json:"output"`
 }
 
 // NotifyRequest defines model for NotifyRequest.
@@ -241,6 +260,7 @@ type SessionDetailResponse struct {
 	Alias       *string                    `json:"alias,omitempty"`
 	Callsign    *string                    `json:"callsign,omitempty"`
 	Completions *[]SessionDetailCompletion `json:"completions,omitempty"`
+	Cost        *float64                   `json:"cost,omitempty"`
 	Created     *string                    `json:"created,omitempty"`
 	Description *string                    `json:"description,omitempty"`
 	Identifier  string                     `json:"identifier"`
@@ -250,6 +270,7 @@ type SessionDetailResponse struct {
 	Slug        *string                    `json:"slug,omitempty"`
 	Summary     *string                    `json:"summary,omitempty"`
 	TurnCount   *int                       `json:"turnCount,omitempty"`
+	Usage       *[]ModelUsage              `json:"usage,omitempty"`
 }
 
 // SessionListResponse defines model for SessionListResponse.
@@ -338,6 +359,11 @@ type WaitResponse struct {
 type GetCheckParams struct {
 	Session string `form:"session" json:"session"`
 	Preview *bool  `form:"preview,omitempty" json:"preview,omitempty"`
+}
+
+// GetCostParams defines parameters for GetCost.
+type GetCostParams struct {
+	Days *int `form:"days,omitempty" json:"days,omitempty"`
 }
 
 // GetResolveParams defines parameters for GetResolve.
@@ -496,6 +522,9 @@ type ClientInterface interface {
 
 	// GetCheck performs a GET /api/check (the `GetCheck` operationId) request.
 	GetCheck(ctx context.Context, params *GetCheckParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetCost performs a GET /api/cost (the `GetCost` operationId) request.
+	GetCost(ctx context.Context, params *GetCostParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// PostListenWithBody performs a POST /api/listen (the `PostListen` operationId) request,
 	// with any type of body and a specified content type.
@@ -660,6 +689,19 @@ func (c *Client) PostBackfill(ctx context.Context, reqEditors ...RequestEditorFn
 // GetCheck performs a GET /api/check (the `GetCheck` operationId) request.
 func (c *Client) GetCheck(ctx context.Context, params *GetCheckParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetCheckRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetCost performs a GET /api/cost (the `GetCost` operationId) request.
+func (c *Client) GetCost(ctx context.Context, params *GetCostParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetCostRequest(c.Server, params)
 	if err != nil {
 		return nil, err
 	}
@@ -1234,6 +1276,60 @@ func NewGetCheckRequest(server string, params *GetCheckParams) (*http.Request, e
 		if params.Preview != nil {
 
 			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "preview", *params.Preview, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "boolean", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetCostRequest constructs an http.Request for the GetCost method
+func NewGetCostRequest(server string, params *GetCostParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/cost")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if params.Days != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "days", *params.Days, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
 				return nil, err
 			} else {
 				for _, qp := range strings.Split(queryFrag, "&") {
@@ -2454,6 +2550,11 @@ type ClientWithResponsesInterface interface {
 	// Returns a wrapper object for the known response body format(s).
 	GetCheckWithResponse(ctx context.Context, params *GetCheckParams, reqEditors ...RequestEditorFn) (*GetCheckResponse, error)
 
+	// GetCostWithResponse performs a GET /api/cost (the `GetCost` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetCostWithResponse(ctx context.Context, params *GetCostParams, reqEditors ...RequestEditorFn) (*GetCostResponse, error)
+
 	// PostListenWithBodyWithResponse performs a POST /api/listen (the `PostListen` operationId) request,
 	// with any type of body and a specified content type.
 	//
@@ -2756,6 +2857,54 @@ func (r GetCheckResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r GetCheckResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type GetCostResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *CostResponse
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetCostResponse) GetJSON200() *CostResponse {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetCostResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetCostResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetCostResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetCostResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetCostResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -4026,6 +4175,17 @@ func (c *ClientWithResponses) GetCheckWithResponse(ctx context.Context, params *
 	return ParseGetCheckResponse(rsp)
 }
 
+// GetCostWithResponse performs a GET /api/cost (the `GetCost` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetCostWithResponse(ctx context.Context, params *GetCostParams, reqEditors ...RequestEditorFn) (*GetCostResponse, error) {
+	rsp, err := c.GetCost(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetCostResponse(rsp)
+}
+
 // PostListenWithBodyWithResponse performs a POST /api/listen (the `PostListen` operationId) request,
 // with any type of body and a specified content type.
 //
@@ -4478,6 +4638,39 @@ func ParseGetCheckResponse(rsp *http.Response) (*GetCheckResponse, error) {
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
 		var dest CheckResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetCostResponse parses an HTTP response from a GetCostWithResponse call
+func ParseGetCostResponse(rsp *http.Response) (*GetCostResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetCostResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest CostResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}

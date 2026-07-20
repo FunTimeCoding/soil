@@ -65,9 +65,10 @@ const (
 	EventSummary = "summary"
 	EventSession = "session"
 
-	SessionTable  = "session"
-	SummaryTable  = "summary"
-	SummaryColumn = "summary"
+	SessionTable     = "session"
+	SummaryTable     = "summary"
+	SummaryColumn    = "summary"
+	TokenUsageColumn = "token_usage"
 
 	Pulse      = "pulse"
 	Label      = "label"

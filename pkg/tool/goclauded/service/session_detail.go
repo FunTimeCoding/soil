@@ -1,6 +1,10 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/goclauded/service/session_detail"
+import (
+	"encoding/json"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/pricing"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/session_detail"
+)
 
 func (s *Service) SessionDetail(query string) (*session_detail.Detail, error) {
 	r, e := s.store.ResolveSessionIdentifier(query)
@@ -45,6 +49,18 @@ func (s *Service) SessionDetail(query string) (*session_detail.Detail, error) {
 	result.TurnCount = v.TurnCount
 	result.Completions = completions
 	result.Summary = body
+
+	if v.TokenUsage != "" {
+		usage := map[string]*pricing.Tokens{}
+
+		if json.Unmarshal([]byte(v.TokenUsage), &usage) == nil {
+			result.Usage = usage
+
+			for model, tokens := range usage {
+				result.Cost += pricing.Cost(model, tokens)
+			}
+		}
+	}
 
 	return result, nil
 }

@@ -25,6 +25,7 @@ func (c *Client) UsageEntries(sessionIdentifier string) []*usage_entry.Entry {
 
 	defer errors.PanicClose(f)
 	var result []*usage_entry.Entry
+	seen := map[string]bool{}
 	scanner := bufio.NewScanner(f)
 	scanner.Buffer(make([]byte, 1024*1024), 1024*1024)
 
@@ -53,6 +54,24 @@ func (c *Client) UsageEntries(sessionIdentifier string) []*usage_entry.Entry {
 			continue
 		}
 
+		if m.Identifier != "" {
+			key := join.Empty(m.Identifier, line.Request)
+
+			if seen[key] {
+				continue
+			}
+
+			seen[key] = true
+		}
+
+		var fiveMinute int
+		var oneHour int
+
+		if m.Usage.CacheCreation != nil {
+			fiveMinute = m.Usage.CacheCreation.Ephemeral5MinuteInputTokens
+			oneHour = m.Usage.CacheCreation.Ephemeral1HourInputTokens
+		}
+
 		result = append(
 			result,
 			usage_entry.New(
@@ -62,6 +81,8 @@ func (c *Client) UsageEntries(sessionIdentifier string) []*usage_entry.Entry {
 				m.Usage.OutputTokens,
 				m.Usage.CacheCreationInputTokens,
 				m.Usage.CacheReadInputTokens,
+				fiveMinute,
+				oneHour,
 			),
 		)
 	}

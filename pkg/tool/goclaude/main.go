@@ -51,5 +51,6 @@ func Main(
 	o.AddCommand(guard.New())
 	o.AddCommand(wait(c))
 	o.AddCommand(usage(c))
+	o.AddCommand(cost(c))
 	errors.PanicOnError(o.Execute())
 }

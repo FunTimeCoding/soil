@@ -21,6 +21,16 @@ func Read(
 	}
 
 	defer errors.PanicClose(f)
+	i, e := f.Stat()
+
+	if e != nil {
+		return e
+	}
+
+	if s.Offset > i.Size() {
+		s.Reset()
+	}
+
 	cold := s.Offset == 0
 
 	if !cold {
@@ -62,6 +72,17 @@ func Read(
 			if line.Branch != "" && s.Branch == "" {
 				s.Branch = line.Branch
 			}
+		}
+
+		if line.Type == "assistant" && line.Message != nil {
+			var m notation.Message
+
+			if json.Unmarshal(line.Message, &m) == nil &&
+				m.Usage != nil {
+				s.recordUsage(line.Request, &m)
+			}
+
+			continue
 		}
 
 		if line.Type != "user" || line.Meta || line.Message == nil {

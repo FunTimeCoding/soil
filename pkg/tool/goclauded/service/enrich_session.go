@@ -20,5 +20,6 @@ func (s *Service) EnrichSession(identifier string) {
 		return
 	}
 
+	s.store.SaveTrackerState(identifier, state)
 	s.RefreshSession(identifier, state)
 }

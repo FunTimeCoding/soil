@@ -4,7 +4,9 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/pricing"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
+	"sort"
 )
 
 func (s *Server) GetSessionDetail(
@@ -80,6 +82,38 @@ func (s *Server) GetSessionDetail(
 
 	if d.Summary != "" {
 		result.Summary = &d.Summary
+	}
+
+	if len(d.Usage) > 0 {
+		models := make([]string, 0, len(d.Usage))
+
+		for model := range d.Usage {
+			models = append(models, model)
+		}
+
+		sort.Strings(models)
+		var usage []server.ModelUsage
+
+		for _, model := range models {
+			t := d.Usage[model]
+			usage = append(
+				usage,
+				server.ModelUsage{
+					Model:         model,
+					Calls:         t.Count,
+					Input:         t.Input,
+					Output:        t.Output,
+					CacheCreation: t.CacheCreation,
+					CacheRead:     t.CacheRead,
+					Cache5Minute:  t.Cache5Minute,
+					Cache1Hour:    t.Cache1Hour,
+					Cost:          pricing.Cost(model, t),
+				},
+			)
+		}
+
+		result.Usage = &usage
+		result.Cost = &d.Cost
 	}
 
 	labels, labelError := s.service.LabelsBySession(d.Identifier)

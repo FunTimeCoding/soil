@@ -48,6 +48,12 @@ type CheckResponse struct {
 	Entries  []QueueEntry `json:"entries"`
 }
 
+// CostResponse defines model for CostResponse.
+type CostResponse struct {
+	Cost   float64       `json:"cost"`
+	Models *[]ModelUsage `json:"models,omitempty"`
+}
+
 // EditSessionRequest defines model for EditSessionRequest.
 type EditSessionRequest struct {
 	Description *string `json:"description,omitempty"`
@@ -137,6 +143,19 @@ type Message struct {
 // MessagesResponse defines model for MessagesResponse.
 type MessagesResponse struct {
 	Messages []SessionMessage `json:"messages"`
+}
+
+// ModelUsage defines model for ModelUsage.
+type ModelUsage struct {
+	Cache1Hour    int     `json:"cache1Hour"`
+	Cache5Minute  int     `json:"cache5Minute"`
+	CacheCreation int     `json:"cacheCreation"`
+	CacheRead     int     `json:"cacheRead"`
+	Calls         int     `json:"calls"`
+	Cost          float64 `json:"cost"`
+	Input         int     `json:"input"`
+	Model         string  `json:"model"`
+	Output        int     `json:"output"`
 }
 
 // NotifyRequest defines model for NotifyRequest.
@@ -247,6 +266,7 @@ type SessionDetailResponse struct {
 	Alias       *string                    `json:"alias,omitempty"`
 	Callsign    *string                    `json:"callsign,omitempty"`
 	Completions *[]SessionDetailCompletion `json:"completions,omitempty"`
+	Cost        *float64                   `json:"cost,omitempty"`
 	Created     *string                    `json:"created,omitempty"`
 	Description *string                    `json:"description,omitempty"`
 	Identifier  string                     `json:"identifier"`
@@ -256,6 +276,7 @@ type SessionDetailResponse struct {
 	Slug        *string                    `json:"slug,omitempty"`
 	Summary     *string                    `json:"summary,omitempty"`
 	TurnCount   *int                       `json:"turnCount,omitempty"`
+	Usage       *[]ModelUsage              `json:"usage,omitempty"`
 }
 
 // SessionListResponse defines model for SessionListResponse.
@@ -346,6 +367,11 @@ type GetCheckParams struct {
 	Preview *bool  `form:"preview,omitempty" json:"preview,omitempty"`
 }
 
+// GetCostParams defines parameters for GetCost.
+type GetCostParams struct {
+	Days *int `form:"days,omitempty" json:"days,omitempty"`
+}
+
 // GetResolveParams defines parameters for GetResolve.
 type GetResolveParams struct {
 	Query string `form:"query" json:"query"`
@@ -426,6 +452,9 @@ type ServerInterface interface {
 
 	// (GET /api/check)
 	GetCheck(w http.ResponseWriter, r *http.Request, params GetCheckParams)
+
+	// (GET /api/cost)
+	GetCost(w http.ResponseWriter, r *http.Request, params GetCostParams)
 
 	// (POST /api/listen)
 	PostListen(w http.ResponseWriter, r *http.Request)
@@ -580,6 +609,39 @@ func (siw *ServerInterfaceWrapper) GetCheck(w http.ResponseWriter, r *http.Reque
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.GetCheck(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetCost operation middleware
+func (siw *ServerInterfaceWrapper) GetCost(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetCostParams
+
+	// ------------- Optional query parameter "days" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "days", r.URL.Query(), &params.Days, runtime.BindQueryParameterOptions{Type: "integer", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "days"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "days", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetCost(w, r, params)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -1442,6 +1504,7 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/backfill", wrapper.PostBackfill)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/sweep", wrapper.PostSweep)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/timeline", wrapper.GetTimeline)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/cost", wrapper.GetCost)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/usage", wrapper.GetUsage)
 
 	return m
@@ -1537,6 +1600,42 @@ func (response GetCheck200JSONResponse) VisitGetCheckResponse(w http.ResponseWri
 type GetCheck500JSONResponse ErrorResponse
 
 func (response GetCheck500JSONResponse) VisitGetCheckResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetCostRequestObject struct {
+	Params GetCostParams
+}
+
+type GetCostResponseObject interface {
+	VisitGetCostResponse(w http.ResponseWriter) error
+}
+
+type GetCost200JSONResponse CostResponse
+
+func (response GetCost200JSONResponse) VisitGetCostResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetCost500JSONResponse ErrorResponse
+
+func (response GetCost500JSONResponse) VisitGetCostResponse(w http.ResponseWriter) error {
 
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(response); err != nil {
@@ -2511,6 +2610,9 @@ type StrictServerInterface interface {
 	// (GET /api/check)
 	GetCheck(ctx context.Context, request GetCheckRequestObject) (GetCheckResponseObject, error)
 
+	// (GET /api/cost)
+	GetCost(ctx context.Context, request GetCostRequestObject) (GetCostResponseObject, error)
+
 	// (POST /api/listen)
 	PostListen(ctx context.Context, request PostListenRequestObject) (PostListenResponseObject, error)
 
@@ -2703,6 +2805,32 @@ func (sh *strictHandler) GetCheck(w http.ResponseWriter, r *http.Request, params
 		sh.options.ResponseErrorHandlerFunc(w, r, err)
 	} else if validResponse, ok := response.(GetCheckResponseObject); ok {
 		if err := validResponse.VisitGetCheckResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetCost operation middleware
+func (sh *strictHandler) GetCost(w http.ResponseWriter, r *http.Request, params GetCostParams) {
+	var request GetCostRequestObject
+
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetCost(ctx, request.(GetCostRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetCost")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetCostResponseObject); ok {
+		if err := validResponse.VisitGetCostResponse(w); err != nil {
 			sh.options.ResponseErrorHandlerFunc(w, r, err)
 		}
 	} else if response != nil {
@@ -3428,50 +3556,53 @@ func (sh *strictHandler) GetWait(w http.ResponseWriter, r *http.Request, params 
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
+	"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",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

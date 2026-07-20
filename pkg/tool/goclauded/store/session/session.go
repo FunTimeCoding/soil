@@ -15,6 +15,7 @@ type Session struct {
 	FirstMessage        string    `gorm:"column:first_message"`
 	TurnCount           int       `gorm:"column:turn_count"`
 	Lines               int       `gorm:"column:lines"`
+	TokenUsage          string    `gorm:"column:token_usage"`
 	WorkDirectory       string    `gorm:"column:work_directory"`
 	Branch              string    `gorm:"column:branch"`
 	SessionTimestamp    string    `gorm:"column:session_timestamp"`

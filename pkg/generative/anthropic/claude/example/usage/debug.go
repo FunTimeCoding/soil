@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/example/common"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/pricing"
 	"sort"
 	"time"
 )
@@ -78,8 +79,8 @@ func Debug() {
 	var totalCost float64
 
 	for _, ts := range block.entries {
-		totalCost += common.EntryCost(
-			common.NormalizeModel(ts.Entry.Model),
+		totalCost += pricing.EntryCost(
+			pricing.NormalizeModel(ts.Entry.Model),
 			ts.Entry,
 		)
 	}

@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/tracker"
+	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"time"
 )
@@ -54,6 +55,12 @@ func (s *Service) RefreshSession(
 
 	if state.FirstMessage != "" {
 		updates["first_message"] = state.FirstMessage
+	}
+
+	if len(state.Usage) > 0 {
+		updates[constant.TokenUsageColumn] = string(
+			notation.Marshal(state.Usage),
+		)
 	}
 
 	if len(updates) > 0 {

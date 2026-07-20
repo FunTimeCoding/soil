@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/example/common"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/pricing"
 	"sort"
 )
 
@@ -49,7 +50,7 @@ func Usage() {
 	var totalCost float64
 
 	for _, t := range activeBlock.entries {
-		key := common.NormalizeModel(t.Entry.Model)
+		key := pricing.NormalizeModel(t.Entry.Model)
 		m, okay := byModel[key]
 
 		if !okay {
@@ -62,7 +63,7 @@ func Usage() {
 		m.cacheCreationInputTokens += t.Entry.CacheCreationInputTokens
 		m.cacheReadInputTokens += t.Entry.CacheReadInputTokens
 		m.count++
-		totalCost += common.EntryCost(key, t.Entry)
+		totalCost += pricing.EntryCost(key, t.Entry)
 	}
 
 	costLimit := 140.0

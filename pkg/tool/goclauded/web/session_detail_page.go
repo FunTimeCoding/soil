@@ -118,6 +118,16 @@ func (s *Server) sessionDetailPage(
 		)
 	}
 
+	if d.Cost > 0 {
+		identity = append(
+			identity,
+			html.Tr(
+				html.Td(html.Strong(gomponents.Text("Cost"))),
+				html.Td(gomponents.Textf("$%.2f", d.Cost)),
+			),
+		)
+	}
+
 	if d.Session != nil {
 		identity = append(
 			identity,
@@ -132,6 +142,15 @@ func (s *Server) sessionDetailPage(
 		content,
 		html.Table(html.TBody(identity...)),
 	)
+
+	if len(d.Usage) > 0 {
+		content = append(
+			content,
+			html.H4(gomponents.Text("Token Usage")),
+			usageTable(d.Usage),
+		)
+	}
+
 	labels, labelError := s.service.LabelsBySession(d.Identifier)
 	errors.PanicOnError(labelError)
 

@@ -9,6 +9,10 @@ import (
 )
 
 func (s *Service) PopulateCache() {
+	for identifier, state := range s.store.TrackerStates() {
+		s.cache.Set(identifier, state)
+	}
+
 	entries, e := os.ReadDir(s.harbor)
 
 	if e != nil {
@@ -29,11 +33,24 @@ func (s *Service) PopulateCache() {
 			entry.Name(),
 			constant.NotationLogExtension,
 		)
+		i, f := entry.Info()
+
+		if f != nil {
+			continue
+		}
+
 		state := s.cache.GetOrCreate(identifier)
+
+		if state.Offset == i.Size() {
+			continue
+		}
+
 		path := filepath.Join(s.harbor, entry.Name())
 
 		if tracker.Read(path, state) != nil {
 			continue
 		}
+
+		s.store.SaveTrackerState(identifier, state)
 	}
 }

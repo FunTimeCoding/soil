@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/example/token_usage"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/example/usage"
 	anthropic "github.com/funtimecoding/soil/pkg/generative/anthropic/example"
 	gguf "github.com/funtimecoding/soil/pkg/generative/gguf/example"
@@ -13,19 +12,13 @@ import (
 	ollama "github.com/funtimecoding/soil/pkg/generative/ollama/example"
 	openWebUI "github.com/funtimecoding/soil/pkg/generative/open_webui/example"
 	openai "github.com/funtimecoding/soil/pkg/generative/openai/example"
-	"time"
 )
 
 func main() {
-	now := time.Now().UTC()
-	token_usage.TokenUsage(
-		now.Add(-24*time.Hour),
-		now,
-	)
+	usage.Usage()
 
 	if false {
 		usage.Debug()
-		usage.Usage()
 		mistral.Prompt()
 		ollama.Chat()
 		ollama.Benchmark()
