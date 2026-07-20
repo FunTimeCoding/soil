@@ -22,7 +22,11 @@ func TestContainsSegment(t *testing.T) {
 	t.Run(
 		"MultiCharacterPrefixMatch",
 		func(t *testing.T) {
-			assert.Boolean(t, true, segment.ContainsSegment("fooReference", "ref"))
+			assert.Boolean(
+				t,
+				true,
+				segment.ContainsSegment("fooReference", "ref"),
+			)
 		},
 	)
 	t.Run(

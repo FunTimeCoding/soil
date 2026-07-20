@@ -18,6 +18,10 @@ func TestNormalize(t *testing.T) {
 		"doc/ai/spec/naming.md",
 		pointer.Normalize("./doc/ai/spec/naming.md"),
 	)
-	assert.String(t, "doc/plugins.md", pointer.Normalize("doc/plugins.md#convert"))
+	assert.String(
+		t,
+		"doc/plugins.md",
+		pointer.Normalize("doc/plugins.md#convert"),
+	)
 	assert.String(t, "pkg/lint", pointer.Normalize("pkg/lint"))
 }

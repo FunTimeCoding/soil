@@ -7,5 +7,9 @@ import (
 )
 
 func TestEncode(t *testing.T) {
-	assert.Bytes(t, []byte(`{"a":"b"}`), maps.Encode(map[string]string{"a": "b"}))
+	assert.Bytes(
+		t,
+		[]byte(`{"a":"b"}`),
+		maps.Encode(map[string]string{"a": "b"}),
+	)
 }

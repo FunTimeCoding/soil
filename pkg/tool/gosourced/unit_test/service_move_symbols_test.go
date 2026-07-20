@@ -104,7 +104,10 @@ func TestBatchSubset(t *testing.T) {
 }
 
 func TestBatchCollision(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("batch-collision/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		serviceTestdata("batch-collision/src"),
+	)
 	s := testService()
 	r, e := s.MoveSymbols(
 		d,
@@ -122,7 +125,10 @@ func TestBatchCollision(t *testing.T) {
 }
 
 func TestBatchDependencyTogether(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("move-dependency/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		serviceTestdata("move-dependency/src"),
+	)
 	s := testService()
 	r, e := s.MoveSymbols(
 		d,
@@ -142,7 +148,10 @@ func TestBatchDependencyTogether(t *testing.T) {
 }
 
 func TestBatchMultiName(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("batch-multi-name/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		serviceTestdata("batch-multi-name/src"),
+	)
 	s := testService()
 	r, e := s.MoveSymbols(
 		d,
@@ -164,7 +173,10 @@ func TestBatchMultiName(t *testing.T) {
 }
 
 func TestBatchMultiNamePartial(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("batch-multi-name/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		serviceTestdata("batch-multi-name/src"),
+	)
 	s := testService()
 	r, e := s.MoveSymbols(
 		d,

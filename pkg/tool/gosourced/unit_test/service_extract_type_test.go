@@ -46,7 +46,10 @@ func TestExtractType(t *testing.T) {
 }
 
 func TestExtractTypeInternalStaysUnexported(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("extract-internal/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		serviceTestdata("extract-internal/src"),
+	)
 	s := testService()
 	r, e := s.ExtractType(
 		d,
@@ -68,7 +71,10 @@ func TestExtractTypeInternalStaysUnexported(t *testing.T) {
 }
 
 func TestExtractTypeCollision(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("extract-collision/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		serviceTestdata("extract-collision/src"),
+	)
 	s := testService()
 	r, e := s.ExtractType(
 		d,
@@ -84,7 +90,10 @@ func TestExtractTypeCollision(t *testing.T) {
 }
 
 func TestExtractTypeDependency(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("extract-dependency/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		serviceTestdata("extract-dependency/src"),
+	)
 	s := testService()
 	r, e := s.ExtractType(
 		d,
@@ -145,7 +154,10 @@ func TestExtractTypeUnexported(t *testing.T) {
 }
 
 func TestExtractTypeTargetFile(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("extract-internal/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		serviceTestdata("extract-internal/src"),
+	)
 	s := testService()
 	r, e := s.ExtractType(
 		d,

@@ -87,7 +87,11 @@ func sessionPrint(c *command_context.Context) *cobra.Command {
 				}
 
 				if m.Role == "user" {
-					fmt.Printf("## user [%d]\n\n%s\n\n", turnNumbers[i], m.Text)
+					fmt.Printf(
+						"## user [%d]\n\n%s\n\n",
+						turnNumbers[i],
+						m.Text,
+					)
 
 					continue
 				}

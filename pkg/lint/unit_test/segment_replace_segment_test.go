@@ -23,11 +23,19 @@ func TestReplaceSegmentPascalCase(t *testing.T) {
 }
 
 func TestReplaceSegmentSingleWord(t *testing.T) {
-	assert.String(t, "locator", segment.ReplaceSegment("url", "url", "locator"))
+	assert.String(
+		t,
+		"locator",
+		segment.ReplaceSegment("url", "url", "locator"),
+	)
 }
 
 func TestReplaceSegmentSingleWordExported(t *testing.T) {
-	assert.String(t, "Locator", segment.ReplaceSegment("Url", "url", "locator"))
+	assert.String(
+		t,
+		"Locator",
+		segment.ReplaceSegment("Url", "url", "locator"),
+	)
 }
 
 func TestReplaceSegmentMiddle(t *testing.T) {
@@ -87,11 +95,19 @@ func TestReplaceSegmentMultiWordSnake(t *testing.T) {
 }
 
 func TestReplaceSegmentSingleChar(t *testing.T) {
-	assert.String(t, "xWrapper", segment.ReplaceSegment("ctxWrapper", "ctx", "x"))
+	assert.String(
+		t,
+		"xWrapper",
+		segment.ReplaceSegment("ctxWrapper", "ctx", "x"),
+	)
 }
 
 func TestReplaceSegmentSingleCharExported(t *testing.T) {
-	assert.String(t, "XWrapper", segment.ReplaceSegment("CtxWrapper", "ctx", "x"))
+	assert.String(
+		t,
+		"XWrapper",
+		segment.ReplaceSegment("CtxWrapper", "ctx", "x"),
+	)
 }
 
 func TestReplaceSegmentSingleCharAlone(t *testing.T) {

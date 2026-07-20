@@ -7,7 +7,10 @@ import (
 )
 
 func TestRenameFunction(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("rename-function/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		serviceTestdata("rename-function/src"),
+	)
 	s := testService()
 	r, e := s.Rename(
 		d,
@@ -28,7 +31,10 @@ func TestRenameFunction(t *testing.T) {
 }
 
 func TestRenameFunctionSamePackage(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("unexport-function/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		serviceTestdata("unexport-function/src"),
+	)
 	s := testService()
 	r, e := s.Rename(
 		d,
@@ -67,7 +73,10 @@ func TestRenameMethod(t *testing.T) {
 }
 
 func TestRenameToUnexportedBlockedByCrossPackage(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("rename-unexport/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		serviceTestdata("rename-unexport/src"),
+	)
 	s := testService()
 	r, e := s.Rename(
 		d,
@@ -84,7 +93,10 @@ func TestRenameToUnexportedBlockedByCrossPackage(t *testing.T) {
 }
 
 func TestRenameToUnexportedAllowedWithinPackage(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("unexport-function/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		serviceTestdata("unexport-function/src"),
+	)
 	s := testService()
 	r, e := s.Rename(
 		d,
@@ -100,7 +112,10 @@ func TestRenameToUnexportedAllowedWithinPackage(t *testing.T) {
 }
 
 func TestRenameCollision(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("rename-function/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		serviceTestdata("rename-function/src"),
+	)
 	s := testService()
 	r, e := s.Rename(
 		d,
@@ -115,7 +130,10 @@ func TestRenameCollision(t *testing.T) {
 }
 
 func TestRenameSymbolNotFound(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("rename-function/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		serviceTestdata("rename-function/src"),
+	)
 	s := testService()
 	r, e := s.Rename(
 		d,
@@ -130,7 +148,10 @@ func TestRenameSymbolNotFound(t *testing.T) {
 }
 
 func TestRenamePackageNotFound(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("rename-function/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		serviceTestdata("rename-function/src"),
+	)
 	s := testService()
 	r, e := s.Rename(
 		d,
@@ -175,7 +196,10 @@ func TestRenameMethodNotFound(t *testing.T) {
 }
 
 func TestRenameMethodCollision(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("method-collision/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		serviceTestdata("method-collision/src"),
+	)
 	s := testService()
 	r, e := s.Rename(
 		d,
@@ -190,7 +214,10 @@ func TestRenameMethodCollision(t *testing.T) {
 }
 
 func TestRenameSameName(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("rename-function/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		serviceTestdata("rename-function/src"),
+	)
 	s := testService()
 	r, e := s.Rename(
 		d,

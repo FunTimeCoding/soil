@@ -16,7 +16,10 @@ func TestVariablesPagination(t *testing.T) {
 		func(m *http.ServeMux) {
 			m.HandleFunc(
 				"/api/v4/projects/7/variables",
-				func(w http.ResponseWriter, q *http.Request) {
+				func(
+					w http.ResponseWriter,
+					q *http.Request,
+				) {
 					page := q.URL.Query().Get("page")
 					pages = append(pages, page)
 					start, count := 0, 100

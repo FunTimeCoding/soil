@@ -30,10 +30,12 @@ func TestIdentityWarningsSkipsServices(t *testing.T) {
 	assert.Integer(
 		t,
 		0,
-		len(scan.IdentityWarnings(
-			v,
-			scan.Services(v, "test", scan.NewConfiguration()),
-		)),
+		len(
+			scan.IdentityWarnings(
+				v,
+				scan.Services(v, "test", scan.NewConfiguration()),
+			),
+		),
 	)
 }
 

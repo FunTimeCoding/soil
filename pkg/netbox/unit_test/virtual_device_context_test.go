@@ -8,5 +8,8 @@ import (
 )
 
 func TestVirtualDeviceContext(t *testing.T) {
-	assert.NotNil(t, virtual_device_context.New(&netbox.VirtualDeviceContext{}))
+	assert.NotNil(
+		t,
+		virtual_device_context.New(&netbox.VirtualDeviceContext{}),
+	)
 }

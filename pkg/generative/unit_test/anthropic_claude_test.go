@@ -11,7 +11,10 @@ import (
 	"testing"
 )
 
-func writeFixture(t *testing.T, lines []string) *claude.Client {
+func writeFixture(
+	t *testing.T,
+	lines []string,
+) *claude.Client {
 	t.Helper()
 	base := t.TempDir()
 	f := system.Create(filepath.Join(base, "fixture.jsonl"))

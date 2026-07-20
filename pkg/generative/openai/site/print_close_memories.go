@@ -7,7 +7,10 @@ import (
 )
 
 func (s *Site) printCloseMemories() {
-	s.protocol.PrintNode(constant.CloseMemoriesSelector, constant.UsefulAttributes)
+	s.protocol.PrintNode(
+		constant.CloseMemoriesSelector,
+		constant.UsefulAttributes,
+	)
 	n := s.protocol.Select(constant.CloseMemoriesSelector, 2)
 	fmt.Println("Close dialog index 2")
 	protocol.Print(n, constant.UsefulAttributes)

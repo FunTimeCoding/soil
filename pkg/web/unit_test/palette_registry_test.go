@@ -15,13 +15,21 @@ func testRegistry() *palette.Registry {
 			Path:     "/projects/new",
 			Category: "action",
 		},
-		palette.Command{Label: "Sessions", Path: "/sessions", Category: "navigate"},
+		palette.Command{
+			Label:    "Sessions",
+			Path:     "/sessions",
+			Category: "navigate",
+		},
 		palette.Command{
 			Label:    "Start build",
 			Path:     "/builds/start",
 			Category: "action",
 		},
-		palette.Command{Label: "Metrics", Path: "/metrics", Category: "navigate"},
+		palette.Command{
+			Label:    "Metrics",
+			Path:     "/metrics",
+			Category: "navigate",
+		},
 		palette.Command{
 			Label:    "Push deploy",
 			Path:     "/deploys/push",

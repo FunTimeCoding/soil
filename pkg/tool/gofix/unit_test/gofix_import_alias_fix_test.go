@@ -13,7 +13,12 @@ import (
 func TestImportAliasFix(t *testing.T) {
 	directory := writeImportAliasTestModule(t)
 	r := output.NewResultsWithDirectory(directory)
-	gofix.RunImportAliasFixWithDirectory([]string{"./..."}, directory, false, r)
+	gofix.RunImportAliasFixWithDirectory(
+		[]string{"./..."},
+		directory,
+		false,
+		r,
+	)
 	t.Run(
 		"SuperfluousAlias",
 		func(t *testing.T) {

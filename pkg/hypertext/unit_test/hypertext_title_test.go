@@ -13,7 +13,12 @@ func TestTitle(t *testing.T) {
 		t,
 		"Test Title",
 		hypertext.Title(
-			hypertext.Document(fixture.File(constant.HypertextPath, "test.html")),
+			hypertext.Document(
+				fixture.File(
+					constant.HypertextPath,
+					"test.html",
+				),
+			),
 		),
 	)
 }

@@ -2,7 +2,10 @@ package enriched_session
 
 import "github.com/funtimecoding/soil/pkg/tool/goclauded/store/session"
 
-func FromStore(i session.Session, active bool) *Session {
+func FromStore(
+	i session.Session,
+	active bool,
+) *Session {
 	result := New()
 	result.Identifier = i.Identifier
 	result.Slug = i.Slug

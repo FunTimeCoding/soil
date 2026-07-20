@@ -8,7 +8,10 @@ import (
 
 func NewEnvironment(verbose bool) *Server {
 	return New(
-		environment.FallbackInteger(constant.PortEnvironment, webConstant.ListenPort),
+		environment.FallbackInteger(
+			constant.PortEnvironment,
+			webConstant.ListenPort,
+		),
 		verbose,
 	)
 }

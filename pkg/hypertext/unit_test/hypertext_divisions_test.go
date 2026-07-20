@@ -13,7 +13,12 @@ func TestDivisions(t *testing.T) {
 		t,
 		[]string{"Example DT", "Example DD"},
 		hypertext.Divisions(
-			hypertext.Document(fixture.File(constant.HypertextPath, "test.html")),
+			hypertext.Document(
+				fixture.File(
+					constant.HypertextPath,
+					"test.html",
+				),
+			),
 		),
 	)
 }

@@ -9,7 +9,10 @@ import (
 func TestIsPath(t *testing.T) {
 	assert.True(t, pointer.IsPath("doc/ai/spec/naming.md"))
 	assert.True(t, pointer.IsPath(".claude/skills/"))
-	assert.True(t, pointer.IsPath("${CLAUDE_PLUGIN_ROOT}/doc/ai/runbook/lint.md"))
+	assert.True(
+		t,
+		pointer.IsPath("${CLAUDE_PLUGIN_ROOT}/doc/ai/runbook/lint.md"),
+	)
 	assert.True(t, pointer.IsPath("../github/soil/pkg"))
 	assert.True(t, pointer.IsPath("/Users/example/file.md"))
 	assert.True(t, pointer.IsPath("https://example.org/page"))

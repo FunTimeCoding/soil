@@ -42,7 +42,10 @@ func TestRenamePackage(t *testing.T) {
 }
 
 func TestRenamePackageShadowed(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("rename-collision/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		serviceTestdata("rename-collision/src"),
+	)
 	s := testService()
 	r, e := s.RenamePackage(d, "example/pkg/outer/store", "depot")
 	assert.FatalOnError(t, e)

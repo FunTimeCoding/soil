@@ -1,3 +1,8 @@
 package assert
 
-func Any(t any, expect any, actual any) {}
+func Any(
+	t any,
+	expect any,
+	actual any,
+) {
+}

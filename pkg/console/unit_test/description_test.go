@@ -15,7 +15,11 @@ func TestDescription(t *testing.T) {
 	)
 	assert.Any(
 		t,
-		&description.Description{Type: "Alfa", Title: "Bravo", Short: "Charlie"},
+		&description.Description{
+			Type:  "Alfa",
+			Title: "Bravo",
+			Short: "Charlie",
+		},
 		description.NewType(upper.Alfa, upper.Bravo, upper.Charlie),
 	)
 }

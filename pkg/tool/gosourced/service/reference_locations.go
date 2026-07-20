@@ -42,7 +42,10 @@ func referenceLocations(
 
 	sort.Slice(
 		locations,
-		func(i int, j int) bool {
+		func(
+			i int,
+			j int,
+		) bool {
 			if locations[i].File != locations[j].File {
 				return locations[i].File < locations[j].File
 			}

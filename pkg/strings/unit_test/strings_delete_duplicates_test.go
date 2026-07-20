@@ -11,6 +11,12 @@ func TestDeleteDuplicates(t *testing.T) {
 	assert.Any(
 		t,
 		[]string{upper.Alfa, upper.Bravo},
-		strings.DeleteDuplicates([]string{upper.Alfa, upper.Alfa, upper.Bravo}),
+		strings.DeleteDuplicates(
+			[]string{
+				upper.Alfa,
+				upper.Alfa,
+				upper.Bravo,
+			},
+		),
 	)
 }

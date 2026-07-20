@@ -13,7 +13,12 @@ func TestTables(t *testing.T) {
 		t,
 		[]string{"Example TD"},
 		hypertext.Tables(
-			hypertext.Document(fixture.File(constant.HypertextPath, "test.html")),
+			hypertext.Document(
+				fixture.File(
+					constant.HypertextPath,
+					"test.html",
+				),
+			),
 		),
 	)
 }

@@ -40,7 +40,10 @@ func TestRenamePackageClause(t *testing.T) {
 }
 
 func TestRenamePackageClauseShadowed(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("rename-collision/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		serviceTestdata("rename-collision/src"),
+	)
 	s := testService()
 	r, e := s.RenamePackageClause(d, "example/pkg/outer/store", "depot")
 	assert.FatalOnError(t, e)

@@ -14,7 +14,13 @@ func resolve(
 ) string {
 	result := environment.Fallback(
 		override,
-		filepath.Join(system.StorageDirectory(constant.CertificateName, false), name),
+		filepath.Join(
+			system.StorageDirectory(
+				constant.CertificateName,
+				false,
+			),
+			name,
+		),
 	)
 
 	if !system.FileExists(result) {

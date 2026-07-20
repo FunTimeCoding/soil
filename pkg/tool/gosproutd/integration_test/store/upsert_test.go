@@ -10,7 +10,13 @@ import (
 
 func TestUpsertNewSeed(t *testing.T) {
 	s := store_tester.New(t)
-	s.Store.UpsertSeed(lower.Alfa, "alfa.md", "hash-a", "content a", time.Now())
+	s.Store.UpsertSeed(
+		lower.Alfa,
+		"alfa.md",
+		"hash-a",
+		"content a",
+		time.Now(),
+	)
 	seeds := s.Store.Seeds()
 	assert.Count(t, 1, seeds)
 	assert.String(t, "alfa", seeds[0].Name)
@@ -20,8 +26,20 @@ func TestUpsertNewSeed(t *testing.T) {
 
 func TestUpsertSecondSeedGetsNextPosition(t *testing.T) {
 	s := store_tester.New(t)
-	s.Store.UpsertSeed(lower.Alfa, "alfa.md", "hash-a", "content a", time.Now())
-	s.Store.UpsertSeed(lower.Bravo, "bravo.md", "hash-b", "content b", time.Now())
+	s.Store.UpsertSeed(
+		lower.Alfa,
+		"alfa.md",
+		"hash-a",
+		"content a",
+		time.Now(),
+	)
+	s.Store.UpsertSeed(
+		lower.Bravo,
+		"bravo.md",
+		"hash-b",
+		"content b",
+		time.Now(),
+	)
 	seeds := s.Store.Seeds()
 	assert.Count(t, 2, seeds)
 	assert.Integer(t, 1, seeds[0].Position)
@@ -30,8 +48,20 @@ func TestUpsertSecondSeedGetsNextPosition(t *testing.T) {
 
 func TestUpsertUpdatesContentOnHashChange(t *testing.T) {
 	s := store_tester.New(t)
-	s.Store.UpsertSeed(lower.Alfa, "alfa.md", "hash-1", "old content", time.Now())
-	s.Store.UpsertSeed(lower.Alfa, "alfa.md", "hash-2", "new content", time.Now())
+	s.Store.UpsertSeed(
+		lower.Alfa,
+		"alfa.md",
+		"hash-1",
+		"old content",
+		time.Now(),
+	)
+	s.Store.UpsertSeed(
+		lower.Alfa,
+		"alfa.md",
+		"hash-2",
+		"new content",
+		time.Now(),
+	)
 	seeds := s.Store.Seeds()
 	assert.Count(t, 1, seeds)
 	assert.String(t, "hash-2", seeds[0].ContentHash)
@@ -66,7 +96,13 @@ func TestUpsertUpdatesModifiedTimeWithoutContentChange(t *testing.T) {
 func TestUpsertSameNameDifferentPath(t *testing.T) {
 	s := store_tester.New(t)
 	s.Store.UpsertSeed(lower.Alfa, "alfa.md", "hash-a", "root", time.Now())
-	s.Store.UpsertSeed(lower.Alfa, "sub/alfa.md", "hash-b", "nested", time.Now())
+	s.Store.UpsertSeed(
+		lower.Alfa,
+		"sub/alfa.md",
+		"hash-b",
+		"nested",
+		time.Now(),
+	)
 	seeds := s.Store.Seeds()
 	assert.Count(t, 2, seeds)
 }

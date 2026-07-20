@@ -22,7 +22,14 @@ func (s *Store) UpsertSeed(
 		s.mapper.Model(seed.Stub()).Select("COALESCE(MAX(position), 0)").Scan(&maxPosition)
 		errors.PanicOnError(
 			s.mapper.Create(
-				seed.New(name, path, contentHash, content, maxPosition+1, modifiedAt),
+				seed.New(
+					name,
+					path,
+					contentHash,
+					content,
+					maxPosition+1,
+					modifiedAt,
+				),
 			).Error,
 		)
 

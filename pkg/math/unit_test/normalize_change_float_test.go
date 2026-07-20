@@ -32,5 +32,9 @@ func normalizeChangeFloatAssertFloat(
 	expect float64,
 ) {
 	t.Helper()
-	assert.Float(t, expect, normalize_change.Float(now, change, minimum, maximum))
+	assert.Float(
+		t,
+		expect,
+		normalize_change.Float(now, change, minimum, maximum),
+	)
 }

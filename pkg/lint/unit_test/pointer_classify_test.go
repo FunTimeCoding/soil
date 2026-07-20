@@ -30,17 +30,40 @@ func TestClassify(t *testing.T) {
 		pointer.Repository,
 		pointer.Classify(".claude-plugin/plugin.json", roots),
 	)
-	assert.String(t, pointer.Repository, pointer.Classify("./doc/ai/spec", roots))
 	assert.String(
 		t,
 		pointer.Repository,
-		pointer.Classify("${CLAUDE_PLUGIN_ROOT}/doc/ai/runbook/lint.md", roots),
+		pointer.Classify("./doc/ai/spec", roots),
 	)
-	assert.String(t, pointer.Unknown, pointer.Classify("tmp/gosec.json", roots))
-	assert.String(t, pointer.Unknown, pointer.Classify(constant.SoilModule, roots))
-	assert.String(t, pointer.Unknown, pointer.Classify("/chart-sessions", roots))
+	assert.String(
+		t,
+		pointer.Repository,
+		pointer.Classify(
+			"${CLAUDE_PLUGIN_ROOT}/doc/ai/runbook/lint.md",
+			roots,
+		),
+	)
+	assert.String(
+		t,
+		pointer.Unknown,
+		pointer.Classify("tmp/gosec.json", roots),
+	)
+	assert.String(
+		t,
+		pointer.Unknown,
+		pointer.Classify(constant.SoilModule, roots),
+	)
+	assert.String(
+		t,
+		pointer.Unknown,
+		pointer.Classify("/chart-sessions", roots),
+	)
 	assert.String(t, pointer.Unknown, pointer.Classify("/api/goals", roots))
-	assert.String(t, pointer.Unknown, pointer.Classify("/debug/pprof/", roots))
+	assert.String(
+		t,
+		pointer.Unknown,
+		pointer.Classify("/debug/pprof/", roots),
+	)
 	assert.String(t, pointer.Unknown, pointer.Classify("//nolint", roots))
 	assert.String(t, pointer.Unknown, pointer.Classify("/etc/hosts", roots))
 	assert.String(
@@ -72,7 +95,11 @@ func TestClassify(t *testing.T) {
 			roots,
 		),
 	)
-	assert.String(t, pointer.Placeholder, pointer.Classify("pkg/tool/*.go", roots))
+	assert.String(
+		t,
+		pointer.Placeholder,
+		pointer.Classify("pkg/tool/*.go", roots),
+	)
 	assert.String(
 		t,
 		pointer.Placeholder,
@@ -81,7 +108,10 @@ func TestClassify(t *testing.T) {
 	assert.String(
 		t,
 		pointer.Placeholder,
-		pointer.Classify("${CLAUDE_PLUGIN_ROOT}/skills/<name>/SKILL.md", roots),
+		pointer.Classify(
+			"${CLAUDE_PLUGIN_ROOT}/skills/<name>/SKILL.md",
+			roots,
+		),
 	)
 	assert.String(
 		t,

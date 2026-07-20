@@ -17,5 +17,9 @@ func TestRepository(t *testing.T) {
 		},
 	)
 	r.Raw = nil
-	assert.Any(t, &repository.Repository{Name: "Alfa", CreatedAt: time.Time{}}, r)
+	assert.Any(
+		t,
+		&repository.Repository{Name: "Alfa", CreatedAt: time.Time{}},
+		r,
+	)
 }

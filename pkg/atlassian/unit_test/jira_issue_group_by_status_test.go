@@ -14,7 +14,12 @@ func TestGroupByStatus(t *testing.T) {
 	r1.Fields.Status = &jira.Status{Name: constant.ToDo}
 	r2 := issue.Raw("TEST-2")
 	r2.Fields.Status = &jira.Status{Name: constant.Closed}
-	actual := issue.GroupByStatus([]*issue.Issue{issue.New(r1, o), issue.New(r2, o)})
+	actual := issue.GroupByStatus(
+		[]*issue.Issue{
+			issue.New(r1, o),
+			issue.New(r2, o),
+		},
+	)
 	assert.Count(t, 2, actual)
 	assert.Count(t, 1, actual[constant.ToDo])
 	assert.String(t, "TEST-1", actual[constant.ToDo][0].Key)

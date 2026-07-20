@@ -15,10 +15,12 @@ func TestFilterNewerThan(t *testing.T) {
 	r2 := issue.Raw("TEST-2")
 	r2.Fields.Created = jira.Time(time.Now())
 	actual := issue.FilterNewerThan(
-		[]*issue.Issue{issue.New(r1, o), issue.New(
-			r2,
-			o,
-		)},
+		[]*issue.Issue{
+			issue.New(r1, o), issue.New(
+				r2,
+				o,
+			),
+		},
 		2,
 	)
 	assert.Count(t, 1, actual)

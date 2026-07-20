@@ -8,7 +8,10 @@ import (
 // rewriteBackReferences turns each bare back-reference identifier in the moved
 // declaration into a source.Name selector, so it resolves once the declaration
 // lands in the target package.
-func rewriteBackReferences(entry *moveEntry, sourceName string) {
+func rewriteBackReferences(
+	entry *moveEntry,
+	sourceName string,
+) {
 	set := make(map[*ast.Ident]bool)
 
 	for _, ident := range entry.backIdentifiers {

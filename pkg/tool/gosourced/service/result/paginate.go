@@ -2,7 +2,10 @@ package result
 
 import "github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 
-func (r *References) Paginate(limit int, offset int) {
+func (r *References) Paginate(
+	limit int,
+	offset int,
+) {
 	if limit <= 0 {
 		limit = constant.ReferenceLimit
 	}

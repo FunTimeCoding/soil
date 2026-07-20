@@ -16,7 +16,10 @@ func TestReport(t *testing.T) {
 	firstSection.Float("Float with unit", 2, "L")
 	firstSection.Integer("Integer", 1)
 	firstSection.Percent("Percent", 50)
-	secondSection := firstSection.Nest("Example second section", report.NoLimit)
+	secondSection := firstSection.Nest(
+		"Example second section",
+		report.NoLimit,
+	)
 	secondSection.String("String", "example")
 	other := report.New("Example other", report.NoLimit)
 	other.String("String", "other")

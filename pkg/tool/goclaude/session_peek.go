@@ -60,7 +60,11 @@ func sessionPeek(c *command_context.Context) *cobra.Command {
 						limit = constant.PeekContextLimit
 					}
 
-					printPeekEntry(entry.UserText, entry.AssistantContext, limit)
+					printPeekEntry(
+						entry.UserText,
+						entry.AssistantContext,
+						limit,
+					)
 				}
 
 				return
@@ -91,7 +95,11 @@ func sessionPeek(c *command_context.Context) *cobra.Command {
 			}
 
 			for _, entry := range p.Entries[:head] {
-				printPeekEntry(entry.UserText, entry.AssistantContext, midLimit)
+				printPeekEntry(
+					entry.UserText,
+					entry.AssistantContext,
+					midLimit,
+				)
 			}
 
 			if samples > 0 && middle > 0 {
@@ -101,7 +109,11 @@ func sessionPeek(c *command_context.Context) *cobra.Command {
 				for i := 0; i < samples; i++ {
 					idx := head + i*step
 					entry := p.Entries[idx]
-					printPeekEntry(entry.UserText, entry.AssistantContext, midLimit)
+					printPeekEntry(
+						entry.UserText,
+						entry.AssistantContext,
+						midLimit,
+					)
 				}
 			} else if middle > 0 {
 				fmt.Printf("--- (%d messages) ---\n", middle)
@@ -117,7 +129,11 @@ func sessionPeek(c *command_context.Context) *cobra.Command {
 						limit = constant.PeekContextLimit
 					}
 
-					printPeekEntry(entry.UserText, entry.AssistantContext, limit)
+					printPeekEntry(
+						entry.UserText,
+						entry.AssistantContext,
+						limit,
+					)
 				}
 			}
 		},

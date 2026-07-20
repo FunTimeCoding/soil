@@ -27,7 +27,10 @@ func readFixtureFile(
 }
 
 func TestUnexportFunction(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("unexport-function/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		serviceTestdata("unexport-function/src"),
+	)
 	s := testService()
 	r, e := s.ChangeVisibility(d, "IsGenerated", "example/pkg/target", "")
 	assert.FatalOnError(t, e)
@@ -40,7 +43,10 @@ func TestUnexportFunction(t *testing.T) {
 }
 
 func TestExportFunction(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("export-function/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		serviceTestdata("export-function/src"),
+	)
 	s := testService()
 	r, e := s.ChangeVisibility(d, "isGenerated", "example/pkg/target", "")
 	assert.FatalOnError(t, e)
@@ -53,7 +59,10 @@ func TestExportFunction(t *testing.T) {
 }
 
 func TestUnexportMethod(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("unexport-method/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		serviceTestdata("unexport-method/src"),
+	)
 	s := testService()
 	r, e := s.ChangeVisibility(d, "Save", "example/pkg/target", "Store")
 	assert.FatalOnError(t, e)
@@ -75,7 +84,10 @@ func TestCollisionDetection(t *testing.T) {
 }
 
 func TestSymbolNotFound(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("unexport-function/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		serviceTestdata("unexport-function/src"),
+	)
 	s := testService()
 	r, e := s.ChangeVisibility(d, "Missing", "example/pkg/target", "")
 	assert.FatalOnError(t, e)
@@ -84,7 +96,10 @@ func TestSymbolNotFound(t *testing.T) {
 }
 
 func TestPackageNotFound(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("unexport-function/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		serviceTestdata("unexport-function/src"),
+	)
 	s := testService()
 	r, e := s.ChangeVisibility(d, "IsGenerated", "example/pkg/missing", "")
 	assert.FatalOnError(t, e)
