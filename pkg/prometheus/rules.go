@@ -9,7 +9,7 @@ import (
 )
 
 func (c *Client) Rules() (*rule_list.List, error) {
-	rules, e := c.client.Rules(c.context)
+	rules, e := c.client.Rules(c.context, nil)
 
 	if e != nil {
 		return nil, e

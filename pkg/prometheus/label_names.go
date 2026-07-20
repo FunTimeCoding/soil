@@ -20,5 +20,11 @@ func (c *Client) LabelNames(
 		return nil, e
 	}
 
-	return label_result.New(v, w), nil
+	names := make([]string, len(v))
+
+	for i, name := range v {
+		names[i] = string(name)
+	}
+
+	return label_result.New(names, w), nil
 }
