@@ -16,6 +16,15 @@ func (s *Service) PushDocument(
 	s.store.EnsurePushCollection(collection)
 	now := time.Now().UTC().Format(time.RFC3339)
 	hash := store.HashContent(body)
+
+	if s.store.ActiveDocumentHash(collection, path) == hash {
+		if len(metadata) > 0 {
+			s.store.SetMetadata(collection, path, metadata)
+		}
+
+		return nil
+	}
+
 	title := store.ExtractTitle(body, path)
 	s.store.InsertContent(hash, body, now)
 	s.store.InsertDocument(collection, path, title, hash, now)

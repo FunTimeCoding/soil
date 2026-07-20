@@ -277,7 +277,7 @@ const (
 
 Theme constants in `pkg/web/theme/constant/` are pico.css custom property
 overrides. Each service picks one in its `New`. One file per palette in
-that package (Amethyst, Archive, Cortex, Ember, Hearth, Sentinel, Slate,
+that package (Amethyst, Archive, Cortex, Hearth, Sentinel, Slate,
 Sprout, Tangerine, Tyria - check the directory for the current set).
 Additional palettes can be defined in downstream repos.
 

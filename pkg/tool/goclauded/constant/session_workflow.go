@@ -65,10 +65,12 @@ filters.
 ## Timeouts
 
 **Inactivity timeout (1 hour)** - session has a topic but
-hasn't checked in. Topic and timeout reason logged.
+neither checked in nor wrote to its log. A long working turn
+keeps the roster spot. Topic and timeout reason logged.
 
-**Complete timeout (30 min)** - session completed but didn't
-re-announce. Logged and shown on next check.
+**Complete timeout (30 min)** - session completed, then went
+quiet on both channels without re-announcing. Logged and shown
+on next check.
 
 ## Session flows
 

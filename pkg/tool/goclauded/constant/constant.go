@@ -79,6 +79,7 @@ const (
 	Slug       = "slug"
 	Limit      = "limit"
 	Offset     = "offset"
+	ListPage   = 500
 	Since      = "since"
 	Before     = "before"
 	Kind       = "kind"

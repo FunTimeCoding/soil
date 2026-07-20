@@ -9,16 +9,17 @@ import (
 )
 
 func openMapper(locator string) *gorm.DB {
-	configuration, e := pgx.ParseConfig(locator)
+	c, e := pgx.ParseConfig(locator)
 	errors.PanicOnError(e)
-	configuration.DefaultQueryExecMode = pgx.QueryExecModeExec
-	mapper, f := gorm.Open(
-		postgres.New(
-			postgres.Config{Conn: stdlib.OpenDB(*configuration)},
-		),
+	c.DefaultQueryExecMode = pgx.QueryExecModeExec
+	d := stdlib.OpenDB(*c)
+	d.SetMaxOpenConns(MaxOpenConnections)
+	d.SetMaxIdleConns(MaxIdleConnections)
+	m, f := gorm.Open(
+		postgres.New(postgres.Config{Conn: d}),
 		&gorm.Config{},
 	)
 	errors.PanicOnError(f)
 
-	return mapper
+	return m
 }

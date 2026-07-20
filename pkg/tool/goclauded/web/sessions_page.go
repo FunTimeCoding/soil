@@ -102,7 +102,6 @@ func (s *Server) sessionsPage(
 				html.THead(
 					html.Tr(
 						html.Th(gomponents.Text("Name")),
-						html.Th(gomponents.Text("Alias")),
 						html.Th(gomponents.Text("Description")),
 						html.Th(gomponents.Text("Lines")),
 						html.Th(gomponents.Text("Turns")),

@@ -48,6 +48,7 @@ const (
 	ChunkOverlap     = 540
 	ChunkWindow      = 800
 	SnippetMaxLength = 400
+	ListPage         = 500
 	ExpandModel      = ""
 	DefaultGlob      = "**/*.md"
 	RrfK             = 60

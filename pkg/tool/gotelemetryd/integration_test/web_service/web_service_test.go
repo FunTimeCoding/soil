@@ -19,7 +19,7 @@ func TestWebService(t *testing.T) {
 		client.PostEventJSONRequestBody{
 			Tool:    "save_memory",
 			Surface: "model_context",
-			Actor:   "Reva",
+			Actor:   "Blair",
 			Outcome: "success",
 		},
 	)
@@ -31,7 +31,7 @@ func TestWebService(t *testing.T) {
 		client.PostEventJSONRequestBody{
 			Tool:    "fleet_deploy",
 			Surface: "command_line",
-			Actor:   "Hana",
+			Actor:   "Cedar",
 			Outcome: "success",
 		},
 	)

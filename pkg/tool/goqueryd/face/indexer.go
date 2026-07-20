@@ -11,6 +11,7 @@ type Indexer interface {
 		body string,
 		metadata map[string]string,
 	)
+	Existing() map[string]string
 	Delete(path string) error
 	MustDelete(path string)
 }

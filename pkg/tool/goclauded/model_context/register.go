@@ -202,17 +202,15 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				constant.Alias,
-				mcp.Description("Display name for the session"),
+				mcp.Description(
+					"Display name for the session (kebab-case, 2-4 words) - shown in the session list",
+				),
 			),
 			mcp.WithString(
 				constant.Description,
 				mcp.Description(
 					"What the session was about (1-3 sentences)",
 				),
-			),
-			mcp.WithString(
-				constant.Slug,
-				mcp.Description("Kebab-case short name for the session"),
 			),
 			mcp.WithString(
 				constant.Topic,

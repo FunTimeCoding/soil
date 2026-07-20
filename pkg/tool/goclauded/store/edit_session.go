@@ -24,10 +24,6 @@ func (s *Store) EditSession(
 		updates[constant.Description] = *a.Description
 	}
 
-	if a.Slug != nil {
-		updates[constant.Slug] = *a.Slug
-	}
-
 	if a.Topic != nil {
 		updates[constant.Topic] = *a.Topic
 	}

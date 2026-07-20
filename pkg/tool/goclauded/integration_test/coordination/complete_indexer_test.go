@@ -16,7 +16,7 @@ func TestCompletePushesIndexer(t *testing.T) {
 	a.MustCallTool(
 		constant.EditSession,
 		map[string]any{
-			constant.Slug: "test-completion",
+			constant.Alias: "test-completion",
 		},
 	)
 	a.MustCallTool(

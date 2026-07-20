@@ -12,9 +12,9 @@ func TestModelContext(t *testing.T) {
 	defer o.Close()
 	c := o.Client
 	assert.Count(t, 2, c.ListTools())
-	o.Seed("save_memory", constant.SurfaceModelContext, "Reva")
-	o.Seed("save_memory", constant.SurfaceModelContext, "Hana")
-	o.Seed("fleet_deploy", constant.SurfaceCommandLine, "Reva")
+	o.Seed("save_memory", constant.SurfaceModelContext, "Blair")
+	o.Seed("save_memory", constant.SurfaceModelContext, "Cedar")
+	o.Seed("fleet_deploy", constant.SurfaceCommandLine, "Blair")
 	query := c.MustCallTool(constant.Query, map[string]any{})
 	assert.StringContains(t, "save_memory", query)
 	assert.StringContains(t, "fleet_deploy", query)

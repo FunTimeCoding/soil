@@ -54,11 +54,13 @@ Six constructors, each returning what its consumer actually uses:
   `foreign_keys = ON`, pool pinned to one connection (a pooled second
   connection would open its own empty database), no WAL
 - `relational.NewMapper(l, locator) *gorm.DB` - postgres, mapper
-  only; logs; the postgres twin of `lite.New`
+  only; logs; the postgres twin of `lite.New`. The underlying
+  `database/sql` pool is bounded (10 open, 5 idle) - bursts queue
+  for a connection instead of exhausting the server's slots
 - `relational.New(locator) *Database` - the full object: pgx pool,
   `database/sql`, mapper. For provisioning tools and services that
   query outside gorm; silent - a service using it as its store logs
-  `relational.PostgresMessage` itself (gonixd is the one case)
+  `relational.PostgresMessage` itself (one private consumer is the current case)
 
 A service that only speaks gorm receives only a mapper. Switching it
 to the full `Database` later is a one-line change at its edge.

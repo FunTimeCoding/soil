@@ -39,7 +39,6 @@ func sessionRow(s *enriched_session.Session) gomponents.Node {
 				gomponents.Group(label),
 			),
 		),
-		html.Td(html.Small(gomponents.Text(s.Alias))),
 		html.Td(html.Small(gomponents.Text(s.Description))),
 		html.Td(gomponents.Textf("%d", s.Lines)),
 		html.Td(gomponents.Textf("%d", s.TurnCount)),

@@ -43,7 +43,7 @@ func TestEditCascadeSummaryPushesIndexer(t *testing.T) {
 	a.MustCallTool(
 		constant.EditSession,
 		map[string]any{
-			constant.Slug: "test-session",
+			constant.Alias: "test-session",
 		},
 	)
 	a.MustCallTool(
