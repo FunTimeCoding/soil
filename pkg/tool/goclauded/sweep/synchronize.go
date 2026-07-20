@@ -1,26 +1,29 @@
 package sweep
 
-import "os"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"os"
+)
 
 func synchronize(
 	source string,
 	destination string,
-) action {
+) constant.Action {
 	di, e := os.Stat(destination)
 
 	if e != nil {
-		return actionCopy
+		return constant.ActionCopy
 	}
 
 	si, f := os.Stat(source)
 
 	if f != nil {
-		return actionSkip
+		return constant.ActionSkip
 	}
 
 	if si.Size() != di.Size() || si.ModTime().After(di.ModTime()) {
-		return actionUpdate
+		return constant.ActionUpdate
 	}
 
-	return actionSkip
+	return constant.ActionSkip
 }

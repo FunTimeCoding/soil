@@ -1,6 +1,6 @@
-package web
+package constant
 
-const inlineCSS = `
+const InlineStyle = `
 	pre { white-space: pre-wrap; word-break: break-word; }
 	.roster-grid {
 		display: grid;
@@ -48,13 +48,4 @@ const inlineCSS = `
 	.kind-complete { background: #2ecc40; color: #fff; }
 	.kind-update { background: #0074d9; color: #fff; }
 	table { margin-bottom: 0; }
-`
-
-const connectionIndicatorJS = `
-	document.addEventListener('htmx:sseOpen', function() {
-		document.getElementById('sse-dot').className = 'status-dot status-active';
-	});
-	document.addEventListener('htmx:sseError', function() {
-		document.getElementById('sse-dot').className = 'status-dot status-disconnected';
-	});
 `

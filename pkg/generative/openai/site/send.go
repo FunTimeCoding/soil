@@ -1,6 +1,9 @@
 package site
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/funtimecoding/soil/pkg/generative/openai/constant"
+)
 
 func (s *Site) Send(t string) {
 	if false {
@@ -9,5 +12,5 @@ func (s *Site) Send(t string) {
 		return
 	}
 
-	s.protocol.EnterText(PromptSelector, t)
+	s.protocol.EnterText(constant.PromptSelector, t)
 }

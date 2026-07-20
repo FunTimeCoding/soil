@@ -18,3 +18,9 @@ const (
 	PlayersTitle = "Players"
 	PlayersPath  = "/players"
 )
+const PageSize = 50
+const (
+	EnrichCutoffDays     = 14
+	FileDateLayout       = "20060102"
+	FileDatePrefixLength = 8
+)

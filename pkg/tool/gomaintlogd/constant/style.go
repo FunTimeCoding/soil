@@ -1,6 +1,6 @@
-package web
+package constant
 
-const inlineCSS = `
+const InlineStyle = `
 .summary-cards { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
 .summary-cards article { flex: 1; min-width: 150px; text-align: center; }
 table { margin-top: 1rem; }

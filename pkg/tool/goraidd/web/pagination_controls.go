@@ -1,6 +1,7 @@
 package web
 
 import (
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
@@ -12,7 +13,7 @@ func paginationControls(
 	var nodes []gomponents.Node
 
 	if offset > 0 {
-		previous := offset - pageSize
+		previous := offset - constant.PageSize
 
 		if previous < 0 {
 			previous = 0
@@ -32,18 +33,18 @@ func paginationControls(
 		gomponents.Textf(
 			" %d–%d of %d ",
 			offset+1,
-			min(offset+pageSize, total),
+			min(offset+constant.PageSize, total),
 			total,
 		),
 	)
 
-	if offset+pageSize < total {
+	if offset+constant.PageSize < total {
 		nodes = append(
 			nodes,
 			html.A(
 				html.Href(
 					paginationLink(
-						offset+pageSize,
+						offset+constant.PageSize,
 						startValue,
 						endValue,
 					),

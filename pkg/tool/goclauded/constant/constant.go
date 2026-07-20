@@ -113,3 +113,11 @@ const (
 	FixtureTarget = "target"
 	FixtureBefore = "before"
 )
+
+type Action int
+
+const (
+	ActionSkip Action = iota
+	ActionCopy
+	ActionUpdate
+)

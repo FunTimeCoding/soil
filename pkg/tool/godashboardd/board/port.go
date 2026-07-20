@@ -1,13 +1,15 @@
 package board
 
+import "github.com/funtimecoding/soil/pkg/tool/godashboardd/constant"
+
 func Port(t Target) int {
 	if t.Port != 0 {
 		return t.Port
 	}
 
 	if t.Secure {
-		return securePort
+		return constant.SecurePort
 	}
 
-	return insecurePort
+	return constant.InsecurePort
 }

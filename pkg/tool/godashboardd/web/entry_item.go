@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
@@ -15,7 +16,7 @@ func entryItem(
 			html.Href(v.Link),
 			html.Target("_blank"),
 			html.Class("board-entry-link"),
-			gomponents.Attr(labelAttribute, v.Label),
+			gomponents.Attr(constant.LabelAttribute, v.Label),
 			html.Img(
 				html.Src(iconLink(v.Icon)),
 				html.Class("board-icon"),

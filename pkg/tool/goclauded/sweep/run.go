@@ -2,6 +2,7 @@ package sweep
 
 import (
 	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"path/filepath"
 )
 
@@ -15,12 +16,12 @@ func Run(harbor string) *Result {
 		destination := filepath.Join(harbor, name)
 
 		switch synchronize(source, destination) {
-		case actionSkip:
+		case constant.ActionSkip:
 			r.Skipped++
-		case actionCopy:
+		case constant.ActionCopy:
 			copyFile(source, destination)
 			r.Copied++
-		case actionUpdate:
+		case constant.ActionUpdate:
 			copyFile(source, destination)
 			r.Updated++
 		}

@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/constant"
 	"strings"
 )
 
@@ -21,5 +22,5 @@ func eventName(label string) string {
 		label,
 	)
 
-	return join.Empty(rowEventPrefix, slug)
+	return join.Empty(constant.RowEventPrefix, slug)
 }

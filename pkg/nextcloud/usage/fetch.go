@@ -4,14 +4,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/nextcloud/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/web"
 	"net/http"
 )
 
 func (c *Client) Fetch() (*Usage, error) {
-	r := web.NewGet(join.Empty(c.base, informationPath))
-	r.Header.Set(tokenHeader, c.token)
+	r := web.NewGet(join.Empty(c.base, constant.InformationPath))
+	r.Header.Set(constant.TokenHeader, c.token)
 	response, e := web.Client().Do(r)
 
 	if e != nil {

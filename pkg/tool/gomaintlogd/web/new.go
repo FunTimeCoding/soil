@@ -36,7 +36,7 @@ func New(s *store.Store) *Server {
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(theme.Archive).
-				WithStyle(inlineCSS).
+				WithStyle(constant.InlineStyle).
 				WithCommandPalette("/palette").
 				WithItems(
 					navigation_item.New(

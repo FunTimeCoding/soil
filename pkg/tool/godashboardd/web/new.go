@@ -26,12 +26,12 @@ func New(
 		palette.Command{
 			Label:    constant.DashboardTitle,
 			Path:     constant.DashboardPath,
-			Category: navigateCategory,
+			Category: constant.NavigateCategory,
 		},
 		palette.Command{
 			Label:    constant.HeatmapTitle,
 			Path:     constant.HeatmapPath,
-			Category: navigateCategory,
+			Category: constant.NavigateCategory,
 		},
 	)
 	labels := map[string]bool{}
@@ -42,7 +42,7 @@ func New(
 			palette.Command{
 				Label:    entry.Label,
 				Path:     entry.Link,
-				Category: linkCategory,
+				Category: constant.LinkCategory,
 			},
 		)
 	}
@@ -57,9 +57,9 @@ func New(
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(theme.Sentinel).
-				WithStyle(inlineCSS).
-				WithCommandPalette(palettePath).
-				WithLiveEndpoint(eventPath).
+				WithStyle(constant.InlineStyle).
+				WithCommandPalette(constant.PalettePath).
+				WithLiveEndpoint(constant.EventPath).
 				WithItems(
 					navigation_item.New(
 						constant.DashboardPath,
@@ -71,7 +71,7 @@ func New(
 					),
 				).
 				WithFooter(
-					html.Script(gomponents.Raw(beaconJS)),
+					html.Script(gomponents.Raw(constant.BeaconScript)),
 				),
 		),
 	}

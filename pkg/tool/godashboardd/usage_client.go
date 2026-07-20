@@ -1,14 +1,15 @@
 package godashboardd
 
 import (
-	"github.com/funtimecoding/soil/pkg/nextcloud/constant"
+	nextcloudConstant "github.com/funtimecoding/soil/pkg/nextcloud/constant"
 	"github.com/funtimecoding/soil/pkg/nextcloud/usage"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/constant"
 )
 
 func usageClient(b *board.Board) *usage.Client {
-	if !b.HasWidget(board.NextcloudWidget) {
+	if !b.HasWidget(constant.NextcloudWidget) {
 		return nil
 	}
 
@@ -18,6 +19,6 @@ func usageClient(b *board.Board) *usage.Client {
 		target.Host,
 		board.Port(target),
 		target.Secure,
-		environment.Required(constant.TokenEnvironment),
+		environment.Required(nextcloudConstant.TokenEnvironment),
 	)
 }

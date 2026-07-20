@@ -1,5 +1,10 @@
 package certificate
 
+import "github.com/funtimecoding/soil/pkg/web/constant"
+
 func File() string {
-	return resolve(FileEnvironment, FileName)
+	return resolve(
+		constant.CertificateFileEnvironment,
+		constant.CertificateFileName,
+	)
 }

@@ -2,13 +2,14 @@ package godashboardd
 
 import (
 	"github.com/funtimecoding/soil/pkg/argocd"
-	"github.com/funtimecoding/soil/pkg/argocd/constant"
+	argocdConstant "github.com/funtimecoding/soil/pkg/argocd/constant"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/constant"
 )
 
 func argocdClient(b *board.Board) *argocd.Client {
-	if !b.HasWidget(board.ArgocdWidget) {
+	if !b.HasWidget(constant.ArgocdWidget) {
 		return nil
 	}
 
@@ -18,6 +19,6 @@ func argocdClient(b *board.Board) *argocd.Client {
 		target.Host,
 		board.Port(target),
 		target.Secure,
-		environment.Required(constant.TokenEnvironment),
+		environment.Required(argocdConstant.TokenEnvironment),
 	)
 }

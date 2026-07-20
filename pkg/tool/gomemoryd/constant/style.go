@@ -1,6 +1,6 @@
-package web
+package constant
 
-const inlineCSS = `
+const InlineStyle = `
 	pre { white-space: pre-wrap; word-break: break-word; }
 	.tag-pip {
 		font-size: 0.75rem;

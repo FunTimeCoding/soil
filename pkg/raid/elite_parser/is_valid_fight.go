@@ -1,9 +1,12 @@
 package elite_parser
 
-import "github.com/funtimecoding/soil/pkg/raid/elite"
+import (
+	"github.com/funtimecoding/soil/pkg/raid/constant"
+	"github.com/funtimecoding/soil/pkg/raid/elite"
+)
 
 func IsValidFight(fight *elite.Fight) bool {
-	if fight.DurationMS < minDuration {
+	if fight.DurationMS < constant.MinDuration {
 		return false
 	}
 
@@ -15,7 +18,7 @@ func IsValidFight(fight *elite.Fight) bool {
 		}
 	}
 
-	if allies < minAllies {
+	if allies < constant.MinAllies {
 		return false
 	}
 
@@ -27,5 +30,5 @@ func IsValidFight(fight *elite.Fight) bool {
 		}
 	}
 
-	return enemies >= minEnemies
+	return enemies >= constant.MinEnemies
 }

@@ -47,7 +47,7 @@ func New(s *service.Service) *Server {
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(theme.Cortex).
-				WithStyle(inlineCSS).
+				WithStyle(constant.InlineStyle).
 				WithCommandPalette("/palette").
 				WithItems(
 					navigation_item.New(

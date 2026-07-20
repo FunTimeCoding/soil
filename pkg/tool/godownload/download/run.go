@@ -2,13 +2,14 @@ package download
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/constant"
+	libraryConstant "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/gitlab"
 	"github.com/funtimecoding/soil/pkg/gitlab/packages"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/join"
 	"github.com/funtimecoding/soil/pkg/tool/common"
+	"github.com/funtimecoding/soil/pkg/tool/godownload/constant"
 	"github.com/funtimecoding/soil/pkg/tool/godownload/download/option"
 	library "gitlab.com/gitlab-org/api/client-go/v2"
 	"os"
@@ -24,7 +25,7 @@ func Run(o *option.Download) {
 	)
 	var p *library.Package
 
-	if o.PackageVersion == constant.LatestVersion {
+	if o.PackageVersion == libraryConstant.LatestVersion {
 		p = packages.FindLatest(filtered)
 	} else {
 		p = packages.FindVersionOrLatest(filtered, o.PackageVersion)
@@ -35,7 +36,7 @@ func Run(o *option.Download) {
 		os.Exit(1)
 	}
 
-	if o.PackageVersion != constant.LatestVersion &&
+	if o.PackageVersion != libraryConstant.LatestVersion &&
 		p.Version != o.PackageVersion {
 		errors.Warning(
 			"version %s not found, using latest\n",
@@ -69,7 +70,7 @@ func Run(o *option.Download) {
 
 	system.Executable(o.Package)
 
-	if o.Output != DefaultOutput {
+	if o.Output != constant.DefaultOutput {
 		system.Move(o.Package, join.Absolute(o.Output, o.Package))
 	}
 }

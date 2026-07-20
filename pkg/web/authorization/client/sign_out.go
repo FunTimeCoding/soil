@@ -1,6 +1,9 @@
 package client
 
-import "net/http"
+import (
+	"github.com/funtimecoding/soil/pkg/web/authorization/constant"
+	"net/http"
+)
 
 func (c *Client) SignOut(
 	w http.ResponseWriter,
@@ -9,7 +12,7 @@ func (c *Client) SignOut(
 	http.SetCookie(
 		w,
 		&http.Cookie{
-			Name:   subjectCookie,
+			Name:   constant.SubjectCookie,
 			MaxAge: -1,
 			Path:   "/",
 		},

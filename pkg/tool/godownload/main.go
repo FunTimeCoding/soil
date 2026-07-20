@@ -29,7 +29,7 @@ func Main(
 		argument.Output,
 		environment.Fallback(
 			"OUTPUT",
-			download.DefaultOutput,
+			constant.DefaultOutput,
 		),
 		"Output directory for executable",
 	)

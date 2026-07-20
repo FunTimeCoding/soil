@@ -1,18 +1,18 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
+import "github.com/funtimecoding/soil/pkg/tool/godashboardd/constant"
 
 func (s *Service) Refresh() {
 	result := map[string][]string{}
 
 	for _, v := range s.board.Entries() {
-		if v.Widget == board.NextcloudWidget {
+		if v.Widget == constant.NextcloudWidget {
 			result[v.Label] = s.usageValues()
 
 			continue
 		}
 
-		if v.Widget == board.ArgocdWidget {
+		if v.Widget == constant.ArgocdWidget {
 			result[v.Label] = s.argocdValues()
 
 			continue

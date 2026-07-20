@@ -7,3 +7,5 @@ var Identity = identity.New(
 	"Binary downloader for CI",
 	"godownload [flags]",
 )
+
+const DefaultOutput = ""

@@ -1,18 +1,21 @@
 package web
 
-import "github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/constant"
+)
 
 func rowLabels(v *board.Entry) []string {
-	if v.Widget == board.NextcloudWidget {
-		return []string{filesLabel, sharesLabel}
+	if v.Widget == constant.NextcloudWidget {
+		return []string{constant.FilesLabel, constant.SharesLabel}
 	}
 
-	if v.Widget == board.ArgocdWidget {
+	if v.Widget == constant.ArgocdWidget {
 		return []string{
-			applicationsLabel,
-			outOfSyncLabel,
-			degradedLabel,
-			missingLabel,
+			constant.ApplicationsLabel,
+			constant.OutOfSyncLabel,
+			constant.DegradedLabel,
+			constant.MissingLabel,
 		}
 	}
 

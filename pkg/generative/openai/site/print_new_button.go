@@ -1,11 +1,14 @@
 package site
 
-import "github.com/funtimecoding/soil/pkg/chromium/protocol"
+import (
+	"github.com/funtimecoding/soil/pkg/chromium/protocol"
+	"github.com/funtimecoding/soil/pkg/generative/openai/constant"
+)
 
 func (s *Site) printNewButton() {
-	s.protocol.PrintNode(NewSelector, usefulAttributes)
+	s.protocol.PrintNode(constant.NewSelector, constant.UsefulAttributes)
 	protocol.Print(
-		s.protocol.Select(NewSelector, 0),
-		usefulAttributes,
+		s.protocol.Select(constant.NewSelector, 0),
+		constant.UsefulAttributes,
 	)
 }

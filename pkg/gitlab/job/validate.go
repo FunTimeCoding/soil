@@ -1,6 +1,7 @@
 package job
 
 import (
+	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"slices"
 	"strings"
 )
@@ -11,7 +12,7 @@ func (j *Job) Validate() {
 	}
 
 	if j.Trace != "" && !slices.Contains(j.concern, Timeout) {
-		if strings.Contains(j.Trace, traceTimeoutMatch) {
+		if strings.Contains(j.Trace, constant.TraceTimeoutMatch) {
 			j.concern = append(j.concern, Timeout)
 		}
 	}

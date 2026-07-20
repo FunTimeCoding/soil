@@ -70,3 +70,5 @@ var (
 	Format        = option.Color.Copy()
 	CheckFormat   = Format.Copy().Tag(tag.Project)
 )
+
+const TraceTimeoutMatch = "ERROR: Job failed (system failure): prepare environment: waiting for pod running: timed out waiting for pod to start."

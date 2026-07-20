@@ -1,5 +1,7 @@
 package site
 
+import "github.com/funtimecoding/soil/pkg/generative/openai/constant"
+
 func (s *Site) clickProfile() {
-	s.protocol.ClickQuery(ProfileSelector)
+	s.protocol.ClickQuery(constant.ProfileSelector)
 }

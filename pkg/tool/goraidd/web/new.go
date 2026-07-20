@@ -50,7 +50,7 @@ func New(
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(theme.Tyria).
-				WithStyle(inlineCSS).
+				WithStyle(constant.InlineStyle).
 				WithCommandPalette("/palette").
 				WithItems(
 					navigation_item.New(

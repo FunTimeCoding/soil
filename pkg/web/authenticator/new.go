@@ -1,7 +1,8 @@
 package authenticator
 
 import (
-	"github.com/funtimecoding/soil/pkg/network/constant"
+	networkConstant "github.com/funtimecoding/soil/pkg/network/constant"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/session_store"
 	"os"
 )
@@ -9,10 +10,10 @@ import (
 func New() *Authenticator {
 	var login string
 
-	if a := os.Getenv(LoginAddressEnvironment); a != "" {
+	if a := os.Getenv(constant.LoginAddressEnvironment); a != "" {
 		login = a
 	} else {
-		login = constant.LocalhostAddressString
+		login = networkConstant.LocalhostAddressString
 	}
 
 	return &Authenticator{store: session_store.New(), loginAddress: login}

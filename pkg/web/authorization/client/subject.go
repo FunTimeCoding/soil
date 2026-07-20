@@ -1,9 +1,12 @@
 package client
 
-import "net/http"
+import (
+	"github.com/funtimecoding/soil/pkg/web/authorization/constant"
+	"net/http"
+)
 
 func (c *Client) Subject(r *http.Request) string {
-	cookie, e := r.Cookie(subjectCookie)
+	cookie, e := r.Cookie(constant.SubjectCookie)
 
 	if e != nil {
 		return ""

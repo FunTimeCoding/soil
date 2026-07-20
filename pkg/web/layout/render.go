@@ -24,8 +24,8 @@ func (p *Page) Render() gomponents.Node {
 		),
 		html.TitleEl(gomponents.Text(title)),
 		html.Link(html.Rel("stylesheet"), html.Href(constant.Pico)),
-		html.StyleEl(gomponents.Raw(baseStyle)),
-		html.StyleEl(gomponents.Raw(notificationStyle)),
+		html.StyleEl(gomponents.Raw(constant.BaseStyle)),
+		html.StyleEl(gomponents.Raw(constant.NotificationStyle)),
 		html.Script(html.Src(constant.Extended)),
 	)
 
@@ -50,7 +50,7 @@ func (p *Page) Render() gomponents.Node {
 	if p.paletteEndpoint != "" {
 		head = append(
 			head,
-			html.StyleEl(gomponents.Raw(paletteStyle)),
+			html.StyleEl(gomponents.Raw(constant.PaletteStyle)),
 		)
 	}
 
@@ -153,13 +153,13 @@ func (p *Page) Render() gomponents.Node {
 		body = append(
 			body,
 			commandPalette(p.paletteEndpoint),
-			html.Script(gomponents.Raw(paletteScript)),
+			html.Script(gomponents.Raw(constant.PaletteScript)),
 		)
 	}
 
 	body = append(
 		body,
-		html.Script(gomponents.Raw(notificationScript)),
+		html.Script(gomponents.Raw(constant.NotificationScript)),
 	)
 	body = append(body, p.footer...)
 

@@ -1,6 +1,6 @@
-package web
+package constant
 
-const inlineCSS = `
+const InlineStyle = `
 .badge { padding: 2px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold; display: inline-block; }
 .badge-critical { background: #f8d7da; color: #721c24; }
 .badge-warning { background: #fff3cd; color: #856404; }

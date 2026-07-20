@@ -27,12 +27,12 @@ func New(s *service.Service) *Server {
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(theme.Sprout).
-				WithStyle(inlineCSS).
+				WithStyle(constant.InlineStyle).
 				WithCommandPalette("/palette").
 				WithScript("https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js").
 				WithLiveEndpoint("/event").
 				WithFooter(
-					html.Script(gomponents.Raw(sortableJS)),
+					html.Script(gomponents.Raw(constant.SortableScript)),
 				),
 		),
 	}

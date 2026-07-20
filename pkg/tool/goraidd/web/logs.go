@@ -54,8 +54,8 @@ func (s *Server) logs(
 			fights = append(fights, f)
 		}
 	} else {
-		if len(all) > pageSize {
-			fights = all[:pageSize]
+		if len(all) > constant.PageSize {
+			fights = all[:constant.PageSize]
 		} else {
 			fights = all
 		}
@@ -106,7 +106,7 @@ func (s *Server) logs(
 		offset = total
 	}
 
-	end := offset + pageSize
+	end := offset + constant.PageSize
 
 	if end > total {
 		end = total

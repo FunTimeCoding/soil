@@ -1,6 +1,7 @@
 package server
 
 import (
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store/record"
 )
@@ -15,12 +16,12 @@ func toResponse(records []record.Record) []server.AlertsResponse {
 			Severity:    r.Severity,
 			Summary:     r.Summary,
 			Labels:      r.Labels,
-			Start:       r.Start.Format(DateFormat),
+			Start:       r.Start.Format(constant.DateFormat),
 			Status:      server.Firing,
 		}
 
 		if r.End != nil {
-			entry.End = new(r.End.Format(DateFormat))
+			entry.End = new(r.End.Format(constant.DateFormat))
 			entry.Status = server.Resolved
 		}
 

@@ -51,7 +51,7 @@ func New(s *service.Service) *Server {
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(theme.Hearth).
-				WithStyle(inlineCSS).
+				WithStyle(constant.InlineStyle).
 				WithCommandPalette("/palette").
 				WithLiveEndpoint("/event").
 				WithBrandNode(
@@ -89,7 +89,7 @@ func New(s *service.Service) *Server {
 				).
 				WithFooter(
 					html.Script(
-						gomponents.Raw(connectionIndicatorJS),
+						gomponents.Raw(constant.ConnectionIndicatorScript),
 					),
 				),
 		),

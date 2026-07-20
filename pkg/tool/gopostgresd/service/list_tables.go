@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/constant"
 )
 
 func (s *Service) ListTables(
@@ -13,6 +14,6 @@ func (s *Service) ListTables(
 	return s.Query(
 		x,
 		instance,
-		fmt.Sprintf(listTablesSQL, schema),
+		fmt.Sprintf(constant.ListTablesQuery, schema),
 	)
 }

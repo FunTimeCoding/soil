@@ -21,3 +21,12 @@ const (
 )
 
 var OkayStatusCodes = []int{http.StatusOK, http.StatusCreated}
+
+const LoginAddressEnvironment = "LOGIN_ADDRESS"
+const (
+	CertificateName               = "certificate"
+	CertificateFileName           = "certificate.pem"
+	CertificateKeyName            = "key.pem"
+	CertificateFileEnvironment    = "CERTIFICATE_FILE"
+	CertificateKeyFileEnvironment = "CERTIFICATE_KEY_FILE"
+)

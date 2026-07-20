@@ -1,35 +1,6 @@
-package web
+package constant
 
-const (
-	palettePath      = "/palette"
-	navigateCategory = "navigate"
-	linkCategory     = "link"
-
-	iconHost = "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/"
-
-	filesLabel  = "Files"
-	sharesLabel = "Shares"
-
-	applicationsLabel = "Apps"
-	outOfSyncLabel    = "OutOfSync"
-	degradedLabel     = "Degraded"
-	missingLabel      = "Missing"
-
-	eventPath      = "/event"
-	rowEventPrefix = "rows-"
-
-	labelAttribute = "data-label"
-)
-
-const beaconJS = `
-document.addEventListener('click', function(e) {
-	var link = e.target.closest('.board-entry-link');
-	if (!link || !link.dataset.label) return;
-	navigator.sendBeacon('/click', link.dataset.label);
-});
-`
-
-const inlineCSS = `
+const InlineStyle = `
 .board-grid { display: grid; gap: 0.75rem; align-items: start; }
 .board-tail { margin-top: 2.5rem; }
 .board-column { display: flex; flex-direction: column; gap: 0.75rem; }

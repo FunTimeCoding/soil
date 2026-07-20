@@ -3,6 +3,7 @@ package model_context
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -28,6 +29,6 @@ func (s *Server) getStatus(
 	return response.Success(
 		"Total records: %d\nLast poll: %s",
 		totalRecords,
-		lastPoll.Format("2006-01-02T15:04:05Z07:00"),
+		lastPoll.Format(constant.DateFormat),
 	)
 }

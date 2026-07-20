@@ -3,6 +3,7 @@ package wait
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/system/run"
+	"github.com/funtimecoding/soil/pkg/tool/gowait/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gowait/wait/option"
 	"time"
 )
@@ -41,6 +42,6 @@ func Process(o *option.Wait) {
 			panic(fmt.Sprintf("timeout after %v", o.Timeout))
 		}
 
-		time.Sleep(interval)
+		time.Sleep(constant.Interval)
 	}
 }

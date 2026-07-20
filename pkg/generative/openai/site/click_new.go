@@ -1,9 +1,12 @@
 package site
 
-import "time"
+import (
+	"github.com/funtimecoding/soil/pkg/generative/openai/constant"
+	"time"
+)
 
 func (s *Site) clickNew() {
-	n := s.protocol.Select(NewSelector, 0)
+	n := s.protocol.Select(constant.NewSelector, 0)
 
 	if n == nil {
 		return

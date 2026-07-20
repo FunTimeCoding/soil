@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/tool/gowait/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gowait/wait/option"
 	"io"
 	"net/http"
@@ -70,7 +71,7 @@ func Locator(o *option.Wait) {
 		select {
 		case <-x.Done():
 			panic("timeout")
-		case <-time.After(interval):
+		case <-time.After(constant.Interval):
 			// Continue
 		}
 	}

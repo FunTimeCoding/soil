@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/constant"
 )
 
 func (s *Service) ListIndexes(
@@ -14,6 +15,6 @@ func (s *Service) ListIndexes(
 	return s.Query(
 		x,
 		instance,
-		fmt.Sprintf(listIndexesSQL, schema, table),
+		fmt.Sprintf(constant.ListIndexesQuery, schema, table),
 	)
 }
