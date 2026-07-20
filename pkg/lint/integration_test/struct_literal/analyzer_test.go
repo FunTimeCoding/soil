@@ -9,5 +9,5 @@ import (
 func TestBlocked(t *testing.T) {
 	p, results := testutil.LoadTestPackage(t, "testdata/src/example")
 	struct_literal.Check(p, results)
-	testutil.AssertBlocked(t, results, 2)
+	testutil.AssertBlocked(t, results, 3)
 }

@@ -14,7 +14,7 @@ func IsAssertCall(
 	s, okay := call.Fun.(*ast.SelectorExpr)
 
 	if !okay {
-		return false
+		return isAssertHelperCall(p, call)
 	}
 
 	i, okay := s.X.(*ast.Ident)
