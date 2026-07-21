@@ -10,5 +10,5 @@ import (
 func TestJob(t *testing.T) {
 	a := job.New(&gitlab.Job{})
 	a.Raw = nil
-	assert.Any(t, &job.Job{MonitorIdentifier: "gitlab-0"}, a)
+	assert.Exported(t, &job.Job{MonitorIdentifier: "gitlab-0"}, a)
 }

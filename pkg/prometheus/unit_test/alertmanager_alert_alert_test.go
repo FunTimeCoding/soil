@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-func TestAlertmanagerAlertAlert(t *testing.T) {
+func TestAlert(t *testing.T) {
 	actual := alert.New(
 		&models.GettableAlert{
 			Fingerprint: new(upper.Alfa),

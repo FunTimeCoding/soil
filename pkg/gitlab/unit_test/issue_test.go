@@ -10,5 +10,5 @@ import (
 func TestIssue(t *testing.T) {
 	i := issue.New(&gitlab.Issue{})
 	i.Raw = nil
-	assert.Any(t, &issue.Issue{}, i)
+	assert.Exported(t, &issue.Issue{}, i)
 }

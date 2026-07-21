@@ -6,6 +6,6 @@ import (
 	"testing"
 )
 
-func TestAlertmanagerConstantConstant(t *testing.T) {
+func TestAlertmanagerConstant(t *testing.T) {
 	assert.String(t, "ALERTMANAGER_HOST", constant.HostEnvironment)
 }

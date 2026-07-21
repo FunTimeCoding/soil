@@ -10,5 +10,5 @@ import (
 func TestCommit(t *testing.T) {
 	c := commit.New(&gitlab.Commit{})
 	c.Raw = nil
-	assert.Any(t, &commit.Commit{}, c)
+	assert.Exported(t, &commit.Commit{}, c)
 }

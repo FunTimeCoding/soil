@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-func TestAgeColorerColorer(t *testing.T) {
+func TestAgeColorerDefault(t *testing.T) {
 	g := age_fixture.New(0 * time.Hour)
 	y := age_fixture.New(15 * time.Hour)
 	r := age_fixture.New(30 * time.Hour)

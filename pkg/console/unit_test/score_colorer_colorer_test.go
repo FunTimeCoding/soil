@@ -10,7 +10,7 @@ import (
 	"testing"
 )
 
-func TestScoreColorerColorer(t *testing.T) {
+func TestScoreColorerDefault(t *testing.T) {
 	g := score_fixture.New(0)
 	y := score_fixture.New(15)
 	r := score_fixture.New(30)

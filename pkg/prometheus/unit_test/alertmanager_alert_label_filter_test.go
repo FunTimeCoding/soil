@@ -21,10 +21,10 @@ func TestAlertmanagerAlertLabelFilter(t *testing.T) {
 	}
 	f1 := label_filter.New(false)
 	f1.Keep("Apple")
-	alertmanagerAlertLabelFilterAssertHasOnly(t, f1.Run(fixture), "Alfa")
+	assertHasOnlyAlert(t, f1.Run(fixture), "Alfa")
 	f2 := label_filter.New(true)
 	f2.Drop("Apple")
-	alertmanagerAlertLabelFilterAssertHasOnly(t, f2.Run(fixture), "Bravo")
+	assertHasOnlyAlert(t, f2.Run(fixture), "Bravo")
 	fixtureValue := []*alert.Alert{
 		{
 			Name:   upper.Alfa,
@@ -43,7 +43,7 @@ func TestAlertmanagerAlertLabelFilter(t *testing.T) {
 	assertHasOnlyValue(t, f4.Run(fixtureValue), "Alfa", "Green")
 }
 
-func alertmanagerAlertLabelFilterAssertHasOnly(
+func assertHasOnlyAlert(
 	t *testing.T,
 	v []*alert.Alert,
 	name string,

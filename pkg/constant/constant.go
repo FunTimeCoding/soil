@@ -1,8 +1,8 @@
 package constant
 
 import (
-	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/text/option"
+	"time"
 )
 
 const (
@@ -73,6 +73,6 @@ const (
 )
 
 var (
-	StartOfTime       = assert.NewDay(1)
+	StartOfTime       = time.Unix(0, 0).UTC()
 	CompactWhitespace = option.Compact()
 )

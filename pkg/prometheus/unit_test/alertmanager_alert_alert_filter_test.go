@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestAlertmanagerAlertAlertFilter(t *testing.T) {
+func TestAlertFilter(t *testing.T) {
 	// TODO: Test cases
 	o := advanced_option.New()
 	assert.Any(

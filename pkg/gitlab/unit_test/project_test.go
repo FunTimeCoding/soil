@@ -10,5 +10,5 @@ import (
 func TestProject(t *testing.T) {
 	p := project.New(&gitlab.Project{Namespace: &gitlab.ProjectNamespace{}})
 	p.Raw = nil
-	assert.Any(t, &project.Project{}, p)
+	assert.Exported(t, &project.Project{}, p)
 }

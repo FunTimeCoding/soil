@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestRunRun(t *testing.T) {
+func TestRunStart(t *testing.T) {
 	r1 := run.New()
 	assert.True(t, r1.Panic)
 	r1.Panic = false

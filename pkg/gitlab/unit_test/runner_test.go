@@ -10,5 +10,5 @@ import (
 func TestRunner(t *testing.T) {
 	r := runner.New(&gitlab.Runner{})
 	r.RawList = nil
-	assert.Any(t, &runner.Runner{}, r)
+	assert.Exported(t, &runner.Runner{}, r)
 }

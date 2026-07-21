@@ -10,5 +10,5 @@ import (
 func TestTask(t *testing.T) {
 	a := task.New(&gitlab.Todo{})
 	a.Raw = nil
-	assert.Any(t, &task.Task{}, a)
+	assert.Exported(t, &task.Task{}, a)
 }
