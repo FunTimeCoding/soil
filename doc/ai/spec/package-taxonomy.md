@@ -19,7 +19,7 @@ direction, and the criteria for introducing them.
 | `model_context/` | MCP tool implementations. Each method is a handler. | `store/`, `constant/`, `convert/`, `response/` |
 | `convert/` | Type filtering shared by `model_context/` and `server/`. | `types/`, `generated/server/` |
 | `web/` | HTML rendering (gomponents). Holds `*view.View` on Server. Flat; file-prefix grouping. | `store/`, `constant/`, `model/`, `web/view/` |
-| `integration_test/` | Cross-package tests using only the public API. External test package. | all exported packages |
+| `integration_test/` | Cross-package tests using only the public API. Facet subpackages with shared setup in `base/` (see `test-placement.md`). | all exported packages |
 
 ### Shared web packages (soil)
 
@@ -64,8 +64,8 @@ Promote when the file exceeds ~100 lines, or when constants reference types
 from a dedicated types package. Inside `constant/`:
 
 - `constant.go` - simple string/int constants, iota enums
-- One file per domain concept: `field.go`, `list.go`, `species.go`
-- Instance variables (constructed values like template instances, species
+- One file per domain concept: `field.go`, `list.go`, `image.go`
+- Instance variables (constructed values like template instances, image
   definitions) get `<concept>_<name>.go` files
 - Registries (lookup functions, slices of all instances) get
   `<concept>_list.go`, `<concept>_by_name.go`
@@ -80,7 +80,7 @@ one-struct rule:
 types/
 ├── template/       # Template struct + validation methods
 ├── field_meta/     # FieldMeta struct + builder
-└── species/        # Species struct + trait accessors
+└── image/          # Image struct + attribute accessors
 ```
 
 `types/` packages have no persistence deps (no ORM, no store). They define
@@ -93,8 +93,8 @@ with receivers). `model/` is a subtree:
 
 ```
 model/
-├── character/       # Character struct + Map(), Format()
-└── character_form/  # Form struct + FieldMap()
+├── machine/         # Machine struct + Map(), Format()
+└── machine_form/    # Form struct + FieldMap()
 ```
 
 If there's only one entity, `model/` can stay flat (one struct file, one
@@ -127,20 +127,10 @@ testable home without scattering it across consumer packages.
 
 ### No package → `integration_test/`
 
-Introduce when cross-package tests exist. All integration tests live here as
-`package integration_test` (external test package). The setup function
-constructs the full service stack using only exported APIs.
-
-Test files are named after what they test, without `_integration` or `_test`
-suffixes in the concept name:
-
-```
-integration_test/
-├── setup_test.go       # Shared test infrastructure
-├── client_test.go      # Generated client endpoint tests
-├── species_test.go     # Species workflow tests
-└── reflection_test.go  # Struct/tag alignment tests
-```
+Introduce when cross-package tests exist. Tests live in facet
+subpackages (`client/`, `model_context/`, `web_interface/`, ...)
+with shared setup exported from `base/` — layout, naming, and the
+unit/integration line are in `test-placement.md`.
 
 ## Flat Package Guidelines
 
@@ -151,11 +141,11 @@ context is fine flat. File-name prefixes provide grouping:
 
 ```
 server/
-├── get_character.go
-├── post_character.go
-├── delete_character.go
-├── get_species.go
-├── character_to_api.go     # conversion helpers
+├── get_machine.go
+├── post_machine.go
+├── delete_machine.go
+├── get_image.go
+├── machine_to_api.go       # conversion helpers
 └── write_json.go           # response helper
 ```
 
@@ -170,16 +160,16 @@ server state could become `web/component/`.
 
 ### Naming collisions in flat packages
 
-When a flat package holds instances of multiple domain concepts (species
+When a flat package holds instances of multiple domain concepts (image
 instances and template instances), use a suffix to disambiguate:
 
 ```go
-var DomesticGoat = species.New("domestic goat", ...)   // species instance
-var BipedalAnthroTemplate = template.New("bipedal_anthro", ...)  // template instance
+var Debian = image.New("debian", ...)   // image instance
+var DebianTemplate = template.New("debian", ...)  // template instance
 ```
 
-The suffix matches the type name. This avoids collisions like `Naga` (species)
-vs `Naga` (template).
+The suffix matches the type name. This avoids collisions like `Debian`
+(image) vs `Debian` (template).
 
 ## Progression
 

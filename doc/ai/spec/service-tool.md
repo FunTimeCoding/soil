@@ -13,8 +13,9 @@ pkg/tool/go<tool>/
 ├── run.go                          # Run(o): wiring, lifecycle, signal block
 ├── option/
 │   ├── <name>.go                   # Option struct (named after tool/domain, not "Option")
-│   ├── new.go                      # Factory: New() *<Name>
-│   └── <name>_test.go              # assert.NotNil(t, New())
+│   └── new.go                      # Factory: New() *<Name>
+├── unit_test/
+│   └── option_test.go              # assert.NotNil(t, option.New()) - see test-placement.md
 ├── store/                          # Persistence (if needed)
 │   ├── store.go                    # Store struct
 │   ├── constant.go                 # Bucket name

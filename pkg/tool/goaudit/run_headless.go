@@ -29,6 +29,10 @@ func runHeadless(
 		r.AddConcern(c)
 	}
 
+	for _, c := range scan.MisplacedTests(v) {
+		r.AddConcern(c)
+	}
+
 	if output.PrintResults(r.Entries, false) {
 		os.Exit(1)
 	}

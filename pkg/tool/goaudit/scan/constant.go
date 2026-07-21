@@ -82,4 +82,6 @@ const (
 	MissingServerCaptureFailText  = "server/ has 500 responses but no capture_fail.go"
 	MissingStrictServerKey        = "missing_strict_server"
 	MissingStrictServerText       = "openapi.yaml exists but strict-server not enabled"
+	MisplacedTestKey              = "misplaced_test"
+	MisplacedTestText             = "test file outside a domain root unit_test/ or integration_test/"
 )

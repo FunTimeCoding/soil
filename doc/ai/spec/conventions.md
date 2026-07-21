@@ -90,7 +90,7 @@
 
 ## Structure
 
-- **One-file-per-function** - each function or method lives in its own file. File name is the snake_case form of the function name: `addFileToTar()` → `add_file_to_tar.go`, `httpFail()` → `http_fail.go`. Test files don't split - one `_test.go` per feature, named after the primary source file.
+- **One-file-per-function** - each function or method lives in its own file. File name is the snake_case form of the function name: `addFileToTar()` → `add_file_to_tar.go`, `httpFail()` → `http_fail.go`. Test files don't split - one `_test.go` per feature, living in the domain root's `unit_test/` with the subpackage prefix (see `test-placement.md`).
 - **One-type-per-file** - struct definitions go in a file named after the struct (snake_case): `type Store struct` → `store.go`. One struct with receivers per package - see `package-design.md` for the full rule and extraction pattern.
 
 ### Constants

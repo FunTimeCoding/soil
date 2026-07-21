@@ -1,6 +1,6 @@
 # Testing Spec
 
-Integration testing patterns for service tools. Unit testing philosophy lives in `conventions.md`.
+Integration testing patterns for service tools. Unit testing philosophy lives in `conventions.md`; where test files live is `test-placement.md`.
 
 ## Store Testing
 

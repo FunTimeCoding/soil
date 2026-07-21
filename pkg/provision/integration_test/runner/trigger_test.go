@@ -2,8 +2,8 @@ package runner
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/provision/integration_test/runner_tester"
 	"github.com/funtimecoding/soil/pkg/provision/runner"
-	"github.com/funtimecoding/soil/pkg/provision/runner/integration_test/runner_tester"
 	"testing"
 )
 

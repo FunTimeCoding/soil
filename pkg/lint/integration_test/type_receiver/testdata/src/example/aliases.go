@@ -1,5 +1,5 @@
 package example
 
-type Species string
+type Zone string
 
 type Region string

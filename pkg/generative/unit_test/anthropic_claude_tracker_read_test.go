@@ -1,15 +1,16 @@
-package tracker
+package unit_test
 
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/tracker"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"os"
 	"path/filepath"
 	"testing"
 )
 
-func assistantLine(
+func assistantUsageLine(
 	messageIdentifier string,
 	request string,
 	model string,
@@ -54,10 +55,10 @@ func appendFile(
 func TestReadAccumulatesUsage(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "session.jsonl")
 	fable := `{"input_tokens":10,"output_tokens":100,"cache_creation_input_tokens":1000,"cache_read_input_tokens":5000,"cache_creation":{"ephemeral_5m_input_tokens":200,"ephemeral_1h_input_tokens":800}}`
-	appendFile(t, path, assistantLine("m1", "r1", "claude-fable-5", fable))
-	appendFile(t, path, assistantLine("m1", "r1", "claude-fable-5", fable))
-	s := New()
-	assert.Nil(t, Read(path, s))
+	appendFile(t, path, assistantUsageLine("m1", "r1", "claude-fable-5", fable))
+	appendFile(t, path, assistantUsageLine("m1", "r1", "claude-fable-5", fable))
+	s := tracker.New()
+	assert.Nil(t, tracker.Read(path, s))
 	tokens := s.Usage["fable"]
 	assert.NotNil(t, tokens)
 	assert.Integer(t, 1, tokens.Count)
@@ -67,10 +68,10 @@ func TestReadAccumulatesUsage(t *testing.T) {
 	assert.Integer(t, 200, tokens.Cache5Minute)
 	assert.Integer(t, 800, tokens.Cache1Hour)
 	assert.Integer(t, 5000, tokens.CacheRead)
-	appendFile(t, path, assistantLine("m1", "r1", "claude-fable-5", fable))
+	appendFile(t, path, assistantUsageLine("m1", "r1", "claude-fable-5", fable))
 	opus := `{"input_tokens":7,"output_tokens":30,"cache_creation_input_tokens":400,"cache_read_input_tokens":900}`
-	appendFile(t, path, assistantLine("m2", "r2", "claude-opus-4-8", opus))
-	assert.Nil(t, Read(path, s))
+	appendFile(t, path, assistantUsageLine("m2", "r2", "claude-opus-4-8", opus))
+	assert.Nil(t, tracker.Read(path, s))
 	tokens = s.Usage["fable"]
 	assert.Integer(t, 1, tokens.Count)
 	assert.Integer(t, 10, tokens.Input)
@@ -86,21 +87,21 @@ func TestReadAccumulatesUsage(t *testing.T) {
 func TestReadResetsOnShrink(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "session.jsonl")
 	fable := `{"input_tokens":10,"output_tokens":100,"cache_creation_input_tokens":0,"cache_read_input_tokens":0}`
-	appendFile(t, path, assistantLine("m1", "r1", "claude-fable-5", fable))
-	appendFile(t, path, assistantLine("m2", "r2", "claude-fable-5", fable))
-	s := New()
-	assert.Nil(t, Read(path, s))
+	appendFile(t, path, assistantUsageLine("m1", "r1", "claude-fable-5", fable))
+	appendFile(t, path, assistantUsageLine("m2", "r2", "claude-fable-5", fable))
+	s := tracker.New()
+	assert.Nil(t, tracker.Read(path, s))
 	assert.Integer(t, 2, s.Usage["fable"].Count)
 
 	if e := os.WriteFile(
 		path,
-		[]byte(assistantLine("m3", "r3", "claude-fable-5", fable)),
+		[]byte(assistantUsageLine("m3", "r3", "claude-fable-5", fable)),
 		0644,
 	); e != nil {
 		t.Fatalf("rewrite %s: %v", path, e)
 	}
 
-	assert.Nil(t, Read(path, s))
+	assert.Nil(t, tracker.Read(path, s))
 	assert.Integer(t, 1, s.Usage["fable"].Count)
 	assert.Integer(t, 1, s.Lines)
 }
