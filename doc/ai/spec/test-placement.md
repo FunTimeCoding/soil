@@ -10,7 +10,7 @@ fixtures, not tests.
 
 Both homes sit directly under a domain root: `pkg/<domain>/`,
 `pkg/tool/<name>/`, or the repository's equivalent top-level
-grouping (an `internal/<domain>/`, a layer directory). Deeper
+grouping (an `internal/<domain>/`). Deeper
 subsystems consolidate up — a subsystem's integration facets live
 at `<root>/integration_test/<facet>/`, not beside the subsystem.
 
