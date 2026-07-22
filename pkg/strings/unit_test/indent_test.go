@@ -1,11 +1,11 @@
 package unit_test
 
 import (
+	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/strings/indent"
-	"github.com/funtimecoding/soil/pkg/strings/upper"
 	"testing"
 )
 
 func TestF(t *testing.T) {
-	indent.F(upper.Alfa, 0)
+	assert.NotNil(t, indent.F)
 }

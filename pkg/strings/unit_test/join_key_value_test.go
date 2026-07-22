@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func TestJoinKeyValueEquals(t *testing.T) {
+func TestJoinKeyValue(t *testing.T) {
 	assert.String(t, "a=b", key_value.Equals("a", "b"))
 	assert.String(t, "a b", key_value.Space("a", "b"))
 	assert.String(t, "ab", key_value.Empty("a", "b"))

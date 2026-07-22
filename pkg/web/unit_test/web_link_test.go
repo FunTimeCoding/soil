@@ -7,6 +7,21 @@ import (
 	"testing"
 )
 
+func TestScheme(t *testing.T) {
+	assert.String(t, "https", web.Scheme(true))
+	assert.String(t, "http", web.Scheme(false))
+}
+
+func TestSchemePrefix(t *testing.T) {
+	assert.String(t, "https://", web.SchemePrefix(true))
+	// noinspection HttpUrlsUsage
+	assert.String(t, "http://", web.SchemePrefix(false))
+}
+
+func TestPortMap(t *testing.T) {
+	assert.String(t, "8080:80", web.PortMap(constant.ListenPort, 80))
+}
+
 func TestLink(t *testing.T) {
 	assert.String(
 		t,

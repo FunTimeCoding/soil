@@ -13,3 +13,7 @@ func TestFixture(t *testing.T) {
 		fixture.Path("example.txt"),
 	)
 }
+
+func TestFileExists(t *testing.T) {
+	assert.FileExists(t, "./fixture_test.go")
+}
