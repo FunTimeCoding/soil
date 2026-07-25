@@ -10,6 +10,10 @@ func (s *Service) DeleteSession(identifier string) error {
 		return e
 	}
 
+	if e := s.store.DeleteTrackerState(identifier); e != nil {
+		return e
+	}
+
 	s.cache.Delete(identifier)
 	s.notify()
 

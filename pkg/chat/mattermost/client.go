@@ -9,6 +9,7 @@ import (
 type Client struct {
 	context     context.Context
 	host        string
+	insecure    bool
 	token       string
 	teamName    string
 	channelName string

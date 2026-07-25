@@ -82,19 +82,30 @@ type ErrorResponse struct {
 	EventIdentifier string `json:"event_identifier"`
 }
 
+// JiraComment defines model for JiraComment.
+type JiraComment struct {
+	Author     string  `json:"author"`
+	Body       string  `json:"body"`
+	Created    string  `json:"created"`
+	Identifier string  `json:"identifier"`
+	Updated    *string `json:"updated,omitempty"`
+}
+
 // JiraIssue defines model for JiraIssue.
 type JiraIssue struct {
-	Assignee    *string   `json:"assignee,omitempty"`
-	Created     *string   `json:"created,omitempty"`
-	Description *string   `json:"description,omitempty"`
-	Due         *string   `json:"due,omitempty"`
-	Key         string    `json:"key"`
-	Labels      *[]string `json:"labels,omitempty"`
-	Link        *string   `json:"link,omitempty"`
-	Priority    *string   `json:"priority,omitempty"`
-	Status      string    `json:"status"`
-	Summary     string    `json:"summary"`
-	Type        string    `json:"type"`
+	Assignee    *string         `json:"assignee,omitempty"`
+	Comments    *[]*JiraComment `json:"comments,omitempty"`
+	Created     *string         `json:"created,omitempty"`
+	Description *string         `json:"description,omitempty"`
+	Due         *string         `json:"due,omitempty"`
+	Key         string          `json:"key"`
+	Labels      *[]string       `json:"labels,omitempty"`
+	Link        *string         `json:"link,omitempty"`
+	Priority    *string         `json:"priority,omitempty"`
+	Status      string          `json:"status"`
+	Summary     string          `json:"summary"`
+	Type        string          `json:"type"`
+	Updated     *string         `json:"updated,omitempty"`
 }
 
 // JiraProject defines model for JiraProject.
@@ -135,6 +146,12 @@ type UpdatePageRequest struct {
 type SearchPagesParams struct {
 	// Query CQL query string or plain text.
 	Query string `form:"query" json:"query"`
+}
+
+// GetIssueParams defines parameters for GetIssue.
+type GetIssueParams struct {
+	// Comments Include the issue's comments.
+	Comments *bool `form:"comments,omitempty" json:"comments,omitempty"`
 }
 
 // SearchIssuesParams defines parameters for SearchIssues.
@@ -186,7 +203,7 @@ type ServerInterface interface {
 	ListSpaces(w http.ResponseWriter, r *http.Request)
 
 	// (GET /api/v1/jira/issue/{key})
-	GetIssue(w http.ResponseWriter, r *http.Request, key string)
+	GetIssue(w http.ResponseWriter, r *http.Request, key string, params GetIssueParams)
 
 	// (POST /api/v1/jira/issue/{key}/comment)
 	AddIssueComment(w http.ResponseWriter, r *http.Request, key string)
@@ -393,8 +410,24 @@ func (siw *ServerInterfaceWrapper) GetIssue(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetIssueParams
+
+	// ------------- Optional query parameter "comments" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "comments", r.URL.Query(), &params.Comments, runtime.BindQueryParameterOptions{Type: "boolean", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "comments"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "comments", Err: err})
+		}
+		return
+	}
+
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.GetIssue(w, r, key)
+		siw.Handler.GetIssue(w, r, key, params)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -955,7 +988,8 @@ func (response ListSpaces500JSONResponse) VisitListSpacesResponse(w http.Respons
 }
 
 type GetIssueRequestObject struct {
-	Key string `json:"key"`
+	Key    string `json:"key"`
+	Params GetIssueParams
 }
 
 type GetIssueResponseObject interface {
@@ -1455,10 +1489,11 @@ func (sh *strictHandler) ListSpaces(w http.ResponseWriter, r *http.Request) {
 }
 
 // GetIssue operation middleware
-func (sh *strictHandler) GetIssue(w http.ResponseWriter, r *http.Request, key string) {
+func (sh *strictHandler) GetIssue(w http.ResponseWriter, r *http.Request, key string, params GetIssueParams) {
 	var request GetIssueRequestObject
 
 	request.Key = key
+	request.Params = params
 
 	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
 		return sh.ssi.GetIssue(ctx, request.(GetIssueRequestObject))
@@ -1627,28 +1662,30 @@ func (sh *strictHandler) SearchIssues(w http.ResponseWriter, r *http.Request, pa
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
+	"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",
+	"4xk0mlaZygBcr/8NAAD//w==",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

@@ -15,7 +15,7 @@ require (
 	github.com/amikos-tech/pure-tokenizers v0.1.5
 	github.com/andybrewer/mack v0.0.0-20251024001139-afd410b36447
 	github.com/andygrunwald/go-jira v1.17.0
-	github.com/anthropics/anthropic-sdk-go v1.58.0
+	github.com/anthropics/anthropic-sdk-go v1.61.0
 	github.com/apenella/go-ansible/v2 v2.4.1
 	github.com/bmatcuk/doublestar/v4 v4.10.0
 	github.com/bndr/gojenkins v1.2.0
@@ -33,14 +33,14 @@ require (
 	github.com/fsnotify/fsnotify v1.10.1
 	github.com/gage-technologies/mistral-go v1.1.0
 	github.com/gdamore/tcell/v2 v2.13.10
-	github.com/getkin/kin-openapi v0.142.0
+	github.com/getkin/kin-openapi v0.144.0
 	github.com/getlantern/systray v1.2.2
 	github.com/getsentry/sentry-go v0.48.0
 	github.com/glebarez/go-sqlite v1.22.0
 	github.com/glebarez/sqlite v1.11.0
-	github.com/go-git/go-billy/v5 v5.9.0
+	github.com/go-git/go-billy/v5 v5.9.1
 	github.com/go-git/go-git/v5 v5.19.1
-	github.com/go-openapi/runtime v0.32.5
+	github.com/go-openapi/runtime v0.32.6
 	github.com/go-openapi/strfmt v0.27.0
 	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1
 	github.com/go-test/deep v1.1.1
@@ -49,17 +49,17 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674
 	github.com/gpustack/gguf-parser-go v0.25.0
-	github.com/grafana/grafana-openapi-client-go v0.0.0-20260608140303-399c66621c54
+	github.com/grafana/grafana-openapi-client-go v0.0.0-20260724161645-6029e6c64947
 	github.com/grafana/loki-client-go v0.0.0-20251015150631-c42bbddc310a
 	github.com/hashicorp/vault-client-go v0.4.3
-	github.com/hetznercloud/hcloud-go/v2 v2.45.0
+	github.com/hetznercloud/hcloud-go/v2 v2.46.0
 	github.com/hupe1980/go-tiktoken v0.0.10
 	github.com/jackc/pgconn v1.14.3
 	github.com/jackc/pgx/v5 v5.10.0
 	github.com/kestra-io/client-sdk/go-sdk v1.3.0
 	github.com/liushuangls/go-anthropic/v2 v2.24.0
 	github.com/luthermonson/go-proxmox v0.8.1
-	github.com/mark3labs/mcp-go v0.56.0
+	github.com/mark3labs/mcp-go v0.57.0
 	github.com/mattermost/mattermost/server/public v0.4.3
 	github.com/mitchellh/go-ps v1.0.0
 	github.com/modelcontextprotocol/go-sdk v1.6.1
@@ -69,15 +69,15 @@ require (
 	github.com/nwaples/rardecode/v2 v2.2.5
 	github.com/oapi-codegen/runtime v1.6.0
 	github.com/olekukonko/tablewriter v1.1.4
-	github.com/ollama/ollama v0.32.1
-	github.com/openai/openai-go/v3 v3.44.0
+	github.com/ollama/ollama v0.32.3
+	github.com/openai/openai-go/v3 v3.46.0
 	github.com/openvex/go-vex v0.2.8
 	github.com/opsgenie/opsgenie-go-sdk-v2 v1.2.23
 	github.com/pkg/sftp v1.13.11
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2
 	github.com/prometheus/alertmanager v0.33.1
-	github.com/prometheus/client_golang v1.24.0
-	github.com/prometheus/common v0.70.0
+	github.com/prometheus/client_golang v1.24.1
+	github.com/prometheus/common v0.70.1
 	github.com/rivo/tview v0.42.0
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/samber/slog-loki/v3 v3.7.2
@@ -102,7 +102,7 @@ require (
 	golang.org/x/time v0.15.0
 	golang.org/x/tools v0.48.0
 	gonum.org/v1/gonum v0.17.0
-	google.golang.org/api v0.289.0
+	google.golang.org/api v0.290.0
 	google.golang.org/protobuf v1.36.12-0.20260120151049-f2248ac996af
 	gopkg.in/yaml.v3 v3.0.1
 	gorm.io/driver/postgres v1.6.0
@@ -178,28 +178,29 @@ require (
 	github.com/go-kit/kit v0.12.0 // indirect
 	github.com/go-kit/log v0.2.1 // indirect
 	github.com/go-logfmt/logfmt v0.6.0 // indirect
-	github.com/go-logr/logr v1.4.3 // indirect
+	github.com/go-logr/logr v1.4.4 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
-	github.com/go-openapi/analysis v0.25.3 // indirect
+	github.com/go-openapi/analysis v0.25.5 // indirect
 	github.com/go-openapi/errors v0.22.8 // indirect
-	github.com/go-openapi/jsonpointer v0.23.1 // indirect
-	github.com/go-openapi/jsonreference v0.21.6 // indirect
-	github.com/go-openapi/loads v0.24.0 // indirect
+	github.com/go-openapi/jsonpointer v1.0.0 // indirect
+	github.com/go-openapi/jsonreference v1.0.0 // indirect
+	github.com/go-openapi/loads v0.25.0 // indirect
 	github.com/go-openapi/runtime/server-middleware v0.30.0 // indirect
-	github.com/go-openapi/spec v0.22.6 // indirect
+	github.com/go-openapi/spec v0.22.9 // indirect
 	github.com/go-openapi/swag v0.26.0 // indirect
 	github.com/go-openapi/swag/cmdutils v0.26.0 // indirect
-	github.com/go-openapi/swag/conv v0.27.0 // indirect
-	github.com/go-openapi/swag/fileutils v0.27.0 // indirect
+	github.com/go-openapi/swag/conv v0.27.3 // indirect
+	github.com/go-openapi/swag/fileutils v0.27.3 // indirect
 	github.com/go-openapi/swag/jsonname v0.26.1 // indirect
-	github.com/go-openapi/swag/jsonutils v0.27.0 // indirect
-	github.com/go-openapi/swag/loading v0.26.1 // indirect
-	github.com/go-openapi/swag/mangling v0.26.1 // indirect
+	github.com/go-openapi/swag/jsonutils v0.27.3 // indirect
+	github.com/go-openapi/swag/loading v0.27.3 // indirect
+	github.com/go-openapi/swag/mangling v0.27.3 // indirect
 	github.com/go-openapi/swag/netutils v0.26.0 // indirect
-	github.com/go-openapi/swag/stringutils v0.27.0 // indirect
-	github.com/go-openapi/swag/typeutils v0.27.0 // indirect
-	github.com/go-openapi/swag/yamlutils v0.26.1 // indirect
-	github.com/go-openapi/validate v0.26.0 // indirect
+	github.com/go-openapi/swag/pools v0.27.3 // indirect
+	github.com/go-openapi/swag/stringutils v0.27.3 // indirect
+	github.com/go-openapi/swag/typeutils v0.27.3 // indirect
+	github.com/go-openapi/swag/yamlutils v0.27.3 // indirect
+	github.com/go-openapi/validate v0.26.1 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/go-playground/validator/v10 v10.30.1 // indirect
@@ -312,7 +313,7 @@ require (
 	github.com/standard-webhooks/standard-webhooks/libraries v0.0.1 // indirect
 	github.com/stretchr/objx v0.5.3 // indirect
 	github.com/stretchr/testify v1.11.1 // indirect
-	github.com/tidwall/gjson v1.18.0 // indirect
+	github.com/tidwall/gjson v1.19.0 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.1 // indirect
 	github.com/tidwall/sjson v1.2.5 // indirect

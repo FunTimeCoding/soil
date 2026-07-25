@@ -5,5 +5,5 @@ func (c *Client) RefreshSocket() {
 		c.webSocket.Close()
 	}
 
-	c.webSocket = newWebSocket(c.host, c.token)
+	c.webSocket = newWebSocket(c.host, c.token, c.insecure)
 }

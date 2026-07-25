@@ -4,13 +4,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/post"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/mattermost/mattermost/server/public/model"
+	"time"
 )
 
-func (c *Client) MustRecentPosts(
+func (c *Client) MustPostsSince(
 	h *model.Channel,
-	sinceMilli int64,
+	since time.Time,
 ) []*post.Post {
-	result, e := c.RecentPosts(h, sinceMilli)
+	result, e := c.PostsSince(h, since)
 	errors.PanicOnError(e)
 
 	return result

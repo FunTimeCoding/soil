@@ -26,9 +26,13 @@ func New(o ...Option) *Client {
 		panic("token required")
 	}
 
-	result.client = model.NewAPIv4Client(
-		locator.New(result.host).String(),
-	)
+	l := locator.New(result.host)
+
+	if result.insecure {
+		l.Insecure()
+	}
+
+	result.client = model.NewAPIv4Client(l.String())
 	result.client.SetOAuthToken(result.token)
 
 	if result.teamName != "" {

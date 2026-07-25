@@ -1,0 +1,183 @@
+---
+openapi: "3.0.3"
+
+info:
+  title: gomattermostd
+  version: "1.0"
+  description: REST API over the Mattermost client for daemon consumers.
+
+servers:
+- url: http://localhost:8587
+
+components:
+  schemas:
+    Status:
+      type: object
+      properties:
+        name:
+          type: string
+        version:
+          type: string
+      required: [name, version]
+
+    Post:
+      type: object
+      properties:
+        identifier:
+          type: string
+        username:
+          type: string
+        message:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        root:
+          # Root post identifier; absent on thread roots and
+          # channel-level posts.
+          type: string
+        files:
+          # File identifiers of attachments.
+          type: array
+          items:
+            type: string
+      required: [identifier, username, message, created_at]
+
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+
+    ErrorResponse:
+      type: object
+      required: [error, event_identifier]
+      properties:
+        error:
+          type: string
+        event_identifier:
+          type: string
+
+paths:
+  /api/v1/status:
+    get:
+      operationId: getStatus
+      summary: Daemon identity and version
+      responses:
+        '200':
+          description: Daemon status
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Status"
+
+  /api/v1/channel/{name}/posts:
+    get:
+      operationId: getChannelPosts
+      summary: Posts of a channel since a time, replies and attachment-only posts included, oldest first
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Channel name within the configured team.
+      - name: since
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date-time
+        description: Only posts created at or after this time.
+      responses:
+        '200':
+          description: Posts since the given time.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/Post"
+        '404':
+          description: Channel not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '500':
+          description: Failed to fetch posts.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/v1/post/{identifier}/reactions:
+    get:
+      operationId: getPostReactions
+      summary: Emoji names of a post's reactions
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Post identifier.
+      responses:
+        '200':
+          description: Emoji names, empty when the post has none.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '404':
+          description: Post not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '500':
+          description: Failed to fetch reactions.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/v1/thread/{identifier}:
+    get:
+      operationId: getThread
+      summary: Replies of a thread by its root post identifier, oldest first
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Root post identifier.
+      responses:
+        '200':
+          description: Thread replies.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/Post"
+        '404':
+          description: Post not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        '500':
+          description: Failed to fetch thread.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"

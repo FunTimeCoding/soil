@@ -76,19 +76,30 @@ type ErrorResponse struct {
 	EventIdentifier string `json:"event_identifier"`
 }
 
+// JiraComment defines model for JiraComment.
+type JiraComment struct {
+	Author     string  `json:"author"`
+	Body       string  `json:"body"`
+	Created    string  `json:"created"`
+	Identifier string  `json:"identifier"`
+	Updated    *string `json:"updated,omitempty"`
+}
+
 // JiraIssue defines model for JiraIssue.
 type JiraIssue struct {
-	Assignee    *string   `json:"assignee,omitempty"`
-	Created     *string   `json:"created,omitempty"`
-	Description *string   `json:"description,omitempty"`
-	Due         *string   `json:"due,omitempty"`
-	Key         string    `json:"key"`
-	Labels      *[]string `json:"labels,omitempty"`
-	Link        *string   `json:"link,omitempty"`
-	Priority    *string   `json:"priority,omitempty"`
-	Status      string    `json:"status"`
-	Summary     string    `json:"summary"`
-	Type        string    `json:"type"`
+	Assignee    *string         `json:"assignee,omitempty"`
+	Comments    *[]*JiraComment `json:"comments,omitempty"`
+	Created     *string         `json:"created,omitempty"`
+	Description *string         `json:"description,omitempty"`
+	Due         *string         `json:"due,omitempty"`
+	Key         string          `json:"key"`
+	Labels      *[]string       `json:"labels,omitempty"`
+	Link        *string         `json:"link,omitempty"`
+	Priority    *string         `json:"priority,omitempty"`
+	Status      string          `json:"status"`
+	Summary     string          `json:"summary"`
+	Type        string          `json:"type"`
+	Updated     *string         `json:"updated,omitempty"`
 }
 
 // JiraProject defines model for JiraProject.
@@ -129,6 +140,12 @@ type UpdatePageRequest struct {
 type SearchPagesParams struct {
 	// Query CQL query string or plain text.
 	Query string `form:"query" json:"query"`
+}
+
+// GetIssueParams defines parameters for GetIssue.
+type GetIssueParams struct {
+	// Comments Include the issue's comments.
+	Comments *bool `form:"comments,omitempty" json:"comments,omitempty"`
 }
 
 // SearchIssuesParams defines parameters for SearchIssues.
@@ -266,7 +283,7 @@ type ClientInterface interface {
 	ListSpaces(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GetIssue performs a GET /api/v1/jira/issue/{key} (the `GetIssue` operationId) request.
-	GetIssue(ctx context.Context, key string, reqEditors ...RequestEditorFn) (*http.Response, error)
+	GetIssue(ctx context.Context, key string, params *GetIssueParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// AddIssueCommentWithBody performs a POST /api/v1/jira/issue/{key}/comment (the `AddIssueComment` operationId) request,
 	// with any type of body and a specified content type.
@@ -431,8 +448,8 @@ func (c *Client) ListSpaces(ctx context.Context, reqEditors ...RequestEditorFn) 
 }
 
 // GetIssue performs a GET /api/v1/jira/issue/{key} (the `GetIssue` operationId) request.
-func (c *Client) GetIssue(ctx context.Context, key string, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewGetIssueRequest(c.Server, key)
+func (c *Client) GetIssue(ctx context.Context, key string, params *GetIssueParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetIssueRequest(c.Server, key, params)
 	if err != nil {
 		return nil, err
 	}
@@ -818,7 +835,7 @@ func NewListSpacesRequest(server string) (*http.Request, error) {
 }
 
 // NewGetIssueRequest constructs an http.Request for the GetIssue method
-func NewGetIssueRequest(server string, key string) (*http.Request, error) {
+func NewGetIssueRequest(server string, key string, params *GetIssueParams) (*http.Request, error) {
 	var err error
 
 	var pathParam0 string
@@ -841,6 +858,33 @@ func NewGetIssueRequest(server string, key string) (*http.Request, error) {
 	queryURL, err := serverURL.Parse(operationPath)
 	if err != nil {
 		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if params.Comments != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "comments", *params.Comments, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "boolean", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
 	}
 
 	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
@@ -1165,7 +1209,7 @@ type ClientWithResponsesInterface interface {
 	// GetIssueWithResponse performs a GET /api/v1/jira/issue/{key} (the `GetIssue` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
-	GetIssueWithResponse(ctx context.Context, key string, reqEditors ...RequestEditorFn) (*GetIssueResponse, error)
+	GetIssueWithResponse(ctx context.Context, key string, params *GetIssueParams, reqEditors ...RequestEditorFn) (*GetIssueResponse, error)
 
 	// AddIssueCommentWithBodyWithResponse performs a POST /api/v1/jira/issue/{key}/comment (the `AddIssueComment` operationId) request,
 	// with any type of body and a specified content type.
@@ -1940,8 +1984,8 @@ func (c *ClientWithResponses) ListSpacesWithResponse(ctx context.Context, reqEdi
 // GetIssueWithResponse performs a GET /api/v1/jira/issue/{key} (the `GetIssue` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
-func (c *ClientWithResponses) GetIssueWithResponse(ctx context.Context, key string, reqEditors ...RequestEditorFn) (*GetIssueResponse, error) {
-	rsp, err := c.GetIssue(ctx, key, reqEditors...)
+func (c *ClientWithResponses) GetIssueWithResponse(ctx context.Context, key string, params *GetIssueParams, reqEditors ...RequestEditorFn) (*GetIssueResponse, error) {
+	rsp, err := c.GetIssue(ctx, key, params, reqEditors...)
 	if err != nil {
 		return nil, err
 	}

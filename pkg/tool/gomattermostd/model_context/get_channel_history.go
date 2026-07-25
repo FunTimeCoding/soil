@@ -57,7 +57,7 @@ func (s *Server) GetChannelHistory(
 			)
 		}
 
-		posts, g = s.client.RecentPosts(ch, since.UnixMilli())
+		posts, g = s.client.PostsSince(ch, since)
 
 		if g != nil {
 			return s.captureDetail(g)

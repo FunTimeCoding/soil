@@ -7,7 +7,8 @@ import (
 )
 
 func getIssue(c *client.Client) *cobra.Command {
-	return &cobra.Command{
+	var comments bool
+	result := &cobra.Command{
 		Use:   "get-issue [key]",
 		Short: "Get a Jira issue by key",
 		Args:  cobra.ExactArgs(1),
@@ -15,7 +16,15 @@ func getIssue(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			fmt.Println(c.GetIssue(arguments[0]))
+			fmt.Println(c.GetIssue(arguments[0], comments))
 		},
 	}
+	result.Flags().BoolVar(
+		&comments,
+		"comments",
+		false,
+		"Include the issue's comments",
+	)
+
+	return result
 }

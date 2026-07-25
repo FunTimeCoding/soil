@@ -18,7 +18,11 @@ func (s *Server) GetIssue(
 		), nil
 	}
 
-	return server.GetIssue200JSONResponse(
-		*convert.JiraIssue(result),
-	), nil
+	converted := convert.JiraIssue(result)
+
+	if r.Params.Comments != nil && *r.Params.Comments {
+		converted.Comments = convert.JiraComments(result)
+	}
+
+	return server.GetIssue200JSONResponse(*converted), nil
 }

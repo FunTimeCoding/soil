@@ -35,6 +35,10 @@ func JiraIssue(i *issue.Issue) *server.JiraIssue {
 		result.Created = new(i.Create.Format(time.RFC3339))
 	}
 
+	if u := time.Time(i.Raw.Fields.Updated); !u.IsZero() {
+		result.Updated = new(u.Format(time.RFC3339))
+	}
+
 	if i.Due != nil && !i.Due.IsZero() {
 		result.Due = new(i.Due.Format(time.RFC3339))
 	}

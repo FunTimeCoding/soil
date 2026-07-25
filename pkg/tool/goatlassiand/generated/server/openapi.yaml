@@ -47,6 +47,12 @@ paths:
         schema:
           type: string
         description: Issue key (e.g. PROJ-123).
+      - name: comments
+        in: query
+        required: false
+        schema:
+          type: boolean
+        description: Include the issue's comments.
       responses:
         "200":
           description: Issue detail.
@@ -377,9 +383,36 @@ components:
             type: string
         created:
           type: string
+        updated:
+          type: string
         due:
           type: string
         link:
+          type: string
+        comments:
+          # Only present when requested with the comments flag.
+          type: array
+          items:
+            nullable: true
+            allOf:
+            - $ref: "#/components/schemas/JiraComment"
+    JiraComment:
+      type: object
+      required:
+      - identifier
+      - author
+      - body
+      - created
+      properties:
+        identifier:
+          type: string
+        author:
+          type: string
+        body:
+          type: string
+        created:
+          type: string
+        updated:
           type: string
     JiraProject:
       type: object

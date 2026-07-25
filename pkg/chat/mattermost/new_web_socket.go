@@ -10,9 +10,16 @@ import (
 func newWebSocket(
 	host string,
 	token string,
+	insecure bool,
 ) *model.WebSocketClient {
+	scheme := constant.SecureSocket
+
+	if insecure {
+		scheme = constant.Socket
+	}
+
 	result, e := model.NewWebSocketClient4(
-		locator.New(host).Scheme(constant.SecureSocket).String(),
+		locator.New(host).Scheme(scheme).String(),
 		token,
 	)
 	errors.PanicOnError(e)

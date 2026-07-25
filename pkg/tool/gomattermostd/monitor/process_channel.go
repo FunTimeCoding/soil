@@ -1,6 +1,9 @@
 package monitor
 
-import "github.com/funtimecoding/soil/pkg/errors/panics"
+import (
+	"github.com/funtimecoding/soil/pkg/errors/panics"
+	"time"
+)
 
 func (m *Monitor) processChannel(name string) {
 	m.mutex.RLock()
@@ -12,7 +15,7 @@ func (m *Monitor) processChannel(name string) {
 		panics.Print("name not found in channel cache: %s", name)
 	}
 
-	posts := m.client.MustRecentPosts(c, lastMilli)
+	posts := m.client.MustPostsSince(c, time.UnixMilli(lastMilli))
 	m.mutex.Lock()
 	m.lastCheckMillisecond[name] = nowMilli()
 	m.mutex.Unlock()

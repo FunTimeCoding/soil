@@ -5,12 +5,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/chat/mattermost"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
-	"github.com/funtimecoding/soil/pkg/lifecycle/server"
+	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/telemetry"
+	generated "github.com/funtimecoding/soil/pkg/tool/gomattermostd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/monitor"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/option"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/server"
 	"github.com/funtimecoding/soil/pkg/web"
 	"net/http"
 )
@@ -34,9 +36,16 @@ func Run(
 		append(
 			p,
 			lifecycle.WithServer(
-				server.New(
+				lifecycleServer.New(
 					o.Address,
 					func(u *http.ServeMux) {
+						generated.HandlerFromMux(
+							generated.NewStrictHandler(
+								server.New(c, o.Version, r),
+								nil,
+							),
+							u,
+						)
 						model_context.New(
 							c,
 							m,
