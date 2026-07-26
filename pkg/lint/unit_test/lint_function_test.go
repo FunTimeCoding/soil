@@ -3,14 +3,14 @@ package unit_test
 import (
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
-	"github.com/funtimecoding/soil/pkg/strings/upper"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 	"testing"
 )
 
 func TestFunctionEmptyBody(t *testing.T) {
 	l := lint.Function(
-		upper.Bravo,
+		constant.UpperBravo,
 		strings.NewReader(
 			"package main\n\nfunc main() {\n}\n",
 		),
@@ -37,7 +37,7 @@ func TestFunctionEmptyBody(t *testing.T) {
 
 func TestFunctionClean(t *testing.T) {
 	l := lint.Function(
-		upper.Alfa,
+		constant.UpperAlfa,
 		strings.NewReader(
 			"package example\n\nfunc Example() {\n\tfmt.Println(\"hello\")\n}\n",
 		),

@@ -33,10 +33,6 @@ func executeMove(
 		)
 	}
 
-	for ident, name := range plan.renames {
-		ident.Name = name
-	}
-
 	decorations := decoration.NewSet()
 
 	for _, entry := range plan.entries {
@@ -49,8 +45,8 @@ func executeMove(
 		}
 	}
 
-	for ident := range plan.renames {
-		owner, file := findOwningFile(plan.all, plan.set, ident.Pos())
+	for ident, name := range plan.renames {
+		owner, file := findOwningFile(plan.all, ident.Pos())
 
 		if file == nil {
 			continue
@@ -58,6 +54,10 @@ func executeMove(
 
 		if _, e := decorations.DecorateFile(plan.set, owner, file); e != nil {
 			return nil, e
+		}
+
+		if d := decorations.DecoratedIdent(owner, ident); d != nil {
+			d.Name = name
 		}
 	}
 

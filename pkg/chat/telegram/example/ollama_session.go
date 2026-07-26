@@ -2,8 +2,8 @@ package example
 
 import (
 	"fmt"
+	chat "github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/chat/telegram"
-	"github.com/funtimecoding/soil/pkg/chat/telegram/constant"
 	"github.com/funtimecoding/soil/pkg/chat/telegram/message"
 	"github.com/funtimecoding/soil/pkg/generative/ollama"
 	"github.com/funtimecoding/soil/pkg/generative/ollama/constant/prompts"
@@ -20,8 +20,8 @@ func OllamaSession() {
 	t := telegram.NewEnvironment()
 	defer t.Close()
 	t.PrintDatabase()
-	f := constant.Format
-	c := environment.Required(constant.ChannelEnvironment)
+	f := telegram.Format
+	c := environment.Required(chat.TelegramChannelEnvironment)
 	verbose := true
 	statistics := false
 	ownName := t.Self().UserName

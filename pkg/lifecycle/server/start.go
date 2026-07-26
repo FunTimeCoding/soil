@@ -1,6 +1,7 @@
 package server
 
 import (
+	"github.com/funtimecoding/soil/pkg/lifecycle/constant"
 	"github.com/funtimecoding/soil/pkg/web"
 	"net/http"
 	"net/http/pprof"
@@ -26,8 +27,8 @@ func (s *Server) Start() {
 	s.http = web.Server(m, s.Address)
 
 	if s.protected {
-		s.http.ReadTimeout = readWriteTimeout
-		s.http.WriteTimeout = readWriteTimeout
+		s.http.ReadTimeout = constant.ReadWriteTimeout
+		s.http.WriteTimeout = constant.ReadWriteTimeout
 
 		if s.writeTimeout > 0 {
 			s.http.WriteTimeout = s.writeTimeout

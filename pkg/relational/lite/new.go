@@ -3,7 +3,7 @@ package lite
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/relational/lite/constant"
+	"github.com/funtimecoding/soil/pkg/relational/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/glebarez/sqlite"
@@ -18,7 +18,7 @@ func New(
 	l.Structured(constant.LiteMessage)
 	system.MakeDirectory(filepath.Dir(path))
 	m, e := gorm.Open(
-		sqlite.Open(join.Empty(path, constant.FileParameters)),
+		sqlite.Open(join.Empty(path, constant.LiteFileParameters)),
 		&gorm.Config{},
 	)
 	errors.PanicOnError(e)

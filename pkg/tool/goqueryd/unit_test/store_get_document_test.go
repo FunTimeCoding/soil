@@ -2,7 +2,7 @@ package unit_test
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"testing"
 )
 
@@ -34,7 +34,7 @@ func TestGetDocumentNotFound(t *testing.T) {
 func TestGetDocumentWithContext(t *testing.T) {
 	s := indexedTestStore(t)
 	defer s.Close()
-	s.AddContext("test", separator.Slash, "root context")
+	s.AddContext("test", constant.Slash, "root context")
 	d := s.MustGetDocument("test/alpha.md")
 	assert.NotNil(t, d)
 	assert.String(t, "root context", d.Context)

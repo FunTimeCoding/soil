@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"github.com/funtimecoding/soil/pkg/errors"
 	library "github.com/funtimecoding/soil/pkg/strings"
-	"github.com/funtimecoding/soil/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	"strings"
 )
@@ -20,7 +20,7 @@ func ScanFile(
 
 	for s.Scan() {
 		b.WriteString(s.Text())
-		b.WriteString(separator.Unix)
+		b.WriteString(constant.Unix)
 	}
 
 	errors.PanicOnError(s.Err())

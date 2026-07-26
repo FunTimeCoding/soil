@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/math/range_mapping"
 	"github.com/funtimecoding/soil/pkg/math/ranges"
-	"github.com/funtimecoding/soil/pkg/strings/upper"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"testing"
 )
 
@@ -20,10 +20,10 @@ func TestGenerate(t *testing.T) {
 		range_mapping.Generate(
 			[]float64{0.5, 1.5, 2.5},
 			[]string{
-				upper.Alfa,
-				upper.Bravo,
-				upper.Charlie,
-				upper.Delta,
+				constant.UpperAlfa,
+				constant.UpperBravo,
+				constant.UpperCharlie,
+				constant.UpperDelta,
 			},
 		),
 	)
@@ -92,10 +92,10 @@ func TestGenerate(t *testing.T) {
 				78462.7853715095,
 			},
 			[]string{
-				upper.Alfa,
-				upper.Bravo,
-				upper.Charlie,
-				upper.Delta,
+				constant.UpperAlfa,
+				constant.UpperBravo,
+				constant.UpperCharlie,
+				constant.UpperDelta,
 			},
 		),
 	)

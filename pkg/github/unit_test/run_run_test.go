@@ -3,7 +3,7 @@ package unit_test
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/github/run"
-	"github.com/funtimecoding/soil/pkg/strings/upper"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/google/go-github/v89/github"
 	"testing"
 	"time"
@@ -12,7 +12,7 @@ import (
 func TestRun(t *testing.T) {
 	r := run.New(
 		&github.WorkflowRun{
-			Name:       new(upper.Alfa),
+			Name:       new(constant.UpperAlfa),
 			CreatedAt:  &github.Timestamp{},
 			Repository: &github.Repository{},
 		},

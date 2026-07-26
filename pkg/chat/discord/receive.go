@@ -3,6 +3,7 @@ package discord
 import (
 	"fmt"
 	"github.com/bwmarrin/discordgo"
+	"github.com/funtimecoding/soil/pkg/chat/constant"
 )
 
 func (c *Client) receive(
@@ -14,9 +15,9 @@ func (c *Client) receive(
 	}
 
 	switch m.Content {
-	case PingCommand:
+	case constant.DiscordPingCommand:
 		c.Send(s, c.UserChannel(s, m.Author.ID).ID, "pong")
-	case CleanCommand:
+	case constant.DiscordCleanCommand:
 		if m.GuildID == "" {
 			// Direct message
 			channel := c.UserChannel(s, m.Author.ID).ID
@@ -27,7 +28,7 @@ func (c *Client) receive(
 			c.Clean(s, m.ChannelID, false)
 			c.Send(s, m.ChannelID, "Done")
 		}
-	case DetailsCommand:
+	case constant.DiscordDetailsCommand:
 		fmt.Printf("Channel: %+v\n", c.Channel(s, m.ChannelID))
 	default:
 		fmt.Printf("Message: %+v\n", m.Message)

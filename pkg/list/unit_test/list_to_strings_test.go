@@ -3,7 +3,7 @@ package unit_test
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/list"
-	"github.com/funtimecoding/soil/pkg/strings/upper"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"testing"
 )
 
@@ -17,6 +17,6 @@ func TestToStrings(t *testing.T) {
 	assert.Strings(
 		t,
 		[]string{"Alfa", "Bravo"},
-		list.ToStrings([]Fixture{upper.Alfa, upper.Bravo}),
+		list.ToStrings([]Fixture{constant.UpperAlfa, constant.UpperBravo}),
 	)
 }

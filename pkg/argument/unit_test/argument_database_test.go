@@ -6,8 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	libraryConstant "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/identity"
-	"github.com/funtimecoding/soil/pkg/relational/lite/constant"
-	"github.com/funtimecoding/soil/pkg/relational/postgres"
+	relational "github.com/funtimecoding/soil/pkg/relational/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/system"
 	"path/filepath"
@@ -15,7 +14,7 @@ import (
 )
 
 func TestLiteDefault(t *testing.T) {
-	t.Setenv(constant.PathEnvironment, "")
+	t.Setenv(relational.LitePathEnvironment, "")
 	name := "gotest-lite-probe"
 	a := argument.NewInstance(identity.New(name, "test tool", name))
 	a.Lite()
@@ -32,7 +31,7 @@ func TestLiteDefault(t *testing.T) {
 }
 
 func TestLiteEnvironmentOverridesDefault(t *testing.T) {
-	t.Setenv(constant.PathEnvironment, "/somewhere/custom.sqlite")
+	t.Setenv(relational.LitePathEnvironment, "/somewhere/custom.sqlite")
 	a := testInstance(t)
 	a.Lite()
 	assert.Nil(t, a.ParseArguments(nil))
@@ -44,7 +43,7 @@ func TestLiteEnvironmentOverridesDefault(t *testing.T) {
 }
 
 func TestLiteFlagOverridesEnvironment(t *testing.T) {
-	t.Setenv(constant.PathEnvironment, "/somewhere/custom.sqlite")
+	t.Setenv(relational.LitePathEnvironment, "/somewhere/custom.sqlite")
 	a := testInstance(t)
 	a.Lite()
 	assert.Nil(
@@ -55,8 +54,8 @@ func TestLiteFlagOverridesEnvironment(t *testing.T) {
 }
 
 func TestDatabaseDefaults(t *testing.T) {
-	t.Setenv(constant.PathEnvironment, "")
-	t.Setenv(postgres.LocatorEnvironment, "")
+	t.Setenv(relational.LitePathEnvironment, "")
+	t.Setenv(relational.PostgresLocatorEnvironment, "")
 	a := testInstance(t)
 	a.Database()
 	assert.Nil(t, a.ParseArguments(nil))
@@ -64,7 +63,7 @@ func TestDatabaseDefaults(t *testing.T) {
 }
 
 func TestDatabaseEnvironmentOverridesDefault(t *testing.T) {
-	t.Setenv(postgres.LocatorEnvironment, "postgres://env@localhost/env")
+	t.Setenv(relational.PostgresLocatorEnvironment, "postgres://env@localhost/env")
 	a := testInstance(t)
 	a.Database()
 	assert.Nil(t, a.ParseArguments(nil))
@@ -76,7 +75,7 @@ func TestDatabaseEnvironmentOverridesDefault(t *testing.T) {
 }
 
 func TestDatabaseFlagOverridesEnvironment(t *testing.T) {
-	t.Setenv(postgres.LocatorEnvironment, "postgres://env@localhost/env")
+	t.Setenv(relational.PostgresLocatorEnvironment, "postgres://env@localhost/env")
 	a := testInstance(t)
 	a.Database()
 	assert.Nil(

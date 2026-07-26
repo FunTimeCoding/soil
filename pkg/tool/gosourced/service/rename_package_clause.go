@@ -73,7 +73,6 @@ func (s *Service) RenamePackageClause(
 		set,
 		filepath.Dir(p.GoFiles[0]),
 		oldName,
-		newName,
 		modified,
 	)
 	decorations := decoration.NewSet()
@@ -82,6 +81,7 @@ func (s *Service) RenamePackageClause(
 		return nil, e
 	}
 
+	renameDecoratedClauses(decorations, modified, oldName, newName)
 	e = decorateQualifiers(
 		r,
 		decorations,

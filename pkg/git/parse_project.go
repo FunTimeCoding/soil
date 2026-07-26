@@ -3,14 +3,14 @@ package git
 import (
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/git/constant"
-	"github.com/funtimecoding/soil/pkg/strings/separator"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 )
 
 func ParseProject(path string) (string, string) {
 	parts := strings.Split(
-		strings.Trim(path, separator.Slash),
-		separator.Slash,
+		strings.Trim(path, stringsConstant.Slash),
+		stringsConstant.Slash,
 	)
 	count := len(parts)
 

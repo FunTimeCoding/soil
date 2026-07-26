@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/relational/lite/constant"
+	"github.com/funtimecoding/soil/pkg/relational/constant"
 	_ "github.com/glebarez/go-sqlite"
 	"sync/atomic"
 )
@@ -16,7 +16,7 @@ func NewMemory() *sql.DB {
 	// memory database (a plain :memory: is one database per connection),
 	// and the counter keeps separate NewMemory calls isolated
 	database, e := sql.Open(
-		constant.DriverName,
+		constant.LiteDriverName,
 		fmt.Sprintf(
 			"file:memory%d?mode=memory&cache=shared&_pragma=foreign_keys(1)",
 			memoryCounter.Add(1),

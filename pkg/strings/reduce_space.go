@@ -1,13 +1,13 @@
 package strings
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"regexp"
 )
 
 func ReduceSpace(s string) string {
 	return regexp.MustCompile(`\s{2,}`).ReplaceAllString(
 		s,
-		separator.Space,
+		constant.Space,
 	)
 }

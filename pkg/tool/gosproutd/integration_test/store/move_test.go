@@ -2,16 +2,22 @@ package store
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/strings/lower"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/integration_test/store_tester"
 	"testing"
 	"time"
 )
 
 func threeSeeds(s *store_tester.Tester) {
-	s.Store.UpsertSeed(lower.Alfa, "alfa.md", "hash-a", "a", time.Now())
-	s.Store.UpsertSeed(lower.Bravo, "bravo.md", "hash-b", "b", time.Now())
-	s.Store.UpsertSeed(lower.Charlie, "charlie.md", "hash-c", "c", time.Now())
+	s.Store.UpsertSeed(constant.LowerAlfa, "alfa.md", "hash-a", "a", time.Now())
+	s.Store.UpsertSeed(constant.LowerBravo, "bravo.md", "hash-b", "b", time.Now())
+	s.Store.UpsertSeed(
+		constant.LowerCharlie,
+		"charlie.md",
+		"hash-c",
+		"c",
+		time.Now(),
+	)
 }
 
 func TestMoveUpSwapsWithAbove(t *testing.T) {

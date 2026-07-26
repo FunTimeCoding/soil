@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 )
 
@@ -16,7 +16,7 @@ func Print(
 ) {
 	fmt.Printf(
 		"%s%s: %s\n",
-		strings.Repeat(separator.DoubleSpace, indent),
+		strings.Repeat(constant.DoubleSpace, indent),
 		title,
 		v.Format(f),
 	)

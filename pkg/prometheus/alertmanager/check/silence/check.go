@@ -2,7 +2,7 @@ package silence
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/console/status/tag"
+	console "github.com/funtimecoding/soil/pkg/console/constant"
 	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/advanced_option"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/check/silence/matcher"
@@ -40,7 +40,7 @@ func Check(o *option.Silence) {
 	f := constant.Format
 
 	if o.Copyable {
-		f.Tag(tag.Copyable)
+		f.Tag(console.TagCopyable)
 	}
 
 	t := time.Now()

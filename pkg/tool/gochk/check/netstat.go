@@ -2,7 +2,7 @@ package check
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/linux"
+	"github.com/funtimecoding/soil/pkg/linux/constant"
 	"github.com/funtimecoding/soil/pkg/linux/systemd/command"
 	"github.com/funtimecoding/soil/pkg/linux/systemd/jc"
 	"github.com/funtimecoding/soil/pkg/notation"
@@ -18,9 +18,9 @@ func Netstat(verbose bool) []*jc.Output {
 	var result []*jc.Output
 	notation.MustDecode(
 		Pipe(
-			Pipe(output, verbose, linux.Awk, "!seen[$4]++"),
+			Pipe(output, verbose, constant.Awk, "!seen[$4]++"),
 			verbose,
-			linux.Jc,
+			constant.Jc,
 			"--netstat",
 			"--monochrome",
 		),

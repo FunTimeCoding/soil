@@ -2,14 +2,14 @@ package alert
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
-	"github.com/funtimecoding/soil/pkg/console/status/tag"
 )
 
 func (a *Alert) flags(f *option.Format) []string {
 	var result []string
 
-	if !f.HasTag(tag.Dense) {
+	if !f.HasTag(constant.TagDense) {
 		if !a.Acknowledged {
 			flag := UnacknowledgedFlag
 

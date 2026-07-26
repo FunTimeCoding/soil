@@ -2,8 +2,8 @@ package constant
 
 import (
 	"errors"
+	"github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
-	"github.com/funtimecoding/soil/pkg/console/status/tag"
 )
 
 const (
@@ -53,5 +53,5 @@ const (
 var (
 	ErrorNotFound = errors.New("not found")
 	Format        = option.ExtendedColor.Copy()
-	Dense         = option.Color.Copy().Tag(tag.Dense)
+	Dense         = option.Color.Copy().Tag(constant.TagDense)
 )

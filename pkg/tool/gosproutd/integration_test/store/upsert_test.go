@@ -2,7 +2,7 @@ package store
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/strings/lower"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/integration_test/store_tester"
 	"testing"
 	"time"
@@ -11,7 +11,7 @@ import (
 func TestUpsertNewSeed(t *testing.T) {
 	s := store_tester.New(t)
 	s.Store.UpsertSeed(
-		lower.Alfa,
+		constant.LowerAlfa,
 		"alfa.md",
 		"hash-a",
 		"content a",
@@ -27,14 +27,14 @@ func TestUpsertNewSeed(t *testing.T) {
 func TestUpsertSecondSeedGetsNextPosition(t *testing.T) {
 	s := store_tester.New(t)
 	s.Store.UpsertSeed(
-		lower.Alfa,
+		constant.LowerAlfa,
 		"alfa.md",
 		"hash-a",
 		"content a",
 		time.Now(),
 	)
 	s.Store.UpsertSeed(
-		lower.Bravo,
+		constant.LowerBravo,
 		"bravo.md",
 		"hash-b",
 		"content b",
@@ -49,14 +49,14 @@ func TestUpsertSecondSeedGetsNextPosition(t *testing.T) {
 func TestUpsertUpdatesContentOnHashChange(t *testing.T) {
 	s := store_tester.New(t)
 	s.Store.UpsertSeed(
-		lower.Alfa,
+		constant.LowerAlfa,
 		"alfa.md",
 		"hash-1",
 		"old content",
 		time.Now(),
 	)
 	s.Store.UpsertSeed(
-		lower.Alfa,
+		constant.LowerAlfa,
 		"alfa.md",
 		"hash-2",
 		"new content",
@@ -71,8 +71,20 @@ func TestUpsertUpdatesContentOnHashChange(t *testing.T) {
 func TestUpsertNoOpOnSameHash(t *testing.T) {
 	s := store_tester.New(t)
 	modified := time.Now()
-	s.Store.UpsertSeed(lower.Alfa, "alfa.md", "hash-1", "content", modified)
-	s.Store.UpsertSeed(lower.Alfa, "alfa.md", "hash-1", "content", modified)
+	s.Store.UpsertSeed(
+		constant.LowerAlfa,
+		"alfa.md",
+		"hash-1",
+		"content",
+		modified,
+	)
+	s.Store.UpsertSeed(
+		constant.LowerAlfa,
+		"alfa.md",
+		"hash-1",
+		"content",
+		modified,
+	)
 	seeds := s.Store.Seeds()
 	assert.Count(t, 1, seeds)
 }
@@ -81,13 +93,13 @@ func TestUpsertUpdatesModifiedTimeWithoutContentChange(t *testing.T) {
 	s := store_tester.New(t)
 	base := time.Now()
 	s.Store.UpsertSeed(
-		lower.Alfa,
+		constant.LowerAlfa,
 		"alfa.md",
 		"hash-1",
 		"content",
 		base.Add(-time.Hour),
 	)
-	s.Store.UpsertSeed(lower.Alfa, "alfa.md", "hash-1", "content", base)
+	s.Store.UpsertSeed(constant.LowerAlfa, "alfa.md", "hash-1", "content", base)
 	seeds := s.Store.Seeds()
 	assert.Count(t, 1, seeds)
 	assert.True(t, seeds[0].ModifiedAt.After(base.Add(-time.Minute)))
@@ -95,9 +107,9 @@ func TestUpsertUpdatesModifiedTimeWithoutContentChange(t *testing.T) {
 
 func TestUpsertSameNameDifferentPath(t *testing.T) {
 	s := store_tester.New(t)
-	s.Store.UpsertSeed(lower.Alfa, "alfa.md", "hash-a", "root", time.Now())
+	s.Store.UpsertSeed(constant.LowerAlfa, "alfa.md", "hash-a", "root", time.Now())
 	s.Store.UpsertSeed(
-		lower.Alfa,
+		constant.LowerAlfa,
 		"sub/alfa.md",
 		"hash-b",
 		"nested",

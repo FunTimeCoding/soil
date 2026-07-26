@@ -2,7 +2,7 @@ package locator
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/system/join"
 	"net"
 	"net/url"
@@ -25,8 +25,8 @@ func (l *Locator) String() string {
 		o.Path = join.Absolute(l.basePath, l.path)
 	}
 
-	if l.trail && !strings.HasSuffix(o.Path, separator.Slash) {
-		o.Path = fmt.Sprintf("%s%s", o.Path, separator.Slash)
+	if l.trail && !strings.HasSuffix(o.Path, constant.Slash) {
+		o.Path = fmt.Sprintf("%s%s", o.Path, constant.Slash)
 	}
 
 	o.RawQuery = l.value.Encode()

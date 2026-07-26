@@ -3,7 +3,7 @@ package runner
 import (
 	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/provision/store"
+	provision "github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/constant"
 	"time"
 )
@@ -22,7 +22,7 @@ func (r *Runner) apply(
 	record := r.store.NewRun()
 	record.Scope = target
 	record.TriggerSource = triggerSource
-	record.Status = store.StatusRunning
+	record.Status = provision.StoreStatusRunning
 	record.GitHead = head
 	r.store.Create(record)
 	r.logger.Structured("highstate_start", constant.Target, target)
@@ -31,7 +31,7 @@ func (r *Runner) apply(
 	record.DurationMillisecond = time.Since(start).Milliseconds()
 
 	if e != nil {
-		record.Status = store.StatusError
+		record.Status = provision.StoreStatusError
 		record.ErrorOutput = e.Error()
 		r.logger.Structured(
 			"highstate_error",
@@ -42,7 +42,7 @@ func (r *Runner) apply(
 		output, marshalError := json.MarshalIndent(result, "", "  ")
 		errors.PanicOnError(marshalError)
 		record.Output = string(output)
-		record.Status = store.StatusSuccess
+		record.Status = provision.StoreStatusSuccess
 		r.logger.Structured("highstate_done")
 	}
 

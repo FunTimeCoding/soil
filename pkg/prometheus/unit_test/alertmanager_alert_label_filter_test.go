@@ -4,18 +4,18 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/label_filter"
-	"github.com/funtimecoding/soil/pkg/strings/upper"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"testing"
 )
 
 func TestAlertmanagerAlertLabelFilter(t *testing.T) {
 	fixture := []*alert.Alert{
 		{
-			Name:   upper.Alfa,
+			Name:   constant.UpperAlfa,
 			Labels: map[string]string{"Apple": "Red"},
 		},
 		{
-			Name:   upper.Bravo,
+			Name:   constant.UpperBravo,
 			Labels: map[string]string{"Banana": "Yellow"},
 		},
 	}
@@ -27,11 +27,11 @@ func TestAlertmanagerAlertLabelFilter(t *testing.T) {
 	assertHasOnlyAlert(t, f2.Run(fixture), "Bravo")
 	fixtureValue := []*alert.Alert{
 		{
-			Name:   upper.Alfa,
+			Name:   constant.UpperAlfa,
 			Labels: map[string]string{"Apple": "Red"},
 		},
 		{
-			Name:   upper.Alfa,
+			Name:   constant.UpperAlfa,
 			Labels: map[string]string{"Apple": "Green"},
 		},
 	}

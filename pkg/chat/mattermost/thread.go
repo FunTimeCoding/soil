@@ -1,7 +1,7 @@
 package mattermost
 
 import (
-	"github.com/funtimecoding/soil/pkg/chat/mattermost/constant"
+	"github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/post"
 	"github.com/mattermost/mattermost/server/public/model"
 )
@@ -14,7 +14,7 @@ func (c *Client) Thread(p *model.Post) ([]*post.Post, error) {
 	list, _, e := c.client.GetPostThread(
 		c.context,
 		p.Id,
-		constant.EmptyEntityTag,
+		constant.MattermostEmptyEntityTag,
 		false,
 	)
 

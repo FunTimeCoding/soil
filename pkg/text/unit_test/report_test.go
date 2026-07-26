@@ -2,15 +2,16 @@ package unit_test
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/text/constant"
 	"github.com/funtimecoding/soil/pkg/text/report"
 	"testing"
 )
 
 func TestReport(t *testing.T) {
-	root := report.New("Example root", report.NoLimit)
+	root := report.New("Example root", constant.NoLimit)
 	root.String("String", "example")
 	root.Integer("Integer", 2)
-	firstSection := root.Nest("Example first section", report.NoLimit)
+	firstSection := root.Nest("Example first section", constant.NoLimit)
 	firstSection.String("String", "example")
 	firstSection.Float("Float without unit", 1, "")
 	firstSection.Float("Float with unit", 2, "L")
@@ -18,10 +19,10 @@ func TestReport(t *testing.T) {
 	firstSection.Percent("Percent", 50)
 	secondSection := firstSection.Nest(
 		"Example second section",
-		report.NoLimit,
+		constant.NoLimit,
 	)
 	secondSection.String("String", "example")
-	other := report.New("Example other", report.NoLimit)
+	other := report.New("Example other", constant.NoLimit)
 	other.String("String", "other")
 	root.AppendSection(other)
 	assert.String(
@@ -36,11 +37,11 @@ func TestReportLimit(t *testing.T) {
 	assert.Integer(t, 12, root.Length())
 	root.String("String", "example")
 	assert.Integer(t, 30, root.Length())
-	firstSection := root.Nest("Example section", report.NoLimit)
+	firstSection := root.Nest("Example section", constant.NoLimit)
 	assert.Integer(t, 15, firstSection.Length())
 	firstSection.String("String", "example")
 	assert.Integer(t, 37, firstSection.Length())
-	secondSection := root.Nest("Too long section", report.NoLimit)
+	secondSection := root.Nest("Too long section", constant.NoLimit)
 	assert.Integer(t, 16, secondSection.Length())
 	assert.String(
 		t,

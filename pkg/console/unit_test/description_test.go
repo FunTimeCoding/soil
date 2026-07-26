@@ -3,7 +3,7 @@ package unit_test
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/console/description"
-	"github.com/funtimecoding/soil/pkg/strings/upper"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"testing"
 )
 
@@ -11,7 +11,7 @@ func TestDescription(t *testing.T) {
 	assert.Any(
 		t,
 		&description.Description{Title: "Alfa", Short: "Bravo"},
-		description.New(upper.Alfa, upper.Bravo),
+		description.New(constant.UpperAlfa, constant.UpperBravo),
 	)
 	assert.Any(
 		t,
@@ -20,6 +20,10 @@ func TestDescription(t *testing.T) {
 			Title: "Bravo",
 			Short: "Charlie",
 		},
-		description.NewType(upper.Alfa, upper.Bravo, upper.Charlie),
+		description.NewType(
+			constant.UpperAlfa,
+			constant.UpperBravo,
+			constant.UpperCharlie,
+		),
 	)
 }

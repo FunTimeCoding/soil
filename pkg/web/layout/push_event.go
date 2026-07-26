@@ -3,7 +3,7 @@ package layout
 import (
 	"bytes"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/split"
 	"github.com/funtimecoding/soil/pkg/system/writer"
 	"maragu.dev/gomponents"
@@ -23,5 +23,5 @@ func PushEvent(
 		writer.Print(w, "data: %s\n", l)
 	}
 
-	writer.Print(w, separator.Unix)
+	writer.Print(w, constant.Unix)
 }

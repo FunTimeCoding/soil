@@ -1,7 +1,7 @@
 package service
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"go/ast"
 	"go/token"
 	"golang.org/x/tools/go/packages"
@@ -13,10 +13,9 @@ func renamePackageClauses(
 	set *token.FileSet,
 	sourceDirectory string,
 	oldName string,
-	newName string,
 	modified map[string]*ast.File,
 ) {
-	testName := fmt.Sprintf("%s_test", oldName)
+	testName := join.Empty(oldName, "_test")
 
 	for _, loaded := range all {
 		for _, file := range loaded.Syntax {
@@ -26,13 +25,7 @@ func renamePackageClauses(
 				continue
 			}
 
-			if file.Name.Name == oldName {
-				file.Name.Name = newName
-				modified[filename] = file
-			}
-
-			if file.Name.Name == testName {
-				file.Name.Name = fmt.Sprintf("%s_test", newName)
+			if file.Name.Name == oldName || file.Name.Name == testName {
 				modified[filename] = file
 			}
 		}

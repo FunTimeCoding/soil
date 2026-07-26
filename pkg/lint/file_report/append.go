@@ -1,7 +1,7 @@
 package file_report
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 )
 
@@ -10,5 +10,5 @@ func (r *Report) append(
 	line string,
 ) {
 	b.WriteString(line)
-	b.WriteString(separator.Unix)
+	b.WriteString(constant.Unix)
 }

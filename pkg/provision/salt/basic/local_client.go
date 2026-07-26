@@ -2,8 +2,8 @@ package basic
 
 import (
 	"encoding/json"
+	"github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/salt/basic/response"
-	"github.com/funtimecoding/soil/pkg/provision/salt/constant"
 )
 
 func (c *Client) LocalClient(
@@ -14,11 +14,11 @@ func (c *Client) LocalClient(
 	b, e := c.Post(
 		"",
 		commandRequest{
-			Client:     constant.LocalClient,
+			Client:     constant.SaltLocalClient,
 			Target:     target,
 			Function:   function,
 			Arguments:  arguments,
-			TargetType: constant.GlobTarget,
+			TargetType: constant.SaltGlobTarget,
 			FullReturn: true,
 		},
 	)

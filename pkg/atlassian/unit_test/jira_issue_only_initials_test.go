@@ -3,7 +3,7 @@ package unit_test
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
-	"github.com/funtimecoding/soil/pkg/strings/capital"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"testing"
 )
 
@@ -13,10 +13,10 @@ func TestOnlyInitials(t *testing.T) {
 		[]*issue.Issue{{Initials: "ALFA"}},
 		issue.OnlyInitials(
 			[]*issue.Issue{
-				{Initials: capital.Alfa},
-				{Initials: capital.Bravo},
+				{Initials: constant.CapitalAlfa},
+				{Initials: constant.CapitalBravo},
 			},
-			capital.Alfa,
+			constant.CapitalAlfa,
 		),
 	)
 }

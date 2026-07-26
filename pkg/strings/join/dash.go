@@ -1,10 +1,10 @@
 package join
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 )
 
 func Dash(s []string) string {
-	return strings.Join(s, separator.Dash)
+	return strings.Join(s, constant.Dash)
 }

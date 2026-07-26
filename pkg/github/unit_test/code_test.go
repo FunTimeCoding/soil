@@ -3,7 +3,7 @@ package unit_test
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/github/code"
-	"github.com/funtimecoding/soil/pkg/strings/upper"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/google/go-github/v89/github"
 	"testing"
 )
@@ -11,9 +11,9 @@ import (
 func TestCode(t *testing.T) {
 	r := code.New(
 		&github.CodeResult{
-			SHA:  new(upper.Alfa),
-			Name: new(upper.Bravo),
-			Path: new(upper.Charlie),
+			SHA:  new(constant.UpperAlfa),
+			Name: new(constant.UpperBravo),
+			Path: new(constant.UpperCharlie),
 		},
 	)
 	r.Raw = nil

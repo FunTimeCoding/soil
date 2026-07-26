@@ -2,8 +2,8 @@ package constant
 
 import (
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/alert/detail"
+	"github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
-	"github.com/funtimecoding/soil/pkg/console/status/tag"
 )
 
 const (
@@ -18,7 +18,7 @@ const (
 )
 
 var Format = option.ExtendedColor.Copy().Tag(
-	tag.Category,
+	constant.TagCategory,
 )
 
 type ParseDescription func(string) *detail.Prometheus

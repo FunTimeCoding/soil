@@ -3,7 +3,7 @@ package gomattermost
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
-	mattermost "github.com/funtimecoding/soil/pkg/chat/mattermost/constant"
+	"github.com/funtimecoding/soil/pkg/chat/mattermost"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/thread"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"

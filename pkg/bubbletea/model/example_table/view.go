@@ -4,7 +4,7 @@ import (
 	"charm.land/bubbletea/v2"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/bubbletea/constant"
-	"github.com/funtimecoding/soil/pkg/strings/separator"
+	strings "github.com/funtimecoding/soil/pkg/strings/constant"
 )
 
 func (m *Model) View() tea.View {
@@ -12,7 +12,7 @@ func (m *Model) View() tea.View {
 		fmt.Sprintf(
 			"%s%s",
 			constant.Table.Render(m.table.View()),
-			separator.Unix,
+			strings.Unix,
 		),
 	)
 }

@@ -230,3 +230,26 @@ func TestRenameSameName(t *testing.T) {
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "already exists")
 }
+
+func TestRenameLongerKeepsComments(t *testing.T) {
+	d := testutil.PrepareTestPackage(t, serviceTestdata("rename-longer/src"))
+	s := testService()
+	r, e := s.Rename(
+		d,
+		"example/pkg/target",
+		"Legend",
+		"TargetLegendExtended",
+		"",
+	)
+	assert.FatalOnError(t, e)
+	testutil.AssertBlocked(t, r, 0)
+	source := readFixtureFile(t, d, "pkg/target/constant.go")
+	assertFormatted(t, source)
+	assert.StringContains(t, "TargetLegendExtended = \"--legend\"", source)
+	assert.StringContains(t, "// alpha trailing", source)
+	assert.StringContains(t, "// bold trailing", source)
+	assert.StringContains(t, "// wide trailing", source)
+	run := readFixtureFile(t, d, "pkg/target/run.go")
+	assertFormatted(t, run)
+	assert.StringContains(t, "TargetLegendExtended", run)
+}

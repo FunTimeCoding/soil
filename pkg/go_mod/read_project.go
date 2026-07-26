@@ -1,6 +1,7 @@
 package go_mod
 
 import (
+	"github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/go_mod/project"
 	"github.com/funtimecoding/soil/pkg/system/join"
 )
@@ -11,7 +12,7 @@ func ReadProject(
 ) *project.Project {
 	return project.New(
 		path,
-		ReadVersion(join.Absolute(path, ModFile)),
+		ReadVersion(join.Absolute(path, constant.ModFile)),
 		runtimeVersion,
 	)
 }

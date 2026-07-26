@@ -1,7 +1,7 @@
 package packer
 
 import (
-	"github.com/funtimecoding/soil/pkg/provision/packer/constant"
+	"github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/join"
 )
@@ -10,7 +10,7 @@ func New(workDirectory string) *Client {
 	web := join.Absolute(
 		workDirectory,
 		constant.PackerDirectory,
-		constant.WebDirectory,
+		constant.PackerWebDirectory,
 	)
 	system.MakeDirectory(web)
 
@@ -20,7 +20,7 @@ func New(workDirectory string) *Client {
 		packerOutputDirectory: join.Absolute(
 			workDirectory,
 			constant.PackerDirectory,
-			constant.OutputDirectory,
+			constant.PackerOutputDirectory,
 		),
 	}
 }

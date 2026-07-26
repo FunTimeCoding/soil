@@ -3,16 +3,16 @@ package basic
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/salt/basic/response"
-	"github.com/funtimecoding/soil/pkg/provision/salt/constant"
 )
 
 func (c *Client) DeleteKey(minion string) ([]string, error) {
 	b, e := c.Post(
 		"",
 		commandRequest{
-			Client:   constant.WheelClient,
-			Function: constant.KeyDelete,
+			Client:   constant.SaltWheelClient,
+			Function: constant.SaltKeyDelete,
 			Match:    minion,
 		},
 	)

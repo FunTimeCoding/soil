@@ -3,14 +3,14 @@ package unit_test
 import (
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
-	"github.com/funtimecoding/soil/pkg/strings/upper"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 	"testing"
 )
 
 func TestPackageNameBlacklisted(t *testing.T) {
 	l := lint.PackageName(
-		upper.Alfa,
+		constant.UpperAlfa,
 		strings.NewReader("package api\n"),
 	)
 	assertReport(
@@ -34,7 +34,7 @@ func TestPackageNameBlacklisted(t *testing.T) {
 
 func TestPackageNameAllowed(t *testing.T) {
 	l := lint.PackageName(
-		upper.Bravo,
+		constant.UpperBravo,
 		strings.NewReader("package server\n"),
 	)
 	assertReport(t, "Bravo", false, nil, "", l)

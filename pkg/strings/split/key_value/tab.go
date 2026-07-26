@@ -1,12 +1,12 @@
 package key_value
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 )
 
 func Tab(s string) (string, string) {
-	p := strings.SplitN(s, separator.Tab, 2)
+	p := strings.SplitN(s, constant.Tab, 2)
 
 	switch len(p) {
 	case 1:

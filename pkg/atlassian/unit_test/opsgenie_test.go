@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/override"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/rotation"
-	"github.com/funtimecoding/soil/pkg/strings/upper"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/opsgenie/opsgenie-go-sdk-v2/og"
 	"testing"
 )
@@ -14,19 +14,19 @@ func TestUserInvolved(t *testing.T) {
 	assert.False(
 		t,
 		opsgenie.UserInvolved(
-			upper.Alfa,
-			[]*override.Override{{User: upper.Bravo}},
+			constant.UpperAlfa,
+			[]*override.Override{{User: constant.UpperBravo}},
 			[]*rotation.Rotation{},
 		),
 	)
 	assert.True(
 		t,
 		opsgenie.UserInvolved(
-			upper.Alfa,
+			constant.UpperAlfa,
 			[]*override.Override{},
 			[]*rotation.Rotation{
 				{
-					Participants: []og.Participant{{Username: upper.Alfa}},
+					Participants: []og.Participant{{Username: constant.UpperAlfa}},
 				},
 			},
 		),

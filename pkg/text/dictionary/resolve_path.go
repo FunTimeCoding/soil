@@ -3,15 +3,15 @@ package dictionary
 import (
 	"fmt"
 	system "github.com/funtimecoding/soil/pkg/system/constant"
-	"github.com/funtimecoding/soil/pkg/text/dictionary/constant"
+	text "github.com/funtimecoding/soil/pkg/text/constant"
 	"os"
 	"path/filepath"
 )
 
 func ResolvePath() string {
 	candidates := []string{
-		constant.File,
-		filepath.Join(system.DocumentPath, constant.File),
+		text.DictionaryFile,
+		filepath.Join(system.DocumentPath, text.DictionaryFile),
 	}
 
 	for _, p := range candidates {

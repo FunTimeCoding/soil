@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/strings/lower"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/integration_test/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/service"
 	"testing"
@@ -13,13 +13,13 @@ func TestSyncAddsNewFiles(t *testing.T) {
 	s.Service.Sync(
 		[]service.DiscoveredFile{
 			{
-				Name:        lower.Alfa,
+				Name:        constant.LowerAlfa,
 				Path:        "alfa.md",
 				ContentHash: "hash-a",
 				Content:     "a",
 			},
 			{
-				Name:        lower.Bravo,
+				Name:        constant.LowerBravo,
 				Path:        "bravo.md",
 				ContentHash: "hash-b",
 				Content:     "b",
@@ -38,13 +38,13 @@ func TestSyncRemovesDeletedFiles(t *testing.T) {
 	s.Service.Sync(
 		[]service.DiscoveredFile{
 			{
-				Name:        lower.Alfa,
+				Name:        constant.LowerAlfa,
 				Path:        "alfa.md",
 				ContentHash: "hash-a",
 				Content:     "a",
 			},
 			{
-				Name:        lower.Bravo,
+				Name:        constant.LowerBravo,
 				Path:        "bravo.md",
 				ContentHash: "hash-b",
 				Content:     "b",
@@ -55,7 +55,7 @@ func TestSyncRemovesDeletedFiles(t *testing.T) {
 	s.Service.Sync(
 		[]service.DiscoveredFile{
 			{
-				Name:        lower.Alfa,
+				Name:        constant.LowerAlfa,
 				Path:        "alfa.md",
 				ContentHash: "hash-a",
 				Content:     "a",
@@ -73,7 +73,7 @@ func TestSyncUpdatesContent(t *testing.T) {
 	s.Service.Sync(
 		[]service.DiscoveredFile{
 			{
-				Name:        lower.Alfa,
+				Name:        constant.LowerAlfa,
 				Path:        "alfa.md",
 				ContentHash: "hash-1",
 				Content:     "old",
@@ -83,7 +83,7 @@ func TestSyncUpdatesContent(t *testing.T) {
 	s.Service.Sync(
 		[]service.DiscoveredFile{
 			{
-				Name:        lower.Alfa,
+				Name:        constant.LowerAlfa,
 				Path:        "alfa.md",
 				ContentHash: "hash-2",
 				Content:     "new",
@@ -99,13 +99,13 @@ func TestSyncPreservesPositionOnUpdate(t *testing.T) {
 	s.Service.Sync(
 		[]service.DiscoveredFile{
 			{
-				Name:        lower.Alfa,
+				Name:        constant.LowerAlfa,
 				Path:        "alfa.md",
 				ContentHash: "hash-a",
 				Content:     "a",
 			},
 			{
-				Name:        lower.Bravo,
+				Name:        constant.LowerBravo,
 				Path:        "bravo.md",
 				ContentHash: "hash-b",
 				Content:     "b",
@@ -116,13 +116,13 @@ func TestSyncPreservesPositionOnUpdate(t *testing.T) {
 	s.Service.Sync(
 		[]service.DiscoveredFile{
 			{
-				Name:        lower.Alfa,
+				Name:        constant.LowerAlfa,
 				Path:        "alfa.md",
 				ContentHash: "hash-a2",
 				Content:     "a2",
 			},
 			{
-				Name:        lower.Bravo,
+				Name:        constant.LowerBravo,
 				Path:        "bravo.md",
 				ContentHash: "hash-b",
 				Content:     "b",

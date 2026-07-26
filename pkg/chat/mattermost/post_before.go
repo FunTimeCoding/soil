@@ -2,7 +2,7 @@ package mattermost
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/chat/mattermost/constant"
+	chat "github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/post"
 	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 	"github.com/mattermost/mattermost/server/public/model"
@@ -20,8 +20,8 @@ func (c *Client) PostBefore(
 			c.context,
 			h.Id,
 			pageNumber,
-			constant.PerPage,
-			constant.EmptyEntityTag,
+			chat.MattermostPerPage,
+			chat.MattermostEmptyEntityTag,
 			true,
 			false,
 		)
@@ -35,7 +35,7 @@ func (c *Client) PostBefore(
 				"no post before %s in channel %s: %w",
 				t.Format(timeConstant.DateMinute),
 				h.Id,
-				constant.ErrorNotFound,
+				ErrorNotFound,
 			)
 		}
 

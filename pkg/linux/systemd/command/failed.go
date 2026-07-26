@@ -1,14 +1,14 @@
 package command
 
-import "github.com/funtimecoding/soil/pkg/linux/systemd/constant"
+import "github.com/funtimecoding/soil/pkg/linux/constant"
 
 func Failed() []string {
 	return []string{
-		constant.Command,
-		constant.ListUnits,
-		constant.Output,
-		constant.Notation,
-		constant.State,
-		constant.FailedState,
+		constant.SystemdCommand,
+		constant.SystemdListUnits,
+		constant.SystemdOutput,
+		constant.SystemdNotation,
+		constant.SystemdState,
+		constant.SystemdFailedState,
 	}
 }

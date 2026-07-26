@@ -74,9 +74,27 @@ func (s *Service) Rename(
 		}
 	}
 
+	decorations := decoration.NewSet()
+
 	for _, f := range references {
 		position := set.Position(f.Ident.Pos())
-		f.Ident.Name = newName
+		owner, file := findOwningFile(all, f.Ident.Pos())
+
+		if file == nil {
+			continue
+		}
+
+		if _, g := decorations.DecorateFile(set, owner, file); g != nil {
+			return nil, g
+		}
+
+		d := decorations.DecoratedIdent(owner, f.Ident)
+
+		if d == nil {
+			continue
+		}
+
+		d.Name = newName
 		r.AddConcern(
 			concern.NewLine(
 				"renamed",
@@ -87,21 +105,6 @@ func (s *Service) Rename(
 				true,
 			),
 		)
-	}
-
-	decorations := decoration.NewSet()
-
-	for _, f := range references {
-		filename := set.Position(f.Ident.Pos()).Filename
-		file := findSyntaxFile(set, f.Package, filename)
-
-		if file == nil {
-			continue
-		}
-
-		if _, f := decorations.DecorateFile(set, f.Package, file); f != nil {
-			return nil, f
-		}
 	}
 
 	e = restoreDecorations(decorations, resolve.NewNames(all), nil)

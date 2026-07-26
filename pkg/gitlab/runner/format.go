@@ -1,15 +1,15 @@
 package runner
 
 import (
+	"github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
-	"github.com/funtimecoding/soil/pkg/console/status/tag"
 )
 
 func (r *Runner) Format(f *option.Format) string {
 	s := status.New(f)
 
-	if f.HasTag(tag.Identifier) {
+	if f.HasTag(constant.TagIdentifier) {
 		s.Integer64(r.Identifier)
 	}
 
@@ -19,7 +19,7 @@ func (r *Runner) Format(f *option.Format) string {
 		r.hostname(),
 	)
 
-	if f.HasTag(tag.Type) {
+	if f.HasTag(constant.TagType) {
 		s.String(r.Type)
 	}
 

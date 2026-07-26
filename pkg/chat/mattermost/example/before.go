@@ -4,8 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost"
-	"github.com/funtimecoding/soil/pkg/chat/mattermost/constant"
-	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
+	"github.com/funtimecoding/soil/pkg/time/constant"
 	"time"
 )
 
@@ -15,7 +14,7 @@ func Before() {
 	channel := a.RequiredPositional(0, "CHANNEL")
 	m := mattermost.NewEnvironment(mattermost.WithVerbose(false))
 	c := m.MustTeamChannel(channel)
-	f := constant.Format
+	f := mattermost.Format
 	fmt.Printf("Channel: %s\n", c.Name)
 	t := time.Now().Add(-30 * 24 * time.Hour)
 	reference, found, e := m.FindPostBefore(c, t)
@@ -27,7 +26,7 @@ func Before() {
 	}
 
 	if !found {
-		fmt.Printf("No post before %s\n", t.Format(timeConstant.DateMinute))
+		fmt.Printf("No post before %s\n", t.Format(constant.DateMinute))
 
 		return
 	}
@@ -35,20 +34,20 @@ func Before() {
 	fmt.Printf("Reference: %s\n", reference.Format(f))
 	fmt.Printf(
 		"Date: %s\n",
-		time.UnixMilli(reference.Raw.CreateAt).Format(timeConstant.DateMinute),
+		time.UnixMilli(reference.Raw.CreateAt).Format(constant.DateMinute),
 	)
 	keep := 500
 	posts := m.MustPostsBefore(c, t, keep)
 	fmt.Printf(
 		"Posts before %s or exceeding %d posts (%d found)\n",
-		t.Format(timeConstant.DateMinute),
+		t.Format(constant.DateMinute),
 		keep,
 		len(posts),
 	)
 
 	for _, p := range posts {
 		fmt.Println(p.Format(f))
-		fmt.Printf("  Time: %s\n", p.Create.Format(timeConstant.DateMinute))
+		fmt.Printf("  Time: %s\n", p.Create.Format(constant.DateMinute))
 
 		if false {
 			m.MustDeletePost(p.Raw)

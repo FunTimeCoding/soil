@@ -3,7 +3,7 @@ package lint
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/option"
-	"github.com/funtimecoding/soil/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	"path/filepath"
 	"strings"
@@ -18,8 +18,8 @@ func Skipped(
 	}
 
 	for _, p := range o.Skips {
-		if strings.Contains(p, separator.Dot) &&
-			!strings.Contains(p, separator.Slash) {
+		if strings.Contains(p, constant.Dot) &&
+			!strings.Contains(p, constant.Slash) {
 			if system.Match(p, filepath.Base(path)) {
 				return true
 			}

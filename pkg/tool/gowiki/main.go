@@ -6,7 +6,7 @@ import (
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence"
 	wiki "github.com/funtimecoding/soil/pkg/atlassian/confluence/constant"
-	"github.com/funtimecoding/soil/pkg/console/status/tag"
+	console "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/tool/gowiki/constant"
 )
@@ -31,7 +31,7 @@ func Main(
 	f := wiki.Format.Copy()
 
 	if a.GetBoolean(argumentConstant.Copyable) {
-		f.Tag(tag.Copyable)
+		f.Tag(console.TagCopyable)
 	}
 
 	if a.GetBoolean(argumentConstant.Watched) || a.GetBoolean(argumentConstant.Favorites) {

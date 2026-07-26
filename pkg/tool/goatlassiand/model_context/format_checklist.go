@@ -1,8 +1,8 @@
 package model_context
 
 import (
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/strings/separator"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/types/checklist_item"
 )
 
@@ -17,5 +17,5 @@ func formatChecklist(v []*checklist_item.Item) string {
 		}
 	}
 
-	return join.Empty(join.NewLine(lines), separator.Unix)
+	return join.Empty(join.NewLine(lines), constant.Unix)
 }

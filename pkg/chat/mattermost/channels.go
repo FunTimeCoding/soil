@@ -1,7 +1,7 @@
 package mattermost
 
 import (
-	"github.com/funtimecoding/soil/pkg/chat/mattermost/constant"
+	"github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/mattermost/mattermost/server/public/model"
 )
 
@@ -14,7 +14,7 @@ func (c *Client) Channels(
 		t.Id,
 		u.Id,
 		false,
-		constant.EmptyEntityTag,
+		constant.MattermostEmptyEntityTag,
 	)
 
 	return result, e

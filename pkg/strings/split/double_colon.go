@@ -1,10 +1,10 @@
 package split
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 )
 
 func DoubleColon(s string) []string {
-	return strings.Split(s, separator.DoubleColon)
+	return strings.Split(s, constant.DoubleColon)
 }

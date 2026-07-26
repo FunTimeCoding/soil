@@ -2,12 +2,12 @@ package basic
 
 import (
 	"encoding/json"
+	"github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/salt/basic/response"
-	"github.com/funtimecoding/soil/pkg/provision/salt/constant"
 )
 
 func (c *Client) ListKeys() (*response.KeysReturn, error) {
-	b, e := c.Get(constant.KeysPath)
+	b, e := c.Get(constant.SaltKeysPath)
 
 	if e != nil {
 		return nil, e

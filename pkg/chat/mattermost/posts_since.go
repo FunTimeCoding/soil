@@ -1,7 +1,7 @@
 package mattermost
 
 import (
-	"github.com/funtimecoding/soil/pkg/chat/mattermost/constant"
+	"github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/post"
 	"github.com/mattermost/mattermost/server/public/model"
 	"time"
@@ -24,7 +24,7 @@ func (c *Client) PostsSince(
 	seen := make(map[string]bool)
 	cursor := since
 
-	for range constant.SinceChunkLimit {
+	for range constant.MattermostSinceChunkLimit {
 		chunk, e := c.postsSinceChunk(h, cursor)
 
 		if e != nil {
@@ -50,7 +50,7 @@ func (c *Client) PostsSince(
 			}
 		}
 
-		if len(chunk) < constant.SinceChunkThreshold ||
+		if len(chunk) < constant.MattermostSinceChunkThreshold ||
 			newest.IsZero() {
 			break
 		}

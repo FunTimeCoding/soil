@@ -1,14 +1,14 @@
 package post
 
 import (
-	"github.com/funtimecoding/soil/pkg/chat/mattermost/constant"
+	"github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/mattermost/mattermost/server/public/model"
 	"log"
 )
 
 func Decode(v *model.WebSocketEvent) *model.Post {
-	a, anyOkay := v.GetData()[constant.PostField]
+	a, anyOkay := v.GetData()[constant.MattermostPostField]
 
 	if !anyOkay {
 		log.Panicf("no post field")

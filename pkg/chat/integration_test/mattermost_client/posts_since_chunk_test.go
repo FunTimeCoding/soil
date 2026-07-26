@@ -3,8 +3,8 @@ package mattermost_client
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/chat/integration_test/mattermost_client_tester"
-	"github.com/funtimecoding/soil/pkg/chat/mattermost/constant"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/mattermost/mattermost/server/public/model"
 	"net/http"
@@ -19,7 +19,7 @@ import (
 func TestPostsSinceChunks(t *testing.T) {
 	capped := &model.PostList{Posts: map[string]*model.Post{}}
 
-	for i := range constant.SinceChunkThreshold {
+	for i := range constant.MattermostSinceChunkThreshold {
 		identifier := fmt.Sprintf("bravo%d", i)
 		capped.Order = append(capped.Order, identifier)
 		capped.Posts[identifier] = &model.Post{
@@ -77,9 +77,9 @@ func TestPostsSinceChunks(t *testing.T) {
 					web.Encode(
 						w,
 						&model.User{
-						Id:       "delta",
-						Username: "echo",
-					})
+							Id:       "delta",
+							Username: "echo",
+						})
 				},
 			)
 		},
@@ -94,6 +94,6 @@ func TestPostsSinceChunks(t *testing.T) {
 	}
 
 	assert.Any(t, 2, len(calls))
-	assert.Any(t, constant.SinceChunkThreshold+1, len(posts))
+	assert.Any(t, constant.MattermostSinceChunkThreshold+1, len(posts))
 	assert.Any(t, "foxtrot", posts[len(posts)-1].Raw.Id)
 }

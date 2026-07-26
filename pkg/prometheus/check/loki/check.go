@@ -1,8 +1,8 @@
 package loki
 
 import (
+	"github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
-	"github.com/funtimecoding/soil/pkg/console/status/tag"
 	checkOption "github.com/funtimecoding/soil/pkg/prometheus/check/loki/option"
 	"github.com/funtimecoding/soil/pkg/prometheus/loki"
 )
@@ -12,7 +12,7 @@ func Check(o *checkOption.Loki) {
 	f := option.Color.Copy()
 
 	if o.Copyable {
-		f.Tag(tag.Copyable)
+		f.Tag(constant.TagCopyable)
 	}
 
 	if o.Namespace == "" {

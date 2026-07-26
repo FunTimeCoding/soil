@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 )
 
@@ -22,5 +22,5 @@ func Encode(
 
 	errors.PanicOnError(e.Encode(a))
 
-	return strings.TrimSuffix(b.String(), separator.Unix)
+	return strings.TrimSuffix(b.String(), constant.Unix)
 }

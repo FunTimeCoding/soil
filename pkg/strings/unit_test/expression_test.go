@@ -2,14 +2,17 @@ package unit_test
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/expression"
-	"github.com/funtimecoding/soil/pkg/strings/upper"
 	"testing"
 )
 
 func TestExpression(t *testing.T) {
-	e := expression.New([]string{upper.Alfa}, []string{upper.Delta})
-	assert.True(t, e.Check([]string{upper.Alfa}))
-	assert.True(t, e.Check([]string{upper.Alfa, upper.Bravo}))
-	assert.False(t, e.Check([]string{upper.Alfa, upper.Delta}))
+	e := expression.New(
+		[]string{constant.UpperAlfa},
+		[]string{constant.UpperDelta},
+	)
+	assert.True(t, e.Check([]string{constant.UpperAlfa}))
+	assert.True(t, e.Check([]string{constant.UpperAlfa, constant.UpperBravo}))
+	assert.False(t, e.Check([]string{constant.UpperAlfa, constant.UpperDelta}))
 }

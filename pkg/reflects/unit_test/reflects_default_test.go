@@ -3,7 +3,7 @@ package unit_test
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/reflects"
-	"github.com/funtimecoding/soil/pkg/strings/upper"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"testing"
 )
 
@@ -16,6 +16,6 @@ func TestDefault(t *testing.T) {
 	assert.False(t, reflects.Default(nil))
 	assert.False(t, reflects.Default(true))
 	assert.False(t, reflects.Default(1))
-	assert.False(t, reflects.Default(upper.Alfa))
-	assert.False(t, reflects.Default(new(upper.Alfa)))
+	assert.False(t, reflects.Default(constant.UpperAlfa))
+	assert.False(t, reflects.Default(new(constant.UpperAlfa)))
 }

@@ -1,7 +1,7 @@
 package mattermost
 
 import (
-	"github.com/funtimecoding/soil/pkg/chat/mattermost/constant"
+	"github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/post"
 	"github.com/mattermost/mattermost/server/public/model"
 	"time"
@@ -22,8 +22,8 @@ func (c *Client) PostsBefore(
 			c.context,
 			h.Id,
 			pageNumber,
-			constant.PerPage,
-			constant.EmptyEntityTag,
+			constant.MattermostPerPage,
+			constant.MattermostEmptyEntityTag,
 			false,
 			false,
 		)

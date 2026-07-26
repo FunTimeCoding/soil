@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
-	"github.com/funtimecoding/soil/pkg/strings/upper"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 	"testing"
 )
@@ -41,7 +41,7 @@ func gitignoredChecker(ignored ...string) lint.Checker {
 
 func TestPointersGitignored(t *testing.T) {
 	l := gitignoredChecker(".claude/notes/alfa.md")(
-		upper.Alfa,
+		constant.UpperAlfa,
 		strings.NewReader(
 			"Style guide at `.claude/notes/alfa.md` today.\n",
 		),
@@ -51,7 +51,7 @@ func TestPointersGitignored(t *testing.T) {
 
 func TestPointersClean(t *testing.T) {
 	l := pointerChecker()(
-		upper.Alfa,
+		constant.UpperAlfa,
 		strings.NewReader("Run `task lint` now.\n"),
 	)
 	assertReport(t, "Alfa", false, nil, "", l)
@@ -59,7 +59,7 @@ func TestPointersClean(t *testing.T) {
 
 func TestPointersExisting(t *testing.T) {
 	l := pointerChecker("doc/ai/runbook/lint.md")(
-		upper.Alfa,
+		constant.UpperAlfa,
 		strings.NewReader("Read `doc/ai/runbook/lint.md` first.\n"),
 	)
 	assertReport(t, "Alfa", false, nil, "", l)
@@ -67,7 +67,7 @@ func TestPointersExisting(t *testing.T) {
 
 func TestPointersDirectory(t *testing.T) {
 	l := pointerChecker("doc/ai/spec")(
-		upper.Alfa,
+		constant.UpperAlfa,
 		strings.NewReader("Specs live in `doc/ai/spec/`.\n"),
 	)
 	assertReport(t, "Alfa", false, nil, "", l)
@@ -75,7 +75,7 @@ func TestPointersDirectory(t *testing.T) {
 
 func TestPointersIgnored(t *testing.T) {
 	l := pointerChecker()(
-		upper.Alfa,
+		constant.UpperAlfa,
 		strings.NewReader(
 			"See `tmp/gosec.json`, `doc/ai/runbook/<name>.md`, and https://example.org/page.\n",
 		),
@@ -86,7 +86,7 @@ func TestPointersIgnored(t *testing.T) {
 func TestPointersDead(t *testing.T) {
 	line := "Read `doc/ai/runbook/ghost.md` first."
 	l := pointerChecker()(
-		upper.Alfa,
+		constant.UpperAlfa,
 		strings.NewReader(fmt.Sprintf("%s\n", line)),
 	)
 	assertReport(
@@ -111,7 +111,7 @@ func TestPointersDead(t *testing.T) {
 func TestPointersAbsolute(t *testing.T) {
 	line := "Notes at `/Users/example/notes.md` today."
 	l := pointerChecker()(
-		upper.Alfa,
+		constant.UpperAlfa,
 		strings.NewReader(fmt.Sprintf("%s\n", line)),
 	)
 	assertReport(
@@ -168,7 +168,7 @@ func TestPointersRelativeDead(t *testing.T) {
 
 func TestPointersSymbolIgnored(t *testing.T) {
 	l := pointerChecker()(
-		upper.Alfa,
+		constant.UpperAlfa,
 		strings.NewReader(
 			"Wraps `pkg/provision/salt.Client` and `pkg/system/run/New()`.\n",
 		),
@@ -178,7 +178,7 @@ func TestPointersSymbolIgnored(t *testing.T) {
 
 func TestPointersExpansionExisting(t *testing.T) {
 	l := pointerChecker("doc/ai/spec/naming.md", "doc/ai/spec/build.md")(
-		upper.Alfa,
+		constant.UpperAlfa,
 		strings.NewReader("Read `doc/ai/spec/{naming,build}.md` first.\n"),
 	)
 	assertReport(t, "Alfa", false, nil, "", l)
@@ -187,7 +187,7 @@ func TestPointersExpansionExisting(t *testing.T) {
 func TestPointersExpansionDead(t *testing.T) {
 	line := "Read `doc/ai/spec/{naming,ghost}.md` first."
 	l := pointerChecker("doc/ai/spec/naming.md")(
-		upper.Alfa,
+		constant.UpperAlfa,
 		strings.NewReader(fmt.Sprintf("%s\n", line)),
 	)
 	assertReport(
@@ -211,7 +211,7 @@ func TestPointersExpansionDead(t *testing.T) {
 
 func TestPointersSiblingExisting(t *testing.T) {
 	l := pointerChecker("../../github/soil/doc/ai/spec/naming.md")(
-		upper.Alfa,
+		constant.UpperAlfa,
 		strings.NewReader(
 			"Shared specs at `../../github/soil/doc/ai/spec/naming.md`.\n",
 		),
@@ -222,7 +222,7 @@ func TestPointersSiblingExisting(t *testing.T) {
 func TestPointersSiblingDead(t *testing.T) {
 	line := "Shared specs at `../github/soil/doc/ai/spec/naming.md`."
 	l := pointerChecker()(
-		upper.Alfa,
+		constant.UpperAlfa,
 		strings.NewReader(fmt.Sprintf("%s\n", line)),
 	)
 	assertReport(
@@ -247,7 +247,7 @@ func TestPointersSiblingDead(t *testing.T) {
 func TestPointersMultiple(t *testing.T) {
 	line := "Read `doc/ai/spec/ghost.md` and `pkg/gone`."
 	l := pointerChecker()(
-		upper.Alfa,
+		constant.UpperAlfa,
 		strings.NewReader(fmt.Sprintf("%s\n", line)),
 	)
 	assertReport(
@@ -279,7 +279,7 @@ func TestPointersMultiple(t *testing.T) {
 
 func TestPointersPluginRoot(t *testing.T) {
 	l := pointerChecker("doc/ai/runbook/lint.md")(
-		upper.Alfa,
+		constant.UpperAlfa,
 		strings.NewReader(
 			"Read `${CLAUDE_PLUGIN_ROOT}/doc/ai/runbook/lint.md`.\n",
 		),

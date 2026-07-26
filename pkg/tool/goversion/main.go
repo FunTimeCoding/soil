@@ -9,6 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/git/check/status"
 	"github.com/funtimecoding/soil/pkg/go_mod/check/version"
 	"github.com/funtimecoding/soil/pkg/go_mod/check/version/option"
+	go_mod "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
 	"github.com/funtimecoding/soil/pkg/runtime"
 	"github.com/funtimecoding/soil/pkg/strings/split"
@@ -49,7 +50,7 @@ func Main(
 	)
 	o.Depth = a.GetInteger(argumentConstant.Depth)
 
-	if s := environment.Optional(version.SkipEnvironment); s != "" {
+	if s := environment.Optional(go_mod.VersionSkipEnvironment); s != "" {
 		o.Skip = split.Comma(s)
 	}
 

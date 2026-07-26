@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus/query"
 	"github.com/funtimecoding/soil/pkg/prometheus/query/filter"
-	"github.com/funtimecoding/soil/pkg/strings/upper"
+	strings "github.com/funtimecoding/soil/pkg/strings/constant"
 	"testing"
 )
 
@@ -16,8 +16,8 @@ func TestQueryFilter(t *testing.T) {
 		query.Filter(
 			constant.Up,
 			filter.New().Node(
-				upper.Alfa,
-			).Namespace(upper.Bravo).Container(upper.Charlie),
+				strings.UpperAlfa,
+			).Namespace(strings.UpperBravo).Container(strings.UpperCharlie),
 		),
 	)
 }
@@ -32,7 +32,7 @@ func TestSumBy(t *testing.T) {
 		`sum(kube_pod_container_status_restarts_total{namespace="Alfa"}) by (namespace, pod)`,
 		query.SumBy(
 			constant.Restart,
-			filter.New().Namespace(upper.Alfa),
+			filter.New().Namespace(strings.UpperAlfa),
 			constant.NamespaceLabel,
 			constant.PodLabel,
 		),
@@ -45,7 +45,7 @@ func TestSumByRate(t *testing.T) {
 		`sum(rate(kube_pod_container_status_restarts_total{namespace="Alfa"}[5m])) by (namespace, pod)`,
 		query.SumByRate(
 			constant.Restart,
-			filter.New().Namespace(upper.Alfa),
+			filter.New().Namespace(strings.UpperAlfa),
 			5,
 			constant.NamespaceLabel,
 			constant.PodLabel,
@@ -65,7 +65,7 @@ func TestChanges(t *testing.T) {
 	assert.String(
 		t,
 		`changes(kube_pod_container_status_restarts_total{pod="Alfa"}[5m]) > 0`,
-		query.Changes(constant.Restart, filter.New().Pod(upper.Alfa), 5),
+		query.Changes(constant.Restart, filter.New().Pod(strings.UpperAlfa), 5),
 	)
 }
 
@@ -74,7 +74,7 @@ func TestSumByLabelReplace(t *testing.T) {
 		t,
 		`sum by (owner) (label_replace(up{instance="Alfa"}, "owner", "$1", "namespace", "([^-]*)-.*"))`,
 		query.SumByLabelReplace(
-			query.Filter(constant.Up, filter.New().Instance(upper.Alfa)),
+			query.Filter(constant.Up, filter.New().Instance(strings.UpperAlfa)),
 			constant.NamespaceLabel,
 			"owner",
 			"([^-]*)-.*",

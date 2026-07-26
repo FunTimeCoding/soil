@@ -2,9 +2,9 @@ package unit_test
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
-	"github.com/funtimecoding/soil/pkg/console/status/tag"
 	"testing"
 )
 
@@ -35,7 +35,7 @@ func TestDetailLinkOSC8DefaultLabel(t *testing.T) {
 }
 
 func TestDetailLinkCopyable(t *testing.T) {
-	s := status.New(option.New().Tag(tag.Copyable)).String("a").DetailLink(
+	s := status.New(option.New().Tag(constant.TagCopyable)).String("a").DetailLink(
 		"https://example.org",
 		"Jira",
 		"",
@@ -44,7 +44,7 @@ func TestDetailLinkCopyable(t *testing.T) {
 }
 
 func TestDetailLinkCopyablePrefix(t *testing.T) {
-	s := status.New(option.New().Tag(tag.Copyable)).String("a").DetailLink(
+	s := status.New(option.New().Tag(constant.TagCopyable)).String("a").DetailLink(
 		"https://example.org",
 		"Grafana",
 		"Prometheus 24h graph",
@@ -57,7 +57,7 @@ func TestDetailLinkCopyablePrefix(t *testing.T) {
 }
 
 func TestDetailLinkMarkdown(t *testing.T) {
-	s := status.New(option.New().Tag(tag.Markdown)).String("a").DetailLink(
+	s := status.New(option.New().Tag(constant.TagMarkdown)).String("a").DetailLink(
 		"https://example.org",
 		"Jira",
 		"",
@@ -70,7 +70,7 @@ func TestDetailLinkMarkdown(t *testing.T) {
 }
 
 func TestDetailLinkMarkdownPrefix(t *testing.T) {
-	s := status.New(option.New().Tag(tag.Markdown)).String("a").DetailLink(
+	s := status.New(option.New().Tag(constant.TagMarkdown)).String("a").DetailLink(
 		"https://example.org",
 		"Grafana",
 		"Prometheus 24h graph",

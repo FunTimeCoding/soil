@@ -1,7 +1,7 @@
 package mattermost
 
 import (
-	"github.com/funtimecoding/soil/pkg/chat/mattermost/constant"
+	"github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/mattermost/mattermost/server/public/model"
 )
 
@@ -10,7 +10,7 @@ func (c *Client) Me() (*model.User, error) {
 		return c.meCache, nil
 	}
 
-	result, _, e := c.client.GetMe(c.context, constant.EmptyEntityTag)
+	result, _, e := c.client.GetMe(c.context, constant.MattermostEmptyEntityTag)
 
 	if e != nil {
 		return nil, e

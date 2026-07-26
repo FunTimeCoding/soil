@@ -2,12 +2,12 @@ package basic
 
 import (
 	"encoding/json"
+	"github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/salt/basic/response"
-	"github.com/funtimecoding/soil/pkg/provision/salt/constant"
 )
 
 func (c *Client) ListMinions() ([]response.Minion, error) {
-	b, e := c.Get(constant.MinionsPath)
+	b, e := c.Get(constant.SaltMinionsPath)
 
 	if e != nil {
 		return nil, e

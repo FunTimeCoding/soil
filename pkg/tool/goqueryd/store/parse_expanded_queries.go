@@ -1,7 +1,7 @@
 package store
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 )
 
@@ -14,7 +14,7 @@ func ParseExpandedQueries(
 
 	for _, line := range strings.Split(
 		strings.TrimSpace(text),
-		separator.Unix,
+		constant.Unix,
 	) {
 		colon := strings.Index(line, ":")
 

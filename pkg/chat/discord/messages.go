@@ -2,6 +2,7 @@ package discord
 
 import (
 	"github.com/bwmarrin/discordgo"
+	"github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 )
 
@@ -11,7 +12,7 @@ func (c *Client) Messages(
 ) []*discordgo.Message {
 	result, e := s.ChannelMessages(
 		channel,
-		MessageLimit,
+		constant.DiscordMessageLimit,
 		"",
 		"",
 		"",

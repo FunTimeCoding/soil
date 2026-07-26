@@ -3,14 +3,14 @@ package unit_test
 import (
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
-	"github.com/funtimecoding/soil/pkg/strings/upper"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 	"testing"
 )
 
 func TestMarkupClean(t *testing.T) {
 	l := lint.Markup(
-		upper.Bravo,
+		constant.UpperBravo,
 		strings.NewReader("---\nmyKey: myValue\n"),
 	)
 	assertReport(t, "Bravo", false, nil, "", l)
@@ -18,7 +18,7 @@ func TestMarkupClean(t *testing.T) {
 
 func TestMarkup(t *testing.T) {
 	l := lint.Markup(
-		upper.Alfa,
+		constant.UpperAlfa,
 		strings.NewReader("myKey: myValue\n"),
 	)
 	assertReport(

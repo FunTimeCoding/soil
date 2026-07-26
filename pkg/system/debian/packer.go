@@ -2,9 +2,9 @@ package debian
 
 import (
 	"fmt"
+	provision "github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/packer"
 	"github.com/funtimecoding/soil/pkg/provision/packer/build"
-	"github.com/funtimecoding/soil/pkg/provision/packer/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/debian/image"
@@ -36,8 +36,8 @@ func (c *Client) Packer(
 	outputImage := build.OutputFilename(v)
 	outputImagePath := join.Absolute(
 		c.workDirectory,
-		constant.PackerDirectory,
-		constant.OutputDirectory,
+		provision.PackerDirectory,
+		provision.PackerOutputDirectory,
 		outputImage,
 	)
 

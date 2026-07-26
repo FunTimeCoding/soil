@@ -3,16 +3,16 @@ package basic
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/salt/basic/response"
-	"github.com/funtimecoding/soil/pkg/provision/salt/constant"
 )
 
 func (c *Client) AcceptKey(minion string) ([]string, error) {
 	b, e := c.Post(
 		"",
 		commandRequest{
-			Client:   constant.WheelClient,
-			Function: constant.KeyAccept,
+			Client:   constant.SaltWheelClient,
+			Function: constant.SaltKeyAccept,
 			Match:    minion,
 		},
 	)

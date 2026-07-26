@@ -2,8 +2,8 @@ package alert
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
-	"github.com/funtimecoding/soil/pkg/console/status/tag"
 )
 
 func (a *Alert) formatHost(f *option.Format) string {
@@ -20,8 +20,8 @@ func (a *Alert) formatHost(f *option.Format) string {
 	}
 
 	if a.HostLink != "" &&
-		!f.HasTag(tag.Copyable) &&
-		!f.HasTag(tag.Markdown) {
+		!f.HasTag(constant.TagCopyable) &&
+		!f.HasTag(constant.TagMarkdown) {
 		result = console.Link(a.HostLink, result, true)
 	}
 

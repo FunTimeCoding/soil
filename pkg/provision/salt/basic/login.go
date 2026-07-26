@@ -3,15 +3,15 @@ package basic
 import (
 	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/salt/basic/response"
-	"github.com/funtimecoding/soil/pkg/provision/salt/constant"
 	"net/http"
 )
 
 func (c *Client) login() {
 	b, code, e := c.exchange(
 		http.MethodPost,
-		constant.LoginPath,
+		constant.SaltLoginPath,
 		loginRequest{
 			Username: c.user,
 			Password: c.password,

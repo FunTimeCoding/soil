@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
-	"github.com/funtimecoding/soil/pkg/strings/upper"
+	strings "github.com/funtimecoding/soil/pkg/strings/constant"
 	"testing"
 )
 
@@ -12,17 +12,17 @@ func TestFilterSevere(t *testing.T) {
 	actual := alert.FilterSevere(
 		[]*alert.Alert{
 			{
-				Name:     upper.Alfa,
+				Name:     strings.UpperAlfa,
 				State:    constant.ActiveState,
 				Severity: constant.CriticalSeverity,
 			},
 			{
-				Name:     upper.Bravo,
+				Name:     strings.UpperBravo,
 				State:    constant.SuppressedState,
 				Severity: constant.CriticalSeverity,
 			},
 			{
-				Name:     upper.Charlie,
+				Name:     strings.UpperCharlie,
 				State:    constant.ActiveState,
 				Severity: constant.InformationSeverity,
 			},

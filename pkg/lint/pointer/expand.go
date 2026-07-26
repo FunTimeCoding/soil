@@ -1,8 +1,8 @@
 package pointer
 
 import (
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/strings/separator"
 	"strings"
 )
 
@@ -21,13 +21,13 @@ func Expand(s string) []string {
 
 	inner := s[start+1 : start+stop]
 
-	if !strings.Contains(inner, separator.Comma) {
+	if !strings.Contains(inner, constant.Comma) {
 		return []string{s}
 	}
 
 	var result []string
 
-	for _, alternative := range strings.Split(inner, separator.Comma) {
+	for _, alternative := range strings.Split(inner, constant.Comma) {
 		result = append(
 			result,
 			Expand(

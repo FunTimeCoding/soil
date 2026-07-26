@@ -14,7 +14,7 @@ func decorateModified(
 	modified map[string]*ast.File,
 ) error {
 	for _, file := range modified {
-		owner, syntax := findOwningFile(all, set, file.Pos())
+		owner, syntax := findOwningFile(all, file.Pos())
 
 		if syntax == nil {
 			continue

@@ -1,7 +1,7 @@
 package mattermost
 
 import (
-	"github.com/funtimecoding/soil/pkg/chat/mattermost/constant"
+	"github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/mattermost/mattermost/server/public/model"
 )
 
@@ -9,8 +9,8 @@ func (c *Client) AllChannels(
 	limit int,
 	offset int,
 ) ([]*model.ChannelWithTeamData, error) {
-	if limit <= 0 || limit > constant.MaxPerPage {
-		limit = constant.MaxPerPage
+	if limit <= 0 || limit > constant.MattermostMaxPerPage {
+		limit = constant.MattermostMaxPerPage
 	}
 
 	if offset < 0 {
@@ -23,7 +23,7 @@ func (c *Client) AllChannels(
 		c.context,
 		page,
 		limit,
-		constant.EmptyEntityTag,
+		constant.MattermostEmptyEntityTag,
 	)
 
 	if e != nil {
@@ -43,7 +43,7 @@ func (c *Client) AllChannels(
 		c.context,
 		page+1,
 		limit,
-		constant.EmptyEntityTag,
+		constant.MattermostEmptyEntityTag,
 	)
 
 	if f != nil {

@@ -2,7 +2,7 @@ package store
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/strings/lower"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/integration_test/store_tester"
 	"testing"
 	"time"
@@ -12,15 +12,15 @@ func TestRecentSeedsOrderNewestFirst(t *testing.T) {
 	s := store_tester.New(t)
 	base := time.Now()
 	s.Store.UpsertSeed(
-		lower.Alfa,
+		constant.LowerAlfa,
 		"alfa.md",
 		"hash-a",
 		"a",
 		base.Add(-2*time.Hour),
 	)
-	s.Store.UpsertSeed(lower.Bravo, "bravo.md", "hash-b", "b", base)
+	s.Store.UpsertSeed(constant.LowerBravo, "bravo.md", "hash-b", "b", base)
 	s.Store.UpsertSeed(
-		lower.Charlie,
+		constant.LowerCharlie,
 		"charlie.md",
 		"hash-c",
 		"c",

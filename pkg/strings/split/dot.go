@@ -1,10 +1,10 @@
 package split
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 )
 
 func Dot(s string) []string {
-	return strings.Split(s, separator.Dot)
+	return strings.Split(s, constant.Dot)
 }

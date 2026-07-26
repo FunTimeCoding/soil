@@ -3,7 +3,7 @@ package unit_test
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
-	"github.com/funtimecoding/soil/pkg/strings/upper"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"testing"
 )
 
@@ -12,8 +12,8 @@ func TestSortByAge(t *testing.T) {
 	dayTwo := assert.NewDay(2)
 	descending := alert.SortByAge(
 		[]*alert.Alert{
-			{Name: upper.Alfa, Start: new(dayOne)},
-			{Name: upper.Bravo, Start: new(dayTwo)},
+			{Name: constant.UpperAlfa, Start: new(dayOne)},
+			{Name: constant.UpperBravo, Start: new(dayTwo)},
 		},
 		false,
 	)
@@ -21,8 +21,8 @@ func TestSortByAge(t *testing.T) {
 	assert.String(t, "Alfa", descending[1].Name)
 	ascending := alert.SortByAge(
 		[]*alert.Alert{
-			{Name: upper.Alfa, Start: new(dayOne)},
-			{Name: upper.Bravo, Start: new(dayTwo)},
+			{Name: constant.UpperAlfa, Start: new(dayOne)},
+			{Name: constant.UpperBravo, Start: new(dayTwo)},
 		},
 		true,
 	)

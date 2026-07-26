@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab/packages"
-	"github.com/funtimecoding/soil/pkg/strings/upper"
+	strings "github.com/funtimecoding/soil/pkg/strings/constant"
 	"gitlab.com/gitlab-org/api/client-go/v2"
 	"testing"
 )
@@ -15,9 +15,9 @@ func TestFindVersionOrLatest(t *testing.T) {
 		&gitlab.Package{Name: "Alfa", Version: "v1.0.2"},
 		packages.FindVersionOrLatest(
 			[]*gitlab.Package{
-				{Name: upper.Alfa, Version: "v1.0.0"},
-				{Name: upper.Alfa, Version: "v1.0.2"},
-				{Name: upper.Alfa, Version: "v1.0.1"},
+				{Name: strings.UpperAlfa, Version: "v1.0.0"},
+				{Name: strings.UpperAlfa, Version: "v1.0.2"},
+				{Name: strings.UpperAlfa, Version: "v1.0.1"},
 			},
 			constant.LatestVersion,
 		),
@@ -27,9 +27,9 @@ func TestFindVersionOrLatest(t *testing.T) {
 		&gitlab.Package{Name: "Alfa", Version: "v1.0.1"},
 		packages.FindVersionOrLatest(
 			[]*gitlab.Package{
-				{Name: upper.Alfa, Version: "v1.0.0"},
-				{Name: upper.Alfa, Version: "v1.0.2"},
-				{Name: upper.Alfa, Version: "v1.0.1"},
+				{Name: strings.UpperAlfa, Version: "v1.0.0"},
+				{Name: strings.UpperAlfa, Version: "v1.0.2"},
+				{Name: strings.UpperAlfa, Version: "v1.0.1"},
 			},
 			"v1.0.1",
 		),

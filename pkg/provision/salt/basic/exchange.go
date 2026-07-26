@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/provision/salt/constant"
+	provision "github.com/funtimecoding/soil/pkg/provision/constant"
 	web "github.com/funtimecoding/soil/pkg/web/constant"
 	"io"
 	"net/http"
@@ -44,7 +44,7 @@ func (c *Client) exchange(
 	}
 
 	if c.token != "" {
-		r.Header.Set(constant.TokenHeader, c.token)
+		r.Header.Set(provision.SaltTokenHeader, c.token)
 	}
 
 	s, f := c.client.Do(r)

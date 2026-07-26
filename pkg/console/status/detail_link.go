@@ -2,7 +2,7 @@ package status
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/console/status/tag"
+	"github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/text/markdown"
 )
 
@@ -19,13 +19,13 @@ func (s *Status) DetailLink(
 		label = "Link"
 	}
 
-	if s.format.HasTag(tag.Copyable) {
-		return s.TagLine(tag.Copyable, "  %s", prefixed(prefix, link))
+	if s.format.HasTag(constant.TagCopyable) {
+		return s.TagLine(constant.TagCopyable, "  %s", prefixed(prefix, link))
 	}
 
-	if s.format.HasTag(tag.Markdown) {
+	if s.format.HasTag(constant.TagMarkdown) {
 		return s.TagLine(
-			tag.Markdown,
+			constant.TagMarkdown,
 			"  %s",
 			prefixed(prefix, markdown.Link(label, link)),
 		)

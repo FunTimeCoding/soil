@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/github/constant"
 	"github.com/funtimecoding/soil/pkg/github/image"
-	"github.com/funtimecoding/soil/pkg/strings/upper"
+	strings "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/google/go-github/v89/github"
 	"testing"
 	"time"
@@ -17,7 +17,7 @@ func TestImage(t *testing.T) {
 		github.PackageMetadata{
 			PackageType: new(constant.ContainerPackageType),
 			Container: &github.PackageContainerMetadata{
-				Tags: []string{upper.Alfa},
+				Tags: []string{strings.UpperAlfa},
 			},
 		},
 	)
@@ -25,7 +25,7 @@ func TestImage(t *testing.T) {
 	i := image.New(
 		&github.PackageVersion{
 			ID:        new(int64(1)),
-			Name:      new(upper.Bravo),
+			Name:      new(strings.UpperBravo),
 			CreatedAt: &github.Timestamp{},
 			Metadata:  meta,
 		},
@@ -35,8 +35,8 @@ func TestImage(t *testing.T) {
 		t,
 		&image.Image{
 			Identifier: 1,
-			Digest:     upper.Bravo,
-			Tags:       []string{upper.Alfa},
+			Digest:     strings.UpperBravo,
+			Tags:       []string{strings.UpperAlfa},
 			Create:     time.Time{},
 		},
 		i,

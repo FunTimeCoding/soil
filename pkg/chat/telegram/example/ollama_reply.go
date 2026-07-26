@@ -2,8 +2,8 @@ package example
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/chat/telegram"
-	"github.com/funtimecoding/soil/pkg/chat/telegram/constant"
 	"github.com/funtimecoding/soil/pkg/generative/ollama"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/text/multi_line"
@@ -13,8 +13,8 @@ func OllamaReply() {
 	o := ollama.NewEnvironment()
 	t := telegram.NewEnvironment()
 	defer t.Close()
-	f := constant.Format
-	c := environment.Required(constant.ChannelEnvironment)
+	f := telegram.Format
+	c := environment.Required(constant.TelegramChannelEnvironment)
 	l := multi_line.New()
 	l.Format(
 		"You are a helpful assistant called %s. Below is a set of lines from a chat channel. Respond with a message in a friendly and informative manner. I will worry about the formatting, time and your name. Try to blend in with the message length and writing style. You can also choose to say nothing if you feel it is not appropriate.",

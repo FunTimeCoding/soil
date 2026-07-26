@@ -3,9 +3,9 @@ package unit_test
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/extended"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
-	"github.com/funtimecoding/soil/pkg/console/status/tag"
 	"github.com/funtimecoding/soil/pkg/console/status/tagged"
 	"github.com/funtimecoding/soil/pkg/strings/join/key_value"
 	"testing"
@@ -47,6 +47,6 @@ func TestTagLine(t *testing.T) {
 	assert.String(
 		t,
 		"1 | a\n  line1\n  line2\n  RawList: &{String:b}",
-		apple.Format(option.New().Extended().Tag(tag.Usage).Raw()),
+		apple.Format(option.New().Extended().Tag(constant.TagUsage).Raw()),
 	)
 }

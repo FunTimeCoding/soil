@@ -5,23 +5,23 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue/customer"
-	"github.com/funtimecoding/soil/pkg/strings/upper"
+	strings "github.com/funtimecoding/soil/pkg/strings/constant"
 	"testing"
 )
 
 func TestIssue(t *testing.T) {
 	actual := customer.New(
 		&models.CustomerRequestScheme{
-			IssueKey: upper.Alfa,
+			IssueKey: strings.UpperAlfa,
 			RequestFieldValues: []*models.CustomerRequestRequestFieldValueScheme{
-				{FieldID: customer.SummaryField, Value: upper.Bravo},
-				{FieldID: customer.DescriptionField, Value: upper.Charlie},
+				{FieldID: customer.SummaryField, Value: strings.UpperBravo},
+				{FieldID: customer.DescriptionField, Value: strings.UpperCharlie},
 			},
 			CurrentStatus: &models.CustomerRequestCurrentStatusScheme{
 				Status: constant.ServiceDeskResolved,
 			},
 			Links: &models.CustomerRequestLinksScheme{
-				Web: upper.Delta,
+				Web: strings.UpperDelta,
 			},
 		},
 	)

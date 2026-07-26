@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/ceph/constant"
 	"github.com/funtimecoding/soil/pkg/ceph/goc"
-	"github.com/funtimecoding/soil/pkg/strings/upper"
+	strings "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"testing"
 )
@@ -12,14 +12,14 @@ import (
 func TestEnvironment(t *testing.T) {
 	if false {
 		// Only works for the running process
-		environment.Set(constant.ConfigurationEnvironment, upper.Alfa)
-		environment.Set(constant.ArgumentEnvironment, upper.Bravo)
+		environment.Set(constant.ConfigurationEnvironment, strings.UpperAlfa)
+		environment.Set(constant.ArgumentEnvironment, strings.UpperBravo)
 	}
 
 	if false {
 		// Not sure if this works
-		goc.SetEnvironmentEscape(constant.ConfigurationEnvironment, upper.Alfa)
-		goc.SetEnvironmentEscape(constant.ArgumentEnvironment, upper.Bravo)
+		goc.SetEnvironmentEscape(constant.ConfigurationEnvironment, strings.UpperAlfa)
+		goc.SetEnvironmentEscape(constant.ArgumentEnvironment, strings.UpperBravo)
 	}
 
 	if false {

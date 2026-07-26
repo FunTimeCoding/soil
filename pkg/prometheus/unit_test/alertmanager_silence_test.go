@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/silence"
-	"github.com/funtimecoding/soil/pkg/strings/upper"
+	strings "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/time"
 	"github.com/prometheus/alertmanager/api/v2/models"
 	"testing"
@@ -13,18 +13,18 @@ import (
 func TestSilence(t *testing.T) {
 	actual := silence.New(
 		&models.GettableSilence{
-			ID: new(upper.Alfa),
+			ID: new(strings.UpperAlfa),
 			Status: &models.SilenceStatus{
 				State: new(constant.ActiveState),
 			},
 			Silence: models.Silence{
-				CreatedBy: new(upper.Bravo),
-				Comment:   new(upper.Charlie),
+				CreatedBy: new(strings.UpperBravo),
+				Comment:   new(strings.UpperCharlie),
 				StartsAt:  new(time.Scan(assert.NewMinute(0))),
 				EndsAt:    new(time.Scan(assert.NewMinute(10))),
 			},
 		},
-		upper.Delta,
+		strings.UpperDelta,
 	)
 	actual.Start = nil
 	actual.End = nil

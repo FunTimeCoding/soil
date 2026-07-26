@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/runner"
 	"github.com/funtimecoding/soil/pkg/system/run"
 	"path/filepath"
@@ -13,7 +14,7 @@ import (
 func New(t *testing.T) *Tester {
 	t.Helper()
 	base := t.TempDir()
-	remote := filepath.Join(base, "remote")
+	remote := filepath.Join(base, "remote.git")
 	clone := filepath.Join(base, "clone")
 	c := run.New()
 	c.Start("git", "init", "--bare", "--initial-branch=main", remote)
@@ -34,7 +35,7 @@ func New(t *testing.T) *Tester {
 	)
 	c = run.New()
 	c.Directory = clone
-	c.Start("git", "push", "origin", "main")
+	c.Start("git", "push", "origin", constant.RunnerBranch)
 	result := &Tester{t: t}
 	result.Runner = runner.New(
 		runner.Configuration{

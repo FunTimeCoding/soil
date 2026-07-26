@@ -1,7 +1,7 @@
 package system
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/slice"
 	"net"
 )
@@ -13,5 +13,5 @@ func Lookup(address string) []string {
 		return []string{}
 	}
 
-	return slice.TrimSuffix(result, separator.Dot)
+	return slice.TrimSuffix(result, constant.Dot)
 }

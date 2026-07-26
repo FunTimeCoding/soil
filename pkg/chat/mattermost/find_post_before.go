@@ -2,7 +2,6 @@ package mattermost
 
 import (
 	"errors"
-	"github.com/funtimecoding/soil/pkg/chat/mattermost/constant"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/post"
 	"github.com/mattermost/mattermost/server/public/model"
 	"time"
@@ -15,7 +14,7 @@ func (c *Client) FindPostBefore(
 	result, e := c.PostBefore(h, t)
 
 	if e != nil {
-		if errors.Is(e, constant.ErrorNotFound) {
+		if errors.Is(e, ErrorNotFound) {
 			return nil, false, nil
 		}
 

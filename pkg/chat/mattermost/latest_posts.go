@@ -1,7 +1,7 @@
 package mattermost
 
 import (
-	"github.com/funtimecoding/soil/pkg/chat/mattermost/constant"
+	"github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/post"
 	"github.com/mattermost/mattermost/server/public/model"
 )
@@ -13,8 +13,8 @@ func (c *Client) LatestPosts(
 	h *model.Channel,
 	limit int,
 ) ([]*post.Post, error) {
-	if limit <= 0 || limit > constant.PerPage {
-		limit = constant.PerPage
+	if limit <= 0 || limit > constant.MattermostPerPage {
+		limit = constant.MattermostPerPage
 	}
 
 	page, _, e := c.client.GetPostsForChannel(
@@ -22,7 +22,7 @@ func (c *Client) LatestPosts(
 		h.Id,
 		0,
 		limit,
-		constant.EmptyEntityTag,
+		constant.MattermostEmptyEntityTag,
 		false,
 		false,
 	)

@@ -3,6 +3,7 @@ package unit_test
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/strings"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"testing"
 )
 
@@ -25,7 +26,7 @@ func TestIndent(t *testing.T) {
 }
 
 func TestReduceSpace(t *testing.T) {
-	assert.String(t, " ", strings.ReduceSpace("  "))
+	assert.String(t, " ", strings.ReduceSpace(constant.DoubleSpace))
 	assert.String(t, "a b", strings.ReduceSpace("a  b"))
 	assert.String(t, "a b c", strings.ReduceSpace("a  b   c"))
 }

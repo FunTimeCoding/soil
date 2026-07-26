@@ -1,7 +1,7 @@
 package mattermost
 
 import (
-	"github.com/funtimecoding/soil/pkg/chat/mattermost/constant"
+	"github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/mattermost/mattermost/server/public/model"
 )
 
@@ -14,8 +14,8 @@ func (c *Client) ChannelUsers(h *model.Channel) ([]*model.User, error) {
 			c.context,
 			h.Id,
 			page,
-			constant.PerPage,
-			constant.EmptyEntityTag,
+			constant.MattermostPerPage,
+			constant.MattermostEmptyEntityTag,
 		)
 
 		if e != nil {

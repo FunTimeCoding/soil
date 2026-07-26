@@ -1,9 +1,9 @@
 package repository
 
 import (
+	"github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
-	"github.com/funtimecoding/soil/pkg/console/status/tag"
 	"github.com/funtimecoding/soil/pkg/strings/split"
 )
 
@@ -16,7 +16,7 @@ func (r *Repository) Format(f *option.Format) string {
 
 	if !r.IsClean && r.Status != "" {
 		for _, l := range split.NewLine(r.Status) {
-			s.TagLine(tag.Changes, "%s", l)
+			s.TagLine(constant.TagChanges, "%s", l)
 		}
 	}
 

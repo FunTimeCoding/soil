@@ -2,8 +2,8 @@ package constant
 
 import (
 	"errors"
+	"github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
-	"github.com/funtimecoding/soil/pkg/console/status/tag"
 	"github.com/prometheus/common/model"
 	"time"
 )
@@ -67,7 +67,7 @@ const NodeNotReady = "KubeNodeNotReady" // Alert name
 
 var (
 	ErrorNotFound = errors.New("not found")
-	Format        = option.Color.Copy().Tag(tag.Comment)
+	Format        = option.Color.Copy().Tag(constant.TagComment)
 
 	AlertStates = []string{
 		ActiveState,

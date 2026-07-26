@@ -2,7 +2,7 @@ package telegram
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/chat/telegram/constant"
+	"github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/chat/telegram/store"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
@@ -12,9 +12,9 @@ import (
 func NewEnvironment() *Client {
 	var s *store.Store
 
-	if path := environment.Optional(constant.DatabaseEnvironment); path != "" {
+	if path := environment.Optional(constant.TelegramDatabaseEnvironment); path != "" {
 		s = store.New(lite.New(logger.New(context.Background()), path))
 	}
 
-	return New(environment.Required(constant.TokenEnvironment), s)
+	return New(environment.Required(constant.TelegramTokenEnvironment), s)
 }

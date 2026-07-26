@@ -1,12 +1,12 @@
 package key_value
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 )
 
 func Underscore(s string) (string, string) {
-	p := strings.SplitN(s, separator.Underscore, 2)
+	p := strings.SplitN(s, constant.Underscore, 2)
 
 	switch len(p) {
 	case 1:

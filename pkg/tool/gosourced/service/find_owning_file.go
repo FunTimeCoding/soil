@@ -8,14 +8,13 @@ import (
 
 func findOwningFile(
 	all []*packages.Package,
-	set *token.FileSet,
 	position token.Pos,
 ) (*packages.Package, *ast.File) {
-	filename := set.Position(position).Filename
-
 	for _, p := range all {
-		if file := findSyntaxFile(set, p, filename); file != nil {
-			return p, file
+		for _, file := range p.Syntax {
+			if file.Pos() <= position && position <= file.End() {
+				return p, file
+			}
 		}
 	}
 

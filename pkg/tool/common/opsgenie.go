@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/alert/detail"
 	opsgenieConstant "github.com/funtimecoding/soil/pkg/atlassian/opsgenie/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
-	"github.com/funtimecoding/soil/pkg/strings/separator"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/split"
 	"github.com/funtimecoding/soil/pkg/strings/split/key_value"
 	"github.com/funtimecoding/soil/pkg/system/environment"
@@ -54,7 +54,7 @@ func Opsgenie() *opsgenie.Client {
 	)
 	result.ShortUser(
 		func(s string) string {
-			if strings.Contains(s, separator.At) {
+			if strings.Contains(s, stringsConstant.At) {
 				k, _ := key_value.At(s)
 
 				return k

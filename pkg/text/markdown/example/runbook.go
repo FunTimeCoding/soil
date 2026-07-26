@@ -5,8 +5,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/text/constant"
 	"github.com/funtimecoding/soil/pkg/text/markdown"
-	"github.com/funtimecoding/soil/pkg/text/markdown/constant"
 	"github.com/funtimecoding/soil/pkg/text/markdown/runbook"
 )
 

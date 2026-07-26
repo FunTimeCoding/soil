@@ -3,7 +3,7 @@ package unit_test
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/strings"
-	"github.com/funtimecoding/soil/pkg/strings/upper"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"testing"
 )
 
@@ -47,10 +47,10 @@ func TestHas(t *testing.T) {
 }
 
 func TestHasWord(t *testing.T) {
-	assert.True(t, strings.HasWord("alfa bravo", "bravo"))
+	assert.True(t, strings.HasWord("alfa bravo", constant.LowerBravo))
 	assert.False(t, strings.HasWord("alfa bravo", "bro"))
 	assert.False(t, strings.HasWord("alfa bravo", "bra"))
-	assert.False(t, strings.HasWord("alfa bravo", "charlie"))
+	assert.False(t, strings.HasWord("alfa bravo", constant.LowerCharlie))
 }
 
 func TestIndexOfSkip(t *testing.T) {
@@ -58,8 +58,8 @@ func TestIndexOfSkip(t *testing.T) {
 		t,
 		1,
 		strings.IndexOfSkip(
-			upper.Bravo,
-			[]string{upper.Alfa, upper.Bravo, upper.Charlie, upper.Bravo},
+			constant.UpperBravo,
+			[]string{constant.UpperAlfa, constant.UpperBravo, constant.UpperCharlie, constant.UpperBravo},
 			0,
 		),
 	)
@@ -67,8 +67,8 @@ func TestIndexOfSkip(t *testing.T) {
 		t,
 		3,
 		strings.IndexOfSkip(
-			upper.Bravo,
-			[]string{upper.Alfa, upper.Bravo, upper.Charlie, upper.Bravo},
+			constant.UpperBravo,
+			[]string{constant.UpperAlfa, constant.UpperBravo, constant.UpperCharlie, constant.UpperBravo},
 			1,
 		),
 	)
@@ -79,14 +79,14 @@ func TestIndexOf(t *testing.T) {
 		t,
 		1,
 		strings.IndexOf(
-			upper.Bravo,
-			[]string{upper.Alfa, upper.Bravo, upper.Charlie},
+			constant.UpperBravo,
+			[]string{constant.UpperAlfa, constant.UpperBravo, constant.UpperCharlie},
 		),
 	)
 }
 
 func TestIntensity(t *testing.T) {
-	v := []string{upper.Alfa, upper.Bravo, upper.Charlie}
+	v := []string{constant.UpperAlfa, constant.UpperBravo, constant.UpperCharlie}
 	assert.String(t, "Alfa", strings.Intensity(v, 0))
 	assert.String(t, "Alfa", strings.Intensity(v, 0.33))
 	assert.String(t, "Bravo", strings.Intensity(v, 0.34))

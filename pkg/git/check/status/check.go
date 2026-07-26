@@ -2,7 +2,7 @@ package status
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/console/status/tag"
+	console "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/git/check/status/option"
 	"github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/git/repository"
@@ -27,7 +27,7 @@ func Check(o *option.Status) {
 	f := constant.Format.Copy()
 
 	if o.Verbose {
-		f.Tag(tag.Changes)
+		f.Tag(console.TagChanges)
 	}
 
 	for _, r := range elements {

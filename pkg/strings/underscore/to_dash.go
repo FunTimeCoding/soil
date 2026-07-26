@@ -1,10 +1,10 @@
 package underscore
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 )
 
 func ToDash(s string) string {
-	return strings.ReplaceAll(s, separator.Underscore, separator.Dash)
+	return strings.ReplaceAll(s, constant.Underscore, constant.Dash)
 }

@@ -3,7 +3,7 @@ package unit_test
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/git/remote"
-	"github.com/funtimecoding/soil/pkg/strings/upper"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"testing"
 )
 
@@ -15,6 +15,6 @@ func TestRemote(t *testing.T) {
 			Locator:  "Bravo",
 			Provider: "Charlie",
 		},
-		remote.New(upper.Alfa, upper.Bravo, upper.Charlie),
+		remote.New(constant.UpperAlfa, constant.UpperBravo, constant.UpperCharlie),
 	)
 }

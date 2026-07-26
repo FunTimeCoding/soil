@@ -2,7 +2,7 @@ package check
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/linux"
+	linuxConstant "github.com/funtimecoding/soil/pkg/linux/constant"
 	"github.com/funtimecoding/soil/pkg/linux/systemd/command"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/strings/split"
@@ -21,7 +21,7 @@ func Check(port string) {
 		// TODO: Load average > CPU cores check
 		diskFull()
 
-		if run.CommandExists(linux.Jc) {
+		if run.CommandExists(linuxConstant.Jc) {
 			if port != "" {
 				ports := split.Comma(port)
 				var found []string

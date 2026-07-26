@@ -3,7 +3,7 @@ package unit_test
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/github/repository"
-	"github.com/funtimecoding/soil/pkg/strings/upper"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/google/go-github/v89/github"
 	"testing"
 	"time"
@@ -12,7 +12,7 @@ import (
 func TestRepository(t *testing.T) {
 	r := repository.New(
 		&github.Repository{
-			Name:      new(upper.Alfa),
+			Name:      new(constant.UpperAlfa),
 			CreatedAt: &github.Timestamp{},
 		},
 	)

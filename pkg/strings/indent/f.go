@@ -2,7 +2,7 @@ package indent
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 )
 
@@ -13,7 +13,7 @@ func F(
 ) {
 	fmt.Printf(
 		"%s%s\n",
-		strings.Repeat(separator.DoubleSpace, indent),
+		strings.Repeat(constant.DoubleSpace, indent),
 		fmt.Sprintf(format, a...),
 	)
 }

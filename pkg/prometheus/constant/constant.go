@@ -1,8 +1,8 @@
 package constant
 
 import (
+	"github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
-	"github.com/funtimecoding/soil/pkg/console/status/tag"
 	"github.com/prometheus/common/model"
 )
 
@@ -54,7 +54,7 @@ const (
 )
 
 var Format = option.Color.Copy().Tag(
-	tag.Category,
-	tag.Emoji,
-	tag.Instance,
+	constant.TagCategory,
+	constant.TagEmoji,
+	constant.TagInstance,
 )

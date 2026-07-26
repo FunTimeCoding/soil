@@ -3,13 +3,13 @@ package basic
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/salt/basic/response"
-	"github.com/funtimecoding/soil/pkg/provision/salt/constant"
 )
 
 func (c *Client) LookupJob(jobIdentifier string) (*response.Job, error) {
 	b, e := c.Get(
-		fmt.Sprintf("%s/%s", constant.JobsPath, jobIdentifier),
+		fmt.Sprintf("%s/%s", constant.SaltJobsPath, jobIdentifier),
 	)
 
 	if e != nil {

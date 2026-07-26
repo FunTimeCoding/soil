@@ -1,7 +1,9 @@
 package option
 
+import "github.com/funtimecoding/soil/pkg/console/constant"
+
 func New(v ...Option) *Output {
-	result := &Output{Format: Text, Debug: false}
+	result := &Output{Format: constant.FormatText, Debug: false}
 
 	for _, o := range v {
 		o(result)

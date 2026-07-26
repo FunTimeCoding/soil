@@ -21,7 +21,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/team_map"
 	opsgenieUser "github.com/funtimecoding/soil/pkg/atlassian/opsgenie/user"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/user_map"
-	"github.com/funtimecoding/soil/pkg/strings/upper"
+	strings "github.com/funtimecoding/soil/pkg/strings/constant"
 	rawSchedule "github.com/opsgenie/opsgenie-go-sdk-v2/schedule"
 	rawTeam "github.com/opsgenie/opsgenie-go-sdk-v2/team"
 	rawUser "github.com/opsgenie/opsgenie-go-sdk-v2/user"
@@ -29,7 +29,7 @@ import (
 )
 
 func TestEntities(t *testing.T) {
-	assert.NotNil(t, page.New(response.NewPage(), upper.Alfa))
+	assert.NotNil(t, page.New(response.NewPage(), strings.UpperAlfa))
 	assert.NotNil(t, search_result.New(response.NewResult()))
 	assert.NotNil(t, space.New(response.NewSpace()))
 	assert.NotNil(t, confluenceUser.New(response.NewUser()))
@@ -53,8 +53,8 @@ func TestEntities(t *testing.T) {
 	assert.NotNil(
 		t,
 		issueOption.New(
-			upper.Alfa,
-			upper.Bravo,
+			strings.UpperAlfa,
+			strings.UpperBravo,
 			[]string{},
 			[]string{constant.Done},
 			nil,
@@ -65,7 +65,7 @@ func TestEntities(t *testing.T) {
 		alertOption.New(
 			nil,
 			nil,
-			upper.Alfa,
+			strings.UpperAlfa,
 			nil,
 			nil,
 			nil,

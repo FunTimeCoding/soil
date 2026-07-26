@@ -2,8 +2,8 @@ package store
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/strings/separator"
 	"strings"
 )
 
@@ -12,12 +12,12 @@ func (s *Store) AddContext(
 	pathPrefix string,
 	description string,
 ) {
-	if !strings.HasPrefix(pathPrefix, separator.Slash) {
-		pathPrefix = join.Empty(separator.Slash, pathPrefix)
+	if !strings.HasPrefix(pathPrefix, constant.Slash) {
+		pathPrefix = join.Empty(constant.Slash, pathPrefix)
 	}
 
-	if !strings.HasSuffix(pathPrefix, separator.Slash) {
-		pathPrefix = join.Empty(pathPrefix, separator.Slash)
+	if !strings.HasSuffix(pathPrefix, constant.Slash) {
+		pathPrefix = join.Empty(pathPrefix, constant.Slash)
 	}
 
 	_, e := s.database.Exec(

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/check/alert/option"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/constant"
-	"github.com/funtimecoding/soil/pkg/console/status/tag"
+	console "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/monitor"
 	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
 )
@@ -21,7 +21,7 @@ func Check(o *option.Alert) {
 	f := constant.Format
 
 	if o.Copyable {
-		f.Tag(tag.Copyable)
+		f.Tag(console.TagCopyable)
 	}
 
 	for _, e := range elements {

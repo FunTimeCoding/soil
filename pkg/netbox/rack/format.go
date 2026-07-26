@@ -1,9 +1,9 @@
 package rack
 
 import (
+	console "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
-	"github.com/funtimecoding/soil/pkg/console/status/tag"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/time/constant"
 )
@@ -11,7 +11,7 @@ import (
 func (r *Rack) Format(f *option.Format) string {
 	s := status.New(f)
 
-	if f.HasTag(tag.Identifier) {
+	if f.HasTag(console.TagIdentifier) {
 		s.Integer32(r.Identifier)
 	}
 

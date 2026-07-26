@@ -2,6 +2,7 @@ package runner
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/provision/constant"
 	"time"
 )
 
@@ -18,10 +19,10 @@ func (r *Runner) run() {
 		r.recovery.Run(r.initFunction)
 	}
 
-	r.recovery.Run(func() { r.applyFunction(nil, TriggerTimer) })
-	syncTicker := time.NewTicker(SyncInterval)
+	r.recovery.Run(func() { r.applyFunction(nil, constant.RunnerTriggerTimer) })
+	syncTicker := time.NewTicker(constant.RunnerSyncInterval)
 	defer syncTicker.Stop()
-	applyTicker := time.NewTicker(ApplyInterval)
+	applyTicker := time.NewTicker(constant.RunnerApplyInterval)
 	defer applyTicker.Stop()
 	cleanupTicker := time.NewTicker(24 * time.Hour)
 	defer cleanupTicker.Stop()
@@ -40,9 +41,9 @@ func (r *Runner) run() {
 				}
 
 				r.recovery.Run(
-					func() { r.applyFunction(nil, TriggerTimer) },
+					func() { r.applyFunction(nil, constant.RunnerTriggerTimer) },
 				)
-				applyTicker.Reset(ApplyInterval)
+				applyTicker.Reset(constant.RunnerApplyInterval)
 			}
 		case <-applyTicker.C:
 			if r.initFunction != nil {
@@ -50,7 +51,7 @@ func (r *Runner) run() {
 			}
 
 			r.recovery.Run(
-				func() { r.applyFunction(nil, TriggerTimer) },
+				func() { r.applyFunction(nil, constant.RunnerTriggerTimer) },
 			)
 		case request := <-r.sync:
 			var result *SyncResult
@@ -77,7 +78,7 @@ func (r *Runner) run() {
 				func() {
 					value = r.applyFunction(
 						request.Parameters,
-						TriggerManual,
+						constant.RunnerTriggerManual,
 					)
 				},
 			)

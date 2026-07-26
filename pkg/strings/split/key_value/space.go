@@ -1,12 +1,12 @@
 package key_value
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 )
 
 func Space(s string) (string, string) {
-	p := strings.SplitN(s, separator.Space, 2)
+	p := strings.SplitN(s, constant.Space, 2)
 
 	switch len(p) {
 	case 1:

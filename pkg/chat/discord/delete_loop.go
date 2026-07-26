@@ -2,6 +2,7 @@ package discord
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 )
 
@@ -9,7 +10,7 @@ func (c *Client) DeleteLoop(channel string) {
 	for {
 		messages, e := c.client.ChannelMessages(
 			channel,
-			MessageLimit,
+			constant.DiscordMessageLimit,
 			"",
 			"",
 			"",

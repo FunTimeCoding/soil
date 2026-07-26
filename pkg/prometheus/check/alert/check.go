@@ -2,7 +2,7 @@ package alert
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/console/status/tag"
+	console "github.com/funtimecoding/soil/pkg/console/constant"
 	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus/check/alert/option"
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
@@ -34,10 +34,10 @@ func Check(o *option.Alert) {
 		return
 	}
 
-	f := constant.Format.Copy().Tag(tag.Host)
+	f := constant.Format.Copy().Tag(console.TagHost)
 
 	if o.Copyable {
-		f.Tag(tag.Copyable)
+		f.Tag(console.TagCopyable)
 	}
 
 	if o.Extended {

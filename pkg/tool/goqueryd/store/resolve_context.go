@@ -2,8 +2,8 @@ package store
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/strings/separator"
 	"strings"
 )
 
@@ -11,7 +11,7 @@ func (s *Store) ResolveContext(
 	collection string,
 	filePath string,
 ) string {
-	normalized := join.Empty(separator.Slash, filePath)
+	normalized := join.Empty(constant.Slash, filePath)
 	prefixes := pathPrefixes(normalized)
 	rows, e := s.database.Query(
 		`SELECT path_prefix, description FROM context

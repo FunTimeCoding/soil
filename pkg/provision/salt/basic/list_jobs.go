@@ -2,12 +2,12 @@ package basic
 
 import (
 	"encoding/json"
+	"github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/salt/basic/response"
-	"github.com/funtimecoding/soil/pkg/provision/salt/constant"
 )
 
 func (c *Client) ListJobs() ([]response.Job, error) {
-	b, e := c.Get(constant.JobsPath)
+	b, e := c.Get(constant.SaltJobsPath)
 
 	if e != nil {
 		return nil, e

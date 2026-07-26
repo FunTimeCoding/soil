@@ -3,8 +3,8 @@ package store
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/strings/separator"
 )
 
 func (s *Store) ListDocuments(
@@ -91,7 +91,7 @@ func (s *Store) ListDocuments(
 		}
 
 		r.VirtualPath = buildVirtualPath(r.Collection, r.Path)
-		r.FilePath = join.Empty(r.Collection, separator.Slash, r.Path)
+		r.FilePath = join.Empty(r.Collection, constant.Slash, r.Path)
 		r.Source = "list"
 		identifiers = append(identifiers, identifier)
 		result = append(result, r)

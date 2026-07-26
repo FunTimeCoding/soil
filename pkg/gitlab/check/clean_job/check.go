@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
-	"github.com/funtimecoding/soil/pkg/console/status/tag"
+	console "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab"
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"os"
@@ -17,7 +17,7 @@ func Check() {
 	a.String(argumentConstant.Match, "", "Description match")
 	a.ParseSimple()
 	g := gitlab.NewEnvironment()
-	f := constant.Format.Copy().Tag(tag.Dense)
+	f := constant.Format.Copy().Tag(console.TagDense)
 	m := a.GetString(argumentConstant.Match)
 
 	if m == "" {

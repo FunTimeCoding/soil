@@ -2,7 +2,7 @@ package system
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 )
 
@@ -16,5 +16,5 @@ func StripUntilDirectory(
 		return s
 	}
 
-	return fmt.Sprintf("%s%s%s", separator.Slash, directory, parts[1])
+	return fmt.Sprintf("%s%s%s", constant.Slash, directory, parts[1])
 }

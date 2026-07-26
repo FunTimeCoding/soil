@@ -1,15 +1,15 @@
 package custom_field
 
 import (
+	"github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
-	"github.com/funtimecoding/soil/pkg/console/status/tag"
 )
 
 func (f *Field) Format(o *option.Format) string {
 	s := status.New(o)
 
-	if o.HasTag(tag.Identifier) {
+	if o.HasTag(constant.TagIdentifier) {
 		s.Integer32(f.Identifier)
 	}
 

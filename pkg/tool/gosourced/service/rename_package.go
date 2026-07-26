@@ -102,7 +102,6 @@ func (s *Service) RenamePackage(
 		set,
 		sourceDirectory,
 		oldName,
-		newName,
 		modified,
 	)
 	decorations := decoration.NewSet()
@@ -123,6 +122,7 @@ func (s *Service) RenamePackage(
 		return nil, e
 	}
 
+	renameDecoratedClauses(decorations, modified, oldName, newName)
 	e = decorateQualifiers(
 		r,
 		decorations,

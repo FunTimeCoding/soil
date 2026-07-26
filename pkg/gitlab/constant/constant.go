@@ -2,8 +2,8 @@ package constant
 
 import (
 	"errors"
+	"github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
-	"github.com/funtimecoding/soil/pkg/console/status/tag"
 	"gitlab.com/gitlab-org/api/client-go/v2"
 )
 
@@ -68,7 +68,7 @@ const (
 var (
 	ErrorNotFound = errors.New("not found")
 	Format        = option.Color.Copy()
-	CheckFormat   = Format.Copy().Tag(tag.Project)
+	CheckFormat   = Format.Copy().Tag(constant.TagProject)
 )
 
 const TraceTimeoutMatch = "ERROR: Job failed (system failure): prepare environment: waiting for pod running: timed out waiting for pod to start."

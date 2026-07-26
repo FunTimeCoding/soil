@@ -17,26 +17,40 @@ import (
 	"github.com/funtimecoding/soil/pkg/prometheus/result/metric"
 	"github.com/funtimecoding/soil/pkg/prometheus/round_tripper"
 	"github.com/funtimecoding/soil/pkg/prometheus/rule/rule_list"
-	"github.com/funtimecoding/soil/pkg/strings/upper"
+	strings "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"testing"
 )
 
 func TestConstructors(t *testing.T) {
-	assert.NotNil(t, enrichment.New(upper.Alfa, upper.Bravo, upper.Charlie))
+	assert.NotNil(
+		t,
+		enrichment.New(
+		strings.UpperAlfa,
+		strings.UpperBravo,
+		strings.UpperCharlie,
+	),
+	)
 	assert.NotNil(t, alert_enricher.New())
 	assert.NotNil(t, alert_processor.New(nil, nil, nil, nil, nil, nil))
-	assert.NotNil(t, severity.New(upper.Alfa, upper.Bravo, upper.Charlie))
+	assert.NotNil(
+		t,
+		severity.New(
+		strings.UpperAlfa,
+		strings.UpperBravo,
+		strings.UpperCharlie,
+	),
+	)
 	assert.NotNil(t, rule_parser.New(nil))
 	assert.NotNil(t, mock_client.New())
 	assert.NotNil(t, client.New("", nil))
 	assert.NotNil(
 		t,
-		basic.New(upper.Alfa, upper.Bravo, upper.Charlie, false),
+		basic.New(strings.UpperAlfa, strings.UpperBravo, strings.UpperCharlie, false),
 	)
 	assert.NotNil(
 		t,
-		loki.New(upper.Alfa, upper.Bravo, upper.Charlie, false),
+		loki.New(strings.UpperAlfa, strings.UpperBravo, strings.UpperCharlie, false),
 	)
 	assert.NotNil(
 		t,
@@ -49,9 +63,9 @@ func TestConstructors(t *testing.T) {
 			"",
 		),
 	)
-	assert.NotNil(t, push.New(upper.Alfa, 0, false, upper.Bravo))
+	assert.NotNil(t, push.New(strings.UpperAlfa, 0, false, strings.UpperBravo))
 	assert.NotNil(t, filter.New())
-	assert.NotNil(t, metric.New(upper.Alfa))
+	assert.NotNil(t, metric.New(strings.UpperAlfa))
 	assert.NotNil(t, round_tripper.New("", ""))
 	assert.NotNil(t, rule_list.New())
 }

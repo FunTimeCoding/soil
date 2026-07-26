@@ -4,8 +4,8 @@ import (
 	"fmt"
 	library "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
+	text "github.com/funtimecoding/soil/pkg/text/constant"
 	"github.com/funtimecoding/soil/pkg/text/dictionary"
-	"github.com/funtimecoding/soil/pkg/text/dictionary/constant"
 	"io/fs"
 	"path/filepath"
 	"strings"
@@ -41,7 +41,7 @@ func Run() {
 				}
 
 				if d.IsDir() {
-					if constant.Skip[d.Name()] {
+					if text.DictionarySkip[d.Name()] {
 						return filepath.SkipDir
 					}
 

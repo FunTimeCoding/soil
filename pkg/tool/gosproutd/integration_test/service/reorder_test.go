@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/strings/lower"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/integration_test/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/service"
 	"testing"
@@ -13,13 +13,13 @@ func TestMoveUpNotifies(t *testing.T) {
 	s.Service.Sync(
 		[]service.DiscoveredFile{
 			{
-				Name:        lower.Alfa,
+				Name:        constant.LowerAlfa,
 				Path:        "alfa.md",
 				ContentHash: "a",
 				Content:     "a",
 			},
 			{
-				Name:        lower.Bravo,
+				Name:        constant.LowerBravo,
 				Path:        "bravo.md",
 				ContentHash: "b",
 				Content:     "b",
@@ -37,19 +37,19 @@ func TestSetPositionNotifies(t *testing.T) {
 	s.Service.Sync(
 		[]service.DiscoveredFile{
 			{
-				Name:        lower.Alfa,
+				Name:        constant.LowerAlfa,
 				Path:        "alfa.md",
 				ContentHash: "a",
 				Content:     "a",
 			},
 			{
-				Name:        lower.Bravo,
+				Name:        constant.LowerBravo,
 				Path:        "bravo.md",
 				ContentHash: "b",
 				Content:     "b",
 			},
 			{
-				Name:        lower.Charlie,
+				Name:        constant.LowerCharlie,
 				Path:        "charlie.md",
 				ContentHash: "c",
 				Content:     "c",
@@ -67,13 +67,13 @@ func TestReorderNotifies(t *testing.T) {
 	s.Service.Sync(
 		[]service.DiscoveredFile{
 			{
-				Name:        lower.Alfa,
+				Name:        constant.LowerAlfa,
 				Path:        "alfa.md",
 				ContentHash: "a",
 				Content:     "a",
 			},
 			{
-				Name:        lower.Bravo,
+				Name:        constant.LowerBravo,
 				Path:        "bravo.md",
 				ContentHash: "b",
 				Content:     "b",

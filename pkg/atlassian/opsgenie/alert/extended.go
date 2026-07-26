@@ -4,9 +4,9 @@ import (
 	"github.com/docker/go-units"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/constant"
 	"github.com/funtimecoding/soil/pkg/console"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
-	"github.com/funtimecoding/soil/pkg/console/status/tag"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 	"github.com/opsgenie/opsgenie-go-sdk-v2/alert"
@@ -19,11 +19,11 @@ func (a *Alert) extended(
 ) {
 	s.Line("  %s", a.Link)
 
-	if f.HasTag(tag.Name) {
+	if f.HasTag(consoleConstant.TagName) {
 		s.Line("  Name: %s", a.Name)
 	}
 
-	investigate := f.HasTag(tag.Investigate)
+	investigate := f.HasTag(consoleConstant.TagInvestigate)
 
 	if investigate && a.Update.Sub(a.Create) > time.Minute {
 		s.Line("  Update: %s", condenseTime(a.Update))
@@ -59,7 +59,7 @@ func (a *Alert) extended(
 		s.Line("  Closed: %s", a.Report.ClosedBy)
 	}
 
-	dense := f.HasTag(tag.Dense)
+	dense := f.HasTag(consoleConstant.TagDense)
 
 	if !dense {
 		var responders []string

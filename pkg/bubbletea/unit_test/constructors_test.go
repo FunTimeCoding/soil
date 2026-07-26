@@ -11,7 +11,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/toast"
 	"github.com/funtimecoding/soil/pkg/bubbletea/table/example_country"
 	"github.com/funtimecoding/soil/pkg/bubbletea/table/item"
-	"github.com/funtimecoding/soil/pkg/strings/upper"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"testing"
 )
 
@@ -21,7 +21,7 @@ func TestConstructors(t *testing.T) {
 	assert.NotNil(t, fetch.Command())
 	assert.NotNil(t, monitor.New(false))
 	assert.NotNil(t, tick.Command())
-	assert.NotNil(t, toast.New(0, upper.Alfa))
+	assert.NotNil(t, toast.New(0, constant.UpperAlfa))
 	assert.NotNil(t, example_country.New())
 	assert.NotNil(t, item.New(true))
 }

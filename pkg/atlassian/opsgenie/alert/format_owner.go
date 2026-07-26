@@ -2,8 +2,8 @@ package alert
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
-	"github.com/funtimecoding/soil/pkg/console/status/tag"
 )
 
 func (a *Alert) formatOwner(f *option.Format) string {
@@ -15,7 +15,7 @@ func (a *Alert) formatOwner(f *option.Format) string {
 		if f.UseColor {
 			result = console.Green("%s", result)
 		}
-	} else if !f.HasTag(tag.Dense) {
+	} else if !f.HasTag(constant.TagDense) {
 		result = NoOwner
 
 		if f.UseColor {

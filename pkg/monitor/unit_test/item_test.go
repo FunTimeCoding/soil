@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/monitor/collector"
 	"github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/item"
-	"github.com/funtimecoding/soil/pkg/strings/upper"
+	strings "github.com/funtimecoding/soil/pkg/strings/constant"
 	web "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"testing"
@@ -26,7 +26,7 @@ func TestItem(t *testing.T) {
 			c,
 			c.IntegerIdentifier(1),
 			constant.Critical,
-			upper.Alfa,
+			strings.UpperAlfa,
 			locator.New(web.Example).Path("/1").String(),
 			nil,
 		).Identifier,

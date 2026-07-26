@@ -3,14 +3,14 @@ package unit_test
 import (
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
-	"github.com/funtimecoding/soil/pkg/strings/upper"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 	"testing"
 )
 
 func TestImportClean(t *testing.T) {
 	l := lint.Import(
-		upper.Bravo,
+		constant.UpperBravo,
 		strings.NewReader(
 			"package example\n\nimport \"fmt\"\n\nfunc Example() {\n\tfmt.Println(\"Hello.\")\n}\n",
 		),
@@ -20,7 +20,7 @@ func TestImportClean(t *testing.T) {
 
 func TestImportBlank(t *testing.T) {
 	l := lint.Import(
-		upper.Charlie,
+		constant.UpperCharlie,
 		strings.NewReader(
 			"package example\n\nimport (\n\t\"fmt\"\n\n\t\"log\"\n)\n\nfunc Example() {\n\tfmt.Printf(\"test\")\n\tlog.Printf(\"test\")\n}\n",
 		),
@@ -47,7 +47,7 @@ func TestImportBlank(t *testing.T) {
 
 func TestGo(t *testing.T) {
 	l := lint.Import(
-		upper.Alfa,
+		constant.UpperAlfa,
 		strings.NewReader(
 			"package example\n\nimport (\n\t\"example.org/example/fmt\"\n)\n\nfunc Example() {\n\tfmt.Println(\"Hello friend.\")\n}\n",
 		),

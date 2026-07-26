@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/go_mod"
 	"github.com/funtimecoding/soil/pkg/go_mod/check/version/option"
+	"github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/go_mod/project"
 	"github.com/funtimecoding/soil/pkg/system"
 	"os"
@@ -46,7 +47,7 @@ func collect(o *option.Version) []*project.Project {
 					}
 				}
 
-				if !i.IsDir() && i.Name() == go_mod.ModFile {
+				if !i.IsDir() && i.Name() == constant.ModFile {
 					result = append(
 						result,
 						go_mod.ReadProject(

@@ -1,10 +1,10 @@
 package join
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/separator"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 )
 
 func Underscore(s []string) string {
-	return strings.Join(s, separator.Underscore)
+	return strings.Join(s, constant.Underscore)
 }

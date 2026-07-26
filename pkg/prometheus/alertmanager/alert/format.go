@@ -3,9 +3,9 @@ package alert
 import (
 	"fmt"
 	"github.com/docker/go-units"
+	console "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
-	"github.com/funtimecoding/soil/pkg/console/status/tag"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
@@ -14,13 +14,13 @@ import (
 func (a *Alert) Format(f *option.Format) string {
 	s := status.New(f)
 
-	if f.HasTag(tag.Fingerprint) {
+	if f.HasTag(console.TagFingerprint) {
 		s.String(a.Fingerprint)
 	}
 
 	s.String(a.formatEntity(f))
 
-	if f.HasTag(tag.Category) {
+	if f.HasTag(console.TagCategory) {
 		s.String(a.formatCategory(f))
 	}
 
@@ -33,11 +33,11 @@ func (a *Alert) Format(f *option.Format) string {
 
 	s.String(a.formatSeverity(f))
 
-	if f.HasTag(tag.Host) {
+	if f.HasTag(console.TagHost) {
 		s.String(a.formatHost(f))
 	}
 
-	if f.HasTag(tag.Instance) {
+	if f.HasTag(console.TagInstance) {
 		s.String(a.formatInstance())
 	}
 
@@ -78,7 +78,7 @@ func (a *Alert) Format(f *option.Format) string {
 		}
 
 		if a.HostLink != "" {
-			if f.HasTag(tag.Copyable) || f.HasTag(tag.Markdown) {
+			if f.HasTag(console.TagCopyable) || f.HasTag(console.TagMarkdown) {
 				s.DetailLink(a.HostLink, "Host", "Host")
 			}
 		}

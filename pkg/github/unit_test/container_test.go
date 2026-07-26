@@ -3,7 +3,7 @@ package unit_test
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/github/container"
-	"github.com/funtimecoding/soil/pkg/strings/upper"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/google/go-github/v89/github"
 	"testing"
 )
@@ -11,14 +11,14 @@ import (
 func TestContainer(t *testing.T) {
 	c := container.New(
 		&github.Package{
-			Name:       new(upper.Alfa),
-			Repository: &github.Repository{Name: new(upper.Bravo)},
+			Name:       new(constant.UpperAlfa),
+			Repository: &github.Repository{Name: new(constant.UpperBravo)},
 		},
 	)
 	c.Raw = nil
 	assert.Any(
 		t,
-		&container.Container{Name: upper.Alfa, Repository: upper.Bravo},
+		&container.Container{Name: constant.UpperAlfa, Repository: constant.UpperBravo},
 		c,
 	)
 }

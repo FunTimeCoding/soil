@@ -1,6 +1,7 @@
 package runner
 
 import (
+	provision "github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/store"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/constant"
 	"path/filepath"
@@ -25,7 +26,7 @@ func (r *Runner) apply(
 		record := r.store.NewRun()
 		record.Scope = p
 		record.TriggerSource = triggerSource
-		record.Status = store.StatusRunning
+		record.Status = provision.StoreStatusRunning
 		record.GitHead = head
 		r.store.Create(record)
 		r.logger.Structured("playbook_start", constant.Playbook, p)
@@ -38,7 +39,7 @@ func (r *Runner) apply(
 		record.ErrorOutput = c.ErrorString
 
 		if c.Error != nil {
-			record.Status = store.StatusError
+			record.Status = provision.StoreStatusError
 			r.logger.Structured(
 				"playbook_error",
 				constant.Playbook,
@@ -47,7 +48,7 @@ func (r *Runner) apply(
 				c.Error.Error(),
 			)
 		} else {
-			record.Status = store.StatusSuccess
+			record.Status = provision.StoreStatusSuccess
 			r.logger.Structured("playbook_done", constant.Playbook, p)
 		}
 
