@@ -2,6 +2,7 @@ package scan
 
 import (
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"path/filepath"
 )
 
@@ -15,8 +16,8 @@ func (s *Service) checkTopLevelResponse(
 
 	if !s.ModelContext && !s.Server {
 		s.addConcern(
-			TopLevelResponseOrphanKey,
-			TopLevelResponseOrphanText,
+			constant.TopLevelResponseOrphanKey,
+			constant.TopLevelResponseOrphanText,
 			path,
 		)
 	}
@@ -24,8 +25,8 @@ func (s *Service) checkTopLevelResponse(
 	if s.ModelContext && !s.Convert &&
 		!v.DirectoryExists(filepath.Join(path, "server")) {
 		s.addConcern(
-			TopLevelResponseMCPKey,
-			TopLevelResponseMCPText,
+			constant.TopLevelResponseMCPKey,
+			constant.TopLevelResponseMCPText,
 			path,
 		)
 	}

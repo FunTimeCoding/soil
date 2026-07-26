@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/tool/gorunif/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gorunif/run_if"
-	runIfConstant "github.com/funtimecoding/soil/pkg/tool/gorunif/run_if/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gorunif/run_if/option"
 )
 
@@ -18,13 +17,13 @@ func Main(
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.String(
-		runIfConstant.Base,
+		constant.Base,
 		"",
 		"Base commit (default: remote tracking branch)",
 	)
-	a.String(runIfConstant.Head, "HEAD", "Head commit")
+	a.String(constant.Head, "HEAD", "Head commit")
 	a.Boolean(
-		runIfConstant.Suffix,
+		constant.Suffix,
 		false,
 		"Match path as suffix instead of prefix",
 	)
@@ -32,9 +31,9 @@ func Main(
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
 	o.Verbose = a.GetBoolean(argument.Verbose)
-	o.Base = a.GetString(runIfConstant.Base)
-	o.Head = a.GetString(runIfConstant.Head)
-	o.Suffix = a.GetBoolean(runIfConstant.Suffix)
+	o.Base = a.GetString(constant.Base)
+	o.Head = a.GetString(constant.Head)
+	o.Suffix = a.GetBoolean(constant.Suffix)
 	o.Pattern = a.RequiredPositional(0, "PATTERN")
 	o.Execute = a.RequiredPositional(1, "EXECUTE")
 	run_if.Run(o)

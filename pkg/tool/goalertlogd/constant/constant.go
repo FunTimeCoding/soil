@@ -30,3 +30,4 @@ const (
 	Firing     = "firing"
 	Resolved   = "resolved"
 )
+const HostEnvironment = "ALERT_LOG_HOST"

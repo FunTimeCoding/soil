@@ -1,9 +1,10 @@
 package scan
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	library "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"sort"
 	"strings"
 )
@@ -12,7 +13,7 @@ func MisplacedTests(v *virtual_file_system.System) []*concern.Concern {
 	var result []*concern.Concern
 
 	for _, path := range v.Files() {
-		if !strings.HasSuffix(path, constant.TestSuffix) {
+		if !strings.HasSuffix(path, library.TestSuffix) {
 			continue
 		}
 
@@ -23,8 +24,8 @@ func MisplacedTests(v *virtual_file_system.System) []*concern.Concern {
 		result = append(
 			result,
 			concern.NewFile(
-				MisplacedTestKey,
-				MisplacedTestText,
+				constant.MisplacedTestKey,
+				constant.MisplacedTestText,
 				path,
 				false,
 			),

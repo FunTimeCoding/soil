@@ -3,6 +3,7 @@ package scan
 import (
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"path/filepath"
 )
 
@@ -16,8 +17,8 @@ func IdentityConcerns(
 	if !v.Has(file) {
 		return []*concern.Concern{
 			concern.NewPackage(
-				IdentityMissingFileKey,
-				IdentityMissingFileText,
+				constant.IdentityMissingFileKey,
+				constant.IdentityMissingFileText,
 				path,
 			),
 		}

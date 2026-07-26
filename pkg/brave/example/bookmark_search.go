@@ -4,14 +4,13 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
 	"github.com/funtimecoding/soil/pkg/brave"
-	"github.com/funtimecoding/soil/pkg/brave/bookmark"
 	"github.com/funtimecoding/soil/pkg/brave/bookmark/node"
 	"github.com/funtimecoding/soil/pkg/brave/constant"
 )
 
 func BookmarkSearch() {
 	a := argument.NewSimple("bookmark-search")
-	a.String(argument.Type, bookmark.DirectoryType, "bookmark type")
+	a.String(argument.Type, constant.DirectoryType, "bookmark type")
 	a.ParseSimple()
 	search := a.RequiredPositional(0, "NAME")
 	bookmarkType := a.GetString(argument.Type)

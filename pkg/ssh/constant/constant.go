@@ -11,3 +11,7 @@ const (
 	ForcePTYArgument         = "-tt"
 	VerboseArgument          = "-v"
 )
+const (
+	TargetHost = "target-host"
+	TargetPort = "target-port"
+)

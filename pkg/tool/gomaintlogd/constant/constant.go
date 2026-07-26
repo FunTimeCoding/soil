@@ -32,3 +32,4 @@ const (
 	AddEntryTitle  = "Add Entry"
 	AddEntryPath   = "/add"
 )
+const HostEnvironment = "MAINTENANCE_LOG_HOST"

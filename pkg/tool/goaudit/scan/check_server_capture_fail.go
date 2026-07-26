@@ -2,6 +2,7 @@ package scan
 
 import (
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"path/filepath"
 	"strings"
 )
@@ -33,8 +34,8 @@ func (s *Service) checkServerCaptureFail(
 	}
 
 	s.addConcern(
-		MissingServerCaptureFailKey,
-		MissingServerCaptureFailText,
+		constant.MissingServerCaptureFailKey,
+		constant.MissingServerCaptureFailText,
 		path,
 	)
 }

@@ -2,7 +2,7 @@ package client
 
 import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
-	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/client/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/constant"
 )
 
 func NewEnvironment() *Client {

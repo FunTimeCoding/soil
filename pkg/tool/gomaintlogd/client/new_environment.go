@@ -2,7 +2,7 @@ package client
 
 import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
-	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/client/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
 )
 
 func NewEnvironment() *Client {

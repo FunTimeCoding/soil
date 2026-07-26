@@ -13,6 +13,14 @@ func executeMove(
 	r *output.Results,
 	plan *movePlan,
 ) (*output.Results, error) {
+	sources, e := captureSourceBytes(plan)
+
+	if e != nil {
+		return nil, e
+	}
+
+	edits := collectSpliceEdits(plan)
+
 	for _, entry := range plan.entries {
 		if !entry.flipped {
 			continue
@@ -86,7 +94,7 @@ func executeMove(
 			removedSpecs[entry.spec] = true
 		}
 
-		removeDeclaration(entry.file, entry.declaration, entry.spec)
+		removeDeclaration(plan.set, entry.file, entry.declaration, entry.spec)
 	}
 
 	deleted := make(map[string]bool)
@@ -131,12 +139,6 @@ func executeMove(
 		}
 	}
 
-	for _, entry := range plan.entries {
-		if len(entry.backIdentifiers) > 0 {
-			rewriteBackReferences(entry, plan.sourceLocalName)
-		}
-	}
-
 	groups := make(map[string][]*moveEntry)
 
 	for _, entry := range plan.entries {
@@ -153,16 +155,16 @@ func executeMove(
 
 	for _, name := range groupNames {
 		batch := groups[name]
-		targetPath, e := writeTargetDeclarations(
+		targetPath, f := writeTargetDeclarations(
 			plan.moveDirectory,
 			plan.targetPackageName,
 			name,
-			emitDeclarations(batch),
+			renderEntries(plan, batch, sources, edits),
 			uniqueImports(batch),
 		)
 
-		if e != nil {
-			return nil, e
+		if f != nil {
+			return nil, f
 		}
 
 		for _, entry := range batch {

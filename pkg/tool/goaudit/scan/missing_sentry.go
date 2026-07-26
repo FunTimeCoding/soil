@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"path/filepath"
 	"sort"
 )
@@ -38,8 +39,8 @@ func MissingSentry(v *virtual_file_system.System) []*concern.Concern {
 			result = append(
 				result,
 				concern.NewPackage(
-					MissingSentryKey,
-					MissingSentryText,
+					constant.MissingSentryKey,
+					constant.MissingSentryText,
 					fmt.Sprintf("cmd/%s", name),
 				),
 			)

@@ -3,6 +3,7 @@ package unit_test
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
 	"testing"
 )
@@ -25,7 +26,7 @@ func TestNilNilReturnFlagged(t *testing.T) {
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
 	s := scan.Services(v, "test", scan.NewConfiguration())
 	assert.Integer(t, 1, len(s))
-	assertConcern(t, s[0], scan.NilNilReturnKey)
+	assertConcern(t, s[0], constant.NilNilReturnKey)
 }
 
 func TestNilNilReturnClean(t *testing.T) {
@@ -46,7 +47,7 @@ func TestNilNilReturnClean(t *testing.T) {
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
 	s := scan.Services(v, "test", scan.NewConfiguration())
 	assert.Integer(t, 1, len(s))
-	assertNoConcern(t, s[0], scan.NilNilReturnKey)
+	assertNoConcern(t, s[0], constant.NilNilReturnKey)
 }
 
 func TestHttpErrorFlagged(t *testing.T) {
@@ -67,7 +68,7 @@ func TestHttpErrorFlagged(t *testing.T) {
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
 	s := scan.Services(v, "test", scan.NewConfiguration())
 	assert.Integer(t, 1, len(s))
-	assertConcern(t, s[0], scan.HttpErrorInStrictKey)
+	assertConcern(t, s[0], constant.HttpErrorInStrictKey)
 }
 
 func TestHttpErrorClean(t *testing.T) {
@@ -88,7 +89,7 @@ func TestHttpErrorClean(t *testing.T) {
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
 	s := scan.Services(v, "test", scan.NewConfiguration())
 	assert.Integer(t, 1, len(s))
-	assertNoConcern(t, s[0], scan.HttpErrorInStrictKey)
+	assertNoConcern(t, s[0], constant.HttpErrorInStrictKey)
 }
 
 func TestMissingServerCaptureFailFlagged(t *testing.T) {
@@ -109,7 +110,7 @@ func TestMissingServerCaptureFailFlagged(t *testing.T) {
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
 	s := scan.Services(v, "test", scan.NewConfiguration())
 	assert.Integer(t, 1, len(s))
-	assertConcern(t, s[0], scan.MissingServerCaptureFailKey)
+	assertConcern(t, s[0], constant.MissingServerCaptureFailKey)
 }
 
 func TestMissingServerCaptureFailSkipsRecoveryOnly(t *testing.T) {
@@ -130,7 +131,7 @@ func TestMissingServerCaptureFailSkipsRecoveryOnly(t *testing.T) {
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
 	s := scan.Services(v, "test", scan.NewConfiguration())
 	assert.Integer(t, 1, len(s))
-	assertNoConcern(t, s[0], scan.MissingServerCaptureFailKey)
+	assertNoConcern(t, s[0], constant.MissingServerCaptureFailKey)
 }
 
 func assertNoConcern(

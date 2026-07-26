@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/parse"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 )
 
 func checkIdentitySource(
@@ -17,8 +18,8 @@ func checkIdentitySource(
 	if e != nil {
 		return []*concern.Concern{
 			concern.NewPackage(
-				IdentityNotParseableKey,
-				IdentityNotParseableText,
+				constant.IdentityNotParseableKey,
+				constant.IdentityNotParseableText,
 				path,
 			),
 		}
@@ -29,8 +30,8 @@ func checkIdentitySource(
 	if v == nil {
 		return []*concern.Concern{
 			concern.NewPackage(
-				IdentityMissingVariableKey,
-				IdentityMissingVariableText,
+				constant.IdentityMissingVariableKey,
+				constant.IdentityMissingVariableText,
 				path,
 			),
 		}
@@ -39,8 +40,8 @@ func checkIdentitySource(
 	if len(v.Values) == 0 {
 		return []*concern.Concern{
 			concern.NewPackage(
-				IdentityNoInitializerKey,
-				IdentityNoInitializerText,
+				constant.IdentityNoInitializerKey,
+				constant.IdentityNoInitializerText,
 				path,
 			),
 		}
@@ -51,8 +52,8 @@ func checkIdentitySource(
 	if c == nil {
 		return []*concern.Concern{
 			concern.NewPackage(
-				IdentityNotNewKey,
-				IdentityNotNewText,
+				constant.IdentityNotNewKey,
+				constant.IdentityNotNewText,
 				path,
 			),
 		}
@@ -61,8 +62,8 @@ func checkIdentitySource(
 	if len(c.Args) < 1 {
 		return []*concern.Concern{
 			concern.NewPackage(
-				IdentityNoArgumentKey,
-				IdentityNoArgumentText,
+				constant.IdentityNoArgumentKey,
+				constant.IdentityNoArgumentText,
 				path,
 			),
 		}
@@ -73,8 +74,8 @@ func checkIdentitySource(
 	if !okay {
 		return []*concern.Concern{
 			concern.NewPackage(
-				IdentityNotStringKey,
-				IdentityNotStringText,
+				constant.IdentityNotStringKey,
+				constant.IdentityNotStringText,
 				path,
 			),
 		}
@@ -83,7 +84,7 @@ func checkIdentitySource(
 	if declared != name {
 		return []*concern.Concern{
 			concern.NewPackage(
-				IdentityMismatchKey,
+				constant.IdentityMismatchKey,
 				fmt.Sprintf(
 					"Identity name %s does not match directory %s",
 					declared,

@@ -2,6 +2,7 @@ package scan
 
 import (
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"gopkg.in/yaml.v3"
 	"path/filepath"
 )
@@ -24,7 +25,11 @@ func (s *Service) checkStrictServer(
 	)
 
 	if !v.Has(configurationFile) {
-		s.addConcern(MissingStrictServerKey, MissingStrictServerText, path)
+		s.addConcern(
+			constant.MissingStrictServerKey,
+			constant.MissingStrictServerText,
+			path,
+		)
 
 		return
 	}
@@ -32,12 +37,20 @@ func (s *Service) checkStrictServer(
 	var c strictServerConfiguration
 
 	if yaml.Unmarshal(v.Read(configurationFile), &c) != nil {
-		s.addConcern(MissingStrictServerKey, MissingStrictServerText, path)
+		s.addConcern(
+			constant.MissingStrictServerKey,
+			constant.MissingStrictServerText,
+			path,
+		)
 
 		return
 	}
 
 	if !c.Generate.StrictServer {
-		s.addConcern(MissingStrictServerKey, MissingStrictServerText, path)
+		s.addConcern(
+			constant.MissingStrictServerKey,
+			constant.MissingStrictServerText,
+			path,
+		)
 	}
 }

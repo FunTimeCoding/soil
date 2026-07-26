@@ -8,14 +8,14 @@ import (
 
 func Run() {
 	a := argument.NewSimple("kubernetes-job")
-	a.Boolean(TrivyArgument, false, "Run Trivy job")
-	a.Boolean(LabArgument, false, "Renovate GitLab")
-	a.Boolean(HubArgument, false, "Renovate GitHub")
+	a.Boolean(constant.TrivyArgument, false, "Run Trivy job")
+	a.Boolean(constant.LabArgument, false, "Renovate GitLab")
+	a.Boolean(constant.HubArgument, false, "Renovate GitHub")
 	a.Boolean(argument.Wait, false, "Wait for job to complete")
 	a.ParseSimple()
-	trivy := a.GetBoolean(TrivyArgument)
-	lab := a.GetBoolean(LabArgument)
-	hub := a.GetBoolean(HubArgument)
+	trivy := a.GetBoolean(constant.TrivyArgument)
+	lab := a.GetBoolean(constant.LabArgument)
+	hub := a.GetBoolean(constant.HubArgument)
 	wait := a.GetBoolean(argument.Wait)
 	k := client.NewEnvironment()
 

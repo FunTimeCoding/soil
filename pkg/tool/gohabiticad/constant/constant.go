@@ -27,3 +27,8 @@ const (
 	TaskType     = "task_type"
 	Text         = "text"
 )
+const (
+	HostEnvironment     = "HAB_HOST"
+	PortEnvironment     = "HAB_PORT"
+	InsecureEnvironment = "HAB_INSECURE"
+)

@@ -19,3 +19,8 @@ const (
 )
 
 var Format = option.ExtendedColor.Copy()
+
+const (
+	LinkType      = "url"
+	DirectoryType = "folder"
+)

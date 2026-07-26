@@ -150,6 +150,7 @@ require (
 	github.com/cloudflare/circl v1.6.3 // indirect
 	github.com/creasty/defaults v1.8.0 // indirect
 	github.com/cyphar/filepath-securejoin v0.6.1 // indirect
+	github.com/dave/dst v0.27.4 // indirect
 	github.com/dennwc/varint v1.0.0 // indirect
 	github.com/diskfs/go-diskfs v1.9.3 // indirect
 	github.com/djherbis/times v1.6.0 // indirect

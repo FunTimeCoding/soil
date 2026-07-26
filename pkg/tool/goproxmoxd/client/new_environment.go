@@ -2,7 +2,7 @@ package client
 
 import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/client/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
 )
 
 func NewEnvironment(instance string) *Client {

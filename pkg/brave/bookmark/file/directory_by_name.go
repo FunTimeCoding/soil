@@ -1,6 +1,6 @@
 package file
 
-import "github.com/funtimecoding/soil/pkg/brave/bookmark"
+import "github.com/funtimecoding/soil/pkg/brave/constant"
 
 func DirectoryByName(
 	n *Node,
@@ -10,7 +10,7 @@ func DirectoryByName(
 	WalkUntil(
 		n,
 		func(o *Node) bool {
-			if o.Type == bookmark.DirectoryType && o.Name == name {
+			if o.Type == constant.DirectoryType && o.Name == name {
 				result = o
 
 				return true

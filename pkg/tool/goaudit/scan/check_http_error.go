@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/parse"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"go/ast"
 	"path/filepath"
 )
@@ -16,7 +17,7 @@ func (s *Service) checkHttpError(
 		s.Concerns = append(
 			s.Concerns,
 			concern.NewPackage(
-				HttpErrorInStrictKey,
+				constant.HttpErrorInStrictKey,
 				fmt.Sprintf(
 					"%s: http.Error bypasses strict server types",
 					filepath.Base(filePath),

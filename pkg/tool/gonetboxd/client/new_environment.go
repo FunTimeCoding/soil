@@ -2,7 +2,7 @@ package client
 
 import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 )
 
 func NewEnvironment() *Client {

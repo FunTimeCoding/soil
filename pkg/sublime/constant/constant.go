@@ -8,3 +8,8 @@ const (
 )
 
 var Format = option.Color.Copy()
+
+const (
+	NoTitle  = "untitled"
+	NoSyntax = "unknown"
+)

@@ -1,16 +1,16 @@
 package node
 
-import "github.com/funtimecoding/soil/pkg/brave/bookmark"
+import "github.com/funtimecoding/soil/pkg/brave/constant"
 
 func GroupByDirectory(n *Node) []*DirectoryGroup {
 	var result []*DirectoryGroup
 	var traverse func(n *Node)
 	traverse = func(n *Node) {
-		if n.Type == bookmark.DirectoryType {
+		if n.Type == constant.DirectoryType {
 			var links []*Node
 
 			for _, c := range n.Children {
-				if c.Type == bookmark.LinkType {
+				if c.Type == constant.LinkType {
 					links = append(links, c)
 				}
 			}
@@ -23,7 +23,7 @@ func GroupByDirectory(n *Node) []*DirectoryGroup {
 			}
 
 			for _, c := range n.Children {
-				if c.Type == bookmark.DirectoryType {
+				if c.Type == constant.DirectoryType {
 					traverse(c)
 				}
 			}

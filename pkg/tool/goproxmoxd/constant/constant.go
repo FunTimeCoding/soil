@@ -63,3 +63,8 @@ const (
 	CloneMachine              = "clone_machine"
 	DeleteMachine             = "delete_machine"
 )
+const (
+	HostEnvironment     = "PROX_HOST"
+	PortEnvironment     = "PROX_PORT"
+	InsecureEnvironment = "PROX_INSECURE"
+)

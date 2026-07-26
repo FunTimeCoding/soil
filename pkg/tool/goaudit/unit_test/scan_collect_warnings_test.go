@@ -3,6 +3,7 @@ package unit_test
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
 	"testing"
 )
@@ -16,7 +17,7 @@ func TestWarningMissingOption(t *testing.T) {
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
 	s := scan.Services(v, "test", scan.NewConfiguration())
 	assert.Integer(t, 1, len(s))
-	assertConcern(t, s[0], scan.MissingOptionKey)
+	assertConcern(t, s[0], constant.MissingOptionKey)
 }
 
 func TestWarningMissingRun(t *testing.T) {
@@ -31,7 +32,7 @@ func TestWarningMissingRun(t *testing.T) {
 	)
 	s := scan.Services(v, "test", scan.NewConfiguration())
 	assert.Integer(t, 1, len(s))
-	assertConcern(t, s[0], scan.MissingRunKey)
+	assertConcern(t, s[0], constant.MissingRunKey)
 }
 
 func TestWarningNoSuffix(t *testing.T) {
@@ -47,7 +48,7 @@ func TestWarningNoSuffix(t *testing.T) {
 	v.WriteString("pkg/tool/gotest/run.go", "package gotest\n")
 	s := scan.Services(v, "test", scan.NewConfiguration())
 	assert.Integer(t, 1, len(s))
-	assertConcern(t, s[0], scan.MissingSuffixKey)
+	assertConcern(t, s[0], constant.MissingSuffixKey)
 }
 
 func TestWarningRouteExists(t *testing.T) {
@@ -68,7 +69,7 @@ func TestWarningRouteExists(t *testing.T) {
 	assertConcern(
 		t,
 		scan.Services(v, "test", scan.NewConfiguration())[0],
-		scan.StaleRouteKey,
+		constant.StaleRouteKey,
 	)
 }
 
@@ -86,7 +87,7 @@ func TestWarningMissingMountGo(t *testing.T) {
 	assertConcern(
 		t,
 		scan.Services(v, "test", scan.NewConfiguration())[0],
-		scan.MissingMountKey,
+		constant.MissingMountKey,
 	)
 }
 
@@ -104,7 +105,7 @@ func TestWarningMissingCaptureFail(t *testing.T) {
 	assertConcern(
 		t,
 		scan.Services(v, "test", scan.NewConfiguration())[0],
-		scan.MissingCaptureFailKey,
+		constant.MissingCaptureFailKey,
 	)
 }
 
@@ -126,7 +127,7 @@ func TestWarningConstantFile(t *testing.T) {
 	assertConcern(
 		t,
 		scan.Services(v, "test", scan.NewConfiguration())[0],
-		scan.ConstantFileKey,
+		constant.ConstantFileKey,
 	)
 }
 

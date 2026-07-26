@@ -3,6 +3,7 @@ package scan
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"go/ast"
 	"path/filepath"
 )
@@ -27,7 +28,7 @@ func (s *Service) checkNilNilReturn(
 				s.Concerns = append(
 					s.Concerns,
 					concern.NewPackage(
-						NilNilReturnKey,
+						constant.NilNilReturnKey,
 						fmt.Sprintf(
 							"%s: return nil, nil (silent empty response)",
 							filepath.Base(filePath),

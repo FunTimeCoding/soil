@@ -3,6 +3,7 @@ package unit_test
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
 	"testing"
 )
@@ -13,7 +14,7 @@ func TestMisplacedTestsFlagged(t *testing.T) {
 	v.WriteString("pkg/alfa/parse.go", "package alfa\n")
 	result := scan.MisplacedTests(v)
 	assert.Integer(t, 1, len(result))
-	assert.String(t, scan.MisplacedTestKey, result[0].Key)
+	assert.String(t, constant.MisplacedTestKey, result[0].Key)
 	assert.String(t, "pkg/alfa/parse_test.go", result[0].Path)
 }
 

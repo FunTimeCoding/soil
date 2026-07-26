@@ -2,6 +2,7 @@ package scan
 
 import (
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"path/filepath"
 )
 
@@ -10,6 +11,10 @@ func (s *Service) checkTopLevelArgument(
 	path string,
 ) {
 	if v.DirectoryExists(filepath.Join(path, "argument")) {
-		s.addConcern(TopLevelArgumentKey, TopLevelArgumentText, path)
+		s.addConcern(
+			constant.TopLevelArgumentKey,
+			constant.TopLevelArgumentText,
+			path,
+		)
 	}
 }

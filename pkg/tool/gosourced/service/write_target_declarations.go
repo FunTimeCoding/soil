@@ -1,30 +1,34 @@
 package service
 
 import (
+	"bytes"
 	"github.com/funtimecoding/soil/pkg/source/imports"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"go/ast"
+	"go/format"
 	"go/parser"
 	"go/token"
 	"os"
 	"path/filepath"
 	"strconv"
+	"strings"
 )
 
 func writeTargetDeclarations(
 	directory string,
 	packageName string,
 	fileName string,
-	declarations []ast.Decl,
+	rendered string,
 	carried []*ast.ImportSpec,
 ) (string, error) {
 	targetPath := filepath.Join(directory, fileName)
 	_, e := os.Stat(targetPath)
 
 	if e != nil {
-		return targetPath, writeExtractedFile(
+		return targetPath, writeCreatedFile(
 			packageName,
 			carried,
-			declarations,
+			rendered,
 			targetPath,
 		)
 	}
@@ -41,8 +45,8 @@ func writeTargetDeclarations(
 		return targetPath, e
 	}
 
-	file.Decls = append(file.Decls, declarations...)
 	names := importLocalNames(file)
+	added := false
 
 	for _, spec := range carried {
 		importPath, f := strconv.Unquote(spec.Path.Value)
@@ -62,7 +66,38 @@ func writeTargetDeclarations(
 		}
 
 		imports.Add(file, importPath, alias)
+		added = true
 	}
 
-	return targetPath, writeFile(fileSet, file, targetPath)
+	var content []byte
+
+	if added {
+		var buffer bytes.Buffer
+
+		if f := format.Node(&buffer, fileSet, file); f != nil {
+			return targetPath, f
+		}
+
+		content = buffer.Bytes()
+	} else {
+		content, e = os.ReadFile(targetPath)
+
+		if e != nil {
+			return targetPath, e
+		}
+	}
+
+	combined := join.Empty(
+		strings.TrimRight(string(content), "\n"),
+		"\n\n",
+		rendered,
+		"\n",
+	)
+	formatted, e := format.Source([]byte(combined))
+
+	if e != nil {
+		return targetPath, e
+	}
+
+	return targetPath, os.WriteFile(targetPath, formatted, 0644)
 }

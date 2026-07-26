@@ -7,3 +7,9 @@ var Identity = identity.New(
 	"Conditional command runner",
 	"gorunif [flags] <command>",
 )
+
+const (
+	Base   = "base"
+	Head   = "head"
+	Suffix = "suffix"
+)

@@ -2,6 +2,7 @@ package scan
 
 import (
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"path/filepath"
 )
 
@@ -10,18 +11,18 @@ func (s *Service) checkStaleDirectories(
 	path string,
 ) {
 	if v.DirectoryExists(filepath.Join(path, "route")) {
-		s.addConcern(StaleRouteKey, StaleRouteText, path)
+		s.addConcern(constant.StaleRouteKey, constant.StaleRouteText, path)
 	}
 
 	if v.DirectoryExists(filepath.Join(path, "tool")) {
-		s.addConcern(StaleToolKey, StaleToolText, path)
+		s.addConcern(constant.StaleToolKey, constant.StaleToolText, path)
 	}
 
 	if v.DirectoryExists(filepath.Join(path, "toolset")) {
-		s.addConcern(StaleToolsetKey, StaleToolsetText, path)
+		s.addConcern(constant.StaleToolsetKey, constant.StaleToolsetText, path)
 	}
 
 	if v.DirectoryExists(filepath.Join(path, "poller")) {
-		s.addConcern(StalePollerKey, StalePollerText, path)
+		s.addConcern(constant.StalePollerKey, constant.StalePollerText, path)
 	}
 }

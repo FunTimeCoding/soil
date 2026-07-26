@@ -1,6 +1,9 @@
 package elite_parser
 
-import "github.com/funtimecoding/soil/pkg/raid/elite"
+import (
+	"github.com/funtimecoding/soil/pkg/raid/constant"
+	"github.com/funtimecoding/soil/pkg/raid/elite"
+)
 
 func extractBoons(p *elite.Player) *Boons {
 	result := &Boons{}
@@ -13,29 +16,29 @@ func extractBoons(p *elite.Player) *Boons {
 		uptime := b.Entries[0].Uptime
 
 		switch b.Identifier {
-		case elite.BuffStability:
+		case constant.BuffStability:
 			result.Stability = uptime
-		case elite.BuffMight:
+		case constant.BuffMight:
 			result.Might = uptime
-		case elite.BuffFury:
+		case constant.BuffFury:
 			result.Fury = uptime
-		case elite.BuffQuickness:
+		case constant.BuffQuickness:
 			result.Quickness = uptime
-		case elite.BuffProtection:
+		case constant.BuffProtection:
 			result.Protection = uptime
-		case elite.BuffResistance:
+		case constant.BuffResistance:
 			result.Resistance = uptime
-		case elite.BuffAegis:
+		case constant.BuffAegis:
 			result.Aegis = uptime
-		case elite.BuffResolution:
+		case constant.BuffResolution:
 			result.Resolution = uptime
-		case elite.BuffSwiftness:
+		case constant.BuffSwiftness:
 			result.Swiftness = uptime
-		case elite.BuffVigor:
+		case constant.BuffVigor:
 			result.Vigor = uptime
-		case elite.BuffRegeneration:
+		case constant.BuffRegeneration:
 			result.Regeneration = uptime
-		case elite.BuffAlacrity:
+		case constant.BuffAlacrity:
 			result.Alacrity = uptime
 		}
 	}

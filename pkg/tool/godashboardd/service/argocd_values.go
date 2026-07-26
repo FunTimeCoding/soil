@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/argocd/application"
+	argocd "github.com/funtimecoding/soil/pkg/argocd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/constant"
 	"strconv"
 )
@@ -29,15 +29,15 @@ func (s *Service) argocdValues() []string {
 	var outOfSync, degraded, missing int
 
 	for _, v := range applications {
-		if v.Sync != application.Synced {
+		if v.Sync != argocd.Synced {
 			outOfSync++
 		}
 
-		if v.Health == application.Degraded {
+		if v.Health == argocd.Degraded {
 			degraded++
 		}
 
-		if v.Health == application.Missing {
+		if v.Health == argocd.Missing {
 			missing++
 		}
 	}

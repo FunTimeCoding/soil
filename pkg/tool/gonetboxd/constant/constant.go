@@ -88,3 +88,8 @@ const (
 	Value          = "value"
 	VirtualMachine = "virtual_machine"
 )
+const (
+	HostEnvironment     = "NETB_HOST"
+	PortEnvironment     = "NETB_PORT"
+	InsecureEnvironment = "NETB_INSECURE"
+)

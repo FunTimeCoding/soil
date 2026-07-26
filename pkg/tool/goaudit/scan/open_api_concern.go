@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"gopkg.in/yaml.v3"
 	"path/filepath"
 )
@@ -30,7 +31,7 @@ func openAPIConcern(
 	}
 
 	return concern.NewPackage(
-		OpenAPIMismatchKey,
+		constant.OpenAPIMismatchKey,
 		fmt.Sprintf(
 			"OpenAPI title %s does not match identity %s",
 			s.Header.Title,

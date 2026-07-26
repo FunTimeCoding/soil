@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"gopkg.in/yaml.v3"
 	"path/filepath"
 	"sort"
@@ -43,7 +44,7 @@ func errorHandlingConcerns(
 					result = append(
 						result,
 						concern.NewPackage(
-							ResponseReferenceKey,
+							constant.ResponseReferenceKey,
 							fmt.Sprintf(
 								"%s %s: uses components/responses ref (should be inlined)",
 								op.OperationID,
@@ -72,7 +73,7 @@ func errorHandlingConcerns(
 					result = append(
 						result,
 						concern.NewPackage(
-							BodylessErrorKey,
+							constant.BodylessErrorKey,
 							fmt.Sprintf(
 								"%s %s: bodyless %s response",
 								op.OperationID,
@@ -90,7 +91,7 @@ func errorHandlingConcerns(
 					result = append(
 						result,
 						concern.NewPackage(
-							ErrorOnServerErrorKey,
+							constant.ErrorOnServerErrorKey,
 							fmt.Sprintf(
 								"%s: 500 references Error (expected ErrorResponse)",
 								op.OperationID,
@@ -104,7 +105,7 @@ func errorHandlingConcerns(
 					if isSuppressed(
 						suppress,
 						op.OperationID,
-						ErrorResponseOnNon500Key,
+						constant.ErrorResponseOnNon500Key,
 					) {
 						continue
 					}
@@ -112,7 +113,7 @@ func errorHandlingConcerns(
 					result = append(
 						result,
 						concern.NewPackage(
-							ErrorResponseOnNon500Key,
+							constant.ErrorResponseOnNon500Key,
 							fmt.Sprintf(
 								"%s: %s references ErrorResponse (expected Error)",
 								op.OperationID,
@@ -131,7 +132,7 @@ func errorHandlingConcerns(
 			result = append(
 				result,
 				concern.NewPackage(
-					MissingErrorSchemaKey,
+					constant.MissingErrorSchemaKey,
 					"endpoints reference Error but schema not defined",
 					path,
 				),
@@ -144,7 +145,7 @@ func errorHandlingConcerns(
 			result = append(
 				result,
 				concern.NewPackage(
-					MissingErrorResponseSchemaKey,
+					constant.MissingErrorResponseSchemaKey,
 					"endpoints reference ErrorResponse but schema not defined",
 					path,
 				),
