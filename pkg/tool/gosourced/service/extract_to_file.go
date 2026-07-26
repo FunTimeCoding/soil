@@ -2,10 +2,12 @@ package service
 
 import (
 	"fmt"
+	"github.com/dave/dst"
+	"github.com/dave/dst/decorator"
+	"github.com/dave/dst/decorator/resolver/goast"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/source/imports"
-	"go/ast"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"go/parser"
 	"go/token"
 	"os"
@@ -87,24 +89,46 @@ func (s *Service) ExtractToFile(
 		return r, nil
 	}
 
-	needed := imports.UsedBy(file, declaration)
-	file.Decls = append(file.Decls[:index], file.Decls[index+1:]...)
-	remaining := collectRemainingImports(file)
-	removeUnusedImports(file, needed, remaining)
-	e = writeFile(fileSet, file, fullPath)
+	dec := decorator.NewDecoratorWithImports(
+		fileSet,
+		constant.StandalonePath,
+		goast.New(),
+	)
+	source, e := dec.DecorateFile(file)
 
 	if e != nil {
 		return nil, e
 	}
 
-	e = writeExtractedFile(
-		file.Name.Name,
-		needed,
-		[]ast.Decl{declaration},
-		targetPath,
-	)
+	moved, _ := dec.Dst.Nodes[declaration].(*dst.FuncDecl)
 
-	if e != nil {
+	if moved == nil {
+		return nil, fmt.Errorf(
+			"no decorated declaration for %s",
+			functionName,
+		)
+	}
+
+	for i, d := range source.Decls {
+		if d == moved {
+			source.Decls = append(source.Decls[:i], source.Decls[i+1:]...)
+
+			break
+		}
+	}
+
+	file.Decls = append(file.Decls[:index], file.Decls[index+1:]...)
+	moved.Decs.Before = dst.EmptyLine
+	target := &dst.File{
+		Name:  dst.NewIdent(file.Name.Name),
+		Decls: []dst.Decl{moved},
+	}
+
+	if e := restoreExtracted(source, fullPath); e != nil {
+		return nil, e
+	}
+
+	if e := restoreExtracted(target, targetPath); e != nil {
 		return nil, e
 	}
 

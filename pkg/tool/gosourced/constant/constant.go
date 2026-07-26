@@ -30,4 +30,5 @@ const (
 const (
 	ReferenceLimit  = 25
 	MemberSeparator = "."
+	StandalonePath  = "standalone"
 )

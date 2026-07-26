@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+// FormatName renders a labeled name.
 func FormatName(name string) string {
 	return fmt.Sprintf("name: %s", name)
 }

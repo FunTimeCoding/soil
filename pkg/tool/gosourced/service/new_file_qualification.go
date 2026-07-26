@@ -12,6 +12,7 @@ func newFileQualification(
 ) *fileQualification {
 	return &fileQualification{
 		file:        file,
+		owner:       p,
 		samePackage: p.PkgPath == sourcePackagePath,
 		idents:      make(map[*ast.Ident]string),
 	}

@@ -21,8 +21,14 @@ func TestExtractFunction(t *testing.T) {
 	extracted := readFixtureFile(t, d, "pkg/target/format_name.go")
 	assert.StringContains(t, "func FormatName(", extracted)
 	assert.StringContains(t, "fmt.Sprintf", extracted)
+	assert.StringContains(
+		t,
+		"// FormatName renders a labeled name.",
+		extracted,
+	)
 	source := readFixtureFile(t, d, "pkg/target/combined.go")
 	assert.True(t, !strings.Contains(source, "func FormatName("))
+	assert.True(t, !strings.Contains(source, "// FormatName renders"))
 	assert.StringContains(t, "func TrimName(", source)
 	assert.StringContains(t, "func PlainName(", source)
 }

@@ -1,13 +1,13 @@
 package service
 
 import (
-	"go/ast"
+	"github.com/dave/dst"
 	"go/token"
 )
 
-func hasOnlyImports(file *ast.File) bool {
+func decoratedHasOnlyImports(file *dst.File) bool {
 	for _, d := range file.Decls {
-		g, okay := d.(*ast.GenDecl)
+		g, okay := d.(*dst.GenDecl)
 
 		if !okay || g.Tok != token.IMPORT {
 			return false

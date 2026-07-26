@@ -138,8 +138,6 @@ func (s *Service) MoveSymbols(
 		}
 	}
 
-	sourceName := p.Types.Name()
-
 	if qualifyBackReferences {
 		excluded := make(map[token.Pos]bool)
 		moved := make(map[types.Object]bool)
@@ -174,10 +172,6 @@ func (s *Service) MoveSymbols(
 			}
 
 			entry.backIdentifiers = idents
-			entry.carried = append(
-				entry.carried,
-				sourceImportSpec(packagePath),
-			)
 		}
 
 		if back && sourceReferencesMoved(p, entries, moved) {
@@ -254,6 +248,10 @@ func (s *Service) MoveSymbols(
 		r,
 		&movePlan{
 			set:               set,
+			all:               all,
+			source:            p,
+			target:            target,
+			resolver:          resolve.NewNames(all),
 			entries:           entries,
 			qualifications:    qualifications,
 			renames:           renames,
@@ -262,7 +260,6 @@ func (s *Service) MoveSymbols(
 			targetPackageName: targetPackageName,
 			moveDirectory:     moveDirectory,
 			createTarget:      target == nil,
-			sourceLocalName:   sourceName,
 		},
 	)
 }

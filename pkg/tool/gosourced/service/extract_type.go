@@ -228,6 +228,10 @@ func (s *Service) ExtractType(
 		r,
 		&movePlan{
 			set:               set,
+			all:               all,
+			source:            p,
+			target:            target,
+			resolver:          resolve.NewNames(all),
 			entries:           entries,
 			qualifications:    qualifications,
 			renames:           renames,
