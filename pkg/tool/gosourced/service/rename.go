@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/decoration"
 	"unicode"
 )
 
@@ -88,7 +89,22 @@ func (s *Service) Rename(
 		)
 	}
 
-	_, e = writeModifiedFiles(set, references)
+	decorations := decoration.NewSet()
+
+	for _, f := range references {
+		filename := set.Position(f.Ident.Pos()).Filename
+		file := findSyntaxFile(set, f.Package, filename)
+
+		if file == nil {
+			continue
+		}
+
+		if _, f := decorations.DecorateFile(set, f.Package, file); f != nil {
+			return nil, f
+		}
+	}
+
+	e = restoreDecorations(decorations, resolve.NewNames(all), nil)
 
 	if e != nil {
 		return nil, e

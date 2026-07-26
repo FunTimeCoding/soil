@@ -2,9 +2,10 @@ package service
 
 import (
 	"fmt"
+	"github.com/dave/dst/decorator"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/source/imports"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/decoration"
 	"go/parser"
 	"go/token"
 	"path/filepath"
@@ -24,14 +25,19 @@ func (s *Service) AddImport(
 	}
 
 	fileSet := token.NewFileSet()
-	file, e := parser.ParseFile(fileSet, fullPath, nil, parser.ParseComments)
+	file, e := decorator.ParseFile(
+		fileSet,
+		fullPath,
+		nil,
+		parser.ParseComments,
+	)
 
 	if e != nil {
 		return nil, e
 	}
 
-	imports.Add(file, importPath, alias)
-	e = writeFile(fileSet, file, fullPath)
+	decoration.AddImport(file, importPath, alias)
+	e = decoration.WriteFile(file, fullPath)
 
 	if e != nil {
 		return nil, e

@@ -4,26 +4,27 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"go/ast"
+	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/decoration"
 	"go/token"
 	"golang.org/x/tools/go/packages"
 	"strconv"
 	"strings"
 )
 
-func rewriteImportPaths(
+func retargetImports(
 	r *output.Results,
+	decorations *decoration.Set,
 	set *token.FileSet,
 	all []*packages.Package,
 	packagePath string,
 	targetPackagePath string,
-	modified map[string]*ast.File,
-) {
-	prefix := fmt.Sprintf("%s/", packagePath)
+) error {
+	prefix := join.Empty(packagePath, "/")
 
 	for _, loaded := range all {
 		for _, file := range loaded.Syntax {
-			filename := set.Position(file.Pos()).Filename
+			touched := false
 
 			for _, spec := range file.Imports {
 				importPath, e := strconv.Unquote(spec.Path.Value)
@@ -39,13 +40,11 @@ func rewriteImportPaths(
 					continue
 				}
 
-				moved := fmt.Sprintf(
-					"%s%s",
+				touched = true
+				moved := join.Empty(
 					targetPackagePath,
 					strings.TrimPrefix(importPath, packagePath),
 				)
-				spec.Path.Value = strconv.Quote(moved)
-				modified[filename] = file
 				position := set.Position(spec.Path.Pos())
 				r.AddConcern(
 					concern.NewLine(
@@ -58,6 +57,24 @@ func rewriteImportPaths(
 					),
 				)
 			}
+
+			if !touched {
+				continue
+			}
+
+			decorated, e := decorations.DecorateFile(set, loaded, file)
+
+			if e != nil {
+				return e
+			}
+
+			decoration.SwapPaths(
+				decorated,
+				packagePath,
+				targetPackagePath,
+			)
 		}
 	}
+
+	return nil
 }

@@ -5,37 +5,40 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
-	"go/ast"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/decoration"
 	"go/token"
 )
 
-func renameQualifiers(
+func decorateQualifiers(
 	r *output.Results,
-	s *token.FileSet,
+	decorations *decoration.Set,
+	set *token.FileSet,
 	qualifiers []resolve.Reference,
 	oldName string,
 	newName string,
-	modified map[string]*ast.File,
-) {
+) error {
 	for _, f := range qualifiers {
-		p := s.Position(f.Ident.Pos())
-		f.Ident.Name = newName
-		filename := p.Filename
-		i := findSyntaxFile(s, f.Package, filename)
-
-		if i != nil {
-			modified[filename] = i
-		}
-
+		position := set.Position(f.Ident.Pos())
 		r.AddConcern(
 			concern.NewLine(
 				"renamed",
 				fmt.Sprintf("%s → %s", oldName, newName),
-				p.Filename,
-				p.Line,
+				position.Filename,
+				position.Line,
 				"",
 				true,
 			),
 		)
+		file := findSyntaxFile(set, f.Package, position.Filename)
+
+		if file == nil {
+			continue
+		}
+
+		if _, e := decorations.DecorateFile(set, f.Package, file); e != nil {
+			return e
+		}
 	}
+
+	return nil
 }

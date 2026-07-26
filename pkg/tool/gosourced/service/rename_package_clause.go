@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/decoration"
 	"go/ast"
 	"go/token"
 	"path/filepath"
@@ -67,7 +68,6 @@ func (s *Service) RenamePackageClause(
 	}
 
 	modified := make(map[string]*ast.File)
-	renameQualifiers(r, set, qualifiers, oldName, newName, modified)
 	renamePackageClauses(
 		all,
 		set,
@@ -76,6 +76,27 @@ func (s *Service) RenamePackageClause(
 		newName,
 		modified,
 	)
+	decorations := decoration.NewSet()
 
-	return r, writeModified(set, modified)
+	if e := decorateModified(decorations, set, all, modified); e != nil {
+		return nil, e
+	}
+
+	e = decorateQualifiers(
+		r,
+		decorations,
+		set,
+		qualifiers,
+		oldName,
+		newName,
+	)
+
+	if e != nil {
+		return nil, e
+	}
+
+	names := resolve.NewNames(all)
+	names.Override(packagePath, newName)
+
+	return r, restoreDecorations(decorations, names, nil)
 }

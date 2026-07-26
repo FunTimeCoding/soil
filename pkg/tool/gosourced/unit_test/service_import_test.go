@@ -16,6 +16,13 @@ func TestAddImportToGrouped(t *testing.T) {
 	source := readFixtureFile(t, d, "pkg/target/example.go")
 	assert.StringContains(t, "\"os\"", source)
 	assert.StringContains(t, "\"fmt\"", source)
+	assert.StringContains(t, "// Example formats a trimmed value.", source)
+	assert.StringContains(t, "} // example trailing", source)
+	assert.True(
+		t,
+		strings.Index(source, "// example trailing") >
+			strings.Index(source, "\"os\""),
+	)
 }
 
 func TestAddImportToEmpty(t *testing.T) {

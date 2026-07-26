@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/decoration"
 	"go/ast"
 	"go/token"
 	"os"
@@ -94,10 +95,8 @@ func (s *Service) RenamePackage(
 		return failValidation(r, taken)
 	}
 
-	modified := make(map[string]*ast.File)
-	rewriteImportPaths(r, set, all, packagePath, targetPackagePath, modified)
-	renameQualifiers(r, set, qualifiers, oldName, newName, modified)
 	sourceDirectory := filepath.Dir(p.GoFiles[0])
+	modified := make(map[string]*ast.File)
 	renamePackageClauses(
 		all,
 		set,
@@ -106,8 +105,41 @@ func (s *Service) RenamePackage(
 		newName,
 		modified,
 	)
+	decorations := decoration.NewSet()
+	e = retargetImports(
+		r,
+		decorations,
+		set,
+		all,
+		packagePath,
+		targetPackagePath,
+	)
 
-	if e := writeModified(set, modified); e != nil {
+	if e != nil {
+		return nil, e
+	}
+
+	if e := decorateModified(decorations, set, all, modified); e != nil {
+		return nil, e
+	}
+
+	e = decorateQualifiers(
+		r,
+		decorations,
+		set,
+		qualifiers,
+		oldName,
+		newName,
+	)
+
+	if e != nil {
+		return nil, e
+	}
+
+	names := resolve.NewNames(all)
+	names.Override(targetPackagePath, newName)
+
+	if e := restoreDecorations(decorations, names, nil); e != nil {
 		return nil, e
 	}
 

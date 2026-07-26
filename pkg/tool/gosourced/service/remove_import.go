@@ -2,10 +2,10 @@ package service
 
 import (
 	"fmt"
+	"github.com/dave/dst/decorator"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/source/imports"
-	"go/ast"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/decoration"
 	"go/parser"
 	"go/token"
 	"path/filepath"
@@ -24,24 +24,18 @@ func (s *Service) RemoveImport(
 	}
 
 	fileSet := token.NewFileSet()
-	file, e := parser.ParseFile(fileSet, fullPath, nil, parser.ParseComments)
+	file, e := decorator.ParseFile(
+		fileSet,
+		fullPath,
+		nil,
+		parser.ParseComments,
+	)
 
 	if e != nil {
 		return nil, e
 	}
 
-	quoted := fmt.Sprintf("%q", importPath)
-	var found *ast.ImportSpec
-
-	for _, spec := range file.Imports {
-		if spec.Path.Value == quoted {
-			found = spec
-
-			break
-		}
-	}
-
-	if found == nil {
+	if !decoration.RemoveImport(file, importPath) {
 		r.AddConcern(
 			concern.NewFile(
 				"validation",
@@ -58,8 +52,7 @@ func (s *Service) RemoveImport(
 		return r, nil
 	}
 
-	imports.Remove(file, found)
-	e = writeFile(fileSet, file, fullPath)
+	e = decoration.WriteFile(file, fullPath)
 
 	if e != nil {
 		return nil, e

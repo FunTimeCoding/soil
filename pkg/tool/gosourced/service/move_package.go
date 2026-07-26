@@ -5,11 +5,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
-	"go/ast"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/decoration"
 	"os"
 	"path"
 	"path/filepath"
-	"sort"
 	"strings"
 )
 
@@ -83,22 +82,26 @@ func (s *Service) MovePackage(
 	}
 
 	sourceDirectory := filepath.Dir(p.GoFiles[0])
-	modified := make(map[string]*ast.File)
-	rewriteImportPaths(r, set, all, packagePath, targetPackagePath, modified)
-	var filenames []string
+	decorations := decoration.NewSet()
+	e = retargetImports(
+		r,
+		decorations,
+		set,
+		all,
+		packagePath,
+		targetPackagePath,
+	)
 
-	for filename := range modified {
-		filenames = append(filenames, filename)
+	if e != nil {
+		return nil, e
 	}
 
-	sort.Strings(filenames)
+	names := resolve.NewNames(all)
+	names.Override(targetPackagePath, p.Types.Name())
+	e = restoreDecorations(decorations, names, nil)
 
-	for _, filename := range filenames {
-		e = writeFile(set, modified[filename], filename)
-
-		if e != nil {
-			return nil, e
-		}
+	if e != nil {
+		return nil, e
 	}
 
 	e = os.MkdirAll(filepath.Dir(moveDirectory), 0755)
