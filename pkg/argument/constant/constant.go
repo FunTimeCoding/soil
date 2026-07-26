@@ -1,4 +1,4 @@
-package argument
+package constant
 
 const (
 	Action         = "action"

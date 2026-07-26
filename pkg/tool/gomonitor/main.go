@@ -2,6 +2,7 @@ package gomonitor
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/bubbletea"
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
@@ -18,16 +19,16 @@ func Main(
 	r := reporter.New(constant.Identity.Name(), version).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
-	a.Boolean(argument.Connect, false, "Connect to the server")
-	a.Boolean(argument.Once, false, "Run once and exit")
-	a.Boolean(argument.DryRun, false, "Print sources without executing")
-	a.Boolean(argument.Parallel, false, "Run checks in parallel")
+	a.Boolean(argumentConstant.Connect, false, "Connect to the server")
+	a.Boolean(argumentConstant.Once, false, "Run once and exit")
+	a.Boolean(argumentConstant.DryRun, false, "Print sources without executing")
+	a.Boolean(argumentConstant.Parallel, false, "Run checks in parallel")
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
-	o.Once = a.GetBoolean(argument.Once)
-	o.Connect = a.GetBoolean(argument.Connect)
-	o.DryRun = a.GetBoolean(argument.DryRun)
-	o.Parallel = a.GetBoolean(argument.Parallel)
+	o.Once = a.GetBoolean(argumentConstant.Once)
+	o.Connect = a.GetBoolean(argumentConstant.Connect)
+	o.DryRun = a.GetBoolean(argumentConstant.DryRun)
+	o.Parallel = a.GetBoolean(argumentConstant.Parallel)
 
 	if o.Once {
 		collect.Check(o.DryRun, o.Parallel)

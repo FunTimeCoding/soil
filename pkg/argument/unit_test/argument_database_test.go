@@ -2,6 +2,7 @@ package unit_test
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/assert"
 	libraryConstant "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/identity"
@@ -23,7 +24,7 @@ func TestLiteDefault(t *testing.T) {
 		system.StorageDirectory(name, false),
 		join.Empty(name, libraryConstant.LiteExtension),
 	)
-	assert.String(t, expected, a.GetString(argument.Lite))
+	assert.String(t, expected, a.GetString(argumentConstant.Lite))
 	assert.False(
 		t,
 		system.DirectoryExists(system.StorageDirectory(name, false)),
@@ -35,7 +36,11 @@ func TestLiteEnvironmentOverridesDefault(t *testing.T) {
 	a := testInstance(t)
 	a.Lite()
 	assert.Nil(t, a.ParseArguments(nil))
-	assert.String(t, "/somewhere/custom.sqlite", a.GetString(argument.Lite))
+	assert.String(
+		t,
+		"/somewhere/custom.sqlite",
+		a.GetString(argumentConstant.Lite),
+	)
 }
 
 func TestLiteFlagOverridesEnvironment(t *testing.T) {
@@ -46,7 +51,7 @@ func TestLiteFlagOverridesEnvironment(t *testing.T) {
 		t,
 		a.ParseArguments([]string{"--lite", "/explicit/flag.sqlite"}),
 	)
-	assert.String(t, "/explicit/flag.sqlite", a.GetString(argument.Lite))
+	assert.String(t, "/explicit/flag.sqlite", a.GetString(argumentConstant.Lite))
 }
 
 func TestDatabaseDefaults(t *testing.T) {
@@ -55,7 +60,7 @@ func TestDatabaseDefaults(t *testing.T) {
 	a := testInstance(t)
 	a.Database()
 	assert.Nil(t, a.ParseArguments(nil))
-	assert.String(t, "", a.GetString(argument.Postgres))
+	assert.String(t, "", a.GetString(argumentConstant.Postgres))
 }
 
 func TestDatabaseEnvironmentOverridesDefault(t *testing.T) {
@@ -66,7 +71,7 @@ func TestDatabaseEnvironmentOverridesDefault(t *testing.T) {
 	assert.String(
 		t,
 		"postgres://env@localhost/env",
-		a.GetString(argument.Postgres),
+		a.GetString(argumentConstant.Postgres),
 	)
 }
 
@@ -83,6 +88,6 @@ func TestDatabaseFlagOverridesEnvironment(t *testing.T) {
 	assert.String(
 		t,
 		"postgres://flag@localhost/flag",
-		a.GetString(argument.Postgres),
+		a.GetString(argumentConstant.Postgres),
 	)
 }

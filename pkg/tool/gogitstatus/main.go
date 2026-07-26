@@ -3,6 +3,7 @@ package gogitstatus
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/git/check/status"
 	"github.com/funtimecoding/soil/pkg/git/check/status/option"
@@ -19,16 +20,16 @@ func Main(
 	r := reporter.New(constant.Identity.Name(), version).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
-	a.Boolean(argument.Notation, false, "JSON output")
-	a.Boolean(argument.All, false, "Include filtered in output")
-	a.Boolean(argument.Verbose, false, "Verbose output")
+	a.Boolean(argumentConstant.Notation, false, "JSON output")
+	a.Boolean(argumentConstant.All, false, "Include filtered in output")
+	a.Boolean(argumentConstant.Verbose, false, "Verbose output")
 	a.String(
-		argument.Path,
+		argumentConstant.Path,
 		"",
 		"Path to scan for git repositories. If not set, the current work directory will be used.",
 	)
 	a.Integer(
-		argument.Depth,
+		argumentConstant.Depth,
 		3,
 		fmt.Sprintf(
 			"Depth to scan for %s. Default is 3.",
@@ -37,11 +38,11 @@ func Main(
 	)
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
-	o.Notation = a.GetBoolean(argument.Notation)
-	o.All = a.GetBoolean(argument.All)
-	o.Verbose = a.GetBoolean(argument.Verbose)
-	o.Path = a.GetString(argument.Path)
-	o.Depth = a.GetInteger(argument.Depth)
+	o.Notation = a.GetBoolean(argumentConstant.Notation)
+	o.All = a.GetBoolean(argumentConstant.All)
+	o.Verbose = a.GetBoolean(argumentConstant.Verbose)
+	o.Path = a.GetString(argumentConstant.Path)
+	o.Depth = a.GetInteger(argumentConstant.Depth)
 
 	if s := environment.Optional(status.RepositoryRootEnvironment); s != "" {
 		o.Path = s

@@ -1,10 +1,5 @@
 package constant
 
-import (
-	"errors"
-	"github.com/funtimecoding/soil/pkg/console/status/option"
-)
-
 const (
 	Base = "/api/0"
 
@@ -19,16 +14,15 @@ const (
 
 	ErrorType = "error"
 
-	Response = "response"
-	Body     = "body"
-)
-
-const (
+	Response        = "response"
+	Body            = "body"
 	PeriodEmpty     = ""
 	PeriodDay       = "24h"
 	PeriodFortnight = "14d"
 
 	SortNewestFirst = "-timestamp"
+
+	UnresolvedFilter = "is:unresolved"
 )
 
 var (
@@ -46,9 +40,4 @@ var (
 		PeriodDay,
 		PeriodFortnight,
 	}
-
-	UnresolvedFilter = "is:unresolved"
-
-	ErrorNotFound = errors.New("not found")
-	Format        = option.Color.Copy()
 )

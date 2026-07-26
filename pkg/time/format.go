@@ -1,7 +1,10 @@
 package time
 
-import "time"
+import (
+	"github.com/funtimecoding/soil/pkg/time/constant"
+	"time"
+)
 
 func Format(t time.Time) string {
-	return t.Format(DateMinute)
+	return t.Format(constant.DateMinute)
 }

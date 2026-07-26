@@ -2,6 +2,7 @@ package gosourced
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
@@ -26,11 +27,11 @@ func Main(
 		"gosourced",
 		"gosourced.yaml",
 	)
-	a.String(argument.Inventory, defaultInventory, "Inventory file path")
+	a.String(argumentConstant.Inventory, defaultInventory, "Inventory file path")
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
 	o.Address = a.Address()
 	o.Version = version
-	o.Inventory = inventory.Load(a.GetString(argument.Inventory))
+	o.Inventory = inventory.Load(a.GetString(argumentConstant.Inventory))
 	Run(o, r)
 }

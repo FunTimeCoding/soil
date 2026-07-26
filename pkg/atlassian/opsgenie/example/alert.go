@@ -3,29 +3,30 @@ package example
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/tool/common"
 )
 
 func Alert() {
 	a := argument.NewSimple("opsgenie-alert")
-	a.Boolean(argument.Create, false, "Create alert")
-	a.String(argument.User, "", "User email for alert")
-	a.String(argument.Text, "", "Alert name")
-	a.String(argument.Close, "", "Alert ID")
+	a.Boolean(constant.Create, false, "Create alert")
+	a.String(constant.User, "", "User email for alert")
+	a.String(constant.Text, "", "Alert name")
+	a.String(constant.Close, "", "Alert ID")
 	a.ParseSimple()
 	c := common.Opsgenie()
 
-	if a.GetBoolean(argument.Create) {
+	if a.GetBoolean(constant.Create) {
 		c.Create(
-			a.GetString(argument.User),
-			a.GetString(argument.Text),
+			a.GetString(constant.User),
+			a.GetString(constant.Text),
 		)
 
 		return
 	}
 
-	if i := a.GetString(argument.Close); i != "" {
+	if i := a.GetString(constant.Close); i != "" {
 		c.Close(i)
 
 		return

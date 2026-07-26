@@ -10,6 +10,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/ollama"
 	"github.com/funtimecoding/soil/pkg/text/template"
 	timeLibrary "github.com/funtimecoding/soil/pkg/time"
+	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 	"github.com/funtimecoding/soil/pkg/tool/common"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermost/constant"
 	"time"
@@ -28,7 +29,7 @@ func Main(
 	t := timeLibrary.Midnight(time.Now())
 	fmt.Printf(
 		"Unresolved threads since %s\n",
-		t.Format(timeLibrary.DateMinute),
+		t.Format(timeConstant.DateMinute),
 	)
 	var relevant []*thread.Thread
 

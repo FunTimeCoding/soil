@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/console/status"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/console/status/tag"
-	"github.com/funtimecoding/soil/pkg/time"
+	"github.com/funtimecoding/soil/pkg/time/constant"
 )
 
 func (s *Silence) Format(f *option.Format) string {
@@ -20,7 +20,7 @@ func (s *Silence) Format(f *option.Format) string {
 		t.String(fmt.Sprintf("%s remain", units.HumanDuration(r)))
 	}
 
-	t.String(s.End.Format(time.DateMinute))
+	t.String(s.End.Format(constant.DateMinute))
 
 	if f.HasTag(tag.State) {
 		t.String(s.State)

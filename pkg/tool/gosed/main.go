@@ -2,6 +2,7 @@ package gosed
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	git "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/tool/common"
@@ -19,31 +20,31 @@ func Main(
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	common.Arguments(a)
-	a.String(argument.Branch, git.MainBranch, "Branch to commit to")
-	a.String(argument.Path, "", "Path in repository")
+	a.String(argumentConstant.Branch, git.MainBranch, "Branch to commit to")
+	a.String(argumentConstant.Path, "", "Path in repository")
 	var replaces []string
 	a.StringSliceVariable(
 		&replaces,
-		argument.Replace,
+		argumentConstant.Replace,
 		nil,
 		"One or more prefix replaces (Example: 'image: app:=v1.2.3')",
 	)
 	var actions []string
 	a.StringSliceVariable(
 		&actions,
-		argument.Action,
+		argumentConstant.Action,
 		nil,
 		"One or more file:prefix=value actions for multi-file commits",
 	)
 	a.Parse(version, gitHash, buildDate)
 	common.ValidateArguments(a)
 	o := option.New()
-	o.Host = a.GetString(argument.Host)
-	o.Token = a.GetString(argument.Token)
-	o.Owner = a.GetString(argument.Owner)
-	o.Repository = a.GetString(argument.Repository)
-	o.Branch = a.GetString(argument.Branch)
-	o.Path = a.GetString(argument.Path)
+	o.Host = a.GetString(argumentConstant.Host)
+	o.Token = a.GetString(argumentConstant.Token)
+	o.Owner = a.GetString(argumentConstant.Owner)
+	o.Repository = a.GetString(argumentConstant.Repository)
+	o.Branch = a.GetString(argumentConstant.Branch)
+	o.Path = a.GetString(argumentConstant.Path)
 	o.Replaces = sed.Parse(replaces)
 	o.RawActions = actions
 	o.Message = a.RequiredPositional(0, "MESSAGE")

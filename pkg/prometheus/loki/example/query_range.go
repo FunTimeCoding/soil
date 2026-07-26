@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/prometheus/loki"
 	"github.com/funtimecoding/soil/pkg/prometheus/loki/basic/constant"
-	timeLibrary "github.com/funtimecoding/soil/pkg/time"
+	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 	telemetry "github.com/funtimecoding/soil/pkg/web/telemetry/constant"
 	"strings"
 	"time"
@@ -42,7 +42,7 @@ func QueryRange() {
 
 		fmt.Printf(
 			"%s %s %s %s\n",
-			v.Time.Format(timeLibrary.DateMinute),
+			v.Time.Format(timeConstant.DateMinute),
 			console.Cyan("%s", route),
 			v.Stream,
 			body,

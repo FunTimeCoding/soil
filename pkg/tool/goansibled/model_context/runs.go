@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/provision/model_context"
-	"github.com/funtimecoding/soil/pkg/time"
+	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -25,7 +25,7 @@ func (s *Server) runs(
 	for i, v := range result {
 		summaries[i] = model_context.RunSummary{
 			ID:                  v.ID,
-			CreatedAt:           v.CreatedAt.Format(time.DateSecond),
+			CreatedAt:           v.CreatedAt.Format(timeConstant.DateSecond),
 			Scope:               v.Scope,
 			TriggerSource:       v.TriggerSource,
 			DurationMillisecond: v.DurationMillisecond,

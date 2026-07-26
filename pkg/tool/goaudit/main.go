@@ -2,6 +2,7 @@ package goaudit
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/option"
@@ -18,7 +19,7 @@ func Main(
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Boolean(
-		argument.Table,
+		argumentConstant.Table,
 		false,
 		"Print compliance tables instead of lint-style concerns",
 	)
@@ -32,6 +33,6 @@ func Main(
 
 	o := option.New()
 	o.Roots = roots
-	o.Table = a.GetBoolean(argument.Table)
+	o.Table = a.GetBoolean(argumentConstant.Table)
 	Run(o)
 }

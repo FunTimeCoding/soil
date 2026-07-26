@@ -3,6 +3,7 @@ package example
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/ssh/constant"
 	"github.com/funtimecoding/soil/pkg/ssh/tunnel"
 	"github.com/funtimecoding/soil/pkg/system"
@@ -10,7 +11,7 @@ import (
 
 func Forward() {
 	a := argument.NewSimple("tunnel")
-	a.String(argument.Host, "", "Relay host")
+	a.String(argumentConstant.Host, "", "Relay host")
 	a.String(constant.TargetHost, "", "Target host")
 	a.Integer(constant.TargetPort, 0, "Target port")
 	a.ParseSimple()
@@ -23,7 +24,7 @@ func Forward() {
 
 	fmt.Printf("Start: %+v\n", t)
 	t.Start(
-		a.Required(argument.Host),
+		a.Required(argumentConstant.Host),
 		a.Required(constant.TargetHost),
 		a.RequiredInteger(constant.TargetPort),
 		0,

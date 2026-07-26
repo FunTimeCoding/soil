@@ -16,6 +16,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/system/join"
 	timeLibrary "github.com/funtimecoding/soil/pkg/time"
+	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 	"github.com/olekukonko/tablewriter"
 	"os"
 	"slices"
@@ -34,7 +35,7 @@ func Log(
 	atRiskCutOff := environment.Required(constant.AtRiskCutOffEnvironment)
 	currentTeam := environment.Required(constant.TeamEnvironment)
 	start := timeLibrary.Parse(
-		timeLibrary.DateYear,
+		timeConstant.DateYear,
 		environment.Required(constant.LinkStartDateEnvironment),
 	)
 	matchUpStart := time.Date(
@@ -49,7 +50,7 @@ func Log(
 	)
 	fmt.Printf(
 		"Match-up start: %s\n",
-		matchUpStart.Format(timeLibrary.DateMinute),
+		matchUpStart.Format(timeConstant.DateMinute),
 	)
 	fmt.Printf("Alliance tag: %s\n", tag)
 	fmt.Printf("Team: %s\n", currentTeam)
@@ -175,7 +176,7 @@ func Log(
 		fmt.Printf(
 			"Last seen: %s: %s\n",
 			v.Name,
-			v.Time.Format(timeLibrary.DateMinute),
+			v.Time.Format(timeConstant.DateMinute),
 		)
 	}
 
@@ -265,7 +266,7 @@ func Log(
 	fmt.Printf("Total members: %d\n", len(members))
 	fmt.Printf(
 		"  Seen days count since %s (%d days): %d\n",
-		ago.Format(timeLibrary.DateMinute),
+		ago.Format(timeConstant.DateMinute),
 		daysAgo,
 		len(seenDays),
 	)

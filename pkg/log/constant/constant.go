@@ -1,4 +1,4 @@
-package logger
+package constant
 
 // https://opentelemetry.io/docs/specs/semconv/messaging
 const (

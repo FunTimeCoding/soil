@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/constant"
-	"github.com/funtimecoding/soil/pkg/time"
+	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 )
 
 func Latest() {
@@ -21,6 +21,6 @@ func Latest() {
 
 	for _, p := range posts {
 		fmt.Println(p.Format(constant.Format))
-		fmt.Printf("  Time: %s\n", p.Create.Format(time.DateMinute))
+		fmt.Printf("  Time: %s\n", p.Create.Format(timeConstant.DateMinute))
 	}
 }

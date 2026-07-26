@@ -1,6 +1,6 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/time"
+import "github.com/funtimecoding/soil/pkg/time/constant"
 
 func (s *Service) sessionMetadata(
 	sessionIdentifier string,
@@ -31,7 +31,7 @@ func (s *Service) sessionMetadata(
 	}
 
 	if !session.StartedAt.IsZero() {
-		result["date"] = session.StartedAt.Format(time.DateYear)
+		result["date"] = session.StartedAt.Format(constant.DateYear)
 	}
 
 	return name, result, nil

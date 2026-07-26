@@ -2,6 +2,7 @@ package gogithubd
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/gogithubd/constant"
@@ -17,17 +18,17 @@ func Main(
 	r := reporter.New(constant.Identity.Name(), version).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
-	a.Boolean(argument.Verbose, false, "Verbose output")
+	a.Boolean(argumentConstant.Verbose, false, "Verbose output")
 	a.String(
-		argument.Owner,
+		argumentConstant.Owner,
 		environment.Optional(constant.OwnerEnvironment),
 		"GitHub owner",
 	)
-	a.Duration(argument.Interval, 5*time.Minute, "Poll interval")
+	a.Duration(argumentConstant.Interval, 5*time.Minute, "Poll interval")
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
-	o.Owner = a.GetString(argument.Owner)
-	o.Interval = a.GetDuration(argument.Interval)
-	o.Verbose = a.GetBoolean(argument.Verbose)
+	o.Owner = a.GetString(argumentConstant.Owner)
+	o.Interval = a.GetDuration(argumentConstant.Interval)
+	o.Verbose = a.GetBoolean(argumentConstant.Verbose)
 	Run(o, r)
 }

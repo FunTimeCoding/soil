@@ -5,14 +5,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/console/status"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/time"
+	"github.com/funtimecoding/soil/pkg/time/constant"
 )
 
 func (o *Override) Format(f *option.Format) string {
 	s := status.New(f).String(
 		compact.Mail(o.User),
-		o.Start.Format(time.DateMinute),
-		o.End.Format(time.DateMinute),
+		o.Start.Format(constant.DateMinute),
+		o.End.Format(constant.DateMinute),
 	).RawList(o.Raw)
 
 	if r := o.rotations(); len(r) > 0 {

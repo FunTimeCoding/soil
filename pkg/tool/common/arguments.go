@@ -3,43 +3,45 @@ package common
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
-	"github.com/funtimecoding/soil/pkg/gitlab/constant"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
+	gitlab "github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"github.com/funtimecoding/soil/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/tool/common/constant"
 )
 
 func Arguments(a *argument.Instance) {
 	a.String(
-		argument.Host,
-		environment.Optional(constant.QualifiedName),
-		fmt.Sprintf("Host, fallback: %s", constant.QualifiedName),
+		argumentConstant.Host,
+		environment.Optional(gitlab.QualifiedName),
+		fmt.Sprintf("Host, fallback: %s", gitlab.QualifiedName),
 	)
 	a.String(
-		argument.Token,
+		argumentConstant.Token,
 		environment.Fallback(
-			TokenEnvironment,
-			environment.Optional(constant.JobToken),
+			constant.TokenEnvironment,
+			environment.Optional(gitlab.JobToken),
 		),
 		fmt.Sprintf(
 			"Token, fallbacks: %s, %s",
-			TokenEnvironment,
-			constant.JobToken,
+			constant.TokenEnvironment,
+			gitlab.JobToken,
 		),
 	)
 	a.String(
-		argument.Owner,
+		argumentConstant.Owner,
 		environment.Fallback(
-			OwnerEnvironment,
-			environment.Optional(constant.ProjectNamespace),
+			constant.OwnerEnvironment,
+			environment.Optional(gitlab.ProjectNamespace),
 		),
 		fmt.Sprintf(
 			"Owner, fallbacks: %s, %s",
-			OwnerEnvironment,
-			constant.ProjectNamespace,
+			constant.OwnerEnvironment,
+			gitlab.ProjectNamespace,
 		),
 	)
 	a.String(
-		argument.Repository,
-		environment.Optional(RepositoryEnvironment),
-		fmt.Sprintf("Repository, fallback: %s", RepositoryEnvironment),
+		argumentConstant.Repository,
+		environment.Optional(constant.RepositoryEnvironment),
+		fmt.Sprintf("Repository, fallback: %s", constant.RepositoryEnvironment),
 	)
 }

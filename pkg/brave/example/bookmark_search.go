@@ -3,6 +3,7 @@ package example
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/brave"
 	"github.com/funtimecoding/soil/pkg/brave/bookmark/node"
 	"github.com/funtimecoding/soil/pkg/brave/constant"
@@ -10,10 +11,10 @@ import (
 
 func BookmarkSearch() {
 	a := argument.NewSimple("bookmark-search")
-	a.String(argument.Type, constant.DirectoryType, "bookmark type")
+	a.String(argumentConstant.Type, constant.DirectoryType, "bookmark type")
 	a.ParseSimple()
 	search := a.RequiredPositional(0, "NAME")
-	bookmarkType := a.GetString(argument.Type)
+	bookmarkType := a.GetString(argumentConstant.Type)
 	b := brave.Bookmark(constant.DefaultProfile)
 	f := constant.Format
 	root := node.New(b.Root.Bar)

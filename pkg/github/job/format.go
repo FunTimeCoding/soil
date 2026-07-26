@@ -3,7 +3,7 @@ package job
 import (
 	"github.com/funtimecoding/soil/pkg/console/status"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
-	"github.com/funtimecoding/soil/pkg/time"
+	"github.com/funtimecoding/soil/pkg/time/constant"
 )
 
 func (j *Job) Format(f *option.Format) string {
@@ -11,7 +11,7 @@ func (j *Job) Format(f *option.Format) string {
 		j.Name,
 		j.Status,
 		j.Conclusion,
-		j.CreatedAt.Format(time.DateMinute),
+		j.CreatedAt.Format(constant.DateMinute),
 		j.Hash,
 	).RawList(j).Format()
 }

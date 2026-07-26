@@ -2,10 +2,10 @@ package gosentry
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/constant"
 	"github.com/funtimecoding/soil/pkg/system/environment"
-	"github.com/funtimecoding/soil/pkg/time"
+	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 )
 
 func showIssue(shortIdentifier string) {
@@ -31,14 +31,14 @@ func showIssue(shortIdentifier string) {
 	if r.FirstSeen != nil {
 		fmt.Printf(
 			"First:    %s\n",
-			r.FirstSeen.Format(time.DateMinute),
+			r.FirstSeen.Format(timeConstant.DateMinute),
 		)
 	}
 
 	if r.LastSeen != nil {
 		fmt.Printf(
 			"Last:     %s\n",
-			r.LastSeen.Format(time.DateMinute),
+			r.LastSeen.Format(timeConstant.DateMinute),
 		)
 	}
 
@@ -53,7 +53,7 @@ func showIssue(shortIdentifier string) {
 	if e.DateCreated != nil {
 		fmt.Printf(
 			"Date:     %s\n",
-			e.DateCreated.Format(time.DateMinute),
+			e.DateCreated.Format(timeConstant.DateMinute),
 		)
 	}
 

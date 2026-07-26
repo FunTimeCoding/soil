@@ -3,6 +3,7 @@ package example
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/github"
 	"github.com/funtimecoding/soil/pkg/github/constant"
@@ -10,9 +11,9 @@ import (
 
 func BranchRequest() {
 	a := argument.NewSimple("github-branch-request")
-	a.String(argument.Branch, "", "Branch name")
+	a.String(argumentConstant.Branch, "", "Branch name")
 	a.ParseSimple()
-	branch := a.GetString(argument.Branch)
+	branch := a.GetString(argumentConstant.Branch)
 	c := github.NewEnvironment()
 	f := option.ExtendedColor.Copy()
 	fmt.Println(

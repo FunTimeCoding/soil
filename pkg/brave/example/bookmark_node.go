@@ -3,6 +3,7 @@ package example
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/brave"
 	"github.com/funtimecoding/soil/pkg/brave/bookmark/node"
 	"github.com/funtimecoding/soil/pkg/brave/constant"
@@ -10,9 +11,9 @@ import (
 
 func BookmarkNode() {
 	a := argument.NewSimple("bookmark-node")
-	a.Integer(argument.Depth, 0, "")
+	a.Integer(argumentConstant.Depth, 0, "")
 	a.ParseSimple()
-	depth := a.GetInteger(argument.Depth)
+	depth := a.GetInteger(argumentConstant.Depth)
 	directory := a.RequiredPositional(0, "DIRECTORY")
 	b := brave.Bookmark(constant.DefaultProfile)
 	f := constant.Format

@@ -2,8 +2,8 @@ package sentry
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/basic/response"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/issue"
 	"github.com/funtimecoding/soil/pkg/strings/split"
 	"github.com/funtimecoding/soil/pkg/system/environment"

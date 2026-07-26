@@ -8,14 +8,14 @@ import (
 	"github.com/chromedp/cdproto/target"
 	"github.com/chromedp/chromedp"
 	"github.com/funtimecoding/soil/pkg/errors"
-	library "github.com/funtimecoding/soil/pkg/time"
+	"github.com/funtimecoding/soil/pkg/time/constant"
 	"time"
 )
 
 func (c *Client) Activate(targetIdentifier string) {
 	fmt.Println("  Activate")
 	start := time.Now()
-	fmt.Printf("    Start %v\n", start.Format(library.Micro))
+	fmt.Printf("    Start %v\n", start.Format(constant.Micro))
 	b, e := c.browser()
 	errors.PanicOnError(e)
 	t1 := time.Now()

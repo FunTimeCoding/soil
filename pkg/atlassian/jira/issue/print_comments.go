@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/text"
 	"github.com/funtimecoding/soil/pkg/text/option"
-	"github.com/funtimecoding/soil/pkg/time"
+	"github.com/funtimecoding/soil/pkg/time/constant"
 	"slices"
 )
 
@@ -26,7 +26,7 @@ func (i *Issue) PrintComments() {
 		fmt.Printf(
 			"  Comment: %s | %s | %s\n",
 			c.Author.Name,
-			CommentTime(c).Format(time.DateMinute),
+			CommentTime(c).Format(constant.DateMinute),
 			console.Magenta(
 				"%s",
 				text.OptimizeWhitespace(c.Body, option.Compact()),

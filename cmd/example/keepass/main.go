@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/keepass"
+	"github.com/funtimecoding/soil/pkg/keepass/constant"
 )
 
 func main() {
@@ -14,5 +15,5 @@ func main() {
 		fmt.Println(entry.GetPassword())
 	}
 
-	fmt.Printf("Entry: %+v\n", c.ByTitle(keepass.DirectoryTitle))
+	fmt.Printf("Entry: %+v\n", c.ByTitle(constant.DirectoryTitle))
 }

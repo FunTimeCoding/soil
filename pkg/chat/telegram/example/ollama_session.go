@@ -10,7 +10,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/text/multi_line"
-	timeLibrary "github.com/funtimecoding/soil/pkg/time"
+	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 	"strings"
 	"time"
 )
@@ -95,7 +95,7 @@ func OllamaSession() {
 				"You are a LLM-driven ChatOps bot called %s. Below is the current snapshot of messages from your Telegram chat channel %s. Do not re-digest the whole log every time by replying to earlier messages. Blend in and respond with a message in a informative manner. Do not prefix your response with a timestamp and your name. Try to match the other users message length and writing style. The time is %s, so you know how old previous messages are.",
 				ownName,
 				c,
-				time.Now().Format(timeLibrary.DateMinute),
+				time.Now().Format(timeConstant.DateMinute),
 			)
 			l.Add(history.Render())
 			response := o.GenerateSimple(l.Render())

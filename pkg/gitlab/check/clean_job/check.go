@@ -3,6 +3,7 @@ package clean_job
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/tag"
 	"github.com/funtimecoding/soil/pkg/gitlab"
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
@@ -11,18 +12,18 @@ import (
 
 func Check() {
 	a := argument.NewSimple("clean-job")
-	a.String(argument.Namespace, "", "Namespace")
-	a.String(argument.Project, "", "Project")
-	a.String(argument.Match, "", "Description match")
+	a.String(argumentConstant.Namespace, "", "Namespace")
+	a.String(argumentConstant.Project, "", "Project")
+	a.String(argumentConstant.Match, "", "Description match")
 	a.ParseSimple()
 	g := gitlab.NewEnvironment()
 	f := constant.Format.Copy().Tag(tag.Dense)
-	m := a.GetString(argument.Match)
+	m := a.GetString(argumentConstant.Match)
 
 	if m == "" {
 		fmt.Printf(
 			"--%s must match a runner description\n",
-			argument.Match,
+			argumentConstant.Match,
 		)
 
 		for _, r := range g.MustRunners(true) {
@@ -43,8 +44,8 @@ func Check() {
 
 	if false {
 		p := g.MustProjectByName(
-			a.Required(argument.Namespace),
-			a.Required(argument.Project),
+			a.Required(argumentConstant.Namespace),
+			a.Required(argumentConstant.Project),
 		)
 
 		if false {

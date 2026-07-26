@@ -2,6 +2,7 @@ package argument
 
 import (
 	"errors"
+	"github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/build"
 	libraryErrors "github.com/funtimecoding/soil/pkg/errors"
 	"github.com/spf13/pflag"
@@ -14,7 +15,7 @@ func (i *Instance) Parse(
 	buildDate string,
 ) {
 	i.flags.Bool(
-		Version,
+		constant.Version,
 		false,
 		"Show version information and exit",
 	)
@@ -24,7 +25,7 @@ func (i *Instance) Parse(
 		os.Exit(0)
 	}
 
-	v, f := i.flags.GetBool(Version)
+	v, f := i.flags.GetBool(constant.Version)
 	libraryErrors.PanicOnError(f)
 
 	if v {

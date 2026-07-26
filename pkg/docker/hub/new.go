@@ -1,7 +1,7 @@
 package hub
 
 import (
-	"github.com/funtimecoding/soil/pkg/docker/hub/constant"
+	"github.com/funtimecoding/soil/pkg/docker/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 

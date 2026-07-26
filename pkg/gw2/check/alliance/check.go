@@ -3,6 +3,7 @@ package alliance
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 )
 
@@ -18,8 +19,8 @@ func Check() {
 
 	if true {
 		a := argument.NewSimple("alliance")
-		a.String(argument.Tag, "", "Guild tag")
+		a.String(constant.Tag, "", "Guild tag")
 		a.ParseSimple()
-		Log(path, a.GetString(argument.Tag))
+		Log(path, a.GetString(constant.Tag))
 	}
 }

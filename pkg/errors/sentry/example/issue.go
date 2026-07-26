@@ -3,8 +3,8 @@ package example
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/constant"
 )
 
 func Issue() {

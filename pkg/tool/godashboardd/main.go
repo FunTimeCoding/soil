@@ -2,6 +2,7 @@ package godashboardd
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
@@ -19,13 +20,13 @@ func Main(
 	a := argument.NewInstance(constant.Identity)
 	a.Web()
 	a.Database()
-	a.String(argument.Board, constant.BoardFile, constant.BoardUsage)
+	a.String(argumentConstant.Board, constant.BoardFile, constant.BoardUsage)
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
 	o.Address = a.Address()
-	o.Board = board.Load(a.GetString(argument.Board))
-	o.PostgresLocator = a.GetString(argument.Postgres)
-	o.LitePath = a.GetString(argument.Lite)
+	o.Board = board.Load(a.GetString(argumentConstant.Board))
+	o.PostgresLocator = a.GetString(argumentConstant.Postgres)
+	o.LitePath = a.GetString(argumentConstant.Lite)
 	o.Issuer = environment.Optional(constant.IssuerEnvironment)
 	o.ClientIdentifier = environment.Optional(
 		constant.ClientIdentifierEnvironment,

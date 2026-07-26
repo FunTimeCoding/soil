@@ -2,6 +2,7 @@ package metric
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/metric/constant"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/location"
@@ -17,7 +18,7 @@ func New(
 	w *sync.WaitGroup,
 ) *Server {
 	if port == 0 {
-		port = environment.FallbackInteger(PortEnvironment, Port)
+		port = environment.FallbackInteger(constant.PortEnvironment, constant.Port)
 	}
 
 	// Metrics listen on all interfaces - Prometheus scrapes over the network

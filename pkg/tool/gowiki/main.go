@@ -3,6 +3,7 @@ package gowiki
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence"
 	wiki "github.com/funtimecoding/soil/pkg/atlassian/confluence/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/tag"
@@ -19,21 +20,21 @@ func Main(
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Boolean(
-		argument.Copyable,
+		argumentConstant.Copyable,
 		false,
 		"Disable OSC8 links and add a copyable link instead",
 	)
-	a.Boolean(argument.Watched, false, "Watched")
-	a.Boolean(argument.Favorites, false, "Favorites")
+	a.Boolean(argumentConstant.Watched, false, "Watched")
+	a.Boolean(argumentConstant.Favorites, false, "Favorites")
 	a.Parse(version, gitHash, buildDate)
 	c := confluence.NewEnvironment()
 	f := wiki.Format.Copy()
 
-	if a.GetBoolean(argument.Copyable) {
+	if a.GetBoolean(argumentConstant.Copyable) {
 		f.Tag(tag.Copyable)
 	}
 
-	if a.GetBoolean(argument.Watched) || a.GetBoolean(argument.Favorites) {
+	if a.GetBoolean(argumentConstant.Watched) || a.GetBoolean(argumentConstant.Favorites) {
 		fmt.Println("Watch")
 
 		for _, p := range c.MustWatched() {

@@ -2,7 +2,7 @@ package gosentryd
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
-	sentry "github.com/funtimecoding/soil/pkg/errors/sentry/constant"
+	errors "github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/constant"
@@ -21,7 +21,7 @@ func Main(
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
 	o.Address = a.Address()
-	o.Organization = environment.Required(sentry.OrganizationEnvironment)
+	o.Organization = environment.Required(errors.OrganizationEnvironment)
 	o.Version = version
 	Run(o, r)
 }

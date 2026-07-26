@@ -2,8 +2,8 @@ package example
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab"
-	"github.com/funtimecoding/soil/pkg/project"
 )
 
 func Search() {
@@ -14,7 +14,7 @@ func Search() {
 	}
 
 	for _, b := range g.MustSearchBlob(
-		fmt.Sprintf("filename:%s", project.GitLabFile),
+		fmt.Sprintf("filename:%s", constant.GitLabFile),
 	) {
 		fmt.Printf("Blob: %+v\n", b)
 	}

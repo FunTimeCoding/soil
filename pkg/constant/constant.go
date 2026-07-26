@@ -76,3 +76,12 @@ var (
 	StartOfTime       = time.Unix(0, 0).UTC()
 	CompactWhitespace = option.Compact()
 )
+
+const UnknownField = "Unknown"
+const (
+	ContainerFile = "Containerfile"
+	DockerFile    = "Dockerfile"
+	GitLabFile    = ".gitlab-ci.yml"
+	MainFile      = "main.go"
+	ReadmeFile    = "README.md"
+)

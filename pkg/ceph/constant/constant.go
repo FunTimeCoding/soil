@@ -1,4 +1,4 @@
-package goc
+package constant
 
 const (
 	ConfigurationEnvironment = "CEPH_CONF"
@@ -6,7 +6,7 @@ const (
 
 	CephPath = "ceph"
 
-	clientConfiguration = "ceph.conf"
+	ClientConfiguration = "ceph.conf"
 
-	keyringSuffix = ".keyring"
+	KeyringSuffix = ".keyring"
 )

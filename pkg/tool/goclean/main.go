@@ -2,6 +2,7 @@ package goclean
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	gitlab "github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"github.com/funtimecoding/soil/pkg/system/environment"
@@ -18,10 +19,10 @@ func Main(
 	r := reporter.New(constant.Identity.Name(), version).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
-	a.Boolean(argument.Verbose, false, "Verbose output")
+	a.Boolean(argumentConstant.Verbose, false, "Verbose output")
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
 	o.GitLabHost = environment.Required(gitlab.HostEnvironment)
-	o.Verbose = a.GetBoolean(argument.Verbose)
+	o.Verbose = a.GetBoolean(argumentConstant.Verbose)
 	clean.Run(o)
 }

@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/raid"
-	"github.com/funtimecoding/soil/pkg/time"
+	"github.com/funtimecoding/soil/pkg/time/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/generated/server"
 )
 
@@ -57,7 +57,7 @@ func (s *Server) GetLogs(
 			result,
 			server.LogResponse{
 				FileName:    f.Filename,
-				Time:        f.Timestamp.Format(time.DateSecond),
+				Time:        f.Timestamp.Format(constant.DateSecond),
 				Duration:    fmt.Sprintf("%dms", f.DurationMS),
 				MapId:       f.MapID,
 				PlayerCount: f.AlliedCount,

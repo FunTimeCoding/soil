@@ -2,6 +2,7 @@ package gosaltd
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/constant"
@@ -18,16 +19,16 @@ func Main(
 	a := argument.NewInstance(constant.Identity)
 	a.Web()
 	a.Database()
-	a.String(argument.Repository, "", "Git repository URL")
-	a.String(argument.ClonePath, "", "Local repository path")
+	a.String(argumentConstant.Repository, "", "Git repository URL")
+	a.String(argumentConstant.ClonePath, "", "Local repository path")
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
 	o.Address = a.Address()
 	o.Version = version
-	o.Repository = a.Required(argument.Repository)
-	o.ClonePath = a.Required(argument.ClonePath)
+	o.Repository = a.Required(argumentConstant.Repository)
+	o.ClonePath = a.Required(argumentConstant.ClonePath)
 	o.SaltPath = environment.Required(constant.SaltPathEnvironment)
-	o.PostgresLocator = a.GetString(argument.Postgres)
-	o.LitePath = a.GetString(argument.Lite)
+	o.PostgresLocator = a.GetString(argumentConstant.Postgres)
+	o.LitePath = a.GetString(argumentConstant.Lite)
 	Run(o, r)
 }

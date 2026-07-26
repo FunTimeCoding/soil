@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/constant"
-	library "github.com/funtimecoding/soil/pkg/time"
+	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 	"time"
 )
 
@@ -27,7 +27,7 @@ func Before() {
 	}
 
 	if !found {
-		fmt.Printf("No post before %s\n", t.Format(library.DateMinute))
+		fmt.Printf("No post before %s\n", t.Format(timeConstant.DateMinute))
 
 		return
 	}
@@ -35,20 +35,20 @@ func Before() {
 	fmt.Printf("Reference: %s\n", reference.Format(f))
 	fmt.Printf(
 		"Date: %s\n",
-		time.UnixMilli(reference.Raw.CreateAt).Format(library.DateMinute),
+		time.UnixMilli(reference.Raw.CreateAt).Format(timeConstant.DateMinute),
 	)
 	keep := 500
 	posts := m.MustPostsBefore(c, t, keep)
 	fmt.Printf(
 		"Posts before %s or exceeding %d posts (%d found)\n",
-		t.Format(library.DateMinute),
+		t.Format(timeConstant.DateMinute),
 		keep,
 		len(posts),
 	)
 
 	for _, p := range posts {
 		fmt.Println(p.Format(f))
-		fmt.Printf("  Time: %s\n", p.Create.Format(library.DateMinute))
+		fmt.Printf("  Time: %s\n", p.Create.Format(timeConstant.DateMinute))
 
 		if false {
 			m.MustDeletePost(p.Raw)

@@ -1,6 +1,6 @@
 package constant
 
-import "github.com/funtimecoding/soil/pkg/project"
+import "github.com/funtimecoding/soil/pkg/constant"
 
 const File = "dictionary.dic"
 
@@ -25,7 +25,7 @@ var (
 		".yml":       true,
 	}
 	NoExtension = map[string]bool{
-		project.ContainerFile: true,
-		project.DockerFile:    true,
+		constant.ContainerFile: true,
+		constant.DockerFile:    true,
 	}
 )

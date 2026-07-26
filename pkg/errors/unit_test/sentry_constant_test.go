@@ -2,7 +2,7 @@ package unit_test
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/constant"
+	"github.com/funtimecoding/soil/pkg/errors/constant"
 	"testing"
 )
 

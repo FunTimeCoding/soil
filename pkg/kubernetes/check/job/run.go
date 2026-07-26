@@ -2,6 +2,7 @@ package job
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/kubernetes/client"
 	"github.com/funtimecoding/soil/pkg/kubernetes/constant"
 )
@@ -11,12 +12,12 @@ func Run() {
 	a.Boolean(constant.TrivyArgument, false, "Run Trivy job")
 	a.Boolean(constant.LabArgument, false, "Renovate GitLab")
 	a.Boolean(constant.HubArgument, false, "Renovate GitHub")
-	a.Boolean(argument.Wait, false, "Wait for job to complete")
+	a.Boolean(argumentConstant.Wait, false, "Wait for job to complete")
 	a.ParseSimple()
 	trivy := a.GetBoolean(constant.TrivyArgument)
 	lab := a.GetBoolean(constant.LabArgument)
 	hub := a.GetBoolean(constant.HubArgument)
-	wait := a.GetBoolean(argument.Wait)
+	wait := a.GetBoolean(argumentConstant.Wait)
 	k := client.NewEnvironment()
 
 	if !trivy && !lab && !hub {

@@ -1,10 +1,10 @@
 package model_context
 
 import (
-	timeLibrary "github.com/funtimecoding/soil/pkg/time"
+	"github.com/funtimecoding/soil/pkg/time/constant"
 	"time"
 )
 
 func formatTime(t time.Time) string {
-	return t.Format(timeLibrary.DateMinute)
+	return t.Format(constant.DateMinute)
 }

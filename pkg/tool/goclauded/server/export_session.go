@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/session"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/writer"
-	"github.com/funtimecoding/soil/pkg/time"
+	"github.com/funtimecoding/soil/pkg/time/constant"
 	"os"
 	"path/filepath"
 	"strings"
@@ -43,7 +43,7 @@ func (s *Server) exportSession(
 
 	name := fmt.Sprintf(
 		"%s-%s.md",
-		created.Format(time.DateYear),
+		created.Format(constant.DateYear),
 		strings.ReplaceAll(
 			strings.ToLower(slug),
 			" ",
@@ -65,7 +65,7 @@ func (s *Server) exportSession(
 	writer.Print(
 		&b,
 		"created: %s\n",
-		created.Format(time.DateYear),
+		created.Format(constant.DateYear),
 	)
 	writer.Print(&b, "---\n\n")
 

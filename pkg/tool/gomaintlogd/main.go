@@ -2,6 +2,7 @@ package gomaintlogd
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/option"
@@ -20,8 +21,8 @@ func Main(
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
 	o.Address = a.Address()
-	o.PostgresLocator = a.GetString(argument.Postgres)
-	o.LitePath = a.GetString(argument.Lite)
+	o.PostgresLocator = a.GetString(argumentConstant.Postgres)
+	o.LitePath = a.GetString(argumentConstant.Lite)
 	o.Version = version
 	Run(o, r)
 }

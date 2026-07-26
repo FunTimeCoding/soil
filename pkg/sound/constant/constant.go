@@ -1,4 +1,4 @@
-package sound
+package constant
 
 const (
 	Afplay         = "afplay"

@@ -6,9 +6,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/console/status/tag"
 	"github.com/funtimecoding/soil/pkg/errors/sentry"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/check/issue/option"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/constant"
 	"github.com/funtimecoding/soil/pkg/monitor"
-	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/monitor/item/constant"
 )
 
 func Check(o *option.Issue) {
@@ -21,7 +20,7 @@ func Check(o *option.Issue) {
 		return
 	}
 
-	f := constant.Format
+	f := sentry.Format
 
 	if o.Copyable {
 		f.Tag(tag.Copyable)
@@ -35,6 +34,6 @@ func Check(o *option.Issue) {
 	}
 
 	if len(elements) == 0 {
-		monitor.NoRelevant(item.GoSentry.Plural)
+		monitor.NoRelevant(constant.GoSentry.Plural)
 	}
 }

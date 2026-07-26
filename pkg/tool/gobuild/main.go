@@ -3,7 +3,9 @@ package gobuild
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/build"
+	buildConstant "github.com/funtimecoding/soil/pkg/build/constant"
 	"github.com/funtimecoding/soil/pkg/build/option"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/system"
@@ -22,21 +24,21 @@ func Main(
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.String(
-		argument.Main,
+		argumentConstant.Main,
 		"",
 		"Path to main.go, defaults to cmd/$NAME/main.go",
 	)
 	a.String(
-		argument.Output,
+		argumentConstant.Output,
 		"",
 		"Output path, defaults to tmp/$NAME/$OS-$ARCH/$NAME",
 	)
-	a.String(argument.BuildTags, "", "Build tags")
-	a.Boolean(build.CopyToBinFlag, false, "Copy to $HOME/bin")
+	a.String(argumentConstant.BuildTags, "", "Build tags")
+	a.Boolean(buildConstant.CopyToBinFlag, false, "Copy to $HOME/bin")
 	a.Boolean(systemConstant.LinuxAMD64, false, "Linux AMD64")
 	a.Boolean(systemConstant.DarwinARM64, false, "Darwin ARM64")
 	a.Boolean(systemConstant.DarwinAMD64, false, "Darwin AMD64")
-	a.Boolean(build.Native, false, "Enable CGO")
+	a.Boolean(buildConstant.Native, false, "Enable CGO")
 	a.Parse(version, gitHash, buildDate)
 	linuxAMD64 := a.GetBoolean(systemConstant.LinuxAMD64)
 	darwinARM64 := a.GetBoolean(systemConstant.DarwinARM64)
@@ -57,7 +59,7 @@ func Main(
 				systemConstant.CommandPath,
 			),
 		) {
-			if n == build.ExamplePath {
+			if n == buildConstant.ExamplePath {
 				continue
 			}
 
@@ -71,10 +73,10 @@ func Main(
 			o := option.New()
 			o.Name = n
 			o.MainPath = mainPath
-			o.Output = a.GetString(argument.Output)
-			o.BuildTags = a.GetString(argument.BuildTags)
-			o.CopyToBin = a.GetBoolean(build.CopyToBinFlag)
-			o.Native = a.GetBoolean(build.Native)
+			o.Output = a.GetString(argumentConstant.Output)
+			o.BuildTags = a.GetString(argumentConstant.BuildTags)
+			o.CopyToBin = a.GetBoolean(buildConstant.CopyToBinFlag)
+			o.Native = a.GetBoolean(buildConstant.Native)
 			o.LinuxAMD64 = linuxAMD64
 			o.DarwinARM64 = darwinARM64
 			o.DarwinAMD64 = darwinAMD64
@@ -84,7 +86,7 @@ func Main(
 		return
 	}
 
-	mainPath := a.GetString(argument.Main)
+	mainPath := a.GetString(argumentConstant.Main)
 
 	if mainPath == "" {
 		if mainPath = build.GuessMainPath(name); mainPath == "" {
@@ -95,10 +97,10 @@ func Main(
 	o := option.New()
 	o.Name = name
 	o.MainPath = mainPath
-	o.Output = a.GetString(argument.Output)
-	o.BuildTags = a.GetString(argument.BuildTags)
-	o.CopyToBin = a.GetBoolean(build.CopyToBinFlag)
-	o.Native = a.GetBoolean(build.Native)
+	o.Output = a.GetString(argumentConstant.Output)
+	o.BuildTags = a.GetString(argumentConstant.BuildTags)
+	o.CopyToBin = a.GetBoolean(buildConstant.CopyToBinFlag)
+	o.Native = a.GetBoolean(buildConstant.Native)
 	o.LinuxAMD64 = linuxAMD64
 	o.DarwinARM64 = darwinARM64
 	o.DarwinAMD64 = darwinAMD64

@@ -2,9 +2,10 @@ package goc
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/ceph/constant"
 	"github.com/funtimecoding/soil/pkg/strings/split"
 	"github.com/funtimecoding/soil/pkg/system"
-	"github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/system/join"
 	"slices"
@@ -14,13 +15,17 @@ func Run(
 	selected string,
 	verbose bool,
 ) {
-	file := environment.Required(ConfigurationEnvironment)
+	file := environment.Required(constant.ConfigurationEnvironment)
 
 	if verbose {
 		fmt.Printf("File: %s\n", file)
 	}
 
-	base := join.Absolute(system.Home(), constant.ConfigurationPath, CephPath)
+	base := join.Absolute(
+		system.Home(),
+		systemConstant.ConfigurationPath,
+		constant.CephPath,
+	)
 
 	if verbose {
 		fmt.Printf("Base: %s\n", base)
@@ -53,14 +58,14 @@ func Run(
 	}
 
 	name := configurationName(base, selected)
-	newConfiguration := join.Absolute(base, selected, clientConfiguration)
+	newConfiguration := join.Absolute(base, selected, constant.ClientConfiguration)
 	newArgument := fmt.Sprintf(
 		"-n %s --keyring=%s",
 		fmt.Sprintf("client.%s", name),
 		join.Absolute(
 			base,
 			selected,
-			fmt.Sprintf("ceph.client.%s.keyring", name),
+			fmt.Sprintf("constant.client.%s.keyring", name),
 		),
 	)
 
@@ -69,6 +74,6 @@ func Run(
 		fmt.Printf("newArgument: %s\n", newArgument)
 	}
 
-	environment.SetTerminal(ConfigurationEnvironment, newConfiguration)
-	environment.SetTerminal(ArgumentEnvironment, newArgument)
+	environment.SetTerminal(constant.ConfigurationEnvironment, newConfiguration)
+	environment.SetTerminal(constant.ArgumentEnvironment, newArgument)
 }

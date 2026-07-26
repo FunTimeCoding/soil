@@ -1,6 +1,7 @@
 package goc
 
 import (
+	"github.com/funtimecoding/soil/pkg/ceph/constant"
 	"github.com/funtimecoding/soil/pkg/strings/split"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/join"
@@ -14,7 +15,7 @@ func configurationName(
 	var result string
 
 	for _, f := range system.Files(join.Absolute(base, selected)) {
-		if strings.HasSuffix(f, keyringSuffix) {
+		if strings.HasSuffix(f, constant.KeyringSuffix) {
 			return split.Dot(f)[2]
 		}
 	}

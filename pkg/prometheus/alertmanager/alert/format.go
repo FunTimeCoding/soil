@@ -8,7 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/console/status/tag"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/time"
+	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 )
 
 func (a *Alert) Format(f *option.Format) string {
@@ -43,7 +43,7 @@ func (a *Alert) Format(f *option.Format) string {
 
 	if a.Start != nil {
 		if false {
-			s.String(a.Start.Format(time.DateMinute))
+			s.String(a.Start.Format(timeConstant.DateMinute))
 		}
 
 		s.String(fmt.Sprintf("%s ago", units.HumanDuration(a.Age())))

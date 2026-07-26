@@ -79,10 +79,38 @@ func TestMoveCommentGroupScrub(t *testing.T) {
 	source := readFixtureFile(t, d, "pkg/keeper/constant.go")
 	assertFormatted(t, source)
 	assert.StringContains(t, "epsilon = \"juliet\"", source)
+	assert.StringContains(t, "// Keeper vocabulary.", source)
 	assert.False(t, strings.Contains(source, "// Delta document."))
 	assert.False(t, strings.Contains(source, "// delta trailing"))
 	moved := readFixtureFile(t, d, "pkg/target/constant/constant.go")
 	assertFormatted(t, moved)
 	assert.StringContains(t, "// Delta document.", moved)
 	assert.StringContains(t, "const Delta = \"india\" // delta trailing", moved)
+	assert.False(t, strings.Contains(moved, "// Keeper vocabulary."))
+}
+
+func TestMoveCommentGroupDocument(t *testing.T) {
+	d := testutil.PrepareTestPackage(t, serviceTestdata("move-comment/src"))
+	s := testService()
+	r, e := s.MoveSymbols(
+		d,
+		"example/pkg/keeper",
+		[]string{"delta", "epsilon"},
+		"",
+		"example/pkg/target/constant",
+		"constant.go",
+		false,
+		false,
+	)
+	assert.FatalOnError(t, e)
+	testutil.AssertBlocked(t, r, 0)
+	source := readFixtureFile(t, d, "pkg/keeper/constant.go")
+	assertFormatted(t, source)
+	assert.False(t, strings.Contains(source, "// Keeper vocabulary."))
+	moved := readFixtureFile(t, d, "pkg/target/constant/constant.go")
+	assertFormatted(t, moved)
+	assert.StringContains(t, "// Keeper vocabulary.", moved)
+	assert.StringContains(t, "// Delta document.", moved)
+	assert.StringContains(t, "Delta = \"india\" // delta trailing", moved)
+	assert.StringContains(t, "Epsilon = \"juliet\"", moved)
 }

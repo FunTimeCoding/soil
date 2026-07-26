@@ -3,6 +3,7 @@ package goversion
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	library "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/git/check/status"
@@ -24,11 +25,11 @@ func Main(
 	r := reporter.New(constant.Identity.Name(), programVersion).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
-	a.Boolean(argument.Notation, false, "JSON output")
-	a.Boolean(argument.All, false, "Include filtered in output")
-	a.String(argument.Skip, "", "Skip matches")
+	a.Boolean(argumentConstant.Notation, false, "JSON output")
+	a.Boolean(argumentConstant.All, false, "Include filtered in output")
+	a.String(argumentConstant.Skip, "", "Skip matches")
 	a.Integer(
-		argument.Depth,
+		argumentConstant.Depth,
 		3,
 		fmt.Sprintf(
 			"Depth to scan for %s. Default: 3",
@@ -37,8 +38,8 @@ func Main(
 	)
 	a.Parse(programVersion, gitHash, buildDate)
 	o := option.New()
-	o.Notation = a.GetBoolean(argument.Notation)
-	o.All = a.GetBoolean(argument.All)
+	o.Notation = a.GetBoolean(argumentConstant.Notation)
+	o.All = a.GetBoolean(argumentConstant.All)
 	o.Path = a.PositionalFallback(
 		0,
 		environment.Fallback(
@@ -46,14 +47,14 @@ func Main(
 			library.CurrentDirectory,
 		),
 	)
-	o.Depth = a.GetInteger(argument.Depth)
+	o.Depth = a.GetInteger(argumentConstant.Depth)
 
 	if s := environment.Optional(version.SkipEnvironment); s != "" {
 		o.Skip = split.Comma(s)
 	}
 
 	if len(o.Skip) == 0 {
-		o.Skip = a.Slice(argument.Skip)
+		o.Skip = a.Slice(argumentConstant.Skip)
 	}
 
 	v := runtime.ExecutableVersion()

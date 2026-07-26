@@ -2,6 +2,7 @@ package gocommit
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	git "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/tool/common"
@@ -19,26 +20,26 @@ func Main(
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	common.Arguments(a)
-	a.String(argument.Branch, git.MainBranch, "Branch to commit to")
-	a.String(argument.Path, "", "Path in repository")
-	a.String(argument.Template, "", "Template file for commit")
+	a.String(argumentConstant.Branch, git.MainBranch, "Branch to commit to")
+	a.String(argumentConstant.Path, "", "Path in repository")
+	a.String(argumentConstant.Template, "", "Template file for commit")
 	var replaces []string
 	a.StringSliceVariable(
 		&replaces,
-		argument.Replace,
+		argumentConstant.Replace,
 		nil,
 		"One or more key-value pairs to replace (Example: FOO=BAR)",
 	)
 	a.Parse(version, gitHash, buildDate)
 	common.ValidateArguments(a)
 	o := option.New()
-	o.Host = a.GetString(argument.Host)
-	o.Token = a.GetString(argument.Token)
-	o.Owner = a.GetString(argument.Owner)
-	o.Repository = a.GetString(argument.Repository)
-	o.Branch = a.GetString(argument.Branch)
-	o.Path = a.GetString(argument.Path)
-	o.Template = a.GetString(argument.Template)
+	o.Host = a.GetString(argumentConstant.Host)
+	o.Token = a.GetString(argumentConstant.Token)
+	o.Owner = a.GetString(argumentConstant.Owner)
+	o.Repository = a.GetString(argumentConstant.Repository)
+	o.Branch = a.GetString(argumentConstant.Branch)
+	o.Path = a.GetString(argumentConstant.Path)
+	o.Template = a.GetString(argumentConstant.Template)
 	o.Replace = replaces
 	o.Message = a.RequiredPositional(0, "MESSAGE")
 	commit.Run(o)

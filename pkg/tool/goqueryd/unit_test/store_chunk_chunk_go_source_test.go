@@ -3,6 +3,7 @@ package unit_test
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/chunk"
 	"strings"
 	"testing"
@@ -16,7 +17,7 @@ func TestChunkGoSourceSplitsAtDeclarations(t *testing.T) {
 		body,
 		body,
 	)
-	chunks := chunk.Document(source, "main.go")
+	chunks := chunk.Document(source, constant.MainFile)
 	assert.Greater(t, 1, float64(len(chunks)))
 	assert.StringContains(t, "package main", chunks[0].Text)
 	found := false

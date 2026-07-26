@@ -2,6 +2,7 @@ package gosentry
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/check/issue"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/check/issue/option"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
@@ -17,30 +18,30 @@ func Main(
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Boolean(
-		argument.Copyable,
+		argumentConstant.Copyable,
 		false,
 		"Disable OSC8 links and add a copyable link instead",
 	)
-	a.Boolean(argument.Notation, false, "JSON output")
-	a.Boolean(argument.All, false, "Include filtered in output")
-	a.Boolean(argument.Verbose, false, "Verbose output")
+	a.Boolean(argumentConstant.Notation, false, "JSON output")
+	a.Boolean(argumentConstant.All, false, "Include filtered in output")
+	a.Boolean(argumentConstant.Verbose, false, "Verbose output")
 	a.String(
-		argument.Issue,
+		argumentConstant.Issue,
 		"",
 		"Show details for a specific issue (e.g. GO-1B)",
 	)
 	a.Parse(version, gitHash, buildDate)
 
-	if i := a.GetString(argument.Issue); i != "" {
+	if i := a.GetString(argumentConstant.Issue); i != "" {
 		showIssue(i)
 
 		return
 	}
 
 	p := option.New()
-	p.Notation = a.GetBoolean(argument.Notation)
-	p.All = a.GetBoolean(argument.All)
-	p.Verbose = a.GetBoolean(argument.Verbose)
-	p.Copyable = a.GetBoolean(argument.Copyable)
+	p.Notation = a.GetBoolean(argumentConstant.Notation)
+	p.All = a.GetBoolean(argumentConstant.All)
+	p.Verbose = a.GetBoolean(argumentConstant.Verbose)
+	p.Copyable = a.GetBoolean(argumentConstant.Copyable)
 	issue.Check(p)
 }

@@ -1,17 +1,18 @@
 package argument
 
 import (
-	"github.com/funtimecoding/soil/pkg/relational/lite/constant"
+	"github.com/funtimecoding/soil/pkg/argument/constant"
+	lite "github.com/funtimecoding/soil/pkg/relational/lite/constant"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 )
 
 func (i *Instance) Lite() {
 	i.String(
-		Lite,
+		constant.Lite,
 		environment.Fallback(
-			constant.PathEnvironment,
+			lite.PathEnvironment,
 			i.identity.LitePath(),
 		),
-		constant.PathUsage,
+		lite.PathUsage,
 	)
 }

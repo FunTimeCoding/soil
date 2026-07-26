@@ -8,7 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/console/status/tag"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	timeLibrary "github.com/funtimecoding/soil/pkg/time"
+	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 	"github.com/opsgenie/opsgenie-go-sdk-v2/alert"
 	"time"
 )
@@ -32,7 +32,7 @@ func (a *Alert) extended(
 	if a.Snoozed {
 		s.Line(
 			"  Snoozed: %s",
-			a.SnoozeUntil.Format(timeLibrary.DateMinute),
+			a.SnoozeUntil.Format(timeConstant.DateMinute),
 		)
 	}
 

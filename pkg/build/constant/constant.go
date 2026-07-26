@@ -1,4 +1,4 @@
-package build
+package constant
 
 const (
 	DefaultVersion = "empty"

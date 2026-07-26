@@ -2,6 +2,7 @@ package golint
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/tool/golint/constant"
@@ -16,30 +17,30 @@ func Main(
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Boolean(
-		argument.Fix,
+		argumentConstant.Fix,
 		false,
 		"Fix concerns that can be fixed",
 	)
 	a.Boolean(
-		argument.Summary,
+		argumentConstant.Summary,
 		false,
 		"Print one line per modified file instead of per-edit detail",
 	)
 	a.String(
-		argument.Skip,
+		argumentConstant.Skip,
 		"",
 		"Directories to skip, comma separated",
 	)
 	a.Boolean(
-		argument.Verbose,
+		argumentConstant.Verbose,
 		false,
 		"Verbose output",
 	)
 	a.Parse(version, gitHash, buildDate)
 	lint.Lint(
-		a.GetString(argument.Skip),
-		a.GetBoolean(argument.Verbose),
-		a.GetBoolean(argument.Fix),
-		a.GetBoolean(argument.Summary),
+		a.GetString(argumentConstant.Skip),
+		a.GetBoolean(argumentConstant.Verbose),
+		a.GetBoolean(argumentConstant.Fix),
+		a.GetBoolean(argumentConstant.Summary),
 	)
 }

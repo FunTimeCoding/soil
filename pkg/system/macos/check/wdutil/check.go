@@ -3,7 +3,7 @@ package wdutil
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/system"
-	library "github.com/funtimecoding/soil/pkg/time"
+	"github.com/funtimecoding/soil/pkg/time/constant"
 	"time"
 )
 
@@ -23,7 +23,7 @@ func Check() {
 				if past != r.Sequence {
 					fmt.Printf(
 						"%s change %s\n",
-						t.Format(library.DateSecond),
+						t.Format(constant.DateSecond),
 						r.Sequence,
 					)
 				}

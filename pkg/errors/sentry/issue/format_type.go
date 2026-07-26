@@ -3,7 +3,7 @@ package issue
 import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/constant"
+	"github.com/funtimecoding/soil/pkg/errors/constant"
 )
 
 func (i *Issue) formatType(f *option.Format) string {

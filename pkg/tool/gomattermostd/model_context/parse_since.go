@@ -1,13 +1,13 @@
 package model_context
 
 import (
-	timeLibrary "github.com/funtimecoding/soil/pkg/time"
+	"github.com/funtimecoding/soil/pkg/time/constant"
 	"time"
 )
 
 func parseSince(s string) (time.Time, error) {
 	t, e := time.ParseInLocation(
-		timeLibrary.DateMinute,
+		constant.DateMinute,
 		s,
 		time.Now().Location(),
 	)

@@ -3,6 +3,7 @@ package unit_test
 import (
 	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"testing"
@@ -30,7 +31,7 @@ func (u *User) UnmarshalJSON(b []byte) error {
 	type Alias User
 	v := (*Alias)(u)
 
-	return notation.UnmarshalUnknown(b, v, notation.UnknownField)
+	return notation.UnmarshalUnknown(b, v, constant.UnknownField)
 }
 
 func (u *User) UnknownField() map[string]any {

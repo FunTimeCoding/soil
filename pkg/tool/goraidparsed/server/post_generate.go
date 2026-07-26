@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/run"
-	timeLibrary "github.com/funtimecoding/soil/pkg/time"
+	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/generated/server"
 	"os"
 	"path/filepath"
@@ -117,7 +117,7 @@ func (s *Server) PostGenerate(
 
 	reportName := fmt.Sprintf(
 		"ONYX Log %s.html",
-		date.Format(timeLibrary.DateYear),
+		date.Format(timeConstant.DateYear),
 	)
 	var reportSource string
 

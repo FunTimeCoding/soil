@@ -1,4 +1,4 @@
-package metric
+package constant
 
 const (
 	PortEnvironment = "METRIC_PORT"

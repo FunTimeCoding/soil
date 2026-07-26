@@ -3,9 +3,10 @@ package godockerhub
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/docker/hub"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/soil/pkg/time"
+	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 	"github.com/funtimecoding/soil/pkg/tool/godockerhub/constant"
 )
 
@@ -18,12 +19,12 @@ func Main(
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.String(
-		argument.Image,
+		argumentConstant.Image,
 		"",
 		"Image to list tags for (e.g. library/golang)",
 	)
 	a.Parse(version, gitHash, buildDate)
-	image := a.GetString(argument.Image)
+	image := a.GetString(argumentConstant.Image)
 
 	if image == "" {
 		fmt.Println("--image is required")
@@ -43,7 +44,7 @@ func Main(
 		updated := ""
 
 		if t.LastUpdated != nil {
-			updated = t.LastUpdated.Format(time.DateMinute)
+			updated = t.LastUpdated.Format(timeConstant.DateMinute)
 		}
 
 		fmt.Printf("%-40s %s\n", t.Name, updated)

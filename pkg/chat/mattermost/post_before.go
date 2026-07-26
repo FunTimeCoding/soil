@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/constant"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/post"
-	library "github.com/funtimecoding/soil/pkg/time"
+	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 	"github.com/mattermost/mattermost/server/public/model"
 	"time"
 )
@@ -33,7 +33,7 @@ func (c *Client) PostBefore(
 		if len(page.Order) == 0 {
 			return nil, fmt.Errorf(
 				"no post before %s in channel %s: %w",
-				t.Format(library.DateMinute),
+				t.Format(timeConstant.DateMinute),
 				h.Id,
 				constant.ErrorNotFound,
 			)

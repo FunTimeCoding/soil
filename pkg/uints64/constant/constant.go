@@ -1,8 +1,8 @@
-package uints64
+package constant
 
 // noinspection SpellCheckingInspection
 const (
-	unit = 1024
+	Unit = 1024
 	// UnitLetter
 	// K: Kilo
 	// M: Mega

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/raid"
-	"github.com/funtimecoding/soil/pkg/time"
+	"github.com/funtimecoding/soil/pkg/time/constant"
 )
 
 func (s *Store) CreateRaid(filenames []string) uint {
@@ -18,7 +18,7 @@ func (s *Store) CreateRaid(filenames []string) uint {
 	r := raid.NewRaid()
 	r.Name = fmt.Sprintf(
 		"Raid %s",
-		firstFight.Timestamp.Format(time.DateYear),
+		firstFight.Timestamp.Format(constant.DateYear),
 	)
 	r.Date = firstFight.Timestamp
 	errors.PanicOnError(s.mapper.Create(r).Error)

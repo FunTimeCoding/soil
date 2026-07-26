@@ -1,4 +1,4 @@
-package check_entry
+package constant
 
 const Warning = "Warning"
 

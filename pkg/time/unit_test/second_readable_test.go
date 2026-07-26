@@ -2,16 +2,16 @@ package unit_test
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/time"
+	"github.com/funtimecoding/soil/pkg/time/constant"
 	"github.com/funtimecoding/soil/pkg/time/second"
 	"testing"
 )
 
 func TestSecondReadable(t *testing.T) {
-	minute := time.MinuteInSeconds
-	hour := time.HourInSeconds
-	day := time.DayInSeconds
-	month := time.MonthInSeconds
+	minute := constant.MinuteInSeconds
+	hour := constant.HourInSeconds
+	day := constant.DayInSeconds
+	month := constant.MonthInSeconds
 	assert.String(t, "1 second", second.Readable(1))
 	assert.String(t, "59 seconds", second.Readable(59))
 	assert.String(t, "1 minute", second.Readable(minute))

@@ -3,6 +3,7 @@ package goupdate
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	library "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/github"
@@ -27,23 +28,23 @@ func Main(
 	r := reporter.New(constant.Identity.Name(), version).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
-	a.Boolean(argument.Continue, false, "Continue on error")
+	a.Boolean(argumentConstant.Continue, false, "Continue on error")
 	var exclusives []string
 	a.StringSliceVariable(
 		&exclusives,
-		argument.Exclusive,
+		argumentConstant.Exclusive,
 		nil,
 		"One or more matches to exclusively update, comma separated",
 	)
 	var downgrades []string
 	a.StringSliceVariable(
 		&downgrades,
-		argument.Downgrade,
+		argumentConstant.Downgrade,
 		nil,
 		"One or more downgrades to apply after update, comma separated",
 	)
 	a.Parse(version, gitHash, buildDate)
-	continueOnError := a.GetBoolean(argument.Continue)
+	continueOnError := a.GetBoolean(argumentConstant.Continue)
 
 	if len(exclusives) > 0 {
 		fmt.Printf("Exclusive matches: %s\n", join.Comma(exclusives))
@@ -95,11 +96,11 @@ func Main(
 		system.SaveFile(file, d)
 	}
 
-	if system.FileExists(project.GitLabFile) {
+	if system.FileExists(library.GitLabFile) {
 		d := project.ReplaceGoImageVersion(
-			system.ReadFile(system.WorkDirectory(), project.GitLabFile),
+			system.ReadFile(system.WorkDirectory(), library.GitLabFile),
 			goString,
 		)
-		system.SaveFile(project.GitLabFile, d)
+		system.SaveFile(library.GitLabFile, d)
 	}
 }

@@ -2,6 +2,7 @@ package godownload
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	library "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/system/environment"
@@ -21,29 +22,29 @@ func Main(
 	a := argument.NewInstance(constant.Identity)
 	common.Arguments(a)
 	a.String(
-		argument.PackageVersion,
+		argumentConstant.PackageVersion,
 		library.LatestVersion,
 		"Version to download, falls back to latest if not found",
 	)
 	a.String(
-		argument.Output,
+		argumentConstant.Output,
 		environment.Fallback(
 			"OUTPUT",
 			constant.DefaultOutput,
 		),
 		"Output directory for executable",
 	)
-	a.Boolean(argument.Verbose, false, "Verbose output")
+	a.Boolean(argumentConstant.Verbose, false, "Verbose output")
 	a.Parse(version, gitHash, buildDate)
 	common.ValidateArguments(a)
 	o := option.New()
-	o.Host = a.GetString(argument.Host)
-	o.Token = a.GetString(argument.Token)
-	o.Owner = a.GetString(argument.Owner)
-	o.Repository = a.GetString(argument.Repository)
-	o.PackageVersion = a.GetString(argument.PackageVersion)
-	o.Output = a.GetString(argument.Output)
-	o.Verbose = a.GetBoolean(argument.Verbose)
+	o.Host = a.GetString(argumentConstant.Host)
+	o.Token = a.GetString(argumentConstant.Token)
+	o.Owner = a.GetString(argumentConstant.Owner)
+	o.Repository = a.GetString(argumentConstant.Repository)
+	o.PackageVersion = a.GetString(argumentConstant.PackageVersion)
+	o.Output = a.GetString(argumentConstant.Output)
+	o.Verbose = a.GetBoolean(argumentConstant.Verbose)
 	o.Package = a.RequiredPositional(0, "PACKAGE")
 	download.Run(o)
 }

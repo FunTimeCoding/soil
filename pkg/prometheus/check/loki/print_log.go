@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/console/status"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/prometheus/loki/message"
-	"github.com/funtimecoding/soil/pkg/time"
+	"github.com/funtimecoding/soil/pkg/time/constant"
 )
 
 func printLog(
@@ -14,7 +14,7 @@ func printLog(
 ) {
 	for _, m := range v {
 		s := status.New(f).String(
-			m.Time.Format(time.DateMinute),
+			m.Time.Format(constant.DateMinute),
 		).String(
 			formatContent(m, f),
 		).String(

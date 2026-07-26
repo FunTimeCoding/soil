@@ -6,7 +6,7 @@ import (
 	"github.com/chromedp/cdproto/page"
 	"github.com/chromedp/chromedp"
 	"github.com/funtimecoding/soil/pkg/errors"
-	library "github.com/funtimecoding/soil/pkg/time"
+	"github.com/funtimecoding/soil/pkg/time/constant"
 	"os"
 	"time"
 )
@@ -18,7 +18,7 @@ func (c *Client) Save(
 ) {
 	fmt.Println("  Save")
 	start := time.Now()
-	fmt.Printf("    Start %v\n", start.Format(library.Micro))
+	fmt.Printf("    Start %v\n", start.Format(constant.Micro))
 	var b []byte
 	c.RunContext(
 		x,
@@ -27,7 +27,7 @@ func (c *Client) Save(
 				t2 := time.Now()
 				fmt.Printf(
 					"    GetResourceTree %v\n",
-					t2.Format(library.Micro),
+					t2.Format(constant.Micro),
 				)
 				t, e := page.GetResourceTree().Do(o)
 

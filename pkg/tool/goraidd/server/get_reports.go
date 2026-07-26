@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/system"
-	"github.com/funtimecoding/soil/pkg/time"
+	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/generated/server"
 	"strings"
 )
@@ -35,7 +35,7 @@ func (s *Server) GetReports(
 			result,
 			server.ReportResponse{
 				FileName: e.Name(),
-				Time:     i.ModTime().Format(time.DateSecond),
+				Time:     i.ModTime().Format(timeConstant.DateSecond),
 				Size:     i.Size(),
 			},
 		)

@@ -170,14 +170,14 @@ The check function copies this preset and applies option flags. Common flag mapp
 ## Common Check Flags
 
 Most check tools register the same boolean flags on the argument
-instance. Flag name constants live in `pkg/argument/constant.go`.
+instance. Flag name constants live in `pkg/argument/constant/`.
 
 | Constant             | Flag         | Description                                        |
 |----------------------|--------------|----------------------------------------------------|
-| `argument.Copyable`  | `--copyable` | Disable OSC8 links and add a copyable link instead |
-| `argument.Notation`  | `--notation` | JSON output                                        |
-| `argument.All`       | `--all`      | Include filtered items                             |
-| `argument.Verbose`   | `--verbose`  | Verbose output                                     |
+| `constant.Copyable`  | `--copyable` | Disable OSC8 links and add a copyable link instead |
+| `constant.Notation`  | `--notation` | JSON output                                        |
+| `constant.All`       | `--all`      | Include filtered items                             |
+| `constant.Verbose`   | `--verbose`  | Verbose output                                     |
 
 Domain-specific flags (e.g., `--critical`, `--set`) are registered
 on the same instance in Main().

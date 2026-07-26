@@ -1,7 +1,7 @@
 package sentry
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors/sentry/constant"
+	"github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 )
 

@@ -10,7 +10,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/time"
+	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 )
 
 func (m *Model) tickEvent(g tick.Message) (*Model, tea.Cmd) {
@@ -49,7 +49,7 @@ func (m *Model) tickEvent(g tick.Message) (*Model, tea.Cmd) {
 		top.String(
 			fmt.Sprintf(
 				"last fetch: %s",
-				m.lastFetch.Format(time.DateMinute),
+				m.lastFetch.Format(timeConstant.DateMinute),
 			),
 		)
 	}
@@ -59,7 +59,7 @@ func (m *Model) tickEvent(g tick.Message) (*Model, tea.Cmd) {
 	bottom.String(m.hostname)
 
 	if false {
-		bottom.String(g.Time.Format(time.DateSecond))
+		bottom.String(g.Time.Format(timeConstant.DateSecond))
 	}
 
 	if false {

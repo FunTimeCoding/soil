@@ -3,7 +3,7 @@ package web
 import (
 	"github.com/funtimecoding/soil/pkg/raid"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	timeLibrary "github.com/funtimecoding/soil/pkg/time"
+	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -22,11 +22,11 @@ func (s *Server) logs(
 
 	if !filtered {
 		startValue = join.Empty(
-			time.Now().Format(timeLibrary.DateYear),
+			time.Now().Format(timeConstant.DateYear),
 			"T00:00",
 		)
 		endValue = join.Empty(
-			time.Now().Format(timeLibrary.DateYear),
+			time.Now().Format(timeConstant.DateYear),
 			"T23:59",
 		)
 	}

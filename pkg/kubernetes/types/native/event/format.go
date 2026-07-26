@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/console/status"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/console/status/tag"
-	"github.com/funtimecoding/soil/pkg/time"
+	"github.com/funtimecoding/soil/pkg/time/constant"
 )
 
 func (e *Event) Format(f *option.Format) string {
@@ -20,7 +20,7 @@ func (e *Event) Format(f *option.Format) string {
 	}
 
 	s.Line("  Note: %s", e.Note)
-	s.Line("  Create: %s", e.Create.Format(time.DateMinute))
+	s.Line("  Create: %s", e.Create.Format(constant.DateMinute))
 	s.RawList(e.Raw)
 
 	return s.Format()

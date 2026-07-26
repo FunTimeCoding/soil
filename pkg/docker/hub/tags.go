@@ -2,7 +2,7 @@ package hub
 
 import (
 	"encoding/json"
-	"github.com/funtimecoding/soil/pkg/docker/hub/constant"
+	"github.com/funtimecoding/soil/pkg/docker/constant"
 	"github.com/funtimecoding/soil/pkg/docker/hub/tag"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings/join"

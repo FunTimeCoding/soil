@@ -2,6 +2,7 @@ package gorunif
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/tool/gorunif/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gorunif/run_if"
@@ -27,10 +28,10 @@ func Main(
 		false,
 		"Match path as suffix instead of prefix",
 	)
-	a.Boolean(argument.Verbose, false, "Verbose output")
+	a.Boolean(argumentConstant.Verbose, false, "Verbose output")
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
-	o.Verbose = a.GetBoolean(argument.Verbose)
+	o.Verbose = a.GetBoolean(argumentConstant.Verbose)
 	o.Base = a.GetString(constant.Base)
 	o.Head = a.GetString(constant.Head)
 	o.Suffix = a.GetBoolean(constant.Suffix)

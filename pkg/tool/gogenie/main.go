@@ -2,6 +2,7 @@ package gogenie
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/check/alert"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/check/alert/option"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
@@ -17,16 +18,16 @@ func Main(
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Boolean(
-		argument.Copyable,
+		argumentConstant.Copyable,
 		false,
 		"Disable OSC8 links and add a copyable link instead",
 	)
-	a.Boolean(argument.Notation, false, "JSON output")
-	a.Boolean(argument.All, false, "Include filtered in output")
+	a.Boolean(argumentConstant.Notation, false, "JSON output")
+	a.Boolean(argumentConstant.All, false, "Include filtered in output")
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
-	o.Copyable = a.GetBoolean(argument.Copyable)
-	o.Notation = a.GetBoolean(argument.Notation)
-	o.All = a.GetBoolean(argument.All)
+	o.Copyable = a.GetBoolean(argumentConstant.Copyable)
+	o.Notation = a.GetBoolean(argumentConstant.Notation)
+	o.All = a.GetBoolean(argumentConstant.All)
 	alert.Check(o)
 }

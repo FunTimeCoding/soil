@@ -3,7 +3,7 @@ package basic
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/constant"
+	"github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"

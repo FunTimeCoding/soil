@@ -2,6 +2,7 @@ package gonetboxd
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/option"
@@ -21,7 +22,7 @@ func Main(
 	o := option.New()
 	o.Address = a.Address()
 	o.Version = version
-	o.LitePath = a.GetString(argument.Lite)
-	o.PostgresLocator = a.GetString(argument.Postgres)
+	o.LitePath = a.GetString(argumentConstant.Lite)
+	o.PostgresLocator = a.GetString(argumentConstant.Postgres)
 	Run(o, r)
 }

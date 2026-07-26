@@ -2,6 +2,7 @@ package goprocessd
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/option"
@@ -17,7 +18,7 @@ func Main(
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.String(
-		argument.File,
+		argumentConstant.File,
 		"Procfile",
 		"Path to Procfile",
 	)
@@ -28,7 +29,7 @@ func Main(
 	)
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
-	o.ProcfilePath = a.GetString(argument.File)
+	o.ProcfilePath = a.GetString(argumentConstant.File)
 	o.EnvrcPath = a.GetString("envrc")
 	Run(o)
 }

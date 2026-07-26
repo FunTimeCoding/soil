@@ -2,6 +2,7 @@ package godebian
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/semver"
 	"github.com/funtimecoding/soil/pkg/tool/godebian/constant"
@@ -16,9 +17,9 @@ func Main(
 	r := reporter.New(constant.Identity.Name(), version).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
-	a.String(argument.Executable, "", "Executable to package: go-example")
+	a.String(argumentConstant.Executable, "", "Executable to package: go-example")
 	a.String(
-		argument.Version,
+		argumentConstant.Version,
 		"",
 		"Package semantic version: 1.0.0, v-prefix gets trimmed",
 	)
@@ -31,8 +32,8 @@ func Main(
 	a.Boolean(constant.SystemdUnitFlag, false, "Create a systemd unit")
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
-	o.Executable = a.GetString(argument.Executable)
-	o.PackageVersion = semver.Trim(a.GetString(argument.Version))
+	o.Executable = a.GetString(argumentConstant.Executable)
+	o.PackageVersion = semver.Trim(a.GetString(argumentConstant.Version))
 	o.MaintainerName = a.GetString(constant.MaintainerNameArgument)
 	o.MaintainerEmail = a.GetString(constant.MaintainerEmailArgument)
 	o.SystemdUnit = a.GetBoolean(constant.SystemdUnitFlag)

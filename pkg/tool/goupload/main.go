@@ -3,6 +3,7 @@ package goupload
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/build"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	gitlab "github.com/funtimecoding/soil/pkg/gitlab/constant"
@@ -51,22 +52,22 @@ func Main(
 	}
 
 	a := argument.NewInstance(constant.Identity)
-	a.String(argument.Locator, locatorDefault, "GitLab API base URL")
-	a.String(argument.Project, projectDefault, "Project ID to update to")
-	a.String(argument.Tag, tagDefault, "Git tag")
+	a.String(argumentConstant.Locator, locatorDefault, "GitLab API base URL")
+	a.String(argumentConstant.Project, projectDefault, "Project ID to update to")
+	a.String(argumentConstant.Tag, tagDefault, "Git tag")
 	a.String(
-		argument.Header,
+		argumentConstant.Header,
 		headerDefault,
 		"Header for authentication in key=value format",
 	)
 	a.Parse(version, gitHash, buildDate)
-	locator := a.Required(argument.Locator)
+	locator := a.Required(argumentConstant.Locator)
 	fmt.Printf("Locator: %s\n", locator)
-	project := a.Required(argument.Project)
+	project := a.Required(argumentConstant.Project)
 	fmt.Printf("Project: %s\n", project)
-	tag := a.Required(argument.Tag)
+	tag := a.Required(argumentConstant.Tag)
 	fmt.Printf("Tag: %s\n", tag)
-	headers := build.Headers(a.GetString(argument.Header))
+	headers := build.Headers(a.GetString(argumentConstant.Header))
 	var runs int
 
 	for _, name := range build.OutputDirectories() {

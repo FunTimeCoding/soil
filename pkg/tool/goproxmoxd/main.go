@@ -2,6 +2,7 @@ package goproxmoxd
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/inventory"
@@ -18,14 +19,14 @@ func Main(
 	a := argument.NewInstance(constant.Identity)
 	a.Web()
 	a.String(
-		argument.Inventory,
+		argumentConstant.Inventory,
 		"goproxmoxd.yaml",
 		"Inventory file path",
 	)
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
 	o.Address = a.Address()
-	o.Inventory = inventory.Load(a.GetString(argument.Inventory))
+	o.Inventory = inventory.Load(a.GetString(argumentConstant.Inventory))
 	o.Version = version
 	Run(o, r)
 }

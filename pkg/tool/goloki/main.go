@@ -2,6 +2,7 @@ package goloki
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/prometheus/check/loki"
 	"github.com/funtimecoding/soil/pkg/prometheus/check/loki/option"
@@ -20,24 +21,29 @@ func Main(
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Boolean(
-		argument.Copyable,
+		argumentConstant.Copyable,
 		false,
 		"Disable OSC8 links and add a copyable link instead",
 	)
-	a.Duration(argument.Since, time.Hour, "Time range to query")
-	a.String(argument.Route, "", "Filter by HTTP route")
-	a.String(argument.Message, "", "Filter by message field")
-	a.BooleanShort(argument.Body, "b", false, "Output only the body field")
-	a.IntegerShort(argument.Limit, "n", 10, "Maximum number of log entries")
+	a.Duration(argumentConstant.Since, time.Hour, "Time range to query")
+	a.String(argumentConstant.Route, "", "Filter by HTTP route")
+	a.String(argumentConstant.Message, "", "Filter by message field")
+	a.BooleanShort(argumentConstant.Body, "b", false, "Output only the body field")
+	a.IntegerShort(
+		argumentConstant.Limit,
+		"n",
+		10,
+		"Maximum number of log entries",
+	)
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
 	o.Namespace = a.Argument(0)
-	o.Since = a.GetDuration(argument.Since)
-	o.Route = a.GetString(argument.Route)
-	o.Message = a.GetString(argument.Message)
-	o.BodyOnly = a.GetBoolean(argument.Body)
-	o.Copyable = a.GetBoolean(argument.Copyable)
-	o.Limit = a.GetInteger(argument.Limit)
+	o.Since = a.GetDuration(argumentConstant.Since)
+	o.Route = a.GetString(argumentConstant.Route)
+	o.Message = a.GetString(argumentConstant.Message)
+	o.BodyOnly = a.GetBoolean(argumentConstant.Body)
+	o.Copyable = a.GetBoolean(argumentConstant.Copyable)
+	o.Limit = a.GetInteger(argumentConstant.Limit)
 	o.Namespaces = environment.Slice(lokiConstant.NamespaceEnvironment)
 	o.Exclude = environment.Slice(lokiConstant.ExcludeEnvironment)
 	loki.Check(o)

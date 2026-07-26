@@ -2,6 +2,7 @@ package gowait
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/tool/gowait/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gowait/wait"
@@ -17,19 +18,19 @@ func Main(
 	r := reporter.New(constant.Identity.Name(), version).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
-	a.String(argument.File, "", "File to wait for")
-	a.String(argument.Process, "", "Process to wait for")
-	a.String(argument.Locator, "", "Locator to wait for")
-	a.String(argument.Contains, "", "String for locator")
-	a.Duration(argument.Timeout, 3*time.Minute, "")
-	a.Boolean(argument.Verbose, false, "Verbose output")
+	a.String(argumentConstant.File, "", "File to wait for")
+	a.String(argumentConstant.Process, "", "Process to wait for")
+	a.String(argumentConstant.Locator, "", "Locator to wait for")
+	a.String(argumentConstant.Contains, "", "String for locator")
+	a.Duration(argumentConstant.Timeout, 3*time.Minute, "")
+	a.Boolean(argumentConstant.Verbose, false, "Verbose output")
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
-	o.File = a.GetString(argument.File)
-	o.Process = a.GetString(argument.Process)
-	o.Locator = a.GetString(argument.Locator)
-	o.Contains = a.GetString(argument.Contains)
-	o.Timeout = a.GetDuration(argument.Timeout)
-	o.Verbose = a.GetBoolean(argument.Verbose)
+	o.File = a.GetString(argumentConstant.File)
+	o.Process = a.GetString(argumentConstant.Process)
+	o.Locator = a.GetString(argumentConstant.Locator)
+	o.Contains = a.GetString(argumentConstant.Contains)
+	o.Timeout = a.GetDuration(argumentConstant.Timeout)
+	o.Verbose = a.GetBoolean(argumentConstant.Verbose)
 	wait.Run(o)
 }

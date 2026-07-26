@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/model_context/constant"
 	"github.com/funtimecoding/soil/pkg/generative/model_context/example/mark/option"
 	"github.com/funtimecoding/soil/pkg/generative/model_context/server"
-	"github.com/funtimecoding/soil/pkg/project"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
@@ -67,7 +66,7 @@ func Run(o *option.Mark) {
 			_ context.Context,
 			_ mcp.ReadResourceRequest,
 		) ([]mcp.ResourceContents, error) {
-			content, e := os.ReadFile(project.ReadmeFile)
+			content, e := os.ReadFile(library.ReadmeFile)
 
 			if e != nil {
 				return nil, e

@@ -2,6 +2,7 @@ package goraidd
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/option"
@@ -20,8 +21,8 @@ func Main(
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
 	o.Address = a.Address()
-	o.PostgresLocator = a.GetString(argument.Postgres)
-	o.LitePath = a.GetString(argument.Lite)
+	o.PostgresLocator = a.GetString(argumentConstant.Postgres)
+	o.LitePath = a.GetString(argumentConstant.Lite)
 	o.LogCachePath = "/srv/arcdps-config"
 	o.ElitePath = "/srv/elite-insights"
 	o.OutputPath = "/srv/gw2-report"

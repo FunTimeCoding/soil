@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/advanced_option"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
 	"github.com/funtimecoding/soil/pkg/sound"
+	soundConstant "github.com/funtimecoding/soil/pkg/sound/constant"
 	"github.com/funtimecoding/soil/pkg/system/macos"
 	"time"
 )
@@ -45,7 +46,7 @@ func worker(
 				s.Loaded = true
 			} else {
 				if len(add) > 0 {
-					sound.Play(sound.SosumiPath, 1.0, false)
+					sound.Play(soundConstant.SosumiPath, 1.0, false)
 				}
 
 				for _, a := range add {

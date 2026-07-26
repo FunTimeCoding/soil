@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/git"
 	"github.com/funtimecoding/soil/pkg/system"
-	library "github.com/funtimecoding/soil/pkg/time"
+	"github.com/funtimecoding/soil/pkg/time/constant"
 	"time"
 )
 
@@ -29,5 +29,5 @@ func BuildInformation() {
 	}
 
 	fmt.Printf("Latest: %s\n", latest)
-	fmt.Printf("Date: %s\n", time.Now().Format(library.DateMinute))
+	fmt.Printf("Date: %s\n", time.Now().Format(constant.DateMinute))
 }

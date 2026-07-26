@@ -90,15 +90,49 @@ func transplantEntries(
 			continue
 		}
 
+		parent := parts[0].declaration
+		whole := len(parts) == len(parent.Specs)
+
+		for _, part := range parts {
+			if part.declaration != parent {
+				whole = false
+			}
+		}
+
+		if whole {
+			clone := &dst.GenDecl{
+				Tok:    parent.Tok,
+				Lparen: parent.Lparen,
+				Rparen: parent.Rparen,
+				Specs:  append([]dst.Spec{}, parent.Specs...),
+			}
+			clone.Decs = parent.Decs
+			clone.Decs.Before = dst.EmptyLine
+			result[i] = clone
+
+			continue
+		}
+
+		counts := make(map[*dst.GenDecl]int)
+
+		for _, part := range parts {
+			counts[part.declaration]++
+		}
+
 		merged := &dst.GenDecl{
 			Tok:    tok,
 			Lparen: true,
 			Rparen: true,
 		}
 		merged.Decs.Before = dst.EmptyLine
+		carried := make(map[*dst.GenDecl]bool)
 
 		for _, part := range parts {
-			if part.single {
+			absorbed := counts[part.declaration] ==
+				len(part.declaration.Specs)
+
+			if absorbed && !carried[part.declaration] {
+				carried[part.declaration] = true
 				part.spec.Decorations().Start.Prepend(
 					part.declaration.Decs.Start.All()...,
 				)

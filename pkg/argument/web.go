@@ -1,22 +1,23 @@
 package argument
 
 import (
+	"github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/system/environment"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	web "github.com/funtimecoding/soil/pkg/web/constant"
 )
 
 func (i *Instance) Web() {
 	i.Integer(
-		Port,
+		constant.Port,
 		environment.FallbackInteger(
-			constant.PortEnvironment,
-			constant.ListenPort,
+			web.PortEnvironment,
+			web.ListenPort,
 		),
-		constant.PortUsage,
+		web.PortUsage,
 	)
 	i.String(
-		BindAddress,
-		environment.Fallback(constant.BindEnvironment, constant.Loopback),
-		constant.BindUsage,
+		constant.BindAddress,
+		environment.Fallback(web.BindEnvironment, web.Loopback),
+		web.BindUsage,
 	)
 }

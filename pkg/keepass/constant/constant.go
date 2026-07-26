@@ -1,4 +1,4 @@
-package keepass
+package constant
 
 const (
 	DatabaseEnvironment = "KEEPASS_DATABASE"

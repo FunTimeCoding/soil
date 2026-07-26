@@ -2,6 +2,7 @@ package goqueryd
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
@@ -21,7 +22,7 @@ func Main(
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
 	o.Address = a.Address()
-	o.LitePath = a.GetString(argument.Lite)
+	o.LitePath = a.GetString(argumentConstant.Lite)
 	o.RerankModel = environment.Required(constant.ModelEnvironment)
 	o.RerankTokenizer = environment.Required(constant.TokenizerEnvironment)
 	o.Version = version

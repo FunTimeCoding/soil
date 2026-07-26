@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/strings/split"
 	"github.com/funtimecoding/soil/pkg/text"
-	"github.com/funtimecoding/soil/pkg/time"
+	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 )
 
 func (p *Post) Format(f *option.Format) string {
@@ -14,7 +14,7 @@ func (p *Post) Format(f *option.Format) string {
 		text.OptimizeWhitespace(p.Message, constant.CompactWhitespace),
 	)
 	s := status.New(f).String(
-		p.Create.Format(time.HourMinute),
+		p.Create.Format(timeConstant.HourMinute),
 		p.formatUser(),
 		formatLine(f, lines[0]),
 	).RawList(p.Raw)
