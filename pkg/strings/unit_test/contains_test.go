@@ -11,16 +11,16 @@ func TestAll(t *testing.T) {
 	assert.True(
 		t,
 		contains.All(
-		[]string{constant.UpperAlfa},
-		[]string{constant.UpperAlfa},
-	),
+			[]string{constant.UpperAlfa},
+			[]string{constant.UpperAlfa},
+		),
 	)
 	assert.False(
 		t,
 		contains.All(
-		[]string{constant.UpperAlfa},
-		[]string{constant.UpperBravo},
-	),
+			[]string{constant.UpperAlfa},
+			[]string{constant.UpperBravo},
+		),
 	)
 	assert.True(
 		t,
@@ -42,16 +42,16 @@ func TestAny(t *testing.T) {
 	assert.True(
 		t,
 		contains.Any(
-		[]string{constant.UpperAlfa},
-		[]string{constant.UpperAlfa},
-	),
+			[]string{constant.UpperAlfa},
+			[]string{constant.UpperAlfa},
+		),
 	)
 	assert.False(
 		t,
 		contains.Any(
-		[]string{constant.UpperAlfa},
-		[]string{constant.UpperBravo},
-	),
+			[]string{constant.UpperAlfa},
+			[]string{constant.UpperBravo},
+		),
 	)
 	assert.True(
 		t,

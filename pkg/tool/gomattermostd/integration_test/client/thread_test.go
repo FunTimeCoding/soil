@@ -67,9 +67,9 @@ func TestThread(t *testing.T) {
 					web.Encode(
 						w,
 						&model.User{
-						Id:       "delta",
-						Username: "echo",
-					})
+							Id:       "delta",
+							Username: "echo",
+						})
 				},
 			)
 		},

@@ -36,9 +36,9 @@ func New(
 					web.Encode(
 						w,
 						&model.Team{
-						Id:   "tango",
-						Name: "tango",
-					})
+							Id:   "tango",
+							Name: "tango",
+						})
 				},
 			)
 			configure(m)

@@ -26,20 +26,20 @@ func TestConstructors(t *testing.T) {
 	assert.NotNil(
 		t,
 		enrichment.New(
-		strings.UpperAlfa,
-		strings.UpperBravo,
-		strings.UpperCharlie,
-	),
+			strings.UpperAlfa,
+			strings.UpperBravo,
+			strings.UpperCharlie,
+		),
 	)
 	assert.NotNil(t, alert_enricher.New())
 	assert.NotNil(t, alert_processor.New(nil, nil, nil, nil, nil, nil))
 	assert.NotNil(
 		t,
 		severity.New(
-		strings.UpperAlfa,
-		strings.UpperBravo,
-		strings.UpperCharlie,
-	),
+			strings.UpperAlfa,
+			strings.UpperBravo,
+			strings.UpperCharlie,
+		),
 	)
 	assert.NotNil(t, rule_parser.New(nil))
 	assert.NotNil(t, mock_client.New())

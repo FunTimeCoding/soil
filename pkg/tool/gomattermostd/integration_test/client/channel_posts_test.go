@@ -25,9 +25,9 @@ func TestChannelPosts(t *testing.T) {
 					web.Encode(
 						w,
 						&model.Channel{
-						Id:   "alfa",
-						Name: "alfa",
-					})
+							Id:   "alfa",
+							Name: "alfa",
+						})
 				},
 			)
 			m.HandleFunc(
@@ -39,30 +39,30 @@ func TestChannelPosts(t *testing.T) {
 					web.Encode(
 						w,
 						&model.PostList{
-						Order: []string{"foxtrot", "charlie", "bravo"},
-						Posts: map[string]*model.Post{
-							"bravo": {
-								Id:       "bravo",
-								UserId:   "delta",
-								Message:  "root",
-								CreateAt: 2000,
+							Order: []string{"foxtrot", "charlie", "bravo"},
+							Posts: map[string]*model.Post{
+								"bravo": {
+									Id:       "bravo",
+									UserId:   "delta",
+									Message:  "root",
+									CreateAt: 2000,
+								},
+								"charlie": {
+									Id:       "charlie",
+									UserId:   "delta",
+									RootId:   "bravo",
+									Message:  "reply",
+									CreateAt: 3000,
+								},
+								"foxtrot": {
+									Id:       "foxtrot",
+									UserId:   "delta",
+									RootId:   "bravo",
+									CreateAt: 4000,
+									FileIds:  []string{"golf"},
+								},
 							},
-							"charlie": {
-								Id:       "charlie",
-								UserId:   "delta",
-								RootId:   "bravo",
-								Message:  "reply",
-								CreateAt: 3000,
-							},
-							"foxtrot": {
-								Id:       "foxtrot",
-								UserId:   "delta",
-								RootId:   "bravo",
-								CreateAt: 4000,
-								FileIds:  []string{"golf"},
-							},
-						},
-					})
+						})
 				},
 			)
 			m.HandleFunc(
@@ -74,9 +74,9 @@ func TestChannelPosts(t *testing.T) {
 					web.Encode(
 						w,
 						&model.User{
-						Id:       "delta",
-						Username: "echo",
-					})
+							Id:       "delta",
+							Username: "echo",
+						})
 				},
 			)
 		},
