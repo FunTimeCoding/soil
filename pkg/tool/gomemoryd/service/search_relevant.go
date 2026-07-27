@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face/search_option"
 )
@@ -10,7 +11,7 @@ func (s *Service) SearchRelevant(
 	limit int,
 	exclude []string,
 ) ([]store.SearchResult, error) {
-	o := search_option.New(query, "memories", limit)
+	o := search_option.New(query, constant.DefaultCollection, limit)
 	o.Exclude = exclude
 	results, e := s.searcher.Search(o)
 

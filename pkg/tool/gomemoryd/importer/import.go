@@ -19,7 +19,7 @@ func Import(
 		return nil, e
 	}
 
-	existing, f := s.ListMemories("", "", false)
+	existing, f := s.ListMemories("", "", "", false)
 
 	if f != nil {
 		return nil, f

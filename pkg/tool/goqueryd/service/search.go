@@ -16,6 +16,7 @@ func (s *Service) Search(o *search_option.Option) *store.SearchOutcome {
 			limit,
 			o.Collection,
 			o.Full,
+			o.Metadata,
 		)
 
 		if e != nil {

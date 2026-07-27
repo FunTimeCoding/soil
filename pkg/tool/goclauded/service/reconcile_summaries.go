@@ -2,11 +2,12 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
 )
 
 func (s *Service) ReconcileSummaries() {
-	existing := s.summaryIndexer.Existing()
+	existing := s.summaryIndexer.Existing(constant.SummaryCollection)
 	pushed := 0
 	skipped := 0
 
@@ -24,7 +25,12 @@ func (s *Service) ReconcileSummaries() {
 			continue
 		}
 
-		s.summaryIndexer.MustPush(slug, m.Body, metadata)
+		s.summaryIndexer.MustPush(
+			constant.SummaryCollection,
+			slug,
+			m.Body,
+			metadata,
+		)
 		pushed++
 	}
 

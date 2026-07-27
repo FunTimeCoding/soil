@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/save_option"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -37,14 +38,14 @@ func (s *Server) create(
 		parentIdentifier = &identifier
 	}
 
-	m, h := s.service.CreateMemory(
-		name,
-		content,
-		description,
-		q.GetString(constant.Type, ""),
-		q.GetString(constant.Source, ""),
-		parentIdentifier,
-	)
+	o := save_option.New()
+	o.Name = name
+	o.Content = content
+	o.Description = description
+	o.Type = q.GetString(constant.Type, "")
+	o.Source = q.GetString(constant.Source, "")
+	o.ParentIdentifier = parentIdentifier
+	m, h := s.service.CreateMemory(o)
 
 	if h != nil {
 		return s.captureDetail(h)

@@ -1,6 +1,9 @@
 package service
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+)
 
 func (s *Service) pushCompletion(
 	slug string,
@@ -9,6 +12,7 @@ func (s *Service) pushCompletion(
 	metadata map[string]string,
 ) error {
 	return s.completionIndexer.Push(
+		constant.CompletionCollection,
 		fmt.Sprintf("%s/%d", slug, sequence),
 		body,
 		metadata,

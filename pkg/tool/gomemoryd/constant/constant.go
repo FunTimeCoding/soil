@@ -19,6 +19,7 @@ const (
 	Profile        = "profile"
 	ListMemories   = "list_memories"
 	GetMemory      = "get_memory"
+	GetMemoryGroup = "get_memory_group"
 	ForgetMemory   = "forget_memory"
 	SearchMemories = "search_memories"
 	RelateMemories = "relate_memories"
@@ -38,6 +39,9 @@ const (
 	ParentIdentifier = "parent_id"
 	IncludeHistory   = "include_history"
 	Topic            = "topic"
+	Scope            = "scope"
+	AllScope         = "all"
+	DefaultScope     = "default"
 	AlwaysTag        = "always"
 	NoIndexTag       = "no-index"
 	Add              = "add"
@@ -56,6 +60,11 @@ const (
 	Query            = "query"
 
 	ProfileBudget = 15000
+
+	DefaultCollection = "memories"
+	MemoryTable       = "memory"
+	VersionTable      = "memory_version"
+	MemorySourceType  = "memory"
 
 	FixtureName    = "name"
 	FixtureContent = "content"

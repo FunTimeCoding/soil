@@ -17,7 +17,7 @@ func (s *Server) GetProfile(
 	}
 
 	showDetail := r.Params.Detail != nil && *r.Params.Detail
-	result, d, e := s.service.Profile(topic, showDetail)
+	result, d, e := s.service.Profile(topic, "", showDetail)
 
 	if e != nil {
 		return server.GetProfile500JSONResponse(

@@ -10,9 +10,10 @@ func (o *Tester) SearchMemories(
 	limit int,
 	memoryType string,
 	tag string,
+	scope string,
 ) []store.SearchResult {
 	o.t.Helper()
-	result, e := o.Store.SearchMemories(query, limit, memoryType, tag)
+	result, e := o.Store.SearchMemories(query, limit, memoryType, tag, scope)
 	assert.FatalOnError(o.t, e)
 
 	return result

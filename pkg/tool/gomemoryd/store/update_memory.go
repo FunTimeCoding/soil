@@ -18,10 +18,13 @@ func (s *Store) UpdateMemory(
 
 	defer rollback(t)
 	_, e = t.Exec(
-		`UPDATE memory SET name = ?, content = ?, description = ?, updated_at = ? WHERE identifier = ?`,
+		`UPDATE memory SET name = ?, content = ?, description = ?, provenance_hash = ?, ordinal = ?, updated_at = ?
+		WHERE identifier = ?`,
 		o.Name,
 		o.Content,
 		o.Description,
+		o.ProvenanceHash,
+		o.Ordinal,
 		now,
 		identifier,
 	)
@@ -59,6 +62,28 @@ func (s *Store) UpdateMemory(
 			`INSERT INTO memory_tag (memory_identifier, tag) VALUES (?, ?)`,
 			identifier,
 			tag,
+		)
+
+		if e != nil {
+			return e
+		}
+	}
+
+	_, e = t.Exec(
+		`DELETE FROM memory_metadata WHERE memory_identifier = ?`,
+		identifier,
+	)
+
+	if e != nil {
+		return e
+	}
+
+	for key, value := range o.Metadata {
+		_, e = t.Exec(
+			`INSERT INTO memory_metadata (memory_identifier, key, value) VALUES (?, ?, ?)`,
+			identifier,
+			key,
+			value,
 		)
 
 		if e != nil {

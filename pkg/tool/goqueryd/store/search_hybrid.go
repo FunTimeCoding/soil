@@ -42,6 +42,7 @@ func (s *Store) SearchHybrid(
 		o.Limit*2,
 		o.Collection,
 		fetchFull,
+		o.Metadata,
 	)
 
 	if e != nil {
@@ -55,6 +56,7 @@ func (s *Store) SearchHybrid(
 		o.Limit*2,
 		o.Collection,
 		fetchFull,
+		o.Metadata,
 		l,
 	)
 
@@ -83,6 +85,7 @@ func (s *Store) SearchHybrid(
 				o.Limit*2,
 				o.Collection,
 				fetchFull,
+				o.Metadata,
 			)
 
 			if h != nil {
@@ -97,6 +100,7 @@ func (s *Store) SearchHybrid(
 				o.Limit*2,
 				o.Collection,
 				fetchFull,
+				o.Metadata,
 				l,
 			)
 

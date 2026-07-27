@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) memorySummary() gomponents.Node {
-	memories, e := s.service.ListMemories("", "", true)
+	memories, e := s.service.ListMemories("", "", constant.AllScope, true)
 
 	if e != nil {
 		return html.P(gomponents.Text("Failed to load memories."))

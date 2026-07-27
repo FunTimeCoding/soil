@@ -3,11 +3,13 @@ package store
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 )
 
 func (s *Store) queryMemories(
 	memoryType string,
 	tag string,
+	scope string,
 	activeOnly bool,
 	rootsOnly *bool,
 ) ([]MemorySummary, error) {
@@ -15,7 +17,7 @@ func (s *Store) queryMemories(
 	var arguments []any
 	parts = append(
 		parts,
-		`SELECT DISTINCT m.identifier, m.name, m.description, m.type, m.updated_at, m.parent_identifier
+		`SELECT DISTINCT m.identifier, m.name, m.description, m.type, m.scope, m.ordinal, m.updated_at, m.parent_identifier
 		FROM memory m`,
 	)
 
@@ -36,6 +38,11 @@ func (s *Store) queryMemories(
 	if memoryType != "" {
 		parts = append(parts, `AND m.type = ?`)
 		arguments = append(arguments, memoryType)
+	}
+
+	if scope != constant.AllScope {
+		parts = append(parts, `AND m.scope = ?`)
+		arguments = append(arguments, scope)
 	}
 
 	if rootsOnly != nil && *rootsOnly {
@@ -59,6 +66,8 @@ func (s *Store) queryMemories(
 			&m.Name,
 			&m.Description,
 			&m.Type,
+			&m.Scope,
+			&m.Ordinal,
 			&m.UpdatedAt,
 			&m.ParentIdentifier,
 		)

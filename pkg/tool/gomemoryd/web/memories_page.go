@@ -26,7 +26,12 @@ func (s *Server) memoriesPage(
 		}
 	}
 
-	memories, e := s.service.ListMemories(memoryType, tag, true)
+	memories, e := s.service.ListMemories(
+		memoryType,
+		tag,
+		constant.AllScope,
+		true,
+	)
 
 	if e != nil {
 		s.view.RenderPage(

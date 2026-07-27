@@ -18,7 +18,7 @@ func TestCreateMemory(t *testing.T) {
 		},
 	)
 	assert.StringContains(t, "Created memory", result)
-	memories, e := s.Store().ListMemories("", "", true)
+	memories, e := s.Store().ListMemories("", "", "", true)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, memories)
 }

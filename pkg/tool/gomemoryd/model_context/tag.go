@@ -18,6 +18,10 @@ func (s *Server) tag(
 		return response.Fail("memory_id is required")
 	}
 
+	if guard, g := s.guardDocumentSourced(identifier); guard != nil {
+		return guard, g
+	}
+
 	addRaw := q.GetString(constant.Add, "")
 	removeRaw := q.GetString(constant.Remove, "")
 	replaceRaw := q.GetString(constant.ReplaceAll, "")

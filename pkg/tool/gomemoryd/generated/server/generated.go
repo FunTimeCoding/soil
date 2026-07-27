@@ -22,6 +22,11 @@ import (
 	"github.com/oapi-codegen/runtime"
 )
 
+// Error defines model for Error.
+type Error struct {
+	Error string `json:"error"`
+}
+
 // ErrorResponse defines model for ErrorResponse.
 type ErrorResponse struct {
 	Error           string `json:"error"`
@@ -31,6 +36,40 @@ type ErrorResponse struct {
 // ImpressionResponse defines model for ImpressionResponse.
 type ImpressionResponse struct {
 	Identifier int `json:"identifier"`
+}
+
+// MemoryRequest defines model for MemoryRequest.
+type MemoryRequest struct {
+	Content          string             `json:"content"`
+	Description      string             `json:"description"`
+	Metadata         *map[string]string `json:"metadata,omitempty"`
+	Name             string             `json:"name"`
+	Ordinal          *int               `json:"ordinal,omitempty"`
+	ParentIdentifier *int64             `json:"parent_identifier,omitempty"`
+	ProvenanceAnchor *string            `json:"provenance_anchor,omitempty"`
+	ProvenanceFile   *string            `json:"provenance_file,omitempty"`
+	ProvenanceHash   *string            `json:"provenance_hash,omitempty"`
+	Scope            *string            `json:"scope,omitempty"`
+	Source           *string            `json:"source,omitempty"`
+	Tags             *[]string          `json:"tags,omitempty"`
+	Type             *string            `json:"type,omitempty"`
+}
+
+// MemoryResponse defines model for MemoryResponse.
+type MemoryResponse struct {
+	Identifier int64 `json:"identifier"`
+}
+
+// MemoryUpdateRequest defines model for MemoryUpdateRequest.
+type MemoryUpdateRequest struct {
+	Content        string             `json:"content"`
+	Description    string             `json:"description"`
+	Metadata       *map[string]string `json:"metadata,omitempty"`
+	Name           string             `json:"name"`
+	Ordinal        *int               `json:"ordinal,omitempty"`
+	ProvenanceHash *string            `json:"provenance_hash,omitempty"`
+	Source         *string            `json:"source,omitempty"`
+	Tags           *[]string          `json:"tags,omitempty"`
 }
 
 // ProfileCompletion defines model for ProfileCompletion.
@@ -108,6 +147,17 @@ type ProfileSummary struct {
 	UpdatedAt   string    `json:"updated_at"`
 }
 
+// SourcedMemory defines model for SourcedMemory.
+type SourcedMemory struct {
+	Identifier       int64  `json:"identifier"`
+	Name             string `json:"name"`
+	Ordinal          int    `json:"ordinal"`
+	ParentIdentifier *int64 `json:"parent_identifier,omitempty"`
+	ProvenanceAnchor string `json:"provenance_anchor"`
+	ProvenanceFile   string `json:"provenance_file"`
+	ProvenanceHash   string `json:"provenance_hash"`
+}
+
 // VersionEntry defines model for VersionEntry.
 type VersionEntry struct {
 	ChangeType       string `json:"change_type"`
@@ -125,10 +175,26 @@ type PostImpressionsJSONBody struct {
 	Source  *string `json:"source,omitempty"`
 }
 
+// GetSourcedMemoriesParams defines parameters for GetSourcedMemories.
+type GetSourcedMemoriesParams struct {
+	Scope string `form:"scope" json:"scope"`
+}
+
+// DeleteMemoryParams defines parameters for DeleteMemory.
+type DeleteMemoryParams struct {
+	Source *string `form:"source,omitempty" json:"source,omitempty"`
+}
+
 // GetProfileParams defines parameters for GetProfile.
 type GetProfileParams struct {
 	Topic  *string `form:"topic,omitempty" json:"topic,omitempty"`
 	Detail *bool   `form:"detail,omitempty" json:"detail,omitempty"`
+}
+
+// PostRelationJSONBody defines parameters for PostRelation.
+type PostRelationJSONBody struct {
+	SourceIdentifier int64 `json:"source_identifier"`
+	TargetIdentifier int64 `json:"target_identifier"`
 }
 
 // GetVersionsParams defines parameters for GetVersions.
@@ -141,14 +207,38 @@ type GetVersionsParams struct {
 // PostImpressionsJSONRequestBody defines body for PostImpressions for application/json ContentType.
 type PostImpressionsJSONRequestBody PostImpressionsJSONBody
 
+// PostMemoryJSONRequestBody defines body for PostMemory for application/json ContentType.
+type PostMemoryJSONRequestBody = MemoryRequest
+
+// PutMemoryJSONRequestBody defines body for PutMemory for application/json ContentType.
+type PutMemoryJSONRequestBody = MemoryUpdateRequest
+
+// PostRelationJSONRequestBody defines body for PostRelation for application/json ContentType.
+type PostRelationJSONRequestBody PostRelationJSONBody
+
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 
 	// (POST /api/impressions)
 	PostImpressions(w http.ResponseWriter, r *http.Request)
 
+	// (GET /api/memories/sourced)
+	GetSourcedMemories(w http.ResponseWriter, r *http.Request, params GetSourcedMemoriesParams)
+
+	// (POST /api/memory)
+	PostMemory(w http.ResponseWriter, r *http.Request)
+
+	// (DELETE /api/memory/{identifier})
+	DeleteMemory(w http.ResponseWriter, r *http.Request, identifier int64, params DeleteMemoryParams)
+
+	// (PUT /api/memory/{identifier})
+	PutMemory(w http.ResponseWriter, r *http.Request, identifier int64)
+
 	// (GET /api/profile)
 	GetProfile(w http.ResponseWriter, r *http.Request, params GetProfileParams)
+
+	// (POST /api/relation)
+	PostRelation(w http.ResponseWriter, r *http.Request)
 
 	// (GET /api/versions)
 	GetVersions(w http.ResponseWriter, r *http.Request, params GetVersionsParams)
@@ -168,6 +258,121 @@ func (siw *ServerInterfaceWrapper) PostImpressions(w http.ResponseWriter, r *htt
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.PostImpressions(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetSourcedMemories operation middleware
+func (siw *ServerInterfaceWrapper) GetSourcedMemories(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetSourcedMemoriesParams
+
+	// ------------- Required query parameter "scope" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, true, "scope", r.URL.Query(), &params.Scope, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "scope"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "scope", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetSourcedMemories(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// PostMemory operation middleware
+func (siw *ServerInterfaceWrapper) PostMemory(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PostMemory(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// DeleteMemory operation middleware
+func (siw *ServerInterfaceWrapper) DeleteMemory(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "identifier" -------------
+	var identifier int64
+
+	err = runtime.BindStyledParameterWithOptions("simple", "identifier", r.PathValue("identifier"), &identifier, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "integer", Format: "int64", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "identifier", Err: err})
+		return
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params DeleteMemoryParams
+
+	// ------------- Optional query parameter "source" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "source", r.URL.Query(), &params.Source, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "source"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "source", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteMemory(w, r, identifier, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// PutMemory operation middleware
+func (siw *ServerInterfaceWrapper) PutMemory(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "identifier" -------------
+	var identifier int64
+
+	err = runtime.BindStyledParameterWithOptions("simple", "identifier", r.PathValue("identifier"), &identifier, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "integer", Format: "int64", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "identifier", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PutMemory(w, r, identifier)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -214,6 +419,20 @@ func (siw *ServerInterfaceWrapper) GetProfile(w http.ResponseWriter, r *http.Req
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.GetProfile(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// PostRelation operation middleware
+func (siw *ServerInterfaceWrapper) PostRelation(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PostRelation(w, r)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -404,6 +623,11 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/versions", wrapper.GetVersions)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/profile", wrapper.GetProfile)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/memory", wrapper.PostMemory)
+	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/memory/{identifier}", wrapper.DeleteMemory)
+	m.HandleFunc(http.MethodPut+" "+options.BaseURL+"/api/memory/{identifier}", wrapper.PutMemory)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/memories/sourced", wrapper.GetSourcedMemories)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/relation", wrapper.PostRelation)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/impressions", wrapper.PostImpressions)
 
 	return m
@@ -445,6 +669,166 @@ func (response PostImpressions500JSONResponse) VisitPostImpressionsResponse(w ht
 	return err
 }
 
+type GetSourcedMemoriesRequestObject struct {
+	Params GetSourcedMemoriesParams
+}
+
+type GetSourcedMemoriesResponseObject interface {
+	VisitGetSourcedMemoriesResponse(w http.ResponseWriter) error
+}
+
+type GetSourcedMemories200JSONResponse []SourcedMemory
+
+func (response GetSourcedMemories200JSONResponse) VisitGetSourcedMemoriesResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetSourcedMemories500JSONResponse ErrorResponse
+
+func (response GetSourcedMemories500JSONResponse) VisitGetSourcedMemoriesResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type PostMemoryRequestObject struct {
+	Body *PostMemoryJSONRequestBody
+}
+
+type PostMemoryResponseObject interface {
+	VisitPostMemoryResponse(w http.ResponseWriter) error
+}
+
+type PostMemory200JSONResponse MemoryResponse
+
+func (response PostMemory200JSONResponse) VisitPostMemoryResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type PostMemory400JSONResponse Error
+
+func (response PostMemory400JSONResponse) VisitPostMemoryResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type PostMemory500JSONResponse ErrorResponse
+
+func (response PostMemory500JSONResponse) VisitPostMemoryResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteMemoryRequestObject struct {
+	Identifier int64 `json:"identifier"`
+	Params     DeleteMemoryParams
+}
+
+type DeleteMemoryResponseObject interface {
+	VisitDeleteMemoryResponse(w http.ResponseWriter) error
+}
+
+type DeleteMemory200JSONResponse MemoryResponse
+
+func (response DeleteMemory200JSONResponse) VisitDeleteMemoryResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteMemory500JSONResponse ErrorResponse
+
+func (response DeleteMemory500JSONResponse) VisitDeleteMemoryResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type PutMemoryRequestObject struct {
+	Identifier int64 `json:"identifier"`
+	Body       *PutMemoryJSONRequestBody
+}
+
+type PutMemoryResponseObject interface {
+	VisitPutMemoryResponse(w http.ResponseWriter) error
+}
+
+type PutMemory200JSONResponse MemoryResponse
+
+func (response PutMemory200JSONResponse) VisitPutMemoryResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type PutMemory500JSONResponse ErrorResponse
+
+func (response PutMemory500JSONResponse) VisitPutMemoryResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type GetProfileRequestObject struct {
 	Params GetProfileParams
 }
@@ -470,6 +854,36 @@ func (response GetProfile200JSONResponse) VisitGetProfileResponse(w http.Respons
 type GetProfile500JSONResponse ErrorResponse
 
 func (response GetProfile500JSONResponse) VisitGetProfileResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type PostRelationRequestObject struct {
+	Body *PostRelationJSONRequestBody
+}
+
+type PostRelationResponseObject interface {
+	VisitPostRelationResponse(w http.ResponseWriter) error
+}
+
+type PostRelation200Response struct {
+}
+
+func (response PostRelation200Response) VisitPostRelationResponse(w http.ResponseWriter) error {
+	w.WriteHeader(200)
+	return nil
+}
+
+type PostRelation500JSONResponse ErrorResponse
+
+func (response PostRelation500JSONResponse) VisitPostRelationResponse(w http.ResponseWriter) error {
 
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(response); err != nil {
@@ -523,8 +937,23 @@ type StrictServerInterface interface {
 	// (POST /api/impressions)
 	PostImpressions(ctx context.Context, request PostImpressionsRequestObject) (PostImpressionsResponseObject, error)
 
+	// (GET /api/memories/sourced)
+	GetSourcedMemories(ctx context.Context, request GetSourcedMemoriesRequestObject) (GetSourcedMemoriesResponseObject, error)
+
+	// (POST /api/memory)
+	PostMemory(ctx context.Context, request PostMemoryRequestObject) (PostMemoryResponseObject, error)
+
+	// (DELETE /api/memory/{identifier})
+	DeleteMemory(ctx context.Context, request DeleteMemoryRequestObject) (DeleteMemoryResponseObject, error)
+
+	// (PUT /api/memory/{identifier})
+	PutMemory(ctx context.Context, request PutMemoryRequestObject) (PutMemoryResponseObject, error)
+
 	// (GET /api/profile)
 	GetProfile(ctx context.Context, request GetProfileRequestObject) (GetProfileResponseObject, error)
+
+	// (POST /api/relation)
+	PostRelation(ctx context.Context, request PostRelationRequestObject) (PostRelationResponseObject, error)
 
 	// (GET /api/versions)
 	GetVersions(ctx context.Context, request GetVersionsRequestObject) (GetVersionsResponseObject, error)
@@ -600,6 +1029,123 @@ func (sh *strictHandler) PostImpressions(w http.ResponseWriter, r *http.Request)
 	}
 }
 
+// GetSourcedMemories operation middleware
+func (sh *strictHandler) GetSourcedMemories(w http.ResponseWriter, r *http.Request, params GetSourcedMemoriesParams) {
+	var request GetSourcedMemoriesRequestObject
+
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetSourcedMemories(ctx, request.(GetSourcedMemoriesRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetSourcedMemories")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetSourcedMemoriesResponseObject); ok {
+		if err := validResponse.VisitGetSourcedMemoriesResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// PostMemory operation middleware
+func (sh *strictHandler) PostMemory(w http.ResponseWriter, r *http.Request) {
+	var request PostMemoryRequestObject
+
+	var body PostMemoryJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.PostMemory(ctx, request.(PostMemoryRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "PostMemory")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(PostMemoryResponseObject); ok {
+		if err := validResponse.VisitPostMemoryResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// DeleteMemory operation middleware
+func (sh *strictHandler) DeleteMemory(w http.ResponseWriter, r *http.Request, identifier int64, params DeleteMemoryParams) {
+	var request DeleteMemoryRequestObject
+
+	request.Identifier = identifier
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.DeleteMemory(ctx, request.(DeleteMemoryRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "DeleteMemory")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(DeleteMemoryResponseObject); ok {
+		if err := validResponse.VisitDeleteMemoryResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// PutMemory operation middleware
+func (sh *strictHandler) PutMemory(w http.ResponseWriter, r *http.Request, identifier int64) {
+	var request PutMemoryRequestObject
+
+	request.Identifier = identifier
+
+	var body PutMemoryJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.PutMemory(ctx, request.(PutMemoryRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "PutMemory")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(PutMemoryResponseObject); ok {
+		if err := validResponse.VisitPutMemoryResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // GetProfile operation middleware
 func (sh *strictHandler) GetProfile(w http.ResponseWriter, r *http.Request, params GetProfileParams) {
 	var request GetProfileRequestObject
@@ -619,6 +1165,37 @@ func (sh *strictHandler) GetProfile(w http.ResponseWriter, r *http.Request, para
 		sh.options.ResponseErrorHandlerFunc(w, r, err)
 	} else if validResponse, ok := response.(GetProfileResponseObject); ok {
 		if err := validResponse.VisitGetProfileResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// PostRelation operation middleware
+func (sh *strictHandler) PostRelation(w http.ResponseWriter, r *http.Request) {
+	var request PostRelationRequestObject
+
+	var body PostRelationJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.PostRelation(ctx, request.(PostRelationRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "PostRelation")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(PostRelationResponseObject); ok {
+		if err := validResponse.VisitPostRelationResponse(w); err != nil {
 			sh.options.ResponseErrorHandlerFunc(w, r, err)
 		}
 	} else if response != nil {
@@ -657,22 +1234,29 @@ func (sh *strictHandler) GetVersions(w http.ResponseWriter, r *http.Request, par
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
+	"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",
+	"eQEaaVFek10G7kNkllz7/T8BAAD//w==",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

@@ -15,6 +15,6 @@ func TestForgetMemory(t *testing.T) {
 	o.Type = "feedback"
 	identifier := s.CreateMemory(o)
 	s.ForgetMemory(identifier, "test")
-	assert.Count(t, 0, s.ListMemories("", "", true))
-	assert.Count(t, 1, s.ListMemories("", "", false))
+	assert.Count(t, 0, s.ListMemories("", "", "", true))
+	assert.Count(t, 1, s.ListMemories("", "", "", false))
 }

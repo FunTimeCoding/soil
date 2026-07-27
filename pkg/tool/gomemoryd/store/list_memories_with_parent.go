@@ -4,10 +4,10 @@ import "github.com/funtimecoding/soil/pkg/errors"
 
 func (s *Store) listMemoriesWithParent(parentID int64) ([]MemorySummary, error) {
 	rows, e := s.database.Query(
-		`SELECT identifier, name, description, type, updated_at, parent_identifier
+		`SELECT identifier, name, description, type, scope, updated_at, parent_identifier
 		FROM memory
 		WHERE parent_identifier = ? AND is_active = 1
-		ORDER BY updated_at DESC`,
+		ORDER BY ordinal, updated_at DESC`,
 		parentID,
 	)
 
@@ -25,6 +25,7 @@ func (s *Store) listMemoriesWithParent(parentID int64) ([]MemorySummary, error) 
 			&m.Name,
 			&m.Description,
 			&m.Type,
+			&m.Scope,
 			&m.UpdatedAt,
 			&m.ParentIdentifier,
 		)

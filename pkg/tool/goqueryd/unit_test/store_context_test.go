@@ -23,7 +23,7 @@ func TestContextAttachedToSearchResults(t *testing.T) {
 	s := indexedTestStore(t)
 	defer s.Close()
 	s.AddContext("test", strings.Slash, "all documents")
-	results := s.MustSearchKeyword("hybrid search pipeline", 10, "", false)
+	results := s.MustSearchKeyword("hybrid search pipeline", 10, "", false, nil)
 	assert.Count(t, 1, results)
 	assert.String(t, "all documents", results[0].Context)
 }

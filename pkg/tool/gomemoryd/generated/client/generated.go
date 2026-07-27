@@ -16,6 +16,11 @@ import (
 	"github.com/oapi-codegen/runtime"
 )
 
+// Error defines model for Error.
+type Error struct {
+	Error string `json:"error"`
+}
+
 // ErrorResponse defines model for ErrorResponse.
 type ErrorResponse struct {
 	Error           string `json:"error"`
@@ -25,6 +30,40 @@ type ErrorResponse struct {
 // ImpressionResponse defines model for ImpressionResponse.
 type ImpressionResponse struct {
 	Identifier int `json:"identifier"`
+}
+
+// MemoryRequest defines model for MemoryRequest.
+type MemoryRequest struct {
+	Content          string             `json:"content"`
+	Description      string             `json:"description"`
+	Metadata         *map[string]string `json:"metadata,omitempty"`
+	Name             string             `json:"name"`
+	Ordinal          *int               `json:"ordinal,omitempty"`
+	ParentIdentifier *int64             `json:"parent_identifier,omitempty"`
+	ProvenanceAnchor *string            `json:"provenance_anchor,omitempty"`
+	ProvenanceFile   *string            `json:"provenance_file,omitempty"`
+	ProvenanceHash   *string            `json:"provenance_hash,omitempty"`
+	Scope            *string            `json:"scope,omitempty"`
+	Source           *string            `json:"source,omitempty"`
+	Tags             *[]string          `json:"tags,omitempty"`
+	Type             *string            `json:"type,omitempty"`
+}
+
+// MemoryResponse defines model for MemoryResponse.
+type MemoryResponse struct {
+	Identifier int64 `json:"identifier"`
+}
+
+// MemoryUpdateRequest defines model for MemoryUpdateRequest.
+type MemoryUpdateRequest struct {
+	Content        string             `json:"content"`
+	Description    string             `json:"description"`
+	Metadata       *map[string]string `json:"metadata,omitempty"`
+	Name           string             `json:"name"`
+	Ordinal        *int               `json:"ordinal,omitempty"`
+	ProvenanceHash *string            `json:"provenance_hash,omitempty"`
+	Source         *string            `json:"source,omitempty"`
+	Tags           *[]string          `json:"tags,omitempty"`
 }
 
 // ProfileCompletion defines model for ProfileCompletion.
@@ -102,6 +141,17 @@ type ProfileSummary struct {
 	UpdatedAt   string    `json:"updated_at"`
 }
 
+// SourcedMemory defines model for SourcedMemory.
+type SourcedMemory struct {
+	Identifier       int64  `json:"identifier"`
+	Name             string `json:"name"`
+	Ordinal          int    `json:"ordinal"`
+	ParentIdentifier *int64 `json:"parent_identifier,omitempty"`
+	ProvenanceAnchor string `json:"provenance_anchor"`
+	ProvenanceFile   string `json:"provenance_file"`
+	ProvenanceHash   string `json:"provenance_hash"`
+}
+
 // VersionEntry defines model for VersionEntry.
 type VersionEntry struct {
 	ChangeType       string `json:"change_type"`
@@ -119,10 +169,26 @@ type PostImpressionsJSONBody struct {
 	Source  *string `json:"source,omitempty"`
 }
 
+// GetSourcedMemoriesParams defines parameters for GetSourcedMemories.
+type GetSourcedMemoriesParams struct {
+	Scope string `form:"scope" json:"scope"`
+}
+
+// DeleteMemoryParams defines parameters for DeleteMemory.
+type DeleteMemoryParams struct {
+	Source *string `form:"source,omitempty" json:"source,omitempty"`
+}
+
 // GetProfileParams defines parameters for GetProfile.
 type GetProfileParams struct {
 	Topic  *string `form:"topic,omitempty" json:"topic,omitempty"`
 	Detail *bool   `form:"detail,omitempty" json:"detail,omitempty"`
+}
+
+// PostRelationJSONBody defines parameters for PostRelation.
+type PostRelationJSONBody struct {
+	SourceIdentifier int64 `json:"source_identifier"`
+	TargetIdentifier int64 `json:"target_identifier"`
 }
 
 // GetVersionsParams defines parameters for GetVersions.
@@ -134,6 +200,15 @@ type GetVersionsParams struct {
 
 // PostImpressionsJSONRequestBody defines body for PostImpressions for application/json ContentType.
 type PostImpressionsJSONRequestBody PostImpressionsJSONBody
+
+// PostMemoryJSONRequestBody defines body for PostMemory for application/json ContentType.
+type PostMemoryJSONRequestBody = MemoryRequest
+
+// PutMemoryJSONRequestBody defines body for PutMemory for application/json ContentType.
+type PutMemoryJSONRequestBody = MemoryUpdateRequest
+
+// PostRelationJSONRequestBody defines body for PostRelation for application/json ContentType.
+type PostRelationJSONRequestBody PostRelationJSONBody
 
 // RequestEditorFn is the function signature for the RequestEditor callback function
 type RequestEditorFn func(ctx context.Context, req *http.Request) error
@@ -217,8 +292,38 @@ type ClientInterface interface {
 	// Takes a body of the `application/json` content type.
 	PostImpressions(ctx context.Context, body PostImpressionsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// GetSourcedMemories performs a GET /api/memories/sourced (the `GetSourcedMemories` operationId) request.
+	GetSourcedMemories(ctx context.Context, params *GetSourcedMemoriesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostMemoryWithBody performs a POST /api/memory (the `PostMemory` operationId) request,
+	// with any type of body and a specified content type.
+	PostMemoryWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostMemory performs a POST /api/memory (the `PostMemory` operationId) request.
+	// Takes a body of the `application/json` content type.
+	PostMemory(ctx context.Context, body PostMemoryJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteMemory performs a DELETE /api/memory/{identifier} (the `DeleteMemory` operationId) request.
+	DeleteMemory(ctx context.Context, identifier int64, params *DeleteMemoryParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PutMemoryWithBody performs a PUT /api/memory/{identifier} (the `PutMemory` operationId) request,
+	// with any type of body and a specified content type.
+	PutMemoryWithBody(ctx context.Context, identifier int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PutMemory performs a PUT /api/memory/{identifier} (the `PutMemory` operationId) request.
+	// Takes a body of the `application/json` content type.
+	PutMemory(ctx context.Context, identifier int64, body PutMemoryJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// GetProfile performs a GET /api/profile (the `GetProfile` operationId) request.
 	GetProfile(ctx context.Context, params *GetProfileParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostRelationWithBody performs a POST /api/relation (the `PostRelation` operationId) request,
+	// with any type of body and a specified content type.
+	PostRelationWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostRelation performs a POST /api/relation (the `PostRelation` operationId) request.
+	// Takes a body of the `application/json` content type.
+	PostRelation(ctx context.Context, body PostRelationJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GetVersions performs a GET /api/versions (the `GetVersions` operationId) request.
 	GetVersions(ctx context.Context, params *GetVersionsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -252,9 +357,119 @@ func (c *Client) PostImpressions(ctx context.Context, body PostImpressionsJSONRe
 	return c.Client.Do(req)
 }
 
+// GetSourcedMemories performs a GET /api/memories/sourced (the `GetSourcedMemories` operationId) request.
+func (c *Client) GetSourcedMemories(ctx context.Context, params *GetSourcedMemoriesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetSourcedMemoriesRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// PostMemoryWithBody performs a POST /api/memory (the `PostMemory` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) PostMemoryWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostMemoryRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// PostMemory performs a POST /api/memory (the `PostMemory` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) PostMemory(ctx context.Context, body PostMemoryJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostMemoryRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// DeleteMemory performs a DELETE /api/memory/{identifier} (the `DeleteMemory` operationId) request.
+func (c *Client) DeleteMemory(ctx context.Context, identifier int64, params *DeleteMemoryParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteMemoryRequest(c.Server, identifier, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// PutMemoryWithBody performs a PUT /api/memory/{identifier} (the `PutMemory` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) PutMemoryWithBody(ctx context.Context, identifier int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPutMemoryRequestWithBody(c.Server, identifier, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// PutMemory performs a PUT /api/memory/{identifier} (the `PutMemory` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) PutMemory(ctx context.Context, identifier int64, body PutMemoryJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPutMemoryRequest(c.Server, identifier, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 // GetProfile performs a GET /api/profile (the `GetProfile` operationId) request.
 func (c *Client) GetProfile(ctx context.Context, params *GetProfileParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetProfileRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// PostRelationWithBody performs a POST /api/relation (the `PostRelation` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) PostRelationWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostRelationRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// PostRelation performs a POST /api/relation (the `PostRelation` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) PostRelation(ctx context.Context, body PostRelationJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostRelationRequest(c.Server, body)
 	if err != nil {
 		return nil, err
 	}
@@ -309,6 +524,204 @@ func NewPostImpressionsRequestWithBody(server string, contentType string, body i
 	}
 
 	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewGetSourcedMemoriesRequest constructs an http.Request for the GetSourcedMemories method
+func NewGetSourcedMemoriesRequest(server string, params *GetSourcedMemoriesParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/memories/sourced")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "scope", params.Scope, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+			return nil, err
+		} else {
+			for _, qp := range strings.Split(queryFrag, "&") {
+				rawQueryFragments = append(rawQueryFragments, qp)
+			}
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewPostMemoryRequest calls the generic PostMemory builder with application/json body
+func NewPostMemoryRequest(server string, body PostMemoryJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPostMemoryRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewPostMemoryRequestWithBody constructs an http.Request for the PostMemory method, with any body, and a specified content type
+func NewPostMemoryRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/memory")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewDeleteMemoryRequest constructs an http.Request for the DeleteMemory method
+func NewDeleteMemoryRequest(server string, identifier int64, params *DeleteMemoryParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "identifier", identifier, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/memory/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if params.Source != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "source", *params.Source, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodDelete, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewPutMemoryRequest calls the generic PutMemory builder with application/json body
+func NewPutMemoryRequest(server string, identifier int64, body PutMemoryJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPutMemoryRequestWithBody(server, identifier, "application/json", bodyReader)
+}
+
+// NewPutMemoryRequestWithBody constructs an http.Request for the PutMemory method, with any body, and a specified content type
+func NewPutMemoryRequestWithBody(server string, identifier int64, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "identifier", identifier, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/memory/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPut, queryURL.String(), body)
 	if err != nil {
 		return nil, err
 	}
@@ -380,6 +793,46 @@ func NewGetProfileRequest(server string, params *GetProfileParams) (*http.Reques
 	if err != nil {
 		return nil, err
 	}
+
+	return req, nil
+}
+
+// NewPostRelationRequest calls the generic PostRelation builder with application/json body
+func NewPostRelationRequest(server string, body PostRelationJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPostRelationRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewPostRelationRequestWithBody constructs an http.Request for the PostRelation method, with any body, and a specified content type
+func NewPostRelationRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/relation")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
 
 	return req, nil
 }
@@ -512,10 +965,50 @@ type ClientWithResponsesInterface interface {
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	PostImpressionsWithResponse(ctx context.Context, body PostImpressionsJSONRequestBody, reqEditors ...RequestEditorFn) (*PostImpressionsResponse, error)
 
+	// GetSourcedMemoriesWithResponse performs a GET /api/memories/sourced (the `GetSourcedMemories` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetSourcedMemoriesWithResponse(ctx context.Context, params *GetSourcedMemoriesParams, reqEditors ...RequestEditorFn) (*GetSourcedMemoriesResponse, error)
+
+	// PostMemoryWithBodyWithResponse performs a POST /api/memory (the `PostMemory` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	PostMemoryWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostMemoryResponse, error)
+
+	// PostMemoryWithResponse performs a POST /api/memory (the `PostMemory` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	PostMemoryWithResponse(ctx context.Context, body PostMemoryJSONRequestBody, reqEditors ...RequestEditorFn) (*PostMemoryResponse, error)
+
+	// DeleteMemoryWithResponse performs a DELETE /api/memory/{identifier} (the `DeleteMemory` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	DeleteMemoryWithResponse(ctx context.Context, identifier int64, params *DeleteMemoryParams, reqEditors ...RequestEditorFn) (*DeleteMemoryResponse, error)
+
+	// PutMemoryWithBodyWithResponse performs a PUT /api/memory/{identifier} (the `PutMemory` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	PutMemoryWithBodyWithResponse(ctx context.Context, identifier int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PutMemoryResponse, error)
+
+	// PutMemoryWithResponse performs a PUT /api/memory/{identifier} (the `PutMemory` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	PutMemoryWithResponse(ctx context.Context, identifier int64, body PutMemoryJSONRequestBody, reqEditors ...RequestEditorFn) (*PutMemoryResponse, error)
+
 	// GetProfileWithResponse performs a GET /api/profile (the `GetProfile` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetProfileWithResponse(ctx context.Context, params *GetProfileParams, reqEditors ...RequestEditorFn) (*GetProfileResponse, error)
+
+	// PostRelationWithBodyWithResponse performs a POST /api/relation (the `PostRelation` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	PostRelationWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostRelationResponse, error)
+
+	// PostRelationWithResponse performs a POST /api/relation (the `PostRelation` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	PostRelationWithResponse(ctx context.Context, body PostRelationJSONRequestBody, reqEditors ...RequestEditorFn) (*PostRelationResponse, error)
 
 	// GetVersionsWithResponse performs a GET /api/versions (the `GetVersions` operationId) request.
 	//
@@ -571,6 +1064,205 @@ func (r PostImpressionsResponse) ContentType() string {
 	return ""
 }
 
+type GetSourcedMemoriesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *[]SourcedMemory
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetSourcedMemoriesResponse) GetJSON200() *[]SourcedMemory {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetSourcedMemoriesResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetSourcedMemoriesResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetSourcedMemoriesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetSourcedMemoriesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetSourcedMemoriesResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type PostMemoryResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *MemoryResponse
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r PostMemoryResponse) GetJSON200() *MemoryResponse {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r PostMemoryResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r PostMemoryResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r PostMemoryResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r PostMemoryResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostMemoryResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r PostMemoryResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type DeleteMemoryResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *MemoryResponse
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r DeleteMemoryResponse) GetJSON200() *MemoryResponse {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r DeleteMemoryResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r DeleteMemoryResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteMemoryResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteMemoryResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r DeleteMemoryResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type PutMemoryResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *MemoryResponse
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r PutMemoryResponse) GetJSON200() *MemoryResponse {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r PutMemoryResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r PutMemoryResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r PutMemoryResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PutMemoryResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r PutMemoryResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type GetProfileResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -613,6 +1305,47 @@ func (r GetProfileResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r GetProfileResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type PostRelationResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r PostRelationResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r PostRelationResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r PostRelationResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostRelationResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r PostRelationResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -689,6 +1422,72 @@ func (c *ClientWithResponses) PostImpressionsWithResponse(ctx context.Context, b
 	return ParsePostImpressionsResponse(rsp)
 }
 
+// GetSourcedMemoriesWithResponse performs a GET /api/memories/sourced (the `GetSourcedMemories` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetSourcedMemoriesWithResponse(ctx context.Context, params *GetSourcedMemoriesParams, reqEditors ...RequestEditorFn) (*GetSourcedMemoriesResponse, error) {
+	rsp, err := c.GetSourcedMemories(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetSourcedMemoriesResponse(rsp)
+}
+
+// PostMemoryWithBodyWithResponse performs a POST /api/memory (the `PostMemory` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) PostMemoryWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostMemoryResponse, error) {
+	rsp, err := c.PostMemoryWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostMemoryResponse(rsp)
+}
+
+// PostMemoryWithResponse performs a POST /api/memory (the `PostMemory` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) PostMemoryWithResponse(ctx context.Context, body PostMemoryJSONRequestBody, reqEditors ...RequestEditorFn) (*PostMemoryResponse, error) {
+	rsp, err := c.PostMemory(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostMemoryResponse(rsp)
+}
+
+// DeleteMemoryWithResponse performs a DELETE /api/memory/{identifier} (the `DeleteMemory` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) DeleteMemoryWithResponse(ctx context.Context, identifier int64, params *DeleteMemoryParams, reqEditors ...RequestEditorFn) (*DeleteMemoryResponse, error) {
+	rsp, err := c.DeleteMemory(ctx, identifier, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteMemoryResponse(rsp)
+}
+
+// PutMemoryWithBodyWithResponse performs a PUT /api/memory/{identifier} (the `PutMemory` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) PutMemoryWithBodyWithResponse(ctx context.Context, identifier int64, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PutMemoryResponse, error) {
+	rsp, err := c.PutMemoryWithBody(ctx, identifier, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePutMemoryResponse(rsp)
+}
+
+// PutMemoryWithResponse performs a PUT /api/memory/{identifier} (the `PutMemory` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) PutMemoryWithResponse(ctx context.Context, identifier int64, body PutMemoryJSONRequestBody, reqEditors ...RequestEditorFn) (*PutMemoryResponse, error) {
+	rsp, err := c.PutMemory(ctx, identifier, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePutMemoryResponse(rsp)
+}
+
 // GetProfileWithResponse performs a GET /api/profile (the `GetProfile` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -698,6 +1497,28 @@ func (c *ClientWithResponses) GetProfileWithResponse(ctx context.Context, params
 		return nil, err
 	}
 	return ParseGetProfileResponse(rsp)
+}
+
+// PostRelationWithBodyWithResponse performs a POST /api/relation (the `PostRelation` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) PostRelationWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostRelationResponse, error) {
+	rsp, err := c.PostRelationWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostRelationResponse(rsp)
+}
+
+// PostRelationWithResponse performs a POST /api/relation (the `PostRelation` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) PostRelationWithResponse(ctx context.Context, body PostRelationJSONRequestBody, reqEditors ...RequestEditorFn) (*PostRelationResponse, error) {
+	rsp, err := c.PostRelation(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostRelationResponse(rsp)
 }
 
 // GetVersionsWithResponse performs a GET /api/versions (the `GetVersions` operationId) request.
@@ -744,6 +1565,145 @@ func ParsePostImpressionsResponse(rsp *http.Response) (*PostImpressionsResponse,
 	return response, nil
 }
 
+// ParseGetSourcedMemoriesResponse parses an HTTP response from a GetSourcedMemoriesWithResponse call
+func ParseGetSourcedMemoriesResponse(rsp *http.Response) (*GetSourcedMemoriesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetSourcedMemoriesResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []SourcedMemory
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePostMemoryResponse parses an HTTP response from a PostMemoryWithResponse call
+func ParsePostMemoryResponse(rsp *http.Response) (*PostMemoryResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostMemoryResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest MemoryResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteMemoryResponse parses an HTTP response from a DeleteMemoryWithResponse call
+func ParseDeleteMemoryResponse(rsp *http.Response) (*DeleteMemoryResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteMemoryResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest MemoryResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePutMemoryResponse parses an HTTP response from a PutMemoryWithResponse call
+func ParsePutMemoryResponse(rsp *http.Response) (*PutMemoryResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PutMemoryResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest MemoryResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseGetProfileResponse parses an HTTP response from a GetProfileWithResponse call
 func ParseGetProfileResponse(rsp *http.Response) (*GetProfileResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -764,6 +1724,35 @@ func ParseGetProfileResponse(rsp *http.Response) (*GetProfileResponse, error) {
 			return nil, err
 		}
 		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePostRelationResponse parses an HTTP response from a PostRelationWithResponse call
+func ParsePostRelationResponse(rsp *http.Response) (*PostRelationResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostRelationResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case rsp.StatusCode == 200:
+		break // No content-type
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse

@@ -4,19 +4,25 @@ import (
 	"fmt"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
 	"slices"
 	"strings"
 )
 
 func (s *Service) Profile(
 	topic string,
+	scope string,
 	detail bool,
 ) (*ProfileResult, *ProfileDetail, error) {
+	if scope == constant.AllScope || scope == constant.DefaultScope {
+		return nil, nil, fmt.Errorf("%w: %s", ErrorReservedScope, scope)
+	}
+
 	if f := s.ensureTokenizer(); f != nil {
 		return nil, nil, f
 	}
 
-	always, e := s.ListMemoriesWithContent(constant.AlwaysTag)
+	always, e := s.ListMemoriesWithContent(constant.AlwaysTag, scope)
 
 	if e != nil {
 		return nil, nil, fmt.Errorf("%w: %v", ErrorAlwaysLoad, e)
@@ -36,21 +42,39 @@ func (s *Service) Profile(
 		alwaysIDs[m.Identifier] = true
 	}
 
-	allMemories, e := s.ListMemories("", "", true)
+	allMemories, e := s.ListMemories("", "", scope, true)
 
 	if e != nil {
 		return nil, nil, fmt.Errorf("%w: %v", ErrorMemoryList, e)
 	}
 
-	childrenByParent := map[int64][]string{}
+	childSummaries := map[int64][]store.MemorySummary{}
 
 	for _, m := range allMemories {
 		if m.ParentIdentifier != nil {
-			childrenByParent[*m.ParentIdentifier] = append(
-				childrenByParent[*m.ParentIdentifier],
-				m.Name,
+			childSummaries[*m.ParentIdentifier] = append(
+				childSummaries[*m.ParentIdentifier],
+				m,
 			)
 		}
+	}
+
+	childrenByParent := map[int64][]string{}
+
+	for parent, children := range childSummaries {
+		slices.SortStableFunc(
+			children,
+			func(a store.MemorySummary, b store.MemorySummary) int {
+				return a.Ordinal - b.Ordinal
+			},
+		)
+		names := make([]string, 0, len(children))
+
+		for _, m := range children {
+			names = append(names, m.Name)
+		}
+
+		childrenByParent[parent] = names
 	}
 
 	indexTrimmed := 0
@@ -85,51 +109,57 @@ func (s *Service) Profile(
 	}
 
 	completionsTrimmed := 0
-	completions, e := s.ListCompletions()
 
-	if e == nil {
-		for _, r := range completions {
-			name := r.Path
+	if scope == "" {
+		completions, f := s.ListCompletions()
 
-			if i := strings.LastIndex(name, stringsConstant.Slash); i >= 0 {
-				name = name[:i]
+		if f == nil {
+			for _, r := range completions {
+				name := r.Path
+
+				if i := strings.LastIndex(name, stringsConstant.Slash); i >= 0 {
+					name = name[:i]
+				}
+
+				entry := CompletionEntry{SessionName: name, Body: r.Body}
+				tokens := s.countTokens(entry)
+
+				if remaining-tokens < 0 {
+					completionsTrimmed++
+
+					continue
+				}
+
+				remaining -= tokens
+				result.Completions = append(result.Completions, entry)
 			}
-
-			entry := CompletionEntry{SessionName: name, Body: r.Body}
-			tokens := s.countTokens(entry)
-
-			if remaining-tokens < 0 {
-				completionsTrimmed++
-
-				continue
-			}
-
-			remaining -= tokens
-			result.Completions = append(result.Completions, entry)
 		}
 	}
 
 	impressionsTrimmed := 0
-	impressions, e := s.LatestImpressions(10)
 
-	if e == nil {
-		for _, i := range impressions {
-			tokens := s.countTokens(i)
+	if scope == "" {
+		impressions, f := s.LatestImpressions(10)
 
-			if remaining-tokens < 0 {
-				impressionsTrimmed++
+		if f == nil {
+			for _, i := range impressions {
+				tokens := s.countTokens(i)
 
-				continue
+				if remaining-tokens < 0 {
+					impressionsTrimmed++
+
+					continue
+				}
+
+				remaining -= tokens
+				result.Impressions = append(result.Impressions, i)
 			}
-
-			remaining -= tokens
-			result.Impressions = append(result.Impressions, i)
 		}
 	}
 
 	relevantTrimmed := 0
 
-	if topic != "" {
+	if topic != "" && scope == "" {
 		exclude := make([]string, len(always))
 
 		for i, m := range always {

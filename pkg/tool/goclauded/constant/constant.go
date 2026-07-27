@@ -65,6 +65,11 @@ const (
 	EventSummary = "summary"
 	EventSession = "session"
 
+	SummaryCollection    = "summaries"
+	CompletionCollection = "completions"
+	SummarySourceType    = "session-summary"
+	CompletionSourceType = "session-completion"
+
 	SessionTable     = "session"
 	SummaryTable     = "summary"
 	SummaryColumn    = "summary"

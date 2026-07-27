@@ -11,6 +11,7 @@ func (s *Store) SearchVector(
 	limit int,
 	collection string,
 	full bool,
+	metadata map[string]string,
 	o *ollama.Client,
 ) ([]SearchResult, error) {
 	queryVector, e := o.EmbedSingle(constant.EmbedModel, query)
@@ -19,7 +20,7 @@ func (s *Store) SearchVector(
 		return nil, e
 	}
 
-	candidates := s.allEmbeddings(collection)
+	candidates := s.allEmbeddings(collection, withoutSourceType(metadata))
 
 	for i := range candidates {
 		candidates[i].distance = cosineDistance(

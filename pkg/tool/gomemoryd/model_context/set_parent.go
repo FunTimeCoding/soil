@@ -18,6 +18,10 @@ func (s *Server) setParent(
 		return response.Fail("memory_id is required")
 	}
 
+	if guard, g := s.guardDocumentSourced(identifier); guard != nil {
+		return guard, g
+	}
+
 	var parentIdentifier *int64
 	parentID := int64(q.GetFloat(constant.ParentIdentifier, 0))
 

@@ -86,6 +86,10 @@ func (s *Server) register() {
 				constant.Topic,
 				mcp.Description("Session topic or context for relevance matching"),
 			),
+			mcp.WithString(
+				constant.Scope,
+				mcp.Description("Memory scope to profile. Empty for the default scope."),
+			),
 		),
 		s.profile,
 	)
@@ -102,6 +106,10 @@ func (s *Server) register() {
 			mcp.WithString(
 				constant.Tag,
 				mcp.Description("Filter by tag"),
+			),
+			mcp.WithString(
+				constant.Scope,
+				mcp.Description("Memory scope. Empty for the default scope, all crosses scopes."),
 			),
 		),
 		s.list,
@@ -123,6 +131,20 @@ func (s *Server) register() {
 			),
 		),
 		s.get,
+	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.GetMemoryGroup,
+			mcp.WithDescription(
+				"Get a parent memory with the full content of all its children in one call, ordered by ordinal then recency. The group fetch for document-sourced memory clusters.",
+			),
+			mcp.WithNumber(
+				constant.MemoryIdentifier,
+				mcp.Required(),
+				mcp.Description("Parent memory ID"),
+			),
+		),
+		s.getGroup,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
@@ -160,6 +182,10 @@ func (s *Server) register() {
 			mcp.WithString(
 				constant.Tag,
 				mcp.Description("Filter by tag"),
+			),
+			mcp.WithString(
+				constant.Scope,
+				mcp.Description("Memory scope. Empty for the default scope, all crosses scopes."),
 			),
 		),
 		s.search,

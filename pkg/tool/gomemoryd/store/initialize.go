@@ -64,6 +64,12 @@ func initialize(database *sql.DB) {
 			SELECT new.identifier, new.content, new.description
 			WHERE new.is_active = 1;
 		END`,
+		`CREATE TABLE IF NOT EXISTS memory_metadata (
+			memory_identifier INTEGER NOT NULL REFERENCES memory(identifier),
+			key       TEXT NOT NULL,
+			value     TEXT NOT NULL,
+			PRIMARY KEY (memory_identifier, key)
+		)`,
 		`CREATE TABLE IF NOT EXISTS impression (
 			identifier  INTEGER PRIMARY KEY AUTOINCREMENT,
 			content    TEXT NOT NULL,

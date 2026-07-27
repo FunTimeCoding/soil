@@ -88,10 +88,10 @@ func TestDeleteDocumentRemovesFromSearch(t *testing.T) {
 			"",
 		),
 	)
-	results := s.MustSearchKeyword("wolverine", 10, "", false)
+	results := s.MustSearchKeyword("wolverine", 10, "", false, nil)
 	assert.Count(t, 1, results)
 	_, e := s.DeleteDocument("notes", "findable.md")
 	assert.FatalOnError(t, e)
-	results = s.MustSearchKeyword("wolverine", 10, "", false)
+	results = s.MustSearchKeyword("wolverine", 10, "", false, nil)
 	assert.Count(t, 0, results)
 }

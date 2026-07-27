@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/save_option"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -16,6 +17,10 @@ func (s *Server) update(
 
 	if e != nil {
 		return response.Fail("memory_id is required")
+	}
+
+	if guard, g := s.guardDocumentSourced(int64(identifier)); guard != nil {
+		return guard, g
 	}
 
 	name, f := q.RequireString(constant.MemoryName)
@@ -36,13 +41,12 @@ func (s *Server) update(
 		return response.Fail("description is required")
 	}
 
-	m, i := s.service.UpdateMemory(
-		int64(identifier),
-		name,
-		content,
-		description,
-		q.GetString(constant.Source, ""),
-	)
+	o := save_option.New()
+	o.Name = name
+	o.Content = content
+	o.Description = description
+	o.Source = q.GetString(constant.Source, "")
+	m, i := s.service.UpdateMemory(int64(identifier), o)
 
 	if i != nil {
 		return s.captureDetail(i)

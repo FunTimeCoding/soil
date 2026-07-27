@@ -24,7 +24,7 @@ func TestHybridSearchDiffersFromKeyword(t *testing.T) {
 	defer s.Close()
 	e := embedTestDocuments(s, o)
 	assert.FatalOnError(t, e)
-	keyword := s.MustSearchKeyword("context resolution", 5, "", false)
+	keyword := s.MustSearchKeyword("context resolution", 5, "", false, nil)
 	option := search_option.New("context resolution", 5)
 	hybrid, e := s.SearchHybrid(option, o)
 	assert.FatalOnError(t, e)
@@ -48,4 +48,21 @@ func TestSearchFallsBackToKeywordWithoutEmbeddings(t *testing.T) {
 	outcome := s.SearchWithFallback(option, o)
 	assert.True(t, outcome.Degraded)
 	assert.Greater(t, 0, float64(len(outcome.Results)))
+}
+
+func TestHybridSearchMetadataFilter(t *testing.T) {
+	s, o := indexedTestStore(t)
+	defer s.Close()
+	e := embedTestDocuments(s, o)
+	assert.FatalOnError(t, e)
+	s.SetMetadata("test", "alpha.md", map[string]string{"scope": "alpha"})
+	option := search_option.New("search pipeline", 10)
+	option.Metadata = map[string]string{"scope": "alpha"}
+	results, f := s.SearchHybrid(option, o)
+	assert.FatalOnError(t, f)
+	assert.Greater(t, 0, float64(len(results)))
+
+	for _, r := range results {
+		assert.String(t, "alpha.md", r.Path)
+	}
 }

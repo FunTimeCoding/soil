@@ -2,8 +2,11 @@ package service
 
 import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
 
-func (s *Service) ListMemoriesWithContent(tag string) ([]store.Memory, error) {
-	summaries, e := s.store.ListMemories("", tag, true)
+func (s *Service) ListMemoriesWithContent(
+	tag string,
+	scope string,
+) ([]store.Memory, error) {
+	summaries, e := s.store.ListMemories("", tag, scope, true)
 
 	if e != nil {
 		return nil, e

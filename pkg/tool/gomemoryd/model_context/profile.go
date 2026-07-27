@@ -16,10 +16,15 @@ func (s *Server) profile(
 ) (*mcp.CallToolResult, error) {
 	result, _, e := s.service.Profile(
 		q.GetString(constant.Topic, ""),
+		q.GetString(constant.Scope, ""),
 		false,
 	)
 
 	if e != nil {
+		if errors.Is(e, service.ErrorReservedScope) {
+			return response.Fail("%s", e.Error())
+		}
+
 		message := "failed to load profile"
 
 		if errors.Is(e, service.ErrorAlwaysLoad) {

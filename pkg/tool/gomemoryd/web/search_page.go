@@ -35,7 +35,13 @@ func (s *Server) searchPage(
 	)
 
 	if query != "" {
-		results, e := s.service.SearchMemories(query, 20, "", "")
+		results, e := s.service.SearchMemories(
+			query,
+			20,
+			"",
+			"",
+			constant.AllScope,
+		)
 
 		if e != nil {
 			content = append(

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 )
 
 func (s *Store) SearchMemories(
@@ -11,12 +12,13 @@ func (s *Store) SearchMemories(
 	limit int,
 	memoryType string,
 	tag string,
+	scope string,
 ) ([]SearchResult, error) {
 	var parts []string
 	var arguments []any
 	parts = append(
 		parts,
-		`SELECT m.identifier, m.name, m.content, m.description, m.type, m.updated_at, rank
+		`SELECT m.identifier, m.name, m.content, m.description, m.type, m.scope, m.updated_at, rank
 		FROM memory_full_text_search f
 		JOIN memory m ON m.identifier = f.rowid`,
 	)
@@ -40,6 +42,11 @@ func (s *Store) SearchMemories(
 		arguments = append(arguments, memoryType)
 	}
 
+	if scope != constant.AllScope {
+		parts = append(parts, `AND m.scope = ?`)
+		arguments = append(arguments, scope)
+	}
+
 	parts = append(parts, fmt.Sprintf(`ORDER BY rank LIMIT %d`, limit))
 	rows, e := s.database.Query(join.Space(parts...), arguments...)
 
@@ -58,6 +65,7 @@ func (s *Store) SearchMemories(
 			&r.Content,
 			&r.Description,
 			&r.Type,
+			&r.Scope,
 			&r.UpdatedAt,
 			&r.Rank,
 		)

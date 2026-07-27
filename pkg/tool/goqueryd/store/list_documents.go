@@ -32,24 +32,11 @@ func (s *Store) ListDocuments(
 		)
 	}
 
-	i := 0
+	joins, joinArguments := metadataJoins(metadata)
 
-	for key, value := range metadata {
-		alias := fmt.Sprintf("m%d", i)
-		parts = append(
-			parts,
-			fmt.Sprintf(
-				`JOIN document_metadata %s
-				ON %s.document_identifier = d.identifier
-				AND %s.key = ? AND %s.value = ?`,
-				alias,
-				alias,
-				alias,
-				alias,
-			),
-		)
-		arguments = append(arguments, key, value)
-		i++
+	if joins != "" {
+		parts = append(parts, joins)
+		arguments = append(arguments, joinArguments...)
 	}
 
 	parts = append(parts, `WHERE d.collection = ? AND d.active = 1`)

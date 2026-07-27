@@ -17,6 +17,10 @@ func (s *Server) forget(
 		return response.Fail("memory_id is required")
 	}
 
+	if guard, g := s.guardDocumentSourced(identifier); guard != nil {
+		return guard, g
+	}
+
 	e := s.service.ForgetMemory(identifier, q.GetString(constant.Source, ""))
 
 	if e != nil {

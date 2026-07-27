@@ -8,10 +8,11 @@ import (
 func (o *Tester) ListMemories(
 	memoryType string,
 	tag string,
+	scope string,
 	activeOnly bool,
 ) []store.MemorySummary {
 	o.t.Helper()
-	result, e := o.Store.ListMemories(memoryType, tag, activeOnly)
+	result, e := o.Store.ListMemories(memoryType, tag, scope, activeOnly)
 	assert.FatalOnError(o.t, e)
 
 	return result

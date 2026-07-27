@@ -7,6 +7,7 @@ func (s *Service) SearchMemories(
 	limit int,
 	memoryType string,
 	tag string,
+	scope string,
 ) ([]store.SearchResult, error) {
-	return s.store.SearchMemories(query, limit, memoryType, tag)
+	return s.store.SearchMemories(query, limit, memoryType, tag, scope)
 }

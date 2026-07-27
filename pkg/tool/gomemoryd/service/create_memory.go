@@ -2,29 +2,20 @@ package service
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/save_option"
 )
 
-func (s *Service) CreateMemory(
-	name string,
-	content string,
-	description string,
-	memoryType string,
-	source string,
-	parentIdentifier *int64,
-) (*store.Memory, error) {
-	if memoryType == "" {
-		memoryType = "feedback"
+func (s *Service) CreateMemory(o *save_option.Option) (*store.Memory, error) {
+	if o.Scope == constant.AllScope || o.Scope == constant.DefaultScope {
+		return nil, fmt.Errorf("%w: %s", ErrorReservedScope, o.Scope)
 	}
 
-	o := save_option.New()
-	o.Name = name
-	o.Content = content
-	o.Description = description
-	o.Type = memoryType
-	o.Source = source
-	o.ParentIdentifier = parentIdentifier
+	if o.Type == "" {
+		o.Type = "feedback"
+	}
+
 	identifier, e := s.store.CreateMemory(o)
 
 	if e != nil {
@@ -38,14 +29,10 @@ func (s *Service) CreateMemory(
 	}
 
 	if e = s.indexer.Push(
-		fmt.Sprintf("memory/%d", m.Identifier),
+		ScopeCollection(m.Scope),
+		memoryPath(m.Identifier),
 		m.Content,
-		map[string]string{
-			"memory_id":   fmt.Sprintf("%d", m.Identifier),
-			"type":        m.Type,
-			"name":        m.Name,
-			"description": m.Description,
-		},
+		pushMetadata(m),
 	); e != nil {
 		return nil, e
 	}

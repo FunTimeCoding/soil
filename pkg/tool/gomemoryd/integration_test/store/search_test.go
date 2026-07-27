@@ -20,7 +20,7 @@ func TestSearchMemories(t *testing.T) {
 	p.Description = "regression tests over manual verification"
 	p.Type = "feedback"
 	s.CreateMemory(p)
-	results := s.SearchMemories("validate input", 10, "", "")
+	results := s.SearchMemories("validate input", 10, "", "", "")
 	assert.Greater(t, 0, float64(len(results)))
 	assert.String(
 		t,

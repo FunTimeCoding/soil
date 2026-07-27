@@ -6,6 +6,7 @@ type SearchResult struct {
 	Content          string   `json:"content"`
 	Description      string   `json:"description"`
 	Type             string   `json:"type"`
+	Scope            string   `json:"scope,omitempty"`
 	Tags             []string `json:"tags,omitempty"`
 	UpdatedAt        string   `json:"updated_at"`
 	Rank             float64  `json:"rank"`

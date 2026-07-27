@@ -64,6 +64,139 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/memory:
+    post:
+      operationId: postMemory
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MemoryRequest"
+      responses:
+        "200":
+          description: Memory created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MemoryResponse"
+        "400":
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to create memory.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/memory/{identifier}:
+    put:
+      operationId: putMemory
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MemoryUpdateRequest"
+      responses:
+        "200":
+          description: Memory updated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MemoryResponse"
+        "500":
+          description: Failed to update memory.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteMemory
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: source
+        in: query
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Memory forgotten.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MemoryResponse"
+        "500":
+          description: Failed to forget memory.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/memories/sourced:
+    get:
+      operationId: getSourcedMemories
+      parameters:
+      - name: scope
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Document-sourced memories in the scope with provenance.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SourcedMemory"
+        "500":
+          description: Failed to list sourced memories.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/relation:
+    post:
+      operationId: postRelation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [source_identifier, target_identifier]
+              properties:
+                source_identifier:
+                  type: integer
+                  format: int64
+                target_identifier:
+                  type: integer
+                  format: int64
+      responses:
+        "200":
+          description: Relation created or already present.
+        "500":
+          description: Failed to create relation.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /api/impressions:
     post:
       operationId: postImpressions
@@ -94,6 +227,92 @@ paths:
                 $ref: "#/components/schemas/ErrorResponse"
 components:
   schemas:
+    MemoryRequest:
+      type: object
+      required: [name, content, description]
+      properties:
+        name:
+          type: string
+        content:
+          type: string
+        description:
+          type: string
+        type:
+          type: string
+        scope:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+        source:
+          type: string
+        parent_identifier:
+          type: integer
+          format: int64
+        provenance_file:
+          type: string
+        provenance_anchor:
+          type: string
+        provenance_hash:
+          type: string
+        ordinal:
+          type: integer
+    MemoryUpdateRequest:
+      type: object
+      required: [name, content, description]
+      properties:
+        name:
+          type: string
+        content:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+        source:
+          type: string
+        provenance_hash:
+          type: string
+        ordinal:
+          type: integer
+    MemoryResponse:
+      type: object
+      required: [identifier]
+      properties:
+        identifier:
+          type: integer
+          format: int64
+    SourcedMemory:
+      type: object
+      required: [identifier, name, provenance_file, provenance_anchor, provenance_hash, ordinal]
+      properties:
+        identifier:
+          type: integer
+          format: int64
+        name:
+          type: string
+        parent_identifier:
+          type: integer
+          format: int64
+        provenance_file:
+          type: string
+        provenance_anchor:
+          type: string
+        provenance_hash:
+          type: string
+        ordinal:
+          type: integer
     ImpressionResponse:
       type: object
       required: [identifier]
@@ -257,6 +476,12 @@ components:
         session_name:
           type: string
         body:
+          type: string
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
           type: string
     ErrorResponse:
       type: object

@@ -2,6 +2,7 @@ package unit_test
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/memory_indexer_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face/search_option"
 	"testing"
@@ -25,7 +26,7 @@ func TestSearchReturnsResults(t *testing.T) {
 		memory_indexer_tester.EmptyFixture(),
 	)
 	results, e := s.Search(
-		search_option.New("error handling", "memories", 10),
+		search_option.New("error handling", constant.DefaultCollection, 10),
 	)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 2, results)
@@ -40,7 +41,7 @@ func TestSearchEmptyResults(t *testing.T) {
 		memory_indexer_tester.EmptyFixture(),
 	)
 	results, e := s.Search(
-		search_option.New("nonexistent", "memories", 10),
+		search_option.New("nonexistent", constant.DefaultCollection, 10),
 	)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 0, results)

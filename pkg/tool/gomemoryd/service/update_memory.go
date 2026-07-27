@@ -1,17 +1,13 @@
 package service
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/save_option"
 )
 
 func (s *Service) UpdateMemory(
 	identifier int64,
-	name string,
-	content string,
-	description string,
-	source string,
+	o *save_option.Option,
 ) (*store.Memory, error) {
 	existing, e := s.store.GetMemory(identifier)
 
@@ -19,15 +15,23 @@ func (s *Service) UpdateMemory(
 		return nil, e
 	}
 
-	o := save_option.New()
-	o.Name = name
-	o.Content = content
-	o.Description = description
-	o.Tags = existing.Tags
-	o.Source = source
-	e = s.store.UpdateMemory(identifier, o)
+	if o.Tags == nil {
+		o.Tags = existing.Tags
+	}
 
-	if e != nil {
+	if o.Metadata == nil {
+		o.Metadata = existing.Metadata
+	}
+
+	if o.ProvenanceHash == "" {
+		o.ProvenanceHash = existing.ProvenanceHash
+	}
+
+	if o.Ordinal == 0 {
+		o.Ordinal = existing.Ordinal
+	}
+
+	if e = s.store.UpdateMemory(identifier, o); e != nil {
 		return nil, e
 	}
 
@@ -38,14 +42,10 @@ func (s *Service) UpdateMemory(
 	}
 
 	if e = s.indexer.Push(
-		fmt.Sprintf("memory/%d", m.Identifier),
+		ScopeCollection(m.Scope),
+		memoryPath(m.Identifier),
 		m.Content,
-		map[string]string{
-			"memory_id":   fmt.Sprintf("%d", m.Identifier),
-			"type":        m.Type,
-			"name":        m.Name,
-			"description": m.Description,
-		},
+		pushMetadata(m),
 	); e != nil {
 		return nil, e
 	}

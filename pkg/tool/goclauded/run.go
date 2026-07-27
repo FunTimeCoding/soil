@@ -19,13 +19,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/option"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/server"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/session_indexer"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/sweep"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/watcher"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/web"
 	memory "github.com/funtimecoding/soil/pkg/tool/gomemoryd/connect"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/connect"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/indexer"
 	library "github.com/funtimecoding/soil/pkg/web"
 	"net/http"
 	"time"
@@ -58,15 +58,10 @@ func Run(
 	l.Structured("gomemoryd_connected", "elapsed", elapsed())
 	queryClient := connect.Wait(l)
 	l.Structured("goqueryd_connected", "elapsed", elapsed())
-	summaryIdx := session_indexer.New(
+	summaryIdx := indexer.New(queryClient, constant.SummarySourceType)
+	completionIdx := indexer.New(
 		queryClient,
-		"summaries",
-		"session-summary",
-	)
-	completionIdx := session_indexer.New(
-		queryClient,
-		"completions",
-		"session-completion",
+		constant.CompletionSourceType,
 	)
 	v := service.New(
 		s,

@@ -11,6 +11,7 @@ func (s *Store) SearchKeyword(
 	limit int,
 	collection string,
 	full bool,
+	metadata map[string]string,
 ) ([]SearchResult, error) {
 	fullTextSearch := BuildFullTextSearchQuery(query)
 
@@ -36,9 +37,16 @@ func (s *Store) SearchKeyword(
 			fm.bm25_score
 		FROM fts_matches fm
 		JOIN document d ON d.identifier = fm.rowid
-		JOIN content ON content.hash = d.hash
-		WHERE d.active = 1`
+		JOIN content ON content.hash = d.hash`
 	arguments := []any{fullTextSearch, limit * 10}
+	joins, joinArguments := metadataJoins(withoutSourceType(metadata))
+
+	if joins != "" {
+		sql = join.Space(sql, joins)
+		arguments = append(arguments, joinArguments...)
+	}
+
+	sql = join.Empty(sql, ` WHERE d.active = 1`)
 
 	if collection != "" {
 		sql = join.Empty(sql, " AND d.collection = ?")

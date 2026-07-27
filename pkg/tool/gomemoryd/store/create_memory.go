@@ -15,15 +15,21 @@ func (s *Store) CreateMemory(o *save_option.Option) (int64, error) {
 
 	defer rollback(t)
 	result, e := t.Exec(
-		`INSERT INTO memory (name, content, description, type, created_at, updated_at, parent_identifier)
-		VALUES (?, ?, ?, ?, ?, ?, ?)`,
+		`INSERT INTO memory (name, content, description, type, scope, created_at, updated_at, parent_identifier,
+			provenance_file, provenance_anchor, provenance_hash, ordinal)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
 		o.Name,
 		o.Content,
 		o.Description,
 		o.Type,
+		o.Scope,
 		now,
 		now,
 		o.ParentIdentifier,
+		o.ProvenanceFile,
+		o.ProvenanceAnchor,
+		o.ProvenanceHash,
+		o.Ordinal,
 	)
 
 	if e != nil {
@@ -56,6 +62,19 @@ func (s *Store) CreateMemory(o *save_option.Option) (int64, error) {
 			`INSERT INTO memory_tag (memory_identifier, tag) VALUES (?, ?)`,
 			identifier,
 			tag,
+		)
+
+		if e != nil {
+			return 0, e
+		}
+	}
+
+	for key, value := range o.Metadata {
+		_, e = t.Exec(
+			`INSERT INTO memory_metadata (memory_identifier, key, value) VALUES (?, ?, ?)`,
+			identifier,
+			key,
+			value,
 		)
 
 		if e != nil {

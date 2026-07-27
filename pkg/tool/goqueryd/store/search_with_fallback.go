@@ -22,6 +22,7 @@ func (s *Store) SearchWithFallback(
 			limit,
 			o.Collection,
 			o.Full,
+			o.Metadata,
 		)
 
 		if f != nil {
@@ -49,6 +50,7 @@ func (s *Store) SearchWithFallback(
 			limit,
 			o.Collection,
 			o.Full,
+			o.Metadata,
 		)
 
 		if g != nil {

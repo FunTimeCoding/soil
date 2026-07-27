@@ -7,8 +7,9 @@ func (s *Store) MustSearchKeyword(
 	limit int,
 	collection string,
 	full bool,
+	metadata map[string]string,
 ) []SearchResult {
-	result, e := s.SearchKeyword(query, limit, collection, full)
+	result, e := s.SearchKeyword(query, limit, collection, full, metadata)
 	errors.PanicOnError(e)
 
 	return result

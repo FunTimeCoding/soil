@@ -3,13 +3,14 @@ package service
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
 	"time"
 )
 
 func (s *Service) ReconcileCompletions() {
 	s.backfillCompletionSequences()
-	existing := s.completionIndexer.Existing()
+	existing := s.completionIndexer.Existing(constant.CompletionCollection)
 	pushed := 0
 	skipped := 0
 
@@ -30,7 +31,12 @@ func (s *Service) ReconcileCompletions() {
 		}
 
 		metadata["created_at"] = c.CreatedAt.Format(time.RFC3339)
-		s.completionIndexer.MustPush(name, c.Summary, metadata)
+		s.completionIndexer.MustPush(
+			constant.CompletionCollection,
+			name,
+			c.Summary,
+			metadata,
+		)
 		pushed++
 	}
 

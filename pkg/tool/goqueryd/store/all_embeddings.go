@@ -5,7 +5,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/strings/join"
 )
 
-func (s *Store) allEmbeddings(collection string) []embeddingCandidate {
+func (s *Store) allEmbeddings(
+	collection string,
+	metadata map[string]string,
+) []embeddingCandidate {
 	sql := `
 		SELECT
 			d.collection || '/' || d.path AS filepath,
@@ -20,6 +23,12 @@ func (s *Store) allEmbeddings(collection string) []embeddingCandidate {
 		JOIN document d ON d.hash = e.hash AND d.active = 1
 		JOIN content ON content.hash = d.hash`
 	var arguments []any
+	joins, joinArguments := metadataJoins(metadata)
+
+	if joins != "" {
+		sql = join.Space(sql, joins)
+		arguments = append(arguments, joinArguments...)
+	}
 
 	if collection != "" {
 		sql = join.Empty(sql, " WHERE d.collection = ?")
