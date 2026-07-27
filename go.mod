@@ -41,7 +41,7 @@ require (
 	github.com/glebarez/sqlite v1.11.0
 	github.com/go-git/go-billy/v5 v5.9.1
 	github.com/go-git/go-git/v5 v5.19.1
-	github.com/go-openapi/runtime v0.32.6
+	github.com/go-openapi/runtime v0.33.0
 	github.com/go-openapi/strfmt v0.27.0
 	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1
 	github.com/go-test/deep v1.1.1
@@ -53,7 +53,7 @@ require (
 	github.com/grafana/grafana-openapi-client-go v0.0.0-20260724161645-6029e6c64947
 	github.com/grafana/loki-client-go v0.0.0-20251015150631-c42bbddc310a
 	github.com/hashicorp/vault-client-go v0.4.3
-	github.com/hetznercloud/hcloud-go/v2 v2.46.0
+	github.com/hetznercloud/hcloud-go/v2 v2.47.0
 	github.com/hupe1980/go-tiktoken v0.0.10
 	github.com/jackc/pgconn v1.14.3
 	github.com/jackc/pgx/v5 v5.10.0
@@ -70,7 +70,7 @@ require (
 	github.com/nwaples/rardecode/v2 v2.3.0
 	github.com/oapi-codegen/runtime v1.6.0
 	github.com/olekukonko/tablewriter v1.1.4
-	github.com/ollama/ollama v0.32.4
+	github.com/ollama/ollama v0.32.5
 	github.com/openai/openai-go/v3 v3.46.0
 	github.com/openvex/go-vex v0.2.8
 	github.com/opsgenie/opsgenie-go-sdk-v2 v1.2.23
