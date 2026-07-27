@@ -6,7 +6,11 @@ import (
 )
 
 func Notify() {
-	macos.Notify(constant.UpperAlfa, constant.UpperBravo, constant.UpperCharlie)
+	macos.Notify(
+		constant.UpperAlfa,
+		constant.UpperBravo,
+		constant.UpperCharlie,
+	)
 	macos.SimpleNotify(constant.UpperAlfa)
 	macos.Beep()
 	macos.Alert("Subject", "Body")

@@ -10,12 +10,18 @@ func ExpectedHelper(t *testing.T) {
 	buildStruct(t, &inner.MyStruct{})
 }
 
-func assertStruct(t *testing.T, expected *inner.MyStruct) {
+func assertStruct(
+	t *testing.T,
+	expected *inner.MyStruct,
+) {
 	t.Helper()
 	_ = expected
 }
 
-func buildStruct(t *testing.T, value *inner.MyStruct) {
+func buildStruct(
+	t *testing.T,
+	value *inner.MyStruct,
+) {
 	t.Helper()
 	_ = value
 }

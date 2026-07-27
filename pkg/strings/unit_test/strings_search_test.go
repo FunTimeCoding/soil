@@ -59,7 +59,12 @@ func TestIndexOfSkip(t *testing.T) {
 		1,
 		strings.IndexOfSkip(
 			constant.UpperBravo,
-			[]string{constant.UpperAlfa, constant.UpperBravo, constant.UpperCharlie, constant.UpperBravo},
+			[]string{
+				constant.UpperAlfa,
+				constant.UpperBravo,
+				constant.UpperCharlie,
+				constant.UpperBravo,
+			},
 			0,
 		),
 	)
@@ -68,7 +73,12 @@ func TestIndexOfSkip(t *testing.T) {
 		3,
 		strings.IndexOfSkip(
 			constant.UpperBravo,
-			[]string{constant.UpperAlfa, constant.UpperBravo, constant.UpperCharlie, constant.UpperBravo},
+			[]string{
+				constant.UpperAlfa,
+				constant.UpperBravo,
+				constant.UpperCharlie,
+				constant.UpperBravo,
+			},
 			1,
 		),
 	)
@@ -80,13 +90,21 @@ func TestIndexOf(t *testing.T) {
 		1,
 		strings.IndexOf(
 			constant.UpperBravo,
-			[]string{constant.UpperAlfa, constant.UpperBravo, constant.UpperCharlie},
+			[]string{
+				constant.UpperAlfa,
+				constant.UpperBravo,
+				constant.UpperCharlie,
+			},
 		),
 	)
 }
 
 func TestIntensity(t *testing.T) {
-	v := []string{constant.UpperAlfa, constant.UpperBravo, constant.UpperCharlie}
+	v := []string{
+		constant.UpperAlfa,
+		constant.UpperBravo,
+		constant.UpperCharlie,
+	}
 	assert.String(t, "Alfa", strings.Intensity(v, 0))
 	assert.String(t, "Alfa", strings.Intensity(v, 0.33))
 	assert.String(t, "Bravo", strings.Intensity(v, 0.34))

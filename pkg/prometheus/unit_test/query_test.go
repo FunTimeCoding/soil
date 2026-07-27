@@ -65,7 +65,11 @@ func TestChanges(t *testing.T) {
 	assert.String(
 		t,
 		`changes(kube_pod_container_status_restarts_total{pod="Alfa"}[5m]) > 0`,
-		query.Changes(constant.Restart, filter.New().Pod(strings.UpperAlfa), 5),
+		query.Changes(
+			constant.Restart,
+			filter.New().Pod(strings.UpperAlfa),
+			5,
+		),
 	)
 }
 
@@ -74,7 +78,10 @@ func TestSumByLabelReplace(t *testing.T) {
 		t,
 		`sum by (owner) (label_replace(up{instance="Alfa"}, "owner", "$1", "namespace", "([^-]*)-.*"))`,
 		query.SumByLabelReplace(
-			query.Filter(constant.Up, filter.New().Instance(strings.UpperAlfa)),
+			query.Filter(
+				constant.Up,
+				filter.New().Instance(strings.UpperAlfa),
+			),
 			constant.NamespaceLabel,
 			"owner",
 			"([^-]*)-.*",

@@ -18,8 +18,14 @@ func TestEnvironment(t *testing.T) {
 
 	if false {
 		// Not sure if this works
-		goc.SetEnvironmentEscape(constant.ConfigurationEnvironment, strings.UpperAlfa)
-		goc.SetEnvironmentEscape(constant.ArgumentEnvironment, strings.UpperBravo)
+		goc.SetEnvironmentEscape(
+			constant.ConfigurationEnvironment,
+			strings.UpperAlfa,
+		)
+		goc.SetEnvironmentEscape(
+			constant.ArgumentEnvironment,
+			strings.UpperBravo,
+		)
 	}
 
 	if false {

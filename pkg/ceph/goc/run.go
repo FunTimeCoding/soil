@@ -58,7 +58,11 @@ func Run(
 	}
 
 	name := configurationName(base, selected)
-	newConfiguration := join.Absolute(base, selected, constant.ClientConfiguration)
+	newConfiguration := join.Absolute(
+		base,
+		selected,
+		constant.ClientConfiguration,
+	)
 	newArgument := fmt.Sprintf(
 		"-n %s --keyring=%s",
 		fmt.Sprintf("client.%s", name),
@@ -74,6 +78,9 @@ func Run(
 		fmt.Printf("newArgument: %s\n", newArgument)
 	}
 
-	environment.SetTerminal(constant.ConfigurationEnvironment, newConfiguration)
+	environment.SetTerminal(
+		constant.ConfigurationEnvironment,
+		newConfiguration,
+	)
 	environment.SetTerminal(constant.ArgumentEnvironment, newArgument)
 }

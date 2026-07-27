@@ -46,11 +46,21 @@ func TestConstructors(t *testing.T) {
 	assert.NotNil(t, client.New("", nil))
 	assert.NotNil(
 		t,
-		basic.New(strings.UpperAlfa, strings.UpperBravo, strings.UpperCharlie, false),
+		basic.New(
+			strings.UpperAlfa,
+			strings.UpperBravo,
+			strings.UpperCharlie,
+			false,
+		),
 	)
 	assert.NotNil(
 		t,
-		loki.New(strings.UpperAlfa, strings.UpperBravo, strings.UpperCharlie, false),
+		loki.New(
+			strings.UpperAlfa,
+			strings.UpperBravo,
+			strings.UpperCharlie,
+			false,
+		),
 	)
 	assert.NotNil(
 		t,
@@ -63,7 +73,10 @@ func TestConstructors(t *testing.T) {
 			"",
 		),
 	)
-	assert.NotNil(t, push.New(strings.UpperAlfa, 0, false, strings.UpperBravo))
+	assert.NotNil(
+		t,
+		push.New(strings.UpperAlfa, 0, false, strings.UpperBravo),
+	)
 	assert.NotNil(t, filter.New())
 	assert.NotNil(t, metric.New(strings.UpperAlfa))
 	assert.NotNil(t, round_tripper.New("", ""))

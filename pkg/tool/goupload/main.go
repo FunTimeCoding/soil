@@ -53,7 +53,11 @@ func Main(
 
 	a := argument.NewInstance(constant.Identity)
 	a.String(argumentConstant.Locator, locatorDefault, "GitLab API base URL")
-	a.String(argumentConstant.Project, projectDefault, "Project ID to update to")
+	a.String(
+		argumentConstant.Project,
+		projectDefault,
+		"Project ID to update to",
+	)
 	a.String(argumentConstant.Tag, tagDefault, "Git tag")
 	a.String(
 		argumentConstant.Header,

@@ -50,7 +50,11 @@ func TestLiteFlagOverridesEnvironment(t *testing.T) {
 		t,
 		a.ParseArguments([]string{"--lite", "/explicit/flag.sqlite"}),
 	)
-	assert.String(t, "/explicit/flag.sqlite", a.GetString(argumentConstant.Lite))
+	assert.String(
+		t,
+		"/explicit/flag.sqlite",
+		a.GetString(argumentConstant.Lite),
+	)
 }
 
 func TestDatabaseDefaults(t *testing.T) {
@@ -63,7 +67,10 @@ func TestDatabaseDefaults(t *testing.T) {
 }
 
 func TestDatabaseEnvironmentOverridesDefault(t *testing.T) {
-	t.Setenv(relational.PostgresLocatorEnvironment, "postgres://env@localhost/env")
+	t.Setenv(
+		relational.PostgresLocatorEnvironment,
+		"postgres://env@localhost/env",
+	)
 	a := testInstance(t)
 	a.Database()
 	assert.Nil(t, a.ParseArguments(nil))
@@ -75,7 +82,10 @@ func TestDatabaseEnvironmentOverridesDefault(t *testing.T) {
 }
 
 func TestDatabaseFlagOverridesEnvironment(t *testing.T) {
-	t.Setenv(relational.PostgresLocatorEnvironment, "postgres://env@localhost/env")
+	t.Setenv(
+		relational.PostgresLocatorEnvironment,
+		"postgres://env@localhost/env",
+	)
 	a := testInstance(t)
 	a.Database()
 	assert.Nil(

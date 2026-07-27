@@ -18,7 +18,10 @@ func New(
 	w *sync.WaitGroup,
 ) *Server {
 	if port == 0 {
-		port = environment.FallbackInteger(constant.PortEnvironment, constant.Port)
+		port = environment.FallbackInteger(
+			constant.PortEnvironment,
+			constant.Port,
+		)
 	}
 
 	// Metrics listen on all interfaces - Prometheus scrapes over the network

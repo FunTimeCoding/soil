@@ -64,7 +64,10 @@ func (s *Service) Profile(
 	for parent, children := range childSummaries {
 		slices.SortStableFunc(
 			children,
-			func(a store.MemorySummary, b store.MemorySummary) int {
+			func(
+				a store.MemorySummary,
+				b store.MemorySummary,
+			) int {
 				return a.Ordinal - b.Ordinal
 			},
 		)
@@ -117,7 +120,10 @@ func (s *Service) Profile(
 			for _, r := range completions {
 				name := r.Path
 
-				if i := strings.LastIndex(name, stringsConstant.Slash); i >= 0 {
+				if i := strings.LastIndex(
+					name,
+					stringsConstant.Slash,
+				); i >= 0 {
 					name = name[:i]
 				}
 

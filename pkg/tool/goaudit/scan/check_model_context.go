@@ -17,7 +17,11 @@ func (s *Service) checkModelContext(
 	mc := filepath.Join(path, "model_context")
 
 	if !v.Has(filepath.Join(mc, "mount.go")) {
-		s.addConcern(constant.MissingMountKey, constant.MissingMountText, path)
+		s.addConcern(
+			constant.MissingMountKey,
+			constant.MissingMountText,
+			path,
+		)
 	}
 
 	if !v.Has(filepath.Join(mc, "capture_fail.go")) {

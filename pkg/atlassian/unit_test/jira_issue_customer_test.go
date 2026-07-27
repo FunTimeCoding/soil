@@ -15,7 +15,10 @@ func TestIssue(t *testing.T) {
 			IssueKey: strings.UpperAlfa,
 			RequestFieldValues: []*models.CustomerRequestRequestFieldValueScheme{
 				{FieldID: customer.SummaryField, Value: strings.UpperBravo},
-				{FieldID: customer.DescriptionField, Value: strings.UpperCharlie},
+				{
+					FieldID: customer.DescriptionField,
+					Value:   strings.UpperCharlie,
+				},
 			},
 			CurrentStatus: &models.CustomerRequestCurrentStatusScheme{
 				Status: constant.ServiceDeskResolved,

@@ -11,6 +11,11 @@ func TestConfluenceSpaceNames(t *testing.T) {
 	assert.Strings(
 		t,
 		[]string{"Alfa", "Bravo"},
-		space.Names([]*space.Space{{Name: constant.UpperAlfa}, {Name: constant.UpperBravo}}),
+		space.Names(
+			[]*space.Space{
+				{Name: constant.UpperAlfa},
+				{Name: constant.UpperBravo},
+			},
+		),
 	)
 }

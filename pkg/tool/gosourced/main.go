@@ -27,7 +27,11 @@ func Main(
 		"gosourced",
 		"gosourced.yaml",
 	)
-	a.String(argumentConstant.Inventory, defaultInventory, "Inventory file path")
+	a.String(
+		argumentConstant.Inventory,
+		defaultInventory,
+		"Inventory file path",
+	)
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
 	o.Address = a.Address()

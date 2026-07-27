@@ -8,7 +8,10 @@ import (
 )
 
 func TestAlertmanagerAlertNameFilter(t *testing.T) {
-	fixture := []*alert.Alert{{Name: constant.UpperAlfa}, {Name: constant.UpperBravo}}
+	fixture := []*alert.Alert{
+		{Name: constant.UpperAlfa},
+		{Name: constant.UpperBravo},
+	}
 	f1 := name_filter.New(false)
 	f1.Keep(constant.UpperAlfa)
 	assertHasOnlyAlert(t, f1.Run(fixture), "Alfa")

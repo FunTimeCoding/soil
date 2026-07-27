@@ -10,8 +10,20 @@ import (
 
 func TestCompactClosesGaps(t *testing.T) {
 	s := store_tester.New(t)
-	s.Store.UpsertSeed(constant.LowerAlfa, "alfa.md", "hash-a", "a", time.Now())
-	s.Store.UpsertSeed(constant.LowerBravo, "bravo.md", "hash-b", "b", time.Now())
+	s.Store.UpsertSeed(
+		constant.LowerAlfa,
+		"alfa.md",
+		"hash-a",
+		"a",
+		time.Now(),
+	)
+	s.Store.UpsertSeed(
+		constant.LowerBravo,
+		"bravo.md",
+		"hash-b",
+		"b",
+		time.Now(),
+	)
 	s.Store.UpsertSeed(
 		constant.LowerCharlie,
 		"charlie.md",
@@ -48,8 +60,20 @@ func TestCompactEmptyStore(t *testing.T) {
 
 func TestCompactPreservesOrder(t *testing.T) {
 	s := store_tester.New(t)
-	s.Store.UpsertSeed(constant.LowerAlfa, "alfa.md", "hash-a", "a", time.Now())
-	s.Store.UpsertSeed(constant.LowerBravo, "bravo.md", "hash-b", "b", time.Now())
+	s.Store.UpsertSeed(
+		constant.LowerAlfa,
+		"alfa.md",
+		"hash-a",
+		"a",
+		time.Now(),
+	)
+	s.Store.UpsertSeed(
+		constant.LowerBravo,
+		"bravo.md",
+		"hash-b",
+		"b",
+		time.Now(),
+	)
 	s.Store.UpsertSeed(
 		constant.LowerCharlie,
 		"charlie.md",
@@ -57,7 +81,13 @@ func TestCompactPreservesOrder(t *testing.T) {
 		"c",
 		time.Now(),
 	)
-	s.Store.UpsertSeed(constant.LowerDelta, "delta.md", "hash-d", "d", time.Now())
+	s.Store.UpsertSeed(
+		constant.LowerDelta,
+		"delta.md",
+		"hash-d",
+		"d",
+		time.Now(),
+	)
 	s.Store.RemoveMissing([]string{"alfa.md", "delta.md"})
 	s.Store.Compact()
 	seeds := s.Store.Seeds()

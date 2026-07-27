@@ -10,7 +10,10 @@ func (s *Store) Cleanup() {
 	errors.PanicOnError(
 		s.mapper.
 			Table(s.tableName).
-			Where("created_at < ?", time.Now().Add(-constant.StoreRetentionAge)).
+			Where(
+				"created_at < ?",
+				time.Now().Add(-constant.StoreRetentionAge),
+			).
 			Delete(&Run{}).Error,
 	)
 }

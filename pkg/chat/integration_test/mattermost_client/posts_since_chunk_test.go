@@ -79,7 +79,8 @@ func TestPostsSinceChunks(t *testing.T) {
 						&model.User{
 							Id:       "delta",
 							Username: "echo",
-						})
+						},
+					)
 				},
 			)
 		},

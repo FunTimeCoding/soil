@@ -99,7 +99,13 @@ func TestUpsertUpdatesModifiedTimeWithoutContentChange(t *testing.T) {
 		"content",
 		base.Add(-time.Hour),
 	)
-	s.Store.UpsertSeed(constant.LowerAlfa, "alfa.md", "hash-1", "content", base)
+	s.Store.UpsertSeed(
+		constant.LowerAlfa,
+		"alfa.md",
+		"hash-1",
+		"content",
+		base,
+	)
 	seeds := s.Store.Seeds()
 	assert.Count(t, 1, seeds)
 	assert.True(t, seeds[0].ModifiedAt.After(base.Add(-time.Minute)))
@@ -107,7 +113,13 @@ func TestUpsertUpdatesModifiedTimeWithoutContentChange(t *testing.T) {
 
 func TestUpsertSameNameDifferentPath(t *testing.T) {
 	s := store_tester.New(t)
-	s.Store.UpsertSeed(constant.LowerAlfa, "alfa.md", "hash-a", "root", time.Now())
+	s.Store.UpsertSeed(
+		constant.LowerAlfa,
+		"alfa.md",
+		"hash-a",
+		"root",
+		time.Now(),
+	)
 	s.Store.UpsertSeed(
 		constant.LowerAlfa,
 		"sub/alfa.md",

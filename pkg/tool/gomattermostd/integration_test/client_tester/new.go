@@ -38,7 +38,8 @@ func New(
 						&model.Team{
 							Id:   "tango",
 							Name: "tango",
-						})
+						},
+					)
 				},
 			)
 			configure(m)

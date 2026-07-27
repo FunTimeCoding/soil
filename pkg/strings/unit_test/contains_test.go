@@ -25,14 +25,22 @@ func TestAll(t *testing.T) {
 	assert.True(
 		t,
 		contains.All(
-			[]string{constant.UpperAlfa, constant.UpperBravo, constant.UpperCharlie},
+			[]string{
+				constant.UpperAlfa,
+				constant.UpperBravo,
+				constant.UpperCharlie,
+			},
 			[]string{constant.UpperAlfa, constant.UpperBravo},
 		),
 	)
 	assert.False(
 		t,
 		contains.All(
-			[]string{constant.UpperAlfa, constant.UpperBravo, constant.UpperCharlie},
+			[]string{
+				constant.UpperAlfa,
+				constant.UpperBravo,
+				constant.UpperCharlie,
+			},
 			[]string{constant.UpperAlfa, constant.UpperDelta},
 		),
 	)
@@ -56,22 +64,36 @@ func TestAny(t *testing.T) {
 	assert.True(
 		t,
 		contains.Any(
-			[]string{constant.UpperAlfa, constant.UpperBravo, constant.UpperCharlie},
+			[]string{
+				constant.UpperAlfa,
+				constant.UpperBravo,
+				constant.UpperCharlie,
+			},
 			[]string{constant.UpperAlfa},
 		),
 	)
 	assert.False(
 		t,
 		contains.Any(
-			[]string{constant.UpperAlfa, constant.UpperBravo, constant.UpperCharlie},
+			[]string{
+				constant.UpperAlfa,
+				constant.UpperBravo,
+				constant.UpperCharlie,
+			},
 			[]string{constant.UpperDelta},
 		),
 	)
 }
 
 func TestSubAny(t *testing.T) {
-	assert.True(t, contains.AnySub([]string{"Al"}, []string{constant.UpperAlfa}))
-	assert.False(t, contains.AnySub([]string{"Ga"}, []string{constant.UpperAlfa}))
+	assert.True(
+		t,
+		contains.AnySub([]string{"Al"}, []string{constant.UpperAlfa}),
+	)
+	assert.False(
+		t,
+		contains.AnySub([]string{"Ga"}, []string{constant.UpperAlfa}),
+	)
 	assert.False(t, contains.AnySub([]string{}, []string{constant.UpperAlfa}))
 	assert.False(t, contains.AnySub([]string{}, []string{}))
 	assert.False(t, contains.AnySub([]string{"Al"}, []string{}))
@@ -79,14 +101,22 @@ func TestSubAny(t *testing.T) {
 		t,
 		contains.AnySub(
 			[]string{"Br"},
-			[]string{constant.UpperAlfa, constant.UpperBravo, constant.UpperCharlie},
+			[]string{
+				constant.UpperAlfa,
+				constant.UpperBravo,
+				constant.UpperCharlie,
+			},
 		),
 	)
 	assert.False(
 		t,
 		contains.AnySub(
 			[]string{"De"},
-			[]string{constant.UpperAlfa, constant.UpperBravo, constant.UpperCharlie},
+			[]string{
+				constant.UpperAlfa,
+				constant.UpperBravo,
+				constant.UpperCharlie,
+			},
 		),
 	)
 }

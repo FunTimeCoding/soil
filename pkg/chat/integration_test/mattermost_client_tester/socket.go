@@ -8,7 +8,10 @@ import (
 
 // The client dials the websocket during construction; hold the
 // upgraded connection open until the client side closes it.
-func socket(w http.ResponseWriter, q *http.Request) {
+func socket(
+	w http.ResponseWriter,
+	q *http.Request,
+) {
 	u := websocket.Upgrader{}
 	c, e := u.Upgrade(w, q, nil)
 

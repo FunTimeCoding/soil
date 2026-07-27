@@ -82,7 +82,11 @@ func TestUnsigned32(t *testing.T) {
 }
 
 func TestNewDay(t *testing.T) {
-	assert.Time(t, time.Date(1970, 1, 2, 0, 0, 0, 0, time.UTC), assert.NewDay(2))
+	assert.Time(
+		t,
+		time.Date(1970, 1, 2, 0, 0, 0, 0, time.UTC),
+		assert.NewDay(2),
+	)
 }
 
 func TestNewMinute(t *testing.T) {

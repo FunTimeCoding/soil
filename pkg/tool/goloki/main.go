@@ -28,7 +28,12 @@ func Main(
 	a.Duration(argumentConstant.Since, time.Hour, "Time range to query")
 	a.String(argumentConstant.Route, "", "Filter by HTTP route")
 	a.String(argumentConstant.Message, "", "Filter by message field")
-	a.BooleanShort(argumentConstant.Body, "b", false, "Output only the body field")
+	a.BooleanShort(
+		argumentConstant.Body,
+		"b",
+		false,
+		"Output only the body field",
+	)
 	a.IntegerShort(
 		argumentConstant.Limit,
 		"n",

@@ -7,6 +7,10 @@ import (
 
 func (s *Service) checkSuffix(path string) {
 	if !strings.HasSuffix(s.Name, "d") && s.hasCapability() {
-		s.addConcern(constant.MissingSuffixKey, constant.MissingSuffixText, path)
+		s.addConcern(
+			constant.MissingSuffixKey,
+			constant.MissingSuffixText,
+			path,
+		)
 	}
 }

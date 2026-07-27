@@ -10,7 +10,10 @@ import (
 func TestHTTPStatus(t *testing.T) {
 	server := httptest.NewServer(
 		http.HandlerFunc(
-			func(w http.ResponseWriter, q *http.Request) {
+			func(
+				w http.ResponseWriter,
+				q *http.Request,
+			) {
 				w.WriteHeader(http.StatusTeapot)
 			},
 		),

@@ -14,6 +14,12 @@ type Indexer interface {
 		metadata map[string]string,
 	)
 	Existing(collection string) map[string]string
-	Delete(collection string, path string) error
-	MustDelete(collection string, path string)
+	Delete(
+		collection string,
+		path string,
+	) error
+	MustDelete(
+		collection string,
+		path string,
+	)
 }

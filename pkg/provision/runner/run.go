@@ -19,7 +19,14 @@ func (r *Runner) run() {
 		r.recovery.Run(r.initFunction)
 	}
 
-	r.recovery.Run(func() { r.applyFunction(nil, constant.RunnerTriggerTimer) })
+	r.recovery.Run(
+		func() {
+			r.applyFunction(
+				nil,
+				constant.RunnerTriggerTimer,
+			)
+		},
+	)
 	syncTicker := time.NewTicker(constant.RunnerSyncInterval)
 	defer syncTicker.Stop()
 	applyTicker := time.NewTicker(constant.RunnerApplyInterval)
@@ -41,7 +48,12 @@ func (r *Runner) run() {
 				}
 
 				r.recovery.Run(
-					func() { r.applyFunction(nil, constant.RunnerTriggerTimer) },
+					func() {
+						r.applyFunction(
+							nil,
+							constant.RunnerTriggerTimer,
+						)
+					},
 				)
 				applyTicker.Reset(constant.RunnerApplyInterval)
 			}

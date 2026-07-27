@@ -19,7 +19,11 @@ func Main(
 	a := argument.NewInstance(constant.Identity)
 	a.Boolean(argumentConstant.Notation, false, "JSON output")
 	a.Boolean(argumentConstant.All, false, "Include filtered in output")
-	a.Boolean(argumentConstant.Clean, false, "Delete events older than 7 days")
+	a.Boolean(
+		argumentConstant.Clean,
+		false,
+		"Delete events older than 7 days",
+	)
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
 	o.Notation = a.GetBoolean(argumentConstant.Notation)

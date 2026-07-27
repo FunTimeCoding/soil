@@ -10,7 +10,10 @@ import (
 	"testing"
 )
 
-func scopedOption(name string, scope string) *save_option.Option {
+func scopedOption(
+	name string,
+	scope string,
+) *save_option.Option {
 	o := save_option.New()
 	o.Name = name
 	o.Content = constant.FixtureContent
@@ -24,7 +27,10 @@ func scopedOption(name string, scope string) *save_option.Option {
 func TestServiceCreateMemoryRejectsReservedScope(t *testing.T) {
 	o := service_tester.New(t)
 
-	for _, reserved := range []string{constant.AllScope, constant.DefaultScope} {
+	for _, reserved := range []string{
+		constant.AllScope,
+		constant.DefaultScope,
+	} {
 		_, e := o.Service.CreateMemory(scopedOption("reserved", reserved))
 		assert.True(t, errors.Is(e, service.ErrorReservedScope))
 	}

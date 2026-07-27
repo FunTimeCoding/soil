@@ -36,7 +36,10 @@ func transplantEntries(
 			}
 
 			seen[entry.declaration] = true
-			declaration := d.DecoratedNode(source, entry.declaration).(dst.Decl)
+			declaration := d.DecoratedNode(
+				source,
+				entry.declaration,
+			).(dst.Decl)
 			declaration.Decorations().Before = dst.EmptyLine
 			result = append(result, declaration)
 
@@ -49,7 +52,10 @@ func transplantEntries(
 
 		seen[entry.spec] = true
 		g := entry.declaration.(*ast.GenDecl)
-		declaration := d.DecoratedNode(source, entry.declaration).(*dst.GenDecl)
+		declaration := d.DecoratedNode(
+			source,
+			entry.declaration,
+		).(*dst.GenDecl)
 		spec := d.DecoratedNode(source, entry.spec).(dst.Spec)
 		single := len(g.Specs) == 1
 

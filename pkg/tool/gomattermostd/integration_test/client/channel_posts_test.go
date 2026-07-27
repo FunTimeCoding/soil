@@ -27,7 +27,8 @@ func TestChannelPosts(t *testing.T) {
 						&model.Channel{
 							Id:   "alfa",
 							Name: "alfa",
-						})
+						},
+					)
 				},
 			)
 			m.HandleFunc(
@@ -62,7 +63,8 @@ func TestChannelPosts(t *testing.T) {
 									FileIds:  []string{"golf"},
 								},
 							},
-						})
+						},
+					)
 				},
 			)
 			m.HandleFunc(
@@ -76,7 +78,8 @@ func TestChannelPosts(t *testing.T) {
 						&model.User{
 							Id:       "delta",
 							Username: "echo",
-						})
+						},
+					)
 				},
 			)
 		},

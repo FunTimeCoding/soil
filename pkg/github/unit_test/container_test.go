@@ -18,7 +18,10 @@ func TestContainer(t *testing.T) {
 	c.Raw = nil
 	assert.Any(
 		t,
-		&container.Container{Name: constant.UpperAlfa, Repository: constant.UpperBravo},
+		&container.Container{
+			Name:       constant.UpperAlfa,
+			Repository: constant.UpperBravo,
+		},
 		c,
 	)
 }

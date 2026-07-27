@@ -11,6 +11,11 @@ func TestConfluencePageNames(t *testing.T) {
 	assert.Strings(
 		t,
 		[]string{"Alfa", "Bravo"},
-		page.Names([]*page.Page{{Name: constant.UpperAlfa}, {Name: constant.UpperBravo}}),
+		page.Names(
+			[]*page.Page{
+				{Name: constant.UpperAlfa},
+				{Name: constant.UpperBravo},
+			},
+		),
 	)
 }

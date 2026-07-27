@@ -17,7 +17,11 @@ func Main(
 	r := reporter.New(constant.Identity.Name(), version).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
-	a.String(argumentConstant.Executable, "", "Executable to package: go-example")
+	a.String(
+		argumentConstant.Executable,
+		"",
+		"Executable to package: go-example",
+	)
 	a.String(
 		argumentConstant.Version,
 		"",

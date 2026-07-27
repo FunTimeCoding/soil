@@ -11,6 +11,11 @@ func TestIntegerKeys(t *testing.T) {
 	assert.Integers(
 		t,
 		[]int{0, 1},
-		maps.IntegerKeys(map[int]string{0: constant.UpperAlfa, 1: constant.UpperBravo}),
+		maps.IntegerKeys(
+			map[int]string{
+				0: constant.UpperAlfa,
+				1: constant.UpperBravo,
+			},
+		),
 	)
 }

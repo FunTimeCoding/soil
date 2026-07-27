@@ -15,6 +15,10 @@ func TestRemote(t *testing.T) {
 			Locator:  "Bravo",
 			Provider: "Charlie",
 		},
-		remote.New(constant.UpperAlfa, constant.UpperBravo, constant.UpperCharlie),
+		remote.New(
+			constant.UpperAlfa,
+			constant.UpperBravo,
+			constant.UpperCharlie,
+		),
 	)
 }

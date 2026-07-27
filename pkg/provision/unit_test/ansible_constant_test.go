@@ -7,5 +7,9 @@ import (
 )
 
 func TestAnsibleConstant(t *testing.T) {
-	assert.String(t, "ANSIBLE_INVENTORY", constant.AnsibleInventoryEnvironment)
+	assert.String(
+		t,
+		"ANSIBLE_INVENTORY",
+		constant.AnsibleInventoryEnvironment,
+	)
 }
