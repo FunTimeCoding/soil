@@ -7,7 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/github/check/job/option"
 	"github.com/funtimecoding/soil/pkg/github/constant"
 	"github.com/funtimecoding/soil/pkg/monitor"
-	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 )
 
 func Check(o *option.Job) {
@@ -33,6 +33,6 @@ func Check(o *option.Job) {
 	}
 
 	if len(elements) == 0 {
-		monitor.NoRelevant(item.GoGitHubJob.Plural)
+		monitor.NoRelevant(monitorConstant.GoGitHubJob.Plural)
 	}
 }

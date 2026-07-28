@@ -1,8 +1,8 @@
 package report
 
 import (
+	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/collector"
-	"github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/item"
 	"time"
 )

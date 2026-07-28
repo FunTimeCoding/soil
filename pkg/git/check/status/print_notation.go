@@ -1,11 +1,11 @@
 package status
 
 import (
+	library "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/git/check/status/option"
 	"github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/git/repository"
 	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
-	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/report"
 	"time"
 )
@@ -21,18 +21,18 @@ func printNotation(
 		v,
 		r,
 		o.All,
-		item.GoGitStatus,
+		monitor.GoGitStatus,
 	) {
-		var s monitor.Severity
+		var s library.Severity
 
 		if e.HasConcerns() {
-			s = monitor.Warning
+			s = library.Warning
 		} else {
-			s = monitor.Information
+			s = library.Information
 		}
 
 		r.AddItem(
-			item.GoGitStatus,
+			monitor.GoGitStatus,
 			e.MonitorIdentifier,
 			s,
 			e.Format(f),

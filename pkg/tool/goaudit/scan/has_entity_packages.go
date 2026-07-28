@@ -3,6 +3,7 @@ package scan
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"path/filepath"
 )
 
@@ -12,7 +13,7 @@ func hasEntityPackages(
 ) bool {
 	for _, n := range v.MustReadDirectory(path) {
 		if n == "basic" ||
-			n == "constant" ||
+			n == constant.ConstantDirectory ||
 			n == "example" ||
 			n == "check" ||
 			n == "response" {

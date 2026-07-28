@@ -40,5 +40,5 @@ func CloseTab() {
 		return
 	}
 
-	fmt.Println("closed")
+	fmt.Println("tab closed")
 }

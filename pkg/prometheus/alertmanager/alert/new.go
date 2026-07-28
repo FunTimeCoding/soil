@@ -2,7 +2,7 @@ package alert
 
 import (
 	"fmt"
-	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/openapi"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
 	"github.com/prometheus/alertmanager/api/v2/models"
@@ -53,7 +53,7 @@ func New(
 	}
 
 	result := &Alert{
-		MonitorIdentifier: item.GoAlert.StringIdentifier(*v.Fingerprint),
+		MonitorIdentifier: monitor.GoAlert.StringIdentifier(*v.Fingerprint),
 		Fingerprint:       *v.Fingerprint,
 		State:             state,
 		Labels:            v.Labels,

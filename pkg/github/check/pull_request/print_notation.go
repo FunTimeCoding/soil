@@ -1,10 +1,11 @@
 package pull_request
 
 import (
+	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/github/check/pull_request/option"
+	github "github.com/funtimecoding/soil/pkg/github/constant"
 	"github.com/funtimecoding/soil/pkg/github/run"
-	"github.com/funtimecoding/soil/pkg/monitor/constant"
-	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/report"
 )
 
@@ -18,7 +19,7 @@ func printNotation(
 		v,
 		r,
 		o.All,
-		item.GoGitHubPullRequest,
+		monitor.GoGitHubPullRequest,
 	) {
 		var s constant.Severity
 
@@ -29,10 +30,10 @@ func printNotation(
 		}
 
 		r.AddItem(
-			item.GoGitHubPullRequest,
+			monitor.GoGitHubPullRequest,
 			e.MonitorIdentifier,
 			s,
-			e.Format(Notation),
+			e.Format(github.NotationFormat),
 			*e.Raw.HTMLURL,
 			&e.Update,
 		)

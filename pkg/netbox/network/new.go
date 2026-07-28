@@ -1,6 +1,7 @@
 package network
 
 import (
+	netboxConstant "github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/network"
 	"github.com/funtimecoding/soil/pkg/network/constant"
 	"github.com/netbox-community/go-netbox/v4"
@@ -13,7 +14,7 @@ func New(i *netbox.Interface) *Interface {
 	if s := i.GetName(); s != "" {
 		name = i.GetName()
 	} else {
-		name = NoName
+		name = netboxConstant.NoName
 	}
 
 	var h net.HardwareAddr

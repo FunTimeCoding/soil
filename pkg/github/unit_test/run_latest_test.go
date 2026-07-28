@@ -2,8 +2,9 @@ package unit_test
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/github/constant"
 	"github.com/funtimecoding/soil/pkg/github/run"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"testing"
 )
 
@@ -14,18 +15,18 @@ func TestRunLatest(t *testing.T) {
 		run.Latest(
 			[]*run.Run{
 				{
-					Name:   constant.UpperAlfa,
-					Status: run.Completed,
+					Name:   stringsConstant.UpperAlfa,
+					Status: constant.CompletedStatus,
 					Create: assert.NewDay(0),
 				},
 				{
-					Name:   constant.UpperBravo,
-					Status: run.Completed,
+					Name:   stringsConstant.UpperBravo,
+					Status: constant.CompletedStatus,
 					Create: assert.NewDay(1),
 				},
 				{
-					Name:   constant.UpperCharlie,
-					Status: run.Completed,
+					Name:   stringsConstant.UpperCharlie,
+					Status: constant.CompletedStatus,
 					Create: assert.NewDay(2),
 				},
 			},

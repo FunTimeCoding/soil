@@ -2,6 +2,7 @@ package scan
 
 import (
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"path/filepath"
 )
 
@@ -25,18 +26,21 @@ func scanService(
 	s.Client = v.DirectoryExists(filepath.Join(path, "client"))
 	s.Types = v.DirectoryExists(filepath.Join(path, "types"))
 	s.Model = v.DirectoryExists(filepath.Join(path, "model"))
-	s.ConstantDirectory = v.DirectoryExists(filepath.Join(path, "constant"))
+	s.ConstantDirectory = v.DirectoryExists(filepath.Join(
+		path,
+		constant.ConstantDirectory,
+	))
 	s.ConstantFile = !s.ConstantDirectory && v.Has(
 		filepath.Join(
 			path,
-			"constant.go",
+			constant.ConstantFileName,
 		),
 	)
 	s.Worker = v.DirectoryExists(filepath.Join(path, "worker"))
 	s.IntegrationTests = v.DirectoryExists(
 		filepath.Join(
 			path,
-			"integration_test",
+			constant.IntegrationTestDirectory,
 		),
 	)
 	s.Option = v.DirectoryExists(filepath.Join(path, "option"))

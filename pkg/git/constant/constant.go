@@ -49,3 +49,16 @@ var (
 
 	Format = option.ExtendedColor.Copy()
 )
+
+const (
+	RepositoryRootEnvironment    = "REPOSITORY_ROOT"
+	RepositoryExcludeEnvironment = "REPOSITORY_EXCLUDE"
+)
+
+const (
+	UnknownProvider = "unknown"
+	GitLabProvider  = "gitlab"
+	GitHubProvider  = "github"
+)
+
+const NotClean = "not_clean"

@@ -1,8 +1,8 @@
 package silence
 
 import (
-	"github.com/funtimecoding/soil/pkg/monitor/constant"
-	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/constant"
+	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/report"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/check/silence/option"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/silence"
@@ -18,10 +18,10 @@ func printNotation(
 		v,
 		r,
 		o.All,
-		item.GoSilence,
+		monitor.GoSilence,
 	) {
 		r.AddItem(
-			item.GoSilence,
+			monitor.GoSilence,
 			e.MonitorIdentifier,
 			constant.Warning,
 			e.Rule,

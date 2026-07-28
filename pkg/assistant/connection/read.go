@@ -1,6 +1,7 @@
 package connection
 
 import (
+	"github.com/funtimecoding/soil/pkg/assistant/constant"
 	"github.com/funtimecoding/soil/pkg/assistant/message"
 	"github.com/gorilla/websocket"
 )
@@ -26,11 +27,11 @@ func (c *Connection) Read() {
 			}
 
 			switch m.Type {
-			case Result:
+			case constant.Result:
 				c.consumeResult(&m)
-			case Event:
+			case constant.Event:
 				c.consumeEvent(&m)
-			case Pong:
+			case constant.Pong:
 				// pong received
 			}
 		}

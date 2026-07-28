@@ -1,6 +1,9 @@
 package runner
 
-import "github.com/funtimecoding/soil/pkg/system"
+import (
+	"github.com/funtimecoding/soil/pkg/gitlab/constant"
+	"github.com/funtimecoding/soil/pkg/system"
+)
 
 func (r *Runner) hostname() string {
 	if s := system.LookupFirst(r.Address); s != "" {
@@ -8,7 +11,7 @@ func (r *Runner) hostname() string {
 	}
 
 	if r.Address == "" {
-		return NoAddress
+		return constant.RunnerNoAddress
 	}
 
 	return r.Address

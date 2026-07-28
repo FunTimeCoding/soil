@@ -1,11 +1,11 @@
 package version
 
 import (
+	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/go_mod"
 	"github.com/funtimecoding/soil/pkg/go_mod/check/version/option"
 	"github.com/funtimecoding/soil/pkg/go_mod/project"
-	"github.com/funtimecoding/soil/pkg/monitor/constant"
-	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/report"
 	"time"
 )
@@ -21,7 +21,7 @@ func printNotation(
 		v,
 		r,
 		o.All,
-		item.GoGitStatus,
+		monitor.GoGitStatus,
 	) {
 		var s constant.Severity
 
@@ -32,7 +32,7 @@ func printNotation(
 		}
 
 		r.AddItem(
-			item.GoGitStatus,
+			monitor.GoGitStatus,
 			e.MonitorIdentifier,
 			s,
 			e.Format(f),

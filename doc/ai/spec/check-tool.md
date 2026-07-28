@@ -149,7 +149,7 @@ The steps:
 
 Each entity must expose `MonitorIdentifier`, `Link`, and a timestamp field for `AddItem`. The severity (`constant.Critical`, `constant.Warning`) is domain-specific.
 
-Items are registered in `pkg/monitor/item/constant/constant.go` via `collector.New(command, name, plural)`.
+Items are registered in `pkg/monitor/constant/collector.go` via `collector.New(command, name, plural)`.
 
 ## Format Preset
 
@@ -235,4 +235,4 @@ if len(elements) == 0 {
 }
 ```
 
-Items are registered in `pkg/monitor/item/constant/constant.go`.
+Items are registered in `pkg/monitor/constant/collector.go`.

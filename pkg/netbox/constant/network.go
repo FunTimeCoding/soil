@@ -1,4 +1,4 @@
-package network
+package constant
 
 import "github.com/netbox-community/go-netbox/v4"
 
@@ -8,12 +8,9 @@ const (
 
 	InterfaceVirtual   = "virtual"
 	Interface1000BaseT = "1000base-t"
-
-	NoType = "no type"
-	NoName = "no name"
 )
 
-var Interfaces = []netbox.InterfaceTypeValue{
+var InterfaceTypes = []netbox.InterfaceTypeValue{
 	InterfaceVirtual,
 	Interface1000BaseT,
 }

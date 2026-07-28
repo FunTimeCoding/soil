@@ -3,7 +3,7 @@ package alert
 import (
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/alert/option"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/team"
-	"github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/monitor/constant"
 )
 
 func (a *Alert) enrich(

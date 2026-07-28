@@ -3,7 +3,7 @@ package alert
 import (
 	"fmt"
 	console "github.com/funtimecoding/soil/pkg/console/constant"
-	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus/check/alert/option"
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/tool/common"
@@ -58,7 +58,7 @@ func Check(o *option.Alert) {
 	if !o.All && statistic.Relevant == 0 {
 		fmt.Printf(
 			"No relevant %s, %d in total\n",
-			item.GoAlert.Plural,
+			monitor.GoAlert.Plural,
 			statistic.Total,
 		)
 	}

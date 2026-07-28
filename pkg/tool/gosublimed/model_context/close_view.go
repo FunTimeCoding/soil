@@ -19,5 +19,5 @@ func (s *Server) CloseView(
 		return s.captureFail(e, constant.UnexpectedError)
 	}
 
-	return response.Success("closed")
+	return response.Success("view closed")
 }

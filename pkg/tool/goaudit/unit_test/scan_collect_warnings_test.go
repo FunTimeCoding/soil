@@ -109,28 +109,6 @@ func TestWarningMissingCaptureFail(t *testing.T) {
 	)
 }
 
-func TestWarningConstantFile(t *testing.T) {
-	v := virtual_file_system.New()
-	v.WriteString(
-		"pkg/tool/gotestd/server/r.go",
-		"package server\n",
-	)
-	v.WriteString(
-		"pkg/tool/gotestd/constant.go",
-		"package gotestd\n",
-	)
-	v.WriteString(
-		"pkg/tool/gotestd/option/o.go",
-		"package option\n",
-	)
-	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
-	assertConcern(
-		t,
-		scan.Services(v, "test", scan.NewConfiguration())[0],
-		constant.ConstantFileKey,
-	)
-}
-
 func TestCleanServiceNoConcerns(t *testing.T) {
 	v := virtual_file_system.New()
 	v.WriteString(

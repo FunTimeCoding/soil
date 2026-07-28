@@ -1,8 +1,8 @@
-package gorilla
+package constant
 
 import "html/template"
 
-var homeTemplate = template.Must(
+var GorillaHomeTemplate = template.Must(
 	template.New("").Parse(
 		`
 <!DOCTYPE html>

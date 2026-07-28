@@ -25,7 +25,11 @@ func MissingSentry(v *virtual_file_system.System) []*concern.Concern {
 	}
 
 	for name := range programs {
-		toolDirectory := filepath.Join("pkg", "tool", name)
+		toolDirectory := filepath.Join(
+			constant.PackageDirectory,
+			constant.ToolDirectory,
+			name,
+		)
 
 		if hasSentryReporter(v, toolDirectory) {
 			programs[name] = true

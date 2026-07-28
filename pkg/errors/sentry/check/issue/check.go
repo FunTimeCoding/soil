@@ -7,7 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/check/issue/option"
 	"github.com/funtimecoding/soil/pkg/monitor"
-	"github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 )
 
 func Check(o *option.Issue) {
@@ -34,6 +34,6 @@ func Check(o *option.Issue) {
 	}
 
 	if len(elements) == 0 {
-		monitor.NoRelevant(constant.GoSentry.Plural)
+		monitor.NoRelevant(monitorConstant.GoSentry.Plural)
 	}
 }

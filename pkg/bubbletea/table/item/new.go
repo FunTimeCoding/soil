@@ -2,19 +2,20 @@ package item
 
 import (
 	"charm.land/bubbles/v2/table"
+	"github.com/funtimecoding/soil/pkg/bubbletea/constant"
 	"github.com/funtimecoding/soil/pkg/bubbletea/style"
 )
 
 func New(user bool) *table.Model {
 	columns := []table.Column{
-		{Title: IdentifierColumn},
-		{Title: ScoreColumn},
-		{Title: SeverityColumn},
-		{Title: DetailColumn},
+		{Title: constant.ItemIdentifierColumn},
+		{Title: constant.ItemScoreColumn},
+		{Title: constant.ItemSeverityColumn},
+		{Title: constant.ItemDetailColumn},
 	}
 
 	if user {
-		columns = append(columns, table.Column{Title: UserColumn})
+		columns = append(columns, table.Column{Title: constant.ItemUserColumn})
 	}
 
 	result := table.New(

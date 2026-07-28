@@ -1,8 +1,8 @@
 package outdated
 
 import (
-	"github.com/funtimecoding/soil/pkg/monitor/constant"
-	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/constant"
+	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/report"
 	"github.com/funtimecoding/soil/pkg/system/macos/brew/formula"
 	"github.com/funtimecoding/soil/pkg/system/macos/check/brew/outdated/option"
@@ -18,10 +18,10 @@ func printNotation(
 		v,
 		r,
 		o.All,
-		item.GoBrew,
+		monitor.GoBrew,
 	) {
 		r.AddItem(
-			item.GoBrew,
+			monitor.GoBrew,
 			e.MonitorIdentifier,
 			constant.Warning,
 			e.CurrentVersion,

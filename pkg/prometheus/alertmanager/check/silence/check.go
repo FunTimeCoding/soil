@@ -3,7 +3,7 @@ package silence
 import (
 	"fmt"
 	console "github.com/funtimecoding/soil/pkg/console/constant"
-	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/advanced_option"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/check/silence/matcher"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/check/silence/option"
@@ -61,7 +61,7 @@ func Check(o *option.Silence) {
 	if !o.All && relevant == 0 {
 		fmt.Printf(
 			"No relevant %s, %d in total\n",
-			item.GoSilence.Plural,
+			monitor.GoSilence.Plural,
 			len(silences),
 		)
 	}

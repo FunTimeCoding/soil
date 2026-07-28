@@ -19,5 +19,5 @@ func (s *Server) CloseTab(
 		return s.captureFail(e, constant.UnexpectedError)
 	}
 
-	return response.Success("closed")
+	return response.Success("tab closed")
 }

@@ -2,7 +2,6 @@ package fetch
 
 import (
 	"github.com/funtimecoding/soil/pkg/monitor/constant"
-	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/split"
 	"github.com/funtimecoding/soil/pkg/system/environment"
@@ -12,7 +11,7 @@ import (
 func List() []string {
 	var result []string
 
-	for _, c := range item.Collectors {
+	for _, c := range constant.Collectors {
 		result = append(result, c.Name)
 	}
 

@@ -11,7 +11,6 @@ func (s *Service) collectWarnings(
 	s.checkModelContext(v, path)
 	s.checkTopLevelArgument(v, path)
 	s.checkTopLevelResponse(v, path)
-	s.checkConstantFile(path)
 	s.checkOption(path)
 	s.checkRun(path)
 	s.checkSuffix(path)

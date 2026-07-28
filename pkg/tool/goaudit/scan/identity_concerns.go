@@ -12,7 +12,11 @@ func IdentityConcerns(
 	path string,
 	name string,
 ) []*concern.Concern {
-	file := filepath.Join(path, "constant", "constant.go")
+	file := filepath.Join(
+		path,
+		constant.ConstantDirectory,
+		constant.ConstantFileName,
+	)
 
 	if !v.Has(file) {
 		return []*concern.Concern{

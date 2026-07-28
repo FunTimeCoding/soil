@@ -1,8 +1,8 @@
 package item
 
 import (
+	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/collector"
-	"github.com/funtimecoding/soil/pkg/monitor/constant"
 	"time"
 )
 

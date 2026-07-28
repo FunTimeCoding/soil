@@ -7,3 +7,13 @@ var Identity = identity.New(
 	"Compliance matrix for services and clients",
 	"goaudit <repo-root> [<repo-root>...]",
 )
+
+const (
+	ConstantDirectory        = "constant"
+	ConstantFileName         = "constant.go"
+	IntegrationTestDirectory = "integration_test"
+	PackageDirectory         = "pkg"
+	TestdataDirectory        = "testdata"
+	ToolDirectory            = "tool"
+	UnitTestDirectory        = "unit_test"
+)

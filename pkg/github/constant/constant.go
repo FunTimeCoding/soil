@@ -30,6 +30,24 @@ const (
 )
 
 var (
-	ErrorNotFound = errors.New("not found")
-	Format        = option.ExtendedColor.Copy()
+	ErrorNotFound  = errors.New("not found")
+	Format         = option.ExtendedColor.Copy()
+	NotationFormat = option.New()
 )
+
+// Status
+const (
+	CompletedStatus  = "completed"
+	QueuedStatus     = "queued"
+	InProgressStatus = "in_progress"
+)
+
+// Conclusion
+const (
+	SuccessConclusion = "success"
+	FailureConclusion = "failure"
+)
+
+const RunFailedConcern = "failed" // Validation concern
+const WorkflowActiveState = "active"
+const NoTags = "no tags"

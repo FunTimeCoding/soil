@@ -1,10 +1,10 @@
 package issue
 
 import (
+	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/check/issue/option"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/issue"
-	"github.com/funtimecoding/soil/pkg/monitor/constant"
-	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/report"
 )
 
@@ -18,10 +18,10 @@ func printNotation(
 		v,
 		r,
 		o.All,
-		item.GoSentry,
+		monitor.GoSentry,
 	) {
 		r.AddItem(
-			item.GoSentry,
+			monitor.GoSentry,
 			e.MonitorIdentifier,
 			constant.Critical,
 			e.Title,

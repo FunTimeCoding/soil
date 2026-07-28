@@ -2,7 +2,7 @@ package issue
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/basic/response"
-	"github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/monitor/constant"
 )
 
 func New(v *response.Issue) *Issue {

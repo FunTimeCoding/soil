@@ -4,18 +4,19 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
 )
 
 func (r *Rack) status(f *option.Format) string {
 	var result string
 
 	if r.Raw.Status != nil {
-		if *r.Raw.Status.Label == ActiveLabel &&
-			*r.Raw.Status.Value == Active {
-			result = Active
-		} else if *r.Raw.Status.Label == DeprecatedLabel &&
-			*r.Raw.Status.Value == Deprecated {
-			result = Deprecated
+		if *r.Raw.Status.Label == constant.RackActiveLabel &&
+			*r.Raw.Status.Value == constant.RackActive {
+			result = constant.RackActive
+		} else if *r.Raw.Status.Label == constant.RackDeprecatedLabel &&
+			*r.Raw.Status.Value == constant.RackDeprecated {
+			result = constant.RackDeprecated
 
 			if f.UseColor {
 				result = console.Yellow("%s", result)
@@ -23,7 +24,7 @@ func (r *Rack) status(f *option.Format) string {
 		} else {
 			result = fmt.Sprintf(
 				"%s (%s=%s)",
-				Unexpected,
+				constant.RackUnexpected,
 				*r.Raw.Status.Label,
 				*r.Raw.Status.Value,
 			)
@@ -33,7 +34,7 @@ func (r *Rack) status(f *option.Format) string {
 			}
 		}
 	} else {
-		result = Unknown
+		result = constant.RackUnknown
 
 		if f.UseColor {
 			result = console.Red("%s", result)

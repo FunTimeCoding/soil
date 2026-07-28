@@ -2,7 +2,7 @@ package silence
 
 import (
 	"fmt"
-	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/openapi"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
@@ -30,7 +30,7 @@ func New(
 	}
 
 	return &Silence{
-		MonitorIdentifier: item.GoSilence.StringIdentifier(
+		MonitorIdentifier: monitor.GoSilence.StringIdentifier(
 			*v.ID,
 		),
 		Identifier: *v.ID,

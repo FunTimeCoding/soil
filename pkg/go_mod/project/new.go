@@ -1,7 +1,7 @@
 package project
 
 import (
-	"github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/monitor/constant"
 	"path/filepath"
 )
 

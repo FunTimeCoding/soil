@@ -3,8 +3,8 @@ package alert
 import (
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/alert"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/check/alert/option"
-	"github.com/funtimecoding/soil/pkg/monitor/constant"
-	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/constant"
+	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/report"
 )
 
@@ -18,7 +18,7 @@ func printNotation(
 		v,
 		r,
 		o.All,
-		item.GoGenie,
+		monitor.GoGenie,
 	) {
 		var s constant.Severity
 
@@ -29,7 +29,7 @@ func printNotation(
 		}
 
 		r.AddItem(
-			item.GoGenie,
+			monitor.GoGenie,
 			e.MonitorIdentifier,
 			s,
 			e.Name,

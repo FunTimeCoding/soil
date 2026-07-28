@@ -1,8 +1,8 @@
 package alert
 
 import (
-	"github.com/funtimecoding/soil/pkg/monitor/constant"
-	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/constant"
+	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/report"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
 	alertmanager "github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
@@ -28,7 +28,7 @@ func printNotation(
 		relevant,
 		r,
 		o.All,
-		item.GoAlert,
+		monitor.GoAlert,
 	) {
 		var s constant.Severity
 
@@ -39,7 +39,7 @@ func printNotation(
 		}
 
 		r.AddItem(
-			item.GoAlert,
+			monitor.GoAlert,
 			e.MonitorIdentifier,
 			s,
 			e.Name,

@@ -1,6 +1,6 @@
 package helper
 
-import "github.com/funtimecoding/soil/pkg/monitor/constant"
+import "github.com/funtimecoding/soil/pkg/constant"
 
 func SeverityWeights(
 	critical float64,

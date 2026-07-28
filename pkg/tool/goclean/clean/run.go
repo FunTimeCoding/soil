@@ -2,7 +2,7 @@ package clean
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/git/remote/provider_map"
+	git "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclean/clean/option"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"strings"
@@ -14,11 +14,11 @@ func Run(o *option.Clean) {
 	r := originRemote(o, m)
 
 	switch r.Provider {
-	case provider_map.GitHubProvider:
+	case git.GitHubProvider:
 		Hub(r)
-	case provider_map.GitLabProvider:
+	case git.GitLabProvider:
 		Lab(o, r)
-	case provider_map.UnknownProvider:
+	case git.UnknownProvider:
 		// TODO: Consider deleting tags except latest locally and pushing them to the server
 		fmt.Println("Unknown provider, nothing to clean")
 	}

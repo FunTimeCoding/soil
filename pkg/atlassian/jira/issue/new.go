@@ -3,7 +3,7 @@ package issue
 import (
 	"github.com/andygrunwald/go-jira"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue/option"
-	"github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/monitor/constant"
 	"strings"
 	"time"
 )

@@ -1,11 +1,11 @@
 package event
 
 import (
+	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/kubernetes/check/event/option"
 	kubernetes "github.com/funtimecoding/soil/pkg/kubernetes/constant"
 	"github.com/funtimecoding/soil/pkg/kubernetes/types/native/event"
-	"github.com/funtimecoding/soil/pkg/monitor/constant"
-	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/report"
 	"slices"
 )
@@ -32,10 +32,10 @@ func printNotation(
 		relevant,
 		r,
 		o.All,
-		item.GoKevt,
+		monitor.GoKevt,
 	) {
 		r.AddItem(
-			item.GoKevt,
+			monitor.GoKevt,
 			e.MonitorIdentifier,
 			constant.Warning,
 			e.Reason,

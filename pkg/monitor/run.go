@@ -3,8 +3,8 @@ package monitor
 import (
 	"fmt"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
-	"github.com/funtimecoding/soil/pkg/monitor/constant"
-	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/constant"
+	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/report"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/system/run"
@@ -18,7 +18,7 @@ func Run(name string) *report.Report {
 	arguments := []string{fmt.Sprintf("--%s", argumentConstant.Notation)}
 
 	if false {
-		if name == item.GoFile.Name {
+		if name == monitor.GoFile.Name {
 			arguments = append(
 				arguments,
 				fmt.Sprintf("--%s", argumentConstant.Verbose),
@@ -33,8 +33,8 @@ func Run(name string) *report.Report {
 		s := fmt.Sprintf("run fail: %s %s", name, r.Error)
 		log.Print(s)
 		result.AddItem(
-			item.MonitorCollector,
-			item.MonitorCollector.StringIdentifier(name),
+			monitor.MonitorCollector,
+			monitor.MonitorCollector.StringIdentifier(name),
 			constant.Critical,
 			s,
 			"",
@@ -47,8 +47,8 @@ func Run(name string) *report.Report {
 	if e := notation.Decode(r.OutputString, &result); e != nil {
 		log.Printf("parse fail: %s %s", name, e)
 		result.AddItem(
-			item.MonitorCollector,
-			item.MonitorCollector.StringIdentifier(name),
+			monitor.MonitorCollector,
+			monitor.MonitorCollector.StringIdentifier(name),
 			constant.Critical,
 			fmt.Sprintf("parse fail: %s %s", name, r.Error),
 			"",

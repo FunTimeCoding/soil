@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/gitlab"
-	"github.com/funtimecoding/soil/pkg/gitlab/job"
+	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab/runner"
 )
 
@@ -26,7 +26,7 @@ func RunnerWay(
 			fmt.Println(j.Format(f))
 		}
 
-		if j.HasConcern(job.Timeout) {
+		if j.HasConcern(constant.JobTimeout) {
 			fmt.Printf("  Start timeout: %s\n", j.Stage)
 
 			if console.AskConfirmation("Retry job?") {

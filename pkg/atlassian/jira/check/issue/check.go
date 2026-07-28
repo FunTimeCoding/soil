@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
 	console "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/monitor"
-	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 )
 
 func Check(o *option.Issue) {
@@ -29,6 +29,6 @@ func Check(o *option.Issue) {
 	}
 
 	if len(elements) == 0 {
-		monitor.NoRelevant(item.GoJira.Plural)
+		monitor.NoRelevant(monitorConstant.GoJira.Plural)
 	}
 }

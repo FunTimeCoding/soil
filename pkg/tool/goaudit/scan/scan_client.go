@@ -3,6 +3,7 @@ package scan
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"path/filepath"
 	"strings"
 )
@@ -20,7 +21,7 @@ func scanClient(
 		Repo:     repo,
 		Must:     hasMustFiles(v, path),
 		Basic:    v.DirectoryExists(filepath.Join(path, "basic")),
-		Constant: v.DirectoryExists(filepath.Join(path, "constant")),
+		Constant: v.DirectoryExists(filepath.Join(path, constant.ConstantDirectory)),
 		Example:  v.DirectoryExists(filepath.Join(path, "example")),
 		Entity:   hasEntityPackages(v, path),
 	}

@@ -8,9 +8,9 @@ import (
 func (m *Map) FindProvider(host string) string {
 	switch host {
 	case constant.GitHubHost:
-		return GitHubProvider
+		return constant.GitHubProvider
 	case constant.GitLabHost:
-		return GitLabProvider
+		return constant.GitLabProvider
 	default:
 		for knownHost, knownProvider := range m.Known {
 			if host == knownHost {
@@ -24,5 +24,5 @@ func (m *Map) FindProvider(host string) string {
 		}
 	}
 
-	return UnknownProvider
+	return constant.UnknownProvider
 }

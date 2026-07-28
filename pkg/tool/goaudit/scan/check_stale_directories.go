@@ -14,7 +14,7 @@ func (s *Service) checkStaleDirectories(
 		s.addConcern(constant.StaleRouteKey, constant.StaleRouteText, path)
 	}
 
-	if v.DirectoryExists(filepath.Join(path, "tool")) {
+	if v.DirectoryExists(filepath.Join(path, constant.ToolDirectory)) {
 		s.addConcern(constant.StaleToolKey, constant.StaleToolText, path)
 	}
 

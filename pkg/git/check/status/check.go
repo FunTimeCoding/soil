@@ -7,14 +7,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/git/repository"
 	"github.com/funtimecoding/soil/pkg/monitor"
-	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 )
 
 func Check(o *option.Status) {
 	elements := repository.Filter(
 		monitor.OnlyConcerns(collect(o.Path, o.Depth), o.All),
-		environment.Slice(RepositoryExcludeEnvironment),
+		environment.Slice(constant.RepositoryExcludeEnvironment),
 		o.All,
 	)
 
@@ -35,6 +35,6 @@ func Check(o *option.Status) {
 	}
 
 	if len(elements) == 0 {
-		monitor.NoRelevant(item.GoGitStatus.Plural)
+		monitor.NoRelevant(monitorConstant.GoGitStatus.Plural)
 	}
 }

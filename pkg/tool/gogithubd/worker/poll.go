@@ -1,6 +1,9 @@
 package worker
 
-import "github.com/funtimecoding/soil/pkg/github/run"
+import (
+	"github.com/funtimecoding/soil/pkg/github/constant"
+	"github.com/funtimecoding/soil/pkg/github/run"
+)
 
 func (w *Worker) Poll() {
 	type key struct {
@@ -14,7 +17,7 @@ func (w *Worker) Poll() {
 		name := repo.GetName()
 
 		for _, r := range w.client.MustLatestRuns(w.owner, name) {
-			if r.Status != run.Completed {
+			if r.Status != constant.CompletedStatus {
 				continue
 			}
 

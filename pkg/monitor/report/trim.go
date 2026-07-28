@@ -2,6 +2,7 @@ package report
 
 import (
 	"fmt"
+	library "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/collector"
 	"github.com/funtimecoding/soil/pkg/monitor/constant"
 	"time"
@@ -22,7 +23,7 @@ func Trim[T any](
 		r.AddItem(
 			o,
 			o.IntegerIdentifier(0),
-			constant.Warning,
+			library.Warning,
 			fmt.Sprintf(
 				"Too many %s (%d), showing only the newest %d",
 				o.Plural,

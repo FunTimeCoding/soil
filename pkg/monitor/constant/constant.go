@@ -23,28 +23,6 @@ const (
 	FlagRemoveCommand    = "flag-remove"
 )
 
-type (
-	Severity string
-	Status   string
-)
-
-const (
-	Critical    Severity = "critical"
-	Warning     Severity = "warning"
-	Information Severity = "information"
-)
-
-const (
-	Open       Status = "open"
-	InProgress Status = "in-progress"
-	Resolved   Status = "resolved"
-	Closed     Status = "closed"
-)
-
 var (
 	Upgrader = websocket.Upgrader{}
-
-	Severities = []Severity{Critical, Warning, Information}
-
-	Statuses = []Status{Open, InProgress, Resolved, Closed}
 )

@@ -10,11 +10,11 @@ func (r *Request) formatState(f *option.Format) string {
 	result := r.State
 
 	if result == constant.OpenedState {
-		result = OpenAlias
+		result = constant.RequestOpenAlias
 	}
 
 	if f.UseColor {
-		if result == OpenAlias {
+		if result == constant.RequestOpenAlias {
 			return console.Yellow("%s", result)
 		}
 

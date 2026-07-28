@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/constant"
 	console "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/monitor"
-	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 )
 
 func Check(o *option.Alert) {
@@ -29,6 +29,6 @@ func Check(o *option.Alert) {
 	}
 
 	if len(elements) == 0 {
-		monitor.NoRelevant(item.GoGenie.Plural)
+		monitor.NoRelevant(monitorConstant.GoGenie.Plural)
 	}
 }

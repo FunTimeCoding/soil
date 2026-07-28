@@ -4,7 +4,7 @@ import (
 	"fmt"
 	console "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/monitor"
-	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/system/macos/brew/constant"
 	"github.com/funtimecoding/soil/pkg/system/macos/check/brew/outdated/option"
 )
@@ -29,6 +29,6 @@ func Check(o *option.Outdated) {
 	}
 
 	if len(elements) == 0 {
-		monitor.NoRelevant(item.GoBrew.Plural)
+		monitor.NoRelevant(monitorConstant.GoBrew.Plural)
 	}
 }

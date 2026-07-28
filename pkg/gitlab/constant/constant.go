@@ -72,3 +72,4 @@ var (
 )
 
 const TraceTimeoutMatch = "ERROR: Job failed (system failure): prepare environment: waiting for pod running: timed out waiting for pod to start."
+const RequestOpenAlias = "open"

@@ -1,6 +1,7 @@
 package netbox
 
 import (
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/device"
 	"github.com/funtimecoding/soil/pkg/netbox/device_role"
 	"github.com/funtimecoding/soil/pkg/netbox/device_type"
@@ -58,7 +59,7 @@ func (c *Client) CreateDevice(
 		q.SetTags(nested)
 	}
 
-	q.SetStatus(device.ActiveStatus)
+	q.SetStatus(constant.DeviceActiveStatus)
 	result, _, e := c.client.DcimAPI.DcimDevicesCreate(
 		c.context,
 	).WritableDeviceWithConfigContextRequest(*q).Execute()

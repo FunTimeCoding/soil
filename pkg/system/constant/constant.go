@@ -16,6 +16,9 @@ const (
 	DarwinARM64 = "darwin-arm64"
 	DarwinAMD64 = "darwin-amd64"
 
+	OpenCommand    = "open"
+	XdgOpenCommand = "xdg-open"
+
 	CommandPath                 = "cmd"
 	BoardPath                   = "board"
 	ConfigurationPath           = ".config"

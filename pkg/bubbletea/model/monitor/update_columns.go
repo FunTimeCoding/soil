@@ -1,7 +1,7 @@
 package monitor
 
 import (
-	"github.com/funtimecoding/soil/pkg/bubbletea/table/item"
+	"github.com/funtimecoding/soil/pkg/bubbletea/constant"
 	"log"
 )
 
@@ -15,21 +15,21 @@ func (m *Model) updateColumns() {
 
 	for i, c := range m.table.Columns() {
 		switch c.Title {
-		case item.IdentifierColumn:
+		case constant.ItemIdentifierColumn:
 			w := columnWidth(c, m.table, i)
 			m.table.Columns()[i].Width = w
 			remaining -= w + 2 // 2 for padding
-		case item.ScoreColumn:
+		case constant.ItemScoreColumn:
 			w := columnWidth(c, m.table, i)
 			m.table.Columns()[i].Width = w
 			remaining -= w + 2 // 2 for padding
-		case item.SeverityColumn:
+		case constant.ItemSeverityColumn:
 			w := columnWidth(c, m.table, i)
 			m.table.Columns()[i].Width = w
 			remaining -= w + 2 // 2 for padding
-		case item.DetailColumn:
+		case constant.ItemDetailColumn:
 			detailIndex = i
-		case item.UserColumn:
+		case constant.ItemUserColumn:
 			w := columnWidth(c, m.table, i)
 			m.table.Columns()[i].Width = w
 			remaining -= w + 2 // 2 for padding

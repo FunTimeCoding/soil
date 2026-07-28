@@ -1,7 +1,7 @@
 package event
 
 import (
-	"github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	"github.com/funtimecoding/soil/pkg/monitor/constant"
 	"k8s.io/api/events/v1"
 )
 

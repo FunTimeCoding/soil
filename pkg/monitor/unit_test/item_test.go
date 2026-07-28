@@ -2,8 +2,8 @@ package unit_test
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/collector"
-	"github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/item"
 	strings "github.com/funtimecoding/soil/pkg/strings/constant"
 	web "github.com/funtimecoding/soil/pkg/web/constant"

@@ -3,6 +3,7 @@ package model_context
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/model_context/argument"
 	proxResponse "github.com/funtimecoding/soil/pkg/tool/goproxmoxd/model_context/response"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -25,7 +26,7 @@ func (s *Server) ListSnippets(
 		return s.captureDetail(e)
 	}
 
-	entries := c.ListDirectory(snippetDirectory)
+	entries := c.ListDirectory(constant.SnippetDirectory)
 	rows := make([]proxResponse.Snippet, 0, len(entries))
 
 	for _, v := range entries {

@@ -7,7 +7,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/git/check/status"
 	"github.com/funtimecoding/soil/pkg/git/check/status/option"
-	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	git "github.com/funtimecoding/soil/pkg/git/constant"
+	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/gogitstatus/constant"
 )
@@ -33,7 +34,7 @@ func Main(
 		3,
 		fmt.Sprintf(
 			"Depth to scan for %s. Default is 3.",
-			item.GoGitStatus.Plural,
+			monitor.GoGitStatus.Plural,
 		),
 	)
 	a.Parse(version, gitHash, buildDate)
@@ -44,7 +45,7 @@ func Main(
 	o.Path = a.GetString(argumentConstant.Path)
 	o.Depth = a.GetInteger(argumentConstant.Depth)
 
-	if s := environment.Optional(status.RepositoryRootEnvironment); s != "" {
+	if s := environment.Optional(git.RepositoryRootEnvironment); s != "" {
 		o.Path = s
 	}
 

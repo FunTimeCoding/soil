@@ -7,7 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/github/check/pull_request/option"
 	"github.com/funtimecoding/soil/pkg/github/constant"
 	"github.com/funtimecoding/soil/pkg/monitor"
-	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 )
 
 func Check(o *option.Request) {
@@ -33,6 +33,6 @@ func Check(o *option.Request) {
 	}
 
 	if len(elements) == 0 {
-		monitor.NoRelevant(item.GoGitHubPullRequest.Plural)
+		monitor.NoRelevant(monitorConstant.GoGitHubPullRequest.Plural)
 	}
 }

@@ -6,11 +6,11 @@ import (
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	library "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/soil/pkg/git/check/status"
+	git "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/go_mod/check/version"
 	"github.com/funtimecoding/soil/pkg/go_mod/check/version/option"
 	go_mod "github.com/funtimecoding/soil/pkg/go_mod/constant"
-	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/runtime"
 	"github.com/funtimecoding/soil/pkg/strings/split"
 	"github.com/funtimecoding/soil/pkg/system"
@@ -34,7 +34,7 @@ func Main(
 		3,
 		fmt.Sprintf(
 			"Depth to scan for %s. Default: 3",
-			item.GoVersion.Plural,
+			monitor.GoVersion.Plural,
 		),
 	)
 	a.Parse(programVersion, gitHash, buildDate)
@@ -44,7 +44,7 @@ func Main(
 	o.Path = a.PositionalFallback(
 		0,
 		environment.Fallback(
-			status.RepositoryRootEnvironment,
+			git.RepositoryRootEnvironment,
 			library.CurrentDirectory,
 		),
 	)

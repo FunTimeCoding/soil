@@ -3,6 +3,7 @@ package worker
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/integration_test/worker_tester"
 	"testing"
 )
@@ -13,7 +14,7 @@ func TestPollSavesNewAlert(t *testing.T) {
 		alert.NewBasic(
 			"abc123",
 			"HighMemory",
-			"critical",
+			constant.CriticalSeverity,
 			"Memory above 90%",
 		),
 	)
@@ -21,14 +22,14 @@ func TestPollSavesNewAlert(t *testing.T) {
 	records := o.Store.MustByName("HighMemory")
 	assert.Count(t, 1, records)
 	assert.String(t, "abc123", records[0].Fingerprint)
-	assert.String(t, "critical", records[0].Severity)
+	assert.String(t, constant.CriticalSeverity, records[0].Severity)
 	assert.True(t, records[0].End == nil)
 }
 
 func TestPollResolvesRemovedAlert(t *testing.T) {
 	o := worker_tester.New(t)
 	o.MockClient.Add(
-		alert.NewBasic("abc123", "HighMemory", "critical", ""),
+		alert.NewBasic("abc123", "HighMemory", constant.CriticalSeverity, ""),
 	)
 	o.Worker.Poll()
 	o.MockClient.Remove("abc123")
@@ -41,7 +42,7 @@ func TestPollResolvesRemovedAlert(t *testing.T) {
 func TestPollIgnoresDuplicateFiring(t *testing.T) {
 	o := worker_tester.New(t)
 	o.MockClient.Add(
-		alert.NewBasic("abc123", "HighMemory", "critical", ""),
+		alert.NewBasic("abc123", "HighMemory", constant.CriticalSeverity, ""),
 	)
 	o.Worker.Poll()
 	o.Worker.Poll()
@@ -52,10 +53,10 @@ func TestPollIgnoresDuplicateFiring(t *testing.T) {
 func TestPollIgnoresDuplicateInResponse(t *testing.T) {
 	o := worker_tester.New(t)
 	o.MockClient.Add(
-		alert.NewBasic("abc123", "HighMemory", "critical", ""),
+		alert.NewBasic("abc123", "HighMemory", constant.CriticalSeverity, ""),
 	)
 	o.MockClient.Add(
-		alert.NewBasic("abc123", "HighMemory", "critical", ""),
+		alert.NewBasic("abc123", "HighMemory", constant.CriticalSeverity, ""),
 	)
 	o.Worker.Poll()
 	assert.Count(t, 1, o.Store.MustByName("HighMemory"))
@@ -64,7 +65,7 @@ func TestPollIgnoresDuplicateInResponse(t *testing.T) {
 func TestRestartPollKeepsFiringOpen(t *testing.T) {
 	o := worker_tester.New(t)
 	o.MockClient.Add(
-		alert.NewBasic("abc123", "HighMemory", "critical", ""),
+		alert.NewBasic("abc123", "HighMemory", constant.CriticalSeverity, ""),
 	)
 	o.Worker.Poll()
 	fresh := worker_tester.NewWithStore(t, o.Store, o.MockClient)
@@ -78,7 +79,7 @@ func TestRestartPollKeepsFiringOpen(t *testing.T) {
 func TestRestartPollResolvesGone(t *testing.T) {
 	o := worker_tester.New(t)
 	o.MockClient.Add(
-		alert.NewBasic("abc123", "HighMemory", "critical", ""),
+		alert.NewBasic("abc123", "HighMemory", constant.CriticalSeverity, ""),
 	)
 	o.Worker.Poll()
 	o.MockClient.Remove("abc123")
@@ -93,7 +94,7 @@ func TestRestartPollResolvesGone(t *testing.T) {
 func TestPollPrunesOldRecords(t *testing.T) {
 	o := worker_tester.NewWithZeroRetention(t)
 	o.MockClient.Add(
-		alert.NewBasic("abc123", "HighMemory", "critical", ""),
+		alert.NewBasic("abc123", "HighMemory", constant.CriticalSeverity, ""),
 	)
 	o.Worker.Poll()
 	o.MockClient.Remove("abc123")

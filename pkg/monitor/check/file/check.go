@@ -2,9 +2,9 @@ package file
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/check/file/option"
-	"github.com/funtimecoding/soil/pkg/monitor/constant"
-	item "github.com/funtimecoding/soil/pkg/monitor/item/constant"
+	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/report"
 	"github.com/funtimecoding/soil/pkg/system"
 	"time"
@@ -22,8 +22,8 @@ func Check(o *option.File) {
 
 		if time.Since(t) > 5*time.Minute {
 			r.AddItem(
-				item.GoFile,
-				item.GoFile.IntegerIdentifier(i+1),
+				monitor.GoFile,
+				monitor.GoFile.IntegerIdentifier(i+1),
 				constant.Warning,
 				fmt.Sprintf("File old: %s", p),
 				"",
@@ -31,8 +31,8 @@ func Check(o *option.File) {
 			)
 		} else if o.Verbose {
 			r.AddItem(
-				item.GoFile,
-				item.GoFile.IntegerIdentifier(i+1),
+				monitor.GoFile,
+				monitor.GoFile.IntegerIdentifier(i+1),
 				constant.Information,
 				fmt.Sprintf("File good: %s", p),
 				"",

@@ -1,11 +1,14 @@
 package run
 
-import "slices"
+import (
+	"github.com/funtimecoding/soil/pkg/github/constant"
+	"slices"
+)
 
 func (r *Run) Validate() {
 	if len(r.Jobs) > 0 && r.Jobs[0].Fail() {
-		if !slices.Contains(r.concern, Failed) {
-			r.concern = append(r.concern, Failed)
+		if !slices.Contains(r.concern, constant.RunFailedConcern) {
+			r.concern = append(r.concern, constant.RunFailedConcern)
 		}
 	}
 }

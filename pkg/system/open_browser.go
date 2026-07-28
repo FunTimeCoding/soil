@@ -10,9 +10,9 @@ import (
 func OpenBrowser(locator string) {
 	switch p := runtime.GOOS; p {
 	case constant.Linux:
-		run.New().Launch("xdg-open", locator)
+		run.New().Launch(constant.XdgOpenCommand, locator)
 	case constant.Darwin:
-		run.New().Launch("open", locator)
+		run.New().Launch(constant.OpenCommand, locator)
 	default:
 		unexpected.String(p)
 	}

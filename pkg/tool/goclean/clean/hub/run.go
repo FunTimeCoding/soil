@@ -3,6 +3,7 @@ package hub
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/github"
+	"github.com/funtimecoding/soil/pkg/github/constant"
 	"github.com/funtimecoding/soil/pkg/github/run"
 )
 
@@ -19,7 +20,7 @@ func Run(
 	}
 
 	for _, r := range runs {
-		if r.Status != run.Completed {
+		if r.Status != constant.CompletedStatus {
 			continue
 		}
 

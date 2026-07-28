@@ -85,3 +85,23 @@ const (
 	MainFile      = "main.go"
 	ReadmeFile    = "README.md"
 )
+
+type Severity string
+
+type Status string
+
+const (
+	Critical    Severity = "critical"
+	Warning     Severity = "warning"
+	Information Severity = "information"
+	Open        Status   = "open"
+	InProgress  Status   = "in-progress"
+	Resolved    Status   = "resolved"
+	Closed      Status   = "closed"
+)
+
+var (
+	Severities = []Severity{Critical, Warning, Information}
+
+	Statuses = []Status{Open, InProgress, Resolved, Closed}
+)
