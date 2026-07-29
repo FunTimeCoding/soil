@@ -69,7 +69,7 @@ func (p *Page) Render() gomponents.Node {
 
 		if node == nil {
 			node = html.A(
-				gomponents.Attr("href", "/"),
+				gomponents.Attr("href", constant.LocationRoot),
 				html.Strong(gomponents.Text(brand)),
 			)
 		}
@@ -111,11 +111,11 @@ func (p *Page) Render() gomponents.Node {
 	body = append(
 		body,
 		html.Div(
-			html.ID(NotificationRegion),
+			html.ID(constant.LayoutNotificationRegion),
 			html.Class("container"),
 		),
 		html.Div(
-			html.ID(StatusLine),
+			html.ID(constant.LayoutStatusLine),
 			html.Class("container"),
 		),
 	)

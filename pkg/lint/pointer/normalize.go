@@ -2,11 +2,15 @@ package pointer
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"strings"
 )
 
 func Normalize(s string) string {
-	result := strings.TrimPrefix(s, fmt.Sprintf("%s/", PluginRootVariable))
+	result := strings.TrimPrefix(
+		s,
+		fmt.Sprintf("%s/", constant.PluginRootVariable),
+	)
 	result = strings.TrimPrefix(result, "./")
 
 	if i := strings.Index(result, "#"); i != -1 {

@@ -1,7 +1,7 @@
 package client
 
 import (
-	"github.com/funtimecoding/soil/pkg/web/authorization/constant"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
 
@@ -12,10 +12,10 @@ func (c *Client) SignOut(
 	http.SetCookie(
 		w,
 		&http.Cookie{
-			Name:   constant.SubjectCookie,
+			Name:   constant.AuthorizationSubjectCookie,
 			MaxAge: -1,
-			Path:   "/",
+			Path:   constant.LocationRoot,
 		},
 	)
-	http.Redirect(w, r, "/", http.StatusFound)
+	http.Redirect(w, r, constant.LocationRoot, http.StatusFound)
 }

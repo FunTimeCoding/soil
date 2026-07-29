@@ -2,9 +2,7 @@ package unit_test
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	authorization "github.com/funtimecoding/soil/pkg/web/authorization/constant"
 	"github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/location"
 	"testing"
 )
 
@@ -19,20 +17,20 @@ func TestAuthorizationConstant(t *testing.T) {
 	assert.String(
 		t,
 		"/.well-known/oauth-protected-resource",
-		authorization.ProtectedResource,
+		constant.ProtectedResource,
 	)
 	assert.String(
 		t,
 		"authorization_servers",
-		authorization.AuthorizationServer,
+		constant.AuthorizationServer,
 	)
-	assert.String(t, "resource", authorization.Resource)
-	assert.String(t, "GET, OPTIONS", authorization.ProtectedMethods)
+	assert.String(t, "resource", constant.AuthorizationResource)
+	assert.String(t, "GET, OPTIONS", constant.ProtectedMethods)
 }
 
 func TestLocationConstant(t *testing.T) {
-	assert.String(t, "/favicon.ico", location.Favicon)
-	assert.String(t, "/mcp", location.ModelContext)
-	assert.String(t, "/shutdown", location.Shutdown)
-	assert.String(t, "/status", location.Status)
+	assert.String(t, "/favicon.ico", constant.LocationFavicon)
+	assert.String(t, "/mcp", constant.LocationModelContext)
+	assert.String(t, "/shutdown", constant.LocationShutdown)
+	assert.String(t, "/status", constant.LocationStatus)
 }

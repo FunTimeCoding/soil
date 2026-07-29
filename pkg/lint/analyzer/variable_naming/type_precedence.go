@@ -1,76 +1,79 @@
 package variable_naming
 
-import "go/types"
+import (
+	"github.com/funtimecoding/soil/pkg/lint/constant"
+	"go/types"
+)
 
 func typePrecedence(t types.Type) int {
 	if isErrorType(t) {
-		return precedenceError
+		return constant.PrecedenceError
 	}
 
 	if isNamedType(t, "testing", "T") {
-		return precedenceTestingT
+		return constant.PrecedenceTestingT
 	}
 
 	if isNamedType(t, "testing", "B") {
-		return precedenceTestingB
+		return constant.PrecedenceTestingB
 	}
 
 	if implementsInterface(t, "io", "Reader") {
-		return precedenceReader
+		return constant.PrecedenceReader
 	}
 
 	if implementsInterface(t, "io", "Writer") {
-		return precedenceWriter
+		return constant.PrecedenceWriter
 	}
 
 	if isNamedType(t, "context", "Context") {
-		return precedenceContext
+		return constant.PrecedenceContext
 	}
 
 	if isNamedType(t, "os", "File") {
-		return precedenceFile
+		return constant.PrecedenceFile
 	}
 
 	if isNamedType(t, "compress/gzip", "Writer") {
-		return precedenceGzipWriter
+		return constant.PrecedenceGzipWriter
 	}
 
 	if isNamedType(t, "archive/tar", "Writer") {
-		return precedenceTarWriter
+		return constant.PrecedenceTarWriter
 	}
 
 	underlying := deref(t).Underlying()
 
 	if isBasicKind(underlying, types.String) {
-		return precedenceString
+		return constant.PrecedenceString
 	}
 
 	if isIntegerType(underlying) {
-		return precedenceInt
+		return constant.PrecedenceInt
 	}
 
 	if isFloatType(underlying) {
-		return precedenceFloat
+		return constant.PrecedenceFloat
 	}
 
 	if isBasicKind(underlying, types.Bool) {
-		return precedenceBool
+		return constant.PrecedenceBool
 	}
 
 	if isByteSlice(t) {
-		return precedenceByteSlice
+		return constant.PrecedenceByteSlice
 	}
 
 	if isBasicKind(underlying, types.Byte) {
-		return precedenceByte
+		return constant.PrecedenceByte
 	}
 
 	if _, okay := underlying.(*types.Map); okay {
-		return precedenceMap
+		return constant.PrecedenceMap
 	}
 
 	if _, okay := underlying.(*types.Chan); okay {
-		return precedenceChannel
+		return constant.PrecedenceChannel
 	}
 
 	if s, okay := underlying.(*types.Slice); okay {
@@ -81,25 +84,25 @@ func typePrecedence(t types.Type) int {
 		}
 
 		if _, okay := e.Underlying().(*types.Struct); okay {
-			return precedenceStructSlice
+			return constant.PrecedenceStructSlice
 		}
 
 		if named, okay := e.(*types.Named); okay {
 			if _, okay := named.Underlying().(*types.Struct); okay {
-				return precedenceStructSlice
+				return constant.PrecedenceStructSlice
 			}
 		}
 
-		return precedencePrimitiveSlice
+		return constant.PrecedencePrimitiveSlice
 	}
 
 	if _, okay := underlying.(*types.Struct); okay {
-		return precedenceStruct
+		return constant.PrecedenceStruct
 	}
 
 	if _, okay := underlying.(*types.Interface); okay {
-		return precedenceInterface
+		return constant.PrecedenceInterface
 	}
 
-	return precedenceUnknown
+	return constant.PrecedenceUnknown
 }

@@ -3,12 +3,12 @@ package example
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence"
-	"github.com/funtimecoding/soil/pkg/atlassian/confluence/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 )
 
 func Search() {
 	c := confluence.NewEnvironment()
-	f := constant.Dense
+	f := constant.ConfluenceDense
 
 	if true {
 		for _, r := range c.MustSearch("space=%s", c.DefaultSpace()) {

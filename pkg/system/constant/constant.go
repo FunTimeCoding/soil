@@ -1,6 +1,9 @@
 package constant
 
-import "time"
+import (
+	"errors"
+	"time"
+)
 
 const (
 	Tilde = "~"
@@ -64,3 +67,11 @@ var (
 	Architectures       = []string{AMD64, ARM64}
 	SystemArchitectures = []string{LinuxAMD64, DarwinARM64, DarwinAMD64}
 )
+
+const (
+	EndOfFile                         = "EOF"
+	SecureShellConfigurationDirectory = ".ssh"
+	KnownHostsFile                    = "known_hosts"
+)
+
+var ErrorDirectoryNotFound = errors.New("directory not found")

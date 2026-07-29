@@ -2,6 +2,7 @@ package layout
 
 import (
 	library "github.com/funtimecoding/soil/pkg/time"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"time"
@@ -9,7 +10,7 @@ import (
 
 func TimeCell(t time.Time) gomponents.Node {
 	return html.Td(
-		html.Class(TimeCellClass),
+		html.Class(constant.LayoutTimeCellClass),
 		html.Small(gomponents.Text(library.FormatCompact(t))),
 	)
 }

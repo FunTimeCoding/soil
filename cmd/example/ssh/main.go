@@ -5,8 +5,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	"github.com/funtimecoding/soil/pkg/ssh"
 	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/join"
-	"github.com/funtimecoding/soil/pkg/system/secure_shell"
 )
 
 func main() {
@@ -28,7 +28,7 @@ func main() {
 			n,
 			join.Absolute(
 				system.Home(),
-				secure_shell.ConfigurationDirectory,
+				constant.SecureShellConfigurationDirectory,
 				"ansible",
 			),
 			"id_rsa_insecure",

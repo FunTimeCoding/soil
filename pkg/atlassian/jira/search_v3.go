@@ -2,9 +2,9 @@ package jira
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/basic/request"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/basic/response"
-	"github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
 	"github.com/funtimecoding/soil/pkg/notation"
 )
 
@@ -23,7 +23,7 @@ func (c *Client) SearchV3(
 		var token = ""
 
 		for {
-			page, e := c.searchV3Page(constant.BasicSearchLimit, token, query)
+			page, e := c.searchV3Page(constant.JiraBasicSearchLimit, token, query)
 
 			if e != nil {
 				return nil, e
@@ -45,7 +45,7 @@ func (c *Client) SearchV3(
 			"/rest/api/3/search/jql",
 			notation.Encode(
 				request.Search{
-					MaxResults: constant.BasicSearchLimit,
+					MaxResults: constant.JiraBasicSearchLimit,
 					Jql:        query,
 				},
 				false,

@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/monitor/gorilla/helper"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/location"
 	"github.com/gorilla/websocket"
 	"log"
 	"net/url"
@@ -23,7 +22,7 @@ func Run() {
 			constant.Localhost,
 			constant.ListenPort,
 		),
-		Path: location.Echo,
+		Path: constant.LocationEcho,
 	}
 	log.Printf("connect to %s", u.String())
 	l := helper.Dial(u)

@@ -3,6 +3,7 @@ package wdutil
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/system"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/time/constant"
 	"time"
 )
@@ -11,7 +12,7 @@ func Check() {
 	ticker := time.NewTicker(1 * time.Second)
 	done := make(chan bool)
 	go func() {
-		past := NotAvailable
+		past := systemConstant.NotAvailable
 
 		for {
 			select {

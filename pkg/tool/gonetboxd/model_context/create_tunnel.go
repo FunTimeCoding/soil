@@ -2,8 +2,8 @@ package model_context
 
 import (
 	"context"
+	generative "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/generative/model_context/parameter"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -13,7 +13,7 @@ func (s *Server) createTunnel(
 	_ context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	name, e := r.RequireString(parameter.Name)
+	name, e := r.RequireString(generative.ParameterName)
 
 	if e != nil {
 		return response.Fail("name is required: %v", e)

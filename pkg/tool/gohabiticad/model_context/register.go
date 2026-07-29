@@ -1,7 +1,7 @@
 package model_context
 
 import (
-	"github.com/funtimecoding/soil/pkg/generative/model_context/parameter"
+	generative "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -48,7 +48,7 @@ func (s *Server) register() {
 				"Score a Habitica task. For habits use direction up or down. For dailies and todos use up to complete.",
 			),
 			mcp.WithString(
-				parameter.Identifier,
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Task ID"),
 			),

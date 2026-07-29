@@ -2,7 +2,7 @@ package alert
 
 import (
 	"github.com/docker/go-units"
-	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/constant"
+	atlassian "github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/console"
 	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status"
@@ -71,14 +71,14 @@ func (a *Alert) extended(
 				if t := a.TeamMap.ByIdentifier(r.Id); t != nil {
 					name = a.TeamMap.KeyByName(t.Name)
 
-					if name == constant.NoKey {
-						name = UnknownTeam
+					if name == atlassian.OpsgenieNoKey {
+						name = atlassian.OpsgenieUnknownTeam
 					}
 				} else {
-					name = UnknownTeam
+					name = atlassian.OpsgenieUnknownTeam
 				}
 
-				if name == UnknownTeam {
+				if name == atlassian.OpsgenieUnknownTeam {
 					s.Line("  Unknown responder team: %+v", r)
 				} else {
 					responders = append(responders, name)
@@ -89,14 +89,14 @@ func (a *Alert) extended(
 				if u := a.UserMap.ByIdentifier(r.Id); u != nil {
 					name = a.shortenUser(u.Name)
 
-					if name == constant.NoKey {
-						name = UnknownUser
+					if name == atlassian.OpsgenieNoKey {
+						name = atlassian.OpsgenieUnknownUser
 					}
 				} else {
-					name = UnknownUser
+					name = atlassian.OpsgenieUnknownUser
 				}
 
-				if name == UnknownUser {
+				if name == atlassian.OpsgenieUnknownUser {
 					s.Line("  Unknown responder user: %+v", r)
 				} else {
 					responders = append(responders, name)

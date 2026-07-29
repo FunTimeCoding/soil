@@ -6,7 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/chat/telegram"
 	"github.com/funtimecoding/soil/pkg/chat/telegram/message"
 	"github.com/funtimecoding/soil/pkg/generative/ollama"
-	"github.com/funtimecoding/soil/pkg/generative/ollama/constant/prompts"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/text/multi_line"
@@ -71,7 +70,7 @@ func OllamaSession() {
 				continue
 			}
 
-			p := prompts.DecideAction()
+			p := ollama.DecideAction()
 			p.History(history.Render())
 			decision := o.GenerateSimple(p.Render())
 

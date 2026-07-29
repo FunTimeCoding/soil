@@ -3,6 +3,7 @@ package unit_test
 import (
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
+	lintConstant "github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 	"testing"
@@ -24,7 +25,7 @@ func TestFunctionEmptyBody(t *testing.T) {
 				Key:      "empty-function-body",
 				Text:     "Function body with only whitespace",
 				Path:     "Bravo",
-				Type:     concern.Line,
+				Type:     lintConstant.ConcernLine,
 				Line:     3,
 				LineText: "func main() {\n}",
 				Fixed:    true,

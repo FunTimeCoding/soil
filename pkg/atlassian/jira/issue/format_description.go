@@ -2,13 +2,14 @@ package issue
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 )
 
 func (i *Issue) FormatDescription(f *option.Format) string {
 	if i.Description == "" {
-		return NoDescription
+		return constant.JiraNoDescription
 	}
 
 	result := i.Description

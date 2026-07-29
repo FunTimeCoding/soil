@@ -2,6 +2,7 @@ package issue
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 )
@@ -10,7 +11,7 @@ func (i *Issue) FormatScore(f *option.Format) string {
 	s := i.Score()
 
 	if s == 0 {
-		return NoScore
+		return constant.JiraNoScore
 	}
 
 	result := fmt.Sprintf("%.1f", s)

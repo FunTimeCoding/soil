@@ -4,10 +4,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/web/search_cache"
+	web "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/palette"
-	theme "github.com/funtimecoding/soil/pkg/web/theme/constant"
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
@@ -37,7 +37,7 @@ func New(s *service.Service) *Server {
 		cache:    search_cache.New(10),
 		view: view.New(
 			layout.New(constant.Identity).
-				WithTheme(theme.Slate).
+				WithTheme(web.ThemeSlate).
 				WithStyle(constant.InlineStyle).
 				WithCommandPalette("/palette").
 				WithItems(

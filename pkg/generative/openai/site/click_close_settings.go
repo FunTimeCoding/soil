@@ -1,7 +1,7 @@
 package site
 
-import "github.com/funtimecoding/soil/pkg/generative/openai/constant"
+import "github.com/funtimecoding/soil/pkg/generative/constant"
 
 func (s *Site) clickCloseSettings() {
-	s.protocol.ClickQuery(constant.CloseSettingsSelector)
+	s.protocol.ClickQuery(constant.OpenAICloseSettingsSelector)
 }

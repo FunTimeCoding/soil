@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	web "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"net/http"
 )
@@ -20,7 +21,7 @@ func (s *Server) event() http.HandlerFunc {
 				if items := s.usageSummary(); len(items) > 0 {
 					layout.PushEvent(
 						w,
-						layout.SummaryStrip,
+						web.LayoutSummaryStrip,
 						layout.SummaryStripContent(items),
 					)
 				}

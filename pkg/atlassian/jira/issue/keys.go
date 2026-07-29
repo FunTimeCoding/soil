@@ -1,5 +1,7 @@
 package issue
 
+import "github.com/funtimecoding/soil/pkg/atlassian/constant"
+
 func Keys(s string) []string {
-	return KeyMatch.FindAllString(s, -1)
+	return constant.JiraKeyMatch.FindAllString(s, -1)
 }

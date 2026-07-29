@@ -5,7 +5,7 @@ import (
 	"fmt"
 	library "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/generative/model_context/constant"
+	generative "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
 
@@ -27,7 +27,7 @@ func Run() {
 	)
 	mcp.AddTool(
 		s,
-		&mcp.Tool{Name: constant.GreetTool, Description: "say hi"},
+		&mcp.Tool{Name: generative.ModelContextGreetTool, Description: "say hi"},
 		func(
 			_ context.Context,
 			_ *mcp.CallToolRequest,

@@ -7,8 +7,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/advanced_option"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/check/silence/matcher"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/check/silence/option"
-	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/silence"
+	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/tool/common"
 	"time"
 )
@@ -37,7 +37,7 @@ func Check(o *option.Silence) {
 	}
 
 	var relevant int
-	f := constant.Format
+	f := prometheus.AlertmanagerFormat
 
 	if o.Copyable {
 		f.Tag(console.TagCopyable)
@@ -46,7 +46,7 @@ func Check(o *option.Silence) {
 	t := time.Now()
 
 	for _, e := range silences {
-		if !o.All && e.State != constant.ActiveState {
+		if !o.All && e.State != prometheus.ActiveState {
 			continue
 		}
 

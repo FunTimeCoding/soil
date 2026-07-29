@@ -2,7 +2,7 @@ package store
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/generative/ollama/constant"
+	"github.com/funtimecoding/soil/pkg/generative/constant"
 )
 
 func (s *Store) InsertEmbedding(
@@ -21,7 +21,7 @@ func (s *Store) InsertEmbedding(
 		sequence,
 		position,
 		blob,
-		constant.EmbedModel,
+		constant.OllamaEmbedModel,
 		now,
 	)
 	errors.PanicOnError(e)

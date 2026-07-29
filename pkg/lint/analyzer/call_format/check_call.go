@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/suppress"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"go/ast"
 	"golang.org/x/tools/go/packages"
@@ -35,7 +36,7 @@ func checkCall(
 				"call_format",
 				fmt.Sprintf(
 					"call exceeds %d characters; split arguments to separate lines",
-					maxLineLength,
+					constant.MaxLineLength,
 				),
 				p.Fset.Position(call.Pos()).Filename,
 				false,

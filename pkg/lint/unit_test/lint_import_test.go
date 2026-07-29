@@ -3,6 +3,7 @@ package unit_test
 import (
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
+	lintConstant "github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 	"testing"
@@ -34,7 +35,7 @@ func TestImportBlank(t *testing.T) {
 				Key:      "import_blank",
 				Text:     "Import block contains blank line",
 				Path:     "Charlie",
-				Type:     concern.Line,
+				Type:     lintConstant.ConcernLine,
 				Line:     3,
 				LineText: "import (",
 				Fixed:    true,
@@ -61,7 +62,7 @@ func TestGo(t *testing.T) {
 				Key:      "single_multi_import",
 				Text:     "Single multi import",
 				Path:     "Alfa",
-				Type:     concern.Line,
+				Type:     lintConstant.ConcernLine,
 				Line:     3,
 				LineText: "import (",
 				Fixed:    true,

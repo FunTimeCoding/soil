@@ -2,8 +2,8 @@ package model_context
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/generative/model_context/parameter"
 	"github.com/funtimecoding/soil/pkg/netbox/device"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -13,7 +13,7 @@ func (s *Server) listDevices(
 	_ context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	query := r.GetString(parameter.Query, "")
+	query := r.GetString(constant.ParameterQuery, "")
 	var result []*device.Device
 	var e error
 

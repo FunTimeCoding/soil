@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/generative/model_context/parameter"
+	generative "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/habitica/tag"
 	"github.com/funtimecoding/soil/pkg/habitica/task"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/constant"
@@ -33,8 +33,8 @@ func TestModelContext(t *testing.T) {
 	score := c.MustCallTool(
 		constant.ScoreTask,
 		map[string]any{
-			parameter.Identifier: "task-1",
-			constant.Direction:   "up",
+			generative.ParameterIdentifier: "task-1",
+			constant.Direction:             "up",
 		},
 	)
 	assert.StringContains(t, "hp", score)

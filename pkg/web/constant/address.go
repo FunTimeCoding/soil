@@ -7,3 +7,9 @@ const (
 	PortEnvironment = "PORT"
 	BindUsage       = "Listen bind address"
 )
+
+const (
+	AddressNoneType = "none"
+	AddressFourType = "IPv4"
+	AddressSixType  = "IPv6"
+)

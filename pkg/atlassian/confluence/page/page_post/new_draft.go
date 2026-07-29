@@ -2,7 +2,7 @@ package page_post
 
 import (
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/basic/response"
-	"github.com/funtimecoding/soil/pkg/atlassian/confluence/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 )
 
 func NewDraft(
@@ -15,9 +15,9 @@ func NewDraft(
 		SpaceIdentifier:  spaceIdentifier,
 		ParentIdentifier: parentIdentifier,
 		Title:            title,
-		Status:           constant.DraftStatus,
+		Status:           constant.ConfluenceDraftStatus,
 		Body: response.Storage{
-			Representation: constant.StorageFormat,
+			Representation: constant.ConfluenceStorageFormat,
 			Value:          body,
 		},
 	}

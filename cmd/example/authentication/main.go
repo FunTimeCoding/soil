@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/text/multi_line"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/authenticator"
-	"github.com/funtimecoding/soil/pkg/web/location"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/request_context"
 	"net/http"
 )
@@ -13,7 +13,7 @@ func main() {
 	a := authenticator.New()
 	m := http.NewServeMux()
 	m.HandleFunc(
-		location.Root,
+		constant.LocationRoot,
 		func(
 			w http.ResponseWriter,
 			e *http.Request,
@@ -32,7 +32,7 @@ func main() {
 		},
 	)
 	m.HandleFunc(
-		location.Status,
+		constant.LocationStatus,
 		func(
 			w http.ResponseWriter,
 			e *http.Request,
@@ -45,7 +45,7 @@ func main() {
 		},
 	)
 	m.HandleFunc(
-		location.Login,
+		constant.LocationLogin,
 		func(
 			w http.ResponseWriter,
 			e *http.Request,
@@ -56,7 +56,7 @@ func main() {
 		},
 	)
 	m.HandleFunc(
-		location.Logout,
+		constant.LocationLogout,
 		func(
 			w http.ResponseWriter,
 			e *http.Request,

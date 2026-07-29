@@ -2,6 +2,7 @@ package pointer
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"slices"
 	"strings"
 )
@@ -11,44 +12,44 @@ func Classify(
 	roots []string,
 ) string {
 	if strings.Contains(s, "://") {
-		return Locator
+		return constant.PointerLocator
 	}
 
 	trimmed, plugin := strings.CutPrefix(
 		s,
-		fmt.Sprintf("%s/", PluginRootVariable),
+		fmt.Sprintf("%s/", constant.PluginRootVariable),
 	)
 
 	if strings.ContainsAny(trimmed, "<>*$") {
-		return Placeholder
+		return constant.PointerPlaceholder
 	}
 
 	if plugin {
-		return Repository
+		return constant.PointerRepository
 	}
 
 	if strings.HasPrefix(trimmed, "/") {
-		if strings.HasPrefix(trimmed, UserPrefix) ||
-			strings.HasPrefix(trimmed, HomePrefix) {
-			return Absolute
+		if strings.HasPrefix(trimmed, constant.UserPathPrefix) ||
+			strings.HasPrefix(trimmed, constant.HomePathPrefix) {
+			return constant.PointerAbsolute
 		}
 
-		return Unknown
+		return constant.PointerUnknown
 	}
 
 	if strings.HasPrefix(trimmed, "..") {
-		return Sibling
+		return constant.PointerSibling
 	}
 
 	root, _, _ := strings.Cut(strings.TrimPrefix(trimmed, "./"), "/")
 
 	if !slices.Contains(roots, root) {
-		return Unknown
+		return constant.PointerUnknown
 	}
 
 	if IsSymbol(trimmed) {
-		return Unknown
+		return constant.PointerUnknown
 	}
 
-	return Repository
+	return constant.PointerRepository
 }

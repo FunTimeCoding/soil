@@ -2,6 +2,7 @@ package issue
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/custom_field_value"
 	"github.com/funtimecoding/soil/pkg/strings"
 	"github.com/funtimecoding/soil/pkg/strings/join"
@@ -11,7 +12,7 @@ func (i *Issue) CustomValue(field string) string {
 	f := i.fieldMap.ByName(field)
 
 	if f == nil {
-		return UnknownField
+		return constant.JiraUnknownField
 	}
 
 	verbose := i.option.Verbose
@@ -19,7 +20,7 @@ func (i *Issue) CustomValue(field string) string {
 	for k, v := range i.Raw.Fields.Unknowns {
 		if k == f.ID {
 			if v == nil {
-				return NilValue
+				return constant.JiraNilValue
 			}
 
 			switch cast := v.(type) {
@@ -75,5 +76,5 @@ func (i *Issue) CustomValue(field string) string {
 		}
 	}
 
-	return UnknownValue
+	return constant.JiraUnknownValue
 }

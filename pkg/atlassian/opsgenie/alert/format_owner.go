@@ -1,6 +1,7 @@
 package alert
 
 import (
+	atlassian "github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
@@ -16,7 +17,7 @@ func (a *Alert) formatOwner(f *option.Format) string {
 			result = console.Green("%s", result)
 		}
 	} else if !f.HasTag(constant.TagDense) {
-		result = NoOwner
+		result = atlassian.OpsgenieNoOwner
 
 		if f.UseColor {
 			result = console.Red("%s", result)

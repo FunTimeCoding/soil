@@ -3,6 +3,7 @@ package customer
 import (
 	"fmt"
 	"github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 )
 
 func New(v *models.CustomerRequestScheme) *Issue {
@@ -11,9 +12,9 @@ func New(v *models.CustomerRequestScheme) *Issue {
 
 	for _, e := range v.RequestFieldValues {
 		switch e.FieldID {
-		case SummaryField:
+		case constant.JiraSummaryField:
 			summary = fmt.Sprintf("%s", e.Value)
-		case DescriptionField:
+		case constant.JiraDescriptionField:
 			description = fmt.Sprintf("%s", e.Value)
 		}
 	}

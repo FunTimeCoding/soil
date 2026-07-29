@@ -2,8 +2,8 @@ package model_context
 
 import (
 	"context"
+	generative "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/generative/model_context/parameter"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -25,13 +25,13 @@ func (s *Server) createPage(
 	}
 
 	draft := r.GetBool(constant.Draft, false)
-	title := r.GetString(parameter.Title, "")
+	title := r.GetString(generative.ParameterTitle, "")
 
 	if !draft && title == "" {
 		return response.Fail("title is required for published pages")
 	}
 
-	body, g := r.RequireString(parameter.Body)
+	body, g := r.RequireString(generative.ParameterBody)
 
 	if g != nil {
 		return response.Fail("body is required: %v", g)

@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence"
-	wiki "github.com/funtimecoding/soil/pkg/atlassian/confluence/constant"
+	atlassian "github.com/funtimecoding/soil/pkg/atlassian/constant"
 	console "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/tool/gowiki/constant"
@@ -28,7 +28,7 @@ func Main(
 	a.Boolean(argumentConstant.Favorites, false, "Favorites")
 	a.Parse(version, gitHash, buildDate)
 	c := confluence.NewEnvironment()
-	f := wiki.Format.Copy()
+	f := atlassian.ConfluenceFormat.Copy()
 
 	if a.GetBoolean(argumentConstant.Copyable) {
 		f.Tag(console.TagCopyable)

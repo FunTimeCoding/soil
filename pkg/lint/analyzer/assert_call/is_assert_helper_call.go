@@ -1,6 +1,7 @@
 package assert_call
 
 import (
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"go/ast"
 	"go/types"
 	"golang.org/x/tools/go/packages"
@@ -16,7 +17,7 @@ func isAssertHelperCall(
 ) bool {
 	i, okay := call.Fun.(*ast.Ident)
 
-	if !okay || !strings.HasPrefix(i.Name, HelperPrefix) {
+	if !okay || !strings.HasPrefix(i.Name, constant.AssertHelperPrefix) {
 		return false
 	}
 
@@ -38,5 +39,5 @@ func isAssertHelperCall(
 		return false
 	}
 
-	return s.Params().At(0).Type().String() == TestingType
+	return s.Params().At(0).Type().String() == constant.AssertTestingType
 }

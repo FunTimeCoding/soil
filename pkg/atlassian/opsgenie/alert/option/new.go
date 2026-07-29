@@ -1,7 +1,7 @@
 package option
 
 import (
-	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/alert/detail"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/team_map"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/user_map"
 	"github.com/funtimecoding/soil/pkg/face"
@@ -14,7 +14,7 @@ func New(
 	alert face.StringAlias,
 	user face.StringAlias,
 	descriptionToName face.StringAlias,
-	parseDescription constant.ParseDescription,
+	parseDescription detail.Parser,
 ) *Alert {
 	return &Alert{
 		Team:              t,

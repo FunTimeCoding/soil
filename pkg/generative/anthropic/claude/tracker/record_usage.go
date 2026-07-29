@@ -1,9 +1,9 @@
 package tracker
 
 import (
-	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/notation"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/pricing"
+	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 )
 
@@ -22,7 +22,7 @@ func (s *State) recordUsage(
 
 		s.RecentMessages = append(s.RecentMessages, key)
 
-		if len(s.RecentMessages) > claude.RecentMessageLimit {
+		if len(s.RecentMessages) > constant.ClaudeRecentMessageLimit {
 			s.RecentMessages = s.RecentMessages[1:]
 		}
 	}

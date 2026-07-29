@@ -1,7 +1,7 @@
 package model_context
 
 import (
-	"github.com/funtimecoding/soil/pkg/generative/model_context/parameter"
+	generative "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -14,12 +14,12 @@ func (s *Server) register() {
 				"Search indexed documents using hybrid BM25 keyword + vector similarity + cross-encoder reranking. Returns ranked results with snippets.",
 			),
 			mcp.WithString(
-				parameter.Query,
+				generative.ParameterQuery,
 				mcp.Required(),
 				mcp.Description("Search query"),
 			),
 			mcp.WithNumber(
-				parameter.Limit,
+				generative.ParameterLimit,
 				mcp.Description("Maximum number of results (default 10)"),
 			),
 			mcp.WithString(
@@ -88,11 +88,11 @@ func (s *Server) register() {
 				mcp.Description("Filter results by metadata key-value pairs (exact match)"),
 			),
 			mcp.WithNumber(
-				parameter.Limit,
+				generative.ParameterLimit,
 				mcp.Description("Maximum number of results (default 10, 0 for all)"),
 			),
 			mcp.WithNumber(
-				parameter.Offset,
+				generative.ParameterOffset,
 				mcp.Description("Number of results to skip (default 0)"),
 			),
 			mcp.WithBoolean(
@@ -131,7 +131,7 @@ func (s *Server) register() {
 				"Register a filesystem collection for indexing.",
 			),
 			mcp.WithString(
-				parameter.Name,
+				generative.ParameterName,
 				mcp.Required(),
 				mcp.Description("Collection name"),
 			),
@@ -154,7 +154,7 @@ func (s *Server) register() {
 				"Delete a collection and all its documents, embeddings, contexts, and source type tags.",
 			),
 			mcp.WithString(
-				parameter.Name,
+				generative.ParameterName,
 				mcp.Required(),
 				mcp.Description("Collection name"),
 			),

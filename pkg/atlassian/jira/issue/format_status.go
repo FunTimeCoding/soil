@@ -1,8 +1,10 @@
 package issue
 
+import "github.com/funtimecoding/soil/pkg/atlassian/constant"
+
 func (i *Issue) FormatStatus() string {
 	if i.Status == "" {
-		return NoStatus
+		return constant.JiraNoStatus
 	}
 
 	if i.shortStatus != nil {

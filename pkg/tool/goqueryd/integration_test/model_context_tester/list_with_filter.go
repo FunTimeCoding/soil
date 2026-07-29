@@ -1,7 +1,7 @@
 package model_context_tester
 
 import (
-	"github.com/funtimecoding/soil/pkg/generative/model_context/parameter"
+	generative "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 )
 
@@ -20,7 +20,7 @@ func (t *Tester) ListWithFilter(
 	}
 
 	if limit > 0 {
-		arguments[parameter.Limit] = limit
+		arguments[generative.ParameterLimit] = limit
 	}
 
 	if full {

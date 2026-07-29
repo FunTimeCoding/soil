@@ -1,6 +1,7 @@
 package variable_naming
 
 import (
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"go/ast"
 	"go/types"
 )
@@ -33,7 +34,7 @@ func collectFromReceiver(
 					typ:         o.Type(),
 					precedence:  typePrecedence(o.Type()),
 					scopedNames: collectScopedNames(o),
-					kind:        kindReceiver,
+					kind:        constant.VariableKindReceiver,
 				},
 			)
 		}

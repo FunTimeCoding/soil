@@ -1,50 +1,53 @@
 package variable_naming
 
-import "go/types"
+import (
+	"github.com/funtimecoding/soil/pkg/lint/constant"
+	"go/types"
+)
 
 func lettersForType(t types.Type) []string {
 	p := typePrecedence(t)
 
 	switch p {
-	case precedenceError:
+	case constant.PrecedenceError:
 		return []string{"e", "f", "g", "h"}
-	case precedenceTestingT:
+	case constant.PrecedenceTestingT:
 		return []string{"t"}
-	case precedenceTestingB:
+	case constant.PrecedenceTestingB:
 		return []string{"b"}
-	case precedenceReader:
+	case constant.PrecedenceReader:
 		return []string{"r"}
-	case precedenceWriter:
+	case constant.PrecedenceWriter:
 		return []string{"w"}
-	case precedenceContext:
+	case constant.PrecedenceContext:
 		return []string{"x"}
-	case precedenceFile:
-		return lettersFromWord("file")
-	case precedenceGzipWriter:
+	case constant.PrecedenceFile:
+		return lettersFromWord(constant.FileWord)
+	case constant.PrecedenceGzipWriter:
 		return []string{"z"}
-	case precedenceTarWriter:
+	case constant.PrecedenceTarWriter:
 		return []string{"t"}
-	case precedenceString:
+	case constant.PrecedenceString:
 		return lettersFromWord("string")
-	case precedenceInt:
+	case constant.PrecedenceInt:
 		return []string{"i"}
-	case precedenceFloat:
+	case constant.PrecedenceFloat:
 		return lettersFromWord("float")
-	case precedenceBool:
+	case constant.PrecedenceBool:
 		return []string{"b"}
-	case precedenceByte:
+	case constant.PrecedenceByte:
 		return lettersFromWord("byte")
-	case precedenceByteSlice:
+	case constant.PrecedenceByteSlice:
 		return lettersFromWord("byte")
-	case precedenceMap:
+	case constant.PrecedenceMap:
 		return lettersFromWord("map")
-	case precedenceChannel:
+	case constant.PrecedenceChannel:
 		return []string{"c"}
-	case precedenceStructSlice:
+	case constant.PrecedenceStructSlice:
 		return []string{"v"}
-	case precedencePrimitiveSlice:
+	case constant.PrecedencePrimitiveSlice:
 		return lettersForPrimitiveSlice(t)
-	case precedenceStruct:
+	case constant.PrecedenceStruct:
 		letters := lettersFromTypeName(t)
 
 		if letters == nil {
@@ -52,7 +55,7 @@ func lettersForType(t types.Type) []string {
 		}
 
 		return letters
-	case precedenceInterface:
+	case constant.PrecedenceInterface:
 		return lettersFromTypeName(t)
 	}
 

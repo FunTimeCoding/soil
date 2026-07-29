@@ -30,7 +30,7 @@ func TestRecoveryPage(t *testing.T) {
 	recorder := httptest.NewRecorder()
 	wrapped.ServeHTTP(
 		recorder,
-		httptest.NewRequest(http.MethodGet, "/", nil),
+		httptest.NewRequest(http.MethodGet, constant.LocationRoot, nil),
 	)
 	assert.Integer(t, http.StatusInternalServerError, recorder.Code)
 	body := recorder.Body.String()
@@ -43,7 +43,7 @@ func TestRecoveryFragment(t *testing.T) {
 	v := recoveryView()
 	wrapped := v.Recovery(memory.New())(http.HandlerFunc(panicServe))
 	recorder := httptest.NewRecorder()
-	request := httptest.NewRequest(http.MethodGet, "/", nil)
+	request := httptest.NewRequest(http.MethodGet, constant.LocationRoot, nil)
 	request.Header.Set(constant.ExtendedRequest, "true")
 	wrapped.ServeHTTP(recorder, request)
 	assert.Integer(t, http.StatusInternalServerError, recorder.Code)

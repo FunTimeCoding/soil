@@ -2,8 +2,8 @@ package model_context
 
 import (
 	"context"
+	generative "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/generative/model_context/parameter"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 	"strings"
@@ -13,7 +13,7 @@ func (s *Server) editPage(
 	_ context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	identifier, f := r.RequireString(parameter.Identifier)
+	identifier, f := r.RequireString(generative.ParameterIdentifier)
 
 	if f != nil {
 		return response.Fail("identifier is required: %v", f)
@@ -31,8 +31,8 @@ func (s *Server) editPage(
 		return response.Fail("new_text is required: %v", h)
 	}
 
-	title := r.GetString(parameter.Title, "")
-	message := r.GetString(parameter.Message, "")
+	title := r.GetString(generative.ParameterTitle, "")
+	message := r.GetString(generative.ParameterMessage, "")
 	draft := r.GetBool(constant.Draft, false)
 	result, i := s.service.EditPage(
 		identifier,

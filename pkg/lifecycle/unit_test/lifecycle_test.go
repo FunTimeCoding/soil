@@ -10,7 +10,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/system"
-	"github.com/funtimecoding/soil/pkg/web/location"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 	"testing"
 )
@@ -63,7 +63,7 @@ func TestRunServerResponds(t *testing.T) {
 				"",
 				func(m *http.ServeMux) {
 					m.HandleFunc(
-						location.Health,
+						constant.LocationHealth,
 						func(
 							w http.ResponseWriter,
 							_ *http.Request,
@@ -94,7 +94,7 @@ func TestStopServerShutsDown(t *testing.T) {
 				"",
 				func(m *http.ServeMux) {
 					m.HandleFunc(
-						location.Health,
+						constant.LocationHealth,
 						func(
 							w http.ResponseWriter,
 							_ *http.Request,
@@ -121,7 +121,7 @@ func TestRunServerMiddleware(t *testing.T) {
 				fmt.Sprintf(":%d", p),
 				func(m *http.ServeMux) {
 					m.HandleFunc(
-						location.Health,
+						constant.LocationHealth,
 						func(
 							w http.ResponseWriter,
 							_ *http.Request,
@@ -167,7 +167,7 @@ func TestRunMixedOrder(t *testing.T) {
 				func(m *http.ServeMux) {
 					log = append(log, "start:server")
 					m.HandleFunc(
-						location.Health,
+						constant.LocationHealth,
 						func(
 							w http.ResponseWriter,
 							_ *http.Request,

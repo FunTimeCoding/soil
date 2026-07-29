@@ -2,8 +2,8 @@ package confluence
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/atlassian/confluence/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/space"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 )
 
 func (c *Client) SpaceByName(name string) (*space.Space, error) {

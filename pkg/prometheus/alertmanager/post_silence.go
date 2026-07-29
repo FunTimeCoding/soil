@@ -1,7 +1,7 @@
 package alertmanager
 
 import (
-	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	library "github.com/funtimecoding/soil/pkg/time"
 	"github.com/prometheus/alertmanager/api/v2/client/silence"

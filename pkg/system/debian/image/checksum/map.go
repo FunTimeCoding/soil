@@ -2,9 +2,13 @@ package checksum
 
 import (
 	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/system/constant"
 	"strings"
 )
 
 func Map(workDirectory string) map[string]string {
-	return Parse(strings.TrimSpace(system.ReadFile(workDirectory, File)))
+	return Parse(strings.TrimSpace(system.ReadFile(
+		workDirectory,
+		constant.ChecksumFile,
+	)))
 }

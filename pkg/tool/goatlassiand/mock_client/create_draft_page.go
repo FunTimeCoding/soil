@@ -1,8 +1,8 @@
 package mock_client
 
 import (
-	"github.com/funtimecoding/soil/pkg/atlassian/confluence/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 )
 
 func (c *Client) CreateDraftPage(
@@ -16,6 +16,6 @@ func (c *Client) CreateDraftPage(
 		parentIdentifier,
 		title,
 		markdown,
-		constant.DraftStatus,
+		constant.ConfluenceDraftStatus,
 	)
 }

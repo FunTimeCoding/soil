@@ -1,5 +1,7 @@
 package claude
 
+import "github.com/funtimecoding/soil/pkg/generative/constant"
+
 func stripAnsi(s string) string {
-	return ansiPattern.ReplaceAllString(s, "")
+	return constant.ClaudeAnsiPattern.ReplaceAllString(s, "")
 }

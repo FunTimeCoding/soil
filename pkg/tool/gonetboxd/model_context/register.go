@@ -1,7 +1,7 @@
 package model_context
 
 import (
-	"github.com/funtimecoding/soil/pkg/generative/model_context/parameter"
+	generative "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -14,7 +14,7 @@ func (s *Server) register() {
 				"List NetBox devices, optionally filtered by name",
 			),
 			mcp.WithString(
-				parameter.Query,
+				generative.ParameterQuery,
 				mcp.Description(
 					"Filter by name (case-insensitive contains)",
 				),
@@ -29,7 +29,7 @@ func (s *Server) register() {
 				"Get a NetBox device by exact name",
 			),
 			mcp.WithString(
-				parameter.Name,
+				generative.ParameterName,
 				mcp.Required(),
 				mcp.Description("Device name"),
 			),
@@ -43,7 +43,7 @@ func (s *Server) register() {
 				"List interfaces for a NetBox device",
 			),
 			mcp.WithString(
-				parameter.Name,
+				generative.ParameterName,
 				mcp.Required(),
 				mcp.Description("Device name"),
 			),
@@ -57,7 +57,7 @@ func (s *Server) register() {
 				"List IP addresses assigned to a NetBox device",
 			),
 			mcp.WithString(
-				parameter.Name,
+				generative.ParameterName,
 				mcp.Required(),
 				mcp.Description("Device name"),
 			),
@@ -104,7 +104,7 @@ func (s *Server) register() {
 			constant.CreateSite,
 			mcp.WithDescription("Create a NetBox site"),
 			mcp.WithString(
-				parameter.Name,
+				generative.ParameterName,
 				mcp.Required(),
 				mcp.Description("Site name"),
 			),
@@ -116,7 +116,7 @@ func (s *Server) register() {
 			constant.CreateTenant,
 			mcp.WithDescription("Create a NetBox tenant"),
 			mcp.WithString(
-				parameter.Name,
+				generative.ParameterName,
 				mcp.Required(),
 				mcp.Description("Tenant name"),
 			),
@@ -128,7 +128,7 @@ func (s *Server) register() {
 			constant.CreateDeviceRole,
 			mcp.WithDescription("Create a NetBox device role"),
 			mcp.WithString(
-				parameter.Name,
+				generative.ParameterName,
 				mcp.Required(),
 				mcp.Description("Role name"),
 			),
@@ -140,7 +140,7 @@ func (s *Server) register() {
 			constant.CreateManufacturer,
 			mcp.WithDescription("Create a NetBox manufacturer"),
 			mcp.WithString(
-				parameter.Name,
+				generative.ParameterName,
 				mcp.Required(),
 				mcp.Description("Manufacturer name"),
 			),
@@ -171,7 +171,7 @@ func (s *Server) register() {
 				"Create a NetBox device. Requires site, role, and device type to exist.",
 			),
 			mcp.WithString(
-				parameter.Name,
+				generative.ParameterName,
 				mcp.Required(),
 				mcp.Description("Device name"),
 			),
@@ -209,7 +209,7 @@ func (s *Server) register() {
 				mcp.Description("Device name"),
 			),
 			mcp.WithString(
-				parameter.Name,
+				generative.ParameterName,
 				mcp.Required(),
 				mcp.Description("Interface name (e.g. eno1, eth0)"),
 			),
@@ -277,7 +277,7 @@ func (s *Server) register() {
 			constant.CreateClusterType,
 			mcp.WithDescription("Create a NetBox cluster type"),
 			mcp.WithString(
-				parameter.Name,
+				generative.ParameterName,
 				mcp.Required(),
 				mcp.Description("Cluster type name"),
 			),
@@ -291,7 +291,7 @@ func (s *Server) register() {
 				"Create a NetBox cluster (VM host grouping)",
 			),
 			mcp.WithString(
-				parameter.Name,
+				generative.ParameterName,
 				mcp.Required(),
 				mcp.Description("Cluster name"),
 			),
@@ -315,7 +315,7 @@ func (s *Server) register() {
 				"Create a NetBox virtual machine assigned to a cluster",
 			),
 			mcp.WithString(
-				parameter.Name,
+				generative.ParameterName,
 				mcp.Required(),
 				mcp.Description("VM name"),
 			),
@@ -339,7 +339,7 @@ func (s *Server) register() {
 				mcp.Description("VM name"),
 			),
 			mcp.WithString(
-				parameter.Name,
+				generative.ParameterName,
 				mcp.Required(),
 				mcp.Description("Interface name (e.g. ens3)"),
 			),
@@ -382,7 +382,7 @@ func (s *Server) register() {
 			constant.CreateTag,
 			mcp.WithDescription("Create a NetBox tag"),
 			mcp.WithString(
-				parameter.Name,
+				generative.ParameterName,
 				mcp.Required(),
 				mcp.Description("Tag name"),
 			),
@@ -496,11 +496,11 @@ func (s *Server) register() {
 				mcp.Description("Device name"),
 			),
 			mcp.WithNumber(
-				parameter.Limit,
+				generative.ParameterLimit,
 				mcp.Description("Maximum entries to return"),
 			),
 			mcp.WithNumber(
-				parameter.Offset,
+				generative.ParameterOffset,
 				mcp.Description("Entries to skip"),
 			),
 		),
@@ -543,11 +543,11 @@ func (s *Server) register() {
 				mcp.Description("VM name"),
 			),
 			mcp.WithNumber(
-				parameter.Limit,
+				generative.ParameterLimit,
 				mcp.Description("Maximum entries to return"),
 			),
 			mcp.WithNumber(
-				parameter.Offset,
+				generative.ParameterOffset,
 				mcp.Description("Entries to skip"),
 			),
 		),
@@ -560,7 +560,7 @@ func (s *Server) register() {
 				"Update a journal entry's comments or kind",
 			),
 			mcp.WithNumber(
-				parameter.Identifier,
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Journal entry identifier"),
 			),
@@ -582,7 +582,7 @@ func (s *Server) register() {
 			constant.DeleteJournalEntry,
 			mcp.WithDescription("Delete a journal entry"),
 			mcp.WithNumber(
-				parameter.Identifier,
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Journal entry identifier"),
 			),
@@ -725,7 +725,7 @@ func (s *Server) register() {
 			constant.CreateTunnelGroup,
 			mcp.WithDescription("Create a VPN tunnel group"),
 			mcp.WithString(
-				parameter.Name,
+				generative.ParameterName,
 				mcp.Required(),
 				mcp.Description("Tunnel group name"),
 			),
@@ -737,7 +737,7 @@ func (s *Server) register() {
 			constant.CreateTunnel,
 			mcp.WithDescription("Create a VPN tunnel in a group"),
 			mcp.WithString(
-				parameter.Name,
+				generative.ParameterName,
 				mcp.Required(),
 				mcp.Description("Tunnel name"),
 			),

@@ -1,9 +1,9 @@
 package alert
 
-import "github.com/funtimecoding/soil/pkg/atlassian/opsgenie/constant"
+import "github.com/funtimecoding/soil/pkg/atlassian/constant"
 
 func (a *Alert) TeamKeyFallback() string {
-	if a.TeamKey == constant.NoKey {
+	if a.TeamKey == constant.OpsgenieNoKey {
 		return a.Team.Name
 	}
 

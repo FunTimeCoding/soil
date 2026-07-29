@@ -1,6 +1,7 @@
 package alert
 
 import (
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 )
@@ -12,7 +13,7 @@ func (a *Alert) formatTeamName(s *option.Format) string {
 		return a.TeamKeyFallback()
 	}
 
-	result = NoTeam
+	result = constant.OpsgenieNoTeam
 
 	if s.UseColor {
 		result = console.Red("%s", result)

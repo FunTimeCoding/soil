@@ -1,6 +1,7 @@
 package call_format
 
 import (
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"go/ast"
 	"go/token"
 )
@@ -18,7 +19,7 @@ func IsViolation(
 	closeLine := fileSet.Position(call.Rparen).Line
 
 	if openLine == closeLine {
-		return lineLength(fileSet, call) > maxLineLength
+		return lineLength(fileSet, call) > constant.MaxLineLength
 	}
 
 	return isMultiLineViolation(fileSet, call)

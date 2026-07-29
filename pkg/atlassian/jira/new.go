@@ -3,9 +3,9 @@ package jira
 import (
 	"context"
 	"github.com/andygrunwald/go-jira"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/basic"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/client"
-	"github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/service_client"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/web/locator"
@@ -37,7 +37,7 @@ func New(
 	}
 
 	if len(result.closedStatus) == 0 {
-		result.closedStatus = []string{constant.Closed}
+		result.closedStatus = []string{constant.JiraClosed}
 	}
 
 	// Verify token. Search V2 returns 200 even if token is invalid.

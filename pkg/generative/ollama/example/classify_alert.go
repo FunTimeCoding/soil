@@ -3,7 +3,6 @@ package example
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/generative/ollama"
-	"github.com/funtimecoding/soil/pkg/generative/ollama/constant/prompts"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/join"
@@ -27,7 +26,7 @@ func ClassifyAlert() {
 	}
 
 	if true {
-		p := prompts.ClassifyAlert()
+		p := ollama.ClassifyAlert()
 		r := o.GenerateNotation(p.Render())
 		fmt.Printf("Response: %+v\n", r)
 		response := p.ParseResponse(r.Text)

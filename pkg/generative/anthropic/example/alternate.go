@@ -4,14 +4,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/generative/anthropic/constant"
+	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/liushuangls/go-anthropic/v2"
 )
 
 func Alternate() {
 	// https://github.com/liushuangls/go-anthropic
-	c := anthropic.NewClient(environment.Required(constant.TokenEnvironment))
+	c := anthropic.NewClient(environment.Required(constant.AnthropicTokenEnvironment))
 	r, e := c.CreateMessages(
 		context.Background(),
 		anthropic.MessagesRequest{

@@ -1,8 +1,8 @@
 package mock_client
 
 import (
-	"github.com/funtimecoding/soil/pkg/atlassian/confluence/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 )
 
 func (c *Client) PagesBySpace(
@@ -10,7 +10,7 @@ func (c *Client) PagesBySpace(
 	status string,
 ) ([]*page.Page, error) {
 	if status == "" {
-		status = constant.CurrentStatus
+		status = constant.ConfluenceCurrentStatus
 	}
 
 	var result []*page.Page

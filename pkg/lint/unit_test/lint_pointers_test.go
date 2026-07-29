@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
+	lintConstant "github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 	"testing"
@@ -98,7 +99,7 @@ func TestPointersDead(t *testing.T) {
 				Key:      "dead_pointer",
 				Text:     "Referenced path does not exist",
 				Path:     "Alfa",
-				Type:     concern.Line,
+				Type:     lintConstant.ConcernLine,
 				Line:     1,
 				LineText: line,
 			},
@@ -123,7 +124,7 @@ func TestPointersAbsolute(t *testing.T) {
 				Key:      "absolute_pointer",
 				Text:     "Absolute path reference",
 				Path:     "Alfa",
-				Type:     concern.Line,
+				Type:     lintConstant.ConcernLine,
 				Line:     1,
 				LineText: line,
 			},
@@ -156,7 +157,7 @@ func TestPointersRelativeDead(t *testing.T) {
 				Key:      "dead_pointer",
 				Text:     "Referenced path does not exist",
 				Path:     "doc/ai/runbook/lint.md",
-				Type:     concern.Line,
+				Type:     lintConstant.ConcernLine,
 				Line:     1,
 				LineText: line,
 			},
@@ -199,7 +200,7 @@ func TestPointersExpansionDead(t *testing.T) {
 				Key:      "dead_pointer",
 				Text:     "Referenced path does not exist",
 				Path:     "Alfa",
-				Type:     concern.Line,
+				Type:     lintConstant.ConcernLine,
 				Line:     1,
 				LineText: line,
 			},
@@ -234,7 +235,7 @@ func TestPointersSiblingDead(t *testing.T) {
 				Key:      "dead_pointer",
 				Text:     "Referenced path does not exist",
 				Path:     "Alfa",
-				Type:     concern.Line,
+				Type:     lintConstant.ConcernLine,
 				Line:     1,
 				LineText: line,
 			},
@@ -259,7 +260,7 @@ func TestPointersMultiple(t *testing.T) {
 				Key:      "dead_pointer",
 				Text:     "Referenced path does not exist",
 				Path:     "Alfa",
-				Type:     concern.Line,
+				Type:     lintConstant.ConcernLine,
 				Line:     1,
 				LineText: line,
 			},
@@ -267,7 +268,7 @@ func TestPointersMultiple(t *testing.T) {
 				Key:      "dead_pointer",
 				Text:     "Referenced path does not exist",
 				Path:     "Alfa",
-				Type:     concern.Line,
+				Type:     lintConstant.ConcernLine,
 				Line:     1,
 				LineText: line,
 			},

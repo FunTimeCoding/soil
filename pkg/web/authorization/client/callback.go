@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/web"
-	"github.com/funtimecoding/soil/pkg/web/authorization/constant"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
 
@@ -13,7 +13,7 @@ func (c *Client) Callback(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	cookie, e := r.Cookie(constant.FlowCookie)
+	cookie, e := r.Cookie(constant.AuthorizationFlowCookie)
 
 	if e != nil {
 		http.Error(w, "missing flow state", http.StatusBadRequest)
@@ -71,11 +71,11 @@ func (c *Client) Callback(
 
 	encrypted, e := c.encrypt([]byte(verified.Subject))
 	errors.PanicOnError(e)
-	web.SetCookie(w, constant.SubjectCookie, encrypted)
+	web.SetCookie(w, constant.AuthorizationSubjectCookie, encrypted)
 	http.SetCookie(
 		w,
 		&http.Cookie{
-			Name:   constant.FlowCookie,
+			Name:   constant.AuthorizationFlowCookie,
 			MaxAge: -1,
 			Path:   "/",
 		},

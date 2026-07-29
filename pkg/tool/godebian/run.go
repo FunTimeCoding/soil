@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/debian"
-	debianConstant "github.com/funtimecoding/soil/pkg/system/debian/constant"
 	"github.com/funtimecoding/soil/pkg/system/join"
 	"github.com/funtimecoding/soil/pkg/tool/godebian/option"
 )
@@ -21,11 +20,11 @@ func Run(o *option.Debian) {
 	packageDirectory := join.Absolute(system.WorkDirectory(), packageName)
 	debianDirectory := join.Absolute(
 		packageDirectory,
-		debianConstant.PackageConfigurationDirectory,
+		constant.DebianPackageConfigurationDirectory,
 	)
 	system.MakeDirectory(debianDirectory)
 	system.SaveFile(
-		join.Absolute(debianDirectory, debianConstant.ControlFile),
+		join.Absolute(debianDirectory, constant.DebianControlFile),
 		fmt.Sprintf(
 			"Package: %s\nVersion: %s\nArchitecture: %s\nMaintainer: %s <%s>\nDescription: Short stub description.\n Long stub description.\n",
 			o.Executable,

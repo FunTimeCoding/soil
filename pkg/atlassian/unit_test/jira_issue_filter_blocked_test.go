@@ -3,7 +3,7 @@ package unit_test
 import (
 	"github.com/andygrunwald/go-jira"
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
 	"testing"
 )
@@ -11,9 +11,9 @@ import (
 func TestFilterBlocked(t *testing.T) {
 	o := issue.FixtureOption()
 	r2 := issue.Raw("TEST-2")
-	blockBy(r2, "TEST-99", constant.InProgress)
+	blockBy(r2, "TEST-99", constant.JiraInProgress)
 	r3 := issue.Raw("TEST-3")
-	blockBy(r3, "TEST-100", constant.Closed)
+	blockBy(r3, "TEST-100", constant.JiraClosed)
 	actual := issue.FilterBlocked(
 		[]*issue.Issue{
 			issue.New(issue.Raw("TEST-1"), o),
@@ -34,7 +34,7 @@ func blockBy(
 	i.Fields.IssueLinks = append(
 		i.Fields.IssueLinks,
 		&jira.IssueLink{
-			Type: jira.IssueLinkType{Inward: issue.BlockedBy},
+			Type: jira.IssueLinkType{Inward: constant.JiraBlockedBy},
 			InwardIssue: &jira.Issue{
 				Key:    key,
 				Fields: &jira.IssueFields{Status: &jira.Status{Name: status}},

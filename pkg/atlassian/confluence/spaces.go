@@ -2,16 +2,16 @@ package confluence
 
 import (
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/basic/response"
-	"github.com/funtimecoding/soil/pkg/atlassian/confluence/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/space"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/notation"
 )
 
 func (c *Client) Spaces() ([]*space.Space, error) {
 	// https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-space/#api-spaces-get
-	l := c.basic.Base().Copy().Path(constant.Space).Set(
-		constant.Status,
-		constant.CurrentStatus,
+	l := c.basic.Base().Copy().Path(constant.ConfluenceSpace).Set(
+		constant.ConfluenceStatus,
+		constant.ConfluenceCurrentStatus,
 	).String()
 	var result []*response.Space
 

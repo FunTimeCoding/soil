@@ -5,7 +5,7 @@ import (
 	console "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/monitor"
 	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
-	"github.com/funtimecoding/soil/pkg/system/macos/brew/constant"
+	system "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/macos/check/brew/outdated/option"
 )
 
@@ -18,7 +18,7 @@ func Check(o *option.Outdated) {
 		return
 	}
 
-	f := constant.Format
+	f := system.BrewFormat
 
 	if o.Copyable {
 		f.Tag(console.TagCopyable)

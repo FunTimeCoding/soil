@@ -2,7 +2,7 @@ package mock_client
 
 import (
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
-	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 )
 
 func (c *Client) Add(a *alert.Alert) {

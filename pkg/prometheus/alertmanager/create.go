@@ -2,8 +2,7 @@ package alertmanager
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
-	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/go-openapi/strfmt"
 	"github.com/prometheus/alertmanager/api/v2/client/alert"
@@ -26,15 +25,15 @@ func (c *Client) Create(
 		&models.PostableAlert{
 			Alert: models.Alert{
 				Labels: models.LabelSet{
-					constant.AlertnameLabel:  name,
-					constant.SeverityLabel:   constant.CriticalSeverity,
-					prometheus.InstanceLabel: instance,
+					constant.AlertnameLabel: name,
+					constant.SeverityLabel:  constant.CriticalSeverity,
+					constant.InstanceLabel:  instance,
 				},
 				GeneratorURL: strfmt.URI(
 					locator.New(
 						c.prometheus.Host(),
-					).Path(prometheus.Graph).Set(
-						prometheus.Graph0Expression,
+					).Path(constant.Graph).Set(
+						constant.Graph0Expression,
 						expression,
 					).String(),
 				),

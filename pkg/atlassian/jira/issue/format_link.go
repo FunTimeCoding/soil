@@ -1,8 +1,10 @@
 package issue
 
+import "github.com/funtimecoding/soil/pkg/atlassian/constant"
+
 func (i *Issue) FormatLink() string {
 	if i.Link == "" {
-		return NoLink
+		return constant.JiraNoLink
 	}
 
 	return i.Link

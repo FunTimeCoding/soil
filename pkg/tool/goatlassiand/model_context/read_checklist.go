@@ -1,7 +1,7 @@
 package model_context
 
 import (
-	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
+	atlassian "github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/types/checklist_item"
 )
@@ -16,9 +16,9 @@ func (s *Server) readChecklist(key string) ([]*checklist_item.Item, error) {
 	value := i.CustomValue(constant.ChecklistField)
 
 	if value == "" ||
-		value == issue.NilValue ||
-		value == issue.UnknownField ||
-		value == issue.UnknownValue {
+		value == atlassian.JiraNilValue ||
+		value == atlassian.JiraUnknownField ||
+		value == atlassian.JiraUnknownValue {
 		return nil, nil
 	}
 

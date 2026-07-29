@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/prometheus/loki"
 	"github.com/funtimecoding/soil/pkg/prometheus/loki/message"
-	"github.com/funtimecoding/soil/pkg/web/telemetry/constant"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"sort"
 	"time"
 )
@@ -40,7 +40,7 @@ func collect(
 	var result []*message.Message
 
 	for _, v := range r {
-		if route != "" && v.Value(constant.Route) == "" {
+		if route != "" && v.Value(constant.TelemetryRoute) == "" {
 			continue
 		}
 

@@ -2,7 +2,7 @@ package server
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/generative/model_context/constant"
+	generative "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
@@ -16,7 +16,7 @@ func (s *Server) authorized(r *http.Request) bool {
 	)
 
 	if t == "" {
-		t = r.URL.Query().Get(constant.TokenParameter)
+		t = r.URL.Query().Get(generative.ModelContextTokenParameter)
 	}
 
 	address := web.ClientAddress(r)

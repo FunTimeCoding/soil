@@ -3,7 +3,6 @@ package server
 import (
 	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/errors"
-	library "github.com/funtimecoding/soil/pkg/web/authorization/constant"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
@@ -14,7 +13,7 @@ func (s *Server) protectedResource(
 ) {
 	w.Header().Set(constant.ContentType, constant.Object)
 	w.Header().Set(constant.AccessOrigin, constant.OriginAll)
-	w.Header().Set(constant.AccessMethod, library.ProtectedMethods)
+	w.Header().Set(constant.AccessMethod, constant.ProtectedMethods)
 
 	if r.Method == http.MethodOptions {
 		return
@@ -23,8 +22,8 @@ func (s *Server) protectedResource(
 	errors.PanicOnError(
 		json.NewEncoder(w).Encode(
 			map[string]any{
-				library.Resource:            s.serverLocator,
-				library.AuthorizationServer: []string{s.authorizationLocator},
+				constant.AuthorizationResource: s.serverLocator,
+				constant.AuthorizationServer:   []string{s.authorizationLocator},
 			},
 		),
 	)

@@ -2,6 +2,7 @@ package message
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus/loki/basic/response"
 	"github.com/funtimecoding/soil/pkg/time"
 )
@@ -24,10 +25,10 @@ func New(
 	}
 
 	if v, okay := parseNotation(e[1]); okay {
-		messageType = NotationType
+		messageType = constant.LokiNotationType
 		result.Values = v
 	} else {
-		messageType = TextType
+		messageType = constant.LokiTextType
 		result.Text = e[1]
 	}
 

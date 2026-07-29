@@ -1,8 +1,7 @@
 package server
 
 import (
-	"github.com/funtimecoding/soil/pkg/web/authorization/constant"
-	"github.com/funtimecoding/soil/pkg/web/location"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
 
@@ -20,9 +19,9 @@ func (s *Server) wrapAuthentication(
 		middle = crossOriginMiddleware
 	}
 
-	m.Handle(location.ModelContext, middle(h))
-	m.Handle(location.Event, middle(h))
-	m.Handle(location.EventMessage, middle(h))
+	m.Handle(constant.LocationModelContext, middle(h))
+	m.Handle(constant.LocationEvent, middle(h))
+	m.Handle(constant.LocationEventMessage, middle(h))
 
 	if s.openAuthentication {
 		m.HandleFunc(constant.ProtectedResource, s.protectedResource)

@@ -3,8 +3,8 @@ package model_context
 import (
 	"context"
 	"github.com/andygrunwald/go-jira"
+	generative "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/generative/model_context/parameter"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -14,7 +14,7 @@ func (s *Server) linkIssues(
 	c context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	key, f := r.RequireString(parameter.Key)
+	key, f := r.RequireString(generative.ParameterKey)
 
 	if f != nil {
 		return response.Fail("key is required: %v", f)

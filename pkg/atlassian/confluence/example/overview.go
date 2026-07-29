@@ -3,12 +3,12 @@ package example
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence"
-	"github.com/funtimecoding/soil/pkg/atlassian/confluence/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 )
 
 func Overview() {
 	c := confluence.NewEnvironment(confluence.WithVerbose(true))
-	f := constant.Format
+	f := constant.ConfluenceFormat
 	fmt.Println("Space")
 
 	for _, s := range c.MustSpaces() {

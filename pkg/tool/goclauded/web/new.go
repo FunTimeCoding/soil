@@ -4,10 +4,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/web/conversations"
+	web "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/palette"
-	theme "github.com/funtimecoding/soil/pkg/web/theme/constant"
 	"github.com/funtimecoding/soil/pkg/web/view"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -50,7 +50,7 @@ func New(s *service.Service) *Server {
 		registry:      registry,
 		view: view.New(
 			layout.New(constant.Identity).
-				WithTheme(theme.Hearth).
+				WithTheme(web.ThemeHearth).
 				WithStyle(constant.InlineStyle).
 				WithCommandPalette("/palette").
 				WithLiveEndpoint("/event").

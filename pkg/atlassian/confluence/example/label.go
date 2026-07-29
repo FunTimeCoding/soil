@@ -3,12 +3,12 @@ package example
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence"
-	"github.com/funtimecoding/soil/pkg/atlassian/confluence/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 )
 
 func Label() {
 	c := confluence.NewEnvironment()
-	f := constant.Dense
+	f := constant.ConfluenceDense
 
 	for _, l := range c.MustLabels() {
 		fmt.Printf("Label: %+v\n", l)

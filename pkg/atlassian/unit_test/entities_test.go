@@ -8,7 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/search_result"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/space"
 	confluenceUser "github.com/funtimecoding/soil/pkg/atlassian/confluence/user"
-	"github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
+	atlassian "github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/field_map"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue/issue_enricher"
@@ -56,7 +56,7 @@ func TestEntities(t *testing.T) {
 			strings.UpperAlfa,
 			strings.UpperBravo,
 			[]string{},
-			[]string{constant.Done},
+			[]string{atlassian.JiraDone},
 			nil,
 		),
 	)

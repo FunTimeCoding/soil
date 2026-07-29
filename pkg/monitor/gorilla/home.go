@@ -4,7 +4,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/monitor/constant"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/location"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"net/http"
 )
@@ -18,7 +17,7 @@ func home(
 			w,
 			locator.New(
 				r.Host,
-			).Scheme(webConstant.Socket).Path(location.Echo).String(),
+			).Scheme(webConstant.Socket).Path(webConstant.LocationEcho).String(),
 		),
 	)
 }

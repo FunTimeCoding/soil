@@ -2,7 +2,7 @@ package loki
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/prometheus/loki/basic/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/grafana/loki-client-go/loki"
 	"github.com/samber/slog-loki/v3"
@@ -12,7 +12,7 @@ import (
 func slogWay(host string) {
 	// Another way to log, not to read
 	configuration, e := loki.NewDefaultConfig(
-		locator.New(host).Base(constant.Base).Path(constant.Push).String(),
+		locator.New(host).Base(constant.LokiBase).Path(constant.LokiPush).String(),
 	)
 	errors.PanicOnError(e)
 	configuration.TenantID = "exampleTenant"

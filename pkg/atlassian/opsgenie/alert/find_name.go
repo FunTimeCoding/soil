@@ -2,7 +2,8 @@ package alert
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
+	atlassian "github.com/funtimecoding/soil/pkg/atlassian/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"strings"
 )
 
@@ -28,10 +29,10 @@ func (a *Alert) findName() string {
 
 	result := a.shortenAlert(message)
 
-	if result == UnknownName {
+	if result == atlassian.OpsgenieUnknownName {
 		result = a.nameFromDescription(description)
 
-		if result == UnknownName {
+		if result == atlassian.OpsgenieUnknownName {
 			if a.RawList != nil {
 				fmt.Printf("Unknown name (simple): %+v\n", a.RawList)
 			}

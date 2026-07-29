@@ -3,55 +3,56 @@ package unit_test
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	"github.com/funtimecoding/soil/pkg/lint/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"testing"
 )
 
 func TestNewLine(t *testing.T) {
 	c := concern.NewLine(
-		constant.UpperAlfa,
-		constant.UpperBravo,
-		constant.UpperCharlie,
+		stringsConstant.UpperAlfa,
+		stringsConstant.UpperBravo,
+		stringsConstant.UpperCharlie,
 		1,
-		constant.UpperCharlie,
+		stringsConstant.UpperCharlie,
 		false,
 	)
 	assert.NotNil(t, c)
-	assert.String(t, concern.Line, c.Type)
+	assert.String(t, constant.ConcernLine, c.Type)
 	assert.Integer(t, 1, c.Line)
 }
 
 func TestNewFile(t *testing.T) {
 	c := concern.NewFile(
-		constant.UpperAlfa,
-		constant.UpperBravo,
-		constant.UpperCharlie,
+		stringsConstant.UpperAlfa,
+		stringsConstant.UpperBravo,
+		stringsConstant.UpperCharlie,
 		false,
 	)
 	assert.NotNil(t, c)
-	assert.String(t, concern.File, c.Type)
+	assert.String(t, constant.ConcernFile, c.Type)
 	assert.Integer(t, 0, c.Line)
 }
 
 func TestNewPackage(t *testing.T) {
 	c := concern.NewPackage(
-		constant.UpperAlfa,
-		constant.UpperBravo,
-		constant.UpperCharlie,
+		stringsConstant.UpperAlfa,
+		stringsConstant.UpperBravo,
+		stringsConstant.UpperCharlie,
 	)
 	assert.NotNil(t, c)
-	assert.String(t, concern.Package, c.Type)
+	assert.String(t, constant.ConcernPackage, c.Type)
 	assert.Boolean(t, false, c.Fixed)
 }
 
 func TestNewDelegatesToNewLine(t *testing.T) {
 	c := concern.New(
-		constant.UpperAlfa,
-		constant.UpperBravo,
-		constant.UpperCharlie,
+		stringsConstant.UpperAlfa,
+		stringsConstant.UpperBravo,
+		stringsConstant.UpperCharlie,
 		1,
-		constant.UpperCharlie,
+		stringsConstant.UpperCharlie,
 		false,
 	)
-	assert.String(t, concern.Line, c.Type)
+	assert.String(t, constant.ConcernLine, c.Type)
 }

@@ -26,7 +26,7 @@ func Pointers(
 			for _, extracted := range pointer.Extract(line) {
 				for _, candidate := range pointer.Expand(extracted) {
 					switch pointer.Classify(candidate, roots) {
-					case pointer.Absolute:
+					case constant.PointerAbsolute:
 						s.AddConcern(
 							constant.AbsolutePointerKey,
 							constant.AbsolutePointerText,
@@ -35,7 +35,7 @@ func Pointers(
 							line,
 							false,
 						)
-					case pointer.Sibling:
+					case constant.PointerSibling:
 						if siblingExists(pointer.Normalize(candidate)) {
 							continue
 						}
@@ -54,7 +54,7 @@ func Pointers(
 							line,
 							false,
 						)
-					case pointer.Repository:
+					case constant.PointerRepository:
 						normalized := pointer.Normalize(candidate)
 
 						if exists(normalized) || ignored(normalized) {

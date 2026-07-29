@@ -5,8 +5,8 @@ import (
 	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/report"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
-	alertmanager "github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus/check/alert/option"
+	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
 )
 
 func printNotation(
@@ -17,7 +17,7 @@ func printNotation(
 	var relevant []*alert.Alert
 
 	for _, e := range v {
-		if !o.All && e.Severity == alertmanager.InformationSeverity {
+		if !o.All && e.Severity == prometheus.InformationSeverity {
 			continue
 		}
 
@@ -32,7 +32,7 @@ func printNotation(
 	) {
 		var s constant.Severity
 
-		if e.Severity == alertmanager.CriticalSeverity {
+		if e.Severity == prometheus.CriticalSeverity {
 			s = constant.Critical
 		} else {
 			s = constant.Warning

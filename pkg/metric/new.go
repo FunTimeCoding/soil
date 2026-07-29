@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/metric/constant"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/web"
-	"github.com/funtimecoding/soil/pkg/web/location"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"net/http"
@@ -29,7 +29,7 @@ func New(
 	r := prometheus.NewRegistry()
 	m := http.NewServeMux()
 	m.Handle(
-		location.Metrics,
+		webConstant.LocationMetrics,
 		promhttp.HandlerFor(r, promhttp.HandlerOpts{Registry: r}),
 	)
 

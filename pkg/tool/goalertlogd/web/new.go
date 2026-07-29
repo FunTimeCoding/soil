@@ -4,10 +4,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/worker"
+	web "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/palette"
-	theme "github.com/funtimecoding/soil/pkg/web/theme/constant"
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
@@ -35,7 +35,7 @@ func New(
 		registry: registry,
 		view: view.New(
 			layout.New(constant.Identity).
-				WithTheme(theme.Sentinel).
+				WithTheme(web.ThemeSentinel).
 				WithStyle(constant.InlineStyle).
 				WithCommandPalette("/palette").
 				WithItems(

@@ -3,8 +3,8 @@ package model_context
 import (
 	"context"
 	library "github.com/funtimecoding/soil/pkg/constant"
+	generative "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/generative/model_context/parameter"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store"
@@ -56,7 +56,7 @@ func (s *Server) list(
 		filter.Until = u
 	}
 
-	if l := r.GetFloat(parameter.Limit, 0); l > 0 {
+	if l := r.GetFloat(generative.ParameterLimit, 0); l > 0 {
 		filter.Limit = int(l)
 	}
 

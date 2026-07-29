@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/web/authorization/constant"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/google/uuid"
 	"net/http"
 	"net/url"
@@ -37,7 +37,7 @@ func (c *Client) SignIn(
 	http.SetCookie(
 		w,
 		&http.Cookie{
-			Name:     constant.FlowCookie,
+			Name:     constant.AuthorizationFlowCookie,
 			Value:    encrypted,
 			HttpOnly: true,
 			Secure:   true,
@@ -50,7 +50,7 @@ func (c *Client) SignIn(
 		c.issuer,
 		url.QueryEscape(c.identifier),
 		url.QueryEscape(c.callbackLocator),
-		url.QueryEscape(constant.DefaultScope),
+		url.QueryEscape(constant.AuthorizationDefaultScope),
 		url.QueryEscape(state),
 		url.QueryEscape(challenge),
 	)

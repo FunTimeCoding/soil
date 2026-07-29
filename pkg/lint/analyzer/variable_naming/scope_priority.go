@@ -1,10 +1,12 @@
 package variable_naming
 
-func scopePriority(k variableKind) int {
+import "github.com/funtimecoding/soil/pkg/lint/constant"
+
+func scopePriority(k constant.VariableKind) int {
 	switch k {
-	case kindReceiver:
+	case constant.VariableKindReceiver:
 		return 0
-	case kindParameter:
+	case constant.VariableKindParameter:
 		return 1
 	default:
 		return 2

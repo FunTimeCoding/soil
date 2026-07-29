@@ -3,6 +3,7 @@ package function
 import (
 	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/generative/constant"
 )
 
 func getCurrentWeather(
@@ -10,14 +11,14 @@ func getCurrentWeather(
 	unit string,
 ) string {
 	weather := map[string]any{
-		"location":    location,
-		"temperature": "6",
-		"unit":        unit,
-		"forecast":    []string{"sunny", "windy"},
+		"location":                       location,
+		constant.LangchainTemperatureKey: "6",
+		"unit":                           unit,
+		"forecast":                       []string{"sunny", "windy"},
 	}
 
 	if unit == "fahrenheit" {
-		weather["temperature"] = 43
+		weather[constant.LangchainTemperatureKey] = 43
 	}
 
 	b, e := json.Marshal(weather)

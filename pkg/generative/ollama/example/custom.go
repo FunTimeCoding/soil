@@ -2,8 +2,8 @@ package example
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/ollama"
-	"github.com/funtimecoding/soil/pkg/generative/ollama/constant"
 	"github.com/funtimecoding/soil/pkg/generative/ollama/generate_request"
 )
 

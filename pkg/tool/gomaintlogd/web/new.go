@@ -3,10 +3,10 @@ package web
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store"
+	web "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/palette"
-	theme "github.com/funtimecoding/soil/pkg/web/theme/constant"
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
@@ -35,7 +35,7 @@ func New(s *store.Store) *Server {
 		registry: registry,
 		view: view.New(
 			layout.New(constant.Identity).
-				WithTheme(theme.Archive).
+				WithTheme(web.ThemeArchive).
 				WithStyle(constant.InlineStyle).
 				WithCommandPalette("/palette").
 				WithItems(

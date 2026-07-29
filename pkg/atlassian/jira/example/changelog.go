@@ -2,14 +2,14 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/common"
 	"time"
 )
 
 func Changelog() {
-	k := environment.Required(constant.DefaultProjectKeyEnvironment)
+	k := environment.Required(constant.JiraDefaultProjectKeyEnvironment)
 	j := common.Jira()
 	fmt.Println("Search (with changelog)...")
 	start := time.Now()
@@ -38,7 +38,7 @@ func Changelog() {
 				for _, item := range h.Items {
 					if item.Field == "status" {
 						t, f := time.Parse(
-							constant.TimeFormat,
+							constant.JiraTimeFormat,
 							h.Created,
 						)
 

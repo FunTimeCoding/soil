@@ -1,8 +1,8 @@
 package confluence
 
 import (
-	"github.com/funtimecoding/soil/pkg/atlassian/confluence/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 )
 
 func (c *Client) UpdatePageAt(
@@ -18,6 +18,6 @@ func (c *Client) UpdatePageAt(
 		page.ToStorage(markdown),
 		version,
 		message,
-		constant.CurrentStatus,
+		constant.ConfluenceCurrentStatus,
 	)
 }

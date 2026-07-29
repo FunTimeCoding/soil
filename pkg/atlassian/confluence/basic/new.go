@@ -1,7 +1,7 @@
 package basic
 
 import (
-	"github.com/funtimecoding/soil/pkg/atlassian/confluence/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
@@ -17,6 +17,6 @@ func New(
 		user:    user,
 		token:   token,
 		verbose: verbose,
-		base:    locator.New(host).Base(constant.Base),
+		base:    locator.New(host).Base(constant.ConfluenceBase),
 	}
 }

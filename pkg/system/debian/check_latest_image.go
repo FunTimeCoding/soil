@@ -3,7 +3,7 @@ package debian
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/strings"
-	"github.com/funtimecoding/soil/pkg/system/debian/constant"
+	"github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/debian/image"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/locator"
@@ -16,7 +16,7 @@ func CheckLatestImage() {
 		image.FindNames(
 			web.GetString(
 				c,
-				locator.New(constant.Image).Path(
+				locator.New(constant.DebianImage).Path(
 					"/cdimage/release/current/arm64/iso-cd",
 				).Trail().String(),
 			),

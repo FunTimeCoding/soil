@@ -2,6 +2,7 @@ package forbidden_import
 
 import (
 	"github.com/funtimecoding/soil/pkg/lint/concern"
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"go/ast"
 	"golang.org/x/tools/go/packages"
@@ -20,8 +21,8 @@ func Check(
 		for _, i := range file.Imports {
 			path := strings.Trim(i.Path.Value, `"`)
 
-			for key, b := range banned {
-				if b.substring {
+			for key, b := range constant.ForbiddenImports {
+				if b.Substring {
 					if !strings.Contains(path, key) {
 						continue
 					}
@@ -34,7 +35,7 @@ func Check(
 				results.AddConcern(
 					concern.NewFile(
 						"forbidden_import",
-						b.message,
+						b.Message,
 						p.Fset.Position(i.Pos()).Filename,
 						false,
 					),

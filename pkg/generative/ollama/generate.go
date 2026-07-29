@@ -1,7 +1,7 @@
 package ollama
 
 import (
-	"github.com/funtimecoding/soil/pkg/generative/ollama/constant"
+	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/ollama/generate_request"
 	"github.com/funtimecoding/soil/pkg/generative/ollama/generate_response"
 	"github.com/ollama/ollama/api"

@@ -1,8 +1,8 @@
 package confluence
 
 import (
-	"github.com/funtimecoding/soil/pkg/atlassian/confluence/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 )
 
 func (c *Client) Favorites() ([]*page.Page, error) {
@@ -15,7 +15,7 @@ func (c *Client) Favorites() ([]*page.Page, error) {
 	var result []*page.Page
 
 	for _, r := range results {
-		if r.Raw.Type == constant.PageType {
+		if r.Raw.Type == constant.ConfluencePageType {
 			p, f := c.Page(r.Raw.Identifier)
 
 			if f != nil {

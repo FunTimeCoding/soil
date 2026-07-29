@@ -2,7 +2,7 @@ package statistic
 
 import (
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
-	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"strings"
 )
 

@@ -1,6 +1,7 @@
 package convert
 
 import (
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 )
@@ -94,7 +95,7 @@ func JiraIssueDiff(
 		a := after.CustomValue(name)
 
 		if b != a {
-			if b == issue.NilValue || b == issue.UnknownValue {
+			if b == constant.JiraNilValue || b == constant.JiraUnknownValue {
 				b = ""
 			}
 

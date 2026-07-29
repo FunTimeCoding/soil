@@ -3,8 +3,8 @@ package mock_client
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/basic/response"
-	"github.com/funtimecoding/soil/pkg/atlassian/confluence/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 )
 
 func (c *Client) createWithStatus(
@@ -25,7 +25,7 @@ func (c *Client) createWithStatus(
 	r.Version = response.Version{Number: 1}
 	r.Body = response.Body{
 		Storage: response.Storage{
-			Representation: constant.StorageFormat,
+			Representation: constant.ConfluenceStorageFormat,
 			Value:          page.ToStorage(markdown),
 		},
 	}

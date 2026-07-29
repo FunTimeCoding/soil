@@ -2,7 +2,7 @@ package jira
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/custom_field_value"
 	"github.com/funtimecoding/soil/pkg/notation"
 )
@@ -43,7 +43,7 @@ func (c *Client) CustomFieldValues(
 			var result []custom_field_value.Value
 			notation.MustDecode(
 				notation.Encode(
-					t.Fields[f.ID].(map[string]any)[constant.AllowedValuesKey],
+					t.Fields[f.ID].(map[string]any)[constant.JiraAllowedValuesKey],
 					false,
 				),
 				&result,

@@ -96,7 +96,7 @@ const (
 )
 ```
 
-Reusable parameter names shared across multiple MCP tools (`query`, `limit`, `key`, `body`, `identifier`, `title`, `message`) live in `pkg/generative/model_context/parameter/constant.go` and are referenced as `parameter.Query`, `parameter.Limit`, etc.
+Reusable parameter names shared across multiple MCP tools (`query`, `limit`, `key`, `body`, `identifier`, `title`, `message`) live in `pkg/generative/constant/model_context.go` and are referenced as `constant.ParameterQuery`, `constant.ParameterLimit`, etc.
 
 ## Server Struct
 
@@ -144,7 +144,7 @@ func (s *Server) Mount(m *http.ServeMux) {
 `register.go` - one `AddTool` call per tool, function in its own file.
 Tool names are constants from the service's `constant/` package.
 Parameter names use string literals for clarity or shared constants
-from `pkg/generative/model_context/parameter/` when the name is
+from the `Parameter*` family in `pkg/generative/constant/` when the name is
 reusable across services (query, limit, identifier, name, etc.):
 
 ```go

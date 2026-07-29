@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/advanced_option"
-	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
+	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/sound"
 	soundConstant "github.com/funtimecoding/soil/pkg/sound/constant"
 	"github.com/funtimecoding/soil/pkg/system/macos"
@@ -52,7 +52,7 @@ func worker(
 				for _, a := range add {
 					var summary string
 
-					if a.Summary == constant.None {
+					if a.Summary == prometheus.None {
 						summary = "no summary"
 					} else {
 						summary = a.Summary

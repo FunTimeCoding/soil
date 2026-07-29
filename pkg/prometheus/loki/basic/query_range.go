@@ -2,10 +2,10 @@ package basic
 
 import (
 	"github.com/funtimecoding/soil/pkg/notation"
-	"github.com/funtimecoding/soil/pkg/prometheus/loki/basic/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus/loki/basic/query"
 	"github.com/funtimecoding/soil/pkg/prometheus/loki/basic/query_result"
-	"github.com/funtimecoding/soil/pkg/web/parameter"
+	web "github.com/funtimecoding/soil/pkg/web/constant"
 	"log"
 	"time"
 )
@@ -19,17 +19,17 @@ func (c *Client) QueryRange(
 	r := query.New()
 	notation.MustDecode(
 		c.Get(
-			c.base.Copy().Path(constant.QueryRange).SetInteger64(
-				parameter.Start,
+			c.base.Copy().Path(constant.LokiQueryRange).SetInteger64(
+				web.ParameterStart,
 				start.UnixNano(),
 			).SetInteger64(
-				parameter.End,
+				web.ParameterEnd,
 				end.UnixNano(),
 			).Set(
-				parameter.Query,
+				web.ParameterQuery,
 				q,
 			).SetInteger(
-				parameter.Limit,
+				web.ParameterLimit,
 				limit,
 			).String(),
 		),

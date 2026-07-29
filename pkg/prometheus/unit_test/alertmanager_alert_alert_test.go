@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	libraryConstant "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
-	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
+	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
 	strings "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/go-openapi/strfmt"
 	"github.com/prometheus/alertmanager/api/v2/models"
@@ -16,7 +16,7 @@ func TestAlert(t *testing.T) {
 		&models.GettableAlert{
 			Fingerprint: new(strings.UpperAlfa),
 			Status: &models.AlertStatus{
-				State: new(constant.ActiveState),
+				State: new(prometheus.ActiveState),
 			},
 			StartsAt: new(strfmt.NewDateTime()),
 		},

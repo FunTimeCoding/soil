@@ -1,5 +1,7 @@
 package concern
 
+import "github.com/funtimecoding/soil/pkg/lint/constant"
+
 func NewPackage(
 	key string,
 	text string,
@@ -9,6 +11,6 @@ func NewPackage(
 		Key:  key,
 		Text: text,
 		Path: path,
-		Type: Package,
+		Type: constant.ConcernPackage,
 	}
 }

@@ -2,7 +2,7 @@ package team_map
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 )
 
 func (m *Map) KeyByIdentifier(identifier string) string {
@@ -11,7 +11,7 @@ func (m *Map) KeyByIdentifier(identifier string) string {
 	if t == nil {
 		fmt.Printf("Team not found: %s\n", identifier)
 
-		return constant.NoKey
+		return constant.OpsgenieNoKey
 	}
 
 	return m.KeyByName(t.Name)

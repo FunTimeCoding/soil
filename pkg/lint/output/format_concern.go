@@ -3,12 +3,13 @@ package output
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 )
 
 func FormatConcern(c *concern.Concern) string {
 	var location string
 
-	if c.Type == concern.Line && c.Line > 0 {
+	if c.Type == constant.ConcernLine && c.Line > 0 {
 		location = fmt.Sprintf("%s:%d", c.Path, c.Line)
 	} else {
 		location = c.Path

@@ -1,7 +1,7 @@
 package alert
 
 import (
-	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"slices"
 )
 

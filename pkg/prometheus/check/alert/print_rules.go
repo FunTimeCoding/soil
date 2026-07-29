@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager"
-	"github.com/funtimecoding/soil/pkg/prometheus/rule"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"time"
 )
 
@@ -22,7 +22,7 @@ func printRules(
 			continue
 		}
 
-		if firing && r.State != rule.FiringState {
+		if firing && r.State != constant.FiringState {
 			continue
 		}
 

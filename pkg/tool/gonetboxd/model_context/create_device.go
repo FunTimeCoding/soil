@@ -2,8 +2,8 @@ package model_context
 
 import (
 	"context"
+	generative "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/generative/model_context/parameter"
 	"github.com/funtimecoding/soil/pkg/netbox/tenant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
@@ -14,7 +14,7 @@ func (s *Server) createDevice(
 	_ context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	name, f := r.RequireString(parameter.Name)
+	name, f := r.RequireString(generative.ParameterName)
 
 	if f != nil {
 		return response.Fail("name is required: %v", f)

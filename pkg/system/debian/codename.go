@@ -2,7 +2,7 @@ package debian
 
 import (
 	"github.com/coreos/go-semver/semver"
-	"github.com/funtimecoding/soil/pkg/system/debian/constant"
+	"github.com/funtimecoding/soil/pkg/system/constant"
 	"log"
 )
 

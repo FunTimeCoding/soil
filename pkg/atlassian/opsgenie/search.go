@@ -2,8 +2,8 @@ package opsgenie
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/alert"
-	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	rawAlert "github.com/opsgenie/opsgenie-go-sdk-v2/alert"
 )
@@ -24,7 +24,7 @@ func (c *Client) Search(
 		page, e := c.userClient.Alert.List(
 			c.context,
 			&rawAlert.ListAlertRequest{
-				Limit:  constant.PageLimit,
+				Limit:  constant.OpsgeniePageLimit,
 				Offset: start,
 				Query:  query,
 			},
@@ -35,11 +35,11 @@ func (c *Client) Search(
 			alert.NewSlice(page.Alerts, p, c.Verbose)...,
 		)
 
-		if len(page.Alerts) < constant.PageLimit {
+		if len(page.Alerts) < constant.OpsgeniePageLimit {
 			break
 		}
 
-		start += constant.PageLimit
+		start += constant.OpsgeniePageLimit
 	}
 
 	return c.processor().Process(result)

@@ -2,6 +2,7 @@ package layout
 
 import (
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
@@ -11,7 +12,7 @@ func StatusItem(
 	kind string,
 ) gomponents.Node {
 	return html.Div(
-		html.ID(StatusLine),
+		html.ID(constant.LayoutStatusLine),
 		html.Class(
 			join.Empty(
 				"container notification-status notification-",

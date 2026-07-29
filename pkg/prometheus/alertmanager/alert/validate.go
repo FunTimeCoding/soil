@@ -1,9 +1,12 @@
 package alert
 
-import "slices"
+import (
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
+	"slices"
+)
 
 func (a *Alert) Validate() {
-	if a.Suppressed() && !slices.Contains(a.concern, Silent) {
-		a.concern = append(a.concern, Silent)
+	if a.Suppressed() && !slices.Contains(a.concern, constant.Silent) {
+		a.concern = append(a.concern, constant.Silent)
 	}
 }

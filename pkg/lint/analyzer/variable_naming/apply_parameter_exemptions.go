@@ -1,10 +1,12 @@
 package variable_naming
 
+import "github.com/funtimecoding/soil/pkg/lint/constant"
+
 func applyParameterExemptions(variables []typedVariable) {
 	typeCount := map[string]int{}
 
 	for _, v := range variables {
-		if v.kind != kindParameter {
+		if v.kind != constant.VariableKindParameter {
 			continue
 		}
 
@@ -14,7 +16,7 @@ func applyParameterExemptions(variables []typedVariable) {
 	for i := range variables {
 		v := &variables[i]
 
-		if v.kind != kindParameter {
+		if v.kind != constant.VariableKindParameter {
 			continue
 		}
 

@@ -1,6 +1,7 @@
 package assert_call
 
 import (
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"go/ast"
 	"go/types"
 	"golang.org/x/tools/go/packages"
@@ -35,5 +36,5 @@ func IsAssertCall(
 		return false
 	}
 
-	return strings.HasSuffix(n.Imported().Path(), PackageSuffix)
+	return strings.HasSuffix(n.Imported().Path(), constant.AssertPackageSuffix)
 }

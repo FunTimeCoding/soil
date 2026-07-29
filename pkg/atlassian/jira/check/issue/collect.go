@@ -1,7 +1,7 @@
 package issue
 
 import (
-	"github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/query"
 	"github.com/funtimecoding/soil/pkg/system/environment"
@@ -11,6 +11,6 @@ import (
 func collect() []*issue.Issue {
 	return query.Open(
 		common.Jira(),
-		environment.Required(constant.DefaultProjectNameEnvironment),
+		environment.Required(constant.JiraDefaultProjectNameEnvironment),
 	)
 }

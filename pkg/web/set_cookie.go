@@ -1,7 +1,7 @@
 package web
 
 import (
-	"github.com/funtimecoding/soil/pkg/web/location"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 	"time"
 )
@@ -16,7 +16,7 @@ func SetCookie(
 		Value:    v,
 		HttpOnly: true,
 		Secure:   true,
-		Path:     location.Root,
+		Path:     constant.LocationRoot,
 		Expires:  time.Now().Add(24 * time.Hour),
 	}
 	http.SetCookie(w, result)

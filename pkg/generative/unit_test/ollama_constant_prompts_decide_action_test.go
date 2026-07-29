@@ -2,7 +2,7 @@ package unit_test
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/generative/ollama/constant/prompts"
+	"github.com/funtimecoding/soil/pkg/generative/ollama"
 	"testing"
 )
 
@@ -20,6 +20,6 @@ If the latest message in the channel does not fit into your role as a ChatOps bo
 ## Messages
 
 `,
-		prompts.DecideAction().Render(),
+		ollama.DecideAction().Render(),
 	)
 }

@@ -2,26 +2,25 @@ package jira
 
 import (
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
-	jira "github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 )
 
 func NewEnvironment(o ...Option) *Client {
-	if s := environment.Optional(jira.DefaultProjectKeyEnvironment); s != "" {
+	if s := environment.Optional(constant.JiraDefaultProjectKeyEnvironment); s != "" {
 		o = append(o, WithDefaultProjectKey(s))
 	}
 
 	if s := environment.Optional(
-		jira.DefaultProjectNameEnvironment,
+		constant.JiraDefaultProjectNameEnvironment,
 	); s != "" {
 		o = append(o, WithDefaultProjectName(s))
 	}
 
-	if s := environment.Optional(jira.DefaultIssueTypeEnvironment); s != "" {
+	if s := environment.Optional(constant.JiraDefaultIssueTypeEnvironment); s != "" {
 		o = append(o, WithDefaultIssueType(s))
 	}
 
-	if v := environment.Slice(jira.ClosedStatusEnvironment); len(v) > 0 {
+	if v := environment.Slice(constant.JiraClosedStatusEnvironment); len(v) > 0 {
 		o = append(o, WithClosedStatus(v))
 	}
 

@@ -2,6 +2,7 @@ package convert
 
 import (
 	"github.com/andygrunwald/go-jira"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"strings"
@@ -36,9 +37,9 @@ func JiraIssueCustomFields(
 			value := i.CustomValue(name)
 
 			if value == "" ||
-				value == issue.NilValue ||
-				value == issue.UnknownField ||
-				value == issue.UnknownValue {
+				value == constant.JiraNilValue ||
+				value == constant.JiraUnknownField ||
+				value == constant.JiraUnknownValue {
 				continue
 			}
 

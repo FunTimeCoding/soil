@@ -3,7 +3,7 @@ package vocabulary
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/generative/anthropic/constant"
+	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	"io"
 	"net/http"
@@ -12,7 +12,7 @@ import (
 )
 
 func download() ([]byte, error) {
-	r, e := http.Get(constant.VocabularyLink)
+	r, e := http.Get(constant.AnthropicVocabularyLink)
 
 	if e != nil {
 		return nil, fmt.Errorf("failed to download vocabulary: %w", e)

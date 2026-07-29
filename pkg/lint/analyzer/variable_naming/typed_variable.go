@@ -1,6 +1,7 @@
 package variable_naming
 
 import (
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"go/ast"
 	"go/types"
 )
@@ -11,6 +12,6 @@ type typedVariable struct {
 	precedence      int
 	scopedNames     map[string]bool
 	descendantNames map[string]bool
-	kind            variableKind
+	kind            constant.VariableKind
 	exempt          bool
 }

@@ -1,6 +1,6 @@
 package alert
 
-import "github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
+import "github.com/funtimecoding/soil/pkg/prometheus/constant"
 
 func FilterAlerts(v []*Alert) []*Alert {
 	var result []*Alert

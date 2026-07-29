@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 	"log/slog"
@@ -65,7 +66,7 @@ func Hooks(
 
 			l.Error(
 				fmt.Sprintf("Unexpected type: %T", a),
-				"identifier",
+				constant.MarkIdentifierKey,
 				identifier,
 				"method",
 				m,
@@ -84,7 +85,7 @@ func Hooks(
 			) {
 				l.Info(
 					"Before initialize",
-					"identifier",
+					constant.MarkIdentifierKey,
 					identifier,
 					"request",
 					q,
@@ -113,7 +114,7 @@ func Hooks(
 					if false {
 						l.Info(
 							"ListToolsRequest",
-							"identifier",
+							constant.MarkIdentifierKey,
 							identifier,
 							"request",
 							q,

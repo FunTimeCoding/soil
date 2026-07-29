@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/console/status"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"slices"
 	"time"
 )
@@ -28,7 +29,7 @@ func (r *Rule) Format(f *option.Format) string {
 		s.Line("  Duration: %d", r.Duration)
 	}
 
-	if !slices.Contains(Healths, r.Health) {
+	if !slices.Contains(constant.RuleHealths, r.Health) {
 		output := fmt.Sprintf("unexpected health: %s", r.Health)
 
 		if f.UseColor {
@@ -38,7 +39,7 @@ func (r *Rule) Format(f *option.Format) string {
 		s.Line("%s", output)
 	}
 
-	if !slices.Contains(States, r.State) {
+	if !slices.Contains(constant.RuleStates, r.State) {
 		output := fmt.Sprintf("unexpected state: %s", r.State)
 
 		if f.UseColor {
@@ -84,11 +85,11 @@ func (r *Rule) Format(f *option.Format) string {
 			r.RawAlert.Health = ""
 			r.RawAlert.Duration = 0
 			r.RawAlert.Query = ""
-			delete(r.RawAlert.Labels, SeverityKey)
-			delete(r.RawAlert.Annotations, SummaryKey)
-			delete(r.RawAlert.Annotations, DescriptionKey)
-			delete(r.RawAlert.Annotations, RunbookKey)
-			delete(r.RawAlert.Annotations, DurationKey)
+			delete(r.RawAlert.Labels, constant.SeverityKey)
+			delete(r.RawAlert.Annotations, constant.SummaryKey)
+			delete(r.RawAlert.Annotations, constant.DescriptionKey)
+			delete(r.RawAlert.Annotations, constant.RunbookKey)
+			delete(r.RawAlert.Annotations, constant.DurationKey)
 		}
 	}
 

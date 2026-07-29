@@ -2,16 +2,16 @@ package example
 
 import (
 	"github.com/akkuman/logrus-loki-hook"
-	"github.com/funtimecoding/soil/pkg/prometheus/loki/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/sirupsen/logrus"
 )
 
 func Write() {
-	host := environment.Required(constant.HostEnvironment)
-	user := environment.Required(constant.UserEnvironment)
-	password := environment.Required(constant.PasswordEnvironment)
+	host := environment.Required(constant.LokiHostEnvironment)
+	user := environment.Required(constant.LokiUserEnvironment)
+	password := environment.Required(constant.LokiPasswordEnvironment)
 	l := logrus.New()
 	h, e := hook.NewHook(
 		&hook.Config{

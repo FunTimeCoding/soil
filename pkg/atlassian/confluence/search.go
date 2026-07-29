@@ -3,8 +3,8 @@ package confluence
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/basic/response"
-	"github.com/funtimecoding/soil/pkg/atlassian/confluence/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/search_result"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 )
@@ -18,9 +18,9 @@ func (c *Client) Search(
 	}
 
 	body, e := c.basic.Get(
-		locator.New(c.host).Base(constant.OldBase).Path(
-			constant.Search,
-		).Set(constant.Query, query).String(),
+		locator.New(c.host).Base(constant.ConfluenceOldBase).Path(
+			constant.ConfluenceSearch,
+		).Set(constant.ConfluenceQuery, query).String(),
 	)
 
 	if e != nil {

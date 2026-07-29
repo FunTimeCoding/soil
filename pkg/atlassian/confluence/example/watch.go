@@ -3,12 +3,12 @@ package example
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence"
-	"github.com/funtimecoding/soil/pkg/atlassian/confluence/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 )
 
 func Watch() {
 	c := confluence.NewEnvironment()
-	f := constant.Dense
+	f := constant.ConfluenceDense
 	fmt.Println("Watch")
 
 	for _, p := range c.MustWatched() {

@@ -1,6 +1,7 @@
 package variable_naming
 
 import (
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"go/ast"
 	"go/types"
 )
@@ -33,7 +34,7 @@ func collectFromParams(
 					typ:         o.Type(),
 					precedence:  typePrecedence(o.Type()),
 					scopedNames: collectScopedNames(o),
-					kind:        kindParameter,
+					kind:        constant.VariableKindParameter,
 				},
 			)
 		}

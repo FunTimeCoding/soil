@@ -37,7 +37,7 @@ func TestAddConcernPreservesFields(t *testing.T) {
 	assert.Integer(t, 1, len(r.Entries))
 	assert.String(t, constant.BlankInsideFunctionKey, r.Entries[0].Key)
 	assert.String(t, "Blank line", r.Entries[0].Text)
-	assert.String(t, concern.Line, r.Entries[0].Type)
+	assert.String(t, constant.ConcernLine, r.Entries[0].Type)
 	assert.Integer(t, 5, r.Entries[0].Line)
 	assert.Boolean(t, true, r.Entries[0].Fixed)
 }

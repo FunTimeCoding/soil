@@ -1,6 +1,9 @@
 package issue
 
-import "slices"
+import (
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
+	"slices"
+)
 
 func (i *Issue) Blocked() bool {
 	for _, l := range i.Raw.Fields.IssueLinks {
@@ -8,7 +11,7 @@ func (i *Issue) Blocked() bool {
 			continue
 		}
 
-		if l.Type.Inward == BlockedBy {
+		if l.Type.Inward == constant.JiraBlockedBy {
 			if slices.Contains(
 				i.option.ClosedStatus,
 				l.InwardIssue.Fields.Status.Name,

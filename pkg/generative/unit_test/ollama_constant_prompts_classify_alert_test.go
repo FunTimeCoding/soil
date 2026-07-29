@@ -2,7 +2,7 @@ package unit_test
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/generative/ollama/constant/prompts"
+	"github.com/funtimecoding/soil/pkg/generative/ollama"
 	"testing"
 )
 
@@ -21,6 +21,6 @@ Answer: Choice between already-broken, not-yet-broken
 ## Example data
 already-broken: DiskFull
 not-yet-broken: DiskNearFull,LatencyHigh`,
-		prompts.ClassifyAlert().Render(),
+		ollama.ClassifyAlert().Render(),
 	)
 }

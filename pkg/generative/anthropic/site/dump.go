@@ -1,7 +1,10 @@
 package site
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/funtimecoding/soil/pkg/generative/constant"
+)
 
 func (s *Site) Dump() {
-	fmt.Println(s.protocol.Outer("body"))
+	fmt.Println(s.protocol.Outer(constant.AnthropicBodyElement))
 }

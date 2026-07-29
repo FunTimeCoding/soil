@@ -2,7 +2,7 @@ package jira
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
 )
 
@@ -14,7 +14,7 @@ func (c *Client) FillComments(v []*issue.Issue) error {
 			continue
 		}
 
-		if len(i.Raw.Fields.Comments.Comments) < constant.CommentCap {
+		if len(i.Raw.Fields.Comments.Comments) < constant.JiraCommentCap {
 			continue
 		}
 

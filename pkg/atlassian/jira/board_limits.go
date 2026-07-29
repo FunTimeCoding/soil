@@ -2,8 +2,8 @@ package jira
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/board_limit"
-	"github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
 )
 
 func (c *Client) BoardLimits(identifier int) ([]*board_limit.Limit, error) {
@@ -19,7 +19,7 @@ func (c *Client) BoardLimits(identifier int) ([]*board_limit.Limit, error) {
 		return nil, f
 	}
 
-	if o.ColumnConfig.ConstraintType != constant.IssueCountType {
+	if o.ColumnConfig.ConstraintType != constant.JiraIssueCountType {
 		return nil, fmt.Errorf(
 			"unexpected constraint type: %s",
 			o.ColumnConfig.ConstraintType,

@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/constant"
 	web "github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/location"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 	"testing"
@@ -29,7 +28,7 @@ func New(
 			Endpoint: locator.New(
 				web.Localhost,
 			).Insecure().Port(port).Path(
-				location.ModelContext,
+				web.LocationModelContext,
 			).String(),
 		},
 		nil,

@@ -1,5 +1,7 @@
 package concern
 
+import "github.com/funtimecoding/soil/pkg/lint/constant"
+
 func NewFile(
 	key string,
 	text string,
@@ -10,7 +12,7 @@ func NewFile(
 		Key:   key,
 		Text:  text,
 		Path:  path,
-		Type:  File,
+		Type:  constant.ConcernFile,
 		Fixed: fixed,
 	}
 }

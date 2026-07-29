@@ -3,7 +3,7 @@ package example
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/web"
-	"github.com/funtimecoding/soil/pkg/web/location"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/request_context"
 	"log/slog"
 	"net/http"
@@ -20,7 +20,7 @@ func Log() {
 	)
 	m := http.NewServeMux()
 	m.HandleFunc(
-		location.Root,
+		constant.LocationRoot,
 		func(
 			w http.ResponseWriter,
 			r *http.Request,

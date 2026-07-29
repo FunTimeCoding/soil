@@ -2,7 +2,6 @@ package alert
 
 import (
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/alert/detail"
-	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/team"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/team_map"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/user_map"
@@ -41,7 +40,7 @@ type Alert struct {
 	shortUser         face.StringAlias
 	shortAlert        face.StringAlias
 	descriptionToName face.StringAlias
-	parseDescription  constant.ParseDescription
+	parseDescription  detail.Parser
 	MonitorIdentifier string
 	RawList           *alert.Alert
 	RawDetail         *alert.GetAlertResult

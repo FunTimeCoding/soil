@@ -1,13 +1,15 @@
 package rule
 
+import "github.com/funtimecoding/soil/pkg/prometheus/constant"
+
 func (r *Rule) formatType() string {
 	if r.RawAlert != nil {
-		return AlertType
+		return constant.AlertType
 	}
 
 	if r.RawRecord != nil {
-		return RecordType
+		return constant.RecordType
 	}
 
-	return UnknownType
+	return constant.UnknownType
 }

@@ -3,12 +3,12 @@ package example
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence"
-	"github.com/funtimecoding/soil/pkg/atlassian/confluence/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 )
 
 func Export() {
 	c := confluence.NewEnvironment()
-	f := constant.Dense
+	f := constant.ConfluenceDense
 
 	for _, p := range c.MustChildPages(c.DefaultSpace(), c.DefaultPage()) {
 		fmt.Println(p.Format(f))

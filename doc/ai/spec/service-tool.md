@@ -258,7 +258,7 @@ func (s *Server) dashboard(w http.ResponseWriter, r *http.Request) {
 | `layout/navigation_item` | `pkg/web/layout/navigation_item/` | `New(path, label)` / `NewExternal(path, label)` for nav links. Renders with active-state highlighting. |
 | `palette` | `pkg/web/palette/` | Command palette framework. `NewRegistry()`, `Register()`, `NewServe(registry)` handler. fzf-style fuzzy matching, highlighted results. Layout adds `⌘K` nav hint and `<dialog>` automatically via `WithCommandPalette`. |
 | `view` | `pkg/web/view/` | HTTP layer wrapping layout. `RenderPage`, `RenderFragment`, `IsExtendedRequest`. Clones the layout template per request. |
-| `theme/constant` | `pkg/web/theme/constant/` | CSS palette constants (pico.css custom property overrides). |
+| `theme/constant` | `pkg/web/constant/` (`theme_*.go`) | CSS palette constants (pico.css custom property overrides). |
 
 ### Page titles and paths
 
@@ -276,10 +276,10 @@ const (
 
 ### Themes
 
-Theme constants in `pkg/web/theme/constant/` are pico.css custom property
-overrides. Each service picks one in its `New`. One file per palette in
-that package (Amethyst, Archive, Cortex, Hearth, Sentinel, Slate,
-Sprout, Tangerine, Tyria - check the directory for the current set).
+Theme constants (`Theme*` in `pkg/web/constant/`, one `theme_<name>.go` per palette) are pico.css custom property
+overrides. Each service picks one in its `New` (ThemeAmethyst, ThemeArchive,
+ThemeCortex, ThemeHearth, ThemeSentinel, ThemeSlate, ThemeSprout,
+ThemeTangerine, ThemeTyria - check the files for the current set).
 Additional palettes can be defined in downstream repos.
 
 Key conventions:

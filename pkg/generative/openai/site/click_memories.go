@@ -1,9 +1,9 @@
 package site
 
-import "github.com/funtimecoding/soil/pkg/generative/openai/constant"
+import "github.com/funtimecoding/soil/pkg/generative/constant"
 
 func (s *Site) clickMemories() {
-	n := s.protocol.Select(constant.MemoriesSelector, 0)
+	n := s.protocol.Select(constant.OpenAIMemoriesSelector, 0)
 
 	if n == nil {
 		return

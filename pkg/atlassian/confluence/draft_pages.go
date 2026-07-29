@@ -2,23 +2,23 @@ package confluence
 
 import (
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/basic/response"
-	"github.com/funtimecoding/soil/pkg/atlassian/confluence/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
 func (c *Client) DraftPages() ([]*page.Page, error) {
-	l := locator.New(c.host).Base(constant.OldBase).Path(
+	l := locator.New(c.host).Base(constant.ConfluenceOldBase).Path(
 		"/content",
 	).Set(
 		"type",
-		constant.PageType,
+		constant.ConfluencePageType,
 	).Set(
-		constant.Status,
-		constant.DraftStatus,
+		constant.ConfluenceStatus,
+		constant.ConfluenceDraftStatus,
 	).Set(
-		"expand",
+		constant.ConfluenceExpand,
 		"body.storage,version",
 	).String()
 	var result []*response.Page

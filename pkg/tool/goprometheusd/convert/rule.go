@@ -1,6 +1,7 @@
 package convert
 
 import (
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus/rule"
 	"time"
 )
@@ -17,7 +18,7 @@ func Rule(r *rule.Rule) *SlimRule {
 	}
 
 	if r.RawAlert != nil {
-		result.Type = rule.AlertType
+		result.Type = constant.AlertType
 		result.LastEvaluation = r.RawAlert.LastEvaluation.Format(time.RFC3339)
 		result.EvaluationTime = r.RawAlert.EvaluationTime
 		result.LastError = r.RawAlert.LastError
@@ -35,7 +36,7 @@ func Rule(r *rule.Rule) *SlimRule {
 			)
 		}
 	} else if r.RawRecord != nil {
-		result.Type = rule.RecordType
+		result.Type = constant.RecordType
 		result.LastEvaluation = r.RawRecord.LastEvaluation.Format(time.RFC3339)
 		result.EvaluationTime = r.RawRecord.EvaluationTime
 		result.LastError = r.RawRecord.LastError

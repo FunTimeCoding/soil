@@ -3,7 +3,7 @@ package unit_test
 import (
 	"github.com/andygrunwald/go-jira"
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
 	"testing"
 )
@@ -11,12 +11,12 @@ import (
 func TestFilterStatus(t *testing.T) {
 	o := issue.FixtureOption()
 	r1 := issue.Raw("TEST-1")
-	r1.Fields.Status = &jira.Status{Name: constant.ToDo}
+	r1.Fields.Status = &jira.Status{Name: constant.JiraToDo}
 	r2 := issue.Raw("TEST-2")
-	r2.Fields.Status = &jira.Status{Name: constant.Closed}
+	r2.Fields.Status = &jira.Status{Name: constant.JiraClosed}
 	actual := issue.FilterStatus(
 		[]*issue.Issue{issue.New(r1, o), issue.New(r2, o)},
-		constant.Closed,
+		constant.JiraClosed,
 	)
 	assert.Count(t, 1, actual)
 	assert.String(t, "TEST-1", actual[0].Key)

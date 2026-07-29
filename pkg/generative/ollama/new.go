@@ -3,7 +3,7 @@ package ollama
 import (
 	"context"
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/generative/ollama/constant"
+	generative "github.com/funtimecoding/soil/pkg/generative/constant"
 	web "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/ollama/ollama/api"
 	"net/http"
@@ -18,11 +18,11 @@ func New(o ...Option) *Client {
 	}
 
 	if result.host == "" {
-		result.host = constant.Host
+		result.host = generative.OllamaHost
 	}
 
 	if result.port == 0 {
-		result.port = constant.Port
+		result.port = generative.OllamaPort
 	}
 
 	var scheme string

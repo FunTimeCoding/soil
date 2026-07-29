@@ -4,7 +4,7 @@ import (
 	"fmt"
 	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/openapi"
-	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
+	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/prometheus/alertmanager/api/v2/models"
@@ -18,7 +18,7 @@ func New(
 	var rule string
 
 	for _, m := range v.Matchers {
-		if *m.Name == constant.AlertnameLabel {
+		if *m.Name == prometheus.AlertnameLabel {
 			rule = *m.Value
 		}
 
@@ -26,7 +26,7 @@ func New(
 	}
 
 	if rule == "" {
-		rule = constant.UnknownRule
+		rule = prometheus.UnknownRule
 	}
 
 	return &Silence{

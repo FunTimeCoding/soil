@@ -1,6 +1,7 @@
 package alert
 
 import (
+	atlassian "github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
@@ -11,7 +12,7 @@ func (a *Alert) flags(f *option.Format) []string {
 
 	if !f.HasTag(constant.TagDense) {
 		if !a.Acknowledged {
-			flag := UnacknowledgedFlag
+			flag := atlassian.OpsgenieUnacknowledgedFlag
 
 			if f.UseColor {
 				flag = console.Red("%s", flag)
@@ -21,7 +22,7 @@ func (a *Alert) flags(f *option.Format) []string {
 		}
 
 		if !a.Seen {
-			flag := UnseenFlag
+			flag := atlassian.OpsgenieUnseenFlag
 
 			if f.UseColor {
 				flag = console.Red("%s", flag)
@@ -32,7 +33,7 @@ func (a *Alert) flags(f *option.Format) []string {
 	}
 
 	if a.Snoozed {
-		flag := SnoozedFlag
+		flag := atlassian.OpsgenieSnoozedFlag
 
 		if f.UseColor {
 			flag = console.Red("%s", flag)

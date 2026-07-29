@@ -3,7 +3,7 @@ package amtool
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/maps"
-	alertmanager "github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
+	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/strings/split/key_value"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/constant"
@@ -17,11 +17,11 @@ func Run(selected string) {
 	base := join.Absolute(
 		system.Home(),
 		constant.ConfigurationPath,
-		alertmanager.AmtoolPath,
+		prometheus.AmtoolPath,
 	)
-	tool := join.Absolute(base, alertmanager.AmtoolConfiguration)
+	tool := join.Absolute(base, prometheus.AmtoolConfiguration)
 
-	if !run.CommandExists(alertmanager.AmtoolCommand) {
+	if !run.CommandExists(prometheus.AmtoolCommand) {
 		fmt.Println(
 			"amtool missing: go install github.com/prometheus/alertmanager/cmd/amtool@latest",
 		)
@@ -35,7 +35,7 @@ func Run(selected string) {
 		return
 	}
 
-	active := Read(base, alertmanager.AmtoolConfiguration)
+	active := Read(base, prometheus.AmtoolConfiguration)
 	files := system.Files(base)
 	var contexts []string
 	locatorByContext := make(map[string]string)
@@ -47,10 +47,10 @@ func Run(selected string) {
 
 		name, _ := key_value.Dot(f)
 
-		if strings.HasPrefix(name, alertmanager.AmtoolConfigurationPrefix) {
+		if strings.HasPrefix(name, prometheus.AmtoolConfigurationPrefix) {
 			context := strings.TrimPrefix(
 				name,
-				alertmanager.AmtoolConfigurationPrefix,
+				prometheus.AmtoolConfigurationPrefix,
 			)
 
 			if !slices.Contains(contexts, context) {
@@ -98,7 +98,7 @@ func Run(selected string) {
 			base,
 			fmt.Sprintf(
 				"%s%s.yml",
-				alertmanager.AmtoolConfigurationPrefix,
+				prometheus.AmtoolConfigurationPrefix,
 				selected,
 			),
 		),

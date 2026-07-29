@@ -3,7 +3,7 @@ package example
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/generative/openai/constant"
+	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/openai/openai-go/v3"
 	"github.com/openai/openai-go/v3/option"
@@ -11,7 +11,7 @@ import (
 
 func Official() {
 	c := openai.NewClient(
-		option.WithAPIKey(environment.Required(constant.TokenEnvironment)),
+		option.WithAPIKey(environment.Required(constant.OpenAITokenEnvironment)),
 	)
 	r, e := c.Chat.Completions.New(
 		context.Background(),

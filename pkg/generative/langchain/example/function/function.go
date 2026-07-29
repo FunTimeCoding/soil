@@ -3,7 +3,7 @@ package function
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/generative/ollama/constant"
+	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/spf13/pflag"
 	"github.com/tmc/langchaingo/llms"
 	"github.com/tmc/langchaingo/llms/ollama"
@@ -16,7 +16,7 @@ func Function() {
 	pflag.Parse()
 	c, clientFail := ollama.New(
 		ollama.WithModel(constant.Llama31),
-		ollama.WithFormat(constant.NotationFormat),
+		ollama.WithFormat(constant.OllamaNotationFormat),
 	)
 	errors.PanicOnError(clientFail)
 	var messages []llms.MessageContent

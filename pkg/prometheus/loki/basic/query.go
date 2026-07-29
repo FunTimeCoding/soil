@@ -2,10 +2,10 @@ package basic
 
 import (
 	"github.com/funtimecoding/soil/pkg/notation"
-	"github.com/funtimecoding/soil/pkg/prometheus/loki/basic/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus/loki/basic/query"
 	"github.com/funtimecoding/soil/pkg/prometheus/loki/basic/query_result"
-	"github.com/funtimecoding/soil/pkg/web/parameter"
+	web "github.com/funtimecoding/soil/pkg/web/constant"
 	"log"
 	"time"
 )
@@ -14,10 +14,10 @@ func (c *Client) Query(q string) *query_result.Result {
 	r := query.New()
 	notation.MustDecode(
 		c.Get(
-			c.base.Copy().Path(constant.Query).SetInteger64(
-				parameter.Time,
+			c.base.Copy().Path(constant.LokiQuery).SetInteger64(
+				web.ParameterTime,
 				time.Now().Unix(),
-			).Set(parameter.Query, q).String(),
+			).Set(web.ParameterQuery, q).String(),
 		),
 		&r,
 		false,

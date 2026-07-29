@@ -3,8 +3,8 @@ package confluence
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/basic/response"
-	"github.com/funtimecoding/soil/pkg/atlassian/confluence/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/notation"
 )
 
@@ -19,13 +19,13 @@ func (c *Client) PageBySpaceAndName(
 	}
 
 	body, f := c.basic.GetV2(
-		c.basic.Base().Copy().Path(constant.Page).Set(
-			constant.BodyFormat,
-			constant.StorageFormat,
+		c.basic.Base().Copy().Path(constant.ConfluencePage).Set(
+			constant.ConfluenceBodyFormat,
+			constant.ConfluenceStorageFormat,
 		).Set(
-			constant.SpaceIdentifier,
+			constant.ConfluenceSpaceIdentifier,
 			s.Identifier,
-		).Set(constant.Title, name).String(),
+		).Set(constant.ConfluenceTitle, name).String(),
 	)
 
 	if f != nil {

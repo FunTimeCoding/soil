@@ -7,8 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/provision/packer/build"
 	stringJoin "github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/system"
-	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
-	"github.com/funtimecoding/soil/pkg/system/debian/constant"
+	"github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/join"
 	"log"
 	"runtime"
@@ -58,12 +57,12 @@ func (c *Client) Run(
 		var connectCommand string
 
 		switch runtime.GOOS {
-		case systemConstant.Linux:
+		case constant.Linux:
 			connectCommand = fmt.Sprintf(
 				"nc -v 127.0.0.1 %d",
 				b.CharacterDevicePort,
 			)
-		case systemConstant.Darwin:
+		case constant.Darwin:
 			connectCommand = fmt.Sprintf(
 				"socat -,raw,echo=0,escape=0x11 tcp:127.0.0.1:%d",
 				b.CharacterDevicePort,

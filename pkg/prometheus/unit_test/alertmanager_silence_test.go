@@ -2,8 +2,8 @@ package unit_test
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/silence"
+	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
 	strings "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/time"
 	"github.com/prometheus/alertmanager/api/v2/models"
@@ -15,7 +15,7 @@ func TestSilence(t *testing.T) {
 		&models.GettableSilence{
 			ID: new(strings.UpperAlfa),
 			Status: &models.SilenceStatus{
-				State: new(constant.ActiveState),
+				State: new(prometheus.ActiveState),
 			},
 			Silence: models.Silence{
 				CreatedBy: new(strings.UpperBravo),

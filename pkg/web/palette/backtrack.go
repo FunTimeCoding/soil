@@ -1,5 +1,7 @@
 package palette
 
+import "github.com/funtimecoding/soil/pkg/web/constant"
+
 func backtrack(
 	scores [][]int,
 	consecutive [][]int,
@@ -17,7 +19,7 @@ func backtrack(
 			if consecutive[i][j] > 1 && j > 0 {
 				j--
 			} else {
-				best := minScore
+				best := constant.PaletteMinScore
 				bestK := -1
 
 				for k := range j {

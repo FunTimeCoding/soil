@@ -2,9 +2,9 @@ package basic
 
 import (
 	"github.com/funtimecoding/soil/pkg/notation"
-	"github.com/funtimecoding/soil/pkg/prometheus/loki/basic/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus/loki/basic/response"
-	"github.com/funtimecoding/soil/pkg/web/parameter"
+	web "github.com/funtimecoding/soil/pkg/web/constant"
 	"log"
 	"time"
 )
@@ -19,14 +19,14 @@ func (c *Client) LabelValues(
 		c.Get(
 			c.base.Copy().Path(
 				"%s/%s%s",
-				constant.Label,
+				constant.LokiLabel,
 				label,
-				constant.Values,
+				constant.LokiValues,
 			).SetInteger64(
-				parameter.Start,
+				web.ParameterStart,
 				start.Unix(),
 			).SetInteger64(
-				parameter.End,
+				web.ParameterEnd,
 				end.Unix(),
 			).String(),
 		),

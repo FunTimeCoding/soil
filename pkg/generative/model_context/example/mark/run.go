@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	library "github.com/funtimecoding/soil/pkg/constant"
-	"github.com/funtimecoding/soil/pkg/generative/model_context/constant"
+	generative "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/model_context/example/mark/option"
 	"github.com/funtimecoding/soil/pkg/generative/model_context/server"
 	"github.com/funtimecoding/soil/pkg/system"
@@ -30,10 +30,10 @@ func Run(o *option.Mark) {
 	)
 	s.AddTool(
 		mcp.NewTool(
-			constant.GreetTool,
+			generative.ModelContextGreetTool,
 			mcp.WithDescription("Say hello to someone"),
 			mcp.WithString(
-				constant.NameParameter,
+				generative.ModelContextNameParameter,
 				mcp.Required(),
 				mcp.Description("Name of the person to greet"),
 			),
@@ -42,7 +42,7 @@ func Run(o *option.Mark) {
 			_ context.Context,
 			r mcp.CallToolRequest,
 		) (*mcp.CallToolResult, error) {
-			name, e := r.RequireString(constant.NameParameter)
+			name, e := r.RequireString(generative.ModelContextNameParameter)
 
 			if e != nil {
 				return mcp.NewToolResultError(e.Error()), nil
@@ -55,7 +55,7 @@ func Run(o *option.Mark) {
 	)
 	s.AddResource(
 		mcp.NewResource(
-			ReadmeDocument,
+			generative.MarkReadmeDocument,
 			"Project README",
 			mcp.WithResourceDescription(
 				"The project's README file",
@@ -74,7 +74,7 @@ func Run(o *option.Mark) {
 
 			return []mcp.ResourceContents{
 				mcp.TextResourceContents{
-					URI:      ReadmeDocument,
+					URI:      generative.MarkReadmeDocument,
 					MIMEType: webConstant.Markdown,
 					Text:     string(content),
 				},
@@ -117,7 +117,7 @@ func Run(o *option.Mark) {
 		v := server.New(s)
 		m := http.NewServeMux()
 		v.Setup(m)
-		h := web.Server(m, server.Address)
+		h := web.Server(m, generative.ModelContextAddress)
 		web.ServeAsynchronous(h)
 		system.KillSignalBlock()
 		web.GracefulShutdown(context.Background(), h, true)

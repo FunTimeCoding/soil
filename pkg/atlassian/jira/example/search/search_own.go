@@ -2,8 +2,8 @@ package search
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira"
-	"github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
 )
 
 func searchOwn(
@@ -15,7 +15,7 @@ func searchOwn(
 		issues := j.MustSearchV3(
 			"project = %s AND status != %s",
 			p,
-			constant.Closed,
+			constant.JiraClosed,
 		)
 		fmt.Printf("  Count: %d\n", len(issues))
 
@@ -30,7 +30,7 @@ func searchOwn(
 			5,
 			"project = %s AND status != %s",
 			p,
-			constant.Closed,
+			constant.JiraClosed,
 		)
 		fmt.Printf("  Count: %d\n", len(issues))
 

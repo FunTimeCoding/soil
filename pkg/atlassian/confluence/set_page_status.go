@@ -1,8 +1,8 @@
 package confluence
 
 import (
-	"github.com/funtimecoding/soil/pkg/atlassian/confluence/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 )
 
 func (c *Client) SetPageStatus(
@@ -12,7 +12,7 @@ func (c *Client) SetPageStatus(
 	var current *page.Page
 	var e error
 
-	if status == constant.CurrentStatus {
+	if status == constant.ConfluenceCurrentStatus {
 		current, e = c.DraftOverlay(identifier)
 	} else {
 		current, e = c.Page(identifier)
@@ -24,10 +24,10 @@ func (c *Client) SetPageStatus(
 
 	version := 1
 
-	if status == constant.CurrentStatus {
+	if status == constant.ConfluenceCurrentStatus {
 		published, f := c.Page(identifier)
 
-		if f == nil && published.Raw.Status == constant.CurrentStatus {
+		if f == nil && published.Raw.Status == constant.ConfluenceCurrentStatus {
 			version = published.Raw.Version.Number + 1
 		}
 	}

@@ -2,7 +2,7 @@ package page_put
 
 import (
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/basic/response"
-	"github.com/funtimecoding/soil/pkg/atlassian/confluence/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 )
 
 func NewWithStatus(
@@ -18,7 +18,7 @@ func NewWithStatus(
 		Status:     status,
 		Title:      title,
 		Body: response.Storage{
-			Representation: constant.StorageFormat,
+			Representation: constant.ConfluenceStorageFormat,
 			Value:          body,
 		},
 		Version: Version{

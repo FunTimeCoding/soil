@@ -2,8 +2,8 @@ package confluence
 
 import (
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/basic/response"
-	"github.com/funtimecoding/soil/pkg/atlassian/confluence/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/notation"
 )
 
@@ -12,22 +12,22 @@ func (c *Client) PagesBySpace(
 	status string,
 ) ([]*page.Page, error) {
 	if status == "" {
-		status = constant.CurrentStatus
+		status = constant.ConfluenceCurrentStatus
 	}
 
-	if status == constant.DraftStatus {
+	if status == constant.ConfluenceDraftStatus {
 		return c.draftPagesBySpace(identifier)
 	}
 
 	l := c.basic.Base().Copy().Path(
 		"%s/%s%s",
-		constant.Space,
+		constant.ConfluenceSpace,
 		identifier,
-		constant.Page,
+		constant.ConfluencePage,
 	).Set(
-		constant.BodyFormat,
-		constant.StorageFormat,
-	).Set(constant.Status, status).String()
+		constant.ConfluenceBodyFormat,
+		constant.ConfluenceStorageFormat,
+	).Set(constant.ConfluenceStatus, status).String()
 	var result []*response.Page
 
 	for {

@@ -3,9 +3,9 @@ package web
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/service"
+	web "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/palette"
-	theme "github.com/funtimecoding/soil/pkg/web/theme/constant"
 	"github.com/funtimecoding/soil/pkg/web/view"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -26,7 +26,7 @@ func New(s *service.Service) *Server {
 		registry: registry,
 		view: view.New(
 			layout.New(constant.Identity).
-				WithTheme(theme.Sprout).
+				WithTheme(web.ThemeSprout).
 				WithStyle(constant.InlineStyle).
 				WithCommandPalette("/palette").
 				WithScript("https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js").

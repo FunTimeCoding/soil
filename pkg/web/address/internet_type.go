@@ -1,17 +1,20 @@
 package address
 
-import "net"
+import (
+	"github.com/funtimecoding/soil/pkg/web/constant"
+	"net"
+)
 
 func InternetType(s string) string {
 	i := net.ParseIP(s)
 
 	if i == nil {
-		return NoneType
+		return constant.AddressNoneType
 	}
 
 	if i.To4() != nil {
-		return FourType
+		return constant.AddressFourType
 	}
 
-	return SixType
+	return constant.AddressSixType
 }

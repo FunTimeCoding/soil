@@ -1,7 +1,7 @@
 package model_context
 
 import (
-	"github.com/funtimecoding/soil/pkg/generative/model_context/parameter"
+	generative "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -83,7 +83,7 @@ func (s *Server) register() {
 				),
 			),
 			mcp.WithNumber(
-				parameter.Limit,
+				generative.ParameterLimit,
 				mcp.Description(
 					"Maximum number of entries to return (default: all)",
 				),

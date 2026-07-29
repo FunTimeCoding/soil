@@ -3,6 +3,7 @@ package unit_test
 import (
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
+	lintConstant "github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 	"testing"
@@ -24,7 +25,7 @@ func TestVariableErrorAssignment(t *testing.T) {
 				Key:      "err_variable",
 				Text:     "Use e instead of err for error variable",
 				Path:     "Alfa",
-				Type:     concern.Line,
+				Type:     lintConstant.ConcernLine,
 				Line:     4,
 				LineText: "\terr := foo()",
 			},
@@ -50,7 +51,7 @@ func TestVariableErrorMultiReturn(t *testing.T) {
 				Key:      "err_variable",
 				Text:     "Use e instead of err for error variable",
 				Path:     "Bravo",
-				Type:     concern.Line,
+				Type:     lintConstant.ConcernLine,
 				Line:     4,
 				LineText: "\tx, err := foo()",
 			},

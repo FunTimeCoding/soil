@@ -1,15 +1,15 @@
 package search
 
 import (
-	"github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/common"
 )
 
 func Search() {
-	p := environment.Required(constant.DefaultProjectNameEnvironment)
+	p := environment.Required(constant.JiraDefaultProjectNameEnvironment)
 	j := common.Jira()
-	f := constant.Format
+	f := constant.JiraFormat
 	searchAndy(j, p, f)
 	searchOwn(j, p)
 	searchOwnFull(j, p, f)

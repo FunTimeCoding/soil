@@ -2,14 +2,14 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/prometheus/loki/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 )
 
 func Official() {
-	host := environment.Required(constant.HostEnvironment)
-	user := environment.Required(constant.UserEnvironment)
-	password := environment.Required(constant.PasswordEnvironment)
+	host := environment.Required(constant.LokiHostEnvironment)
+	user := environment.Required(constant.LokiUserEnvironment)
+	password := environment.Required(constant.LokiPasswordEnvironment)
 
 	if false {
 		fmt.Printf("Host: %s\n", host)

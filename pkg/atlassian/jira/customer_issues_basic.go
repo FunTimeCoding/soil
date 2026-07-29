@@ -2,18 +2,18 @@ package jira
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
-	"github.com/funtimecoding/soil/pkg/web/parameter"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
+	web "github.com/funtimecoding/soil/pkg/web/constant"
 )
 
 func (c *Client) CustomerIssuesBasic() error {
 	status, body, e := c.basic.Get(
 		c.basic.Base().Copy().Base(
-			constant.ServiceDesk,
-		).Path(constant.Request).SetInteger(
-			parameter.Limit,
+			constant.JiraServiceDesk,
+		).Path(constant.JiraRequest).SetInteger(
+			web.ParameterLimit,
 			10,
-		).SetInteger(parameter.Start, 0).String(),
+		).SetInteger(web.ParameterStart, 0).String(),
 	)
 
 	if e != nil {

@@ -2,8 +2,8 @@ package alertmanager
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/silence"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 )
 
 func (c *Client) SilenceByRule(name string) (*silence.Silence, error) {

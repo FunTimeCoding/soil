@@ -2,7 +2,7 @@ package unit_test
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/system/macos/constant"
+	"github.com/funtimecoding/soil/pkg/system/constant"
 	"testing"
 )
 
@@ -11,6 +11,6 @@ func TestMacosConstant(t *testing.T) {
 	assert.String(t, "bootout", constant.Bootout)
 	assert.String(t, "codesign", constant.Codesign)
 	assert.String(t, "launchctl", constant.Launchctl)
-	assert.String(t, "print", constant.Print)
+	assert.String(t, "print", constant.LaunchctlPrint)
 	assert.String(t, "wdutil", constant.Wdutil)
 }

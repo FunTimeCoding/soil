@@ -1,14 +1,11 @@
 package request_context
 
-import (
-	"github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/location"
-)
+import "github.com/funtimecoding/soil/pkg/web/constant"
 
 func (c *Context) LastLocation() string {
 	if s := c.Cookie(constant.LastLocation); s != nil {
 		return s.Value
 	}
 
-	return location.Root
+	return constant.LocationRoot
 }

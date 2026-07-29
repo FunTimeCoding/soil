@@ -2,8 +2,8 @@ package loki
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus/loki"
-	"github.com/funtimecoding/soil/pkg/prometheus/loki/basic/constant"
 	"time"
 )
 
@@ -21,7 +21,7 @@ func collectOverview(
 			fmt.Sprintf(`{namespace="%s"}`, n),
 			start,
 			end,
-			constant.MaximumLimit,
+			constant.LokiMaximumLimit,
 		)
 		result = append(
 			result,

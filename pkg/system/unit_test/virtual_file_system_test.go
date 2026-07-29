@@ -3,6 +3,7 @@ package unit_test
 import (
 	"errors"
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"os"
 	"path/filepath"
@@ -97,7 +98,7 @@ func TestReadDirectoryMissing(t *testing.T) {
 	result, e := v.ReadDirectory("pkg/tool/missing")
 	assert.True(t, result == nil)
 	assert.NotNil(t, e)
-	assert.True(t, errors.Is(e, virtual_file_system.ErrorDirectoryNotFound))
+	assert.True(t, errors.Is(e, constant.ErrorDirectoryNotFound))
 }
 
 func TestFlushFrom(t *testing.T) {

@@ -2,10 +2,10 @@ package jira
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/basic/response"
-	"github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
 	"github.com/funtimecoding/soil/pkg/notation"
-	"github.com/funtimecoding/soil/pkg/web/parameter"
+	web "github.com/funtimecoding/soil/pkg/web/constant"
 )
 
 func (c *Client) searchV3Page(
@@ -15,15 +15,15 @@ func (c *Client) searchV3Page(
 ) (*response.Search, error) {
 	var result response.Search
 	status, r, e := c.basic.Get(
-		c.basic.Base().Copy().Base(constant.Base).Path(constant.Search).Set(
-			parameter.Fields,
-			constant.AllFields,
-		).SetInteger(constant.MaximumResultsKey, maximumResults).Set(
-			constant.NextPageTokenKey,
+		c.basic.Base().Copy().Base(constant.JiraBase).Path(constant.JiraSearch).Set(
+			web.ParameterFields,
+			constant.JiraAllFields,
+		).SetInteger(constant.JiraMaximumResultsKey, maximumResults).Set(
+			constant.JiraNextPageTokenKey,
 			nextPageToken,
-		).Set(constant.QueryKey, query).Set(
-			constant.ExpandKey,
-			constant.ChangelogExpand,
+		).Set(constant.JiraQueryKey, query).Set(
+			constant.JiraExpandKey,
+			constant.JiraChangelogExpand,
 		).String(),
 	)
 

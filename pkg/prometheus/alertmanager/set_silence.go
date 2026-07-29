@@ -3,7 +3,7 @@ package alertmanager
 import (
 	"errors"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
-	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"time"
 )
 
@@ -29,7 +29,7 @@ func (c *Client) SetSilence(
 	t := time.Now()
 
 	if d == 0 {
-		d = constant.DefaultDuration
+		d = constant.AlertmanagerDefaultDuration
 	}
 
 	s, f := c.SilenceByRule(alert)

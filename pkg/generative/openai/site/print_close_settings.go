@@ -1,10 +1,10 @@
 package site
 
-import "github.com/funtimecoding/soil/pkg/generative/openai/constant"
+import "github.com/funtimecoding/soil/pkg/generative/constant"
 
 func (s *Site) printCloseSettings() {
 	s.protocol.PrintNode(
-		constant.CloseSettingsSelector,
-		constant.UsefulAttributes,
+		constant.OpenAICloseSettingsSelector,
+		constant.OpenAIUsefulAttributes,
 	)
 }

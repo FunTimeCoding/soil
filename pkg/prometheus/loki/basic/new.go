@@ -1,7 +1,7 @@
 package basic
 
 import (
-	"github.com/funtimecoding/soil/pkg/prometheus/loki/basic/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
@@ -16,6 +16,6 @@ func New(
 		user:     user,
 		password: password,
 		verbose:  verbose,
-		base:     locator.New(host).Base(constant.Base),
+		base:     locator.New(host).Base(constant.LokiBase),
 	}
 }

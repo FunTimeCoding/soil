@@ -1,6 +1,7 @@
 package variable_naming
 
 import (
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"go/ast"
 	"sort"
 )
@@ -35,7 +36,7 @@ func assignLetters(variables []typedVariable) map[*ast.Ident]string {
 	localNames := map[string]bool{}
 
 	for _, v := range singleLetterVars {
-		if v.kind == kindLocal {
+		if v.kind == constant.VariableKindLocal {
 			localNames[v.ident.Name] = true
 		}
 	}
@@ -50,7 +51,7 @@ func assignLetters(variables []typedVariable) map[*ast.Ident]string {
 			perVariableTaken[k] = true
 		}
 
-		if v.kind == kindLocal {
+		if v.kind == constant.VariableKindLocal {
 			for k := range v.scopedNames {
 				perVariableTaken[k] = true
 			}

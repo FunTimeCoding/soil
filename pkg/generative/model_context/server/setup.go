@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/funtimecoding/soil/pkg/web/location"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/mark3labs/mcp-go/server"
 	"net/http"
 	"time"
@@ -10,7 +10,7 @@ import (
 func (s *Server) Setup(m *http.ServeMux) {
 	h := http.NewServeMux()
 	h.Handle(
-		location.ModelContext,
+		constant.LocationModelContext,
 		server.NewStreamableHTTPServer(
 			s.server,
 			server.WithStreamableHTTPLogger(s.Logger()),
@@ -18,7 +18,7 @@ func (s *Server) Setup(m *http.ServeMux) {
 		),
 	)
 	sse := server.NewSSEServer(s.server)
-	h.Handle(location.Event, sse.SSEHandler())
-	h.Handle(location.EventMessage, sse.MessageHandler())
+	h.Handle(constant.LocationEvent, sse.SSEHandler())
+	h.Handle(constant.LocationEventMessage, sse.MessageHandler())
 	s.wrapAuthentication(m, h)
 }

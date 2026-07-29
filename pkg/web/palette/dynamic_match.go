@@ -1,5 +1,7 @@
 package palette
 
+import "github.com/funtimecoding/soil/pkg/web/constant"
+
 func dynamicMatch(
 	pattern []rune,
 	text []rune,
@@ -15,7 +17,7 @@ func dynamicMatch(
 		consecutive[i] = make([]int, columns)
 
 		for j := range columns {
-			scores[i][j] = minScore
+			scores[i][j] = constant.PaletteMinScore
 		}
 	}
 
@@ -24,8 +26,8 @@ func dynamicMatch(
 			continue
 		}
 
-		bonus := bonuses[j] * bonusFirstCharacter
-		scores[0][j] = scoreMatch + bonus
+		bonus := bonuses[j] * constant.PaletteBonusFirstCharacter
+		scores[0][j] = constant.PaletteScoreMatch + bonus
 		consecutive[0][j] = 1
 	}
 
@@ -36,31 +38,31 @@ func dynamicMatch(
 			}
 
 			bonus := bonuses[j]
-			diagonalScore := minScore
+			diagonalScore := constant.PaletteMinScore
 
-			if j > 0 && scores[i-1][j-1] > minScore {
+			if j > 0 && scores[i-1][j-1] > constant.PaletteMinScore {
 				past := consecutive[i-1][j-1]
-				consecutiveBonus := max(bonus, bonusConsecutiveMin)
+				consecutiveBonus := max(bonus, constant.PaletteBonusConsecutiveMin)
 
 				if past > 0 {
 					bonus = consecutiveBonus
 				}
 
-				diagonalScore = scores[i-1][j-1] + scoreMatch + bonus
+				diagonalScore = scores[i-1][j-1] + constant.PaletteScoreMatch + bonus
 			} else if i == 0 {
-				diagonalScore = scoreMatch + bonus*bonusFirstCharacter
+				diagonalScore = constant.PaletteScoreMatch + bonus*constant.PaletteBonusFirstCharacter
 			}
 
-			gapScore := minScore
+			gapScore := constant.PaletteMinScore
 
 			for k := i - 1; k < j; k++ {
-				if scores[i-1][k] <= minScore {
+				if scores[i-1][k] <= constant.PaletteMinScore {
 					continue
 				}
 
 				gap := j - k - 1
-				penalty := scoreGapStart + scoreGapExtension*gap
-				candidate := scores[i-1][k] + penalty + scoreMatch + bonus
+				penalty := constant.PaletteScoreGapStart + constant.PaletteScoreGapExtension*gap
+				candidate := scores[i-1][k] + penalty + constant.PaletteScoreMatch + bonus
 
 				if candidate > gapScore {
 					gapScore = candidate
@@ -69,7 +71,7 @@ func dynamicMatch(
 
 			best := max(diagonalScore, gapScore)
 
-			if best > minScore {
+			if best > constant.PaletteMinScore {
 				scores[i][j] = best
 
 				if diagonalScore >= gapScore && j > 0 {
@@ -81,7 +83,7 @@ func dynamicMatch(
 		}
 	}
 
-	bestScore := minScore
+	bestScore := constant.PaletteMinScore
 	bestEnd := -1
 
 	for j := rows - 1; j < columns; j++ {

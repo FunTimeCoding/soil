@@ -1,0 +1,54 @@
+package constant
+
+import (
+	"github.com/funtimecoding/soil/pkg/console/constant"
+	"github.com/funtimecoding/soil/pkg/console/status/option"
+)
+
+const (
+	ConfluenceDefaultSpaceEnvironment = "CONFLUENCE_DEFAULT_SPACE"
+	ConfluenceDefaultPageEnvironment  = "CONFLUENCE_DEFAULT_PAGE"
+	ConfluenceLabelEnvironment        = "CONFLUENCE_LABEL"
+
+	ConfluenceNoSpace = "no space"
+
+	ConfluencePageType = "page"
+
+	ConfluenceWiki = "/wiki"
+	ConfluenceBase = "/wiki/api/v2"
+
+	ConfluenceOldBase = "/wiki/rest/api"
+	ConfluenceSearch  = "/content/search"
+	ConfluenceUser    = "/user/current"
+
+	ConfluencePage     = "/pages"
+	ConfluenceSpace    = "/spaces"
+	ConfluenceLabel    = "/labels"
+	ConfluenceChildren = "/direct-children"
+
+	ConfluenceBodyFormat      = "body-format"
+	ConfluenceStatus          = "status"
+	ConfluenceQuery           = "cql"
+	ConfluenceSpaceIdentifier = "space-id"
+	ConfluenceTitle           = "title"
+
+	ConfluenceCurrentStatus  = "current"
+	ConfluenceDraftParameter = "draft"
+	ConfluenceDraftStatus    = "draft"
+	ConfluenceGetDraft       = "get-draft"
+
+	ConfluenceExpand = "expand"
+	// Body format
+	ConfluenceViewFormat      = "view"
+	ConfluenceAtlasFormat     = "atlas_doc_format"
+	ConfluenceStorageFormat   = "storage"
+	ConfluenceExportFormat    = "export_view"
+	ConfluenceAnonymousFormat = "anonymous_export_view"
+	ConfluenceStyledFormat    = "styled_view"
+	ConfluenceEditFormat      = "editor"
+)
+
+var (
+	ConfluenceFormat = option.ExtendedColor.Copy()
+	ConfluenceDense  = option.Color.Copy().Tag(constant.TagDense)
+)

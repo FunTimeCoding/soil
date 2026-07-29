@@ -1,5 +1,7 @@
 package concern
 
+import "github.com/funtimecoding/soil/pkg/lint/constant"
+
 func NewLine(
 	key string,
 	text string,
@@ -12,7 +14,7 @@ func NewLine(
 		Key:      key,
 		Text:     text,
 		Path:     path,
-		Type:     Line,
+		Type:     constant.ConcernLine,
 		Line:     line,
 		LineText: lineText,
 		Fixed:    fixed,

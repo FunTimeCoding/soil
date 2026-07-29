@@ -3,7 +3,6 @@ package token_check
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
-	jiraConstant "github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/common"
 )
@@ -12,7 +11,7 @@ func TokenCheck() {
 	host := environment.Required(constant.HostEnvironment)
 	user := environment.Required(constant.UserEnvironment)
 	token := environment.Required(constant.TokenEnvironment)
-	k := environment.Required(jiraConstant.DefaultProjectKeyEnvironment)
+	k := environment.Required(constant.JiraDefaultProjectKeyEnvironment)
 	fmt.Println("TokenCheck: raw /myself")
 	rawMyself(host, user, token)
 	fmt.Println()

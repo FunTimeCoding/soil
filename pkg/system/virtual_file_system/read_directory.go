@@ -2,13 +2,14 @@ package virtual_file_system
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/system/constant"
 	"sort"
 	"strings"
 )
 
 func (s *System) ReadDirectory(path string) ([]string, error) {
 	if !s.DirectoryExists(path) {
-		return nil, ErrorDirectoryNotFound
+		return nil, constant.ErrorDirectoryNotFound
 	}
 
 	prefix := fmt.Sprintf("%s/", path)

@@ -1,7 +1,7 @@
 package basic
 
 import (
-	"github.com/funtimecoding/soil/pkg/atlassian/confluence/constant"
+	atlassian "github.com/funtimecoding/soil/pkg/atlassian/constant"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"io"
@@ -15,7 +15,7 @@ func (c *Client) PostOldPath(
 ) (string, error) {
 	r, e := http.NewRequest(
 		http.MethodPost,
-		locator.New(c.host).Base(constant.OldBase).Path(p).String(),
+		locator.New(c.host).Base(atlassian.ConfluenceOldBase).Path(p).String(),
 		strings.NewReader(body),
 	)
 

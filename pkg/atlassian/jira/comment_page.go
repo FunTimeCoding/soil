@@ -2,8 +2,8 @@ package jira
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/basic/response"
-	"github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
 	"github.com/funtimecoding/soil/pkg/notation"
 )
 
@@ -14,10 +14,10 @@ func (c *Client) commentPage(
 	var result response.Comments
 	_, r, e := c.basic.Get(
 		c.basic.Base().Copy().Base("/rest/api/2").Path(
-			fmt.Sprintf("%s/%s/comment", constant.Issue, key),
+			fmt.Sprintf("%s/%s/comment", constant.JiraIssue, key),
 		).SetInteger(
-			constant.MaximumResultsKey,
-			constant.CommentPageSize,
+			constant.JiraMaximumResultsKey,
+			constant.JiraCommentPageSize,
 		).SetInteger(
 			"startAt",
 			startAt,

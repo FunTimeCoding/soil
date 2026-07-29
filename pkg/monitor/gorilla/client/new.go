@@ -3,7 +3,6 @@ package client
 import (
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/location"
 	"net/url"
 )
 
@@ -15,7 +14,7 @@ func New() *Client {
 				constant.Localhost,
 				constant.ListenPort,
 			),
-			Path: location.Monitor,
+			Path: constant.LocationMonitor,
 		},
 		done: make(chan struct{}),
 	}

@@ -3,6 +3,7 @@ package unit_test
 import (
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
+	lintConstant "github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 	"testing"
@@ -22,7 +23,7 @@ func TestPackageNameBlacklisted(t *testing.T) {
 				Key:      "package_name",
 				Text:     "Blacklisted package name",
 				Path:     "Alfa",
-				Type:     concern.Line,
+				Type:     lintConstant.ConcernLine,
 				Line:     1,
 				LineText: "package api",
 			},

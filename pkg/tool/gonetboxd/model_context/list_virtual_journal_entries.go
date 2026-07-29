@@ -2,8 +2,8 @@ package model_context
 
 import (
 	"context"
+	generative "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/generative/model_context/parameter"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -20,8 +20,8 @@ func (s *Server) listVirtualJournalEntries(
 
 	result, g := s.client.VirtualJournalEntries(
 		name,
-		int32(r.GetInt(parameter.Limit, 0)),
-		int32(r.GetInt(parameter.Offset, 0)),
+		int32(r.GetInt(generative.ParameterLimit, 0)),
+		int32(r.GetInt(generative.ParameterOffset, 0)),
 	)
 
 	if g != nil {

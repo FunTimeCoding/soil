@@ -1,10 +1,10 @@
 package issue
 
-import "github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
+import "github.com/funtimecoding/soil/pkg/atlassian/constant"
 
 func (i *Issue) EpicLink() string {
-	if i.Type != EpicType {
-		if l := i.CustomValue(constant.ParentEpic); ValidValue(l) {
+	if i.Type != constant.JiraEpicType {
+		if l := i.CustomValue(constant.JiraParentEpic); ValidValue(l) {
 			return l
 		}
 	}

@@ -3,6 +3,7 @@ package unit_test
 import (
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
+	lintConstant "github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 	"testing"
@@ -30,7 +31,7 @@ func TestMarkup(t *testing.T) {
 				Key:      "front_matter_delimiter",
 				Text:     "No front matter delimiter",
 				Path:     "Alfa",
-				Type:     concern.Line,
+				Type:     lintConstant.ConcernLine,
 				Line:     1,
 				LineText: "myKey: myValue",
 				Fixed:    true,

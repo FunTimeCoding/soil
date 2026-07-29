@@ -4,7 +4,7 @@ import (
 	"fmt"
 	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/openapi"
-	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
+	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/prometheus/alertmanager/api/v2/models"
 	"slices"
 )
@@ -26,9 +26,9 @@ func New(
 	state := *v.Status.State
 
 	if state == "" {
-		state = constant.None
+		state = prometheus.None
 	} else {
-		if !slices.Contains(constant.AlertStates, state) {
+		if !slices.Contains(prometheus.AlertStates, state) {
 			fmt.Printf("Unexpected state: %s\n", state)
 		}
 	}
@@ -63,11 +63,11 @@ func New(
 		Start:             openapi.ConvertTime(v.StartsAt),
 		instance:          StripColon,
 	}
-	extractKey(&remaining, constant.AlertnameLabel, &result.Name)
-	extractKey(&remaining, constant.SeverityLabel, &result.Severity)
-	extractKey(&remaining, constant.SummaryLabel, &result.Summary)
-	extractKey(&remaining, constant.MessageLabel, &result.Message)
-	extractKey(&remaining, constant.PrometheusLabel, &result.Prometheus)
+	extractKey(&remaining, prometheus.AlertnameLabel, &result.Name)
+	extractKey(&remaining, prometheus.SeverityLabel, &result.Severity)
+	extractKey(&remaining, prometheus.SummaryLabel, &result.Summary)
+	extractKey(&remaining, prometheus.MessageLabel, &result.Message)
+	extractKey(&remaining, prometheus.PrometheusLabel, &result.Prometheus)
 	result.Link = result.buildLink(host)
 
 	return result

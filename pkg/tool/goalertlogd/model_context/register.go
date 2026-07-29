@@ -1,7 +1,7 @@
 package model_context
 
 import (
-	"github.com/funtimecoding/soil/pkg/generative/model_context/parameter"
+	generative "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -12,7 +12,7 @@ func (s *Server) register() {
 			constant.GetAlerts,
 			mcp.WithDescription("Get alert log entries matching the given name"),
 			mcp.WithString(
-				parameter.Name,
+				generative.ParameterName,
 				mcp.Required(),
 				mcp.Description("Alert name to filter by"),
 			),

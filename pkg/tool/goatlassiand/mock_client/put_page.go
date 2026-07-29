@@ -2,8 +2,8 @@ package mock_client
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/atlassian/confluence/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 )
 
 func (c *Client) PutPage(
@@ -20,7 +20,7 @@ func (c *Client) PutPage(
 		return nil, fmt.Errorf("page not found: %s", identifier)
 	}
 
-	if status == constant.DraftStatus {
+	if status == constant.ConfluenceDraftStatus {
 		if e.page == nil {
 			return nil, fmt.Errorf("page not found: %s", identifier)
 		}
@@ -30,7 +30,7 @@ func (c *Client) PutPage(
 		draft.Body.Storage.Value = body
 		draft.Version.Number = version
 		draft.Version.Message = message
-		draft.Status = constant.DraftStatus
+		draft.Status = constant.ConfluenceDraftStatus
 		e.draft = &draft
 
 		return toPage(e.draft), nil
@@ -44,7 +44,7 @@ func (c *Client) PutPage(
 	e.page.Body.Storage.Value = body
 	e.page.Version.Number = version
 	e.page.Version.Message = message
-	e.page.Status = constant.CurrentStatus
+	e.page.Status = constant.ConfluenceCurrentStatus
 	e.draft = nil
 
 	return toPage(e.page), nil

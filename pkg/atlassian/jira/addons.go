@@ -2,11 +2,11 @@ package jira
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 )
 
 func (c *Client) Addons() error {
-	status, body, e := c.basic.GetPath(constant.Addon)
+	status, body, e := c.basic.GetPath(constant.JiraAddon)
 
 	if e != nil {
 		return e

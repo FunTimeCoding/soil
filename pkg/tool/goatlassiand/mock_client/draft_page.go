@@ -2,8 +2,8 @@ package mock_client
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/atlassian/confluence/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 )
 
 func (c *Client) DraftPage(identifier string) (*page.Page, error) {
@@ -13,7 +13,7 @@ func (c *Client) DraftPage(identifier string) (*page.Page, error) {
 		return nil, fmt.Errorf("page not found: %s", identifier)
 	}
 
-	if e.page != nil && e.page.Status == constant.DraftStatus {
+	if e.page != nil && e.page.Status == constant.ConfluenceDraftStatus {
 		return toPage(e.page), nil
 	}
 

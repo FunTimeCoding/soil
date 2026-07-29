@@ -8,7 +8,7 @@ import (
 
 func TestParentScopeContains(t *testing.T) {
 	universe := types.Universe
-	p := types.NewScope(universe, 0, 1, "package")
+	p := types.NewScope(universe, 0, 1, "package scope")
 	function := types.NewScope(p, 0, 1, "function")
 	block := types.NewScope(function, 0, 1, "block")
 	inner := types.NewScope(block, 0, 1, "inner")

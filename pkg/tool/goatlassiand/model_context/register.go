@@ -1,7 +1,7 @@
 package model_context
 
 import (
-	"github.com/funtimecoding/soil/pkg/generative/model_context/parameter"
+	generative "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -12,12 +12,12 @@ func (s *Server) register() {
 			constant.JiraSearch,
 			mcp.WithDescription("Search Jira issues using JQL"),
 			mcp.WithString(
-				parameter.Query,
+				generative.ParameterQuery,
 				mcp.Required(),
 				mcp.Description("JQL query string"),
 			),
 			mcp.WithNumber(
-				parameter.Limit,
+				generative.ParameterLimit,
 				mcp.Required(),
 				mcp.Description("Maximum number of results (e.g. 25)"),
 			),
@@ -29,7 +29,7 @@ func (s *Server) register() {
 			constant.JiraGetIssue,
 			mcp.WithDescription("Get a Jira issue by key"),
 			mcp.WithString(
-				parameter.Key,
+				generative.ParameterKey,
 				mcp.Required(),
 				mcp.Description("Issue key (e.g. PROJ-123)"),
 			),
@@ -53,11 +53,11 @@ func (s *Server) register() {
 			constant.JiraSearchProjects,
 			mcp.WithDescription("Search Jira projects by key or name"),
 			mcp.WithString(
-				parameter.Query,
+				generative.ParameterQuery,
 				mcp.Description("Filter by key (exact, case-insensitive) or name (case-insensitive contains). Omit to list all."),
 			),
 			mcp.WithNumber(
-				parameter.Limit,
+				generative.ParameterLimit,
 				mcp.Required(),
 				mcp.Description("Maximum number of results (e.g. 25)"),
 			),
@@ -73,7 +73,7 @@ func (s *Server) register() {
 			constant.ConfluenceSearch,
 			mcp.WithDescription("Search Confluence pages using CQL or plain text"),
 			mcp.WithString(
-				parameter.Query,
+				generative.ParameterQuery,
 				mcp.Required(),
 				mcp.Description("CQL query string or plain text"),
 			),
@@ -85,7 +85,7 @@ func (s *Server) register() {
 			constant.ConfluenceGetPage,
 			mcp.WithDescription("Get a Confluence page by ID with body content as markdown"),
 			mcp.WithString(
-				parameter.Identifier,
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Page ID"),
 			),
@@ -105,7 +105,7 @@ func (s *Server) register() {
 				"Get the draft layer of a Confluence page. Confluence maintains a draft layer for every page - this always returns content, even if there are no unpublished changes. Compare against the published version (confluence_get_page) to detect actual differences.",
 			),
 			mcp.WithString(
-				parameter.Identifier,
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Page ID"),
 			),
@@ -127,13 +127,13 @@ func (s *Server) register() {
 				mcp.Description("Parent page ID"),
 			),
 			mcp.WithString(
-				parameter.Title,
+				generative.ParameterTitle,
 				mcp.Description(
 					"Page title. Required for published pages, optional for drafts.",
 				),
 			),
 			mcp.WithString(
-				parameter.Body,
+				generative.ParameterBody,
 				mcp.Required(),
 				mcp.Description("Page content in markdown"),
 			),
@@ -149,22 +149,22 @@ func (s *Server) register() {
 			constant.ConfluenceUpdatePage,
 			mcp.WithDescription("Update a Confluence page with markdown content. Gets the current version automatically."),
 			mcp.WithString(
-				parameter.Identifier,
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Page ID"),
 			),
 			mcp.WithString(
-				parameter.Title,
+				generative.ParameterTitle,
 				mcp.Required(),
 				mcp.Description("Page title"),
 			),
 			mcp.WithString(
-				parameter.Body,
+				generative.ParameterBody,
 				mcp.Required(),
 				mcp.Description("Full page content in markdown"),
 			),
 			mcp.WithString(
-				parameter.Message,
+				generative.ParameterMessage,
 				mcp.Description("Version comment"),
 			),
 		),
@@ -177,7 +177,7 @@ func (s *Server) register() {
 				"Edit a Confluence page by replacing a text fragment. Call confluence_get_page first to read the current content. The old_text must appear exactly once in the page.",
 			),
 			mcp.WithString(
-				parameter.Identifier,
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Page ID"),
 			),
@@ -194,13 +194,13 @@ func (s *Server) register() {
 				mcp.Description("The replacement text"),
 			),
 			mcp.WithString(
-				parameter.Title,
+				generative.ParameterTitle,
 				mcp.Description(
 					"New page title. If omitted, the current title is kept.",
 				),
 			),
 			mcp.WithString(
-				parameter.Message,
+				generative.ParameterMessage,
 				mcp.Description("Version comment"),
 			),
 			mcp.WithBoolean(
@@ -239,7 +239,7 @@ func (s *Server) register() {
 				"Publish or unpublish a Confluence page. Set status to 'current' to publish a draft, or 'draft' to unpublish a published page.",
 			),
 			mcp.WithString(
-				parameter.Identifier,
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Page ID"),
 			),
@@ -260,7 +260,7 @@ func (s *Server) register() {
 				"Delete a Confluence page. For draft pages, set draft to true - draft pages are permanently deleted, not sent to trash. Draft overlays (unpublished changes on published pages) cannot be deleted via the API.",
 			),
 			mcp.WithString(
-				parameter.Identifier,
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Page ID"),
 			),
@@ -285,7 +285,7 @@ func (s *Server) register() {
 			constant.ConfluenceGetPageChildren,
 			mcp.WithDescription("List child pages of a Confluence page"),
 			mcp.WithString(
-				parameter.Identifier,
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Parent page ID"),
 			),
@@ -297,12 +297,12 @@ func (s *Server) register() {
 			constant.ConfluenceAddComment,
 			mcp.WithDescription("Add a comment to a Confluence page"),
 			mcp.WithString(
-				parameter.Identifier,
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Page ID"),
 			),
 			mcp.WithString(
-				parameter.Body,
+				generative.ParameterBody,
 				mcp.Required(),
 				mcp.Description("Comment text"),
 			),
@@ -391,7 +391,7 @@ func (s *Server) register() {
 				"Update an existing Jira issue. Only provided fields are changed. Empty strings are ignored, not applied. Returns the updated issue with a before/after diff of changed fields.",
 			),
 			mcp.WithString(
-				parameter.Key,
+				generative.ParameterKey,
 				mcp.Required(),
 				mcp.Description("Issue key (e.g. INF-123)"),
 			),
@@ -441,7 +441,7 @@ func (s *Server) register() {
 			constant.JiraGetTransitions,
 			mcp.WithDescription("List available transitions for a Jira issue"),
 			mcp.WithString(
-				parameter.Key,
+				generative.ParameterKey,
 				mcp.Required(),
 				mcp.Description("Issue key"),
 			),
@@ -453,7 +453,7 @@ func (s *Server) register() {
 			constant.JiraTransitionIssue,
 			mcp.WithDescription("Transition a Jira issue to a new status"),
 			mcp.WithString(
-				parameter.Key,
+				generative.ParameterKey,
 				mcp.Required(),
 				mcp.Description("Issue key"),
 			),
@@ -470,12 +470,12 @@ func (s *Server) register() {
 			constant.JiraAddComment,
 			mcp.WithDescription("Add a comment to a Jira issue"),
 			mcp.WithString(
-				parameter.Key,
+				generative.ParameterKey,
 				mcp.Required(),
 				mcp.Description("Issue key"),
 			),
 			mcp.WithString(
-				parameter.Body,
+				generative.ParameterBody,
 				mcp.Required(),
 				mcp.Description("Comment text"),
 			),
@@ -489,7 +489,7 @@ func (s *Server) register() {
 				"Search Jira users by display name or email. Returns account IDs needed for assigning issues.",
 			),
 			mcp.WithString(
-				parameter.Query,
+				generative.ParameterQuery,
 				mcp.Required(),
 				mcp.Description(
 					"Search term (display name or email)",
@@ -514,7 +514,7 @@ func (s *Server) register() {
 				"Link two Jira issues. Use jira_get_link_types to discover available link type names.",
 			),
 			mcp.WithString(
-				parameter.Key,
+				generative.ParameterKey,
 				mcp.Required(),
 				mcp.Description("Source issue key"),
 			),
@@ -539,7 +539,7 @@ func (s *Server) register() {
 				"Delete a link between two Jira issues. Use jira_get_issue to find link IDs.",
 			),
 			mcp.WithString(
-				parameter.Identifier,
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Link ID"),
 			),
@@ -553,17 +553,17 @@ func (s *Server) register() {
 				"Update an existing comment on a Jira issue. Use jira_get_issue with include_comments to find comment IDs.",
 			),
 			mcp.WithString(
-				parameter.Key,
+				generative.ParameterKey,
 				mcp.Required(),
 				mcp.Description("Issue key"),
 			),
 			mcp.WithString(
-				parameter.Identifier,
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Comment ID"),
 			),
 			mcp.WithString(
-				parameter.Body,
+				generative.ParameterBody,
 				mcp.Required(),
 				mcp.Description("New comment body"),
 			),
@@ -577,12 +577,12 @@ func (s *Server) register() {
 				"Delete a comment from a Jira issue. Use jira_get_issue with include_comments to find comment IDs.",
 			),
 			mcp.WithString(
-				parameter.Key,
+				generative.ParameterKey,
 				mcp.Required(),
 				mcp.Description("Issue key"),
 			),
 			mcp.WithString(
-				parameter.Identifier,
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Comment ID"),
 			),
@@ -596,7 +596,7 @@ func (s *Server) register() {
 				"Get the Smart Checklist items on a Jira issue. Returns indexed items with checked/unchecked status.",
 			),
 			mcp.WithString(
-				parameter.Key,
+				generative.ParameterKey,
 				mcp.Required(),
 				mcp.Description("Issue key"),
 			),
@@ -610,7 +610,7 @@ func (s *Server) register() {
 				"Add an item to a Jira issue's Smart Checklist. Added as unchecked.",
 			),
 			mcp.WithString(
-				parameter.Key,
+				generative.ParameterKey,
 				mcp.Required(),
 				mcp.Description("Issue key"),
 			),
@@ -629,7 +629,7 @@ func (s *Server) register() {
 				"Toggle a Smart Checklist item between checked and unchecked.",
 			),
 			mcp.WithString(
-				parameter.Key,
+				generative.ParameterKey,
 				mcp.Required(),
 				mcp.Description("Issue key"),
 			),
@@ -648,7 +648,7 @@ func (s *Server) register() {
 				"Edit the text of a Smart Checklist item.",
 			),
 			mcp.WithString(
-				parameter.Key,
+				generative.ParameterKey,
 				mcp.Required(),
 				mcp.Description("Issue key"),
 			),
@@ -672,7 +672,7 @@ func (s *Server) register() {
 				"Delete an item from a Jira issue's Smart Checklist.",
 			),
 			mcp.WithString(
-				parameter.Key,
+				generative.ParameterKey,
 				mcp.Required(),
 				mcp.Description("Issue key"),
 			),

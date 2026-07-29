@@ -1,7 +1,7 @@
 package issue
 
 import (
-	"github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"time"
 )
 
@@ -16,7 +16,7 @@ func (i *Issue) lastStatusTransition() time.Time {
 		for _, item := range h.Items {
 			if item.Field == "status" {
 				t, e := time.Parse(
-					constant.TimeFormat,
+					constant.JiraTimeFormat,
 					h.Created,
 				)
 

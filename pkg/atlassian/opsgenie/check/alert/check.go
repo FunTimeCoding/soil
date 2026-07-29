@@ -2,8 +2,8 @@ package alert
 
 import (
 	"fmt"
+	atlassian "github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/check/alert/option"
-	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/constant"
 	console "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/monitor"
 	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
@@ -18,7 +18,7 @@ func Check(o *option.Alert) {
 		return
 	}
 
-	f := constant.Format
+	f := atlassian.OpsgenieFormat
 
 	if o.Copyable {
 		f.Tag(console.TagCopyable)

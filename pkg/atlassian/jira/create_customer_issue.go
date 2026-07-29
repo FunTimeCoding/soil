@@ -2,7 +2,7 @@ package jira
 
 import (
 	"github.com/ctreminiom/go-atlassian/v2/pkg/infra/models"
-	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue/customer"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/integers"
 )
 
@@ -18,8 +18,8 @@ func (c *Client) CreateCustomerIssue(
 			ServiceDeskID: integers.ToString(desk),
 			RequestTypeID: integers.ToString(requestType),
 			RequestFieldValues: map[string]any{
-				customer.SummaryField:     summary,
-				customer.DescriptionField: description,
+				constant.JiraSummaryField:     summary,
+				constant.JiraDescriptionField: description,
 			},
 		},
 	)

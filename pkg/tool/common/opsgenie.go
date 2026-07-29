@@ -1,11 +1,11 @@
 package common
 
 import (
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/alert/alert_enricher"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/alert/detail"
-	opsgenieConstant "github.com/funtimecoding/soil/pkg/atlassian/opsgenie/constant"
-	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/constant"
+	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/split"
 	"github.com/funtimecoding/soil/pkg/strings/split/key_value"
@@ -16,13 +16,13 @@ import (
 func Opsgenie() *opsgenie.Client {
 	result := opsgenie.NewEnvironment().Set(
 		alert_enricher.New().Add(
-			constant.HighMemoryUsage,
-			constant.Memory,
-			constant.High,
+			prometheus.HighMemoryUsage,
+			prometheus.EntityMemory,
+			prometheus.CategoryHigh,
 		),
 	)
 
-	if s := environment.Optional(opsgenieConstant.TeamEnvironment); s != "" {
+	if s := environment.Optional(constant.OpsgenieTeamEnvironment); s != "" {
 		for _, pair := range split.Semicolon(s) {
 			if len(pair) == 0 {
 				continue
@@ -44,7 +44,7 @@ func Opsgenie() *opsgenie.Client {
 		func(s string) string {
 			if false {
 				switch s {
-				case constant.HighMemoryUsage:
+				case prometheus.HighMemoryUsage:
 					return "Memory"
 				}
 			}

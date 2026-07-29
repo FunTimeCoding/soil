@@ -3,7 +3,7 @@ package jira
 import (
 	"fmt"
 	"github.com/andygrunwald/go-jira"
-	"github.com/funtimecoding/soil/pkg/atlassian/jira/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
 )
 
@@ -30,8 +30,8 @@ func (c *Client) Search(
 			&jira.SearchOptionsV2{
 				NextPageToken: token,
 				Fields:        []string{"*all"},
-				MaxResults:    constant.SearchLimit,
-				Expand:        constant.ChangelogExpand,
+				MaxResults:    constant.JiraSearchLimit,
+				Expand:        constant.JiraChangelogExpand,
 			},
 		)
 
