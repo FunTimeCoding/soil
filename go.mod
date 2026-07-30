@@ -40,7 +40,7 @@ require (
 	github.com/glebarez/go-sqlite v1.22.0
 	github.com/glebarez/sqlite v1.11.0
 	github.com/go-git/go-billy/v5 v5.9.1
-	github.com/go-git/go-git/v5 v5.19.1
+	github.com/go-git/go-git/v5 v5.19.2
 	github.com/go-openapi/runtime v0.33.0
 	github.com/go-openapi/strfmt v0.27.0
 	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1
@@ -63,7 +63,7 @@ require (
 	github.com/mark3labs/mcp-go v0.57.0
 	github.com/mattermost/mattermost/server/public v0.4.3
 	github.com/mitchellh/go-ps v1.0.0
-	github.com/modelcontextprotocol/go-sdk v1.6.1
+	github.com/modelcontextprotocol/go-sdk v1.7.0
 	github.com/muesli/termenv v0.16.0
 	github.com/netbox-community/go-netbox/v4 v4.3.0
 	github.com/nsf/termbox-go v1.1.1
@@ -71,7 +71,7 @@ require (
 	github.com/oapi-codegen/runtime v1.6.0
 	github.com/olekukonko/tablewriter v1.1.4
 	github.com/ollama/ollama v0.32.5
-	github.com/openai/openai-go/v3 v3.46.0
+	github.com/openai/openai-go/v3 v3.47.0
 	github.com/openvex/go-vex v0.2.8
 	github.com/opsgenie/opsgenie-go-sdk-v2 v1.2.23
 	github.com/pkg/sftp v1.13.11
@@ -90,11 +90,11 @@ require (
 	github.com/spf13/pflag v1.0.10
 	github.com/studio-b12/gowebdav v0.13.0
 	github.com/tmc/langchaingo v0.1.14
-	github.com/tobischo/gokeepasslib/v3 v3.6.2
+	github.com/tobischo/gokeepasslib/v3 v3.7.0
 	github.com/trivago/tgo v1.0.7
 	github.com/whilp/git-urls v1.0.0
-	github.com/yuin/goldmark v1.8.4
-	gitlab.com/gitlab-org/api/client-go/v2 v2.51.0
+	github.com/yuin/goldmark v1.8.5
+	gitlab.com/gitlab-org/api/client-go/v2 v2.53.0
 	golang.org/x/crypto v0.54.0
 	golang.org/x/mod v0.38.0
 	golang.org/x/net v0.57.0
@@ -103,7 +103,7 @@ require (
 	golang.org/x/time v0.15.0
 	golang.org/x/tools v0.48.0
 	gonum.org/v1/gonum v0.17.0
-	google.golang.org/api v0.290.0
+	google.golang.org/api v0.291.0
 	google.golang.org/protobuf v1.36.12-0.20260120151049-f2248ac996af
 	gopkg.in/yaml.v3 v3.0.1
 	gorm.io/driver/postgres v1.6.0
@@ -119,7 +119,7 @@ require (
 )
 
 require (
-	cloud.google.com/go/auth v0.20.0 // indirect
+	cloud.google.com/go/auth v0.22.0 // indirect
 	cloud.google.com/go/auth/oauth2adapt v0.2.8 // indirect
 	cloud.google.com/go/compute/metadata v0.9.0 // indirect
 	dario.cat/mergo v1.0.2 // indirect
@@ -223,7 +223,7 @@ require (
 	github.com/google/jsonschema-go v0.4.3 // indirect
 	github.com/google/pprof v0.0.0-20260302011040-a15ffb7f9dcc // indirect
 	github.com/google/s2a-go v0.1.9 // indirect
-	github.com/googleapis/enterprise-certificate-proxy v0.3.18 // indirect
+	github.com/googleapis/enterprise-certificate-proxy v0.3.19 // indirect
 	github.com/googleapis/gax-go/v2 v2.23.0 // indirect
 	github.com/grafana/loki/pkg/push v0.0.0-20240912152814-63e84b476a9a // indirect
 	github.com/grafana/regexp v0.0.0-20250905093917-f7b3be9d1853 // indirect
@@ -344,8 +344,8 @@ require (
 	golang.org/x/sync v0.22.0 // indirect
 	golang.org/x/term v0.45.0 // indirect
 	golang.org/x/text v0.40.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20260706201446-f0a921348800 // indirect
-	google.golang.org/grpc v1.82.0 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20260724162435-b2f20204f0df // indirect
+	google.golang.org/grpc v1.82.1 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1 // indirect
 	gopkg.in/validator.v2 v2.0.1 // indirect
