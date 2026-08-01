@@ -11,10 +11,10 @@ pkg/<service>/
 ├── <entity>.go               # Client method to fetch single entity
 ├── <entities>.go             # Client method to fetch entity list
 ├── constant/
-│   └── constant.go           # Service-level constants (e.g., Host)
+│   ├── constant.go           # Service-level constants (e.g., Host)
+│   └── <entity>.go           # Entity constants, entity-prefixed
 ├── <entity>/
 │   ├── <entity>.go           # Pure struct definition
-│   ├── constant.go           # Fallback display constants
 │   ├── format.go             # Main Format(f *option.Format) method
 │   ├── format_<field>.go     # Per-field formatters (private)
 │   ├── new.go                # Factory from external type
@@ -58,19 +58,22 @@ type Job struct {
 }
 ```
 
-### Constants (`job/constant.go`)
+### Constants (`constant/job.go`)
 
-Fallback values for missing data:
+Fallback values for missing data live in the service's `constant/`
+package as an entity-prefixed concept file - never as a
+`constant.go` inside the entity package (the constant placement
+rule; goaudit flags strays):
 
 ```go
-package job
+package constant
 
 const (
-    NoUser    = "no user"
-    NoProject = "no project"
+    JobNoUser    = "no user"
+    JobNoProject = "no project"
 
-    FailConcern = "fail"
-    Timeout     = "timeout"
+    JobFailConcern = "fail"
+    JobTimeout     = "timeout"
 )
 ```
 
