@@ -3,7 +3,6 @@ package unit_test
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
-	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
 	"testing"
 )
@@ -29,7 +28,7 @@ func TestCheckIdentityMismatch(t *testing.T) {
 	)
 	r := scan.IdentityConcerns(v, "pkg/tool/gotestd", "gotestd")
 	assert.Integer(t, 1, len(r))
-	assert.String(t, constant.IdentityMismatchKey, r[0].Key)
+	assert.String(t, "identity_mismatch", r[0].Key)
 }
 
 func TestCheckIdentityMissingFile(t *testing.T) {
@@ -39,7 +38,7 @@ func TestCheckIdentityMissingFile(t *testing.T) {
 		"gotestd",
 	)
 	assert.Integer(t, 1, len(r))
-	assert.String(t, constant.IdentityMissingFileKey, r[0].Key)
+	assert.String(t, "identity_missing_file", r[0].Key)
 }
 
 func TestCheckIdentityMissingVariable(t *testing.T) {
@@ -50,5 +49,5 @@ func TestCheckIdentityMissingVariable(t *testing.T) {
 	)
 	r := scan.IdentityConcerns(v, "pkg/tool/gotestd", "gotestd")
 	assert.Integer(t, 1, len(r))
-	assert.String(t, constant.IdentityMissingVariableKey, r[0].Key)
+	assert.String(t, "identity_missing_variable", r[0].Key)
 }

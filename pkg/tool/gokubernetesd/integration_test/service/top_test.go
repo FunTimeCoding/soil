@@ -16,7 +16,7 @@ func TestTopNodes(t *testing.T) {
 	result, e := s.Service.TopNodes(context.Background(), "test")
 	assert.Nil(t, e)
 	assert.Count(t, 1, result)
-	assert.String(t, constant.UpperAlfa, result[0].Name)
+	assert.String(t, "Alfa", result[0].Name)
 	assert.String(t, "500m", result[0].CPU)
 	assert.String(t, "25%", result[0].CPUPercent)
 	assert.String(t, "50%", result[0].MemoryPercent)

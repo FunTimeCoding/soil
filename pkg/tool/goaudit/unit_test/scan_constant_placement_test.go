@@ -3,7 +3,6 @@ package unit_test
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
-	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
 	"testing"
 )
@@ -14,7 +13,7 @@ func TestConstantPlacementStrayFlagged(t *testing.T) {
 	v.WriteString("pkg/alfa/constant.go", "package alfa\n")
 	result := scan.ConstantPlacement(v)
 	assert.Integer(t, 1, len(result))
-	assert.String(t, constant.ConstantFileKey, result[0].Key)
+	assert.String(t, "constant_file", result[0].Key)
 	assert.String(t, "pkg/alfa/constant.go", result[0].Path)
 }
 
@@ -43,7 +42,7 @@ func TestConstantPlacementDepthFlagged(t *testing.T) {
 	v.WriteString("pkg/tool/constant/constant.go", "package constant\n")
 	result := scan.ConstantPlacement(v)
 	assert.Integer(t, 3, len(result))
-	assert.String(t, constant.ConstantDepthKey, result[0].Key)
+	assert.String(t, "constant_depth", result[0].Key)
 	assert.String(t, "cmd/example/alfa/constant", result[0].Path)
 	assert.String(t, "pkg/alfa/deep/constant", result[1].Path)
 	assert.String(t, "pkg/tool/constant", result[2].Path)
@@ -54,7 +53,7 @@ func TestConstantPlacementNestedFlagged(t *testing.T) {
 	v.WriteString("pkg/constant/emoji/emoji.go", "package emoji\n")
 	result := scan.ConstantPlacement(v)
 	assert.Integer(t, 1, len(result))
-	assert.String(t, constant.ConstantNestedKey, result[0].Key)
+	assert.String(t, "constant_nested", result[0].Key)
 	assert.String(t, "pkg/constant/emoji", result[0].Path)
 }
 
@@ -66,9 +65,9 @@ func TestConstantPlacementNestedStrayPair(t *testing.T) {
 	)
 	result := scan.ConstantPlacement(v)
 	assert.Integer(t, 2, len(result))
-	assert.String(t, constant.ConstantNestedKey, result[0].Key)
+	assert.String(t, "constant_nested", result[0].Key)
 	assert.String(t, "pkg/constant/directory", result[0].Path)
-	assert.String(t, constant.ConstantFileKey, result[1].Key)
+	assert.String(t, "constant_file", result[1].Key)
 	assert.String(t, "pkg/constant/directory/constant.go", result[1].Path)
 }
 

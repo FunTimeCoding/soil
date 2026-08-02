@@ -95,6 +95,7 @@ func TestPostsSinceChunks(t *testing.T) {
 	}
 
 	assert.Any(t, 2, len(calls))
-	assert.Any(t, constant.MattermostSinceChunkThreshold+1, len(posts))
+	assert.Any(t, len(capped.Order)+1, len(posts))
+	assert.Any(t, "bravo0", posts[0].Raw.Id)
 	assert.Any(t, "foxtrot", posts[len(posts)-1].Raw.Id)
 }

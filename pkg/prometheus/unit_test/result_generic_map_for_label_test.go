@@ -13,7 +13,7 @@ func TestMapForLabel(t *testing.T) {
 		map[string][]*generic.Result{
 			"differing-container1": {
 				{
-					Type:   constant.Scalar,
+					Type:   "scalar",
 					Metric: `node_load1{container="differing-container1"}`,
 					Value:  "1",
 				},

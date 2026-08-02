@@ -19,8 +19,8 @@ func TestContainer(t *testing.T) {
 	assert.Any(
 		t,
 		&container.Container{
-			Name:       constant.UpperAlfa,
-			Repository: constant.UpperBravo,
+			Name:       "Alfa",
+			Repository: "Bravo",
 		},
 		c,
 	)

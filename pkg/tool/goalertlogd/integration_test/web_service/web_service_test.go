@@ -31,7 +31,7 @@ func TestWebService(t *testing.T) {
 	assert.String(t, "fp1", (*alerts.JSON200)[0].Fingerprint)
 	assert.String(
 		t,
-		string(client.Firing),
+		"firing",
 		string((*alerts.JSON200)[0].Status),
 	)
 	recent, e := c.GetRecentAlertsWithResponse(
@@ -66,7 +66,7 @@ func TestWebServiceResolve(t *testing.T) {
 	assert.Count(t, 1, *alerts.JSON200)
 	assert.String(
 		t,
-		string(client.Resolved),
+		"resolved",
 		string((*alerts.JSON200)[0].Status),
 	)
 	assert.True(t, (*alerts.JSON200)[0].End != nil)

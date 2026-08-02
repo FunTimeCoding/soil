@@ -3,7 +3,6 @@ package unit_test
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
-	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
 	"testing"
 )
@@ -16,7 +15,7 @@ func TestIdentityWarningsForCliTool(t *testing.T) {
 	)
 	w := scan.IdentityWarnings(v, nil)
 	assert.Integer(t, 1, len(w))
-	assert.String(t, constant.IdentityMismatchKey, w[0].Key)
+	assert.String(t, "identity_mismatch", w[0].Key)
 }
 
 func TestIdentityWarningsSkipsServices(t *testing.T) {

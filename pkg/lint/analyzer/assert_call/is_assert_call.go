@@ -5,7 +5,6 @@ import (
 	"go/ast"
 	"go/types"
 	"golang.org/x/tools/go/packages"
-	"strings"
 )
 
 func IsAssertCall(
@@ -36,5 +35,5 @@ func IsAssertCall(
 		return false
 	}
 
-	return strings.HasSuffix(n.Imported().Path(), constant.AssertPackageSuffix)
+	return n.Imported().Name() == constant.AssertPackageName
 }

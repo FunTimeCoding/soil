@@ -22,7 +22,7 @@ func TestPollSavesNewAlert(t *testing.T) {
 	records := o.Store.MustByName("HighMemory")
 	assert.Count(t, 1, records)
 	assert.String(t, "abc123", records[0].Fingerprint)
-	assert.String(t, constant.CriticalSeverity, records[0].Severity)
+	assert.String(t, "critical", records[0].Severity)
 	assert.True(t, records[0].End == nil)
 }
 

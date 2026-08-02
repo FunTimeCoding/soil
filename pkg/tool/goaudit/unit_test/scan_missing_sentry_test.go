@@ -3,7 +3,6 @@ package unit_test
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
-	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
 	"testing"
 )
@@ -17,7 +16,7 @@ func TestMissingSentryFlagged(t *testing.T) {
 	)
 	result := scan.MissingSentry(v)
 	assert.Integer(t, 1, len(result))
-	assert.String(t, constant.MissingSentryKey, result[0].Key)
+	assert.String(t, "missing_sentry", result[0].Key)
 	assert.String(t, "cmd/gotest", result[0].Path)
 }
 

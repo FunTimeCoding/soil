@@ -4,42 +4,32 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/strings"
 	"github.com/funtimecoding/soil/pkg/strings/constant"
+	"github.com/funtimecoding/soil/pkg/strings/unit_test/strings_tester"
 	"testing"
 )
 
 func TestCompare(t *testing.T) {
 	assertCompare(
 		t,
-		[]string{},
-		[]string{},
-		[]string{},
+		strings_tester.Compare{},
 		[]string{},
 		[]string{},
 	)
-	// Add
 	assertCompare(
 		t,
-		[]string{constant.UpperAlfa},
-		[]string{},
-		[]string{},
+		strings_tester.Compare{Add: []string{"Alfa"}},
 		[]string{},
 		[]string{constant.UpperAlfa},
 	)
-	// Remove
 	assertCompare(
 		t,
-		[]string{},
-		[]string{constant.UpperAlfa},
-		[]string{},
+		strings_tester.Compare{Remove: []string{"Alfa"}},
 		[]string{constant.UpperAlfa},
 		[]string{},
 	)
-	// Stay
 	assertCompare(
 		t,
-		[]string{},
-		[]string{},
-		[]string{constant.UpperAlfa},
+		strings_tester.Compare{Stay: []string{"Alfa"}},
 		[]string{constant.UpperAlfa},
 		[]string{constant.UpperAlfa},
 	)
@@ -47,23 +37,29 @@ func TestCompare(t *testing.T) {
 
 func assertCompare(
 	t *testing.T,
-	expectAdd []string,
-	expectRemove []string,
-	expectStay []string,
+	expected strings_tester.Compare,
 	past []string,
 	now []string,
 ) {
 	t.Helper()
 	add, remove, stay := strings.Compare(past, now)
-	assert.Any(t, expectAdd, add)
-	assert.Any(t, expectRemove, remove)
-	assert.Any(t, expectStay, stay)
+	assert.Strings(t, notNil(expected.Add), add)
+	assert.Strings(t, notNil(expected.Remove), remove)
+	assert.Strings(t, notNil(expected.Stay), stay)
+}
+
+func notNil(s []string) []string {
+	if s == nil {
+		return []string{}
+	}
+
+	return s
 }
 
 func TestDeleteDuplicates(t *testing.T) {
 	assert.Any(
 		t,
-		[]string{constant.UpperAlfa, constant.UpperBravo},
+		[]string{"Alfa", "Bravo"},
 		strings.DeleteDuplicates(
 			[]string{
 				constant.UpperAlfa,
@@ -116,7 +112,7 @@ func TestLinesAfter(t *testing.T) {
 func TestRemoveFromList(t *testing.T) {
 	assert.Any(
 		t,
-		[]string{constant.UpperBravo, constant.UpperCharlie},
+		[]string{"Bravo", "Charlie"},
 		strings.RemoveFromList(
 			[]string{
 				constant.UpperAlfa,
@@ -129,7 +125,7 @@ func TestRemoveFromList(t *testing.T) {
 	)
 	assert.Any(
 		t,
-		[]string{constant.UpperCharlie},
+		[]string{"Charlie"},
 		strings.RemoveFromList(
 			[]string{
 				constant.UpperAlfa,
@@ -151,11 +147,7 @@ func TestReverse(t *testing.T) {
 	strings.Reverse(reversed)
 	assert.Any(
 		t,
-		[]string{
-			constant.UpperAlfa,
-			constant.UpperBravo,
-			constant.UpperCharlie,
-		},
+		[]string{"Alfa", "Bravo", "Charlie"},
 		reversed,
 	)
 }
@@ -184,11 +176,7 @@ func TestSort(t *testing.T) {
 	strings.Sort(preSorted, true)
 	assert.Strings(
 		t,
-		[]string{
-			constant.UpperAlfa,
-			constant.UpperBravo,
-			constant.UpperCharlie,
-		},
+		[]string{"Alfa", "Bravo", "Charlie"},
 		preSorted,
 	)
 	ascending := []string{
@@ -199,11 +187,7 @@ func TestSort(t *testing.T) {
 	strings.Sort(ascending, true)
 	assert.Strings(
 		t,
-		[]string{
-			constant.UpperAlfa,
-			constant.UpperBravo,
-			constant.UpperCharlie,
-		},
+		[]string{"Alfa", "Bravo", "Charlie"},
 		ascending,
 	)
 	descending := []string{
@@ -214,11 +198,7 @@ func TestSort(t *testing.T) {
 	strings.Sort(descending, false)
 	assert.Strings(
 		t,
-		[]string{
-			constant.UpperCharlie,
-			constant.UpperBravo,
-			constant.UpperAlfa,
-		},
+		[]string{"Charlie", "Bravo", "Alfa"},
 		descending,
 	)
 }
@@ -232,11 +212,7 @@ func TestSwap(t *testing.T) {
 	strings.Swap(actual, 1, 2)
 	assert.Any(
 		t,
-		[]string{
-			constant.UpperAlfa,
-			constant.UpperCharlie,
-			constant.UpperBravo,
-		},
+		[]string{"Alfa", "Charlie", "Bravo"},
 		actual,
 	)
 }

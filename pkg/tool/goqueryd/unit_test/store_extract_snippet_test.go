@@ -42,9 +42,5 @@ func TestExtractSnippetTruncatesLongResult(t *testing.T) {
 		50,
 	)
 	snippet, _ := store.ExtractSnippet(long, "keyword", 0)
-	assert.Less(
-		t,
-		float64(constant.SnippetMaxLength+1),
-		float64(len(snippet)),
-	)
+	assert.Less(t, 401, float64(len(snippet)))
 }

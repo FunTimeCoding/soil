@@ -35,8 +35,8 @@ func TestImage(t *testing.T) {
 		t,
 		&image.Image{
 			Identifier: 1,
-			Digest:     strings.UpperBravo,
-			Tags:       []string{strings.UpperAlfa},
+			Digest:     "Bravo",
+			Tags:       []string{"Alfa"},
 			Create:     time.Time{},
 		},
 		i,

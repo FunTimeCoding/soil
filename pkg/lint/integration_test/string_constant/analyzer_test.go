@@ -25,3 +25,11 @@ func TestNoConstant(t *testing.T) {
 	string_constant.Check(p, results)
 	testutil.AssertBlocked(t, results, 0)
 }
+
+func TestExpected(t *testing.T) {
+	temporary := testutil.PrepareTestPackage(t, "testdata/src/expected")
+	testutil.WriteModFile(t, temporary, "expected.test")
+	p, results := testutil.LoadFromDirectory(t, temporary)
+	string_constant.Check(p, results)
+	testutil.AssertBlocked(t, results, 4)
+}

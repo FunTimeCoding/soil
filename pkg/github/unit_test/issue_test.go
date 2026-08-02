@@ -24,8 +24,8 @@ func TestIssue(t *testing.T) {
 		t,
 		&issue.Issue{
 			Repository: "funtimecoding/soil",
-			Title:      constant.UpperAlfa,
-			Link:       constant.UpperBravo,
+			Title:      "Alfa",
+			Link:       "Bravo",
 		},
 		i,
 	)

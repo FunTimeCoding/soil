@@ -22,7 +22,7 @@ func TestCompletionTableAfterComplete(t *testing.T) {
 	c := s.Store.RecentCompletions()
 	assert.Count(t, 1, c)
 	assert.String(t, a.Name(), c[0].Name)
-	assert.String(t, constant.Complete, c[0].Kind)
+	assert.String(t, "complete", c[0].Kind)
 	assert.String(t, "search index", c[0].Topic)
 	assert.String(t, "search index implemented", c[0].Summary)
 }
@@ -43,7 +43,7 @@ func TestCompletionTableAfterUpdate(t *testing.T) {
 	c := s.Store.RecentCompletions()
 	assert.Count(t, 1, c)
 	assert.String(t, a.Name(), c[0].Name)
-	assert.String(t, constant.Update, c[0].Kind)
+	assert.String(t, "update", c[0].Kind)
 	assert.String(t, "milestone reached", c[0].Topic)
 	assert.String(t, "completed", c[0].Summary)
 }

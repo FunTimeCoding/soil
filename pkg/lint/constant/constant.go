@@ -73,9 +73,9 @@ const (
 var PackageBlocklist = []string{"api"}
 
 const (
-	AssertPackageSuffix = "/pkg/assert"
-	AssertHelperPrefix  = "assert"
-	AssertTestingType   = "*testing.T"
+	AssertPackageName  = "assert"
+	AssertHelperPrefix = "assert"
+	AssertTestingType  = "*testing.T"
 )
 
 const MaxLineLength = 80

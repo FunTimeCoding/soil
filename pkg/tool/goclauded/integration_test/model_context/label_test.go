@@ -23,7 +23,7 @@ func TestLabelReservedKeyBlocked(t *testing.T) {
 			},
 		)
 		assert.StringContains(t, "reserved key", result)
-		assert.StringContains(t, constant.EditSession, result)
+		assert.StringContains(t, "edit_session", result)
 	}
 }
 

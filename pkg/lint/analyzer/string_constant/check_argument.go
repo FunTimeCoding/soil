@@ -2,6 +2,7 @@ package string_constant
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/assert_call"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"go/ast"
@@ -15,11 +16,18 @@ func checkArgument(
 	results *output.Results,
 	e ast.Expr,
 	constants map[string]knownConstant,
+	expected []assert_call.Range,
 ) {
 	l, okay := e.(*ast.BasicLit)
 
 	if !okay || l.Kind != token.STRING {
 		return
+	}
+
+	for _, r := range expected {
+		if r.Contains(l.Pos()) {
+			return
+		}
 	}
 
 	value := strings.Trim(l.Value, "\"")

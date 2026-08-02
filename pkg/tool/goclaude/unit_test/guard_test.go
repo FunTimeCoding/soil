@@ -2,7 +2,6 @@ package unit_test
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/tool/goclaude/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/guard"
 	"testing"
 )
@@ -10,17 +9,17 @@ import (
 func TestVerdictSed(t *testing.T) {
 	assert.String(
 		t,
-		constant.SedMessage,
+		"sed on macOS is BSD sed and its flags (notably -i) differ from GNU sed - use gsed instead",
 		guard.Verdict("darwin", "sed -i 's/a/b/' file.go"),
 	)
-	assert.String(
+	assert.StringContains(
 		t,
-		constant.SedMessage,
+		"use gsed instead",
 		guard.Verdict("darwin", "grep x file | sed 's/a/b/'"),
 	)
-	assert.String(
+	assert.StringContains(
 		t,
-		constant.SedMessage,
+		"use gsed instead",
 		guard.Verdict("darwin", "cat file; sed -n 1p file"),
 	)
 }

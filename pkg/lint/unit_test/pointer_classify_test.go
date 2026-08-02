@@ -2,8 +2,7 @@ package unit_test
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	library "github.com/funtimecoding/soil/pkg/constant"
-	"github.com/funtimecoding/soil/pkg/lint/constant"
+	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint/pointer"
 	"testing"
 )
@@ -12,7 +11,7 @@ func TestClassify(t *testing.T) {
 	roots := []string{".claude", ".claude-plugin", "doc", "pkg", "skills"}
 	assert.String(
 		t,
-		constant.PointerRepository,
+		"repository",
 		pointer.Classify(
 			"doc/ai/spec/naming.md",
 			roots,
@@ -20,7 +19,7 @@ func TestClassify(t *testing.T) {
 	)
 	assert.String(
 		t,
-		constant.PointerRepository,
+		"repository",
 		pointer.Classify(
 			".claude/skills/sign-firefox/SKILL.md",
 			roots,
@@ -28,17 +27,17 @@ func TestClassify(t *testing.T) {
 	)
 	assert.String(
 		t,
-		constant.PointerRepository,
+		"repository",
 		pointer.Classify(".claude-plugin/plugin.json", roots),
 	)
 	assert.String(
 		t,
-		constant.PointerRepository,
+		"repository",
 		pointer.Classify("./doc/ai/spec", roots),
 	)
 	assert.String(
 		t,
-		constant.PointerRepository,
+		"repository",
 		pointer.Classify(
 			"${CLAUDE_PLUGIN_ROOT}/doc/ai/runbook/constant.md",
 			roots,
@@ -46,38 +45,38 @@ func TestClassify(t *testing.T) {
 	)
 	assert.String(
 		t,
-		constant.PointerUnknown,
+		"unknown",
 		pointer.Classify("tmp/gosec.json", roots),
 	)
 	assert.String(
 		t,
-		constant.PointerUnknown,
-		pointer.Classify(library.SoilModule, roots),
+		"unknown",
+		pointer.Classify(constant.SoilModule, roots),
 	)
 	assert.String(
 		t,
-		constant.PointerUnknown,
+		"unknown",
 		pointer.Classify("/chart-sessions", roots),
 	)
 	assert.String(
 		t,
-		constant.PointerUnknown,
+		"unknown",
 		pointer.Classify("/api/goals", roots),
 	)
 	assert.String(
 		t,
-		constant.PointerUnknown,
+		"unknown",
 		pointer.Classify("/debug/pprof/", roots),
 	)
-	assert.String(t, constant.PointerUnknown, pointer.Classify("//nolint", roots))
+	assert.String(t, "unknown", pointer.Classify("//nolint", roots))
 	assert.String(
 		t,
-		constant.PointerUnknown,
+		"unknown",
 		pointer.Classify("/etc/hosts", roots),
 	)
 	assert.String(
 		t,
-		constant.PointerUnknown,
+		"unknown",
 		pointer.Classify(
 			"pkg/web/RecoveryMiddleware",
 			roots,
@@ -85,7 +84,7 @@ func TestClassify(t *testing.T) {
 	)
 	assert.String(
 		t,
-		constant.PointerUnknown,
+		"unknown",
 		pointer.Classify(
 			"pkg/provision/salt.Client",
 			roots,
@@ -93,12 +92,12 @@ func TestClassify(t *testing.T) {
 	)
 	assert.String(
 		t,
-		constant.PointerUnknown,
+		"unknown",
 		pointer.Classify("pkg/check/memory.LocalLines()", roots),
 	)
 	assert.String(
 		t,
-		constant.PointerPlaceholder,
+		"placeholder",
 		pointer.Classify(
 			"doc/ai/runbook/<name>.md",
 			roots,
@@ -106,17 +105,17 @@ func TestClassify(t *testing.T) {
 	)
 	assert.String(
 		t,
-		constant.PointerPlaceholder,
+		"placeholder",
 		pointer.Classify("pkg/tool/*.go", roots),
 	)
 	assert.String(
 		t,
-		constant.PointerPlaceholder,
+		"placeholder",
 		pointer.Classify("$HOME/notes.md", roots),
 	)
 	assert.String(
 		t,
-		constant.PointerPlaceholder,
+		"placeholder",
 		pointer.Classify(
 			"${CLAUDE_PLUGIN_ROOT}/skills/<name>/SKILL.md",
 			roots,
@@ -124,12 +123,12 @@ func TestClassify(t *testing.T) {
 	)
 	assert.String(
 		t,
-		constant.PointerSibling,
+		"sibling",
 		pointer.Classify("../github/soil/doc/ai/spec/naming.md", roots),
 	)
 	assert.String(
 		t,
-		constant.PointerAbsolute,
+		"absolute",
 		pointer.Classify(
 			"/Users/example/notes.md",
 			roots,
@@ -137,7 +136,7 @@ func TestClassify(t *testing.T) {
 	)
 	assert.String(
 		t,
-		constant.PointerLocator,
+		"locator",
 		pointer.Classify("https://code.claude.com/docs/en/skills", roots),
 	)
 }
