@@ -71,7 +71,7 @@ require (
 	github.com/oapi-codegen/runtime v1.6.0
 	github.com/olekukonko/tablewriter v1.1.4
 	github.com/ollama/ollama v0.32.5
-	github.com/openai/openai-go/v3 v3.47.0
+	github.com/openai/openai-go/v3 v3.49.0
 	github.com/openvex/go-vex v0.2.8
 	github.com/opsgenie/opsgenie-go-sdk-v2 v1.2.23
 	github.com/pkg/sftp v1.13.11
@@ -94,7 +94,7 @@ require (
 	github.com/trivago/tgo v1.0.7
 	github.com/whilp/git-urls v1.0.0
 	github.com/yuin/goldmark v1.8.5
-	gitlab.com/gitlab-org/api/client-go/v2 v2.53.0
+	gitlab.com/gitlab-org/api/client-go/v2 v2.55.1
 	golang.org/x/crypto v0.54.0
 	golang.org/x/mod v0.38.0
 	golang.org/x/net v0.57.0
@@ -106,7 +106,7 @@ require (
 	google.golang.org/api v0.291.0
 	google.golang.org/protobuf v1.36.12-0.20260120151049-f2248ac996af
 	gopkg.in/yaml.v3 v3.0.1
-	gorm.io/driver/postgres v1.6.0
+	gorm.io/driver/postgres v1.6.2
 	gorm.io/gorm v1.31.2
 	gotest.tools/v3 v3.5.2
 	k8s.io/api v0.30.14
