@@ -9,3 +9,12 @@ var Identity = identity.New(
 )
 
 const HistoryCapacity = 200
+
+var Colors = []int{
+	32, // green
+	36, // cyan
+	35, // magenta
+	33, // yellow
+	34, // blue
+	31, // red
+}

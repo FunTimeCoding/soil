@@ -9,7 +9,7 @@ direction, and the criteria for introducing them.
 | Package | Role | Imports from |
 |---------|------|-------------|
 | `types/` | Pure domain types - validation schemas, metadata, enums. No persistence, no external service deps. | stdlib, shared libs |
-| `constant/` | Domain constants, enum values, instances, registries. Purely declarative - data definitions only, no logic. Promoted from `constant.go` when it outgrows a single file. | `types/`, shared libs |
+| `constant/` | Domain constants, enum values, instances, registries. Purely declarative - data definitions only, no logic. The only constant home - no bare `constant.go` outside it (the placement rule in `conventions.md`; goaudit flags strays). | `types/`, shared libs |
 | `model/` | Persistence-aware entities - gorm-tagged structs, JSON field parsing, DB convenience methods. | `types/`, shared libs, ORM |
 | `store/` | Data access - CRUD operations on model types. | `model/`, ORM |
 | `generated/client/` | oapi-codegen output - typed REST client. Machine output, don't edit. | stdlib |
@@ -58,12 +58,14 @@ belong in `types/` (or an interface in `face/`).
 
 ## When to Promote
 
-### `constant.go` → `constant/`
+### `constant/` - from the start
 
-Promote when the file exceeds ~100 lines, or when constants reference types
-from a dedicated types package. Inside `constant/`:
+Constants live in `constant/` from the first constant - there is no
+bare-`constant.go` stage. Inside `constant/`:
 
-- `constant.go` - simple string/int constants, iota enums
+- `constant.go` - simple string/int constants
+- Typed iota enums - type and values together in a type-named file
+  (`variable_kind.go` for `VariableKind`)
 - One file per domain concept: `field.go`, `list.go`, `image.go`
 - Instance variables (constructed values like template instances, image
   definitions) get `<concept>_<name>.go` files

@@ -2,12 +2,13 @@ package example
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/chat/telegram"
 )
 
 func Echo() {
 	c := telegram.NewEnvironment()
-	f := telegram.Format
+	f := constant.TelegramFormat
 
 	for _, m := range c.Messages() {
 		fmt.Println(m.Format(f))

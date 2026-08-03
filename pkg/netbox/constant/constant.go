@@ -3,6 +3,7 @@ package constant
 import (
 	"errors"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
+	"regexp"
 )
 
 const (
@@ -56,3 +57,5 @@ var (
 		InterfaceAddress,
 	}
 )
+
+var NonSlug = regexp.MustCompile(`[^a-z0-9-]`)

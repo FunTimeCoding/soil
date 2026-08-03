@@ -3,6 +3,7 @@ package gofix
 import (
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint/segment"
+	gofix "github.com/funtimecoding/soil/pkg/tool/gofix/constant"
 	"path/filepath"
 	"strings"
 )
@@ -35,7 +36,7 @@ func runSurvey(patterns []string) {
 			}
 
 			for _, s := range segment.Segments(i.Name) {
-				if whitelist[s] {
+				if gofix.Whitelist[s] {
 					continue
 				}
 

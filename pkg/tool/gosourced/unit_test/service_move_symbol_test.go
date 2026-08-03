@@ -45,6 +45,32 @@ func TestMoveConstant(t *testing.T) {
 	assert.StringContains(t, "example/pkg/target/constant", run)
 }
 
+func TestMoveIntoReferenced(t *testing.T) {
+	d := testutil.PrepareTestPackage(
+		t,
+		serviceTestdata("move-into-referenced/src"),
+	)
+	s := testService()
+	r, e := s.MoveSymbol(
+		d,
+		"example/pkg/target",
+		"Table",
+		"example/pkg/target/constant",
+		"constant.go",
+		false,
+	)
+	assert.FatalOnError(t, e)
+	testutil.AssertBlocked(t, r, 0)
+	moved := readFixtureFile(t, d, "pkg/target/constant/constant.go")
+	assertFormatted(t, moved)
+	assert.StringContains(t, "Address: \"primary\"", moved)
+	assert.StringNotContains(t, "example/pkg/target/constant", moved)
+	run := readFixtureFile(t, d, "pkg/target/run.go")
+	assertFormatted(t, run)
+	assert.StringContains(t, "return constant.Table", run)
+	assert.StringContains(t, "example/pkg/target/constant", run)
+}
+
 func TestMoveCrossPackage(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,

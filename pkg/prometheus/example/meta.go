@@ -3,26 +3,10 @@ package example
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/prometheus"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/strings/split/key_value"
 	"slices"
 )
-
-var Groups = []string{
-	"alertmanager",
-	"events",
-	"go",
-	"kube",
-	"net",
-	"node",
-	"pg",
-	"postgres",
-	"probe",
-	"process",
-	"prometheus",
-	"promhttp",
-	"pushgateway",
-	"reloader",
-}
 
 func Meta() {
 	c := prometheus.NewEnvironment()
@@ -34,7 +18,7 @@ func Meta() {
 			fmt.Printf("  %s\n", k)
 			prefix, _ := key_value.Underscore(k)
 
-			if slices.Contains(Groups, prefix) {
+			if slices.Contains(constant.ExampleGroups, prefix) {
 				m[prefix] = append(m[prefix], k)
 			} else {
 				m["other"] = append(m["other"], k)

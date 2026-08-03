@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/anonymous_struct"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/call_format"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/defer_close"
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/expected_first"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/file_identity"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/forbidden_call"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/forbidden_import"
@@ -29,6 +30,7 @@ func check(
 	forbidden_import.Check(p, results)
 	string_concatenation.Check(p, results)
 	string_constant.Check(p, results)
+	expected_first.Check(p, results)
 	struct_literal.Check(p, results)
 	call_format.Check(p, results)
 	defer_close.Check(p, results)

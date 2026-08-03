@@ -2,19 +2,9 @@ package server
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"strings"
 )
-
-var multiWordPrefixes = map[string]bool{
-	"go":       true,
-	"git":      true,
-	"task":     true,
-	"kubectl":  true,
-	"logcli":   true,
-	"goclaude": true,
-	"podman":   true,
-	"docker":   true,
-}
 
 var bashNoise = map[string]bool{
 	"":         true,
@@ -83,7 +73,7 @@ func bashGroupKey(command string) string {
 		return ""
 	}
 
-	if multiWordPrefixes[first] && len(parts) > 1 {
+	if constant.MultiWordPrefixes[first] && len(parts) > 1 {
 		return fmt.Sprintf("%s %s", first, parts[1])
 	}
 

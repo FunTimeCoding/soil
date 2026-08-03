@@ -16,9 +16,10 @@ pkg/tool/go<tool>/
 │   └── new.go                      # Factory: New() *<Name>
 ├── unit_test/
 │   └── option_test.go              # assert.NotNil(t, option.New()) - see test-placement.md
+├── constant/
+│   └── constant.go                 # Tool constants (bucket names, identity)
 ├── store/                          # Persistence (if needed)
 │   ├── store.go                    # Store struct
-│   ├── constant.go                 # Bucket name
 │   ├── record.go                   # Record type
 │   ├── new.go                      # Constructor: opens db, ensures bucket
 │   ├── close.go                    # Close()
@@ -31,8 +32,7 @@ pkg/tool/go<tool>/
 │   └── poll.go                     # Poll() - single cycle logic
 └── server/                         # REST implementation (or manual routes)
     ├── <operation>.go              # Route function returning http.HandlerFunc
-    ├── response.go                 # Response struct (if needed)
-    └── constant.go                 # Server-specific constants
+    └── response.go                 # Response struct (if needed)
 ```
 
 ## Entry Point
@@ -138,7 +138,7 @@ func Alerts(s *store.Store) http.HandlerFunc {
 - `web.Encode(w, result)` - encodes result as JSON without setting headers (use when headers are set separately, e.g. with a non-200 status code)
 - `web.ObjectHeader(w)` - sets Content-Type JSON header only (use with `web.Encode` when you need a custom status code between header and body)
 - Use `argument.*` constants for query parameter names
-- Response structs in `response.go`, constants in `constant.go`
+- Response structs in `response.go`, constants in the tool's `constant/`
 
 ## HTML Web Package
 

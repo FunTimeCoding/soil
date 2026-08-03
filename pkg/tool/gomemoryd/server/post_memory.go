@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 	"github.com/funtimecoding/soil/pkg/constant"
+	gomemoryd "github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/server"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service"
 )
 
 func (s *Server) PostMemory(
@@ -15,7 +15,7 @@ func (s *Server) PostMemory(
 	m, e := s.service.CreateMemory(saveOption(*r.Body))
 
 	if e != nil {
-		if errors.Is(e, service.ErrorReservedScope) {
+		if errors.Is(e, gomemoryd.ErrorReservedScope) {
 			return server.PostMemory400JSONResponse(*clientError(e)), nil
 		}
 

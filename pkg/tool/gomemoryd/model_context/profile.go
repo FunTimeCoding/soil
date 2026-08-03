@@ -6,7 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -21,17 +20,17 @@ func (s *Server) profile(
 	)
 
 	if e != nil {
-		if errors.Is(e, service.ErrorReservedScope) {
+		if errors.Is(e, constant.ErrorReservedScope) {
 			return response.Fail("%s", e.Error())
 		}
 
 		message := "failed to load profile"
 
-		if errors.Is(e, service.ErrorAlwaysLoad) {
+		if errors.Is(e, constant.ErrorAlwaysLoad) {
 			message = "failed to load always-tagged memories"
-		} else if errors.Is(e, service.ErrorRelevantSearch) {
+		} else if errors.Is(e, constant.ErrorRelevantSearch) {
 			message = "failed to search for relevant memories"
-		} else if errors.Is(e, service.ErrorMemoryList) {
+		} else if errors.Is(e, constant.ErrorMemoryList) {
 			message = "failed to list memories"
 		}
 

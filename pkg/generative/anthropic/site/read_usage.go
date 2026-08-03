@@ -2,16 +2,8 @@ package site
 
 import (
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/site/usage_result"
-	"regexp"
+	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"strconv"
-)
-
-var resetPattern = regexp.MustCompile(
-	`Resets?\s+(.+?)</span>`,
-)
-
-var valuePattern = regexp.MustCompile(
-	`aria-valuenow="(\d+)"`,
 )
 
 func (s *Site) ReadUsage() *usage_result.Result {
@@ -23,7 +15,7 @@ func (s *Site) ReadUsage() *usage_result.Result {
 		return nil
 	}
 
-	value := valuePattern.FindStringSubmatch(outer)
+	value := constant.ValuePattern.FindStringSubmatch(outer)
 
 	if value == nil {
 		return nil
@@ -36,7 +28,7 @@ func (s *Site) ReadUsage() *usage_result.Result {
 	}
 
 	reset := ""
-	match := resetPattern.FindStringSubmatch(outer)
+	match := constant.ResetPattern.FindStringSubmatch(outer)
 
 	if match != nil {
 		reset = match[1]

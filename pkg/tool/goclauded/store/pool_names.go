@@ -13,7 +13,7 @@ func (s *Store) poolNames() ([]string, error) {
 	}
 
 	if len(entries) == 0 {
-		return defaultNames, nil
+		return constant.DefaultNames, nil
 	}
 
 	result := make([]string, len(entries))

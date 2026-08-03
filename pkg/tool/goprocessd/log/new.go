@@ -1,6 +1,9 @@
 package log
 
-import "time"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/constant"
+	"time"
+)
 
 func New(
 	name string,
@@ -8,7 +11,7 @@ func New(
 	maxNameWidth int,
 ) *Logger {
 	l := &Logger{
-		colorIndex:   colorIndex % len(colors),
+		colorIndex:   colorIndex % len(constant.Colors),
 		name:         name,
 		writes:       make(chan []byte),
 		done:         make(chan struct{}),

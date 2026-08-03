@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/integration_test/service_tester"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/save_option"
 	"testing"
 )
@@ -32,14 +31,14 @@ func TestServiceCreateMemoryRejectsReservedScope(t *testing.T) {
 		constant.DefaultScope,
 	} {
 		_, e := o.Service.CreateMemory(scopedOption("reserved", reserved))
-		assert.True(t, errors.Is(e, service.ErrorReservedScope))
+		assert.True(t, errors.Is(e, constant.ErrorReservedScope))
 	}
 }
 
 func TestServiceProfileRejectsReservedScope(t *testing.T) {
 	o := service_tester.New(t)
 	_, _, e := o.Service.Profile("", constant.AllScope, false)
-	assert.True(t, errors.Is(e, service.ErrorReservedScope))
+	assert.True(t, errors.Is(e, constant.ErrorReservedScope))
 }
 
 func TestServiceCreateRoutesCollectionByScope(t *testing.T) {

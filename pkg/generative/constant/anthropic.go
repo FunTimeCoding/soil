@@ -20,3 +20,12 @@ var (
 )
 
 const AnthropicBodyElement = "body"
+
+var (
+	ResetPattern = regexp.MustCompile(
+		`Resets?\s+(.+?)</span>`,
+	)
+	ValuePattern = regexp.MustCompile(
+		`aria-valuenow="(\d+)"`,
+	)
+)

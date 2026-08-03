@@ -1,6 +1,9 @@
 package constant
 
-import "github.com/funtimecoding/soil/pkg/identity"
+import (
+	"github.com/funtimecoding/soil/pkg/identity"
+	"regexp"
+)
 
 var Identity = identity.New(
 	"goclaude",
@@ -21,3 +24,5 @@ const (
 	GuardBlockExit = 2
 	SedMessage     = "sed on macOS is BSD sed and its flags (notably -i) differ from GNU sed - use gsed instead"
 )
+
+var SedInvocation = regexp.MustCompile(`(^|[|&;(\s])sed(\s|$)`)

@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/certificate_detail"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/resource"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -20,7 +21,7 @@ func (s *Service) Certificate(
 		return nil, e
 	}
 
-	cert, f := c.Dynamic().Resource(certificateGVR).Namespace(
+	cert, f := c.Dynamic().Resource(constant.CertificateGVR).Namespace(
 		namespace,
 	).Get(x, name, v1.GetOptions{})
 
@@ -28,7 +29,7 @@ func (s *Service) Certificate(
 		return nil, f
 	}
 
-	requests, g := c.Dynamic().Resource(certificateRequestGVR).Namespace(
+	requests, g := c.Dynamic().Resource(constant.CertificateRequestGVR).Namespace(
 		namespace,
 	).List(x, v1.ListOptions{})
 	var latestRequest map[string]any

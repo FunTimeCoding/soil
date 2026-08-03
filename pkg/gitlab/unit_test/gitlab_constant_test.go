@@ -14,6 +14,6 @@ func TestGitlabConstant(t *testing.T) {
 	assert.String(t, "CI_COMMIT_TAG", constant.CommitTag)
 	assert.String(t, "CI_JOB_TOKEN", constant.JobToken)
 	assert.String(t, "asc", constant.Ascending)
-	assert.String(t, "failed", constant.Failed)
-	assert.String(t, "success", constant.Success)
+	assert.String(t, "failed", constant.JobFail)
+	assert.String(t, "success", constant.JobSuccess)
 }

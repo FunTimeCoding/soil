@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/console/age_colorer"
 	console "github.com/funtimecoding/soil/pkg/console/constant"
+	"github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/check/issue/option"
 	"github.com/funtimecoding/soil/pkg/monitor"
@@ -20,7 +21,7 @@ func Check(o *option.Issue) {
 		return
 	}
 
-	f := sentry.Format
+	f := constant.Format
 
 	if o.Copyable {
 		f.Tag(console.TagCopyable)

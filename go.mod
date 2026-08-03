@@ -115,6 +115,7 @@ require (
 	k8s.io/metrics v0.30.14
 	maragu.dev/gomponents v1.3.0
 	maragu.dev/gomponents-htmx v0.6.1
+	mvdan.cc/sh/v3 v3.13.1
 	sigs.k8s.io/yaml v1.6.0
 )
 

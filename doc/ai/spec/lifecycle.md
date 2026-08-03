@@ -14,7 +14,9 @@ Components (servers and workers) are registered via functional options. They sta
 
 ```
 pkg/lifecycle/
-  constant.go                         - Option type
+  option.go                           - Option type
+  constant/
+    constant.go                       - ReadWriteTimeout for protected servers
   lifecycle.go                        - Lifecycle struct
   new.go                              - constructor
   run.go                              - Run() starts all components in order
@@ -28,7 +30,6 @@ pkg/lifecycle/
     start.go
     stop.go
   server/
-    constant.go             - readWriteTimeout for protected servers
     server.go               - Server struct
     new.go                  - New(address, setup) constructor
     start.go                - sets up mux, registers pprof if enabled,

@@ -1,14 +1,12 @@
 package store
 
 import (
-	"regexp"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"strings"
 )
 
-var nonAlphanumeric = regexp.MustCompile(`[^\p{L}\p{N}'_]+`)
-
 func sanitizeTerm(term string) string {
-	return nonAlphanumeric.ReplaceAllString(
+	return constant.NonAlphanumeric.ReplaceAllString(
 		strings.ToLower(term),
 		"",
 	)

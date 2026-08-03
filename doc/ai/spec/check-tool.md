@@ -27,7 +27,7 @@ pkg/monitor/
 └── item/constant/constant.go       # Item identifiers for monitor.NoRelevant()
 
 pkg/argument/
-└── constant.go                     # Argument name constants (Copyable, Notation, All, etc.)
+└── constant/constant.go            # Argument name constants (Copyable, Notation, All, etc.)
 ```
 
 ## Entry Point

@@ -15,7 +15,7 @@ func (l *Logger) writeBuffers(line []byte) {
 	writer.Print(
 		os.Stdout,
 		"\x1b[%dm%s %*s | \x1b[m",
-		colors[l.colorIndex],
+		constant.Colors[l.colorIndex],
 		now,
 		l.maxNameWidth,
 		l.name,

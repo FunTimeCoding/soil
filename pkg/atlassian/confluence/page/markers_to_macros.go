@@ -1,6 +1,7 @@
 package page
 
 import (
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/system/writer"
 	"strings"
 )
@@ -10,7 +11,7 @@ func markersToMacros(markdown string) string {
 	remaining := markdown
 
 	for {
-		l := macroCommentPattern.FindStringIndex(remaining)
+		l := constant.MacroCommentPattern.FindStringIndex(remaining)
 
 		if l == nil {
 			result.WriteString(markdownToHTML(remaining))
@@ -23,7 +24,7 @@ func markersToMacros(markdown string) string {
 		}
 
 		match := remaining[l[0]:l[1]]
-		groups := macroCommentPattern.FindStringSubmatch(match)
+		groups := constant.MacroCommentPattern.FindStringSubmatch(match)
 		name := groups[1]
 		body := strings.TrimSpace(groups[2])
 

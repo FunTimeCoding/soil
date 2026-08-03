@@ -158,7 +158,9 @@ Each entity has:
 
 - `format.go` - main `Format(f)` method, builds status line
 - `format_<field>.go` - private per-field formatter reading `f.UseColor`, `f.UseCompact`, `f.HasTag()`
-- `constant.go` - fallback display values (`NoPages`, `NoPrice`, etc.)
+- Fallback display values live in the service's `constant/` as an
+  entity-prefixed concept file (`constant/job.go` - see
+  `entity-wrapper.md`), never in the entity package
 
 ### Typical Format Method
 

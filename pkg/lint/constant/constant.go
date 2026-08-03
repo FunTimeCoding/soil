@@ -1,5 +1,7 @@
 package constant
 
+import "regexp"
+
 const (
 	FrontMatterDelimiter = "---"
 
@@ -83,4 +85,10 @@ const (
 	ConcernLine    = "line"
 	ConcernFile    = "file"
 	ConcernPackage = "package"
+)
+
+var LinkTarget = regexp.MustCompile(`]\(([^)]+)\)`)
+var (
+	ErrorPattern  = regexp.MustCompile(`\berr(?:\s*(?::=|=[^=])|,)`)
+	StringLiteral = regexp.MustCompile(`"(?:[^"\\]|\\.)*"`)
 )

@@ -43,6 +43,11 @@ Never suppress analyzer findings: a `struct_literal` finding on a
 test literal means the type needs a constructor. Expected sides of
 asserts stay literal, never constants.
 
+Assert helpers mirror the assert shape: expected value first,
+right after `t`. When a helper checks several fields at once, the
+expected side is one typed struct owned by the tester package,
+not a parameter list.
+
 ### Naming
 
 Files: subpackage path joined with underscores, plus the concept —

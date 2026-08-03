@@ -7,16 +7,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/resource"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/response"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/runtime/schema"
 	"sort"
 	"strings"
 )
-
-var argocdApplicationGVR = schema.GroupVersionResource{
-	Group:    "argoproj.io",
-	Version:  "v1alpha1",
-	Resource: "applications",
-}
 
 func (s *Service) ArgocdApplications(
 	x context.Context,
@@ -28,7 +21,7 @@ func (s *Service) ArgocdApplications(
 		return nil, e
 	}
 
-	apps, f := c.Dynamic().Resource(argocdApplicationGVR).Namespace(
+	apps, f := c.Dynamic().Resource(constant.ArgocdApplicationGVR).Namespace(
 		constant.Argocd,
 	).List(x, v1.ListOptions{})
 

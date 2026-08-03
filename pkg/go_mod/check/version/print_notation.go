@@ -2,8 +2,8 @@ package version
 
 import (
 	"github.com/funtimecoding/soil/pkg/constant"
-	"github.com/funtimecoding/soil/pkg/go_mod"
 	"github.com/funtimecoding/soil/pkg/go_mod/check/version/option"
+	go_modConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/go_mod/project"
 	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/report"
@@ -15,7 +15,7 @@ func printNotation(
 	o *option.Version,
 ) {
 	r := report.New()
-	f := go_mod.Format
+	f := go_modConstant.Format
 
 	for _, e := range report.Trim(
 		v,

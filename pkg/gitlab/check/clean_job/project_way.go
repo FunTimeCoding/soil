@@ -14,7 +14,7 @@ func ProjectWay(
 	f *option.Format,
 ) {
 	for _, j := range g.MustProjectJobs(p) {
-		if j.Status != constant.Failed {
+		if j.Status != constant.JobFail {
 			continue
 		}
 

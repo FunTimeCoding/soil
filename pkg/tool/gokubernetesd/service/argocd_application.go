@@ -20,7 +20,7 @@ func (s *Service) ArgocdApplication(
 		return nil, e
 	}
 
-	app, f := c.Dynamic().Resource(argocdApplicationGVR).Namespace(
+	app, f := c.Dynamic().Resource(constant.ArgocdApplicationGVR).Namespace(
 		constant.Argocd,
 	).Get(x, name, v1.GetOptions{})
 

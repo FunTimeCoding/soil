@@ -1,11 +1,14 @@
 package function
 
-import "slices"
+import (
+	"github.com/funtimecoding/soil/pkg/generative/constant"
+	"slices"
+)
 
 func validTool(name string) bool {
 	var valid []string
 
-	for _, v := range functions {
+	for _, v := range constant.LangchainExampleFunctions {
 		valid = append(valid, v.Name)
 	}
 

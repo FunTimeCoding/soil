@@ -1,15 +1,12 @@
 package chunk
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/join"
-	"regexp"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"strings"
 )
 
-var fencePattern = regexp.MustCompile(join.Empty(`\n`, "```"))
-
 func findCodeFences(text string) []codeFence {
-	matches := fencePattern.FindAllStringIndex(text, -1)
+	matches := constant.FencePattern.FindAllStringIndex(text, -1)
 	var result []codeFence
 	inFence := false
 	start := 0

@@ -1,11 +1,9 @@
 package pointer
 
 import (
-	"regexp"
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"strings"
 )
-
-var linkTarget = regexp.MustCompile(`]\(([^)]+)\)`)
 
 func Extract(line string) []string {
 	var result []string
@@ -17,7 +15,7 @@ func Extract(line string) []string {
 		}
 	}
 
-	for _, m := range linkTarget.FindAllStringSubmatch(line, -1) {
+	for _, m := range constant.LinkTarget.FindAllStringSubmatch(line, -1) {
 		if IsPath(m[1]) {
 			result = append(result, m[1])
 		}

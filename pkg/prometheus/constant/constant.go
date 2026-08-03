@@ -153,3 +153,19 @@ const (
 const PushgatewayPort = int(9091)
 
 var ErrorNotFound = errors.New("not found")
+var ExampleGroups = []string{
+	"alertmanager",
+	"events",
+	"go",
+	"kube",
+	"net",
+	"node",
+	"pg",
+	"postgres",
+	"probe",
+	"process",
+	"prometheus",
+	"promhttp",
+	"pushgateway",
+	"reloader",
+}

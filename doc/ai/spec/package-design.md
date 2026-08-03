@@ -84,7 +84,8 @@ real implementation.
 ## What Stays
 
 Package-level functions without a receiver are fine alongside the single
-struct. Constants live in `constant.go`. Each function gets its own file.
+struct. Constants live in the root's `constant/` package. Each function
+gets its own file.
 
 Tool entrypoint packages (`pkg/tool/go<name>/`) often have no struct with
 receivers at all - just `Main()`, `run()`, and orchestration functions.

@@ -3,6 +3,7 @@ package constant
 import (
 	"github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
+	"regexp"
 )
 
 const (
@@ -51,4 +52,16 @@ const (
 var (
 	ConfluenceFormat = option.ExtendedColor.Copy()
 	ConfluenceDense  = option.Color.Copy().Tag(constant.TagDense)
+)
+
+var (
+	RichTextMacroPattern = regexp.MustCompile(
+		`<ac:structured-macro[^>]*ac:name="([^"]+)"[^>]*><ac:rich-text-body>([\s\S]*?)</ac:rich-text-body></ac:structured-macro>`,
+	)
+	PlainTextMacroPattern = regexp.MustCompile(
+		`<ac:structured-macro[^>]*ac:name="([^"]+)"[^>]*><ac:plain-text-body><!\[CDATA\[(.*?)]]></ac:plain-text-body></ac:structured-macro>`,
+	)
+	MacroCommentPattern = regexp.MustCompile(
+		`<!-- ac:(\w+) -->\n([\s\S]*?)<!-- /ac:\w+ -->`,
+	)
 )

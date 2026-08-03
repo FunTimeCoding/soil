@@ -96,9 +96,3 @@ func TestNewMinute(t *testing.T) {
 		assert.NewMinute(5),
 	)
 }
-
-func TestStub(t *testing.T) {
-	before := assert.StubCount
-	assert.Stub(t)
-	assert.Integer(t, before+1, assert.StubCount)
-}

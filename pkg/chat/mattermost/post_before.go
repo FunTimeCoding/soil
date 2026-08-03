@@ -35,7 +35,7 @@ func (c *Client) PostBefore(
 				"no post before %s in channel %s: %w",
 				t.Format(timeConstant.DateMinute),
 				h.Id,
-				ErrorNotFound,
+				chat.ErrorMattermostNotFound,
 			)
 		}
 

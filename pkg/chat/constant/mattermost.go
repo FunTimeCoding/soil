@@ -1,5 +1,10 @@
 package constant
 
+import (
+	"errors"
+	"github.com/funtimecoding/soil/pkg/console/status/option"
+)
+
 const (
 	MattermostHostEnvironment    = "MATTERMOST_HOST"
 	MattermostTokenEnvironment   = "MATTERMOST_TOKEN"
@@ -27,3 +32,10 @@ const (
 	MattermostRepeat       = "repeat"                 // forwarded
 	MattermostThread       = "thread"                 // belongs to above thread
 )
+
+var (
+	ErrorMattermostNotConfigured = errors.New("not configured")
+	ErrorMattermostNotFound      = errors.New("not found")
+)
+
+var MattermostFormat = option.ExtendedColor.Copy()

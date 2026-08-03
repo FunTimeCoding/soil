@@ -1,13 +1,16 @@
 package telegram
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/funtimecoding/soil/pkg/chat/constant"
+)
 
 func (c *Client) PrintDatabase() {
 	if c.store == nil {
 		return
 	}
 
-	f := Format
+	f := constant.TelegramFormat
 	fmt.Println("Channels:")
 
 	for _, h := range c.store.MustChannels() {

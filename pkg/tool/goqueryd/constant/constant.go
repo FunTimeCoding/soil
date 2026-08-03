@@ -1,6 +1,10 @@
 package constant
 
-import "github.com/funtimecoding/soil/pkg/identity"
+import (
+	"github.com/funtimecoding/soil/pkg/identity"
+	"github.com/funtimecoding/soil/pkg/strings/join"
+	"regexp"
+)
 
 var Identity = identity.New(
 	"goqueryd",
@@ -96,4 +100,14 @@ Cosine distance measures how close two vectors are.
 
 A cross-encoder scores each query-document pair directly.
 It reranks the merged candidate set by relevance.`
+)
+
+var FencePattern = regexp.MustCompile(join.Empty(`\n`, "```"))
+
+var (
+	HyphenatedPattern = regexp.MustCompile(
+		`^[\p{L}\p{N}][\p{L}\p{N}'-]*-[\p{L}\p{N}][\p{L}\p{N}'-]*$`,
+	)
+	HeadingPattern  = regexp.MustCompile(`(?m)^##?\s+(.+)$`)
+	NonAlphanumeric = regexp.MustCompile(`[^\p{L}\p{N}'_]+`)
 )

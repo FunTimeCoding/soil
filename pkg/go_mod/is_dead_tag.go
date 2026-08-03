@@ -1,11 +1,7 @@
 package go_mod
 
-import "regexp"
-
-var deadTagPattern = regexp.MustCompile(
-	`(\S+)@(\S+): reading .+ unknown revision`,
-)
+import "github.com/funtimecoding/soil/pkg/go_mod/constant"
 
 func IsDeadTag(stderr string) bool {
-	return deadTagPattern.MatchString(stderr)
+	return constant.DeadTagPattern.MatchString(stderr)
 }

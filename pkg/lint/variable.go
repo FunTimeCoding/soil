@@ -4,13 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/file_report"
 	"io"
-	"regexp"
 	"strings"
-)
-
-var (
-	errorPattern  = regexp.MustCompile(`\berr(?:\s*(?::=|=[^=])|,)`)
-	stringLiteral = regexp.MustCompile(`"(?:[^"\\]|\\.)*"`)
 )
 
 func Variable(
@@ -27,9 +21,9 @@ func Variable(
 			continue
 		}
 
-		stripped := stringLiteral.ReplaceAllString(trimmed, `""`)
+		stripped := constant.StringLiteral.ReplaceAllString(trimmed, `""`)
 
-		if errorPattern.MatchString(stripped) {
+		if constant.ErrorPattern.MatchString(stripped) {
 			s.AddConcern(
 				constant.ErrorVariableKey,
 				constant.ErrorVariableText,

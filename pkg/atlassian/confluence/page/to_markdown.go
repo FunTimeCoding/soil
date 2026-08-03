@@ -2,12 +2,13 @@ package page
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"strings"
 )
 
 func ToMarkdown(markup string) string {
-	if !richTextMacroPattern.MatchString(markup) &&
-		!plainTextMacroPattern.MatchString(markup) {
+	if !constant.RichTextMacroPattern.MatchString(markup) &&
+		!constant.PlainTextMacroPattern.MatchString(markup) {
 		return markupToMarkdown(markup)
 	}
 
@@ -15,13 +16,13 @@ func ToMarkdown(markup string) string {
 	remaining := markup
 
 	for {
-		plainLocation := plainTextMacroPattern.FindStringIndex(remaining)
-		richLocation := richTextMacroPattern.FindStringIndex(remaining)
+		plainLocation := constant.PlainTextMacroPattern.FindStringIndex(remaining)
+		richLocation := constant.RichTextMacroPattern.FindStringIndex(remaining)
 		l, pattern := earliest(
 			plainLocation,
 			richLocation,
-			plainTextMacroPattern,
-			richTextMacroPattern,
+			constant.PlainTextMacroPattern,
+			constant.RichTextMacroPattern,
 		)
 
 		if l == nil {
@@ -43,7 +44,7 @@ func ToMarkdown(markup string) string {
 		name := groups[1]
 		body := groups[2]
 
-		if pattern == plainTextMacroPattern {
+		if pattern == constant.PlainTextMacroPattern {
 			parts = append(
 				parts,
 				fmt.Sprintf(

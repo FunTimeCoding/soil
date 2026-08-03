@@ -15,7 +15,6 @@ func Check(
 	skip *option.Lint,
 	fix bool,
 	verbose bool,
-	stubTest bool,
 	r *output.Results,
 ) *virtual_file_system.System {
 	fixes := virtual_file_system.New()
@@ -37,11 +36,6 @@ func Check(
 		verbose,
 		r,
 	)
-
-	if stubTest {
-		generateStubTests(v, fixes, paths, fix)
-	}
-
 	runCheckers(
 		v,
 		fixes,

@@ -1,11 +1,7 @@
 package store
 
-import "regexp"
-
-var hyphenatedPattern = regexp.MustCompile(
-	`^[\p{L}\p{N}][\p{L}\p{N}'-]*-[\p{L}\p{N}][\p{L}\p{N}'-]*$`,
-)
+import "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 
 func isHyphenatedToken(term string) bool {
-	return hyphenatedPattern.MatchString(term)
+	return constant.HyphenatedPattern.MatchString(term)
 }

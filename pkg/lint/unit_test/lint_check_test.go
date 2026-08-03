@@ -23,7 +23,6 @@ func TestCheckImportFix(t *testing.T) {
 		option.New("", false),
 		false,
 		false,
-		false,
 		&r,
 	)
 	assert.String(
@@ -49,7 +48,6 @@ func TestCheckCleanNoFixes(t *testing.T) {
 		option.New("", false),
 		false,
 		false,
-		false,
 		&r,
 	)
 	assert.Boolean(t, false, fixes.Has("pkg/foo/foo.go"))
@@ -68,7 +66,6 @@ func TestCheckSkipsGeneratedFile(t *testing.T) {
 		option.New("", false),
 		false,
 		false,
-		false,
 		&r,
 	)
 	assert.Boolean(t, false, fixes.Has("pkg/foo/generated.go"))
@@ -84,7 +81,6 @@ func TestCheckSkipsGeneratedHeader(t *testing.T) {
 	fixes := lint.Check(
 		v,
 		option.New("", false),
-		false,
 		false,
 		false,
 		&r,
@@ -105,7 +101,6 @@ func TestCheckSkipsGeneratedHeaderLineThree(t *testing.T) {
 		option.New("", false),
 		false,
 		false,
-		false,
 		&r,
 	)
 	assert.Boolean(t, false, fixes.Has("pkg/foo/server.go"))
@@ -122,7 +117,6 @@ func TestCheckDoesNotSkipNormalFile(t *testing.T) {
 	fixes := lint.Check(
 		v,
 		option.New("", false),
-		false,
 		false,
 		false,
 		&r,
@@ -144,7 +138,6 @@ func TestCheckVariableFlaggedNoFix(t *testing.T) {
 	fixes := lint.Check(
 		v,
 		option.New("", false),
-		false,
 		false,
 		false,
 		&r,
@@ -172,134 +165,10 @@ func TestCheckMultipleFilesOnlyBrokenFixed(t *testing.T) {
 		option.New("", false),
 		false,
 		false,
-		false,
 		&r,
 	)
 	assert.Boolean(t, true, fixes.Has("pkg/foo/foo.go"))
 	assert.Boolean(t, false, fixes.Has("pkg/foo/bar.go"))
-}
-
-func TestCheckStubCreated(t *testing.T) {
-	v := virtual_file_system.New()
-	v.WriteString(
-		"go.mod",
-		"module example\n\nrequire github.com/funtimecoding/soil v0.0.1\n",
-	)
-	v.WriteString(
-		"pkg/foo/foo.go",
-		"package foo\n\nfunc Foo() {}\n",
-	)
-	var r output.Results
-	fixes := lint.Check(
-		v,
-		option.New("", false),
-		false,
-		false,
-		true,
-		&r,
-	)
-	assert.String(
-		t,
-		"package foo\n\nimport (\n\t\"github.com/funtimecoding/soil/pkg/assert\"\n\t\"testing\"\n)\n\nfunc TestFoo(t *testing.T) {\n\tassert.Stub(t)\n}\n",
-		fixes.ReadString("pkg/foo/foo_test.go"),
-	)
-}
-
-func TestCheckStubMainPackage(t *testing.T) {
-	v := virtual_file_system.New()
-	v.WriteString(
-		"go.mod",
-		"module example\n\nrequire github.com/funtimecoding/soil v0.0.1\n",
-	)
-	v.WriteString(
-		"cmd/foo/main.go",
-		"package main\n\nfunc main() {}\n",
-	)
-	var r output.Results
-	fixes := lint.Check(
-		v,
-		option.New("", false),
-		false,
-		false,
-		true,
-		&r,
-	)
-	assert.String(
-		t,
-		"package main\n\nimport (\n\t\"github.com/funtimecoding/soil/pkg/assert\"\n\t\"testing\"\n)\n\nfunc TestStub(t *testing.T) {\n\tassert.Stub(t)\n}\n",
-		fixes.ReadString("cmd/foo/main_test.go"),
-	)
-}
-
-func TestCheckStubToolPackage(t *testing.T) {
-	v := virtual_file_system.New()
-	v.WriteString(
-		"go.mod",
-		"module example\n\nrequire github.com/funtimecoding/soil v0.0.1\n",
-	)
-	v.WriteString(
-		"pkg/tool/gofoo/main.go",
-		"package gofoo\n\nfunc Main() {}\n",
-	)
-	var r output.Results
-	fixes := lint.Check(
-		v,
-		option.New("", false),
-		false,
-		false,
-		true,
-		&r,
-	)
-	assert.String(
-		t,
-		"package gofoo\n\nimport (\n\t\"github.com/funtimecoding/soil/pkg/assert\"\n\t\"testing\"\n)\n\nfunc TestStub(t *testing.T) {\n\tassert.Stub(t)\n}\n",
-		fixes.ReadString("pkg/tool/gofoo/main_test.go"),
-	)
-}
-
-func TestCheckStubWithoutSoil(t *testing.T) {
-	v := virtual_file_system.New()
-	v.WriteString("go.mod", "module example\n")
-	v.WriteString(
-		"pkg/foo/foo.go",
-		"package foo\n\nfunc Foo() {}\n",
-	)
-	var r output.Results
-	fixes := lint.Check(
-		v,
-		option.New("", false),
-		false,
-		false,
-		true,
-		&r,
-	)
-	assert.String(
-		t,
-		"package foo\n\nimport \"testing\"\n\nfunc TestFoo(t *testing.T) {\n\tt.Helper()\n}\n",
-		fixes.ReadString("pkg/foo/foo_test.go"),
-	)
-}
-
-func TestCheckStubTestdata(t *testing.T) {
-	v := virtual_file_system.New()
-	v.WriteString(
-		"pkg/lint/analyzer/naming/testdata/src/example/example.go",
-		"package example\n\ntype Example struct{}\n",
-	)
-	var r output.Results
-	fixes := lint.Check(
-		v,
-		option.New("", false),
-		false,
-		false,
-		true,
-		&r,
-	)
-	assert.String(
-		t,
-		"package example\n\nimport \"testing\"\n\nfunc TestExample(t *testing.T) {\n\tt.Helper()\n}\n",
-		fixes.ReadString("pkg/lint/analyzer/naming/testdata/src/example/example_test.go"),
-	)
 }
 
 func TestCheckResultImportCollapsed(t *testing.T) {
@@ -313,7 +182,6 @@ func TestCheckResultImportCollapsed(t *testing.T) {
 		v,
 		option.New("", false),
 		true,
-		false,
 		false,
 		&r,
 	)
@@ -337,7 +205,6 @@ func TestCheckResultBlankLineRemoved(t *testing.T) {
 		option.New("", false),
 		true,
 		false,
-		false,
 		&r,
 	)
 	assertApplied(
@@ -359,7 +226,6 @@ func TestCheckResultBlankLineInserted(t *testing.T) {
 		v,
 		option.New("", false),
 		true,
-		false,
 		false,
 		&r,
 	)

@@ -9,7 +9,7 @@ import (
 
 func (s *Service) CreateMemory(o *save_option.Option) (*store.Memory, error) {
 	if o.Scope == constant.AllScope || o.Scope == constant.DefaultScope {
-		return nil, fmt.Errorf("%w: %s", ErrorReservedScope, o.Scope)
+		return nil, fmt.Errorf("%w: %s", constant.ErrorReservedScope, o.Scope)
 	}
 
 	if o.Type == "" {

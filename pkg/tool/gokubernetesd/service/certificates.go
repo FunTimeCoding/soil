@@ -4,26 +4,14 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/format"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/resource"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/response"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/runtime/schema"
 	"sort"
 	"strings"
 )
-
-var certificateGVR = schema.GroupVersionResource{
-	Group:    "cert-manager.io",
-	Version:  "v1",
-	Resource: "certificates",
-}
-
-var certificateRequestGVR = schema.GroupVersionResource{
-	Group:    "cert-manager.io",
-	Version:  "v1",
-	Resource: "certificaterequests",
-}
 
 func (s *Service) Certificates(
 	x context.Context,
@@ -35,7 +23,7 @@ func (s *Service) Certificates(
 		return nil, e
 	}
 
-	certs, f := c.Dynamic().Resource(certificateGVR).Namespace(
+	certs, f := c.Dynamic().Resource(constant.CertificateGVR).Namespace(
 		"",
 	).List(x, v1.ListOptions{})
 
@@ -50,7 +38,7 @@ func (s *Service) Certificates(
 		return nil, f
 	}
 
-	requests, g := c.Dynamic().Resource(certificateRequestGVR).Namespace(
+	requests, g := c.Dynamic().Resource(constant.CertificateRequestGVR).Namespace(
 		"",
 	).List(x, v1.ListOptions{})
 	var requestStatus map[string]string

@@ -1,18 +1,16 @@
 package store
 
 import (
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"path/filepath"
-	"regexp"
 	"strings"
 )
-
-var headingPattern = regexp.MustCompile(`(?m)^##?\s+(.+)$`)
 
 func ExtractTitle(
 	content string,
 	filename string,
 ) string {
-	match := headingPattern.FindStringSubmatch(content)
+	match := constant.HeadingPattern.FindStringSubmatch(content)
 
 	if match != nil {
 		return strings.TrimSpace(match[1])

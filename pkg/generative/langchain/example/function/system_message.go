@@ -4,10 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/generative/constant"
 )
 
 func systemMessage() string {
-	b, e := json.Marshal(functions)
+	b, e := json.Marshal(constant.LangchainExampleFunctions)
 	errors.PanicOnError(e)
 
 	return fmt.Sprintf(

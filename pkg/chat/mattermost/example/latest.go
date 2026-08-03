@@ -3,6 +3,7 @@ package example
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
+	chat "github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost"
 	"github.com/funtimecoding/soil/pkg/time/constant"
 )
@@ -19,7 +20,7 @@ func Latest() {
 	fmt.Printf("Latest %d posts (%d found)\n", limit, len(posts))
 
 	for _, p := range posts {
-		fmt.Println(p.Format(mattermost.Format))
+		fmt.Println(p.Format(chat.MattermostFormat))
 		fmt.Printf("  Time: %s\n", p.Create.Format(constant.DateMinute))
 	}
 }

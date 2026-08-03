@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/format"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/response"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -32,12 +33,12 @@ func (s *Service) TopPodContainers(
 	var f error
 
 	if q.AllNamespaces {
-		metrics, f = c.Dynamic().Resource(metricsPodGVR).List(
+		metrics, f = c.Dynamic().Resource(constant.MetricsPodGVR).List(
 			x,
 			v1.ListOptions{},
 		)
 	} else {
-		metrics, f = c.Dynamic().Resource(metricsPodGVR).Namespace(
+		metrics, f = c.Dynamic().Resource(constant.MetricsPodGVR).Namespace(
 			namespace,
 		).List(x, v1.ListOptions{})
 	}

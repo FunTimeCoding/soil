@@ -1,7 +1,9 @@
 package go_mod
 
+import "github.com/funtimecoding/soil/pkg/go_mod/constant"
+
 func ParseDeadTag(stderr string) (string, string) {
-	m := deadTagPattern.FindStringSubmatch(stderr)
+	m := constant.DeadTagPattern.FindStringSubmatch(stderr)
 
 	if m == nil {
 		return "", ""

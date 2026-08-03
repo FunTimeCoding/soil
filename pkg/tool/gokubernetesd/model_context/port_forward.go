@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/model_context/argument"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/port_forward_state"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -41,7 +42,7 @@ func (s *Server) PortForward(
 		return response.Fail(e.Error())
 	}
 
-	plural, okay := portForwardResource[a.ResourceType]
+	plural, okay := constant.PortForwardResource[a.ResourceType]
 
 	if !okay {
 		return response.Fail(

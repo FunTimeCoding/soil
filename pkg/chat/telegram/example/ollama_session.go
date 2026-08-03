@@ -19,7 +19,7 @@ func OllamaSession() {
 	t := telegram.NewEnvironment()
 	defer t.Close()
 	t.PrintDatabase()
-	f := telegram.Format
+	f := chat.TelegramFormat
 	c := environment.Required(chat.TelegramChannelEnvironment)
 	verbose := true
 	statistics := false

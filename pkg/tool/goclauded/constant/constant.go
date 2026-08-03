@@ -128,3 +128,27 @@ const (
 	ActionCopy
 	ActionUpdate
 )
+
+var DefaultNames = []string{
+	"Ash",
+	"Blair",
+	"Cedar",
+	"Dale",
+	"Ellis",
+	"Frost",
+	"Glen",
+	"Harbor",
+	"Jade",
+	"Kent",
+}
+
+var MultiWordPrefixes = map[string]bool{
+	"go":       true,
+	"git":      true,
+	"task":     true,
+	"kubectl":  true,
+	"logcli":   true,
+	"goclaude": true,
+	"podman":   true,
+	"docker":   true,
+}

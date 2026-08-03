@@ -1,5 +1,10 @@
 package constant
 
+import (
+	"errors"
+	"github.com/funtimecoding/soil/pkg/console/status/option"
+)
+
 const (
 	Base = "/api/0"
 
@@ -40,4 +45,9 @@ var (
 		PeriodDay,
 		PeriodFortnight,
 	}
+)
+
+var (
+	ErrorNotFound = errors.New("not found")
+	Format = option.Color.Copy()
 )

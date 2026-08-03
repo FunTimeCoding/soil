@@ -1,44 +1,12 @@
 package build_tag
 
-import "strings"
-
-var knownTags = map[string]bool{
-	"aix":       true,
-	"android":   true,
-	"darwin":    true,
-	"dragonfly": true,
-	"freebsd":   true,
-	"illumos":   true,
-	"ios":       true,
-	"js":        true,
-	"linux":     true,
-	"netbsd":    true,
-	"openbsd":   true,
-	"plan9":     true,
-	"solaris":   true,
-	"wasip1":    true,
-	"windows":   true,
-	"386":       true,
-	"amd64":     true,
-	"arm":       true,
-	"arm64":     true,
-	"loong64":   true,
-	"mips":      true,
-	"mips64":    true,
-	"mips64le":  true,
-	"mipsle":    true,
-	"ppc64":     true,
-	"ppc64le":   true,
-	"riscv64":   true,
-	"s390x":     true,
-	"wasm":      true,
-	"cgo":       true,
-	"ignore":    true,
-	"race":      true,
-}
+import (
+	"github.com/funtimecoding/soil/pkg/source/constant"
+	"strings"
+)
 
 func isCustom(tag string) bool {
-	if knownTags[tag] {
+	if constant.KnownTags[tag] {
 		return false
 	}
 

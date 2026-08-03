@@ -15,7 +15,7 @@ func (s *Service) Profile(
 	detail bool,
 ) (*ProfileResult, *ProfileDetail, error) {
 	if scope == constant.AllScope || scope == constant.DefaultScope {
-		return nil, nil, fmt.Errorf("%w: %s", ErrorReservedScope, scope)
+		return nil, nil, fmt.Errorf("%w: %s", constant.ErrorReservedScope, scope)
 	}
 
 	if f := s.ensureTokenizer(); f != nil {
@@ -25,7 +25,7 @@ func (s *Service) Profile(
 	always, e := s.ListMemoriesWithContent(constant.AlwaysTag, scope)
 
 	if e != nil {
-		return nil, nil, fmt.Errorf("%w: %v", ErrorAlwaysLoad, e)
+		return nil, nil, fmt.Errorf("%w: %v", constant.ErrorAlwaysLoad, e)
 	}
 
 	result := &ProfileResult{Always: always}
@@ -45,7 +45,7 @@ func (s *Service) Profile(
 	allMemories, e := s.ListMemories("", "", scope, true)
 
 	if e != nil {
-		return nil, nil, fmt.Errorf("%w: %v", ErrorMemoryList, e)
+		return nil, nil, fmt.Errorf("%w: %v", constant.ErrorMemoryList, e)
 	}
 
 	childSummaries := map[int64][]store.MemorySummary{}
@@ -177,7 +177,7 @@ func (s *Service) Profile(
 		if f != nil {
 			return nil, nil, fmt.Errorf(
 				"%w: %v",
-				ErrorRelevantSearch,
+				constant.ErrorRelevantSearch,
 				f,
 			)
 		}
