@@ -34,7 +34,7 @@ require (
 	github.com/fsnotify/fsnotify v1.10.1
 	github.com/gage-technologies/mistral-go v1.1.0
 	github.com/gdamore/tcell/v2 v2.13.10
-	github.com/getkin/kin-openapi v0.145.0
+	github.com/getkin/kin-openapi v0.146.0
 	github.com/getlantern/systray v1.2.2
 	github.com/getsentry/sentry-go v0.48.0
 	github.com/glebarez/go-sqlite v1.22.0
@@ -83,7 +83,7 @@ require (
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/samber/slog-loki/v3 v3.7.2
 	github.com/sanity-io/litter v1.5.8
-	github.com/sashabaranov/go-openai v1.41.2
+	github.com/sashabaranov/go-openai v1.42.0
 	github.com/sirupsen/logrus v1.9.4
 	github.com/slok/go-http-metrics v0.13.0
 	github.com/spf13/cobra v1.10.2
