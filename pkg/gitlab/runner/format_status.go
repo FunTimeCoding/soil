@@ -1,7 +1,7 @@
 package runner
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 )
@@ -11,9 +11,9 @@ func (r *Runner) formatStatus(f *option.Format) string {
 
 	if f.UseColor {
 		if result == constant.RunnerOnlineStatus {
-			result = console.Green("%s", result)
+			result = consoleConstant.Green("%s", result)
 		} else {
-			result = console.Red("%s", result)
+			result = consoleConstant.Red("%s", result)
 		}
 	}
 

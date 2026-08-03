@@ -2,7 +2,7 @@ package issue
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/console"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/text"
 	"github.com/funtimecoding/soil/pkg/text/option"
 	"github.com/funtimecoding/soil/pkg/time/constant"
@@ -27,7 +27,7 @@ func (i *Issue) PrintComments() {
 			"  Comment: %s | %s | %s\n",
 			c.Author.Name,
 			CommentTime(c).Format(constant.DateMinute),
-			console.Magenta(
+			consoleConstant.Magenta(
 				"%s",
 				text.OptimizeWhitespace(c.Body, option.Compact()),
 			),

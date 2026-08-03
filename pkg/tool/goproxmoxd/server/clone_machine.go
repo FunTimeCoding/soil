@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"errors"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 	"github.com/luthermonson/go-proxmox"
@@ -60,7 +59,7 @@ func (s *Server) CloneMachine(
 	)
 
 	if e != nil {
-		if errors.Is(e, not_found.Sentinel) {
+		if not_found.Is(e) {
 			return server.CloneMachine404JSONResponse{
 				Error: e.Error(),
 			}, nil

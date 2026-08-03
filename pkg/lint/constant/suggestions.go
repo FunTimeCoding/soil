@@ -1,4 +1,4 @@
-package segment
+package constant
 
 var Suggestions = map[string]Suggestion{
 	"id":     {Words: []string{"identifier"}},

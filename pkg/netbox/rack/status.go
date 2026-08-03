@@ -2,7 +2,7 @@ package rack
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/console"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
 )
@@ -19,7 +19,7 @@ func (r *Rack) status(f *option.Format) string {
 			result = constant.RackDeprecated
 
 			if f.UseColor {
-				result = console.Yellow("%s", result)
+				result = consoleConstant.Yellow("%s", result)
 			}
 		} else {
 			result = fmt.Sprintf(
@@ -30,14 +30,14 @@ func (r *Rack) status(f *option.Format) string {
 			)
 
 			if f.UseColor {
-				result = console.Red("%s", result)
+				result = consoleConstant.Red("%s", result)
 			}
 		}
 	} else {
 		result = constant.RackUnknown
 
 		if f.UseColor {
-			result = console.Red("%s", result)
+			result = consoleConstant.Red("%s", result)
 		}
 	}
 

@@ -1,13 +1,13 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 )
 
 func (s *Service) formatName(f *option.Format) string {
 	if f.UseColor {
-		return console.Cyan("%s", s.Name)
+		return constant.Cyan("%s", s.Name)
 	}
 
 	return s.Name

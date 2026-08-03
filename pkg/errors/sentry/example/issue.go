@@ -2,14 +2,14 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/console/status/option"
+	console "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry"
 )
 
 func Issue() {
 	c := sentry.NewEnvironment()
-	f := option.Color.Copy()
+	f := console.ColorFormat.Copy()
 
 	for _, i := range c.MustIssuesSimple(true) {
 		fmt.Printf("Issue: %s\n", i.Format(f))

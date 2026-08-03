@@ -2,7 +2,7 @@ package markdown
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/strings"
 )
@@ -14,7 +14,7 @@ func Print(
 	output := strings.PrefixMultiline(string(source), "> ")
 
 	if f.UseColor {
-		output = console.Cyan("%s", output)
+		output = constant.Cyan("%s", output)
 	}
 
 	fmt.Println(output)

@@ -1,7 +1,7 @@
 package view
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/sublime/constant"
 )
@@ -14,7 +14,7 @@ func (v *View) formatTitle(f *option.Format) string {
 	}
 
 	if f.UseColor {
-		return console.Cyan("%s", title)
+		return consoleConstant.Cyan("%s", title)
 	}
 
 	return title

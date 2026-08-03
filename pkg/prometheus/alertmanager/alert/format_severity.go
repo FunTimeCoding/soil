@@ -1,7 +1,7 @@
 package alert
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"slices"
@@ -12,9 +12,9 @@ func (a *Alert) formatSeverity(f *option.Format) string {
 
 	if f.UseColor {
 		if slices.Contains(constant.RedSeverities, result) {
-			result = console.Red("%s", result)
+			result = consoleConstant.Red("%s", result)
 		} else if slices.Contains(constant.YellowSeverities, result) {
-			result = console.Yellow("%s", result)
+			result = consoleConstant.Yellow("%s", result)
 		}
 	}
 

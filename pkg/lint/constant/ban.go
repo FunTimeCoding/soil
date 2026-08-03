@@ -14,3 +14,8 @@ var ForbiddenImports = map[string]Ban{
 		Message:   `use "github.com/funtimecoding/soil/pkg/assert" instead of testify`,
 	},
 }
+
+var ForbiddenCalls = map[string]bool{
+	"Command":        true,
+	"CommandContext": true,
+}

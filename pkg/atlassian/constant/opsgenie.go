@@ -2,7 +2,6 @@ package constant
 
 import (
 	"github.com/funtimecoding/soil/pkg/console/constant"
-	"github.com/funtimecoding/soil/pkg/console/status/option"
 	constant1 "github.com/funtimecoding/soil/pkg/prometheus/constant"
 )
 
@@ -17,7 +16,7 @@ const (
 	OpsgenieNoKey = "no key"
 )
 
-var OpsgenieFormat = option.ExtendedColor.Copy().Tag(
+var OpsgenieFormat = constant.ExtendedColorFormat.Copy().Tag(
 	constant.TagCategory,
 )
 

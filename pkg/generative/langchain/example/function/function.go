@@ -2,18 +2,20 @@ package function
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/constant"
-	"github.com/spf13/pflag"
 	"github.com/tmc/langchaingo/llms"
 	"github.com/tmc/langchaingo/llms/ollama"
 	"log"
 )
 
-var flagVerbose = pflag.Bool("v", false, "verbose mode")
-
 func Function() {
-	pflag.Parse()
+	a := argument.NewSimple("function")
+	a.BooleanShort(argumentConstant.Verbose, "v", false, "verbose mode")
+	a.ParseSimple()
+	verbose := a.GetBoolean(argumentConstant.Verbose)
 	c, clientFail := ollama.New(
 		ollama.WithModel(constant.Llama31),
 		ollama.WithFormat(constant.OllamaNotationFormat),
@@ -46,7 +48,7 @@ func Function() {
 		if a := unmarshalCall(choice1.Content); a != nil {
 			log.Printf("Call: %v", a.Tool)
 
-			if *flagVerbose {
+			if verbose {
 				log.Printf("Call: %v (raw: %v)", a.Tool, choice1.Content)
 			}
 

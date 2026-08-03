@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
 	"github.com/funtimecoding/soil/pkg/argument/constant"
-	"github.com/funtimecoding/soil/pkg/console/status/option"
+	console "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/tool/common"
 )
 
@@ -32,7 +32,7 @@ func Alert() {
 		return
 	}
 
-	f := option.ExtendedColor.Copy()
+	f := console.ExtendedColorFormat.Copy()
 	alerts := c.Open()
 
 	for _, a := range alerts {

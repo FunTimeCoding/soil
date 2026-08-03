@@ -2,7 +2,7 @@ package constant
 
 import (
 	"errors"
-	"github.com/funtimecoding/soil/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/console/constant"
 )
 
 const (
@@ -49,5 +49,5 @@ var (
 
 var (
 	ErrorNotFound = errors.New("not found")
-	Format = option.Color.Copy()
+	Format        = constant.ColorFormat.Copy()
 )

@@ -2,7 +2,7 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/console"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus/loki"
 	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
@@ -43,7 +43,7 @@ func QueryRange() {
 		fmt.Printf(
 			"%s %s %s %s\n",
 			v.Time.Format(timeConstant.DateMinute),
-			console.Cyan("%s", route),
+			consoleConstant.Cyan("%s", route),
 			v.Stream,
 			body,
 		)

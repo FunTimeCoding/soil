@@ -34,7 +34,7 @@ func (s *Server) DeleteMachine(
 	e = s.service.DeleteMachine(c, a.Identifier, a.Node, a.Purge)
 
 	if e != nil {
-		if errors.Is(e, not_found.Sentinel) ||
+		if not_found.Is(e) ||
 			errors.Is(e, constant.ErrorMachineRunning) {
 			return response.Fail("%s", e)
 		}

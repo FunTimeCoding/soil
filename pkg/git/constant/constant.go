@@ -1,6 +1,6 @@
 package constant
 
-import "github.com/funtimecoding/soil/pkg/console/status/option"
+import "github.com/funtimecoding/soil/pkg/console/constant"
 
 const (
 	VersionPrefix = "v"
@@ -47,7 +47,7 @@ const (
 var (
 	MainBranches = []string{MainBranch, MasterBranch}
 
-	Format = option.ExtendedColor.Copy()
+	Format = constant.ExtendedColorFormat.Copy()
 )
 
 const (

@@ -14,7 +14,7 @@ func (a *Alert) formatHost(f *option.Format) string {
 		result = prometheus.NoHost
 
 		if f.UseColor {
-			result = console.Yellow(result)
+			result = constant.Yellow(result)
 		}
 
 		return result

@@ -6,42 +6,6 @@ import (
 	"strings"
 )
 
-var bashNoise = map[string]bool{
-	"":         true,
-	"#":        true,
-	"for":      true,
-	"if":       true,
-	"done":     true,
-	"fi":       true,
-	"else":     true,
-	"else:":    true,
-	"elif":     true,
-	"in":       true,
-	"then":     true,
-	"do":       true,
-	"import":   true,
-	"from":     true,
-	"with":     true,
-	"continue": true,
-	"break":    true,
-	"return":   true,
-	"pass":     true,
-	"try:":     true,
-	"except:":  true,
-	"class":    true,
-	"def":      true,
-	"func":     true,
-	"package":  true,
-	"var":      true,
-	"const":    true,
-	"type":     true,
-	"EOF":      true,
-	"PYEOF":    true,
-	"GOEOF":    true,
-	"local":    true,
-	"export":   true,
-}
-
 func bashGroupKey(command string) string {
 	command = strings.TrimSpace(command)
 
@@ -57,7 +21,7 @@ func bashGroupKey(command string) string {
 
 	first := parts[0]
 
-	if bashNoise[first] {
+	if constant.BashNoise[first] {
 		return ""
 	}
 

@@ -2,11 +2,11 @@ package unit_test
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/console/constant"
 	"testing"
 )
 
 func TestStatusOptionConstant(t *testing.T) {
-	assert.NotNil(t, option.Color)
-	assert.NotNil(t, option.ExtendedColor)
+	assert.NotNil(t, constant.ColorFormat)
+	assert.NotNil(t, constant.ExtendedColorFormat)
 }

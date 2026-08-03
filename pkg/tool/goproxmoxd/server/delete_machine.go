@@ -41,7 +41,7 @@ func (s *Server) DeleteMachine(
 	e = s.service.DeleteMachine(c, int(r.Identifier), node, purge)
 
 	if e != nil {
-		if errors.Is(e, not_found.Sentinel) {
+		if not_found.Is(e) {
 			return server.DeleteMachine404JSONResponse{
 				Error: e.Error(),
 			}, nil

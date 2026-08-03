@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	chat "github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/thread"
-	"github.com/funtimecoding/soil/pkg/console"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/generative/ollama"
 	"github.com/funtimecoding/soil/pkg/text/template"
@@ -88,7 +88,7 @@ Next step: unclear
 		formatted := h.Format(f)
 		fmt.Println(formatted)
 		r := o.GenerateSimple(template.Execute(tem, formatted))
-		fmt.Printf("%s\n", console.Magenta("%s", r.Text))
+		fmt.Printf("%s\n", consoleConstant.Magenta("%s", r.Text))
 
 		if false {
 			r.Print()

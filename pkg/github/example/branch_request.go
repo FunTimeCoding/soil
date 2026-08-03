@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
-	"github.com/funtimecoding/soil/pkg/console/status/option"
+	console "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/github"
 	"github.com/funtimecoding/soil/pkg/github/constant"
 )
@@ -15,7 +15,7 @@ func BranchRequest() {
 	a.ParseSimple()
 	branch := a.GetString(argumentConstant.Branch)
 	c := github.NewEnvironment()
-	f := option.ExtendedColor.Copy()
+	f := console.ExtendedColorFormat.Copy()
 	fmt.Println(
 		c.MustBranchRequest(
 			constant.Namespace,

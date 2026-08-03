@@ -3,7 +3,7 @@ package issue
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
-	"github.com/funtimecoding/soil/pkg/console"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 )
 
@@ -21,7 +21,7 @@ func (i *Issue) FormatScore(f *option.Format) string {
 			return i.scoreColor(result)
 		}
 
-		return console.Yellow("%s", result)
+		return consoleConstant.Yellow("%s", result)
 	}
 
 	return result

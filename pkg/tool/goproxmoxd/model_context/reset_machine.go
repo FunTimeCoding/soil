@@ -2,7 +2,6 @@ package model_context
 
 import (
 	"context"
-	"errors"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/model_context/argument"
@@ -33,7 +32,7 @@ func (s *Server) ResetMachine(
 	taskID, e := s.service.ResetMachine(c, a.Identifier, a.Node)
 
 	if e != nil {
-		if errors.Is(e, not_found.Sentinel) {
+		if not_found.Is(e) {
 			return response.Fail("%s", e)
 		}
 

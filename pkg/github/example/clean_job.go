@@ -2,14 +2,14 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/console/status/option"
+	console "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/github"
 	"github.com/funtimecoding/soil/pkg/github/constant"
 )
 
 func CleanJob() {
 	c := github.NewEnvironment()
-	f := option.ExtendedColor.Copy()
+	f := console.ExtendedColorFormat.Copy()
 	owner := constant.Namespace
 	repository := constant.Repository
 

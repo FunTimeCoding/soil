@@ -1,6 +1,6 @@
 package constant
 
-import "github.com/funtimecoding/soil/pkg/console/status/option"
+import "github.com/funtimecoding/soil/pkg/console/constant"
 
 const (
 	HostEnvironment = "ITERM_HOST"
@@ -10,4 +10,4 @@ const (
 	NoJob   = "unknown"
 )
 
-var Format = option.Color.Copy()
+var Format = constant.ColorFormat.Copy()

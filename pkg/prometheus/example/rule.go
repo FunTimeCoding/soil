@@ -2,14 +2,14 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/console/status/option"
+	console "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus"
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"slices"
 )
 
 func Rule() {
-	f := option.ExtendedColor.Copy()
+	f := console.ExtendedColorFormat.Copy()
 	var severities []string
 	fmt.Println("Rules")
 

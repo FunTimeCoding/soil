@@ -1,7 +1,7 @@
 package constant
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/console/constant"
 	"regexp"
 )
 
@@ -71,7 +71,7 @@ const (
 )
 
 var (
-	JiraFormat      = option.ExtendedColor.Copy()
+	JiraFormat      = constant.ExtendedColorFormat.Copy()
 	ServiceDeskDone = []string{
 		ServiceDeskClosed,
 		ServiceDeskResolved,

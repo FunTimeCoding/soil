@@ -29,7 +29,6 @@ func main() {
 	}
 
 	build.DebianPackages()
-	relational.FirstSkipNotFound(nil, nil, nil)
 	unexpected.Float(0)
 	markup.ToNotation("")
 	system.TransmissionSocket("")

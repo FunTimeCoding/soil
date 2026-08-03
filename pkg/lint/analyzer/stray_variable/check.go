@@ -15,7 +15,8 @@ import (
 // Check flags package-level variables outside constant/ packages.
 // Constants and constructed values belong in the domain's
 // constant/ home; genuine state earns an explicit sanction.
-// Sanctioned: go:embed variables and synchronization primitives.
+// Sanctioned: go:embed variables, synchronization primitives, and
+// the linker-injected build metadata triplet in main packages.
 func Check(
 	p *packages.Package,
 	results *output.Results,
@@ -57,8 +58,16 @@ func Check(
 					continue
 				}
 
-				for _, n := range v.Names {
+				for i, n := range v.Names {
 					if isSynchronization(p, n) {
+						continue
+					}
+
+					if isOnceConstructed(p, v, i) {
+						continue
+					}
+
+					if isBuildMetadata(p, n) {
 						continue
 					}
 

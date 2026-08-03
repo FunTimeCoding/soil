@@ -5,26 +5,20 @@ import (
 	"github.com/funtimecoding/soil/pkg/console"
 )
 
-var White = console.NewColor("#fff")
-
 func main() {
 	if false {
+		var White = console.NewColor("#fff")
 		fmt.Println(White("W"))
 	}
 
 	if false {
-		for r := 0; r < 15; r++ {
-			for g := 0; g < 15; g++ {
-				for b := 0; b < 15; b++ {
+		for r := range 15 {
+			for g := range 15 {
+				for b := range 15 {
 					fmt.Printf(
 						"%s",
 						console.NewColor(
-							fmt.Sprintf(
-								"#%x%x%x",
-								r,
-								g,
-								b,
-							),
+							fmt.Sprintf("#%x%x%x", r, g, b),
 						)("W"),
 					)
 				}
@@ -36,13 +30,9 @@ func main() {
 
 	if true {
 		c := console.Gradient("#00ff00", "#ff0000", 250)
-		count := len(c)
 
-		for i := 0; i < count; i++ {
-			fmt.Printf(
-				"%s",
-				c[i]("W"),
-			)
+		for i := range len(c) {
+			fmt.Printf("%s", c[i]("W"))
 		}
 
 		println()

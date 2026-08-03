@@ -203,6 +203,17 @@ func (s *Service) MoveSymbols(
 		return failValidation(r, e.Error())
 	}
 
+	constraints, message := planConstraints(
+		set,
+		target,
+		entries,
+		moveDirectory,
+	)
+
+	if message != "" {
+		return failValidation(r, message)
+	}
+
 	targetPackageName := path.Base(targetPackagePath)
 
 	if target != nil {
@@ -253,6 +264,7 @@ func (s *Service) MoveSymbols(
 			target:            target,
 			resolver:          resolve.NewNames(all),
 			entries:           entries,
+			constraints:       constraints,
 			qualifications:    qualifications,
 			renames:           renames,
 			packagePath:       packagePath,

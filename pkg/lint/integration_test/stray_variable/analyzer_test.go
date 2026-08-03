@@ -9,7 +9,13 @@ import (
 func TestFlagged(t *testing.T) {
 	p, results := testutil.LoadTestPackage(t, "testdata/src/flagged")
 	stray_variable.Check(p, results)
-	testutil.AssertBlocked(t, results, 3)
+	testutil.AssertBlocked(t, results, 4)
+}
+
+func TestBuildMetadataSanctioned(t *testing.T) {
+	p, results := testutil.LoadTestPackage(t, "testdata/src/metadata")
+	stray_variable.Check(p, results)
+	testutil.AssertBlocked(t, results, 1)
 }
 
 func TestClean(t *testing.T) {

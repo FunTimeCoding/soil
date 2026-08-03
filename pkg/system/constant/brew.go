@@ -1,6 +1,6 @@
 package constant
 
-import "github.com/funtimecoding/soil/pkg/console/status/option"
+import "github.com/funtimecoding/soil/pkg/console/constant"
 
 const (
 	Brew            = "brew"
@@ -11,4 +11,4 @@ const (
 	BrewNotation1   = "--json=v1"
 )
 
-var BrewFormat = option.Color.Copy()
+var BrewFormat = constant.ColorFormat.Copy()

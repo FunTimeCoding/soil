@@ -1,8 +1,8 @@
-package time
+package day
 
 import "time"
 
-func NewDay(
+func New(
 	year int,
 	m time.Month,
 	day int,

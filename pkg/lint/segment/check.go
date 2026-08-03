@@ -1,5 +1,7 @@
 package segment
 
+import "github.com/funtimecoding/soil/pkg/lint/constant"
+
 func Check(
 	name string,
 	isVariable bool,
@@ -10,11 +12,11 @@ func Check(
 	allowSingleLetter := isVariable && !isField && !multiSegment
 
 	for _, s := range parts {
-		if NoSuggestion[s] {
+		if constant.NoSuggestion[s] {
 			return &Result{Segment: s, Banned: true}
 		}
 
-		entry, hasSuggestion := Suggestions[s]
+		entry, hasSuggestion := constant.Suggestions[s]
 
 		if !hasSuggestion {
 			continue

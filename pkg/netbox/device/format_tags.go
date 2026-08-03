@@ -1,7 +1,7 @@
 package device
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
@@ -36,7 +36,7 @@ func (d *Device) formatTags(f *option.Format) string {
 	result := join.Comma(filtered)
 
 	if f.UseColor {
-		result = console.Yellow("%s", result)
+		result = consoleConstant.Yellow("%s", result)
 	}
 
 	return result

@@ -1,4 +1,4 @@
-package segment
+package constant
 
 type Suggestion struct {
 	Letters []string

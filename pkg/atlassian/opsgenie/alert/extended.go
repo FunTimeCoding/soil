@@ -3,7 +3,6 @@ package alert
 import (
 	"github.com/docker/go-units"
 	atlassian "github.com/funtimecoding/soil/pkg/atlassian/constant"
-	"github.com/funtimecoding/soil/pkg/console"
 	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
@@ -49,7 +48,7 @@ func (a *Alert) extended(
 		by := a.shortenUser(a.Report.AcknowledgedBy)
 
 		if f.UseColor {
-			by = console.Yellow("%s", by)
+			by = consoleConstant.Yellow("%s", by)
 		}
 
 		s.Line("  Acknowledged: %s", by)

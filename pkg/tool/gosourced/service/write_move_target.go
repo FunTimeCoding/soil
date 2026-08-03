@@ -45,6 +45,15 @@ func writeMoveTarget(
 		Name:  dst.NewIdent(plan.targetPackageName),
 		Decls: transplants,
 	}
+
+	if lines := plan.constraints[fileName]; len(lines) > 0 {
+		for _, line := range lines {
+			file.Decs.Start.Append(line)
+		}
+
+		file.Decs.Start.Append("\n")
+	}
+
 	d.Files[targetPath] = file
 	d.PackagePaths[file] = plan.targetPackagePath
 

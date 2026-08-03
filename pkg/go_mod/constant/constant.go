@@ -1,7 +1,7 @@
 package constant
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/console/constant"
 	"regexp"
 )
 
@@ -14,7 +14,7 @@ const (
 
 const VersionSkipEnvironment = "VERSION_SKIP"
 
-var Format = option.Color.Copy()
+var Format = constant.ColorFormat.Copy()
 var DeadTagPattern = regexp.MustCompile(
 	`(\S+)@(\S+): reading .+ unknown revision`,
 )

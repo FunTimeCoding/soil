@@ -1,7 +1,7 @@
 package runner
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 )
@@ -14,7 +14,7 @@ func (r *Runner) formatName(f *option.Format) string {
 	}
 
 	if f.UseColor {
-		result = console.Cyan("%s", result)
+		result = consoleConstant.Cyan("%s", result)
 	}
 
 	return result

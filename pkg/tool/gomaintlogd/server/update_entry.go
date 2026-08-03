@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"errors"
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/generated/server"
@@ -16,7 +15,7 @@ func (s *Server) UpdateEntry(
 	e, f := s.store.Get(uint(r.Id))
 
 	if f != nil {
-		if errors.Is(f, not_found.Sentinel) {
+		if not_found.Is(f) {
 			return server.UpdateEntry404JSONResponse{Error: f.Error()}, nil
 		}
 

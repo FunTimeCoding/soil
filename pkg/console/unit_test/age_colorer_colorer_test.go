@@ -1,10 +1,11 @@
 package unit_test
 
 import (
+	"github.com/fatih/color"
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/console/age_colorer"
 	"github.com/funtimecoding/soil/pkg/console/age_colorer/age_fixture"
+	"github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/math/range_mapping"
 	"github.com/funtimecoding/soil/pkg/math/ranges"
 	"testing"
@@ -46,23 +47,21 @@ func TestAgeColorerDefault(t *testing.T) {
 	c.Set(g)
 	c.Set(y)
 	c.Set(r)
-	console.GreenInstance.EnableColor()
-	console.YellowInstance.EnableColor()
-	console.RedInstance.EnableColor()
+	color.NoColor = false
 	// Not sure if function pointers can be compared, so compare output
 	assert.String(
 		t,
-		console.Green("%s", "g"),
+		constant.Green("%s", "g"),
 		g.AgeColor()("g"),
 	)
 	assert.String(
 		t,
-		console.Yellow("%s", "y"),
+		constant.Yellow("%s", "y"),
 		y.AgeColor()("y"),
 	)
 	assert.String(
 		t,
-		console.Red("%s", "r"),
+		constant.Red("%s", "r"),
 		r.AgeColor()("r"),
 	)
 }

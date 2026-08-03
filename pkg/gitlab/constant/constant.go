@@ -3,7 +3,6 @@ package constant
 import (
 	"errors"
 	"github.com/funtimecoding/soil/pkg/console/constant"
-	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"gitlab.com/gitlab-org/api/client-go/v2"
 )
 
@@ -67,7 +66,7 @@ const (
 
 var (
 	ErrorNotFound = errors.New("not found")
-	Format        = option.Color.Copy()
+	Format        = constant.ColorFormat.Copy()
 	CheckFormat   = Format.Copy().Tag(constant.TagProject)
 )
 

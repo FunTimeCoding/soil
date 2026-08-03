@@ -2,7 +2,7 @@ package device
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/console"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	library "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
@@ -33,7 +33,7 @@ func (d *Device) formatComment(f *option.Format) string {
 	}
 
 	if f.UseColor {
-		result = console.Magenta("%s", result)
+		result = consoleConstant.Magenta("%s", result)
 	}
 
 	return result

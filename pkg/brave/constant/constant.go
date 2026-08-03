@@ -1,6 +1,6 @@
 package constant
 
-import "github.com/funtimecoding/soil/pkg/console/status/option"
+import "github.com/funtimecoding/soil/pkg/console/constant"
 
 const (
 	BravePath = "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser"
@@ -18,7 +18,7 @@ const (
 	BookmarksFile = "Bookmarks"
 )
 
-var Format = option.ExtendedColor.Copy()
+var Format = constant.ExtendedColorFormat.Copy()
 
 const (
 	LinkType      = "url"

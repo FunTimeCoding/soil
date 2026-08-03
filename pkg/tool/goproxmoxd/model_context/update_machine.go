@@ -34,7 +34,7 @@ func (s *Server) UpdateMachine(
 	e = s.service.UpdateMachine(c, &a)
 
 	if e != nil {
-		if errors.Is(e, not_found.Sentinel) ||
+		if not_found.Is(e) ||
 			errors.Is(e, constant.ErrorNoChanges) ||
 			errors.Is(e, constant.ErrorSetDeleteConflict) {
 			return response.Fail("%s", e)

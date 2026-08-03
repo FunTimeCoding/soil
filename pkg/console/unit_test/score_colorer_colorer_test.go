@@ -1,8 +1,9 @@
 package unit_test
 
 import (
+	"github.com/fatih/color"
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/score_colorer"
 	"github.com/funtimecoding/soil/pkg/console/score_colorer/score_fixture"
 	"github.com/funtimecoding/soil/pkg/math/range_mapping"
@@ -45,23 +46,21 @@ func TestScoreColorerDefault(t *testing.T) {
 	c.Set(g)
 	c.Set(y)
 	c.Set(r)
-	console.GreenInstance.EnableColor()
-	console.YellowInstance.EnableColor()
-	console.RedInstance.EnableColor()
+	color.NoColor = false
 	// Not sure if function pointers can be compared, so compare output
 	assert.String(
 		t,
-		console.Green("%s", "g"),
+		constant.Green("%s", "g"),
 		g.ScoreColor()("g"),
 	)
 	assert.String(
 		t,
-		console.Yellow("%s", "y"),
+		constant.Yellow("%s", "y"),
 		y.ScoreColor()("y"),
 	)
 	assert.String(
 		t,
-		console.Red("%s", "r"),
+		constant.Red("%s", "r"),
 		r.ScoreColor()("r"),
 	)
 }
@@ -72,7 +71,7 @@ func TestZeroScore(t *testing.T) {
 	c := score_colorer.Default(a, b)
 	c.Set(a)
 	c.Set(b)
-	console.GreenInstance.EnableColor()
-	assert.String(t, console.Green("%s", "a"), a.ScoreColor()("a"))
-	assert.String(t, console.Green("%s", "b"), b.ScoreColor()("b"))
+	color.NoColor = false
+	assert.String(t, constant.Green("%s", "a"), a.ScoreColor()("a"))
+	assert.String(t, constant.Green("%s", "b"), b.ScoreColor()("b"))
 }

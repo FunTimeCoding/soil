@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/suppress"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"go/ast"
 	"go/types"
@@ -39,7 +40,7 @@ func checkCall(
 		return
 	}
 
-	if !banned[f.Name()] {
+	if !constant.ForbiddenCalls[f.Name()] {
 		return
 	}
 

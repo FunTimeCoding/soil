@@ -1,7 +1,7 @@
 package device
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
 )
@@ -9,14 +9,14 @@ import (
 func (d *Device) formatName(f *option.Format) string {
 	if d.Name == "" {
 		if f.UseColor {
-			return console.Yellow("%s", constant.NoName)
+			return consoleConstant.Yellow("%s", constant.NoName)
 		}
 
 		return constant.NoName
 	}
 
 	if f.UseColor {
-		return console.Cyan("%s", d.Name)
+		return consoleConstant.Cyan("%s", d.Name)
 	}
 
 	return d.Name

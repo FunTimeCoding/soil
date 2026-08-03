@@ -2,14 +2,13 @@ package loki
 
 import (
 	"github.com/funtimecoding/soil/pkg/console/constant"
-	"github.com/funtimecoding/soil/pkg/console/status/option"
-	checkOption "github.com/funtimecoding/soil/pkg/prometheus/check/loki/option"
+	"github.com/funtimecoding/soil/pkg/prometheus/check/loki/option"
 	"github.com/funtimecoding/soil/pkg/prometheus/loki"
 )
 
-func Check(o *checkOption.Loki) {
+func Check(o *option.Loki) {
 	c := loki.NewEnvironment(false)
-	f := option.Color.Copy()
+	f := constant.ColorFormat.Copy()
 
 	if o.Copyable {
 		f.Tag(constant.TagCopyable)

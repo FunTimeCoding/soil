@@ -1,4 +1,4 @@
-package segment
+package constant
 
 var NoSuggestion = map[string]bool{
 	"handler": true,

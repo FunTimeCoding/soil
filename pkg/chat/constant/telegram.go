@@ -1,6 +1,6 @@
 package constant
 
-import "github.com/funtimecoding/soil/pkg/console/status/option"
+import "github.com/funtimecoding/soil/pkg/console/constant"
 
 const (
 	TelegramTokenEnvironment    = "TELEGRAM_TOKEN"
@@ -8,4 +8,4 @@ const (
 	TelegramDatabaseEnvironment = "TELEGRAM_DATABASE"
 )
 
-var TelegramFormat = option.Color.Copy()
+var TelegramFormat = constant.ColorFormat.Copy()

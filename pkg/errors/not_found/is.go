@@ -1,7 +1,9 @@
 package not_found
 
-func (e *NotFoundError) Is(target error) bool {
-	_, okay := target.(*NotFoundError)
+import "errors"
 
-	return okay
+func Is(e error) bool {
+	var target *NotFoundError
+
+	return errors.As(e, &target)
 }

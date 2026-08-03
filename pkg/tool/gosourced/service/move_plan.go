@@ -14,6 +14,7 @@ type movePlan struct {
 	target            *packages.Package
 	resolver          *resolve.Names
 	entries           []*moveEntry
+	constraints       map[string][]string
 	qualifications    map[string]*fileQualification
 	renames           map[*ast.Ident]string
 	packagePath       string

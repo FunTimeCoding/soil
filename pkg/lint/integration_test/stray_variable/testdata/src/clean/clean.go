@@ -18,3 +18,9 @@ func Exercise() string {
 
 	return favicon
 }
+
+var onceValue = sync.OnceValue(func() string { return "computed" })
+
+func ExerciseOnce() string {
+	return onceValue()
+}

@@ -2,7 +2,6 @@ package constant
 
 import (
 	"github.com/funtimecoding/soil/pkg/console/constant"
-	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"regexp"
 )
 
@@ -50,8 +49,8 @@ const (
 )
 
 var (
-	ConfluenceFormat = option.ExtendedColor.Copy()
-	ConfluenceDense  = option.Color.Copy().Tag(constant.TagDense)
+	ConfluenceFormat = constant.ExtendedColorFormat.Copy()
+	ConfluenceDense  = constant.ColorFormat.Copy().Tag(constant.TagDense)
 )
 
 var (

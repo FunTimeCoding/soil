@@ -2,7 +2,6 @@ package model_context
 
 import (
 	"context"
-	"errors"
 	library "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
@@ -25,7 +24,7 @@ func (s *Server) update(
 	e, f := s.store.Get(uint(identifier))
 
 	if f != nil {
-		if errors.Is(f, not_found.Sentinel) {
+		if not_found.Is(f) {
 			return response.Fail("%s", f)
 		}
 

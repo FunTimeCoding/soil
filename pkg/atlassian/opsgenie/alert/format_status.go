@@ -2,7 +2,7 @@ package alert
 
 import (
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
-	"github.com/funtimecoding/soil/pkg/console"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 )
 
@@ -11,7 +11,7 @@ func (a *Alert) formatStatus(f *option.Format) string {
 
 	if f.UseColor {
 		if a.Status != constant.OpsgenieClosedStatus {
-			result = console.Red("%s", a.Status)
+			result = consoleConstant.Red("%s", a.Status)
 		} else {
 			result = a.Status
 		}

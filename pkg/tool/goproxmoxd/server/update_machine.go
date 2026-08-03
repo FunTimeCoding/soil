@@ -30,7 +30,7 @@ func (s *Server) UpdateMachine(
 	e = s.service.UpdateMachine(c, a)
 
 	if e != nil {
-		if errors.Is(e, not_found.Sentinel) {
+		if not_found.Is(e) {
 			return server.UpdateMachine404JSONResponse{
 				Error: e.Error(),
 			}, nil

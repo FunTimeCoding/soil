@@ -2,7 +2,7 @@ package silence
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"strings"
 )
@@ -22,7 +22,7 @@ func (s *Silence) formatComment(f *option.Format) string {
 	if f.UseColor {
 		return fmt.Sprintf(
 			"Comment: %s",
-			console.Magenta("%s", s.Comment),
+			constant.Magenta("%s", s.Comment),
 		)
 	}
 

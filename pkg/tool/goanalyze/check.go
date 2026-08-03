@@ -10,6 +10,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/forbidden_import"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/naming"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/restricted_call"
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/stray_variable"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/string_concatenation"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/string_constant"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/struct_literal"
@@ -39,4 +40,5 @@ func check(
 	unchecked_print_write.Check(p, results)
 	anonymous_struct.Check(p, results)
 	value_return.Check(p, results)
+	stray_variable.Check(p, results)
 }

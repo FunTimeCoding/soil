@@ -1,7 +1,7 @@
 package branch
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 )
@@ -13,13 +13,13 @@ func (b *Branch) formatMerged(f *option.Format) string {
 		result = constant.BranchMerged
 
 		if f.UseColor {
-			return console.Green("%s", result)
+			return consoleConstant.Green("%s", result)
 		}
 	} else {
 		result = constant.BranchUnmerged
 
 		if f.UseColor {
-			return console.Yellow("%s", result)
+			return consoleConstant.Yellow("%s", result)
 		}
 	}
 

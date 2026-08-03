@@ -1,7 +1,7 @@
 package physical_address
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
 )
@@ -13,7 +13,7 @@ func (a *Address) formatObjectType(f *option.Format) string {
 		result = constant.NoObjectType
 
 		if f.UseColor {
-			result = console.Red("%s", result)
+			result = consoleConstant.Red("%s", result)
 		}
 	}
 

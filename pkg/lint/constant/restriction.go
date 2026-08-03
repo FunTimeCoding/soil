@@ -1,6 +1,13 @@
-package restricted_call
+package constant
 
-var rules = []Rule{
+type Restriction struct {
+	Package   string
+	Function  string
+	AllowedIn []string
+	Message   string
+}
+
+var RestrictedCalls = []Restriction{
 	{
 		Package:  "database/sql",
 		Function: "Open",

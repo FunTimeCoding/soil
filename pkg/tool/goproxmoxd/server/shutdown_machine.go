@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"errors"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 )
@@ -32,7 +31,7 @@ func (s *Server) ShutdownMachine(
 	taskID, e := s.service.ShutdownMachine(c, int(r.Identifier), node)
 
 	if e != nil {
-		if errors.Is(e, not_found.Sentinel) {
+		if not_found.Is(e) {
 			return server.ShutdownMachine404JSONResponse{Error: e.Error()}, nil
 		}
 

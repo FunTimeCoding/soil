@@ -2,7 +2,7 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/console/status/option"
+	"github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/strings"
 	"github.com/funtimecoding/soil/pkg/tool/common"
 )
@@ -13,7 +13,7 @@ func Customer() {
 
 	if false {
 		for _, i := range j.MustCustomerIssues(true) {
-			fmt.Println(i.Format(option.Color))
+			fmt.Println(i.Format(constant.ColorFormat))
 		}
 	}
 

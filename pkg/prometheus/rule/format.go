@@ -2,7 +2,7 @@ package rule
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/console"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
@@ -33,7 +33,7 @@ func (r *Rule) Format(f *option.Format) string {
 		output := fmt.Sprintf("unexpected health: %s", r.Health)
 
 		if f.UseColor {
-			output = console.Red("%s", output)
+			output = consoleConstant.Red("%s", output)
 		}
 
 		s.Line("%s", output)
@@ -43,7 +43,7 @@ func (r *Rule) Format(f *option.Format) string {
 		output := fmt.Sprintf("unexpected state: %s", r.State)
 
 		if f.UseColor {
-			output = console.Red("%s", output)
+			output = consoleConstant.Red("%s", output)
 		}
 
 		s.Line("%s", output)
@@ -56,7 +56,7 @@ func (r *Rule) Format(f *option.Format) string {
 			output := fmt.Sprintf("  Alert last evaluation: %s", age)
 
 			if f.UseColor {
-				output = console.Red("%s", output)
+				output = consoleConstant.Red("%s", output)
 			}
 
 			s.Line("%s", output)
@@ -69,7 +69,7 @@ func (r *Rule) Format(f *option.Format) string {
 			)
 
 			if f.UseColor {
-				output = console.Yellow("%s", output)
+				output = consoleConstant.Yellow("%s", output)
 			}
 
 			s.Line("%s", output)

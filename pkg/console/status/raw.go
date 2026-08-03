@@ -2,7 +2,7 @@ package status
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/console/constant"
 )
 
 func (s *Status) Raw(
@@ -20,7 +20,7 @@ func (s *Status) Raw(
 	}
 
 	if s.format.UseColor {
-		r = console.Magenta("%s", r)
+		r = constant.Magenta("%s", r)
 	}
 
 	return s.Line("  %s: %s", title, r)

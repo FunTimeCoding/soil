@@ -2,7 +2,7 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/console"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab"
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 )
@@ -19,7 +19,7 @@ func Issue() {
 		if false {
 			fmt.Printf(
 				"  %s\n",
-				console.Magenta("%s", i.Raw.Description),
+				consoleConstant.Magenta("%s", i.Raw.Description),
 			)
 		}
 	}

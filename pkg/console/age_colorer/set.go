@@ -1,7 +1,7 @@
 package age_colorer
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/math/in_range"
 )
@@ -20,11 +20,11 @@ func (c *Colorer) Set(i face.AgeColorable) {
 	}
 
 	if first := c.mapping[0]; value <= first.Range.L {
-		i.SetAgeColor(console.Green)
+		i.SetAgeColor(constant.Green)
 	}
 
 	if last := c.mapping[len(c.mapping)-1]; value >= last.Range.R {
-		i.SetAgeColor(console.Red)
+		i.SetAgeColor(constant.Red)
 	}
 
 	if i.AgeColor() == nil {

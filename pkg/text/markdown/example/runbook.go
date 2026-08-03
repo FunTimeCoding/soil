@@ -2,7 +2,7 @@ package example
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/console/status/option"
+	console "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/text/constant"
@@ -12,7 +12,7 @@ import (
 
 func Runbook() {
 	base := environment.Required(constant.WikiPathEnvironment)
-	f := option.Color
+	f := console.ColorFormat
 
 	for _, n := range system.Files(base) {
 		fmt.Printf("File: %s\n", n)

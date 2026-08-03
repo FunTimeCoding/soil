@@ -95,11 +95,19 @@ type NotFoundError struct {
 }
 
 func (e *NotFoundError) Error() string { return e.Message }
-func (e *NotFoundError) Is(target error) bool {
-    _, ok := target.(*NotFoundError)
-    return ok
+
+func Is(e error) bool {
+    var target *NotFoundError
+
+    return errors.As(e, &target)
 }
 ```
+
+Handlers that only classify - route to 404, pick a response
+shape - call the package's `Is` function (the `os.IsNotExist`
+shape) instead of spelling out `errors.As` with a target they
+never read. No package-level sentinel variable exists for typed
+errors; the type is the classification.
 
 The dividing line: does the message need context from the call
 site? If yes, typed error. If no, simple sentinel.

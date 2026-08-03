@@ -3,7 +3,7 @@ package issue
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
-	"github.com/funtimecoding/soil/pkg/console"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 )
 
@@ -15,7 +15,7 @@ func (i *Issue) FormatDescription(f *option.Format) string {
 	result := i.Description
 
 	if f.UseColor {
-		result = console.Magenta("%s", result)
+		result = consoleConstant.Magenta("%s", result)
 	}
 
 	return fmt.Sprintf("  Description: %s", result)

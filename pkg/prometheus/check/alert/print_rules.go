@@ -2,7 +2,7 @@ package alert
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/console/status/option"
+	console "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager"
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"time"
@@ -12,7 +12,7 @@ func printRules(
 	c *alertmanager.Client,
 	firing bool,
 ) {
-	f := option.ExtendedColor.Copy()
+	f := console.ExtendedColorFormat.Copy()
 
 	for _, r := range c.MustRules().Alert() {
 		if r.RawAlert != nil &&

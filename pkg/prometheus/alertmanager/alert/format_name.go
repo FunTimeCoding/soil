@@ -1,7 +1,6 @@
 package alert
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/strings/join"
@@ -12,7 +11,7 @@ func (a *Alert) formatName(f *option.Format) string {
 	result := a.Name
 
 	if f.UseColor {
-		result = console.Yellow("%s", result)
+		result = constant.Yellow("%s", result)
 	}
 
 	if f.HasTag(constant.TagEmoji) {
