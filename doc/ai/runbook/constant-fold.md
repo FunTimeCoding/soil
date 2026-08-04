@@ -25,7 +25,12 @@ semantics) and `unit_test`/`integration_test` homes inside
 
 1. **Census first.** Run the unparked gate. The finding list is
    the complete work list - nothing outside it is left over,
-   nothing inside it is exempt.
+   nothing inside it is exempt. Prove the census is alive before
+   trusting a zero: analyzers need package patterns (`./...` -
+   a repo root without Go files reports a silent or panicking
+   fake zero), and a deliberately planted stray in a scratch
+   package must flag before you believe the empty output.
+   Delete the probe after.
 2. **Classify before moving.** Read every flagged file and tag it
    by kind - the treatment differs and package-by-package
    flattening applied blindly gets it wrong:
@@ -55,6 +60,12 @@ semantics) and `unit_test`/`integration_test` homes inside
    - **misfile** - a type or func living under a constant name;
      it moves OUT to its owning package (or `git mv` in place),
      never into the constant home.
+   - **discriminator** - a constant pair (or field-plus-values)
+     that duplicates what another field's presence already says
+     (a kind string where exactly one kind sets its companion
+     field). It dissolves into a derived predicate method
+     instead of moving - check serialization consumers before
+     deleting the field.
    - **single** - one or two constants; fold to the domain root.
      Cross-domain promotion is a separate scope.
 3. **Fold in approval-paced waves**, smallest domain first, one
@@ -71,6 +82,13 @@ semantics) and `unit_test`/`integration_test` homes inside
   in any member: separate constants. Same value, different
   meaning: own constant or an honest literal rename - never a
   suppression.
+- Enum values never live in vocabulary/leaf packages, even when
+  their type does: leaf-typed values move to the constant home,
+  which imports the leaf one-way. When the leaf's own machinery
+  consumes the values - the cycle case - they move UP the
+  hierarchy to the next constant home instead of staying put.
+  Values take the type or package qualifier as they move; the
+  name must stand alone.
 - Export-all applies to internals (analyzer orderings, tuning
   knobs, scoring tables) - in-package residence is the lint gap
   new sessions recreate strays through.
@@ -100,4 +118,10 @@ vocabulary's references are qualified and concentrated (a
 value-assertion anchor test plus a few consumers), hand-rewriting
 the declaration file and sweeping consumers with word-boundary
 qualified replacements beats dozens of tool renames - build and
-lint prove the sweep.
+lint prove the sweep. Two clean-up traps after tool moves: moved
+symbols can land one-file-per-symbol - consolidate into the
+curated `const (...)` block file; and package renames don't touch
+file basenames - test files elsewhere that embed the old package
+name in their filename need a manual `git mv` (renaming basenames
+by string match risks collateral, so the tool correctly refuses
+the rabbit hole).

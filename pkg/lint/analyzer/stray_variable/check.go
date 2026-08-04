@@ -67,6 +67,10 @@ func Check(
 						continue
 					}
 
+					if isMetricRegistration(p, v, i) {
+						continue
+					}
+
 					if isBuildMetadata(p, n) {
 						continue
 					}
