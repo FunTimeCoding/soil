@@ -1,8 +1,8 @@
 package restricted_call
 
 import (
-	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/lint/types/restriction"
 	"go/ast"
 	"golang.org/x/tools/go/packages"
 	"slices"
@@ -11,7 +11,7 @@ import (
 func CheckRestrictions(
 	p *packages.Package,
 	results *output.Results,
-	rules []constant.Restriction,
+	rules []restriction.Restriction,
 ) {
 	for _, rule := range rules {
 		if slices.Contains(rule.AllowedIn, p.PkgPath) {

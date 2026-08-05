@@ -33,10 +33,8 @@ func runHeadless(
 		r.AddConcern(c)
 	}
 
-	if false {
-		for _, c := range scan.ConstantPlacement(v) {
-			r.AddConcern(c)
-		}
+	for _, c := range scan.ConstantPlacement(v) {
+		r.AddConcern(c)
 	}
 
 	if output.PrintResults(r.Entries, false) {

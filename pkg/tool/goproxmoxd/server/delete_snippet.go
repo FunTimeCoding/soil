@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 )
 
@@ -24,7 +23,7 @@ func (s *Server) DeleteSnippet(
 		), nil
 	}
 
-	c.RemoveFile(constant.SnippetPath(r.Name))
+	c.RemoveFile(snippetPath(r.Name))
 
 	return server.DeleteSnippet200JSONResponse{
 		Status: "deleted",

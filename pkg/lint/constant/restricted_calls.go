@@ -1,13 +1,8 @@
 package constant
 
-type Restriction struct {
-	Package   string
-	Function  string
-	AllowedIn []string
-	Message   string
-}
+import "github.com/funtimecoding/soil/pkg/lint/types/restriction"
 
-var RestrictedCalls = []Restriction{
+var RestrictedCalls = []restriction.Restriction{
 	{
 		Package:  "database/sql",
 		Function: "Open",

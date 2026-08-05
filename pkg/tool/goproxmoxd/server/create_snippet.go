@@ -3,7 +3,6 @@ package server
 import (
 	"context"
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 )
 
@@ -25,7 +24,7 @@ func (s *Server) CreateSnippet(
 		), nil
 	}
 
-	c.WriteFile(constant.SnippetPath(r.Body.Name), []byte(r.Body.Content))
+	c.WriteFile(snippetPath(r.Body.Name), []byte(r.Body.Content))
 
 	return server.CreateSnippet200JSONResponse{
 		Volume: fmt.Sprintf("local:snippets/%s", r.Body.Name),

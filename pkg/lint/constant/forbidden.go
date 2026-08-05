@@ -1,11 +1,8 @@
 package constant
 
-type Ban struct {
-	Substring bool
-	Message   string
-}
+import "github.com/funtimecoding/soil/pkg/lint/types/ban"
 
-var ForbiddenImports = map[string]Ban{
+var ForbiddenImports = map[string]ban.Ban{
 	"flag": {
 		Message: `use "github.com/spf13/pflag" instead of "flag"`,
 	},

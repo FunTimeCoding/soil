@@ -1,6 +1,8 @@
 package constant
 
-var Suggestions = map[string]Suggestion{
+import "github.com/funtimecoding/soil/pkg/lint/types/suggestion"
+
+var Suggestions = map[string]suggestion.Suggestion{
 	"id":     {Words: []string{"identifier"}},
 	"url":    {Letters: []string{"l"}, Words: []string{"locator"}},
 	"mcp":    {Letters: []string{"c"}, Words: []string{"model_context"}},

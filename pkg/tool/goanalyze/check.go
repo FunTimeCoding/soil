@@ -3,6 +3,7 @@ package goanalyze
 import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/anonymous_struct"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/call_format"
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/constant_declaration"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/defer_close"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/expected_first"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/file_identity"
@@ -10,6 +11,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/forbidden_import"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/naming"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/restricted_call"
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/stray_constant"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/stray_variable"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/string_concatenation"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/string_constant"
@@ -41,4 +43,6 @@ func check(
 	anonymous_struct.Check(p, results)
 	value_return.Check(p, results)
 	stray_variable.Check(p, results)
+	stray_constant.Check(p, results)
+	constant_declaration.Check(p, results)
 }

@@ -1,26 +1,16 @@
-package restricted_call
+package stray_constant
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/lint/analyzer/restricted_call"
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/stray_constant"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/lint/types/restriction"
 	"go/token"
 	"golang.org/x/tools/go/packages"
 	"testing"
 )
 
-var testRules = []restriction.Restriction{
-	{
-		Package:   "example/fakegorm",
-		Function:  "Open",
-		AllowedIn: []string{"example/blessed"},
-		Message:   "open through the blessed package",
-	},
-}
-
-func TestCheckRules(t *testing.T) {
+func TestStrayConstant(t *testing.T) {
 	directory := testutil.PrepareTestPackage(t, "testdata/src/example")
 	configuration := &packages.Config{
 		Mode: packages.LoadSyntax | packages.NeedModule,
@@ -40,9 +30,9 @@ func TestCheckRules(t *testing.T) {
 			t.Fatalf("package errors: %v", p.Errors)
 		}
 
-		restricted_call.CheckRestrictions(p, results, testRules)
+		stray_constant.Check(p, results)
 	}
 
 	testutil.AssertBlocked(t, results, 1)
-	testutil.AssertBlockedContains(t, results, "blessed package")
+	testutil.AssertBlockedContains(t, results, "Stray")
 }

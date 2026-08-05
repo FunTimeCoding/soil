@@ -3,8 +3,8 @@ package restricted_call
 import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/suppress"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
-	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/lint/types/restriction"
 	"go/ast"
 	"go/types"
 	"golang.org/x/tools/go/packages"
@@ -14,7 +14,7 @@ func checkCall(
 	p *packages.Package,
 	results *output.Results,
 	call *ast.CallExpr,
-	rule constant.Restriction,
+	rule restriction.Restriction,
 ) {
 	sel, isSel := call.Fun.(*ast.SelectorExpr)
 

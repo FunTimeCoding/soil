@@ -1,9 +1,6 @@
 package record
 
-import (
-	"fmt"
-	"github.com/funtimecoding/soil/pkg/telemetry/constant"
-)
+import "fmt"
 
 func newRecord(
 	tool string,
@@ -12,11 +9,11 @@ func newRecord(
 	outcome string,
 	kind string,
 ) *Record {
-	if !constant.ValidSurface(surface) {
+	if !validSurface(surface) {
 		panic(fmt.Sprintf("invalid telemetry surface: %q", surface))
 	}
 
-	if !constant.ValidKind(kind) {
+	if !validKind(kind) {
 		panic(fmt.Sprintf("invalid telemetry kind: %q", kind))
 	}
 

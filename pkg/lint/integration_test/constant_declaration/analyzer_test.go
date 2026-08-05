@@ -1,26 +1,16 @@
-package restricted_call
+package constant_declaration
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/lint/analyzer/restricted_call"
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/constant_declaration"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/lint/types/restriction"
 	"go/token"
 	"golang.org/x/tools/go/packages"
 	"testing"
 )
 
-var testRules = []restriction.Restriction{
-	{
-		Package:   "example/fakegorm",
-		Function:  "Open",
-		AllowedIn: []string{"example/blessed"},
-		Message:   "open through the blessed package",
-	},
-}
-
-func TestCheckRules(t *testing.T) {
+func TestConstantDeclaration(t *testing.T) {
 	directory := testutil.PrepareTestPackage(t, "testdata/src/example")
 	configuration := &packages.Config{
 		Mode: packages.LoadSyntax | packages.NeedModule,
@@ -40,9 +30,10 @@ func TestCheckRules(t *testing.T) {
 			t.Fatalf("package errors: %v", p.Errors)
 		}
 
-		restricted_call.CheckRestrictions(p, results, testRules)
+		constant_declaration.Check(p, results)
 	}
 
-	testutil.AssertBlocked(t, results, 1)
-	testutil.AssertBlockedContains(t, results, "blessed package")
+	testutil.AssertBlocked(t, results, 2)
+	testutil.AssertBlockedContains(t, results, "behavior-free")
+	testutil.AssertBlockedContains(t, results, "enum-shaped")
 }

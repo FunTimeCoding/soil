@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 )
 
@@ -24,7 +23,7 @@ func (s *Server) GetSnippet(
 		), nil
 	}
 
-	b := c.ReadFile(constant.SnippetPath(r.Name))
+	b := c.ReadFile(snippetPath(r.Name))
 
 	return server.GetSnippet200JSONResponse{
 		Name:    r.Name,
