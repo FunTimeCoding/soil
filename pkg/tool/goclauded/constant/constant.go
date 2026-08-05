@@ -70,10 +70,13 @@ const (
 	SummarySourceType    = "session-summary"
 	CompletionSourceType = "session-completion"
 
-	SessionTable     = "session"
-	SummaryTable     = "summary"
-	SummaryColumn    = "summary"
-	TokenUsageColumn = "token_usage"
+	SessionTable         = "session"
+	SummaryTable         = "summary"
+	SummaryColumn        = "summary"
+	TokenUsageColumn     = "token_usage"
+	ModelColumn          = "model"
+	ContextPercentColumn = "context_percent"
+	ContextWindowColumn  = "context_window"
 
 	Pulse      = "pulse"
 	Label      = "label"

@@ -7,7 +7,7 @@
 ```
 gobuild goalertlog          # build one binary
 gobuild                     # build all binaries in cmd/ (except example/)
-gobuild --copy-to-bin       # also copy matching-architecture binary to ~/bin
+gobuild --copy-to-bin       # also install matching-architecture binary to ~/bin
 gobuild --linux-amd64       # build only linux-amd64
 gobuild --native            # enable CGO
 ```
@@ -23,6 +23,16 @@ go build -ldflags "-X main.Version=v0.10.294 -X main.GitHash=144f841a -X main.Bu
 - **Version** - latest git tag (`git describe --tags --abbrev=0`)
 - **GitHash** - short commit hash (`git rev-parse --short HEAD`)
 - **BuildDate** - current time in RFC3339
+
+## Install Semantics
+
+`--copy-to-bin` installs via `system.ReplaceFile` - write to a
+temporary file beside the destination, then rename over it. The
+destination always gets a fresh inode: in-place overwrite makes
+macOS kill the next exec of a previously executed binary
+(stale kernel signature cache), and truncating a running
+executable on Linux fails with "text file busy". Rename has
+neither problem - running processes keep the old inode.
 
 ## Target Architectures
 

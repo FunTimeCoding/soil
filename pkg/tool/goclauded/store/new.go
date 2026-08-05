@@ -11,6 +11,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/pool_name"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/pulse"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/queue"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/rate_snapshot"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/session"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/summary"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/tracker_state"
@@ -34,6 +35,7 @@ func New(
 			summary.Stub(),
 			pool_name.Stub(),
 			usage_snapshot.Stub(),
+			rate_snapshot.Stub(),
 			label.Stub(),
 			pulse.Stub(),
 			notification.Stub(),

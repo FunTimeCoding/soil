@@ -14,6 +14,7 @@ func TestDirectoryContent(t *testing.T) {
 		t,
 		[]string{
 			"board",
+			"claude",
 			"hypertext",
 			"markdown",
 			"memory",

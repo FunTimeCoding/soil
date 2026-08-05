@@ -2,8 +2,7 @@ package server
 
 import (
 	"context"
-	library "github.com/funtimecoding/soil/pkg/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
 )
 
@@ -15,19 +14,9 @@ func (s *Server) PostRegister(
 
 	if e != nil {
 		return server.PostRegister500JSONResponse(
-			*s.captureFail(e, library.UnexpectedError),
+			*s.captureFail(e, constant.UnexpectedError),
 		), nil
 	}
-
-	s.logger.Structured(
-		constant.Register,
-		"claude_session_identifier",
-		r.Body.Session,
-		constant.SessionName,
-		result.Callsign,
-		"new",
-		result.New,
-	)
 
 	return server.PostRegister200JSONResponse{
 		Callsign: result.Callsign,

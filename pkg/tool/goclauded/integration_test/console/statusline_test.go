@@ -1,0 +1,45 @@
+package console
+
+import (
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/assert/fixture"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration_test/base"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration_test/console_tester"
+	"testing"
+)
+
+func TestStatuslineRendersAndStores(t *testing.T) {
+	s := base.New(t)
+	defer s.Close()
+	c := console_tester.New(t, s.Port())
+	c.Register("11111111-2222-3333-4444-555555555555")
+	line := c.Statusline(
+		[]byte(fixture.Read("claude", "statusline.json")),
+	)
+	assert.String(t, "18% context", line)
+	record, e := s.Service.GetSession(
+		"11111111-2222-3333-4444-555555555555",
+	)
+	assert.FatalOnError(t, e)
+	assert.Integer(t, 18, record.ContextPercent)
+	assert.Integer(t, 1000000, record.ContextWindow)
+	assert.String(t, "Fable 5", record.Model)
+}
+
+func TestStatuslineRateSnapshotDedupe(t *testing.T) {
+	s := base.New(t)
+	defer s.Close()
+	c := console_tester.New(t, s.Port())
+	c.Register("11111111-2222-3333-4444-555555555555")
+	body := []byte(fixture.Read("claude", "statusline.json"))
+	c.Statusline(body)
+	first, e := s.Store.Store.LatestRateSnapshot()
+	assert.FatalOnError(t, e)
+	assert.NotNil(t, first)
+	assert.Integer(t, 31, first.FiveHourPercent)
+	assert.Integer(t, 1, first.SevenDayPercent)
+	c.Statusline(body)
+	second, f := s.Store.Store.LatestRateSnapshot()
+	assert.FatalOnError(t, f)
+	assert.Integer(t, int(first.Identifier), int(second.Identifier))
+}

@@ -59,6 +59,7 @@ func Main(
 	o.AddCommand(listVirtualJournalEntries(c))
 	o.AddCommand(updateJournalEntry(c))
 	o.AddCommand(deleteJournalEntry(c))
+	o.AddCommand(deleteAddress(c))
 	o.AddCommand(setDeviceLabel(c))
 	o.AddCommand(removeDeviceLabel(c))
 	o.AddCommand(listDeviceLabels(c))

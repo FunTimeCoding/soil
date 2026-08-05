@@ -1316,6 +1316,26 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/addresses/{identifier}:
+    delete:
+      operationId: deleteAddress
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        description: IP address identifier.
+      responses:
+        "204":
+          description: Address deleted.
+        "500":
+          description: Failed to delete address.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 components:
   schemas:
     Device:

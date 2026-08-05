@@ -40,11 +40,13 @@ func (s *Service) ReconcileCompletions() {
 		pushed++
 	}
 
-	s.logger.Structured(
-		"reconcile_completions",
-		"pushed",
-		pushed,
-		"skipped",
-		skipped,
-	)
+	if pushed > 0 {
+		s.logger.Structured(
+			"reconcile_completions",
+			"pushed",
+			pushed,
+			"skipped",
+			skipped,
+		)
+	}
 }

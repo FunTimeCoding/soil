@@ -11,7 +11,6 @@ import (
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/join"
 	"github.com/funtimecoding/soil/pkg/system/run"
-	"os"
 	"path/filepath"
 	"runtime"
 )
@@ -83,24 +82,7 @@ func Go(o *option.Build) {
 		)
 		fmt.Printf("Source: %s\n", p.Output)
 		fmt.Printf("Destination: %s\n", destination)
-
-		if runtime.GOOS == systemConstant.Linux {
-			// On Linux, the file is busy if it is currently running.
-			// panic: open /home/user/bin/gobuild: text file busy
-			if destination == system.ExecutablePath() {
-				system.Move(
-					destination,
-					fmt.Sprintf(
-						"/%s/%s-old-%d",
-						systemConstant.Temporary,
-						p.Name,
-						os.Getpid(),
-					),
-				)
-			}
-		}
-
-		system.CopyFile(p.Output, destination)
+		system.ReplaceFile(p.Output, destination)
 		system.Executable(destination)
 	}
 

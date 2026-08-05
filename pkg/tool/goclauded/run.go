@@ -36,28 +36,13 @@ func Run(
 	r face.Reporter,
 ) {
 	start := time.Now()
-	elapsed := func() float64 { return time.Since(start).Seconds() }
 	l := logger.New(context.Background())
 	n := notifier.New()
 	s := store.New(lite.New(l, o.LitePath), time.Now)
-	l.Structured("store_ready", "elapsed", elapsed())
 	h := claude.New().Base()
-	result := sweep.Run(h)
-	l.Structured(
-		"sweep_complete",
-		"elapsed",
-		elapsed(),
-		"copied",
-		result.Copied,
-		"updated",
-		result.Updated,
-		"skipped",
-		result.Skipped,
-	)
+	sweep.Run(h)
 	memoryClient := memory.Wait(l)
-	l.Structured("gomemoryd_connected", "elapsed", elapsed())
 	queryClient := connect.Wait(l)
-	l.Structured("goqueryd_connected", "elapsed", elapsed())
 	summaryIdx := indexer.New(queryClient, constant.SummarySourceType)
 	completionIdx := indexer.New(
 		queryClient,
@@ -77,15 +62,15 @@ func Run(
 	)
 	v.ClearBindings()
 	v.ReconcileSummaries()
-	l.Structured("summaries_reconciled", "elapsed", elapsed())
 	v.ReconcileCompletions()
-	l.Structured("completions_reconciled", "elapsed", elapsed())
 	v.PopulateCache()
-	l.Structured("cache_populated", "elapsed", elapsed())
 	v.BackfillSessions()
-	l.Structured("sessions_backfilled", "elapsed", elapsed())
 	v.CheckConsistency()
-	l.Structured("consistency_checked", "elapsed", elapsed())
+	l.Structured(
+		"started",
+		"elapsed",
+		time.Since(start).Seconds(),
+	)
 	rec := recovery.New(l, r)
 	timeoutTicker := ticker.New(
 		5*time.Minute,

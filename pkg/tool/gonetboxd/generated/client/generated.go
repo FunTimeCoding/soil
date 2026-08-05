@@ -471,6 +471,9 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 // The interface specification for the client above.
 type ClientInterface interface {
 
+	// DeleteAddress performs a DELETE /api/v1/addresses/{identifier} (the `DeleteAddress` operationId) request.
+	DeleteAddress(ctx context.Context, identifier int32, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// ListClusterTypes performs a GET /api/v1/cluster-types (the `ListClusterTypes` operationId) request.
 	ListClusterTypes(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -749,6 +752,19 @@ type ClientInterface interface {
 	// CreateVirtualTunnelTermination performs a POST /api/v1/virtual-machines/{name}/tunnel-terminations/create (the `CreateVirtualTunnelTermination` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateVirtualTunnelTermination(ctx context.Context, name string, body CreateVirtualTunnelTerminationJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+}
+
+// DeleteAddress performs a DELETE /api/v1/addresses/{identifier} (the `DeleteAddress` operationId) request.
+func (c *Client) DeleteAddress(ctx context.Context, identifier int32, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteAddressRequest(c.Server, identifier)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
 }
 
 // ListClusterTypes performs a GET /api/v1/cluster-types (the `ListClusterTypes` operationId) request.
@@ -1798,6 +1814,40 @@ func (c *Client) CreateVirtualTunnelTermination(ctx context.Context, name string
 		return nil, err
 	}
 	return c.Client.Do(req)
+}
+
+// NewDeleteAddressRequest constructs an http.Request for the DeleteAddress method
+func NewDeleteAddressRequest(server string, identifier int32) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "identifier", identifier, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int32"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/addresses/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodDelete, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
 }
 
 // NewListClusterTypesRequest constructs an http.Request for the ListClusterTypes method
@@ -3930,6 +3980,11 @@ func WithBaseURL(baseURL string) ClientOption {
 // ClientWithResponsesInterface is the interface specification for the client with responses above.
 type ClientWithResponsesInterface interface {
 
+	// DeleteAddressWithResponse performs a DELETE /api/v1/addresses/{identifier} (the `DeleteAddress` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	DeleteAddressWithResponse(ctx context.Context, identifier int32, reqEditors ...RequestEditorFn) (*DeleteAddressResponse, error)
+
 	// ListClusterTypesWithResponse performs a GET /api/v1/cluster-types (the `ListClusterTypes` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
@@ -4314,6 +4369,47 @@ type ClientWithResponsesInterface interface {
 	// CreateVirtualTunnelTerminationWithResponse performs a POST /api/v1/virtual-machines/{name}/tunnel-terminations/create (the `CreateVirtualTunnelTermination` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateVirtualTunnelTerminationWithResponse(ctx context.Context, name string, body CreateVirtualTunnelTerminationJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateVirtualTunnelTerminationResponse, error)
+}
+
+type DeleteAddressResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r DeleteAddressResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r DeleteAddressResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteAddressResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteAddressResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r DeleteAddressResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
 }
 
 type ListClusterTypesResponse struct {
@@ -6846,6 +6942,17 @@ func (r CreateVirtualTunnelTerminationResponse) ContentType() string {
 	return ""
 }
 
+// DeleteAddressWithResponse performs a DELETE /api/v1/addresses/{identifier} (the `DeleteAddress` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) DeleteAddressWithResponse(ctx context.Context, identifier int32, reqEditors ...RequestEditorFn) (*DeleteAddressResponse, error) {
+	rsp, err := c.DeleteAddress(ctx, identifier, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteAddressResponse(rsp)
+}
+
 // ListClusterTypesWithResponse performs a GET /api/v1/cluster-types (the `ListClusterTypes` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -7691,6 +7798,35 @@ func (c *ClientWithResponses) CreateVirtualTunnelTerminationWithResponse(ctx con
 		return nil, err
 	}
 	return ParseCreateVirtualTunnelTerminationResponse(rsp)
+}
+
+// ParseDeleteAddressResponse parses an HTTP response from a DeleteAddressWithResponse call
+func ParseDeleteAddressResponse(rsp *http.Response) (*DeleteAddressResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteAddressResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case rsp.StatusCode == 204:
+		break // No content-type
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
 }
 
 // ParseListClusterTypesResponse parses an HTTP response from a ListClusterTypesWithResponse call

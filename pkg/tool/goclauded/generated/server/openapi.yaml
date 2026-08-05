@@ -578,6 +578,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/sessions/{identifier}/context:
+    post:
+      operationId: postSessionContext
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContextRequest"
+      responses:
+        "200":
+          description: Context recorded.
+        "500":
+          description: Internal error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /api/backfill:
     post:
       operationId: postBackfill
@@ -851,6 +875,27 @@ components:
       properties:
         body:
           type: string
+    ContextRequest:
+      type: object
+      required:
+      - used_percentage
+      properties:
+        used_percentage:
+          type: integer
+        window_size:
+          type: integer
+        model:
+          type: string
+        five_hour_percent:
+          type: integer
+        seven_day_percent:
+          type: integer
+        five_hour_reset:
+          type: integer
+          format: int64
+        seven_day_reset:
+          type: integer
+          format: int64
     LabelRequest:
       type: object
       required:

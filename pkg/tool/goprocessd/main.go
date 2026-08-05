@@ -28,6 +28,7 @@ func Main(
 		"Path to .envrc file",
 	)
 	a.Parse(version, gitHash, buildDate)
+	a.NoPositionals("goprocessd is the daemon and takes no commands - control a running daemon with: goprocess run <command>")
 	o := option.New()
 	o.ProcfilePath = a.GetString(argumentConstant.File)
 	o.EnvrcPath = a.GetString("envrc")

@@ -60,6 +60,13 @@ func sessionCard(
 		metadata = append(metadata, fmt.Sprintf("%d lines", lines))
 	}
 
+	if s.ContextPercent > 0 {
+		metadata = append(
+			metadata,
+			fmt.Sprintf("%d%% context", s.ContextPercent),
+		)
+	}
+
 	metadata = append(metadata, relativeTime(s.LastSeen))
 	details = append(
 		details,

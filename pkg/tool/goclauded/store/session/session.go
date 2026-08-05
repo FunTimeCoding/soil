@@ -16,6 +16,9 @@ type Session struct {
 	TurnCount           int       `gorm:"column:turn_count"`
 	Lines               int       `gorm:"column:lines"`
 	TokenUsage          string    `gorm:"column:token_usage"`
+	Model               string    `gorm:"column:model"`
+	ContextPercent      int       `gorm:"column:context_percent"`
+	ContextWindow       int       `gorm:"column:context_window"`
 	WorkDirectory       string    `gorm:"column:work_directory"`
 	Branch              string    `gorm:"column:branch"`
 	SessionTimestamp    string    `gorm:"column:session_timestamp"`
