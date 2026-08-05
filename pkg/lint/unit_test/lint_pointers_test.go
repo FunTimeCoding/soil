@@ -287,3 +287,52 @@ func TestPointersPluginRoot(t *testing.T) {
 	)
 	assertReport(t, "Alfa", false, nil, "", l)
 }
+
+func TestPointersBareLinkDead(t *testing.T) {
+	line := "See [ghost](ghost.md) for details."
+	l := pointerChecker()(
+		"doc/guide/index.md",
+		strings.NewReader(fmt.Sprintf("%s\n", line)),
+	)
+	assertReport(
+		t,
+		"doc/guide/index.md",
+		true,
+		[]*concern.Concern{
+			{
+				Key:      "dead_pointer",
+				Text:     "Referenced path does not exist",
+				Path:     "doc/guide/index.md",
+				Type:     lintConstant.ConcernLine,
+				Line:     1,
+				LineText: line,
+			},
+		},
+		"",
+		l,
+	)
+}
+
+func TestPointersBareLinkExisting(t *testing.T) {
+	l := pointerChecker("doc/guide/other.md")(
+		"doc/guide/index.md",
+		strings.NewReader("See [other](other.md) for details.\n"),
+	)
+	assertReport(t, "doc/guide/index.md", false, nil, "", l)
+}
+
+func TestPointersBareLinkAnchorIgnored(t *testing.T) {
+	l := pointerChecker()(
+		"doc/guide/index.md",
+		strings.NewReader("Jump to [section](#section) below.\n"),
+	)
+	assertReport(t, "doc/guide/index.md", false, nil, "", l)
+}
+
+func TestPointersBareLinkAnchorSuffix(t *testing.T) {
+	l := pointerChecker("doc/guide/other.md")(
+		"doc/guide/index.md",
+		strings.NewReader("See [other](other.md#part) there.\n"),
+	)
+	assertReport(t, "doc/guide/index.md", false, nil, "", l)
+}

@@ -23,6 +23,26 @@ func Pointers(
 			line, number := s.Text()
 			s.PassLine(line)
 
+			for _, bare := range pointer.ExtractBareLinks(line) {
+				relative, inside := pointer.Relative(
+					path,
+					bare,
+				)
+
+				if inside && exists(relative) {
+					continue
+				}
+
+				s.AddConcern(
+					constant.DeadPointerKey,
+					constant.DeadPointerText,
+					path,
+					number,
+					line,
+					false,
+				)
+			}
+
 			for _, extracted := range pointer.Extract(line) {
 				for _, candidate := range pointer.Expand(extracted) {
 					switch pointer.Classify(candidate, roots) {
