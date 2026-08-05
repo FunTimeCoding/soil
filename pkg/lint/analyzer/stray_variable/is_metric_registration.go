@@ -7,9 +7,6 @@ import (
 	"golang.org/x/tools/go/packages"
 )
 
-// Promauto constructors register into the process-global
-// prometheus registry at construction - package-level vars are
-// the ecosystem's own idiom for them.
 func isMetricRegistration(
 	p *packages.Package,
 	v *ast.ValueSpec,

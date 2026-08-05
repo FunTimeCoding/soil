@@ -7,7 +7,6 @@ func (c *Connection) consumeResult(m *message.Message) {
 	defer c.RUnlock()
 
 	if !m.Success && m.Error != nil {
-		// command failed
 		return
 	}
 }

@@ -6,7 +6,6 @@ import (
 	"go/token"
 )
 
-// IsViolation reports whether a call expression violates call formatting rules.
 func IsViolation(
 	fileSet *token.FileSet,
 	call *ast.CallExpr,

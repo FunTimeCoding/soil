@@ -42,7 +42,6 @@ func (c *Connection) Connect() {
 		case constant.AuthenticationInvalid:
 			panic("authentication invalid")
 		case constant.AuthenticationSuccess:
-			// good
 			return
 		}
 	}

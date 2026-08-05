@@ -6,7 +6,6 @@ import (
 	"go/token"
 )
 
-// BuildFixes returns the edits needed to fix a call_format violation.
 func BuildFixes(
 	fileSet *token.FileSet,
 	call *ast.CallExpr,

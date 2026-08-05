@@ -5,7 +5,6 @@ import (
 	"golang.org/x/tools/go/packages"
 )
 
-// ComputeRenames returns the renames needed for a function's local variables.
 func ComputeRenames(
 	p *packages.Package,
 	u *ast.FuncDecl,

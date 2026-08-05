@@ -16,9 +16,11 @@ func Main(
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Boolean("summary", false, "One line per file")
+	a.Boolean("comment", false, "Include the stray_comment lint")
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
 	o.Summary = a.GetBoolean("summary")
+	o.Comment = a.GetBoolean("comment")
 	o.Patterns = a.Positionals()
 	Run(o)
 }

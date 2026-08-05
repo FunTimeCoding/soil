@@ -3,6 +3,7 @@ package stray_variable
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"go/ast"
@@ -12,18 +13,11 @@ import (
 	"strings"
 )
 
-// Check flags package-level variables outside constant/ packages.
-// Constants and constructed values belong in the domain's
-// constant/ home; genuine state earns an explicit sanction.
-// Sanctioned: go:embed variables, synchronization primitives, and
-// the linker-injected build metadata triplet in main packages.
 func Check(
 	p *packages.Package,
 	results *output.Results,
 ) {
-	// Test-variant package entries recompile the same source
-	// files - visiting them would double-report every variable.
-	if len(p.Syntax) == 0 || p.ID != p.PkgPath {
+	if lint.SkipPackage(p) {
 		return
 	}
 

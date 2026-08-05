@@ -16,7 +16,6 @@ func LatestTag(path string) string {
 				c := CommitFromHash(r, f.Hash())
 
 				if c == nil {
-					// Skip
 					return nil
 				}
 

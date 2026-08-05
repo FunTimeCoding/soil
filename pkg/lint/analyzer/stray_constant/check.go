@@ -3,6 +3,7 @@ package stray_constant
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"go/ast"
@@ -12,17 +13,11 @@ import (
 	"strings"
 )
 
-// Check flags package-level constants outside constant/ packages
-// - the twin of stray_variable for the const keyword. Constants
-// live in the domain's constant/ home; sanctions accumulate here
-// as the census surfaces legitimate residents.
 func Check(
 	p *packages.Package,
 	results *output.Results,
 ) {
-	// Test-variant package entries recompile the same source
-	// files - visiting them would double-report every constant.
-	if len(p.Syntax) == 0 || p.ID != p.PkgPath {
+	if lint.SkipPackage(p) {
 		return
 	}
 

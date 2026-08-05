@@ -32,7 +32,6 @@ func (c *Connection) Read() {
 			case constant.Event:
 				c.consumeEvent(&m)
 			case constant.Pong:
-				// pong received
 			}
 		}
 	}

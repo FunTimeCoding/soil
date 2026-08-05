@@ -3,6 +3,7 @@ package constant_declaration
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"go/ast"
@@ -12,16 +13,11 @@ import (
 	"strings"
 )
 
-// Check flags declarations that don't belong inside constant/
-// packages: constant homes are behavior-free and hold no record
-// types. Allowed declarations are constants, variables (tables),
-// and enum-shaped named types over basic kinds; funcs and
-// non-basic type declarations belong in vocabulary leaves.
 func Check(
 	p *packages.Package,
 	results *output.Results,
 ) {
-	if len(p.Syntax) == 0 || p.ID != p.PkgPath {
+	if lint.SkipPackage(p) {
 		return
 	}
 

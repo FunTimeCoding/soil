@@ -11,13 +11,12 @@ func Round(
 	actual float64,
 	decimals int,
 ) {
-	// Pass if identical before rounding
 	if actual == expect {
 		return
 	}
 
 	actual = round.Round(actual, decimals)
-	// Pass if identical after rounding
+
 	if actual == expect {
 		return
 	}

@@ -72,7 +72,7 @@ func Locator(o *option.Wait) {
 		case <-x.Done():
 			panic("timeout")
 		case <-time.After(constant.Interval):
-			// Continue
+			// pass
 		}
 	}
 }

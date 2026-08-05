@@ -48,7 +48,7 @@ func Main(
 
 		for _, line := range lines {
 			trimmed := strings.TrimSpace(line)
-			// Handle package declaration - only keep the first one
+
 			if packageRegex.MatchString(trimmed) {
 				if packageLine == "" {
 					packageLine = line
@@ -57,14 +57,13 @@ func Main(
 				continue
 			}
 
-			// Handle import blocks and single imports
 			if importBlockRegex.MatchString(trimmed) {
 				inImportBlock = true
 
 				continue
 			} else if inImportBlock && trimmed == ")" {
 				inImportBlock = false
-				skipEmptyLines = true // Skip empty lines after imports
+				skipEmptyLines = true
 
 				continue
 			} else if inImportBlock {
@@ -80,22 +79,18 @@ func Main(
 				continue
 			}
 
-			// Skip empty lines immediately after imports/package
 			if trimmed == "" && skipEmptyLines {
 				continue
 			}
 
-			// Once we hit actual code, stop skipping empty lines
 			if trimmed != "" {
 				skipEmptyLines = false
 			}
 
-			// Add the line to our code collection
 			codeLines = append(codeLines, line)
 		}
 	}
 
-	// Output package and imports
 	if packageLine != "" {
 		fmt.Println(packageLine)
 		fmt.Println()
@@ -119,19 +114,17 @@ func Main(
 		fmt.Println()
 	}
 
-	// Normalize spacing in code section
 	pastWasEmpty := false
 
 	for i, line := range codeLines {
 		trimmed := strings.TrimSpace(line)
 		isEmpty := trimmed == ""
 		isTopLevel := functionRegex.MatchString(trimmed)
-		// Add blank line before top-level declarations (except the very first one)
+
 		if isTopLevel && i > 0 && !pastWasEmpty {
 			fmt.Println()
 		}
 
-		// Print the line (skip consecutive empty lines)
 		if !isEmpty || !pastWasEmpty {
 			fmt.Println(line)
 		}

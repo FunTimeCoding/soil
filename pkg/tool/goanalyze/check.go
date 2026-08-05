@@ -11,6 +11,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/forbidden_import"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/naming"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/restricted_call"
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/stray_comment"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/stray_constant"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/stray_variable"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/string_concatenation"
@@ -26,6 +27,7 @@ import (
 func check(
 	p *packages.Package,
 	results *output.Results,
+	comment bool,
 ) {
 	naming.Check(p, results)
 	forbidden_call.Check(p, results)
@@ -45,4 +47,8 @@ func check(
 	stray_variable.Check(p, results)
 	stray_constant.Check(p, results)
 	constant_declaration.Check(p, results)
+
+	if comment {
+		stray_comment.Check(p, results)
+	}
 }

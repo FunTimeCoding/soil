@@ -17,7 +17,7 @@ func Run(o *option.Analyze) {
 	results := output.NewResults()
 
 	for _, p := range loaded {
-		check(p, results)
+		check(p, results, o.Comment)
 	}
 
 	hasBlocked := output.PrintResults(results.Entries, o.Summary)

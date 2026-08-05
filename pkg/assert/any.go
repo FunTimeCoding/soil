@@ -38,7 +38,7 @@ func Any(
 	case reflect.Array:
 		expectLength = reflect.ValueOf(expect).Len()
 	default:
-		// skip
+		// pass
 	}
 
 	switch reflect.TypeOf(actual).Kind() {
@@ -47,7 +47,7 @@ func Any(
 	case reflect.Array:
 		actualLength = reflect.ValueOf(actual).Len()
 	default:
-		// skip
+		// pass
 	}
 
 	if expectLength > -1 || actualLength > -1 {
