@@ -38,13 +38,21 @@ func (s *Server) ReplyToThread(
 		return s.captureDetail(e)
 	}
 
-	return response.SuccessAny(
-		map[string]any{
-			"id":         p.Id,
-			"channel_id": p.ChannelId,
-			"root_id":    p.RootId,
-			"message":    p.Message,
-			"create_at":  formatMilli(p.CreateAt),
-		},
-	)
+	result := map[string]any{
+		"id":         p.Id,
+		"channel_id": p.ChannelId,
+		"root_id":    p.RootId,
+		"message":    p.Message,
+		"create_at":  formatMilli(p.CreateAt),
+	}
+
+	if a.EmojiName != "" {
+		result["emoji_name"] = a.EmojiName
+
+		if f := s.client.React(parent, a.EmojiName); f != nil {
+			result["reaction_error"] = f.Error()
+		}
+	}
+
+	return response.SuccessAny(result)
 }

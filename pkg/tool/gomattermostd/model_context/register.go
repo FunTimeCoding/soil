@@ -256,7 +256,7 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ReplyToThread,
-			mcp.WithDescription("Reply to a message thread"),
+			mcp.WithDescription("Reply to a message thread, optionally adding an emoji reaction to the root message"),
 			mcp.WithString(
 				"channel_id",
 				mcp.Required(),
@@ -271,6 +271,10 @@ func (s *Server) register() {
 				"message",
 				mcp.Required(),
 				mcp.Description("Reply text"),
+			),
+			mcp.WithString(
+				"emoji_name",
+				mcp.Description("Emoji reaction without colons to add to the root message"),
 			),
 		),
 		mcp.NewTypedToolHandler(s.ReplyToThread),
