@@ -11,7 +11,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/strings/split"
 	"github.com/funtimecoding/soil/pkg/system"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
-	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/system/join"
 	"github.com/funtimecoding/soil/pkg/tool/gobuild/constant"
 	"log"
@@ -54,18 +53,11 @@ func Main(
 
 	name := a.Argument(0)
 
+	if name == argumentConstant.All {
+		name = ""
+	}
+
 	if name == "" {
-		binaries := environment.Optional(constant.BinaryEnvironment)
-
-		if binaries != "" && binaries != argumentConstant.All {
-			for _, n := range split.Comma(binaries) {
-				fmt.Printf("Build %s\n", n)
-				buildNamed(a, n, linuxAMD64, darwinARM64, darwinAMD64)
-			}
-
-			return
-		}
-
 		for _, n := range system.Directories(
 			join.Absolute(
 				system.WorkDirectory(),
@@ -76,6 +68,15 @@ func Main(
 				continue
 			}
 
+			fmt.Printf("Build %s\n", n)
+			buildNamed(a, n, linuxAMD64, darwinARM64, darwinAMD64)
+		}
+
+		return
+	}
+
+	if names := split.Comma(name); len(names) > 1 {
+		for _, n := range names {
 			fmt.Printf("Build %s\n", n)
 			buildNamed(a, n, linuxAMD64, darwinARM64, darwinAMD64)
 		}
