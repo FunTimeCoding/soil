@@ -877,6 +877,225 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/address-ranges:
+    get:
+      operationId: listAddressRanges
+      responses:
+        "200":
+          description: All IP address ranges.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/AddressRange"
+        "500":
+          description: Failed to list address ranges.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: createAddressRange
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAddressRangeRequest"
+      responses:
+        "201":
+          description: Created address range.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AddressRange"
+        "500":
+          description: Failed to create address range.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/locations:
+    get:
+      operationId: listLocations
+      responses:
+        "200":
+          description: All locations.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/Location"
+        "500":
+          description: Failed to list locations.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: createLocation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateLocationRequest"
+      responses:
+        "201":
+          description: Created location.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Location"
+        "500":
+          description: Failed to create location.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/platforms:
+    get:
+      operationId: listPlatforms
+      responses:
+        "200":
+          description: All platforms.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/Platform"
+        "500":
+          description: Failed to list platforms.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: createPlatform
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateNameRequest"
+      responses:
+        "201":
+          description: Created platform.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Platform"
+        "500":
+          description: Failed to create platform.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/wireless-networks:
+    get:
+      operationId: listWirelessNetworks
+      responses:
+        "200":
+          description: All wireless networks.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/WirelessNetwork"
+        "500":
+          description: Failed to list wireless networks.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: createWirelessNetwork
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateNameRequest"
+      responses:
+        "201":
+          description: Created wireless network.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WirelessNetwork"
+        "500":
+          description: Failed to create wireless network.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/virtual-machines/{name}/disks:
+    get:
+      operationId: listVirtualDisks
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Virtual machine name.
+      responses:
+        "200":
+          description: Disks on the virtual machine.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/VirtualDisk"
+        "500":
+          description: Failed to list virtual disks.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: createVirtualDisk
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Virtual machine name.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateVirtualDiskRequest"
+      responses:
+        "201":
+          description: Created virtual disk.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VirtualDisk"
+        "500":
+          description: Failed to create virtual disk.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /api/v1/tunnel-groups:
     get:
       operationId: listTunnelGroups
@@ -1762,6 +1981,18 @@ components:
         primaryAddress:
           type: string
           description: Address to set as primary (must be assigned to the device).
+        location:
+          type: string
+          description: Location name to assign (must already exist).
+        platform:
+          type: string
+          description: Platform name to assign (must already exist).
+        serial:
+          type: string
+          description: Serial number.
+        description:
+          type: string
+          description: Device description.
     UpdateVirtualMachineRequest:
       type: object
       properties:
@@ -1771,6 +2002,125 @@ components:
         primaryAddress:
           type: string
           description: Address to set as primary (must be assigned to the virtual machine).
+        platform:
+          type: string
+          description: Platform name to assign (must already exist).
+        cores:
+          type: number
+          description: Virtual CPU count.
+        memory:
+          type: integer
+          description: Memory in megabytes.
+        status:
+          type: string
+          description: Status (active, offline, planned, staged, failed, decommissioning).
+    AddressRange:
+      type: object
+      required:
+      - identifier
+      - start
+      - end
+      properties:
+        identifier:
+          type: integer
+          format: int32
+        start:
+          type: string
+        end:
+          type: string
+        status:
+          type: string
+    CreateAddressRangeRequest:
+      type: object
+      required:
+      - start
+      - end
+      properties:
+        start:
+          type: string
+          description: Start address in CIDR notation (e.g. 192.168.1.50/24).
+        end:
+          type: string
+          description: End address in CIDR notation (e.g. 192.168.1.254/24).
+        status:
+          type: string
+          description: Range status (active, reserved, deprecated). Defaults to active.
+        description:
+          type: string
+          description: Range description.
+    Location:
+      type: object
+      required:
+      - identifier
+      - name
+      properties:
+        identifier:
+          type: integer
+          format: int32
+        name:
+          type: string
+    CreateLocationRequest:
+      type: object
+      required:
+      - name
+      - site
+      properties:
+        name:
+          type: string
+          description: Location name.
+        site:
+          type: string
+          description: Site name (must already exist).
+    Platform:
+      type: object
+      required:
+      - identifier
+      - name
+      properties:
+        identifier:
+          type: integer
+          format: int32
+        name:
+          type: string
+    WirelessNetwork:
+      type: object
+      required:
+      - identifier
+      - name
+      properties:
+        identifier:
+          type: integer
+          format: int32
+        name:
+          type: string
+    VirtualDisk:
+      type: object
+      required:
+      - identifier
+      - name
+      - size
+      properties:
+        identifier:
+          type: integer
+          format: int32
+        name:
+          type: string
+        size:
+          type: integer
+          format: int32
+    CreateVirtualDiskRequest:
+      type: object
+      required:
+      - name
+      - size
+      properties:
+        name:
+          type: string
+          description: Disk name.
+        size:
+          type: integer
+          format: int32
+          description: Disk size in megabytes.
     CreateClusterRequest:
       type: object
       required:

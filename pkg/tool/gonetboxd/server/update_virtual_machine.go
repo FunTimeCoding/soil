@@ -21,6 +21,50 @@ func (s *Server) UpdateVirtualMachine(
 		}
 	}
 
+	if r.Body.Platform != nil {
+		if _, e := s.client.SetVirtualMachinePlatform(
+			r.Name,
+			*r.Body.Platform,
+		); e != nil {
+			return server.UpdateVirtualMachine500JSONResponse(
+				*s.captureDetail(e),
+			), nil
+		}
+	}
+
+	if r.Body.Cores != nil {
+		if _, e := s.client.SetVirtualMachineCores(
+			r.Name,
+			float64(*r.Body.Cores),
+		); e != nil {
+			return server.UpdateVirtualMachine500JSONResponse(
+				*s.captureDetail(e),
+			), nil
+		}
+	}
+
+	if r.Body.Memory != nil {
+		if _, e := s.client.SetVirtualMachineMemory(
+			r.Name,
+			int32(*r.Body.Memory),
+		); e != nil {
+			return server.UpdateVirtualMachine500JSONResponse(
+				*s.captureDetail(e),
+			), nil
+		}
+	}
+
+	if r.Body.Status != nil {
+		if _, e := s.client.SetVirtualMachineStatus(
+			r.Name,
+			*r.Body.Status,
+		); e != nil {
+			return server.UpdateVirtualMachine500JSONResponse(
+				*s.captureDetail(e),
+			), nil
+		}
+	}
+
 	name := r.Name
 
 	if r.Body.Name != nil {

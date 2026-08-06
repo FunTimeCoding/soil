@@ -2,10 +2,10 @@ package netbox
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/netbox-community/go-netbox/v4"
+	"github.com/funtimecoding/soil/pkg/netbox/internet_address_range"
 )
 
-func (c *Client) MustInternetAddressRanges() []netbox.IPRange {
+func (c *Client) MustInternetAddressRanges() []*internet_address_range.Range {
 	result, e := c.InternetAddressRanges()
 	errors.PanicOnError(e)
 

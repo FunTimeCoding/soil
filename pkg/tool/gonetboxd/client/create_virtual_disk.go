@@ -6,11 +6,16 @@ import (
 	"github.com/funtimecoding/soil/pkg/web"
 )
 
-func (c *Client) UpdateVirtualMachine(
+func (c *Client) CreateVirtualDisk(
+	machine string,
 	name string,
-	body client.UpdateVirtualMachineRequest,
+	size int32,
 ) string {
-	result, e := c.client.UpdateVirtualMachine(c.context, name, body)
+	result, e := c.client.CreateVirtualDisk(
+		c.context,
+		machine,
+		client.CreateVirtualDiskRequest{Name: name, Size: size},
+	)
 	errors.PanicOnError(e)
 
 	return web.ReadString(result)

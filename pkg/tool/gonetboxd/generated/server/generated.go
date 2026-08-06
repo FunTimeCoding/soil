@@ -30,6 +30,14 @@ type Address struct {
 	ObjectType *string `json:"objectType,omitempty"`
 }
 
+// AddressRange defines model for AddressRange.
+type AddressRange struct {
+	End        string  `json:"end"`
+	Identifier int32   `json:"identifier"`
+	Start      string  `json:"start"`
+	Status     *string `json:"status,omitempty"`
+}
+
 // Cluster defines model for Cluster.
 type Cluster struct {
 	Identifier int32   `json:"identifier"`
@@ -42,6 +50,21 @@ type Cluster struct {
 type ClusterType struct {
 	Identifier int32  `json:"identifier"`
 	Name       string `json:"name"`
+}
+
+// CreateAddressRangeRequest defines model for CreateAddressRangeRequest.
+type CreateAddressRangeRequest struct {
+	// Description Range description.
+	Description *string `json:"description,omitempty"`
+
+	// End End address in CIDR notation (e.g. 192.168.1.254/24).
+	End string `json:"end"`
+
+	// Start Start address in CIDR notation (e.g. 192.168.1.50/24).
+	Start string `json:"start"`
+
+	// Status Range status (active, reserved, deprecated). Defaults to active.
+	Status *string `json:"status,omitempty"`
 }
 
 // CreateAddressRequest defines model for CreateAddressRequest.
@@ -114,6 +137,15 @@ type CreateJournalEntryRequest struct {
 	Kind     *string `json:"kind,omitempty"`
 }
 
+// CreateLocationRequest defines model for CreateLocationRequest.
+type CreateLocationRequest struct {
+	// Name Location name.
+	Name string `json:"name"`
+
+	// Site Site name (must already exist).
+	Site string `json:"site"`
+}
+
 // CreateNameRequest defines model for CreateNameRequest.
 type CreateNameRequest struct {
 	Name string `json:"name"`
@@ -153,6 +185,15 @@ type CreateTunnelTerminationRequest struct {
 
 	// Tunnel Tunnel name (must already exist).
 	Tunnel string `json:"tunnel"`
+}
+
+// CreateVirtualDiskRequest defines model for CreateVirtualDiskRequest.
+type CreateVirtualDiskRequest struct {
+	// Name Disk name.
+	Name string `json:"name"`
+
+	// Size Disk size in megabytes.
+	Size int32 `json:"size"`
 }
 
 // CreateVirtualInterfaceRequest defines model for CreateVirtualInterfaceRequest.
@@ -232,8 +273,20 @@ type Label struct {
 	Value string `json:"value"`
 }
 
+// Location defines model for Location.
+type Location struct {
+	Identifier int32  `json:"identifier"`
+	Name       string `json:"name"`
+}
+
 // Manufacturer defines model for Manufacturer.
 type Manufacturer struct {
+	Identifier int32  `json:"identifier"`
+	Name       string `json:"name"`
+}
+
+// Platform defines model for Platform.
+type Platform struct {
 	Identifier int32  `json:"identifier"`
 	Name       string `json:"name"`
 }
@@ -294,11 +347,23 @@ type TunnelTermination struct {
 
 // UpdateDeviceRequest defines model for UpdateDeviceRequest.
 type UpdateDeviceRequest struct {
+	// Description Device description.
+	Description *string `json:"description,omitempty"`
+
+	// Location Location name to assign (must already exist).
+	Location *string `json:"location,omitempty"`
+
 	// Name New device name.
 	Name *string `json:"name,omitempty"`
 
+	// Platform Platform name to assign (must already exist).
+	Platform *string `json:"platform,omitempty"`
+
 	// PrimaryAddress Address to set as primary (must be assigned to the device).
 	PrimaryAddress *string `json:"primaryAddress,omitempty"`
+
+	// Serial Serial number.
+	Serial *string `json:"serial,omitempty"`
 }
 
 // UpdateJournalEntryRequest defines model for UpdateJournalEntryRequest.
@@ -309,11 +374,30 @@ type UpdateJournalEntryRequest struct {
 
 // UpdateVirtualMachineRequest defines model for UpdateVirtualMachineRequest.
 type UpdateVirtualMachineRequest struct {
+	// Cores Virtual CPU count.
+	Cores *float32 `json:"cores,omitempty"`
+
+	// Memory Memory in megabytes.
+	Memory *int `json:"memory,omitempty"`
+
 	// Name New virtual machine name.
 	Name *string `json:"name,omitempty"`
 
+	// Platform Platform name to assign (must already exist).
+	Platform *string `json:"platform,omitempty"`
+
 	// PrimaryAddress Address to set as primary (must be assigned to the virtual machine).
 	PrimaryAddress *string `json:"primaryAddress,omitempty"`
+
+	// Status Status (active, offline, planned, staged, failed, decommissioning).
+	Status *string `json:"status,omitempty"`
+}
+
+// VirtualDisk defines model for VirtualDisk.
+type VirtualDisk struct {
+	Identifier int32  `json:"identifier"`
+	Name       string `json:"name"`
+	Size       int32  `json:"size"`
 }
 
 // VirtualInterface defines model for VirtualInterface.
@@ -331,6 +415,12 @@ type VirtualMachine struct {
 	PrimaryAddress *string   `json:"primaryAddress,omitempty"`
 	Site           *string   `json:"site,omitempty"`
 	Tags           *[]string `json:"tags,omitempty"`
+}
+
+// WirelessNetwork defines model for WirelessNetwork.
+type WirelessNetwork struct {
+	Identifier int32  `json:"identifier"`
+	Name       string `json:"name"`
 }
 
 // ListDevicesParams defines parameters for ListDevices.
@@ -356,6 +446,9 @@ type ListVirtualJournalEntriesParams struct {
 	// Offset Entries to skip.
 	Offset *int32 `form:"offset,omitempty" json:"offset,omitempty"`
 }
+
+// CreateAddressRangeJSONRequestBody defines body for CreateAddressRange for application/json ContentType.
+type CreateAddressRangeJSONRequestBody = CreateAddressRangeRequest
 
 // CreateClusterTypeJSONRequestBody defines body for CreateClusterType for application/json ContentType.
 type CreateClusterTypeJSONRequestBody = CreateNameRequest
@@ -393,8 +486,14 @@ type CreateDeviceTunnelTerminationJSONRequestBody = CreateTunnelTerminationReque
 // UpdateJournalEntryJSONRequestBody defines body for UpdateJournalEntry for application/json ContentType.
 type UpdateJournalEntryJSONRequestBody = UpdateJournalEntryRequest
 
+// CreateLocationJSONRequestBody defines body for CreateLocation for application/json ContentType.
+type CreateLocationJSONRequestBody = CreateLocationRequest
+
 // CreateManufacturerJSONRequestBody defines body for CreateManufacturer for application/json ContentType.
 type CreateManufacturerJSONRequestBody = CreateNameRequest
+
+// CreatePlatformJSONRequestBody defines body for CreatePlatform for application/json ContentType.
+type CreatePlatformJSONRequestBody = CreateNameRequest
 
 // CreatePrefixJSONRequestBody defines body for CreatePrefix for application/json ContentType.
 type CreatePrefixJSONRequestBody = CreatePrefixRequest
@@ -423,6 +522,9 @@ type UpdateVirtualMachineJSONRequestBody = UpdateVirtualMachineRequest
 // CreateVirtualAddressJSONRequestBody defines body for CreateVirtualAddress for application/json ContentType.
 type CreateVirtualAddressJSONRequestBody = CreateAddressRequest
 
+// CreateVirtualDiskJSONRequestBody defines body for CreateVirtualDisk for application/json ContentType.
+type CreateVirtualDiskJSONRequestBody = CreateVirtualDiskRequest
+
 // CreateVirtualInterfaceJSONRequestBody defines body for CreateVirtualInterface for application/json ContentType.
 type CreateVirtualInterfaceJSONRequestBody = CreateVirtualInterfaceRequest
 
@@ -435,8 +537,17 @@ type SetVirtualLabelJSONRequestBody = SetLabelRequest
 // CreateVirtualTunnelTerminationJSONRequestBody defines body for CreateVirtualTunnelTermination for application/json ContentType.
 type CreateVirtualTunnelTerminationJSONRequestBody = CreateTunnelTerminationRequest
 
+// CreateWirelessNetworkJSONRequestBody defines body for CreateWirelessNetwork for application/json ContentType.
+type CreateWirelessNetworkJSONRequestBody = CreateNameRequest
+
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
+
+	// (GET /api/v1/address-ranges)
+	ListAddressRanges(w http.ResponseWriter, r *http.Request)
+
+	// (POST /api/v1/address-ranges)
+	CreateAddressRange(w http.ResponseWriter, r *http.Request)
 
 	// (DELETE /api/v1/addresses/{identifier})
 	DeleteAddress(w http.ResponseWriter, r *http.Request, identifier int32)
@@ -522,11 +633,23 @@ type ServerInterface interface {
 	// (PATCH /api/v1/journal-entries/{identifier})
 	UpdateJournalEntry(w http.ResponseWriter, r *http.Request, identifier int32)
 
+	// (GET /api/v1/locations)
+	ListLocations(w http.ResponseWriter, r *http.Request)
+
+	// (POST /api/v1/locations)
+	CreateLocation(w http.ResponseWriter, r *http.Request)
+
 	// (GET /api/v1/manufacturers)
 	ListManufacturers(w http.ResponseWriter, r *http.Request)
 
 	// (POST /api/v1/manufacturers)
 	CreateManufacturer(w http.ResponseWriter, r *http.Request)
+
+	// (GET /api/v1/platforms)
+	ListPlatforms(w http.ResponseWriter, r *http.Request)
+
+	// (POST /api/v1/platforms)
+	CreatePlatform(w http.ResponseWriter, r *http.Request)
 
 	// (GET /api/v1/prefixes)
 	ListPrefixes(w http.ResponseWriter, r *http.Request)
@@ -585,6 +708,12 @@ type ServerInterface interface {
 	// (POST /api/v1/virtual-machines/{name}/addresses/create)
 	CreateVirtualAddress(w http.ResponseWriter, r *http.Request, name string)
 
+	// (GET /api/v1/virtual-machines/{name}/disks)
+	ListVirtualDisks(w http.ResponseWriter, r *http.Request, name string)
+
+	// (POST /api/v1/virtual-machines/{name}/disks)
+	CreateVirtualDisk(w http.ResponseWriter, r *http.Request, name string)
+
 	// (GET /api/v1/virtual-machines/{name}/interfaces)
 	ListVirtualInterfaces(w http.ResponseWriter, r *http.Request, name string)
 
@@ -614,6 +743,12 @@ type ServerInterface interface {
 
 	// (POST /api/v1/virtual-machines/{name}/tunnel-terminations/create)
 	CreateVirtualTunnelTermination(w http.ResponseWriter, r *http.Request, name string)
+
+	// (GET /api/v1/wireless-networks)
+	ListWirelessNetworks(w http.ResponseWriter, r *http.Request)
+
+	// (POST /api/v1/wireless-networks)
+	CreateWirelessNetwork(w http.ResponseWriter, r *http.Request)
 }
 
 // ServerInterfaceWrapper converts contexts to parameters.
@@ -624,6 +759,34 @@ type ServerInterfaceWrapper struct {
 }
 
 type MiddlewareFunc func(http.Handler) http.Handler
+
+// ListAddressRanges operation middleware
+func (siw *ServerInterfaceWrapper) ListAddressRanges(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ListAddressRanges(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// CreateAddressRange operation middleware
+func (siw *ServerInterfaceWrapper) CreateAddressRange(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CreateAddressRange(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
 
 // DeleteAddress operation middleware
 func (siw *ServerInterfaceWrapper) DeleteAddress(w http.ResponseWriter, r *http.Request) {
@@ -1317,6 +1480,34 @@ func (siw *ServerInterfaceWrapper) UpdateJournalEntry(w http.ResponseWriter, r *
 	handler.ServeHTTP(w, r)
 }
 
+// ListLocations operation middleware
+func (siw *ServerInterfaceWrapper) ListLocations(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ListLocations(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// CreateLocation operation middleware
+func (siw *ServerInterfaceWrapper) CreateLocation(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CreateLocation(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
 // ListManufacturers operation middleware
 func (siw *ServerInterfaceWrapper) ListManufacturers(w http.ResponseWriter, r *http.Request) {
 
@@ -1336,6 +1527,34 @@ func (siw *ServerInterfaceWrapper) CreateManufacturer(w http.ResponseWriter, r *
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.CreateManufacturer(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ListPlatforms operation middleware
+func (siw *ServerInterfaceWrapper) ListPlatforms(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ListPlatforms(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// CreatePlatform operation middleware
+func (siw *ServerInterfaceWrapper) CreatePlatform(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CreatePlatform(w, r)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -1650,6 +1869,58 @@ func (siw *ServerInterfaceWrapper) CreateVirtualAddress(w http.ResponseWriter, r
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.CreateVirtualAddress(w, r, name)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ListVirtualDisks operation middleware
+func (siw *ServerInterfaceWrapper) ListVirtualDisks(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "name" -------------
+	var name string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "name", r.PathValue("name"), &name, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "name", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ListVirtualDisks(w, r, name)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// CreateVirtualDisk operation middleware
+func (siw *ServerInterfaceWrapper) CreateVirtualDisk(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "name" -------------
+	var name string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "name", r.PathValue("name"), &name, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "name", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CreateVirtualDisk(w, r, name)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -1984,6 +2255,34 @@ func (siw *ServerInterfaceWrapper) CreateVirtualTunnelTermination(w http.Respons
 	handler.ServeHTTP(w, r)
 }
 
+// ListWirelessNetworks operation middleware
+func (siw *ServerInterfaceWrapper) ListWirelessNetworks(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ListWirelessNetworks(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// CreateWirelessNetwork operation middleware
+func (siw *ServerInterfaceWrapper) CreateWirelessNetwork(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CreateWirelessNetwork(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
 type UnescapedCookieParamError struct {
 	ParamName string
 	Err       error
@@ -2141,6 +2440,16 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	m.HandleFunc(http.MethodPut+" "+options.BaseURL+"/api/v1/devices/{name}/tags/{tag}", wrapper.AddDeviceTag)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/prefixes", wrapper.ListPrefixes)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/prefixes", wrapper.CreatePrefix)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/address-ranges", wrapper.ListAddressRanges)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/address-ranges", wrapper.CreateAddressRange)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/locations", wrapper.ListLocations)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/locations", wrapper.CreateLocation)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/platforms", wrapper.ListPlatforms)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/platforms", wrapper.CreatePlatform)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/wireless-networks", wrapper.ListWirelessNetworks)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/wireless-networks", wrapper.CreateWirelessNetwork)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/virtual-machines/{name}/disks", wrapper.ListVirtualDisks)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/virtual-machines/{name}/disks", wrapper.CreateVirtualDisk)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/tunnel-groups", wrapper.ListTunnelGroups)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/tunnel-groups", wrapper.CreateTunnelGroup)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/tunnels", wrapper.ListTunnels)
@@ -2165,6 +2474,77 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/v1/addresses/{identifier}", wrapper.DeleteAddress)
 
 	return m
+}
+
+type ListAddressRangesRequestObject struct {
+}
+
+type ListAddressRangesResponseObject interface {
+	VisitListAddressRangesResponse(w http.ResponseWriter) error
+}
+
+type ListAddressRanges200JSONResponse []*AddressRange
+
+func (response ListAddressRanges200JSONResponse) VisitListAddressRangesResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListAddressRanges500JSONResponse ErrorResponse
+
+func (response ListAddressRanges500JSONResponse) VisitListAddressRangesResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateAddressRangeRequestObject struct {
+	Body *CreateAddressRangeJSONRequestBody
+}
+
+type CreateAddressRangeResponseObject interface {
+	VisitCreateAddressRangeResponse(w http.ResponseWriter) error
+}
+
+type CreateAddressRange201JSONResponse AddressRange
+
+func (response CreateAddressRange201JSONResponse) VisitCreateAddressRangeResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(201)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateAddressRange500JSONResponse ErrorResponse
+
+func (response CreateAddressRange500JSONResponse) VisitCreateAddressRangeResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
 }
 
 type DeleteAddressRequestObject struct {
@@ -3179,6 +3559,77 @@ func (response UpdateJournalEntry500JSONResponse) VisitUpdateJournalEntryRespons
 	return err
 }
 
+type ListLocationsRequestObject struct {
+}
+
+type ListLocationsResponseObject interface {
+	VisitListLocationsResponse(w http.ResponseWriter) error
+}
+
+type ListLocations200JSONResponse []*Location
+
+func (response ListLocations200JSONResponse) VisitListLocationsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListLocations500JSONResponse ErrorResponse
+
+func (response ListLocations500JSONResponse) VisitListLocationsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateLocationRequestObject struct {
+	Body *CreateLocationJSONRequestBody
+}
+
+type CreateLocationResponseObject interface {
+	VisitCreateLocationResponse(w http.ResponseWriter) error
+}
+
+type CreateLocation201JSONResponse Location
+
+func (response CreateLocation201JSONResponse) VisitCreateLocationResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(201)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateLocation500JSONResponse ErrorResponse
+
+func (response CreateLocation500JSONResponse) VisitCreateLocationResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type ListManufacturersRequestObject struct {
 }
 
@@ -3239,6 +3690,77 @@ func (response CreateManufacturer201JSONResponse) VisitCreateManufacturerRespons
 type CreateManufacturer500JSONResponse ErrorResponse
 
 func (response CreateManufacturer500JSONResponse) VisitCreateManufacturerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListPlatformsRequestObject struct {
+}
+
+type ListPlatformsResponseObject interface {
+	VisitListPlatformsResponse(w http.ResponseWriter) error
+}
+
+type ListPlatforms200JSONResponse []*Platform
+
+func (response ListPlatforms200JSONResponse) VisitListPlatformsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListPlatforms500JSONResponse ErrorResponse
+
+func (response ListPlatforms500JSONResponse) VisitListPlatformsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreatePlatformRequestObject struct {
+	Body *CreatePlatformJSONRequestBody
+}
+
+type CreatePlatformResponseObject interface {
+	VisitCreatePlatformResponse(w http.ResponseWriter) error
+}
+
+type CreatePlatform201JSONResponse Platform
+
+func (response CreatePlatform201JSONResponse) VisitCreatePlatformResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(201)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreatePlatform500JSONResponse ErrorResponse
+
+func (response CreatePlatform500JSONResponse) VisitCreatePlatformResponse(w http.ResponseWriter) error {
 
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(response); err != nil {
@@ -3928,6 +4450,79 @@ func (response CreateVirtualAddress500JSONResponse) VisitCreateVirtualAddressRes
 	return err
 }
 
+type ListVirtualDisksRequestObject struct {
+	Name string `json:"name"`
+}
+
+type ListVirtualDisksResponseObject interface {
+	VisitListVirtualDisksResponse(w http.ResponseWriter) error
+}
+
+type ListVirtualDisks200JSONResponse []*VirtualDisk
+
+func (response ListVirtualDisks200JSONResponse) VisitListVirtualDisksResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListVirtualDisks500JSONResponse ErrorResponse
+
+func (response ListVirtualDisks500JSONResponse) VisitListVirtualDisksResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateVirtualDiskRequestObject struct {
+	Name string `json:"name"`
+	Body *CreateVirtualDiskJSONRequestBody
+}
+
+type CreateVirtualDiskResponseObject interface {
+	VisitCreateVirtualDiskResponse(w http.ResponseWriter) error
+}
+
+type CreateVirtualDisk201JSONResponse VirtualDisk
+
+func (response CreateVirtualDisk201JSONResponse) VisitCreateVirtualDiskResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(201)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateVirtualDisk500JSONResponse ErrorResponse
+
+func (response CreateVirtualDisk500JSONResponse) VisitCreateVirtualDiskResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type ListVirtualInterfacesRequestObject struct {
 	Name string `json:"name"`
 }
@@ -4291,8 +4886,85 @@ func (response CreateVirtualTunnelTermination500JSONResponse) VisitCreateVirtual
 	return err
 }
 
+type ListWirelessNetworksRequestObject struct {
+}
+
+type ListWirelessNetworksResponseObject interface {
+	VisitListWirelessNetworksResponse(w http.ResponseWriter) error
+}
+
+type ListWirelessNetworks200JSONResponse []*WirelessNetwork
+
+func (response ListWirelessNetworks200JSONResponse) VisitListWirelessNetworksResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListWirelessNetworks500JSONResponse ErrorResponse
+
+func (response ListWirelessNetworks500JSONResponse) VisitListWirelessNetworksResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateWirelessNetworkRequestObject struct {
+	Body *CreateWirelessNetworkJSONRequestBody
+}
+
+type CreateWirelessNetworkResponseObject interface {
+	VisitCreateWirelessNetworkResponse(w http.ResponseWriter) error
+}
+
+type CreateWirelessNetwork201JSONResponse WirelessNetwork
+
+func (response CreateWirelessNetwork201JSONResponse) VisitCreateWirelessNetworkResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(201)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateWirelessNetwork500JSONResponse ErrorResponse
+
+func (response CreateWirelessNetwork500JSONResponse) VisitCreateWirelessNetworkResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
+
+	// (GET /api/v1/address-ranges)
+	ListAddressRanges(ctx context.Context, request ListAddressRangesRequestObject) (ListAddressRangesResponseObject, error)
+
+	// (POST /api/v1/address-ranges)
+	CreateAddressRange(ctx context.Context, request CreateAddressRangeRequestObject) (CreateAddressRangeResponseObject, error)
 
 	// (DELETE /api/v1/addresses/{identifier})
 	DeleteAddress(ctx context.Context, request DeleteAddressRequestObject) (DeleteAddressResponseObject, error)
@@ -4378,11 +5050,23 @@ type StrictServerInterface interface {
 	// (PATCH /api/v1/journal-entries/{identifier})
 	UpdateJournalEntry(ctx context.Context, request UpdateJournalEntryRequestObject) (UpdateJournalEntryResponseObject, error)
 
+	// (GET /api/v1/locations)
+	ListLocations(ctx context.Context, request ListLocationsRequestObject) (ListLocationsResponseObject, error)
+
+	// (POST /api/v1/locations)
+	CreateLocation(ctx context.Context, request CreateLocationRequestObject) (CreateLocationResponseObject, error)
+
 	// (GET /api/v1/manufacturers)
 	ListManufacturers(ctx context.Context, request ListManufacturersRequestObject) (ListManufacturersResponseObject, error)
 
 	// (POST /api/v1/manufacturers)
 	CreateManufacturer(ctx context.Context, request CreateManufacturerRequestObject) (CreateManufacturerResponseObject, error)
+
+	// (GET /api/v1/platforms)
+	ListPlatforms(ctx context.Context, request ListPlatformsRequestObject) (ListPlatformsResponseObject, error)
+
+	// (POST /api/v1/platforms)
+	CreatePlatform(ctx context.Context, request CreatePlatformRequestObject) (CreatePlatformResponseObject, error)
 
 	// (GET /api/v1/prefixes)
 	ListPrefixes(ctx context.Context, request ListPrefixesRequestObject) (ListPrefixesResponseObject, error)
@@ -4441,6 +5125,12 @@ type StrictServerInterface interface {
 	// (POST /api/v1/virtual-machines/{name}/addresses/create)
 	CreateVirtualAddress(ctx context.Context, request CreateVirtualAddressRequestObject) (CreateVirtualAddressResponseObject, error)
 
+	// (GET /api/v1/virtual-machines/{name}/disks)
+	ListVirtualDisks(ctx context.Context, request ListVirtualDisksRequestObject) (ListVirtualDisksResponseObject, error)
+
+	// (POST /api/v1/virtual-machines/{name}/disks)
+	CreateVirtualDisk(ctx context.Context, request CreateVirtualDiskRequestObject) (CreateVirtualDiskResponseObject, error)
+
 	// (GET /api/v1/virtual-machines/{name}/interfaces)
 	ListVirtualInterfaces(ctx context.Context, request ListVirtualInterfacesRequestObject) (ListVirtualInterfacesResponseObject, error)
 
@@ -4470,6 +5160,12 @@ type StrictServerInterface interface {
 
 	// (POST /api/v1/virtual-machines/{name}/tunnel-terminations/create)
 	CreateVirtualTunnelTermination(ctx context.Context, request CreateVirtualTunnelTerminationRequestObject) (CreateVirtualTunnelTerminationResponseObject, error)
+
+	// (GET /api/v1/wireless-networks)
+	ListWirelessNetworks(ctx context.Context, request ListWirelessNetworksRequestObject) (ListWirelessNetworksResponseObject, error)
+
+	// (POST /api/v1/wireless-networks)
+	CreateWirelessNetwork(ctx context.Context, request CreateWirelessNetworkRequestObject) (CreateWirelessNetworkResponseObject, error)
 }
 
 type StrictHandlerFunc func(ctx context.Context, w http.ResponseWriter, r *http.Request, request any) (any, error)
@@ -4509,6 +5205,61 @@ type strictHandler struct {
 	ssi         StrictServerInterface
 	middlewares []StrictMiddlewareFunc
 	options     StrictHTTPServerOptions
+}
+
+// ListAddressRanges operation middleware
+func (sh *strictHandler) ListAddressRanges(w http.ResponseWriter, r *http.Request) {
+	var request ListAddressRangesRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ListAddressRanges(ctx, request.(ListAddressRangesRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ListAddressRanges")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ListAddressRangesResponseObject); ok {
+		if err := validResponse.VisitListAddressRangesResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// CreateAddressRange operation middleware
+func (sh *strictHandler) CreateAddressRange(w http.ResponseWriter, r *http.Request) {
+	var request CreateAddressRangeRequestObject
+
+	var body CreateAddressRangeJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.CreateAddressRange(ctx, request.(CreateAddressRangeRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "CreateAddressRange")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(CreateAddressRangeResponseObject); ok {
+		if err := validResponse.VisitCreateAddressRangeResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
 }
 
 // DeleteAddress operation middleware
@@ -5310,6 +6061,61 @@ func (sh *strictHandler) UpdateJournalEntry(w http.ResponseWriter, r *http.Reque
 	}
 }
 
+// ListLocations operation middleware
+func (sh *strictHandler) ListLocations(w http.ResponseWriter, r *http.Request) {
+	var request ListLocationsRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ListLocations(ctx, request.(ListLocationsRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ListLocations")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ListLocationsResponseObject); ok {
+		if err := validResponse.VisitListLocationsResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// CreateLocation operation middleware
+func (sh *strictHandler) CreateLocation(w http.ResponseWriter, r *http.Request) {
+	var request CreateLocationRequestObject
+
+	var body CreateLocationJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.CreateLocation(ctx, request.(CreateLocationRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "CreateLocation")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(CreateLocationResponseObject); ok {
+		if err := validResponse.VisitCreateLocationResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // ListManufacturers operation middleware
 func (sh *strictHandler) ListManufacturers(w http.ResponseWriter, r *http.Request) {
 	var request ListManufacturersRequestObject
@@ -5358,6 +6164,61 @@ func (sh *strictHandler) CreateManufacturer(w http.ResponseWriter, r *http.Reque
 		sh.options.ResponseErrorHandlerFunc(w, r, err)
 	} else if validResponse, ok := response.(CreateManufacturerResponseObject); ok {
 		if err := validResponse.VisitCreateManufacturerResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ListPlatforms operation middleware
+func (sh *strictHandler) ListPlatforms(w http.ResponseWriter, r *http.Request) {
+	var request ListPlatformsRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ListPlatforms(ctx, request.(ListPlatformsRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ListPlatforms")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ListPlatformsResponseObject); ok {
+		if err := validResponse.VisitListPlatformsResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// CreatePlatform operation middleware
+func (sh *strictHandler) CreatePlatform(w http.ResponseWriter, r *http.Request) {
+	var request CreatePlatformRequestObject
+
+	var body CreatePlatformJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.CreatePlatform(ctx, request.(CreatePlatformRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "CreatePlatform")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(CreatePlatformResponseObject); ok {
+		if err := validResponse.VisitCreatePlatformResponse(w); err != nil {
 			sh.options.ResponseErrorHandlerFunc(w, r, err)
 		}
 	} else if response != nil {
@@ -5892,6 +6753,65 @@ func (sh *strictHandler) CreateVirtualAddress(w http.ResponseWriter, r *http.Req
 	}
 }
 
+// ListVirtualDisks operation middleware
+func (sh *strictHandler) ListVirtualDisks(w http.ResponseWriter, r *http.Request, name string) {
+	var request ListVirtualDisksRequestObject
+
+	request.Name = name
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ListVirtualDisks(ctx, request.(ListVirtualDisksRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ListVirtualDisks")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ListVirtualDisksResponseObject); ok {
+		if err := validResponse.VisitListVirtualDisksResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// CreateVirtualDisk operation middleware
+func (sh *strictHandler) CreateVirtualDisk(w http.ResponseWriter, r *http.Request, name string) {
+	var request CreateVirtualDiskRequestObject
+
+	request.Name = name
+
+	var body CreateVirtualDiskJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.CreateVirtualDisk(ctx, request.(CreateVirtualDiskRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "CreateVirtualDisk")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(CreateVirtualDiskResponseObject); ok {
+		if err := validResponse.VisitCreateVirtualDiskResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // ListVirtualInterfaces operation middleware
 func (sh *strictHandler) ListVirtualInterfaces(w http.ResponseWriter, r *http.Request, name string) {
 	var request ListVirtualInterfacesRequestObject
@@ -6185,64 +7105,128 @@ func (sh *strictHandler) CreateVirtualTunnelTermination(w http.ResponseWriter, r
 	}
 }
 
+// ListWirelessNetworks operation middleware
+func (sh *strictHandler) ListWirelessNetworks(w http.ResponseWriter, r *http.Request) {
+	var request ListWirelessNetworksRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ListWirelessNetworks(ctx, request.(ListWirelessNetworksRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ListWirelessNetworks")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ListWirelessNetworksResponseObject); ok {
+		if err := validResponse.VisitListWirelessNetworksResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// CreateWirelessNetwork operation middleware
+func (sh *strictHandler) CreateWirelessNetwork(w http.ResponseWriter, r *http.Request) {
+	var request CreateWirelessNetworkRequestObject
+
+	var body CreateWirelessNetworkJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.CreateWirelessNetwork(ctx, request.(CreateWirelessNetworkRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "CreateWirelessNetwork")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(CreateWirelessNetworkResponseObject); ok {
+		if err := validResponse.VisitCreateWirelessNetworkResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // Base64 encoded, compressed with deflate, json marshaled OpenAPI spec.
 // Stored as a slice of fixed-width chunks rather than one concatenated
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
-	"AAD//w==",
+	"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",
+	"WDXHgb7aUfO6G5xVK3oARYtI8r//BwAA//8=",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

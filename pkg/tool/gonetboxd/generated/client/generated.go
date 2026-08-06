@@ -24,6 +24,14 @@ type Address struct {
 	ObjectType *string `json:"objectType,omitempty"`
 }
 
+// AddressRange defines model for AddressRange.
+type AddressRange struct {
+	End        string  `json:"end"`
+	Identifier int32   `json:"identifier"`
+	Start      string  `json:"start"`
+	Status     *string `json:"status,omitempty"`
+}
+
 // Cluster defines model for Cluster.
 type Cluster struct {
 	Identifier int32   `json:"identifier"`
@@ -36,6 +44,21 @@ type Cluster struct {
 type ClusterType struct {
 	Identifier int32  `json:"identifier"`
 	Name       string `json:"name"`
+}
+
+// CreateAddressRangeRequest defines model for CreateAddressRangeRequest.
+type CreateAddressRangeRequest struct {
+	// Description Range description.
+	Description *string `json:"description,omitempty"`
+
+	// End End address in CIDR notation (e.g. 192.168.1.254/24).
+	End string `json:"end"`
+
+	// Start Start address in CIDR notation (e.g. 192.168.1.50/24).
+	Start string `json:"start"`
+
+	// Status Range status (active, reserved, deprecated). Defaults to active.
+	Status *string `json:"status,omitempty"`
 }
 
 // CreateAddressRequest defines model for CreateAddressRequest.
@@ -108,6 +131,15 @@ type CreateJournalEntryRequest struct {
 	Kind     *string `json:"kind,omitempty"`
 }
 
+// CreateLocationRequest defines model for CreateLocationRequest.
+type CreateLocationRequest struct {
+	// Name Location name.
+	Name string `json:"name"`
+
+	// Site Site name (must already exist).
+	Site string `json:"site"`
+}
+
 // CreateNameRequest defines model for CreateNameRequest.
 type CreateNameRequest struct {
 	Name string `json:"name"`
@@ -147,6 +179,15 @@ type CreateTunnelTerminationRequest struct {
 
 	// Tunnel Tunnel name (must already exist).
 	Tunnel string `json:"tunnel"`
+}
+
+// CreateVirtualDiskRequest defines model for CreateVirtualDiskRequest.
+type CreateVirtualDiskRequest struct {
+	// Name Disk name.
+	Name string `json:"name"`
+
+	// Size Disk size in megabytes.
+	Size int32 `json:"size"`
 }
 
 // CreateVirtualInterfaceRequest defines model for CreateVirtualInterfaceRequest.
@@ -226,8 +267,20 @@ type Label struct {
 	Value string `json:"value"`
 }
 
+// Location defines model for Location.
+type Location struct {
+	Identifier int32  `json:"identifier"`
+	Name       string `json:"name"`
+}
+
 // Manufacturer defines model for Manufacturer.
 type Manufacturer struct {
+	Identifier int32  `json:"identifier"`
+	Name       string `json:"name"`
+}
+
+// Platform defines model for Platform.
+type Platform struct {
 	Identifier int32  `json:"identifier"`
 	Name       string `json:"name"`
 }
@@ -288,11 +341,23 @@ type TunnelTermination struct {
 
 // UpdateDeviceRequest defines model for UpdateDeviceRequest.
 type UpdateDeviceRequest struct {
+	// Description Device description.
+	Description *string `json:"description,omitempty"`
+
+	// Location Location name to assign (must already exist).
+	Location *string `json:"location,omitempty"`
+
 	// Name New device name.
 	Name *string `json:"name,omitempty"`
 
+	// Platform Platform name to assign (must already exist).
+	Platform *string `json:"platform,omitempty"`
+
 	// PrimaryAddress Address to set as primary (must be assigned to the device).
 	PrimaryAddress *string `json:"primaryAddress,omitempty"`
+
+	// Serial Serial number.
+	Serial *string `json:"serial,omitempty"`
 }
 
 // UpdateJournalEntryRequest defines model for UpdateJournalEntryRequest.
@@ -303,11 +368,30 @@ type UpdateJournalEntryRequest struct {
 
 // UpdateVirtualMachineRequest defines model for UpdateVirtualMachineRequest.
 type UpdateVirtualMachineRequest struct {
+	// Cores Virtual CPU count.
+	Cores *float32 `json:"cores,omitempty"`
+
+	// Memory Memory in megabytes.
+	Memory *int `json:"memory,omitempty"`
+
 	// Name New virtual machine name.
 	Name *string `json:"name,omitempty"`
 
+	// Platform Platform name to assign (must already exist).
+	Platform *string `json:"platform,omitempty"`
+
 	// PrimaryAddress Address to set as primary (must be assigned to the virtual machine).
 	PrimaryAddress *string `json:"primaryAddress,omitempty"`
+
+	// Status Status (active, offline, planned, staged, failed, decommissioning).
+	Status *string `json:"status,omitempty"`
+}
+
+// VirtualDisk defines model for VirtualDisk.
+type VirtualDisk struct {
+	Identifier int32  `json:"identifier"`
+	Name       string `json:"name"`
+	Size       int32  `json:"size"`
 }
 
 // VirtualInterface defines model for VirtualInterface.
@@ -325,6 +409,12 @@ type VirtualMachine struct {
 	PrimaryAddress *string   `json:"primaryAddress,omitempty"`
 	Site           *string   `json:"site,omitempty"`
 	Tags           *[]string `json:"tags,omitempty"`
+}
+
+// WirelessNetwork defines model for WirelessNetwork.
+type WirelessNetwork struct {
+	Identifier int32  `json:"identifier"`
+	Name       string `json:"name"`
 }
 
 // ListDevicesParams defines parameters for ListDevices.
@@ -350,6 +440,9 @@ type ListVirtualJournalEntriesParams struct {
 	// Offset Entries to skip.
 	Offset *int32 `form:"offset,omitempty" json:"offset,omitempty"`
 }
+
+// CreateAddressRangeJSONRequestBody defines body for CreateAddressRange for application/json ContentType.
+type CreateAddressRangeJSONRequestBody = CreateAddressRangeRequest
 
 // CreateClusterTypeJSONRequestBody defines body for CreateClusterType for application/json ContentType.
 type CreateClusterTypeJSONRequestBody = CreateNameRequest
@@ -387,8 +480,14 @@ type CreateDeviceTunnelTerminationJSONRequestBody = CreateTunnelTerminationReque
 // UpdateJournalEntryJSONRequestBody defines body for UpdateJournalEntry for application/json ContentType.
 type UpdateJournalEntryJSONRequestBody = UpdateJournalEntryRequest
 
+// CreateLocationJSONRequestBody defines body for CreateLocation for application/json ContentType.
+type CreateLocationJSONRequestBody = CreateLocationRequest
+
 // CreateManufacturerJSONRequestBody defines body for CreateManufacturer for application/json ContentType.
 type CreateManufacturerJSONRequestBody = CreateNameRequest
+
+// CreatePlatformJSONRequestBody defines body for CreatePlatform for application/json ContentType.
+type CreatePlatformJSONRequestBody = CreateNameRequest
 
 // CreatePrefixJSONRequestBody defines body for CreatePrefix for application/json ContentType.
 type CreatePrefixJSONRequestBody = CreatePrefixRequest
@@ -417,6 +516,9 @@ type UpdateVirtualMachineJSONRequestBody = UpdateVirtualMachineRequest
 // CreateVirtualAddressJSONRequestBody defines body for CreateVirtualAddress for application/json ContentType.
 type CreateVirtualAddressJSONRequestBody = CreateAddressRequest
 
+// CreateVirtualDiskJSONRequestBody defines body for CreateVirtualDisk for application/json ContentType.
+type CreateVirtualDiskJSONRequestBody = CreateVirtualDiskRequest
+
 // CreateVirtualInterfaceJSONRequestBody defines body for CreateVirtualInterface for application/json ContentType.
 type CreateVirtualInterfaceJSONRequestBody = CreateVirtualInterfaceRequest
 
@@ -428,6 +530,9 @@ type SetVirtualLabelJSONRequestBody = SetLabelRequest
 
 // CreateVirtualTunnelTerminationJSONRequestBody defines body for CreateVirtualTunnelTermination for application/json ContentType.
 type CreateVirtualTunnelTerminationJSONRequestBody = CreateTunnelTerminationRequest
+
+// CreateWirelessNetworkJSONRequestBody defines body for CreateWirelessNetwork for application/json ContentType.
+type CreateWirelessNetworkJSONRequestBody = CreateNameRequest
 
 // RequestEditorFn is the function signature for the RequestEditor callback function
 type RequestEditorFn func(ctx context.Context, req *http.Request) error
@@ -502,6 +607,17 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 
 // The interface specification for the client above.
 type ClientInterface interface {
+
+	// ListAddressRanges performs a GET /api/v1/address-ranges (the `ListAddressRanges` operationId) request.
+	ListAddressRanges(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateAddressRangeWithBody performs a POST /api/v1/address-ranges (the `CreateAddressRange` operationId) request,
+	// with any type of body and a specified content type.
+	CreateAddressRangeWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateAddressRange performs a POST /api/v1/address-ranges (the `CreateAddressRange` operationId) request.
+	// Takes a body of the `application/json` content type.
+	CreateAddressRange(ctx context.Context, body CreateAddressRangeJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// DeleteAddress performs a DELETE /api/v1/addresses/{identifier} (the `DeleteAddress` operationId) request.
 	DeleteAddress(ctx context.Context, identifier int32, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -647,6 +763,17 @@ type ClientInterface interface {
 	// Takes a body of the `application/json` content type.
 	UpdateJournalEntry(ctx context.Context, identifier int32, body UpdateJournalEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// ListLocations performs a GET /api/v1/locations (the `ListLocations` operationId) request.
+	ListLocations(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateLocationWithBody performs a POST /api/v1/locations (the `CreateLocation` operationId) request,
+	// with any type of body and a specified content type.
+	CreateLocationWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateLocation performs a POST /api/v1/locations (the `CreateLocation` operationId) request.
+	// Takes a body of the `application/json` content type.
+	CreateLocation(ctx context.Context, body CreateLocationJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// ListManufacturers performs a GET /api/v1/manufacturers (the `ListManufacturers` operationId) request.
 	ListManufacturers(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -657,6 +784,17 @@ type ClientInterface interface {
 	// CreateManufacturer performs a POST /api/v1/manufacturers (the `CreateManufacturer` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateManufacturer(ctx context.Context, body CreateManufacturerJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ListPlatforms performs a GET /api/v1/platforms (the `ListPlatforms` operationId) request.
+	ListPlatforms(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreatePlatformWithBody performs a POST /api/v1/platforms (the `CreatePlatform` operationId) request,
+	// with any type of body and a specified content type.
+	CreatePlatformWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreatePlatform performs a POST /api/v1/platforms (the `CreatePlatform` operationId) request.
+	// Takes a body of the `application/json` content type.
+	CreatePlatform(ctx context.Context, body CreatePlatformJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// ListPrefixes performs a GET /api/v1/prefixes (the `ListPrefixes` operationId) request.
 	ListPrefixes(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -760,6 +898,17 @@ type ClientInterface interface {
 	// Takes a body of the `application/json` content type.
 	CreateVirtualAddress(ctx context.Context, name string, body CreateVirtualAddressJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// ListVirtualDisks performs a GET /api/v1/virtual-machines/{name}/disks (the `ListVirtualDisks` operationId) request.
+	ListVirtualDisks(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateVirtualDiskWithBody performs a POST /api/v1/virtual-machines/{name}/disks (the `CreateVirtualDisk` operationId) request,
+	// with any type of body and a specified content type.
+	CreateVirtualDiskWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateVirtualDisk performs a POST /api/v1/virtual-machines/{name}/disks (the `CreateVirtualDisk` operationId) request.
+	// Takes a body of the `application/json` content type.
+	CreateVirtualDisk(ctx context.Context, name string, body CreateVirtualDiskJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// ListVirtualInterfaces performs a GET /api/v1/virtual-machines/{name}/interfaces (the `ListVirtualInterfaces` operationId) request.
 	ListVirtualInterfaces(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -809,6 +958,58 @@ type ClientInterface interface {
 	// CreateVirtualTunnelTermination performs a POST /api/v1/virtual-machines/{name}/tunnel-terminations/create (the `CreateVirtualTunnelTermination` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateVirtualTunnelTermination(ctx context.Context, name string, body CreateVirtualTunnelTerminationJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ListWirelessNetworks performs a GET /api/v1/wireless-networks (the `ListWirelessNetworks` operationId) request.
+	ListWirelessNetworks(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateWirelessNetworkWithBody performs a POST /api/v1/wireless-networks (the `CreateWirelessNetwork` operationId) request,
+	// with any type of body and a specified content type.
+	CreateWirelessNetworkWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateWirelessNetwork performs a POST /api/v1/wireless-networks (the `CreateWirelessNetwork` operationId) request.
+	// Takes a body of the `application/json` content type.
+	CreateWirelessNetwork(ctx context.Context, body CreateWirelessNetworkJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+}
+
+// ListAddressRanges performs a GET /api/v1/address-ranges (the `ListAddressRanges` operationId) request.
+func (c *Client) ListAddressRanges(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListAddressRangesRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// CreateAddressRangeWithBody performs a POST /api/v1/address-ranges (the `CreateAddressRange` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) CreateAddressRangeWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateAddressRangeRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// CreateAddressRange performs a POST /api/v1/address-ranges (the `CreateAddressRange` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) CreateAddressRange(ctx context.Context, body CreateAddressRangeJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateAddressRangeRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
 }
 
 // DeleteAddress performs a DELETE /api/v1/addresses/{identifier} (the `DeleteAddress` operationId) request.
@@ -1355,6 +1556,47 @@ func (c *Client) UpdateJournalEntry(ctx context.Context, identifier int32, body 
 	return c.Client.Do(req)
 }
 
+// ListLocations performs a GET /api/v1/locations (the `ListLocations` operationId) request.
+func (c *Client) ListLocations(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListLocationsRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// CreateLocationWithBody performs a POST /api/v1/locations (the `CreateLocation` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) CreateLocationWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateLocationRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// CreateLocation performs a POST /api/v1/locations (the `CreateLocation` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) CreateLocation(ctx context.Context, body CreateLocationJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateLocationRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 // ListManufacturers performs a GET /api/v1/manufacturers (the `ListManufacturers` operationId) request.
 func (c *Client) ListManufacturers(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListManufacturersRequest(c.Server)
@@ -1386,6 +1628,47 @@ func (c *Client) CreateManufacturerWithBody(ctx context.Context, contentType str
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateManufacturer(ctx context.Context, body CreateManufacturerJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateManufacturerRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// ListPlatforms performs a GET /api/v1/platforms (the `ListPlatforms` operationId) request.
+func (c *Client) ListPlatforms(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListPlatformsRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// CreatePlatformWithBody performs a POST /api/v1/platforms (the `CreatePlatform` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) CreatePlatformWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreatePlatformRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// CreatePlatform performs a POST /api/v1/platforms (the `CreatePlatform` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) CreatePlatform(ctx context.Context, body CreatePlatformJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreatePlatformRequest(c.Server, body)
 	if err != nil {
 		return nil, err
 	}
@@ -1778,6 +2061,47 @@ func (c *Client) CreateVirtualAddress(ctx context.Context, name string, body Cre
 	return c.Client.Do(req)
 }
 
+// ListVirtualDisks performs a GET /api/v1/virtual-machines/{name}/disks (the `ListVirtualDisks` operationId) request.
+func (c *Client) ListVirtualDisks(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListVirtualDisksRequest(c.Server, name)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// CreateVirtualDiskWithBody performs a POST /api/v1/virtual-machines/{name}/disks (the `CreateVirtualDisk` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) CreateVirtualDiskWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateVirtualDiskRequestWithBody(c.Server, name, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// CreateVirtualDisk performs a POST /api/v1/virtual-machines/{name}/disks (the `CreateVirtualDisk` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) CreateVirtualDisk(ctx context.Context, name string, body CreateVirtualDiskJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateVirtualDiskRequest(c.Server, name, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 // ListVirtualInterfaces performs a GET /api/v1/virtual-machines/{name}/interfaces (the `ListVirtualInterfaces` operationId) request.
 func (c *Client) ListVirtualInterfaces(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListVirtualInterfacesRequest(c.Server, name)
@@ -1966,6 +2290,114 @@ func (c *Client) CreateVirtualTunnelTermination(ctx context.Context, name string
 		return nil, err
 	}
 	return c.Client.Do(req)
+}
+
+// ListWirelessNetworks performs a GET /api/v1/wireless-networks (the `ListWirelessNetworks` operationId) request.
+func (c *Client) ListWirelessNetworks(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListWirelessNetworksRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// CreateWirelessNetworkWithBody performs a POST /api/v1/wireless-networks (the `CreateWirelessNetwork` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) CreateWirelessNetworkWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateWirelessNetworkRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// CreateWirelessNetwork performs a POST /api/v1/wireless-networks (the `CreateWirelessNetwork` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) CreateWirelessNetwork(ctx context.Context, body CreateWirelessNetworkJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateWirelessNetworkRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// NewListAddressRangesRequest constructs an http.Request for the ListAddressRanges method
+func NewListAddressRangesRequest(server string) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/address-ranges")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewCreateAddressRangeRequest calls the generic CreateAddressRange builder with application/json body
+func NewCreateAddressRangeRequest(server string, body CreateAddressRangeJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreateAddressRangeRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewCreateAddressRangeRequestWithBody constructs an http.Request for the CreateAddressRange method, with any body, and a specified content type
+func NewCreateAddressRangeRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/address-ranges")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
 }
 
 // NewDeleteAddressRequest constructs an http.Request for the DeleteAddress method
@@ -3100,6 +3532,73 @@ func NewUpdateJournalEntryRequestWithBody(server string, identifier int32, conte
 	return req, nil
 }
 
+// NewListLocationsRequest constructs an http.Request for the ListLocations method
+func NewListLocationsRequest(server string) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/locations")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewCreateLocationRequest calls the generic CreateLocation builder with application/json body
+func NewCreateLocationRequest(server string, body CreateLocationJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreateLocationRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewCreateLocationRequestWithBody constructs an http.Request for the CreateLocation method, with any body, and a specified content type
+func NewCreateLocationRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/locations")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
 // NewListManufacturersRequest constructs an http.Request for the ListManufacturers method
 func NewListManufacturersRequest(server string) (*http.Request, error) {
 	var err error
@@ -3148,6 +3647,73 @@ func NewCreateManufacturerRequestWithBody(server string, contentType string, bod
 	}
 
 	operationPath := fmt.Sprintf("/api/v1/manufacturers")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewListPlatformsRequest constructs an http.Request for the ListPlatforms method
+func NewListPlatformsRequest(server string) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/platforms")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewCreatePlatformRequest calls the generic CreatePlatform builder with application/json body
+func NewCreatePlatformRequest(server string, body CreatePlatformJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreatePlatformRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewCreatePlatformRequestWithBody constructs an http.Request for the CreatePlatform method, with any body, and a specified content type
+func NewCreatePlatformRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/platforms")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3825,6 +4391,87 @@ func NewCreateVirtualAddressRequestWithBody(server string, name string, contentT
 	return req, nil
 }
 
+// NewListVirtualDisksRequest constructs an http.Request for the ListVirtualDisks method
+func NewListVirtualDisksRequest(server string, name string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "name", name, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/virtual-machines/%s/disks", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewCreateVirtualDiskRequest calls the generic CreateVirtualDisk builder with application/json body
+func NewCreateVirtualDiskRequest(server string, name string, body CreateVirtualDiskJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreateVirtualDiskRequestWithBody(server, name, "application/json", bodyReader)
+}
+
+// NewCreateVirtualDiskRequestWithBody constructs an http.Request for the CreateVirtualDisk method, with any body, and a specified content type
+func NewCreateVirtualDiskRequestWithBody(server string, name string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "name", name, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/virtual-machines/%s/disks", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
 // NewListVirtualInterfacesRequest constructs an http.Request for the ListVirtualInterfaces method
 func NewListVirtualInterfacesRequest(server string, name string) (*http.Request, error) {
 	var err error
@@ -4284,6 +4931,73 @@ func NewCreateVirtualTunnelTerminationRequestWithBody(server string, name string
 	return req, nil
 }
 
+// NewListWirelessNetworksRequest constructs an http.Request for the ListWirelessNetworks method
+func NewListWirelessNetworksRequest(server string) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/wireless-networks")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewCreateWirelessNetworkRequest calls the generic CreateWirelessNetwork builder with application/json body
+func NewCreateWirelessNetworkRequest(server string, body CreateWirelessNetworkJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreateWirelessNetworkRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewCreateWirelessNetworkRequestWithBody constructs an http.Request for the CreateWirelessNetwork method, with any body, and a specified content type
+func NewCreateWirelessNetworkRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/wireless-networks")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
 func (c *Client) applyEditors(ctx context.Context, req *http.Request, additionalEditors []RequestEditorFn) error {
 	for _, r := range c.RequestEditors {
 		if err := r(ctx, req); err != nil {
@@ -4327,6 +5041,21 @@ func WithBaseURL(baseURL string) ClientOption {
 
 // ClientWithResponsesInterface is the interface specification for the client with responses above.
 type ClientWithResponsesInterface interface {
+
+	// ListAddressRangesWithResponse performs a GET /api/v1/address-ranges (the `ListAddressRanges` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	ListAddressRangesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListAddressRangesResponse, error)
+
+	// CreateAddressRangeWithBodyWithResponse performs a POST /api/v1/address-ranges (the `CreateAddressRange` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	CreateAddressRangeWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateAddressRangeResponse, error)
+
+	// CreateAddressRangeWithResponse performs a POST /api/v1/address-ranges (the `CreateAddressRange` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	CreateAddressRangeWithResponse(ctx context.Context, body CreateAddressRangeJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateAddressRangeResponse, error)
 
 	// DeleteAddressWithResponse performs a DELETE /api/v1/addresses/{identifier} (the `DeleteAddress` operationId) request.
 	//
@@ -4528,6 +5257,21 @@ type ClientWithResponsesInterface interface {
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	UpdateJournalEntryWithResponse(ctx context.Context, identifier int32, body UpdateJournalEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateJournalEntryResponse, error)
 
+	// ListLocationsWithResponse performs a GET /api/v1/locations (the `ListLocations` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	ListLocationsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListLocationsResponse, error)
+
+	// CreateLocationWithBodyWithResponse performs a POST /api/v1/locations (the `CreateLocation` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	CreateLocationWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateLocationResponse, error)
+
+	// CreateLocationWithResponse performs a POST /api/v1/locations (the `CreateLocation` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	CreateLocationWithResponse(ctx context.Context, body CreateLocationJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateLocationResponse, error)
+
 	// ListManufacturersWithResponse performs a GET /api/v1/manufacturers (the `ListManufacturers` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
@@ -4542,6 +5286,21 @@ type ClientWithResponsesInterface interface {
 	// CreateManufacturerWithResponse performs a POST /api/v1/manufacturers (the `CreateManufacturer` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateManufacturerWithResponse(ctx context.Context, body CreateManufacturerJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateManufacturerResponse, error)
+
+	// ListPlatformsWithResponse performs a GET /api/v1/platforms (the `ListPlatforms` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	ListPlatformsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListPlatformsResponse, error)
+
+	// CreatePlatformWithBodyWithResponse performs a POST /api/v1/platforms (the `CreatePlatform` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	CreatePlatformWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreatePlatformResponse, error)
+
+	// CreatePlatformWithResponse performs a POST /api/v1/platforms (the `CreatePlatform` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	CreatePlatformWithResponse(ctx context.Context, body CreatePlatformJSONRequestBody, reqEditors ...RequestEditorFn) (*CreatePlatformResponse, error)
 
 	// ListPrefixesWithResponse performs a GET /api/v1/prefixes (the `ListPrefixes` operationId) request.
 	//
@@ -4683,6 +5442,21 @@ type ClientWithResponsesInterface interface {
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateVirtualAddressWithResponse(ctx context.Context, name string, body CreateVirtualAddressJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateVirtualAddressResponse, error)
 
+	// ListVirtualDisksWithResponse performs a GET /api/v1/virtual-machines/{name}/disks (the `ListVirtualDisks` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	ListVirtualDisksWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*ListVirtualDisksResponse, error)
+
+	// CreateVirtualDiskWithBodyWithResponse performs a POST /api/v1/virtual-machines/{name}/disks (the `CreateVirtualDisk` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	CreateVirtualDiskWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateVirtualDiskResponse, error)
+
+	// CreateVirtualDiskWithResponse performs a POST /api/v1/virtual-machines/{name}/disks (the `CreateVirtualDisk` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	CreateVirtualDiskWithResponse(ctx context.Context, name string, body CreateVirtualDiskJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateVirtualDiskResponse, error)
+
 	// ListVirtualInterfacesWithResponse performs a GET /api/v1/virtual-machines/{name}/interfaces (the `ListVirtualInterfaces` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
@@ -4752,6 +5526,117 @@ type ClientWithResponsesInterface interface {
 	// CreateVirtualTunnelTerminationWithResponse performs a POST /api/v1/virtual-machines/{name}/tunnel-terminations/create (the `CreateVirtualTunnelTermination` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateVirtualTunnelTerminationWithResponse(ctx context.Context, name string, body CreateVirtualTunnelTerminationJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateVirtualTunnelTerminationResponse, error)
+
+	// ListWirelessNetworksWithResponse performs a GET /api/v1/wireless-networks (the `ListWirelessNetworks` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	ListWirelessNetworksWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListWirelessNetworksResponse, error)
+
+	// CreateWirelessNetworkWithBodyWithResponse performs a POST /api/v1/wireless-networks (the `CreateWirelessNetwork` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	CreateWirelessNetworkWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateWirelessNetworkResponse, error)
+
+	// CreateWirelessNetworkWithResponse performs a POST /api/v1/wireless-networks (the `CreateWirelessNetwork` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	CreateWirelessNetworkWithResponse(ctx context.Context, body CreateWirelessNetworkJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateWirelessNetworkResponse, error)
+}
+
+type ListAddressRangesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *[]*AddressRange
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r ListAddressRangesResponse) GetJSON200() *[]*AddressRange {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r ListAddressRangesResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r ListAddressRangesResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r ListAddressRangesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListAddressRangesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ListAddressRangesResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type CreateAddressRangeResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON201 the response for an HTTP 201 `application/json` response
+	JSON201 *AddressRange
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON201 returns the response for an HTTP 201 `application/json` response
+func (r CreateAddressRangeResponse) GetJSON201() *AddressRange {
+	return r.JSON201
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r CreateAddressRangeResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r CreateAddressRangeResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r CreateAddressRangeResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CreateAddressRangeResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r CreateAddressRangeResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
 }
 
 type DeleteAddressResponse struct {
@@ -6084,6 +6969,102 @@ func (r UpdateJournalEntryResponse) ContentType() string {
 	return ""
 }
 
+type ListLocationsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *[]*Location
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r ListLocationsResponse) GetJSON200() *[]*Location {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r ListLocationsResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r ListLocationsResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r ListLocationsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListLocationsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ListLocationsResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type CreateLocationResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON201 the response for an HTTP 201 `application/json` response
+	JSON201 *Location
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON201 returns the response for an HTTP 201 `application/json` response
+func (r CreateLocationResponse) GetJSON201() *Location {
+	return r.JSON201
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r CreateLocationResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r CreateLocationResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r CreateLocationResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CreateLocationResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r CreateLocationResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type ListManufacturersResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -6174,6 +7155,102 @@ func (r CreateManufacturerResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r CreateManufacturerResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type ListPlatformsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *[]*Platform
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r ListPlatformsResponse) GetJSON200() *[]*Platform {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r ListPlatformsResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r ListPlatformsResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r ListPlatformsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListPlatformsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ListPlatformsResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type CreatePlatformResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON201 the response for an HTTP 201 `application/json` response
+	JSON201 *Platform
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON201 returns the response for an HTTP 201 `application/json` response
+func (r CreatePlatformResponse) GetJSON201() *Platform {
+	return r.JSON201
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r CreatePlatformResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r CreatePlatformResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r CreatePlatformResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CreatePlatformResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r CreatePlatformResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -7092,6 +8169,102 @@ func (r CreateVirtualAddressResponse) ContentType() string {
 	return ""
 }
 
+type ListVirtualDisksResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *[]*VirtualDisk
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r ListVirtualDisksResponse) GetJSON200() *[]*VirtualDisk {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r ListVirtualDisksResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r ListVirtualDisksResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r ListVirtualDisksResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListVirtualDisksResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ListVirtualDisksResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type CreateVirtualDiskResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON201 the response for an HTTP 201 `application/json` response
+	JSON201 *VirtualDisk
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON201 returns the response for an HTTP 201 `application/json` response
+func (r CreateVirtualDiskResponse) GetJSON201() *VirtualDisk {
+	return r.JSON201
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r CreateVirtualDiskResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r CreateVirtualDiskResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r CreateVirtualDiskResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CreateVirtualDiskResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r CreateVirtualDiskResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type ListVirtualInterfacesResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -7565,6 +8738,135 @@ func (r CreateVirtualTunnelTerminationResponse) ContentType() string {
 	return ""
 }
 
+type ListWirelessNetworksResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *[]*WirelessNetwork
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r ListWirelessNetworksResponse) GetJSON200() *[]*WirelessNetwork {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r ListWirelessNetworksResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r ListWirelessNetworksResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r ListWirelessNetworksResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListWirelessNetworksResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ListWirelessNetworksResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type CreateWirelessNetworkResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON201 the response for an HTTP 201 `application/json` response
+	JSON201 *WirelessNetwork
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON201 returns the response for an HTTP 201 `application/json` response
+func (r CreateWirelessNetworkResponse) GetJSON201() *WirelessNetwork {
+	return r.JSON201
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r CreateWirelessNetworkResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r CreateWirelessNetworkResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r CreateWirelessNetworkResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CreateWirelessNetworkResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r CreateWirelessNetworkResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+// ListAddressRangesWithResponse performs a GET /api/v1/address-ranges (the `ListAddressRanges` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) ListAddressRangesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListAddressRangesResponse, error) {
+	rsp, err := c.ListAddressRanges(ctx, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListAddressRangesResponse(rsp)
+}
+
+// CreateAddressRangeWithBodyWithResponse performs a POST /api/v1/address-ranges (the `CreateAddressRange` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) CreateAddressRangeWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateAddressRangeResponse, error) {
+	rsp, err := c.CreateAddressRangeWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateAddressRangeResponse(rsp)
+}
+
+// CreateAddressRangeWithResponse performs a POST /api/v1/address-ranges (the `CreateAddressRange` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) CreateAddressRangeWithResponse(ctx context.Context, body CreateAddressRangeJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateAddressRangeResponse, error) {
+	rsp, err := c.CreateAddressRange(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateAddressRangeResponse(rsp)
+}
+
 // DeleteAddressWithResponse performs a DELETE /api/v1/addresses/{identifier} (the `DeleteAddress` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -8005,6 +9307,39 @@ func (c *ClientWithResponses) UpdateJournalEntryWithResponse(ctx context.Context
 	return ParseUpdateJournalEntryResponse(rsp)
 }
 
+// ListLocationsWithResponse performs a GET /api/v1/locations (the `ListLocations` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) ListLocationsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListLocationsResponse, error) {
+	rsp, err := c.ListLocations(ctx, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListLocationsResponse(rsp)
+}
+
+// CreateLocationWithBodyWithResponse performs a POST /api/v1/locations (the `CreateLocation` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) CreateLocationWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateLocationResponse, error) {
+	rsp, err := c.CreateLocationWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateLocationResponse(rsp)
+}
+
+// CreateLocationWithResponse performs a POST /api/v1/locations (the `CreateLocation` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) CreateLocationWithResponse(ctx context.Context, body CreateLocationJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateLocationResponse, error) {
+	rsp, err := c.CreateLocation(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateLocationResponse(rsp)
+}
+
 // ListManufacturersWithResponse performs a GET /api/v1/manufacturers (the `ListManufacturers` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -8036,6 +9371,39 @@ func (c *ClientWithResponses) CreateManufacturerWithResponse(ctx context.Context
 		return nil, err
 	}
 	return ParseCreateManufacturerResponse(rsp)
+}
+
+// ListPlatformsWithResponse performs a GET /api/v1/platforms (the `ListPlatforms` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) ListPlatformsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListPlatformsResponse, error) {
+	rsp, err := c.ListPlatforms(ctx, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListPlatformsResponse(rsp)
+}
+
+// CreatePlatformWithBodyWithResponse performs a POST /api/v1/platforms (the `CreatePlatform` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) CreatePlatformWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreatePlatformResponse, error) {
+	rsp, err := c.CreatePlatformWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreatePlatformResponse(rsp)
+}
+
+// CreatePlatformWithResponse performs a POST /api/v1/platforms (the `CreatePlatform` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) CreatePlatformWithResponse(ctx context.Context, body CreatePlatformJSONRequestBody, reqEditors ...RequestEditorFn) (*CreatePlatformResponse, error) {
+	rsp, err := c.CreatePlatform(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreatePlatformResponse(rsp)
 }
 
 // ListPrefixesWithResponse performs a GET /api/v1/prefixes (the `ListPrefixes` operationId) request.
@@ -8346,6 +9714,39 @@ func (c *ClientWithResponses) CreateVirtualAddressWithResponse(ctx context.Conte
 	return ParseCreateVirtualAddressResponse(rsp)
 }
 
+// ListVirtualDisksWithResponse performs a GET /api/v1/virtual-machines/{name}/disks (the `ListVirtualDisks` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) ListVirtualDisksWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*ListVirtualDisksResponse, error) {
+	rsp, err := c.ListVirtualDisks(ctx, name, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListVirtualDisksResponse(rsp)
+}
+
+// CreateVirtualDiskWithBodyWithResponse performs a POST /api/v1/virtual-machines/{name}/disks (the `CreateVirtualDisk` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) CreateVirtualDiskWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateVirtualDiskResponse, error) {
+	rsp, err := c.CreateVirtualDiskWithBody(ctx, name, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateVirtualDiskResponse(rsp)
+}
+
+// CreateVirtualDiskWithResponse performs a POST /api/v1/virtual-machines/{name}/disks (the `CreateVirtualDisk` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) CreateVirtualDiskWithResponse(ctx context.Context, name string, body CreateVirtualDiskJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateVirtualDiskResponse, error) {
+	rsp, err := c.CreateVirtualDisk(ctx, name, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateVirtualDiskResponse(rsp)
+}
+
 // ListVirtualInterfacesWithResponse performs a GET /api/v1/virtual-machines/{name}/interfaces (the `ListVirtualInterfaces` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -8498,6 +9899,105 @@ func (c *ClientWithResponses) CreateVirtualTunnelTerminationWithResponse(ctx con
 		return nil, err
 	}
 	return ParseCreateVirtualTunnelTerminationResponse(rsp)
+}
+
+// ListWirelessNetworksWithResponse performs a GET /api/v1/wireless-networks (the `ListWirelessNetworks` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) ListWirelessNetworksWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListWirelessNetworksResponse, error) {
+	rsp, err := c.ListWirelessNetworks(ctx, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListWirelessNetworksResponse(rsp)
+}
+
+// CreateWirelessNetworkWithBodyWithResponse performs a POST /api/v1/wireless-networks (the `CreateWirelessNetwork` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) CreateWirelessNetworkWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateWirelessNetworkResponse, error) {
+	rsp, err := c.CreateWirelessNetworkWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateWirelessNetworkResponse(rsp)
+}
+
+// CreateWirelessNetworkWithResponse performs a POST /api/v1/wireless-networks (the `CreateWirelessNetwork` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) CreateWirelessNetworkWithResponse(ctx context.Context, body CreateWirelessNetworkJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateWirelessNetworkResponse, error) {
+	rsp, err := c.CreateWirelessNetwork(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateWirelessNetworkResponse(rsp)
+}
+
+// ParseListAddressRangesResponse parses an HTTP response from a ListAddressRangesWithResponse call
+func ParseListAddressRangesResponse(rsp *http.Response) (*ListAddressRangesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListAddressRangesResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []*AddressRange
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseCreateAddressRangeResponse parses an HTTP response from a CreateAddressRangeWithResponse call
+func ParseCreateAddressRangeResponse(rsp *http.Response) (*CreateAddressRangeResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CreateAddressRangeResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest AddressRange
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
 }
 
 // ParseDeleteAddressResponse parses an HTTP response from a DeleteAddressWithResponse call
@@ -9419,6 +10919,72 @@ func ParseUpdateJournalEntryResponse(rsp *http.Response) (*UpdateJournalEntryRes
 	return response, nil
 }
 
+// ParseListLocationsResponse parses an HTTP response from a ListLocationsWithResponse call
+func ParseListLocationsResponse(rsp *http.Response) (*ListLocationsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListLocationsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []*Location
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseCreateLocationResponse parses an HTTP response from a CreateLocationWithResponse call
+func ParseCreateLocationResponse(rsp *http.Response) (*CreateLocationResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CreateLocationResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest Location
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseListManufacturersResponse parses an HTTP response from a ListManufacturersWithResponse call
 func ParseListManufacturersResponse(rsp *http.Response) (*ListManufacturersResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -9468,6 +11034,72 @@ func ParseCreateManufacturerResponse(rsp *http.Response) (*CreateManufacturerRes
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
 		var dest Manufacturer
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListPlatformsResponse parses an HTTP response from a ListPlatformsWithResponse call
+func ParseListPlatformsResponse(rsp *http.Response) (*ListPlatformsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListPlatformsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []*Platform
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseCreatePlatformResponse parses an HTTP response from a CreatePlatformWithResponse call
+func ParseCreatePlatformResponse(rsp *http.Response) (*CreatePlatformResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CreatePlatformResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest Platform
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -10112,6 +11744,72 @@ func ParseCreateVirtualAddressResponse(rsp *http.Response) (*CreateVirtualAddres
 	return response, nil
 }
 
+// ParseListVirtualDisksResponse parses an HTTP response from a ListVirtualDisksWithResponse call
+func ParseListVirtualDisksResponse(rsp *http.Response) (*ListVirtualDisksResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListVirtualDisksResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []*VirtualDisk
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseCreateVirtualDiskResponse parses an HTTP response from a CreateVirtualDiskWithResponse call
+func ParseCreateVirtualDiskResponse(rsp *http.Response) (*CreateVirtualDiskResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CreateVirtualDiskResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest VirtualDisk
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseListVirtualInterfacesResponse parses an HTTP response from a ListVirtualInterfacesWithResponse call
 func ParseListVirtualInterfacesResponse(rsp *http.Response) (*ListVirtualInterfacesResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -10421,6 +12119,72 @@ func ParseCreateVirtualTunnelTerminationResponse(rsp *http.Response) (*CreateVir
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
 		var dest TunnelTermination
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListWirelessNetworksResponse parses an HTTP response from a ListWirelessNetworksWithResponse call
+func ParseListWirelessNetworksResponse(rsp *http.Response) (*ListWirelessNetworksResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListWirelessNetworksResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []*WirelessNetwork
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseCreateWirelessNetworkResponse parses an HTTP response from a CreateWirelessNetworkWithResponse call
+func ParseCreateWirelessNetworkResponse(rsp *http.Response) (*CreateWirelessNetworkResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CreateWirelessNetworkResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest WirelessNetwork
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}

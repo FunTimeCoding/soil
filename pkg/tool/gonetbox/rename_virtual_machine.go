@@ -3,6 +3,7 @@ package gonetbox
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
+	generated "github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"github.com/spf13/cobra"
 )
 
@@ -16,7 +17,12 @@ func renameVirtualMachine(c *client.Client) *cobra.Command {
 			arguments []string,
 		) {
 			fmt.Println(
-				c.UpdateVirtualMachine(arguments[0], arguments[1], ""),
+				c.UpdateVirtualMachine(
+					arguments[0],
+					generated.UpdateVirtualMachineRequest{
+						Name: &arguments[1],
+					},
+				),
 			)
 		},
 	}

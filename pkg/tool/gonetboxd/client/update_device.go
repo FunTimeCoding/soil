@@ -8,19 +8,8 @@ import (
 
 func (c *Client) UpdateDevice(
 	name string,
-	newName string,
-	primaryAddress string,
+	body client.UpdateDeviceRequest,
 ) string {
-	body := client.UpdateDeviceRequest{}
-
-	if newName != "" {
-		body.Name = &newName
-	}
-
-	if primaryAddress != "" {
-		body.PrimaryAddress = &primaryAddress
-	}
-
 	result, e := c.client.UpdateDevice(c.context, name, body)
 	errors.PanicOnError(e)
 

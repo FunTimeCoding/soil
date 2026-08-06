@@ -6,11 +6,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/web"
 )
 
-func (c *Client) UpdateVirtualMachine(
+func (c *Client) CreateLocation(
 	name string,
-	body client.UpdateVirtualMachineRequest,
+	site string,
 ) string {
-	result, e := c.client.UpdateVirtualMachine(c.context, name, body)
+	result, e := c.client.CreateLocation(
+		c.context,
+		client.CreateLocationRequest{Name: name, Site: site},
+	)
 	errors.PanicOnError(e)
 
 	return web.ReadString(result)

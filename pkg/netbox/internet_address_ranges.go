@@ -2,10 +2,10 @@ package netbox
 
 import (
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
-	"github.com/netbox-community/go-netbox/v4"
+	"github.com/funtimecoding/soil/pkg/netbox/internet_address_range"
 )
 
-func (c *Client) InternetAddressRanges() ([]netbox.IPRange, error) {
+func (c *Client) InternetAddressRanges() ([]*internet_address_range.Range, error) {
 	result, _, e := c.client.IpamAPI.IpamIpRangesList(
 		c.context,
 	).Limit(constant.PageLimit).Execute()
@@ -14,5 +14,5 @@ func (c *Client) InternetAddressRanges() ([]netbox.IPRange, error) {
 		return nil, e
 	}
 
-	return result.Results, nil
+	return internet_address_range.NewSlice(result.Results), nil
 }

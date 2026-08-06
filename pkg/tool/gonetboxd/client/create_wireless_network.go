@@ -6,11 +6,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/web"
 )
 
-func (c *Client) UpdateVirtualMachine(
-	name string,
-	body client.UpdateVirtualMachineRequest,
-) string {
-	result, e := c.client.UpdateVirtualMachine(c.context, name, body)
+func (c *Client) CreateWirelessNetwork(ssid string) string {
+	result, e := c.client.CreateWirelessNetwork(
+		c.context,
+		client.CreateNameRequest{Name: ssid},
+	)
 	errors.PanicOnError(e)
 
 	return web.ReadString(result)
