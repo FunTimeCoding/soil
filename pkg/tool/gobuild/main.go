@@ -8,8 +8,10 @@ import (
 	buildConstant "github.com/funtimecoding/soil/pkg/build/constant"
 	"github.com/funtimecoding/soil/pkg/build/option"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/strings/split"
 	"github.com/funtimecoding/soil/pkg/system"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/system/join"
 	"github.com/funtimecoding/soil/pkg/tool/gobuild/constant"
 	"log"
@@ -53,6 +55,17 @@ func Main(
 	name := a.Argument(0)
 
 	if name == "" {
+		binaries := environment.Optional(constant.BinaryEnvironment)
+
+		if binaries != "" && binaries != argumentConstant.All {
+			for _, n := range split.Comma(binaries) {
+				fmt.Printf("Build %s\n", n)
+				buildNamed(a, n, linuxAMD64, darwinARM64, darwinAMD64)
+			}
+
+			return
+		}
+
 		for _, n := range system.Directories(
 			join.Absolute(
 				system.WorkDirectory(),
@@ -64,23 +77,7 @@ func Main(
 			}
 
 			fmt.Printf("Build %s\n", n)
-			mainPath := build.GuessMainPath(n)
-
-			if mainPath == "" {
-				log.Panicf("could not find main.go for %s", n)
-			}
-
-			o := option.New()
-			o.Name = n
-			o.MainPath = mainPath
-			o.Output = a.GetString(argumentConstant.Output)
-			o.BuildTags = a.GetString(argumentConstant.BuildTags)
-			o.CopyToBin = a.GetBoolean(buildConstant.CopyToBinFlag)
-			o.Native = a.GetBoolean(buildConstant.Native)
-			o.LinuxAMD64 = linuxAMD64
-			o.DarwinARM64 = darwinARM64
-			o.DarwinAMD64 = darwinAMD64
-			build.Architectures(o)
+			buildNamed(a, n, linuxAMD64, darwinARM64, darwinAMD64)
 		}
 
 		return
