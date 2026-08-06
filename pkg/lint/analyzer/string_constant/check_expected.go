@@ -35,7 +35,10 @@ func checkExpected(
 
 			// Standard library constants cannot drift with the
 			// code under test - they are named literals.
-			if !strings.ContainsRune(strings.Split(c.Pkg().Path(), "/")[0], '.') {
+			if !strings.ContainsRune(
+				strings.Split(c.Pkg().Path(), "/")[0],
+				'.',
+			) {
 				return true
 			}
 

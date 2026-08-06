@@ -34,7 +34,12 @@ func IdentityWarnings(
 
 		path := filepath.Join(toolDirectory, name)
 
-		if !v.DirectoryExists(filepath.Join(path, constant.ConstantDirectory)) {
+		if !v.DirectoryExists(
+			filepath.Join(
+				path,
+				constant.ConstantDirectory,
+			),
+		) {
 			continue
 		}
 

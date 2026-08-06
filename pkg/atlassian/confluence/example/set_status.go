@@ -9,7 +9,10 @@ import (
 func SetStatus() {
 	if false {
 		c := confluence.NewEnvironment()
-		result, e := c.SetPageStatus("6717441", constant.ConfluenceDraftStatus)
+		result, e := c.SetPageStatus(
+			"6717441",
+			constant.ConfluenceDraftStatus,
+		)
 
 		if e != nil {
 			fmt.Printf("error: %v\n", e)

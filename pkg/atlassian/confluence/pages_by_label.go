@@ -14,7 +14,10 @@ func (c *Client) PagesByLabel(labelIdentifier string) ([]*page.Page, error) {
 			constant.ConfluenceLabel,
 			labelIdentifier,
 			constant.ConfluencePage,
-		).Set(constant.ConfluenceBodyFormat, constant.ConfluenceStorageFormat).String(),
+		).Set(
+			constant.ConfluenceBodyFormat,
+			constant.ConfluenceStorageFormat,
+		).String(),
 	)
 
 	if e != nil {

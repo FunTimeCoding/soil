@@ -13,7 +13,10 @@ func (c *Client) DraftOverlay(identifier string) (*page.Page, error) {
 			"%s/%s",
 			constant.ConfluencePage,
 			identifier,
-		).Set(constant.ConfluenceBodyFormat, constant.ConfluenceStorageFormat).
+		).Set(
+			constant.ConfluenceBodyFormat,
+			constant.ConfluenceStorageFormat,
+		).
 			Set(constant.ConfluenceGetDraft, "true").String(),
 	)
 

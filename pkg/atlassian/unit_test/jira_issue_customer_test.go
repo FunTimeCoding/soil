@@ -14,7 +14,10 @@ func TestIssue(t *testing.T) {
 		&models.CustomerRequestScheme{
 			IssueKey: strings.UpperAlfa,
 			RequestFieldValues: []*models.CustomerRequestRequestFieldValueScheme{
-				{FieldID: atlassian.JiraSummaryField, Value: strings.UpperBravo},
+				{
+					FieldID: atlassian.JiraSummaryField,
+					Value:   strings.UpperBravo,
+				},
 				{
 					FieldID: atlassian.JiraDescriptionField,
 					Value:   strings.UpperCharlie,

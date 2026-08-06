@@ -42,7 +42,10 @@ func dynamicMatch(
 
 			if j > 0 && scores[i-1][j-1] > constant.PaletteMinScore {
 				past := consecutive[i-1][j-1]
-				consecutiveBonus := max(bonus, constant.PaletteBonusConsecutiveMin)
+				consecutiveBonus := max(
+					bonus,
+					constant.PaletteBonusConsecutiveMin,
+				)
 
 				if past > 0 {
 					bonus = consecutiveBonus

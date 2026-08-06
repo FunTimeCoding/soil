@@ -26,10 +26,12 @@ func scanService(
 	s.Client = v.DirectoryExists(filepath.Join(path, "client"))
 	s.Types = v.DirectoryExists(filepath.Join(path, "types"))
 	s.Model = v.DirectoryExists(filepath.Join(path, "model"))
-	s.ConstantDirectory = v.DirectoryExists(filepath.Join(
-		path,
-		constant.ConstantDirectory,
-	))
+	s.ConstantDirectory = v.DirectoryExists(
+		filepath.Join(
+			path,
+			constant.ConstantDirectory,
+		),
+	)
 	s.ConstantFile = !s.ConstantDirectory && v.Has(
 		filepath.Join(
 			path,

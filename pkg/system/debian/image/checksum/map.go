@@ -7,8 +7,12 @@ import (
 )
 
 func Map(workDirectory string) map[string]string {
-	return Parse(strings.TrimSpace(system.ReadFile(
-		workDirectory,
-		constant.ChecksumFile,
-	)))
+	return Parse(
+		strings.TrimSpace(
+			system.ReadFile(
+				workDirectory,
+				constant.ChecksumFile,
+			),
+		),
+	)
 }

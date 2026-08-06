@@ -27,7 +27,10 @@ func Run() {
 	)
 	mcp.AddTool(
 		s,
-		&mcp.Tool{Name: generative.ModelContextGreetTool, Description: "say hi"},
+		&mcp.Tool{
+			Name:        generative.ModelContextGreetTool,
+			Description: "say hi",
+		},
 		func(
 			_ context.Context,
 			_ *mcp.CallToolRequest,

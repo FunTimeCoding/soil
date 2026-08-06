@@ -2,7 +2,11 @@ package assert
 
 import "testing"
 
-func String(t *testing.T, expected string, actual string) {
+func String(
+	t *testing.T,
+	expected string,
+	actual string,
+) {
 	t.Helper()
 
 	if expected != actual {
@@ -10,7 +14,11 @@ func String(t *testing.T, expected string, actual string) {
 	}
 }
 
-func Item(t *testing.T, expected any, actual any) {
+func Item(
+	t *testing.T,
+	expected any,
+	actual any,
+) {
 	t.Helper()
 
 	if expected != actual {
@@ -18,7 +26,10 @@ func Item(t *testing.T, expected any, actual any) {
 	}
 }
 
-func True(t *testing.T, actual bool) {
+func True(
+	t *testing.T,
+	actual bool,
+) {
 	t.Helper()
 
 	if !actual {

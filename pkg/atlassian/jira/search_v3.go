@@ -23,7 +23,11 @@ func (c *Client) SearchV3(
 		var token = ""
 
 		for {
-			page, e := c.searchV3Page(constant.JiraBasicSearchLimit, token, query)
+			page, e := c.searchV3Page(
+				constant.JiraBasicSearchLimit,
+				token,
+				query,
+			)
 
 			if e != nil {
 				return nil, e

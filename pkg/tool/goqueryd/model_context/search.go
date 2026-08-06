@@ -20,7 +20,10 @@ func (s *Server) search(
 		return response.Fail("query is required: %v", e)
 	}
 
-	o := search_option.New(query, int(q.GetFloat(generative.ParameterLimit, 10)))
+	o := search_option.New(
+		query,
+		int(q.GetFloat(generative.ParameterLimit, 10)),
+	)
 	o.Collection = q.GetString(constant.Collection, "")
 	o.Full = q.GetBool(constant.Full, false)
 	o.Mode = q.GetString(constant.Mode, "hybrid")

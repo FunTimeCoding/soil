@@ -7,7 +7,11 @@ import (
 )
 
 func TestOpenWebuiConstant(t *testing.T) {
-	assert.String(t, "OPEN_WEBUI_HOST", constant.OpenWebInterfaceHostEnvironment)
+	assert.String(
+		t,
+		"OPEN_WEBUI_HOST",
+		constant.OpenWebInterfaceHostEnvironment,
+	)
 	assert.String(
 		t,
 		"OPEN_WEBUI_TOKEN",

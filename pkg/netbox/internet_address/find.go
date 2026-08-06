@@ -5,7 +5,10 @@ import (
 	"strings"
 )
 
-func Find(addresses []*Address, address string) *Address {
+func Find(
+	addresses []*Address,
+	address string,
+) *Address {
 	bare, _, _ := strings.Cut(address, "/")
 	target := net.ParseIP(bare)
 

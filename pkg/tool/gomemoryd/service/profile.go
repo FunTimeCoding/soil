@@ -15,7 +15,11 @@ func (s *Service) Profile(
 	detail bool,
 ) (*ProfileResult, *ProfileDetail, error) {
 	if scope == constant.AllScope || scope == constant.DefaultScope {
-		return nil, nil, fmt.Errorf("%w: %s", constant.ErrorReservedScope, scope)
+		return nil, nil, fmt.Errorf(
+			"%w: %s",
+			constant.ErrorReservedScope,
+			scope,
+		)
 	}
 
 	if f := s.ensureTokenizer(); f != nil {

@@ -38,7 +38,10 @@ func (s *Server) UpdateDevice(
 	}
 
 	if r.Body.Serial != nil {
-		if _, e := s.client.SetDeviceSerial(r.Name, *r.Body.Serial); e != nil {
+		if _, e := s.client.SetDeviceSerial(
+			r.Name,
+			*r.Body.Serial,
+		); e != nil {
 			return server.UpdateDevice500JSONResponse(*s.captureDetail(e)), nil
 		}
 	}

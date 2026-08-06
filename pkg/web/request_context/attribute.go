@@ -28,7 +28,10 @@ func (c *Context) Attribute() []slog.Attr {
 		result = append(
 			result,
 			slog.Any(
-				key_value.Dot(constant.TelemetryHeaderPrefix, strings.ToLower(k)),
+				key_value.Dot(
+					constant.TelemetryHeaderPrefix,
+					strings.ToLower(k),
+				),
 				v,
 			),
 		)
