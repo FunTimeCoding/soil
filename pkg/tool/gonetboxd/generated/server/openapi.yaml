@@ -60,6 +60,34 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+    patch:
+      operationId: updateDevice
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Device name (exact match).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateDeviceRequest"
+      responses:
+        "200":
+          description: Updated device.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Device"
+        "500":
+          description: Failed to update device.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /api/v1/devices/{name}/interfaces:
     get:
       operationId: listInterfaces
@@ -518,6 +546,111 @@ paths:
                 $ref: "#/components/schemas/VirtualMachine"
         "500":
           description: Failed to create virtual machine.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/virtual-machines/{name}:
+    get:
+      operationId: getVirtualMachine
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Virtual machine name (exact match).
+      responses:
+        "200":
+          description: Virtual machine detail.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VirtualMachine"
+        "500":
+          description: Failed to get virtual machine.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    patch:
+      operationId: updateVirtualMachine
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Virtual machine name (exact match).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateVirtualMachineRequest"
+      responses:
+        "200":
+          description: Updated virtual machine.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VirtualMachine"
+        "500":
+          description: Failed to update virtual machine.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/virtual-machines/{name}/interfaces:
+    get:
+      operationId: listVirtualInterfaces
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Virtual machine name.
+      responses:
+        "200":
+          description: Interfaces for the virtual machine.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/Interface"
+        "500":
+          description: Failed to list virtual interfaces.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/virtual-machines/{name}/addresses:
+    get:
+      operationId: listVirtualAddresses
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Virtual machine name.
+      responses:
+        "200":
+          description: IP addresses assigned to the virtual machine.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/Address"
+        "500":
+          description: Failed to list virtual addresses.
           content:
             application/json:
               schema:
@@ -1493,6 +1626,9 @@ components:
         type:
           type: string
           description: Interface type (e.g. 1000base-t, 10gbase-t).
+        physicalAddress:
+          type: string
+          description: MAC address to create and assign to the interface.
     CreateAddressRequest:
       type: object
       required:
@@ -1505,6 +1641,9 @@ components:
         address:
           type: string
           description: IP address in CIDR notation (e.g. 192.168.1.10/24).
+        status:
+          type: string
+          description: Address status (active, dhcp, reserved). Defaults to active.
     CreateDeviceRequest:
       type: object
       required:
@@ -1602,10 +1741,36 @@ components:
           type: string
         site:
           type: string
+        primaryAddress:
+          type: string
         tags:
           type: array
           items:
             type: string
+        labels:
+          type: array
+          items:
+            nullable: true
+            allOf:
+            - $ref: "#/components/schemas/Label"
+    UpdateDeviceRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: New device name.
+        primaryAddress:
+          type: string
+          description: Address to set as primary (must be assigned to the device).
+    UpdateVirtualMachineRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: New virtual machine name.
+        primaryAddress:
+          type: string
+          description: Address to set as primary (must be assigned to the virtual machine).
     CreateClusterRequest:
       type: object
       required:

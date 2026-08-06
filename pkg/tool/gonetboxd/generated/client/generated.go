@@ -45,6 +45,9 @@ type CreateAddressRequest struct {
 
 	// Interface Interface name on the device (e.g. eno1).
 	Interface string `json:"interface"`
+
+	// Status Address status (active, dhcp, reserved). Defaults to active.
+	Status *string `json:"status,omitempty"`
 }
 
 // CreateClusterRequest defines model for CreateClusterRequest.
@@ -91,6 +94,9 @@ type CreateDeviceTypeRequest struct {
 type CreateInterfaceRequest struct {
 	// Name Interface name (e.g. eno1, eth0).
 	Name string `json:"name"`
+
+	// PhysicalAddress MAC address to create and assign to the interface.
+	PhysicalAddress *string `json:"physicalAddress,omitempty"`
 
 	// Type Interface type (e.g. 1000base-t, 10gbase-t).
 	Type string `json:"type"`
@@ -280,10 +286,28 @@ type TunnelTermination struct {
 	Tunnel                *string `json:"tunnel,omitempty"`
 }
 
+// UpdateDeviceRequest defines model for UpdateDeviceRequest.
+type UpdateDeviceRequest struct {
+	// Name New device name.
+	Name *string `json:"name,omitempty"`
+
+	// PrimaryAddress Address to set as primary (must be assigned to the device).
+	PrimaryAddress *string `json:"primaryAddress,omitempty"`
+}
+
 // UpdateJournalEntryRequest defines model for UpdateJournalEntryRequest.
 type UpdateJournalEntryRequest struct {
 	Comments *string `json:"comments,omitempty"`
 	Kind     *string `json:"kind,omitempty"`
+}
+
+// UpdateVirtualMachineRequest defines model for UpdateVirtualMachineRequest.
+type UpdateVirtualMachineRequest struct {
+	// Name New virtual machine name.
+	Name *string `json:"name,omitempty"`
+
+	// PrimaryAddress Address to set as primary (must be assigned to the virtual machine).
+	PrimaryAddress *string `json:"primaryAddress,omitempty"`
 }
 
 // VirtualInterface defines model for VirtualInterface.
@@ -294,11 +318,13 @@ type VirtualInterface struct {
 
 // VirtualMachine defines model for VirtualMachine.
 type VirtualMachine struct {
-	Cluster    *string   `json:"cluster,omitempty"`
-	Identifier int32     `json:"identifier"`
-	Name       string    `json:"name"`
-	Site       *string   `json:"site,omitempty"`
-	Tags       *[]string `json:"tags,omitempty"`
+	Cluster        *string   `json:"cluster,omitempty"`
+	Identifier     int32     `json:"identifier"`
+	Labels         *[]*Label `json:"labels,omitempty"`
+	Name           string    `json:"name"`
+	PrimaryAddress *string   `json:"primaryAddress,omitempty"`
+	Site           *string   `json:"site,omitempty"`
+	Tags           *[]string `json:"tags,omitempty"`
 }
 
 // ListDevicesParams defines parameters for ListDevices.
@@ -339,6 +365,9 @@ type CreateDeviceTypeJSONRequestBody = CreateDeviceTypeRequest
 
 // CreateDeviceJSONRequestBody defines body for CreateDevice for application/json ContentType.
 type CreateDeviceJSONRequestBody = CreateDeviceRequest
+
+// UpdateDeviceJSONRequestBody defines body for UpdateDevice for application/json ContentType.
+type UpdateDeviceJSONRequestBody = UpdateDeviceRequest
 
 // CreateAddressJSONRequestBody defines body for CreateAddress for application/json ContentType.
 type CreateAddressJSONRequestBody = CreateAddressRequest
@@ -381,6 +410,9 @@ type CreateTunnelJSONRequestBody = CreateTunnelRequest
 
 // CreateVirtualMachineJSONRequestBody defines body for CreateVirtualMachine for application/json ContentType.
 type CreateVirtualMachineJSONRequestBody = CreateVirtualMachineRequest
+
+// UpdateVirtualMachineJSONRequestBody defines body for UpdateVirtualMachine for application/json ContentType.
+type UpdateVirtualMachineJSONRequestBody = UpdateVirtualMachineRequest
 
 // CreateVirtualAddressJSONRequestBody defines body for CreateVirtualAddress for application/json ContentType.
 type CreateVirtualAddressJSONRequestBody = CreateAddressRequest
@@ -531,6 +563,14 @@ type ClientInterface interface {
 
 	// GetDevice performs a GET /api/v1/devices/{name} (the `GetDevice` operationId) request.
 	GetDevice(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateDeviceWithBody performs a PATCH /api/v1/devices/{name} (the `UpdateDevice` operationId) request,
+	// with any type of body and a specified content type.
+	UpdateDeviceWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateDevice performs a PATCH /api/v1/devices/{name} (the `UpdateDevice` operationId) request.
+	// Takes a body of the `application/json` content type.
+	UpdateDevice(ctx context.Context, name string, body UpdateDeviceJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// ListAddresses performs a GET /api/v1/devices/{name}/addresses (the `ListAddresses` operationId) request.
 	ListAddresses(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -698,6 +738,20 @@ type ClientInterface interface {
 	// Takes a body of the `application/json` content type.
 	CreateVirtualMachine(ctx context.Context, body CreateVirtualMachineJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// GetVirtualMachine performs a GET /api/v1/virtual-machines/{name} (the `GetVirtualMachine` operationId) request.
+	GetVirtualMachine(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateVirtualMachineWithBody performs a PATCH /api/v1/virtual-machines/{name} (the `UpdateVirtualMachine` operationId) request,
+	// with any type of body and a specified content type.
+	UpdateVirtualMachineWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateVirtualMachine performs a PATCH /api/v1/virtual-machines/{name} (the `UpdateVirtualMachine` operationId) request.
+	// Takes a body of the `application/json` content type.
+	UpdateVirtualMachine(ctx context.Context, name string, body UpdateVirtualMachineJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ListVirtualAddresses performs a GET /api/v1/virtual-machines/{name}/addresses (the `ListVirtualAddresses` operationId) request.
+	ListVirtualAddresses(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// CreateVirtualAddressWithBody performs a POST /api/v1/virtual-machines/{name}/addresses/create (the `CreateVirtualAddress` operationId) request,
 	// with any type of body and a specified content type.
 	CreateVirtualAddressWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -705,6 +759,9 @@ type ClientInterface interface {
 	// CreateVirtualAddress performs a POST /api/v1/virtual-machines/{name}/addresses/create (the `CreateVirtualAddress` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateVirtualAddress(ctx context.Context, name string, body CreateVirtualAddressJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ListVirtualInterfaces performs a GET /api/v1/virtual-machines/{name}/interfaces (the `ListVirtualInterfaces` operationId) request.
+	ListVirtualInterfaces(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// CreateVirtualInterfaceWithBody performs a POST /api/v1/virtual-machines/{name}/interfaces/create (the `CreateVirtualInterface` operationId) request,
 	// with any type of body and a specified content type.
@@ -975,6 +1032,34 @@ func (c *Client) CreateDevice(ctx context.Context, body CreateDeviceJSONRequestB
 // GetDevice performs a GET /api/v1/devices/{name} (the `GetDevice` operationId) request.
 func (c *Client) GetDevice(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetDeviceRequest(c.Server, name)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// UpdateDeviceWithBody performs a PATCH /api/v1/devices/{name} (the `UpdateDevice` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) UpdateDeviceWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateDeviceRequestWithBody(c.Server, name, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// UpdateDevice performs a PATCH /api/v1/devices/{name} (the `UpdateDevice` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) UpdateDevice(ctx context.Context, name string, body UpdateDeviceJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateDeviceRequest(c.Server, name, body)
 	if err != nil {
 		return nil, err
 	}
@@ -1611,6 +1696,60 @@ func (c *Client) CreateVirtualMachine(ctx context.Context, body CreateVirtualMac
 	return c.Client.Do(req)
 }
 
+// GetVirtualMachine performs a GET /api/v1/virtual-machines/{name} (the `GetVirtualMachine` operationId) request.
+func (c *Client) GetVirtualMachine(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetVirtualMachineRequest(c.Server, name)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// UpdateVirtualMachineWithBody performs a PATCH /api/v1/virtual-machines/{name} (the `UpdateVirtualMachine` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) UpdateVirtualMachineWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateVirtualMachineRequestWithBody(c.Server, name, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// UpdateVirtualMachine performs a PATCH /api/v1/virtual-machines/{name} (the `UpdateVirtualMachine` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) UpdateVirtualMachine(ctx context.Context, name string, body UpdateVirtualMachineJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateVirtualMachineRequest(c.Server, name, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// ListVirtualAddresses performs a GET /api/v1/virtual-machines/{name}/addresses (the `ListVirtualAddresses` operationId) request.
+func (c *Client) ListVirtualAddresses(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListVirtualAddressesRequest(c.Server, name)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 // CreateVirtualAddressWithBody performs a POST /api/v1/virtual-machines/{name}/addresses/create (the `CreateVirtualAddress` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CreateVirtualAddressWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -1629,6 +1768,19 @@ func (c *Client) CreateVirtualAddressWithBody(ctx context.Context, name string, 
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateVirtualAddress(ctx context.Context, name string, body CreateVirtualAddressJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateVirtualAddressRequest(c.Server, name, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// ListVirtualInterfaces performs a GET /api/v1/virtual-machines/{name}/interfaces (the `ListVirtualInterfaces` operationId) request.
+func (c *Client) ListVirtualInterfaces(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListVirtualInterfacesRequest(c.Server, name)
 	if err != nil {
 		return nil, err
 	}
@@ -2242,6 +2394,53 @@ func NewGetDeviceRequest(server string, name string) (*http.Request, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	return req, nil
+}
+
+// NewUpdateDeviceRequest calls the generic UpdateDevice builder with application/json body
+func NewUpdateDeviceRequest(server string, name string, body UpdateDeviceJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewUpdateDeviceRequestWithBody(server, name, "application/json", bodyReader)
+}
+
+// NewUpdateDeviceRequestWithBody constructs an http.Request for the UpdateDevice method, with any body, and a specified content type
+func NewUpdateDeviceRequestWithBody(server string, name string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "name", name, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/devices/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPatch, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
 
 	return req, nil
 }
@@ -3464,6 +3663,121 @@ func NewCreateVirtualMachineRequestWithBody(server string, contentType string, b
 	return req, nil
 }
 
+// NewGetVirtualMachineRequest constructs an http.Request for the GetVirtualMachine method
+func NewGetVirtualMachineRequest(server string, name string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "name", name, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/virtual-machines/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewUpdateVirtualMachineRequest calls the generic UpdateVirtualMachine builder with application/json body
+func NewUpdateVirtualMachineRequest(server string, name string, body UpdateVirtualMachineJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewUpdateVirtualMachineRequestWithBody(server, name, "application/json", bodyReader)
+}
+
+// NewUpdateVirtualMachineRequestWithBody constructs an http.Request for the UpdateVirtualMachine method, with any body, and a specified content type
+func NewUpdateVirtualMachineRequestWithBody(server string, name string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "name", name, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/virtual-machines/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPatch, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewListVirtualAddressesRequest constructs an http.Request for the ListVirtualAddresses method
+func NewListVirtualAddressesRequest(server string, name string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "name", name, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/virtual-machines/%s/addresses", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewCreateVirtualAddressRequest calls the generic CreateVirtualAddress builder with application/json body
 func NewCreateVirtualAddressRequest(server string, name string, body CreateVirtualAddressJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
@@ -3507,6 +3821,40 @@ func NewCreateVirtualAddressRequestWithBody(server string, name string, contentT
 	}
 
 	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewListVirtualInterfacesRequest constructs an http.Request for the ListVirtualInterfaces method
+func NewListVirtualInterfacesRequest(server string, name string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "name", name, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/virtual-machines/%s/interfaces", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
 
 	return req, nil
 }
@@ -4065,6 +4413,16 @@ type ClientWithResponsesInterface interface {
 	// Returns a wrapper object for the known response body format(s).
 	GetDeviceWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*GetDeviceResponse, error)
 
+	// UpdateDeviceWithBodyWithResponse performs a PATCH /api/v1/devices/{name} (the `UpdateDevice` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	UpdateDeviceWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateDeviceResponse, error)
+
+	// UpdateDeviceWithResponse performs a PATCH /api/v1/devices/{name} (the `UpdateDevice` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	UpdateDeviceWithResponse(ctx context.Context, name string, body UpdateDeviceJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateDeviceResponse, error)
+
 	// ListAddressesWithResponse performs a GET /api/v1/devices/{name}/addresses (the `ListAddresses` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
@@ -4295,6 +4653,26 @@ type ClientWithResponsesInterface interface {
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateVirtualMachineWithResponse(ctx context.Context, body CreateVirtualMachineJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateVirtualMachineResponse, error)
 
+	// GetVirtualMachineWithResponse performs a GET /api/v1/virtual-machines/{name} (the `GetVirtualMachine` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetVirtualMachineWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*GetVirtualMachineResponse, error)
+
+	// UpdateVirtualMachineWithBodyWithResponse performs a PATCH /api/v1/virtual-machines/{name} (the `UpdateVirtualMachine` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	UpdateVirtualMachineWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateVirtualMachineResponse, error)
+
+	// UpdateVirtualMachineWithResponse performs a PATCH /api/v1/virtual-machines/{name} (the `UpdateVirtualMachine` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	UpdateVirtualMachineWithResponse(ctx context.Context, name string, body UpdateVirtualMachineJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateVirtualMachineResponse, error)
+
+	// ListVirtualAddressesWithResponse performs a GET /api/v1/virtual-machines/{name}/addresses (the `ListVirtualAddresses` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	ListVirtualAddressesWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*ListVirtualAddressesResponse, error)
+
 	// CreateVirtualAddressWithBodyWithResponse performs a POST /api/v1/virtual-machines/{name}/addresses/create (the `CreateVirtualAddress` operationId) request,
 	// with any type of body and a specified content type.
 	//
@@ -4304,6 +4682,11 @@ type ClientWithResponsesInterface interface {
 	// CreateVirtualAddressWithResponse performs a POST /api/v1/virtual-machines/{name}/addresses/create (the `CreateVirtualAddress` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateVirtualAddressWithResponse(ctx context.Context, name string, body CreateVirtualAddressJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateVirtualAddressResponse, error)
+
+	// ListVirtualInterfacesWithResponse performs a GET /api/v1/virtual-machines/{name}/interfaces (the `ListVirtualInterfaces` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	ListVirtualInterfacesWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*ListVirtualInterfacesResponse, error)
 
 	// CreateVirtualInterfaceWithBodyWithResponse performs a POST /api/v1/virtual-machines/{name}/interfaces/create (the `CreateVirtualInterface` operationId) request,
 	// with any type of body and a specified content type.
@@ -4941,6 +5324,54 @@ func (r GetDeviceResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r GetDeviceResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type UpdateDeviceResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *Device
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r UpdateDeviceResponse) GetJSON200() *Device {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r UpdateDeviceResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r UpdateDeviceResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r UpdateDeviceResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r UpdateDeviceResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r UpdateDeviceResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -6469,6 +6900,150 @@ func (r CreateVirtualMachineResponse) ContentType() string {
 	return ""
 }
 
+type GetVirtualMachineResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *VirtualMachine
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetVirtualMachineResponse) GetJSON200() *VirtualMachine {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetVirtualMachineResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetVirtualMachineResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetVirtualMachineResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetVirtualMachineResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetVirtualMachineResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type UpdateVirtualMachineResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *VirtualMachine
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r UpdateVirtualMachineResponse) GetJSON200() *VirtualMachine {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r UpdateVirtualMachineResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r UpdateVirtualMachineResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r UpdateVirtualMachineResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r UpdateVirtualMachineResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r UpdateVirtualMachineResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type ListVirtualAddressesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *[]*Address
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r ListVirtualAddressesResponse) GetJSON200() *[]*Address {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r ListVirtualAddressesResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r ListVirtualAddressesResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r ListVirtualAddressesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListVirtualAddressesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ListVirtualAddressesResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type CreateVirtualAddressResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -6511,6 +7086,54 @@ func (r CreateVirtualAddressResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r CreateVirtualAddressResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type ListVirtualInterfacesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *[]*Interface
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r ListVirtualInterfacesResponse) GetJSON200() *[]*Interface {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r ListVirtualInterfacesResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r ListVirtualInterfacesResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r ListVirtualInterfacesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListVirtualInterfacesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ListVirtualInterfacesResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -7129,6 +7752,28 @@ func (c *ClientWithResponses) GetDeviceWithResponse(ctx context.Context, name st
 	return ParseGetDeviceResponse(rsp)
 }
 
+// UpdateDeviceWithBodyWithResponse performs a PATCH /api/v1/devices/{name} (the `UpdateDevice` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) UpdateDeviceWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateDeviceResponse, error) {
+	rsp, err := c.UpdateDeviceWithBody(ctx, name, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateDeviceResponse(rsp)
+}
+
+// UpdateDeviceWithResponse performs a PATCH /api/v1/devices/{name} (the `UpdateDevice` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) UpdateDeviceWithResponse(ctx context.Context, name string, body UpdateDeviceJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateDeviceResponse, error) {
+	rsp, err := c.UpdateDevice(ctx, name, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateDeviceResponse(rsp)
+}
+
 // ListAddressesWithResponse performs a GET /api/v1/devices/{name}/addresses (the `ListAddresses` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -7635,6 +8280,50 @@ func (c *ClientWithResponses) CreateVirtualMachineWithResponse(ctx context.Conte
 	return ParseCreateVirtualMachineResponse(rsp)
 }
 
+// GetVirtualMachineWithResponse performs a GET /api/v1/virtual-machines/{name} (the `GetVirtualMachine` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetVirtualMachineWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*GetVirtualMachineResponse, error) {
+	rsp, err := c.GetVirtualMachine(ctx, name, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetVirtualMachineResponse(rsp)
+}
+
+// UpdateVirtualMachineWithBodyWithResponse performs a PATCH /api/v1/virtual-machines/{name} (the `UpdateVirtualMachine` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) UpdateVirtualMachineWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateVirtualMachineResponse, error) {
+	rsp, err := c.UpdateVirtualMachineWithBody(ctx, name, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateVirtualMachineResponse(rsp)
+}
+
+// UpdateVirtualMachineWithResponse performs a PATCH /api/v1/virtual-machines/{name} (the `UpdateVirtualMachine` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) UpdateVirtualMachineWithResponse(ctx context.Context, name string, body UpdateVirtualMachineJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateVirtualMachineResponse, error) {
+	rsp, err := c.UpdateVirtualMachine(ctx, name, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateVirtualMachineResponse(rsp)
+}
+
+// ListVirtualAddressesWithResponse performs a GET /api/v1/virtual-machines/{name}/addresses (the `ListVirtualAddresses` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) ListVirtualAddressesWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*ListVirtualAddressesResponse, error) {
+	rsp, err := c.ListVirtualAddresses(ctx, name, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListVirtualAddressesResponse(rsp)
+}
+
 // CreateVirtualAddressWithBodyWithResponse performs a POST /api/v1/virtual-machines/{name}/addresses/create (the `CreateVirtualAddress` operationId) request,
 // with any type of body and a specified content type.
 //
@@ -7655,6 +8344,17 @@ func (c *ClientWithResponses) CreateVirtualAddressWithResponse(ctx context.Conte
 		return nil, err
 	}
 	return ParseCreateVirtualAddressResponse(rsp)
+}
+
+// ListVirtualInterfacesWithResponse performs a GET /api/v1/virtual-machines/{name}/interfaces (the `ListVirtualInterfaces` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) ListVirtualInterfacesWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*ListVirtualInterfacesResponse, error) {
+	rsp, err := c.ListVirtualInterfaces(ctx, name, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListVirtualInterfacesResponse(rsp)
 }
 
 // CreateVirtualInterfaceWithBodyWithResponse performs a POST /api/v1/virtual-machines/{name}/interfaces/create (the `CreateVirtualInterface` operationId) request,
@@ -8186,6 +8886,39 @@ func ParseGetDeviceResponse(rsp *http.Response) (*GetDeviceResponse, error) {
 			return nil, err
 		}
 		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseUpdateDeviceResponse parses an HTTP response from a UpdateDeviceWithResponse call
+func ParseUpdateDeviceResponse(rsp *http.Response) (*UpdateDeviceResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &UpdateDeviceResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Device
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -9247,6 +9980,105 @@ func ParseCreateVirtualMachineResponse(rsp *http.Response) (*CreateVirtualMachin
 	return response, nil
 }
 
+// ParseGetVirtualMachineResponse parses an HTTP response from a GetVirtualMachineWithResponse call
+func ParseGetVirtualMachineResponse(rsp *http.Response) (*GetVirtualMachineResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetVirtualMachineResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest VirtualMachine
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseUpdateVirtualMachineResponse parses an HTTP response from a UpdateVirtualMachineWithResponse call
+func ParseUpdateVirtualMachineResponse(rsp *http.Response) (*UpdateVirtualMachineResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &UpdateVirtualMachineResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest VirtualMachine
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListVirtualAddressesResponse parses an HTTP response from a ListVirtualAddressesWithResponse call
+func ParseListVirtualAddressesResponse(rsp *http.Response) (*ListVirtualAddressesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListVirtualAddressesResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []*Address
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseCreateVirtualAddressResponse parses an HTTP response from a CreateVirtualAddressWithResponse call
 func ParseCreateVirtualAddressResponse(rsp *http.Response) (*CreateVirtualAddressResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -9267,6 +10099,39 @@ func ParseCreateVirtualAddressResponse(rsp *http.Response) (*CreateVirtualAddres
 			return nil, err
 		}
 		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListVirtualInterfacesResponse parses an HTTP response from a ListVirtualInterfacesWithResponse call
+func ParseListVirtualInterfacesResponse(rsp *http.Response) (*ListVirtualInterfacesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListVirtualInterfacesResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []*Interface
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse

@@ -9,10 +9,16 @@ import (
 func (c *Client) CreateVirtualAddress(
 	interfaceIdentifier int32,
 	address string,
+	status string,
 ) (*internet_address.Address, error) {
 	q := netbox.NewWritableIPAddressRequest(address)
 	q.SetAssignedObjectType(constant.VirtualInterfaceAddress)
 	q.SetAssignedObjectId(int64(interfaceIdentifier))
+
+	if status != "" {
+		q.SetStatus(netbox.PatchedWritableIPAddressRequestStatus(status))
+	}
+
 	result, _, e := c.client.IpamAPI.IpamIpAddressesCreate(
 		c.context,
 	).WritableIPAddressRequest(*q).Execute()

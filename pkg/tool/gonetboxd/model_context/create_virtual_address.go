@@ -42,7 +42,7 @@ func (s *Server) createVirtualAddress(
 		return s.captureFail(j, "interface not found on virtual machine")
 	}
 
-	result, k := s.client.CreateVirtualAddress(iface.GetId(), address)
+	result, k := s.client.CreateVirtualAddress(iface.GetId(), address, "")
 
 	if k != nil {
 		return s.captureFail(k, "address not assigned")

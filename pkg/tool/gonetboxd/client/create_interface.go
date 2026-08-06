@@ -10,15 +10,18 @@ func (c *Client) CreateInterface(
 	device string,
 	name string,
 	interfaceType string,
+	physicalAddress string,
 ) string {
-	result, e := c.client.CreateInterface(
-		c.context,
-		device,
-		client.CreateInterfaceRequest{
-			Name: name,
-			Type: interfaceType,
-		},
-	)
+	body := client.CreateInterfaceRequest{
+		Name: name,
+		Type: interfaceType,
+	}
+
+	if physicalAddress != "" {
+		body.PhysicalAddress = &physicalAddress
+	}
+
+	result, e := c.client.CreateInterface(c.context, device, body)
 	errors.PanicOnError(e)
 
 	return web.ReadString(result)

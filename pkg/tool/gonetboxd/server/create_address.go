@@ -21,7 +21,13 @@ func (s *Server) CreateAddress(
 		return server.CreateAddress500JSONResponse(*s.captureDetail(f)), nil
 	}
 
-	a, g := s.client.CreateAddress(i.Identifier, r.Body.Address)
+	status := ""
+
+	if r.Body.Status != nil {
+		status = *r.Body.Status
+	}
+
+	a, g := s.client.CreateAddress(i.Identifier, r.Body.Address, status)
 
 	if g != nil {
 		return server.CreateAddress500JSONResponse(*s.captureDetail(g)), nil

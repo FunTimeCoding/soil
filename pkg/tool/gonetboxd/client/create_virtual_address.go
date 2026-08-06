@@ -10,15 +10,18 @@ func (c *Client) CreateVirtualAddress(
 	vmName string,
 	interfaceName string,
 	address string,
+	status string,
 ) string {
-	result, e := c.client.CreateVirtualAddress(
-		c.context,
-		vmName,
-		client.CreateAddressRequest{
-			Interface: interfaceName,
-			Address:   address,
-		},
-	)
+	body := client.CreateAddressRequest{
+		Interface: interfaceName,
+		Address:   address,
+	}
+
+	if status != "" {
+		body.Status = &status
+	}
+
+	result, e := c.client.CreateVirtualAddress(c.context, vmName, body)
 	errors.PanicOnError(e)
 
 	return web.ReadString(result)

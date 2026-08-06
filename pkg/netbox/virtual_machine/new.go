@@ -6,10 +6,31 @@ import (
 )
 
 func New(v *netbox.VirtualMachineWithConfigContext) *Machine {
+	var cluster string
+
+	if v.Cluster.IsSet() {
+		cluster = v.Cluster.Get().GetName()
+	}
+
+	var site string
+
+	if v.Site.IsSet() {
+		site = v.Site.Get().GetName()
+	}
+
+	var address string
+
+	if v.PrimaryIp4.IsSet() {
+		address = v.PrimaryIp4.Get().GetDisplay()
+	}
+
 	return &Machine{
-		Identifier: v.GetId(),
-		Name:       v.GetName(),
-		Tags:       tag.Names(v.Tags),
-		Raw:        v,
+		Identifier:     v.GetId(),
+		Name:           v.GetName(),
+		Cluster:        cluster,
+		Site:           site,
+		PrimaryAddress: address,
+		Tags:           tag.Names(v.Tags),
+		Raw:            v,
 	}
 }

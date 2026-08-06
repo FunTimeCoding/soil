@@ -9,7 +9,7 @@ func (c *Client) MustCreateAddress(
 	interfaceIdentifier int32,
 	address string,
 ) *internet_address.Address {
-	result, e := c.CreateAddress(interfaceIdentifier, address)
+	result, e := c.CreateAddress(interfaceIdentifier, address, "")
 	errors.PanicOnError(e)
 
 	return result

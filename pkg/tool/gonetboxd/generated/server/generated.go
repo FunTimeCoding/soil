@@ -51,6 +51,9 @@ type CreateAddressRequest struct {
 
 	// Interface Interface name on the device (e.g. eno1).
 	Interface string `json:"interface"`
+
+	// Status Address status (active, dhcp, reserved). Defaults to active.
+	Status *string `json:"status,omitempty"`
 }
 
 // CreateClusterRequest defines model for CreateClusterRequest.
@@ -97,6 +100,9 @@ type CreateDeviceTypeRequest struct {
 type CreateInterfaceRequest struct {
 	// Name Interface name (e.g. eno1, eth0).
 	Name string `json:"name"`
+
+	// PhysicalAddress MAC address to create and assign to the interface.
+	PhysicalAddress *string `json:"physicalAddress,omitempty"`
 
 	// Type Interface type (e.g. 1000base-t, 10gbase-t).
 	Type string `json:"type"`
@@ -286,10 +292,28 @@ type TunnelTermination struct {
 	Tunnel                *string `json:"tunnel,omitempty"`
 }
 
+// UpdateDeviceRequest defines model for UpdateDeviceRequest.
+type UpdateDeviceRequest struct {
+	// Name New device name.
+	Name *string `json:"name,omitempty"`
+
+	// PrimaryAddress Address to set as primary (must be assigned to the device).
+	PrimaryAddress *string `json:"primaryAddress,omitempty"`
+}
+
 // UpdateJournalEntryRequest defines model for UpdateJournalEntryRequest.
 type UpdateJournalEntryRequest struct {
 	Comments *string `json:"comments,omitempty"`
 	Kind     *string `json:"kind,omitempty"`
+}
+
+// UpdateVirtualMachineRequest defines model for UpdateVirtualMachineRequest.
+type UpdateVirtualMachineRequest struct {
+	// Name New virtual machine name.
+	Name *string `json:"name,omitempty"`
+
+	// PrimaryAddress Address to set as primary (must be assigned to the virtual machine).
+	PrimaryAddress *string `json:"primaryAddress,omitempty"`
 }
 
 // VirtualInterface defines model for VirtualInterface.
@@ -300,11 +324,13 @@ type VirtualInterface struct {
 
 // VirtualMachine defines model for VirtualMachine.
 type VirtualMachine struct {
-	Cluster    *string   `json:"cluster,omitempty"`
-	Identifier int32     `json:"identifier"`
-	Name       string    `json:"name"`
-	Site       *string   `json:"site,omitempty"`
-	Tags       *[]string `json:"tags,omitempty"`
+	Cluster        *string   `json:"cluster,omitempty"`
+	Identifier     int32     `json:"identifier"`
+	Labels         *[]*Label `json:"labels,omitempty"`
+	Name           string    `json:"name"`
+	PrimaryAddress *string   `json:"primaryAddress,omitempty"`
+	Site           *string   `json:"site,omitempty"`
+	Tags           *[]string `json:"tags,omitempty"`
 }
 
 // ListDevicesParams defines parameters for ListDevices.
@@ -345,6 +371,9 @@ type CreateDeviceTypeJSONRequestBody = CreateDeviceTypeRequest
 
 // CreateDeviceJSONRequestBody defines body for CreateDevice for application/json ContentType.
 type CreateDeviceJSONRequestBody = CreateDeviceRequest
+
+// UpdateDeviceJSONRequestBody defines body for UpdateDevice for application/json ContentType.
+type UpdateDeviceJSONRequestBody = UpdateDeviceRequest
 
 // CreateAddressJSONRequestBody defines body for CreateAddress for application/json ContentType.
 type CreateAddressJSONRequestBody = CreateAddressRequest
@@ -387,6 +416,9 @@ type CreateTunnelJSONRequestBody = CreateTunnelRequest
 
 // CreateVirtualMachineJSONRequestBody defines body for CreateVirtualMachine for application/json ContentType.
 type CreateVirtualMachineJSONRequestBody = CreateVirtualMachineRequest
+
+// UpdateVirtualMachineJSONRequestBody defines body for UpdateVirtualMachine for application/json ContentType.
+type UpdateVirtualMachineJSONRequestBody = UpdateVirtualMachineRequest
 
 // CreateVirtualAddressJSONRequestBody defines body for CreateVirtualAddress for application/json ContentType.
 type CreateVirtualAddressJSONRequestBody = CreateAddressRequest
@@ -441,6 +473,9 @@ type ServerInterface interface {
 
 	// (GET /api/v1/devices/{name})
 	GetDevice(w http.ResponseWriter, r *http.Request, name string)
+
+	// (PATCH /api/v1/devices/{name})
+	UpdateDevice(w http.ResponseWriter, r *http.Request, name string)
 
 	// (GET /api/v1/devices/{name}/addresses)
 	ListAddresses(w http.ResponseWriter, r *http.Request, name string)
@@ -538,8 +573,20 @@ type ServerInterface interface {
 	// (POST /api/v1/virtual-machines)
 	CreateVirtualMachine(w http.ResponseWriter, r *http.Request)
 
+	// (GET /api/v1/virtual-machines/{name})
+	GetVirtualMachine(w http.ResponseWriter, r *http.Request, name string)
+
+	// (PATCH /api/v1/virtual-machines/{name})
+	UpdateVirtualMachine(w http.ResponseWriter, r *http.Request, name string)
+
+	// (GET /api/v1/virtual-machines/{name}/addresses)
+	ListVirtualAddresses(w http.ResponseWriter, r *http.Request, name string)
+
 	// (POST /api/v1/virtual-machines/{name}/addresses/create)
 	CreateVirtualAddress(w http.ResponseWriter, r *http.Request, name string)
+
+	// (GET /api/v1/virtual-machines/{name}/interfaces)
+	ListVirtualInterfaces(w http.ResponseWriter, r *http.Request, name string)
 
 	// (POST /api/v1/virtual-machines/{name}/interfaces/create)
 	CreateVirtualInterface(w http.ResponseWriter, r *http.Request, name string)
@@ -780,6 +827,32 @@ func (siw *ServerInterfaceWrapper) GetDevice(w http.ResponseWriter, r *http.Requ
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.GetDevice(w, r, name)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// UpdateDevice operation middleware
+func (siw *ServerInterfaceWrapper) UpdateDevice(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "name" -------------
+	var name string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "name", r.PathValue("name"), &name, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "name", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.UpdateDevice(w, r, name)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -1482,6 +1555,84 @@ func (siw *ServerInterfaceWrapper) CreateVirtualMachine(w http.ResponseWriter, r
 	handler.ServeHTTP(w, r)
 }
 
+// GetVirtualMachine operation middleware
+func (siw *ServerInterfaceWrapper) GetVirtualMachine(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "name" -------------
+	var name string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "name", r.PathValue("name"), &name, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "name", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetVirtualMachine(w, r, name)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// UpdateVirtualMachine operation middleware
+func (siw *ServerInterfaceWrapper) UpdateVirtualMachine(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "name" -------------
+	var name string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "name", r.PathValue("name"), &name, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "name", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.UpdateVirtualMachine(w, r, name)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ListVirtualAddresses operation middleware
+func (siw *ServerInterfaceWrapper) ListVirtualAddresses(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "name" -------------
+	var name string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "name", r.PathValue("name"), &name, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "name", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ListVirtualAddresses(w, r, name)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
 // CreateVirtualAddress operation middleware
 func (siw *ServerInterfaceWrapper) CreateVirtualAddress(w http.ResponseWriter, r *http.Request) {
 
@@ -1499,6 +1650,32 @@ func (siw *ServerInterfaceWrapper) CreateVirtualAddress(w http.ResponseWriter, r
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.CreateVirtualAddress(w, r, name)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ListVirtualInterfaces operation middleware
+func (siw *ServerInterfaceWrapper) ListVirtualInterfaces(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "name" -------------
+	var name string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "name", r.PathValue("name"), &name, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "name", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ListVirtualInterfaces(w, r, name)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -1929,6 +2106,7 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/devices", wrapper.ListDevices)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/devices/{name}", wrapper.GetDevice)
+	m.HandleFunc(http.MethodPatch+" "+options.BaseURL+"/api/v1/devices/{name}", wrapper.UpdateDevice)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/devices/{name}/interfaces", wrapper.ListInterfaces)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/devices/{name}/addresses", wrapper.ListAddresses)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/devices/{name}/addresses/create", wrapper.CreateAddress)
@@ -1950,6 +2128,10 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/clusters", wrapper.CreateCluster)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/virtual-machines", wrapper.ListVirtualMachines)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/virtual-machines", wrapper.CreateVirtualMachine)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/virtual-machines/{name}", wrapper.GetVirtualMachine)
+	m.HandleFunc(http.MethodPatch+" "+options.BaseURL+"/api/v1/virtual-machines/{name}", wrapper.UpdateVirtualMachine)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/virtual-machines/{name}/interfaces", wrapper.ListVirtualInterfaces)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/virtual-machines/{name}/addresses", wrapper.ListVirtualAddresses)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/virtual-machines/{name}/interfaces/create", wrapper.CreateVirtualInterface)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/virtual-machines/{name}/addresses/create", wrapper.CreateVirtualAddress)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/tags", wrapper.ListTags)
@@ -2410,6 +2592,43 @@ func (response GetDevice404JSONResponse) VisitGetDeviceResponse(w http.ResponseW
 type GetDevice500JSONResponse ErrorResponse
 
 func (response GetDevice500JSONResponse) VisitGetDeviceResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateDeviceRequestObject struct {
+	Name string `json:"name"`
+	Body *UpdateDeviceJSONRequestBody
+}
+
+type UpdateDeviceResponseObject interface {
+	VisitUpdateDeviceResponse(w http.ResponseWriter) error
+}
+
+type UpdateDevice200JSONResponse Device
+
+func (response UpdateDevice200JSONResponse) VisitUpdateDeviceResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateDevice500JSONResponse ErrorResponse
+
+func (response UpdateDevice500JSONResponse) VisitUpdateDeviceResponse(w http.ResponseWriter) error {
 
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(response); err != nil {
@@ -3563,6 +3782,115 @@ func (response CreateVirtualMachine500JSONResponse) VisitCreateVirtualMachineRes
 	return err
 }
 
+type GetVirtualMachineRequestObject struct {
+	Name string `json:"name"`
+}
+
+type GetVirtualMachineResponseObject interface {
+	VisitGetVirtualMachineResponse(w http.ResponseWriter) error
+}
+
+type GetVirtualMachine200JSONResponse VirtualMachine
+
+func (response GetVirtualMachine200JSONResponse) VisitGetVirtualMachineResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetVirtualMachine500JSONResponse ErrorResponse
+
+func (response GetVirtualMachine500JSONResponse) VisitGetVirtualMachineResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateVirtualMachineRequestObject struct {
+	Name string `json:"name"`
+	Body *UpdateVirtualMachineJSONRequestBody
+}
+
+type UpdateVirtualMachineResponseObject interface {
+	VisitUpdateVirtualMachineResponse(w http.ResponseWriter) error
+}
+
+type UpdateVirtualMachine200JSONResponse VirtualMachine
+
+func (response UpdateVirtualMachine200JSONResponse) VisitUpdateVirtualMachineResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateVirtualMachine500JSONResponse ErrorResponse
+
+func (response UpdateVirtualMachine500JSONResponse) VisitUpdateVirtualMachineResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListVirtualAddressesRequestObject struct {
+	Name string `json:"name"`
+}
+
+type ListVirtualAddressesResponseObject interface {
+	VisitListVirtualAddressesResponse(w http.ResponseWriter) error
+}
+
+type ListVirtualAddresses200JSONResponse []*Address
+
+func (response ListVirtualAddresses200JSONResponse) VisitListVirtualAddressesResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListVirtualAddresses500JSONResponse ErrorResponse
+
+func (response ListVirtualAddresses500JSONResponse) VisitListVirtualAddressesResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type CreateVirtualAddressRequestObject struct {
 	Name string `json:"name"`
 	Body *CreateVirtualAddressJSONRequestBody
@@ -3589,6 +3917,42 @@ func (response CreateVirtualAddress201JSONResponse) VisitCreateVirtualAddressRes
 type CreateVirtualAddress500JSONResponse ErrorResponse
 
 func (response CreateVirtualAddress500JSONResponse) VisitCreateVirtualAddressResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListVirtualInterfacesRequestObject struct {
+	Name string `json:"name"`
+}
+
+type ListVirtualInterfacesResponseObject interface {
+	VisitListVirtualInterfacesResponse(w http.ResponseWriter) error
+}
+
+type ListVirtualInterfaces200JSONResponse []*Interface
+
+func (response ListVirtualInterfaces200JSONResponse) VisitListVirtualInterfacesResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListVirtualInterfaces500JSONResponse ErrorResponse
+
+func (response ListVirtualInterfaces500JSONResponse) VisitListVirtualInterfacesResponse(w http.ResponseWriter) error {
 
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(response); err != nil {
@@ -3966,6 +4330,9 @@ type StrictServerInterface interface {
 	// (GET /api/v1/devices/{name})
 	GetDevice(ctx context.Context, request GetDeviceRequestObject) (GetDeviceResponseObject, error)
 
+	// (PATCH /api/v1/devices/{name})
+	UpdateDevice(ctx context.Context, request UpdateDeviceRequestObject) (UpdateDeviceResponseObject, error)
+
 	// (GET /api/v1/devices/{name}/addresses)
 	ListAddresses(ctx context.Context, request ListAddressesRequestObject) (ListAddressesResponseObject, error)
 
@@ -4062,8 +4429,20 @@ type StrictServerInterface interface {
 	// (POST /api/v1/virtual-machines)
 	CreateVirtualMachine(ctx context.Context, request CreateVirtualMachineRequestObject) (CreateVirtualMachineResponseObject, error)
 
+	// (GET /api/v1/virtual-machines/{name})
+	GetVirtualMachine(ctx context.Context, request GetVirtualMachineRequestObject) (GetVirtualMachineResponseObject, error)
+
+	// (PATCH /api/v1/virtual-machines/{name})
+	UpdateVirtualMachine(ctx context.Context, request UpdateVirtualMachineRequestObject) (UpdateVirtualMachineResponseObject, error)
+
+	// (GET /api/v1/virtual-machines/{name}/addresses)
+	ListVirtualAddresses(ctx context.Context, request ListVirtualAddressesRequestObject) (ListVirtualAddressesResponseObject, error)
+
 	// (POST /api/v1/virtual-machines/{name}/addresses/create)
 	CreateVirtualAddress(ctx context.Context, request CreateVirtualAddressRequestObject) (CreateVirtualAddressResponseObject, error)
+
+	// (GET /api/v1/virtual-machines/{name}/interfaces)
+	ListVirtualInterfaces(ctx context.Context, request ListVirtualInterfacesRequestObject) (ListVirtualInterfacesResponseObject, error)
 
 	// (POST /api/v1/virtual-machines/{name}/interfaces/create)
 	CreateVirtualInterface(ctx context.Context, request CreateVirtualInterfaceRequestObject) (CreateVirtualInterfaceResponseObject, error)
@@ -4454,6 +4833,39 @@ func (sh *strictHandler) GetDevice(w http.ResponseWriter, r *http.Request, name 
 		sh.options.ResponseErrorHandlerFunc(w, r, err)
 	} else if validResponse, ok := response.(GetDeviceResponseObject); ok {
 		if err := validResponse.VisitGetDeviceResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// UpdateDevice operation middleware
+func (sh *strictHandler) UpdateDevice(w http.ResponseWriter, r *http.Request, name string) {
+	var request UpdateDeviceRequestObject
+
+	request.Name = name
+
+	var body UpdateDeviceJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.UpdateDevice(ctx, request.(UpdateDeviceRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "UpdateDevice")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(UpdateDeviceResponseObject); ok {
+		if err := validResponse.VisitUpdateDeviceResponse(w); err != nil {
 			sh.options.ResponseErrorHandlerFunc(w, r, err)
 		}
 	} else if response != nil {
@@ -5362,6 +5774,91 @@ func (sh *strictHandler) CreateVirtualMachine(w http.ResponseWriter, r *http.Req
 	}
 }
 
+// GetVirtualMachine operation middleware
+func (sh *strictHandler) GetVirtualMachine(w http.ResponseWriter, r *http.Request, name string) {
+	var request GetVirtualMachineRequestObject
+
+	request.Name = name
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetVirtualMachine(ctx, request.(GetVirtualMachineRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetVirtualMachine")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetVirtualMachineResponseObject); ok {
+		if err := validResponse.VisitGetVirtualMachineResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// UpdateVirtualMachine operation middleware
+func (sh *strictHandler) UpdateVirtualMachine(w http.ResponseWriter, r *http.Request, name string) {
+	var request UpdateVirtualMachineRequestObject
+
+	request.Name = name
+
+	var body UpdateVirtualMachineJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.UpdateVirtualMachine(ctx, request.(UpdateVirtualMachineRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "UpdateVirtualMachine")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(UpdateVirtualMachineResponseObject); ok {
+		if err := validResponse.VisitUpdateVirtualMachineResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ListVirtualAddresses operation middleware
+func (sh *strictHandler) ListVirtualAddresses(w http.ResponseWriter, r *http.Request, name string) {
+	var request ListVirtualAddressesRequestObject
+
+	request.Name = name
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ListVirtualAddresses(ctx, request.(ListVirtualAddressesRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ListVirtualAddresses")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ListVirtualAddressesResponseObject); ok {
+		if err := validResponse.VisitListVirtualAddressesResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // CreateVirtualAddress operation middleware
 func (sh *strictHandler) CreateVirtualAddress(w http.ResponseWriter, r *http.Request, name string) {
 	var request CreateVirtualAddressRequestObject
@@ -5388,6 +5885,32 @@ func (sh *strictHandler) CreateVirtualAddress(w http.ResponseWriter, r *http.Req
 		sh.options.ResponseErrorHandlerFunc(w, r, err)
 	} else if validResponse, ok := response.(CreateVirtualAddressResponseObject); ok {
 		if err := validResponse.VisitCreateVirtualAddressResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ListVirtualInterfaces operation middleware
+func (sh *strictHandler) ListVirtualInterfaces(w http.ResponseWriter, r *http.Request, name string) {
+	var request ListVirtualInterfacesRequestObject
+
+	request.Name = name
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ListVirtualInterfaces(ctx, request.(ListVirtualInterfacesRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ListVirtualInterfaces")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ListVirtualInterfacesResponseObject); ok {
+		if err := validResponse.VisitListVirtualInterfacesResponse(w); err != nil {
 			sh.options.ResponseErrorHandlerFunc(w, r, err)
 		}
 	} else if response != nil {
@@ -5667,54 +6190,59 @@ func (sh *strictHandler) CreateVirtualTunnelTermination(w http.ResponseWriter, r
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
+	"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",
+	"AAD//w==",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

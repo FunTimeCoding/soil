@@ -10,15 +10,18 @@ func (c *Client) CreateAddress(
 	device string,
 	interfaceName string,
 	address string,
+	status string,
 ) string {
-	result, e := c.client.CreateAddress(
-		c.context,
-		device,
-		client.CreateAddressRequest{
-			Interface: interfaceName,
-			Address:   address,
-		},
-	)
+	body := client.CreateAddressRequest{
+		Interface: interfaceName,
+		Address:   address,
+	}
+
+	if status != "" {
+		body.Status = &status
+	}
+
+	result, e := c.client.CreateAddress(c.context, device, body)
 	errors.PanicOnError(e)
 
 	return web.ReadString(result)

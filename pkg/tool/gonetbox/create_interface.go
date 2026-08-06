@@ -9,6 +9,7 @@ import (
 
 func createInterface(c *client.Client) *cobra.Command {
 	var interfaceType string
+	var physicalAddress string
 	result := &cobra.Command{
 		Use:   "create-interface [device] [name]",
 		Short: "Create a network interface on a device",
@@ -22,6 +23,7 @@ func createInterface(c *client.Client) *cobra.Command {
 					arguments[0],
 					arguments[1],
 					interfaceType,
+					physicalAddress,
 				),
 			)
 		},
@@ -31,6 +33,12 @@ func createInterface(c *client.Client) *cobra.Command {
 		"type",
 		"",
 		"interface type (e.g. 1000base-t)",
+	)
+	result.Flags().StringVar(
+		&physicalAddress,
+		"physical-address",
+		"",
+		"MAC address to create and assign to the interface",
 	)
 	errors.PanicOnError(result.MarkFlagRequired("type"))
 

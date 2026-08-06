@@ -42,7 +42,7 @@ func (s *Server) createAddress(
 		return s.captureFail(j, "interface not found on device")
 	}
 
-	result, k := s.client.CreateAddress(iface.Identifier, address)
+	result, k := s.client.CreateAddress(iface.Identifier, address, "")
 
 	if k != nil {
 		return s.captureFail(k, "address not assigned")

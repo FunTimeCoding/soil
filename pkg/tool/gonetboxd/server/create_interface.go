@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/network"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 	"github.com/netbox-community/go-netbox/v4"
 )
@@ -24,6 +25,16 @@ func (s *Server) CreateInterface(
 
 	if f != nil {
 		return server.CreateInterface500JSONResponse(*s.captureDetail(f)), nil
+	}
+
+	if r.Body.PhysicalAddress != nil {
+		if _, g := s.client.CreatePhysicalInterface(
+			network.PhysicalAddress(*r.Body.PhysicalAddress),
+			"",
+			i,
+		); g != nil {
+			return server.CreateInterface500JSONResponse(*s.captureDetail(g)), nil
+		}
 	}
 
 	result := server.Interface{

@@ -21,7 +21,13 @@ func (s *Server) CreateVirtualAddress(
 		return server.CreateVirtualAddress500JSONResponse(*s.captureDetail(f)), nil
 	}
 
-	a, g := s.client.CreateVirtualAddress(i.GetId(), r.Body.Address)
+	status := ""
+
+	if r.Body.Status != nil {
+		status = *r.Body.Status
+	}
+
+	a, g := s.client.CreateVirtualAddress(i.GetId(), r.Body.Address, status)
 
 	if g != nil {
 		return server.CreateVirtualAddress500JSONResponse(*s.captureDetail(g)), nil
