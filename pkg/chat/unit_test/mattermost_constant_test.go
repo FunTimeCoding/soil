@@ -15,6 +15,11 @@ func TestClient(t *testing.T) {
 		"MATTERMOST_CHANNEL",
 		constant.MattermostChannelEnvironment,
 	)
+	assert.String(
+		t,
+		"MATTERMOST_INSECURE",
+		constant.MattermostInsecureEnvironment,
+	)
 	assert.String(t, "construction", constant.MattermostConstruction)
 	assert.String(t, "hourglass_flowing_sand", constant.MattermostHourglass)
 	assert.String(t, "repeat", constant.MattermostRepeat)

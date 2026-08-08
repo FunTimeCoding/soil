@@ -22,5 +22,9 @@ func NewEnvironment(o ...Option) *Client {
 		o = append(o, WithChannel(s))
 	}
 
+	if environment.Exists(constant.MattermostInsecureEnvironment) {
+		o = append(o, WithInsecure())
+	}
+
 	return New(o...)
 }

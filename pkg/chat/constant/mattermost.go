@@ -6,10 +6,11 @@ import (
 )
 
 const (
-	MattermostHostEnvironment    = "MATTERMOST_HOST"
-	MattermostTokenEnvironment   = "MATTERMOST_TOKEN"
-	MattermostTeamEnvironment    = "MATTERMOST_TEAM"
-	MattermostChannelEnvironment = "MATTERMOST_CHANNEL"
+	MattermostHostEnvironment     = "MATTERMOST_HOST"
+	MattermostTokenEnvironment    = "MATTERMOST_TOKEN"
+	MattermostTeamEnvironment     = "MATTERMOST_TEAM"
+	MattermostChannelEnvironment  = "MATTERMOST_CHANNEL"
+	MattermostInsecureEnvironment = "MATTERMOST_INSECURE"
 
 	MattermostPerPage    int = 1000
 	MattermostMaxPerPage int = 200
