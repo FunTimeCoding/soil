@@ -10,6 +10,8 @@ func main() {
 	mattermost.Since()
 
 	if false {
+		mattermost.DeleteTwice()
+		mattermost.Paging()
 		mattermost.Latest()
 		mattermost.Before()
 		discord.DeleteLoop()

@@ -1,7 +1,6 @@
 package mattermost
 
 import (
-	"github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/post"
 	"github.com/mattermost/mattermost/server/public/model"
 	"time"
@@ -15,18 +14,10 @@ func (c *Client) PostsBefore(
 	const maximumDelete = 1000
 	var result []*post.Post
 	position := 0
-	pageNumber := 0
+	anchor := ""
 
 	for len(result) < maximumDelete {
-		page, _, e := c.client.GetPostsForChannel(
-			c.context,
-			h.Id,
-			pageNumber,
-			constant.MattermostPerPage,
-			constant.MattermostEmptyEntityTag,
-			false,
-			false,
-		)
+		page, e := c.postPage(h, anchor, false)
 
 		if e != nil {
 			return nil, e
@@ -57,7 +48,7 @@ func (c *Client) PostsBefore(
 			position++
 		}
 
-		pageNumber++
+		anchor = page.Order[len(page.Order)-1]
 	}
 
 	return result, nil

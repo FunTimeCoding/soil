@@ -13,18 +13,10 @@ func (c *Client) PostBefore(
 	h *model.Channel,
 	t time.Time,
 ) (*post.Post, error) {
-	pageNumber := 0
+	anchor := ""
 
 	for {
-		page, _, e := c.client.GetPostsForChannel(
-			c.context,
-			h.Id,
-			pageNumber,
-			chat.MattermostPerPage,
-			chat.MattermostEmptyEntityTag,
-			true,
-			false,
-		)
+		page, e := c.postPage(h, anchor, true)
 
 		if e != nil {
 			return nil, e
@@ -52,6 +44,6 @@ func (c *Client) PostBefore(
 			}
 		}
 
-		pageNumber++
+		anchor = page.Order[len(page.Order)-1]
 	}
 }
