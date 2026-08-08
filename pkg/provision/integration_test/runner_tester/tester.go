@@ -7,8 +7,10 @@ import (
 )
 
 type Tester struct {
-	t       *testing.T
-	Runner  *runner.Runner
-	applied []*ApplyCall
-	mutex   sync.Mutex
+	t         *testing.T
+	Runner    *runner.Runner
+	ClonePath string
+	remote    string
+	applied   []*ApplyCall
+	mutex     sync.Mutex
 }

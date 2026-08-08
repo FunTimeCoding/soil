@@ -23,7 +23,7 @@ func (r *Runner) syncWithDiff() *SyncResult {
 		remote,
 	)
 	diff := r.gitDiffLog(local, remote)
-	r.gitPull()
+	r.gitReset()
 
 	return &SyncResult{Changed: true, Diff: diff}
 }

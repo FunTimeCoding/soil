@@ -19,6 +19,7 @@ type Runner struct {
 	cleanupFunction func()
 	registry        face.ProcessRegistry
 	logger          *logger.Logger
+	reporter        face.Reporter
 	recovery        *recovery.Recovery
 	trigger         chan TriggerRequest
 	sync            chan SyncRequest

@@ -4,6 +4,7 @@ import "github.com/funtimecoding/soil/pkg/system/run"
 
 func (r *Runner) newRun() *run.Run {
 	result := run.New()
+	result.SetReporter(r.reporter, "git")
 
 	if r.registry != nil {
 		result.WithRegistry(r.registry)

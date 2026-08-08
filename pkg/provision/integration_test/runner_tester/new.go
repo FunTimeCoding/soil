@@ -36,11 +36,12 @@ func New(t *testing.T) *Tester {
 	c = run.New()
 	c.Directory = clone
 	c.Start("git", "push", "origin", constant.RunnerBranch)
-	result := &Tester{t: t}
+	result := &Tester{t: t, ClonePath: clone, remote: remote}
 	result.Runner = runner.New(
 		runner.Configuration{
 			Repository: remote,
 			ClonePath:  clone,
+			ToolPath:   ".",
 			ApplyFunction: func(
 				parameters map[string]any,
 				triggerSource string,

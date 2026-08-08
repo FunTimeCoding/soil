@@ -22,7 +22,7 @@ func (r *Runner) gitSync() bool {
 		constant.RunnerRemote,
 		remote,
 	)
-	r.gitPull()
+	r.gitReset()
 
 	return true
 }

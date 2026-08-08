@@ -21,6 +21,7 @@ func New(
 		cleanupFunction: c.CleanupFunction,
 		registry:        c.Registry,
 		logger:          l,
+		reporter:        r,
 		recovery:        recovery.New(l, r),
 		trigger:         make(chan TriggerRequest, 1),
 		sync:            make(chan SyncRequest, 1),

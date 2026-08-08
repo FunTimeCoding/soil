@@ -41,8 +41,9 @@ func (r *Run) Start(s ...string) string {
 				e,
 				r.reporterLabel,
 				map[string]any{
-					"output": r.OutputString,
-					"stderr": r.ErrorString,
+					"command": join.Space(s...),
+					"output":  r.OutputString,
+					"stderr":  r.ErrorString,
 				},
 			)
 		}
