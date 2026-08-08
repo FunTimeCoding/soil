@@ -2,7 +2,7 @@ package github
 
 import (
 	"github.com/funtimecoding/soil/pkg/github/run"
-	"github.com/google/go-github/v89/github"
+	"github.com/google/go-github/v90/github"
 )
 
 func (c *Client) ProjectRuns(

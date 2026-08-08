@@ -3,7 +3,7 @@ package run
 import (
 	"github.com/funtimecoding/soil/pkg/github/repository"
 	"github.com/funtimecoding/soil/pkg/monitor/constant"
-	"github.com/google/go-github/v89/github"
+	"github.com/google/go-github/v90/github"
 	"time"
 )
 

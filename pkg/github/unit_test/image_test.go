@@ -7,7 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/github/constant"
 	"github.com/funtimecoding/soil/pkg/github/image"
 	strings "github.com/funtimecoding/soil/pkg/strings/constant"
-	"github.com/google/go-github/v89/github"
+	"github.com/google/go-github/v90/github"
 	"testing"
 	"time"
 )
