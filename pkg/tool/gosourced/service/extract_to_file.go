@@ -7,6 +7,7 @@ import (
 	"github.com/dave/dst/decorator/resolver/goast"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/strings/camel"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"go/parser"
 	"go/token"
@@ -70,7 +71,7 @@ func (s *Service) ExtractToFile(
 
 	targetPath := filepath.Join(
 		filepath.Dir(fullPath),
-		fmt.Sprintf("%s.go", toSnakeCase(functionName)),
+		fmt.Sprintf("%s.go", camel.ToSnake(functionName)),
 	)
 
 	if _, e := os.Stat(targetPath); e == nil {
@@ -149,7 +150,7 @@ func (s *Service) ExtractToFile(
 		name := remainingFunctionName(file)
 		renamePath := filepath.Join(
 			filepath.Dir(fullPath),
-			fmt.Sprintf("%s.go", toSnakeCase(name)),
+			fmt.Sprintf("%s.go", camel.ToSnake(name)),
 		)
 
 		if _, e := os.Stat(renamePath); e == nil {

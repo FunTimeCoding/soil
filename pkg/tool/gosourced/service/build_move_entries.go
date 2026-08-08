@@ -3,6 +3,7 @@ package service
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/source/imports"
+	"github.com/funtimecoding/soil/pkg/strings/camel"
 	"go/ast"
 	"golang.org/x/tools/go/packages"
 	"unicode"
@@ -72,7 +73,7 @@ func buildMoveEntries(
 		name := targetFile
 
 		if name == "" {
-			name = fmt.Sprintf("%s.go", toSnakeCase(newName))
+			name = fmt.Sprintf("%s.go", camel.ToSnake(newName))
 		}
 
 		result = append(

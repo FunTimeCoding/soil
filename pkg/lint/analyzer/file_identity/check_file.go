@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/strings/camel"
 	"go/ast"
 	"go/types"
 	"golang.org/x/tools/go/packages"
@@ -96,7 +97,7 @@ func checkFile(
 	}
 
 	stem := strings.TrimSuffix(name, constant.GoExtension)
-	expected := toSnakeCase(sole.name)
+	expected := camel.ToSnake(sole.name)
 
 	if stem != expected {
 		results.AddConcern(

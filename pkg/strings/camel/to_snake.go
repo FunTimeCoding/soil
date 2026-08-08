@@ -1,11 +1,11 @@
-package file_identity
+package camel
 
 import (
 	"strings"
 	"unicode"
 )
 
-func toSnakeCase(s string) string {
+func ToSnake(s string) string {
 	var b strings.Builder
 
 	for i, r := range s {
