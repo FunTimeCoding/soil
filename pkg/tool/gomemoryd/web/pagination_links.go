@@ -12,6 +12,7 @@ func paginationLinks(
 	total int,
 	tag string,
 	memoryType string,
+	scope string,
 ) []gomponents.Node {
 	var navigation []gomponents.Node
 
@@ -21,7 +22,7 @@ func paginationLinks(
 			html.A(
 				gomponents.Attr(
 					"href",
-					pageLink(page-1, tag, memoryType),
+					pageLink(page-1, tag, memoryType, scope),
 				),
 				gomponents.Text("← Newer"),
 			),
@@ -38,7 +39,7 @@ func paginationLinks(
 			html.A(
 				gomponents.Attr(
 					"href",
-					pageLink(page+1, tag, memoryType),
+					pageLink(page+1, tag, memoryType, scope),
 				),
 				gomponents.Text("Older →"),
 			),

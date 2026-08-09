@@ -141,6 +141,18 @@ type ProfileSummary struct {
 	UpdatedAt   string    `json:"updated_at"`
 }
 
+// Relation defines model for Relation.
+type Relation struct {
+	CreatedAt        *string `json:"created_at,omitempty"`
+	SourceIdentifier int64   `json:"source_identifier"`
+	SourceName       string  `json:"source_name"`
+	SourceScope      *string `json:"source_scope,omitempty"`
+	TargetIdentifier int64   `json:"target_identifier"`
+	TargetName       string  `json:"target_name"`
+	TargetScope      *string `json:"target_scope,omitempty"`
+	Type             *string `json:"type,omitempty"`
+}
+
 // SourcedMemory defines model for SourcedMemory.
 type SourcedMemory struct {
 	Identifier       int64  `json:"identifier"`
@@ -185,10 +197,23 @@ type GetProfileParams struct {
 	Detail *bool   `form:"detail,omitempty" json:"detail,omitempty"`
 }
 
+// DeleteRelationParams defines parameters for DeleteRelation.
+type DeleteRelationParams struct {
+	SourceIdentifier int64 `form:"source_identifier" json:"source_identifier"`
+	TargetIdentifier int64 `form:"target_identifier" json:"target_identifier"`
+}
+
 // PostRelationJSONBody defines parameters for PostRelation.
 type PostRelationJSONBody struct {
-	SourceIdentifier int64 `json:"source_identifier"`
-	TargetIdentifier int64 `json:"target_identifier"`
+	SourceIdentifier int64   `json:"source_identifier"`
+	TargetIdentifier int64   `json:"target_identifier"`
+	Type             *string `json:"type,omitempty"`
+}
+
+// GetRelationsParams defines parameters for GetRelations.
+type GetRelationsParams struct {
+	Type  *string `form:"type,omitempty" json:"type,omitempty"`
+	Scope *string `form:"scope,omitempty" json:"scope,omitempty"`
 }
 
 // GetVersionsParams defines parameters for GetVersions.
@@ -317,6 +342,9 @@ type ClientInterface interface {
 	// GetProfile performs a GET /api/profile (the `GetProfile` operationId) request.
 	GetProfile(ctx context.Context, params *GetProfileParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// DeleteRelation performs a DELETE /api/relation (the `DeleteRelation` operationId) request.
+	DeleteRelation(ctx context.Context, params *DeleteRelationParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// PostRelationWithBody performs a POST /api/relation (the `PostRelation` operationId) request,
 	// with any type of body and a specified content type.
 	PostRelationWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -324,6 +352,9 @@ type ClientInterface interface {
 	// PostRelation performs a POST /api/relation (the `PostRelation` operationId) request.
 	// Takes a body of the `application/json` content type.
 	PostRelation(ctx context.Context, body PostRelationJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetRelations performs a GET /api/relations (the `GetRelations` operationId) request.
+	GetRelations(ctx context.Context, params *GetRelationsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GetVersions performs a GET /api/versions (the `GetVersions` operationId) request.
 	GetVersions(ctx context.Context, params *GetVersionsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -452,6 +483,19 @@ func (c *Client) GetProfile(ctx context.Context, params *GetProfileParams, reqEd
 	return c.Client.Do(req)
 }
 
+// DeleteRelation performs a DELETE /api/relation (the `DeleteRelation` operationId) request.
+func (c *Client) DeleteRelation(ctx context.Context, params *DeleteRelationParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteRelationRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 // PostRelationWithBody performs a POST /api/relation (the `PostRelation` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) PostRelationWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
@@ -470,6 +514,19 @@ func (c *Client) PostRelationWithBody(ctx context.Context, contentType string, b
 // Takes a body of the `application/json` content type.
 func (c *Client) PostRelation(ctx context.Context, body PostRelationJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewPostRelationRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetRelations performs a GET /api/relations (the `GetRelations` operationId) request.
+func (c *Client) GetRelations(ctx context.Context, params *GetRelationsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetRelationsRequest(c.Server, params)
 	if err != nil {
 		return nil, err
 	}
@@ -797,6 +854,64 @@ func NewGetProfileRequest(server string, params *GetProfileParams) (*http.Reques
 	return req, nil
 }
 
+// NewDeleteRelationRequest constructs an http.Request for the DeleteRelation method
+func NewDeleteRelationRequest(server string, params *DeleteRelationParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/relation")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "source_identifier", params.SourceIdentifier, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: "int64"}); err != nil {
+			return nil, err
+		} else {
+			for _, qp := range strings.Split(queryFrag, "&") {
+				rawQueryFragments = append(rawQueryFragments, qp)
+			}
+		}
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "target_identifier", params.TargetIdentifier, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: "int64"}); err != nil {
+			return nil, err
+		} else {
+			for _, qp := range strings.Split(queryFrag, "&") {
+				rawQueryFragments = append(rawQueryFragments, qp)
+			}
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodDelete, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewPostRelationRequest calls the generic PostRelation builder with application/json body
 func NewPostRelationRequest(server string, body PostRelationJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
@@ -833,6 +948,72 @@ func NewPostRelationRequestWithBody(server string, contentType string, body io.R
 	}
 
 	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewGetRelationsRequest constructs an http.Request for the GetRelations method
+func NewGetRelationsRequest(server string, params *GetRelationsParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/relations")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if params.Type != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "type", *params.Type, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if params.Scope != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "scope", *params.Scope, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
 
 	return req, nil
 }
@@ -1000,6 +1181,11 @@ type ClientWithResponsesInterface interface {
 	// Returns a wrapper object for the known response body format(s).
 	GetProfileWithResponse(ctx context.Context, params *GetProfileParams, reqEditors ...RequestEditorFn) (*GetProfileResponse, error)
 
+	// DeleteRelationWithResponse performs a DELETE /api/relation (the `DeleteRelation` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	DeleteRelationWithResponse(ctx context.Context, params *DeleteRelationParams, reqEditors ...RequestEditorFn) (*DeleteRelationResponse, error)
+
 	// PostRelationWithBodyWithResponse performs a POST /api/relation (the `PostRelation` operationId) request,
 	// with any type of body and a specified content type.
 	//
@@ -1009,6 +1195,11 @@ type ClientWithResponsesInterface interface {
 	// PostRelationWithResponse performs a POST /api/relation (the `PostRelation` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	PostRelationWithResponse(ctx context.Context, body PostRelationJSONRequestBody, reqEditors ...RequestEditorFn) (*PostRelationResponse, error)
+
+	// GetRelationsWithResponse performs a GET /api/relations (the `GetRelations` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetRelationsWithResponse(ctx context.Context, params *GetRelationsParams, reqEditors ...RequestEditorFn) (*GetRelationsResponse, error)
 
 	// GetVersionsWithResponse performs a GET /api/versions (the `GetVersions` operationId) request.
 	//
@@ -1311,6 +1502,54 @@ func (r GetProfileResponse) ContentType() string {
 	return ""
 }
 
+type DeleteRelationResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r DeleteRelationResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r DeleteRelationResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r DeleteRelationResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteRelationResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteRelationResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r DeleteRelationResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type PostRelationResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -1346,6 +1585,54 @@ func (r PostRelationResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r PostRelationResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type GetRelationsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *[]Relation
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetRelationsResponse) GetJSON200() *[]Relation {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetRelationsResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetRelationsResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetRelationsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetRelationsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetRelationsResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -1499,6 +1786,17 @@ func (c *ClientWithResponses) GetProfileWithResponse(ctx context.Context, params
 	return ParseGetProfileResponse(rsp)
 }
 
+// DeleteRelationWithResponse performs a DELETE /api/relation (the `DeleteRelation` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) DeleteRelationWithResponse(ctx context.Context, params *DeleteRelationParams, reqEditors ...RequestEditorFn) (*DeleteRelationResponse, error) {
+	rsp, err := c.DeleteRelation(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteRelationResponse(rsp)
+}
+
 // PostRelationWithBodyWithResponse performs a POST /api/relation (the `PostRelation` operationId) request,
 // with any type of body and a specified content type.
 //
@@ -1519,6 +1817,17 @@ func (c *ClientWithResponses) PostRelationWithResponse(ctx context.Context, body
 		return nil, err
 	}
 	return ParsePostRelationResponse(rsp)
+}
+
+// GetRelationsWithResponse performs a GET /api/relations (the `GetRelations` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetRelationsWithResponse(ctx context.Context, params *GetRelationsParams, reqEditors ...RequestEditorFn) (*GetRelationsResponse, error) {
+	rsp, err := c.GetRelations(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetRelationsResponse(rsp)
 }
 
 // GetVersionsWithResponse performs a GET /api/versions (the `GetVersions` operationId) request.
@@ -1737,6 +2046,42 @@ func ParseGetProfileResponse(rsp *http.Response) (*GetProfileResponse, error) {
 	return response, nil
 }
 
+// ParseDeleteRelationResponse parses an HTTP response from a DeleteRelationWithResponse call
+func ParseDeleteRelationResponse(rsp *http.Response) (*DeleteRelationResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteRelationResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case rsp.StatusCode == 200:
+		break // No content-type
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParsePostRelationResponse parses an HTTP response from a PostRelationWithResponse call
 func ParsePostRelationResponse(rsp *http.Response) (*PostRelationResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -1753,6 +2098,39 @@ func ParsePostRelationResponse(rsp *http.Response) (*PostRelationResponse, error
 	switch {
 	case rsp.StatusCode == 200:
 		break // No content-type
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetRelationsResponse parses an HTTP response from a GetRelationsWithResponse call
+func ParseGetRelationsResponse(rsp *http.Response) (*GetRelationsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetRelationsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []Relation
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse

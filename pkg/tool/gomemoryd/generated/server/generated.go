@@ -147,6 +147,18 @@ type ProfileSummary struct {
 	UpdatedAt   string    `json:"updated_at"`
 }
 
+// Relation defines model for Relation.
+type Relation struct {
+	CreatedAt        *string `json:"created_at,omitempty"`
+	SourceIdentifier int64   `json:"source_identifier"`
+	SourceName       string  `json:"source_name"`
+	SourceScope      *string `json:"source_scope,omitempty"`
+	TargetIdentifier int64   `json:"target_identifier"`
+	TargetName       string  `json:"target_name"`
+	TargetScope      *string `json:"target_scope,omitempty"`
+	Type             *string `json:"type,omitempty"`
+}
+
 // SourcedMemory defines model for SourcedMemory.
 type SourcedMemory struct {
 	Identifier       int64  `json:"identifier"`
@@ -191,10 +203,23 @@ type GetProfileParams struct {
 	Detail *bool   `form:"detail,omitempty" json:"detail,omitempty"`
 }
 
+// DeleteRelationParams defines parameters for DeleteRelation.
+type DeleteRelationParams struct {
+	SourceIdentifier int64 `form:"source_identifier" json:"source_identifier"`
+	TargetIdentifier int64 `form:"target_identifier" json:"target_identifier"`
+}
+
 // PostRelationJSONBody defines parameters for PostRelation.
 type PostRelationJSONBody struct {
-	SourceIdentifier int64 `json:"source_identifier"`
-	TargetIdentifier int64 `json:"target_identifier"`
+	SourceIdentifier int64   `json:"source_identifier"`
+	TargetIdentifier int64   `json:"target_identifier"`
+	Type             *string `json:"type,omitempty"`
+}
+
+// GetRelationsParams defines parameters for GetRelations.
+type GetRelationsParams struct {
+	Type  *string `form:"type,omitempty" json:"type,omitempty"`
+	Scope *string `form:"scope,omitempty" json:"scope,omitempty"`
 }
 
 // GetVersionsParams defines parameters for GetVersions.
@@ -237,8 +262,14 @@ type ServerInterface interface {
 	// (GET /api/profile)
 	GetProfile(w http.ResponseWriter, r *http.Request, params GetProfileParams)
 
+	// (DELETE /api/relation)
+	DeleteRelation(w http.ResponseWriter, r *http.Request, params DeleteRelationParams)
+
 	// (POST /api/relation)
 	PostRelation(w http.ResponseWriter, r *http.Request)
+
+	// (GET /api/relations)
+	GetRelations(w http.ResponseWriter, r *http.Request, params GetRelationsParams)
 
 	// (GET /api/versions)
 	GetVersions(w http.ResponseWriter, r *http.Request, params GetVersionsParams)
@@ -428,11 +459,103 @@ func (siw *ServerInterfaceWrapper) GetProfile(w http.ResponseWriter, r *http.Req
 	handler.ServeHTTP(w, r)
 }
 
+// DeleteRelation operation middleware
+func (siw *ServerInterfaceWrapper) DeleteRelation(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params DeleteRelationParams
+
+	// ------------- Required query parameter "source_identifier" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, true, "source_identifier", r.URL.Query(), &params.SourceIdentifier, runtime.BindQueryParameterOptions{Type: "integer", Format: "int64"})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "source_identifier"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "source_identifier", Err: err})
+		}
+		return
+	}
+
+	// ------------- Required query parameter "target_identifier" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, true, "target_identifier", r.URL.Query(), &params.TargetIdentifier, runtime.BindQueryParameterOptions{Type: "integer", Format: "int64"})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "target_identifier"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "target_identifier", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteRelation(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
 // PostRelation operation middleware
 func (siw *ServerInterfaceWrapper) PostRelation(w http.ResponseWriter, r *http.Request) {
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.PostRelation(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetRelations operation middleware
+func (siw *ServerInterfaceWrapper) GetRelations(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetRelationsParams
+
+	// ------------- Optional query parameter "type" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "type", r.URL.Query(), &params.Type, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "type"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "type", Err: err})
+		}
+		return
+	}
+
+	// ------------- Optional query parameter "scope" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "scope", r.URL.Query(), &params.Scope, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "scope"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "scope", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetRelations(w, r, params)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -627,7 +750,9 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/memory/{identifier}", wrapper.DeleteMemory)
 	m.HandleFunc(http.MethodPut+" "+options.BaseURL+"/api/memory/{identifier}", wrapper.PutMemory)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/memories/sourced", wrapper.GetSourcedMemories)
+	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/relation", wrapper.DeleteRelation)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/relation", wrapper.PostRelation)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/relations", wrapper.GetRelations)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/impressions", wrapper.PostImpressions)
 
 	return m
@@ -865,6 +990,50 @@ func (response GetProfile500JSONResponse) VisitGetProfileResponse(w http.Respons
 	return err
 }
 
+type DeleteRelationRequestObject struct {
+	Params DeleteRelationParams
+}
+
+type DeleteRelationResponseObject interface {
+	VisitDeleteRelationResponse(w http.ResponseWriter) error
+}
+
+type DeleteRelation200Response struct {
+}
+
+func (response DeleteRelation200Response) VisitDeleteRelationResponse(w http.ResponseWriter) error {
+	w.WriteHeader(200)
+	return nil
+}
+
+type DeleteRelation404JSONResponse Error
+
+func (response DeleteRelation404JSONResponse) VisitDeleteRelationResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteRelation500JSONResponse ErrorResponse
+
+func (response DeleteRelation500JSONResponse) VisitDeleteRelationResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type PostRelationRequestObject struct {
 	Body *PostRelationJSONRequestBody
 }
@@ -884,6 +1053,42 @@ func (response PostRelation200Response) VisitPostRelationResponse(w http.Respons
 type PostRelation500JSONResponse ErrorResponse
 
 func (response PostRelation500JSONResponse) VisitPostRelationResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetRelationsRequestObject struct {
+	Params GetRelationsParams
+}
+
+type GetRelationsResponseObject interface {
+	VisitGetRelationsResponse(w http.ResponseWriter) error
+}
+
+type GetRelations200JSONResponse []Relation
+
+func (response GetRelations200JSONResponse) VisitGetRelationsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetRelations500JSONResponse ErrorResponse
+
+func (response GetRelations500JSONResponse) VisitGetRelationsResponse(w http.ResponseWriter) error {
 
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(response); err != nil {
@@ -952,8 +1157,14 @@ type StrictServerInterface interface {
 	// (GET /api/profile)
 	GetProfile(ctx context.Context, request GetProfileRequestObject) (GetProfileResponseObject, error)
 
+	// (DELETE /api/relation)
+	DeleteRelation(ctx context.Context, request DeleteRelationRequestObject) (DeleteRelationResponseObject, error)
+
 	// (POST /api/relation)
 	PostRelation(ctx context.Context, request PostRelationRequestObject) (PostRelationResponseObject, error)
+
+	// (GET /api/relations)
+	GetRelations(ctx context.Context, request GetRelationsRequestObject) (GetRelationsResponseObject, error)
 
 	// (GET /api/versions)
 	GetVersions(ctx context.Context, request GetVersionsRequestObject) (GetVersionsResponseObject, error)
@@ -1172,6 +1383,32 @@ func (sh *strictHandler) GetProfile(w http.ResponseWriter, r *http.Request, para
 	}
 }
 
+// DeleteRelation operation middleware
+func (sh *strictHandler) DeleteRelation(w http.ResponseWriter, r *http.Request, params DeleteRelationParams) {
+	var request DeleteRelationRequestObject
+
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.DeleteRelation(ctx, request.(DeleteRelationRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "DeleteRelation")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(DeleteRelationResponseObject); ok {
+		if err := validResponse.VisitDeleteRelationResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // PostRelation operation middleware
 func (sh *strictHandler) PostRelation(w http.ResponseWriter, r *http.Request) {
 	var request PostRelationRequestObject
@@ -1196,6 +1433,32 @@ func (sh *strictHandler) PostRelation(w http.ResponseWriter, r *http.Request) {
 		sh.options.ResponseErrorHandlerFunc(w, r, err)
 	} else if validResponse, ok := response.(PostRelationResponseObject); ok {
 		if err := validResponse.VisitPostRelationResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetRelations operation middleware
+func (sh *strictHandler) GetRelations(w http.ResponseWriter, r *http.Request, params GetRelationsParams) {
+	var request GetRelationsRequestObject
+
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetRelations(ctx, request.(GetRelationsRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetRelations")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetRelationsResponseObject); ok {
+		if err := validResponse.VisitGetRelationsResponse(w); err != nil {
 			sh.options.ResponseErrorHandlerFunc(w, r, err)
 		}
 	} else if response != nil {
@@ -1234,29 +1497,31 @@ func (sh *strictHandler) GetVersions(w http.ResponseWriter, r *http.Request, par
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"3FlBc9s2E/0rHHzfkbXUNulBxzZpJ4fOeJxpLhmPBiZWEhISoIGlUo1H/71DABQJEoQoW6rc3Gxyudh9",
-	"+/B2AT2RTBalFCBQk8UT0dkGCmr+fK+UVPUfpZIlKORgHkPzGHclkAXRqLhYk/0+JQoeK66AkcVnZ3af",
-	"Nmby4QtkSPap9XsHupRCw3T/KYEtCFxyBgL5isPkIAJfhuL6UJQKtOZSjAcXXJwLhDWowepH1vsTCql2",
-	"d/BYgcbhUpkUCAKDSDDQmeIlcimC7wtAyijS+iVljNeGNL/1/A8+GgQoaAFBS6kYFzQPQZCSkqphmVZS",
-	"FRSt4S9vSBr6TsktCCoyWFKRbUY40LFa8RyO2Wyo3gRtdCbL8NdaVioLv0K6tixAKKIYUqXorv3/GE0N",
-	"0Omh4n59Y9SZRtOj4D+Ht3+VjCJ8f+ydwp3zMeSlRLhVst4Gv8mizKEB1K/Eg2S7cBpW7JYjQPVC86xT",
-	"6zUS0TtAyvNhNDT/Rnd6ifIrCB0uwUPF1oDhd9kh0aiL1kwvUfGiqHMIGfKD5kf9tWbH/AkGf8ddWYuY",
-	"EwU5bKnAqJ/WKOYKJdI84qdXZAd92itTL69+EqGyhGsQAjyM7hCFQMq9/CJ0bHv7aVKVKaAIbEnDr+Pj",
-	"QEQpxhW3u/vd514YkSStMJ81wWNSfQwArpc0Q77tYvAgZQ5URDX6bJ02JZVpVCMZxuoQFWO3oAegt1Y3",
-	"90jNxnu43YIeCP9XsCIL8r9ZO7PP3MA+8zkQAKizH0912mkvAcfsIPUTXLm+4GvqqfF0dnMgHiNOp7r8",
-	"WBUFDQPXyM7JLoGqbHMHusrxaOd31W6ijzDGc3vWuevYZh7drYqKr50XoioeXPv5z2xjb+eafGIlcGQZ",
-	"or/hOVMgTsv5YnV5RfAfAz2E9kfT/thYWzv5hPn9nmcnFKC/UCjA4VItNqECfQJVi/B7geHNQMUalqOU",
-	"su8vNnoUhjbLZ2+eZ81uw0VHdkAn+dRD6rDwEPC9aW4raWLiWLOFrKVdsh6Gt7YcZEF+vJnfzA2zSxC0",
-	"5GRBfjaPajrjxpRnRks+6zXhUtqzfF1GWkf6gZEFuZUaP3QMbf6g8Vd3tOw0HVqWOc/Mt7Mv2pbO9sXT",
-	"etVU9BsfYbRaS1QVmAd23DLr/zSfnxR9rOcHLg9NBB6LO1eMiZsbb+pk354xEP92NRDD75TnwBKULoSk",
-	"5cBNbb9PLTUMrzjomS2FOWC6c7lPjz8Au0pdF9eoJi0AQWmy+PxEeL3yYwVq12yIhbuC6xcp7eTZL/39",
-	"Cws4aXrzu85wbhsA+k5mVQECf3BAJQ1yCRcJbiAxiSbfOG6SVl+vWfica0z60Q6Lv4tLgkPo+WoQy8a/",
-	"HP+XN3PvejWApbXwNvGbc9cyKCBiS3POEgf5K1APy5QAeWZPbRfc1+syyAFhyKV35vmBTSHlqJtWKxxe",
-	"dx1XjwnX3iPC1Fy7XE6JzsK+lVRriQjimjSogwDs0iAlZRWSjAqvUeP7S+qT/yPIa1Upd8y6JktsCCGx",
-	"KO2ROjZduFP3tKkCZcmz6N4d2fXuGqv7JYMVNbcsK5prSAcXmBeVgf4FYQBfZ2JHC+Sg/HZ+vflCUpa4",
-	"wnrFVpDTw69Uo4PFXWN1roOGFfTTj/BIa21bvuzX1OHiIccvOL/4VWjAa2aTRKqE5goo2yX1nA/iNUwN",
-	"DRE8drjzq45pwafGZtoRg4vstCPGiDjkvOAY1oa38+mThVytNIz4mY81r0sfeLxbnAnnHddVmmolBuQE",
-	"eQEaaVFek10G7kNkllz7/T8BAAD//w==",
+	"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",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

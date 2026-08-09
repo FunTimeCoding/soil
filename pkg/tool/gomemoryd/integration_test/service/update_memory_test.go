@@ -34,7 +34,7 @@ func TestServiceUpdateMemoryPreservesTags(t *testing.T) {
 	assert.FatalOnError(t, e)
 	assert.String(t, "updated content", updated.Content)
 	assert.Count(t, 2, updated.Tags)
-	assert.Count(t, 2, o.Indexer.Pushed)
+	assert.Count(t, 3, o.Indexer.Pushed)
 }
 
 func TestServiceUpdateMemoryNonexistentFails(t *testing.T) {

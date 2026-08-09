@@ -25,8 +25,13 @@ func (s *Server) paletteMemoriesSearch(
 			constant.AllScope,
 		)
 		errors.PanicOnError(e)
+		hidden := s.service.HiddenTag()
 
 		for _, m := range results {
+			if hiddenTagged(m.Tags, hidden) {
+				continue
+			}
+
 			items = append(
 				items,
 				palette.SearchItem{

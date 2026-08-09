@@ -43,6 +43,17 @@ func (s *Server) memoryDetailPage(
 		return
 	}
 
+	if hiddenTagged(m.Tags, s.service.HiddenTag()) {
+		s.view.RenderPage(
+			w,
+			"Not Found",
+			constant.MemoriesPath,
+			html.P(gomponents.Text("Memory not found.")),
+		)
+
+		return
+	}
+
 	var content []gomponents.Node
 	content = append(content, html.H3(gomponents.Text(m.Name)))
 	content = append(
@@ -56,6 +67,10 @@ func (s *Server) memoryDetailPage(
 				html.Tr(
 					html.Td(html.Strong(gomponents.Text("Type"))),
 					html.Td(gomponents.Text(m.Type)),
+				),
+				html.Tr(
+					html.Td(html.Strong(gomponents.Text("Scope"))),
+					scopeCell(m.Scope),
 				),
 				html.Tr(
 					html.Td(html.Strong(gomponents.Text("Created"))),
@@ -142,27 +157,51 @@ func (s *Server) memoryDetailPage(
 	related, e := s.service.ListRelated(identifier)
 
 	if e == nil && len(related) > 0 {
+		hidden := s.service.HiddenTag()
 		var links []gomponents.Node
 
 		for _, r := range related {
-			links = append(
-				links,
-				html.Li(
-					html.A(
-						gomponents.Attr(
-							"href",
-							fmt.Sprintf("/memories/%d", r.Identifier),
-						),
-						gomponents.Text(r.Name),
+			if hiddenTagged(r.Tags, hidden) {
+				continue
+			}
+
+			entry := []gomponents.Node{
+				html.A(
+					gomponents.Attr(
+						"href",
+						fmt.Sprintf("/memories/%d", r.Identifier),
 					),
-					gomponents.Textf(" - %s", r.Description),
+					gomponents.Text(r.Name),
 				),
+			}
+
+			if r.Type != "" {
+				entry = append(
+					entry,
+					html.Small(gomponents.Textf(" (%s)", r.Type)),
+				)
+			}
+
+			if r.Scope != m.Scope {
+				entry = append(
+					entry,
+					html.Small(gomponents.Textf(
+						" [%s]",
+						relatedScope(r.Scope),
+					)),
+				)
+			}
+
+			entry = append(
+				entry,
+				gomponents.Textf(" - %s", r.Description),
 			)
+			links = append(links, html.Li(entry...))
 		}
 
 		content = append(
 			content,
-			html.H4(gomponents.Text("Relations")),
+			html.H4(gomponents.Text(constant.RelationsTitle)),
 			html.Ul(links...),
 		)
 	}

@@ -1,17 +1,32 @@
 package store
 
-import "github.com/funtimecoding/soil/pkg/errors"
+import (
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/strings/join"
+)
 
 func (s *Store) RecentVersions(
 	since string,
 	limit int,
+	excludeTag string,
 ) ([]Version, error) {
-	rows, e := s.database.Query(
+	parts := []string{
 		`SELECT identifier, memory_identifier, name, content, description, changed_at, change_type, source
-		FROM memory_version WHERE changed_at > ? ORDER BY identifier DESC LIMIT ?`,
-		since,
-		limit,
-	)
+		FROM memory_version WHERE changed_at > ?`,
+	}
+	arguments := []any{since}
+
+	if excludeTag != "" {
+		parts = append(
+			parts,
+			`AND memory_identifier NOT IN (SELECT memory_identifier FROM memory_tag WHERE tag = ?)`,
+		)
+		arguments = append(arguments, excludeTag)
+	}
+
+	parts = append(parts, `ORDER BY identifier DESC LIMIT ?`)
+	arguments = append(arguments, limit)
+	rows, e := s.database.Query(join.Space(parts...), arguments...)
 
 	if e != nil {
 		return nil, e

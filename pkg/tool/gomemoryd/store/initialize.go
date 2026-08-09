@@ -39,6 +39,7 @@ func initialize(database *sql.DB) {
 			source_identifier  INTEGER NOT NULL REFERENCES memory(identifier),
 			target_identifier  INTEGER NOT NULL REFERENCES memory(identifier),
 			created_at TEXT NOT NULL,
+			type TEXT NOT NULL DEFAULT '',
 			PRIMARY KEY (source_identifier, target_identifier)
 		)`,
 		`CREATE VIRTUAL TABLE IF NOT EXISTS memory_full_text_search USING fts5(

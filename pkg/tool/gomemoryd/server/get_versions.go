@@ -30,9 +30,21 @@ func (s *Server) GetVersions(
 		), nil
 	}
 
+	hidden, e := s.service.HiddenIdentifiers()
+
+	if e != nil {
+		return server.GetVersions500JSONResponse(
+			*s.captureFail(e, constant.UnexpectedError),
+		), nil
+	}
+
 	entries := make([]server.VersionEntry, 0, len(versions))
 
 	for _, v := range versions {
+		if hidden[v.MemoryIdentifier] {
+			continue
+		}
+
 		entries = append(
 			entries,
 			server.VersionEntry{

@@ -4,5 +4,9 @@ func (s *Service) ReplaceTags(
 	identifier int64,
 	tags []string,
 ) error {
-	return s.store.ReplaceTags(identifier, tags)
+	if e := s.store.ReplaceTags(identifier, tags); e != nil {
+		return e
+	}
+
+	return s.syncIndexByIdentifier(identifier)
 }

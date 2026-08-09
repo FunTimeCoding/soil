@@ -13,9 +13,16 @@ func (s *Server) memorySummary() gomponents.Node {
 		return html.P(gomponents.Text("Failed to load memories."))
 	}
 
+	hidden := s.service.HiddenTag()
+	active := 0
 	counts := map[string]int{}
 
 	for _, m := range memories {
+		if hiddenTagged(m.Tags, hidden) {
+			continue
+		}
+
+		active++
 		counts[m.Type]++
 	}
 
@@ -36,7 +43,7 @@ func (s *Server) memorySummary() gomponents.Node {
 	return gomponents.Group(
 		[]gomponents.Node{
 			html.H3(gomponents.Text(constant.MemoriesTitle)),
-			html.P(gomponents.Textf("%d active", len(memories))),
+			html.P(gomponents.Textf("%d active", active)),
 			html.Table(
 				html.THead(
 					html.Tr(

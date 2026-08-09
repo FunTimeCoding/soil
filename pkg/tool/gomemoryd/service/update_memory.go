@@ -41,12 +41,7 @@ func (s *Service) UpdateMemory(
 		return nil, e
 	}
 
-	if e = s.indexer.Push(
-		ScopeCollection(m.Scope),
-		memoryPath(m.Identifier),
-		m.Content,
-		pushMetadata(m),
-	); e != nil {
+	if e = s.syncIndex(m); e != nil {
 		return nil, e
 	}
 

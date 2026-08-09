@@ -18,6 +18,15 @@ func (s *Server) memoriesPage(
 ) {
 	tag := r.URL.Query().Get(constant.Tag)
 	memoryType := r.URL.Query().Get(constant.Type)
+	scope := r.URL.Query().Get(constant.Scope)
+	listScope := constant.AllScope
+
+	if scope == constant.DefaultScope {
+		listScope = ""
+	} else if scope != "" {
+		listScope = scope
+	}
+
 	page := 1
 
 	if v := r.URL.Query().Get("page"); v != "" {
@@ -29,9 +38,21 @@ func (s *Server) memoriesPage(
 	memories, e := s.service.ListMemories(
 		memoryType,
 		tag,
-		constant.AllScope,
+		listScope,
 		true,
 	)
+	hidden := s.service.HiddenTag()
+	visible := memories[:0]
+
+	for _, m := range memories {
+		if hiddenTagged(m.Tags, hidden) {
+			continue
+		}
+
+		visible = append(visible, m)
+	}
+
+	memories = visible
 
 	if e != nil {
 		s.view.RenderPage(
@@ -65,6 +86,7 @@ func (s *Server) memoriesPage(
 		content,
 		html.H3(gomponents.Text(constant.MemoriesTitle)),
 	)
+	content = append(content, s.scopeFilter(scope, tag, memoryType)...)
 
 	if tag != "" || memoryType != "" {
 		var filters []gomponents.Node
@@ -182,6 +204,7 @@ func (s *Server) memoriesPage(
 			total,
 			tag,
 			memoryType,
+			scope,
 		)...,
 	)
 	s.view.RenderPage(

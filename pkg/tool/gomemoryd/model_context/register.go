@@ -118,16 +118,23 @@ func (s *Server) register() {
 		mcp.NewTool(
 			constant.GetMemory,
 			mcp.WithDescription(
-				"Get a memory by ID. Returns full content, description, type, tags, and related memories (identifier, name, description, tags per neighbor). Optionally includes version history.",
+				"Get one or several memories. Returns content, description, tags, metadata, and related memories (identifier, name, description, type, tags per neighbor). Optionally includes version history (single fetch only).",
 			),
 			mcp.WithNumber(
 				constant.MemoryIdentifier,
-				mcp.Required(),
-				mcp.Description("Memory ID"),
+				mcp.Description("Memory ID (single fetch)"),
+			),
+			mcp.WithString(
+				constant.MemoryIdentifiers,
+				mcp.Description("Comma-separated memory IDs - returns an array, one entry per memory with its relations"),
 			),
 			mcp.WithBoolean(
 				constant.IncludeHistory,
 				mcp.Description("Include version history (default false)"),
+			),
+			mcp.WithBoolean(
+				constant.Detail,
+				mcp.Description("Return the full record with timestamps, scope, and provenance (default false)"),
 			),
 		),
 		s.get,
@@ -142,6 +149,10 @@ func (s *Server) register() {
 				constant.MemoryIdentifier,
 				mcp.Required(),
 				mcp.Description("Parent memory ID"),
+			),
+			mcp.WithBoolean(
+				constant.Detail,
+				mcp.Description("Return full records with timestamps, scope, and provenance (default false)"),
 			),
 		),
 		s.getGroup,
@@ -187,6 +198,10 @@ func (s *Server) register() {
 				constant.Scope,
 				mcp.Description("Memory scope. Empty for the default scope, all crosses scopes."),
 			),
+			mcp.WithBoolean(
+				constant.Detail,
+				mcp.Description("Return full records with timestamps, scope, and type (default false)"),
+			),
 		),
 		s.search,
 	)
@@ -194,7 +209,30 @@ func (s *Server) register() {
 		mcp.NewTool(
 			constant.RelateMemories,
 			mcp.WithDescription(
-				"Create a relation between two memories. Relations are bidirectional - get_memory on either shows the other under related.",
+				"Create a relation between two memories. Relations are bidirectional - get_memory on either shows the other under related. Relating an existing pair with a type retypes the edge.",
+			),
+			mcp.WithNumber(
+				constant.SourceIdentifier,
+				mcp.Required(),
+				mcp.Description("First memory ID"),
+			),
+			mcp.WithNumber(
+				constant.TargetIdentifier,
+				mcp.Required(),
+				mcp.Description("Second memory ID"),
+			),
+			mcp.WithString(
+				constant.Type,
+				mcp.Description("Relation type: affinity, informs, grounds, mechanism, sequence, deep-dive (optional; affinity and informs read undirected, the rest source to target)"),
+			),
+		),
+		s.relate,
+	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.UnrelateMemories,
+			mcp.WithDescription(
+				"Remove a relation between two memories. The stored row is directional - pass the ids in the order the relation was created; the error message says when to try the reverse. Permanent, no history.",
 			),
 			mcp.WithNumber(
 				constant.SourceIdentifier,
@@ -207,7 +245,7 @@ func (s *Server) register() {
 				mcp.Description("Second memory ID"),
 			),
 		),
-		s.relate,
+		s.unrelate,
 	)
 	s.server.AddTool(
 		mcp.NewTool(

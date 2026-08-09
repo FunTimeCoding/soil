@@ -56,5 +56,6 @@ func Main(
 		"gomemoryd port",
 	)
 	o.AddCommand(profile(&l))
+	o.AddCommand(relations(&l))
 	errors.PanicOnError(o.Execute())
 }

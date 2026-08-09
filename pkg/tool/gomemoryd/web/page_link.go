@@ -10,6 +10,7 @@ func pageLink(
 	page int,
 	tag string,
 	memoryType string,
+	scope string,
 ) string {
 	params := url.Values{}
 
@@ -23,6 +24,10 @@ func pageLink(
 
 	if memoryType != "" {
 		params.Set(constant.Type, memoryType)
+	}
+
+	if scope != "" {
+		params.Set(constant.Scope, scope)
 	}
 
 	query := params.Encode()

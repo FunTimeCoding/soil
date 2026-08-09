@@ -6,5 +6,5 @@ func (s *Service) RecentVersions(
 	since string,
 	limit int,
 ) ([]store.Version, error) {
-	return s.store.RecentVersions(since, limit)
+	return s.store.RecentVersions(since, limit, s.hiddenTag)
 }

@@ -4,7 +4,7 @@ import "github.com/funtimecoding/soil/pkg/errors"
 
 func (s *Store) ListRelated(identifier int64) ([]Related, error) {
 	rows, e := s.database.Query(
-		`SELECT m.identifier, m.name, m.description
+		`SELECT m.identifier, m.name, m.description, m.scope, r.type
 		FROM memory_relation r
 		JOIN memory m ON m.identifier = CASE
 			WHEN r.source_identifier = ? THEN r.target_identifier
@@ -27,7 +27,13 @@ func (s *Store) ListRelated(identifier int64) ([]Related, error) {
 
 	for rows.Next() {
 		var r Related
-		f := rows.Scan(&r.Identifier, &r.Name, &r.Description)
+		f := rows.Scan(
+			&r.Identifier,
+			&r.Name,
+			&r.Description,
+			&r.Scope,
+			&r.Type,
+		)
 
 		if f != nil {
 			return nil, f

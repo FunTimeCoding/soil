@@ -188,11 +188,72 @@ paths:
                 target_identifier:
                   type: integer
                   format: int64
+                type:
+                  type: string
       responses:
         "200":
           description: Relation created or already present.
         "500":
           description: Failed to create relation.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteRelation
+      parameters:
+        - name: source_identifier
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: target_identifier
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: Relation removed.
+        "404":
+          description: Relation not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to remove relation.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/relations:
+    get:
+      operationId: getRelations
+      parameters:
+        - name: type
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: scope
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Relations with resolved names and scopes.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Relation"
+        "500":
+          description: Failed to list relations.
           content:
             application/json:
               schema:
@@ -482,6 +543,28 @@ components:
       required: [error]
       properties:
         error:
+          type: string
+    Relation:
+      type: object
+      required: [source_identifier, source_name, target_identifier, target_name]
+      properties:
+        source_identifier:
+          type: integer
+          format: int64
+        source_name:
+          type: string
+        source_scope:
+          type: string
+        target_identifier:
+          type: integer
+          format: int64
+        target_name:
+          type: string
+        target_scope:
+          type: string
+        type:
+          type: string
+        created_at:
           type: string
     ErrorResponse:
       type: object

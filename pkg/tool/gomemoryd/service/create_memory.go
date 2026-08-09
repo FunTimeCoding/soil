@@ -28,12 +28,7 @@ func (s *Service) CreateMemory(o *save_option.Option) (*store.Memory, error) {
 		return nil, e
 	}
 
-	if e = s.indexer.Push(
-		ScopeCollection(m.Scope),
-		memoryPath(m.Identifier),
-		m.Content,
-		pushMetadata(m),
-	); e != nil {
+	if e = s.syncIndex(m); e != nil {
 		return nil, e
 	}
 

@@ -14,6 +14,7 @@ func (s *Server) dashboard(
 		constant.DashboardTitle,
 		constant.DashboardPath,
 		s.memorySummary(),
+		s.relationSummary(),
 		s.tagSummary(),
 		s.recentVersions(),
 		s.recentImpressionsSummary(),

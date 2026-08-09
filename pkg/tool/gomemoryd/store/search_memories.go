@@ -18,9 +18,10 @@ func (s *Store) SearchMemories(
 	var arguments []any
 	parts = append(
 		parts,
-		`SELECT m.identifier, m.name, m.content, m.description, m.type, m.scope, m.updated_at, rank
+		`SELECT m.identifier, m.name, m.content, m.description, m.type, m.scope, m.updated_at, rank, COALESCE(p.name, '')
 		FROM memory_full_text_search f
-		JOIN memory m ON m.identifier = f.rowid`,
+		JOIN memory m ON m.identifier = f.rowid
+		LEFT JOIN memory p ON p.identifier = m.parent_identifier`,
 	)
 
 	if tag != "" {
@@ -68,6 +69,7 @@ func (s *Store) SearchMemories(
 			&r.Scope,
 			&r.UpdatedAt,
 			&r.Rank,
+			&r.ParentName,
 		)
 
 		if e != nil {

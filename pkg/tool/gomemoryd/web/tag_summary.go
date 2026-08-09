@@ -23,9 +23,14 @@ func (s *Server) tagSummary() gomponents.Node {
 		)
 	}
 
+	hidden := s.service.HiddenTag()
 	var pips []gomponents.Node
 
 	for _, t := range tags {
+		if hidden != "" && t.Tag == hidden {
+			continue
+		}
+
 		pips = append(
 			pips,
 			html.A(

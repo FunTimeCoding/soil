@@ -60,4 +60,10 @@ func migrate(d *sql.DB) {
 		"ordinal",
 		"INTEGER NOT NULL DEFAULT 0",
 	)
+	addColumnIfMissing(
+		d,
+		constant.RelationTable,
+		constant.Type,
+		"TEXT NOT NULL DEFAULT ''",
+	)
 }

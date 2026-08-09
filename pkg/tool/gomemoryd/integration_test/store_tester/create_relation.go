@@ -9,6 +9,6 @@ func (o *Tester) CreateRelation(
 	o.t.Helper()
 	assert.FatalOnError(
 		o.t,
-		o.Store.CreateRelation(sourceIdentifier, targetIdentifier),
+		o.Store.CreateRelation(sourceIdentifier, targetIdentifier, ""),
 	)
 }

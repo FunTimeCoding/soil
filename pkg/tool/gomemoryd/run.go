@@ -7,7 +7,9 @@ import (
 	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
+	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/telemetry"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	generated "github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/memory_indexer"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/model_context"
@@ -29,7 +31,9 @@ func Run(
 	s := store.New(connection.New(l, o.LitePath))
 	defer s.Close()
 	idx := memory_indexer.New(connect.Wait(l))
-	v := service.New(s, idx, idx, idx)
+	v := service.New(s, idx, idx, idx).WithHiddenTag(
+		environment.Fallback(constant.HiddenTagEnvironment, ""),
+	)
 	reconcileMemories(v)
 	u := memoryWeb.New(v)
 	lifecycle.New(

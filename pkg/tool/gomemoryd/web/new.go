@@ -24,6 +24,11 @@ func New(s *service.Service) *Server {
 			Category: "navigate",
 		},
 		palette.Command{
+			Label:    constant.RelationsTitle,
+			Path:     constant.RelationsPath,
+			Category: "navigate",
+		},
+		palette.Command{
 			Label:    constant.ImpressionsTitle,
 			Path:     constant.ImpressionsPath,
 			Category: "navigate",
@@ -57,6 +62,10 @@ func New(s *service.Service) *Server {
 					navigation_item.New(
 						constant.MemoriesPath,
 						constant.MemoriesTitle,
+					),
+					navigation_item.New(
+						constant.RelationsPath,
+						constant.RelationsTitle,
 					),
 					navigation_item.New(
 						constant.ImpressionsPath,

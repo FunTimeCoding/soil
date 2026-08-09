@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/convert"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -35,5 +36,11 @@ func (s *Server) search(
 		return s.captureFail(e, "search failed")
 	}
 
-	return response.Success(notation.MarshalIndent(results))
+	if q.GetBool(constant.Detail, false) {
+		return response.Success(notation.MarshalIndent(results))
+	}
+
+	return response.Success(
+		notation.MarshalIndent(convert.SearchResults(results)),
+	)
 }

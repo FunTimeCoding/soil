@@ -31,6 +31,10 @@ func (s *Server) GetProfile(
 	}
 
 	for _, m := range result.Always {
+		if s.skipHidden(m.Tags) {
+			continue
+		}
+
 		entry := server.ProfileMemory{
 			Identifier:  int(m.Identifier),
 			Name:        m.Name,
@@ -57,6 +61,10 @@ func (s *Server) GetProfile(
 		)
 
 		for _, r := range result.Relevant {
+			if s.skipHidden(r.Tags) {
+				continue
+			}
+
 			entry := server.ProfileSearchResult{
 				Identifier:  int(r.Identifier),
 				Name:        r.Name,
@@ -78,6 +86,10 @@ func (s *Server) GetProfile(
 	}
 
 	for _, m := range result.Index {
+		if s.skipHidden(m.Tags) {
+			continue
+		}
+
 		entry := server.ProfileSummary{
 			Identifier:  int(m.Identifier),
 			Name:        m.Name,
