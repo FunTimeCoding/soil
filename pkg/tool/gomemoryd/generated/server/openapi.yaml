@@ -202,18 +202,18 @@ paths:
     delete:
       operationId: deleteRelation
       parameters:
-        - name: source_identifier
-          in: query
-          required: true
-          schema:
-            type: integer
-            format: int64
-        - name: target_identifier
-          in: query
-          required: true
-          schema:
-            type: integer
-            format: int64
+      - name: source_identifier
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: target_identifier
+        in: query
+        required: true
+        schema:
+          type: integer
+          format: int64
       responses:
         "200":
           description: Relation removed.
@@ -233,16 +233,16 @@ paths:
     get:
       operationId: getRelations
       parameters:
-        - name: type
-          in: query
-          required: false
-          schema:
-            type: string
-        - name: scope
-          in: query
-          required: false
-          schema:
-            type: string
+      - name: type
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: scope
+        in: query
+        required: false
+        schema:
+          type: string
       responses:
         "200":
           description: Relations with resolved names and scopes.

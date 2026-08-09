@@ -80,16 +80,20 @@ func (s *Server) relationsPage(
 		rows = append(
 			rows,
 			html.Tr(
-				html.Td(memoryLink(
-					relation.SourceIdentifier,
-					relation.SourceName,
-				)),
+				html.Td(
+					memoryLink(
+						relation.SourceIdentifier,
+						relation.SourceName,
+					),
+				),
 				html.Td(scopeText(relation.SourceScope)),
 				html.Td(gomponents.Text(label)),
-				html.Td(memoryLink(
-					relation.TargetIdentifier,
-					relation.TargetName,
-				)),
+				html.Td(
+					memoryLink(
+						relation.TargetIdentifier,
+						relation.TargetName,
+					),
+				),
 				html.Td(scopeText(relation.TargetScope)),
 			),
 		)

@@ -185,10 +185,12 @@ func (s *Server) memoryDetailPage(
 			if r.Scope != m.Scope {
 				entry = append(
 					entry,
-					html.Small(gomponents.Textf(
-						" [%s]",
-						relatedScope(r.Scope),
-					)),
+					html.Small(
+						gomponents.Textf(
+							" [%s]",
+							relatedScope(r.Scope),
+						),
+					),
 				)
 			}
 
