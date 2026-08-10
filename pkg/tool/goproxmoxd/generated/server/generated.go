@@ -299,6 +299,15 @@ type GetContainerParams struct {
 	Node *string `form:"node,omitempty" json:"node,omitempty"`
 }
 
+// ShutdownContainerParams defines parameters for ShutdownContainer.
+type ShutdownContainerParams struct {
+	// Instance Proxmox instance name. Optional when only one instance is configured.
+	Instance *Instance `form:"instance,omitempty" json:"instance,omitempty"`
+
+	// Node Node name. Speeds up lookup when known.
+	Node *string `form:"node,omitempty" json:"node,omitempty"`
+}
+
 // ListContainerSnapshotsParams defines parameters for ListContainerSnapshots.
 type ListContainerSnapshotsParams struct {
 	// Instance Proxmox instance name. Optional when only one instance is configured.
@@ -328,6 +337,24 @@ type DeleteContainerSnapshotParams struct {
 
 // RollbackContainerSnapshotParams defines parameters for RollbackContainerSnapshot.
 type RollbackContainerSnapshotParams struct {
+	// Instance Proxmox instance name. Optional when only one instance is configured.
+	Instance *Instance `form:"instance,omitempty" json:"instance,omitempty"`
+
+	// Node Node name. Speeds up lookup when known.
+	Node *string `form:"node,omitempty" json:"node,omitempty"`
+}
+
+// StartContainerParams defines parameters for StartContainer.
+type StartContainerParams struct {
+	// Instance Proxmox instance name. Optional when only one instance is configured.
+	Instance *Instance `form:"instance,omitempty" json:"instance,omitempty"`
+
+	// Node Node name. Speeds up lookup when known.
+	Node *string `form:"node,omitempty" json:"node,omitempty"`
+}
+
+// StopContainerParams defines parameters for StopContainer.
+type StopContainerParams struct {
 	// Instance Proxmox instance name. Optional when only one instance is configured.
 	Instance *Instance `form:"instance,omitempty" json:"instance,omitempty"`
 
@@ -551,6 +578,9 @@ type ServerInterface interface {
 	// (GET /api/v1/containers/{identifier})
 	GetContainer(w http.ResponseWriter, r *http.Request, identifier int64, params GetContainerParams)
 
+	// (POST /api/v1/containers/{identifier}/shutdown)
+	ShutdownContainer(w http.ResponseWriter, r *http.Request, identifier int64, params ShutdownContainerParams)
+
 	// (GET /api/v1/containers/{identifier}/snapshots)
 	ListContainerSnapshots(w http.ResponseWriter, r *http.Request, identifier int64, params ListContainerSnapshotsParams)
 
@@ -562,6 +592,12 @@ type ServerInterface interface {
 
 	// (POST /api/v1/containers/{identifier}/snapshots/{name}/rollback)
 	RollbackContainerSnapshot(w http.ResponseWriter, r *http.Request, identifier int64, name string, params RollbackContainerSnapshotParams)
+
+	// (POST /api/v1/containers/{identifier}/start)
+	StartContainer(w http.ResponseWriter, r *http.Request, identifier int64, params StartContainerParams)
+
+	// (POST /api/v1/containers/{identifier}/stop)
+	StopContainer(w http.ResponseWriter, r *http.Request, identifier int64, params StopContainerParams)
 
 	// (GET /api/v1/instances)
 	ListInstances(w http.ResponseWriter, r *http.Request)
@@ -740,6 +776,61 @@ func (siw *ServerInterfaceWrapper) GetContainer(w http.ResponseWriter, r *http.R
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.GetContainer(w, r, identifier, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ShutdownContainer operation middleware
+func (siw *ServerInterfaceWrapper) ShutdownContainer(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "identifier" -------------
+	var identifier int64
+
+	err = runtime.BindStyledParameterWithOptions("simple", "identifier", r.PathValue("identifier"), &identifier, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "integer", Format: "int64", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "identifier", Err: err})
+		return
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params ShutdownContainerParams
+
+	// ------------- Optional query parameter "instance" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "instance", r.URL.Query(), &params.Instance, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "instance"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "instance", Err: err})
+		}
+		return
+	}
+
+	// ------------- Optional query parameter "node" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "node", r.URL.Query(), &params.Node, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "node"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "node", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ShutdownContainer(w, r, identifier, params)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -978,6 +1069,116 @@ func (siw *ServerInterfaceWrapper) RollbackContainerSnapshot(w http.ResponseWrit
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.RollbackContainerSnapshot(w, r, identifier, name, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// StartContainer operation middleware
+func (siw *ServerInterfaceWrapper) StartContainer(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "identifier" -------------
+	var identifier int64
+
+	err = runtime.BindStyledParameterWithOptions("simple", "identifier", r.PathValue("identifier"), &identifier, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "integer", Format: "int64", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "identifier", Err: err})
+		return
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params StartContainerParams
+
+	// ------------- Optional query parameter "instance" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "instance", r.URL.Query(), &params.Instance, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "instance"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "instance", Err: err})
+		}
+		return
+	}
+
+	// ------------- Optional query parameter "node" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "node", r.URL.Query(), &params.Node, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "node"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "node", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.StartContainer(w, r, identifier, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// StopContainer operation middleware
+func (siw *ServerInterfaceWrapper) StopContainer(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "identifier" -------------
+	var identifier int64
+
+	err = runtime.BindStyledParameterWithOptions("simple", "identifier", r.PathValue("identifier"), &identifier, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "integer", Format: "int64", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "identifier", Err: err})
+		return
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params StopContainerParams
+
+	// ------------- Optional query parameter "instance" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "instance", r.URL.Query(), &params.Instance, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "instance"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "instance", Err: err})
+		}
+		return
+	}
+
+	// ------------- Optional query parameter "node" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "node", r.URL.Query(), &params.Node, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "node"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "node", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.StopContainer(w, r, identifier, params)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -2319,6 +2520,9 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/machines/{identifier}/shutdown", wrapper.ShutdownMachine)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/machines/{identifier}/reset", wrapper.ResetMachine)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/nodes/{name}/networks", wrapper.ListNetworks)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/containers/{identifier}/start", wrapper.StartContainer)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/containers/{identifier}/stop", wrapper.StopContainer)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/containers/{identifier}/shutdown", wrapper.ShutdownContainer)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/containers", wrapper.ListContainers)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/containers/{identifier}", wrapper.GetContainer)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/containers/{identifier}/snapshots", wrapper.ListContainerSnapshots)
@@ -2441,6 +2645,71 @@ func (response GetContainer404JSONResponse) VisitGetContainerResponse(w http.Res
 type GetContainer500JSONResponse ErrorResponse
 
 func (response GetContainer500JSONResponse) VisitGetContainerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ShutdownContainerRequestObject struct {
+	Identifier int64 `json:"identifier"`
+	Params     ShutdownContainerParams
+}
+
+type ShutdownContainerResponseObject interface {
+	VisitShutdownContainerResponse(w http.ResponseWriter) error
+}
+
+type ShutdownContainer200JSONResponse TaskResult
+
+func (response ShutdownContainer200JSONResponse) VisitShutdownContainerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ShutdownContainer400JSONResponse Error
+
+func (response ShutdownContainer400JSONResponse) VisitShutdownContainerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ShutdownContainer404JSONResponse Error
+
+func (response ShutdownContainer404JSONResponse) VisitShutdownContainerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ShutdownContainer500JSONResponse ErrorResponse
+
+func (response ShutdownContainer500JSONResponse) VisitShutdownContainerResponse(w http.ResponseWriter) error {
 
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(response); err != nil {
@@ -2704,6 +2973,136 @@ func (response RollbackContainerSnapshot404JSONResponse) VisitRollbackContainerS
 type RollbackContainerSnapshot500JSONResponse ErrorResponse
 
 func (response RollbackContainerSnapshot500JSONResponse) VisitRollbackContainerSnapshotResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type StartContainerRequestObject struct {
+	Identifier int64 `json:"identifier"`
+	Params     StartContainerParams
+}
+
+type StartContainerResponseObject interface {
+	VisitStartContainerResponse(w http.ResponseWriter) error
+}
+
+type StartContainer200JSONResponse TaskResult
+
+func (response StartContainer200JSONResponse) VisitStartContainerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type StartContainer400JSONResponse Error
+
+func (response StartContainer400JSONResponse) VisitStartContainerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type StartContainer404JSONResponse Error
+
+func (response StartContainer404JSONResponse) VisitStartContainerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type StartContainer500JSONResponse ErrorResponse
+
+func (response StartContainer500JSONResponse) VisitStartContainerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type StopContainerRequestObject struct {
+	Identifier int64 `json:"identifier"`
+	Params     StopContainerParams
+}
+
+type StopContainerResponseObject interface {
+	VisitStopContainerResponse(w http.ResponseWriter) error
+}
+
+type StopContainer200JSONResponse TaskResult
+
+func (response StopContainer200JSONResponse) VisitStopContainerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type StopContainer400JSONResponse Error
+
+func (response StopContainer400JSONResponse) VisitStopContainerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type StopContainer404JSONResponse Error
+
+func (response StopContainer404JSONResponse) VisitStopContainerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type StopContainer500JSONResponse ErrorResponse
+
+func (response StopContainer500JSONResponse) VisitStopContainerResponse(w http.ResponseWriter) error {
 
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(response); err != nil {
@@ -4170,6 +4569,9 @@ type StrictServerInterface interface {
 	// (GET /api/v1/containers/{identifier})
 	GetContainer(ctx context.Context, request GetContainerRequestObject) (GetContainerResponseObject, error)
 
+	// (POST /api/v1/containers/{identifier}/shutdown)
+	ShutdownContainer(ctx context.Context, request ShutdownContainerRequestObject) (ShutdownContainerResponseObject, error)
+
 	// (GET /api/v1/containers/{identifier}/snapshots)
 	ListContainerSnapshots(ctx context.Context, request ListContainerSnapshotsRequestObject) (ListContainerSnapshotsResponseObject, error)
 
@@ -4181,6 +4583,12 @@ type StrictServerInterface interface {
 
 	// (POST /api/v1/containers/{identifier}/snapshots/{name}/rollback)
 	RollbackContainerSnapshot(ctx context.Context, request RollbackContainerSnapshotRequestObject) (RollbackContainerSnapshotResponseObject, error)
+
+	// (POST /api/v1/containers/{identifier}/start)
+	StartContainer(ctx context.Context, request StartContainerRequestObject) (StartContainerResponseObject, error)
+
+	// (POST /api/v1/containers/{identifier}/stop)
+	StopContainer(ctx context.Context, request StopContainerRequestObject) (StopContainerResponseObject, error)
 
 	// (GET /api/v1/instances)
 	ListInstances(ctx context.Context, request ListInstancesRequestObject) (ListInstancesResponseObject, error)
@@ -4350,6 +4758,33 @@ func (sh *strictHandler) GetContainer(w http.ResponseWriter, r *http.Request, id
 	}
 }
 
+// ShutdownContainer operation middleware
+func (sh *strictHandler) ShutdownContainer(w http.ResponseWriter, r *http.Request, identifier int64, params ShutdownContainerParams) {
+	var request ShutdownContainerRequestObject
+
+	request.Identifier = identifier
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ShutdownContainer(ctx, request.(ShutdownContainerRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ShutdownContainer")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ShutdownContainerResponseObject); ok {
+		if err := validResponse.VisitShutdownContainerResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // ListContainerSnapshots operation middleware
 func (sh *strictHandler) ListContainerSnapshots(w http.ResponseWriter, r *http.Request, identifier int64, params ListContainerSnapshotsParams) {
 	var request ListContainerSnapshotsRequestObject
@@ -4460,6 +4895,60 @@ func (sh *strictHandler) RollbackContainerSnapshot(w http.ResponseWriter, r *htt
 		sh.options.ResponseErrorHandlerFunc(w, r, err)
 	} else if validResponse, ok := response.(RollbackContainerSnapshotResponseObject); ok {
 		if err := validResponse.VisitRollbackContainerSnapshotResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// StartContainer operation middleware
+func (sh *strictHandler) StartContainer(w http.ResponseWriter, r *http.Request, identifier int64, params StartContainerParams) {
+	var request StartContainerRequestObject
+
+	request.Identifier = identifier
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.StartContainer(ctx, request.(StartContainerRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "StartContainer")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(StartContainerResponseObject); ok {
+		if err := validResponse.VisitStartContainerResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// StopContainer operation middleware
+func (sh *strictHandler) StopContainer(w http.ResponseWriter, r *http.Request, identifier int64, params StopContainerParams) {
+	var request StopContainerRequestObject
+
+	request.Identifier = identifier
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.StopContainer(ctx, request.(StopContainerRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "StopContainer")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(StopContainerResponseObject); ok {
+		if err := validResponse.VisitStopContainerResponse(w); err != nil {
 			sh.options.ResponseErrorHandlerFunc(w, r, err)
 		}
 	} else if response != nil {
@@ -5185,45 +5674,46 @@ func (sh *strictHandler) GetSnippet(w http.ResponseWriter, r *http.Request, name
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
+	"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",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

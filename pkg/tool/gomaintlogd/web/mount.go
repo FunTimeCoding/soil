@@ -15,4 +15,5 @@ func (s *Server) Mount(m *http.ServeMux) {
 	m.HandleFunc("GET /entry/edit", s.edit)
 	m.HandleFunc("POST /entry/edit", s.editSubmit)
 	m.HandleFunc("POST /entry/delete", s.delete)
+	m.HandleFunc("GET /favicon.ico", s.favicon)
 }

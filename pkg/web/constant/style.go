@@ -2,6 +2,15 @@ package constant
 
 const (
 	BaseStyle = `
+:root {
+	--pico-h1-color: var(--pico-color);
+	--pico-h2-color: var(--pico-color);
+	--pico-h3-color: var(--pico-color);
+	--pico-h4-color: var(--pico-color);
+	--pico-h5-color: var(--pico-color);
+	--pico-h6-color: var(--pico-color);
+	--pico-code-color: var(--pico-color);
+}
 a { text-decoration: none; }
 a:hover { text-decoration: none; color: var(--pico-primary-hover); }
 .time-cell { white-space: nowrap; }
@@ -134,5 +143,17 @@ a:hover { text-decoration: none; color: var(--pico-primary-hover); }
 	text-align: center;
 	color: var(--pico-muted-color);
 }
+`
+	ConnectionStyle = `
+.connection-dot {
+	display: inline-block;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	margin-right: 0.4rem;
+	vertical-align: middle;
+}
+.connection-dot.connected { background: #2ecc40; }
+.connection-dot.disconnected { background: #ff4136; }
 `
 )

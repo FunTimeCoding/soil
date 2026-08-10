@@ -9,8 +9,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/palette"
 	"github.com/funtimecoding/soil/pkg/web/view"
-	"maragu.dev/gomponents"
-	"maragu.dev/gomponents/html"
 )
 
 func New(s *service.Service) *Server {
@@ -54,17 +52,6 @@ func New(s *service.Service) *Server {
 				WithStyle(constant.InlineStyle).
 				WithCommandPalette("/palette").
 				WithLiveEndpoint("/event").
-				WithBrandNode(
-					html.Strong(
-						html.Span(
-							html.ID("sse-dot"),
-							html.Class(
-								"status-dot status-disconnected",
-							),
-						),
-						gomponents.Text(constant.Identity.Name()),
-					),
-				).
 				WithItems(
 					navigation_item.New(
 						constant.DashboardPath,
@@ -85,11 +72,6 @@ func New(s *service.Service) *Server {
 					navigation_item.NewExternal(
 						constant.ConversationsPath,
 						constant.ConversationsTitle,
-					),
-				).
-				WithFooter(
-					html.Script(
-						gomponents.Raw(constant.ConnectionIndicatorScript),
 					),
 				),
 		),

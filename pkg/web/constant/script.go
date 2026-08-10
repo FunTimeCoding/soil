@@ -31,6 +31,14 @@ document.body.addEventListener('htmx:responseError', function(e) {
 	region.appendChild(item);
 });
 `
+	ConnectionScript = `
+document.addEventListener('htmx:sseOpen', function() {
+	document.getElementById('connection').className = 'connection-dot connected';
+});
+document.addEventListener('htmx:sseError', function() {
+	document.getElementById('connection').className = 'connection-dot disconnected';
+});
+`
 	PaletteScript = `
 (function() {
 	var dialog = document.getElementById('palette');

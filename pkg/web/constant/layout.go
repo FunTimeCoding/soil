@@ -7,4 +7,8 @@ const (
 	LayoutStatusSuccess      = "success"
 	LayoutStatusNotice       = "notice"
 	LayoutTimeCellClass      = "time-cell"
+
+	LayoutConnection             = "connection"
+	LayoutConnectionConnected    = "connection-dot connected"
+	LayoutConnectionDisconnected = "connection-dot disconnected"
 )

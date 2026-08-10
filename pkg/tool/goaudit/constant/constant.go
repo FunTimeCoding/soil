@@ -8,6 +8,11 @@ var Identity = identity.New(
 	"goaudit <repo-root> [<repo-root>...]",
 )
 
+var ConfigurationPaths = []string{
+	".goaudit.yaml",
+	"strata/tool/goaudit.yaml",
+}
+
 const (
 	ConstantDirectory        = "constant"
 	ConstantFileName         = "constant.go"

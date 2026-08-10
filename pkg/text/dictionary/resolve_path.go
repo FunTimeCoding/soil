@@ -2,23 +2,22 @@ package dictionary
 
 import (
 	"fmt"
-	system "github.com/funtimecoding/soil/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/system"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	text "github.com/funtimecoding/soil/pkg/text/constant"
-	"os"
 	"path/filepath"
 )
 
 func ResolvePath() string {
 	candidates := []string{
 		text.DictionaryFile,
-		filepath.Join(system.DocumentPath, text.DictionaryFile),
+		filepath.Join(systemConstant.DocumentPath, text.DictionaryFile),
+	}
+	result := system.FirstFile(candidates...)
+
+	if result == "" {
+		panic(fmt.Sprintf("dictionary not found: %v", candidates))
 	}
 
-	for _, p := range candidates {
-		if _, e := os.Stat(p); e == nil {
-			return p
-		}
-	}
-
-	panic(fmt.Sprintf("dictionary not found: %v", candidates))
+	return result
 }

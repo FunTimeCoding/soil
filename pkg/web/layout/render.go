@@ -37,6 +37,7 @@ func (p *Page) Render() gomponents.Node {
 		head = append(
 			head,
 			html.Script(html.Src(constant.ServerSide)),
+			html.StyleEl(gomponents.Raw(constant.ConnectionStyle)),
 		)
 	}
 
@@ -65,15 +66,21 @@ func (p *Page) Render() gomponents.Node {
 	brand := p.identity.Name()
 
 	if brand != "" || p.brandNode != nil {
-		node := p.brandNode
+		inner := p.brandNode
 
-		if node == nil {
-			node = html.A(
-				gomponents.Attr("href", constant.LocationRoot),
-				html.Strong(gomponents.Text(brand)),
-			)
+		if inner == nil {
+			inner = html.Strong(gomponents.Text(brand))
 		}
 
+		cell := []gomponents.Node{
+			gomponents.Attr("href", constant.LocationRoot),
+		}
+
+		if p.liveEndpoint != "" {
+			cell = append(cell, connectionDot())
+		}
+
+		node := html.A(append(cell, inner)...)
 		var navigation []gomponents.Node
 
 		for _, item := range p.items {
@@ -161,6 +168,14 @@ func (p *Page) Render() gomponents.Node {
 		body,
 		html.Script(gomponents.Raw(constant.NotificationScript)),
 	)
+
+	if p.liveEndpoint != "" {
+		body = append(
+			body,
+			html.Script(gomponents.Raw(constant.ConnectionScript)),
+		)
+	}
+
 	body = append(body, p.footer...)
 
 	return html.Doctype(

@@ -449,6 +449,58 @@ func (s *Server) register() {
 	)
 	s.server.AddTool(
 		mcp.NewTool(
+			constant.StartContainer,
+			mcp.WithDescription("Start an LXC container"),
+			mcp.WithNumber(
+				"identifier",
+				mcp.Required(),
+				mcp.Description("Container ID"),
+			),
+			mcp.WithString(
+				"node",
+				mcp.Description("Node name (omit to search all nodes)"),
+			),
+		),
+		mcp.NewTypedToolHandler(s.StartContainer),
+	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.ShutdownContainer,
+			mcp.WithDescription(
+				"Gracefully shutdown an LXC container - prefer this over stop",
+			),
+			mcp.WithNumber(
+				"identifier",
+				mcp.Required(),
+				mcp.Description("Container ID"),
+			),
+			mcp.WithString(
+				"node",
+				mcp.Description("Node name (omit to search all nodes)"),
+			),
+		),
+		mcp.NewTypedToolHandler(s.ShutdownContainer),
+	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.StopContainer,
+			mcp.WithDescription(
+				"Stop an LXC container immediately - a hard kill, use shutdown_container unless the guest is unresponsive",
+			),
+			mcp.WithNumber(
+				"identifier",
+				mcp.Required(),
+				mcp.Description("Container ID"),
+			),
+			mcp.WithString(
+				"node",
+				mcp.Description("Node name (omit to search all nodes)"),
+			),
+		),
+		mcp.NewTypedToolHandler(s.StopContainer),
+	)
+	s.server.AddTool(
+		mcp.NewTool(
 			constant.ListContainerSnapshots,
 			mcp.WithDescription("List snapshots for an LXC container"),
 			mcp.WithNumber(

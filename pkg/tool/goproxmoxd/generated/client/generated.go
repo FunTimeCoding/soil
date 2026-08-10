@@ -293,6 +293,15 @@ type GetContainerParams struct {
 	Node *string `form:"node,omitempty" json:"node,omitempty"`
 }
 
+// ShutdownContainerParams defines parameters for ShutdownContainer.
+type ShutdownContainerParams struct {
+	// Instance Proxmox instance name. Optional when only one instance is configured.
+	Instance *Instance `form:"instance,omitempty" json:"instance,omitempty"`
+
+	// Node Node name. Speeds up lookup when known.
+	Node *string `form:"node,omitempty" json:"node,omitempty"`
+}
+
 // ListContainerSnapshotsParams defines parameters for ListContainerSnapshots.
 type ListContainerSnapshotsParams struct {
 	// Instance Proxmox instance name. Optional when only one instance is configured.
@@ -322,6 +331,24 @@ type DeleteContainerSnapshotParams struct {
 
 // RollbackContainerSnapshotParams defines parameters for RollbackContainerSnapshot.
 type RollbackContainerSnapshotParams struct {
+	// Instance Proxmox instance name. Optional when only one instance is configured.
+	Instance *Instance `form:"instance,omitempty" json:"instance,omitempty"`
+
+	// Node Node name. Speeds up lookup when known.
+	Node *string `form:"node,omitempty" json:"node,omitempty"`
+}
+
+// StartContainerParams defines parameters for StartContainer.
+type StartContainerParams struct {
+	// Instance Proxmox instance name. Optional when only one instance is configured.
+	Instance *Instance `form:"instance,omitempty" json:"instance,omitempty"`
+
+	// Node Node name. Speeds up lookup when known.
+	Node *string `form:"node,omitempty" json:"node,omitempty"`
+}
+
+// StopContainerParams defines parameters for StopContainer.
+type StopContainerParams struct {
 	// Instance Proxmox instance name. Optional when only one instance is configured.
 	Instance *Instance `form:"instance,omitempty" json:"instance,omitempty"`
 
@@ -616,6 +643,9 @@ type ClientInterface interface {
 	// GetContainer performs a GET /api/v1/containers/{identifier} (the `GetContainer` operationId) request.
 	GetContainer(ctx context.Context, identifier int64, params *GetContainerParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// ShutdownContainer performs a POST /api/v1/containers/{identifier}/shutdown (the `ShutdownContainer` operationId) request.
+	ShutdownContainer(ctx context.Context, identifier int64, params *ShutdownContainerParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// ListContainerSnapshots performs a GET /api/v1/containers/{identifier}/snapshots (the `ListContainerSnapshots` operationId) request.
 	ListContainerSnapshots(ctx context.Context, identifier int64, params *ListContainerSnapshotsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -632,6 +662,12 @@ type ClientInterface interface {
 
 	// RollbackContainerSnapshot performs a POST /api/v1/containers/{identifier}/snapshots/{name}/rollback (the `RollbackContainerSnapshot` operationId) request.
 	RollbackContainerSnapshot(ctx context.Context, identifier int64, name string, params *RollbackContainerSnapshotParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// StartContainer performs a POST /api/v1/containers/{identifier}/start (the `StartContainer` operationId) request.
+	StartContainer(ctx context.Context, identifier int64, params *StartContainerParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// StopContainer performs a POST /api/v1/containers/{identifier}/stop (the `StopContainer` operationId) request.
+	StopContainer(ctx context.Context, identifier int64, params *StopContainerParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// ListInstances performs a GET /api/v1/instances (the `ListInstances` operationId) request.
 	ListInstances(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -765,6 +801,19 @@ func (c *Client) GetContainer(ctx context.Context, identifier int64, params *Get
 	return c.Client.Do(req)
 }
 
+// ShutdownContainer performs a POST /api/v1/containers/{identifier}/shutdown (the `ShutdownContainer` operationId) request.
+func (c *Client) ShutdownContainer(ctx context.Context, identifier int64, params *ShutdownContainerParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewShutdownContainerRequest(c.Server, identifier, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 // ListContainerSnapshots performs a GET /api/v1/containers/{identifier}/snapshots (the `ListContainerSnapshots` operationId) request.
 func (c *Client) ListContainerSnapshots(ctx context.Context, identifier int64, params *ListContainerSnapshotsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListContainerSnapshotsRequest(c.Server, identifier, params)
@@ -822,6 +871,32 @@ func (c *Client) DeleteContainerSnapshot(ctx context.Context, identifier int64, 
 // RollbackContainerSnapshot performs a POST /api/v1/containers/{identifier}/snapshots/{name}/rollback (the `RollbackContainerSnapshot` operationId) request.
 func (c *Client) RollbackContainerSnapshot(ctx context.Context, identifier int64, name string, params *RollbackContainerSnapshotParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewRollbackContainerSnapshotRequest(c.Server, identifier, name, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// StartContainer performs a POST /api/v1/containers/{identifier}/start (the `StartContainer` operationId) request.
+func (c *Client) StartContainer(ctx context.Context, identifier int64, params *StartContainerParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewStartContainerRequest(c.Server, identifier, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// StopContainer performs a POST /api/v1/containers/{identifier}/stop (the `StopContainer` operationId) request.
+func (c *Client) StopContainer(ctx context.Context, identifier int64, params *StopContainerParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewStopContainerRequest(c.Server, identifier, params)
 	if err != nil {
 		return nil, err
 	}
@@ -1386,6 +1461,79 @@ func NewGetContainerRequest(server string, identifier int64, params *GetContaine
 	return req, nil
 }
 
+// NewShutdownContainerRequest constructs an http.Request for the ShutdownContainer method
+func NewShutdownContainerRequest(server string, identifier int64, params *ShutdownContainerParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "identifier", identifier, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/containers/%s/shutdown", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if params.Instance != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "instance", *params.Instance, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if params.Node != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "node", *params.Node, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewListContainerSnapshotsRequest constructs an http.Request for the ListContainerSnapshots method
 func NewListContainerSnapshotsRequest(server string, identifier int64, params *ListContainerSnapshotsParams) (*http.Request, error) {
 	var err error
@@ -1649,6 +1797,152 @@ func NewRollbackContainerSnapshotRequest(server string, identifier int64, name s
 	}
 
 	operationPath := fmt.Sprintf("/api/v1/containers/%s/snapshots/%s/rollback", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if params.Instance != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "instance", *params.Instance, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if params.Node != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "node", *params.Node, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewStartContainerRequest constructs an http.Request for the StartContainer method
+func NewStartContainerRequest(server string, identifier int64, params *StartContainerParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "identifier", identifier, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/containers/%s/start", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if params.Instance != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "instance", *params.Instance, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if params.Node != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "node", *params.Node, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewStopContainerRequest constructs an http.Request for the StopContainer method
+func NewStopContainerRequest(server string, identifier int64, params *StopContainerParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "identifier", identifier, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: "int64"})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/containers/%s/stop", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3489,6 +3783,11 @@ type ClientWithResponsesInterface interface {
 	// Returns a wrapper object for the known response body format(s).
 	GetContainerWithResponse(ctx context.Context, identifier int64, params *GetContainerParams, reqEditors ...RequestEditorFn) (*GetContainerResponse, error)
 
+	// ShutdownContainerWithResponse performs a POST /api/v1/containers/{identifier}/shutdown (the `ShutdownContainer` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	ShutdownContainerWithResponse(ctx context.Context, identifier int64, params *ShutdownContainerParams, reqEditors ...RequestEditorFn) (*ShutdownContainerResponse, error)
+
 	// ListContainerSnapshotsWithResponse performs a GET /api/v1/containers/{identifier}/snapshots (the `ListContainerSnapshots` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
@@ -3513,6 +3812,16 @@ type ClientWithResponsesInterface interface {
 	//
 	// Returns a wrapper object for the known response body format(s).
 	RollbackContainerSnapshotWithResponse(ctx context.Context, identifier int64, name string, params *RollbackContainerSnapshotParams, reqEditors ...RequestEditorFn) (*RollbackContainerSnapshotResponse, error)
+
+	// StartContainerWithResponse performs a POST /api/v1/containers/{identifier}/start (the `StartContainer` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	StartContainerWithResponse(ctx context.Context, identifier int64, params *StartContainerParams, reqEditors ...RequestEditorFn) (*StartContainerResponse, error)
+
+	// StopContainerWithResponse performs a POST /api/v1/containers/{identifier}/stop (the `StopContainer` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	StopContainerWithResponse(ctx context.Context, identifier int64, params *StopContainerParams, reqEditors ...RequestEditorFn) (*StopContainerResponse, error)
 
 	// ListInstancesWithResponse performs a GET /api/v1/instances (the `ListInstances` operationId) request.
 	//
@@ -3787,6 +4096,68 @@ func (r GetContainerResponse) ContentType() string {
 	return ""
 }
 
+type ShutdownContainerResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *TaskResult
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r ShutdownContainerResponse) GetJSON200() *TaskResult {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r ShutdownContainerResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r ShutdownContainerResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r ShutdownContainerResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r ShutdownContainerResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r ShutdownContainerResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ShutdownContainerResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ShutdownContainerResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type ListContainerSnapshotsResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -4029,6 +4400,130 @@ func (r RollbackContainerSnapshotResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r RollbackContainerSnapshotResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type StartContainerResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *TaskResult
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r StartContainerResponse) GetJSON200() *TaskResult {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r StartContainerResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r StartContainerResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r StartContainerResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r StartContainerResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r StartContainerResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r StartContainerResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r StartContainerResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type StopContainerResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *TaskResult
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r StopContainerResponse) GetJSON200() *TaskResult {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r StopContainerResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r StopContainerResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r StopContainerResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r StopContainerResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r StopContainerResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r StopContainerResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r StopContainerResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -5516,6 +6011,17 @@ func (c *ClientWithResponses) GetContainerWithResponse(ctx context.Context, iden
 	return ParseGetContainerResponse(rsp)
 }
 
+// ShutdownContainerWithResponse performs a POST /api/v1/containers/{identifier}/shutdown (the `ShutdownContainer` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) ShutdownContainerWithResponse(ctx context.Context, identifier int64, params *ShutdownContainerParams, reqEditors ...RequestEditorFn) (*ShutdownContainerResponse, error) {
+	rsp, err := c.ShutdownContainer(ctx, identifier, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseShutdownContainerResponse(rsp)
+}
+
 // ListContainerSnapshotsWithResponse performs a GET /api/v1/containers/{identifier}/snapshots (the `ListContainerSnapshots` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -5569,6 +6075,28 @@ func (c *ClientWithResponses) RollbackContainerSnapshotWithResponse(ctx context.
 		return nil, err
 	}
 	return ParseRollbackContainerSnapshotResponse(rsp)
+}
+
+// StartContainerWithResponse performs a POST /api/v1/containers/{identifier}/start (the `StartContainer` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) StartContainerWithResponse(ctx context.Context, identifier int64, params *StartContainerParams, reqEditors ...RequestEditorFn) (*StartContainerResponse, error) {
+	rsp, err := c.StartContainer(ctx, identifier, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseStartContainerResponse(rsp)
+}
+
+// StopContainerWithResponse performs a POST /api/v1/containers/{identifier}/stop (the `StopContainer` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) StopContainerWithResponse(ctx context.Context, identifier int64, params *StopContainerParams, reqEditors ...RequestEditorFn) (*StopContainerResponse, error) {
+	rsp, err := c.StopContainer(ctx, identifier, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseStopContainerResponse(rsp)
 }
 
 // ListInstancesWithResponse performs a GET /api/v1/instances (the `ListInstances` operationId) request.
@@ -5999,6 +6527,53 @@ func ParseGetContainerResponse(rsp *http.Response) (*GetContainerResponse, error
 	return response, nil
 }
 
+// ParseShutdownContainerResponse parses an HTTP response from a ShutdownContainerWithResponse call
+func ParseShutdownContainerResponse(rsp *http.Response) (*ShutdownContainerResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ShutdownContainerResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest TaskResult
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseListContainerSnapshotsResponse parses an HTTP response from a ListContainerSnapshotsWithResponse call
 func ParseListContainerSnapshotsResponse(rsp *http.Response) (*ListContainerSnapshotsResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -6149,6 +6724,100 @@ func ParseRollbackContainerSnapshotResponse(rsp *http.Response) (*RollbackContai
 	}
 
 	response := &RollbackContainerSnapshotResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest TaskResult
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseStartContainerResponse parses an HTTP response from a StartContainerWithResponse call
+func ParseStartContainerResponse(rsp *http.Response) (*StartContainerResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &StartContainerResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest TaskResult
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseStopContainerResponse parses an HTTP response from a StopContainerWithResponse call
+func ParseStopContainerResponse(rsp *http.Response) (*StopContainerResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &StopContainerResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}

@@ -17,5 +17,13 @@ func (c *Client) SignOut(
 			Path:   constant.LocationRoot,
 		},
 	)
-	http.Redirect(w, r, constant.LocationRoot, http.StatusFound)
+	locator := c.endSessionLocator()
+
+	if locator == "" {
+		http.Redirect(w, r, constant.LocationRoot, http.StatusFound)
+
+		return
+	}
+
+	http.Redirect(w, r, locator, http.StatusFound)
 }

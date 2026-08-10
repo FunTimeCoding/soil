@@ -679,6 +679,135 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/containers/{identifier}/start:
+    post:
+      operationId: startContainer
+      parameters:
+      - $ref: "#/components/parameters/Instance"
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+        description: Container ID.
+      - name: node
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Node name. Speeds up lookup when known.
+      responses:
+        "200":
+          description: Container started.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskResult"
+        "404":
+          description: Container not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "400":
+          description: Invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/containers/{identifier}/stop:
+    post:
+      operationId: stopContainer
+      parameters:
+      - $ref: "#/components/parameters/Instance"
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+        description: Container ID.
+      - name: node
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Node name. Speeds up lookup when known.
+      responses:
+        "200":
+          description: Container stopped.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskResult"
+        "404":
+          description: Container not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "400":
+          description: Invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/containers/{identifier}/shutdown:
+    post:
+      operationId: shutdownContainer
+      parameters:
+      - $ref: "#/components/parameters/Instance"
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+        description: Container ID.
+      - name: node
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Node name. Speeds up lookup when known.
+      responses:
+        "200":
+          description: Container shutdown initiated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TaskResult"
+        "404":
+          description: Container not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "400":
+          description: Invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /api/v1/containers:
     get:
       operationId: listContainers

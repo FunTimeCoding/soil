@@ -38,7 +38,6 @@ const InlineStyle = `
 	}
 	.status-active { background: #2ecc40; }
 	.status-stale { background: #ffdc00; }
-	.status-disconnected { background: #ff4136; }
 	.kind-badge {
 		font-size: 0.75rem;
 		padding: 0.1rem 0.4rem;

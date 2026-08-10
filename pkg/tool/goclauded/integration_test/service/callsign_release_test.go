@@ -9,23 +9,23 @@ import (
 	"time"
 )
 
-func TestCallsignReleasedAfterThreeDays(t *testing.T) {
+func TestCallsignReleasedAfterSevenDays(t *testing.T) {
 	s := service_tester.New(t)
 	r := s.Register("session-1")
 	assert.True(t, r.Callsign != "")
 	callsign := r.Callsign
-	s.Store.Advance(73 * time.Hour)
+	s.Store.Advance(8 * 24 * time.Hour)
 	s.Service.RunTimeoutSweep()
 	e := s.Store.GetSession("session-1")
 	assert.True(t, e.Callsign == nil)
 	assert.String(t, callsign, e.Name)
 }
 
-func TestCallsignNotReleasedBeforeThreeDays(t *testing.T) {
+func TestCallsignNotReleasedBeforeSevenDays(t *testing.T) {
 	s := service_tester.New(t)
 	r := s.Register("session-1")
 	assert.True(t, r.Callsign != "")
-	s.Store.Advance(71 * time.Hour)
+	s.Store.Advance(6 * 24 * time.Hour)
 	s.Service.RunTimeoutSweep()
 	e := s.Store.GetSession("session-1")
 	assert.True(t, e.Callsign != nil)
@@ -56,7 +56,7 @@ func TestCallsignRecycledAfterSweepRelease(t *testing.T) {
 		assert.String(t, v, callsigns[i])
 	}
 
-	s.Store.Advance(73 * time.Hour)
+	s.Store.Advance(8 * 24 * time.Hour)
 	s.Service.RunTimeoutSweep()
 	r := s.Register("after-sweep")
 	assert.True(t, r.Callsign != "")

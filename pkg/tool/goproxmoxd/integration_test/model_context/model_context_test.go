@@ -265,3 +265,36 @@ func TestMachineNotFound(t *testing.T) {
 	)
 	assert.StringContains(t, "unable to find", result)
 }
+
+func TestStartContainer(t *testing.T) {
+	o := model_context_tester.New(t)
+	defer o.Close()
+	o.MockClient.AddContainer("test", 101, "stopped-container")
+	result := o.Client.MustCallTool(
+		constant.StartContainer,
+		map[string]any{"identifier": 101, "node": "test"},
+	)
+	assert.StringContains(t, "task_id", result)
+}
+
+func TestStopContainer(t *testing.T) {
+	o := model_context_tester.New(t)
+	defer o.Close()
+	o.MockClient.AddContainer("test", 101, "running-container")
+	result := o.Client.MustCallTool(
+		constant.StopContainer,
+		map[string]any{"identifier": 101, "node": "test"},
+	)
+	assert.StringContains(t, "task_id", result)
+}
+
+func TestShutdownContainer(t *testing.T) {
+	o := model_context_tester.New(t)
+	defer o.Close()
+	o.MockClient.AddContainer("test", 101, "running-container")
+	result := o.Client.MustCallTool(
+		constant.ShutdownContainer,
+		map[string]any{"identifier": 101, "node": "test"},
+	)
+	assert.StringContains(t, "task_id", result)
+}

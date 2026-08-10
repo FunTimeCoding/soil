@@ -17,5 +17,6 @@ func (s *Server) Mount(m *http.ServeMux) {
 	m.HandleFunc("POST /raids/create", s.createRaid)
 	m.HandleFunc("GET /players", s.players)
 	m.HandleFunc("GET /players/{account}", s.playerDetail)
+	m.HandleFunc("GET /favicon.ico", s.favicon)
 	m.Handle("GET /static/", http.FileServerFS(staticFiles))
 }

@@ -63,6 +63,9 @@ type ProxmoxClient interface {
 		n *proxmox.Node,
 		identifier int,
 	) (*proxmox.Container, error)
+	StartContainer(v *proxmox.Container) (*proxmox.Task, error)
+	StopContainer(v *proxmox.Container) (*proxmox.Task, error)
+	ShutdownContainer(v *proxmox.Container) (*proxmox.Task, error)
 	ContainerSnapshots(v *proxmox.Container) ([]*proxmox.ContainerSnapshot, error)
 	CreateContainerSnapshot(
 		v *proxmox.Container,

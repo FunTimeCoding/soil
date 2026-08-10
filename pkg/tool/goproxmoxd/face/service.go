@@ -103,6 +103,21 @@ type Service interface {
 		identifier int,
 		node string,
 	) (string, error)
+	StartContainer(
+		c ProxmoxClient,
+		identifier int,
+		node string,
+	) (string, error)
+	StopContainer(
+		c ProxmoxClient,
+		identifier int,
+		node string,
+	) (string, error)
+	ShutdownContainer(
+		c ProxmoxClient,
+		identifier int,
+		node string,
+	) (string, error)
 	ListMachineSnapshots(
 		c ProxmoxClient,
 		identifier int,

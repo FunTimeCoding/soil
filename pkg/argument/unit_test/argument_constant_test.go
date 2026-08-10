@@ -36,6 +36,7 @@ func TestConstant(t *testing.T) {
 	assert.String(t, "name", constant.Name)
 	assert.String(t, "node", constant.Node)
 	assert.String(t, "old", constant.Old)
+	assert.String(t, "on-upgrade", constant.OnUpgrade)
 	assert.String(t, "package", constant.Package)
 	assert.String(t, "parent", constant.Parent)
 	assert.String(t, "password", constant.Password)
@@ -54,5 +55,6 @@ func TestConstant(t *testing.T) {
 	assert.String(t, "team", constant.Team)
 	assert.String(t, "title", constant.Title)
 	assert.String(t, "topic", constant.Topic)
+	assert.String(t, "unit", constant.Unit)
 	assert.String(t, "unknown", constant.Unknown)
 }

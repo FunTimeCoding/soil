@@ -17,4 +17,7 @@ const (
 	Base     = "/api2/json"
 
 	Name = "name"
+
+	ContainerShutdownForce   = false
+	ContainerShutdownTimeout = 60
 )
