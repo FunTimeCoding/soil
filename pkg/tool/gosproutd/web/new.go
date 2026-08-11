@@ -17,7 +17,7 @@ func New(s *service.Service) *Server {
 		palette.Command{
 			Label:    "Dashboard",
 			Path:     "/",
-			Category: "navigate",
+			Category: web.PaletteNavigate,
 		},
 	)
 

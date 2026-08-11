@@ -23,6 +23,7 @@ const (
 	SignInPath   = "/sign-in"
 	CallbackPath = "/callback"
 	SignOutPath  = "/sign-out"
+	SignOutTitle = "Sign out"
 
 	IssuerEnvironment           = "AUTHORIZATION_ISSUER"
 	ClientIdentifierEnvironment = "AUTHORIZATION_CLIENT_IDENTIFIER"
@@ -36,8 +37,6 @@ const (
 )
 const (
 	PalettePath       = "/palette"
-	NavigateCategory  = "navigate"
-	LinkCategory      = "link"
 	IconHost          = "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/"
 	FilesLabel        = "Files"
 	SharesLabel       = "Shares"

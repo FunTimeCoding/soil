@@ -17,27 +17,27 @@ func New(s *service.Service) *Server {
 		palette.Command{
 			Label:    constant.DashboardTitle,
 			Path:     constant.DashboardPath,
-			Category: "navigate",
+			Category: web.PaletteNavigate,
 		},
 		palette.Command{
 			Label:    constant.SessionsTitle,
 			Path:     constant.SessionsPath,
-			Category: "navigate",
+			Category: web.PaletteNavigate,
 		},
 		palette.Command{
 			Label:    constant.MessagesTitle,
 			Path:     constant.MessagesPath,
-			Category: "navigate",
+			Category: web.PaletteNavigate,
 		},
 		palette.Command{
 			Label:    constant.HistoryTitle,
 			Path:     constant.HistoryPath,
-			Category: "navigate",
+			Category: web.PaletteNavigate,
 		},
 		palette.Command{
 			Label:    constant.ConversationsTitle,
 			Path:     constant.ConversationsPath,
-			Category: "navigate",
+			Category: web.PaletteNavigate,
 		},
 	)
 

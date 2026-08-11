@@ -26,12 +26,17 @@ func New(
 		palette.Command{
 			Label:    constant.DashboardTitle,
 			Path:     constant.DashboardPath,
-			Category: constant.NavigateCategory,
+			Category: web.PaletteNavigate,
 		},
 		palette.Command{
 			Label:    constant.HeatmapTitle,
 			Path:     constant.HeatmapPath,
-			Category: constant.NavigateCategory,
+			Category: web.PaletteNavigate,
+		},
+		palette.Command{
+			Label:    constant.SignOutTitle,
+			Path:     constant.SignOutPath,
+			Category: web.PaletteAction,
 		},
 	)
 	labels := map[string]bool{}
@@ -42,7 +47,7 @@ func New(
 			palette.Command{
 				Label:    entry.Label,
 				Path:     entry.Link,
-				Category: constant.LinkCategory,
+				Category: web.PaletteLink,
 			},
 		)
 	}

@@ -16,17 +16,17 @@ func New(s *store.Store) *Server {
 		palette.Command{
 			Label:    constant.DashboardTitle,
 			Path:     constant.DashboardPath,
-			Category: "navigate",
+			Category: web.PaletteNavigate,
 		},
 		palette.Command{
 			Label:    constant.EntriesTitle,
 			Path:     constant.EntriesPath,
-			Category: "navigate",
+			Category: web.PaletteNavigate,
 		},
 		palette.Command{
 			Label:    constant.AddEntryTitle,
 			Path:     constant.AddEntryPath,
-			Category: "action",
+			Category: web.PaletteAction,
 		},
 	)
 

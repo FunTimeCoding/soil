@@ -65,13 +65,7 @@ func (p *Page) Render() gomponents.Node {
 	var body []gomponents.Node
 	brand := p.identity.Name()
 
-	if brand != "" || p.brandNode != nil {
-		inner := p.brandNode
-
-		if inner == nil {
-			inner = html.Strong(gomponents.Text(brand))
-		}
-
+	if brand != "" {
 		cell := []gomponents.Node{
 			gomponents.Attr("href", constant.LocationRoot),
 		}
@@ -80,7 +74,9 @@ func (p *Page) Render() gomponents.Node {
 			cell = append(cell, connectionDot())
 		}
 
-		node := html.A(append(cell, inner)...)
+		node := html.A(
+			append(cell, html.Strong(gomponents.Text(brand)))...,
+		)
 		var navigation []gomponents.Node
 
 		for _, item := range p.items {

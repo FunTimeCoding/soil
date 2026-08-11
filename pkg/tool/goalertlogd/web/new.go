@@ -20,12 +20,12 @@ func New(
 		palette.Command{
 			Label:    constant.DashboardTitle,
 			Path:     constant.DashboardPath,
-			Category: "navigate",
+			Category: web.PaletteNavigate,
 		},
 		palette.Command{
 			Label:    constant.RecentTitle,
 			Path:     constant.RecentPath,
-			Category: "navigate",
+			Category: web.PaletteNavigate,
 		},
 	)
 

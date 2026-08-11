@@ -11,3 +11,10 @@ const (
 	PaletteBonusFirstCharacter = 2
 	PaletteMinScore            = -1 << 30
 )
+
+const (
+	PaletteNavigate = "navigate"
+	PaletteAction   = "action"
+	PaletteLink     = "link"
+	PaletteSearch   = "search"
+)

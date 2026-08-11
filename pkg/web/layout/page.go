@@ -12,7 +12,6 @@ type Page struct {
 	path            string
 	theme           string
 	style           string
-	brandNode       gomponents.Node
 	items           []*navigation_item.Item
 	navigation      []gomponents.Node
 	script          []string

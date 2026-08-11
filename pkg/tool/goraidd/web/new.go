@@ -22,22 +22,22 @@ func New(
 		palette.Command{
 			Label:    constant.LogsTitle,
 			Path:     constant.LogsPath,
-			Category: "navigate",
+			Category: web.PaletteNavigate,
 		},
 		palette.Command{
 			Label:    constant.ReportsTitle,
 			Path:     constant.ReportsPath,
-			Category: "navigate",
+			Category: web.PaletteNavigate,
 		},
 		palette.Command{
 			Label:    constant.RaidsTitle,
 			Path:     constant.RaidsPath,
-			Category: "navigate",
+			Category: web.PaletteNavigate,
 		},
 		palette.Command{
 			Label:    constant.PlayersTitle,
 			Path:     constant.PlayersPath,
-			Category: "navigate",
+			Category: web.PaletteNavigate,
 		},
 	)
 

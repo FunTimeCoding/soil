@@ -5,6 +5,7 @@ import "github.com/funtimecoding/soil/pkg/lint/concern"
 type Service struct {
 	Name              string
 	Repo              string
+	Path              string
 	ModelContext      bool
 	Server            bool
 	Web               bool

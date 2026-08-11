@@ -16,12 +16,12 @@ func New(s *store.Store) *Server {
 		palette.Command{
 			Label:    constant.HeatmapTitle,
 			Path:     constant.HeatmapPath,
-			Category: "navigate",
+			Category: web.PaletteNavigate,
 		},
 		palette.Command{
 			Label:    constant.EventsTitle,
 			Path:     constant.EventsPath,
-			Category: "navigate",
+			Category: web.PaletteNavigate,
 		},
 	)
 

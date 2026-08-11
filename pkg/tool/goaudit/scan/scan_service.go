@@ -16,10 +16,13 @@ func scanService(
 	s := &Service{
 		Name: name,
 		Repo: repo,
+		Path: path,
 	}
 	s.ModelContext = v.DirectoryExists(filepath.Join(path, "model_context"))
 	s.Server = v.DirectoryExists(filepath.Join(path, "server"))
-	s.Web = v.DirectoryExists(filepath.Join(path, "web"))
+	s.Web = v.DirectoryExists(
+		filepath.Join(path, constant.WebDirectory),
+	)
 	s.Store = v.DirectoryExists(filepath.Join(path, "store"))
 	s.Generated = v.DirectoryExists(filepath.Join(path, "generated"))
 	s.Convert = v.DirectoryExists(filepath.Join(path, "convert"))

@@ -127,4 +127,5 @@ const (
 	Wait           = "wait"
 	Warning        = "warning"
 	Watched        = "watched"
+	Web            = "web"
 )

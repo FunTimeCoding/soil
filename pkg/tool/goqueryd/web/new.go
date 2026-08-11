@@ -17,17 +17,17 @@ func New(s *service.Service) *Server {
 		palette.Command{
 			Label:    constant.DashboardTitle,
 			Path:     constant.DashboardPath,
-			Category: "navigate",
+			Category: web.PaletteNavigate,
 		},
 		palette.Command{
 			Label:    constant.SearchTitle,
 			Path:     constant.SearchPath,
-			Category: "navigate",
+			Category: web.PaletteNavigate,
 		},
 		palette.Command{
 			Label:    constant.CollectionsTitle,
 			Path:     constant.CollectionsPath,
-			Category: "navigate",
+			Category: web.PaletteNavigate,
 		},
 	)
 

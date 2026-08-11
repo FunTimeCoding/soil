@@ -17,6 +17,13 @@ func Run(o *option.Audit) {
 			system.FirstFile(constant.ConfigurationPaths...),
 		)
 		services := scan.Services(v, repo, configuration)
+
+		if o.Web {
+			runWeb(scan.Frontends(v, services))
+
+			continue
+		}
+
 		identityWarnings := scan.IdentityWarnings(v, services)
 		clients := scan.Clients(v, repo, configuration)
 

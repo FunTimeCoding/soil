@@ -16,32 +16,32 @@ func New(s *service.Service) *Server {
 		palette.Command{
 			Label:    constant.DashboardTitle,
 			Path:     constant.DashboardPath,
-			Category: "navigate",
+			Category: web.PaletteNavigate,
 		},
 		palette.Command{
 			Label:    constant.MemoriesTitle,
 			Path:     constant.MemoriesPath,
-			Category: "navigate",
+			Category: web.PaletteNavigate,
 		},
 		palette.Command{
 			Label:    constant.RelationsTitle,
 			Path:     constant.RelationsPath,
-			Category: "navigate",
+			Category: web.PaletteNavigate,
 		},
 		palette.Command{
 			Label:    constant.ImpressionsTitle,
 			Path:     constant.ImpressionsPath,
-			Category: "navigate",
+			Category: web.PaletteNavigate,
 		},
 		palette.Command{
 			Label:    constant.SearchTitle,
 			Path:     constant.SearchPath,
-			Category: "navigate",
+			Category: web.PaletteNavigate,
 		},
 		palette.Command{
 			Label:      "Search memories",
 			Path:       "/palette/memories",
-			Category:   "search",
+			Category: web.PaletteSearch,
 			SwapTarget: ".palette-body",
 		},
 	)
