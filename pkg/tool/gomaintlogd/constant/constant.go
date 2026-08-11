@@ -30,6 +30,11 @@ const (
 	EntriesTitle   = "Entries"
 	EntriesPath    = "/entries"
 	AddEntryTitle  = "Add Entry"
+	EntryTitle     = "Entry"
+	EntryPath      = "/entry"
+	DetailPath     = "/detail"
+	EditPath       = "/edit"
+	DeletePath     = "/delete"
 	AddEntryPath   = "/add"
 )
 const HostEnvironment = "MAINTENANCE_LOG_HOST"

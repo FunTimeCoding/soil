@@ -29,7 +29,7 @@ func editForm(
 			alert,
 			html.Form(
 				html.Class("edit-form"),
-				htmx.Post(fmt.Sprintf("/entry/edit?id=%d", e.ID)),
+				htmx.Post(fragmentLocator(constant.EditPath, e.ID)),
 				htmx.Target(target),
 				htmx.Swap("outerHTML"),
 				html.Div(
@@ -96,7 +96,7 @@ func editForm(
 					html.Button(
 						html.Type("button"),
 						html.Class("outline secondary"),
-						htmx.Get(fmt.Sprintf("/entry/detail?id=%d", e.ID)),
+						htmx.Get(fragmentLocator(constant.DetailPath, e.ID)),
 						htmx.Target(target),
 						htmx.Swap("outerHTML"),
 						gomponents.Text("Cancel"),

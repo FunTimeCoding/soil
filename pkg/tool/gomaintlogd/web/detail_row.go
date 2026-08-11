@@ -2,7 +2,7 @@ package web
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/time"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store/entry"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents-htmx"
@@ -19,51 +19,19 @@ func detailRow(e *entry.Entry) gomponents.Node {
 			gomponents.Attr("colspan", "6"),
 			html.Div(
 				html.Class("detail-content"),
-				html.Div(
-					html.Class("grid"),
-					html.Div(
-						html.Strong(gomponents.Text("Timestamp: ")),
-						gomponents.Text(
-							time.FormatCompact(e.Timestamp),
-						),
-					),
-					html.Div(
-						html.Strong(gomponents.Text("Action: ")),
-						gomponents.Text(e.Action),
-					),
-					html.Div(
-						html.Strong(gomponents.Text("User: ")),
-						gomponents.Text(e.User),
-					),
-				),
-				html.Div(
-					html.Class("grid"),
-					html.Div(
-						html.Strong(gomponents.Text("System: ")),
-						gomponents.Text(e.System),
-					),
-					html.Div(
-						html.Strong(gomponents.Text("Service: ")),
-						gomponents.Text(e.Service),
-					),
-					html.Div(),
-				),
-				html.Div(
-					html.Strong(gomponents.Text("Description:")),
-					html.Pre(gomponents.Text(e.Description)),
-				),
+				entryFields(e),
 				html.Div(
 					html.Class("detail-actions"),
 					html.Button(
 						html.Class("outline"),
-						htmx.Get(fmt.Sprintf("/entry/edit?id=%d", e.ID)),
+						htmx.Get(fragmentLocator(constant.EditPath, e.ID)),
 						htmx.Target(target),
 						htmx.Swap("outerHTML"),
 						gomponents.Text("Edit"),
 					),
 					html.Button(
 						html.Class("outline contrast"),
-						htmx.Post(fmt.Sprintf("/entry/delete?id=%d", e.ID)),
+						htmx.Post(fragmentLocator(constant.DeletePath, e.ID)),
 						htmx.Confirm("Delete this entry?"),
 						gomponents.Attr(
 							"hx-on::after-request",
@@ -86,6 +54,12 @@ func detailRow(e *entry.Entry) gomponents.Node {
 							),
 						),
 						gomponents.Text("Close"),
+					),
+					html.A(
+						html.Class("outline secondary"),
+						gomponents.Attr("role", "button"),
+						html.Href(entryLocator(e.ID)),
+						gomponents.Text("Permalink"),
 					),
 				),
 			),

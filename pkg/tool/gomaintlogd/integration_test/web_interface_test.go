@@ -39,15 +39,28 @@ func TestWebInterface(t *testing.T) {
 	)
 	assert.StringContains(t, "jdoe", o.Get(constant.DashboardPath))
 	assert.StringContains(t, "worker1", o.Get(constant.EntriesPath))
-	detail := o.Get("/entry/detail?id=1")
+	detail := o.Get("/detail?id=1")
 	assert.StringContains(t, "nginx was unresponsive, restarted", detail)
 	assert.StringContains(t, "Edit", detail)
 	assert.StringContains(t, "Delete", detail)
-	edit := o.Get("/entry/edit?id=1")
+	assert.StringContains(t, "Permalink", detail)
+	assert.StringContains(t, `href="/entry/1"`, detail)
+	o.AssertStatus("/entry/1", http.StatusOK)
+	page := o.Get("/entry/1")
+	assert.StringContains(t, "nginx was unresponsive, restarted", page)
+	assert.StringContains(t, "worker1", page)
+	o.AssertStatus("/entry/9999", http.StatusNotFound)
+	assert.StringContains(
+		t,
+		"This entry no longer exists",
+		o.Get("/entry/9999"),
+	)
+	o.AssertStatus("/entry/nonsense", http.StatusNotFound)
+	edit := o.Get("/edit?id=1")
 	assert.StringContains(t, "restarted web server", edit)
 	assert.StringContains(t, "Save", edit)
 	editBody := o.PostForm(
-		"/entry/edit?id=1",
+		"/edit?id=1",
 		url.Values{
 			"action":      {"cleared and documented"},
 			"user":        {"jdoe"},
@@ -58,7 +71,7 @@ func TestWebInterface(t *testing.T) {
 		},
 	)
 	assert.StringContains(t, "cleared and documented", editBody)
-	o.PostForm("/entry/delete?id=1", nil)
+	o.PostForm("/delete?id=1", nil)
 	assert.StringContains(
 		t,
 		"No entries found",

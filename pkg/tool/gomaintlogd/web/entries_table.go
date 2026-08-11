@@ -2,6 +2,7 @@ package web
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store/entry"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"maragu.dev/gomponents"
@@ -23,7 +24,7 @@ func entriesTable(entries []entry.Entry) gomponents.Node {
 			html.Tr(
 				html.ID(fmt.Sprintf("row-%d", e.ID)),
 				html.Class("clickable-row"),
-				htmx.Get(fmt.Sprintf("/entry/detail?id=%d", e.ID)),
+				htmx.Get(fragmentLocator(constant.DetailPath, e.ID)),
 				htmx.Target(fmt.Sprintf("#%s", target)),
 				htmx.Swap("outerHTML"),
 				layout.TimeCell(e.Timestamp),
