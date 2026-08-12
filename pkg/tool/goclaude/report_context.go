@@ -7,7 +7,7 @@ import (
 
 func reportContext(
 	c *client.ClientWithResponses,
-	input *statuslineInput,
+	input *statusLineInput,
 ) {
 	if input.SessionID == "" {
 		return

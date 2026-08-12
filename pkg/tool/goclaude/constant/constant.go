@@ -24,7 +24,7 @@ const (
 	GuardBlockExit = 2
 	SedMessage     = "sed on macOS is BSD sed and its flags (notably -i) differ from GNU sed - use gsed instead"
 
-	StatuslineDumpFile = "/tmp/goclaude-statusline.json"
+	StatusLineDumpFile = "/tmp/goclaude-status-line.json"
 )
 
 var SedInvocation = regexp.MustCompile(`(^|[|&;(\s])sed(\s|$)`)

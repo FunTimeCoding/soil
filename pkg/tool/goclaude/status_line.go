@@ -10,9 +10,9 @@ import (
 	"os"
 )
 
-func statusline(c *command_context.Context) *cobra.Command {
+func statusLine(c *command_context.Context) *cobra.Command {
 	result := &cobra.Command{
-		Use:   "statusline",
+		Use:   "status-line",
 		Short: "Render the status line and report context usage to goclauded",
 		Args:  cobra.NoArgs,
 		Run: func(
@@ -22,9 +22,9 @@ func statusline(c *command_context.Context) *cobra.Command {
 			body, e := io.ReadAll(os.Stdin)
 			errors.PanicOnError(e)
 			errors.LogOnError(
-				os.WriteFile(constant.StatuslineDumpFile, body, 0o644),
+				os.WriteFile(constant.StatusLineDumpFile, body, 0o644),
 			)
-			fmt.Println(RunStatusline(c.Client(), body))
+			fmt.Println(RunStatusLine(c.Client(), body))
 		},
 	}
 

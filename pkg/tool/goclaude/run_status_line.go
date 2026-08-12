@@ -5,11 +5,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 )
 
-func RunStatusline(
+func RunStatusLine(
 	c *client.ClientWithResponses,
 	body []byte,
 ) string {
-	input := parseStatuslineInput(body)
+	input := parseStatusLineInput(body)
 	reportContext(c, input)
 
 	return fmt.Sprintf(

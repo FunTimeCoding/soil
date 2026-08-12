@@ -5,8 +5,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 )
 
-func parseStatuslineInput(body []byte) *statuslineInput {
-	var input statuslineInput
+func parseStatusLineInput(body []byte) *statusLineInput {
+	var input statusLineInput
 	errors.PanicOnError(json.Unmarshal(body, &input))
 
 	return &input

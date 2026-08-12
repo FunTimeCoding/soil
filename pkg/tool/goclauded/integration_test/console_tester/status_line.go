@@ -2,8 +2,8 @@ package console_tester
 
 import "github.com/funtimecoding/soil/pkg/tool/goclaude"
 
-func (o *Tester) Statusline(body []byte) string {
+func (o *Tester) StatusLine(body []byte) string {
 	o.t.Helper()
 
-	return goclaude.RunStatusline(o.client, body)
+	return goclaude.RunStatusLine(o.client, body)
 }

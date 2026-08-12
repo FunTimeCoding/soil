@@ -48,7 +48,7 @@ func Main(
 	o.AddCommand(sessionBranch(c))
 	o.AddCommand(register(c))
 	o.AddCommand(check(c))
-	o.AddCommand(statusline(c))
+	o.AddCommand(statusLine(c))
 	o.AddCommand(guard.New())
 	o.AddCommand(wait(c))
 	o.AddCommand(usage(c))

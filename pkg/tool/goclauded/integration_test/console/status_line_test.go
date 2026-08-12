@@ -8,13 +8,13 @@ import (
 	"testing"
 )
 
-func TestStatuslineRendersAndStores(t *testing.T) {
+func TestStatusLineRendersAndStores(t *testing.T) {
 	s := base.New(t)
 	defer s.Close()
 	c := console_tester.New(t, s.Port())
 	c.Register("11111111-2222-3333-4444-555555555555")
-	line := c.Statusline(
-		[]byte(fixture.Read("claude", "statusline.json")),
+	line := c.StatusLine(
+		[]byte(fixture.Read("claude", "status-line.json")),
 	)
 	assert.String(t, "18% context", line)
 	record, e := s.Service.GetSession(
@@ -26,19 +26,19 @@ func TestStatuslineRendersAndStores(t *testing.T) {
 	assert.String(t, "Fable 5", record.Model)
 }
 
-func TestStatuslineRateSnapshotDedupe(t *testing.T) {
+func TestStatusLineRateSnapshotDedupe(t *testing.T) {
 	s := base.New(t)
 	defer s.Close()
 	c := console_tester.New(t, s.Port())
 	c.Register("11111111-2222-3333-4444-555555555555")
-	body := []byte(fixture.Read("claude", "statusline.json"))
-	c.Statusline(body)
+	body := []byte(fixture.Read("claude", "status-line.json"))
+	c.StatusLine(body)
 	first, e := s.Store.Store.LatestRateSnapshot()
 	assert.FatalOnError(t, e)
 	assert.NotNil(t, first)
 	assert.Integer(t, 31, first.FiveHourPercent)
 	assert.Integer(t, 1, first.SevenDayPercent)
-	c.Statusline(body)
+	c.StatusLine(body)
 	second, f := s.Store.Store.LatestRateSnapshot()
 	assert.FatalOnError(t, f)
 	assert.Integer(t, int(first.Identifier), int(second.Identifier))
