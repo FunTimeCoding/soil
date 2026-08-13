@@ -32,10 +32,7 @@ func (s *Server) PostDocument(
 
 	if e != nil {
 		return server.PostDocument500JSONResponse(
-			*s.captureFail(
-				e,
-				constant.UnexpectedError,
-			),
+			*s.captureFail(e, constant.UnexpectedError),
 		), nil
 	}
 

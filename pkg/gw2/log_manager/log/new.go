@@ -9,10 +9,7 @@ func New(l *log_manager.Log) *Log {
 	var accounts []string
 
 	for _, player := range l.Players {
-		accounts = append(
-			accounts,
-			strings.TrimPrefix(player.AccountName, ":"),
-		)
+		accounts = append(accounts, strings.TrimPrefix(player.AccountName, ":"))
 	}
 
 	return &Log{

@@ -18,7 +18,5 @@ func (s *Server) PostRegister(
 		), nil
 	}
 
-	return server.PostRegister200JSONResponse{
-		Callsign: result.Callsign,
-	}, nil
+	return server.PostRegister200JSONResponse{Callsign: result.Callsign}, nil
 }

@@ -13,10 +13,7 @@ func historyLink(
 	var parts []string
 
 	for _, k := range kinds {
-		parts = append(
-			parts,
-			fmt.Sprintf("%s=%s", constant.Kind, k),
-		)
+		parts = append(parts, fmt.Sprintf("%s=%s", constant.Kind, k))
 	}
 
 	if page > 1 {

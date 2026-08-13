@@ -25,11 +25,7 @@ func (s *Server) updateJournalEntry(
 		return response.Fail("nothing to update: pass comments or kind")
 	}
 
-	result, g := s.client.UpdateJournalEntry(
-		int32(identifier),
-		kind,
-		comments,
-	)
+	result, g := s.client.UpdateJournalEntry(int32(identifier), kind, comments)
 
 	if g != nil {
 		return s.captureFail(g, "journal entry not updated")

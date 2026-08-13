@@ -15,9 +15,5 @@ func Dump() {
 		return
 	}
 
-	fmt.Printf(
-		"Session %d%%  resets %s\n",
-		r.SessionPercent,
-		r.SessionReset,
-	)
+	fmt.Printf("Session %d%%  resets %s\n", r.SessionPercent, r.SessionReset)
 }

@@ -46,10 +46,7 @@ func Spacing(
 			strings.HasPrefix(trimmed, "switch ") ||
 			strings.HasPrefix(trimmed, "select ")
 
-		isExit := trimmed == "return" || strings.HasPrefix(
-			trimmed,
-			"return ",
-		) ||
+		isExit := trimmed == "return" || strings.HasPrefix(trimmed, "return ") ||
 			trimmed == "break" || strings.HasPrefix(trimmed, "break ") ||
 			trimmed == "continue" || strings.HasPrefix(trimmed, "continue ")
 
@@ -61,10 +58,7 @@ func Spacing(
 		) ||
 			strings.HasPrefix(trimmed, "type "))
 
-		isVariable := topLevel && !isBlank && strings.HasPrefix(
-			trimmed,
-			"var ",
-		)
+		isVariable := topLevel && !isBlank && strings.HasPrefix(trimmed, "var ")
 		isConstant := topLevel &&
 			!isBlank &&
 			strings.HasPrefix(trimmed, "const ")
@@ -293,10 +287,7 @@ func Spacing(
 
 		s.ChangedLine(line)
 
-		if strings.HasPrefix(
-			trimmed,
-			"}",
-		) && !isElseContinuation && !endsWithBrace {
+		if strings.HasPrefix(trimmed, "}") && !isElseContinuation && !endsWithBrace {
 			isControl := false
 
 			if len(blockStack) > 0 {

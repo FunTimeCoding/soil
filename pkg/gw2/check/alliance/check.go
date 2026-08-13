@@ -8,10 +8,7 @@ import (
 )
 
 func Check() {
-	path := fmt.Sprintf(
-		"%s\\AppData\\Local\\ArcdpsLogManager",
-		system.Home(),
-	)
+	path := fmt.Sprintf("%s\\AppData\\Local\\ArcdpsLogManager", system.Home())
 
 	if false {
 		Guild(path)

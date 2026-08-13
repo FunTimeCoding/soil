@@ -24,9 +24,9 @@ func (s *Store) Events(q *event_query.Query) ([]event.Event, error) {
 
 	var result []event.Event
 
-	if e := g.Order(
-		"created_at DESC",
-	).Limit(q.Limit()).Offset(q.Offset()).Find(&result).Error; e != nil {
+	if e := g.Order("created_at DESC").Limit(q.Limit()).Offset(q.Offset()).Find(
+		&result,
+	).Error; e != nil {
 		return nil, e
 	}
 

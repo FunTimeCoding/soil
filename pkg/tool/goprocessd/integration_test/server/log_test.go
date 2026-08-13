@@ -8,11 +8,7 @@ import (
 )
 
 func TestLogCapturesOutput(t *testing.T) {
-	s := tester.New(
-		t,
-		"alfa: sh -c 'echo hello-from-alfa && sleep 60'\n",
-		"",
-	)
+	s := tester.New(t, "alfa: sh -c 'echo hello-from-alfa && sleep 60'\n", "")
 	s.WaitContains(t, "hello-from-alfa", "log", "alfa")
 }
 

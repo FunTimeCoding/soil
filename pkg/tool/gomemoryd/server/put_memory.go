@@ -44,7 +44,5 @@ func (s *Server) PutMemory(
 		), nil
 	}
 
-	return server.PutMemory200JSONResponse{
-		Identifier: m.Identifier,
-	}, nil
+	return server.PutMemory200JSONResponse{Identifier: m.Identifier}, nil
 }

@@ -60,10 +60,7 @@ func (c *Client) do(
 		var o error_payload.Payload
 
 		if json.Unmarshal(b, &o) == nil && o.Message != "" {
-			return nil, detail_error.New(
-				o.Message,
-				result.Status,
-			)
+			return nil, detail_error.New(o.Message, result.Status)
 		}
 
 		return nil, fmt.Errorf("%s", result.Status)

@@ -16,11 +16,7 @@ func (c *Client) AddTag(
 	}
 
 	if c.verbose {
-		fmt.Printf(
-			"ADD tag: %s %s\n",
-			t.Nested.GetName(),
-			t.Nested.GetSlug(),
-		)
+		fmt.Printf("ADD tag: %s %s\n", t.Nested.GetName(), t.Nested.GetSlug())
 	}
 
 	d, f := c.DeviceByName(deviceName)

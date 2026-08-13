@@ -5,9 +5,5 @@ func New(
 	collection string,
 	limit int,
 ) *Option {
-	return &Option{
-		Query:      query,
-		Collection: collection,
-		Limit:      limit,
-	}
+	return &Option{Query: query, Collection: collection, Limit: limit}
 }

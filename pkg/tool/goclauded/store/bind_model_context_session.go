@@ -10,13 +10,8 @@ func (s *Store) BindModelContextSession(
 	name string,
 	modelContextSessionIdentifier string,
 ) error {
-	result := s.database.Model(session.Stub()).Where(
-		"callsign = ?",
-		name,
-	).Updates(
-		map[string]any{
-			"model_context_session": modelContextSessionIdentifier,
-		},
+	result := s.database.Model(session.Stub()).Where("callsign = ?", name).Updates(
+		map[string]any{"model_context_session": modelContextSessionIdentifier},
 	)
 
 	if result.Error != nil {

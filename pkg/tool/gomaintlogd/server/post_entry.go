@@ -37,7 +37,5 @@ func (s *Server) PostEntry(
 		), nil
 	}
 
-	return server.PostEntry200JSONResponse(
-		toResponse([]entry.Entry{*e})[0],
-	), nil
+	return server.PostEntry200JSONResponse(toResponse([]entry.Entry{*e})[0]), nil
 }

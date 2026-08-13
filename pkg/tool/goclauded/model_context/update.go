@@ -21,7 +21,9 @@ func (s *Server) update(
 	}
 
 	if c.Callsign == "" {
-		return response.Fail("unknown session - announce first to bind your identity")
+		return response.Fail(
+			"unknown session - announce first to bind your identity",
+		)
 	}
 
 	message, e := q.RequireString(constant.Message)
@@ -58,7 +60,5 @@ func (s *Server) update(
 		return s.captureFail(f, library.UnexpectedError)
 	}
 
-	return response.Success(
-		fmt.Sprintf("Updated %s: %s", topic, message),
-	)
+	return response.Success(fmt.Sprintf("Updated %s: %s", topic, message))
 }

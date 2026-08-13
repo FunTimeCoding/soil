@@ -14,9 +14,7 @@ func New(
 ) *Tester {
 	t.Helper()
 	c, e := client.NewClientWithResponses(
-		locator.New(
-			constant.Localhost,
-		).Insecure().Port(port).String(),
+		locator.New(constant.Localhost).Insecure().Port(port).String(),
 	)
 	assert.FatalOnError(t, e)
 

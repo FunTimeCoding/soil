@@ -20,11 +20,7 @@ func (s *Server) DeleteProjectVariable(
 		return response.Fail("key is required")
 	}
 
-	_, e := s.client.ProjectVariables.RemoveVariable(
-		a.Project,
-		a.Key,
-		nil,
-	)
+	_, e := s.client.ProjectVariables.RemoveVariable(a.Project, a.Key, nil)
 
 	if e != nil {
 		return s.captureDetail(e)

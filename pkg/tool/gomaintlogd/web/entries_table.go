@@ -34,10 +34,7 @@ func entriesTable(entries []entry.Entry) gomponents.Node {
 				html.Td(gomponents.Text(e.Service)),
 				html.Td(gomponents.Text(truncate(e.Description, 80))),
 			),
-			html.Tr(
-				html.ID(target),
-				html.Style("display:none"),
-			),
+			html.Tr(html.ID(target), html.Style("display:none")),
 		)
 	}
 

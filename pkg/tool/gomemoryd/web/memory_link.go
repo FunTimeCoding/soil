@@ -11,10 +11,7 @@ func memoryLink(
 	name string,
 ) gomponents.Node {
 	return html.A(
-		gomponents.Attr(
-			"href",
-			fmt.Sprintf("/memories/%d", identifier),
-		),
+		gomponents.Attr("href", fmt.Sprintf("/memories/%d", identifier)),
 		gomponents.Text(name),
 	)
 }

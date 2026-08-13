@@ -64,21 +64,12 @@ func TestThread(t *testing.T) {
 					w http.ResponseWriter,
 					q *http.Request,
 				) {
-					web.Encode(
-						w,
-						&model.User{
-							Id:       "delta",
-							Username: "echo",
-						},
-					)
+					web.Encode(w, &model.User{Id: "delta", Username: "echo"})
 				},
 			)
 		},
 	)
-	result, e := r.Client.GetThreadWithResponse(
-		context.Background(),
-		"bravo",
-	)
+	result, e := r.Client.GetThreadWithResponse(context.Background(), "bravo")
 
 	if e != nil {
 		t.Fatal(e)

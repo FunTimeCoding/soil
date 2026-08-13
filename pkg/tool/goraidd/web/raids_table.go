@@ -31,15 +31,15 @@ func raidsTable(rows []store.RaidRow) gomponents.Node {
 					return html.Tr(
 						html.Td(
 							html.A(
-								html.Href(
-									fmt.Sprintf("/raids/%d", r.ID),
-								),
+								html.Href(fmt.Sprintf("/raids/%d", r.ID)),
 								gomponents.Text(r.Name),
 							),
 						),
 						html.Td(
 							html.Class(web.LayoutTimeCellClass),
-							gomponents.Text(r.Date.Format(timeConstant.DateYear)),
+							gomponents.Text(
+								r.Date.Format(timeConstant.DateYear),
+							),
 						),
 						html.Td(gomponents.Textf("%d", r.Fights)),
 						html.Td(gomponents.Textf("%d", r.Players)),

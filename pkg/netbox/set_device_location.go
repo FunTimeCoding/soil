@@ -23,9 +23,7 @@ func (c *Client) SetDeviceLocation(
 
 	q := netbox.NewPatchedWritableDeviceWithConfigContextRequest()
 	q.SetLocation(
-		netbox.DeviceWithConfigContextRequestLocation{
-			Int32: &l.Identifier,
-		},
+		netbox.DeviceWithConfigContextRequestLocation{Int32: &l.Identifier},
 	)
 
 	return c.updateDevice(d, q)

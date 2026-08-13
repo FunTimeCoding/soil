@@ -29,10 +29,7 @@ func TestModelContext(t *testing.T) {
 	assert.StringContains(
 		t,
 		"hello world",
-		o.Client.MustCallTool(
-			constant.ReadView,
-			map[string]any{"view_id": 1},
-		),
+		o.Client.MustCallTool(constant.ReadView, map[string]any{"view_id": 1}),
 	)
 	assert.StringContains(
 		t,
@@ -65,9 +62,6 @@ func TestModelContext(t *testing.T) {
 	assert.StringContains(
 		t,
 		"closed",
-		o.Client.MustCallTool(
-			constant.CloseView,
-			map[string]any{"view_id": 2},
-		),
+		o.Client.MustCallTool(constant.CloseView, map[string]any{"view_id": 2}),
 	)
 }

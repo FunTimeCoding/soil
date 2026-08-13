@@ -14,9 +14,7 @@ func (c *Client) ListStorageContent(
 		c.context,
 		name,
 		storage,
-		&client.ListStorageContentParams{
-			Instance: &c.instance,
-		},
+		&client.ListStorageContentParams{Instance: &c.instance},
 	)
 	errors.PanicOnError(e)
 

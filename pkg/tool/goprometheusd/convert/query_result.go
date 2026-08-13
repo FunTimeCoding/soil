@@ -27,9 +27,7 @@ func QueryResult(r *query_result.Result) *SlimQueryResult {
 		}
 	case model.Matrix:
 		for _, s := range t {
-			stream := SlimStream{
-				Metric: metricToMap(s.Metric),
-			}
+			stream := SlimStream{Metric: metricToMap(s.Metric)}
 
 			for _, p := range s.Values {
 				stream.Values = append(

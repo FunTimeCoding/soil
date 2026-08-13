@@ -17,9 +17,7 @@ func TestBranch(t *testing.T) {
 	e := constant.MainBranch
 
 	if action.IsActionRun() {
-		if r := environment.Required(
-			github.ReferenceEnvironment,
-		); r != constant.MainBranch {
+		if r := environment.Required(github.ReferenceEnvironment); r != constant.MainBranch {
 			e = r
 		}
 	}
@@ -37,10 +35,7 @@ func TestBranch(t *testing.T) {
 		t,
 		contains.Any(
 			[]string{actual},
-			[]string{
-				constant.MainBranch,
-				constant.HeadReference,
-			},
+			[]string{constant.MainBranch, constant.HeadReference},
 		),
 	)
 }

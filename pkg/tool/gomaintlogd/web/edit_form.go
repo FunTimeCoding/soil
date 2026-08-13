@@ -57,9 +57,7 @@ func editForm(
 						html.Input(
 							html.Type("datetime-local"),
 							html.Name(constant.Timestamp),
-							html.Value(
-								e.Timestamp.Format("2006-01-02T15:04"),
-							),
+							html.Value(e.Timestamp.Format("2006-01-02T15:04")),
 						),
 					),
 				),

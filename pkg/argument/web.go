@@ -9,10 +9,7 @@ import (
 func (i *Instance) Web() {
 	i.Integer(
 		constant.Port,
-		environment.FallbackInteger(
-			web.PortEnvironment,
-			web.ListenPort,
-		),
+		environment.FallbackInteger(web.PortEnvironment, web.ListenPort),
 		web.PortUsage,
 	)
 	i.String(

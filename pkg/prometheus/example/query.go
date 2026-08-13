@@ -17,17 +17,10 @@ func Query() {
 		fmt.Printf("Up: %s\n", k)
 	}
 
-	countPerScrapeJob := c.QueryIntegers(
-		`count by (job)({__name__=~".+"})`,
-		t,
-	)
+	countPerScrapeJob := c.QueryIntegers(`count by (job)({__name__=~".+"})`, t)
 
 	for _, k := range maps.StringKeys(countPerScrapeJob) {
-		fmt.Printf(
-			"Scrape Job: %s Count: %d\n",
-			k,
-			countPerScrapeJob[k],
-		)
+		fmt.Printf("Scrape Job: %s Count: %d\n", k, countPerScrapeJob[k])
 	}
 
 	cardinalityPerMetric := c.QueryIntegers(
@@ -36,11 +29,7 @@ func Query() {
 	)
 
 	for _, k := range maps.StringKeys(cardinalityPerMetric) {
-		fmt.Printf(
-			"Metric: %s Count: %d\n",
-			k,
-			cardinalityPerMetric[k],
-		)
+		fmt.Printf("Metric: %s Count: %d\n", k, cardinalityPerMetric[k])
 	}
 
 	// TODO: prometheus_tsdb_symbol_table_size_bytes

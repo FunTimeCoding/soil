@@ -25,11 +25,7 @@ func (s *Server) historyPage(
 	kinds := r.URL.Query()[constant.Kind]
 	limit := 10
 	offset := (page - 1) * limit
-	a := argument.Timeline{
-		Kinds:  kinds,
-		Limit:  limit + 1,
-		Offset: offset,
-	}
+	a := argument.Timeline{Kinds: kinds, Limit: limit + 1, Offset: offset}
 	entries, e := s.service.Timeline(a)
 	errors.PanicOnError(e)
 	hasMore := len(entries) > limit
@@ -44,9 +40,7 @@ func (s *Server) historyPage(
 	if isHTMX {
 		navigation := historyNavigation(page, hasMore, kinds)
 		errors.PanicOnError(
-			gomponents.Group(
-				[]gomponents.Node{table, navigation},
-			).Render(w),
+			gomponents.Group([]gomponents.Node{table, navigation}).Render(w),
 		)
 
 		return
@@ -70,6 +64,5 @@ func (s *Server) historyPage(
 		w,
 		constant.HistoryTitle,
 		constant.HistoryPath,
-		content...,
-	)
+		content...)
 }

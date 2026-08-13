@@ -9,10 +9,7 @@ func searchResultItem(item SearchItem) gomponents.Node {
 	var children []gomponents.Node
 	children = append(
 		children,
-		html.Span(
-			html.Class("palette-label"),
-			gomponents.Text(item.Label),
-		),
+		html.Span(html.Class("palette-label"), gomponents.Text(item.Label)),
 	)
 
 	if item.Description != "" {

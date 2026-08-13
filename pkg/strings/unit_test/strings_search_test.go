@@ -32,11 +32,7 @@ func TestElementAfterSkip(t *testing.T) {
 }
 
 func TestElementAfter(t *testing.T) {
-	assert.String(
-		t,
-		"b",
-		strings.ElementAfter([]string{"a", "b"}, "a"),
-	)
+	assert.String(t, "b", strings.ElementAfter([]string{"a", "b"}, "a"))
 }
 
 func TestHas(t *testing.T) {

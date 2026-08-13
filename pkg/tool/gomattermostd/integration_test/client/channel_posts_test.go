@@ -22,13 +22,7 @@ func TestChannelPosts(t *testing.T) {
 					w http.ResponseWriter,
 					q *http.Request,
 				) {
-					web.Encode(
-						w,
-						&model.Channel{
-							Id:   "alfa",
-							Name: "alfa",
-						},
-					)
+					web.Encode(w, &model.Channel{Id: "alfa", Name: "alfa"})
 				},
 			)
 			m.HandleFunc(
@@ -73,13 +67,7 @@ func TestChannelPosts(t *testing.T) {
 					w http.ResponseWriter,
 					q *http.Request,
 				) {
-					web.Encode(
-						w,
-						&model.User{
-							Id:       "delta",
-							Username: "echo",
-						},
-					)
+					web.Encode(w, &model.User{Id: "delta", Username: "echo"})
 				},
 			)
 		},

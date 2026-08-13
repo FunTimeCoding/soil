@@ -16,10 +16,5 @@ func (c *Client) DeviceJournalEntries(
 		return nil, e
 	}
 
-	return c.journalEntries(
-		constant.DeviceAddress,
-		d.Identifier,
-		limit,
-		offset,
-	)
+	return c.journalEntries(constant.DeviceAddress, d.Identifier, limit, offset)
 }

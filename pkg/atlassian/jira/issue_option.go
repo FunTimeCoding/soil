@@ -19,13 +19,7 @@ func (c *Client) IssueOption() (*option.Issue, error) {
 		return nil, f
 	}
 
-	c.issueOption = option.New(
-		c.locator,
-		c.user,
-		keys,
-		c.closedStatus,
-		m,
-	)
+	c.issueOption = option.New(c.locator, c.user, keys, c.closedStatus, m)
 	c.issueOption.Verbose = c.verbose
 
 	return c.issueOption, nil

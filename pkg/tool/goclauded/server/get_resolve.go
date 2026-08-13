@@ -48,7 +48,5 @@ func (s *Server) GetResolve(
 		}, nil
 	}
 
-	return server.GetResolve200JSONResponse{
-		Identifier: result.Identifier(),
-	}, nil
+	return server.GetResolve200JSONResponse{Identifier: result.Identifier()}, nil
 }

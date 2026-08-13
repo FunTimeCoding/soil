@@ -37,16 +37,10 @@ func expandFileQuerySymbols(file *ast.File) []*querySymbol {
 							continue
 						}
 
-						result = append(
-							result,
-							&querySymbol{name: n.Name},
-						)
+						result = append(result, &querySymbol{name: n.Name})
 					}
 				case *ast.TypeSpec:
-					result = append(
-						result,
-						&querySymbol{name: spec.Name.Name},
-					)
+					result = append(result, &querySymbol{name: spec.Name.Name})
 				}
 			}
 		}

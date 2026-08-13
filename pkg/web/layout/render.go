@@ -42,24 +42,15 @@ func (p *Page) Render() gomponents.Node {
 	}
 
 	if p.theme != "" {
-		head = append(
-			head,
-			html.StyleEl(gomponents.Raw(p.theme)),
-		)
+		head = append(head, html.StyleEl(gomponents.Raw(p.theme)))
 	}
 
 	if p.paletteEndpoint != "" {
-		head = append(
-			head,
-			html.StyleEl(gomponents.Raw(constant.PaletteStyle)),
-		)
+		head = append(head, html.StyleEl(gomponents.Raw(constant.PaletteStyle)))
 	}
 
 	if p.style != "" {
-		head = append(
-			head,
-			html.StyleEl(gomponents.Raw(p.style)),
-		)
+		head = append(head, html.StyleEl(gomponents.Raw(p.style)))
 	}
 
 	var body []gomponents.Node
@@ -74,9 +65,7 @@ func (p *Page) Render() gomponents.Node {
 			cell = append(cell, connectionDot())
 		}
 
-		node := html.A(
-			append(cell, html.Strong(gomponents.Text(brand)))...,
-		)
+		node := html.A(append(cell, html.Strong(gomponents.Text(brand)))...)
 		var navigation []gomponents.Node
 
 		for _, item := range p.items {
@@ -117,10 +106,7 @@ func (p *Page) Render() gomponents.Node {
 			html.ID(constant.LayoutNotificationRegion),
 			html.Class("container"),
 		),
-		html.Div(
-			html.ID(constant.LayoutStatusLine),
-			html.Class("container"),
-		),
+		html.Div(html.ID(constant.LayoutStatusLine), html.Class("container")),
 	)
 	var mainAttrs []gomponents.Node
 	mainAttrs = append(mainAttrs, html.Class("container"))

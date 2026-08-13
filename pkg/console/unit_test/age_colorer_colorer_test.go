@@ -20,13 +20,7 @@ func TestAgeColorerDefault(t *testing.T) {
 	assert.Any(
 		t,
 		[]*range_mapping.Mapping{
-			{
-				Range: ranges.Range{
-					L: 0,
-					R: 0.3333333333333333,
-				},
-				Value: "green",
-			},
+			{Range: ranges.Range{L: 0, R: 0.3333333333333333}, Value: "green"},
 			{
 				Range: ranges.Range{
 					L: 0.3333333333333333,
@@ -34,13 +28,7 @@ func TestAgeColorerDefault(t *testing.T) {
 				},
 				Value: "yellow",
 			},
-			{
-				Range: ranges.Range{
-					L: 0.6666666666666666,
-					R: 1,
-				},
-				Value: "red",
-			},
+			{Range: ranges.Range{L: 0.6666666666666666, R: 1}, Value: "red"},
 		},
 		c.Mapping(),
 	)
@@ -49,19 +37,7 @@ func TestAgeColorerDefault(t *testing.T) {
 	c.Set(r)
 	color.NoColor = false
 	// Not sure if function pointers can be compared, so compare output
-	assert.String(
-		t,
-		constant.Green("%s", "g"),
-		g.AgeColor()("g"),
-	)
-	assert.String(
-		t,
-		constant.Yellow("%s", "y"),
-		y.AgeColor()("y"),
-	)
-	assert.String(
-		t,
-		constant.Red("%s", "r"),
-		r.AgeColor()("r"),
-	)
+	assert.String(t, constant.Green("%s", "g"), g.AgeColor()("g"))
+	assert.String(t, constant.Yellow("%s", "y"), y.AgeColor()("y"))
+	assert.String(t, constant.Red("%s", "r"), r.AgeColor()("r"))
 }

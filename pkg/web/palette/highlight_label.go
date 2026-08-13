@@ -32,10 +32,7 @@ func highlightLabel(
 				text := string(run)
 
 				if inMatch {
-					nodes = append(
-						nodes,
-						html.Strong(gomponents.Text(text)),
-					)
+					nodes = append(nodes, html.Strong(gomponents.Text(text)))
 				} else {
 					nodes = append(nodes, gomponents.Text(text))
 				}
@@ -53,10 +50,7 @@ func highlightLabel(
 		text := string(run)
 
 		if inMatch {
-			nodes = append(
-				nodes,
-				html.Strong(gomponents.Text(text)),
-			)
+			nodes = append(nodes, html.Strong(gomponents.Text(text)))
 		} else {
 			nodes = append(nodes, gomponents.Text(text))
 		}

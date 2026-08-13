@@ -14,7 +14,8 @@ func (c *Client) GraphLink(expression string) string {
 		host = c.host
 	}
 
-	return locator.New(
-		host,
-	).Path(constant.Graph).Set(constant.Graph0Expression, expression).String()
+	return locator.New(host).Path(constant.Graph).Set(
+		constant.Graph0Expression,
+		expression,
+	).String()
 }

@@ -33,12 +33,7 @@ func TestCompleteTimeoutCoordination(t *testing.T) {
 	a := s.NewSession(t)
 	defer a.Close()
 	a.Announce(a.Name(), "a task")
-	a.MustCallTool(
-		constant.Complete,
-		map[string]any{
-			constant.Message: "done",
-		},
-	)
+	a.MustCallTool(constant.Complete, map[string]any{constant.Message: "done"})
 	a.CheckLive()
 	s.Store.Advance(45 * time.Minute)
 	s.Service.RunTimeoutSweep()

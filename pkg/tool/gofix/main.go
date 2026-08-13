@@ -36,7 +36,7 @@ func Main(
 		runVariableNamingFix(patterns, diff, s)
 	} else {
 		runFix(patterns, diff, s)
-		runCallFormatFix(patterns, diff, s)
+		RunFormatFixWithDirectory(patterns, "", s)
 		runSingleParameterFix(patterns, diff, s)
 		runImportAliasFix(patterns, diff, s)
 	}

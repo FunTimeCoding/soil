@@ -42,11 +42,5 @@ func (c *Client) SetSilence(
 		return "", f
 	}
 
-	return c.PostSilence(
-		s.Identifier,
-		alert,
-		comment,
-		*s.Start,
-		t.Add(d),
-	)
+	return c.PostSilence(s.Identifier, alert, comment, *s.Start, t.Add(d))
 }

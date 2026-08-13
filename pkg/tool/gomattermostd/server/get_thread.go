@@ -12,20 +12,14 @@ func (s *Server) GetThread(
 	parent, e := s.client.FindPost(r.Identifier)
 
 	if e != nil {
-		return server.GetThread404JSONResponse(
-			*clientError("post not found"),
-		), nil
+		return server.GetThread404JSONResponse(*clientError("post not found")), nil
 	}
 
 	replies, f := s.client.Thread(parent)
 
 	if f != nil {
-		return server.GetThread500JSONResponse(
-			*s.captureDetail(f),
-		), nil
+		return server.GetThread500JSONResponse(*s.captureDetail(f)), nil
 	}
 
-	return server.GetThread200JSONResponse(
-		convertPosts(replies),
-	), nil
+	return server.GetThread200JSONResponse(convertPosts(replies)), nil
 }

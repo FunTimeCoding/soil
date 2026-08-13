@@ -11,10 +11,7 @@ func (c *Client) Records(
 	listZone bool,
 ) ([]*record.Record, error) {
 	var result recordsResponse
-	path := fmt.Sprintf(
-		"/zones/records/get?domain=%s",
-		url.QueryEscape(domain),
-	)
+	path := fmt.Sprintf("/zones/records/get?domain=%s", url.QueryEscape(domain))
 
 	if listZone {
 		path = fmt.Sprintf("%s&listZone=true", path)

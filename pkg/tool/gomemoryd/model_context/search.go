@@ -24,13 +24,7 @@ func (s *Server) search(
 	memoryType := q.GetString(constant.Type, "")
 	tag := q.GetString(constant.Tag, "")
 	scope := q.GetString(constant.Scope, "")
-	results, e := s.service.SearchMemories(
-		query,
-		limit,
-		memoryType,
-		tag,
-		scope,
-	)
+	results, e := s.service.SearchMemories(query, limit, memoryType, tag, scope)
 
 	if e != nil {
 		return s.captureFail(e, "search failed")

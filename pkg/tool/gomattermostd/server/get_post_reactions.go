@@ -23,9 +23,7 @@ func (s *Server) GetPostReactions(
 		reactions, f := s.client.Reactions(parent)
 
 		if f != nil {
-			return server.GetPostReactions500JSONResponse(
-				*s.captureDetail(f),
-			), nil
+			return server.GetPostReactions500JSONResponse(*s.captureDetail(f)), nil
 		}
 
 		for _, v := range reactions {

@@ -10,12 +10,7 @@ func extendLines(
 	result := input
 
 	for _, line := range lines {
-		result = fmt.Sprintf(
-			"%s\n%s%s",
-			result,
-			spaces(indent),
-			line,
-		)
+		result = fmt.Sprintf("%s\n%s%s", result, spaces(indent), line)
 	}
 
 	return result

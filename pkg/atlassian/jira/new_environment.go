@@ -10,9 +10,7 @@ func NewEnvironment(o ...Option) *Client {
 		o = append(o, WithDefaultProjectKey(s))
 	}
 
-	if s := environment.Optional(
-		constant.JiraDefaultProjectNameEnvironment,
-	); s != "" {
+	if s := environment.Optional(constant.JiraDefaultProjectNameEnvironment); s != "" {
 		o = append(o, WithDefaultProjectName(s))
 	}
 

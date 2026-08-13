@@ -57,9 +57,7 @@ func TestSSEMultiLineBody(t *testing.T) {
 	a.Announce(a.Name(), "setup")
 	a.MustCallTool(
 		constant.Summarize,
-		map[string]any{
-			constant.Body: "line one\nline two\nline three",
-		},
+		map[string]any{constant.Body: "line one\nline two\nline three"},
 	)
 	events, disconnect := connectSSE(t, s)
 	defer disconnect()
@@ -99,15 +97,9 @@ func connectSSE(
 				name = strings.TrimPrefix(line, "event: ")
 				lines = nil
 			} else if strings.HasPrefix(line, "data: ") {
-				lines = append(
-					lines,
-					strings.TrimPrefix(line, "data: "),
-				)
+				lines = append(lines, strings.TrimPrefix(line, "data: "))
 			} else if line == "" && name != "" {
-				events <- sseEvent{
-					name:    name,
-					payload: join.NewLine(lines),
-				}
+				events <- sseEvent{name: name, payload: join.NewLine(lines)}
 				name = ""
 				lines = nil
 			}

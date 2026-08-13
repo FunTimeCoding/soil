@@ -43,11 +43,7 @@ func planConstraints(
 	}
 
 	for name, lines := range result {
-		file := findSyntaxFile(
-			set,
-			target,
-			filepath.Join(moveDirectory, name),
-		)
+		file := findSyntaxFile(set, target, filepath.Join(moveDirectory, name))
 
 		if file == nil {
 			continue

@@ -44,16 +44,8 @@ func TestTrimToLastSentence(t *testing.T) {
 			input:    "This is incomplete",
 			expected: "This is incomplete",
 		},
-		{
-			name:     "empty_string",
-			input:    "",
-			expected: "",
-		},
-		{
-			name:     "single_character",
-			input:    "a",
-			expected: "a",
-		},
+		{name: "empty_string", input: "", expected: ""},
+		{name: "single_character", input: "a", expected: "a"},
 		// Punctuation at boundaries
 		{
 			name:     "ends_with_punctuation",
@@ -65,11 +57,7 @@ func TestTrimToLastSentence(t *testing.T) {
 			input:    ".Start with period",
 			expected: ".",
 		},
-		{
-			name:     "only_punctuation",
-			input:    ".",
-			expected: ".",
-		},
+		{name: "only_punctuation", input: ".", expected: "."},
 		{
 			name:     "punctuation_with_no_following_text",
 			input:    "Sentence.",

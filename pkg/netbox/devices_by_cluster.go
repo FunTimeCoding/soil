@@ -20,9 +20,9 @@ func (c *Client) DevicesByCluster(s string) ([]*device.Device, error) {
 		)
 	}
 
-	result, _, f := c.client.DcimAPI.DcimDevicesList(
-		c.context,
-	).ClusterId([]*int32{&clusters[0].Identifier}).Execute()
+	result, _, f := c.client.DcimAPI.DcimDevicesList(c.context).ClusterId(
+		[]*int32{&clusters[0].Identifier},
+	).Execute()
 
 	if f != nil {
 		return nil, f

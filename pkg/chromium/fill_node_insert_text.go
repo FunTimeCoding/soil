@@ -43,10 +43,7 @@ func (c *Client) fillNodeInsertText(
 				}
 
 				if exception != nil {
-					return fmt.Errorf(
-						"fill focus failed: %s",
-						exception.Text,
-					)
+					return fmt.Errorf("fill focus failed: %s", exception.Text)
 				}
 
 				return input.InsertText(value).Do(v)

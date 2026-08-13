@@ -18,11 +18,6 @@ func RecordTelemetry(
 	}
 
 	c.Record(
-		record.NewBaseline(
-			operation,
-			constant.WebService,
-			"user",
-			outcome,
-		),
+		record.NewBaseline(operation, constant.WebService, "user", outcome),
 	)
 }

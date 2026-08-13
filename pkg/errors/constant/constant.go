@@ -40,11 +40,7 @@ var (
 		"culprit",
 	}
 
-	Periods = []string{
-		PeriodEmpty,
-		PeriodDay,
-		PeriodFortnight,
-	}
+	Periods = []string{PeriodEmpty, PeriodDay, PeriodFortnight}
 )
 
 var (

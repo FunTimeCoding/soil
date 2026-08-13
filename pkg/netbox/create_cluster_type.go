@@ -6,10 +6,7 @@ import (
 )
 
 func (c *Client) CreateClusterType(name string) (*cluster_type.Type, error) {
-	q := netbox.NewClusterTypeRequest(
-		name,
-		slug(name),
-	)
+	q := netbox.NewClusterTypeRequest(name, slug(name))
 	result, _, e := c.client.VirtualizationAPI.VirtualizationClusterTypesCreate(
 		c.context,
 	).ClusterTypeRequest(*q).Execute()

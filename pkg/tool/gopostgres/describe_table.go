@@ -26,11 +26,7 @@ func describeTable(c *client.Client) *cobra.Command {
 				p.Schema = &schema
 			}
 
-			r, e := c.DescribeTable(
-				context.Background(),
-				arguments[0],
-				p,
-			)
+			r, e := c.DescribeTable(context.Background(), arguments[0], p)
 			errors.PanicOnError(e)
 			printResponse(r)
 		},

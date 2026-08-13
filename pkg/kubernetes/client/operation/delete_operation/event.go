@@ -15,10 +15,6 @@ func Event(
 	name string,
 ) {
 	errors.PanicOnError(
-		operation.Event(c, namespace).Delete(
-			x,
-			name,
-			v1.DeleteOptions{},
-		),
+		operation.Event(c, namespace).Delete(x, name, v1.DeleteOptions{}),
 	)
 }

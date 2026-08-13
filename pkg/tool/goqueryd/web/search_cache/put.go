@@ -19,10 +19,7 @@ func (c *Cache) Put(
 		c.order = c.order[1:]
 	}
 
-	c.entries[key] = &entry{
-		outcome: outcome,
-		expiry:  time.Now().Add(c.ttl),
-	}
+	c.entries[key] = &entry{outcome: outcome, expiry: time.Now().Add(c.ttl)}
 	c.removeFromOrder(key)
 	c.order = append(c.order, key)
 }

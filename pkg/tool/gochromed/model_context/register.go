@@ -23,7 +23,9 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				"tab_id",
-				mcp.Description("Target tab or iframe target by ID (from list_tabs)"),
+				mcp.Description(
+					"Target tab or iframe target by ID (from list_tabs)",
+				),
 			),
 			mcp.WithString(
 				"title",
@@ -44,7 +46,9 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				"tab_id",
-				mcp.Description("Target tab or iframe target by ID (from list_tabs)"),
+				mcp.Description(
+					"Target tab or iframe target by ID (from list_tabs)",
+				),
 			),
 			mcp.WithString(
 				"title",
@@ -70,7 +74,9 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				"tab_id",
-				mcp.Description("Target tab or iframe target by ID (from list_tabs)"),
+				mcp.Description(
+					"Target tab or iframe target by ID (from list_tabs)",
+				),
 			),
 		),
 		mcp.NewTypedToolHandler(s.Navigate),
@@ -86,10 +92,7 @@ func (s *Server) register() {
 				mcp.Required(),
 				mcp.Description("JavaScript expression to evaluate"),
 			),
-			mcp.WithString(
-				"tab_id",
-				mcp.Description("Target tab by ID"),
-			),
+			mcp.WithString("tab_id", mcp.Description("Target tab by ID")),
 			mcp.WithString(
 				"title",
 				mcp.Description("Target tab by title substring"),
@@ -105,10 +108,7 @@ func (s *Server) register() {
 		mcp.NewTool(
 			constant.CloseTab,
 			mcp.WithDescription("Close a browser tab."),
-			mcp.WithString(
-				"tab_id",
-				mcp.Description("Target tab by ID"),
-			),
+			mcp.WithString("tab_id", mcp.Description("Target tab by ID")),
 			mcp.WithString(
 				"title",
 				mcp.Description("Target tab by title substring"),
@@ -138,10 +138,7 @@ func (s *Server) register() {
 			mcp.WithDescription(
 				"Read the HTML body of a browser tab. Saves to download directory and returns the file path. Targets the active tab by default.",
 			),
-			mcp.WithString(
-				"tab_id",
-				mcp.Description("Target tab by ID"),
-			),
+			mcp.WithString("tab_id", mcp.Description("Target tab by ID")),
 			mcp.WithString(
 				"title",
 				mcp.Description("Target tab by title substring"),
@@ -164,10 +161,7 @@ func (s *Server) register() {
 				mcp.Required(),
 				mcp.Description("Element UID from snapshot (e.g. e3)"),
 			),
-			mcp.WithString(
-				"tab_id",
-				mcp.Description("Target tab by ID"),
-			),
+			mcp.WithString("tab_id", mcp.Description("Target tab by ID")),
 			mcp.WithString(
 				"title",
 				mcp.Description("Target tab by title substring"),
@@ -201,10 +195,7 @@ func (s *Server) register() {
 				mcp.Required(),
 				mcp.Description("Value to fill"),
 			),
-			mcp.WithString(
-				"tab_id",
-				mcp.Description("Target tab by ID"),
-			),
+			mcp.WithString("tab_id", mcp.Description("Target tab by ID")),
 			mcp.WithString(
 				"title",
 				mcp.Description("Target tab by title substring"),
@@ -234,10 +225,7 @@ func (s *Server) register() {
 			mcp.WithDescription(
 				"Wake a sleeping browser tab by activating it. Brings the tab to the foreground.",
 			),
-			mcp.WithString(
-				"tab_id",
-				mcp.Description("Target tab by ID"),
-			),
+			mcp.WithString("tab_id", mcp.Description("Target tab by ID")),
 			mcp.WithString(
 				"title",
 				mcp.Description("Target tab by title substring"),
@@ -255,10 +243,7 @@ func (s *Server) register() {
 			mcp.WithDescription(
 				"Read the navigation history (back/forward list) of a browser tab. Tab must be awake.",
 			),
-			mcp.WithString(
-				"tab_id",
-				mcp.Description("Target tab by ID"),
-			),
+			mcp.WithString("tab_id", mcp.Description("Target tab by ID")),
 			mcp.WithString(
 				"title",
 				mcp.Description("Target tab by title substring"),

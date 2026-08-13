@@ -24,10 +24,7 @@ func (s *Store) enrichFile(
 	b := system.ReadBytes(base, name)
 	var fight elite.Fight
 	notation.MustDecodeBytes(b, &fight, false)
-	timestamp := time.Parse(
-		"2006-01-02 15:04:05 -07:00",
-		fight.TimeStartStd,
-	)
+	timestamp := time.Parse("2006-01-02 15:04:05 -07:00", fight.TimeStartStd)
 	alliedTeamID := 0
 
 	if len(fight.Players) > 0 {

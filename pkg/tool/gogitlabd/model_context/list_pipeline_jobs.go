@@ -24,9 +24,7 @@ func (s *Server) ListPipelineJobs(
 	v, _, e := s.client.Jobs.ListPipelineJobs(
 		a.Project,
 		a.Pipeline,
-		&gitlab.ListJobsOptions{
-			ListOptions: gitlab.ListOptions{PerPage: 100},
-		},
+		&gitlab.ListJobsOptions{ListOptions: gitlab.ListOptions{PerPage: 100}},
 	)
 
 	if e != nil {

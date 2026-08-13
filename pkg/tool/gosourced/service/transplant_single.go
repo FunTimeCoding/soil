@@ -13,10 +13,7 @@ func transplantSingle(
 		return declaration
 	}
 
-	fresh := &dst.GenDecl{
-		Tok:   declaration.Tok,
-		Specs: []dst.Spec{spec},
-	}
+	fresh := &dst.GenDecl{Tok: declaration.Tok, Specs: []dst.Spec{spec}}
 	fresh.Decs.Before = dst.EmptyLine
 	fresh.Decs.Start.Append(spec.Decorations().Start.All()...)
 	spec.Decorations().Start.Clear()

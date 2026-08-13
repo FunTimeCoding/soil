@@ -10,9 +10,9 @@ func (c *Client) DeviceTypes() ([]*device_type.Type, error) {
 		return c.cache.DeviceTypes, nil
 	}
 
-	result, _, e := c.client.DcimAPI.DcimDeviceTypesList(
-		c.context,
-	).Limit(constant.PageLimit).Execute()
+	result, _, e := c.client.DcimAPI.DcimDeviceTypesList(c.context).Limit(
+		constant.PageLimit,
+	).Execute()
 
 	if e != nil {
 		return nil, e

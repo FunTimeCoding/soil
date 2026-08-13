@@ -20,10 +20,7 @@ func ParseGuilds(s string) []*log_manager.Guild {
 
 		var guild log_manager.Guild
 
-		if e := notation.Decode(
-			notation.Encode(v, false),
-			&guild,
-		); e != nil {
+		if e := notation.Decode(notation.Encode(v, false), &guild); e != nil {
 			errors.PanicOnError(e)
 		}
 

@@ -19,19 +19,13 @@ func Do(
 		}
 
 		if last = f(); last == nil {
-			return &Result{
-				Attempts: i + 1,
-				Elapsed:  time.Since(start),
-			}, nil
+			return &Result{Attempts: i + 1, Elapsed: time.Since(start)}, nil
 		}
 	}
 
-	return &Result{
-			Attempts: attempts,
-			Elapsed:  time.Since(start),
-		}, fmt.Errorf(
-			"after %d attempts: %w",
-			attempts,
-			last,
-		)
+	return &Result{Attempts: attempts, Elapsed: time.Since(start)}, fmt.Errorf(
+		"after %d attempts: %w",
+		attempts,
+		last,
+	)
 }

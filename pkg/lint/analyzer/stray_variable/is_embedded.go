@@ -9,10 +9,7 @@ func isEmbedded(
 	declaration *ast.GenDecl,
 	value *ast.ValueSpec,
 ) bool {
-	for _, group := range []*ast.CommentGroup{
-		declaration.Doc,
-		value.Doc,
-	} {
+	for _, group := range []*ast.CommentGroup{declaration.Doc, value.Doc} {
 		if group == nil {
 			continue
 		}

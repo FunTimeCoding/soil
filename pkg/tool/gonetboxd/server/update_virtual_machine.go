@@ -22,10 +22,7 @@ func (s *Server) UpdateVirtualMachine(
 	}
 
 	if r.Body.Platform != nil {
-		if _, e := s.client.SetVirtualMachinePlatform(
-			r.Name,
-			*r.Body.Platform,
-		); e != nil {
+		if _, e := s.client.SetVirtualMachinePlatform(r.Name, *r.Body.Platform); e != nil {
 			return server.UpdateVirtualMachine500JSONResponse(
 				*s.captureDetail(e),
 			), nil
@@ -55,10 +52,7 @@ func (s *Server) UpdateVirtualMachine(
 	}
 
 	if r.Body.Status != nil {
-		if _, e := s.client.SetVirtualMachineStatus(
-			r.Name,
-			*r.Body.Status,
-		); e != nil {
+		if _, e := s.client.SetVirtualMachineStatus(r.Name, *r.Body.Status); e != nil {
 			return server.UpdateVirtualMachine500JSONResponse(
 				*s.captureDetail(e),
 			), nil
@@ -82,9 +76,7 @@ func (s *Server) UpdateVirtualMachine(
 	m, e := s.client.VirtualMachineByName(name)
 
 	if e != nil {
-		return server.UpdateVirtualMachine500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.UpdateVirtualMachine500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	return server.UpdateVirtualMachine200JSONResponse(

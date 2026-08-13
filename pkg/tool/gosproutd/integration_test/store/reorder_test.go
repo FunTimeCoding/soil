@@ -11,11 +11,7 @@ func TestReorderReverses(t *testing.T) {
 	threeSeeds(s)
 	seeds := s.Store.Seeds()
 	s.Store.Reorder(
-		[]uint{
-			seeds[2].Identifier,
-			seeds[1].Identifier,
-			seeds[0].Identifier,
-		},
+		[]uint{seeds[2].Identifier, seeds[1].Identifier, seeds[0].Identifier},
 	)
 	after := s.Store.Seeds()
 	assert.String(t, "charlie", after[0].Name)

@@ -17,9 +17,6 @@ func ListFixture(v ...*client.SearchResult) http.HandlerFunc {
 		w http.ResponseWriter,
 		_ *http.Request,
 	) {
-		web.EncodeNotation(
-			w,
-			client.ListOutcome{Results: results},
-		)
+		web.EncodeNotation(w, client.ListOutcome{Results: results})
 	}
 }

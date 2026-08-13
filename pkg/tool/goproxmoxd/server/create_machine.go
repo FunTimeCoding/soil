@@ -20,9 +20,7 @@ func (s *Server) CreateMachine(
 	c, e := s.service.Client(instance)
 
 	if e != nil {
-		return server.CreateMachine500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.CreateMachine500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	m := convertCreateMachine(r.Body)
@@ -30,14 +28,10 @@ func (s *Server) CreateMachine(
 
 	if e != nil {
 		if errors.Is(e, constant.ErrorCDROMCloudInitConflict) {
-			return server.CreateMachine400JSONResponse(
-				*clientError(e),
-			), nil
+			return server.CreateMachine400JSONResponse(*clientError(e)), nil
 		}
 
-		return server.CreateMachine500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.CreateMachine500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	status := "created"

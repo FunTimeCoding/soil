@@ -41,11 +41,7 @@ func (s *Service) GetResource(
 			v1.GetOptions{},
 		)
 	} else {
-		result, g = c.Dynamic().Resource(gvr).Get(
-			x,
-			q.Name,
-			v1.GetOptions{},
-		)
+		result, g = c.Dynamic().Resource(gvr).Get(x, q.Name, v1.GetOptions{})
 	}
 
 	if g != nil {

@@ -24,12 +24,7 @@ func listMachines(c *command_context.Context) *cobra.Command {
 			fmt.Println(c.Client().ListMachines(n))
 		},
 	}
-	result.Flags().StringVar(
-		&node,
-		"node",
-		"",
-		"filter by node name",
-	)
+	result.Flags().StringVar(&node, "node", "", "filter by node name")
 
 	return result
 }

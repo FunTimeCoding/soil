@@ -18,20 +18,12 @@ func ParseChecklist(value string) []*checklist_item.Item {
 		if strings.HasPrefix(line, "+ ") {
 			result = append(
 				result,
-				checklist_item.New(
-					len(result)+1,
-					line[2:],
-					true,
-				),
+				checklist_item.New(len(result)+1, line[2:], true),
 			)
 		} else if strings.HasPrefix(line, "- ") {
 			result = append(
 				result,
-				checklist_item.New(
-					len(result)+1,
-					line[2:],
-					false,
-				),
+				checklist_item.New(len(result)+1, line[2:], false),
 			)
 		}
 	}

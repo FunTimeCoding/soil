@@ -7,10 +7,7 @@ func (c *Client) Peek(sessionIdentifier string) *peek.Peek {
 		result := peek.New()
 
 		for _, m := range messages {
-			result.Entries = append(
-				result.Entries,
-				peek.Entry{UserText: m},
-			)
+			result.Entries = append(result.Entries, peek.Entry{UserText: m})
 			result.UserMessageCount++
 		}
 

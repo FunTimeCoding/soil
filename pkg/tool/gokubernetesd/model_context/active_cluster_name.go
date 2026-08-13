@@ -16,9 +16,7 @@ func (s *Server) activeClusterName(x context.Context) (string, error) {
 	v, okay := s.sessions.Load(session.SessionID())
 
 	if !okay {
-		return "", fmt.Errorf(
-			"no cluster selected - use use_cluster first",
-		)
+		return "", fmt.Errorf("no cluster selected - use use_cluster first")
 	}
 
 	return v.(string), nil

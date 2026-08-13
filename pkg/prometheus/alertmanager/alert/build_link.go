@@ -18,14 +18,11 @@ func (a *Alert) buildLink(host string) string {
 			i,
 		)
 	} else {
-		query = fmt.Sprintf(
-			"{%s=\"%s\"}",
-			constant.AlertnameLabel,
-			a.Name,
-		)
+		query = fmt.Sprintf("{%s=\"%s\"}", constant.AlertnameLabel, a.Name)
 	}
 
-	return locator.New(host).Trail().Fragment(
-		constant.Alerts,
-	).FragmentSet("filter", query).String()
+	return locator.New(host).Trail().Fragment(constant.Alerts).FragmentSet(
+		"filter",
+		query,
+	).String()
 }

@@ -42,9 +42,7 @@ func (r *Reaper) scan() map[int]zombieDetail {
 			}
 
 			if strings.HasPrefix(line, "PPid:\t") {
-				v, f := strconv.Atoi(
-					strings.TrimPrefix(line, "PPid:\t"),
-				)
+				v, f := strconv.Atoi(strings.TrimPrefix(line, "PPid:\t"))
 
 				if f == nil {
 					detail.ppid = v

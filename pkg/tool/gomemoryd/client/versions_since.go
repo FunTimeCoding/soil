@@ -12,10 +12,7 @@ func (c *RestClient) VersionsSince(
 ) []VersionEntry {
 	r, e := c.http.GetVersions(
 		context.Background(),
-		&client.GetVersionsParams{
-			Since: since,
-			Limit: &limit,
-		},
+		&client.GetVersionsParams{Since: since, Limit: &limit},
 	)
 
 	if e != nil {

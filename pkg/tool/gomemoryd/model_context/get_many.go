@@ -16,11 +16,7 @@ func (s *Server) getMany(
 	var result []any
 
 	for _, part := range strings.Split(raw, ",") {
-		identifier, e := strconv.ParseInt(
-			strings.TrimSpace(part),
-			10,
-			64,
-		)
+		identifier, e := strconv.ParseInt(strings.TrimSpace(part), 10, 64)
 
 		if e != nil {
 			return response.Fail("invalid memory id %q", part)

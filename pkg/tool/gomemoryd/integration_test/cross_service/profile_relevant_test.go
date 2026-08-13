@@ -20,10 +20,7 @@ func TestProfileRelevantTierUsesHybridSearch(t *testing.T) {
 			constant.Description: "MCP error handling conventions",
 		},
 	)
-	s.QueryClient.MustCallTool(
-		goquerydConstant.Embed,
-		map[string]any{},
-	)
+	s.QueryClient.MustCallTool(goquerydConstant.Embed, map[string]any{})
 	result := s.MemoryClient.MustCallTool(
 		constant.Profile,
 		map[string]any{

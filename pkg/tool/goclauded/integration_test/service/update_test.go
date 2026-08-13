@@ -22,7 +22,9 @@ func TestUpdate(t *testing.T) {
 	e := s.Store.GetSession("session-1")
 	assert.String(t, "new scope", e.Topic)
 	assert.String(t, "pkg/tool", e.Files)
-	events := s.Store.Events(event_query.New().Kind(constant.Update).SetLimit(10))
+	events := s.Store.Events(
+		event_query.New().Kind(constant.Update).SetLimit(10),
+	)
 	assert.Count(t, 1, events)
 	completions := s.Store.CompletionsBySession("session-1")
 	assert.Count(t, 1, completions)

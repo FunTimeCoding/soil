@@ -38,11 +38,7 @@ func TestWebService(t *testing.T) {
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusOK, stats.StatusCode())
 	assert.NotNil(t, stats.JSON200)
-	score, e := c.ScoreTaskWithResponse(
-		x,
-		"task-1",
-		client.Up,
-	)
+	score, e := c.ScoreTaskWithResponse(x, "task-1", client.Up)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusOK, score.StatusCode())
 	gear, e := c.GetGearWithResponse(x)

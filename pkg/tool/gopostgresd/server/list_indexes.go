@@ -22,12 +22,7 @@ func (s *Server) ListIndexes(
 		schema = *r.Params.Schema
 	}
 
-	rows, e := s.service.ListIndexes(
-		c,
-		instance,
-		schema,
-		r.Params.Table,
-	)
+	rows, e := s.service.ListIndexes(c, instance, schema, r.Params.Table)
 
 	if e != nil {
 		return server.ListIndexes500JSONResponse(

@@ -50,11 +50,7 @@ func (s *Service) FileReferences(
 		r.AddConcern(
 			concern.NewFile(
 				"validation",
-				fmt.Sprintf(
-					"file not found in %s: %s",
-					packagePath,
-					filePath,
-				),
+				fmt.Sprintf("file not found in %s: %s", packagePath, filePath),
 				"",
 				false,
 			),
@@ -89,9 +85,7 @@ func (s *Service) FileReferences(
 		)
 
 		if f != nil {
-			r.AddConcern(
-				concern.NewFile("validation", f.Error(), "", false),
-			)
+			r.AddConcern(concern.NewFile("validation", f.Error(), "", false))
 
 			return r, nil, nil
 		}
@@ -99,11 +93,7 @@ func (s *Service) FileReferences(
 		name := q.name
 
 		if q.receiver != "" {
-			name = join.Empty(
-				q.receiver,
-				constant.MemberSeparator,
-				q.name,
-			)
+			name = join.Empty(q.receiver, constant.MemberSeparator, q.name)
 		}
 
 		entries = append(

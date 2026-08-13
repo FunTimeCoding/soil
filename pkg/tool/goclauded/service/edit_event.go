@@ -43,18 +43,10 @@ func (s *Service) EditEvent(
 		}
 
 		if slug != "" {
-			c, f := s.store.CompletionByTopic(
-				edited.SessionIdentifier,
-				topic,
-			)
+			c, f := s.store.CompletionByTopic(edited.SessionIdentifier, topic)
 
 			if f == nil && c != nil {
-				if g := s.pushCompletion(
-					slug,
-					c.Sequence,
-					message,
-					metadata,
-				); g != nil {
+				if g := s.pushCompletion(slug, c.Sequence, message, metadata); g != nil {
 					return edited, g
 				}
 			}

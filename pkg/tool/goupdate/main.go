@@ -81,9 +81,7 @@ func Main(
 
 		if token := os.Getenv(githubConstant.TokenEnvironment); token != "" {
 			if v := release.LatestCompatible(
-				github.New(
-					token,
-				).MustReleases(
+				github.New(token).MustReleases(
 					githubConstant.DelveNamespace,
 					githubConstant.DelveRepository,
 				),

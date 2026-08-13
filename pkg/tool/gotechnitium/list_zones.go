@@ -15,12 +15,7 @@ func listZones(c *technitium.Client) *cobra.Command {
 			_ []string,
 		) {
 			for _, z := range c.MustZones() {
-				fmt.Printf(
-					"%s (%s) internal=%v\n",
-					z.Name,
-					z.Type,
-					z.Internal,
-				)
+				fmt.Printf("%s (%s) internal=%v\n", z.Name, z.Type, z.Internal)
 			}
 		},
 	}

@@ -42,13 +42,7 @@ func (s *Service) PushDocument(
 	}
 
 	for i, embedding := range embeddings {
-		s.store.InsertEmbedding(
-			hash,
-			i,
-			chunks[i].Position,
-			embedding,
-			now,
-		)
+		s.store.InsertEmbedding(hash, i, chunks[i].Position, embedding, now)
 	}
 
 	if len(metadata) > 0 {

@@ -24,7 +24,5 @@ func (s *Server) PostMemory(
 		), nil
 	}
 
-	return server.PostMemory200JSONResponse{
-		Identifier: m.Identifier,
-	}, nil
+	return server.PostMemory200JSONResponse{Identifier: m.Identifier}, nil
 }

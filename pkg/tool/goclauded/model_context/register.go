@@ -15,16 +15,12 @@ func (s *Server) register() {
 			mcp.WithString(
 				constant.SessionName,
 				mcp.Required(),
-				mcp.Description(
-					"Your assigned name from the hook context",
-				),
+				mcp.Description("Your assigned name from the hook context"),
 			),
 			mcp.WithString(
 				constant.Topic,
 				mcp.Required(),
-				mcp.Description(
-					"Short description of what you're working on",
-				),
+				mcp.Description("Short description of what you're working on"),
 			),
 			mcp.WithArray(
 				constant.Files,
@@ -64,9 +60,7 @@ func (s *Server) register() {
 			mcp.WithString(
 				constant.Message,
 				mcp.Required(),
-				mcp.Description(
-					"What was accomplished in the current scope",
-				),
+				mcp.Description("What was accomplished in the current scope"),
 			),
 			mcp.WithString(
 				constant.Topic,
@@ -75,9 +69,7 @@ func (s *Server) register() {
 			),
 			mcp.WithArray(
 				constant.Files,
-				mcp.Description(
-					"Updated files or packages you're touching",
-				),
+				mcp.Description("Updated files or packages you're touching"),
 			),
 		),
 		s.update,
@@ -100,9 +92,7 @@ func (s *Server) register() {
 			mcp.WithNumber(
 				constant.Identifier,
 				mcp.Required(),
-				mcp.Description(
-					"Event ID from history output (e.g. 42)",
-				),
+				mcp.Description("Event ID from history output (e.g. 42)"),
 			),
 			mcp.WithString(
 				constant.Message,
@@ -129,15 +119,11 @@ func (s *Server) register() {
 			),
 			mcp.WithNumber(
 				constant.Limit,
-				mcp.Description(
-					"Maximum sessions to return (default 20)",
-				),
+				mcp.Description("Maximum sessions to return (default 20)"),
 			),
 			mcp.WithNumber(
 				constant.Offset,
-				mcp.Description(
-					"Number of sessions to skip (default 0)",
-				),
+				mcp.Description("Number of sessions to skip (default 0)"),
 			),
 		),
 		s.listSessions,
@@ -150,9 +136,7 @@ func (s *Server) register() {
 			),
 			mcp.WithNumber(
 				constant.Limit,
-				mcp.Description(
-					"Number of events to show (default 20)",
-				),
+				mcp.Description("Number of events to show (default 20)"),
 			),
 			mcp.WithNumber(
 				constant.Offset,
@@ -160,9 +144,7 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				constant.Since,
-				mcp.Description(
-					"Duration lookback window (e.g. 72h, 168h)",
-				),
+				mcp.Description("Duration lookback window (e.g. 72h, 168h)"),
 			),
 			mcp.WithString(
 				constant.Before,
@@ -208,14 +190,9 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				constant.Description,
-				mcp.Description(
-					"What the session was about (1-3 sentences)",
-				),
+				mcp.Description("What the session was about (1-3 sentences)"),
 			),
-			mcp.WithString(
-				constant.Topic,
-				mcp.Description("Current task"),
-			),
+			mcp.WithString(constant.Topic, mcp.Description("Current task")),
 			mcp.WithString(
 				constant.Files,
 				mcp.Description("Files or packages being touched"),
@@ -237,9 +214,7 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				constant.To,
-				mcp.Description(
-					"Recipient name (omit to broadcast to all)",
-				),
+				mcp.Description("Recipient name (omit to broadcast to all)"),
 			),
 			mcp.WithString(
 				constant.Body,

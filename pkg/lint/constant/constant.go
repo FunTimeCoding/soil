@@ -81,6 +81,7 @@ const (
 )
 
 const MaxLineLength = 80
+const TabWidth = 4
 const (
 	ConcernLine    = "line"
 	ConcernFile    = "file"

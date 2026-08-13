@@ -6,8 +6,5 @@ import (
 )
 
 func (n *Namespace) Format(f *option.Format) string {
-	return status.New(f).String(
-		n.Name,
-		n.Cluster,
-	).RawList(n.Raw).Format()
+	return status.New(f).String(n.Name, n.Cluster).RawList(n.Raw).Format()
 }

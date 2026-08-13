@@ -22,7 +22,5 @@ func (s *Server) DeleteMemory(
 		), nil
 	}
 
-	return server.DeleteMemory200JSONResponse{
-		Identifier: r.Identifier,
-	}, nil
+	return server.DeleteMemory200JSONResponse{Identifier: r.Identifier}, nil
 }

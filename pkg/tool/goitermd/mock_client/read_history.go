@@ -10,10 +10,7 @@ func (c *Client) ReadHistory(
 	_ int,
 ) (*history.History, error) {
 	if _, okay := c.screens[identifier]; !okay {
-		return history.Stub(), fmt.Errorf(
-			"session %s not found",
-			identifier,
-		)
+		return history.Stub(), fmt.Errorf("session %s not found", identifier)
 	}
 
 	result := history.Stub()

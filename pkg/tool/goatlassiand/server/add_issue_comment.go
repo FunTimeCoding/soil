@@ -10,9 +10,7 @@ func (s *Server) AddIssueComment(
 	r server.AddIssueCommentRequestObject,
 ) (server.AddIssueCommentResponseObject, error) {
 	if e := s.jira.Comment(r.Key, r.Body.Body); e != nil {
-		return server.AddIssueComment500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.AddIssueComment500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	return server.AddIssueComment204Response{}, nil

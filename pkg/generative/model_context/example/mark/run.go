@@ -48,18 +48,14 @@ func Run(o *option.Mark) {
 				return mcp.NewToolResultError(e.Error()), nil
 			}
 
-			return mcp.NewToolResultText(
-				fmt.Sprintf("Hello %s", name),
-			), nil
+			return mcp.NewToolResultText(fmt.Sprintf("Hello %s", name)), nil
 		},
 	)
 	s.AddResource(
 		mcp.NewResource(
 			generative.MarkReadmeDocument,
 			"Project README",
-			mcp.WithResourceDescription(
-				"The project's README file",
-			),
+			mcp.WithResourceDescription("The project's README file"),
 			mcp.WithMIMEType(webConstant.Markdown),
 		),
 		func(
@@ -85,9 +81,7 @@ func Run(o *option.Mark) {
 		mcp.NewResourceTemplate(
 			"user://{id}/profile",
 			"User Profile",
-			mcp.WithTemplateDescription(
-				"Returns user profile information",
-			),
+			mcp.WithTemplateDescription("Returns user profile information"),
 			mcp.WithTemplateMIMEType(webConstant.Object),
 		),
 		func(

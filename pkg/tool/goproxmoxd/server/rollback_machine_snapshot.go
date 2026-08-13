@@ -19,7 +19,9 @@ func (s *Server) RollbackMachineSnapshot(
 	c, e := s.service.Client(instance)
 
 	if e != nil {
-		return server.RollbackMachineSnapshot500JSONResponse(*s.captureDetail(e)), nil
+		return server.RollbackMachineSnapshot500JSONResponse(
+			*s.captureDetail(e),
+		), nil
 	}
 
 	node := ""
@@ -37,10 +39,14 @@ func (s *Server) RollbackMachineSnapshot(
 
 	if e != nil {
 		if not_found.Is(e) {
-			return server.RollbackMachineSnapshot404JSONResponse{Error: e.Error()}, nil
+			return server.RollbackMachineSnapshot404JSONResponse{
+				Error: e.Error(),
+			}, nil
 		}
 
-		return server.RollbackMachineSnapshot500JSONResponse(*s.captureDetail(e)), nil
+		return server.RollbackMachineSnapshot500JSONResponse(
+			*s.captureDetail(e),
+		), nil
 	}
 
 	return server.RollbackMachineSnapshot200JSONResponse{TaskId: taskID}, nil

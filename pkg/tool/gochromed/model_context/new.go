@@ -15,10 +15,7 @@ func New(
 	version string,
 ) *Server {
 	result := &Server{
-		server: server.New(
-			constant.Identity,
-			version,
-		).WithRecorder(t).Server(),
+		server: server.New(constant.Identity, version).WithRecorder(t).Server(),
 		client:            c,
 		downloadDirectory: downloadDirectory,
 		snapshotCache:     make(map[string]map[string]int64),

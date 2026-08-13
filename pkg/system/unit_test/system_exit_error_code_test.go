@@ -8,9 +8,5 @@ import (
 )
 
 func TestExitErrorCode(t *testing.T) {
-	assert.Integer(
-		t,
-		-1,
-		system.ExitErrorCode(error(&exec.ExitError{})),
-	)
+	assert.Integer(t, -1, system.ExitErrorCode(error(&exec.ExitError{})))
 }

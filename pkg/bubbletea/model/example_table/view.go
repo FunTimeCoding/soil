@@ -9,10 +9,6 @@ import (
 
 func (m *Model) View() tea.View {
 	return tea.NewView(
-		fmt.Sprintf(
-			"%s%s",
-			constant.Table.Render(m.table.View()),
-			strings.Unix,
-		),
+		fmt.Sprintf("%s%s", constant.Table.Render(m.table.View()), strings.Unix),
 	)
 }

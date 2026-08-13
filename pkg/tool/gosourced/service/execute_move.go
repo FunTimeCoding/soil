@@ -36,11 +36,7 @@ func executeMove(
 	decorations := decoration.NewSet()
 
 	for _, entry := range plan.entries {
-		if _, e := decorations.DecorateFile(
-			plan.set,
-			plan.source,
-			entry.file,
-		); e != nil {
+		if _, e := decorations.DecorateFile(plan.set, plan.source, entry.file); e != nil {
 			return nil, e
 		}
 	}
@@ -89,11 +85,7 @@ func executeMove(
 		}
 
 		if q.name != nil && q.name.alias != "" && !q.name.imported {
-			decorations.AddAlias(
-				file,
-				plan.targetPackagePath,
-				q.name.alias,
-			)
+			decorations.AddAlias(file, plan.targetPackagePath, q.name.alias)
 		}
 
 		for _, qp := range q.positions {
@@ -169,10 +161,7 @@ func executeMove(
 		var spec dst.Spec
 
 		if entry.spec != nil {
-			spec, _ = decorations.DecoratedNode(
-				plan.source,
-				entry.spec,
-			).(dst.Spec)
+			spec, _ = decorations.DecoratedNode(plan.source, entry.spec).(dst.Spec)
 		}
 
 		removeDecoratedDeclaration(file, declaration, spec)
@@ -197,9 +186,7 @@ func executeMove(
 		}
 
 		deleted[filename] = true
-		r.AddConcern(
-			concern.NewFile("removed", "empty file", filename, true),
-		)
+		r.AddConcern(concern.NewFile("removed", "empty file", filename, true))
 	}
 
 	if plan.createTarget {

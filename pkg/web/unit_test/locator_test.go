@@ -21,9 +21,9 @@ func TestLocator(t *testing.T) {
 	assert.String(
 		t,
 		"wss://example.org",
-		locator.Stub().Insecure().Host(
-			constant.Example,
-		).Scheme(constant.SecureSocket).String(),
+		locator.Stub().Insecure().Host(constant.Example).Scheme(
+			constant.SecureSocket,
+		).String(),
 	)
 }
 
@@ -95,9 +95,7 @@ func TestParameter(t *testing.T) {
 	assert.String(
 		t,
 		"https://example.org/p?a=1&b=2",
-		locator.New(constant.Example).Path(
-			"/p",
-		).Add("a", "1").Add("b", "2").String(),
+		locator.New(constant.Example).Path("/p").Add("a", "1").Add("b", "2").String(),
 	)
 	assert.String(
 		t,
@@ -125,8 +123,9 @@ func TestFragment(t *testing.T) {
 	assert.String(
 		t,
 		"https://example.org/#/a?b=c%3Dd",
-		locator.New(
-			constant.Example,
-		).Trail().Fragment("/a").FragmentSet("b", "c=d").String(),
+		locator.New(constant.Example).Trail().Fragment("/a").FragmentSet(
+			"b",
+			"c=d",
+		).String(),
 	)
 }

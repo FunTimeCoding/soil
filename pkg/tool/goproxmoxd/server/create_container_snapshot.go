@@ -19,7 +19,9 @@ func (s *Server) CreateContainerSnapshot(
 	c, e := s.service.Client(instance)
 
 	if e != nil {
-		return server.CreateContainerSnapshot500JSONResponse(*s.captureDetail(e)), nil
+		return server.CreateContainerSnapshot500JSONResponse(
+			*s.captureDetail(e),
+		), nil
 	}
 
 	node := ""
@@ -37,10 +39,14 @@ func (s *Server) CreateContainerSnapshot(
 
 	if e != nil {
 		if not_found.Is(e) {
-			return server.CreateContainerSnapshot404JSONResponse{Error: e.Error()}, nil
+			return server.CreateContainerSnapshot404JSONResponse{
+				Error: e.Error(),
+			}, nil
 		}
 
-		return server.CreateContainerSnapshot500JSONResponse(*s.captureDetail(e)), nil
+		return server.CreateContainerSnapshot500JSONResponse(
+			*s.captureDetail(e),
+		), nil
 	}
 
 	return server.CreateContainerSnapshot200JSONResponse{TaskId: taskID}, nil

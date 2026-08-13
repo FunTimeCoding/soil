@@ -6,9 +6,9 @@ import (
 )
 
 func (c *Client) InterfaceAddresses(interfaceIdentifier int32) ([]*internet_address.Address, error) {
-	result, _, e := c.client.IpamAPI.IpamIpAddressesList(
-		c.context,
-	).Limit(constant.PageLimit).InterfaceId(
+	result, _, e := c.client.IpamAPI.IpamIpAddressesList(c.context).Limit(
+		constant.PageLimit,
+	).InterfaceId(
 		[]int32{interfaceIdentifier},
 	).Execute()
 

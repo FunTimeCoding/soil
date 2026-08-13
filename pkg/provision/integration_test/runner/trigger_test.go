@@ -19,9 +19,7 @@ func TestTriggerWithParameters(t *testing.T) {
 	s := runner_tester.New(t)
 	s.WaitForApply(1)
 	s.Trigger(
-		runner.TriggerRequest{
-			Parameters: map[string]any{"target": "specific"},
-		},
+		runner.TriggerRequest{Parameters: map[string]any{"target": "specific"}},
 	)
 	s.WaitForApply(2)
 	assert.String(t, "specific", s.LastApply().Parameters["target"].(string))
@@ -31,11 +29,7 @@ func TestSynchronousTrigger(t *testing.T) {
 	s := runner_tester.New(t)
 	s.WaitForApply(1)
 	response := make(chan *runner.TriggerResult, 1)
-	s.Trigger(
-		runner.TriggerRequest{
-			Response: response,
-		},
-	)
+	s.Trigger(runner.TriggerRequest{Response: response})
 	result := <-response
 	assert.Nil(t, result.Error)
 	assert.NotNil(t, result.Value)

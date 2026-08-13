@@ -29,21 +29,14 @@ func main() {
 	if false {
 		n.DownloadFile(
 			"example.png",
-			join.Absolute(
-				system.Home(),
-				constant.DownloadsPath,
-				"example.png",
-			),
+			join.Absolute(system.Home(), constant.DownloadsPath, "example.png"),
 		)
 	}
 
 	if false {
 		n.UploadFile(
 			"example2.png",
-			join.Absolute(
-				system.Home(),
-				constant.DownloadsPath,
-			),
+			join.Absolute(system.Home(), constant.DownloadsPath),
 			"example.png",
 		)
 	}

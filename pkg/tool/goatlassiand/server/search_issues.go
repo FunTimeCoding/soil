@@ -14,25 +14,17 @@ func (s *Server) SearchIssues(
 		result, e := s.jira.SearchLimit(*r.Params.Limit, r.Params.Query)
 
 		if e != nil {
-			return server.SearchIssues500JSONResponse(
-				*s.captureDetail(e),
-			), nil
+			return server.SearchIssues500JSONResponse(*s.captureDetail(e)), nil
 		}
 
-		return server.SearchIssues200JSONResponse(
-			convert.JiraIssues(result),
-		), nil
+		return server.SearchIssues200JSONResponse(convert.JiraIssues(result)), nil
 	}
 
 	result, e := s.jira.Search(r.Params.Query)
 
 	if e != nil {
-		return server.SearchIssues500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.SearchIssues500JSONResponse(*s.captureDetail(e)), nil
 	}
 
-	return server.SearchIssues200JSONResponse(
-		convert.JiraIssues(result),
-	), nil
+	return server.SearchIssues200JSONResponse(convert.JiraIssues(result)), nil
 }

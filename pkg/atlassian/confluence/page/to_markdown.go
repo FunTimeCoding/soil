@@ -16,7 +16,9 @@ func ToMarkdown(markup string) string {
 	remaining := markup
 
 	for {
-		plainLocation := constant.PlainTextMacroPattern.FindStringIndex(remaining)
+		plainLocation := constant.PlainTextMacroPattern.FindStringIndex(
+			remaining,
+		)
 		richLocation := constant.RichTextMacroPattern.FindStringIndex(remaining)
 		l, pattern := earliest(
 			plainLocation,

@@ -18,10 +18,7 @@ func Alert() {
 	c := common.Opsgenie()
 
 	if a.GetBoolean(constant.Create) {
-		c.Create(
-			a.GetString(constant.User),
-			a.GetString(constant.Text),
-		)
+		c.Create(a.GetString(constant.User), a.GetString(constant.Text))
 
 		return
 	}

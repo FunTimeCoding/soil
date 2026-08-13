@@ -6,9 +6,9 @@ import (
 )
 
 func (c *Client) PowerPanels() ([]*power_panel.Panel, error) {
-	result, _, e := c.client.DcimAPI.DcimPowerPanelsList(
-		c.context,
-	).Limit(constant.PageLimit).Execute()
+	result, _, e := c.client.DcimAPI.DcimPowerPanelsList(c.context).Limit(
+		constant.PageLimit,
+	).Execute()
 
 	if e != nil {
 		return nil, e

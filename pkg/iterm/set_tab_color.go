@@ -17,11 +17,7 @@ func (c *Client) SetTabColor(
 	blue int,
 ) error {
 	body, e := json.Marshal(
-		map[string]int{
-			"red":   red,
-			"green": green,
-			"blue":  blue,
-		},
+		map[string]int{"red": red, "green": green, "blue": blue},
 	)
 
 	if e != nil {

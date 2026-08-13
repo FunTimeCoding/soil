@@ -8,8 +8,12 @@ import (
 func Parse(m map[string]string) *Result {
 	activeState := m["ActiveState"]
 	subState := m["SubState"]
-	activeEnter := helper.ParseTimestamp(m[constant.SystemdActiveEnterTimestamp])
-	execMainStart := helper.ParseTimestamp(m[constant.SystemdExecMainStartTimestamp])
+	activeEnter := helper.ParseTimestamp(
+		m[constant.SystemdActiveEnterTimestamp],
+	)
+	execMainStart := helper.ParseTimestamp(
+		m[constant.SystemdExecMainStartTimestamp],
+	)
 
 	return &Result{
 		ActiveState:   activeState,

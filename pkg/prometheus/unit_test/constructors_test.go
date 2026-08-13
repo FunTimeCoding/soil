@@ -62,21 +62,8 @@ func TestConstructors(t *testing.T) {
 			false,
 		),
 	)
-	assert.NotNil(
-		t,
-		prometheus.New(
-			constant.Localhost,
-			0,
-			false,
-			"",
-			"",
-			"",
-		),
-	)
-	assert.NotNil(
-		t,
-		push.New(strings.UpperAlfa, 0, false, strings.UpperBravo),
-	)
+	assert.NotNil(t, prometheus.New(constant.Localhost, 0, false, "", "", ""))
+	assert.NotNil(t, push.New(strings.UpperAlfa, 0, false, strings.UpperBravo))
 	assert.NotNil(t, filter.New())
 	assert.NotNil(t, metric.New(strings.UpperAlfa))
 	assert.NotNil(t, round_tripper.New("", ""))

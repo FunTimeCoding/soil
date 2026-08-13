@@ -12,10 +12,7 @@ func NewColor(hex string) face.SprintFunction {
 		a ...any,
 	) string {
 		return lipgloss.NewStyle().Foreground(lipgloss.Color(hex)).Render(
-			fmt.Sprintf(
-				format,
-				a...,
-			),
+			fmt.Sprintf(format, a...),
 		)
 	}
 }

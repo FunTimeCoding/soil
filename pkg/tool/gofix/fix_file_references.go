@@ -68,11 +68,7 @@ func fixFileReferences(
 			r.AddConcern(
 				concern.NewFile(
 					"renamed",
-					fmt.Sprintf(
-						"renamed %s → %s (unloaded)",
-						i.Name,
-						newName,
-					),
+					fmt.Sprintf("renamed %s → %s (unloaded)", i.Name, newName),
 					path,
 					true,
 				),

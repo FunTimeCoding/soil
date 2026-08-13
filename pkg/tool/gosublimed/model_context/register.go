@@ -62,17 +62,9 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.CreateView,
-			mcp.WithDescription(
-				"Create a new scratch buffer in Sublime Text",
-			),
-			mcp.WithString(
-				"title",
-				mcp.Description("Buffer title"),
-			),
-			mcp.WithString(
-				"content",
-				mcp.Description("Initial buffer content"),
-			),
+			mcp.WithDescription("Create a new scratch buffer in Sublime Text"),
+			mcp.WithString("title", mcp.Description("Buffer title")),
+			mcp.WithString("content", mcp.Description("Initial buffer content")),
 			mcp.WithString(
 				"syntax",
 				mcp.Description("Syntax name (e.g. Go, Python, Markdown)"),
@@ -83,9 +75,7 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.SaveView,
-			mcp.WithDescription(
-				"Save a Sublime Text view to disk",
-			),
+			mcp.WithDescription("Save a Sublime Text view to disk"),
 			mcp.WithNumber(
 				"view_id",
 				mcp.Required(),
@@ -115,9 +105,7 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.OpenFile,
-			mcp.WithDescription(
-				"Open a file from disk as a Sublime Text tab",
-			),
+			mcp.WithDescription("Open a file from disk as a Sublime Text tab"),
 			mcp.WithString(
 				"file_path",
 				mcp.Required(),

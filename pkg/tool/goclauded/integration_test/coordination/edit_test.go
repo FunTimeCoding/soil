@@ -16,9 +16,7 @@ func TestEdit(t *testing.T) {
 	a.Announce(a.Name(), "some work")
 	a.MustCallTool(
 		constant.Complete,
-		map[string]any{
-			constant.Message: "hasty summary",
-		},
+		map[string]any{constant.Message: "hasty summary"},
 	)
 	events := s.Store.Events(event_query.New().SetLimit(1))
 	assert.Count(t, 1, events)

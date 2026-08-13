@@ -43,14 +43,8 @@ func Check(port string) {
 				slices.Sort(found)
 
 				if !slices.Equal(ports, found) {
-					fmt.Printf(
-						"Expect ports: %s\n",
-						join.Comma(ports),
-					)
-					fmt.Printf(
-						"Found ports: %s\n",
-						join.Comma(found),
-					)
+					fmt.Printf("Expect ports: %s\n", join.Comma(ports))
+					fmt.Printf("Found ports: %s\n", join.Comma(found))
 				}
 			}
 		} else {

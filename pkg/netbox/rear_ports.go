@@ -6,9 +6,9 @@ import (
 )
 
 func (c *Client) RearPorts() ([]*rear_port.Port, error) {
-	result, _, e := c.client.DcimAPI.DcimRearPortsList(
-		c.context,
-	).Limit(constant.PageLimit).Execute()
+	result, _, e := c.client.DcimAPI.DcimRearPortsList(c.context).Limit(
+		constant.PageLimit,
+	).Execute()
 
 	if e != nil {
 		return nil, e

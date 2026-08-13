@@ -37,10 +37,7 @@ func (s *Server) GetSummary(
 	entries := make([]server.SummaryEntry, 0, len(rows))
 
 	for _, r := range rows {
-		entry := server.SummaryEntry{
-			Tool:  r.Tool,
-			Count: int(r.Count),
-		}
+		entry := server.SummaryEntry{Tool: r.Tool, Count: int(r.Count)}
 
 		if r.Surface != "" {
 			entry.Surface = &r.Surface

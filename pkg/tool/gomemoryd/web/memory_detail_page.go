@@ -74,15 +74,11 @@ func (s *Server) memoryDetailPage(
 				),
 				html.Tr(
 					html.Td(html.Strong(gomponents.Text("Created"))),
-					layout.TimeCell(
-						library.Parse(time.RFC3339, m.CreatedAt),
-					),
+					layout.TimeCell(library.Parse(time.RFC3339, m.CreatedAt)),
 				),
 				html.Tr(
 					html.Td(html.Strong(gomponents.Text("Updated"))),
-					layout.TimeCell(
-						library.Parse(time.RFC3339, m.UpdatedAt),
-					),
+					layout.TimeCell(library.Parse(time.RFC3339, m.UpdatedAt)),
 				),
 				html.Tr(
 					html.Td(html.Strong(gomponents.Text("Active"))),
@@ -99,10 +95,7 @@ func (s *Server) memoryDetailPage(
 			pips = append(
 				pips,
 				html.A(
-					gomponents.Attr(
-						"href",
-						fmt.Sprintf("/memories?tag=%s", t),
-					),
+					gomponents.Attr("href", fmt.Sprintf("/memories?tag=%s", t)),
 					html.Class("tag-pip"),
 					gomponents.Text(t),
 				),
@@ -127,9 +120,7 @@ func (s *Server) memoryDetailPage(
 			rows = append(
 				rows,
 				html.Tr(
-					layout.TimeCell(
-						library.Parse(time.RFC3339, v.ChangedAt),
-					),
+					layout.TimeCell(library.Parse(time.RFC3339, v.ChangedAt)),
 					html.Td(gomponents.Text(v.ChangeType)),
 					html.Td(html.Small(gomponents.Text(v.Source))),
 					html.Td(html.Small(gomponents.Text(v.Description))),
@@ -185,19 +176,11 @@ func (s *Server) memoryDetailPage(
 			if r.Scope != m.Scope {
 				entry = append(
 					entry,
-					html.Small(
-						gomponents.Textf(
-							" [%s]",
-							relatedScope(r.Scope),
-						),
-					),
+					html.Small(gomponents.Textf(" [%s]", relatedScope(r.Scope))),
 				)
 			}
 
-			entry = append(
-				entry,
-				gomponents.Textf(" - %s", r.Description),
-			)
+			entry = append(entry, gomponents.Textf(" - %s", r.Description))
 			links = append(links, html.Li(entry...))
 		}
 

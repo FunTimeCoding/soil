@@ -13,10 +13,8 @@ import (
 func TestSilence(t *testing.T) {
 	actual := silence.New(
 		&models.GettableSilence{
-			ID: new(strings.UpperAlfa),
-			Status: &models.SilenceStatus{
-				State: new(prometheus.ActiveState),
-			},
+			ID:     new(strings.UpperAlfa),
+			Status: &models.SilenceStatus{State: new(prometheus.ActiveState)},
 			Silence: models.Silence{
 				CreatedBy: new(strings.UpperBravo),
 				Comment:   new(strings.UpperCharlie),

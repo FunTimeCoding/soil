@@ -12,10 +12,7 @@ func TestIntegerKeys(t *testing.T) {
 		t,
 		[]int{0, 1},
 		maps.IntegerKeys(
-			map[int]string{
-				0: constant.UpperAlfa,
-				1: constant.UpperBravo,
-			},
+			map[int]string{0: constant.UpperAlfa, 1: constant.UpperBravo},
 		),
 	)
 }

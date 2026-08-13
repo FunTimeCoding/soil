@@ -9,10 +9,5 @@ func matchFrom(
 	s *session.Session,
 	field string,
 ) *resolve_result.Match {
-	return resolve_result.NewMatch(
-		s.Identifier,
-		s.Name,
-		s.AliasValue(),
-		field,
-	)
+	return resolve_result.NewMatch(s.Identifier, s.Name, s.AliasValue(), field)
 }

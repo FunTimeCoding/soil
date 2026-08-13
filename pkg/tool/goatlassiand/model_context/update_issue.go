@@ -71,10 +71,7 @@ func (s *Server) updateIssue(
 	if labelsRaw != "" {
 		var labels []string
 
-		if g := json.Unmarshal(
-			[]byte(labelsRaw),
-			&labels,
-		); g != nil {
+		if g := json.Unmarshal([]byte(labelsRaw), &labels); g != nil {
 			return response.Fail(
 				"labels must be a JSON array of strings: %v",
 				g,
@@ -89,10 +86,7 @@ func (s *Server) updateIssue(
 	if fieldsRaw != "" {
 		var fields map[string]any
 
-		if g := json.Unmarshal(
-			[]byte(fieldsRaw),
-			&fields,
-		); g != nil {
+		if g := json.Unmarshal([]byte(fieldsRaw), &fields); g != nil {
 			return response.Fail(
 				"additional_fields must be a JSON object: %v",
 				g,
@@ -109,10 +103,7 @@ func (s *Server) updateIssue(
 			field := fieldMap.ByName(name)
 
 			if field == nil {
-				return response.Fail(
-					"unknown field: %s",
-					name,
-				)
+				return response.Fail("unknown field: %s", name)
 			}
 
 			raw.Fields.Unknowns.Set(field.Key, value)
@@ -126,10 +117,7 @@ func (s *Server) updateIssue(
 		fieldsRaw != ""
 
 	if hasFieldChanges {
-		_, resp, i := s.jira.Nested().Issue.UpdateWithContext(
-			c,
-			raw,
-		)
+		_, resp, i := s.jira.Nested().Issue.UpdateWithContext(c, raw)
 
 		if i != nil {
 			if resp != nil && resp.Body != nil {
@@ -153,11 +141,7 @@ func (s *Server) updateIssue(
 			return fail, g
 		}
 
-		resp, j := s.jira.Nested().Issue.UpdateAssigneeWithContext(
-			c,
-			key,
-			user,
-		)
+		resp, j := s.jira.Nested().Issue.UpdateAssigneeWithContext(c, key, user)
 
 		if j != nil {
 			if resp != nil && resp.Body != nil {

@@ -7,8 +7,5 @@ import (
 )
 
 func PrintAccount() {
-	fmt.Printf(
-		"%+v",
-		gw2.New(environment.Required("GW2_TEST_TOKEN")).Account(),
-	)
+	fmt.Printf("%+v", gw2.New(environment.Required("GW2_TEST_TOKEN")).Account())
 }

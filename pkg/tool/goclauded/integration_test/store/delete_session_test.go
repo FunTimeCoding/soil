@@ -42,10 +42,7 @@ func TestDeleteSessionCascadesChildRecords(t *testing.T) {
 	)
 	_, se := s.Store.SetLabel("session-1", "role", "reviewer")
 	assert.FatalOnError(t, se)
-	assert.FatalOnError(
-		t,
-		s.Store.SendPulse("session-1", "Ash", "test pulse"),
-	)
+	assert.FatalOnError(t, s.Store.SendPulse("session-1", "Ash", "test pulse"))
 	completions := s.CompletionsBySession("session-1")
 	assert.Count(t, 1, completions)
 	summary := s.SummaryBySession("session-1")

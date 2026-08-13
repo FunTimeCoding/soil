@@ -22,10 +22,7 @@ func (s *Server) register() {
 		mcp.NewTool(
 			constant.ListProjects,
 			mcp.WithDescription("List accessible GitLab projects"),
-			mcp.WithString(
-				"search",
-				mcp.Description("Filter by name"),
-			),
+			mcp.WithString("search", mcp.Description("Filter by name")),
 		),
 		mcp.NewTypedToolHandler(s.ListProjects),
 	)
@@ -174,11 +171,7 @@ func (s *Server) register() {
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
-			mcp.WithNumber(
-				"job",
-				mcp.Required(),
-				mcp.Description("Job ID"),
-			),
+			mcp.WithNumber("job", mcp.Required(), mcp.Description("Job ID")),
 		),
 		mcp.NewTypedToolHandler(s.GetPipelineJob),
 	)
@@ -191,11 +184,7 @@ func (s *Server) register() {
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
-			mcp.WithNumber(
-				"job",
-				mcp.Required(),
-				mcp.Description("Job ID"),
-			),
+			mcp.WithNumber("job", mcp.Required(), mcp.Description("Job ID")),
 		),
 		mcp.NewTypedToolHandler(s.GetPipelineJobOutput),
 	)
@@ -225,11 +214,7 @@ func (s *Server) register() {
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
-			mcp.WithNumber(
-				"job",
-				mcp.Required(),
-				mcp.Description("Job ID"),
-			),
+			mcp.WithNumber("job", mcp.Required(), mcp.Description("Job ID")),
 		),
 		mcp.NewTypedToolHandler(s.RetryPipelineJob),
 	)
@@ -259,11 +244,7 @@ func (s *Server) register() {
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
-			mcp.WithNumber(
-				"job",
-				mcp.Required(),
-				mcp.Description("Job ID"),
-			),
+			mcp.WithNumber("job", mcp.Required(), mcp.Description("Job ID")),
 		),
 		mcp.NewTypedToolHandler(s.CancelPipelineJob),
 	)
@@ -278,9 +259,7 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				"state",
-				mcp.Description(
-					"Filter by state (opened, closed, merged, all)",
-				),
+				mcp.Description("Filter by state (opened, closed, merged, all)"),
 			),
 		),
 		mcp.NewTypedToolHandler(s.ListMergeRequests),
@@ -322,9 +301,7 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.MergeRequestDiscussions,
-			mcp.WithDescription(
-				"List discussion threads on a merge request",
-			),
+			mcp.WithDescription("List discussion threads on a merge request"),
 			mcp.WithString(
 				"project",
 				mcp.Required(),
@@ -369,10 +346,7 @@ func (s *Server) register() {
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
-			mcp.WithString(
-				"reference",
-				mcp.Description("Branch or tag name"),
-			),
+			mcp.WithString("reference", mcp.Description("Branch or tag name")),
 		),
 		mcp.NewTypedToolHandler(s.ListCommits),
 	)
@@ -385,11 +359,7 @@ func (s *Server) register() {
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
-			mcp.WithString(
-				"sha",
-				mcp.Required(),
-				mcp.Description("Commit SHA"),
-			),
+			mcp.WithString("sha", mcp.Required(), mcp.Description("Commit SHA")),
 		),
 		mcp.NewTypedToolHandler(s.GetCommit),
 	)
@@ -402,20 +372,14 @@ func (s *Server) register() {
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
-			mcp.WithString(
-				"sha",
-				mcp.Required(),
-				mcp.Description("Commit SHA"),
-			),
+			mcp.WithString("sha", mcp.Required(), mcp.Description("Commit SHA")),
 		),
 		mcp.NewTypedToolHandler(s.GetCommitDiff),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ListProjectVariables,
-			mcp.WithDescription(
-				"List CI/CD variables for a GitLab project",
-			),
+			mcp.WithDescription("List CI/CD variables for a GitLab project"),
 			mcp.WithString(
 				"project",
 				mcp.Required(),
@@ -462,14 +426,9 @@ func (s *Server) register() {
 			),
 			mcp.WithBoolean(
 				"protected",
-				mcp.Description(
-					"Only expose to protected branches/tags",
-				),
+				mcp.Description("Only expose to protected branches/tags"),
 			),
-			mcp.WithBoolean(
-				"masked",
-				mcp.Description("Mask value in job logs"),
-			),
+			mcp.WithBoolean("masked", mcp.Description("Mask value in job logs")),
 			mcp.WithBoolean(
 				"expand",
 				mcp.Description(
@@ -500,14 +459,9 @@ func (s *Server) register() {
 			),
 			mcp.WithBoolean(
 				"protected",
-				mcp.Description(
-					"Only expose to protected branches/tags",
-				),
+				mcp.Description("Only expose to protected branches/tags"),
 			),
-			mcp.WithBoolean(
-				"masked",
-				mcp.Description("Mask value in job logs"),
-			),
+			mcp.WithBoolean("masked", mcp.Description("Mask value in job logs")),
 			mcp.WithBoolean(
 				"expand",
 				mcp.Description(

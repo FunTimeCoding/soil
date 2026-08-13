@@ -12,17 +12,13 @@ func (s *Server) DownloadLocator(
 	instance, e := s.resolveInstance(r.Params.Instance)
 
 	if e != nil {
-		return server.DownloadLocator400JSONResponse(
-			*clientError(e),
-		), nil
+		return server.DownloadLocator400JSONResponse(*clientError(e)), nil
 	}
 
 	c, e := s.service.Client(instance)
 
 	if e != nil {
-		return server.DownloadLocator500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.DownloadLocator500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	e = s.service.DownloadLocator(
@@ -35,14 +31,10 @@ func (s *Server) DownloadLocator(
 	)
 
 	if e != nil {
-		return server.DownloadLocator500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.DownloadLocator500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	status := "downloaded"
 
-	return server.DownloadLocator200JSONResponse{
-		Status: status,
-	}, nil
+	return server.DownloadLocator200JSONResponse{Status: status}, nil
 }

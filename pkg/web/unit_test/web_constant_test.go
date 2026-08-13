@@ -19,11 +19,7 @@ func TestAuthorizationConstant(t *testing.T) {
 		"/.well-known/oauth-protected-resource",
 		constant.ProtectedResource,
 	)
-	assert.String(
-		t,
-		"authorization_servers",
-		constant.AuthorizationServer,
-	)
+	assert.String(t, "authorization_servers", constant.AuthorizationServer)
 	assert.String(t, "resource", constant.AuthorizationResource)
 	assert.String(t, "GET, OPTIONS", constant.ProtectedMethods)
 }

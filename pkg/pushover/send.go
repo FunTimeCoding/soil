@@ -13,17 +13,10 @@ import (
 
 func (c *Client) Send(s string) *http.Response {
 	result, e := http.Post(
-		locator.New(
-			constant.Host,
-		).Base(constant.Base).Path(constant.Message).String(),
+		locator.New(constant.Host).Base(constant.Base).Path(constant.Message).String(),
 		web.Object,
 		bytes.NewBuffer(
-			[]byte(
-				notation.Encode(
-					notification.New(c.user, c.token, s),
-					false,
-				),
-			),
+			[]byte(notation.Encode(notification.New(c.user, c.token, s), false)),
 		),
 	)
 	errors.PanicOnError(e)

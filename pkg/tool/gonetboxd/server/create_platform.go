@@ -16,7 +16,5 @@ func (s *Server) CreatePlatform(
 		return server.CreatePlatform500JSONResponse(*s.captureDetail(e)), nil
 	}
 
-	return server.CreatePlatform201JSONResponse(
-		*convert.Platform(result),
-	), nil
+	return server.CreatePlatform201JSONResponse(*convert.Platform(result)), nil
 }

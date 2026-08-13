@@ -10,9 +10,6 @@ func (s *Session) Announce(
 
 	return s.MustCallTool(
 		constant.Announce,
-		map[string]any{
-			constant.SessionName: name,
-			constant.Topic:       topic,
-		},
+		map[string]any{constant.SessionName: name, constant.Topic: topic},
 	)
 }

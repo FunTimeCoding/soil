@@ -19,11 +19,7 @@ func (j *Job) Format(f *option.Format) string {
 		s.String(j.formatProject())
 	}
 
-	s.String(
-		j.formatUser(),
-		j.formatDate(f),
-		j.formatConcern(f),
-	)
+	s.String(j.formatUser(), j.formatDate(f), j.formatConcern(f))
 	s.DetailLink(j.Link, "GitLab", "")
 
 	return s.RawList(j.Raw).Format()

@@ -13,9 +13,7 @@ func ByTitleUserRecursive(
 	for _, group := range g {
 		for _, entry := range group.Entries {
 			if entry.GetTitle() == title {
-				if v := entry.Get(
-					constant.UserNameKey,
-				); v != nil && v.Value.Content == user {
+				if v := entry.Get(constant.UserNameKey); v != nil && v.Value.Content == user {
 					return &entry
 				}
 			}

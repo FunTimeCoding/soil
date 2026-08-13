@@ -21,10 +21,7 @@ func Main(
 	defer func() { r.RecoverFlush(recover()) }()
 	v, e := client.NewClient(
 		locator.New(
-			environment.Fallback(
-				constant.HostEnvironment,
-				web.Localhost,
-			),
+			environment.Fallback(constant.HostEnvironment, web.Localhost),
 		).Port(web.ListenPort).Insecure().String(),
 	)
 	errors.PanicOnError(e)

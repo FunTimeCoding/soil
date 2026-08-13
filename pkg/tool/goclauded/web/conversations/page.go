@@ -42,17 +42,11 @@ func (s *Server) page(
 						html.Type("search"),
 						html.Class("sidebar-filter"),
 						gomponents.Attr("placeholder", "Filter..."),
-						gomponents.Attr(
-							"oninput",
-							"filterSidebar(this.value)",
-						),
+						gomponents.Attr("oninput", "filterSidebar(this.value)"),
 					),
 					html.Div(
 						html.ID("sidebar-entries"),
-						gomponents.Attr(
-							"hx-get",
-							"/conversations/sidebar",
-						),
+						gomponents.Attr("hx-get", "/conversations/sidebar"),
 						gomponents.Attr(
 							"hx-trigger",
 							"session-edited from:body",

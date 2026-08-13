@@ -7,9 +7,9 @@ import (
 
 func (c *Client) CreatePlatform(name string) (*platform.Platform, error) {
 	q := netbox.NewPlatformRequest(name, slug(name))
-	result, _, e := c.client.DcimAPI.DcimPlatformsCreate(
-		c.context,
-	).PlatformRequest(*q).Execute()
+	result, _, e := c.client.DcimAPI.DcimPlatformsCreate(c.context).PlatformRequest(
+		*q,
+	).Execute()
 
 	if e != nil {
 		return nil, e

@@ -18,9 +18,7 @@ func (s *Server) triggerRun(
 	request := runner.TriggerRequest{Update: update}
 
 	if target != "" {
-		request.Parameters = map[string]any{
-			constant.Target: target,
-		}
+		request.Parameters = map[string]any{constant.Target: target}
 	}
 
 	if synchronous {

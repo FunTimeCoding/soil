@@ -5,9 +5,5 @@ func New(
 	toName string,
 	body string,
 ) *Message {
-	return &Message{
-		FromName: fromName,
-		ToName:   toName,
-		Body:     body,
-	}
+	return &Message{FromName: fromName, ToName: toName, Body: body}
 }

@@ -71,10 +71,7 @@ func Run() {
 				unused[u.Category] = make([]string, 0)
 			}
 
-			unused[u.Category] = append(
-				unused[u.Category],
-				u.Word,
-			)
+			unused[u.Category] = append(unused[u.Category], u.Word)
 		}
 	}
 

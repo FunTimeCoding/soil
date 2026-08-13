@@ -20,9 +20,7 @@ func New(
 	t.Helper()
 	d := testutil.PrepareTestPackage(t, fixture)
 	i := inventory.New()
-	i.Modules = []inventory.Module{
-		{Name: "test", Directory: d},
-	}
+	i.Modules = []inventory.Module{{Name: "test", Directory: d}}
 	s := service.New(i)
 	v := model_context_server.New(
 		t,

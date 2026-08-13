@@ -5,9 +5,5 @@ func New(
 	from string,
 	to string,
 ) *Severity {
-	return &Severity{
-		Alert: alert,
-		From:  from,
-		To:    to,
-	}
+	return &Severity{Alert: alert, From: from, To: to}
 }

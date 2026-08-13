@@ -23,9 +23,7 @@ func (s *Server) tokenUsage(
 	result := s.service.Usage()
 
 	if result == nil {
-		return response.Success(
-			"Usage monitoring not enabled or no data yet.",
-		)
+		return response.Success("Usage monitoring not enabled or no data yet.")
 	}
 
 	lines := []string{

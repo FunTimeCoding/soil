@@ -72,10 +72,7 @@ func Log(
 	}
 
 	aleevaFile := gw2.LatestAleevaFile(
-		system.FilesMatching(
-			systemConstant.Temporary,
-			constant.AleevaPrefix,
-		),
+		system.FilesMatching(systemConstant.Temporary, constant.AleevaPrefix),
 	)
 	fmt.Printf(
 		"Latest Aleeva file: %s\n",
@@ -92,10 +89,7 @@ func Log(
 	var verifiedAccounts []string
 	var rowCount int
 
-	for _, r := range aleeva_report.Parse(
-		systemConstant.Temporary,
-		aleevaFile,
-	) {
+	for _, r := range aleeva_report.Parse(systemConstant.Temporary, aleevaFile) {
 		if len(r.WvwTeams) == 0 || len(r.Gw2Accounts) == 0 {
 			continue
 		}
@@ -156,10 +150,7 @@ func Log(
 
 	fmt.Printf("Members: %s\n", stringJoin.Comma(members))
 	logs := log.NewSlice(
-		gw2.ParseLogs(
-			system.ReadBytes(path, constant.LogFile),
-			false,
-		),
+		gw2.ParseLogs(system.ReadBytes(path, constant.LogFile), false),
 	)
 	var unverified []string
 
@@ -215,11 +206,7 @@ func Log(
 		for guild, guildMembers := range guildReport {
 			for _, e := range guildMembers {
 				if !slices.Contains(members, e) {
-					fmt.Printf(
-						"Guild member not found: %s %s\n",
-						guild,
-						e,
-					)
+					fmt.Printf("Guild member not found: %s %s\n", guild, e)
 				}
 			}
 		}
@@ -309,10 +296,7 @@ func Log(
 
 	fmt.Printf("  Never seen days count: %d\n", len(neverSeenDays))
 	fmt.Printf("    Exception count: %d\n", exceptionCount)
-	fmt.Printf(
-		"    Confirmed not on team count: %d\n",
-		confirmedNotOnTeamCount,
-	)
+	fmt.Printf("    Confirmed not on team count: %d\n", confirmedNotOnTeamCount)
 	fmt.Printf(
 		"    No Aleeva count: %d\n",
 		noAleevaOrNotOnTeamCount-confirmedNotOnTeamCount,

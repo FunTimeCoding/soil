@@ -18,10 +18,7 @@ func Run() {
 	signal.Notify(interrupt, os.Interrupt)
 	u := url.URL{
 		Scheme: constant.Socket,
-		Host: web.AddressHostPort(
-			constant.Localhost,
-			constant.ListenPort,
-		),
+		Host: web.AddressHostPort(constant.Localhost, constant.ListenPort),
 		Path: constant.LocationEcho,
 	}
 	log.Printf("connect to %s", u.String())
@@ -51,10 +48,7 @@ func Run() {
 		case <-done:
 			return
 		case t := <-ticker.C:
-			if e := l.WriteMessage(
-				websocket.TextMessage,
-				[]byte(t.String()),
-			); e != nil {
+			if e := l.WriteMessage(websocket.TextMessage, []byte(t.String())); e != nil {
 				log.Printf("write: %s\n", e)
 
 				return
@@ -64,10 +58,7 @@ func Run() {
 
 			if e := l.WriteMessage(
 				websocket.CloseMessage,
-				websocket.FormatCloseMessage(
-					websocket.CloseNormalClosure,
-					"",
-				),
+				websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""),
 			); e != nil {
 				log.Printf("write close: %s\n", e)
 

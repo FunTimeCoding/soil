@@ -18,10 +18,7 @@ func LastSeenPerMemberSlice(
 				continue
 			}
 
-			result = append(
-				result,
-				LastSeenMember{Name: member, Time: *t},
-			)
+			result = append(result, LastSeenMember{Name: member, Time: *t})
 		}
 	}
 

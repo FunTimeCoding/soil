@@ -22,10 +22,7 @@ func (m *Message) ReadHeader() http.Header {
 			if s, okayString := slice[0].(string); okayString {
 				result.Set(key, s)
 			} else {
-				result.Set(
-					key,
-					fmt.Sprintf("string fail: %v", slice[0]),
-				)
+				result.Set(key, fmt.Sprintf("string fail: %v", slice[0]))
 			}
 		} else {
 			result.Set(key, fmt.Sprintf("any slice fail: %v", v))

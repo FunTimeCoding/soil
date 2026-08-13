@@ -9,9 +9,5 @@ import (
 )
 
 func TestEnvironmentPrefix(t *testing.T) {
-	assert.String(
-		t,
-		"",
-		ssh.EnvironmentPrefix(command.New(constant.UpperAlfa)),
-	)
+	assert.String(t, "", ssh.EnvironmentPrefix(command.New(constant.UpperAlfa)))
 }

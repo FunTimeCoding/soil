@@ -49,10 +49,7 @@ func (s *Store) run() {
 						s.syncLogCache()
 					}
 
-					if strings.HasSuffix(
-						v.Name,
-						constant.DetailedWvWKillSuffix,
-					) {
+					if strings.HasSuffix(v.Name, constant.DetailedWvWKillSuffix) {
 						s.enrichFile(
 							filepath.Dir(v.Name),
 							filepath.Base(v.Name),

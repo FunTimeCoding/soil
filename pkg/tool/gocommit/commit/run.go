@@ -17,10 +17,7 @@ func Run(o *option.Commit) {
 		o.Branch,
 		o.Message,
 		o.Path,
-		strings.ReplaceAllSlice(
-			system.ReadFileUnsafe(o.Template),
-			o.Replace,
-		),
+		strings.ReplaceAllSlice(system.ReadFileUnsafe(o.Template), o.Replace),
 		c.MustFileExists(p, o.Branch, o.Path),
 	)
 }

@@ -23,11 +23,7 @@ func (s *Server) MuteEvent(
 	}
 
 	if a.Cluster != "" {
-		return response.Success(
-			"muted %s for cluster %s",
-			a.Reason,
-			a.Cluster,
-		)
+		return response.Success("muted %s for cluster %s", a.Reason, a.Cluster)
 	}
 
 	return response.Success("muted %s for all clusters", a.Reason)

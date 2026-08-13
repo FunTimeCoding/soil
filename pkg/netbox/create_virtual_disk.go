@@ -17,9 +17,7 @@ func (c *Client) CreateVirtualDisk(
 	}
 
 	q := netbox.NewVirtualDiskRequest(
-		netbox.PatchedVirtualDiskRequestVirtualMachine{
-			Int32: &m.Identifier,
-		},
+		netbox.PatchedVirtualDiskRequestVirtualMachine{Int32: &m.Identifier},
 		name,
 		size,
 	)

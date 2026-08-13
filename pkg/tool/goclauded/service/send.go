@@ -18,11 +18,7 @@ func (s *Service) Send(
 		}
 
 		if session == nil {
-			return fmt.Errorf(
-				"%w: %s",
-				constant.ErrorCallsignNotFound,
-				to,
-			)
+			return fmt.Errorf("%w: %s", constant.ErrorCallsignNotFound, to)
 		}
 	}
 

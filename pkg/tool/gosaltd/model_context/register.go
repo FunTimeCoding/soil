@@ -74,9 +74,7 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.Minions,
-			mcp.WithDescription(
-				"List connected salt minions.",
-			),
+			mcp.WithDescription("List connected salt minions."),
 		),
 		s.minions,
 	)

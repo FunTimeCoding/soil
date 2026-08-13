@@ -16,6 +16,7 @@ func (s *Server) CreateSite(
 	}
 
 	return server.CreateSite201JSONResponse{
-		Identifier: i.Identifier, Name: i.Name,
+		Identifier: i.Identifier,
+		Name: i.Name,
 	}, nil
 }

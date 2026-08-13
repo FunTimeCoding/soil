@@ -11,11 +11,7 @@ func (c *Client) IssueByIdentifier(
 	identifier string,
 ) (*response.Issue, error) {
 	b, e := c.basic.Get(
-		fmt.Sprintf(
-			"organizations/%s/issues/%s",
-			organization,
-			identifier,
-		),
+		fmt.Sprintf("organizations/%s/issues/%s", organization, identifier),
 		nil,
 	)
 

@@ -10,10 +10,7 @@ import (
 func TestChildren(t *testing.T) {
 	actual := issue.Children(
 		[]*issue.Issue{
-			{
-				Key: "TEST-1",
-				Raw: &jira.Issue{Fields: &jira.IssueFields{}},
-			},
+			{Key: "TEST-1", Raw: &jira.Issue{Fields: &jira.IssueFields{}}},
 			{
 				Key: "TEST-2",
 				Raw: &jira.Issue{

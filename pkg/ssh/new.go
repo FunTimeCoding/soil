@@ -35,9 +35,7 @@ func New(
 				Auth: []ssh.AuthMethod{
 					ssh.PublicKeys(
 						secure_shell.Signers(
-							system.Socket(
-								os.Getenv(constant.SocketEnvironment),
-							),
+							system.Socket(os.Getenv(constant.SocketEnvironment)),
 						)...,
 					),
 				},

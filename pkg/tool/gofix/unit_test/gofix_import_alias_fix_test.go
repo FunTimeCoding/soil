@@ -13,22 +13,14 @@ import (
 func TestImportAliasFix(t *testing.T) {
 	directory := writeImportAliasTestModule(t)
 	r := output.NewResultsWithDirectory(directory)
-	gofix.RunImportAliasFixWithDirectory(
-		[]string{"./..."},
-		directory,
-		false,
-		r,
-	)
+	gofix.RunImportAliasFixWithDirectory([]string{"./..."}, directory, false, r)
 	t.Run(
 		"SuperfluousAlias",
 		func(t *testing.T) {
 			assert.String(
 				t,
 				"package example\n\nimport \"testmodule/pkg/helper\"\n\nfunc UseHelper() string {\n\treturn helper.Value()\n}\n",
-				testutil.ReadFile(
-					t,
-					filepath.Join(directory, "superfluous.go"),
-				),
+				testutil.ReadFile(t, filepath.Join(directory, "superfluous.go")),
 			)
 		},
 	)
@@ -51,10 +43,7 @@ func TestImportAliasFix(t *testing.T) {
 			assert.String(
 				t,
 				"package example\n\nimport h \"testmodule/pkg/helper\"\n\nfunc UseCollision() string {\n\thelper := \"local\"\n\n\treturn helper + h.Value()\n}\n",
-				testutil.ReadFile(
-					t,
-					filepath.Join(directory, "collision.go"),
-				),
+				testutil.ReadFile(t, filepath.Join(directory, "collision.go")),
 			)
 		},
 	)
@@ -66,10 +55,7 @@ func TestImportAliasFix(t *testing.T) {
 				"package example\n\nimport (\n\th \"testmodule/pkg/helper\"\n\t\"testmodule/pkg/other/helper\"\n)\n\nfunc UseBoth() string {\n\treturn h.Value() + helper.Extra()\n}\n",
 				testutil.ReadFile(
 					t,
-					filepath.Join(
-						directory,
-						"import_collision.go",
-					),
+					filepath.Join(directory, "import_collision.go"),
 				),
 			)
 		},
@@ -121,10 +107,7 @@ func TestImportAliasFix(t *testing.T) {
 				"package example\n\nimport (\n\ta \"testmodule/pkg/alpha/constant\"\n\tb \"testmodule/pkg/beta/constant\"\n)\n\nfunc UseMultiple() string {\n\treturn a.One() + b.Two()\n}\n",
 				testutil.ReadFile(
 					t,
-					filepath.Join(
-						directory,
-						"multiple_same_name.go",
-					),
+					filepath.Join(directory, "multiple_same_name.go"),
 				),
 			)
 		},
@@ -137,10 +120,7 @@ func TestImportAliasFix(t *testing.T) {
 				"package example\n\nimport \"testmodule/pkg/helper\"\n\ntype Thing struct {\n\thelper string\n}\n\nfunc UseThing() string {\n\treturn helper.Value()\n}\n",
 				testutil.ReadFile(
 					t,
-					filepath.Join(
-						directory,
-						"struct_field.go",
-					),
+					filepath.Join(directory, "struct_field.go"),
 				),
 			)
 		},
@@ -153,10 +133,7 @@ func TestImportAliasFix(t *testing.T) {
 				"package example\n\nimport model \"testmodule/pkg/setting/string\"\n\nfunc UseBuiltin(name string) string {\n\treturn model.Value(name)\n}\n",
 				testutil.ReadFile(
 					t,
-					filepath.Join(
-						directory,
-						"builtin_collision.go",
-					),
+					filepath.Join(directory, "builtin_collision.go"),
 				),
 			)
 		},
@@ -211,12 +188,7 @@ func TestImportAliasFix(t *testing.T) {
 func writeImportAliasTestModule(t *testing.T) string {
 	t.Helper()
 	directory := t.TempDir()
-	testutil.WriteFile(
-		t,
-		directory,
-		"go.mod",
-		"module testmodule\n\ngo 1.22\n",
-	)
+	testutil.WriteFile(t, directory, "go.mod", "module testmodule\n\ngo 1.22\n")
 	testutil.WriteFile(
 		t,
 		directory,

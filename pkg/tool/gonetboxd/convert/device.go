@@ -6,10 +6,7 @@ import (
 )
 
 func Device(d *device.Device) *server.Device {
-	result := &server.Device{
-		Identifier: d.Identifier,
-		Name:       d.Name,
-	}
+	result := &server.Device{Identifier: d.Identifier, Name: d.Name}
 
 	if d.Role != "" {
 		result.Role = &d.Role

@@ -19,7 +19,9 @@ func (s *Server) moment(
 	}
 
 	if c.Callsign == "" {
-		return response.Fail("unknown session - announce first to bind your identity")
+		return response.Fail(
+			"unknown session - announce first to bind your identity",
+		)
 	}
 
 	line, e := q.RequireString(constant.Line)
@@ -28,11 +30,7 @@ func (s *Server) moment(
 		return response.Fail("line is required: %v", e)
 	}
 
-	if f := s.service.Moment(
-		c.SessionIdentifier,
-		c.Callsign,
-		line,
-	); f != nil {
+	if f := s.service.Moment(c.SessionIdentifier, c.Callsign, line); f != nil {
 		return s.captureFail(f, library.UnexpectedError)
 	}
 

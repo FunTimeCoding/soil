@@ -26,11 +26,7 @@ func (s *Server) exportSession(
 
 	messages := s.service.Messages(i.Identifier)
 	created := parseTimestamp(i.Timestamp)
-	d := filepath.Join(
-		basePath,
-		created.Format("2006"),
-		created.Format("01"),
-	)
+	d := filepath.Join(basePath, created.Format("2006"), created.Format("01"))
 	slug := alias
 
 	if slug == "" {
@@ -44,11 +40,7 @@ func (s *Server) exportSession(
 	name := fmt.Sprintf(
 		"%s-%s.md",
 		created.Format(constant.DateYear),
-		strings.ReplaceAll(
-			strings.ToLower(slug),
-			" ",
-			"-",
-		),
+		strings.ReplaceAll(strings.ToLower(slug), " ", "-"),
 	)
 	var b strings.Builder
 	writer.Print(&b, "---\n")
@@ -62,11 +54,7 @@ func (s *Server) exportSession(
 		writer.Print(&b, "slug: %s\n", i.Slug)
 	}
 
-	writer.Print(
-		&b,
-		"created: %s\n",
-		created.Format(constant.DateYear),
-	)
+	writer.Print(&b, "created: %s\n", created.Format(constant.DateYear))
 	writer.Print(&b, "---\n\n")
 
 	for _, m := range messages {

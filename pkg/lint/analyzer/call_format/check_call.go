@@ -43,6 +43,13 @@ func checkCall(
 			),
 		)
 	} else {
-		reportMultiLine(p, results, call)
+		results.AddConcern(
+			concern.NewFile(
+				"call_format",
+				"each argument should be on its own line",
+				p.Fset.Position(call.Args[0].Pos()).Filename,
+				false,
+			),
+		)
 	}
 }

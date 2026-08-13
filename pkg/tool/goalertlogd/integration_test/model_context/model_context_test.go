@@ -21,10 +21,7 @@ func TestModelContext(t *testing.T) {
 	)
 	assert.StringContains(t, "fp1", alerts)
 	assert.StringContains(t, "critical", alerts)
-	recent := c.MustCallTool(
-		constant.GetRecentAlerts,
-		map[string]any{},
-	)
+	recent := c.MustCallTool(constant.GetRecentAlerts, map[string]any{})
 	assert.StringContains(t, "HighMemory", recent)
 	assert.StringContains(t, "DiskFull", recent)
 	top := c.MustCallTool(constant.GetTopAlerts, map[string]any{})

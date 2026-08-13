@@ -13,15 +13,15 @@ func link(
 ) string {
 	if tiny {
 		if p.Links.WebUI != "" {
-			return locator.New(
-				host,
-			).Base(constant.ConfluenceWiki).Path(p.Links.TinyUI).String()
+			return locator.New(host).Base(constant.ConfluenceWiki).Path(
+				p.Links.TinyUI,
+			).String()
 		}
 	} else {
 		if p.Links.WebUI != "" {
-			return locator.New(
-				host,
-			).Base(constant.ConfluenceWiki).Path(p.Links.WebUI).String()
+			return locator.New(host).Base(constant.ConfluenceWiki).Path(
+				p.Links.WebUI,
+			).String()
 		}
 	}
 

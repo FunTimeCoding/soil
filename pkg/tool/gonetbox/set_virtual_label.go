@@ -16,11 +16,7 @@ func setVirtualLabel(c *client.Client) *cobra.Command {
 			arguments []string,
 		) {
 			fmt.Println(
-				c.SetVirtualLabel(
-					arguments[0],
-					arguments[1],
-					arguments[2],
-				),
+				c.SetVirtualLabel(arguments[0], arguments[1], arguments[2]),
 			)
 		},
 	}

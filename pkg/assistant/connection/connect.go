@@ -19,10 +19,7 @@ func (c *Connection) Connect() {
 		Path:   constant.Path,
 	}
 	var e error
-	c.connection, _, e = websocket.DefaultDialer.Dial(
-		u.String(),
-		nil,
-	)
+	c.connection, _, e = websocket.DefaultDialer.Dial(u.String(), nil)
 	errors.PanicOnError(e)
 
 	for {

@@ -72,10 +72,7 @@ const (
 
 var (
 	JiraFormat      = constant.ExtendedColorFormat.Copy()
-	ServiceDeskDone = []string{
-		ServiceDeskClosed,
-		ServiceDeskResolved,
-	}
+	ServiceDeskDone = []string{ServiceDeskClosed, ServiceDeskResolved}
 )
 
 const (

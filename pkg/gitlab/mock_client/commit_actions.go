@@ -10,11 +10,7 @@ func (c *Client) CommitActions(
 ) (*gitlab.Commit, error) {
 	c.commits = append(
 		c.commits,
-		&Commit{
-			Branch:  branch,
-			Message: message,
-			Actions: v,
-		},
+		&Commit{Branch: branch, Message: message, Actions: v},
 	)
 
 	return &gitlab.Commit{}, nil

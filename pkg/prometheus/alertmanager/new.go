@@ -23,11 +23,7 @@ func New(
 	}
 
 	c := client.NewHTTPClient(nil)
-	t := transport.New(
-		host,
-		client.DefaultBasePath,
-		[]string{scheme},
-	)
+	t := transport.New(host, client.DefaultBasePath, []string{scheme})
 
 	if user != "" && password != "" {
 		t.DefaultAuthentication = transport.BasicAuth(user, password)

@@ -7,8 +7,5 @@ import (
 
 func Query() {
 	c := loki.NewEnvironment(false)
-	fmt.Printf(
-		"Query: %+v\n",
-		c.Query(`rate({namespace="i9n"}[5m])`),
-	)
+	fmt.Printf("Query: %+v\n", c.Query(`rate({namespace="i9n"}[5m])`))
 }

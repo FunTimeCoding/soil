@@ -25,15 +25,9 @@ func (s *Store) MoveDown(identifier uint) {
 
 	originalPosition := current.Position
 	errors.PanicOnError(
-		s.mapper.Model(&current).Update(
-			"position",
-			below.Position,
-		).Error,
+		s.mapper.Model(&current).Update("position", below.Position).Error,
 	)
 	errors.PanicOnError(
-		s.mapper.Model(&below).Update(
-			"position",
-			originalPosition,
-		).Error,
+		s.mapper.Model(&below).Update("position", originalPosition).Error,
 	)
 }

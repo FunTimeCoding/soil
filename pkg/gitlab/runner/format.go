@@ -13,11 +13,7 @@ func (r *Runner) Format(f *option.Format) string {
 		s.Integer64(r.Identifier)
 	}
 
-	s.String(
-		r.formatName(f),
-		r.formatDescription(),
-		r.hostname(),
-	)
+	s.String(r.formatName(f), r.formatDescription(), r.hostname())
 
 	if f.HasTag(constant.TagType) {
 		s.String(r.Type)
@@ -27,10 +23,9 @@ func (r *Runner) Format(f *option.Format) string {
 		s.String(r.formatShared())
 	}
 
-	s.String(
-		r.formatStatus(f),
-		r.formatConcern(f),
-	).RawList(r.RawList).RawDetail(r.RawDetail)
+	s.String(r.formatStatus(f), r.formatConcern(f)).RawList(r.RawList).RawDetail(
+		r.RawDetail,
+	)
 
 	if v := r.formatTags(); v != "" {
 		s.String(v)

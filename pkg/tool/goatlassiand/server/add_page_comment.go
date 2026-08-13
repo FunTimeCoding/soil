@@ -9,13 +9,8 @@ func (s *Server) AddPageComment(
 	_ context.Context,
 	r server.AddPageCommentRequestObject,
 ) (server.AddPageCommentResponseObject, error) {
-	if e := s.confluence.AddComment(
-		r.Identifier,
-		r.Body.Body,
-	); e != nil {
-		return server.AddPageComment500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+	if e := s.confluence.AddComment(r.Identifier, r.Body.Body); e != nil {
+		return server.AddPageComment500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	return server.AddPageComment204Response{}, nil

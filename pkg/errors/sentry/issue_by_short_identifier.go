@@ -17,9 +17,7 @@ func (c *Client) IssueByShortIdentifier(
 		fmt.Sprintf(
 			"projects/%s/%s/issues",
 			organization,
-			strings.ToLower(
-				identifier[:strings.LastIndex(identifier, "-")],
-			),
+			strings.ToLower(identifier[:strings.LastIndex(identifier, "-")]),
 		),
 		map[string]string{"shortIdLookup": "1", "query": identifier},
 	)

@@ -20,9 +20,7 @@ func (s *Server) UploadFile(
 	}
 
 	if a.ChannelID == "" && a.ChannelName == "" {
-		return response.Fail(
-			"channel_id or channel_name is required",
-		)
+		return response.Fail("channel_id or channel_name is required")
 	}
 
 	b, e := os.ReadFile(a.Path)

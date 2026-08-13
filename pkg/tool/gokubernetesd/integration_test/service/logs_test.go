@@ -17,10 +17,7 @@ func TestLogsDirectPod(t *testing.T) {
 	_, e := s.Service.Logs(
 		context.Background(),
 		"test",
-		service.LogsQuery{
-			Name:      "nginx-abc123",
-			Namespace: "default",
-		},
+		service.LogsQuery{Name: "nginx-abc123", Namespace: "default"},
 	)
 	assert.Nil(t, e)
 }
@@ -34,10 +31,7 @@ func TestLogsAmbiguousPods(t *testing.T) {
 	_, e := s.Service.Logs(
 		context.Background(),
 		"test",
-		service.LogsQuery{
-			Name:      "deployment/nginx",
-			Namespace: "default",
-		},
+		service.LogsQuery{Name: "deployment/nginx", Namespace: "default"},
 	)
 	assert.NotNil(t, e)
 	var ap *ambiguous_pods.AmbiguousPods
@@ -53,10 +47,7 @@ func TestLogsSinglePodDeployment(t *testing.T) {
 	_, e := s.Service.Logs(
 		context.Background(),
 		"test",
-		service.LogsQuery{
-			Name:      "deployment/redis",
-			Namespace: "default",
-		},
+		service.LogsQuery{Name: "deployment/redis", Namespace: "default"},
 	)
 	assert.Nil(t, e)
 }

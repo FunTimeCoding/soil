@@ -12,10 +12,7 @@ func TestStringKeys(t *testing.T) {
 		t,
 		[]string{"Alfa", "Bravo"},
 		maps.StringKeys(
-			map[string]int{
-				constant.UpperAlfa:  0,
-				constant.UpperBravo: 1,
-			},
+			map[string]int{constant.UpperAlfa: 0, constant.UpperBravo: 1},
 		),
 	)
 }

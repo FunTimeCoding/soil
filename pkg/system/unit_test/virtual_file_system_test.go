@@ -61,17 +61,9 @@ func TestVirtualFileSystemDirectoryExists(t *testing.T) {
 	v.WriteString("pkg/tool/gotest/server/router.go", "")
 	v.WriteString("pkg/tool/gotest/constant/constant.go", "")
 	assert.Boolean(t, true, v.DirectoryExists("pkg/tool/gotest"))
-	assert.Boolean(
-		t,
-		true,
-		v.DirectoryExists("pkg/tool/gotest/server"),
-	)
+	assert.Boolean(t, true, v.DirectoryExists("pkg/tool/gotest/server"))
 	assert.Boolean(t, true, v.DirectoryExists("pkg"))
-	assert.Boolean(
-		t,
-		false,
-		v.DirectoryExists("pkg/tool/gotest/model_context"),
-	)
+	assert.Boolean(t, false, v.DirectoryExists("pkg/tool/gotest/model_context"))
 	assert.Boolean(t, false, v.DirectoryExists("pkg/tool/other"))
 }
 

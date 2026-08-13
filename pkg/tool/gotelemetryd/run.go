@@ -33,10 +33,7 @@ func Run(
 				o.Address,
 				func(m *http.ServeMux) {
 					generated.HandlerFromMux(
-						generated.NewStrictHandler(
-							server.New(s, r),
-							nil,
-						),
+						generated.NewStrictHandler(server.New(s, r), nil),
 						m,
 					)
 					model_context.New(

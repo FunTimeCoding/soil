@@ -6,7 +6,5 @@ import (
 )
 
 func (t *Tester) WriteEnvrc(content string) {
-	errors.PanicOnError(
-		os.WriteFile(t.EnvrcPath, []byte(content), 0755),
-	)
+	errors.PanicOnError(os.WriteFile(t.EnvrcPath, []byte(content), 0755))
 }

@@ -44,11 +44,7 @@ func Main(
 	headerDefault := ""
 
 	if s := os.Getenv(gitlab.JobToken); s != "" {
-		headerDefault = fmt.Sprintf(
-			"%s=%s",
-			gitlab.JobTokenHeader,
-			s,
-		)
+		headerDefault = fmt.Sprintf("%s=%s", gitlab.JobTokenHeader, s)
 	}
 
 	a := argument.NewInstance(constant.Identity)
@@ -76,10 +72,7 @@ func Main(
 
 	for _, name := range build.OutputDirectories() {
 		for _, systemArchitecture := range build.SystemArchitectures() {
-			if p := build.GuessArchivePath(
-				name,
-				systemArchitecture,
-			); p != "" {
+			if p := build.GuessArchivePath(name, systemArchitecture); p != "" {
 				runs++
 				file := filepath.Base(p)
 				fmt.Printf("Archive: %s\n", file)

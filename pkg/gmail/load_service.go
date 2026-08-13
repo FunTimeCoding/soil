@@ -15,9 +15,7 @@ func (c *Client) loadService() *gmail.Service {
 	token := c.tokenFlow(c.credential, false)
 	result, e := gmail.NewService(
 		c.context,
-		option.WithTokenSource(
-			c.credential.TokenSource(c.context, token),
-		),
+		option.WithTokenSource(c.credential.TokenSource(c.context, token)),
 	)
 	errors.PanicOnError(e)
 	name, _ := key_value.At(c.profile(result).EmailAddress)

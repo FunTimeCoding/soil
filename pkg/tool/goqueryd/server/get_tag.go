@@ -17,7 +17,5 @@ func (s *Server) GetTag(
 
 	sourceType := s.service.GetSourceType(collection, r.Params.Path)
 
-	return server.GetTag200JSONResponse{
-		SourceType: new(string(sourceType)),
-	}, nil
+	return server.GetTag200JSONResponse{SourceType: new(string(sourceType))}, nil
 }

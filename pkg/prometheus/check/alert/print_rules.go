@@ -16,9 +16,7 @@ func printRules(
 
 	for _, r := range c.MustRules().Alert() {
 		if r.RawAlert != nil &&
-			time.Since(
-				r.RawAlert.LastEvaluation,
-			).Round(time.Second) < 1*time.Minute {
+			time.Since(r.RawAlert.LastEvaluation).Round(time.Second) < 1*time.Minute {
 			continue
 		}
 

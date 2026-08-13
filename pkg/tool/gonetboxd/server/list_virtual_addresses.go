@@ -13,9 +13,7 @@ func (s *Server) ListVirtualAddresses(
 	addresses, e := s.client.VirtualMachineAddresses(r.Name)
 
 	if e != nil {
-		return server.ListVirtualAddresses500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.ListVirtualAddresses500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	return server.ListVirtualAddresses200JSONResponse(

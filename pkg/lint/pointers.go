@@ -24,10 +24,7 @@ func Pointers(
 			s.PassLine(line)
 
 			for _, bare := range pointer.ExtractBareLinks(line) {
-				relative, inside := pointer.Relative(
-					path,
-					bare,
-				)
+				relative, inside := pointer.Relative(path, bare)
 
 				if inside && exists(relative) {
 					continue

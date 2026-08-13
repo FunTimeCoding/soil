@@ -15,14 +15,7 @@ func TestReplaceUnique(t *testing.T) {
 		expect  string
 		fail    string
 	}{
-		{
-			"single match",
-			"Hello world",
-			"world",
-			"there",
-			"Hello there",
-			"",
-		},
+		{"single match", "Hello world", "world", "there", "Hello there", ""},
 		{
 			"not found",
 			"Hello world",

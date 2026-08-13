@@ -18,10 +18,7 @@ func TestMarkupClean(t *testing.T) {
 }
 
 func TestMarkup(t *testing.T) {
-	l := lint.Markup(
-		constant.UpperAlfa,
-		strings.NewReader("myKey: myValue\n"),
-	)
+	l := lint.Markup(constant.UpperAlfa, strings.NewReader("myKey: myValue\n"))
 	assertReport(
 		t,
 		"Alfa",

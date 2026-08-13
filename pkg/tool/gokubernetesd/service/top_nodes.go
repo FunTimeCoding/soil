@@ -28,11 +28,10 @@ func (s *Service) TopNodes(
 	)
 
 	if f != nil {
-		if strings.Contains(
-			f.Error(),
-			"could not find the requested resource",
-		) {
-			return nil, fmt.Errorf("metrics API not available - install metrics-server")
+		if strings.Contains(f.Error(), "could not find the requested resource") {
+			return nil, fmt.Errorf(
+				"metrics API not available - install metrics-server",
+			)
 		}
 
 		return nil, f

@@ -10,12 +10,6 @@ func (c *Client) MustCreate(
 	expression string,
 ) {
 	errors.PanicOnError(
-		c.Create(
-			name,
-			instance,
-			summary,
-			description,
-			expression,
-		),
+		c.Create(name, instance, summary, description, expression),
 	)
 }

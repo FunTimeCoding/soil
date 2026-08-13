@@ -19,7 +19,9 @@ func TestSummarize(t *testing.T) {
 	assert.FatalOnError(t, e)
 	body := s.Store.SummaryBySession("session-1")
 	assert.String(t, "Fixed the auth race condition", body)
-	events := s.Store.Events(event_query.New().Kind(constant.Summarize).SetLimit(10))
+	events := s.Store.Events(
+		event_query.New().Kind(constant.Summarize).SetLimit(10),
+	)
 	assert.Count(t, 1, events)
 }
 

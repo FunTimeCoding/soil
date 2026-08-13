@@ -20,9 +20,7 @@ func (s *Server) CloneMachine(
 	c, e := s.service.Client(instance)
 
 	if e != nil {
-		return server.CloneMachine500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.CloneMachine500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	node := ""
@@ -31,9 +29,7 @@ func (s *Server) CloneMachine(
 		node = *r.Params.Node
 	}
 
-	options := &proxmox.VirtualMachineCloneOptions{
-		Name: r.Body.Name,
-	}
+	options := &proxmox.VirtualMachineCloneOptions{Name: r.Body.Name}
 
 	if r.Body.NewIdentifier != nil {
 		options.NewID = int(*r.Body.NewIdentifier)
@@ -51,23 +47,14 @@ func (s *Server) CloneMachine(
 		options.SnapName = *r.Body.Snapshot
 	}
 
-	newID, e := s.service.CloneMachine(
-		c,
-		int(r.Identifier),
-		node,
-		options,
-	)
+	newID, e := s.service.CloneMachine(c, int(r.Identifier), node, options)
 
 	if e != nil {
 		if not_found.Is(e) {
-			return server.CloneMachine404JSONResponse{
-				Error: e.Error(),
-			}, nil
+			return server.CloneMachine404JSONResponse{Error: e.Error()}, nil
 		}
 
-		return server.CloneMachine500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.CloneMachine500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	status := "cloned"

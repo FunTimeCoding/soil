@@ -41,17 +41,10 @@ func Run(
 		notifier.New(),
 		l,
 	)
-	u := web.New(
-		o.Board,
-		v,
-		c,
-		authorizationClient(o),
-	)
+	u := web.New(o.Board, v, c, authorizationClient(o))
 	lifecycle.New(
 		l,
-		lifecycle.WithWorker(
-			worker.New(v, constant.RefreshInterval, l, r),
-		),
+		lifecycle.WithWorker(worker.New(v, constant.RefreshInterval, l, r)),
 		lifecycle.WithServer(
 			server.New(
 				o.Address,

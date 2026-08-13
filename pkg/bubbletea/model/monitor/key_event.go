@@ -52,12 +52,7 @@ func (m *Model) keyEvent(g tea.KeyMsg) (tea.Model, tea.Cmd) {
 		if m.connect {
 			r := m.table.SelectedRow()
 			m.client.Write(
-				join.Comma(
-					[]string{
-						monitorConstant.FlagCommand,
-						r[0],
-					},
-				),
+				join.Comma([]string{monitorConstant.FlagCommand, r[0]}),
 			)
 		}
 

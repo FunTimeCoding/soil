@@ -23,11 +23,7 @@ func TestProfileCollapsesChildrenUnderParent(t *testing.T) {
 		},
 	)
 	var parentID int
-	_, e := fmt.Sscanf(
-		parentResult,
-		"Created memory %d",
-		&parentID,
-	)
+	_, e := fmt.Sscanf(parentResult, "Created memory %d", &parentID)
 	assert.FatalOnError(t, e)
 	childNames := []string{"captureFail", "captureDetail", "clientError"}
 
@@ -37,19 +33,13 @@ func TestProfileCollapsesChildrenUnderParent(t *testing.T) {
 			map[string]any{
 				constant.MemoryName: name,
 				constant.Content:    fmt.Sprintf("%s content", name),
-				constant.Description: fmt.Sprintf(
-					"%s description",
-					name,
-				),
+				constant.Description: fmt.Sprintf("%s description", name),
 				constant.ParentIdentifier: parentID,
 			},
 		)
 	}
 
-	raw := s.MemoryClient.MustCallTool(
-		constant.Profile,
-		map[string]any{},
-	)
+	raw := s.MemoryClient.MustCallTool(constant.Profile, map[string]any{})
 	var profile profileResult
 	assert.FatalOnError(t, json.Unmarshal([]byte(raw), &profile))
 	indexIDs := make([]int64, len(profile.Index))

@@ -50,10 +50,7 @@ func (s *Server) roster(
 		}
 
 		if session.Alias != nil {
-			details = append(
-				details,
-				fmt.Sprintf("alias: %s", *session.Alias),
-			)
+			details = append(details, fmt.Sprintf("alias: %s", *session.Alias))
 		}
 
 		if session.Description != "" {
@@ -61,18 +58,11 @@ func (s *Server) roster(
 		}
 
 		if session.FirstMessage != "" {
-			details = append(
-				details,
-				fmt.Sprintf("%q", session.FirstMessage),
-			)
+			details = append(details, fmt.Sprintf("%q", session.FirstMessage))
 		}
 
 		if len(details) > 0 {
-			line = fmt.Sprintf(
-				"%s\n  %s",
-				line,
-				strings.Join(details, " · "),
-			)
+			line = fmt.Sprintf("%s\n  %s", line, strings.Join(details, " · "))
 		}
 
 		labels, f := s.service.LabelsBySession(session.Identifier)
@@ -85,10 +75,7 @@ func (s *Server) roster(
 			var pips []string
 
 			for _, l := range labels {
-				pips = append(
-					pips,
-					fmt.Sprintf("(%s:%s)", l.Key, l.Value),
-				)
+				pips = append(pips, fmt.Sprintf("(%s:%s)", l.Key, l.Value))
 			}
 
 			line = fmt.Sprintf("%s\n  %s", line, join.Space(pips...))
@@ -101,11 +88,7 @@ func (s *Server) roster(
 		}
 
 		if l != nil {
-			line = fmt.Sprintf(
-				"%s\n  pulse: %s",
-				line,
-				l.Body,
-			)
+			line = fmt.Sprintf("%s\n  pulse: %s", line, l.Body)
 		}
 
 		lines = append(lines, line)

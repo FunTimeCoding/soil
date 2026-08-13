@@ -67,12 +67,7 @@ func (s *Server) handleReloadProcfile() string {
 			continue
 		}
 
-		p := process.New(
-			entry.Name,
-			entry.Command,
-			len(result),
-			s.maxNameWidth,
-		)
+		p := process.New(entry.Name, entry.Command, len(result), s.maxNameWidth)
 		p.Spawn(s.environment.Build(), nil)
 		result = append(result, p)
 	}

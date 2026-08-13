@@ -10,8 +10,5 @@ func Token(
 	r *http.Request,
 	token string,
 ) {
-	r.Header.Set(
-		constant.Authorization,
-		key_value.Space(constant.Token, token),
-	)
+	r.Header.Set(constant.Authorization, key_value.Space(constant.Token, token))
 }

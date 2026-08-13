@@ -14,10 +14,7 @@ func (i *Indexer) List(
 	offset int,
 	full bool,
 ) (*face.ListOutcome, error) {
-	params := &client.GetListParams{
-		Collection: collection,
-		Full:       &full,
-	}
+	params := &client.GetListParams{Collection: collection, Full: &full}
 
 	if len(metadata) > 0 {
 		params.Metadata = &metadata

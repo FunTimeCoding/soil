@@ -32,10 +32,7 @@ func (s *Server) collectionsPage(
 	)
 
 	if len(status.Collections) == 0 {
-		content = append(
-			content,
-			html.P(gomponents.Text("No collections.")),
-		)
+		content = append(content, html.P(gomponents.Text("No collections.")))
 	} else {
 		var rows []gomponents.Node
 

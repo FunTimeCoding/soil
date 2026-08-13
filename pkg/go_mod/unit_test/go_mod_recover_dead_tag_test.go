@@ -16,10 +16,7 @@ func TestIsDeadTag(t *testing.T) {
 }
 
 func TestIsDeadTagNegative(t *testing.T) {
-	assert.False(
-		t,
-		go_mod.IsDeadTag("go: module not found"),
-	)
+	assert.False(t, go_mod.IsDeadTag("go: module not found"))
 }
 
 func TestParseDeadTag(t *testing.T) {

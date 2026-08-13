@@ -13,9 +13,7 @@ func (s *Server) GetStats(
 	result, e := s.habitica.UserStats()
 
 	if e != nil {
-		return server.GetStats500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.GetStats500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	return server.GetStats200JSONResponse(*convert.Stats(result)), nil

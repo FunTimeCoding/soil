@@ -11,9 +11,6 @@ import (
 func (c *Client) Reload(x context.Context) {
 	errors.PanicOnError(chromedp.Run(x, page.Reload()))
 	errors.PanicOnError(
-		chromedp.Run(
-			x,
-			chromedp.WaitReady(constant.BodySelector),
-		),
+		chromedp.Run(x, chromedp.WaitReady(constant.BodySelector)),
 	)
 }

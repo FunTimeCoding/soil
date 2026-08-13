@@ -52,9 +52,7 @@ func (s *Server) searchPage(
 	isHTMX := r.Header.Get("HX-Request") == "true"
 
 	if isHTMX {
-		errors.PanicOnError(
-			gomponents.Group(resultsContent).Render(w),
-		)
+		errors.PanicOnError(gomponents.Group(resultsContent).Render(w))
 
 		return
 	}
@@ -65,15 +63,7 @@ func (s *Server) searchPage(
 		content,
 		html.H3(gomponents.Text(constant.SearchTitle)),
 		searchForm(query, collection, status.Collections),
-		html.Div(
-			html.ID("search-results"),
-			gomponents.Group(resultsContent),
-		),
+		html.Div(html.ID("search-results"), gomponents.Group(resultsContent)),
 	)
-	s.view.RenderPage(
-		w,
-		constant.SearchTitle,
-		constant.SearchPath,
-		content...,
-	)
+	s.view.RenderPage(w, constant.SearchTitle, constant.SearchPath, content...)
 }

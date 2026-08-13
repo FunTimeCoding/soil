@@ -13,10 +13,7 @@ func sourceTypePrefixes(p string) []string {
 	result := make([]string, 0, len(parts))
 
 	for i := len(parts) - 1; i >= 0; i-- {
-		result = append(
-			result,
-			fmt.Sprintf("%s/", join.Slash(parts[:i+1])),
-		)
+		result = append(result, fmt.Sprintf("%s/", join.Slash(parts[:i+1])))
 	}
 
 	result = append(result, "")

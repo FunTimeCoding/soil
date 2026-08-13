@@ -29,10 +29,7 @@ func (c *Client) FillComments(v []*issue.Issue) error {
 	}
 
 	if filled > 0 {
-		fmt.Printf(
-			"Filled comments for %d issue(s)\n",
-			filled,
-		)
+		fmt.Printf("Filled comments for %d issue(s)\n", filled)
 	}
 
 	return nil

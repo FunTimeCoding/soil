@@ -55,10 +55,7 @@ func Import(
 
 				if len(block) == 3 {
 					s.ChangedLine(
-						fmt.Sprintf(
-							"import %s",
-							strings.TrimSpace(block[1]),
-						),
+						fmt.Sprintf("import %s", strings.TrimSpace(block[1])),
 					)
 					s.AddConcern(
 						constant.SingleMultiImportKey,

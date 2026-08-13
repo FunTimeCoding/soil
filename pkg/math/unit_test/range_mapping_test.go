@@ -30,13 +30,7 @@ func TestGenerate(t *testing.T) {
 	assert.Any(
 		t,
 		[]*range_mapping.Mapping{
-			{
-				Range: ranges.Range{
-					L: 0,
-					R: 127673.40987711631,
-				},
-				Value: "Alfa",
-			},
+			{Range: ranges.Range{L: 0, R: 127673.40987711631}, Value: "Alfa"},
 			{
 				Range: ranges.Range{
 					L: 127673.40987711631,
@@ -45,17 +39,11 @@ func TestGenerate(t *testing.T) {
 				Value: "Bravo",
 			},
 			{
-				Range: ranges.Range{
-					L: 255346.81975423262,
-					R: 383020.2296313489,
-				},
+				Range: ranges.Range{L: 255346.81975423262, R: 383020.2296313489},
 				Value: "Charlie",
 			},
 			{
-				Range: ranges.Range{
-					L: 383020.2296313489,
-					R: 510693.63950846525,
-				},
+				Range: ranges.Range{L: 383020.2296313489, R: 510693.63950846525},
 				Value: "Delta",
 			},
 		},

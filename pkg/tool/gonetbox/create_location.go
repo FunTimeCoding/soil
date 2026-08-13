@@ -20,12 +20,7 @@ func createLocation(c *client.Client) *cobra.Command {
 			fmt.Println(c.CreateLocation(arguments[0], site))
 		},
 	}
-	result.Flags().StringVar(
-		&site,
-		"site",
-		"",
-		"site name (required)",
-	)
+	result.Flags().StringVar(&site, "site", "", "site name (required)")
 	errors.PanicOnError(result.MarkFlagRequired("site"))
 
 	return result

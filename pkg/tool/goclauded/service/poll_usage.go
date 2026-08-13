@@ -8,11 +8,7 @@ import (
 func (s *Service) PollUsage() {
 	defer func() {
 		if r := recover(); r != nil {
-			s.logger.Structured(
-				"usage poll failed",
-				"error",
-				r,
-			)
+			s.logger.Structured("usage poll failed", "error", r)
 		}
 	}()
 	browser := site.New()

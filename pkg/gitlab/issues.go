@@ -8,9 +8,7 @@ import (
 
 func (c *Client) Issues() ([]*issue.Issue, error) {
 	result, _, e := c.client.Issues.ListIssues(
-		&gitlab.ListIssuesOptions{
-			ListOptions: constant.DefaultListOptions,
-		},
+		&gitlab.ListIssuesOptions{ListOptions: constant.DefaultListOptions},
 	)
 
 	if e != nil {

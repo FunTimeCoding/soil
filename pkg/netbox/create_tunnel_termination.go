@@ -13,16 +13,16 @@ func (c *Client) CreateTunnelTermination(
 	role string,
 ) (*tunnel_termination.Termination, error) {
 	q := netbox.NewWritableTunnelTerminationRequest(
-		netbox.Int32AsPatchedWritableTunnelTerminationRequestTunnel(&t.Identifier),
+		netbox.Int32AsPatchedWritableTunnelTerminationRequestTunnel(
+			&t.Identifier,
+		),
 		terminationType,
 	)
 	q.SetTerminationId(terminationIdentifier)
-	q.SetRole(
-		netbox.PatchedWritableTunnelTerminationRequestRole(role),
-	)
-	result, _, e := c.client.VpnAPI.VpnTunnelTerminationsCreate(
-		c.context,
-	).WritableTunnelTerminationRequest(*q).Execute()
+	q.SetRole(netbox.PatchedWritableTunnelTerminationRequestRole(role))
+	result, _, e := c.client.VpnAPI.VpnTunnelTerminationsCreate(c.context).WritableTunnelTerminationRequest(
+		*q,
+	).Execute()
 
 	if e != nil {
 		return nil, e

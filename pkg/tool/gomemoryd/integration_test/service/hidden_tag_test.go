@@ -19,10 +19,7 @@ func TestHiddenTagLeavesIndex(t *testing.T) {
 	m, e := o.Service.CreateMemory(p)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, o.Indexer.Pushed)
-	assert.FatalOnError(
-		t,
-		o.Service.AddTags(m.Identifier, []string{"private"}),
-	)
+	assert.FatalOnError(t, o.Service.AddTags(m.Identifier, []string{"private"}))
 	assert.Count(t, 1, o.Indexer.Pushed)
 	assert.Count(t, 1, o.Indexer.Deleted)
 	q := save_option.New()

@@ -16,6 +16,7 @@ func (s *Server) CreateTenant(
 	}
 
 	return server.CreateTenant201JSONResponse{
-		Identifier: t.Identifier, Name: t.Name,
+		Identifier: t.Identifier,
+		Name: t.Name,
 	}, nil
 }

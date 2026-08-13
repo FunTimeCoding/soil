@@ -39,7 +39,5 @@ func (s *Server) GetContainer(
 		return server.GetContainer500JSONResponse(*s.captureDetail(e)), nil
 	}
 
-	return server.GetContainer200JSONResponse(
-		*convert.ContainerDetail(ct),
-	), nil
+	return server.GetContainer200JSONResponse(*convert.ContainerDetail(ct)), nil
 }

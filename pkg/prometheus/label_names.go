@@ -9,12 +9,7 @@ func (c *Client) LabelNames(
 	matches []string,
 	since time.Time,
 ) (*label_result.Result, error) {
-	v, w, e := c.client.LabelNames(
-		c.context,
-		matches,
-		since,
-		time.Now(),
-	)
+	v, w, e := c.client.LabelNames(c.context, matches, since, time.Now())
 
 	if e != nil {
 		return nil, e

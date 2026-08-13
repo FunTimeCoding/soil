@@ -40,11 +40,7 @@ func New(
 	result.Count = len(result.Skips)
 
 	if result.Count > 0 && verbose {
-		fmt.Printf(
-			"Skips (%d): %s\n",
-			result.Count,
-			join.Comma(result.Skips),
-		)
+		fmt.Printf("Skips (%d): %s\n", result.Count, join.Comma(result.Skips))
 	}
 
 	return result

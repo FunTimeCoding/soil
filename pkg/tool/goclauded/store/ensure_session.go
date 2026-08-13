@@ -7,10 +7,7 @@ import (
 
 func (s *Store) EnsureSession(identifier string) (*ensure_result.Result, error) {
 	var i session.Session
-	result := s.database.Where(
-		"identifier = ?",
-		identifier,
-	).Limit(1).Find(&i)
+	result := s.database.Where("identifier = ?", identifier).Limit(1).Find(&i)
 
 	if result.Error != nil {
 		return nil, result.Error
@@ -29,10 +26,7 @@ func (s *Store) EnsureSession(identifier string) (*ensure_result.Result, error) 
 			return nil, e
 		}
 
-		return ensure_result.NewExisting(
-			i.CallsignValue(),
-			previousLastSeen,
-		), nil
+		return ensure_result.NewExisting(i.CallsignValue(), previousLastSeen), nil
 	}
 
 	name, e := s.NextName()
@@ -45,9 +39,7 @@ func (s *Store) EnsureSession(identifier string) (*ensure_result.Result, error) 
 		return ensure_result.Stub(), nil
 	}
 
-	if f := s.database.Create(
-		session.NewRegistered(identifier, name),
-	).Error; f != nil {
+	if f := s.database.Create(session.NewRegistered(identifier, name)).Error; f != nil {
 		return nil, f
 	}
 

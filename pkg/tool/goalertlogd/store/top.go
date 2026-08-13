@@ -45,7 +45,9 @@ func (s *Store) Top(
 			TopRecord{
 				Name:            r.Name,
 				Count:           r.Count,
-				AverageDuration: time.Duration(r.AverageSeconds * float64(time.Second)),
+				AverageDuration: time.Duration(
+					r.AverageSeconds * float64(time.Second),
+				),
 				CurrentlyFiring: r.CurrentlyFiring,
 				Severity:        r.Severity,
 			},

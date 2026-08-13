@@ -23,11 +23,7 @@ func (c *Client) ReadScreen(identifier string) (*screen.Screen, error) {
 	if r.StatusCode != http.StatusOK {
 		b := system.ReadAll(r.Body)
 
-		return screen.Stub(), fmt.Errorf(
-			"read screen: %d: %s",
-			r.StatusCode,
-			b,
-		)
+		return screen.Stub(), fmt.Errorf("read screen: %d: %s", r.StatusCode, b)
 	}
 
 	var result *screen.Screen

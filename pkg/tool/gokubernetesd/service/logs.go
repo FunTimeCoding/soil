@@ -24,11 +24,7 @@ func (s *Service) Logs(
 	}
 
 	if len(pods) == 0 {
-		return "", fmt.Errorf(
-			"no pods found for %s in %s",
-			q.Name,
-			q.Namespace,
-		)
+		return "", fmt.Errorf("no pods found for %s in %s", q.Name, q.Namespace)
 	}
 
 	if len(pods) > 1 {

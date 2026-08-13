@@ -29,10 +29,8 @@ func NewWithPassword(
 		client: secure_shell.Dial(
 			fmt.Sprintf("%s:22", host),
 			&ssh.ClientConfig{
-				User: user,
-				Auth: []ssh.AuthMethod{
-					ssh.Password(password),
-				},
+				User:            user,
+				Auth:            []ssh.AuthMethod{ssh.Password(password)},
 				HostKeyCallback: callback,
 			},
 		),

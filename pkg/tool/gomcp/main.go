@@ -17,8 +17,5 @@ func Main(
 	a := argument.NewInstance(constant.Identity)
 	a.String(argumentConstant.Token, "", "Bearer token for authorization")
 	a.Parse(version, gitHash, buildDate)
-	probe(
-		a.RequiredPositional(0, "URL"),
-		a.GetString(argumentConstant.Token),
-	)
+	probe(a.RequiredPositional(0, "URL"), a.GetString(argumentConstant.Token))
 }

@@ -14,10 +14,7 @@ func (s *Server) PostEmbed(
 
 	if e != nil {
 		return server.PostEmbed500JSONResponse(
-			*s.captureFail(
-				e,
-				constant.UnexpectedError,
-			),
+			*s.captureFail(e, constant.UnexpectedError),
 		), nil
 	}
 

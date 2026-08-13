@@ -25,10 +25,7 @@ func (s *Server) listDeviceLabels(
 		return s.captureFail(resolveFail, "device not found")
 	}
 
-	labels, e := s.store.Labels(
-		netboxConstant.DeviceAddress,
-		d.Identifier,
-	)
+	labels, e := s.store.Labels(netboxConstant.DeviceAddress, d.Identifier)
 
 	if e != nil {
 		return s.captureFail(e, "labels not listed for device")

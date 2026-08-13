@@ -7,10 +7,7 @@ import (
 
 func (c *Client) ListResources() []*mcp.Resource {
 	c.t.Helper()
-	result, e := c.session.ListResources(
-		c.context,
-		&mcp.ListResourcesParams{},
-	)
+	result, e := c.session.ListResources(c.context, &mcp.ListResourcesParams{})
 	assert.FatalOnError(c.t, e)
 
 	return result.Resources

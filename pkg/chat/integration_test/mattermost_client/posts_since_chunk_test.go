@@ -74,13 +74,7 @@ func TestPostsSinceChunks(t *testing.T) {
 					w http.ResponseWriter,
 					q *http.Request,
 				) {
-					web.Encode(
-						w,
-						&model.User{
-							Id:       "delta",
-							Username: "echo",
-						},
-					)
+					web.Encode(w, &model.User{Id: "delta", Username: "echo"})
 				},
 			)
 		},

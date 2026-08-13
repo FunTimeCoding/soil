@@ -10,9 +10,5 @@ func New(
 	outputPath string,
 	r face.Reporter,
 ) *Server {
-	return &Server{
-		store:      s,
-		outputPath: outputPath,
-		reporter:   r,
-	}
+	return &Server{store: s, outputPath: outputPath, reporter: r}
 }

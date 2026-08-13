@@ -13,10 +13,7 @@ func Series() {
 		"SeriesCountByLabelValuePair: %d\n",
 		len(r.SeriesCountByLabelValuePair),
 	)
-	fmt.Printf(
-		"SeriesCountByMetricName: %d\n",
-		len(r.SeriesCountByMetricName),
-	)
+	fmt.Printf("SeriesCountByMetricName: %d\n", len(r.SeriesCountByMetricName))
 	fmt.Printf(
 		"LabelValueCountByLabelName: %d\n",
 		len(r.LabelValueCountByLabelName),

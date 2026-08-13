@@ -45,10 +45,5 @@ func (s *Server) linkIssues(
 		return response.Fail("link failed: %v", h)
 	}
 
-	return response.Success(
-		"%s %s %s",
-		key,
-		linkType,
-		target,
-	)
+	return response.Success("%s %s %s", key, linkType, target)
 }

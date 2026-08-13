@@ -11,14 +11,7 @@ func (s *Site) Probe() {
 		return
 	}
 
-	fmt.Printf(
-		"aria-valuenow: %s\n\n",
-		n.AttributeValue("aria-valuenow"),
-	)
+	fmt.Printf("aria-valuenow: %s\n\n", n.AttributeValue("aria-valuenow"))
 	fmt.Println("--- great-grandparent ---")
-	fmt.Println(
-		s.protocol.Outer(
-			"div:has(> div > div > div[role='meter'])",
-		),
-	)
+	fmt.Println(s.protocol.Outer("div:has(> div > div > div[role='meter'])"))
 }

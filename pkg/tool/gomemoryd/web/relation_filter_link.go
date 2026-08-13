@@ -22,15 +22,8 @@ func relationFilterLink(
 	if value != "" {
 		params := url.Values{}
 		params.Set(constant.Type, value)
-		target = fmt.Sprintf(
-			"%s?%s",
-			constant.RelationsPath,
-			params.Encode(),
-		)
+		target = fmt.Sprintf("%s?%s", constant.RelationsPath, params.Encode())
 	}
 
-	return html.A(
-		gomponents.Attr("href", target),
-		gomponents.Text(label),
-	)
+	return html.A(gomponents.Attr("href", target), gomponents.Text(label))
 }

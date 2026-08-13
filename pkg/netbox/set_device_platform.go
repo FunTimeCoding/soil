@@ -22,11 +22,7 @@ func (c *Client) SetDevicePlatform(
 	}
 
 	q := netbox.NewPatchedWritableDeviceWithConfigContextRequest()
-	q.SetPlatform(
-		netbox.DeviceTypeRequestDefaultPlatform{
-			Int32: &p.Identifier,
-		},
-	)
+	q.SetPlatform(netbox.DeviceTypeRequestDefaultPlatform{Int32: &p.Identifier})
 
 	return c.updateDevice(d, q)
 }

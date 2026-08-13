@@ -17,9 +17,7 @@ func listTables(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			p := &client.ListTablesParams{
-				Instance: instancePointer(instance),
-			}
+			p := &client.ListTablesParams{Instance: instancePointer(instance)}
 
 			if schema != "" {
 				p.Schema = &schema

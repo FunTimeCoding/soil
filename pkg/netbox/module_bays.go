@@ -6,9 +6,9 @@ import (
 )
 
 func (c *Client) ModuleBays() ([]*module_bay.Bay, error) {
-	result, _, e := c.client.DcimAPI.DcimModuleBaysList(
-		c.context,
-	).Limit(constant.PageLimit).Execute()
+	result, _, e := c.client.DcimAPI.DcimModuleBaysList(c.context).Limit(
+		constant.PageLimit,
+	).Execute()
 
 	if e != nil {
 		return nil, e

@@ -13,9 +13,7 @@ func (s *Server) ListWirelessNetworks(
 	networks, e := s.client.WirelessNetworks()
 
 	if e != nil {
-		return server.ListWirelessNetworks500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.ListWirelessNetworks500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	return server.ListWirelessNetworks200JSONResponse(

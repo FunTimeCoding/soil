@@ -8,9 +8,11 @@ import (
 
 func (c *Client) IssueV3(key string) error {
 	status, body, e := c.basic.Get(
-		c.basic.Base().Copy().Base(
-			constant.JiraBase,
-		).Path("%s/%s", constant.JiraIssue, key).Set(
+		c.basic.Base().Copy().Base(constant.JiraBase).Path(
+			"%s/%s",
+			constant.JiraIssue,
+			key,
+		).Set(
 			web.ParameterFields,
 			constant.JiraAllFields,
 		).String(),

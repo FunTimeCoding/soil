@@ -26,7 +26,9 @@ func TestUserInvolved(t *testing.T) {
 			[]*override.Override{},
 			[]*rotation.Rotation{
 				{
-					Participants: []og.Participant{{Username: constant.UpperAlfa}},
+					Participants: []og.Participant{
+						{Username: constant.UpperAlfa},
+					},
 				},
 			},
 		),

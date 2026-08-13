@@ -24,9 +24,7 @@ import (
 func New(t *testing.T) *Tester {
 	t.Helper()
 	q := base.New(t)
-	c, e := client.NewClient(
-		fmt.Sprintf("http://localhost:%d", q.Port()),
-	)
+	c, e := client.NewClient(fmt.Sprintf("http://localhost:%d", q.Port()))
 	errors.PanicOnError(e)
 	i := memory_indexer.New(c)
 	s := store.New(connection.NewMemory())

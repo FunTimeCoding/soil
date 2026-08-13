@@ -17,9 +17,9 @@ func (c *Client) CreateDeviceType(
 		model,
 		slug(model),
 	)
-	result, _, e := c.client.DcimAPI.DcimDeviceTypesCreate(
-		c.context,
-	).WritableDeviceTypeRequest(*q).Execute()
+	result, _, e := c.client.DcimAPI.DcimDeviceTypesCreate(c.context).WritableDeviceTypeRequest(
+		*q,
+	).Execute()
 
 	if e != nil {
 		return nil, e

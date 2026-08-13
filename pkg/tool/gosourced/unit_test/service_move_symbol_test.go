@@ -192,10 +192,7 @@ func TestMoveCycle(t *testing.T) {
 }
 
 func TestMoveDependency(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		serviceTestdata("move-dependency/src"),
-	)
+	d := testutil.PrepareTestPackage(t, serviceTestdata("move-dependency/src"))
 	s := testService()
 	r, e := s.MoveSymbol(
 		d,

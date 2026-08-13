@@ -40,10 +40,7 @@ func Main(
 	o.PersistentFlags().StringVar(
 		&host,
 		"host",
-		environment.Fallback(
-			memoryConstant.HostEnvironment,
-			web.Localhost,
-		),
+		environment.Fallback(memoryConstant.HostEnvironment, web.Localhost),
 		"gomemoryd host",
 	)
 	o.PersistentFlags().IntVar(

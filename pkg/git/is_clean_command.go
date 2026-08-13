@@ -6,9 +6,5 @@ import (
 )
 
 func IsCleanCommand() bool {
-	return system.Run(
-		constant.Command,
-		constant.Status,
-		constant.Porcelain,
-	) == ""
+	return system.Run(constant.Command, constant.Status, constant.Porcelain) == ""
 }

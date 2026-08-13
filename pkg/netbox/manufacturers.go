@@ -7,9 +7,7 @@ func (c *Client) Manufacturers() ([]*manufacturer.Manufacturer, error) {
 		return c.cache.Manufacturers, nil
 	}
 
-	result, _, e := c.client.DcimAPI.DcimManufacturersList(
-		c.context,
-	).Execute()
+	result, _, e := c.client.DcimAPI.DcimManufacturersList(c.context).Execute()
 
 	if e != nil {
 		return nil, e

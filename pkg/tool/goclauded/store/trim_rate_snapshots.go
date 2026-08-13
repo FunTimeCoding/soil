@@ -7,9 +7,8 @@ import (
 
 func (s *Store) TrimRateSnapshots() {
 	errors.PanicOnError(
-		s.database.Where(
-			"created_at < ?",
-			s.clock().AddDate(0, 0, -7),
-		).Delete(rate_snapshot.Stub()).Error,
+		s.database.Where("created_at < ?", s.clock().AddDate(0, 0, -7)).Delete(
+			rate_snapshot.Stub(),
+		).Error,
 	)
 }

@@ -31,15 +31,11 @@ func Main(
 	o.ClientIdentifier = environment.Optional(
 		constant.ClientIdentifierEnvironment,
 	)
-	o.ClientSecret = environment.Optional(
-		constant.ClientSecretEnvironment,
-	)
+	o.ClientSecret = environment.Optional(constant.ClientSecretEnvironment)
 	o.EncryptionSecret = environment.Optional(
 		constant.EncryptionSecretEnvironment,
 	)
-	o.PublicLocator = environment.Optional(
-		constant.PublicLocatorEnvironment,
-	)
+	o.PublicLocator = environment.Optional(constant.PublicLocatorEnvironment)
 	o.Version = version
 	Run(o, r)
 }

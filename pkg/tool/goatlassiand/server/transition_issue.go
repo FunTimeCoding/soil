@@ -9,13 +9,8 @@ func (s *Server) TransitionIssue(
 	_ context.Context,
 	r server.TransitionIssueRequestObject,
 ) (server.TransitionIssueResponseObject, error) {
-	if e := s.jira.Transition(
-		r.Key,
-		r.Body.TransitionIdentifier,
-	); e != nil {
-		return server.TransitionIssue500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+	if e := s.jira.Transition(r.Key, r.Body.TransitionIdentifier); e != nil {
+		return server.TransitionIssue500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	return server.TransitionIssue204Response{}, nil

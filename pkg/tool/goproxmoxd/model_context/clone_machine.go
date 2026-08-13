@@ -34,9 +34,7 @@ func (s *Server) CloneMachine(
 		return s.captureDetail(e)
 	}
 
-	options := &proxmox.VirtualMachineCloneOptions{
-		Name: a.Name,
-	}
+	options := &proxmox.VirtualMachineCloneOptions{Name: a.Name}
 
 	if a.NewID > 0 {
 		options.NewID = a.NewID
@@ -65,9 +63,6 @@ func (s *Server) CloneMachine(
 	}
 
 	return response.SuccessAny(
-		map[string]any{
-			"identifier": newID,
-			"status":     "cloned",
-		},
+		map[string]any{"identifier": newID, "status": "cloned"},
 	)
 }

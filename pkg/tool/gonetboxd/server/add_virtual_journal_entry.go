@@ -16,16 +16,10 @@ func (s *Server) AddVirtualJournalEntry(
 		kind = *r.Body.Kind
 	}
 
-	result, e := s.client.AddVirtualJournalEntry(
-		r.Name,
-		kind,
-		r.Body.Comments,
-	)
+	result, e := s.client.AddVirtualJournalEntry(r.Name, kind, r.Body.Comments)
 
 	if e != nil {
-		return server.AddVirtualJournalEntry500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.AddVirtualJournalEntry500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	return server.AddVirtualJournalEntry201JSONResponse(

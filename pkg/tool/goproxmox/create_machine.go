@@ -35,10 +35,7 @@ func createMachine(c *command_context.Context) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			body := client.CreateMachineJSONRequestBody{
-				Node: node,
-				Name: name,
-			}
+			body := client.CreateMachineJSONRequestBody{Node: node, Name: name}
 
 			if diskImport != "" {
 				body.DiskImport = &diskImport
@@ -113,12 +110,7 @@ func createMachine(c *command_context.Context) *cobra.Command {
 	}
 	result.Flags().StringVar(&node, "node", "", "target node")
 	result.Flags().StringVar(&name, "name", "", "VM name")
-	result.Flags().StringVar(
-		&diskImport,
-		"disk-import",
-		"",
-		"import-from path",
-	)
+	result.Flags().StringVar(&diskImport, "disk-import", "", "import-from path")
 	result.Flags().IntVar(&diskSize, "disk-size", 0, "disk size in GiB")
 	result.Flags().StringVar(
 		&diskStorage,

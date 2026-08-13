@@ -5,9 +5,5 @@ func NewWordUsage(
 	category string,
 	used bool,
 ) *WordUsage {
-	return &WordUsage{
-		Word:     word,
-		Category: category,
-		Used:     used,
-	}
+	return &WordUsage{Word: word, Category: category, Used: used}
 }

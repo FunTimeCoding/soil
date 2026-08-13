@@ -19,10 +19,7 @@ func gatherTypeEntries(
 	named, okay := typeObject.Type().(*types.Named)
 
 	if !okay {
-		return nil, fmt.Sprintf(
-			"%s is not a named type",
-			typeObject.Name(),
-		)
+		return nil, fmt.Sprintf("%s is not a named type", typeObject.Name())
 	}
 
 	objects := []types.Object{typeObject}
@@ -37,10 +34,7 @@ func gatherTypeEntries(
 		file, declaration, spec := findDeclarationNode(p, o)
 
 		if declaration == nil {
-			return nil, fmt.Sprintf(
-				"declaration not found: %s",
-				o.Name(),
-			)
+			return nil, fmt.Sprintf("declaration not found: %s", o.Name())
 		}
 
 		node := ast.Node(declaration)
@@ -52,9 +46,7 @@ func gatherTypeEntries(
 		name := targetFile
 
 		if name == "" {
-			name = filepath.Base(
-				set.Position(file.Pos()).Filename,
-			)
+			name = filepath.Base(set.Position(file.Pos()).Filename)
 		}
 
 		result = append(

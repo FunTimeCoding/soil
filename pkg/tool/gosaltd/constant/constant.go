@@ -5,11 +5,7 @@ import (
 	"time"
 )
 
-var Identity = identity.New(
-	"gosaltd",
-	"Salt highstate runner",
-	"gosaltd",
-).WithInstructions(
+var Identity = identity.New("gosaltd", "Salt highstate runner", "gosaltd").WithInstructions(
 	"Salt highstate runner - trigger highstate on all minions and check results. Call sync to pull latest code. Use trigger with update and synchronous flags for single-call deploy. Runs execute asynchronously by default; use runs and run tools to poll for completion and read output.",
 )
 

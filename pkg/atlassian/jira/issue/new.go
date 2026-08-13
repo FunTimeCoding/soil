@@ -13,9 +13,7 @@ func New(
 	o *option.Issue,
 ) *Issue {
 	result := Stub()
-	result.MonitorIdentifier = constant.GoJira.StringIdentifier(
-		v.Key,
-	)
+	result.MonitorIdentifier = constant.GoJira.StringIdentifier(v.Key)
 	result.Key = v.Key
 	result.Summary = strings.TrimSpace(v.Fields.Summary)
 	result.Description = strings.TrimSpace(v.Fields.Description)

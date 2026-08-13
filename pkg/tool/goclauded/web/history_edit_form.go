@@ -34,9 +34,7 @@ func (s *Server) historyEditForm(
 		gomponents.Group(
 			[]gomponents.Node{
 				html.Td(
-					gomponents.Text(
-						event.CreatedAt.Local().Format("15:04"),
-					),
+					gomponents.Text(event.CreatedAt.Local().Format("15:04")),
 				),
 				html.Td(
 					html.Textarea(

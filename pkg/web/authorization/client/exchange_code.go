@@ -22,10 +22,7 @@ func (c *Client) exchangeCode(
 		"client_secret": {c.secret},
 		"code_verifier": {verifier},
 	}
-	r, e := http.PostForm(
-		join.Empty(c.issuer, "/token"),
-		form,
-	)
+	r, e := http.PostForm(join.Empty(c.issuer, "/token"), form)
 	errors.PanicOnError(e)
 
 	defer errors.PanicClose(r.Body)

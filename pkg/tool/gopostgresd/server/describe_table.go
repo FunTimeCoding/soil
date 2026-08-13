@@ -22,12 +22,7 @@ func (s *Server) DescribeTable(
 		schema = *r.Params.Schema
 	}
 
-	rows, e := s.service.DescribeTable(
-		c,
-		instance,
-		schema,
-		r.Table,
-	)
+	rows, e := s.service.DescribeTable(c, instance, schema, r.Table)
 
 	if e != nil {
 		return server.DescribeTable500JSONResponse(

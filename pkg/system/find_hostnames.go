@@ -34,10 +34,7 @@ func FindHostnames(host string) ([]string, error) {
 		result = names
 
 		for i := range result {
-			result[i] = strings.TrimSuffix(
-				result[i],
-				constant.CurrentDirectory,
-			)
+			result[i] = strings.TrimSuffix(result[i], constant.CurrentDirectory)
 		}
 	} else {
 		result = []string{host}

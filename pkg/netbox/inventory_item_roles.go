@@ -6,9 +6,9 @@ import (
 )
 
 func (c *Client) InventoryItemRoles() ([]*inventory_item_role.Role, error) {
-	result, _, e := c.client.DcimAPI.DcimInventoryItemRolesList(
-		c.context,
-	).Limit(constant.PageLimit).Execute()
+	result, _, e := c.client.DcimAPI.DcimInventoryItemRolesList(c.context).Limit(
+		constant.PageLimit,
+	).Execute()
 
 	if e != nil {
 		return nil, e

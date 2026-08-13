@@ -41,11 +41,7 @@ func (s *Server) getIssue(
 		t = p.GetIssueTypeWithName(i.Type)
 	}
 
-	result := convert.JiraIssueCustomFields(
-		i,
-		t,
-		includeComments,
-	)
+	result := convert.JiraIssueCustomFields(i, t, includeComments)
 	value := i.CustomValue(constant.ChecklistField)
 
 	if value != "" &&

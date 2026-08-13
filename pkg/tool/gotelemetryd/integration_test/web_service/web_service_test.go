@@ -36,10 +36,7 @@ func TestWebService(t *testing.T) {
 		},
 	)
 	assert.FatalOnError(t, e)
-	events, e := c.GetEventsWithResponse(
-		x,
-		&client.GetEventsParams{},
-	)
+	events, e := c.GetEventsWithResponse(x, &client.GetEventsParams{})
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusOK, events.StatusCode())
 	assert.Count(t, 2, *events.JSON200)
@@ -49,10 +46,7 @@ func TestWebService(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, *filtered.JSON200)
-	summary, e := c.GetSummaryWithResponse(
-		x,
-		&client.GetSummaryParams{},
-	)
+	summary, e := c.GetSummaryWithResponse(x, &client.GetSummaryParams{})
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusOK, summary.StatusCode())
 	assert.NotEmpty(t, *summary.JSON200)

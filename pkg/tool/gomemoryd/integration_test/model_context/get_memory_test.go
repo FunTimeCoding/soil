@@ -63,10 +63,6 @@ func TestGetMemoryIncludesRelated(t *testing.T) {
 	assert.Count(t, 1, result.Related)
 	assert.Integer64(t, 2, result.Related[0].Identifier)
 	assert.String(t, "deployment", result.Related[0].Name)
-	assert.String(
-		t,
-		"deployment description",
-		result.Related[0].Description,
-	)
+	assert.String(t, "deployment description", result.Related[0].Description)
 	assert.Count(t, 2, result.Related[0].Tags)
 }

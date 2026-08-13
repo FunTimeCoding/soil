@@ -21,10 +21,7 @@ func TestHeaders(t *testing.T) {
 		},
 		hypertext.Headers(
 			hypertext.Document(
-				fixture.File(
-					constant.HypertextPath,
-					"test.html",
-				),
+				fixture.File(constant.HypertextPath, "test.html"),
 			),
 		),
 	)

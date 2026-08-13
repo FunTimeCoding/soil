@@ -22,23 +22,14 @@ func TestConstantPlacementHomesPass(t *testing.T) {
 	v.WriteString("pkg/constant/constant.go", "package constant\n")
 	v.WriteString("pkg/alfa/constant/constant.go", "package constant\n")
 	v.WriteString("pkg/alfa/constant/style.go", "package constant\n")
-	v.WriteString(
-		"pkg/tool/gotestd/constant/constant.go",
-		"package constant\n",
-	)
+	v.WriteString("pkg/tool/gotestd/constant/constant.go", "package constant\n")
 	assert.Integer(t, 0, len(scan.ConstantPlacement(v)))
 }
 
 func TestConstantPlacementDepthFlagged(t *testing.T) {
 	v := virtual_file_system.New()
-	v.WriteString(
-		"pkg/alfa/deep/constant/constant.go",
-		"package constant\n",
-	)
-	v.WriteString(
-		"cmd/example/alfa/constant/constant.go",
-		"package constant\n",
-	)
+	v.WriteString("pkg/alfa/deep/constant/constant.go", "package constant\n")
+	v.WriteString("cmd/example/alfa/constant/constant.go", "package constant\n")
 	v.WriteString("pkg/tool/constant/constant.go", "package constant\n")
 	result := scan.ConstantPlacement(v)
 	assert.Integer(t, 3, len(result))
@@ -59,10 +50,7 @@ func TestConstantPlacementNestedFlagged(t *testing.T) {
 
 func TestConstantPlacementNestedStrayPair(t *testing.T) {
 	v := virtual_file_system.New()
-	v.WriteString(
-		"pkg/constant/directory/constant.go",
-		"package directory\n",
-	)
+	v.WriteString("pkg/constant/directory/constant.go", "package directory\n")
 	result := scan.ConstantPlacement(v)
 	assert.Integer(t, 2, len(result))
 	assert.String(t, "constant_nested", result[0].Key)

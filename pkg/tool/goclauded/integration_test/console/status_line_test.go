@@ -13,13 +13,9 @@ func TestStatusLineRendersAndStores(t *testing.T) {
 	defer s.Close()
 	c := console_tester.New(t, s.Port())
 	c.Register("11111111-2222-3333-4444-555555555555")
-	line := c.StatusLine(
-		[]byte(fixture.Read("claude", "status-line.json")),
-	)
+	line := c.StatusLine([]byte(fixture.Read("claude", "status-line.json")))
 	assert.String(t, "18% context", line)
-	record, e := s.Service.GetSession(
-		"11111111-2222-3333-4444-555555555555",
-	)
+	record, e := s.Service.GetSession("11111111-2222-3333-4444-555555555555")
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 18, record.ContextPercent)
 	assert.Integer(t, 1000000, record.ContextWindow)

@@ -11,9 +11,5 @@ func New(
 	p *worker.Worker,
 	r face.Reporter,
 ) *Server {
-	return &Server{
-		store:    s,
-		worker:   p,
-		reporter: r,
-	}
+	return &Server{store: s, worker: p, reporter: r}
 }

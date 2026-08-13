@@ -16,11 +16,7 @@ func originRemote(
 	result := git.Remote(system.WorkDirectory(), m, constant.OriginRemote)
 
 	if result == nil {
-		system.Exitf(
-			1,
-			"could not identify provider: %s\n",
-			o.GitLabHost,
-		)
+		system.Exitf(1, "could not identify provider: %s\n", o.GitLabHost)
 		// make static analyzer happy
 		result = remote.New("", "", "")
 	}

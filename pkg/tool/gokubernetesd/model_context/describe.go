@@ -42,10 +42,7 @@ func (s *Server) Describe(
 		return s.captureFail(f, "describe resource")
 	}
 
-	m := map[string]any{
-		"resource": result.Resource,
-		"events":   result.Events,
-	}
+	m := map[string]any{"resource": result.Resource, "events": result.Events}
 
 	return formatMarkup(m, result.Filtered)
 }

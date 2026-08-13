@@ -62,11 +62,7 @@ func TestDetailLinkMarkdown(t *testing.T) {
 		"Jira",
 		"",
 	)
-	assert.String(
-		t,
-		"a\n  [Jira](https://example.org)",
-		s.Format(),
-	)
+	assert.String(t, "a\n  [Jira](https://example.org)", s.Format())
 }
 
 func TestDetailLinkMarkdownPrefix(t *testing.T) {

@@ -16,15 +16,10 @@ func TestComplete(t *testing.T) {
 	a.CheckLive()
 	a.MustCallTool(
 		constant.Complete,
-		map[string]any{
-			constant.Message: "search index and refresh implemented",
-		},
+		map[string]any{constant.Message: "search index and refresh implemented"},
 	)
 	r := a.CheckLive()
-	completions := clientEntriesByKind(
-		r.Entries,
-		constant.QueueSessionComplete,
-	)
+	completions := clientEntriesByKind(r.Entries, constant.QueueSessionComplete)
 	assert.True(t, len(completions) > 0)
 	assert.StringContains(t, "building search index", completions[0].Body)
 }
@@ -55,9 +50,7 @@ func TestCompleteAndReannounce(t *testing.T) {
 	a.CheckLive()
 	a.MustCallTool(
 		constant.Complete,
-		map[string]any{
-			constant.Message: "done with first",
-		},
+		map[string]any{constant.Message: "done with first"},
 	)
 	a.Announce(a.Name(), "second task")
 	r := a.CheckLive()
@@ -74,9 +67,7 @@ func TestCompleteWithExplicitTopic(t *testing.T) {
 	a.Announce(a.Name(), "main work")
 	a.MustCallTool(
 		constant.Complete,
-		map[string]any{
-			constant.Message: "main work done",
-		},
+		map[string]any{constant.Message: "main work done"},
 	)
 	a.MustCallTool(
 		constant.Complete,
@@ -96,17 +87,10 @@ func TestCompleteNoTopicNoAnnounce(t *testing.T) {
 	a := s.NewSession(t)
 	defer a.Close()
 	a.Announce(a.Name(), "work")
-	a.MustCallTool(
-		constant.Complete,
-		map[string]any{
-			constant.Message: "done",
-		},
-	)
+	a.MustCallTool(constant.Complete, map[string]any{constant.Message: "done"})
 	result := a.MustCallToolError(
 		constant.Complete,
-		map[string]any{
-			constant.Message: "nothing to complete",
-		},
+		map[string]any{constant.Message: "nothing to complete"},
 	)
 	assert.StringContains(t, "no active topic", result)
 }
@@ -118,9 +102,7 @@ func TestCompleteBeforeAnnounce(t *testing.T) {
 	defer a.Close()
 	result := a.MustCallToolError(
 		constant.Complete,
-		map[string]any{
-			constant.Message: "nothing to complete",
-		},
+		map[string]any{constant.Message: "nothing to complete"},
 	)
 	assert.StringContains(t, "announce first", result)
 }

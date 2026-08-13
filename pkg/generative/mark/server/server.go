@@ -55,10 +55,7 @@ func (b *Builder) Server() *server.MCPServer {
 	}
 
 	if b.resources {
-		options = append(
-			options,
-			server.WithResourceCapabilities(true, false),
-		)
+		options = append(options, server.WithResourceCapabilities(true, false))
 	}
 
 	return server.NewMCPServer(b.name, b.version, options...)

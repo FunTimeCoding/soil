@@ -45,20 +45,12 @@ func Lint(
 			)
 		} else {
 			r.AddConcern(
-				concern.NewFile(
-					"empty_directory",
-					"empty directory",
-					p,
-					false,
-				),
+				concern.NewFile("empty_directory", "empty directory", p, false),
 			)
 		}
 	}
 
-	for _, p := range system.FilesRecursive(
-		constant.CurrentDirectory,
-		verbose,
-	) {
+	for _, p := range system.FilesRecursive(constant.CurrentDirectory, verbose) {
 		if Skipped(skip, p) {
 			if verbose {
 				fmt.Printf("Skip file: %s\n", p)
@@ -78,22 +70,10 @@ func Lint(
 		if fix {
 			system.Remove(p)
 			r.AddConcern(
-				concern.NewFile(
-					"empty_file",
-					"removed empty file",
-					p,
-					true,
-				),
+				concern.NewFile("empty_file", "removed empty file", p, true),
 			)
 		} else {
-			r.AddConcern(
-				concern.NewFile(
-					"empty_file",
-					"empty file",
-					p,
-					false,
-				),
-			)
+			r.AddConcern(concern.NewFile("empty_file", "empty file", p, false))
 		}
 	}
 

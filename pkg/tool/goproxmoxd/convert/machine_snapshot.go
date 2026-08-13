@@ -6,9 +6,7 @@ import (
 )
 
 func MachineSnapshot(s *proxmox.VirtualMachineSnapshot) *server.Snapshot {
-	result := &server.Snapshot{
-		Name: s.Name,
-	}
+	result := &server.Snapshot{Name: s.Name}
 
 	if s.Description != "" {
 		result.Description = &s.Description

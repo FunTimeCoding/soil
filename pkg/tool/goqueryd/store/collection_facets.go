@@ -90,10 +90,7 @@ func (s *Store) CollectionFacets(
 
 	for _, key := range sorted {
 		values := counts[key]
-		f := Facet{
-			Key:      key,
-			Distinct: len(values),
-		}
+		f := Facet{Key: key, Distinct: len(values)}
 
 		if f.Distinct <= threshold {
 			f.Values = values

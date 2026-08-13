@@ -13,12 +13,8 @@ func (s *Server) ListProjects(
 	result, e := s.jira.Projects()
 
 	if e != nil {
-		return server.ListProjects500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.ListProjects500JSONResponse(*s.captureDetail(e)), nil
 	}
 
-	return server.ListProjects200JSONResponse(
-		convert.JiraProjects(result),
-	), nil
+	return server.ListProjects200JSONResponse(convert.JiraProjects(result)), nil
 }

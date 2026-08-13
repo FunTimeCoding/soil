@@ -23,11 +23,7 @@ func Main(
 		false,
 		"Print compliance tables instead of lint-style concerns",
 	)
-	a.Boolean(
-		argumentConstant.Web,
-		false,
-		"Print what each web frontend uses",
-	)
+	a.Boolean(argumentConstant.Web, false, "Print what each web frontend uses")
 	a.Parse(version, gitHash, buildDate)
 	roots := a.Positionals()
 

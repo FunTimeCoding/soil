@@ -12,11 +12,7 @@ import (
 )
 
 func (c *Client) do(path string) (json.RawMessage, error) {
-	r, e := http.NewRequest(
-		http.MethodGet,
-		join.Empty(c.base, path),
-		nil,
-	)
+	r, e := http.NewRequest(http.MethodGet, join.Empty(c.base, path), nil)
 
 	if e != nil {
 		return nil, e

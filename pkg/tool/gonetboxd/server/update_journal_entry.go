@@ -21,16 +21,10 @@ func (s *Server) UpdateJournalEntry(
 		comments = *r.Body.Comments
 	}
 
-	result, e := s.client.UpdateJournalEntry(
-		r.Identifier,
-		kind,
-		comments,
-	)
+	result, e := s.client.UpdateJournalEntry(r.Identifier, kind, comments)
 
 	if e != nil {
-		return server.UpdateJournalEntry500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.UpdateJournalEntry500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	return server.UpdateJournalEntry200JSONResponse(

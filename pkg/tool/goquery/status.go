@@ -31,11 +31,7 @@ func status(c *client.Client) *cobra.Command {
 
 			for _, v := range s.Collections {
 				if v.Path == "" {
-					fmt.Printf(
-						"  %s: %d documents\n",
-						v.Name,
-						v.DocumentCount,
-					)
+					fmt.Printf("  %s: %d documents\n", v.Name, v.DocumentCount)
 				} else {
 					fmt.Printf(
 						"  %s: %d documents (%s %s)\n",

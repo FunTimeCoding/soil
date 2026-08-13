@@ -7,9 +7,9 @@ import (
 
 func (c *Client) DeviceModuleBays(device string) ([]*module_bay.Bay, error) {
 	fmt.Printf("Name: %s\n", device)
-	result, _, e := c.client.DcimAPI.DcimModuleBaysList(
-		c.context,
-	).Device([]*string{&device}).Execute()
+	result, _, e := c.client.DcimAPI.DcimModuleBaysList(c.context).Device(
+		[]*string{&device},
+	).Execute()
 
 	if e != nil {
 		return nil, e

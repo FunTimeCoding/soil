@@ -11,7 +11,9 @@ import (
 
 func Alternate() {
 	// https://github.com/liushuangls/go-anthropic
-	c := anthropic.NewClient(environment.Required(constant.AnthropicTokenEnvironment))
+	c := anthropic.NewClient(
+		environment.Required(constant.AnthropicTokenEnvironment),
+	)
 	r, e := c.CreateMessages(
 		context.Background(),
 		anthropic.MessagesRequest{

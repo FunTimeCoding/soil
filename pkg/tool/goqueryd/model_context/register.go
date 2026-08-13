@@ -32,7 +32,9 @@ func (s *Server) register() {
 			),
 			mcp.WithBoolean(
 				constant.Full,
-				mcp.Description("Include full document body in results (default false)"),
+				mcp.Description(
+					"Include full document body in results (default false)",
+				),
 			),
 			mcp.WithString(
 				constant.SourceType,
@@ -40,7 +42,9 @@ func (s *Server) register() {
 			),
 			mcp.WithObject(
 				constant.Metadata,
-				mcp.Description("Filter results by metadata key-value pairs (exact match)"),
+				mcp.Description(
+					"Filter results by metadata key-value pairs (exact match)",
+				),
 			),
 		),
 		s.search,
@@ -63,7 +67,9 @@ func (s *Server) register() {
 			mcp.WithString(
 				constant.Path,
 				mcp.Required(),
-				mcp.Description("Document path (qmd://collection/path or collection/path)"),
+				mcp.Description(
+					"Document path (qmd://collection/path or collection/path)",
+				),
 			),
 		),
 		s.get,
@@ -85,11 +91,15 @@ func (s *Server) register() {
 			),
 			mcp.WithObject(
 				constant.Metadata,
-				mcp.Description("Filter results by metadata key-value pairs (exact match)"),
+				mcp.Description(
+					"Filter results by metadata key-value pairs (exact match)",
+				),
 			),
 			mcp.WithNumber(
 				generative.ParameterLimit,
-				mcp.Description("Maximum number of results (default 10, 0 for all)"),
+				mcp.Description(
+					"Maximum number of results (default 10, 0 for all)",
+				),
 			),
 			mcp.WithNumber(
 				generative.ParameterOffset,
@@ -110,7 +120,9 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				constant.Collection,
-				mcp.Description("Restrict to a specific collection (omit for all)"),
+				mcp.Description(
+					"Restrict to a specific collection (omit for all)",
+				),
 			),
 		),
 		s.index,
@@ -236,7 +248,9 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				constant.SourceType,
-				mcp.Description("Source type tag (convenience alias for metadata.source_type)"),
+				mcp.Description(
+					"Source type tag (convenience alias for metadata.source_type)",
+				),
 			),
 			mcp.WithObject(
 				constant.Metadata,
@@ -281,7 +295,9 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				constant.SourceType,
-				mcp.Description("Source type to set (omit to get, empty string to remove)"),
+				mcp.Description(
+					"Source type to set (omit to get, empty string to remove)",
+				),
 			),
 		),
 		s.tag,
@@ -289,9 +305,7 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ListTags,
-			mcp.WithDescription(
-				"List all configured source type tags.",
-			),
+			mcp.WithDescription("List all configured source type tags."),
 		),
 		s.listTags,
 	)
@@ -308,7 +322,9 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				constant.Key,
-				mcp.Description("Specific key to expand (shows all values regardless of cardinality)"),
+				mcp.Description(
+					"Specific key to expand (shows all values regardless of cardinality)",
+				),
 			),
 		),
 		s.listMetadata,

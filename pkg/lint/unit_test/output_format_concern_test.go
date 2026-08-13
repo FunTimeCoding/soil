@@ -91,14 +91,7 @@ func TestFormatLineZeroNoLineNumber(t *testing.T) {
 		t,
 		"pkg/foo.go: finding",
 		output.FormatConcern(
-			concern.NewLine(
-				"test",
-				"finding",
-				"pkg/foo.go",
-				0,
-				"",
-				false,
-			),
+			concern.NewLine("test", "finding", "pkg/foo.go", 0, "", false),
 		),
 	)
 }

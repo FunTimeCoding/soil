@@ -10,9 +10,9 @@ func (c *Client) Tenants() ([]*tenant.Tenant, error) {
 		return c.cache.Tenants, nil
 	}
 
-	result, _, e := c.client.TenancyAPI.TenancyTenantsList(
-		c.context,
-	).Limit(constant.PageLimit).Execute()
+	result, _, e := c.client.TenancyAPI.TenancyTenantsList(c.context).Limit(
+		constant.PageLimit,
+	).Execute()
 
 	if e != nil {
 		return nil, e

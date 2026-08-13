@@ -14,9 +14,11 @@ func TestHelper(t *testing.T) {
 		t,
 		"http://localhost/a",
 		helper.ToWebLink(
-			locator.New(
-				webConstant.Localhost,
-			).Insecure().Base(constant.Interface).Path("/a").String(),
+			locator.New(webConstant.Localhost).Insecure().Base(
+				constant.Interface,
+			).Path(
+				"/a",
+			).String(),
 		),
 	)
 }

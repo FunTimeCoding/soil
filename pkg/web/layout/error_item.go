@@ -12,19 +12,13 @@ func ErrorItem(
 	nodes := []gomponents.Node{
 		gomponents.Attr("role", "alert"),
 		html.Class("notification-error"),
-		html.Span(
-			html.Class("notification-message"),
-			gomponents.Text(message),
-		),
+		html.Span(html.Class("notification-message"), gomponents.Text(message)),
 	}
 
 	if event != "" {
 		nodes = append(
 			nodes,
-			html.Small(
-				html.Class("notification-event"),
-				gomponents.Text(event),
-			),
+			html.Small(html.Class("notification-event"), gomponents.Text(event)),
 		)
 	}
 

@@ -9,11 +9,7 @@ import (
 
 func (c *Client) DraftOverlay(identifier string) (*page.Page, error) {
 	body, e := c.basic.GetV2(
-		c.basic.Base().Copy().Path(
-			"%s/%s",
-			constant.ConfluencePage,
-			identifier,
-		).Set(
+		c.basic.Base().Copy().Path("%s/%s", constant.ConfluencePage, identifier).Set(
 			constant.ConfluenceBodyFormat,
 			constant.ConfluenceStorageFormat,
 		).

@@ -8,9 +8,6 @@ import (
 
 func Bookmark(profile string) *file.Bookmark {
 	return file.Parse(
-		system.ReadFile(
-			MustProfileByName(profile).Path,
-			constant.BookmarksFile,
-		),
+		system.ReadFile(MustProfileByName(profile).Path, constant.BookmarksFile),
 	)
 }

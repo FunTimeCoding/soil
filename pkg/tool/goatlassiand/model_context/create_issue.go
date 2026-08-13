@@ -56,10 +56,7 @@ func (s *Server) createIssue(
 	if labelsRaw != "" {
 		var labels []string
 
-		if i := json.Unmarshal(
-			[]byte(labelsRaw),
-			&labels,
-		); i != nil {
+		if i := json.Unmarshal([]byte(labelsRaw), &labels); i != nil {
 			return response.Fail(
 				"labels must be a JSON array of strings: %v",
 				i,
@@ -72,10 +69,7 @@ func (s *Server) createIssue(
 	if fieldsRaw != "" {
 		var fields map[string]any
 
-		if i := json.Unmarshal(
-			[]byte(fieldsRaw),
-			&fields,
-		); i != nil {
+		if i := json.Unmarshal([]byte(fieldsRaw), &fields); i != nil {
 			return response.Fail(
 				"additional_fields must be a JSON object: %v",
 				i,
@@ -92,20 +86,14 @@ func (s *Server) createIssue(
 			field := fieldMap.ByName(name)
 
 			if field == nil {
-				return response.Fail(
-					"unknown field: %s",
-					name,
-				)
+				return response.Fail("unknown field: %s", name)
 			}
 
 			raw.Fields.Unknowns.Set(field.Key, value)
 		}
 	}
 
-	result, resp, k := s.jira.Nested().Issue.CreateWithContext(
-		c,
-		raw,
-	)
+	result, resp, k := s.jira.Nested().Issue.CreateWithContext(c, raw)
 
 	if k != nil {
 		if resp != nil && resp.Body != nil {
@@ -148,10 +136,7 @@ func (s *Server) createIssue(
 
 			return s.captureFail(
 				l,
-				fmt.Sprintf(
-					"created %s but assign failed",
-					result.Key,
-				),
+				fmt.Sprintf("created %s but assign failed", result.Key),
 			)
 		}
 	}

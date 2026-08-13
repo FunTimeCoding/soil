@@ -6,11 +6,7 @@ func Aggregate(v []*PlayerFightStatistic) map[string]*AggregatedPlayer {
 	players := map[string]*AggregatedPlayer{}
 
 	for _, s := range v {
-		key := join.Empty(
-			s.Identity.Account,
-			"|",
-			s.Identity.Profession,
-		)
+		key := join.Empty(s.Identity.Account, "|", s.Identity.Profession)
 		p, exists := players[key]
 
 		if !exists {

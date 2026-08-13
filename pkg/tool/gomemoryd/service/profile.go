@@ -124,10 +124,7 @@ func (s *Service) Profile(
 			for _, r := range completions {
 				name := r.Path
 
-				if i := strings.LastIndex(
-					name,
-					stringsConstant.Slash,
-				); i >= 0 {
+				if i := strings.LastIndex(name, stringsConstant.Slash); i >= 0 {
 					name = name[:i]
 				}
 

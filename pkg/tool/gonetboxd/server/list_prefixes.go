@@ -16,7 +16,5 @@ func (s *Server) ListPrefixes(
 		return server.ListPrefixes500JSONResponse(*s.captureDetail(e)), nil
 	}
 
-	return server.ListPrefixes200JSONResponse(
-		convert.Prefixes(prefixes),
-	), nil
+	return server.ListPrefixes200JSONResponse(convert.Prefixes(prefixes)), nil
 }

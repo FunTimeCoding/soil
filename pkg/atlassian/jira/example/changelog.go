@@ -19,13 +19,7 @@ func Changelog() {
 	)
 	elapsed := time.Since(start)
 	fmt.Printf("Fetched %d issues in %s\n\n", len(issues), elapsed)
-	fmt.Printf(
-		"  %-10s %-22s %6s %6s\n",
-		"KEY",
-		"STATUS",
-		"CHANGE",
-		"TRANS",
-	)
+	fmt.Printf("  %-10s %-22s %6s %6s\n", "KEY", "STATUS", "CHANGE", "TRANS")
 
 	for _, i := range issues {
 		changeAge := int(time.Since(i.ChangeTime()).Hours() / 24)
@@ -37,10 +31,7 @@ func Changelog() {
 			for _, h := range i.Raw.Changelog.Histories {
 				for _, item := range h.Items {
 					if item.Field == "status" {
-						t, f := time.Parse(
-							constant.JiraTimeFormat,
-							h.Created,
-						)
+						t, f := time.Parse(constant.JiraTimeFormat, h.Created)
 
 						if f != nil {
 							continue

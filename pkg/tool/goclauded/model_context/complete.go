@@ -20,7 +20,9 @@ func (s *Server) complete(
 	}
 
 	if c.Callsign == "" {
-		return response.Fail("unknown session - announce first to bind your identity")
+		return response.Fail(
+			"unknown session - announce first to bind your identity",
+		)
 	}
 
 	message, e := q.RequireString(constant.Message)
@@ -40,19 +42,14 @@ func (s *Server) complete(
 	}
 
 	if topic == "" {
-		return response.Fail("no active topic - provide a topic parameter or announce first")
+		return response.Fail(
+			"no active topic - provide a topic parameter or announce first",
+		)
 	}
 
-	if f := s.service.Complete(
-		c.SessionIdentifier,
-		c.Callsign,
-		topic,
-		message,
-	); f != nil {
+	if f := s.service.Complete(c.SessionIdentifier, c.Callsign, topic, message); f != nil {
 		return s.captureFail(f, library.UnexpectedError)
 	}
 
-	return response.Success(
-		fmt.Sprintf("Completed %s: %s", topic, message),
-	)
+	return response.Success(fmt.Sprintf("Completed %s: %s", topic, message))
 }

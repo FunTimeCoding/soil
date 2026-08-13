@@ -17,11 +17,7 @@ func addDeviceJournalEntry(c *client.Client) *cobra.Command {
 			arguments []string,
 		) {
 			fmt.Println(
-				c.AddDeviceJournalEntry(
-					arguments[0],
-					kind,
-					arguments[1],
-				),
+				c.AddDeviceJournalEntry(arguments[0], kind, arguments[1]),
 			)
 		},
 	}

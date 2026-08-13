@@ -8,9 +8,6 @@ func (c *Client) CallToolRaw(
 ) (*mcp.CallToolResult, error) {
 	return c.session.CallTool(
 		c.context,
-		&mcp.CallToolParams{
-			Name:      name,
-			Arguments: arguments,
-		},
+		&mcp.CallToolParams{Name: name, Arguments: arguments},
 	)
 }

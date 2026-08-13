@@ -13,9 +13,7 @@ func printLog(
 	f *option.Format,
 ) {
 	for _, m := range v {
-		s := status.New(f).String(
-			m.Time.Format(constant.DateMinute),
-		).String(
+		s := status.New(f).String(m.Time.Format(constant.DateMinute)).String(
 			formatContent(m, f),
 		).String(
 			m.Stream,

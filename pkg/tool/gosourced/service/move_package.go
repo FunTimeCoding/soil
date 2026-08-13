@@ -39,10 +39,7 @@ func (s *Service) MovePackage(
 	if strings.HasPrefix(targetPackagePath, prefix) {
 		return failValidation(
 			r,
-			fmt.Sprintf(
-				"cannot move %s into itself",
-				packagePath,
-			),
+			fmt.Sprintf("cannot move %s into itself", packagePath),
 		)
 	}
 

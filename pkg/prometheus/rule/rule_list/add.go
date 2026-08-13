@@ -61,12 +61,7 @@ func (l *List) Add(i *rule.Rule) {
 				)
 			}
 		} else {
-			log.Panicf(
-				"duplicate: name=%s existing=%+v new=%+v",
-				r.Name,
-				i,
-				r,
-			)
+			log.Panicf("duplicate: name=%s existing=%+v new=%+v", r.Name, i, r)
 		}
 	}
 

@@ -17,17 +17,9 @@ func Main(
 	r := reporter.New(constant.Identity.Name(), version).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
-	a.String(
-		constant.Base,
-		"",
-		"Base commit (default: remote tracking branch)",
-	)
+	a.String(constant.Base, "", "Base commit (default: remote tracking branch)")
 	a.String(constant.Head, "HEAD", "Head commit")
-	a.Boolean(
-		constant.Suffix,
-		false,
-		"Match path as suffix instead of prefix",
-	)
+	a.Boolean(constant.Suffix, false, "Match path as suffix instead of prefix")
 	a.Boolean(argumentConstant.Verbose, false, "Verbose output")
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()

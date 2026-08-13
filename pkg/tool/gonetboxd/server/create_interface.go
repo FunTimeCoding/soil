@@ -37,10 +37,7 @@ func (s *Server) CreateInterface(
 		}
 	}
 
-	result := server.Interface{
-		Identifier: i.Identifier,
-		Name:       i.Name,
-	}
+	result := server.Interface{Identifier: i.Identifier, Name: i.Name}
 
 	if i.Type != "" {
 		t := string(i.Type)

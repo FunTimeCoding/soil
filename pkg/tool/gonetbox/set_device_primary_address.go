@@ -19,9 +19,7 @@ func setDevicePrimaryAddress(c *client.Client) *cobra.Command {
 			fmt.Println(
 				c.UpdateDevice(
 					arguments[0],
-					generated.UpdateDeviceRequest{
-						PrimaryAddress: &arguments[1],
-					},
+					generated.UpdateDeviceRequest{PrimaryAddress: &arguments[1]},
 				),
 			)
 		},

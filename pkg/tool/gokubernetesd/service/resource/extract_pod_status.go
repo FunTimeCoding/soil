@@ -6,17 +6,9 @@ import (
 )
 
 func ExtractPodStatus(u *unstructured.Unstructured) string {
-	reason, _, e := unstructured.NestedString(
-		u.Object,
-		"status",
-		"phase",
-	)
+	reason, _, e := unstructured.NestedString(u.Object, "status", "phase")
 	errors.PanicOnError(e)
-	r, okay, f := unstructured.NestedString(
-		u.Object,
-		"status",
-		"reason",
-	)
+	r, okay, f := unstructured.NestedString(u.Object, "status", "reason")
 	errors.PanicOnError(f)
 
 	if okay && r != "" {

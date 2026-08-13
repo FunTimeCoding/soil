@@ -6,9 +6,6 @@ func (c *Client) SaveImpression(
 ) {
 	c.Impressions = append(
 		c.Impressions,
-		ImpressionCall{
-			Content: content,
-			Source:  source,
-		},
+		ImpressionCall{Content: content, Source: source},
 	)
 }

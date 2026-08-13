@@ -7,8 +7,5 @@ import (
 )
 
 func TestHasKey(t *testing.T) {
-	assert.True(
-		t,
-		issue.HasKey("Message with key ABC-123."),
-	)
+	assert.True(t, issue.HasKey("Message with key ABC-123."))
 }

@@ -11,9 +11,7 @@ func (c *Client) AddVirtualJournalEntry(
 	kind string,
 	comments string,
 ) string {
-	body := client.AddVirtualJournalEntryJSONRequestBody{
-		Comments: comments,
-	}
+	body := client.AddVirtualJournalEntryJSONRequestBody{Comments: comments}
 
 	if kind != "" {
 		body.Kind = &kind

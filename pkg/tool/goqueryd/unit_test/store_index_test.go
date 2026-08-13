@@ -69,12 +69,7 @@ func TestIndexSkipsGeneratedFiles(t *testing.T) {
 	s := openTestStore(t)
 	defer s.Close()
 	directory := t.TempDir()
-	writeFixture(
-		t,
-		directory,
-		"real.go",
-		"package foo\n\nfunc Real() {}\n",
-	)
+	writeFixture(t, directory, "real.go", "package foo\n\nfunc Real() {}\n")
 	writeFixture(
 		t,
 		directory,

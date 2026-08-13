@@ -16,7 +16,5 @@ func (s *Server) ListAddresses(
 		return server.ListAddresses500JSONResponse(*s.captureDetail(e)), nil
 	}
 
-	return server.ListAddresses200JSONResponse(
-		convert.Addresses(addresses),
-	), nil
+	return server.ListAddresses200JSONResponse(convert.Addresses(addresses)), nil
 }

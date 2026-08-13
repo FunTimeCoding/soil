@@ -15,9 +15,7 @@ func ResolveCronJobPods(
 ) ([]string, error) {
 	jobs, e := c.Clientset().BatchV1().Jobs(namespace).List(
 		x,
-		v1.ListOptions{
-			LabelSelector: fmt.Sprintf("job-name=%s", name),
-		},
+		v1.ListOptions{LabelSelector: fmt.Sprintf("job-name=%s", name)},
 	)
 
 	if e != nil {

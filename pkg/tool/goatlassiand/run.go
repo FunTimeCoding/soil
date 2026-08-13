@@ -54,13 +54,7 @@ func Run(
 						),
 						m,
 					)
-					model_context.New(
-						j,
-						c,
-						r,
-						t,
-						o.Version,
-					).Mount(m)
+					model_context.New(j, c, r, t, o.Version).Mount(m)
 				},
 			).WithMiddleware(web.RecoveryMiddleware(r)),
 		),

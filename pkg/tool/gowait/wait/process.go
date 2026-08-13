@@ -23,10 +23,7 @@ func Process(o *option.Wait) {
 		r.Start("pgrep", "-f", o.Process)
 
 		if r.Error != nil {
-			fmt.Printf(
-				"Done after %v\n",
-				time.Since(start).Round(time.Second),
-			)
+			fmt.Printf("Done after %v\n", time.Since(start).Round(time.Second))
 
 			return
 		}

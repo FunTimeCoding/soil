@@ -14,11 +14,7 @@ func (i *Instance) Parse(
 	gitHash string,
 	buildDate string,
 ) {
-	i.flags.Bool(
-		constant.Version,
-		false,
-		"Show version information and exit",
-	)
+	i.flags.Bool(constant.Version, false, "Show version information and exit")
 	e := i.ParseArguments(os.Args[1:])
 
 	if errors.Is(e, pflag.ErrHelp) {

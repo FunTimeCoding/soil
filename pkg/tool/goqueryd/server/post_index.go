@@ -20,10 +20,7 @@ func (s *Server) PostIndex(
 
 	if e != nil {
 		return server.PostIndex500JSONResponse(
-			*s.captureFail(
-				e,
-				constant.UnexpectedError,
-			),
+			*s.captureFail(e, constant.UnexpectedError),
 		), nil
 	}
 

@@ -15,9 +15,9 @@ func home(
 	errors.PanicOnError(
 		constant.GorillaHomeTemplate.Execute(
 			w,
-			locator.New(
-				r.Host,
-			).Scheme(webConstant.Socket).Path(webConstant.LocationEcho).String(),
+			locator.New(r.Host).Scheme(webConstant.Socket).Path(
+				webConstant.LocationEcho,
+			).String(),
 		),
 	)
 }

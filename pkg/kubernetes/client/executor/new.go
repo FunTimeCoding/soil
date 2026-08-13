@@ -11,11 +11,7 @@ func New(
 	c *rest.Config,
 	r *rest.Request,
 ) remotecommand.Executor {
-	result, e := remotecommand.NewSPDYExecutor(
-		c,
-		constant.Post,
-		r.URL(),
-	)
+	result, e := remotecommand.NewSPDYExecutor(c, constant.Post, r.URL())
 	errors.PanicOnError(e)
 
 	return result

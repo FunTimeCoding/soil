@@ -44,9 +44,7 @@ func (s *Store) Status() (*status.Status, error) {
 		return nil, e
 	}
 
-	row := s.database.QueryRow(
-		"SELECT COUNT(*) FROM embedding",
-	)
+	row := s.database.QueryRow("SELECT COUNT(*) FROM embedding")
 
 	if e := row.Scan(&r.TotalEmbeddings); e != nil {
 		return nil, e

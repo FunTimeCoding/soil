@@ -19,12 +19,16 @@ func (s *Server) listen(
 	}
 
 	if c.Callsign == "" {
-		return response.Fail("unknown session - announce first to bind your identity")
+		return response.Fail(
+			"unknown session - announce first to bind your identity",
+		)
 	}
 
 	if e := s.service.SetListening(c.Callsign, true); e != nil {
 		return s.captureFail(e, library.UnexpectedError)
 	}
 
-	return response.Success("Listening for messages. You will be woken when a message arrives.")
+	return response.Success(
+		"Listening for messages. You will be woken when a message arrives.",
+	)
 }

@@ -46,11 +46,7 @@ func planQualifications(
 	}
 
 	for filename, q := range result {
-		q.name = chooseImportName(
-			q.file,
-			targetPackagePath,
-			targetPackageName,
-		)
+		q.name = chooseImportName(q.file, targetPackagePath, targetPackageName)
 
 		if q.name == nil {
 			return nil, filename

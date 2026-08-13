@@ -34,19 +34,11 @@ func IdentityWarnings(
 
 		path := filepath.Join(toolDirectory, name)
 
-		if !v.DirectoryExists(
-			filepath.Join(
-				path,
-				constant.ConstantDirectory,
-			),
-		) {
+		if !v.DirectoryExists(filepath.Join(path, constant.ConstantDirectory)) {
 			continue
 		}
 
-		result = append(
-			result,
-			IdentityConcerns(v, path, name)...,
-		)
+		result = append(result, IdentityConcerns(v, path, name)...)
 	}
 
 	sort.Slice(

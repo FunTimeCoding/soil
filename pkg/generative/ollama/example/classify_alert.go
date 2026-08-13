@@ -36,10 +36,7 @@ func ClassifyAlert() {
 		system.SaveFile(
 			join.Absolute(
 				base,
-				fmt.Sprintf(
-					"response-%d.json",
-					len(system.Files(base))+1,
-				),
+				fmt.Sprintf("response-%d.json", len(system.Files(base))+1),
 			),
 			response,
 		)

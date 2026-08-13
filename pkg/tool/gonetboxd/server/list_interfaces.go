@@ -22,7 +22,5 @@ func (s *Server) ListInterfaces(
 		return server.ListInterfaces500JSONResponse(*s.captureDetail(f)), nil
 	}
 
-	return server.ListInterfaces200JSONResponse(
-		convert.Interfaces(interfaces),
-	), nil
+	return server.ListInterfaces200JSONResponse(convert.Interfaces(interfaces)), nil
 }

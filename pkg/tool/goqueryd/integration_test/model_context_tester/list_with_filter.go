@@ -11,9 +11,7 @@ func (t *Tester) ListWithFilter(
 	limit int,
 	full bool,
 ) string {
-	arguments := map[string]any{
-		constant.Collection: collection,
-	}
+	arguments := map[string]any{constant.Collection: collection}
 
 	if sourceType != "" {
 		arguments[constant.SourceType] = sourceType

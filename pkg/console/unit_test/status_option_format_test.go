@@ -15,10 +15,6 @@ func TestCopy(t *testing.T) {
 	assert.Strings(t, []string{"a", "b"}, bravo.Tags)
 
 	if alfa == bravo {
-		t.Errorf(
-			"Expect copy to be different: %+v %+v",
-			alfa,
-			bravo,
-		)
+		t.Errorf("Expect copy to be different: %+v %+v", alfa, bravo)
 	}
 }

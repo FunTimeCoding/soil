@@ -18,16 +18,9 @@ func (s *Server) tailGrid(values map[string][]string) gomponents.Node {
 
 		columns = append(
 			columns,
-			html.Div(
-				html.Class("board-column"),
-				gomponents.Group(sections),
-			),
+			html.Div(html.Class("board-column"), gomponents.Group(sections)),
 		)
 	}
 
-	return boardGrid(
-		s.board.Tail.Columns,
-		"board-grid board-tail",
-		columns,
-	)
+	return boardGrid(s.board.Tail.Columns, "board-grid board-tail", columns)
 }

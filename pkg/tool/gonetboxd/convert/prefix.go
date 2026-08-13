@@ -6,10 +6,7 @@ import (
 )
 
 func Prefix(p *prefix.Prefix) *server.Prefix {
-	result := &server.Prefix{
-		Identifier: p.Identifier,
-		Prefix:     p.Name,
-	}
+	result := &server.Prefix{Identifier: p.Identifier, Prefix: p.Name}
 
 	if p.Description != "" {
 		result.Description = &p.Description

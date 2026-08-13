@@ -13,9 +13,7 @@ func (s *Server) CreateWirelessNetwork(
 	result, e := s.client.CreateWirelessNetwork(r.Body.Name)
 
 	if e != nil {
-		return server.CreateWirelessNetwork500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.CreateWirelessNetwork500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	return server.CreateWirelessNetwork201JSONResponse(

@@ -33,10 +33,6 @@ func (s *Server) ReadBody(
 	}
 
 	return response.SuccessAny(
-		map[string]any{
-			"path": path,
-			"tab":  t.Title,
-			"size": len(body),
-		},
+		map[string]any{"path": path, "tab": t.Title, "size": len(body)},
 	)
 }

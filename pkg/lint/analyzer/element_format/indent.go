@@ -1,17 +1,16 @@
-package call_format
+package element_format
 
 import (
-	"go/ast"
 	"go/token"
 	"strings"
 )
 
-func callIndent(
+func Indent(
 	fileSet *token.FileSet,
-	call *ast.CallExpr,
+	e *Elements,
 	source []byte,
 ) string {
-	p := fileSet.Position(call.Pos())
+	p := fileSet.Position(e.Position)
 	lineStart := p.Offset - (p.Column - 1)
 	count := 0
 

@@ -15,15 +15,11 @@ func TestSummarizePushesIndexer(t *testing.T) {
 	a.Announce(a.Name(), "building things")
 	a.MustCallTool(
 		constant.EditSession,
-		map[string]any{
-			constant.Alias: "test-session",
-		},
+		map[string]any{constant.Alias: "test-session"},
 	)
 	a.MustCallTool(
 		constant.Summarize,
-		map[string]any{
-			constant.Body: "summary for indexing",
-		},
+		map[string]any{constant.Body: "summary for indexing"},
 	)
 	assert.Count(t, 1, s.SummaryIndexer.Pushed)
 	assert.String(t, "test-session", s.SummaryIndexer.Pushed[0].Name)
@@ -38,21 +34,15 @@ func TestSummarizeAmendPushesUpdatedBody(t *testing.T) {
 	a.Announce(a.Name(), "building things")
 	a.MustCallTool(
 		constant.EditSession,
-		map[string]any{
-			constant.Alias: "test-session",
-		},
+		map[string]any{constant.Alias: "test-session"},
 	)
 	a.MustCallTool(
 		constant.Summarize,
-		map[string]any{
-			constant.Body: "first draft",
-		},
+		map[string]any{constant.Body: "first draft"},
 	)
 	a.MustCallTool(
 		constant.Summarize,
-		map[string]any{
-			constant.Body: "revised with more detail",
-		},
+		map[string]any{constant.Body: "revised with more detail"},
 	)
 	assert.Count(t, 2, s.SummaryIndexer.Pushed)
 	assert.String(

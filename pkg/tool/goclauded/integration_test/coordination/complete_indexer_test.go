@@ -15,15 +15,11 @@ func TestCompletePushesIndexer(t *testing.T) {
 	a.Announce(a.Name(), "building things")
 	a.MustCallTool(
 		constant.EditSession,
-		map[string]any{
-			constant.Alias: "test-completion",
-		},
+		map[string]any{constant.Alias: "test-completion"},
 	)
 	a.MustCallTool(
 		constant.Complete,
-		map[string]any{
-			constant.Message: "built the thing",
-		},
+		map[string]any{constant.Message: "built the thing"},
 	)
 	assert.Count(t, 1, s.CompletionIndexer.Pushed)
 	assert.String(t, "test-completion/1", s.CompletionIndexer.Pushed[0].Name)
@@ -38,9 +34,7 @@ func TestCompleteWithoutSlugSkipsPush(t *testing.T) {
 	a.Announce(a.Name(), "building things")
 	a.MustCallTool(
 		constant.Complete,
-		map[string]any{
-			constant.Message: "completed without slug",
-		},
+		map[string]any{constant.Message: "completed without slug"},
 	)
 	assert.Count(t, 0, s.CompletionIndexer.Pushed)
 }

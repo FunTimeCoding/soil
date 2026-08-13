@@ -13,9 +13,7 @@ func (c *Client) Tabs() []*tab.Tab {
 	notation.MustDecode(
 		web.GetString(
 			web.InsecureClient(),
-			locator.New(
-				c.host,
-			).Port(c.port).Path(constant.NotationPath).Insecure().String(),
+			locator.New(c.host).Port(c.port).Path(constant.NotationPath).Insecure().String(),
 		),
 		&result,
 		true,

@@ -11,7 +11,5 @@ func (s *Server) DeleteCollection(
 ) (server.DeleteCollectionResponseObject, error) {
 	deleted := s.service.DeleteCollection(r.Params.Name)
 
-	return server.DeleteCollection200JSONResponse{
-		Deleted: new(bool(deleted)),
-	}, nil
+	return server.DeleteCollection200JSONResponse{Deleted: new(bool(deleted))}, nil
 }

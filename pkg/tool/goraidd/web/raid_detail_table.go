@@ -10,7 +10,9 @@ import (
 
 func raidDetailTable(rows []store.RaidPlayerRow) gomponents.Node {
 	if len(rows) == 0 {
-		return html.P(html.Em(gomponents.Text("No player stats for this raid.")))
+		return html.P(
+			html.Em(gomponents.Text("No player stats for this raid.")),
+		)
 	}
 
 	return html.Table(
@@ -43,12 +45,7 @@ func raidDetailTable(rows []store.RaidPlayerRow) gomponents.Node {
 					return html.Tr(
 						html.Td(
 							html.A(
-								html.Href(
-									fmt.Sprintf(
-										"/players/%s",
-										r.Account,
-									),
-								),
+								html.Href(fmt.Sprintf("/players/%s", r.Account)),
 								gomponents.Text(r.Name),
 							),
 						),
@@ -62,22 +59,10 @@ func raidDetailTable(rows []store.RaidPlayerRow) gomponents.Node {
 						),
 						html.Td(gomponents.Textf("%d", r.Fights)),
 						html.Td(
-							gomponents.Text(
-								perSecond(
-									r.Damage,
-									seconds,
-									1,
-								),
-							),
+							gomponents.Text(perSecond(r.Damage, seconds, 1)),
 						),
 						html.Td(
-							gomponents.Text(
-								perSecond(
-									r.Healing,
-									seconds,
-									1,
-								),
-							),
+							gomponents.Text(perSecond(r.Healing, seconds, 1)),
 						),
 						html.Td(
 							gomponents.Text(
@@ -85,39 +70,14 @@ func raidDetailTable(rows []store.RaidPlayerRow) gomponents.Node {
 							),
 						),
 						html.Td(
-							gomponents.Text(
-								perSecond(
-									r.BoonStrips,
-									seconds,
-									2,
-								),
-							),
+							gomponents.Text(perSecond(r.BoonStrips, seconds, 2)),
 						),
 						html.Td(
-							gomponents.Text(
-								perSecond(
-									r.Barrier,
-									seconds,
-									1,
-								),
-							),
+							gomponents.Text(perSecond(r.Barrier, seconds, 1)),
 						),
+						html.Td(gomponents.Text(perSecond(r.Downs, seconds, 1))),
 						html.Td(
-							gomponents.Text(
-								perSecond(
-									r.Downs,
-									seconds,
-									1,
-								),
-							),
-						),
-						html.Td(
-							gomponents.Text(
-								perMinute(
-									r.DeadCount,
-									minutes,
-								),
-							),
+							gomponents.Text(perMinute(r.DeadCount, minutes)),
 						),
 						html.Td(gomponents.Textf("%.0f", r.DistToCom)),
 					)

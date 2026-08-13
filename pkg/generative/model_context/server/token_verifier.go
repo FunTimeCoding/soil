@@ -8,10 +8,7 @@ import (
 func (s *Server) tokenVerifier() *oidc.IDTokenVerifier {
 	s.once.Do(
 		func() {
-			provider, e := oidc.NewProvider(
-				s.context,
-				s.authorizationLocator,
-			)
+			provider, e := oidc.NewProvider(s.context, s.authorizationLocator)
 			errors.PanicOnError(e)
 			s.verifier = provider.Verifier(
 				&oidc.Config{ClientID: s.clientIdentifier},

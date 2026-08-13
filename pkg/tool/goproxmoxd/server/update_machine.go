@@ -21,9 +21,7 @@ func (s *Server) UpdateMachine(
 	c, e := s.service.Client(instance)
 
 	if e != nil {
-		return server.UpdateMachine500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.UpdateMachine500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	a := convertUpdateMachine(r)
@@ -31,25 +29,17 @@ func (s *Server) UpdateMachine(
 
 	if e != nil {
 		if not_found.Is(e) {
-			return server.UpdateMachine404JSONResponse{
-				Error: e.Error(),
-			}, nil
+			return server.UpdateMachine404JSONResponse{Error: e.Error()}, nil
 		}
 
 		if errors.Is(e, constant.ErrorNoChanges) {
-			return server.UpdateMachine400JSONResponse(
-				*clientError(e),
-			), nil
+			return server.UpdateMachine400JSONResponse(*clientError(e)), nil
 		}
 
-		return server.UpdateMachine500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.UpdateMachine500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	status := "updated"
 
-	return server.UpdateMachine200JSONResponse{
-		Status: status,
-	}, nil
+	return server.UpdateMachine200JSONResponse{Status: status}, nil
 }

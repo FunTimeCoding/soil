@@ -19,10 +19,7 @@ func NewContext(cluster string) (*Client, error) {
 		return nil, f
 	}
 
-	_, g := operation.Node(result.client).List(
-		result.context,
-		v1.ListOptions{},
-	)
+	_, g := operation.Node(result.client).List(result.context, v1.ListOptions{})
 
 	if g != nil {
 		return nil, g

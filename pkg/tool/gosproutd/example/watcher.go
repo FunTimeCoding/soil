@@ -18,7 +18,9 @@ func Watcher() {
 	errors.PanicOnError(e)
 	defer func() { errors.PanicOnError(w.Close()) }()
 	errors.PanicOnError(w.Add(directory))
-	fmt.Printf("ready - create, modify, rename, or delete files in the directory\n\n")
+	fmt.Printf(
+		"ready - create, modify, rename, or delete files in the directory\n\n",
+	)
 
 	for {
 		select {

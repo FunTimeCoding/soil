@@ -18,12 +18,7 @@ func (s *Service) PollMemory() {
 		var body string
 
 		if v.Source != "" {
-			body = fmt.Sprintf(
-				"%s %s by %s",
-				v.Name,
-				v.ChangeType,
-				v.Source,
-			)
+			body = fmt.Sprintf("%s %s by %s", v.Name, v.ChangeType, v.Source)
 		} else {
 			body = fmt.Sprintf("%s %s", v.Name, v.ChangeType)
 		}
@@ -34,8 +29,6 @@ func (s *Service) PollMemory() {
 	}
 
 	if len(versions) > 0 {
-		s.lastMemoryPoll = s.clock().UTC().Format(
-			"2006-01-02T15:04:05Z",
-		)
+		s.lastMemoryPoll = s.clock().UTC().Format("2006-01-02T15:04:05Z")
 	}
 }

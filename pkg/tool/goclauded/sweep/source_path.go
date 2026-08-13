@@ -6,9 +6,5 @@ import (
 )
 
 func sourcePath() string {
-	return filepath.Join(
-		system.Home(),
-		".claude",
-		"projects",
-	)
+	return filepath.Join(system.Home(), ".claude", "projects")
 }

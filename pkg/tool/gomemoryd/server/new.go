@@ -9,8 +9,5 @@ func New(
 	s *service.Service,
 	r face.Reporter,
 ) *Server {
-	return &Server{
-		service:  s,
-		reporter: r,
-	}
+	return &Server{service: s, reporter: r}
 }

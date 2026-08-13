@@ -23,11 +23,7 @@ func (c *Client) SetVirtualMachinePlatform(
 
 	q := netbox.NewPatchedWritableVirtualMachineWithConfigContextRequest()
 	q.SetName(m.Name)
-	q.SetPlatform(
-		netbox.DeviceTypeRequestDefaultPlatform{
-			Int32: &p.Identifier,
-		},
-	)
+	q.SetPlatform(netbox.DeviceTypeRequestDefaultPlatform{Int32: &p.Identifier})
 
 	return c.updateVirtualMachine(m, q)
 }

@@ -48,18 +48,9 @@ func FormatDescription(e *Entry) string {
 			to = recipient
 		}
 
-		return fmt.Sprintf(
-			"%s → %s: %s",
-			actor,
-			to,
-			e.meta(constant.Message),
-		)
+		return fmt.Sprintf("%s → %s: %s", actor, to, e.meta(constant.Message))
 	case "moment":
-		return fmt.Sprintf(
-			"%s captured: %s",
-			actor,
-			e.meta(constant.Line),
-		)
+		return fmt.Sprintf("%s captured: %s", actor, e.meta(constant.Line))
 	case "summarize":
 		body := e.meta(constant.Body)
 

@@ -19,9 +19,7 @@ func (s *Server) ListSnippets(
 	c, e := s.service.SSHClient(instance)
 
 	if e != nil {
-		return server.ListSnippets500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.ListSnippets500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	entries := c.ListDirectory(constant.SnippetDirectory)
@@ -34,10 +32,7 @@ func (s *Server) ListSnippets(
 
 		result = append(
 			result,
-			server.SnippetItem{
-				Name: v.Name(),
-				Size: new(int64(v.Size())),
-			},
+			server.SnippetItem{Name: v.Name(), Size: new(int64(v.Size()))},
 		)
 	}
 

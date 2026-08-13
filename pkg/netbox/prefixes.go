@@ -10,9 +10,9 @@ func (c *Client) Prefixes() ([]*prefix.Prefix, error) {
 		return c.cache.Prefixes, nil
 	}
 
-	result, _, e := c.client.IpamAPI.IpamPrefixesList(
-		c.context,
-	).Limit(constant.PageLimit).Execute()
+	result, _, e := c.client.IpamAPI.IpamPrefixesList(c.context).Limit(
+		constant.PageLimit,
+	).Execute()
 
 	if e != nil {
 		return nil, e

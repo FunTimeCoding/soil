@@ -14,9 +14,7 @@ func printNotation() {
 	fmt.Println(
 		web.GetString(
 			web.InsecureClient(),
-			locator.New(
-				environment.Required(constant.HostEnvironment),
-			).Port(
+			locator.New(environment.Required(constant.HostEnvironment)).Port(
 				strings.MustToInteger(
 					environment.Required(constant.PortEnvironment),
 				),

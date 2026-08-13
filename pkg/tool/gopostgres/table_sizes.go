@@ -17,9 +17,7 @@ func tableSizes(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			p := &client.TableSizesParams{
-				Instance: instancePointer(instance),
-			}
+			p := &client.TableSizesParams{Instance: instancePointer(instance)}
 
 			if schema != "" {
 				p.Schema = &schema

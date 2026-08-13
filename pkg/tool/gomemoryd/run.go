@@ -67,12 +67,7 @@ func Run(
 						),
 						m,
 					)
-					model_context.New(
-						v,
-						r,
-						t,
-						o.Version,
-					).Mount(m)
+					model_context.New(v, r, t, o.Version).Mount(m)
 					u.Mount(m)
 				},
 			).WithMiddleware(u.Recovery(r)),

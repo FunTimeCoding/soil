@@ -36,10 +36,7 @@ func AddImport(
 		return
 	}
 
-	declaration := &dst.GenDecl{
-		Tok:   token.IMPORT,
-		Specs: []dst.Spec{spec},
-	}
+	declaration := &dst.GenDecl{Tok: token.IMPORT, Specs: []dst.Spec{spec}}
 	declaration.Decs.After = dst.EmptyLine
 	file.Decls = append([]dst.Decl{declaration}, file.Decls...)
 }

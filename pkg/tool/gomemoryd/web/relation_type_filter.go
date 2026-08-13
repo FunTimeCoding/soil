@@ -15,11 +15,7 @@ func relationTypeFilter(
 ) gomponents.Node {
 	entries := []gomponents.Node{
 		html.Small(gomponents.Text("Type: ")),
-		relationFilterLink(
-			fmt.Sprintf("all (%d)", total),
-			"",
-			current,
-		),
+		relationFilterLink(fmt.Sprintf("all (%d)", total), "", current),
 		gomponents.Text(" · "),
 		relationFilterLink(
 			fmt.Sprintf("untyped (%d)", untyped),

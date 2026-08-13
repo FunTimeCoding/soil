@@ -20,11 +20,7 @@ func (s *Server) GetEvent(
 		return response.Fail("identifier is required")
 	}
 
-	result, e := s.client.Event(
-		s.organization,
-		a.Project,
-		a.Identifier,
-	)
+	result, e := s.client.Event(s.organization, a.Project, a.Identifier)
 
 	if e != nil {
 		return s.captureDetail(e)

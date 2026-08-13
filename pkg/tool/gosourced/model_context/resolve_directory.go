@@ -16,9 +16,7 @@ func (s *Server) resolveDirectory(x context.Context) (string, error) {
 	name, okay := s.service.ActiveModule(session.SessionID())
 
 	if !okay {
-		return "", fmt.Errorf(
-			"no active module - call use_module first",
-		)
+		return "", fmt.Errorf("no active module - call use_module first")
 	}
 
 	m, okay := s.service.Module(name)

@@ -21,7 +21,9 @@ func (s *Server) send(
 	}
 
 	if c.Callsign == "" {
-		return response.Fail("unknown session - announce first to bind your identity")
+		return response.Fail(
+			"unknown session - announce first to bind your identity",
+		)
 	}
 
 	body, e := q.RequireString(constant.Body)

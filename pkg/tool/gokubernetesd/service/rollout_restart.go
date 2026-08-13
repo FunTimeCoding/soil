@@ -31,7 +31,9 @@ func (s *Service) RolloutRestart(
 			"template": map[string]any{
 				"metadata": map[string]any{
 					"annotations": map[string]any{
-						"kubectl.kubernetes.io/restartedAt": time.Now().Format(time.RFC3339),
+						"kubectl.kubernetes.io/restartedAt": time.Now().Format(
+							time.RFC3339,
+						),
 					},
 				},
 			},

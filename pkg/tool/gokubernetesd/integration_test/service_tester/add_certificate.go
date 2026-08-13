@@ -29,7 +29,9 @@ func (t *Tester) AddCertificate(
 
 	_, e := t.Dynamic.Resource(
 		schema.GroupVersionResource{
-			Group: "cert-manager.io", Version: "v1", Resource: "certificates",
+			Group:    "cert-manager.io",
+			Version:  "v1",
+			Resource: "certificates",
 		},
 	).Namespace(namespace).Create(
 		t.context(),
@@ -45,10 +47,7 @@ func (t *Tester) AddCertificate(
 				"status": map[string]any{
 					"notAfter": notAfter.Format(time.RFC3339),
 					"conditions": []any{
-						map[string]any{
-							"type":   "Ready",
-							"status": readyStatus,
-						},
+						map[string]any{"type": "Ready", "status": readyStatus},
 					},
 				},
 			},

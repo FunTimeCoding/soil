@@ -34,10 +34,7 @@ func windowSelector(
 		} else {
 			windowLinks = append(
 				windowLinks,
-				html.A(
-					gomponents.Attr("href", link),
-					gomponents.Text(w.Label),
-				),
+				html.A(gomponents.Attr("href", link), gomponents.Text(w.Label)),
 			)
 		}
 
@@ -57,10 +54,7 @@ func windowSelector(
 		} else {
 			groupLinks = append(
 				groupLinks,
-				html.A(
-					gomponents.Attr("href", link),
-					gomponents.Text(g.Label),
-				),
+				html.A(gomponents.Attr("href", link), gomponents.Text(g.Label)),
 			)
 		}
 

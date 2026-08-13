@@ -9,12 +9,10 @@ func (s *Server) registerWrite() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ExecInPod,
-			mcp.WithDescription("Execute a command in a pod. Command must be an array of strings - no shell interpretation"),
-			mcp.WithString(
-				"name",
-				mcp.Required(),
-				mcp.Description("Pod name"),
+			mcp.WithDescription(
+				"Execute a command in a pod. Command must be an array of strings - no shell interpretation",
 			),
+			mcp.WithString("name", mcp.Required(), mcp.Description("Pod name")),
 			mcp.WithString(
 				"namespace",
 				mcp.Required(),
@@ -23,12 +21,11 @@ func (s *Server) registerWrite() {
 			mcp.WithArray(
 				"command",
 				mcp.Required(),
-				mcp.Description("Command as array of strings (e.g. [\"ls\", \"-la\"])"),
+				mcp.Description(
+					"Command as array of strings (e.g. [\"ls\", \"-la\"])",
+				),
 			),
-			mcp.WithString(
-				"container",
-				mcp.Description("Container name"),
-			),
+			mcp.WithString("container", mcp.Description("Container name")),
 			mcp.WithNumber(
 				"timeout",
 				mcp.Description("Timeout in milliseconds (default: 60000)"),
@@ -60,11 +57,15 @@ func (s *Server) registerWrite() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.RolloutRestart,
-			mcp.WithDescription("Restart a deployment, daemonset, or statefulset"),
+			mcp.WithDescription(
+				"Restart a deployment, daemonset, or statefulset",
+			),
 			mcp.WithString(
 				"resourceType",
 				mcp.Required(),
-				mcp.Description("Resource type: deployment, daemonset, or statefulset"),
+				mcp.Description(
+					"Resource type: deployment, daemonset, or statefulset",
+				),
 			),
 			mcp.WithString(
 				"name",
@@ -81,7 +82,9 @@ func (s *Server) registerWrite() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.PortForward,
-			mcp.WithDescription("Forward a local port to a port on a Kubernetes resource"),
+			mcp.WithDescription(
+				"Forward a local port to a port on a Kubernetes resource",
+			),
 			mcp.WithString(
 				"resourceType",
 				mcp.Required(),
@@ -124,7 +127,9 @@ func (s *Server) registerWrite() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.Patch,
-			mcp.WithDescription("Patch a Kubernetes resource. Returns the patched resource as YAML."),
+			mcp.WithDescription(
+				"Patch a Kubernetes resource. Returns the patched resource as YAML.",
+			),
 			mcp.WithString(
 				"resourceType",
 				mcp.Required(),
@@ -146,7 +151,9 @@ func (s *Server) registerWrite() {
 			),
 			mcp.WithString(
 				"type",
-				mcp.Description("Patch type: strategic, merge, or json (default: strategic)"),
+				mcp.Description(
+					"Patch type: strategic, merge, or json (default: strategic)",
+				),
 			),
 			mcp.WithBoolean(
 				"dryRun",
@@ -158,19 +165,20 @@ func (s *Server) registerWrite() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.Apply,
-			mcp.WithDescription("Apply a YAML manifest to create a resource. Fails if the resource already exists unless override is true."),
+			mcp.WithDescription(
+				"Apply a YAML manifest to create a resource. Fails if the resource already exists unless override is true.",
+			),
 			mcp.WithString(
 				"manifest",
 				mcp.Required(),
 				mcp.Description("YAML manifest"),
 			),
-			mcp.WithString(
-				"namespace",
-				mcp.Description("Namespace override"),
-			),
+			mcp.WithString("namespace", mcp.Description("Namespace override")),
 			mcp.WithBoolean(
 				"override",
-				mcp.Description("Allow updating existing resources (default: false)"),
+				mcp.Description(
+					"Allow updating existing resources (default: false)",
+				),
 			),
 			mcp.WithBoolean(
 				"dryRun",

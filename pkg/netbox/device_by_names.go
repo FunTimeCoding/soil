@@ -24,10 +24,7 @@ func (c *Client) DeviceByNames(n []string) (*device.Device, error) {
 			var identifiers []string
 
 			for _, d := range devices {
-				identifiers = append(
-					identifiers,
-					fmt.Sprintf("%d", d.Raw.Id),
-				)
+				identifiers = append(identifiers, fmt.Sprintf("%d", d.Raw.Id))
 			}
 
 			return nil, fmt.Errorf(

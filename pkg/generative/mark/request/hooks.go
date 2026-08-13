@@ -36,11 +36,7 @@ func Hooks(
 
 			if q, okay := a.(*mcp.CallToolRequest); okay {
 				l.Info(
-					fmt.Sprintf(
-						"%s %s",
-						q.Method,
-						q.Params.Name,
-					),
+					fmt.Sprintf("%s %s", q.Method, q.Params.Name),
 					"arguments",
 					q.Params.Arguments,
 				)
@@ -49,9 +45,7 @@ func Hooks(
 			}
 
 			if q, okay := a.(*mcp.PaginatedRequest); okay {
-				l.Info(
-					fmt.Sprintf("PaginatedRequest: %s", q.Method),
-				)
+				l.Info(fmt.Sprintf("PaginatedRequest: %s", q.Method))
 				LogParameter(l, &q.Request)
 
 				return
@@ -97,11 +91,7 @@ func Hooks(
 				_ context.Context,
 				s server.ClientSession,
 			) {
-				l.Info(
-					"Session registered",
-					"session",
-					s.SessionID(),
-				)
+				l.Info("Session registered", "session", s.SessionID())
 			},
 		)
 		h.AddOnRequestInitialization(

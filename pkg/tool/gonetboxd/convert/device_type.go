@@ -6,10 +6,7 @@ import (
 )
 
 func DeviceType(t *device_type.Type) *server.DeviceType {
-	result := &server.DeviceType{
-		Identifier: t.Identifier,
-		Model:      t.Model,
-	}
+	result := &server.DeviceType{Identifier: t.Identifier, Model: t.Model}
 
 	if t.Raw.Manufacturer.Name != "" {
 		result.Manufacturer = &t.Raw.Manufacturer.Name

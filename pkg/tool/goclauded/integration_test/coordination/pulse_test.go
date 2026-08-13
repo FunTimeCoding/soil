@@ -37,9 +37,7 @@ func TestMCPSelfPulseDoesNotEchoBack(t *testing.T) {
 	a.CheckLive()
 	a.MustCallTool(
 		constant.Pulse,
-		map[string]any{
-			constant.Line: "still building",
-		},
+		map[string]any{constant.Line: "still building"},
 	)
 	check := a.CheckLive()
 	pulses := clientEntriesByKind(check.Entries, constant.QueuePulse)

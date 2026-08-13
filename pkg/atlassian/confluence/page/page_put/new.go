@@ -20,9 +20,6 @@ func New(
 			Representation: constant.ConfluenceStorageFormat,
 			Value:          body,
 		},
-		Version: Version{
-			Number:  version,
-			Message: message,
-		},
+		Version: Version{Number: version, Message: message},
 	}
 }

@@ -19,13 +19,7 @@ func splitAtBoundaries(
 		if len(text) > constant.ChunkSize {
 			result = append(result, chunkMarkdown(text)...)
 		} else {
-			result = append(
-				result,
-				Chunk{
-					Text:     text,
-					Position: start,
-				},
-			)
+			result = append(result, Chunk{Text: text, Position: start})
 		}
 
 		start = boundary
@@ -40,13 +34,7 @@ func splitAtBoundaries(
 				result = append(result, c)
 			}
 		} else {
-			result = append(
-				result,
-				Chunk{
-					Text:     text,
-					Position: start,
-				},
-			)
+			result = append(result, Chunk{Text: text, Position: start})
 		}
 	}
 

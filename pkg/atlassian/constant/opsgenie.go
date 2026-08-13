@@ -43,10 +43,7 @@ const (
 )
 
 var (
-	OpsgenieStatuses = []string{
-		OpsgenieClosedStatus,
-		OpsgenieOpenStatus,
-	}
+	OpsgenieStatuses   = []string{OpsgenieClosedStatus, OpsgenieOpenStatus}
 	OpsgeniePriorities = []string{
 		OpsgeniePriorityP1,
 		OpsgeniePriorityP2,
@@ -54,8 +51,6 @@ var (
 		OpsgeniePriorityP4,
 		OpsgeniePriorityP5,
 	}
-	OpsgenieSkipDetail = []string{
-		constant1.SeverityLabel,
-	}
+	OpsgenieSkipDetail         = []string{constant1.SeverityLabel}
 	OpsgenieCondenseSkipFields []string
 )

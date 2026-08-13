@@ -30,9 +30,7 @@ func Expand(s string) []string {
 	for _, alternative := range strings.Split(inner, constant.Comma) {
 		result = append(
 			result,
-			Expand(
-				join.Empty(s[:start], alternative, s[start+stop+1:]),
-			)...,
+			Expand(join.Empty(s[:start], alternative, s[start+stop+1:]))...,
 		)
 	}
 

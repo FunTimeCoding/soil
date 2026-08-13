@@ -17,9 +17,7 @@ func (s *Server) scopeFilter(
 		return nil
 	}
 
-	entries := []gomponents.Node{
-		html.Small(gomponents.Text("Scope: ")),
-	}
+	entries := []gomponents.Node{html.Small(gomponents.Text("Scope: "))}
 	entries = append(
 		entries,
 		scopeLink(constant.AllScope, "", current, tag, memoryType),

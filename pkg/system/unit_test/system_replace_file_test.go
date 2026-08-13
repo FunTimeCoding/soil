@@ -25,9 +25,5 @@ func TestReplaceFileCreatesDestination(t *testing.T) {
 	destination := join.Absolute(d, "destination")
 	system.SaveFile(source, "content")
 	system.ReplaceFile(source, destination)
-	assert.String(
-		t,
-		"content",
-		system.ReadFile(d, "destination"),
-	)
+	assert.String(t, "content", system.ReadFile(d, "destination"))
 }

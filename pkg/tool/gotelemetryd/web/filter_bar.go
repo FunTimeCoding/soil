@@ -67,8 +67,5 @@ func filterBar(o *store.QueryOption) gomponents.Node {
 		return gomponents.Text("")
 	}
 
-	return html.P(
-		gomponents.Text("Filtered: "),
-		gomponents.Group(active),
-	)
+	return html.P(gomponents.Text("Filtered: "), gomponents.Group(active))
 }

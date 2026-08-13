@@ -47,9 +47,7 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.Explain,
-			mcp.WithDescription(
-				"Show the execution plan for a SQL query",
-			),
+			mcp.WithDescription("Show the execution plan for a SQL query"),
 			mcp.WithString(
 				"sql",
 				mcp.Required(),
@@ -67,9 +65,7 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ListSchemas,
-			mcp.WithDescription(
-				"List schemas in the active database",
-			),
+			mcp.WithDescription("List schemas in the active database"),
 		),
 		mcp.NewTypedToolHandler(s.listSchemas),
 	)
@@ -121,9 +117,7 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.TableSizes,
-			mcp.WithDescription(
-				"Show row counts and disk usage for tables",
-			),
+			mcp.WithDescription("Show row counts and disk usage for tables"),
 			mcp.WithString(
 				"schema",
 				mcp.Description("Schema name (default: public)"),

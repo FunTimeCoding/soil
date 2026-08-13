@@ -19,9 +19,7 @@ func (s *Server) CreateSnippet(
 	c, e := s.service.SSHClient(instance)
 
 	if e != nil {
-		return server.CreateSnippet500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.CreateSnippet500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	c.WriteFile(snippetPath(r.Body.Name), []byte(r.Body.Content))

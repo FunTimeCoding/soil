@@ -32,7 +32,5 @@ func sortLinks(modified bool) gomponents.Node {
 		recent = html.Strong(gomponents.Text(constant.SortModified))
 	}
 
-	return html.P(
-		html.Small(priority, gomponents.Text(" · "), recent),
-	)
+	return html.P(html.Small(priority, gomponents.Text(" · "), recent))
 }

@@ -17,9 +17,6 @@ func SearchFixture(v ...*client.SearchResult) http.HandlerFunc {
 		w http.ResponseWriter,
 		_ *http.Request,
 	) {
-		web.EncodeNotation(
-			w,
-			client.SearchOutcome{Results: results},
-		)
+		web.EncodeNotation(w, client.SearchOutcome{Results: results})
 	}
 }

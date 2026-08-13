@@ -15,7 +15,9 @@ func TestEditEventSummaryCascade(t *testing.T) {
 		t,
 		s.Service.Summarize("session-1", "Cedar", "original summary"),
 	)
-	events := s.Store.Events(event_query.New().Kind(constant.Summarize).SetLimit(10))
+	events := s.Store.Events(
+		event_query.New().Kind(constant.Summarize).SetLimit(10),
+	)
 	assert.Count(t, 1, events)
 	_, e := s.Service.EditEvent(events[0].Identifier, "revised summary")
 	assert.FatalOnError(t, e)
@@ -29,7 +31,9 @@ func TestEditEventCompletionCascade(t *testing.T) {
 	s.Store.Announce(r.Callsign, "fixing auth", "")
 	topic := s.Store.CompleteTask(r.Callsign)
 	s.Complete("session-1", r.Callsign, topic, "original message")
-	events := s.Store.Events(event_query.New().Kind(constant.Complete).SetLimit(10))
+	events := s.Store.Events(
+		event_query.New().Kind(constant.Complete).SetLimit(10),
+	)
 	assert.Count(t, 1, events)
 	_, f := s.Service.EditEvent(events[0].Identifier, "corrected message")
 	assert.FatalOnError(t, f)

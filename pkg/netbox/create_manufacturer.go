@@ -6,13 +6,10 @@ import (
 )
 
 func (c *Client) CreateManufacturer(name string) (*manufacturer.Manufacturer, error) {
-	q := netbox.NewManufacturerRequest(
-		name,
-		slug(name),
-	)
-	result, _, e := c.client.DcimAPI.DcimManufacturersCreate(
-		c.context,
-	).ManufacturerRequest(*q).Execute()
+	q := netbox.NewManufacturerRequest(name, slug(name))
+	result, _, e := c.client.DcimAPI.DcimManufacturersCreate(c.context).ManufacturerRequest(
+		*q,
+	).Execute()
 
 	if e != nil {
 		return nil, e

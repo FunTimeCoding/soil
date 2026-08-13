@@ -36,16 +36,8 @@ func documentsTable(documents []store.SearchResult) gomponents.Node {
 						gomponents.Text(d.Title),
 					),
 				),
-				html.Td(
-					html.Small(
-						gomponents.Text(d.VirtualPath),
-					),
-				),
-				html.Td(
-					html.Small(
-						gomponents.Text(sourceType),
-					),
-				),
+				html.Td(html.Small(gomponents.Text(d.VirtualPath))),
+				html.Td(html.Small(gomponents.Text(sourceType))),
 			),
 		)
 	}

@@ -6,10 +6,7 @@ import (
 )
 
 func New(v *netbox.JournalEntry) *Entry {
-	result := &Entry{
-		Identifier: v.Id,
-		Comments:   v.Comments,
-	}
+	result := &Entry{Identifier: v.Id, Comments: v.Comments}
 
 	if v.Kind != nil && v.Kind.Value != nil {
 		result.Kind = string(*v.Kind.Value)

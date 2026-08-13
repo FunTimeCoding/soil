@@ -9,10 +9,5 @@ func fragmentLocator(
 	path string,
 	identifier uint,
 ) string {
-	return fmt.Sprintf(
-		"%s?%s=%d",
-		path,
-		constant.Identifier,
-		identifier,
-	)
+	return fmt.Sprintf("%s?%s=%d", path, constant.Identifier, identifier)
 }

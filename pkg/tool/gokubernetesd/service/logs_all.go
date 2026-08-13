@@ -58,13 +58,7 @@ func (s *Service) LogsAll(
 			continue
 		}
 
-		result = append(
-			result,
-			response.PodLog{
-				Pod:     pod,
-				Content: content,
-			},
-		)
+		result = append(result, response.PodLog{Pod: pod, Content: content})
 	}
 
 	return result, nil

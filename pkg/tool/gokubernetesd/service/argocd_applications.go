@@ -26,11 +26,10 @@ func (s *Service) ArgocdApplications(
 	).List(x, v1.ListOptions{})
 
 	if f != nil {
-		if strings.Contains(
-			f.Error(),
-			"could not find the requested resource",
-		) {
-			return nil, fmt.Errorf("ArgoCD not installed - Application CRD not found")
+		if strings.Contains(f.Error(), "could not find the requested resource") {
+			return nil, fmt.Errorf(
+				"ArgoCD not installed - Application CRD not found",
+			)
 		}
 
 		return nil, f

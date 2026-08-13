@@ -16,16 +16,10 @@ func (s *Server) AddDeviceJournalEntry(
 		kind = *r.Body.Kind
 	}
 
-	result, e := s.client.AddDeviceJournalEntry(
-		r.Name,
-		kind,
-		r.Body.Comments,
-	)
+	result, e := s.client.AddDeviceJournalEntry(r.Name, kind, r.Body.Comments)
 
 	if e != nil {
-		return server.AddDeviceJournalEntry500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.AddDeviceJournalEntry500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	return server.AddDeviceJournalEntry201JSONResponse(

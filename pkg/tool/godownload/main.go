@@ -28,10 +28,7 @@ func Main(
 	)
 	a.String(
 		argumentConstant.Output,
-		environment.Fallback(
-			"OUTPUT",
-			constant.DefaultOutput,
-		),
+		environment.Fallback("OUTPUT", constant.DefaultOutput),
 		"Output directory for executable",
 	)
 	a.Boolean(argumentConstant.Verbose, false, "Verbose output")

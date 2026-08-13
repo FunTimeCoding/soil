@@ -45,9 +45,6 @@ func (s *Server) CreateMachine(
 	}
 
 	return response.SuccessAny(
-		map[string]any{
-			"identifier": identifier,
-			"status":     "created",
-		},
+		map[string]any{"identifier": identifier, "status": "created"},
 	)
 }

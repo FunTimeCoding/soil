@@ -6,8 +6,7 @@ import (
 )
 
 func (r *Response) Format(f *option.Format) string {
-	return status.New(f).String(
-		r.Message.Role,
-		r.Message.Content,
-	).RawList(r.Raw).Format()
+	return status.New(f).String(r.Message.Role, r.Message.Content).RawList(
+		r.Raw,
+	).Format()
 }

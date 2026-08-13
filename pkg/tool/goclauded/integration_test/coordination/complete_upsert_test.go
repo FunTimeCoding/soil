@@ -16,9 +16,7 @@ func TestCompleteAmend(t *testing.T) {
 	a.Announce(a.Name(), "search index")
 	a.MustCallTool(
 		constant.Complete,
-		map[string]any{
-			constant.Message: "hasty summary",
-		},
+		map[string]any{constant.Message: "hasty summary"},
 	)
 	a.Announce(a.Name(), "search index")
 	a.MustCallTool(
@@ -51,20 +49,18 @@ func TestCompleteAmendOneEvent(t *testing.T) {
 	a.Announce(a.Name(), "search index")
 	a.MustCallTool(
 		constant.Complete,
-		map[string]any{
-			constant.Message: "first pass",
-		},
+		map[string]any{constant.Message: "first pass"},
 	)
 	a.Announce(a.Name(), "search index")
 	a.MustCallTool(
 		constant.Complete,
-		map[string]any{
-			constant.Message: "revised with edge cases",
-		},
+		map[string]any{constant.Message: "revised with edge cases"},
 	)
 	var found int
 
-	for _, e := range s.Store.Events(event_query.New().Kind(constant.Complete).SetLimit(10)) {
+	for _, e := range s.Store.Events(
+		event_query.New().Kind(constant.Complete).SetLimit(10),
+	) {
 		if e.Metadata[constant.Topic] == "search index" {
 			found++
 			assert.String(
@@ -86,16 +82,12 @@ func TestCompleteDifferentTopics(t *testing.T) {
 	a.Announce(a.Name(), "first task")
 	a.MustCallTool(
 		constant.Complete,
-		map[string]any{
-			constant.Message: "done with first",
-		},
+		map[string]any{constant.Message: "done with first"},
 	)
 	a.Announce(a.Name(), "second task")
 	a.MustCallTool(
 		constant.Complete,
-		map[string]any{
-			constant.Message: "done with second",
-		},
+		map[string]any{constant.Message: "done with second"},
 	)
 	var count int
 

@@ -13,8 +13,6 @@ func (s *Server) Monitoring(
 	s.monitor.RunNow()
 
 	return response.SuccessAny(
-		map[string]any{
-			"message": "Topic monitoring executed successfully",
-		},
+		map[string]any{"message": "Topic monitoring executed successfully"},
 	)
 }

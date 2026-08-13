@@ -14,9 +14,7 @@ func migrateEventMetadata(d *gorm.DB) {
 			Body       string `gorm:"column:body"`
 		}
 		var events []legacyEvent
-		d.Raw(
-			"SELECT identifier, kind, scope, body FROM event",
-		).Scan(&events)
+		d.Raw("SELECT identifier, kind, scope, body FROM event").Scan(&events)
 
 		for _, e := range events {
 			metadata := legacyMetadata(e.Kind, e.Scope, e.Body)

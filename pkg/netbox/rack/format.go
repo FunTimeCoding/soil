@@ -37,14 +37,8 @@ func (r *Rack) Format(f *option.Format) string {
 		s.Line("  Tenant: %s", r.Raw.Tenant.Get().GetName())
 	}
 
-	s.Line(
-		"  Created: %s",
-		r.Raw.Created.Get().Format(constant.DateMinute),
-	)
-	s.Line(
-		"  Updated: %s",
-		r.Raw.LastUpdated.Get().Format(constant.DateMinute),
-	)
+	s.Line("  Created: %s", r.Raw.Created.Get().Format(constant.DateMinute))
+	s.Line("  Updated: %s", r.Raw.LastUpdated.Get().Format(constant.DateMinute))
 	s.Line("  Devices: %d", r.Raw.DeviceCount)
 	s.Line("  Unit height: %d", r.Raw.UHeight)
 

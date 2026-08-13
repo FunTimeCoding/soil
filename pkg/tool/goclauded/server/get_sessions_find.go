@@ -36,7 +36,5 @@ func (s *Server) GetSessionsFind(
 		)
 	}
 
-	return server.GetSessionsFind200JSONResponse{
-		Matches: result,
-	}, nil
+	return server.GetSessionsFind200JSONResponse{Matches: result}, nil
 }

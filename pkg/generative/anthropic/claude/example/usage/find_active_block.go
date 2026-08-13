@@ -21,18 +21,13 @@ func findActiveBlock(all []*common.Timestamped) *block {
 			pastEnd := ts.Time.Equal(current.end) ||
 				ts.Time.After(current.end)
 			gap := len(current.entries) > 0 &&
-				ts.Time.Sub(
-					current.entries[len(current.entries)-1].Time,
-				) >= window
+				ts.Time.Sub(current.entries[len(current.entries)-1].Time) >= window
 			needNew = pastEnd || gap
 		}
 
 		if needNew {
 			start := ts.Time.Truncate(time.Hour)
-			current = &block{
-				start: start,
-				end:   start.Add(window),
-			}
+			current = &block{start: start, end: start.Add(window)}
 		}
 
 		current.entries = append(current.entries, ts)

@@ -6,9 +6,9 @@ import (
 )
 
 func (c *Client) TunnelTerminations() ([]*tunnel_termination.Termination, error) {
-	result, _, e := c.client.VpnAPI.VpnTunnelTerminationsList(
-		c.context,
-	).Limit(constant.PageLimit).Execute()
+	result, _, e := c.client.VpnAPI.VpnTunnelTerminationsList(c.context).Limit(
+		constant.PageLimit,
+	).Execute()
 
 	if e != nil {
 		return nil, e

@@ -23,11 +23,7 @@ func (s *Server) deleteComment(
 		return response.Fail("identifier is required: %v", g)
 	}
 
-	e := s.jira.Nested().Issue.DeleteCommentWithContext(
-		c,
-		key,
-		identifier,
-	)
+	e := s.jira.Nested().Issue.DeleteCommentWithContext(c, key, identifier)
 
 	if e != nil {
 		return response.Fail("delete comment failed: %v", e)

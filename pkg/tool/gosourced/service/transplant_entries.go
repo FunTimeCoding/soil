@@ -36,10 +36,7 @@ func transplantEntries(
 			}
 
 			seen[entry.declaration] = true
-			declaration := d.DecoratedNode(
-				source,
-				entry.declaration,
-			).(dst.Decl)
+			declaration := d.DecoratedNode(source, entry.declaration).(dst.Decl)
 			declaration.Decorations().Before = dst.EmptyLine
 			result = append(result, declaration)
 
@@ -52,18 +49,12 @@ func transplantEntries(
 
 		seen[entry.spec] = true
 		g := entry.declaration.(*ast.GenDecl)
-		declaration := d.DecoratedNode(
-			source,
-			entry.declaration,
-		).(*dst.GenDecl)
+		declaration := d.DecoratedNode(source, entry.declaration).(*dst.GenDecl)
 		spec := d.DecoratedNode(source, entry.spec).(dst.Spec)
 		single := len(g.Specs) == 1
 
 		if g.Tok == token.TYPE {
-			result = append(
-				result,
-				transplantSingle(declaration, spec, single),
-			)
+			result = append(result, transplantSingle(declaration, spec, single))
 
 			continue
 		}
@@ -125,11 +116,7 @@ func transplantEntries(
 			counts[part.declaration]++
 		}
 
-		merged := &dst.GenDecl{
-			Tok:    tok,
-			Lparen: true,
-			Rparen: true,
-		}
+		merged := &dst.GenDecl{Tok: tok, Lparen: true, Rparen: true}
 		merged.Decs.Before = dst.EmptyLine
 		carried := make(map[*dst.GenDecl]bool)
 

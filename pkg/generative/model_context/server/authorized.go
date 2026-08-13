@@ -22,11 +22,7 @@ func (s *Server) authorized(r *http.Request) bool {
 	address := web.ClientAddress(r)
 
 	if s.tokenAuthentication && s.token != "" && t == s.token {
-		fmt.Printf(
-			"Authorized token:%s address:%s\n",
-			t,
-			address,
-		)
+		fmt.Printf("Authorized token:%s address:%s\n", t, address)
 
 		return true
 	}
@@ -37,11 +33,7 @@ func (s *Server) authorized(r *http.Request) bool {
 		return true
 	}
 
-	fmt.Printf(
-		"Unauthorized token:%s address:%s\n",
-		t,
-		address,
-	)
+	fmt.Printf("Unauthorized token:%s address:%s\n", t, address)
 
 	return false
 }

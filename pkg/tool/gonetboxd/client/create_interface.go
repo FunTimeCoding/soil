@@ -12,10 +12,7 @@ func (c *Client) CreateInterface(
 	interfaceType string,
 	physicalAddress string,
 ) string {
-	body := client.CreateInterfaceRequest{
-		Name: name,
-		Type: interfaceType,
-	}
+	body := client.CreateInterfaceRequest{Name: name, Type: interfaceType}
 
 	if physicalAddress != "" {
 		body.PhysicalAddress = &physicalAddress

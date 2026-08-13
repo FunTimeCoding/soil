@@ -7,11 +7,7 @@ import (
 )
 
 func TestFixture(t *testing.T) {
-	assert.Suffix(
-		t,
-		"soil/fixture/example.txt",
-		fixture.Path("example.txt"),
-	)
+	assert.Suffix(t, "soil/fixture/example.txt", fixture.Path("example.txt"))
 }
 
 func TestFileExists(t *testing.T) {

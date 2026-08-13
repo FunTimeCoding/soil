@@ -51,10 +51,7 @@ func (s *Server) GetChannelHistory(
 		since, f := parseSince(a.Since)
 
 		if f != nil {
-			return response.Fail(
-				"invalid since format: %v",
-				f,
-			)
+			return response.Fail("invalid since format: %v", f)
 		}
 
 		posts, g = s.client.PostsSince(ch, since)
@@ -107,10 +104,7 @@ func (s *Server) GetChannelHistory(
 		rows[i] = r
 	}
 
-	result := map[string]any{
-		"posts": rows,
-		"limit": limit,
-	}
+	result := map[string]any{"posts": rows, "limit": limit}
 
 	if truncated > 0 {
 		result["note"] = fmt.Sprintf(

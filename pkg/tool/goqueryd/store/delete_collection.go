@@ -36,10 +36,7 @@ func (s *Store) DeleteCollection(name string) bool {
 	}
 
 	errors.PanicOnError(rows.Err())
-	_, e = s.database.Exec(
-		"DELETE FROM document WHERE collection = ?",
-		name,
-	)
+	_, e = s.database.Exec("DELETE FROM document WHERE collection = ?", name)
 	errors.PanicOnError(e)
 
 	for _, hash := range orphanedHashes {
@@ -49,10 +46,7 @@ func (s *Store) DeleteCollection(name string) bool {
 		errors.PanicOnError(e)
 	}
 
-	_, e = s.database.Exec(
-		"DELETE FROM context WHERE collection = ?",
-		name,
-	)
+	_, e = s.database.Exec("DELETE FROM context WHERE collection = ?", name)
 	errors.PanicOnError(e)
 	_, e = s.database.Exec(
 		"DELETE FROM source_type_tag WHERE collection = ?",

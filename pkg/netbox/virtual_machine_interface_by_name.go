@@ -24,9 +24,5 @@ func (c *Client) VirtualMachineInterfaceByName(
 		}
 	}
 
-	return nil, fmt.Errorf(
-		"interface %s not found for VM %s",
-		name,
-		vm.Name,
-	)
+	return nil, fmt.Errorf("interface %s not found for VM %s", name, vm.Name)
 }

@@ -14,10 +14,7 @@ func (c *Client) UpdateMachine(
 	result, e := c.client.UpdateMachineWithResponse(
 		c.context,
 		identifier,
-		&client.UpdateMachineParams{
-			Instance: &c.instance,
-			Node:     node,
-		},
+		&client.UpdateMachineParams{Instance: &c.instance, Node: node},
 		body,
 	)
 	errors.PanicOnError(e)

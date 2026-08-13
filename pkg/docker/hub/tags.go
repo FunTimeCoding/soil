@@ -12,9 +12,10 @@ import (
 
 func (c *Client) Tags(image string) []*tag.Tag {
 	r := web.NewGet(
-		c.base.Copy().Path(
-			join.Empty(image, "/tags"),
-		).Set(constant.PageSizeParameter, constant.PageSize).String(),
+		c.base.Copy().Path(join.Empty(image, "/tags")).Set(
+			constant.PageSizeParameter,
+			constant.PageSize,
+		).String(),
 	)
 	r.Header.Set(webConstant.Accept, webConstant.Object)
 	response := web.Send(web.Client(), r)

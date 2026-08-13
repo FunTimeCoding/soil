@@ -13,10 +13,7 @@ func Registry(
 	c *gitlab.Client,
 	p *project.Project,
 ) {
-	for _, r := range c.MustRegistryRepositories(
-		p.Identifier,
-		false,
-	) {
+	for _, r := range c.MustRegistryRepositories(p.Identifier, false) {
 		images := c.MustImages(p.Identifier, r.ID)
 
 		if len(images) == 0 {

@@ -29,10 +29,7 @@ func (a *Alert) extended(
 	}
 
 	if a.Snoozed {
-		s.Line(
-			"  Snoozed: %s",
-			a.SnoozeUntil.Format(timeConstant.DateMinute),
-		)
+		s.Line("  Snoozed: %s", a.SnoozeUntil.Format(timeConstant.DateMinute))
 	}
 
 	if investigate && a.Report.AckTime > 0 {

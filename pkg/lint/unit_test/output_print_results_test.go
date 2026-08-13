@@ -76,11 +76,7 @@ func TestPrintResultsSummaryShowsBlockedDetailed(t *testing.T) {
 			output.PrintResults(entries, true)
 		},
 	)
-	assert.String(
-		t,
-		"pkg/foo.go\npkg/bar.go: blocked\n",
-		result,
-	)
+	assert.String(t, "pkg/foo.go\npkg/bar.go: blocked\n", result)
 }
 
 func TestPrintResultsLineLevel(t *testing.T) {

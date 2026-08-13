@@ -20,10 +20,10 @@ func (d *Database) validateDatabase(n string) {
 		log.Panicf("database name must start with a letter or underscore")
 	}
 
-	if !regexp.MustCompile(
-		`^[a-zA-Z_][a-zA-Z0-9_$]*$`,
-	).MatchString(n) {
-		log.Panicf("database name can only contain letters, digits, underscores, and dollar signs")
+	if !regexp.MustCompile(`^[a-zA-Z_][a-zA-Z0-9_$]*$`).MatchString(n) {
+		log.Panicf(
+			"database name can only contain letters, digits, underscores, and dollar signs",
+		)
 	}
 
 	lower := strings.ToLower(n)
@@ -36,10 +36,7 @@ func (d *Database) validateDatabase(n string) {
 		"pg_catalog",
 	} {
 		if lower == reserved {
-			log.Panicf(
-				"database name cannot be a reserved name: %s",
-				reserved,
-			)
+			log.Panicf("database name cannot be a reserved name: %s", reserved)
 		}
 	}
 }

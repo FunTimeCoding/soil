@@ -54,9 +54,6 @@ func (s *Server) GetThreadReplies(
 	}
 
 	return response.SuccessAny(
-		map[string]any{
-			"post_id": a.PostID,
-			"replies": rows,
-		},
+		map[string]any{"post_id": a.PostID, "replies": rows},
 	)
 }

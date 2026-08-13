@@ -39,7 +39,5 @@ func (s *Server) GetMachine(
 		return server.GetMachine500JSONResponse(*s.captureDetail(e)), nil
 	}
 
-	return server.GetMachine200JSONResponse(
-		*convert.MachineDetail(vm),
-	), nil
+	return server.GetMachine200JSONResponse(*convert.MachineDetail(vm)), nil
 }

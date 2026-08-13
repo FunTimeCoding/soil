@@ -16,26 +16,14 @@ func Main(
 	r := reporter.New(constant.Identity.Name(), version).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
-	a.Boolean(
-		argumentConstant.Fix,
-		false,
-		"Fix concerns that can be fixed",
-	)
+	a.Boolean(argumentConstant.Fix, false, "Fix concerns that can be fixed")
 	a.Boolean(
 		argumentConstant.Summary,
 		false,
 		"Print one line per modified file instead of per-edit detail",
 	)
-	a.String(
-		argumentConstant.Skip,
-		"",
-		"Directories to skip, comma separated",
-	)
-	a.Boolean(
-		argumentConstant.Verbose,
-		false,
-		"Verbose output",
-	)
+	a.String(argumentConstant.Skip, "", "Directories to skip, comma separated")
+	a.Boolean(argumentConstant.Verbose, false, "Verbose output")
 	a.Parse(version, gitHash, buildDate)
 	lint.Lint(
 		a.GetString(argumentConstant.Skip),

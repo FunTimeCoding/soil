@@ -6,5 +6,7 @@ import (
 )
 
 func NewAdministrator() *Database {
-	return New(environment.Required(constant.PostgresAdministratorLocatorEnvironment))
+	return New(
+		environment.Required(constant.PostgresAdministratorLocatorEnvironment),
+	)
 }

@@ -51,10 +51,7 @@ func resultItem(r Result) gomponents.Node {
 			gomponents.Attr("hx-swap", "innerHTML"),
 		)
 	} else {
-		attrs = append(
-			attrs,
-			gomponents.Attr("href", r.Command.Path),
-		)
+		attrs = append(attrs, gomponents.Attr("href", r.Command.Path))
 	}
 
 	attrs = append(attrs, gomponents.Group(children))

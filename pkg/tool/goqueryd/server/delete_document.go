@@ -14,14 +14,9 @@ func (s *Server) DeleteDocument(
 
 	if e != nil {
 		return server.DeleteDocument500JSONResponse(
-			*s.captureFail(
-				e,
-				constant.UnexpectedError,
-			),
+			*s.captureFail(e, constant.UnexpectedError),
 		), nil
 	}
 
-	return server.DeleteDocument200JSONResponse{
-		Deleted: new(bool(deleted)),
-	}, nil
+	return server.DeleteDocument200JSONResponse{Deleted: new(bool(deleted))}, nil
 }

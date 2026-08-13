@@ -15,26 +15,12 @@ func TestRule(t *testing.T) {
 	)
 	actualAlert.RawAlert = nil
 	actualAlert.RawGroup = nil
-	assert.Any(
-		t,
-		&rule.Rule{
-			Name:  "Alfa",
-			Group: "Bravo",
-		},
-		actualAlert,
-	)
+	assert.Any(t, &rule.Rule{Name: "Alfa", Group: "Bravo"}, actualAlert)
 	actualRecord := rule.NewRecord(
 		&v1.RecordingRule{Name: constant.UpperAlfa},
 		&v1.RuleGroup{Name: constant.UpperBravo},
 	)
 	actualRecord.RawRecord = nil
 	actualRecord.RawGroup = nil
-	assert.Any(
-		t,
-		&rule.Rule{
-			Name:  "Alfa",
-			Group: "Bravo",
-		},
-		actualRecord,
-	)
+	assert.Any(t, &rule.Rule{Name: "Alfa", Group: "Bravo"}, actualRecord)
 }

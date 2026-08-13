@@ -50,9 +50,7 @@ func (m *Model) Update(s tea.Msg) (tea.Model, tea.Cmd) {
 		return m, nil
 	case viewDetailMessage:
 		i := m.selectedItem()
-		m.modal = &Modal{
-			content: fmt.Sprintf("Details: %+v", i),
-		}
+		m.modal = &Modal{content: fmt.Sprintf("Details: %+v", i)}
 	}
 
 	t, result := m.table.Update(s)

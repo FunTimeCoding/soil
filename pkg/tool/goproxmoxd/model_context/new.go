@@ -14,14 +14,9 @@ func New(
 	version string,
 ) *Server {
 	result := &Server{
-		server: server.New(
-			constant.Identity,
-			version,
-		).WithInstructions(
+		server: server.New(constant.Identity, version).WithInstructions(
 			constant.Identity.RenderInstructions(
-				map[string]bool{
-					constant.MultiInstance: len(v.Instances()) > 1,
-				},
+				map[string]bool{constant.MultiInstance: len(v.Instances()) > 1},
 			),
 		).WithRecorder(t).Server(),
 		service:  v,

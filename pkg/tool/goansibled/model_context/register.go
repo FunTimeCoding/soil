@@ -9,9 +9,7 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.Playbooks,
-			mcp.WithDescription(
-				"List configured ansible playbook paths.",
-			),
+			mcp.WithDescription("List configured ansible playbook paths."),
 		),
 		s.playbooks,
 	)
@@ -59,7 +57,9 @@ func (s *Server) register() {
 			),
 			mcp.WithNumber(
 				constant.Limit,
-				mcp.Description("Maximum number of runs to return. Default: 20."),
+				mcp.Description(
+					"Maximum number of runs to return. Default: 20.",
+				),
 			),
 			mcp.WithString(
 				constant.Status,

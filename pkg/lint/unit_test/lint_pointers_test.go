@@ -43,9 +43,7 @@ func gitignoredChecker(ignored ...string) lint.Checker {
 func TestPointersGitignored(t *testing.T) {
 	l := gitignoredChecker(".claude/notes/alfa.md")(
 		constant.UpperAlfa,
-		strings.NewReader(
-			"Style guide at `.claude/notes/alfa.md` today.\n",
-		),
+		strings.NewReader("Style guide at `.claude/notes/alfa.md` today.\n"),
 	)
 	assertReport(t, "Alfa", false, nil, "", l)
 }

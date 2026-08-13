@@ -19,10 +19,7 @@ func Run() {
 		}
 	)
 	s := mcp.NewServer(
-		&mcp.Implementation{
-			Name:    "Greeter",
-			Version: library.DefaultVersion,
-		},
+		&mcp.Implementation{Name: "Greeter", Version: library.DefaultVersion},
 		nil,
 	)
 	mcp.AddTool(
@@ -40,9 +37,7 @@ func Run() {
 			Output,
 			error,
 		) {
-			return nil, Output{
-				Greeting: fmt.Sprintf("Hi %s", i.Name),
-			}, nil
+			return nil, Output{Greeting: fmt.Sprintf("Hi %s", i.Name)}, nil
 		},
 	)
 	errors.PanicOnError(s.Run(context.Background(), &mcp.StdioTransport{}))

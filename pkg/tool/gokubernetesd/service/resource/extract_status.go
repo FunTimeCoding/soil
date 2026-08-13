@@ -39,11 +39,7 @@ func ExtractStatus(u *unstructured.Unstructured) string {
 		return fmt.Sprintf("%d/%d ready", readyReplicas, replicas)
 	}
 
-	phase, okay, f := unstructured.NestedString(
-		u.Object,
-		"status",
-		"phase",
-	)
+	phase, okay, f := unstructured.NestedString(u.Object, "status", "phase")
 	errors.PanicOnError(f)
 
 	if okay {
@@ -75,11 +71,7 @@ func ExtractStatus(u *unstructured.Unstructured) string {
 		}
 	}
 
-	specType, okay, f := unstructured.NestedString(
-		u.Object,
-		"spec",
-		"type",
-	)
+	specType, okay, f := unstructured.NestedString(u.Object, "spec", "type")
 	errors.PanicOnError(f)
 
 	if okay {

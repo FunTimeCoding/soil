@@ -114,24 +114,14 @@ func findImportAliasEdits(
 				r.AddConcern(
 					concern.NewFile(
 						"import_alias",
-						fmt.Sprintf(
-							"de-aliased %s → %s",
-							alias,
-							declaredName,
-						),
+						fmt.Sprintf("de-aliased %s → %s", alias, declaredName),
 						filePath,
 						true,
 					),
 				)
 				result = append(
 					result,
-					buildImportAliasEdits(
-						p,
-						file,
-						spec,
-						alias,
-						declaredName,
-					)...,
+					buildImportAliasEdits(p, file, spec, alias, declaredName)...,
 				)
 			}
 		}

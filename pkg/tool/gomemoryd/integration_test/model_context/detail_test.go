@@ -227,10 +227,7 @@ func TestSearchMemoriesDetailCarriesType(t *testing.T) {
 	)
 	raw := s.MustCallTool(
 		constant.SearchMemories,
-		map[string]any{
-			constant.Query:  "retry",
-			constant.Detail: true,
-		},
+		map[string]any{constant.Query: "retry", constant.Detail: true},
 	)
 	var results []map[string]any
 	assert.FatalOnError(t, json.Unmarshal([]byte(raw), &results))
@@ -288,10 +285,7 @@ func TestProfileAlwaysTierCompact(t *testing.T) {
 			constant.Add:              constant.AlwaysTag,
 		},
 	)
-	result := decode(
-		t,
-		s.MustCallTool(constant.Profile, map[string]any{}),
-	)
+	result := decode(t, s.MustCallTool(constant.Profile, map[string]any{}))
 	always := result[constant.AlwaysTag].([]any)
 	assert.Count(t, 1, always)
 	first := always[0].(map[string]any)

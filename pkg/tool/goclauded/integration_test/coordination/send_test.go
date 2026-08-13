@@ -43,9 +43,7 @@ func TestSendBroadcast(t *testing.T) {
 	b.CheckLive()
 	a.MustCallTool(
 		constant.Send,
-		map[string]any{
-			constant.Body: "deploying service",
-		},
+		map[string]any{constant.Body: "deploying service"},
 	)
 	r := b.CheckLive()
 	messages := clientEntriesByKind(r.Entries, constant.QueueMessage)

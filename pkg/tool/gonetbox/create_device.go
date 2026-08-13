@@ -26,23 +26,10 @@ func createDevice(c *client.Client) *cobra.Command {
 				t = &tenant
 			}
 
-			fmt.Println(
-				c.CreateDevice(
-					arguments[0],
-					role,
-					deviceType,
-					site,
-					t,
-				),
-			)
+			fmt.Println(c.CreateDevice(arguments[0], role, deviceType, site, t))
 		},
 	}
-	result.Flags().StringVar(
-		&role,
-		"role",
-		"",
-		"device role name (required)",
-	)
+	result.Flags().StringVar(&role, "role", "", "device role name (required)")
 	result.Flags().StringVar(
 		&deviceType,
 		"type",

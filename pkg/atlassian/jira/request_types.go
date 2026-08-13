@@ -6,13 +6,7 @@ func (c *Client) RequestTypes(
 	desk int,
 	group int,
 ) (*models.ProjectRequestTypePageScheme, error) {
-	result, _, e := c.service.Request.Type.Gets(
-		c.context,
-		desk,
-		group,
-		0,
-		50,
-	)
+	result, _, e := c.service.Request.Type.Gets(c.context, desk, group, 0, 50)
 
 	return result, e
 }

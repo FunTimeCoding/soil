@@ -21,11 +21,7 @@ func Main(
 	a := argument.NewInstance(constant.Identity)
 	a.Boolean(argumentConstant.Connect, false, "Connect to the server")
 	a.Boolean(argumentConstant.Once, false, "Run once and exit")
-	a.Boolean(
-		argumentConstant.DryRun,
-		false,
-		"Print sources without executing",
-	)
+	a.Boolean(argumentConstant.DryRun, false, "Print sources without executing")
 	a.Boolean(argumentConstant.Parallel, false, "Run checks in parallel")
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()

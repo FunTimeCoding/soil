@@ -38,10 +38,7 @@ func (s *Store) FindSimilarFiles(
 		if distance <= 5 {
 			candidates = append(
 				candidates,
-				scored{
-					path:     path,
-					distance: distance,
-				},
+				scored{path: path, distance: distance},
 			)
 		}
 	}

@@ -16,10 +16,7 @@ func historyNavigation(
 		links = append(
 			links,
 			html.A(
-				gomponents.Attr(
-					"hx-get",
-					historyLink(page-1, kinds),
-				),
+				gomponents.Attr("hx-get", historyLink(page-1, kinds)),
 				gomponents.Attr("hx-target", "#history-content"),
 				gomponents.Attr("hx-swap", "innerHTML"),
 				gomponents.Text("← Newer"),
@@ -35,10 +32,7 @@ func historyNavigation(
 		links = append(
 			links,
 			html.A(
-				gomponents.Attr(
-					"hx-get",
-					historyLink(page+1, kinds),
-				),
+				gomponents.Attr("hx-get", historyLink(page+1, kinds)),
 				gomponents.Attr("hx-target", "#history-content"),
 				gomponents.Attr("hx-swap", "innerHTML"),
 				gomponents.Text("Older →"),

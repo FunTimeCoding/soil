@@ -27,8 +27,5 @@ func (s *Server) rosterSection() gomponents.Node {
 		)
 	}
 
-	return html.Div(
-		html.Class("roster-grid"),
-		gomponents.Group(cards),
-	)
+	return html.Div(html.Class("roster-grid"), gomponents.Group(cards))
 }

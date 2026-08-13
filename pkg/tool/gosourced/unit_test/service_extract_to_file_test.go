@@ -10,10 +10,7 @@ import (
 )
 
 func TestExtractFunction(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		serviceTestdata("extract-function/src"),
-	)
+	d := testutil.PrepareTestPackage(t, serviceTestdata("extract-function/src"))
 	s := testService()
 	r, e := s.ExtractToFile(d, "pkg/target/combined.go", "FormatName")
 	assert.FatalOnError(t, e)
@@ -21,11 +18,7 @@ func TestExtractFunction(t *testing.T) {
 	extracted := readFixtureFile(t, d, "pkg/target/format_name.go")
 	assert.StringContains(t, "func FormatName(", extracted)
 	assert.StringContains(t, "fmt.Sprintf", extracted)
-	assert.StringContains(
-		t,
-		"// FormatName renders a labeled name.",
-		extracted,
-	)
+	assert.StringContains(t, "// FormatName renders a labeled name.", extracted)
 	source := readFixtureFile(t, d, "pkg/target/combined.go")
 	assert.True(t, !strings.Contains(source, "func FormatName("))
 	assert.True(t, !strings.Contains(source, "// FormatName renders"))
@@ -34,10 +27,7 @@ func TestExtractFunction(t *testing.T) {
 }
 
 func TestExtractFunctionRemovesUnusedImport(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		serviceTestdata("extract-function/src"),
-	)
+	d := testutil.PrepareTestPackage(t, serviceTestdata("extract-function/src"))
 	s := testService()
 	r, e := s.ExtractToFile(d, "pkg/target/combined.go", "TrimName")
 	assert.FatalOnError(t, e)
@@ -51,10 +41,7 @@ func TestExtractFunctionRemovesUnusedImport(t *testing.T) {
 }
 
 func TestExtractFunctionNoImports(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		serviceTestdata("extract-function/src"),
-	)
+	d := testutil.PrepareTestPackage(t, serviceTestdata("extract-function/src"))
 	s := testService()
 	r, e := s.ExtractToFile(d, "pkg/target/combined.go", "PlainName")
 	assert.FatalOnError(t, e)
@@ -65,10 +52,7 @@ func TestExtractFunctionNoImports(t *testing.T) {
 }
 
 func TestExtractFunctionNotFound(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		serviceTestdata("extract-function/src"),
-	)
+	d := testutil.PrepareTestPackage(t, serviceTestdata("extract-function/src"))
 	s := testService()
 	r, e := s.ExtractToFile(d, "pkg/target/combined.go", "Missing")
 	assert.FatalOnError(t, e)
@@ -77,20 +61,14 @@ func TestExtractFunctionNotFound(t *testing.T) {
 }
 
 func TestExtractFunctionFileNotFound(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		serviceTestdata("extract-function/src"),
-	)
+	d := testutil.PrepareTestPackage(t, serviceTestdata("extract-function/src"))
 	s := testService()
 	_, e := s.ExtractToFile(d, "pkg/target/missing.go", "Something")
 	assert.True(t, e != nil)
 }
 
 func TestExtractFunctionTargetExists(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		serviceTestdata("extract-function/src"),
-	)
+	d := testutil.PrepareTestPackage(t, serviceTestdata("extract-function/src"))
 	target := filepath.Join(d, "pkg/target/format_name.go")
 	e := os.WriteFile(target, []byte("package target\n"), 0644)
 	assert.FatalOnError(t, e)

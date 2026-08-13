@@ -12,9 +12,7 @@ func (s *Server) GetTransitions(
 	transitions, e := s.jira.Transitions(r.Key)
 
 	if e != nil {
-		return server.GetTransitions500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.GetTransitions500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	result := make([]*server.JiraTransition, 0, len(transitions))

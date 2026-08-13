@@ -18,7 +18,9 @@ func (t *Tester) AddDeployment(
 	r := int32(replicas)
 	_, e := t.Dynamic.Resource(
 		schema.GroupVersionResource{
-			Group: "apps", Version: "v1", Resource: "deployments",
+			Group:    "apps",
+			Version:  "v1",
+			Resource: "deployments",
 		},
 	).Namespace(namespace).Create(
 		t.context(),
@@ -34,9 +36,7 @@ func (t *Tester) AddDeployment(
 				"spec": map[string]any{
 					"replicas": replicas,
 					"selector": map[string]any{
-						"matchLabels": map[string]any{
-							"app": name,
-						},
+						"matchLabels": map[string]any{"app": name},
 					},
 				},
 				"status": map[string]any{
@@ -51,10 +51,7 @@ func (t *Tester) AddDeployment(
 	_, f := t.Clientset.AppsV1().Deployments(namespace).Create(
 		t.context(),
 		&apps.Deployment{
-			ObjectMeta: v1.ObjectMeta{
-				Name:      name,
-				Namespace: namespace,
-			},
+			ObjectMeta: v1.ObjectMeta{Name: name, Namespace: namespace},
 			Spec: apps.DeploymentSpec{
 				Replicas: &r,
 				Selector: &v1.LabelSelector{

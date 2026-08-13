@@ -20,11 +20,7 @@ func TestClientsDiscovered(t *testing.T) {
 func TestClientsExcludesTool(t *testing.T) {
 	v := virtual_file_system.New()
 	v.WriteString("pkg/tool/gotestd/client.go", "package gotestd\n")
-	assert.Integer(
-		t,
-		0,
-		len(scan.Clients(v, "test", scan.NewConfiguration())),
-	)
+	assert.Integer(t, 0, len(scan.Clients(v, "test", scan.NewConfiguration())))
 }
 
 func TestClientsExcludesConfiguration(t *testing.T) {

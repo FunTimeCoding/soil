@@ -11,8 +11,6 @@ func ServeCertificateAsynchronous(
 	key string,
 ) {
 	go func() {
-		errors.PanicOnUnclean(
-			s.ListenAndServeTLS(certificate, key),
-		)
+		errors.PanicOnUnclean(s.ListenAndServeTLS(certificate, key))
 	}()
 }

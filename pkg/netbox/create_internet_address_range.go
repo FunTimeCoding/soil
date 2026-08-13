@@ -21,9 +21,9 @@ func (c *Client) CreateInternetAddressRange(
 		q.SetDescription(description)
 	}
 
-	result, _, e := c.client.IpamAPI.IpamIpRangesCreate(
-		c.context,
-	).WritableIPRangeRequest(*q).Execute()
+	result, _, e := c.client.IpamAPI.IpamIpRangesCreate(c.context).WritableIPRangeRequest(
+		*q,
+	).Execute()
 
 	if e != nil {
 		return nil, e

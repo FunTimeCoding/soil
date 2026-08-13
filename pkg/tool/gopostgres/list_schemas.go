@@ -18,9 +18,7 @@ func listSchemas(c *client.Client) *cobra.Command {
 		) {
 			r, e := c.ListSchemas(
 				context.Background(),
-				&client.ListSchemasParams{
-					Instance: instancePointer(instance),
-				},
+				&client.ListSchemasParams{Instance: instancePointer(instance)},
 			)
 			errors.PanicOnError(e)
 			printResponse(r)

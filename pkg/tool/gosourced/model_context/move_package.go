@@ -34,11 +34,7 @@ func (s *Server) movePackage(
 		return response.Fail("%s", e)
 	}
 
-	r, e := s.service.MovePackage(
-		directory,
-		a.PackagePath,
-		a.TargetPackagePath,
-	)
+	r, e := s.service.MovePackage(directory, a.PackagePath, a.TargetPackagePath)
 
 	if e != nil {
 		return s.captureFail(e, constant.UnexpectedError)

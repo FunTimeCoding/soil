@@ -23,15 +23,8 @@ func printToolSummary(
 	var parts []string
 
 	for _, tc := range counts[:top] {
-		parts = append(
-			parts,
-			fmt.Sprintf("%d %s", tc.Count, tc.Name),
-		)
+		parts = append(parts, fmt.Sprintf("%d %s", tc.Count, tc.Name))
 	}
 
-	fmt.Printf(
-		"%d tool calls (%s)\n",
-		total,
-		strings.Join(parts, ", "),
-	)
+	fmt.Printf("%d tool calls (%s)\n", total, strings.Join(parts, ", "))
 }

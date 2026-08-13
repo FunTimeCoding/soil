@@ -9,10 +9,7 @@ func Instances(
 	var result []*SlimInstance
 
 	for i := range v {
-		result = append(
-			result,
-			Instance(&v[i], v[i].Name == active),
-		)
+		result = append(result, Instance(&v[i], v[i].Name == active))
 	}
 
 	return result

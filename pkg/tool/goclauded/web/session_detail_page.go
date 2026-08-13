@@ -138,10 +138,7 @@ func (s *Server) sessionDetailPage(
 		)
 	}
 
-	content = append(
-		content,
-		html.Table(html.TBody(identity...)),
-	)
+	content = append(content, html.Table(html.TBody(identity...)))
 
 	if len(d.Usage) > 0 {
 		content = append(
@@ -171,10 +168,7 @@ func (s *Server) sessionDetailPage(
 	}
 
 	if len(d.Completions) > 0 {
-		content = append(
-			content,
-			html.H4(gomponents.Text("Completions")),
-		)
+		content = append(content, html.H4(gomponents.Text("Completions")))
 		var rows []gomponents.Node
 
 		for _, c := range d.Completions {

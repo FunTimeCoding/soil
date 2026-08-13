@@ -27,12 +27,7 @@ func createCluster(c *client.Client) *cobra.Command {
 		"",
 		"cluster type name (required)",
 	)
-	result.Flags().StringVar(
-		&site,
-		"site",
-		"",
-		"site name (required)",
-	)
+	result.Flags().StringVar(&site, "site", "", "site name (required)")
 	errors.PanicOnError(result.MarkFlagRequired("type"))
 	errors.PanicOnError(result.MarkFlagRequired("site"))
 

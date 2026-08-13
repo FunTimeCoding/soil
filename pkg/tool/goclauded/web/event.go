@@ -28,19 +28,11 @@ func (s *Server) event() http.HandlerFunc {
 			}
 
 			if subs.Has(constant.Roster) {
-				layout.PushEvent(
-					w,
-					constant.Roster,
-					s.rosterSection(),
-				)
+				layout.PushEvent(w, constant.Roster, s.rosterSection())
 			}
 
 			if subs.Has(constant.Activity) {
-				layout.PushEvent(
-					w,
-					constant.Activity,
-					s.activitySection(nil),
-				)
+				layout.PushEvent(w, constant.Activity, s.activitySection(nil))
 			}
 
 			if subs.Has(constant.Pulse) {

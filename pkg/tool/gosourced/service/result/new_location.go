@@ -5,9 +5,5 @@ func NewLocation(
 	line int,
 	packagePath string,
 ) *Location {
-	return &Location{
-		File:    file,
-		Line:    line,
-		Package: packagePath,
-	}
+	return &Location{File: file, Line: line, Package: packagePath}
 }

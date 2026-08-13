@@ -10,14 +10,7 @@ import (
 var (
 	DefaultWeights = helper.SeverityWeights(3, 2, 1)
 
-	DefaultSource = source.New(
-		1,
-		0,
-		0,
-		0,
-		0,
-		DefaultWeights,
-	)
+	DefaultSource = source.New(1, 0, 0, 0, 0, DefaultWeights)
 
 	MonitorCollector = collector.New(
 		"undefined",

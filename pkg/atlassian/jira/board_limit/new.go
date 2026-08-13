@@ -5,9 +5,5 @@ func New(
 	column string,
 	maximum int,
 ) *Limit {
-	return &Limit{
-		Board:   board,
-		Column:  column,
-		Maximum: maximum,
-	}
+	return &Limit{Board: board, Column: column, Maximum: maximum}
 }

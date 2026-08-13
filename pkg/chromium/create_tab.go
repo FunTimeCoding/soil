@@ -12,9 +12,7 @@ func (c *Client) CreateTab(l string) (string, error) {
 		return "", e
 	}
 
-	identifier, e := target.CreateTarget(l).Do(
-		cdp.WithExecutor(c.context, b),
-	)
+	identifier, e := target.CreateTarget(l).Do(cdp.WithExecutor(c.context, b))
 
 	if e != nil {
 		return "", e

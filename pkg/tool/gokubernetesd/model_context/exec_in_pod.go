@@ -45,9 +45,13 @@ func (s *Server) ExecInPod(
 
 	b, cancel := context.WithTimeout(x, timeout)
 	defer cancel()
-	request := c.Clientset().CoreV1().RESTClient().Post().Resource(
-		"pods",
-	).Namespace(a.Namespace).Name(a.Name).SubResource("exec")
+	request := c.Clientset().CoreV1().RESTClient().Post().Resource("pods").Namespace(
+		a.Namespace,
+	).Name(
+		a.Name,
+	).SubResource(
+		"exec",
+	)
 	request.VersionedParams(
 		&v1.PodExecOptions{
 			Command:   a.Command,

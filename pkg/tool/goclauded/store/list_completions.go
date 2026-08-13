@@ -7,9 +7,7 @@ import (
 
 func (s *Store) ListCompletions() []completion.Completion {
 	var result []completion.Completion
-	errors.PanicOnError(
-		s.database.Order("created_at ASC").Find(&result).Error,
-	)
+	errors.PanicOnError(s.database.Order("created_at ASC").Find(&result).Error)
 
 	return result
 }

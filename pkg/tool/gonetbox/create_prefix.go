@@ -20,12 +20,7 @@ func createPrefix(c *client.Client) *cobra.Command {
 			fmt.Println(c.CreatePrefix(arguments[0], site, description))
 		},
 	}
-	result.Flags().StringVar(
-		&site,
-		"site",
-		"",
-		"site name (optional)",
-	)
+	result.Flags().StringVar(&site, "site", "", "site name (optional)")
 	result.Flags().StringVar(
 		&description,
 		"description",

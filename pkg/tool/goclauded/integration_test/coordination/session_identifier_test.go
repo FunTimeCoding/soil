@@ -14,18 +14,8 @@ func TestEventSessionID(t *testing.T) {
 	a := s.NewSession(t)
 	defer a.Close()
 	a.Announce(a.Name(), "working")
-	a.MustCallTool(
-		constant.Moment,
-		map[string]any{
-			constant.Line: "a moment",
-		},
-	)
-	a.MustCallTool(
-		constant.Complete,
-		map[string]any{
-			constant.Message: "done",
-		},
-	)
+	a.MustCallTool(constant.Moment, map[string]any{constant.Line: "a moment"})
+	a.MustCallTool(constant.Complete, map[string]any{constant.Message: "done"})
 
 	for _, e := range s.Store.Events(event_query.New().SetLimit(10)) {
 		if e.Kind == "register" {
@@ -44,9 +34,7 @@ func TestSummarySessionID(t *testing.T) {
 	a.Announce(a.Name(), "working")
 	a.MustCallTool(
 		constant.Summarize,
-		map[string]any{
-			constant.Body: "session summary",
-		},
+		map[string]any{constant.Body: "session summary"},
 	)
 	v := s.Store.ListSummaries()
 	assert.Count(t, 1, v)
@@ -59,12 +47,7 @@ func TestCompletionSessionID(t *testing.T) {
 	a := s.NewSession(t)
 	defer a.Close()
 	a.Announce(a.Name(), "working")
-	a.MustCallTool(
-		constant.Complete,
-		map[string]any{
-			constant.Message: "done",
-		},
-	)
+	a.MustCallTool(constant.Complete, map[string]any{constant.Message: "done"})
 	var found bool
 
 	for _, c := range s.Store.RecentCompletions() {

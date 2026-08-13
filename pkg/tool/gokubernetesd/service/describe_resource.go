@@ -45,20 +45,14 @@ func (s *Service) DescribeResource(
 			v1.GetOptions{},
 		)
 	} else {
-		object, g = c.Dynamic().Resource(gvr).Get(
-			x,
-			q.Name,
-			v1.GetOptions{},
-		)
+		object, g = c.Dynamic().Resource(gvr).Get(x, q.Name, v1.GetOptions{})
 	}
 
 	if g != nil {
 		return nil, g
 	}
 
-	selectors := []string{
-		fmt.Sprintf("involvedObject.name=%s", q.Name),
-	}
+	selectors := []string{fmt.Sprintf("involvedObject.name=%s", q.Name)}
 
 	if namespaced {
 		selectors = append(
@@ -90,9 +84,5 @@ func (s *Service) DescribeResource(
 
 	filtered := resource.FilterObject(object.Object, q.Unfiltered)
 
-	return describe_result.New(
-		filtered.Object,
-		eventList,
-		filtered.Filtered,
-	), nil
+	return describe_result.New(filtered.Object, eventList, filtered.Filtered), nil
 }

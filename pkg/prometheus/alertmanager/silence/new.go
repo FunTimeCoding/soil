@@ -30,9 +30,7 @@ func New(
 	}
 
 	return &Silence{
-		MonitorIdentifier: monitor.GoSilence.StringIdentifier(
-			*v.ID,
-		),
+		MonitorIdentifier: monitor.GoSilence.StringIdentifier(*v.ID),
 		Identifier: *v.ID,
 		State:      *v.Status.State,
 		Match:      join.Comma(match),
@@ -41,9 +39,7 @@ func New(
 		Author:     *v.CreatedBy,
 		Comment:    *v.Comment,
 		Rule:       rule,
-		Link: locator.New(
-			host,
-		).Trail().Fragment("/silences/%s", *v.ID).String(),
+		Link: locator.New(host).Trail().Fragment("/silences/%s", *v.ID).String(),
 		Raw: v,
 	}
 }

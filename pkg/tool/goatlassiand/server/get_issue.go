@@ -13,9 +13,7 @@ func (s *Server) GetIssue(
 	result, e := s.jira.Issue(r.Key)
 
 	if e != nil {
-		return server.GetIssue500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.GetIssue500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	converted := convert.JiraIssue(result)

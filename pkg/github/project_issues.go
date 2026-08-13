@@ -6,12 +6,7 @@ func (c *Client) ProjectIssues(
 	owner string,
 	name string,
 ) ([]*github.Issue, error) {
-	result, _, e := c.client.Issues.ListByRepo(
-		c.context,
-		owner,
-		name,
-		nil,
-	)
+	result, _, e := c.client.Issues.ListByRepo(c.context, owner, name, nil)
 
 	return result, e
 }

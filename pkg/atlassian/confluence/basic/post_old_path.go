@@ -24,12 +24,8 @@ func (c *Client) PostOldPath(
 	}
 
 	r.SetBasicAuth(c.user, c.token)
-	r.Header[webConstant.Accept] = []string{
-		webConstant.Object,
-	}
-	r.Header[webConstant.ContentType] = []string{
-		webConstant.Object,
-	}
+	r.Header[webConstant.Accept] = []string{webConstant.Object}
+	r.Header[webConstant.ContentType] = []string{webConstant.Object}
 	result, f := http.DefaultClient.Do(r)
 
 	if f != nil {

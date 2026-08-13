@@ -62,11 +62,7 @@ func (s *Service) MoveSymbols(
 		if file == nil {
 			return failValidation(
 				r,
-				fmt.Sprintf(
-					"file not found in %s: %s",
-					packagePath,
-					filePath,
-				),
+				fmt.Sprintf("file not found in %s: %s", packagePath, filePath),
 			)
 		}
 
@@ -81,10 +77,7 @@ func (s *Service) MoveSymbols(
 
 	for _, name := range symbols {
 		if unique[name] {
-			return failValidation(
-				r,
-				fmt.Sprintf("duplicate symbol: %s", name),
-			)
+			return failValidation(r, fmt.Sprintf("duplicate symbol: %s", name))
 		}
 
 		unique[name] = true
@@ -203,12 +196,7 @@ func (s *Service) MoveSymbols(
 		return failValidation(r, e.Error())
 	}
 
-	constraints, message := planConstraints(
-		set,
-		target,
-		entries,
-		moveDirectory,
-	)
+	constraints, message := planConstraints(set, target, entries, moveDirectory)
 
 	if message != "" {
 		return failValidation(r, message)

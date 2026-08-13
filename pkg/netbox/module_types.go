@@ -6,9 +6,9 @@ import (
 )
 
 func (c *Client) ModuleTypes() ([]*module_type.Type, error) {
-	result, _, e := c.client.DcimAPI.DcimModuleTypesList(
-		c.context,
-	).Limit(constant.PageLimit).Execute()
+	result, _, e := c.client.DcimAPI.DcimModuleTypesList(c.context).Limit(
+		constant.PageLimit,
+	).Execute()
 
 	if e != nil {
 		return nil, e

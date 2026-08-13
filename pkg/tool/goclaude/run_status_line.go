@@ -12,8 +12,5 @@ func RunStatusLine(
 	input := parseStatusLineInput(body)
 	reportContext(c, input)
 
-	return fmt.Sprintf(
-		"%d%% context",
-		int(input.ContextWindow.UsedPercentage),
-	)
+	return fmt.Sprintf("%d%% context", int(input.ContextWindow.UsedPercentage))
 }

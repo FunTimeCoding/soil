@@ -29,10 +29,7 @@ func writeFixture(
 }
 
 func userLine(text string) string {
-	return fmt.Sprintf(
-		`{"type":"user","message":{"content":"%s"}}`,
-		text,
-	)
+	return fmt.Sprintf(`{"type":"user","message":{"content":"%s"}}`, text)
 }
 
 func assistantLine(text string) string {

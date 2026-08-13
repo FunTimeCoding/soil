@@ -24,12 +24,7 @@ func New(
 	processes := make([]*process.Process, len(entries))
 
 	for i, entry := range entries {
-		processes[i] = process.New(
-			entry.Name,
-			entry.Command,
-			i,
-			maxNameWidth,
-		)
+		processes[i] = process.New(entry.Name, entry.Command, i, maxNameWidth)
 	}
 
 	return &Server{

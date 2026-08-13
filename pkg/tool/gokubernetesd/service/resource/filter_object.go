@@ -26,10 +26,7 @@ func FilterObject(
 		if entries, okay := managed.([]any); okay {
 			filtered = append(
 				filtered,
-				fmt.Sprintf(
-					"metadata.managedFields (%d entries)",
-					len(entries),
-				),
+				fmt.Sprintf("metadata.managedFields (%d entries)", len(entries)),
 			)
 		}
 

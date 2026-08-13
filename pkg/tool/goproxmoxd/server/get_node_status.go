@@ -19,17 +19,13 @@ func (s *Server) GetNodeStatus(
 	c, e := s.service.Client(instance)
 
 	if e != nil {
-		return server.GetNodeStatus500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.GetNodeStatus500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	result, e := s.service.GetNodeStatus(c, r.Name)
 
 	if e != nil {
-		return server.GetNodeStatus500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.GetNodeStatus500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	return server.GetNodeStatus200JSONResponse(*convert.NodeStatus(result)), nil

@@ -15,10 +15,7 @@ func (r *Runner) needsUpgrade(s string) bool {
 			continue
 		}
 
-		if strings.Contains(
-			e.Diagnostic.Detail,
-			"terraform init -upgrade",
-		) {
+		if strings.Contains(e.Diagnostic.Detail, "terraform init -upgrade") {
 			return true
 		}
 	}

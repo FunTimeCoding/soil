@@ -28,19 +28,11 @@ func main() {
 	}
 
 	if false {
-		fmt.Printf(
-			"Is active running: %v\n",
-			c.IsActiveRunning(service),
-		)
-		fmt.Printf(
-			"Start time: %v\n",
-			time.Format(c.StartTime(service)),
-		)
+		fmt.Printf("Is active running: %v\n", c.IsActiveRunning(service))
+		fmt.Printf("Start time: %v\n", time.Format(c.StartTime(service)))
 	}
 
 	if true {
-		s.RunCommand(
-			command.New("sudo echo $TEST").Set("TEST", "yay"),
-		).Print()
+		s.RunCommand(command.New("sudo echo $TEST").Set("TEST", "yay")).Print()
 	}
 }

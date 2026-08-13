@@ -26,19 +26,13 @@ func (s *Server) MyThreads(
 	}
 
 	team := s.client.DefaultTeam()
-	opts := model.GetUserThreadsOpts{
-		PageSize: uint64(limit),
-		Extended: true,
-	}
+	opts := model.GetUserThreadsOpts{PageSize: uint64(limit), Extended: true}
 
 	if a.Since != "" {
 		since, g := parseSince(a.Since)
 
 		if g != nil {
-			return response.Fail(
-				"invalid since format: %v",
-				g,
-			)
+			return response.Fail("invalid since format: %v", g)
 		}
 
 		opts.Since = uint64(since.UnixMilli())

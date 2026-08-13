@@ -31,10 +31,7 @@ func (s *Store) ResolveSessionIdentifier(query string) (*resolve_result.Result, 
 
 	if r.RowsAffected > 0 && !seen[byIdentifier.Identifier] {
 		seen[byIdentifier.Identifier] = true
-		matches = append(
-			matches,
-			matchFrom(&byIdentifier, constant.Identifier),
-		)
+		matches = append(matches, matchFrom(&byIdentifier, constant.Identifier))
 	}
 
 	var byAlias session.Session
@@ -51,10 +48,9 @@ func (s *Store) ResolveSessionIdentifier(query string) (*resolve_result.Result, 
 
 	var byPrefix []session.Session
 
-	if e := s.database.Where(
-		"identifier LIKE ?",
-		fmt.Sprintf("%s%%", query),
-	).Find(&byPrefix).Error; e != nil {
+	if e := s.database.Where("identifier LIKE ?", fmt.Sprintf("%s%%", query)).Find(
+		&byPrefix,
+	).Error; e != nil {
 		return nil, e
 	}
 

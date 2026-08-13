@@ -19,10 +19,7 @@ func Send(
 	connection, e := net.Dial("unix", socketPath)
 
 	if e != nil {
-		if errors.Is(e, syscall.ENOENT) || errors.Is(
-			e,
-			syscall.ECONNREFUSED,
-		) {
+		if errors.Is(e, syscall.ENOENT) || errors.Is(e, syscall.ECONNREFUSED) {
 			return "", fmt.Errorf(
 				"no goprocessd instance running for this directory",
 			)

@@ -9,8 +9,5 @@ func New(
 	t time.Time,
 	entry *usage_entry.Entry,
 ) *Timestamped {
-	return &Timestamped{
-		Time:  t,
-		Entry: entry,
-	}
+	return &Timestamped{Time: t, Entry: entry}
 }

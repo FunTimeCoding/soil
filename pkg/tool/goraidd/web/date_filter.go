@@ -30,10 +30,7 @@ func dateFilter(startValue, endValue string) gomponents.Node {
 					html.Value(endValue),
 				),
 			),
-			html.Button(
-				html.Type("submit"),
-				gomponents.Text("Filter"),
-			),
+			html.Button(html.Type("submit"), gomponents.Text("Filter")),
 		),
 	)
 }

@@ -26,12 +26,7 @@ func (s *Server) PostSessionLabel(
 	var e error
 
 	if value == "" {
-		change, e = s.service.DeleteLabel(
-			r.Identifier,
-			from,
-			"",
-			r.Body.Key,
-		)
+		change, e = s.service.DeleteLabel(r.Identifier, from, "", r.Body.Key)
 	} else {
 		change, e = s.service.SetLabel(
 			r.Identifier,

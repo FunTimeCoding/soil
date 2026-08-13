@@ -11,9 +11,7 @@ func FindDirectoryUp(
 	nameToFind string,
 ) string {
 	for {
-		if _, e := os.Stat(
-			join.Absolute(currentDirectory, nameToFind),
-		); e == nil {
+		if _, e := os.Stat(join.Absolute(currentDirectory, nameToFind)); e == nil {
 			return currentDirectory
 		}
 

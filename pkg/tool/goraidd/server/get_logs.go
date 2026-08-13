@@ -66,8 +66,5 @@ func (s *Server) GetLogs(
 		)
 	}
 
-	return server.GetLogs200JSONResponse{
-		Total: total,
-		Logs:  result,
-	}, nil
+	return server.GetLogs200JSONResponse{Total: total, Logs: result}, nil
 }

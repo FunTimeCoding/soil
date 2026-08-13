@@ -26,11 +26,7 @@ func (s *Server) addSubmit(
 		html.Div(
 			html.Div(
 				html.Class("success"),
-				gomponents.Textf(
-					"Entry added: %s by %s",
-					e.Action,
-					e.User,
-				),
+				gomponents.Textf("Entry added: %s by %s", e.Action, e.User),
 			),
 			addForm(),
 		),

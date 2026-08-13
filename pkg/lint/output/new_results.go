@@ -6,10 +6,5 @@ import (
 )
 
 func NewResults() *Results {
-	return &Results{
-		workDirectory: fmt.Sprintf(
-			"%s/",
-			system.WorkDirectory(),
-		),
-	}
+	return &Results{workDirectory: fmt.Sprintf("%s/", system.WorkDirectory())}
 }

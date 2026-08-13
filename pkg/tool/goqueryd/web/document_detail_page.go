@@ -19,12 +19,7 @@ func (s *Server) documentDetailPage(
 			w,
 			"Error",
 			constant.SearchPath,
-			html.P(
-				gomponents.Textf(
-					"Failed to load document: %s",
-					e.Error(),
-				),
-			),
+			html.P(gomponents.Textf("Failed to load document: %s", e.Error())),
 		)
 
 		return
@@ -39,28 +34,17 @@ func (s *Server) documentDetailPage(
 		)
 
 		if len(suggestions) > 0 {
-			content = append(
-				content,
-				html.P(gomponents.Text("Did you mean:")),
-			)
+			content = append(content, html.P(gomponents.Text("Did you mean:")))
 			var items []gomponents.Node
 
 			for _, suggestion := range suggestions {
-				items = append(
-					items,
-					html.Li(gomponents.Text(suggestion)),
-				)
+				items = append(items, html.Li(gomponents.Text(suggestion)))
 			}
 
 			content = append(content, html.Ul(items...))
 		}
 
-		s.view.RenderPage(
-			w,
-			"Not Found",
-			constant.SearchPath,
-			content...,
-		)
+		s.view.RenderPage(w, "Not Found", constant.SearchPath, content...)
 
 		return
 	}
@@ -81,21 +65,15 @@ func (s *Server) documentDetailPage(
 				),
 				html.Tr(
 					html.Td(html.Strong(gomponents.Text("Virtual Path"))),
-					html.Td(
-						html.Small(gomponents.Text(document.VirtualPath)),
-					),
+					html.Td(html.Small(gomponents.Text(document.VirtualPath))),
 				),
 				html.Tr(
 					html.Td(html.Strong(gomponents.Text("File"))),
-					html.Td(
-						html.Small(gomponents.Text(document.FilePath)),
-					),
+					html.Td(html.Small(gomponents.Text(document.FilePath))),
 				),
 				html.Tr(
 					html.Td(html.Strong(gomponents.Text("Hash"))),
-					html.Td(
-						html.Small(gomponents.Text(document.Hash[:16])),
-					),
+					html.Td(html.Small(gomponents.Text(document.Hash[:16]))),
 				),
 			),
 		),
@@ -105,10 +83,5 @@ func (s *Server) documentDetailPage(
 		html.H4(gomponents.Text("Body")),
 		html.Pre(gomponents.Text(document.Body)),
 	)
-	s.view.RenderPage(
-		w,
-		document.Title,
-		constant.CollectionsPath,
-		content...,
-	)
+	s.view.RenderPage(w, document.Title, constant.CollectionsPath, content...)
 }

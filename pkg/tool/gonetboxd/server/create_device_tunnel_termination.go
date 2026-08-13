@@ -14,19 +14,25 @@ func (s *Server) CreateDeviceTunnelTermination(
 	t, e := s.client.TunnelByName(r.Body.Tunnel)
 
 	if e != nil {
-		return server.CreateDeviceTunnelTermination500JSONResponse(*s.captureDetail(e)), nil
+		return server.CreateDeviceTunnelTermination500JSONResponse(
+			*s.captureDetail(e),
+		), nil
 	}
 
 	d, f := s.client.DeviceByName(r.Name)
 
 	if f != nil {
-		return server.CreateDeviceTunnelTermination500JSONResponse(*s.captureDetail(f)), nil
+		return server.CreateDeviceTunnelTermination500JSONResponse(
+			*s.captureDetail(f),
+		), nil
 	}
 
 	i, g := s.client.DeviceInterfaceByName(d, r.Body.Interface)
 
 	if g != nil {
-		return server.CreateDeviceTunnelTermination500JSONResponse(*s.captureDetail(g)), nil
+		return server.CreateDeviceTunnelTermination500JSONResponse(
+			*s.captureDetail(g),
+		), nil
 	}
 
 	tt, h := s.client.CreateTunnelTermination(
@@ -37,7 +43,9 @@ func (s *Server) CreateDeviceTunnelTermination(
 	)
 
 	if h != nil {
-		return server.CreateDeviceTunnelTermination500JSONResponse(*s.captureDetail(h)), nil
+		return server.CreateDeviceTunnelTermination500JSONResponse(
+			*s.captureDetail(h),
+		), nil
 	}
 
 	return server.CreateDeviceTunnelTermination201JSONResponse(

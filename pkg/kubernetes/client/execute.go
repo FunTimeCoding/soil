@@ -18,9 +18,11 @@ func (c *Client) Execute(
 	container string,
 	command ...string,
 ) {
-	r := c.client.CoreV1().RESTClient().Post().Resource(
-		constant.PodsResource,
-	).Namespace(namespace).Name(pod).SubResource(
+	r := c.client.CoreV1().RESTClient().Post().Resource(constant.PodsResource).Namespace(
+		namespace,
+	).Name(
+		pod,
+	).SubResource(
 		constant.ExecuteSubResource,
 	)
 	r.VersionedParams(

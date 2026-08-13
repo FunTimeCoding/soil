@@ -402,10 +402,7 @@ func TestAddComment(t *testing.T) {
 	)
 	result := o.Client.MustCallTool(
 		constant.ConfluenceAddComment,
-		map[string]any{
-			"identifier": "1",
-			"body":       "A comment",
-		},
+		map[string]any{"identifier": "1", "body": "A comment"},
 	)
 	assert.StringContains(t, "comment added", result)
 }

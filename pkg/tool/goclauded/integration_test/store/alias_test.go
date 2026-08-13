@@ -36,11 +36,7 @@ func TestSetAndGetAlias(t *testing.T) {
 	s := store_tester.New(t)
 	s.EnsureSession("session-1")
 	editAlias(s, "session-1", "my-project")
-	assert.String(
-		t,
-		"my-project",
-		s.GetSession("session-1").AliasValue(),
-	)
+	assert.String(t, "my-project", s.GetSession("session-1").AliasValue())
 }
 
 func TestSetAliasOverwrite(t *testing.T) {
@@ -48,11 +44,7 @@ func TestSetAliasOverwrite(t *testing.T) {
 	s.EnsureSession("session-1")
 	editAlias(s, "session-1", "first-name")
 	editAlias(s, "session-1", "second-name")
-	assert.String(
-		t,
-		"second-name",
-		s.GetSession("session-1").AliasValue(),
-	)
+	assert.String(t, "second-name", s.GetSession("session-1").AliasValue())
 }
 
 func TestSetAndGetDescription(t *testing.T) {
@@ -105,11 +97,7 @@ func TestSetDescriptionDoesNotClearAlias(t *testing.T) {
 	s.EnsureSession("session-1")
 	editAlias(s, "session-1", "my-project")
 	editDescription(s, "session-1", "New description")
-	assert.String(
-		t,
-		"my-project",
-		s.GetSession("session-1").AliasValue(),
-	)
+	assert.String(t, "my-project", s.GetSession("session-1").AliasValue())
 }
 
 func TestSetAliasDoesNotClearDescription(t *testing.T) {
@@ -117,22 +105,14 @@ func TestSetAliasDoesNotClearDescription(t *testing.T) {
 	s.EnsureSession("session-1")
 	editDescription(s, "session-1", "Important work")
 	editAlias(s, "session-1", "renamed")
-	assert.String(
-		t,
-		"Important work",
-		s.GetSession("session-1").Description,
-	)
+	assert.String(t, "Important work", s.GetSession("session-1").Description)
 }
 
 func TestEditTopic(t *testing.T) {
 	s := store_tester.New(t)
 	s.EnsureSession("session-1")
 	edit(s, "session-1", edit_session.New().WithTopic("debugging auth"))
-	assert.String(
-		t,
-		"debugging auth",
-		s.GetSession("session-1").Topic,
-	)
+	assert.String(t, "debugging auth", s.GetSession("session-1").Topic)
 }
 
 func TestNoOpEdit(t *testing.T) {
@@ -140,11 +120,7 @@ func TestNoOpEdit(t *testing.T) {
 	s.EnsureSession("session-1")
 	editAlias(s, "session-1", constant.FixtureBefore)
 	edit(s, "session-1", edit_session.New())
-	assert.String(
-		t,
-		"before",
-		s.GetSession("session-1").AliasValue(),
-	)
+	assert.String(t, "before", s.GetSession("session-1").AliasValue())
 }
 
 func TestResolveByAlias(t *testing.T) {

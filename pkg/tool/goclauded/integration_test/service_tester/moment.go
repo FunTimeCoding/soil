@@ -7,8 +7,5 @@ func (o *Tester) Moment(
 	name string,
 	line string,
 ) {
-	assert.FatalOnError(
-		o.t,
-		o.Service.Moment(sessionIdentifier, name, line),
-	)
+	assert.FatalOnError(o.t, o.Service.Moment(sessionIdentifier, name, line))
 }

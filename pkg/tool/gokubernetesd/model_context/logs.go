@@ -70,10 +70,7 @@ func (s *Server) Logs(
 			return response.Fail(f.Error())
 		}
 
-		if strings.Contains(
-			f.Error(),
-			"a container name must be specified",
-		) {
+		if strings.Contains(f.Error(), "a container name must be specified") {
 			return response.Fail(f.Error())
 		}
 

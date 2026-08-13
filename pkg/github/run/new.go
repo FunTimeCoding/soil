@@ -22,9 +22,7 @@ func New(v *github.WorkflowRun) *Run {
 	}
 
 	return &Run{
-		MonitorIdentifier: constant.GoGitHubJob.Integer64Identifier(
-			v.GetID(),
-		),
+		MonitorIdentifier: constant.GoGitHubJob.Integer64Identifier(v.GetID()),
 		Identifier: v.GetID(),
 		Name:       v.GetName(),
 		Status:     v.GetStatus(),

@@ -28,11 +28,15 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.Get,
-			mcp.WithDescription("Get or list Kubernetes resources by type, name, and namespace"),
+			mcp.WithDescription(
+				"Get or list Kubernetes resources by type, name, and namespace",
+			),
 			mcp.WithString(
 				"resourceType",
 				mcp.Required(),
-				mcp.Description("Resource type (e.g. pods, deployments, services, configmaps, nodes)"),
+				mcp.Description(
+					"Resource type (e.g. pods, deployments, services, configmaps, nodes)",
+				),
 			),
 			mcp.WithString(
 				"name",
@@ -52,11 +56,15 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				"fieldSelector",
-				mcp.Description("Filter by field selector (e.g. metadata.name=my-pod)"),
+				mcp.Description(
+					"Filter by field selector (e.g. metadata.name=my-pod)",
+				),
 			),
 			mcp.WithBoolean(
 				"unfiltered",
-				mcp.Description("Return the full object without filtering noise (managedFields, last-applied-configuration)"),
+				mcp.Description(
+					"Return the full object without filtering noise (managedFields, last-applied-configuration)",
+				),
 			),
 		),
 		mcp.NewTypedToolHandler(s.Get),
@@ -64,7 +72,9 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.Describe,
-			mcp.WithDescription("Describe a Kubernetes resource with status, conditions, and events"),
+			mcp.WithDescription(
+				"Describe a Kubernetes resource with status, conditions, and events",
+			),
 			mcp.WithString(
 				"resourceType",
 				mcp.Required(),
@@ -81,7 +91,9 @@ func (s *Server) register() {
 			),
 			mcp.WithBoolean(
 				"unfiltered",
-				mcp.Description("Return the full object without filtering noise (managedFields, last-applied-configuration)"),
+				mcp.Description(
+					"Return the full object without filtering noise (managedFields, last-applied-configuration)",
+				),
 			),
 		),
 		mcp.NewTypedToolHandler(s.Describe),
@@ -89,11 +101,15 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.Logs,
-			mcp.WithDescription("Get logs from a pod or resource that owns pods (e.g. deployment/sentry, job/migrate)"),
+			mcp.WithDescription(
+				"Get logs from a pod or resource that owns pods (e.g. deployment/sentry, job/migrate)",
+			),
 			mcp.WithString(
 				"name",
 				mcp.Required(),
-				mcp.Description("Pod name or resource/name (e.g. sentry-abc123, deployment/sentry, job/migrate)"),
+				mcp.Description(
+					"Pod name or resource/name (e.g. sentry-abc123, deployment/sentry, job/migrate)",
+				),
 			),
 			mcp.WithString(
 				"namespace",
@@ -102,7 +118,9 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				"container",
-				mcp.Description("Container name (required for multi-container pods)"),
+				mcp.Description(
+					"Container name (required for multi-container pods)",
+				),
 			),
 			mcp.WithNumber(
 				"tail",
@@ -116,13 +134,12 @@ func (s *Server) register() {
 				"previous",
 				mcp.Description("Logs from previously terminated container"),
 			),
-			mcp.WithBoolean(
-				"timestamps",
-				mcp.Description("Include timestamps"),
-			),
+			mcp.WithBoolean("timestamps", mcp.Description("Include timestamps")),
 			mcp.WithBoolean(
 				"all",
-				mcp.Description("Get logs from all matching pods (default: error with list if multiple)"),
+				mcp.Description(
+					"Get logs from all matching pods (default: error with list if multiple)",
+				),
 			),
 		),
 		mcp.NewTypedToolHandler(s.Logs),
@@ -130,14 +147,18 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.Events,
-			mcp.WithDescription("List Kubernetes events, optionally scoped to a resource"),
+			mcp.WithDescription(
+				"List Kubernetes events, optionally scoped to a resource",
+			),
 			mcp.WithString(
 				"namespace",
 				mcp.Description("Namespace (omit for all namespaces)"),
 			),
 			mcp.WithString(
 				"kind",
-				mcp.Description("Filter by involved object kind (e.g. Pod, Deployment)"),
+				mcp.Description(
+					"Filter by involved object kind (e.g. Pod, Deployment)",
+				),
 			),
 			mcp.WithString(
 				"name",
@@ -147,10 +168,7 @@ func (s *Server) register() {
 				"type",
 				mcp.Description("Filter by event type: Normal or Warning"),
 			),
-			mcp.WithNumber(
-				"limit",
-				mcp.Description("Maximum events to return"),
-			),
+			mcp.WithNumber("limit", mcp.Description("Maximum events to return")),
 			mcp.WithBoolean(
 				"unfiltered",
 				mcp.Description("Show all events including muted"),
@@ -224,7 +242,9 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.Argocd,
-			mcp.WithDescription("ArgoCD application sync and health status. Omit name to list all applications."),
+			mcp.WithDescription(
+				"ArgoCD application sync and health status. Omit name to list all applications.",
+			),
 			mcp.WithString(
 				"name",
 				mcp.Description("Application name for detail view"),
@@ -239,7 +259,9 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.Certificates,
-			mcp.WithDescription("Certificate status, expiry, and renewal health. Omit name to list all certificates."),
+			mcp.WithDescription(
+				"Certificate status, expiry, and renewal health. Omit name to list all certificates.",
+			),
 			mcp.WithString(
 				"name",
 				mcp.Description("Certificate name for detail view"),

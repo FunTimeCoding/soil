@@ -36,10 +36,7 @@ func searchForm(
 
 		options = append(
 			options,
-			html.Option(
-				gomponents.Text(c.Name),
-				gomponents.Group(attrs),
-			),
+			html.Option(gomponents.Text(c.Name), gomponents.Group(attrs)),
 		)
 	}
 
@@ -53,13 +50,7 @@ func searchForm(
 			gomponents.Attr("value", query),
 			gomponents.Attr("autocomplete", "off"),
 		),
-		html.Select(
-			html.Name(constant.Collection),
-			gomponents.Group(options),
-		),
-		html.Button(
-			html.Type("submit"),
-			gomponents.Text(constant.SearchTitle),
-		),
+		html.Select(html.Name(constant.Collection), gomponents.Group(options)),
+		html.Button(html.Type("submit"), gomponents.Text(constant.SearchTitle)),
 	)
 }

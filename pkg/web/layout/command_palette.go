@@ -25,10 +25,7 @@ func commandPalette(endpoint string) gomponents.Node {
 			),
 			html.Div(
 				html.ID("palette-results"),
-				gomponents.Attr(
-					"hx-get",
-					endpoint,
-				),
+				gomponents.Attr("hx-get", endpoint),
 				gomponents.Attr("hx-trigger", "load"),
 				gomponents.Attr("hx-swap", "outerHTML"),
 			),

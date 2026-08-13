@@ -1,6 +1,7 @@
 package call_format
 
 import (
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/element_format"
 	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"go/ast"
 	"go/token"
@@ -21,5 +22,8 @@ func IsViolation(
 		return lineLength(fileSet, call) > constant.MaxLineLength
 	}
 
-	return isMultiLineViolation(fileSet, call)
+	return element_format.IsMultiLineViolation(
+		fileSet,
+		element_format.FromCall(call),
+	)
 }

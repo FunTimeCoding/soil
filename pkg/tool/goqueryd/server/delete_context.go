@@ -9,12 +9,7 @@ func (s *Server) DeleteContext(
 	_ context.Context,
 	r server.DeleteContextRequestObject,
 ) (server.DeleteContextResponseObject, error) {
-	deleted := s.service.RemoveContext(
-		r.Params.Collection,
-		r.Params.PathPrefix,
-	)
+	deleted := s.service.RemoveContext(r.Params.Collection, r.Params.PathPrefix)
 
-	return server.DeleteContext200JSONResponse{
-		Deleted: new(bool(deleted)),
-	}, nil
+	return server.DeleteContext200JSONResponse{Deleted: new(bool(deleted))}, nil
 }

@@ -18,10 +18,7 @@ func RerankBenchmark() {
 	errors.PanicOnError(e)
 
 	defer errors.PanicClose(r)
-	fmt.Printf(
-		"New (tokenizer + runtime + session): %v\n",
-		time.Since(start),
-	)
+	fmt.Printf("New (tokenizer + runtime + session): %v\n", time.Since(start))
 
 	for _, c := range []benchmarkCase{
 		{label: "batch 30 distinct", documents: distinctDocuments(30)},

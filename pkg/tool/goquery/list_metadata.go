@@ -18,9 +18,7 @@ func listMetadata(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			params := &client.GetMetadataParams{
-				Collection: arguments[0],
-			}
+			params := &client.GetMetadataParams{Collection: arguments[0]}
 
 			if key != "" {
 				params.Key = &key

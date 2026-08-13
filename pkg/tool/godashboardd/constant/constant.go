@@ -5,11 +5,7 @@ import (
 	"time"
 )
 
-var Identity = identity.New(
-	"godashboardd",
-	"Homelab dashboard",
-	"godashboardd",
-)
+var Identity = identity.New("godashboardd", "Homelab dashboard", "godashboardd")
 
 const (
 	DashboardTitle = "Dashboard"

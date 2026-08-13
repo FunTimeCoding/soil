@@ -17,9 +17,7 @@ func (s *Server) GetRepositoryTree(
 		return response.Fail("project is required")
 	}
 
-	o := &gitlab.ListTreeOptions{
-		ListOptions: gitlab.ListOptions{PerPage: 100},
-	}
+	o := &gitlab.ListTreeOptions{ListOptions: gitlab.ListOptions{PerPage: 100}}
 
 	if a.Path != "" {
 		o.Path = &a.Path

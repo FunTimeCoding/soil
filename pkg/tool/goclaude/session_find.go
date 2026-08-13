@@ -20,9 +20,7 @@ func sessionFind(c *command_context.Context) *cobra.Command {
 		) {
 			response, e := c.Client().GetSessionsFindWithResponse(
 				context.Background(),
-				&client.GetSessionsFindParams{
-					Tool: arguments[0],
-				},
+				&client.GetSessionsFindParams{Tool: arguments[0]},
 			)
 			errors.PanicOnError(e)
 			matches := response.JSON200.Matches
@@ -37,12 +35,7 @@ func sessionFind(c *command_context.Context) *cobra.Command {
 			}
 
 			for _, m := range matches {
-				fmt.Printf(
-					"%4d  %.8s  %s\n",
-					m.Count,
-					m.SessionId,
-					m.Name,
-				)
+				fmt.Printf("%4d  %.8s  %s\n", m.Count, m.SessionId, m.Name)
 			}
 		},
 	}

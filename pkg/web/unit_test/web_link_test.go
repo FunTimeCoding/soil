@@ -28,19 +28,11 @@ func TestLink(t *testing.T) {
 		"https://localhost:9000",
 		web.Link(constant.Localhost, 9000, true),
 	)
-	assert.String(
-		t,
-		"https://localhost",
-		web.Link(constant.Localhost, 0, true),
-	)
+	assert.String(t, "https://localhost", web.Link(constant.Localhost, 0, true))
 	assert.String(
 		t,
 		"http://localhost:9000",
 		web.Link(constant.Localhost, 9000, false),
 	)
-	assert.String(
-		t,
-		"http://localhost",
-		web.Link(constant.Localhost, 0, false),
-	)
+	assert.String(t, "http://localhost", web.Link(constant.Localhost, 0, false))
 }

@@ -16,7 +16,5 @@ func (s *Server) CreateLocation(
 		return server.CreateLocation500JSONResponse(*s.captureDetail(e)), nil
 	}
 
-	return server.CreateLocation201JSONResponse(
-		*convert.Location(result),
-	), nil
+	return server.CreateLocation201JSONResponse(*convert.Location(result)), nil
 }

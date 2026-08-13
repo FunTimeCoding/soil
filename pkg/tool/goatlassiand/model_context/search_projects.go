@@ -22,10 +22,7 @@ func (s *Server) searchProjects(
 	}
 
 	query := r.GetString(generative.ParameterQuery, "")
-	includeDescriptions := r.GetBool(
-		constant.IncludeDescriptions,
-		false,
-	)
+	includeDescriptions := r.GetBool(constant.IncludeDescriptions, false)
 	projects, h := s.jira.Projects()
 
 	if h != nil {

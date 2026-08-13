@@ -11,11 +11,7 @@ import (
 )
 
 func (r *Rule) Format(f *option.Format) string {
-	s := status.New(f).String(
-		r.formatName(f),
-		r.Group,
-		r.formatType(),
-	)
+	s := status.New(f).String(r.formatName(f), r.Group, r.formatType())
 
 	if r.Summary != "" {
 		s.Line("  Summary: %s", r.Summary)
@@ -50,9 +46,7 @@ func (r *Rule) Format(f *option.Format) string {
 	}
 
 	if r.RawAlert != nil {
-		if age := time.Since(
-			r.RawAlert.LastEvaluation,
-		).Round(time.Second); age > 30*time.Second {
+		if age := time.Since(r.RawAlert.LastEvaluation).Round(time.Second); age > 30*time.Second {
 			output := fmt.Sprintf("  Alert last evaluation: %s", age)
 
 			if f.UseColor {

@@ -15,9 +15,9 @@ func Write() {
 	l := logrus.New()
 	h, e := hook.NewHook(
 		&hook.Config{
-			URL: locator.New(
-				host,
-			).UserPassword(user, password).Path("/api/prom/push").String(),
+			URL: locator.New(host).UserPassword(user, password).Path(
+				"/api/prom/push",
+			).String(),
 			LevelName: "severity",
 			Labels:    map[string]string{"application": "test"},
 		},

@@ -33,10 +33,7 @@ func findClients(
 			continue
 		}
 
-		result = append(
-			result,
-			findClients(v, root, c, repo, configuration)...,
-		)
+		result = append(result, findClients(v, root, c, repo, configuration)...)
 	}
 
 	return result

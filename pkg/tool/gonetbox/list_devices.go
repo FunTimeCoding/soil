@@ -24,12 +24,7 @@ func listDevices(c *client.Client) *cobra.Command {
 			fmt.Println(c.ListDevices(q))
 		},
 	}
-	result.Flags().StringVar(
-		&query,
-		"query",
-		"",
-		"filter by name",
-	)
+	result.Flags().StringVar(&query, "query", "", "filter by name")
 
 	return result
 }

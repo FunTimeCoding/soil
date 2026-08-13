@@ -20,9 +20,7 @@ func (s *Server) ListTenants(
 	for _, t := range tenants {
 		result = append(
 			result,
-			&server.Tenant{
-				Identifier: t.Identifier, Name: t.Name,
-			},
+			&server.Tenant{Identifier: t.Identifier, Name: t.Name},
 		)
 	}
 

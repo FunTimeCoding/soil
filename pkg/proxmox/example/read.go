@@ -17,18 +17,12 @@ func Read() {
 
 		for _, m := range p.MustMachines(o) {
 			fmt.Printf("  Machine list: %+v\n", m)
-			fmt.Printf(
-				"  Machine: %+v\n",
-				p.MustMachine(o, int(m.VMID)),
-			)
+			fmt.Printf("  Machine: %+v\n", p.MustMachine(o, int(m.VMID)))
 		}
 
 		for _, c := range p.MustContainers(o) {
 			fmt.Printf("  Container list: %+v\n", c)
-			fmt.Printf(
-				"  Container: %+v\n",
-				p.MustContainer(o, int(c.VMID)),
-			)
+			fmt.Printf("  Container: %+v\n", p.MustContainer(o, int(c.VMID)))
 		}
 	}
 

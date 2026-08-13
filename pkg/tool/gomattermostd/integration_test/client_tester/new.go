@@ -33,13 +33,7 @@ func New(
 					w http.ResponseWriter,
 					q *http.Request,
 				) {
-					web.Encode(
-						w,
-						&model.Team{
-							Id:   "tango",
-							Name: "tango",
-						},
-					)
+					web.Encode(w, &model.Team{Id: "tango", Name: "tango"})
 				},
 			)
 			configure(m)

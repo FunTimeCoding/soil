@@ -9,10 +9,7 @@ func (m *Monitor) refreshCache() {
 	var all []*model.ChannelWithTeamData
 
 	for offset := 0; ; offset += constant.MattermostMaxPerPage {
-		page := m.client.MustAllChannels(
-			constant.MattermostMaxPerPage,
-			offset,
-		)
+		page := m.client.MustAllChannels(constant.MattermostMaxPerPage, offset)
 		all = append(all, page...)
 
 		if len(page) < constant.MattermostMaxPerPage {

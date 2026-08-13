@@ -10,11 +10,7 @@ import (
 func TestRemote(t *testing.T) {
 	assert.Any(
 		t,
-		&remote.Remote{
-			Name:     "Alfa",
-			Locator:  "Bravo",
-			Provider: "Charlie",
-		},
+		&remote.Remote{Name: "Alfa", Locator: "Bravo", Provider: "Charlie"},
 		remote.New(
 			constant.UpperAlfa,
 			constant.UpperBravo,

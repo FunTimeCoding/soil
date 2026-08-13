@@ -18,22 +18,14 @@ func printNotation(
 	var relevant []*event.Event
 
 	for _, e := range v {
-		if !o.All && slices.Contains(
-			kubernetes.IrrelevantEventReason,
-			e.Reason,
-		) {
+		if !o.All && slices.Contains(kubernetes.IrrelevantEventReason, e.Reason) {
 			continue
 		}
 
 		relevant = append(relevant, e)
 	}
 
-	for _, e := range report.Trim(
-		relevant,
-		r,
-		o.All,
-		monitor.GoKevt,
-	) {
+	for _, e := range report.Trim(relevant, r, o.All, monitor.GoKevt) {
 		r.AddItem(
 			monitor.GoKevt,
 			e.MonitorIdentifier,

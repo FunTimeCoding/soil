@@ -35,12 +35,7 @@ func (s *Server) memoriesPage(
 		}
 	}
 
-	memories, e := s.service.ListMemories(
-		memoryType,
-		tag,
-		listScope,
-		true,
-	)
+	memories, e := s.service.ListMemories(memoryType, tag, listScope, true)
 	hidden := s.service.HiddenTag()
 	visible := memories[:0]
 
@@ -82,20 +77,14 @@ func (s *Server) memoriesPage(
 	}
 
 	var content []gomponents.Node
-	content = append(
-		content,
-		html.H3(gomponents.Text(constant.MemoriesTitle)),
-	)
+	content = append(content, html.H3(gomponents.Text(constant.MemoriesTitle)))
 	content = append(content, s.scopeFilter(scope, tag, memoryType)...)
 
 	if tag != "" || memoryType != "" {
 		var filters []gomponents.Node
 
 		if tag != "" {
-			filters = append(
-				filters,
-				gomponents.Textf("tag: %s", tag),
-			)
+			filters = append(filters, gomponents.Textf("tag: %s", tag))
 		}
 
 		if memoryType != "" {
@@ -103,10 +92,7 @@ func (s *Server) memoriesPage(
 				filters = append(filters, gomponents.Text(" · "))
 			}
 
-			filters = append(
-				filters,
-				gomponents.Textf("type: %s", memoryType),
-			)
+			filters = append(filters, gomponents.Textf("type: %s", memoryType))
 		}
 
 		filters = append(
@@ -121,10 +107,7 @@ func (s *Server) memoriesPage(
 	}
 
 	if len(memories) == 0 {
-		content = append(
-			content,
-			html.P(gomponents.Text("No memories.")),
-		)
+		content = append(content, html.P(gomponents.Text("No memories.")))
 	} else {
 		var rows []gomponents.Node
 
@@ -158,22 +141,15 @@ func (s *Server) memoriesPage(
 						html.A(
 							gomponents.Attr(
 								"href",
-								fmt.Sprintf(
-									"/memories/%d",
-									m.Identifier,
-								),
+								fmt.Sprintf("/memories/%d", m.Identifier),
 							),
 							gomponents.Text(m.Name),
 						),
 					),
-					html.Td(
-						html.Small(gomponents.Text(m.Description)),
-					),
+					html.Td(html.Small(gomponents.Text(m.Description))),
 					html.Td(gomponents.Text(m.Type)),
 					html.Td(gomponents.Group(pips)),
-					layout.TimeCell(
-						library.Parse(time.RFC3339, m.UpdatedAt),
-					),
+					layout.TimeCell(library.Parse(time.RFC3339, m.UpdatedAt)),
 				),
 			)
 		}
@@ -197,20 +173,11 @@ func (s *Server) memoriesPage(
 
 	content = append(
 		content,
-		paginationLinks(
-			page,
-			offset,
-			limit,
-			total,
-			tag,
-			memoryType,
-			scope,
-		)...,
+		paginationLinks(page, offset, limit, total, tag, memoryType, scope)...,
 	)
 	s.view.RenderPage(
 		w,
 		constant.MemoriesTitle,
 		constant.MemoriesPath,
-		content...,
-	)
+		content...)
 }

@@ -29,23 +29,12 @@ func (s *Server) SendKey(
 			time.Sleep(interval)
 		}
 
-		e := s.client.SendKey(
-			a.SessionIdentifier,
-			key,
-		)
+		e := s.client.SendKey(a.SessionIdentifier, key)
 
 		if e != nil {
-			return response.Fail(
-				"send key %s (step %d): %v",
-				key,
-				i+1,
-				e,
-			)
+			return response.Fail("send key %s (step %d): %v", key, i+1, e)
 		}
 	}
 
-	return response.Success(
-		"sent keys: %s",
-		join.Comma(a.Keys),
-	)
+	return response.Success("sent keys: %s", join.Comma(a.Keys))
 }

@@ -21,9 +21,7 @@ func playerDetailTable(rows []store.PlayerRaidRow) gomponents.Node {
 			nodes,
 			html.H3(
 				html.A(
-					html.Href(
-						fmt.Sprintf("/raids/%d", first.RaidID),
-					),
+					html.Href(fmt.Sprintf("/raids/%d", first.RaidID)),
 					gomponents.Text(first.RaidName),
 				),
 				gomponents.Textf(" - %d fights", first.RaidFights),

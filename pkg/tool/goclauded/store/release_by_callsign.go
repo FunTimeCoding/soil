@@ -6,8 +6,8 @@ import (
 )
 
 func (s *Store) ReleaseByCallsign(c string) error {
-	return s.database.Model(session.Stub()).Where(
-		"callsign = ?",
-		c,
-	).Update(constant.Callsign, nil).Error
+	return s.database.Model(session.Stub()).Where("callsign = ?", c).Update(
+		constant.Callsign,
+		nil,
+	).Error
 }

@@ -13,11 +13,7 @@ func TestFirstFile(t *testing.T) {
 	second := filepath.Join(root, "second.yaml")
 	errors.PanicClose(system.Create(second))
 	assert.String(t, "", system.FirstFile())
-	assert.String(
-		t,
-		"",
-		system.FirstFile(filepath.Join(root, "missing.yaml")),
-	)
+	assert.String(t, "", system.FirstFile(filepath.Join(root, "missing.yaml")))
 	assert.String(
 		t,
 		second,

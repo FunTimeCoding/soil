@@ -6,9 +6,9 @@ import (
 )
 
 func (c *Client) RackRoles() ([]*rack_role.Role, error) {
-	result, _, e := c.client.DcimAPI.DcimRackRolesList(
-		c.context,
-	).Limit(constant.PageLimit).Execute()
+	result, _, e := c.client.DcimAPI.DcimRackRolesList(c.context).Limit(
+		constant.PageLimit,
+	).Execute()
 
 	if e != nil {
 		return nil, e

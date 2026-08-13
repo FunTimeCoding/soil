@@ -6,11 +6,7 @@ import (
 )
 
 func parseSince(s string) (time.Time, error) {
-	t, e := time.ParseInLocation(
-		constant.DateMinute,
-		s,
-		time.Now().Location(),
-	)
+	t, e := time.ParseInLocation(constant.DateMinute, s, time.Now().Location())
 
 	if e != nil {
 		return time.Parse(time.RFC3339, s)

@@ -15,10 +15,7 @@ func resolve(
 	result := environment.Fallback(
 		override,
 		filepath.Join(
-			system.StorageDirectory(
-				constant.CertificateName,
-				false,
-			),
+			system.StorageDirectory(constant.CertificateName, false),
 			name,
 		),
 	)

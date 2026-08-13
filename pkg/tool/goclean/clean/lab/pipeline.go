@@ -57,11 +57,7 @@ func Pipeline(
 			i.Ref == latestSemantic.Ref &&
 			i.SHA == mainHash {
 			if o.Verbose {
-				fmt.Printf(
-					"Skip pipeline (sematic): %s %s\n",
-					i.Ref,
-					i.SHA,
-				)
+				fmt.Printf("Skip pipeline (sematic): %s %s\n", i.Ref, i.SHA)
 			}
 
 			continue
@@ -71,11 +67,7 @@ func Pipeline(
 			i.Ref == mainBranch.Name &&
 			i.SHA == latestMain.SHA {
 			if o.Verbose {
-				fmt.Printf(
-					"Skip pipeline (main): %s %s\n",
-					i.Ref,
-					i.SHA,
-				)
+				fmt.Printf("Skip pipeline (main): %s %s\n", i.Ref, i.SHA)
 			}
 
 			continue

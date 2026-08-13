@@ -16,12 +16,5 @@ func TestContainer(t *testing.T) {
 		},
 	)
 	c.Raw = nil
-	assert.Any(
-		t,
-		&container.Container{
-			Name:       "Alfa",
-			Repository: "Bravo",
-		},
-		c,
-	)
+	assert.Any(t, &container.Container{Name: "Alfa", Repository: "Bravo"}, c)
 }

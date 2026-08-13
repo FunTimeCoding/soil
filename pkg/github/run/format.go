@@ -8,10 +8,7 @@ import (
 )
 
 func (r *Run) Format(f *option.Format) string {
-	s := status.New(f).String(
-		r.formatName(f),
-		r.Status,
-	)
+	s := status.New(f).String(r.formatName(f), r.Status)
 
 	if f.HasTag(console.TagTimestamp) {
 		s.String(r.Create.Format(constant.DateMinute))

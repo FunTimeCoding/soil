@@ -6,10 +6,7 @@ import (
 )
 
 func (c *Container) Format(f *option.Format) string {
-	s := status.New(f).String(
-		c.formatName(f),
-		c.Repository,
-	).RawList(c.Raw)
+	s := status.New(f).String(c.formatName(f), c.Repository).RawList(c.Raw)
 
 	return s.Format()
 }

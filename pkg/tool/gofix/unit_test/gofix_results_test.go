@@ -13,9 +13,7 @@ func TestRelativize(t *testing.T) {
 			assert.String(
 				t,
 				"pkg/foo/bar.go",
-				output.NewResultsWithDirectory(
-					"/Users/example/src/go-example/",
-				).Relativize(
+				output.NewResultsWithDirectory("/Users/example/src/go-example/").Relativize(
 					"/Users/example/src/go-example/pkg/foo/bar.go",
 				),
 			)
@@ -27,9 +25,9 @@ func TestRelativize(t *testing.T) {
 			assert.String(
 				t,
 				"/other/path/file.go",
-				output.NewResultsWithDirectory(
-					"/Users/example/src/go-example/",
-				).Relativize("/other/path/file.go"),
+				output.NewResultsWithDirectory("/Users/example/src/go-example/").Relativize(
+					"/other/path/file.go",
+				),
 			)
 		},
 	)
@@ -39,9 +37,9 @@ func TestRelativize(t *testing.T) {
 			assert.String(
 				t,
 				"/some/path/file.go",
-				output.NewResultsWithDirectory(
-					"",
-				).Relativize("/some/path/file.go"),
+				output.NewResultsWithDirectory("").Relativize(
+					"/some/path/file.go",
+				),
 			)
 		},
 	)

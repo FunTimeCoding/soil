@@ -7,5 +7,7 @@ import (
 )
 
 func User() {
-	fmt.Println(confluence.NewEnvironment().MustUser().Format(constant.ConfluenceFormat))
+	fmt.Println(
+		confluence.NewEnvironment().MustUser().Format(constant.ConfluenceFormat),
+	)
 }

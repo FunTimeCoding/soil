@@ -36,10 +36,7 @@ func (s *Server) ListSnippets(
 
 		rows = append(
 			rows,
-			proxResponse.Snippet{
-				Name: v.Name(),
-				Size: uint64(v.Size()),
-			},
+			proxResponse.Snippet{Name: v.Name(), Size: uint64(v.Size())},
 		)
 	}
 

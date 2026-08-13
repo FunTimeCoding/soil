@@ -13,21 +13,13 @@ func TestNetworkFindByName(t *testing.T) {
 		&netbox.Interface{
 			Name: constant.Eth0,
 			Type: netbox.InterfaceType{
-				Value: new(
-					netbox.InterfaceTypeValue(
-						constant.InterfaceVirtual,
-					),
-				),
+				Value: new(netbox.InterfaceTypeValue(constant.InterfaceVirtual)),
 			},
 		},
 	)
 	interfaces := []*network.Interface{i}
 	// Happy path
-	assert.Any(
-		t,
-		i,
-		network.FindByName(interfaces, constant.Eth0),
-	)
+	assert.Any(t, i, network.FindByName(interfaces, constant.Eth0))
 	// Not found
 	var expected *network.Interface
 	assert.Any(t, expected, network.FindByName(interfaces, constant.Eth1))

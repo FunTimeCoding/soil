@@ -17,12 +17,7 @@ func TestSortByAge(t *testing.T) {
 	r3 := issue.Raw("TEST-3")
 	r3.Fields.Created = jira.Time(time.Now().Add(-1 * time.Hour))
 	actual := issue.SortByAge(
-		[]*issue.Issue{
-			issue.New(r3, o), issue.New(r1, o), issue.New(
-				r2,
-				o,
-			),
-		},
+		[]*issue.Issue{issue.New(r3, o), issue.New(r1, o), issue.New(r2, o)},
 	)
 	assert.Count(t, 3, actual)
 	assert.String(t, "TEST-1", actual[0].Key)

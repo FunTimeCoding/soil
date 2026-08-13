@@ -6,12 +6,7 @@ func (c *Client) Workflows(
 	owner string,
 	name string,
 ) ([]*workflow.Workflow, error) {
-	result, _, e := c.client.Actions.ListWorkflows(
-		c.context,
-		owner,
-		name,
-		nil,
-	)
+	result, _, e := c.client.Actions.ListWorkflows(c.context, owner, name, nil)
 
 	if e != nil {
 		return nil, e

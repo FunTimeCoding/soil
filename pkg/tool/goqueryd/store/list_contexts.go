@@ -16,11 +16,7 @@ func (s *Store) ListContexts() []result.ContextEntry {
 	for rows.Next() {
 		var c result.ContextEntry
 		errors.PanicOnError(
-			rows.Scan(
-				&c.Collection,
-				&c.PathPrefix,
-				&c.Description,
-			),
+			rows.Scan(&c.Collection, &c.PathPrefix, &c.Description),
 		)
 		r = append(r, c)
 	}

@@ -34,7 +34,9 @@ func Main(
 		f.Tag(console.TagCopyable)
 	}
 
-	if a.GetBoolean(argumentConstant.Watched) || a.GetBoolean(argumentConstant.Favorites) {
+	if a.GetBoolean(argumentConstant.Watched) || a.GetBoolean(
+		argumentConstant.Favorites,
+	) {
 		fmt.Println("Watch")
 
 		for _, p := range c.MustWatched() {

@@ -12,9 +12,7 @@ import (
 func TestStrayConstantFlagged(t *testing.T) {
 	l := lint.StrayConstant(
 		stringsConstant.UpperAlfa,
-		strings.NewReader(
-			"package example\n\nconst Foo = 1\n",
-		),
+		strings.NewReader("package example\n\nconst Foo = 1\n"),
 	)
 	assertReport(
 		t,
@@ -64,9 +62,7 @@ func TestStrayConstantBlockFlagged(t *testing.T) {
 func TestStrayConstantExemptByFilename(t *testing.T) {
 	l := lint.StrayConstant(
 		"constant.go",
-		strings.NewReader(
-			"package example\n\nconst Foo = 1\n",
-		),
+		strings.NewReader("package example\n\nconst Foo = 1\n"),
 	)
 	assertReport(t, "constant.go", false, nil, "", l)
 }
@@ -74,9 +70,7 @@ func TestStrayConstantExemptByFilename(t *testing.T) {
 func TestStrayConstantExemptByFilenameTest(t *testing.T) {
 	l := lint.StrayConstant(
 		"constant_test.go",
-		strings.NewReader(
-			"package example\n\nconst Foo = 1\n",
-		),
+		strings.NewReader("package example\n\nconst Foo = 1\n"),
 	)
 	assertReport(t, "constant_test.go", false, nil, "", l)
 }
@@ -84,9 +78,7 @@ func TestStrayConstantExemptByFilenameTest(t *testing.T) {
 func TestStrayConstantExemptByPackage(t *testing.T) {
 	l := lint.StrayConstant(
 		stringsConstant.UpperCharlie,
-		strings.NewReader(
-			"package constant\n\nconst Foo = 1\n",
-		),
+		strings.NewReader("package constant\n\nconst Foo = 1\n"),
 	)
 	assertReport(t, "Charlie", false, nil, "", l)
 }
@@ -94,9 +86,7 @@ func TestStrayConstantExemptByPackage(t *testing.T) {
 func TestStrayConstantExemptByConstantDirectory(t *testing.T) {
 	l := lint.StrayConstant(
 		"pkg/tool/example/constant/color/item.go",
-		strings.NewReader(
-			"package color\n\nconst Foo = 1\n",
-		),
+		strings.NewReader("package color\n\nconst Foo = 1\n"),
 	)
 	assertReport(
 		t,
@@ -111,9 +101,7 @@ func TestStrayConstantExemptByConstantDirectory(t *testing.T) {
 func TestStrayConstantDirectoryMatchesExactly(t *testing.T) {
 	l := lint.StrayConstant(
 		"pkg/example/constants/foo.go",
-		strings.NewReader(
-			"package example\n\nconst Foo = 1\n",
-		),
+		strings.NewReader("package example\n\nconst Foo = 1\n"),
 	)
 	assertReport(
 		t,

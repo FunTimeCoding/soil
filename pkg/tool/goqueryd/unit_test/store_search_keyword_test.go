@@ -9,13 +9,7 @@ import (
 func TestSearchKeywordFindsDocument(t *testing.T) {
 	s := indexedTestStore(t)
 	defer s.Close()
-	results := s.MustSearchKeyword(
-		"hybrid search pipeline",
-		10,
-		"",
-		false,
-		nil,
-	)
+	results := s.MustSearchKeyword("hybrid search pipeline", 10, "", false, nil)
 	assert.Count(t, 1, results)
 	assert.String(t, "Search Pipeline", results[0].Title)
 }
@@ -49,13 +43,7 @@ func TestSearchKeywordCollectionFilter(t *testing.T) {
 func TestSearchKeywordVirtualPath(t *testing.T) {
 	s := indexedTestStore(t)
 	defer s.Close()
-	results := s.MustSearchKeyword(
-		"hybrid search pipeline",
-		10,
-		"",
-		false,
-		nil,
-	)
+	results := s.MustSearchKeyword("hybrid search pipeline", 10, "", false, nil)
 	assert.String(t, "qmd://test/alpha.md", results[0].VirtualPath)
 }
 

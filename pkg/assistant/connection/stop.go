@@ -18,10 +18,7 @@ func (c *Connection) Stop() {
 	errors.PanicOnError(
 		c.connection.WriteMessage(
 			websocket.CloseMessage,
-			websocket.FormatCloseMessage(
-				websocket.CloseNormalClosure,
-				"",
-			),
+			websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""),
 		),
 	)
 	time.Sleep(time.Second)

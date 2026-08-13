@@ -12,10 +12,7 @@ func (s *Server) PostSessionsExport(
 	var paths []string
 
 	for _, e := range s.service.Sessions() {
-		paths = append(
-			paths,
-			s.exportSession(e, s.sessionExportPath),
-		)
+		paths = append(paths, s.exportSession(e, s.sessionExportPath))
 	}
 
 	return server.PostSessionsExport200JSONResponse{Paths: paths}, nil

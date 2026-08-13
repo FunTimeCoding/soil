@@ -9,8 +9,5 @@ func New(
 	s *store.Store,
 	n face.EventNotifier,
 ) *Service {
-	return &Service{
-		store:    s,
-		notifier: n,
-	}
+	return &Service{store: s, notifier: n}
 }

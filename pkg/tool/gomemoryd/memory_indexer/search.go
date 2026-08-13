@@ -21,10 +21,7 @@ func (i *Indexer) Search(o *search_option.Option) ([]face.SearchResult, error) {
 		params.Exclude = &o.Exclude
 	}
 
-	r, e := i.client.GetSearch(
-		context.Background(),
-		params,
-	)
+	r, e := i.client.GetSearch(context.Background(), params)
 
 	if e != nil {
 		return nil, e
@@ -37,10 +34,7 @@ func (i *Indexer) Search(o *search_option.Option) ([]face.SearchResult, error) {
 	}
 
 	if parsed.JSON200 == nil {
-		return nil, fmt.Errorf(
-			"unexpected response: %s",
-			parsed.Status(),
-		)
+		return nil, fmt.Errorf("unexpected response: %s", parsed.Status())
 	}
 
 	var result []face.SearchResult

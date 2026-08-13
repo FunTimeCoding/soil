@@ -26,9 +26,7 @@ func TestIssue(t *testing.T) {
 			CurrentStatus: &models.CustomerRequestCurrentStatusScheme{
 				Status: atlassian.ServiceDeskResolved,
 			},
-			Links: &models.CustomerRequestLinksScheme{
-				Web: strings.UpperDelta,
-			},
+			Links: &models.CustomerRequestLinksScheme{Web: strings.UpperDelta},
 		},
 	)
 	actual.Raw = nil

@@ -16,11 +16,11 @@ func TestEditCascadeSummary(t *testing.T) {
 	a.Announce(a.Name(), "building things")
 	a.MustCallTool(
 		constant.Summarize,
-		map[string]any{
-			constant.Body: "original summary",
-		},
+		map[string]any{constant.Body: "original summary"},
 	)
-	events := s.Store.Events(event_query.New().Kind(constant.Summarize).SetLimit(1))
+	events := s.Store.Events(
+		event_query.New().Kind(constant.Summarize).SetLimit(1),
+	)
 	assert.Count(t, 1, events)
 	a.MustCallTool(
 		constant.EditEvent,
@@ -42,18 +42,16 @@ func TestEditCascadeSummaryPushesIndexer(t *testing.T) {
 	a.Announce(a.Name(), "building things")
 	a.MustCallTool(
 		constant.EditSession,
-		map[string]any{
-			constant.Alias: "test-session",
-		},
+		map[string]any{constant.Alias: "test-session"},
 	)
 	a.MustCallTool(
 		constant.Summarize,
-		map[string]any{
-			constant.Body: "original",
-		},
+		map[string]any{constant.Body: "original"},
 	)
 	before := len(s.SummaryIndexer.Pushed)
-	events := s.Store.Events(event_query.New().Kind(constant.Summarize).SetLimit(1))
+	events := s.Store.Events(
+		event_query.New().Kind(constant.Summarize).SetLimit(1),
+	)
 	a.MustCallTool(
 		constant.EditEvent,
 		map[string]any{
@@ -74,11 +72,11 @@ func TestEditCascadeCompletion(t *testing.T) {
 	a.Announce(a.Name(), "search index")
 	a.MustCallTool(
 		constant.Complete,
-		map[string]any{
-			constant.Message: "hasty completion",
-		},
+		map[string]any{constant.Message: "hasty completion"},
 	)
-	events := s.Store.Events(event_query.New().Kind(constant.Complete).SetLimit(1))
+	events := s.Store.Events(
+		event_query.New().Kind(constant.Complete).SetLimit(1),
+	)
 	assert.Count(t, 1, events)
 	a.MustCallTool(
 		constant.EditEvent,
@@ -108,12 +106,12 @@ func TestEditMomentNoCascade(t *testing.T) {
 	a.Announce(a.Name(), "working")
 	a.MustCallTool(
 		constant.Moment,
-		map[string]any{
-			constant.Line: "something landed",
-		},
+		map[string]any{constant.Line: "something landed"},
 	)
 	before := len(s.SummaryIndexer.Pushed)
-	events := s.Store.Events(event_query.New().Kind(constant.Moment).SetLimit(1))
+	events := s.Store.Events(
+		event_query.New().Kind(constant.Moment).SetLimit(1),
+	)
 	assert.Count(t, 1, events)
 	a.MustCallTool(
 		constant.EditEvent,
@@ -123,6 +121,8 @@ func TestEditMomentNoCascade(t *testing.T) {
 		},
 	)
 	assert.Integer(t, before, len(s.SummaryIndexer.Pushed))
-	edited := s.Store.Events(event_query.New().Kind(constant.Moment).SetLimit(1))
+	edited := s.Store.Events(
+		event_query.New().Kind(constant.Moment).SetLimit(1),
+	)
 	assert.String(t, "revised moment", edited[0].Metadata[constant.Line])
 }

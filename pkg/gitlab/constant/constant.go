@@ -14,11 +14,7 @@ const (
 	ClosedState  = "closed"
 )
 
-var RequestStates = []string{
-	OpenedState,
-	MergedState,
-	ClosedState,
-}
+var RequestStates = []string{OpenedState, MergedState, ClosedState}
 
 // Identifier Sort field
 const Identifier = "id"

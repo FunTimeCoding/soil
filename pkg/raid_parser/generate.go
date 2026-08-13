@@ -13,10 +13,7 @@ func (c *Client) Generate(
 ) string {
 	result, e := c.client.PostGenerate(
 		c.context,
-		client.PostGenerateJSONRequestBody{
-			Files: files,
-			Date:  date,
-		},
+		client.PostGenerateJSONRequestBody{Files: files, Date: date},
 	)
 	errors.PanicOnError(e)
 

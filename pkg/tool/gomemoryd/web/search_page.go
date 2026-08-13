@@ -49,10 +49,7 @@ func (s *Server) searchPage(
 				html.P(gomponents.Textf("Search failed: %s", e.Error())),
 			)
 		} else if len(results) == 0 {
-			content = append(
-				content,
-				html.P(gomponents.Text("No results.")),
-			)
+			content = append(content, html.P(gomponents.Text("No results.")))
 		} else {
 			var rows []gomponents.Node
 
@@ -62,10 +59,7 @@ func (s *Server) searchPage(
 				for _, t := range m.Tags {
 					pips = append(
 						pips,
-						html.Span(
-							html.Class("tag-pip"),
-							gomponents.Text(t),
-						),
+						html.Span(html.Class("tag-pip"), gomponents.Text(t)),
 						gomponents.Text(" "),
 					)
 				}
@@ -77,19 +71,12 @@ func (s *Server) searchPage(
 							html.A(
 								gomponents.Attr(
 									"href",
-									fmt.Sprintf(
-										"/memories/%d",
-										m.Identifier,
-									),
+									fmt.Sprintf("/memories/%d", m.Identifier),
 								),
 								gomponents.Text(m.Name),
 							),
 						),
-						html.Td(
-							html.Small(
-								gomponents.Text(m.Description),
-							),
-						),
+						html.Td(html.Small(gomponents.Text(m.Description))),
 						html.Td(gomponents.Text(m.Type)),
 						html.Td(gomponents.Group(pips)),
 					),
@@ -98,9 +85,7 @@ func (s *Server) searchPage(
 
 			content = append(
 				content,
-				html.P(
-					gomponents.Textf("%d results", len(results)),
-				),
+				html.P(gomponents.Textf("%d results", len(results))),
 				html.Table(
 					html.THead(
 						html.Tr(
@@ -116,10 +101,5 @@ func (s *Server) searchPage(
 		}
 	}
 
-	s.view.RenderPage(
-		w,
-		constant.SearchTitle,
-		constant.SearchPath,
-		content...,
-	)
+	s.view.RenderPage(w, constant.SearchTitle, constant.SearchPath, content...)
 }

@@ -11,9 +11,7 @@ func (c *Client) GroupTabs(
 	title string,
 	color string,
 ) (int, error) {
-	parameters := map[string]any{
-		"tab_ids": tabIdentifiers,
-	}
+	parameters := map[string]any{"tab_ids": tabIdentifiers}
 
 	if groupIdentifier > 0 {
 		parameters["group_id"] = groupIdentifier

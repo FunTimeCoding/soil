@@ -45,9 +45,7 @@ func (s *Server) register() {
 			),
 			mcp.WithBoolean(
 				"unread_only",
-				mcp.Description(
-					"Only show threads with unread replies",
-				),
+				mcp.Description("Only show threads with unread replies"),
 			),
 			mcp.WithString(
 				"since",
@@ -131,14 +129,8 @@ func (s *Server) register() {
 				mcp.Required(),
 				mcp.Description("Local file path to upload"),
 			),
-			mcp.WithString(
-				"channel_id",
-				mcp.Description("Channel ID"),
-			),
-			mcp.WithString(
-				"channel_name",
-				mcp.Description("Channel name"),
-			),
+			mcp.WithString("channel_id", mcp.Description("Channel ID")),
+			mcp.WithString("channel_name", mcp.Description("Channel name")),
 			mcp.WithString(
 				"message",
 				mcp.Description(
@@ -151,9 +143,7 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.SendDirectMessage,
-			mcp.WithDescription(
-				"Send a direct message to a user by username.",
-			),
+			mcp.WithDescription("Send a direct message to a user by username."),
 			mcp.WithString(
 				"username",
 				mcp.Required(),
@@ -170,7 +160,9 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ListChannels,
-			mcp.WithDescription("List public channels in the Mattermost workspace"),
+			mcp.WithDescription(
+				"List public channels in the Mattermost workspace",
+			),
 			mcp.WithNumber(
 				"limit",
 				mcp.Description("Max channels to return (default 100)"),
@@ -190,14 +182,8 @@ func (s *Server) register() {
 			mcp.WithDescription(
 				"Get one channel with its header and purpose. Provide channel_id or channel_name.",
 			),
-			mcp.WithString(
-				"channel_id",
-				mcp.Description("Channel ID"),
-			),
-			mcp.WithString(
-				"channel_name",
-				mcp.Description("Channel name"),
-			),
+			mcp.WithString("channel_id", mcp.Description("Channel ID")),
+			mcp.WithString("channel_name", mcp.Description("Channel name")),
 		),
 		mcp.NewTypedToolHandler(s.GetChannel),
 	)
@@ -207,14 +193,8 @@ func (s *Server) register() {
 			mcp.WithDescription(
 				"Get recent messages from a channel. Provide channel_id or channel_name.",
 			),
-			mcp.WithString(
-				"channel_id",
-				mcp.Description("Channel ID"),
-			),
-			mcp.WithString(
-				"channel_name",
-				mcp.Description("Channel name"),
-			),
+			mcp.WithString("channel_id", mcp.Description("Channel ID")),
+			mcp.WithString("channel_name", mcp.Description("Channel name")),
 			mcp.WithNumber(
 				"limit",
 				mcp.Description(
@@ -234,17 +214,9 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.PostMessage,
-			mcp.WithDescription(
-				"Post a message to a Mattermost channel",
-			),
-			mcp.WithString(
-				"channel_id",
-				mcp.Description("Channel ID"),
-			),
-			mcp.WithString(
-				"channel_name",
-				mcp.Description("Channel name"),
-			),
+			mcp.WithDescription("Post a message to a Mattermost channel"),
+			mcp.WithString("channel_id", mcp.Description("Channel ID")),
+			mcp.WithString("channel_name", mcp.Description("Channel name")),
 			mcp.WithString(
 				"message",
 				mcp.Required(),
@@ -256,7 +228,9 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ReplyToThread,
-			mcp.WithDescription("Reply to a message thread, optionally adding an emoji reaction to the root message"),
+			mcp.WithDescription(
+				"Reply to a message thread, optionally adding an emoji reaction to the root message",
+			),
 			mcp.WithString(
 				"channel_id",
 				mcp.Required(),
@@ -274,7 +248,9 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				"emoji_name",
-				mcp.Description("Emoji reaction without colons to add to the root message"),
+				mcp.Description(
+					"Emoji reaction without colons to add to the root message",
+				),
 			),
 		),
 		mcp.NewTypedToolHandler(s.ReplyToThread),
@@ -299,9 +275,7 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.GetThreadReplies,
-			mcp.WithDescription(
-				"Get all replies in a message thread",
-			),
+			mcp.WithDescription("Get all replies in a message thread"),
 			mcp.WithString(
 				"post_id",
 				mcp.Required(),
@@ -313,9 +287,7 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.GetUsers,
-			mcp.WithDescription(
-				"List users in the Mattermost workspace",
-			),
+			mcp.WithDescription("List users in the Mattermost workspace"),
 			mcp.WithNumber(
 				"limit",
 				mcp.Description("Max users to return (default 100)"),
@@ -332,9 +304,7 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.GetUserProfile,
-			mcp.WithDescription(
-				"Get profile information for a user",
-			),
+			mcp.WithDescription("Get profile information for a user"),
 			mcp.WithString(
 				"user_id",
 				mcp.Required(),
@@ -348,9 +318,7 @@ func (s *Server) register() {
 		s.server.AddTool(
 			mcp.NewTool(
 				constant.RunMonitoring,
-				mcp.WithDescription(
-					"Run topic monitoring immediately",
-				),
+				mcp.WithDescription("Run topic monitoring immediately"),
 			),
 			s.Monitoring,
 		)

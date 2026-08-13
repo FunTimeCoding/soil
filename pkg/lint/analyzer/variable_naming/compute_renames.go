@@ -47,13 +47,7 @@ func ComputeRenames(
 				continue
 			}
 
-			result = append(
-				result,
-				Rename{
-					Object:  o,
-					NewName: ideal,
-				},
-			)
+			result = append(result, Rename{Object: o, NewName: ideal})
 		}
 	}
 
@@ -75,13 +69,7 @@ func ComputeRenames(
 				continue
 			}
 
-			result = append(
-				result,
-				Rename{
-					Object:  o,
-					NewName: expected,
-				},
-			)
+			result = append(result, Rename{Object: o, NewName: expected})
 		}
 	}
 

@@ -21,16 +21,8 @@ func TestWebDefaults(t *testing.T) {
 	a := testInstance(t)
 	a.Web()
 	assert.Nil(t, a.ParseArguments(nil))
-	assert.Integer(
-		t,
-		8080,
-		a.GetInteger(argumentConstant.Port),
-	)
-	assert.String(
-		t,
-		"127.0.0.1",
-		a.GetString(argumentConstant.BindAddress),
-	)
+	assert.Integer(t, 8080, a.GetInteger(argumentConstant.Port))
+	assert.String(t, "127.0.0.1", a.GetString(argumentConstant.BindAddress))
 	assert.String(t, "127.0.0.1:8080", a.Address())
 }
 

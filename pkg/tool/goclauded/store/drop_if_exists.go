@@ -16,12 +16,6 @@ func dropIfExists(
 	}
 
 	errors.PanicOnError(
-		d.Exec(
-			fmt.Sprintf(
-				"ALTER TABLE %s DROP COLUMN %s",
-				table,
-				column,
-			),
-		).Error,
+		d.Exec(fmt.Sprintf("ALTER TABLE %s DROP COLUMN %s", table, column)).Error,
 	)
 }

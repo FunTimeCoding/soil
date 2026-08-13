@@ -42,10 +42,7 @@ func (s *Server) PostGenerate(
 	for _, file := range r.Body.Files {
 		system.Stat(file)
 
-		if f := os.Symlink(
-			file,
-			filepath.Join(workdir, filepath.Base(file)),
-		); f != nil {
+		if f := os.Symlink(file, filepath.Join(workdir, filepath.Base(file))); f != nil {
 			return server.PostGenerate500JSONResponse(
 				*s.captureFail(f, "failed to symlink file"),
 			), nil
@@ -84,10 +81,7 @@ func (s *Server) PostGenerate(
 		}
 	}
 
-	tiddlerScript := filepath.Join(
-		s.parserPath,
-		"tiddler_import.py",
-	)
+	tiddlerScript := filepath.Join(s.parserPath, "tiddler_import.py")
 	t := run.New().NoPanic()
 	t.Directory = s.parserPath
 	t.Start(

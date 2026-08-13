@@ -19,9 +19,7 @@ func renameVirtualMachine(c *client.Client) *cobra.Command {
 			fmt.Println(
 				c.UpdateVirtualMachine(
 					arguments[0],
-					generated.UpdateVirtualMachineRequest{
-						Name: &arguments[1],
-					},
+					generated.UpdateVirtualMachineRequest{Name: &arguments[1]},
 				),
 			)
 		},

@@ -18,13 +18,7 @@ func New(t *testing.T) *Tester {
 		runtime.NewScheme(),
 		gvrListKinds(),
 	)
-	c := cluster.NewWithResources(
-		"test",
-		set,
-		dynamic,
-		nil,
-		apiResources(),
-	)
+	c := cluster.NewWithResources("test", set, dynamic, nil, apiResources())
 
 	return &Tester{
 		Tester:    s,

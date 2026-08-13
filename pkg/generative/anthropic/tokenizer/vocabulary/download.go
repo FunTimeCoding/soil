@@ -21,10 +21,7 @@ func download() ([]byte, error) {
 	defer errors.PanicClose(r.Body)
 
 	if r.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf(
-			"failed to download vocabulary: %s",
-			r.Status,
-		)
+		return nil, fmt.Errorf("failed to download vocabulary: %s", r.Status)
 	}
 
 	content, e := io.ReadAll(r.Body)

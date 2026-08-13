@@ -6,8 +6,5 @@ import (
 )
 
 func (a *Address) Format(f *option.Format) string {
-	return status.New(f).String(
-		a.Name,
-		a.formatObjectType(f),
-	).RawList(a.Raw).Format()
+	return status.New(f).String(a.Name, a.formatObjectType(f)).RawList(a.Raw).Format()
 }

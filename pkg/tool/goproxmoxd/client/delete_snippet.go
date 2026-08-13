@@ -10,9 +10,7 @@ func (c *Client) DeleteSnippet(name string) string {
 	result, e := c.client.DeleteSnippetWithResponse(
 		c.context,
 		name,
-		&client.DeleteSnippetParams{
-			Instance: &c.instance,
-		},
+		&client.DeleteSnippetParams{Instance: &c.instance},
 	)
 	errors.PanicOnError(e)
 

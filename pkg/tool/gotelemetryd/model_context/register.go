@@ -18,9 +18,7 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				constant.Surface,
-				mcp.Description(
-					"Filter by surface: mcp, cli, rest, web.",
-				),
+				mcp.Description("Filter by surface: mcp, cli, rest, web."),
 			),
 			mcp.WithString(
 				constant.Actor,
@@ -28,9 +26,7 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				constant.Kind,
-				mcp.Description(
-					"Filter by kind: baseline or domain.",
-				),
+				mcp.Description("Filter by kind: baseline or domain."),
 			),
 			mcp.WithString(
 				constant.Since,
@@ -42,9 +38,7 @@ func (s *Server) register() {
 			),
 			mcp.WithNumber(
 				constant.Limit,
-				mcp.Description(
-					"Maximum events to return. Default: 50.",
-				),
+				mcp.Description("Maximum events to return. Default: 50."),
 			),
 		),
 		s.query,
@@ -65,9 +59,7 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				constant.GroupBy,
-				mcp.Description(
-					"Group by: tool (default), surface, or kind.",
-				),
+				mcp.Description("Group by: tool (default), surface, or kind."),
 			),
 		),
 		s.summary,

@@ -19,12 +19,7 @@ func deleteRecord(c *technitium.Client) *cobra.Command {
 			arguments []string,
 		) {
 			c.MustDeleteRecord(arguments[0], recordType, value)
-			fmt.Printf(
-				"deleted: %s %s %s\n",
-				arguments[0],
-				recordType,
-				value,
-			)
+			fmt.Printf("deleted: %s %s %s\n", arguments[0], recordType, value)
 		},
 	}
 	result.Flags().StringVar(
@@ -33,12 +28,7 @@ func deleteRecord(c *technitium.Client) *cobra.Command {
 		"A",
 		"record type (A, AAAA, CNAME, PTR, TXT)",
 	)
-	result.Flags().StringVar(
-		&value,
-		"value",
-		"",
-		"record value to delete",
-	)
+	result.Flags().StringVar(&value, "value", "", "record value to delete")
 	errors.PanicOnError(result.MarkFlagRequired("value"))
 
 	return result

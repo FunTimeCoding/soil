@@ -18,20 +18,11 @@ func CloneAll() {
 
 	for _, p := range projects {
 		i++
-		fmt.Printf(
-			"Project (%d/%d): %s\n",
-			i,
-			count,
-			p.Raw.PathWithNamespace,
-		)
+		fmt.Printf("Project (%d/%d): %s\n", i, count, p.Raw.PathWithNamespace)
 		group := join.Absolute(base, p.Raw.Namespace.Path)
 		system.EnsurePathExists(group)
 		repository := join.Absolute(group, p.Raw.Path)
-		fmt.Printf(
-			"  Clone %s to %s\n",
-			p.Raw.SSHURLToRepo,
-			repository,
-		)
+		fmt.Printf("  Clone %s to %s\n", p.Raw.SSHURLToRepo, repository)
 
 		if !system.DirectoryExists(repository) {
 			system.ChangeDirectory(group)

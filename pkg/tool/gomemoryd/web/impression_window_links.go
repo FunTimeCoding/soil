@@ -20,13 +20,7 @@ func impressionWindowLinks(active int) gomponents.Node {
 		} else {
 			nodes = append(
 				nodes,
-				html.A(
-					gomponents.Attr(
-						"href",
-						impressionLink(d),
-					),
-					label,
-				),
+				html.A(gomponents.Attr("href", impressionLink(d)), label),
 			)
 		}
 	}

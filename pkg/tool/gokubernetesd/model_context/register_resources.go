@@ -12,7 +12,9 @@ func (s *Server) registerResources() {
 		mcp.NewResource(
 			constant.KubernetesWorkflowURI,
 			"Cluster selection, response format, log resolution",
-			mcp.WithResourceDescription("Non-obvious behaviors: YAML responses, filtered comments, deployment/job log resolution, multi-pod and multi-container disambiguation."),
+			mcp.WithResourceDescription(
+				"Non-obvious behaviors: YAML responses, filtered comments, deployment/job log resolution, multi-pod and multi-container disambiguation.",
+			),
 			mcp.WithMIMEType(web.Markdown),
 		),
 		func(

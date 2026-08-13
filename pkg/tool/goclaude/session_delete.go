@@ -20,10 +20,7 @@ func sessionDelete(c *command_context.Context) *cobra.Command {
 			identifier := resolveSession(c.Client(), arguments[0])
 
 			if identifier == "" {
-				fmt.Printf(
-					"session not found: %s\n",
-					arguments[0],
-				)
+				fmt.Printf("session not found: %s\n", arguments[0])
 
 				return
 			}

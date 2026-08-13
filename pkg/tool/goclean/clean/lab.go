@@ -19,11 +19,7 @@ func Lab(
 	remoteLocator := git.ParseLocator(origin.Locator)
 
 	if remoteLocator == nil {
-		system.Exitf(
-			1,
-			"could not parse remote locator: %s\n",
-			origin.Locator,
-		)
+		system.Exitf(1, "could not parse remote locator: %s\n", origin.Locator)
 
 		return
 	}
@@ -36,12 +32,7 @@ func Lab(
 	p := c.MustProjectByName(namespace, repository)
 
 	if o.Verbose {
-		fmt.Printf(
-			"Project: %d %s %s\n",
-			p.Identifier,
-			p.Namespace,
-			p.Name,
-		)
+		fmt.Printf("Project: %d %s %s\n", p.Identifier, p.Namespace, p.Name)
 	}
 
 	lab.Pipeline(o, c, p)

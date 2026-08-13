@@ -5,9 +5,5 @@ func New(
 	name string,
 	phase string,
 ) *Pod {
-	return &Pod{
-		Namespace: namespace,
-		Name:      name,
-		Phase:     phase,
-	}
+	return &Pod{Namespace: namespace, Name: name, Phase: phase}
 }

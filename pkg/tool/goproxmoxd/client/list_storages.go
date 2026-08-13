@@ -10,9 +10,7 @@ func (c *Client) ListStorages(name string) string {
 	result, e := c.client.ListStoragesWithResponse(
 		c.context,
 		name,
-		&client.ListStoragesParams{
-			Instance: &c.instance,
-		},
+		&client.ListStoragesParams{Instance: &c.instance},
 	)
 	errors.PanicOnError(e)
 

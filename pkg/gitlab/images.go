@@ -14,9 +14,7 @@ func (c *Client) Images(
 		project,
 		repository,
 		&gitlab.ListRegistryRepositoryTagsOptions{
-			ListOptions: gitlab.ListOptions{
-				PerPage: constant.PerPage1000,
-			},
+			ListOptions: gitlab.ListOptions{PerPage: constant.PerPage1000},
 		},
 	)
 

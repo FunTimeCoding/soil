@@ -11,11 +11,7 @@ func (s *Section) Percent(
 	f float64,
 ) {
 	l := line.New()
-	l.Value = fmt.Sprintf(
-		"%s: %s%%",
-		name,
-		floats.ToStringRounded(f),
-	)
+	l.Value = fmt.Sprintf("%s: %s%%", name, floats.ToStringRounded(f))
 	l.Indent = s.indent + 1
 	s.appendRenderable(l)
 }

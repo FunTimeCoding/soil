@@ -67,18 +67,12 @@ func (s *Server) editForm(
 				),
 				html.Div(
 					html.Class("edit-actions"),
-					html.Button(
-						html.Type("submit"),
-						gomponents.Text("Save"),
-					),
+					html.Button(html.Type("submit"), gomponents.Text("Save")),
 					html.Button(
 						html.Type("button"),
 						gomponents.Attr(
 							"hx-get",
-							fmt.Sprintf(
-								"/conversations/%s",
-								identifier,
-							),
+							fmt.Sprintf("/conversations/%s", identifier),
 						),
 						gomponents.Attr("hx-target", "#panel"),
 						gomponents.Text("Cancel"),

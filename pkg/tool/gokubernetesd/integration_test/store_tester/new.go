@@ -9,8 +9,5 @@ import (
 func New(t *testing.T) *Tester {
 	t.Helper()
 
-	return &Tester{
-		t:     t,
-		Store: store.New(lite.NewMemory()),
-	}
+	return &Tester{t: t, Store: store.New(lite.NewMemory())}
 }

@@ -36,12 +36,7 @@ func explain(c *client.Client) *cobra.Command {
 		"",
 		"Instance name (optional when only one instance is configured)",
 	)
-	result.Flags().BoolVar(
-		&analyze,
-		"analyze",
-		false,
-		"Run EXPLAIN ANALYZE",
-	)
+	result.Flags().BoolVar(&analyze, "analyze", false, "Run EXPLAIN ANALYZE")
 
 	return result
 }

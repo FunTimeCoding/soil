@@ -9,10 +9,7 @@ import (
 // concept files - the package is named after the domain, not
 // constant, so the package-name exemption does not apply.
 func constantDirectory(path string) bool {
-	for _, s := range strings.Split(
-		filepath.ToSlash(filepath.Dir(path)),
-		"/",
-	) {
+	for _, s := range strings.Split(filepath.ToSlash(filepath.Dir(path)), "/") {
 		if s == "constant" {
 			return true
 		}

@@ -106,10 +106,7 @@ func (c *Client) Peek(sessionIdentifier string) *peek.Peek {
 			result.Entries[last].AssistantContext = lastAssistantText
 		}
 
-		result.Entries = append(
-			result.Entries,
-			peek.Entry{UserText: clean},
-		)
+		result.Entries = append(result.Entries, peek.Entry{UserText: clean})
 		result.UserMessageCount++
 		lastAssistantText = ""
 	}
@@ -121,13 +118,7 @@ func (c *Client) Peek(sessionIdentifier string) *peek.Peek {
 	var sorted []peek.ToolCount
 
 	for name, count := range toolCounts {
-		sorted = append(
-			sorted,
-			peek.ToolCount{
-				Name:  name,
-				Count: count,
-			},
-		)
+		sorted = append(sorted, peek.ToolCount{Name: name, Count: count})
 	}
 
 	sort.Slice(

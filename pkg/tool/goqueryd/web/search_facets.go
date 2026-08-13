@@ -25,11 +25,7 @@ func searchFacets(
 				sections,
 				html.P(
 					html.Small(
-						gomponents.Textf(
-							"%s: %d distinct",
-							f.Key,
-							f.Distinct,
-						),
+						gomponents.Textf("%s: %d distinct", f.Key, f.Distinct),
 					),
 				),
 			)
@@ -54,9 +50,7 @@ func searchFacets(
 				items = append(
 					items,
 					html.Span(
-						html.Strong(
-							gomponents.Textf("%s (%d)", value, count),
-						),
+						html.Strong(gomponents.Textf("%s (%d)", value, count)),
 						gomponents.Text(" "),
 						html.A(
 							gomponents.Attr(

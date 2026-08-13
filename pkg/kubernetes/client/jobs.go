@@ -6,8 +6,5 @@ import (
 )
 
 func (c *Client) Jobs(namespace string) []*job.Job {
-	return job.NewSlice(
-		list.Job(c.client, c.context, namespace, ""),
-		c.cluster,
-	)
+	return job.NewSlice(list.Job(c.client, c.context, namespace, ""), c.cluster)
 }

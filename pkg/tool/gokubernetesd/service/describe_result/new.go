@@ -7,9 +7,5 @@ func New(
 	events []response.DescribeEvent,
 	filtered []string,
 ) *Result {
-	return &Result{
-		Resource: resource,
-		Events:   events,
-		Filtered: filtered,
-	}
+	return &Result{Resource: resource, Events: events, Filtered: filtered}
 }

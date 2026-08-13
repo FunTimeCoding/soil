@@ -14,12 +14,7 @@ func printNotation(
 ) {
 	r := report.New()
 
-	for _, e := range report.Trim(
-		v,
-		r,
-		o.All,
-		monitor.GoSentry,
-	) {
+	for _, e := range report.Trim(v, r, o.All, monitor.GoSentry) {
 		r.AddItem(
 			monitor.GoSentry,
 			e.MonitorIdentifier,

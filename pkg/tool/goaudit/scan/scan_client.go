@@ -22,10 +22,7 @@ func scanClient(
 		Must:  hasMustFiles(v, path),
 		Basic: v.DirectoryExists(filepath.Join(path, "basic")),
 		Constant: v.DirectoryExists(
-			filepath.Join(
-				path,
-				constant.ConstantDirectory,
-			),
+			filepath.Join(path, constant.ConstantDirectory),
 		),
 		Example: v.DirectoryExists(filepath.Join(path, "example")),
 		Entity:  hasEntityPackages(v, path),

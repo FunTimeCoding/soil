@@ -6,9 +6,9 @@ import (
 )
 
 func (c *Client) VirtualDeviceContexts() ([]*virtual_device_context.Context, error) {
-	result, _, e := c.client.DcimAPI.DcimVirtualDeviceContextsList(
-		c.context,
-	).Limit(constant.PageLimit).Execute()
+	result, _, e := c.client.DcimAPI.DcimVirtualDeviceContextsList(c.context).Limit(
+		constant.PageLimit,
+	).Execute()
 
 	if e != nil {
 		return nil, e

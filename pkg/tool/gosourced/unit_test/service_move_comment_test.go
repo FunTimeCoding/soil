@@ -26,11 +26,7 @@ func TestMoveCommentTargetDrift(t *testing.T) {
 	assertFormatted(t, moved)
 	assert.StringContains(t, "const Host = \"bravo\" // host trailing", moved)
 	assert.StringContains(t, "// Alpha document.", moved)
-	assert.StringContains(
-		t,
-		"const Alpha = \"alfa\" // alpha trailing",
-		moved,
-	)
+	assert.StringContains(t, "const Alpha = \"alfa\" // alpha trailing", moved)
 	assert.True(
 		t,
 		strings.Index(moved, "// host trailing") <
@@ -62,11 +58,7 @@ func TestMoveCommentSourceScrub(t *testing.T) {
 	moved := readFixtureFile(t, d, "pkg/target/constant/constant.go")
 	assertFormatted(t, moved)
 	assert.StringContains(t, "// Moved document.", moved)
-	assert.StringContains(
-		t,
-		"const Moved = \"hotel\" // moved trailing",
-		moved,
-	)
+	assert.StringContains(t, "const Moved = \"hotel\" // moved trailing", moved)
 }
 
 func TestMoveCommentGroupScrub(t *testing.T) {
@@ -93,11 +85,7 @@ func TestMoveCommentGroupScrub(t *testing.T) {
 	moved := readFixtureFile(t, d, "pkg/target/constant/constant.go")
 	assertFormatted(t, moved)
 	assert.StringContains(t, "// Delta document.", moved)
-	assert.StringContains(
-		t,
-		"const Delta = \"india\" // delta trailing",
-		moved,
-	)
+	assert.StringContains(t, "const Delta = \"india\" // delta trailing", moved)
 	assert.False(t, strings.Contains(moved, "// Keeper vocabulary."))
 }
 

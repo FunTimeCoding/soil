@@ -104,12 +104,7 @@ func (s *Server) PortForward(
 		}
 	}()
 	<-ready
-	identifier := fmt.Sprintf(
-		"%s-%s-%d",
-		a.ResourceType,
-		a.Name,
-		a.LocalPort,
-	)
+	identifier := fmt.Sprintf("%s-%s-%d", a.ResourceType, a.Name, a.LocalPort)
 	s.service.StorePortForward(
 		identifier,
 		port_forward_state.New(

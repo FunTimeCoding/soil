@@ -36,10 +36,7 @@ func (s *Server) messagesPage(
 	}
 
 	var content []gomponents.Node
-	content = append(
-		content,
-		html.H3(gomponents.Text(constant.MessagesTitle)),
-	)
+	content = append(content, html.H3(gomponents.Text(constant.MessagesTitle)))
 
 	if len(rows) == 0 {
 		content = append(content, html.P(gomponents.Text("No messages.")))
@@ -94,6 +91,5 @@ func (s *Server) messagesPage(
 		w,
 		constant.MessagesTitle,
 		constant.MessagesPath,
-		content...,
-	)
+		content...)
 }

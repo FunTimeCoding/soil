@@ -39,9 +39,7 @@ func (s *Server) dashboard(
 			),
 			html.Article(
 				html.Header(gomponents.Text("Currently Firing")),
-				html.P(
-					gomponents.Textf("%d", s.worker.FiringCount()),
-				),
+				html.P(gomponents.Textf("%d", s.worker.FiringCount())),
 			),
 			html.Article(
 				html.Header(gomponents.Text("Last Poll")),

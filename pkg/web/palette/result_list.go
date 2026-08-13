@@ -19,8 +19,5 @@ func resultList(results []Result) gomponents.Node {
 		items = append(items, resultItem(r))
 	}
 
-	return html.Div(
-		html.ID("palette-results"),
-		gomponents.Group(items),
-	)
+	return html.Div(html.ID("palette-results"), gomponents.Group(items))
 }

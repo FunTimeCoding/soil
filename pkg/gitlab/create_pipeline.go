@@ -9,10 +9,7 @@ func (c *Client) CreatePipeline(
 ) (*gitlab.Pipeline, error) {
 	result, _, e := c.client.Pipelines.CreatePipeline(
 		project,
-		&gitlab.CreatePipelineOptions{
-			Ref:       new(reference),
-			Variables: &v,
-		},
+		&gitlab.CreatePipelineOptions{Ref: new(reference), Variables: &v},
 	)
 
 	return result, e

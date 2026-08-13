@@ -13,9 +13,7 @@ func (s *Server) RemoveVirtualLabel(
 	m, e := s.client.VirtualMachineByName(r.Name)
 
 	if e != nil {
-		return server.RemoveVirtualLabel500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.RemoveVirtualLabel500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	if e := s.store.RemoveLabel(
@@ -23,9 +21,7 @@ func (s *Server) RemoveVirtualLabel(
 		m.Identifier,
 		r.Key,
 	); e != nil {
-		return server.RemoveVirtualLabel500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.RemoveVirtualLabel500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	return server.RemoveVirtualLabel204Response{}, nil

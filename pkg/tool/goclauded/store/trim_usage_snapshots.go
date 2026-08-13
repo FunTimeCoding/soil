@@ -7,9 +7,8 @@ import (
 
 func (s *Store) TrimUsageSnapshots() {
 	errors.PanicOnError(
-		s.database.Where(
-			"created_at < ?",
-			s.clock().AddDate(0, 0, -7),
-		).Delete(usage_snapshot.Stub()).Error,
+		s.database.Where("created_at < ?", s.clock().AddDate(0, 0, -7)).Delete(
+			usage_snapshot.Stub(),
+		).Error,
 	)
 }

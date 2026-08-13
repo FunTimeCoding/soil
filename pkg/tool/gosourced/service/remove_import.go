@@ -24,12 +24,7 @@ func (s *Service) RemoveImport(
 	}
 
 	fileSet := token.NewFileSet()
-	file, e := decorator.ParseFile(
-		fileSet,
-		fullPath,
-		nil,
-		parser.ParseComments,
-	)
+	file, e := decorator.ParseFile(fileSet, fullPath, nil, parser.ParseComments)
 
 	if e != nil {
 		return nil, e
@@ -39,11 +34,7 @@ func (s *Service) RemoveImport(
 		r.AddConcern(
 			concern.NewFile(
 				"validation",
-				fmt.Sprintf(
-					"import %s not found in %s",
-					importPath,
-					filePath,
-				),
+				fmt.Sprintf("import %s not found in %s", importPath, filePath),
 				filePath,
 				false,
 			),

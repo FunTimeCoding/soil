@@ -12,9 +12,7 @@ func (c *Client) ensureProvider() {
 			p, e := oidc.NewProvider(context.Background(), c.issuer)
 			errors.PanicOnError(e)
 			c.provider = p
-			c.verifier = p.Verifier(
-				&oidc.Config{ClientID: c.identifier},
-			)
+			c.verifier = p.Verifier(&oidc.Config{ClientID: c.identifier})
 		},
 	)
 }

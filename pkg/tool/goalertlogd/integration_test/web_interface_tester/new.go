@@ -14,8 +14,8 @@ func New(t *testing.T) *Tester {
 	return &Tester{
 		t:      t,
 		server: s,
-		base: locator.New(
-			constant.Localhost,
-		).Insecure().Port(s.ContextServer.Port).String(),
+		base: locator.New(constant.Localhost).Insecure().Port(
+			s.ContextServer.Port,
+		).String(),
 	}
 }

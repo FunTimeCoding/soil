@@ -6,8 +6,5 @@ func (o *Tester) Release(
 	sessionIdentifier string,
 	name string,
 ) {
-	assert.FatalOnError(
-		o.t,
-		o.Service.Release(sessionIdentifier, name),
-	)
+	assert.FatalOnError(o.t, o.Service.Release(sessionIdentifier, name))
 }

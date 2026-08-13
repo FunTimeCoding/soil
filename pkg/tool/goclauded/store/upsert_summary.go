@@ -8,10 +8,11 @@ func (s *Store) UpsertSummary(
 	body string,
 ) error {
 	var existing summary.Summary
-	result := s.database.Where(
-		"session_identifier = ?",
-		sessionIdentifier,
-	).Limit(1).Find(&existing)
+	result := s.database.Where("session_identifier = ?", sessionIdentifier).Limit(
+		1,
+	).Find(
+		&existing,
+	)
 
 	if result.Error != nil {
 		return result.Error
@@ -19,10 +20,7 @@ func (s *Store) UpsertSummary(
 
 	if result.RowsAffected > 0 {
 		return s.database.Model(&existing).Updates(
-			map[string]any{
-				"name": name,
-				"body": body,
-			},
+			map[string]any{"name": name, "body": body},
 		).Error
 	}
 

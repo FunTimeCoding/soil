@@ -7,9 +7,9 @@ import (
 
 func (c *Client) CreateTag(name string) (*tag.Tag, error) {
 	q := netbox.NewTagRequest(name, slug(name))
-	result, _, e := c.client.ExtrasAPI.ExtrasTagsCreate(
-		c.context,
-	).TagRequest(*q).Execute()
+	result, _, e := c.client.ExtrasAPI.ExtrasTagsCreate(c.context).TagRequest(
+		*q,
+	).Execute()
 
 	if e != nil {
 		return nil, e

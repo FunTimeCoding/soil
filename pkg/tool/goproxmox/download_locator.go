@@ -38,12 +38,7 @@ func downloadLocator(c *command_context.Context) *cobra.Command {
 		"import",
 		"content type: import, iso, or vztmpl",
 	)
-	result.Flags().StringVar(
-		&filename,
-		"filename",
-		"",
-		"filename to save as",
-	)
+	result.Flags().StringVar(&filename, "filename", "", "filename to save as")
 	errors.PanicOnError(result.MarkFlagRequired("filename"))
 
 	return result

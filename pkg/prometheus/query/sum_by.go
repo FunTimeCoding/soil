@@ -11,9 +11,5 @@ func SumBy(
 	f *filter.Filter,
 	by ...string,
 ) string {
-	return fmt.Sprintf(
-		"sum(%s) by (%s)",
-		Filter(name, f),
-		join.CommaSpace(by),
-	)
+	return fmt.Sprintf("sum(%s) by (%s)", Filter(name, f), join.CommaSpace(by))
 }

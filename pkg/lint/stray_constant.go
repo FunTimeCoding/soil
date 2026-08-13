@@ -34,10 +34,7 @@ func StrayConstant(
 		trimmed := strings.TrimSpace(line)
 
 		if !packageConstant && strings.HasPrefix(line, "package ") {
-			packageConstant = strings.TrimPrefix(
-				line,
-				"package ",
-			) == "constant"
+			packageConstant = strings.TrimPrefix(line, "package ") == "constant"
 		}
 
 		if !packageConstant && depth == 0 &&

@@ -26,10 +26,6 @@ func TestFormatStringWithVector(t *testing.T) {
 	assert.Any(
 		t,
 		"{\n    \"String\": \"1,<1.0, 1.0, 1.0>,2\"\n}",
-		notation.Format(
-			fixture.WithString{
-				String: "1,<1.0, 1.0, 1.0>,2",
-			},
-		),
+		notation.Format(fixture.WithString{String: "1,<1.0, 1.0, 1.0>,2"}),
 	)
 }

@@ -29,12 +29,7 @@ func resetMachine(c *command_context.Context) *cobra.Command {
 			fmt.Println(c.Client().ResetMachine(identifier, n))
 		},
 	}
-	result.Flags().StringVar(
-		&node,
-		"node",
-		"",
-		"node name (speeds up lookup)",
-	)
+	result.Flags().StringVar(&node, "node", "", "node name (speeds up lookup)")
 
 	return result
 }

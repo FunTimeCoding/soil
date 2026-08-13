@@ -38,12 +38,7 @@ func listIndexes(c *client.Client) *cobra.Command {
 		"",
 		"Instance name (optional when only one instance is configured)",
 	)
-	result.Flags().StringVar(
-		&table,
-		"table",
-		"",
-		"Table name (required)",
-	)
+	result.Flags().StringVar(&table, "table", "", "Table name (required)")
 	result.Flags().StringVar(
 		&schema,
 		"schema",

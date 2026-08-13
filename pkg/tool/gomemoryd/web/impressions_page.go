@@ -23,9 +23,9 @@ func (s *Server) impressionsPage(
 		}
 	}
 
-	since := time.Now().Add(
-		-time.Duration(days) * 24 * time.Hour,
-	).UTC().Format(time.RFC3339)
+	since := time.Now().Add(-time.Duration(days) * 24 * time.Hour).UTC().Format(
+		time.RFC3339,
+	)
 	impressions, e := s.service.RecentImpressions(since)
 
 	if e != nil {
@@ -44,20 +44,10 @@ func (s *Server) impressionsPage(
 		content,
 		html.H3(gomponents.Text(constant.ImpressionsTitle)),
 	)
-	content = append(
-		content,
-		html.P(
-			html.Small(
-				impressionWindowLinks(days),
-			),
-		),
-	)
+	content = append(content, html.P(html.Small(impressionWindowLinks(days))))
 
 	if len(impressions) == 0 {
-		content = append(
-			content,
-			html.P(gomponents.Text("No impressions.")),
-		)
+		content = append(content, html.P(gomponents.Text("No impressions.")))
 	} else {
 		var rows []gomponents.Node
 
@@ -65,12 +55,8 @@ func (s *Server) impressionsPage(
 			rows = append(
 				rows,
 				html.Tr(
-					layout.TimeCell(
-						library.Parse(time.RFC3339, i.CreatedAt),
-					),
-					html.Td(
-						html.Em(gomponents.Text(i.Source)),
-					),
+					layout.TimeCell(library.Parse(time.RFC3339, i.CreatedAt)),
+					html.Td(html.Em(gomponents.Text(i.Source))),
 					html.Td(gomponents.Text(i.Content)),
 				),
 			)

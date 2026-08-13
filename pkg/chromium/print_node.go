@@ -15,10 +15,7 @@ func (c *Client) PrintNode(
 ) {
 	var node []*cdp.Node
 	errors.PanicOnError(
-		chromedp.Run(
-			o,
-			chromedp.Nodes(selector, &node, chromedp.ByQueryAll),
-		),
+		chromedp.Run(o, chromedp.Nodes(selector, &node, chromedp.ByQueryAll)),
 	)
 	fmt.Printf("Selector: %s\n", selector)
 

@@ -38,15 +38,9 @@ func historyFilters(activeKinds []string) gomponents.Node {
 
 		items = append(
 			items,
-			html.Label(
-				html.Input(attrs...),
-				gomponents.Text(f.label),
-			),
+			html.Label(html.Input(attrs...), gomponents.Text(f.label)),
 		)
 	}
 
-	return html.Form(
-		html.ID("history-filters"),
-		gomponents.Group(items),
-	)
+	return html.Form(html.ID("history-filters"), gomponents.Group(items))
 }

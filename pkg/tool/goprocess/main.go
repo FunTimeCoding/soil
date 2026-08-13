@@ -22,12 +22,7 @@ func Main(
 		Version:       argument.CobraVersion(version, gitHash, buildDate),
 		SilenceErrors: true,
 	}
-	o.PersistentFlags().StringP(
-		"file",
-		"f",
-		"Procfile",
-		"path to Procfile",
-	)
+	o.PersistentFlags().StringP("file", "f", "Procfile", "path to Procfile")
 	o.AddCommand(checkCommand())
 	o.AddCommand(runCommand())
 	errors.PanicOnError(o.Execute())

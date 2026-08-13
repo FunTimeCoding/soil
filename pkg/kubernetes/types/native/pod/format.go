@@ -6,8 +6,5 @@ import (
 )
 
 func (p *Pod) Format(f *option.Format) string {
-	return status.New(f).String(
-		p.Name,
-		p.Cluster,
-	).RawList(p.Raw).Format()
+	return status.New(f).String(p.Name, p.Cluster).RawList(p.Raw).Format()
 }

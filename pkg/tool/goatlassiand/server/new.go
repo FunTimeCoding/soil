@@ -11,9 +11,5 @@ func New(
 	c *confluence.Client,
 	r face.Reporter,
 ) *Server {
-	return &Server{
-		jira:       l,
-		confluence: c,
-		reporter:   r,
-	}
+	return &Server{jira: l, confluence: c, reporter: r}
 }

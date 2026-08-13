@@ -10,10 +10,7 @@ import (
 
 func TestAlertmanagerAlertLabelFilter(t *testing.T) {
 	fixture := []*alert.Alert{
-		{
-			Name:   constant.UpperAlfa,
-			Labels: map[string]string{"Apple": "Red"},
-		},
+		{Name: constant.UpperAlfa, Labels: map[string]string{"Apple": "Red"}},
 		{
 			Name:   constant.UpperBravo,
 			Labels: map[string]string{"Banana": "Yellow"},
@@ -26,10 +23,7 @@ func TestAlertmanagerAlertLabelFilter(t *testing.T) {
 	f2.Drop("Apple")
 	assertHasOnlyAlert(t, f2.Run(fixture), "Bravo")
 	fixtureValue := []*alert.Alert{
-		{
-			Name:   constant.UpperAlfa,
-			Labels: map[string]string{"Apple": "Red"},
-		},
+		{Name: constant.UpperAlfa, Labels: map[string]string{"Apple": "Red"}},
 		{
 			Name:   constant.UpperAlfa,
 			Labels: map[string]string{"Apple": "Green"},

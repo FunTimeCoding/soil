@@ -14,10 +14,7 @@ func (c *Client) CloneMachine(
 	result, e := c.client.CloneMachineWithResponse(
 		c.context,
 		identifier,
-		&client.CloneMachineParams{
-			Instance: &c.instance,
-			Node:     node,
-		},
+		&client.CloneMachineParams{Instance: &c.instance, Node: node},
 		body,
 	)
 	errors.PanicOnError(e)

@@ -23,10 +23,7 @@ func (r *Runner) terraformInit() {
 		r.reporter.CaptureWithContext(
 			c.Error,
 			"terraform init",
-			map[string]any{
-				"output": c.OutputString,
-				"stderr": c.ErrorString,
-			},
+			map[string]any{"output": c.OutputString, "stderr": c.ErrorString},
 		)
 		panic(c.Error)
 	}

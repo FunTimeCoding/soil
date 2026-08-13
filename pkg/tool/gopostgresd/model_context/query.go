@@ -28,10 +28,7 @@ func (s *Server) query(
 	if e != nil {
 		return s.captureFail(
 			e,
-			fmt.Sprintf(
-				"database error on %s: query not executed",
-				instance,
-			),
+			fmt.Sprintf("database error on %s: query not executed", instance),
 		)
 	}
 

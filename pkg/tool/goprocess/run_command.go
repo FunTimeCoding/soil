@@ -50,10 +50,7 @@ Commands:
 			}
 
 			if strings.HasPrefix(response, "error:") {
-				return fmt.Errorf(
-					"%s",
-					strings.TrimPrefix(response, "error: "),
-				)
+				return fmt.Errorf("%s", strings.TrimPrefix(response, "error: "))
 			}
 
 			if response != "ok" {

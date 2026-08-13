@@ -18,11 +18,7 @@ func listVirtualJournalEntries(c *client.Client) *cobra.Command {
 			arguments []string,
 		) {
 			fmt.Println(
-				c.ListVirtualJournalEntries(
-					arguments[0],
-					limit,
-					offset,
-				),
+				c.ListVirtualJournalEntries(arguments[0], limit, offset),
 			)
 		},
 	}
@@ -32,12 +28,7 @@ func listVirtualJournalEntries(c *client.Client) *cobra.Command {
 		0,
 		"maximum entries to return (optional)",
 	)
-	result.Flags().Int32Var(
-		&offset,
-		"offset",
-		0,
-		"entries to skip (optional)",
-	)
+	result.Flags().Int32Var(&offset, "offset", 0, "entries to skip (optional)")
 
 	return result
 }

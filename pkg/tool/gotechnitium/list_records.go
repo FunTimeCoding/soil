@@ -17,21 +17,11 @@ func listRecords(c *technitium.Client) *cobra.Command {
 			arguments []string,
 		) {
 			for _, r := range c.MustRecords(arguments[0], all) {
-				fmt.Printf(
-					"%s %s %v\n",
-					r.Name,
-					r.Type,
-					r.Payload,
-				)
+				fmt.Printf("%s %s %v\n", r.Name, r.Type, r.Payload)
 			}
 		},
 	}
-	result.Flags().BoolVar(
-		&all,
-		"all",
-		false,
-		"list all records in the zone",
-	)
+	result.Flags().BoolVar(&all, "all", false, "list all records in the zone")
 
 	return result
 }

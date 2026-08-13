@@ -13,7 +13,9 @@ func TestNamespace(t *testing.T) {
 	assert.NotNil(
 		t,
 		namespace.New(
-			&core.Namespace{ObjectMeta: meta.ObjectMeta{Name: constant.UpperAlfa}},
+			&core.Namespace{
+				ObjectMeta: meta.ObjectMeta{Name: constant.UpperAlfa},
+			},
 			"",
 		),
 	)

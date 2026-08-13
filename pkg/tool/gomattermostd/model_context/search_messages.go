@@ -73,9 +73,6 @@ func (s *Server) SearchMessages(
 	}
 
 	return response.SuccessAny(
-		map[string]any{
-			"results": rows,
-			"count":   len(rows),
-		},
+		map[string]any{"results": rows, "count": len(rows)},
 	)
 }

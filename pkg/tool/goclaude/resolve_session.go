@@ -45,12 +45,7 @@ func resolveSession(
 				display = "(discovered)"
 			}
 
-			fmt.Printf(
-				"  %s  %-7s  %s\n",
-				m.Identifier[:8],
-				name,
-				display,
-			)
+			fmt.Printf("  %s  %-7s  %s\n", m.Identifier[:8], name, display)
 		}
 
 		return ""

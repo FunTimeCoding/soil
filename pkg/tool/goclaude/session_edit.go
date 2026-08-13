@@ -23,17 +23,12 @@ func sessionEdit(c *command_context.Context) *cobra.Command {
 			identifier := resolveSession(c.Client(), arguments[0])
 
 			if identifier == "" {
-				fmt.Printf(
-					"session not found: %s\n",
-					arguments[0],
-				)
+				fmt.Printf("session not found: %s\n", arguments[0])
 
 				return
 			}
 
-			body := client.PostEditSessionJSONRequestBody{
-				Session: identifier,
-			}
+			body := client.PostEditSessionJSONRequestBody{Session: identifier}
 
 			if name != "" {
 				body.Name = &name
@@ -70,18 +65,8 @@ func sessionEdit(c *command_context.Context) *cobra.Command {
 			}
 		},
 	}
-	result.Flags().StringVar(
-		&name,
-		"name",
-		"",
-		"Set display name",
-	)
-	result.Flags().StringVar(
-		&description,
-		"description",
-		"",
-		"Set description",
-	)
+	result.Flags().StringVar(&name, "name", "", "Set display name")
+	result.Flags().StringVar(&description, "description", "", "Set description")
 
 	return result
 }

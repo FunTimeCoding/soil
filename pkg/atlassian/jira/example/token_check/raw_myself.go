@@ -7,9 +7,5 @@ func rawMyself(
 	user string,
 	token string,
 ) {
-	rawGet(
-		locator.New(host).Path("rest/api/2/myself").String(),
-		user,
-		token,
-	)
+	rawGet(locator.New(host).Path("rest/api/2/myself").String(), user, token)
 }

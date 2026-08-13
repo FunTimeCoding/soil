@@ -19,7 +19,9 @@ func (s *Store) UpsertSeed(
 
 	if result.RowsAffected == 0 {
 		var maxPosition int
-		s.mapper.Model(seed.Stub()).Select("COALESCE(MAX(position), 0)").Scan(&maxPosition)
+		s.mapper.Model(seed.Stub()).Select("COALESCE(MAX(position), 0)").Scan(
+			&maxPosition,
+		)
 		errors.PanicOnError(
 			s.mapper.Create(
 				seed.New(
@@ -36,7 +38,9 @@ func (s *Store) UpsertSeed(
 		return
 	}
 
-	if existing.ContentHash != contentHash || !existing.ModifiedAt.Equal(modifiedAt) {
+	if existing.ContentHash != contentHash || !existing.ModifiedAt.Equal(
+		modifiedAt,
+	) {
 		errors.PanicOnError(
 			s.mapper.Model(&existing).Updates(
 				map[string]any{

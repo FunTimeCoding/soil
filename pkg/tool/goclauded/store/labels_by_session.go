@@ -8,8 +8,9 @@ import (
 func (s *Store) LabelsBySession(sessionIdentifier string) ([]label.Label, error) {
 	var result []label.Label
 
-	return result, s.database.Where(
-		"session_identifier = ?",
-		sessionIdentifier,
-	).Order(constant.Key).Find(&result).Error
+	return result, s.database.Where("session_identifier = ?", sessionIdentifier).Order(
+		constant.Key,
+	).Find(
+		&result,
+	).Error
 }

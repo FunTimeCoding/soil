@@ -25,10 +25,7 @@ func TestModelContext(t *testing.T) {
 	assert.StringContains(
 		t,
 		"example.com",
-		o.Client.MustCallTool(
-			constant.ReadTab,
-			map[string]any{"tab_id": 100},
-		),
+		o.Client.MustCallTool(constant.ReadTab, map[string]any{"tab_id": 100}),
 	)
 	assert.StringContains(
 		t,
@@ -85,9 +82,6 @@ func TestModelContext(t *testing.T) {
 	assert.StringContains(
 		t,
 		"closed",
-		o.Client.MustCallTool(
-			constant.CloseTab,
-			map[string]any{"tab_id": 100},
-		),
+		o.Client.MustCallTool(constant.CloseTab, map[string]any{"tab_id": 100}),
 	)
 }

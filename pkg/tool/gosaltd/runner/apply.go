@@ -33,11 +33,7 @@ func (r *Runner) apply(
 	if e != nil {
 		record.Status = provision.StoreStatusError
 		record.ErrorOutput = e.Error()
-		r.logger.Structured(
-			"highstate_error",
-			"error",
-			e.Error(),
-		)
+		r.logger.Structured("highstate_error", "error", e.Error())
 	} else {
 		output, marshalError := json.MarshalIndent(result, "", "  ")
 		errors.PanicOnError(marshalError)

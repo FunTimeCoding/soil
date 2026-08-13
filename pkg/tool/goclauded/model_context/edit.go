@@ -46,7 +46,5 @@ func (s *Server) edit(
 		return s.captureFail(g, library.UnexpectedError)
 	}
 
-	return response.Success(
-		fmt.Sprintf("Updated event #%d", int(identifier)),
-	)
+	return response.Success(fmt.Sprintf("Updated event #%d", int(identifier)))
 }

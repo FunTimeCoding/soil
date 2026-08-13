@@ -7,10 +7,7 @@ import (
 )
 
 func TestRenameFunction(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		serviceTestdata("rename-function/src"),
-	)
+	d := testutil.PrepareTestPackage(t, serviceTestdata("rename-function/src"))
 	s := testService()
 	r, e := s.Rename(
 		d,
@@ -36,13 +33,7 @@ func TestRenameFunctionSamePackage(t *testing.T) {
 		serviceTestdata("unexport-function/src"),
 	)
 	s := testService()
-	r, e := s.Rename(
-		d,
-		"example/pkg/target",
-		"IsGenerated",
-		"WasGenerated",
-		"",
-	)
+	r, e := s.Rename(d, "example/pkg/target", "IsGenerated", "WasGenerated", "")
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	declaration := readFixtureFile(t, d, "pkg/target/is_generated.go")
@@ -73,18 +64,9 @@ func TestRenameMethod(t *testing.T) {
 }
 
 func TestRenameToUnexportedBlockedByCrossPackage(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		serviceTestdata("rename-unexport/src"),
-	)
+	d := testutil.PrepareTestPackage(t, serviceTestdata("rename-unexport/src"))
 	s := testService()
-	r, e := s.Rename(
-		d,
-		"example/pkg/target",
-		"Validate",
-		"check",
-		"",
-	)
+	r, e := s.Rename(d, "example/pkg/target", "Validate", "check", "")
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "would lose access")
@@ -98,13 +80,7 @@ func TestRenameToUnexportedAllowedWithinPackage(t *testing.T) {
 		serviceTestdata("unexport-function/src"),
 	)
 	s := testService()
-	r, e := s.Rename(
-		d,
-		"example/pkg/target",
-		"IsGenerated",
-		"wasGenerated",
-		"",
-	)
+	r, e := s.Rename(d, "example/pkg/target", "IsGenerated", "wasGenerated", "")
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	declaration := readFixtureFile(t, d, "pkg/target/is_generated.go")
@@ -112,46 +88,25 @@ func TestRenameToUnexportedAllowedWithinPackage(t *testing.T) {
 }
 
 func TestRenameCollision(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		serviceTestdata("rename-function/src"),
-	)
+	d := testutil.PrepareTestPackage(t, serviceTestdata("rename-function/src"))
 	s := testService()
-	r, e := s.Rename(
-		d,
-		"example/pkg/target",
-		"IsGeneratedHeader",
-		"Check",
-		"",
-	)
+	r, e := s.Rename(d, "example/pkg/target", "IsGeneratedHeader", "Check", "")
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "already exists")
 }
 
 func TestRenameSymbolNotFound(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		serviceTestdata("rename-function/src"),
-	)
+	d := testutil.PrepareTestPackage(t, serviceTestdata("rename-function/src"))
 	s := testService()
-	r, e := s.Rename(
-		d,
-		"example/pkg/target",
-		"Missing",
-		"Something",
-		"",
-	)
+	r, e := s.Rename(d, "example/pkg/target", "Missing", "Something", "")
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "not found")
 }
 
 func TestRenamePackageNotFound(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		serviceTestdata("rename-function/src"),
-	)
+	d := testutil.PrepareTestPackage(t, serviceTestdata("rename-function/src"))
 	s := testService()
 	r, e := s.Rename(
 		d,
@@ -183,41 +138,23 @@ func TestRenameReceiverNotFound(t *testing.T) {
 func TestRenameMethodNotFound(t *testing.T) {
 	d := testutil.PrepareTestPackage(t, serviceTestdata("rename-method/src"))
 	s := testService()
-	r, e := s.Rename(
-		d,
-		"example/pkg/target",
-		"Missing",
-		"Something",
-		"Store",
-	)
+	r, e := s.Rename(d, "example/pkg/target", "Missing", "Something", "Store")
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "not found")
 }
 
 func TestRenameMethodCollision(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		serviceTestdata("method-collision/src"),
-	)
+	d := testutil.PrepareTestPackage(t, serviceTestdata("method-collision/src"))
 	s := testService()
-	r, e := s.Rename(
-		d,
-		"example/pkg/target",
-		"Save",
-		"Load",
-		"Store",
-	)
+	r, e := s.Rename(d, "example/pkg/target", "Save", "Load", "Store")
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "already exists")
 }
 
 func TestRenameSameName(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		serviceTestdata("rename-function/src"),
-	)
+	d := testutil.PrepareTestPackage(t, serviceTestdata("rename-function/src"))
 	s := testService()
 	r, e := s.Rename(
 		d,

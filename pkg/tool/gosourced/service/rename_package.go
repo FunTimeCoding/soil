@@ -76,10 +76,7 @@ func (s *Service) RenamePackage(
 	if _, f := os.Stat(moveDirectory); f == nil {
 		return failValidation(
 			r,
-			fmt.Sprintf(
-				"target directory already exists: %s",
-				moveDirectory,
-			),
+			fmt.Sprintf("target directory already exists: %s", moveDirectory),
 		)
 	}
 
@@ -97,13 +94,7 @@ func (s *Service) RenamePackage(
 
 	sourceDirectory := filepath.Dir(p.GoFiles[0])
 	modified := make(map[string]*ast.File)
-	renamePackageClauses(
-		all,
-		set,
-		sourceDirectory,
-		oldName,
-		modified,
-	)
+	renamePackageClauses(all, set, sourceDirectory, oldName, modified)
 	decorations := decoration.NewSet()
 	e = retargetImports(
 		r,
@@ -123,14 +114,7 @@ func (s *Service) RenamePackage(
 	}
 
 	renameDecoratedClauses(decorations, modified, oldName, newName)
-	e = decorateQualifiers(
-		r,
-		decorations,
-		set,
-		qualifiers,
-		oldName,
-		newName,
-	)
+	e = decorateQualifiers(r, decorations, set, qualifiers, oldName, newName)
 
 	if e != nil {
 		return nil, e

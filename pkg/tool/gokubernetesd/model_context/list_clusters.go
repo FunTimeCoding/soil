@@ -27,10 +27,7 @@ func (s *Server) ListClusters(
 	for _, c := range s.service.Clusters() {
 		result = append(
 			result,
-			response.ClusterEntry{
-				Name:   c.Name(),
-				Active: c.Name() == active,
-			},
+			response.ClusterEntry{Name: c.Name(), Active: c.Name() == active},
 		)
 	}
 

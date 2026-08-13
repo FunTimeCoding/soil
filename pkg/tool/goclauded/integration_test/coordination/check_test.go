@@ -26,10 +26,7 @@ func TestCheckPreviewNoSession(t *testing.T) {
 	restClient := s.RESTClient(t)
 	response, e := restClient.GetCheckWithResponse(
 		context.Background(),
-		&client.GetCheckParams{
-			Session: uuid.New().String(),
-			Preview: new(true),
-		},
+		&client.GetCheckParams{Session: uuid.New().String(), Preview: new(true)},
 	)
 	assert.FatalOnError(t, e)
 	assert.False(t, response.JSON200.Changed)
@@ -47,9 +44,7 @@ func TestCheckRecentActivity(t *testing.T) {
 	b.CheckLive()
 	a.MustCallTool(
 		constant.Complete,
-		map[string]any{
-			constant.Message: "indexing done",
-		},
+		map[string]any{constant.Message: "indexing done"},
 	)
 	check := b.CheckLive()
 	completions := clientEntriesByKind(
@@ -79,9 +74,7 @@ func TestCheckRecentActivityLive(t *testing.T) {
 	b.Check()
 	a.MustCallTool(
 		constant.Complete,
-		map[string]any{
-			constant.Message: "indexing done",
-		},
+		map[string]any{constant.Message: "indexing done"},
 	)
 	check := b.CheckLive()
 	assert.True(t, check.Changed)

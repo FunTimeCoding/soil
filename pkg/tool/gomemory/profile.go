@@ -29,10 +29,7 @@ func profile(l **client.Client) *cobra.Command {
 				params.Detail = &detail
 			}
 
-			r, e := (*l).GetProfile(
-				context.Background(),
-				params,
-			)
+			r, e := (*l).GetProfile(context.Background(), params)
 			errors.PanicOnError(e)
 			defer errors.PanicClose(r.Body)
 			body, e := io.ReadAll(r.Body)
@@ -46,12 +43,7 @@ func profile(l **client.Client) *cobra.Command {
 		"",
 		"session topic for relevance matching",
 	)
-	c.Flags().BoolVar(
-		&detail,
-		"detail",
-		false,
-		"include token budget details",
-	)
+	c.Flags().BoolVar(&detail, "detail", false, "include token budget details")
 
 	return c
 }

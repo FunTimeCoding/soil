@@ -24,7 +24,9 @@ func segmentSpans(name string) []segmentSpan {
 						segmentSpan{
 							start: segmentStart,
 							end:   offset + i,
-							lower: strings.ToLower(name[segmentStart : offset+i]),
+							lower: strings.ToLower(
+								name[segmentStart : offset+i],
+							),
 						},
 					)
 				}
@@ -39,7 +41,9 @@ func segmentSpans(name string) []segmentSpan {
 				segmentSpan{
 					start: segmentStart,
 					end:   offset + len(part),
-					lower: strings.ToLower(name[segmentStart : offset+len(part)]),
+					lower: strings.ToLower(
+						name[segmentStart : offset+len(part)],
+					),
 				},
 			)
 		}

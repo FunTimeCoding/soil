@@ -35,10 +35,7 @@ func TestLabelCustomKey(t *testing.T) {
 	a.Announce(a.Name(), "labeling")
 	a.MustCallTool(
 		constant.Label,
-		map[string]any{
-			constant.Key:   "stage",
-			constant.Value: "canary",
-		},
+		map[string]any{constant.Key: "stage", constant.Value: "canary"},
 	)
 	result := a.MustCallTool(
 		constant.Label,

@@ -38,9 +38,7 @@ func Run(
 	u := queryWeb.New(v)
 	lifecycle.New(
 		l,
-		lifecycle.WithWorker(
-			worker.New(v, 10*time.Minute, l, r),
-		),
+		lifecycle.WithWorker(worker.New(v, 10*time.Minute, l, r)),
 		lifecycle.WithServer(
 			lifecycleServer.New(
 				o.Address,
@@ -70,12 +68,7 @@ func Run(
 						),
 						m,
 					)
-					model_context.New(
-						v,
-						r,
-						t,
-						o.Version,
-					).Mount(m)
+					model_context.New(v, r, t, o.Version).Mount(m)
 					u.Mount(m)
 				},
 			).WithMiddleware(u.Recovery(r)),

@@ -54,11 +54,7 @@ func (s *Server) GetProfile(
 	}
 
 	if len(result.Relevant) > 0 {
-		relevant := make(
-			[]server.ProfileSearchResult,
-			0,
-			len(result.Relevant),
-		)
+		relevant := make([]server.ProfileSearchResult, 0, len(result.Relevant))
 
 		for _, r := range result.Relevant {
 			if s.skipHidden(r.Tags) {

@@ -6,9 +6,11 @@ import (
 )
 
 func (c *Client) physicalAddressesOffset(offset int32) ([]netbox.MACAddress, error) {
-	result, _, e := c.client.DcimAPI.DcimMacAddressesList(
-		c.context,
-	).Limit(constant.PageLimit).Offset(offset).Execute()
+	result, _, e := c.client.DcimAPI.DcimMacAddressesList(c.context).Limit(
+		constant.PageLimit,
+	).Offset(
+		offset,
+	).Execute()
 
 	if e != nil {
 		return nil, e

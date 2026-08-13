@@ -34,10 +34,7 @@ func (s *Server) sessionEditForm(
 		constant.SessionsPath,
 		html.H3(gomponents.Text("Edit Session")),
 		html.Form(
-			gomponents.Attr(
-				"method",
-				"POST",
-			),
+			gomponents.Attr("method", "POST"),
 			gomponents.Attr(
 				"action",
 				fmt.Sprintf("/sessions/%s/edit", identifier),
@@ -65,10 +62,7 @@ func (s *Server) sessionEditForm(
 				),
 			),
 			html.Div(
-				html.Button(
-					html.Type("submit"),
-					gomponents.Text("Save"),
-				),
+				html.Button(html.Type("submit"), gomponents.Text("Save")),
 				gomponents.Text(" "),
 				html.A(
 					gomponents.Attr(

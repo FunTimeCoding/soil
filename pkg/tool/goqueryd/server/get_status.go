@@ -14,10 +14,7 @@ func (s *Server) GetStatus(
 
 	if e != nil {
 		return server.GetStatus500JSONResponse(
-			*s.captureFail(
-				e,
-				constant.UnexpectedError,
-			),
+			*s.captureFail(e, constant.UnexpectedError),
 		), nil
 	}
 

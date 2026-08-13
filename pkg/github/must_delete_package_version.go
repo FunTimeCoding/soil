@@ -6,10 +6,5 @@ func (c *Client) MustDeletePackageVersion(
 	packageName string,
 	versionIdentifier int64,
 ) {
-	errors.PanicOnError(
-		c.DeletePackageVersion(
-			packageName,
-			versionIdentifier,
-		),
-	)
+	errors.PanicOnError(c.DeletePackageVersion(packageName, versionIdentifier))
 }

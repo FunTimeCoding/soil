@@ -53,12 +53,7 @@ func TestFix(t *testing.T) {
 				"package types\n\nconst StrayConstant = \"value\"\n",
 				testutil.ReadFile(
 					t,
-					filepath.Join(
-						directory,
-						"pkg",
-						"types",
-						"stray_const.go",
-					),
+					filepath.Join(directory, "pkg", "types", "stray_const.go"),
 				),
 			)
 			assert.String(
@@ -136,12 +131,7 @@ func TestFix(t *testing.T) {
 				"package collision\n\nfunc Example() string {\n\tr := \"taken\"\n\te := \"test\"\n\n\treturn r + e\n}\n",
 				testutil.ReadFile(
 					t,
-					filepath.Join(
-						directory,
-						"pkg",
-						"collision",
-						"example.go",
-					),
+					filepath.Join(directory, "pkg", "collision", "example.go"),
 				),
 			)
 		},
@@ -180,12 +170,7 @@ func TestFix(t *testing.T) {
 				"package parent\n\nfunc Example() {\n\ts := \"status\"\n\tsources := []string{\"a\"}\n\n\tfor _, o := range sources {\n\t\t_ = s + o\n\t}\n}\n",
 				testutil.ReadFile(
 					t,
-					filepath.Join(
-						directory,
-						"pkg",
-						"parent",
-						"example.go",
-					),
+					filepath.Join(directory, "pkg", "parent", "example.go"),
 				),
 			)
 		},
@@ -198,12 +183,7 @@ func TestFix(t *testing.T) {
 				"package errs\n\nimport \"fmt\"\n\nfunc Example() {\n\te := fmt.Errorf(\"first\")\n\tf := fmt.Errorf(\"second\")\n\t_ = e\n\t_ = f\n}\n",
 				testutil.ReadFile(
 					t,
-					filepath.Join(
-						directory,
-						"pkg",
-						"errs",
-						"example.go",
-					),
+					filepath.Join(directory, "pkg", "errs", "example.go"),
 				),
 			)
 		},
@@ -216,12 +196,7 @@ func TestFix(t *testing.T) {
 				"package errs\n\nimport \"fmt\"\n\nfunc Triple() {\n\te := fmt.Errorf(\"first\")\n\tf := fmt.Errorf(\"second\")\n\tg := fmt.Errorf(\"third\")\n\t_ = e\n\t_ = f\n\t_ = g\n}\n",
 				testutil.ReadFile(
 					t,
-					filepath.Join(
-						directory,
-						"pkg",
-						"errs",
-						"triple.go",
-					),
+					filepath.Join(directory, "pkg", "errs", "triple.go"),
 				),
 			)
 		},
@@ -234,12 +209,7 @@ func TestFix(t *testing.T) {
 				"package sentinel\n\nimport \"fmt\"\n\nvar ErrorQuit = fmt.Errorf(\"quit\")\n",
 				testutil.ReadFile(
 					t,
-					filepath.Join(
-						directory,
-						"pkg",
-						"sentinel",
-						"sentinel.go",
-					),
+					filepath.Join(directory, "pkg", "sentinel", "sentinel.go"),
 				),
 			)
 			assert.String(
@@ -247,12 +217,7 @@ func TestFix(t *testing.T) {
 				"package caller\n\nimport (\n\t\"errors\"\n\t\"testmodule/pkg/sentinel\"\n)\n\nfunc Check(e error) bool {\n\treturn errors.Is(e, sentinel.ErrorQuit)\n}\n",
 				testutil.ReadFile(
 					t,
-					filepath.Join(
-						directory,
-						"pkg",
-						"caller",
-						"caller.go",
-					),
+					filepath.Join(directory, "pkg", "caller", "caller.go"),
 				),
 			)
 			assert.String(
@@ -260,12 +225,7 @@ func TestFix(t *testing.T) {
 				"//go:build ignore\n\npackage tagged\n\nimport (\n\t\"errors\"\n\t\"testmodule/pkg/sentinel\"\n)\n\nfunc Handle(e error) bool {\n\treturn errors.Is(e, sentinel.ErrorQuit)\n}\n",
 				testutil.ReadFile(
 					t,
-					filepath.Join(
-						directory,
-						"pkg",
-						"tagged",
-						"tagged.go",
-					),
+					filepath.Join(directory, "pkg", "tagged", "tagged.go"),
 				),
 			)
 		},
@@ -311,12 +271,7 @@ func TestFix(t *testing.T) {
 func writeTestModule(t *testing.T) string {
 	t.Helper()
 	directory := t.TempDir()
-	testutil.WriteFile(
-		t,
-		directory,
-		"go.mod",
-		"module testmodule\n\ngo 1.22\n",
-	)
+	testutil.WriteFile(t, directory, "go.mod", "module testmodule\n\ngo 1.22\n")
 	testutil.WriteFile(
 		t,
 		directory,

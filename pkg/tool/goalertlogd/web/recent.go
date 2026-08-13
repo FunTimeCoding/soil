@@ -67,10 +67,7 @@ func (s *Server) recent(
 				),
 				html.Label(
 					gomponents.Raw("&nbsp;"),
-					html.Button(
-						html.Type("submit"),
-						gomponents.Text("Filter"),
-					),
+					html.Button(html.Type("submit"), gomponents.Text("Filter")),
 				),
 			),
 		),

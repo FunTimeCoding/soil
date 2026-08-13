@@ -11,9 +11,7 @@ func (c *Client) CreateSnippet(
 ) string {
 	result, e := c.client.CreateSnippetWithResponse(
 		c.context,
-		&client.CreateSnippetParams{
-			Instance: &c.instance,
-		},
+		&client.CreateSnippetParams{Instance: &c.instance},
 		body,
 	)
 	errors.PanicOnError(e)

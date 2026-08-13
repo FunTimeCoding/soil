@@ -16,10 +16,7 @@ func openMapper(locator string) *gorm.DB {
 	d := stdlib.OpenDB(*c)
 	d.SetMaxOpenConns(constant.MaxOpenConnections)
 	d.SetMaxIdleConns(constant.MaxIdleConnections)
-	m, f := gorm.Open(
-		postgres.New(postgres.Config{Conn: d}),
-		&gorm.Config{},
-	)
+	m, f := gorm.Open(postgres.New(postgres.Config{Conn: d}), &gorm.Config{})
 	errors.PanicOnError(f)
 
 	return m

@@ -13,12 +13,8 @@ func (s *Server) GetPage(
 	result, e := s.confluence.Page(r.Identifier)
 
 	if e != nil {
-		return server.GetPage500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.GetPage500JSONResponse(*s.captureDetail(e)), nil
 	}
 
-	return server.GetPage200JSONResponse(
-		*convert.ConfluencePageDetail(result),
-	), nil
+	return server.GetPage200JSONResponse(*convert.ConfluencePageDetail(result)), nil
 }

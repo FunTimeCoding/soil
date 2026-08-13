@@ -18,9 +18,7 @@ func (s *Server) CreatePage(
 	)
 
 	if e != nil {
-		return server.CreatePage500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.CreatePage500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	return server.CreatePage201JSONResponse(

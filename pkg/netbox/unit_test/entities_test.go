@@ -107,7 +107,9 @@ func TestEntities(t *testing.T) {
 	assert.NotNil(t, notification_group.New(&netbox.NotificationGroup{}))
 	assert.NotNil(
 		t,
-		physical_address.New(&netbox.MACAddress{Display: constant.PhysicalTest0}),
+		physical_address.New(
+			&netbox.MACAddress{Display: constant.PhysicalTest0},
+		),
 	)
 	assert.NotNil(t, platform.New(&netbox.Platform{}))
 	assert.NotNil(t, power_feed.New(&netbox.PowerFeed{}))
@@ -133,10 +135,7 @@ func TestEntities(t *testing.T) {
 	assert.NotNil(t, user_group.New(&netbox.Group{}))
 	assert.NotNil(t, user.New(&netbox.User{}))
 	assert.NotNil(t, virtual_chassis.New(&netbox.VirtualChassis{}))
-	assert.NotNil(
-		t,
-		virtual_device_context.New(&netbox.VirtualDeviceContext{}),
-	)
+	assert.NotNil(t, virtual_device_context.New(&netbox.VirtualDeviceContext{}))
 	assert.NotNil(
 		t,
 		virtual_machine.New(&netbox.VirtualMachineWithConfigContext{}),

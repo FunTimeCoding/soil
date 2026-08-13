@@ -17,9 +17,7 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.UseModule,
-			mcp.WithDescription(
-				"Set the active module for this session.",
-			),
+			mcp.WithDescription("Set the active module for this session."),
 			mcp.WithString(
 				"module",
 				mcp.Required(),
@@ -49,9 +47,7 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				"receiver",
-				mcp.Description(
-					"Receiver type name for methods, e.g. Store.",
-				),
+				mcp.Description("Receiver type name for methods, e.g. Store."),
 			),
 			mcp.WithString(
 				"file",
@@ -83,9 +79,7 @@ func (s *Server) register() {
 			mcp.WithString(
 				"symbol",
 				mcp.Required(),
-				mcp.Description(
-					"Symbol name, e.g. IsGeneratedHeader.",
-				),
+				mcp.Description("Symbol name, e.g. IsGeneratedHeader."),
 			),
 			mcp.WithString(
 				"package_path",
@@ -96,9 +90,7 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				"receiver",
-				mcp.Description(
-					"Receiver type name for methods, e.g. Store.",
-				),
+				mcp.Description("Receiver type name for methods, e.g. Store."),
 			),
 		),
 		mcp.NewTypedToolHandler(s.changeVisibility),
@@ -112,29 +104,21 @@ func (s *Server) register() {
 			mcp.WithString(
 				"package_path",
 				mcp.Required(),
-				mcp.Description(
-					"Full import path of the package.",
-				),
+				mcp.Description("Full import path of the package."),
 			),
 			mcp.WithString(
 				"old_name",
 				mcp.Required(),
-				mcp.Description(
-					"Current name of the symbol.",
-				),
+				mcp.Description("Current name of the symbol."),
 			),
 			mcp.WithString(
 				"new_name",
 				mcp.Required(),
-				mcp.Description(
-					"New name for the symbol.",
-				),
+				mcp.Description("New name for the symbol."),
 			),
 			mcp.WithString(
 				"receiver",
-				mcp.Description(
-					"Receiver type name for methods, e.g. Store.",
-				),
+				mcp.Description("Receiver type name for methods, e.g. Store."),
 			),
 		),
 		mcp.NewTypedToolHandler(s.renameSymbol),
@@ -155,16 +139,12 @@ func (s *Server) register() {
 			mcp.WithString(
 				"symbol",
 				mcp.Required(),
-				mcp.Description(
-					"Symbol name to move, e.g. itemFields.",
-				),
+				mcp.Description("Symbol name to move, e.g. itemFields."),
 			),
 			mcp.WithString(
 				"target_package_path",
 				mcp.Required(),
-				mcp.Description(
-					"Full import path of the destination package.",
-				),
+				mcp.Description("Full import path of the destination package."),
 			),
 			mcp.WithString(
 				"target_file",
@@ -209,9 +189,7 @@ func (s *Server) register() {
 			mcp.WithString(
 				"target_package_path",
 				mcp.Required(),
-				mcp.Description(
-					"Full import path of the destination package.",
-				),
+				mcp.Description("Full import path of the destination package."),
 			),
 			mcp.WithString(
 				"target_file",
@@ -243,9 +221,7 @@ func (s *Server) register() {
 			mcp.WithString(
 				"package_path",
 				mcp.Required(),
-				mcp.Description(
-					"Full import path of the package to move.",
-				),
+				mcp.Description("Full import path of the package to move."),
 			),
 			mcp.WithString(
 				"target_package_path",
@@ -266,9 +242,7 @@ func (s *Server) register() {
 			mcp.WithString(
 				"package_path",
 				mcp.Required(),
-				mcp.Description(
-					"Full import path of the package to rename.",
-				),
+				mcp.Description("Full import path of the package to rename."),
 			),
 			mcp.WithString(
 				"new_name",
@@ -289,9 +263,7 @@ func (s *Server) register() {
 			mcp.WithString(
 				"package_path",
 				mcp.Required(),
-				mcp.Description(
-					"Full import path of the package to rename.",
-				),
+				mcp.Description("Full import path of the package to rename."),
 			),
 			mcp.WithString(
 				"new_name",
@@ -319,16 +291,12 @@ func (s *Server) register() {
 			mcp.WithString(
 				"type",
 				mcp.Required(),
-				mcp.Description(
-					"Named type to extract, e.g. Store.",
-				),
+				mcp.Description("Named type to extract, e.g. Store."),
 			),
 			mcp.WithString(
 				"target_package_path",
 				mcp.Required(),
-				mcp.Description(
-					"Full import path of the destination package.",
-				),
+				mcp.Description("Full import path of the destination package."),
 			),
 			mcp.WithString(
 				"target_file",
@@ -361,9 +329,7 @@ func (s *Server) register() {
 			mcp.WithString(
 				"function",
 				mcp.Required(),
-				mcp.Description(
-					"Function or method name to extract.",
-				),
+				mcp.Description("Function or method name to extract."),
 			),
 		),
 		mcp.NewTypedToolHandler(s.extractToFile),
@@ -371,51 +337,34 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.AddImport,
-			mcp.WithDescription(
-				"Add an import to a Go file.",
-			),
+			mcp.WithDescription("Add an import to a Go file."),
 			mcp.WithString(
 				"file",
 				mcp.Required(),
-				mcp.Description(
-					"File path relative to module root.",
-				),
+				mcp.Description("File path relative to module root."),
 			),
 			mcp.WithString(
 				"import_path",
 				mcp.Required(),
-				mcp.Description(
-					"Import path to add, e.g. fmt.",
-				),
+				mcp.Description("Import path to add, e.g. fmt."),
 			),
-			mcp.WithString(
-				"alias",
-				mcp.Description(
-					"Optional import alias.",
-				),
-			),
+			mcp.WithString("alias", mcp.Description("Optional import alias.")),
 		),
 		mcp.NewTypedToolHandler(s.addImport),
 	)
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.RemoveImport,
-			mcp.WithDescription(
-				"Remove an import from a Go file.",
-			),
+			mcp.WithDescription("Remove an import from a Go file."),
 			mcp.WithString(
 				"file",
 				mcp.Required(),
-				mcp.Description(
-					"File path relative to module root.",
-				),
+				mcp.Description("File path relative to module root."),
 			),
 			mcp.WithString(
 				"import_path",
 				mcp.Required(),
-				mcp.Description(
-					"Import path to remove.",
-				),
+				mcp.Description("Import path to remove."),
 			),
 		),
 		mcp.NewTypedToolHandler(s.removeImport),

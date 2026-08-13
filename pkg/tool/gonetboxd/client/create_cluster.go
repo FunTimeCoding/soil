@@ -13,11 +13,7 @@ func (c *Client) CreateCluster(
 ) string {
 	result, e := c.client.CreateCluster(
 		c.context,
-		client.CreateClusterRequest{
-			Name: name,
-			Type: clusterType,
-			Site: site,
-		},
+		client.CreateClusterRequest{Name: name, Type: clusterType, Site: site},
 	)
 	errors.PanicOnError(e)
 

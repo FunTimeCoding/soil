@@ -23,9 +23,6 @@ func (s *Server) CreateTab(
 	}
 
 	return response.SuccessAny(
-		map[string]any{
-			"tab_id": identifier,
-			"url":    a.Locator,
-		},
+		map[string]any{"tab_id": identifier, "url": a.Locator},
 	)
 }

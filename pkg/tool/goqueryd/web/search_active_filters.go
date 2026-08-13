@@ -45,9 +45,6 @@ func searchActiveFilters(
 	}
 
 	return html.P(
-		html.Small(
-			gomponents.Text("Filters: "),
-			gomponents.Group(chips),
-		),
+		html.Small(gomponents.Text("Filters: "), gomponents.Group(chips)),
 	)
 }

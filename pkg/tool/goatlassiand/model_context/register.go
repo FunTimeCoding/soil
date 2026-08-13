@@ -41,9 +41,7 @@ func (s *Server) register() {
 			),
 			mcp.WithBoolean(
 				constant.Comments,
-				mcp.Description(
-					"Include comments on the issue.",
-				),
+				mcp.Description("Include comments on the issue."),
 			),
 		),
 		s.getIssue,
@@ -54,7 +52,9 @@ func (s *Server) register() {
 			mcp.WithDescription("Search Jira projects by key or name"),
 			mcp.WithString(
 				generative.ParameterQuery,
-				mcp.Description("Filter by key (exact, case-insensitive) or name (case-insensitive contains). Omit to list all."),
+				mcp.Description(
+					"Filter by key (exact, case-insensitive) or name (case-insensitive contains). Omit to list all.",
+				),
 			),
 			mcp.WithNumber(
 				generative.ParameterLimit,
@@ -63,7 +63,9 @@ func (s *Server) register() {
 			),
 			mcp.WithBoolean(
 				constant.IncludeDescriptions,
-				mcp.Description("Fetch full project details including description (slower, one API call per result). Defaults to false."),
+				mcp.Description(
+					"Fetch full project details including description (slower, one API call per result). Defaults to false.",
+				),
 			),
 		),
 		s.searchProjects,
@@ -71,7 +73,9 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ConfluenceSearch,
-			mcp.WithDescription("Search Confluence pages using CQL or plain text"),
+			mcp.WithDescription(
+				"Search Confluence pages using CQL or plain text",
+			),
 			mcp.WithString(
 				generative.ParameterQuery,
 				mcp.Required(),
@@ -83,7 +87,9 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ConfluenceGetPage,
-			mcp.WithDescription("Get a Confluence page by ID with body content as markdown"),
+			mcp.WithDescription(
+				"Get a Confluence page by ID with body content as markdown",
+			),
 			mcp.WithString(
 				generative.ParameterIdentifier,
 				mcp.Required(),
@@ -115,7 +121,9 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ConfluenceCreatePage,
-			mcp.WithDescription("Create a new Confluence page with markdown content"),
+			mcp.WithDescription(
+				"Create a new Confluence page with markdown content",
+			),
 			mcp.WithString(
 				constant.SpaceIdentifier,
 				mcp.Required(),
@@ -139,7 +147,9 @@ func (s *Server) register() {
 			),
 			mcp.WithBoolean(
 				constant.Draft,
-				mcp.Description("Create as a draft page instead of publishing immediately."),
+				mcp.Description(
+					"Create as a draft page instead of publishing immediately.",
+				),
 			),
 		),
 		s.createPage,
@@ -147,7 +157,9 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ConfluenceUpdatePage,
-			mcp.WithDescription("Update a Confluence page with markdown content. Gets the current version automatically."),
+			mcp.WithDescription(
+				"Update a Confluence page with markdown content. Gets the current version automatically.",
+			),
 			mcp.WithString(
 				generative.ParameterIdentifier,
 				mcp.Required(),
@@ -323,9 +335,7 @@ func (s *Server) register() {
 			mcp.WithString(
 				constant.IssueType,
 				mcp.Required(),
-				mcp.Description(
-					"Issue type name (e.g. Task, Bug, Story)",
-				),
+				mcp.Description("Issue type name (e.g. Task, Bug, Story)"),
 			),
 			mcp.WithString(
 				constant.ExpandFields,
@@ -350,19 +360,14 @@ func (s *Server) register() {
 			mcp.WithString(
 				constant.IssueType,
 				mcp.Required(),
-				mcp.Description(
-					"Issue type name (e.g. Task, Bug, Story)",
-				),
+				mcp.Description("Issue type name (e.g. Task, Bug, Story)"),
 			),
 			mcp.WithString(
 				constant.Summary,
 				mcp.Required(),
 				mcp.Description("Issue summary/title"),
 			),
-			mcp.WithString(
-				"description",
-				mcp.Description("Issue description"),
-			),
+			mcp.WithString("description", mcp.Description("Issue description")),
 			mcp.WithString(
 				constant.Assignee,
 				mcp.Description(
@@ -399,10 +404,7 @@ func (s *Server) register() {
 				constant.Summary,
 				mcp.Description("New summary/title"),
 			),
-			mcp.WithString(
-				"description",
-				mcp.Description("New description"),
-			),
+			mcp.WithString("description", mcp.Description("New description")),
 			mcp.WithString(
 				constant.Assignee,
 				mcp.Description(
@@ -491,9 +493,7 @@ func (s *Server) register() {
 			mcp.WithString(
 				generative.ParameterQuery,
 				mcp.Required(),
-				mcp.Description(
-					"Search term (display name or email)",
-				),
+				mcp.Description("Search term (display name or email)"),
 			),
 		),
 		s.searchUsers,
@@ -644,9 +644,7 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.JiraEditChecklistItem,
-			mcp.WithDescription(
-				"Edit the text of a Smart Checklist item.",
-			),
+			mcp.WithDescription("Edit the text of a Smart Checklist item."),
 			mcp.WithString(
 				generative.ParameterKey,
 				mcp.Required(),

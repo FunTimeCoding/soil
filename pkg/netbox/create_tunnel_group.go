@@ -7,9 +7,9 @@ import (
 
 func (c *Client) CreateTunnelGroup(name string) (*tunnel_group.Group, error) {
 	q := netbox.NewTunnelGroupRequest(name, slug(name))
-	result, _, e := c.client.VpnAPI.VpnTunnelGroupsCreate(
-		c.context,
-	).TunnelGroupRequest(*q).Execute()
+	result, _, e := c.client.VpnAPI.VpnTunnelGroupsCreate(c.context).TunnelGroupRequest(
+		*q,
+	).Execute()
 
 	if e != nil {
 		return nil, e

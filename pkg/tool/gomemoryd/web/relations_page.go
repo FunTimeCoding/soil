@@ -81,18 +81,12 @@ func (s *Server) relationsPage(
 			rows,
 			html.Tr(
 				html.Td(
-					memoryLink(
-						relation.SourceIdentifier,
-						relation.SourceName,
-					),
+					memoryLink(relation.SourceIdentifier, relation.SourceName),
 				),
 				html.Td(scopeText(relation.SourceScope)),
 				html.Td(gomponents.Text(label)),
 				html.Td(
-					memoryLink(
-						relation.TargetIdentifier,
-						relation.TargetName,
-					),
+					memoryLink(relation.TargetIdentifier, relation.TargetName),
 				),
 				html.Td(scopeText(relation.TargetScope)),
 			),
@@ -100,10 +94,7 @@ func (s *Server) relationsPage(
 	}
 
 	if len(rows) == 0 {
-		content = append(
-			content,
-			html.P(gomponents.Text("No relations.")),
-		)
+		content = append(content, html.P(gomponents.Text("No relations.")))
 	} else {
 		content = append(
 			content,

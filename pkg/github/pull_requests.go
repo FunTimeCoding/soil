@@ -6,12 +6,7 @@ func (c *Client) PullRequests(
 	owner string,
 	name string,
 ) ([]*github.PullRequest, error) {
-	result, _, e := c.client.PullRequests.List(
-		c.context,
-		owner,
-		name,
-		nil,
-	)
+	result, _, e := c.client.PullRequests.List(c.context, owner, name, nil)
 
 	return result, e
 }

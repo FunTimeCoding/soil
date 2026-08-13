@@ -12,10 +12,7 @@ func (c *Client) CreateVirtualMachine(
 ) string {
 	result, e := c.client.CreateVirtualMachine(
 		c.context,
-		client.CreateVirtualMachineRequest{
-			Name:    name,
-			Cluster: cluster,
-		},
+		client.CreateVirtualMachineRequest{Name: name, Cluster: cluster},
 	)
 	errors.PanicOnError(e)
 

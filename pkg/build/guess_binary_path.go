@@ -10,12 +10,9 @@ func GuessBinaryPath(
 	name string,
 	systemArchitecture string,
 ) string {
-	if s := join.Relative(
-		constant.Temporary,
-		name,
-		systemArchitecture,
-		name,
-	); system.FileExists(s) {
+	if s := join.Relative(constant.Temporary, name, systemArchitecture, name); system.FileExists(
+		s,
+	) {
 		return s
 	}
 

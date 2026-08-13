@@ -27,11 +27,7 @@ func (c *Client) exchange(
 		reader = bytes.NewReader(b)
 	}
 
-	r, e := http.NewRequest(
-		method,
-		fmt.Sprintf("%s/%s", c.base, path),
-		reader,
-	)
+	r, e := http.NewRequest(method, fmt.Sprintf("%s/%s", c.base, path), reader)
 
 	if e != nil {
 		return nil, 0, e

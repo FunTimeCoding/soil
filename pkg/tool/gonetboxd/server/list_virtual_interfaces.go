@@ -13,17 +13,13 @@ func (s *Server) ListVirtualInterfaces(
 	m, e := s.client.VirtualMachineByName(r.Name)
 
 	if e != nil {
-		return server.ListVirtualInterfaces500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.ListVirtualInterfaces500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	interfaces, f := s.client.VirtualMachineInterfaces(m)
 
 	if f != nil {
-		return server.ListVirtualInterfaces500JSONResponse(
-			*s.captureDetail(f),
-		), nil
+		return server.ListVirtualInterfaces500JSONResponse(*s.captureDetail(f)), nil
 	}
 
 	return server.ListVirtualInterfaces200JSONResponse(

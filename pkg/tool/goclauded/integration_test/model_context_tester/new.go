@@ -18,9 +18,7 @@ func New(
 	t.Helper()
 	x := context.Background()
 	c := model_context_client.New(t, port)
-	base := locator.New(
-		constant.Localhost,
-	).Insecure().Port(port).String()
+	base := locator.New(constant.Localhost).Insecure().Port(port).String()
 	restClient, e := client.NewClientWithResponses(base)
 	assert.FatalOnError(t, e)
 	identifier := uuid.New().String()

@@ -14,10 +14,7 @@ func TestEvents(t *testing.T) {
 	result, e := s.Service.Events(
 		context.Background(),
 		"test",
-		service.EventsQuery{
-			Namespace: "default",
-			Limit:     50,
-		},
+		service.EventsQuery{Namespace: "default", Limit: 50},
 	)
 	assert.Nil(t, e)
 	assert.Count(t, 1, result)
@@ -46,10 +43,7 @@ func TestEventsMutedFiltered(t *testing.T) {
 	result, e := s.Service.Events(
 		context.Background(),
 		"test",
-		service.EventsQuery{
-			Namespace: "kube-system",
-			Limit:     50,
-		},
+		service.EventsQuery{Namespace: "kube-system", Limit: 50},
 	)
 	assert.Nil(t, e)
 	assert.Count(t, 1, result)

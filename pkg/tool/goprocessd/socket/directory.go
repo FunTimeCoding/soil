@@ -6,10 +6,5 @@ import (
 )
 
 func directory() string {
-	return filepath.Join(
-		system.Home(),
-		".local",
-		"share",
-		"goprocessd",
-	)
+	return filepath.Join(system.Home(), ".local", "share", "goprocessd")
 }

@@ -17,11 +17,7 @@ func addVirtualJournalEntry(c *client.Client) *cobra.Command {
 			arguments []string,
 		) {
 			fmt.Println(
-				c.AddVirtualJournalEntry(
-					arguments[0],
-					kind,
-					arguments[1],
-				),
+				c.AddVirtualJournalEntry(arguments[0], kind, arguments[1]),
 			)
 		},
 	}

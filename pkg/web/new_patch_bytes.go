@@ -11,11 +11,7 @@ func NewPatchBytes(
 	locator string,
 	body io.Reader,
 ) *http.Request {
-	result, e := http.NewRequest(
-		constant.Patch,
-		locator,
-		body,
-	)
+	result, e := http.NewRequest(constant.Patch, locator, body)
 	errors.PanicOnError(e)
 
 	return result

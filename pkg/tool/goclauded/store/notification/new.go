@@ -5,9 +5,5 @@ func New(
 	source string,
 	body string,
 ) *Notification {
-	return &Notification{
-		Callsign: callsign,
-		Source:   source,
-		Body:     body,
-	}
+	return &Notification{Callsign: callsign, Source: source, Body: body}
 }

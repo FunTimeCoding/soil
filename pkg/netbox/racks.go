@@ -10,9 +10,9 @@ func (c *Client) Racks() ([]*rack.Rack, error) {
 		return c.cache.Racks, nil
 	}
 
-	result, _, e := c.client.DcimAPI.DcimRacksList(
-		c.context,
-	).Limit(constant.PageLimit).Execute()
+	result, _, e := c.client.DcimAPI.DcimRacksList(c.context).Limit(
+		constant.PageLimit,
+	).Execute()
 
 	if e != nil {
 		return nil, e

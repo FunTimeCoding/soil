@@ -9,11 +9,7 @@ import (
 
 func TestFormatCompactToday(t *testing.T) {
 	now := time.Now()
-	assert.String(
-		t,
-		now.Local().Format("15:04"),
-		library.FormatCompact(now),
-	)
+	assert.String(t, now.Local().Format("15:04"), library.FormatCompact(now))
 }
 
 func TestFormatCompactOlder(t *testing.T) {

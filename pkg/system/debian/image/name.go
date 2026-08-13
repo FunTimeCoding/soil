@@ -9,9 +9,5 @@ func Name(
 	v *semver.Version,
 	architecture string,
 ) string {
-	return fmt.Sprintf(
-		"debian-%s-%s-netinst.iso",
-		v.String(),
-		architecture,
-	)
+	return fmt.Sprintf("debian-%s-%s-netinst.iso", v.String(), architecture)
 }

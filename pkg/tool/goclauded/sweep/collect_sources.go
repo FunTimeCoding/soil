@@ -20,9 +20,7 @@ func collectSources() []string {
 			continue
 		}
 
-		files, fe := filepath.Glob(
-			filepath.Join(base, entry.Name(), "*.jsonl"),
-		)
+		files, fe := filepath.Glob(filepath.Join(base, entry.Name(), "*.jsonl"))
 
 		if fe != nil {
 			continue

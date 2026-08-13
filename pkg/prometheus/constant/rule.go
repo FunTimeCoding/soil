@@ -23,12 +23,6 @@ const (
 )
 
 var (
-	RuleHealths = []v1.RuleHealth{
-		HealthOkay,
-	}
-	RuleStates = []string{
-		InactiveState,
-		PendingState,
-		FiringState,
-	}
+	RuleHealths = []v1.RuleHealth{HealthOkay}
+	RuleStates  = []string{InactiveState, PendingState, FiringState}
 )

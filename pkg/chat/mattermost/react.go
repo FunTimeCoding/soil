@@ -14,11 +14,7 @@ func (c *Client) React(
 
 	_, _, e = c.client.SaveReaction(
 		c.context,
-		&model.Reaction{
-			UserId:    me.Id,
-			PostId:    p.Id,
-			EmojiName: emoji,
-		},
+		&model.Reaction{UserId: me.Id, PostId: p.Id, EmojiName: emoji},
 	)
 
 	return e

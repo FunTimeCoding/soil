@@ -23,10 +23,7 @@ func sessionPrint(c *command_context.Context) *cobra.Command {
 			identifier := resolveSession(c.Client(), arguments[0])
 
 			if identifier == "" {
-				fmt.Printf(
-					"session not found: %s\n",
-					arguments[0],
-				)
+				fmt.Printf("session not found: %s\n", arguments[0])
 
 				return
 			}
@@ -87,11 +84,7 @@ func sessionPrint(c *command_context.Context) *cobra.Command {
 				}
 
 				if m.Role == "user" {
-					fmt.Printf(
-						"## user [%d]\n\n%s\n\n",
-						turnNumbers[i],
-						m.Text,
-					)
+					fmt.Printf("## user [%d]\n\n%s\n\n", turnNumbers[i], m.Text)
 
 					continue
 				}

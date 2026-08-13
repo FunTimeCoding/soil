@@ -37,11 +37,7 @@ func (r *Runner) apply(
 
 	if c.Error != nil {
 		record.Status = provision.StoreStatusError
-		r.logger.Structured(
-			"terraform_apply_error",
-			"error",
-			c.Error.Error(),
-		)
+		r.logger.Structured("terraform_apply_error", "error", c.Error.Error())
 	} else {
 		record.Status = provision.StoreStatusSuccess
 		r.logger.Structured("terraform_apply_done")

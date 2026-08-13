@@ -14,23 +14,14 @@ func (s *Server) ListVirtualLabels(
 	m, e := s.client.VirtualMachineByName(r.Name)
 
 	if e != nil {
-		return server.ListVirtualLabels500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.ListVirtualLabels500JSONResponse(*s.captureDetail(e)), nil
 	}
 
-	labels, e := s.store.Labels(
-		constant.VirtualMachineAddress,
-		m.Identifier,
-	)
+	labels, e := s.store.Labels(constant.VirtualMachineAddress, m.Identifier)
 
 	if e != nil {
-		return server.ListVirtualLabels500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.ListVirtualLabels500JSONResponse(*s.captureDetail(e)), nil
 	}
 
-	return server.ListVirtualLabels200JSONResponse(
-		convert.Labels(labels),
-	), nil
+	return server.ListVirtualLabels200JSONResponse(convert.Labels(labels)), nil
 }

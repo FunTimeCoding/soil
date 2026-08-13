@@ -51,10 +51,7 @@ func checkCall(
 	results.AddConcern(
 		concern.NewFile(
 			"forbidden_call",
-			fmt.Sprintf(
-				"use pkg/system/run instead of exec.%s",
-				f.Name(),
-			),
+			fmt.Sprintf("use pkg/system/run instead of exec.%s", f.Name()),
 			p.Fset.Position(call.Pos()).Filename,
 			false,
 		),

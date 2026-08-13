@@ -42,9 +42,6 @@ func Arguments(a *argument.Instance) {
 	a.String(
 		argumentConstant.Repository,
 		environment.Optional(constant.RepositoryEnvironment),
-		fmt.Sprintf(
-			"Repository, fallback: %s",
-			constant.RepositoryEnvironment,
-		),
+		fmt.Sprintf("Repository, fallback: %s", constant.RepositoryEnvironment),
 	)
 }

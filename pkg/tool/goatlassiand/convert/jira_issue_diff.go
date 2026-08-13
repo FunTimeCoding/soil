@@ -101,11 +101,7 @@ func JiraIssueDiff(
 
 			result.Changes = append(
 				result.Changes,
-				FieldChange{
-					Field:  name,
-					Before: b,
-					After:  a,
-				},
+				FieldChange{Field: name, Before: b, After: a},
 			)
 		}
 	}

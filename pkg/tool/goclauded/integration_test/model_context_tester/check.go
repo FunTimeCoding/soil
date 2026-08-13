@@ -10,10 +10,7 @@ func (s *Session) Check() *client.CheckResponse {
 	preview := true
 	response, e := s.RestClient.GetCheckWithResponse(
 		s.Context,
-		&client.GetCheckParams{
-			Session: s.UUID,
-			Preview: &preview,
-		},
+		&client.GetCheckParams{Session: s.UUID, Preview: &preview},
 	)
 	assert.FatalOnError(s.T, e)
 

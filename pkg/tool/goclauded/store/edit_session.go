@@ -38,8 +38,7 @@ func (s *Store) EditSession(
 
 	updates["last_seen"] = s.clock()
 
-	return s.database.Model(session.Stub()).Where(
-		"identifier = ?",
-		identifier,
-	).Updates(updates).Error
+	return s.database.Model(session.Stub()).Where("identifier = ?", identifier).Updates(
+		updates,
+	).Error
 }

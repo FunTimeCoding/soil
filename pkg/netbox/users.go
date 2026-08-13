@@ -6,9 +6,9 @@ import (
 )
 
 func (c *Client) Users() ([]*user.User, error) {
-	result, _, e := c.client.UsersAPI.UsersUsersList(
-		c.context,
-	).Limit(constant.PageLimit).Execute()
+	result, _, e := c.client.UsersAPI.UsersUsersList(c.context).Limit(
+		constant.PageLimit,
+	).Execute()
 
 	if e != nil {
 		return nil, e

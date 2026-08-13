@@ -20,11 +20,7 @@ func createVirtualDisk(c *client.Client) *cobra.Command {
 			size, e := strconv.Atoi(arguments[2])
 			errors.PanicOnError(e)
 			fmt.Println(
-				c.CreateVirtualDisk(
-					arguments[0],
-					arguments[1],
-					int32(size),
-				),
+				c.CreateVirtualDisk(arguments[0], arguments[1], int32(size)),
 			)
 		},
 	}

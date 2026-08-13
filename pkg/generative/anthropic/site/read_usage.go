@@ -7,9 +7,7 @@ import (
 )
 
 func (s *Site) ReadUsage() *usage_result.Result {
-	outer := s.protocol.Outer(
-		"div:has(> div > div > div[role='meter'])",
-	)
+	outer := s.protocol.Outer("div:has(> div > div > div[role='meter'])")
 
 	if outer == "" {
 		return nil
@@ -34,16 +32,5 @@ func (s *Site) ReadUsage() *usage_result.Result {
 		reset = match[1]
 	}
 
-	return usage_result.New(
-		percent,
-		reset,
-		0,
-		"",
-		0,
-		0,
-		"",
-		"",
-		"",
-		0,
-	)
+	return usage_result.New(percent, reset, 0, "", 0, 0, "", "", "", 0)
 }

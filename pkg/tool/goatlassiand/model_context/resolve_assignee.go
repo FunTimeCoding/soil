@@ -26,10 +26,7 @@ func (s *Server) resolveAssignee(
 	}
 
 	if len(users) == 0 {
-		r, f := response.Fail(
-			"no user found matching: %s",
-			name,
-		)
+		r, f := response.Fail("no user found matching: %s", name)
 
 		return nil, r, f
 	}

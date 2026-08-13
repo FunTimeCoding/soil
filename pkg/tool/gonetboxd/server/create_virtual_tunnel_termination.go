@@ -14,19 +14,25 @@ func (s *Server) CreateVirtualTunnelTermination(
 	t, e := s.client.TunnelByName(r.Body.Tunnel)
 
 	if e != nil {
-		return server.CreateVirtualTunnelTermination500JSONResponse(*s.captureDetail(e)), nil
+		return server.CreateVirtualTunnelTermination500JSONResponse(
+			*s.captureDetail(e),
+		), nil
 	}
 
 	vm, f := s.client.VirtualMachineByName(r.Name)
 
 	if f != nil {
-		return server.CreateVirtualTunnelTermination500JSONResponse(*s.captureDetail(f)), nil
+		return server.CreateVirtualTunnelTermination500JSONResponse(
+			*s.captureDetail(f),
+		), nil
 	}
 
 	i, g := s.client.VirtualMachineInterfaceByName(vm, r.Body.Interface)
 
 	if g != nil {
-		return server.CreateVirtualTunnelTermination500JSONResponse(*s.captureDetail(g)), nil
+		return server.CreateVirtualTunnelTermination500JSONResponse(
+			*s.captureDetail(g),
+		), nil
 	}
 
 	tt, h := s.client.CreateTunnelTermination(
@@ -37,7 +43,9 @@ func (s *Server) CreateVirtualTunnelTermination(
 	)
 
 	if h != nil {
-		return server.CreateVirtualTunnelTermination500JSONResponse(*s.captureDetail(h)), nil
+		return server.CreateVirtualTunnelTermination500JSONResponse(
+			*s.captureDetail(h),
+		), nil
 	}
 
 	return server.CreateVirtualTunnelTermination201JSONResponse(

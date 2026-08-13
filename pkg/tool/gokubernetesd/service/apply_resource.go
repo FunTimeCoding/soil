@@ -109,11 +109,7 @@ func (s *Service) ApplyResource(
 				updateOptions,
 			)
 		} else {
-			_, h = c.Dynamic().Resource(gvr).Update(
-				x,
-				resource,
-				updateOptions,
-			)
+			_, h = c.Dynamic().Resource(gvr).Update(x, resource, updateOptions)
 		}
 
 		if h != nil {
@@ -124,11 +120,7 @@ func (s *Service) ApplyResource(
 					options,
 				)
 			} else {
-				_, h = c.Dynamic().Resource(gvr).Create(
-					x,
-					resource,
-					options,
-				)
+				_, h = c.Dynamic().Resource(gvr).Create(x, resource, options)
 			}
 		}
 	} else {
@@ -139,11 +131,7 @@ func (s *Service) ApplyResource(
 				options,
 			)
 		} else {
-			_, h = c.Dynamic().Resource(gvr).Create(
-				x,
-				resource,
-				options,
-			)
+			_, h = c.Dynamic().Resource(gvr).Create(x, resource, options)
 		}
 	}
 
@@ -151,9 +139,5 @@ func (s *Service) ApplyResource(
 		return nil, h
 	}
 
-	return &ApplyResult{
-		Kind:      kind,
-		Name:      name,
-		Namespace: namespace,
-	}, nil
+	return &ApplyResult{Kind: kind, Name: name, Namespace: namespace}, nil
 }

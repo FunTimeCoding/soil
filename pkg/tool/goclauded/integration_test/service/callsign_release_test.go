@@ -34,8 +34,16 @@ func TestCallsignNotReleasedBeforeSevenDays(t *testing.T) {
 func TestCallsignRecycledAfterSweepRelease(t *testing.T) {
 	s := service_tester.New(t)
 	expected := []string{
-		"Ash", "Blair", "Cedar", "Dale", "Ellis",
-		"Frost", "Glen", "Harbor", "Jade", "Kent",
+		"Ash",
+		"Blair",
+		"Cedar",
+		"Dale",
+		"Ellis",
+		"Frost",
+		"Glen",
+		"Harbor",
+		"Jade",
+		"Kent",
 	}
 	var callsigns []string
 

@@ -30,11 +30,7 @@ func (s *Server) removeDeviceLabel(
 		return s.captureFail(resolveFail, "device not found")
 	}
 
-	if e := s.store.RemoveLabel(
-		netboxConstant.DeviceAddress,
-		d.Identifier,
-		key,
-	); e != nil {
+	if e := s.store.RemoveLabel(netboxConstant.DeviceAddress, d.Identifier, key); e != nil {
 		return s.captureFail(e, "label not removed from device")
 	}
 

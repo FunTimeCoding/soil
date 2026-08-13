@@ -15,9 +15,7 @@ func TestCompletionTableAfterComplete(t *testing.T) {
 	a.Announce(a.Name(), "search index")
 	a.MustCallTool(
 		constant.Complete,
-		map[string]any{
-			constant.Message: "search index implemented",
-		},
+		map[string]any{constant.Message: "search index implemented"},
 	)
 	c := s.Store.RecentCompletions()
 	assert.Count(t, 1, c)
@@ -57,12 +55,7 @@ func TestCompletionTableHookContext(t *testing.T) {
 	defer b.Close()
 	a.Announce(a.Name(), "search index")
 	b.CheckLive()
-	a.MustCallTool(
-		constant.Complete,
-		map[string]any{
-			constant.Message: "done",
-		},
-	)
+	a.MustCallTool(constant.Complete, map[string]any{constant.Message: "done"})
 	a.Announce(a.Name(), "next task")
 	a.MustCallTool(
 		constant.Update,
@@ -73,10 +66,7 @@ func TestCompletionTableHookContext(t *testing.T) {
 	)
 	r := b.CheckLive()
 	assert.True(t, r.Changed)
-	completions := clientEntriesByKind(
-		r.Entries,
-		constant.QueueSessionComplete,
-	)
+	completions := clientEntriesByKind(r.Entries, constant.QueueSessionComplete)
 	updates := clientEntriesByKind(r.Entries, constant.QueueSessionUpdate)
 	assert.True(t, len(completions) > 0)
 	assert.True(t, len(updates) > 0)

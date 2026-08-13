@@ -47,10 +47,7 @@ func TestMerge(t *testing.T) {
 	}
 
 	if len(english.Words) != 3 {
-		t.Fatalf(
-			"expected 3 words in English, got %d",
-			len(english.Words),
-		)
+		t.Fatalf("expected 3 words in English, got %d", len(english.Words))
 	}
 
 	if english.Words[0] != "alfa" ||
@@ -60,9 +57,6 @@ func TestMerge(t *testing.T) {
 	}
 
 	if categories[2].Name != "Kubernetes" {
-		t.Fatalf(
-			"expected Kubernetes category, got %s",
-			categories[2].Name,
-		)
+		t.Fatalf("expected Kubernetes category, got %s", categories[2].Name)
 	}
 }

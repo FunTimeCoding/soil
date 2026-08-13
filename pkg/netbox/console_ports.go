@@ -6,9 +6,9 @@ import (
 )
 
 func (c *Client) ConsolePorts() ([]*console_port.Port, error) {
-	result, _, e := c.client.DcimAPI.DcimConsolePortsList(
-		c.context,
-	).Limit(constant.PageLimit).Execute()
+	result, _, e := c.client.DcimAPI.DcimConsolePortsList(c.context).Limit(
+		constant.PageLimit,
+	).Execute()
 
 	if e != nil {
 		return nil, e

@@ -6,9 +6,7 @@ import (
 )
 
 func sessionIdentifierFromEnvironment() string {
-	if i := environment.Optional(
-		constant.SessionIdentifierEnvironment,
-	); i != "" {
+	if i := environment.Optional(constant.SessionIdentifierEnvironment); i != "" {
 		return i
 	}
 

@@ -11,9 +11,7 @@ func Stream() {
 	c := make(chan string)
 	r := api.GenerateResponse{}
 	go ollama.NewEnvironment().MustGenerateStream(
-		generate_request.New().Prompt(
-			"One short sentence: What is a car?",
-		).Get(),
+		generate_request.New().Prompt("One short sentence: What is a car?").Get(),
 		c,
 		&r,
 	)

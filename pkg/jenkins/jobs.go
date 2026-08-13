@@ -9,11 +9,7 @@ import (
 func (c *Client) Jobs() []*gojenkins.Job {
 	if false {
 		type contextKey string
-		c.context = context.WithValue(
-			c.context,
-			contextKey("debug"),
-			true,
-		)
+		c.context = context.WithValue(c.context, contextKey("debug"), true)
 	}
 
 	result, e := c.client.GetAllJobs(c.context)

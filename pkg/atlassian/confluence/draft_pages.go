@@ -9,9 +9,7 @@ import (
 )
 
 func (c *Client) DraftPages() ([]*page.Page, error) {
-	l := locator.New(c.host).Base(constant.ConfluenceOldBase).Path(
-		"/content",
-	).Set(
+	l := locator.New(c.host).Base(constant.ConfluenceOldBase).Path("/content").Set(
 		"type",
 		constant.ConfluencePageType,
 	).Set(

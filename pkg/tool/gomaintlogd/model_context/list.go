@@ -34,10 +34,7 @@ func (s *Server) list(
 		i, parseFail := time.Parse(time.RFC3339, since)
 
 		if parseFail != nil {
-			return response.Fail(
-				"invalid since format: %v",
-				parseFail,
-			)
+			return response.Fail("invalid since format: %v", parseFail)
 		}
 
 		filter.Since = i
@@ -47,10 +44,7 @@ func (s *Server) list(
 		u, parseFail := time.Parse(time.RFC3339, until)
 
 		if parseFail != nil {
-			return response.Fail(
-				"invalid until format: %v",
-				parseFail,
-			)
+			return response.Fail("invalid until format: %v", parseFail)
 		}
 
 		filter.Until = u

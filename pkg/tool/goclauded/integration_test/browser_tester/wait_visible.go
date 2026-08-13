@@ -7,7 +7,5 @@ import (
 
 func (b *Browser) WaitVisible(selector string) {
 	b.T.Helper()
-	errors.PanicOnError(
-		chromedp.Run(b.Context, chromedp.WaitVisible(selector)),
-	)
+	errors.PanicOnError(chromedp.Run(b.Context, chromedp.WaitVisible(selector)))
 }

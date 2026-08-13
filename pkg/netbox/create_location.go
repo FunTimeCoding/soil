@@ -18,13 +18,11 @@ func (c *Client) CreateLocation(
 	q := netbox.NewWritableLocationRequest(
 		name,
 		slug(name),
-		netbox.DeviceWithConfigContextRequestSite{
-			Int32: &s.Identifier,
-		},
+		netbox.DeviceWithConfigContextRequestSite{Int32: &s.Identifier},
 	)
-	result, _, f := c.client.DcimAPI.DcimLocationsCreate(
-		c.context,
-	).WritableLocationRequest(*q).Execute()
+	result, _, f := c.client.DcimAPI.DcimLocationsCreate(c.context).WritableLocationRequest(
+		*q,
+	).Execute()
 
 	if f != nil {
 		return nil, f

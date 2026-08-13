@@ -6,9 +6,5 @@ import (
 )
 
 func (c *Client) AllMetrics() []string {
-	return c.MustLabelValues(
-		constant.Name,
-		[]string{},
-		library.StartOfTime,
-	).Values
+	return c.MustLabelValues(constant.Name, []string{}, library.StartOfTime).Values
 }

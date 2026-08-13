@@ -62,11 +62,6 @@ func Run(o *option.Debian) {
 	system.MakeDirectory(bin)
 	system.Move(o.Executable, join.Absolute(bin, o.Executable))
 	fmt.Println(
-		system.Run(
-			"dpkg-deb",
-			"--build",
-			"--root-owner-group",
-			packageName,
-		),
+		system.Run("dpkg-deb", "--build", "--root-owner-group", packageName),
 	)
 }

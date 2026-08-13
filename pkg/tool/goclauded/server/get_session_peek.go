@@ -13,9 +13,7 @@ func (s *Server) GetSessionPeek(
 	var entries []server.PeekEntry
 
 	for _, entry := range p.Entries {
-		e := server.PeekEntry{
-			UserText: entry.UserText,
-		}
+		e := server.PeekEntry{UserText: entry.UserText}
 
 		if entry.AssistantContext != "" {
 			e.AssistantContext = &entry.AssistantContext
@@ -29,10 +27,7 @@ func (s *Server) GetSessionPeek(
 	for _, tc := range p.ToolCounts {
 		toolCounts = append(
 			toolCounts,
-			server.ToolCount{
-				Name:  tc.Name,
-				Count: tc.Count,
-			},
+			server.ToolCount{Name: tc.Name, Count: tc.Count},
 		)
 	}
 

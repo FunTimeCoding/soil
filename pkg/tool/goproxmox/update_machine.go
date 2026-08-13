@@ -55,12 +55,7 @@ func updateMachine(c *command_context.Context) *cobra.Command {
 	result.Flags().StringVar(&node, "node", "", "node name")
 	result.Flags().StringVar(&name, "name", "", "new VM name")
 	result.Flags().StringVar(&tags, "tags", "", "semicolon-separated tags")
-	result.Flags().StringVar(
-		&description,
-		"description",
-		"",
-		"VM description",
-	)
+	result.Flags().StringVar(&description, "description", "", "VM description")
 	result.Flags().StringVar(&deleteFields, "delete", "", "fields to clear")
 
 	return result

@@ -7,10 +7,6 @@ func (c *Client) DeleteIssue(
 	identifier string,
 ) error {
 	return c.basic.Delete(
-		fmt.Sprintf(
-			"organizations/%s/issues/%s",
-			organization,
-			identifier,
-		),
+		fmt.Sprintf("organizations/%s/issues/%s", organization, identifier),
 	)
 }

@@ -12,10 +12,7 @@ func ParseExpandedQueries(
 	lower := strings.ToLower(originalQuery)
 	var result []ExpandedQuery
 
-	for _, line := range strings.Split(
-		strings.TrimSpace(text),
-		constant.Unix,
-	) {
+	for _, line := range strings.Split(strings.TrimSpace(text), constant.Unix) {
 		colon := strings.Index(line, ":")
 
 		if colon == -1 {
@@ -34,10 +31,7 @@ func ParseExpandedQueries(
 			continue
 		}
 
-		result = append(
-			result,
-			ExpandedQuery{Type: queryType, Query: query},
-		)
+		result = append(result, ExpandedQuery{Type: queryType, Query: query})
 	}
 
 	return result

@@ -19,7 +19,9 @@ func (s *Server) release(
 	}
 
 	if c.Callsign == "" {
-		return response.Fail("unknown session - announce first to bind your identity")
+		return response.Fail(
+			"unknown session - announce first to bind your identity",
+		)
 	}
 
 	if e := s.service.Release(c.SessionIdentifier, c.Callsign); e != nil {

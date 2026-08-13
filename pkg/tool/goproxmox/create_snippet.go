@@ -28,12 +28,7 @@ func createSnippet(c *command_context.Context) *cobra.Command {
 			)
 		},
 	}
-	result.Flags().StringVar(
-		&content,
-		"content",
-		"",
-		"snippet content",
-	)
+	result.Flags().StringVar(&content, "content", "", "snippet content")
 	errors.PanicOnError(result.MarkFlagRequired("content"))
 
 	return result

@@ -39,10 +39,7 @@ func recentTable(records []record.Record) gomponents.Node {
 							html.A(
 								html.Class("alert-link"),
 								html.Href(
-									fmt.Sprintf(
-										"/alerts?name=%s",
-										r.Name,
-									),
+									fmt.Sprintf("/alerts?name=%s", r.Name),
 								),
 								gomponents.Text(r.Name),
 							),

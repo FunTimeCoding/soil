@@ -76,10 +76,7 @@ func ExtractSnippet(
 	snippet := strings.Join(lines[start:end], stringsConstant.Unix)
 
 	if len(snippet) > constant.SnippetMaxLength {
-		snippet = fmt.Sprintf(
-			"%s...",
-			snippet[:constant.SnippetMaxLength-3],
-		)
+		snippet = fmt.Sprintf("%s...", snippet[:constant.SnippetMaxLength-3])
 	}
 
 	return snippet, lineOffset + bestLine + 1

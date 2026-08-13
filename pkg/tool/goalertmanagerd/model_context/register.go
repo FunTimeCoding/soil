@@ -40,23 +40,33 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				"filter",
-				mcp.Description("Comma-separated label matchers (e.g. alertname=\"FanFailure\",severity=\"warning\")"),
+				mcp.Description(
+					"Comma-separated label matchers (e.g. alertname=\"FanFailure\",severity=\"warning\")",
+				),
 			),
 			mcp.WithString(
 				"active",
-				mcp.Description("Include active alerts (true/false, default true)"),
+				mcp.Description(
+					"Include active alerts (true/false, default true)",
+				),
 			),
 			mcp.WithString(
 				"silenced",
-				mcp.Description("Include silenced alerts (true/false, default true)"),
+				mcp.Description(
+					"Include silenced alerts (true/false, default true)",
+				),
 			),
 			mcp.WithString(
 				"inhibited",
-				mcp.Description("Include inhibited alerts (true/false, default true)"),
+				mcp.Description(
+					"Include inhibited alerts (true/false, default true)",
+				),
 			),
 			mcp.WithString(
 				"unprocessed",
-				mcp.Description("Include unprocessed alerts (true/false, default true)"),
+				mcp.Description(
+					"Include unprocessed alerts (true/false, default true)",
+				),
 			),
 			mcp.WithString(
 				"receiver",
@@ -109,13 +119,12 @@ func (s *Server) register() {
 				mcp.Required(),
 				mcp.Description("Alert rule name to silence"),
 			),
-			mcp.WithString(
-				"comment",
-				mcp.Description("Silence comment"),
-			),
+			mcp.WithString("comment", mcp.Description("Silence comment")),
 			mcp.WithString(
 				"duration",
-				mcp.Description("Silence duration (e.g. 10m, 1h, 24h). Default 10m."),
+				mcp.Description(
+					"Silence duration (e.g. 10m, 1h, 24h). Default 10m.",
+				),
 			),
 		),
 		mcp.NewTypedToolHandler(s.createSilence),
@@ -123,9 +132,7 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.DeleteSilence,
-			mcp.WithDescription(
-				"Expire a silence by its identifier.",
-			),
+			mcp.WithDescription("Expire a silence by its identifier."),
 			mcp.WithString(
 				"id",
 				mcp.Required(),
@@ -137,12 +144,12 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.GetStatus,
-			mcp.WithDescription(
-				"Get Alertmanager cluster status and version.",
-			),
+			mcp.WithDescription("Get Alertmanager cluster status and version."),
 			mcp.WithBoolean(
 				"include_configuration",
-				mcp.Description("Include the full alertmanager routing configuration"),
+				mcp.Description(
+					"Include the full alertmanager routing configuration",
+				),
 			),
 		),
 		mcp.NewTypedToolHandler(s.getStatus),

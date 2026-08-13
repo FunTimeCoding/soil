@@ -41,10 +41,7 @@ func TestProfileHidesNoIndexMemoriesFromIndex(t *testing.T) {
 			constant.Description: "Deployment pipeline conventions",
 		},
 	)
-	s.QueryClient.MustCallTool(
-		goquerydConstant.Embed,
-		map[string]any{},
-	)
+	s.QueryClient.MustCallTool(goquerydConstant.Embed, map[string]any{})
 	raw := s.MemoryClient.MustCallTool(
 		constant.Profile,
 		map[string]any{

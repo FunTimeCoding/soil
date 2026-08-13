@@ -105,12 +105,7 @@ func sessionList(c *command_context.Context) *cobra.Command {
 		false,
 		"Show first user message preview",
 	)
-	result.Flags().BoolVar(
-		&detail,
-		"detail",
-		false,
-		"Show descriptions",
-	)
+	result.Flags().BoolVar(&detail, "detail", false, "Show descriptions")
 	result.Flags().BoolVar(
 		&unnamed,
 		"unnamed",
@@ -123,12 +118,7 @@ func sessionList(c *command_context.Context) *cobra.Command {
 		0,
 		"Maximum number of sessions to show",
 	)
-	result.Flags().IntVar(
-		&offset,
-		"offset",
-		0,
-		"Number of sessions to skip",
-	)
+	result.Flags().IntVar(&offset, "offset", 0, "Number of sessions to skip")
 
 	return result
 }

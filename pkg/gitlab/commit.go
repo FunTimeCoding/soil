@@ -24,11 +24,7 @@ func (c *Client) Commit(
 			Branch:        &branch,
 			CommitMessage: &text,
 			Actions: []*gitlab.CommitActionOptions{
-				{
-					Action:   &action,
-					FilePath: &path,
-					Content:  &content,
-				},
+				{Action: &action, FilePath: &path, Content: &content},
 			},
 		},
 	)

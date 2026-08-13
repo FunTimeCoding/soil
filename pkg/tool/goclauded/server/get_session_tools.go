@@ -34,13 +34,7 @@ func (s *Server) GetSessionTools(
 	var sorted []server.ToolCount
 
 	for name, count := range counts {
-		sorted = append(
-			sorted,
-			server.ToolCount{
-				Name:  name,
-				Count: count,
-			},
-		)
+		sorted = append(sorted, server.ToolCount{Name: name, Count: count})
 	}
 
 	sort.Slice(

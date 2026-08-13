@@ -6,9 +6,7 @@ func (d *Database) Dump() map[string]any {
 	result := make(map[string]any)
 
 	for _, table := range d.Tables() {
-		rows := d.Query(
-			fmt.Sprintf("%s * FROM %s", "SELECT", table),
-		)
+		rows := d.Query(fmt.Sprintf("%s * FROM %s", "SELECT", table))
 		rowsResult := make([]map[string]any, 0)
 
 		for rows.Next() {

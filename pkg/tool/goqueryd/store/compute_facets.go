@@ -43,10 +43,7 @@ func ComputeFacets(
 			continue
 		}
 
-		f := Facet{
-			Key:      key,
-			Distinct: len(values),
-		}
+		f := Facet{Key: key, Distinct: len(values)}
 
 		if f.Distinct <= threshold {
 			f.Values = values

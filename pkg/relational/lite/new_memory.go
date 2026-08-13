@@ -11,10 +11,7 @@ import (
 func NewMemory() *gorm.DB {
 	m, e := gorm.Open(
 		sqlite.Open(
-			join.Empty(
-				constant.LiteMemory,
-				constant.LiteMemoryParameters,
-			),
+			join.Empty(constant.LiteMemory, constant.LiteMemoryParameters),
 		),
 		&gorm.Config{},
 	)

@@ -2,10 +2,10 @@ package gofix
 
 import "github.com/funtimecoding/soil/pkg/lint/output"
 
-func runCallFormatFix(
+func RunCompositeFormatFixWithDirectory(
 	patterns []string,
-	diff bool,
+	directory string,
 	r *output.Results,
 ) {
-	RunCallFormatFixWithDirectory(patterns, "", r)
+	RunFormatFixWithDirectory(patterns, directory, r)
 }

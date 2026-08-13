@@ -6,9 +6,9 @@ import (
 )
 
 func (c *Client) InternetAddressRanges() ([]*internet_address_range.Range, error) {
-	result, _, e := c.client.IpamAPI.IpamIpRangesList(
-		c.context,
-	).Limit(constant.PageLimit).Execute()
+	result, _, e := c.client.IpamAPI.IpamIpRangesList(c.context).Limit(
+		constant.PageLimit,
+	).Execute()
 
 	if e != nil {
 		return nil, e

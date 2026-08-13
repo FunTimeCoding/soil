@@ -17,12 +17,7 @@ func printNotation(
 	r := report.New()
 	f := go_modConstant.Format
 
-	for _, e := range report.Trim(
-		v,
-		r,
-		o.All,
-		monitor.GoGitStatus,
-	) {
+	for _, e := range report.Trim(v, r, o.All, monitor.GoGitStatus) {
 		var s constant.Severity
 
 		if e.HasConcerns() {

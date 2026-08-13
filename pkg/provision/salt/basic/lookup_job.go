@@ -8,9 +8,7 @@ import (
 )
 
 func (c *Client) LookupJob(jobIdentifier string) (*response.Job, error) {
-	b, e := c.Get(
-		fmt.Sprintf("%s/%s", constant.SaltJobsPath, jobIdentifier),
-	)
+	b, e := c.Get(fmt.Sprintf("%s/%s", constant.SaltJobsPath, jobIdentifier))
 
 	if e != nil {
 		return nil, e

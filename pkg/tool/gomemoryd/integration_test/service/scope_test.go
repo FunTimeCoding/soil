@@ -26,10 +26,7 @@ func scopedOption(
 func TestServiceCreateMemoryRejectsReservedScope(t *testing.T) {
 	o := service_tester.New(t)
 
-	for _, reserved := range []string{
-		constant.AllScope,
-		constant.DefaultScope,
-	} {
+	for _, reserved := range []string{constant.AllScope, constant.DefaultScope} {
 		_, e := o.Service.CreateMemory(scopedOption("reserved", reserved))
 		assert.True(t, errors.Is(e, constant.ErrorReservedScope))
 	}

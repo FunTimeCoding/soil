@@ -4,8 +4,5 @@ func New(
 	v []string,
 	w []string,
 ) *Result {
-	return &Result{
-		Values:   v,
-		Warnings: w,
-	}
+	return &Result{Values: v, Warnings: w}
 }

@@ -6,9 +6,11 @@ import (
 )
 
 func (c *Client) internetAddressesOffset(offset int32) ([]netbox.IPAddress, error) {
-	result, _, e := c.client.IpamAPI.IpamIpAddressesList(
-		c.context,
-	).Limit(constant.PageLimit).Offset(offset).Execute()
+	result, _, e := c.client.IpamAPI.IpamIpAddressesList(c.context).Limit(
+		constant.PageLimit,
+	).Offset(
+		offset,
+	).Execute()
 
 	if e != nil {
 		return nil, e

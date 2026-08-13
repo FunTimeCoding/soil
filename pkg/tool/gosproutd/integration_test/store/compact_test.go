@@ -10,13 +10,7 @@ import (
 
 func TestCompactClosesGaps(t *testing.T) {
 	s := store_tester.New(t)
-	s.Store.UpsertSeed(
-		constant.LowerAlfa,
-		"alfa.md",
-		"hash-a",
-		"a",
-		time.Now(),
-	)
+	s.Store.UpsertSeed(constant.LowerAlfa, "alfa.md", "hash-a", "a", time.Now())
 	s.Store.UpsertSeed(
 		constant.LowerBravo,
 		"bravo.md",
@@ -60,13 +54,7 @@ func TestCompactEmptyStore(t *testing.T) {
 
 func TestCompactPreservesOrder(t *testing.T) {
 	s := store_tester.New(t)
-	s.Store.UpsertSeed(
-		constant.LowerAlfa,
-		"alfa.md",
-		"hash-a",
-		"a",
-		time.Now(),
-	)
+	s.Store.UpsertSeed(constant.LowerAlfa, "alfa.md", "hash-a", "a", time.Now())
 	s.Store.UpsertSeed(
 		constant.LowerBravo,
 		"bravo.md",

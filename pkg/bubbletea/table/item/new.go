@@ -15,16 +15,10 @@ func New(user bool) *table.Model {
 	}
 
 	if user {
-		columns = append(
-			columns,
-			table.Column{Title: constant.ItemUserColumn},
-		)
+		columns = append(columns, table.Column{Title: constant.ItemUserColumn})
 	}
 
-	result := table.New(
-		table.WithColumns(columns),
-		table.WithFocused(true),
-	)
+	result := table.New(table.WithColumns(columns), table.WithFocused(true))
 	style.Table(&result)
 
 	return &result

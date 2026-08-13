@@ -25,9 +25,7 @@ func TestHostFromLocator(t *testing.T) {
 		t,
 		"example.org",
 		web.HostFromLocator(
-			locator.New(
-				constant.Example,
-			).Port(constant.ListenPort).Path("/a").String(),
+			locator.New(constant.Example).Port(constant.ListenPort).Path("/a").String(),
 		),
 	)
 	assert.String(
@@ -42,18 +40,14 @@ func TestHostPortFromLocator(t *testing.T) {
 		t,
 		"example.org:8080",
 		web.HostPortFromLocator(
-			locator.New(
-				constant.Example,
-			).Port(constant.ListenPort).Path("/a").String(),
+			locator.New(constant.Example).Port(constant.ListenPort).Path("/a").String(),
 		),
 	)
 }
 
 func TestHostPortFromLocatorSplit(t *testing.T) {
 	host, port := web.HostPortFromLocatorSplit(
-		locator.New(
-			constant.Example,
-		).Port(constant.ListenPort).Path("/a").String(),
+		locator.New(constant.Example).Port(constant.ListenPort).Path("/a").String(),
 	)
 	assert.String(t, "example.org", host)
 	assert.Integer(t, 8080, port)

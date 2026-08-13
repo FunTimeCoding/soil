@@ -42,9 +42,7 @@ func JiraCreateMeta(
 			f.Schema = schema
 		}
 
-		allowed, i := t.Fields.Array(
-			join.Empty(key, "/allowedValues"),
-		)
+		allowed, i := t.Fields.Array(join.Empty(key, "/allowedValues"))
 
 		if i == nil {
 			for _, a := range allowed {
@@ -55,11 +53,7 @@ func JiraCreateMeta(
 				}
 
 				var v custom_field_value.Value
-				notation.MustDecode(
-					notation.Encode(m, false),
-					&v,
-					true,
-				)
+				notation.MustDecode(notation.Encode(m, false), &v, true)
 
 				if v.Value != "" {
 					f.AllowedValues = append(
@@ -72,10 +66,7 @@ func JiraCreateMeta(
 				} else if n, okay := m["name"].(string); okay {
 					f.AllowedValues = append(
 						f.AllowedValues,
-						&CreateMetaAllowed{
-							Identifier: v.ID,
-							Value:      n,
-						},
+						&CreateMetaAllowed{Identifier: v.ID, Value: n},
 					)
 				}
 			}

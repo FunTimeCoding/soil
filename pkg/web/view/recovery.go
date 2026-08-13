@@ -24,14 +24,8 @@ func (v *View) Recovery(r face.Reporter) func(http.Handler) http.Handler {
 					}
 
 					event := r.Recover(caught)
-					item := layout.ErrorItem(
-						fmt.Sprintf("%v", caught),
-						event,
-					)
-					w.Header().Set(
-						constant.ContentType,
-						constant.MarkupUnicode,
-					)
+					item := layout.ErrorItem(fmt.Sprintf("%v", caught), event)
+					w.Header().Set(constant.ContentType, constant.MarkupUnicode)
 
 					if v.IsExtendedRequest(q) {
 						w.Header().Set(constant.NotificationItem, "true")

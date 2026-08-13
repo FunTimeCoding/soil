@@ -57,10 +57,7 @@ func (s *Service) ExtractToFile(
 		r.AddConcern(
 			concern.NewFile(
 				"validation",
-				fmt.Sprintf(
-					"would leave an empty file: %s",
-					filePath,
-				),
+				fmt.Sprintf("would leave an empty file: %s", filePath),
 				filePath,
 				false,
 			),
@@ -78,10 +75,7 @@ func (s *Service) ExtractToFile(
 		r.AddConcern(
 			concern.NewFile(
 				"validation",
-				fmt.Sprintf(
-					"%s already exists",
-					filepath.Base(targetPath),
-				),
+				fmt.Sprintf("%s already exists", filepath.Base(targetPath)),
 				filePath,
 				false,
 			),
@@ -104,10 +98,7 @@ func (s *Service) ExtractToFile(
 	moved, _ := dec.Dst.Nodes[declaration].(*dst.FuncDecl)
 
 	if moved == nil {
-		return nil, fmt.Errorf(
-			"no decorated declaration for %s",
-			functionName,
-		)
+		return nil, fmt.Errorf("no decorated declaration for %s", functionName)
 	}
 
 	for i, d := range source.Decls {
@@ -136,11 +127,7 @@ func (s *Service) ExtractToFile(
 	r.AddConcern(
 		concern.NewFile(
 			"extracted",
-			fmt.Sprintf(
-				"%s → %s",
-				functionName,
-				filepath.Base(targetPath),
-			),
+			fmt.Sprintf("%s → %s", functionName, filepath.Base(targetPath)),
 			filePath,
 			true,
 		),

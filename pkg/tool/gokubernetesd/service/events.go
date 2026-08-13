@@ -59,7 +59,9 @@ func (s *Service) Events(
 	sort.Slice(
 		events.Items,
 		func(i, j int) bool {
-			return events.Items[i].LastTimestamp.After(events.Items[j].LastTimestamp.Time)
+			return events.Items[i].LastTimestamp.After(
+				events.Items[j].LastTimestamp.Time,
+			)
 		},
 	)
 	limit := q.Limit

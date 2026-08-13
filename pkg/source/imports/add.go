@@ -35,9 +35,6 @@ func Add(
 		return
 	}
 
-	declaration := &ast.GenDecl{
-		Tok:   token.IMPORT,
-		Specs: []ast.Spec{spec},
-	}
+	declaration := &ast.GenDecl{Tok: token.IMPORT, Specs: []ast.Spec{spec}}
 	file.Decls = append([]ast.Decl{declaration}, file.Decls...)
 }

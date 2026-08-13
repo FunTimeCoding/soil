@@ -17,10 +17,7 @@ func (s *Server) listModules(
 	for _, m := range modules {
 		result = append(
 			result,
-			map[string]any{
-				"name":      m.Name,
-				"directory": m.Directory,
-			},
+			map[string]any{"name": m.Name, "directory": m.Directory},
 		)
 	}
 

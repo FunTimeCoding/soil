@@ -35,9 +35,7 @@ func (s *Server) Certificates(
 			return s.captureFail(f, "get certificate")
 		}
 
-		m := map[string]any{
-			"certificate": result.Certificate,
-		}
+		m := map[string]any{"certificate": result.Certificate}
 
 		if result.LatestRequest != nil {
 			m["latestRequest"] = result.LatestRequest

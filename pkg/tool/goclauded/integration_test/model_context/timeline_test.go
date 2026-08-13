@@ -22,10 +22,7 @@ func TestTimelinePagination(t *testing.T) {
 	x := context.Background()
 	first, e := a.RestClient.GetTimelineWithResponse(
 		x,
-		&client.GetTimelineParams{
-			Limit:  new(5),
-			Offset: new(0),
-		},
+		&client.GetTimelineParams{Limit: new(5), Offset: new(0)},
 	)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 5, *first.JSON200)
@@ -33,10 +30,7 @@ func TestTimelinePagination(t *testing.T) {
 	assert.StringContains(t, "topic-08", (*first.JSON200)[4].Subject)
 	second, f := a.RestClient.GetTimelineWithResponse(
 		x,
-		&client.GetTimelineParams{
-			Limit:  new(5),
-			Offset: new(5),
-		},
+		&client.GetTimelineParams{Limit: new(5), Offset: new(5)},
 	)
 	assert.FatalOnError(t, f)
 	assert.Count(t, 5, *second.JSON200)
@@ -44,10 +38,7 @@ func TestTimelinePagination(t *testing.T) {
 	assert.StringContains(t, "topic-03", (*second.JSON200)[4].Subject)
 	third, g := a.RestClient.GetTimelineWithResponse(
 		x,
-		&client.GetTimelineParams{
-			Limit:  new(5),
-			Offset: new(10),
-		},
+		&client.GetTimelineParams{Limit: new(5), Offset: new(10)},
 	)
 	assert.FatalOnError(t, g)
 	assert.Count(t, 2, *third.JSON200)

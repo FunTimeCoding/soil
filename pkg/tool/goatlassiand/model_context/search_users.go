@@ -18,17 +18,11 @@ func (s *Server) searchUsers(
 		return response.Fail("query is required: %v", f)
 	}
 
-	users, resp, g := s.jira.Nested().User.FindWithContext(
-		c,
-		query,
-	)
+	users, resp, g := s.jira.Nested().User.FindWithContext(c, query)
 
 	if g != nil {
 		if resp != nil && resp.Body != nil {
-			return response.Fail(
-				"user search failed: %v",
-				g,
-			)
+			return response.Fail("user search failed: %v", g)
 		}
 
 		return response.Fail("user search failed: %v", g)

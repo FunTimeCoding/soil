@@ -16,9 +16,7 @@ func diskFull() {
 			continue
 		}
 
-		u := stringLibrary.MustToInteger(
-			strings.TrimSuffix(p[len(p)-2], "%"),
-		)
+		u := stringLibrary.MustToInteger(strings.TrimSuffix(p[len(p)-2], "%"))
 		point := p[0]
 
 		if u == 100 {

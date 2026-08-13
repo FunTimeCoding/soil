@@ -13,9 +13,7 @@ func SortByAge(v []*Issue) []*Issue {
 			i int,
 			j int,
 		) bool {
-			return time.Time(
-				result[i].Raw.Fields.Created,
-			).Before(
+			return time.Time(result[i].Raw.Fields.Created).Before(
 				time.Time(result[j].Raw.Fields.Created),
 			)
 		},

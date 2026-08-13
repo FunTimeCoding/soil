@@ -12,7 +12,9 @@ func TestMessage(t *testing.T) {
 	assert.NotNil(
 		t,
 		message.New(
-			&tgbotapi.Message{From: &tgbotapi.User{UserName: constant.UpperAlfa}},
+			&tgbotapi.Message{
+				From: &tgbotapi.User{UserName: constant.UpperAlfa},
+			},
 		),
 	)
 }

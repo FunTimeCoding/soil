@@ -13,12 +13,8 @@ func (s *Server) AllocateStat(
 	result, e := s.habitica.Allocate(string(r.Stat))
 
 	if e != nil {
-		return server.AllocateStat500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.AllocateStat500JSONResponse(*s.captureDetail(e)), nil
 	}
 
-	return server.AllocateStat200JSONResponse(
-		*convert.Stats(result),
-	), nil
+	return server.AllocateStat200JSONResponse(*convert.Stats(result)), nil
 }

@@ -36,10 +36,7 @@ func showIssue(shortIdentifier string) {
 	}
 
 	if r.LastSeen != nil {
-		fmt.Printf(
-			"Last:     %s\n",
-			r.LastSeen.Format(timeConstant.DateMinute),
-		)
+		fmt.Printf("Last:     %s\n", r.LastSeen.Format(timeConstant.DateMinute))
 	}
 
 	if r.Culprit != "" {

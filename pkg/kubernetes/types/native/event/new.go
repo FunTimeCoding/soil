@@ -10,9 +10,7 @@ func New(
 	cluster string,
 ) *Event {
 	return &Event{
-		MonitorIdentifier: constant.GoKevt.StringIdentifier(
-			v.Name,
-		),
+		MonitorIdentifier: constant.GoKevt.StringIdentifier(v.Name),
 		Cluster:       cluster,
 		Namespace:     v.Namespace,
 		RegardingKind: v.Regarding.Kind,

@@ -11,9 +11,7 @@ func (c *Client) ProjectRuns(
 ) ([]*run.Run, error) {
 	var result []*run.Run
 	o := &github.ListWorkflowRunsOptions{
-		ListOptions: github.ListOptions{
-			PerPage: 100, // Cannot go higher than 100
-		},
+		ListOptions: github.ListOptions{PerPage: 100}, // Cannot go higher than 100
 	}
 
 	for {

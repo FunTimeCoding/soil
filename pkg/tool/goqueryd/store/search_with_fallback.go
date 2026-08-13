@@ -35,10 +35,7 @@ func (s *Store) SearchWithFallback(
 			filtered = filtered[:o.Limit]
 		}
 
-		return &SearchOutcome{
-			Results:  filtered,
-			Degraded: true,
-		}
+		return &SearchOutcome{Results: filtered, Degraded: true}
 	}
 
 	results, f := s.SearchHybrid(o, l)
@@ -63,11 +60,7 @@ func (s *Store) SearchWithFallback(
 			filtered = filtered[:o.Limit]
 		}
 
-		return &SearchOutcome{
-			Results:  filtered,
-			Degraded: true,
-			Cause:    f,
-		}
+		return &SearchOutcome{Results: filtered, Degraded: true, Cause: f}
 	}
 
 	return &SearchOutcome{Results: results}

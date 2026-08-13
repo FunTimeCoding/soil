@@ -11,42 +11,15 @@ func TestRoundTripStorageToMarkdownToStorage(t *testing.T) {
 		name    string
 		storage string
 	}{
-		{
-			"plain paragraph",
-			"<p>Hello world</p>",
-		},
-		{
-			"two paragraphs",
-			"<p>First</p><p>Second</p>",
-		},
-		{
-			"bullet list",
-			"<ul><li><p>Alfa</p></li><li><p>Bravo</p></li></ul>",
-		},
-		{
-			"heading and paragraph",
-			"<h2>Title</h2><p>Body text</p>",
-		},
-		{
-			"bold and italic",
-			"<p><strong>bold</strong> and <em>italic</em></p>",
-		},
-		{
-			"link",
-			`<p><a href="https://example.org">Example</a></p>`,
-		},
-		{
-			"ordered list",
-			"<ol><li><p>One</p></li><li><p>Two</p></li></ol>",
-		},
-		{
-			"code inline",
-			"<p>Use <code>fmt.Println</code> here</p>",
-		},
-		{
-			"hard break",
-			"<p>Line one<br />Line two</p>",
-		},
+		{"plain paragraph", "<p>Hello world</p>"},
+		{"two paragraphs", "<p>First</p><p>Second</p>"},
+		{"bullet list", "<ul><li><p>Alfa</p></li><li><p>Bravo</p></li></ul>"},
+		{"heading and paragraph", "<h2>Title</h2><p>Body text</p>"},
+		{"bold and italic", "<p><strong>bold</strong> and <em>italic</em></p>"},
+		{"link", `<p><a href="https://example.org">Example</a></p>`},
+		{"ordered list", "<ol><li><p>One</p></li><li><p>Two</p></li></ol>"},
+		{"code inline", "<p>Use <code>fmt.Println</code> here</p>"},
+		{"hard break", "<p>Line one<br />Line two</p>"},
 		{
 			"code block",
 			`<ac:structured-macro ac:name="code"><ac:plain-text-body><![CDATA[fmt.Println("hello")]]></ac:plain-text-body></ac:structured-macro>`,
@@ -86,58 +59,17 @@ func TestRoundTripMarkdownToStorageToMarkdown(t *testing.T) {
 		markdown string
 		expect   string // empty means expect identical round-trip
 	}{
-		{
-			"plain paragraph",
-			"Hello world",
-			"",
-		},
-		{
-			"two paragraphs",
-			"First\n\nSecond",
-			"",
-		},
-		{
-			"bullet list",
-			"- Alfa\n- Bravo",
-			"",
-		},
-		{
-			"heading and paragraph",
-			"## Title\n\nBody text",
-			"",
-		},
-		{
-			"bold and italic",
-			"**bold** and *italic*",
-			"",
-		},
-		{
-			"link",
-			"[Example](https://example.org)",
-			"",
-		},
-		{
-			"ordered list",
-			"1. One\n2. Two",
-			"",
-		},
-		{
-			"code inline",
-			"Use `fmt.Println` here",
-			"",
-		},
-		{
-			"hard break",
-			"Line one  \nLine two",
-			"",
-		},
-		{
-			"code block",
-			"```\nfmt.Println(\"hello\")\n```",
-			"",
-		},
-		{
-			// drift: blank line inserted between outer and inner item
+		{"plain paragraph", "Hello world", ""},
+		{"two paragraphs", "First\n\nSecond", ""},
+		{"bullet list", "- Alfa\n- Bravo", ""},
+		{"heading and paragraph", "## Title\n\nBody text", ""},
+		{"bold and italic", "**bold** and *italic*", ""},
+		{"link", "[Example](https://example.org)", ""},
+		{"ordered list", "1. One\n2. Two", ""},
+		{"code inline", "Use `fmt.Println` here", ""},
+		{"hard break", "Line one  \nLine two", ""},
+		{"code block", "```\nfmt.Println(\"hello\")\n```", ""},
+		{ // drift: blank line inserted between outer and inner item
 			"nested list",
 			"- Outer\n    - Inner",
 			"- Outer\n  \n  - Inner",

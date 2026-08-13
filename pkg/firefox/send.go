@@ -52,9 +52,6 @@ func (c *Client) send(
 
 		return r, nil
 	case <-time.After(10 * time.Second):
-		return &reply{}, fmt.Errorf(
-			"%s: timeout waiting for reply",
-			method,
-		)
+		return &reply{}, fmt.Errorf("%s: timeout waiting for reply", method)
 	}
 }

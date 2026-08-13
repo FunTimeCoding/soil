@@ -7,10 +7,7 @@ func (s *Store) UpdateTopic(
 	topic string,
 	files string,
 ) error {
-	return s.database.Model(session.Stub()).Where(
-		"callsign = ?",
-		name,
-	).Updates(
+	return s.database.Model(session.Stub()).Where("callsign = ?", name).Updates(
 		map[string]any{
 			"topic":     topic,
 			"files":     files,

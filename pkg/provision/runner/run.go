@@ -21,10 +21,7 @@ func (r *Runner) run() {
 
 	r.recovery.Run(
 		func() {
-			r.applyFunction(
-				nil,
-				constant.RunnerTriggerTimer,
-			)
+			r.applyFunction(nil, constant.RunnerTriggerTimer)
 		},
 	)
 	syncTicker := time.NewTicker(constant.RunnerSyncInterval)
@@ -49,10 +46,7 @@ func (r *Runner) run() {
 
 				r.recovery.Run(
 					func() {
-						r.applyFunction(
-							nil,
-							constant.RunnerTriggerTimer,
-						)
+						r.applyFunction(nil, constant.RunnerTriggerTimer)
 					},
 				)
 				applyTicker.Reset(constant.RunnerApplyInterval)
@@ -70,9 +64,7 @@ func (r *Runner) run() {
 			r.recovery.Run(func() { result = r.syncWithDiff() })
 
 			if result == nil {
-				result = &SyncResult{
-					Error: fmt.Errorf("sync failed"),
-				}
+				result = &SyncResult{Error: fmt.Errorf("sync failed")}
 			}
 
 			request.Response <- result

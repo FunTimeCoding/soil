@@ -22,10 +22,7 @@ func (s *Server) generate(
 		base := filepath.Base(fileName)
 		timestamp := strings.TrimSuffix(base, filepath.Ext(base))
 		notationName := join.Empty(timestamp, constant.DetailedWvWKillSuffix)
-		files = append(
-			files,
-			filepath.Join(s.elitePath, notationName),
-		)
+		files = append(files, filepath.Join(s.elitePath, notationName))
 	}
 
 	s.parser.Generate(files, nil)

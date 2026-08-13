@@ -15,10 +15,6 @@ func (c *Client) AddStorageContent(
 	key := fmt.Sprintf("%s/%s", node, storage)
 	c.storageContent[key] = append(
 		c.storageContent[key],
-		&proxmox.StorageContent{
-			Volid:  volid,
-			Format: format,
-			Size:   size,
-		},
+		&proxmox.StorageContent{Volid: volid, Format: format, Size: size},
 	)
 }

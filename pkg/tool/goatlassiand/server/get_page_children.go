@@ -13,9 +13,7 @@ func (s *Server) GetPageChildren(
 	result, e := s.confluence.ChildPagesByIdentifier(r.Identifier)
 
 	if e != nil {
-		return server.GetPageChildren500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.GetPageChildren500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	return server.GetPageChildren200JSONResponse(

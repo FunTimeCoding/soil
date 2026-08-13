@@ -21,11 +21,7 @@ func (r *Runbook) Walk(n ast.Node) {
 				section = &Section{Title: title}
 				r.Sections = append(r.Sections, *section)
 			} else {
-				fmt.Printf(
-					"Unexpected heading level %d: %s\n",
-					h.Level,
-					title,
-				)
+				fmt.Printf("Unexpected heading level %d: %s\n", h.Level, title)
 			}
 		case ast.KindParagraph:
 			if r.Title == "" {

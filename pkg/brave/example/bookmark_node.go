@@ -35,10 +35,6 @@ func BookmarkNode() {
 	}
 
 	for _, g := range node.GroupByDirectory(d) {
-		fmt.Printf(
-			"Group %s (%d)\n",
-			g.Directory.Name,
-			len(g.Links),
-		)
+		fmt.Printf("Group %s (%d)\n", g.Directory.Name, len(g.Links))
 	}
 }

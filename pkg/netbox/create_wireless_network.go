@@ -9,9 +9,9 @@ func (c *Client) CreateWirelessNetwork(
 	ssid string,
 ) (*wireless_network.Network, error) {
 	q := netbox.NewWritableWirelessLANRequest(ssid)
-	result, _, e := c.client.WirelessAPI.WirelessWirelessLansCreate(
-		c.context,
-	).WritableWirelessLANRequest(*q).Execute()
+	result, _, e := c.client.WirelessAPI.WirelessWirelessLansCreate(c.context).WritableWirelessLANRequest(
+		*q,
+	).Execute()
 
 	if e != nil {
 		return nil, e

@@ -35,11 +35,6 @@ func normalizeChangeIntegerAssertInteger(
 	assert.Integer(
 		t,
 		expect,
-		normalize_change.Integer(
-			now,
-			change,
-			minimum,
-			maximum,
-		),
+		normalize_change.Integer(now, change, minimum, maximum),
 	)
 }

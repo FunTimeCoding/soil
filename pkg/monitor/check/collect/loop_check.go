@@ -7,9 +7,6 @@ import (
 )
 
 func loopCheck(t time.Time) {
-	fmt.Printf(
-		"Time: %s\n",
-		t.Format(constant.DateMinute),
-	)
+	fmt.Printf("Time: %s\n", t.Format(constant.DateMinute))
 	Check(false, false)
 }

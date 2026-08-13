@@ -11,9 +11,5 @@ func (s *Service) TableSizes(
 	instance string,
 	schema string,
 ) ([]map[string]any, error) {
-	return s.Query(
-		x,
-		instance,
-		fmt.Sprintf(constant.TableSizesQuery, schema),
-	)
+	return s.Query(x, instance, fmt.Sprintf(constant.TableSizesQuery, schema))
 }

@@ -8,11 +8,7 @@ import (
 )
 
 func TestAnyToSlice(t *testing.T) {
-	assert.Strings(
-		t,
-		[]string{"Alfa"},
-		strings.AnyToSlice(constant.UpperAlfa),
-	)
+	assert.Strings(t, []string{"Alfa"}, strings.AnyToSlice(constant.UpperAlfa))
 	assert.Strings(
 		t,
 		[]string{"Alfa", "Bravo"},

@@ -21,13 +21,7 @@ func updateJournalEntry(c *client.Client) *cobra.Command {
 		) {
 			identifier, e := strconv.Atoi(arguments[0])
 			errors.PanicOnError(e)
-			fmt.Println(
-				c.UpdateJournalEntry(
-					int32(identifier),
-					kind,
-					comments,
-				),
-			)
+			fmt.Println(c.UpdateJournalEntry(int32(identifier), kind, comments))
 		},
 	}
 	result.Flags().StringVar(

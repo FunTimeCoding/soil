@@ -20,7 +20,5 @@ func (c *Client) Alert(
 	)
 	errors.PanicOnError(e)
 
-	return c.processor().ProcessOne(
-		alert.NewDetail(result, c.AlertOption(), t),
-	)
+	return c.processor().ProcessOne(alert.NewDetail(result, c.AlertOption(), t))
 }

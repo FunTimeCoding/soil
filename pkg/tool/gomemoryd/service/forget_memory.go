@@ -14,8 +14,5 @@ func (s *Service) ForgetMemory(
 		return e
 	}
 
-	return s.indexer.Delete(
-		ScopeCollection(m.Scope),
-		memoryPath(identifier),
-	)
+	return s.indexer.Delete(ScopeCollection(m.Scope), memoryPath(identifier))
 }

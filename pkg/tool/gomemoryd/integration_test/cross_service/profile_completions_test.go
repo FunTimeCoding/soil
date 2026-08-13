@@ -24,10 +24,7 @@ func TestProfileShowsCompletions(t *testing.T) {
 			},
 		},
 	)
-	result := s.MemoryClient.MustCallTool(
-		constant.Profile,
-		map[string]any{},
-	)
+	result := s.MemoryClient.MustCallTool(constant.Profile, map[string]any{})
 	assert.StringContains(t, "test-session", result)
 	assert.StringContains(t, "built the search pipeline", result)
 }
@@ -58,10 +55,7 @@ func TestProfileShowsMultipleCompletionsPerSession(t *testing.T) {
 			},
 		},
 	)
-	result := s.MemoryClient.MustCallTool(
-		constant.Profile,
-		map[string]any{},
-	)
+	result := s.MemoryClient.MustCallTool(constant.Profile, map[string]any{})
 	assert.StringContains(t, "built the API", result)
 	assert.StringContains(t, "wrote the tests", result)
 }

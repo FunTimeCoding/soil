@@ -19,7 +19,9 @@ func ToSnake(s string) string {
 
 				if unicode.IsLower(previous) || unicode.IsDigit(previous) {
 					b.WriteByte('_')
-				} else if unicode.IsUpper(previous) && i+1 < len(s) && unicode.IsLower(rune(s[i+1])) {
+				} else if unicode.IsUpper(previous) && i+1 < len(s) && unicode.IsLower(
+					rune(s[i+1]),
+				) {
 					b.WriteByte('_')
 				}
 			}

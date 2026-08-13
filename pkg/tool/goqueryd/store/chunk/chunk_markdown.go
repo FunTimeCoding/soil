@@ -31,10 +31,7 @@ func chunkMarkdown(content string) []Chunk {
 
 		result = append(
 			result,
-			Chunk{
-				Text:     content[position:end],
-				Position: position,
-			},
+			Chunk{Text: content[position:end], Position: position},
 		)
 
 		if end >= len(content) {

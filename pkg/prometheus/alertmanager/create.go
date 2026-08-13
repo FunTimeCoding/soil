@@ -30,9 +30,7 @@ func (c *Client) Create(
 					constant.InstanceLabel:  instance,
 				},
 				GeneratorURL: strfmt.URI(
-					locator.New(
-						c.prometheus.Host(),
-					).Path(constant.Graph).Set(
+					locator.New(c.prometheus.Host()).Path(constant.Graph).Set(
 						constant.Graph0Expression,
 						expression,
 					).String(),

@@ -17,16 +17,13 @@ func (c *Client) CreateTunnel(
 	)
 	q.SetGroup(
 		netbox.BriefTunnelGroupRequestAsPatchedWritableTunnelRequestGroup(
-			netbox.NewBriefTunnelGroupRequest(
-				group.Name,
-				group.Raw.GetSlug(),
-			),
+			netbox.NewBriefTunnelGroupRequest(group.Name, group.Raw.GetSlug()),
 		),
 	)
 	q.SetStatus(netbox.PATCHEDWRITABLETUNNELREQUESTSTATUS_ACTIVE)
-	result, _, e := c.client.VpnAPI.VpnTunnelsCreate(
-		c.context,
-	).WritableTunnelRequest(*q).Execute()
+	result, _, e := c.client.VpnAPI.VpnTunnelsCreate(c.context).WritableTunnelRequest(
+		*q,
+	).Execute()
 
 	if e != nil {
 		return nil, e

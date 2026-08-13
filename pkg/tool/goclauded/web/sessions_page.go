@@ -60,10 +60,7 @@ func (s *Server) sessionsPage(
 	}
 
 	var content []gomponents.Node
-	content = append(
-		content,
-		html.H3(gomponents.Text(constant.SessionsTitle)),
-	)
+	content = append(content, html.H3(gomponents.Text(constant.SessionsTitle)))
 	var filters []gomponents.Node
 
 	if activeOnly {
@@ -123,10 +120,7 @@ func (s *Server) sessionsPage(
 		navigation = append(
 			navigation,
 			html.A(
-				gomponents.Attr(
-					"href",
-					sessionsPageLink(base, page-1),
-				),
+				gomponents.Attr("href", sessionsPageLink(base, page-1)),
 				gomponents.Text("← Newer"),
 			),
 		)
@@ -140,10 +134,7 @@ func (s *Server) sessionsPage(
 		navigation = append(
 			navigation,
 			html.A(
-				gomponents.Attr(
-					"href",
-					sessionsPageLink(base, page+1),
-				),
+				gomponents.Attr("href", sessionsPageLink(base, page+1)),
 				gomponents.Text("Older →"),
 			),
 		)
@@ -157,6 +148,5 @@ func (s *Server) sessionsPage(
 		w,
 		constant.SessionsTitle,
 		constant.SessionsPath,
-		content...,
-	)
+		content...)
 }

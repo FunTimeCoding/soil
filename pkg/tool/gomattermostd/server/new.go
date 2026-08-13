@@ -10,9 +10,5 @@ func New(
 	version string,
 	r face.Reporter,
 ) *Server {
-	return &Server{
-		client:   c,
-		version:  version,
-		reporter: r,
-	}
+	return &Server{client: c, version: version, reporter: r}
 }

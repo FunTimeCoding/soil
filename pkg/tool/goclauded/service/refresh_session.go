@@ -28,19 +28,13 @@ func (s *Service) RefreshSession(
 	if state.FirstTimestamp != "" {
 		updates["session_timestamp"] = state.FirstTimestamp
 
-		if t, e := time.Parse(
-			time.RFC3339Nano,
-			state.FirstTimestamp,
-		); e == nil {
+		if t, e := time.Parse(time.RFC3339Nano, state.FirstTimestamp); e == nil {
 			updates["started_at"] = t
 		}
 	}
 
 	if state.LastTimestamp != "" {
-		if t, e := time.Parse(
-			time.RFC3339Nano,
-			state.LastTimestamp,
-		); e == nil {
+		if t, e := time.Parse(time.RFC3339Nano, state.LastTimestamp); e == nil {
 			updates["last_active_at"] = t
 		}
 	}

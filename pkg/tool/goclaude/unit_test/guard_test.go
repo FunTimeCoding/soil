@@ -76,11 +76,7 @@ func TestVerdictAllowsRemote(t *testing.T) {
 
 func TestVerdictAllowsFilter(t *testing.T) {
 	assert.String(t, "", guard.Verdict("darwin", "sed 's/a/b/' file.go"))
-	assert.String(
-		t,
-		"",
-		guard.Verdict("darwin", "grep x file | sed 's/a/b/'"),
-	)
+	assert.String(t, "", guard.Verdict("darwin", "grep x file | sed 's/a/b/'"))
 	assert.String(t, "", guard.Verdict("darwin", "cat file; sed -n 1p file"))
 	assert.String(
 		t,
@@ -96,10 +92,7 @@ func TestVerdictAllowsSedAsArgument(t *testing.T) {
 	assert.String(
 		t,
 		"",
-		guard.Verdict(
-			"darwin",
-			`grep -cE '(^|[|&;( ])sed( |$)' corpus.txt`,
-		),
+		guard.Verdict("darwin", `grep -cE '(^|[|&;( ])sed( |$)' corpus.txt`),
 	)
 	assert.String(t, "", guard.Verdict("darwin", "echo parsed"))
 	assert.String(t, "", guard.Verdict("darwin", "git grep sedative"))

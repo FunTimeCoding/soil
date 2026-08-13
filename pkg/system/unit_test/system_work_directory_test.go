@@ -8,8 +8,5 @@ import (
 )
 
 func TestWorkDirectory(t *testing.T) {
-	assert.True(
-		t,
-		strings.Contains(system.WorkDirectory(), "system"),
-	)
+	assert.True(t, strings.Contains(system.WorkDirectory(), "system"))
 }

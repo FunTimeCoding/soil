@@ -12,12 +12,7 @@ func (c *Client) JobsJSON() {
 		Raw:     new(gojenkins.ExecutorResponse),
 		Jenkins: c.client,
 	}
-	_, e := c.client.Requester.GetJSON(
-		c.context,
-		"/",
-		exec.Raw,
-		nil,
-	)
+	_, e := c.client.Requester.GetJSON(c.context, "/", exec.Raw, nil)
 	errors.PanicOnError(e)
 	jobs := make([]*gojenkins.Job, len(exec.Raw.Jobs))
 	jobStrings := make([]string, len(exec.Raw.Jobs))

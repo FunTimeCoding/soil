@@ -128,10 +128,7 @@ func (s *Server) GetSessionDetail(
 		var le []server.LabelEntry
 
 		for _, l := range labels {
-			le = append(
-				le,
-				server.LabelEntry{Key: l.Key, Value: l.Value},
-			)
+			le = append(le, server.LabelEntry{Key: l.Key, Value: l.Value})
 		}
 
 		result.Labels = &le

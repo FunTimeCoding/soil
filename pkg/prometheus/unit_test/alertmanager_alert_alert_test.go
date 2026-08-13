@@ -15,10 +15,8 @@ func TestAlert(t *testing.T) {
 	actual := alert.New(
 		&models.GettableAlert{
 			Fingerprint: new(strings.UpperAlfa),
-			Status: &models.AlertStatus{
-				State: new(prometheus.ActiveState),
-			},
-			StartsAt: new(strfmt.NewDateTime()),
+			Status:      &models.AlertStatus{State: new(prometheus.ActiveState)},
+			StartsAt:    new(strfmt.NewDateTime()),
 		},
 		strings.UpperBravo,
 	)

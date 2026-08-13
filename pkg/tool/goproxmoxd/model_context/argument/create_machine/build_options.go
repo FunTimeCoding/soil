@@ -73,10 +73,7 @@ func (m *Machine) BuildOptions() []proxmox.VirtualMachineOption {
 
 	result = append(
 		result,
-		option(
-			"net0",
-			fmt.Sprintf("virtio,bridge=%s", bridge),
-		),
+		option("net0", fmt.Sprintf("virtio,bridge=%s", bridge)),
 	)
 	agent := m.Agent == nil || *m.Agent
 
@@ -132,10 +129,7 @@ func (m *Machine) BuildOptions() []proxmox.VirtualMachineOption {
 		result = append(result, option("ipconfig0", ipConfiguration))
 
 		if m.SearchDomain != "" {
-			result = append(
-				result,
-				option("searchdomain", m.SearchDomain),
-			)
+			result = append(result, option("searchdomain", m.SearchDomain))
 		}
 
 		result = append(

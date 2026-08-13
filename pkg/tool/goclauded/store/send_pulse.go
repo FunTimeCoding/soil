@@ -7,7 +7,5 @@ func (s *Store) SendPulse(
 	fromName string,
 	body string,
 ) error {
-	return s.database.Create(
-		pulse.New(sessionIdentifier, fromName, body),
-	).Error
+	return s.database.Create(pulse.New(sessionIdentifier, fromName, body)).Error
 }

@@ -8,10 +8,7 @@ import (
 )
 
 func TestFindReferences(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		serviceTestdata("find-references/src"),
-	)
+	d := testutil.PrepareTestPackage(t, serviceTestdata("find-references/src"))
 	s := testService()
 	r, references, e := s.FindReferences(d, "example/pkg/target", "Used", "")
 	assert.FatalOnError(t, e)
@@ -26,10 +23,7 @@ func TestFindReferences(t *testing.T) {
 }
 
 func TestFindReferencesMethod(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		serviceTestdata("find-references/src"),
-	)
+	d := testutil.PrepareTestPackage(t, serviceTestdata("find-references/src"))
 	s := testService()
 	r, references, e := s.FindReferences(
 		d,
@@ -45,27 +39,16 @@ func TestFindReferencesMethod(t *testing.T) {
 }
 
 func TestFindReferencesUnknownSymbol(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		serviceTestdata("find-references/src"),
-	)
+	d := testutil.PrepareTestPackage(t, serviceTestdata("find-references/src"))
 	s := testService()
-	r, references, e := s.FindReferences(
-		d,
-		"example/pkg/target",
-		"Missing",
-		"",
-	)
+	r, references, e := s.FindReferences(d, "example/pkg/target", "Missing", "")
 	assert.FatalOnError(t, e)
 	assert.True(t, references == nil)
 	testutil.AssertBlockedContains(t, r, "Missing")
 }
 
 func TestFileReferences(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		serviceTestdata("find-references/src"),
-	)
+	d := testutil.PrepareTestPackage(t, serviceTestdata("find-references/src"))
 	s := testService()
 	r, references, e := s.FileReferences(
 		d,
@@ -84,10 +67,7 @@ func TestFileReferences(t *testing.T) {
 }
 
 func TestFileReferencesMethods(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		serviceTestdata("find-references/src"),
-	)
+	d := testutil.PrepareTestPackage(t, serviceTestdata("find-references/src"))
 	s := testService()
 	r, references, e := s.FileReferences(
 		d,
@@ -105,10 +85,7 @@ func TestFileReferencesMethods(t *testing.T) {
 }
 
 func TestFileReferencesUnknownFile(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		serviceTestdata("find-references/src"),
-	)
+	d := testutil.PrepareTestPackage(t, serviceTestdata("find-references/src"))
 	s := testService()
 	r, references, e := s.FileReferences(
 		d,

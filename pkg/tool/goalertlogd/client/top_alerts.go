@@ -14,11 +14,7 @@ func (c *Client) TopAlerts(
 ) string {
 	result, e := c.client.GetTopAlerts(
 		c.context,
-		&client.GetTopAlertsParams{
-			N:     &n,
-			Start: &start,
-			End:   &end,
-		},
+		&client.GetTopAlertsParams{N: &n, Start: &start, End: &end},
 	)
 	errors.PanicOnError(e)
 

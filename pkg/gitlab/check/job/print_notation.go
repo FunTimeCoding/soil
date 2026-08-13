@@ -16,12 +16,7 @@ func printNotation(
 	r := report.New()
 	f := constant.CheckFormat
 
-	for _, e := range report.Trim(
-		v,
-		r,
-		o.All,
-		monitor.GoGitLab,
-	) {
+	for _, e := range report.Trim(v, r, o.All, monitor.GoGitLab) {
 		var s library.Severity
 
 		if e.Fail() {

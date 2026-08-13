@@ -12,13 +12,7 @@ import (
 )
 
 func TestItem(t *testing.T) {
-	c := collector.New(
-		"example",
-		"example",
-		"examples",
-		0,
-		nil,
-	)
+	c := collector.New("example", "example", "examples", 0, nil)
 	assert.String(
 		t,
 		"example-1",

@@ -53,18 +53,12 @@ func New(
 				WithStyle(constant.InlineStyle).
 				WithCommandPalette("/palette").
 				WithItems(
-					navigation_item.New(
-						constant.LogsPath,
-						constant.LogsTitle,
-					),
+					navigation_item.New(constant.LogsPath, constant.LogsTitle),
 					navigation_item.New(
 						constant.ReportsPath,
 						constant.ReportsTitle,
 					),
-					navigation_item.New(
-						constant.RaidsPath,
-						constant.RaidsTitle,
-					),
+					navigation_item.New(constant.RaidsPath, constant.RaidsTitle),
 					navigation_item.New(
 						constant.PlayersPath,
 						constant.PlayersTitle,

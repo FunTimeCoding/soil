@@ -6,10 +6,7 @@ import (
 )
 
 func (c *Client) Forwards() []forwarding_rule.ForwardingRule {
-	r, e := c.userClient.Forward.List(
-		c.context,
-		&forwarding_rule.ListRequest{},
-	)
+	r, e := c.userClient.Forward.List(c.context, &forwarding_rule.ListRequest{})
 	errors.PanicOnError(e)
 
 	return r.ForwardingRule

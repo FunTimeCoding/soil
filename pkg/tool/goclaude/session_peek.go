@@ -21,10 +21,7 @@ func sessionPeek(c *command_context.Context) *cobra.Command {
 			identifier := resolveSession(c.Client(), arguments[0])
 
 			if identifier == "" {
-				fmt.Printf(
-					"session not found: %s\n",
-					arguments[0],
-				)
+				fmt.Printf("session not found: %s\n", arguments[0])
 
 				return
 			}
@@ -95,11 +92,7 @@ func sessionPeek(c *command_context.Context) *cobra.Command {
 			}
 
 			for _, entry := range p.Entries[:head] {
-				printPeekEntry(
-					entry.UserText,
-					entry.AssistantContext,
-					midLimit,
-				)
+				printPeekEntry(entry.UserText, entry.AssistantContext, midLimit)
 			}
 
 			if samples > 0 && middle > 0 {

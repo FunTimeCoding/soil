@@ -15,9 +15,7 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				generative.ParameterQuery,
-				mcp.Description(
-					"Filter by name (case-insensitive contains)",
-				),
+				mcp.Description("Filter by name (case-insensitive contains)"),
 			),
 		),
 		s.listDevices,
@@ -25,9 +23,7 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.GetDevice,
-			mcp.WithDescription(
-				"Get a NetBox device by exact name",
-			),
+			mcp.WithDescription("Get a NetBox device by exact name"),
 			mcp.WithString(
 				generative.ParameterName,
 				mcp.Required(),
@@ -39,9 +35,7 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ListInterfaces,
-			mcp.WithDescription(
-				"List interfaces for a NetBox device",
-			),
+			mcp.WithDescription("List interfaces for a NetBox device"),
 			mcp.WithString(
 				generative.ParameterName,
 				mcp.Required(),
@@ -53,9 +47,7 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ListAddresses,
-			mcp.WithDescription(
-				"List IP addresses assigned to a NetBox device",
-			),
+			mcp.WithDescription("List IP addresses assigned to a NetBox device"),
 			mcp.WithString(
 				generative.ParameterName,
 				mcp.Required(),
@@ -200,9 +192,7 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.CreateInterface,
-			mcp.WithDescription(
-				"Create a network interface on a NetBox device",
-			),
+			mcp.WithDescription("Create a network interface on a NetBox device"),
 			mcp.WithString(
 				constant.Device,
 				mcp.Required(),
@@ -216,9 +206,7 @@ func (s *Server) register() {
 			mcp.WithString(
 				constant.Type,
 				mcp.Required(),
-				mcp.Description(
-					"Interface type (e.g. 1000base-t, 10gbase-t)",
-				),
+				mcp.Description("Interface type (e.g. 1000base-t, 10gbase-t)"),
 			),
 		),
 		s.createInterface,
@@ -226,9 +214,7 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.CreateAddress,
-			mcp.WithDescription(
-				"Assign an IP address to a device interface",
-			),
+			mcp.WithDescription("Assign an IP address to a device interface"),
 			mcp.WithString(
 				constant.Device,
 				mcp.Required(),
@@ -266,9 +252,7 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ListVirtualMachines,
-			mcp.WithDescription(
-				"List all NetBox virtual machines",
-			),
+			mcp.WithDescription("List all NetBox virtual machines"),
 		),
 		s.listVirtualMachines,
 	)
@@ -287,9 +271,7 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.CreateCluster,
-			mcp.WithDescription(
-				"Create a NetBox cluster (VM host grouping)",
-			),
+			mcp.WithDescription("Create a NetBox cluster (VM host grouping)"),
 			mcp.WithString(
 				generative.ParameterName,
 				mcp.Required(),
@@ -443,9 +425,7 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.RemoveVirtualTag,
-			mcp.WithDescription(
-				"Remove a tag from a virtual machine",
-			),
+			mcp.WithDescription("Remove a tag from a virtual machine"),
 			mcp.WithString(
 				constant.VirtualMachine,
 				mcp.Required(),
@@ -477,9 +457,7 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				constant.Kind,
-				mcp.Description(
-					"Entry kind: info, success, warning, or danger",
-				),
+				mcp.Description("Entry kind: info, success, warning, or danger"),
 			),
 		),
 		s.addDeviceJournalEntry,
@@ -524,9 +502,7 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				constant.Kind,
-				mcp.Description(
-					"Entry kind: info, success, warning, or danger",
-				),
+				mcp.Description("Entry kind: info, success, warning, or danger"),
 			),
 		),
 		s.addVirtualJournalEntry,
@@ -556,9 +532,7 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.UpdateJournalEntry,
-			mcp.WithDescription(
-				"Update a journal entry's comments or kind",
-			),
+			mcp.WithDescription("Update a journal entry's comments or kind"),
 			mcp.WithNumber(
 				generative.ParameterIdentifier,
 				mcp.Required(),
@@ -633,9 +607,7 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ListDeviceLabels,
-			mcp.WithDescription(
-				"List labels on a device, ordered by key",
-			),
+			mcp.WithDescription("List labels on a device, ordered by key"),
 			mcp.WithString(
 				constant.Device,
 				mcp.Required(),
@@ -788,9 +760,7 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.CreateVirtualTunnelTermination,
-			mcp.WithDescription(
-				"Create a tunnel termination on a VM interface",
-			),
+			mcp.WithDescription("Create a tunnel termination on a VM interface"),
 			mcp.WithString(
 				constant.VirtualMachine,
 				mcp.Required(),
@@ -828,9 +798,7 @@ func (s *Server) register() {
 			mcp.WithString(
 				constant.Prefix,
 				mcp.Required(),
-				mcp.Description(
-					"CIDR notation (e.g. 192.168.178.0/24)",
-				),
+				mcp.Description("CIDR notation (e.g. 192.168.178.0/24)"),
 			),
 			mcp.WithString(
 				constant.Site,

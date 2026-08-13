@@ -15,9 +15,7 @@ func (c *Client) DownloadLocator(
 		c.context,
 		node,
 		storage,
-		&client.DownloadLocatorParams{
-			Instance: &c.instance,
-		},
+		&client.DownloadLocatorParams{Instance: &c.instance},
 		body,
 	)
 	errors.PanicOnError(e)

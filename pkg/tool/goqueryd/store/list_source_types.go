@@ -17,11 +17,7 @@ func (s *Store) ListSourceTypes() []SourceTypeTag {
 	for rows.Next() {
 		var t SourceTypeTag
 		errors.PanicOnError(
-			rows.Scan(
-				&t.Collection,
-				&t.PathPrefix,
-				&t.SourceType,
-			),
+			rows.Scan(&t.Collection, &t.PathPrefix, &t.SourceType),
 		)
 		result = append(result, t)
 	}

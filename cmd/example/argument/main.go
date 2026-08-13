@@ -8,8 +8,5 @@ import (
 func main() {
 	a := argument.NewSimple("argument-example")
 	a.ParseSimple()
-	fmt.Printf(
-		"Positional argument 0: %s\n",
-		a.Argument(0),
-	)
+	fmt.Printf("Positional argument 0: %s\n", a.Argument(0))
 }

@@ -9,10 +9,6 @@ func GreaterEqual(
 ) {
 	if actual < than {
 		t.Helper()
-		t.Errorf(
-			"\nExpect greater equal than: %f\nActual: %f",
-			than,
-			actual,
-		)
+		t.Errorf("\nExpect greater equal than: %f\nActual: %f", than, actual)
 	}
 }

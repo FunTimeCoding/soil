@@ -14,9 +14,5 @@ func TestFindFilesByExtension(t *testing.T) {
 		system.FindDirectoryUp(system.WorkDirectory(), git.Directory),
 		constant.FixturePath,
 	)
-	assert.Count(
-		t,
-		6,
-		system.FindFilesByExtension(fixture, ".json"),
-	)
+	assert.Count(t, 6, system.FindFilesByExtension(fixture, ".json"))
 }

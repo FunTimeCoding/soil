@@ -46,10 +46,7 @@ func TestExtractType(t *testing.T) {
 }
 
 func TestExtractTypeInternalStaysUnexported(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		serviceTestdata("extract-internal/src"),
-	)
+	d := testutil.PrepareTestPackage(t, serviceTestdata("extract-internal/src"))
 	s := testService()
 	r, e := s.ExtractType(
 		d,
@@ -154,10 +151,7 @@ func TestExtractTypeUnexported(t *testing.T) {
 }
 
 func TestExtractTypeTargetFile(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		serviceTestdata("extract-internal/src"),
-	)
+	d := testutil.PrepareTestPackage(t, serviceTestdata("extract-internal/src"))
 	s := testService()
 	r, e := s.ExtractType(
 		d,

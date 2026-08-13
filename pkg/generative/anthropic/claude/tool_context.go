@@ -89,10 +89,7 @@ func (c *Client) ToolContext(
 					}
 
 					if strings.Contains(b.Name, toolFilter) {
-						im.ToolUses = append(
-							im.ToolUses,
-							b.Name,
-						)
+						im.ToolUses = append(im.ToolUses, b.Name)
 					}
 				}
 			}
@@ -109,9 +106,7 @@ func (c *Client) ToolContext(
 		}
 
 		for _, toolName := range im.ToolUses {
-			r := ToolContextResult{
-				ToolName: toolName,
-			}
+			r := ToolContextResult{ToolName: toolName}
 			start := i - surroundCount
 
 			if start < 0 {
@@ -123,10 +118,7 @@ func (c *Client) ToolContext(
 					continue
 				}
 
-				r.Before = append(
-					r.Before,
-					messages[j].Message,
-				)
+				r.Before = append(r.Before, messages[j].Message)
 			}
 
 			end := i + surroundCount + 1
@@ -140,10 +132,7 @@ func (c *Client) ToolContext(
 					continue
 				}
 
-				r.After = append(
-					r.After,
-					messages[j].Message,
-				)
+				r.After = append(r.After, messages[j].Message)
 			}
 
 			results = append(results, r)

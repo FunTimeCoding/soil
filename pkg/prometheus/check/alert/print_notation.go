@@ -24,12 +24,7 @@ func printNotation(
 		relevant = append(relevant, e)
 	}
 
-	for _, e := range report.Trim(
-		relevant,
-		r,
-		o.All,
-		monitor.GoAlert,
-	) {
+	for _, e := range report.Trim(relevant, r, o.All, monitor.GoAlert) {
 		var s constant.Severity
 
 		if e.Severity == prometheus.CriticalSeverity {

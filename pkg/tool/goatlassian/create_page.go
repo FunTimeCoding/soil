@@ -18,22 +18,10 @@ func createPage(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			fmt.Println(
-				c.CreatePage(
-					space,
-					parent,
-					arguments[0],
-					arguments[1],
-				),
-			)
+			fmt.Println(c.CreatePage(space, parent, arguments[0], arguments[1]))
 		},
 	}
-	result.Flags().StringVar(
-		&space,
-		"space",
-		"",
-		"space identifier (required)",
-	)
+	result.Flags().StringVar(&space, "space", "", "space identifier (required)")
 	result.Flags().StringVar(
 		&parent,
 		"parent",

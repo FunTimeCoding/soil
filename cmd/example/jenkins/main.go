@@ -44,9 +44,7 @@ func main() {
 			fmt.Println(name)
 
 			if false {
-				b := j.Basic().Get(
-					fmt.Sprintf("job/%s/config.xml", name),
-				)
+				b := j.Basic().Get(fmt.Sprintf("job/%s/config.xml", name))
 				system.SaveFile(
 					join.Absolute(root, fmt.Sprintf("%s.xml", name)),
 					b,

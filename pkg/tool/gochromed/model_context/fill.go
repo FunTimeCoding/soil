@@ -31,10 +31,7 @@ func (s *Server) Fill(
 	backendID, okay := s.resolveUID(t.Identifier, a.UID)
 
 	if !okay {
-		return response.Fail(
-			"uid %s not found - take a snapshot first",
-			a.UID,
-		)
+		return response.Fail("uid %s not found - take a snapshot first", a.UID)
 	}
 
 	direct := a.Direct != nil && *a.Direct
@@ -67,9 +64,5 @@ func (s *Server) Fill(
 
 	s.cacheSnapshot(t.Identifier, nodes)
 
-	return response.Success(
-		"filled %s\n\n%s",
-		a.UID,
-		snapshot.Format(nodes, 0),
-	)
+	return response.Success("filled %s\n\n%s", a.UID, snapshot.Format(nodes, 0))
 }

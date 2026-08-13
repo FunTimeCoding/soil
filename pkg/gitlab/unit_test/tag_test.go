@@ -12,11 +12,7 @@ func TestTagLatest(t *testing.T) {
 		t,
 		&gitlab.Tag{Name: "v1.0.2"},
 		tag.Latest(
-			[]*gitlab.Tag{
-				{Name: "v1.0.0"},
-				{Name: "v1.0.2"},
-				{Name: "v1.0.1"},
-			},
+			[]*gitlab.Tag{{Name: "v1.0.0"}, {Name: "v1.0.2"}, {Name: "v1.0.1"}},
 		),
 	)
 }

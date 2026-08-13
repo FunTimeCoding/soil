@@ -13,15 +13,9 @@ func New(t *testing.T) *Tester {
 	t.Helper()
 	s := base.New(t)
 	c, e := client.NewClientWithResponses(
-		locator.New(
-			constant.Localhost,
-		).Insecure().Port(s.ContextServer.Port).String(),
+		locator.New(constant.Localhost).Insecure().Port(s.ContextServer.Port).String(),
 	)
 	assert.FatalOnError(t, e)
 
-	return &Tester{
-		server:     s,
-		Client:     c,
-		MockClient: s.MockClient,
-	}
+	return &Tester{server: s, Client: c, MockClient: s.MockClient}
 }

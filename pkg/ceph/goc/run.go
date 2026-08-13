@@ -78,9 +78,6 @@ func Run(
 		fmt.Printf("newArgument: %s\n", newArgument)
 	}
 
-	environment.SetTerminal(
-		constant.ConfigurationEnvironment,
-		newConfiguration,
-	)
+	environment.SetTerminal(constant.ConfigurationEnvironment, newConfiguration)
 	environment.SetTerminal(constant.ArgumentEnvironment, newArgument)
 }

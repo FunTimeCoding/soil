@@ -33,10 +33,7 @@ func checkCommand() *cobra.Command {
 			}
 
 			sort.Strings(names)
-			fmt.Printf(
-				"valid procfile detected (%s)\n",
-				join.CommaSpace(names),
-			)
+			fmt.Printf("valid procfile detected (%s)\n", join.CommaSpace(names))
 
 			return nil
 		},

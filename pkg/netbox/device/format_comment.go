@@ -24,10 +24,7 @@ func (d *Device) formatComment(f *option.Format) string {
 	var result string
 
 	if strings.CountRune(o, '\n') > 0 {
-		result = fmt.Sprintf(
-			"\n%s",
-			strings.Indent(o, 4, false),
-		)
+		result = fmt.Sprintf("\n%s", strings.Indent(o, 4, false))
 	} else {
 		result = fmt.Sprintf(" %s", o)
 	}

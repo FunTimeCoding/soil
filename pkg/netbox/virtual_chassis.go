@@ -6,9 +6,9 @@ import (
 )
 
 func (c *Client) VirtualChassis() ([]*virtual_chassis.Chassis, error) {
-	result, _, e := c.client.DcimAPI.DcimVirtualChassisList(
-		c.context,
-	).Limit(constant.PageLimit).Execute()
+	result, _, e := c.client.DcimAPI.DcimVirtualChassisList(c.context).Limit(
+		constant.PageLimit,
+	).Execute()
 
 	if e != nil {
 		return nil, e

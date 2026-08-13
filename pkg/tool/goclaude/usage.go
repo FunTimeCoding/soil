@@ -17,9 +17,7 @@ func usage(c *command_context.Context) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			response, e := c.Client().GetUsageWithResponse(
-				context.Background(),
-			)
+			response, e := c.Client().GetUsageWithResponse(context.Background())
 			errors.PanicOnError(e)
 
 			if response.StatusCode() == 204 || response.JSON200 == nil {

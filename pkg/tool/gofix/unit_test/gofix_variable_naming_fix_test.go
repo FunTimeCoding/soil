@@ -52,10 +52,7 @@ func TestVariableNamingFix(t *testing.T) {
 				"package example\n\nimport \"fmt\"\n\nfunc ErrorChainRenamed() {\n\te := fmt.Errorf(\"first\")\n\tf := fmt.Errorf(\"second\")\n\t_ = e\n\t_ = f\n}\n",
 				testutil.ReadFile(
 					t,
-					filepath.Join(
-						directory,
-						"error_chain_renamed.go",
-					),
+					filepath.Join(directory, "error_chain_renamed.go"),
 				),
 			)
 		},
@@ -66,10 +63,7 @@ func TestVariableNamingFix(t *testing.T) {
 			assert.String(
 				t,
 				"package example\n\nimport \"fmt\"\n\nfunc CorrectUntouched() {\n\te := fmt.Errorf(\"test\")\n\ts := \"hello\"\n\t_ = e\n\t_ = s\n}\n",
-				testutil.ReadFile(
-					t,
-					filepath.Join(directory, "correct.go"),
-				),
+				testutil.ReadFile(t, filepath.Join(directory, "correct.go")),
 			)
 		},
 	)
@@ -98,12 +92,7 @@ func TestVariableNamingFix(t *testing.T) {
 func writeVariableNamingTestModule(t *testing.T) string {
 	t.Helper()
 	directory := t.TempDir()
-	testutil.WriteFile(
-		t,
-		directory,
-		"go.mod",
-		"module example\n\ngo 1.22\n",
-	)
+	testutil.WriteFile(t, directory, "go.mod", "module example\n\ngo 1.22\n")
 	testutil.WriteFile(
 		t,
 		directory,

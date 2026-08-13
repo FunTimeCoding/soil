@@ -6,8 +6,5 @@ func New(
 	r *http.Response,
 	milliseconds int64,
 ) *Response {
-	return &Response{
-		Response:     r,
-		Milliseconds: milliseconds,
-	}
+	return &Response{Response: r, Milliseconds: milliseconds}
 }

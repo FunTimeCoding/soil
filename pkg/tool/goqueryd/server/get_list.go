@@ -47,10 +47,7 @@ func (s *Server) GetList(
 
 	if e != nil {
 		return server.GetList500JSONResponse(
-			*s.captureFail(
-				e,
-				constant.UnexpectedError,
-			),
+			*s.captureFail(e, constant.UnexpectedError),
 		), nil
 	}
 

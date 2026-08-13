@@ -15,12 +15,7 @@ func printNotation(
 ) {
 	r := report.New()
 
-	for _, e := range report.Trim(
-		v,
-		r,
-		o.All,
-		monitor.GoGitHubJob,
-	) {
+	for _, e := range report.Trim(v, r, o.All, monitor.GoGitHubJob) {
 		var s constant.Severity
 
 		if e.HasConcerns() {

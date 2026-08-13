@@ -14,11 +14,7 @@ func eval(
 	r := run.New()
 	r.Panic = false
 	r.SetEnvironment(base)
-	output := r.Start(
-		"/bin/sh",
-		"-c",
-		fmt.Sprintf(". %s && env -0", path),
-	)
+	output := r.Start("/bin/sh", "-c", fmt.Sprintf(". %s && env -0", path))
 
 	if r.Error != nil {
 		return nil, fmt.Errorf("eval %s: %w", path, r.Error)

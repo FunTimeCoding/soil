@@ -25,10 +25,7 @@ func (s *Server) ListMergeRequests(
 		o.State = &a.State
 	}
 
-	v, _, e := s.client.MergeRequests.ListProjectMergeRequests(
-		a.Project,
-		o,
-	)
+	v, _, e := s.client.MergeRequests.ListProjectMergeRequests(a.Project, o)
 
 	if e != nil {
 		return s.captureDetail(e)

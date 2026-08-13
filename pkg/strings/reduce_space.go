@@ -6,8 +6,5 @@ import (
 )
 
 func ReduceSpace(s string) string {
-	return regexp.MustCompile(`\s{2,}`).ReplaceAllString(
-		s,
-		constant.Space,
-	)
+	return regexp.MustCompile(`\s{2,}`).ReplaceAllString(s, constant.Space)
 }

@@ -23,10 +23,7 @@ func wait(c *command_context.Context) *cobra.Command {
 			name := os.Getenv(constant.NameEnvironment)
 			response, e := c.Client().GetWaitWithResponse(
 				context.Background(),
-				&client.GetWaitParams{
-					Callsign: name,
-					Timeout:  &timeout,
-				},
+				&client.GetWaitParams{Callsign: name, Timeout: &timeout},
 			)
 
 			if e != nil {
@@ -50,12 +47,7 @@ func wait(c *command_context.Context) *cobra.Command {
 			os.Exit(2)
 		},
 	}
-	result.Flags().IntVar(
-		&timeout,
-		"timeout",
-		30,
-		"poll timeout in seconds",
-	)
+	result.Flags().IntVar(&timeout, "timeout", 30, "poll timeout in seconds")
 
 	return result
 }

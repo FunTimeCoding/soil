@@ -14,10 +14,7 @@ func (s *Server) seedTable() gomponents.Node {
 		rows = append(
 			rows,
 			html.Tr(
-				html.Td(
-					html.Class("drag-handle"),
-					gomponents.Text("⠿"),
-				),
+				html.Td(html.Class("drag-handle"), gomponents.Text("⠿")),
 				html.Td(
 					html.Class("position-cell"),
 					gomponents.Text(fmt.Sprintf("%d", v.Position)),
@@ -41,17 +38,11 @@ func (s *Server) seedTable() gomponents.Node {
 		html.THead(
 			html.Tr(
 				html.Th(gomponents.Text("")),
-				html.Th(
-					html.Class("position-cell"),
-					gomponents.Text("#"),
-				),
+				html.Th(html.Class("position-cell"), gomponents.Text("#")),
 				html.Th(gomponents.Text("Name")),
 				html.Th(gomponents.Text("Path")),
 			),
 		),
-		html.TBody(
-			html.Class("sortable"),
-			gomponents.Group(rows),
-		),
+		html.TBody(html.Class("sortable"), gomponents.Group(rows)),
 	)
 }

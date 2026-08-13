@@ -54,10 +54,6 @@ func (s *Server) GetUsers(
 	}
 
 	return response.SuccessAny(
-		map[string]any{
-			"users":    rows,
-			"page":     page,
-			"per_page": limit,
-		},
+		map[string]any{"users": rows, "page": page, "per_page": limit},
 	)
 }

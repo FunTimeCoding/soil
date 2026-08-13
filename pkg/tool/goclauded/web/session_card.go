@@ -26,27 +26,20 @@ func sessionCard(
 	}
 
 	if s.Topic != "" {
-		details = append(
-			details,
-			html.P(gomponents.Text(s.Topic)),
-		)
+		details = append(details, html.P(gomponents.Text(s.Topic)))
 	}
 
 	if s.Description != "" {
 		details = append(
 			details,
-			html.P(
-				html.Small(gomponents.Text(s.Description)),
-			),
+			html.P(html.Small(gomponents.Text(s.Description))),
 		)
 	}
 
 	if s.Files != "" {
 		details = append(
 			details,
-			html.P(
-				html.Small(gomponents.Text(shortenPaths(s.Files))),
-			),
+			html.P(html.Small(gomponents.Text(shortenPaths(s.Files)))),
 		)
 	}
 
@@ -70,9 +63,7 @@ func sessionCard(
 	metadata = append(metadata, relativeTime(s.LastSeen))
 	details = append(
 		details,
-		html.P(
-			html.Small(gomponents.Text(strings.Join(metadata, " · "))),
-		),
+		html.P(html.Small(gomponents.Text(strings.Join(metadata, " · ")))),
 	)
 
 	if len(labels) > 0 {
@@ -83,9 +74,7 @@ func sessionCard(
 				pips,
 				html.Span(
 					html.Class("label-pip"),
-					gomponents.Text(
-						fmt.Sprintf("(%s:%s)", l.Key, l.Value),
-					),
+					gomponents.Text(fmt.Sprintf("(%s:%s)", l.Key, l.Value)),
 				),
 			)
 		}
@@ -106,15 +95,9 @@ func sessionCard(
 	}
 
 	return html.A(
-		gomponents.Attr(
-			"href",
-			fmt.Sprintf("/sessions/%s", s.Identifier),
-		),
+		gomponents.Attr("href", fmt.Sprintf("/sessions/%s", s.Identifier)),
 		html.Class("session-card"),
-		html.H4(
-			statusDot(s.LastSeen),
-			gomponents.Text(s.Name),
-		),
+		html.H4(statusDot(s.LastSeen), gomponents.Text(s.Name)),
 		gomponents.Group(details),
 	)
 }

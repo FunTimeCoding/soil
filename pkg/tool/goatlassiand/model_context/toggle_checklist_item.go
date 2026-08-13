@@ -33,11 +33,7 @@ func (s *Server) toggleChecklistItem(
 	i := int(index)
 
 	if i < 1 || i > len(items) {
-		return response.Fail(
-			"index %d out of range (1-%d)",
-			i,
-			len(items),
-		)
+		return response.Fail("index %d out of range (1-%d)", i, len(items))
 	}
 
 	items[i-1].Checked = !items[i-1].Checked

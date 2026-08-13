@@ -17,10 +17,7 @@ func (c *Cluster) ResolveResource(
 
 	if c.resources == nil {
 		return schema.GroupVersionResource{}, false,
-			fmt.Errorf(
-				"failed to discover API resources: %w",
-				c.discoveryFail,
-			)
+			fmt.Errorf("failed to discover API resources: %w", c.discoveryFail)
 	}
 
 	lower := strings.ToLower(resourceType)

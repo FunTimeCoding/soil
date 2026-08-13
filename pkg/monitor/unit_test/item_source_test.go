@@ -8,15 +8,5 @@ import (
 )
 
 func TestSource(t *testing.T) {
-	assert.NotNil(
-		t,
-		source.New(
-			0,
-			0,
-			0,
-			0,
-			0,
-			helper.SeverityWeights(0, 0, 0),
-		),
-	)
+	assert.NotNil(t, source.New(0, 0, 0, 0, 0, helper.SeverityWeights(0, 0, 0)))
 }

@@ -8,9 +8,7 @@ func (s *Service) RecordContext(
 	window int,
 	model string,
 ) {
-	updates := map[string]any{
-		constant.ContextPercentColumn: percent,
-	}
+	updates := map[string]any{constant.ContextPercentColumn: percent}
 
 	if window > 0 {
 		updates[constant.ContextWindowColumn] = window

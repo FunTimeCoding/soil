@@ -76,11 +76,7 @@ func TestPrintResults(t *testing.T) {
 					assert.False(t, hasBlocked)
 				},
 			)
-			assert.String(
-				t,
-				"pkg/foo/bar.go\npkg/foo/baz.go\n",
-				captured,
-			)
+			assert.String(t, "pkg/foo/bar.go\npkg/foo/baz.go\n", captured)
 		},
 	)
 	t.Run(

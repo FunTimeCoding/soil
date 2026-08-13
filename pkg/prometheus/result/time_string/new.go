@@ -7,9 +7,5 @@ func New(
 	t time.Time,
 	value string,
 ) *Result {
-	return &Result{
-		Metric: metric,
-		Time:   t,
-		Value:  value,
-	}
+	return &Result{Metric: metric, Time: t, Value: value}
 }

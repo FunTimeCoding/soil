@@ -27,14 +27,7 @@ func addColumnIfMissing(
 		var defaultValue *string
 		var pk int
 
-		if rows.Scan(
-			&cid,
-			&name,
-			&columnType,
-			&notNull,
-			&defaultValue,
-			&pk,
-		) != nil {
+		if rows.Scan(&cid, &name, &columnType, &notNull, &defaultValue, &pk) != nil {
 			return
 		}
 

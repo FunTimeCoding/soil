@@ -29,10 +29,7 @@ func TestImportNameAliased(t *testing.T) {
 }
 
 func TestImportNameNotFound(t *testing.T) {
-	f, _, e := parse.Source(
-		"test.go",
-		"package test\n\nimport \"fmt\"\n",
-	)
+	f, _, e := parse.Source("test.go", "package test\n\nimport \"fmt\"\n")
 	assert.Nil(t, e)
 	_, found := parse.ImportName(f, "github.com/example/reporter")
 	assert.False(t, found)

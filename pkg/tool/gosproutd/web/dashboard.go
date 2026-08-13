@@ -26,9 +26,6 @@ func (s *Server) dashboard(
 		constant.DashboardPath,
 		html.H3(gomponents.Text("Seeds")),
 		sortLinks(modified),
-		html.Div(
-			gomponents.Attr("sse-swap", event),
-			table,
-		),
+		html.Div(gomponents.Attr("sse-swap", event), table),
 	)
 }

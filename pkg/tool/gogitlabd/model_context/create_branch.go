@@ -27,10 +27,7 @@ func (s *Server) CreateBranch(
 
 	v, _, e := s.client.Branches.CreateBranch(
 		a.Project,
-		&gitlab.CreateBranchOptions{
-			Branch: &a.Branch,
-			Ref:    &a.Reference,
-		},
+		&gitlab.CreateBranchOptions{Branch: &a.Branch, Ref: &a.Reference},
 	)
 
 	if e != nil {

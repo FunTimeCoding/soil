@@ -20,8 +20,5 @@ func sectionCard(
 		nodes = append(nodes, entryItem(e, values))
 	}
 
-	return html.Article(
-		html.Class("board-section"),
-		gomponents.Group(nodes),
-	)
+	return html.Article(html.Class("board-section"), gomponents.Group(nodes))
 }

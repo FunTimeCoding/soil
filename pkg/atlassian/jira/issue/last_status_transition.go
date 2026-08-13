@@ -15,10 +15,7 @@ func (i *Issue) lastStatusTransition() time.Time {
 	for _, h := range i.Raw.Changelog.Histories {
 		for _, item := range h.Items {
 			if item.Field == "status" {
-				t, e := time.Parse(
-					constant.JiraTimeFormat,
-					h.Created,
-				)
+				t, e := time.Parse(constant.JiraTimeFormat, h.Created)
 
 				if e != nil {
 					continue

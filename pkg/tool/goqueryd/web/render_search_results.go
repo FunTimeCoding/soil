@@ -25,24 +25,16 @@ func (s *Server) renderSearchResults(
 			content,
 			html.P(
 				html.Small(
-					html.Em(
-						gomponents.Text("degraded to keyword search"),
-					),
+					html.Em(gomponents.Text("degraded to keyword search")),
 				),
 			),
 		)
 	}
 
-	content = append(
-		content,
-		searchFacets(facets, query, collection, metadata),
-	)
+	content = append(content, searchFacets(facets, query, collection, metadata))
 
 	if len(results) == 0 {
-		content = append(
-			content,
-			html.P(gomponents.Text("No results.")),
-		)
+		content = append(content, html.P(gomponents.Text("No results.")))
 	} else {
 		var rows []gomponents.Node
 
@@ -62,19 +54,9 @@ func (s *Server) renderSearchResults(
 							gomponents.Text(m.Title),
 						),
 					),
-					html.Td(
-						html.Small(
-							gomponents.Text(m.VirtualPath),
-						),
-					),
-					html.Td(
-						html.Small(
-							gomponents.Text(m.Snippet),
-						),
-					),
-					html.Td(
-						gomponents.Textf("%.2f", m.Score),
-					),
+					html.Td(html.Small(gomponents.Text(m.VirtualPath))),
+					html.Td(html.Small(gomponents.Text(m.Snippet))),
+					html.Td(gomponents.Textf("%.2f", m.Score)),
 				),
 			)
 		}

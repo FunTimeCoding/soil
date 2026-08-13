@@ -15,13 +15,7 @@ func messageBlock(m *message.Message) gomponents.Node {
 
 	return html.Div(
 		html.Class(class),
-		html.Div(
-			html.Class("message-role"),
-			gomponents.Text(m.Role),
-		),
-		html.Div(
-			html.Class("message-text"),
-			gomponents.Text(m.Text),
-		),
+		html.Div(html.Class("message-role"), gomponents.Text(m.Role)),
+		html.Div(html.Class("message-text"), gomponents.Text(m.Text)),
 	)
 }

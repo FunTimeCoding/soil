@@ -12,7 +12,5 @@ func New(
 	errors.FatalOnEmpty(host, "host")
 	errors.FatalOnEmpty(token, "token")
 
-	return &Client{
-		basic: basic.New(host, token),
-	}
+	return &Client{basic: basic.New(host, token)}
 }

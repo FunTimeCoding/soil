@@ -33,9 +33,6 @@ func (s *Server) AddReaction(
 	}
 
 	return response.SuccessAny(
-		map[string]any{
-			"post_id":    a.PostID,
-			"emoji_name": a.EmojiName,
-		},
+		map[string]any{"post_id": a.PostID, "emoji_name": a.EmojiName},
 	)
 }

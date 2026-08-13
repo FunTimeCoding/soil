@@ -8,9 +8,6 @@ import (
 
 func SpaceToUnderscore(s string) string {
 	return strings.TrimSpace(
-		regexp.MustCompile(`\s+`).ReplaceAllString(
-			s,
-			constant.Underscore,
-		),
+		regexp.MustCompile(`\s+`).ReplaceAllString(s, constant.Underscore),
 	)
 }

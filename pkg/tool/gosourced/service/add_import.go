@@ -25,12 +25,7 @@ func (s *Service) AddImport(
 	}
 
 	fileSet := token.NewFileSet()
-	file, e := decorator.ParseFile(
-		fileSet,
-		fullPath,
-		nil,
-		parser.ParseComments,
-	)
+	file, e := decorator.ParseFile(fileSet, fullPath, nil, parser.ParseComments)
 
 	if e != nil {
 		return nil, e

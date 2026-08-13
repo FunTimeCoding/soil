@@ -16,7 +16,9 @@ func (s *Server) register() {
 			mcp.WithString(
 				constant.MemoryName,
 				mcp.Required(),
-				mcp.Description("Short name for identification (e.g. 'retry policy', 'careful work')"),
+				mcp.Description(
+					"Short name for identification (e.g. 'retry policy', 'careful work')",
+				),
 			),
 			mcp.WithString(
 				constant.Content,
@@ -30,11 +32,15 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				constant.Type,
-				mcp.Description("Memory type: user, feedback, project, reference (default: feedback)"),
+				mcp.Description(
+					"Memory type: user, feedback, project, reference (default: feedback)",
+				),
 			),
 			mcp.WithString(
 				constant.Source,
-				mcp.Description("Session name of the caller (optional, for version attribution)"),
+				mcp.Description(
+					"Session name of the caller (optional, for version attribution)",
+				),
 			),
 			mcp.WithNumber(
 				constant.ParentIdentifier,
@@ -71,7 +77,9 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				constant.Source,
-				mcp.Description("Session name of the caller (optional, for version attribution)"),
+				mcp.Description(
+					"Session name of the caller (optional, for version attribution)",
+				),
 			),
 		),
 		s.update,
@@ -84,11 +92,15 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				constant.Topic,
-				mcp.Description("Session topic or context for relevance matching"),
+				mcp.Description(
+					"Session topic or context for relevance matching",
+				),
 			),
 			mcp.WithString(
 				constant.Scope,
-				mcp.Description("Memory scope to profile. Empty for the default scope."),
+				mcp.Description(
+					"Memory scope to profile. Empty for the default scope.",
+				),
 			),
 		),
 		s.profile,
@@ -103,13 +115,12 @@ func (s *Server) register() {
 				constant.Type,
 				mcp.Description("Filter by memory type"),
 			),
-			mcp.WithString(
-				constant.Tag,
-				mcp.Description("Filter by tag"),
-			),
+			mcp.WithString(constant.Tag, mcp.Description("Filter by tag")),
 			mcp.WithString(
 				constant.Scope,
-				mcp.Description("Memory scope. Empty for the default scope, all crosses scopes."),
+				mcp.Description(
+					"Memory scope. Empty for the default scope, all crosses scopes.",
+				),
 			),
 		),
 		s.list,
@@ -126,7 +137,9 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				constant.MemoryIdentifiers,
-				mcp.Description("Comma-separated memory IDs - returns an array, one entry per memory with its relations"),
+				mcp.Description(
+					"Comma-separated memory IDs - returns an array, one entry per memory with its relations",
+				),
 			),
 			mcp.WithBoolean(
 				constant.IncludeHistory,
@@ -134,7 +147,9 @@ func (s *Server) register() {
 			),
 			mcp.WithBoolean(
 				constant.Detail,
-				mcp.Description("Return the full record with timestamps, scope, and provenance (default false)"),
+				mcp.Description(
+					"Return the full record with timestamps, scope, and provenance (default false)",
+				),
 			),
 		),
 		s.get,
@@ -152,7 +167,9 @@ func (s *Server) register() {
 			),
 			mcp.WithBoolean(
 				constant.Detail,
-				mcp.Description("Return full records with timestamps, scope, and provenance (default false)"),
+				mcp.Description(
+					"Return full records with timestamps, scope, and provenance (default false)",
+				),
 			),
 		),
 		s.getGroup,
@@ -190,17 +207,18 @@ func (s *Server) register() {
 				constant.Type,
 				mcp.Description("Filter by memory type"),
 			),
-			mcp.WithString(
-				constant.Tag,
-				mcp.Description("Filter by tag"),
-			),
+			mcp.WithString(constant.Tag, mcp.Description("Filter by tag")),
 			mcp.WithString(
 				constant.Scope,
-				mcp.Description("Memory scope. Empty for the default scope, all crosses scopes."),
+				mcp.Description(
+					"Memory scope. Empty for the default scope, all crosses scopes.",
+				),
 			),
 			mcp.WithBoolean(
 				constant.Detail,
-				mcp.Description("Return full records with timestamps, scope, and type (default false)"),
+				mcp.Description(
+					"Return full records with timestamps, scope, and type (default false)",
+				),
 			),
 		),
 		s.search,
@@ -223,7 +241,9 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				constant.Type,
-				mcp.Description("Relation type: affinity, informs, grounds, mechanism, sequence, deep-dive (optional; affinity and informs read undirected, the rest source to target)"),
+				mcp.Description(
+					"Relation type: affinity, informs, grounds, mechanism, sequence, deep-dive (optional; affinity and informs read undirected, the rest source to target)",
+				),
 			),
 		),
 		s.relate,
@@ -277,7 +297,9 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				constant.ReplaceAll,
-				mcp.Description("Comma-separated tags to replace all existing tags with"),
+				mcp.Description(
+					"Comma-separated tags to replace all existing tags with",
+				),
 			),
 		),
 		s.tag,

@@ -8,10 +8,7 @@ func (r *Request) Add(
 ) *Request {
 	r.request.Messages = append(
 		r.request.Messages,
-		api.Message{
-			Role:    role,
-			Content: content,
-		},
+		api.Message{Role: role, Content: content},
 	)
 
 	return r

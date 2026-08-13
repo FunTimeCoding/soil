@@ -17,18 +17,12 @@ func Main(
 	r.Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
-	a.String(
-		argumentConstant.File,
-		"Procfile",
-		"Path to Procfile",
-	)
-	a.String(
-		"envrc",
-		".envrc",
-		"Path to .envrc file",
-	)
+	a.String(argumentConstant.File, "Procfile", "Path to Procfile")
+	a.String("envrc", ".envrc", "Path to .envrc file")
 	a.Parse(version, gitHash, buildDate)
-	a.NoPositionals("goprocessd is the daemon and takes no commands - control a running daemon with: goprocess run <command>")
+	a.NoPositionals(
+		"goprocessd is the daemon and takes no commands - control a running daemon with: goprocess run <command>",
+	)
 	o := option.New()
 	o.ProcfilePath = a.GetString(argumentConstant.File)
 	o.EnvrcPath = a.GetString("envrc")

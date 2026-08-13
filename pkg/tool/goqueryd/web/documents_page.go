@@ -46,12 +46,7 @@ func (s *Server) documentsPage(
 			w,
 			name,
 			constant.CollectionsPath,
-			html.P(
-				gomponents.Textf(
-					"Failed to load documents: %s",
-					e.Error(),
-				),
-			),
+			html.P(gomponents.Textf("Failed to load documents: %s", e.Error())),
 		)
 
 		return
@@ -70,9 +65,7 @@ func (s *Server) documentsPage(
 
 	if isHTMX {
 		errors.PanicOnError(
-			gomponents.Group(
-				[]gomponents.Node{table, navigation},
-			).Render(w),
+			gomponents.Group([]gomponents.Node{table, navigation}).Render(w),
 		)
 
 		return
@@ -94,28 +87,19 @@ func (s *Server) documentsPage(
 			html.Type("radio"),
 			html.Name(constant.SourceType),
 			html.Value(""),
-			gomponents.Attr(
-				"hx-get",
-				fmt.Sprintf("/documents/%s", name),
-			),
+			gomponents.Attr("hx-get", fmt.Sprintf("/documents/%s", name)),
 			gomponents.Attr("hx-include", "#documents-filters"),
 			gomponents.Attr("hx-target", "#documents-content"),
 			gomponents.Attr("hx-swap", "innerHTML"),
 		}
 
 		if sourceType == "" {
-			clearAttrs = append(
-				clearAttrs,
-				gomponents.Attr("checked", ""),
-			)
+			clearAttrs = append(clearAttrs, gomponents.Attr("checked", ""))
 		}
 
 		filters = append(
 			filters,
-			html.Label(
-				html.Input(clearAttrs...),
-				gomponents.Text("All"),
-			),
+			html.Label(html.Input(clearAttrs...), gomponents.Text("All")),
 		)
 
 		for value := range sourceTypeFacet.Values {
@@ -123,10 +107,7 @@ func (s *Server) documentsPage(
 				html.Type("radio"),
 				html.Name(constant.SourceType),
 				html.Value(value),
-				gomponents.Attr(
-					"hx-get",
-					fmt.Sprintf("/documents/%s", name),
-				),
+				gomponents.Attr("hx-get", fmt.Sprintf("/documents/%s", name)),
 				gomponents.Attr("hx-include", "#documents-filters"),
 				gomponents.Attr("hx-target", "#documents-content"),
 				gomponents.Attr("hx-swap", "innerHTML"),
@@ -151,28 +132,18 @@ func (s *Server) documentsPage(
 	}
 
 	var content []gomponents.Node
-	content = append(
-		content,
-		html.H3(gomponents.Text(name)),
-	)
+	content = append(content, html.H3(gomponents.Text(name)))
 
 	if len(filters) > 0 {
 		content = append(
 			content,
-			html.Form(
-				html.ID("documents-filters"),
-				gomponents.Group(filters),
-			),
+			html.Form(html.ID("documents-filters"), gomponents.Group(filters)),
 		)
 	}
 
 	content = append(
 		content,
-		html.Div(
-			html.ID("documents-content"),
-			table,
-			navigation,
-		),
+		html.Div(html.ID("documents-content"), table, navigation),
 	)
 	s.view.RenderPage(w, name, constant.CollectionsPath, content...)
 }

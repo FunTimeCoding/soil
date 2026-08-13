@@ -53,9 +53,7 @@ var (
 	}
 
 	// PhysicalObjectTypes a MAC address can be assigned to
-	PhysicalObjectTypes = []string{
-		InterfaceAddress,
-	}
+	PhysicalObjectTypes = []string{InterfaceAddress}
 )
 
 var NonSlug = regexp.MustCompile(`[^a-z0-9-]`)

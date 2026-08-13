@@ -23,9 +23,9 @@ func (c *Client) CreatePrefix(
 		q.SetDescription(description)
 	}
 
-	result, _, e := c.client.IpamAPI.IpamPrefixesCreate(
-		c.context,
-	).WritablePrefixRequest(*q).Execute()
+	result, _, e := c.client.IpamAPI.IpamPrefixesCreate(c.context).WritablePrefixRequest(
+		*q,
+	).Execute()
 
 	if e != nil {
 		return nil, e

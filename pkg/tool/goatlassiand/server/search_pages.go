@@ -13,12 +13,8 @@ func (s *Server) SearchPages(
 	result, e := s.confluence.Search(r.Params.Query)
 
 	if e != nil {
-		return server.SearchPages500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.SearchPages500JSONResponse(*s.captureDetail(e)), nil
 	}
 
-	return server.SearchPages200JSONResponse(
-		convert.ConfluencePages(result),
-	), nil
+	return server.SearchPages200JSONResponse(convert.ConfluencePages(result)), nil
 }

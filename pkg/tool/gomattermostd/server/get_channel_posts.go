@@ -20,12 +20,8 @@ func (s *Server) GetChannelPosts(
 	posts, f := s.client.PostsSince(channel, r.Params.Since)
 
 	if f != nil {
-		return server.GetChannelPosts500JSONResponse(
-			*s.captureDetail(f),
-		), nil
+		return server.GetChannelPosts500JSONResponse(*s.captureDetail(f)), nil
 	}
 
-	return server.GetChannelPosts200JSONResponse(
-		convertPosts(posts),
-	), nil
+	return server.GetChannelPosts200JSONResponse(convertPosts(posts)), nil
 }

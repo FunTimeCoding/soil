@@ -32,10 +32,7 @@ func RemoveImport(
 			)
 
 			if len(declaration.Specs) == 0 {
-				file.Decls = append(
-					file.Decls[:i],
-					file.Decls[i+1:]...,
-				)
+				file.Decls = append(file.Decls[:i], file.Decls[i+1:]...)
 			}
 
 			return true

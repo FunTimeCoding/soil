@@ -17,10 +17,7 @@ func TestPeekQueueDoesNotConsume(t *testing.T) {
 	messages := entriesByKind(peeked, constant.QueueMessage)
 	assert.Count(t, 1, messages)
 	drained := s.Check("session-1")
-	drainedMessages := entriesByKind(
-		drained.Entries,
-		constant.QueueMessage,
-	)
+	drainedMessages := entriesByKind(drained.Entries, constant.QueueMessage)
 	assert.Count(t, 1, drainedMessages)
 }
 

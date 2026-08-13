@@ -19,14 +19,7 @@ func (s *Service) Client(instance string) (*prometheus.Client, error) {
 		return nil, fmt.Errorf("unknown instance: %s", instance)
 	}
 
-	c := prometheus.New(
-		i.Host,
-		i.Port,
-		i.Secure,
-		i.User,
-		i.Password,
-		"",
-	)
+	c := prometheus.New(i.Host, i.Port, i.Secure, i.User, i.Password, "")
 	s.clients[instance] = c
 
 	return c, nil

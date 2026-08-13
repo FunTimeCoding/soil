@@ -12,11 +12,7 @@ func Hub(r *remote.Remote) {
 	l := git.ParseLocator(r.Locator)
 
 	if l == nil {
-		system.Exitf(
-			1,
-			"could not parse remote locator: %s\n",
-			r.Locator,
-		)
+		system.Exitf(1, "could not parse remote locator: %s\n", r.Locator)
 
 		return
 	}

@@ -10,10 +10,7 @@ func (s *Store) EventMetadataByEvents(
 	}
 
 	var rows []event_metadata.EventMetadata
-	s.database.Where(
-		"event_identifier IN ?",
-		identifiers,
-	).Find(&rows)
+	s.database.Where("event_identifier IN ?", identifiers).Find(&rows)
 	result := map[uint]map[string]string{}
 
 	for _, row := range rows {

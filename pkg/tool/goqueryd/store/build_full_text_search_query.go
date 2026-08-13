@@ -47,15 +47,9 @@ func BuildFullTextSearchQuery(query string) string {
 
 				if term != "" {
 					if negated {
-						negative = append(
-							negative,
-							join.Empty(`"`, term, `"`),
-						)
+						negative = append(negative, join.Empty(`"`, term, `"`))
 					} else {
-						positive = append(
-							positive,
-							join.Empty(`"`, term, `"`),
-						)
+						positive = append(positive, join.Empty(`"`, term, `"`))
 					}
 				}
 			} else {
@@ -63,15 +57,9 @@ func BuildFullTextSearchQuery(query string) string {
 
 				if term != "" {
 					if negated {
-						negative = append(
-							negative,
-							join.Empty(`"`, term, `"*`),
-						)
+						negative = append(negative, join.Empty(`"`, term, `"*`))
 					} else {
-						positive = append(
-							positive,
-							join.Empty(`"`, term, `"*`),
-						)
+						positive = append(positive, join.Empty(`"`, term, `"*`))
 					}
 				}
 			}

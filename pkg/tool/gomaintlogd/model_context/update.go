@@ -55,10 +55,7 @@ func (s *Server) update(
 		t, g := time.Parse(time.RFC3339, stamp)
 
 		if g != nil {
-			return response.Fail(
-				"invalid timestamp format: %v",
-				g,
-			)
+			return response.Fail("invalid timestamp format: %v", g)
 		}
 
 		e.Timestamp = t

@@ -35,17 +35,13 @@ func (s *Store) UpsertEvent(
 	}
 
 	if result.RowsAffected > 0 {
-		if e := s.database.Model(&existing).Update(
-			"actor",
-			actor,
-		).Error; e != nil {
+		if e := s.database.Model(&existing).Update("actor", actor).Error; e != nil {
 			return e
 		}
 
-		if e := s.database.Where(
-			"event_identifier = ?",
-			existing.Identifier,
-		).Delete(event_metadata.Stub()).Error; e != nil {
+		if e := s.database.Where("event_identifier = ?", existing.Identifier).Delete(
+			event_metadata.Stub(),
+		).Error; e != nil {
 			return e
 		}
 

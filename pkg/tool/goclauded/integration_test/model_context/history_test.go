@@ -43,10 +43,7 @@ func TestHistorySkip(t *testing.T) {
 	a.Announce(a.Name(), "topic-charlie")
 	history := a.MustCallTool(
 		constant.History,
-		map[string]any{
-			constant.Limit:  float64(1),
-			constant.Offset: float64(1),
-		},
+		map[string]any{constant.Limit: float64(1), constant.Offset: float64(1)},
 	)
 	assert.StringContains(t, "topic-bravo", history)
 	assert.StringNotContains(t, "topic-charlie", history)
@@ -67,9 +64,7 @@ func TestHistoryAllKinds(t *testing.T) {
 	)
 	a.MustCallTool(
 		constant.Complete,
-		map[string]any{
-			constant.Message: "finished",
-		},
+		map[string]any{constant.Message: "finished"},
 	)
 	history := a.MustCallTool(constant.History, map[string]any{})
 	assert.StringContains(t, "announced: working", history)

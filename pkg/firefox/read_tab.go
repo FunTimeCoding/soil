@@ -10,10 +10,7 @@ func (c *Client) ReadTab(
 	identifier int,
 	raw bool,
 ) (*content.Content, error) {
-	r, e := c.send(
-		"read_tab",
-		map[string]any{"tab_id": identifier, "raw": raw},
-	)
+	r, e := c.send("read_tab", map[string]any{"tab_id": identifier, "raw": raw})
 
 	if e != nil {
 		return content.Stub(), fmt.Errorf("read tab: %w", e)

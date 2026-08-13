@@ -23,10 +23,7 @@ func TestDeleteResource(t *testing.T) {
 	result, f := s.Service.ListResources(
 		context.Background(),
 		"test",
-		service.ListQuery{
-			ResourceType: "pods",
-			Namespace:    "default",
-		},
+		service.ListQuery{ResourceType: "pods", Namespace: "default"},
 	)
 	assert.Nil(t, f)
 	assert.Count(t, 0, result)

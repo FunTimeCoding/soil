@@ -24,7 +24,5 @@ func (s *Server) PostImpressions(
 		), nil
 	}
 
-	return server.PostImpressions200JSONResponse{
-		Identifier: int(identifier),
-	}, nil
+	return server.PostImpressions200JSONResponse{Identifier: int(identifier)}, nil
 }

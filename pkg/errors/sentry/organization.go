@@ -7,10 +7,7 @@ import (
 )
 
 func (c *Client) Organization(slug string) (*response.Organization, error) {
-	b, e := c.basic.Get(
-		fmt.Sprintf("organizations/%s", slug),
-		nil,
-	)
+	b, e := c.basic.Get(fmt.Sprintf("organizations/%s", slug), nil)
 
 	if e != nil {
 		return nil, e

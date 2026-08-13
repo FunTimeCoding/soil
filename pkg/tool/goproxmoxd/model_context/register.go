@@ -42,12 +42,10 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.GetNodeStatus,
-			mcp.WithDescription("Get detailed resource status for a Proxmox node"),
-			mcp.WithString(
-				"node",
-				mcp.Required(),
-				mcp.Description("Node name"),
+			mcp.WithDescription(
+				"Get detailed resource status for a Proxmox node",
 			),
+			mcp.WithString("node", mcp.Required(), mcp.Description("Node name")),
 		),
 		mcp.NewTypedToolHandler(s.GetNodeStatus),
 	)
@@ -236,11 +234,7 @@ func (s *Server) register() {
 				mcp.Required(),
 				mcp.Description("Target node name"),
 			),
-			mcp.WithString(
-				"name",
-				mcp.Required(),
-				mcp.Description("VM name"),
-			),
+			mcp.WithString("name", mcp.Required(), mcp.Description("VM name")),
 			mcp.WithNumber(
 				"identifier",
 				mcp.Description("VMID (auto-allocated when omitted)"),
@@ -260,11 +254,15 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				"disk_import",
-				mcp.Description("Import-from path for disk image, e.g. local:import/debian-13-generic-amd64.qcow2"),
+				mcp.Description(
+					"Import-from path for disk image, e.g. local:import/debian-13-generic-amd64.qcow2",
+				),
 			),
 			mcp.WithString(
 				"cdrom",
-				mcp.Description("ISO volume to mount as CD-ROM, e.g. local:iso/debian-13.iso. Boots from CD-ROM first when set."),
+				mcp.Description(
+					"ISO volume to mount as CD-ROM, e.g. local:iso/debian-13.iso. Boots from CD-ROM first when set.",
+				),
 			),
 			mcp.WithString(
 				"bridge",
@@ -293,7 +291,9 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				"ip_config",
-				mcp.Description("Cloud-init IP config (default ip=dhcp when cloud-init is used)"),
+				mcp.Description(
+					"Cloud-init IP config (default ip=dhcp when cloud-init is used)",
+				),
 			),
 			mcp.WithString(
 				"search_domain",
@@ -307,13 +307,12 @@ func (s *Server) register() {
 				"start",
 				mcp.Description("Start VM after creation (default false)"),
 			),
-			mcp.WithString(
-				"tags",
-				mcp.Description("Semicolon-separated tags"),
-			),
+			mcp.WithString("tags", mcp.Description("Semicolon-separated tags")),
 			mcp.WithString(
 				"extras",
-				mcp.Description("Additional Proxmox options as comma-separated key=value pairs"),
+				mcp.Description(
+					"Additional Proxmox options as comma-separated key=value pairs",
+				),
 			),
 		),
 		mcp.NewTypedToolHandler(s.CreateMachine),
@@ -344,13 +343,12 @@ func (s *Server) register() {
 			),
 			mcp.WithNumber("cores", mcp.Description("CPU cores")),
 			mcp.WithNumber("memory", mcp.Description("Memory in MiB")),
-			mcp.WithString(
-				"description",
-				mcp.Description("VM description"),
-			),
+			mcp.WithString("description", mcp.Description("VM description")),
 			mcp.WithString(
 				"delete",
-				mcp.Description("Comma-separated field names to clear, e.g. tags,description"),
+				mcp.Description(
+					"Comma-separated field names to clear, e.g. tags,description",
+				),
 			),
 		),
 		mcp.NewTypedToolHandler(s.UpdateMachine),
@@ -377,11 +375,15 @@ func (s *Server) register() {
 			),
 			mcp.WithNumber(
 				"new_identifier",
-				mcp.Description("VMID for the clone (auto-allocated when omitted)"),
+				mcp.Description(
+					"VMID for the clone (auto-allocated when omitted)",
+				),
 			),
 			mcp.WithBoolean(
 				"full",
-				mcp.Description("Full clone instead of linked clone (default false)"),
+				mcp.Description(
+					"Full clone instead of linked clone (default false)",
+				),
 			),
 			mcp.WithString(
 				"storage",
@@ -389,7 +391,9 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				"snapshot",
-				mcp.Description("Clone from a specific snapshot instead of current state"),
+				mcp.Description(
+					"Clone from a specific snapshot instead of current state",
+				),
 			),
 		),
 		mcp.NewTypedToolHandler(s.CloneMachine),
@@ -411,7 +415,9 @@ func (s *Server) register() {
 			),
 			mcp.WithBoolean(
 				"purge",
-				mcp.Description("Remove from cluster config and associated resources (default false)"),
+				mcp.Description(
+					"Remove from cluster config and associated resources (default false)",
+				),
 			),
 		),
 		mcp.NewTypedToolHandler(s.DeleteMachine),
@@ -581,14 +587,8 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ListNetworks,
-			mcp.WithDescription(
-				"List network interfaces on a Proxmox node",
-			),
-			mcp.WithString(
-				"node",
-				mcp.Required(),
-				mcp.Description("Node name"),
-			),
+			mcp.WithDescription("List network interfaces on a Proxmox node"),
+			mcp.WithString("node", mcp.Required(), mcp.Description("Node name")),
 		),
 		mcp.NewTypedToolHandler(s.ListNetworks),
 	)
@@ -598,11 +598,7 @@ func (s *Server) register() {
 			mcp.WithDescription(
 				"List storage backends on a node. Shows type, content types, and usage.",
 			),
-			mcp.WithString(
-				"node",
-				mcp.Required(),
-				mcp.Description("Node name"),
-			),
+			mcp.WithString("node", mcp.Required(), mcp.Description("Node name")),
 		),
 		mcp.NewTypedToolHandler(s.ListStorages),
 	)
@@ -612,11 +608,7 @@ func (s *Server) register() {
 			mcp.WithDescription(
 				"List content on a storage backend. Returns ISOs, disk images, templates, and backups with their volume identifiers.",
 			),
-			mcp.WithString(
-				"node",
-				mcp.Required(),
-				mcp.Description("Node name"),
-			),
+			mcp.WithString("node", mcp.Required(), mcp.Description("Node name")),
 			mcp.WithString(
 				"storage",
 				mcp.Required(),
@@ -631,11 +623,7 @@ func (s *Server) register() {
 			mcp.WithDescription(
 				"Download a file from a URL to a storage backend. Use content 'import' for qcow2 cloud images, 'iso' for ISOs, 'vztmpl' for container templates. Waits for the download to complete.",
 			),
-			mcp.WithString(
-				"node",
-				mcp.Required(),
-				mcp.Description("Node name"),
-			),
+			mcp.WithString("node", mcp.Required(), mcp.Description("Node name")),
 			mcp.WithString(
 				"storage",
 				mcp.Required(),
@@ -693,9 +681,7 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ListSnippets,
-			mcp.WithDescription(
-				"List snippet files on the Proxmox host",
-			),
+			mcp.WithDescription("List snippet files on the Proxmox host"),
 		),
 		mcp.NewTypedToolHandler(s.ListSnippets),
 	)

@@ -14,10 +14,7 @@ func TestDivisions(t *testing.T) {
 		[]string{"Example DT", "Example DD"},
 		hypertext.Divisions(
 			hypertext.Document(
-				fixture.File(
-					constant.HypertextPath,
-					"test.html",
-				),
+				fixture.File(constant.HypertextPath, "test.html"),
 			),
 		),
 	)

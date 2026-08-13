@@ -19,7 +19,9 @@ func (s *Server) DeleteContainerSnapshot(
 	c, e := s.service.Client(instance)
 
 	if e != nil {
-		return server.DeleteContainerSnapshot500JSONResponse(*s.captureDetail(e)), nil
+		return server.DeleteContainerSnapshot500JSONResponse(
+			*s.captureDetail(e),
+		), nil
 	}
 
 	node := ""
@@ -37,10 +39,14 @@ func (s *Server) DeleteContainerSnapshot(
 
 	if e != nil {
 		if not_found.Is(e) {
-			return server.DeleteContainerSnapshot404JSONResponse{Error: e.Error()}, nil
+			return server.DeleteContainerSnapshot404JSONResponse{
+				Error: e.Error(),
+			}, nil
 		}
 
-		return server.DeleteContainerSnapshot500JSONResponse(*s.captureDetail(e)), nil
+		return server.DeleteContainerSnapshot500JSONResponse(
+			*s.captureDetail(e),
+		), nil
 	}
 
 	return server.DeleteContainerSnapshot200JSONResponse{TaskId: taskID}, nil

@@ -12,11 +12,7 @@ func (c *Client) login() {
 	b, code, e := c.exchange(
 		http.MethodPost,
 		constant.SaltLoginPath,
-		loginRequest{
-			Username: c.user,
-			Password: c.password,
-			EAuth:    c.eauth,
-		},
+		loginRequest{Username: c.user, Password: c.password, EAuth: c.eauth},
 	)
 	errors.PanicOnError(e)
 

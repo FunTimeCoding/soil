@@ -20,7 +20,5 @@ func (s *Server) listInstances(
 		active, _ = s.service.ActiveInstance(session.SessionID())
 	}
 
-	return response.SuccessAny(
-		convert.Instances(s.service.Instances(), active),
-	)
+	return response.SuccessAny(convert.Instances(s.service.Instances(), active))
 }

@@ -33,9 +33,7 @@ func (s *Server) heatmap(
 	var tableRows []gomponents.Node
 
 	for _, row := range rows {
-		cells := []gomponents.Node{
-			html.Td(gomponents.Text(row.Tool)),
-		}
+		cells := []gomponents.Node{html.Td(gomponents.Text(row.Tool))}
 
 		if showSurface {
 			cells = append(cells, html.Td(gomponents.Text(row.Surface)))
@@ -52,9 +50,7 @@ func (s *Server) heatmap(
 		tableRows = append(tableRows, html.Tr(cells...))
 	}
 
-	headerCells := []gomponents.Node{
-		html.Th(gomponents.Text("Tool")),
-	}
+	headerCells := []gomponents.Node{html.Th(gomponents.Text("Tool"))}
 
 	if showSurface {
 		headerCells = append(headerCells, html.Th(gomponents.Text("Surface")))

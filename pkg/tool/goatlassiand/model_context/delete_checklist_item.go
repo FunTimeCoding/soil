@@ -33,11 +33,7 @@ func (s *Server) deleteChecklistItem(
 	i := int(index)
 
 	if i < 1 || i > len(items) {
-		return response.Fail(
-			"index %d out of range (1-%d)",
-			i,
-			len(items),
-		)
+		return response.Fail("index %d out of range (1-%d)", i, len(items))
 	}
 
 	items = append(items[:i-1], items[i:]...)

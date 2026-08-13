@@ -120,27 +120,17 @@ const NodeNotReady = "KubeNodeNotReady" // Alert name
 var (
 	AlertmanagerFormat = constant.ColorFormat.Copy().Tag(constant.TagComment)
 
-	AlertStates = []string{
-		ActiveState,
-		SuppressedState,
-	}
-	Severities = []string{
+	AlertStates = []string{ActiveState, SuppressedState}
+	Severities  = []string{
 		CriticalSeverity,
 		WarningSeverity,
 		InformationSeverity,
 		NoneSeverity,
 		UnknownSeverity,
 	}
-	SevereSeverities = []string{
-		CriticalSeverity,
-		WarningSeverity,
-	}
-	RedSeverities = []string{
-		CriticalSeverity,
-	}
-	YellowSeverities = []string{
-		WarningSeverity,
-	}
+	SevereSeverities = []string{CriticalSeverity, WarningSeverity}
+	RedSeverities    = []string{CriticalSeverity}
+	YellowSeverities = []string{WarningSeverity}
 )
 
 const (

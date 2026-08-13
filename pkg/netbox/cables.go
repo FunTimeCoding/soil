@@ -6,9 +6,9 @@ import (
 )
 
 func (c *Client) Cables() ([]*cable.Cable, error) {
-	result, _, e := c.client.DcimAPI.DcimCablesList(
-		c.context,
-	).Limit(constant.PageLimit).Execute()
+	result, _, e := c.client.DcimAPI.DcimCablesList(c.context).Limit(
+		constant.PageLimit,
+	).Execute()
 
 	if e != nil {
 		return nil, e

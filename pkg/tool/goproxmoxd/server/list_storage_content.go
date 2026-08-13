@@ -12,25 +12,19 @@ func (s *Server) ListStorageContent(
 	instance, e := s.resolveInstance(r.Params.Instance)
 
 	if e != nil {
-		return server.ListStorageContent400JSONResponse(
-			*clientError(e),
-		), nil
+		return server.ListStorageContent400JSONResponse(*clientError(e)), nil
 	}
 
 	c, e := s.service.Client(instance)
 
 	if e != nil {
-		return server.ListStorageContent500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.ListStorageContent500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	content, e := s.service.ListStorageContent(c, r.Name, r.Storage)
 
 	if e != nil {
-		return server.ListStorageContent500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.ListStorageContent500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	var result server.ListStorageContent200JSONResponse

@@ -34,10 +34,7 @@ func Discover(directory string) []string {
 						name == "testdata" ||
 						name == "tmp" ||
 						name != constant.CurrentDirectory &&
-							strings.HasPrefix(
-								name,
-								constant.CurrentDirectory,
-							) {
+							strings.HasPrefix(name, constant.CurrentDirectory) {
 						return filepath.SkipDir
 					}
 

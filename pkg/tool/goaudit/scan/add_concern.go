@@ -7,8 +7,5 @@ func (s *Service) addConcern(
 	text string,
 	path string,
 ) {
-	s.Concerns = append(
-		s.Concerns,
-		concern.NewPackage(key, text, path),
-	)
+	s.Concerns = append(s.Concerns, concern.NewPackage(key, text, path))
 }

@@ -18,15 +18,10 @@ func (s *Server) GetSnippet(
 	c, e := s.service.SSHClient(instance)
 
 	if e != nil {
-		return server.GetSnippet500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.GetSnippet500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	b := c.ReadFile(snippetPath(r.Name))
 
-	return server.GetSnippet200JSONResponse{
-		Name:    r.Name,
-		Content: string(b),
-	}, nil
+	return server.GetSnippet200JSONResponse{Name: r.Name, Content: string(b)}, nil
 }

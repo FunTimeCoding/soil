@@ -17,13 +17,7 @@ func listDeviceJournalEntries(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			fmt.Println(
-				c.ListDeviceJournalEntries(
-					arguments[0],
-					limit,
-					offset,
-				),
-			)
+			fmt.Println(c.ListDeviceJournalEntries(arguments[0], limit, offset))
 		},
 	}
 	result.Flags().Int32Var(
@@ -32,12 +26,7 @@ func listDeviceJournalEntries(c *client.Client) *cobra.Command {
 		0,
 		"maximum entries to return (optional)",
 	)
-	result.Flags().Int32Var(
-		&offset,
-		"offset",
-		0,
-		"entries to skip (optional)",
-	)
+	result.Flags().Int32Var(&offset, "offset", 0, "entries to skip (optional)")
 
 	return result
 }

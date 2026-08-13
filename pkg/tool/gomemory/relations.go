@@ -38,10 +38,7 @@ func relations(l **client.Client) *cobra.Command {
 				params.Scope = &scope
 			}
 
-			r, e := (*l).GetRelations(
-				context.Background(),
-				params,
-			)
+			r, e := (*l).GetRelations(context.Background(), params)
 			errors.PanicOnError(e)
 			defer errors.PanicClose(r.Body)
 			body, e := io.ReadAll(r.Body)
@@ -49,10 +46,7 @@ func relations(l **client.Client) *cobra.Command {
 			var rows []client.Relation
 			errors.PanicOnError(json.Unmarshal(body, &rows))
 			w := tabwriter.NewWriter(os.Stdout, 0, 4, 2, ' ', 0)
-			_, e = fmt.Fprintln(
-				w,
-				"SOURCE\tSCOPE\tTYPE\tTARGET\tSCOPE",
-			)
+			_, e = fmt.Fprintln(w, "SOURCE\tSCOPE\tTYPE\tTARGET\tSCOPE")
 			errors.PanicOnError(e)
 
 			for _, row := range rows {
@@ -72,18 +66,8 @@ func relations(l **client.Client) *cobra.Command {
 			fmt.Printf("%d relations\n", len(rows))
 		},
 	}
-	c.Flags().StringVar(
-		&relationType,
-		"type",
-		"",
-		"filter by relation type",
-	)
-	c.Flags().BoolVar(
-		&untyped,
-		"untyped",
-		false,
-		"show only untyped relations",
-	)
+	c.Flags().StringVar(&relationType, "type", "", "filter by relation type")
+	c.Flags().BoolVar(&untyped, "untyped", false, "show only untyped relations")
 	c.Flags().StringVar(
 		&scope,
 		"scope",

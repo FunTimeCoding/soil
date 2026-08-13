@@ -10,9 +10,7 @@ func (a *Alert) enrich(
 	p *option.Alert,
 	t *team.Team,
 ) *Alert {
-	a.MonitorIdentifier = constant.GoGenie.IntegerIdentifier(
-		a.SmallIdentifier,
-	)
+	a.MonitorIdentifier = constant.GoGenie.IntegerIdentifier(a.SmallIdentifier)
 	a.TeamKey = p.Team.KeyByIdentifier(t.Identifier)
 	a.Team = t
 	a.TeamMap = p.Team

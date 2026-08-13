@@ -24,10 +24,7 @@ func TestMoveBuildTagCarry(t *testing.T) {
 	testutil.AssertBlocked(t, r, 0)
 	moved := readFixtureFile(t, d, "pkg/tagged/hold/hold.go")
 	assertFormatted(t, moved)
-	assert.True(
-		t,
-		strings.HasPrefix(moved, "//go:build local\n\npackage hold"),
-	)
+	assert.True(t, strings.HasPrefix(moved, "//go:build local\n\npackage hold"))
 	assert.StringContains(t, "func Flag", moved)
 }
 

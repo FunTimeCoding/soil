@@ -6,9 +6,9 @@ import (
 )
 
 func (c *Client) RackTypes() ([]*rack_type.Type, error) {
-	result, _, e := c.client.DcimAPI.DcimRackTypesList(
-		c.context,
-	).Limit(constant.PageLimit).Execute()
+	result, _, e := c.client.DcimAPI.DcimRackTypesList(c.context).Limit(
+		constant.PageLimit,
+	).Execute()
 
 	if e != nil {
 		return nil, e

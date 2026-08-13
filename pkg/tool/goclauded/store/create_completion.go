@@ -10,12 +10,6 @@ func (s *Store) CreateCompletion(
 	summary string,
 ) error {
 	return s.database.Create(
-		completion.New(
-			sessionIdentifier,
-			name,
-			kind,
-			topic,
-			summary,
-		),
+		completion.New(sessionIdentifier, name, kind, topic, summary),
 	).Error
 }

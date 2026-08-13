@@ -19,10 +19,7 @@ func (s *Server) frameHint(identifier string) string {
 			continue
 		}
 
-		lines = append(
-			lines,
-			fmt.Sprintf("  %s %s", t.Identifier, t.Locator),
-		)
+		lines = append(lines, fmt.Sprintf("  %s %s", t.Identifier, t.Locator))
 	}
 
 	if len(lines) == 0 {

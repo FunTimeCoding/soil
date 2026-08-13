@@ -19,11 +19,7 @@ func (s *Service) checkStaleDirectories(
 	}
 
 	if v.DirectoryExists(filepath.Join(path, "toolset")) {
-		s.addConcern(
-			constant.StaleToolsetKey,
-			constant.StaleToolsetText,
-			path,
-		)
+		s.addConcern(constant.StaleToolsetKey, constant.StaleToolsetText, path)
 	}
 
 	if v.DirectoryExists(filepath.Join(path, "poller")) {

@@ -14,12 +14,7 @@ func printNotation(
 ) {
 	r := report.New()
 
-	for _, e := range report.Trim(
-		v,
-		r,
-		o.All,
-		monitor.GoGenie,
-	) {
+	for _, e := range report.Trim(v, r, o.All, monitor.GoGenie) {
 		var s constant.Severity
 
 		if e.Acknowledged {

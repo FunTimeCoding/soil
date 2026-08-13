@@ -17,29 +17,15 @@ func TestChanger(t *testing.T) {
 	assert.String(t, "Banana", a1.Name("Banana"))
 	assert.Any(
 		t,
-		[]*alert.Alert{
-			{Name: "Apple"},
-			{Name: "Orange"},
-		},
-		a1.Run(
-			[]*alert.Alert{
-				{Name: "BigApple"},
-				{Name: "ComplicatedOrange"},
-			},
-		),
+		[]*alert.Alert{{Name: "Apple"}, {Name: "Orange"}},
+		a1.Run([]*alert.Alert{{Name: "BigApple"}, {Name: "ComplicatedOrange"}}),
 	)
 	a2 := field_changer.New()
 	a2.AddName("BigApple", "Apple")
-	a2.AddSeverity(
-		"Apple",
-		constant.WarningSeverity,
-		constant.CriticalSeverity,
-	)
+	a2.AddSeverity("Apple", constant.WarningSeverity, constant.CriticalSeverity)
 	assert.Any(
 		t,
-		[]*alert.Alert{
-			{Name: "Apple", Severity: "critical"},
-		},
+		[]*alert.Alert{{Name: "Apple", Severity: "critical"}},
 		a2.Run(
 			[]*alert.Alert{
 				{Name: "BigApple", Severity: constant.WarningSeverity},

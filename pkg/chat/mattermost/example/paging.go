@@ -20,13 +20,9 @@ func Paging() {
 	c := m.MustTeamChannel(channel)
 	fmt.Printf("Channel: %s\n", c.Name)
 	raw := model.NewAPIv4Client(
-		locator.New(
-			environment.Required(constant.MattermostHostEnvironment),
-		).String(),
+		locator.New(environment.Required(constant.MattermostHostEnvironment)).String(),
 	)
-	raw.SetOAuthToken(
-		environment.Required(constant.MattermostTokenEnvironment),
-	)
+	raw.SetOAuthToken(environment.Required(constant.MattermostTokenEnvironment))
 	background := context.Background()
 	page, _, e := raw.GetPostsForChannel(
 		background,

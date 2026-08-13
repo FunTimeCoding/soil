@@ -20,10 +20,7 @@ func (s *Silence) formatComment(f *option.Format) string {
 	}
 
 	if f.UseColor {
-		return fmt.Sprintf(
-			"Comment: %s",
-			constant.Magenta("%s", s.Comment),
-		)
+		return fmt.Sprintf("Comment: %s", constant.Magenta("%s", s.Comment))
 	}
 
 	return s.Comment

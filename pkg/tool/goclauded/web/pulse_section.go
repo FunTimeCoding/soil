@@ -14,10 +14,7 @@ func (s *Server) pulseSection(identifier string) gomponents.Node {
 	var nodes []gomponents.Node
 
 	if len(pulses) > 0 {
-		nodes = append(
-			nodes,
-			html.H4(gomponents.Text("Pulses")),
-		)
+		nodes = append(nodes, html.H4(gomponents.Text("Pulses")))
 		var rows []gomponents.Node
 
 		for _, p := range pulses {
@@ -31,10 +28,7 @@ func (s *Server) pulseSection(identifier string) gomponents.Node {
 				rows,
 				html.P(
 					html.Small(
-						gomponents.Textf(
-							"%s ",
-							p.CreatedAt.Format("15:04"),
-						),
+						gomponents.Textf("%s ", p.CreatedAt.Format("15:04")),
 					),
 					html.Em(gomponents.Textf("%s ", from)),
 					gomponents.Text(p.Body),
@@ -59,10 +53,7 @@ func (s *Server) pulseSection(identifier string) gomponents.Node {
 				gomponents.Attr("placeholder", "pulse..."),
 				gomponents.Attr("autocomplete", "off"),
 			),
-			html.Button(
-				html.Type("submit"),
-				gomponents.Text("Send"),
-			),
+			html.Button(html.Type("submit"), gomponents.Text("Send")),
 		),
 	)
 

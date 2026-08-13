@@ -13,10 +13,7 @@ func (s *Store) EditEvent(
 ) (*event.Event, error) {
 	var existing event.Event
 
-	if e := s.database.Where(
-		"identifier = ?",
-		identifier,
-	).First(&existing).Error; e != nil {
+	if e := s.database.Where("identifier = ?", identifier).First(&existing).Error; e != nil {
 		if relational.NotFound(e) {
 			return nil, fmt.Errorf(
 				"%w: %d",
@@ -30,11 +27,7 @@ func (s *Store) EditEvent(
 
 	key := editableKey(existing.Kind)
 
-	if e := s.UpdateEventMetadata(
-		identifier,
-		key,
-		value,
-	); e != nil {
+	if e := s.UpdateEventMetadata(identifier, key, value); e != nil {
 		return nil, e
 	}
 

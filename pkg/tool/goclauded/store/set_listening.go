@@ -6,13 +6,7 @@ func (s *Store) SetListening(
 	name string,
 	listening bool,
 ) error {
-	return s.database.Model(session.Stub()).Where(
-		"callsign = ?",
-		name,
-	).Updates(
-		map[string]any{
-			"listening": listening,
-			"last_seen": s.clock(),
-		},
+	return s.database.Model(session.Stub()).Where("callsign = ?", name).Updates(
+		map[string]any{"listening": listening, "last_seen": s.clock()},
 	).Error
 }

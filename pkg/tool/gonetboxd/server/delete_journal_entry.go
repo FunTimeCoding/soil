@@ -10,9 +10,7 @@ func (s *Server) DeleteJournalEntry(
 	r server.DeleteJournalEntryRequestObject,
 ) (server.DeleteJournalEntryResponseObject, error) {
 	if e := s.client.DeleteJournalEntry(r.Identifier); e != nil {
-		return server.DeleteJournalEntry500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.DeleteJournalEntry500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	return server.DeleteJournalEntry204Response{}, nil

@@ -34,10 +34,7 @@ func Main(
 
 	if true {
 		gorilla.Run(
-			web.AddressHostPort(
-				webConstant.Localhost,
-				webConstant.ListenPort,
-			),
+			web.AddressHostPort(webConstant.Localhost, webConstant.ListenPort),
 		)
 	}
 }

@@ -8,9 +8,7 @@ func (c *Client) UpdateGroup(
 	color string,
 	collapsed *bool,
 ) error {
-	parameters := map[string]any{
-		"group_id": groupIdentifier,
-	}
+	parameters := map[string]any{"group_id": groupIdentifier}
 
 	if title != "" {
 		parameters["title"] = title

@@ -25,15 +25,9 @@ func (s *Store) MoveUp(identifier uint) {
 
 	originalPosition := current.Position
 	errors.PanicOnError(
-		s.mapper.Model(&current).Update(
-			"position",
-			above.Position,
-		).Error,
+		s.mapper.Model(&current).Update("position", above.Position).Error,
 	)
 	errors.PanicOnError(
-		s.mapper.Model(&above).Update(
-			"position",
-			originalPosition,
-		).Error,
+		s.mapper.Model(&above).Update("position", originalPosition).Error,
 	)
 }

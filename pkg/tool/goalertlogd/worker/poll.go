@@ -17,9 +17,7 @@ func (w *Worker) Poll() {
 
 	defer func() {
 		if w.metrics != nil {
-			w.metrics.pollDuration.Observe(
-				time.Since(start).Seconds(),
-			)
+			w.metrics.pollDuration.Observe(time.Since(start).Seconds())
 		}
 	}()
 	alerts, _ := w.client.MustAlerts(advanced_option.New(), nil)

@@ -39,11 +39,7 @@ func (s *Server) editChecklistItem(
 	j := int(index)
 
 	if j < 1 || j > len(items) {
-		return response.Fail(
-			"index %d out of range (1-%d)",
-			j,
-			len(items),
-		)
+		return response.Fail("index %d out of range (1-%d)", j, len(items))
 	}
 
 	items[j-1].Text = text

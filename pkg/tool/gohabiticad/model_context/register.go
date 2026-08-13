@@ -15,7 +15,9 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				constant.TaskType,
-				mcp.Description("Task type filter: habits, dailys, todos, rewards"),
+				mcp.Description(
+					"Task type filter: habits, dailys, todos, rewards",
+				),
 			),
 		),
 		s.getTasks,
@@ -34,10 +36,7 @@ func (s *Server) register() {
 				mcp.Required(),
 				mcp.Description("Task title"),
 			),
-			mcp.WithString(
-				constant.Notes,
-				mcp.Description("Task notes"),
-			),
+			mcp.WithString(constant.Notes, mcp.Description("Task notes")),
 		),
 		s.createTask,
 	)

@@ -16,11 +16,7 @@ func buildImportAliasEdits(
 	var result []edit
 	result = append(
 		result,
-		edit{
-			position: spec.Name.Pos(),
-			end:      spec.Path.Pos(),
-			newText:  "",
-		},
+		edit{position: spec.Name.Pos(), end: spec.Path.Pos(), newText: ""},
 	)
 	ast.Inspect(
 		file,

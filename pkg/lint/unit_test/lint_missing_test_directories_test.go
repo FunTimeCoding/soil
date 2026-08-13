@@ -7,11 +7,7 @@ import (
 )
 
 func TestMissingTestDirectories(t *testing.T) {
-	paths := []string{
-		"pkg/foo/foo.go",
-		"pkg/bar/bar.go",
-		"pkg/bar/bar_test.go",
-	}
+	paths := []string{"pkg/foo/foo.go", "pkg/bar/bar.go", "pkg/bar/bar_test.go"}
 	result := lint.MissingTestDirectories(paths, nil)
 	assert.Integer(t, 1, len(result))
 	_, okay := result["pkg/foo"]
@@ -19,21 +15,14 @@ func TestMissingTestDirectories(t *testing.T) {
 }
 
 func TestMissingTestDirectoriesNone(t *testing.T) {
-	paths := []string{
-		"pkg/foo/foo.go",
-		"pkg/foo/foo_test.go",
-	}
+	paths := []string{"pkg/foo/foo.go", "pkg/foo/foo_test.go"}
 	result := lint.MissingTestDirectories(paths, nil)
 	assert.Integer(t, 0, len(result))
 }
 
 func TestMissingTestDirectoriesGenerated(t *testing.T) {
-	paths := []string{
-		"pkg/foo/foo.go",
-	}
-	generatedPaths := []string{
-		"pkg/baz/generated.go",
-	}
+	paths := []string{"pkg/foo/foo.go"}
+	generatedPaths := []string{"pkg/baz/generated.go"}
 	result := lint.MissingTestDirectories(paths, generatedPaths)
 	assert.Integer(t, 2, len(result))
 	_, okay := result["pkg/foo"]

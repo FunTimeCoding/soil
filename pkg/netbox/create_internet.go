@@ -17,9 +17,9 @@ func (c *Client) CreateInternet(
 	q := netbox.NewWritableIPAddressRequest(address)
 	q.SetAssignedObjectType(objectType)
 	q.SetAssignedObjectId(objectIdentifier)
-	result, _, e := c.client.IpamAPI.IpamIpAddressesCreate(
-		c.context,
-	).WritableIPAddressRequest(*q).Execute()
+	result, _, e := c.client.IpamAPI.IpamIpAddressesCreate(c.context).WritableIPAddressRequest(
+		*q,
+	).Execute()
 	fmt.Printf("Create address result: %+v\n", result)
 
 	if e != nil {

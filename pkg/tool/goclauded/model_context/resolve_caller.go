@@ -18,19 +18,16 @@ func (s *Server) resolveCaller(
 	}
 
 	modelContextSessionIdentifier := session.SessionID()
-	name, sessionIdentifier, e := s.service.ResolveModelContextSession(modelContextSessionIdentifier)
+	name, sessionIdentifier, e := s.service.ResolveModelContextSession(
+		modelContextSessionIdentifier,
+	)
 
 	if e != nil {
 		return nil, e
 	}
 
 	s.telemetry.Record(
-		record.NewDomain(
-			tool,
-			constant.ModelContext,
-			name,
-			constant.Success,
-		),
+		record.NewDomain(tool, constant.ModelContext, name, constant.Success),
 	)
 
 	return &caller{Callsign: name, SessionIdentifier: sessionIdentifier}, nil

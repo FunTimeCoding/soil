@@ -25,11 +25,7 @@ func collectOverview(
 		)
 		result = append(
 			result,
-			&overview{
-				Namespace: n,
-				Count:     len(r),
-				Latest:    latest(r),
-			},
+			&overview{Namespace: n, Count: len(r), Latest: latest(r)},
 		)
 	}
 

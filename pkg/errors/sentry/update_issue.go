@@ -17,11 +17,7 @@ func (c *Client) UpdateIssue(
 		AssignedTo string `json:"assignedTo,omitempty"`
 	}
 	b, e := c.basic.Put(
-		fmt.Sprintf(
-			"organizations/%s/issues/%s",
-			organization,
-			identifier,
-		),
+		fmt.Sprintf("organizations/%s/issues/%s", organization, identifier),
 		body{Status: status, AssignedTo: assignedTo},
 	)
 

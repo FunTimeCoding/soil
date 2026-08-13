@@ -24,10 +24,7 @@ func (c *Client) Applications() ([]*application.Application, error) {
 	defer errors.PanicClose(reply.Body)
 
 	if reply.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf(
-			"applications status: %d",
-			reply.StatusCode,
-		)
+		return nil, fmt.Errorf("applications status: %d", reply.StatusCode)
 	}
 
 	var p response.Applications

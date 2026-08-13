@@ -34,10 +34,7 @@ func (s *Server) explain(
 	if e != nil {
 		return s.captureFail(
 			e,
-			fmt.Sprintf(
-				"database error on %s: explain not executed",
-				instance,
-			),
+			fmt.Sprintf("database error on %s: explain not executed", instance),
 		)
 	}
 

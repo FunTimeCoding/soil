@@ -6,9 +6,9 @@ import (
 )
 
 func (c *Client) UserGroups() ([]*user_group.Group, error) {
-	result, _, e := c.client.UsersAPI.UsersGroupsList(
-		c.context,
-	).Limit(constant.PageLimit).Execute()
+	result, _, e := c.client.UsersAPI.UsersGroupsList(c.context).Limit(
+		constant.PageLimit,
+	).Execute()
 
 	if e != nil {
 		return nil, e

@@ -11,11 +11,7 @@ func printOverview(
 	f *option.Format,
 ) {
 	for _, e := range entries {
-		s := status.New(f).String(
-			formatNamespace(e, f),
-		).Integer(
-			e.Count,
-		).String(
+		s := status.New(f).String(formatNamespace(e, f)).Integer(e.Count).String(
 			formatLatest(e),
 		)
 		fmt.Println(s.Format())

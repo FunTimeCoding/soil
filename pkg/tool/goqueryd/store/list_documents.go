@@ -44,10 +44,7 @@ func (s *Store) ListDocuments(
 	parts = append(parts, `ORDER BY d.modified_at DESC`)
 
 	if limit > 0 {
-		parts = append(
-			parts,
-			fmt.Sprintf(`LIMIT %d OFFSET %d`, limit, offset),
-		)
+		parts = append(parts, fmt.Sprintf(`LIMIT %d OFFSET %d`, limit, offset))
 	}
 
 	rows, e := s.database.Query(join.Space(parts...), arguments...)

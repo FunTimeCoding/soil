@@ -28,10 +28,7 @@ func Run(
 					constant.LogFile,
 				)
 			case systemConstant.Linux:
-				path = join.Absolute(
-					systemConstant.Temporary,
-					constant.LogFile,
-				)
+				path = join.Absolute(systemConstant.Temporary, constant.LogFile)
 			default:
 				path = constant.LogFile
 			}

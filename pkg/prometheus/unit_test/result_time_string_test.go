@@ -12,13 +12,7 @@ func TestOnlyLatest(t *testing.T) {
 		t,
 		1,
 		time_string.OnlyLatest(
-			[]*time_string.Result{
-				{
-					Metric: "",
-					Time:   time.Now(),
-					Value:  "",
-				},
-			},
+			[]*time_string.Result{{Metric: "", Time: time.Now(), Value: ""}},
 		),
 	)
 }

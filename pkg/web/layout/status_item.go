@@ -14,16 +14,10 @@ func StatusItem(
 	return html.Div(
 		html.ID(constant.LayoutStatusLine),
 		html.Class(
-			join.Empty(
-				"container notification-status notification-",
-				kind,
-			),
+			join.Empty("container notification-status notification-", kind),
 		),
 		gomponents.Attr("hx-swap-oob", "outerHTML"),
 		gomponents.Attr("role", "status"),
-		html.Span(
-			html.Class("notification-message"),
-			gomponents.Text(message),
-		),
+		html.Span(html.Class("notification-message"), gomponents.Text(message)),
 	)
 }

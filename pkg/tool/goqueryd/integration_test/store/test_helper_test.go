@@ -93,13 +93,7 @@ func embedTestDocuments(
 		}
 
 		for i, embedding := range embeddings {
-			s.InsertEmbedding(
-				p.Hash,
-				i,
-				chunks[i].Position,
-				embedding,
-				now,
-			)
+			s.InsertEmbedding(p.Hash, i, chunks[i].Position, embedding, now)
 		}
 	}
 

@@ -26,18 +26,8 @@ func create(c *client.Client) *cobra.Command {
 		"",
 		"Task type: habit, daily, todo, reward",
 	)
-	result.Flags().StringVar(
-		&text,
-		"text",
-		"",
-		"Task title",
-	)
-	result.Flags().StringVar(
-		&notes,
-		"notes",
-		"",
-		"Task notes",
-	)
+	result.Flags().StringVar(&text, "text", "", "Task title")
+	result.Flags().StringVar(&notes, "notes", "", "Task notes")
 	result.MarkFlagsRequiredTogether("type", "text")
 
 	return result

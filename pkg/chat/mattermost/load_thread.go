@@ -8,10 +8,7 @@ import (
 
 func (c *Client) LoadThread(p *post.Post) *thread.Thread {
 	result := thread.New(p, c.MustThread(p.Raw))
-	result.Resolved = c.MustPostHasReaction(
-		p.Raw,
-		constant.MattermostCheckMark,
-	)
+	result.Resolved = c.MustPostHasReaction(p.Raw, constant.MattermostCheckMark)
 
 	return result
 }

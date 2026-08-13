@@ -1,7 +1,5 @@
 package store
 
 func NewQueryOption() *QueryOption {
-	return &QueryOption{
-		Limit: 50,
-	}
+	return &QueryOption{Limit: 50}
 }

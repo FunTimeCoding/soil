@@ -24,9 +24,7 @@ func (s *Server) UpdatePage(
 	)
 
 	if e != nil {
-		return server.UpdatePage500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.UpdatePage500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	return server.UpdatePage200JSONResponse(

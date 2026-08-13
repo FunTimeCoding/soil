@@ -40,12 +40,7 @@ func (s *Server) push(
 		metadata[constant.SourceType] = sourceType
 	}
 
-	if h := s.service.PushDocument(
-		collection,
-		path,
-		body,
-		metadata,
-	); h != nil {
+	if h := s.service.PushDocument(collection, path, body, metadata); h != nil {
 		return s.captureFail(h, "push failed")
 	}
 

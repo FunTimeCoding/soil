@@ -10,9 +10,7 @@ func (c *Client) GetSnippet(name string) string {
 	result, e := c.client.GetSnippetWithResponse(
 		c.context,
 		name,
-		&client.GetSnippetParams{
-			Instance: &c.instance,
-		},
+		&client.GetSnippetParams{Instance: &c.instance},
 	)
 	errors.PanicOnError(e)
 

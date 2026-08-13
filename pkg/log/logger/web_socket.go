@@ -19,15 +19,9 @@ func (l *Logger) WebSocket(v *message.Message) {
 	result := []slog.Attr{
 		slog.String(constant.MessagingSystem, "homeassistant"),
 		slog.String(constant.OperationName, "receive"),
-		slog.String(
-			constant.MessageIdentifier,
-			fmt.Sprintf("%d", v.Identifier),
-		),
+		slog.String(constant.MessageIdentifier, fmt.Sprintf("%d", v.Identifier)),
 		slog.String(constant.MessageType, v.Event.Type),
-		slog.String(
-			constant.ConversationIdentifier,
-			v.Event.Context.Identifier,
-		),
+		slog.String(constant.ConversationIdentifier, v.Event.Context.Identifier),
 		slog.Time(constant.EnvelopeTime, t),
 		slog.Int(constant.BodySize, len(v.Event.Raw)),
 	}

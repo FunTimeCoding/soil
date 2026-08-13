@@ -104,10 +104,7 @@ func (s *Server) register() {
 					"Existing group ID to add tabs to (omit to create new group)",
 				),
 			),
-			mcp.WithString(
-				"title",
-				mcp.Description("Group title"),
-			),
+			mcp.WithString("title", mcp.Description("Group title")),
 			mcp.WithString(
 				"color",
 				mcp.Description(
@@ -138,10 +135,7 @@ func (s *Server) register() {
 				mcp.Required(),
 				mcp.Description("Group identifier"),
 			),
-			mcp.WithString(
-				"title",
-				mcp.Description("New group title"),
-			),
+			mcp.WithString("title", mcp.Description("New group title")),
 			mcp.WithString(
 				"color",
 				mcp.Description(

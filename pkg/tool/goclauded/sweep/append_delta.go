@@ -23,7 +23,5 @@ func appendDelta(
 	errors.PanicOnError(g)
 	i, h := os.Stat(source)
 	errors.PanicOnError(h)
-	errors.PanicOnError(
-		os.Chtimes(destination, i.ModTime(), i.ModTime()),
-	)
+	errors.PanicOnError(os.Chtimes(destination, i.ModTime(), i.ModTime()))
 }

@@ -6,8 +6,5 @@ func New(
 	v model.Value,
 	w []string,
 ) *Result {
-	return &Result{
-		Value:    v,
-		Warnings: w,
-	}
+	return &Result{Value: v, Warnings: w}
 }

@@ -9,9 +9,7 @@ import (
 func (c *Client) ListSnippets() string {
 	result, e := c.client.ListSnippetsWithResponse(
 		c.context,
-		&client.ListSnippetsParams{
-			Instance: &c.instance,
-		},
+		&client.ListSnippetsParams{Instance: &c.instance},
 	)
 	errors.PanicOnError(e)
 

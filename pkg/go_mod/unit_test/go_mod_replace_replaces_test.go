@@ -10,9 +10,6 @@ func TestReplaceReplaces(t *testing.T) {
 	assert.String(
 		t,
 		"replace (\nb\n)\n",
-		go_mod.ReplaceReplaces(
-			"replace (\na\n)\n",
-			"replace (\nb\n)\n",
-		),
+		go_mod.ReplaceReplaces("replace (\na\n)\n", "replace (\nb\n)\n"),
 	)
 }

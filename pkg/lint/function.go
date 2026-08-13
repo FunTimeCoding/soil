@@ -24,10 +24,7 @@ func Function(
 		line, number := s.Text()
 		trimmed := strings.TrimSpace(line)
 
-		if strings.HasPrefix(trimmed, "func ") && strings.Contains(
-			line,
-			"{",
-		) {
+		if strings.HasPrefix(trimmed, "func ") && strings.Contains(line, "{") {
 			functionStart = number
 			functionBraceDepth = strings.Count(line, "{") - strings.Count(
 				line,

@@ -50,7 +50,10 @@ func renderBrand(l *layout.Page) string {
 
 func TestBrandLinksHome(t *testing.T) {
 	body := renderBrand(layout.New(identity.New("test", "test tool", "test")))
-	assert.True(t, strings.Contains(body, `<a href="/"><strong>test</strong></a>`))
+	assert.True(
+		t,
+		strings.Contains(body, `<a href="/"><strong>test</strong></a>`),
+	)
 	assert.True(t, !strings.Contains(body, "connection-dot"))
 }
 
@@ -94,11 +97,7 @@ func TestRecoveryFragment(t *testing.T) {
 	request.Header.Set(constant.ExtendedRequest, "true")
 	wrapped.ServeHTTP(recorder, request)
 	assert.Integer(t, http.StatusInternalServerError, recorder.Code)
-	assert.String(
-		t,
-		"true",
-		recorder.Header().Get(constant.NotificationItem),
-	)
+	assert.String(t, "true", recorder.Header().Get(constant.NotificationItem))
 	body := recorder.Body.String()
 	assert.True(t, strings.Contains(body, "notification-error"))
 	assert.True(t, !strings.Contains(body, "<nav"))

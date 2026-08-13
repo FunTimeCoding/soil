@@ -19,27 +19,15 @@ func emptyRegions(file *ast.File) []region {
 				if len(t.Methods.List) == 0 {
 					result = append(
 						result,
-						region{
-							From: t.Methods.Opening,
-							To:   t.Methods.Closing,
-						},
+						region{From: t.Methods.Opening, To: t.Methods.Closing},
 					)
 				}
 			case *ast.SwitchStmt:
-				result = append(
-					result,
-					emptyClauses(t.Body)...,
-				)
+				result = append(result, emptyClauses(t.Body)...)
 			case *ast.TypeSwitchStmt:
-				result = append(
-					result,
-					emptyClauses(t.Body)...,
-				)
+				result = append(result, emptyClauses(t.Body)...)
 			case *ast.SelectStmt:
-				result = append(
-					result,
-					emptyClauses(t.Body)...,
-				)
+				result = append(result, emptyClauses(t.Body)...)
 			}
 
 			return true

@@ -43,17 +43,11 @@ func (s *Service) ExtractType(
 	typeObject := p.Types.Scope().Lookup(typeName)
 
 	if typeObject == nil {
-		return failValidation(
-			r,
-			fmt.Sprintf("type not found: %s", typeName),
-		)
+		return failValidation(r, fmt.Sprintf("type not found: %s", typeName))
 	}
 
 	if _, okay := typeObject.(*types.TypeName); !okay {
-		return failValidation(
-			r,
-			fmt.Sprintf("%s is not a type", typeName),
-		)
+		return failValidation(r, fmt.Sprintf("%s is not a type", typeName))
 	}
 
 	entries, message := gatherTypeEntries(set, p, typeObject, targetFile)
@@ -146,12 +140,7 @@ func (s *Service) ExtractType(
 		return failValidation(r, e.Error())
 	}
 
-	constraints, message := planConstraints(
-		set,
-		target,
-		entries,
-		moveDirectory,
-	)
+	constraints, message := planConstraints(set, target, entries, moveDirectory)
 
 	if message != "" {
 		return failValidation(r, message)
@@ -181,10 +170,7 @@ func (s *Service) ExtractType(
 			if isType {
 				external = append(
 					external,
-					qualifiedReference{
-						reference: f,
-						newName:   entry.newName,
-					},
+					qualifiedReference{reference: f, newName: entry.newName},
 				)
 
 				continue
@@ -222,11 +208,7 @@ func (s *Service) ExtractType(
 		r.AddConcern(
 			concern.NewLine(
 				"exported",
-				fmt.Sprintf(
-					"%s → %s",
-					field.object.Name(),
-					field.newName,
-				),
+				fmt.Sprintf("%s → %s", field.object.Name(), field.newName),
 				position.Filename,
 				position.Line,
 				"",

@@ -13,11 +13,7 @@ func (s *Service) CreateRelation(
 ) error {
 	if relationType != "" &&
 		!slices.Contains(constant.RelationTypes, relationType) {
-		return fmt.Errorf(
-			"%w: %s",
-			constant.ErrorRelationType,
-			relationType,
-		)
+		return fmt.Errorf("%w: %s", constant.ErrorRelationType, relationType)
 	}
 
 	return s.store.CreateRelation(

@@ -13,12 +13,6 @@ func (c *Client) MustSetFieldMulti(
 	valueNames []string,
 ) {
 	errors.PanicOnError(
-		c.SetFieldMulti(
-			projectKey,
-			issueType,
-			i,
-			fieldName,
-			valueNames,
-		),
+		c.SetFieldMulti(projectKey, issueType, i, fieldName, valueNames),
 	)
 }

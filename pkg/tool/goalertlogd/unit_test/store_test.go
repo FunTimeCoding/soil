@@ -36,11 +36,7 @@ func TestTopAggregates(t *testing.T) {
 	); e != nil {
 		t.Fatalf("create: %v", e)
 	}
-	result, e := s.Top(
-		0,
-		time.Now().Add(-time.Hour),
-		time.Now().Add(time.Hour),
-	)
+	result, e := s.Top(0, time.Now().Add(-time.Hour), time.Now().Add(time.Hour))
 
 	if e != nil {
 		t.Fatalf("top: %v", e)

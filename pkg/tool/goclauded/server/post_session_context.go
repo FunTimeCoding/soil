@@ -22,12 +22,7 @@ func (s *Server) PostSessionContext(
 		model = *r.Body.Model
 	}
 
-	s.service.RecordContext(
-		r.Identifier,
-		r.Body.UsedPercentage,
-		window,
-		model,
-	)
+	s.service.RecordContext(r.Identifier, r.Body.UsedPercentage, window, model)
 
 	if r.Body.FiveHourPercent == nil || r.Body.SevenDayPercent == nil {
 		return server.PostSessionContext200Response{}, nil

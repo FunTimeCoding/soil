@@ -41,10 +41,7 @@ func (c *Client) Save(
 					return e
 				}
 
-				fmt.Printf(
-					"    GetResourceTree took %v\n",
-					time.Since(t2),
-				)
+				fmt.Printf("    GetResourceTree took %v\n", time.Since(t2))
 				t3 := time.Now()
 				b, e = page.GetResourceContent(t.Frame.ID, locator).Do(o)
 
@@ -58,10 +55,7 @@ func (c *Client) Save(
 					return e
 				}
 
-				fmt.Printf(
-					"    GetResourceContent took %v\n",
-					time.Since(t3),
-				)
+				fmt.Printf("    GetResourceContent took %v\n", time.Since(t3))
 
 				return nil
 			},

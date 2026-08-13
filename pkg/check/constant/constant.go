@@ -2,6 +2,4 @@ package constant
 
 const Warning = "Warning"
 
-var Levels = []string{
-	Warning,
-}
+var Levels = []string{Warning}

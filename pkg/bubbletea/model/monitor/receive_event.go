@@ -28,11 +28,7 @@ func (m *Model) receiveEvent(s receive.Message) {
 
 			if i != -1 {
 				row := rows[i]
-				log.Printf(
-					"remove handle %s from %s\n",
-					handle,
-					row[0],
-				)
+				log.Printf("remove handle %s from %s\n", handle, row[0])
 
 				if row[2] == handle {
 					row[2] = ""

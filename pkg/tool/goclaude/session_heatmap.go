@@ -21,9 +21,7 @@ func sessionHeatmap(c *command_context.Context) *cobra.Command {
 		) {
 			response, e := c.Client().GetSessionsHeatmapWithResponse(
 				context.Background(),
-				&client.GetSessionsHeatmapParams{
-					Bash: &bash,
-				},
+				&client.GetSessionsHeatmapParams{Bash: &bash},
 			)
 			errors.PanicOnError(e)
 			h := response.JSON200
@@ -48,18 +46,8 @@ func sessionHeatmap(c *command_context.Context) *cobra.Command {
 				len(h.Entries),
 				label,
 			)
-			fmt.Printf(
-				"%-40s %6s %8s\n",
-				"Tool",
-				"Calls",
-				"Sessions",
-			)
-			fmt.Printf(
-				"%-40s %6s %8s\n",
-				"----",
-				"-----",
-				"--------",
-			)
+			fmt.Printf("%-40s %6s %8s\n", "Tool", "Calls", "Sessions")
+			fmt.Printf("%-40s %6s %8s\n", "----", "-----", "--------")
 
 			for _, entry := range h.Entries {
 				fmt.Printf(

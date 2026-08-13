@@ -19,10 +19,7 @@ func TestSingleParameterFix(t *testing.T) {
 			assert.String(
 				t,
 				"package example\n\nimport \"context\"\n\ntype Client struct{}\n\nfunc (c *Client) Snapshot(x context.Context) (string, error) {\n\treturn \"\", nil\n}\n",
-				testutil.ReadFile(
-					t,
-					filepath.Join(directory, "method.go"),
-				),
+				testutil.ReadFile(t, filepath.Join(directory, "method.go")),
 			)
 		},
 	)
@@ -32,10 +29,7 @@ func TestSingleParameterFix(t *testing.T) {
 			assert.String(
 				t,
 				"package example\n\nfunc Process(name string) error {\n\treturn nil\n}\n",
-				testutil.ReadFile(
-					t,
-					filepath.Join(directory, "function.go"),
-				),
+				testutil.ReadFile(t, filepath.Join(directory, "function.go")),
 			)
 		},
 	)
@@ -45,10 +39,7 @@ func TestSingleParameterFix(t *testing.T) {
 			assert.String(
 				t,
 				"package example\n\nfunc TwoParams(\n\ta string,\n\tb string,\n) error {\n\treturn nil\n}\n",
-				testutil.ReadFile(
-					t,
-					filepath.Join(directory, "two_params.go"),
-				),
+				testutil.ReadFile(t, filepath.Join(directory, "two_params.go")),
 			)
 		},
 	)
@@ -71,10 +62,7 @@ func TestSingleParameterFix(t *testing.T) {
 			assert.String(
 				t,
 				"package example\n\nfunc VeryLongFunctionNameThatWouldExceedTheLimit(\n\tparameterWithAVeryLongName string,\n) error {\n\treturn nil\n}\n",
-				testutil.ReadFile(
-					t,
-					filepath.Join(directory, "too_long.go"),
-				),
+				testutil.ReadFile(t, filepath.Join(directory, "too_long.go")),
 			)
 		},
 	)
@@ -109,10 +97,7 @@ func TestSingleParameterFixWithTestFiles(t *testing.T) {
 			assert.String(
 				t,
 				"package tested\n\nfunc FindLatest(v []string) *string {\n\treturn nil\n}\n",
-				testutil.ReadFile(
-					t,
-					filepath.Join(directory, "find.go"),
-				),
+				testutil.ReadFile(t, filepath.Join(directory, "find.go")),
 			)
 		},
 	)
@@ -121,12 +106,7 @@ func TestSingleParameterFixWithTestFiles(t *testing.T) {
 func writeSingleParameterTestModuleWithTests(t *testing.T) string {
 	t.Helper()
 	directory := t.TempDir()
-	testutil.WriteFile(
-		t,
-		directory,
-		"go.mod",
-		"module example\n\ngo 1.22\n",
-	)
+	testutil.WriteFile(t, directory, "go.mod", "module example\n\ngo 1.22\n")
 	testutil.WriteFile(
 		t,
 		directory,
@@ -146,12 +126,7 @@ func writeSingleParameterTestModuleWithTests(t *testing.T) string {
 func writeSingleParameterTestModule(t *testing.T) string {
 	t.Helper()
 	directory := t.TempDir()
-	testutil.WriteFile(
-		t,
-		directory,
-		"go.mod",
-		"module example\n\ngo 1.22\n",
-	)
+	testutil.WriteFile(t, directory, "go.mod", "module example\n\ngo 1.22\n")
 	testutil.WriteFile(
 		t,
 		directory,

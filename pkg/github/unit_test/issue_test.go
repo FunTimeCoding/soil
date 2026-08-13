@@ -12,9 +12,9 @@ import (
 func TestIssue(t *testing.T) {
 	i := issue.New(
 		&github.Issue{
-			RepositoryURL: locator.New(
-				"api.github.com",
-			).Path("/repos/funtimecoding/soil").Pointer(),
+			RepositoryURL: locator.New("api.github.com").Path(
+				"/repos/funtimecoding/soil",
+			).Pointer(),
 			Title:   new(constant.UpperAlfa),
 			HTMLURL: new(constant.UpperBravo),
 		},

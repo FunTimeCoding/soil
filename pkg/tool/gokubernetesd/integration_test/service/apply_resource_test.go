@@ -20,10 +20,7 @@ func TestApplyResource(t *testing.T) {
 	result, e := s.Service.ApplyResource(
 		context.Background(),
 		"test",
-		service.ApplyQuery{
-			Manifest:  testManifest,
-			Namespace: "default",
-		},
+		service.ApplyQuery{Manifest: testManifest, Namespace: "default"},
 	)
 	assert.Nil(t, e)
 	assert.String(t, "ConfigMap", result.Kind)
@@ -36,19 +33,13 @@ func TestApplyResourceAlreadyExists(t *testing.T) {
 	_, f := s.Service.ApplyResource(
 		context.Background(),
 		"test",
-		service.ApplyQuery{
-			Manifest:  testManifest,
-			Namespace: "default",
-		},
+		service.ApplyQuery{Manifest: testManifest, Namespace: "default"},
 	)
 	assert.Nil(t, f)
 	_, e := s.Service.ApplyResource(
 		context.Background(),
 		"test",
-		service.ApplyQuery{
-			Manifest:  testManifest,
-			Namespace: "default",
-		},
+		service.ApplyQuery{Manifest: testManifest, Namespace: "default"},
 	)
 	assert.NotNil(t, e)
 }
@@ -58,10 +49,7 @@ func TestApplyResourceOverride(t *testing.T) {
 	_, f := s.Service.ApplyResource(
 		context.Background(),
 		"test",
-		service.ApplyQuery{
-			Manifest:  testManifest,
-			Namespace: "default",
-		},
+		service.ApplyQuery{Manifest: testManifest, Namespace: "default"},
 	)
 	assert.Nil(t, f)
 	result, e := s.Service.ApplyResource(

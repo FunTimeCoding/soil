@@ -15,10 +15,6 @@ func Time(
 
 	if !actualRounded.Equal(expectRounded) {
 		t.Helper()
-		t.Errorf(
-			"\nExpect: %#v\nActual: %#v",
-			expectRounded,
-			actualRounded,
-		)
+		t.Errorf("\nExpect: %#v\nActual: %#v", expectRounded, actualRounded)
 	}
 }

@@ -31,9 +31,6 @@ func (s *Server) GetSnippet(
 	b := c.ReadFile(snippetPath(a.Name))
 
 	return response.SuccessAny(
-		map[string]string{
-			"name":    a.Name,
-			"content": string(b),
-		},
+		map[string]string{"name": a.Name, "content": string(b)},
 	)
 }

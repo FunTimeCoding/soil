@@ -20,10 +20,7 @@ func (s *Server) CancelPipeline(
 		return response.Fail("pipeline is required")
 	}
 
-	v, _, e := s.client.Pipelines.CancelPipelineBuild(
-		a.Project,
-		a.Pipeline,
-	)
+	v, _, e := s.client.Pipelines.CancelPipelineBuild(a.Project, a.Pipeline)
 
 	if e != nil {
 		return s.captureDetail(e)

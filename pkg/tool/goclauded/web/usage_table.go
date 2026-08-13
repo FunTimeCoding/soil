@@ -35,12 +35,7 @@ func usageTable(usage map[string]*pricing.Tokens) gomponents.Node {
 				html.Td(gomponents.Text(pricing.FormatTokens(t.Output))),
 				html.Td(gomponents.Text(pricing.FormatTokens(t.CacheCreation))),
 				html.Td(gomponents.Text(pricing.FormatTokens(t.CacheRead))),
-				html.Td(
-					gomponents.Textf(
-						"$%.2f",
-						pricing.Cost(model, t),
-					),
-				),
+				html.Td(gomponents.Textf("$%.2f", pricing.Cost(model, t))),
 			),
 		)
 	}

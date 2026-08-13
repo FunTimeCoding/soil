@@ -27,9 +27,7 @@ func (s *Server) recentImpressionsSummary() gomponents.Node {
 		rows = append(
 			rows,
 			html.Tr(
-				layout.TimeCell(
-					library.Parse(time.RFC3339, i.CreatedAt),
-				),
+				layout.TimeCell(library.Parse(time.RFC3339, i.CreatedAt)),
 				html.Td(html.Em(gomponents.Text(i.Source))),
 				html.Td(gomponents.Text(i.Content)),
 			),

@@ -47,11 +47,7 @@ func checkIdent(
 	results.AddConcern(
 		concern.NewFile(
 			"naming",
-			segment.FormatMessage(
-				r.Applicable,
-				r.Segment,
-				ident.Name,
-			),
+			segment.FormatMessage(r.Applicable, r.Segment, ident.Name),
 			p.Fset.Position(ident.Pos()).Filename,
 			false,
 		),

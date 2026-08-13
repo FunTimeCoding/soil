@@ -12,11 +12,7 @@ func (s *Server) FindReleases(
 	_ mcp.CallToolRequest,
 	a argument.FindReleases,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.client.Releases(
-		s.organization,
-		a.Query,
-		a.Limit,
-	)
+	result, e := s.client.Releases(s.organization, a.Query, a.Limit)
 
 	if e != nil {
 		return s.captureDetail(e)

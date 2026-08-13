@@ -13,22 +13,14 @@ import (
 )
 
 func TestNewCreatesParentAndAppliesParameters(t *testing.T) {
-	p := filepath.Join(
-		t.TempDir(),
-		"nested",
-		constant.TestDatabase,
-	)
+	p := filepath.Join(t.TempDir(), "nested", constant.TestDatabase)
 	d := connection.New(logger.New(context.Background()), p)
 	defer func() { errors.PanicOnError(d.Close()) }()
 	var enabled int
-	errors.PanicOnError(
-		d.QueryRow("PRAGMA foreign_keys").Scan(&enabled),
-	)
+	errors.PanicOnError(d.QueryRow("PRAGMA foreign_keys").Scan(&enabled))
 	assert.Integer(t, 1, enabled)
 	var journal string
-	errors.PanicOnError(
-		d.QueryRow("PRAGMA journal_mode").Scan(&journal),
-	)
+	errors.PanicOnError(d.QueryRow("PRAGMA journal_mode").Scan(&journal))
 	assert.String(t, "wal", journal)
 	assert.True(t, system.FileExists(p))
 }
@@ -48,8 +40,6 @@ func TestNewMemoryIsolatesCalls(t *testing.T) {
 	)
 	assert.Integer(t, 0, count)
 	var enabled int
-	errors.PanicOnError(
-		first.QueryRow("PRAGMA foreign_keys").Scan(&enabled),
-	)
+	errors.PanicOnError(first.QueryRow("PRAGMA foreign_keys").Scan(&enabled))
 	assert.Integer(t, 1, enabled)
 }

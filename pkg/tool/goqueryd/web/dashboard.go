@@ -69,9 +69,7 @@ func (s *Server) dashboard(
 					),
 					html.Td(gomponents.Text(c.Type)),
 					html.Td(gomponents.Textf("%d", c.DocumentCount)),
-					html.Td(
-						html.Small(gomponents.Text(c.Path)),
-					),
+					html.Td(html.Small(gomponents.Text(c.Path))),
 				),
 			)
 		}

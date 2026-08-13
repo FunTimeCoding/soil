@@ -10,10 +10,7 @@ import (
 
 func TestWarningMissingOption(t *testing.T) {
 	v := virtual_file_system.New()
-	v.WriteString(
-		"pkg/tool/gotestd/server/r.go",
-		"package server\n",
-	)
+	v.WriteString("pkg/tool/gotestd/server/r.go", "package server\n")
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
 	s := scan.Services(v, "test", scan.NewConfiguration())
 	assert.Integer(t, 1, len(s))
@@ -22,14 +19,8 @@ func TestWarningMissingOption(t *testing.T) {
 
 func TestWarningMissingRun(t *testing.T) {
 	v := virtual_file_system.New()
-	v.WriteString(
-		"pkg/tool/gotestd/server/r.go",
-		"package server\n",
-	)
-	v.WriteString(
-		"pkg/tool/gotestd/option/o.go",
-		"package option\n",
-	)
+	v.WriteString("pkg/tool/gotestd/server/r.go", "package server\n")
+	v.WriteString("pkg/tool/gotestd/option/o.go", "package option\n")
 	s := scan.Services(v, "test", scan.NewConfiguration())
 	assert.Integer(t, 1, len(s))
 	assertConcern(t, s[0], constant.MissingRunKey)
@@ -37,14 +28,8 @@ func TestWarningMissingRun(t *testing.T) {
 
 func TestWarningNoSuffix(t *testing.T) {
 	v := virtual_file_system.New()
-	v.WriteString(
-		"pkg/tool/gotest/server/r.go",
-		"package server\n",
-	)
-	v.WriteString(
-		"pkg/tool/gotest/option/o.go",
-		"package option\n",
-	)
+	v.WriteString("pkg/tool/gotest/server/r.go", "package server\n")
+	v.WriteString("pkg/tool/gotest/option/o.go", "package option\n")
 	v.WriteString("pkg/tool/gotest/run.go", "package gotest\n")
 	s := scan.Services(v, "test", scan.NewConfiguration())
 	assert.Integer(t, 1, len(s))
@@ -53,18 +38,9 @@ func TestWarningNoSuffix(t *testing.T) {
 
 func TestWarningRouteExists(t *testing.T) {
 	v := virtual_file_system.New()
-	v.WriteString(
-		"pkg/tool/gotestd/server/r.go",
-		"package server\n",
-	)
-	v.WriteString(
-		"pkg/tool/gotestd/route/r.go",
-		"package route\n",
-	)
-	v.WriteString(
-		"pkg/tool/gotestd/option/o.go",
-		"package option\n",
-	)
+	v.WriteString("pkg/tool/gotestd/server/r.go", "package server\n")
+	v.WriteString("pkg/tool/gotestd/route/r.go", "package route\n")
+	v.WriteString("pkg/tool/gotestd/option/o.go", "package option\n")
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
 	assertConcern(
 		t,
@@ -79,10 +55,7 @@ func TestWarningMissingMountGo(t *testing.T) {
 		"pkg/tool/gotestd/model_context/server.go",
 		"package model_context\n",
 	)
-	v.WriteString(
-		"pkg/tool/gotestd/option/o.go",
-		"package option\n",
-	)
+	v.WriteString("pkg/tool/gotestd/option/o.go", "package option\n")
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
 	assertConcern(
 		t,
@@ -97,10 +70,7 @@ func TestWarningMissingCaptureFail(t *testing.T) {
 		"pkg/tool/gotestd/model_context/mount.go",
 		"package model_context\n",
 	)
-	v.WriteString(
-		"pkg/tool/gotestd/option/o.go",
-		"package option\n",
-	)
+	v.WriteString("pkg/tool/gotestd/option/o.go", "package option\n")
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
 	assertConcern(
 		t,
@@ -111,18 +81,12 @@ func TestWarningMissingCaptureFail(t *testing.T) {
 
 func TestCleanServiceNoConcerns(t *testing.T) {
 	v := virtual_file_system.New()
-	v.WriteString(
-		"pkg/tool/gotestd/server/r.go",
-		"package server\n",
-	)
+	v.WriteString("pkg/tool/gotestd/server/r.go", "package server\n")
 	v.WriteString(
 		"pkg/tool/gotestd/constant/constant.go",
 		"package constant\n\nimport \"github.com/funtimecoding/soil/pkg/identity\"\n\nvar Identity = identity.New(\"gotestd\", \"test\", \"gotestd\")\n",
 	)
-	v.WriteString(
-		"pkg/tool/gotestd/option/o.go",
-		"package option\n",
-	)
+	v.WriteString("pkg/tool/gotestd/option/o.go", "package option\n")
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
 	s := scan.Services(v, "test", scan.NewConfiguration())
 	assert.Integer(t, 1, len(s))

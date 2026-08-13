@@ -78,10 +78,5 @@ func (s *Service) UpdateMachine(
 		)
 	}
 
-	return s.UpdateMachineConfiguration(
-		c,
-		a.Identifier,
-		a.Node,
-		options,
-	)
+	return s.UpdateMachineConfiguration(c, a.Identifier, a.Node, options)
 }

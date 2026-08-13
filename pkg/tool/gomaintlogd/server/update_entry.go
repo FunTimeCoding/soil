@@ -49,7 +49,5 @@ func (s *Server) UpdateEntry(
 		), nil
 	}
 
-	return server.UpdateEntry200JSONResponse(
-		toResponse([]entry.Entry{*e})[0],
-	), nil
+	return server.UpdateEntry200JSONResponse(toResponse([]entry.Entry{*e})[0]), nil
 }

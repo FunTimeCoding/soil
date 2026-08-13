@@ -14,9 +14,6 @@ func TestResolveCallerDatabaseError(t *testing.T) {
 	defer a.Close()
 	a.Announce(a.Name(), "working")
 	s.Store.Store.Close()
-	result := a.MustCallToolError(
-		constant.Status,
-		nil,
-	)
+	result := a.MustCallToolError(constant.Status, nil)
 	assert.StringContains(t, "unexpected error", result)
 }

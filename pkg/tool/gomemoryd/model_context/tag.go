@@ -27,7 +27,9 @@ func (s *Server) tag(
 	replaceRaw := q.GetString(constant.ReplaceAll, "")
 
 	if addRaw == "" && removeRaw == "" && replaceRaw == "" {
-		return response.Fail("at least one of add, remove, or replace_all is required")
+		return response.Fail(
+			"at least one of add, remove, or replace_all is required",
+		)
 	}
 
 	if replaceRaw != "" {

@@ -18,9 +18,7 @@ func (s *Server) triggerRun(
 	request := runner.TriggerRequest{Update: update}
 
 	if playbook != "" {
-		request.Parameters = map[string]any{
-			constant.Playbook: playbook,
-		}
+		request.Parameters = map[string]any{constant.Playbook: playbook}
 	}
 
 	if synchronous {

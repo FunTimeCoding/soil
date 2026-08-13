@@ -21,9 +21,7 @@ func New(
 		o = append(
 			o,
 			v2.WithBaseURL(
-				locator.New(
-					host,
-				).Base("/api/v2").Port(port).Insecure().String(),
+				locator.New(host).Base("/api/v2").Port(port).Insecure().String(),
 			),
 		)
 	}

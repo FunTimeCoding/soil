@@ -12,9 +12,7 @@ import (
 func TestFunctionEmptyBody(t *testing.T) {
 	l := lint.Function(
 		constant.UpperBravo,
-		strings.NewReader(
-			"package main\n\nfunc main() {\n}\n",
-		),
+		strings.NewReader("package main\n\nfunc main() {\n}\n"),
 	)
 	assertReport(
 		t,

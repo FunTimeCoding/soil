@@ -31,19 +31,12 @@ func TestRenamePackageClause(t *testing.T) {
 	assert.StringContains(t, "v := depot.Store{}", caller)
 	aliased := readFixtureFile(t, d, "pkg/aliased/run.go")
 	assertFormatted(t, aliased)
-	assert.StringContains(
-		t,
-		"st \"example/pkg/outer/store\"",
-		aliased,
-	)
+	assert.StringContains(t, "st \"example/pkg/outer/store\"", aliased)
 	assert.StringContains(t, "return &st.Store{}", aliased)
 }
 
 func TestRenamePackageClauseShadowed(t *testing.T) {
-	d := testutil.PrepareTestPackage(
-		t,
-		serviceTestdata("rename-collision/src"),
-	)
+	d := testutil.PrepareTestPackage(t, serviceTestdata("rename-collision/src"))
 	s := testService()
 	r, e := s.RenamePackageClause(d, "example/pkg/outer/store", "depot")
 	assert.FatalOnError(t, e)

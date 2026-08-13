@@ -22,9 +22,7 @@ func (s *Server) GetSessionToolContext(
 		r.Params.Filter,
 		surround,
 	) {
-		entry := server.ToolContextResult{
-			ToolName: c.ToolName,
-		}
+		entry := server.ToolContextResult{ToolName: c.ToolName}
 		var before []server.SessionMessage
 
 		for _, m := range c.Before {

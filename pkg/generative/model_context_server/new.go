@@ -19,9 +19,7 @@ func New(
 	p, n := system.ClaimPort()
 	b := lifecycle.New(
 		logger.New(context.Background()),
-		lifecycle.WithServer(
-			server.New("", setup).WithListener(n),
-		),
+		lifecycle.WithServer(server.New("", setup).WithListener(n)),
 	)
 	b.Run()
 	assert.Listen(t, p)

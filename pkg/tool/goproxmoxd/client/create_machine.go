@@ -11,9 +11,7 @@ func (c *Client) CreateMachine(
 ) string {
 	result, e := c.client.CreateMachineWithResponse(
 		c.context,
-		&client.CreateMachineParams{
-			Instance: &c.instance,
-		},
+		&client.CreateMachineParams{Instance: &c.instance},
 		body,
 	)
 	errors.PanicOnError(e)

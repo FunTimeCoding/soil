@@ -16,11 +16,7 @@ func setDeviceLabel(c *client.Client) *cobra.Command {
 			arguments []string,
 		) {
 			fmt.Println(
-				c.SetDeviceLabel(
-					arguments[0],
-					arguments[1],
-					arguments[2],
-				),
+				c.SetDeviceLabel(arguments[0], arguments[1], arguments[2]),
 			)
 		},
 	}

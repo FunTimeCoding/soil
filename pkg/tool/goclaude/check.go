@@ -17,10 +17,7 @@ func check(c *command_context.Context) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			o := RunCheck(
-				c.Client(),
-				sessionIdentifierFromEnvironment(),
-			)
+			o := RunCheck(c.Client(), sessionIdentifierFromEnvironment())
 
 			if o == "" {
 				return

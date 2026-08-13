@@ -2,8 +2,4 @@ package constant
 
 import "github.com/funtimecoding/soil/pkg/identity"
 
-var Identity = identity.New(
-	"gopackage",
-	"Package builder",
-	"gopackage",
-)
+var Identity = identity.New("gopackage", "Package builder", "gopackage")

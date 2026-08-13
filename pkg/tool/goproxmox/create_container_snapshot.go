@@ -27,13 +27,7 @@ func createContainerSnapshot(c *command_context.Context) *cobra.Command {
 				n = &node
 			}
 
-			fmt.Println(
-				c.Client().CreateContainerSnapshot(
-					identifier,
-					name,
-					n,
-				),
-			)
+			fmt.Println(c.Client().CreateContainerSnapshot(identifier, name, n))
 		},
 	}
 	result.Flags().StringVar(&node, "node", "", "node name")

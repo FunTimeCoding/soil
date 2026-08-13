@@ -29,8 +29,6 @@ func (s *Server) listMetadata(
 	}
 
 	return response.Success(
-		notation.MarshalIndent(
-			s.service.CollectionFacets(collection, nil),
-		),
+		notation.MarshalIndent(s.service.CollectionFacets(collection, nil)),
 	)
 }

@@ -22,11 +22,7 @@ func (r *Registry) Search(query string) []Result {
 
 		results = append(
 			results,
-			Result{
-				Command:   c,
-				Score:     score,
-				Positions: positions,
-			},
+			Result{Command: c, Score: score, Positions: positions},
 		)
 	}
 

@@ -66,21 +66,14 @@ func (s *Server) register() {
 				constant.Service,
 				mcp.Description("Filter by service identifier"),
 			),
-			mcp.WithString(
-				constant.User,
-				mcp.Description("Filter by user"),
-			),
+			mcp.WithString(constant.User, mcp.Description("Filter by user")),
 			mcp.WithString(
 				constant.Since,
-				mcp.Description(
-					"Show entries since this time (RFC3339 format)",
-				),
+				mcp.Description("Show entries since this time (RFC3339 format)"),
 			),
 			mcp.WithString(
 				constant.Until,
-				mcp.Description(
-					"Show entries until this time (RFC3339 format)",
-				),
+				mcp.Description("Show entries until this time (RFC3339 format)"),
 			),
 			mcp.WithNumber(
 				generative.ParameterLimit,
@@ -94,9 +87,7 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.UpdateEntry,
-			mcp.WithDescription(
-				"Update an existing maintenance log entry",
-			),
+			mcp.WithDescription("Update an existing maintenance log entry"),
 			mcp.WithNumber(
 				constant.Identifier,
 				mcp.Required(),
@@ -106,10 +97,7 @@ func (s *Server) register() {
 				constant.Action,
 				mcp.Description("Updated action description"),
 			),
-			mcp.WithString(
-				constant.User,
-				mcp.Description("Updated user"),
-			),
+			mcp.WithString(constant.User, mcp.Description("Updated user")),
 			mcp.WithString(
 				constant.System,
 				mcp.Description("Updated system identifier"),
@@ -124,9 +112,7 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				constant.Timestamp,
-				mcp.Description(
-					"Updated timestamp (RFC3339 format)",
-				),
+				mcp.Description("Updated timestamp (RFC3339 format)"),
 			),
 		),
 		s.update,
@@ -134,9 +120,7 @@ func (s *Server) register() {
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.DeleteEntry,
-			mcp.WithDescription(
-				"Delete a maintenance log entry",
-			),
+			mcp.WithDescription("Delete a maintenance log entry"),
 			mcp.WithNumber(
 				constant.Identifier,
 				mcp.Required(),

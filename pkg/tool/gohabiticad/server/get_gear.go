@@ -13,12 +13,8 @@ func (s *Server) GetGear(
 	result, e := s.habitica.UserGear()
 
 	if e != nil {
-		return server.GetGear500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.GetGear500JSONResponse(*s.captureDetail(e)), nil
 	}
 
-	return server.GetGear200JSONResponse(
-		*convert.Gear(result),
-	), nil
+	return server.GetGear200JSONResponse(*convert.Gear(result)), nil
 }

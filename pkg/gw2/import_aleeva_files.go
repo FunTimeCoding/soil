@@ -11,10 +11,7 @@ import (
 func ImportAleevaFiles() {
 	downloads := join.Absolute(system.Home(), systemConstant.DownloadsPath)
 
-	for _, file := range system.FilesMatching(
-		downloads,
-		constant.MembersPrefix,
-	) {
+	for _, file := range system.FilesMatching(downloads, constant.MembersPrefix) {
 		source := join.Absolute(downloads, file)
 		destination := join.Absolute(
 			systemConstant.Temporary,

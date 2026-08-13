@@ -7,7 +7,5 @@ func (s *Store) CreateMuteRule(
 	message string,
 	cluster string,
 ) error {
-	return s.database.Create(
-		mute_rule.New(reason, message, cluster),
-	).Error
+	return s.database.Create(mute_rule.New(reason, message, cluster)).Error
 }

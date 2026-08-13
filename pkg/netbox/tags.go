@@ -10,9 +10,9 @@ func (c *Client) Tags() ([]*tag.Tag, error) {
 		return c.cache.Tags, nil
 	}
 
-	result, _, e := c.client.ExtrasAPI.ExtrasTagsList(
-		c.context,
-	).Limit(constant.PageLimit).Execute()
+	result, _, e := c.client.ExtrasAPI.ExtrasTagsList(c.context).Limit(
+		constant.PageLimit,
+	).Execute()
 
 	if e != nil {
 		return nil, e

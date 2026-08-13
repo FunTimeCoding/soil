@@ -59,10 +59,7 @@ func Main(
 
 	if name == "" {
 		for _, n := range system.Directories(
-			join.Absolute(
-				system.WorkDirectory(),
-				systemConstant.CommandPath,
-			),
+			join.Absolute(system.WorkDirectory(), systemConstant.CommandPath),
 		) {
 			if n == buildConstant.ExamplePath {
 				continue

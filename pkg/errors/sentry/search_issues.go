@@ -32,10 +32,7 @@ func (c *Client) SearchIssues(
 		q["cursor"] = cursor
 	}
 
-	b, e := c.basic.Get(
-		fmt.Sprintf("organizations/%s/issues", organization),
-		q,
-	)
+	b, e := c.basic.Get(fmt.Sprintf("organizations/%s/issues", organization), q)
 
 	if e != nil {
 		return nil, e

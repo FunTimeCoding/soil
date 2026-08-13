@@ -18,9 +18,9 @@ func (c *Client) CreateInterface(
 		name,
 		t,
 	)
-	result, _, e := c.client.DcimAPI.DcimInterfacesCreate(
-		c.context,
-	).WritableInterfaceRequest(*q).Execute()
+	result, _, e := c.client.DcimAPI.DcimInterfacesCreate(c.context).WritableInterfaceRequest(
+		*q,
+	).Execute()
 
 	if e != nil {
 		return nil, e

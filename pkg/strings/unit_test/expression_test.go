@@ -14,8 +14,5 @@ func TestExpression(t *testing.T) {
 	)
 	assert.True(t, e.Check([]string{constant.UpperAlfa}))
 	assert.True(t, e.Check([]string{constant.UpperAlfa, constant.UpperBravo}))
-	assert.False(
-		t,
-		e.Check([]string{constant.UpperAlfa, constant.UpperDelta}),
-	)
+	assert.False(t, e.Check([]string{constant.UpperAlfa, constant.UpperDelta}))
 }

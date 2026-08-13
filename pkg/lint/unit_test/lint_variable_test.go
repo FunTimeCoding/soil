@@ -94,9 +94,7 @@ func TestVariableErrorInString(t *testing.T) {
 func TestVariableErrorComment(t *testing.T) {
 	l := lint.Variable(
 		constant.UpperAlfa,
-		strings.NewReader(
-			"package example\n\n// err := foo()\n",
-		),
+		strings.NewReader("package example\n\n// err := foo()\n"),
 	)
 	assertReport(t, "Alfa", false, nil, "", l)
 }

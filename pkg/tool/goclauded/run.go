@@ -44,10 +44,7 @@ func Run(
 	memoryClient := memory.Wait(l)
 	queryClient := connect.Wait(l)
 	summaryIdx := indexer.New(queryClient, constant.SummarySourceType)
-	completionIdx := indexer.New(
-		queryClient,
-		constant.CompletionSourceType,
-	)
+	completionIdx := indexer.New(queryClient, constant.CompletionSourceType)
 	v := service.New(
 		s,
 		claude.New(),
@@ -66,17 +63,9 @@ func Run(
 	v.PopulateCache()
 	v.BackfillSessions()
 	v.CheckConsistency()
-	l.Structured(
-		"started",
-		"elapsed",
-		time.Since(start).Seconds(),
-	)
+	l.Structured("started", "elapsed", time.Since(start).Seconds())
 	rec := recovery.New(l, r)
-	timeoutTicker := ticker.New(
-		5*time.Minute,
-		v.RunTimeoutSweep,
-		rec,
-	)
+	timeoutTicker := ticker.New(5*time.Minute, v.RunTimeoutSweep, rec)
 	memoryTicker := ticker.New(30*time.Second, v.PollMemory, rec)
 	w := watcher.New(v, l, r, h)
 	address := o.Address
@@ -107,13 +96,7 @@ func Run(
 			),
 			m,
 		)
-		model_context.New(
-			v,
-			r,
-			l,
-			t,
-			o.Version,
-		).Mount(m)
+		model_context.New(v, r, l, t, o.Version).Mount(m)
 		u.Mount(m)
 	}
 	middleware := u.Recovery(r)
@@ -131,9 +114,7 @@ func Run(
 	if environment.Exists(constant.MonitorUsageEnvironment) {
 		options = append(
 			options,
-			lifecycle.WithWorker(
-				ticker.New(time.Minute, v.PollUsage, rec),
-			),
+			lifecycle.WithWorker(ticker.New(time.Minute, v.PollUsage, rec)),
 		)
 	}
 

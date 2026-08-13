@@ -43,16 +43,8 @@ func TestRosterAfterComplete(t *testing.T) {
 	defer a.Close()
 	a.Announce(a.Name(), "some task")
 	a.CheckLive()
-	a.MustCallTool(
-		constant.Complete,
-		map[string]any{
-			constant.Message: "done",
-		},
-	)
+	a.MustCallTool(constant.Complete, map[string]any{constant.Message: "done"})
 	r := a.CheckLive()
-	completions := clientEntriesByKind(
-		r.Entries,
-		constant.QueueSessionComplete,
-	)
+	completions := clientEntriesByKind(r.Entries, constant.QueueSessionComplete)
 	assert.True(t, len(completions) > 0)
 }

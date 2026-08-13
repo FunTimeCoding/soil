@@ -28,11 +28,7 @@ func TestIsGeneratedFileOapiCodegen(t *testing.T) {
 }
 
 func TestIsGeneratedFileNormal(t *testing.T) {
-	path := writeTestFile(
-		t,
-		"foo.go",
-		"package foo\n\nfunc Foo() {}\n",
-	)
+	path := writeTestFile(t, "foo.go", "package foo\n\nfunc Foo() {}\n")
 	assert.Boolean(t, false, lint.IsGeneratedFile(path))
 }
 

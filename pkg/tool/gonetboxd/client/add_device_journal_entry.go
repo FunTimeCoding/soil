@@ -11,9 +11,7 @@ func (c *Client) AddDeviceJournalEntry(
 	kind string,
 	comments string,
 ) string {
-	body := client.AddDeviceJournalEntryJSONRequestBody{
-		Comments: comments,
-	}
+	body := client.AddDeviceJournalEntryJSONRequestBody{Comments: comments}
 
 	if kind != "" {
 		body.Kind = &kind

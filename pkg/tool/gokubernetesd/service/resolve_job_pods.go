@@ -12,10 +12,5 @@ func ResolveJobPods(
 	name string,
 	namespace string,
 ) ([]string, error) {
-	return ListPodNames(
-		x,
-		c,
-		namespace,
-		fmt.Sprintf("job-name=%s", name),
-	)
+	return ListPodNames(x, c, namespace, fmt.Sprintf("job-name=%s", name))
 }

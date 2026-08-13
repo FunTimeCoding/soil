@@ -6,9 +6,9 @@ import (
 )
 
 func (c *Client) PowerFeeds() ([]*power_feed.Feed, error) {
-	result, _, e := c.client.DcimAPI.DcimPowerFeedsList(
-		c.context,
-	).Limit(constant.PageLimit).Execute()
+	result, _, e := c.client.DcimAPI.DcimPowerFeedsList(c.context).Limit(
+		constant.PageLimit,
+	).Execute()
 
 	if e != nil {
 		return nil, e

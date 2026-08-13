@@ -9,12 +9,6 @@ import (
 )
 
 func TestPublicHoliday(t *testing.T) {
-	assert.True(
-		t,
-		library.PublicHoliday(day.New(2024, time.November, 1)),
-	)
-	assert.False(
-		t,
-		library.PublicHoliday(day.New(2024, time.November, 2)),
-	)
+	assert.True(t, library.PublicHoliday(day.New(2024, time.November, 1)))
+	assert.False(t, library.PublicHoliday(day.New(2024, time.November, 2)))
 }

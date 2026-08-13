@@ -27,12 +27,7 @@ func (s *Server) PostAnnounce(
 		), nil
 	}
 
-	if e := s.service.Announce(
-		identifier,
-		r.Body.Callsign,
-		r.Body.Topic,
-		files,
-	); e != nil {
+	if e := s.service.Announce(identifier, r.Body.Callsign, r.Body.Topic, files); e != nil {
 		if errors.Is(e, goclauded.ErrorCallsignNotFound) {
 			return server.PostAnnounce500JSONResponse(
 				server.ErrorResponse{Error: e.Error()},

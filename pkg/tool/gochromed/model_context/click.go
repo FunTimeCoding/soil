@@ -27,10 +27,7 @@ func (s *Server) Click(
 	backendID, okay := s.resolveUID(t.Identifier, a.UID)
 
 	if !okay {
-		return response.Fail(
-			"uid %s not found - take a snapshot first",
-			a.UID,
-		)
+		return response.Fail("uid %s not found - take a snapshot first", a.UID)
 	}
 
 	x := s.client.AcquireTarget(t.Identifier)

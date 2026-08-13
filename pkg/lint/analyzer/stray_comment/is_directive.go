@@ -15,10 +15,7 @@ func isDirective(text string) bool {
 		}
 	}
 
-	for _, marker := range []string{
-		"#nosec",
-		"goanalyze:ignore",
-	} {
+	for _, marker := range []string{"#nosec", "goanalyze:ignore"} {
 		if strings.Contains(text, marker) {
 			return true
 		}

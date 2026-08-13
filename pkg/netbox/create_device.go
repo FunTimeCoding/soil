@@ -60,9 +60,9 @@ func (c *Client) CreateDevice(
 	}
 
 	q.SetStatus(constant.DeviceActiveStatus)
-	result, _, e := c.client.DcimAPI.DcimDevicesCreate(
-		c.context,
-	).WritableDeviceWithConfigContextRequest(*q).Execute()
+	result, _, e := c.client.DcimAPI.DcimDevicesCreate(c.context).WritableDeviceWithConfigContextRequest(
+		*q,
+	).Execute()
 
 	if e != nil {
 		return nil, e

@@ -7,10 +7,7 @@ import (
 )
 
 func localSedInPlace(command string) (bool, error) {
-	file, e := syntax.NewParser().Parse(
-		strings.NewReader(command),
-		"",
-	)
+	file, e := syntax.NewParser().Parse(strings.NewReader(command), "")
 
 	if e != nil {
 		return false, e

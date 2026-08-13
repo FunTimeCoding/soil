@@ -16,10 +16,7 @@ func TestListResources(t *testing.T) {
 	result, e := s.Service.ListResources(
 		context.Background(),
 		"test",
-		service.ListQuery{
-			ResourceType: "pods",
-			Namespace:    "default",
-		},
+		service.ListQuery{ResourceType: "pods", Namespace: "default"},
 	)
 	assert.Nil(t, e)
 	assert.Count(t, 2, result)
@@ -33,10 +30,7 @@ func TestListResourcesWithRestarts(t *testing.T) {
 	result, e := s.Service.ListResources(
 		context.Background(),
 		"test",
-		service.ListQuery{
-			ResourceType: "pods",
-			Namespace:    "default",
-		},
+		service.ListQuery{ResourceType: "pods", Namespace: "default"},
 	)
 	assert.Nil(t, e)
 	assert.Count(t, 1, result)
@@ -48,10 +42,7 @@ func TestListResourcesEmpty(t *testing.T) {
 	result, e := s.Service.ListResources(
 		context.Background(),
 		"test",
-		service.ListQuery{
-			ResourceType: "pods",
-			Namespace:    "default",
-		},
+		service.ListQuery{ResourceType: "pods", Namespace: "default"},
 	)
 	assert.Nil(t, e)
 	assert.Count(t, 0, result)
@@ -62,10 +53,7 @@ func TestListResourcesUnknownCluster(t *testing.T) {
 	_, e := s.Service.ListResources(
 		context.Background(),
 		"nonexistent",
-		service.ListQuery{
-			ResourceType: "pods",
-			Namespace:    "default",
-		},
+		service.ListQuery{ResourceType: "pods", Namespace: "default"},
 	)
 	assert.NotNil(t, e)
 }

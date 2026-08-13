@@ -11,11 +11,7 @@ func NewPutBytes(
 	locator string,
 	body io.Reader,
 ) *http.Request {
-	result, e := http.NewRequest(
-		constant.Put,
-		locator,
-		body,
-	)
+	result, e := http.NewRequest(constant.Put, locator, body)
 	errors.PanicOnError(e)
 
 	return result

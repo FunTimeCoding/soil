@@ -30,10 +30,7 @@ func (c *Client) Search(
 			},
 		)
 		errors.PanicOnError(e)
-		result = append(
-			result,
-			alert.NewSlice(page.Alerts, p, c.Verbose)...,
-		)
+		result = append(result, alert.NewSlice(page.Alerts, p, c.Verbose)...)
 
 		if len(page.Alerts) < constant.OpsgeniePageLimit {
 			break

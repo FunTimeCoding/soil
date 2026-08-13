@@ -8,10 +8,5 @@ func New(
 	t time.Time,
 	value string,
 ) *Result {
-	return &Result{
-		Type:   typeName,
-		Metric: metric,
-		Time:   t,
-		Value:  value,
-	}
+	return &Result{Type: typeName, Metric: metric, Time: t, Value: value}
 }

@@ -23,30 +23,18 @@ func TestReplaceSegmentPascalCase(t *testing.T) {
 }
 
 func TestReplaceSegmentSingleWord(t *testing.T) {
-	assert.String(
-		t,
-		"message",
-		segment.ReplaceSegment("msg", "msg", "message"),
-	)
+	assert.String(t, "message", segment.ReplaceSegment("msg", "msg", "message"))
 }
 
 func TestReplaceSegmentSingleWordExported(t *testing.T) {
-	assert.String(
-		t,
-		"Message",
-		segment.ReplaceSegment("Msg", "msg", "message"),
-	)
+	assert.String(t, "Message", segment.ReplaceSegment("Msg", "msg", "message"))
 }
 
 func TestReplaceSegmentMiddle(t *testing.T) {
 	assert.String(
 		t,
 		"fooMessage",
-		segment.ReplaceSegment(
-			"fooMsg",
-			"msg",
-			"message",
-		),
+		segment.ReplaceSegment("fooMsg", "msg", "message"),
 	)
 }
 
@@ -54,11 +42,7 @@ func TestReplaceSegmentMiddleExported(t *testing.T) {
 	assert.String(
 		t,
 		"FooMessage",
-		segment.ReplaceSegment(
-			"FooMsg",
-			"msg",
-			"message",
-		),
+		segment.ReplaceSegment("FooMsg", "msg", "message"),
 	)
 }
 

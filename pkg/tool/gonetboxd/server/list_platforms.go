@@ -16,7 +16,5 @@ func (s *Server) ListPlatforms(
 		return server.ListPlatforms500JSONResponse(*s.captureDetail(e)), nil
 	}
 
-	return server.ListPlatforms200JSONResponse(
-		convert.Platforms(platforms),
-	), nil
+	return server.ListPlatforms200JSONResponse(convert.Platforms(platforms)), nil
 }

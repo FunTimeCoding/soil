@@ -13,10 +13,7 @@ func New(t *testing.T) *Tester {
 
 	return &Tester{
 		t: t,
-		Store: store.New(
-			lite.NewMemory(),
-			func() time.Time { return now },
-		),
+		Store: store.New(lite.NewMemory(), func() time.Time { return now }),
 		now: &now,
 	}
 }

@@ -10,10 +10,7 @@ func New() *Client {
 	return &Client{
 		locator: url.URL{
 			Scheme: constant.Socket,
-			Host: web.AddressHostPort(
-				constant.Localhost,
-				constant.ListenPort,
-			),
+			Host: web.AddressHostPort(constant.Localhost, constant.ListenPort),
 			Path: constant.LocationMonitor,
 		},
 		done: make(chan struct{}),

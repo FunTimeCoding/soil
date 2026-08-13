@@ -21,10 +21,6 @@ func DeleteTwice() {
 	var f *model.AppError
 
 	if errors.As(e, &f) {
-		fmt.Printf(
-			"AppError identifier %s status %d\n",
-			f.Id,
-			f.StatusCode,
-		)
+		fmt.Printf("AppError identifier %s status %d\n", f.Id, f.StatusCode)
 	}
 }

@@ -11,9 +11,6 @@ func ReplaceVersionByPrefix(
 	prefix string,
 ) string {
 	return regexp.MustCompile(
-		fmt.Sprintf(
-			`(%s)([0-9]+\.[0-9]+\.[0-9]+)`,
-			prefix,
-		),
+		fmt.Sprintf(`(%s)([0-9]+\.[0-9]+\.[0-9]+)`, prefix),
 	).ReplaceAllString(content, fmt.Sprintf("${1}%s", v))
 }

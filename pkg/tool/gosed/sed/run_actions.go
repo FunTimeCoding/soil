@@ -51,9 +51,7 @@ func runActions(
 			&upstream.CommitActionOptions{
 				Action:   &update,
 				FilePath: new(path),
-				Content: new(
-					replaceLines(base64.Decode(f.Content), replaces),
-				),
+				Content: new(replaceLines(base64.Decode(f.Content), replaces)),
 			},
 		)
 	}

@@ -28,18 +28,13 @@ func (s *Server) recentVersions() gomponents.Node {
 		rows = append(
 			rows,
 			html.Tr(
-				layout.TimeCell(
-					library.Parse(time.RFC3339, v.ChangedAt),
-				),
+				layout.TimeCell(library.Parse(time.RFC3339, v.ChangedAt)),
 				html.Td(gomponents.Text(v.ChangeType)),
 				html.Td(
 					html.A(
 						gomponents.Attr(
 							"href",
-							fmt.Sprintf(
-								"/memories/%d",
-								v.MemoryIdentifier,
-							),
+							fmt.Sprintf("/memories/%d", v.MemoryIdentifier),
 						),
 						gomponents.Text(v.Name),
 					),

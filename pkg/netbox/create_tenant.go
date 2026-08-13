@@ -6,13 +6,10 @@ import (
 )
 
 func (c *Client) CreateTenant(name string) (*tenant.Tenant, error) {
-	q := netbox.NewTenantRequest(
-		name,
-		slug(name),
-	)
-	result, _, e := c.client.TenancyAPI.TenancyTenantsCreate(
-		c.context,
-	).TenantRequest(*q).Execute()
+	q := netbox.NewTenantRequest(name, slug(name))
+	result, _, e := c.client.TenancyAPI.TenancyTenantsCreate(c.context).TenantRequest(
+		*q,
+	).Execute()
 
 	if e != nil {
 		return nil, e

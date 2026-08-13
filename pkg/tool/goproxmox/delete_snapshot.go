@@ -30,19 +30,9 @@ func deleteSnapshot(c *command_context.Context) *cobra.Command {
 			fmt.Println(c.Client().DeleteMachineSnapshot(identifier, name, n))
 		},
 	}
-	result.Flags().StringVar(
-		&name,
-		"name",
-		"",
-		"snapshot name (required)",
-	)
+	result.Flags().StringVar(&name, "name", "", "snapshot name (required)")
 	errors.PanicOnError(result.MarkFlagRequired("name"))
-	result.Flags().StringVar(
-		&node,
-		"node",
-		"",
-		"node name (speeds up lookup)",
-	)
+	result.Flags().StringVar(&node, "node", "", "node name (speeds up lookup)")
 
 	return result
 }

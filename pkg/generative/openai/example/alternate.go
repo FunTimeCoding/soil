@@ -16,10 +16,7 @@ func Alternate() {
 		openai.ChatCompletionRequest{
 			Model: openai.GPT4o,
 			Messages: []openai.ChatCompletionMessage{
-				{
-					Role:    openai.ChatMessageRoleUser,
-					Content: "Hello!",
-				},
+				{Role: openai.ChatMessageRoleUser, Content: "Hello!"},
 			},
 		},
 	)

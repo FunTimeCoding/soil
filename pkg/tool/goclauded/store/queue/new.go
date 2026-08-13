@@ -5,9 +5,5 @@ func New(
 	kind string,
 	body string,
 ) *Entry {
-	return &Entry{
-		Callsign: callsign,
-		Kind:     kind,
-		Body:     body,
-	}
+	return &Entry{Callsign: callsign, Kind: kind, Body: body}
 }

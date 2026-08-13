@@ -17,13 +17,7 @@ func TestSeedsOrderedByPosition(t *testing.T) {
 		"c",
 		time.Now(),
 	)
-	s.Store.UpsertSeed(
-		constant.LowerAlfa,
-		"alfa.md",
-		"hash-a",
-		"a",
-		time.Now(),
-	)
+	s.Store.UpsertSeed(constant.LowerAlfa, "alfa.md", "hash-a", "a", time.Now())
 	s.Store.UpsertSeed(
 		constant.LowerBravo,
 		"bravo.md",

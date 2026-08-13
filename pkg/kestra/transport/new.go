@@ -7,9 +7,5 @@ func New(
 	password string,
 	r http.RoundTripper,
 ) *Transport {
-	return &Transport{
-		username: username,
-		password: password,
-		r:        r,
-	}
+	return &Transport{username: username, password: password, r: r}
 }

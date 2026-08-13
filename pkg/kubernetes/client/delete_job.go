@@ -13,9 +13,7 @@ func (c *Client) DeleteJob(
 	e := c.client.BatchV1().Jobs(namespace).Delete(
 		c.context,
 		name,
-		v1.DeleteOptions{
-			PropagationPolicy: new(v1.DeletePropagationForeground),
-		},
+		v1.DeleteOptions{PropagationPolicy: new(v1.DeletePropagationForeground)},
 	)
 
 	if e != nil {

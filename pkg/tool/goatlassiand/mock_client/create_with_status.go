@@ -30,11 +30,7 @@ func (c *Client) createWithStatus(
 		},
 	}
 	r.Links = response.Links{
-		WebUI: fmt.Sprintf(
-			"/spaces/ops/pages/%s/%s",
-			identifier,
-			title,
-		),
+		WebUI: fmt.Sprintf("/spaces/ops/pages/%s/%s", identifier, title),
 	}
 	c.pages[identifier] = &entry{page: r}
 

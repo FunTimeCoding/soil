@@ -36,11 +36,7 @@ func (s *Server) Start() {
 	}
 
 	if s.certificate != "" {
-		web.ServeCertificateAsynchronous(
-			s.http,
-			s.certificate,
-			s.key,
-		)
+		web.ServeCertificateAsynchronous(s.http, s.certificate, s.key)
 	} else if s.listener != nil {
 		web.ServeListenerAsynchronous(s.http, s.listener)
 	} else {

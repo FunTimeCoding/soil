@@ -6,7 +6,5 @@ import (
 )
 
 func summaryStrip(items []string) gomponents.Node {
-	return html.Div(
-		SummaryStripContent(items),
-	)
+	return html.Div(SummaryStripContent(items))
 }

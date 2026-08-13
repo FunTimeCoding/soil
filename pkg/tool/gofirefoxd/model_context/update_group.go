@@ -13,12 +13,7 @@ func (s *Server) UpdateGroup(
 	_ mcp.CallToolRequest,
 	a argument.UpdateGroup,
 ) (*mcp.CallToolResult, error) {
-	e := s.client.UpdateGroup(
-		int(a.GroupIdentifier),
-		a.Title,
-		a.Color,
-		nil,
-	)
+	e := s.client.UpdateGroup(int(a.GroupIdentifier), a.Title, a.Color, nil)
 
 	if e != nil {
 		return s.captureFail(e, constant.UnexpectedError)

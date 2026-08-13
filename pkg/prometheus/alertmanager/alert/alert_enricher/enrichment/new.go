@@ -5,9 +5,5 @@ func New(
 	entity string,
 	category string,
 ) *Enrichment {
-	return &Enrichment{
-		Name:     name,
-		Entity:   entity,
-		Category: category,
-	}
+	return &Enrichment{Name: name, Entity: entity, Category: category}
 }

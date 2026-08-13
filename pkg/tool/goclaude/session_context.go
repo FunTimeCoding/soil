@@ -23,10 +23,7 @@ func sessionContext(c *command_context.Context) *cobra.Command {
 			identifier := resolveSession(c.Client(), arguments[0])
 
 			if identifier == "" {
-				fmt.Printf(
-					"session not found: %s\n",
-					arguments[0],
-				)
+				fmt.Printf("session not found: %s\n", arguments[0])
 
 				return
 			}
@@ -43,10 +40,7 @@ func sessionContext(c *command_context.Context) *cobra.Command {
 			results := response.JSON200.Results
 
 			if len(results) == 0 {
-				fmt.Printf(
-					"no tool calls matching %q\n",
-					arguments[1],
-				)
+				fmt.Printf("no tool calls matching %q\n", arguments[1])
 
 				return
 			}
@@ -63,17 +57,10 @@ func sessionContext(c *command_context.Context) *cobra.Command {
 						text := m.Text
 
 						if len(text) > 300 {
-							text = fmt.Sprintf(
-								"%s…",
-								text[:300],
-							)
+							text = fmt.Sprintf("%s…", text[:300])
 						}
 
-						fmt.Printf(
-							"**%s:** %s\n\n",
-							m.Role,
-							text,
-						)
+						fmt.Printf("**%s:** %s\n\n", m.Role, text)
 					}
 				}
 
@@ -84,17 +71,10 @@ func sessionContext(c *command_context.Context) *cobra.Command {
 						text := m.Text
 
 						if len(text) > 300 {
-							text = fmt.Sprintf(
-								"%s…",
-								text[:300],
-							)
+							text = fmt.Sprintf("%s…", text[:300])
 						}
 
-						fmt.Printf(
-							"**%s:** %s\n\n",
-							m.Role,
-							text,
-						)
+						fmt.Printf("**%s:** %s\n\n", m.Role, text)
 					}
 				}
 			}

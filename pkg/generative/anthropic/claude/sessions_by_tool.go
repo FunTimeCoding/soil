@@ -21,10 +21,7 @@ func (c *Client) SessionsByTool(toolFilter string) []*SessionToolCount {
 			continue
 		}
 
-		result = append(
-			result,
-			&SessionToolCount{Session: s, Count: count},
-		)
+		result = append(result, &SessionToolCount{Session: s, Count: count})
 	}
 
 	sort.Slice(

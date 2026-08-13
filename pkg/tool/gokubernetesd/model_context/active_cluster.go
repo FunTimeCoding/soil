@@ -17,9 +17,7 @@ func (s *Server) activeCluster(x context.Context) (*cluster.Cluster, error) {
 	v, okay := s.sessions.Load(session.SessionID())
 
 	if !okay {
-		return nil, fmt.Errorf(
-			"no cluster selected - use use_cluster first",
-		)
+		return nil, fmt.Errorf("no cluster selected - use use_cluster first")
 	}
 
 	return s.service.ClusterByName(v.(string))

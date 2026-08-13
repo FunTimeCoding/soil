@@ -8,8 +8,9 @@ import (
 func (s *Store) UsageSnapshots(since time.Duration) ([]usage_snapshot.Snapshot, error) {
 	var result []usage_snapshot.Snapshot
 
-	return result, s.database.Where(
-		"created_at > ?",
-		s.clock().Add(-since),
-	).Order("created_at ASC").Find(&result).Error
+	return result, s.database.Where("created_at > ?", s.clock().Add(-since)).Order(
+		"created_at ASC",
+	).Find(
+		&result,
+	).Error
 }

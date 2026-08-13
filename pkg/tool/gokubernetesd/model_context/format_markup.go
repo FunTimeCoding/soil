@@ -23,10 +23,6 @@ func formatMarkup(
 	}
 
 	return response.Success(
-		fmt.Sprintf(
-			"# filtered: %s\n%s",
-			join.CommaSpace(filtered),
-			b,
-		),
+		fmt.Sprintf("# filtered: %s\n%s", join.CommaSpace(filtered), b),
 	)
 }

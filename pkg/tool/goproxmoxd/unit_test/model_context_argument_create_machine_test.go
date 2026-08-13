@@ -175,11 +175,7 @@ func TestBuildOptionsCloudInit(t *testing.T) {
 	m.CIUser = "admin"
 	options := m.BuildOptions()
 	assert.String(t, "admin", requireOption(t, options, "ciuser").(string))
-	assert.String(
-		t,
-		"ip=dhcp",
-		requireOption(t, options, "ipconfig0").(string),
-	)
+	assert.String(t, "ip=dhcp", requireOption(t, options, "ipconfig0").(string))
 	assert.String(
 		t,
 		"local-lvm:cloudinit",
@@ -196,11 +192,7 @@ func TestBuildOptionsCloudInitFull(t *testing.T) {
 	m.IPConfiguration = "ip=10.0.0.5/24,gw=10.0.0.1"
 	options := m.BuildOptions()
 	assert.String(t, "deploy", requireOption(t, options, "ciuser").(string))
-	assert.String(
-		t,
-		"secret",
-		requireOption(t, options, "cipassword").(string),
-	)
+	assert.String(t, "secret", requireOption(t, options, "cipassword").(string))
 	assert.String(
 		t,
 		"ip=10.0.0.5/24,gw=10.0.0.1",
@@ -220,11 +212,7 @@ func TestBuildOptionsCloudInitSSHKeysOnly(t *testing.T) {
 	m.Name = "ssh-vm"
 	m.SSHKeys = "ssh-ed25519 AAAA key1"
 	options := m.BuildOptions()
-	assert.String(
-		t,
-		"ip=dhcp",
-		requireOption(t, options, "ipconfig0").(string),
-	)
+	assert.String(t, "ip=dhcp", requireOption(t, options, "ipconfig0").(string))
 	assert.String(
 		t,
 		"local-lvm:cloudinit",
@@ -237,11 +225,7 @@ func TestBuildOptionsCustomCPUType(t *testing.T) {
 	m.Name = "cpu-vm"
 	m.CPUType = "x86-64-v2-AES"
 	options := m.BuildOptions()
-	assert.String(
-		t,
-		"x86-64-v2-AES",
-		requireOption(t, options, "cpu").(string),
-	)
+	assert.String(t, "x86-64-v2-AES", requireOption(t, options, "cpu").(string))
 }
 
 func TestBuildOptionsSearchDomain(t *testing.T) {
@@ -262,16 +246,8 @@ func TestBuildOptionsExtras(t *testing.T) {
 	m.Name = "extras-vm"
 	m.Extras = "serial0=socket,vga=serial0"
 	options := m.BuildOptions()
-	assert.String(
-		t,
-		"socket",
-		requireOption(t, options, "serial0").(string),
-	)
-	assert.String(
-		t,
-		"serial0",
-		requireOption(t, options, "vga").(string),
-	)
+	assert.String(t, "socket", requireOption(t, options, "serial0").(string))
+	assert.String(t, "serial0", requireOption(t, options, "vga").(string))
 }
 
 func TestBuildOptionsCustomDiskSize(t *testing.T) {

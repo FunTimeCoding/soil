@@ -21,9 +21,7 @@ func (s *Server) DeleteMachine(
 	c, e := s.service.Client(instance)
 
 	if e != nil {
-		return server.DeleteMachine500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.DeleteMachine500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	node := ""
@@ -42,23 +40,15 @@ func (s *Server) DeleteMachine(
 
 	if e != nil {
 		if not_found.Is(e) {
-			return server.DeleteMachine404JSONResponse{
-				Error: e.Error(),
-			}, nil
+			return server.DeleteMachine404JSONResponse{Error: e.Error()}, nil
 		}
 
 		if errors.Is(e, constant.ErrorMachineRunning) {
-			return server.DeleteMachine400JSONResponse(
-				*clientError(e),
-			), nil
+			return server.DeleteMachine400JSONResponse(*clientError(e)), nil
 		}
 
-		return server.DeleteMachine500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.DeleteMachine500JSONResponse(*s.captureDetail(e)), nil
 	}
 
-	return server.DeleteMachine200JSONResponse{
-		TaskId: "deleted",
-	}, nil
+	return server.DeleteMachine200JSONResponse{TaskId: "deleted"}, nil
 }

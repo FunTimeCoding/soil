@@ -41,10 +41,7 @@ func (s *Server) announce(
 	}
 
 	if cs := server.ClientSessionFromContext(x); cs != nil {
-		if f := s.service.BindModelContextSession(
-			name,
-			cs.SessionID(),
-		); f != nil {
+		if f := s.service.BindModelContextSession(name, cs.SessionID()); f != nil {
 			if errors.Is(f, constant.ErrorCallsignNotFound) {
 				return response.Fail(f.Error())
 			}
@@ -72,11 +69,5 @@ func (s *Server) announce(
 		return s.captureFail(f, library.UnexpectedError)
 	}
 
-	return response.Success(
-		fmt.Sprintf(
-			"Announced as %s: %s",
-			name,
-			topic,
-		),
-	)
+	return response.Success(fmt.Sprintf("Announced as %s: %s", name, topic))
 }

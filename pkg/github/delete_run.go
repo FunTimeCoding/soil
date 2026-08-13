@@ -5,12 +5,7 @@ func (c *Client) DeleteRun(
 	name string,
 	run int64,
 ) error {
-	_, e := c.client.Actions.DeleteWorkflowRun(
-		c.context,
-		owner,
-		name,
-		run,
-	)
+	_, e := c.client.Actions.DeleteWorkflowRun(c.context, owner, name, run)
 
 	return e
 }

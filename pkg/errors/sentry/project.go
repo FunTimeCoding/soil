@@ -11,11 +11,7 @@ func (c *Client) Project(
 	projectSlug string,
 ) (*response.Project, error) {
 	b, e := c.basic.Get(
-		fmt.Sprintf(
-			"projects/%s/%s",
-			organization,
-			projectSlug,
-		),
+		fmt.Sprintf("projects/%s/%s", organization, projectSlug),
 		nil,
 	)
 

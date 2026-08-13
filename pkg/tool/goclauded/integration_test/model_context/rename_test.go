@@ -15,9 +15,7 @@ func TestEditSessionAliasSelf(t *testing.T) {
 	a.Announce(a.Name(), "working")
 	a.MustCallTool(
 		constant.EditSession,
-		map[string]any{
-			constant.Alias: "my-project",
-		},
+		map[string]any{constant.Alias: "my-project"},
 	)
 	roster := a.MustCallTool(constant.Roster, map[string]any{})
 	assert.StringContains(t, "my-project", roster)
@@ -34,10 +32,7 @@ func TestEditSessionAliasOther(t *testing.T) {
 	b.Announce(b.Name(), constant.FixtureTarget)
 	a.MustCallTool(
 		constant.EditSession,
-		map[string]any{
-			constant.Alias:  "the-target",
-			constant.Target: b.Name(),
-		},
+		map[string]any{constant.Alias: "the-target", constant.Target: b.Name()},
 	)
 	roster := a.MustCallTool(constant.Roster, map[string]any{})
 	assert.StringContains(t, "the-target", roster)
@@ -51,9 +46,7 @@ func TestEditSessionDescription(t *testing.T) {
 	a.Announce(a.Name(), "working")
 	a.MustCallTool(
 		constant.EditSession,
-		map[string]any{
-			constant.Description: "Fixed the auth bug",
-		},
+		map[string]any{constant.Description: "Fixed the auth bug"},
 	)
 	assert.String(
 		t,

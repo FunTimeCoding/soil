@@ -17,11 +17,7 @@ func writeMoveTarget(
 	targetPath := filepath.Join(plan.moveDirectory, fileName)
 
 	if plan.target != nil {
-		if astFile := findSyntaxFile(
-			plan.set,
-			plan.target,
-			targetPath,
-		); astFile != nil {
+		if astFile := findSyntaxFile(plan.set, plan.target, targetPath); astFile != nil {
 			file, e := d.DecorateFile(plan.set, plan.target, astFile)
 
 			if e != nil {

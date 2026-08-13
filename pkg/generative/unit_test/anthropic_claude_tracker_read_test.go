@@ -33,11 +33,7 @@ func appendFile(
 	path string,
 	content string,
 ) {
-	f, e := os.OpenFile(
-		path,
-		os.O_APPEND|os.O_CREATE|os.O_WRONLY,
-		0644,
-	)
+	f, e := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 
 	if e != nil {
 		t.Fatalf("open %s: %v", path, e)
@@ -55,16 +51,8 @@ func appendFile(
 func TestReadAccumulatesUsage(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "session.jsonl")
 	fable := `{"input_tokens":10,"output_tokens":100,"cache_creation_input_tokens":1000,"cache_read_input_tokens":5000,"cache_creation":{"ephemeral_5m_input_tokens":200,"ephemeral_1h_input_tokens":800}}`
-	appendFile(
-		t,
-		path,
-		assistantUsageLine("m1", "r1", "claude-fable-5", fable),
-	)
-	appendFile(
-		t,
-		path,
-		assistantUsageLine("m1", "r1", "claude-fable-5", fable),
-	)
+	appendFile(t, path, assistantUsageLine("m1", "r1", "claude-fable-5", fable))
+	appendFile(t, path, assistantUsageLine("m1", "r1", "claude-fable-5", fable))
 	s := tracker.New()
 	assert.Nil(t, tracker.Read(path, s))
 	tokens := s.Usage["fable"]
@@ -76,17 +64,9 @@ func TestReadAccumulatesUsage(t *testing.T) {
 	assert.Integer(t, 200, tokens.Cache5Minute)
 	assert.Integer(t, 800, tokens.Cache1Hour)
 	assert.Integer(t, 5000, tokens.CacheRead)
-	appendFile(
-		t,
-		path,
-		assistantUsageLine("m1", "r1", "claude-fable-5", fable),
-	)
+	appendFile(t, path, assistantUsageLine("m1", "r1", "claude-fable-5", fable))
 	opus := `{"input_tokens":7,"output_tokens":30,"cache_creation_input_tokens":400,"cache_read_input_tokens":900}`
-	appendFile(
-		t,
-		path,
-		assistantUsageLine("m2", "r2", "claude-opus-4-8", opus),
-	)
+	appendFile(t, path, assistantUsageLine("m2", "r2", "claude-opus-4-8", opus))
 	assert.Nil(t, tracker.Read(path, s))
 	tokens = s.Usage["fable"]
 	assert.Integer(t, 1, tokens.Count)
@@ -103,16 +83,8 @@ func TestReadAccumulatesUsage(t *testing.T) {
 func TestReadResetsOnShrink(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "session.jsonl")
 	fable := `{"input_tokens":10,"output_tokens":100,"cache_creation_input_tokens":0,"cache_read_input_tokens":0}`
-	appendFile(
-		t,
-		path,
-		assistantUsageLine("m1", "r1", "claude-fable-5", fable),
-	)
-	appendFile(
-		t,
-		path,
-		assistantUsageLine("m2", "r2", "claude-fable-5", fable),
-	)
+	appendFile(t, path, assistantUsageLine("m1", "r1", "claude-fable-5", fable))
+	appendFile(t, path, assistantUsageLine("m2", "r2", "claude-fable-5", fable))
 	s := tracker.New()
 	assert.Nil(t, tracker.Read(path, s))
 	assert.Integer(t, 2, s.Usage["fable"].Count)

@@ -6,13 +6,10 @@ import (
 )
 
 func (c *Client) CreateDeviceRole(name string) (*device_role.Role, error) {
-	q := netbox.NewWritableDeviceRoleRequest(
-		name,
-		slug(name),
-	)
-	result, _, e := c.client.DcimAPI.DcimDeviceRolesCreate(
-		c.context,
-	).WritableDeviceRoleRequest(*q).Execute()
+	q := netbox.NewWritableDeviceRoleRequest(name, slug(name))
+	result, _, e := c.client.DcimAPI.DcimDeviceRolesCreate(c.context).WritableDeviceRoleRequest(
+		*q,
+	).Execute()
 
 	if e != nil {
 		return nil, e

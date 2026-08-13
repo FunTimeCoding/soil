@@ -82,14 +82,7 @@ func (s *Service) RenamePackageClause(
 	}
 
 	renameDecoratedClauses(decorations, modified, oldName, newName)
-	e = decorateQualifiers(
-		r,
-		decorations,
-		set,
-		qualifiers,
-		oldName,
-		newName,
-	)
+	e = decorateQualifiers(r, decorations, set, qualifiers, oldName, newName)
 
 	if e != nil {
 		return nil, e

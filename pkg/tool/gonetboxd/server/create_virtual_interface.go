@@ -22,6 +22,7 @@ func (s *Server) CreateVirtualInterface(
 	}
 
 	return server.CreateVirtualInterface201JSONResponse{
-		Identifier: i.GetId(), Name: i.GetName(),
+		Identifier: i.GetId(),
+		Name: i.GetName(),
 	}, nil
 }

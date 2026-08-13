@@ -11,7 +11,5 @@ func New(t *testing.T) *Tester {
 	s := base.New(t)
 	t.Cleanup(s.Close)
 
-	return &Tester{
-		Service: service.New(s.Store(), s.Ollama(), s.Reranker()),
-	}
+	return &Tester{Service: service.New(s.Store(), s.Ollama(), s.Reranker())}
 }

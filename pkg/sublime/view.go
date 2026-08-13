@@ -10,9 +10,7 @@ import (
 )
 
 func (c *Client) View(identifier int) (*view.View, error) {
-	r, e := c.client.Get(
-		c.base.Copy().Path("/views/%d", identifier).String(),
-	)
+	r, e := c.client.Get(c.base.Copy().Path("/views/%d", identifier).String())
 
 	if e != nil {
 		return view.Stub(), fmt.Errorf("read view: %w", e)

@@ -14,10 +14,7 @@ func (s *Server) GetDocument(
 
 	if e != nil {
 		return server.GetDocument500JSONResponse(
-			*s.captureFail(
-				e,
-				constant.UnexpectedError,
-			),
+			*s.captureFail(e, constant.UnexpectedError),
 		), nil
 	}
 

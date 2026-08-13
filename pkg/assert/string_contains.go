@@ -12,10 +12,6 @@ func StringContains(
 ) {
 	if !strings.Contains(actual, expect) {
 		t.Helper()
-		t.Errorf(
-			"\nExpect string contains: %+q\nActual: %+q",
-			expect,
-			actual,
-		)
+		t.Errorf("\nExpect string contains: %+q\nActual: %+q", expect, actual)
 	}
 }

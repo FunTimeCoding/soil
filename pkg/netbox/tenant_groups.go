@@ -6,9 +6,9 @@ import (
 )
 
 func (c *Client) TenantGroups() ([]*tenant_group.Group, error) {
-	result, _, e := c.client.TenancyAPI.TenancyTenantGroupsList(
-		c.context,
-	).Limit(constant.PageLimit).Execute()
+	result, _, e := c.client.TenancyAPI.TenancyTenantGroupsList(c.context).Limit(
+		constant.PageLimit,
+	).Execute()
 
 	if e != nil {
 		return nil, e

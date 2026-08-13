@@ -50,10 +50,7 @@ func collect(o *option.Version) []*project.Project {
 				if !i.IsDir() && i.Name() == constant.ModFile {
 					result = append(
 						result,
-						go_mod.ReadProject(
-							filepath.Dir(path),
-							o.RuntimeVersion,
-						),
+						go_mod.ReadProject(filepath.Dir(path), o.RuntimeVersion),
 					)
 
 					return filepath.SkipDir

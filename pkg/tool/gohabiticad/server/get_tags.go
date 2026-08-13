@@ -13,9 +13,7 @@ func (s *Server) GetTags(
 	result, e := s.habitica.Tags()
 
 	if e != nil {
-		return server.GetTags500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.GetTags500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	return server.GetTags200JSONResponse(convert.Tags(result)), nil

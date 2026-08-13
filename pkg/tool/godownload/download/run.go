@@ -38,10 +38,7 @@ func Run(o *option.Download) {
 
 	if o.PackageVersion != libraryConstant.LatestVersion &&
 		p.Version != o.PackageVersion {
-		errors.Warning(
-			"version %s not found, using latest\n",
-			o.PackageVersion,
-		)
+		errors.Warning("version %s not found, using latest\n", o.PackageVersion)
 	}
 
 	f := packages.SystemMatchingFile(

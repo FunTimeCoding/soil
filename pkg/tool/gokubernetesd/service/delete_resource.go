@@ -36,9 +36,5 @@ func (s *Service) DeleteResource(
 		)
 	}
 
-	return c.Dynamic().Resource(gvr).Delete(
-		x,
-		name,
-		v1.DeleteOptions{},
-	)
+	return c.Dynamic().Resource(gvr).Delete(x, name, v1.DeleteOptions{})
 }

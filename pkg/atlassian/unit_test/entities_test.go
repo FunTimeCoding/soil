@@ -62,15 +62,7 @@ func TestEntities(t *testing.T) {
 	)
 	assert.NotNil(
 		t,
-		alertOption.New(
-			nil,
-			nil,
-			strings.UpperAlfa,
-			nil,
-			nil,
-			nil,
-			nil,
-		),
+		alertOption.New(nil, nil, strings.UpperAlfa, nil, nil, nil, nil),
 	)
 	assert.NotNil(t, override.New(&rawSchedule.ScheduleOverride{}))
 	assert.NotNil(t, rotation.New(&rawSchedule.Rotation{}))

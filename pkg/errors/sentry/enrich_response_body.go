@@ -14,9 +14,7 @@ func enrichResponseBody(
 	}
 
 	if b := extractBody(h.OriginalException); b != nil {
-		e.Contexts[constant.Response] = sentry.Context{
-			constant.Body: string(b),
-		}
+		e.Contexts[constant.Response] = sentry.Context{constant.Body: string(b)}
 
 		return e
 	}

@@ -13,10 +13,7 @@ func devicePatch(d *device.Device) *netbox.PatchedWritableDeviceWithConfigContex
 	if s := d.Raw.Role.GetName(); s != "" {
 		result.SetRole(
 			netbox.BriefDeviceRoleRequestAsDeviceWithConfigContextRequestRole(
-				netbox.NewBriefDeviceRoleRequest(
-					s,
-					d.Raw.Role.GetSlug(),
-				),
+				netbox.NewBriefDeviceRoleRequest(s, d.Raw.Role.GetSlug()),
 			),
 		)
 	}
@@ -65,11 +62,7 @@ func devicePatch(d *device.Device) *netbox.PatchedWritableDeviceWithConfigContex
 	if s := d.Raw.GetSerial(); s == "" && d.Serial != "" {
 		result.SetSerial(d.Serial)
 	} else if s != "" && d.Serial == "" {
-		errors.Warning(
-			"not unsetting serial %s %s\n",
-			d.Name,
-			s,
-		)
+		errors.Warning("not unsetting serial %s %s\n", d.Name, s)
 	} else if s != "" && d.Serial != "" && s != d.Serial {
 		result.SetSerial(d.Serial)
 	}

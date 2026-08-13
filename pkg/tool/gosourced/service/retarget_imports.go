@@ -68,11 +68,7 @@ func retargetImports(
 				return e
 			}
 
-			decoration.SwapPaths(
-				decorated,
-				packagePath,
-				targetPackagePath,
-			)
+			decoration.SwapPaths(decorated, packagePath, targetPackagePath)
 		}
 	}
 

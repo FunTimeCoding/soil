@@ -22,12 +22,8 @@ func (s *Server) CreateTask(
 	result, e := s.habitica.CreateTask(c)
 
 	if e != nil {
-		return server.CreateTask500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.CreateTask500JSONResponse(*s.captureDetail(e)), nil
 	}
 
-	return server.CreateTask201JSONResponse(
-		*convert.Task(result),
-	), nil
+	return server.CreateTask201JSONResponse(*convert.Task(result)), nil
 }

@@ -20,9 +20,7 @@ func (s *Server) ListManufacturers(
 	for _, m := range manufacturers {
 		result = append(
 			result,
-			&server.Manufacturer{
-				Identifier: m.Identifier, Name: m.Name,
-			},
+			&server.Manufacturer{Identifier: m.Identifier, Name: m.Name},
 		)
 	}
 

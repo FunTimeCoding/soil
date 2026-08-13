@@ -12,7 +12,9 @@ import (
 
 func Official() {
 	c := anthropic.NewClient(
-		option.WithAPIKey(environment.Required(constant.AnthropicTokenEnvironment)),
+		option.WithAPIKey(
+			environment.Required(constant.AnthropicTokenEnvironment),
+		),
 	)
 	r, e := c.Messages.New(
 		context.Background(),

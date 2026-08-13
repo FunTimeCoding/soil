@@ -9,9 +9,7 @@ import (
 func NewEnvironment() *Client {
 	var o []Option
 
-	if v := environment.Optional(
-		constant.SaltAuthenticationEnvironment,
-	); v != "" {
+	if v := environment.Optional(constant.SaltAuthenticationEnvironment); v != "" {
 		o = append(o, WithAuthentication(v))
 	}
 

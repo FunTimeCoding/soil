@@ -14,17 +14,11 @@ func (i *Item) Render(currentPath string) gomponents.Node {
 	)
 
 	if i.external {
-		attributes = append(
-			attributes,
-			gomponents.Attr("target", "_blank"),
-		)
+		attributes = append(attributes, gomponents.Attr("target", "_blank"))
 	}
 
 	if currentPath == i.path {
-		attributes = append(
-			attributes,
-			gomponents.Attr("aria-current", "page"),
-		)
+		attributes = append(attributes, gomponents.Attr("aria-current", "page"))
 	}
 
 	return html.Li(html.A(attributes...))

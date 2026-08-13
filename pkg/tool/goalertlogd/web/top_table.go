@@ -35,16 +35,15 @@ func (s *Server) topTable() gomponents.Node {
 							html.A(
 								html.Class("alert-link"),
 								html.Href(
-									fmt.Sprintf(
-										"/alerts?name=%s",
-										r.Name,
-									),
+									fmt.Sprintf("/alerts?name=%s", r.Name),
 								),
 								gomponents.Text(r.Name),
 							),
 						),
 						html.Td(gomponents.Textf("%d", r.Count)),
-						html.Td(gomponents.Text(formatDuration(r.AverageDuration))),
+						html.Td(
+							gomponents.Text(formatDuration(r.AverageDuration)),
+						),
 						html.Td(gomponents.Textf("%d", r.CurrentlyFiring)),
 						html.Td(severityBadge(r.Severity)),
 					)

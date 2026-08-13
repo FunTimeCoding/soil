@@ -18,14 +18,10 @@ func (s *Server) DeleteSnippet(
 	c, e := s.service.SSHClient(instance)
 
 	if e != nil {
-		return server.DeleteSnippet500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.DeleteSnippet500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	c.RemoveFile(snippetPath(r.Name))
 
-	return server.DeleteSnippet200JSONResponse{
-		Status: "deleted",
-	}, nil
+	return server.DeleteSnippet200JSONResponse{Status: "deleted"}, nil
 }

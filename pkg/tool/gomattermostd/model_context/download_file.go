@@ -27,10 +27,7 @@ func (s *Server) DownloadFile(
 		return s.captureDetail(e)
 	}
 
-	b, _, e := s.client.Nested().GetFile(
-		s.client.Context(),
-		a.FileIdentifier,
-	)
+	b, _, e := s.client.Nested().GetFile(s.client.Context(), a.FileIdentifier)
 
 	if e != nil {
 		return s.captureDetail(e)

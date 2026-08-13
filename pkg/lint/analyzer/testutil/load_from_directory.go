@@ -37,7 +37,5 @@ func LoadFromDirectory(
 		t.Fatalf("package errors: %v", p.Errors)
 	}
 
-	return p, output.NewResultsWithDirectory(
-		fmt.Sprintf("%s/", directory),
-	)
+	return p, output.NewResultsWithDirectory(fmt.Sprintf("%s/", directory))
 }

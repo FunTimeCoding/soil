@@ -23,12 +23,7 @@ func updatePage(c *client.Client) *cobra.Command {
 			}
 
 			fmt.Println(
-				c.UpdatePage(
-					arguments[0],
-					arguments[1],
-					arguments[2],
-					m,
-				),
+				c.UpdatePage(arguments[0], arguments[1], arguments[2], m),
 			)
 		},
 	}

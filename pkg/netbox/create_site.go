@@ -6,13 +6,10 @@ import (
 )
 
 func (c *Client) CreateSite(name string) (*site.Site, error) {
-	q := netbox.NewWritableSiteRequest(
-		name,
-		slug(name),
-	)
-	result, _, e := c.client.DcimAPI.DcimSitesCreate(
-		c.context,
-	).WritableSiteRequest(*q).Execute()
+	q := netbox.NewWritableSiteRequest(name, slug(name))
+	result, _, e := c.client.DcimAPI.DcimSitesCreate(c.context).WritableSiteRequest(
+		*q,
+	).Execute()
 
 	if e != nil {
 		return nil, e

@@ -21,7 +21,6 @@ func renderToasts(v []*toast.Toast) string {
 		return ""
 	}
 
-	return lipgloss.NewStyle().Foreground(
-		lipgloss.Color("205"), // Magenta-ish
-	).Render(join.NewLine(lines))
+	return lipgloss.NewStyle().Foreground(lipgloss.Color("205")). // Magenta-ish
+									Render(join.NewLine(lines))
 }

@@ -137,10 +137,7 @@ func TestUpdateMachineNoChanges(t *testing.T) {
 	o.MockClient.AddMachine("test", 100, "original")
 	result := o.Client.MustCallToolError(
 		constant.UpdateMachine,
-		map[string]any{
-			"identifier": 100,
-			"node":       "test",
-		},
+		map[string]any{"identifier": 100, "node": "test"},
 	)
 	assert.StringContains(t, "no changes", result)
 }

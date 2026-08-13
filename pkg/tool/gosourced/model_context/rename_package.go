@@ -28,11 +28,7 @@ func (s *Server) renamePackage(
 		return response.Fail("%s", e)
 	}
 
-	r, e := s.service.RenamePackage(
-		directory,
-		a.PackagePath,
-		a.NewName,
-	)
+	r, e := s.service.RenamePackage(directory, a.PackagePath, a.NewName)
 
 	if e != nil {
 		return s.captureFail(e, constant.UnexpectedError)

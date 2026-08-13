@@ -19,12 +19,7 @@ func addRecord(c *technitium.Client) *cobra.Command {
 			arguments []string,
 		) {
 			r := c.MustAddRecord(arguments[0], recordType, value)
-			fmt.Printf(
-				"added: %s %s %v\n",
-				r.Name,
-				r.Type,
-				r.Payload,
-			)
+			fmt.Printf("added: %s %s %v\n", r.Name, r.Type, r.Payload)
 		},
 	}
 	result.Flags().StringVar(

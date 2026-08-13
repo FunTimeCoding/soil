@@ -28,20 +28,12 @@ func New(
 	errors.PanicOnError(
 		os.WriteFile(procfilePath, []byte(procfileContent), 0644),
 	)
-	errors.PanicOnError(
-		os.WriteFile(envrcPath, []byte(envrcContent), 0755),
-	)
+	errors.PanicOnError(os.WriteFile(envrcPath, []byte(envrcContent), 0755))
 	entries, e := procfile.Parse(procfilePath)
 	errors.PanicOnError(e)
 	env := environment.New(os.Environ())
 	errors.PanicOnError(env.Load(envrcPath))
-	s := server.New(
-		entries,
-		env,
-		procfilePath,
-		envrcPath,
-		socketPath,
-	)
+	s := server.New(entries, env, procfilePath, envrcPath, socketPath)
 	go func() { errors.PanicOnError(s.Run()) }()
 	time.Sleep(100 * time.Millisecond)
 	t.Cleanup(

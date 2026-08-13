@@ -21,10 +21,7 @@ func collectFromConstantDirectory(
 	}
 
 	for _, n := range entries {
-		if n.IsDir() || !strings.HasSuffix(
-			n.Name(),
-			constant.GoExtension,
-		) {
+		if n.IsDir() || !strings.HasSuffix(n.Name(), constant.GoExtension) {
 			continue
 		}
 

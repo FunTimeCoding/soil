@@ -11,8 +11,6 @@ func (s *Server) reportDelete(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	system.RemoveFile(
-		filepath.Join(s.outputPath, r.PathValue("fileName")),
-	)
+	system.RemoveFile(filepath.Join(s.outputPath, r.PathValue("fileName")))
 	http.Redirect(w, r, constant.ReportsPath, http.StatusSeeOther)
 }

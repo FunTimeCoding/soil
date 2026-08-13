@@ -17,9 +17,7 @@ func main() {
 				for b := range 15 {
 					fmt.Printf(
 						"%s",
-						console.NewColor(
-							fmt.Sprintf("#%x%x%x", r, g, b),
-						)("W"),
+						console.NewColor(fmt.Sprintf("#%x%x%x", r, g, b))("W"),
 					)
 				}
 

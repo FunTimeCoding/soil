@@ -16,7 +16,5 @@ func (s *Server) ListTunnelGroups(
 		return server.ListTunnelGroups500JSONResponse(*s.captureDetail(e)), nil
 	}
 
-	return server.ListTunnelGroups200JSONResponse(
-		convert.TunnelGroups(groups),
-	), nil
+	return server.ListTunnelGroups200JSONResponse(convert.TunnelGroups(groups)), nil
 }

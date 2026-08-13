@@ -20,21 +20,13 @@ func TestWriteOkay(t *testing.T) {
 func TestTextHeader(t *testing.T) {
 	m := writer_mock.New()
 	web.TextHeader(m)
-	assert.Any(
-		t,
-		http.Header{"Content-Type": {"text/plain"}},
-		m.Headers,
-	)
+	assert.Any(t, http.Header{"Content-Type": {"text/plain"}}, m.Headers)
 }
 
 func TestObjectHeader(t *testing.T) {
 	m := writer_mock.New()
 	web.ObjectHeader(m)
-	assert.Any(
-		t,
-		http.Header{"Content-Type": {"application/json"}},
-		m.Headers,
-	)
+	assert.Any(t, http.Header{"Content-Type": {"application/json"}}, m.Headers)
 }
 
 func TestMock(t *testing.T) {

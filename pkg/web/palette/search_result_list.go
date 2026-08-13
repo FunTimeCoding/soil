@@ -9,10 +9,7 @@ func SearchResultList(items []SearchItem) gomponents.Node {
 	if len(items) == 0 {
 		return html.Div(
 			html.ID("palette-search-results"),
-			html.Div(
-				html.Class("palette-empty"),
-				gomponents.Text("No matches"),
-			),
+			html.Div(html.Class("palette-empty"), gomponents.Text("No matches")),
 		)
 	}
 
@@ -22,8 +19,5 @@ func SearchResultList(items []SearchItem) gomponents.Node {
 		nodes = append(nodes, searchResultItem(item))
 	}
 
-	return html.Div(
-		html.ID("palette-search-results"),
-		gomponents.Group(nodes),
-	)
+	return html.Div(html.ID("palette-search-results"), gomponents.Group(nodes))
 }

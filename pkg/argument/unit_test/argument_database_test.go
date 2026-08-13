@@ -46,10 +46,7 @@ func TestLiteFlagOverridesEnvironment(t *testing.T) {
 	t.Setenv(relational.LitePathEnvironment, "/somewhere/custom.sqlite")
 	a := testInstance(t)
 	a.Lite()
-	assert.Nil(
-		t,
-		a.ParseArguments([]string{"--lite", "/explicit/flag.sqlite"}),
-	)
+	assert.Nil(t, a.ParseArguments([]string{"--lite", "/explicit/flag.sqlite"}))
 	assert.String(
 		t,
 		"/explicit/flag.sqlite",

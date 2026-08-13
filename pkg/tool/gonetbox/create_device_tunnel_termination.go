@@ -29,12 +29,7 @@ func createDeviceTunnelTermination(c *client.Client) *cobra.Command {
 			)
 		},
 	}
-	result.Flags().StringVar(
-		&tunnel,
-		"tunnel",
-		"",
-		"tunnel name (required)",
-	)
+	result.Flags().StringVar(&tunnel, "tunnel", "", "tunnel name (required)")
 	result.Flags().StringVar(
 		&interfaceName,
 		"interface",

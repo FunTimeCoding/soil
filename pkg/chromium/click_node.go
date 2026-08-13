@@ -34,10 +34,7 @@ func (c *Client) ClickNode(
 				}
 
 				if exception != nil {
-					return fmt.Errorf(
-						"click failed: %s",
-						exception.Text,
-					)
+					return fmt.Errorf("click failed: %s", exception.Text)
 				}
 
 				return nil

@@ -13,12 +13,8 @@ func (s *Server) ListSpaces(
 	result, e := s.confluence.Spaces()
 
 	if e != nil {
-		return server.ListSpaces500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.ListSpaces500JSONResponse(*s.captureDetail(e)), nil
 	}
 
-	return server.ListSpaces200JSONResponse(
-		convert.ConfluenceSpaces(result),
-	), nil
+	return server.ListSpaces200JSONResponse(convert.ConfluenceSpaces(result)), nil
 }

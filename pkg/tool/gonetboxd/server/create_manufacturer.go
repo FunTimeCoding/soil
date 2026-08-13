@@ -16,6 +16,7 @@ func (s *Server) CreateManufacturer(
 	}
 
 	return server.CreateManufacturer201JSONResponse{
-		Identifier: m.Identifier, Name: m.Name,
+		Identifier: m.Identifier,
+		Name: m.Name,
 	}, nil
 }

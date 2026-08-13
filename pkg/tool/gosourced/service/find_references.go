@@ -23,9 +23,7 @@ func (s *Service) FindReferences(
 	declaration, _, e := findDeclaration(all, packagePath, symbol, receiver)
 
 	if e != nil {
-		r.AddConcern(
-			concern.NewFile("validation", e.Error(), "", false),
-		)
+		r.AddConcern(concern.NewFile("validation", e.Error(), "", false))
 
 		return r, nil, nil
 	}

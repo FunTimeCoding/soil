@@ -11,11 +11,7 @@ func (c *Client) Post(
 	l string,
 	body string,
 ) (int, string, error) {
-	r, e := http.NewRequest(
-		http.MethodPost,
-		l,
-		strings.NewReader(body),
-	)
+	r, e := http.NewRequest(http.MethodPost, l, strings.NewReader(body))
 
 	if e != nil {
 		return 0, "", e

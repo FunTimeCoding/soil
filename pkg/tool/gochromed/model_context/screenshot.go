@@ -45,10 +45,6 @@ func (s *Server) Screenshot(
 	}
 
 	return response.SuccessAny(
-		map[string]any{
-			"path": path,
-			"tab":  t.Title,
-			"size": len(b),
-		},
+		map[string]any{"path": path, "tab": t.Title, "size": len(b)},
 	)
 }

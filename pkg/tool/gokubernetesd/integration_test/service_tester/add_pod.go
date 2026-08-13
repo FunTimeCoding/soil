@@ -33,9 +33,7 @@ func (t *Tester) AddPod(p *pod.Pod) {
 	}
 
 	_, e := t.Dynamic.Resource(
-		schema.GroupVersionResource{
-			Group: "", Version: "v1", Resource: "pods",
-		},
+		schema.GroupVersionResource{Group: "", Version: "v1", Resource: "pods"},
 	).Namespace(p.Namespace).Create(
 		t.context(),
 		&unstructured.Unstructured{

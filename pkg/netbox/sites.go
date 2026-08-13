@@ -10,9 +10,9 @@ func (c *Client) Sites() ([]*site.Site, error) {
 		return c.cache.Sites, nil
 	}
 
-	result, _, e := c.client.DcimAPI.DcimSitesList(
-		c.context,
-	).Limit(constant.PageLimit).Execute()
+	result, _, e := c.client.DcimAPI.DcimSitesList(c.context).Limit(
+		constant.PageLimit,
+	).Execute()
 
 	if e != nil {
 		return nil, e

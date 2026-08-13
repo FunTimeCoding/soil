@@ -7,10 +7,5 @@ func (c *Context) Redirect(target string) {
 		target = c.Referer()
 	}
 
-	http.Redirect(
-		c.writer,
-		c.request,
-		target,
-		http.StatusFound,
-	)
+	http.Redirect(c.writer, c.request, target, http.StatusFound)
 }

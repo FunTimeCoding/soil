@@ -16,7 +16,9 @@ func (c *Client) CreateVirtualMachine(
 			netbox.NewBriefClusterRequest(cl.Name),
 		),
 	)
-	q.SetStatus(netbox.PATCHEDWRITABLEVIRTUALMACHINEWITHCONFIGCONTEXTREQUESTSTATUS_ACTIVE)
+	q.SetStatus(
+		netbox.PATCHEDWRITABLEVIRTUALMACHINEWITHCONFIGCONTEXTREQUESTSTATUS_ACTIVE,
+	)
 	result, _, e := c.client.VirtualizationAPI.VirtualizationVirtualMachinesCreate(
 		c.context,
 	).WritableVirtualMachineWithConfigContextRequest(*q).Execute()

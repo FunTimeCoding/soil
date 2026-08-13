@@ -41,10 +41,7 @@ func (c *Client) fillNodeDirect(
 				}
 
 				if exception != nil {
-					return fmt.Errorf(
-						"fill failed: %s",
-						exception.Text,
-					)
+					return fmt.Errorf("fill failed: %s", exception.Text)
 				}
 
 				return nil

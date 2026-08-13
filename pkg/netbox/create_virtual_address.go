@@ -19,9 +19,9 @@ func (c *Client) CreateVirtualAddress(
 		q.SetStatus(netbox.PatchedWritableIPAddressRequestStatus(status))
 	}
 
-	result, _, e := c.client.IpamAPI.IpamIpAddressesCreate(
-		c.context,
-	).WritableIPAddressRequest(*q).Execute()
+	result, _, e := c.client.IpamAPI.IpamIpAddressesCreate(c.context).WritableIPAddressRequest(
+		*q,
+	).Execute()
 
 	if e != nil {
 		return nil, e

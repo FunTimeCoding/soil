@@ -8,8 +8,5 @@ func New(
 	secure bool,
 	token string,
 ) *Client {
-	return &Client{
-		base:  web.Link(host, port, secure),
-		token: token,
-	}
+	return &Client{base: web.Link(host, port, secure), token: token}
 }

@@ -14,9 +14,7 @@ func Open() {
 	defer c.Close()
 	var result string
 	c.Run(
-		chromedp.Navigate(
-			locator.New("pkg.go.dev").Path("/time").String(),
-		),
+		chromedp.Navigate(locator.New("pkg.go.dev").Path("/time").String()),
 		//chromedp.Text(
 		//	`.Documentation-overview`,
 		//	&result,

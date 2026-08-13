@@ -26,9 +26,7 @@ func (s *Service) Rename(
 	declaration, p, e := findDeclaration(all, packagePath, oldName, receiver)
 
 	if e != nil {
-		r.AddConcern(
-			concern.NewFile("validation", e.Error(), "", false),
-		)
+		r.AddConcern(concern.NewFile("validation", e.Error(), "", false))
 
 		return r, nil
 	}
@@ -36,17 +34,15 @@ func (s *Service) Rename(
 	e = checkCollision(p, newName, receiver)
 
 	if e != nil {
-		r.AddConcern(
-			concern.NewFile("validation", e.Error(), "", false),
-		)
+		r.AddConcern(concern.NewFile("validation", e.Error(), "", false))
 
 		return r, nil
 	}
 
 	references := resolve.FindAllReferences(all, declaration)
-	unexporting := unicode.IsUpper(
-		rune(oldName[0]),
-	) && unicode.IsLower(rune(newName[0]))
+	unexporting := unicode.IsUpper(rune(oldName[0])) && unicode.IsLower(
+		rune(newName[0]),
+	)
 
 	if unexporting {
 		for _, f := range references {

@@ -34,22 +34,13 @@ func playersTable(rows []store.AttendanceRow) gomponents.Node {
 					return html.Tr(
 						html.Td(
 							html.A(
-								html.Href(
-									fmt.Sprintf(
-										"/players/%s",
-										r.Account,
-									),
-								),
+								html.Href(fmt.Sprintf("/players/%s", r.Account)),
 								gomponents.Text(r.Account),
 							),
 						),
 						html.Td(gomponents.Text(r.Characters)),
 						html.Td(
-							gomponents.Textf(
-								"%d / %d",
-								r.Fights,
-								r.Available,
-							),
+							gomponents.Textf("%d / %d", r.Fights, r.Available),
 						),
 						html.Td(gomponents.Textf("%d%%", pct)),
 					)

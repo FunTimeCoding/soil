@@ -16,12 +16,7 @@ func addRecord(c *hetzner.Client) *cobra.Command {
 			arguments []string,
 		) {
 			z := zoneByName(c, arguments[0])
-			c.CreateRecord(
-				z,
-				arguments[1],
-				arguments[2],
-				arguments[3],
-			)
+			c.CreateRecord(z, arguments[1], arguments[2], arguments[3])
 			fmt.Printf(
 				"added %s %s.%s -> %s\n",
 				arguments[2],

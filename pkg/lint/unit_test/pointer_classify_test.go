@@ -12,29 +12,19 @@ func TestClassify(t *testing.T) {
 	assert.String(
 		t,
 		"repository",
-		pointer.Classify(
-			"doc/ai/spec/naming.md",
-			roots,
-		),
+		pointer.Classify("doc/ai/spec/naming.md", roots),
 	)
 	assert.String(
 		t,
 		"repository",
-		pointer.Classify(
-			".claude/skills/sign-firefox/SKILL.md",
-			roots,
-		),
+		pointer.Classify(".claude/skills/sign-firefox/SKILL.md", roots),
 	)
 	assert.String(
 		t,
 		"repository",
 		pointer.Classify(".claude-plugin/plugin.json", roots),
 	)
-	assert.String(
-		t,
-		"repository",
-		pointer.Classify("./doc/ai/spec", roots),
-	)
+	assert.String(t, "repository", pointer.Classify("./doc/ai/spec", roots))
 	assert.String(
 		t,
 		"repository",
@@ -43,52 +33,22 @@ func TestClassify(t *testing.T) {
 			roots,
 		),
 	)
-	assert.String(
-		t,
-		"unknown",
-		pointer.Classify("tmp/gosec.json", roots),
-	)
-	assert.String(
-		t,
-		"unknown",
-		pointer.Classify(constant.SoilModule, roots),
-	)
-	assert.String(
-		t,
-		"unknown",
-		pointer.Classify("/chart-sessions", roots),
-	)
-	assert.String(
-		t,
-		"unknown",
-		pointer.Classify("/api/goals", roots),
-	)
-	assert.String(
-		t,
-		"unknown",
-		pointer.Classify("/debug/pprof/", roots),
-	)
+	assert.String(t, "unknown", pointer.Classify("tmp/gosec.json", roots))
+	assert.String(t, "unknown", pointer.Classify(constant.SoilModule, roots))
+	assert.String(t, "unknown", pointer.Classify("/chart-sessions", roots))
+	assert.String(t, "unknown", pointer.Classify("/api/goals", roots))
+	assert.String(t, "unknown", pointer.Classify("/debug/pprof/", roots))
 	assert.String(t, "unknown", pointer.Classify("//nolint", roots))
+	assert.String(t, "unknown", pointer.Classify("/etc/hosts", roots))
 	assert.String(
 		t,
 		"unknown",
-		pointer.Classify("/etc/hosts", roots),
+		pointer.Classify("pkg/web/RecoveryMiddleware", roots),
 	)
 	assert.String(
 		t,
 		"unknown",
-		pointer.Classify(
-			"pkg/web/RecoveryMiddleware",
-			roots,
-		),
-	)
-	assert.String(
-		t,
-		"unknown",
-		pointer.Classify(
-			"pkg/provision/salt.Client",
-			roots,
-		),
+		pointer.Classify("pkg/provision/salt.Client", roots),
 	)
 	assert.String(
 		t,
@@ -98,28 +58,14 @@ func TestClassify(t *testing.T) {
 	assert.String(
 		t,
 		"placeholder",
-		pointer.Classify(
-			"doc/ai/runbook/<name>.md",
-			roots,
-		),
+		pointer.Classify("doc/ai/runbook/<name>.md", roots),
 	)
+	assert.String(t, "placeholder", pointer.Classify("pkg/tool/*.go", roots))
+	assert.String(t, "placeholder", pointer.Classify("$HOME/notes.md", roots))
 	assert.String(
 		t,
 		"placeholder",
-		pointer.Classify("pkg/tool/*.go", roots),
-	)
-	assert.String(
-		t,
-		"placeholder",
-		pointer.Classify("$HOME/notes.md", roots),
-	)
-	assert.String(
-		t,
-		"placeholder",
-		pointer.Classify(
-			"${CLAUDE_PLUGIN_ROOT}/skills/<name>/SKILL.md",
-			roots,
-		),
+		pointer.Classify("${CLAUDE_PLUGIN_ROOT}/skills/<name>/SKILL.md", roots),
 	)
 	assert.String(
 		t,
@@ -129,10 +75,7 @@ func TestClassify(t *testing.T) {
 	assert.String(
 		t,
 		"absolute",
-		pointer.Classify(
-			"/Users/example/notes.md",
-			roots,
-		),
+		pointer.Classify("/Users/example/notes.md", roots),
 	)
 	assert.String(
 		t,

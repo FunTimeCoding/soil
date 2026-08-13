@@ -48,10 +48,7 @@ func (b *Build) arguments(headless bool) [][]string {
 		result = append(result, []string{"-serial", "chardev:char0"})
 		result = append(result, []string{"-nographic"})
 	} else {
-		result = append(
-			result,
-			[]string{"-device", "virtio-gpu-pci"},
-		)
+		result = append(result, []string{"-device", "virtio-gpu-pci"})
 	}
 
 	return result

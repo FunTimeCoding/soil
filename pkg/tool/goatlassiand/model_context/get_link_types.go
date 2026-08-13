@@ -11,9 +11,7 @@ func (s *Server) getLinkTypes(
 	_ context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	_, body, e := s.jira.Basic().GetPath(
-		"rest/api/2/issueLinkType",
-	)
+	_, body, e := s.jira.Basic().GetPath("rest/api/2/issueLinkType")
 
 	if e != nil {
 		return s.captureDetail(e)

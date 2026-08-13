@@ -31,12 +31,7 @@ func reportsTable(v []os.DirEntry) gomponents.Node {
 					return html.Tr(
 						html.Td(
 							html.A(
-								html.Href(
-									fmt.Sprintf(
-										"/reports/%s",
-										d.Name(),
-									),
-								),
+								html.Href(fmt.Sprintf("/reports/%s", d.Name())),
 								gomponents.Text(d.Name()),
 							),
 						),
@@ -48,10 +43,7 @@ func reportsTable(v []os.DirEntry) gomponents.Node {
 							html.Form(
 								html.Method("post"),
 								html.Action(
-									fmt.Sprintf(
-										"/reports/%s/delete",
-										d.Name(),
-									),
+									fmt.Sprintf("/reports/%s/delete", d.Name()),
 								),
 								html.Button(
 									html.Type("submit"),

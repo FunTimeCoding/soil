@@ -26,10 +26,7 @@ func TestHistoryCountMultiple(t *testing.T) {
 	a.Announce(a.Name(), "two")
 	a.MustCallTool(
 		constant.Update,
-		map[string]any{
-			constant.Message: "completed",
-			constant.Topic:   "three",
-		},
+		map[string]any{constant.Message: "completed", constant.Topic: "three"},
 	)
 	result := a.MustCallTool(constant.HistoryCount, map[string]any{})
 	assert.StringContains(t, "3 events", result)

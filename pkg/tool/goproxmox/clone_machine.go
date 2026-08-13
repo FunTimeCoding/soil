@@ -31,9 +31,7 @@ func cloneMachine(c *command_context.Context) *cobra.Command {
 				n = &node
 			}
 
-			body := client.CloneMachineJSONRequestBody{
-				Name: name,
-			}
+			body := client.CloneMachineJSONRequestBody{Name: name}
 
 			if full {
 				body.Full = &full

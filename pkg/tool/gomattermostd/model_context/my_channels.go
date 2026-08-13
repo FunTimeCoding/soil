@@ -44,10 +44,7 @@ func (s *Server) MyChannels(
 		since, f := parseSince(a.Since)
 
 		if f != nil {
-			return response.Fail(
-				"invalid since format: %v",
-				f,
-			)
+			return response.Fail("invalid since format: %v", f)
 		}
 
 		sinceMilli := since.UnixMilli()

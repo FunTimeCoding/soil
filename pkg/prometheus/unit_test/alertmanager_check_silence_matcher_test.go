@@ -386,12 +386,7 @@ func TestMatchesWithMultipleMatchers(t *testing.T) {
 		{
 			name: "all matchers match",
 			matchers: []*models.Matcher{
-				newMatcher(
-					"alertname",
-					"HighCPU",
-					true,
-					false,
-				),
+				newMatcher("alertname", "HighCPU", true, false),
 				newMatcher(
 					constant.SeverityLabel,
 					constant.CriticalSeverity,
@@ -409,12 +404,7 @@ func TestMatchesWithMultipleMatchers(t *testing.T) {
 		{
 			name: "one matcher doesn't match",
 			matchers: []*models.Matcher{
-				newMatcher(
-					"alertname",
-					"HighCPU",
-					true,
-					false,
-				),
+				newMatcher("alertname", "HighCPU", true, false),
 				newMatcher(
 					constant.SeverityLabel,
 					constant.WarningSeverity,
@@ -445,18 +435,8 @@ func TestMatchesWithMultipleMatchers(t *testing.T) {
 		{
 			name: "negative matcher with missing label",
 			matchers: []*models.Matcher{
-				newMatcher(
-					"alertname",
-					"HighCPU",
-					true,
-					false,
-				),
-				newMatcher(
-					"job",
-					"test",
-					false,
-					false,
-				),
+				newMatcher("alertname", "HighCPU", true, false),
+				newMatcher("job", "test", false, false),
 			},
 			labels:        models.LabelSet{"alertname": "HighCPU"},
 			expectedMatch: true,
@@ -574,10 +554,7 @@ func TestMatchesWithMultipleAlerts(t *testing.T) {
 			models.LabelSet{"alertname": "HighCPU", "severity": "critical"},
 		),
 		newAlert(
-			models.LabelSet{
-				"alertname": "HighMemory",
-				"severity":  "warning",
-			},
+			models.LabelSet{"alertname": "HighMemory", "severity": "warning"},
 		),
 		newAlert(
 			models.LabelSet{"alertname": "DiskFull", "severity": "critical"},

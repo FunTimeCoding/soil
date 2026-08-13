@@ -6,8 +6,5 @@ import (
 )
 
 func sanitizeTerm(term string) string {
-	return constant.NonAlphanumeric.ReplaceAllString(
-		strings.ToLower(term),
-		"",
-	)
+	return constant.NonAlphanumeric.ReplaceAllString(strings.ToLower(term), "")
 }

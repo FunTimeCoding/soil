@@ -99,9 +99,7 @@ func (r *Router) Monitor(
 
 			for _, l := range r.Client {
 				l.Send(
-					join.Comma(
-						[]string{operation, i.Handle(), arguments[1]},
-					),
+					join.Comma([]string{operation, i.Handle(), arguments[1]}),
 				)
 			}
 		case constant.ClearCommand:

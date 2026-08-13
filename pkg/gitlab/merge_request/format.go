@@ -6,10 +6,7 @@ import (
 )
 
 func (r *Request) Format(f *option.Format) string {
-	s := status.New(f).Integer64(
-		r.Project,
-		r.Identifier,
-	).String(
+	s := status.New(f).Integer64(r.Project, r.Identifier).String(
 		r.formatState(f),
 		r.formatTitle(f),
 		r.formatAge(f),

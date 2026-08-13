@@ -17,10 +17,7 @@ func (s *Server) topGrid(values map[string][]string) gomponents.Node {
 
 		columns = append(
 			columns,
-			html.Div(
-				html.Class("board-column"),
-				gomponents.Group(sections),
-			),
+			html.Div(html.Class("board-column"), gomponents.Group(sections)),
 		)
 	}
 

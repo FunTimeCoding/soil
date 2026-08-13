@@ -31,10 +31,7 @@ func (s *Server) addChecklistItem(
 		return s.captureFail(h, "checklist not readable")
 	}
 
-	items = append(
-		items,
-		checklist_item.New(len(items), text, false),
-	)
+	items = append(items, checklist_item.New(len(items), text, false))
 
 	if fail, e := s.writeChecklist(c, key, items); fail != nil {
 		return fail, e

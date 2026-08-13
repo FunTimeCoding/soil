@@ -23,16 +23,16 @@ func (s *Service) Certificates(
 		return nil, e
 	}
 
-	certs, f := c.Dynamic().Resource(constant.CertificateGVR).Namespace(
-		"",
-	).List(x, v1.ListOptions{})
+	certs, f := c.Dynamic().Resource(constant.CertificateGVR).Namespace("").List(
+		x,
+		v1.ListOptions{},
+	)
 
 	if f != nil {
-		if strings.Contains(
-			f.Error(),
-			"could not find the requested resource",
-		) {
-			return nil, fmt.Errorf("cert-manager not installed - Certificate CRD not found")
+		if strings.Contains(f.Error(), "could not find the requested resource") {
+			return nil, fmt.Errorf(
+				"cert-manager not installed - Certificate CRD not found",
+			)
 		}
 
 		return nil, f

@@ -12,9 +12,7 @@ func TestCountStatistics(t *testing.T) {
 	s := statistic.New()
 	assert.Any(
 		t,
-		&statistic.Statistic{
-			Total: 1,
-		},
+		&statistic.Statistic{Total: 1},
 		s.CountBeforeProcessing(
 			[]*alert.Alert{
 				{
