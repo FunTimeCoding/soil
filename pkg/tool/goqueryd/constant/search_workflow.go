@@ -43,8 +43,8 @@ Parameters:
 - full - include full document body in results (default false)
 - limit - max results (default 10)
 
-When Ollama is unavailable, search degrades to keyword-only
-automatically.
+When the embedding backend is unavailable, search degrades to
+keyword-only automatically.
 
 ## Retrieving documents
 

@@ -1,13 +1,13 @@
 package store
 
 import (
-	"github.com/funtimecoding/soil/pkg/generative/ollama"
+	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search_option"
 )
 
 func (s *Store) SearchWithFallback(
 	o *search_option.Option,
-	l *ollama.Client,
+	m face.Embedder,
 ) *SearchOutcome {
 	status, e := s.Status()
 
@@ -38,7 +38,7 @@ func (s *Store) SearchWithFallback(
 		return &SearchOutcome{Results: filtered, Degraded: true}
 	}
 
-	results, f := s.SearchHybrid(o, l)
+	results, f := s.SearchHybrid(o, m)
 
 	if f != nil {
 		limit := o.Limit + len(o.Exclude)

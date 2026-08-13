@@ -4,7 +4,6 @@ package store
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert/fixture"
-	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/ollama"
 	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
 	system "github.com/funtimecoding/soil/pkg/system/constant"
@@ -54,7 +53,7 @@ func pushTestDocument(
 		texts[i] = c.Text
 	}
 
-	embeddings, e := o.Embed(constant.OllamaEmbedModel, texts)
+	embeddings, e := o.Embed(texts)
 
 	if e != nil {
 		return e
@@ -86,7 +85,7 @@ func embedTestDocuments(
 			texts[i] = c.Text
 		}
 
-		embeddings, e := o.Embed(constant.OllamaEmbedModel, texts)
+		embeddings, e := o.Embed(texts)
 
 		if e != nil {
 			return e

@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/example/usage"
 	anthropic "github.com/funtimecoding/soil/pkg/generative/anthropic/example"
+	embed "github.com/funtimecoding/soil/pkg/generative/embed/example"
 	gguf "github.com/funtimecoding/soil/pkg/generative/gguf/example"
 	langchain "github.com/funtimecoding/soil/pkg/generative/langchain/example"
 	"github.com/funtimecoding/soil/pkg/generative/langchain/example/function"
@@ -30,6 +31,7 @@ func main() {
 		ollama.Show()
 		ollama.List()
 		ollama.Embed()
+		embed.Target()
 		ollama.Running()
 		ollama.Heartbeat()
 		openai.Token()

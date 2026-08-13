@@ -1,7 +1,7 @@
 package store
 
 import (
-	"github.com/funtimecoding/soil/pkg/generative/ollama"
+	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search_option"
 	"sort"
@@ -9,7 +9,7 @@ import (
 
 func (s *Store) SearchHybrid(
 	o *search_option.Option,
-	l *ollama.Client,
+	m face.Embedder,
 ) ([]SearchResult, error) {
 	scores := map[string]float64{}
 	byPath := map[string]SearchResult{}
@@ -57,7 +57,7 @@ func (s *Store) SearchHybrid(
 		o.Collection,
 		fetchFull,
 		o.Metadata,
-		l,
+		m,
 	)
 
 	if f != nil {
@@ -66,53 +66,6 @@ func (s *Store) SearchHybrid(
 
 	addList(vectorResults)
 	addBody(vectorResults)
-	var expanded []ExpandedQuery
-
-	if constant.ExpandModel != "" {
-		var g error
-		expanded, g = ExpandQuery(o.Query, l)
-
-		if g != nil {
-			return nil, g
-		}
-	}
-
-	for _, q := range expanded {
-		switch q.Type {
-		case "lex":
-			lexResults, h := s.SearchKeyword(
-				q.Query,
-				o.Limit*2,
-				o.Collection,
-				fetchFull,
-				o.Metadata,
-			)
-
-			if h != nil {
-				return nil, h
-			}
-
-			addList(lexResults)
-			addBody(lexResults)
-		case "vec", "hyde":
-			vecResults, h := s.SearchVector(
-				q.Query,
-				o.Limit*2,
-				o.Collection,
-				fetchFull,
-				o.Metadata,
-				l,
-			)
-
-			if h != nil {
-				return nil, h
-			}
-
-			addList(vecResults)
-			addBody(vecResults)
-		}
-	}
-
 	excludeSet := map[string]bool{}
 
 	for _, p := range o.Exclude {

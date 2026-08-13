@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/generative/ollama"
+	"github.com/funtimecoding/soil/pkg/generative/embed"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
@@ -34,7 +34,7 @@ func Run(
 	a, e := rerank.New(o.RerankModel, o.RerankTokenizer)
 	errors.PanicOnError(e)
 	defer errors.LogClose(a)
-	v := service.New(s, ollama.NewEnvironment(), a)
+	v := service.New(s, embed.NewEnvironment(), a)
 	u := queryWeb.New(v)
 	lifecycle.New(
 		l,

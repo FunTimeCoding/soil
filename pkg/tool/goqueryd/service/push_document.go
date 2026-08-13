@@ -1,7 +1,6 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/chunk"
 	"time"
@@ -35,7 +34,7 @@ func (s *Service) PushDocument(
 		texts[i] = c.Text
 	}
 
-	embeddings, e := s.ollama.Embed(constant.OllamaEmbedModel, texts)
+	embeddings, e := s.embedder.Embed(texts)
 
 	if e != nil {
 		return e

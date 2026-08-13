@@ -33,7 +33,7 @@ func (s *Service) Search(o *search_option.Option) *store.SearchOutcome {
 			s.store.EnrichResults(filtered, o.Metadata),
 		)
 	} else {
-		outcome = s.store.SearchWithFallback(o, s.ollama)
+		outcome = s.store.SearchWithFallback(o, s.embedder)
 	}
 
 	outcome.Facets = store.ComputeFacets(outcome.Results, 20)

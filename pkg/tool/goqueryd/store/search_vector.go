@@ -1,8 +1,8 @@
 package store
 
 import (
-	"github.com/funtimecoding/soil/pkg/generative/constant"
-	"github.com/funtimecoding/soil/pkg/generative/ollama"
+	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/generative/embed"
 	"sort"
 )
 
@@ -12,9 +12,9 @@ func (s *Store) SearchVector(
 	collection string,
 	full bool,
 	metadata map[string]string,
-	o *ollama.Client,
+	m face.Embedder,
 ) ([]SearchResult, error) {
-	queryVector, e := o.EmbedSingle(constant.OllamaEmbedModel, query)
+	queryVector, e := embed.Single(m, query)
 
 	if e != nil {
 		return nil, e

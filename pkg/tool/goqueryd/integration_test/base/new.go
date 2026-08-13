@@ -27,7 +27,7 @@ func New(t *testing.T) *Server {
 	return &Server{
 		t:        t,
 		store:    s,
-		ollama:   l,
+		embedder: l,
 		reranker: a,
 		server: model_context_server.New(
 			t,

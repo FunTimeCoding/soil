@@ -1,10 +1,7 @@
 package ollama
 
-func (c *Client) EmbedSingle(
-	model string,
-	v string,
-) ([]float32, error) {
-	result, e := c.Embed(model, []string{v})
+func (c *Client) EmbedSingle(v string) ([]float32, error) {
+	result, e := c.Embed([]string{v})
 
 	if e != nil {
 		return nil, e

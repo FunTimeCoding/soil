@@ -53,22 +53,8 @@ const (
 	ChunkWindow      = 800
 	SnippetMaxLength = 400
 	ListPage         = 500
-	ExpandModel      = ""
 	DefaultGlob      = "**/*.md"
 	RrfK             = 60
-
-	ExpandPrompt = `/no_think Expand this search query into 2-4 alternative search variants. Output each on its own line in the format "type: query" where type is one of:
-- lex: keyword variant for full-text search (specific terms, synonyms, abbreviations)
-- vec: semantic variant for vector similarity (rephrase the meaning)
-- hyde: hypothetical document snippet that would answer the query
-
-Example input: "how does auth work"
-Example output:
-lex: authentication authorization login
-vec: user authentication flow and session management
-hyde: The authentication system uses JWT tokens issued on login. Sessions are stored in Redis with a 24-hour TTL.
-
-Query: `
 
 	DashboardTitle   = "Dashboard"
 	DashboardPath    = "/"
