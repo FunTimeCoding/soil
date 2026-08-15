@@ -26,9 +26,6 @@ const (
 	PackageNameKey  = "package_name"
 	PackageNameText = "Blacklisted package name"
 
-	MissingTestFileKey  = "missing_test_file"
-	MissingTestFileText = "No test file in package"
-
 	MissingBlankBeforeControlKey  = "missing_blank_before_control"
 	MissingBlankBeforeControlText = "Missing blank line before control block"
 
@@ -41,11 +38,15 @@ const (
 	MissingBlankAfterControlKey  = "missing_blank_after_control"
 	MissingBlankAfterControlText = "Missing blank line after control block"
 
-	MissingSentryKey  = "missing_sentry"
-	MissingSentryText = "No sentry reporter in program"
-
 	StrayConstantKey  = "stray_const"
 	StrayConstantText = "Top-level const outside of a constant file or constant package"
+
+	FixturePrefix              = "// golint:fixture "
+	StrayConstantRule          = "stray_constant"
+	FixtureKey                 = "fixture_directive"
+	FixtureOutsideTestdataText = "golint:fixture directive outside testdata"
+	FixtureUnknownRuleText     = "unknown golint:fixture rule"
+	FixtureMisplacedText       = "golint:fixture directive must directly precede the declaration it sanctions"
 
 	BlankInsideFunctionKey  = "blank_inside_function"
 	BlankInsideFunctionText = "Blank line between statements inside function body"
@@ -70,26 +71,23 @@ const (
 
 	AbsolutePointerKey  = "absolute_pointer"
 	AbsolutePointerText = "Absolute path reference"
-)
 
-var PackageBlocklist = []string{"api"}
-
-const (
 	AssertPackageName  = "assert"
 	AssertHelperPrefix = "assert"
 	AssertTestingType  = "*testing.T"
-)
 
-const MaxLineLength = 80
-const TabWidth = 4
-const (
+	MaxLineLength = 80
+	TabWidth      = 4
+
 	ConcernLine    = "line"
 	ConcernFile    = "file"
 	ConcernPackage = "package"
 )
 
-var LinkTarget = regexp.MustCompile(`]\(([^)]+)\)`)
 var (
+	PackageBlocklist = []string{"api"}
+
+	LinkTarget    = regexp.MustCompile(`]\(([^)]+)\)`)
 	ErrorPattern  = regexp.MustCompile(`\berr(?:\s*(?::=|=[^=])|,)`)
 	StringLiteral = regexp.MustCompile(`"(?:[^"\\]|\\.)*"`)
 )

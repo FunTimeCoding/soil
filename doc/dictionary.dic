@@ -88,6 +88,7 @@ godebian
 godockerhub
 godownload
 gofile
+goflightd
 gofix
 gogenie
 goghjob
@@ -176,6 +177,9 @@ tahoe
 tink
 ventura
 wdutil
+universalcontrol
+rapportd
+sharingd
 
 # Debian
 cdimage

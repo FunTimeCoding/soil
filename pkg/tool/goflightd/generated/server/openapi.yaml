@@ -1,0 +1,240 @@
+---
+openapi: "3.0.0"
+info:
+  title: goflightd
+  version: 1.0.0
+paths:
+  /api/v1/status:
+    get:
+      operationId: getStatus
+      responses:
+        "200":
+          description: Service status.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StatusResponse"
+        "500":
+          description: Failed to query status.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/mark:
+    post:
+      operationId: postMark
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MarkRequest"
+      responses:
+        "201":
+          description: Mark recorded.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MarkResponse"
+        "400":
+          description: Invalid mark request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to record mark.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/marks:
+    get:
+      operationId: getMarks
+      parameters:
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Recent marks, newest first.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MarkResponse"
+        "500":
+          description: Failed to query marks.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/events:
+    get:
+      operationId: getEvents
+      parameters:
+      - name: start
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: end
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Log events within the given time range.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/EventResponse"
+        "500":
+          description: Failed to query events.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/snapshots:
+    get:
+      operationId: getSnapshots
+      parameters:
+      - name: start
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: end
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: State snapshots within the given time range.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SnapshotResponse"
+        "500":
+          description: Failed to query snapshots.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    StatusResponse:
+      type: object
+      required:
+      - events
+      - snapshots
+      - marks
+      properties:
+        events:
+          type: integer
+          format: int64
+        snapshots:
+          type: integer
+          format: int64
+        marks:
+          type: integer
+          format: int64
+        lastEvent:
+          type: string
+    MarkRequest:
+      type: object
+      required:
+      - label
+      properties:
+        label:
+          type: string
+        note:
+          type: string
+    MarkResponse:
+      type: object
+      required:
+      - identifier
+      - time
+      - label
+      properties:
+        identifier:
+          type: integer
+          format: int64
+        time:
+          type: string
+        label:
+          type: string
+        note:
+          type: string
+    EventResponse:
+      type: object
+      required:
+      - time
+      - process
+      - subsystem
+      - category
+      - message
+      properties:
+        time:
+          type: string
+        process:
+          type: string
+        subsystem:
+          type: string
+        category:
+          type: string
+        message:
+          type: string
+    SnapshotResponse:
+      type: object
+      required:
+      - time
+      - kind
+      - key
+      - value
+      properties:
+        time:
+          type: string
+        kind:
+          type: string
+        key:
+          type: string
+        value:
+          type: string
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+    ErrorResponse:
+      type: object
+      required: [error, event_identifier]
+      properties:
+        error:
+          type: string
+        event_identifier:
+          type: string

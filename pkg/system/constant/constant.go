@@ -29,6 +29,7 @@ const (
 	DownloadsPath               = "Downloads"
 	FixturePath                 = "fixture"
 	HypertextPath               = "hypertext"
+	TestdataPath                = "testdata"
 	IdeaPath                    = ".idea"
 	KubernetesConfigurationPath = ".kube/config"
 	MarkdownPath                = "markdown"

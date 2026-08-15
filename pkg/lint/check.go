@@ -29,6 +29,7 @@ func Check(
 			Variable,
 			PackageName,
 			StrayConstant,
+			FixtureDirective,
 			Spacing,
 			VariableGrouping,
 		},

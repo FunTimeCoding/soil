@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/stray_constant"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"go/token"
 	"golang.org/x/tools/go/packages"
 	"testing"
@@ -13,9 +14,10 @@ import (
 func TestStrayConstant(t *testing.T) {
 	directory := testutil.PrepareTestPackage(t, "testdata/src/example")
 	configuration := &packages.Config{
-		Mode: packages.LoadSyntax | packages.NeedModule,
-		Fset: token.NewFileSet(),
-		Dir:  directory,
+		Mode:  packages.LoadSyntax | packages.NeedModule,
+		Fset:  token.NewFileSet(),
+		Dir:   directory,
+		Tests: true,
 	}
 	loaded, e := packages.Load(configuration, "./...")
 
@@ -25,7 +27,7 @@ func TestStrayConstant(t *testing.T) {
 
 	results := output.NewResultsWithDirectory(fmt.Sprintf("%s/", directory))
 
-	for _, p := range loaded {
+	for _, p := range resolve.PreferTestVariants(loaded) {
 		if len(p.Errors) > 0 {
 			t.Fatalf("package errors: %v", p.Errors)
 		}
@@ -33,6 +35,7 @@ func TestStrayConstant(t *testing.T) {
 		stray_constant.Check(p, results)
 	}
 
-	testutil.AssertBlocked(t, results, 1)
+	testutil.AssertBlocked(t, results, 2)
 	testutil.AssertBlockedContains(t, results, "Stray")
+	testutil.AssertBlockedContains(t, results, "testFixture")
 }

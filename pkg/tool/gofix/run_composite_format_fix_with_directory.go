@@ -7,5 +7,5 @@ func RunCompositeFormatFixWithDirectory(
 	directory string,
 	r *output.Results,
 ) {
-	RunFormatFixWithDirectory(patterns, directory, r)
+	RunFormatFixWithDirectory(patterns, directory, false, r)
 }

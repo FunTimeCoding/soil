@@ -8,6 +8,7 @@ import (
 func RunFormatFixWithDirectory(
 	patterns []string,
 	directory string,
+	diff bool,
 	r *output.Results,
 ) {
 	if len(patterns) == 0 {
@@ -15,9 +16,15 @@ func RunFormatFixWithDirectory(
 	}
 
 	all, _ := Load(directory, patterns)
-	changed := findFormatEdits(all, r, true)
+	changed := findFormatEdits(all, r, true, !diff)
 
 	if len(changed) == 0 {
+		return
+	}
+
+	if diff {
+		printDestinationDiffs(changed)
+
 		return
 	}
 
@@ -25,7 +32,7 @@ func RunFormatFixWithDirectory(
 
 	for pass := range 5 {
 		all, _ = Load(directory, patterns)
-		changed = findFormatEdits(all, r, false)
+		changed = findFormatEdits(all, r, false, true)
 
 		if len(changed) == 0 {
 			return

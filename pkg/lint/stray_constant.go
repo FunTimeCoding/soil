@@ -16,7 +16,6 @@ func StrayConstant(
 	base := filepath.Base(path)
 
 	if base == "constant.go" ||
-		base == "constant_test.go" ||
 		constantDirectory(path) {
 		for s.Scan() {
 			line, _ := s.Text()
@@ -27,17 +26,18 @@ func StrayConstant(
 	}
 
 	var packageConstant bool
+	var sanction bool
 	var depth int
 
 	for s.Scan() {
 		line, number := s.Text()
 		trimmed := strings.TrimSpace(line)
 
-		if !packageConstant && strings.HasPrefix(line, "package ") {
+		if strings.HasPrefix(line, "package ") {
 			packageConstant = strings.TrimPrefix(line, "package ") == "constant"
 		}
 
-		if !packageConstant && depth == 0 &&
+		if !packageConstant && !sanction && depth == 0 &&
 			(strings.HasPrefix(trimmed, "const ") || trimmed == "const (") {
 			s.AddConcern(
 				constant.StrayConstantKey,
@@ -48,6 +48,11 @@ func StrayConstant(
 				false,
 			)
 		}
+
+		rule, okay := parseFixtureRule(line)
+		sanction = okay &&
+			rule == constant.StrayConstantRule &&
+			testdataPath(path)
 
 		for _, c := range line {
 			switch c {

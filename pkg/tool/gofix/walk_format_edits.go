@@ -18,6 +18,7 @@ func walkFormatEdits(
 	source []byte,
 	name string,
 	collapse bool,
+	apply bool,
 	r *output.Results,
 	changed map[string]*dst.File,
 ) {
@@ -54,7 +55,7 @@ func walkFormatEdits(
 									fileSet.Position(astCall.Lparen).Line,
 								),
 								name,
-								true,
+								apply,
 							),
 						)
 					}
@@ -96,7 +97,7 @@ func walkFormatEdits(
 									fileSet.Position(astLit.Lbrace).Line,
 								),
 								name,
-								true,
+								apply,
 							),
 						)
 					}

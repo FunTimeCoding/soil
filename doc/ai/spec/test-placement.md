@@ -36,8 +36,11 @@ of preference:
 3. Whole-struct compares over the exported surface: `assert.Exported`
    (unexported fields are invisible to the comparator).
 4. Test-only fixtures in package source move to the test home;
-   fixture constants go to its `constant_test.go` (the stray-constant
-   rule's designed exemption).
+   fixture constants go to the domain's `constant/` package
+   (`Fixture`-prefixed names, or a `sample.go` domain file for
+   data blobs). A `constant_test.go` is never a constant home -
+   a file by that name holds constant value assertions
+   (usage-anchor tests), nothing else.
 
 Never suppress analyzer findings: a `struct_literal` finding on a
 test literal means the type needs a constructor. Expected sides of

@@ -4,21 +4,12 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/restricted_call"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/lint/types/restriction"
 	"go/token"
 	"golang.org/x/tools/go/packages"
 	"testing"
 )
-
-var testRules = []restriction.Restriction{
-	{
-		Package:   "example/fakegorm",
-		Function:  "Open",
-		AllowedIn: []string{"example/blessed"},
-		Message:   "open through the blessed package",
-	},
-}
 
 func TestCheckRules(t *testing.T) {
 	directory := testutil.PrepareTestPackage(t, "testdata/src/example")
@@ -40,7 +31,11 @@ func TestCheckRules(t *testing.T) {
 			t.Fatalf("package errors: %v", p.Errors)
 		}
 
-		restricted_call.CheckRestrictions(p, results, testRules)
+		restricted_call.CheckRestrictions(
+			p,
+			results,
+			constant.FixtureRestrictions,
+		)
 	}
 
 	testutil.AssertBlocked(t, results, 1)

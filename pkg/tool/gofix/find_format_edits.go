@@ -15,6 +15,7 @@ func findFormatEdits(
 	all []*packages.Package,
 	r *output.Results,
 	collapse bool,
+	apply bool,
 ) map[string]*dst.File {
 	changed := make(map[string]*dst.File)
 	sourceCache := make(map[string][]byte)
@@ -73,6 +74,7 @@ func findFormatEdits(
 				source,
 				name,
 				collapse,
+				apply,
 				r,
 				changed,
 			)

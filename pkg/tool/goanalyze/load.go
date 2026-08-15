@@ -10,5 +10,5 @@ func load(patterns []string) []*packages.Package {
 	result, _, e := resolve.LoadPackages("", patterns...)
 	errors.PanicOnError(e)
 
-	return result
+	return resolve.PreferTestVariants(result)
 }
