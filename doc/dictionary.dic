@@ -42,16 +42,14 @@ openvex
 osquery
 qdrant
 shiin
-treminio
 technitium
+treminio
 trivy
 
 # Go
 GOPROXY
-coverprofile
 errcheck
 goanalyze
-gocover
 golangci
 gorm
 gosec
@@ -88,8 +86,8 @@ godebian
 godockerhub
 godownload
 gofile
-goflightd
 gofix
+goflightd
 gogenie
 goghjob
 goghpr
@@ -118,10 +116,10 @@ gonetbox
 gonetboxd
 gopostgres
 gopostgresd
-goprometheus
-goprometheusd
 goprocess
 goprocessd
+goprometheus
+goprometheusd
 goproxmox
 goproxmoxd
 goqueryd
@@ -171,15 +169,15 @@ icns
 iterm
 mojave
 monterey
+rapportd
+sharingd
 sonoma
 sosumi
 tahoe
 tink
+universalcontrol
 ventura
 wdutil
-universalcontrol
-rapportd
-sharingd
 
 # Debian
 cdimage
@@ -269,7 +267,6 @@ highstate
 saltstack
 
 # Postgres
-sslmode
 datdba
 datistemplate
 datname
@@ -325,12 +322,12 @@ cpuinfo
 kversion
 maxcpu
 maxdisk
+onboot
 proxmox
 pveversion
 secureboot
 sysname
 vmid
-onboot
 
 # HTMX
 HTMX
