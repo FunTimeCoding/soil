@@ -15,7 +15,7 @@ require (
 	github.com/amikos-tech/pure-tokenizers v0.1.5
 	github.com/andybrewer/mack v0.0.0-20251024001139-afd410b36447
 	github.com/andygrunwald/go-jira v1.17.0
-	github.com/anthropics/anthropic-sdk-go v1.63.0
+	github.com/anthropics/anthropic-sdk-go v1.63.1
 	github.com/apenella/go-ansible/v2 v2.4.1
 	github.com/bmatcuk/doublestar/v4 v4.10.0
 	github.com/bndr/gojenkins v1.2.0
@@ -70,8 +70,8 @@ require (
 	github.com/nwaples/rardecode/v2 v2.3.0
 	github.com/oapi-codegen/runtime v1.6.0
 	github.com/olekukonko/tablewriter v1.1.4
-	github.com/ollama/ollama v0.32.9
-	github.com/openai/openai-go/v3 v3.50.0
+	github.com/ollama/ollama v0.32.13
+	github.com/openai/openai-go/v3 v3.51.0
 	github.com/openvex/go-vex v0.2.8
 	github.com/opsgenie/opsgenie-go-sdk-v2 v1.2.23
 	github.com/pkg/sftp v1.13.11
@@ -84,7 +84,7 @@ require (
 	github.com/samber/slog-loki/v3 v3.7.2
 	github.com/sanity-io/litter v1.5.8
 	github.com/sashabaranov/go-openai v1.42.0
-	github.com/sirupsen/logrus v1.9.4
+	github.com/sirupsen/logrus v1.10.0
 	github.com/slok/go-http-metrics v0.13.0
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/pflag v1.0.10
@@ -96,12 +96,12 @@ require (
 	github.com/yuin/goldmark v1.8.5
 	gitlab.com/gitlab-org/api/client-go/v2 v2.58.0
 	golang.org/x/crypto v0.55.0
-	golang.org/x/mod v0.39.0
+	golang.org/x/mod v0.40.0
 	golang.org/x/net v0.58.0
 	golang.org/x/oauth2 v0.36.0
 	golang.org/x/sys v0.47.0
 	golang.org/x/time v0.15.0
-	golang.org/x/tools v0.48.0
+	golang.org/x/tools v0.49.0
 	gonum.org/v1/gonum v0.17.0
 	google.golang.org/api v0.293.0
 	google.golang.org/protobuf v1.36.12
