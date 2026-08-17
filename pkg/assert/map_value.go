@@ -1,7 +1,7 @@
 package assert
 
 import (
-	"fmt"
+	"reflect"
 	"testing"
 )
 
@@ -20,17 +20,16 @@ func MapValue(
 		return
 	}
 
-	expectString := fmt.Sprintf("%v", expect)
-	actualString := fmt.Sprintf("%v", actual)
-
-	if expectString != actualString {
-		t.Errorf(
-			"key %q: expected %v (%T), got %v (%T)",
-			key,
-			expect,
-			expect,
-			actual,
-			actual,
-		)
+	if reflect.DeepEqual(actual, expect) {
+		return
 	}
+
+	t.Errorf(
+		"key %q: expected %v (%T), got %v (%T)",
+		key,
+		expect,
+		expect,
+		actual,
+		actual,
+	)
 }
