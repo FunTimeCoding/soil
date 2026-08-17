@@ -52,3 +52,5 @@ const (
 	LabArgument   = "lab"
 	HubArgument   = "hub"
 )
+
+const InCluster = "in-cluster"

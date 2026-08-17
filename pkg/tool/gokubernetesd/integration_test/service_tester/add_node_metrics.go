@@ -14,8 +14,8 @@ func (t *Tester) AddNodeMetrics(
 ) {
 	_, e := t.Dynamic.Resource(
 		schema.GroupVersionResource{
-			Group: "metrics.k8s.io",
-			Version: "v1beta1",
+			Group:    "metrics.k8s.io",
+			Version:  "v1beta1",
 			Resource: "nodes",
 		},
 	).Create(

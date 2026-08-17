@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/kubernetes/client"
+	"github.com/funtimecoding/soil/pkg/kubernetes/constant"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
@@ -30,7 +31,15 @@ func Run(
 	)
 	p := reaper.New(r)
 	m := metric.New(0, false, nil)
-	n := runner.New(o, s, l, r, p, m.Registry(), client.NewEnvironment())
+	n := runner.New(
+		o,
+		s,
+		l,
+		r,
+		p,
+		m.Registry(),
+		client.NewInCluster(constant.InCluster),
+	)
 	lifecycle.New(
 		l,
 		lifecycle.WithWorker(m),

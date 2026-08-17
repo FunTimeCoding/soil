@@ -3,13 +3,14 @@ package service
 import (
 	"github.com/funtimecoding/soil/pkg/kubernetes/client"
 	"github.com/funtimecoding/soil/pkg/kubernetes/client/client_configuration"
+	"github.com/funtimecoding/soil/pkg/kubernetes/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/cluster"
 )
 
 func buildClusters() map[string]*cluster.Cluster {
 	result := make(map[string]*cluster.Cluster)
 
-	if c, e := client.TryInCluster("in-cluster"); e == nil {
+	if c, e := client.TryInCluster(constant.InCluster); e == nil {
 		result["in-cluster"] = cluster.New(
 			"in-cluster",
 			c.Nested(),
