@@ -20,7 +20,7 @@ func (r *Runner) apply(
 	record.GitHead = head
 	r.store.Create(record)
 	r.logger.Structured("terraform_apply_start")
-	arguments := []string{"terraform", "apply", "-auto-approve"}
+	arguments := []string{constant.Command, "apply", "-auto-approve"}
 
 	if v, okay := parameters[constant.Target]; okay {
 		record.Scope = v.(string)
@@ -40,9 +40,12 @@ func (r *Runner) apply(
 		r.logger.Structured("terraform_apply_error", "error", c.Error.Error())
 	} else {
 		record.Status = provision.StoreStatusSuccess
+		r.metrics.lastSuccess.Set(float64(time.Now().Unix()))
 		r.logger.Structured("terraform_apply_done")
 	}
 
+	r.metrics.runsTotal.WithLabelValues(record.Status).Inc()
+	r.metrics.applyDuration.Observe(time.Since(start).Seconds())
 	r.store.Update(record)
 
 	return record

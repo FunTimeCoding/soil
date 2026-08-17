@@ -53,7 +53,7 @@ func TestContextLoadsRecordMemoriesAndModes(t *testing.T) {
 	s.Service.EnrichSession("context-session")
 	loads, e := s.Service.ContextLoadsBySession("context-session")
 	assert.FatalOnError(t, e)
-	assert.Integer(t, 8, len(loads))
+	assert.Integer(t, 11, len(loads))
 	mode := loadAt(t, loads, 0)
 	assert.String(t, "mode", mode.Kind)
 	assert.String(t, "build", mode.Reference)
@@ -74,6 +74,13 @@ func TestContextLoadsRecordMemoriesAndModes(t *testing.T) {
 	assert.String(t, "search", found.Kind)
 	assert.String(t, "107", found.Reference)
 	assert.String(t, "example query", found.Query)
+	parent := loadAt(t, loads, 8)
+	assert.String(t, "memory", parent.Kind)
+	assert.String(t, "109", parent.Reference)
+	assert.String(t, "kilo", parent.Name)
+	child := loadAt(t, loads, 10)
+	assert.String(t, "111", child.Reference)
+	assert.String(t, "mike", child.Name)
 }
 
 func TestContextLoadsSkipIndexTier(t *testing.T) {
@@ -98,7 +105,7 @@ func TestContextLoadsSurviveColdReplay(t *testing.T) {
 	s.Service.EnrichSession("replay-session")
 	first, e := s.Service.ContextLoadsBySession("replay-session")
 	assert.FatalOnError(t, e)
-	assert.Integer(t, 8, len(first))
+	assert.Integer(t, 11, len(first))
 	result := s.Service.ColdBackfillAllSessions()
 	assert.Integer(t, 1, result.Enriched)
 	second, f := s.Service.ContextLoadsBySession("replay-session")

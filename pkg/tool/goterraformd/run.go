@@ -3,9 +3,11 @@ package goterraformd
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/metric"
 	"github.com/funtimecoding/soil/pkg/provision/store"
 	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/system/reaper"
@@ -27,9 +29,11 @@ func Run(
 		"terraform_runs",
 	)
 	p := reaper.New(r)
-	n := runner.New(o, s, l, r, p)
+	m := metric.New(0, false, nil)
+	n := runner.New(o, s, l, r, p, m.Registry(), client.NewEnvironment())
 	lifecycle.New(
 		l,
+		lifecycle.WithWorker(m),
 		lifecycle.WithWorker(p),
 		lifecycle.WithWorker(n),
 		lifecycle.WithServer(

@@ -8,4 +8,6 @@ type Terraform struct {
 	TerraformPath   string
 	PostgresLocator string
 	LitePath        string
+	StateNamespace  string
+	StateLease      string
 }

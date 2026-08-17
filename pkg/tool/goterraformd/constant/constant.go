@@ -22,7 +22,14 @@ const (
 	Status      = "status"
 	Identifier  = "id"
 
-	TerraformPathEnvironment = "TERRAFORM_PATH"
+	Command = "terraform"
+
+	TerraformPathEnvironment  = "TERRAFORM_PATH"
+	StateNamespaceEnvironment = "TERRAFORM_STATE_NAMESPACE"
+	StateLeaseEnvironment     = "TERRAFORM_STATE_LEASE"
+
+	StateNamespace = "terraform"
+	StateLease     = "lock-tfstate-default-state"
 
 	RecentRunsFailed = "failed to list recent runs"
 	RunLookupFailed  = "failed to look up run"

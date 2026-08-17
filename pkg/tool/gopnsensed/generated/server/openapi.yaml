@@ -1,0 +1,525 @@
+---
+openapi: "3.0.0"
+info:
+  title: gopnsensed
+  version: 1.0.0
+paths:
+  /api/v1/leases:
+    get:
+      operationId: listLeases
+      parameters:
+      - name: query
+        in: query
+        schema:
+          type: string
+        description: Search phrase.
+      responses:
+        "200":
+          description: DHCP leases.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Lease"
+        "500":
+          description: Failed to fetch leases.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/hosts:
+    get:
+      operationId: listHosts
+      parameters:
+      - name: query
+        in: query
+        schema:
+          type: string
+        description: Search phrase.
+      responses:
+        "200":
+          description: Dnsmasq host entries and static reservations.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Host"
+        "500":
+          description: Failed to fetch host entries.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/pools:
+    get:
+      operationId: listPools
+      parameters:
+      - name: query
+        in: query
+        schema:
+          type: string
+        description: Search phrase.
+      responses:
+        "200":
+          description: DHCP pools.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Pool"
+        "500":
+          description: Failed to fetch pools.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/rules:
+    get:
+      operationId: listRules
+      parameters:
+      - name: query
+        in: query
+        schema:
+          type: string
+        description: Search phrase.
+      responses:
+        "200":
+          description: Firewall filter rules.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Rule"
+        "500":
+          description: Failed to fetch rules.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/aliases:
+    get:
+      operationId: listAliases
+      parameters:
+      - name: query
+        in: query
+        schema:
+          type: string
+        description: Search phrase.
+      responses:
+        "200":
+          description: Firewall aliases.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Alias"
+        "500":
+          description: Failed to fetch aliases.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/source-nat:
+    get:
+      operationId: listSourceNat
+      parameters:
+      - name: query
+        in: query
+        schema:
+          type: string
+        description: Search phrase.
+      responses:
+        "200":
+          description: Source NAT rules.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/SourceNatRule"
+        "500":
+          description: Failed to fetch source NAT rules.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/forwards:
+    get:
+      operationId: listForwards
+      parameters:
+      - name: query
+        in: query
+        schema:
+          type: string
+        description: Search phrase.
+      responses:
+        "200":
+          description: Unbound query forwards.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Forward"
+        "500":
+          description: Failed to fetch forwards.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/blocklists:
+    get:
+      operationId: listBlocklists
+      parameters:
+      - name: query
+        in: query
+        schema:
+          type: string
+        description: Search phrase.
+      responses:
+        "200":
+          description: Unbound DNS blocklists.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Blocklist"
+        "500":
+          description: Failed to fetch blocklists.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/interfaces:
+    get:
+      operationId: listInterfaces
+      responses:
+        "200":
+          description: Network interfaces.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/NetworkInterface"
+        "500":
+          description: Failed to fetch interfaces.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/log:
+    get:
+      operationId: firewallLog
+      parameters:
+      - name: limit
+        in: query
+        schema:
+          type: integer
+        description: Maximum number of records.
+      responses:
+        "200":
+          description: Firewall log records.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LogEntry"
+        "500":
+          description: Failed to fetch the firewall log.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/states:
+    get:
+      operationId: firewallStates
+      parameters:
+      - name: query
+        in: query
+        schema:
+          type: string
+        description: Search phrase.
+      responses:
+        "200":
+          description: Firewall state table entries.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/State"
+        "500":
+          description: Failed to fetch states.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    Lease:
+      type: object
+      required: [address, hardware_address, hostname, client_identifier, expire, interface, reserved]
+      properties:
+        address:
+          type: string
+        hardware_address:
+          type: string
+        hostname:
+          type: string
+        client_identifier:
+          type: string
+        expire:
+          type: string
+          format: date-time
+        interface:
+          type: string
+        reserved:
+          type: boolean
+    Host:
+      type: object
+      required: [identifier, host, domain, address, hardware_address, client_identifier, description]
+      properties:
+        identifier:
+          type: string
+        host:
+          type: string
+        domain:
+          type: string
+        address:
+          type: string
+        hardware_address:
+          type: string
+        client_identifier:
+          type: string
+        description:
+          type: string
+    Pool:
+      type: object
+      required: [identifier, interface, start_address, end_address, lease_time, domain, description]
+      properties:
+        identifier:
+          type: string
+        interface:
+          type: string
+        start_address:
+          type: string
+        end_address:
+          type: string
+        lease_time:
+          type: string
+        domain:
+          type: string
+        description:
+          type: string
+    Rule:
+      type: object
+      required: [identifier, enabled, sequence, interface, direction, action, protocol, source_net, source_port, destination_net, destination_port, log, automatic, description, categories]
+      properties:
+        identifier:
+          type: string
+        enabled:
+          type: boolean
+        sequence:
+          type: string
+        interface:
+          type: string
+        direction:
+          type: string
+        action:
+          type: string
+        protocol:
+          type: string
+        source_net:
+          type: string
+        source_port:
+          type: string
+        destination_net:
+          type: string
+        destination_port:
+          type: string
+        log:
+          type: boolean
+        automatic:
+          type: boolean
+        description:
+          type: string
+        categories:
+          type: string
+    Alias:
+      type: object
+      required: [identifier, enabled, name, type, content, description]
+      properties:
+        identifier:
+          type: string
+        enabled:
+          type: boolean
+        name:
+          type: string
+        type:
+          type: string
+        content:
+          type: string
+        description:
+          type: string
+    SourceNatRule:
+      type: object
+      required: [identifier, enabled, interface, protocol, source_net, destination_net, target, target_port, log, description]
+      properties:
+        identifier:
+          type: string
+        enabled:
+          type: boolean
+        interface:
+          type: string
+        protocol:
+          type: string
+        source_net:
+          type: string
+        destination_net:
+          type: string
+        target:
+          type: string
+        target_port:
+          type: string
+        log:
+          type: boolean
+        description:
+          type: string
+    Forward:
+      type: object
+      required: [identifier, enabled, type, domain, server, port, description]
+      properties:
+        identifier:
+          type: string
+        enabled:
+          type: boolean
+        type:
+          type: string
+        domain:
+          type: string
+        server:
+          type: string
+        port:
+          type: string
+        description:
+          type: string
+    Blocklist:
+      type: object
+      required: [identifier, enabled, type, description]
+      properties:
+        identifier:
+          type: string
+        enabled:
+          type: boolean
+        type:
+          type: string
+        description:
+          type: string
+    NetworkInterface:
+      type: object
+      required: [device, status, media, mac_address, mtu, addresses]
+      properties:
+        device:
+          type: string
+        status:
+          type: string
+        media:
+          type: string
+        mac_address:
+          type: string
+        mtu:
+          type: string
+        addresses:
+          type: array
+          items:
+            type: string
+    LogEntry:
+      type: object
+      required: [timestamp, interface, action, direction, protocol, source, source_port, destination, destination_port, rule_number, rule_identifier, label]
+      properties:
+        timestamp:
+          type: string
+        interface:
+          type: string
+        action:
+          type: string
+        direction:
+          type: string
+        protocol:
+          type: string
+        source:
+          type: string
+        source_port:
+          type: string
+        destination:
+          type: string
+        destination_port:
+          type: string
+        rule_number:
+          type: string
+        rule_identifier:
+          type: string
+        label:
+          type: string
+    State:
+      type: object
+      required: [label, description, interface, protocol, direction, source_address, source_port, destination_address, destination_port, state, age, expires, packets, bytes, rule]
+      properties:
+        label:
+          type: string
+        description:
+          type: string
+        interface:
+          type: string
+        protocol:
+          type: string
+        direction:
+          type: string
+        source_address:
+          type: string
+        source_port:
+          type: string
+        destination_address:
+          type: string
+        destination_port:
+          type: string
+        state:
+          type: string
+        age:
+          type: string
+        expires:
+          type: string
+        packets:
+          type: array
+          items:
+            type: integer
+            format: int64
+        bytes:
+          type: array
+          items:
+            type: integer
+            format: int64
+        rule:
+          type: string
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+    ErrorResponse:
+      type: object
+      required: [error, event_identifier]
+      properties:
+        error:
+          type: string
+        event_identifier:
+          type: string

@@ -11,14 +11,14 @@ func New(
 ) *Event {
 	return &Event{
 		MonitorIdentifier: constant.GoKevt.StringIdentifier(v.Name),
-		Cluster:       cluster,
-		Namespace:     v.Namespace,
-		RegardingKind: v.Regarding.Kind,
-		Name:          v.Name,
-		Type:          v.Type,
-		Reason:        v.Reason,
-		Create:        &v.CreationTimestamp.Time,
-		Note:          v.Note,
-		Raw:           v,
+		Cluster:           cluster,
+		Namespace:         v.Namespace,
+		RegardingKind:     v.Regarding.Kind,
+		Name:              v.Name,
+		Type:              v.Type,
+		Reason:            v.Reason,
+		Create:            &v.CreationTimestamp.Time,
+		Note:              v.Note,
+		Raw:               v,
 	}
 }

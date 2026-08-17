@@ -2,10 +2,12 @@ package runner
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/kubernetes/client"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/provision/runner"
 	"github.com/funtimecoding/soil/pkg/provision/store"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/option"
+	"github.com/prometheus/client_golang/prometheus"
 )
 
 func New(
@@ -14,15 +16,22 @@ func New(
 	l *logger.Logger,
 	r face.Reporter,
 	registry face.ProcessRegistry,
+	y *prometheus.Registry,
+	k *client.Client,
 ) *Runner {
 	result := &Runner{
-		store:         s,
-		clonePath:     o.ClonePath,
-		terraformPath: o.TerraformPath,
-		logger:        l,
-		reporter:      r,
-		registry:      registry,
+		store:          s,
+		clonePath:      o.ClonePath,
+		terraformPath:  o.TerraformPath,
+		logger:         l,
+		reporter:       r,
+		registry:       registry,
+		kubernetes:     k,
+		stateNamespace: o.StateNamespace,
+		stateLeaseName: o.StateLease,
 	}
+	result.metrics = newMetrics(y, result.stateLease)
+	result.seedLastSuccess()
 	result.provision = runner.New(
 		runner.Configuration{
 			Repository:      o.Repository,

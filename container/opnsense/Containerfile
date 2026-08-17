@@ -1,0 +1,3 @@
+FROM alpine:3.24.1
+COPY tmp/gopnsensed/linux-amd64/gopnsensed /usr/local/bin
+ENTRYPOINT ["gopnsensed"]

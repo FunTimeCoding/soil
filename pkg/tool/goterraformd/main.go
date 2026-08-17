@@ -30,5 +30,13 @@ func Main(
 	o.TerraformPath = environment.Required(constant.TerraformPathEnvironment)
 	o.PostgresLocator = a.GetString(argumentConstant.Postgres)
 	o.LitePath = a.GetString(argumentConstant.Lite)
+	o.StateNamespace = environment.Fallback(
+		constant.StateNamespaceEnvironment,
+		constant.StateNamespace,
+	)
+	o.StateLease = environment.Fallback(
+		constant.StateLeaseEnvironment,
+		constant.StateLease,
+	)
 	Run(o, r)
 }
