@@ -11,7 +11,7 @@ func checkFile(
 	p *packages.Package,
 	results *output.Results,
 	file *ast.File,
-	constants map[string]knownConstant,
+	constants map[string][]knownConstant,
 ) {
 	expected := assert_call.ExpectedRanges(p, file)
 	ast.Inspect(

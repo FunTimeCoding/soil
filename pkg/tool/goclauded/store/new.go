@@ -3,6 +3,7 @@ package store
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/completion"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/context_load"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/event"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/event_metadata"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/label"
@@ -41,6 +42,7 @@ func New(
 			notification.Stub(),
 			queue.Stub(),
 			tracker_state.Stub(),
+			context_load.Stub(),
 		),
 	)
 	migrateEventMetadata(d)

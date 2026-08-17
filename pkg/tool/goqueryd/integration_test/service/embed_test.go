@@ -13,10 +13,10 @@ func TestEmbedCreatesEmbeddings(t *testing.T) {
 	s.IndexFixtures()
 	result, e := s.Service.Embed()
 	assert.FatalOnError(t, e)
-	assert.Greater(t, 0, float64(result.Documents))
-	assert.Greater(t, 0, float64(result.Chunks))
+	assert.Greater(t, 0, result.Documents)
+	assert.Greater(t, 0, result.Chunks)
 	status := s.Service.MustStatus()
-	assert.Greater(t, 0, float64(status.TotalEmbeddings))
+	assert.Greater(t, 0, status.TotalEmbeddings)
 	assert.Integer(t, 0, status.PendingEmbeddings)
 }
 
@@ -45,5 +45,5 @@ func TestEmbedAfterPush(t *testing.T) {
 		),
 	)
 	status := s.Service.MustStatus()
-	assert.Greater(t, 0, float64(status.TotalEmbeddings))
+	assert.Greater(t, 0, status.TotalEmbeddings)
 }

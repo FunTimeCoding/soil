@@ -16,7 +16,7 @@ func TestHybridSearchReturnsResults(t *testing.T) {
 	option := search_option.New("search pipeline", 10)
 	results, e := s.SearchHybrid(option, o)
 	assert.FatalOnError(t, e)
-	assert.Greater(t, 0, float64(len(results)))
+	assert.Greater(t, 0, len(results))
 }
 
 func TestHybridSearchDiffersFromKeyword(t *testing.T) {
@@ -47,7 +47,7 @@ func TestSearchFallsBackToKeywordWithoutEmbeddings(t *testing.T) {
 	option := search_option.New("chunking strategy", 10)
 	outcome := s.SearchWithFallback(option, o)
 	assert.True(t, outcome.Degraded)
-	assert.Greater(t, 0, float64(len(outcome.Results)))
+	assert.Greater(t, 0, len(outcome.Results))
 }
 
 func TestHybridSearchMetadataFilter(t *testing.T) {
@@ -60,7 +60,7 @@ func TestHybridSearchMetadataFilter(t *testing.T) {
 	option.Metadata = map[string]string{"scope": "alpha"}
 	results, f := s.SearchHybrid(option, o)
 	assert.FatalOnError(t, f)
-	assert.Greater(t, 0, float64(len(results)))
+	assert.Greater(t, 0, len(results))
 
 	for _, r := range results {
 		assert.String(t, "alpha.md", r.Path)

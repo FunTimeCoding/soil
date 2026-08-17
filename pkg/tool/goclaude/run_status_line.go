@@ -2,6 +2,7 @@ package goclaude
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 )
 
@@ -11,6 +12,12 @@ func RunStatusLine(
 ) string {
 	input := parseStatusLineInput(body)
 	reportContext(c, input)
+	context := fmt.Sprintf("%d%%", int(input.ContextWindow.UsedPercentage))
+	model := shortModelName(input.Model.DisplayName)
 
-	return fmt.Sprintf("%d%% context", int(input.ContextWindow.UsedPercentage))
+	if model == "" {
+		return context
+	}
+
+	return join.Space(model, context)
 }

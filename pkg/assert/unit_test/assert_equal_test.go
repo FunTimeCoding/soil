@@ -40,11 +40,11 @@ func TestInteger(t *testing.T) {
 }
 
 func TestInteger32(t *testing.T) {
-	assert.Integer32(t, 1, 1)
+	assert.Integer(t, 1, 1)
 }
 
 func TestInteger64(t *testing.T) {
-	assert.Integer64(t, 1, 1)
+	assert.Integer(t, 1, 1)
 }
 
 func TestNil(t *testing.T) {
@@ -74,11 +74,11 @@ func TestTrue(t *testing.T) {
 }
 
 func TestUnsigned(t *testing.T) {
-	assert.Unsigned(t, 1, 1)
+	assert.Integer(t, 1, 1)
 }
 
 func TestUnsigned32(t *testing.T) {
-	assert.Unsigned32(t, 1, 1)
+	assert.Integer(t, 1, 1)
 }
 
 func TestNewDay(t *testing.T) {

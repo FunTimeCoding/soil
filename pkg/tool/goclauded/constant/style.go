@@ -46,7 +46,20 @@ const InlineStyle = `
 	}
 	.kind-complete { background: #2ecc40; color: #fff; }
 	.kind-update { background: #0074d9; color: #fff; }
-	table { margin-bottom: 0; }
+	.session-card table { margin-bottom: 0; }
+	.label-pip {
+		display: inline-block;
+		font-size: 0.75rem;
+		padding: 0.15rem 0.5rem;
+		margin-right: 0.35rem;
+		border-radius: var(--pico-border-radius);
+		border: 1px solid var(--pico-muted-border-color);
+		background: var(--pico-card-sectioning-background-color);
+	}
+	.label-key {
+		color: var(--pico-muted-color);
+		margin-right: 0.3rem;
+	}
 `
 const ConversationStyle = `
 	html, body {

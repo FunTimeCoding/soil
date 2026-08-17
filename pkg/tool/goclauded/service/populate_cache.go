@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/tracker"
+	goclaudedConstant "github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"os"
 	"path/filepath"
 	"strings"
@@ -46,11 +47,13 @@ func (s *Service) PopulateCache() {
 		}
 
 		path := filepath.Join(s.harbor, entry.Name())
+		calls, g := tracker.Read(path, state, goclaudedConstant.FollowedTools)
 
-		if tracker.Read(path, state) != nil {
+		if g != nil {
 			continue
 		}
 
 		s.store.SaveTrackerState(identifier, state)
+		s.recordContextLoads(identifier, calls)
 	}
 }

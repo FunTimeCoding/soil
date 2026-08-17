@@ -5,4 +5,6 @@ type Call struct {
 	Identifier string
 	Timestamp  string
 	Detail     string
+	Input      string
+	Result     string
 }

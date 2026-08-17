@@ -27,4 +27,7 @@ const (
 	StatusLineDumpFile = "/tmp/goclaude-status-line.json"
 )
 
-var SedInvocation = regexp.MustCompile(`(^|[|&;(\s])sed(\s|$)`)
+var (
+	SedInvocation = regexp.MustCompile(`(^|[|&;(\s])sed(\s|$)`)
+	ShortModelName = map[string]string{"Fable 5": "Fable"}
+)

@@ -366,6 +366,12 @@ type WaitResponse struct {
 	Messages []Message `json:"messages"`
 }
 
+// PostBackfillParams defines parameters for PostBackfill.
+type PostBackfillParams struct {
+	// Cold Reset tracker offsets and re-read every transcript whole.
+	Cold *bool `form:"cold,omitempty" json:"cold,omitempty"`
+}
+
 // GetCheckParams defines parameters for GetCheck.
 type GetCheckParams struct {
 	Session string `form:"session" json:"session"`
@@ -532,7 +538,7 @@ type ClientInterface interface {
 	PostAnnounce(ctx context.Context, body PostAnnounceJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// PostBackfill performs a POST /api/backfill (the `PostBackfill` operationId) request.
-	PostBackfill(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+	PostBackfill(ctx context.Context, params *PostBackfillParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GetCheck performs a GET /api/check (the `GetCheck` operationId) request.
 	GetCheck(ctx context.Context, params *GetCheckParams, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -696,8 +702,8 @@ func (c *Client) PostAnnounce(ctx context.Context, body PostAnnounceJSONRequestB
 }
 
 // PostBackfill performs a POST /api/backfill (the `PostBackfill` operationId) request.
-func (c *Client) PostBackfill(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPostBackfillRequest(c.Server)
+func (c *Client) PostBackfill(ctx context.Context, params *PostBackfillParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostBackfillRequest(c.Server, params)
 	if err != nil {
 		return nil, err
 	}
@@ -1261,7 +1267,7 @@ func NewPostAnnounceRequestWithBody(server string, contentType string, body io.R
 }
 
 // NewPostBackfillRequest constructs an http.Request for the PostBackfill method
-func NewPostBackfillRequest(server string) (*http.Request, error) {
+func NewPostBackfillRequest(server string, params *PostBackfillParams) (*http.Request, error) {
 	var err error
 
 	serverURL, err := url.Parse(server)
@@ -1277,6 +1283,33 @@ func NewPostBackfillRequest(server string) (*http.Request, error) {
 	queryURL, err := serverURL.Parse(operationPath)
 	if err != nil {
 		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if params.Cold != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "cold", *params.Cold, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "boolean", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
 	}
 
 	req, err := http.NewRequest(http.MethodPost, queryURL.String(), nil)
@@ -2640,7 +2673,7 @@ type ClientWithResponsesInterface interface {
 	// PostBackfillWithResponse performs a POST /api/backfill (the `PostBackfill` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
-	PostBackfillWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*PostBackfillResponse, error)
+	PostBackfillWithResponse(ctx context.Context, params *PostBackfillParams, reqEditors ...RequestEditorFn) (*PostBackfillResponse, error)
 
 	// GetCheckWithResponse performs a GET /api/check (the `GetCheck` operationId) request.
 	//
@@ -4304,8 +4337,8 @@ func (c *ClientWithResponses) PostAnnounceWithResponse(ctx context.Context, body
 // PostBackfillWithResponse performs a POST /api/backfill (the `PostBackfill` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
-func (c *ClientWithResponses) PostBackfillWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*PostBackfillResponse, error) {
-	rsp, err := c.PostBackfill(ctx, reqEditors...)
+func (c *ClientWithResponses) PostBackfillWithResponse(ctx context.Context, params *PostBackfillParams, reqEditors ...RequestEditorFn) (*PostBackfillResponse, error) {
+	rsp, err := c.PostBackfill(ctx, params, reqEditors...)
 	if err != nil {
 		return nil, err
 	}

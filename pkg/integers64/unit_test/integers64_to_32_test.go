@@ -7,5 +7,5 @@ import (
 )
 
 func TestTo32(t *testing.T) {
-	assert.Integer32(t, 0, integers64.To32(0))
+	assert.Integer(t, 0, integers64.To32(0))
 }

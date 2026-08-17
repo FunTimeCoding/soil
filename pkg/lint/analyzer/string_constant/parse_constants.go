@@ -8,10 +8,9 @@ import (
 )
 
 func parseConstants(
-	result map[string]knownConstant,
+	result map[string][]knownConstant,
 	path string,
 	p string,
-	distance int,
 ) {
 	set := token.NewFileSet()
 	file, e := parser.ParseFile(set, path, nil, 0)
@@ -50,16 +49,10 @@ func parseConstants(
 				}
 
 				value := strings.Trim(l.Value, "\"")
-				existing, exists := result[value]
-
-				if !exists || distance < existing.distance {
-					result[value] = knownConstant{
-						name:        name.Name,
-						packageName: p,
-						value:       value,
-						distance:    distance,
-					}
-				}
+				result[value] = append(
+					result[value],
+					knownConstant{name: name.Name, packageName: p},
+				)
 			}
 		}
 	}

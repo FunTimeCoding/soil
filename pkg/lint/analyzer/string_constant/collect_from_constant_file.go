@@ -6,10 +6,9 @@ import (
 )
 
 func collectFromConstantFile(
-	result map[string]knownConstant,
+	result map[string][]knownConstant,
 	directory string,
 	p string,
-	distance int,
 ) {
 	path := filepath.Join(directory, "constant.go")
 
@@ -17,5 +16,5 @@ func collectFromConstantFile(
 		return
 	}
 
-	parseConstants(result, path, p, distance)
+	parseConstants(result, path, p)
 }

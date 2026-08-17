@@ -8,10 +8,9 @@ import (
 )
 
 func collectFromConstantDirectory(
-	result map[string]knownConstant,
+	result map[string][]knownConstant,
 	directory string,
 	subDirectory string,
-	distance int,
 ) {
 	constantDirectory := filepath.Join(directory, subDirectory)
 	entries, e := os.ReadDir(constantDirectory)
@@ -33,7 +32,6 @@ func collectFromConstantDirectory(
 			result,
 			filepath.Join(constantDirectory, n.Name()),
 			subDirectory,
-			distance,
 		)
 	}
 }

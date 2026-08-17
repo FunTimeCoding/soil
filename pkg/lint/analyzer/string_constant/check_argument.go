@@ -1,7 +1,6 @@
 package string_constant
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/assert_call"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
@@ -15,7 +14,7 @@ func checkArgument(
 	p *packages.Package,
 	results *output.Results,
 	e ast.Expr,
-	constants map[string]knownConstant,
+	constants map[string][]knownConstant,
 	expected []assert_call.Range,
 ) {
 	l, okay := e.(*ast.BasicLit)
@@ -36,7 +35,7 @@ func checkArgument(
 		return
 	}
 
-	c, exists := constants[value]
+	list, exists := constants[value]
 
 	if !exists {
 		return
@@ -45,12 +44,7 @@ func checkArgument(
 	results.AddConcern(
 		concern.NewFile(
 			"string_constant",
-			fmt.Sprintf(
-				"string literal %q has constant %s.%s",
-				value,
-				c.packageName,
-				c.name,
-			),
+			formatMessage(value, list),
 			p.Fset.Position(l.Pos()).Filename,
 			false,
 		),

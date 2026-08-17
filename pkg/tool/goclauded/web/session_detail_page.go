@@ -38,6 +38,13 @@ func (s *Server) sessionDetailPage(
 
 	var content []gomponents.Node
 	content = append(content, html.H3(gomponents.Text(title)))
+	labels, labelError := s.service.LabelsBySession(d.Identifier)
+	errors.PanicOnError(labelError)
+
+	if len(labels) > 0 {
+		content = append(content, labelPips(labels))
+	}
+
 	var identity []gomponents.Node
 
 	if d.Session != nil && d.Session.Name != "" {
@@ -148,25 +155,6 @@ func (s *Server) sessionDetailPage(
 		)
 	}
 
-	labels, labelError := s.service.LabelsBySession(d.Identifier)
-	errors.PanicOnError(labelError)
-
-	if len(labels) > 0 {
-		var pips []gomponents.Node
-
-		for _, l := range labels {
-			pips = append(
-				pips,
-				html.Span(
-					html.Class("label-pip"),
-					gomponents.Textf("(%s:%s)", l.Key, l.Value),
-				),
-			)
-		}
-
-		content = append(content, html.P(gomponents.Group(pips)))
-	}
-
 	if len(d.Completions) > 0 {
 		content = append(content, html.H4(gomponents.Text("Completions")))
 		var rows []gomponents.Node
@@ -198,6 +186,10 @@ func (s *Server) sessionDetailPage(
 			),
 		)
 	}
+
+	loads, loadError := s.service.ContextLoadsBySession(d.Identifier)
+	errors.PanicOnError(loadError)
+	content = append(content, contextLoadSection(loads)...)
 
 	if d.Summary != "" {
 		content = append(

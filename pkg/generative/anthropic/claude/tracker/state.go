@@ -1,6 +1,9 @@
 package tracker
 
-import "github.com/funtimecoding/soil/pkg/generative/anthropic/claude/pricing"
+import (
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/pricing"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/tool_call"
+)
 
 type State struct {
 	Offset           int64
@@ -14,4 +17,5 @@ type State struct {
 	FirstMessage     string
 	Usage            map[string]*pricing.Tokens
 	RecentMessages   []string
+	Pending          map[string]tool_call.Call
 }

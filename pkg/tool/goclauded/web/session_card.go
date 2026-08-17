@@ -67,19 +67,7 @@ func sessionCard(
 	)
 
 	if len(labels) > 0 {
-		var pips []gomponents.Node
-
-		for _, l := range labels {
-			pips = append(
-				pips,
-				html.Span(
-					html.Class("label-pip"),
-					gomponents.Text(fmt.Sprintf("(%s:%s)", l.Key, l.Value)),
-				),
-			)
-		}
-
-		details = append(details, html.P(gomponents.Group(pips)))
+		details = append(details, labelPips(labels))
 	}
 
 	if latestPulse != nil {

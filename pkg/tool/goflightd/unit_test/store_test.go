@@ -72,5 +72,5 @@ func TestStoreMarks(t *testing.T) {
 	assert.String(t, "recovered", marks[0].Label)
 	count, f := s.MarkCount()
 	assert.FatalOnError(t, f)
-	assert.Integer64(t, 2, count)
+	assert.Integer(t, 2, count)
 }

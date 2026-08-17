@@ -74,4 +74,22 @@ func migrateForeignKeys(d *gorm.DB) {
 		)`,
 		"identifier, session_identifier, from_name, body, consumed, created_at",
 	)
+	recreateWithFK(
+		d,
+		constant.ContextLoadTable,
+		`CREATE TABLE context_load_new (
+			identifier INTEGER PRIMARY KEY AUTOINCREMENT,
+			session_identifier TEXT NOT NULL
+				REFERENCES session(identifier) ON DELETE CASCADE,
+			call_identifier TEXT,
+			reference TEXT,
+			kind TEXT,
+			name TEXT,
+			tier TEXT,
+			query TEXT,
+			occurred_at DATETIME,
+			UNIQUE (session_identifier, call_identifier, reference)
+		)`,
+		"identifier, session_identifier, call_identifier, reference, kind, name, tier, query, occurred_at",
+	)
 }

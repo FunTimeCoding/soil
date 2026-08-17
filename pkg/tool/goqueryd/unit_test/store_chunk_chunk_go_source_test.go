@@ -18,7 +18,7 @@ func TestChunkGoSourceSplitsAtDeclarations(t *testing.T) {
 		body,
 	)
 	chunks := chunk.Document(source, constant.MainFile)
-	assert.Greater(t, 1, float64(len(chunks)))
+	assert.Greater(t, 1, len(chunks))
 	assert.StringContains(t, "package main", chunks[0].Text)
 	found := false
 
@@ -39,7 +39,7 @@ func TestChunkGoSourceFallsBackOnParseError(t *testing.T) {
 		strings.Repeat("text\n", 1000),
 	)
 	chunks := chunk.Document(invalid, "broken.go")
-	assert.Greater(t, 0, float64(len(chunks)))
+	assert.Greater(t, 0, len(chunks))
 }
 
 func TestChunkGoSourceShortFile(t *testing.T) {

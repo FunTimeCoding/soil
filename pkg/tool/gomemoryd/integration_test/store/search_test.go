@@ -21,7 +21,7 @@ func TestSearchMemories(t *testing.T) {
 	p.Type = "feedback"
 	s.CreateMemory(p)
 	results := s.SearchMemories("validate input", 10, "", "", "")
-	assert.Greater(t, 0, float64(len(results)))
+	assert.Greater(t, 0, len(results))
 	assert.String(
 		t,
 		"validate at boundaries; trust internal callers",

@@ -39,7 +39,7 @@ func (s *Server) page(
 				html.Div(
 					html.Class("sidebar"),
 					html.Input(
-						html.Type("search"),
+						html.Type(constant.SearchInputType),
 						html.Class("sidebar-filter"),
 						gomponents.Attr("placeholder", "Filter..."),
 						gomponents.Attr("oninput", "filterSidebar(this.value)"),

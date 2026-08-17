@@ -22,8 +22,8 @@ func TestMustToFloat(t *testing.T) {
 }
 
 func TestMustToInteger64(t *testing.T) {
-	assert.Integer64(t, 1, strings.MustToInteger64(constant.One))
-	assert.Integer64(t, 1, strings.MustToInteger64(" 1"))
+	assert.Integer(t, 1, strings.MustToInteger64(constant.One))
+	assert.Integer(t, 1, strings.MustToInteger64(" 1"))
 }
 
 func TestMustToInteger(t *testing.T) {
@@ -44,8 +44,8 @@ func TestMustToIntegers(t *testing.T) {
 }
 
 func TestMustToUnsignedInteger(t *testing.T) {
-	assert.Unsigned(t, 1, strings.MustToUnsignedInteger(constant.One))
-	assert.Unsigned(t, 1, strings.MustToUnsignedInteger(" 1"))
+	assert.Integer(t, 1, strings.MustToUnsignedInteger(constant.One))
+	assert.Integer(t, 1, strings.MustToUnsignedInteger(" 1"))
 }
 
 func TestToBoolean(t *testing.T) {
@@ -80,6 +80,6 @@ func TestToMap(t *testing.T) {
 }
 
 func TestUnsignedToInteger(t *testing.T) {
-	assert.Unsigned(t, 5, strings.ToUnsignedInteger(constant.Five, 0))
-	assert.Unsigned(t, 5, strings.ToUnsignedInteger(" 5", 0))
+	assert.Integer(t, 5, strings.ToUnsignedInteger(constant.Five, 0))
+	assert.Integer(t, 5, strings.ToUnsignedInteger(" 5", 0))
 }

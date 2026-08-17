@@ -5,10 +5,10 @@ import (
 	"testing"
 )
 
-func Integer(
+func Integer[T integerKind](
 	t *testing.T,
-	expect int,
-	actual int,
+	expect T,
+	actual T,
 ) {
 	t.Helper()
 	assert.Equal(t, actual, expect)

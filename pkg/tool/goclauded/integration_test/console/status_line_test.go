@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert/fixture"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration_test/base"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration_test/console_tester"
+	"strings"
 	"testing"
 )
 
@@ -14,12 +15,25 @@ func TestStatusLineRendersAndStores(t *testing.T) {
 	c := console_tester.New(t, s.Port())
 	c.Register("11111111-2222-3333-4444-555555555555")
 	line := c.StatusLine([]byte(fixture.Read("claude", "status-line.json")))
-	assert.String(t, "18% context", line)
+	assert.String(t, "Fable 18%", line)
 	record, e := s.Service.GetSession("11111111-2222-3333-4444-555555555555")
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 18, record.ContextPercent)
 	assert.Integer(t, 1000000, record.ContextWindow)
 	assert.String(t, "Fable 5", record.Model)
+}
+
+func TestStatusLineKeepsUnmappedModelName(t *testing.T) {
+	s := base.New(t)
+	defer s.Close()
+	c := console_tester.New(t, s.Port())
+	c.Register("11111111-2222-3333-4444-555555555555")
+	body := strings.ReplaceAll(
+		fixture.Read("claude", "status-line.json"),
+		"Fable 5",
+		"Opus 4.6",
+	)
+	assert.String(t, "Opus 4.6 18%", c.StatusLine([]byte(body)))
 }
 
 func TestStatusLineRateSnapshotDedupe(t *testing.T) {

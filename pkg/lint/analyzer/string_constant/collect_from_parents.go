@@ -3,14 +3,13 @@ package string_constant
 import "path/filepath"
 
 func collectFromParents(
-	result map[string]knownConstant,
+	result map[string][]knownConstant,
 	directory string,
 ) {
 	current := filepath.Dir(directory)
-	distance := 1
 
 	for {
-		collectFromConstantDirectory(result, current, "constant", distance)
+		collectFromConstantDirectory(result, current, "constant")
 
 		if filepath.Base(current) == "pkg" {
 			break
@@ -23,6 +22,5 @@ func collectFromParents(
 		}
 
 		current = parent
-		distance++
 	}
 }

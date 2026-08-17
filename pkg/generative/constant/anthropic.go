@@ -12,7 +12,15 @@ const (
 	AnthropicRoleAssistant = "assistant"
 )
 
-const ClaudeRecentMessageLimit = 50
+const (
+	ClaudeRecentMessageLimit = 50
+	ClaudePendingCallLimit   = 64
+)
+
+const (
+	ClaudeToolUseBlock    = "tool_use"
+	ClaudeToolResultBlock = "tool_result"
+)
 
 var (
 	ClaudeMarkupTagPattern = regexp.MustCompile(`<[^>]+>`)

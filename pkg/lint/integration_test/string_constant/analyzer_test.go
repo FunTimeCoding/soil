@@ -10,6 +10,16 @@ func TestFlagged(t *testing.T) {
 	p, results := testutil.LoadTestPackage(t, "testdata/src/flagged")
 	string_constant.Check(p, results)
 	testutil.AssertBlocked(t, results, 4)
+	testutil.AssertBlockedContains(
+		t,
+		results,
+		`string literal "name" has constants constant.Name or constant.NameColumn`,
+	)
+	testutil.AssertBlockedContains(
+		t,
+		results,
+		`string literal "query" has constant constant.Query`,
+	)
 }
 
 func TestClean(t *testing.T) {
@@ -31,5 +41,5 @@ func TestExpected(t *testing.T) {
 	testutil.WriteModFile(t, temporary, "expected.test")
 	p, results := testutil.LoadFromDirectory(t, temporary)
 	string_constant.Check(p, results)
-	testutil.AssertBlocked(t, results, 4)
+	testutil.AssertBlocked(t, results, 5)
 }

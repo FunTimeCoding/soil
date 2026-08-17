@@ -95,6 +95,10 @@ func (s *Service) MoveSymbols(
 		return failValidation(r, message)
 	}
 
+	if message := checkMethodSet(entries); message != "" {
+		return failValidation(r, message)
+	}
+
 	target := findPackage(all, targetPackagePath)
 
 	if target == nil && !create {

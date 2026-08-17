@@ -70,5 +70,5 @@ func TestDeleteSessionCascadesChildRecords(t *testing.T) {
 	assert.Count(t, 0, pulses)
 	eventCount, ce = s.Store.CountEvents()
 	assert.FatalOnError(t, ce)
-	assert.Integer64(t, 0, eventCount)
+	assert.Integer(t, 0, eventCount)
 }

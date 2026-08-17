@@ -1,14 +1,17 @@
 package assert
 
-import "testing"
+import (
+	"cmp"
+	"testing"
+)
 
-func GreaterEqual(
+func GreaterEqual[T cmp.Ordered](
 	t *testing.T,
-	than float64,
-	actual float64,
+	than T,
+	actual T,
 ) {
 	if actual < than {
 		t.Helper()
-		t.Errorf("\nExpect greater equal than: %f\nActual: %f", than, actual)
+		t.Errorf("\nExpect greater equal than: %v\nActual: %v", than, actual)
 	}
 }

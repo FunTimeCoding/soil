@@ -16,6 +16,6 @@ func TestStoreRoundTrip(t *testing.T) {
 	assert.Integer(t, 1, len(s.MustUsers()))
 	h := s.MustChannelByName("announcements")
 	assert.NotNil(t, h)
-	assert.Integer64(t, -100, h.Identifier)
+	assert.Integer(t, -100, h.Identifier)
 	assert.True(t, s.MustChannelByName("missing") == nil)
 }

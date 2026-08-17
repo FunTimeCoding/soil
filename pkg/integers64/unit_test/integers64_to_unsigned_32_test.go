@@ -7,5 +7,5 @@ import (
 )
 
 func TestToUnsigned32(t *testing.T) {
-	assert.Unsigned32(t, 0, integers64.ToUnsigned32(0))
+	assert.Integer(t, 0, integers64.ToUnsigned32(0))
 }

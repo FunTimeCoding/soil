@@ -103,3 +103,34 @@ func BooleanLiteralFlagged(t *testing.T) {
 		Matches("name", nil),
 	) // want `string literal "name" has constant constant.Name`
 }
+
+func lookup(name string) map[string]float64 {
+	return map[string]float64{name: 0}
+}
+
+func IndexClean(
+	t *testing.T,
+	actual float64,
+	table map[string]float64,
+) {
+	assert.Item(t, table[constant.Name], actual)
+}
+
+func SliceClean(
+	t *testing.T,
+	actual string,
+	text string,
+) {
+	assert.String(t, text[constant.Start:], actual)
+}
+
+func IndexContainerFlagged(
+	t *testing.T,
+	actual float64,
+) {
+	assert.Item(
+		t,
+		lookup(constant.Name)[constant.Name],
+		actual,
+	) // want `constant constant.Name in expected value should be a literal`
+}

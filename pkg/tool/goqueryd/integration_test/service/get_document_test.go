@@ -24,7 +24,7 @@ func TestGetDocumentNotFoundWithSuggestions(t *testing.T) {
 	document, similar, e := s.Service.GetDocument("test/alfa.md")
 	assert.FatalOnError(t, e)
 	assert.Nil(t, document)
-	assert.Greater(t, 0, float64(len(similar)))
+	assert.Greater(t, 0, len(similar))
 }
 
 func TestGetDocumentNotFoundNoSuggestions(t *testing.T) {

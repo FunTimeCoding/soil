@@ -9,7 +9,7 @@ func TestFindSimilarFiles(t *testing.T) {
 	s := indexedTestStore(t)
 	defer s.Close()
 	similar := s.MustFindSimilarFiles("test/alfa.md", 5)
-	assert.Greater(t, 0, float64(len(similar)))
+	assert.Greater(t, 0, len(similar))
 	assert.String(t, "test/alpha.md", similar[0])
 }
 

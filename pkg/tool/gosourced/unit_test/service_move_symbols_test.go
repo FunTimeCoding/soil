@@ -3,6 +3,7 @@ package unit_test
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"os"
 	"path/filepath"
 	"strings"
@@ -193,6 +194,25 @@ func TestBatchMethodRefused(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "methods cannot move")
+}
+
+func TestBatchMethodSetRefused(t *testing.T) {
+	d := testutil.PrepareTestPackage(t, serviceTestdata("batch-method/src"))
+	s := testService()
+	r, e := s.MoveSymbols(
+		d,
+		"example/pkg/target",
+		[]string{"Store"},
+		"",
+		"example/pkg/target/constant",
+		"",
+		false,
+		false,
+	)
+	assert.FatalOnError(t, e)
+	testutil.AssertBlocked(t, r, 1)
+	testutil.AssertBlockedContains(t, r, "Store has methods")
+	testutil.AssertBlockedContains(t, r, constant.ExtractType)
 }
 
 func TestBackReferenceQualified(t *testing.T) {

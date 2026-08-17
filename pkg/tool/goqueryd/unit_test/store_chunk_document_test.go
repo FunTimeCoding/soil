@@ -33,7 +33,7 @@ func TestDocumentSplitsAtHeadings(t *testing.T) {
 		sections[4],
 	)
 	chunks := chunk.Document(content, "test.md")
-	assert.Greater(t, 1, float64(len(chunks)))
+	assert.Greater(t, 1, len(chunks))
 	assert.StringContains(t, "# First", chunks[0].Text)
 }
 

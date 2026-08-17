@@ -16,7 +16,7 @@ func TestExtractSnippetFindsQueryTerms(t *testing.T) {
 	)
 	assert.StringContains(t, "Keyword Matching", snippet)
 	assert.StringContains(t, "term frequency", snippet)
-	assert.Greater(t, 0, float64(line))
+	assert.Greater(t, 0, line)
 }
 
 func TestExtractSnippetWithChunkPosition(t *testing.T) {
@@ -27,7 +27,7 @@ func TestExtractSnippetWithChunkPosition(t *testing.T) {
 		position,
 	)
 	assert.StringContains(t, "Cross-Encoder Reranking", snippet)
-	assert.Greater(t, 0, float64(line))
+	assert.Greater(t, 0, line)
 }
 
 func TestExtractSnippetEmptyBody(t *testing.T) {
@@ -42,5 +42,5 @@ func TestExtractSnippetTruncatesLongResult(t *testing.T) {
 		50,
 	)
 	snippet, _ := store.ExtractSnippet(long, "keyword", 0)
-	assert.Less(t, 401, float64(len(snippet)))
+	assert.Less(t, 401, len(snippet))
 }

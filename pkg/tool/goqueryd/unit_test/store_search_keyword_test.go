@@ -19,7 +19,7 @@ func TestSearchKeywordRanking(t *testing.T) {
 	defer s.Close()
 	results := s.MustSearchKeyword("documents", 10, "", false, nil)
 	assert.Greater(t, 0, results[0].Score)
-	assert.Greater(t, 1, float64(len(results)))
+	assert.Greater(t, 1, len(results))
 }
 
 func TestSearchKeywordCollectionFilter(t *testing.T) {
@@ -52,7 +52,7 @@ func TestSearchKeywordNegation(t *testing.T) {
 	defer s.Close()
 	all := s.MustSearchKeyword("search documents", 10, "", false, nil)
 	negated := s.MustSearchKeyword("search -pipeline", 10, "", false, nil)
-	assert.Greater(t, float64(len(negated)), float64(len(all)))
+	assert.Greater(t, len(negated), len(all))
 }
 
 func TestSearchKeywordQuotedPhrase(t *testing.T) {

@@ -54,7 +54,7 @@ func TestReadAccumulatesUsage(t *testing.T) {
 	appendFile(t, path, assistantUsageLine("m1", "r1", "claude-fable-5", fable))
 	appendFile(t, path, assistantUsageLine("m1", "r1", "claude-fable-5", fable))
 	s := tracker.New()
-	assert.Nil(t, tracker.Read(path, s))
+	assert.Nil(t, trackerRead(path, s))
 	tokens := s.Usage["fable"]
 	assert.NotNil(t, tokens)
 	assert.Integer(t, 1, tokens.Count)
@@ -67,7 +67,7 @@ func TestReadAccumulatesUsage(t *testing.T) {
 	appendFile(t, path, assistantUsageLine("m1", "r1", "claude-fable-5", fable))
 	opus := `{"input_tokens":7,"output_tokens":30,"cache_creation_input_tokens":400,"cache_read_input_tokens":900}`
 	appendFile(t, path, assistantUsageLine("m2", "r2", "claude-opus-4-8", opus))
-	assert.Nil(t, tracker.Read(path, s))
+	assert.Nil(t, trackerRead(path, s))
 	tokens = s.Usage["fable"]
 	assert.Integer(t, 1, tokens.Count)
 	assert.Integer(t, 10, tokens.Input)
@@ -86,7 +86,7 @@ func TestReadResetsOnShrink(t *testing.T) {
 	appendFile(t, path, assistantUsageLine("m1", "r1", "claude-fable-5", fable))
 	appendFile(t, path, assistantUsageLine("m2", "r2", "claude-fable-5", fable))
 	s := tracker.New()
-	assert.Nil(t, tracker.Read(path, s))
+	assert.Nil(t, trackerRead(path, s))
 	assert.Integer(t, 2, s.Usage["fable"].Count)
 
 	if e := os.WriteFile(
@@ -97,7 +97,7 @@ func TestReadResetsOnShrink(t *testing.T) {
 		t.Fatalf("rewrite %s: %v", path, e)
 	}
 
-	assert.Nil(t, tracker.Read(path, s))
+	assert.Nil(t, trackerRead(path, s))
 	assert.Integer(t, 1, s.Usage["fable"].Count)
 	assert.Integer(t, 1, s.Lines)
 }

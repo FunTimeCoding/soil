@@ -5,11 +5,13 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/spf13/cobra"
 )
 
 func sessionBackfill(c *command_context.Context) *cobra.Command {
-	return &cobra.Command{
+	var cold bool
+	result := &cobra.Command{
 		Use:   "backfill",
 		Short: "Re-enrich all sessions from JSONL files",
 		Args:  cobra.NoArgs,
@@ -17,8 +19,15 @@ func sessionBackfill(c *command_context.Context) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
+			parameters := &client.PostBackfillParams{}
+
+			if cold {
+				parameters.Cold = new(true)
+			}
+
 			response, e := c.Client().PostBackfillWithResponse(
 				context.Background(),
+				parameters,
 			)
 			errors.PanicOnError(e)
 			r := response.JSON200
@@ -29,4 +38,12 @@ func sessionBackfill(c *command_context.Context) *cobra.Command {
 			)
 		},
 	}
+	result.Flags().BoolVar(
+		&cold,
+		"cold",
+		false,
+		"Reset tracker offsets and re-read every transcript whole",
+	)
+
+	return result
 }
