@@ -19,6 +19,7 @@ func (s *Service) ExtractToFile(
 	directory string,
 	filePath string,
 	functionName string,
+	dryRun bool,
 ) (*output.Results, error) {
 	r := output.NewResultsWithDirectory(directory)
 	fullPath := filePath
@@ -116,11 +117,11 @@ func (s *Service) ExtractToFile(
 		Decls: []dst.Decl{moved},
 	}
 
-	if e := restoreExtracted(source, fullPath); e != nil {
+	if e := restoreExtracted(source, fullPath, dryRun); e != nil {
 		return nil, e
 	}
 
-	if e := restoreExtracted(target, targetPath); e != nil {
+	if e := restoreExtracted(target, targetPath, dryRun); e != nil {
 		return nil, e
 	}
 
@@ -156,10 +157,12 @@ func (s *Service) ExtractToFile(
 			return r, nil
 		}
 
-		e = os.Rename(fullPath, renamePath)
+		if !dryRun {
+			e = os.Rename(fullPath, renamePath)
 
-		if e != nil {
-			return nil, e
+			if e != nil {
+				return nil, e
+			}
 		}
 
 		r.AddConcern(
@@ -174,6 +177,10 @@ func (s *Service) ExtractToFile(
 				true,
 			),
 		)
+	}
+
+	if dryRun {
+		r.MarkPlanned()
 	}
 
 	return r, nil

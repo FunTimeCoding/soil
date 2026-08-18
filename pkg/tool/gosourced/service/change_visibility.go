@@ -7,6 +7,14 @@ func (s *Service) ChangeVisibility(
 	symbol string,
 	packagePath string,
 	receiver string,
+	dryRun bool,
 ) (*output.Results, error) {
-	return s.Rename(directory, packagePath, symbol, FlipName(symbol), receiver)
+	return s.Rename(
+		directory,
+		packagePath,
+		symbol,
+		FlipName(symbol),
+		receiver,
+		dryRun,
+	)
 }

@@ -10,7 +10,7 @@ import (
 func TestAddImportToGrouped(t *testing.T) {
 	d := testutil.PrepareTestPackage(t, serviceTestdata("import-grouped/src"))
 	s := testService()
-	r, e := s.AddImport(d, "pkg/target/example.go", "os", "")
+	r, e := s.AddImport(d, "pkg/target/example.go", "os", "", false)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	source := readFixtureFile(t, d, "pkg/target/example.go")
@@ -28,7 +28,7 @@ func TestAddImportToGrouped(t *testing.T) {
 func TestAddImportToEmpty(t *testing.T) {
 	d := testutil.PrepareTestPackage(t, serviceTestdata("import-empty/src"))
 	s := testService()
-	r, e := s.AddImport(d, "pkg/target/example.go", "fmt", "")
+	r, e := s.AddImport(d, "pkg/target/example.go", "fmt", "", false)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	source := readFixtureFile(t, d, "pkg/target/example.go")
@@ -38,7 +38,13 @@ func TestAddImportToEmpty(t *testing.T) {
 func TestAddImportWithAlias(t *testing.T) {
 	d := testutil.PrepareTestPackage(t, serviceTestdata("import-grouped/src"))
 	s := testService()
-	r, e := s.AddImport(d, "pkg/target/example.go", "path/filepath", "fp")
+	r, e := s.AddImport(
+		d,
+		"pkg/target/example.go",
+		"path/filepath",
+		"fp",
+		false,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	source := readFixtureFile(t, d, "pkg/target/example.go")
@@ -48,7 +54,7 @@ func TestAddImportWithAlias(t *testing.T) {
 func TestRemoveImport(t *testing.T) {
 	d := testutil.PrepareTestPackage(t, serviceTestdata("import-grouped/src"))
 	s := testService()
-	r, e := s.RemoveImport(d, "pkg/target/example.go", "strings")
+	r, e := s.RemoveImport(d, "pkg/target/example.go", "strings", false)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	source := readFixtureFile(t, d, "pkg/target/example.go")
@@ -60,7 +66,7 @@ func TestRemoveImport(t *testing.T) {
 func TestRemoveImportNotFound(t *testing.T) {
 	d := testutil.PrepareTestPackage(t, serviceTestdata("import-grouped/src"))
 	s := testService()
-	r, e := s.RemoveImport(d, "pkg/target/example.go", "os")
+	r, e := s.RemoveImport(d, "pkg/target/example.go", "os", false)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "not found")

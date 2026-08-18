@@ -22,6 +22,7 @@ func TestBatchFile(t *testing.T) {
 		"constant.go",
 		false,
 		false,
+		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
@@ -52,6 +53,7 @@ func TestBatchEnum(t *testing.T) {
 		"pkg/target/constant.go",
 		"example/pkg/target/constant",
 		"constant.go",
+		false,
 		false,
 		false,
 	)
@@ -85,6 +87,7 @@ func TestBatchSubset(t *testing.T) {
 		"constant.go",
 		false,
 		false,
+		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
@@ -112,6 +115,7 @@ func TestBatchCollision(t *testing.T) {
 		"constant.go",
 		false,
 		false,
+		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
@@ -128,6 +132,7 @@ func TestBatchDependencyTogether(t *testing.T) {
 		"",
 		"example/pkg/target/constant",
 		"constant.go",
+		false,
 		false,
 		false,
 	)
@@ -148,6 +153,7 @@ func TestBatchMultiName(t *testing.T) {
 		"pkg/target/constant.go",
 		"example/pkg/target/constant",
 		"constant.go",
+		false,
 		false,
 		false,
 	)
@@ -172,6 +178,7 @@ func TestBatchMultiNamePartial(t *testing.T) {
 		"constant.go",
 		false,
 		false,
+		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
@@ -190,6 +197,7 @@ func TestBatchMethodRefused(t *testing.T) {
 		"",
 		false,
 		false,
+		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
@@ -206,6 +214,7 @@ func TestBatchMethodSetRefused(t *testing.T) {
 		"",
 		"example/pkg/target/constant",
 		"",
+		false,
 		false,
 		false,
 	)
@@ -227,6 +236,7 @@ func TestBackReferenceQualified(t *testing.T) {
 		"mover.go",
 		true,
 		true,
+		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
@@ -252,6 +262,7 @@ func TestBackReferenceRefusedWithoutFlag(t *testing.T) {
 		"mover.go",
 		true,
 		false,
+		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
@@ -270,6 +281,7 @@ func TestBackReferenceCycleRefused(t *testing.T) {
 		"mover.go",
 		true,
 		true,
+		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
@@ -291,6 +303,7 @@ func TestBackReferenceUnexportedRefused(t *testing.T) {
 		"mover.go",
 		true,
 		true,
+		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)

@@ -28,7 +28,12 @@ func (s *Server) renamePackage(
 		return response.Fail("%s", e)
 	}
 
-	r, e := s.service.RenamePackage(directory, a.PackagePath, a.NewName)
+	r, e := s.service.RenamePackage(
+		directory,
+		a.PackagePath,
+		a.NewName,
+		a.DryRun,
+	)
 
 	if e != nil {
 		return s.captureFail(e, constant.UnexpectedError)
@@ -38,7 +43,7 @@ func (s *Server) renamePackage(
 	var fixed []*concern.Concern
 
 	for _, c := range r.Entries {
-		if c.Fixed {
+		if c.Fixed || c.Planned {
 			fixed = append(fixed, c)
 		} else {
 			unfixed = append(unfixed, c)

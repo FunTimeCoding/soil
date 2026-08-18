@@ -26,7 +26,7 @@ func (c *Client) ToolCalls(sessionIdentifier string) []tool_call.Call {
 	defer errors.PanicClose(f)
 	var result []tool_call.Call
 	scanner := bufio.NewScanner(f)
-	scanner.Buffer(make([]byte, 1024*1024), 1024*1024)
+	scanner.Buffer(nil, constant.NotationScanBuffer)
 
 	for scanner.Scan() {
 		var line notation.Line

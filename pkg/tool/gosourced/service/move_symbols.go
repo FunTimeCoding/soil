@@ -20,6 +20,7 @@ func (s *Service) MoveSymbols(
 	targetFile string,
 	create bool,
 	qualifyBackReferences bool,
+	dryRun bool,
 ) (*output.Results, error) {
 	r := output.NewResultsWithDirectory(directory)
 
@@ -264,6 +265,7 @@ func (s *Service) MoveSymbols(
 			targetPackageName: targetPackageName,
 			moveDirectory:     moveDirectory,
 			createTarget:      target == nil,
+			dryRun:            dryRun,
 		},
 	)
 }

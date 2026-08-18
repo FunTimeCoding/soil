@@ -27,7 +27,13 @@ func (s *Server) addImport(
 		return response.Fail("%s", e)
 	}
 
-	r, e := s.service.AddImport(directory, a.File, a.ImportPath, a.Alias)
+	r, e := s.service.AddImport(
+		directory,
+		a.File,
+		a.ImportPath,
+		a.Alias,
+		a.DryRun,
+	)
 
 	if e != nil {
 		return s.captureFail(e, constant.UnexpectedError)

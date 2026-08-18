@@ -69,5 +69,12 @@ func (s *Server) announce(
 		return s.captureFail(f, library.UnexpectedError)
 	}
 
-	return response.Success(fmt.Sprintf("Announced as %s: %s", name, topic))
+	return response.Success(
+		join.NewLine(
+			[]string{
+				fmt.Sprintf("Announced as %s: %s", name, topic),
+				s.service.ContextPanel(c.SessionIdentifier),
+			},
+		),
+	)
 }

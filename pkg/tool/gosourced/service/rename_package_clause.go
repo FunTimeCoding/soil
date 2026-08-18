@@ -14,6 +14,7 @@ func (s *Service) RenamePackageClause(
 	directory string,
 	packagePath string,
 	newName string,
+	dryRun bool,
 ) (*output.Results, error) {
 	r := output.NewResultsWithDirectory(directory)
 
@@ -91,5 +92,13 @@ func (s *Service) RenamePackageClause(
 	names := resolve.NewNames(all)
 	names.Override(packagePath, newName)
 
-	return r, restoreDecorations(decorations, names, nil)
+	if e := restoreDecorations(decorations, names, nil, dryRun); e != nil {
+		return nil, e
+	}
+
+	if dryRun {
+		r.MarkPlanned()
+	}
+
+	return r, nil
 }

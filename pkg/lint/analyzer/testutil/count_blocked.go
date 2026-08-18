@@ -6,7 +6,7 @@ func countBlocked(results *output.Results) int {
 	var count int
 
 	for _, c := range results.Entries {
-		if !c.Fixed {
+		if !c.Fixed && !c.Planned {
 			count++
 		}
 	}

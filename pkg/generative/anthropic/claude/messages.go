@@ -26,7 +26,7 @@ func (c *Client) Messages(sessionIdentifier string) []message.Message {
 	defer errors.PanicClose(f)
 	var result []message.Message
 	scanner := bufio.NewScanner(f)
-	scanner.Buffer(make([]byte, 1024*1024), 1024*1024)
+	scanner.Buffer(nil, constant.NotationScanBuffer)
 
 	for scanner.Scan() {
 		var line notation.Line

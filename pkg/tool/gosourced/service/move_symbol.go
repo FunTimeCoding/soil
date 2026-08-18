@@ -9,6 +9,7 @@ func (s *Service) MoveSymbol(
 	targetPackagePath string,
 	targetFile string,
 	create bool,
+	dryRun bool,
 ) (*output.Results, error) {
 	return s.MoveSymbols(
 		directory,
@@ -19,5 +20,6 @@ func (s *Service) MoveSymbol(
 		targetFile,
 		create,
 		false,
+		dryRun,
 	)
 }

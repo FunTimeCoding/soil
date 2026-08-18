@@ -13,6 +13,7 @@ func contextLoadSection(loads []context_load.Load) []gomponents.Node {
 	}
 
 	var rows []gomponents.Node
+	base := memoryBase()
 
 	for _, entry := range collapseSearches(loads) {
 		rows = append(
@@ -20,7 +21,7 @@ func contextLoadSection(loads []context_load.Load) []gomponents.Node {
 			html.Tr(
 				layout.TimeCell(entry.OccurredAt),
 				html.Td(html.Small(gomponents.Text(displayKind(&entry)))),
-				html.Td(html.Small(gomponents.Text(entry.Reference))),
+				referenceCell(&entry, base),
 				html.Td(gomponents.Text(entry.Name)),
 			),
 		)

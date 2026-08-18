@@ -34,7 +34,12 @@ func (s *Server) movePackage(
 		return response.Fail("%s", e)
 	}
 
-	r, e := s.service.MovePackage(directory, a.PackagePath, a.TargetPackagePath)
+	r, e := s.service.MovePackage(
+		directory,
+		a.PackagePath,
+		a.TargetPackagePath,
+		a.DryRun,
+	)
 
 	if e != nil {
 		return s.captureFail(e, constant.UnexpectedError)
@@ -44,7 +49,7 @@ func (s *Server) movePackage(
 	var fixed []*concern.Concern
 
 	for _, c := range r.Entries {
-		if c.Fixed {
+		if c.Fixed || c.Planned {
 			fixed = append(fixed, c)
 		} else {
 			unfixed = append(unfixed, c)

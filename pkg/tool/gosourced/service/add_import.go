@@ -16,6 +16,7 @@ func (s *Service) AddImport(
 	filePath string,
 	importPath string,
 	alias string,
+	dryRun bool,
 ) (*output.Results, error) {
 	r := output.NewResultsWithDirectory(directory)
 	fullPath := filePath
@@ -32,7 +33,7 @@ func (s *Service) AddImport(
 	}
 
 	decoration.AddImport(file, importPath, alias)
-	e = decoration.WriteFile(file, fullPath)
+	e = decoration.WriteFile(file, fullPath, dryRun)
 
 	if e != nil {
 		return nil, e
@@ -45,6 +46,10 @@ func (s *Service) AddImport(
 	}
 
 	r.AddConcern(concern.NewFile("import", message, filePath, true))
+
+	if dryRun {
+		r.MarkPlanned()
+	}
 
 	return r, nil
 }

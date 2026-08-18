@@ -10,6 +10,7 @@ func restoreDecorations(
 	decorations *decoration.Set,
 	names *resolve.Names,
 	skip map[string]bool,
+	dryRun bool,
 ) error {
 	var filenames []string
 
@@ -29,6 +30,7 @@ func restoreDecorations(
 			decorations.Aliases[file],
 			file,
 			filename,
+			dryRun,
 		)
 
 		if e != nil {

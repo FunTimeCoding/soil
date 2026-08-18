@@ -8,4 +8,5 @@ type MoveSymbols struct {
 	TargetFile            string   `json:"target_file"`
 	Create                bool     `json:"create"`
 	QualifyBackReferences bool     `json:"qualify_back_references"`
+	DryRun                bool     `json:"dry_run"`
 }

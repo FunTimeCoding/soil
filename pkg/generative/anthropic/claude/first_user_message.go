@@ -24,7 +24,7 @@ func (c *Client) FirstUserMessage(sessionIdentifier string) string {
 
 	defer errors.PanicClose(f)
 	s := bufio.NewScanner(f)
-	s.Buffer(make([]byte, 1024*1024), 1024*1024)
+	s.Buffer(nil, constant.NotationScanBuffer)
 
 	for s.Scan() {
 		var l notation.Line

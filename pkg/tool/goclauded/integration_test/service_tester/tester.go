@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration_test/mock_notifier"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration_test/store_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service"
+	memoryMock "github.com/funtimecoding/soil/pkg/tool/gomemoryd/client/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/mock_indexer"
 	"testing"
 )
@@ -17,5 +18,6 @@ type Tester struct {
 	SummaryIndexer    *mock_indexer.Indexer
 	CompletionIndexer *mock_indexer.Indexer
 	Notifier          *mock_notifier.Notifier
+	Memory            *memoryMock.Client
 	Harbor            string
 }

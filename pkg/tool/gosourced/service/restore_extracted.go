@@ -12,6 +12,7 @@ import (
 func restoreExtracted(
 	file *dst.File,
 	path string,
+	dryRun bool,
 ) error {
 	restorer := decorator.NewRestorerWithImports(
 		constant.StandalonePath,
@@ -21,6 +22,10 @@ func restoreExtracted(
 
 	if e := restorer.Fprint(&buffer, file); e != nil {
 		return e
+	}
+
+	if dryRun {
+		return nil
 	}
 
 	return os.WriteFile(path, buffer.Bytes(), 0644)

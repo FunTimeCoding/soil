@@ -6,4 +6,5 @@ type ExtractType struct {
 	TargetPackagePath string `json:"target_package_path"`
 	TargetFile        string `json:"target_file"`
 	Create            bool   `json:"create"`
+	DryRun            bool   `json:"dry_run"`
 }

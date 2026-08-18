@@ -16,6 +16,7 @@ func (s *Service) MovePackage(
 	directory string,
 	packagePath string,
 	targetPackagePath string,
+	dryRun bool,
 ) (*output.Results, error) {
 	r := output.NewResultsWithDirectory(directory)
 
@@ -95,22 +96,24 @@ func (s *Service) MovePackage(
 
 	names := resolve.NewNames(all)
 	names.Override(targetPackagePath, p.Types.Name())
-	e = restoreDecorations(decorations, names, nil)
+	e = restoreDecorations(decorations, names, nil, dryRun)
 
 	if e != nil {
 		return nil, e
 	}
 
-	e = os.MkdirAll(filepath.Dir(moveDirectory), 0755)
+	if !dryRun {
+		e = os.MkdirAll(filepath.Dir(moveDirectory), 0755)
 
-	if e != nil {
-		return nil, e
-	}
+		if e != nil {
+			return nil, e
+		}
 
-	e = os.Rename(sourceDirectory, moveDirectory)
+		e = os.Rename(sourceDirectory, moveDirectory)
 
-	if e != nil {
-		return nil, e
+		if e != nil {
+			return nil, e
+		}
 	}
 
 	r.AddConcern(
@@ -121,6 +124,10 @@ func (s *Service) MovePackage(
 			true,
 		),
 	)
+
+	if dryRun {
+		r.MarkPlanned()
+	}
 
 	return r, nil
 }

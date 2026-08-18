@@ -33,6 +33,7 @@ func (s *Server) changeVisibility(
 		a.Symbol,
 		a.PackagePath,
 		a.Receiver,
+		a.DryRun,
 	)
 
 	if e != nil {
@@ -43,7 +44,7 @@ func (s *Server) changeVisibility(
 	var fixed []*concern.Concern
 
 	for _, c := range r.Entries {
-		if c.Fixed {
+		if c.Fixed || c.Planned {
 			fixed = append(fixed, c)
 		} else {
 			unfixed = append(unfixed, c)

@@ -1,17 +1,26 @@
 package model_context
 
-import "strings"
+import (
+	separator "github.com/funtimecoding/soil/pkg/strings/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
+	"strings"
+)
 
-func splitTags(raw string) []string {
+func splitTags(raw string) ([]string, bool) {
 	var result []string
+	stripped := false
 
-	for _, t := range strings.Split(raw, ",") {
-		t = strings.TrimSpace(t)
+	for _, one := range strings.Split(raw, separator.Comma) {
+		clean := strings.Trim(one, constant.TagCutset)
 
-		if t != "" {
-			result = append(result, t)
+		if clean != strings.TrimSpace(one) {
+			stripped = true
+		}
+
+		if clean != "" {
+			result = append(result, clean)
 		}
 	}
 
-	return result
+	return result, stripped
 }

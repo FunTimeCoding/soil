@@ -27,7 +27,7 @@ func (c *Client) Peek(sessionIdentifier string) *peek.Peek {
 	defer errors.PanicClose(f)
 	result := peek.New()
 	s := bufio.NewScanner(f)
-	s.Buffer(make([]byte, 1024*1024), 1024*1024)
+	s.Buffer(nil, constant.NotationScanBuffer)
 	toolCounts := map[string]int{}
 	var lastAssistantText string
 

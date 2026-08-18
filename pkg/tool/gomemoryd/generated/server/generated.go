@@ -72,6 +72,13 @@ type MemoryUpdateRequest struct {
 	Tags           *[]string          `json:"tags,omitempty"`
 }
 
+// NamedCount defines model for NamedCount.
+type NamedCount struct {
+	Count       int      `json:"count"`
+	Identifiers *[]int64 `json:"identifiers,omitempty"`
+	Name        string   `json:"name"`
+}
+
 // ProfileCompletion defines model for ProfileCompletion.
 type ProfileCompletion struct {
 	Body        string `json:"body"`
@@ -170,6 +177,12 @@ type SourcedMemory struct {
 	ProvenanceHash   string `json:"provenance_hash"`
 }
 
+// Statistics defines model for Statistics.
+type Statistics struct {
+	Scopes []NamedCount `json:"scopes"`
+	Tags   []NamedCount `json:"tags"`
+}
+
 // VersionEntry defines model for VersionEntry.
 type VersionEntry struct {
 	ChangeType       string `json:"change_type"`
@@ -247,6 +260,9 @@ type ServerInterface interface {
 	// (POST /api/impressions)
 	PostImpressions(w http.ResponseWriter, r *http.Request)
 
+	// (GET /api/memories/redacted)
+	GetRedactedMemories(w http.ResponseWriter, r *http.Request)
+
 	// (GET /api/memories/sourced)
 	GetSourcedMemories(w http.ResponseWriter, r *http.Request, params GetSourcedMemoriesParams)
 
@@ -271,6 +287,9 @@ type ServerInterface interface {
 	// (GET /api/relations)
 	GetRelations(w http.ResponseWriter, r *http.Request, params GetRelationsParams)
 
+	// (GET /api/statistics)
+	GetStatistics(w http.ResponseWriter, r *http.Request)
+
 	// (GET /api/versions)
 	GetVersions(w http.ResponseWriter, r *http.Request, params GetVersionsParams)
 }
@@ -289,6 +308,20 @@ func (siw *ServerInterfaceWrapper) PostImpressions(w http.ResponseWriter, r *htt
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.PostImpressions(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetRedactedMemories operation middleware
+func (siw *ServerInterfaceWrapper) GetRedactedMemories(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetRedactedMemories(w, r)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -565,6 +598,20 @@ func (siw *ServerInterfaceWrapper) GetRelations(w http.ResponseWriter, r *http.R
 	handler.ServeHTTP(w, r)
 }
 
+// GetStatistics operation middleware
+func (siw *ServerInterfaceWrapper) GetStatistics(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetStatistics(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
 // GetVersions operation middleware
 func (siw *ServerInterfaceWrapper) GetVersions(w http.ResponseWriter, r *http.Request) {
 
@@ -750,6 +797,8 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/memory/{identifier}", wrapper.DeleteMemory)
 	m.HandleFunc(http.MethodPut+" "+options.BaseURL+"/api/memory/{identifier}", wrapper.PutMemory)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/memories/sourced", wrapper.GetSourcedMemories)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/memories/redacted", wrapper.GetRedactedMemories)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/statistics", wrapper.GetStatistics)
 	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/relation", wrapper.DeleteRelation)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/relation", wrapper.PostRelation)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/relations", wrapper.GetRelations)
@@ -783,6 +832,41 @@ func (response PostImpressions200JSONResponse) VisitPostImpressionsResponse(w ht
 type PostImpressions500JSONResponse ErrorResponse
 
 func (response PostImpressions500JSONResponse) VisitPostImpressionsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetRedactedMemoriesRequestObject struct {
+}
+
+type GetRedactedMemoriesResponseObject interface {
+	VisitGetRedactedMemoriesResponse(w http.ResponseWriter) error
+}
+
+type GetRedactedMemories200JSONResponse []int64
+
+func (response GetRedactedMemories200JSONResponse) VisitGetRedactedMemoriesResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetRedactedMemories500JSONResponse ErrorResponse
+
+func (response GetRedactedMemories500JSONResponse) VisitGetRedactedMemoriesResponse(w http.ResponseWriter) error {
 
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(response); err != nil {
@@ -1100,6 +1184,41 @@ func (response GetRelations500JSONResponse) VisitGetRelationsResponse(w http.Res
 	return err
 }
 
+type GetStatisticsRequestObject struct {
+}
+
+type GetStatisticsResponseObject interface {
+	VisitGetStatisticsResponse(w http.ResponseWriter) error
+}
+
+type GetStatistics200JSONResponse Statistics
+
+func (response GetStatistics200JSONResponse) VisitGetStatisticsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetStatistics500JSONResponse ErrorResponse
+
+func (response GetStatistics500JSONResponse) VisitGetStatisticsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type GetVersionsRequestObject struct {
 	Params GetVersionsParams
 }
@@ -1142,6 +1261,9 @@ type StrictServerInterface interface {
 	// (POST /api/impressions)
 	PostImpressions(ctx context.Context, request PostImpressionsRequestObject) (PostImpressionsResponseObject, error)
 
+	// (GET /api/memories/redacted)
+	GetRedactedMemories(ctx context.Context, request GetRedactedMemoriesRequestObject) (GetRedactedMemoriesResponseObject, error)
+
 	// (GET /api/memories/sourced)
 	GetSourcedMemories(ctx context.Context, request GetSourcedMemoriesRequestObject) (GetSourcedMemoriesResponseObject, error)
 
@@ -1165,6 +1287,9 @@ type StrictServerInterface interface {
 
 	// (GET /api/relations)
 	GetRelations(ctx context.Context, request GetRelationsRequestObject) (GetRelationsResponseObject, error)
+
+	// (GET /api/statistics)
+	GetStatistics(ctx context.Context, request GetStatisticsRequestObject) (GetStatisticsResponseObject, error)
 
 	// (GET /api/versions)
 	GetVersions(ctx context.Context, request GetVersionsRequestObject) (GetVersionsResponseObject, error)
@@ -1233,6 +1358,30 @@ func (sh *strictHandler) PostImpressions(w http.ResponseWriter, r *http.Request)
 		sh.options.ResponseErrorHandlerFunc(w, r, err)
 	} else if validResponse, ok := response.(PostImpressionsResponseObject); ok {
 		if err := validResponse.VisitPostImpressionsResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetRedactedMemories operation middleware
+func (sh *strictHandler) GetRedactedMemories(w http.ResponseWriter, r *http.Request) {
+	var request GetRedactedMemoriesRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetRedactedMemories(ctx, request.(GetRedactedMemoriesRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetRedactedMemories")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetRedactedMemoriesResponseObject); ok {
+		if err := validResponse.VisitGetRedactedMemoriesResponse(w); err != nil {
 			sh.options.ResponseErrorHandlerFunc(w, r, err)
 		}
 	} else if response != nil {
@@ -1466,6 +1615,30 @@ func (sh *strictHandler) GetRelations(w http.ResponseWriter, r *http.Request, pa
 	}
 }
 
+// GetStatistics operation middleware
+func (sh *strictHandler) GetStatistics(w http.ResponseWriter, r *http.Request) {
+	var request GetStatisticsRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetStatistics(ctx, request.(GetStatisticsRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetStatistics")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetStatisticsResponseObject); ok {
+		if err := validResponse.VisitGetStatisticsResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // GetVersions operation middleware
 func (sh *strictHandler) GetVersions(w http.ResponseWriter, r *http.Request, params GetVersionsParams) {
 	var request GetVersionsRequestObject
@@ -1497,31 +1670,34 @@ func (sh *strictHandler) GetVersions(w http.ResponseWriter, r *http.Request, par
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
+	"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",
+	"vACNtCivSTAD994yS67d7t8AAAD//w==",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

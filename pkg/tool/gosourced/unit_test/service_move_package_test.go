@@ -12,7 +12,12 @@ import (
 func TestMovePackage(t *testing.T) {
 	d := testutil.PrepareTestPackage(t, serviceTestdata("package-move/src"))
 	s := testService()
-	r, e := s.MovePackage(d, "example/pkg/outer/store", "example/pkg/store")
+	r, e := s.MovePackage(
+		d,
+		"example/pkg/outer/store",
+		"example/pkg/store",
+		false,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	_, e = os.Stat(filepath.Join(d, "pkg/outer/store"))
@@ -33,7 +38,12 @@ func TestMovePackage(t *testing.T) {
 func TestMovePackageBaseMismatch(t *testing.T) {
 	d := testutil.PrepareTestPackage(t, serviceTestdata("package-move/src"))
 	s := testService()
-	r, e := s.MovePackage(d, "example/pkg/outer/store", "example/pkg/depot")
+	r, e := s.MovePackage(
+		d,
+		"example/pkg/outer/store",
+		"example/pkg/depot",
+		false,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "name would change")
@@ -44,7 +54,12 @@ func TestMovePackageTargetExists(t *testing.T) {
 	e := os.MkdirAll(filepath.Join(d, "pkg/store"), 0755)
 	assert.FatalOnError(t, e)
 	s := testService()
-	r, e := s.MovePackage(d, "example/pkg/outer/store", "example/pkg/store")
+	r, e := s.MovePackage(
+		d,
+		"example/pkg/outer/store",
+		"example/pkg/store",
+		false,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "already exists")
@@ -57,6 +72,7 @@ func TestMovePackageIntoItself(t *testing.T) {
 		d,
 		"example/pkg/outer/store",
 		"example/pkg/outer/store/inner/store",
+		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
@@ -66,7 +82,12 @@ func TestMovePackageIntoItself(t *testing.T) {
 func TestMovePackageNotFound(t *testing.T) {
 	d := testutil.PrepareTestPackage(t, serviceTestdata("package-move/src"))
 	s := testService()
-	r, e := s.MovePackage(d, "example/pkg/outer/missing", "example/pkg/missing")
+	r, e := s.MovePackage(
+		d,
+		"example/pkg/outer/missing",
+		"example/pkg/missing",
+		false,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "not found")

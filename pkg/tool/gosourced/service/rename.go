@@ -15,6 +15,7 @@ func (s *Service) Rename(
 	oldName string,
 	newName string,
 	receiver string,
+	dryRun bool,
 ) (*output.Results, error) {
 	r := output.NewResultsWithDirectory(directory)
 	all, set, e := resolve.LoadPackages(directory, "./...")
@@ -103,10 +104,14 @@ func (s *Service) Rename(
 		)
 	}
 
-	e = restoreDecorations(decorations, resolve.NewNames(all), nil)
+	e = restoreDecorations(decorations, resolve.NewNames(all), nil, dryRun)
 
 	if e != nil {
 		return nil, e
+	}
+
+	if dryRun {
+		r.MarkPlanned()
 	}
 
 	return r, nil

@@ -30,6 +30,7 @@ const (
 
 	StateNamespace = "terraform"
 	StateLease     = "lock-tfstate-default-state"
+	LockAnnotation = "app.terraform.io/lock-info"
 
 	RecentRunsFailed = "failed to list recent runs"
 	RunLookupFailed  = "failed to look up run"

@@ -2,7 +2,7 @@ package web
 
 import "github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
 
-func filterSearchResults(
+func FilterSearchResults(
 	outcome *store.SearchOutcome,
 	metadata map[string]string,
 ) ([]store.SearchResult, []store.Facet) {

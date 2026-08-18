@@ -28,7 +28,7 @@ func (s *Server) extractToFile(
 		return response.Fail("%s", e)
 	}
 
-	r, e := s.service.ExtractToFile(directory, a.File, a.Function)
+	r, e := s.service.ExtractToFile(directory, a.File, a.Function, a.DryRun)
 
 	if e != nil {
 		return s.captureFail(e, constant.UnexpectedError)
@@ -38,7 +38,7 @@ func (s *Server) extractToFile(
 	var fixed []*concern.Concern
 
 	for _, c := range r.Entries {
-		if c.Fixed {
+		if c.Fixed || c.Planned {
 			fixed = append(fixed, c)
 		} else {
 			unfixed = append(unfixed, c)

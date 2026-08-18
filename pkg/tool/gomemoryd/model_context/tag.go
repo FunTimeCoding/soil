@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -32,8 +33,16 @@ func (s *Server) tag(
 		)
 	}
 
+	var cleaned []string
+
 	if replaceRaw != "" {
-		e := s.service.ReplaceTags(identifier, splitTags(replaceRaw))
+		tags, stripped := splitTags(replaceRaw)
+
+		if stripped {
+			cleaned = append(cleaned, tags...)
+		}
+
+		e := s.service.ReplaceTags(identifier, tags)
 
 		if e != nil {
 			return s.captureFail(e, "failed to replace tags")
@@ -41,7 +50,13 @@ func (s *Server) tag(
 	}
 
 	if addRaw != "" {
-		e := s.service.AddTags(identifier, splitTags(addRaw))
+		tags, stripped := splitTags(addRaw)
+
+		if stripped {
+			cleaned = append(cleaned, tags...)
+		}
+
+		e := s.service.AddTags(identifier, tags)
 
 		if e != nil {
 			return s.captureFail(e, "failed to add tags")
@@ -49,7 +64,13 @@ func (s *Server) tag(
 	}
 
 	if removeRaw != "" {
-		e := s.service.RemoveTags(identifier, splitTags(removeRaw))
+		tags, stripped := splitTags(removeRaw)
+
+		if stripped {
+			cleaned = append(cleaned, tags...)
+		}
+
+		e := s.service.RemoveTags(identifier, tags)
 
 		if e != nil {
 			return s.captureFail(e, "failed to remove tags")
@@ -62,7 +83,18 @@ func (s *Server) tag(
 		return s.captureFail(e, "failed to fetch memory")
 	}
 
+	stored := fmt.Sprintf("Memory %d tags: %v", identifier, m.Tags)
+
+	if len(cleaned) == 0 {
+		return response.Success(stored)
+	}
+
 	return response.Success(
-		fmt.Sprintf("Memory %d tags: %v", identifier, m.Tags),
+		join.NewLine(
+			[]string{
+				join.Space(constant.TagStripNotice, join.CommaSpace(cleaned)),
+				stored,
+			},
+		),
 	)
 }

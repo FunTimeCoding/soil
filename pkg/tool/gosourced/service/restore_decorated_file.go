@@ -14,6 +14,7 @@ func restoreDecoratedFile(
 	aliases map[string]string,
 	file *dst.File,
 	path string,
+	dryRun bool,
 ) error {
 	r := decorator.NewRestorerWithImports(packagePath, resolver)
 	f := r.FileRestorer()
@@ -26,6 +27,10 @@ func restoreDecoratedFile(
 
 	if e := f.Fprint(&buffer, file); e != nil {
 		return e
+	}
+
+	if dryRun {
+		return nil
 	}
 
 	return os.WriteFile(path, buffer.Bytes(), 0644)

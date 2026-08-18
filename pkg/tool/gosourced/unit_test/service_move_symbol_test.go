@@ -30,6 +30,7 @@ func TestMoveConstant(t *testing.T) {
 		"example/pkg/target/constant",
 		"constant.go",
 		false,
+		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
@@ -58,6 +59,7 @@ func TestMoveIntoReferenced(t *testing.T) {
 		"example/pkg/target/constant",
 		"constant.go",
 		false,
+		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
@@ -84,6 +86,7 @@ func TestMoveCrossPackage(t *testing.T) {
 		"example/pkg/target/constant",
 		"constant.go",
 		false,
+		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
@@ -106,6 +109,7 @@ func TestMoveAlias(t *testing.T) {
 		"Mode",
 		"example/pkg/target/constant",
 		"constant.go",
+		false,
 		false,
 	)
 	assert.FatalOnError(t, e)
@@ -131,6 +135,7 @@ func TestMoveCreateRefused(t *testing.T) {
 		"example/pkg/target/constant",
 		"constant.go",
 		false,
+		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
@@ -147,6 +152,7 @@ func TestMoveCreate(t *testing.T) {
 		"example/pkg/target/constant",
 		"constant.go",
 		true,
+		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
@@ -169,6 +175,7 @@ func TestMoveCollision(t *testing.T) {
 		"example/pkg/target/constant",
 		"constant.go",
 		false,
+		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
@@ -184,6 +191,7 @@ func TestMoveCycle(t *testing.T) {
 		"Mode",
 		"example/pkg/other",
 		"",
+		false,
 		false,
 	)
 	assert.FatalOnError(t, e)
@@ -201,6 +209,7 @@ func TestMoveDependency(t *testing.T) {
 		"example/pkg/target/constant",
 		"constant.go",
 		false,
+		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
@@ -217,6 +226,7 @@ func TestMoveGroup(t *testing.T) {
 		"First",
 		"example/pkg/target/constant",
 		"constant.go",
+		false,
 		false,
 	)
 	assert.FatalOnError(t, e)
@@ -243,6 +253,7 @@ func TestMoveFunction(t *testing.T) {
 		"example/pkg/check",
 		"",
 		true,
+		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)

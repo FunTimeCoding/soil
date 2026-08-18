@@ -15,6 +15,7 @@ func (s *Service) RemoveImport(
 	directory string,
 	filePath string,
 	importPath string,
+	dryRun bool,
 ) (*output.Results, error) {
 	r := output.NewResultsWithDirectory(directory)
 	fullPath := filePath
@@ -43,7 +44,7 @@ func (s *Service) RemoveImport(
 		return r, nil
 	}
 
-	e = decoration.WriteFile(file, fullPath)
+	e = decoration.WriteFile(file, fullPath, dryRun)
 
 	if e != nil {
 		return nil, e
@@ -57,6 +58,10 @@ func (s *Service) RemoveImport(
 			true,
 		),
 	)
+
+	if dryRun {
+		r.MarkPlanned()
+	}
 
 	return r, nil
 }

@@ -22,6 +22,7 @@ const (
 	TierRelevant = "relevant"
 
 	ContextLoadTable = "context_load"
+	RedactedName     = "hidden"
 )
 
 var FollowedTools = []string{MemoryToolPrefix, SkillTool}

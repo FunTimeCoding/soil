@@ -3,7 +3,9 @@ package runner
 import (
 	"github.com/funtimecoding/soil/pkg/kubernetes/types/native/lease"
 	"github.com/funtimecoding/soil/pkg/provision/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goterraformd/types/lock_detail"
 	"github.com/prometheus/client_golang/prometheus"
+	"time"
 )
 
 func newMetrics(
@@ -55,13 +57,13 @@ func newMetrics(
 				Help: "How long the terraform state lock has been held.",
 			},
 			func() float64 {
-				v := held()
+				d := lock_detail.New(held())
 
-				if v == nil {
+				if d == nil {
 					return 0
 				}
 
-				return v.Age().Seconds()
+				return time.Since(d.Created).Seconds()
 			},
 		),
 	)

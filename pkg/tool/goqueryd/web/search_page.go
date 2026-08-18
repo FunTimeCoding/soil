@@ -40,7 +40,7 @@ func (s *Server) searchPage(
 		s.cache.Put(key, outcome)
 	}
 
-	results, facets := filterSearchResults(outcome, metadata)
+	results, facets := FilterSearchResults(outcome, metadata)
 	resultsContent := s.renderSearchResults(
 		results,
 		facets,

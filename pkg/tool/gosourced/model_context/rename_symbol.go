@@ -42,6 +42,7 @@ func (s *Server) renameSymbol(
 		a.OldName,
 		a.NewName,
 		a.Receiver,
+		a.DryRun,
 	)
 
 	if e != nil {
@@ -52,7 +53,7 @@ func (s *Server) renameSymbol(
 	var fixed []*concern.Concern
 
 	for _, c := range r.Entries {
-		if c.Fixed {
+		if c.Fixed || c.Planned {
 			fixed = append(fixed, c)
 		} else {
 			unfixed = append(unfixed, c)

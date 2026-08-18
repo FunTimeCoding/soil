@@ -15,7 +15,7 @@ func PrintResults(
 	for _, c := range entries {
 		line := FormatConcern(c)
 
-		if !c.Fixed {
+		if !c.Fixed && !c.Planned {
 			hasBlocked = true
 			fmt.Println(line)
 

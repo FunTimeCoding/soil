@@ -40,6 +40,7 @@ const (
 	MarkdownExtension    = ".md"
 	MarkupExtension      = ".yaml"
 	NotationLogExtension = ".jsonl"
+	NotationScanBuffer   = 64 * 1024 * 1024
 	ShortMarkupExtension = ".yml"
 
 	LatestVersion = "latest"

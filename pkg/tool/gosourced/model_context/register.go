@@ -92,6 +92,12 @@ func (s *Server) register() {
 				"receiver",
 				mcp.Description("Receiver type name for methods, e.g. Store."),
 			),
+			mcp.WithBoolean(
+				"dry_run",
+				mcp.Description(
+					"Report what the call would change without writing anything. Emits the same lines a real run does.",
+				),
+			),
 		),
 		mcp.NewTypedToolHandler(s.changeVisibility),
 	)
@@ -119,6 +125,12 @@ func (s *Server) register() {
 			mcp.WithString(
 				"receiver",
 				mcp.Description("Receiver type name for methods, e.g. Store."),
+			),
+			mcp.WithBoolean(
+				"dry_run",
+				mcp.Description(
+					"Report what the call would change without writing anything. Emits the same lines a real run does.",
+				),
 			),
 		),
 		mcp.NewTypedToolHandler(s.renameSymbol),
@@ -156,6 +168,12 @@ func (s *Server) register() {
 				"create",
 				mcp.Description(
 					"Create the destination package when it does not exist. Refuses by default.",
+				),
+			),
+			mcp.WithBoolean(
+				"dry_run",
+				mcp.Description(
+					"Report what the call would change without writing anything. Emits the same lines a real run does.",
 				),
 			),
 		),
@@ -209,6 +227,12 @@ func (s *Server) register() {
 					"When a moved declaration references symbols staying in the source package, qualify those references and import the source package instead of refusing. Unexported back-reference targets still refuse - export them first.",
 				),
 			),
+			mcp.WithBoolean(
+				"dry_run",
+				mcp.Description(
+					"Report what the call would change without writing anything. Emits the same lines a real run does.",
+				),
+			),
 		),
 		mcp.NewTypedToolHandler(s.moveSymbols),
 	)
@@ -228,6 +252,12 @@ func (s *Server) register() {
 				mcp.Required(),
 				mcp.Description(
 					"Full import path of the destination. Last segment must match the source.",
+				),
+			),
+			mcp.WithBoolean(
+				"dry_run",
+				mcp.Description(
+					"Report what the call would change without writing anything. Emits the same lines a real run does.",
 				),
 			),
 		),
@@ -251,6 +281,12 @@ func (s *Server) register() {
 					"New package name, e.g. depot. Becomes the new last path segment.",
 				),
 			),
+			mcp.WithBoolean(
+				"dry_run",
+				mcp.Description(
+					"Report what the call would change without writing anything. Emits the same lines a real run does.",
+				),
+			),
 		),
 		mcp.NewTypedToolHandler(s.renamePackage),
 	)
@@ -270,6 +306,12 @@ func (s *Server) register() {
 				mcp.Required(),
 				mcp.Description(
 					"New package name. The directory and import path keep their names.",
+				),
+			),
+			mcp.WithBoolean(
+				"dry_run",
+				mcp.Description(
+					"Report what the call would change without writing anything. Emits the same lines a real run does.",
 				),
 			),
 		),
@@ -310,6 +352,12 @@ func (s *Server) register() {
 					"Create the destination package when it does not exist. Refuses by default.",
 				),
 			),
+			mcp.WithBoolean(
+				"dry_run",
+				mcp.Description(
+					"Report what the call would change without writing anything. Emits the same lines a real run does.",
+				),
+			),
 		),
 		mcp.NewTypedToolHandler(s.extractType),
 	)
@@ -331,6 +379,12 @@ func (s *Server) register() {
 				mcp.Required(),
 				mcp.Description("Function or method name to extract."),
 			),
+			mcp.WithBoolean(
+				"dry_run",
+				mcp.Description(
+					"Report what the call would change without writing anything. Emits the same lines a real run does.",
+				),
+			),
 		),
 		mcp.NewTypedToolHandler(s.extractToFile),
 	)
@@ -349,6 +403,12 @@ func (s *Server) register() {
 				mcp.Description("Import path to add, e.g. fmt."),
 			),
 			mcp.WithString("alias", mcp.Description("Optional import alias.")),
+			mcp.WithBoolean(
+				"dry_run",
+				mcp.Description(
+					"Report what the call would change without writing anything. Emits the same lines a real run does.",
+				),
+			),
 		),
 		mcp.NewTypedToolHandler(s.addImport),
 	)
@@ -365,6 +425,12 @@ func (s *Server) register() {
 				"import_path",
 				mcp.Required(),
 				mcp.Description("Import path to remove."),
+			),
+			mcp.WithBoolean(
+				"dry_run",
+				mcp.Description(
+					"Report what the call would change without writing anything. Emits the same lines a real run does.",
+				),
 			),
 		),
 		mcp.NewTypedToolHandler(s.removeImport),

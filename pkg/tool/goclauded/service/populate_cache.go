@@ -49,7 +49,7 @@ func (s *Service) PopulateCache() {
 		path := filepath.Join(s.harbor, entry.Name())
 		calls, g := tracker.Read(path, state, goclaudedConstant.FollowedTools)
 
-		if g != nil {
+		if g != nil && state.Offset == 0 {
 			continue
 		}
 

@@ -35,7 +35,7 @@ func (c *Client) ToolContext(
 	}
 	var messages []indexedMessage
 	scanner := bufio.NewScanner(f)
-	scanner.Buffer(make([]byte, 1024*1024), 1024*1024)
+	scanner.Buffer(nil, constant.NotationScanBuffer)
 
 	for scanner.Scan() {
 		var line notation.Line

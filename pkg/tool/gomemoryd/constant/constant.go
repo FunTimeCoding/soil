@@ -17,6 +17,8 @@ const (
 	HostEnvironment      = "MEMORY_HOST"
 	PortEnvironment      = "MEMORY_PORT"
 	HiddenTagEnvironment = "MEMORY_HIDDEN_TAG"
+	TagCutset            = "[]\" \t"
+	TagStripNotice       = "Stripped [ ] \" from tag input, saved as:"
 
 	SaveMemory       = "save_memory"
 	UpdateMemory     = "update_memory"

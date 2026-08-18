@@ -22,4 +22,5 @@ type movePlan struct {
 	targetPackageName string
 	moveDirectory     string
 	createTarget      bool
+	dryRun            bool
 }

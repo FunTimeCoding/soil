@@ -51,6 +51,7 @@ func (s *Server) moveSymbols(
 		a.TargetFile,
 		a.Create,
 		a.QualifyBackReferences,
+		a.DryRun,
 	)
 
 	if e != nil {
@@ -61,7 +62,7 @@ func (s *Server) moveSymbols(
 	var fixed []*concern.Concern
 
 	for _, c := range r.Entries {
-		if c.Fixed {
+		if c.Fixed || c.Planned {
 			fixed = append(fixed, c)
 		} else {
 			unfixed = append(unfixed, c)

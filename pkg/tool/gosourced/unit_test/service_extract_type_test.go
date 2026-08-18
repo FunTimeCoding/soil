@@ -19,6 +19,7 @@ func TestExtractType(t *testing.T) {
 		"example/pkg/model",
 		"",
 		true,
+		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
@@ -55,6 +56,7 @@ func TestExtractTypeInternalStaysUnexported(t *testing.T) {
 		"example/pkg/model",
 		"",
 		true,
+		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
@@ -80,6 +82,7 @@ func TestExtractTypeCollision(t *testing.T) {
 		"example/pkg/model",
 		"",
 		false,
+		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
@@ -99,6 +102,7 @@ func TestExtractTypeDependency(t *testing.T) {
 		"example/pkg/model",
 		"",
 		true,
+		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
@@ -119,6 +123,7 @@ func TestExtractTypeFieldCollision(t *testing.T) {
 		"example/pkg/model",
 		"",
 		true,
+		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
@@ -138,6 +143,7 @@ func TestExtractTypeUnexported(t *testing.T) {
 		"example/pkg/model",
 		"",
 		true,
+		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
@@ -160,6 +166,7 @@ func TestExtractTypeTargetFile(t *testing.T) {
 		"example/pkg/model",
 		"store.go",
 		true,
+		false,
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)

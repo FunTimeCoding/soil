@@ -181,15 +181,17 @@ func executeMove(
 			continue
 		}
 
-		if e := os.Remove(filename); e != nil {
-			return nil, e
+		if !plan.dryRun {
+			if e := os.Remove(filename); e != nil {
+				return nil, e
+			}
 		}
 
 		deleted[filename] = true
 		r.AddConcern(concern.NewFile("removed", "empty file", filename, true))
 	}
 
-	if plan.createTarget {
+	if plan.createTarget && !plan.dryRun {
 		if e := os.MkdirAll(plan.moveDirectory, 0755); e != nil {
 			return nil, e
 		}
@@ -242,11 +244,16 @@ func executeMove(
 			decorations.Aliases[file],
 			file,
 			filename,
+			plan.dryRun,
 		)
 
 		if e != nil {
 			return nil, e
 		}
+	}
+
+	if plan.dryRun {
+		r.MarkPlanned()
 	}
 
 	return r, nil

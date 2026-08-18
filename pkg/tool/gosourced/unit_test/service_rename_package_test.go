@@ -12,7 +12,7 @@ import (
 func TestRenamePackage(t *testing.T) {
 	d := testutil.PrepareTestPackage(t, serviceTestdata("package-rename/src"))
 	s := testService()
-	r, e := s.RenamePackage(d, "example/pkg/outer/store", "depot")
+	r, e := s.RenamePackage(d, "example/pkg/outer/store", "depot", false)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	_, e = os.Stat(filepath.Join(d, "pkg/outer/store"))
@@ -40,7 +40,7 @@ func TestRenamePackage(t *testing.T) {
 func TestRenamePackageShadowed(t *testing.T) {
 	d := testutil.PrepareTestPackage(t, serviceTestdata("rename-collision/src"))
 	s := testService()
-	r, e := s.RenamePackage(d, "example/pkg/outer/store", "depot")
+	r, e := s.RenamePackage(d, "example/pkg/outer/store", "depot", false)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "taken")
@@ -49,7 +49,7 @@ func TestRenamePackageShadowed(t *testing.T) {
 func TestRenamePackageSameName(t *testing.T) {
 	d := testutil.PrepareTestPackage(t, serviceTestdata("package-rename/src"))
 	s := testService()
-	r, e := s.RenamePackage(d, "example/pkg/outer/store", "store")
+	r, e := s.RenamePackage(d, "example/pkg/outer/store", "store", false)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "already named")
@@ -58,7 +58,7 @@ func TestRenamePackageSameName(t *testing.T) {
 func TestRenamePackageInvalidName(t *testing.T) {
 	d := testutil.PrepareTestPackage(t, serviceTestdata("package-rename/src"))
 	s := testService()
-	r, e := s.RenamePackage(d, "example/pkg/outer/store", "9depot")
+	r, e := s.RenamePackage(d, "example/pkg/outer/store", "9depot", false)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "not a valid")

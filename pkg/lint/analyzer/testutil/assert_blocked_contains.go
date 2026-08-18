@@ -14,7 +14,7 @@ func AssertBlockedContains(
 	t.Helper()
 
 	for _, c := range results.Entries {
-		if !c.Fixed && strings.Contains(c.Text, substring) {
+		if !c.Fixed && !c.Planned && strings.Contains(c.Text, substring) {
 			return
 		}
 	}
@@ -22,7 +22,7 @@ func AssertBlockedContains(
 	t.Errorf("no blocked result containing %q", substring)
 
 	for _, c := range results.Entries {
-		if !c.Fixed {
+		if !c.Fixed && !c.Planned {
 			t.Logf("  blocked: %s: %s", c.Path, c.Text)
 		}
 	}

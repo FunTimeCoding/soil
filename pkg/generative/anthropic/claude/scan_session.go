@@ -26,7 +26,7 @@ func scanSession(path string) *session.Session {
 	)
 	s := session.New(identifier)
 	scanner := bufio.NewScanner(f)
-	scanner.Buffer(make([]byte, 1024*1024), 1024*1024)
+	scanner.Buffer(nil, constant.NotationScanBuffer)
 	filled := false
 
 	for scanner.Scan() {

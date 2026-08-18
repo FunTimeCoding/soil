@@ -17,6 +17,7 @@ func (s *Service) RenamePackage(
 	directory string,
 	packagePath string,
 	newName string,
+	dryRun bool,
 ) (*output.Results, error) {
 	r := output.NewResultsWithDirectory(directory)
 
@@ -123,14 +124,16 @@ func (s *Service) RenamePackage(
 	names := resolve.NewNames(all)
 	names.Override(targetPackagePath, newName)
 
-	if e := restoreDecorations(decorations, names, nil); e != nil {
+	if e := restoreDecorations(decorations, names, nil, dryRun); e != nil {
 		return nil, e
 	}
 
-	e = os.Rename(sourceDirectory, moveDirectory)
+	if !dryRun {
+		e = os.Rename(sourceDirectory, moveDirectory)
 
-	if e != nil {
-		return nil, e
+		if e != nil {
+			return nil, e
+		}
 	}
 
 	r.AddConcern(
@@ -141,6 +144,10 @@ func (s *Service) RenamePackage(
 			true,
 		),
 	)
+
+	if dryRun {
+		r.MarkPlanned()
+	}
 
 	return r, nil
 }

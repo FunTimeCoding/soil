@@ -18,6 +18,7 @@ func (s *Service) ExtractType(
 	targetPackagePath string,
 	targetFile string,
 	create bool,
+	dryRun bool,
 ) (*output.Results, error) {
 	r := output.NewResultsWithDirectory(directory)
 
@@ -234,6 +235,7 @@ func (s *Service) ExtractType(
 			targetPackageName: targetPackageName,
 			moveDirectory:     moveDirectory,
 			createTarget:      target == nil,
+			dryRun:            dryRun,
 		},
 	)
 }

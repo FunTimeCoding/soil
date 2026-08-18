@@ -66,6 +66,13 @@ type MemoryUpdateRequest struct {
 	Tags           *[]string          `json:"tags,omitempty"`
 }
 
+// NamedCount defines model for NamedCount.
+type NamedCount struct {
+	Count       int      `json:"count"`
+	Identifiers *[]int64 `json:"identifiers,omitempty"`
+	Name        string   `json:"name"`
+}
+
 // ProfileCompletion defines model for ProfileCompletion.
 type ProfileCompletion struct {
 	Body        string `json:"body"`
@@ -162,6 +169,12 @@ type SourcedMemory struct {
 	ProvenanceAnchor string `json:"provenance_anchor"`
 	ProvenanceFile   string `json:"provenance_file"`
 	ProvenanceHash   string `json:"provenance_hash"`
+}
+
+// Statistics defines model for Statistics.
+type Statistics struct {
+	Scopes []NamedCount `json:"scopes"`
+	Tags   []NamedCount `json:"tags"`
 }
 
 // VersionEntry defines model for VersionEntry.
@@ -317,6 +330,9 @@ type ClientInterface interface {
 	// Takes a body of the `application/json` content type.
 	PostImpressions(ctx context.Context, body PostImpressionsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// GetRedactedMemories performs a GET /api/memories/redacted (the `GetRedactedMemories` operationId) request.
+	GetRedactedMemories(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// GetSourcedMemories performs a GET /api/memories/sourced (the `GetSourcedMemories` operationId) request.
 	GetSourcedMemories(ctx context.Context, params *GetSourcedMemoriesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -356,6 +372,9 @@ type ClientInterface interface {
 	// GetRelations performs a GET /api/relations (the `GetRelations` operationId) request.
 	GetRelations(ctx context.Context, params *GetRelationsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// GetStatistics performs a GET /api/statistics (the `GetStatistics` operationId) request.
+	GetStatistics(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// GetVersions performs a GET /api/versions (the `GetVersions` operationId) request.
 	GetVersions(ctx context.Context, params *GetVersionsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
@@ -378,6 +397,19 @@ func (c *Client) PostImpressionsWithBody(ctx context.Context, contentType string
 // Takes a body of the `application/json` content type.
 func (c *Client) PostImpressions(ctx context.Context, body PostImpressionsJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewPostImpressionsRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetRedactedMemories performs a GET /api/memories/redacted (the `GetRedactedMemories` operationId) request.
+func (c *Client) GetRedactedMemories(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetRedactedMemoriesRequest(c.Server)
 	if err != nil {
 		return nil, err
 	}
@@ -537,6 +569,19 @@ func (c *Client) GetRelations(ctx context.Context, params *GetRelationsParams, r
 	return c.Client.Do(req)
 }
 
+// GetStatistics performs a GET /api/statistics (the `GetStatistics` operationId) request.
+func (c *Client) GetStatistics(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetStatisticsRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 // GetVersions performs a GET /api/versions (the `GetVersions` operationId) request.
 func (c *Client) GetVersions(ctx context.Context, params *GetVersionsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetVersionsRequest(c.Server, params)
@@ -586,6 +631,33 @@ func NewPostImpressionsRequestWithBody(server string, contentType string, body i
 	}
 
 	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewGetRedactedMemoriesRequest constructs an http.Request for the GetRedactedMemories method
+func NewGetRedactedMemoriesRequest(server string) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/memories/redacted")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
 
 	return req, nil
 }
@@ -1018,6 +1090,33 @@ func NewGetRelationsRequest(server string, params *GetRelationsParams) (*http.Re
 	return req, nil
 }
 
+// NewGetStatisticsRequest constructs an http.Request for the GetStatistics method
+func NewGetStatisticsRequest(server string) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/statistics")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewGetVersionsRequest constructs an http.Request for the GetVersions method
 func NewGetVersionsRequest(server string, params *GetVersionsParams) (*http.Request, error) {
 	var err error
@@ -1146,6 +1245,11 @@ type ClientWithResponsesInterface interface {
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	PostImpressionsWithResponse(ctx context.Context, body PostImpressionsJSONRequestBody, reqEditors ...RequestEditorFn) (*PostImpressionsResponse, error)
 
+	// GetRedactedMemoriesWithResponse performs a GET /api/memories/redacted (the `GetRedactedMemories` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetRedactedMemoriesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetRedactedMemoriesResponse, error)
+
 	// GetSourcedMemoriesWithResponse performs a GET /api/memories/sourced (the `GetSourcedMemories` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
@@ -1201,6 +1305,11 @@ type ClientWithResponsesInterface interface {
 	// Returns a wrapper object for the known response body format(s).
 	GetRelationsWithResponse(ctx context.Context, params *GetRelationsParams, reqEditors ...RequestEditorFn) (*GetRelationsResponse, error)
 
+	// GetStatisticsWithResponse performs a GET /api/statistics (the `GetStatistics` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetStatisticsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetStatisticsResponse, error)
+
 	// GetVersionsWithResponse performs a GET /api/versions (the `GetVersions` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
@@ -1249,6 +1358,54 @@ func (r PostImpressionsResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r PostImpressionsResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type GetRedactedMemoriesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *[]int64
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetRedactedMemoriesResponse) GetJSON200() *[]int64 {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetRedactedMemoriesResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetRedactedMemoriesResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetRedactedMemoriesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetRedactedMemoriesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetRedactedMemoriesResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -1639,6 +1796,54 @@ func (r GetRelationsResponse) ContentType() string {
 	return ""
 }
 
+type GetStatisticsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *Statistics
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetStatisticsResponse) GetJSON200() *Statistics {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetStatisticsResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetStatisticsResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetStatisticsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetStatisticsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetStatisticsResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type GetVersionsResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -1707,6 +1912,17 @@ func (c *ClientWithResponses) PostImpressionsWithResponse(ctx context.Context, b
 		return nil, err
 	}
 	return ParsePostImpressionsResponse(rsp)
+}
+
+// GetRedactedMemoriesWithResponse performs a GET /api/memories/redacted (the `GetRedactedMemories` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetRedactedMemoriesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetRedactedMemoriesResponse, error) {
+	rsp, err := c.GetRedactedMemories(ctx, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetRedactedMemoriesResponse(rsp)
 }
 
 // GetSourcedMemoriesWithResponse performs a GET /api/memories/sourced (the `GetSourcedMemories` operationId) request.
@@ -1830,6 +2046,17 @@ func (c *ClientWithResponses) GetRelationsWithResponse(ctx context.Context, para
 	return ParseGetRelationsResponse(rsp)
 }
 
+// GetStatisticsWithResponse performs a GET /api/statistics (the `GetStatistics` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetStatisticsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetStatisticsResponse, error) {
+	rsp, err := c.GetStatistics(ctx, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetStatisticsResponse(rsp)
+}
+
 // GetVersionsWithResponse performs a GET /api/versions (the `GetVersions` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -1857,6 +2084,39 @@ func ParsePostImpressionsResponse(rsp *http.Response) (*PostImpressionsResponse,
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
 		var dest ImpressionResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetRedactedMemoriesResponse parses an HTTP response from a GetRedactedMemoriesWithResponse call
+func ParseGetRedactedMemoriesResponse(rsp *http.Response) (*GetRedactedMemoriesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetRedactedMemoriesResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []int64
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -2127,6 +2387,39 @@ func ParseGetRelationsResponse(rsp *http.Response) (*GetRelationsResponse, error
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
 		var dest []Relation
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetStatisticsResponse parses an HTTP response from a GetStatisticsWithResponse call
+func ParseGetStatisticsResponse(rsp *http.Response) (*GetStatisticsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetStatisticsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Statistics
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}

@@ -171,6 +171,41 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/memories/redacted:
+    get:
+      operationId: getRedactedMemories
+      responses:
+        "200":
+          description: Identifiers consumers must not display.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: integer
+                  format: int64
+        "500":
+          description: Failed to list redacted identifiers.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/statistics:
+    get:
+      operationId: getStatistics
+      responses:
+        "200":
+          description: Corpus counts by scope and tag.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Statistics"
+        "500":
+          description: Failed to compute statistics.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /api/relation:
     post:
       operationId: postRelation
@@ -566,6 +601,31 @@ components:
           type: string
         created_at:
           type: string
+    NamedCount:
+      type: object
+      required: [name, count]
+      properties:
+        name:
+          type: string
+        count:
+          type: integer
+        identifiers:
+          type: array
+          items:
+            type: integer
+            format: int64
+    Statistics:
+      type: object
+      required: [scopes, tags]
+      properties:
+        scopes:
+          type: array
+          items:
+            $ref: "#/components/schemas/NamedCount"
+        tags:
+          type: array
+          items:
+            $ref: "#/components/schemas/NamedCount"
     ErrorResponse:
       type: object
       required: [error, event_identifier]

@@ -19,7 +19,9 @@ func (s *Service) EnrichSession(identifier string) {
 	if e != nil {
 		s.reporter.CaptureException(e)
 
-		return
+		if state.Offset == 0 {
+			return
+		}
 	}
 
 	s.store.SaveTrackerState(identifier, state)

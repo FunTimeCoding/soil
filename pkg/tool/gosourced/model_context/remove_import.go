@@ -28,7 +28,7 @@ func (s *Server) removeImport(
 		return response.Fail("%s", e)
 	}
 
-	r, e := s.service.RemoveImport(directory, a.File, a.ImportPath)
+	r, e := s.service.RemoveImport(directory, a.File, a.ImportPath, a.DryRun)
 
 	if e != nil {
 		return s.captureFail(e, constant.UnexpectedError)
@@ -38,7 +38,7 @@ func (s *Server) removeImport(
 	var fixed []*concern.Concern
 
 	for _, c := range r.Entries {
-		if c.Fixed {
+		if c.Fixed || c.Planned {
 			fixed = append(fixed, c)
 		} else {
 			unfixed = append(unfixed, c)

@@ -27,7 +27,7 @@ func (c *Client) UsageEntries(sessionIdentifier string) []*usage_entry.Entry {
 	var result []*usage_entry.Entry
 	seen := map[string]bool{}
 	scanner := bufio.NewScanner(f)
-	scanner.Buffer(make([]byte, 1024*1024), 1024*1024)
+	scanner.Buffer(nil, constant.NotationScanBuffer)
 
 	for scanner.Scan() {
 		var line notation.Line

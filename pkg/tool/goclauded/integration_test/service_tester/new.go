@@ -17,6 +17,7 @@ func New(t *testing.T) *Tester {
 	t.Helper()
 	s := store_tester.New(t)
 	c := mock_client.New()
+	mc := memoryMock.New()
 	si := mock_indexer.New()
 	ci := mock_indexer.New()
 	n := mock_notifier.New()
@@ -28,7 +29,7 @@ func New(t *testing.T) *Tester {
 		Service: service.New(
 			s.Store,
 			c,
-			memoryMock.New(),
+			mc,
 			si,
 			ci,
 			n,
@@ -42,5 +43,6 @@ func New(t *testing.T) *Tester {
 		SummaryIndexer:    si,
 		CompletionIndexer: ci,
 		Notifier:          n,
+		Memory:            mc,
 	}
 }
