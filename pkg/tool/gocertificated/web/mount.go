@@ -33,4 +33,5 @@ func (s *Server) Mount(m *http.ServeMux) {
 	)
 	m.HandleFunc(fmt.Sprintf("POST %s", constant.PublishPath), s.publishSubmit)
 	m.HandleFunc(fmt.Sprintf("GET %s", constant.RootPath), s.root)
+	m.HandleFunc("GET /favicon.ico", s.favicon)
 }
