@@ -5,13 +5,13 @@ type Indexer interface {
 		collection string,
 		path string,
 		body string,
-		metadata map[string]string,
+		metadata map[string][]string,
 	) error
 	MustPush(
 		collection string,
 		path string,
 		body string,
-		metadata map[string]string,
+		metadata map[string][]string,
 	)
 	Existing(collection string) map[string]string
 	Delete(

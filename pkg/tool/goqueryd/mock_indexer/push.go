@@ -4,7 +4,7 @@ func (i *Indexer) Push(
 	collection string,
 	name string,
 	body string,
-	metadata map[string]string,
+	metadata map[string][]string,
 ) error {
 	i.Pushed = append(
 		i.Pushed,

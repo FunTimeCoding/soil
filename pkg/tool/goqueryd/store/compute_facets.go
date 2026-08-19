@@ -9,12 +9,14 @@ func ComputeFacets(
 	counts := map[string]map[string]int{}
 
 	for _, r := range results {
-		for key, value := range r.Metadata {
+		for key, values := range r.Metadata {
 			if counts[key] == nil {
 				counts[key] = map[string]int{}
 			}
 
-			counts[key][value]++
+			for _, value := range values {
+				counts[key][value]++
+			}
 		}
 	}
 

@@ -92,20 +92,20 @@ type SearchOutcome struct {
 
 // SearchResult defines model for SearchResult.
 type SearchResult struct {
-	Body        *string            `json:"body,omitempty"`
-	Collection  string             `json:"collection"`
-	Context     *string            `json:"context,omitempty"`
-	FilePath    string             `json:"file_path"`
-	Hash        string             `json:"hash"`
-	Metadata    *map[string]string `json:"metadata,omitempty"`
-	Path        string             `json:"path"`
-	Score       float32            `json:"score"`
-	Snippet     *string            `json:"snippet,omitempty"`
-	SnippetLine *int               `json:"snippet_line,omitempty"`
-	Source      string             `json:"source"`
-	SourceType  *string            `json:"source_type,omitempty"`
-	Title       string             `json:"title"`
-	VirtualPath string             `json:"virtual_path"`
+	Body        *string              `json:"body,omitempty"`
+	Collection  string               `json:"collection"`
+	Context     *string              `json:"context,omitempty"`
+	FilePath    string               `json:"file_path"`
+	Hash        string               `json:"hash"`
+	Metadata    *map[string][]string `json:"metadata,omitempty"`
+	Path        string               `json:"path"`
+	Score       float32              `json:"score"`
+	Snippet     *string              `json:"snippet,omitempty"`
+	SnippetLine *int                 `json:"snippet_line,omitempty"`
+	Source      string               `json:"source"`
+	SourceType  *string              `json:"source_type,omitempty"`
+	Title       string               `json:"title"`
+	VirtualPath string               `json:"virtual_path"`
 }
 
 // SourceTypeTag defines model for SourceTypeTag.
@@ -161,11 +161,11 @@ type GetDocumentParams struct {
 
 // PostDocumentJSONBody defines parameters for PostDocument.
 type PostDocumentJSONBody struct {
-	Body       string             `json:"body"`
-	Collection string             `json:"collection"`
-	Metadata   *map[string]string `json:"metadata,omitempty"`
-	Path       string             `json:"path"`
-	SourceType *string            `json:"source_type,omitempty"`
+	Body       string               `json:"body"`
+	Collection string               `json:"collection"`
+	Metadata   *map[string][]string `json:"metadata,omitempty"`
+	Path       string               `json:"path"`
+	SourceType *string              `json:"source_type,omitempty"`
 }
 
 // PostIndexJSONBody defines parameters for PostIndex.

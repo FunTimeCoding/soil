@@ -1,0 +1,498 @@
+---
+openapi: "3.0.0"
+info:
+  title: gocertificated
+  version: 1.0.0
+paths:
+  /api/v1/authorities:
+    get:
+      operationId: getAuthorities
+      responses:
+        "200":
+          description: Every authority in the chain, root first.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AuthorityResponse"
+        "500":
+          description: Failed to query authorities.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: postAuthority
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AuthorityBody"
+      responses:
+        "200":
+          description: The authority that was created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthorityResponse"
+        "409":
+          description: An authority of that name is already live.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to create the authority.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/authorities/{name}:
+    get:
+      operationId: getAuthority
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: The named authority.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AuthorityResponse"
+        "404":
+          description: No live authority of that name.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to query the authority.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/certificates:
+    get:
+      operationId: getCertificates
+      parameters:
+      - name: authority
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: kind
+        in: query
+        required: false
+        schema:
+          $ref: "#/components/schemas/CertificateKind"
+      - name: expiresBefore
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: revoked
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Certificates matching the given filters.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CertificateResponse"
+        "500":
+          description: Failed to query certificates.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: postCertificate
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CertificateBody"
+      responses:
+        "200":
+          description: >
+            The issued certificate. The private key is present in this
+            response only and is never stored.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CertificateResponse"
+        "500":
+          description: Failed to issue the certificate.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/certificates/{serial}:
+    get:
+      operationId: getCertificate
+      parameters:
+      - name: serial
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: The certificate with that serial.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CertificateResponse"
+        "404":
+          description: No certificate with that serial.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to query the certificate.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/certificates/{serial}/revocation:
+    post:
+      operationId: postRevocation
+      parameters:
+      - name: serial
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: The revoked certificate.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CertificateResponse"
+        "404":
+          description: No live certificate with that serial.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to revoke the certificate.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/signing-requests:
+    post:
+      operationId: postSigningRequest
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SigningRequestBody"
+      responses:
+        "200":
+          description: >
+            The signed certificate. No private key is returned or held -
+            the subject keeps the key it generated.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CertificateResponse"
+        "500":
+          description: Failed to sign the request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/publication:
+    get:
+      operationId: getPublication
+      responses:
+        "200":
+          description: What a publish would commit.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PublicationResponse"
+        "500":
+          description: Failed to determine pending changes.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: postPublication
+      responses:
+        "200":
+          description: The commit that was written.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PublicationResponse"
+        "500":
+          description: Failed to publish.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/root:
+    get:
+      operationId: getRoot
+      responses:
+        "200":
+          description: >
+            The root certificate for trust import. Armored, no key,
+            deliberately the simplest response the service has.
+          content:
+            text/plain:
+              schema:
+                type: string
+        "404":
+          description: No root exists yet.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/v1/revocation-list:
+    get:
+      operationId: getRevocationList
+      parameters:
+      - name: authority
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: The revocation list signed by the named authority.
+          content:
+            text/plain:
+              schema:
+                type: string
+        "404":
+          description: No live authority of that name.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to build the revocation list.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    AuthorityBody:
+      type: object
+      required:
+      - name
+      - kind
+      - commonName
+      properties:
+        name:
+          type: string
+        kind:
+          $ref: "#/components/schemas/AuthorityKind"
+        commonName:
+          type: string
+        country:
+          type: string
+        province:
+          type: string
+        organization:
+          type: string
+        permittedDomain:
+          type: array
+          items:
+            type: string
+        permittedAddress:
+          type: array
+          items:
+            type: string
+        validYear:
+          type: integer
+    AuthorityResponse:
+      type: object
+      required:
+      - name
+      - kind
+      - serial
+      - commonName
+      - certificate
+      - notBefore
+      - notAfter
+      - published
+      properties:
+        name:
+          type: string
+        kind:
+          $ref: "#/components/schemas/AuthorityKind"
+        serial:
+          type: string
+        commonName:
+          type: string
+        certificate:
+          type: string
+        permittedDomain:
+          type: array
+          items:
+            type: string
+        permittedAddress:
+          type: array
+          items:
+            type: string
+        notBefore:
+          type: string
+          format: date-time
+        notAfter:
+          type: string
+          format: date-time
+        published:
+          type: boolean
+    CertificateBody:
+      type: object
+      required:
+      - authority
+      - kind
+      - commonName
+      properties:
+        authority:
+          type: string
+        kind:
+          $ref: "#/components/schemas/LeafKind"
+        commonName:
+          type: string
+        host:
+          type: array
+          items:
+            type: string
+        validDay:
+          type: integer
+    SigningRequestBody:
+      type: object
+      required:
+      - authority
+      - kind
+      - request
+      properties:
+        authority:
+          type: string
+        kind:
+          $ref: "#/components/schemas/LeafKind"
+        request:
+          type: string
+        validDay:
+          type: integer
+    CertificateResponse:
+      type: object
+      required:
+      - serial
+      - kind
+      - commonName
+      - issuer
+      - certificate
+      - notBefore
+      - notAfter
+      properties:
+        serial:
+          type: string
+        kind:
+          $ref: "#/components/schemas/CertificateKind"
+        commonName:
+          type: string
+        issuer:
+          type: string
+        certificate:
+          type: string
+        privateKey:
+          type: string
+        host:
+          type: array
+          items:
+            type: string
+        notBefore:
+          type: string
+          format: date-time
+        notAfter:
+          type: string
+          format: date-time
+        revokedAt:
+          type: string
+          format: date-time
+    PublicationResponse:
+      type: object
+      required:
+      - pending
+      properties:
+        pending:
+          type: array
+          items:
+            $ref: "#/components/schemas/PendingChange"
+        commit:
+          type: string
+    PendingChange:
+      type: object
+      required:
+      - path
+      - reason
+      properties:
+        path:
+          type: string
+        reason:
+          type: string
+    AuthorityKind:
+      type: string
+      enum:
+      - root
+      - intermediate
+    LeafKind:
+      type: string
+      enum:
+      - server
+      - client
+    CertificateKind:
+      type: string
+      enum:
+      - root
+      - intermediate
+      - server
+      - client
+    Error:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: string
+    ErrorResponse:
+      type: object
+      required:
+      - error
+      - event_identifier
+      properties:
+        error:
+          type: string
+        event_identifier:
+          type: string

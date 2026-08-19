@@ -99,20 +99,20 @@ type SearchOutcome struct {
 
 // SearchResult defines model for SearchResult.
 type SearchResult struct {
-	Body        *string            `json:"body,omitempty"`
-	Collection  string             `json:"collection"`
-	Context     *string            `json:"context,omitempty"`
-	FilePath    string             `json:"file_path"`
-	Hash        string             `json:"hash"`
-	Metadata    *map[string]string `json:"metadata,omitempty"`
-	Path        string             `json:"path"`
-	Score       float32            `json:"score"`
-	Snippet     *string            `json:"snippet,omitempty"`
-	SnippetLine *int               `json:"snippet_line,omitempty"`
-	Source      string             `json:"source"`
-	SourceType  *string            `json:"source_type,omitempty"`
-	Title       string             `json:"title"`
-	VirtualPath string             `json:"virtual_path"`
+	Body        *string              `json:"body,omitempty"`
+	Collection  string               `json:"collection"`
+	Context     *string              `json:"context,omitempty"`
+	FilePath    string               `json:"file_path"`
+	Hash        string               `json:"hash"`
+	Metadata    *map[string][]string `json:"metadata,omitempty"`
+	Path        string               `json:"path"`
+	Score       float32              `json:"score"`
+	Snippet     *string              `json:"snippet,omitempty"`
+	SnippetLine *int                 `json:"snippet_line,omitempty"`
+	Source      string               `json:"source"`
+	SourceType  *string              `json:"source_type,omitempty"`
+	Title       string               `json:"title"`
+	VirtualPath string               `json:"virtual_path"`
 }
 
 // SourceTypeTag defines model for SourceTypeTag.
@@ -168,11 +168,11 @@ type GetDocumentParams struct {
 
 // PostDocumentJSONBody defines parameters for PostDocument.
 type PostDocumentJSONBody struct {
-	Body       string             `json:"body"`
-	Collection string             `json:"collection"`
-	Metadata   *map[string]string `json:"metadata,omitempty"`
-	Path       string             `json:"path"`
-	SourceType *string            `json:"source_type,omitempty"`
+	Body       string               `json:"body"`
+	Collection string               `json:"collection"`
+	Metadata   *map[string][]string `json:"metadata,omitempty"`
+	Path       string               `json:"path"`
+	SourceType *string              `json:"source_type,omitempty"`
 }
 
 // PostIndexJSONBody defines parameters for PostIndex.
@@ -2193,31 +2193,31 @@ func (sh *strictHandler) GetTags(w http.ResponseWriter, r *http.Request) {
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
+	"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",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

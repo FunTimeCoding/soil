@@ -23,7 +23,7 @@ func (c *Client) ProjectByName(
 
 	if count == 0 {
 		return nil, fmt.Errorf(
-			"project not found: %s/%s: %w",
+			"project: %s/%s: %w",
 			namespace,
 			name,
 			constant.ErrorNotFound,
@@ -36,7 +36,7 @@ func (c *Client) ProjectByName(
 		}
 
 		return nil, fmt.Errorf(
-			"project not found: %s/%s: %w",
+			"project: %s/%s: %w",
 			namespace,
 			name,
 			constant.ErrorNotFound,

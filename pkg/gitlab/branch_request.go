@@ -21,7 +21,7 @@ func (c *Client) BranchRequest(
 
 	if r != nil && r.StatusCode == 404 {
 		return nil, fmt.Errorf(
-			"project not found: %d: %w",
+			"project: %d: %w",
 			project,
 			constant.ErrorNotFound,
 		)

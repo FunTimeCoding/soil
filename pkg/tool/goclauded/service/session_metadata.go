@@ -4,7 +4,7 @@ import "github.com/funtimecoding/soil/pkg/time/constant"
 
 func (s *Service) sessionMetadata(
 	sessionIdentifier string,
-) (string, map[string]string, error) {
+) (string, map[string][]string, error) {
 	session, e := s.store.GetSession(sessionIdentifier)
 
 	if e != nil {
@@ -25,13 +25,13 @@ func (s *Service) sessionMetadata(
 		return "", nil, nil
 	}
 
-	result := map[string]string{
-		"session_name": name,
-		"session_id":   sessionIdentifier,
+	result := map[string][]string{
+		"session_name": {name},
+		"session_id":   {sessionIdentifier},
 	}
 
 	if !session.StartedAt.IsZero() {
-		result["date"] = session.StartedAt.Format(constant.DateYear)
+		result["date"] = []string{session.StartedAt.Format(constant.DateYear)}
 	}
 
 	return name, result, nil

@@ -9,7 +9,7 @@ func (s *Service) pushCompletion(
 	slug string,
 	sequence int,
 	body string,
-	metadata map[string]string,
+	metadata map[string][]string,
 ) error {
 	return s.completionIndexer.Push(
 		constant.CompletionCollection,

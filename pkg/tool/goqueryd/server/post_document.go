@@ -11,7 +11,7 @@ func (s *Server) PostDocument(
 	_ context.Context,
 	r server.PostDocumentRequestObject,
 ) (server.PostDocumentResponseObject, error) {
-	metadata := map[string]string{}
+	metadata := map[string][]string{}
 
 	if r.Body.Metadata != nil {
 		for key, value := range *r.Body.Metadata {
@@ -20,7 +20,7 @@ func (s *Server) PostDocument(
 	}
 
 	if r.Body.SourceType != nil && *r.Body.SourceType != "" {
-		metadata[queryConstant.SourceType] = *r.Body.SourceType
+		metadata[queryConstant.SourceType] = []string{*r.Body.SourceType}
 	}
 
 	e := s.service.PushDocument(

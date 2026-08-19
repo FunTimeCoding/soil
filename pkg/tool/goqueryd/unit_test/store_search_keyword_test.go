@@ -86,7 +86,7 @@ func TestSearchKeywordMetadataFilter(t *testing.T) {
 	writeFixture(t, directory, "scoped.md", "# Scoped\n\nKeyword quasar.\n")
 	s.AddCollection("test", directory, constant.DefaultGlob)
 	s.Index("test")
-	s.SetMetadata("test", "scoped.md", map[string]string{"scope": "alpha"})
+	s.SetMetadata("test", "scoped.md", map[string][]string{"scope": {"alpha"}})
 	all := s.MustSearchKeyword("quasar", 10, "", false, nil)
 	assert.Count(t, 2, all)
 	filtered := s.MustSearchKeyword(
@@ -113,7 +113,7 @@ func TestSearchKeywordMetadataNarrowsCandidates(t *testing.T) {
 	writeFixture(t, directory, "target.md", "# Target\n\nOne quasar only.\n")
 	s.AddCollection("test", directory, constant.DefaultGlob)
 	s.Index("test")
-	s.SetMetadata("test", "target.md", map[string]string{"scope": "alpha"})
+	s.SetMetadata("test", "target.md", map[string][]string{"scope": {"alpha"}})
 	top := s.MustSearchKeyword("quasar", 1, "", false, nil)
 	assert.Count(t, 1, top)
 	assert.String(t, "Noise", top[0].Title)
@@ -139,7 +139,7 @@ func TestSearchKeywordSourceTypeFilterDeferred(t *testing.T) {
 	s.SetMetadata(
 		"test",
 		"one.md",
-		map[string]string{constant.SourceType: "memory"},
+		map[string][]string{constant.SourceType: {"memory"}},
 	)
 	results := s.MustSearchKeyword(
 		"quasar",

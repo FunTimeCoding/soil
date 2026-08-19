@@ -145,7 +145,7 @@ containers:
   args: [--inventory, /etc/go<tool>/go<tool>d.yaml]
   volumeMounts:
   - {name: inventory, mountPath: /etc/go<tool>, readOnly: true}
-volumes: [{name: inventory, secret: {secretName: <tool>-fsec}}]
+volumes: [{name: inventory, secret: {secretName: <tool>-secret}}]
 ```
 
 Credentials live inside the inventory YAML, not in environment

@@ -30,7 +30,7 @@ func (s *Service) ReconcileCompletions() {
 			continue
 		}
 
-		metadata["created_at"] = c.CreatedAt.Format(time.RFC3339)
+		metadata["created_at"] = []string{c.CreatedAt.Format(time.RFC3339)}
 		s.completionIndexer.MustPush(
 			constant.CompletionCollection,
 			name,

@@ -29,15 +29,15 @@ func (s *Server) push(
 		return response.Fail("body is required: %v", g)
 	}
 
-	metadata := extractMetadata(q)
+	metadata := documentMetadata(extractMetadata(q))
 	sourceType := q.GetString(constant.SourceType, "")
 
 	if sourceType != "" {
 		if metadata == nil {
-			metadata = map[string]string{}
+			metadata = map[string][]string{}
 		}
 
-		metadata[constant.SourceType] = sourceType
+		metadata[constant.SourceType] = []string{sourceType}
 	}
 
 	if h := s.service.PushDocument(collection, path, body, metadata); h != nil {

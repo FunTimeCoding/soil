@@ -6,7 +6,7 @@ func (i *Indexer) MustPush(
 	collection string,
 	name string,
 	body string,
-	metadata map[string]string,
+	metadata map[string][]string,
 ) {
 	errors.PanicOnError(i.Push(collection, name, body, metadata))
 }

@@ -14,6 +14,6 @@ type SearchResult struct {
 	Snippet       string            `json:"snippet,omitempty"`
 	SnippetLine   int               `json:"snippet_line,omitempty"`
 	Body          string            `json:"body,omitempty"`
-	Metadata      map[string]string `json:"metadata,omitempty"`
+	Metadata      map[string][]string `json:"metadata,omitempty"`
 	ChunkPosition int               `json:"-"`
 }

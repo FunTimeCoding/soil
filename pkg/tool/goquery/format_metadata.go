@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func formatMetadata(metadata map[string]string) string {
+func formatMetadata(metadata map[string][]string) string {
 	keys := make([]string, 0, len(metadata))
 
 	for k := range metadata {
@@ -21,7 +21,10 @@ func formatMetadata(metadata map[string]string) string {
 	var parts []string
 
 	for _, k := range keys {
-		parts = append(parts, fmt.Sprintf("%s=%s", k, metadata[k]))
+		parts = append(
+			parts,
+			fmt.Sprintf("%s=%s", k, strings.Join(metadata[k], ",")),
+		)
 	}
 
 	return strings.Join(parts, "  ")

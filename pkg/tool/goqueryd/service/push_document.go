@@ -10,7 +10,7 @@ func (s *Service) PushDocument(
 	collection string,
 	path string,
 	body string,
-	metadata map[string]string,
+	metadata map[string][]string,
 ) error {
 	s.store.EnsurePushCollection(collection)
 	now := time.Now().UTC().Format(time.RFC3339)

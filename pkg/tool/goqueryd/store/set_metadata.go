@@ -5,7 +5,7 @@ import "github.com/funtimecoding/soil/pkg/errors"
 func (s *Store) SetMetadata(
 	collection string,
 	path string,
-	metadata map[string]string,
+	metadata map[string][]string,
 ) {
 	var identifier int
 	e := s.database.QueryRow(
@@ -24,13 +24,15 @@ func (s *Store) SetMetadata(
 	)
 	errors.PanicOnError(e)
 
-	for key, value := range metadata {
-		_, e = s.database.Exec(
-			"INSERT INTO document_metadata (document_identifier, key, value) VALUES (?, ?, ?)",
-			identifier,
-			key,
-			value,
-		)
-		errors.PanicOnError(e)
+	for key, values := range metadata {
+		for _, value := range distinct(values) {
+			_, e = s.database.Exec(
+				"INSERT INTO document_metadata (document_identifier, key, value) VALUES (?, ?, ?)",
+				identifier,
+				key,
+				value,
+			)
+			errors.PanicOnError(e)
+		}
 	}
 }

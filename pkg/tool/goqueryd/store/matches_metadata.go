@@ -1,9 +1,12 @@
 package store
 
-import "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
+	"slices"
+)
 
 func matchesMetadata(
-	documentMetadata map[string]string,
+	documentMetadata map[string][]string,
 	resolvedSourceType string,
 	filter map[string]string,
 ) bool {
@@ -16,7 +19,7 @@ func matchesMetadata(
 			continue
 		}
 
-		if documentMetadata == nil || documentMetadata[key] != value {
+		if !slices.Contains(documentMetadata[key], value) {
 			return false
 		}
 	}

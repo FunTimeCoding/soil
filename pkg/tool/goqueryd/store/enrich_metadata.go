@@ -12,7 +12,9 @@ func (s *Store) enrichMetadata(
 		results[i].Metadata = metadata[identifiers[i]]
 
 		if results[i].Metadata != nil {
-			results[i].SourceType = results[i].Metadata[constant.SourceType]
+			results[i].SourceType = FirstValue(
+				results[i].Metadata[constant.SourceType],
+			)
 		}
 
 		if results[i].SourceType == "" {

@@ -47,7 +47,9 @@ func TestServiceCreateRoutesCollectionByScope(t *testing.T) {
 	assert.FatalOnError(t, f)
 	assert.Count(t, 2, o.Indexer.Pushed)
 	assert.String(t, "alpha", o.Indexer.Pushed[1].Collection)
-	assert.String(t, "alpha", o.Indexer.Pushed[1].Metadata[constant.Scope])
+	scope := o.Indexer.Pushed[1].Metadata[constant.Scope]
+	assert.Count(t, 1, scope)
+	assert.String(t, "alpha", scope[0])
 }
 
 func TestServiceUpdatePreservesMetadataAndOrdinal(t *testing.T) {

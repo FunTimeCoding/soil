@@ -4,5 +4,5 @@ type PushCall struct {
 	Collection string
 	Name       string
 	Body       string
-	Metadata   map[string]string
+	Metadata   map[string][]string
 }

@@ -10,9 +10,9 @@ func (i *Indexer) Push(
 	collection string,
 	path string,
 	body string,
-	metadata map[string]string,
+	metadata map[string][]string,
 ) error {
-	merged := map[string]string{constant.SourceType: i.sourceType}
+	merged := map[string][]string{constant.SourceType: {i.sourceType}}
 
 	for key, value := range metadata {
 		merged[key] = value

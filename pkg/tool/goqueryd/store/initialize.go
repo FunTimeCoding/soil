@@ -63,7 +63,7 @@ func initialize(database *sql.DB) {
 				REFERENCES document(identifier) ON DELETE CASCADE,
 			key   TEXT NOT NULL,
 			value TEXT NOT NULL,
-			PRIMARY KEY (document_identifier, key)
+			PRIMARY KEY (document_identifier, key, value)
 		)`,
 		"CREATE INDEX IF NOT EXISTS idx_document_metadata_key_value ON document_metadata(key, value)",
 		`CREATE TABLE IF NOT EXISTS context (
@@ -94,6 +94,7 @@ func initialize(database *sql.DB) {
 		errors.PanicOnError(e)
 	}
 
+	migrateMetadataValue(database)
 	migrations := []string{
 		"ALTER TABLE collection ADD COLUMN type TEXT NOT NULL DEFAULT 'filesystem'",
 	}

@@ -19,7 +19,7 @@ func (c *Client) File(
 
 	if r != nil && r.StatusCode == 404 {
 		return nil, fmt.Errorf(
-			"file not found: %s (branch %s, project %d): %w",
+			"file: %s (branch %s, project %d): %w",
 			name,
 			branch,
 			project,

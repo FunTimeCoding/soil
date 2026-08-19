@@ -342,7 +342,9 @@ paths:
                 metadata:
                   type: object
                   additionalProperties:
-                    type: string
+                    type: array
+                    items:
+                      type: string
       responses:
         "200":
           description: Document pushed.
@@ -517,7 +519,9 @@ components:
         metadata:
           type: object
           additionalProperties:
-            type: string
+            type: array
+            items:
+              type: string
     Facet:
       type: object
       required: [key, distinct]

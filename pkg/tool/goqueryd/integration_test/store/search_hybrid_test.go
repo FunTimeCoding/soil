@@ -55,7 +55,7 @@ func TestHybridSearchMetadataFilter(t *testing.T) {
 	defer s.Close()
 	e := embedTestDocuments(s, o)
 	assert.FatalOnError(t, e)
-	s.SetMetadata("test", "alpha.md", map[string]string{"scope": "alpha"})
+	s.SetMetadata("test", "alpha.md", map[string][]string{"scope": {"alpha"}})
 	option := search_option.New("search pipeline", 10)
 	option.Metadata = map[string]string{"scope": "alpha"}
 	results, f := s.SearchHybrid(option, o)
