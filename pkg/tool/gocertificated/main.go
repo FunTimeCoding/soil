@@ -20,35 +20,17 @@ func Main(
 	a := argument.NewInstance(constant.Identity)
 	a.Web()
 	a.Database()
-	a.String(
-		constant.ProjectArgument,
-		environment.Fallback(gitlabConstant.ProjectEnvironment, ""),
-		"Repository the authority publishes to",
-	)
-	a.String(
-		constant.BranchArgument,
-		constant.PublishBranch,
-		"Branch the authority commits to",
-	)
-	a.String(
-		constant.SecretAuthorityArgument,
-		environment.Fallback(constant.SecretAuthorityEnvironment, ""),
-		"Authority whose material is delivered as a secret manifest",
-	)
-	a.String(
-		constant.SecretPathArgument,
-		environment.Fallback(constant.SecretPathEnvironment, ""),
-		"Repository path of the delivered secret manifest",
-	)
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
 	o.Address = a.Address()
 	o.PostgresLocator = a.GetString(argumentConstant.Postgres)
 	o.LitePath = a.GetString(argumentConstant.Lite)
-	o.Project = a.GetString(constant.ProjectArgument)
-	o.Branch = a.GetString(constant.BranchArgument)
-	o.SecretAuthority = a.GetString(constant.SecretAuthorityArgument)
-	o.SecretPath = a.GetString(constant.SecretPathArgument)
+	o.Project = environment.Required(gitlabConstant.ProjectEnvironment)
+	o.Branch = constant.PublishBranch
+	o.SecretAuthority = environment.Required(
+		constant.SecretAuthorityEnvironment,
+	)
+	o.SecretPath = environment.Required(constant.SecretPathEnvironment)
 	o.Version = version
 	Run(o, r)
 }

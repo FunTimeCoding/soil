@@ -25,11 +25,13 @@ func New(t *testing.T) *Server {
 	f := mock_client.New()
 	v := service.New(
 		s,
-		publish.New(f, constant.FixtureProject, constant.PublishBranch).
-			WithSecret(
-				constant.FixtureClusterAuthority,
-				constant.FixtureSecretPath,
-			),
+		publish.New(
+			f,
+			constant.FixtureProject,
+			constant.PublishBranch,
+			constant.FixtureClusterAuthority,
+			constant.FixtureSecretPath,
+		),
 	)
 	r := memory.New()
 
