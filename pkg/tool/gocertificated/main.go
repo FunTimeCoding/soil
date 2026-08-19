@@ -27,6 +27,9 @@ func Main(
 	o.LitePath = a.GetString(argumentConstant.Lite)
 	o.Project = environment.Required(gitlabConstant.ProjectEnvironment)
 	o.Branch = constant.PublishBranch
+	o.AuthorityDirectory = environment.Required(
+		constant.AuthorityDirectoryEnvironment,
+	)
 	o.SecretAuthority = environment.Required(
 		constant.SecretAuthorityEnvironment,
 	)

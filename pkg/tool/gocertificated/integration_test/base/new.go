@@ -29,6 +29,7 @@ func New(t *testing.T) *Server {
 			f,
 			constant.FixtureProject,
 			constant.PublishBranch,
+			constant.FixtureAuthorityDirectory,
 			constant.FixtureClusterAuthority,
 			constant.FixtureSecretPath,
 		),

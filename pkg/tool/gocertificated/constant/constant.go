@@ -30,10 +30,9 @@ const (
 )
 
 const (
-	RootAuthority    = "root"
-	PublishDirectory = "certificate"
-	PublishBranch    = "main"
-	PublishMessage   = "publish"
+	RootAuthority  = "root"
+	PublishBranch  = "main"
+	PublishMessage = "publish"
 )
 
 const AnyName = ""
@@ -62,8 +61,9 @@ const (
 )
 
 const (
-	SecretAuthorityEnvironment = "SECRET_AUTHORITY"
-	SecretPathEnvironment      = "SECRET_PATH"
+	AuthorityDirectoryEnvironment = "AUTHORITY_DIRECTORY"
+	SecretAuthorityEnvironment    = "SECRET_AUTHORITY"
+	SecretPathEnvironment         = "SECRET_PATH"
 )
 
 const (
@@ -162,5 +162,6 @@ const (
 	FixtureLocalHost         = "service.local"
 	FixtureRequestHost       = "host.example.org"
 	FixtureImpostor          = "impostor"
+	FixtureAuthorityDirectory = "certificate"
 	FixtureSecretPath        = "manifest/authority-secret.yaml"
 )

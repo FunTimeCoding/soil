@@ -16,7 +16,7 @@ func (p *Publisher) Changes(v []record.Record) ([]*Change, error) {
 			result,
 			NewChange(
 				path.Join(
-					constant.PublishDirectory,
+					p.authorityDirectory,
 					r.Name,
 					constant.CertificateFile,
 				),
@@ -24,7 +24,7 @@ func (p *Publisher) Changes(v []record.Record) ([]*Change, error) {
 				r.Certificate,
 			),
 			NewChange(
-				path.Join(constant.PublishDirectory, r.Name, constant.KeyFile),
+				path.Join(p.authorityDirectory, r.Name, constant.KeyFile),
 				reason,
 				r.Key,
 			),

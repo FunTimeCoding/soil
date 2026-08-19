@@ -34,7 +34,14 @@ func Run(
 	errors.PanicOnError(e)
 	v := service.New(
 		s,
-		publish.New(f, project, o.Branch, o.SecretAuthority, o.SecretPath),
+		publish.New(
+			f,
+			project,
+			o.Branch,
+			o.AuthorityDirectory,
+			o.SecretAuthority,
+			o.SecretPath,
+		),
 	)
 	i := certificateWeb.New(s, v)
 	lifecycle.New(
