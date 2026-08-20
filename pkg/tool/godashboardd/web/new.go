@@ -63,8 +63,8 @@ func New(
 			layout.New(constant.Identity).
 				WithTheme(web.ThemeSentinel).
 				WithStyle(constant.InlineStyle).
-				WithCommandPalette(constant.PalettePath).
-				WithLiveEndpoint(constant.EventPath).
+				WithCommandPalette(web.PalettePath).
+				WithLiveEndpoint(web.LivePath).
 				WithItems(
 					navigation_item.New(
 						constant.DashboardPath,

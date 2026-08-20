@@ -3,6 +3,7 @@ package web
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/status"
+	web "github.com/funtimecoding/soil/pkg/web/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
@@ -42,7 +43,7 @@ func searchForm(
 
 	return html.Form(
 		gomponents.Attr("method", "GET"),
-		gomponents.Attr("action", constant.SearchPath),
+		gomponents.Attr("action", web.SearchPath),
 		html.Input(
 			html.Type(constant.Search),
 			html.Name("query"),

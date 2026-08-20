@@ -11,7 +11,10 @@ func New(r *response.Formula) *Formula {
 		Name:              r.Name,
 		InstalledVersions: r.InstalledVersions,
 		CurrentVersion:    r.CurrentVersion,
-		Link: fmt.Sprintf("https://formulae.brew.sh/formula/%s", r.Name),
+		Link: fmt.Sprintf(
+			"https://formulae.brew.sh/formula/%s",
+			r.Name,
+		),
 		Pinned: r.Pinned,
 	}
 }

@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/option"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 )
 
 func Main(
@@ -34,6 +35,17 @@ func Main(
 		constant.SecretAuthorityEnvironment,
 	)
 	o.SecretPath = environment.Required(constant.SecretPathEnvironment)
+	o.Issuer = environment.Required(webConstant.AuthorizationIssuerEnvironment)
+	o.ClientIdentifier = environment.Required(
+		webConstant.AuthorizationClientIdentifierEnvironment,
+	)
+	o.ClientSecret = environment.Required(
+		webConstant.AuthorizationClientSecretEnvironment,
+	)
+	o.EncryptionSecret = environment.Required(
+		webConstant.AuthorizationEncryptionSecretEnvironment,
+	)
+	o.PublicLocator = environment.Required(webConstant.PublicLocatorEnvironment)
 	o.Version = version
 	Run(o, r)
 }

@@ -1,16 +1,18 @@
 package web
 
 import (
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/palette"
+	"github.com/funtimecoding/soil/pkg/web/route"
 	"net/http"
 )
 
 func (s *Server) Mount(m *http.ServeMux) {
-	m.HandleFunc("GET /palette", palette.NewServe(s.registry))
-	m.HandleFunc("GET /{$}", s.dashboard)
-	m.Handle("GET /event", s.event())
-	m.HandleFunc("POST /move-up", s.moveUp)
-	m.HandleFunc("POST /move-down", s.moveDown)
-	m.HandleFunc("POST /reorder", s.reorder)
-	m.HandleFunc("GET /favicon.ico", s.favicon)
+	m.HandleFunc(route.Get(constant.PalettePath), palette.NewServe(s.registry))
+	m.HandleFunc(route.Get(constant.RootPattern), s.dashboard)
+	m.Handle(route.Get(constant.LivePath), s.event())
+	m.HandleFunc(route.Post("/move-up"), s.moveUp)
+	m.HandleFunc(route.Post("/move-down"), s.moveDown)
+	m.HandleFunc(route.Post("/reorder"), s.reorder)
+	m.HandleFunc(route.Get(constant.FaviconPath), s.favicon)
 }

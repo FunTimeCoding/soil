@@ -6,13 +6,6 @@ const (
 
 	CallbackPortEnvironment = "CALLBACK_PORT"
 
-	GateClientIdentifierEnvironment = "GATE_CLIENT_IDENTIFIER"
-	GateClientSecretEnvironment     = "GATE_CLIENT_SECRET"
-	GateIssuerEnvironment           = "GATE_ISSUER"
-	GateSecretEnvironment           = "GATE_SECRET"
-	GateCallbackLocatorEnvironment  = "GATE_CALLBACK_LOCATOR"
-	GateSignInPathEnvironment       = "GATE_SIGN_IN_PATH"
-
 	AuthorizationIssuerEnvironment           = "AUTHORIZATION_ISSUER"
 	AuthorizationClientIdentifierEnvironment = "AUTHORIZATION_CLIENT_IDENTIFIER"
 	AuthorizationClientSecretEnvironment     = "AUTHORIZATION_CLIENT_SECRET"
@@ -26,7 +19,10 @@ const (
 	AuthorizationFlowCookie    = "authorization_flow"
 	AuthorizationSubjectCookie = "authorization_subject"
 	AuthorizationDefaultScope  = "openid offline"
-	// Notation key
+)
+
+// Notation key
+const (
 	AuthorizationServer   = "authorization_servers"
 	AuthorizationResource = "resource"
 )

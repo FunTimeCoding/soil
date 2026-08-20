@@ -19,9 +19,9 @@ func (s *Server) wrapAuthentication(
 		middle = crossOriginMiddleware
 	}
 
-	m.Handle(constant.LocationModelContext, middle(h))
-	m.Handle(constant.LocationEvent, middle(h))
-	m.Handle(constant.LocationEventMessage, middle(h))
+	m.Handle(constant.ModelContextPath, middle(h))
+	m.Handle(constant.EventPath, middle(h))
+	m.Handle(constant.EventMessagePath, middle(h))
 
 	if s.openAuthentication {
 		m.HandleFunc(constant.ProtectedResource, s.protectedResource)

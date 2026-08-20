@@ -13,7 +13,7 @@ func New(t *testing.T) *Tester {
 	n := mock_notifier.New()
 
 	return &Tester{
-		Service: service.New(store.New(lite.NewMemory()), n),
+		Service:  service.New(store.New(lite.NewMemory()), n),
 		Notifier: n,
 	}
 }

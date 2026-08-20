@@ -19,7 +19,7 @@ func TestCollectionFacets(t *testing.T) {
 			"# Alpha\n\nFirst.\n",
 			map[string][]string{
 				constant.FixtureAuthorKey: {"alice"},
-				constant.FixtureTagKey: {"design"},
+				constant.FixtureTagKey:    {"design"},
 			},
 		),
 	)
@@ -31,7 +31,7 @@ func TestCollectionFacets(t *testing.T) {
 			"# Beta\n\nSecond.\n",
 			map[string][]string{
 				constant.FixtureAuthorKey: {"alice"},
-				constant.FixtureTagKey: {constant.FixtureBuildValue},
+				constant.FixtureTagKey:    {constant.FixtureBuildValue},
 			},
 		),
 	)
@@ -43,7 +43,7 @@ func TestCollectionFacets(t *testing.T) {
 			"# Gamma\n\nThird.\n",
 			map[string][]string{
 				constant.FixtureAuthorKey: {"bob"},
-				constant.FixtureTagKey: {constant.FixtureBuildValue},
+				constant.FixtureTagKey:    {constant.FixtureBuildValue},
 			},
 		),
 	)
@@ -70,7 +70,7 @@ func TestCollectionFacetsForKey(t *testing.T) {
 			"# Alpha\n\nFirst.\n",
 			map[string][]string{
 				constant.FixtureAuthorKey: {"alice"},
-				constant.FixtureTagKey: {"design"},
+				constant.FixtureTagKey:    {"design"},
 			},
 		),
 	)
@@ -82,7 +82,7 @@ func TestCollectionFacetsForKey(t *testing.T) {
 			"# Beta\n\nSecond.\n",
 			map[string][]string{
 				constant.FixtureAuthorKey: {"bob"},
-				constant.FixtureTagKey: {constant.FixtureBuildValue},
+				constant.FixtureTagKey:    {constant.FixtureBuildValue},
 			},
 		),
 	)

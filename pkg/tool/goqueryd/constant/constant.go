@@ -59,7 +59,6 @@ const (
 	DashboardTitle   = "Dashboard"
 	DashboardPath    = "/"
 	SearchTitle      = "Search"
-	SearchPath       = "/search"
 	CollectionsTitle = "Collections"
 	CollectionsPath  = "/collections"
 	Identifier       = "identifier"

@@ -13,10 +13,15 @@ func (o *Tester) Page(
 	path string,
 ) string {
 	t.Helper()
-	result, e := http.Get(
+	r, e := http.NewRequest(
+		http.MethodGet,
 		fmt.Sprintf("http://127.0.0.1:%d%s", o.Server.Port(), path),
+		nil,
 	)
 	assert.FatalOnError(t, e)
+	r.AddCookie(o.Server.Authorization.SubjectCookie("tester"))
+	result, f := http.DefaultClient.Do(r)
+	assert.FatalOnError(t, f)
 	assert.Integer(t, http.StatusOK, result.StatusCode)
 
 	return web.ReadString(result)

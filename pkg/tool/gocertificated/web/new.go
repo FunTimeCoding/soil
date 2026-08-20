@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/service"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/store"
+	"github.com/funtimecoding/soil/pkg/web/authorization/client"
 	web "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
@@ -14,6 +15,7 @@ import (
 func New(
 	s *store.Store,
 	v *service.Service,
+	authorization *client.Client,
 ) *Server {
 	registry := palette.NewRegistry()
 	registry.Register(
@@ -47,16 +49,22 @@ func New(
 			Path:     constant.RootPath,
 			Category: web.PaletteAction,
 		},
+		palette.Command{
+			Label:    web.SignOutTitle,
+			Path:     web.SignOutPath,
+			Category: web.PaletteAction,
+		},
 	)
 
 	return &Server{
-		store:    s,
-		service:  v,
-		registry: registry,
+		store:         s,
+		service:       v,
+		authorization: authorization,
+		registry:      registry,
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(web.ThemeSentinel).
-				WithCommandPalette("/palette").
+				WithCommandPalette(web.PalettePath).
 				WithItems(
 					navigation_item.New(
 						constant.DashboardPath,

@@ -7,5 +7,5 @@ func (c *Context) LastLocation() string {
 		return s.Value
 	}
 
-	return constant.LocationRoot
+	return constant.RootPath
 }

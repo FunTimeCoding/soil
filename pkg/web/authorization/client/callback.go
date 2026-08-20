@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
@@ -69,9 +68,7 @@ func (c *Client) Callback(
 		return
 	}
 
-	encrypted, e := c.encrypt([]byte(verified.Subject))
-	errors.PanicOnError(e)
-	web.SetCookie(w, constant.AuthorizationSubjectCookie, encrypted)
+	http.SetCookie(w, c.SubjectCookie(verified.Subject))
 	http.SetCookie(
 		w,
 		&http.Cookie{

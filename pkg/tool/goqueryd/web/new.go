@@ -21,7 +21,7 @@ func New(s *service.Service) *Server {
 		},
 		palette.Command{
 			Label:    constant.SearchTitle,
-			Path:     constant.SearchPath,
+			Path:     web.SearchPath,
 			Category: web.PaletteNavigate,
 		},
 		palette.Command{
@@ -39,16 +39,13 @@ func New(s *service.Service) *Server {
 			layout.New(constant.Identity).
 				WithTheme(web.ThemeSlate).
 				WithStyle(constant.InlineStyle).
-				WithCommandPalette("/palette").
+				WithCommandPalette(web.PalettePath).
 				WithItems(
 					navigation_item.New(
 						constant.DashboardPath,
 						constant.DashboardTitle,
 					),
-					navigation_item.New(
-						constant.SearchPath,
-						constant.SearchTitle,
-					),
+					navigation_item.New(web.SearchPath, constant.SearchTitle),
 					navigation_item.New(
 						constant.CollectionsPath,
 						constant.CollectionsTitle,

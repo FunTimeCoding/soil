@@ -23,14 +23,14 @@ func New(v *github.WorkflowRun) *Run {
 
 	return &Run{
 		MonitorIdentifier: constant.GoGitHubJob.Integer64Identifier(v.GetID()),
-		Identifier: v.GetID(),
-		Name:       v.GetName(),
-		Status:     v.GetStatus(),
-		Conclusion: v.GetConclusion(),
-		Branch:     v.GetHeadBranch(),
-		Create:     create,
-		Update:     update,
-		Repository: repository.New(v.Repository),
-		Raw:        v,
+		Identifier:        v.GetID(),
+		Name:              v.GetName(),
+		Status:            v.GetStatus(),
+		Conclusion:        v.GetConclusion(),
+		Branch:            v.GetHeadBranch(),
+		Create:            create,
+		Update:            update,
+		Repository:        repository.New(v.Repository),
+		Raw:               v,
 	}
 }

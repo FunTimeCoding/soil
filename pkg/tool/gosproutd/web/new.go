@@ -28,11 +28,11 @@ func New(s *service.Service) *Server {
 			layout.New(constant.Identity).
 				WithTheme(web.ThemeSprout).
 				WithStyle(constant.InlineStyle).
-				WithCommandPalette("/palette").
+				WithCommandPalette(web.PalettePath).
 				WithScript(
-				"https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js",
-			).
-				WithLiveEndpoint("/event").
+					"https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js",
+				).
+				WithLiveEndpoint(web.LivePath).
 				WithFooter(
 					html.Script(gomponents.Raw(constant.SortableScript)),
 				),

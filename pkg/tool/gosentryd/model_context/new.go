@@ -15,7 +15,7 @@ func New(
 	version string,
 ) *Server {
 	result := &Server{
-		server: server.New(constant.Identity, version).WithRecorder(t).Server(),
+		server:       server.New(constant.Identity, version).WithRecorder(t).Server(),
 		client:       c,
 		organization: organization,
 		reporter:     r,

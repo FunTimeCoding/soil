@@ -10,7 +10,7 @@ import (
 func (s *Server) Setup(m *http.ServeMux) {
 	h := http.NewServeMux()
 	h.Handle(
-		constant.LocationModelContext,
+		constant.ModelContextPath,
 		server.NewStreamableHTTPServer(
 			s.server,
 			server.WithStreamableHTTPLogger(s.Logger()),
@@ -18,7 +18,7 @@ func (s *Server) Setup(m *http.ServeMux) {
 		),
 	)
 	sse := server.NewSSEServer(s.server)
-	h.Handle(constant.LocationEvent, sse.SSEHandler())
-	h.Handle(constant.LocationEventMessage, sse.MessageHandler())
+	h.Handle(constant.EventPath, sse.SSEHandler())
+	h.Handle(constant.EventMessagePath, sse.MessageHandler())
 	s.wrapAuthentication(m, h)
 }

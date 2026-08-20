@@ -17,6 +17,6 @@ func (s *Server) CreateDeviceRole(
 
 	return server.CreateDeviceRole201JSONResponse{
 		Identifier: role.Identifier,
-		Name: role.Name,
+		Name:       role.Name,
 	}, nil
 }

@@ -14,7 +14,7 @@ func (c *Client) encrypt(payload []byte) (string, error) {
 		return "", e
 	}
 
-	sealed := c.seal.Seal(nonce, nonce, payload, nil)
-
-	return base64.RawURLEncoding.EncodeToString(sealed), nil
+	return base64.RawURLEncoding.EncodeToString(
+		c.seal.Seal(nonce, nonce, payload, nil),
+	), nil
 }

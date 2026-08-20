@@ -6,7 +6,7 @@ func (c *Context) Referer() string {
 	result := c.request.Referer()
 
 	if result == "" {
-		return constant.LocationRoot
+		return constant.RootPath
 	}
 
 	return result

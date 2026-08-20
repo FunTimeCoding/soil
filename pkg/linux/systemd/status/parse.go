@@ -14,7 +14,7 @@ func Parse(s string) *Result {
 		MainProcess: strings.TrimSpace(
 			expression.SubMatch(`Main PID: (\d+)`, s),
 		),
-		Memory: strings.TrimSpace(expression.SubMatch(`Memory: (.+)`, s)),
+		Memory:    strings.TrimSpace(expression.SubMatch(`Memory: (.+)`, s)),
 		Processor: strings.TrimSpace(expression.SubMatch(`CPU: (.+)`, s)),
 	}
 }

@@ -37,7 +37,7 @@ func New(
 			layout.New(constant.Identity).
 				WithTheme(web.ThemeSentinel).
 				WithStyle(constant.InlineStyle).
-				WithCommandPalette("/palette").
+				WithCommandPalette(web.PalettePath).
 				WithItems(
 					navigation_item.New(
 						constant.DashboardPath,

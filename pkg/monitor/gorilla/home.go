@@ -16,7 +16,7 @@ func home(
 		constant.GorillaHomeTemplate.Execute(
 			w,
 			locator.New(r.Host).Scheme(webConstant.Socket).Path(
-				webConstant.LocationEcho,
+				webConstant.EchoPath,
 			).String(),
 		),
 	)

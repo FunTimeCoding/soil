@@ -2,6 +2,8 @@ package unit_test
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/palette"
 	"net/http"
 	"net/http/httptest"
@@ -11,7 +13,7 @@ import (
 func TestServeEmptyQuery(t *testing.T) {
 	serve := palette.NewServe(testRegistry())
 	w := httptest.NewRecorder()
-	q := httptest.NewRequest(http.MethodGet, "/palette", nil)
+	q := httptest.NewRequest(http.MethodGet, constant.PalettePath, nil)
 	serve(w, q)
 	assert.Integer(t, http.StatusOK, w.Code)
 	assert.StringContains(t, "Dashboard", w.Body.String())
@@ -22,7 +24,11 @@ func TestServeEmptyQuery(t *testing.T) {
 func TestServeWithQuery(t *testing.T) {
 	serve := palette.NewServe(testRegistry())
 	w := httptest.NewRecorder()
-	q := httptest.NewRequest(http.MethodGet, "/palette?q=dash", nil)
+	q := httptest.NewRequest(
+		http.MethodGet,
+		join.Question(constant.PalettePath, "q=dash"),
+		nil,
+	)
 	serve(w, q)
 	assert.Integer(t, http.StatusOK, w.Code)
 	assert.StringContains(t, "<strong>Dash</strong>board", w.Body.String())
@@ -31,7 +37,11 @@ func TestServeWithQuery(t *testing.T) {
 func TestServeNoResults(t *testing.T) {
 	serve := palette.NewServe(testRegistry())
 	w := httptest.NewRecorder()
-	q := httptest.NewRequest(http.MethodGet, "/palette?q=xyz", nil)
+	q := httptest.NewRequest(
+		http.MethodGet,
+		join.Question(constant.PalettePath, "q=xyz"),
+		nil,
+	)
 	serve(w, q)
 	assert.Integer(t, http.StatusOK, w.Code)
 	assert.StringContains(t, "No matches", w.Body.String())
@@ -40,7 +50,11 @@ func TestServeNoResults(t *testing.T) {
 func TestServeAcronymHighlight(t *testing.T) {
 	serve := palette.NewServe(testRegistry())
 	w := httptest.NewRecorder()
-	q := httptest.NewRequest(http.MethodGet, "/palette?q=cp", nil)
+	q := httptest.NewRequest(
+		http.MethodGet,
+		join.Question(constant.PalettePath, "q=cp"),
+		nil,
+	)
 	serve(w, q)
 	assert.Integer(t, http.StatusOK, w.Code)
 	assert.StringContains(t, "<strong>C</strong>reate", w.Body.String())
@@ -50,7 +64,11 @@ func TestServeAcronymHighlight(t *testing.T) {
 func TestServeResultsAreLinks(t *testing.T) {
 	serve := palette.NewServe(testRegistry())
 	w := httptest.NewRecorder()
-	q := httptest.NewRequest(http.MethodGet, "/palette?q=metric", nil)
+	q := httptest.NewRequest(
+		http.MethodGet,
+		join.Question(constant.PalettePath, "q=metric"),
+		nil,
+	)
 	serve(w, q)
 	assert.Integer(t, http.StatusOK, w.Code)
 	assert.StringContains(t, "/metrics", w.Body.String())

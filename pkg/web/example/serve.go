@@ -11,7 +11,7 @@ import (
 func Serve() {
 	m := http.NewServeMux()
 	m.HandleFunc(
-		constant.LocationRoot,
+		constant.RootPath,
 		func(
 			w http.ResponseWriter,
 			e *http.Request,

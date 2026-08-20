@@ -15,7 +15,7 @@ func LoadConfiguration() *Configuration {
 		Enabled:  true,
 		Schedule: environment.Required("MONITORING_SCHEDULE"),
 		Channels: parseList(environment.Required("MONITORING_CHANNELS")),
-		Topics: parseList(environment.Required("MONITORING_TOPICS")),
+		Topics:   parseList(environment.Required("MONITORING_TOPICS")),
 		MessageLimit: strings.MustToInteger(
 			environment.Required("MONITORING_MESSAGE_LIMIT"),
 		),

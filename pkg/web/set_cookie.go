@@ -16,7 +16,7 @@ func SetCookie(
 		Value:    v,
 		HttpOnly: true,
 		Secure:   true,
-		Path:     constant.LocationRoot,
+		Path:     constant.RootPath,
 		Expires:  time.Now().Add(24 * time.Hour),
 	}
 	http.SetCookie(w, result)

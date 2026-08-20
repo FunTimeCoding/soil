@@ -32,7 +32,7 @@ func TestRecoveryPage(t *testing.T) {
 	recorder := httptest.NewRecorder()
 	wrapped.ServeHTTP(
 		recorder,
-		httptest.NewRequest(http.MethodGet, constant.LocationRoot, nil),
+		httptest.NewRequest(http.MethodGet, constant.RootPath, nil),
 	)
 	assert.Integer(t, http.StatusInternalServerError, recorder.Code)
 	body := recorder.Body.String()
@@ -43,7 +43,7 @@ func TestRecoveryPage(t *testing.T) {
 
 func renderBrand(l *layout.Page) string {
 	recorder := httptest.NewRecorder()
-	view.New(l).RenderPage(recorder, "", constant.LocationRoot)
+	view.New(l).RenderPage(recorder, "", constant.RootPath)
 
 	return recorder.Body.String()
 }
@@ -60,7 +60,7 @@ func TestBrandLinksHome(t *testing.T) {
 func TestLiveBrandCarriesConnectionDot(t *testing.T) {
 	body := renderBrand(
 		layout.New(identity.New("test", "test tool", "test")).
-			WithLiveEndpoint("/event"),
+			WithLiveEndpoint(constant.LivePath),
 	)
 	assert.True(
 		t,
@@ -77,7 +77,7 @@ func TestRenderPageWithSummary(t *testing.T) {
 	recoveryView().RenderPageWithSummary(
 		recorder,
 		"Dashboard",
-		constant.LocationRoot,
+		constant.RootPath,
 		[]string{"24 services", "2 drift"},
 		html.H3(gomponents.Text("Fleet")),
 	)
@@ -93,7 +93,7 @@ func TestRecoveryFragment(t *testing.T) {
 	v := recoveryView()
 	wrapped := v.Recovery(memory.New())(http.HandlerFunc(panicServe))
 	recorder := httptest.NewRecorder()
-	request := httptest.NewRequest(http.MethodGet, constant.LocationRoot, nil)
+	request := httptest.NewRequest(http.MethodGet, constant.RootPath, nil)
 	request.Header.Set(constant.ExtendedRequest, "true")
 	wrapped.ServeHTTP(recorder, request)
 	assert.Integer(t, http.StatusInternalServerError, recorder.Code)

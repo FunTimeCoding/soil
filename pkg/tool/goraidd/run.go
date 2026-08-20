@@ -31,7 +31,7 @@ func Run(
 		r,
 	)
 	p := raid_parser.New("localhost:8081", true)
-	u := raidWeb.New(s, o.ElitePath, o.OutputPath, p)
+	u := raidWeb.New(s, o.ElitePath, o.OutputPath, p, authorizationClient(o))
 	lifecycle.New(
 		l,
 		lifecycle.WithWorker(s),

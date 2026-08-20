@@ -11,17 +11,17 @@ var Identity = identity.New(
 )
 
 const (
-	FirewallLog     = "firewall_log"
-	FirewallStates  = "firewall_states"
-	ListAliases     = "list_aliases"
-	ListBlocklists  = "list_blocklists"
-	ListForwards    = "list_forwards"
-	ListHosts       = "list_hosts"
-	ListInterfaces  = "list_interfaces"
-	ListLeases      = "list_leases"
-	ListPools       = "list_pools"
-	ListRules       = "list_rules"
-	ListSourceNat   = "list_source_nat"
+	FirewallLog    = "firewall_log"
+	FirewallStates = "firewall_states"
+	ListAliases    = "list_aliases"
+	ListBlocklists = "list_blocklists"
+	ListForwards   = "list_forwards"
+	ListHosts      = "list_hosts"
+	ListInterfaces = "list_interfaces"
+	ListLeases     = "list_leases"
+	ListPools      = "list_pools"
+	ListRules      = "list_rules"
+	ListSourceNat  = "list_source_nat"
 )
 
 const (

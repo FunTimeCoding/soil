@@ -3,6 +3,7 @@ package web
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
+	web "github.com/funtimecoding/soil/pkg/web/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -18,8 +19,8 @@ func (s *Server) searchPage(
 		content,
 		html.H3(gomponents.Text(constant.SearchTitle)),
 		html.Form(
-			gomponents.Attr("method", "GET"),
-			gomponents.Attr("action", constant.SearchPath),
+			gomponents.Attr(web.FormMethod, http.MethodGet),
+			gomponents.Attr(web.FormAction, web.SearchPath),
 			html.Input(
 				html.Type("search"),
 				html.Name(constant.Query),
@@ -28,7 +29,7 @@ func (s *Server) searchPage(
 				gomponents.Attr("autocomplete", "off"),
 			),
 			html.Button(
-				html.Type("submit"),
+				html.Type(web.FormSubmit),
 				gomponents.Text(constant.SearchTitle),
 			),
 		),
@@ -101,5 +102,10 @@ func (s *Server) searchPage(
 		}
 	}
 
-	s.view.RenderPage(w, constant.SearchTitle, constant.SearchPath, content...)
+	s.view.RenderPage(
+		w,
+		constant.SearchTitle,
+		web.SearchPath,
+		content...,
+	)
 }

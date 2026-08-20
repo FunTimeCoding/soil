@@ -28,6 +28,6 @@ const (
 )
 
 var (
-	SedInvocation = regexp.MustCompile(`(^|[|&;(\s])sed(\s|$)`)
+	SedInvocation  = regexp.MustCompile(`(^|[|&;(\s])sed(\s|$)`)
 	ShortModelName = map[string]string{"Fable 5": "Fable"}
 )

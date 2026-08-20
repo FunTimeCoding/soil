@@ -35,13 +35,13 @@ func New(s *service.Service) *Server {
 		},
 		palette.Command{
 			Label:    constant.SearchTitle,
-			Path:     constant.SearchPath,
+			Path:     web.SearchPath,
 			Category: web.PaletteNavigate,
 		},
 		palette.Command{
 			Label:      "Search memories",
 			Path:       "/palette/memories",
-			Category: web.PaletteSearch,
+			Category:   web.PaletteSearch,
 			SwapTarget: ".palette-body",
 		},
 	)
@@ -53,7 +53,7 @@ func New(s *service.Service) *Server {
 			layout.New(constant.Identity).
 				WithTheme(web.ThemeCortex).
 				WithStyle(constant.InlineStyle).
-				WithCommandPalette("/palette").
+				WithCommandPalette(web.PalettePath).
 				WithItems(
 					navigation_item.New(
 						constant.DashboardPath,
@@ -71,10 +71,7 @@ func New(s *service.Service) *Server {
 						constant.ImpressionsPath,
 						constant.ImpressionsTitle,
 					),
-					navigation_item.New(
-						constant.SearchPath,
-						constant.SearchTitle,
-					),
+					navigation_item.New(web.SearchPath, constant.SearchTitle),
 				),
 		),
 	}

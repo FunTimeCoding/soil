@@ -43,7 +43,7 @@ func Run(
 			o.SecretPath,
 		),
 	)
-	i := certificateWeb.New(s, v)
+	i := certificateWeb.New(s, v, authorizationClient(o))
 	lifecycle.New(
 		g,
 		lifecycle.WithServer(

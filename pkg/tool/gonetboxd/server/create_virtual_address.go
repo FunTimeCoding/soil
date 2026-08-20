@@ -35,6 +35,6 @@ func (s *Server) CreateVirtualAddress(
 
 	return server.CreateVirtualAddress201JSONResponse{
 		Identifier: a.Identifier,
-		Address: a.Address.String(),
+		Address:    a.Address.String(),
 	}, nil
 }

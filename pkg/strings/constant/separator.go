@@ -14,6 +14,7 @@ const (
 	Hash        = "#"
 	Pipe        = "|"
 	Plus        = "+"
+	Question    = "?"
 	Semicolon   = ";"
 	Slash       = "/"
 	Space       = " "

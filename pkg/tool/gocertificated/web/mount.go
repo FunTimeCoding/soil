@@ -1,37 +1,44 @@
 package web
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/palette"
+	"github.com/funtimecoding/soil/pkg/web/route"
 	"net/http"
 )
 
 func (s *Server) Mount(m *http.ServeMux) {
-	m.HandleFunc("GET /palette", palette.NewServe(s.registry))
-	m.HandleFunc("GET /{$}", s.dashboard)
-	m.HandleFunc(fmt.Sprintf("GET %s", constant.AuthoritiesPath), s.authorities)
+	m.HandleFunc(route.Get(webConstant.SignInPath), s.signIn)
+	m.HandleFunc(route.Get(webConstant.CallbackPath), s.callback)
+	m.HandleFunc(route.Get(webConstant.SignOutPath), s.signOut)
 	m.HandleFunc(
-		fmt.Sprintf("GET %s", constant.CertificatesPath),
-		s.certificates,
+		route.Get(webConstant.PalettePath),
+		s.require(palette.NewServe(s.registry)),
+	)
+	m.HandleFunc(route.Get(webConstant.RootPattern), s.require(s.dashboard))
+	m.HandleFunc(route.Get(constant.AuthoritiesPath), s.require(s.authorities))
+	m.HandleFunc(
+		route.Get(constant.CertificatesPath),
+		s.require(s.certificates),
 	)
 	m.HandleFunc(
-		fmt.Sprintf("GET %s", constant.CreateAuthorityPath),
-		s.createAuthority,
+		route.Get(constant.CreateAuthorityPath),
+		s.require(s.createAuthority),
 	)
 	m.HandleFunc(
-		fmt.Sprintf("POST %s", constant.CreateAuthorityPath),
-		s.createAuthoritySubmit,
+		route.Post(constant.CreateAuthorityPath),
+		s.require(s.createAuthoritySubmit),
 	)
 	m.HandleFunc(
-		fmt.Sprintf("GET %s", constant.IssueCertificatePath),
-		s.issueCertificate,
+		route.Get(constant.IssueCertificatePath),
+		s.require(s.issueCertificate),
 	)
 	m.HandleFunc(
-		fmt.Sprintf("POST %s", constant.IssueCertificatePath),
-		s.issueCertificateSubmit,
+		route.Post(constant.IssueCertificatePath),
+		s.require(s.issueCertificateSubmit),
 	)
-	m.HandleFunc(fmt.Sprintf("POST %s", constant.PublishPath), s.publishSubmit)
-	m.HandleFunc(fmt.Sprintf("GET %s", constant.RootPath), s.root)
-	m.HandleFunc("GET /favicon.ico", s.favicon)
+	m.HandleFunc(route.Post(constant.PublishPath), s.require(s.publishSubmit))
+	m.HandleFunc(route.Get(constant.RootPath), s.root)
+	m.HandleFunc(route.Get(webConstant.FaviconPath), s.favicon)
 }

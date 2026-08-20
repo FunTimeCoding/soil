@@ -26,7 +26,7 @@ func New(
 		x,
 		&mcp.StreamableClientTransport{
 			Endpoint: locator.New(web.Localhost).Insecure().Port(port).Path(
-				web.LocationModelContext,
+				web.ModelContextPath,
 			).String(),
 		},
 		nil,

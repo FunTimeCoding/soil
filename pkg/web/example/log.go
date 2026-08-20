@@ -20,7 +20,7 @@ func Log() {
 	)
 	m := http.NewServeMux()
 	m.HandleFunc(
-		constant.LocationRoot,
+		constant.RootPath,
 		func(
 			w http.ResponseWriter,
 			r *http.Request,

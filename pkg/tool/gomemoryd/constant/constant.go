@@ -67,7 +67,6 @@ const (
 	RelationsPath    = "/relations"
 	UntypedFilter    = "untyped"
 	SearchTitle      = "Search"
-	SearchPath       = "/search"
 	Identifier       = "identifier"
 	Query            = "query"
 

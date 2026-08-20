@@ -11,7 +11,10 @@ const (
 
 	OriginAll = "*"
 
-	FormMethod     = "method"
+	FormMethod = "method"
+	FormAction = "action"
+	FormSubmit = "submit"
+
 	ErrorParameter = "error"
 
 	Extended   = "https://unpkg.com/htmx.org@2.0.4"

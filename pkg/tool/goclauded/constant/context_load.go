@@ -15,8 +15,8 @@ const (
 
 	LoadKindMemory  = "memory"
 	LoadKindProfile = "profile"
-	LoadKindMode   = "mode"
-	LoadKindSearch = "search"
+	LoadKindMode    = "mode"
+	LoadKindSearch  = "search"
 
 	TierAlways   = "always"
 	TierRelevant = "relevant"

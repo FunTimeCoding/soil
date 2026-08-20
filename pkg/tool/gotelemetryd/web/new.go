@@ -31,7 +31,7 @@ func New(s *store.Store) *Server {
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(web.ThemeArchive).
-				WithCommandPalette("/palette").
+				WithCommandPalette(web.PalettePath).
 				WithItems(
 					navigation_item.New(
 						constant.HeatmapPath,

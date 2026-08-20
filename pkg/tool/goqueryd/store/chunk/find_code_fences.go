@@ -20,7 +20,7 @@ func findCodeFences(text string) []codeFence {
 				result,
 				codeFence{
 					start: start,
-					end:   match[0] + len(
+					end: match[0] + len(
 						strings.TrimSpace(text[match[0]:match[1]]),
 					),
 				},

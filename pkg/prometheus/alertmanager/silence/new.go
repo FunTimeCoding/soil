@@ -31,15 +31,18 @@ func New(
 
 	return &Silence{
 		MonitorIdentifier: monitor.GoSilence.StringIdentifier(*v.ID),
-		Identifier: *v.ID,
-		State:      *v.Status.State,
-		Match:      join.Comma(match),
-		Start:      openapi.ConvertTime(v.StartsAt),
-		End:        openapi.ConvertTime(v.EndsAt),
-		Author:     *v.CreatedBy,
-		Comment:    *v.Comment,
-		Rule:       rule,
-		Link: locator.New(host).Trail().Fragment("/silences/%s", *v.ID).String(),
+		Identifier:        *v.ID,
+		State:             *v.Status.State,
+		Match:             join.Comma(match),
+		Start:             openapi.ConvertTime(v.StartsAt),
+		End:               openapi.ConvertTime(v.EndsAt),
+		Author:            *v.CreatedBy,
+		Comment:           *v.Comment,
+		Rule:              rule,
+		Link: locator.New(host).Trail().Fragment(
+			"/silences/%s",
+			*v.ID,
+		).String(),
 		Raw: v,
 	}
 }

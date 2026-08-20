@@ -29,7 +29,7 @@ func New(
 	r := prometheus.NewRegistry()
 	m := http.NewServeMux()
 	m.Handle(
-		webConstant.LocationMetrics,
+		webConstant.MetricsPath,
 		promhttp.HandlerFor(r, promhttp.HandlerOpts{Registry: r}),
 	)
 

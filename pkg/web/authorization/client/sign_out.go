@@ -14,13 +14,13 @@ func (c *Client) SignOut(
 		&http.Cookie{
 			Name:   constant.AuthorizationSubjectCookie,
 			MaxAge: -1,
-			Path:   constant.LocationRoot,
+			Path:   constant.RootPath,
 		},
 	)
 	locator := c.endSessionLocator()
 
 	if locator == "" {
-		http.Redirect(w, r, constant.LocationRoot, http.StatusFound)
+		http.Redirect(w, r, constant.RootPath, http.StatusFound)
 
 		return
 	}

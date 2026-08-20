@@ -4,8 +4,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/option"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 )
 
 func Main(
@@ -26,5 +28,16 @@ func Main(
 	o.LogCachePath = "/srv/arcdps-config"
 	o.ElitePath = "/srv/elite-insights"
 	o.OutputPath = "/srv/gw2-report"
+	o.Issuer = environment.Required(webConstant.AuthorizationIssuerEnvironment)
+	o.ClientIdentifier = environment.Required(
+		webConstant.AuthorizationClientIdentifierEnvironment,
+	)
+	o.ClientSecret = environment.Required(
+		webConstant.AuthorizationClientSecretEnvironment,
+	)
+	o.EncryptionSecret = environment.Required(
+		webConstant.AuthorizationEncryptionSecretEnvironment,
+	)
+	o.PublicLocator = environment.Required(webConstant.PublicLocatorEnvironment)
 	Run(o, r)
 }

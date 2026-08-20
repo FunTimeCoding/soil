@@ -11,8 +11,8 @@ var ErrorCDROMCloudInitConflict = errors.New(
 )
 
 var (
-	ErrorNoChanges         = errors.New("no changes specified")
-	ErrorMachineRunning    = errors.New(
+	ErrorNoChanges      = errors.New("no changes specified")
+	ErrorMachineRunning = errors.New(
 		"vm is running - stop it before deleting",
 	)
 	ErrorSetDeleteConflict = errors.New("cannot set and delete the same field")

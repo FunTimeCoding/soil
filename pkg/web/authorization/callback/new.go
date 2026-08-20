@@ -27,7 +27,7 @@ func New(
 		errorCh:    make(chan error, 1),
 	}
 	m.Handle(
-		constant.LocationCallback,
+		constant.CallbackPath,
 		http.HandlerFunc(
 			func(
 				w http.ResponseWriter,

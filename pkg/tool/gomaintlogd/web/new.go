@@ -37,7 +37,7 @@ func New(s *store.Store) *Server {
 			layout.New(constant.Identity).
 				WithTheme(web.ThemeArchive).
 				WithStyle(constant.InlineStyle).
-				WithCommandPalette("/palette").
+				WithCommandPalette(web.PalettePath).
 				WithItems(
 					navigation_item.New(
 						constant.DashboardPath,

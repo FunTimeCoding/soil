@@ -63,7 +63,7 @@ func TestRunServerResponds(t *testing.T) {
 				"",
 				func(m *http.ServeMux) {
 					m.HandleFunc(
-						constant.LocationHealth,
+						constant.HealthPath,
 						func(
 							w http.ResponseWriter,
 							_ *http.Request,
@@ -94,7 +94,7 @@ func TestStopServerShutsDown(t *testing.T) {
 				"",
 				func(m *http.ServeMux) {
 					m.HandleFunc(
-						constant.LocationHealth,
+						constant.HealthPath,
 						func(
 							w http.ResponseWriter,
 							_ *http.Request,
@@ -121,7 +121,7 @@ func TestRunServerMiddleware(t *testing.T) {
 				fmt.Sprintf(":%d", p),
 				func(m *http.ServeMux) {
 					m.HandleFunc(
-						constant.LocationHealth,
+						constant.HealthPath,
 						func(
 							w http.ResponseWriter,
 							_ *http.Request,
@@ -167,7 +167,7 @@ func TestRunMixedOrder(t *testing.T) {
 				func(m *http.ServeMux) {
 					log = append(log, "start:server")
 					m.HandleFunc(
-						constant.LocationHealth,
+						constant.HealthPath,
 						func(
 							w http.ResponseWriter,
 							_ *http.Request,

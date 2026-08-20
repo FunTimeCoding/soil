@@ -15,6 +15,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/store"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/web"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/model_context/mock_recorder"
+	"github.com/funtimecoding/soil/pkg/web/authorization/client"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 	"testing"
 )
@@ -35,11 +37,20 @@ func New(t *testing.T) *Server {
 		),
 	)
 	r := memory.New()
+	authorization := client.New(
+		"https://gate.example.org",
+		"tester",
+		"tester-secret",
+		webConstant.SignInPath,
+		"https://certificate.example.org/callback",
+		client.DeriveKey("tester-encryption-secret"),
+	)
 
 	return &Server{
-		Store:   s,
-		Service: v,
-		Forge:   f,
+		Store:         s,
+		Service:       v,
+		Forge:         f,
+		Authorization: authorization,
 		server: model_context_server.New(
 			t,
 			func(m *http.ServeMux) {
@@ -54,7 +65,7 @@ func New(t *testing.T) *Server {
 					mock_recorder.New(),
 					library.DefaultVersion,
 				).Mount(m)
-				web.New(s, v).Mount(m)
+				web.New(s, v, authorization).Mount(m)
 			},
 		),
 	}

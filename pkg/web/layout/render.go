@@ -57,9 +57,7 @@ func (p *Page) Render() gomponents.Node {
 	brand := p.identity.Name()
 
 	if brand != "" {
-		cell := []gomponents.Node{
-			gomponents.Attr("href", constant.LocationRoot),
-		}
+		cell := []gomponents.Node{gomponents.Attr("href", constant.RootPath)}
 
 		if p.liveEndpoint != "" {
 			cell = append(cell, connectionDot())

@@ -13,6 +13,8 @@ const (
 )
 
 const (
+	PalettePath = "/palette"
+
 	PaletteNavigate = "navigate"
 	PaletteAction   = "action"
 	PaletteLink     = "link"

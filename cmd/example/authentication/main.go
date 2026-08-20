@@ -13,7 +13,7 @@ func main() {
 	a := authenticator.New()
 	m := http.NewServeMux()
 	m.HandleFunc(
-		constant.LocationRoot,
+		constant.RootPath,
 		func(
 			w http.ResponseWriter,
 			e *http.Request,
@@ -32,7 +32,7 @@ func main() {
 		},
 	)
 	m.HandleFunc(
-		constant.LocationStatus,
+		constant.StatusPath,
 		func(
 			w http.ResponseWriter,
 			e *http.Request,
@@ -45,7 +45,7 @@ func main() {
 		},
 	)
 	m.HandleFunc(
-		constant.LocationLogin,
+		constant.LoginPath,
 		func(
 			w http.ResponseWriter,
 			e *http.Request,
@@ -56,7 +56,7 @@ func main() {
 		},
 	)
 	m.HandleFunc(
-		constant.LocationLogout,
+		constant.LogoutPath,
 		func(
 			w http.ResponseWriter,
 			e *http.Request,

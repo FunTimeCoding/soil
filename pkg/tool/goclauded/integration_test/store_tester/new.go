@@ -12,8 +12,8 @@ func New(t *testing.T) *Tester {
 	now := time.Now()
 
 	return &Tester{
-		t: t,
+		t:     t,
 		Store: store.New(lite.NewMemory(), func() time.Time { return now }),
-		now: &now,
+		now:   &now,
 	}
 }

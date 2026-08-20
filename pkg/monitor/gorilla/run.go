@@ -11,9 +11,9 @@ import (
 func Run(address string) {
 	r := router.New()
 	m := http.NewServeMux()
-	m.HandleFunc(constant.LocationMonitor, r.Monitor)
-	m.HandleFunc(constant.LocationEcho, echo)
-	m.HandleFunc(constant.LocationRoot, home)
+	m.HandleFunc(constant.MonitorPath, r.Monitor)
+	m.HandleFunc(constant.EchoPath, echo)
+	m.HandleFunc(constant.RootPath, home)
 	log.Printf("listen on %s\n", address)
 	web.ListenAddress(m, address)
 }

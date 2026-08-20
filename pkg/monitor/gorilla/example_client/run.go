@@ -18,8 +18,8 @@ func Run() {
 	signal.Notify(interrupt, os.Interrupt)
 	u := url.URL{
 		Scheme: constant.Socket,
-		Host: web.AddressHostPort(constant.Localhost, constant.ListenPort),
-		Path: constant.LocationEcho,
+		Host:   web.AddressHostPort(constant.Localhost, constant.ListenPort),
+		Path:   constant.EchoPath,
 	}
 	log.Printf("connect to %s", u.String())
 	l := helper.Dial(u)

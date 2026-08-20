@@ -50,8 +50,8 @@ func New(s *service.Service) *Server {
 			layout.New(constant.Identity).
 				WithTheme(web.ThemeHearth).
 				WithStyle(constant.InlineStyle).
-				WithCommandPalette("/palette").
-				WithLiveEndpoint("/event").
+				WithCommandPalette(web.PalettePath).
+				WithLiveEndpoint(web.LivePath).
 				WithItems(
 					navigation_item.New(
 						constant.DashboardPath,

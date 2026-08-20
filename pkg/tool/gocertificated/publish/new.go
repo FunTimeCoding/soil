@@ -11,11 +11,11 @@ func New(
 	secretPath string,
 ) *Publisher {
 	return &Publisher{
-		forge:             f,
-		project:           project,
-		branch:            branch,
+		forge:              f,
+		project:            project,
+		branch:             branch,
 		authorityDirectory: authorityDirectory,
-		secretAuthority:   secretAuthority,
-		secretPath:        secretPath,
+		secretAuthority:    secretAuthority,
+		secretPath:         secretPath,
 	}
 }

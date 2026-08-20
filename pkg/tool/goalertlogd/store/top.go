@@ -43,8 +43,8 @@ func (s *Store) Top(
 		result = append(
 			result,
 			TopRecord{
-				Name:            r.Name,
-				Count:           r.Count,
+				Name:  r.Name,
+				Count: r.Count,
 				AverageDuration: time.Duration(
 					r.AverageSeconds * float64(time.Second),
 				),

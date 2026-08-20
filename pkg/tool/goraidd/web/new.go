@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/raid_parser"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/store"
+	"github.com/funtimecoding/soil/pkg/web/authorization/client"
 	web "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
@@ -16,6 +17,7 @@ func New(
 	elitePath string,
 	outputPath string,
 	p *raid_parser.Client,
+	authorization *client.Client,
 ) *Server {
 	registry := palette.NewRegistry()
 	registry.Register(
@@ -39,19 +41,25 @@ func New(
 			Path:     constant.PlayersPath,
 			Category: web.PaletteNavigate,
 		},
+		palette.Command{
+			Label:    web.SignOutTitle,
+			Path:     web.SignOutPath,
+			Category: web.PaletteAction,
+		},
 	)
 
 	return &Server{
-		store:      s,
-		elitePath:  elitePath,
-		outputPath: outputPath,
-		parser:     p,
-		registry:   registry,
+		store:         s,
+		elitePath:     elitePath,
+		outputPath:    outputPath,
+		parser:        p,
+		authorization: authorization,
+		registry:      registry,
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(web.ThemeTyria).
 				WithStyle(constant.InlineStyle).
-				WithCommandPalette("/palette").
+				WithCommandPalette(web.PalettePath).
 				WithItems(
 					navigation_item.New(constant.LogsPath, constant.LogsTitle),
 					navigation_item.New(
