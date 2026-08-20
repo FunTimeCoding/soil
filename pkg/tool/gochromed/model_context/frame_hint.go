@@ -3,7 +3,7 @@ package model_context
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/chromium/constant"
-	"strings"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 )
 
 // frameHint lists the cross-origin iframe targets rendered inside the
@@ -28,6 +28,6 @@ func (s *Server) frameHint(identifier string) string {
 
 	return fmt.Sprintf(
 		"\n\nThis tab contains cross-origin iframe targets. Their content renders as bare Iframe nodes above. Snapshot, evaluate, click, and read_body reach inside them when targeted by tab_id or url substring:\n%s",
-		strings.Join(lines, "\n"),
+		join.NewLine(lines),
 	)
 }

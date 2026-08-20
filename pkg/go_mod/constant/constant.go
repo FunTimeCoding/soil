@@ -5,8 +5,10 @@ import (
 	"regexp"
 )
 
-const ModFile = "go.mod"
 const (
+	ModFile = "go.mod"
+	SumFile = "go.sum"
+
 	RuntimeOld    = "runtime_old"
 	RuntimeNewer  = "runtime_newer"
 	PanicOccurred = "panic_occurred"

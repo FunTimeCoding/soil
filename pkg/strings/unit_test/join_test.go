@@ -9,10 +9,12 @@ import (
 func TestJoin(t *testing.T) {
 	s := []string{"a", "b"}
 	assert.String(t, "a:b", join.Colon(s...))
+	assert.String(t, "a&b", join.Ampersand(s))
 	assert.String(t, "a,b", join.Comma(s))
 	assert.String(t, "a, b", join.CommaSpace(s))
 	assert.String(t, "a-b", join.Dash(s))
 	assert.String(t, "a::b", join.DoubleColon(s))
+	assert.String(t, "a  b", join.DoubleSpace(s))
 	assert.String(t, "a=b", join.Equals(s))
 	assert.String(t, "a\nb", join.NewLine(s))
 	assert.String(t, "a|b", join.Pipe(s))
@@ -21,4 +23,6 @@ func TestJoin(t *testing.T) {
 	assert.String(t, "a.b", join.Dot(s))
 	assert.String(t, "a/b", join.Slash(s))
 	assert.String(t, "ab", join.Empty(s...))
+	assert.String(t, "a;b", join.Semicolon(s))
+	assert.String(t, "a; b", join.SemicolonSpace(s))
 }

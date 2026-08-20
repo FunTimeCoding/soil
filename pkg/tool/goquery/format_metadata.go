@@ -2,8 +2,8 @@ package goquery
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"sort"
-	"strings"
 )
 
 func formatMetadata(metadata map[string][]string) string {
@@ -21,11 +21,8 @@ func formatMetadata(metadata map[string][]string) string {
 	var parts []string
 
 	for _, k := range keys {
-		parts = append(
-			parts,
-			fmt.Sprintf("%s=%s", k, strings.Join(metadata[k], ",")),
-		)
+		parts = append(parts, fmt.Sprintf("%s=%s", k, join.Comma(metadata[k])))
 	}
 
-	return strings.Join(parts, "  ")
+	return join.DoubleSpace(parts)
 }

@@ -3,7 +3,7 @@ package common
 import (
 	"encoding/json"
 	"fmt"
-	"strings"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 )
 
 func parseValidationErrors(body []byte) string {
@@ -25,5 +25,5 @@ func parseValidationErrors(body []byte) string {
 		}
 	}
 
-	return strings.Join(parts, "; ")
+	return join.SemicolonSpace(parts)
 }

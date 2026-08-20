@@ -2,6 +2,7 @@ package scan
 
 import (
 	"github.com/funtimecoding/soil/pkg/lint/concern"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"sort"
@@ -40,10 +41,10 @@ func ConstantPlacement(v *virtual_file_system.System) []*concern.Concern {
 				continue
 			}
 
-			directories[strings.Join(segments[:i+1], "/")] = true
+			directories[join.Slash(segments[:i+1])] = true
 
 			if last-i > 1 && !isTestHome(segments[i+1]) {
-				nested[strings.Join(segments[:i+2], "/")] = true
+				nested[join.Slash(segments[:i+2])] = true
 			}
 		}
 	}

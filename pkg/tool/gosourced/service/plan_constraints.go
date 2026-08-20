@@ -2,10 +2,10 @@ package service
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"go/token"
 	"golang.org/x/tools/go/packages"
 	"path/filepath"
-	"strings"
 )
 
 // A mismatch in either direction rewrites visibility silently -
@@ -23,12 +23,12 @@ func planConstraints(
 		lines := fileConstraintLines(entry.file)
 
 		if existing, seen := result[entry.targetFile]; seen {
-			if strings.Join(existing, "\n") != strings.Join(lines, "\n") {
+			if join.NewLine(existing) != join.NewLine(lines) {
 				return nil, fmt.Sprintf(
 					"sources moving to %s carry different build constraints (%q vs %q)",
 					entry.targetFile,
-					strings.Join(existing, " "),
-					strings.Join(lines, " "),
+					join.Space(existing...),
+					join.Space(lines...),
 				)
 			}
 
@@ -51,12 +51,12 @@ func planConstraints(
 
 		targetLines := fileConstraintLines(file)
 
-		if strings.Join(lines, "\n") != strings.Join(targetLines, "\n") {
+		if join.NewLine(lines) != join.NewLine(targetLines) {
 			return nil, fmt.Sprintf(
 				"build constraint mismatch on %s: source %q, target %q - align them or move by hand",
 				name,
-				strings.Join(lines, " "),
-				strings.Join(targetLines, " "),
+				join.Space(lines...),
+				join.Space(targetLines...),
 			)
 		}
 	}

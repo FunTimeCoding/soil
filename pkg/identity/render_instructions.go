@@ -1,6 +1,6 @@
 package identity
 
-import "strings"
+import "github.com/funtimecoding/soil/pkg/strings/join"
 
 func (t *Tool) RenderInstructions(conditions map[string]bool) string {
 	var parts []string
@@ -12,5 +12,5 @@ func (t *Tool) RenderInstructions(conditions map[string]bool) string {
 		}
 	}
 
-	return strings.Join(parts, " ")
+	return join.Space(parts...)
 }

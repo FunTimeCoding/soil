@@ -2,8 +2,9 @@ package web
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/strings/join/key_value"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"strings"
 )
 
 func historyLink(
@@ -13,7 +14,7 @@ func historyLink(
 	var parts []string
 
 	for _, k := range kinds {
-		parts = append(parts, fmt.Sprintf("%s=%s", constant.Kind, k))
+		parts = append(parts, key_value.Equals(constant.Kind, k))
 	}
 
 	if page > 1 {
@@ -24,5 +25,5 @@ func historyLink(
 		return "/history"
 	}
 
-	return fmt.Sprintf("/history?%s", strings.Join(parts, "&"))
+	return fmt.Sprintf("/history?%s", join.Ampersand(parts))
 }

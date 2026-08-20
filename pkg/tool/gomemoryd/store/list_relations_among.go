@@ -3,7 +3,8 @@ package store
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"strings"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 )
 
 func (s *Store) ListRelationsAmong(
@@ -17,11 +18,11 @@ func (s *Store) ListRelationsAmong(
 	var arguments []any
 
 	for _, identifier := range identifiers {
-		placeholders = append(placeholders, "?")
+		placeholders = append(placeholders, constant.Question)
 		arguments = append(arguments, identifier)
 	}
 
-	set := strings.Join(placeholders, ", ")
+	set := join.CommaSpace(placeholders)
 	arguments = append(arguments, arguments...)
 	rows, e := s.database.Query(
 		fmt.Sprintf(

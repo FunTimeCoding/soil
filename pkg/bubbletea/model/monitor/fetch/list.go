@@ -2,7 +2,7 @@ package fetch
 
 import (
 	"github.com/funtimecoding/soil/pkg/monitor/constant"
-	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/split"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"strings"
@@ -16,7 +16,7 @@ func List() []string {
 	}
 
 	if s := environment.Optional(constant.PluginEnvironment); s != "" {
-		if strings.HasPrefix(s, stringsConstant.Plus) {
+		if strings.HasPrefix(s, stringConstant.Plus) {
 			result = append(result, split.Comma(s)...)
 		} else {
 			result = split.Comma(s)

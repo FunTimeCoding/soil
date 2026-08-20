@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/github/constant"
 	"github.com/funtimecoding/soil/pkg/github/run"
-	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"testing"
 )
 
@@ -15,17 +15,17 @@ func TestRunLatest(t *testing.T) {
 		run.Latest(
 			[]*run.Run{
 				{
-					Name:   stringsConstant.UpperAlfa,
+					Name:   stringConstant.UpperAlfa,
 					Status: constant.CompletedStatus,
 					Create: assert.NewDay(0),
 				},
 				{
-					Name:   stringsConstant.UpperBravo,
+					Name:   stringConstant.UpperBravo,
 					Status: constant.CompletedStatus,
 					Create: assert.NewDay(1),
 				},
 				{
-					Name:   stringsConstant.UpperCharlie,
+					Name:   stringConstant.UpperCharlie,
 					Status: constant.CompletedStatus,
 					Create: assert.NewDay(2),
 				},

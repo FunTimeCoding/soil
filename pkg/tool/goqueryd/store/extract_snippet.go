@@ -2,7 +2,7 @@ package store
 
 import (
 	"fmt"
-	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"strings"
 )
@@ -36,11 +36,11 @@ func ExtractSnippet(
 		searchBody = body[start:end]
 
 		if start > 0 {
-			lineOffset = strings.Count(body[:start], stringsConstant.Unix)
+			lineOffset = strings.Count(body[:start], stringConstant.Unix)
 		}
 	}
 
-	lines := strings.Split(searchBody, stringsConstant.Unix)
+	lines := strings.Split(searchBody, stringConstant.Unix)
 	terms := extractQueryTerms(query)
 	bestLine := 0
 	bestScore := -1
@@ -73,7 +73,7 @@ func ExtractSnippet(
 		end = len(lines)
 	}
 
-	snippet := strings.Join(lines[start:end], stringsConstant.Unix)
+	snippet := strings.Join(lines[start:end], stringConstant.Unix)
 
 	if len(snippet) > constant.SnippetMaxLength {
 		snippet = fmt.Sprintf("%s...", snippet[:constant.SnippetMaxLength-3])

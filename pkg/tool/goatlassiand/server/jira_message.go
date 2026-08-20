@@ -3,7 +3,7 @@ package server
 import (
 	"fmt"
 	"github.com/andygrunwald/go-jira"
-	"strings"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 )
 
 func jiraMessage(e *jira.Error) string {
@@ -13,5 +13,5 @@ func jiraMessage(e *jira.Error) string {
 		parts = append(parts, fmt.Sprintf("%s: %s", field, message))
 	}
 
-	return strings.Join(parts, "; ")
+	return join.SemicolonSpace(parts)
 }

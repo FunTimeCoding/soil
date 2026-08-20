@@ -3,9 +3,9 @@ package git
 import (
 	library "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/git/constant"
+	"github.com/funtimecoding/soil/pkg/strings/split"
 	"github.com/funtimecoding/soil/pkg/system/run"
 	"strconv"
-	"strings"
 	"time"
 )
 
@@ -29,7 +29,7 @@ func CommitTimes(directory string) (map[string]time.Time, error) {
 	result := make(map[string]time.Time)
 	var current time.Time
 
-	for _, line := range strings.Split(r.OutputString, "\n") {
+	for _, line := range split.NewLine(r.OutputString) {
 		if line == "" {
 			continue
 		}

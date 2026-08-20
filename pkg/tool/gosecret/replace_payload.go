@@ -65,5 +65,5 @@ func ReplacePayload(
 
 	result = append(result, lines[i:]...)
 
-	return []byte(strings.Join(result, "\n")), nil
+	return []byte(join.NewLine(result)), nil
 }

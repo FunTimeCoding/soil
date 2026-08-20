@@ -2,8 +2,8 @@ package web
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
-	"strings"
 )
 
 func documentsLink(
@@ -28,5 +28,5 @@ func documentsLink(
 		return basePath
 	}
 
-	return fmt.Sprintf("%s?%s", basePath, strings.Join(parts, "&"))
+	return fmt.Sprintf("%s?%s", basePath, join.Ampersand(parts))
 }

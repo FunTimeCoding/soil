@@ -2,7 +2,7 @@ package service
 
 import (
 	"fmt"
-	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
 	"slices"
@@ -124,7 +124,7 @@ func (s *Service) Profile(
 			for _, r := range completions {
 				name := r.Path
 
-				if i := strings.LastIndex(name, stringsConstant.Slash); i >= 0 {
+				if i := strings.LastIndex(name, stringConstant.Slash); i >= 0 {
 					name = name[:i]
 				}
 

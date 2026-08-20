@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	web "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
+	"github.com/funtimecoding/soil/pkg/web/subscription"
 	"net/http"
 )
 
@@ -15,7 +16,7 @@ func (s *Server) event() http.HandlerFunc {
 			f http.Flusher,
 			r *http.Request,
 		) {
-			subs := parseSubscribe(r)
+			subs := subscription.Parse(r)
 
 			if subs.Has(constant.EventSummary) {
 				if items := s.usageSummary(); len(items) > 0 {

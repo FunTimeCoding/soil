@@ -3,8 +3,10 @@ package web
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
+	"github.com/funtimecoding/soil/pkg/web/subscription"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -243,7 +245,13 @@ func (s *Server) sessionDetailPage(
 		w,
 		title,
 		constant.SessionsPath,
-		fmt.Sprintf("subscribe=pulse&session=%s", d.Identifier),
+		join.Empty(
+			subscription.Query(constant.Pulse),
+			"&",
+			constant.EventSession,
+			"=",
+			d.Identifier,
+		),
 		content...,
 	)
 }

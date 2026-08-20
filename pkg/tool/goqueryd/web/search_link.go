@@ -2,9 +2,9 @@ package web
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"net/url"
 	"sort"
-	"strings"
 )
 
 func searchLink(
@@ -40,5 +40,5 @@ func searchLink(
 		)
 	}
 
-	return fmt.Sprintf("/search?%s", strings.Join(parts, "&"))
+	return fmt.Sprintf("/search?%s", join.Ampersand(parts))
 }

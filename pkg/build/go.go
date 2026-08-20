@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/build/option"
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
-	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	stringJoin "github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/system"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
@@ -60,7 +60,7 @@ func Go(o *option.Build) {
 	r.Panic = false
 
 	if !p.Native {
-		r.Environment(constant.NativeEnabled, stringsConstant.BooleanFalse)
+		r.Environment(constant.NativeEnabled, stringConstant.BooleanFalse)
 	}
 
 	r.Environment(constant.System, p.OperatingSystem)

@@ -1,7 +1,10 @@
 package store
 
-import "strings"
+import (
+	"github.com/funtimecoding/soil/pkg/strings/join"
+	"strings"
+)
 
 func placeholders(count int) string {
-	return strings.Join(strings.Split(strings.Repeat("?", count), ""), ", ")
+	return join.CommaSpace(strings.Split(strings.Repeat("?", count), ""))
 }

@@ -3,9 +3,9 @@ package resolve
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/source/build_tag"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"go/token"
 	"golang.org/x/tools/go/packages"
-	"strings"
 )
 
 func LoadPackages(
@@ -22,9 +22,7 @@ func LoadPackages(
 	tags := build_tag.Discover(directory)
 
 	if len(tags) > 0 {
-		c.BuildFlags = []string{
-			fmt.Sprintf("-tags=%s", strings.Join(tags, ",")),
-		}
+		c.BuildFlags = []string{fmt.Sprintf("-tags=%s", join.Comma(tags))}
 	}
 
 	result, e := packages.Load(c, patterns...)

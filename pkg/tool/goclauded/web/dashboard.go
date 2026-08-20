@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/web/subscription"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -15,7 +16,11 @@ func (s *Server) dashboard(
 		w,
 		constant.DashboardTitle,
 		constant.DashboardPath,
-		"subscribe=roster,activity,summary",
+		subscription.Query(
+			constant.Roster,
+			constant.Activity,
+			constant.EventSummary,
+		),
 		s.usageSummary(),
 		html.H3(gomponents.Text("Roster")),
 		html.Div(

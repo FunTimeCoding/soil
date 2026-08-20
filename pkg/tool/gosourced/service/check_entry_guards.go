@@ -2,10 +2,10 @@ package service
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"go/token"
 	"golang.org/x/tools/go/packages"
 	"strconv"
-	"strings"
 )
 
 func checkEntryGuards(
@@ -39,7 +39,7 @@ func checkEntryGuards(
 				return fmt.Sprintf(
 					"%s references package-local symbols: %s",
 					entry.symbol,
-					strings.Join(dependencies, ", "),
+					join.CommaSpace(dependencies),
 				)
 			}
 		}

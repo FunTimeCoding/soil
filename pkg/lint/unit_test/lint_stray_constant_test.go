@@ -4,14 +4,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/constant"
-	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 	"testing"
 )
 
 func TestStrayConstantFlagged(t *testing.T) {
 	l := lint.StrayConstant(
-		stringsConstant.UpperAlfa,
+		stringConstant.UpperAlfa,
 		strings.NewReader("package example\n\nconst Foo = 1\n"),
 	)
 	assertReport(
@@ -35,7 +35,7 @@ func TestStrayConstantFlagged(t *testing.T) {
 
 func TestStrayConstantBlockFlagged(t *testing.T) {
 	l := lint.StrayConstant(
-		stringsConstant.UpperBravo,
+		stringConstant.UpperBravo,
 		strings.NewReader(
 			"package example\n\nconst (\n\tFoo = 1\n\tBar = 2\n)\n",
 		),
@@ -93,7 +93,7 @@ func TestStrayConstantFlaggedInConstantTestFile(t *testing.T) {
 
 func TestStrayConstantExemptByPackage(t *testing.T) {
 	l := lint.StrayConstant(
-		stringsConstant.UpperCharlie,
+		stringConstant.UpperCharlie,
 		strings.NewReader("package constant\n\nconst Foo = 1\n"),
 	)
 	assertReport(t, "Charlie", false, nil, "", l)
@@ -140,7 +140,7 @@ func TestStrayConstantDirectoryMatchesExactly(t *testing.T) {
 
 func TestStrayConstantInsideFunctionNotFlagged(t *testing.T) {
 	l := lint.StrayConstant(
-		stringsConstant.UpperDelta,
+		stringConstant.UpperDelta,
 		strings.NewReader(
 			"package example\n\nfunc Example() {\n\tconst x = 1\n\t_ = x\n}\n",
 		),

@@ -1,0 +1,10 @@
+package join
+
+import (
+	"github.com/funtimecoding/soil/pkg/strings/constant"
+	"strings"
+)
+
+func Semicolon(s []string) string {
+	return strings.Join(s, constant.Semicolon)
+}

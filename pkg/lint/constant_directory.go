@@ -1,6 +1,7 @@
 package lint
 
 import (
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"path/filepath"
 	"strings"
 )
@@ -9,7 +10,10 @@ import (
 // concept files - the package is named after the domain, not
 // constant, so the package-name exemption does not apply.
 func constantDirectory(path string) bool {
-	for _, s := range strings.Split(filepath.ToSlash(filepath.Dir(path)), "/") {
+	for s := range strings.SplitSeq(
+		filepath.ToSlash(filepath.Dir(path)),
+		constant.Slash,
+	) {
 		if s == "constant" {
 			return true
 		}
