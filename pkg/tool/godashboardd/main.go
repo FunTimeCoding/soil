@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/option"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 )
 
 func Main(
@@ -27,15 +28,17 @@ func Main(
 	o.Board = board.Load(a.GetString(argumentConstant.Board))
 	o.PostgresLocator = a.GetString(argumentConstant.Postgres)
 	o.LitePath = a.GetString(argumentConstant.Lite)
-	o.Issuer = environment.Optional(constant.IssuerEnvironment)
-	o.ClientIdentifier = environment.Optional(
-		constant.ClientIdentifierEnvironment,
+	o.Issuer = environment.Required(webConstant.AuthorizationIssuerEnvironment)
+	o.ClientIdentifier = environment.Required(
+		webConstant.AuthorizationClientIdentifierEnvironment,
 	)
-	o.ClientSecret = environment.Optional(constant.ClientSecretEnvironment)
-	o.EncryptionSecret = environment.Optional(
-		constant.EncryptionSecretEnvironment,
+	o.ClientSecret = environment.Required(
+		webConstant.AuthorizationClientSecretEnvironment,
 	)
-	o.PublicLocator = environment.Optional(constant.PublicLocatorEnvironment)
+	o.EncryptionSecret = environment.Required(
+		webConstant.AuthorizationEncryptionSecretEnvironment,
+	)
+	o.PublicLocator = environment.Required(webConstant.PublicLocatorEnvironment)
 	o.Version = version
 	Run(o, r)
 }

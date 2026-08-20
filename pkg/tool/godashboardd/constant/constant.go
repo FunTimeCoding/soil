@@ -16,17 +16,6 @@ const (
 	BoardUsage = "Board definition file path"
 	BoardFile  = "godashboardd.yaml"
 
-	SignInPath   = "/sign-in"
-	CallbackPath = "/callback"
-	SignOutPath  = "/sign-out"
-	SignOutTitle = "Sign out"
-
-	IssuerEnvironment           = "AUTHORIZATION_ISSUER"
-	ClientIdentifierEnvironment = "AUTHORIZATION_CLIENT_IDENTIFIER"
-	ClientSecretEnvironment     = "AUTHORIZATION_CLIENT_SECRET"
-	EncryptionSecretEnvironment = "AUTHORIZATION_ENCRYPTION_SECRET"
-	PublicLocatorEnvironment    = "PUBLIC_LOCATOR"
-
 	PendingValue = "–"
 
 	RefreshInterval = 30 * time.Second

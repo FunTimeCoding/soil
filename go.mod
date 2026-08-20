@@ -1,6 +1,6 @@
 module github.com/funtimecoding/soil
 
-go 1.26.6
+go 1.26.7
 
 require (
 	charm.land/bubbles/v2 v2.1.1
@@ -15,7 +15,7 @@ require (
 	github.com/amikos-tech/pure-tokenizers v0.1.5
 	github.com/andybrewer/mack v0.0.0-20251024001139-afd410b36447
 	github.com/andygrunwald/go-jira v1.17.0
-	github.com/anthropics/anthropic-sdk-go v1.65.0
+	github.com/anthropics/anthropic-sdk-go v1.66.0
 	github.com/apenella/go-ansible/v2 v2.4.1
 	github.com/bmatcuk/doublestar/v4 v4.10.0
 	github.com/bndr/gojenkins v1.2.0
@@ -70,7 +70,7 @@ require (
 	github.com/nwaples/rardecode/v2 v2.3.0
 	github.com/oapi-codegen/runtime v1.7.0
 	github.com/olekukonko/tablewriter v1.1.4
-	github.com/ollama/ollama v0.32.14
+	github.com/ollama/ollama v0.32.15
 	github.com/openai/openai-go/v3 v3.52.0
 	github.com/openvex/go-vex v0.2.8
 	github.com/opsgenie/opsgenie-go-sdk-v2 v1.2.23

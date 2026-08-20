@@ -6,6 +6,8 @@ const (
 	PortUsage       = "Listen port"
 	PortEnvironment = "PORT"
 	BindUsage       = "Listen bind address"
+
+	PublicLocatorEnvironment = "PUBLIC_LOCATOR"
 )
 
 const (

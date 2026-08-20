@@ -2,16 +2,12 @@ package godashboardd
 
 import (
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/tool/godashboardd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/option"
 	"github.com/funtimecoding/soil/pkg/web/authorization/client"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 )
 
 func authorizationClient(o *option.Dashboard) *client.Client {
-	if o.Issuer == "" {
-		return nil
-	}
-
 	return client.New(
 		o.Issuer,
 		o.ClientIdentifier,

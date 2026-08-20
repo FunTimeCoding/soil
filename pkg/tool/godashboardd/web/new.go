@@ -34,8 +34,8 @@ func New(
 			Category: web.PaletteNavigate,
 		},
 		palette.Command{
-			Label:    constant.SignOutTitle,
-			Path:     constant.SignOutPath,
+			Label:    web.SignOutTitle,
+			Path:     web.SignOutPath,
 			Category: web.PaletteAction,
 		},
 	)
