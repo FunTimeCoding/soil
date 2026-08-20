@@ -79,6 +79,7 @@
   | `w.Header().Set(...); json.NewEncoder(w).Encode(v)` | `web.EncodeNotation(w, v)` |
   | `json.NewEncoder(w).Encode(v)` (header set separately) | `web.Encode(w, v)` |
   | `w.Header().Set(constant.ContentType, constant.Object)` | `web.ObjectHeader(w)` |
+  | `m.HandleFunc("GET /x", h)` / `fmt.Sprintf("GET %s", path)` | `m.HandleFunc(route.Get(path...), h)` (`pkg/web/route`, variadic parts, `route.Post` for POST) |
   | `mcp.NewToolResultError(fmt.Sprintf(...))` | `response.Fail(...)` |
   | `mcp.NewToolResultText(notation.MarshalIndent(v))` | `response.SuccessAny(v)` |
   | `mcp.NewToolResultText("message")` | `response.Success("message")` |
