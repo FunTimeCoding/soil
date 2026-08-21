@@ -1990,6 +1990,9 @@ components:
         tenant:
           type: string
           description: Tenant name to assign (must already exist).
+        status:
+          type: string
+          description: Status (active, offline, planned, staged, failed, inventory, decommissioning).
         serial:
           type: string
           description: Serial number.

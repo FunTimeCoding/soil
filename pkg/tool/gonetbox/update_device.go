@@ -11,6 +11,7 @@ func updateDevice(c *client.Client) *cobra.Command {
 	var location string
 	var platform string
 	var tenant string
+	var status string
 	var serial string
 	var description string
 	result := &cobra.Command{
@@ -33,6 +34,10 @@ func updateDevice(c *client.Client) *cobra.Command {
 
 			if tenant != "" {
 				body.Tenant = &tenant
+			}
+
+			if status != "" {
+				body.Status = &status
 			}
 
 			if serial != "" {
@@ -63,6 +68,12 @@ func updateDevice(c *client.Client) *cobra.Command {
 		"tenant",
 		"",
 		"tenant name to assign (must already exist)",
+	)
+	result.Flags().StringVar(
+		&status,
+		"status",
+		"",
+		"status (active, offline, planned, staged, failed, inventory, decommissioning)",
 	)
 	result.Flags().StringVar(&serial, "serial", "", "serial number")
 	result.Flags().StringVar(

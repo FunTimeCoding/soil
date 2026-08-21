@@ -359,6 +359,9 @@ type UpdateDeviceRequest struct {
 	// Serial Serial number.
 	Serial *string `json:"serial,omitempty"`
 
+	// Status Status (active, offline, planned, staged, failed, inventory, decommissioning).
+	Status *string `json:"status,omitempty"`
+
 	// Tenant Tenant name to assign (must already exist).
 	Tenant *string `json:"tenant,omitempty"`
 }
