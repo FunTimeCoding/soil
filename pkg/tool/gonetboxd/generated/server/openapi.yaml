@@ -1987,6 +1987,9 @@ components:
         platform:
           type: string
           description: Platform name to assign (must already exist).
+        tenant:
+          type: string
+          description: Tenant name to assign (must already exist).
         serial:
           type: string
           description: Serial number.
@@ -2005,6 +2008,9 @@ components:
         platform:
           type: string
           description: Platform name to assign (must already exist).
+        tenant:
+          type: string
+          description: Tenant name to assign (must already exist).
         cores:
           type: number
           description: Virtual CPU count.

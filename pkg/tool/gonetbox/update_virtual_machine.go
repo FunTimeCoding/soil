@@ -9,6 +9,7 @@ import (
 
 func updateVirtualMachine(c *client.Client) *cobra.Command {
 	var platform string
+	var tenant string
 	var cores float32
 	var memory int
 	var status string
@@ -24,6 +25,10 @@ func updateVirtualMachine(c *client.Client) *cobra.Command {
 
 			if platform != "" {
 				body.Platform = &platform
+			}
+
+			if tenant != "" {
+				body.Tenant = &tenant
 			}
 
 			if cores > 0 {
@@ -46,6 +51,12 @@ func updateVirtualMachine(c *client.Client) *cobra.Command {
 		"platform",
 		"",
 		"platform name to assign (must already exist)",
+	)
+	result.Flags().StringVar(
+		&tenant,
+		"tenant",
+		"",
+		"tenant name to assign (must already exist)",
 	)
 	result.Flags().Float32Var(&cores, "cores", 0, "virtual CPU count")
 	result.Flags().IntVar(&memory, "memory", 0, "memory in megabytes")

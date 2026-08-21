@@ -29,6 +29,14 @@ func (s *Server) UpdateVirtualMachine(
 		}
 	}
 
+	if r.Body.Tenant != nil {
+		if _, e := s.client.SetVirtualMachineTenant(r.Name, *r.Body.Tenant); e != nil {
+			return server.UpdateVirtualMachine500JSONResponse(
+				*s.captureDetail(e),
+			), nil
+		}
+	}
+
 	if r.Body.Cores != nil {
 		if _, e := s.client.SetVirtualMachineCores(
 			r.Name,

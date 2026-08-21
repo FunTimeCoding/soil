@@ -358,6 +358,9 @@ type UpdateDeviceRequest struct {
 
 	// Serial Serial number.
 	Serial *string `json:"serial,omitempty"`
+
+	// Tenant Tenant name to assign (must already exist).
+	Tenant *string `json:"tenant,omitempty"`
 }
 
 // UpdateJournalEntryRequest defines model for UpdateJournalEntryRequest.
@@ -385,6 +388,9 @@ type UpdateVirtualMachineRequest struct {
 
 	// Status Status (active, offline, planned, staged, failed, decommissioning).
 	Status *string `json:"status,omitempty"`
+
+	// Tenant Tenant name to assign (must already exist).
+	Tenant *string `json:"tenant,omitempty"`
 }
 
 // VirtualDisk defines model for VirtualDisk.
