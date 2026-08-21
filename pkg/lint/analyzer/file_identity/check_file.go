@@ -96,7 +96,7 @@ func checkFile(
 		}
 	}
 
-	stem := strings.TrimSuffix(name, constant.GoExtension)
+	stem := trimPlatformSuffix(strings.TrimSuffix(name, constant.GoExtension))
 	expected := camel.ToSnake(sole.name)
 
 	if stem != expected {

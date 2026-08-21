@@ -3,7 +3,6 @@ package run
 import (
 	"os"
 	"os/exec"
-	"syscall"
 )
 
 func (r *Run) build(s ...string) *exec.Cmd {
@@ -22,7 +21,7 @@ func (r *Run) build(s ...string) *exec.Cmd {
 	}
 
 	if r.processGroup {
-		c.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
+		setProcessGroup(c)
 	}
 
 	if r.stdout != nil {
