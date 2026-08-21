@@ -6,5 +6,9 @@ type Cable struct {
 	Identifier  int32
 	Name        string
 	Description string
+	Status      string
+	SideA       string
+	SideB       string
+	Link        string
 	Raw         *netbox.Cable
 }

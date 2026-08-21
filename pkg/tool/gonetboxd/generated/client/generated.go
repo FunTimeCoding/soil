@@ -32,6 +32,16 @@ type AddressRange struct {
 	Status     *string `json:"status,omitempty"`
 }
 
+// Cable defines model for Cable.
+type Cable struct {
+	Identifier int32   `json:"identifier"`
+	Link       *string `json:"link,omitempty"`
+	Name       string  `json:"name"`
+	SideA      *string `json:"sideA,omitempty"`
+	SideB      *string `json:"sideB,omitempty"`
+	Status     *string `json:"status,omitempty"`
+}
+
 // Cluster defines model for Cluster.
 type Cluster struct {
 	Identifier int32   `json:"identifier"`
@@ -71,6 +81,21 @@ type CreateAddressRequest struct {
 
 	// Status Address status (active, dhcp, reserved). Defaults to active.
 	Status *string `json:"status,omitempty"`
+}
+
+// CreateCableRequest defines model for CreateCableRequest.
+type CreateCableRequest struct {
+	// DeviceA Device name on side A.
+	DeviceA string `json:"deviceA"`
+
+	// DeviceB Device name on side B.
+	DeviceB string `json:"deviceB"`
+
+	// InterfaceA Interface name on side A.
+	InterfaceA string `json:"interfaceA"`
+
+	// InterfaceB Interface name on side B.
+	InterfaceB string `json:"interfaceB"`
 }
 
 // CreateClusterRequest defines model for CreateClusterRequest.
@@ -455,6 +480,9 @@ type ListVirtualJournalEntriesParams struct {
 // CreateAddressRangeJSONRequestBody defines body for CreateAddressRange for application/json ContentType.
 type CreateAddressRangeJSONRequestBody = CreateAddressRangeRequest
 
+// CreateCableJSONRequestBody defines body for CreateCable for application/json ContentType.
+type CreateCableJSONRequestBody = CreateCableRequest
+
 // CreateClusterTypeJSONRequestBody defines body for CreateClusterType for application/json ContentType.
 type CreateClusterTypeJSONRequestBody = CreateNameRequest
 
@@ -632,6 +660,17 @@ type ClientInterface interface {
 
 	// DeleteAddress performs a DELETE /api/v1/addresses/{identifier} (the `DeleteAddress` operationId) request.
 	DeleteAddress(ctx context.Context, identifier int32, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ListCables performs a GET /api/v1/cables (the `ListCables` operationId) request.
+	ListCables(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateCableWithBody performs a POST /api/v1/cables (the `CreateCable` operationId) request,
+	// with any type of body and a specified content type.
+	CreateCableWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateCable performs a POST /api/v1/cables (the `CreateCable` operationId) request.
+	// Takes a body of the `application/json` content type.
+	CreateCable(ctx context.Context, body CreateCableJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// ListClusterTypes performs a GET /api/v1/cluster-types (the `ListClusterTypes` operationId) request.
 	ListClusterTypes(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -1026,6 +1065,47 @@ func (c *Client) CreateAddressRange(ctx context.Context, body CreateAddressRange
 // DeleteAddress performs a DELETE /api/v1/addresses/{identifier} (the `DeleteAddress` operationId) request.
 func (c *Client) DeleteAddress(ctx context.Context, identifier int32, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewDeleteAddressRequest(c.Server, identifier)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// ListCables performs a GET /api/v1/cables (the `ListCables` operationId) request.
+func (c *Client) ListCables(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListCablesRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// CreateCableWithBody performs a POST /api/v1/cables (the `CreateCable` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) CreateCableWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateCableRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// CreateCable performs a POST /api/v1/cables (the `CreateCable` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) CreateCable(ctx context.Context, body CreateCableJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateCableRequest(c.Server, body)
 	if err != nil {
 		return nil, err
 	}
@@ -2441,6 +2521,73 @@ func NewDeleteAddressRequest(server string, identifier int32) (*http.Request, er
 	if err != nil {
 		return nil, err
 	}
+
+	return req, nil
+}
+
+// NewListCablesRequest constructs an http.Request for the ListCables method
+func NewListCablesRequest(server string) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/cables")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewCreateCableRequest calls the generic CreateCable builder with application/json body
+func NewCreateCableRequest(server string, body CreateCableJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreateCableRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewCreateCableRequestWithBody constructs an http.Request for the CreateCable method, with any body, and a specified content type
+func NewCreateCableRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/cables")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
 
 	return req, nil
 }
@@ -5073,6 +5220,21 @@ type ClientWithResponsesInterface interface {
 	// Returns a wrapper object for the known response body format(s).
 	DeleteAddressWithResponse(ctx context.Context, identifier int32, reqEditors ...RequestEditorFn) (*DeleteAddressResponse, error)
 
+	// ListCablesWithResponse performs a GET /api/v1/cables (the `ListCables` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	ListCablesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListCablesResponse, error)
+
+	// CreateCableWithBodyWithResponse performs a POST /api/v1/cables (the `CreateCable` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	CreateCableWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateCableResponse, error)
+
+	// CreateCableWithResponse performs a POST /api/v1/cables (the `CreateCable` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	CreateCableWithResponse(ctx context.Context, body CreateCableJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateCableResponse, error)
+
 	// ListClusterTypesWithResponse performs a GET /api/v1/cluster-types (the `ListClusterTypes` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
@@ -5685,6 +5847,102 @@ func (r DeleteAddressResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r DeleteAddressResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type ListCablesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *[]*Cable
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r ListCablesResponse) GetJSON200() *[]*Cable {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r ListCablesResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r ListCablesResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r ListCablesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListCablesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ListCablesResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type CreateCableResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON201 the response for an HTTP 201 `application/json` response
+	JSON201 *Cable
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON201 returns the response for an HTTP 201 `application/json` response
+func (r CreateCableResponse) GetJSON201() *Cable {
+	return r.JSON201
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r CreateCableResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r CreateCableResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r CreateCableResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CreateCableResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r CreateCableResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -8889,6 +9147,39 @@ func (c *ClientWithResponses) DeleteAddressWithResponse(ctx context.Context, ide
 	return ParseDeleteAddressResponse(rsp)
 }
 
+// ListCablesWithResponse performs a GET /api/v1/cables (the `ListCables` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) ListCablesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListCablesResponse, error) {
+	rsp, err := c.ListCables(ctx, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListCablesResponse(rsp)
+}
+
+// CreateCableWithBodyWithResponse performs a POST /api/v1/cables (the `CreateCable` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) CreateCableWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateCableResponse, error) {
+	rsp, err := c.CreateCableWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateCableResponse(rsp)
+}
+
+// CreateCableWithResponse performs a POST /api/v1/cables (the `CreateCable` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) CreateCableWithResponse(ctx context.Context, body CreateCableJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateCableResponse, error) {
+	rsp, err := c.CreateCable(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateCableResponse(rsp)
+}
+
 // ListClusterTypesWithResponse performs a GET /api/v1/cluster-types (the `ListClusterTypes` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -10027,6 +10318,72 @@ func ParseDeleteAddressResponse(rsp *http.Response) (*DeleteAddressResponse, err
 	switch {
 	case rsp.StatusCode == 204:
 		break // No content-type
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListCablesResponse parses an HTTP response from a ListCablesWithResponse call
+func ParseListCablesResponse(rsp *http.Response) (*ListCablesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListCablesResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []*Cable
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseCreateCableResponse parses an HTTP response from a CreateCableWithResponse call
+func ParseCreateCableResponse(rsp *http.Response) (*CreateCableResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CreateCableResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest Cable
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse

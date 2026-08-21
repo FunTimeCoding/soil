@@ -1,12 +1,25 @@
 package cable
 
-import "github.com/netbox-community/go-netbox/v4"
+import (
+	"github.com/funtimecoding/soil/pkg/netbox/helper"
+	"github.com/netbox-community/go-netbox/v4"
+)
 
-func New(c *netbox.Cable) *Cable {
+func New(v *netbox.Cable) *Cable {
+	var status string
+
+	if v.Status != nil {
+		status = string(v.Status.GetValue())
+	}
+
 	return &Cable{
-		Identifier:  c.GetId(),
-		Name:        c.GetDisplay(),
-		Description: c.GetDescription(),
-		Raw:         c,
+		Identifier:  v.GetId(),
+		Name:        v.GetDisplay(),
+		Description: v.GetDescription(),
+		Status:      status,
+		SideA:       terminationLabel(v.GetATerminations()),
+		SideB:       terminationLabel(v.GetBTerminations()),
+		Link:        helper.ToWebLink(v.GetUrl()),
+		Raw:         v,
 	}
 }

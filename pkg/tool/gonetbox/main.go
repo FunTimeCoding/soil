@@ -94,5 +94,7 @@ func Main(
 	o.AddCommand(createVirtualTunnelTermination(c))
 	o.AddCommand(listPrefixes(c))
 	o.AddCommand(createPrefix(c))
+	o.AddCommand(listCables(c))
+	o.AddCommand(createCable(c))
 	errors.PanicOnError(o.Execute())
 }
