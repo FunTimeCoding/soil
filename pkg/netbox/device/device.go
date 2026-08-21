@@ -9,6 +9,7 @@ type Device struct {
 	Type           string
 	Site           string
 	Tenant         string
+	Status         string
 	Comment        string
 	Serial         string
 	PrimaryAddress string

@@ -16,6 +16,10 @@ func VirtualMachine(m *virtual_machine.Machine) *server.VirtualMachine {
 		result.Site = new(m.Raw.Site.Get().GetName())
 	}
 
+	if m.Status != "" {
+		result.Status = &m.Status
+	}
+
 	if m.PrimaryAddress != "" {
 		result.PrimaryAddress = &m.PrimaryAddress
 	}

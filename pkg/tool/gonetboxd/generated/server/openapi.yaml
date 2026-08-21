@@ -1709,6 +1709,8 @@ components:
           type: string
         tenant:
           type: string
+        status:
+          type: string
         serial:
           type: string
         primaryAddress:
@@ -1959,6 +1961,8 @@ components:
         cluster:
           type: string
         site:
+          type: string
+        status:
           type: string
         primaryAddress:
           type: string

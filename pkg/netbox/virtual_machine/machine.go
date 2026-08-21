@@ -7,6 +7,7 @@ type Machine struct {
 	Name           string
 	Cluster        string
 	Site           string
+	Status         string
 	PrimaryAddress string
 	Tags           []string
 	Raw            *netbox.VirtualMachineWithConfigContext

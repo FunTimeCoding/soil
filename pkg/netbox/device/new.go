@@ -37,6 +37,8 @@ func New(v *netbox.DeviceWithConfigContext) *Device {
 		comment = v.GetComments()
 	}
 
+	status := v.GetStatus()
+
 	return &Device{
 		Identifier:     v.GetId(),
 		Name:           name,
@@ -44,6 +46,7 @@ func New(v *netbox.DeviceWithConfigContext) *Device {
 		Type:           v.DeviceType.GetDisplay(),
 		Site:           v.Site.GetName(),
 		Tenant:         tenant,
+		Status:         string(status.GetValue()),
 		Serial:         v.GetSerial(),
 		Comment:        comment,
 		PrimaryAddress: address,

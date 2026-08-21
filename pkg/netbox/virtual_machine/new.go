@@ -24,11 +24,14 @@ func New(v *netbox.VirtualMachineWithConfigContext) *Machine {
 		address = v.PrimaryIp4.Get().GetDisplay()
 	}
 
+	status := v.GetStatus()
+
 	return &Machine{
 		Identifier:     v.GetId(),
 		Name:           v.GetName(),
 		Cluster:        cluster,
 		Site:           site,
+		Status:         string(status.GetValue()),
 		PrimaryAddress: address,
 		Tags:           tag.Names(v.Tags),
 		Raw:            v,

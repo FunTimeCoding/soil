@@ -24,6 +24,10 @@ func Device(d *device.Device) *server.Device {
 		result.Tenant = &d.Tenant
 	}
 
+	if d.Status != "" {
+		result.Status = &d.Status
+	}
+
 	if d.Serial != "" {
 		result.Serial = &d.Serial
 	}

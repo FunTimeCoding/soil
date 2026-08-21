@@ -215,6 +215,7 @@ type Device struct {
 	Role           *string   `json:"role,omitempty"`
 	Serial         *string   `json:"serial,omitempty"`
 	Site           *string   `json:"site,omitempty"`
+	Status         *string   `json:"status,omitempty"`
 	Tags           *[]string `json:"tags,omitempty"`
 	Tenant         *string   `json:"tenant,omitempty"`
 	Type           *string   `json:"type,omitempty"`
@@ -417,6 +418,7 @@ type VirtualMachine struct {
 	Name           string    `json:"name"`
 	PrimaryAddress *string   `json:"primaryAddress,omitempty"`
 	Site           *string   `json:"site,omitempty"`
+	Status         *string   `json:"status,omitempty"`
 	Tags           *[]string `json:"tags,omitempty"`
 }
 
