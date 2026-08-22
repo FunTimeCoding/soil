@@ -19,7 +19,7 @@ func (c *Client) Thread(p *model.Post) ([]*post.Post, error) {
 	)
 
 	if e != nil {
-		return nil, e
+		return nil, wrapError(e)
 	}
 
 	var posts []*model.Post

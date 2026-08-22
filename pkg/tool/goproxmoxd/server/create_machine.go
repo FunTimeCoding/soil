@@ -2,8 +2,7 @@ package server
 
 import (
 	"context"
-	"errors"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 )
 
@@ -27,7 +26,7 @@ func (s *Server) CreateMachine(
 	identifier, e := s.service.CreateMachine(c, m)
 
 	if e != nil {
-		if errors.Is(e, constant.ErrorCDROMCloudInitConflict) {
+		if validation.Is(e) {
 			return server.CreateMachine400JSONResponse(*clientError(e)), nil
 		}
 

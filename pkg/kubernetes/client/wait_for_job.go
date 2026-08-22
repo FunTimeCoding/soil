@@ -2,19 +2,21 @@ package client
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/job"
+	"github.com/funtimecoding/soil/pkg/errors/timeout"
 	"time"
 )
 
 func (c *Client) WaitForJob(
 	namespace string,
 	name string,
-	timeout time.Duration,
+	limit time.Duration,
 ) error {
 	start := time.Now()
 
 	for {
-		if timeout > 0 && time.Since(start) > timeout {
-			return fmt.Errorf("job timeout: %s", name)
+		if limit > 0 && time.Since(start) > limit {
+			return timeout.Format("job timeout: %s", name)
 		}
 
 		j := c.Job(namespace, name)
@@ -30,7 +32,10 @@ func (c *Client) WaitForJob(
 		}
 
 		if j.Raw.Status.Failed > 0 {
-			return fmt.Errorf("job fail: %s", name)
+			failure := job.New(name, "kubernetes", j.FailureCause())
+			failure.Detail = map[string]any{"namespace": namespace}
+
+			return failure
 		}
 
 		fmt.Printf("job running: %s\n", name)

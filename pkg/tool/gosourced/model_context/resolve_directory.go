@@ -3,6 +3,8 @@ package model_context
 import (
 	"context"
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/not_selected"
 	"github.com/mark3labs/mcp-go/server"
 )
 
@@ -16,13 +18,15 @@ func (s *Server) resolveDirectory(x context.Context) (string, error) {
 	name, okay := s.service.ActiveModule(session.SessionID())
 
 	if !okay {
-		return "", fmt.Errorf("no active module - call use_module first")
+		return "", not_selected.Format(
+			"no active module - call use_module first",
+		)
 	}
 
 	m, okay := s.service.Module(name)
 
 	if !okay {
-		return "", fmt.Errorf("unknown module: %s", name)
+		return "", not_found.New("module", name)
 	}
 
 	return m.Directory, nil

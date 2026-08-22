@@ -1,6 +1,6 @@
 package mock_client
 
-import "fmt"
+import "github.com/funtimecoding/soil/pkg/errors/not_found"
 
 func (c *Client) AddComment(
 	pageIdentifier string,
@@ -9,7 +9,7 @@ func (c *Client) AddComment(
 	e, okay := c.pages[pageIdentifier]
 
 	if !okay || e.deleted {
-		return fmt.Errorf("page not found: %s", pageIdentifier)
+		return not_found.New("page", pageIdentifier)
 	}
 
 	return nil

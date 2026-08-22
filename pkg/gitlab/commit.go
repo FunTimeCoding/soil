@@ -29,5 +29,5 @@ func (c *Client) Commit(
 		},
 	)
 
-	return result, e
+	return result, wrapError(e)
 }

@@ -28,7 +28,7 @@ func (c *Client) LatestPosts(
 	)
 
 	if e != nil {
-		return nil, e
+		return nil, wrapError(e)
 	}
 
 	result := post.NewSlice(post.FromList(page, true))

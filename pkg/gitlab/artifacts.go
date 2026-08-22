@@ -8,5 +8,5 @@ func (c *Client) Artifacts(
 ) (*bytes.Reader, error) {
 	result, _, e := c.client.Jobs.GetJobArtifacts(project, job)
 
-	return result, e
+	return result, wrapError(e)
 }

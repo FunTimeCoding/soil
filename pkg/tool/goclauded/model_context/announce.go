@@ -2,9 +2,9 @@ package model_context
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	library "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
@@ -42,7 +42,7 @@ func (s *Server) announce(
 
 	if cs := server.ClientSessionFromContext(x); cs != nil {
 		if f := s.service.BindModelContextSession(name, cs.SessionID()); f != nil {
-			if errors.Is(f, constant.ErrorCallsignNotFound) {
+			if not_found.Is(f) {
 				return response.Fail(f.Error())
 			}
 
@@ -62,7 +62,7 @@ func (s *Server) announce(
 		topic,
 		join.NewLine(files),
 	); f != nil {
-		if errors.Is(f, constant.ErrorCallsignNotFound) {
+		if not_found.Is(f) {
 			return response.Fail(f.Error())
 		}
 

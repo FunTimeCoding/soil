@@ -1,9 +1,8 @@
 package jira
 
 import (
-	"fmt"
 	"github.com/andygrunwald/go-jira"
-	"github.com/funtimecoding/soil/pkg/atlassian/constant"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 )
 
 func (c *Client) BoardByName(name string) (*jira.Board, error) {
@@ -19,9 +18,5 @@ func (c *Client) BoardByName(name string) (*jira.Board, error) {
 		}
 	}
 
-	return nil, fmt.Errorf(
-		"board not found: %s: %w",
-		name,
-		constant.ErrorNotFound,
-	)
+	return nil, not_found.New("board", name)
 }

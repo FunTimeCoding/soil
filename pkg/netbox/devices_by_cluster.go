@@ -1,7 +1,8 @@
 package netbox
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/ambiguous"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/netbox/device"
 )
 
@@ -12,8 +13,12 @@ func (c *Client) DevicesByCluster(s string) ([]*device.Device, error) {
 		return nil, e
 	}
 
-	if len(clusters) != 1 {
-		return nil, fmt.Errorf(
+	if len(clusters) == 0 {
+		return nil, not_found.New("cluster", s)
+	}
+
+	if len(clusters) > 1 {
+		return nil, ambiguous.Format(
 			"expected 1 cluster for %s, got %d",
 			s,
 			len(clusters),

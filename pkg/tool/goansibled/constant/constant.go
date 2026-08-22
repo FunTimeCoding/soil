@@ -24,7 +24,4 @@ const (
 	Identifier  = "id"
 
 	AnsiblePathEnvironment = "ANSIBLE_PATH"
-
-	RecentRunsFailed = "failed to list recent runs"
-	RunLookupFailed  = "failed to look up run"
 )

@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/response"
 )
 
@@ -24,7 +25,7 @@ func (s *Service) LogsAll(
 	}
 
 	if len(pods) == 0 {
-		return nil, fmt.Errorf(
+		return nil, not_found.Format(
 			"no pods found for %s in %s",
 			q.Name,
 			q.Namespace,

@@ -1,9 +1,8 @@
 package confluence
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/space"
-	"github.com/funtimecoding/soil/pkg/atlassian/constant"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 )
 
 func (c *Client) SpaceByName(name string) (*space.Space, error) {
@@ -19,9 +18,5 @@ func (c *Client) SpaceByName(name string) (*space.Space, error) {
 		}
 	}
 
-	return nil, fmt.Errorf(
-		"space not found: %s: %w",
-		name,
-		constant.ErrorNotFound,
-	)
+	return nil, not_found.New("space", name)
 }

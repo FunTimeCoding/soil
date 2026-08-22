@@ -12,5 +12,5 @@ func (c *Client) CreatePipeline(
 		&gitlab.CreatePipelineOptions{Ref: new(reference), Variables: &v},
 	)
 
-	return result, e
+	return result, wrapError(e)
 }

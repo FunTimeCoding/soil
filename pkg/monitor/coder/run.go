@@ -2,8 +2,8 @@ package coder
 
 import (
 	"context"
-	"errors"
-	errorLibrary "github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/not_configured"
 	"github.com/funtimecoding/soil/pkg/monitor/coder/server"
 	system "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/web/constant"
@@ -18,11 +18,11 @@ import (
 
 func Run() error {
 	if len(os.Args) < 2 {
-		return errors.New("listen address missing")
+		return not_configured.Format("listen address missing")
 	}
 
 	l, listenFail := net.Listen(system.Transmission, os.Args[1])
-	errorLibrary.PanicOnError(listenFail)
+	errors.PanicOnError(listenFail)
 	log.Printf(
 		"listen on %s",
 		locator.New(l.Addr().String()).Scheme(constant.Socket).String(),

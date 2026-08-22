@@ -16,7 +16,7 @@ func (c *Client) Tasks() ([]*task.Task, error) {
 	)
 
 	if e != nil {
-		return nil, e
+		return nil, wrapError(e)
 	}
 
 	return task.NewSlice(result), nil

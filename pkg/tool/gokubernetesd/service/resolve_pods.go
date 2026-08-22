@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/cluster"
 	"strings"
 )
@@ -30,7 +30,7 @@ func ResolvePods(
 	case "cronjob":
 		return ResolveCronJobPods(x, c, resourceName, namespace)
 	default:
-		return nil, fmt.Errorf(
+		return nil, validation.New(
 			"unsupported resource type for logs: %s (use deployment, job, or cronjob)",
 			resourceType,
 		)

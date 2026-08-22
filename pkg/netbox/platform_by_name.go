@@ -1,7 +1,7 @@
 package netbox
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/netbox/platform"
 )
 
@@ -18,5 +18,5 @@ func (c *Client) PlatformByName(n string) (*platform.Platform, error) {
 		}
 	}
 
-	return nil, fmt.Errorf("platform %s not found", n)
+	return nil, not_found.New("platform", n)
 }

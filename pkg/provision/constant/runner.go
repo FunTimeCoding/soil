@@ -14,4 +14,7 @@ const (
 	RunnerStatus = "status"
 	RunnerLocal  = "local"
 	RunnerRemote = "remote"
+	RunnerPath   = "path"
+
+	RunnerIndexLock = ".git/index.lock"
 )

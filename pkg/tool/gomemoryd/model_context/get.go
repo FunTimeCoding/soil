@@ -33,7 +33,7 @@ func (s *Server) get(
 	related, f := s.service.ListRelated(identifier)
 
 	if f != nil {
-		return s.captureFail(f, "failed to load relations")
+		return s.captureFail(f, "load relations")
 	}
 
 	var history []store.Version
@@ -42,7 +42,7 @@ func (s *Server) get(
 		history, e = s.service.GetMemoryHistory(identifier)
 
 		if e != nil {
-			return s.captureFail(e, "failed to load history")
+			return s.captureFail(e, "load history")
 		}
 	}
 

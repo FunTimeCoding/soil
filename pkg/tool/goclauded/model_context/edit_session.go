@@ -2,8 +2,8 @@ package model_context
 
 import (
 	"context"
-	"errors"
 	library "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/argument/edit_session"
@@ -81,7 +81,7 @@ func (s *Server) editSession(
 	}
 
 	if e := s.service.EditSession(sessionIdentifier, a); e != nil {
-		if errors.Is(e, constant.ErrorAliasCollision) {
+		if conflict.Is(e) {
 			return response.Fail(e.Error())
 		}
 

@@ -5,6 +5,7 @@ import (
 	"github.com/dave/dst"
 	"github.com/dave/dst/decorator"
 	"github.com/dave/dst/decorator/resolver/goast"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/strings/camel"
@@ -99,7 +100,10 @@ func (s *Service) ExtractToFile(
 	moved, _ := dec.Dst.Nodes[declaration].(*dst.FuncDecl)
 
 	if moved == nil {
-		return nil, fmt.Errorf("no decorated declaration for %s", functionName)
+		return nil, not_found.Format(
+			"no decorated declaration for %s",
+			functionName,
+		)
 	}
 
 	for i, d := range source.Decls {

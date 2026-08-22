@@ -8,5 +8,5 @@ func (c *Client) Pipeline(
 ) (*gitlab.Pipeline, error) {
 	result, _, e := c.client.Pipelines.GetPipeline(project, pipeline)
 
-	return result, e
+	return result, wrapError(e)
 }

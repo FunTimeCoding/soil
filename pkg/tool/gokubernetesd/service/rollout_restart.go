@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 	"encoding/json"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"time"
@@ -79,7 +79,7 @@ func (s *Service) RolloutRestart(
 
 		return g
 	default:
-		return fmt.Errorf(
+		return validation.New(
 			"unsupported resource type for rollout restart: %s (use deployment, daemonset, or statefulset)",
 			resourceType,
 		)

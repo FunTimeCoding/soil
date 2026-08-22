@@ -39,6 +39,11 @@ func New(s *service.Service) *Server {
 			Path:     constant.ConversationsPath,
 			Category: web.PaletteNavigate,
 		},
+		palette.Command{
+			Label:    constant.CoverageTitle,
+			Path:     constant.CoveragePath,
+			Category: web.PaletteNavigate,
+		},
 	)
 
 	return &Server{
@@ -68,6 +73,10 @@ func New(s *service.Service) *Server {
 					navigation_item.New(
 						constant.HistoryPath,
 						constant.HistoryTitle,
+					),
+					navigation_item.New(
+						constant.CoveragePath,
+						constant.CoverageTitle,
 					),
 					navigation_item.NewExternal(
 						constant.ConversationsPath,

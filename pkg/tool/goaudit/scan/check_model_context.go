@@ -14,7 +14,7 @@ func (s *Service) checkModelContext(
 		return
 	}
 
-	mc := filepath.Join(path, "model_context")
+	mc := filepath.Join(path, constant.ModelContextDirectory)
 
 	if !v.Has(filepath.Join(mc, constant.MountFileName)) {
 		s.addConcern(constant.MissingMountKey, constant.MissingMountText, path)

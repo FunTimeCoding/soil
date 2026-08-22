@@ -18,7 +18,7 @@ func (c *Client) ArtifactsFile(
 	)
 
 	if e != nil {
-		return "", e
+		return "", wrapError(e)
 	}
 
 	return string(system.ReadAll(reader)), nil

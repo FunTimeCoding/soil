@@ -1,7 +1,7 @@
 package github
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/github/constant"
 	"github.com/funtimecoding/soil/pkg/github/pull_request"
 	"github.com/funtimecoding/soil/pkg/strings/join"
@@ -25,11 +25,10 @@ func (c *Client) BranchRequest(
 	)
 
 	if r != nil && r.StatusCode == 404 {
-		return nil, fmt.Errorf(
-			"repository not found: %s/%s: %w",
+		return nil, not_found.Format(
+			"repository not found: %s/%s",
 			owner,
 			repository,
-			constant.ErrorNotFound,
 		)
 	}
 
@@ -38,12 +37,11 @@ func (c *Client) BranchRequest(
 	}
 
 	if len(result) == 0 {
-		return nil, fmt.Errorf(
-			"no pull request for branch %s in %s/%s: %w",
+		return nil, not_found.Format(
+			"no pull request for branch %s in %s/%s",
 			branch,
 			owner,
 			repository,
-			constant.ErrorNotFound,
 		)
 	}
 

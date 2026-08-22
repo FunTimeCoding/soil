@@ -13,5 +13,5 @@ func (c *Client) Tree(project int64) ([]*gitlab.TreeNode, error) {
 		return []*gitlab.TreeNode{}, nil
 	}
 
-	return result, e
+	return result, wrapError(e)
 }

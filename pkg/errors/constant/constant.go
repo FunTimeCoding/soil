@@ -1,9 +1,6 @@
 package constant
 
-import (
-	"errors"
-	"github.com/funtimecoding/soil/pkg/console/constant"
-)
+import "github.com/funtimecoding/soil/pkg/console/constant"
 
 const (
 	Base = "/api/0"
@@ -21,6 +18,16 @@ const (
 
 	Response        = "response"
 	Body            = "body"
+	Process         = "process"
+	Command         = "command"
+	Output          = "output"
+	Stderr          = "stderr"
+	Job             = "job"
+	Identifier      = "identifier"
+	Kind            = "kind"
+	Upstream        = "upstream"
+	Status          = "status"
+	Detail          = "detail"
 	PeriodEmpty     = ""
 	PeriodDay       = "24h"
 	PeriodFortnight = "14d"
@@ -44,6 +51,5 @@ var (
 )
 
 var (
-	ErrorNotFound = errors.New("not found")
-	Format        = constant.ColorFormat.Copy()
+	Format = constant.ColorFormat.Copy()
 )

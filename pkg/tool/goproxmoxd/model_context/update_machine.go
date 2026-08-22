@@ -2,10 +2,9 @@ package model_context
 
 import (
 	"context"
-	"errors"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/model_context/argument/update_machine"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -34,9 +33,7 @@ func (s *Server) UpdateMachine(
 	e = s.service.UpdateMachine(c, &a)
 
 	if e != nil {
-		if not_found.Is(e) ||
-			errors.Is(e, constant.ErrorNoChanges) ||
-			errors.Is(e, constant.ErrorSetDeleteConflict) {
+		if not_found.Is(e) || validation.Is(e) {
 			return response.Fail("%s", e)
 		}
 

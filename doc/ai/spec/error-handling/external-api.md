@@ -112,6 +112,43 @@ errors; the type is the classification.
 The dividing line: does the message need context from the call
 site? If yes, typed error. If no, simple sentinel.
 
+The shared typed classes live in `pkg/errors`, each with
+`Format` (or `New`) and `Is`. Reach for these before inventing
+a per-package sentinel for the same class:
+
+- `not_found` - a lookup missed. `New(kind, identifier)` for
+  the standard message, `Format` for free-form.
+- `ambiguous` - an exactly-one lookup matched several. Zero
+  matches is `not_found`, never `ambiguous`.
+- `conflict` - the state is already occupied: already live,
+  already in use, already queued, still running.
+  `Exists(kind, identifier)` renders the standard
+  "kind already exists: identifier" message.
+- `validation` - a caller-shaped request error (`New`);
+  `captureDetail` surfaces its message without a Sentry
+  capture.
+- `not_selected` - a required session selection is missing;
+  the message carries the actionable hint.
+- `not_configured` - the deployment lacks the config to serve
+  the operation; only the operator can fix it.
+- `unreachable` - a backing dependency is down, not connected,
+  or not installed. The 503-shaped class.
+- `timeout` - waiting ran out. `timeout.Is` also matches
+  `context.DeadlineExceeded`.
+- `unexpected` - an upstream replied with a surprise; message
+  shape `"<subject> status: %d"` or `"unexpected <subject>:
+  <value>"`. The package also carries the panic helpers
+  (`Count`, `Integer`, ...).
+- `unreadable_body` - a response arrived but reading its body
+  failed. `New(wrapped, format, ...)` keeps the cause chain;
+  `web.ReadBytes` panics with it, so the panic path classifies
+  too. An upstream's own well-formed error message is neither
+  this nor `unexpected` - pass it through.
+
+Multi-instance daemons resolve their session-scoped instance
+through `pkg/inventory.Resolve`, which produces `not_found`
+and `not_selected`.
+
 **Message format:** `"subject condition: identifier"` - the what
 before the which. Examples: `"machine not found: 123"`,
 `"collection not found: favorites"`, `"browser unreachable"`.
@@ -119,3 +156,9 @@ The subject tells you what failed. The identifier tells you
 which one. Construct the message where the knowledge is - the
 function that did the lookup, not the handler that routes the
 response.
+
+**Wrap-label format:** when wrapping an underlying error with
+the operation that was attempted, the label is `"verb noun:
+%w"` - `"list tabs: %w"`, `"create entry: %w"`, `"download
+vocabulary: %w"`. Never `"failed to X"` or `"X fail"` - the
+error position already says it failed.

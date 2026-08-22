@@ -1,12 +1,12 @@
 package mock_client
 
-import "fmt"
+import "github.com/funtimecoding/soil/pkg/errors/not_found"
 
 func (c *Client) DeleteDraft(pageIdentifier string) error {
 	e, okay := c.pages[pageIdentifier]
 
 	if !okay || e.deleted {
-		return fmt.Errorf("page not found: %s", pageIdentifier)
+		return not_found.New("page", pageIdentifier)
 	}
 
 	if e.page != nil && e.page.Status == "draft" {
@@ -15,5 +15,5 @@ func (c *Client) DeleteDraft(pageIdentifier string) error {
 		return nil
 	}
 
-	return fmt.Errorf("page not found: %s", pageIdentifier)
+	return not_found.New("page", pageIdentifier)
 }

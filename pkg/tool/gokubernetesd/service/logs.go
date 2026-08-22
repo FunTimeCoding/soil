@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/ambiguous_pods"
 )
 
@@ -24,7 +24,11 @@ func (s *Service) Logs(
 	}
 
 	if len(pods) == 0 {
-		return "", fmt.Errorf("no pods found for %s in %s", q.Name, q.Namespace)
+		return "", not_found.Format(
+			"no pods found for %s in %s",
+			q.Name,
+			q.Namespace,
+		)
 	}
 
 	if len(pods) > 1 {

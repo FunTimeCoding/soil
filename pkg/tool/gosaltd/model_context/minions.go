@@ -20,7 +20,7 @@ func (s *Server) minions(
 	result, e := c.Minions()
 
 	if e != nil {
-		return s.captureFail(e, constant.MinionsFailed)
+		return s.captureFail(e, constant.MinionsFail)
 	}
 
 	return response.SuccessAny(result)

@@ -16,5 +16,5 @@ func (c *Client) Posts(h *model.Channel) (*model.PostList, error) {
 		false,
 	)
 
-	return result, e
+	return result, wrapError(e)
 }

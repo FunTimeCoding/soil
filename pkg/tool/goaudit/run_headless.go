@@ -5,14 +5,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
-	"os"
 )
 
 func runHeadless(
 	v *virtual_file_system.System,
 	e []*scan.Service,
 	identityWarnings []*concern.Concern,
-) {
+) bool {
 	r := output.NewResults()
 
 	for _, s := range e {
@@ -37,7 +36,5 @@ func runHeadless(
 		r.AddConcern(c)
 	}
 
-	if output.PrintResults(r.Entries, false) {
-		os.Exit(1)
-	}
+	return output.PrintResults(r.Entries, false)
 }

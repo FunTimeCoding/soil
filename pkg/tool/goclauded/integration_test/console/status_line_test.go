@@ -16,8 +16,11 @@ func TestStatusLineRendersAndStores(t *testing.T) {
 	c.Register("11111111-2222-3333-4444-555555555555")
 	line := c.StatusLine([]byte(fixture.Read("claude", "status-line.json")))
 	assert.String(t, "Fable 18%", line)
-	record, e := s.Service.GetSession("11111111-2222-3333-4444-555555555555")
+	record, found, e := s.Service.FindSession(
+		"11111111-2222-3333-4444-555555555555",
+	)
 	assert.FatalOnError(t, e)
+	assert.True(t, found)
 	assert.Integer(t, 18, record.ContextPercent)
 	assert.Integer(t, 1000000, record.ContextWindow)
 	assert.String(t, "Fable 5", record.Model)

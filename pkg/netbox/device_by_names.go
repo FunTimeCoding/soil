@@ -2,6 +2,8 @@ package netbox
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/ambiguous"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/netbox/device"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 )
@@ -27,8 +29,8 @@ func (c *Client) DeviceByNames(n []string) (*device.Device, error) {
 				identifiers = append(identifiers, fmt.Sprintf("%d", d.Raw.Id))
 			}
 
-			return nil, fmt.Errorf(
-				"more than one device found with name '%s'. IDs: %s",
+			return nil, ambiguous.Format(
+				"more than one device named %s: %s",
 				name,
 				join.Comma(identifiers),
 			)
@@ -40,7 +42,7 @@ func (c *Client) DeviceByNames(n []string) (*device.Device, error) {
 	}
 
 	if result == nil {
-		return nil, fmt.Errorf(
+		return nil, not_found.Format(
 			"no device found matching names: %s",
 			join.Comma(n),
 		)

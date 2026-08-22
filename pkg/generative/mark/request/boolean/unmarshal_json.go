@@ -2,7 +2,7 @@ package boolean
 
 import (
 	"encoding/json"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"strconv"
 )
 
@@ -21,7 +21,7 @@ func (b *Boolean) UnmarshalJSON(y []byte) error {
 		a, f := strconv.ParseBool(s)
 
 		if f != nil {
-			return fmt.Errorf("cannot parse %q as boolean", s)
+			return validation.New("cannot parse %q as boolean", s)
 		}
 
 		*b = Boolean(a)
@@ -29,5 +29,5 @@ func (b *Boolean) UnmarshalJSON(y []byte) error {
 		return nil
 	}
 
-	return fmt.Errorf("cannot unmarshal %s as boolean", string(y))
+	return validation.New("cannot unmarshal %s as boolean", string(y))
 }

@@ -12,5 +12,5 @@ func (c *Client) MergeRequestDiscussions(
 		nil,
 	)
 
-	return result, e
+	return result, wrapError(e)
 }

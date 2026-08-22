@@ -1,8 +1,7 @@
 package gitlab
 
 import (
-	"fmt"
-	"github.com/funtimecoding/soil/pkg/gitlab/constant"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/gitlab/merge_request"
 	"gitlab.com/gitlab-org/api/client-go/v2"
 )
@@ -20,23 +19,18 @@ func (c *Client) BranchRequest(
 	)
 
 	if r != nil && r.StatusCode == 404 {
-		return nil, fmt.Errorf(
-			"project: %d: %w",
-			project,
-			constant.ErrorNotFound,
-		)
+		return nil, not_found.New("project", project)
 	}
 
 	if e != nil {
-		return nil, e
+		return nil, wrapError(e)
 	}
 
 	if len(result) == 0 {
-		return nil, fmt.Errorf(
-			"no merge request for branch %s in project %d: %w",
+		return nil, not_found.Format(
+			"no merge request for branch %s in project %d",
 			branch,
 			project,
-			constant.ErrorNotFound,
 		)
 	}
 

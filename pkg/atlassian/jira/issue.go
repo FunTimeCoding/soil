@@ -15,7 +15,7 @@ func (c *Client) Issue(key string) (*issue.Issue, error) {
 	result, _, f := c.client.Issue.Get(key, &jira.GetQueryOptions{})
 
 	if f != nil {
-		return nil, f
+		return nil, wrapError(f)
 	}
 
 	return issue.New(result, o), nil

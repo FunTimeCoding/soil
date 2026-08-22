@@ -1,9 +1,6 @@
 package constant
 
-import (
-	"errors"
-	"github.com/funtimecoding/soil/pkg/console/constant"
-)
+import "github.com/funtimecoding/soil/pkg/console/constant"
 
 const (
 	MattermostHostEnvironment     = "MATTERMOST_HOST"
@@ -32,11 +29,6 @@ const (
 	MattermostHourglass    = "hourglass_flowing_sand" // waiting, pending resolve
 	MattermostRepeat       = "repeat"                 // forwarded
 	MattermostThread       = "thread"                 // belongs to above thread
-)
-
-var (
-	ErrorMattermostNotConfigured = errors.New("not configured")
-	ErrorMattermostNotFound      = errors.New("not found")
 )
 
 var MattermostFormat = constant.ExtendedColorFormat.Copy()

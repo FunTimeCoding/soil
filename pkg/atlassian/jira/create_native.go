@@ -9,7 +9,7 @@ func (c *Client) CreateNative(i *jira.Issue) (*issue.Issue, error) {
 	result, _, e := c.client.Issue.CreateWithContext(c.context, i)
 
 	if e != nil {
-		return nil, e
+		return nil, wrapError(e)
 	}
 
 	v, f := c.Issue(result.Key)

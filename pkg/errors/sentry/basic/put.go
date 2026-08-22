@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/errors/constant"
+	"github.com/funtimecoding/soil/pkg/errors/unreadable_body"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
@@ -44,7 +45,7 @@ func (c *Client) Put(
 	i := s.Body.Close()
 
 	if h != nil {
-		return nil, h
+		return nil, unreadable_body.New(h, "read response body")
 	}
 
 	if i != nil {

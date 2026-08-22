@@ -1,8 +1,7 @@
 package mock_client
 
 import (
-	"fmt"
-	"github.com/funtimecoding/soil/pkg/gitlab/constant"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"gitlab.com/gitlab-org/api/client-go/v2"
 )
 
@@ -14,7 +13,7 @@ func (c *Client) File(
 	f, exists := c.files[name]
 
 	if !exists {
-		return nil, fmt.Errorf("file: %s: %w", name, constant.ErrorNotFound)
+		return nil, not_found.New("file", name)
 	}
 
 	return f, nil

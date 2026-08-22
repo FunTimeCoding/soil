@@ -21,7 +21,7 @@ func (c *Client) SearchLimit(
 	)
 
 	if e != nil {
-		return nil, e
+		return nil, wrapError(e)
 	}
 
 	o, f := c.IssueOption()

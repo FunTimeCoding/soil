@@ -1,9 +1,9 @@
 package jira
 
 import (
-	"fmt"
 	"github.com/andygrunwald/go-jira"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/custom_field_value"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"slices"
 )
@@ -22,7 +22,7 @@ func (c *Client) SetFieldMulti(
 	}
 
 	if len(valid) == 0 {
-		return fmt.Errorf(
+		return not_found.Format(
 			"project %s type %s field %s has no values",
 			projectKey,
 			issueType,
@@ -45,7 +45,7 @@ func (c *Client) SetFieldMulti(
 	}
 
 	if len(notFound) > 0 {
-		return fmt.Errorf(
+		return not_found.Format(
 			"field %s value(s) not found: %s, valid: %s",
 			fieldName,
 			join.Comma(notFound),

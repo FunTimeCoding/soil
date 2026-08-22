@@ -1,7 +1,7 @@
 package alertmanager
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/go-openapi/strfmt"
 	"github.com/prometheus/alertmanager/api/v2/client/silence"
 )
@@ -16,7 +16,7 @@ func (c *Client) DeleteSilence(identifier string) error {
 	}
 
 	if !result.IsSuccess() {
-		return fmt.Errorf("unexpected status code: %+v", result)
+		return unexpected.Format("unexpected response: %+v", result)
 	}
 
 	return nil

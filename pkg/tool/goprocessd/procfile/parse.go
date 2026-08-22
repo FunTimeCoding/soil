@@ -1,7 +1,7 @@
 package procfile
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"os"
 	"strings"
 )
@@ -32,7 +32,7 @@ func Parse(path string) ([]Entry, error) {
 	}
 
 	if len(result) == 0 {
-		return nil, fmt.Errorf("no valid entries in %s", path)
+		return nil, validation.New("no valid entries in %s", path)
 	}
 
 	return result, nil

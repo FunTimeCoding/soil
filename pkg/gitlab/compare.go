@@ -11,5 +11,5 @@ func (c *Client) Compare(
 		&gitlab.CompareOptions{From: new(from), To: new(to)},
 	)
 
-	return result, e
+	return result, wrapError(e)
 }

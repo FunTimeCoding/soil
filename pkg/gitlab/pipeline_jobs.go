@@ -16,7 +16,7 @@ func (c *Client) PipelineJobs(
 	)
 
 	if e != nil {
-		return nil, e
+		return nil, wrapError(e)
 	}
 
 	return c.enrichJobs(job.NewSlice(result)), nil

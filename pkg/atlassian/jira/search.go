@@ -36,7 +36,7 @@ func (c *Client) Search(
 		)
 
 		if e != nil {
-			return nil, e
+			return nil, wrapError(e)
 		}
 
 		token = r.NextPageToken

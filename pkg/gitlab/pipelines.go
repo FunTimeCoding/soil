@@ -13,5 +13,5 @@ func (c *Client) Pipelines(project int64) ([]*gitlab.PipelineInfo, error) {
 		},
 	)
 
-	return result, e
+	return result, wrapError(e)
 }

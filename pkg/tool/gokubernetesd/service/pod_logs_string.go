@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/cluster"
 	"io"
 	"k8s.io/api/core/v1"
@@ -40,7 +40,7 @@ func PodLogsString(
 		d, e := time.ParseDuration(since)
 
 		if e != nil {
-			return "", fmt.Errorf("invalid since duration: %s", e)
+			return "", validation.New("invalid since duration: %s", e)
 		}
 
 		seconds := int64(d.Seconds())

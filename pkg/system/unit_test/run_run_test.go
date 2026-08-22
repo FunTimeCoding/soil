@@ -27,13 +27,13 @@ func TestRunStart(t *testing.T) {
 	case constant.Windows:
 		assert.String(
 			t,
-			`exec: "nonexistent": executable file not found in %PATH%`,
+			`nonexistent: exec: "nonexistent": executable file not found in %PATH%`,
 			r2.Error.Error(),
 		)
 	default:
 		assert.String(
 			t,
-			`exec: "nonexistent": executable file not found in $PATH`,
+			`nonexistent: exec: "nonexistent": executable file not found in $PATH`,
 			r2.Error.Error(),
 		)
 	}

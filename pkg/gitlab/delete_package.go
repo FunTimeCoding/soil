@@ -6,5 +6,5 @@ func (c *Client) DeletePackage(
 ) error {
 	_, e := c.client.Packages.DeleteProjectPackage(project, repository)
 
-	return e
+	return wrapError(e)
 }

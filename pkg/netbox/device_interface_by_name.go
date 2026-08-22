@@ -1,8 +1,7 @@
 package netbox
 
 import (
-	"fmt"
-	"github.com/funtimecoding/soil/pkg/netbox/constant"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/netbox/device"
 	"github.com/funtimecoding/soil/pkg/netbox/network"
 )
@@ -23,10 +22,9 @@ func (c *Client) DeviceInterfaceByName(
 		}
 	}
 
-	return nil, fmt.Errorf(
-		"interface %s not found for device %s: %w",
+	return nil, not_found.Format(
+		"interface %s not found for device %s",
 		name,
 		d.Name,
-		constant.ErrorNotFound,
 	)
 }

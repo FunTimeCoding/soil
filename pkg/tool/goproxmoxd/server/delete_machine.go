@@ -2,9 +2,8 @@ package server
 
 import (
 	"context"
-	"errors"
+	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 )
 
@@ -43,8 +42,8 @@ func (s *Server) DeleteMachine(
 			return server.DeleteMachine404JSONResponse{Error: e.Error()}, nil
 		}
 
-		if errors.Is(e, constant.ErrorMachineRunning) {
-			return server.DeleteMachine400JSONResponse(*clientError(e)), nil
+		if conflict.Is(e) {
+			return server.DeleteMachine409JSONResponse(*clientError(e)), nil
 		}
 
 		return server.DeleteMachine500JSONResponse(*s.captureDetail(e)), nil

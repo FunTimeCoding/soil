@@ -37,6 +37,7 @@ func (s *Server) Mount(m *http.ServeMux) {
 		s.sessionDeleteAction,
 	)
 	m.HandleFunc(route.Get("/activity"), s.activityPage)
+	m.HandleFunc(route.Get(constant.CoveragePath), s.coveragePage)
 	m.HandleFunc(route.Get(constant.MessagesPath), s.messagesPage)
 	m.HandleFunc(route.Get(constant.HistoryPath), s.historyPage)
 	m.HandleFunc(

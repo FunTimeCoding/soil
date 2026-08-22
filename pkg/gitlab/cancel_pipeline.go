@@ -8,5 +8,5 @@ func (c *Client) CancelPipeline(
 ) (*gitlab.Pipeline, error) {
 	result, _, e := c.client.Pipelines.CancelPipelineBuild(project, pipeline)
 
-	return result, e
+	return result, wrapError(e)
 }

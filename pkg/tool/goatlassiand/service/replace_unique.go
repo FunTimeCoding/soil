@@ -1,7 +1,8 @@
 package service
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/ambiguous"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"strings"
 )
 
@@ -13,13 +14,13 @@ func ReplaceUnique(
 	count := strings.Count(content, oldText)
 
 	if count == 0 {
-		return "", fmt.Errorf(
+		return "", not_found.Format(
 			"old_text not found in page. Re-read the page with confluence_get_page and try again",
 		)
 	}
 
 	if count > 1 {
-		return "", fmt.Errorf(
+		return "", ambiguous.Format(
 			"old_text found %d times, must be unique. Provide more surrounding context to match exactly once",
 			count,
 		)

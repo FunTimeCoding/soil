@@ -12,5 +12,5 @@ func (c *Client) FindPost(identifier string) (*model.Post, error) {
 		constant.MattermostEmptyEntityTag,
 	)
 
-	return result, e
+	return result, wrapError(e)
 }

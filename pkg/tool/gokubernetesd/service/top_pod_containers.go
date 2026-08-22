@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/unreachable"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/format"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/response"
@@ -45,7 +45,7 @@ func (s *Service) TopPodContainers(
 
 	if f != nil {
 		if strings.Contains(f.Error(), "could not find the requested resource") {
-			return nil, fmt.Errorf(
+			return nil, unreachable.Format(
 				"metrics API not available - install metrics-server",
 			)
 		}

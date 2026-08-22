@@ -3,7 +3,8 @@ package habitica
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/unexpected"
+	"github.com/funtimecoding/soil/pkg/errors/unreadable_body"
 	"github.com/funtimecoding/soil/pkg/habitica/constant"
 	"github.com/funtimecoding/soil/pkg/habitica/error_payload"
 	"github.com/funtimecoding/soil/pkg/notation"
@@ -48,22 +49,22 @@ func (c *Client) do(
 		}
 
 		if g != nil {
-			return nil, fmt.Errorf(
-				"habitica %s %s: %d (body unreadable: %w)",
+			return nil, unreadable_body.New(
+				g,
+				"habitica %s %s: %d",
 				method,
 				path,
 				result.StatusCode,
-				g,
 			)
 		}
 
 		var o error_payload.Payload
 
 		if json.Unmarshal(b, &o) == nil && o.Message != "" {
-			return nil, detail_error.New(o.Message, result.Status)
+			return nil, detail_error.New(o.Message, result.Status).WithBody(b)
 		}
 
-		return nil, fmt.Errorf("%s", result.Status)
+		return nil, unexpected.Format("unexpected status: %s", result.Status)
 	}
 
 	return result, nil

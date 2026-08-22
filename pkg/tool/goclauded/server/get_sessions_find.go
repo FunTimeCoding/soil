@@ -14,7 +14,7 @@ func (s *Server) GetSessionsFind(
 
 	for _, m := range s.service.SessionsByTool(r.Params.Tool) {
 		name := m.Session.Slug
-		e, f := s.service.GetSession(m.Session.Identifier)
+		e, found, f := s.service.FindSession(m.Session.Identifier)
 
 		if f != nil {
 			return server.GetSessionsFind500JSONResponse(
@@ -22,7 +22,7 @@ func (s *Server) GetSessionsFind(
 			), nil
 		}
 
-		if e != nil && e.Alias != nil {
+		if found && e.Alias != nil {
 			name = *e.Alias
 		}
 

@@ -1,7 +1,7 @@
 package netbox
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/netbox/tunnel"
 )
 
@@ -18,5 +18,5 @@ func (c *Client) TunnelByName(n string) (*tunnel.Tunnel, error) {
 		}
 	}
 
-	return nil, fmt.Errorf("tunnel not found: %s", n)
+	return nil, not_found.New("tunnel", n)
 }

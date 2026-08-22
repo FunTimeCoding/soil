@@ -23,11 +23,9 @@ const (
 	Status      = "status"
 	Identifier  = "id"
 
-	RecentRunsFailed = "failed to list recent runs"
-	RunLookupFailed  = "failed to look up run"
-	MinionsFailed    = "failed to list minions"
-	KeysFailed       = "failed to list keys"
-	NotConnected     = "salt API not connected yet"
+	MinionsFail  = "list minions"
+	KeysFail     = "list keys"
+	NotConnected = "salt API not connected yet"
 
 	SaltPathEnvironment = "SALT_PATH"
 

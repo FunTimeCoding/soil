@@ -11,5 +11,5 @@ func (c *Client) DeletePipeline(
 		return nil
 	}
 
-	return e
+	return wrapError(e)
 }

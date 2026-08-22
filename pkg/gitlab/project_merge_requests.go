@@ -32,7 +32,7 @@ func (c *Client) ProjectMergeRequests(
 		)
 
 		if e != nil {
-			return nil, e
+			return nil, wrapError(e)
 		}
 
 		result = append(result, page...)

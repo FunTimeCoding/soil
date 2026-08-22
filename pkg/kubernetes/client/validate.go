@@ -1,7 +1,7 @@
 package client
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"reflect"
 )
 
@@ -17,11 +17,11 @@ func (c *Client) Validate() error {
 		switch f.Kind() {
 		case reflect.Pointer, reflect.Interface, reflect.Map:
 			if f.IsNil() {
-				return fmt.Errorf("field not set: %s", name)
+				return validation.New("field not set: %s", name)
 			}
 		case reflect.String:
 			if f.String() == "" {
-				return fmt.Errorf("field empty: %s", name)
+				return validation.New("field empty: %s", name)
 			}
 		default:
 			continue

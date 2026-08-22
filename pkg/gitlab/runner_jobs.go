@@ -27,7 +27,7 @@ func (c *Client) RunnerJobs(
 		)
 
 		if e != nil {
-			return nil, e
+			return nil, wrapError(e)
 		}
 
 		result = append(result, page...)

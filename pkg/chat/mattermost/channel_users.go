@@ -19,7 +19,7 @@ func (c *Client) ChannelUsers(h *model.Channel) ([]*model.User, error) {
 		)
 
 		if e != nil {
-			return nil, e
+			return nil, wrapError(e)
 		}
 
 		if len(users) == 0 {

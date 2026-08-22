@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/telemetry"
 	"github.com/funtimecoding/soil/pkg/tool/gohabitica/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/client"
 	"github.com/spf13/cobra"
@@ -16,17 +17,23 @@ func Main(
 ) {
 	r := reporter.New(constant.Identity.Name(), version).Start()
 	defer func() { r.RecoverFlush(recover()) }()
-	c := client.NewEnvironment()
+	x := &Context{
+		Client:    client.NewEnvironment(),
+		Telemetry: telemetry.NewEnvironment(),
+	}
 	o := &cobra.Command{
 		Use:     constant.Identity.Usage(),
 		Short:   constant.Identity.Description(),
 		Version: argument.CobraVersion(version, gitHash, buildDate),
 	}
-	o.AddCommand(tasks(c))
-	o.AddCommand(create(c))
-	o.AddCommand(score(c))
-	o.AddCommand(tags(c))
-	o.AddCommand(statistic(c))
-	o.AddCommand(cron(c))
+	o.AddCommand(tasks(x))
+	o.AddCommand(create(x))
+	o.AddCommand(score(x))
+	o.AddCommand(tags(x))
+	o.AddCommand(statistic(x))
+	o.AddCommand(cron(x))
+	o.AddCommand(allocate(x))
+	o.AddCommand(gear(x))
+	o.AddCommand(equip(x))
 	errors.PanicOnError(o.Execute())
 }

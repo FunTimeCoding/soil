@@ -1,6 +1,6 @@
 package runner
 
-import "fmt"
+import "github.com/funtimecoding/soil/pkg/errors/conflict"
 
 func (r *Runner) Sync() (*SyncResult, error) {
 	request := SyncRequest{Response: make(chan *SyncResult, 1)}
@@ -9,6 +9,6 @@ func (r *Runner) Sync() (*SyncResult, error) {
 	case r.sync <- request:
 		return <-request.Response, nil
 	default:
-		return nil, fmt.Errorf("sync already queued")
+		return nil, conflict.Format("sync already queued")
 	}
 }

@@ -1,7 +1,7 @@
 package service
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"go/ast"
 	"go/token"
 )
@@ -13,7 +13,7 @@ func expandFileSymbols(file *ast.File) ([]string, error) {
 		switch declaration := d.(type) {
 		case *ast.FuncDecl:
 			if declaration.Recv != nil {
-				return nil, fmt.Errorf(
+				return nil, validation.New(
 					"file contains method %s - methods cannot move",
 					declaration.Name.Name,
 				)
@@ -39,7 +39,7 @@ func expandFileSymbols(file *ast.File) ([]string, error) {
 	}
 
 	if len(result) == 0 {
-		return nil, fmt.Errorf("file declares no movable symbols")
+		return nil, validation.New("file declares no movable symbols")
 	}
 
 	return result, nil

@@ -8,5 +8,5 @@ func (c *Client) ListCommits(
 ) ([]*gitlab.Commit, error) {
 	result, _, e := c.client.Commits.ListCommits(project, o)
 
-	return result, e
+	return result, wrapError(e)
 }

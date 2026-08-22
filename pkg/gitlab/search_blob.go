@@ -18,7 +18,7 @@ func (c *Client) SearchBlob(query string) ([]*gitlab.Blob, error) {
 		)
 
 		if f != nil {
-			return nil, f
+			return nil, wrapError(f)
 		}
 
 		result = append(result, page...)

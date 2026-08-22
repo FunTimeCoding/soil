@@ -29,7 +29,7 @@ func (s *Server) PostGenerate(
 
 	if e != nil {
 		return server.PostGenerate500JSONResponse(
-			*s.captureFail(e, "failed to create temp directory"),
+			*s.captureFail(e, "create temporary directory"),
 		), nil
 	}
 
@@ -44,7 +44,7 @@ func (s *Server) PostGenerate(
 
 		if f := os.Symlink(file, filepath.Join(workdir, filepath.Base(file))); f != nil {
 			return server.PostGenerate500JSONResponse(
-				*s.captureFail(f, "failed to symlink file"),
+				*s.captureFail(f, "symlink file"),
 			), nil
 		}
 	}

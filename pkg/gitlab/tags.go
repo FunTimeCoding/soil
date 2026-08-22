@@ -13,5 +13,5 @@ func (c *Client) Tags(project int64) ([]*gitlab.Tag, error) {
 		},
 	)
 
-	return result, e
+	return result, wrapError(e)
 }

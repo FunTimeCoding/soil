@@ -1,7 +1,7 @@
 package netbox
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/netbox/tunnel_group"
 )
 
@@ -18,5 +18,5 @@ func (c *Client) TunnelGroupByName(n string) (*tunnel_group.Group, error) {
 		}
 	}
 
-	return nil, fmt.Errorf("tunnel group not found: %s", n)
+	return nil, not_found.New("tunnel group", n)
 }

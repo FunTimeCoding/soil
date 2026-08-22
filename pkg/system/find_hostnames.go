@@ -28,7 +28,7 @@ func FindHostnames(host string) ([]string, error) {
 				return result, nil
 			}
 
-			return result, fmt.Errorf("lookup: %s", lookUpFail)
+			return result, fmt.Errorf("lookup: %w", lookUpFail)
 		}
 
 		result = names

@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) searchUsers(
-	c context.Context,
+	_ context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	query, f := r.RequireString(constant.ParameterQuery)
@@ -18,14 +18,10 @@ func (s *Server) searchUsers(
 		return response.Fail("query is required: %v", f)
 	}
 
-	users, resp, g := s.jira.Nested().User.FindWithContext(c, query)
+	users, g := s.jira.FindUsers(query)
 
 	if g != nil {
-		if resp != nil && resp.Body != nil {
-			return response.Fail("user search failed: %v", g)
-		}
-
-		return response.Fail("user search failed: %v", g)
+		return s.captureDetail(g)
 	}
 
 	return response.SuccessAny(convert.JiraUsers(users))

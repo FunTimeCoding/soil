@@ -2,8 +2,8 @@ package server
 
 import (
 	"context"
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/pricing"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
 	"sort"
@@ -15,16 +15,14 @@ func (s *Server) GetSessionDetail(
 ) (server.GetSessionDetailResponseObject, error) {
 	d, e := s.service.SessionDetail(r.Identifier)
 
+	if not_found.Is(e) {
+		return server.GetSessionDetail404JSONResponse{Error: e.Error()}, nil
+	}
+
 	if e != nil {
 		return server.GetSessionDetail500JSONResponse(
 			*s.captureFail(e, constant.UnexpectedError),
 		), nil
-	}
-
-	if d == nil {
-		return server.GetSessionDetail404JSONResponse{
-			Error: fmt.Sprintf("session not found: %s", r.Identifier),
-		}, nil
 	}
 
 	result := server.SessionDetailResponse{Identifier: d.Identifier}

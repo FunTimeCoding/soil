@@ -2,7 +2,7 @@ package service
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/model_context/argument/create_machine"
 )
@@ -14,7 +14,9 @@ func (s *Service) CreateMachine(
 	cloudInit := m.CIUser != "" || m.SSHKeys != "" || m.CIPassword != ""
 
 	if cloudInit && m.CDROM != "" {
-		return 0, constant.ErrorCDROMCloudInitConflict
+		return 0, validation.New(
+			"cdrom and cloud-init are mutually exclusive - both use ide2",
+		)
 	}
 
 	identifier := m.Identifier

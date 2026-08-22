@@ -27,7 +27,7 @@ func (c *Client) AllChannels(
 	)
 
 	if e != nil {
-		return nil, e
+		return nil, wrapError(e)
 	}
 
 	if skip == 0 {
@@ -47,7 +47,7 @@ func (c *Client) AllChannels(
 	)
 
 	if f != nil {
-		return nil, f
+		return nil, wrapError(f)
 	}
 
 	result = append(result, next...)

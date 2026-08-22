@@ -17,5 +17,5 @@ func (c *Client) CreateTag(
 		},
 	)
 
-	return result, e
+	return result, wrapError(e)
 }

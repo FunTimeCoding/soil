@@ -24,5 +24,5 @@ func (c *Client) Packages(
 		return result, nil
 	}
 
-	return result, e
+	return result, wrapError(e)
 }

@@ -2,6 +2,7 @@ package cluster
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"strings"
 )
@@ -17,7 +18,7 @@ func (c *Cluster) ResolveResource(
 
 	if c.resources == nil {
 		return schema.GroupVersionResource{}, false,
-			fmt.Errorf("failed to discover API resources: %w", c.discoveryFail)
+			fmt.Errorf("discover API resources: %w", c.discoveryFail)
 	}
 
 	lower := strings.ToLower(resourceType)
@@ -51,5 +52,5 @@ func (c *Cluster) ResolveResource(
 	}
 
 	return schema.GroupVersionResource{}, false,
-		fmt.Errorf("unknown resource type: %s", resourceType)
+		not_found.New("resource type", resourceType)
 }

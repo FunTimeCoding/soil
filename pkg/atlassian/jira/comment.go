@@ -12,5 +12,5 @@ func (c *Client) Comment(
 		&jira.Comment{Body: body},
 	)
 
-	return e
+	return wrapError(e)
 }

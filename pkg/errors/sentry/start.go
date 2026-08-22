@@ -29,7 +29,7 @@ func Start(
 			TracesSampleRate: 1.0,
 			AttachStacktrace: true,
 			SendDefaultPII:   true,
-			BeforeSend:       enrichResponseBody,
+			BeforeSend:       enrich,
 		},
 	)
 	errors.FatalOnError(e)

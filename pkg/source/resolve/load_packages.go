@@ -33,7 +33,7 @@ func LoadPackages(
 
 	for _, p := range result {
 		for _, f := range p.Errors {
-			return nil, nil, fmt.Errorf("%s: %s", p.PkgPath, f)
+			return nil, nil, fmt.Errorf("%s: %w", p.PkgPath, f)
 		}
 	}
 

@@ -3,14 +3,10 @@ package model_context
 import (
 	"context"
 	"encoding/json"
-	"fmt"
-	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/convert"
 	"github.com/mark3labs/mcp-go/mcp"
-	"github.com/trivago/tgo/tcontainer"
 )
 
 func (s *Server) createIssue(
@@ -35,116 +31,40 @@ func (s *Server) createIssue(
 		return response.Fail("summary is required: %v", h)
 	}
 
-	description := r.GetString("description", "")
-	assigneeName := r.GetString(constant.Assignee, "")
-	labelsRaw := r.GetString(constant.Labels, "")
-	fieldsRaw := r.GetString(constant.AdditionalFields, "")
-	raw := issue.RawStub()
-	raw.Fields.Unknowns = make(tcontainer.MarshalMap)
-	reporter, i := s.jira.User()
+	var labels []string
 
-	if i != nil {
-		return s.captureDetail(i)
-	}
-
-	raw.Fields.Reporter = reporter
-	raw.Fields.Project.Key = project
-	raw.Fields.Type.Name = issueType
-	raw.Fields.Summary = summary
-	raw.Fields.Description = description
-
-	if labelsRaw != "" {
-		var labels []string
-
-		if i := json.Unmarshal([]byte(labelsRaw), &labels); i != nil {
+	if raw := r.GetString(constant.Labels, ""); raw != "" {
+		if i := json.Unmarshal([]byte(raw), &labels); i != nil {
 			return response.Fail(
 				"labels must be a JSON array of strings: %v",
 				i,
 			)
 		}
-
-		raw.Fields.Labels = labels
 	}
 
-	if fieldsRaw != "" {
-		var fields map[string]any
+	var fields map[string]any
 
-		if i := json.Unmarshal([]byte(fieldsRaw), &fields); i != nil {
+	if raw := r.GetString(constant.AdditionalFields, ""); raw != "" {
+		if i := json.Unmarshal([]byte(raw), &fields); i != nil {
 			return response.Fail(
 				"additional_fields must be a JSON object: %v",
 				i,
 			)
 		}
-
-		fieldMap, j := s.jira.FieldMap()
-
-		if j != nil {
-			return s.captureDetail(j)
-		}
-
-		for name, value := range fields {
-			field := fieldMap.ByName(name)
-
-			if field == nil {
-				return response.Fail("unknown field: %s", name)
-			}
-
-			raw.Fields.Unknowns.Set(field.Key, value)
-		}
 	}
 
-	result, resp, k := s.jira.Nested().Issue.CreateWithContext(c, raw)
+	created, i := s.service.CreateIssue(
+		project,
+		issueType,
+		summary,
+		r.GetString("description", ""),
+		r.GetString(constant.Assignee, ""),
+		labels,
+		fields,
+	)
 
-	if k != nil {
-		if resp != nil && resp.Body != nil {
-			return s.captureFail(
-				k,
-				fmt.Sprintf(
-					"create failed: %s",
-					string(system.ReadAll(resp.Body)),
-				),
-			)
-		}
-
-		return s.captureFail(k, "issue not created")
-	}
-
-	if assigneeName != "" {
-		user, fail, j := s.resolveAssignee(c, assigneeName)
-
-		if fail != nil {
-			return fail, j
-		}
-
-		assignResp, l := s.jira.Nested().Issue.UpdateAssigneeWithContext(
-			c,
-			result.Key,
-			user,
-		)
-
-		if l != nil {
-			if assignResp != nil && assignResp.Body != nil {
-				return s.captureFail(
-					l,
-					fmt.Sprintf(
-						"created %s but assign failed: %s",
-						result.Key,
-						string(system.ReadAll(assignResp.Body)),
-					),
-				)
-			}
-
-			return s.captureFail(
-				l,
-				fmt.Sprintf("created %s but assign failed", result.Key),
-			)
-		}
-	}
-
-	created, m := s.jira.Issue(result.Key)
-
-	if m != nil {
-		return s.captureFail(m, "issue created but retrieval failed")
+	if i != nil {
+		return s.failOrCapture(i, "issue not created")
 	}
 
 	return response.SuccessAny(convert.JiraIssue(created))

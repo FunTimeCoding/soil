@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/generated/server"
 )
@@ -13,7 +13,7 @@ func (s *Server) GetRevocationList(
 ) (server.GetRevocationListResponseObject, error) {
 	result, e := s.service.RevocationList(r.Params.Authority)
 
-	if errors.Is(e, constant.ErrorNotFound) {
+	if not_found.Is(e) {
 		return server.GetRevocationList404JSONResponse(
 			*clientError(constant.AuthorityMissing),
 		), nil

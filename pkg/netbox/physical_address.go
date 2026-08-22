@@ -1,8 +1,7 @@
 package netbox
 
 import (
-	"fmt"
-	"github.com/funtimecoding/soil/pkg/netbox/constant"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/netbox/physical_address"
 	"net"
 )
@@ -21,20 +20,15 @@ func (c *Client) PhysicalAddress(a net.HardwareAddr) (*physical_address.Address,
 			}
 		}
 
-		return nil, fmt.Errorf(
-			"no exact match for physical address %s among %d results: %w",
+		return nil, not_found.Format(
+			"no exact match for physical address %s among %d results",
 			a,
 			len(result),
-			constant.ErrorNotFound,
 		)
 	}
 
 	if len(result) == 0 {
-		return nil, fmt.Errorf(
-			"physical address not found: %s: %w",
-			a,
-			constant.ErrorNotFound,
-		)
+		return nil, not_found.New("physical address", a)
 	}
 
 	return result[0], nil

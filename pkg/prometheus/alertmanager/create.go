@@ -1,7 +1,7 @@
 package alertmanager
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/go-openapi/strfmt"
@@ -51,7 +51,7 @@ func (c *Client) Create(
 	}
 
 	if !result.IsSuccess() {
-		return fmt.Errorf("unexpected status code: %+v", result)
+		return unexpected.Format("unexpected response: %+v", result)
 	}
 
 	return nil

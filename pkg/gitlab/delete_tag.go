@@ -6,5 +6,5 @@ func (c *Client) DeleteTag(
 ) error {
 	_, e := c.client.Tags.DeleteTag(project, name)
 
-	return e
+	return wrapError(e)
 }

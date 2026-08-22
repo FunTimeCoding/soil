@@ -12,5 +12,5 @@ func (c *Client) Query(
 		gitlab.WithContext(c.context),
 	)
 
-	return e
+	return wrapError(e)
 }

@@ -1,7 +1,8 @@
 package service
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"go/types"
 	"golang.org/x/tools/go/packages"
 )
@@ -14,7 +15,7 @@ func findMethod(
 	o := p.Types.Scope().Lookup(receiver)
 
 	if o == nil {
-		return nil, nil, fmt.Errorf(
+		return nil, nil, not_found.Format(
 			"receiver type %s not found in %s",
 			receiver,
 			p.PkgPath,
@@ -24,7 +25,7 @@ func findMethod(
 	named, okay := o.Type().(*types.Named)
 
 	if !okay {
-		return nil, nil, fmt.Errorf(
+		return nil, nil, validation.New(
 			"%s is not a named type in %s",
 			receiver,
 			p.PkgPath,
@@ -39,7 +40,7 @@ func findMethod(
 		}
 	}
 
-	return nil, nil, fmt.Errorf(
+	return nil, nil, not_found.Format(
 		"method %s not found on %s in %s",
 		symbol,
 		receiver,

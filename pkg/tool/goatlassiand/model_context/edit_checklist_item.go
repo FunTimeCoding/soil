@@ -30,23 +30,10 @@ func (s *Server) editChecklistItem(
 		return response.Fail("text is required: %v", h)
 	}
 
-	items, i := s.readChecklist(key)
+	items, i := s.service.EditChecklistItem(key, int(index), text)
 
 	if i != nil {
-		return s.captureFail(i, "checklist not readable")
-	}
-
-	j := int(index)
-
-	if j < 1 || j > len(items) {
-		return response.Fail("index %d out of range (1-%d)", j, len(items))
-	}
-
-	items[j-1].Text = text
-	fail, e := s.writeChecklist(c, key, items)
-
-	if fail != nil {
-		return fail, e
+		return s.failOrCapture(i, "checklist not updated")
 	}
 
 	return response.SuccessAny(items)

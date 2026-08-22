@@ -1,15 +1,13 @@
 package constant
 
 import (
-	"errors"
 	"github.com/funtimecoding/soil/pkg/identity"
+	"time"
 )
 
-var (
-	ErrorAliasCollision   = errors.New("alias already in use")
-	ErrorCallsignNotFound = errors.New("callsign does not exist")
-	ErrorEventNotFound    = errors.New("event not found")
+const CoverageRecentWindow = 30 * 24 * time.Hour
 
+var (
 	ReservedLabelKeys = []string{
 		SessionName,
 		Alias,
@@ -30,8 +28,10 @@ var (
 const (
 	SessionExportPathEnvironment = "SESSION_EXPORT_PATH"
 	MonitorUsageEnvironment      = "CLAUDE_MONITOR_USAGE"
+	CoverageRootEnvironment      = "CLAUDE_COVERAGE_ROOT"
 
 	SessionName = "name"
+	SessionKind = "session"
 	Callsign    = "callsign"
 	Topic       = "topic"
 	Files       = "files"
@@ -118,6 +118,10 @@ const (
 	HistoryPath        = "/history"
 	ConversationsTitle = "Conversations"
 	ConversationsPath  = "/conversations"
+	CoverageTitle      = "Coverage"
+	CoveragePath       = "/coverage"
+
+	ModelContextServersFile = ".mcp.json"
 
 	FixtureTopic  = "topic"
 	FixtureTarget = "target"

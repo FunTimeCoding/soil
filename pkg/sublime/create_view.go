@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/sublime/view"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/web/constant"
@@ -41,7 +42,7 @@ func (c *Client) CreateView(
 	defer errors.LogClose(r.Body)
 
 	if r.StatusCode != http.StatusCreated {
-		return view.Stub(), fmt.Errorf(
+		return view.Stub(), unexpected.Format(
 			"create view: %d: %s",
 			r.StatusCode,
 			system.ReadAll(r.Body),

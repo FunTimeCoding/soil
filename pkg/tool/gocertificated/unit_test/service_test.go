@@ -9,6 +9,7 @@ import (
 	"encoding/pem"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/armor"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/authority"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
@@ -93,7 +94,7 @@ func TestSecondRootConflicts(t *testing.T) {
 	s, v := newChain(t)
 	defer s.Close()
 	_, e := v.CreateAuthority(rootBody())
-	assert.True(t, errors.Is(e, constant.ErrorConflict))
+	assert.True(t, conflict.Is(e))
 }
 
 func TestIssuedLeafVerifiesAgainstTheChain(t *testing.T) {

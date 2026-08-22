@@ -1,7 +1,6 @@
 package constant
 
 import (
-	"errors"
 	"github.com/funtimecoding/soil/pkg/console/constant"
 	"regexp"
 )
@@ -40,8 +39,7 @@ const (
 )
 
 var (
-	Format        = constant.ColorFormat.Copy()
-	ErrorNotFound = errors.New("not found")
+	Format = constant.ColorFormat.Copy()
 
 	// InternetObjectTypes an IP address can be assigned to
 	InternetObjectTypes = []string{

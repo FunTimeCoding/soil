@@ -2,7 +2,7 @@ package client
 
 import (
 	"encoding/base64"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 )
 
 func (c *Client) decrypt(encoded string) ([]byte, error) {
@@ -15,7 +15,7 @@ func (c *Client) decrypt(encoded string) ([]byte, error) {
 	nonceSize := c.seal.NonceSize()
 
 	if len(b) < nonceSize {
-		return nil, fmt.Errorf("ciphertext too short")
+		return nil, validation.New("ciphertext too short")
 	}
 
 	return c.seal.Open(nil, b[:nonceSize], b[nonceSize:], nil)

@@ -14,7 +14,7 @@ func parseDetail(
 	var e response.Error
 
 	if json.Unmarshal(body, &e) == nil && e.Message != "" {
-		return detail_error.New(e.Message, status)
+		return detail_error.New(e.Message, status).WithBody(body)
 	}
 
 	var v2 response.V2Error
@@ -27,7 +27,7 @@ func parseDetail(
 		}
 
 		if title != "" {
-			return detail_error.New(title, status)
+			return detail_error.New(title, status).WithBody(body)
 		}
 	}
 

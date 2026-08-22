@@ -102,41 +102,52 @@ and returns 500. Wired into lifecycle via
 `server.New(...).WithMiddleware(web.RecoveryMiddleware(r))`.
 See `lifecycle.md`.
 
-### Sentry body enrichment
+### Sentry enrichment providers
 
 `pkg/errors/sentry/start.go` installs a `BeforeSend` hook that
-checks every error for `face.BodyProvider` (an interface with
-`Body() []byte`). When present - e.g. `*netbox.GenericOpenAPIError`
-- the response body is attached as a `response` context on the
-Sentry event. This works for both `CaptureException` and `Recover`
+checks every error - on both `CaptureException` and `Recover`
 paths (via `OriginalException` and `RecoveredException` in the
-`EventHint`). No caller changes needed - any error satisfying
-`BodyProvider` is automatically enriched.
+`EventHint`) - for two provider interfaces. No caller changes
+needed; any error satisfying a provider is automatically
+enriched:
+
+- `face.BodyProvider` (`Body() []byte`) - e.g.
+  `*netbox.GenericOpenAPIError` - attaches the response body as
+  a `response` context.
+- `face.ContextProvider` (`ErrorContext() (string, map[string]any)`)
+  - e.g. `*command.CommandError` ("process"), `*job.JobError`
+  ("job"), `*detail_error.Detail` ("upstream": status, detail,
+  body) - attaches the map under the key the error names.
+
+This is the enrichment mechanism: errors carry their own story,
+and the single capture at the recovery boundary attaches it.
+Reporting from a throw site before panicking creates a second
+Sentry issue for the same failure - a context-free decoy - so
+never capture and panic with the same error.
 
 ## External Process Failure
 
-When shelling out to an external process (terraform, git, ansible),
-use `SetReporter` on `run.Run` to enrich Sentry
-with stdout and stderr automatically on failure:
+When a command run through `run.Start` fails, the error is a
+`*command.CommandError` (`pkg/errors/command`) carrying the
+command line, stdout, and stderr, wrapping the underlying
+`exec.ExitError`. Its `Error()` stays short and stable for
+Sentry grouping ("git reset --hard origin/main: exit status
+128"); the output travels as structured context via
+`face.ContextProvider` and is attached by the `BeforeSend`
+hook at whichever recovery layer catches the panic:
 
 ```go
 c := run.New()
 c.Directory = directory
-c.SetReporter(r.reporter, "terraform init")
 c.Start("terraform", "init")
+// on failure: panics with *command.CommandError - the recovery
+// chain reports once, with command/output/stderr attached
 ```
-
-`SetReporter` stores the reporter and a label on the `Run` struct.
-When `Start` encounters an error and `Panic` is true (the default),
-it calls `CaptureWithContext` with the process output before
-panicking. The Sentry event gets stdout and stderr as structured
-context - visible in the Sentry UI without being stuffed into the
-panic message.
 
 For cases where the caller needs to inspect the error before
 deciding what to do (e.g. parsing terraform's JSON output to
 decide whether to retry with `-upgrade`), use `NoPanic()` and
-handle manually:
+handle manually - `c.Error` holds the same rich error:
 
 ```go
 c := run.New().NoPanic()

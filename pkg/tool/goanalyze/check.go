@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/call_format"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/constant_declaration"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/defer_close"
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/error_wrap_verb"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/expected_first"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/file_identity"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/forbidden_call"
@@ -39,6 +40,7 @@ func check(
 	struct_literal.Check(p, results)
 	call_format.Check(p, results)
 	defer_close.Check(p, results)
+	error_wrap_verb.Check(p, results)
 	file_identity.Check(p, results)
 	type_receiver.Check(p, results)
 	unchecked_print_write.Check(p, results)

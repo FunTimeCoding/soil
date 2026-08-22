@@ -18,10 +18,10 @@ func (s *Server) editForm(
 	session := s.service.Resolve(identifier)
 	alias := session.Slug
 	var description string
-	e, f := s.service.GetSession(session.Identifier)
+	e, found, f := s.service.FindSession(session.Identifier)
 	errors.PanicOnError(f)
 
-	if e != nil {
+	if found {
 		if e.Alias != nil {
 			alias = *e.Alias
 		}

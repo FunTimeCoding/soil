@@ -3,6 +3,7 @@ package chromium
 import (
 	"fmt"
 	"github.com/chromedp/chromedp"
+	"github.com/funtimecoding/soil/pkg/errors/unreachable"
 )
 
 func (c *Client) browser() (*chromedp.Browser, error) {
@@ -15,7 +16,7 @@ func (c *Client) browser() (*chromedp.Browser, error) {
 	x := chromedp.FromContext(c.context)
 
 	if x == nil {
-		return nil, fmt.Errorf("chromedp context is nil")
+		return nil, unreachable.Format("chromedp context is nil")
 	}
 
 	if x.Browser != nil {
@@ -29,7 +30,7 @@ func (c *Client) browser() (*chromedp.Browser, error) {
 	}
 
 	if x.Browser == nil {
-		return nil, fmt.Errorf("browser is nil after reconnect")
+		return nil, unreachable.Format("browser is nil after reconnect")
 	}
 
 	return x.Browser, nil

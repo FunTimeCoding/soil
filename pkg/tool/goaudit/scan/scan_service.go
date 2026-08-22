@@ -14,7 +14,9 @@ func scanService(
 	c *Configuration,
 ) *Service {
 	s := &Service{Name: name, Repo: repo, Path: path}
-	s.ModelContext = v.DirectoryExists(filepath.Join(path, "model_context"))
+	s.ModelContext = v.DirectoryExists(
+		filepath.Join(path, constant.ModelContextDirectory),
+	)
 	s.Server = v.DirectoryExists(filepath.Join(path, "server"))
 	s.Web = v.DirectoryExists(filepath.Join(path, constant.WebDirectory))
 	s.Store = v.DirectoryExists(filepath.Join(path, "store"))

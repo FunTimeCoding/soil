@@ -16,18 +16,12 @@ func (r *Runner) terraformInit() {
 		r.logger.Structured("terraform_init_upgrade")
 		u := r.newRun()
 		u.Directory = directory
-		u.SetReporter(r.reporter, "terraform init -upgrade")
 		u.Start(constant.Command, "init", "-upgrade")
 
 		return
 	}
 
 	if c.Error != nil {
-		r.reporter.CaptureWithContext(
-			c.Error,
-			"terraform init",
-			map[string]any{"output": c.OutputString, "stderr": c.ErrorString},
-		)
 		panic(c.Error)
 	}
 }

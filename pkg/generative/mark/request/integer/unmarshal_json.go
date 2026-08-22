@@ -2,7 +2,7 @@ package integer
 
 import (
 	"encoding/json"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"strconv"
 )
 
@@ -21,7 +21,7 @@ func (i *Integer) UnmarshalJSON(b []byte) error {
 		v, f := strconv.Atoi(s)
 
 		if f != nil {
-			return fmt.Errorf("cannot parse %q as integer", s)
+			return validation.New("cannot parse %q as integer", s)
 		}
 
 		*i = Integer(v)
@@ -29,5 +29,5 @@ func (i *Integer) UnmarshalJSON(b []byte) error {
 		return nil
 	}
 
-	return fmt.Errorf("cannot unmarshal %s as integer", string(b))
+	return validation.New("cannot unmarshal %s as integer", string(b))
 }

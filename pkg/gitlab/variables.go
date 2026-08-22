@@ -26,7 +26,7 @@ func (c *Client) Variables(project int64) ([]*gitlab.ProjectVariable, error) {
 		}
 
 		if e != nil {
-			return nil, e
+			return nil, wrapError(e)
 		}
 
 		result = append(result, page...)

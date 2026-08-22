@@ -1,6 +1,6 @@
 package mock_client
 
-import "fmt"
+import "github.com/funtimecoding/soil/pkg/errors/not_found"
 
 func (c *Client) SaveView(
 	identifier int,
@@ -15,5 +15,5 @@ func (c *Client) SaveView(
 		}
 	}
 
-	return fmt.Errorf("view %d not found", identifier)
+	return not_found.New("view", identifier)
 }

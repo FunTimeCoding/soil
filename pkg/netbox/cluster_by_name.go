@@ -1,7 +1,7 @@
 package netbox
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/netbox/cluster"
 )
 
@@ -18,5 +18,5 @@ func (c *Client) ClusterByName(n string) (*cluster.Cluster, error) {
 		}
 	}
 
-	return nil, fmt.Errorf("cluster not found: %s", n)
+	return nil, not_found.New("cluster", n)
 }

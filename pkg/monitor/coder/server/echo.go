@@ -36,7 +36,7 @@ func echo(
 	}
 
 	if _, e := io.Copy(w, r); e != nil {
-		return fmt.Errorf("io.Copy fail: %w", e)
+		return fmt.Errorf("copy: %w", e)
 	}
 
 	return w.Close()

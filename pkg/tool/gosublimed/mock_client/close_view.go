@@ -1,6 +1,6 @@
 package mock_client
 
-import "fmt"
+import "github.com/funtimecoding/soil/pkg/errors/not_found"
 
 func (c *Client) CloseView(identifier int) error {
 	for i, v := range c.views {
@@ -11,5 +11,5 @@ func (c *Client) CloseView(identifier int) error {
 		}
 	}
 
-	return fmt.Errorf("view %d not found", identifier)
+	return not_found.New("view", identifier)
 }

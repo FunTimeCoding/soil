@@ -3,6 +3,7 @@ package gosecret
 import (
 	"encoding/base64"
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"sort"
 	"strings"
@@ -29,7 +30,7 @@ func ReplacePayload(
 	}
 
 	if !found {
-		return nil, fmt.Errorf("no data block in manifest")
+		return nil, validation.New("no data block in manifest")
 	}
 
 	for ; i < len(lines); i++ {

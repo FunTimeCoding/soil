@@ -12,7 +12,7 @@ through `errors.PanicOnError`.
 | `system.ReadDirectory(path)` | `os.ReadDir` | Returns `[]os.DirEntry` |
 | `system.ReadBytes(base, name)` | `fs.ReadFile` via embed | Takes base + name, not full path |
 | `system.ReadFile(base, name)` | Same, returns `string` | |
-| `system.ReadAll(reader)` | `io.ReadAll` | For HTTP response bodies |
+| `system.ReadAll(reader)` | `io.ReadAll` | Generic readers; HTTP response bodies go through `web.ReadBytes` (panics typed `unreadable_body`) |
 | `system.Stat(path)` | `os.Stat` | Returns `os.FileInfo` |
 | `system.Remove(path)` | `os.RemoveAll` | Recursive - use for directories |
 | `system.RemoveFile(path)` | `os.Remove` | Single file only |

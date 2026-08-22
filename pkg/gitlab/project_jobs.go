@@ -9,7 +9,7 @@ func (c *Client) ProjectJobs(p *project.Project) ([]*job.Job, error) {
 	result, _, e := c.client.Jobs.ListProjectJobs(p.Identifier, nil)
 
 	if e != nil {
-		return nil, e
+		return nil, wrapError(e)
 	}
 
 	return c.enrichProjectJobs(job.NewSlice(result), p), nil

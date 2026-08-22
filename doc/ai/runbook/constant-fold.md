@@ -92,9 +92,11 @@ semantics) and `unit_test`/`integration_test` homes inside
 - Export-all applies to internals (analyzer orderings, tuning
   knobs, scoring tables) - in-package residence is the lint gap
   new sessions recreate strays through.
-- Error vars keep the `Error*`-first form (`ErrorNotFound`);
-  provider-prefixed error names break staticcheck ST1012 - merge
-  same-meaning error vars per domain instead.
+- Error vars keep the `Error*`-first form (`ErrorTokenExpired`);
+  provider-prefixed error names break staticcheck ST1012. Before
+  keeping a sentinel at all, check the shared typed classes in
+  `pkg/errors` - same-meaning per-package sentinels were folded
+  into them.
 - Comment preservation is load-bearing: `#nosec` markers, spec
   structure headers, design-rationale comments ride the move
   verbatim. Multi-group `const (...)` blocks are the curated

@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
+	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
 	"github.com/luthermonson/go-proxmox"
 )
@@ -19,7 +19,10 @@ func (s *Service) DeleteMachine(
 	}
 
 	if vm.Status == "running" {
-		return constant.ErrorMachineRunning
+		return conflict.Format(
+			"machine %d is running - stop it before deleting",
+			identifier,
+		)
 	}
 
 	task, e := c.DeleteMachine(

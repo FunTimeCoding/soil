@@ -20,7 +20,7 @@ func (s *Server) keys(
 	result, e := c.Keys()
 
 	if e != nil {
-		return s.captureFail(e, constant.KeysFailed)
+		return s.captureFail(e, constant.KeysFail)
 	}
 
 	return response.SuccessAny(result)

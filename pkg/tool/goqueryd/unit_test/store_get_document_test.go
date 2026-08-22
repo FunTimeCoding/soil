@@ -24,10 +24,12 @@ func TestGetDocumentByVirtualPath(t *testing.T) {
 	assert.String(t, "qmd://test/alpha.md", d.VirtualPath)
 }
 
-func TestGetDocumentNotFound(t *testing.T) {
+func TestFindDocumentMissIsNotFound(t *testing.T) {
 	s := indexedTestStore(t)
 	defer s.Close()
-	d := s.MustGetDocument("test/nonexistent.md")
+	d, found, e := s.FindDocument("test/nonexistent.md")
+	assert.FatalOnError(t, e)
+	assert.False(t, found)
 	assert.Nil(t, d)
 }
 

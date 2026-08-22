@@ -17,5 +17,5 @@ func (c *Client) CommitActions(
 		},
 	)
 
-	return result, e
+	return result, wrapError(e)
 }

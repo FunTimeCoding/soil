@@ -7,7 +7,7 @@ func (c *Client) Boards() ([]*jira.Board, error) {
 	v, _, e := c.client.Board.GetAllBoards(nil)
 
 	if e != nil {
-		return nil, e
+		return nil, wrapError(e)
 	}
 
 	for _, b := range v.Values {

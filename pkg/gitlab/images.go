@@ -19,7 +19,7 @@ func (c *Client) Images(
 	)
 
 	if e != nil {
-		return nil, e
+		return nil, wrapError(e)
 	}
 
 	return image.Sort(result), nil

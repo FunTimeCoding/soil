@@ -15,13 +15,13 @@ func download() ([]byte, error) {
 	r, e := http.Get(constant.AnthropicVocabularyLink)
 
 	if e != nil {
-		return nil, fmt.Errorf("failed to download vocabulary: %w", e)
+		return nil, fmt.Errorf("download vocabulary: %w", e)
 	}
 
 	defer errors.PanicClose(r.Body)
 
 	if r.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("failed to download vocabulary: %s", r.Status)
+		return nil, fmt.Errorf("download vocabulary: %s", r.Status)
 	}
 
 	content, e := io.ReadAll(r.Body)

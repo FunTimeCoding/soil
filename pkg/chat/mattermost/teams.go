@@ -12,5 +12,5 @@ func (c *Client) Teams(userIdentifier string) ([]*model.Team, error) {
 		constant.MattermostEmptyEntityTag,
 	)
 
-	return result, e
+	return result, wrapError(e)
 }

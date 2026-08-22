@@ -5,7 +5,6 @@ import (
 	generative "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/types/checklist_item"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -25,16 +24,10 @@ func (s *Server) addChecklistItem(
 		return response.Fail("text is required: %v", g)
 	}
 
-	items, h := s.readChecklist(key)
+	items, h := s.service.AddChecklistItem(key, text)
 
 	if h != nil {
-		return s.captureFail(h, "checklist not readable")
-	}
-
-	items = append(items, checklist_item.New(len(items), text, false))
-
-	if fail, e := s.writeChecklist(c, key, items); fail != nil {
-		return fail, e
+		return s.failOrCapture(h, "checklist not updated")
 	}
 
 	return response.SuccessAny(items)

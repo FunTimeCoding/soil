@@ -169,6 +169,439 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/jira/issue:
+    post:
+      operationId: createIssue
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateIssueRequest"
+      responses:
+        "201":
+          description: Created issue.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JiraIssue"
+        "400":
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to create issue.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/jira/issue/{key}/update:
+    post:
+      operationId: updateIssue
+      parameters:
+      - name: key
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Issue key.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateIssueRequest"
+      responses:
+        "200":
+          description: Update result with field changes.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/IssueUpdateResult"
+        "400":
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to update issue.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/jira/meta:
+    get:
+      operationId: getCreateMeta
+      parameters:
+      - name: project
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Project key.
+      - name: issue_type
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Issue type name.
+      - name: expand
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Comma-separated field names to expand allowed values.
+      responses:
+        "200":
+          description: Create metadata fields.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/CreateMetaField"
+        "500":
+          description: Failed to get create metadata.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/jira/users:
+    get:
+      operationId: searchUsers
+      parameters:
+      - name: query
+        in: query
+        required: true
+        schema:
+          type: string
+        description: User search query.
+      responses:
+        "200":
+          description: Matching users.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/JiraUser"
+        "500":
+          description: Failed to search users.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/jira/issue/{key}/link:
+    post:
+      operationId: linkIssues
+      parameters:
+      - name: key
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Outward issue key.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LinkRequest"
+      responses:
+        "204":
+          description: Issues linked.
+        "500":
+          description: Failed to link issues.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/jira/link/{identifier}:
+    delete:
+      operationId: deleteLink
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Link identifier.
+      responses:
+        "204":
+          description: Link deleted.
+        "500":
+          description: Failed to delete link.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/jira/link-types:
+    get:
+      operationId: getLinkTypes
+      responses:
+        "200":
+          description: Available issue link types.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/LinkType"
+        "500":
+          description: Failed to get link types.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/jira/issue/{key}/comment/{identifier}:
+    put:
+      operationId: updateComment
+      parameters:
+      - name: key
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Issue key.
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Comment identifier.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CommentRequest"
+      responses:
+        "204":
+          description: Comment updated.
+        "500":
+          description: Failed to update comment.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteComment
+      parameters:
+      - name: key
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Issue key.
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Comment identifier.
+      responses:
+        "204":
+          description: Comment deleted.
+        "500":
+          description: Failed to delete comment.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/jira/issue/{key}/checklist:
+    get:
+      operationId: getChecklist
+      parameters:
+      - name: key
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Issue key.
+      responses:
+        "200":
+          description: Checklist items.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/ChecklistItem"
+        "500":
+          description: Failed to read checklist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: addChecklistItem
+      parameters:
+      - name: key
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Issue key.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChecklistTextRequest"
+      responses:
+        "200":
+          description: Checklist after addition.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/ChecklistItem"
+        "400":
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to add checklist item.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/jira/issue/{key}/checklist/{index}:
+    put:
+      operationId: editChecklistItem
+      parameters:
+      - name: key
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Issue key.
+      - name: index
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: One-based item index.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChecklistTextRequest"
+      responses:
+        "200":
+          description: Checklist after edit.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/ChecklistItem"
+        "400":
+          description: Index out of range.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to edit checklist item.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteChecklistItem
+      parameters:
+      - name: key
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Issue key.
+      - name: index
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: One-based item index.
+      responses:
+        "200":
+          description: Checklist after deletion.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/ChecklistItem"
+        "400":
+          description: Index out of range.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to delete checklist item.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/jira/issue/{key}/checklist/{index}/toggle:
+    post:
+      operationId: toggleChecklistItem
+      parameters:
+      - name: key
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Issue key.
+      - name: index
+        in: path
+        required: true
+        schema:
+          type: integer
+        description: One-based item index.
+      responses:
+        "200":
+          description: Checklist after toggle.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/ChecklistItem"
+        "400":
+          description: Index out of range.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to toggle checklist item.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /api/v1/confluence/spaces:
     get:
       operationId: listSpaces
@@ -301,6 +734,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deletePage
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Page ID.
+      - name: draft
+        in: query
+        required: false
+        schema:
+          type: boolean
+        description: Delete the draft instead of the published page.
+      responses:
+        "204":
+          description: Page deleted.
+        "500":
+          description: Failed to delete page.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /api/v1/confluence/page/{identifier}/children:
     get:
       operationId: getPageChildren
@@ -349,6 +806,132 @@ paths:
           description: Comment added.
         "500":
           description: Failed to add comment.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/confluence/page/{identifier}/draft:
+    get:
+      operationId: getPageDraft
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Page ID.
+      responses:
+        "200":
+          description: Page with unpublished draft changes overlaid.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConfluencePageDetail"
+        "500":
+          description: Failed to get page draft.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/confluence/page/{identifier}/status:
+    post:
+      operationId: setPageStatus
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Page ID.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PageStatusRequest"
+      responses:
+        "200":
+          description: Page after status change.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConfluencePageDetail"
+        "400":
+          description: Invalid status.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to set page status.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/confluence/page/{identifier}/edit:
+    post:
+      operationId: editPage
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Page ID.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EditPageRequest"
+      responses:
+        "200":
+          description: Page after partial edit.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConfluencePageDetail"
+        "400":
+          description: Old text not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to edit page.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/confluence/pages:
+    get:
+      operationId: listPages
+      parameters:
+      - name: space
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Space identifier.
+      - name: status
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Page status filter.
+      responses:
+        "200":
+          description: Pages in the space.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/ConfluencePage"
+        "500":
+          description: Failed to list pages.
           content:
             application/json:
               schema:
@@ -544,6 +1127,157 @@ components:
         body:
           type: string
           description: Comment body text.
+    CreateIssueRequest:
+      type: object
+      required: [project, issue_type, summary]
+      properties:
+        project:
+          type: string
+        issue_type:
+          type: string
+        summary:
+          type: string
+        description:
+          type: string
+        assignee:
+          type: string
+        labels:
+          type: array
+          items:
+            type: string
+        additional_fields:
+          type: object
+          additionalProperties: true
+    UpdateIssueRequest:
+      type: object
+      properties:
+        summary:
+          type: string
+        description:
+          type: string
+        assignee:
+          type: string
+        reporter:
+          type: string
+        labels:
+          type: array
+          items:
+            type: string
+        additional_fields:
+          type: object
+          additionalProperties: true
+        no_diff:
+          type: boolean
+    IssueUpdateResult:
+      type: object
+      required: [issue]
+      properties:
+        issue:
+          $ref: "#/components/schemas/JiraIssue"
+        changes:
+          type: array
+          items:
+            $ref: "#/components/schemas/FieldChange"
+    FieldChange:
+      type: object
+      required: [field, before, after]
+      properties:
+        field:
+          type: string
+        before:
+          type: string
+        after:
+          type: string
+    CreateMetaField:
+      type: object
+      required: [name, key, required, schema]
+      properties:
+        name:
+          type: string
+        key:
+          type: string
+        required:
+          type: boolean
+        schema:
+          type: string
+        allowed_values:
+          type: array
+          items:
+            $ref: "#/components/schemas/CreateMetaAllowed"
+    CreateMetaAllowed:
+      type: object
+      required: [identifier, value]
+      properties:
+        identifier:
+          type: string
+        value:
+          type: string
+    JiraUser:
+      type: object
+      required: [account_identifier, display_name, active]
+      properties:
+        account_identifier:
+          type: string
+        display_name:
+          type: string
+        email:
+          type: string
+        active:
+          type: boolean
+    LinkRequest:
+      type: object
+      required: [target_key]
+      properties:
+        target_key:
+          type: string
+        link_type:
+          type: string
+    LinkType:
+      type: object
+      required: [name, inward, outward]
+      properties:
+        name:
+          type: string
+        inward:
+          type: string
+        outward:
+          type: string
+    ChecklistItem:
+      type: object
+      required: [index, text, checked]
+      properties:
+        index:
+          type: integer
+        text:
+          type: string
+        checked:
+          type: boolean
+    ChecklistTextRequest:
+      type: object
+      required: [text]
+      properties:
+        text:
+          type: string
+    PageStatusRequest:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+    EditPageRequest:
+      type: object
+      required: [old_text, new_text]
+      properties:
+        old_text:
+          type: string
+        new_text:
+          type: string
+        title:
+          type: string
+        message:
+          type: string
+        draft:
+          type: boolean
     Error:
       type: object
       required: [error]

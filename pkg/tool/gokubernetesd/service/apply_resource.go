@@ -2,7 +2,8 @@ package service
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/conflict"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"sigs.k8s.io/yaml"
@@ -23,24 +24,24 @@ func (s *Service) ApplyResource(
 	f := yaml.Unmarshal([]byte(q.Manifest), &object)
 
 	if f != nil {
-		return nil, fmt.Errorf("invalid YAML: %s", f)
+		return nil, validation.New("invalid YAML: %s", f)
 	}
 
 	resource := &unstructured.Unstructured{Object: object}
 	kind := resource.GetKind()
 
 	if kind == "" {
-		return nil, fmt.Errorf("manifest must include kind")
+		return nil, validation.New("manifest must include kind")
 	}
 
 	if resource.GetAPIVersion() == "" {
-		return nil, fmt.Errorf("manifest must include apiVersion")
+		return nil, validation.New("manifest must include apiVersion")
 	}
 
 	name := resource.GetName()
 
 	if name == "" {
-		return nil, fmt.Errorf("manifest must include metadata.name")
+		return nil, validation.New("manifest must include metadata.name")
 	}
 
 	gvr, namespaced, g := c.ResolveResource(kind)
@@ -84,7 +85,7 @@ func (s *Service) ApplyResource(
 		}
 
 		if h == nil && existing != nil {
-			return nil, fmt.Errorf(
+			return nil, conflict.Format(
 				"%s/%s already exists in %s - pass override: true to update",
 				kind,
 				name,

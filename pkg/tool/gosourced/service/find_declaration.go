@@ -1,7 +1,7 @@
 package service
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"go/types"
 	"golang.org/x/tools/go/packages"
 )
@@ -23,7 +23,7 @@ func findDeclaration(
 	}
 
 	if target == nil {
-		return nil, nil, fmt.Errorf("package not found: %s", packagePath)
+		return nil, nil, not_found.New("package", packagePath)
 	}
 
 	if receiver == "" {

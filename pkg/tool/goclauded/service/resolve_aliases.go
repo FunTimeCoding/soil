@@ -4,9 +4,9 @@ func (s *Service) resolveAliases(sessionIDs map[string]bool) map[string]string {
 	result := map[string]string{}
 
 	for identifier := range sessionIDs {
-		session, e := s.store.GetSession(identifier)
+		session, found, e := s.store.FindSession(identifier)
 
-		if e != nil || session == nil {
+		if e != nil || !found {
 			continue
 		}
 

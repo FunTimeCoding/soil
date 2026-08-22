@@ -1,7 +1,7 @@
 package update_machine
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"strings"
 )
 
@@ -35,13 +35,13 @@ func (m *Machine) Validate() error {
 	if m.Delete != "" {
 		for _, field := range strings.Split(m.Delete, ",") {
 			if setNames[strings.TrimSpace(field)] {
-				return constant.ErrorSetDeleteConflict
+				return validation.New("cannot set and delete the same field")
 			}
 		}
 	}
 
 	if len(setNames) == 0 && m.Delete == "" {
-		return constant.ErrorNoChanges
+		return validation.New("no changes specified")
 	}
 
 	return nil

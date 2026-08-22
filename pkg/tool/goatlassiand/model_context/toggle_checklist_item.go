@@ -24,23 +24,10 @@ func (s *Server) toggleChecklistItem(
 		return response.Fail("index is required: %v", g)
 	}
 
-	items, h := s.readChecklist(key)
+	items, h := s.service.ToggleChecklistItem(key, int(index))
 
 	if h != nil {
-		return s.captureFail(h, "checklist not readable")
-	}
-
-	i := int(index)
-
-	if i < 1 || i > len(items) {
-		return response.Fail("index %d out of range (1-%d)", i, len(items))
-	}
-
-	items[i-1].Checked = !items[i-1].Checked
-	fail, e := s.writeChecklist(c, key, items)
-
-	if fail != nil {
-		return fail, e
+		return s.failOrCapture(h, "checklist not updated")
 	}
 
 	return response.SuccessAny(items)

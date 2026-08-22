@@ -1,9 +1,9 @@
 package mock_client
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 )
 
 func (c *Client) PutPage(
@@ -17,12 +17,12 @@ func (c *Client) PutPage(
 	e, okay := c.pages[identifier]
 
 	if !okay || e.deleted {
-		return nil, fmt.Errorf("page not found: %s", identifier)
+		return nil, not_found.New("page", identifier)
 	}
 
 	if status == constant.ConfluenceDraftStatus {
 		if e.page == nil {
-			return nil, fmt.Errorf("page not found: %s", identifier)
+			return nil, not_found.New("page", identifier)
 		}
 
 		draft := *e.page
@@ -37,7 +37,7 @@ func (c *Client) PutPage(
 	}
 
 	if e.page == nil {
-		return nil, fmt.Errorf("page not found: %s", identifier)
+		return nil, not_found.New("page", identifier)
 	}
 
 	e.page.Title = title

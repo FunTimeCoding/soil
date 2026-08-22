@@ -32,7 +32,7 @@ func (c *Client) RegistryRepositories(
 		}
 
 		if e != nil {
-			return nil, e
+			return nil, wrapError(e)
 		}
 
 		result = append(result, page...)

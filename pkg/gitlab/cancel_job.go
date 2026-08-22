@@ -8,5 +8,5 @@ func (c *Client) CancelJob(
 ) (*gitlab.Job, error) {
 	result, _, e := c.client.Jobs.CancelJob(project, job)
 
-	return result, e
+	return result, wrapError(e)
 }

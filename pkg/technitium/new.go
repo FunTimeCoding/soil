@@ -2,9 +2,7 @@ package technitium
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/web/locator"
-	"net/http"
+	"github.com/funtimecoding/soil/pkg/technitium/basic"
 )
 
 func New(
@@ -14,9 +12,5 @@ func New(
 	errors.FatalOnEmpty(host, "host")
 	errors.FatalOnEmpty(token, "token")
 
-	return &Client{
-		base:   join.Empty(locator.New(host).String(), "/api"),
-		token:  token,
-		client: &http.Client{},
-	}
+	return &Client{basic: basic.New(host, token)}
 }

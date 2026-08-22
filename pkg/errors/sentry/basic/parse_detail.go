@@ -14,7 +14,7 @@ func parseDetail(
 	var e response.Error
 
 	if json.Unmarshal(body, &e) == nil && e.Detail != "" {
-		return detail_error.New(e.Detail, status)
+		return detail_error.New(e.Detail, status).WithBody(body)
 	}
 
 	return fmt.Errorf("%s", status)

@@ -18,7 +18,7 @@ func (s *Server) list(
 	memories, e := s.service.ListMemories(memoryType, tag, scope, true)
 
 	if e != nil {
-		return s.captureFail(e, "failed to list memories")
+		return s.captureFail(e, "list memories")
 	}
 
 	return response.Success(notation.MarshalIndent(memories))

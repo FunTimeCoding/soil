@@ -9,7 +9,7 @@ func (c *Client) SearchProject(query string) ([]*project.Project, error) {
 	result, _, e := c.client.Search.Projects(query, &gitlab.SearchOptions{})
 
 	if e != nil {
-		return nil, e
+		return nil, wrapError(e)
 	}
 
 	return project.NewSlice(result), nil

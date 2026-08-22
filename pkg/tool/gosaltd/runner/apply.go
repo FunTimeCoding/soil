@@ -2,9 +2,12 @@ package runner
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	provision "github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/constant"
+	"slices"
+	"strings"
 	"time"
 )
 
@@ -38,8 +41,30 @@ func (r *Runner) apply(
 		output, marshalError := json.MarshalIndent(result, "", "  ")
 		errors.PanicOnError(marshalError)
 		record.Output = string(output)
-		record.Status = provision.StoreStatusSuccess
-		r.logger.Structured("highstate_done")
+		var silent []string
+
+		for minion, v := range result {
+			if !v.Responded {
+				silent = append(silent, minion)
+			}
+		}
+
+		if len(silent) > 0 {
+			slices.Sort(silent)
+			record.Status = provision.StoreStatusError
+			record.ErrorOutput = fmt.Sprintf(
+				"minion did not respond: %s",
+				strings.Join(silent, ", "),
+			)
+			r.logger.Structured(
+				"highstate_silent_minion",
+				constant.Minions,
+				strings.Join(silent, ", "),
+			)
+		} else {
+			record.Status = provision.StoreStatusSuccess
+			r.logger.Structured("highstate_done")
+		}
 	}
 
 	r.store.Update(record)

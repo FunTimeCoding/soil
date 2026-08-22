@@ -2,10 +2,9 @@ package server
 
 import (
 	"context"
-	"errors"
 	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	goclauded "github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
 )
 
@@ -28,9 +27,9 @@ func (s *Server) PostAnnounce(
 	}
 
 	if e := s.service.Announce(identifier, r.Body.Callsign, r.Body.Topic, files); e != nil {
-		if errors.Is(e, goclauded.ErrorCallsignNotFound) {
-			return server.PostAnnounce500JSONResponse(
-				server.ErrorResponse{Error: e.Error()},
+		if not_found.Is(e) {
+			return server.PostAnnounce404JSONResponse(
+				server.Error{Error: e.Error()},
 			), nil
 		}
 

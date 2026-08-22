@@ -22,6 +22,18 @@ import (
 	"github.com/oapi-codegen/runtime"
 )
 
+// ChecklistItem defines model for ChecklistItem.
+type ChecklistItem struct {
+	Checked bool   `json:"checked"`
+	Index   int    `json:"index"`
+	Text    string `json:"text"`
+}
+
+// ChecklistTextRequest defines model for ChecklistTextRequest.
+type ChecklistTextRequest struct {
+	Text string `json:"text"`
+}
+
 // CommentRequest defines model for CommentRequest.
 type CommentRequest struct {
 	// Body Comment body text.
@@ -56,6 +68,32 @@ type ConfluenceSpace struct {
 	Type               *string `json:"type,omitempty"`
 }
 
+// CreateIssueRequest defines model for CreateIssueRequest.
+type CreateIssueRequest struct {
+	AdditionalFields *map[string]interface{} `json:"additional_fields,omitempty"`
+	Assignee         *string                 `json:"assignee,omitempty"`
+	Description      *string                 `json:"description,omitempty"`
+	IssueType        string                  `json:"issue_type"`
+	Labels           *[]string               `json:"labels,omitempty"`
+	Project          string                  `json:"project"`
+	Summary          string                  `json:"summary"`
+}
+
+// CreateMetaAllowed defines model for CreateMetaAllowed.
+type CreateMetaAllowed struct {
+	Identifier string `json:"identifier"`
+	Value      string `json:"value"`
+}
+
+// CreateMetaField defines model for CreateMetaField.
+type CreateMetaField struct {
+	AllowedValues *[]CreateMetaAllowed `json:"allowed_values,omitempty"`
+	Key           string               `json:"key"`
+	Name          string               `json:"name"`
+	Required      bool                 `json:"required"`
+	Schema        string               `json:"schema"`
+}
+
 // CreatePageRequest defines model for CreatePageRequest.
 type CreatePageRequest struct {
 	// Body Page content in markdown.
@@ -71,6 +109,15 @@ type CreatePageRequest struct {
 	Title string `json:"title"`
 }
 
+// EditPageRequest defines model for EditPageRequest.
+type EditPageRequest struct {
+	Draft   *bool   `json:"draft,omitempty"`
+	Message *string `json:"message,omitempty"`
+	NewText string  `json:"new_text"`
+	OldText string  `json:"old_text"`
+	Title   *string `json:"title,omitempty"`
+}
+
 // Error defines model for Error.
 type Error struct {
 	Error string `json:"error"`
@@ -80,6 +127,19 @@ type Error struct {
 type ErrorResponse struct {
 	Error           string `json:"error"`
 	EventIdentifier string `json:"event_identifier"`
+}
+
+// FieldChange defines model for FieldChange.
+type FieldChange struct {
+	After  string `json:"after"`
+	Before string `json:"before"`
+	Field  string `json:"field"`
+}
+
+// IssueUpdateResult defines model for IssueUpdateResult.
+type IssueUpdateResult struct {
+	Changes *[]FieldChange `json:"changes,omitempty"`
+	Issue   JiraIssue      `json:"issue"`
 }
 
 // JiraComment defines model for JiraComment.
@@ -124,10 +184,47 @@ type JiraTransition struct {
 	ToStatus   *string `json:"toStatus,omitempty"`
 }
 
+// JiraUser defines model for JiraUser.
+type JiraUser struct {
+	AccountIdentifier string  `json:"account_identifier"`
+	Active            bool    `json:"active"`
+	DisplayName       string  `json:"display_name"`
+	Email             *string `json:"email,omitempty"`
+}
+
+// LinkRequest defines model for LinkRequest.
+type LinkRequest struct {
+	LinkType  *string `json:"link_type,omitempty"`
+	TargetKey string  `json:"target_key"`
+}
+
+// LinkType defines model for LinkType.
+type LinkType struct {
+	Inward  string `json:"inward"`
+	Name    string `json:"name"`
+	Outward string `json:"outward"`
+}
+
+// PageStatusRequest defines model for PageStatusRequest.
+type PageStatusRequest struct {
+	Status string `json:"status"`
+}
+
 // TransitionRequest defines model for TransitionRequest.
 type TransitionRequest struct {
 	// TransitionIdentifier Transition ID from get_transitions.
 	TransitionIdentifier string `json:"transitionIdentifier"`
+}
+
+// UpdateIssueRequest defines model for UpdateIssueRequest.
+type UpdateIssueRequest struct {
+	AdditionalFields *map[string]interface{} `json:"additional_fields,omitempty"`
+	Assignee         *string                 `json:"assignee,omitempty"`
+	Description      *string                 `json:"description,omitempty"`
+	Labels           *[]string               `json:"labels,omitempty"`
+	NoDiff           *bool                   `json:"no_diff,omitempty"`
+	Reporter         *string                 `json:"reporter,omitempty"`
+	Summary          *string                 `json:"summary,omitempty"`
 }
 
 // UpdatePageRequest defines model for UpdatePageRequest.
@@ -142,6 +239,21 @@ type UpdatePageRequest struct {
 	Title string `json:"title"`
 }
 
+// DeletePageParams defines parameters for DeletePage.
+type DeletePageParams struct {
+	// Draft Delete the draft instead of the published page.
+	Draft *bool `form:"draft,omitempty" json:"draft,omitempty"`
+}
+
+// ListPagesParams defines parameters for ListPages.
+type ListPagesParams struct {
+	// Space Space identifier.
+	Space string `form:"space" json:"space"`
+
+	// Status Page status filter.
+	Status *string `form:"status,omitempty" json:"status,omitempty"`
+}
+
 // SearchPagesParams defines parameters for SearchPages.
 type SearchPagesParams struct {
 	// Query CQL query string or plain text.
@@ -154,6 +266,18 @@ type GetIssueParams struct {
 	Comments *bool `form:"comments,omitempty" json:"comments,omitempty"`
 }
 
+// GetCreateMetaParams defines parameters for GetCreateMeta.
+type GetCreateMetaParams struct {
+	// Project Project key.
+	Project string `form:"project" json:"project"`
+
+	// IssueType Issue type name.
+	IssueType string `form:"issue_type" json:"issue_type"`
+
+	// Expand Comma-separated field names to expand allowed values.
+	Expand *string `form:"expand,omitempty" json:"expand,omitempty"`
+}
+
 // SearchIssuesParams defines parameters for SearchIssues.
 type SearchIssuesParams struct {
 	// Query JQL query string.
@@ -161,6 +285,12 @@ type SearchIssuesParams struct {
 
 	// Limit Maximum number of results. Omit for all.
 	Limit *int `form:"limit,omitempty" json:"limit,omitempty"`
+}
+
+// SearchUsersParams defines parameters for SearchUsers.
+type SearchUsersParams struct {
+	// Query User search query.
+	Query string `form:"query" json:"query"`
 }
 
 // CreatePageJSONRequestBody defines body for CreatePage for application/json ContentType.
@@ -172,17 +302,44 @@ type UpdatePageJSONRequestBody = UpdatePageRequest
 // AddPageCommentJSONRequestBody defines body for AddPageComment for application/json ContentType.
 type AddPageCommentJSONRequestBody = CommentRequest
 
+// EditPageJSONRequestBody defines body for EditPage for application/json ContentType.
+type EditPageJSONRequestBody = EditPageRequest
+
+// SetPageStatusJSONRequestBody defines body for SetPageStatus for application/json ContentType.
+type SetPageStatusJSONRequestBody = PageStatusRequest
+
+// CreateIssueJSONRequestBody defines body for CreateIssue for application/json ContentType.
+type CreateIssueJSONRequestBody = CreateIssueRequest
+
+// AddChecklistItemJSONRequestBody defines body for AddChecklistItem for application/json ContentType.
+type AddChecklistItemJSONRequestBody = ChecklistTextRequest
+
+// EditChecklistItemJSONRequestBody defines body for EditChecklistItem for application/json ContentType.
+type EditChecklistItemJSONRequestBody = ChecklistTextRequest
+
 // AddIssueCommentJSONRequestBody defines body for AddIssueComment for application/json ContentType.
 type AddIssueCommentJSONRequestBody = CommentRequest
 
+// UpdateCommentJSONRequestBody defines body for UpdateComment for application/json ContentType.
+type UpdateCommentJSONRequestBody = CommentRequest
+
+// LinkIssuesJSONRequestBody defines body for LinkIssues for application/json ContentType.
+type LinkIssuesJSONRequestBody = LinkRequest
+
 // TransitionIssueJSONRequestBody defines body for TransitionIssue for application/json ContentType.
 type TransitionIssueJSONRequestBody = TransitionRequest
+
+// UpdateIssueJSONRequestBody defines body for UpdateIssue for application/json ContentType.
+type UpdateIssueJSONRequestBody = UpdateIssueRequest
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 
 	// (POST /api/v1/confluence/page)
 	CreatePage(w http.ResponseWriter, r *http.Request)
+
+	// (DELETE /api/v1/confluence/page/{identifier})
+	DeletePage(w http.ResponseWriter, r *http.Request, identifier string, params DeletePageParams)
 
 	// (GET /api/v1/confluence/page/{identifier})
 	GetPage(w http.ResponseWriter, r *http.Request, identifier string)
@@ -196,17 +353,56 @@ type ServerInterface interface {
 	// (POST /api/v1/confluence/page/{identifier}/comment)
 	AddPageComment(w http.ResponseWriter, r *http.Request, identifier string)
 
+	// (GET /api/v1/confluence/page/{identifier}/draft)
+	GetPageDraft(w http.ResponseWriter, r *http.Request, identifier string)
+
+	// (POST /api/v1/confluence/page/{identifier}/edit)
+	EditPage(w http.ResponseWriter, r *http.Request, identifier string)
+
+	// (POST /api/v1/confluence/page/{identifier}/status)
+	SetPageStatus(w http.ResponseWriter, r *http.Request, identifier string)
+
+	// (GET /api/v1/confluence/pages)
+	ListPages(w http.ResponseWriter, r *http.Request, params ListPagesParams)
+
 	// (GET /api/v1/confluence/search)
 	SearchPages(w http.ResponseWriter, r *http.Request, params SearchPagesParams)
 
 	// (GET /api/v1/confluence/spaces)
 	ListSpaces(w http.ResponseWriter, r *http.Request)
 
+	// (POST /api/v1/jira/issue)
+	CreateIssue(w http.ResponseWriter, r *http.Request)
+
 	// (GET /api/v1/jira/issue/{key})
 	GetIssue(w http.ResponseWriter, r *http.Request, key string, params GetIssueParams)
 
+	// (GET /api/v1/jira/issue/{key}/checklist)
+	GetChecklist(w http.ResponseWriter, r *http.Request, key string)
+
+	// (POST /api/v1/jira/issue/{key}/checklist)
+	AddChecklistItem(w http.ResponseWriter, r *http.Request, key string)
+
+	// (DELETE /api/v1/jira/issue/{key}/checklist/{index})
+	DeleteChecklistItem(w http.ResponseWriter, r *http.Request, key string, index int)
+
+	// (PUT /api/v1/jira/issue/{key}/checklist/{index})
+	EditChecklistItem(w http.ResponseWriter, r *http.Request, key string, index int)
+
+	// (POST /api/v1/jira/issue/{key}/checklist/{index}/toggle)
+	ToggleChecklistItem(w http.ResponseWriter, r *http.Request, key string, index int)
+
 	// (POST /api/v1/jira/issue/{key}/comment)
 	AddIssueComment(w http.ResponseWriter, r *http.Request, key string)
+
+	// (DELETE /api/v1/jira/issue/{key}/comment/{identifier})
+	DeleteComment(w http.ResponseWriter, r *http.Request, key string, identifier string)
+
+	// (PUT /api/v1/jira/issue/{key}/comment/{identifier})
+	UpdateComment(w http.ResponseWriter, r *http.Request, key string, identifier string)
+
+	// (POST /api/v1/jira/issue/{key}/link)
+	LinkIssues(w http.ResponseWriter, r *http.Request, key string)
 
 	// (POST /api/v1/jira/issue/{key}/transition)
 	TransitionIssue(w http.ResponseWriter, r *http.Request, key string)
@@ -214,11 +410,26 @@ type ServerInterface interface {
 	// (GET /api/v1/jira/issue/{key}/transitions)
 	GetTransitions(w http.ResponseWriter, r *http.Request, key string)
 
+	// (POST /api/v1/jira/issue/{key}/update)
+	UpdateIssue(w http.ResponseWriter, r *http.Request, key string)
+
+	// (GET /api/v1/jira/link-types)
+	GetLinkTypes(w http.ResponseWriter, r *http.Request)
+
+	// (DELETE /api/v1/jira/link/{identifier})
+	DeleteLink(w http.ResponseWriter, r *http.Request, identifier string)
+
+	// (GET /api/v1/jira/meta)
+	GetCreateMeta(w http.ResponseWriter, r *http.Request, params GetCreateMetaParams)
+
 	// (GET /api/v1/jira/projects)
 	ListProjects(w http.ResponseWriter, r *http.Request)
 
 	// (GET /api/v1/jira/search)
 	SearchIssues(w http.ResponseWriter, r *http.Request, params SearchIssuesParams)
+
+	// (GET /api/v1/jira/users)
+	SearchUsers(w http.ResponseWriter, r *http.Request, params SearchUsersParams)
 }
 
 // ServerInterfaceWrapper converts contexts to parameters.
@@ -235,6 +446,48 @@ func (siw *ServerInterfaceWrapper) CreatePage(w http.ResponseWriter, r *http.Req
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.CreatePage(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// DeletePage operation middleware
+func (siw *ServerInterfaceWrapper) DeletePage(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "identifier" -------------
+	var identifier string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "identifier", r.PathValue("identifier"), &identifier, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "identifier", Err: err})
+		return
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params DeletePageParams
+
+	// ------------- Optional query parameter "draft" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "draft", r.URL.Query(), &params.Draft, runtime.BindQueryParameterOptions{Type: "boolean", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "draft"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "draft", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeletePage(w, r, identifier, params)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -348,6 +601,130 @@ func (siw *ServerInterfaceWrapper) AddPageComment(w http.ResponseWriter, r *http
 	handler.ServeHTTP(w, r)
 }
 
+// GetPageDraft operation middleware
+func (siw *ServerInterfaceWrapper) GetPageDraft(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "identifier" -------------
+	var identifier string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "identifier", r.PathValue("identifier"), &identifier, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "identifier", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetPageDraft(w, r, identifier)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// EditPage operation middleware
+func (siw *ServerInterfaceWrapper) EditPage(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "identifier" -------------
+	var identifier string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "identifier", r.PathValue("identifier"), &identifier, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "identifier", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.EditPage(w, r, identifier)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// SetPageStatus operation middleware
+func (siw *ServerInterfaceWrapper) SetPageStatus(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "identifier" -------------
+	var identifier string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "identifier", r.PathValue("identifier"), &identifier, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "identifier", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.SetPageStatus(w, r, identifier)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ListPages operation middleware
+func (siw *ServerInterfaceWrapper) ListPages(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params ListPagesParams
+
+	// ------------- Required query parameter "space" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, true, "space", r.URL.Query(), &params.Space, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "space"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "space", Err: err})
+		}
+		return
+	}
+
+	// ------------- Optional query parameter "status" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "status", r.URL.Query(), &params.Status, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "status"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "status", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ListPages(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
 // SearchPages operation middleware
 func (siw *ServerInterfaceWrapper) SearchPages(w http.ResponseWriter, r *http.Request) {
 
@@ -386,6 +763,20 @@ func (siw *ServerInterfaceWrapper) ListSpaces(w http.ResponseWriter, r *http.Req
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.ListSpaces(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// CreateIssue operation middleware
+func (siw *ServerInterfaceWrapper) CreateIssue(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.CreateIssue(w, r)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -437,6 +828,163 @@ func (siw *ServerInterfaceWrapper) GetIssue(w http.ResponseWriter, r *http.Reque
 	handler.ServeHTTP(w, r)
 }
 
+// GetChecklist operation middleware
+func (siw *ServerInterfaceWrapper) GetChecklist(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "key" -------------
+	var key string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "key", r.PathValue("key"), &key, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "key", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetChecklist(w, r, key)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// AddChecklistItem operation middleware
+func (siw *ServerInterfaceWrapper) AddChecklistItem(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "key" -------------
+	var key string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "key", r.PathValue("key"), &key, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "key", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.AddChecklistItem(w, r, key)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// DeleteChecklistItem operation middleware
+func (siw *ServerInterfaceWrapper) DeleteChecklistItem(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "key" -------------
+	var key string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "key", r.PathValue("key"), &key, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "key", Err: err})
+		return
+	}
+
+	// ------------- Path parameter "index" -------------
+	var index int
+
+	err = runtime.BindStyledParameterWithOptions("simple", "index", r.PathValue("index"), &index, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "integer", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "index", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteChecklistItem(w, r, key, index)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// EditChecklistItem operation middleware
+func (siw *ServerInterfaceWrapper) EditChecklistItem(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "key" -------------
+	var key string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "key", r.PathValue("key"), &key, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "key", Err: err})
+		return
+	}
+
+	// ------------- Path parameter "index" -------------
+	var index int
+
+	err = runtime.BindStyledParameterWithOptions("simple", "index", r.PathValue("index"), &index, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "integer", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "index", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.EditChecklistItem(w, r, key, index)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// ToggleChecklistItem operation middleware
+func (siw *ServerInterfaceWrapper) ToggleChecklistItem(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "key" -------------
+	var key string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "key", r.PathValue("key"), &key, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "key", Err: err})
+		return
+	}
+
+	// ------------- Path parameter "index" -------------
+	var index int
+
+	err = runtime.BindStyledParameterWithOptions("simple", "index", r.PathValue("index"), &index, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "integer", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "index", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.ToggleChecklistItem(w, r, key, index)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
 // AddIssueComment operation middleware
 func (siw *ServerInterfaceWrapper) AddIssueComment(w http.ResponseWriter, r *http.Request) {
 
@@ -454,6 +1002,102 @@ func (siw *ServerInterfaceWrapper) AddIssueComment(w http.ResponseWriter, r *htt
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.AddIssueComment(w, r, key)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// DeleteComment operation middleware
+func (siw *ServerInterfaceWrapper) DeleteComment(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "key" -------------
+	var key string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "key", r.PathValue("key"), &key, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "key", Err: err})
+		return
+	}
+
+	// ------------- Path parameter "identifier" -------------
+	var identifier string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "identifier", r.PathValue("identifier"), &identifier, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "identifier", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteComment(w, r, key, identifier)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// UpdateComment operation middleware
+func (siw *ServerInterfaceWrapper) UpdateComment(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "key" -------------
+	var key string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "key", r.PathValue("key"), &key, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "key", Err: err})
+		return
+	}
+
+	// ------------- Path parameter "identifier" -------------
+	var identifier string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "identifier", r.PathValue("identifier"), &identifier, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "identifier", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.UpdateComment(w, r, key, identifier)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// LinkIssues operation middleware
+func (siw *ServerInterfaceWrapper) LinkIssues(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "key" -------------
+	var key string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "key", r.PathValue("key"), &key, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "key", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.LinkIssues(w, r, key)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -515,6 +1159,131 @@ func (siw *ServerInterfaceWrapper) GetTransitions(w http.ResponseWriter, r *http
 	handler.ServeHTTP(w, r)
 }
 
+// UpdateIssue operation middleware
+func (siw *ServerInterfaceWrapper) UpdateIssue(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "key" -------------
+	var key string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "key", r.PathValue("key"), &key, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "key", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.UpdateIssue(w, r, key)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetLinkTypes operation middleware
+func (siw *ServerInterfaceWrapper) GetLinkTypes(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetLinkTypes(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// DeleteLink operation middleware
+func (siw *ServerInterfaceWrapper) DeleteLink(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "identifier" -------------
+	var identifier string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "identifier", r.PathValue("identifier"), &identifier, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "identifier", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeleteLink(w, r, identifier)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetCreateMeta operation middleware
+func (siw *ServerInterfaceWrapper) GetCreateMeta(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetCreateMetaParams
+
+	// ------------- Required query parameter "project" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, true, "project", r.URL.Query(), &params.Project, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "project"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "project", Err: err})
+		}
+		return
+	}
+
+	// ------------- Required query parameter "issue_type" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, true, "issue_type", r.URL.Query(), &params.IssueType, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "issue_type"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "issue_type", Err: err})
+		}
+		return
+	}
+
+	// ------------- Optional query parameter "expand" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "expand", r.URL.Query(), &params.Expand, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "expand"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "expand", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetCreateMeta(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
 // ListProjects operation middleware
 func (siw *ServerInterfaceWrapper) ListProjects(w http.ResponseWriter, r *http.Request) {
 
@@ -566,6 +1335,39 @@ func (siw *ServerInterfaceWrapper) SearchIssues(w http.ResponseWriter, r *http.R
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.SearchIssues(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// SearchUsers operation middleware
+func (siw *ServerInterfaceWrapper) SearchUsers(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params SearchUsersParams
+
+	// ------------- Required query parameter "query" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, true, "query", r.URL.Query(), &params.Query, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "query"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "query", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.SearchUsers(w, r, params)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -701,13 +1503,32 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/jira/issue/{key}/transition", wrapper.TransitionIssue)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/jira/issue/{key}/comment", wrapper.AddIssueComment)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/jira/projects", wrapper.ListProjects)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/jira/issue", wrapper.CreateIssue)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/jira/issue/{key}/update", wrapper.UpdateIssue)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/jira/meta", wrapper.GetCreateMeta)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/jira/users", wrapper.SearchUsers)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/jira/issue/{key}/link", wrapper.LinkIssues)
+	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/v1/jira/link/{identifier}", wrapper.DeleteLink)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/jira/link-types", wrapper.GetLinkTypes)
+	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/v1/jira/issue/{key}/comment/{identifier}", wrapper.DeleteComment)
+	m.HandleFunc(http.MethodPut+" "+options.BaseURL+"/api/v1/jira/issue/{key}/comment/{identifier}", wrapper.UpdateComment)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/jira/issue/{key}/checklist", wrapper.GetChecklist)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/jira/issue/{key}/checklist", wrapper.AddChecklistItem)
+	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/v1/jira/issue/{key}/checklist/{index}", wrapper.DeleteChecklistItem)
+	m.HandleFunc(http.MethodPut+" "+options.BaseURL+"/api/v1/jira/issue/{key}/checklist/{index}", wrapper.EditChecklistItem)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/jira/issue/{key}/checklist/{index}/toggle", wrapper.ToggleChecklistItem)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/confluence/spaces", wrapper.ListSpaces)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/confluence/search", wrapper.SearchPages)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/confluence/page", wrapper.CreatePage)
+	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/v1/confluence/page/{identifier}", wrapper.DeletePage)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/confluence/page/{identifier}", wrapper.GetPage)
 	m.HandleFunc(http.MethodPut+" "+options.BaseURL+"/api/v1/confluence/page/{identifier}", wrapper.UpdatePage)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/confluence/page/{identifier}/children", wrapper.GetPageChildren)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/confluence/page/{identifier}/comment", wrapper.AddPageComment)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/confluence/page/{identifier}/draft", wrapper.GetPageDraft)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/confluence/page/{identifier}/status", wrapper.SetPageStatus)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/confluence/page/{identifier}/edit", wrapper.EditPage)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/confluence/pages", wrapper.ListPages)
 
 	return m
 }
@@ -737,6 +1558,37 @@ func (response CreatePage201JSONResponse) VisitCreatePageResponse(w http.Respons
 type CreatePage500JSONResponse ErrorResponse
 
 func (response CreatePage500JSONResponse) VisitCreatePageResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeletePageRequestObject struct {
+	Identifier string `json:"identifier"`
+	Params     DeletePageParams
+}
+
+type DeletePageResponseObject interface {
+	VisitDeletePageResponse(w http.ResponseWriter) error
+}
+
+type DeletePage204Response struct {
+}
+
+func (response DeletePage204Response) VisitDeletePageResponse(w http.ResponseWriter) error {
+	w.WriteHeader(204)
+	return nil
+}
+
+type DeletePage500JSONResponse ErrorResponse
+
+func (response DeletePage500JSONResponse) VisitDeletePageResponse(w http.ResponseWriter) error {
 
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(response); err != nil {
@@ -916,6 +1768,180 @@ func (response AddPageComment500JSONResponse) VisitAddPageCommentResponse(w http
 	return err
 }
 
+type GetPageDraftRequestObject struct {
+	Identifier string `json:"identifier"`
+}
+
+type GetPageDraftResponseObject interface {
+	VisitGetPageDraftResponse(w http.ResponseWriter) error
+}
+
+type GetPageDraft200JSONResponse ConfluencePageDetail
+
+func (response GetPageDraft200JSONResponse) VisitGetPageDraftResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetPageDraft500JSONResponse ErrorResponse
+
+func (response GetPageDraft500JSONResponse) VisitGetPageDraftResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type EditPageRequestObject struct {
+	Identifier string `json:"identifier"`
+	Body       *EditPageJSONRequestBody
+}
+
+type EditPageResponseObject interface {
+	VisitEditPageResponse(w http.ResponseWriter) error
+}
+
+type EditPage200JSONResponse ConfluencePageDetail
+
+func (response EditPage200JSONResponse) VisitEditPageResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type EditPage400JSONResponse Error
+
+func (response EditPage400JSONResponse) VisitEditPageResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type EditPage500JSONResponse ErrorResponse
+
+func (response EditPage500JSONResponse) VisitEditPageResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type SetPageStatusRequestObject struct {
+	Identifier string `json:"identifier"`
+	Body       *SetPageStatusJSONRequestBody
+}
+
+type SetPageStatusResponseObject interface {
+	VisitSetPageStatusResponse(w http.ResponseWriter) error
+}
+
+type SetPageStatus200JSONResponse ConfluencePageDetail
+
+func (response SetPageStatus200JSONResponse) VisitSetPageStatusResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type SetPageStatus400JSONResponse Error
+
+func (response SetPageStatus400JSONResponse) VisitSetPageStatusResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type SetPageStatus500JSONResponse ErrorResponse
+
+func (response SetPageStatus500JSONResponse) VisitSetPageStatusResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListPagesRequestObject struct {
+	Params ListPagesParams
+}
+
+type ListPagesResponseObject interface {
+	VisitListPagesResponse(w http.ResponseWriter) error
+}
+
+type ListPages200JSONResponse []*ConfluencePage
+
+func (response ListPages200JSONResponse) VisitListPagesResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ListPages500JSONResponse ErrorResponse
+
+func (response ListPages500JSONResponse) VisitListPagesResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type SearchPagesRequestObject struct {
 	Params SearchPagesParams
 }
@@ -987,6 +2013,56 @@ func (response ListSpaces500JSONResponse) VisitListSpacesResponse(w http.Respons
 	return err
 }
 
+type CreateIssueRequestObject struct {
+	Body *CreateIssueJSONRequestBody
+}
+
+type CreateIssueResponseObject interface {
+	VisitCreateIssueResponse(w http.ResponseWriter) error
+}
+
+type CreateIssue201JSONResponse JiraIssue
+
+func (response CreateIssue201JSONResponse) VisitCreateIssueResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(201)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateIssue400JSONResponse Error
+
+func (response CreateIssue400JSONResponse) VisitCreateIssueResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type CreateIssue500JSONResponse ErrorResponse
+
+func (response CreateIssue500JSONResponse) VisitCreateIssueResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type GetIssueRequestObject struct {
 	Key    string `json:"key"`
 	Params GetIssueParams
@@ -1038,6 +2114,247 @@ func (response GetIssue500JSONResponse) VisitGetIssueResponse(w http.ResponseWri
 	return err
 }
 
+type GetChecklistRequestObject struct {
+	Key string `json:"key"`
+}
+
+type GetChecklistResponseObject interface {
+	VisitGetChecklistResponse(w http.ResponseWriter) error
+}
+
+type GetChecklist200JSONResponse []*ChecklistItem
+
+func (response GetChecklist200JSONResponse) VisitGetChecklistResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetChecklist500JSONResponse ErrorResponse
+
+func (response GetChecklist500JSONResponse) VisitGetChecklistResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type AddChecklistItemRequestObject struct {
+	Key  string `json:"key"`
+	Body *AddChecklistItemJSONRequestBody
+}
+
+type AddChecklistItemResponseObject interface {
+	VisitAddChecklistItemResponse(w http.ResponseWriter) error
+}
+
+type AddChecklistItem200JSONResponse []*ChecklistItem
+
+func (response AddChecklistItem200JSONResponse) VisitAddChecklistItemResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type AddChecklistItem400JSONResponse Error
+
+func (response AddChecklistItem400JSONResponse) VisitAddChecklistItemResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type AddChecklistItem500JSONResponse ErrorResponse
+
+func (response AddChecklistItem500JSONResponse) VisitAddChecklistItemResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteChecklistItemRequestObject struct {
+	Key   string `json:"key"`
+	Index int    `json:"index"`
+}
+
+type DeleteChecklistItemResponseObject interface {
+	VisitDeleteChecklistItemResponse(w http.ResponseWriter) error
+}
+
+type DeleteChecklistItem200JSONResponse []*ChecklistItem
+
+func (response DeleteChecklistItem200JSONResponse) VisitDeleteChecklistItemResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteChecklistItem400JSONResponse Error
+
+func (response DeleteChecklistItem400JSONResponse) VisitDeleteChecklistItemResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteChecklistItem500JSONResponse ErrorResponse
+
+func (response DeleteChecklistItem500JSONResponse) VisitDeleteChecklistItemResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type EditChecklistItemRequestObject struct {
+	Key   string `json:"key"`
+	Index int    `json:"index"`
+	Body  *EditChecklistItemJSONRequestBody
+}
+
+type EditChecklistItemResponseObject interface {
+	VisitEditChecklistItemResponse(w http.ResponseWriter) error
+}
+
+type EditChecklistItem200JSONResponse []*ChecklistItem
+
+func (response EditChecklistItem200JSONResponse) VisitEditChecklistItemResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type EditChecklistItem400JSONResponse Error
+
+func (response EditChecklistItem400JSONResponse) VisitEditChecklistItemResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type EditChecklistItem500JSONResponse ErrorResponse
+
+func (response EditChecklistItem500JSONResponse) VisitEditChecklistItemResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ToggleChecklistItemRequestObject struct {
+	Key   string `json:"key"`
+	Index int    `json:"index"`
+}
+
+type ToggleChecklistItemResponseObject interface {
+	VisitToggleChecklistItemResponse(w http.ResponseWriter) error
+}
+
+type ToggleChecklistItem200JSONResponse []*ChecklistItem
+
+func (response ToggleChecklistItem200JSONResponse) VisitToggleChecklistItemResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ToggleChecklistItem400JSONResponse Error
+
+func (response ToggleChecklistItem400JSONResponse) VisitToggleChecklistItemResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type ToggleChecklistItem500JSONResponse ErrorResponse
+
+func (response ToggleChecklistItem500JSONResponse) VisitToggleChecklistItemResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type AddIssueCommentRequestObject struct {
 	Key  string `json:"key"`
 	Body *AddIssueCommentJSONRequestBody
@@ -1058,6 +2375,100 @@ func (response AddIssueComment204Response) VisitAddIssueCommentResponse(w http.R
 type AddIssueComment500JSONResponse ErrorResponse
 
 func (response AddIssueComment500JSONResponse) VisitAddIssueCommentResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteCommentRequestObject struct {
+	Key        string `json:"key"`
+	Identifier string `json:"identifier"`
+}
+
+type DeleteCommentResponseObject interface {
+	VisitDeleteCommentResponse(w http.ResponseWriter) error
+}
+
+type DeleteComment204Response struct {
+}
+
+func (response DeleteComment204Response) VisitDeleteCommentResponse(w http.ResponseWriter) error {
+	w.WriteHeader(204)
+	return nil
+}
+
+type DeleteComment500JSONResponse ErrorResponse
+
+func (response DeleteComment500JSONResponse) VisitDeleteCommentResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateCommentRequestObject struct {
+	Key        string `json:"key"`
+	Identifier string `json:"identifier"`
+	Body       *UpdateCommentJSONRequestBody
+}
+
+type UpdateCommentResponseObject interface {
+	VisitUpdateCommentResponse(w http.ResponseWriter) error
+}
+
+type UpdateComment204Response struct {
+}
+
+func (response UpdateComment204Response) VisitUpdateCommentResponse(w http.ResponseWriter) error {
+	w.WriteHeader(204)
+	return nil
+}
+
+type UpdateComment500JSONResponse ErrorResponse
+
+func (response UpdateComment500JSONResponse) VisitUpdateCommentResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type LinkIssuesRequestObject struct {
+	Key  string `json:"key"`
+	Body *LinkIssuesJSONRequestBody
+}
+
+type LinkIssuesResponseObject interface {
+	VisitLinkIssuesResponse(w http.ResponseWriter) error
+}
+
+type LinkIssues204Response struct {
+}
+
+func (response LinkIssues204Response) VisitLinkIssuesResponse(w http.ResponseWriter) error {
+	w.WriteHeader(204)
+	return nil
+}
+
+type LinkIssues500JSONResponse ErrorResponse
+
+func (response LinkIssues500JSONResponse) VisitLinkIssuesResponse(w http.ResponseWriter) error {
 
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(response); err != nil {
@@ -1125,6 +2536,158 @@ func (response GetTransitions200JSONResponse) VisitGetTransitionsResponse(w http
 type GetTransitions500JSONResponse ErrorResponse
 
 func (response GetTransitions500JSONResponse) VisitGetTransitionsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateIssueRequestObject struct {
+	Key  string `json:"key"`
+	Body *UpdateIssueJSONRequestBody
+}
+
+type UpdateIssueResponseObject interface {
+	VisitUpdateIssueResponse(w http.ResponseWriter) error
+}
+
+type UpdateIssue200JSONResponse IssueUpdateResult
+
+func (response UpdateIssue200JSONResponse) VisitUpdateIssueResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateIssue400JSONResponse Error
+
+func (response UpdateIssue400JSONResponse) VisitUpdateIssueResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type UpdateIssue500JSONResponse ErrorResponse
+
+func (response UpdateIssue500JSONResponse) VisitUpdateIssueResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetLinkTypesRequestObject struct {
+}
+
+type GetLinkTypesResponseObject interface {
+	VisitGetLinkTypesResponse(w http.ResponseWriter) error
+}
+
+type GetLinkTypes200JSONResponse []LinkType
+
+func (response GetLinkTypes200JSONResponse) VisitGetLinkTypesResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetLinkTypes500JSONResponse ErrorResponse
+
+func (response GetLinkTypes500JSONResponse) VisitGetLinkTypesResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeleteLinkRequestObject struct {
+	Identifier string `json:"identifier"`
+}
+
+type DeleteLinkResponseObject interface {
+	VisitDeleteLinkResponse(w http.ResponseWriter) error
+}
+
+type DeleteLink204Response struct {
+}
+
+func (response DeleteLink204Response) VisitDeleteLinkResponse(w http.ResponseWriter) error {
+	w.WriteHeader(204)
+	return nil
+}
+
+type DeleteLink500JSONResponse ErrorResponse
+
+func (response DeleteLink500JSONResponse) VisitDeleteLinkResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetCreateMetaRequestObject struct {
+	Params GetCreateMetaParams
+}
+
+type GetCreateMetaResponseObject interface {
+	VisitGetCreateMetaResponse(w http.ResponseWriter) error
+}
+
+type GetCreateMeta200JSONResponse []*CreateMetaField
+
+func (response GetCreateMeta200JSONResponse) VisitGetCreateMetaResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetCreateMeta500JSONResponse ErrorResponse
+
+func (response GetCreateMeta500JSONResponse) VisitGetCreateMetaResponse(w http.ResponseWriter) error {
 
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(response); err != nil {
@@ -1207,11 +2770,50 @@ func (response SearchIssues500JSONResponse) VisitSearchIssuesResponse(w http.Res
 	return err
 }
 
+type SearchUsersRequestObject struct {
+	Params SearchUsersParams
+}
+
+type SearchUsersResponseObject interface {
+	VisitSearchUsersResponse(w http.ResponseWriter) error
+}
+
+type SearchUsers200JSONResponse []*JiraUser
+
+func (response SearchUsers200JSONResponse) VisitSearchUsersResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type SearchUsers500JSONResponse ErrorResponse
+
+func (response SearchUsers500JSONResponse) VisitSearchUsersResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
 
 	// (POST /api/v1/confluence/page)
 	CreatePage(ctx context.Context, request CreatePageRequestObject) (CreatePageResponseObject, error)
+
+	// (DELETE /api/v1/confluence/page/{identifier})
+	DeletePage(ctx context.Context, request DeletePageRequestObject) (DeletePageResponseObject, error)
 
 	// (GET /api/v1/confluence/page/{identifier})
 	GetPage(ctx context.Context, request GetPageRequestObject) (GetPageResponseObject, error)
@@ -1225,17 +2827,56 @@ type StrictServerInterface interface {
 	// (POST /api/v1/confluence/page/{identifier}/comment)
 	AddPageComment(ctx context.Context, request AddPageCommentRequestObject) (AddPageCommentResponseObject, error)
 
+	// (GET /api/v1/confluence/page/{identifier}/draft)
+	GetPageDraft(ctx context.Context, request GetPageDraftRequestObject) (GetPageDraftResponseObject, error)
+
+	// (POST /api/v1/confluence/page/{identifier}/edit)
+	EditPage(ctx context.Context, request EditPageRequestObject) (EditPageResponseObject, error)
+
+	// (POST /api/v1/confluence/page/{identifier}/status)
+	SetPageStatus(ctx context.Context, request SetPageStatusRequestObject) (SetPageStatusResponseObject, error)
+
+	// (GET /api/v1/confluence/pages)
+	ListPages(ctx context.Context, request ListPagesRequestObject) (ListPagesResponseObject, error)
+
 	// (GET /api/v1/confluence/search)
 	SearchPages(ctx context.Context, request SearchPagesRequestObject) (SearchPagesResponseObject, error)
 
 	// (GET /api/v1/confluence/spaces)
 	ListSpaces(ctx context.Context, request ListSpacesRequestObject) (ListSpacesResponseObject, error)
 
+	// (POST /api/v1/jira/issue)
+	CreateIssue(ctx context.Context, request CreateIssueRequestObject) (CreateIssueResponseObject, error)
+
 	// (GET /api/v1/jira/issue/{key})
 	GetIssue(ctx context.Context, request GetIssueRequestObject) (GetIssueResponseObject, error)
 
+	// (GET /api/v1/jira/issue/{key}/checklist)
+	GetChecklist(ctx context.Context, request GetChecklistRequestObject) (GetChecklistResponseObject, error)
+
+	// (POST /api/v1/jira/issue/{key}/checklist)
+	AddChecklistItem(ctx context.Context, request AddChecklistItemRequestObject) (AddChecklistItemResponseObject, error)
+
+	// (DELETE /api/v1/jira/issue/{key}/checklist/{index})
+	DeleteChecklistItem(ctx context.Context, request DeleteChecklistItemRequestObject) (DeleteChecklistItemResponseObject, error)
+
+	// (PUT /api/v1/jira/issue/{key}/checklist/{index})
+	EditChecklistItem(ctx context.Context, request EditChecklistItemRequestObject) (EditChecklistItemResponseObject, error)
+
+	// (POST /api/v1/jira/issue/{key}/checklist/{index}/toggle)
+	ToggleChecklistItem(ctx context.Context, request ToggleChecklistItemRequestObject) (ToggleChecklistItemResponseObject, error)
+
 	// (POST /api/v1/jira/issue/{key}/comment)
 	AddIssueComment(ctx context.Context, request AddIssueCommentRequestObject) (AddIssueCommentResponseObject, error)
+
+	// (DELETE /api/v1/jira/issue/{key}/comment/{identifier})
+	DeleteComment(ctx context.Context, request DeleteCommentRequestObject) (DeleteCommentResponseObject, error)
+
+	// (PUT /api/v1/jira/issue/{key}/comment/{identifier})
+	UpdateComment(ctx context.Context, request UpdateCommentRequestObject) (UpdateCommentResponseObject, error)
+
+	// (POST /api/v1/jira/issue/{key}/link)
+	LinkIssues(ctx context.Context, request LinkIssuesRequestObject) (LinkIssuesResponseObject, error)
 
 	// (POST /api/v1/jira/issue/{key}/transition)
 	TransitionIssue(ctx context.Context, request TransitionIssueRequestObject) (TransitionIssueResponseObject, error)
@@ -1243,11 +2884,26 @@ type StrictServerInterface interface {
 	// (GET /api/v1/jira/issue/{key}/transitions)
 	GetTransitions(ctx context.Context, request GetTransitionsRequestObject) (GetTransitionsResponseObject, error)
 
+	// (POST /api/v1/jira/issue/{key}/update)
+	UpdateIssue(ctx context.Context, request UpdateIssueRequestObject) (UpdateIssueResponseObject, error)
+
+	// (GET /api/v1/jira/link-types)
+	GetLinkTypes(ctx context.Context, request GetLinkTypesRequestObject) (GetLinkTypesResponseObject, error)
+
+	// (DELETE /api/v1/jira/link/{identifier})
+	DeleteLink(ctx context.Context, request DeleteLinkRequestObject) (DeleteLinkResponseObject, error)
+
+	// (GET /api/v1/jira/meta)
+	GetCreateMeta(ctx context.Context, request GetCreateMetaRequestObject) (GetCreateMetaResponseObject, error)
+
 	// (GET /api/v1/jira/projects)
 	ListProjects(ctx context.Context, request ListProjectsRequestObject) (ListProjectsResponseObject, error)
 
 	// (GET /api/v1/jira/search)
 	SearchIssues(ctx context.Context, request SearchIssuesRequestObject) (SearchIssuesResponseObject, error)
+
+	// (GET /api/v1/jira/users)
+	SearchUsers(ctx context.Context, request SearchUsersRequestObject) (SearchUsersResponseObject, error)
 }
 
 type StrictHandlerFunc func(ctx context.Context, w http.ResponseWriter, r *http.Request, request any) (any, error)
@@ -1313,6 +2969,33 @@ func (sh *strictHandler) CreatePage(w http.ResponseWriter, r *http.Request) {
 		sh.options.ResponseErrorHandlerFunc(w, r, err)
 	} else if validResponse, ok := response.(CreatePageResponseObject); ok {
 		if err := validResponse.VisitCreatePageResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// DeletePage operation middleware
+func (sh *strictHandler) DeletePage(w http.ResponseWriter, r *http.Request, identifier string, params DeletePageParams) {
+	var request DeletePageRequestObject
+
+	request.Identifier = identifier
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.DeletePage(ctx, request.(DeletePageRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "DeletePage")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(DeletePageResponseObject); ok {
+		if err := validResponse.VisitDeletePageResponse(w); err != nil {
 			sh.options.ResponseErrorHandlerFunc(w, r, err)
 		}
 	} else if response != nil {
@@ -1438,6 +3121,124 @@ func (sh *strictHandler) AddPageComment(w http.ResponseWriter, r *http.Request, 
 	}
 }
 
+// GetPageDraft operation middleware
+func (sh *strictHandler) GetPageDraft(w http.ResponseWriter, r *http.Request, identifier string) {
+	var request GetPageDraftRequestObject
+
+	request.Identifier = identifier
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetPageDraft(ctx, request.(GetPageDraftRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetPageDraft")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetPageDraftResponseObject); ok {
+		if err := validResponse.VisitGetPageDraftResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// EditPage operation middleware
+func (sh *strictHandler) EditPage(w http.ResponseWriter, r *http.Request, identifier string) {
+	var request EditPageRequestObject
+
+	request.Identifier = identifier
+
+	var body EditPageJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.EditPage(ctx, request.(EditPageRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "EditPage")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(EditPageResponseObject); ok {
+		if err := validResponse.VisitEditPageResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// SetPageStatus operation middleware
+func (sh *strictHandler) SetPageStatus(w http.ResponseWriter, r *http.Request, identifier string) {
+	var request SetPageStatusRequestObject
+
+	request.Identifier = identifier
+
+	var body SetPageStatusJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.SetPageStatus(ctx, request.(SetPageStatusRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "SetPageStatus")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(SetPageStatusResponseObject); ok {
+		if err := validResponse.VisitSetPageStatusResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ListPages operation middleware
+func (sh *strictHandler) ListPages(w http.ResponseWriter, r *http.Request, params ListPagesParams) {
+	var request ListPagesRequestObject
+
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ListPages(ctx, request.(ListPagesRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ListPages")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ListPagesResponseObject); ok {
+		if err := validResponse.VisitListPagesResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // SearchPages operation middleware
 func (sh *strictHandler) SearchPages(w http.ResponseWriter, r *http.Request, params SearchPagesParams) {
 	var request SearchPagesRequestObject
@@ -1488,6 +3289,37 @@ func (sh *strictHandler) ListSpaces(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// CreateIssue operation middleware
+func (sh *strictHandler) CreateIssue(w http.ResponseWriter, r *http.Request) {
+	var request CreateIssueRequestObject
+
+	var body CreateIssueJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.CreateIssue(ctx, request.(CreateIssueRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "CreateIssue")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(CreateIssueResponseObject); ok {
+		if err := validResponse.VisitCreateIssueResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // GetIssue operation middleware
 func (sh *strictHandler) GetIssue(w http.ResponseWriter, r *http.Request, key string, params GetIssueParams) {
 	var request GetIssueRequestObject
@@ -1508,6 +3340,153 @@ func (sh *strictHandler) GetIssue(w http.ResponseWriter, r *http.Request, key st
 		sh.options.ResponseErrorHandlerFunc(w, r, err)
 	} else if validResponse, ok := response.(GetIssueResponseObject); ok {
 		if err := validResponse.VisitGetIssueResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetChecklist operation middleware
+func (sh *strictHandler) GetChecklist(w http.ResponseWriter, r *http.Request, key string) {
+	var request GetChecklistRequestObject
+
+	request.Key = key
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetChecklist(ctx, request.(GetChecklistRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetChecklist")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetChecklistResponseObject); ok {
+		if err := validResponse.VisitGetChecklistResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// AddChecklistItem operation middleware
+func (sh *strictHandler) AddChecklistItem(w http.ResponseWriter, r *http.Request, key string) {
+	var request AddChecklistItemRequestObject
+
+	request.Key = key
+
+	var body AddChecklistItemJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.AddChecklistItem(ctx, request.(AddChecklistItemRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "AddChecklistItem")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(AddChecklistItemResponseObject); ok {
+		if err := validResponse.VisitAddChecklistItemResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// DeleteChecklistItem operation middleware
+func (sh *strictHandler) DeleteChecklistItem(w http.ResponseWriter, r *http.Request, key string, index int) {
+	var request DeleteChecklistItemRequestObject
+
+	request.Key = key
+	request.Index = index
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.DeleteChecklistItem(ctx, request.(DeleteChecklistItemRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "DeleteChecklistItem")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(DeleteChecklistItemResponseObject); ok {
+		if err := validResponse.VisitDeleteChecklistItemResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// EditChecklistItem operation middleware
+func (sh *strictHandler) EditChecklistItem(w http.ResponseWriter, r *http.Request, key string, index int) {
+	var request EditChecklistItemRequestObject
+
+	request.Key = key
+	request.Index = index
+
+	var body EditChecklistItemJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.EditChecklistItem(ctx, request.(EditChecklistItemRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "EditChecklistItem")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(EditChecklistItemResponseObject); ok {
+		if err := validResponse.VisitEditChecklistItemResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// ToggleChecklistItem operation middleware
+func (sh *strictHandler) ToggleChecklistItem(w http.ResponseWriter, r *http.Request, key string, index int) {
+	var request ToggleChecklistItemRequestObject
+
+	request.Key = key
+	request.Index = index
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.ToggleChecklistItem(ctx, request.(ToggleChecklistItemRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "ToggleChecklistItem")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(ToggleChecklistItemResponseObject); ok {
+		if err := validResponse.VisitToggleChecklistItemResponse(w); err != nil {
 			sh.options.ResponseErrorHandlerFunc(w, r, err)
 		}
 	} else if response != nil {
@@ -1541,6 +3520,100 @@ func (sh *strictHandler) AddIssueComment(w http.ResponseWriter, r *http.Request,
 		sh.options.ResponseErrorHandlerFunc(w, r, err)
 	} else if validResponse, ok := response.(AddIssueCommentResponseObject); ok {
 		if err := validResponse.VisitAddIssueCommentResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// DeleteComment operation middleware
+func (sh *strictHandler) DeleteComment(w http.ResponseWriter, r *http.Request, key string, identifier string) {
+	var request DeleteCommentRequestObject
+
+	request.Key = key
+	request.Identifier = identifier
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.DeleteComment(ctx, request.(DeleteCommentRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "DeleteComment")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(DeleteCommentResponseObject); ok {
+		if err := validResponse.VisitDeleteCommentResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// UpdateComment operation middleware
+func (sh *strictHandler) UpdateComment(w http.ResponseWriter, r *http.Request, key string, identifier string) {
+	var request UpdateCommentRequestObject
+
+	request.Key = key
+	request.Identifier = identifier
+
+	var body UpdateCommentJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.UpdateComment(ctx, request.(UpdateCommentRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "UpdateComment")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(UpdateCommentResponseObject); ok {
+		if err := validResponse.VisitUpdateCommentResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// LinkIssues operation middleware
+func (sh *strictHandler) LinkIssues(w http.ResponseWriter, r *http.Request, key string) {
+	var request LinkIssuesRequestObject
+
+	request.Key = key
+
+	var body LinkIssuesJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.LinkIssues(ctx, request.(LinkIssuesRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "LinkIssues")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(LinkIssuesResponseObject); ok {
+		if err := validResponse.VisitLinkIssuesResponse(w); err != nil {
 			sh.options.ResponseErrorHandlerFunc(w, r, err)
 		}
 	} else if response != nil {
@@ -1607,6 +3680,115 @@ func (sh *strictHandler) GetTransitions(w http.ResponseWriter, r *http.Request, 
 	}
 }
 
+// UpdateIssue operation middleware
+func (sh *strictHandler) UpdateIssue(w http.ResponseWriter, r *http.Request, key string) {
+	var request UpdateIssueRequestObject
+
+	request.Key = key
+
+	var body UpdateIssueJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.UpdateIssue(ctx, request.(UpdateIssueRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "UpdateIssue")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(UpdateIssueResponseObject); ok {
+		if err := validResponse.VisitUpdateIssueResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetLinkTypes operation middleware
+func (sh *strictHandler) GetLinkTypes(w http.ResponseWriter, r *http.Request) {
+	var request GetLinkTypesRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetLinkTypes(ctx, request.(GetLinkTypesRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetLinkTypes")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetLinkTypesResponseObject); ok {
+		if err := validResponse.VisitGetLinkTypesResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// DeleteLink operation middleware
+func (sh *strictHandler) DeleteLink(w http.ResponseWriter, r *http.Request, identifier string) {
+	var request DeleteLinkRequestObject
+
+	request.Identifier = identifier
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.DeleteLink(ctx, request.(DeleteLinkRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "DeleteLink")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(DeleteLinkResponseObject); ok {
+		if err := validResponse.VisitDeleteLinkResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetCreateMeta operation middleware
+func (sh *strictHandler) GetCreateMeta(w http.ResponseWriter, r *http.Request, params GetCreateMetaParams) {
+	var request GetCreateMetaRequestObject
+
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetCreateMeta(ctx, request.(GetCreateMetaRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetCreateMeta")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetCreateMetaResponseObject); ok {
+		if err := validResponse.VisitGetCreateMetaResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // ListProjects operation middleware
 func (sh *strictHandler) ListProjects(w http.ResponseWriter, r *http.Request) {
 	var request ListProjectsRequestObject
@@ -1657,35 +3839,81 @@ func (sh *strictHandler) SearchIssues(w http.ResponseWriter, r *http.Request, pa
 	}
 }
 
+// SearchUsers operation middleware
+func (sh *strictHandler) SearchUsers(w http.ResponseWriter, r *http.Request, params SearchUsersParams) {
+	var request SearchUsersRequestObject
+
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.SearchUsers(ctx, request.(SearchUsersRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "SearchUsers")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(SearchUsersResponseObject); ok {
+		if err := validResponse.VisitSearchUsersResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // Base64 encoded, compressed with deflate, json marshaled OpenAPI spec.
 // Stored as a slice of fixed-width chunks rather than one concatenated
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"7Fnfb9s2EP5XCG7ANkCznLZ78VuXbkOKDs2abi9FUNDS2WZCkQpJpTUM/+8DSf2wLNKyHScKuj0lNn99",
-	"d9/xuzt6hROR5YID1wpPVlglC8iI/fdcZBlw/QHuClDafJNLkYPUFOz4VKRL8zcFlUiaayo4nlSrkBlF",
-	"Gr7qEY6wXuaAJ1hpSfkcr9cRlnBXUAkpnnxyG13Xs8T0BhKN1xE+F3zGCuAJXJI5dBHQFLimMwrSfNo6",
-	"JMKM8lvvgNJEF8o7pKlm4B+xX6x6bNmAVG3Wb9kb0ISysIc7WI42PCcJXOxeHPLAQw29Mmd3bWxFjwfO",
-	"QmSQk3kf6h6P3ILfkZxkJ2PbnFHu6PWEBKIt3QfeKLMEJYJrc60oRxmRt6n4wj0XK8I5kcB121nb25kZ",
-	"yPgUXbzxbuIJk/Yelkt08QZpgRJrF9ILcHtSP7A6rDzG2bF+ndiG5bG2OicKi8pvUgrZ9T1UX+/G4KYF",
-	"9/0AKhdcwf77RxjugevPOwPYC8Kz0ofrLZWkFOUuKlLoRQBWUHwc4ekx17DI08DSXRerBFlCagCErL1Q",
-	"qvAwQJSicw7++544D7m0oiFzKxh7P8OTTyv8vYQZnuDv4iZbxmWqjDcdvL6OMC8YI1MT7FoWUGsJJlKS",
-	"ZZ8D++QwLeAggWNkCqxtVUDrGnzB9JFLKiTVy0OTqiqyjMjlIUJ7QKw43a3OqIGUW4eC5FIK+/HghBT0",
-	"dMhrD8wxPWnF2PJREq5ohfigGikMTlyFCN11V4M4G4zB9KfrKbtyT7ORSUAzKTI0B/25Waz6M4n3JB/q",
-	"v20QPnbSzkCpssBt7/IPSGUMLdXpsRJrT8400ymfCcuROw3PBdHMKCrhKY7wvQOKJ/hsNB6NDS6RAyc5",
-	"xRP80n5lsrVeWJfFJKfx/Vmc1MVhnFcFvnA+Nh4mjiDTVNS1E3bIQelfS7+XTrZ6neeMJnZZfKPcbXAq",
-	"bf7bpeHd4mzddlIp5bLM79aMF+Oz0wHwNQQWw1Z75XKHLbVGxs2/jMcnA9EuYTyn/04og3Sj6ith2KkB",
-	"VuNVIxBrg2AOHob/AF3SmxNJMtAglc28nqh2VSs1n01IVaozaStRm7towwXbl+G6w+v4yXm1hqV2GH2h",
-	"euH65xKCJfrV+NVpiQ7C4EKjmSh4OmSAzUE30RXhvPAETaPOw8XN6bWom3P20qKnj1kHdEOL/mMh6irU",
-	"gzUwThaUpRJ4nxieV/N6g3u7o38+2nhgL7X14rdHO+VJkcZt1htqaAGrmD4sPDaadW819DpNbXiU874h",
-	"6dt6ct5L916F36BJmsKgCkHStKndgyGggMhkEVSDKztsaFR9XJ//9Q7dFSCXyDGFhEQ5I5TXL/E2BOyU",
-	"Jgaqj9+0Klj/oYzoZGEcoxfgPDVkeDjia6kKxkdOEudnb3y8o0pfuSlD0eLe9o/i5TVj6J4qOmWAnKFD",
-	"MsKo0g2MFiE3VJKYKlVAvLqF5c5Wxr1A9lxWOwndwhL9CKP5CF1+eP/257MXL38KSLV7CNr/kkadA3nC",
-	"itQ91VtDflCVOqmQNtTvop6TpkIwIPyRO6jmRdfDnPOh65uergR1pz6bNsly2Reue5UV1rA964o6fE8U",
-	"rv+XFA8tKTqU6/a7sJf15jn1MNF63qx3X5uPJX7judnCGZb9htE9b/3Gs/iuhPVxY9oQEfB0RcvW7yXH",
-	"1Sz3hNoVG3woNBOySa1D54TWzyGeGMndz1+7q8rLatLTU1T9PPfgmrIydPCqcgNIl469WkB783rv59ut",
-	"HvB0XV+noPyTfKVZkSFeZFOQSMyQBFUwrUbofUa1vRGEsRACRjOqfYUl5RrmIIcRh7LWPCbuHEHtJrOm",
-	"4xk0mlaZygBcr/8NAAD//w==",
+	"7Fxtb9s48v8qhP5/4O4AN053e2/yrtfsHlKkSK5J781iEdDS2GZDUSpJ5QFBvvuBQ+rJJiXLSSw32X2z",
+	"jUWR8/DjzHBmqIcoztI8EyC0io4eIhUvIaX4z09LiK85U/pEQ2p+yGWWg9QM8HFsHkNi/qnvc4iOolmW",
+	"caAiepxETCRw13jEhIYFSPNIw51uPFFaMrGIHh8nkYQfBZNmyj/cBG70pFrsz0n5Xjb7DrE2E1Z0XsKd",
+	"/go/ClB6ndzNlsVR3kWyNAURnn6WJffm/wmoWLJcs0xER+VbxDwlZu6DaNJDAU7kp0DMeQEihnO6gHUK",
+	"WAJCszkD6WFzEnEmrr0PlKa6UN5HmmkO/if4Q68Sa5LKyfo5OwZNGQ9LeI2WrRnPaQwn3S+HJPBURi/M",
+	"2us8ttDjIWeZpZDTRR/VPRK5Br8gBU2fTdtmDTejVxISqIYTpQoIbimaJMxIgvKrOQOerPx43hisZQGe",
+	"VahSbCHAz1SfrJkh7irA+iTidAbcbjwNqeqQW0SlpPfm71xmSJoXjUWaUnnfL+ZykhaF9fthaX8BTT9y",
+	"nt1aoz3IetxQXgyFgH2nm57fjWI9qrdkXuEUbSH/v4R5dBT937T2W1PntKbrfHqUMBj9NYM+T2fX7hcN",
+	"Tl/ui+pB9X5YTMYmDnQ75hUSZ0Ib38MESam8TrJb4fE+kyinEoRuW5TV6cwIYgwPOTn2TuKxpe050OCR",
+	"k2OiMxIjX0Qvwc7J/IRVttfDHD7rd6arZHm4LdeZhD3vbwnTnVpIJJ1rPzxSUMq563XEwe1VICyZRBlP",
+	"wg83dEvVHI21vAxKmcl1tqD8uXsVOyw471dQeSYUbD7/JIIbEPqq0yZ5ifC86aMLrc6nJRW+OIrOdcAI",
+	"zmCeSb8q56Ud66bSDqtmmrjFfDSib/yWJ1TDV1AF174I3HCwuXlssu0xjOhO+ub4zCRF0tZtP/7qY8W8",
+	"4yJhj7gLvQygIBjxWQOSbBP7FCjRZKArc0Q6kmoCQtyelKJc4bUrHomthNrqpJyfzaOjP/qVUgr48c9J",
+	"JArO6cxYCBMYeVTdJcC+uCgpYFBUuU2gFIzZc8kyyfT90JNMOLoKRrcDsGKderlGRYibOgSS8zoaHHYK",
+	"CEo6JLUnBvY9sbzh5VJSoVhJ8aDQMkxcdhFSaNde7aTzmwKPo6NxnBV9DmcS0VizG/D7+YSpnNP7qyA3",
+	"kLpTbTcrHlJWJq/o8PF4ysR1MEwx+AgfaDSVC9BXfnCtpknqsSEqLt06K1gQt1Qmw3CQFTrwkj/EdmvU",
+	"L/pINPGchVdQXGpD9LlxvlXqbRHOS1VDusLneiITQ89llhKjgPpl1R8Me1fyUW2jjr0+nG/jVER2lbD5",
+	"3L9/JeSZDAV+nWfzgPhe+tjWOFi0Z/kvSGVw4uKJlzpa9ZyaHjEJPM9QZna1aJFRzY3aqTDb88YSGh1F",
+	"7w8ODw5xq+cgaM6io+hX/Mmc1/QSRTalOZvevJ/GVQ5tmpd50MzK2EiYWnxHR43Tsztwg9L/cnJ3QkbM",
+	"5jlnMb42/a4s3OozfX+2oannx7aQXPAl3QEI2fjl8P3zEeDLmyINK1loG+3hYfvAiPmfh4fPRkT7jOdZ",
+	"/XfKOCSNc78jA4cGtDp9qP3fo8UpBw3rSj7G352ScyppChqkwojZg22bvWDmbwOsMlo4akcQbQ12pnhW",
+	"V7H0YGoDkwKECaWBJiSb23xHMeNMLStlOGJ+FCDva2psPsGzcGWwTJS/gqsPgf1sRZeMqXhLQq34SbQA",
+	"z479N+jRNLkuz8Od71OnLvOY3DK9tGUjRwLq74PV8vPpL0iGyDSZZ4UYFTcL0E3Q5IUHNLW3HQ83z+9b",
+	"1mOIjXzL7jFrCW34ljcGUZsjGOzTpvGS8UQCEtVlDD+V43rBvZqj3x/bODCbtVLo3iCh5Ql5jNhQGmps",
+	"A1Zqehg8GulSb3T7MUkQHm7cKzJ9K50WG9m9D+HWC5ok4wY/NEnqs9gACFRFpS7zcOwixTccMGGkVIg6",
+	"sraBtyuOkOwGJKdsL+IYS9ogFEDCOqxAWZl8Tft/tdq6p4EPihTLdySnUjPKidGVi4EOXz4GOuMJtpTt",
+	"RxxkeB8eBdUpVj++L6yVuyjrKa8G5Ovp5/2HuVWWM6y7w/mJuKGcJW75MTGuSjNekdKFdBX03adMIax7",
+	"EW2bZmrkhvJF2ObytMTVec0XmTOuOxYrN+OrOjCgPggTmKVDeY6JNM6Urk4vIZApoDJeBlF2gY83wtmn",
+	"/5wS1DKxKiSZJDmnRhquZ9kHhPLPV32QtLhIqY6XRjAGHcj3uHbIaLYfHwbF3Vbowg4ZSy22C3orvXzk",
+	"nNwwxWbcbVc1+n6tyGgp5DuTdFq1VnWVqmzT0EvWqlol3R0Xq5qNY8EKFcpp96GFk/ge1MZKAQQgNH24",
+	"hvvHrqRACaJOe4+DyDXck7/DweKAnH89+/zu/S+//iMQO680LQ+PLk5EzIvE1sWQkb+pMieiQu6l6ocb",
+	"WAc73A1krQxttWZ3iW+76t4UZzaC6zQuL2h1Abe6xbUxeJ8JrLsOSlq36rZMbrspCK49Jggk0IRU+i3r",
+	"dKGMdZv3MfT8Ap7Vd/vwBQ7zY8LMnv/L7q436Z8xi9/ad5ubvekD3mbdoJFl1A2y5rXPBLybUWXiMg0p",
+	"QSZC2TV3Xbd3teoi8E9td+2GQF3ueEMkcEeyQpNsTmSVhxu3rcezLQK9Gr8lTL85iP/lcrbfYbutqOzX",
+	"7sKKylNdzlRniwXvSD1c4vO//M7PtCusTt/qvrDcD94ZGzTUILA37Kj5WU4nb6eZJqTygb3kI+l/EhK5",
+	"p/r3Qv07HXrfnx7ypvI7O4LflB733nC4q7R70Km7qfUoL9P6vcUpE9cInd7a6pm9hGhTpfvvMJoXSLdV",
+	"uhUMMRIcV+WGAit41atv3b7B7A+W6xuUg8os+63y9Uuq2yq+cUsVyRlX+7VGN6xTNG7TdlUqLhvDXnet",
+	"YuVm/3aF+hvK8I2GPhSZZ7IuBo5dxWrdou7BiPUiYRPRuDv9SsyD5zb4jnsV1z+FE7yIRCQOsE3heDG9",
+	"bAR/k1ULF/OEzZ/xkO8MkDotXvk9h+frFOoLQfDrEYOsi42v0OMjP2MblRYlfsEPPJkaufTZlFOMeMY8",
+	"MiIF+3NeNHL2KiAFTTv7EapvCfb2ndvv+LQs+UovS/3Nxqc00SDCzTBipg2t1foq5BMPrvSdAsO7hsRZ",
+	"U7OIwvT0XU5FQtyXGon9UmOIJjt4r3qGVz5BuV1i1jZtGSglVFMrovEvHLap8qLfAbKnR70ctPuos/w2",
+	"1pN7Q0tGx+/mrglZV8dGrdyb5Rs+r/RyP1/39pqF+ELvWFqkRBTpDCQWBzD6UgfkLGUag3zKeYgCzlLm",
+	"/crFaLWaRsPfNrhzeY9Ws3iljj1oGO/IhBQK0dSJv284pgd+ZlC5nuP7J709UH0ubissfClBgJLdA+WX",
+	"dOB//wsAAP//",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

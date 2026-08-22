@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 )
 
@@ -18,7 +19,7 @@ func (s *Service) Send(
 		}
 
 		if session == nil {
-			return fmt.Errorf("%w: %s", constant.ErrorCallsignNotFound, to)
+			return not_found.New(constant.Callsign, to)
 		}
 	}
 

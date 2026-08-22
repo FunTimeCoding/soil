@@ -1,7 +1,7 @@
 package service
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"go/types"
 	"golang.org/x/tools/go/packages"
 )
@@ -25,7 +25,7 @@ func checkMethodCollision(
 
 	for i := range named.NumMethods() {
 		if named.Method(i).Name() == targetName {
-			return fmt.Errorf(
+			return conflict.Format(
 				"method %s already exists on %s in %s",
 				targetName,
 				receiver,

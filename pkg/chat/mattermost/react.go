@@ -17,5 +17,5 @@ func (c *Client) React(
 		&model.Reaction{UserId: me.Id, PostId: p.Id, EmojiName: emoji},
 	)
 
-	return e
+	return wrapError(e)
 }

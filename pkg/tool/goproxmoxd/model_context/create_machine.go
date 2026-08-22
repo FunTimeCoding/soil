@@ -2,9 +2,8 @@ package model_context
 
 import (
 	"context"
-	"errors"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/model_context/argument/create_machine"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -37,7 +36,7 @@ func (s *Server) CreateMachine(
 	identifier, e := s.service.CreateMachine(c, &a)
 
 	if e != nil {
-		if errors.Is(e, constant.ErrorCDROMCloudInitConflict) {
+		if validation.Is(e) {
 			return response.Fail("%s", e)
 		}
 

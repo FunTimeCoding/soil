@@ -15,7 +15,7 @@ func (c *Client) ProjectIssues(project int64) ([]*issue.Issue, error) {
 	)
 
 	if e != nil {
-		return nil, e
+		return nil, wrapError(e)
 	}
 
 	return issue.NewSlice(result), nil

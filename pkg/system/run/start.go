@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	library "github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/command"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"os/exec"
 )
@@ -24,7 +25,12 @@ func (r *Run) Start(s ...string) string {
 	r.ErrorString = stderr.String()
 
 	if e != nil {
-		r.Error = e
+		r.Error = command.New(
+			join.Space(s...),
+			r.OutputString,
+			r.ErrorString,
+			e,
+		)
 	}
 
 	if r.Verbose {
@@ -35,20 +41,8 @@ func (r *Run) Start(s ...string) string {
 		r.Exit = f.ExitCode()
 	}
 
-	if r.Panic {
-		if e != nil && r.reporter != nil {
-			r.reporter.CaptureWithContext(
-				e,
-				r.reporterLabel,
-				map[string]any{
-					"command": join.Space(s...),
-					"output":  r.OutputString,
-					"stderr":  r.ErrorString,
-				},
-			)
-		}
-
-		library.PanicOnError(e)
+	if r.Panic && e != nil {
+		library.PanicOnError(r.Error)
 	}
 
 	return r.OutputString

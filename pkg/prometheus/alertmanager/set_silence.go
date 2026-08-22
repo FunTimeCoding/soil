@@ -1,7 +1,7 @@
 package alertmanager
 
 import (
-	"errors"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"time"
@@ -35,7 +35,7 @@ func (c *Client) SetSilence(
 	s, f := c.SilenceByRule(alert)
 
 	if f != nil {
-		if errors.Is(f, constant.ErrorNotFound) {
+		if not_found.Is(f) {
 			return c.PostSilence("", alert, comment, t, t.Add(d))
 		}
 

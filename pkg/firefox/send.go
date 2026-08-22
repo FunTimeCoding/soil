@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/coder/websocket/wsjson"
+	"github.com/funtimecoding/soil/pkg/errors/timeout"
+	"github.com/funtimecoding/soil/pkg/errors/unreachable"
 	"time"
 )
 
@@ -16,7 +18,7 @@ func (c *Client) send(
 	c.mutex.Unlock()
 
 	if connection == nil {
-		return &reply{}, fmt.Errorf("extension not connected")
+		return &reply{}, unreachable.Format("extension not connected")
 	}
 
 	identifier := int(c.identifier.Add(1))
@@ -52,6 +54,6 @@ func (c *Client) send(
 
 		return r, nil
 	case <-time.After(10 * time.Second):
-		return &reply{}, fmt.Errorf("%s: timeout waiting for reply", method)
+		return &reply{}, timeout.Format("%s: timeout waiting for reply", method)
 	}
 }

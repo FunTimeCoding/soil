@@ -1,7 +1,7 @@
 package netbox
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/physical_address"
 	"github.com/netbox-community/go-netbox/v4"
@@ -32,7 +32,7 @@ func (c *Client) PhysicalAddresses() ([]*physical_address.Address, error) {
 	}
 
 	if len(result) == 0 {
-		return nil, fmt.Errorf("no physical addresses found")
+		return nil, not_found.Format("no physical addresses found")
 	}
 
 	c.cache.PhysicalAddresses = physical_address.NewSlice(result)

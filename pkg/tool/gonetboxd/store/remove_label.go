@@ -1,7 +1,8 @@
 package store
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/store/label"
 )
 
@@ -24,7 +25,7 @@ func (s *Store) RemoveLabel(
 	}
 
 	if result.RowsAffected == 0 {
-		return fmt.Errorf("label not found: %s", key)
+		return not_found.New(constant.LabelKey, key)
 	}
 
 	return nil

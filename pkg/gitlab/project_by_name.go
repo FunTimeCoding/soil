@@ -1,8 +1,7 @@
 package gitlab
 
 import (
-	"fmt"
-	"github.com/funtimecoding/soil/pkg/gitlab/constant"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/gitlab/project"
 	"gitlab.com/gitlab-org/api/client-go/v2"
 )
@@ -16,17 +15,16 @@ func (c *Client) ProjectByName(
 	)
 
 	if e != nil {
-		return nil, e
+		return nil, wrapError(e)
 	}
 
 	count := len(result)
 
 	if count == 0 {
-		return nil, fmt.Errorf(
-			"project: %s/%s: %w",
+		return nil, not_found.Format(
+			"project not found: %s/%s",
 			namespace,
 			name,
-			constant.ErrorNotFound,
 		)
 	}
 
@@ -35,11 +33,10 @@ func (c *Client) ProjectByName(
 			return project.New(result[0]), nil
 		}
 
-		return nil, fmt.Errorf(
-			"project: %s/%s: %w",
+		return nil, not_found.Format(
+			"project not found: %s/%s",
 			namespace,
 			name,
-			constant.ErrorNotFound,
 		)
 	}
 
@@ -49,11 +46,10 @@ func (c *Client) ProjectByName(
 		}
 	}
 
-	return nil, fmt.Errorf(
-		"no exact match for project %s/%s among %d results: %w",
+	return nil, not_found.Format(
+		"no exact match for project %s/%s among %d results",
 		namespace,
 		name,
 		count,
-		constant.ErrorNotFound,
 	)
 }

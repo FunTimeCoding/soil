@@ -9,7 +9,7 @@ func (c *Client) BoardSprints(identifier int) ([]*jira.Sprint, error) {
 	v, _, e := c.client.Board.GetAllSprints(integers.ToString(identifier))
 
 	if e != nil {
-		return nil, e
+		return nil, wrapError(e)
 	}
 
 	var result []*jira.Sprint

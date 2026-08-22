@@ -1,6 +1,6 @@
 package node
 
-import "github.com/funtimecoding/soil/pkg/errors"
+import "github.com/funtimecoding/soil/pkg/errors/not_found"
 
 func MustDirectoryByName(
 	n *Node,
@@ -9,9 +9,7 @@ func MustDirectoryByName(
 	result := DirectoryByName(n, name)
 
 	if result == nil {
-		errors.NotFound(name)
-
-		return Stub()
+		panic(not_found.New("directory", name))
 	}
 
 	return result

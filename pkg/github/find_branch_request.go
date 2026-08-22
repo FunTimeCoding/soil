@@ -1,8 +1,7 @@
 package github
 
 import (
-	"errors"
-	"github.com/funtimecoding/soil/pkg/github/constant"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/github/pull_request"
 )
 
@@ -14,7 +13,7 @@ func (c *Client) FindBranchRequest(
 	result, e := c.BranchRequest(owner, repository, branch)
 
 	if e != nil {
-		if errors.Is(e, constant.ErrorNotFound) {
+		if not_found.Is(e) {
 			return nil, false, nil
 		}
 

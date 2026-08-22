@@ -12,5 +12,5 @@ func (c *Client) ReadCommit(
 		&gitlab.GetCommitOptions{},
 	)
 
-	return result, e
+	return result, wrapError(e)
 }

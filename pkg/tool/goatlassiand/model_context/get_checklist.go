@@ -17,7 +17,7 @@ func (s *Server) getChecklist(
 		return response.Fail("key is required: %v", f)
 	}
 
-	items, g := s.readChecklist(key)
+	items, g := s.service.ReadChecklist(key)
 
 	if g != nil {
 		return s.captureFail(g, "checklist not readable")

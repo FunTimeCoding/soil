@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/iterm/history"
 	"github.com/funtimecoding/soil/pkg/system"
 	"net/http"
@@ -26,7 +27,7 @@ func (c *Client) ReadHistory(
 	if r.StatusCode != http.StatusOK {
 		b := system.ReadAll(r.Body)
 
-		return history.Stub(), fmt.Errorf(
+		return history.Stub(), unexpected.Format(
 			"read history: %d: %s",
 			r.StatusCode,
 			b,

@@ -12,7 +12,7 @@ func (c *Client) Issues() ([]*issue.Issue, error) {
 	)
 
 	if e != nil {
-		return nil, e
+		return nil, wrapError(e)
 	}
 
 	return issue.NewSlice(result), nil

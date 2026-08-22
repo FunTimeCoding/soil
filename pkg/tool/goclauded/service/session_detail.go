@@ -2,7 +2,9 @@ package service
 
 import (
 	"encoding/json"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/pricing"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/session_detail"
 )
 
@@ -14,17 +16,17 @@ func (s *Service) SessionDetail(query string) (*session_detail.Detail, error) {
 	}
 
 	if !r.Found() {
-		return nil, nil
+		return nil, not_found.New(constant.SessionKind, query)
 	}
 
-	v, f := s.store.GetSession(r.Identifier())
+	v, found, f := s.store.FindSession(r.Identifier())
 
 	if f != nil {
 		return nil, f
 	}
 
-	if v == nil {
-		return nil, nil
+	if !found {
+		return nil, not_found.New(constant.SessionKind, query)
 	}
 
 	completions, f := s.store.CompletionsBySession(v.Identifier)

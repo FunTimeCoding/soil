@@ -1,7 +1,6 @@
 package constant
 
 import (
-	"errors"
 	"github.com/funtimecoding/soil/pkg/identity"
 	"os"
 	"time"
@@ -121,11 +120,6 @@ const (
 	CountryLabel      = "country"
 	ProvinceLabel     = "province"
 	OrganizationLabel = "organization"
-)
-
-var (
-	ErrorNotFound = errors.New("not found")
-	ErrorConflict = errors.New("already live")
 )
 
 const (

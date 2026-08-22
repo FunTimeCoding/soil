@@ -8,5 +8,5 @@ func (c *Client) ProjectVariable(
 ) (*gitlab.ProjectVariable, error) {
 	result, _, e := c.client.ProjectVariables.GetVariable(project, key, nil)
 
-	return result, e
+	return result, wrapError(e)
 }

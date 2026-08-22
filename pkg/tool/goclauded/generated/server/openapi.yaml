@@ -65,6 +65,12 @@ paths:
       responses:
         "200":
           description: Announcement registered.
+        "404":
+          description: Callsign not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal error.
           content:
@@ -234,6 +240,12 @@ paths:
       responses:
         "200":
           description: Session updated.
+        "409":
+          description: Alias already in use.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal error.
           content:
@@ -293,6 +305,22 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HeatmapResponse"
+        "500":
+          description: Internal error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/coverage:
+    get:
+      operationId: getCoverage
+      responses:
+        "200":
+          description: MCP server surface coverage from the session archive.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CoverageResponse"
         "500":
           description: Internal error.
           content:
@@ -1277,6 +1305,67 @@ components:
           type: integer
         sessions:
           type: integer
+    CoverageResponse:
+      type: object
+      required:
+      - servers
+      properties:
+        servers:
+          type: array
+          items:
+            $ref: "#/components/schemas/CoverageServer"
+    CoverageServer:
+      type: object
+      required:
+      - name
+      - configured
+      - registered
+      - usedTotal
+      - usedRecent
+      - callsTotal
+      - callsRecent
+      - tools
+      properties:
+        name:
+          type: string
+        path:
+          type: string
+        configured:
+          type: boolean
+        registered:
+          type: integer
+        usedTotal:
+          type: integer
+        usedRecent:
+          type: integer
+        callsTotal:
+          type: integer
+        callsRecent:
+          type: integer
+        lastUsed:
+          type: string
+        tools:
+          type: array
+          items:
+            $ref: "#/components/schemas/CoverageTool"
+    CoverageTool:
+      type: object
+      required:
+      - name
+      - registered
+      - callsTotal
+      - callsRecent
+      properties:
+        name:
+          type: string
+        registered:
+          type: boolean
+        callsTotal:
+          type: integer
+        callsRecent:
+          type: integer
+        lastUsed:
+          type: string
     FindResponse:
       type: object
       required:

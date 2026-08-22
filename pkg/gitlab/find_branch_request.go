@@ -1,8 +1,7 @@
 package gitlab
 
 import (
-	"errors"
-	"github.com/funtimecoding/soil/pkg/gitlab/constant"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/gitlab/merge_request"
 )
 
@@ -13,7 +12,7 @@ func (c *Client) FindBranchRequest(
 	result, e := c.BranchRequest(project, branch)
 
 	if e != nil {
-		if errors.Is(e, constant.ErrorNotFound) {
+		if not_found.Is(e) {
 			return nil, false, nil
 		}
 

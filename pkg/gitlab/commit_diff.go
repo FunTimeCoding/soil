@@ -8,5 +8,5 @@ func (c *Client) CommitDiff(
 ) ([]*gitlab.Diff, error) {
 	result, _, e := c.client.Commits.GetCommitDiff(project, sha, nil)
 
-	return result, e
+	return result, wrapError(e)
 }

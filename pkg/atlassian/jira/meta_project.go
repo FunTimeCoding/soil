@@ -1,8 +1,8 @@
 package jira
 
 import (
-	"fmt"
 	"github.com/andygrunwald/go-jira"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 )
 
 func (c *Client) MetaProject(key string) (*jira.MetaProject, error) {
@@ -15,7 +15,7 @@ func (c *Client) MetaProject(key string) (*jira.MetaProject, error) {
 	result := meta.GetProjectWithKey(key)
 
 	if result == nil {
-		return nil, fmt.Errorf("project not found: %s", key)
+		return nil, not_found.New("project", key)
 	}
 
 	return result, nil

@@ -6,7 +6,7 @@ func (c *Client) get(
 	path string,
 	result any,
 ) error {
-	payload, e := c.do(path)
+	payload, e := c.basic.Get(path)
 
 	if e != nil {
 		return e

@@ -12,7 +12,7 @@ func (c *Client) Branches(project int64) ([]*branch.Branch, error) {
 	)
 
 	if e != nil {
-		return nil, e
+		return nil, wrapError(e)
 	}
 
 	return branch.NewSlice(result), nil

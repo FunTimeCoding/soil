@@ -17,7 +17,7 @@ func (c *Client) User(identifier string) (*model.User, error) {
 	)
 
 	if e != nil {
-		return nil, e
+		return nil, wrapError(e)
 	}
 
 	c.user.Add(result)

@@ -36,6 +36,22 @@ type JiraSource interface {
 		p *jira.MetaProject,
 		issueType string,
 	) (*jira.MetaIssueType, error)
-	Nested() *jira.Client
+	CreateNative(i *jira.Issue) (*issue.Issue, error)
+	UpdateNative(i *jira.Issue) error
+	Assign(
+		key string,
+		u *jira.User,
+	) error
+	AddLink(link *jira.IssueLink) error
+	DeleteLink(identifier string) error
+	UpdateComment(
+		key string,
+		comment *jira.Comment,
+	) error
+	DeleteComment(
+		key string,
+		identifier string,
+	) error
+	FindUsers(query string) ([]jira.User, error)
 	Basic() *basic.Client
 }

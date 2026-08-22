@@ -22,7 +22,7 @@ func (s *Server) getGroup(
 	parent, children, e := s.service.GetMemoryGroup(identifier)
 
 	if e != nil {
-		return s.captureFail(e, "failed to load memory group")
+		return s.captureFail(e, "load memory group")
 	}
 
 	members := map[int64]bool{parent.Identifier: true}
@@ -36,7 +36,7 @@ func (s *Server) getGroup(
 	edges, f := s.service.ListRelationsAmong(identifiers)
 
 	if f != nil {
-		return s.captureFail(f, "failed to load group relations")
+		return s.captureFail(f, "load group relations")
 	}
 
 	relations := groupRelations(edges, members)

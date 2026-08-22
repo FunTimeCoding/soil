@@ -21,7 +21,7 @@ func (c *Client) postPage(
 			false,
 		)
 
-		return page, e
+		return page, wrapError(e)
 	}
 
 	page, _, e := c.client.GetPostsBefore(
@@ -35,5 +35,5 @@ func (c *Client) postPage(
 		false,
 	)
 
-	return page, e
+	return page, wrapError(e)
 }

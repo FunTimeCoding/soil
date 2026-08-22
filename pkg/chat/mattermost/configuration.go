@@ -8,5 +8,5 @@ func (c *Client) Configuration() (map[string]string, error) {
 		constant.MattermostEmptyEntityTag,
 	)
 
-	return result, e
+	return result, wrapError(e)
 }

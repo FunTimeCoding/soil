@@ -16,11 +16,11 @@ func (s *Server) exportSession(
 	i *session.Session,
 	basePath string,
 ) string {
-	o, f := s.service.GetSession(i.Identifier)
+	o, found, f := s.service.FindSession(i.Identifier)
 	errors.PanicOnError(f)
 	alias := ""
 
-	if o != nil {
+	if found {
 		alias = o.AliasValue()
 	}
 

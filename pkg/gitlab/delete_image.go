@@ -11,5 +11,5 @@ func (c *Client) DeleteImage(
 		tag,
 	)
 
-	return e
+	return wrapError(e)
 }

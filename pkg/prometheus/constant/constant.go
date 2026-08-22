@@ -1,7 +1,6 @@
 package constant
 
 import (
-	"errors"
 	"github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/prometheus/common/model"
 	"time"
@@ -141,7 +140,6 @@ const (
 
 const PushgatewayPort = int(9091)
 
-var ErrorNotFound = errors.New("not found")
 var ExampleGroups = []string{
 	"alertmanager",
 	"events",

@@ -13,5 +13,5 @@ func (c *Client) CreateMergeRequestNote(
 		&gitlab.CreateMergeRequestNoteOptions{Body: &body},
 	)
 
-	return result, e
+	return result, wrapError(e)
 }

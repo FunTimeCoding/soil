@@ -1,0 +1,225 @@
+---
+openapi: "3.0.0"
+info:
+  title: gosublimed
+  version: 1.0.0
+paths:
+  /api/views:
+    get:
+      operationId: getViews
+      responses:
+        "200":
+          description: Open views with previews.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/View"
+        "500":
+          description: Failed to list views.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: createView
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateViewRequest"
+      responses:
+        "200":
+          description: View created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/View"
+        "500":
+          description: Failed to create view.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/views/{id}:
+    get:
+      operationId: getView
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: View with full text.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/View"
+        "500":
+          description: Failed to read view.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: closeView
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        "204":
+          description: View closed.
+        "500":
+          description: Failed to close view.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/views/{id}/edit:
+    post:
+      operationId: editView
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EditViewRequest"
+      responses:
+        "200":
+          description: View after edit.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/View"
+        "500":
+          description: Failed to edit view.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/views/{id}/save:
+    post:
+      operationId: saveView
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SaveViewRequest"
+      responses:
+        "204":
+          description: View saved.
+        "500":
+          description: Failed to save view.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/open:
+    post:
+      operationId: openFile
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OpenFileRequest"
+      responses:
+        "200":
+          description: Opened view.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/View"
+        "500":
+          description: Failed to open file.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    View:
+      type: object
+      required: [view_id, window_id, file_path, title, is_dirty, syntax]
+      properties:
+        view_id:
+          type: integer
+        window_id:
+          type: integer
+        file_path:
+          type: string
+        title:
+          type: string
+        is_dirty:
+          type: boolean
+        syntax:
+          type: string
+        preview:
+          type: string
+        text:
+          type: string
+    CreateViewRequest:
+      type: object
+      required: [title, content]
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        syntax:
+          type: string
+    EditViewRequest:
+      type: object
+      required: [old_string, new_string]
+      properties:
+        old_string:
+          type: string
+        new_string:
+          type: string
+        replace_all:
+          type: boolean
+    SaveViewRequest:
+      type: object
+      properties:
+        file_path:
+          type: string
+    OpenFileRequest:
+      type: object
+      required: [file_path]
+      properties:
+        file_path:
+          type: string
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+    ErrorResponse:
+      type: object
+      required: [error, event_identifier]
+      properties:
+        error:
+          type: string
+        event_identifier:
+          type: string

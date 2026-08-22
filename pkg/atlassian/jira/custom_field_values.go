@@ -1,9 +1,9 @@
 package jira
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/custom_field_value"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/notation"
 )
 
@@ -21,11 +21,7 @@ func (c *Client) CustomFieldValues(
 	f := m.ByName(fieldName)
 
 	if f == nil {
-		return nil, fmt.Errorf(
-			"field not found: %s: %w",
-			fieldName,
-			constant.ErrorNotFound,
-		)
+		return nil, not_found.New("field", fieldName)
 	}
 
 	meta, g := c.CreateMeta(key)
@@ -54,9 +50,5 @@ func (c *Client) CustomFieldValues(
 		}
 	}
 
-	return nil, fmt.Errorf(
-		"issue type not found: %s: %w",
-		issueType,
-		constant.ErrorNotFound,
-	)
+	return nil, not_found.New("issue type", issueType)
 }

@@ -1,7 +1,7 @@
 package service
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/prometheus"
 )
 
@@ -16,7 +16,7 @@ func (s *Service) Client(instance string) (*prometheus.Client, error) {
 	i, okay := s.Instance(instance)
 
 	if !okay {
-		return nil, fmt.Errorf("unknown instance: %s", instance)
+		return nil, not_found.New("instance", instance)
 	}
 
 	c := prometheus.New(i.Host, i.Port, i.Secure, i.User, i.Password, "")

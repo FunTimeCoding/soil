@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/generated/server"
@@ -14,7 +14,7 @@ func (s *Server) PostAuthority(
 ) (server.PostAuthorityResponseObject, error) {
 	result, e := s.service.CreateAuthority(r.Body)
 
-	if errors.Is(e, constant.ErrorConflict) {
+	if conflict.Is(e) {
 		return server.PostAuthority409JSONResponse(
 			*clientError(constant.AuthorityLive),
 		), nil

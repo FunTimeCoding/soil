@@ -6,5 +6,5 @@ func (c *Client) DeleteProjectVariable(
 ) error {
 	_, e := c.client.ProjectVariables.RemoveVariable(project, key, nil)
 
-	return e
+	return wrapError(e)
 }

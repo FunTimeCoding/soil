@@ -2,9 +2,8 @@ package model_context
 
 import (
 	"context"
-	"errors"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gosentryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -17,7 +16,7 @@ func (s *Server) SearchIssues(
 	project, e := s.resolveProject(a.Project)
 
 	if e != nil {
-		if errors.Is(e, constant.ErrorProjectNotFound) {
+		if not_found.Is(e) {
 			return response.Fail(e.Error())
 		}
 

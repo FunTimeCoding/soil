@@ -12,5 +12,5 @@ func (c *Client) CreateBranch(
 		&gitlab.CreateBranchOptions{Branch: &name, Ref: &reference},
 	)
 
-	return result, e
+	return result, wrapError(e)
 }

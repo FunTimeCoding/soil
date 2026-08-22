@@ -2,9 +2,8 @@ package server
 
 import (
 	"context"
-	"errors"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 )
 
@@ -32,7 +31,7 @@ func (s *Server) UpdateMachine(
 			return server.UpdateMachine404JSONResponse{Error: e.Error()}, nil
 		}
 
-		if errors.Is(e, constant.ErrorNoChanges) {
+		if validation.Is(e) {
 			return server.UpdateMachine400JSONResponse(*clientError(e)), nil
 		}
 

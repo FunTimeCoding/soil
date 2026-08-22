@@ -2,7 +2,6 @@ package model_context
 
 import (
 	"context"
-	"github.com/andygrunwald/go-jira"
 	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -30,18 +29,8 @@ func (s *Server) updateComment(
 		return response.Fail("body is required: %v", h)
 	}
 
-	_, resp, i := s.jira.Nested().Issue.UpdateCommentWithContext(
-		c,
-		key,
-		&jira.Comment{ID: identifier, Body: body},
-	)
-
-	if i != nil {
-		if resp != nil && resp.Body != nil {
-			return response.Fail("update comment failed: %v", i)
-		}
-
-		return response.Fail("update comment failed: %v", i)
+	if e := s.service.UpdateComment(key, identifier, body); e != nil {
+		return response.Fail("%s", e)
 	}
 
 	return response.Success("comment %s updated", identifier)

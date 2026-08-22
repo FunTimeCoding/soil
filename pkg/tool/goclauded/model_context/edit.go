@@ -2,9 +2,9 @@ package model_context
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	library "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -39,7 +39,7 @@ func (s *Server) edit(
 	_, g = s.service.EditEvent(uint(identifier), message)
 
 	if g != nil {
-		if errors.Is(g, constant.ErrorEventNotFound) {
+		if not_found.Is(g) {
 			return response.Fail(g.Error())
 		}
 

@@ -28,7 +28,7 @@ func (s Server) ServeHTTP(
 
 	defer func() {
 		if e := c.CloseNow(); e != nil {
-			s.Logf("failed to close connection: %v", e)
+			s.Logf("close connection: %v", e)
 		}
 	}()
 	log.Printf("subprotocol: %v\n", c.Subprotocol())

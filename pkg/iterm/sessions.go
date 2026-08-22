@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/iterm/response"
 	"github.com/funtimecoding/soil/pkg/iterm/session"
 	"github.com/funtimecoding/soil/pkg/system"
@@ -21,7 +22,7 @@ func (c *Client) Sessions() ([]*session.Session, error) {
 	defer errors.LogClose(r.Body)
 
 	if r.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf(
+		return nil, unexpected.Format(
 			"list sessions: %d: %s",
 			r.StatusCode,
 			system.ReadAll(r.Body),

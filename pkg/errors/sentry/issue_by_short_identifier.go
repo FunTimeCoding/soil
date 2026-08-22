@@ -3,7 +3,7 @@ package sentry
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/errors/constant"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/basic/response"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/issue"
 	"strings"
@@ -33,11 +33,7 @@ func (c *Client) IssueByShortIdentifier(
 	}
 
 	if len(result) == 0 {
-		return nil, fmt.Errorf(
-			"issue not found: %s: %w",
-			identifier,
-			constant.ErrorNotFound,
-		)
+		return nil, not_found.New("issue", identifier)
 	}
 
 	return issue.New(&result[0]), nil

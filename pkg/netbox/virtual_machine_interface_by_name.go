@@ -1,7 +1,7 @@
 package netbox
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/netbox/virtual_machine"
 	"github.com/netbox-community/go-netbox/v4"
 )
@@ -24,5 +24,9 @@ func (c *Client) VirtualMachineInterfaceByName(
 		}
 	}
 
-	return nil, fmt.Errorf("interface %s not found for VM %s", name, vm.Name)
+	return nil, not_found.Format(
+		"interface %s not found for VM %s",
+		name,
+		vm.Name,
+	)
 }

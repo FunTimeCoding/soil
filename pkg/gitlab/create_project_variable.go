@@ -16,5 +16,5 @@ func (c *Client) CreateProjectVariable(
 		},
 	)
 
-	return result, e
+	return result, wrapError(e)
 }

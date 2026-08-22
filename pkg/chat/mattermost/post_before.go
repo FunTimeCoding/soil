@@ -1,10 +1,9 @@
 package mattermost
 
 import (
-	"fmt"
-	chat "github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/post"
-	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/time/constant"
 	"github.com/mattermost/mattermost/server/public/model"
 	"time"
 )
@@ -23,11 +22,10 @@ func (c *Client) PostBefore(
 		}
 
 		if len(page.Order) == 0 {
-			return nil, fmt.Errorf(
-				"no post before %s in channel %s: %w",
-				t.Format(timeConstant.DateMinute),
+			return nil, not_found.Format(
+				"no post before %s in channel %s",
+				t.Format(constant.DateMinute),
 				h.Id,
-				chat.ErrorMattermostNotFound,
 			)
 		}
 

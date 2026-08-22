@@ -6,16 +6,19 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/option"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
+	"os"
 	"path/filepath"
 )
 
 func Run(o *option.Audit) {
+	configuration := scan.LoadConfiguration(
+		system.FirstFile(constant.ConfigurationPaths...),
+	)
+	failed := false
+
 	for _, root := range o.Roots {
 		v := virtual_file_system.From(root)
 		repo := filepath.Base(root)
-		configuration := scan.LoadConfiguration(
-			system.FirstFile(constant.ConfigurationPaths...),
-		)
 		services := scan.Services(v, repo, configuration)
 
 		if o.Web {
@@ -33,6 +36,16 @@ func Run(o *option.Audit) {
 			continue
 		}
 
-		runHeadless(v, services, identityWarnings)
+		if runHeadless(v, services, identityWarnings) {
+			failed = true
+		}
+	}
+
+	if !o.Web && !o.Table && runPermissions(configuration) {
+		failed = true
+	}
+
+	if failed {
+		os.Exit(1)
 	}
 }

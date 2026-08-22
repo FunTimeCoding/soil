@@ -2,7 +2,7 @@ package memory_indexer
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 )
@@ -41,7 +41,10 @@ func (i *Indexer) List(
 	}
 
 	if parsed.JSON200 == nil {
-		return nil, fmt.Errorf("unexpected response: %s", parsed.Status())
+		return nil, unexpected.Format(
+			"unexpected response: %s",
+			parsed.Status(),
+		)
 	}
 
 	var results []face.SearchResult

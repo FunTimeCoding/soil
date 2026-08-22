@@ -15,7 +15,7 @@ func (c *Client) DirectMessage(
 	channel, _, e := c.client.CreateDirectChannel(c.context, me.Id, u.Id)
 
 	if e != nil {
-		return nil, e
+		return nil, wrapError(e)
 	}
 
 	return c.PostSimple(channel, text)

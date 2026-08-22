@@ -9,7 +9,7 @@ func (c *Client) Trace(
 	result, _, e := c.client.Jobs.GetTraceFile(project, job)
 
 	if e != nil {
-		return "", e
+		return "", wrapError(e)
 	}
 
 	return string(system.ReadAll(result)), nil

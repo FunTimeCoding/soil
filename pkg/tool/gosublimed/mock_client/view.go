@@ -1,7 +1,7 @@
 package mock_client
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/sublime/view"
 )
 
@@ -12,5 +12,5 @@ func (c *Client) View(identifier int) (*view.View, error) {
 		}
 	}
 
-	return view.Stub(), fmt.Errorf("view %d not found", identifier)
+	return view.Stub(), not_found.New("view", identifier)
 }

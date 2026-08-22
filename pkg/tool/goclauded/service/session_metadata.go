@@ -5,13 +5,13 @@ import "github.com/funtimecoding/soil/pkg/time/constant"
 func (s *Service) sessionMetadata(
 	sessionIdentifier string,
 ) (string, map[string][]string, error) {
-	session, e := s.store.GetSession(sessionIdentifier)
+	session, found, e := s.store.FindSession(sessionIdentifier)
 
 	if e != nil {
 		return "", nil, e
 	}
 
-	if session == nil {
+	if !found {
 		return "", nil, nil
 	}
 

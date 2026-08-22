@@ -55,7 +55,6 @@ func main() {
 	web.WriteBytesSafe(nil, 0, nil)
 	web.DefaultServer(nil)
 	push.Send(nil)
-	errors.NotFound("")
 	relational.NewEnvironment()
 	gitlab.NewGitLabCom("")
 	git.ModifiedFiles("")

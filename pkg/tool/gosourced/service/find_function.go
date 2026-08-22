@@ -1,7 +1,7 @@
 package service
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"go/types"
 	"golang.org/x/tools/go/packages"
 )
@@ -13,7 +13,7 @@ func findFunction(
 	o := p.Types.Scope().Lookup(symbol)
 
 	if o == nil {
-		return nil, nil, fmt.Errorf(
+		return nil, nil, not_found.Format(
 			"symbol %s not found in %s",
 			symbol,
 			p.PkgPath,

@@ -1,7 +1,7 @@
 package netbox
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/netbox/tenant"
 )
 
@@ -18,5 +18,5 @@ func (c *Client) TenantByName(n string) (*tenant.Tenant, error) {
 		}
 	}
 
-	return nil, fmt.Errorf("tenant not found: %s", n)
+	return nil, not_found.New("tenant", n)
 }

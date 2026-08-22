@@ -59,6 +59,34 @@ type CostResponse struct {
 	Models *[]ModelUsage `json:"models,omitempty"`
 }
 
+// CoverageResponse defines model for CoverageResponse.
+type CoverageResponse struct {
+	Servers []CoverageServer `json:"servers"`
+}
+
+// CoverageServer defines model for CoverageServer.
+type CoverageServer struct {
+	CallsRecent int            `json:"callsRecent"`
+	CallsTotal  int            `json:"callsTotal"`
+	Configured  bool           `json:"configured"`
+	LastUsed    *string        `json:"lastUsed,omitempty"`
+	Name        string         `json:"name"`
+	Path        *string        `json:"path,omitempty"`
+	Registered  int            `json:"registered"`
+	Tools       []CoverageTool `json:"tools"`
+	UsedRecent  int            `json:"usedRecent"`
+	UsedTotal   int            `json:"usedTotal"`
+}
+
+// CoverageTool defines model for CoverageTool.
+type CoverageTool struct {
+	CallsRecent int     `json:"callsRecent"`
+	CallsTotal  int     `json:"callsTotal"`
+	LastUsed    *string `json:"lastUsed,omitempty"`
+	Name        string  `json:"name"`
+	Registered  bool    `json:"registered"`
+}
+
 // EditSessionRequest defines model for EditSessionRequest.
 type EditSessionRequest struct {
 	Description *string `json:"description,omitempty"`
@@ -546,6 +574,9 @@ type ClientInterface interface {
 	// GetCost performs a GET /api/cost (the `GetCost` operationId) request.
 	GetCost(ctx context.Context, params *GetCostParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// GetCoverage performs a GET /api/coverage (the `GetCoverage` operationId) request.
+	GetCoverage(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// PostListenWithBody performs a POST /api/listen (the `PostListen` operationId) request,
 	// with any type of body and a specified content type.
 	PostListenWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -730,6 +761,19 @@ func (c *Client) GetCheck(ctx context.Context, params *GetCheckParams, reqEditor
 // GetCost performs a GET /api/cost (the `GetCost` operationId) request.
 func (c *Client) GetCost(ctx context.Context, params *GetCostParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetCostRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetCoverage performs a GET /api/coverage (the `GetCoverage` operationId) request.
+func (c *Client) GetCoverage(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetCoverageRequest(c.Server)
 	if err != nil {
 		return nil, err
 	}
@@ -1426,6 +1470,33 @@ func NewGetCostRequest(server string, params *GetCostParams) (*http.Request, err
 			rawQueryFragments = append(rawQueryFragments, encoded)
 		}
 		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetCoverageRequest constructs an http.Request for the GetCoverage method
+func NewGetCoverageRequest(server string) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/coverage")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
 	}
 
 	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
@@ -2685,6 +2756,11 @@ type ClientWithResponsesInterface interface {
 	// Returns a wrapper object for the known response body format(s).
 	GetCostWithResponse(ctx context.Context, params *GetCostParams, reqEditors ...RequestEditorFn) (*GetCostResponse, error)
 
+	// GetCoverageWithResponse performs a GET /api/coverage (the `GetCoverage` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetCoverageWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetCoverageResponse, error)
+
 	// PostListenWithBodyWithResponse performs a POST /api/listen (the `PostListen` operationId) request,
 	// with any type of body and a specified content type.
 	//
@@ -2869,8 +2945,15 @@ type ClientWithResponsesInterface interface {
 type PostAnnounceResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r PostAnnounceResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -3045,6 +3128,54 @@ func (r GetCostResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r GetCostResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type GetCoverageResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *CoverageResponse
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetCoverageResponse) GetJSON200() *CoverageResponse {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetCoverageResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetCoverageResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetCoverageResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetCoverageResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetCoverageResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -3465,8 +3596,15 @@ func (r GetSessionsBashDumpResponse) ContentType() string {
 type PostEditSessionResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
+	// JSON409 the response for an HTTP 409 `application/json` response
+	JSON409 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+}
+
+// GetJSON409 returns the response for an HTTP 409 `application/json` response
+func (r PostEditSessionResponse) GetJSON409() *Error {
+	return r.JSON409
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -4367,6 +4505,17 @@ func (c *ClientWithResponses) GetCostWithResponse(ctx context.Context, params *G
 	return ParseGetCostResponse(rsp)
 }
 
+// GetCoverageWithResponse performs a GET /api/coverage (the `GetCoverage` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetCoverageWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetCoverageResponse, error) {
+	rsp, err := c.GetCoverage(ctx, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetCoverageResponse(rsp)
+}
+
 // PostListenWithBodyWithResponse performs a POST /api/listen (the `PostListen` operationId) request,
 // with any type of body and a specified content type.
 //
@@ -4780,6 +4929,13 @@ func ParsePostAnnounceResponse(rsp *http.Response) (*PostAnnounceResponse, error
 	case rsp.StatusCode == 200:
 		break // No content-type
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -4874,6 +5030,39 @@ func ParseGetCostResponse(rsp *http.Response) (*GetCostResponse, error) {
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
 		var dest CostResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetCoverageResponse parses an HTTP response from a GetCoverageWithResponse call
+func ParseGetCoverageResponse(rsp *http.Response) (*GetCoverageResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetCoverageResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest CoverageResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}
@@ -5198,6 +5387,13 @@ func ParsePostEditSessionResponse(rsp *http.Response) (*PostEditSessionResponse,
 	switch {
 	case rsp.StatusCode == 200:
 		break // No content-type
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse

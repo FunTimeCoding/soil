@@ -16,7 +16,7 @@ func (c *Client) MergeRequestCommits(
 	)
 
 	if e != nil {
-		return nil, e
+		return nil, wrapError(e)
 	}
 
 	return commit.NewSlice(result), nil

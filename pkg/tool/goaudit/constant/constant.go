@@ -11,9 +11,11 @@ var Identity = identity.New(
 var ConfigurationPaths = []string{".goaudit.yaml", "strata/tool/goaudit.yaml"}
 
 const (
+	ClaudeSettingsPath       = ".claude/settings.local.json"
 	ConstantDirectory        = "constant"
 	ConstantFileName         = "constant.go"
 	IntegrationTestDirectory = "integration_test"
+	ModelContextDirectory    = "model_context"
 	PackageDirectory         = "pkg"
 	TestdataDirectory        = "testdata"
 	ToolDirectory            = "tool"

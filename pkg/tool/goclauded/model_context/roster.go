@@ -81,13 +81,13 @@ func (s *Server) roster(
 			line = fmt.Sprintf("%s\n  %s", line, join.Space(pips...))
 		}
 
-		l, g := s.service.LatestPulse(session.Identifier)
+		l, found, g := s.service.FindLatestPulse(session.Identifier)
 
 		if g != nil {
 			return s.captureFail(g, library.UnexpectedError)
 		}
 
-		if l != nil {
+		if found {
 			line = fmt.Sprintf("%s\n  pulse: %s", line, l.Body)
 		}
 

@@ -13,5 +13,5 @@ func (c *Client) UpdateProjectVariable(
 		&gitlab.UpdateProjectVariableOptions{Value: &value},
 	)
 
-	return result, e
+	return result, wrapError(e)
 }

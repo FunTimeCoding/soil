@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
@@ -15,11 +16,7 @@ func (s *Service) Profile(
 	detail bool,
 ) (*ProfileResult, *ProfileDetail, error) {
 	if scope == constant.AllScope || scope == constant.DefaultScope {
-		return nil, nil, fmt.Errorf(
-			"%w: %s",
-			constant.ErrorReservedScope,
-			scope,
-		)
+		return nil, nil, validation.New("scope name is reserved: %s", scope)
 	}
 
 	if f := s.ensureTokenizer(); f != nil {
@@ -29,27 +26,22 @@ func (s *Service) Profile(
 	always, e := s.ListMemoriesWithContent(constant.AlwaysTag, scope)
 
 	if e != nil {
-		return nil, nil, fmt.Errorf("%w: %v", constant.ErrorAlwaysLoad, e)
+		return nil, nil, fmt.Errorf("load always memories: %w", e)
 	}
 
 	result := &ProfileResult{Always: always}
 	alwaysTokens := s.countTokens(always)
-	remaining := constant.ProfileBudget - alwaysTokens
-
-	if remaining < 0 {
-		remaining = 0
-	}
-
+	remaining := max(constant.ProfileBudget-alwaysTokens, 0)
 	alwaysIDs := map[int64]bool{}
 
 	for _, m := range always {
 		alwaysIDs[m.Identifier] = true
 	}
 
-	allMemories, e := s.ListMemories("", "", scope, true)
+	allMemories, f := s.ListMemories("", "", scope, true)
 
-	if e != nil {
-		return nil, nil, fmt.Errorf("%w: %v", constant.ErrorMemoryList, e)
+	if f != nil {
+		return nil, nil, fmt.Errorf("list memories: %w", f)
 	}
 
 	childSummaries := map[int64][]store.MemorySummary{}
@@ -176,11 +168,7 @@ func (s *Service) Profile(
 		relevant, f := s.SearchRelevant(topic, 20, exclude)
 
 		if f != nil {
-			return nil, nil, fmt.Errorf(
-				"%w: %v",
-				constant.ErrorRelevantSearch,
-				f,
-			)
+			return nil, nil, fmt.Errorf("search relevant memories: %w", f)
 		}
 
 		for _, r := range relevant {

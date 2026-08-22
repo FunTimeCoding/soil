@@ -12,5 +12,5 @@ func (c *Client) Team(name string) (*model.Team, error) {
 		constant.MattermostEmptyEntityTag,
 	)
 
-	return result, e
+	return result, wrapError(e)
 }

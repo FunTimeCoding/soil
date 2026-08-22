@@ -50,6 +50,12 @@ func sessionEdit(c *command_context.Context) *cobra.Command {
 			)
 			errors.PanicOnError(e)
 
+			if response.JSON409 != nil {
+				fmt.Println(response.JSON409.Error)
+
+				return
+			}
+
 			if response.JSON500 != nil {
 				fmt.Println(response.JSON500.Error)
 

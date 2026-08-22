@@ -20,7 +20,7 @@ func (c *Client) postsSinceChunk(
 	)
 
 	if e != nil {
-		return nil, e
+		return nil, wrapError(e)
 	}
 
 	return post.FromList(list, true), nil

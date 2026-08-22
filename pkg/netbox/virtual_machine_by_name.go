@@ -1,7 +1,7 @@
 package netbox
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/netbox/virtual_machine"
 )
 
@@ -18,5 +18,5 @@ func (c *Client) VirtualMachineByName(n string) (*virtual_machine.Machine, error
 		}
 	}
 
-	return nil, fmt.Errorf("virtual machine not found: %s", n)
+	return nil, not_found.New("virtual machine", n)
 }

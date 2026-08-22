@@ -52,6 +52,8 @@ tasks:
     - cd pkg/tool/goraidd/generated/server && oapi-codegen --config config.yaml openapi.yaml
     - cd pkg/tool/goraidparsed/generated/client && oapi-codegen --config config.yaml ../server/openapi.yaml
     - cd pkg/tool/goraidparsed/generated/server && oapi-codegen --config config.yaml openapi.yaml
+    - cd pkg/tool/gosublimed/generated/client && oapi-codegen --config config.yaml ../server/openapi.yaml
+    - cd pkg/tool/gosublimed/generated/server && oapi-codegen --config config.yaml openapi.yaml
     - cd pkg/tool/gotelemetryd/generated/client && oapi-codegen --config config.yaml ../server/openapi.yaml
     - cd pkg/tool/gotelemetryd/generated/server && oapi-codegen --config config.yaml openapi.yaml
     silent: true

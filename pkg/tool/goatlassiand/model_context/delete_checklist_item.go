@@ -24,28 +24,10 @@ func (s *Server) deleteChecklistItem(
 		return response.Fail("index is required: %v", g)
 	}
 
-	items, h := s.readChecklist(key)
+	items, h := s.service.DeleteChecklistItem(key, int(index))
 
 	if h != nil {
-		return s.captureFail(h, "checklist not readable")
-	}
-
-	i := int(index)
-
-	if i < 1 || i > len(items) {
-		return response.Fail("index %d out of range (1-%d)", i, len(items))
-	}
-
-	items = append(items[:i-1], items[i:]...)
-
-	for j := range items {
-		items[j].Index = j + 1
-	}
-
-	fail, e := s.writeChecklist(c, key, items)
-
-	if fail != nil {
-		return fail, e
+		return s.failOrCapture(h, "checklist not updated")
 	}
 
 	return response.SuccessAny(items)

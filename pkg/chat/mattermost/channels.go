@@ -17,5 +17,5 @@ func (c *Client) Channels(
 		constant.MattermostEmptyEntityTag,
 	)
 
-	return result, e
+	return result, wrapError(e)
 }

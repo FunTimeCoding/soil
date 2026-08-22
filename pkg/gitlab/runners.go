@@ -30,7 +30,7 @@ func (c *Client) Runners(all bool) ([]*runner.Runner, error) {
 		}
 
 		if e != nil {
-			return nil, e
+			return nil, wrapError(e)
 		}
 
 		if false {

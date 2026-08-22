@@ -1,7 +1,8 @@
 package netbox
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/netbox/tag"
 )
 
@@ -18,5 +19,5 @@ func (c *Client) TagByName(n string) (*tag.Tag, error) {
 		}
 	}
 
-	return nil, fmt.Errorf("tag not found: %s", n)
+	return nil, not_found.New(constant.TagKey, n)
 }

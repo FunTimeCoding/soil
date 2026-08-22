@@ -16,5 +16,5 @@ func (c *Client) Users(
 		constant.MattermostEmptyEntityTag,
 	)
 
-	return result, e
+	return result, wrapError(e)
 }

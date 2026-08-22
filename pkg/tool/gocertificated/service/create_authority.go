@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/authority"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/generated/server"
@@ -19,7 +20,7 @@ func (s *Service) CreateAuthority(
 	}
 
 	if live != nil {
-		return nil, constant.ErrorConflict
+		return nil, conflict.Format("authority already live: %s", b.Name)
 	}
 
 	kind := constant.CertificateKind(b.Kind)

@@ -4,6 +4,8 @@ const (
 	ModelContextGreetTool      = "greet"
 	ModelContextNameParameter  = "name"
 	ModelContextTokenParameter = "token"
+	ModelContextToolPrefix     = "mcp__"
+	ModelContextToolSeparator  = "__"
 )
 
 const (
@@ -26,6 +28,11 @@ const (
 	MarkUserPrefix = "user://"
 
 	MarkProfileSuffix = "/profile"
+)
+
+const (
+	RecentRunsFail = "list recent runs"
+	RunLookupFail  = "look up run"
 )
 
 const ModelContextAddress = ":10080"

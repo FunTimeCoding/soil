@@ -10,5 +10,5 @@ func (c *Client) Transition(
 		transitionIdentifier,
 	)
 
-	return e
+	return wrapError(e)
 }

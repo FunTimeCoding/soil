@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -17,7 +18,7 @@ func (s *Service) Pool(instance string) (*pgxpool.Pool, error) {
 	i, okay := s.Instance(instance)
 
 	if !okay {
-		return nil, fmt.Errorf("unknown instance: %s", instance)
+		return nil, not_found.New("instance", instance)
 	}
 
 	p, e := pgxpool.New(context.Background(), i.Locator())

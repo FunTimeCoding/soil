@@ -31,9 +31,6 @@ const (
 	OutcomeSuccess = "success"
 	OutcomeError   = "error"
 
-	QueryFailed   = "failed to query events"
-	SummaryFailed = "failed to build summary"
-
 	HeatmapTitle = "Heatmap"
 	HeatmapPath  = "/"
 	EventsTitle  = "Events"

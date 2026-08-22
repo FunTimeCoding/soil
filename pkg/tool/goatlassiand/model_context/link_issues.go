@@ -2,10 +2,8 @@ package model_context
 
 import (
 	"context"
-	"github.com/andygrunwald/go-jira"
 	generative "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -27,22 +25,9 @@ func (s *Server) linkIssues(
 	}
 
 	linkType := r.GetString(constant.LinkType, "Relates")
-	link := &jira.IssueLink{
-		Type:         jira.IssueLinkType{Name: linkType},
-		OutwardIssue: &jira.Issue{Key: key},
-		InwardIssue:  &jira.Issue{Key: target},
-	}
-	resp, h := s.jira.Nested().Issue.AddLinkWithContext(c, link)
 
-	if h != nil {
-		if resp != nil && resp.Body != nil {
-			return response.Fail(
-				"link failed: %s",
-				string(system.ReadAll(resp.Body)),
-			)
-		}
-
-		return response.Fail("link failed: %v", h)
+	if h := s.service.LinkIssues(key, target, linkType); h != nil {
+		return response.Fail("%s", h)
 	}
 
 	return response.Success("%s %s %s", key, linkType, target)

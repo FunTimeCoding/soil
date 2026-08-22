@@ -9,7 +9,7 @@ func (c *Client) Retry(
 	result, _, e := c.client.Jobs.RetryJob(project, jobIdentifier)
 
 	if e != nil {
-		return nil, e
+		return nil, wrapError(e)
 	}
 
 	return c.enrichJob(job.New(result)), nil

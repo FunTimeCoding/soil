@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	"errors"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
@@ -21,21 +21,11 @@ func (s *Server) profile(
 	)
 
 	if e != nil {
-		if errors.Is(e, constant.ErrorReservedScope) {
+		if validation.Is(e) {
 			return response.Fail("%s", e.Error())
 		}
 
-		message := "failed to load profile"
-
-		if errors.Is(e, constant.ErrorAlwaysLoad) {
-			message = "failed to load always-tagged memories"
-		} else if errors.Is(e, constant.ErrorRelevantSearch) {
-			message = "failed to search for relevant memories"
-		} else if errors.Is(e, constant.ErrorMemoryList) {
-			message = "failed to list memories"
-		}
-
-		return s.captureFail(e, message)
+		return s.captureFail(e, "load profile")
 	}
 
 	return response.Success(

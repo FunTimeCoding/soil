@@ -44,22 +44,27 @@ pkg/tool/go<tool>d/service/
 ├── client.go               # Client(instance string) - lazy creation with mutex
 ├── instance.go             # Instance(name string) - lookup by name
 ├── instances.go            # Instances() - full list
-├── resolve_instance.go     # ResolveInstance(explicit string) - defaulting logic
+├── resolve_instance.go     # ResolveInstance(explicit string) - delegates to inventory.Resolve
 ├── active_instance.go      # ActiveInstance(sessionID string) - MCP session state
 └── set_active_instance.go  # SetActiveInstance(sessionID, instance string)
 ```
 
 ### Instance Resolution
 
-`ResolveInstance(explicit string) (string, error)` encodes the
-defaulting rule:
+`ResolveInstance(explicit string) (string, error)` delegates to
+the shared `pkg/inventory.Resolve(explicit, names)` - the
+per-tool method is a two-liner over the inventory's `Names()`.
+The defaulting rule lives in the shared helper:
 
-- If `explicit` is non-empty, validate it exists and return it
+- If `explicit` is non-empty, validate it exists and return it -
+  unknown names are typed `not_found`
 - If exactly one instance is configured, return it
-- Otherwise, return an error ("no instance selected" or "multiple
-  instances configured, selection required")
+- Otherwise, return a typed `not_selected` error ("no instance
+  selected - %d instances configured, selection required")
 
-All three surfaces call this instead of doing their own resolution.
+All three surfaces call this instead of doing their own
+resolution. Unknown-instance lookups in `Client`-style methods
+are typed `not_found` as well.
 The rule is: when there's no ambiguity, don't require selection.
 
 ### Lazy Client Creation

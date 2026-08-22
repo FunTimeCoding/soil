@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/model_context/argument"
@@ -16,7 +16,7 @@ func (s *Server) revocationList(
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.RevocationList(a.Authority)
 
-	if errors.Is(e, constant.ErrorNotFound) {
+	if not_found.Is(e) {
 		return response.Fail("%s", constant.AuthorityMissing)
 	}
 

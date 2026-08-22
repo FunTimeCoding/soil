@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/iterm/screen"
 	"github.com/funtimecoding/soil/pkg/system"
 	"net/http"
@@ -23,7 +24,11 @@ func (c *Client) ReadScreen(identifier string) (*screen.Screen, error) {
 	if r.StatusCode != http.StatusOK {
 		b := system.ReadAll(r.Body)
 
-		return screen.Stub(), fmt.Errorf("read screen: %d: %s", r.StatusCode, b)
+		return screen.Stub(), unexpected.Format(
+			"read screen: %d: %s",
+			r.StatusCode,
+			b,
+		)
 	}
 
 	var result *screen.Screen

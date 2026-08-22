@@ -6,7 +6,7 @@ import (
 )
 
 func (o *Tester) GetSession(sessionIdentifier string) *session.Session {
-	result, e := o.Store.GetSession(sessionIdentifier)
+	result, _, e := o.Store.FindSession(sessionIdentifier)
 	assert.FatalOnError(o.t, e)
 
 	return result

@@ -14,10 +14,10 @@ func (s *Server) sessionEditForm(
 	r *http.Request,
 ) {
 	identifier := r.PathValue(constant.Identifier)
-	e, f := s.service.GetSession(identifier)
+	e, found, f := s.service.FindSession(identifier)
 	errors.PanicOnError(f)
 
-	if e == nil {
+	if !found {
 		s.view.RenderPage(
 			w,
 			"Session Not Found",

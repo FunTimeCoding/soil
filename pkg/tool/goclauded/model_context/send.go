@@ -2,9 +2,9 @@ package model_context
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	library "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -35,7 +35,7 @@ func (s *Server) send(
 	to := q.GetString(constant.To, "")
 
 	if f := s.service.Send(c.Callsign, to, body); f != nil {
-		if errors.Is(f, constant.ErrorCallsignNotFound) {
+		if not_found.Is(f) {
 			return response.Fail(f.Error())
 		}
 

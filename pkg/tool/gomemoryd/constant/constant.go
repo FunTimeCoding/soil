@@ -1,9 +1,6 @@
 package constant
 
-import (
-	"errors"
-	"github.com/funtimecoding/soil/pkg/identity"
-)
+import "github.com/funtimecoding/soil/pkg/identity"
 
 var Identity = identity.New(
 	"gomemoryd",
@@ -90,11 +87,3 @@ var RelationTypes = []string{
 	"sequence",
 	"deep-dive",
 }
-
-var (
-	ErrorAlwaysLoad     = errors.New("failed to load always memories")
-	ErrorRelevantSearch = errors.New("failed to search relevant memories")
-	ErrorMemoryList     = errors.New("failed to list memories")
-	ErrorReservedScope  = errors.New("scope name is reserved")
-	ErrorRelationType   = errors.New("unknown relation type")
-)

@@ -12,8 +12,6 @@ type Run struct {
 	stdio          bool
 	stdout         io.Writer
 	stderr         io.Writer
-	reporter       face.Reporter
-	reporterLabel  string
 	registry       face.ProcessRegistry
 	Directory      string
 	Panic          bool

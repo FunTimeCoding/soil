@@ -1,8 +1,7 @@
 package netbox
 
 import (
-	"fmt"
-	"github.com/funtimecoding/soil/pkg/netbox/constant"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/netbox/device"
 )
 
@@ -20,20 +19,15 @@ func (c *Client) DeviceByName(n string) (*device.Device, error) {
 			}
 		}
 
-		return nil, fmt.Errorf(
-			"no exact match for device %s among %d results: %w",
+		return nil, not_found.Format(
+			"no exact match for device %s among %d results",
 			n,
 			len(result),
-			constant.ErrorNotFound,
 		)
 	}
 
 	if len(result) == 0 {
-		return nil, fmt.Errorf(
-			"device not found: %s: %w",
-			n,
-			constant.ErrorNotFound,
-		)
+		return nil, not_found.New("device", n)
 	}
 
 	return result[0], nil

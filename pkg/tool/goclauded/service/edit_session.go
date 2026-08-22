@@ -1,8 +1,7 @@
 package service
 
 import (
-	"fmt"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/argument/edit_session"
 )
 
@@ -18,9 +17,8 @@ func (s *Service) EditSession(
 		}
 
 		if owner != "" && owner != identifier {
-			return fmt.Errorf(
-				"%w: %q is used by session %s",
-				constant.ErrorAliasCollision,
+			return conflict.Format(
+				"alias already in use: %q is used by session %s",
 				*a.Alias,
 				owner,
 			)

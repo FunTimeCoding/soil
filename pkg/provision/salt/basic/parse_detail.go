@@ -17,7 +17,7 @@ func parseDetail(
 	end := strings.Index(s, "</p>")
 
 	if start >= 0 && end > start {
-		return detail_error.New(s[start+3:end], status)
+		return detail_error.New(s[start+3:end], status).WithBody(body)
 	}
 
 	return fmt.Errorf("%s", status)

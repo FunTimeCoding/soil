@@ -2,6 +2,7 @@ package model_context
 
 import (
 	"context"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/provision/model_context"
 	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
@@ -17,7 +18,7 @@ func (s *Server) runs(
 	result, e := s.store.Recent(limit)
 
 	if e != nil {
-		return s.captureFail(e, constant.RecentRunsFailed)
+		return s.captureFail(e, generativeConstant.RecentRunsFail)
 	}
 
 	summaries := make([]model_context.RunSummary, len(result))

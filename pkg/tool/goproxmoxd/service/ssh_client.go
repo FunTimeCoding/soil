@@ -1,7 +1,8 @@
 package service
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/not_configured"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/ssh"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
 )
@@ -17,11 +18,11 @@ func (s *Service) SSHClient(instance string) (face.SnippetClient, error) {
 	i, okay := s.Instance(instance)
 
 	if !okay {
-		return nil, fmt.Errorf("unknown instance: %s", instance)
+		return nil, not_found.New("instance", instance)
 	}
 
 	if i.SSHUser == "" || i.SSHPassword == "" {
-		return nil, fmt.Errorf(
+		return nil, not_configured.Format(
 			"instance %s has no SSH credentials configured",
 			instance,
 		)

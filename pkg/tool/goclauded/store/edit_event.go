@@ -1,9 +1,8 @@
 package store
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/relational"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/event"
 )
 
@@ -15,11 +14,7 @@ func (s *Store) EditEvent(
 
 	if e := s.database.Where("identifier = ?", identifier).First(&existing).Error; e != nil {
 		if relational.NotFound(e) {
-			return nil, fmt.Errorf(
-				"%w: %d",
-				constant.ErrorEventNotFound,
-				identifier,
-			)
+			return nil, not_found.New("event", identifier)
 		}
 
 		return nil, e

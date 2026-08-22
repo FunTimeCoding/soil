@@ -2,8 +2,8 @@ package usage
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/nextcloud/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -22,7 +22,7 @@ func (c *Client) Fetch() (*Usage, error) {
 	defer errors.PanicClose(response.Body)
 
 	if response.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf(
+		return nil, unexpected.Format(
 			"server information status: %d",
 			response.StatusCode,
 		)

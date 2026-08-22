@@ -32,9 +32,9 @@ func TestMapNotHasKey(t *testing.T) {
 }
 
 func TestMapValue(t *testing.T) {
-	m := map[string]any{"height": 180, "name": "Fern"}
+	m := map[string]any{"height": 180, "name": "Alfa"}
 	assert.MapValue(t, 180, m, "height")
-	assert.MapValue(t, "Fern", m, "name")
+	assert.MapValue(t, "Alfa", m, "name")
 }
 
 func TestPrefix(t *testing.T) {

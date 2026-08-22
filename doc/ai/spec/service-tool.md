@@ -358,6 +358,19 @@ func (c *Client) MustLinks(collection int32) []*link.Link {
 }
 ```
 
+### Find Pattern
+
+Lookups where absence is a valid outcome return the Find shape -
+`Find<Noun>(...) (*T, bool, error)`. The flag carries absence,
+the error carries failure; never a `nil, nil` soft-miss that
+callers must remember to check. When absence is exceptional for
+every caller, return a typed `not_found` instead of the flag.
+`<Noun>Exists` variants wrap a lookup and swallow only
+`not_found`. List endpoints are neither: an empty slice is a
+complete answer, not a miss. Examples: `FindBranchRequest`,
+`FindPostBefore`, `FindSession`, `FindLatestPulse`,
+`FindDocument`, `FileExists`.
+
 Helper methods that iterate over results (e.g. `CollectionByName`,
 `TagByName`) call the Must variants internally since their callers
 expect panics.

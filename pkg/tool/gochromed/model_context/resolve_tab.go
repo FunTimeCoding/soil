@@ -1,9 +1,9 @@
 package model_context
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/chromium/constant"
 	"github.com/funtimecoding/soil/pkg/chromium/tab"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"strings"
 )
 
@@ -21,7 +21,7 @@ func (s *Server) resolveTab(
 			}
 		}
 
-		return nil, fmt.Errorf("tab not found: %s", tabID)
+		return nil, not_found.New("tab", tabID)
 	}
 
 	if title != "" {
@@ -31,7 +31,7 @@ func (s *Server) resolveTab(
 			}
 		}
 
-		return nil, fmt.Errorf("no tab with title containing: %s", title)
+		return nil, not_found.Format("no tab with title containing: %s", title)
 	}
 
 	if l != "" {
@@ -41,7 +41,7 @@ func (s *Server) resolveTab(
 			}
 		}
 
-		return nil, fmt.Errorf("no tab with URL containing: %s", l)
+		return nil, not_found.Format("no tab with URL containing: %s", l)
 	}
 
 	for _, t := range tabs {
@@ -50,5 +50,5 @@ func (s *Server) resolveTab(
 		}
 	}
 
-	return nil, fmt.Errorf("no page tabs open")
+	return nil, not_found.Format("no page tabs open")
 }

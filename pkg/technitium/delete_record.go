@@ -27,7 +27,7 @@ func (c *Client) DeleteRecord(
 		path = fmt.Sprintf("%s&text=%s", path, url.QueryEscape(value))
 	}
 
-	_, e := c.do(path)
+	_, e := c.basic.Get(path)
 
 	return e
 }

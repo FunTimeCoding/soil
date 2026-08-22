@@ -17,7 +17,7 @@ func (c *Client) AssignedMergeRequests(all bool) ([]*merge_request.Request, erro
 	)
 
 	if e != nil {
-		return nil, e
+		return nil, wrapError(e)
 	}
 
 	result := merge_request.NewSlice(requests)

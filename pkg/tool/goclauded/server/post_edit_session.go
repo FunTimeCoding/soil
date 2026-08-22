@@ -2,9 +2,8 @@ package server
 
 import (
 	"context"
-	"errors"
 	"github.com/funtimecoding/soil/pkg/constant"
-	goclauded "github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/argument/edit_session"
 )
@@ -20,9 +19,9 @@ func (s *Server) PostEditSession(
 	a.Files = r.Body.Files
 
 	if e := s.service.EditSession(r.Body.Session, a); e != nil {
-		if errors.Is(e, goclauded.ErrorAliasCollision) {
-			return server.PostEditSession500JSONResponse(
-				server.ErrorResponse{Error: e.Error()},
+		if conflict.Is(e) {
+			return server.PostEditSession409JSONResponse(
+				server.Error{Error: e.Error()},
 			), nil
 		}
 

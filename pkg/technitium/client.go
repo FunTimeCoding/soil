@@ -1,9 +1,7 @@
 package technitium
 
-import "net/http"
+import "github.com/funtimecoding/soil/pkg/technitium/basic"
 
 type Client struct {
-	base   string
-	token  string
-	client *http.Client
+	basic *basic.Client
 }

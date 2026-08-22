@@ -19,7 +19,7 @@ func (s *Server) rosterSection() gomponents.Node {
 	for i := range sessions {
 		labels, f := s.service.LabelsBySession(sessions[i].Identifier)
 		errors.PanicOnError(f)
-		latest, g := s.service.LatestPulse(sessions[i].Identifier)
+		latest, _, g := s.service.FindLatestPulse(sessions[i].Identifier)
 		errors.PanicOnError(g)
 		cards = append(
 			cards,

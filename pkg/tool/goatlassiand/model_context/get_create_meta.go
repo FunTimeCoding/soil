@@ -33,16 +33,10 @@ func (s *Server) getCreateMeta(
 		}
 	}
 
-	p, h := s.jira.MetaProject(project)
+	t, h := s.service.CreateMeta(project, issueType)
 
 	if h != nil {
-		return s.captureFail(h, "project metadata not found")
-	}
-
-	t, i := s.jira.MetaIssueType(p, issueType)
-
-	if i != nil {
-		return s.captureFail(i, "issue type not found")
+		return s.failOrCapture(h, "create metadata not found")
 	}
 
 	return response.SuccessAny(convert.JiraCreateMeta(t, expand))

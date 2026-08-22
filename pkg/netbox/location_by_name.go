@@ -1,7 +1,7 @@
 package netbox
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/netbox/location"
 )
 
@@ -18,5 +18,5 @@ func (c *Client) LocationByName(n string) (*location.Location, error) {
 		}
 	}
 
-	return nil, fmt.Errorf("location %s not found", n)
+	return nil, not_found.New("location", n)
 }

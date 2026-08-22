@@ -1,6 +1,9 @@
 package connection
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/unreachable"
+)
 
 func (c *Connection) send(
 	o command,
@@ -10,7 +13,7 @@ func (c *Connection) send(
 	defer c.Unlock()
 
 	if c.connection == nil {
-		return 0, fmt.Errorf("connection not open")
+		return 0, unreachable.Format("connection not open")
 	}
 
 	c.lastIdentifier++
@@ -23,7 +26,7 @@ func (c *Connection) send(
 	if e := c.connection.WriteJSON(o); e != nil {
 		delete(c.subscribers, c.lastIdentifier)
 
-		return 0, fmt.Errorf("send fail: %w", e)
+		return 0, fmt.Errorf("send: %w", e)
 	}
 
 	return c.lastIdentifier, nil

@@ -1,8 +1,8 @@
 package jira
 
 import (
-	"fmt"
 	"github.com/andygrunwald/go-jira"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 )
 
 func (c *Client) MetaIssueType(
@@ -12,7 +12,7 @@ func (c *Client) MetaIssueType(
 	result := p.GetIssueTypeWithName(issueType)
 
 	if result == nil {
-		return nil, fmt.Errorf("issue type not found: %s", issueType)
+		return nil, not_found.New("issue type", issueType)
 	}
 
 	return result, nil

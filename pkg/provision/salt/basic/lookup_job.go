@@ -3,6 +3,7 @@ package basic
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/salt/basic/response"
 )
@@ -21,7 +22,7 @@ func (c *Client) LookupJob(jobIdentifier string) (*response.Job, error) {
 	}
 
 	if len(r.Details) == 0 {
-		return nil, fmt.Errorf("job %s not found", jobIdentifier)
+		return nil, not_found.New("job", jobIdentifier)
 	}
 
 	job := r.Details[0]

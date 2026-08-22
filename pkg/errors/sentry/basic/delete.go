@@ -2,6 +2,7 @@ package basic
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/constant"
+	"github.com/funtimecoding/soil/pkg/errors/unreadable_body"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"io"
@@ -30,7 +31,7 @@ func (c *Client) Delete(path string) error {
 	h := s.Body.Close()
 
 	if g != nil {
-		return g
+		return unreadable_body.New(g, "read response body")
 	}
 
 	if h != nil {

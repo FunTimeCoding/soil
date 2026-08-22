@@ -3,6 +3,7 @@ package runner
 import "github.com/funtimecoding/soil/pkg/provision/constant"
 
 func (r *Runner) syncWithDiff() *SyncResult {
+	r.gitClean()
 	r.gitFetch()
 	local := r.gitRevision("HEAD")
 	remote := r.gitRevision(constant.RunnerRemoteBranch)

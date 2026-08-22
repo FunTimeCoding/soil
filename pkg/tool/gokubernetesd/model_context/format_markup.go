@@ -15,7 +15,7 @@ func formatMarkup(
 	b, e := yaml.Marshal(object)
 
 	if e != nil {
-		return response.Fail("failed to marshal yaml: %s", e)
+		return response.Fail("marshal yaml: %s", e)
 	}
 
 	if len(filtered) == 0 {

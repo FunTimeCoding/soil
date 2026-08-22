@@ -17,14 +17,8 @@ func (s *Server) deleteLink(
 		return response.Fail("identifier is required: %v", f)
 	}
 
-	resp, e := s.jira.Nested().Issue.DeleteLinkWithContext(c, identifier)
-
-	if e != nil {
-		if resp != nil && resp.Body != nil {
-			return response.Fail("delete link failed: %v", e)
-		}
-
-		return response.Fail("delete link failed: %v", e)
+	if e := s.service.DeleteLink(identifier); e != nil {
+		return response.Fail("%s", e)
 	}
 
 	return response.Success("link %s deleted", identifier)

@@ -1,9 +1,6 @@
 package model_context
 
-import (
-	"fmt"
-	"github.com/funtimecoding/soil/pkg/tool/gosentryd/constant"
-)
+import "github.com/funtimecoding/soil/pkg/errors/not_found"
 
 func (s *Server) resolveProject(slug string) (string, error) {
 	if slug == "" {
@@ -22,5 +19,5 @@ func (s *Server) resolveProject(slug string) (string, error) {
 		}
 	}
 
-	return "", fmt.Errorf("%w: %s", constant.ErrorProjectNotFound, slug)
+	return "", not_found.New("project", slug)
 }

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
@@ -39,7 +40,7 @@ func (c *Client) SetTabColor(
 	if r.StatusCode != http.StatusOK {
 		b := system.ReadAll(r.Body)
 
-		return fmt.Errorf("set tab color: %d: %s", r.StatusCode, b)
+		return unexpected.Format("set tab color: %d: %s", r.StatusCode, b)
 	}
 
 	return nil

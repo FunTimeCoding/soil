@@ -1,9 +1,6 @@
 package constant
 
-import (
-	"errors"
-	"github.com/funtimecoding/soil/pkg/identity"
-)
+import "github.com/funtimecoding/soil/pkg/identity"
 
 var Identity = identity.New(
 	"gosentryd",
@@ -28,5 +25,3 @@ const (
 	GetEvent          = "get_event"
 	DeleteIssue       = "delete_issue"
 )
-
-var ErrorProjectNotFound = errors.New("project not found")

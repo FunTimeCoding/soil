@@ -13,7 +13,7 @@ func (c *Client) Me() (*model.User, error) {
 	result, _, e := c.client.GetMe(c.context, constant.MattermostEmptyEntityTag)
 
 	if e != nil {
-		return nil, e
+		return nil, wrapError(e)
 	}
 
 	c.meCache = result

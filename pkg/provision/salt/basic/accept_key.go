@@ -28,7 +28,7 @@ func (c *Client) AcceptKey(minion string) ([]string, error) {
 	}
 
 	if len(r.Return) == 0 || !r.Return[0].Result.Success {
-		return nil, fmt.Errorf("failed to accept key for %s", minion)
+		return nil, fmt.Errorf("accept key: %s", minion)
 	}
 
 	return r.Return[0].Result.Affected.Minions, nil

@@ -25,7 +25,7 @@ func (c *Client) Projects() ([]*project.Project, error) {
 		)
 
 		if e != nil {
-			return nil, e
+			return nil, wrapError(e)
 		}
 
 		result = append(result, page...)

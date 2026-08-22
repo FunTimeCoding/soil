@@ -10,7 +10,7 @@ func (c *Client) Project(identifier int64) (*project.Project, error) {
 	result, _, e := c.client.Projects.GetProject(identifier, nil)
 
 	if e != nil {
-		return nil, e
+		return nil, wrapError(e)
 	}
 
 	c.projectCache[identifier] = project.New(result)

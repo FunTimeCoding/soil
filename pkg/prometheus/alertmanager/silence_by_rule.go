@@ -1,9 +1,8 @@
 package alertmanager
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/silence"
-	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 )
 
 func (c *Client) SilenceByRule(name string) (*silence.Silence, error) {
@@ -19,9 +18,5 @@ func (c *Client) SilenceByRule(name string) (*silence.Silence, error) {
 		}
 	}
 
-	return nil, fmt.Errorf(
-		"silence not found: %s: %w",
-		name,
-		constant.ErrorNotFound,
-	)
+	return nil, not_found.New("silence", name)
 }

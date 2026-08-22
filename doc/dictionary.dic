@@ -123,6 +123,7 @@ goprometheus
 goprometheusd
 goproxmox
 goproxmoxd
+gopnsensed
 goqueryd
 goraid
 goraidd

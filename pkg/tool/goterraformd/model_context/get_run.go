@@ -2,6 +2,7 @@ package model_context
 
 import (
 	"context"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/constant"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -20,7 +21,7 @@ func (s *Server) getRun(
 	result, e := s.store.Find(identifier)
 
 	if e != nil {
-		return s.captureFail(e, constant.RunLookupFailed)
+		return s.captureFail(e, generativeConstant.RunLookupFail)
 	}
 
 	return response.SuccessAny(result)

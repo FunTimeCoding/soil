@@ -3,6 +3,7 @@ package callback
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/timeout"
 	"time"
 )
 
@@ -17,7 +18,7 @@ func (s *Server) WaitForCallback() string {
 	case e := <-s.errorCh:
 		errors.PanicOnError(e)
 	case <-time.After(5 * time.Minute):
-		errors.PanicOnError(fmt.Errorf("callback timeout"))
+		errors.PanicOnError(timeout.Format("callback timeout"))
 	}
 
 	return ""

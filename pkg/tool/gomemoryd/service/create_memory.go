@@ -1,7 +1,7 @@
 package service
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/save_option"
@@ -9,7 +9,7 @@ import (
 
 func (s *Service) CreateMemory(o *save_option.Option) (*store.Memory, error) {
 	if o.Scope == constant.AllScope || o.Scope == constant.DefaultScope {
-		return nil, fmt.Errorf("%w: %s", constant.ErrorReservedScope, o.Scope)
+		return nil, validation.New("scope name is reserved: %s", o.Scope)
 	}
 
 	if o.Type == "" {

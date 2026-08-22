@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/iterm/session"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/web/constant"
@@ -24,7 +25,7 @@ func (c *Client) CreateTab() (*session.Session, error) {
 	defer errors.LogClose(r.Body)
 
 	if r.StatusCode != http.StatusCreated {
-		return session.Stub(), fmt.Errorf(
+		return session.Stub(), unexpected.Format(
 			"create tab: %d: %s",
 			r.StatusCode,
 			system.ReadAll(r.Body),

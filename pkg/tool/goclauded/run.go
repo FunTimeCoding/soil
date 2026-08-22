@@ -21,6 +21,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/sweep"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/transcript_cache"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/watcher"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/web"
 	memory "github.com/funtimecoding/soil/pkg/tool/gomemoryd/connect"
@@ -47,7 +48,7 @@ func Run(
 	completionIdx := indexer.New(queryClient, constant.CompletionSourceType)
 	v := service.New(
 		s,
-		claude.New(),
+		transcript_cache.New(claude.New()),
 		memoryClient,
 		summaryIdx,
 		completionIdx,
@@ -64,6 +65,7 @@ func Run(
 	v.BackfillSessions()
 	v.CheckConsistency()
 	l.Structured("started", "elapsed", time.Since(start).Seconds())
+	go warm(v)
 	rec := recovery.New(l, r)
 	timeoutTicker := ticker.New(5*time.Minute, v.RunTimeoutSweep, rec)
 	memoryTicker := ticker.New(30*time.Second, v.PollMemory, rec)

@@ -2,8 +2,8 @@ package client
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"net/http"
 	"net/url"
@@ -29,7 +29,7 @@ func (c *Client) exchangeCode(
 
 	if r.StatusCode != http.StatusOK {
 		errors.PanicOnError(
-			fmt.Errorf("token exchange failed: %d", r.StatusCode),
+			unexpected.Format("token exchange status: %d", r.StatusCode),
 		)
 	}
 

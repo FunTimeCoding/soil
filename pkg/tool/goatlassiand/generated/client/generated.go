@@ -16,6 +16,18 @@ import (
 	"github.com/oapi-codegen/runtime"
 )
 
+// ChecklistItem defines model for ChecklistItem.
+type ChecklistItem struct {
+	Checked bool   `json:"checked"`
+	Index   int    `json:"index"`
+	Text    string `json:"text"`
+}
+
+// ChecklistTextRequest defines model for ChecklistTextRequest.
+type ChecklistTextRequest struct {
+	Text string `json:"text"`
+}
+
 // CommentRequest defines model for CommentRequest.
 type CommentRequest struct {
 	// Body Comment body text.
@@ -50,6 +62,32 @@ type ConfluenceSpace struct {
 	Type               *string `json:"type,omitempty"`
 }
 
+// CreateIssueRequest defines model for CreateIssueRequest.
+type CreateIssueRequest struct {
+	AdditionalFields *map[string]interface{} `json:"additional_fields,omitempty"`
+	Assignee         *string                 `json:"assignee,omitempty"`
+	Description      *string                 `json:"description,omitempty"`
+	IssueType        string                  `json:"issue_type"`
+	Labels           *[]string               `json:"labels,omitempty"`
+	Project          string                  `json:"project"`
+	Summary          string                  `json:"summary"`
+}
+
+// CreateMetaAllowed defines model for CreateMetaAllowed.
+type CreateMetaAllowed struct {
+	Identifier string `json:"identifier"`
+	Value      string `json:"value"`
+}
+
+// CreateMetaField defines model for CreateMetaField.
+type CreateMetaField struct {
+	AllowedValues *[]CreateMetaAllowed `json:"allowed_values,omitempty"`
+	Key           string               `json:"key"`
+	Name          string               `json:"name"`
+	Required      bool                 `json:"required"`
+	Schema        string               `json:"schema"`
+}
+
 // CreatePageRequest defines model for CreatePageRequest.
 type CreatePageRequest struct {
 	// Body Page content in markdown.
@@ -65,6 +103,15 @@ type CreatePageRequest struct {
 	Title string `json:"title"`
 }
 
+// EditPageRequest defines model for EditPageRequest.
+type EditPageRequest struct {
+	Draft   *bool   `json:"draft,omitempty"`
+	Message *string `json:"message,omitempty"`
+	NewText string  `json:"new_text"`
+	OldText string  `json:"old_text"`
+	Title   *string `json:"title,omitempty"`
+}
+
 // Error defines model for Error.
 type Error struct {
 	Error string `json:"error"`
@@ -74,6 +121,19 @@ type Error struct {
 type ErrorResponse struct {
 	Error           string `json:"error"`
 	EventIdentifier string `json:"event_identifier"`
+}
+
+// FieldChange defines model for FieldChange.
+type FieldChange struct {
+	After  string `json:"after"`
+	Before string `json:"before"`
+	Field  string `json:"field"`
+}
+
+// IssueUpdateResult defines model for IssueUpdateResult.
+type IssueUpdateResult struct {
+	Changes *[]FieldChange `json:"changes,omitempty"`
+	Issue   JiraIssue      `json:"issue"`
 }
 
 // JiraComment defines model for JiraComment.
@@ -118,10 +178,47 @@ type JiraTransition struct {
 	ToStatus   *string `json:"toStatus,omitempty"`
 }
 
+// JiraUser defines model for JiraUser.
+type JiraUser struct {
+	AccountIdentifier string  `json:"account_identifier"`
+	Active            bool    `json:"active"`
+	DisplayName       string  `json:"display_name"`
+	Email             *string `json:"email,omitempty"`
+}
+
+// LinkRequest defines model for LinkRequest.
+type LinkRequest struct {
+	LinkType  *string `json:"link_type,omitempty"`
+	TargetKey string  `json:"target_key"`
+}
+
+// LinkType defines model for LinkType.
+type LinkType struct {
+	Inward  string `json:"inward"`
+	Name    string `json:"name"`
+	Outward string `json:"outward"`
+}
+
+// PageStatusRequest defines model for PageStatusRequest.
+type PageStatusRequest struct {
+	Status string `json:"status"`
+}
+
 // TransitionRequest defines model for TransitionRequest.
 type TransitionRequest struct {
 	// TransitionIdentifier Transition ID from get_transitions.
 	TransitionIdentifier string `json:"transitionIdentifier"`
+}
+
+// UpdateIssueRequest defines model for UpdateIssueRequest.
+type UpdateIssueRequest struct {
+	AdditionalFields *map[string]interface{} `json:"additional_fields,omitempty"`
+	Assignee         *string                 `json:"assignee,omitempty"`
+	Description      *string                 `json:"description,omitempty"`
+	Labels           *[]string               `json:"labels,omitempty"`
+	NoDiff           *bool                   `json:"no_diff,omitempty"`
+	Reporter         *string                 `json:"reporter,omitempty"`
+	Summary          *string                 `json:"summary,omitempty"`
 }
 
 // UpdatePageRequest defines model for UpdatePageRequest.
@@ -136,6 +233,21 @@ type UpdatePageRequest struct {
 	Title string `json:"title"`
 }
 
+// DeletePageParams defines parameters for DeletePage.
+type DeletePageParams struct {
+	// Draft Delete the draft instead of the published page.
+	Draft *bool `form:"draft,omitempty" json:"draft,omitempty"`
+}
+
+// ListPagesParams defines parameters for ListPages.
+type ListPagesParams struct {
+	// Space Space identifier.
+	Space string `form:"space" json:"space"`
+
+	// Status Page status filter.
+	Status *string `form:"status,omitempty" json:"status,omitempty"`
+}
+
 // SearchPagesParams defines parameters for SearchPages.
 type SearchPagesParams struct {
 	// Query CQL query string or plain text.
@@ -148,6 +260,18 @@ type GetIssueParams struct {
 	Comments *bool `form:"comments,omitempty" json:"comments,omitempty"`
 }
 
+// GetCreateMetaParams defines parameters for GetCreateMeta.
+type GetCreateMetaParams struct {
+	// Project Project key.
+	Project string `form:"project" json:"project"`
+
+	// IssueType Issue type name.
+	IssueType string `form:"issue_type" json:"issue_type"`
+
+	// Expand Comma-separated field names to expand allowed values.
+	Expand *string `form:"expand,omitempty" json:"expand,omitempty"`
+}
+
 // SearchIssuesParams defines parameters for SearchIssues.
 type SearchIssuesParams struct {
 	// Query JQL query string.
@@ -155,6 +279,12 @@ type SearchIssuesParams struct {
 
 	// Limit Maximum number of results. Omit for all.
 	Limit *int `form:"limit,omitempty" json:"limit,omitempty"`
+}
+
+// SearchUsersParams defines parameters for SearchUsers.
+type SearchUsersParams struct {
+	// Query User search query.
+	Query string `form:"query" json:"query"`
 }
 
 // CreatePageJSONRequestBody defines body for CreatePage for application/json ContentType.
@@ -166,11 +296,35 @@ type UpdatePageJSONRequestBody = UpdatePageRequest
 // AddPageCommentJSONRequestBody defines body for AddPageComment for application/json ContentType.
 type AddPageCommentJSONRequestBody = CommentRequest
 
+// EditPageJSONRequestBody defines body for EditPage for application/json ContentType.
+type EditPageJSONRequestBody = EditPageRequest
+
+// SetPageStatusJSONRequestBody defines body for SetPageStatus for application/json ContentType.
+type SetPageStatusJSONRequestBody = PageStatusRequest
+
+// CreateIssueJSONRequestBody defines body for CreateIssue for application/json ContentType.
+type CreateIssueJSONRequestBody = CreateIssueRequest
+
+// AddChecklistItemJSONRequestBody defines body for AddChecklistItem for application/json ContentType.
+type AddChecklistItemJSONRequestBody = ChecklistTextRequest
+
+// EditChecklistItemJSONRequestBody defines body for EditChecklistItem for application/json ContentType.
+type EditChecklistItemJSONRequestBody = ChecklistTextRequest
+
 // AddIssueCommentJSONRequestBody defines body for AddIssueComment for application/json ContentType.
 type AddIssueCommentJSONRequestBody = CommentRequest
 
+// UpdateCommentJSONRequestBody defines body for UpdateComment for application/json ContentType.
+type UpdateCommentJSONRequestBody = CommentRequest
+
+// LinkIssuesJSONRequestBody defines body for LinkIssues for application/json ContentType.
+type LinkIssuesJSONRequestBody = LinkRequest
+
 // TransitionIssueJSONRequestBody defines body for TransitionIssue for application/json ContentType.
 type TransitionIssueJSONRequestBody = TransitionRequest
+
+// UpdateIssueJSONRequestBody defines body for UpdateIssue for application/json ContentType.
+type UpdateIssueJSONRequestBody = UpdateIssueRequest
 
 // RequestEditorFn is the function signature for the RequestEditor callback function
 type RequestEditorFn func(ctx context.Context, req *http.Request) error
@@ -254,6 +408,9 @@ type ClientInterface interface {
 	// Takes a body of the `application/json` content type.
 	CreatePage(ctx context.Context, body CreatePageJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// DeletePage performs a DELETE /api/v1/confluence/page/{identifier} (the `DeletePage` operationId) request.
+	DeletePage(ctx context.Context, identifier string, params *DeletePageParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// GetPage performs a GET /api/v1/confluence/page/{identifier} (the `GetPage` operationId) request.
 	GetPage(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -276,14 +433,69 @@ type ClientInterface interface {
 	// Takes a body of the `application/json` content type.
 	AddPageComment(ctx context.Context, identifier string, body AddPageCommentJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// GetPageDraft performs a GET /api/v1/confluence/page/{identifier}/draft (the `GetPageDraft` operationId) request.
+	GetPageDraft(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// EditPageWithBody performs a POST /api/v1/confluence/page/{identifier}/edit (the `EditPage` operationId) request,
+	// with any type of body and a specified content type.
+	EditPageWithBody(ctx context.Context, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// EditPage performs a POST /api/v1/confluence/page/{identifier}/edit (the `EditPage` operationId) request.
+	// Takes a body of the `application/json` content type.
+	EditPage(ctx context.Context, identifier string, body EditPageJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// SetPageStatusWithBody performs a POST /api/v1/confluence/page/{identifier}/status (the `SetPageStatus` operationId) request,
+	// with any type of body and a specified content type.
+	SetPageStatusWithBody(ctx context.Context, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// SetPageStatus performs a POST /api/v1/confluence/page/{identifier}/status (the `SetPageStatus` operationId) request.
+	// Takes a body of the `application/json` content type.
+	SetPageStatus(ctx context.Context, identifier string, body SetPageStatusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ListPages performs a GET /api/v1/confluence/pages (the `ListPages` operationId) request.
+	ListPages(ctx context.Context, params *ListPagesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// SearchPages performs a GET /api/v1/confluence/search (the `SearchPages` operationId) request.
 	SearchPages(ctx context.Context, params *SearchPagesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// ListSpaces performs a GET /api/v1/confluence/spaces (the `ListSpaces` operationId) request.
 	ListSpaces(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// CreateIssueWithBody performs a POST /api/v1/jira/issue (the `CreateIssue` operationId) request,
+	// with any type of body and a specified content type.
+	CreateIssueWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateIssue performs a POST /api/v1/jira/issue (the `CreateIssue` operationId) request.
+	// Takes a body of the `application/json` content type.
+	CreateIssue(ctx context.Context, body CreateIssueJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// GetIssue performs a GET /api/v1/jira/issue/{key} (the `GetIssue` operationId) request.
 	GetIssue(ctx context.Context, key string, params *GetIssueParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetChecklist performs a GET /api/v1/jira/issue/{key}/checklist (the `GetChecklist` operationId) request.
+	GetChecklist(ctx context.Context, key string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// AddChecklistItemWithBody performs a POST /api/v1/jira/issue/{key}/checklist (the `AddChecklistItem` operationId) request,
+	// with any type of body and a specified content type.
+	AddChecklistItemWithBody(ctx context.Context, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// AddChecklistItem performs a POST /api/v1/jira/issue/{key}/checklist (the `AddChecklistItem` operationId) request.
+	// Takes a body of the `application/json` content type.
+	AddChecklistItem(ctx context.Context, key string, body AddChecklistItemJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteChecklistItem performs a DELETE /api/v1/jira/issue/{key}/checklist/{index} (the `DeleteChecklistItem` operationId) request.
+	DeleteChecklistItem(ctx context.Context, key string, index int, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// EditChecklistItemWithBody performs a PUT /api/v1/jira/issue/{key}/checklist/{index} (the `EditChecklistItem` operationId) request,
+	// with any type of body and a specified content type.
+	EditChecklistItemWithBody(ctx context.Context, key string, index int, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// EditChecklistItem performs a PUT /api/v1/jira/issue/{key}/checklist/{index} (the `EditChecklistItem` operationId) request.
+	// Takes a body of the `application/json` content type.
+	EditChecklistItem(ctx context.Context, key string, index int, body EditChecklistItemJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ToggleChecklistItem performs a POST /api/v1/jira/issue/{key}/checklist/{index}/toggle (the `ToggleChecklistItem` operationId) request.
+	ToggleChecklistItem(ctx context.Context, key string, index int, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// AddIssueCommentWithBody performs a POST /api/v1/jira/issue/{key}/comment (the `AddIssueComment` operationId) request,
 	// with any type of body and a specified content type.
@@ -292,6 +504,25 @@ type ClientInterface interface {
 	// AddIssueComment performs a POST /api/v1/jira/issue/{key}/comment (the `AddIssueComment` operationId) request.
 	// Takes a body of the `application/json` content type.
 	AddIssueComment(ctx context.Context, key string, body AddIssueCommentJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteComment performs a DELETE /api/v1/jira/issue/{key}/comment/{identifier} (the `DeleteComment` operationId) request.
+	DeleteComment(ctx context.Context, key string, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateCommentWithBody performs a PUT /api/v1/jira/issue/{key}/comment/{identifier} (the `UpdateComment` operationId) request,
+	// with any type of body and a specified content type.
+	UpdateCommentWithBody(ctx context.Context, key string, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateComment performs a PUT /api/v1/jira/issue/{key}/comment/{identifier} (the `UpdateComment` operationId) request.
+	// Takes a body of the `application/json` content type.
+	UpdateComment(ctx context.Context, key string, identifier string, body UpdateCommentJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// LinkIssuesWithBody performs a POST /api/v1/jira/issue/{key}/link (the `LinkIssues` operationId) request,
+	// with any type of body and a specified content type.
+	LinkIssuesWithBody(ctx context.Context, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// LinkIssues performs a POST /api/v1/jira/issue/{key}/link (the `LinkIssues` operationId) request.
+	// Takes a body of the `application/json` content type.
+	LinkIssues(ctx context.Context, key string, body LinkIssuesJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// TransitionIssueWithBody performs a POST /api/v1/jira/issue/{key}/transition (the `TransitionIssue` operationId) request,
 	// with any type of body and a specified content type.
@@ -304,11 +535,31 @@ type ClientInterface interface {
 	// GetTransitions performs a GET /api/v1/jira/issue/{key}/transitions (the `GetTransitions` operationId) request.
 	GetTransitions(ctx context.Context, key string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// UpdateIssueWithBody performs a POST /api/v1/jira/issue/{key}/update (the `UpdateIssue` operationId) request,
+	// with any type of body and a specified content type.
+	UpdateIssueWithBody(ctx context.Context, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateIssue performs a POST /api/v1/jira/issue/{key}/update (the `UpdateIssue` operationId) request.
+	// Takes a body of the `application/json` content type.
+	UpdateIssue(ctx context.Context, key string, body UpdateIssueJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetLinkTypes performs a GET /api/v1/jira/link-types (the `GetLinkTypes` operationId) request.
+	GetLinkTypes(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteLink performs a DELETE /api/v1/jira/link/{identifier} (the `DeleteLink` operationId) request.
+	DeleteLink(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetCreateMeta performs a GET /api/v1/jira/meta (the `GetCreateMeta` operationId) request.
+	GetCreateMeta(ctx context.Context, params *GetCreateMetaParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// ListProjects performs a GET /api/v1/jira/projects (the `ListProjects` operationId) request.
 	ListProjects(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// SearchIssues performs a GET /api/v1/jira/search (the `SearchIssues` operationId) request.
 	SearchIssues(ctx context.Context, params *SearchIssuesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// SearchUsers performs a GET /api/v1/jira/users (the `SearchUsers` operationId) request.
+	SearchUsers(ctx context.Context, params *SearchUsersParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
 
 // CreatePageWithBody performs a POST /api/v1/confluence/page (the `CreatePage` operationId) request,
@@ -329,6 +580,19 @@ func (c *Client) CreatePageWithBody(ctx context.Context, contentType string, bod
 // Takes a body of the `application/json` content type.
 func (c *Client) CreatePage(ctx context.Context, body CreatePageJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreatePageRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// DeletePage performs a DELETE /api/v1/confluence/page/{identifier} (the `DeletePage` operationId) request.
+func (c *Client) DeletePage(ctx context.Context, identifier string, params *DeletePageParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeletePageRequest(c.Server, identifier, params)
 	if err != nil {
 		return nil, err
 	}
@@ -421,6 +685,88 @@ func (c *Client) AddPageComment(ctx context.Context, identifier string, body Add
 	return c.Client.Do(req)
 }
 
+// GetPageDraft performs a GET /api/v1/confluence/page/{identifier}/draft (the `GetPageDraft` operationId) request.
+func (c *Client) GetPageDraft(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetPageDraftRequest(c.Server, identifier)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// EditPageWithBody performs a POST /api/v1/confluence/page/{identifier}/edit (the `EditPage` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) EditPageWithBody(ctx context.Context, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewEditPageRequestWithBody(c.Server, identifier, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// EditPage performs a POST /api/v1/confluence/page/{identifier}/edit (the `EditPage` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) EditPage(ctx context.Context, identifier string, body EditPageJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewEditPageRequest(c.Server, identifier, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// SetPageStatusWithBody performs a POST /api/v1/confluence/page/{identifier}/status (the `SetPageStatus` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) SetPageStatusWithBody(ctx context.Context, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewSetPageStatusRequestWithBody(c.Server, identifier, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// SetPageStatus performs a POST /api/v1/confluence/page/{identifier}/status (the `SetPageStatus` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) SetPageStatus(ctx context.Context, identifier string, body SetPageStatusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewSetPageStatusRequest(c.Server, identifier, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// ListPages performs a GET /api/v1/confluence/pages (the `ListPages` operationId) request.
+func (c *Client) ListPages(ctx context.Context, params *ListPagesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListPagesRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 // SearchPages performs a GET /api/v1/confluence/search (the `SearchPages` operationId) request.
 func (c *Client) SearchPages(ctx context.Context, params *SearchPagesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewSearchPagesRequest(c.Server, params)
@@ -447,9 +793,132 @@ func (c *Client) ListSpaces(ctx context.Context, reqEditors ...RequestEditorFn) 
 	return c.Client.Do(req)
 }
 
+// CreateIssueWithBody performs a POST /api/v1/jira/issue (the `CreateIssue` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) CreateIssueWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateIssueRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// CreateIssue performs a POST /api/v1/jira/issue (the `CreateIssue` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) CreateIssue(ctx context.Context, body CreateIssueJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateIssueRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 // GetIssue performs a GET /api/v1/jira/issue/{key} (the `GetIssue` operationId) request.
 func (c *Client) GetIssue(ctx context.Context, key string, params *GetIssueParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetIssueRequest(c.Server, key, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetChecklist performs a GET /api/v1/jira/issue/{key}/checklist (the `GetChecklist` operationId) request.
+func (c *Client) GetChecklist(ctx context.Context, key string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetChecklistRequest(c.Server, key)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// AddChecklistItemWithBody performs a POST /api/v1/jira/issue/{key}/checklist (the `AddChecklistItem` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) AddChecklistItemWithBody(ctx context.Context, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewAddChecklistItemRequestWithBody(c.Server, key, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// AddChecklistItem performs a POST /api/v1/jira/issue/{key}/checklist (the `AddChecklistItem` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) AddChecklistItem(ctx context.Context, key string, body AddChecklistItemJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewAddChecklistItemRequest(c.Server, key, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// DeleteChecklistItem performs a DELETE /api/v1/jira/issue/{key}/checklist/{index} (the `DeleteChecklistItem` operationId) request.
+func (c *Client) DeleteChecklistItem(ctx context.Context, key string, index int, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteChecklistItemRequest(c.Server, key, index)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// EditChecklistItemWithBody performs a PUT /api/v1/jira/issue/{key}/checklist/{index} (the `EditChecklistItem` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) EditChecklistItemWithBody(ctx context.Context, key string, index int, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewEditChecklistItemRequestWithBody(c.Server, key, index, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// EditChecklistItem performs a PUT /api/v1/jira/issue/{key}/checklist/{index} (the `EditChecklistItem` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) EditChecklistItem(ctx context.Context, key string, index int, body EditChecklistItemJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewEditChecklistItemRequest(c.Server, key, index, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// ToggleChecklistItem performs a POST /api/v1/jira/issue/{key}/checklist/{index}/toggle (the `ToggleChecklistItem` operationId) request.
+func (c *Client) ToggleChecklistItem(ctx context.Context, key string, index int, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewToggleChecklistItemRequest(c.Server, key, index)
 	if err != nil {
 		return nil, err
 	}
@@ -478,6 +947,75 @@ func (c *Client) AddIssueCommentWithBody(ctx context.Context, key string, conten
 // Takes a body of the `application/json` content type.
 func (c *Client) AddIssueComment(ctx context.Context, key string, body AddIssueCommentJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewAddIssueCommentRequest(c.Server, key, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// DeleteComment performs a DELETE /api/v1/jira/issue/{key}/comment/{identifier} (the `DeleteComment` operationId) request.
+func (c *Client) DeleteComment(ctx context.Context, key string, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteCommentRequest(c.Server, key, identifier)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// UpdateCommentWithBody performs a PUT /api/v1/jira/issue/{key}/comment/{identifier} (the `UpdateComment` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) UpdateCommentWithBody(ctx context.Context, key string, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateCommentRequestWithBody(c.Server, key, identifier, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// UpdateComment performs a PUT /api/v1/jira/issue/{key}/comment/{identifier} (the `UpdateComment` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) UpdateComment(ctx context.Context, key string, identifier string, body UpdateCommentJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateCommentRequest(c.Server, key, identifier, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// LinkIssuesWithBody performs a POST /api/v1/jira/issue/{key}/link (the `LinkIssues` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) LinkIssuesWithBody(ctx context.Context, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewLinkIssuesRequestWithBody(c.Server, key, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// LinkIssues performs a POST /api/v1/jira/issue/{key}/link (the `LinkIssues` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) LinkIssues(ctx context.Context, key string, body LinkIssuesJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewLinkIssuesRequest(c.Server, key, body)
 	if err != nil {
 		return nil, err
 	}
@@ -529,6 +1067,73 @@ func (c *Client) GetTransitions(ctx context.Context, key string, reqEditors ...R
 	return c.Client.Do(req)
 }
 
+// UpdateIssueWithBody performs a POST /api/v1/jira/issue/{key}/update (the `UpdateIssue` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) UpdateIssueWithBody(ctx context.Context, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateIssueRequestWithBody(c.Server, key, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// UpdateIssue performs a POST /api/v1/jira/issue/{key}/update (the `UpdateIssue` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) UpdateIssue(ctx context.Context, key string, body UpdateIssueJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateIssueRequest(c.Server, key, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetLinkTypes performs a GET /api/v1/jira/link-types (the `GetLinkTypes` operationId) request.
+func (c *Client) GetLinkTypes(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetLinkTypesRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// DeleteLink performs a DELETE /api/v1/jira/link/{identifier} (the `DeleteLink` operationId) request.
+func (c *Client) DeleteLink(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteLinkRequest(c.Server, identifier)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetCreateMeta performs a GET /api/v1/jira/meta (the `GetCreateMeta` operationId) request.
+func (c *Client) GetCreateMeta(ctx context.Context, params *GetCreateMetaParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetCreateMetaRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 // ListProjects performs a GET /api/v1/jira/projects (the `ListProjects` operationId) request.
 func (c *Client) ListProjects(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListProjectsRequest(c.Server)
@@ -545,6 +1150,19 @@ func (c *Client) ListProjects(ctx context.Context, reqEditors ...RequestEditorFn
 // SearchIssues performs a GET /api/v1/jira/search (the `SearchIssues` operationId) request.
 func (c *Client) SearchIssues(ctx context.Context, params *SearchIssuesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewSearchIssuesRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// SearchUsers performs a GET /api/v1/jira/users (the `SearchUsers` operationId) request.
+func (c *Client) SearchUsers(ctx context.Context, params *SearchUsersParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewSearchUsersRequest(c.Server, params)
 	if err != nil {
 		return nil, err
 	}
@@ -591,6 +1209,67 @@ func NewCreatePageRequestWithBody(server string, contentType string, body io.Rea
 	}
 
 	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewDeletePageRequest constructs an http.Request for the DeletePage method
+func NewDeletePageRequest(server string, identifier string, params *DeletePageParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "identifier", identifier, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/confluence/page/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if params.Draft != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "draft", *params.Draft, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "boolean", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodDelete, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
 
 	return req, nil
 }
@@ -757,6 +1436,196 @@ func NewAddPageCommentRequestWithBody(server string, identifier string, contentT
 	return req, nil
 }
 
+// NewGetPageDraftRequest constructs an http.Request for the GetPageDraft method
+func NewGetPageDraftRequest(server string, identifier string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "identifier", identifier, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/confluence/page/%s/draft", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewEditPageRequest calls the generic EditPage builder with application/json body
+func NewEditPageRequest(server string, identifier string, body EditPageJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewEditPageRequestWithBody(server, identifier, "application/json", bodyReader)
+}
+
+// NewEditPageRequestWithBody constructs an http.Request for the EditPage method, with any body, and a specified content type
+func NewEditPageRequestWithBody(server string, identifier string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "identifier", identifier, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/confluence/page/%s/edit", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewSetPageStatusRequest calls the generic SetPageStatus builder with application/json body
+func NewSetPageStatusRequest(server string, identifier string, body SetPageStatusJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewSetPageStatusRequestWithBody(server, identifier, "application/json", bodyReader)
+}
+
+// NewSetPageStatusRequestWithBody constructs an http.Request for the SetPageStatus method, with any body, and a specified content type
+func NewSetPageStatusRequestWithBody(server string, identifier string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "identifier", identifier, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/confluence/page/%s/status", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewListPagesRequest constructs an http.Request for the ListPages method
+func NewListPagesRequest(server string, params *ListPagesParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/confluence/pages")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "space", params.Space, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+			return nil, err
+		} else {
+			for _, qp := range strings.Split(queryFrag, "&") {
+				rawQueryFragments = append(rawQueryFragments, qp)
+			}
+		}
+
+		if params.Status != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "status", *params.Status, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewSearchPagesRequest constructs an http.Request for the SearchPages method
 func NewSearchPagesRequest(server string, params *SearchPagesParams) (*http.Request, error) {
 	var err error
@@ -834,6 +1703,46 @@ func NewListSpacesRequest(server string) (*http.Request, error) {
 	return req, nil
 }
 
+// NewCreateIssueRequest calls the generic CreateIssue builder with application/json body
+func NewCreateIssueRequest(server string, body CreateIssueJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreateIssueRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewCreateIssueRequestWithBody constructs an http.Request for the CreateIssue method, with any body, and a specified content type
+func NewCreateIssueRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/jira/issue")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
 // NewGetIssueRequest constructs an http.Request for the GetIssue method
 func NewGetIssueRequest(server string, key string, params *GetIssueParams) (*http.Request, error) {
 	var err error
@@ -895,6 +1804,223 @@ func NewGetIssueRequest(server string, key string, params *GetIssueParams) (*htt
 	return req, nil
 }
 
+// NewGetChecklistRequest constructs an http.Request for the GetChecklist method
+func NewGetChecklistRequest(server string, key string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "key", key, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/jira/issue/%s/checklist", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewAddChecklistItemRequest calls the generic AddChecklistItem builder with application/json body
+func NewAddChecklistItemRequest(server string, key string, body AddChecklistItemJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewAddChecklistItemRequestWithBody(server, key, "application/json", bodyReader)
+}
+
+// NewAddChecklistItemRequestWithBody constructs an http.Request for the AddChecklistItem method, with any body, and a specified content type
+func NewAddChecklistItemRequestWithBody(server string, key string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "key", key, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/jira/issue/%s/checklist", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewDeleteChecklistItemRequest constructs an http.Request for the DeleteChecklistItem method
+func NewDeleteChecklistItemRequest(server string, key string, index int) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "key", key, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithOptions("simple", false, "index", index, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/jira/issue/%s/checklist/%s", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodDelete, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewEditChecklistItemRequest calls the generic EditChecklistItem builder with application/json body
+func NewEditChecklistItemRequest(server string, key string, index int, body EditChecklistItemJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewEditChecklistItemRequestWithBody(server, key, index, "application/json", bodyReader)
+}
+
+// NewEditChecklistItemRequestWithBody constructs an http.Request for the EditChecklistItem method, with any body, and a specified content type
+func NewEditChecklistItemRequestWithBody(server string, key string, index int, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "key", key, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithOptions("simple", false, "index", index, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/jira/issue/%s/checklist/%s", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPut, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewToggleChecklistItemRequest constructs an http.Request for the ToggleChecklistItem method
+func NewToggleChecklistItemRequest(server string, key string, index int) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "key", key, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithOptions("simple", false, "index", index, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "integer", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/jira/issue/%s/checklist/%s/toggle", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewAddIssueCommentRequest calls the generic AddIssueComment builder with application/json body
 func NewAddIssueCommentRequest(server string, key string, body AddIssueCommentJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
@@ -923,6 +2049,148 @@ func NewAddIssueCommentRequestWithBody(server string, key string, contentType st
 	}
 
 	operationPath := fmt.Sprintf("/api/v1/jira/issue/%s/comment", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewDeleteCommentRequest constructs an http.Request for the DeleteComment method
+func NewDeleteCommentRequest(server string, key string, identifier string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "key", key, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithOptions("simple", false, "identifier", identifier, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/jira/issue/%s/comment/%s", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodDelete, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewUpdateCommentRequest calls the generic UpdateComment builder with application/json body
+func NewUpdateCommentRequest(server string, key string, identifier string, body UpdateCommentJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewUpdateCommentRequestWithBody(server, key, identifier, "application/json", bodyReader)
+}
+
+// NewUpdateCommentRequestWithBody constructs an http.Request for the UpdateComment method, with any body, and a specified content type
+func NewUpdateCommentRequestWithBody(server string, key string, identifier string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "key", key, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithOptions("simple", false, "identifier", identifier, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/jira/issue/%s/comment/%s", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPut, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewLinkIssuesRequest calls the generic LinkIssues builder with application/json body
+func NewLinkIssuesRequest(server string, key string, body LinkIssuesJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewLinkIssuesRequestWithBody(server, key, "application/json", bodyReader)
+}
+
+// NewLinkIssuesRequestWithBody constructs an http.Request for the LinkIssues method, with any body, and a specified content type
+func NewLinkIssuesRequestWithBody(server string, key string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "key", key, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/jira/issue/%s/link", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1023,6 +2291,184 @@ func NewGetTransitionsRequest(server string, key string) (*http.Request, error) 
 	return req, nil
 }
 
+// NewUpdateIssueRequest calls the generic UpdateIssue builder with application/json body
+func NewUpdateIssueRequest(server string, key string, body UpdateIssueJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewUpdateIssueRequestWithBody(server, key, "application/json", bodyReader)
+}
+
+// NewUpdateIssueRequestWithBody constructs an http.Request for the UpdateIssue method, with any body, and a specified content type
+func NewUpdateIssueRequestWithBody(server string, key string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "key", key, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/jira/issue/%s/update", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewGetLinkTypesRequest constructs an http.Request for the GetLinkTypes method
+func NewGetLinkTypesRequest(server string) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/jira/link-types")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewDeleteLinkRequest constructs an http.Request for the DeleteLink method
+func NewDeleteLinkRequest(server string, identifier string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "identifier", identifier, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/jira/link/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodDelete, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetCreateMetaRequest constructs an http.Request for the GetCreateMeta method
+func NewGetCreateMetaRequest(server string, params *GetCreateMetaParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/jira/meta")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "project", params.Project, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+			return nil, err
+		} else {
+			for _, qp := range strings.Split(queryFrag, "&") {
+				rawQueryFragments = append(rawQueryFragments, qp)
+			}
+		}
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "issue_type", params.IssueType, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+			return nil, err
+		} else {
+			for _, qp := range strings.Split(queryFrag, "&") {
+				rawQueryFragments = append(rawQueryFragments, qp)
+			}
+		}
+
+		if params.Expand != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "expand", *params.Expand, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewListProjectsRequest constructs an http.Request for the ListProjects method
 func NewListProjectsRequest(server string) (*http.Request, error) {
 	var err error
@@ -1112,6 +2558,56 @@ func NewSearchIssuesRequest(server string, params *SearchIssuesParams) (*http.Re
 	return req, nil
 }
 
+// NewSearchUsersRequest constructs an http.Request for the SearchUsers method
+func NewSearchUsersRequest(server string, params *SearchUsersParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/jira/users")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "query", params.Query, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+			return nil, err
+		} else {
+			for _, qp := range strings.Split(queryFrag, "&") {
+				rawQueryFragments = append(rawQueryFragments, qp)
+			}
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 func (c *Client) applyEditors(ctx context.Context, req *http.Request, additionalEditors []RequestEditorFn) error {
 	for _, r := range c.RequestEditors {
 		if err := r(ctx, req); err != nil {
@@ -1166,6 +2662,11 @@ type ClientWithResponsesInterface interface {
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreatePageWithResponse(ctx context.Context, body CreatePageJSONRequestBody, reqEditors ...RequestEditorFn) (*CreatePageResponse, error)
 
+	// DeletePageWithResponse performs a DELETE /api/v1/confluence/page/{identifier} (the `DeletePage` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	DeletePageWithResponse(ctx context.Context, identifier string, params *DeletePageParams, reqEditors ...RequestEditorFn) (*DeletePageResponse, error)
+
 	// GetPageWithResponse performs a GET /api/v1/confluence/page/{identifier} (the `GetPage` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
@@ -1196,6 +2697,36 @@ type ClientWithResponsesInterface interface {
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	AddPageCommentWithResponse(ctx context.Context, identifier string, body AddPageCommentJSONRequestBody, reqEditors ...RequestEditorFn) (*AddPageCommentResponse, error)
 
+	// GetPageDraftWithResponse performs a GET /api/v1/confluence/page/{identifier}/draft (the `GetPageDraft` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetPageDraftWithResponse(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*GetPageDraftResponse, error)
+
+	// EditPageWithBodyWithResponse performs a POST /api/v1/confluence/page/{identifier}/edit (the `EditPage` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	EditPageWithBodyWithResponse(ctx context.Context, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*EditPageResponse, error)
+
+	// EditPageWithResponse performs a POST /api/v1/confluence/page/{identifier}/edit (the `EditPage` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	EditPageWithResponse(ctx context.Context, identifier string, body EditPageJSONRequestBody, reqEditors ...RequestEditorFn) (*EditPageResponse, error)
+
+	// SetPageStatusWithBodyWithResponse performs a POST /api/v1/confluence/page/{identifier}/status (the `SetPageStatus` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	SetPageStatusWithBodyWithResponse(ctx context.Context, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*SetPageStatusResponse, error)
+
+	// SetPageStatusWithResponse performs a POST /api/v1/confluence/page/{identifier}/status (the `SetPageStatus` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	SetPageStatusWithResponse(ctx context.Context, identifier string, body SetPageStatusJSONRequestBody, reqEditors ...RequestEditorFn) (*SetPageStatusResponse, error)
+
+	// ListPagesWithResponse performs a GET /api/v1/confluence/pages (the `ListPages` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	ListPagesWithResponse(ctx context.Context, params *ListPagesParams, reqEditors ...RequestEditorFn) (*ListPagesResponse, error)
+
 	// SearchPagesWithResponse performs a GET /api/v1/confluence/search (the `SearchPages` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
@@ -1206,10 +2737,55 @@ type ClientWithResponsesInterface interface {
 	// Returns a wrapper object for the known response body format(s).
 	ListSpacesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListSpacesResponse, error)
 
+	// CreateIssueWithBodyWithResponse performs a POST /api/v1/jira/issue (the `CreateIssue` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	CreateIssueWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateIssueResponse, error)
+
+	// CreateIssueWithResponse performs a POST /api/v1/jira/issue (the `CreateIssue` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	CreateIssueWithResponse(ctx context.Context, body CreateIssueJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateIssueResponse, error)
+
 	// GetIssueWithResponse performs a GET /api/v1/jira/issue/{key} (the `GetIssue` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetIssueWithResponse(ctx context.Context, key string, params *GetIssueParams, reqEditors ...RequestEditorFn) (*GetIssueResponse, error)
+
+	// GetChecklistWithResponse performs a GET /api/v1/jira/issue/{key}/checklist (the `GetChecklist` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetChecklistWithResponse(ctx context.Context, key string, reqEditors ...RequestEditorFn) (*GetChecklistResponse, error)
+
+	// AddChecklistItemWithBodyWithResponse performs a POST /api/v1/jira/issue/{key}/checklist (the `AddChecklistItem` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	AddChecklistItemWithBodyWithResponse(ctx context.Context, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*AddChecklistItemResponse, error)
+
+	// AddChecklistItemWithResponse performs a POST /api/v1/jira/issue/{key}/checklist (the `AddChecklistItem` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	AddChecklistItemWithResponse(ctx context.Context, key string, body AddChecklistItemJSONRequestBody, reqEditors ...RequestEditorFn) (*AddChecklistItemResponse, error)
+
+	// DeleteChecklistItemWithResponse performs a DELETE /api/v1/jira/issue/{key}/checklist/{index} (the `DeleteChecklistItem` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	DeleteChecklistItemWithResponse(ctx context.Context, key string, index int, reqEditors ...RequestEditorFn) (*DeleteChecklistItemResponse, error)
+
+	// EditChecklistItemWithBodyWithResponse performs a PUT /api/v1/jira/issue/{key}/checklist/{index} (the `EditChecklistItem` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	EditChecklistItemWithBodyWithResponse(ctx context.Context, key string, index int, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*EditChecklistItemResponse, error)
+
+	// EditChecklistItemWithResponse performs a PUT /api/v1/jira/issue/{key}/checklist/{index} (the `EditChecklistItem` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	EditChecklistItemWithResponse(ctx context.Context, key string, index int, body EditChecklistItemJSONRequestBody, reqEditors ...RequestEditorFn) (*EditChecklistItemResponse, error)
+
+	// ToggleChecklistItemWithResponse performs a POST /api/v1/jira/issue/{key}/checklist/{index}/toggle (the `ToggleChecklistItem` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	ToggleChecklistItemWithResponse(ctx context.Context, key string, index int, reqEditors ...RequestEditorFn) (*ToggleChecklistItemResponse, error)
 
 	// AddIssueCommentWithBodyWithResponse performs a POST /api/v1/jira/issue/{key}/comment (the `AddIssueComment` operationId) request,
 	// with any type of body and a specified content type.
@@ -1220,6 +2796,31 @@ type ClientWithResponsesInterface interface {
 	// AddIssueCommentWithResponse performs a POST /api/v1/jira/issue/{key}/comment (the `AddIssueComment` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	AddIssueCommentWithResponse(ctx context.Context, key string, body AddIssueCommentJSONRequestBody, reqEditors ...RequestEditorFn) (*AddIssueCommentResponse, error)
+
+	// DeleteCommentWithResponse performs a DELETE /api/v1/jira/issue/{key}/comment/{identifier} (the `DeleteComment` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	DeleteCommentWithResponse(ctx context.Context, key string, identifier string, reqEditors ...RequestEditorFn) (*DeleteCommentResponse, error)
+
+	// UpdateCommentWithBodyWithResponse performs a PUT /api/v1/jira/issue/{key}/comment/{identifier} (the `UpdateComment` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	UpdateCommentWithBodyWithResponse(ctx context.Context, key string, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateCommentResponse, error)
+
+	// UpdateCommentWithResponse performs a PUT /api/v1/jira/issue/{key}/comment/{identifier} (the `UpdateComment` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	UpdateCommentWithResponse(ctx context.Context, key string, identifier string, body UpdateCommentJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateCommentResponse, error)
+
+	// LinkIssuesWithBodyWithResponse performs a POST /api/v1/jira/issue/{key}/link (the `LinkIssues` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	LinkIssuesWithBodyWithResponse(ctx context.Context, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*LinkIssuesResponse, error)
+
+	// LinkIssuesWithResponse performs a POST /api/v1/jira/issue/{key}/link (the `LinkIssues` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	LinkIssuesWithResponse(ctx context.Context, key string, body LinkIssuesJSONRequestBody, reqEditors ...RequestEditorFn) (*LinkIssuesResponse, error)
 
 	// TransitionIssueWithBodyWithResponse performs a POST /api/v1/jira/issue/{key}/transition (the `TransitionIssue` operationId) request,
 	// with any type of body and a specified content type.
@@ -1236,6 +2837,31 @@ type ClientWithResponsesInterface interface {
 	// Returns a wrapper object for the known response body format(s).
 	GetTransitionsWithResponse(ctx context.Context, key string, reqEditors ...RequestEditorFn) (*GetTransitionsResponse, error)
 
+	// UpdateIssueWithBodyWithResponse performs a POST /api/v1/jira/issue/{key}/update (the `UpdateIssue` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	UpdateIssueWithBodyWithResponse(ctx context.Context, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateIssueResponse, error)
+
+	// UpdateIssueWithResponse performs a POST /api/v1/jira/issue/{key}/update (the `UpdateIssue` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	UpdateIssueWithResponse(ctx context.Context, key string, body UpdateIssueJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateIssueResponse, error)
+
+	// GetLinkTypesWithResponse performs a GET /api/v1/jira/link-types (the `GetLinkTypes` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetLinkTypesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetLinkTypesResponse, error)
+
+	// DeleteLinkWithResponse performs a DELETE /api/v1/jira/link/{identifier} (the `DeleteLink` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	DeleteLinkWithResponse(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*DeleteLinkResponse, error)
+
+	// GetCreateMetaWithResponse performs a GET /api/v1/jira/meta (the `GetCreateMeta` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetCreateMetaWithResponse(ctx context.Context, params *GetCreateMetaParams, reqEditors ...RequestEditorFn) (*GetCreateMetaResponse, error)
+
 	// ListProjectsWithResponse performs a GET /api/v1/jira/projects (the `ListProjects` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
@@ -1245,6 +2871,11 @@ type ClientWithResponsesInterface interface {
 	//
 	// Returns a wrapper object for the known response body format(s).
 	SearchIssuesWithResponse(ctx context.Context, params *SearchIssuesParams, reqEditors ...RequestEditorFn) (*SearchIssuesResponse, error)
+
+	// SearchUsersWithResponse performs a GET /api/v1/jira/users (the `SearchUsers` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	SearchUsersWithResponse(ctx context.Context, params *SearchUsersParams, reqEditors ...RequestEditorFn) (*SearchUsersResponse, error)
 }
 
 type CreatePageResponse struct {
@@ -1289,6 +2920,47 @@ func (r CreatePageResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r CreatePageResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type DeletePageResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r DeletePageResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r DeletePageResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r DeletePageResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeletePageResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r DeletePageResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -1494,6 +3166,212 @@ func (r AddPageCommentResponse) ContentType() string {
 	return ""
 }
 
+type GetPageDraftResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *ConfluencePageDetail
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetPageDraftResponse) GetJSON200() *ConfluencePageDetail {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetPageDraftResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetPageDraftResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetPageDraftResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetPageDraftResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetPageDraftResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type EditPageResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *ConfluencePageDetail
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r EditPageResponse) GetJSON200() *ConfluencePageDetail {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r EditPageResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r EditPageResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r EditPageResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r EditPageResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r EditPageResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r EditPageResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type SetPageStatusResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *ConfluencePageDetail
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r SetPageStatusResponse) GetJSON200() *ConfluencePageDetail {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r SetPageStatusResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r SetPageStatusResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r SetPageStatusResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r SetPageStatusResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r SetPageStatusResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r SetPageStatusResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type ListPagesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *[]*ConfluencePage
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r ListPagesResponse) GetJSON200() *[]*ConfluencePage {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r ListPagesResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r ListPagesResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r ListPagesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListPagesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ListPagesResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type SearchPagesResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -1590,6 +3468,61 @@ func (r ListSpacesResponse) ContentType() string {
 	return ""
 }
 
+type CreateIssueResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON201 the response for an HTTP 201 `application/json` response
+	JSON201 *JiraIssue
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON201 returns the response for an HTTP 201 `application/json` response
+func (r CreateIssueResponse) GetJSON201() *JiraIssue {
+	return r.JSON201
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r CreateIssueResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r CreateIssueResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r CreateIssueResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r CreateIssueResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CreateIssueResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r CreateIssueResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type GetIssueResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -1645,6 +3578,274 @@ func (r GetIssueResponse) ContentType() string {
 	return ""
 }
 
+type GetChecklistResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *[]*ChecklistItem
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetChecklistResponse) GetJSON200() *[]*ChecklistItem {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetChecklistResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetChecklistResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetChecklistResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetChecklistResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetChecklistResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type AddChecklistItemResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *[]*ChecklistItem
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r AddChecklistItemResponse) GetJSON200() *[]*ChecklistItem {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r AddChecklistItemResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r AddChecklistItemResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r AddChecklistItemResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r AddChecklistItemResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r AddChecklistItemResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r AddChecklistItemResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type DeleteChecklistItemResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *[]*ChecklistItem
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r DeleteChecklistItemResponse) GetJSON200() *[]*ChecklistItem {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r DeleteChecklistItemResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r DeleteChecklistItemResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r DeleteChecklistItemResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteChecklistItemResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteChecklistItemResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r DeleteChecklistItemResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type EditChecklistItemResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *[]*ChecklistItem
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r EditChecklistItemResponse) GetJSON200() *[]*ChecklistItem {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r EditChecklistItemResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r EditChecklistItemResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r EditChecklistItemResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r EditChecklistItemResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r EditChecklistItemResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r EditChecklistItemResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type ToggleChecklistItemResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *[]*ChecklistItem
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r ToggleChecklistItemResponse) GetJSON200() *[]*ChecklistItem {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r ToggleChecklistItemResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r ToggleChecklistItemResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r ToggleChecklistItemResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r ToggleChecklistItemResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ToggleChecklistItemResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ToggleChecklistItemResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type AddIssueCommentResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -1680,6 +3881,129 @@ func (r AddIssueCommentResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r AddIssueCommentResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type DeleteCommentResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r DeleteCommentResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r DeleteCommentResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteCommentResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteCommentResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r DeleteCommentResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type UpdateCommentResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r UpdateCommentResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r UpdateCommentResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r UpdateCommentResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r UpdateCommentResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r UpdateCommentResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type LinkIssuesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r LinkIssuesResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r LinkIssuesResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r LinkIssuesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r LinkIssuesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r LinkIssuesResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -1769,6 +4093,198 @@ func (r GetTransitionsResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r GetTransitionsResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type UpdateIssueResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *IssueUpdateResult
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r UpdateIssueResponse) GetJSON200() *IssueUpdateResult {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r UpdateIssueResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r UpdateIssueResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r UpdateIssueResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r UpdateIssueResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r UpdateIssueResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r UpdateIssueResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type GetLinkTypesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *[]LinkType
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetLinkTypesResponse) GetJSON200() *[]LinkType {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetLinkTypesResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetLinkTypesResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetLinkTypesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetLinkTypesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetLinkTypesResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type DeleteLinkResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r DeleteLinkResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r DeleteLinkResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteLinkResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteLinkResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r DeleteLinkResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type GetCreateMetaResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *[]*CreateMetaField
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetCreateMetaResponse) GetJSON200() *[]*CreateMetaField {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetCreateMetaResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetCreateMetaResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetCreateMetaResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetCreateMetaResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetCreateMetaResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -1871,6 +4387,54 @@ func (r SearchIssuesResponse) ContentType() string {
 	return ""
 }
 
+type SearchUsersResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *[]*JiraUser
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r SearchUsersResponse) GetJSON200() *[]*JiraUser {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r SearchUsersResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r SearchUsersResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r SearchUsersResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r SearchUsersResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r SearchUsersResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 // CreatePageWithBodyWithResponse performs a POST /api/v1/confluence/page (the `CreatePage` operationId) request,
 // with any type of body and a specified content type.
 //
@@ -1891,6 +4455,17 @@ func (c *ClientWithResponses) CreatePageWithResponse(ctx context.Context, body C
 		return nil, err
 	}
 	return ParseCreatePageResponse(rsp)
+}
+
+// DeletePageWithResponse performs a DELETE /api/v1/confluence/page/{identifier} (the `DeletePage` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) DeletePageWithResponse(ctx context.Context, identifier string, params *DeletePageParams, reqEditors ...RequestEditorFn) (*DeletePageResponse, error) {
+	rsp, err := c.DeletePage(ctx, identifier, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeletePageResponse(rsp)
 }
 
 // GetPageWithResponse performs a GET /api/v1/confluence/page/{identifier} (the `GetPage` operationId) request.
@@ -1959,6 +4534,72 @@ func (c *ClientWithResponses) AddPageCommentWithResponse(ctx context.Context, id
 	return ParseAddPageCommentResponse(rsp)
 }
 
+// GetPageDraftWithResponse performs a GET /api/v1/confluence/page/{identifier}/draft (the `GetPageDraft` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetPageDraftWithResponse(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*GetPageDraftResponse, error) {
+	rsp, err := c.GetPageDraft(ctx, identifier, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetPageDraftResponse(rsp)
+}
+
+// EditPageWithBodyWithResponse performs a POST /api/v1/confluence/page/{identifier}/edit (the `EditPage` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) EditPageWithBodyWithResponse(ctx context.Context, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*EditPageResponse, error) {
+	rsp, err := c.EditPageWithBody(ctx, identifier, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseEditPageResponse(rsp)
+}
+
+// EditPageWithResponse performs a POST /api/v1/confluence/page/{identifier}/edit (the `EditPage` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) EditPageWithResponse(ctx context.Context, identifier string, body EditPageJSONRequestBody, reqEditors ...RequestEditorFn) (*EditPageResponse, error) {
+	rsp, err := c.EditPage(ctx, identifier, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseEditPageResponse(rsp)
+}
+
+// SetPageStatusWithBodyWithResponse performs a POST /api/v1/confluence/page/{identifier}/status (the `SetPageStatus` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) SetPageStatusWithBodyWithResponse(ctx context.Context, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*SetPageStatusResponse, error) {
+	rsp, err := c.SetPageStatusWithBody(ctx, identifier, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseSetPageStatusResponse(rsp)
+}
+
+// SetPageStatusWithResponse performs a POST /api/v1/confluence/page/{identifier}/status (the `SetPageStatus` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) SetPageStatusWithResponse(ctx context.Context, identifier string, body SetPageStatusJSONRequestBody, reqEditors ...RequestEditorFn) (*SetPageStatusResponse, error) {
+	rsp, err := c.SetPageStatus(ctx, identifier, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseSetPageStatusResponse(rsp)
+}
+
+// ListPagesWithResponse performs a GET /api/v1/confluence/pages (the `ListPages` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) ListPagesWithResponse(ctx context.Context, params *ListPagesParams, reqEditors ...RequestEditorFn) (*ListPagesResponse, error) {
+	rsp, err := c.ListPages(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListPagesResponse(rsp)
+}
+
 // SearchPagesWithResponse performs a GET /api/v1/confluence/search (the `SearchPages` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -1981,6 +4622,28 @@ func (c *ClientWithResponses) ListSpacesWithResponse(ctx context.Context, reqEdi
 	return ParseListSpacesResponse(rsp)
 }
 
+// CreateIssueWithBodyWithResponse performs a POST /api/v1/jira/issue (the `CreateIssue` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) CreateIssueWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateIssueResponse, error) {
+	rsp, err := c.CreateIssueWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateIssueResponse(rsp)
+}
+
+// CreateIssueWithResponse performs a POST /api/v1/jira/issue (the `CreateIssue` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) CreateIssueWithResponse(ctx context.Context, body CreateIssueJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateIssueResponse, error) {
+	rsp, err := c.CreateIssue(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateIssueResponse(rsp)
+}
+
 // GetIssueWithResponse performs a GET /api/v1/jira/issue/{key} (the `GetIssue` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -1990,6 +4653,83 @@ func (c *ClientWithResponses) GetIssueWithResponse(ctx context.Context, key stri
 		return nil, err
 	}
 	return ParseGetIssueResponse(rsp)
+}
+
+// GetChecklistWithResponse performs a GET /api/v1/jira/issue/{key}/checklist (the `GetChecklist` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetChecklistWithResponse(ctx context.Context, key string, reqEditors ...RequestEditorFn) (*GetChecklistResponse, error) {
+	rsp, err := c.GetChecklist(ctx, key, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetChecklistResponse(rsp)
+}
+
+// AddChecklistItemWithBodyWithResponse performs a POST /api/v1/jira/issue/{key}/checklist (the `AddChecklistItem` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) AddChecklistItemWithBodyWithResponse(ctx context.Context, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*AddChecklistItemResponse, error) {
+	rsp, err := c.AddChecklistItemWithBody(ctx, key, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseAddChecklistItemResponse(rsp)
+}
+
+// AddChecklistItemWithResponse performs a POST /api/v1/jira/issue/{key}/checklist (the `AddChecklistItem` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) AddChecklistItemWithResponse(ctx context.Context, key string, body AddChecklistItemJSONRequestBody, reqEditors ...RequestEditorFn) (*AddChecklistItemResponse, error) {
+	rsp, err := c.AddChecklistItem(ctx, key, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseAddChecklistItemResponse(rsp)
+}
+
+// DeleteChecklistItemWithResponse performs a DELETE /api/v1/jira/issue/{key}/checklist/{index} (the `DeleteChecklistItem` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) DeleteChecklistItemWithResponse(ctx context.Context, key string, index int, reqEditors ...RequestEditorFn) (*DeleteChecklistItemResponse, error) {
+	rsp, err := c.DeleteChecklistItem(ctx, key, index, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteChecklistItemResponse(rsp)
+}
+
+// EditChecklistItemWithBodyWithResponse performs a PUT /api/v1/jira/issue/{key}/checklist/{index} (the `EditChecklistItem` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) EditChecklistItemWithBodyWithResponse(ctx context.Context, key string, index int, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*EditChecklistItemResponse, error) {
+	rsp, err := c.EditChecklistItemWithBody(ctx, key, index, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseEditChecklistItemResponse(rsp)
+}
+
+// EditChecklistItemWithResponse performs a PUT /api/v1/jira/issue/{key}/checklist/{index} (the `EditChecklistItem` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) EditChecklistItemWithResponse(ctx context.Context, key string, index int, body EditChecklistItemJSONRequestBody, reqEditors ...RequestEditorFn) (*EditChecklistItemResponse, error) {
+	rsp, err := c.EditChecklistItem(ctx, key, index, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseEditChecklistItemResponse(rsp)
+}
+
+// ToggleChecklistItemWithResponse performs a POST /api/v1/jira/issue/{key}/checklist/{index}/toggle (the `ToggleChecklistItem` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) ToggleChecklistItemWithResponse(ctx context.Context, key string, index int, reqEditors ...RequestEditorFn) (*ToggleChecklistItemResponse, error) {
+	rsp, err := c.ToggleChecklistItem(ctx, key, index, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseToggleChecklistItemResponse(rsp)
 }
 
 // AddIssueCommentWithBodyWithResponse performs a POST /api/v1/jira/issue/{key}/comment (the `AddIssueComment` operationId) request,
@@ -2012,6 +4752,61 @@ func (c *ClientWithResponses) AddIssueCommentWithResponse(ctx context.Context, k
 		return nil, err
 	}
 	return ParseAddIssueCommentResponse(rsp)
+}
+
+// DeleteCommentWithResponse performs a DELETE /api/v1/jira/issue/{key}/comment/{identifier} (the `DeleteComment` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) DeleteCommentWithResponse(ctx context.Context, key string, identifier string, reqEditors ...RequestEditorFn) (*DeleteCommentResponse, error) {
+	rsp, err := c.DeleteComment(ctx, key, identifier, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteCommentResponse(rsp)
+}
+
+// UpdateCommentWithBodyWithResponse performs a PUT /api/v1/jira/issue/{key}/comment/{identifier} (the `UpdateComment` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) UpdateCommentWithBodyWithResponse(ctx context.Context, key string, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateCommentResponse, error) {
+	rsp, err := c.UpdateCommentWithBody(ctx, key, identifier, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateCommentResponse(rsp)
+}
+
+// UpdateCommentWithResponse performs a PUT /api/v1/jira/issue/{key}/comment/{identifier} (the `UpdateComment` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) UpdateCommentWithResponse(ctx context.Context, key string, identifier string, body UpdateCommentJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateCommentResponse, error) {
+	rsp, err := c.UpdateComment(ctx, key, identifier, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateCommentResponse(rsp)
+}
+
+// LinkIssuesWithBodyWithResponse performs a POST /api/v1/jira/issue/{key}/link (the `LinkIssues` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) LinkIssuesWithBodyWithResponse(ctx context.Context, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*LinkIssuesResponse, error) {
+	rsp, err := c.LinkIssuesWithBody(ctx, key, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseLinkIssuesResponse(rsp)
+}
+
+// LinkIssuesWithResponse performs a POST /api/v1/jira/issue/{key}/link (the `LinkIssues` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) LinkIssuesWithResponse(ctx context.Context, key string, body LinkIssuesJSONRequestBody, reqEditors ...RequestEditorFn) (*LinkIssuesResponse, error) {
+	rsp, err := c.LinkIssues(ctx, key, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseLinkIssuesResponse(rsp)
 }
 
 // TransitionIssueWithBodyWithResponse performs a POST /api/v1/jira/issue/{key}/transition (the `TransitionIssue` operationId) request,
@@ -2047,6 +4842,61 @@ func (c *ClientWithResponses) GetTransitionsWithResponse(ctx context.Context, ke
 	return ParseGetTransitionsResponse(rsp)
 }
 
+// UpdateIssueWithBodyWithResponse performs a POST /api/v1/jira/issue/{key}/update (the `UpdateIssue` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) UpdateIssueWithBodyWithResponse(ctx context.Context, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateIssueResponse, error) {
+	rsp, err := c.UpdateIssueWithBody(ctx, key, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateIssueResponse(rsp)
+}
+
+// UpdateIssueWithResponse performs a POST /api/v1/jira/issue/{key}/update (the `UpdateIssue` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) UpdateIssueWithResponse(ctx context.Context, key string, body UpdateIssueJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateIssueResponse, error) {
+	rsp, err := c.UpdateIssue(ctx, key, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateIssueResponse(rsp)
+}
+
+// GetLinkTypesWithResponse performs a GET /api/v1/jira/link-types (the `GetLinkTypes` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetLinkTypesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetLinkTypesResponse, error) {
+	rsp, err := c.GetLinkTypes(ctx, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetLinkTypesResponse(rsp)
+}
+
+// DeleteLinkWithResponse performs a DELETE /api/v1/jira/link/{identifier} (the `DeleteLink` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) DeleteLinkWithResponse(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*DeleteLinkResponse, error) {
+	rsp, err := c.DeleteLink(ctx, identifier, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteLinkResponse(rsp)
+}
+
+// GetCreateMetaWithResponse performs a GET /api/v1/jira/meta (the `GetCreateMeta` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetCreateMetaWithResponse(ctx context.Context, params *GetCreateMetaParams, reqEditors ...RequestEditorFn) (*GetCreateMetaResponse, error) {
+	rsp, err := c.GetCreateMeta(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetCreateMetaResponse(rsp)
+}
+
 // ListProjectsWithResponse performs a GET /api/v1/jira/projects (the `ListProjects` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -2069,6 +4919,17 @@ func (c *ClientWithResponses) SearchIssuesWithResponse(ctx context.Context, para
 	return ParseSearchIssuesResponse(rsp)
 }
 
+// SearchUsersWithResponse performs a GET /api/v1/jira/users (the `SearchUsers` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) SearchUsersWithResponse(ctx context.Context, params *SearchUsersParams, reqEditors ...RequestEditorFn) (*SearchUsersResponse, error) {
+	rsp, err := c.SearchUsers(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseSearchUsersResponse(rsp)
+}
+
 // ParseCreatePageResponse parses an HTTP response from a CreatePageWithResponse call
 func ParseCreatePageResponse(rsp *http.Response) (*CreatePageResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -2089,6 +4950,35 @@ func ParseCreatePageResponse(rsp *http.Response) (*CreatePageResponse, error) {
 			return nil, err
 		}
 		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeletePageResponse parses an HTTP response from a DeletePageWithResponse call
+func ParseDeletePageResponse(rsp *http.Response) (*DeletePageResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeletePageResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case rsp.StatusCode == 204:
+		break // No content-type
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -2244,6 +5134,152 @@ func ParseAddPageCommentResponse(rsp *http.Response) (*AddPageCommentResponse, e
 	return response, nil
 }
 
+// ParseGetPageDraftResponse parses an HTTP response from a GetPageDraftWithResponse call
+func ParseGetPageDraftResponse(rsp *http.Response) (*GetPageDraftResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetPageDraftResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ConfluencePageDetail
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseEditPageResponse parses an HTTP response from a EditPageWithResponse call
+func ParseEditPageResponse(rsp *http.Response) (*EditPageResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &EditPageResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ConfluencePageDetail
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseSetPageStatusResponse parses an HTTP response from a SetPageStatusWithResponse call
+func ParseSetPageStatusResponse(rsp *http.Response) (*SetPageStatusResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &SetPageStatusResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ConfluencePageDetail
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListPagesResponse parses an HTTP response from a ListPagesWithResponse call
+func ParseListPagesResponse(rsp *http.Response) (*ListPagesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListPagesResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []*ConfluencePage
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseSearchPagesResponse parses an HTTP response from a SearchPagesWithResponse call
 func ParseSearchPagesResponse(rsp *http.Response) (*SearchPagesResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -2310,6 +5346,46 @@ func ParseListSpacesResponse(rsp *http.Response) (*ListSpacesResponse, error) {
 	return response, nil
 }
 
+// ParseCreateIssueResponse parses an HTTP response from a CreateIssueWithResponse call
+func ParseCreateIssueResponse(rsp *http.Response) (*CreateIssueResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CreateIssueResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest JiraIssue
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseGetIssueResponse parses an HTTP response from a GetIssueWithResponse call
 func ParseGetIssueResponse(rsp *http.Response) (*GetIssueResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -2350,6 +5426,199 @@ func ParseGetIssueResponse(rsp *http.Response) (*GetIssueResponse, error) {
 	return response, nil
 }
 
+// ParseGetChecklistResponse parses an HTTP response from a GetChecklistWithResponse call
+func ParseGetChecklistResponse(rsp *http.Response) (*GetChecklistResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetChecklistResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []*ChecklistItem
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseAddChecklistItemResponse parses an HTTP response from a AddChecklistItemWithResponse call
+func ParseAddChecklistItemResponse(rsp *http.Response) (*AddChecklistItemResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &AddChecklistItemResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []*ChecklistItem
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteChecklistItemResponse parses an HTTP response from a DeleteChecklistItemWithResponse call
+func ParseDeleteChecklistItemResponse(rsp *http.Response) (*DeleteChecklistItemResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteChecklistItemResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []*ChecklistItem
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseEditChecklistItemResponse parses an HTTP response from a EditChecklistItemWithResponse call
+func ParseEditChecklistItemResponse(rsp *http.Response) (*EditChecklistItemResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &EditChecklistItemResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []*ChecklistItem
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseToggleChecklistItemResponse parses an HTTP response from a ToggleChecklistItemWithResponse call
+func ParseToggleChecklistItemResponse(rsp *http.Response) (*ToggleChecklistItemResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ToggleChecklistItemResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []*ChecklistItem
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseAddIssueCommentResponse parses an HTTP response from a AddIssueCommentWithResponse call
 func ParseAddIssueCommentResponse(rsp *http.Response) (*AddIssueCommentResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -2359,6 +5628,93 @@ func ParseAddIssueCommentResponse(rsp *http.Response) (*AddIssueCommentResponse,
 	}
 
 	response := &AddIssueCommentResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case rsp.StatusCode == 204:
+		break // No content-type
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteCommentResponse parses an HTTP response from a DeleteCommentWithResponse call
+func ParseDeleteCommentResponse(rsp *http.Response) (*DeleteCommentResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteCommentResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case rsp.StatusCode == 204:
+		break // No content-type
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseUpdateCommentResponse parses an HTTP response from a UpdateCommentWithResponse call
+func ParseUpdateCommentResponse(rsp *http.Response) (*UpdateCommentResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &UpdateCommentResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case rsp.StatusCode == 204:
+		break // No content-type
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseLinkIssuesResponse parses an HTTP response from a LinkIssuesWithResponse call
+func ParseLinkIssuesResponse(rsp *http.Response) (*LinkIssuesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &LinkIssuesResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}
@@ -2441,6 +5797,141 @@ func ParseGetTransitionsResponse(rsp *http.Response) (*GetTransitionsResponse, e
 	return response, nil
 }
 
+// ParseUpdateIssueResponse parses an HTTP response from a UpdateIssueWithResponse call
+func ParseUpdateIssueResponse(rsp *http.Response) (*UpdateIssueResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &UpdateIssueResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest IssueUpdateResult
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetLinkTypesResponse parses an HTTP response from a GetLinkTypesWithResponse call
+func ParseGetLinkTypesResponse(rsp *http.Response) (*GetLinkTypesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetLinkTypesResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []LinkType
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteLinkResponse parses an HTTP response from a DeleteLinkWithResponse call
+func ParseDeleteLinkResponse(rsp *http.Response) (*DeleteLinkResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteLinkResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case rsp.StatusCode == 204:
+		break // No content-type
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetCreateMetaResponse parses an HTTP response from a GetCreateMetaWithResponse call
+func ParseGetCreateMetaResponse(rsp *http.Response) (*GetCreateMetaResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetCreateMetaResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []*CreateMetaField
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseListProjectsResponse parses an HTTP response from a ListProjectsWithResponse call
 func ParseListProjectsResponse(rsp *http.Response) (*ListProjectsResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -2490,6 +5981,39 @@ func ParseSearchIssuesResponse(rsp *http.Response) (*SearchIssuesResponse, error
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
 		var dest []*JiraIssue
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseSearchUsersResponse parses an HTTP response from a SearchUsersWithResponse call
+func ParseSearchUsersResponse(rsp *http.Response) (*SearchUsersResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &SearchUsersResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []*JiraUser
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}

@@ -1,7 +1,7 @@
 package service
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/proxmox"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
 	"time"
@@ -18,7 +18,7 @@ func (s *Service) Client(instance string) (face.ProxmoxClient, error) {
 	i, okay := s.Instance(instance)
 
 	if !okay {
-		return nil, fmt.Errorf("unknown instance: %s", instance)
+		return nil, not_found.New("instance", instance)
 	}
 
 	var o []proxmox.Option

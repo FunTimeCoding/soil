@@ -1,8 +1,7 @@
 package gitlab
 
 import (
-	"errors"
-	"github.com/funtimecoding/soil/pkg/gitlab/constant"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/gitlab/project"
 )
 
@@ -14,7 +13,7 @@ func (c *Client) FileExists(
 	_, e := c.File(p.Identifier, branch, file)
 
 	if e != nil {
-		if errors.Is(e, constant.ErrorNotFound) {
+		if not_found.Is(e) {
 			return false, nil
 		}
 

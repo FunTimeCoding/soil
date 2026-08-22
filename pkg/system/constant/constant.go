@@ -1,9 +1,6 @@
 package constant
 
-import (
-	"errors"
-	"time"
-)
+import "time"
 
 const (
 	Tilde = "~"
@@ -74,5 +71,3 @@ const (
 	SecureShellConfigurationDirectory = ".ssh"
 	KnownHostsFile                    = "known_hosts"
 )
-
-var ErrorDirectoryNotFound = errors.New("directory not found")

@@ -12,5 +12,5 @@ func (c *Client) MergeRequestDiffs(
 		nil,
 	)
 
-	return result, e
+	return result, wrapError(e)
 }

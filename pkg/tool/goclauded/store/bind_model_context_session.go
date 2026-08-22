@@ -1,7 +1,7 @@
 package store
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/session"
 )
@@ -19,7 +19,7 @@ func (s *Store) BindModelContextSession(
 	}
 
 	if result.RowsAffected == 0 {
-		return fmt.Errorf("%w: %s", constant.ErrorCallsignNotFound, name)
+		return not_found.New(constant.Callsign, name)
 	}
 
 	return nil

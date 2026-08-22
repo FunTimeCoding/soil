@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"golang.org/x/tools/go/packages"
 	"path/filepath"
 	"strings"
@@ -14,7 +15,7 @@ func targetDirectory(
 ) (string, error) {
 	if target != nil {
 		if len(target.GoFiles) == 0 {
-			return "", fmt.Errorf(
+			return "", validation.New(
 				"target package has no Go files: %s",
 				targetPackagePath,
 			)
@@ -30,7 +31,7 @@ func targetDirectory(
 	prefix := fmt.Sprintf("%s/", source.Module.Path)
 
 	if !strings.HasPrefix(targetPackagePath, prefix) {
-		return "", fmt.Errorf(
+		return "", validation.New(
 			"target package is outside the module: %s",
 			targetPackagePath,
 		)

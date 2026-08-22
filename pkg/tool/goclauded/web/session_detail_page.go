@@ -3,6 +3,7 @@ package web
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
@@ -17,9 +18,8 @@ func (s *Server) sessionDetailPage(
 	r *http.Request,
 ) {
 	d, e := s.service.SessionDetail(r.PathValue(constant.Identifier))
-	errors.PanicOnError(e)
 
-	if d == nil {
+	if not_found.Is(e) {
 		s.view.RenderPage(
 			w,
 			"Session Not Found",
@@ -30,6 +30,7 @@ func (s *Server) sessionDetailPage(
 		return
 	}
 
+	errors.PanicOnError(e)
 	title := d.Identifier[:8]
 
 	if d.Alias != "" {

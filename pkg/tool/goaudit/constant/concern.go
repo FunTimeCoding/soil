@@ -65,4 +65,11 @@ const (
 	MissingStrictServerText       = "openapi.yaml exists but strict-server not enabled"
 	MisplacedTestKey              = "misplaced_test"
 	MisplacedTestText             = "test file outside a domain root unit_test/ or integration_test/"
+	StaleToolPermissionKey        = "stale_tool_permission"
+	MappedServiceMissingKey       = "mapped_service_missing"
+	MappedServiceMissingText      = "mapped service has no model_context/"
+	UnresolvedToolNameKey         = "unresolved_tool_name"
+	UnresolvedToolNameText        = "tool name not resolvable to a string"
+	FileNotParseableKey           = "not_parseable"
+	FileNotParseableText          = "file not parseable"
 )

@@ -32,7 +32,7 @@ func (s *Server) getMany(
 		related, g := s.service.ListRelated(identifier)
 
 		if g != nil {
-			return s.captureFail(g, "failed to load relations")
+			return s.captureFail(g, "load relations")
 		}
 
 		if detail {

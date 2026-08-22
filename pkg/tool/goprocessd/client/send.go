@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	panicErrors "github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/unreachable"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/system/writer"
 	"net"
@@ -20,7 +21,7 @@ func Send(
 
 	if e != nil {
 		if errors.Is(e, syscall.ENOENT) || errors.Is(e, syscall.ECONNREFUSED) {
-			return "", fmt.Errorf(
+			return "", unreachable.Format(
 				"no goprocessd instance running for this directory",
 			)
 		}
@@ -50,7 +51,7 @@ func Send(
 	}
 
 	if len(lines) == 0 {
-		return "", fmt.Errorf("no response from server")
+		return "", unreachable.Format("no response from server")
 	}
 
 	return join.NewLine(lines), nil

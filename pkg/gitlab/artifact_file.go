@@ -13,5 +13,5 @@ func (c *Client) ArtifactFile(
 		path,
 	)
 
-	return result, e
+	return result, wrapError(e)
 }

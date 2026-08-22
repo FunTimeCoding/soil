@@ -19,7 +19,7 @@ func New(
 		server:     server.New(constant.Identity, version).WithRecorder(t).Server(),
 		jira:       j,
 		confluence: c,
-		service:    service.New(c),
+		service:    service.New(j, c),
 		reporter:   r,
 	}
 	result.register()

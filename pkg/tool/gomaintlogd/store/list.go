@@ -37,7 +37,7 @@ func (s *Store) List(f *Filter) ([]entry.Entry, error) {
 	var result []entry.Entry
 
 	if e := q.Order("timestamp DESC").Find(&result).Error; e != nil {
-		return nil, fmt.Errorf("failed to list entries: %w", e)
+		return nil, fmt.Errorf("list entries: %w", e)
 	}
 
 	return result, nil

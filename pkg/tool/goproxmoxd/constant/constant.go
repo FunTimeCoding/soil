@@ -1,22 +1,10 @@
 package constant
 
 import (
-	"errors"
 	"github.com/funtimecoding/soil/pkg/identity"
 	"github.com/funtimecoding/soil/pkg/identity/paragraph"
 )
 
-var ErrorCDROMCloudInitConflict = errors.New(
-	"cdrom and cloud-init are mutually exclusive - both use ide2",
-)
-
-var (
-	ErrorNoChanges      = errors.New("no changes specified")
-	ErrorMachineRunning = errors.New(
-		"vm is running - stop it before deleting",
-	)
-	ErrorSetDeleteConflict = errors.New("cannot set and delete the same field")
-)
 var Identity = identity.New(
 	"goproxmoxd",
 	"Proxmox hypervisor bridge for node and VM inspection",

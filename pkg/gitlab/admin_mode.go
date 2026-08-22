@@ -8,5 +8,5 @@ func (c *Client) AdminMode(on bool) (*gitlab.Settings, error) {
 		&gitlab.UpdateSettingsOptions{AdminMode: new(on)},
 	)
 
-	return result, e
+	return result, wrapError(e)
 }

@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/convert"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/types/checklist_item"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -48,7 +49,7 @@ func (s *Server) getIssue(
 		value != atlassian.JiraNilValue &&
 		value != atlassian.JiraUnknownField &&
 		value != atlassian.JiraUnknownValue {
-		result.Checklist = ParseChecklist(value)
+		result.Checklist = checklist_item.Parse(value)
 	}
 
 	return response.SuccessAny(result)
