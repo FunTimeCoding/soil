@@ -2,7 +2,6 @@ package gohabitica
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/constant"
 	"github.com/spf13/cobra"
 )
 
@@ -15,7 +14,6 @@ func gear(x *Context) *cobra.Command {
 			_ []string,
 		) {
 			fmt.Println(x.Client.Gear())
-			x.record(constant.GetGear)
 		},
 	}
 }

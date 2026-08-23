@@ -2,7 +2,6 @@ package gohabitica
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/constant"
 	"github.com/spf13/cobra"
 )
 
@@ -17,7 +16,6 @@ func score(x *Context) *cobra.Command {
 			arguments []string,
 		) {
 			fmt.Println(x.Client.Score(arguments[0], direction))
-			x.record(constant.ScoreTask)
 		},
 	}
 	result.Flags().StringVar(

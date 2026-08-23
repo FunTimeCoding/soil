@@ -6,7 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/telemetry"
 	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/option"
@@ -17,8 +16,9 @@ import (
 
 func Run(
 	o *option.Alertmanager,
-	r face.Reporter,
+	s face.Instrument,
 ) {
+	r := s.Reporter()
 	v := service.New(o.Inventory)
 	lifecycle.New(
 		logger.New(context.Background()),
@@ -27,12 +27,7 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					model_context.New(
-						v,
-						r,
-						telemetry.NewEnvironment(),
-						o.Version,
-					).Mount(m)
+					model_context.New(v, r, s.Recorder(), o.Version).Mount(m)
 				},
 			).WithMiddleware(web.RecoveryMiddleware(r)),
 		),

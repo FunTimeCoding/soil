@@ -7,7 +7,6 @@ import (
 	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/sublime"
-	"github.com/funtimecoding/soil/pkg/telemetry"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/constant"
 	generated "github.com/funtimecoding/soil/pkg/tool/gosublimed/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/model_context"
@@ -19,8 +18,9 @@ import (
 
 func Run(
 	o *option.Sublime,
-	r face.Reporter,
+	s face.Instrument,
 ) {
+	r := s.Reporter()
 	c := sublime.NewEnvironment()
 	lifecycle.New(
 		logger.New(context.Background()),
@@ -29,7 +29,7 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					t := telemetry.NewEnvironment()
+					t := s.Recorder()
 					generated.HandlerFromMux(
 						generated.NewStrictHandler(
 							server.New(c),

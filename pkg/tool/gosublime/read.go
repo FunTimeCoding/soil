@@ -4,9 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
-	telemetry "github.com/funtimecoding/soil/pkg/telemetry/constant"
-	"github.com/funtimecoding/soil/pkg/telemetry/record"
-	gosublimed "github.com/funtimecoding/soil/pkg/tool/gosublimed/constant"
 	"github.com/spf13/cobra"
 	"os"
 	"strconv"
@@ -46,15 +43,6 @@ func read(x *Context) *cobra.Command {
 				)
 				os.Exit(1)
 			}
-
-			x.Telemetry.Record(
-				record.NewDomain(
-					gosublimed.ReadView,
-					telemetry.CommandLine,
-					telemetry.User,
-					telemetry.Success,
-				),
-			)
 
 			if r.JSON200.Text != nil {
 				fmt.Print(*r.JSON200.Text)

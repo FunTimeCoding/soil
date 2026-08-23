@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/telemetry"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/option"
@@ -17,8 +16,9 @@ import (
 
 func Run(
 	o *option.Chrome,
-	r face.Reporter,
+	s face.Instrument,
 ) {
+	r := s.Reporter()
 	c := chromium.NewEnvironment()
 	lifecycle.New(
 		logger.New(context.Background()),
@@ -31,7 +31,7 @@ func Run(
 						c,
 						o.DownloadDirectory,
 						r,
-						telemetry.NewEnvironment(),
+						s.Recorder(),
 						o.Version,
 					).Mount(m)
 				},

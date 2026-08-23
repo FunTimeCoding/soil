@@ -14,11 +14,11 @@ func checkCommand() *cobra.Command {
 		Use:   "check",
 		Short: "Validate Procfile and show entries",
 		RunE: func(
-			cmd *cobra.Command,
+			m *cobra.Command,
 			_ []string,
 		) error {
-			cmd.SilenceUsage = true
-			procfilePath, e := cmd.Flags().GetString("file")
+			m.SilenceUsage = true
+			procfilePath, e := m.Flags().GetString("file")
 			errors.PanicOnError(e)
 			entries, e := procfile.Parse(procfilePath)
 

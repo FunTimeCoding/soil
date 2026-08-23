@@ -7,7 +7,6 @@ import (
 	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/relational"
-	"github.com/funtimecoding/soil/pkg/telemetry"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/collector/bluetooth"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/collector/stream"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/collector/wireless"
@@ -24,8 +23,9 @@ import (
 
 func Run(
 	o *option.Flight,
-	r face.Reporter,
+	i face.Instrument,
 ) {
+	r := i.Reporter()
 	g := logger.New(context.Background())
 	s := store.New(relational.Open(g, o.PostgresLocator, o.LitePath))
 	defer s.Close()
@@ -53,7 +53,7 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					t := telemetry.NewEnvironment()
+					t := i.Recorder()
 					generated.HandlerFromMux(
 						generated.NewStrictHandler(
 							server.New(s, r),

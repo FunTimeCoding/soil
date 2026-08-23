@@ -3,7 +3,7 @@ package goproxmoxd
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/inventory"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/option"
@@ -14,8 +14,8 @@ func Main(
 	gitHash string,
 	buildDate string,
 ) {
-	r := reporter.New(constant.Identity.Name(), version).Start()
-	defer func() { r.RecoverFlush(recover()) }()
+	s := instrument.New(constant.Identity, version)
+	defer func() { s.Flush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Web()
 	a.String(
@@ -28,5 +28,5 @@ func Main(
 	o.Address = a.Address()
 	o.Inventory = inventory.Load(a.GetString(argumentConstant.Inventory))
 	o.Version = version
-	Run(o, r)
+	Run(o, s)
 }

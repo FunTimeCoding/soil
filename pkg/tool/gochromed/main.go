@@ -2,7 +2,7 @@ package gochromed
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/option"
@@ -13,9 +13,8 @@ func Main(
 	gitHash string,
 	buildDate string,
 ) {
-	r := reporter.New(constant.Identity.Name(), version)
-	r.Start()
-	defer func() { r.RecoverFlush(recover()) }()
+	s := instrument.New(constant.Identity, version)
+	defer func() { s.Flush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Web()
 	a.Parse(version, gitHash, buildDate)
@@ -25,5 +24,5 @@ func Main(
 	o.DownloadDirectory = environment.Required(
 		constant.DownloadDirectoryEnvironment,
 	)
-	Run(o, r)
+	Run(o, s)
 }

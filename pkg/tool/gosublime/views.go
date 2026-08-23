@@ -4,9 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
-	telemetry "github.com/funtimecoding/soil/pkg/telemetry/constant"
-	"github.com/funtimecoding/soil/pkg/telemetry/record"
-	gosublimed "github.com/funtimecoding/soil/pkg/tool/gosublimed/constant"
 	"github.com/spf13/cobra"
 	"os"
 )
@@ -35,15 +32,6 @@ func views(x *Context) *cobra.Command {
 				)
 				os.Exit(1)
 			}
-
-			x.Telemetry.Record(
-				record.NewDomain(
-					gosublimed.ListViews,
-					telemetry.CommandLine,
-					telemetry.User,
-					telemetry.Success,
-				),
-			)
 
 			for _, v := range *r.JSON200 {
 				dirty := " "

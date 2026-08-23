@@ -3,7 +3,7 @@ package goflightd
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/option"
 )
@@ -13,8 +13,8 @@ func Main(
 	gitHash string,
 	buildDate string,
 ) {
-	r := reporter.New(constant.Identity.Name(), version).Start()
-	defer func() { r.RecoverFlush(recover()) }()
+	s := instrument.New(constant.Identity, version)
+	defer func() { s.Flush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Web()
 	a.Database()
@@ -30,5 +30,5 @@ func Main(
 	o.LitePath = a.GetString(argumentConstant.Lite)
 	o.Predicate = a.GetString(constant.PredicateFlag)
 	o.Version = version
-	Run(o, r)
+	Run(o, s)
 }

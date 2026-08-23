@@ -2,7 +2,7 @@ package gopnsensed
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/option"
 )
@@ -12,13 +12,13 @@ func Main(
 	gitHash string,
 	buildDate string,
 ) {
-	r := reporter.New(constant.Identity.Name(), version).Start()
-	defer func() { r.RecoverFlush(recover()) }()
+	s := instrument.New(constant.Identity, version)
+	defer func() { s.Flush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Web()
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
 	o.Address = a.Address()
 	o.Version = version
-	Run(o, r)
+	Run(o, s)
 }

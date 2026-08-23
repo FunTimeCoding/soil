@@ -96,19 +96,29 @@ func Main(
     gitHash string,
     buildDate string,
 ) {
-    r := reporter.New(constant.Identity.Name(), version).Start()
-    defer func() { r.RecoverFlush(recover()) }()
+    s := instrument.New(constant.Identity, version)
+    defer func() { s.Flush(recover()) }()
     c := client.NewEnvironment()
     o := &cobra.Command{
         Use:     constant.Identity.Usage(),
         Short:   constant.Identity.Description(),
         Version: argument.CobraVersion(version, gitHash, buildDate),
+        PersistentPostRun: func(
+            m *cobra.Command,
+            _ []string,
+        ) {
+            s.RecordCommand(m.Name())
+        },
     }
     o.AddCommand(listItems(c))
     o.AddCommand(createItem(c))
     errors.PanicOnError(o.Execute())
 }
 ```
+
+The `PersistentPostRun` hook records CLI telemetry for every
+successful command under the command's own name. Commands do not
+record individually.
 
 Cobra handles `--version` via the `Version` field and `--help`
 natively. Identity provides `Use` and `Short` on the root command.
@@ -145,11 +155,34 @@ Subcommand flags use `result.Flags().StringVar` (bound to local
 variables), not the argument instance. Required flags use
 `result.MarkFlagRequired`.
 
+## Instrument Integration
+
+Programs that carry telemetry - daemons and subcommand CLIs - create
+an instrument at the top of `Main()`, before any other work.
+`pkg/instrument` bundles the observability pair - the Sentry reporter
+and the telemetry recorder - behind one constructor and one exit
+defer.
+
+```go
+s := instrument.New(constant.Identity, version)
+defer func() { s.Flush(recover()) }()
+```
+
+- `Recorder()` and `Reporter()` expose the halves as `face.Recorder`
+  and `face.Reporter` for downstream components
+- `RecordCommand(name)` records a successful CLI command; it takes a
+  string so the package stays cobra-free
+- The recorder reads `TELEMETRY_HOST` and `TELEMETRY_PORT`, speaking
+  https unless `TELEMETRY_INSECURE` is set
+- Daemon `Run()` accepts `face.Instrument` and pulls the halves where
+  it wires them; the concrete `*instrument.Instrument` never crosses
+  `Run()`
+
 ## Reporter Integration
 
-Every program creates a reporter at the top of `Main()`, before any other
-work. The reporter captures unhandled panics and provides error reporting
-to all downstream components.
+Programs without telemetry create the reporter directly. It captures
+unhandled panics and provides error reporting to all downstream
+components.
 
 ```go
 r := reporter.New(constant.Identity.Name(), version).Start()

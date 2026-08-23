@@ -6,7 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/telemetry"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/option"
@@ -17,8 +16,9 @@ import (
 
 func Run(
 	o *option.Source,
-	r face.Reporter,
+	i face.Instrument,
 ) {
+	r := i.Reporter()
 	l := logger.New(context.Background())
 	s := service.New(o.Inventory)
 	lifecycle.New(
@@ -28,12 +28,7 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					model_context.New(
-						s,
-						r,
-						telemetry.NewEnvironment(),
-						o.Version,
-					).Mount(m)
+					model_context.New(s, r, i.Recorder(), o.Version).Mount(m)
 				},
 			).WithMiddleware(web.RecoveryMiddleware(r)),
 		),

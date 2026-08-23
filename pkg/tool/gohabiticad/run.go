@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/telemetry"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/constant"
 	generated "github.com/funtimecoding/soil/pkg/tool/gohabiticad/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/model_context"
@@ -19,8 +18,9 @@ import (
 
 func Run(
 	o *option.Habitica,
-	r face.Reporter,
+	s face.Instrument,
 ) {
+	r := s.Reporter()
 	lifecycle.New(
 		logger.New(context.Background()),
 		lifecycle.WithServer(
@@ -29,7 +29,7 @@ func Run(
 				o.Address,
 				func(m *http.ServeMux) {
 					c := habitica.NewEnvironment()
-					t := telemetry.NewEnvironment()
+					t := s.Recorder()
 					generated.HandlerFromMux(
 						generated.NewStrictHandler(
 							server.New(c, r),

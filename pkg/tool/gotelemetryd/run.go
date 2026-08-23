@@ -7,7 +7,6 @@ import (
 	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/relational"
-	"github.com/funtimecoding/soil/pkg/telemetry"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
 	generated "github.com/funtimecoding/soil/pkg/tool/gotelemetryd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/model_context"
@@ -21,8 +20,9 @@ import (
 
 func Run(
 	o *option.Telemetry,
-	r face.Reporter,
+	i face.Instrument,
 ) {
+	r := i.Reporter()
 	l := logger.New(context.Background())
 	s := store.New(relational.Open(l, o.PostgresLocator, o.LitePath))
 	defer s.Close()
@@ -41,7 +41,7 @@ func Run(
 					model_context.New(
 						service.New(s),
 						r,
-						telemetry.NewEnvironment(),
+						i.Recorder(),
 						o.Version,
 					).Mount(m)
 					u.Mount(m)

@@ -9,7 +9,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/provision/store"
 	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/system/reaper"
-	"github.com/funtimecoding/soil/pkg/telemetry"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/option"
@@ -20,8 +19,9 @@ import (
 
 func Run(
 	o *option.Ansible,
-	r face.Reporter,
+	i face.Instrument,
 ) {
+	r := i.Reporter()
 	l := logger.New(context.Background())
 	s := store.New(
 		relational.Open(l, o.PostgresLocator, o.LitePath),
@@ -38,13 +38,7 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					model_context.New(
-						n,
-						s,
-						r,
-						telemetry.NewEnvironment(),
-						o.Version,
-					).Mount(m)
+					model_context.New(n, s, r, i.Recorder(), o.Version).Mount(m)
 				},
 			).WithMiddleware(web.RecoveryMiddleware(r)),
 		),

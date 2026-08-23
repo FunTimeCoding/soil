@@ -3,10 +3,7 @@ package goatlassian
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/soil/pkg/telemetry"
-	telemetryConstant "github.com/funtimecoding/soil/pkg/telemetry/constant"
-	"github.com/funtimecoding/soil/pkg/telemetry/record"
+	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassian/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
@@ -17,26 +14,18 @@ func Main(
 	gitHash string,
 	buildDate string,
 ) {
-	r := reporter.New(constant.Identity.Name(), version).Start()
-	defer func() { r.RecoverFlush(recover()) }()
+	s := instrument.New(constant.Identity, version)
+	defer func() { s.Flush(recover()) }()
 	c := client.NewEnvironment()
-	t := telemetry.NewEnvironment()
 	o := &cobra.Command{
 		Use:     constant.Identity.Usage(),
 		Short:   constant.Identity.Description(),
 		Version: argument.CobraVersion(version, gitHash, buildDate),
 		PersistentPostRun: func(
-			cmd *cobra.Command,
+			m *cobra.Command,
 			_ []string,
 		) {
-			t.Record(
-				record.NewDomain(
-					cmd.Name(),
-					telemetryConstant.CommandLine,
-					telemetryConstant.User,
-					telemetryConstant.Success,
-				),
-			)
+			s.RecordCommand(m.Name())
 		},
 	}
 	o.AddCommand(searchIssues(c))

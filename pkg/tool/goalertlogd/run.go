@@ -9,7 +9,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/metric"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager"
 	"github.com/funtimecoding/soil/pkg/relational"
-	"github.com/funtimecoding/soil/pkg/telemetry"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
 	generated "github.com/funtimecoding/soil/pkg/tool/goalertlogd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/model_context"
@@ -26,8 +25,9 @@ import (
 
 func Run(
 	o *option.Log,
-	r face.Reporter,
+	i face.Instrument,
 ) {
+	r := i.Reporter()
 	g := logger.New(context.Background())
 	m := metric.New()
 	s := store.New(relational.Open(g, o.PostgresLocator, o.LitePath))
@@ -59,7 +59,7 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					t := telemetry.NewEnvironment()
+					t := i.Recorder()
 					generated.HandlerFromMux(
 						generated.NewStrictHandler(
 							server.New(s, w, r),

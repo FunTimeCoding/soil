@@ -4,9 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
-	telemetry "github.com/funtimecoding/soil/pkg/telemetry/constant"
-	"github.com/funtimecoding/soil/pkg/telemetry/record"
-	gosublimed "github.com/funtimecoding/soil/pkg/tool/gosublimed/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/generated/client"
 	"github.com/spf13/cobra"
 	"os"
@@ -40,14 +37,6 @@ func open(x *Context) *cobra.Command {
 				os.Exit(1)
 			}
 
-			x.Telemetry.Record(
-				record.NewDomain(
-					gosublimed.OpenFile,
-					telemetry.CommandLine,
-					telemetry.User,
-					telemetry.Success,
-				),
-			)
 			fmt.Printf("opened view %d\n", r.JSON200.ViewId)
 		},
 	}

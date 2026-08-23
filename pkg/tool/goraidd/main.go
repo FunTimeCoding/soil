@@ -3,7 +3,7 @@ package goraidd
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/option"
@@ -15,8 +15,8 @@ func Main(
 	gitHash string,
 	buildDate string,
 ) {
-	r := reporter.New(constant.Identity.Name(), version).Start()
-	defer func() { r.RecoverFlush(recover()) }()
+	s := instrument.New(constant.Identity, version)
+	defer func() { s.Flush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Web()
 	a.Database()
@@ -39,5 +39,5 @@ func Main(
 		webConstant.AuthorizationEncryptionSecretEnvironment,
 	)
 	o.PublicLocator = environment.Required(webConstant.PublicLocatorEnvironment)
-	Run(o, r)
+	Run(o, s)
 }

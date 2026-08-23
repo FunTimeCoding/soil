@@ -7,7 +7,6 @@ import (
 	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/opnsense"
-	"github.com/funtimecoding/soil/pkg/telemetry"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/constant"
 	generated "github.com/funtimecoding/soil/pkg/tool/gopnsensed/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/model_context"
@@ -19,8 +18,9 @@ import (
 
 func Run(
 	o *option.Opnsense,
-	r face.Reporter,
+	s face.Instrument,
 ) {
+	r := s.Reporter()
 	lifecycle.New(
 		logger.New(context.Background()),
 		lifecycle.WithServer(
@@ -29,7 +29,7 @@ func Run(
 				o.Address,
 				func(m *http.ServeMux) {
 					c := opnsense.NewEnvironment()
-					t := telemetry.NewEnvironment()
+					t := s.Recorder()
 					generated.HandlerFromMux(
 						generated.NewStrictHandler(
 							server.New(c, r),

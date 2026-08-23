@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/telemetry"
 	"github.com/funtimecoding/soil/pkg/tool/goitermd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goitermd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/goitermd/option"
@@ -17,8 +16,9 @@ import (
 
 func Run(
 	o *option.Iterm,
-	r face.Reporter,
+	s face.Instrument,
 ) {
+	r := s.Reporter()
 	lifecycle.New(
 		logger.New(context.Background()),
 		lifecycle.WithServer(
@@ -29,7 +29,7 @@ func Run(
 					model_context.New(
 						iterm.NewEnvironment(),
 						r,
-						telemetry.NewEnvironment(),
+						s.Recorder(),
 						o.Version,
 					).Mount(m)
 				},

@@ -3,8 +3,8 @@ package gocertificated
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	gitlabConstant "github.com/funtimecoding/soil/pkg/gitlab/constant"
+	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/option"
@@ -16,8 +16,8 @@ func Main(
 	gitHash string,
 	buildDate string,
 ) {
-	r := reporter.New(constant.Identity.Name(), version).Start()
-	defer func() { r.RecoverFlush(recover()) }()
+	s := instrument.New(constant.Identity, version)
+	defer func() { s.Flush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Web()
 	a.Database()
@@ -47,5 +47,5 @@ func Main(
 	)
 	o.PublicLocator = environment.Required(webConstant.PublicLocatorEnvironment)
 	o.Version = version
-	Run(o, r)
+	Run(o, s)
 }

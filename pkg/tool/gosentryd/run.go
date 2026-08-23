@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/telemetry"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/option"
@@ -17,8 +16,9 @@ import (
 
 func Run(
 	o *option.Server,
-	r face.Reporter,
+	s face.Instrument,
 ) {
+	r := s.Reporter()
 	lifecycle.New(
 		logger.New(context.Background()),
 		lifecycle.WithServer(
@@ -30,7 +30,7 @@ func Run(
 						sentry.NewEnvironment(),
 						o.Organization,
 						r,
-						telemetry.NewEnvironment(),
+						s.Recorder(),
 						o.Version,
 					).Mount(m)
 				},

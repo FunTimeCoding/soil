@@ -14,6 +14,7 @@ const (
 	Baseline = "baseline"
 	Domain   = "domain"
 
-	HostEnvironment = "TELEMETRY_HOST"
-	PortEnvironment = "TELEMETRY_PORT"
+	HostEnvironment     = "TELEMETRY_HOST"
+	PortEnvironment     = "TELEMETRY_PORT"
+	InsecureEnvironment = "TELEMETRY_INSECURE"
 )

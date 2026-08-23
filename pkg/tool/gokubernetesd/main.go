@@ -3,7 +3,7 @@ package gokubernetesd
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/option"
 )
@@ -13,8 +13,8 @@ func Main(
 	gitHash string,
 	buildDate string,
 ) {
-	r := reporter.New(constant.Identity.Name(), version).Start()
-	defer func() { r.RecoverFlush(recover()) }()
+	s := instrument.New(constant.Identity, version)
+	defer func() { s.Flush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Web()
 	a.Boolean(argumentConstant.ReadOnly, false, "Disable write operations")
@@ -25,5 +25,5 @@ func Main(
 	o.ReadOnly = a.GetBoolean(argumentConstant.ReadOnly)
 	o.LitePath = a.GetString(argumentConstant.Lite)
 	o.Version = version
-	Run(o, r)
+	Run(o, s)
 }

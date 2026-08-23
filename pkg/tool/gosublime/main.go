@@ -3,9 +3,8 @@ package gosublime
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/system/environment"
-	"github.com/funtimecoding/soil/pkg/telemetry"
 	"github.com/funtimecoding/soil/pkg/tool/gosublime/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/generated/client"
 	"github.com/funtimecoding/soil/pkg/web/locator"
@@ -18,9 +17,8 @@ func Main(
 	gitHash string,
 	buildDate string,
 ) {
-	r := reporter.New(constant.Identity.Name(), version)
-	r.Start()
-	defer func() { r.RecoverFlush(recover()) }()
+	s := instrument.New(constant.Identity, version)
+	defer func() { s.Flush(recover()) }()
 	host := environment.Optional(constant.HostEnvironment)
 
 	if host == "" {
@@ -34,11 +32,17 @@ func Main(
 		os.Exit(1)
 	}
 
-	x := &Context{Client: c, Telemetry: telemetry.NewEnvironment()}
+	x := &Context{Client: c}
 	o := &cobra.Command{
 		Use:     constant.Identity.Usage(),
 		Short:   constant.Identity.Description(),
 		Version: argument.CobraVersion(version, gitHash, buildDate),
+		PersistentPostRun: func(
+			m *cobra.Command,
+			_ []string,
+		) {
+			s.RecordCommand(m.Name())
+		},
 	}
 	o.AddCommand(views(x))
 	o.AddCommand(read(x))

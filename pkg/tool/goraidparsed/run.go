@@ -6,7 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/telemetry"
 	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/constant"
 	generated "github.com/funtimecoding/soil/pkg/tool/goraidparsed/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/option"
@@ -17,8 +16,9 @@ import (
 
 func Run(
 	o *option.Parser,
-	r face.Reporter,
+	s face.Instrument,
 ) {
+	r := s.Reporter()
 	l := logger.New(context.Background())
 	lifecycle.New(
 		l,
@@ -27,7 +27,7 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					t := telemetry.NewEnvironment()
+					t := s.Recorder()
 					generated.HandlerFromMux(
 						generated.NewStrictHandler(
 							server.New(

@@ -42,6 +42,17 @@ func TestMissingSentryWithOptionalReporter(t *testing.T) {
 	assert.Integer(t, 0, len(result))
 }
 
+func TestMissingSentryWithInstrument(t *testing.T) {
+	v := virtual_file_system.New()
+	v.WriteString("cmd/gotest/main.go", "package main\n")
+	v.WriteString(
+		"pkg/tool/gotest/run.go",
+		"package gotest\n\nimport \"github.com/funtimecoding/soil/pkg/instrument\"\n\nfunc Run() {\n\ts := instrument.New(constant.Identity, \"v0.1.0\")\n}\n",
+	)
+	result := scan.MissingSentry(v)
+	assert.Integer(t, 0, len(result))
+}
+
 func TestMissingSentrySkipsExample(t *testing.T) {
 	v := virtual_file_system.New()
 	v.WriteString("cmd/example/main.go", "package main\n")

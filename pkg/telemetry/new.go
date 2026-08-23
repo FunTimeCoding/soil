@@ -9,9 +9,16 @@ import (
 func New(
 	host string,
 	port int,
+	insecure bool,
 ) *Client {
+	l := locator.New(host).Port(port)
+
+	if insecure {
+		l.Insecure()
+	}
+
 	return &Client{
-		base:   locator.New(host).Insecure().Port(port).String(),
+		base:   l.String(),
 		client: &http.Client{Timeout: 5 * time.Second},
 	}
 }

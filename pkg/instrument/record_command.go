@@ -1,14 +1,14 @@
-package gohabitica
+package instrument
 
 import (
 	"github.com/funtimecoding/soil/pkg/telemetry/constant"
 	"github.com/funtimecoding/soil/pkg/telemetry/record"
 )
 
-func (x *Context) record(tool string) {
-	x.Telemetry.Record(
+func (i *Instrument) RecordCommand(name string) {
+	i.recorder.Record(
 		record.NewDomain(
-			tool,
+			name,
 			constant.CommandLine,
 			constant.User,
 			constant.Success,

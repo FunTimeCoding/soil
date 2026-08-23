@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/telemetry"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/constant"
 	generated "github.com/funtimecoding/soil/pkg/tool/gomattermostd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context"
@@ -20,8 +19,9 @@ import (
 
 func Run(
 	o *option.Mattermost,
-	r face.Reporter,
+	s face.Instrument,
 ) {
+	r := s.Reporter()
 	l := logger.New(context.Background())
 	c := mattermost.NewEnvironment()
 	var m *monitor.Monitor
@@ -52,7 +52,7 @@ func Run(
 							c,
 							m,
 							r,
-							telemetry.NewEnvironment(),
+							s.Recorder(),
 							o.Version,
 						).Mount(u)
 					},

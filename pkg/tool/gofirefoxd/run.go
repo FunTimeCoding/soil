@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/telemetry"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/option"
@@ -17,8 +16,9 @@ import (
 
 func Run(
 	o *option.Firefox,
-	r face.Reporter,
+	s face.Instrument,
 ) {
+	r := s.Reporter()
 	c := firefox.NewEnvironment()
 	lifecycle.New(
 		logger.New(context.Background()),
@@ -36,12 +36,7 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					model_context.New(
-						c,
-						r,
-						telemetry.NewEnvironment(),
-						o.Version,
-					).Mount(m)
+					model_context.New(c, r, s.Recorder(), o.Version).Mount(m)
 				},
 			).WithMiddleware(web.RecoveryMiddleware(r)),
 		),

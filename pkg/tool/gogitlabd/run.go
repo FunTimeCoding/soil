@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/telemetry"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/option"
@@ -17,8 +16,9 @@ import (
 
 func Run(
 	o *option.Gitlab,
-	r face.Reporter,
+	s face.Instrument,
 ) {
+	r := s.Reporter()
 	lifecycle.New(
 		logger.New(context.Background()),
 		lifecycle.WithServer(
@@ -29,7 +29,7 @@ func Run(
 					model_context.New(
 						gitlab.NewEnvironment().Nested(),
 						r,
-						telemetry.NewEnvironment(),
+						s.Recorder(),
 						o.Version,
 					).Mount(m)
 				},

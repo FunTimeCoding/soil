@@ -11,7 +11,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/system/environment"
-	"github.com/funtimecoding/soil/pkg/telemetry"
 	"github.com/funtimecoding/soil/pkg/ticker"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	generated "github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
@@ -34,8 +33,9 @@ import (
 
 func Run(
 	o *option.Option,
-	r face.Reporter,
+	i face.Instrument,
 ) {
+	r := i.Reporter()
 	start := time.Now()
 	l := logger.New(context.Background())
 	n := notifier.New()
@@ -71,7 +71,7 @@ func Run(
 	memoryTicker := ticker.New(30*time.Second, v.PollMemory, rec)
 	w := watcher.New(v, l, r, h)
 	address := o.Address
-	t := telemetry.NewEnvironment()
+	t := i.Recorder()
 	u := web.New(v)
 	setup := func(m *http.ServeMux) {
 		generated.HandlerFromMux(

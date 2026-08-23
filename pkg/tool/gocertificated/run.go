@@ -9,7 +9,6 @@ import (
 	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/relational"
-	"github.com/funtimecoding/soil/pkg/telemetry"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	generated "github.com/funtimecoding/soil/pkg/tool/gocertificated/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/model_context"
@@ -25,8 +24,9 @@ import (
 
 func Run(
 	o *option.Certificate,
-	r face.Reporter,
+	u face.Instrument,
 ) {
+	r := u.Reporter()
 	g := logger.New(context.Background())
 	s := store.New(relational.Open(g, o.PostgresLocator, o.LitePath))
 	defer s.Close()
@@ -52,7 +52,7 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					t := telemetry.NewEnvironment()
+					t := u.Recorder()
 					generated.HandlerFromMux(
 						generated.NewStrictHandler(
 							server.New(s, v, r),

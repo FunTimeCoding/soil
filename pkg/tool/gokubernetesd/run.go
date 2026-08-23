@@ -8,7 +8,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
-	"github.com/funtimecoding/soil/pkg/telemetry"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/option"
@@ -21,8 +20,9 @@ import (
 
 func Run(
 	o *option.Server,
-	r face.Reporter,
+	i face.Instrument,
 ) {
+	r := i.Reporter()
 	l := logger.New(context.Background())
 	s := service.New(store.New(lite.New(l, o.LitePath)))
 
@@ -42,7 +42,7 @@ func Run(
 						s,
 						o.ReadOnly,
 						r,
-						telemetry.NewEnvironment(),
+						i.Recorder(),
 						o.Version,
 					).Mount(m)
 				},

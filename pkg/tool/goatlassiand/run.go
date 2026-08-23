@@ -8,7 +8,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/telemetry"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
 	generated "github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/model_context"
@@ -20,8 +19,9 @@ import (
 
 func Run(
 	o *option.Atlassian,
-	r face.Reporter,
+	s face.Instrument,
 ) {
+	r := s.Reporter()
 	j := jira.NewEnvironment()
 	c := confluence.NewEnvironment()
 	lifecycle.New(
@@ -31,7 +31,7 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					t := telemetry.NewEnvironment()
+					t := s.Recorder()
 					generated.HandlerFromMux(
 						generated.NewStrictHandler(
 							server.New(j, c, r),

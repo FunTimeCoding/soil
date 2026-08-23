@@ -35,6 +35,14 @@ func hasSentryReporter(
 				return true
 			}
 		}
+
+		if parse.HasCall(
+			f,
+			"github.com/funtimecoding/soil/pkg/instrument",
+			"New",
+		) {
+			return true
+		}
 	}
 
 	return false

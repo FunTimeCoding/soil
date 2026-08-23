@@ -31,22 +31,22 @@ Commands:
 		),
 		Args: cobra.MinimumNArgs(1),
 		RunE: func(
-			cmd *cobra.Command,
+			m *cobra.Command,
 			arguments []string,
 		) error {
-			cmd.SilenceUsage = true
-			procfilePath, e := cmd.Flags().GetString("file")
+			m.SilenceUsage = true
+			procfilePath, e := m.Flags().GetString("file")
 			errors.PanicOnError(e)
 			command := arguments[0]
 			commandArguments := arguments[1:]
-			response, e := client.Send(
+			response, f := client.Send(
 				socket.Path(procfilePath),
 				command,
 				commandArguments,
 			)
 
-			if e != nil {
-				return e
+			if f != nil {
+				return f
 			}
 
 			if strings.HasPrefix(response, "error:") {

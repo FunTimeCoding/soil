@@ -4,9 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
-	telemetry "github.com/funtimecoding/soil/pkg/telemetry/constant"
-	"github.com/funtimecoding/soil/pkg/telemetry/record"
-	gosublimed "github.com/funtimecoding/soil/pkg/tool/gosublimed/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/generated/client"
 	"github.com/spf13/cobra"
 	"os"
@@ -47,14 +44,6 @@ func create(x *Context) *cobra.Command {
 				os.Exit(1)
 			}
 
-			x.Telemetry.Record(
-				record.NewDomain(
-					gosublimed.CreateView,
-					telemetry.CommandLine,
-					telemetry.User,
-					telemetry.Success,
-				),
-			)
 			fmt.Printf("created view %d\n", r.JSON200.ViewId)
 		},
 	}

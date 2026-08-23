@@ -8,7 +8,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/raid_parser"
 	"github.com/funtimecoding/soil/pkg/relational"
-	"github.com/funtimecoding/soil/pkg/telemetry"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
 	generated "github.com/funtimecoding/soil/pkg/tool/goraidd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/option"
@@ -21,8 +20,9 @@ import (
 
 func Run(
 	o *option.Raid,
-	r face.Reporter,
+	i face.Instrument,
 ) {
+	r := i.Reporter()
 	l := logger.New(context.Background())
 	s := store.New(
 		relational.Open(l, o.PostgresLocator, o.LitePath),
@@ -41,7 +41,7 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					t := telemetry.NewEnvironment()
+					t := i.Recorder()
 					generated.HandlerFromMux(
 						generated.NewStrictHandler(
 							server.New(s, o.OutputPath, r),
