@@ -66,7 +66,7 @@ require (
 	github.com/modelcontextprotocol/go-sdk v1.7.0
 	github.com/muesli/termenv v0.16.0
 	github.com/netbox-community/go-netbox/v4 v4.3.0
-	github.com/nsf/termbox-go v1.1.1
+	github.com/nsf/termbox-go v1.1.2
 	github.com/nwaples/rardecode/v2 v2.4.0
 	github.com/oapi-codegen/runtime v1.7.0
 	github.com/olekukonko/tablewriter v1.1.4
