@@ -3,12 +3,41 @@ package server
 import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/constant"
 	"github.com/funtimecoding/soil/pkg/web"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/route"
 	"net/http"
 	"net/http/pprof"
 )
 
 func (s *Server) Start() {
+	if s.identity.Stamp() == nil {
+		panic(
+			"identity has no stamp - argument.Parse stamps it, tests use identity.Example",
+		)
+	}
+
 	s.Setup(s.Mux)
+	s.Mux.HandleFunc(
+		route.Get(webConstant.HealthPath),
+		func(w http.ResponseWriter, _ *http.Request) {
+			w.WriteHeader(http.StatusOK)
+		},
+	)
+	s.Mux.HandleFunc(
+		route.Get(webConstant.VersionPath),
+		func(w http.ResponseWriter, _ *http.Request) {
+			b := s.identity.Stamp()
+			web.EncodeNotation(
+				w,
+				&Version{
+					Name:      s.identity.Name(),
+					Version:   b.Version,
+					GitHash:   b.GitHash,
+					BuildDate: b.BuildDate,
+				},
+			)
+		},
+	)
 
 	if s.profiling {
 		s.Mux.HandleFunc("GET /debug/pprof/", pprof.Index)

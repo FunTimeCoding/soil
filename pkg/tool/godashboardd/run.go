@@ -47,6 +47,7 @@ func Run(
 		lifecycle.WithWorker(worker.New(v, constant.RefreshInterval, l, r)),
 		lifecycle.WithServer(
 			server.New(
+				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
 					u.Mount(m)

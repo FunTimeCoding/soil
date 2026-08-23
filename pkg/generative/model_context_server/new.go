@@ -3,6 +3,7 @@ package model_context_server
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/identity"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
@@ -19,7 +20,9 @@ func New(
 	p, n := system.ClaimPort()
 	b := lifecycle.New(
 		logger.New(context.Background()),
-		lifecycle.WithServer(server.New("", setup).WithListener(n)),
+		lifecycle.WithServer(
+			server.New(identity.Example(), "", setup).WithListener(n),
+		),
 	)
 	b.Run()
 	assert.Listen(t, p)

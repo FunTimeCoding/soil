@@ -40,6 +40,7 @@ func Run(
 		l,
 		lifecycle.WithServer(
 			lifecycleServer.New(
+				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
 					t := telemetry.NewEnvironment()

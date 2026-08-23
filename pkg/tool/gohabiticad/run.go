@@ -8,6 +8,7 @@ import (
 	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/telemetry"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/constant"
 	generated "github.com/funtimecoding/soil/pkg/tool/gohabiticad/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/option"
@@ -24,6 +25,7 @@ func Run(
 		logger.New(context.Background()),
 		lifecycle.WithServer(
 			lifecycleServer.New(
+				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
 					c := habitica.NewEnvironment()

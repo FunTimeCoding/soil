@@ -10,6 +10,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/telemetry"
+	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	generated "github.com/funtimecoding/soil/pkg/tool/gocertificated/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/option"
@@ -48,6 +49,7 @@ func Run(
 		g,
 		lifecycle.WithServer(
 			lifecycleServer.New(
+				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
 					t := telemetry.NewEnvironment()

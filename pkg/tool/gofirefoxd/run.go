@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/telemetry"
+	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/option"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -23,6 +24,7 @@ func Run(
 		logger.New(context.Background()),
 		lifecycle.WithServer(
 			server.New(
+				constant.Identity,
 				web.AddressPort(o.BridgePort),
 				func(m *http.ServeMux) {
 					m.Handle("/", c)
@@ -31,6 +33,7 @@ func Run(
 		),
 		lifecycle.WithServer(
 			server.New(
+				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
 					model_context.New(

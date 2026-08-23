@@ -1,12 +1,12 @@
-package build
+package stamp
 
-import "github.com/funtimecoding/soil/pkg/build/constant"
+import "github.com/funtimecoding/soil/pkg/stamp/constant"
 
 func New(
 	version string,
 	gitHash string,
 	date string,
-) *Build {
+) *Stamp {
 	if version == "" {
 		version = constant.DefaultVersion
 	}
@@ -19,5 +19,5 @@ func New(
 		date = constant.DefaultDate
 	}
 
-	return &Build{Version: version, GitHash: gitHash, BuildDate: date}
+	return &Stamp{Version: version, GitHash: gitHash, BuildDate: date}
 }

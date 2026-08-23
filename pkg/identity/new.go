@@ -5,9 +5,5 @@ func New(
 	description string,
 	usage string,
 ) *Tool {
-	return &Tool{
-		name:        name,
-		description: description,
-		usage:       usage,
-	}
+	return &Tool{name: name, description: description, usage: usage}
 }

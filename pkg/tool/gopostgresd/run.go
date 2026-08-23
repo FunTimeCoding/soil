@@ -7,6 +7,7 @@ import (
 	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/telemetry"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/constant"
 	generated "github.com/funtimecoding/soil/pkg/tool/gopostgresd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/option"
@@ -24,6 +25,7 @@ func Run(
 		logger.New(context.Background()),
 		lifecycle.WithServer(
 			lifecycleServer.New(
+				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
 					s := service.New(o.Inventory)

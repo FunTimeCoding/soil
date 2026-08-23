@@ -8,6 +8,7 @@ import (
 	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/telemetry"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/constant"
 	generated "github.com/funtimecoding/soil/pkg/tool/gomattermostd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/monitor"
@@ -37,6 +38,7 @@ func Run(
 			p,
 			lifecycle.WithServer(
 				lifecycleServer.New(
+					constant.Identity,
 					o.Address,
 					func(u *http.ServeMux) {
 						generated.HandlerFromMux(

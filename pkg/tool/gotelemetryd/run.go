@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/telemetry"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
 	generated "github.com/funtimecoding/soil/pkg/tool/gotelemetryd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/option"
@@ -30,6 +31,7 @@ func Run(
 		l,
 		lifecycle.WithServer(
 			lifecycleServer.New(
+				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
 					generated.HandlerFromMux(

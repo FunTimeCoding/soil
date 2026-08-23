@@ -1,6 +1,7 @@
 package server
 
 import (
+	"github.com/funtimecoding/soil/pkg/identity"
 	"net"
 	"net/http"
 	"time"
@@ -11,6 +12,7 @@ type Server struct {
 	http         *http.Server
 	Setup        func(*http.ServeMux)
 	Middleware   func(http.Handler) http.Handler
+	identity     *identity.Tool
 	Address      string
 	listener     net.Listener
 	protected    bool

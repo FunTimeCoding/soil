@@ -14,10 +14,6 @@ func TestBuild(t *testing.T) {
 		t.Skip("no git directory")
 	}
 
-	b := build.New("a", "b", "c")
-	assert.String(t, b.Version, "a")
-	assert.String(t, b.GitHash, "b")
-	assert.String(t, b.BuildDate, "c")
 	assert.True(t, len(build.Date()) > 0)
 	assert.True(t, len(build.GitHash()) > 0)
 

@@ -9,6 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/raid_parser"
 	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/telemetry"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
 	generated "github.com/funtimecoding/soil/pkg/tool/goraidd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/option"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/server"
@@ -37,6 +38,7 @@ func Run(
 		lifecycle.WithWorker(s),
 		lifecycle.WithServer(
 			lifecycleServer.New(
+				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
 					t := telemetry.NewEnvironment()

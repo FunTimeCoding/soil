@@ -9,6 +9,7 @@ const (
 	SearchPath       = "/search"
 	FaviconPath      = "/favicon.ico"
 	HealthPath       = "/health"
+	VersionPath      = "/version"
 	LoginPath        = "/login"
 	LogoutPath       = "/logout"
 	MetricsPath      = "/metrics"

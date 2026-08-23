@@ -5,12 +5,14 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/identity"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/mock_worker"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/system"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web"
+	"io"
 	"net/http"
 	"testing"
 )
@@ -60,18 +62,9 @@ func TestRunServerResponds(t *testing.T) {
 		logger.New(context.Background()),
 		lifecycle.WithServer(
 			server.New(
+				identity.Example(),
 				"",
-				func(m *http.ServeMux) {
-					m.HandleFunc(
-						constant.HealthPath,
-						func(
-							w http.ResponseWriter,
-							_ *http.Request,
-						) {
-							w.WriteHeader(http.StatusOK)
-						},
-					)
-				},
+				func(_ *http.ServeMux) {},
 			).WithListener(n),
 		),
 	)
@@ -85,24 +78,39 @@ func TestRunServerResponds(t *testing.T) {
 	)
 }
 
+func TestRunServerVersion(t *testing.T) {
+	p, n := system.ClaimPort()
+	l := lifecycle.New(
+		logger.New(context.Background()),
+		lifecycle.WithServer(
+			server.New(
+				identity.Example().WithStamp("v1", "hash", "date"),
+				"",
+				func(_ *http.ServeMux) {},
+			).WithListener(n),
+		),
+	)
+	l.Run()
+	defer l.Stop()
+	assert.Listen(t, p)
+	response := web.BasicGet(fmt.Sprintf("http://localhost:%d/version", p))
+	defer errors.PanicClose(response.Body)
+	assert.Integer(t, http.StatusOK, response.StatusCode)
+	b, e := io.ReadAll(response.Body)
+	errors.PanicOnError(e)
+	assert.StringContains(t, "v1", string(b))
+	assert.StringContains(t, "example", string(b))
+}
+
 func TestStopServerShutsDown(t *testing.T) {
 	p, n := system.ClaimPort()
 	l := lifecycle.New(
 		logger.New(context.Background()),
 		lifecycle.WithServer(
 			server.New(
+				identity.Example(),
 				"",
-				func(m *http.ServeMux) {
-					m.HandleFunc(
-						constant.HealthPath,
-						func(
-							w http.ResponseWriter,
-							_ *http.Request,
-						) {
-							w.WriteHeader(http.StatusOK)
-						},
-					)
-				},
+				func(_ *http.ServeMux) {},
 			).WithListener(n),
 		),
 	)
@@ -118,18 +126,9 @@ func TestRunServerMiddleware(t *testing.T) {
 		logger.New(context.Background()),
 		lifecycle.WithServer(
 			server.New(
+				identity.Example(),
 				fmt.Sprintf(":%d", p),
-				func(m *http.ServeMux) {
-					m.HandleFunc(
-						constant.HealthPath,
-						func(
-							w http.ResponseWriter,
-							_ *http.Request,
-						) {
-							w.WriteHeader(http.StatusOK)
-						},
-					)
-				},
+				func(_ *http.ServeMux) {},
 			).WithMiddleware(
 				func(h http.Handler) http.Handler {
 					return http.HandlerFunc(
@@ -163,18 +162,10 @@ func TestRunMixedOrder(t *testing.T) {
 		lifecycle.WithWorker(mock_worker.New("a", &log)),
 		lifecycle.WithServer(
 			server.New(
+				identity.Example(),
 				"",
-				func(m *http.ServeMux) {
+				func(_ *http.ServeMux) {
 					log = append(log, "start:server")
-					m.HandleFunc(
-						constant.HealthPath,
-						func(
-							w http.ResponseWriter,
-							_ *http.Request,
-						) {
-							w.WriteHeader(http.StatusOK)
-						},
-					)
 				},
 			).WithListener(n),
 		),

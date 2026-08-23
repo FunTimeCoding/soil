@@ -11,6 +11,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/system/reaper"
 	"github.com/funtimecoding/soil/pkg/telemetry"
+	"github.com/funtimecoding/soil/pkg/tool/gosaltd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/runner"
@@ -35,6 +36,7 @@ func Run(
 		lifecycle.WithWorker(n),
 		lifecycle.WithServer(
 			server.New(
+				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
 					model_context.New(

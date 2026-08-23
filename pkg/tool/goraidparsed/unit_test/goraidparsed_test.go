@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/identity"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
@@ -20,6 +21,7 @@ func TestRunLifecycle(t *testing.T) {
 		logger.New(context.Background()),
 		lifecycle.WithServer(
 			lifecycleServer.New(
+				identity.Example(),
 				"",
 				func(m *http.ServeMux) {
 					generated.HandlerFromMux(

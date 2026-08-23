@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/telemetry"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
 	generated "github.com/funtimecoding/soil/pkg/tool/gomaintlogd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/option"
@@ -30,6 +31,7 @@ func Run(
 		g,
 		lifecycle.WithServer(
 			lifecycleServer.New(
+				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
 					t := telemetry.NewEnvironment()

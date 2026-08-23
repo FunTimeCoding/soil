@@ -10,6 +10,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager"
 	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/telemetry"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
 	generated "github.com/funtimecoding/soil/pkg/tool/goalertlogd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/option"
@@ -46,6 +47,7 @@ func Run(
 		lifecycle.WithWorker(w),
 		lifecycle.WithServer(
 			lifecycleServer.New(
+				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
 					t := telemetry.NewEnvironment()

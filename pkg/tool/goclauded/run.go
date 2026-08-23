@@ -102,7 +102,7 @@ func Run(
 		u.Mount(m)
 	}
 	middleware := u.Recovery(r)
-	srv := lifecycleServer.New(address, setup).
+	srv := lifecycleServer.New(constant.Identity, address, setup).
 		WithMiddleware(middleware).
 		WithProfiling().
 		WithDefaultCertificate()

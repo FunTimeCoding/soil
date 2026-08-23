@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/telemetry"
+	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/option"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -22,6 +23,7 @@ func Run(
 		logger.New(context.Background()),
 		lifecycle.WithServer(
 			server.New(
+				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
 					model_context.New(

@@ -9,6 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/telemetry"
+	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/service"
@@ -33,6 +34,7 @@ func Run(
 		lifecycle.WithWorker(w),
 		lifecycle.WithServer(
 			server.New(
+				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
 					model_context.New(

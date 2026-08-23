@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/kubernetes/client"
-	"github.com/funtimecoding/soil/pkg/kubernetes/constant"
+	kubernetesConstant "github.com/funtimecoding/soil/pkg/kubernetes/constant"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
@@ -13,6 +13,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/system/reaper"
 	"github.com/funtimecoding/soil/pkg/telemetry"
+	"github.com/funtimecoding/soil/pkg/tool/goterraformd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/option"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/runner"
@@ -38,7 +39,7 @@ func Run(
 		r,
 		p,
 		m.Registry(),
-		client.NewInCluster(constant.InCluster),
+		client.NewInCluster(kubernetesConstant.InCluster),
 	)
 	lifecycle.New(
 		l,
@@ -47,6 +48,7 @@ func Run(
 		lifecycle.WithWorker(n),
 		lifecycle.WithServer(
 			server.New(
+				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
 					model_context.New(

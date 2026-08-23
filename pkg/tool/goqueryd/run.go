@@ -10,6 +10,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
 	"github.com/funtimecoding/soil/pkg/telemetry"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	generated "github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/option"
@@ -41,6 +42,7 @@ func Run(
 		lifecycle.WithWorker(worker.New(v, 10*time.Minute, l, r)),
 		lifecycle.WithServer(
 			lifecycleServer.New(
+				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
 					t := telemetry.NewEnvironment()

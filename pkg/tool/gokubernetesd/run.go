@@ -9,6 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/telemetry"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service"
@@ -34,6 +35,7 @@ func Run(
 		l,
 		lifecycle.WithServer(
 			server.New(
+				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
 					model_context.New(

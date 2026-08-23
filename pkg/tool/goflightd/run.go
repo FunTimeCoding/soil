@@ -11,6 +11,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/collector/bluetooth"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/collector/stream"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/collector/wireless"
+	"github.com/funtimecoding/soil/pkg/tool/goflightd/constant"
 	generated "github.com/funtimecoding/soil/pkg/tool/goflightd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/janitor"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/option"
@@ -49,6 +50,7 @@ func Run(
 		options,
 		lifecycle.WithServer(
 			lifecycleServer.New(
+				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
 					t := telemetry.NewEnvironment()

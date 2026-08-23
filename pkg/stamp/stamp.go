@@ -1,6 +1,6 @@
-package build
+package stamp
 
-type Build struct {
+type Stamp struct {
 	Version   string
 	GitHash   string
 	BuildDate string

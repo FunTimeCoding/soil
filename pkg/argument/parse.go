@@ -3,7 +3,6 @@ package argument
 import (
 	"errors"
 	"github.com/funtimecoding/soil/pkg/argument/constant"
-	"github.com/funtimecoding/soil/pkg/build"
 	libraryErrors "github.com/funtimecoding/soil/pkg/errors"
 	"github.com/spf13/pflag"
 	"os"
@@ -14,6 +13,7 @@ func (i *Instance) Parse(
 	gitHash string,
 	buildDate string,
 ) {
+	i.identity.WithStamp(version, gitHash, buildDate)
 	i.flags.Bool(constant.Version, false, "Show version information and exit")
 	e := i.ParseArguments(os.Args[1:])
 
@@ -25,7 +25,7 @@ func (i *Instance) Parse(
 	libraryErrors.PanicOnError(f)
 
 	if v {
-		build.New(version, gitHash, buildDate).Print()
+		i.identity.Stamp().Print()
 		os.Exit(0)
 	}
 }

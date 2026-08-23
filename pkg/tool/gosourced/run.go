@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/telemetry"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/option"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service"
@@ -24,6 +25,7 @@ func Run(
 		l,
 		lifecycle.WithServer(
 			server.New(
+				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
 					model_context.New(
