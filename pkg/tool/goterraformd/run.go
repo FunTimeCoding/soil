@@ -18,6 +18,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/option"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/runner"
 	"github.com/funtimecoding/soil/pkg/web"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
 
@@ -31,7 +32,7 @@ func Run(
 		"terraform_runs",
 	)
 	p := reaper.New(r)
-	m := metric.New(0, false, nil)
+	m := metric.New()
 	n := runner.New(
 		o,
 		s,
@@ -43,9 +44,17 @@ func Run(
 	)
 	lifecycle.New(
 		l,
-		lifecycle.WithWorker(m),
 		lifecycle.WithWorker(p),
 		lifecycle.WithWorker(n),
+		lifecycle.WithServer(
+			server.New(
+				constant.Identity,
+				webConstant.MetricAddress,
+				func(x *http.ServeMux) {
+					x.Handle(webConstant.MetricsPath, m.Exporter())
+				},
+			),
+		),
 		lifecycle.WithServer(
 			server.New(
 				constant.Identity,

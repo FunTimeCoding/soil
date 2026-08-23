@@ -2,6 +2,6 @@ package metric
 
 import "github.com/prometheus/client_golang/prometheus"
 
-func (m *Metric) Registry() *prometheus.Registry {
-	return m.registry
+type Metric struct {
+	registry *prometheus.Registry
 }

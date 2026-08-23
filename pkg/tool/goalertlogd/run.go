@@ -19,6 +19,7 @@ import (
 	alertWeb "github.com/funtimecoding/soil/pkg/tool/goalertlogd/web"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/worker"
 	"github.com/funtimecoding/soil/pkg/web"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 	"time"
 )
@@ -28,7 +29,7 @@ func Run(
 	r face.Reporter,
 ) {
 	g := logger.New(context.Background())
-	m := metric.New(0, false, nil)
+	m := metric.New()
 	s := store.New(relational.Open(g, o.PostgresLocator, o.LitePath))
 	defer s.Close()
 	w := worker.New(
@@ -43,8 +44,16 @@ func Run(
 	u := alertWeb.New(s, w)
 	lifecycle.New(
 		g,
-		lifecycle.WithWorker(m),
 		lifecycle.WithWorker(w),
+		lifecycle.WithServer(
+			lifecycleServer.New(
+				constant.Identity,
+				webConstant.MetricAddress,
+				func(x *http.ServeMux) {
+					x.Handle(webConstant.MetricsPath, m.Exporter())
+				},
+			),
+		),
 		lifecycle.WithServer(
 			lifecycleServer.New(
 				constant.Identity,

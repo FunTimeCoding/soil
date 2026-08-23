@@ -12,7 +12,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/gitlab"
 	"github.com/funtimecoding/soil/pkg/kubernetes/client"
 	"github.com/funtimecoding/soil/pkg/kubernetes/markup"
-	"github.com/funtimecoding/soil/pkg/metric"
 	"github.com/funtimecoding/soil/pkg/notifier/mattermost_notifier"
 	"github.com/funtimecoding/soil/pkg/project"
 	"github.com/funtimecoding/soil/pkg/prometheus/push"
@@ -58,7 +57,6 @@ func main() {
 	relational.NewEnvironment()
 	gitlab.NewGitLabCom("")
 	git.ModifiedFiles("")
-	metric.MiddlewareServer("", nil)
 	secure_shell.Listen(nil, "")
 	client.MustNewContext("")
 	client.NewInCluster("")
