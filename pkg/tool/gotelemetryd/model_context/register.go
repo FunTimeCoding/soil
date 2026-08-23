@@ -10,7 +10,7 @@ func (s *Server) register() {
 		mcp.NewTool(
 			constant.Query,
 			mcp.WithDescription(
-				"Query recent usage events. Filter by tool name, surface (mcp, cli, rest, web), actor, and time range. Returns individual events, newest first.",
+				"Query recent usage events. Filter by tool name, surface (model_context, command_line, web_service, web), actor, and time range. Returns individual events, newest first.",
 			),
 			mcp.WithString(
 				constant.Tool,
@@ -18,7 +18,9 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				constant.Surface,
-				mcp.Description("Filter by surface: mcp, cli, rest, web."),
+				mcp.Description(
+					"Filter by surface: model_context, command_line, web_service, web.",
+				),
 			),
 			mcp.WithString(
 				constant.Actor,
