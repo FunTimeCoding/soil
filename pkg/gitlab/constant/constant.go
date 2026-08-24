@@ -33,10 +33,11 @@ const (
 var DefaultListOptions = gitlab.ListOptions{Page: 0, PerPage: 100}
 
 const (
-	HostEnvironment    = "GITLAB_HOST"
-	TokenEnvironment   = "GITLAB_TOKEN"
-	GroupEnvironment   = "GITLAB_GROUP"
-	ProjectEnvironment = "GITLAB_PROJECT"
+	HostEnvironment        = "GITLAB_HOST"
+	TokenEnvironment       = "GITLAB_TOKEN"
+	GroupEnvironment       = "GITLAB_GROUP"
+	ProjectEnvironment     = "GITLAB_PROJECT"
+	ProjectNameEnvironment = "GITLAB_PROJECT_NAME"
 
 	PrivateTokenHeader = "Private-Token"
 	JobTokenHeader     = "Job-Token"

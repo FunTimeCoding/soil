@@ -11,6 +11,12 @@ func NewEnvironment(o ...Option) *Client {
 		o = append(o, WithGroups(s))
 	}
 
+	if s := environment.SliceInteger64(
+		constant.ProjectEnvironment,
+	); len(s) > 0 {
+		o = append(o, WithProjects(s))
+	}
+
 	return New(
 		web.TrimScheme(environment.Required(constant.HostEnvironment)),
 		environment.Required(constant.TokenEnvironment),

@@ -7,6 +7,22 @@ import (
 )
 
 func (c *Client) Projects() ([]*project.Project, error) {
+	if len(c.projects) > 0 {
+		var selected []*project.Project
+
+		for _, i := range c.projects {
+			p, e := c.Project(i)
+
+			if e != nil {
+				return nil, e
+			}
+
+			selected = append(selected, p)
+		}
+
+		return selected, nil
+	}
+
 	if len(c.groups) > 0 {
 		return c.GroupProjects(c.groups...)
 	}

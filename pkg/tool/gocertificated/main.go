@@ -26,7 +26,7 @@ func Main(
 	o.Address = a.Address()
 	o.PostgresLocator = a.GetString(argumentConstant.Postgres)
 	o.LitePath = a.GetString(argumentConstant.Lite)
-	o.Project = environment.Required(gitlabConstant.ProjectEnvironment)
+	o.Project = environment.Required(gitlabConstant.ProjectNameEnvironment)
 	o.Branch = constant.PublishBranch
 	o.AuthorityDirectory = environment.Required(
 		constant.AuthorityDirectoryEnvironment,
