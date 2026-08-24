@@ -37,7 +37,7 @@ func Run(
 			worker.New(
 				github.NewEnvironment(),
 				o.Owner,
-				o.Interval,
+				constant.PollInterval,
 				m.Registry(),
 				l,
 				r,

@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/gogithubd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogithubd/option"
-	"time"
 )
 
 func Main(
@@ -24,11 +23,9 @@ func Main(
 		environment.Optional(constant.OwnerEnvironment),
 		"GitHub owner",
 	)
-	a.Duration(argumentConstant.Interval, 5*time.Minute, "Poll interval")
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
 	o.Owner = a.GetString(argumentConstant.Owner)
-	o.Interval = a.GetDuration(argumentConstant.Interval)
 	o.Verbose = a.GetBoolean(argumentConstant.Verbose)
 	Run(o, r)
 }

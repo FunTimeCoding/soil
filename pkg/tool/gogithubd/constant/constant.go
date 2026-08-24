@@ -1,6 +1,11 @@
 package constant
 
-import "github.com/funtimecoding/soil/pkg/identity"
+import (
+	"github.com/funtimecoding/soil/pkg/identity"
+	"time"
+)
+
+const PollInterval = 5 * time.Minute
 
 var Identity = identity.New(
 	"gogithubd",
