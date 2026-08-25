@@ -21,3 +21,16 @@ const (
 	ContainerShutdownForce   = false
 	ContainerShutdownTimeout = 60
 )
+
+const (
+	NodeType      = "node"
+	MachineType   = "qemu"
+	ContainerType = "lxc"
+	StorageType   = "storage"
+)
+
+const (
+	RunningStatus   = "running"
+	OnlineStatus    = "online"
+	AvailableStatus = "available"
+)

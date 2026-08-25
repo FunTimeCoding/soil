@@ -3,6 +3,7 @@ package service
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/model_context/argument/create_machine"
 )
@@ -65,7 +66,7 @@ func (s *Service) CreateMachine(
 
 		resizeTask, e := c.ResizeDisk(
 			vm,
-			"virtio0",
+			constant.PrimaryDiskOption,
 			fmt.Sprintf("%dG", diskSize),
 		)
 

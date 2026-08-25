@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/model_context/argument/update_machine"
 	"github.com/luthermonson/go-proxmox"
@@ -20,14 +21,20 @@ func (s *Service) UpdateMachine(
 	if a.Name != "" {
 		options = append(
 			options,
-			proxmox.VirtualMachineOption{Name: "name", Value: a.Name},
+			proxmox.VirtualMachineOption{
+				Name:  constant.NameOption,
+				Value: a.Name,
+			},
 		)
 	}
 
 	if a.Tags != "" {
 		options = append(
 			options,
-			proxmox.VirtualMachineOption{Name: "tags", Value: a.Tags},
+			proxmox.VirtualMachineOption{
+				Name:  constant.TagsOption,
+				Value: a.Tags,
+			},
 		)
 	}
 
@@ -40,21 +47,30 @@ func (s *Service) UpdateMachine(
 
 		options = append(
 			options,
-			proxmox.VirtualMachineOption{Name: "onboot", Value: value},
+			proxmox.VirtualMachineOption{
+				Name:  constant.OnBootOption,
+				Value: value,
+			},
 		)
 	}
 
 	if a.Cores > 0 {
 		options = append(
 			options,
-			proxmox.VirtualMachineOption{Name: "cores", Value: a.Cores},
+			proxmox.VirtualMachineOption{
+				Name:  constant.CoresOption,
+				Value: a.Cores,
+			},
 		)
 	}
 
 	if a.Memory > 0 {
 		options = append(
 			options,
-			proxmox.VirtualMachineOption{Name: "memory", Value: a.Memory},
+			proxmox.VirtualMachineOption{
+				Name:  constant.MemoryOption,
+				Value: a.Memory,
+			},
 		)
 	}
 
@@ -62,7 +78,7 @@ func (s *Service) UpdateMachine(
 		options = append(
 			options,
 			proxmox.VirtualMachineOption{
-				Name:  "description",
+				Name:  constant.DescriptionOption,
 				Value: a.Description,
 			},
 		)
@@ -72,7 +88,7 @@ func (s *Service) UpdateMachine(
 		options = append(
 			options,
 			proxmox.VirtualMachineOption{
-				Name:  "delete",
+				Name:  constant.DeleteOption,
 				Value: strings.TrimSpace(a.Delete),
 			},
 		)

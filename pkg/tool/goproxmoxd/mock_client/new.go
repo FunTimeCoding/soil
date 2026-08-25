@@ -16,6 +16,8 @@ func New() *Client {
 		networks:           make(map[string]proxmox.NodeNetworks),
 		storages:           make(map[string]proxmox.Storages),
 		storageContent:     make(map[string][]*proxmox.StorageContent),
+		updatesPending:     make(map[string][]*proxmox.APTUpdate),
+		version:            &proxmox.Version{},
 		nextID:             100,
 	}
 }

@@ -1,6 +1,7 @@
 package model_context
 
 import (
+	generative "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -45,7 +46,11 @@ func (s *Server) register() {
 			mcp.WithDescription(
 				"Get detailed resource status for a Proxmox node",
 			),
-			mcp.WithString("node", mcp.Required(), mcp.Description("Node name")),
+			mcp.WithString(
+				constant.NodeParameter,
+				mcp.Required(),
+				mcp.Description("Node name"),
+			),
 		),
 		mcp.NewTypedToolHandler(s.GetNodeStatus),
 	)
@@ -56,7 +61,7 @@ func (s *Server) register() {
 				"List virtual machines, optionally filtered by node",
 			),
 			mcp.WithString(
-				"node",
+				constant.NodeParameter,
 				mcp.Description("Node name (omit to list across all nodes)"),
 			),
 		),
@@ -69,12 +74,12 @@ func (s *Server) register() {
 				"Get status and config for a virtual machine by VMID",
 			),
 			mcp.WithNumber(
-				"identifier",
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("VM ID"),
 			),
 			mcp.WithString(
-				"node",
+				constant.NodeParameter,
 				mcp.Description("Node name (omit to search all nodes)"),
 			),
 		),
@@ -85,12 +90,12 @@ func (s *Server) register() {
 			constant.StartMachine,
 			mcp.WithDescription("Start a virtual machine"),
 			mcp.WithNumber(
-				"identifier",
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Machine ID"),
 			),
 			mcp.WithString(
-				"node",
+				constant.NodeParameter,
 				mcp.Description("Node name (omit to search all nodes)"),
 			),
 		),
@@ -101,12 +106,12 @@ func (s *Server) register() {
 			constant.StopMachine,
 			mcp.WithDescription("Stop a virtual machine immediately"),
 			mcp.WithNumber(
-				"identifier",
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Machine ID"),
 			),
 			mcp.WithString(
-				"node",
+				constant.NodeParameter,
 				mcp.Description("Node name (omit to search all nodes)"),
 			),
 		),
@@ -117,12 +122,12 @@ func (s *Server) register() {
 			constant.ShutdownMachine,
 			mcp.WithDescription("Gracefully shutdown a virtual machine"),
 			mcp.WithNumber(
-				"identifier",
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Machine ID"),
 			),
 			mcp.WithString(
-				"node",
+				constant.NodeParameter,
 				mcp.Description("Node name (omit to search all nodes)"),
 			),
 		),
@@ -133,12 +138,12 @@ func (s *Server) register() {
 			constant.ResetMachine,
 			mcp.WithDescription("Reset a virtual machine"),
 			mcp.WithNumber(
-				"identifier",
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Machine ID"),
 			),
 			mcp.WithString(
-				"node",
+				constant.NodeParameter,
 				mcp.Description("Node name (omit to search all nodes)"),
 			),
 		),
@@ -149,12 +154,12 @@ func (s *Server) register() {
 			constant.ListMachineSnapshots,
 			mcp.WithDescription("List snapshots for a virtual machine"),
 			mcp.WithNumber(
-				"identifier",
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Machine ID"),
 			),
 			mcp.WithString(
-				"node",
+				constant.NodeParameter,
 				mcp.Description("Node name (omit to search all nodes)"),
 			),
 		),
@@ -165,17 +170,17 @@ func (s *Server) register() {
 			constant.CreateMachineSnapshot,
 			mcp.WithDescription("Create a snapshot of a virtual machine"),
 			mcp.WithNumber(
-				"identifier",
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Machine ID"),
 			),
 			mcp.WithString(
-				"name",
+				generative.ParameterName,
 				mcp.Required(),
 				mcp.Description("Snapshot name"),
 			),
 			mcp.WithString(
-				"node",
+				constant.NodeParameter,
 				mcp.Description("Node name (omit to search all nodes)"),
 			),
 		),
@@ -186,17 +191,17 @@ func (s *Server) register() {
 			constant.RollbackMachineSnapshot,
 			mcp.WithDescription("Rollback a virtual machine to a snapshot"),
 			mcp.WithNumber(
-				"identifier",
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Machine ID"),
 			),
 			mcp.WithString(
-				"name",
+				generative.ParameterName,
 				mcp.Required(),
 				mcp.Description("Snapshot name"),
 			),
 			mcp.WithString(
-				"node",
+				constant.NodeParameter,
 				mcp.Description("Node name (omit to search all nodes)"),
 			),
 		),
@@ -207,17 +212,17 @@ func (s *Server) register() {
 			constant.DeleteMachineSnapshot,
 			mcp.WithDescription("Delete a snapshot from a virtual machine"),
 			mcp.WithNumber(
-				"identifier",
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Machine ID"),
 			),
 			mcp.WithString(
-				"name",
+				generative.ParameterName,
 				mcp.Required(),
 				mcp.Description("Snapshot name"),
 			),
 			mcp.WithString(
-				"node",
+				constant.NodeParameter,
 				mcp.Description("Node name (omit to search all nodes)"),
 			),
 		),
@@ -230,18 +235,25 @@ func (s *Server) register() {
 				"Create a virtual machine. Waits for the creation task to complete before returning.",
 			),
 			mcp.WithString(
-				"node",
+				constant.NodeParameter,
 				mcp.Required(),
 				mcp.Description("Target node name"),
 			),
-			mcp.WithString("name", mcp.Required(), mcp.Description("VM name")),
+			mcp.WithString(
+				generative.ParameterName,
+				mcp.Required(),
+				mcp.Description("VM name"),
+			),
 			mcp.WithNumber(
-				"identifier",
+				generative.ParameterIdentifier,
 				mcp.Description("VMID (auto-allocated when omitted)"),
 			),
-			mcp.WithNumber("cores", mcp.Description("CPU cores (default 2)")),
 			mcp.WithNumber(
-				"memory",
+				constant.CoresOption,
+				mcp.Description("CPU cores (default 2)"),
+			),
+			mcp.WithNumber(
+				constant.MemoryOption,
 				mcp.Description("Memory in MiB (default 2048)"),
 			),
 			mcp.WithNumber(
@@ -273,11 +285,11 @@ func (s *Server) register() {
 				mcp.Description("CPU type (default host)"),
 			),
 			mcp.WithBoolean(
-				"agent",
+				constant.AgentOption,
 				mcp.Description("Enable QEMU guest agent (default true)"),
 			),
 			mcp.WithBoolean(
-				"onboot",
+				constant.OnBootOption,
 				mcp.Description("Start VM automatically on host boot"),
 			),
 			mcp.WithString("ci_user", mcp.Description("Cloud-init user")),
@@ -307,7 +319,10 @@ func (s *Server) register() {
 				"start",
 				mcp.Description("Start VM after creation (default false)"),
 			),
-			mcp.WithString("tags", mcp.Description("Semicolon-separated tags")),
+			mcp.WithString(
+				constant.TagsOption,
+				mcp.Description("Semicolon-separated tags"),
+			),
 			mcp.WithString(
 				"extras",
 				mcp.Description(
@@ -324,28 +339,37 @@ func (s *Server) register() {
 				"Update configuration of an existing virtual machine.",
 			),
 			mcp.WithNumber(
-				"identifier",
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Machine ID"),
 			),
 			mcp.WithString(
-				"node",
+				constant.NodeParameter,
 				mcp.Description("Node name (omit to search all nodes)"),
 			),
-			mcp.WithString("name", mcp.Description("New VM name")),
 			mcp.WithString(
-				"tags",
+				generative.ParameterName,
+				mcp.Description("New VM name"),
+			),
+			mcp.WithString(
+				constant.TagsOption,
 				mcp.Description("Semicolon-separated tags (replaces existing)"),
 			),
 			mcp.WithBoolean(
-				"onboot",
+				constant.OnBootOption,
 				mcp.Description("Start VM automatically on host boot"),
 			),
-			mcp.WithNumber("cores", mcp.Description("CPU cores")),
-			mcp.WithNumber("memory", mcp.Description("Memory in MiB")),
-			mcp.WithString("description", mcp.Description("VM description")),
+			mcp.WithNumber(constant.CoresOption, mcp.Description("CPU cores")),
+			mcp.WithNumber(
+				constant.MemoryOption,
+				mcp.Description("Memory in MiB"),
+			),
 			mcp.WithString(
-				"delete",
+				constant.DescriptionOption,
+				mcp.Description("VM description"),
+			),
+			mcp.WithString(
+				constant.DeleteOption,
 				mcp.Description(
 					"Comma-separated field names to clear, e.g. tags,description",
 				),
@@ -360,17 +384,17 @@ func (s *Server) register() {
 				"Clone a virtual machine. Waits for the clone task to complete before returning.",
 			),
 			mcp.WithNumber(
-				"identifier",
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Source machine ID to clone from"),
 			),
 			mcp.WithString(
-				"name",
+				generative.ParameterName,
 				mcp.Required(),
 				mcp.Description("Name for the new VM"),
 			),
 			mcp.WithString(
-				"node",
+				constant.NodeParameter,
 				mcp.Description("Node name (omit to search all nodes)"),
 			),
 			mcp.WithNumber(
@@ -386,7 +410,7 @@ func (s *Server) register() {
 				),
 			),
 			mcp.WithString(
-				"storage",
+				constant.StorageParameter,
 				mcp.Description("Target storage for the clone"),
 			),
 			mcp.WithString(
@@ -405,12 +429,12 @@ func (s *Server) register() {
 				"Delete a virtual machine. The VM must be stopped first. Waits for deletion to complete.",
 			),
 			mcp.WithNumber(
-				"identifier",
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Machine ID"),
 			),
 			mcp.WithString(
-				"node",
+				constant.NodeParameter,
 				mcp.Description("Node name (omit to search all nodes)"),
 			),
 			mcp.WithBoolean(
@@ -429,7 +453,7 @@ func (s *Server) register() {
 				"List LXC containers, optionally filtered by node",
 			),
 			mcp.WithString(
-				"node",
+				constant.NodeParameter,
 				mcp.Description("Node name (omit to list across all nodes)"),
 			),
 		),
@@ -442,12 +466,12 @@ func (s *Server) register() {
 				"Get status and config for an LXC container by VMID",
 			),
 			mcp.WithNumber(
-				"identifier",
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Container ID"),
 			),
 			mcp.WithString(
-				"node",
+				constant.NodeParameter,
 				mcp.Description("Node name (omit to search all nodes)"),
 			),
 		),
@@ -458,12 +482,12 @@ func (s *Server) register() {
 			constant.StartContainer,
 			mcp.WithDescription("Start an LXC container"),
 			mcp.WithNumber(
-				"identifier",
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Container ID"),
 			),
 			mcp.WithString(
-				"node",
+				constant.NodeParameter,
 				mcp.Description("Node name (omit to search all nodes)"),
 			),
 		),
@@ -476,12 +500,12 @@ func (s *Server) register() {
 				"Gracefully shutdown an LXC container - prefer this over stop",
 			),
 			mcp.WithNumber(
-				"identifier",
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Container ID"),
 			),
 			mcp.WithString(
-				"node",
+				constant.NodeParameter,
 				mcp.Description("Node name (omit to search all nodes)"),
 			),
 		),
@@ -494,12 +518,12 @@ func (s *Server) register() {
 				"Stop an LXC container immediately - a hard kill, use shutdown_container unless the guest is unresponsive",
 			),
 			mcp.WithNumber(
-				"identifier",
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Container ID"),
 			),
 			mcp.WithString(
-				"node",
+				constant.NodeParameter,
 				mcp.Description("Node name (omit to search all nodes)"),
 			),
 		),
@@ -510,12 +534,12 @@ func (s *Server) register() {
 			constant.ListContainerSnapshots,
 			mcp.WithDescription("List snapshots for an LXC container"),
 			mcp.WithNumber(
-				"identifier",
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Container ID"),
 			),
 			mcp.WithString(
-				"node",
+				constant.NodeParameter,
 				mcp.Description("Node name (omit to search all nodes)"),
 			),
 		),
@@ -526,17 +550,17 @@ func (s *Server) register() {
 			constant.CreateContainerSnapshot,
 			mcp.WithDescription("Create a snapshot of an LXC container"),
 			mcp.WithNumber(
-				"identifier",
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Container ID"),
 			),
 			mcp.WithString(
-				"name",
+				generative.ParameterName,
 				mcp.Required(),
 				mcp.Description("Snapshot name"),
 			),
 			mcp.WithString(
-				"node",
+				constant.NodeParameter,
 				mcp.Description("Node name (omit to search all nodes)"),
 			),
 		),
@@ -547,17 +571,17 @@ func (s *Server) register() {
 			constant.RollbackContainerSnapshot,
 			mcp.WithDescription("Rollback an LXC container to a snapshot"),
 			mcp.WithNumber(
-				"identifier",
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Container ID"),
 			),
 			mcp.WithString(
-				"name",
+				generative.ParameterName,
 				mcp.Required(),
 				mcp.Description("Snapshot name"),
 			),
 			mcp.WithString(
-				"node",
+				constant.NodeParameter,
 				mcp.Description("Node name (omit to search all nodes)"),
 			),
 		),
@@ -568,17 +592,17 @@ func (s *Server) register() {
 			constant.DeleteContainerSnapshot,
 			mcp.WithDescription("Delete a snapshot from an LXC container"),
 			mcp.WithNumber(
-				"identifier",
+				generative.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Container ID"),
 			),
 			mcp.WithString(
-				"name",
+				generative.ParameterName,
 				mcp.Required(),
 				mcp.Description("Snapshot name"),
 			),
 			mcp.WithString(
-				"node",
+				constant.NodeParameter,
 				mcp.Description("Node name (omit to search all nodes)"),
 			),
 		),
@@ -588,7 +612,11 @@ func (s *Server) register() {
 		mcp.NewTool(
 			constant.ListNetworks,
 			mcp.WithDescription("List network interfaces on a Proxmox node"),
-			mcp.WithString("node", mcp.Required(), mcp.Description("Node name")),
+			mcp.WithString(
+				constant.NodeParameter,
+				mcp.Required(),
+				mcp.Description("Node name"),
+			),
 		),
 		mcp.NewTypedToolHandler(s.ListNetworks),
 	)
@@ -598,7 +626,11 @@ func (s *Server) register() {
 			mcp.WithDescription(
 				"List storage backends on a node. Shows type, content types, and usage.",
 			),
-			mcp.WithString("node", mcp.Required(), mcp.Description("Node name")),
+			mcp.WithString(
+				constant.NodeParameter,
+				mcp.Required(),
+				mcp.Description("Node name"),
+			),
 		),
 		mcp.NewTypedToolHandler(s.ListStorages),
 	)
@@ -608,9 +640,13 @@ func (s *Server) register() {
 			mcp.WithDescription(
 				"List content on a storage backend. Returns ISOs, disk images, templates, and backups with their volume identifiers.",
 			),
-			mcp.WithString("node", mcp.Required(), mcp.Description("Node name")),
 			mcp.WithString(
-				"storage",
+				constant.NodeParameter,
+				mcp.Required(),
+				mcp.Description("Node name"),
+			),
+			mcp.WithString(
+				constant.StorageParameter,
 				mcp.Required(),
 				mcp.Description("Storage name from list_storages"),
 			),
@@ -623,14 +659,18 @@ func (s *Server) register() {
 			mcp.WithDescription(
 				"Download a file from a URL to a storage backend. Use content 'import' for qcow2 cloud images, 'iso' for ISOs, 'vztmpl' for container templates. Waits for the download to complete.",
 			),
-			mcp.WithString("node", mcp.Required(), mcp.Description("Node name")),
 			mcp.WithString(
-				"storage",
+				constant.NodeParameter,
+				mcp.Required(),
+				mcp.Description("Node name"),
+			),
+			mcp.WithString(
+				constant.StorageParameter,
 				mcp.Required(),
 				mcp.Description("Storage name from list_storages"),
 			),
 			mcp.WithString(
-				"content",
+				constant.ContentParameter,
 				mcp.Required(),
 				mcp.Description("Content type: import, iso, or vztmpl"),
 			),
@@ -654,12 +694,12 @@ func (s *Server) register() {
 				"Create a cloud-init or other snippet file on the Proxmox host via SSH. Returns the volume reference for use with cicustom.",
 			),
 			mcp.WithString(
-				"name",
+				generative.ParameterName,
 				mcp.Required(),
 				mcp.Description("Snippet filename, e.g. cloud-init-agent.yml"),
 			),
 			mcp.WithString(
-				"content",
+				constant.ContentParameter,
 				mcp.Required(),
 				mcp.Description("File content, e.g. a cloud-init YAML body"),
 			),
@@ -671,7 +711,7 @@ func (s *Server) register() {
 			constant.GetSnippet,
 			mcp.WithDescription("Read a snippet file from the Proxmox host"),
 			mcp.WithString(
-				"name",
+				generative.ParameterName,
 				mcp.Required(),
 				mcp.Description("Snippet filename"),
 			),
@@ -690,7 +730,7 @@ func (s *Server) register() {
 			constant.DeleteSnippet,
 			mcp.WithDescription("Delete a snippet file from the Proxmox host"),
 			mcp.WithString(
-				"name",
+				generative.ParameterName,
 				mcp.Required(),
 				mcp.Description("Snippet filename"),
 			),

@@ -21,6 +21,7 @@ func (c *Client) CertificateRequests() []certificate_request.CertificateRequest 
 			Name:      item.GetName(),
 			Namespace: item.GetNamespace(),
 			Ready:     true,
+			Created:   item.GetCreationTimestamp().Time,
 		}
 		conditions, _, f := unstructured.NestedSlice(
 			item.Object,

@@ -16,6 +16,10 @@ type Client struct {
 	networks           map[string]proxmox.NodeNetworks
 	storages           map[string]proxmox.Storages
 	storageContent     map[string][]*proxmox.StorageContent
+	updatesPending     map[string][]*proxmox.APTUpdate
+	notInBackup        []*proxmox.BackupGuestEntry
+	version            *proxmox.Version
+	failure            error
 	nextID             int
 	mutex              sync.Mutex
 }

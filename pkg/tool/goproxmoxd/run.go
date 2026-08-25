@@ -6,13 +6,16 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/metric"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
 	generated "github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/option"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/server"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/service"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/worker"
 	"github.com/funtimecoding/soil/pkg/web"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
 
@@ -22,8 +25,22 @@ func Run(
 ) {
 	r := s.Reporter()
 	v := service.New(o.Inventory)
+	l := logger.New(context.Background())
+	m := metric.New()
 	lifecycle.New(
-		logger.New(context.Background()),
+		l,
+		lifecycle.WithWorker(
+			worker.New(v, constant.PollInterval, m.Registry(), l, r),
+		),
+		lifecycle.WithServer(
+			lifecycleServer.New(
+				constant.Identity,
+				webConstant.MetricAddress,
+				func(x *http.ServeMux) {
+					x.Handle(webConstant.MetricsPath, m.Exporter())
+				},
+			),
+		),
 		lifecycle.WithServer(
 			lifecycleServer.New(
 				constant.Identity,

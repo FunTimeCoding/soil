@@ -17,16 +17,24 @@ func (c *Client) Certificates() []certificate.Certificate {
 	var result []certificate.Certificate
 
 	for _, item := range list.Items {
+		issuer, _, f := unstructured.NestedString(
+			item.Object,
+			constant.SpecField,
+			constant.IssuerReferenceField,
+			constant.IssuerReferenceName,
+		)
+		errors.PanicOnError(f)
 		r := certificate.Certificate{
 			Name:      item.GetName(),
 			Namespace: item.GetNamespace(),
+			Issuer:    issuer,
 		}
-		conditions, _, f := unstructured.NestedSlice(
+		conditions, _, g := unstructured.NestedSlice(
 			item.Object,
 			constant.StatusField,
 			constant.ConditionsField,
 		)
-		errors.PanicOnError(f)
+		errors.PanicOnError(g)
 
 		for _, raw := range conditions {
 			o, isMap := raw.(map[string]any)

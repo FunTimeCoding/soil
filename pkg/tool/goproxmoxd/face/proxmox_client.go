@@ -9,6 +9,10 @@ type ProxmoxClient interface {
 	Nodes() (proxmox.NodeStatuses, error)
 	Node(name string) (*proxmox.Node, error)
 	NodeStatus(name string) (*node_status.Status, error)
+	NodeVersion(n *proxmox.Node) (*proxmox.Version, error)
+	ClusterResources(filters ...string) (proxmox.ClusterResources, error)
+	GuestsNotInBackup() ([]*proxmox.BackupGuestEntry, error)
+	UpdatesPending(n *proxmox.Node) ([]*proxmox.APTUpdate, error)
 	Machines(n *proxmox.Node) (proxmox.VirtualMachines, error)
 	Machine(
 		n *proxmox.Node,

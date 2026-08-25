@@ -2,6 +2,7 @@ package update_machine
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
 	"strings"
 )
 
@@ -9,27 +10,27 @@ func (m *Machine) Validate() error {
 	setNames := make(map[string]bool)
 
 	if m.Name != "" {
-		setNames["name"] = true
+		setNames[constant.NameOption] = true
 	}
 
 	if m.Tags != "" {
-		setNames["tags"] = true
+		setNames[constant.TagsOption] = true
 	}
 
 	if m.OnBoot != nil {
-		setNames["onboot"] = true
+		setNames[constant.OnBootOption] = true
 	}
 
 	if m.Cores > 0 {
-		setNames["cores"] = true
+		setNames[constant.CoresOption] = true
 	}
 
 	if m.Memory > 0 {
-		setNames["memory"] = true
+		setNames[constant.MemoryOption] = true
 	}
 
 	if m.Description != "" {
-		setNames["description"] = true
+		setNames[constant.DescriptionOption] = true
 	}
 
 	if m.Delete != "" {

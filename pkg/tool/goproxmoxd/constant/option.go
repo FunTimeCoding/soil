@@ -1,0 +1,26 @@
+package constant
+
+const (
+	AgentOption                 = "agent"
+	BalloonOption               = "balloon"
+	BootOption                  = "boot"
+	CloudInitPasswordOption     = "cipassword"
+	CloudInitUserOption         = "ciuser"
+	CoresOption                 = "cores"
+	DeleteOption                = "delete"
+	DescriptionOption           = "description"
+	DiskControllerOption        = "scsihw"
+	InternetConfigurationOption = "ipconfig0"
+	MemoryOption                = "memory"
+	NameOption                  = "name"
+	OnBootOption                = "onboot"
+	OperatingSystemOption       = "ostype"
+	PrimaryDiskOption           = "virtio0"
+	PrimaryNetworkOption        = "net0"
+	ProcessorOption             = "cpu"
+	RemovableDriveOption        = "ide2"
+	SearchDomainOption          = "searchdomain"
+	SecureShellKeysOption       = "sshkeys"
+	SocketsOption               = "sockets"
+	TagsOption                  = "tags"
+)

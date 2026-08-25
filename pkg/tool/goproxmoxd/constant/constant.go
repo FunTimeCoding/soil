@@ -3,7 +3,10 @@ package constant
 import (
 	"github.com/funtimecoding/soil/pkg/identity"
 	"github.com/funtimecoding/soil/pkg/identity/paragraph"
+	"time"
 )
+
+const PollInterval = 30 * time.Second
 
 var Identity = identity.New(
 	"goproxmoxd",
