@@ -1,7 +1,7 @@
 package argument
 
 type CloseTab struct {
-	TabID string `json:"tab_id"`
-	Title string `json:"title"`
-	URL   string `json:"url"`
+	TabIdentifier string `json:"tab_id"`
+	Title         string `json:"title"`
+	Locator       string `json:"url"`
 }

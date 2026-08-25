@@ -30,7 +30,7 @@ func (s *Server) RollbackContainerSnapshot(
 		node = *r.Params.Node
 	}
 
-	taskID, e := s.service.RollbackContainerSnapshot(
+	taskIdentifier, e := s.service.RollbackContainerSnapshot(
 		c,
 		int(r.Identifier),
 		node,
@@ -49,5 +49,7 @@ func (s *Server) RollbackContainerSnapshot(
 		), nil
 	}
 
-	return server.RollbackContainerSnapshot200JSONResponse{TaskId: taskID}, nil
+	return server.RollbackContainerSnapshot200JSONResponse{
+		TaskId: taskIdentifier,
+	}, nil
 }

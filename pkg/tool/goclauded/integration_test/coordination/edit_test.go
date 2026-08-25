@@ -34,7 +34,7 @@ func TestEdit(t *testing.T) {
 	)
 }
 
-func TestEditNegativeID(t *testing.T) {
+func TestEditNegativeIdentifier(t *testing.T) {
 	s := base.New(t)
 	defer s.Close()
 	a := s.NewSession(t)

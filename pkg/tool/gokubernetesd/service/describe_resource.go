@@ -84,5 +84,9 @@ func (s *Service) DescribeResource(
 
 	filtered := resource.FilterObject(object.Object, q.Unfiltered)
 
-	return describe_result.New(filtered.Object, eventList, filtered.Filtered), nil
+	return describe_result.New(
+		filtered.Object,
+		eventList,
+		filtered.Filtered,
+	), nil
 }

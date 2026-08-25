@@ -63,7 +63,11 @@ func Dialog() {
 					Text:       "charlie",
 					Color:      "#36a64f",
 					Fields: []*model.MessageAttachmentField{
-						{Title: "Current Version", Value: "v2.1.0", Short: true},
+						{
+							Title: "Current Version",
+							Value: "v2.1.0",
+							Short: true,
+						},
 						{Title: "Target Version", Value: "v2.2.1", Short: true},
 					},
 					Actions: []*model.PostAction{

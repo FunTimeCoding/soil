@@ -3,8 +3,8 @@ package raid
 import "time"
 
 type Raid struct {
-	ID        uint `gorm:"primaryKey"`
-	Name      string
-	Date      time.Time
-	CreatedAt time.Time
+	Identifier uint `gorm:"primaryKey;column:id"`
+	Name       string
+	Date       time.Time
+	CreatedAt  time.Time
 }

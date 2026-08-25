@@ -3,7 +3,7 @@ package entry
 import "time"
 
 type Entry struct {
-	ID          uint      `gorm:"primarykey" json:"id"`
+	Identifier  uint      `gorm:"primarykey;column:id" json:"id"`
 	Timestamp   time.Time `json:"timestamp" gorm:"not null;index"`
 	Action      string    `json:"action" gorm:"not null;type:text"`
 	User        string    `json:"user" gorm:"not null;index"`

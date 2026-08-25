@@ -1,7 +1,7 @@
 package raid
 
 type PlayerFightStatistic struct {
-	ID                uint   `gorm:"primaryKey"`
+	Identifier        uint   `gorm:"primaryKey;column:id"`
 	Filename          string `gorm:"index"`
 	Account           string `gorm:"index"`
 	Name              string

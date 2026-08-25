@@ -12,7 +12,10 @@ func coverageNow() time.Time {
 	return time.Date(2026, 8, 22, 12, 0, 0, 0, time.UTC)
 }
 
-func coverageCall(name string, timestamp string) tool_call.Call {
+func coverageCall(
+	name string,
+	timestamp string,
+) tool_call.Call {
 	return tool_call.Call{Name: name, Timestamp: timestamp}
 }
 

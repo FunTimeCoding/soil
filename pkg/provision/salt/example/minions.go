@@ -16,6 +16,6 @@ func Minions() {
 	}
 
 	for _, m := range result {
-		fmt.Printf("%s (%s %s)\n", m.ID, m.OS, m.OSRelease)
+		fmt.Printf("%s (%s %s)\n", m.Identifier, m.OS, m.OSRelease)
 	}
 }

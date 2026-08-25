@@ -148,5 +148,6 @@ func (s *Server) sessionsPage(
 		w,
 		constant.SessionsTitle,
 		constant.SessionsPath,
-		content...)
+		content...,
+	)
 }

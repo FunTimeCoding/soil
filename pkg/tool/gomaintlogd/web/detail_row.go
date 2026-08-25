@@ -10,10 +10,10 @@ import (
 )
 
 func detailRow(e *entry.Entry) gomponents.Node {
-	target := fmt.Sprintf("#detail-%d", e.ID)
+	target := fmt.Sprintf("#detail-%d", e.Identifier)
 
 	return html.Tr(
-		html.ID(fmt.Sprintf("detail-%d", e.ID)),
+		html.ID(fmt.Sprintf("detail-%d", e.Identifier)),
 		html.Class("detail-row"),
 		html.Td(
 			gomponents.Attr("colspan", "6"),
@@ -24,21 +24,25 @@ func detailRow(e *entry.Entry) gomponents.Node {
 					html.Class("detail-actions"),
 					html.Button(
 						html.Class("outline"),
-						htmx.Get(fragmentLocator(constant.EditPath, e.ID)),
+						htmx.Get(
+							fragmentLocator(constant.EditPath, e.Identifier),
+						),
 						htmx.Target(target),
 						htmx.Swap("outerHTML"),
 						gomponents.Text("Edit"),
 					),
 					html.Button(
 						html.Class("outline contrast"),
-						htmx.Post(fragmentLocator(constant.DeletePath, e.ID)),
+						htmx.Post(
+							fragmentLocator(constant.DeletePath, e.Identifier),
+						),
 						htmx.Confirm("Delete this entry?"),
 						gomponents.Attr(
 							"hx-on::after-request",
 							fmt.Sprintf(
 								"document.getElementById('row-%d')?.remove();document.getElementById('detail-%d')?.remove()",
-								e.ID,
-								e.ID,
+								e.Identifier,
+								e.Identifier,
 							),
 						),
 						gomponents.Text("Delete"),
@@ -50,7 +54,7 @@ func detailRow(e *entry.Entry) gomponents.Node {
 							"onclick",
 							fmt.Sprintf(
 								"var r=document.getElementById('detail-%d');r.style.display='none';r.innerHTML='';r.className=''",
-								e.ID,
+								e.Identifier,
 							),
 						),
 						gomponents.Text("Close"),
@@ -58,7 +62,7 @@ func detailRow(e *entry.Entry) gomponents.Node {
 					html.A(
 						html.Class("outline secondary"),
 						gomponents.Attr("role", "button"),
-						html.Href(entryLocator(e.ID)),
+						html.Href(entryLocator(e.Identifier)),
 						gomponents.Text("Permalink"),
 					),
 				),

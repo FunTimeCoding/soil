@@ -3,7 +3,7 @@ package store
 import "time"
 
 type UsageEvent struct {
-	ID                  uint   `gorm:"primaryKey"`
+	Identifier          uint   `gorm:"primaryKey;column:id"`
 	Tool                string `gorm:"not null;index"`
 	Surface             string `gorm:"not null;index"`
 	Actor               string `gorm:"not null;index"`

@@ -8,7 +8,10 @@ import (
 func (s *Service) MustReindexMemory(m *store.Memory) {
 	if !s.indexable(m) {
 		errors.LogOnError(
-			s.indexer.Delete(ScopeCollection(m.Scope), memoryPath(m.Identifier)),
+			s.indexer.Delete(
+				ScopeCollection(m.Scope),
+				memoryPath(m.Identifier),
+			),
 		)
 
 		return

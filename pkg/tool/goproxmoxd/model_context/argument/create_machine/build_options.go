@@ -129,7 +129,8 @@ func (m *Machine) BuildOptions() []proxmox.VirtualMachineOption {
 			option(
 				constant.SecureShellKeysOption,
 				proxmox.EncodeSSHKeys(
-					keys...),
+					keys...,
+				),
 			),
 		)
 	}

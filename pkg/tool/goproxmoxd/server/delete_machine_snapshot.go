@@ -28,7 +28,7 @@ func (s *Server) DeleteMachineSnapshot(
 		node = *r.Params.Node
 	}
 
-	taskID, e := s.service.DeleteMachineSnapshot(
+	taskIdentifier, e := s.service.DeleteMachineSnapshot(
 		c,
 		int(r.Identifier),
 		node,
@@ -43,5 +43,5 @@ func (s *Server) DeleteMachineSnapshot(
 		return server.DeleteMachineSnapshot500JSONResponse(*s.captureDetail(e)), nil
 	}
 
-	return server.DeleteMachineSnapshot200JSONResponse{TaskId: taskID}, nil
+	return server.DeleteMachineSnapshot200JSONResponse{TaskId: taskIdentifier}, nil
 }

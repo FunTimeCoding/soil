@@ -19,7 +19,7 @@ func (s *Server) UploadFile(
 		return response.Fail("path is required")
 	}
 
-	if a.ChannelID == "" && a.ChannelName == "" {
+	if a.ChannelIdentifier == "" && a.ChannelName == "" {
 		return response.Fail("channel_id or channel_name is required")
 	}
 
@@ -38,7 +38,7 @@ func (s *Server) UploadFile(
 			return s.captureFail(e, "channel not found")
 		}
 	} else {
-		ch, e = s.client.Channel(a.ChannelID)
+		ch, e = s.client.Channel(a.ChannelIdentifier)
 
 		if e != nil {
 			return s.captureFail(e, "channel not found")

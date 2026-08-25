@@ -64,5 +64,6 @@ func (s *Server) historyPage(
 		w,
 		constant.HistoryTitle,
 		constant.HistoryPath,
-		content...)
+		content...,
+	)
 }

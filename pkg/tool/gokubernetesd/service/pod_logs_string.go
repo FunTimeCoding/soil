@@ -47,7 +47,10 @@ func PodLogsString(
 		options.SinceSeconds = &seconds
 	}
 
-	stream, e := c.Clientset().CoreV1().Pods(namespace).GetLogs(pod, options).Stream(
+	stream, e := c.Clientset().CoreV1().Pods(namespace).GetLogs(
+		pod,
+		options,
+	).Stream(
 		x,
 	)
 

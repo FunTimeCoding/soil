@@ -50,7 +50,10 @@ func Lint(
 		}
 	}
 
-	for _, p := range system.FilesRecursive(constant.CurrentDirectory, verbose) {
+	for _, p := range system.FilesRecursive(
+		constant.CurrentDirectory,
+		verbose,
+	) {
 		if Skipped(skip, p) {
 			if verbose {
 				fmt.Printf("Skip file: %s\n", p)

@@ -44,7 +44,7 @@ func (c *Client) IssuesSimple(verbose bool) ([]*issue.Issue, error) {
 				fmt.Printf("Project: %s\n", p.Name)
 			}
 
-			issues, e := c.Issues(o, p.ID, constant.PeriodFortnight)
+			issues, e := c.Issues(o, p.Identifier, constant.PeriodFortnight)
 
 			if e != nil {
 				return nil, e

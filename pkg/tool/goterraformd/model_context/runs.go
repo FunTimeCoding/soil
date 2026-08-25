@@ -25,7 +25,7 @@ func (s *Server) runs(
 
 	for i, v := range result {
 		summaries[i] = model_context.RunSummary{
-			ID:                  v.ID,
+			Identifier:          v.Identifier,
 			CreatedAt:           v.CreatedAt.Format(timeConstant.DateSecond),
 			Scope:               v.Scope,
 			TriggerSource:       v.TriggerSource,

@@ -28,7 +28,7 @@ func (s *Server) ResetMachine(
 		node = *r.Params.Node
 	}
 
-	taskID, e := s.service.ResetMachine(c, int(r.Identifier), node)
+	taskIdentifier, e := s.service.ResetMachine(c, int(r.Identifier), node)
 
 	if e != nil {
 		if not_found.Is(e) {
@@ -38,5 +38,5 @@ func (s *Server) ResetMachine(
 		return server.ResetMachine500JSONResponse(*s.captureDetail(e)), nil
 	}
 
-	return server.ResetMachine200JSONResponse{TaskId: taskID}, nil
+	return server.ResetMachine200JSONResponse{TaskId: taskIdentifier}, nil
 }

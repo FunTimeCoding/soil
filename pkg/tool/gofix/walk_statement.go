@@ -5,7 +5,11 @@ import "github.com/dave/dst"
 func walkStatement(
 	t dst.Stmt,
 	parentLit *dst.CompositeLit,
-	walk func(dst.Node, *dst.CompositeLit, int),
+	walk func(
+		dst.Node,
+		*dst.CompositeLit,
+		int,
+	),
 ) {
 	switch s := t.(type) {
 	case *dst.ExprStmt:

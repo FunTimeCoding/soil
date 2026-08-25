@@ -1,6 +1,7 @@
 package goanalyze
 
 import (
+	"github.com/funtimecoding/soil/pkg/lint/face"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/goanalyze/option"
 	"os"
@@ -15,9 +16,10 @@ func Run(o *option.Analyze) {
 
 	loaded := load(patterns)
 	results := output.NewResults()
+	faces := face.New(loaded)
 
 	for _, p := range loaded {
-		check(p, results, o.Comment)
+		check(p, results, o.Comment, faces)
 	}
 
 	hasBlocked := output.PrintResults(results.Entries, o.Summary)

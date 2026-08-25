@@ -9,7 +9,7 @@ func reportContext(
 	c *client.ClientWithResponses,
 	input *statusLineInput,
 ) {
-	if input.SessionID == "" {
+	if input.SessionIdentifier == "" {
 		return
 	}
 
@@ -38,7 +38,7 @@ func reportContext(
 
 	if _, e := c.PostSessionContextWithResponse(
 		context.Background(),
-		input.SessionID,
+		input.SessionIdentifier,
 		body,
 	); e != nil {
 		return

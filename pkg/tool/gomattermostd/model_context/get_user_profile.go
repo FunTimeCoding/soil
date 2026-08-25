@@ -12,11 +12,11 @@ func (s *Server) GetUserProfile(
 	_ mcp.CallToolRequest,
 	a argument.GetUserProfile,
 ) (*mcp.CallToolResult, error) {
-	if a.UserID == "" {
+	if a.UserIdentifier == "" {
 		return response.Fail("user_id is required")
 	}
 
-	u, e := s.client.User(a.UserID)
+	u, e := s.client.User(a.UserIdentifier)
 
 	if e != nil {
 		return s.captureDetail(e)

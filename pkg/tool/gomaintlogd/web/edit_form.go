@@ -14,7 +14,7 @@ func editForm(
 	e *entry.Entry,
 	message string,
 ) gomponents.Node {
-	target := fmt.Sprintf("#detail-%d", e.ID)
+	target := fmt.Sprintf("#detail-%d", e.Identifier)
 	var alert gomponents.Node
 
 	if message != "" {
@@ -22,14 +22,14 @@ func editForm(
 	}
 
 	return html.Tr(
-		html.ID(fmt.Sprintf("detail-%d", e.ID)),
+		html.ID(fmt.Sprintf("detail-%d", e.Identifier)),
 		html.Class("detail-row"),
 		html.Td(
 			gomponents.Attr("colspan", "6"),
 			alert,
 			html.Form(
 				html.Class("edit-form"),
-				htmx.Post(fragmentLocator(constant.EditPath, e.ID)),
+				htmx.Post(fragmentLocator(constant.EditPath, e.Identifier)),
 				htmx.Target(target),
 				htmx.Swap("outerHTML"),
 				html.Div(
@@ -94,7 +94,9 @@ func editForm(
 					html.Button(
 						html.Type("button"),
 						html.Class("outline secondary"),
-						htmx.Get(fragmentLocator(constant.DetailPath, e.ID)),
+						htmx.Get(
+							fragmentLocator(constant.DetailPath, e.Identifier),
+						),
 						htmx.Target(target),
 						htmx.Swap("outerHTML"),
 						gomponents.Text("Cancel"),

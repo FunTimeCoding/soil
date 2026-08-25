@@ -23,5 +23,8 @@ func (s *Server) GetSnippet(
 
 	b := c.ReadFile(snippetPath(r.Name))
 
-	return server.GetSnippet200JSONResponse{Name: r.Name, Content: string(b)}, nil
+	return server.GetSnippet200JSONResponse{
+		Name:    r.Name,
+		Content: string(b),
+	}, nil
 }

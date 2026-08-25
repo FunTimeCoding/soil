@@ -25,7 +25,7 @@ func IsValidFight(fight *elite.Fight) bool {
 	enemies := 0
 
 	for _, target := range fight.Targets {
-		if target.EnemyPlayer && target.TeamID != 0 {
+		if target.EnemyPlayer && target.TeamIdentifier != 0 {
 			enemies++
 		}
 	}

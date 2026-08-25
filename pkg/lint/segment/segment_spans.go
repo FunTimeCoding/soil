@@ -1,9 +1,6 @@
 package segment
 
-import (
-	"strings"
-	"unicode"
-)
+import "strings"
 
 func segmentSpans(name string) []segmentSpan {
 	var result []segmentSpan
@@ -14,36 +11,32 @@ func segmentSpans(name string) []segmentSpan {
 			offset++
 		}
 
-		segmentStart := offset
+		r := []rune(part)
+		start := 0
 
-		for i, r := range part {
-			if i > 0 && unicode.IsUpper(r) {
-				if segmentStart < offset+i {
-					result = append(
-						result,
-						segmentSpan{
-							start: segmentStart,
-							end:   offset + i,
-							lower: strings.ToLower(
-								name[segmentStart : offset+i],
-							),
-						},
-					)
-				}
-
-				segmentStart = offset + i
+		for i := 1; i < len(r); i++ {
+			if !boundary(r, i) {
+				continue
 			}
-		}
 
-		if segmentStart < offset+len(part) {
 			result = append(
 				result,
 				segmentSpan{
-					start: segmentStart,
+					start: offset + len(string(r[:start])),
+					end:   offset + len(string(r[:i])),
+					lower: strings.ToLower(string(r[start:i])),
+				},
+			)
+			start = i
+		}
+
+		if start < len(r) {
+			result = append(
+				result,
+				segmentSpan{
+					start: offset + len(string(r[:start])),
 					end:   offset + len(part),
-					lower: strings.ToLower(
-						name[segmentStart : offset+len(part)],
-					),
+					lower: strings.ToLower(string(r[start:])),
 				},
 			)
 		}

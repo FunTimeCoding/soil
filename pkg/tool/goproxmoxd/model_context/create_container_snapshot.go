@@ -33,7 +33,7 @@ func (s *Server) CreateContainerSnapshot(
 		return s.captureDetail(e)
 	}
 
-	taskID, e := s.service.CreateContainerSnapshot(
+	taskIdentifier, e := s.service.CreateContainerSnapshot(
 		c,
 		a.Identifier,
 		a.Node,
@@ -48,5 +48,5 @@ func (s *Server) CreateContainerSnapshot(
 		return s.captureDetail(e)
 	}
 
-	return response.SuccessAny(map[string]string{"task_id": taskID})
+	return response.SuccessAny(map[string]string{"task_id": taskIdentifier})
 }

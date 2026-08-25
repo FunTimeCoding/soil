@@ -4,9 +4,9 @@ import "github.com/funtimecoding/soil/pkg/sublime/view"
 
 func (c *Client) OpenFile(path string) (*view.View, error) {
 	v := view.Stub()
-	v.Identifier = c.nextID
+	v.Identifier = c.nextIdentifier
 	v.FilePath = path
-	c.nextID++
+	c.nextIdentifier++
 	c.views = append(c.views, v)
 
 	return v, nil

@@ -634,12 +634,12 @@ paths:
     post:
       operationId: postBackfill
       parameters:
-        - name: cold
-          in: query
-          required: false
-          schema:
-            type: boolean
-          description: Reset tracker offsets and re-read every transcript whole.
+      - name: cold
+        in: query
+        required: false
+        schema:
+          type: boolean
+        description: Reset tracker offsets and re-read every transcript whole.
       responses:
         "200":
           description: Backfill completed.

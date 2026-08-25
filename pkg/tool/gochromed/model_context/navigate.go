@@ -17,7 +17,7 @@ func (s *Server) Navigate(
 		return response.Fail("url is required")
 	}
 
-	t, e := s.resolveTab(a.TabID, "", "")
+	t, e := s.resolveTab(a.TabIdentifier, "", "")
 
 	if e != nil {
 		return response.Fail(e.Error())

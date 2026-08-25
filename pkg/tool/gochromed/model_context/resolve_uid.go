@@ -1,12 +1,12 @@
 package model_context
 
 func (s *Server) resolveUID(
-	tabID string,
+	tabIdentifier string,
 	uid string,
 ) (int64, bool) {
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
-	cache, okay := s.snapshotCache[tabID]
+	cache, okay := s.snapshotCache[tabIdentifier]
 
 	if !okay {
 		return 0, false

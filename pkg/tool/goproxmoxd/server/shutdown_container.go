@@ -28,7 +28,7 @@ func (s *Server) ShutdownContainer(
 		node = *r.Params.Node
 	}
 
-	taskID, e := s.service.ShutdownContainer(c, int(r.Identifier), node)
+	taskIdentifier, e := s.service.ShutdownContainer(c, int(r.Identifier), node)
 
 	if e != nil {
 		if not_found.Is(e) {
@@ -38,5 +38,5 @@ func (s *Server) ShutdownContainer(
 		return server.ShutdownContainer500JSONResponse(*s.captureDetail(e)), nil
 	}
 
-	return server.ShutdownContainer200JSONResponse{TaskId: taskID}, nil
+	return server.ShutdownContainer200JSONResponse{TaskId: taskIdentifier}, nil
 }

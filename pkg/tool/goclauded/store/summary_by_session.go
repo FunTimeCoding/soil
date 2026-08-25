@@ -4,7 +4,10 @@ import "github.com/funtimecoding/soil/pkg/tool/goclauded/store/summary"
 
 func (s *Store) SummaryBySession(sessionIdentifier string) (string, error) {
 	var i summary.Summary
-	result := s.database.Where("session_identifier = ?", sessionIdentifier).Limit(
+	result := s.database.Where(
+		"session_identifier = ?",
+		sessionIdentifier,
+	).Limit(
 		1,
 	).Find(
 		&i,

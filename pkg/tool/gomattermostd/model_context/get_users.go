@@ -31,25 +31,25 @@ func (s *Server) GetUsers(
 	}
 
 	type row struct {
-		ID        string `json:"id"`
-		Username  string `json:"username"`
-		FirstName string `json:"first_name"`
-		LastName  string `json:"last_name"`
-		Nickname  string `json:"nickname"`
-		Email     string `json:"email"`
-		IsBot     bool   `json:"is_bot"`
+		Identifier string `json:"id"`
+		Username   string `json:"username"`
+		FirstName  string `json:"first_name"`
+		LastName   string `json:"last_name"`
+		Nickname   string `json:"nickname"`
+		Email      string `json:"email"`
+		IsBot      bool   `json:"is_bot"`
 	}
 	rows := make([]row, len(users))
 
 	for i, u := range users {
 		rows[i] = row{
-			ID:        u.Id,
-			Username:  u.Username,
-			FirstName: u.FirstName,
-			LastName:  u.LastName,
-			Nickname:  u.Nickname,
-			Email:     u.Email,
-			IsBot:     u.IsBot,
+			Identifier: u.Id,
+			Username:   u.Username,
+			FirstName:  u.FirstName,
+			LastName:   u.LastName,
+			Nickname:   u.Nickname,
+			Email:      u.Email,
+			IsBot:      u.IsBot,
 		}
 	}
 

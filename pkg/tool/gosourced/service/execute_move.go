@@ -36,7 +36,11 @@ func executeMove(
 	decorations := decoration.NewSet()
 
 	for _, entry := range plan.entries {
-		if _, e := decorations.DecorateFile(plan.set, plan.source, entry.file); e != nil {
+		if _, e := decorations.DecorateFile(
+			plan.set,
+			plan.source,
+			entry.file,
+		); e != nil {
 			return nil, e
 		}
 	}
@@ -161,7 +165,10 @@ func executeMove(
 		var spec dst.Spec
 
 		if entry.spec != nil {
-			spec, _ = decorations.DecoratedNode(plan.source, entry.spec).(dst.Spec)
+			spec, _ = decorations.DecoratedNode(
+				plan.source,
+				entry.spec,
+			).(dst.Spec)
 		}
 
 		removeDecoratedDeclaration(file, declaration, spec)

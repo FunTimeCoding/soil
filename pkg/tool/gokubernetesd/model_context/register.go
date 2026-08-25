@@ -134,7 +134,10 @@ func (s *Server) register() {
 				"previous",
 				mcp.Description("Logs from previously terminated container"),
 			),
-			mcp.WithBoolean("timestamps", mcp.Description("Include timestamps")),
+			mcp.WithBoolean(
+				"timestamps",
+				mcp.Description("Include timestamps"),
+			),
 			mcp.WithBoolean(
 				"all",
 				mcp.Description(
@@ -168,7 +171,10 @@ func (s *Server) register() {
 				"type",
 				mcp.Description("Filter by event type: Normal or Warning"),
 			),
-			mcp.WithNumber("limit", mcp.Description("Maximum events to return")),
+			mcp.WithNumber(
+				"limit",
+				mcp.Description("Maximum events to return"),
+			),
 			mcp.WithBoolean(
 				"unfiltered",
 				mcp.Description("Show all events including muted"),

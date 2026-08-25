@@ -8,7 +8,10 @@ import (
 	"time"
 )
 
-func (c *Client) TriggerCertificateIssuance(namespace string, name string) {
+func (c *Client) TriggerCertificateIssuance(
+	namespace string,
+	name string,
+) {
 	resource := c.dynamic.Resource(constant.CertificateGVR).Namespace(namespace)
 	o, e := resource.Get(c.context, name, v1.GetOptions{})
 	errors.PanicOnError(e)

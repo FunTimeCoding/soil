@@ -48,7 +48,10 @@ func Run() {
 		case <-done:
 			return
 		case t := <-ticker.C:
-			if e := l.WriteMessage(websocket.TextMessage, []byte(t.String())); e != nil {
+			if e := l.WriteMessage(
+				websocket.TextMessage,
+				[]byte(t.String()),
+			); e != nil {
 				log.Printf("write: %s\n", e)
 
 				return

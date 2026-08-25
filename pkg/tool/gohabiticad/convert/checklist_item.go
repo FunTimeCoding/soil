@@ -7,7 +7,7 @@ import (
 
 func ChecklistItem(i *checklist_item.Item) *server.ChecklistItem {
 	return &server.ChecklistItem{
-		Identifier: i.ID,
+		Identifier: i.Identifier,
 		Text:       i.Text,
 		Completed:  i.Completed,
 	}

@@ -27,6 +27,12 @@ func History() {
 			marker = "→ "
 		}
 
-		fmt.Printf("%s[%d] %s\n     %s\n", marker, i, entry.Title, entry.URL)
+		fmt.Printf(
+			"%s[%d] %s\n     %s\n",
+			marker,
+			i,
+			entry.Title,
+			entry.Locator,
+		)
 	}
 }

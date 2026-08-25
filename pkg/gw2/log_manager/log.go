@@ -8,7 +8,7 @@ type Log struct {
 	EncounterResult             int         `json:"EncounterResult"`
 	EncounterMode               int         `json:"EncounterMode"`
 	Encounter                   int         `json:"Encounter"`
-	MapID                       int         `json:"MapId"`
+	MapIdentifier               int         `json:"MapId"`
 	PointOfView                 PointOfView `json:"PointOfView"`
 	GameBuild                   int         `json:"GameBuild"`
 	EvtcVersion                 string      `json:"EvtcVersion"`

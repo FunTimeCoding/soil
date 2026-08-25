@@ -17,7 +17,7 @@ func (s *Service) CloneMachine(
 		return 0, e
 	}
 
-	newID, task, e := c.CloneMachine(vm, options)
+	newIdentifier, task, e := c.CloneMachine(vm, options)
 
 	if e != nil {
 		return 0, e
@@ -29,5 +29,5 @@ func (s *Service) CloneMachine(
 		return 0, e
 	}
 
-	return newID, nil
+	return newIdentifier, nil
 }

@@ -40,5 +40,6 @@ func (s *Server) coveragePage(
 		w,
 		constant.CoverageTitle,
 		constant.CoveragePath,
-		content...)
+		content...,
+	)
 }

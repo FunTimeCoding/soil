@@ -7,5 +7,5 @@ func ToStorage(markdown string) string {
 		return markersToMacros(markdown)
 	}
 
-	return markdownToHTML(markdown)
+	return markdownToMarkup(markdown)
 }

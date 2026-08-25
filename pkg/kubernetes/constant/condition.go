@@ -1,11 +1,11 @@
 package constant
 
 const (
-	StatusField            = "status"
-	ConditionsField        = "conditions"
-	SpecField              = "spec"
-	IssuerReferenceField   = "issuerRef"
-	IssuerReferenceName    = "name"
+	StatusField          = "status"
+	ConditionsField      = "conditions"
+	SpecField            = "spec"
+	IssuerReferenceField = "issuerRef"
+	IssuerReferenceName  = "name"
 
 	ConditionFieldType       = "type"
 	ConditionFieldStatus     = "status"

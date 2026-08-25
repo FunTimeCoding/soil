@@ -6,7 +6,11 @@ import (
 )
 
 func (s *Store) CleanupQueue(cutoff time.Time) int64 {
-	result := s.database.Where("consumed = ? AND created_at < ?", true, cutoff).Delete(
+	result := s.database.Where(
+		"consumed = ? AND created_at < ?",
+		true,
+		cutoff,
+	).Delete(
 		queue.Stub(),
 	)
 

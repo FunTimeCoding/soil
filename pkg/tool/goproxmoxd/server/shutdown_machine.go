@@ -28,7 +28,7 @@ func (s *Server) ShutdownMachine(
 		node = *r.Params.Node
 	}
 
-	taskID, e := s.service.ShutdownMachine(c, int(r.Identifier), node)
+	taskIdentifier, e := s.service.ShutdownMachine(c, int(r.Identifier), node)
 
 	if e != nil {
 		if not_found.Is(e) {
@@ -38,5 +38,5 @@ func (s *Server) ShutdownMachine(
 		return server.ShutdownMachine500JSONResponse(*s.captureDetail(e)), nil
 	}
 
-	return server.ShutdownMachine200JSONResponse{TaskId: taskID}, nil
+	return server.ShutdownMachine200JSONResponse{TaskId: taskIdentifier}, nil
 }

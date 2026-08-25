@@ -8,20 +8,20 @@ import (
 )
 
 func (s *Server) resolveTab(
-	tabID string,
+	tabIdentifier string,
 	title string,
 	l string,
 ) (*tab.Tab, error) {
 	tabs := s.client.Tabs()
 
-	if tabID != "" {
+	if tabIdentifier != "" {
 		for _, t := range tabs {
-			if t.Identifier == tabID {
+			if t.Identifier == tabIdentifier {
 				return t, nil
 			}
 		}
 
-		return nil, not_found.New("tab", tabID)
+		return nil, not_found.New("tab", tabIdentifier)
 	}
 
 	if title != "" {

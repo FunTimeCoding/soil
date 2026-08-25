@@ -17,12 +17,12 @@ func TestWebService(t *testing.T) {
 	c := o.Client
 	x := context.Background()
 	k := task.Stub()
-	k.ID = "task-1"
+	k.Identifier = "task-1"
 	k.Text = "Deploy fleet"
 	k.Type = "daily"
 	o.MockClient.AddTask(k)
 	g := tag.Stub()
-	g.ID = "tag-1"
+	g.Identifier = "tag-1"
 	g.Name = "deploy"
 	o.MockClient.AddTag(g)
 	tasks, e := c.GetTasksWithResponse(x, &client.GetTasksParams{})

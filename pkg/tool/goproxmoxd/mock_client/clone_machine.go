@@ -8,19 +8,19 @@ func (c *Client) CloneMachine(
 ) (int, *proxmox.Task, error) {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
-	newID := options.NewID
+	newIdentifier := options.NewID
 
-	if newID == 0 {
-		newID = c.nextID
-		c.nextID++
+	if newIdentifier == 0 {
+		newIdentifier = c.nextIdentifier
+		c.nextIdentifier++
 	}
 
 	clone := &proxmox.VirtualMachine{
-		VMID: proxmox.StringOrUint64(newID),
+		VMID: proxmox.StringOrUint64(newIdentifier),
 		Name: options.Name,
 		Node: vm.Node,
 	}
-	c.machines[vm.Node][newID] = clone
+	c.machines[vm.Node][newIdentifier] = clone
 
-	return newID, &proxmox.Task{UPID: "mock:clone"}, nil
+	return newIdentifier, &proxmox.Task{UPID: "mock:clone"}, nil
 }

@@ -14,7 +14,10 @@ func (s *Store) CompleteTask(name string) (string, error) {
 		return "", nil
 	}
 
-	return i.Topic, s.database.Model(session.Stub()).Where("callsign = ?", name).Updates(
+	return i.Topic, s.database.Model(session.Stub()).Where(
+		"callsign = ?",
+		name,
+	).Updates(
 		map[string]any{"topic": "", "files": "", "last_seen": s.clock()},
 	).Error
 }

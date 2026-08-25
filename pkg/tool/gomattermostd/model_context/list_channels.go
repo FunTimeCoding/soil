@@ -25,7 +25,7 @@ func (s *Server) ListChannels(
 	}
 
 	type row struct {
-		ID          string `json:"id"`
+		Identifier  string `json:"id"`
 		Name        string `json:"name"`
 		DisplayName string `json:"display_name"`
 		Type        string `json:"type"`
@@ -36,7 +36,7 @@ func (s *Server) ListChannels(
 
 	for i, c := range page {
 		rows[i] = row{
-			ID:          c.Id,
+			Identifier:  c.Id,
 			Name:        c.Name,
 			DisplayName: c.DisplayName,
 			Type:        channelTypeName(c.Type),

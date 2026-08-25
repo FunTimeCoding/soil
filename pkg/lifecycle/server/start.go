@@ -19,13 +19,19 @@ func (s *Server) Start() {
 	s.Setup(s.Mux)
 	s.Mux.HandleFunc(
 		route.Get(webConstant.HealthPath),
-		func(w http.ResponseWriter, _ *http.Request) {
+		func(
+			w http.ResponseWriter,
+			_ *http.Request,
+		) {
 			w.WriteHeader(http.StatusOK)
 		},
 	)
 	s.Mux.HandleFunc(
 		route.Get(webConstant.VersionPath),
-		func(w http.ResponseWriter, _ *http.Request) {
+		func(
+			w http.ResponseWriter,
+			_ *http.Request,
+		) {
 			b := s.identity.Stamp()
 			web.EncodeNotation(
 				w,

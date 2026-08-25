@@ -33,7 +33,7 @@ func (s *Server) RollbackContainerSnapshot(
 		return s.captureDetail(e)
 	}
 
-	taskID, e := s.service.RollbackContainerSnapshot(
+	taskIdentifier, e := s.service.RollbackContainerSnapshot(
 		c,
 		a.Identifier,
 		a.Node,
@@ -48,5 +48,5 @@ func (s *Server) RollbackContainerSnapshot(
 		return s.captureDetail(e)
 	}
 
-	return response.SuccessAny(map[string]string{"task_id": taskID})
+	return response.SuccessAny(map[string]string{"task_id": taskIdentifier})
 }

@@ -8,7 +8,10 @@ func (s *Store) UpsertSummary(
 	body string,
 ) error {
 	var existing summary.Summary
-	result := s.database.Where("session_identifier = ?", sessionIdentifier).Limit(
+	result := s.database.Where(
+		"session_identifier = ?",
+		sessionIdentifier,
+	).Limit(
 		1,
 	).Find(
 		&existing,

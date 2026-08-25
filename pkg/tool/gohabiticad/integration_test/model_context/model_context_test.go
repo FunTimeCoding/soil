@@ -16,12 +16,12 @@ func TestModelContext(t *testing.T) {
 	c := o.Client
 	assert.Count(t, 9, c.ListTools())
 	k := task.Stub()
-	k.ID = "task-1"
+	k.Identifier = "task-1"
 	k.Text = "Deploy fleet"
 	k.Type = "daily"
 	o.MockClient.AddTask(k)
 	g := tag.Stub()
-	g.ID = "tag-1"
+	g.Identifier = "tag-1"
 	g.Name = "deploy"
 	o.MockClient.AddTag(g)
 	tasks := c.MustCallTool(constant.GetTasks, map[string]any{})

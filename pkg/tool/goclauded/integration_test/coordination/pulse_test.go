@@ -28,7 +28,7 @@ func TestExternalPulseReachesSessionViaQueue(t *testing.T) {
 	assert.StringContains(t, "deploy complete", pulses[0].Body)
 }
 
-func TestMCPSelfPulseDoesNotEchoBack(t *testing.T) {
+func TestModelContextSelfPulseDoesNotEchoBack(t *testing.T) {
 	s := base.New(t)
 	defer s.Close()
 	a := s.NewSession(t)

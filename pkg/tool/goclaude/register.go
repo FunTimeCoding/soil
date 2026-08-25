@@ -20,7 +20,7 @@ func register(c *command_context.Context) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			session := readHookInput().SessionID
+			session := readHookInput().SessionIdentifier
 
 			if session == "" {
 				return

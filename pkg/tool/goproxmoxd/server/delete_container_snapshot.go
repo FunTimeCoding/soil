@@ -30,7 +30,7 @@ func (s *Server) DeleteContainerSnapshot(
 		node = *r.Params.Node
 	}
 
-	taskID, e := s.service.DeleteContainerSnapshot(
+	taskIdentifier, e := s.service.DeleteContainerSnapshot(
 		c,
 		int(r.Identifier),
 		node,
@@ -49,5 +49,5 @@ func (s *Server) DeleteContainerSnapshot(
 		), nil
 	}
 
-	return server.DeleteContainerSnapshot200JSONResponse{TaskId: taskID}, nil
+	return server.DeleteContainerSnapshot200JSONResponse{TaskId: taskIdentifier}, nil
 }

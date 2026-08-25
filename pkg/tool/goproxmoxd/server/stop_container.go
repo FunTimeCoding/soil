@@ -28,7 +28,7 @@ func (s *Server) StopContainer(
 		node = *r.Params.Node
 	}
 
-	taskID, e := s.service.StopContainer(c, int(r.Identifier), node)
+	taskIdentifier, e := s.service.StopContainer(c, int(r.Identifier), node)
 
 	if e != nil {
 		if not_found.Is(e) {
@@ -38,5 +38,5 @@ func (s *Server) StopContainer(
 		return server.StopContainer500JSONResponse(*s.captureDetail(e)), nil
 	}
 
-	return server.StopContainer200JSONResponse{TaskId: taskID}, nil
+	return server.StopContainer200JSONResponse{TaskId: taskIdentifier}, nil
 }

@@ -26,7 +26,10 @@ func TestCheckPreviewNoSession(t *testing.T) {
 	restClient := s.RESTClient(t)
 	response, e := restClient.GetCheckWithResponse(
 		context.Background(),
-		&client.GetCheckParams{Session: uuid.New().String(), Preview: new(true)},
+		&client.GetCheckParams{
+			Session: uuid.New().String(),
+			Preview: new(true),
+		},
 	)
 	assert.FatalOnError(t, e)
 	assert.False(t, response.JSON200.Changed)

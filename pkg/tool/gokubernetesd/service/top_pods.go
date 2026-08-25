@@ -44,7 +44,10 @@ func (s *Service) TopPods(
 	}
 
 	if f != nil {
-		if strings.Contains(f.Error(), "could not find the requested resource") {
+		if strings.Contains(
+			f.Error(),
+			"could not find the requested resource",
+		) {
 			return nil, unreachable.Format(
 				"metrics API not available - install metrics-server",
 			)

@@ -5,7 +5,11 @@ import "github.com/funtimecoding/soil/pkg/tool/goclauded/store/notification"
 func (s *Store) PendingNotifications(callsign string) ([]notification.Notification, error) {
 	var result []notification.Notification
 
-	if e := s.database.Where("callsign = ? AND consumed = ?", callsign, false).Order(
+	if e := s.database.Where(
+		"callsign = ? AND consumed = ?",
+		callsign,
+		false,
+	).Order(
 		"created_at",
 	).Find(
 		&result,

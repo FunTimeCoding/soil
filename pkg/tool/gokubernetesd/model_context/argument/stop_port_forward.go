@@ -1,5 +1,5 @@
 package argument
 
 type StopPortForward struct {
-	ID string `json:"id"`
+	Identifier string `json:"id"`
 }

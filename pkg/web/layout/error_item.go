@@ -18,7 +18,10 @@ func ErrorItem(
 	if event != "" {
 		nodes = append(
 			nodes,
-			html.Small(html.Class("notification-event"), gomponents.Text(event)),
+			html.Small(
+				html.Class("notification-event"),
+				gomponents.Text(event),
+			),
 		)
 	}
 

@@ -359,7 +359,11 @@ func (s *Server) register() {
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
-			mcp.WithString("sha", mcp.Required(), mcp.Description("Commit SHA")),
+			mcp.WithString(
+				"sha",
+				mcp.Required(),
+				mcp.Description("Commit SHA"),
+			),
 		),
 		mcp.NewTypedToolHandler(s.GetCommit),
 	)
@@ -372,7 +376,11 @@ func (s *Server) register() {
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
-			mcp.WithString("sha", mcp.Required(), mcp.Description("Commit SHA")),
+			mcp.WithString(
+				"sha",
+				mcp.Required(),
+				mcp.Description("Commit SHA"),
+			),
 		),
 		mcp.NewTypedToolHandler(s.GetCommitDiff),
 	)
@@ -428,7 +436,10 @@ func (s *Server) register() {
 				"protected",
 				mcp.Description("Only expose to protected branches/tags"),
 			),
-			mcp.WithBoolean("masked", mcp.Description("Mask value in job logs")),
+			mcp.WithBoolean(
+				"masked",
+				mcp.Description("Mask value in job logs"),
+			),
 			mcp.WithBoolean(
 				"expand",
 				mcp.Description(
@@ -461,7 +472,10 @@ func (s *Server) register() {
 				"protected",
 				mcp.Description("Only expose to protected branches/tags"),
 			),
-			mcp.WithBoolean("masked", mcp.Description("Mask value in job logs")),
+			mcp.WithBoolean(
+				"masked",
+				mcp.Description("Mask value in job logs"),
+			),
 			mcp.WithBoolean(
 				"expand",
 				mcp.Description(

@@ -47,7 +47,12 @@ func (s *Server) CloneMachine(
 		options.SnapName = *r.Body.Snapshot
 	}
 
-	newID, e := s.service.CloneMachine(c, int(r.Identifier), node, options)
+	newIdentifier, e := s.service.CloneMachine(
+		c,
+		int(r.Identifier),
+		node,
+		options,
+	)
 
 	if e != nil {
 		if not_found.Is(e) {
@@ -60,7 +65,7 @@ func (s *Server) CloneMachine(
 	status := "cloned"
 
 	return server.CloneMachine200JSONResponse{
-		Identifier: int64(newID),
+		Identifier: int64(newIdentifier),
 		Status:     &status,
 	}, nil
 }

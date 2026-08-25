@@ -1,5 +1,5 @@
 package store
 
-func (s *Store) ListChildren(parentID int64) ([]MemorySummary, error) {
-	return s.listMemoriesWithParent(parentID)
+func (s *Store) ListChildren(parentIdentifier int64) ([]MemorySummary, error) {
+	return s.listMemoriesWithParent(parentIdentifier)
 }

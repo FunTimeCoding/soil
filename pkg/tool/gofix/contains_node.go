@@ -2,7 +2,10 @@ package gofix
 
 import "github.com/dave/dst"
 
-func containsNode(parent dst.Node, target dst.Node) bool {
+func containsNode(
+	parent dst.Node,
+	target dst.Node,
+) bool {
 	if parent == target {
 		return true
 	}

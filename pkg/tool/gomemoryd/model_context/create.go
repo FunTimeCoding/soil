@@ -33,8 +33,8 @@ func (s *Server) create(
 
 	var parentIdentifier *int64
 
-	if parentID := q.GetFloat(constant.ParentIdentifier, 0); parentID > 0 {
-		identifier := int64(parentID)
+	if value := q.GetFloat(constant.ParentIdentifier, 0); value > 0 {
+		identifier := int64(value)
 		parentIdentifier = &identifier
 	}
 

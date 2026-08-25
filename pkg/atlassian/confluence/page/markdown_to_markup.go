@@ -7,7 +7,7 @@ import (
 	"github.com/yuin/goldmark/extension"
 )
 
-func markdownToHTML(markdown string) string {
+func markdownToMarkup(markdown string) string {
 	m := goldmark.New(goldmark.WithExtensions(extension.Table))
 	var b bytes.Buffer
 	errors.PanicOnError(m.Convert([]byte(markdown), &b))

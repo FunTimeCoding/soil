@@ -35,7 +35,7 @@ func (s *Server) entryPage(
 		w,
 		constant.EntryTitle,
 		entryLocator(identifier),
-		html.H1(gomponents.Textf("%s %d", constant.EntryTitle, e.ID)),
+		html.H1(gomponents.Textf("%s %d", constant.EntryTitle, e.Identifier)),
 		html.Div(html.Class("detail-content"), entryFields(e)),
 		html.A(
 			gomponents.Attr("role", "button"),

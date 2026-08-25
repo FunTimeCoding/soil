@@ -17,7 +17,7 @@ func (s *Server) PostMessage(
 		return response.Fail("message is required")
 	}
 
-	if a.ChannelID == "" && a.ChannelName == "" {
+	if a.ChannelIdentifier == "" && a.ChannelName == "" {
 		return response.Fail("channel_id or channel_name is required")
 	}
 
@@ -32,7 +32,7 @@ func (s *Server) PostMessage(
 		}
 	} else {
 		var e error
-		ch, e = s.client.Channel(a.ChannelID)
+		ch, e = s.client.Channel(a.ChannelIdentifier)
 
 		if e != nil {
 			return s.captureFail(e, "channel not found")

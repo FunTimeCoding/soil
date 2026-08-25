@@ -17,7 +17,11 @@ func TestSearchReturnsResults(t *testing.T) {
 				"captureFail content",
 				0.93,
 			),
-			memory_indexer_tester.TestResult("memory/2", "error handling", 0.71),
+			memory_indexer_tester.TestResult(
+				"memory/2",
+				"error handling",
+				0.71,
+			),
 		),
 		memory_indexer_tester.EmptyFixture(),
 	)

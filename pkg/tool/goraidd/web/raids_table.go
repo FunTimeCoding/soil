@@ -31,7 +31,9 @@ func raidsTable(rows []store.RaidRow) gomponents.Node {
 					return html.Tr(
 						html.Td(
 							html.A(
-								html.Href(fmt.Sprintf("/raids/%d", r.ID)),
+								html.Href(
+									fmt.Sprintf("/raids/%d", r.Identifier),
+								),
 								gomponents.Text(r.Name),
 							),
 						),

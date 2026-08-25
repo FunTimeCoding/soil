@@ -25,8 +25,8 @@ func (s *Service) checkTopLevelResponse(
 	if s.ModelContext && !s.Convert &&
 		!v.DirectoryExists(filepath.Join(path, "server")) {
 		s.addConcern(
-			constant.TopLevelResponseMCPKey,
-			constant.TopLevelResponseMCPText,
+			constant.TopLevelResponseModelContextKey,
+			constant.TopLevelResponseModelContextText,
 			path,
 		)
 	}

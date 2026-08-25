@@ -37,5 +37,5 @@ func (s *Server) PostEvent(
 		), nil
 	}
 
-	return server.PostEvent200JSONResponse{Id: int(e.ID)}, nil
+	return server.PostEvent200JSONResponse{Id: int(e.Identifier)}, nil
 }

@@ -13,7 +13,7 @@ func (s *Server) GetChannel(
 	_ mcp.CallToolRequest,
 	a argument.GetChannel,
 ) (*mcp.CallToolResult, error) {
-	if a.ChannelID == "" && a.ChannelName == "" {
+	if a.ChannelIdentifier == "" && a.ChannelName == "" {
 		return response.Fail("channel_id or channel_name is required")
 	}
 
@@ -28,7 +28,7 @@ func (s *Server) GetChannel(
 		}
 	} else {
 		var e error
-		ch, e = s.client.Channel(a.ChannelID)
+		ch, e = s.client.Channel(a.ChannelIdentifier)
 
 		if e != nil {
 			return s.captureFail(e, "channel not found")

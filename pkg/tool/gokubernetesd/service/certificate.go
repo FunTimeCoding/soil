@@ -55,5 +55,9 @@ func (s *Service) Certificate(
 		}
 	}
 
-	return certificate_detail.New(filtered.Object, requestObject, allFiltered), nil
+	return certificate_detail.New(
+		filtered.Object,
+		requestObject,
+		allFiltered,
+	), nil
 }

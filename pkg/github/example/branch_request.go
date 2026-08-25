@@ -17,7 +17,11 @@ func BranchRequest() {
 	c := github.NewEnvironment()
 	f := console.ExtendedColorFormat.Copy()
 	fmt.Println(
-		c.MustBranchRequest(constant.Namespace, constant.Repository, branch).Format(
+		c.MustBranchRequest(
+			constant.Namespace,
+			constant.Repository,
+			branch,
+		).Format(
 			f,
 		),
 	)

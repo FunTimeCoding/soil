@@ -41,3 +41,31 @@ func TestSegmentsMixed(t *testing.T) {
 		segment.Segments("OutputDirectory"),
 	)
 }
+
+func TestSegmentsTrailingInitialism(t *testing.T) {
+	assert.Strings(
+		t,
+		[]string{"marshal", "json"},
+		segment.Segments("MarshalJSON"),
+	)
+}
+
+func TestSegmentsLeadingInitialism(t *testing.T) {
+	assert.Strings(t, []string{"url", "option"}, segment.Segments("URLOption"))
+}
+
+func TestSegmentsInteriorInitialism(t *testing.T) {
+	assert.Strings(
+		t,
+		[]string{"ip", "configuration"},
+		segment.Segments("IPConfiguration"),
+	)
+}
+
+func TestSegmentsDigitBeforeWord(t *testing.T) {
+	assert.Strings(
+		t,
+		[]string{"base64", "value"},
+		segment.Segments("Base64Value"),
+	)
+}

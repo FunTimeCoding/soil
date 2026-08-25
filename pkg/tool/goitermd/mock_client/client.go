@@ -6,7 +6,7 @@ import (
 )
 
 type Client struct {
-	sessions []*session.Session
-	screens  map[string]*screen.Screen
-	nextID   int
+	sessions       []*session.Session
+	screens        map[string]*screen.Screen
+	nextIdentifier int
 }

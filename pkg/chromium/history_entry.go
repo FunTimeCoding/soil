@@ -1,6 +1,6 @@
 package chromium
 
 type HistoryEntry struct {
-	Title string
-	URL   string
+	Title   string
+	Locator string
 }

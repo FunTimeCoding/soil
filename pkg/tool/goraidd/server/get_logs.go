@@ -59,7 +59,7 @@ func (s *Server) GetLogs(
 				FileName:    f.Filename,
 				Time:        f.Timestamp.Format(constant.DateSecond),
 				Duration:    fmt.Sprintf("%dms", f.DurationMS),
-				MapId:       f.MapID,
+				MapId:       f.MapIdentifier,
 				PlayerCount: f.AlliedCount,
 				Players:     nil,
 			},

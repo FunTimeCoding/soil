@@ -27,5 +27,5 @@ func fightMap(f raid.Fight) string {
 		return f.MapName
 	}
 
-	return fmt.Sprintf("%d", f.MapID)
+	return fmt.Sprintf("%d", f.MapIdentifier)
 }

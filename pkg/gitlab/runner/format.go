@@ -23,7 +23,10 @@ func (r *Runner) Format(f *option.Format) string {
 		s.String(r.formatShared())
 	}
 
-	s.String(r.formatStatus(f), r.formatConcern(f)).RawList(r.RawList).RawDetail(
+	s.String(
+		r.formatStatus(f),
+		r.formatConcern(f),
+	).RawList(r.RawList).RawDetail(
 		r.RawDetail,
 	)
 

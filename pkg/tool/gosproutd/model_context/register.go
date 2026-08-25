@@ -21,7 +21,11 @@ func (s *Server) register() {
 			mcp.WithDescription(
 				"Move a seed to a specific position in the priority list.",
 			),
-			mcp.WithString("name", mcp.Required(), mcp.Description("Seed name")),
+			mcp.WithString(
+				"name",
+				mcp.Required(),
+				mcp.Description("Seed name"),
+			),
 			mcp.WithNumber(
 				"position",
 				mcp.Required(),

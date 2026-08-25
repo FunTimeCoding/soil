@@ -54,6 +54,6 @@ func main() {
 	}
 
 	if false {
-		j.JobsJSON()
+		j.JobsNotation()
 	}
 }

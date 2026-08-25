@@ -25,8 +25,8 @@ func (s *Store) CreateRaid(filenames []string) uint {
 	errors.PanicOnError(
 		s.mapper.Model(raid.NewFight()).
 			Where("filename IN ?", filenames).
-			Update("raid_id", r.ID).Error,
+			Update("raid_id", r.Identifier).Error,
 	)
 
-	return r.ID
+	return r.Identifier
 }

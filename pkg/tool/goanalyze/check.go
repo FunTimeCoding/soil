@@ -21,6 +21,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/type_receiver"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/unchecked_print_write"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/value_return"
+	"github.com/funtimecoding/soil/pkg/lint/face"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"golang.org/x/tools/go/packages"
 )
@@ -29,8 +30,9 @@ func check(
 	p *packages.Package,
 	results *output.Results,
 	comment bool,
+	faces *face.Set,
 ) {
-	naming.Check(p, results)
+	naming.Check(p, results, faces)
 	forbidden_call.Check(p, results)
 	restricted_call.Check(p, results)
 	forbidden_import.Check(p, results)

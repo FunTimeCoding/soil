@@ -64,7 +64,10 @@ func (s *Server) register() {
 			constant.CreateView,
 			mcp.WithDescription("Create a new scratch buffer in Sublime Text"),
 			mcp.WithString("title", mcp.Description("Buffer title")),
-			mcp.WithString("content", mcp.Description("Initial buffer content")),
+			mcp.WithString(
+				"content",
+				mcp.Description("Initial buffer content"),
+			),
 			mcp.WithString(
 				"syntax",
 				mcp.Description("Syntax name (e.g. Go, Python, Markdown)"),

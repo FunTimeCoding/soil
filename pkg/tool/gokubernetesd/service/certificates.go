@@ -30,7 +30,10 @@ func (s *Service) Certificates(
 	)
 
 	if f != nil {
-		if strings.Contains(f.Error(), "could not find the requested resource") {
+		if strings.Contains(
+			f.Error(),
+			"could not find the requested resource",
+		) {
 			return nil, unreachable.Format(
 				"cert-manager not installed - Certificate CRD not found",
 			)

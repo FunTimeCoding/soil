@@ -57,12 +57,16 @@ func playerRaidTable(rows []store.PlayerRaidRow) gomponents.Node {
 							),
 						),
 						html.Td(
-							gomponents.Text(perSecond(r.BoonStrips, seconds, 2)),
+							gomponents.Text(
+								perSecond(r.BoonStrips, seconds, 2),
+							),
 						),
 						html.Td(
 							gomponents.Text(perSecond(r.Barrier, seconds, 1)),
 						),
-						html.Td(gomponents.Text(perSecond(r.Downs, seconds, 1))),
+						html.Td(
+							gomponents.Text(perSecond(r.Downs, seconds, 1)),
+						),
 						html.Td(
 							gomponents.Text(perMinute(r.DeadCount, minutes)),
 						),

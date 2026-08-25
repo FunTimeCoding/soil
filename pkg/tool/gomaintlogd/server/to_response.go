@@ -10,7 +10,7 @@ func toResponse(entries []entry.Entry) []server.EntryResponse {
 
 	for i, e := range entries {
 		r := server.EntryResponse{
-			Id:        int(e.ID),
+			Id:        int(e.Identifier),
 			Timestamp: e.Timestamp,
 			Action:    e.Action,
 			User:      e.User,

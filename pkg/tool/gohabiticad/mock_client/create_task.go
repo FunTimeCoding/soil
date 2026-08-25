@@ -8,7 +8,7 @@ import (
 
 func (c *Client) CreateTask(b *request.CreateTaskBody) (*task.Task, error) {
 	t := task.Stub()
-	t.ID = uuid.New().String()
+	t.Identifier = uuid.New().String()
 	t.Text = b.Text
 	t.Type = b.Type
 	c.tasks = append(c.tasks, t)

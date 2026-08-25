@@ -16,7 +16,11 @@ func (s *Server) RemoveDeviceLabel(
 		return server.RemoveDeviceLabel500JSONResponse(*s.captureDetail(e)), nil
 	}
 
-	if e := s.store.RemoveLabel(constant.DeviceAddress, d.Identifier, r.Key); e != nil {
+	if e := s.store.RemoveLabel(
+		constant.DeviceAddress,
+		d.Identifier,
+		r.Key,
+	); e != nil {
 		return server.RemoveDeviceLabel500JSONResponse(*s.captureDetail(e)), nil
 	}
 

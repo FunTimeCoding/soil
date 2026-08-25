@@ -28,7 +28,7 @@ func (s *Server) StartMachine(
 		node = *r.Params.Node
 	}
 
-	taskID, e := s.service.StartMachine(c, int(r.Identifier), node)
+	taskIdentifier, e := s.service.StartMachine(c, int(r.Identifier), node)
 
 	if e != nil {
 		if not_found.Is(e) {
@@ -38,5 +38,5 @@ func (s *Server) StartMachine(
 		return server.StartMachine500JSONResponse(*s.captureDetail(e)), nil
 	}
 
-	return server.StartMachine200JSONResponse{TaskId: taskID}, nil
+	return server.StartMachine200JSONResponse{TaskId: taskIdentifier}, nil
 }

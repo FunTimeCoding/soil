@@ -58,7 +58,7 @@ func (s *Server) GetEvents(
 
 	for _, e := range events {
 		entry := server.EventEntry{
-			Id:        int(e.ID),
+			Id:        int(e.Identifier),
 			Tool:      e.Tool,
 			Surface:   e.Surface,
 			Actor:     e.Actor,

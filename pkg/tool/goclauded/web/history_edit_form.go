@@ -28,7 +28,7 @@ func (s *Server) historyEditForm(
 	}
 
 	editValue := editableValue(event.Kind, event.Metadata)
-	textareaID := fmt.Sprintf("edit-body-%d", identifier)
+	textareaIdentifier := fmt.Sprintf("edit-body-%d", identifier)
 	w.Header().Set(web.ContentType, "text/html; charset=utf-8")
 	errors.PanicOnError(
 		gomponents.Group(
@@ -38,7 +38,7 @@ func (s *Server) historyEditForm(
 				),
 				html.Td(
 					html.Textarea(
-						html.ID(textareaID),
+						html.ID(textareaIdentifier),
 						html.Name(constant.Body),
 						html.Rows("3"),
 						html.Style("width: 100%"),
@@ -57,7 +57,7 @@ func (s *Server) historyEditForm(
 							gomponents.Attr("hx-swap", "outerHTML"),
 							gomponents.Attr(
 								"hx-include",
-								fmt.Sprintf("#%s", textareaID),
+								fmt.Sprintf("#%s", textareaIdentifier),
 							),
 							gomponents.Text("Save"),
 						),

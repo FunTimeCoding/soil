@@ -25,7 +25,10 @@ func TestGetList(t *testing.T) {
 		[]string{"1", "2", "3"},
 		web.GetList(
 			web.NewGet(
-				locator.New(constant.Localhost).Insecure().Set("a", "1,2,3").String(),
+				locator.New(constant.Localhost).Insecure().Set(
+					"a",
+					"1,2,3",
+				).String(),
 			),
 			"a",
 		),

@@ -23,10 +23,10 @@ func (s *Server) setParent(
 	}
 
 	var parentIdentifier *int64
-	parentID := int64(q.GetFloat(constant.ParentIdentifier, 0))
+	value := int64(q.GetFloat(constant.ParentIdentifier, 0))
 
-	if parentID > 0 {
-		parentIdentifier = &parentID
+	if value > 0 {
+		parentIdentifier = &value
 	}
 
 	if e := s.service.SetParent(identifier, parentIdentifier); e != nil {

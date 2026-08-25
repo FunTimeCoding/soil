@@ -14,8 +14,8 @@ func (c *Client) createWithStatus(
 	markdown string,
 	status string,
 ) (*page.Page, error) {
-	identifier := fmt.Sprintf("%d", c.nextID)
-	c.nextID++
+	identifier := fmt.Sprintf("%d", c.nextIdentifier)
+	c.nextIdentifier++
 	r := response.NewPage()
 	r.Identifier = identifier
 	r.SpaceIdentifier = spaceIdentifier

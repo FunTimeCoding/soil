@@ -7,7 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/web"
 )
 
-func (c *Client) JobsJSON() {
+func (c *Client) JobsNotation() {
 	exec := gojenkins.Executor{
 		Raw:     new(gojenkins.ExecutorResponse),
 		Jenkins: c.client,

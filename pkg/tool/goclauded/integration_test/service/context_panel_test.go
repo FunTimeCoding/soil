@@ -7,7 +7,10 @@ import (
 	"testing"
 )
 
-func panelSession(t *testing.T, identifier string) *service_tester.Tester {
+func panelSession(
+	t *testing.T,
+	identifier string,
+) *service_tester.Tester {
 	t.Helper()
 	s := service_tester.New(t)
 	s.Store.EnsureSession(identifier)

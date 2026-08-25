@@ -18,6 +18,6 @@ func New() *Client {
 		storageContent:     make(map[string][]*proxmox.StorageContent),
 		updatesPending:     make(map[string][]*proxmox.APTUpdate),
 		version:            &proxmox.Version{},
-		nextID:             100,
+		nextIdentifier:     100,
 	}
 }

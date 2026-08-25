@@ -11,14 +11,14 @@ import (
 
 func (c *Client) ClickNode(
 	x context.Context,
-	backendNodeID int64,
+	backendNodeIdentifier int64,
 ) error {
 	return chromedp.Run(
 		x,
 		chromedp.ActionFunc(
 			func(v context.Context) error {
 				o, e := dom.ResolveNode().WithBackendNodeID(
-					cdp.BackendNodeID(backendNodeID),
+					cdp.BackendNodeID(backendNodeIdentifier),
 				).Do(v)
 
 				if e != nil {

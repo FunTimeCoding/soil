@@ -66,7 +66,10 @@ func New(
 						constant.ReportsPath,
 						constant.ReportsTitle,
 					),
-					navigation_item.New(constant.RaidsPath, constant.RaidsTitle),
+					navigation_item.New(
+						constant.RaidsPath,
+						constant.RaidsTitle,
+					),
 					navigation_item.New(
 						constant.PlayersPath,
 						constant.PlayersTitle,

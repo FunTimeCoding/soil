@@ -6,5 +6,9 @@ import (
 )
 
 func (t *Task) Format(f *option.Format) string {
-	return status.New(f).String(string(t.Type), t.State, t.Body).RawList(t.Raw).Format()
+	return status.New(f).String(
+		string(t.Type),
+		t.State,
+		t.Body,
+	).RawList(t.Raw).Format()
 }

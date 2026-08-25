@@ -10,7 +10,7 @@ import (
 
 func TestIssue(t *testing.T) {
 	r := response.NewIssue()
-	r.ID = "1"
+	r.Identifier = "1"
 	r.Type = constant.UpperBravo
 	r.Title = constant.UpperCharlie
 	r.Permalink = constant.UpperDelta

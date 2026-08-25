@@ -12,7 +12,10 @@ import (
 func (s *Store) syncLogCache() {
 	system.Stat(filepath.Join(s.logCachePath, constant.LogFile))
 	logs := log.NewSlice(
-		gw2.ParseLogs(system.ReadBytes(s.logCachePath, constant.LogFile), false),
+		gw2.ParseLogs(
+			system.ReadBytes(s.logCachePath, constant.LogFile),
+			false,
+		),
 	)
 	count := 0
 
@@ -20,10 +23,13 @@ func (s *Store) syncLogCache() {
 		f := raid.NewFight()
 		f.Filename = l.Raw.FileName
 		f.Timestamp = l.Time
-		f.MapID = l.Raw.MapID
+		f.MapIdentifier = l.Raw.MapIdentifier
 		f.AlliedCount = len(l.Raw.Players)
 
-		if r := s.mapper.Where("filename = ?", f.Filename).FirstOrCreate(f); r.RowsAffected > 0 {
+		if r := s.mapper.Where(
+			"filename = ?",
+			f.Filename,
+		).FirstOrCreate(f); r.RowsAffected > 0 {
 			count++
 		}
 	}

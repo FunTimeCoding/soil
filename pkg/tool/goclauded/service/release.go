@@ -16,7 +16,12 @@ func (s *Service) Release(
 		return e
 	}
 
-	if e := s.store.LogEvent(sessionIdentifier, constant.Release, name, nil); e != nil {
+	if e := s.store.LogEvent(
+		sessionIdentifier,
+		constant.Release,
+		name,
+		nil,
+	); e != nil {
 		return e
 	}
 

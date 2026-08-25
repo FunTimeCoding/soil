@@ -28,7 +28,7 @@ func (s *Server) CreateMachineSnapshot(
 		node = *r.Params.Node
 	}
 
-	taskID, e := s.service.CreateMachineSnapshot(
+	taskIdentifier, e := s.service.CreateMachineSnapshot(
 		c,
 		int(r.Identifier),
 		node,
@@ -43,5 +43,5 @@ func (s *Server) CreateMachineSnapshot(
 		return server.CreateMachineSnapshot500JSONResponse(*s.captureDetail(e)), nil
 	}
 
-	return server.CreateMachineSnapshot200JSONResponse{TaskId: taskID}, nil
+	return server.CreateMachineSnapshot200JSONResponse{TaskId: taskIdentifier}, nil
 }

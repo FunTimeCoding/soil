@@ -15,7 +15,7 @@ func (s *Server) GetChannelHistory(
 	_ mcp.CallToolRequest,
 	a argument.GetChannelHistory,
 ) (*mcp.CallToolResult, error) {
-	if a.ChannelID == "" && a.ChannelName == "" {
+	if a.ChannelIdentifier == "" && a.ChannelName == "" {
 		return response.Fail("channel_id or channel_name is required")
 	}
 
@@ -36,7 +36,7 @@ func (s *Server) GetChannelHistory(
 		}
 	} else {
 		var e error
-		ch, e = s.client.Channel(a.ChannelID)
+		ch, e = s.client.Channel(a.ChannelIdentifier)
 
 		if e != nil {
 			return s.captureFail(e, "channel not found")
@@ -73,20 +73,20 @@ func (s *Server) GetChannelHistory(
 	}
 
 	type row struct {
-		ID       string   `json:"id"`
-		Username string   `json:"username"`
-		Message  string   `json:"message"`
-		CreateAt string   `json:"create_at"`
-		RootID   *string  `json:"root_id,omitempty"`
-		FileIds  []string `json:"file_ids,omitempty"`
+		Identifier     string   `json:"id"`
+		Username       string   `json:"username"`
+		Message        string   `json:"message"`
+		CreateAt       string   `json:"create_at"`
+		RootIdentifier *string  `json:"root_id,omitempty"`
+		FileIds        []string `json:"file_ids,omitempty"`
 	}
 	rows := make([]row, len(posts))
 
 	for i, p := range posts {
 		r := row{
-			ID:       p.Raw.Id,
-			Message:  p.Message,
-			CreateAt: formatTime(p.Create),
+			Identifier: p.Raw.Id,
+			Message:    p.Message,
+			CreateAt:   formatTime(p.Create),
 		}
 
 		if p.User != nil {
@@ -94,7 +94,7 @@ func (s *Server) GetChannelHistory(
 		}
 
 		if p.Raw.RootId != "" {
-			r.RootID = new(p.Raw.RootId)
+			r.RootIdentifier = new(p.Raw.RootId)
 		}
 
 		if len(p.Raw.FileIds) > 0 {

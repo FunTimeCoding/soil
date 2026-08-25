@@ -1,6 +1,7 @@
 package naming
 
 import (
+	"github.com/funtimecoding/soil/pkg/lint/face"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"go/ast"
 	"golang.org/x/tools/go/packages"
@@ -9,6 +10,7 @@ import (
 func Check(
 	p *packages.Package,
 	results *output.Results,
+	faces *face.Set,
 ) {
 	for _, file := range p.Syntax {
 		if ast.IsGenerated(file) {
@@ -30,7 +32,7 @@ func Check(
 					return true
 				}
 
-				checkIdent(p, results, ident, o)
+				checkIdent(p, results, ident, o, faces)
 
 				return true
 			},

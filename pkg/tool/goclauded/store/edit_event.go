@@ -12,7 +12,10 @@ func (s *Store) EditEvent(
 ) (*event.Event, error) {
 	var existing event.Event
 
-	if e := s.database.Where("identifier = ?", identifier).First(&existing).Error; e != nil {
+	if e := s.database.Where(
+		"identifier = ?",
+		identifier,
+	).First(&existing).Error; e != nil {
 		if relational.NotFound(e) {
 			return nil, not_found.New("event", identifier)
 		}

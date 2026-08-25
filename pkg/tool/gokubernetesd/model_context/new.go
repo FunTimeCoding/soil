@@ -15,7 +15,10 @@ func New(
 	version string,
 ) *Server {
 	result := &Server{
-		server: server.New(constant.Identity, version).WithResources().WithRecorder(
+		server: server.New(
+			constant.Identity,
+			version,
+		).WithResources().WithRecorder(
 			t,
 		).Server(),
 		service:  s,

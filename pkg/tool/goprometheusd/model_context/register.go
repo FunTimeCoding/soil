@@ -147,7 +147,10 @@ func (s *Server) register() {
 				"limit",
 				mcp.Description("Maximum number of rules to return"),
 			),
-			mcp.WithNumber("offset", mcp.Description("Number of rules to skip")),
+			mcp.WithNumber(
+				"offset",
+				mcp.Description("Number of rules to skip"),
+			),
 		),
 		mcp.NewTypedToolHandler(s.queryRules),
 	)

@@ -32,7 +32,9 @@ func TestTopPods(t *testing.T) {
 	s.AddPodMetrics(
 		"default",
 		"redis",
-		[]map[string]string{{"name": "redis", "cpu": "200m", "memory": "128Mi"}},
+		[]map[string]string{
+			{"name": "redis", "cpu": "200m", "memory": "128Mi"},
+		},
 	)
 	result, e := s.Service.TopPods(
 		context.Background(),

@@ -7,7 +7,7 @@ import (
 
 func New(v *response.Issue) *Issue {
 	return &Issue{
-		MonitorIdentifier: constant.GoSentry.StringIdentifier(v.ID),
+		MonitorIdentifier: constant.GoSentry.StringIdentifier(v.Identifier),
 		Project:           v.Project.Name,
 		Type:              v.Type,
 		Title:             v.Title,

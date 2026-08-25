@@ -11,7 +11,10 @@ func (s *Store) Announce(
 	topic string,
 	files string,
 ) error {
-	result := s.database.Model(session.Stub()).Where("callsign = ?", name).Updates(
+	result := s.database.Model(session.Stub()).Where(
+		"callsign = ?",
+		name,
+	).Updates(
 		map[string]any{
 			"topic":     topic,
 			"files":     files,

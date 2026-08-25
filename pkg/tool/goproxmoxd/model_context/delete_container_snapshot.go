@@ -33,7 +33,7 @@ func (s *Server) DeleteContainerSnapshot(
 		return s.captureDetail(e)
 	}
 
-	taskID, e := s.service.DeleteContainerSnapshot(
+	taskIdentifier, e := s.service.DeleteContainerSnapshot(
 		c,
 		a.Identifier,
 		a.Node,
@@ -48,5 +48,5 @@ func (s *Server) DeleteContainerSnapshot(
 		return s.captureDetail(e)
 	}
 
-	return response.SuccessAny(map[string]string{"task_id": taskID})
+	return response.SuccessAny(map[string]string{"task_id": taskIdentifier})
 }

@@ -5,11 +5,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/raid"
 )
 
-func (s *Store) RaidFights(raidID int) []raid.Fight {
+func (s *Store) RaidFights(raidIdentifier int) []raid.Fight {
 	var fights []raid.Fight
 	errors.PanicOnError(
 		s.mapper.
-			Where("raid_id = ?", raidID).
+			Where("raid_id = ?", raidIdentifier).
 			Order("timestamp ASC").
 			Find(&fights).Error,
 	)

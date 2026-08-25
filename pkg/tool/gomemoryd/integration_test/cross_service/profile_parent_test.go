@@ -22,8 +22,8 @@ func TestProfileCollapsesChildrenUnderParent(t *testing.T) {
 			constant.Description: "Error handling parent",
 		},
 	)
-	var parentID int
-	_, e := fmt.Sscanf(parentResult, "Created memory %d", &parentID)
+	var parentIdentifier int
+	_, e := fmt.Sscanf(parentResult, "Created memory %d", &parentIdentifier)
 	assert.FatalOnError(t, e)
 	childNames := []string{"captureFail", "captureDetail", "clientError"}
 
@@ -34,7 +34,7 @@ func TestProfileCollapsesChildrenUnderParent(t *testing.T) {
 				constant.MemoryName:       name,
 				constant.Content:          fmt.Sprintf("%s content", name),
 				constant.Description:      fmt.Sprintf("%s description", name),
-				constant.ParentIdentifier: parentID,
+				constant.ParentIdentifier: parentIdentifier,
 			},
 		)
 	}
@@ -48,10 +48,10 @@ func TestProfileCollapsesChildrenUnderParent(t *testing.T) {
 		indexIDs[i] = m.Identifier
 	}
 
-	assert.True(t, slices.Contains(indexIDs, int64(parentID)))
+	assert.True(t, slices.Contains(indexIDs, int64(parentIdentifier)))
 
 	for _, m := range profile.Index {
-		if m.Identifier == int64(parentID) {
+		if m.Identifier == int64(parentIdentifier) {
 			assert.Count(t, 3, m.Children)
 
 			for _, name := range childNames {

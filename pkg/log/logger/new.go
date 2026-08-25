@@ -16,6 +16,10 @@ func New(c context.Context) *Logger {
 				&slog.HandlerOptions{Level: slog.LevelInfo},
 			),
 		),
-		plain: log.New(os.Stderr, "PLAIN: ", log.Ldate|log.Ltime|log.Lshortfile),
+		plain: log.New(
+			os.Stderr,
+			"PLAIN: ",
+			log.Ldate|log.Ltime|log.Lshortfile,
+		),
 	}
 }

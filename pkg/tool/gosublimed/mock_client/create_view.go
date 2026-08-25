@@ -8,11 +8,11 @@ func (c *Client) CreateView(
 	syntax string,
 ) (*view.View, error) {
 	v := view.Stub()
-	v.Identifier = c.nextID
+	v.Identifier = c.nextIdentifier
 	v.Title = title
 	v.Text = content
 	v.Syntax = syntax
-	c.nextID++
+	c.nextIdentifier++
 	c.views = append(c.views, v)
 
 	return v, nil

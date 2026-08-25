@@ -31,7 +31,7 @@ func (c *Client) History(identifier string) (*HistoryResult, error) {
 	for _, entry := range entries {
 		result.Entries = append(
 			result.Entries,
-			&HistoryEntry{Title: entry.Title, URL: entry.URL},
+			&HistoryEntry{Title: entry.Title, Locator: entry.URL},
 		)
 	}
 

@@ -20,7 +20,7 @@ const (
 	EmptyFunctionBodyKey  = "empty-function-body"
 	EmptyFunctionBodyText = "Function body with only whitespace"
 
-	ErrorVariableKey  = "err_variable"
+	ErrorVariableKey  = "error_variable"
 	ErrorVariableText = "Use e instead of err for error variable"
 
 	PackageNameKey  = "package_name"
@@ -38,7 +38,7 @@ const (
 	MissingBlankAfterControlKey  = "missing_blank_after_control"
 	MissingBlankAfterControlText = "Missing blank line after control block"
 
-	StrayConstantKey  = "stray_const"
+	StrayConstantKey  = "stray_constant"
 	StrayConstantText = "Top-level const outside of a constant file or constant package"
 
 	FixturePrefix              = "// golint:fixture "
@@ -47,6 +47,8 @@ const (
 	FixtureOutsideTestdataText = "golint:fixture directive outside testdata"
 	FixtureUnknownRuleText     = "unknown golint:fixture rule"
 	FixtureMisplacedText       = "golint:fixture directive must directly precede the declaration it sanctions"
+
+	StringConcatenationKey = "string_concatenation"
 
 	BlankInsideFunctionKey  = "blank_inside_function"
 	BlankInsideFunctionText = "Blank line between statements inside function body"
@@ -57,13 +59,13 @@ const (
 	ExtraneousTopLevelBlankKey  = "extraneous_top_level_blank"
 	ExtraneousTopLevelBlankText = "Extraneous blank line between top-level declarations"
 
-	MissingBlankBetweenVariableConstantKey  = "missing_blank_between_var_const"
+	MissingBlankBetweenVariableConstantKey  = "missing_blank_between_variable_constant"
 	MissingBlankBetweenVariableConstantText = "Missing blank line between top-level const and var declarations"
 
 	StrayBinaryKey  = "stray_binary"
 	StrayBinaryText = "Stray binary detected"
 
-	VariableGroupingKey  = "var_grouping"
+	VariableGroupingKey  = "variable_grouping"
 	VariableGroupingText = "Consecutive var declarations should use var (...) block"
 
 	DeadPointerKey  = "dead_pointer"

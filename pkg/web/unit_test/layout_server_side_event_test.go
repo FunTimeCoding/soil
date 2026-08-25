@@ -15,7 +15,11 @@ func TestServerSideEventOpensWithoutWrites(t *testing.T) {
 	server := httptest.NewServer(
 		layout.HandleServerSideEvent(
 			notifier.New(),
-			func(http.ResponseWriter, http.Flusher) {},
+			func(
+				http.ResponseWriter,
+				http.Flusher,
+			) {
+			},
 		),
 	)
 	defer server.Close()

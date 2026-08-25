@@ -20,7 +20,7 @@ func showIssue(shortIdentifier string) {
 	}
 
 	r := i.Raw
-	fmt.Printf("Issue:    %s\n", r.ShortID)
+	fmt.Printf("Issue:    %s\n", r.ShortIdentifier)
 	fmt.Printf("Title:    %s\n", r.Title)
 	fmt.Printf("Project:  %s\n", r.Project.Name)
 	fmt.Printf("Link:     %s\n", r.Permalink)
@@ -43,9 +43,9 @@ func showIssue(shortIdentifier string) {
 		fmt.Printf("Culprit:  %s\n", r.Culprit)
 	}
 
-	e := c.MustLatestEvent(o, r.ID)
+	e := c.MustLatestEvent(o, r.Identifier)
 	fmt.Println()
-	fmt.Printf("Latest Event: %s\n", e.EventID)
+	fmt.Printf("Latest Event: %s\n", e.EventIdentifier)
 
 	if e.DateCreated != nil {
 		fmt.Printf(

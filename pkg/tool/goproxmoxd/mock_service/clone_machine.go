@@ -11,17 +11,17 @@ func (s *Service) CloneMachine(
 	_ string,
 	options *proxmox.VirtualMachineCloneOptions,
 ) (int, error) {
-	newID := options.NewID
+	newIdentifier := options.NewID
 
-	if newID == 0 {
+	if newIdentifier == 0 {
 		v, e := c.NextIdentifier()
 
 		if e != nil {
 			return 0, e
 		}
 
-		newID = v
+		newIdentifier = v
 	}
 
-	return newID, nil
+	return newIdentifier, nil
 }

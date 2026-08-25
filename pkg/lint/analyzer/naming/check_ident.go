@@ -3,6 +3,7 @@ package naming
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
+	"github.com/funtimecoding/soil/pkg/lint/face"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/lint/segment"
 	"go/ast"
@@ -15,8 +16,9 @@ func checkIdent(
 	results *output.Results,
 	ident *ast.Ident,
 	o types.Object,
+	faces *face.Set,
 ) {
-	if isInterfaceMethod(o) {
+	if faces.Implements(o) {
 		return
 	}
 

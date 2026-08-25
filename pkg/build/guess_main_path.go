@@ -8,7 +8,11 @@ import (
 )
 
 func GuessMainPath(name string) string {
-	if s := join.Relative(constant.CommandPath, name, library.MainFile); system.FileExists(
+	if s := join.Relative(
+		constant.CommandPath,
+		name,
+		library.MainFile,
+	); system.FileExists(
 		s,
 	) {
 		return s

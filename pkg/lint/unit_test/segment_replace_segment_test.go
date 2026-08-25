@@ -2,6 +2,7 @@ package unit_test
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/segment"
 	"testing"
 )
@@ -100,4 +101,36 @@ func TestReplaceSegmentSingleCharAlone(t *testing.T) {
 
 func TestReplaceSegmentNoMatch(t *testing.T) {
 	assert.String(t, "fooBar", segment.ReplaceSegment("fooBar", "baz", "qux"))
+}
+
+func TestReplaceSegmentTrailingInitialism(t *testing.T) {
+	assert.String(
+		t,
+		"MarshalNotation",
+		segment.ReplaceSegment("MarshalJSON", "json", "notation"),
+	)
+}
+
+func TestReplaceSegmentLeadingInitialism(t *testing.T) {
+	assert.String(
+		t,
+		"LocatorOption",
+		segment.ReplaceSegment("URLOption", "url", constant.PointerLocator),
+	)
+}
+
+func TestReplaceSegmentBareInitialism(t *testing.T) {
+	assert.String(
+		t,
+		"Identifier",
+		segment.ReplaceSegment("ID", "id", "identifier"),
+	)
+}
+
+func TestReplaceSegmentUnexportedInitialism(t *testing.T) {
+	assert.String(
+		t,
+		"nextIdentifier",
+		segment.ReplaceSegment("nextID", "id", "identifier"),
+	)
 }

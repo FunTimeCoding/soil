@@ -2,10 +2,10 @@ package scan
 
 func isSuppressed(
 	suppress map[string][]string,
-	operationID string,
+	operationIdentifier string,
 	concernKey string,
 ) bool {
-	keys, okay := suppress[operationID]
+	keys, okay := suppress[operationIdentifier]
 
 	if !okay {
 		return false

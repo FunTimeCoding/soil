@@ -215,7 +215,11 @@ func TestBuildOptionsCloudInit(t *testing.T) {
 	assert.String(
 		t,
 		"ip=dhcp",
-		requireOption(t, options, constant.InternetConfigurationOption).(string),
+		requireOption(
+			t,
+			options,
+			constant.InternetConfigurationOption,
+		).(string),
 	)
 	assert.String(
 		t,
@@ -245,7 +249,11 @@ func TestBuildOptionsCloudInitFull(t *testing.T) {
 	assert.String(
 		t,
 		"ip=10.0.0.5/24,gw=10.0.0.1",
-		requireOption(t, options, constant.InternetConfigurationOption).(string),
+		requireOption(
+			t,
+			options,
+			constant.InternetConfigurationOption,
+		).(string),
 	)
 	_, hasKeys := findOption(options, constant.SecureShellKeysOption)
 	assert.Boolean(t, true, hasKeys)
@@ -264,7 +272,11 @@ func TestBuildOptionsCloudInitSSHKeysOnly(t *testing.T) {
 	assert.String(
 		t,
 		"ip=dhcp",
-		requireOption(t, options, constant.InternetConfigurationOption).(string),
+		requireOption(
+			t,
+			options,
+			constant.InternetConfigurationOption,
+		).(string),
 	)
 	assert.String(
 		t,

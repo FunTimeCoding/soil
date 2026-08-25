@@ -8,7 +8,10 @@ import (
 	"testing"
 )
 
-func writeAlfaService(base string, settings string) {
+func writeAlfaService(
+	base string,
+	settings string,
+) {
 	system.MakeDirectory(filepath.Join(base, ".claude"))
 	system.WriteFile(
 		filepath.Join(base, ".claude", "settings.local.json"),

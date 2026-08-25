@@ -11,7 +11,7 @@ import (
 
 func (c *Client) fillNodeDirect(
 	x context.Context,
-	backendNodeID int64,
+	backendNodeIdentifier int64,
 	value string,
 ) error {
 	return chromedp.Run(
@@ -19,7 +19,7 @@ func (c *Client) fillNodeDirect(
 		chromedp.ActionFunc(
 			func(v context.Context) error {
 				o, e := dom.ResolveNode().WithBackendNodeID(
-					cdp.BackendNodeID(backendNodeID),
+					cdp.BackendNodeID(backendNodeIdentifier),
 				).Do(v)
 
 				if e != nil {

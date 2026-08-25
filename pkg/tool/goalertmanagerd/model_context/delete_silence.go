@@ -12,7 +12,7 @@ func (s *Server) deleteSilence(
 	_ mcp.CallToolRequest,
 	a argument.DeleteSilence,
 ) (*mcp.CallToolResult, error) {
-	if a.ID == "" {
+	if a.Identifier == "" {
 		return response.Fail("id is required")
 	}
 
@@ -22,11 +22,11 @@ func (s *Server) deleteSilence(
 		return response.Fail("%s", e)
 	}
 
-	e = s.service.DeleteSilence(instance, a.ID)
+	e = s.service.DeleteSilence(instance, a.Identifier)
 
 	if e != nil {
 		return s.captureDetail(e)
 	}
 
-	return response.Success("silence expired: %s", a.ID)
+	return response.Success("silence expired: %s", a.Identifier)
 }

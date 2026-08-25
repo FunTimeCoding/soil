@@ -28,7 +28,10 @@ func (s *Store) SetLabel(
 			return old, nil
 		}
 
-		return old, s.database.Model(&existing).Update(constant.Value, value).Error
+		return old, s.database.Model(&existing).Update(
+			constant.Value,
+			value,
+		).Error
 	}
 
 	return "", s.database.Create(label.New(sessionIdentifier, key, value)).Error

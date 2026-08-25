@@ -2,7 +2,10 @@ package web
 
 import "fmt"
 
-func coverageRatio(used int, registered int) string {
+func coverageRatio(
+	used int,
+	registered int,
+) string {
 	if registered == 0 {
 		return "-"
 	}

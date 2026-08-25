@@ -3,7 +3,7 @@ package store
 import "time"
 
 type Run struct {
-	ID                  uint `gorm:"primaryKey"`
+	Identifier          uint `gorm:"primaryKey;column:id"`
 	CreatedAt           time.Time
 	Scope               string
 	TriggerSource       string

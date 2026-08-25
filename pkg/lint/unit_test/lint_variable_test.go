@@ -22,7 +22,7 @@ func TestVariableErrorAssignment(t *testing.T) {
 		true,
 		[]*concern.Concern{
 			{
-				Key:      "err_variable",
+				Key:      lintConstant.ErrorVariableKey,
 				Text:     "Use e instead of err for error variable",
 				Path:     "Alfa",
 				Type:     lintConstant.ConcernLine,
@@ -48,7 +48,7 @@ func TestVariableErrorMultiReturn(t *testing.T) {
 		true,
 		[]*concern.Concern{
 			{
-				Key:      "err_variable",
+				Key:      lintConstant.ErrorVariableKey,
 				Text:     "Use e instead of err for error variable",
 				Path:     "Bravo",
 				Type:     lintConstant.ConcernLine,

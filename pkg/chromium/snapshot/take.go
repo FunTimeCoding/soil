@@ -42,11 +42,11 @@ func Take(c context.Context) ([]*Node, error) {
 
 		uid++
 		sn := &Node{
-			UID:              fmt.Sprintf("e%d", uid),
-			Role:             role,
-			Name:             name,
-			Value:            value,
-			BackendDOMNodeID: int64(n.BackendDOMNodeID),
+			UID:                      fmt.Sprintf("e%d", uid),
+			Role:                     role,
+			Name:                     name,
+			Value:                    value,
+			BackendDOMNodeIdentifier: int64(n.BackendDOMNodeID),
 		}
 		lookup[n.NodeID] = sn
 

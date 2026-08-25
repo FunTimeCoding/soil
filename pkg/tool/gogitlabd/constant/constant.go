@@ -7,7 +7,11 @@ import (
 
 const PollInterval = time.Minute
 
-var Identity = identity.New("gogitlabd", "GitLab API bridge", "gogitlabd").WithInstructions(
+var Identity = identity.New(
+	"gogitlabd",
+	"GitLab API bridge",
+	"gogitlabd",
+).WithInstructions(
 	"GitLab API - projects, pipelines, merge requests, commits, CI variables. Projects are referenced by path (owner/repo) or numeric ID.",
 )
 

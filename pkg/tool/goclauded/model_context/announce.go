@@ -41,7 +41,10 @@ func (s *Server) announce(
 	}
 
 	if cs := server.ClientSessionFromContext(x); cs != nil {
-		if f := s.service.BindModelContextSession(name, cs.SessionID()); f != nil {
+		if f := s.service.BindModelContextSession(
+			name,
+			cs.SessionID(),
+		); f != nil {
 			if not_found.Is(f) {
 				return response.Fail(f.Error())
 			}

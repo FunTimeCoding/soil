@@ -30,7 +30,7 @@ func (s *Server) RollbackMachineSnapshot(
 		node = *r.Params.Node
 	}
 
-	taskID, e := s.service.RollbackMachineSnapshot(
+	taskIdentifier, e := s.service.RollbackMachineSnapshot(
 		c,
 		int(r.Identifier),
 		node,
@@ -49,5 +49,5 @@ func (s *Server) RollbackMachineSnapshot(
 		), nil
 	}
 
-	return server.RollbackMachineSnapshot200JSONResponse{TaskId: taskID}, nil
+	return server.RollbackMachineSnapshot200JSONResponse{TaskId: taskIdentifier}, nil
 }

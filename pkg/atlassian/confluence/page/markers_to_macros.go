@@ -14,13 +14,13 @@ func markersToMacros(markdown string) string {
 		l := constant.MacroCommentPattern.FindStringIndex(remaining)
 
 		if l == nil {
-			result.WriteString(markdownToHTML(remaining))
+			result.WriteString(markdownToMarkup(remaining))
 
 			break
 		}
 
 		if l[0] > 0 {
-			result.WriteString(markdownToHTML(remaining[:l[0]]))
+			result.WriteString(markdownToMarkup(remaining[:l[0]]))
 		}
 
 		match := remaining[l[0]:l[1]]
@@ -43,7 +43,7 @@ func markersToMacros(markdown string) string {
 				&result,
 				`<ac:structured-macro ac:name="%s"><ac:rich-text-body>%s</ac:rich-text-body></ac:structured-macro>`,
 				name,
-				strings.TrimRight(markdownToHTML(body), "\n"),
+				strings.TrimRight(markdownToMarkup(body), "\n"),
 			)
 		}
 

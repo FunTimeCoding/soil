@@ -7,7 +7,7 @@ import (
 
 func Task(t *task.Task) *server.Task {
 	result := &server.Task{
-		Identifier: t.ID,
+		Identifier: t.Identifier,
 		Text:       t.Text,
 		Type:       t.Type,
 	}

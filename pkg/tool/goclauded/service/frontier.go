@@ -40,7 +40,10 @@ func frontier(
 
 	sort.Slice(
 		result,
-		func(a int, b int) bool {
+		func(
+			a int,
+			b int,
+		) bool {
 			return result[a].Identifier < result[b].Identifier
 		},
 	)

@@ -30,7 +30,7 @@ func (s *Server) CreateContainerSnapshot(
 		node = *r.Params.Node
 	}
 
-	taskID, e := s.service.CreateContainerSnapshot(
+	taskIdentifier, e := s.service.CreateContainerSnapshot(
 		c,
 		int(r.Identifier),
 		node,
@@ -49,5 +49,5 @@ func (s *Server) CreateContainerSnapshot(
 		), nil
 	}
 
-	return server.CreateContainerSnapshot200JSONResponse{TaskId: taskID}, nil
+	return server.CreateContainerSnapshot200JSONResponse{TaskId: taskIdentifier}, nil
 }

@@ -20,6 +20,6 @@ type Client struct {
 	notInBackup        []*proxmox.BackupGuestEntry
 	version            *proxmox.Version
 	failure            error
-	nextID             int
+	nextIdentifier     int
 	mutex              sync.Mutex
 }

@@ -10,5 +10,5 @@ func sessionIdentifierFromEnvironment() string {
 		return i
 	}
 
-	return readHookInput().SessionID
+	return readHookInput().SessionIdentifier
 }

@@ -18,7 +18,11 @@ func CreateBundle(
 	lower := strings.ToLower(name)
 	identifier := fmt.Sprintf("%s.%s", vendor, lower)
 	content := join.Absolute(
-		join.Absolute(system.WorkDirectory(), path, fmt.Sprintf("%s.app", name)),
+		join.Absolute(
+			system.WorkDirectory(),
+			path,
+			fmt.Sprintf("%s.app", name),
+		),
 		"Contents",
 	)
 	macos := join.Absolute(content, "MacOS")

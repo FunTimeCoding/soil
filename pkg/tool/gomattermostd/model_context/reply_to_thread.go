@@ -12,7 +12,7 @@ func (s *Server) ReplyToThread(
 	_ mcp.CallToolRequest,
 	a argument.ReplyToThread,
 ) (*mcp.CallToolResult, error) {
-	if a.PostID == "" {
+	if a.PostIdentifier == "" {
 		return response.Fail("post_id is required")
 	}
 
@@ -20,13 +20,13 @@ func (s *Server) ReplyToThread(
 		return response.Fail("message is required")
 	}
 
-	ch, e := s.client.Channel(a.ChannelID)
+	ch, e := s.client.Channel(a.ChannelIdentifier)
 
 	if e != nil {
 		return s.captureFail(e, "channel not found")
 	}
 
-	parent, e := s.client.FindPost(a.PostID)
+	parent, e := s.client.FindPost(a.PostIdentifier)
 
 	if e != nil {
 		return s.captureFail(e, "post not found")

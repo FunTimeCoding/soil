@@ -22,13 +22,13 @@ func (s *Server) Fill(
 		return response.Fail("value is required")
 	}
 
-	t, e := s.resolveTab(a.TabID, a.Title, a.URL)
+	t, e := s.resolveTab(a.TabIdentifier, a.Title, a.Locator)
 
 	if e != nil {
 		return response.Fail(e.Error())
 	}
 
-	backendID, okay := s.resolveUID(t.Identifier, a.UID)
+	backendIdentifier, okay := s.resolveUID(t.Identifier, a.UID)
 
 	if !okay {
 		return response.Fail("uid %s not found - take a snapshot first", a.UID)
@@ -39,7 +39,7 @@ func (s *Server) Fill(
 	e = withTimeoutAction(
 		constant.TargetTimeout,
 		func() error {
-			return s.client.FillNode(x, backendID, a.Value, direct)
+			return s.client.FillNode(x, backendIdentifier, a.Value, direct)
 		},
 	)
 

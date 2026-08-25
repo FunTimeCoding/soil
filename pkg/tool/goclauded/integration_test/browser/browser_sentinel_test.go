@@ -12,12 +12,12 @@ func TestBrowserSentinelDebug(t *testing.T) {
 	b := browser_tester.New(t)
 	b.Navigate("http://localhost:8583/conversations")
 	b.WaitReady(".sidebar-entry")
-	var sentinelHTML string
+	var sentinelMarkup string
 	b.Evaluate(
 		"(() => { const el = document.querySelector('[hx-trigger=\"revealed\"]'); return el ? el.outerHTML : 'NOT FOUND'; })()",
-		&sentinelHTML,
+		&sentinelMarkup,
 	)
-	fmt.Printf("sentinel: %s\n", sentinelHTML)
+	fmt.Printf("sentinel: %s\n", sentinelMarkup)
 	var sidebarHeight float64
 	b.Evaluate(
 		"document.querySelector('.sidebar').scrollHeight",

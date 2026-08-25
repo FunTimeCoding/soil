@@ -8,7 +8,7 @@ import (
 	"testing"
 )
 
-func TestEventSessionID(t *testing.T) {
+func TestEventSessionIdentifier(t *testing.T) {
 	s := base.New(t)
 	defer s.Close()
 	a := s.NewSession(t)
@@ -26,7 +26,7 @@ func TestEventSessionID(t *testing.T) {
 	}
 }
 
-func TestSummarySessionID(t *testing.T) {
+func TestSummarySessionIdentifier(t *testing.T) {
 	s := base.New(t)
 	defer s.Close()
 	a := s.NewSession(t)
@@ -41,7 +41,7 @@ func TestSummarySessionID(t *testing.T) {
 	assert.True(t, v[0].SessionIdentifier != "")
 }
 
-func TestCompletionSessionID(t *testing.T) {
+func TestCompletionSessionIdentifier(t *testing.T) {
 	s := base.New(t)
 	defer s.Close()
 	a := s.NewSession(t)

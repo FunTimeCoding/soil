@@ -13,18 +13,18 @@ func (s *Server) StopPortForward(
 	_ mcp.CallToolRequest,
 	a argument.StopPortForward,
 ) (*mcp.CallToolResult, error) {
-	if a.ID == "" {
+	if a.Identifier == "" {
 		return response.Fail("id is required")
 	}
 
-	v, okay := s.service.StopPortForward(a.ID)
+	v, okay := s.service.StopPortForward(a.Identifier)
 
 	if !okay {
-		return response.Fail("port forward not found: %s", a.ID)
+		return response.Fail("port forward not found: %s", a.Identifier)
 	}
 
 	state := v.(*port_forward_state.PortForwardState)
 	close(state.Stop)
 
-	return response.Success("stopped port forward %s", a.ID)
+	return response.Success("stopped port forward %s", a.Identifier)
 }

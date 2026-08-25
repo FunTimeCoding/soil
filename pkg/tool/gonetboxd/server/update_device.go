@@ -20,13 +20,19 @@ func (s *Server) UpdateDevice(
 	}
 
 	if r.Body.Location != nil {
-		if _, e := s.client.SetDeviceLocation(r.Name, *r.Body.Location); e != nil {
+		if _, e := s.client.SetDeviceLocation(
+			r.Name,
+			*r.Body.Location,
+		); e != nil {
 			return server.UpdateDevice500JSONResponse(*s.captureDetail(e)), nil
 		}
 	}
 
 	if r.Body.Platform != nil {
-		if _, e := s.client.SetDevicePlatform(r.Name, *r.Body.Platform); e != nil {
+		if _, e := s.client.SetDevicePlatform(
+			r.Name,
+			*r.Body.Platform,
+		); e != nil {
 			return server.UpdateDevice500JSONResponse(*s.captureDetail(e)), nil
 		}
 	}
@@ -50,7 +56,10 @@ func (s *Server) UpdateDevice(
 	}
 
 	if r.Body.Description != nil {
-		if _, e := s.client.SetDeviceDescription(r.Name, *r.Body.Description); e != nil {
+		if _, e := s.client.SetDeviceDescription(
+			r.Name,
+			*r.Body.Description,
+		); e != nil {
 			return server.UpdateDevice500JSONResponse(*s.captureDetail(e)), nil
 		}
 	}

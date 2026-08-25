@@ -63,13 +63,13 @@ func (s *Server) PortForward(
 		plural,
 		a.Name,
 	)
-	hostURL, f := url.Parse(c.Configuration().Host)
+	hostLocator, f := url.Parse(c.Configuration().Host)
 
 	if f != nil {
 		return s.captureFail(f, "parse host URL")
 	}
 
-	hostURL.Path = path
+	hostLocator.Path = path
 	transport, upgrader, g := spdy.RoundTripperFor(c.Configuration())
 
 	if g != nil {
@@ -80,7 +80,7 @@ func (s *Server) PortForward(
 		upgrader,
 		&http.Client{Transport: transport},
 		"POST",
-		hostURL,
+		hostLocator,
 	)
 	stop := make(chan struct{})
 	ready := make(chan struct{})

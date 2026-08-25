@@ -12,7 +12,7 @@ func (s *Server) AddReaction(
 	_ mcp.CallToolRequest,
 	a argument.AddReaction,
 ) (*mcp.CallToolResult, error) {
-	if a.PostID == "" {
+	if a.PostIdentifier == "" {
 		return response.Fail("post_id is required")
 	}
 
@@ -20,7 +20,7 @@ func (s *Server) AddReaction(
 		return response.Fail("emoji_name is required")
 	}
 
-	p, e := s.client.FindPost(a.PostID)
+	p, e := s.client.FindPost(a.PostIdentifier)
 
 	if e != nil {
 		return s.captureFail(e, "post not found")
@@ -33,6 +33,6 @@ func (s *Server) AddReaction(
 	}
 
 	return response.SuccessAny(
-		map[string]any{"post_id": a.PostID, "emoji_name": a.EmojiName},
+		map[string]any{"post_id": a.PostIdentifier, "emoji_name": a.EmojiName},
 	)
 }

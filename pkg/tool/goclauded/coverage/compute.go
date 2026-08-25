@@ -19,7 +19,10 @@ func Compute(
 ) []*Server {
 	cut := now.Add(-constant.CoverageRecentWindow)
 	tools := map[string]map[string]*Tool{}
-	ensure := func(server string, name string) *Tool {
+	ensure := func(
+		server string,
+		name string,
+	) *Tool {
 		if tools[server] == nil {
 			tools[server] = map[string]*Tool{}
 		}

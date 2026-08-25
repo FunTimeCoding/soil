@@ -9,15 +9,15 @@ func (c *Client) GroupTabs(
 	identifier := groupIdentifier
 
 	if identifier == 0 {
-		c.groupID++
-		identifier = c.groupID
+		c.groupIdentifier++
+		identifier = c.groupIdentifier
 	}
 
 	c.groups[identifier] = &group{title: title, color: color}
 
-	for _, tabID := range tabIdentifiers {
+	for _, tabIdentifier := range tabIdentifiers {
 		for i, t := range c.tabs {
-			if t.Identifier == tabID {
+			if t.Identifier == tabIdentifier {
 				c.tabs[i].GroupIdentifier = identifier
 			}
 		}

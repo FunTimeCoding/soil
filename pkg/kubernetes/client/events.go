@@ -34,7 +34,13 @@ func (c *Client) Events(
 				result = append(
 					result,
 					event.NewSlice(
-						list.Event(l.client, l.context, n, limit, fieldSelector),
+						list.Event(
+							l.client,
+							l.context,
+							n,
+							limit,
+							fieldSelector,
+						),
 						l.cluster,
 					)...,
 				)

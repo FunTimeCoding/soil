@@ -7,7 +7,7 @@ type Player struct {
 	Group           int            `json:"group"`
 	HasCommanderTag bool           `json:"hasCommanderTag"`
 	NotInSquad      bool           `json:"notInSquad"`
-	TeamID          int            `json:"teamID"`
+	TeamIdentifier  int            `json:"teamID"`
 	ActiveTimes     []int          `json:"activeTimes"`
 	DPSTargets      [][]Damage     `json:"dpsTargets"`
 	StatsTargets    [][]StatsEntry `json:"statsTargets"`

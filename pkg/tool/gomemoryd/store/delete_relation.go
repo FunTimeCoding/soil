@@ -1,14 +1,14 @@
 package store
 
 func (s *Store) DeleteRelation(
-	sourceID int64,
-	targetID int64,
+	sourceIdentifier int64,
+	targetIdentifier int64,
 ) (bool, error) {
 	result, e := s.database.Exec(
 		`DELETE FROM memory_relation
 		WHERE source_identifier = ? AND target_identifier = ?`,
-		sourceID,
-		targetID,
+		sourceIdentifier,
+		targetIdentifier,
 	)
 
 	if e != nil {

@@ -3,6 +3,7 @@ package string_concatenation
 import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/suppress"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"go/ast"
 	"go/types"
@@ -26,13 +27,18 @@ func checkAssign(
 		return
 	}
 
-	if suppress.IsSuppressed(p.Fset, p.Syntax, s.Pos(), "string_concat") {
+	if suppress.IsSuppressed(
+		p.Fset,
+		p.Syntax,
+		s.Pos(),
+		constant.StringConcatenationKey,
+	) {
 		return
 	}
 
 	results.AddConcern(
 		concern.NewFile(
-			"string_concatenation",
+			constant.StringConcatenationKey,
 			"use fmt.Sprintf instead of string concatenation",
 			p.Fset.Position(s.Pos()).Filename,
 			false,

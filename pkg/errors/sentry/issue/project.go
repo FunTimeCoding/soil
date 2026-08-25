@@ -1,7 +1,7 @@
 package issue
 
 type Project struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
-	Slug string `json:"slug"`
+	Identifier string `json:"id"`
+	Name       string `json:"name"`
+	Slug       string `json:"slug"`
 }

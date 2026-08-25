@@ -30,7 +30,11 @@ func (s *Server) summarize(
 		return response.Fail("body is required: %v", e)
 	}
 
-	if f := s.service.Summarize(c.SessionIdentifier, c.Callsign, body); f != nil {
+	if f := s.service.Summarize(
+		c.SessionIdentifier,
+		c.Callsign,
+		body,
+	); f != nil {
 		return s.captureFail(f, library.UnexpectedError)
 	}
 

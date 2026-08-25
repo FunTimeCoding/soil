@@ -24,7 +24,7 @@ func Issue() {
 
 				for _, i := range c.MustIssues(
 					o.Slug,
-					p.ID,
+					p.Identifier,
 					constant.PeriodFortnight,
 				) {
 					fmt.Printf("Issue: %s\n", i.Format(f))

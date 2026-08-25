@@ -91,5 +91,6 @@ func (s *Server) messagesPage(
 		w,
 		constant.MessagesTitle,
 		constant.MessagesPath,
-		content...)
+		content...,
+	)
 }

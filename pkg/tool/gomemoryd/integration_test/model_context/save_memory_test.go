@@ -48,7 +48,7 @@ func TestUpdateMemory(t *testing.T) {
 	assert.String(t, "updated", m.Content)
 }
 
-func TestUpdateMemoryRequiresID(t *testing.T) {
+func TestUpdateMemoryRequiresIdentifier(t *testing.T) {
 	s := model_context_tester.New(t)
 	result := s.MustCallToolError(
 		constant.UpdateMemory,

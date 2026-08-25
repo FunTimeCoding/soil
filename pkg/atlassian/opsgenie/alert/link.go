@@ -6,5 +6,8 @@ func link(
 	identifier string,
 	webHost string,
 ) string {
-	return locator.New(webHost).Path("/alert/detail/%s/details", identifier).String()
+	return locator.New(webHost).Path(
+		"/alert/detail/%s/details",
+		identifier,
+	).String()
 }

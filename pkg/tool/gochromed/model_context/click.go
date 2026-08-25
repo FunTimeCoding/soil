@@ -18,13 +18,13 @@ func (s *Server) Click(
 		return response.Fail("uid is required")
 	}
 
-	t, e := s.resolveTab(a.TabID, a.Title, a.URL)
+	t, e := s.resolveTab(a.TabIdentifier, a.Title, a.Locator)
 
 	if e != nil {
 		return response.Fail(e.Error())
 	}
 
-	backendID, okay := s.resolveUID(t.Identifier, a.UID)
+	backendIdentifier, okay := s.resolveUID(t.Identifier, a.UID)
 
 	if !okay {
 		return response.Fail("uid %s not found - take a snapshot first", a.UID)
@@ -34,7 +34,7 @@ func (s *Server) Click(
 	e = withTimeoutAction(
 		constant.TargetTimeout,
 		func() error {
-			return s.client.ClickNode(x, backendID)
+			return s.client.ClickNode(x, backendIdentifier)
 		},
 	)
 

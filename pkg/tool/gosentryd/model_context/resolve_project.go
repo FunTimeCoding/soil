@@ -15,7 +15,7 @@ func (s *Server) resolveProject(slug string) (string, error) {
 
 	for _, p := range projects {
 		if p.Slug == slug {
-			return p.ID, nil
+			return p.Identifier, nil
 		}
 	}
 

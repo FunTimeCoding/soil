@@ -179,5 +179,6 @@ func (s *Server) memoriesPage(
 		w,
 		constant.MemoriesTitle,
 		constant.MemoriesPath,
-		content...)
+		content...,
+	)
 }

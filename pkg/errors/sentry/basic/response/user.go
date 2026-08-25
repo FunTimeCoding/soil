@@ -3,11 +3,11 @@ package response
 import "time"
 
 type User struct {
-	ID              string     `json:"id"`
+	Identifier      string     `json:"id"`
 	Name            string     `json:"name"`
 	Username        string     `json:"username"`
 	Email           string     `json:"email"`
-	AvatarURL       string     `json:"avatarUrl"`
+	AvatarLocator   string     `json:"avatarUrl"`
 	IsActive        bool       `json:"isActive"`
 	HasPasswordAuth bool       `json:"hasPasswordAuth"`
 	IsManaged       bool       `json:"isManaged"`

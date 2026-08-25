@@ -17,7 +17,7 @@ func (s *Server) Evaluate(
 		return response.Fail("expression is required")
 	}
 
-	t, e := s.resolveTab(a.TabID, a.Title, a.URL)
+	t, e := s.resolveTab(a.TabIdentifier, a.Title, a.Locator)
 
 	if e != nil {
 		return response.Fail(e.Error())

@@ -8,7 +8,11 @@ import (
 )
 
 func (r *Repository) Format(f *option.Format) string {
-	s := status.New(f).String(r.formatName(f), r.Path, r.formatConcern(f)).RawList(
+	s := status.New(f).String(
+		r.formatName(f),
+		r.Path,
+		r.formatConcern(f),
+	).RawList(
 		r,
 	)
 

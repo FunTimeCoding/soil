@@ -24,7 +24,10 @@ func FilesByExtension(
 					return e
 				}
 
-				if !i.IsDir() && slices.Contains(extension, filepath.Ext(path)) {
+				if !i.IsDir() && slices.Contains(
+					extension,
+					filepath.Ext(path),
+				) {
 					result = append(result, path)
 				}
 

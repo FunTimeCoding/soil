@@ -1,6 +1,7 @@
 package gofix
 
 import (
+	"github.com/funtimecoding/soil/pkg/lint/face"
 	"go/token"
 	"golang.org/x/tools/go/packages"
 )
@@ -8,6 +9,7 @@ import (
 func FindViolations(all []*packages.Package) []violation {
 	var result []violation
 	seen := make(map[token.Pos]bool)
+	faces := face.New(all)
 
 	for _, p := range all {
 		generatedFiles := buildGeneratedSet(p)
@@ -29,7 +31,7 @@ func FindViolations(all []*packages.Package) []violation {
 				continue
 			}
 
-			if isInterfaceMethod(p, o) {
+			if faces.Implements(o) {
 				continue
 			}
 

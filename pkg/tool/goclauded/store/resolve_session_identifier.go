@@ -48,7 +48,10 @@ func (s *Store) ResolveSessionIdentifier(query string) (*resolve_result.Result, 
 
 	var byPrefix []session.Session
 
-	if e := s.database.Where("identifier LIKE ?", fmt.Sprintf("%s%%", query)).Find(
+	if e := s.database.Where(
+		"identifier LIKE ?",
+		fmt.Sprintf("%s%%", query),
+	).Find(
 		&byPrefix,
 	).Error; e != nil {
 		return nil, e

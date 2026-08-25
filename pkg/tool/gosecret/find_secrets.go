@@ -22,7 +22,7 @@ func FindSecrets(directory string) ([]string, error) {
 				return nil
 			}
 
-			if !isYAMLFile(path) {
+			if !isMarkupFile(path) {
 				return nil
 			}
 

@@ -14,7 +14,10 @@ func recreateWithFK(
 ) {
 	var hasFK int64
 	d.Raw(
-		fmt.Sprintf("SELECT COUNT(*) FROM pragma_foreign_key_list('%s')", table),
+		fmt.Sprintf(
+			"SELECT COUNT(*) FROM pragma_foreign_key_list('%s')",
+			table,
+		),
 	).Scan(&hasFK)
 
 	if hasFK > 0 {

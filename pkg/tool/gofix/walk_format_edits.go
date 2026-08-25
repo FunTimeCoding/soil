@@ -22,8 +22,16 @@ func walkFormatEdits(
 	r *output.Results,
 	changed map[string]*dst.File,
 ) {
-	var walk func(dst.Node, *dst.CompositeLit, int)
-	walk = func(n dst.Node, parentLit *dst.CompositeLit, extraPadding int) {
+	var walk func(
+		dst.Node,
+		*dst.CompositeLit,
+		int,
+	)
+	walk = func(
+		n dst.Node,
+		parentLit *dst.CompositeLit,
+		extraPadding int,
+	) {
 		switch node := n.(type) {
 		case *dst.CallExpr:
 			if len(node.Args) > 0 {

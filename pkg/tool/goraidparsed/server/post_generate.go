@@ -42,7 +42,10 @@ func (s *Server) PostGenerate(
 	for _, file := range r.Body.Files {
 		system.Stat(file)
 
-		if f := os.Symlink(file, filepath.Join(workdir, filepath.Base(file))); f != nil {
+		if f := os.Symlink(
+			file,
+			filepath.Join(workdir, filepath.Base(file)),
+		); f != nil {
 			return server.PostGenerate500JSONResponse(
 				*s.captureFail(f, "symlink file"),
 			), nil

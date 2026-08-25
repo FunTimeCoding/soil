@@ -47,7 +47,7 @@ func errorHandlingConcerns(
 							constant.ResponseReferenceKey,
 							fmt.Sprintf(
 								"%s %s: uses components/responses ref (should be inlined)",
-								op.OperationID,
+								op.OperationIdentifier,
 								code,
 							),
 							path,
@@ -76,7 +76,7 @@ func errorHandlingConcerns(
 							constant.BodylessErrorKey,
 							fmt.Sprintf(
 								"%s %s: bodyless %s response",
-								op.OperationID,
+								op.OperationIdentifier,
 								code,
 								response.Description,
 							),
@@ -94,7 +94,7 @@ func errorHandlingConcerns(
 							constant.ErrorOnServerErrorKey,
 							fmt.Sprintf(
 								"%s: 500 references Error (expected ErrorResponse)",
-								op.OperationID,
+								op.OperationIdentifier,
 							),
 							path,
 						),
@@ -104,7 +104,7 @@ func errorHandlingConcerns(
 				if code != "500" && r == "ErrorResponse" {
 					if isSuppressed(
 						suppress,
-						op.OperationID,
+						op.OperationIdentifier,
 						constant.ErrorResponseOnNon500Key,
 					) {
 						continue
@@ -116,7 +116,7 @@ func errorHandlingConcerns(
 							constant.ErrorResponseOnNon500Key,
 							fmt.Sprintf(
 								"%s: %s references ErrorResponse (expected Error)",
-								op.OperationID,
+								op.OperationIdentifier,
 								code,
 							),
 							path,

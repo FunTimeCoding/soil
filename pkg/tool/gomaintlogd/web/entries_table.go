@@ -18,13 +18,13 @@ func entriesTable(entries []entry.Entry) gomponents.Node {
 	var rows []gomponents.Node
 
 	for _, e := range entries {
-		target := fmt.Sprintf("detail-%d", e.ID)
+		target := fmt.Sprintf("detail-%d", e.Identifier)
 		rows = append(
 			rows,
 			html.Tr(
-				html.ID(fmt.Sprintf("row-%d", e.ID)),
+				html.ID(fmt.Sprintf("row-%d", e.Identifier)),
 				html.Class("clickable-row"),
-				htmx.Get(fragmentLocator(constant.DetailPath, e.ID)),
+				htmx.Get(fragmentLocator(constant.DetailPath, e.Identifier)),
 				htmx.Target(fmt.Sprintf("#%s", target)),
 				htmx.Swap("outerHTML"),
 				layout.TimeCell(e.Timestamp),

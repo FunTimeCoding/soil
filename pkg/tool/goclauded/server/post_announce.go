@@ -26,7 +26,12 @@ func (s *Server) PostAnnounce(
 		), nil
 	}
 
-	if e := s.service.Announce(identifier, r.Body.Callsign, r.Body.Topic, files); e != nil {
+	if e := s.service.Announce(
+		identifier,
+		r.Body.Callsign,
+		r.Body.Topic,
+		files,
+	); e != nil {
 		if not_found.Is(e) {
 			return server.PostAnnounce404JSONResponse(
 				server.Error{Error: e.Error()},

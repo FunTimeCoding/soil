@@ -5,16 +5,16 @@ import "github.com/funtimecoding/soil/pkg/tool/goraidd/store"
 func groupByRaid(rows []store.PlayerRaidRow) [][]store.PlayerRaidRow {
 	var result [][]store.PlayerRaidRow
 	var current []store.PlayerRaidRow
-	var currentID uint
+	var currentIdentifier uint
 
 	for _, r := range rows {
-		if r.RaidID != currentID {
+		if r.RaidIdentifier != currentIdentifier {
 			if len(current) > 0 {
 				result = append(result, current)
 			}
 
 			current = nil
-			currentID = r.RaidID
+			currentIdentifier = r.RaidIdentifier
 		}
 
 		current = append(current, r)

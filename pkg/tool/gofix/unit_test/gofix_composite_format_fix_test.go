@@ -19,7 +19,10 @@ func TestCompositeFormatFix(t *testing.T) {
 			assert.String(
 				t,
 				"package example\n\nfunc SharedLine() []int {\n\treturn []int{1, 2, 3}\n}\n",
-				testutil.ReadFile(t, filepath.Join(directory, "shared_line.go")),
+				testutil.ReadFile(
+					t,
+					filepath.Join(directory, "shared_line.go"),
+				),
 			)
 		},
 	)

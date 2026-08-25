@@ -25,22 +25,22 @@ func (s *Store) enrichFile(
 	var fight elite.Fight
 	notation.MustDecodeBytes(b, &fight, false)
 	timestamp := time.Parse("2006-01-02 15:04:05 -07:00", fight.TimeStartStd)
-	alliedTeamID := 0
+	alliedTeamIdentifier := 0
 
 	if len(fight.Players) > 0 {
-		alliedTeamID = fight.Players[0].TeamID
+		alliedTeamIdentifier = fight.Players[0].TeamIdentifier
 	}
 
 	enemyCount := 0
 	enemyTeams := map[int]int{}
 
 	for _, target := range fight.Targets {
-		if target.TeamID == 0 {
+		if target.TeamIdentifier == 0 {
 			continue
 		}
 
 		enemyCount++
-		enemyTeams[target.TeamID]++
+		enemyTeams[target.TeamIdentifier]++
 	}
 
 	enemyTeamsString := string(notation.Marshal(enemyTeams))
@@ -63,10 +63,10 @@ func (s *Store) enrichFile(
 		map[string]any{
 			"timestamp":      timestamp,
 			"duration_ms":    fight.DurationMS,
-			"map_id":         fight.MapID,
+			"map_id":         fight.MapIdentifier,
 			"map_name":       fight.FightName,
 			"allied_count":   len(fight.Players),
-			"allied_team_id": alliedTeamID,
+			"allied_team_id": alliedTeamIdentifier,
 			"enemy_count":    enemyCount,
 			"enemy_teams":    enemyTeamsString,
 			"success":        fight.Success,

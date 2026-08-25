@@ -1,31 +1,25 @@
 package segment
 
-import (
-	"strings"
-	"unicode"
-)
+import "strings"
 
 func Segments(name string) []string {
 	var result []string
-	var current strings.Builder
 
 	for _, part := range strings.Split(name, "_") {
-		current.Reset()
+		r := []rune(part)
+		start := 0
 
-		for i, r := range part {
-			if i > 0 && unicode.IsUpper(r) {
-				if s := current.String(); s != "" {
-					result = append(result, s)
-				}
-
-				current.Reset()
+		for i := 1; i < len(r); i++ {
+			if !boundary(r, i) {
+				continue
 			}
 
-			current.WriteRune(unicode.ToLower(r))
+			result = append(result, strings.ToLower(string(r[start:i])))
+			start = i
 		}
 
-		if s := current.String(); s != "" {
-			result = append(result, s)
+		if start < len(r) {
+			result = append(result, strings.ToLower(string(r[start:])))
 		}
 	}
 

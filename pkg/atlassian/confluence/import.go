@@ -31,7 +31,12 @@ func (c *Client) Import(
 
 	body, h := c.basic.PostV2Path(
 		constant.ConfluencePage,
-		page_post.New(s.Identifier, p.Identifier, f.Name, page.ToMarkup(f.Body)).Encode(),
+		page_post.New(
+			s.Identifier,
+			p.Identifier,
+			f.Name,
+			page.ToMarkup(f.Body),
+		).Encode(),
 	)
 
 	if h != nil {

@@ -89,7 +89,10 @@ func Log(
 	var verifiedAccounts []string
 	var rowCount int
 
-	for _, r := range aleeva_report.Parse(systemConstant.Temporary, aleevaFile) {
+	for _, r := range aleeva_report.Parse(
+		systemConstant.Temporary,
+		aleevaFile,
+	) {
 		if len(r.WvwTeams) == 0 || len(r.Gw2Accounts) == 0 {
 			continue
 		}

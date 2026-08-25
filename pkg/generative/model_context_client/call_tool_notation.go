@@ -2,7 +2,7 @@ package model_context_client
 
 import "encoding/json"
 
-func (c *Client) CallToolJSON(
+func (c *Client) CallToolNotation(
 	name string,
 	arguments map[string]any,
 ) (map[string]any, error) {

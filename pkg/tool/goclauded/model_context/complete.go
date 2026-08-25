@@ -47,7 +47,12 @@ func (s *Server) complete(
 		)
 	}
 
-	if f := s.service.Complete(c.SessionIdentifier, c.Callsign, topic, message); f != nil {
+	if f := s.service.Complete(
+		c.SessionIdentifier,
+		c.Callsign,
+		topic,
+		message,
+	); f != nil {
 		return s.captureFail(f, library.UnexpectedError)
 	}
 

@@ -3,7 +3,7 @@ package store
 import "time"
 
 type PlayerRaidRow struct {
-	RaidID            uint
+	RaidIdentifier    uint `gorm:"column:raid_id"`
 	RaidName          string
 	RaidDate          time.Time
 	RaidFights        int

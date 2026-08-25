@@ -20,7 +20,10 @@ func TestImportAliasFix(t *testing.T) {
 			assert.String(
 				t,
 				"package example\n\nimport \"testmodule/pkg/helper\"\n\nfunc UseHelper() string {\n\treturn helper.Value()\n}\n",
-				testutil.ReadFile(t, filepath.Join(directory, "superfluous.go")),
+				testutil.ReadFile(
+					t,
+					filepath.Join(directory, "superfluous.go"),
+				),
 			)
 		},
 	)

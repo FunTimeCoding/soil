@@ -95,7 +95,10 @@ func TestParameter(t *testing.T) {
 	assert.String(
 		t,
 		"https://example.org/p?a=1&b=2",
-		locator.New(constant.Example).Path("/p").Add("a", "1").Add("b", "2").String(),
+		locator.New(constant.Example).Path("/p").Add("a", "1").Add(
+			"b",
+			"2",
+		).String(),
 	)
 	assert.String(
 		t,

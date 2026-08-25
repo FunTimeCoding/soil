@@ -56,7 +56,10 @@ func clusterBody() *server.AuthorityBody {
 	}
 }
 
-func leafBody(common string, host []string) *server.CertificateBody {
+func leafBody(
+	common string,
+	host []string,
+) *server.CertificateBody {
 	return &server.CertificateBody{
 		Authority:  constant.FixtureClusterAuthority,
 		Kind:       server.LeafKind(constant.KindServer),

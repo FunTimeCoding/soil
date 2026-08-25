@@ -121,7 +121,13 @@ func findImportAliasEdits(
 				)
 				result = append(
 					result,
-					buildImportAliasEdits(p, file, spec, alias, declaredName)...,
+					buildImportAliasEdits(
+						p,
+						file,
+						spec,
+						alias,
+						declaredName,
+					)...,
 				)
 			}
 		}

@@ -3,8 +3,8 @@ package store
 import "time"
 
 func (s *Store) CreateRelation(
-	sourceID int64,
-	targetID int64,
+	sourceIdentifier int64,
+	targetIdentifier int64,
 	relationType string,
 ) error {
 	now := time.Now().UTC().Format(time.RFC3339)
@@ -13,8 +13,8 @@ func (s *Store) CreateRelation(
 		VALUES (?, ?, ?, ?)
 		ON CONFLICT(source_identifier, target_identifier)
 		DO UPDATE SET type = excluded.type WHERE excluded.type != ''`,
-		sourceID,
-		targetID,
+		sourceIdentifier,
+		targetIdentifier,
 		now,
 		relationType,
 	)

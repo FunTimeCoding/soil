@@ -18,7 +18,10 @@ func printNotation(
 	var relevant []*event.Event
 
 	for _, e := range v {
-		if !o.All && slices.Contains(kubernetes.IrrelevantEventReason, e.Reason) {
+		if !o.All && slices.Contains(
+			kubernetes.IrrelevantEventReason,
+			e.Reason,
+		) {
 			continue
 		}
 

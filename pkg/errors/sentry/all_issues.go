@@ -22,7 +22,11 @@ func (c *Client) AllIssues() ([]*issue.Issue, error) {
 		}
 
 		for _, p := range projects {
-			issues, g := c.Issues(o.Slug, p.ID, constant.PeriodFortnight)
+			issues, g := c.Issues(
+				o.Slug,
+				p.Identifier,
+				constant.PeriodFortnight,
+			)
 
 			if g != nil {
 				return nil, g

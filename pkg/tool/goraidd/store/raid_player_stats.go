@@ -2,7 +2,7 @@ package store
 
 import "github.com/funtimecoding/soil/pkg/errors"
 
-func (s *Store) RaidPlayerStats(raidID int) []RaidPlayerRow {
+func (s *Store) RaidPlayerStats(raidIdentifier int) []RaidPlayerRow {
 	var rows []RaidPlayerRow
 	errors.PanicOnError(
 		s.mapper.
@@ -25,7 +25,7 @@ func (s *Store) RaidPlayerStats(raidID int) []RaidPlayerRow {
 			Joins(
 				"JOIN fights ON fights.filename = player_fight_stats.filename",
 			).
-			Where("fights.raid_id = ?", raidID).
+			Where("fights.raid_id = ?", raidIdentifier).
 			Group("player_fight_stats.account, profession").
 			Order("sum(damage) DESC").
 			Find(&rows).Error,

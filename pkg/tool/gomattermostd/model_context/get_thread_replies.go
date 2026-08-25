@@ -12,11 +12,11 @@ func (s *Server) GetThreadReplies(
 	_ mcp.CallToolRequest,
 	a argument.GetThreadReplies,
 ) (*mcp.CallToolResult, error) {
-	if a.PostID == "" {
+	if a.PostIdentifier == "" {
 		return response.Fail("post_id is required")
 	}
 
-	parent, e := s.client.FindPost(a.PostID)
+	parent, e := s.client.FindPost(a.PostIdentifier)
 
 	if e != nil {
 		return s.captureFail(e, "post not found")
@@ -29,19 +29,19 @@ func (s *Server) GetThreadReplies(
 	}
 
 	type row struct {
-		ID       string   `json:"id"`
-		Username string   `json:"username"`
-		Message  string   `json:"message"`
-		CreateAt string   `json:"create_at"`
-		FileIds  []string `json:"file_ids,omitempty"`
+		Identifier string   `json:"id"`
+		Username   string   `json:"username"`
+		Message    string   `json:"message"`
+		CreateAt   string   `json:"create_at"`
+		FileIds    []string `json:"file_ids,omitempty"`
 	}
 	rows := make([]row, len(replies))
 
 	for i, r := range replies {
 		rows[i] = row{
-			ID:       r.Raw.Id,
-			Message:  r.Message,
-			CreateAt: formatTime(r.Create),
+			Identifier: r.Raw.Id,
+			Message:    r.Message,
+			CreateAt:   formatTime(r.Create),
 		}
 
 		if r.User != nil {
@@ -54,6 +54,6 @@ func (s *Server) GetThreadReplies(
 	}
 
 	return response.SuccessAny(
-		map[string]any{"post_id": a.PostID, "replies": rows},
+		map[string]any{"post_id": a.PostIdentifier, "replies": rows},
 	)
 }

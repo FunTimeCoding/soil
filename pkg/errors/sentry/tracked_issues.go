@@ -19,7 +19,11 @@ func (c *Client) TrackedIssues() ([]*issue.Issue, error) {
 			return nil, e
 		}
 
-		issues, f := c.Issues(c.organization, proj.ID, constant.PeriodFortnight)
+		issues, f := c.Issues(
+			c.organization,
+			proj.Identifier,
+			constant.PeriodFortnight,
+		)
 
 		if f != nil {
 			return nil, f

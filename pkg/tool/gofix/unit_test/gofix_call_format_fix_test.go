@@ -32,7 +32,10 @@ func TestCallFormatFix(t *testing.T) {
 			assert.String(
 				t,
 				"package example\n\ntype Options struct {\n\tValue int\n}\n\nfunc SharedLine() {\n\twithStruct(\n\t\t\"name\",\n\t\tOptions{Value: 1},\n\t)\n}\n\nfunc withStruct(a string, b Options) {}\n",
-				testutil.ReadFile(t, filepath.Join(directory, "shared_line.go")),
+				testutil.ReadFile(
+					t,
+					filepath.Join(directory, "shared_line.go"),
+				),
 			)
 		},
 	)
@@ -78,7 +81,10 @@ func TestCallFormatFix(t *testing.T) {
 			assert.String(
 				t,
 				"package example\n\ntype Logger struct{}\n\nfunc (l *Logger) Structured(args ...string) {}\n\ntype Poller struct {\n\tlogger *Logger\n}\n\nfunc (p *Poller) Run() {\n\tdefer func() {\n\t\tif v := recover(); v != nil {\n\t\t\tp.logger.Structured(\"recover failed\", \"error\", \"value\")\n\t\t}\n\t}()\n}\n",
-				testutil.ReadFile(t, filepath.Join(directory, "deep_method.go")),
+				testutil.ReadFile(
+					t,
+					filepath.Join(directory, "deep_method.go"),
+				),
 			)
 		},
 	)

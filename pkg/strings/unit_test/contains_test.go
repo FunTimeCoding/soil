@@ -10,7 +10,10 @@ import (
 func TestAll(t *testing.T) {
 	assert.True(
 		t,
-		contains.All([]string{constant.UpperAlfa}, []string{constant.UpperAlfa}),
+		contains.All(
+			[]string{constant.UpperAlfa},
+			[]string{constant.UpperAlfa},
+		),
 	)
 	assert.False(
 		t,
@@ -46,7 +49,10 @@ func TestAll(t *testing.T) {
 func TestAny(t *testing.T) {
 	assert.True(
 		t,
-		contains.Any([]string{constant.UpperAlfa}, []string{constant.UpperAlfa}),
+		contains.Any(
+			[]string{constant.UpperAlfa},
+			[]string{constant.UpperAlfa},
+		),
 	)
 	assert.False(
 		t,
