@@ -13,6 +13,14 @@ func boundary(
 		return true
 	}
 
-	return unicode.IsUpper(previous) && unicode.IsUpper(current) &&
-		i+1 < len(r) && unicode.IsLower(r[i+1])
+	if !unicode.IsUpper(previous) || !unicode.IsUpper(current) ||
+		i+1 >= len(r) || !unicode.IsLower(r[i+1]) {
+		return false
+	}
+
+	if r[i+1] == 's' && (i+2 == len(r) || unicode.IsUpper(r[i+2])) {
+		return false
+	}
+
+	return true
 }

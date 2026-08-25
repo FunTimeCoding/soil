@@ -53,5 +53,6 @@ var Suggestions = map[string]suggestion.Suggestion{
 	"loc":    {Letters: []string{"l"}, Words: []string{"location"}},
 	"dep":    {Letters: []string{"d"}, Words: []string{"dependency"}},
 	"os":     {Words: []string{"operating_system", "system"}},
+	"osd":    {Words: []string{"storage_daemon"}},
 	"fqdn":   {Words: []string{"absolute_domain_name", "absolute_name"}},
 }

@@ -134,3 +134,19 @@ func TestReplaceSegmentUnexportedInitialism(t *testing.T) {
 		segment.ReplaceSegment("nextID", "id", "identifier"),
 	)
 }
+
+func TestReplaceSegmentAcronymMultiWord(t *testing.T) {
+	assert.String(
+		t,
+		"StorageDaemonMap",
+		segment.ReplaceSegment("OsdMap", "osd", "storage_daemon"),
+	)
+}
+
+func TestReplaceSegmentUppercaseAcronymMultiWord(t *testing.T) {
+	assert.String(
+		t,
+		"DownStorageDaemon",
+		segment.ReplaceSegment("DownOSD", "osd", "storage_daemon"),
+	)
+}
