@@ -17,7 +17,7 @@ func createMachine(c *command_context.Context) *cobra.Command {
 	var cdrom string
 	var bridge string
 	var cpuType string
-	var osType string
+	var operatingSystemType string
 	var ciUser string
 	var ciPassword string
 	var sshKeys string
@@ -61,8 +61,8 @@ func createMachine(c *command_context.Context) *cobra.Command {
 				body.CpuType = &cpuType
 			}
 
-			if osType != "" {
-				body.OsType = &osType
+			if operatingSystemType != "" {
+				body.OsType = &operatingSystemType
 			}
 
 			if ciUser != "" {
@@ -121,7 +121,7 @@ func createMachine(c *command_context.Context) *cobra.Command {
 	result.Flags().StringVar(&cdrom, "cdrom", "", "ISO volume")
 	result.Flags().StringVar(&bridge, "bridge", "", "network bridge")
 	result.Flags().StringVar(&cpuType, "cpu-type", "", "CPU type")
-	result.Flags().StringVar(&osType, "os-type", "", "OS type")
+	result.Flags().StringVar(&operatingSystemType, "os-type", "", "OS type")
 	result.Flags().StringVar(&ciUser, "ci-user", "", "cloud-init user")
 	result.Flags().StringVar(
 		&ciPassword,

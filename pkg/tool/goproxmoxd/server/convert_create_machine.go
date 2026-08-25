@@ -47,7 +47,7 @@ func convertCreateMachine(b *server.CreateMachineRequest) *create_machine.Machin
 	}
 
 	if b.OsType != nil {
-		m.OSType = *b.OsType
+		m.OperatingSystemType = *b.OsType
 	}
 
 	if b.Agent != nil {

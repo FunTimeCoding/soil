@@ -104,10 +104,10 @@ func (m *Machine) BuildOptions() []proxmox.VirtualMachineOption {
 
 	result = append(result, option(constant.ProcessorOption, cpuType))
 
-	if m.OSType != "" {
+	if m.OperatingSystemType != "" {
 		result = append(
 			result,
-			option(constant.OperatingSystemOption, m.OSType),
+			option(constant.OperatingSystemOption, m.OperatingSystemType),
 		)
 	}
 

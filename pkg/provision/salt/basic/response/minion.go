@@ -3,14 +3,14 @@ package response
 type Minion struct {
 	Identifier        string              `json:"id"`
 	Host              string              `json:"host"`
-	FQDN              string              `json:"fqdn"`
+	AbsoluteDomainName              string              `json:"fqdn"`
 	Domain            string              `json:"domain"`
 	Localhost         string              `json:"localhost"`
 	Master            string              `json:"master"`
-	OS                string              `json:"os"`
-	OSFullName        string              `json:"osfullname"`
-	OSRelease         string              `json:"osrelease"`
-	OSFamily          string              `json:"os_family"`
+	OperatingSystem                string              `json:"os"`
+	OperatingSystemFullName        string              `json:"osfullname"`
+	OperatingSystemRelease         string              `json:"osrelease"`
+	OperatingSystemFamily          string              `json:"os_family"`
 	Kernel            string              `json:"kernel"`
 	KernelRelease     string              `json:"kernelrelease"`
 	CPUArch           string              `json:"cpuarch"`

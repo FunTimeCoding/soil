@@ -12,7 +12,7 @@ type Machine struct {
 	CDROM           string `json:"cdrom"`
 	Bridge          string `json:"bridge"`
 	CPUType         string `json:"cpu_type"`
-	OSType          string `json:"os_type"`
+	OperatingSystemType          string `json:"os_type"`
 	Agent           *bool  `json:"agent"`
 	OnBoot          *bool  `json:"onboot"`
 	Start           bool   `json:"start"`

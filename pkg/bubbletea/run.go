@@ -23,8 +23,8 @@ func Run(
 			case systemConstant.Darwin:
 				path = join.Absolute(
 					system.Home(),
-					systemConstant.MacOSLibrary,
-					systemConstant.MacOsLogs,
+					systemConstant.DarwinLibrary,
+					systemConstant.DarwinLogs,
 					constant.LogFile,
 				)
 			case systemConstant.Linux:

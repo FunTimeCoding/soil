@@ -126,7 +126,7 @@ func TestBuildOptionsCustomValues(t *testing.T) {
 	m.Cores = 8
 	m.Memory = 16384
 	m.Bridge = "vmbr0"
-	m.OSType = "l26"
+	m.OperatingSystemType = "l26"
 	m.Tags = "prod;web"
 	options := m.BuildOptions()
 	assert.Integer(t, 8, requireOption(t, options, constant.CoresOption).(int))

@@ -56,8 +56,8 @@ const (
 
 // macOS specific paths
 const (
-	MacOSLibrary = "Library"
-	MacOsLogs    = "Logs"
+	DarwinLibrary = "Library"
+	DarwinLogs    = "Logs"
 )
 
 var (

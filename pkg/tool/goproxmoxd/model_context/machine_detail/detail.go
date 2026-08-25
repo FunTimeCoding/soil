@@ -14,7 +14,7 @@ type Detail struct {
 	Uptime      uint64  `json:"uptime"`
 	Tags        string  `json:"tags,omitempty"`
 	Description string  `json:"description,omitempty"`
-	OSType      string  `json:"os_type,omitempty"`
+	OperatingSystemType      string  `json:"os_type,omitempty"`
 	Sockets     int     `json:"sockets,omitempty"`
 	Cores       int     `json:"cores,omitempty"`
 }

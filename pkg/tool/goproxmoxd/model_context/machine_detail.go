@@ -24,7 +24,7 @@ func machineDetail(v *proxmox.VirtualMachine) *machine_detail.Detail {
 		result.Description = v.VirtualMachineConfig.Description
 
 		if v.VirtualMachineConfig.OSType != nil {
-			result.OSType = *v.VirtualMachineConfig.OSType
+			result.OperatingSystemType = *v.VirtualMachineConfig.OSType
 		}
 
 		if v.VirtualMachineConfig.Sockets != nil {
