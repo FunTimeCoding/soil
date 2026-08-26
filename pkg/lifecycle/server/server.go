@@ -15,6 +15,7 @@ type Server struct {
 	identity     *identity.Tool
 	Address      string
 	listener     net.Listener
+	tokens       []string
 	protected    bool
 	writeTimeout time.Duration
 	certificate  string

@@ -55,6 +55,14 @@ func (s *Server) Start() {
 
 	var m http.Handler = s.Mux
 
+	if len(s.tokens) > 0 {
+		m = web.TokenMiddleware(
+			s.tokens,
+			webConstant.HealthPath,
+			webConstant.VersionPath,
+		)(m)
+	}
+
 	if s.Middleware != nil {
 		m = s.Middleware(m)
 	}
