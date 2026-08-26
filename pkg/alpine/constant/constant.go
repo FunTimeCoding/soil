@@ -17,6 +17,14 @@ const (
 
 	MetadataFile = ".PKGINFO"
 
+	IndexFile         = "APKINDEX"
+	IndexArchive      = "APKINDEX.tar.gz"
+	IndexName         = "P:"
+	IndexVersion      = "V:"
+	IndexArchitecture = "A:"
+
+	PackagesPath = "/packages"
+
 	GzipHeaderSize  = 10
 	GzipMinimumSize = 20
 )

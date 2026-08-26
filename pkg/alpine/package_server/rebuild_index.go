@@ -22,7 +22,7 @@ func rebuildIndex(
 		return not_found.Format("no .apk files found in %s", directory)
 	}
 
-	arguments := []string{"index", "-vU", "-o", "APKINDEX.tar.gz"}
+	arguments := []string{"index", "-vU", "-o", constant.IndexArchive}
 
 	for _, f := range packageFiles {
 		arguments = append(arguments, filepath.Base(f))
@@ -41,7 +41,7 @@ func rebuildIndex(
 		"abuild-sign",
 		"-k",
 		filepath.Join(constant.KeyDirectory, keyName),
-		filepath.Join(directory, "APKINDEX.tar.gz"),
+		filepath.Join(directory, constant.IndexArchive),
 	)
 
 	if s.Error != nil {

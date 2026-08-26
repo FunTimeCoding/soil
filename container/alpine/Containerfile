@@ -1,0 +1,5 @@
+FROM alpine:3.24.1
+RUN apk add --no-cache apk-tools abuild
+COPY tmp/goalpined/linux-amd64/goalpined /usr/local/bin
+EXPOSE 8080
+ENTRYPOINT ["goalpined"]
