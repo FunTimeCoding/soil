@@ -83,7 +83,6 @@ goclaude
 goclauded
 goclean
 gocontainer
-godebian
 godockerhub
 godownload
 gofile
@@ -99,6 +98,7 @@ gogitlabd
 gogitstatus
 gohabitica
 gohabiticad
+gohw
 goimage
 goitermd
 gojira
@@ -115,6 +115,8 @@ gomonitor
 gomonitord
 gonetbox
 gonetboxd
+gopackageapk
+gopackagedeb
 gopostgres
 gopostgresd
 goprocess
