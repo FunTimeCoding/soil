@@ -86,6 +86,7 @@ goclean
 gocontainer
 godockerhub
 godownload
+goexample
 gofile
 gofix
 goflightd
@@ -118,6 +119,7 @@ gonetbox
 gonetboxd
 gopackageapk
 gopackagedeb
+gopnsensed
 gopostgres
 gopostgresd
 goprocess
@@ -126,7 +128,6 @@ goprometheus
 goprometheusd
 goproxmox
 goproxmoxd
-gopnsensed
 goqueryd
 goraid
 goraidd
