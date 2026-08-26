@@ -23,8 +23,6 @@ const (
 	IndexVersion      = "V:"
 	IndexArchitecture = "A:"
 
-	PackagesPath = "/packages"
-
 	GzipHeaderSize  = 10
 	GzipMinimumSize = 20
 )

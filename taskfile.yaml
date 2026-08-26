@@ -22,6 +22,8 @@ tasks:
     cmds:
     - cd pkg/tool/goalertlogd/generated/client && oapi-codegen --config config.yaml ../server/openapi.yaml
     - cd pkg/tool/goalertlogd/generated/server && oapi-codegen --config config.yaml openapi.yaml
+    - cd pkg/tool/goalpined/generated/client && oapi-codegen --config config.yaml ../server/openapi.yaml
+    - cd pkg/tool/goalpined/generated/server && oapi-codegen --config config.yaml openapi.yaml
     - cd pkg/tool/goatlassiand/generated/client && oapi-codegen --config config.yaml ../server/openapi.yaml
     - cd pkg/tool/goatlassiand/generated/server && oapi-codegen --config config.yaml openapi.yaml
     - cd pkg/tool/gocertificated/generated/client && oapi-codegen --config config.yaml ../server/openapi.yaml

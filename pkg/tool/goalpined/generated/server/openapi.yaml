@@ -1,0 +1,64 @@
+---
+openapi: "3.0.0"
+info:
+  title: goalpined
+  version: 1.0.0
+paths:
+  /api/v1/packages:
+    get:
+      operationId: getPackages
+      parameters:
+      - name: name
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Repository index listings, optionally filtered by package name.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Listing"
+        "500":
+          description: Failed to read the repository index.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    Listing:
+      type: object
+      required: [version, repository, architecture, packages]
+      properties:
+        version:
+          type: string
+        repository:
+          type: string
+        architecture:
+          type: string
+        packages:
+          type: array
+          items:
+            $ref: "#/components/schemas/Entry"
+    Entry:
+      type: object
+      required: [name, version, architecture]
+      properties:
+        name:
+          type: string
+        version:
+          type: string
+        architecture:
+          type: string
+    ErrorResponse:
+      type: object
+      required: [error, event_identifier]
+      properties:
+        error:
+          type: string
+        event_identifier:
+          type: string
