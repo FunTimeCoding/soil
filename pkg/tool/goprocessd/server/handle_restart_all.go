@@ -3,12 +3,15 @@ package server
 import "fmt"
 
 func (s *Server) handleRestartAll() string {
-	for _, p := range s.processes {
+	s.commandMutex.Lock()
+	defer s.commandMutex.Unlock()
+
+	for _, p := range s.snapshotProcesses() {
 		if e := p.Stop(); e != nil {
 			return fmt.Sprintf("error: %s", e)
 		}
 
-		p.Spawn(s.environment.Build(), nil)
+		s.spawn(p)
 	}
 
 	return "ok"

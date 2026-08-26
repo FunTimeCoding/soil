@@ -12,8 +12,9 @@ type Logger struct {
 	done         chan struct{}
 	timeout      time.Duration
 	buffers      [][]byte
-	maxNameWidth int
-	history      []string
+	maxNameWidth    int
+	history         []string
+	generationStart int
 }
 
 var mutex sync.Mutex

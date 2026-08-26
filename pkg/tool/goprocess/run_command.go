@@ -24,7 +24,9 @@ Commands:
   restart-all            Restart all processes
   reload-procfile        Re-read Procfile, start/stop/restart as needed
   reload-environment     Re-eval .envrc for future restarts
-  log PROCESS            Show recent log output
+  log PROCESS            Show the current generation of log output
+  log PROCESS all        Show all retained log output
+  log PROCESS clear      Discard retained log output
   list                   List process names
   status                 Show running status
 `,

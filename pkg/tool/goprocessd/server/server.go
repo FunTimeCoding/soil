@@ -3,6 +3,7 @@ package server
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/process"
+	"sync"
 )
 
 type Server struct {
@@ -12,4 +13,9 @@ type Server struct {
 	procfilePath string
 	envrcPath    string
 	socketPath   string
+	running      int
+	countMutex   sync.Mutex
+	processMutex sync.RWMutex
+	commandMutex sync.Mutex
+	allDone      chan struct{}
 }

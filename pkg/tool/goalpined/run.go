@@ -61,6 +61,8 @@ func Run(
 					)
 					c.Mount(m)
 				},
+			).WithTokens(
+				[]string{o.Token},
 			).WithMiddleware(web.RecoveryMiddleware(r)),
 		),
 		lifecycle.WithServer(

@@ -4,15 +4,13 @@ import (
 	"golang.org/x/sys/unix"
 	"os"
 	"os/signal"
-	"sync"
 )
 
 func (s *Server) Run() error {
-	var waitGroup sync.WaitGroup
 	listenErrors := make(chan error, 1)
 
-	for _, p := range s.processes {
-		p.Spawn(s.environment.Build(), &waitGroup)
+	for _, p := range s.snapshotProcesses() {
+		s.spawn(p)
 	}
 
 	go func() {
@@ -22,14 +20,9 @@ func (s *Server) Run() error {
 	}()
 	signals := make(chan os.Signal, 10)
 	signal.Notify(signals, unix.SIGTERM, unix.SIGINT, unix.SIGHUP)
-	allDone := make(chan struct{}, 1)
-	go func() {
-		waitGroup.Wait()
-		allDone <- struct{}{}
-	}()
 
 	select {
-	case <-allDone:
+	case <-s.allDone:
 		return s.stopAll()
 	case <-signals:
 		return s.stopAll()

@@ -1,12 +1,12 @@
 package goalpine
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
-	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/tool/goalpine/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/client"
+	"github.com/spf13/cobra"
 )
 
 func Main(
@@ -16,9 +16,13 @@ func Main(
 ) {
 	r := reporter.New(constant.Identity.Name(), version).Start()
 	defer func() { r.RecoverFlush(recover()) }()
-	a := argument.NewInstance(constant.Identity)
-	a.String(argumentConstant.Name, "", "Filter to one package name")
-	a.Parse(version, gitHash, buildDate)
 	c := client.NewEnvironment()
-	fmt.Println(c.Packages(a.GetString(argumentConstant.Name)))
+	o := &cobra.Command{
+		Use:     constant.Identity.Usage(),
+		Short:   constant.Identity.Description(),
+		Version: argument.CobraVersion(version, gitHash, buildDate),
+	}
+	o.AddCommand(packages(c))
+	o.AddCommand(upload(c))
+	errors.PanicOnError(o.Execute())
 }

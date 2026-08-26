@@ -5,7 +5,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/writer"
 )
 
-func (p *Process) run(environment []string) {
+func (p *Process) run(environment []string) bool {
+	p.logger.StartGeneration()
 	r := run.New()
 	r.Panic = false
 	r.SetEnvironment(environment)
@@ -16,7 +17,7 @@ func (p *Process) run(environment []string) {
 	if e != nil {
 		writer.Print(p.logger, "Failed to start %s: %s\n", p.Name, e)
 
-		return
+		return false
 	}
 
 	p.handle = handle
@@ -27,5 +28,8 @@ func (p *Process) run(environment []string) {
 	p.condition.Broadcast()
 	p.waitError = e
 	p.handle = nil
+	supervisorStopped := p.stoppedBySupervisor
 	writer.Print(p.logger, "Terminating %s\n", p.Name)
+
+	return supervisorStopped
 }

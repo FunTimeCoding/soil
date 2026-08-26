@@ -33,6 +33,10 @@ func (l *Logger) writeBuffers(line []byte) {
 	if len(text) > 0 {
 		if len(l.history) >= constant.HistoryCapacity {
 			l.history = l.history[1:]
+
+			if l.generationStart > 0 {
+				l.generationStart--
+			}
 		}
 
 		l.history = append(l.history, text)

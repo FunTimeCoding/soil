@@ -6,17 +6,17 @@ import (
 )
 
 func (s *Server) handleStatus() string {
-	var lines []string
+	var result []string
 
-	for _, p := range s.processes {
+	for _, e := range s.Statuses() {
 		prefix := " "
 
-		if p.Running() {
+		if e.Running {
 			prefix = "*"
 		}
 
-		lines = append(lines, fmt.Sprintf("%s%s", prefix, p.Name))
+		result = append(result, fmt.Sprintf("%s%s", prefix, e.Name))
 	}
 
-	return join.NewLine(lines)
+	return join.NewLine(result)
 }

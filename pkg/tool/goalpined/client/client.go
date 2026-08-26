@@ -8,4 +8,6 @@ import (
 type Client struct {
 	context context.Context
 	client  *client.ClientWithResponses
+	base    string
+	token   string
 }

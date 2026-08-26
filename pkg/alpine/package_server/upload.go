@@ -1,14 +1,11 @@
 package package_server
 
 import (
-	"crypto/subtle"
 	"github.com/funtimecoding/soil/pkg/alpine/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
-	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/writer"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 	"path/filepath"
 	"strings"
@@ -20,19 +17,6 @@ func (s *Server) upload(
 ) {
 	if r.Method != http.MethodPost {
 		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
-
-		return
-	}
-
-	authorization := r.Header.Get(web.Authorization)
-	bearer := join.Empty(web.Bearer, stringsConstant.Space)
-
-	if !strings.HasPrefix(authorization, bearer) ||
-		subtle.ConstantTimeCompare(
-			[]byte(strings.TrimPrefix(authorization, bearer)),
-			[]byte(s.token),
-		) != 1 {
-		http.Error(w, web.Unauthorized, http.StatusUnauthorized)
 
 		return
 	}

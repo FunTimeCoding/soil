@@ -3,9 +3,10 @@ package server
 import "github.com/funtimecoding/soil/pkg/strings/join"
 
 func (s *Server) handleList() string {
-	names := make([]string, len(s.processes))
+	processes := s.snapshotProcesses()
+	names := make([]string, len(processes))
 
-	for i, p := range s.processes {
+	for i, p := range processes {
 		names[i] = p.Name
 	}
 

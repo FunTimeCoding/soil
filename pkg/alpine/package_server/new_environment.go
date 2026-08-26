@@ -6,8 +6,5 @@ import (
 )
 
 func NewEnvironment() *Server {
-	return New(
-		environment.Required(constant.TokenEnvironment),
-		environment.Required(constant.SignatureKeyEnvironment),
-	)
+	return New(environment.Required(constant.SignatureKeyEnvironment))
 }

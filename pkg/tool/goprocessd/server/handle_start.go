@@ -3,6 +3,9 @@ package server
 import "fmt"
 
 func (s *Server) handleStart(arguments []string) string {
+	s.commandMutex.Lock()
+	defer s.commandMutex.Unlock()
+
 	for _, name := range arguments {
 		p := s.findProcess(name)
 
@@ -10,7 +13,7 @@ func (s *Server) handleStart(arguments []string) string {
 			return fmt.Sprintf("error: unknown process %s", name)
 		}
 
-		p.Spawn(s.environment.Build(), nil)
+		s.spawn(p)
 	}
 
 	return "ok"

@@ -9,6 +9,18 @@ var Identity = identity.New(
 )
 
 const HistoryCapacity = 200
+const (
+	ProcessStatus  = "process_status"
+	ProcessLog     = "process_log"
+	ProcessRestart = "process_restart"
+	ProcessReload  = "process_reload"
+)
+
+const (
+	UnknownProcess = "unknown process %s"
+	ProcfileScope  = "procfile"
+	EnvironmentScope = "environment"
+)
 
 var Colors = []int{
 	32, // green

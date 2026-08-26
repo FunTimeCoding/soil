@@ -34,5 +34,6 @@ func New(
 		procfilePath: procfilePath,
 		envrcPath:    envrcPath,
 		socketPath:   socketPath,
+		allDone:      make(chan struct{}, 1),
 	}
 }

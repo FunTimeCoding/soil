@@ -1,26 +1,31 @@
 package server
 
-import (
-	"fmt"
-	"github.com/funtimecoding/soil/pkg/strings/join"
-)
+import "fmt"
 
 func (s *Server) handleLog(arguments []string) string {
 	if len(arguments) == 0 {
 		return "error: log requires a process name"
 	}
 
-	p := s.findProcess(arguments[0])
+	name := arguments[0]
+	p := s.findProcess(name)
 
 	if p == nil {
-		return fmt.Sprintf("error: unknown process %s", arguments[0])
+		return fmt.Sprintf("error: unknown process %s", name)
 	}
 
-	lines := p.Log()
+	if len(arguments) == 1 {
+		return currentLog(p, name)
+	}
 
-	if len(lines) == 0 {
+	switch arguments[1] {
+	case "all":
+		return lines(p.Log())
+	case "clear":
+		p.ClearLog()
+
 		return "ok"
+	default:
+		return fmt.Sprintf("error: unknown log option %s", arguments[1])
 	}
-
-	return join.NewLine(lines)
 }
