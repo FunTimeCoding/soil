@@ -11,7 +11,7 @@ func (p *Packager) MoveBinary() {
 	system.MakeDirectory(p.BinaryRoot)
 	source := p.ExecutablePath
 
-	if !runtime.RunningFromBinary() {
+	if !runtime.RunningFromBinary() && !filepath.IsAbs(p.ExecutablePath) {
 		source = filepath.Join(system.WorkDirectory(), p.ExecutablePath)
 	}
 

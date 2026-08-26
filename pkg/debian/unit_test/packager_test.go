@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/debian/packager"
 	"github.com/funtimecoding/soil/pkg/system"
+	"path/filepath"
 	"testing"
 )
 
@@ -62,6 +63,21 @@ func TestSubPath(t *testing.T) {
 		},
 		actual,
 	)
+}
+
+func TestMoveBinaryAbsolutePath(t *testing.T) {
+	directory := t.TempDir()
+	source := filepath.Join(directory, "goexample")
+	system.WriteFile(source, []byte("binary"), 0755)
+	p := packager.New(
+		source,
+		constant.DefaultVersion,
+		"John Doe",
+		"john.doe@example.org",
+	)
+	p.BinaryRoot = filepath.Join(directory, "usr", "local", "bin")
+	p.MoveBinary()
+	assert.True(t, system.FileExists(filepath.Join(p.BinaryRoot, "goexample")))
 }
 
 func generifyPackager(p *packager.Packager) {
