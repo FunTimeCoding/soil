@@ -16,7 +16,7 @@ func TestPackager(t *testing.T) {
 		"John Doe",
 		"john.doe@example.org",
 	)
-	generifyPackager(actual)
+	root := packageRoot()
 	assert.Any(
 		t,
 		&packager.Packager{
@@ -24,11 +24,11 @@ func TestPackager(t *testing.T) {
 			ExecutableName:    "goexample",
 			PackageName:       "goexample_1.0.0-1_amd64",
 			PackageVersion:    "1.0.0",
-			Root:              "/soil/pkg/debian/unit_test/goexample_1.0.0-1_amd64",
-			ConfigurationRoot: "/soil/pkg/debian/unit_test/goexample_1.0.0-1_amd64/DEBIAN",
-			UnitRoot:          "/soil/pkg/debian/unit_test/goexample_1.0.0-1_amd64/lib/systemd/system",
-			ControlFile:       "/soil/pkg/debian/unit_test/goexample_1.0.0-1_amd64/DEBIAN/control",
-			BinaryRoot:        "/soil/pkg/debian/unit_test/goexample_1.0.0-1_amd64/usr/local/bin",
+			Root:              root,
+			ConfigurationRoot: filepath.Join(root, "DEBIAN"),
+			UnitRoot:          filepath.Join(root, "lib", "systemd", "system"),
+			ControlFile:       filepath.Join(root, "DEBIAN", "control"),
+			BinaryRoot:        filepath.Join(root, "usr", "local", "bin"),
 			Architecture:      "amd64",
 			MaintainerName:    "John Doe",
 			MaintainerMail:    "john.doe@example.org",
@@ -44,7 +44,7 @@ func TestSubPath(t *testing.T) {
 		"John Doe",
 		"john.doe@example.org",
 	)
-	generifyPackager(actual)
+	root := packageRoot()
 	assert.Any(
 		t,
 		&packager.Packager{
@@ -52,11 +52,11 @@ func TestSubPath(t *testing.T) {
 			ExecutableName:    "goexample",
 			PackageName:       "goexample_1.0.0-1_amd64",
 			PackageVersion:    "1.0.0",
-			Root:              "/soil/pkg/debian/unit_test/goexample_1.0.0-1_amd64",
-			ConfigurationRoot: "/soil/pkg/debian/unit_test/goexample_1.0.0-1_amd64/DEBIAN",
-			UnitRoot:          "/soil/pkg/debian/unit_test/goexample_1.0.0-1_amd64/lib/systemd/system",
-			ControlFile:       "/soil/pkg/debian/unit_test/goexample_1.0.0-1_amd64/DEBIAN/control",
-			BinaryRoot:        "/soil/pkg/debian/unit_test/goexample_1.0.0-1_amd64/usr/local/bin",
+			Root:              root,
+			ConfigurationRoot: filepath.Join(root, "DEBIAN"),
+			UnitRoot:          filepath.Join(root, "lib", "systemd", "system"),
+			ControlFile:       filepath.Join(root, "DEBIAN", "control"),
+			BinaryRoot:        filepath.Join(root, "usr", "local", "bin"),
 			Architecture:      "amd64",
 			MaintainerName:    "John Doe",
 			MaintainerMail:    "john.doe@example.org",
@@ -80,11 +80,6 @@ func TestMoveBinaryAbsolutePath(t *testing.T) {
 	assert.True(t, system.FileExists(filepath.Join(p.BinaryRoot, "goexample")))
 }
 
-func generifyPackager(p *packager.Packager) {
-	d := "soil"
-	p.Root = system.StripUntilDirectory(p.Root, d)
-	p.ConfigurationRoot = system.StripUntilDirectory(p.ConfigurationRoot, d)
-	p.UnitRoot = system.StripUntilDirectory(p.UnitRoot, d)
-	p.ControlFile = system.StripUntilDirectory(p.ControlFile, d)
-	p.BinaryRoot = system.StripUntilDirectory(p.BinaryRoot, d)
+func packageRoot() string {
+	return filepath.Join(system.WorkDirectory(), "goexample_1.0.0-1_amd64")
 }
