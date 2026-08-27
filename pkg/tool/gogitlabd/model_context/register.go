@@ -526,4 +526,39 @@ func (s *Server) register() {
 		),
 		mcp.NewTypedToolHandler(s.CreateBranch),
 	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.ListRegistryRepositories,
+			mcp.WithDescription(
+				"List container registry repositories of a GitLab project",
+			),
+			mcp.WithString(
+				"project",
+				mcp.Required(),
+				mcp.Description("Project path (owner/repo) or ID"),
+			),
+		),
+		mcp.NewTypedToolHandler(s.ListRegistryRepositories),
+	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.DeleteRegistryRepository,
+			mcp.WithDescription(
+				"Delete a container registry repository and its cache sibling (<path>/cache) when present - the ritual after an image moves to another registry",
+			),
+			mcp.WithString(
+				"project",
+				mcp.Required(),
+				mcp.Description("Project path (owner/repo) or ID"),
+			),
+			mcp.WithString(
+				"path",
+				mcp.Required(),
+				mcp.Description(
+					"Full registry repository path as shown by list_registry_repositories",
+				),
+			),
+		),
+		mcp.NewTypedToolHandler(s.DeleteRegistryRepository),
+	)
 }

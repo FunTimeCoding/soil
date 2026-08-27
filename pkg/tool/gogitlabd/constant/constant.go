@@ -33,6 +33,9 @@ const (
 	CancelPipeline       = "cancel_pipeline"
 	CancelPipelineJob    = "cancel_pipeline_job"
 
+	ListRegistryRepositories = "list_registry_repositories"
+	DeleteRegistryRepository = "delete_registry_repository"
+
 	ListMergeRequests       = "list_merge_requests"
 	GetMergeRequest         = "get_merge_request"
 	GetMergeRequestDiffs    = "get_merge_request_diffs"
