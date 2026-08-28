@@ -8,14 +8,14 @@ require (
 	charm.land/lipgloss/v2 v2.0.6
 	github.com/JohannesKaufmann/html-to-markdown/v2 v2.5.2
 	github.com/MrGunflame/gw2api v1.0.5
-	github.com/PuerkitoBio/goquery v1.12.0
+	github.com/PuerkitoBio/goquery v1.13.0
 	github.com/akkuman/logrus-loki-hook v0.0.0-20210518091319-f99fe13c48f5
 	github.com/amikos-tech/chroma-go v0.4.1
 	github.com/amikos-tech/pure-onnx v0.0.1
 	github.com/amikos-tech/pure-tokenizers v0.1.5
 	github.com/andybrewer/mack v0.0.0-20251024001139-afd410b36447
 	github.com/andygrunwald/go-jira v1.17.0
-	github.com/anthropics/anthropic-sdk-go v1.67.0
+	github.com/anthropics/anthropic-sdk-go v1.68.0
 	github.com/apenella/go-ansible/v2 v2.4.1
 	github.com/bmatcuk/doublestar/v4 v4.10.0
 	github.com/bndr/gojenkins v1.2.0
@@ -34,7 +34,7 @@ require (
 	github.com/fsnotify/fsnotify v1.10.1
 	github.com/gage-technologies/mistral-go v1.1.0
 	github.com/gdamore/tcell/v2 v2.13.10
-	github.com/getkin/kin-openapi v0.147.0
+	github.com/getkin/kin-openapi v0.149.0
 	github.com/getlantern/systray v1.2.2
 	github.com/getsentry/sentry-go v0.49.0
 	github.com/glebarez/go-sqlite v1.23.0
@@ -70,8 +70,8 @@ require (
 	github.com/nwaples/rardecode/v2 v2.4.1
 	github.com/oapi-codegen/runtime v1.7.0
 	github.com/olekukonko/tablewriter v1.1.4
-	github.com/ollama/ollama v0.33.0
-	github.com/openai/openai-go/v3 v3.52.0
+	github.com/ollama/ollama v0.33.1
+	github.com/openai/openai-go/v3 v3.54.0
 	github.com/openvex/go-vex v0.2.8
 	github.com/opsgenie/opsgenie-go-sdk-v2 v1.2.23
 	github.com/pkg/sftp v1.13.11
@@ -94,7 +94,7 @@ require (
 	github.com/trivago/tgo v1.0.7
 	github.com/whilp/git-urls v1.0.0
 	github.com/yuin/goldmark v1.8.5
-	gitlab.com/gitlab-org/api/client-go/v2 v2.59.1
+	gitlab.com/gitlab-org/api/client-go/v2 v2.60.0
 	golang.org/x/crypto v0.55.0
 	golang.org/x/mod v0.40.0
 	golang.org/x/net v0.58.0
@@ -306,7 +306,7 @@ require (
 	github.com/ryanuber/go-glob v1.0.0 // indirect
 	github.com/samber/lo v1.53.0 // indirect
 	github.com/samber/slog-common v0.21.0 // indirect
-	github.com/santhosh-tekuri/jsonschema/v6 v6.0.2 // indirect
+	github.com/santhosh-tekuri/jsonschema/v6 v6.0.3 // indirect
 	github.com/segmentio/asm v1.1.3 // indirect
 	github.com/segmentio/encoding v0.5.4 // indirect
 	github.com/sergi/go-diff v1.4.0 // indirect
