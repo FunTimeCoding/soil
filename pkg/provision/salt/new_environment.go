@@ -13,6 +13,10 @@ func NewEnvironment() *Client {
 		o = append(o, WithAuthentication(v))
 	}
 
+	if environment.Exists(constant.SaltInsecureEnvironment) {
+		o = append(o, WithInsecure())
+	}
+
 	return New(
 		environment.Required(constant.SaltHostEnvironment),
 		strings.MustToInteger(

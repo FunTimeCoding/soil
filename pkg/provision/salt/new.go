@@ -21,7 +21,7 @@ func New(
 		eauth = "pam"
 	}
 
-	result.basic = basic.New(host, port, user, password, eauth)
+	result.basic = basic.New(host, port, user, password, eauth, result.insecure)
 
 	return result
 }

@@ -6,6 +6,7 @@ const (
 	SaltUserEnvironment           = "SALT_USER"
 	SaltPasswordEnvironment       = "SALT_PASSWORD"
 	SaltAuthenticationEnvironment = "SALT_AUTHENTICATION"
+	SaltInsecureEnvironment       = "SALT_INSECURE"
 
 	SaltRun       = "cmd.run"
 	SaltHighstate = "state.highstate"

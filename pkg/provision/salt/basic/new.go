@@ -11,9 +11,20 @@ func New(
 	user string,
 	password string,
 	eauth string,
+	insecure bool,
 ) *Client {
+	l := locator.New(host)
+
+	if port != 0 {
+		l.Port(port)
+	}
+
+	if insecure {
+		l.Insecure()
+	}
+
 	result := &Client{
-		base:     locator.New(host).Port(port).Insecure().String(),
+		base:     l.String(),
 		user:     user,
 		password: password,
 		eauth:    eauth,
