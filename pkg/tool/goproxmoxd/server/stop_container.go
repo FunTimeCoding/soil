@@ -16,19 +16,17 @@ func (s *Server) StopContainer(
 		return server.StopContainer400JSONResponse(*clientError(e)), nil
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return server.StopContainer500JSONResponse(*s.captureDetail(e)), nil
-	}
-
 	node := ""
 
 	if r.Params.Node != nil {
 		node = *r.Params.Node
 	}
 
-	taskIdentifier, e := s.service.StopContainer(c, int(r.Identifier), node)
+	taskIdentifier, e := s.service.StopContainer(
+		instance,
+		int(r.Identifier),
+		node,
+	)
 
 	if e != nil {
 		if not_found.Is(e) {

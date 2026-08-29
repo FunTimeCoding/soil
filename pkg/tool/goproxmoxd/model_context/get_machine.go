@@ -23,13 +23,7 @@ func (s *Server) GetMachine(
 		return response.Fail("%s", e)
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return s.captureDetail(e)
-	}
-
-	vm, e := s.service.GetMachine(c, a.Identifier, a.Node)
+	vm, e := s.service.GetMachine(instance, a.Identifier, a.Node)
 
 	if e != nil {
 		if not_found.Is(e) {

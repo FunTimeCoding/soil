@@ -15,14 +15,8 @@ func (s *Server) DownloadLocator(
 		return server.DownloadLocator400JSONResponse(*clientError(e)), nil
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return server.DownloadLocator500JSONResponse(*s.captureDetail(e)), nil
-	}
-
 	e = s.service.DownloadLocator(
-		c,
+		instance,
 		r.Name,
 		r.Storage,
 		r.Body.Content,

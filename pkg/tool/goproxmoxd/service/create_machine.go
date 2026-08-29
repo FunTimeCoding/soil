@@ -3,13 +3,13 @@ package service
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"github.com/funtimecoding/soil/pkg/proxmox/network_device"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/model_context/argument/create_machine"
 )
 
 func (s *Service) CreateMachine(
-	c face.ProxmoxClient,
+	instance string,
 	m *create_machine.Machine,
 ) (int, error) {
 	cloudInit := m.CIUser != "" || m.SSHKeys != "" || m.CIPassword != ""
@@ -18,6 +18,12 @@ func (s *Service) CreateMachine(
 		return 0, validation.New(
 			"cdrom and cloud-init are mutually exclusive - both use ide2",
 		)
+	}
+
+	c, clientFail := s.Client(instance)
+
+	if clientFail != nil {
+		return 0, clientFail
 	}
 
 	identifier := m.Identifier
@@ -30,6 +36,19 @@ func (s *Service) CreateMachine(
 		}
 
 		identifier = v
+	}
+
+	if m.HardwareAddress == "" {
+		address, e := network_device.Derive(
+			s.inventory.Index(instance),
+			identifier,
+		)
+
+		if e != nil {
+			return 0, e
+		}
+
+		m.HardwareAddress = address
 	}
 
 	node, e := c.Node(m.Node)

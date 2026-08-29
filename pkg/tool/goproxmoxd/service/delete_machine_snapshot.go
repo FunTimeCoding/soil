@@ -1,13 +1,17 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
-
 func (s *Service) DeleteMachineSnapshot(
-	c face.ProxmoxClient,
+	instance string,
 	identifier int,
 	node string,
 	name string,
 ) (string, error) {
+	c, clientFail := s.Client(instance)
+
+	if clientFail != nil {
+		return "", clientFail
+	}
+
 	vm, e := findMachine(c, identifier, node)
 
 	if e != nil {

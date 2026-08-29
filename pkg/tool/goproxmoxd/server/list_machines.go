@@ -16,19 +16,13 @@ func (s *Server) ListMachines(
 		return server.ListMachines400JSONResponse(*clientError(e)), nil
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return server.ListMachines500JSONResponse(*s.captureDetail(e)), nil
-	}
-
 	node := ""
 
 	if r.Params.Node != nil {
 		node = *r.Params.Node
 	}
 
-	machines, e := s.service.ListMachines(c, node)
+	machines, e := s.service.ListMachines(instance, node)
 
 	if e != nil {
 		return server.ListMachines500JSONResponse(*s.captureDetail(e)), nil

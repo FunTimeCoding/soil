@@ -5,7 +5,7 @@ import (
 	"github.com/luthermonson/go-proxmox"
 )
 
-func (s *Service) UpdateMachineConfiguration(
+func (s *Service) updateMachineConfiguration(
 	c face.ProxmoxClient,
 	identifier int,
 	node string,

@@ -40,6 +40,7 @@ func Main(
 	o.AddCommand(getNodeStatus(c))
 	o.AddCommand(listMachines(c))
 	o.AddCommand(getMachine(c))
+	o.AddCommand(deriveHardwareAddress(c))
 	o.AddCommand(createMachine(c))
 	o.AddCommand(updateMachine(c))
 	o.AddCommand(cloneMachine(c))

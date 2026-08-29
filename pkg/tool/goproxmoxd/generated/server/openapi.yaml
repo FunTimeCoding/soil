@@ -16,6 +16,40 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/InstanceDetail"
+  /api/v1/hardware-address:
+    get:
+      operationId: deriveHardwareAddress
+      parameters:
+      - name: instance
+        in: query
+        schema:
+          type: string
+        description: Proxmox instance name.
+      - name: identifier
+        in: query
+        required: true
+        schema:
+          type: integer
+        description: Machine identifier, which need not exist yet.
+      responses:
+        "200":
+          description: The address this machine derives to.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DerivedAddress"
+        "400":
+          description: The instance or identifier is out of range.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to derive the address.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /api/v1/nodes:
     get:
       operationId: listNodes
@@ -1527,6 +1561,38 @@ components:
           type: integer
         cores:
           type: integer
+        network_devices:
+          type: array
+          items:
+            $ref: "#/components/schemas/NetworkDevice"
+    DerivedAddress:
+      type: object
+      required: [instance, identifier, hardware_address]
+      properties:
+        instance:
+          type: string
+        identifier:
+          type: integer
+        hardware_address:
+          type: string
+        in_use_by:
+          type: integer
+    NetworkDevice:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+        model:
+          type: string
+        interface:
+          type: string
+        hardware_address:
+          type: string
+        bridge:
+          type: string
+        vlan:
+          type: integer
     Container:
       type: object
       required:
@@ -1671,6 +1737,8 @@ components:
         cdrom:
           type: string
         bridge:
+          type: string
+        hardware_address:
           type: string
         cpuType:
           type: string

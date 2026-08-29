@@ -16,12 +16,6 @@ func (s *Server) CreateMachineSnapshot(
 		return server.CreateMachineSnapshot400JSONResponse(*clientError(e)), nil
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return server.CreateMachineSnapshot500JSONResponse(*s.captureDetail(e)), nil
-	}
-
 	node := ""
 
 	if r.Params.Node != nil {
@@ -29,7 +23,7 @@ func (s *Server) CreateMachineSnapshot(
 	}
 
 	taskIdentifier, e := s.service.CreateMachineSnapshot(
-		c,
+		instance,
 		int(r.Identifier),
 		node,
 		r.Body.Name,

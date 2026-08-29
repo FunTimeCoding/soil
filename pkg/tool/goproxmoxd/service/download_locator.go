@@ -1,15 +1,19 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
-
 func (s *Service) DownloadLocator(
-	c face.ProxmoxClient,
+	instance string,
 	node string,
 	storage string,
 	content string,
 	filename string,
 	l string,
 ) error {
+	c, clientFail := s.Client(instance)
+
+	if clientFail != nil {
+		return clientFail
+	}
+
 	n, e := c.Node(node)
 
 	if e != nil {

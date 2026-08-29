@@ -9,27 +9,31 @@ import (
 	"testing"
 )
 
+func containerService(c *mock_client.Client) *service.Service {
+	result := service.New(inventory.NewSingle("test"))
+	result.SetClient("test", c)
+
+	return result
+}
+
 func TestStartContainerMissing(t *testing.T) {
 	c := mock_client.New()
 	c.AddNode("test")
-	s := service.New(inventory.NewSingle("test"))
-	_, e := s.StartContainer(c, 999, "")
+	_, e := containerService(c).StartContainer("test", 999, "")
 	assert.True(t, not_found.Is(e))
 }
 
 func TestStopContainerMissing(t *testing.T) {
 	c := mock_client.New()
 	c.AddNode("test")
-	s := service.New(inventory.NewSingle("test"))
-	_, e := s.StopContainer(c, 999, "")
+	_, e := containerService(c).StopContainer("test", 999, "")
 	assert.True(t, not_found.Is(e))
 }
 
 func TestShutdownContainerMissing(t *testing.T) {
 	c := mock_client.New()
 	c.AddNode("test")
-	s := service.New(inventory.NewSingle("test"))
-	_, e := s.ShutdownContainer(c, 999, "")
+	_, e := containerService(c).ShutdownContainer("test", 999, "")
 	assert.True(t, not_found.Is(e))
 }
 
@@ -37,8 +41,7 @@ func TestStartContainerFound(t *testing.T) {
 	c := mock_client.New()
 	c.AddNode("test")
 	c.AddContainer("test", 101, "target-container")
-	s := service.New(inventory.NewSingle("test"))
-	taskIdentifier, e := s.StartContainer(c, 101, "test")
-	assert.True(t, e == nil)
+	taskIdentifier, e := containerService(c).StartContainer("test", 101, "test")
+	assert.Nil(t, e)
 	assert.StringContains(t, "ct-start", taskIdentifier)
 }

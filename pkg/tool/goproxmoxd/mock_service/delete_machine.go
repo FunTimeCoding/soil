@@ -1,16 +1,19 @@
 package mock_service
 
-import (
-	"github.com/funtimecoding/soil/pkg/errors/conflict"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
-)
+import "github.com/funtimecoding/soil/pkg/errors/conflict"
 
 func (s *Service) DeleteMachine(
-	c face.ProxmoxClient,
+	instance string,
 	identifier int,
 	node string,
 	_ bool,
 ) error {
+	c, clientFail := s.Client(instance)
+
+	if clientFail != nil {
+		return clientFail
+	}
+
 	n, e := c.Node(node)
 
 	if e != nil {

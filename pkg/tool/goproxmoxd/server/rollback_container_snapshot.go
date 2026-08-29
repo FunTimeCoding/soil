@@ -16,14 +16,6 @@ func (s *Server) RollbackContainerSnapshot(
 		return server.RollbackContainerSnapshot400JSONResponse(*clientError(e)), nil
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return server.RollbackContainerSnapshot500JSONResponse(
-			*s.captureDetail(e),
-		), nil
-	}
-
 	node := ""
 
 	if r.Params.Node != nil {
@@ -31,7 +23,7 @@ func (s *Server) RollbackContainerSnapshot(
 	}
 
 	taskIdentifier, e := s.service.RollbackContainerSnapshot(
-		c,
+		instance,
 		int(r.Identifier),
 		node,
 		r.Name,

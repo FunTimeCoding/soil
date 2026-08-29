@@ -27,14 +27,8 @@ func (s *Server) CreateMachineSnapshot(
 		return response.Fail("%s", e)
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return s.captureDetail(e)
-	}
-
 	taskIdentifier, e := s.service.CreateMachineSnapshot(
-		c,
+		instance,
 		a.Identifier,
 		a.Node,
 		a.Name,

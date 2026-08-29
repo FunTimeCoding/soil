@@ -27,13 +27,7 @@ func (s *Server) CreateMachine(
 		return response.Fail("%s", e)
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return s.captureDetail(e)
-	}
-
-	identifier, e := s.service.CreateMachine(c, &a)
+	identifier, e := s.service.CreateMachine(instance, &a)
 
 	if e != nil {
 		if validation.Is(e) {

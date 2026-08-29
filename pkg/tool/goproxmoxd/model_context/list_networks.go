@@ -22,13 +22,7 @@ func (s *Server) ListNetworks(
 		return response.Fail("%s", e)
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return s.captureDetail(e)
-	}
-
-	networks, e := s.service.ListNetworks(c, a.Node)
+	networks, e := s.service.ListNetworks(instance, a.Node)
 
 	if e != nil {
 		return s.captureDetail(e)

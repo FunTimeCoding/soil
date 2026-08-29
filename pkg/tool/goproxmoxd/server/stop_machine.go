@@ -16,19 +16,17 @@ func (s *Server) StopMachine(
 		return server.StopMachine400JSONResponse(*clientError(e)), nil
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return server.StopMachine500JSONResponse(*s.captureDetail(e)), nil
-	}
-
 	node := ""
 
 	if r.Params.Node != nil {
 		node = *r.Params.Node
 	}
 
-	taskIdentifier, e := s.service.StopMachine(c, int(r.Identifier), node)
+	taskIdentifier, e := s.service.StopMachine(
+		instance,
+		int(r.Identifier),
+		node,
+	)
 
 	if e != nil {
 		if not_found.Is(e) {

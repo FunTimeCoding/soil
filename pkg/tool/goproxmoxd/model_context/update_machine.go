@@ -24,13 +24,7 @@ func (s *Server) UpdateMachine(
 		return response.Fail("%s", e)
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return s.captureDetail(e)
-	}
-
-	e = s.service.UpdateMachine(c, &a)
+	e = s.service.UpdateMachine(instance, &a)
 
 	if e != nil {
 		if not_found.Is(e) || validation.Is(e) {

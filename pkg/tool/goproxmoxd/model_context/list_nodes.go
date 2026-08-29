@@ -19,13 +19,7 @@ func (s *Server) ListNodes(
 		return response.Fail("%s", e)
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return s.captureDetail(e)
-	}
-
-	nodes, e := s.service.ListNodes(c)
+	nodes, e := s.service.ListNodes(instance)
 
 	if e != nil {
 		return s.captureDetail(e)

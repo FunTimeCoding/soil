@@ -17,14 +17,8 @@ func (s *Server) UpdateMachine(
 		return server.UpdateMachine400JSONResponse(*clientError(e)), nil
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return server.UpdateMachine500JSONResponse(*s.captureDetail(e)), nil
-	}
-
 	a := convertUpdateMachine(r)
-	e = s.service.UpdateMachine(c, a)
+	e = s.service.UpdateMachine(instance, a)
 
 	if e != nil {
 		if not_found.Is(e) {

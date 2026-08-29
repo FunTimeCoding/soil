@@ -16,13 +16,7 @@ func (s *Server) ListNodes(
 		return server.ListNodes400JSONResponse(*clientError(e)), nil
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return server.ListNodes500JSONResponse(*s.captureDetail(e)), nil
-	}
-
-	nodes, e := s.service.ListNodes(c)
+	nodes, e := s.service.ListNodes(instance)
 
 	if e != nil {
 		return server.ListNodes500JSONResponse(*s.captureDetail(e)), nil

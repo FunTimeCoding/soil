@@ -23,13 +23,11 @@ func (s *Server) ShutdownMachine(
 		return response.Fail("%s", e)
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return s.captureDetail(e)
-	}
-
-	taskIdentifier, e := s.service.ShutdownMachine(c, a.Identifier, a.Node)
+	taskIdentifier, e := s.service.ShutdownMachine(
+		instance,
+		a.Identifier,
+		a.Node,
+	)
 
 	if e != nil {
 		if not_found.Is(e) {

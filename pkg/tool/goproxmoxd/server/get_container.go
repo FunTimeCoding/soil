@@ -17,19 +17,13 @@ func (s *Server) GetContainer(
 		return server.GetContainer400JSONResponse(*clientError(e)), nil
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return server.GetContainer500JSONResponse(*s.captureDetail(e)), nil
-	}
-
 	node := ""
 
 	if r.Params.Node != nil {
 		node = *r.Params.Node
 	}
 
-	ct, e := s.service.GetContainer(c, int(r.Identifier), node)
+	ct, e := s.service.GetContainer(instance, int(r.Identifier), node)
 
 	if e != nil {
 		if not_found.Is(e) {

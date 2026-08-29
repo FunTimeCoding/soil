@@ -19,13 +19,7 @@ func (s *Server) ListContainers(
 		return response.Fail("%s", e)
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return s.captureDetail(e)
-	}
-
-	containers, e := s.service.ListContainers(c, a.Node)
+	containers, e := s.service.ListContainers(instance, a.Node)
 
 	if e != nil {
 		return s.captureDetail(e)

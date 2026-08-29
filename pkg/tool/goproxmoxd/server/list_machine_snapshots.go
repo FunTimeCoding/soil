@@ -17,19 +17,17 @@ func (s *Server) ListMachineSnapshots(
 		return server.ListMachineSnapshots400JSONResponse(*clientError(e)), nil
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return server.ListMachineSnapshots500JSONResponse(*s.captureDetail(e)), nil
-	}
-
 	node := ""
 
 	if r.Params.Node != nil {
 		node = *r.Params.Node
 	}
 
-	snapshots, e := s.service.ListMachineSnapshots(c, int(r.Identifier), node)
+	snapshots, e := s.service.ListMachineSnapshots(
+		instance,
+		int(r.Identifier),
+		node,
+	)
 
 	if e != nil {
 		if not_found.Is(e) {

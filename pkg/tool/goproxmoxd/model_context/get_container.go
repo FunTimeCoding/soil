@@ -23,13 +23,7 @@ func (s *Server) GetContainer(
 		return response.Fail("%s", e)
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return s.captureDetail(e)
-	}
-
-	ct, e := s.service.GetContainer(c, a.Identifier, a.Node)
+	ct, e := s.service.GetContainer(instance, a.Identifier, a.Node)
 
 	if e != nil {
 		if not_found.Is(e) {

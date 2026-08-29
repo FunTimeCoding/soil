@@ -27,13 +27,7 @@ func (s *Server) ListStorageContent(
 		return response.Fail("%s", e)
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return s.captureDetail(e)
-	}
-
-	content, e := s.service.ListStorageContent(c, a.Node, a.Storage)
+	content, e := s.service.ListStorageContent(instance, a.Node, a.Storage)
 
 	if e != nil {
 		return s.captureDetail(e)

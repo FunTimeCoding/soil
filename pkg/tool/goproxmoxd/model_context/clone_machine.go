@@ -28,12 +28,6 @@ func (s *Server) CloneMachine(
 		return response.Fail("%s", e)
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return s.captureDetail(e)
-	}
-
 	options := &proxmox.VirtualMachineCloneOptions{Name: a.Name}
 
 	if a.NewIdentifier > 0 {
@@ -52,7 +46,12 @@ func (s *Server) CloneMachine(
 		options.SnapName = a.Snapshot
 	}
 
-	newIdentifier, e := s.service.CloneMachine(c, a.Identifier, a.Node, options)
+	newIdentifier, e := s.service.CloneMachine(
+		instance,
+		a.Identifier,
+		a.Node,
+		options,
+	)
 
 	if e != nil {
 		if not_found.Is(e) {

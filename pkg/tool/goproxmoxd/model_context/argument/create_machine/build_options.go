@@ -75,11 +75,17 @@ func (m *Machine) BuildOptions() []proxmox.VirtualMachineOption {
 		bridge = "vmbr0"
 	}
 
+	model := "virtio"
+
+	if m.HardwareAddress != "" {
+		model = fmt.Sprintf("virtio=%s", m.HardwareAddress)
+	}
+
 	result = append(
 		result,
 		option(
 			constant.PrimaryNetworkOption,
-			fmt.Sprintf("virtio,bridge=%s", bridge),
+			fmt.Sprintf("%s,bridge=%s", model, bridge),
 		),
 	)
 	agent := m.Agent == nil || *m.Agent

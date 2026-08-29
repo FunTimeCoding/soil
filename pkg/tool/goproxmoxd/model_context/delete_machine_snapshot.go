@@ -27,14 +27,8 @@ func (s *Server) DeleteMachineSnapshot(
 		return response.Fail("%s", e)
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return s.captureDetail(e)
-	}
-
 	taskIdentifier, e := s.service.DeleteMachineSnapshot(
-		c,
+		instance,
 		a.Identifier,
 		a.Node,
 		a.Name,

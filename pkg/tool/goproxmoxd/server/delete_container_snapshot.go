@@ -16,14 +16,6 @@ func (s *Server) DeleteContainerSnapshot(
 		return server.DeleteContainerSnapshot400JSONResponse(*clientError(e)), nil
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return server.DeleteContainerSnapshot500JSONResponse(
-			*s.captureDetail(e),
-		), nil
-	}
-
 	node := ""
 
 	if r.Params.Node != nil {
@@ -31,7 +23,7 @@ func (s *Server) DeleteContainerSnapshot(
 	}
 
 	taskIdentifier, e := s.service.DeleteContainerSnapshot(
-		c,
+		instance,
 		int(r.Identifier),
 		node,
 		r.Name,

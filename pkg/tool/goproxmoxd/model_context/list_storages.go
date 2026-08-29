@@ -23,13 +23,7 @@ func (s *Server) ListStorages(
 		return response.Fail("%s", e)
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return s.captureDetail(e)
-	}
-
-	storages, e := s.service.ListStorages(c, a.Node)
+	storages, e := s.service.ListStorages(instance, a.Node)
 
 	if e != nil {
 		return s.captureDetail(e)

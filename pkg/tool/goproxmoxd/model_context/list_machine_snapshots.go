@@ -23,13 +23,11 @@ func (s *Server) ListMachineSnapshots(
 		return response.Fail("%s", e)
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return s.captureDetail(e)
-	}
-
-	snapshots, e := s.service.ListMachineSnapshots(c, a.Identifier, a.Node)
+	snapshots, e := s.service.ListMachineSnapshots(
+		instance,
+		a.Identifier,
+		a.Node,
+	)
 
 	if e != nil {
 		if not_found.Is(e) {

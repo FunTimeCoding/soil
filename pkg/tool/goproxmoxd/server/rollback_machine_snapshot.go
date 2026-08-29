@@ -16,14 +16,6 @@ func (s *Server) RollbackMachineSnapshot(
 		return server.RollbackMachineSnapshot400JSONResponse(*clientError(e)), nil
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return server.RollbackMachineSnapshot500JSONResponse(
-			*s.captureDetail(e),
-		), nil
-	}
-
 	node := ""
 
 	if r.Params.Node != nil {
@@ -31,7 +23,7 @@ func (s *Server) RollbackMachineSnapshot(
 	}
 
 	taskIdentifier, e := s.service.RollbackMachineSnapshot(
-		c,
+		instance,
 		int(r.Identifier),
 		node,
 		r.Name,

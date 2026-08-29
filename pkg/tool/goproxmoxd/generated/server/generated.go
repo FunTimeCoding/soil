@@ -66,34 +66,43 @@ type ContainerDetail struct {
 
 // CreateMachineRequest defines model for CreateMachineRequest.
 type CreateMachineRequest struct {
-	Agent        *bool   `json:"agent,omitempty"`
-	Bridge       *string `json:"bridge,omitempty"`
-	Cdrom        *string `json:"cdrom,omitempty"`
-	CiPassword   *string `json:"ciPassword,omitempty"`
-	CiUser       *string `json:"ciUser,omitempty"`
-	Cores        *int    `json:"cores,omitempty"`
-	CpuType      *string `json:"cpuType,omitempty"`
-	DiskImport   *string `json:"diskImport,omitempty"`
-	DiskSize     *int    `json:"diskSize,omitempty"`
-	DiskStorage  *string `json:"diskStorage,omitempty"`
-	Extras       *string `json:"extras,omitempty"`
-	Identifier   *int64  `json:"identifier,omitempty"`
-	IpConfig     *string `json:"ipConfig,omitempty"`
-	Memory       *int    `json:"memory,omitempty"`
-	Name         string  `json:"name"`
-	Node         string  `json:"node"`
-	Onboot       *bool   `json:"onboot,omitempty"`
-	OsType       *string `json:"osType,omitempty"`
-	SearchDomain *string `json:"searchDomain,omitempty"`
-	SshKeys      *string `json:"sshKeys,omitempty"`
-	Start        *bool   `json:"start,omitempty"`
-	Tags         *string `json:"tags,omitempty"`
+	Agent           *bool   `json:"agent,omitempty"`
+	Bridge          *string `json:"bridge,omitempty"`
+	Cdrom           *string `json:"cdrom,omitempty"`
+	CiPassword      *string `json:"ciPassword,omitempty"`
+	CiUser          *string `json:"ciUser,omitempty"`
+	Cores           *int    `json:"cores,omitempty"`
+	CpuType         *string `json:"cpuType,omitempty"`
+	DiskImport      *string `json:"diskImport,omitempty"`
+	DiskSize        *int    `json:"diskSize,omitempty"`
+	DiskStorage     *string `json:"diskStorage,omitempty"`
+	Extras          *string `json:"extras,omitempty"`
+	HardwareAddress *string `json:"hardware_address,omitempty"`
+	Identifier      *int64  `json:"identifier,omitempty"`
+	IpConfig        *string `json:"ipConfig,omitempty"`
+	Memory          *int    `json:"memory,omitempty"`
+	Name            string  `json:"name"`
+	Node            string  `json:"node"`
+	Onboot          *bool   `json:"onboot,omitempty"`
+	OsType          *string `json:"osType,omitempty"`
+	SearchDomain    *string `json:"searchDomain,omitempty"`
+	SshKeys         *string `json:"sshKeys,omitempty"`
+	Start           *bool   `json:"start,omitempty"`
+	Tags            *string `json:"tags,omitempty"`
 }
 
 // CreateMachineResult defines model for CreateMachineResult.
 type CreateMachineResult struct {
 	Identifier int64   `json:"identifier"`
 	Status     *string `json:"status,omitempty"`
+}
+
+// DerivedAddress defines model for DerivedAddress.
+type DerivedAddress struct {
+	HardwareAddress string `json:"hardware_address"`
+	Identifier      int    `json:"identifier"`
+	InUseBy         *int   `json:"in_use_by,omitempty"`
+	Instance        string `json:"instance"`
 }
 
 // DownloadLocatorRequest defines model for DownloadLocatorRequest.
@@ -136,22 +145,23 @@ type Machine struct {
 
 // MachineDetail defines model for MachineDetail.
 type MachineDetail struct {
-	Cores       *int     `json:"cores,omitempty"`
-	Cpu         *float64 `json:"cpu,omitempty"`
-	Cpus        *int     `json:"cpus,omitempty"`
-	Description *string  `json:"description,omitempty"`
-	Disk        *int64   `json:"disk,omitempty"`
-	Identifier  int64    `json:"identifier"`
-	MaxDisk     *int64   `json:"maxDisk,omitempty"`
-	MaxMem      *int64   `json:"maxMem,omitempty"`
-	Mem         *int64   `json:"mem,omitempty"`
-	Name        string   `json:"name"`
-	Node        *string  `json:"node,omitempty"`
-	OsType      *string  `json:"osType,omitempty"`
-	Sockets     *int     `json:"sockets,omitempty"`
-	Status      *string  `json:"status,omitempty"`
-	Tags        *string  `json:"tags,omitempty"`
-	Uptime      *int64   `json:"uptime,omitempty"`
+	Cores          *int             `json:"cores,omitempty"`
+	Cpu            *float64         `json:"cpu,omitempty"`
+	Cpus           *int             `json:"cpus,omitempty"`
+	Description    *string          `json:"description,omitempty"`
+	Disk           *int64           `json:"disk,omitempty"`
+	Identifier     int64            `json:"identifier"`
+	MaxDisk        *int64           `json:"maxDisk,omitempty"`
+	MaxMem         *int64           `json:"maxMem,omitempty"`
+	Mem            *int64           `json:"mem,omitempty"`
+	Name           string           `json:"name"`
+	NetworkDevices *[]NetworkDevice `json:"network_devices,omitempty"`
+	Node           *string          `json:"node,omitempty"`
+	OsType         *string          `json:"osType,omitempty"`
+	Sockets        *int             `json:"sockets,omitempty"`
+	Status         *string          `json:"status,omitempty"`
+	Tags           *string          `json:"tags,omitempty"`
+	Uptime         *int64           `json:"uptime,omitempty"`
 }
 
 // MemoryInfo defines model for MemoryInfo.
@@ -173,6 +183,16 @@ type Network struct {
 	Iface       string  `json:"iface"`
 	Netmask     *string `json:"netmask,omitempty"`
 	Type        *string `json:"type,omitempty"`
+}
+
+// NetworkDevice defines model for NetworkDevice.
+type NetworkDevice struct {
+	Bridge          *string `json:"bridge,omitempty"`
+	HardwareAddress *string `json:"hardware_address,omitempty"`
+	Interface       *string `json:"interface,omitempty"`
+	Model           *string `json:"model,omitempty"`
+	Name            string  `json:"name"`
+	Vlan            *int    `json:"vlan,omitempty"`
 }
 
 // Node defines model for Node.
@@ -360,6 +380,15 @@ type StopContainerParams struct {
 
 	// Node Node name. Speeds up lookup when known.
 	Node *string `form:"node,omitempty" json:"node,omitempty"`
+}
+
+// DeriveHardwareAddressParams defines parameters for DeriveHardwareAddress.
+type DeriveHardwareAddressParams struct {
+	// Instance Proxmox instance name.
+	Instance *string `form:"instance,omitempty" json:"instance,omitempty"`
+
+	// Identifier Machine identifier, which need not exist yet.
+	Identifier int `form:"identifier" json:"identifier"`
 }
 
 // ListMachinesParams defines parameters for ListMachines.
@@ -598,6 +627,9 @@ type ServerInterface interface {
 
 	// (POST /api/v1/containers/{identifier}/stop)
 	StopContainer(w http.ResponseWriter, r *http.Request, identifier int64, params StopContainerParams)
+
+	// (GET /api/v1/hardware-address)
+	DeriveHardwareAddress(w http.ResponseWriter, r *http.Request, params DeriveHardwareAddressParams)
 
 	// (GET /api/v1/instances)
 	ListInstances(w http.ResponseWriter, r *http.Request)
@@ -1179,6 +1211,52 @@ func (siw *ServerInterfaceWrapper) StopContainer(w http.ResponseWriter, r *http.
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.StopContainer(w, r, identifier, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// DeriveHardwareAddress operation middleware
+func (siw *ServerInterfaceWrapper) DeriveHardwareAddress(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params DeriveHardwareAddressParams
+
+	// ------------- Optional query parameter "instance" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "instance", r.URL.Query(), &params.Instance, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "instance"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "instance", Err: err})
+		}
+		return
+	}
+
+	// ------------- Required query parameter "identifier" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, true, "identifier", r.URL.Query(), &params.Identifier, runtime.BindQueryParameterOptions{Type: "integer", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "identifier"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "identifier", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.DeriveHardwareAddress(w, r, params)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -2504,6 +2582,7 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	}
 
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/instances", wrapper.ListInstances)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/hardware-address", wrapper.DeriveHardwareAddress)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/nodes", wrapper.ListNodes)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/nodes/{name}/status", wrapper.GetNodeStatus)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/machines", wrapper.ListMachines)
@@ -3103,6 +3182,56 @@ func (response StopContainer404JSONResponse) VisitStopContainerResponse(w http.R
 type StopContainer500JSONResponse ErrorResponse
 
 func (response StopContainer500JSONResponse) VisitStopContainerResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeriveHardwareAddressRequestObject struct {
+	Params DeriveHardwareAddressParams
+}
+
+type DeriveHardwareAddressResponseObject interface {
+	VisitDeriveHardwareAddressResponse(w http.ResponseWriter) error
+}
+
+type DeriveHardwareAddress200JSONResponse DerivedAddress
+
+func (response DeriveHardwareAddress200JSONResponse) VisitDeriveHardwareAddressResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeriveHardwareAddress400JSONResponse Error
+
+func (response DeriveHardwareAddress400JSONResponse) VisitDeriveHardwareAddressResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type DeriveHardwareAddress500JSONResponse ErrorResponse
+
+func (response DeriveHardwareAddress500JSONResponse) VisitDeriveHardwareAddressResponse(w http.ResponseWriter) error {
 
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(response); err != nil {
@@ -4604,6 +4733,9 @@ type StrictServerInterface interface {
 	// (POST /api/v1/containers/{identifier}/stop)
 	StopContainer(ctx context.Context, request StopContainerRequestObject) (StopContainerResponseObject, error)
 
+	// (GET /api/v1/hardware-address)
+	DeriveHardwareAddress(ctx context.Context, request DeriveHardwareAddressRequestObject) (DeriveHardwareAddressResponseObject, error)
+
 	// (GET /api/v1/instances)
 	ListInstances(ctx context.Context, request ListInstancesRequestObject) (ListInstancesResponseObject, error)
 
@@ -4963,6 +5095,32 @@ func (sh *strictHandler) StopContainer(w http.ResponseWriter, r *http.Request, i
 		sh.options.ResponseErrorHandlerFunc(w, r, err)
 	} else if validResponse, ok := response.(StopContainerResponseObject); ok {
 		if err := validResponse.VisitStopContainerResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// DeriveHardwareAddress operation middleware
+func (sh *strictHandler) DeriveHardwareAddress(w http.ResponseWriter, r *http.Request, params DeriveHardwareAddressParams) {
+	var request DeriveHardwareAddressRequestObject
+
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.DeriveHardwareAddress(ctx, request.(DeriveHardwareAddressRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "DeriveHardwareAddress")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(DeriveHardwareAddressResponseObject); ok {
+		if err := validResponse.VisitDeriveHardwareAddressResponse(w); err != nil {
 			sh.options.ResponseErrorHandlerFunc(w, r, err)
 		}
 	} else if response != nil {
@@ -5688,46 +5846,50 @@ func (sh *strictHandler) GetSnippet(w http.ResponseWriter, r *http.Request, name
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
+	"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",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

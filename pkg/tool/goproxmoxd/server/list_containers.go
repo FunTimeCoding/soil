@@ -16,19 +16,13 @@ func (s *Server) ListContainers(
 		return server.ListContainers400JSONResponse(*clientError(e)), nil
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return server.ListContainers500JSONResponse(*s.captureDetail(e)), nil
-	}
-
 	node := ""
 
 	if r.Params.Node != nil {
 		node = *r.Params.Node
 	}
 
-	containers, e := s.service.ListContainers(c, node)
+	containers, e := s.service.ListContainers(instance, node)
 
 	if e != nil {
 		return server.ListContainers500JSONResponse(*s.captureDetail(e)), nil

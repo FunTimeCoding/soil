@@ -22,6 +22,18 @@ const (
 	ContainerShutdownTimeout = 60
 )
 
+const LocalPrefix byte = 0x02
+const (
+	MaximumInstance = 255
+	MaximumMachine  = 0xFFFFFFFF
+)
+
+const (
+	BridgeKey          = "bridge"
+	TagKey             = "tag"
+	HardwareAddressKey = "hwaddr"
+)
+
 const (
 	NodeType      = "node"
 	MachineType   = "qemu"

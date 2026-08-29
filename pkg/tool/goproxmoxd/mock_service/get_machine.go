@@ -1,15 +1,18 @@
 package mock_service
 
-import (
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
-	"github.com/luthermonson/go-proxmox"
-)
+import "github.com/luthermonson/go-proxmox"
 
 func (s *Service) GetMachine(
-	c face.ProxmoxClient,
+	instance string,
 	identifier int,
 	node string,
 ) (*proxmox.VirtualMachine, error) {
+	c, clientFail := s.Client(instance)
+
+	if clientFail != nil {
+		return nil, clientFail
+	}
+
 	n, e := c.Node(node)
 
 	if e != nil {

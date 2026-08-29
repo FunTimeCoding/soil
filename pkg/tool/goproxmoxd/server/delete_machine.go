@@ -17,12 +17,6 @@ func (s *Server) DeleteMachine(
 		return server.DeleteMachine400JSONResponse(*clientError(e)), nil
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return server.DeleteMachine500JSONResponse(*s.captureDetail(e)), nil
-	}
-
 	node := ""
 
 	if r.Params.Node != nil {
@@ -35,7 +29,7 @@ func (s *Server) DeleteMachine(
 		purge = *r.Params.Purge
 	}
 
-	e = s.service.DeleteMachine(c, int(r.Identifier), node, purge)
+	e = s.service.DeleteMachine(instance, int(r.Identifier), node, purge)
 
 	if e != nil {
 		if not_found.Is(e) {

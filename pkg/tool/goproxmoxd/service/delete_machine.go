@@ -2,16 +2,21 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
 	"github.com/luthermonson/go-proxmox"
 )
 
 func (s *Service) DeleteMachine(
-	c face.ProxmoxClient,
+	instance string,
 	identifier int,
 	node string,
 	purge bool,
 ) error {
+	c, clientFail := s.Client(instance)
+
+	if clientFail != nil {
+		return clientFail
+	}
+
 	vm, e := findMachine(c, identifier, node)
 
 	if e != nil {

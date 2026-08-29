@@ -22,13 +22,7 @@ func (s *Server) GetNodeStatus(
 		return response.Fail("%s", e)
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return s.captureDetail(e)
-	}
-
-	result, e := s.service.GetNodeStatus(c, a.Node)
+	result, e := s.service.GetNodeStatus(instance, a.Node)
 
 	if e != nil {
 		return s.captureDetail(e)

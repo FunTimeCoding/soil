@@ -1,9 +1,7 @@
 package mock_service
 
-import "github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
-
 func (s *Service) DeleteMachineSnapshot(
-	_ face.ProxmoxClient,
+	_ string,
 	_ int,
 	_ string,
 	_ string,

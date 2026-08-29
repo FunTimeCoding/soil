@@ -17,12 +17,6 @@ func (s *Server) CloneMachine(
 		return server.CloneMachine400JSONResponse(*clientError(e)), nil
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return server.CloneMachine500JSONResponse(*s.captureDetail(e)), nil
-	}
-
 	node := ""
 
 	if r.Params.Node != nil {
@@ -48,7 +42,7 @@ func (s *Server) CloneMachine(
 	}
 
 	newIdentifier, e := s.service.CloneMachine(
-		c,
+		instance,
 		int(r.Identifier),
 		node,
 		options,

@@ -2,6 +2,7 @@ package inventory
 
 type Instance struct {
 	Name        string `yaml:"name"`
+	Index       int    `yaml:"index"`
 	Host        string `yaml:"host"`
 	Port        int    `yaml:"port"`
 	User        string `yaml:"user"`

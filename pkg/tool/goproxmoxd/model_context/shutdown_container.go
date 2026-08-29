@@ -23,13 +23,11 @@ func (s *Server) ShutdownContainer(
 		return response.Fail("%s", e)
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return s.captureDetail(e)
-	}
-
-	taskIdentifier, e := s.service.ShutdownContainer(c, a.Identifier, a.Node)
+	taskIdentifier, e := s.service.ShutdownContainer(
+		instance,
+		a.Identifier,
+		a.Node,
+	)
 
 	if e != nil {
 		if not_found.Is(e) {

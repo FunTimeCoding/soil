@@ -15,13 +15,7 @@ func (s *Server) ListStorages(
 		return server.ListStorages400JSONResponse(*clientError(e)), nil
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return server.ListStorages500JSONResponse(*s.captureDetail(e)), nil
-	}
-
-	storages, e := s.service.ListStorages(c, r.Name)
+	storages, e := s.service.ListStorages(instance, r.Name)
 
 	if e != nil {
 		return server.ListStorages500JSONResponse(*s.captureDetail(e)), nil

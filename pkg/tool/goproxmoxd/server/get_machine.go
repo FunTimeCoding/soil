@@ -17,19 +17,13 @@ func (s *Server) GetMachine(
 		return server.GetMachine400JSONResponse(*clientError(e)), nil
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return server.GetMachine500JSONResponse(*s.captureDetail(e)), nil
-	}
-
 	node := ""
 
 	if r.Params.Node != nil {
 		node = *r.Params.Node
 	}
 
-	vm, e := s.service.GetMachine(c, int(r.Identifier), node)
+	vm, e := s.service.GetMachine(instance, int(r.Identifier), node)
 
 	if e != nil {
 		if not_found.Is(e) {

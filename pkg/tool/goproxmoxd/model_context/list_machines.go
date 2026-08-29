@@ -19,13 +19,7 @@ func (s *Server) ListMachines(
 		return response.Fail("%s", e)
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return s.captureDetail(e)
-	}
-
-	machines, e := s.service.ListMachines(c, a.Node)
+	machines, e := s.service.ListMachines(instance, a.Node)
 
 	if e != nil {
 		return s.captureDetail(e)

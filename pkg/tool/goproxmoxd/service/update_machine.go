@@ -2,16 +2,21 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/model_context/argument/update_machine"
 	"github.com/luthermonson/go-proxmox"
 	"strings"
 )
 
 func (s *Service) UpdateMachine(
-	c face.ProxmoxClient,
+	instance string,
 	a *update_machine.Machine,
 ) error {
+	c, clientFail := s.Client(instance)
+
+	if clientFail != nil {
+		return clientFail
+	}
+
 	if e := a.Validate(); e != nil {
 		return e
 	}
@@ -94,5 +99,5 @@ func (s *Service) UpdateMachine(
 		)
 	}
 
-	return s.UpdateMachineConfiguration(c, a.Identifier, a.Node, options)
+	return s.updateMachineConfiguration(c, a.Identifier, a.Node, options)
 }

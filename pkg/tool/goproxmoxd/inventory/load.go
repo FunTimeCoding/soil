@@ -9,6 +9,7 @@ import (
 func Load(path string) *Inventory {
 	result := &Inventory{}
 	errors.PanicOnError(yaml.Unmarshal(system.ReadBytesUnsafe(path), result))
+	errors.PanicOnError(result.Validate())
 
 	return result
 }

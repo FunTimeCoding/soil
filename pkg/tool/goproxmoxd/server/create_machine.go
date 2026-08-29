@@ -16,14 +16,8 @@ func (s *Server) CreateMachine(
 		return server.CreateMachine400JSONResponse(*clientError(e)), nil
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return server.CreateMachine500JSONResponse(*s.captureDetail(e)), nil
-	}
-
 	m := convertCreateMachine(r.Body)
-	identifier, e := s.service.CreateMachine(c, m)
+	identifier, e := s.service.CreateMachine(instance, m)
 
 	if e != nil {
 		if validation.Is(e) {

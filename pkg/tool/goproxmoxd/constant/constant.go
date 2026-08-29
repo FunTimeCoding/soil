@@ -29,6 +29,7 @@ const (
 	GetNodeStatus             = "get_node_status"
 	ListMachines              = "list_machines"
 	GetMachine                = "get_machine"
+	DeriveHardwareAddress     = "derive_hardware_address"
 	StartMachine              = "start_machine"
 	StopMachine               = "stop_machine"
 	ShutdownMachine           = "shutdown_machine"

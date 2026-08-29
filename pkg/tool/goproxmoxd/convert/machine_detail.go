@@ -1,6 +1,7 @@
 package convert
 
 import (
+	"github.com/funtimecoding/soil/pkg/proxmox/network_device"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 	"github.com/luthermonson/go-proxmox"
 )
@@ -39,6 +40,14 @@ func MachineDetail(v *proxmox.VirtualMachine) *server.MachineDetail {
 
 		if v.VirtualMachineConfig.Cores != nil {
 			result.Cores = v.VirtualMachineConfig.Cores
+		}
+
+		if len(v.VirtualMachineConfig.Nets) > 0 {
+			result.NetworkDevices = new(
+				NetworkDevices(
+					network_device.NewSlice(v.VirtualMachineConfig.Nets),
+				),
+			)
 		}
 	}
 

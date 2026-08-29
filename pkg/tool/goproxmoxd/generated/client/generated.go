@@ -60,34 +60,43 @@ type ContainerDetail struct {
 
 // CreateMachineRequest defines model for CreateMachineRequest.
 type CreateMachineRequest struct {
-	Agent        *bool   `json:"agent,omitempty"`
-	Bridge       *string `json:"bridge,omitempty"`
-	Cdrom        *string `json:"cdrom,omitempty"`
-	CiPassword   *string `json:"ciPassword,omitempty"`
-	CiUser       *string `json:"ciUser,omitempty"`
-	Cores        *int    `json:"cores,omitempty"`
-	CpuType      *string `json:"cpuType,omitempty"`
-	DiskImport   *string `json:"diskImport,omitempty"`
-	DiskSize     *int    `json:"diskSize,omitempty"`
-	DiskStorage  *string `json:"diskStorage,omitempty"`
-	Extras       *string `json:"extras,omitempty"`
-	Identifier   *int64  `json:"identifier,omitempty"`
-	IpConfig     *string `json:"ipConfig,omitempty"`
-	Memory       *int    `json:"memory,omitempty"`
-	Name         string  `json:"name"`
-	Node         string  `json:"node"`
-	Onboot       *bool   `json:"onboot,omitempty"`
-	OsType       *string `json:"osType,omitempty"`
-	SearchDomain *string `json:"searchDomain,omitempty"`
-	SshKeys      *string `json:"sshKeys,omitempty"`
-	Start        *bool   `json:"start,omitempty"`
-	Tags         *string `json:"tags,omitempty"`
+	Agent           *bool   `json:"agent,omitempty"`
+	Bridge          *string `json:"bridge,omitempty"`
+	Cdrom           *string `json:"cdrom,omitempty"`
+	CiPassword      *string `json:"ciPassword,omitempty"`
+	CiUser          *string `json:"ciUser,omitempty"`
+	Cores           *int    `json:"cores,omitempty"`
+	CpuType         *string `json:"cpuType,omitempty"`
+	DiskImport      *string `json:"diskImport,omitempty"`
+	DiskSize        *int    `json:"diskSize,omitempty"`
+	DiskStorage     *string `json:"diskStorage,omitempty"`
+	Extras          *string `json:"extras,omitempty"`
+	HardwareAddress *string `json:"hardware_address,omitempty"`
+	Identifier      *int64  `json:"identifier,omitempty"`
+	IpConfig        *string `json:"ipConfig,omitempty"`
+	Memory          *int    `json:"memory,omitempty"`
+	Name            string  `json:"name"`
+	Node            string  `json:"node"`
+	Onboot          *bool   `json:"onboot,omitempty"`
+	OsType          *string `json:"osType,omitempty"`
+	SearchDomain    *string `json:"searchDomain,omitempty"`
+	SshKeys         *string `json:"sshKeys,omitempty"`
+	Start           *bool   `json:"start,omitempty"`
+	Tags            *string `json:"tags,omitempty"`
 }
 
 // CreateMachineResult defines model for CreateMachineResult.
 type CreateMachineResult struct {
 	Identifier int64   `json:"identifier"`
 	Status     *string `json:"status,omitempty"`
+}
+
+// DerivedAddress defines model for DerivedAddress.
+type DerivedAddress struct {
+	HardwareAddress string `json:"hardware_address"`
+	Identifier      int    `json:"identifier"`
+	InUseBy         *int   `json:"in_use_by,omitempty"`
+	Instance        string `json:"instance"`
 }
 
 // DownloadLocatorRequest defines model for DownloadLocatorRequest.
@@ -130,22 +139,23 @@ type Machine struct {
 
 // MachineDetail defines model for MachineDetail.
 type MachineDetail struct {
-	Cores       *int     `json:"cores,omitempty"`
-	Cpu         *float64 `json:"cpu,omitempty"`
-	Cpus        *int     `json:"cpus,omitempty"`
-	Description *string  `json:"description,omitempty"`
-	Disk        *int64   `json:"disk,omitempty"`
-	Identifier  int64    `json:"identifier"`
-	MaxDisk     *int64   `json:"maxDisk,omitempty"`
-	MaxMem      *int64   `json:"maxMem,omitempty"`
-	Mem         *int64   `json:"mem,omitempty"`
-	Name        string   `json:"name"`
-	Node        *string  `json:"node,omitempty"`
-	OsType      *string  `json:"osType,omitempty"`
-	Sockets     *int     `json:"sockets,omitempty"`
-	Status      *string  `json:"status,omitempty"`
-	Tags        *string  `json:"tags,omitempty"`
-	Uptime      *int64   `json:"uptime,omitempty"`
+	Cores          *int             `json:"cores,omitempty"`
+	Cpu            *float64         `json:"cpu,omitempty"`
+	Cpus           *int             `json:"cpus,omitempty"`
+	Description    *string          `json:"description,omitempty"`
+	Disk           *int64           `json:"disk,omitempty"`
+	Identifier     int64            `json:"identifier"`
+	MaxDisk        *int64           `json:"maxDisk,omitempty"`
+	MaxMem         *int64           `json:"maxMem,omitempty"`
+	Mem            *int64           `json:"mem,omitempty"`
+	Name           string           `json:"name"`
+	NetworkDevices *[]NetworkDevice `json:"network_devices,omitempty"`
+	Node           *string          `json:"node,omitempty"`
+	OsType         *string          `json:"osType,omitempty"`
+	Sockets        *int             `json:"sockets,omitempty"`
+	Status         *string          `json:"status,omitempty"`
+	Tags           *string          `json:"tags,omitempty"`
+	Uptime         *int64           `json:"uptime,omitempty"`
 }
 
 // MemoryInfo defines model for MemoryInfo.
@@ -167,6 +177,16 @@ type Network struct {
 	Iface       string  `json:"iface"`
 	Netmask     *string `json:"netmask,omitempty"`
 	Type        *string `json:"type,omitempty"`
+}
+
+// NetworkDevice defines model for NetworkDevice.
+type NetworkDevice struct {
+	Bridge          *string `json:"bridge,omitempty"`
+	HardwareAddress *string `json:"hardware_address,omitempty"`
+	Interface       *string `json:"interface,omitempty"`
+	Model           *string `json:"model,omitempty"`
+	Name            string  `json:"name"`
+	Vlan            *int    `json:"vlan,omitempty"`
 }
 
 // Node defines model for Node.
@@ -354,6 +374,15 @@ type StopContainerParams struct {
 
 	// Node Node name. Speeds up lookup when known.
 	Node *string `form:"node,omitempty" json:"node,omitempty"`
+}
+
+// DeriveHardwareAddressParams defines parameters for DeriveHardwareAddress.
+type DeriveHardwareAddressParams struct {
+	// Instance Proxmox instance name.
+	Instance *string `form:"instance,omitempty" json:"instance,omitempty"`
+
+	// Identifier Machine identifier, which need not exist yet.
+	Identifier int `form:"identifier" json:"identifier"`
 }
 
 // ListMachinesParams defines parameters for ListMachines.
@@ -669,6 +698,9 @@ type ClientInterface interface {
 	// StopContainer performs a POST /api/v1/containers/{identifier}/stop (the `StopContainer` operationId) request.
 	StopContainer(ctx context.Context, identifier int64, params *StopContainerParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// DeriveHardwareAddress performs a GET /api/v1/hardware-address (the `DeriveHardwareAddress` operationId) request.
+	DeriveHardwareAddress(ctx context.Context, params *DeriveHardwareAddressParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// ListInstances performs a GET /api/v1/instances (the `ListInstances` operationId) request.
 	ListInstances(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -897,6 +929,19 @@ func (c *Client) StartContainer(ctx context.Context, identifier int64, params *S
 // StopContainer performs a POST /api/v1/containers/{identifier}/stop (the `StopContainer` operationId) request.
 func (c *Client) StopContainer(ctx context.Context, identifier int64, params *StopContainerParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewStopContainerRequest(c.Server, identifier, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// DeriveHardwareAddress performs a GET /api/v1/hardware-address (the `DeriveHardwareAddress` operationId) request.
+func (c *Client) DeriveHardwareAddress(ctx context.Context, params *DeriveHardwareAddressParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeriveHardwareAddressRequest(c.Server, params)
 	if err != nil {
 		return nil, err
 	}
@@ -1992,6 +2037,68 @@ func NewStopContainerRequest(server string, identifier int64, params *StopContai
 	}
 
 	req, err := http.NewRequest(http.MethodPost, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewDeriveHardwareAddressRequest constructs an http.Request for the DeriveHardwareAddress method
+func NewDeriveHardwareAddressRequest(server string, params *DeriveHardwareAddressParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/hardware-address")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if params.Instance != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "instance", *params.Instance, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "identifier", params.Identifier, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+			return nil, err
+		} else {
+			for _, qp := range strings.Split(queryFrag, "&") {
+				rawQueryFragments = append(rawQueryFragments, qp)
+			}
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -3823,6 +3930,11 @@ type ClientWithResponsesInterface interface {
 	// Returns a wrapper object for the known response body format(s).
 	StopContainerWithResponse(ctx context.Context, identifier int64, params *StopContainerParams, reqEditors ...RequestEditorFn) (*StopContainerResponse, error)
 
+	// DeriveHardwareAddressWithResponse performs a GET /api/v1/hardware-address (the `DeriveHardwareAddress` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	DeriveHardwareAddressWithResponse(ctx context.Context, params *DeriveHardwareAddressParams, reqEditors ...RequestEditorFn) (*DeriveHardwareAddressResponse, error)
+
 	// ListInstancesWithResponse performs a GET /api/v1/instances (the `ListInstances` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
@@ -4524,6 +4636,61 @@ func (r StopContainerResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r StopContainerResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type DeriveHardwareAddressResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *DerivedAddress
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r DeriveHardwareAddressResponse) GetJSON200() *DerivedAddress {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r DeriveHardwareAddressResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r DeriveHardwareAddressResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r DeriveHardwareAddressResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r DeriveHardwareAddressResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeriveHardwareAddressResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r DeriveHardwareAddressResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -6106,6 +6273,17 @@ func (c *ClientWithResponses) StopContainerWithResponse(ctx context.Context, ide
 	return ParseStopContainerResponse(rsp)
 }
 
+// DeriveHardwareAddressWithResponse performs a GET /api/v1/hardware-address (the `DeriveHardwareAddress` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) DeriveHardwareAddressWithResponse(ctx context.Context, params *DeriveHardwareAddressParams, reqEditors ...RequestEditorFn) (*DeriveHardwareAddressResponse, error) {
+	rsp, err := c.DeriveHardwareAddress(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeriveHardwareAddressResponse(rsp)
+}
+
 // ListInstancesWithResponse performs a GET /api/v1/instances (the `ListInstances` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -6850,6 +7028,46 @@ func ParseStopContainerResponse(rsp *http.Response) (*StopContainerResponse, err
 			return nil, err
 		}
 		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeriveHardwareAddressResponse parses an HTTP response from a DeriveHardwareAddressWithResponse call
+func ParseDeriveHardwareAddressResponse(rsp *http.Response) (*DeriveHardwareAddressResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeriveHardwareAddressResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest DerivedAddress
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse

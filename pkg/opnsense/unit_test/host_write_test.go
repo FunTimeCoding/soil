@@ -41,7 +41,7 @@ func TestDeleteHostReportsMissingEntry(t *testing.T) {
 func TestDeleteHostAcceptsDeleted(t *testing.T) {
 	s := canned(`{"result":"deleted"}`)
 	defer s.Close()
-	assert.True(t, client(s).DeleteHost("abc") == nil)
+	assert.Nil(t, client(s).DeleteHost("abc"))
 }
 
 func TestAddHostRejectionIsValidation(t *testing.T) {
@@ -56,6 +56,6 @@ func TestAddHostReturnsIdentifier(t *testing.T) {
 	s := canned(`{"result":"saved","uuid":"a-b-c"}`)
 	defer s.Close()
 	result, e := client(s).AddHost(request.New())
-	assert.True(t, e == nil)
+	assert.Nil(t, e)
 	assert.String(t, "a-b-c", result)
 }

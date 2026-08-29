@@ -16,13 +16,7 @@ func (s *Server) GetNodeStatus(
 		return server.GetNodeStatus400JSONResponse(*clientError(e)), nil
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return server.GetNodeStatus500JSONResponse(*s.captureDetail(e)), nil
-	}
-
-	result, e := s.service.GetNodeStatus(c, r.Name)
+	result, e := s.service.GetNodeStatus(instance, r.Name)
 
 	if e != nil {
 		return server.GetNodeStatus500JSONResponse(*s.captureDetail(e)), nil

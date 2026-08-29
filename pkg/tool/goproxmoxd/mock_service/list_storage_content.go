@@ -1,15 +1,18 @@
 package mock_service
 
-import (
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
-	"github.com/luthermonson/go-proxmox"
-)
+import "github.com/luthermonson/go-proxmox"
 
 func (s *Service) ListStorageContent(
-	c face.ProxmoxClient,
+	instance string,
 	node string,
 	storage string,
 ) ([]*proxmox.StorageContent, error) {
+	c, clientFail := s.Client(instance)
+
+	if clientFail != nil {
+		return nil, clientFail
+	}
+
 	n, e := c.Node(node)
 
 	if e != nil {

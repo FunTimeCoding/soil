@@ -24,13 +24,7 @@ func (s *Server) DeleteMachine(
 		return response.Fail("%s", e)
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return s.captureDetail(e)
-	}
-
-	e = s.service.DeleteMachine(c, a.Identifier, a.Node, a.Purge)
+	e = s.service.DeleteMachine(instance, a.Identifier, a.Node, a.Purge)
 
 	if e != nil {
 		if not_found.Is(e) || conflict.Is(e) {

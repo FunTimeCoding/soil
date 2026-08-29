@@ -16,12 +16,6 @@ func (s *Server) DeleteMachineSnapshot(
 		return server.DeleteMachineSnapshot400JSONResponse(*clientError(e)), nil
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return server.DeleteMachineSnapshot500JSONResponse(*s.captureDetail(e)), nil
-	}
-
 	node := ""
 
 	if r.Params.Node != nil {
@@ -29,7 +23,7 @@ func (s *Server) DeleteMachineSnapshot(
 	}
 
 	taskIdentifier, e := s.service.DeleteMachineSnapshot(
-		c,
+		instance,
 		int(r.Identifier),
 		node,
 		r.Name,

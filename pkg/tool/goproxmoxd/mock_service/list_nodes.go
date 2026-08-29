@@ -1,12 +1,13 @@
 package mock_service
 
-import (
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
-	"github.com/luthermonson/go-proxmox"
-)
+import "github.com/luthermonson/go-proxmox"
 
-func (s *Service) ListNodes(
-	c face.ProxmoxClient,
-) (proxmox.NodeStatuses, error) {
+func (s *Service) ListNodes(instance string) (proxmox.NodeStatuses, error) {
+	c, clientFail := s.Client(instance)
+
+	if clientFail != nil {
+		return nil, clientFail
+	}
+
 	return c.Nodes()
 }

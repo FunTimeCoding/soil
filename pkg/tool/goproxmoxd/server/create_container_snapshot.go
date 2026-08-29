@@ -16,14 +16,6 @@ func (s *Server) CreateContainerSnapshot(
 		return server.CreateContainerSnapshot400JSONResponse(*clientError(e)), nil
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return server.CreateContainerSnapshot500JSONResponse(
-			*s.captureDetail(e),
-		), nil
-	}
-
 	node := ""
 
 	if r.Params.Node != nil {
@@ -31,7 +23,7 @@ func (s *Server) CreateContainerSnapshot(
 	}
 
 	taskIdentifier, e := s.service.CreateContainerSnapshot(
-		c,
+		instance,
 		int(r.Identifier),
 		node,
 		r.Body.Name,

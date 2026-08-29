@@ -23,13 +23,7 @@ func (s *Server) StartMachine(
 		return response.Fail("%s", e)
 	}
 
-	c, e := s.service.Client(instance)
-
-	if e != nil {
-		return s.captureDetail(e)
-	}
-
-	taskIdentifier, e := s.service.StartMachine(c, a.Identifier, a.Node)
+	taskIdentifier, e := s.service.StartMachine(instance, a.Identifier, a.Node)
 
 	if e != nil {
 		if not_found.Is(e) {
