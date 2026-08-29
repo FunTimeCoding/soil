@@ -50,7 +50,7 @@ require (
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674
 	github.com/gpustack/gguf-parser-go v0.26.0
-	github.com/grafana/grafana-openapi-client-go v0.0.0-20260826175523-1c43014c9904
+	github.com/grafana/grafana-openapi-client-go v0.0.0-20260828183528-15d99ca95e47
 	github.com/grafana/loki-client-go v0.0.0-20251015150631-c42bbddc310a
 	github.com/hashicorp/vault-client-go v0.4.3
 	github.com/hetznercloud/hcloud-go/v2 v2.47.0
@@ -70,7 +70,7 @@ require (
 	github.com/nwaples/rardecode/v2 v2.4.1
 	github.com/oapi-codegen/runtime v1.7.0
 	github.com/olekukonko/tablewriter v1.1.4
-	github.com/ollama/ollama v0.33.1
+	github.com/ollama/ollama v0.33.2
 	github.com/openai/openai-go/v3 v3.54.0
 	github.com/openvex/go-vex v0.2.8
 	github.com/opsgenie/opsgenie-go-sdk-v2 v1.2.23
@@ -103,7 +103,7 @@ require (
 	golang.org/x/time v0.15.0
 	golang.org/x/tools v0.49.0
 	gonum.org/v1/gonum v0.17.0
-	google.golang.org/api v0.294.0
+	google.golang.org/api v0.295.0
 	google.golang.org/protobuf v1.36.12
 	gopkg.in/yaml.v3 v3.0.1
 	gorm.io/driver/postgres v1.6.2
@@ -115,7 +115,7 @@ require (
 	k8s.io/metrics v0.30.14
 	maragu.dev/gomponents v1.3.0
 	maragu.dev/gomponents-htmx v0.6.1
-	mvdan.cc/sh/v3 v3.13.1
+	mvdan.cc/sh/v3 v3.14.0
 	sigs.k8s.io/yaml v1.6.0
 )
 
