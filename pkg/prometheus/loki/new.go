@@ -12,9 +12,5 @@ func New(
 	verbose bool,
 ) *Client {
 	//client.New()
-	if false {
-		slogWay(host)
-	}
-
 	return &Client{basic: basic.New(host, user, password, verbose)}
 }

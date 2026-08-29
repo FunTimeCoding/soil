@@ -60,15 +60,7 @@ tasks:
     - cd pkg/tool/gotelemetryd/generated/server && oapi-codegen --config config.yaml openapi.yaml
     silent: true
   build: {cmds: ['go run cmd/gobuild/main.go'], silent: true}
-  update:
-    cmds:
-    # k8s.io/apimachinery: Cilium is not ready for 0.31.0
-    # github.com/google/gnostic-models: 0.7.0 has bad imports
-    - |
-      goupdate \
-        --downgrade k8s.io/apimachinery@v0.30.14 \
-        --downgrade github.com/google/gnostic-models@v0.6.9
-    silent: true
+  update: {cmds: ['goupdate'], silent: true}
   update-library: {cmds: [true], silent: true}
   tool:
     cmds:
