@@ -39,5 +39,9 @@ func Main(
 	o.AddCommand(interfaces(c))
 	o.AddCommand(log(c))
 	o.AddCommand(queryCommand("states", "Query the state table", c.States))
+	o.AddCommand(addHost(c))
+	o.AddCommand(setHost(c))
+	o.AddCommand(deleteHost(c))
+	o.AddCommand(reconfigure(c))
 	errors.PanicOnError(o.Execute())
 }

@@ -9,6 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/opnsense/log_entry"
 	"github.com/funtimecoding/soil/pkg/opnsense/network_interface"
 	"github.com/funtimecoding/soil/pkg/opnsense/pool"
+	"github.com/funtimecoding/soil/pkg/opnsense/request"
 	"github.com/funtimecoding/soil/pkg/opnsense/rule"
 	"github.com/funtimecoding/soil/pkg/opnsense/source_nat"
 	"github.com/funtimecoding/soil/pkg/opnsense/state"
@@ -26,4 +27,8 @@ type OpnsenseSource interface {
 	Interfaces() ([]*network_interface.Interface, error)
 	Log(limit int) ([]*log_entry.Entry, error)
 	States(phrase string) ([]*state.State, error)
+	AddHost(h *request.Host) (string, error)
+	SetHost(identifier string, h *request.Host) error
+	DeleteHost(identifier string) error
+	ReconfigureDnsmasq() error
 }

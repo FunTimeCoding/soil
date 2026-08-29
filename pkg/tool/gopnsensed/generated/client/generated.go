@@ -4,6 +4,7 @@
 package client
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -34,6 +35,11 @@ type Blocklist struct {
 	Type        string `json:"type"`
 }
 
+// Error defines model for Error.
+type Error struct {
+	Error string `json:"error"`
+}
+
 // ErrorResponse defines model for ErrorResponse.
 type ErrorResponse struct {
 	Error           string `json:"error"`
@@ -60,6 +66,21 @@ type Host struct {
 	HardwareAddress  string `json:"hardware_address"`
 	Host             string `json:"host"`
 	Identifier       string `json:"identifier"`
+}
+
+// HostRequest defines model for HostRequest.
+type HostRequest struct {
+	Address          *string `json:"address,omitempty"`
+	ClientIdentifier *string `json:"client_identifier,omitempty"`
+	Description      *string `json:"description,omitempty"`
+	Domain           *string `json:"domain,omitempty"`
+	HardwareAddress  *string `json:"hardware_address,omitempty"`
+	Host             *string `json:"host,omitempty"`
+}
+
+// Identifier defines model for Identifier.
+type Identifier struct {
+	Identifier string `json:"identifier"`
 }
 
 // Lease defines model for Lease.
@@ -186,6 +207,24 @@ type ListHostsParams struct {
 	Query *string `form:"query,omitempty" json:"query,omitempty"`
 }
 
+// AddHostParams defines parameters for AddHost.
+type AddHostParams struct {
+	// Apply Reconfigure Dnsmasq after the write, default true.
+	Apply *bool `form:"apply,omitempty" json:"apply,omitempty"`
+}
+
+// DeleteHostParams defines parameters for DeleteHost.
+type DeleteHostParams struct {
+	// Apply Reconfigure Dnsmasq after the write, default true.
+	Apply *bool `form:"apply,omitempty" json:"apply,omitempty"`
+}
+
+// SetHostParams defines parameters for SetHost.
+type SetHostParams struct {
+	// Apply Reconfigure Dnsmasq after the write, default true.
+	Apply *bool `form:"apply,omitempty" json:"apply,omitempty"`
+}
+
 // ListLeasesParams defines parameters for ListLeases.
 type ListLeasesParams struct {
 	// Query Search phrase.
@@ -221,6 +260,12 @@ type FirewallStatesParams struct {
 	// Query Search phrase.
 	Query *string `form:"query,omitempty" json:"query,omitempty"`
 }
+
+// AddHostJSONRequestBody defines body for AddHost for application/json ContentType.
+type AddHostJSONRequestBody = HostRequest
+
+// SetHostJSONRequestBody defines body for SetHost for application/json ContentType.
+type SetHostJSONRequestBody = HostRequest
 
 // RequestEditorFn is the function signature for the RequestEditor callback function
 type RequestEditorFn func(ctx context.Context, req *http.Request) error
@@ -302,11 +347,33 @@ type ClientInterface interface {
 	// ListBlocklists performs a GET /api/v1/blocklists (the `ListBlocklists` operationId) request.
 	ListBlocklists(ctx context.Context, params *ListBlocklistsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// ReconfigureDnsmasq performs a POST /api/v1/dnsmasq/reconfigure (the `ReconfigureDnsmasq` operationId) request.
+	ReconfigureDnsmasq(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// ListForwards performs a GET /api/v1/forwards (the `ListForwards` operationId) request.
 	ListForwards(ctx context.Context, params *ListForwardsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// ListHosts performs a GET /api/v1/hosts (the `ListHosts` operationId) request.
 	ListHosts(ctx context.Context, params *ListHostsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// AddHostWithBody performs a POST /api/v1/hosts (the `AddHost` operationId) request,
+	// with any type of body and a specified content type.
+	AddHostWithBody(ctx context.Context, params *AddHostParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// AddHost performs a POST /api/v1/hosts (the `AddHost` operationId) request.
+	// Takes a body of the `application/json` content type.
+	AddHost(ctx context.Context, params *AddHostParams, body AddHostJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteHost performs a DELETE /api/v1/hosts/{identifier} (the `DeleteHost` operationId) request.
+	DeleteHost(ctx context.Context, identifier string, params *DeleteHostParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// SetHostWithBody performs a PUT /api/v1/hosts/{identifier} (the `SetHost` operationId) request,
+	// with any type of body and a specified content type.
+	SetHostWithBody(ctx context.Context, identifier string, params *SetHostParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// SetHost performs a PUT /api/v1/hosts/{identifier} (the `SetHost` operationId) request.
+	// Takes a body of the `application/json` content type.
+	SetHost(ctx context.Context, identifier string, params *SetHostParams, body SetHostJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// ListInterfaces performs a GET /api/v1/interfaces (the `ListInterfaces` operationId) request.
 	ListInterfaces(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -356,6 +423,19 @@ func (c *Client) ListBlocklists(ctx context.Context, params *ListBlocklistsParam
 	return c.Client.Do(req)
 }
 
+// ReconfigureDnsmasq performs a POST /api/v1/dnsmasq/reconfigure (the `ReconfigureDnsmasq` operationId) request.
+func (c *Client) ReconfigureDnsmasq(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewReconfigureDnsmasqRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 // ListForwards performs a GET /api/v1/forwards (the `ListForwards` operationId) request.
 func (c *Client) ListForwards(ctx context.Context, params *ListForwardsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListForwardsRequest(c.Server, params)
@@ -372,6 +452,75 @@ func (c *Client) ListForwards(ctx context.Context, params *ListForwardsParams, r
 // ListHosts performs a GET /api/v1/hosts (the `ListHosts` operationId) request.
 func (c *Client) ListHosts(ctx context.Context, params *ListHostsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListHostsRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// AddHostWithBody performs a POST /api/v1/hosts (the `AddHost` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) AddHostWithBody(ctx context.Context, params *AddHostParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewAddHostRequestWithBody(c.Server, params, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// AddHost performs a POST /api/v1/hosts (the `AddHost` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) AddHost(ctx context.Context, params *AddHostParams, body AddHostJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewAddHostRequest(c.Server, params, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// DeleteHost performs a DELETE /api/v1/hosts/{identifier} (the `DeleteHost` operationId) request.
+func (c *Client) DeleteHost(ctx context.Context, identifier string, params *DeleteHostParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteHostRequest(c.Server, identifier, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// SetHostWithBody performs a PUT /api/v1/hosts/{identifier} (the `SetHost` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) SetHostWithBody(ctx context.Context, identifier string, params *SetHostParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewSetHostRequestWithBody(c.Server, identifier, params, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// SetHost performs a PUT /api/v1/hosts/{identifier} (the `SetHost` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) SetHost(ctx context.Context, identifier string, params *SetHostParams, body SetHostJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewSetHostRequest(c.Server, identifier, params, body)
 	if err != nil {
 		return nil, err
 	}
@@ -581,6 +730,33 @@ func NewListBlocklistsRequest(server string, params *ListBlocklistsParams) (*htt
 	return req, nil
 }
 
+// NewReconfigureDnsmasqRequest constructs an http.Request for the ReconfigureDnsmasq method
+func NewReconfigureDnsmasqRequest(server string) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/dnsmasq/reconfigure")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewListForwardsRequest constructs an http.Request for the ListForwards method
 func NewListForwardsRequest(server string, params *ListForwardsParams) (*http.Request, error) {
 	var err error
@@ -685,6 +861,208 @@ func NewListHostsRequest(server string, params *ListHostsParams) (*http.Request,
 	if err != nil {
 		return nil, err
 	}
+
+	return req, nil
+}
+
+// NewAddHostRequest calls the generic AddHost builder with application/json body
+func NewAddHostRequest(server string, params *AddHostParams, body AddHostJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewAddHostRequestWithBody(server, params, "application/json", bodyReader)
+}
+
+// NewAddHostRequestWithBody constructs an http.Request for the AddHost method, with any body, and a specified content type
+func NewAddHostRequestWithBody(server string, params *AddHostParams, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/hosts")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if params.Apply != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "apply", *params.Apply, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "boolean", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewDeleteHostRequest constructs an http.Request for the DeleteHost method
+func NewDeleteHostRequest(server string, identifier string, params *DeleteHostParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "identifier", identifier, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/hosts/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if params.Apply != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "apply", *params.Apply, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "boolean", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodDelete, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewSetHostRequest calls the generic SetHost builder with application/json body
+func NewSetHostRequest(server string, identifier string, params *SetHostParams, body SetHostJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewSetHostRequestWithBody(server, identifier, params, "application/json", bodyReader)
+}
+
+// NewSetHostRequestWithBody constructs an http.Request for the SetHost method, with any body, and a specified content type
+func NewSetHostRequestWithBody(server string, identifier string, params *SetHostParams, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "identifier", identifier, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/v1/hosts/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if params.Apply != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "apply", *params.Apply, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "boolean", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodPut, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
 
 	return req, nil
 }
@@ -1094,6 +1472,11 @@ type ClientWithResponsesInterface interface {
 	// Returns a wrapper object for the known response body format(s).
 	ListBlocklistsWithResponse(ctx context.Context, params *ListBlocklistsParams, reqEditors ...RequestEditorFn) (*ListBlocklistsResponse, error)
 
+	// ReconfigureDnsmasqWithResponse performs a POST /api/v1/dnsmasq/reconfigure (the `ReconfigureDnsmasq` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	ReconfigureDnsmasqWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ReconfigureDnsmasqResponse, error)
+
 	// ListForwardsWithResponse performs a GET /api/v1/forwards (the `ListForwards` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
@@ -1103,6 +1486,31 @@ type ClientWithResponsesInterface interface {
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListHostsWithResponse(ctx context.Context, params *ListHostsParams, reqEditors ...RequestEditorFn) (*ListHostsResponse, error)
+
+	// AddHostWithBodyWithResponse performs a POST /api/v1/hosts (the `AddHost` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	AddHostWithBodyWithResponse(ctx context.Context, params *AddHostParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*AddHostResponse, error)
+
+	// AddHostWithResponse performs a POST /api/v1/hosts (the `AddHost` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	AddHostWithResponse(ctx context.Context, params *AddHostParams, body AddHostJSONRequestBody, reqEditors ...RequestEditorFn) (*AddHostResponse, error)
+
+	// DeleteHostWithResponse performs a DELETE /api/v1/hosts/{identifier} (the `DeleteHost` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	DeleteHostWithResponse(ctx context.Context, identifier string, params *DeleteHostParams, reqEditors ...RequestEditorFn) (*DeleteHostResponse, error)
+
+	// SetHostWithBodyWithResponse performs a PUT /api/v1/hosts/{identifier} (the `SetHost` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	SetHostWithBodyWithResponse(ctx context.Context, identifier string, params *SetHostParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*SetHostResponse, error)
+
+	// SetHostWithResponse performs a PUT /api/v1/hosts/{identifier} (the `SetHost` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	SetHostWithResponse(ctx context.Context, identifier string, params *SetHostParams, body SetHostJSONRequestBody, reqEditors ...RequestEditorFn) (*SetHostResponse, error)
 
 	// ListInterfacesWithResponse performs a GET /api/v1/interfaces (the `ListInterfaces` operationId) request.
 	//
@@ -1236,6 +1644,47 @@ func (r ListBlocklistsResponse) ContentType() string {
 	return ""
 }
 
+type ReconfigureDnsmasqResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r ReconfigureDnsmasqResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r ReconfigureDnsmasqResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r ReconfigureDnsmasqResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ReconfigureDnsmasqResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ReconfigureDnsmasqResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type ListForwardsResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -1326,6 +1775,143 @@ func (r ListHostsResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r ListHostsResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type AddHostResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *Identifier
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r AddHostResponse) GetJSON200() *Identifier {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r AddHostResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r AddHostResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r AddHostResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r AddHostResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r AddHostResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type DeleteHostResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r DeleteHostResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r DeleteHostResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r DeleteHostResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteHostResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteHostResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r DeleteHostResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type SetHostResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r SetHostResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r SetHostResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r SetHostResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r SetHostResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r SetHostResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -1690,6 +2276,17 @@ func (c *ClientWithResponses) ListBlocklistsWithResponse(ctx context.Context, pa
 	return ParseListBlocklistsResponse(rsp)
 }
 
+// ReconfigureDnsmasqWithResponse performs a POST /api/v1/dnsmasq/reconfigure (the `ReconfigureDnsmasq` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) ReconfigureDnsmasqWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ReconfigureDnsmasqResponse, error) {
+	rsp, err := c.ReconfigureDnsmasq(ctx, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseReconfigureDnsmasqResponse(rsp)
+}
+
 // ListForwardsWithResponse performs a GET /api/v1/forwards (the `ListForwards` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -1710,6 +2307,61 @@ func (c *ClientWithResponses) ListHostsWithResponse(ctx context.Context, params 
 		return nil, err
 	}
 	return ParseListHostsResponse(rsp)
+}
+
+// AddHostWithBodyWithResponse performs a POST /api/v1/hosts (the `AddHost` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) AddHostWithBodyWithResponse(ctx context.Context, params *AddHostParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*AddHostResponse, error) {
+	rsp, err := c.AddHostWithBody(ctx, params, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseAddHostResponse(rsp)
+}
+
+// AddHostWithResponse performs a POST /api/v1/hosts (the `AddHost` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) AddHostWithResponse(ctx context.Context, params *AddHostParams, body AddHostJSONRequestBody, reqEditors ...RequestEditorFn) (*AddHostResponse, error) {
+	rsp, err := c.AddHost(ctx, params, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseAddHostResponse(rsp)
+}
+
+// DeleteHostWithResponse performs a DELETE /api/v1/hosts/{identifier} (the `DeleteHost` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) DeleteHostWithResponse(ctx context.Context, identifier string, params *DeleteHostParams, reqEditors ...RequestEditorFn) (*DeleteHostResponse, error) {
+	rsp, err := c.DeleteHost(ctx, identifier, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteHostResponse(rsp)
+}
+
+// SetHostWithBodyWithResponse performs a PUT /api/v1/hosts/{identifier} (the `SetHost` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) SetHostWithBodyWithResponse(ctx context.Context, identifier string, params *SetHostParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*SetHostResponse, error) {
+	rsp, err := c.SetHostWithBody(ctx, identifier, params, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseSetHostResponse(rsp)
+}
+
+// SetHostWithResponse performs a PUT /api/v1/hosts/{identifier} (the `SetHost` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) SetHostWithResponse(ctx context.Context, identifier string, params *SetHostParams, body SetHostJSONRequestBody, reqEditors ...RequestEditorFn) (*SetHostResponse, error) {
+	rsp, err := c.SetHost(ctx, identifier, params, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseSetHostResponse(rsp)
 }
 
 // ListInterfacesWithResponse performs a GET /api/v1/interfaces (the `ListInterfaces` operationId) request.
@@ -1855,6 +2507,35 @@ func ParseListBlocklistsResponse(rsp *http.Response) (*ListBlocklistsResponse, e
 	return response, nil
 }
 
+// ParseReconfigureDnsmasqResponse parses an HTTP response from a ReconfigureDnsmasqWithResponse call
+func ParseReconfigureDnsmasqResponse(rsp *http.Response) (*ReconfigureDnsmasqResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ReconfigureDnsmasqResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case rsp.StatusCode == 204:
+		break // No content-type
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseListForwardsResponse parses an HTTP response from a ListForwardsWithResponse call
 func ParseListForwardsResponse(rsp *http.Response) (*ListForwardsResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -1908,6 +2589,104 @@ func ParseListHostsResponse(rsp *http.Response) (*ListHostsResponse, error) {
 			return nil, err
 		}
 		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseAddHostResponse parses an HTTP response from a AddHostWithResponse call
+func ParseAddHostResponse(rsp *http.Response) (*AddHostResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &AddHostResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest Identifier
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteHostResponse parses an HTTP response from a DeleteHostWithResponse call
+func ParseDeleteHostResponse(rsp *http.Response) (*DeleteHostResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteHostResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case rsp.StatusCode == 204:
+		break // No content-type
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseSetHostResponse parses an HTTP response from a SetHostWithResponse call
+func ParseSetHostResponse(rsp *http.Response) (*SetHostResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &SetHostResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case rsp.StatusCode == 204:
+		break // No content-type
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse

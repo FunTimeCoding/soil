@@ -7,7 +7,24 @@ var Identity = identity.New(
 	"OPNsense firewall bridge",
 	"gopnsensed",
 ).WithInstructions(
-	"OPNsense firewall - DHCP leases, host reservations, firewall rules, aliases, DNS forwards, blocklists, interfaces, firewall log and state table. Read-only.",
+	"OPNsense firewall - DHCP leases, host reservations, firewall rules, aliases, DNS forwards, blocklists, interfaces, firewall log and state table. Reads throughout; Dnsmasq host entries can also be added, updated and deleted.",
+)
+
+const (
+	AddHost            = "add_host"
+	SetHost            = "set_host"
+	DeleteHost         = "delete_host"
+	ReconfigureDnsmasq = "reconfigure_dnsmasq"
+)
+
+const (
+	ParameterApply            = "apply"
+	ParameterHost             = "host"
+	ParameterDomain           = "domain"
+	ParameterAddress          = "address"
+	ParameterHardwareAddress  = "hardware_address"
+	ParameterClientIdentifier = "client_identifier"
+	ParameterDescription      = "description"
 )
 
 const (

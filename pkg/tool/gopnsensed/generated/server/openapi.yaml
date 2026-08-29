@@ -52,6 +52,104 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: addHost
+      parameters:
+      - name: apply
+        in: query
+        schema:
+          type: boolean
+        description: Reconfigure Dnsmasq after the write, default true.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HostRequest"
+      responses:
+        "200":
+          description: Identifier of the created host entry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Identifier"
+        "500":
+          description: Failed to add the host entry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/hosts/{identifier}:
+    put:
+      operationId: setHost
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Host entry identifier.
+      - name: apply
+        in: query
+        schema:
+          type: boolean
+        description: Reconfigure Dnsmasq after the write, default true.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/HostRequest"
+      responses:
+        "204":
+          description: Host entry updated.
+        "500":
+          description: Failed to update the host entry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteHost
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Host entry identifier.
+      - name: apply
+        in: query
+        schema:
+          type: boolean
+        description: Reconfigure Dnsmasq after the write, default true.
+      responses:
+        "204":
+          description: Host entry deleted.
+        "404":
+          description: No host entry with that identifier.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to delete the host entry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/v1/dnsmasq/reconfigure:
+    post:
+      operationId: reconfigureDnsmasq
+      responses:
+        "204":
+          description: Dnsmasq reconfigured.
+        "500":
+          description: Failed to reconfigure Dnsmasq.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /api/v1/pools:
     get:
       operationId: listPools
@@ -300,6 +398,27 @@ components:
         client_identifier:
           type: string
         description:
+          type: string
+    HostRequest:
+      type: object
+      properties:
+        host:
+          type: string
+        domain:
+          type: string
+        address:
+          type: string
+        hardware_address:
+          type: string
+        client_identifier:
+          type: string
+        description:
+          type: string
+    Identifier:
+      type: object
+      required: [identifier]
+      properties:
+        identifier:
           type: string
     Pool:
       type: object
