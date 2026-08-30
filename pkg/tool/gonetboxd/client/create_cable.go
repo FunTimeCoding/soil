@@ -11,7 +11,7 @@ func (c *Client) CreateCable(
 	interfaceA string,
 	deviceB string,
 	interfaceB string,
-) string {
+) (string, int) {
 	result, e := c.client.CreateCable(
 		c.context,
 		client.CreateCableRequest{
@@ -23,5 +23,5 @@ func (c *Client) CreateCable(
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

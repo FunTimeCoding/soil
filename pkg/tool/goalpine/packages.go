@@ -1,7 +1,7 @@
 package goalpine
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/client"
 	"github.com/spf13/cobra"
 )
@@ -21,7 +21,7 @@ func packages(c *client.Client) *cobra.Command {
 				name = arguments[0]
 			}
 
-			fmt.Println(c.Packages(name))
+			console.Emit(c.Packages(name))
 		},
 	}
 }

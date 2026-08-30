@@ -5,9 +5,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/web"
 )
 
-func (c *Client) Gear() string {
+func (c *Client) Gear() (string, int) {
 	result, e := c.client.GetGear(c.context)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

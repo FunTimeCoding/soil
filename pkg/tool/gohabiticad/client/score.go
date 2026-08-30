@@ -9,7 +9,7 @@ import (
 func (c *Client) Score(
 	identifier string,
 	direction string,
-) string {
+) (string, int) {
 	result, e := c.client.ScoreTask(
 		c.context,
 		identifier,
@@ -17,5 +17,5 @@ func (c *Client) Score(
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

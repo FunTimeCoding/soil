@@ -9,7 +9,7 @@ import (
 func (c *Client) DeletePage(
 	identifier string,
 	draft bool,
-) string {
+) (string, int) {
 	params := &client.DeletePageParams{}
 
 	if draft {
@@ -19,5 +19,5 @@ func (c *Client) DeletePage(
 	result, e := c.client.DeletePage(c.context, identifier, params)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

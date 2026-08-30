@@ -1,7 +1,7 @@
 package gonetbox
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
@@ -19,7 +19,7 @@ func createVirtualDisk(c *client.Client) *cobra.Command {
 		) {
 			size, e := strconv.Atoi(arguments[2])
 			errors.PanicOnError(e)
-			fmt.Println(
+			console.Emit(
 				c.CreateVirtualDisk(arguments[0], arguments[1], int32(size)),
 			)
 		},

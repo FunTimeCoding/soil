@@ -1,7 +1,7 @@
 package gopnsense
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/client"
 	"github.com/spf13/cobra"
 )
@@ -21,7 +21,7 @@ func log(c *client.Client) *cobra.Command {
 				l = &limit
 			}
 
-			fmt.Println(c.Log(l))
+			console.Emit(c.Log(l))
 		},
 	}
 	result.Flags().IntVar(&limit, "limit", 0, "maximum number of records")

@@ -8,9 +8,9 @@ import (
 func (c *Client) AddDeviceTag(
 	device string,
 	tag string,
-) string {
+) (string, int) {
 	result, e := c.client.AddDeviceTag(c.context, device, tag)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

@@ -9,7 +9,7 @@ import (
 func (c *Client) CreateVirtualInterface(
 	vmName string,
 	name string,
-) string {
+) (string, int) {
 	result, e := c.client.CreateVirtualInterface(
 		c.context,
 		vmName,
@@ -17,5 +17,5 @@ func (c *Client) CreateVirtualInterface(
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

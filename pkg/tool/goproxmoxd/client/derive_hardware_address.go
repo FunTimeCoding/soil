@@ -3,10 +3,9 @@ package client
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
 )
 
-func (c *Client) DeriveHardwareAddress(identifier int) string {
+func (c *Client) DeriveHardwareAddress(identifier int) (string, int) {
 	result, e := c.client.DeriveHardwareAddressWithResponse(
 		c.context,
 		&client.DeriveHardwareAddressParams{
@@ -16,5 +15,5 @@ func (c *Client) DeriveHardwareAddress(identifier int) string {
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result.HTTPResponse)
+	return string(result.Body), result.StatusCode()
 }

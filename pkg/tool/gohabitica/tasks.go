@@ -1,11 +1,12 @@
 package gohabitica
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/client"
 	"github.com/spf13/cobra"
 )
 
-func tasks(x *Context) *cobra.Command {
+func tasks(c *client.Client) *cobra.Command {
 	var taskType string
 	result := &cobra.Command{
 		Use:   "tasks",
@@ -14,7 +15,7 @@ func tasks(x *Context) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			fmt.Println(x.Client.Tasks(taskType))
+			console.Emit(c.Tasks(taskType))
 		},
 	}
 	result.Flags().StringVar(

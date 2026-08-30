@@ -5,9 +5,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/web"
 )
 
-func (c *Client) ListSpaces() string {
+func (c *Client) ListSpaces() (string, int) {
 	result, e := c.client.ListSpaces(c.context)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

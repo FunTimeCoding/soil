@@ -1,8 +1,8 @@
 package goalpine
 
 import (
-	"fmt"
 	alpine "github.com/funtimecoding/soil/pkg/alpine/constant"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/goalpine/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/client"
 	"github.com/spf13/cobra"
@@ -23,7 +23,9 @@ func upload(c *client.Client) *cobra.Command {
 			cobra.CheckErr(f)
 			architecture, g := o.Flags().GetString(constant.ArchitectureFlag)
 			cobra.CheckErr(g)
-			fmt.Print(c.Upload(arguments[0], version, repository, architecture))
+			console.Emit(
+				c.Upload(arguments[0], version, repository, architecture),
+			)
 		},
 	}
 	result.Flags().String(

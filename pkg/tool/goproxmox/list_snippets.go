@@ -1,7 +1,7 @@
 package goproxmox
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmox/command_context"
 	"github.com/spf13/cobra"
 )
@@ -14,7 +14,7 @@ func listSnippets(c *command_context.Context) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			fmt.Println(c.Client().ListSnippets())
+			console.Emit(c.Client().ListSnippets())
 		},
 	}
 }

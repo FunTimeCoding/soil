@@ -1,7 +1,7 @@
 package goatlassian
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
 )
@@ -15,7 +15,7 @@ func getPageDraft(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			fmt.Println(c.GetPageDraft(arguments[0]))
+			console.Emit(c.GetPageDraft(arguments[0]))
 		},
 	}
 }

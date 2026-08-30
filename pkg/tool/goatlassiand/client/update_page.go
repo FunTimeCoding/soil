@@ -11,7 +11,7 @@ func (c *Client) UpdatePage(
 	title string,
 	body string,
 	message *string,
-) string {
+) (string, int) {
 	result, e := c.client.UpdatePage(
 		c.context,
 		identifier,
@@ -23,5 +23,5 @@ func (c *Client) UpdatePage(
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

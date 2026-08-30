@@ -1,7 +1,7 @@
 package gonetbox
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
@@ -15,7 +15,7 @@ func listVirtualLabels(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			fmt.Println(c.ListVirtualLabels(arguments[0]))
+			console.Emit(c.ListVirtualLabels(arguments[0]))
 		},
 	}
 }

@@ -5,9 +5,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/web"
 )
 
-func (c *Client) ListTenants() string {
+func (c *Client) ListTenants() (string, int) {
 	result, e := c.client.ListTenants(c.context)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

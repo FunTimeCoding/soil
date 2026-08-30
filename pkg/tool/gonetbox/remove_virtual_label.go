@@ -2,6 +2,7 @@ package gonetbox
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
@@ -15,7 +16,7 @@ func removeVirtualLabel(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			c.RemoveVirtualLabel(arguments[0], arguments[1])
+			console.Emit(c.RemoveVirtualLabel(arguments[0], arguments[1]))
 			fmt.Println("label removed")
 		},
 	}

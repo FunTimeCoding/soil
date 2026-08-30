@@ -10,12 +10,12 @@ func (c *Client) CreateCluster(
 	name string,
 	clusterType string,
 	site string,
-) string {
+) (string, int) {
 	result, e := c.client.CreateCluster(
 		c.context,
 		client.CreateClusterRequest{Name: name, Type: clusterType, Site: site},
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

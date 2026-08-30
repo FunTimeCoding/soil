@@ -10,7 +10,7 @@ func (c *Client) CreateVirtualDisk(
 	machine string,
 	name string,
 	size int32,
-) string {
+) (string, int) {
 	result, e := c.client.CreateVirtualDisk(
 		c.context,
 		machine,
@@ -18,5 +18,5 @@ func (c *Client) CreateVirtualDisk(
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

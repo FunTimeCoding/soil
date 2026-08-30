@@ -1,7 +1,7 @@
 package goatlassian
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
 )
@@ -15,7 +15,7 @@ func setPageStatus(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			fmt.Println(c.SetPageStatus(arguments[0], arguments[1]))
+			console.Emit(c.SetPageStatus(arguments[0], arguments[1]))
 		},
 	}
 }

@@ -9,12 +9,12 @@ import (
 func (c *Client) CreateVirtualMachine(
 	name string,
 	cluster string,
-) string {
+) (string, int) {
 	result, e := c.client.CreateVirtualMachine(
 		c.context,
 		client.CreateVirtualMachineRequest{Name: name, Cluster: cluster},
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

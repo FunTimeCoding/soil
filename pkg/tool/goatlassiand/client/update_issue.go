@@ -15,7 +15,7 @@ func (c *Client) UpdateIssue(
 	labels []string,
 	fields map[string]any,
 	noDiff bool,
-) string {
+) (string, int) {
 	body := client.UpdateIssueJSONRequestBody{}
 
 	if summary != "" {
@@ -49,5 +49,5 @@ func (c *Client) UpdateIssue(
 	result, e := c.client.UpdateIssue(c.context, key, body)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

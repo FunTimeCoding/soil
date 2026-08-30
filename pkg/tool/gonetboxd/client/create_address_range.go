@@ -11,7 +11,7 @@ func (c *Client) CreateAddressRange(
 	end string,
 	status string,
 	description string,
-) string {
+) (string, int) {
 	body := client.CreateAddressRangeRequest{Start: start, End: end}
 
 	if status != "" {
@@ -25,5 +25,5 @@ func (c *Client) CreateAddressRange(
 	result, e := c.client.CreateAddressRange(c.context, body)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

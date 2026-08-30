@@ -1,11 +1,12 @@
 package gohabitica
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/client"
 	"github.com/spf13/cobra"
 )
 
-func tags(x *Context) *cobra.Command {
+func tags(c *client.Client) *cobra.Command {
 	return &cobra.Command{
 		Use:   "tags",
 		Short: "List tags",
@@ -13,7 +14,7 @@ func tags(x *Context) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			fmt.Println(x.Client.Tags())
+			console.Emit(c.Tags())
 		},
 	}
 }

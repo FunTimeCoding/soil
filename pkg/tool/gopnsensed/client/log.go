@@ -6,12 +6,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/web"
 )
 
-func (c *Client) Log(limit *int) string {
+func (c *Client) Log(limit *int) (string, int) {
 	result, e := c.client.FirewallLog(
 		c.context,
 		&client.FirewallLogParams{Limit: limit},
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

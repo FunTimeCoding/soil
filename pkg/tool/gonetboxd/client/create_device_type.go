@@ -9,7 +9,7 @@ import (
 func (c *Client) CreateDeviceType(
 	model string,
 	manufacturer string,
-) string {
+) (string, int) {
 	result, e := c.client.CreateDeviceType(
 		c.context,
 		client.CreateDeviceTypeRequest{
@@ -19,5 +19,5 @@ func (c *Client) CreateDeviceType(
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

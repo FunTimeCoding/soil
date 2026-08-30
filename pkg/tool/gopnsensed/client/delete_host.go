@@ -9,7 +9,7 @@ import (
 func (c *Client) DeleteHost(
 	identifier string,
 	apply *bool,
-) string {
+) (string, int) {
 	result, e := c.client.DeleteHost(
 		c.context,
 		identifier,
@@ -17,5 +17,5 @@ func (c *Client) DeleteHost(
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

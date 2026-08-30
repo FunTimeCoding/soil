@@ -209,3 +209,18 @@ recovery middleware.
 ### `os.Exit` and reporter
 
 Some tools call `os.Exit(1)` for expected failure conditions (no results, validation failures, upload errors). This intentionally bypasses the reporter defer - these are not crashes and should not be reported as errors. The reporter covers unexpected panics only.
+
+Exit codes are `0` for success and `1` for every failure. Nothing
+distinguishes failure kinds by number - the response body already
+carries that, and `error-handling/rest.md` defines how: a tier 1
+rejection returns the `Error` schema with no `event_identifier`,
+while tier 2 and 3 return `ErrorResponse` carrying one.
+
+A CLI client that talks to a daemon prints the response body and
+exits `1` when the status is 400 or above. Both cases bypass the
+reporter: a tier 1 rejection is the caller's mistake and carries no
+Sentry capture by design, and a tier 2 or 3 failure was already
+captured daemon-side - the `event_identifier` in the body is the
+handle for it, so capturing again would duplicate one failure as
+two events. Only transport failures reach the reporter, through the
+normal panic path.

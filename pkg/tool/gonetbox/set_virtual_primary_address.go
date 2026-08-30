@@ -1,7 +1,7 @@
 package gonetbox
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	generated "github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"github.com/spf13/cobra"
@@ -16,7 +16,7 @@ func setVirtualPrimaryAddress(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			fmt.Println(
+			console.Emit(
 				c.UpdateVirtualMachine(
 					arguments[0],
 					generated.UpdateVirtualMachineRequest{

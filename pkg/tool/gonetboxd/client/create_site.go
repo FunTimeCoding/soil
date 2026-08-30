@@ -6,12 +6,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/web"
 )
 
-func (c *Client) CreateSite(name string) string {
+func (c *Client) CreateSite(name string) (string, int) {
 	result, e := c.client.CreateSite(
 		c.context,
 		client.CreateNameRequest{Name: name},
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

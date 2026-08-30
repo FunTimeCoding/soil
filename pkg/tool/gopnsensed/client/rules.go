@@ -6,12 +6,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/web"
 )
 
-func (c *Client) Rules(query *string) string {
+func (c *Client) Rules(query *string) (string, int) {
 	result, e := c.client.ListRules(
 		c.context,
 		&client.ListRulesParams{Query: query},
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

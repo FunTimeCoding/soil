@@ -1,7 +1,7 @@
 package goatlassian
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
@@ -18,7 +18,9 @@ func createPage(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			fmt.Println(c.CreatePage(space, parent, arguments[0], arguments[1]))
+			console.Emit(
+				c.CreatePage(space, parent, arguments[0], arguments[1]),
+			)
 		},
 	}
 	result.Flags().StringVar(&space, "space", "", "space identifier (required)")

@@ -10,7 +10,7 @@ func (c *Client) AddVirtualJournalEntry(
 	machine string,
 	kind string,
 	comments string,
-) string {
+) (string, int) {
 	body := client.AddVirtualJournalEntryJSONRequestBody{Comments: comments}
 
 	if kind != "" {
@@ -20,5 +20,5 @@ func (c *Client) AddVirtualJournalEntry(
 	result, e := c.client.AddVirtualJournalEntry(c.context, machine, body)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

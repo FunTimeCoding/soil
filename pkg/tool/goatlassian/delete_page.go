@@ -2,6 +2,7 @@ package goatlassian
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
 )
@@ -16,7 +17,7 @@ func deletePage(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			c.DeletePage(arguments[0], draft)
+			console.Emit(c.DeletePage(arguments[0], draft))
 			fmt.Printf("deleted page %s\n", arguments[0])
 		},
 	}

@@ -11,7 +11,7 @@ func (c *Client) CreateVirtualTunnelTermination(
 	tunnel string,
 	interfaceName string,
 	role string,
-) string {
+) (string, int) {
 	result, e := c.client.CreateVirtualTunnelTermination(
 		c.context,
 		vm,
@@ -23,5 +23,5 @@ func (c *Client) CreateVirtualTunnelTermination(
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

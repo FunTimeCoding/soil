@@ -1,7 +1,7 @@
 package goraid
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/raid"
 	"github.com/spf13/cobra"
 )
@@ -14,7 +14,7 @@ func reports(c *raid.Client) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			fmt.Println(c.Reports())
+			console.Emit(c.Reports())
 		},
 	}
 }

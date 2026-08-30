@@ -5,9 +5,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/web"
 )
 
-func (c *Client) ListVirtualLabels(machine string) string {
+func (c *Client) ListVirtualLabels(machine string) (string, int) {
 	result, e := c.client.ListVirtualLabels(c.context, machine)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

@@ -1,11 +1,12 @@
 package gohabitica
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/client"
 	"github.com/spf13/cobra"
 )
 
-func statistic(x *Context) *cobra.Command {
+func statistic(c *client.Client) *cobra.Command {
 	return &cobra.Command{
 		Use:   "statistic",
 		Short: "Get user statistic",
@@ -13,7 +14,7 @@ func statistic(x *Context) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			fmt.Println(x.Client.Statistic())
+			console.Emit(c.Statistic())
 		},
 	}
 }

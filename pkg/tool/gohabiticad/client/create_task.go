@@ -10,7 +10,7 @@ func (c *Client) CreateTask(
 	taskType string,
 	text string,
 	notes string,
-) string {
+) (string, int) {
 	body := client.CreateTaskJSONRequestBody{
 		Type: client.CreateTaskRequestType(taskType),
 		Text: text,
@@ -23,5 +23,5 @@ func (c *Client) CreateTask(
 	result, e := c.client.CreateTask(c.context, body)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

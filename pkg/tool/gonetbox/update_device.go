@@ -1,7 +1,7 @@
 package gonetbox
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	generated "github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"github.com/spf13/cobra"
@@ -48,7 +48,7 @@ func updateDevice(c *client.Client) *cobra.Command {
 				body.Description = &description
 			}
 
-			fmt.Println(c.UpdateDevice(arguments[0], body))
+			console.Emit(c.UpdateDevice(arguments[0], body))
 		},
 	}
 	result.Flags().StringVar(

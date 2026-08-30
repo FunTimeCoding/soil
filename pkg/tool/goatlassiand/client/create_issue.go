@@ -14,7 +14,7 @@ func (c *Client) CreateIssue(
 	assignee string,
 	labels []string,
 	fields map[string]any,
-) string {
+) (string, int) {
 	body := client.CreateIssueJSONRequestBody{
 		Project:   project,
 		IssueType: issueType,
@@ -40,5 +40,5 @@ func (c *Client) CreateIssue(
 	result, e := c.client.CreateIssue(c.context, body)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

@@ -10,7 +10,7 @@ func (c *Client) SetDeviceLabel(
 	device string,
 	key string,
 	value string,
-) string {
+) (string, int) {
 	result, e := c.client.SetDeviceLabel(
 		c.context,
 		device,
@@ -19,5 +19,5 @@ func (c *Client) SetDeviceLabel(
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

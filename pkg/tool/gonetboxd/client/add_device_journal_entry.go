@@ -10,7 +10,7 @@ func (c *Client) AddDeviceJournalEntry(
 	device string,
 	kind string,
 	comments string,
-) string {
+) (string, int) {
 	body := client.AddDeviceJournalEntryJSONRequestBody{Comments: comments}
 
 	if kind != "" {
@@ -20,5 +20,5 @@ func (c *Client) AddDeviceJournalEntry(
 	result, e := c.client.AddDeviceJournalEntry(c.context, device, body)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

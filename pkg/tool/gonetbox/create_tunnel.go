@@ -1,7 +1,7 @@
 package gonetbox
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
@@ -18,7 +18,7 @@ func createTunnel(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			fmt.Println(c.CreateTunnel(arguments[0], encapsulation, group))
+			console.Emit(c.CreateTunnel(arguments[0], encapsulation, group))
 		},
 	}
 	result.Flags().StringVar(

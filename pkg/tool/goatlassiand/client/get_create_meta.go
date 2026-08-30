@@ -10,7 +10,7 @@ func (c *Client) GetCreateMeta(
 	project string,
 	issueType string,
 	expand string,
-) string {
+) (string, int) {
 	params := &client.GetCreateMetaParams{
 		Project:   project,
 		IssueType: issueType,
@@ -23,5 +23,5 @@ func (c *Client) GetCreateMeta(
 	result, e := c.client.GetCreateMeta(c.context, params)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

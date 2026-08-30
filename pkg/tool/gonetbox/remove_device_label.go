@@ -2,6 +2,7 @@ package gonetbox
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
@@ -15,7 +16,7 @@ func removeDeviceLabel(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			c.RemoveDeviceLabel(arguments[0], arguments[1])
+			console.Emit(c.RemoveDeviceLabel(arguments[0], arguments[1]))
 			fmt.Println("label removed")
 		},
 	}

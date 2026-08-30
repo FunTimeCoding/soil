@@ -3,13 +3,12 @@ package client
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func (c *Client) GetContainer(
 	identifier int64,
 	node *string,
-) string {
+) (string, int) {
 	result, e := c.client.GetContainerWithResponse(
 		c.context,
 		identifier,
@@ -17,5 +16,5 @@ func (c *Client) GetContainer(
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result.HTTPResponse)
+	return string(result.Body), result.StatusCode()
 }

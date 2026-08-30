@@ -1,14 +1,14 @@
 package gopnsense
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/spf13/cobra"
 )
 
 func queryCommand(
 	use string,
 	short string,
-	call func(query *string) string,
+	call func(query *string) (string, int),
 ) *cobra.Command {
 	var query string
 	result := &cobra.Command{
@@ -24,7 +24,7 @@ func queryCommand(
 				q = &query
 			}
 
-			fmt.Println(call(q))
+			console.Emit(call(q))
 		},
 	}
 	result.Flags().StringVar(&query, "query", "", "search phrase")

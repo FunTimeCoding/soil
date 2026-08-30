@@ -1,7 +1,7 @@
 package gopnsense
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/client"
 	"github.com/spf13/cobra"
 )
@@ -14,7 +14,7 @@ func interfaces(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			fmt.Println(c.Interfaces())
+			console.Emit(c.Interfaces())
 		},
 	}
 }

@@ -12,7 +12,7 @@ func (c *Client) Logs(
 	limit *int,
 	start *time.Time,
 	end *time.Time,
-) string {
+) (string, int) {
 	result, e := c.client.GetLogs(
 		c.context,
 		&client.GetLogsParams{
@@ -24,5 +24,5 @@ func (c *Client) Logs(
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

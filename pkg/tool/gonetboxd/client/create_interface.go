@@ -11,7 +11,7 @@ func (c *Client) CreateInterface(
 	name string,
 	interfaceType string,
 	physicalAddress string,
-) string {
+) (string, int) {
 	body := client.CreateInterfaceRequest{Name: name, Type: interfaceType}
 
 	if physicalAddress != "" {
@@ -21,5 +21,5 @@ func (c *Client) CreateInterface(
 	result, e := c.client.CreateInterface(c.context, device, body)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

@@ -6,9 +6,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/web"
 )
 
-func (c *Client) Alerts() string {
+func (c *Client) Alerts() (string, int) {
 	result, e := c.client.GetAlerts(c.context, &client.GetAlertsParams{})
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

@@ -9,7 +9,7 @@ import (
 func (c *Client) AddHost(
 	body client.HostRequest,
 	apply *bool,
-) string {
+) (string, int) {
 	result, e := c.client.AddHost(
 		c.context,
 		&client.AddHostParams{Apply: apply},
@@ -17,5 +17,5 @@ func (c *Client) AddHost(
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

@@ -1,7 +1,7 @@
 package gonetbox
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
@@ -17,7 +17,7 @@ func createLocation(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			fmt.Println(c.CreateLocation(arguments[0], site))
+			console.Emit(c.CreateLocation(arguments[0], site))
 		},
 	}
 	result.Flags().StringVar(&site, "site", "", "site name (required)")

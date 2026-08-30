@@ -8,9 +8,9 @@ import (
 func (c *Client) RemoveVirtualTag(
 	name string,
 	tag string,
-) string {
+) (string, int) {
 	result, e := c.client.RemoveVirtualTag(c.context, name, tag)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

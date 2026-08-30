@@ -3,10 +3,9 @@ package client
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
 )
 
-func (c *Client) GetSnippet(name string) string {
+func (c *Client) GetSnippet(name string) (string, int) {
 	result, e := c.client.GetSnippetWithResponse(
 		c.context,
 		name,
@@ -14,5 +13,5 @@ func (c *Client) GetSnippet(name string) string {
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result.HTTPResponse)
+	return string(result.Body), result.StatusCode()
 }

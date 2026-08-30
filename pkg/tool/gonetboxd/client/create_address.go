@@ -11,7 +11,7 @@ func (c *Client) CreateAddress(
 	interfaceName string,
 	address string,
 	status string,
-) string {
+) (string, int) {
 	body := client.CreateAddressRequest{
 		Interface: interfaceName,
 		Address:   address,
@@ -24,5 +24,5 @@ func (c *Client) CreateAddress(
 	result, e := c.client.CreateAddress(c.context, device, body)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

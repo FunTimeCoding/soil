@@ -3,14 +3,13 @@ package client
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func (c *Client) CreateMachineSnapshot(
 	identifier int64,
 	name string,
 	node *string,
-) string {
+) (string, int) {
 	body := client.CreateMachineSnapshotJSONRequestBody{Name: name}
 	result, e := c.client.CreateMachineSnapshotWithResponse(
 		c.context,
@@ -23,5 +22,5 @@ func (c *Client) CreateMachineSnapshot(
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result.HTTPResponse)
+	return string(result.Body), result.StatusCode()
 }

@@ -2,7 +2,7 @@ package goatlassian
 
 import (
 	"encoding/json"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
@@ -41,7 +41,7 @@ func updateIssue(c *client.Client) *cobra.Command {
 				}
 			}
 
-			fmt.Println(
+			console.Emit(
 				c.UpdateIssue(
 					arguments[0],
 					summary,

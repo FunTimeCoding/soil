@@ -16,7 +16,7 @@ func Main(
 ) {
 	s := instrument.New(constant.Identity, version)
 	defer func() { s.Flush(recover()) }()
-	x := &Context{Client: client.NewEnvironment()}
+	c := client.NewEnvironment()
 	o := &cobra.Command{
 		Use:     constant.Identity.Usage(),
 		Short:   constant.Identity.Description(),
@@ -28,14 +28,14 @@ func Main(
 			s.RecordCommand(m.Name())
 		},
 	}
-	o.AddCommand(tasks(x))
-	o.AddCommand(create(x))
-	o.AddCommand(score(x))
-	o.AddCommand(tags(x))
-	o.AddCommand(statistic(x))
-	o.AddCommand(cron(x))
-	o.AddCommand(allocate(x))
-	o.AddCommand(gear(x))
-	o.AddCommand(equip(x))
+	o.AddCommand(tasks(c))
+	o.AddCommand(create(c))
+	o.AddCommand(score(c))
+	o.AddCommand(tags(c))
+	o.AddCommand(statistic(c))
+	o.AddCommand(cron(c))
+	o.AddCommand(allocate(c))
+	o.AddCommand(gear(c))
+	o.AddCommand(equip(c))
 	errors.PanicOnError(o.Execute())
 }

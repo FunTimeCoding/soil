@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/web"
 )
 
-func (c *Client) Tasks(taskType string) string {
+func (c *Client) Tasks(taskType string) (string, int) {
 	var p *client.GetTasksParams
 
 	if taskType != "" {
@@ -18,5 +18,5 @@ func (c *Client) Tasks(taskType string) string {
 	result, e := c.client.GetTasks(c.context, p)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

@@ -13,7 +13,7 @@ func (c *Client) EditPage(
 	title string,
 	message string,
 	draft bool,
-) string {
+) (string, int) {
 	body := client.EditPageJSONRequestBody{OldText: oldText, NewText: newText}
 
 	if title != "" {
@@ -31,5 +31,5 @@ func (c *Client) EditPage(
 	result, e := c.client.EditPage(c.context, identifier, body)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

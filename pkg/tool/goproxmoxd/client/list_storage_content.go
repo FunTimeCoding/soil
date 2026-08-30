@@ -3,13 +3,12 @@ package client
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func (c *Client) ListStorageContent(
 	name string,
 	storage string,
-) string {
+) (string, int) {
 	result, e := c.client.ListStorageContentWithResponse(
 		c.context,
 		name,
@@ -18,5 +17,5 @@ func (c *Client) ListStorageContent(
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result.HTTPResponse)
+	return string(result.Body), result.StatusCode()
 }

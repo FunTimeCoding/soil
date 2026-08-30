@@ -2,6 +2,7 @@ package goatlassian
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
 )
@@ -15,7 +16,7 @@ func deleteComment(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			c.DeleteComment(arguments[0], arguments[1])
+			console.Emit(c.DeleteComment(arguments[0], arguments[1]))
 			fmt.Printf("deleted comment %s\n", arguments[1])
 		},
 	}

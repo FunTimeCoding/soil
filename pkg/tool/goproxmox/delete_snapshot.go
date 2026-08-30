@@ -1,7 +1,7 @@
 package goproxmox
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmox/command_context"
 	"github.com/spf13/cobra"
@@ -27,7 +27,7 @@ func deleteSnapshot(c *command_context.Context) *cobra.Command {
 				n = &node
 			}
 
-			fmt.Println(c.Client().DeleteMachineSnapshot(identifier, name, n))
+			console.Emit(c.Client().DeleteMachineSnapshot(identifier, name, n))
 		},
 	}
 	result.Flags().StringVar(&name, "name", "", "snapshot name (required)")

@@ -6,12 +6,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/web"
 )
 
-func (c *Client) SearchPages(query string) string {
+func (c *Client) SearchPages(query string) (string, int) {
 	result, e := c.client.SearchPages(
 		c.context,
 		&client.SearchPagesParams{Query: query},
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

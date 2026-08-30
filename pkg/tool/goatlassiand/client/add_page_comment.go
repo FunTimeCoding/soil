@@ -9,7 +9,7 @@ import (
 func (c *Client) AddPageComment(
 	identifier string,
 	body string,
-) string {
+) (string, int) {
 	result, e := c.client.AddPageComment(
 		c.context,
 		identifier,
@@ -17,5 +17,5 @@ func (c *Client) AddPageComment(
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

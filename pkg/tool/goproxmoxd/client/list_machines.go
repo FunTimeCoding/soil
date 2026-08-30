@@ -3,15 +3,14 @@ package client
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
 )
 
-func (c *Client) ListMachines(node *string) string {
+func (c *Client) ListMachines(node *string) (string, int) {
 	result, e := c.client.ListMachinesWithResponse(
 		c.context,
 		&client.ListMachinesParams{Instance: &c.instance, Node: node},
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result.HTTPResponse)
+	return string(result.Body), result.StatusCode()
 }

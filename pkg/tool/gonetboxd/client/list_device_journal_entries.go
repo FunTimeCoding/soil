@@ -10,7 +10,7 @@ func (c *Client) ListDeviceJournalEntries(
 	device string,
 	limit int32,
 	offset int32,
-) string {
+) (string, int) {
 	p := &client.ListDeviceJournalEntriesParams{}
 
 	if limit > 0 {
@@ -24,5 +24,5 @@ func (c *Client) ListDeviceJournalEntries(
 	result, e := c.client.ListDeviceJournalEntries(c.context, device, p)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

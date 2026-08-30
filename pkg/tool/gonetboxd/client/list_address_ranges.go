@@ -5,9 +5,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/web"
 )
 
-func (c *Client) ListAddressRanges() string {
+func (c *Client) ListAddressRanges() (string, int) {
 	result, e := c.client.ListAddressRanges(c.context)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

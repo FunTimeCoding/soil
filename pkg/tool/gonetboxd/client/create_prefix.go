@@ -10,7 +10,7 @@ func (c *Client) CreatePrefix(
 	prefix string,
 	site string,
 	description string,
-) string {
+) (string, int) {
 	body := client.CreatePrefixRequest{Prefix: prefix}
 
 	if site != "" {
@@ -24,5 +24,5 @@ func (c *Client) CreatePrefix(
 	result, e := c.client.CreatePrefix(c.context, body)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

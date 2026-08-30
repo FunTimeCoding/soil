@@ -1,7 +1,7 @@
 package goatlassian
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
@@ -25,7 +25,7 @@ func editChecklistItem(c *client.Client) *cobra.Command {
 				os.Exit(1)
 			}
 
-			fmt.Println(c.EditChecklistItem(arguments[0], index, arguments[2]))
+			console.Emit(c.EditChecklistItem(arguments[0], index, arguments[2]))
 		},
 	}
 }

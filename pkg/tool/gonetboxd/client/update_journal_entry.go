@@ -10,7 +10,7 @@ func (c *Client) UpdateJournalEntry(
 	identifier int32,
 	kind string,
 	comments string,
-) string {
+) (string, int) {
 	body := client.UpdateJournalEntryJSONRequestBody{}
 
 	if comments != "" {
@@ -24,5 +24,5 @@ func (c *Client) UpdateJournalEntry(
 	result, e := c.client.UpdateJournalEntry(c.context, identifier, body)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

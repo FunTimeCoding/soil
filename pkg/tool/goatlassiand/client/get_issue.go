@@ -9,7 +9,7 @@ import (
 func (c *Client) GetIssue(
 	key string,
 	comments bool,
-) string {
+) (string, int) {
 	params := &client.GetIssueParams{}
 
 	if comments {
@@ -19,5 +19,5 @@ func (c *Client) GetIssue(
 	result, e := c.client.GetIssue(c.context, key, params)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

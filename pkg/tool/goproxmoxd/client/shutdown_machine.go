@@ -3,13 +3,12 @@ package client
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
-	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func (c *Client) ShutdownMachine(
 	identifier int64,
 	node *string,
-) string {
+) (string, int) {
 	result, e := c.client.ShutdownMachineWithResponse(
 		c.context,
 		identifier,
@@ -17,5 +16,5 @@ func (c *Client) ShutdownMachine(
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result.HTTPResponse)
+	return string(result.Body), result.StatusCode()
 }

@@ -10,7 +10,7 @@ func (c *Client) SetVirtualLabel(
 	machine string,
 	key string,
 	value string,
-) string {
+) (string, int) {
 	result, e := c.client.SetVirtualLabel(
 		c.context,
 		machine,
@@ -19,5 +19,5 @@ func (c *Client) SetVirtualLabel(
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

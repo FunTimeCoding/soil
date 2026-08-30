@@ -8,8 +8,9 @@ import (
 func (c *Client) RemoveVirtualLabel(
 	machine string,
 	key string,
-) {
+) (string, int) {
 	result, e := c.client.RemoveVirtualLabel(c.context, machine, key)
 	errors.PanicOnError(e)
-	web.ReadString(result)
+
+	return web.ReadString(result), result.StatusCode
 }

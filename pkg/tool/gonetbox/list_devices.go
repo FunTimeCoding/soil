@@ -1,7 +1,7 @@
 package gonetbox
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
@@ -21,7 +21,7 @@ func listDevices(c *client.Client) *cobra.Command {
 				q = &query
 			}
 
-			fmt.Println(c.ListDevices(q))
+			console.Emit(c.ListDevices(q))
 		},
 	}
 	result.Flags().StringVar(&query, "query", "", "filter by name")

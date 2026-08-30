@@ -1,7 +1,7 @@
 package gopnsense
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/client"
 	"github.com/spf13/cobra"
 )
@@ -16,7 +16,7 @@ func setHost(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			a []string,
 		) {
-			fmt.Println(c.SetHost(a[0], *hostRequest(f), &f.apply))
+			console.Emit(c.SetHost(a[0], *hostRequest(f), &f.apply))
 		},
 	}
 	registerHostFlags(result, f)

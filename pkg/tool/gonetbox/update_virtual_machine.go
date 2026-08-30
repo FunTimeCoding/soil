@@ -1,7 +1,7 @@
 package gonetbox
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	generated "github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"github.com/spf13/cobra"
@@ -43,7 +43,7 @@ func updateVirtualMachine(c *client.Client) *cobra.Command {
 				body.Status = &status
 			}
 
-			fmt.Println(c.UpdateVirtualMachine(arguments[0], body))
+			console.Emit(c.UpdateVirtualMachine(arguments[0], body))
 		},
 	}
 	result.Flags().StringVar(

@@ -10,7 +10,7 @@ func (c *Client) EditChecklistItem(
 	key string,
 	index int,
 	text string,
-) string {
+) (string, int) {
 	result, e := c.client.EditChecklistItem(
 		c.context,
 		key,
@@ -19,5 +19,5 @@ func (c *Client) EditChecklistItem(
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

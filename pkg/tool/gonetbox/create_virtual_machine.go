@@ -1,7 +1,7 @@
 package gonetbox
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
@@ -17,7 +17,7 @@ func createVirtualMachine(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			fmt.Println(c.CreateVirtualMachine(arguments[0], cluster))
+			console.Emit(c.CreateVirtualMachine(arguments[0], cluster))
 		},
 	}
 	result.Flags().StringVar(&cluster, "cluster", "", "cluster name (required)")

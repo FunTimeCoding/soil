@@ -1,7 +1,7 @@
 package gonetbox
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
@@ -26,7 +26,9 @@ func createDevice(c *client.Client) *cobra.Command {
 				t = &tenant
 			}
 
-			fmt.Println(c.CreateDevice(arguments[0], role, deviceType, site, t))
+			console.Emit(
+				c.CreateDevice(arguments[0], role, deviceType, site, t),
+			)
 		},
 	}
 	result.Flags().StringVar(&role, "role", "", "device role name (required)")

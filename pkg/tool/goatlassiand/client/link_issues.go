@@ -10,7 +10,7 @@ func (c *Client) LinkIssues(
 	key string,
 	target string,
 	linkType string,
-) string {
+) (string, int) {
 	body := client.LinkIssuesJSONRequestBody{TargetKey: target}
 
 	if linkType != "" {
@@ -20,5 +20,5 @@ func (c *Client) LinkIssues(
 	result, e := c.client.LinkIssues(c.context, key, body)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

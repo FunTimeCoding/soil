@@ -1,7 +1,7 @@
 package goproxmox
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmox/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
@@ -49,7 +49,7 @@ func updateMachine(c *command_context.Context) *cobra.Command {
 				body.Delete = &deleteFields
 			}
 
-			fmt.Println(c.Client().UpdateMachine(identifier, n, body))
+			console.Emit(c.Client().UpdateMachine(identifier, n, body))
 		},
 	}
 	result.Flags().StringVar(&node, "node", "", "node name")

@@ -8,9 +8,9 @@ import (
 func (c *Client) DeleteComment(
 	key string,
 	identifier string,
-) string {
+) (string, int) {
 	result, e := c.client.DeleteComment(c.context, key, identifier)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

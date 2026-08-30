@@ -9,7 +9,7 @@ import (
 func (c *Client) ListPages(
 	space string,
 	status string,
-) string {
+) (string, int) {
 	params := &client.ListPagesParams{Space: space}
 
 	if status != "" {
@@ -19,5 +19,5 @@ func (c *Client) ListPages(
 	result, e := c.client.ListPages(c.context, params)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

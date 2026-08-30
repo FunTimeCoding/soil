@@ -1,11 +1,12 @@
 package gohabitica
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/client"
 	"github.com/spf13/cobra"
 )
 
-func score(x *Context) *cobra.Command {
+func score(c *client.Client) *cobra.Command {
 	var direction string
 	result := &cobra.Command{
 		Use:   "score [identifier]",
@@ -15,7 +16,7 @@ func score(x *Context) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			fmt.Println(x.Client.Score(arguments[0], direction))
+			console.Emit(c.Score(arguments[0], direction))
 		},
 	}
 	result.Flags().StringVar(

@@ -15,7 +15,7 @@ func (c *Client) Upload(
 	version string,
 	repository string,
 	architecture string,
-) string {
+) (string, int) {
 	q := web.NewPostBytes(
 		join.Slash(
 			[]string{
@@ -34,5 +34,5 @@ func (c *Client) Upload(
 	errors.PanicOnError(e)
 	defer errors.PanicClose(r.Body)
 
-	return web.ReadString(r)
+	return web.ReadString(r), r.StatusCode
 }

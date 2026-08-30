@@ -1,7 +1,7 @@
 package goproxmox
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmox/command_context"
 	"github.com/spf13/cobra"
@@ -19,7 +19,7 @@ func deriveHardwareAddress(c *command_context.Context) *cobra.Command {
 		) {
 			identifier, e := strconv.Atoi(a[0])
 			errors.PanicOnError(e)
-			fmt.Println(c.Client().DeriveHardwareAddress(identifier))
+			console.Emit(c.Client().DeriveHardwareAddress(identifier))
 		},
 	}
 }

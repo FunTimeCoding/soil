@@ -8,9 +8,9 @@ import (
 func (c *Client) DeleteChecklistItem(
 	key string,
 	index int,
-) string {
+) (string, int) {
 	result, e := c.client.DeleteChecklistItem(c.context, key, index)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

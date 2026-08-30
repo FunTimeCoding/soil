@@ -9,7 +9,7 @@ import (
 func (c *Client) TransitionIssue(
 	key string,
 	transitionIdentifier string,
-) string {
+) (string, int) {
 	result, e := c.client.TransitionIssue(
 		c.context,
 		key,
@@ -17,5 +17,5 @@ func (c *Client) TransitionIssue(
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

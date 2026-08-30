@@ -9,12 +9,12 @@ import (
 func (c *Client) SearchIssues(
 	query string,
 	limit *int,
-) string {
+) (string, int) {
 	result, e := c.client.SearchIssues(
 		c.context,
 		&client.SearchIssuesParams{Query: query, Limit: limit},
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

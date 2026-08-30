@@ -5,9 +5,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/web"
 )
 
-func (c *Client) ListTunnelGroups() string {
+func (c *Client) ListTunnelGroups() (string, int) {
 	result, e := c.client.ListTunnelGroups(c.context)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

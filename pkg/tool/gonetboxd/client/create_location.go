@@ -9,12 +9,12 @@ import (
 func (c *Client) CreateLocation(
 	name string,
 	site string,
-) string {
+) (string, int) {
 	result, e := c.client.CreateLocation(
 		c.context,
 		client.CreateLocationRequest{Name: name, Site: site},
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

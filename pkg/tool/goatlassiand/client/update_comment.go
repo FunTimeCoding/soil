@@ -10,7 +10,7 @@ func (c *Client) UpdateComment(
 	key string,
 	identifier string,
 	body string,
-) string {
+) (string, int) {
 	result, e := c.client.UpdateComment(
 		c.context,
 		key,
@@ -19,5 +19,5 @@ func (c *Client) UpdateComment(
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

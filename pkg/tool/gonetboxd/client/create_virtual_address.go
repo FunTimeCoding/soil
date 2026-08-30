@@ -11,7 +11,7 @@ func (c *Client) CreateVirtualAddress(
 	interfaceName string,
 	address string,
 	status string,
-) string {
+) (string, int) {
 	body := client.CreateAddressRequest{
 		Interface: interfaceName,
 		Address:   address,
@@ -24,5 +24,5 @@ func (c *Client) CreateVirtualAddress(
 	result, e := c.client.CreateVirtualAddress(c.context, vmName, body)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

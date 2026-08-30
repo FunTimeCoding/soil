@@ -11,7 +11,7 @@ func (c *Client) CreatePage(
 	parentIdentifier string,
 	title string,
 	body string,
-) string {
+) (string, int) {
 	result, e := c.client.CreatePage(
 		c.context,
 		client.CreatePageJSONRequestBody{
@@ -23,5 +23,5 @@ func (c *Client) CreatePage(
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

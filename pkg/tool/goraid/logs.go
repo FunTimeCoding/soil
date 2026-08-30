@@ -1,7 +1,7 @@
 package goraid
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/raid"
 	"github.com/spf13/cobra"
 	"time"
@@ -48,7 +48,7 @@ func logs(c *raid.Client) *cobra.Command {
 				}
 			}
 
-			fmt.Println(c.Logs(o, l, s, e))
+			console.Emit(c.Logs(o, l, s, e))
 		},
 	}
 	result.Flags().IntVar(&offset, "offset", 0, "offset into log list")

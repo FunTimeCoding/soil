@@ -10,7 +10,7 @@ func (c *Client) ListVirtualJournalEntries(
 	machine string,
 	limit int32,
 	offset int32,
-) string {
+) (string, int) {
 	p := &client.ListVirtualJournalEntriesParams{}
 
 	if limit > 0 {
@@ -24,5 +24,5 @@ func (c *Client) ListVirtualJournalEntries(
 	result, e := c.client.ListVirtualJournalEntries(c.context, machine, p)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

@@ -11,12 +11,12 @@ func (c *Client) TopAlerts(
 	n int,
 	start time.Time,
 	end time.Time,
-) string {
+) (string, int) {
 	result, e := c.client.GetTopAlerts(
 		c.context,
 		&client.GetTopAlertsParams{N: &n, Start: &start, End: &end},
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

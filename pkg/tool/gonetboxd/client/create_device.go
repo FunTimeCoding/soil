@@ -12,7 +12,7 @@ func (c *Client) CreateDevice(
 	deviceType string,
 	site string,
 	tenant *string,
-) string {
+) (string, int) {
 	result, e := c.client.CreateDevice(
 		c.context,
 		client.CreateDeviceRequest{
@@ -25,5 +25,5 @@ func (c *Client) CreateDevice(
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

@@ -8,8 +8,9 @@ import (
 func (c *Client) RemoveDeviceLabel(
 	device string,
 	key string,
-) {
+) (string, int) {
 	result, e := c.client.RemoveDeviceLabel(c.context, device, key)
 	errors.PanicOnError(e)
-	web.ReadString(result)
+
+	return web.ReadString(result), result.StatusCode
 }

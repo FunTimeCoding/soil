@@ -11,7 +11,7 @@ func (c *Client) CreateDeviceTunnelTermination(
 	tunnel string,
 	interfaceName string,
 	role string,
-) string {
+) (string, int) {
 	result, e := c.client.CreateDeviceTunnelTermination(
 		c.context,
 		device,
@@ -23,5 +23,5 @@ func (c *Client) CreateDeviceTunnelTermination(
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

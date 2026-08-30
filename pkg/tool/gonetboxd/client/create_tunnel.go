@@ -10,7 +10,7 @@ func (c *Client) CreateTunnel(
 	name string,
 	encapsulation string,
 	group string,
-) string {
+) (string, int) {
 	result, e := c.client.CreateTunnel(
 		c.context,
 		client.CreateTunnelRequest{
@@ -21,5 +21,5 @@ func (c *Client) CreateTunnel(
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

@@ -5,9 +5,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/web"
 )
 
-func (c *Client) GetPage(identifier string) string {
+func (c *Client) GetPage(identifier string) (string, int) {
 	result, e := c.client.GetPage(c.context, identifier)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result)
+	return web.ReadString(result), result.StatusCode
 }

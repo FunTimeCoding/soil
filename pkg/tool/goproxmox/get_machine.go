@@ -1,7 +1,7 @@
 package goproxmox
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmox/command_context"
 	"github.com/spf13/cobra"
@@ -26,7 +26,7 @@ func getMachine(c *command_context.Context) *cobra.Command {
 				n = &node
 			}
 
-			fmt.Println(c.Client().GetMachine(identifier, n))
+			console.Emit(c.Client().GetMachine(identifier, n))
 		},
 	}
 	result.Flags().StringVar(&node, "node", "", "node name (speeds up lookup)")
