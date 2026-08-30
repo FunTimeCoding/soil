@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/convert"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/generated/server"
 	"time"
 )
@@ -36,20 +37,5 @@ func (s *Server) GetTopAlerts(
 		), nil
 	}
 
-	result := make(server.GetTopAlerts200JSONResponse, 0, len(records))
-
-	for _, c := range records {
-		result = append(
-			result,
-			server.TopAlertsResponse{
-				Name:            c.Name,
-				Count:           c.Count,
-				AverageDuration: c.AverageDuration.String(),
-				CurrentlyFiring: c.CurrentlyFiring,
-				Severity:        c.Severity,
-			},
-		)
-	}
-
-	return result, nil
+	return server.GetTopAlerts200JSONResponse(convert.TopAlerts(records)), nil
 }

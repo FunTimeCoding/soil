@@ -1,7 +1,7 @@
 package notation
 
 import (
-	"encoding/json"
+	"encoding/json/v2"
 	"github.com/funtimecoding/soil/pkg/structs/constant"
 	"reflect"
 )

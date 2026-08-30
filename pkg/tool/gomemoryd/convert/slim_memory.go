@@ -8,5 +8,5 @@ type SlimMemory struct {
 	Tags             []string          `json:"tags,omitempty"`
 	Metadata         map[string]string `json:"metadata,omitempty"`
 	ParentIdentifier *int64            `json:"parent_identifier,omitempty"`
-	Ordinal          int               `json:"ordinal,omitempty"`
+	Ordinal          int               `json:"ordinal,omitzero"`
 }

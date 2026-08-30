@@ -16,5 +16,5 @@ type Memory struct {
 	ProvenanceFile   string            `json:"provenance_file,omitempty"`
 	ProvenanceAnchor string            `json:"provenance_anchor,omitempty"`
 	ProvenanceHash   string            `json:"provenance_hash,omitempty"`
-	Ordinal          int               `json:"ordinal,omitempty"`
+	Ordinal          int               `json:"ordinal,omitzero"`
 }

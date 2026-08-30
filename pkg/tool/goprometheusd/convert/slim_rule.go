@@ -8,9 +8,9 @@ type SlimRule struct {
 	Health         string          `json:"health"`
 	Query          string          `json:"query"`
 	Severity       string          `json:"severity,omitempty"`
-	Duration       int             `json:"duration,omitempty"`
+	Duration       int             `json:"duration,omitzero"`
 	LastEvaluation string          `json:"last_evaluation,omitempty"`
-	EvaluationTime float64         `json:"evaluation_time,omitempty"`
+	EvaluationTime float64         `json:"evaluation_time,omitzero"`
 	LastError      string          `json:"last_error,omitempty"`
 	Alerts         []SlimRuleAlert `json:"alerts,omitempty"`
 }

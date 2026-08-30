@@ -7,7 +7,10 @@ import (
 )
 
 func ReadKey(v []string) string {
-	v = strings.RemoveFromList(v, []string{constant.OmitEmpty})
+	v = strings.RemoveFromList(
+		v,
+		[]string{constant.OmitEmpty, constant.OmitZero},
+	)
 
 	if len(v) == 0 {
 		panic("empty notation")

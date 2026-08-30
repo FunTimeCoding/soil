@@ -11,6 +11,7 @@ func TestDecodeAny(t *testing.T) {
 	var a any
 	notation.DecodeAny(true, &a)
 	assert.Any(t, a, true)
-	notation.DecodeAny(constant.UpperAlfa, &a)
-	assert.Any(t, a, "Alfa")
+	var b any
+	notation.DecodeAny(constant.UpperAlfa, &b)
+	assert.Any(t, b, "Alfa")
 }

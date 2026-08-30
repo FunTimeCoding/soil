@@ -1,5 +1,5 @@
 package request
 
 type AddFile struct {
-	ForceReplace bool `json:"forceReplace,omitempty"`
+	ForceReplace bool `json:"forceReplace,omitzero"`
 }

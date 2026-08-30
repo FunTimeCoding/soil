@@ -11,8 +11,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/option"
+	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/web"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/worker"
-	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
@@ -25,11 +25,11 @@ func Run(
 	l := logger.New(context.Background())
 	c := gitlab.NewEnvironment()
 	m := metric.New()
+	k := worker.New(c, constant.PollInterval, m.Registry(), l, r)
+	b := web.New(k)
 	lifecycle.New(
 		l,
-		lifecycle.WithWorker(
-			worker.New(c, constant.PollInterval, m.Registry(), l, r),
-		),
+		lifecycle.WithWorker(k),
 		lifecycle.WithServer(
 			server.New(
 				constant.Identity,
@@ -50,8 +50,9 @@ func Run(
 						s.Recorder(),
 						o.Version,
 					).Mount(x)
+					b.Mount(x)
 				},
-			).WithMiddleware(web.RecoveryMiddleware(r)),
+			).WithMiddleware(b.Recovery(r)),
 		),
 	).RunUntilSignal()
 }

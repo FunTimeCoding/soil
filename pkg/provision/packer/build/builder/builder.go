@@ -16,7 +16,7 @@ type Builder struct {
 	DiskSize        int        `json:"disk_size"`
 	DiskFormat      string     `json:"format"`
 	NetDevice       string     `json:"net_device,omitempty"`
-	Headless        bool       `json:"headless,omitempty"`
+	Headless        bool       `json:"headless,omitzero"`
 	Display         string     `json:"display,omitempty"`
 	QemuArguments   [][]string `json:"qemuargs"`
 	BootWait        string     `json:"boot_wait"`

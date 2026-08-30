@@ -2,6 +2,7 @@ package worker
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
+	"github.com/funtimecoding/soil/pkg/event/notifier"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/gitlab"
 	"github.com/funtimecoding/soil/pkg/log/logger"
@@ -30,6 +31,7 @@ func New(
 		interval: interval,
 		gauge:    g,
 		recovery: recovery.New(l, r),
+		notifier: notifier.New(),
 		stop:     make(chan struct{}),
 	}
 }

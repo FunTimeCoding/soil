@@ -5,6 +5,7 @@ const (
 	RelationalKey = "gorm"
 
 	OmitEmpty = "omitempty"
+	OmitZero  = "omitzero"
 
 	Skip = "-"
 

@@ -2,7 +2,7 @@ package request
 
 type SignOption struct {
 	Skip           bool   `json:"Skip"`
-	Batch          bool   `json:"Batch,omitempty"`
+	Batch          bool   `json:"Batch,omitzero"`
 	GpgKey         string `json:"GpgKey,omitempty"`
 	Keyring        string `json:"Keyring,omitempty"`
 	SecretKeyring  string `json:"SecretKeyring,omitempty"`

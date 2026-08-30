@@ -347,7 +347,7 @@ func TestSearch(t *testing.T) {
 		constant.ConfluenceSearch,
 		map[string]any{"query": "type=page"},
 	)
-	assert.StringContains(t, "null", result)
+	assert.StringContains(t, "[]", result)
 }
 
 func TestListSpaces(t *testing.T) {
@@ -357,7 +357,7 @@ func TestListSpaces(t *testing.T) {
 		constant.ConfluenceListSpaces,
 		map[string]any{},
 	)
-	assert.StringContains(t, "null", result)
+	assert.StringContains(t, "[]", result)
 }
 
 func TestGetPageChildren(t *testing.T) {

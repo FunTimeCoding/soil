@@ -6,6 +6,6 @@ type Event struct {
 	Actor     string `json:"actor"`
 	Outcome   string `json:"outcome"`
 	Kind      string `json:"kind"`
-	Duration  int64  `json:"duration_ms,omitempty"`
+	Duration  int64  `json:"duration_ms,omitzero"`
 	CreatedAt string `json:"created_at"`
 }

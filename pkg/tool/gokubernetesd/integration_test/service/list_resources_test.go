@@ -22,6 +22,8 @@ func TestListResources(t *testing.T) {
 	assert.Count(t, 2, result)
 	assert.String(t, "nginx", result[0].Name)
 	assert.String(t, "Running", result[0].Status)
+	assert.NotNil(t, result[0].Restarts)
+	assert.Integer(t, 0, int(*result[0].Restarts))
 }
 
 func TestListResourcesWithRestarts(t *testing.T) {
@@ -34,7 +36,8 @@ func TestListResourcesWithRestarts(t *testing.T) {
 	)
 	assert.Nil(t, e)
 	assert.Count(t, 1, result)
-	assert.Integer(t, 47, int(result[0].Restarts))
+	assert.NotNil(t, result[0].Restarts)
+	assert.Integer(t, 47, int(*result[0].Restarts))
 }
 
 func TestListResourcesEmpty(t *testing.T) {

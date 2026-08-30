@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/convert"
 	"github.com/mark3labs/mcp-go/mcp"
 	"time"
 )
@@ -47,6 +48,6 @@ func (s *Server) getTopAlerts(
 	return response.Success(
 		"Top %d alerts:\n%s",
 		len(records),
-		notation.MarshalIndent(records),
+		notation.MarshalIndent(convert.TopAlerts(records)),
 	)
 }

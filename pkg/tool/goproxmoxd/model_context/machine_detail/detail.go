@@ -15,6 +15,6 @@ type Detail struct {
 	Tags                string  `json:"tags,omitempty"`
 	Description         string  `json:"description,omitempty"`
 	OperatingSystemType string  `json:"os_type,omitempty"`
-	Sockets             int     `json:"sockets,omitempty"`
-	Cores               int     `json:"cores,omitempty"`
+	Sockets             int     `json:"sockets,omitzero"`
+	Cores               int     `json:"cores,omitzero"`
 }

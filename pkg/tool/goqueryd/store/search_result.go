@@ -12,7 +12,7 @@ type SearchResult struct {
 	SourceType    string              `json:"source_type,omitempty"`
 	Context       string              `json:"context,omitempty"`
 	Snippet       string              `json:"snippet,omitempty"`
-	SnippetLine   int                 `json:"snippet_line,omitempty"`
+	SnippetLine   int                 `json:"snippet_line,omitzero"`
 	Body          string              `json:"body,omitempty"`
 	Metadata      map[string][]string `json:"metadata,omitempty"`
 	ChunkPosition int                 `json:"-"`

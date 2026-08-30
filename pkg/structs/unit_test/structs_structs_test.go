@@ -28,7 +28,7 @@ func TestPrimary(t *testing.T) {
 
 func TestOmit(t *testing.T) {
 	type Test struct {
-		Age int `json:"age,omitempty" gorm:"not null"`
+		Age int `json:"age,omitempty" gorm:"not null"` // goanalyze:ignore omit_empty_zero
 	}
 	v := reflect.TypeOf(Test{})
 	assert.Integer(t, 1, v.NumField())
@@ -41,6 +41,22 @@ func TestOmit(t *testing.T) {
 		r := relational_tag.FromField(f)
 		assert.False(t, r.Primary())
 		assert.True(t, !r.Nullable())
+	}
+}
+
+func TestOmitZero(t *testing.T) {
+	type Test struct {
+		Age int `json:"age,omitzero" gorm:"not null"`
+	}
+	v := reflect.TypeOf(Test{})
+	assert.Integer(t, 1, v.NumField())
+
+	for i := 0; i < v.NumField(); i++ {
+		f := v.Field(i)
+		n := notation_tag.FromField(f)
+		assert.String(t, "age", n.Key())
+		assert.False(t, n.OmitEmpty())
+		assert.True(t, n.OmitZero())
 	}
 }
 

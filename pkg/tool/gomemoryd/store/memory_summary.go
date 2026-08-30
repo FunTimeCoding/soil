@@ -9,6 +9,6 @@ type MemorySummary struct {
 	Tags             []string `json:"tags,omitempty"`
 	UpdatedAt        string   `json:"updated_at"`
 	ParentIdentifier *int64   `json:"parent_identifier,omitempty"`
-	Ordinal          int      `json:"ordinal,omitempty"`
+	Ordinal          int      `json:"ordinal,omitzero"`
 	Children         []string `json:"children,omitempty"`
 }

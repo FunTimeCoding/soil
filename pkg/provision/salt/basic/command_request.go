@@ -7,5 +7,5 @@ type commandRequest struct {
 	Arguments  []string `json:"arg,omitempty"`
 	Match      string   `json:"match,omitempty"`
 	TargetType string   `json:"tgt_type,omitempty"`
-	FullReturn bool     `json:"full_return,omitempty"`
+	FullReturn bool     `json:"full_return,omitzero"`
 }

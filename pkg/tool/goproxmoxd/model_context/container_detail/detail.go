@@ -14,6 +14,6 @@ type Detail struct {
 	Hostname    string `json:"hostname,omitempty"`
 	Description string `json:"description,omitempty"`
 	Arch        string `json:"arch,omitempty"`
-	Cores       int    `json:"cores,omitempty"`
-	Memory      int    `json:"memory,omitempty"`
+	Cores       int    `json:"cores,omitzero"`
+	Memory      int    `json:"memory,omitzero"`
 }

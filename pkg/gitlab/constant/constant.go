@@ -26,8 +26,16 @@ const (
 
 // Job status
 const (
-	JobSuccess = "success"
-	JobFail    = "failed"
+	JobSuccess            = "success"
+	JobFail               = "failed"
+	JobRunning            = "running"
+	JobPending            = "pending"
+	JobCreated            = "created"
+	JobPreparing          = "preparing"
+	JobWaitingForResource = "waiting_for_resource"
+	JobCanceled           = "canceled"
+	JobSkipped            = "skipped"
+	JobManual             = "manual"
 )
 
 var DefaultListOptions = gitlab.ListOptions{Page: 0, PerPage: 100}

@@ -1,6 +1,6 @@
 package notation
 
-import "encoding/json"
+import "encoding/json/v2"
 
 func DecodeBytes(
 	value []byte,

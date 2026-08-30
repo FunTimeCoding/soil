@@ -11,6 +11,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/forbidden_call"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/forbidden_import"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/naming"
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/omit_empty_zero"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/restricted_call"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/stray_comment"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/stray_constant"
@@ -43,6 +44,7 @@ func check(
 	call_format.Check(p, results)
 	defer_close.Check(p, results)
 	error_wrap_verb.Check(p, results)
+	omit_empty_zero.Check(p, results)
 	file_identity.Check(p, results)
 	type_receiver.Check(p, results)
 	unchecked_print_write.Check(p, results)

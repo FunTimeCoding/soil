@@ -1,26 +1,23 @@
 package notation
 
 import (
-	"bytes"
-	"encoding/json"
+	"encoding/json/jsontext"
+	"encoding/json/v2"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
-	"strings"
 )
 
 func Encode(
 	a any,
 	indent bool,
 ) string {
-	b := &bytes.Buffer{}
-	e := json.NewEncoder(b)
-	e.SetEscapeHTML(false)
+	options := []json.Options{json.Deterministic(true)}
 
 	if indent {
-		e.SetIndent("", "    ")
+		options = append(options, jsontext.WithIndent("    "))
 	}
 
-	errors.PanicOnError(e.Encode(a))
+	b, e := json.Marshal(a, options...)
+	errors.PanicOnError(e)
 
-	return strings.TrimSuffix(b.String(), constant.Unix)
+	return string(b)
 }

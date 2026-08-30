@@ -10,8 +10,8 @@ type Parameters struct {
 	Events            []string     `json:"events,omitempty"`
 	Options           Options      `json:"options,omitempty"`
 	Content           string       `json:"content,omitempty"`
-	Height            int          `json:"height,omitempty"`
-	Width             int          `json:"width,omitempty"`
+	Height            int          `json:"height,omitzero"`
+	Width             int          `json:"width,omitzero"`
 	PromptType        string       `json:"promptType,omitempty"`
 	Text              string       `json:"text,omitempty"`
 	AdditionalFields  struct{}     `json:"additionalFields,omitempty"`

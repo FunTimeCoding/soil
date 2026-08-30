@@ -9,5 +9,5 @@ type FormulaService struct {
 	WorkingDirectory     string            `json:"working_dir,omitempty"`
 	LogPath              string            `json:"log_path,omitempty"`
 	ErrorLogPath         string            `json:"error_log_path,omitempty"`
-	RequireRoot          bool              `json:"require_root,omitempty"`
+	RequireRoot          bool              `json:"require_root,omitzero"`
 }

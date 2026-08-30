@@ -5,7 +5,25 @@ import (
 	"time"
 )
 
-const PollInterval = time.Minute
+const (
+	PollInterval       = time.Minute
+	ActivePollInterval = 10 * time.Second
+)
+const (
+	BoardTitle = "Pipelines"
+	BoardPath  = "/"
+
+	SuccessIcon = "/static/gitlab-success.png"
+	FailIcon    = "/static/gitlab-fail.png"
+	RunningIcon = "/static/gitlab-running.png"
+	PendingIcon = "/static/gitlab-pending.png"
+	WarningIcon = "/static/gitlab-warning.png"
+
+	RenovatePrefix = "renovate/"
+
+	BoardEvent   = "board"
+	SummaryEvent = "summary"
+)
 
 var Identity = identity.New(
 	"gogitlabd",

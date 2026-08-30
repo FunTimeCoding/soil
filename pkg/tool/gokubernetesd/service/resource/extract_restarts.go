@@ -5,7 +5,7 @@ import (
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )
 
-func ExtractRestarts(u *unstructured.Unstructured) int64 {
+func ExtractRestarts(u *unstructured.Unstructured) *int64 {
 	containers, okay, e := unstructured.NestedSlice(
 		u.Object,
 		"status",
@@ -14,7 +14,7 @@ func ExtractRestarts(u *unstructured.Unstructured) int64 {
 	errors.PanicOnError(e)
 
 	if !okay {
-		return 0
+		return nil
 	}
 
 	var total int64
@@ -33,5 +33,5 @@ func ExtractRestarts(u *unstructured.Unstructured) int64 {
 		}
 	}
 
-	return total
+	return new(total)
 }
