@@ -38,6 +38,7 @@ func (s *Server) Mount(m *http.ServeMux) {
 	)
 	m.HandleFunc(route.Get("/activity"), s.activityPage)
 	m.HandleFunc(route.Get(constant.CoveragePath), s.coveragePage)
+	m.HandleFunc(route.Get(constant.UsagePath), s.usagePage)
 	m.HandleFunc(route.Get(constant.MessagesPath), s.messagesPage)
 	m.HandleFunc(route.Get(constant.HistoryPath), s.historyPage)
 	m.HandleFunc(

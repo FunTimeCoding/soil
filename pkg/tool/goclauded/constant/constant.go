@@ -122,6 +122,9 @@ const (
 	ConversationsPath  = "/conversations"
 	CoverageTitle      = "Coverage"
 	CoveragePath       = "/coverage"
+	UsageTitle         = "Usage"
+	UsagePath          = "/usage"
+	UsageChart         = "usage_chart"
 
 	ModelContextServersFile = ".mcp.json"
 

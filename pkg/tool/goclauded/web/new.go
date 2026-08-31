@@ -1,6 +1,7 @@
 package web
 
 import (
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/web/conversations"
@@ -54,7 +55,7 @@ func New(s *service.Service) *Server {
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(web.ThemeHearth).
-				WithStyle(constant.InlineStyle).
+				WithStyle(join.Empty(constant.InlineStyle, web.ChartStyle)).
 				WithCommandPalette(web.PalettePath).
 				WithLiveEndpoint(web.LivePath).
 				WithItems(
@@ -77,6 +78,10 @@ func New(s *service.Service) *Server {
 					navigation_item.New(
 						constant.CoveragePath,
 						constant.CoverageTitle,
+					),
+					navigation_item.New(
+						constant.UsagePath,
+						constant.UsageTitle,
 					),
 					navigation_item.NewExternal(
 						constant.ConversationsPath,

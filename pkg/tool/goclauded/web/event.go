@@ -28,6 +28,10 @@ func (s *Server) event() http.HandlerFunc {
 				}
 			}
 
+			if subs.Has(constant.Usage) {
+				layout.PushEvent(w, constant.UsageChart, s.usageChart())
+			}
+
 			if subs.Has(constant.Roster) {
 				layout.PushEvent(w, constant.Roster, s.rosterSection())
 			}
