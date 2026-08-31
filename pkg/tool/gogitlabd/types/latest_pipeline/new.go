@@ -7,24 +7,41 @@ import (
 
 func New(
 	branches []*branch.Branch,
+	tags []*gitlab.Tag,
 	pipelines []*gitlab.PipelineInfo,
 ) map[string]*gitlab.PipelineInfo {
-	existing := make(map[string]bool)
+	branchName := make(map[string]bool)
 
 	for _, b := range branches {
-		existing[b.Name] = true
+		branchName[b.Name] = true
+	}
+
+	tagName := make(map[string]bool)
+
+	for _, t := range tags {
+		tagName[t.Name] = true
 	}
 
 	result := make(map[string]*gitlab.PipelineInfo)
+	var latestTag *gitlab.PipelineInfo
 
 	for _, p := range pipelines {
-		if !existing[p.Ref] {
+		if branchName[p.Ref] {
+			if e, okay := result[p.Ref]; !okay || p.ID > e.ID {
+				result[p.Ref] = p
+			}
+
 			continue
 		}
 
-		if e, okay := result[p.Ref]; !okay || p.ID > e.ID {
-			result[p.Ref] = p
+		if tagName[p.Ref] &&
+			(latestTag == nil || p.ID > latestTag.ID) {
+			latestTag = p
 		}
+	}
+
+	if latestTag != nil {
+		result[latestTag.Ref] = latestTag
 	}
 
 	return result

@@ -1,6 +1,7 @@
 package raid
 
 import (
+	"github.com/funtimecoding/soil/pkg/console/response"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -12,7 +13,7 @@ func (c *Client) Logs(
 	limit *int,
 	start *time.Time,
 	end *time.Time,
-) (string, int) {
+) *response.Response {
 	result, e := c.client.GetLogs(
 		c.context,
 		&client.GetLogsParams{
@@ -24,5 +25,5 @@ func (c *Client) Logs(
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result), result.StatusCode
+	return response.New(web.ReadString(result), result.StatusCode)
 }

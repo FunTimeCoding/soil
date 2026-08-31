@@ -19,6 +19,8 @@ func New(
 		initFunction:    c.InitFunction,
 		setupFunction:   c.SetupFunction,
 		cleanupFunction: c.CleanupFunction,
+		changeFunction:  c.ChangeFunction,
+		downstream:      c.Downstream,
 		registry:        c.Registry,
 		logger:          l,
 		reporter:        r,

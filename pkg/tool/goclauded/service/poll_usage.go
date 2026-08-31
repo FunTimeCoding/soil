@@ -20,15 +20,9 @@ func (s *Service) PollUsage() {
 		return
 	}
 
-	s.usageMutex.Lock()
-	s.usage = result
-	s.usageMutex.Unlock()
-	s.store.SaveUsageSnapshot(
-		result.SessionPercent,
-		result.WeeklyAllPercent,
-		result.WeeklySonnetPercent,
-		result.CreditPercent,
-	)
-	s.store.TrimUsageSnapshots()
+	if e := s.recordFable(result.FablePercent, result.FableReset); e != nil {
+		s.logger.Structured("fable snapshot failed", "error", e)
+	}
+
 	s.notifier.Notify()
 }

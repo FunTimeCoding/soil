@@ -1,6 +1,7 @@
 package client
 
 import (
+	"github.com/funtimecoding/soil/pkg/console/response"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -12,7 +13,7 @@ func (c *Client) CreateDevice(
 	deviceType string,
 	site string,
 	tenant *string,
-) (string, int) {
+) *response.Response {
 	result, e := c.client.CreateDevice(
 		c.context,
 		client.CreateDeviceRequest{
@@ -25,5 +26,5 @@ func (c *Client) CreateDevice(
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result), result.StatusCode
+	return response.New(web.ReadString(result), result.StatusCode)
 }

@@ -14,3 +14,7 @@ func Different(n int, m int) int {
 
 	return pair.Compare(n, m)
 }
+
+func Reversed(n int, m int) int {
+	return pair.Compare(m, n) // order is deliberate
+}

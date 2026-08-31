@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/context_load"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/event"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/event_metadata"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/fable_snapshot"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/label"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/message"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/notification"
@@ -16,7 +17,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/session"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/summary"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/tracker_state"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/usage_snapshot"
 	"gorm.io/gorm"
 	"time"
 )
@@ -35,7 +35,7 @@ func New(
 			completion.Stub(),
 			summary.Stub(),
 			pool_name.Stub(),
-			usage_snapshot.Stub(),
+			fable_snapshot.Stub(),
 			rate_snapshot.Stub(),
 			label.Stub(),
 			pulse.Stub(),

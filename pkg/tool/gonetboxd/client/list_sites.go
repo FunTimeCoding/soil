@@ -1,13 +1,14 @@
 package client
 
 import (
+	"github.com/funtimecoding/soil/pkg/console/response"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/web"
 )
 
-func (c *Client) ListSites() (string, int) {
+func (c *Client) ListSites() *response.Response {
 	result, e := c.client.ListSites(c.context)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result), result.StatusCode
+	return response.New(web.ReadString(result), result.StatusCode)
 }

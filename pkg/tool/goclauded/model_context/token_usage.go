@@ -6,6 +6,7 @@ import (
 	library "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/time"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -23,29 +24,37 @@ func (s *Server) tokenUsage(
 	result := s.service.Usage()
 
 	if result == nil {
-		return response.Success("Usage monitoring not enabled or no data yet.")
+		return response.Success("No usage data yet.")
 	}
 
 	lines := []string{
 		fmt.Sprintf(
-			"Session    %2d%%   resets %s",
-			result.SessionPercent,
-			result.SessionReset,
+			"Session  %2d%%   resets %s",
+			result.FiveHourPercent,
+			result.FiveHourResetText(),
 		),
 		fmt.Sprintf(
-			"Weekly     %2d%%   resets %s",
-			result.WeeklyAllPercent,
-			result.WeeklyAllReset,
-		),
-		fmt.Sprintf("  Sonnet   %2d%%", result.WeeklySonnetPercent),
-		fmt.Sprintf("  Design   %2d%%", result.WeeklyDesignPercent),
-		fmt.Sprintf("Routines   %s", result.RoutineRuns),
-		fmt.Sprintf(
-			"Credits    %s   resets %s",
-			result.CreditSpent,
-			result.CreditReset,
+			"Weekly   %2d%%   resets %s",
+			result.SevenDayPercent,
+			result.SevenDayResetText(),
 		),
 	}
+
+	if result.HasFable() {
+		lines = append(
+			lines,
+			fmt.Sprintf(
+				"Fable    %2d%%   resets %s",
+				result.FablePercent,
+				result.FableReset,
+			),
+		)
+	}
+
+	lines = append(
+		lines,
+		fmt.Sprintf("Updated  %s", time.FormatCompact(result.LastUpdated)),
+	)
 
 	return response.Success(join.NewLine(lines))
 }

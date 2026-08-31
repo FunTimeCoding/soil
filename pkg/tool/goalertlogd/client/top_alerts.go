@@ -1,6 +1,7 @@
 package client
 
 import (
+	"github.com/funtimecoding/soil/pkg/console/response"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -11,12 +12,12 @@ func (c *Client) TopAlerts(
 	n int,
 	start time.Time,
 	end time.Time,
-) (string, int) {
+) *response.Response {
 	result, e := c.client.GetTopAlerts(
 		c.context,
 		&client.GetTopAlertsParams{N: &n, Start: &start, End: &end},
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result), result.StatusCode
+	return response.New(web.ReadString(result), result.StatusCode)
 }

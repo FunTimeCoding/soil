@@ -729,13 +729,13 @@ paths:
       operationId: getUsage
       responses:
         "200":
-          description: Current Claude usage from browser monitoring.
+          description: Current Claude usage from status line reports and the usage page.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/UsageResponse"
         "204":
-          description: Usage monitoring not enabled or no data yet.
+          description: No usage data yet.
         "500":
           description: Internal error.
           content:
@@ -761,39 +761,29 @@ components:
     UsageResponse:
       type: object
       required:
-      - sessionPercent
-      - sessionReset
-      - weeklyAllPercent
-      - weeklyAllReset
-      - weeklySonnetPercent
-      - weeklyDesignPercent
-      - routineRuns
-      - creditSpent
-      - creditReset
-      - creditPercent
-      - lastUpdated
+      - five_hour_percent
+      - five_hour_reset
+      - seven_day_percent
+      - seven_day_reset
+      - fable_percent
+      - fable_reset
+      - last_updated
       properties:
-        sessionPercent:
+        five_hour_percent:
           type: integer
-        sessionReset:
+        five_hour_reset:
           type: string
-        weeklyAllPercent:
+          format: date-time
+        seven_day_percent:
           type: integer
-        weeklyAllReset:
+        seven_day_reset:
           type: string
-        weeklySonnetPercent:
+          format: date-time
+        fable_percent:
           type: integer
-        weeklyDesignPercent:
-          type: integer
-        routineRuns:
+        fable_reset:
           type: string
-        creditSpent:
-          type: string
-        creditReset:
-          type: string
-        creditPercent:
-          type: integer
-        lastUpdated:
+        last_updated:
           type: string
           format: date-time
     ResolveResponse:

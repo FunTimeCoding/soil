@@ -2,13 +2,14 @@ package gopnsense
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/console/response"
 	"github.com/spf13/cobra"
 )
 
 func queryCommand(
 	use string,
 	short string,
-	call func(query *string) (string, int),
+	call func(query *string) *response.Response,
 ) *cobra.Command {
 	var query string
 	result := &cobra.Command{

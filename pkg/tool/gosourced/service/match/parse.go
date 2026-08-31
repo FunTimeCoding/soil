@@ -8,6 +8,7 @@ import (
 	"go/parser"
 	"go/printer"
 	"go/token"
+	"path/filepath"
 	"strings"
 )
 
@@ -24,7 +25,27 @@ func Parse(source string) (*Pattern, error) {
 		return nil, fmt.Errorf("pattern does not parse: %w", e)
 	}
 
+	imports := map[string]string{}
+
 	for _, d := range file.Decls {
+		general, isImport := d.(*ast.GenDecl)
+
+		if isImport && general.Tok == token.IMPORT {
+			for _, s := range general.Specs {
+				spec := s.(*ast.ImportSpec)
+				path := strings.Trim(spec.Path.Value, "\"")
+				name := filepath.Base(path)
+
+				if spec.Name != nil {
+					name = spec.Name.Name
+				}
+
+				imports[name] = path
+			}
+
+			continue
+		}
+
 		declaration, okay := d.(*ast.FuncDecl)
 
 		if !okay {
@@ -56,7 +77,11 @@ func Parse(source string) (*Pattern, error) {
 			return nil, f
 		}
 
-		return &Pattern{Holes: holes, Statement: statement}, nil
+		return &Pattern{
+			Holes:     holes,
+			Imports:   imports,
+			Statement: statement,
+		}, nil
 	}
 
 	return nil, fmt.Errorf("pattern must declare a function")

@@ -1,6 +1,7 @@
 package client
 
 import (
+	"github.com/funtimecoding/soil/pkg/console/response"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -11,7 +12,7 @@ func (c *Client) CreatePage(
 	parentIdentifier string,
 	title string,
 	body string,
-) (string, int) {
+) *response.Response {
 	result, e := c.client.CreatePage(
 		c.context,
 		client.CreatePageJSONRequestBody{
@@ -23,5 +24,5 @@ func (c *Client) CreatePage(
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result), result.StatusCode
+	return response.New(web.ReadString(result), result.StatusCode)
 }

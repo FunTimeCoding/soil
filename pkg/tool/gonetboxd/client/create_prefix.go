@@ -1,6 +1,7 @@
 package client
 
 import (
+	"github.com/funtimecoding/soil/pkg/console/response"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -10,7 +11,7 @@ func (c *Client) CreatePrefix(
 	prefix string,
 	site string,
 	description string,
-) (string, int) {
+) *response.Response {
 	body := client.CreatePrefixRequest{Prefix: prefix}
 
 	if site != "" {
@@ -24,5 +25,5 @@ func (c *Client) CreatePrefix(
 	result, e := c.client.CreatePrefix(c.context, body)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result), result.StatusCode
+	return response.New(web.ReadString(result), result.StatusCode)
 }

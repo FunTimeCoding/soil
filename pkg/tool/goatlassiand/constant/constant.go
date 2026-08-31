@@ -1,6 +1,9 @@
 package constant
 
-import "github.com/funtimecoding/soil/pkg/identity"
+import (
+	"github.com/funtimecoding/soil/pkg/identity"
+	"time"
+)
 
 var Identity = identity.New(
 	"goatlassiand",
@@ -76,4 +79,21 @@ const (
 	HostEnvironment     = "ATL_HOST"
 	PortEnvironment     = "ATL_PORT"
 	InsecureEnvironment = "ATL_INSECURE"
+)
+
+const (
+	PlateTitle = "Plate"
+	PlatePath  = "/"
+
+	FavoritesTitle = "Favourites"
+	WatchedTitle   = "Watched"
+
+	PlateEvent     = "plate"
+	FavoritesEvent = "favorites"
+	WatchedEvent   = "watched"
+	SummaryEvent   = "summary"
+
+	PlateQuery = "(assignee = currentUser() OR reporter = currentUser()) AND statusCategory != Done ORDER BY updated DESC"
+
+	PollInterval = time.Minute
 )

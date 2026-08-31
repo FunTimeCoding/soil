@@ -1,6 +1,7 @@
 package client
 
 import (
+	"github.com/funtimecoding/soil/pkg/console/response"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -10,7 +11,7 @@ func (c *Client) CreateVirtualDisk(
 	machine string,
 	name string,
 	size int32,
-) (string, int) {
+) *response.Response {
 	result, e := c.client.CreateVirtualDisk(
 		c.context,
 		machine,
@@ -18,5 +19,5 @@ func (c *Client) CreateVirtualDisk(
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result), result.StatusCode
+	return response.New(web.ReadString(result), result.StatusCode)
 }

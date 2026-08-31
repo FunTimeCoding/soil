@@ -1,10 +1,35 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/generative/anthropic/site/usage_result"
+import "github.com/funtimecoding/soil/pkg/tool/goclauded/usage_result"
 
 func (s *Service) Usage() *usage_result.Result {
-	s.usageMutex.RLock()
-	defer s.usageMutex.RUnlock()
+	rate, e := s.store.LatestRateSnapshot()
 
-	return s.usage
+	if e != nil || rate == nil {
+		return nil
+	}
+
+	fablePercent := 0
+	fableReset := ""
+	updated := rate.CreatedAt
+	fable, f := s.store.LatestFableSnapshot()
+
+	if f == nil && fable != nil {
+		fablePercent = fable.Percent
+		fableReset = fable.Reset
+
+		if fable.CreatedAt.After(updated) {
+			updated = fable.CreatedAt
+		}
+	}
+
+	return usage_result.New(
+		rate.FiveHourPercent,
+		rate.FiveHourReset,
+		rate.SevenDayPercent,
+		rate.SevenDayReset,
+		fablePercent,
+		fableReset,
+		updated,
+	)
 }

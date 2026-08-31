@@ -4,6 +4,7 @@ import "regexp"
 
 const (
 	FrontMatterDelimiter = "---"
+	MemberSeparator      = "."
 
 	FrontMatterDelimiterKey  = "front_matter_delimiter"
 	FrontMatterDelimiterText = "No front matter delimiter"

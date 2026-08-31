@@ -1,6 +1,7 @@
 package client
 
 import (
+	"github.com/funtimecoding/soil/pkg/console/response"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -15,7 +16,7 @@ func (c *Client) UpdateIssue(
 	labels []string,
 	fields map[string]any,
 	noDiff bool,
-) (string, int) {
+) *response.Response {
 	body := client.UpdateIssueJSONRequestBody{}
 
 	if summary != "" {
@@ -49,5 +50,5 @@ func (c *Client) UpdateIssue(
 	result, e := c.client.UpdateIssue(c.context, key, body)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result), result.StatusCode
+	return response.New(web.ReadString(result), result.StatusCode)
 }

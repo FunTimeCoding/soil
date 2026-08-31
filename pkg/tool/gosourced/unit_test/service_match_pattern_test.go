@@ -69,10 +69,11 @@ func TestMatchPatternHoleConsistency(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	assert.NotNil(t, match)
-	assert.Integer(t, 2, match.Total)
+	assert.Integer(t, 3, match.Total)
 	assert.Integer(t, 1, match.Matched)
-	assert.Integer(t, 1, len(match.Unmatched))
-	assert.String(t, "return pair.Compare(n, m)", match.Unmatched[0].Exemplar)
+	assert.Integer(t, 2, len(match.Unmatched))
+	assert.String(t, "return pair.Compare(m, n)", match.Unmatched[0].Exemplar)
+	assert.String(t, "return pair.Compare(n, m)", match.Unmatched[1].Exemplar)
 }
 
 func TestMatchPatternType(t *testing.T) {

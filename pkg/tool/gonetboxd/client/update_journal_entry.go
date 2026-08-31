@@ -1,6 +1,7 @@
 package client
 
 import (
+	"github.com/funtimecoding/soil/pkg/console/response"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -10,7 +11,7 @@ func (c *Client) UpdateJournalEntry(
 	identifier int32,
 	kind string,
 	comments string,
-) (string, int) {
+) *response.Response {
 	body := client.UpdateJournalEntryJSONRequestBody{}
 
 	if comments != "" {
@@ -24,5 +25,5 @@ func (c *Client) UpdateJournalEntry(
 	result, e := c.client.UpdateJournalEntry(c.context, identifier, body)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result), result.StatusCode
+	return response.New(web.ReadString(result), result.StatusCode)
 }

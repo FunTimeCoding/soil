@@ -10,4 +10,5 @@ type Terraform struct {
 	LitePath        string
 	StateNamespace  string
 	StateLease      string
+	Downstream      []string
 }

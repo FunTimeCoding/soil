@@ -3,6 +3,7 @@ package client
 import (
 	"bytes"
 	"github.com/funtimecoding/soil/pkg/alpine/constant"
+	"github.com/funtimecoding/soil/pkg/console/response"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/system"
@@ -15,7 +16,7 @@ func (c *Client) Upload(
 	version string,
 	repository string,
 	architecture string,
-) (string, int) {
+) *response.Response {
 	q := web.NewPostBytes(
 		join.Slash(
 			[]string{
@@ -34,5 +35,5 @@ func (c *Client) Upload(
 	errors.PanicOnError(e)
 	defer errors.PanicClose(r.Body)
 
-	return web.ReadString(r), r.StatusCode
+	return response.New(web.ReadString(r), r.StatusCode)
 }

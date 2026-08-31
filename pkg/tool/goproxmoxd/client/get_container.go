@@ -1,6 +1,7 @@
 package client
 
 import (
+	"github.com/funtimecoding/soil/pkg/console/response"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
 )
@@ -8,7 +9,7 @@ import (
 func (c *Client) GetContainer(
 	identifier int64,
 	node *string,
-) (string, int) {
+) *response.Response {
 	result, e := c.client.GetContainerWithResponse(
 		c.context,
 		identifier,
@@ -16,5 +17,5 @@ func (c *Client) GetContainer(
 	)
 	errors.PanicOnError(e)
 
-	return string(result.Body), result.StatusCode()
+	return response.New(string(result.Body), result.StatusCode())
 }

@@ -28,8 +28,9 @@ var (
 )
 
 const AnthropicBodyElement = "body"
-
-var (
-	ResetPattern = regexp.MustCompile(`Resets?\s+(.+?)</span>`)
-	ValuePattern = regexp.MustCompile(`aria-valuenow="(\d+)"`)
+const (
+	UsageMeterSession   = "Current session"
+	UsageMeterAllModels = "All models"
+	UsageMeterFable     = "Fable"
+	UsageResetPrefix    = "Resets "
 )

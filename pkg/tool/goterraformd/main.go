@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/instrument"
+	"github.com/funtimecoding/soil/pkg/strings/split"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/option"
@@ -38,5 +39,10 @@ func Main(
 		constant.StateLeaseEnvironment,
 		constant.StateLease,
 	)
+
+	if v := environment.Fallback(constant.DownstreamEnvironment, ""); v != "" {
+		o.Downstream = split.Comma(v)
+	}
+
 	Run(o, s)
 }

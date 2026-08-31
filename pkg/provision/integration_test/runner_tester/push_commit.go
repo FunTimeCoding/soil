@@ -30,7 +30,7 @@ func (o *Tester) PushCommit(
 		"user.email=runner-tester@localhost",
 		"commit",
 		"-m",
-		join.Space("update", name),
+		join.Space("change", name),
 	)
 	c = run.New()
 	c.Directory = writer

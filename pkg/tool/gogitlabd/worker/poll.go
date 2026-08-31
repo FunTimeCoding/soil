@@ -25,6 +25,7 @@ func (w *Worker) Poll() {
 
 		for reference, i := range latest_pipeline.New(
 			w.client.MustBranches(p.Identifier),
+			w.client.MustTags(p.Identifier),
 			w.client.MustPipelines(p.Identifier),
 		) {
 			latest[key{name, reference}] = i

@@ -1,6 +1,7 @@
 package client
 
 import (
+	"github.com/funtimecoding/soil/pkg/console/response"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -10,7 +11,7 @@ func (c *Client) AddDeviceJournalEntry(
 	device string,
 	kind string,
 	comments string,
-) (string, int) {
+) *response.Response {
 	body := client.AddDeviceJournalEntryJSONRequestBody{Comments: comments}
 
 	if kind != "" {
@@ -20,5 +21,5 @@ func (c *Client) AddDeviceJournalEntry(
 	result, e := c.client.AddDeviceJournalEntry(c.context, device, body)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result), result.StatusCode
+	return response.New(web.ReadString(result), result.StatusCode)
 }

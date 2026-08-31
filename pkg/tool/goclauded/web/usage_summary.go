@@ -9,8 +9,15 @@ func (s *Server) usageSummary() []string {
 		return nil
 	}
 
-	return []string{
-		fmt.Sprintf("Session %d%%", result.SessionPercent),
-		fmt.Sprintf("resets %s", result.SessionReset),
+	items := []string{
+		fmt.Sprintf("Session %d%%", result.FiveHourPercent),
+		fmt.Sprintf("resets %s", result.FiveHourResetText()),
+		fmt.Sprintf("Weekly %d%%", result.SevenDayPercent),
 	}
+
+	if result.HasFable() {
+		items = append(items, fmt.Sprintf("Fable %d%%", result.FablePercent))
+	}
+
+	return items
 }

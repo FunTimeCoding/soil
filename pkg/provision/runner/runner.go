@@ -17,6 +17,8 @@ type Runner struct {
 	initFunction    func()
 	setupFunction   func() bool
 	cleanupFunction func()
+	changeFunction  func(value any) []string
+	downstream      []face.Downstream
 	registry        face.ProcessRegistry
 	logger          *logger.Logger
 	reporter        face.Reporter

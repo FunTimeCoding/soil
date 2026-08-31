@@ -8,10 +8,10 @@ import (
 )
 
 func main() {
-	frame_probe.FrameProbe()
+	anthropic.Dump()
 
 	if false {
-		anthropic.Dump()
+		frame_probe.FrameProbe()
 		chromium.Tab()
 		brave.BookmarkSearch()
 		brave.BookmarkNode()

@@ -1,6 +1,7 @@
 package client
 
 import (
+	"github.com/funtimecoding/soil/pkg/console/response"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -13,7 +14,7 @@ func (c *Client) EditPage(
 	title string,
 	message string,
 	draft bool,
-) (string, int) {
+) *response.Response {
 	body := client.EditPageJSONRequestBody{OldText: oldText, NewText: newText}
 
 	if title != "" {
@@ -31,5 +32,5 @@ func (c *Client) EditPage(
 	result, e := c.client.EditPage(c.context, identifier, body)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result), result.StatusCode
+	return response.New(web.ReadString(result), result.StatusCode)
 }

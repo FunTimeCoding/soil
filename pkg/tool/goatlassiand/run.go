@@ -13,7 +13,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/option"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/server"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/web"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/worker"
+	webLib "github.com/funtimecoding/soil/pkg/web"
 	"net/http"
 )
 
@@ -24,8 +26,12 @@ func Run(
 	r := s.Reporter()
 	j := jira.NewEnvironment()
 	c := confluence.NewEnvironment()
+	l := logger.New(context.Background())
+	k := worker.New(j, c, constant.PollInterval, l, r)
+	b := web.New(k)
 	lifecycle.New(
-		logger.New(context.Background()),
+		l,
+		lifecycle.WithWorker(k),
 		lifecycle.WithServer(
 			lifecycleServer.New(
 				constant.Identity,
@@ -47,7 +53,7 @@ func Run(
 										request any,
 									) (any, error) {
 										response, e := f(x, w, r, request)
-										web.RecordTelemetry(t, operation, e)
+										webLib.RecordTelemetry(t, operation, e)
 
 										return response, e
 									}
@@ -57,8 +63,9 @@ func Run(
 						m,
 					)
 					model_context.New(j, c, r, t, o.Version).Mount(m)
+					b.Mount(m)
 				},
-			).WithMiddleware(web.RecoveryMiddleware(r)),
+			).WithMiddleware(b.Recovery(r)),
 		),
 	).RunUntilSignal()
 }

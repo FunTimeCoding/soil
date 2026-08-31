@@ -1,6 +1,7 @@
 package client
 
 import (
+	"github.com/funtimecoding/soil/pkg/console/response"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
 )
@@ -9,7 +10,7 @@ func (c *Client) CreateMachineSnapshot(
 	identifier int64,
 	name string,
 	node *string,
-) (string, int) {
+) *response.Response {
 	body := client.CreateMachineSnapshotJSONRequestBody{Name: name}
 	result, e := c.client.CreateMachineSnapshotWithResponse(
 		c.context,
@@ -22,5 +23,5 @@ func (c *Client) CreateMachineSnapshot(
 	)
 	errors.PanicOnError(e)
 
-	return string(result.Body), result.StatusCode()
+	return response.New(string(result.Body), result.StatusCode())
 }

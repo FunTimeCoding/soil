@@ -1,6 +1,7 @@
 package client
 
 import (
+	"github.com/funtimecoding/soil/pkg/console/response"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -11,7 +12,7 @@ func (c *Client) CreateAddressRange(
 	end string,
 	status string,
 	description string,
-) (string, int) {
+) *response.Response {
 	body := client.CreateAddressRangeRequest{Start: start, End: end}
 
 	if status != "" {
@@ -25,5 +26,5 @@ func (c *Client) CreateAddressRange(
 	result, e := c.client.CreateAddressRange(c.context, body)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result), result.StatusCode
+	return response.New(web.ReadString(result), result.StatusCode)
 }

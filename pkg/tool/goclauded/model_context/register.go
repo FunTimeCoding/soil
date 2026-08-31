@@ -314,7 +314,7 @@ func (s *Server) register() {
 		mcp.NewTool(
 			constant.TokenUsage,
 			mcp.WithDescription(
-				"Current Claude usage across session, weekly, and credit limits. Read from the claude.ai usage page.",
+				"Current Claude usage across the five-hour session, seven-day weekly, and Fable limits. Composed from status line reports and the usage page.",
 			),
 		),
 		s.tokenUsage,

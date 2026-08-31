@@ -21,7 +21,7 @@ func (r *Runner) run() {
 
 	r.recovery.Run(
 		func() {
-			r.applyFunction(nil, constant.RunnerTriggerTimer)
+			r.apply(nil, constant.RunnerTriggerTimer)
 		},
 	)
 	syncTicker := time.NewTicker(constant.RunnerSyncInterval)
@@ -46,7 +46,7 @@ func (r *Runner) run() {
 
 				r.recovery.Run(
 					func() {
-						r.applyFunction(nil, constant.RunnerTriggerTimer)
+						r.apply(nil, constant.RunnerTriggerTimer)
 					},
 				)
 				applyTicker.Reset(constant.RunnerApplyInterval)
@@ -56,9 +56,7 @@ func (r *Runner) run() {
 				r.recovery.Run(r.initFunction)
 			}
 
-			r.recovery.Run(
-				func() { r.applyFunction(nil, constant.RunnerTriggerTimer) },
-			)
+			r.recovery.Run(func() { r.apply(nil, constant.RunnerTriggerTimer) })
 		case request := <-r.sync:
 			var result *SyncResult
 			r.recovery.Run(func() { result = r.syncWithDiff() })
@@ -80,7 +78,7 @@ func (r *Runner) run() {
 			var value any
 			r.recovery.Run(
 				func() {
-					value = r.applyFunction(
+					value = r.apply(
 						request.Parameters,
 						constant.RunnerTriggerManual,
 					)

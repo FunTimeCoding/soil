@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/kubernetes/client"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/provision/downstream"
 	"github.com/funtimecoding/soil/pkg/provision/runner"
 	"github.com/funtimecoding/soil/pkg/provision/store"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/option"
@@ -32,6 +33,12 @@ func New(
 	}
 	result.metrics = newMetrics(y, result.stateLease)
 	result.seedLastSuccess()
+	var targets []face.Downstream
+
+	for _, address := range o.Downstream {
+		targets = append(targets, downstream.New(address))
+	}
+
 	result.provision = runner.New(
 		runner.Configuration{
 			Repository:      o.Repository,
@@ -40,6 +47,8 @@ func New(
 			ApplyFunction:   result.apply,
 			InitFunction:    result.terraformInit,
 			CleanupFunction: s.Cleanup,
+			ChangeFunction:  Changes,
+			Downstream:      targets,
 			Registry:        registry,
 		},
 		l,

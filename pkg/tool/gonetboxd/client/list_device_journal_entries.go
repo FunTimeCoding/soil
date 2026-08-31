@@ -1,6 +1,7 @@
 package client
 
 import (
+	"github.com/funtimecoding/soil/pkg/console/response"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -10,7 +11,7 @@ func (c *Client) ListDeviceJournalEntries(
 	device string,
 	limit int32,
 	offset int32,
-) (string, int) {
+) *response.Response {
 	p := &client.ListDeviceJournalEntriesParams{}
 
 	if limit > 0 {
@@ -24,5 +25,5 @@ func (c *Client) ListDeviceJournalEntries(
 	result, e := c.client.ListDeviceJournalEntries(c.context, device, p)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result), result.StatusCode
+	return response.New(web.ReadString(result), result.StatusCode)
 }

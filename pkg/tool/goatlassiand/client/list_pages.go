@@ -1,6 +1,7 @@
 package client
 
 import (
+	"github.com/funtimecoding/soil/pkg/console/response"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -9,7 +10,7 @@ import (
 func (c *Client) ListPages(
 	space string,
 	status string,
-) (string, int) {
+) *response.Response {
 	params := &client.ListPagesParams{Space: space}
 
 	if status != "" {
@@ -19,5 +20,5 @@ func (c *Client) ListPages(
 	result, e := c.client.ListPages(c.context, params)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result), result.StatusCode
+	return response.New(web.ReadString(result), result.StatusCode)
 }

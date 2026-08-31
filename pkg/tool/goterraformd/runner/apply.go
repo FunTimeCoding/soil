@@ -20,7 +20,12 @@ func (r *Runner) apply(
 	record.GitHead = head
 	r.store.Create(record)
 	r.logger.Structured("terraform_apply_start")
-	arguments := []string{constant.Command, "apply", "-auto-approve"}
+	arguments := []string{
+		constant.Command,
+		"apply",
+		"-auto-approve",
+		"-no-color",
+	}
 
 	if v, okay := parameters[constant.Target]; okay {
 		record.Scope = v.(string)

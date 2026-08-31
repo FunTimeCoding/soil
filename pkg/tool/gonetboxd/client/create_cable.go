@@ -1,6 +1,7 @@
 package client
 
 import (
+	"github.com/funtimecoding/soil/pkg/console/response"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -11,7 +12,7 @@ func (c *Client) CreateCable(
 	interfaceA string,
 	deviceB string,
 	interfaceB string,
-) (string, int) {
+) *response.Response {
 	result, e := c.client.CreateCable(
 		c.context,
 		client.CreateCableRequest{
@@ -23,5 +24,5 @@ func (c *Client) CreateCable(
 	)
 	errors.PanicOnError(e)
 
-	return web.ReadString(result), result.StatusCode
+	return response.New(web.ReadString(result), result.StatusCode)
 }

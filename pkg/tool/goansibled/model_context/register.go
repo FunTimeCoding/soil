@@ -1,6 +1,7 @@
 package model_context
 
 import (
+	provision "github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -44,6 +45,12 @@ func (s *Server) register() {
 				constant.Synchronous,
 				mcp.Description(
 					"Wait for the run to complete and return the result. Default: false.",
+				),
+			),
+			mcp.WithArray(
+				provision.DownstreamChanges,
+				mcp.Description(
+					"Changed upstream resource addresses, sent by a provisioning daemon firing its downstream edge. Recorded with the run; does not select playbooks.",
 				),
 			),
 		),

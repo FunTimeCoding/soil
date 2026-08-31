@@ -4,13 +4,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
-	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/match"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/result"
 	"go/types"
 	"golang.org/x/tools/go/ast/astutil"
-	"os"
-	"sort"
 )
 
 func (s *Service) MatchPattern(
@@ -63,7 +60,7 @@ func (s *Service) MatchPattern(
 	contents := map[string][]byte{}
 	total := 0
 	matched := 0
-	groups := map[string]*result.Group{}
+	var entries []*siteEntry
 
 	for _, reference := range objectReferences(all, isAnchor) {
 		file := syntaxFileAt(reference.Package, reference.Ident.Pos())
@@ -94,64 +91,23 @@ func (s *Service) MatchPattern(
 			continue
 		}
 
-		position := set.Position(reference.Ident.Pos())
-		content, okay := contents[position.Filename]
+		entry, i := s.siteEntryFor(
+			directory,
+			set,
+			contents,
+			node,
+			anchorNode(path),
+			reference,
+		)
 
-		if !okay {
-			read, i := os.ReadFile(position.Filename)
-
-			if i != nil {
-				return nil, nil, i
-			}
-
-			content = read
-			contents[position.Filename] = read
+		if i != nil {
+			return nil, nil, i
 		}
 
-		shape, exemplar := statementShape(content, set, node, anchorNode(path))
-		entry, exists := groups[shape]
-
-		if !exists {
-			entry = result.NewGroup(shape, exemplar, nil)
-			groups[shape] = entry
-		}
-
-		entry.Locations = append(
-			entry.Locations,
-			result.NewLocation(
-				system.RelativePath(directory, position.Filename),
-				position.Line,
-				reference.Package.PkgPath,
-			),
-		)
+		entries = append(entries, entry)
 	}
 
-	var unmatched []*result.Group
-
-	for _, entry := range groups {
-		sort.Slice(
-			entry.Locations,
-			func(i, j int) bool {
-				if entry.Locations[i].File != entry.Locations[j].File {
-					return entry.Locations[i].File < entry.Locations[j].File
-				}
-
-				return entry.Locations[i].Line < entry.Locations[j].Line
-			},
-		)
-		unmatched = append(unmatched, entry)
-	}
-
-	sort.Slice(
-		unmatched,
-		func(i, j int) bool {
-			if len(unmatched[i].Locations) != len(unmatched[j].Locations) {
-				return len(unmatched[i].Locations) > len(unmatched[j].Locations)
-			}
-
-			return unmatched[i].Shape < unmatched[j].Shape
-		},
-	)
+	unmatched := groupEntries(entries)
 
 	return r, result.NewMatch(symbol, pattern, total, matched, unmatched), nil
 }

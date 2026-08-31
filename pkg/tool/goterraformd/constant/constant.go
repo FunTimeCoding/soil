@@ -25,6 +25,7 @@ const (
 	Command = "terraform"
 
 	TerraformPathEnvironment  = "TERRAFORM_PATH"
+	DownstreamEnvironment     = "DOWNSTREAM_HOSTS"
 	StateNamespaceEnvironment = "TERRAFORM_STATE_NAMESPACE"
 	StateLeaseEnvironment     = "TERRAFORM_STATE_LEASE"
 
