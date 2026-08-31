@@ -72,8 +72,8 @@ const (
 
 	SessionTable         = "session"
 	SummaryTable         = "summary"
-	RateSnapshotTable    = "rate_snapshots"
-	FableSnapshotTable   = "fable_snapshots"
+	RateSnapshotTable    = "rate_snapshot"
+	FableSnapshotTable   = "fable_snapshot"
 	SummaryColumn        = "summary"
 	TokenUsageColumn     = "token_usage"
 	ModelColumn          = "model"

@@ -14,4 +14,6 @@ func migrateColumns(d *gorm.DB) {
 	dropIfExists(d, constant.SessionTable, "needs_roster")
 	dropIfExists(d, constant.SessionTable, "needs_reannounce")
 	dropTableIfExists(d, "snapshots")
+	renameTableIfExists(d, "rate_snapshots", constant.RateSnapshotTable)
+	renameTableIfExists(d, "fable_snapshots", constant.FableSnapshotTable)
 }
