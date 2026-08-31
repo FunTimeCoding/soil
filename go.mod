@@ -49,7 +49,7 @@ require (
 	github.com/google/go-github/v90 v90.0.0
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674
-	github.com/gpustack/gguf-parser-go v0.26.1
+	github.com/gpustack/gguf-parser-go v0.26.2
 	github.com/grafana/grafana-openapi-client-go v0.0.0-20260828183528-15d99ca95e47
 	github.com/hashicorp/vault-client-go v0.4.3
 	github.com/hetznercloud/hcloud-go/v2 v2.47.0
@@ -77,7 +77,7 @@ require (
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2
 	github.com/prometheus/alertmanager v0.34.0
 	github.com/prometheus/client_golang v1.24.1
-	github.com/prometheus/common v0.70.1
+	github.com/prometheus/common v0.71.0
 	github.com/rivo/tview v0.42.0
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/sanity-io/litter v1.5.8
@@ -101,7 +101,7 @@ require (
 	golang.org/x/time v0.15.0
 	golang.org/x/tools v0.49.0
 	gonum.org/v1/gonum v0.17.0
-	google.golang.org/api v0.295.0
+	google.golang.org/api v0.296.0
 	google.golang.org/protobuf v1.36.12
 	gopkg.in/yaml.v3 v3.0.1
 	gorm.io/driver/postgres v1.6.2
