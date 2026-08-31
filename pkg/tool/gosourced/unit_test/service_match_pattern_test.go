@@ -83,7 +83,7 @@ func TestMatchPatternType(t *testing.T) {
 		"example/pkg/client",
 		"Client",
 		"",
-		"func pattern(c *client.Client, x []int) {\n\tif c.Client(x...) {\n\t}\n}",
+		"func pattern(c *client.Client, x []any) {\n\tif c.Client(x...) {\n\t}\n}",
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
@@ -96,6 +96,21 @@ func TestMatchPatternType(t *testing.T) {
 		"if c.Ready() && retries < 3 {",
 		match.Unmatched[0].Exemplar,
 	)
+}
+
+func TestMatchPatternSpreadHoleType(t *testing.T) {
+	d := testutil.PrepareTestPackage(t, serviceTestdata("census/src"))
+	s := testService()
+	r, match, e := s.MatchPattern(
+		d,
+		"example/pkg/client",
+		"Client",
+		"",
+		"func pattern(c *client.Client, x []int) {\n\tif c.Client(x...) {\n\t}\n}",
+	)
+	assert.FatalOnError(t, e)
+	assert.True(t, match == nil)
+	testutil.AssertBlockedContains(t, r, "[]any")
 }
 
 func TestListCalls(t *testing.T) {

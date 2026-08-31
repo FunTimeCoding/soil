@@ -98,7 +98,7 @@ func (s *Server) register() {
 				"pattern",
 				mcp.Required(),
 				mcp.Description(
-					"Expected shape as a Go function with exactly one body statement, e.g. func pattern(c *client.Client, key string) { fmt.Println(c.DeleteComment(key)) }. Parameters are holes matching any expression; a single hole spread as c.Method(x...) matches any argument list.",
+					"Expected shape as a Go function with exactly one body statement, e.g. func pattern(c *client.Client, key string) { fmt.Println(c.DeleteComment(key)) }. Parameters are holes matching any expression assignable to their declared type; a single []any hole spread as c.Method(x...) matches any argument list.",
 				),
 			),
 		),

@@ -50,10 +50,13 @@ func Parse(source string) (*Pattern, error) {
 			}
 		}
 
-		return &Pattern{
-			Holes:     holes,
-			Statement: declaration.Body.List[0],
-		}, nil
+		statement := declaration.Body.List[0]
+
+		if f := checkSpreadHoles(statement, holes); f != nil {
+			return nil, f
+		}
+
+		return &Pattern{Holes: holes, Statement: statement}, nil
 	}
 
 	return nil, fmt.Errorf("pattern must declare a function")
