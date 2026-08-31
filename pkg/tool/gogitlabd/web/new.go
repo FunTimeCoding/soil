@@ -1,6 +1,7 @@
 package web
 
 import (
+	"github.com/funtimecoding/soil/pkg/gitlab"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/worker"
 	web "github.com/funtimecoding/soil/pkg/web/constant"
@@ -10,7 +11,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
-func New(k *worker.Worker) *Server {
+func New(
+	c *gitlab.Client,
+	k *worker.Worker,
+) *Server {
 	registry := palette.NewRegistry()
 	registry.Register(
 		palette.Command{
@@ -21,6 +25,7 @@ func New(k *worker.Worker) *Server {
 	)
 
 	return &Server{
+		client:   c,
 		worker:   k,
 		registry: registry,
 		view: view.New(

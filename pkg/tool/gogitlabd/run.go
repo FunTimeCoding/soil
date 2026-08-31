@@ -26,7 +26,7 @@ func Run(
 	c := gitlab.NewEnvironment()
 	m := metric.New()
 	k := worker.New(c, constant.PollInterval, m.Registry(), l, r)
-	b := web.New(k)
+	b := web.New(c, k)
 	lifecycle.New(
 		l,
 		lifecycle.WithWorker(k),

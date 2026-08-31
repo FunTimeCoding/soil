@@ -11,6 +11,7 @@ const (
 	Authenticate      = "WWW-Authenticate"
 	Authorization     = "Authorization"
 	ContentType       = "Content-Type"
+	ExtendedRedirect  = "HX-Redirect"
 	ExtendedRequest   = "HX-Request"
 	ForwardedFor      = "X-Forwarded-For"
 	NotificationItem  = "Notification-Item"

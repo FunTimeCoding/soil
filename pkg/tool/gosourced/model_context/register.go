@@ -72,6 +72,62 @@ func (s *Server) register() {
 	)
 	s.server.AddTool(
 		mcp.NewTool(
+			constant.MatchPattern,
+			mcp.WithDescription(
+				"Pre-flight check for a bulk edit: test every reference to a symbol against an expected shape, before editing anything. The pattern is plain Go - a function whose parameters declare the holes; block bodies in the pattern are wildcards. Sites whose enclosing statement matches count as matched; the rest come back grouped by normalized shape (literals as INT/STRING, other identifiers as IDENT) with a verbatim exemplar and locations per group - the sites that need hands instead of the mechanical edit. Read-only, no files change.",
+			),
+			mcp.WithString(
+				"package_path",
+				mcp.Required(),
+				mcp.Description(
+					"Full import path of the package holding the symbol. Imported packages work too, e.g. fmt.",
+				),
+			),
+			mcp.WithString(
+				"symbol",
+				mcp.Required(),
+				mcp.Description(
+					"Symbol name whose references are tested. A type name with no receiver anchors every method on the type; the pattern then spells the anchor call with the type name standing for any method.",
+				),
+			),
+			mcp.WithString(
+				"receiver",
+				mcp.Description("Receiver type name for methods, e.g. Client."),
+			),
+			mcp.WithString(
+				"pattern",
+				mcp.Required(),
+				mcp.Description(
+					"Expected shape as a Go function with exactly one body statement, e.g. func pattern(c *client.Client, key string) { fmt.Println(c.DeleteComment(key)) }. Parameters are holes matching any expression; a single hole spread as c.Method(x...) matches any argument list.",
+				),
+			),
+		),
+		mcp.NewTypedToolHandler(s.matchPattern),
+	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.ListCalls,
+			mcp.WithDescription(
+				"Inventory of what a region of the module calls: every function and method referenced by packages under an import-path prefix, excluding calls within the region itself, grouped by callee with counts, largest first. The discovery step before a bulk edit - surfaces sibling names nobody thought to ask about (fmt.Print beside fmt.Println) and shows a region's blast radius. Read-only, no files change.",
+			),
+			mcp.WithString(
+				"region",
+				mcp.Required(),
+				mcp.Description(
+					"Import path prefix selecting the region, e.g. github.com/funtimecoding/soil/pkg/tool/gonetboxd.",
+				),
+			),
+			mcp.WithNumber(
+				generative.ParameterLimit,
+				mcp.Description(
+					"Maximum callees returned. Defaults to 100; the exact total is always reported.",
+				),
+			),
+		),
+		mcp.NewTypedToolHandler(s.listCalls),
+	)
+	s.server.AddTool(
+		mcp.NewTool(
 			constant.ChangeVisibility,
 			mcp.WithDescription(
 				"Change the visibility of a Go function, method, type, or constant by toggling its first letter case. Updates all references across the module.",

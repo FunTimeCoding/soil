@@ -14,6 +14,8 @@ const (
 	ListModules         = "list_modules"
 	UseModule           = "use_module"
 	FindReferences      = "find_references"
+	MatchPattern        = "match_pattern"
+	ListCalls           = "list_calls"
 	ChangeVisibility    = "change_visibility"
 	RenameSymbol        = "rename_symbol"
 	MoveSymbol          = "move_symbol"

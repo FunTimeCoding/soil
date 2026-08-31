@@ -10,8 +10,12 @@ const (
 	ActivePollInterval = 10 * time.Second
 )
 const (
-	BoardTitle = "Pipelines"
-	BoardPath  = "/"
+	BoardTitle   = "Pipelines"
+	BoardPath    = "/"
+	PipelinePath = "/pipeline"
+	JobPath      = "/job"
+	RetryPath    = "/retry"
+	DeletePath   = "/delete"
 
 	SuccessIcon = "/static/gitlab-success.png"
 	FailIcon    = "/static/gitlab-fail.png"
@@ -21,8 +25,9 @@ const (
 
 	RenovatePrefix = "renovate/"
 
-	BoardEvent   = "board"
-	SummaryEvent = "summary"
+	BoardEvent    = "board"
+	SummaryEvent  = "summary"
+	PipelineEvent = "pipeline_strip"
 )
 
 var Identity = identity.New(

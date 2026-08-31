@@ -1,6 +1,7 @@
 package worker
 
 import (
+	"github.com/funtimecoding/soil/pkg/gitlab/project"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/types/board_entry"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/types/latest_pipeline"
@@ -16,17 +17,17 @@ func (w *Worker) Poll() {
 		reference string
 	}
 	latest := make(map[key]*gitlab.PipelineInfo)
-	links := make(map[string]string)
+	projects := make(map[string]*project.Project)
 
 	for _, p := range w.client.MustProjects() {
-		project := join.Slash([]string{p.Namespace, p.Name})
-		links[project] = p.Raw.WebURL
+		name := join.Slash([]string{p.Namespace, p.Name})
+		projects[name] = p
 
 		for reference, i := range latest_pipeline.New(
 			w.client.MustBranches(p.Identifier),
 			w.client.MustPipelines(p.Identifier),
 		) {
-			latest[key{project, reference}] = i
+			latest[key{name, reference}] = i
 		}
 	}
 
@@ -45,7 +46,8 @@ func (w *Worker) Poll() {
 			entries,
 			board_entry.New(
 				k.project,
-				links[k.project],
+				projects[k.project].Identifier,
+				projects[k.project].Raw.WebURL,
 				k.reference,
 				i.Status,
 				i.ID,

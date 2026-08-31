@@ -23,6 +23,10 @@ func findDeclaration(
 	}
 
 	if target == nil {
+		target = findPackageDeep(all, packagePath)
+	}
+
+	if target == nil {
 		return nil, nil, not_found.New("package", packagePath)
 	}
 

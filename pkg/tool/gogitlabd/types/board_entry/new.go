@@ -4,6 +4,7 @@ import "time"
 
 func New(
 	project string,
+	projectIdentifier int64,
 	projectLink string,
 	reference string,
 	status string,
@@ -12,12 +13,13 @@ func New(
 	updated time.Time,
 ) *Entry {
 	return &Entry{
-		Project:     project,
-		ProjectLink: projectLink,
-		Reference:   reference,
-		Status:      status,
-		Identifier:  identifier,
-		Link:        link,
-		Updated:     updated,
+		Project:           project,
+		ProjectIdentifier: projectIdentifier,
+		ProjectLink:       projectLink,
+		Reference:         reference,
+		Status:            status,
+		Identifier:        identifier,
+		Link:              link,
+		Updated:           updated,
 	}
 }

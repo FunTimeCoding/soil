@@ -1,7 +1,6 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/result"
 	"go/token"
@@ -18,8 +17,14 @@ func referenceLocations(
 	excludeFile string,
 ) []*result.Location {
 	var locations []*result.Location
+	references := objectReferences(
+		all,
+		func(o types.Object) bool {
+			return sameObject(o, declaration)
+		},
+	)
 
-	for _, f := range resolve.FindAllReferences(all, declaration) {
+	for _, f := range references {
 		if f.Ident.Pos() == declaration.Pos() {
 			continue
 		}

@@ -51,8 +51,13 @@ func (*Server) boardTable(entries []*board_entry.Entry) gomponents.Node {
 				),
 				html.Td(
 					html.A(
-						html.Href(entry.Link),
-						html.Target("_blank"),
+						html.Href(
+							detailLink(
+								entry.ProjectIdentifier,
+								entry.Identifier,
+								0,
+							),
+						),
 						gomponents.Textf("#%d", entry.Identifier),
 					),
 				),

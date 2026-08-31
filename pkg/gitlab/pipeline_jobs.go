@@ -19,5 +19,8 @@ func (c *Client) PipelineJobs(
 		return nil, wrapError(e)
 	}
 
-	return c.enrichJobs(job.NewSlice(result)), nil
+	return c.enrichProjectJobs(
+		job.NewSlice(result),
+		c.MustProject(project),
+	), nil
 }
