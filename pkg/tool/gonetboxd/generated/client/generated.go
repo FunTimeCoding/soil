@@ -647,381 +647,381 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 // The interface specification for the client above.
 type ClientInterface interface {
 
-	// ListAddressRanges performs a GET /api/v1/address-ranges (the `ListAddressRanges` operationId) request.
+	// ListAddressRanges performs a GET /api/address-ranges (the `ListAddressRanges` operationId) request.
 	ListAddressRanges(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateAddressRangeWithBody performs a POST /api/v1/address-ranges (the `CreateAddressRange` operationId) request,
+	// CreateAddressRangeWithBody performs a POST /api/address-ranges (the `CreateAddressRange` operationId) request,
 	// with any type of body and a specified content type.
 	CreateAddressRangeWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateAddressRange performs a POST /api/v1/address-ranges (the `CreateAddressRange` operationId) request.
+	// CreateAddressRange performs a POST /api/address-ranges (the `CreateAddressRange` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateAddressRange(ctx context.Context, body CreateAddressRangeJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// DeleteAddress performs a DELETE /api/v1/addresses/{identifier} (the `DeleteAddress` operationId) request.
+	// DeleteAddress performs a DELETE /api/addresses/{identifier} (the `DeleteAddress` operationId) request.
 	DeleteAddress(ctx context.Context, identifier int32, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListCables performs a GET /api/v1/cables (the `ListCables` operationId) request.
+	// ListCables performs a GET /api/cables (the `ListCables` operationId) request.
 	ListCables(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateCableWithBody performs a POST /api/v1/cables (the `CreateCable` operationId) request,
+	// CreateCableWithBody performs a POST /api/cables (the `CreateCable` operationId) request,
 	// with any type of body and a specified content type.
 	CreateCableWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateCable performs a POST /api/v1/cables (the `CreateCable` operationId) request.
+	// CreateCable performs a POST /api/cables (the `CreateCable` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateCable(ctx context.Context, body CreateCableJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListClusterTypes performs a GET /api/v1/cluster-types (the `ListClusterTypes` operationId) request.
+	// ListClusterTypes performs a GET /api/cluster-types (the `ListClusterTypes` operationId) request.
 	ListClusterTypes(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateClusterTypeWithBody performs a POST /api/v1/cluster-types (the `CreateClusterType` operationId) request,
+	// CreateClusterTypeWithBody performs a POST /api/cluster-types (the `CreateClusterType` operationId) request,
 	// with any type of body and a specified content type.
 	CreateClusterTypeWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateClusterType performs a POST /api/v1/cluster-types (the `CreateClusterType` operationId) request.
+	// CreateClusterType performs a POST /api/cluster-types (the `CreateClusterType` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateClusterType(ctx context.Context, body CreateClusterTypeJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListClusters performs a GET /api/v1/clusters (the `ListClusters` operationId) request.
+	// ListClusters performs a GET /api/clusters (the `ListClusters` operationId) request.
 	ListClusters(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateClusterWithBody performs a POST /api/v1/clusters (the `CreateCluster` operationId) request,
+	// CreateClusterWithBody performs a POST /api/clusters (the `CreateCluster` operationId) request,
 	// with any type of body and a specified content type.
 	CreateClusterWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateCluster performs a POST /api/v1/clusters (the `CreateCluster` operationId) request.
+	// CreateCluster performs a POST /api/clusters (the `CreateCluster` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateCluster(ctx context.Context, body CreateClusterJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListDeviceRoles performs a GET /api/v1/device-roles (the `ListDeviceRoles` operationId) request.
+	// ListDeviceRoles performs a GET /api/device-roles (the `ListDeviceRoles` operationId) request.
 	ListDeviceRoles(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateDeviceRoleWithBody performs a POST /api/v1/device-roles (the `CreateDeviceRole` operationId) request,
+	// CreateDeviceRoleWithBody performs a POST /api/device-roles (the `CreateDeviceRole` operationId) request,
 	// with any type of body and a specified content type.
 	CreateDeviceRoleWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateDeviceRole performs a POST /api/v1/device-roles (the `CreateDeviceRole` operationId) request.
+	// CreateDeviceRole performs a POST /api/device-roles (the `CreateDeviceRole` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateDeviceRole(ctx context.Context, body CreateDeviceRoleJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListDeviceTypes performs a GET /api/v1/device-types (the `ListDeviceTypes` operationId) request.
+	// ListDeviceTypes performs a GET /api/device-types (the `ListDeviceTypes` operationId) request.
 	ListDeviceTypes(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateDeviceTypeWithBody performs a POST /api/v1/device-types (the `CreateDeviceType` operationId) request,
+	// CreateDeviceTypeWithBody performs a POST /api/device-types (the `CreateDeviceType` operationId) request,
 	// with any type of body and a specified content type.
 	CreateDeviceTypeWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateDeviceType performs a POST /api/v1/device-types (the `CreateDeviceType` operationId) request.
+	// CreateDeviceType performs a POST /api/device-types (the `CreateDeviceType` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateDeviceType(ctx context.Context, body CreateDeviceTypeJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListDevices performs a GET /api/v1/devices (the `ListDevices` operationId) request.
+	// ListDevices performs a GET /api/devices (the `ListDevices` operationId) request.
 	ListDevices(ctx context.Context, params *ListDevicesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateDeviceWithBody performs a POST /api/v1/devices/create (the `CreateDevice` operationId) request,
+	// CreateDeviceWithBody performs a POST /api/devices/create (the `CreateDevice` operationId) request,
 	// with any type of body and a specified content type.
 	CreateDeviceWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateDevice performs a POST /api/v1/devices/create (the `CreateDevice` operationId) request.
+	// CreateDevice performs a POST /api/devices/create (the `CreateDevice` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateDevice(ctx context.Context, body CreateDeviceJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetDevice performs a GET /api/v1/devices/{name} (the `GetDevice` operationId) request.
+	// GetDevice performs a GET /api/devices/{name} (the `GetDevice` operationId) request.
 	GetDevice(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// UpdateDeviceWithBody performs a PATCH /api/v1/devices/{name} (the `UpdateDevice` operationId) request,
+	// UpdateDeviceWithBody performs a PATCH /api/devices/{name} (the `UpdateDevice` operationId) request,
 	// with any type of body and a specified content type.
 	UpdateDeviceWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// UpdateDevice performs a PATCH /api/v1/devices/{name} (the `UpdateDevice` operationId) request.
+	// UpdateDevice performs a PATCH /api/devices/{name} (the `UpdateDevice` operationId) request.
 	// Takes a body of the `application/json` content type.
 	UpdateDevice(ctx context.Context, name string, body UpdateDeviceJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListAddresses performs a GET /api/v1/devices/{name}/addresses (the `ListAddresses` operationId) request.
+	// ListAddresses performs a GET /api/devices/{name}/addresses (the `ListAddresses` operationId) request.
 	ListAddresses(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateAddressWithBody performs a POST /api/v1/devices/{name}/addresses/create (the `CreateAddress` operationId) request,
+	// CreateAddressWithBody performs a POST /api/devices/{name}/addresses/create (the `CreateAddress` operationId) request,
 	// with any type of body and a specified content type.
 	CreateAddressWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateAddress performs a POST /api/v1/devices/{name}/addresses/create (the `CreateAddress` operationId) request.
+	// CreateAddress performs a POST /api/devices/{name}/addresses/create (the `CreateAddress` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateAddress(ctx context.Context, name string, body CreateAddressJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListInterfaces performs a GET /api/v1/devices/{name}/interfaces (the `ListInterfaces` operationId) request.
+	// ListInterfaces performs a GET /api/devices/{name}/interfaces (the `ListInterfaces` operationId) request.
 	ListInterfaces(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateInterfaceWithBody performs a POST /api/v1/devices/{name}/interfaces/create (the `CreateInterface` operationId) request,
+	// CreateInterfaceWithBody performs a POST /api/devices/{name}/interfaces/create (the `CreateInterface` operationId) request,
 	// with any type of body and a specified content type.
 	CreateInterfaceWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateInterface performs a POST /api/v1/devices/{name}/interfaces/create (the `CreateInterface` operationId) request.
+	// CreateInterface performs a POST /api/devices/{name}/interfaces/create (the `CreateInterface` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateInterface(ctx context.Context, name string, body CreateInterfaceJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListDeviceJournalEntries performs a GET /api/v1/devices/{name}/journal-entries (the `ListDeviceJournalEntries` operationId) request.
+	// ListDeviceJournalEntries performs a GET /api/devices/{name}/journal-entries (the `ListDeviceJournalEntries` operationId) request.
 	ListDeviceJournalEntries(ctx context.Context, name string, params *ListDeviceJournalEntriesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// AddDeviceJournalEntryWithBody performs a POST /api/v1/devices/{name}/journal-entries (the `AddDeviceJournalEntry` operationId) request,
+	// AddDeviceJournalEntryWithBody performs a POST /api/devices/{name}/journal-entries (the `AddDeviceJournalEntry` operationId) request,
 	// with any type of body and a specified content type.
 	AddDeviceJournalEntryWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// AddDeviceJournalEntry performs a POST /api/v1/devices/{name}/journal-entries (the `AddDeviceJournalEntry` operationId) request.
+	// AddDeviceJournalEntry performs a POST /api/devices/{name}/journal-entries (the `AddDeviceJournalEntry` operationId) request.
 	// Takes a body of the `application/json` content type.
 	AddDeviceJournalEntry(ctx context.Context, name string, body AddDeviceJournalEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListDeviceLabels performs a GET /api/v1/devices/{name}/labels (the `ListDeviceLabels` operationId) request.
+	// ListDeviceLabels performs a GET /api/devices/{name}/labels (the `ListDeviceLabels` operationId) request.
 	ListDeviceLabels(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// RemoveDeviceLabel performs a DELETE /api/v1/devices/{name}/labels/{key} (the `RemoveDeviceLabel` operationId) request.
+	// RemoveDeviceLabel performs a DELETE /api/devices/{name}/labels/{key} (the `RemoveDeviceLabel` operationId) request.
 	RemoveDeviceLabel(ctx context.Context, name string, key string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// SetDeviceLabelWithBody performs a PUT /api/v1/devices/{name}/labels/{key} (the `SetDeviceLabel` operationId) request,
+	// SetDeviceLabelWithBody performs a PUT /api/devices/{name}/labels/{key} (the `SetDeviceLabel` operationId) request,
 	// with any type of body and a specified content type.
 	SetDeviceLabelWithBody(ctx context.Context, name string, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// SetDeviceLabel performs a PUT /api/v1/devices/{name}/labels/{key} (the `SetDeviceLabel` operationId) request.
+	// SetDeviceLabel performs a PUT /api/devices/{name}/labels/{key} (the `SetDeviceLabel` operationId) request.
 	// Takes a body of the `application/json` content type.
 	SetDeviceLabel(ctx context.Context, name string, key string, body SetDeviceLabelJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListDeviceTags performs a GET /api/v1/devices/{name}/tags (the `ListDeviceTags` operationId) request.
+	// ListDeviceTags performs a GET /api/devices/{name}/tags (the `ListDeviceTags` operationId) request.
 	ListDeviceTags(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// RemoveDeviceTag performs a DELETE /api/v1/devices/{name}/tags/{tag} (the `RemoveDeviceTag` operationId) request.
+	// RemoveDeviceTag performs a DELETE /api/devices/{name}/tags/{tag} (the `RemoveDeviceTag` operationId) request.
 	RemoveDeviceTag(ctx context.Context, name string, tag string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// AddDeviceTag performs a PUT /api/v1/devices/{name}/tags/{tag} (the `AddDeviceTag` operationId) request.
+	// AddDeviceTag performs a PUT /api/devices/{name}/tags/{tag} (the `AddDeviceTag` operationId) request.
 	AddDeviceTag(ctx context.Context, name string, tag string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateDeviceTunnelTerminationWithBody performs a POST /api/v1/devices/{name}/tunnel-terminations/create (the `CreateDeviceTunnelTermination` operationId) request,
+	// CreateDeviceTunnelTerminationWithBody performs a POST /api/devices/{name}/tunnel-terminations/create (the `CreateDeviceTunnelTermination` operationId) request,
 	// with any type of body and a specified content type.
 	CreateDeviceTunnelTerminationWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateDeviceTunnelTermination performs a POST /api/v1/devices/{name}/tunnel-terminations/create (the `CreateDeviceTunnelTermination` operationId) request.
+	// CreateDeviceTunnelTermination performs a POST /api/devices/{name}/tunnel-terminations/create (the `CreateDeviceTunnelTermination` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateDeviceTunnelTermination(ctx context.Context, name string, body CreateDeviceTunnelTerminationJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// DeleteJournalEntry performs a DELETE /api/v1/journal-entries/{identifier} (the `DeleteJournalEntry` operationId) request.
+	// DeleteJournalEntry performs a DELETE /api/journal-entries/{identifier} (the `DeleteJournalEntry` operationId) request.
 	DeleteJournalEntry(ctx context.Context, identifier int32, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// UpdateJournalEntryWithBody performs a PATCH /api/v1/journal-entries/{identifier} (the `UpdateJournalEntry` operationId) request,
+	// UpdateJournalEntryWithBody performs a PATCH /api/journal-entries/{identifier} (the `UpdateJournalEntry` operationId) request,
 	// with any type of body and a specified content type.
 	UpdateJournalEntryWithBody(ctx context.Context, identifier int32, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// UpdateJournalEntry performs a PATCH /api/v1/journal-entries/{identifier} (the `UpdateJournalEntry` operationId) request.
+	// UpdateJournalEntry performs a PATCH /api/journal-entries/{identifier} (the `UpdateJournalEntry` operationId) request.
 	// Takes a body of the `application/json` content type.
 	UpdateJournalEntry(ctx context.Context, identifier int32, body UpdateJournalEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListLocations performs a GET /api/v1/locations (the `ListLocations` operationId) request.
+	// ListLocations performs a GET /api/locations (the `ListLocations` operationId) request.
 	ListLocations(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateLocationWithBody performs a POST /api/v1/locations (the `CreateLocation` operationId) request,
+	// CreateLocationWithBody performs a POST /api/locations (the `CreateLocation` operationId) request,
 	// with any type of body and a specified content type.
 	CreateLocationWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateLocation performs a POST /api/v1/locations (the `CreateLocation` operationId) request.
+	// CreateLocation performs a POST /api/locations (the `CreateLocation` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateLocation(ctx context.Context, body CreateLocationJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListManufacturers performs a GET /api/v1/manufacturers (the `ListManufacturers` operationId) request.
+	// ListManufacturers performs a GET /api/manufacturers (the `ListManufacturers` operationId) request.
 	ListManufacturers(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateManufacturerWithBody performs a POST /api/v1/manufacturers (the `CreateManufacturer` operationId) request,
+	// CreateManufacturerWithBody performs a POST /api/manufacturers (the `CreateManufacturer` operationId) request,
 	// with any type of body and a specified content type.
 	CreateManufacturerWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateManufacturer performs a POST /api/v1/manufacturers (the `CreateManufacturer` operationId) request.
+	// CreateManufacturer performs a POST /api/manufacturers (the `CreateManufacturer` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateManufacturer(ctx context.Context, body CreateManufacturerJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListPlatforms performs a GET /api/v1/platforms (the `ListPlatforms` operationId) request.
+	// ListPlatforms performs a GET /api/platforms (the `ListPlatforms` operationId) request.
 	ListPlatforms(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreatePlatformWithBody performs a POST /api/v1/platforms (the `CreatePlatform` operationId) request,
+	// CreatePlatformWithBody performs a POST /api/platforms (the `CreatePlatform` operationId) request,
 	// with any type of body and a specified content type.
 	CreatePlatformWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreatePlatform performs a POST /api/v1/platforms (the `CreatePlatform` operationId) request.
+	// CreatePlatform performs a POST /api/platforms (the `CreatePlatform` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreatePlatform(ctx context.Context, body CreatePlatformJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListPrefixes performs a GET /api/v1/prefixes (the `ListPrefixes` operationId) request.
+	// ListPrefixes performs a GET /api/prefixes (the `ListPrefixes` operationId) request.
 	ListPrefixes(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreatePrefixWithBody performs a POST /api/v1/prefixes (the `CreatePrefix` operationId) request,
+	// CreatePrefixWithBody performs a POST /api/prefixes (the `CreatePrefix` operationId) request,
 	// with any type of body and a specified content type.
 	CreatePrefixWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreatePrefix performs a POST /api/v1/prefixes (the `CreatePrefix` operationId) request.
+	// CreatePrefix performs a POST /api/prefixes (the `CreatePrefix` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreatePrefix(ctx context.Context, body CreatePrefixJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListSites performs a GET /api/v1/sites (the `ListSites` operationId) request.
+	// ListSites performs a GET /api/sites (the `ListSites` operationId) request.
 	ListSites(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateSiteWithBody performs a POST /api/v1/sites (the `CreateSite` operationId) request,
+	// CreateSiteWithBody performs a POST /api/sites (the `CreateSite` operationId) request,
 	// with any type of body and a specified content type.
 	CreateSiteWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateSite performs a POST /api/v1/sites (the `CreateSite` operationId) request.
+	// CreateSite performs a POST /api/sites (the `CreateSite` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateSite(ctx context.Context, body CreateSiteJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListTags performs a GET /api/v1/tags (the `ListTags` operationId) request.
+	// ListTags performs a GET /api/tags (the `ListTags` operationId) request.
 	ListTags(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateTagWithBody performs a POST /api/v1/tags (the `CreateTag` operationId) request,
+	// CreateTagWithBody performs a POST /api/tags (the `CreateTag` operationId) request,
 	// with any type of body and a specified content type.
 	CreateTagWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateTag performs a POST /api/v1/tags (the `CreateTag` operationId) request.
+	// CreateTag performs a POST /api/tags (the `CreateTag` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateTag(ctx context.Context, body CreateTagJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListTenants performs a GET /api/v1/tenants (the `ListTenants` operationId) request.
+	// ListTenants performs a GET /api/tenants (the `ListTenants` operationId) request.
 	ListTenants(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateTenantWithBody performs a POST /api/v1/tenants (the `CreateTenant` operationId) request,
+	// CreateTenantWithBody performs a POST /api/tenants (the `CreateTenant` operationId) request,
 	// with any type of body and a specified content type.
 	CreateTenantWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateTenant performs a POST /api/v1/tenants (the `CreateTenant` operationId) request.
+	// CreateTenant performs a POST /api/tenants (the `CreateTenant` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateTenant(ctx context.Context, body CreateTenantJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListTunnelGroups performs a GET /api/v1/tunnel-groups (the `ListTunnelGroups` operationId) request.
+	// ListTunnelGroups performs a GET /api/tunnel-groups (the `ListTunnelGroups` operationId) request.
 	ListTunnelGroups(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateTunnelGroupWithBody performs a POST /api/v1/tunnel-groups (the `CreateTunnelGroup` operationId) request,
+	// CreateTunnelGroupWithBody performs a POST /api/tunnel-groups (the `CreateTunnelGroup` operationId) request,
 	// with any type of body and a specified content type.
 	CreateTunnelGroupWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateTunnelGroup performs a POST /api/v1/tunnel-groups (the `CreateTunnelGroup` operationId) request.
+	// CreateTunnelGroup performs a POST /api/tunnel-groups (the `CreateTunnelGroup` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateTunnelGroup(ctx context.Context, body CreateTunnelGroupJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListTunnelTerminations performs a GET /api/v1/tunnel-terminations (the `ListTunnelTerminations` operationId) request.
+	// ListTunnelTerminations performs a GET /api/tunnel-terminations (the `ListTunnelTerminations` operationId) request.
 	ListTunnelTerminations(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListTunnels performs a GET /api/v1/tunnels (the `ListTunnels` operationId) request.
+	// ListTunnels performs a GET /api/tunnels (the `ListTunnels` operationId) request.
 	ListTunnels(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateTunnelWithBody performs a POST /api/v1/tunnels (the `CreateTunnel` operationId) request,
+	// CreateTunnelWithBody performs a POST /api/tunnels (the `CreateTunnel` operationId) request,
 	// with any type of body and a specified content type.
 	CreateTunnelWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateTunnel performs a POST /api/v1/tunnels (the `CreateTunnel` operationId) request.
+	// CreateTunnel performs a POST /api/tunnels (the `CreateTunnel` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateTunnel(ctx context.Context, body CreateTunnelJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListVirtualMachines performs a GET /api/v1/virtual-machines (the `ListVirtualMachines` operationId) request.
+	// ListVirtualMachines performs a GET /api/virtual-machines (the `ListVirtualMachines` operationId) request.
 	ListVirtualMachines(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateVirtualMachineWithBody performs a POST /api/v1/virtual-machines (the `CreateVirtualMachine` operationId) request,
+	// CreateVirtualMachineWithBody performs a POST /api/virtual-machines (the `CreateVirtualMachine` operationId) request,
 	// with any type of body and a specified content type.
 	CreateVirtualMachineWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateVirtualMachine performs a POST /api/v1/virtual-machines (the `CreateVirtualMachine` operationId) request.
+	// CreateVirtualMachine performs a POST /api/virtual-machines (the `CreateVirtualMachine` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateVirtualMachine(ctx context.Context, body CreateVirtualMachineJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetVirtualMachine performs a GET /api/v1/virtual-machines/{name} (the `GetVirtualMachine` operationId) request.
+	// GetVirtualMachine performs a GET /api/virtual-machines/{name} (the `GetVirtualMachine` operationId) request.
 	GetVirtualMachine(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// UpdateVirtualMachineWithBody performs a PATCH /api/v1/virtual-machines/{name} (the `UpdateVirtualMachine` operationId) request,
+	// UpdateVirtualMachineWithBody performs a PATCH /api/virtual-machines/{name} (the `UpdateVirtualMachine` operationId) request,
 	// with any type of body and a specified content type.
 	UpdateVirtualMachineWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// UpdateVirtualMachine performs a PATCH /api/v1/virtual-machines/{name} (the `UpdateVirtualMachine` operationId) request.
+	// UpdateVirtualMachine performs a PATCH /api/virtual-machines/{name} (the `UpdateVirtualMachine` operationId) request.
 	// Takes a body of the `application/json` content type.
 	UpdateVirtualMachine(ctx context.Context, name string, body UpdateVirtualMachineJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListVirtualAddresses performs a GET /api/v1/virtual-machines/{name}/addresses (the `ListVirtualAddresses` operationId) request.
+	// ListVirtualAddresses performs a GET /api/virtual-machines/{name}/addresses (the `ListVirtualAddresses` operationId) request.
 	ListVirtualAddresses(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateVirtualAddressWithBody performs a POST /api/v1/virtual-machines/{name}/addresses/create (the `CreateVirtualAddress` operationId) request,
+	// CreateVirtualAddressWithBody performs a POST /api/virtual-machines/{name}/addresses/create (the `CreateVirtualAddress` operationId) request,
 	// with any type of body and a specified content type.
 	CreateVirtualAddressWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateVirtualAddress performs a POST /api/v1/virtual-machines/{name}/addresses/create (the `CreateVirtualAddress` operationId) request.
+	// CreateVirtualAddress performs a POST /api/virtual-machines/{name}/addresses/create (the `CreateVirtualAddress` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateVirtualAddress(ctx context.Context, name string, body CreateVirtualAddressJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListVirtualDisks performs a GET /api/v1/virtual-machines/{name}/disks (the `ListVirtualDisks` operationId) request.
+	// ListVirtualDisks performs a GET /api/virtual-machines/{name}/disks (the `ListVirtualDisks` operationId) request.
 	ListVirtualDisks(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateVirtualDiskWithBody performs a POST /api/v1/virtual-machines/{name}/disks (the `CreateVirtualDisk` operationId) request,
+	// CreateVirtualDiskWithBody performs a POST /api/virtual-machines/{name}/disks (the `CreateVirtualDisk` operationId) request,
 	// with any type of body and a specified content type.
 	CreateVirtualDiskWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateVirtualDisk performs a POST /api/v1/virtual-machines/{name}/disks (the `CreateVirtualDisk` operationId) request.
+	// CreateVirtualDisk performs a POST /api/virtual-machines/{name}/disks (the `CreateVirtualDisk` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateVirtualDisk(ctx context.Context, name string, body CreateVirtualDiskJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListVirtualInterfaces performs a GET /api/v1/virtual-machines/{name}/interfaces (the `ListVirtualInterfaces` operationId) request.
+	// ListVirtualInterfaces performs a GET /api/virtual-machines/{name}/interfaces (the `ListVirtualInterfaces` operationId) request.
 	ListVirtualInterfaces(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateVirtualInterfaceWithBody performs a POST /api/v1/virtual-machines/{name}/interfaces/create (the `CreateVirtualInterface` operationId) request,
+	// CreateVirtualInterfaceWithBody performs a POST /api/virtual-machines/{name}/interfaces/create (the `CreateVirtualInterface` operationId) request,
 	// with any type of body and a specified content type.
 	CreateVirtualInterfaceWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateVirtualInterface performs a POST /api/v1/virtual-machines/{name}/interfaces/create (the `CreateVirtualInterface` operationId) request.
+	// CreateVirtualInterface performs a POST /api/virtual-machines/{name}/interfaces/create (the `CreateVirtualInterface` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateVirtualInterface(ctx context.Context, name string, body CreateVirtualInterfaceJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListVirtualJournalEntries performs a GET /api/v1/virtual-machines/{name}/journal-entries (the `ListVirtualJournalEntries` operationId) request.
+	// ListVirtualJournalEntries performs a GET /api/virtual-machines/{name}/journal-entries (the `ListVirtualJournalEntries` operationId) request.
 	ListVirtualJournalEntries(ctx context.Context, name string, params *ListVirtualJournalEntriesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// AddVirtualJournalEntryWithBody performs a POST /api/v1/virtual-machines/{name}/journal-entries (the `AddVirtualJournalEntry` operationId) request,
+	// AddVirtualJournalEntryWithBody performs a POST /api/virtual-machines/{name}/journal-entries (the `AddVirtualJournalEntry` operationId) request,
 	// with any type of body and a specified content type.
 	AddVirtualJournalEntryWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// AddVirtualJournalEntry performs a POST /api/v1/virtual-machines/{name}/journal-entries (the `AddVirtualJournalEntry` operationId) request.
+	// AddVirtualJournalEntry performs a POST /api/virtual-machines/{name}/journal-entries (the `AddVirtualJournalEntry` operationId) request.
 	// Takes a body of the `application/json` content type.
 	AddVirtualJournalEntry(ctx context.Context, name string, body AddVirtualJournalEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListVirtualLabels performs a GET /api/v1/virtual-machines/{name}/labels (the `ListVirtualLabels` operationId) request.
+	// ListVirtualLabels performs a GET /api/virtual-machines/{name}/labels (the `ListVirtualLabels` operationId) request.
 	ListVirtualLabels(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// RemoveVirtualLabel performs a DELETE /api/v1/virtual-machines/{name}/labels/{key} (the `RemoveVirtualLabel` operationId) request.
+	// RemoveVirtualLabel performs a DELETE /api/virtual-machines/{name}/labels/{key} (the `RemoveVirtualLabel` operationId) request.
 	RemoveVirtualLabel(ctx context.Context, name string, key string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// SetVirtualLabelWithBody performs a PUT /api/v1/virtual-machines/{name}/labels/{key} (the `SetVirtualLabel` operationId) request,
+	// SetVirtualLabelWithBody performs a PUT /api/virtual-machines/{name}/labels/{key} (the `SetVirtualLabel` operationId) request,
 	// with any type of body and a specified content type.
 	SetVirtualLabelWithBody(ctx context.Context, name string, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// SetVirtualLabel performs a PUT /api/v1/virtual-machines/{name}/labels/{key} (the `SetVirtualLabel` operationId) request.
+	// SetVirtualLabel performs a PUT /api/virtual-machines/{name}/labels/{key} (the `SetVirtualLabel` operationId) request.
 	// Takes a body of the `application/json` content type.
 	SetVirtualLabel(ctx context.Context, name string, key string, body SetVirtualLabelJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// RemoveVirtualTag performs a DELETE /api/v1/virtual-machines/{name}/tags/{tag} (the `RemoveVirtualTag` operationId) request.
+	// RemoveVirtualTag performs a DELETE /api/virtual-machines/{name}/tags/{tag} (the `RemoveVirtualTag` operationId) request.
 	RemoveVirtualTag(ctx context.Context, name string, tag string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// AddVirtualTag performs a PUT /api/v1/virtual-machines/{name}/tags/{tag} (the `AddVirtualTag` operationId) request.
+	// AddVirtualTag performs a PUT /api/virtual-machines/{name}/tags/{tag} (the `AddVirtualTag` operationId) request.
 	AddVirtualTag(ctx context.Context, name string, tag string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateVirtualTunnelTerminationWithBody performs a POST /api/v1/virtual-machines/{name}/tunnel-terminations/create (the `CreateVirtualTunnelTermination` operationId) request,
+	// CreateVirtualTunnelTerminationWithBody performs a POST /api/virtual-machines/{name}/tunnel-terminations/create (the `CreateVirtualTunnelTermination` operationId) request,
 	// with any type of body and a specified content type.
 	CreateVirtualTunnelTerminationWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateVirtualTunnelTermination performs a POST /api/v1/virtual-machines/{name}/tunnel-terminations/create (the `CreateVirtualTunnelTermination` operationId) request.
+	// CreateVirtualTunnelTermination performs a POST /api/virtual-machines/{name}/tunnel-terminations/create (the `CreateVirtualTunnelTermination` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateVirtualTunnelTermination(ctx context.Context, name string, body CreateVirtualTunnelTerminationJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListWirelessNetworks performs a GET /api/v1/wireless-networks (the `ListWirelessNetworks` operationId) request.
+	// ListWirelessNetworks performs a GET /api/wireless-networks (the `ListWirelessNetworks` operationId) request.
 	ListWirelessNetworks(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateWirelessNetworkWithBody performs a POST /api/v1/wireless-networks (the `CreateWirelessNetwork` operationId) request,
+	// CreateWirelessNetworkWithBody performs a POST /api/wireless-networks (the `CreateWirelessNetwork` operationId) request,
 	// with any type of body and a specified content type.
 	CreateWirelessNetworkWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateWirelessNetwork performs a POST /api/v1/wireless-networks (the `CreateWirelessNetwork` operationId) request.
+	// CreateWirelessNetwork performs a POST /api/wireless-networks (the `CreateWirelessNetwork` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateWirelessNetwork(ctx context.Context, body CreateWirelessNetworkJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
 
-// ListAddressRanges performs a GET /api/v1/address-ranges (the `ListAddressRanges` operationId) request.
+// ListAddressRanges performs a GET /api/address-ranges (the `ListAddressRanges` operationId) request.
 func (c *Client) ListAddressRanges(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListAddressRangesRequest(c.Server)
 	if err != nil {
@@ -1034,7 +1034,7 @@ func (c *Client) ListAddressRanges(ctx context.Context, reqEditors ...RequestEdi
 	return c.Client.Do(req)
 }
 
-// CreateAddressRangeWithBody performs a POST /api/v1/address-ranges (the `CreateAddressRange` operationId) request,
+// CreateAddressRangeWithBody performs a POST /api/address-ranges (the `CreateAddressRange` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CreateAddressRangeWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateAddressRangeRequestWithBody(c.Server, contentType, body)
@@ -1048,7 +1048,7 @@ func (c *Client) CreateAddressRangeWithBody(ctx context.Context, contentType str
 	return c.Client.Do(req)
 }
 
-// CreateAddressRange performs a POST /api/v1/address-ranges (the `CreateAddressRange` operationId) request.
+// CreateAddressRange performs a POST /api/address-ranges (the `CreateAddressRange` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateAddressRange(ctx context.Context, body CreateAddressRangeJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateAddressRangeRequest(c.Server, body)
@@ -1062,7 +1062,7 @@ func (c *Client) CreateAddressRange(ctx context.Context, body CreateAddressRange
 	return c.Client.Do(req)
 }
 
-// DeleteAddress performs a DELETE /api/v1/addresses/{identifier} (the `DeleteAddress` operationId) request.
+// DeleteAddress performs a DELETE /api/addresses/{identifier} (the `DeleteAddress` operationId) request.
 func (c *Client) DeleteAddress(ctx context.Context, identifier int32, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewDeleteAddressRequest(c.Server, identifier)
 	if err != nil {
@@ -1075,7 +1075,7 @@ func (c *Client) DeleteAddress(ctx context.Context, identifier int32, reqEditors
 	return c.Client.Do(req)
 }
 
-// ListCables performs a GET /api/v1/cables (the `ListCables` operationId) request.
+// ListCables performs a GET /api/cables (the `ListCables` operationId) request.
 func (c *Client) ListCables(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListCablesRequest(c.Server)
 	if err != nil {
@@ -1088,7 +1088,7 @@ func (c *Client) ListCables(ctx context.Context, reqEditors ...RequestEditorFn) 
 	return c.Client.Do(req)
 }
 
-// CreateCableWithBody performs a POST /api/v1/cables (the `CreateCable` operationId) request,
+// CreateCableWithBody performs a POST /api/cables (the `CreateCable` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CreateCableWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateCableRequestWithBody(c.Server, contentType, body)
@@ -1102,7 +1102,7 @@ func (c *Client) CreateCableWithBody(ctx context.Context, contentType string, bo
 	return c.Client.Do(req)
 }
 
-// CreateCable performs a POST /api/v1/cables (the `CreateCable` operationId) request.
+// CreateCable performs a POST /api/cables (the `CreateCable` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateCable(ctx context.Context, body CreateCableJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateCableRequest(c.Server, body)
@@ -1116,7 +1116,7 @@ func (c *Client) CreateCable(ctx context.Context, body CreateCableJSONRequestBod
 	return c.Client.Do(req)
 }
 
-// ListClusterTypes performs a GET /api/v1/cluster-types (the `ListClusterTypes` operationId) request.
+// ListClusterTypes performs a GET /api/cluster-types (the `ListClusterTypes` operationId) request.
 func (c *Client) ListClusterTypes(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListClusterTypesRequest(c.Server)
 	if err != nil {
@@ -1129,7 +1129,7 @@ func (c *Client) ListClusterTypes(ctx context.Context, reqEditors ...RequestEdit
 	return c.Client.Do(req)
 }
 
-// CreateClusterTypeWithBody performs a POST /api/v1/cluster-types (the `CreateClusterType` operationId) request,
+// CreateClusterTypeWithBody performs a POST /api/cluster-types (the `CreateClusterType` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CreateClusterTypeWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateClusterTypeRequestWithBody(c.Server, contentType, body)
@@ -1143,7 +1143,7 @@ func (c *Client) CreateClusterTypeWithBody(ctx context.Context, contentType stri
 	return c.Client.Do(req)
 }
 
-// CreateClusterType performs a POST /api/v1/cluster-types (the `CreateClusterType` operationId) request.
+// CreateClusterType performs a POST /api/cluster-types (the `CreateClusterType` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateClusterType(ctx context.Context, body CreateClusterTypeJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateClusterTypeRequest(c.Server, body)
@@ -1157,7 +1157,7 @@ func (c *Client) CreateClusterType(ctx context.Context, body CreateClusterTypeJS
 	return c.Client.Do(req)
 }
 
-// ListClusters performs a GET /api/v1/clusters (the `ListClusters` operationId) request.
+// ListClusters performs a GET /api/clusters (the `ListClusters` operationId) request.
 func (c *Client) ListClusters(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListClustersRequest(c.Server)
 	if err != nil {
@@ -1170,7 +1170,7 @@ func (c *Client) ListClusters(ctx context.Context, reqEditors ...RequestEditorFn
 	return c.Client.Do(req)
 }
 
-// CreateClusterWithBody performs a POST /api/v1/clusters (the `CreateCluster` operationId) request,
+// CreateClusterWithBody performs a POST /api/clusters (the `CreateCluster` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CreateClusterWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateClusterRequestWithBody(c.Server, contentType, body)
@@ -1184,7 +1184,7 @@ func (c *Client) CreateClusterWithBody(ctx context.Context, contentType string, 
 	return c.Client.Do(req)
 }
 
-// CreateCluster performs a POST /api/v1/clusters (the `CreateCluster` operationId) request.
+// CreateCluster performs a POST /api/clusters (the `CreateCluster` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateCluster(ctx context.Context, body CreateClusterJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateClusterRequest(c.Server, body)
@@ -1198,7 +1198,7 @@ func (c *Client) CreateCluster(ctx context.Context, body CreateClusterJSONReques
 	return c.Client.Do(req)
 }
 
-// ListDeviceRoles performs a GET /api/v1/device-roles (the `ListDeviceRoles` operationId) request.
+// ListDeviceRoles performs a GET /api/device-roles (the `ListDeviceRoles` operationId) request.
 func (c *Client) ListDeviceRoles(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListDeviceRolesRequest(c.Server)
 	if err != nil {
@@ -1211,7 +1211,7 @@ func (c *Client) ListDeviceRoles(ctx context.Context, reqEditors ...RequestEdito
 	return c.Client.Do(req)
 }
 
-// CreateDeviceRoleWithBody performs a POST /api/v1/device-roles (the `CreateDeviceRole` operationId) request,
+// CreateDeviceRoleWithBody performs a POST /api/device-roles (the `CreateDeviceRole` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CreateDeviceRoleWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateDeviceRoleRequestWithBody(c.Server, contentType, body)
@@ -1225,7 +1225,7 @@ func (c *Client) CreateDeviceRoleWithBody(ctx context.Context, contentType strin
 	return c.Client.Do(req)
 }
 
-// CreateDeviceRole performs a POST /api/v1/device-roles (the `CreateDeviceRole` operationId) request.
+// CreateDeviceRole performs a POST /api/device-roles (the `CreateDeviceRole` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateDeviceRole(ctx context.Context, body CreateDeviceRoleJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateDeviceRoleRequest(c.Server, body)
@@ -1239,7 +1239,7 @@ func (c *Client) CreateDeviceRole(ctx context.Context, body CreateDeviceRoleJSON
 	return c.Client.Do(req)
 }
 
-// ListDeviceTypes performs a GET /api/v1/device-types (the `ListDeviceTypes` operationId) request.
+// ListDeviceTypes performs a GET /api/device-types (the `ListDeviceTypes` operationId) request.
 func (c *Client) ListDeviceTypes(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListDeviceTypesRequest(c.Server)
 	if err != nil {
@@ -1252,7 +1252,7 @@ func (c *Client) ListDeviceTypes(ctx context.Context, reqEditors ...RequestEdito
 	return c.Client.Do(req)
 }
 
-// CreateDeviceTypeWithBody performs a POST /api/v1/device-types (the `CreateDeviceType` operationId) request,
+// CreateDeviceTypeWithBody performs a POST /api/device-types (the `CreateDeviceType` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CreateDeviceTypeWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateDeviceTypeRequestWithBody(c.Server, contentType, body)
@@ -1266,7 +1266,7 @@ func (c *Client) CreateDeviceTypeWithBody(ctx context.Context, contentType strin
 	return c.Client.Do(req)
 }
 
-// CreateDeviceType performs a POST /api/v1/device-types (the `CreateDeviceType` operationId) request.
+// CreateDeviceType performs a POST /api/device-types (the `CreateDeviceType` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateDeviceType(ctx context.Context, body CreateDeviceTypeJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateDeviceTypeRequest(c.Server, body)
@@ -1280,7 +1280,7 @@ func (c *Client) CreateDeviceType(ctx context.Context, body CreateDeviceTypeJSON
 	return c.Client.Do(req)
 }
 
-// ListDevices performs a GET /api/v1/devices (the `ListDevices` operationId) request.
+// ListDevices performs a GET /api/devices (the `ListDevices` operationId) request.
 func (c *Client) ListDevices(ctx context.Context, params *ListDevicesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListDevicesRequest(c.Server, params)
 	if err != nil {
@@ -1293,7 +1293,7 @@ func (c *Client) ListDevices(ctx context.Context, params *ListDevicesParams, req
 	return c.Client.Do(req)
 }
 
-// CreateDeviceWithBody performs a POST /api/v1/devices/create (the `CreateDevice` operationId) request,
+// CreateDeviceWithBody performs a POST /api/devices/create (the `CreateDevice` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CreateDeviceWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateDeviceRequestWithBody(c.Server, contentType, body)
@@ -1307,7 +1307,7 @@ func (c *Client) CreateDeviceWithBody(ctx context.Context, contentType string, b
 	return c.Client.Do(req)
 }
 
-// CreateDevice performs a POST /api/v1/devices/create (the `CreateDevice` operationId) request.
+// CreateDevice performs a POST /api/devices/create (the `CreateDevice` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateDevice(ctx context.Context, body CreateDeviceJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateDeviceRequest(c.Server, body)
@@ -1321,7 +1321,7 @@ func (c *Client) CreateDevice(ctx context.Context, body CreateDeviceJSONRequestB
 	return c.Client.Do(req)
 }
 
-// GetDevice performs a GET /api/v1/devices/{name} (the `GetDevice` operationId) request.
+// GetDevice performs a GET /api/devices/{name} (the `GetDevice` operationId) request.
 func (c *Client) GetDevice(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetDeviceRequest(c.Server, name)
 	if err != nil {
@@ -1334,7 +1334,7 @@ func (c *Client) GetDevice(ctx context.Context, name string, reqEditors ...Reque
 	return c.Client.Do(req)
 }
 
-// UpdateDeviceWithBody performs a PATCH /api/v1/devices/{name} (the `UpdateDevice` operationId) request,
+// UpdateDeviceWithBody performs a PATCH /api/devices/{name} (the `UpdateDevice` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) UpdateDeviceWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewUpdateDeviceRequestWithBody(c.Server, name, contentType, body)
@@ -1348,7 +1348,7 @@ func (c *Client) UpdateDeviceWithBody(ctx context.Context, name string, contentT
 	return c.Client.Do(req)
 }
 
-// UpdateDevice performs a PATCH /api/v1/devices/{name} (the `UpdateDevice` operationId) request.
+// UpdateDevice performs a PATCH /api/devices/{name} (the `UpdateDevice` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) UpdateDevice(ctx context.Context, name string, body UpdateDeviceJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewUpdateDeviceRequest(c.Server, name, body)
@@ -1362,7 +1362,7 @@ func (c *Client) UpdateDevice(ctx context.Context, name string, body UpdateDevic
 	return c.Client.Do(req)
 }
 
-// ListAddresses performs a GET /api/v1/devices/{name}/addresses (the `ListAddresses` operationId) request.
+// ListAddresses performs a GET /api/devices/{name}/addresses (the `ListAddresses` operationId) request.
 func (c *Client) ListAddresses(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListAddressesRequest(c.Server, name)
 	if err != nil {
@@ -1375,7 +1375,7 @@ func (c *Client) ListAddresses(ctx context.Context, name string, reqEditors ...R
 	return c.Client.Do(req)
 }
 
-// CreateAddressWithBody performs a POST /api/v1/devices/{name}/addresses/create (the `CreateAddress` operationId) request,
+// CreateAddressWithBody performs a POST /api/devices/{name}/addresses/create (the `CreateAddress` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CreateAddressWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateAddressRequestWithBody(c.Server, name, contentType, body)
@@ -1389,7 +1389,7 @@ func (c *Client) CreateAddressWithBody(ctx context.Context, name string, content
 	return c.Client.Do(req)
 }
 
-// CreateAddress performs a POST /api/v1/devices/{name}/addresses/create (the `CreateAddress` operationId) request.
+// CreateAddress performs a POST /api/devices/{name}/addresses/create (the `CreateAddress` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateAddress(ctx context.Context, name string, body CreateAddressJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateAddressRequest(c.Server, name, body)
@@ -1403,7 +1403,7 @@ func (c *Client) CreateAddress(ctx context.Context, name string, body CreateAddr
 	return c.Client.Do(req)
 }
 
-// ListInterfaces performs a GET /api/v1/devices/{name}/interfaces (the `ListInterfaces` operationId) request.
+// ListInterfaces performs a GET /api/devices/{name}/interfaces (the `ListInterfaces` operationId) request.
 func (c *Client) ListInterfaces(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListInterfacesRequest(c.Server, name)
 	if err != nil {
@@ -1416,7 +1416,7 @@ func (c *Client) ListInterfaces(ctx context.Context, name string, reqEditors ...
 	return c.Client.Do(req)
 }
 
-// CreateInterfaceWithBody performs a POST /api/v1/devices/{name}/interfaces/create (the `CreateInterface` operationId) request,
+// CreateInterfaceWithBody performs a POST /api/devices/{name}/interfaces/create (the `CreateInterface` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CreateInterfaceWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateInterfaceRequestWithBody(c.Server, name, contentType, body)
@@ -1430,7 +1430,7 @@ func (c *Client) CreateInterfaceWithBody(ctx context.Context, name string, conte
 	return c.Client.Do(req)
 }
 
-// CreateInterface performs a POST /api/v1/devices/{name}/interfaces/create (the `CreateInterface` operationId) request.
+// CreateInterface performs a POST /api/devices/{name}/interfaces/create (the `CreateInterface` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateInterface(ctx context.Context, name string, body CreateInterfaceJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateInterfaceRequest(c.Server, name, body)
@@ -1444,7 +1444,7 @@ func (c *Client) CreateInterface(ctx context.Context, name string, body CreateIn
 	return c.Client.Do(req)
 }
 
-// ListDeviceJournalEntries performs a GET /api/v1/devices/{name}/journal-entries (the `ListDeviceJournalEntries` operationId) request.
+// ListDeviceJournalEntries performs a GET /api/devices/{name}/journal-entries (the `ListDeviceJournalEntries` operationId) request.
 func (c *Client) ListDeviceJournalEntries(ctx context.Context, name string, params *ListDeviceJournalEntriesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListDeviceJournalEntriesRequest(c.Server, name, params)
 	if err != nil {
@@ -1457,7 +1457,7 @@ func (c *Client) ListDeviceJournalEntries(ctx context.Context, name string, para
 	return c.Client.Do(req)
 }
 
-// AddDeviceJournalEntryWithBody performs a POST /api/v1/devices/{name}/journal-entries (the `AddDeviceJournalEntry` operationId) request,
+// AddDeviceJournalEntryWithBody performs a POST /api/devices/{name}/journal-entries (the `AddDeviceJournalEntry` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) AddDeviceJournalEntryWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewAddDeviceJournalEntryRequestWithBody(c.Server, name, contentType, body)
@@ -1471,7 +1471,7 @@ func (c *Client) AddDeviceJournalEntryWithBody(ctx context.Context, name string,
 	return c.Client.Do(req)
 }
 
-// AddDeviceJournalEntry performs a POST /api/v1/devices/{name}/journal-entries (the `AddDeviceJournalEntry` operationId) request.
+// AddDeviceJournalEntry performs a POST /api/devices/{name}/journal-entries (the `AddDeviceJournalEntry` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) AddDeviceJournalEntry(ctx context.Context, name string, body AddDeviceJournalEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewAddDeviceJournalEntryRequest(c.Server, name, body)
@@ -1485,7 +1485,7 @@ func (c *Client) AddDeviceJournalEntry(ctx context.Context, name string, body Ad
 	return c.Client.Do(req)
 }
 
-// ListDeviceLabels performs a GET /api/v1/devices/{name}/labels (the `ListDeviceLabels` operationId) request.
+// ListDeviceLabels performs a GET /api/devices/{name}/labels (the `ListDeviceLabels` operationId) request.
 func (c *Client) ListDeviceLabels(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListDeviceLabelsRequest(c.Server, name)
 	if err != nil {
@@ -1498,7 +1498,7 @@ func (c *Client) ListDeviceLabels(ctx context.Context, name string, reqEditors .
 	return c.Client.Do(req)
 }
 
-// RemoveDeviceLabel performs a DELETE /api/v1/devices/{name}/labels/{key} (the `RemoveDeviceLabel` operationId) request.
+// RemoveDeviceLabel performs a DELETE /api/devices/{name}/labels/{key} (the `RemoveDeviceLabel` operationId) request.
 func (c *Client) RemoveDeviceLabel(ctx context.Context, name string, key string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewRemoveDeviceLabelRequest(c.Server, name, key)
 	if err != nil {
@@ -1511,7 +1511,7 @@ func (c *Client) RemoveDeviceLabel(ctx context.Context, name string, key string,
 	return c.Client.Do(req)
 }
 
-// SetDeviceLabelWithBody performs a PUT /api/v1/devices/{name}/labels/{key} (the `SetDeviceLabel` operationId) request,
+// SetDeviceLabelWithBody performs a PUT /api/devices/{name}/labels/{key} (the `SetDeviceLabel` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) SetDeviceLabelWithBody(ctx context.Context, name string, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewSetDeviceLabelRequestWithBody(c.Server, name, key, contentType, body)
@@ -1525,7 +1525,7 @@ func (c *Client) SetDeviceLabelWithBody(ctx context.Context, name string, key st
 	return c.Client.Do(req)
 }
 
-// SetDeviceLabel performs a PUT /api/v1/devices/{name}/labels/{key} (the `SetDeviceLabel` operationId) request.
+// SetDeviceLabel performs a PUT /api/devices/{name}/labels/{key} (the `SetDeviceLabel` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) SetDeviceLabel(ctx context.Context, name string, key string, body SetDeviceLabelJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewSetDeviceLabelRequest(c.Server, name, key, body)
@@ -1539,7 +1539,7 @@ func (c *Client) SetDeviceLabel(ctx context.Context, name string, key string, bo
 	return c.Client.Do(req)
 }
 
-// ListDeviceTags performs a GET /api/v1/devices/{name}/tags (the `ListDeviceTags` operationId) request.
+// ListDeviceTags performs a GET /api/devices/{name}/tags (the `ListDeviceTags` operationId) request.
 func (c *Client) ListDeviceTags(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListDeviceTagsRequest(c.Server, name)
 	if err != nil {
@@ -1552,7 +1552,7 @@ func (c *Client) ListDeviceTags(ctx context.Context, name string, reqEditors ...
 	return c.Client.Do(req)
 }
 
-// RemoveDeviceTag performs a DELETE /api/v1/devices/{name}/tags/{tag} (the `RemoveDeviceTag` operationId) request.
+// RemoveDeviceTag performs a DELETE /api/devices/{name}/tags/{tag} (the `RemoveDeviceTag` operationId) request.
 func (c *Client) RemoveDeviceTag(ctx context.Context, name string, tag string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewRemoveDeviceTagRequest(c.Server, name, tag)
 	if err != nil {
@@ -1565,7 +1565,7 @@ func (c *Client) RemoveDeviceTag(ctx context.Context, name string, tag string, r
 	return c.Client.Do(req)
 }
 
-// AddDeviceTag performs a PUT /api/v1/devices/{name}/tags/{tag} (the `AddDeviceTag` operationId) request.
+// AddDeviceTag performs a PUT /api/devices/{name}/tags/{tag} (the `AddDeviceTag` operationId) request.
 func (c *Client) AddDeviceTag(ctx context.Context, name string, tag string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewAddDeviceTagRequest(c.Server, name, tag)
 	if err != nil {
@@ -1578,7 +1578,7 @@ func (c *Client) AddDeviceTag(ctx context.Context, name string, tag string, reqE
 	return c.Client.Do(req)
 }
 
-// CreateDeviceTunnelTerminationWithBody performs a POST /api/v1/devices/{name}/tunnel-terminations/create (the `CreateDeviceTunnelTermination` operationId) request,
+// CreateDeviceTunnelTerminationWithBody performs a POST /api/devices/{name}/tunnel-terminations/create (the `CreateDeviceTunnelTermination` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CreateDeviceTunnelTerminationWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateDeviceTunnelTerminationRequestWithBody(c.Server, name, contentType, body)
@@ -1592,7 +1592,7 @@ func (c *Client) CreateDeviceTunnelTerminationWithBody(ctx context.Context, name
 	return c.Client.Do(req)
 }
 
-// CreateDeviceTunnelTermination performs a POST /api/v1/devices/{name}/tunnel-terminations/create (the `CreateDeviceTunnelTermination` operationId) request.
+// CreateDeviceTunnelTermination performs a POST /api/devices/{name}/tunnel-terminations/create (the `CreateDeviceTunnelTermination` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateDeviceTunnelTermination(ctx context.Context, name string, body CreateDeviceTunnelTerminationJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateDeviceTunnelTerminationRequest(c.Server, name, body)
@@ -1606,7 +1606,7 @@ func (c *Client) CreateDeviceTunnelTermination(ctx context.Context, name string,
 	return c.Client.Do(req)
 }
 
-// DeleteJournalEntry performs a DELETE /api/v1/journal-entries/{identifier} (the `DeleteJournalEntry` operationId) request.
+// DeleteJournalEntry performs a DELETE /api/journal-entries/{identifier} (the `DeleteJournalEntry` operationId) request.
 func (c *Client) DeleteJournalEntry(ctx context.Context, identifier int32, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewDeleteJournalEntryRequest(c.Server, identifier)
 	if err != nil {
@@ -1619,7 +1619,7 @@ func (c *Client) DeleteJournalEntry(ctx context.Context, identifier int32, reqEd
 	return c.Client.Do(req)
 }
 
-// UpdateJournalEntryWithBody performs a PATCH /api/v1/journal-entries/{identifier} (the `UpdateJournalEntry` operationId) request,
+// UpdateJournalEntryWithBody performs a PATCH /api/journal-entries/{identifier} (the `UpdateJournalEntry` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) UpdateJournalEntryWithBody(ctx context.Context, identifier int32, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewUpdateJournalEntryRequestWithBody(c.Server, identifier, contentType, body)
@@ -1633,7 +1633,7 @@ func (c *Client) UpdateJournalEntryWithBody(ctx context.Context, identifier int3
 	return c.Client.Do(req)
 }
 
-// UpdateJournalEntry performs a PATCH /api/v1/journal-entries/{identifier} (the `UpdateJournalEntry` operationId) request.
+// UpdateJournalEntry performs a PATCH /api/journal-entries/{identifier} (the `UpdateJournalEntry` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) UpdateJournalEntry(ctx context.Context, identifier int32, body UpdateJournalEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewUpdateJournalEntryRequest(c.Server, identifier, body)
@@ -1647,7 +1647,7 @@ func (c *Client) UpdateJournalEntry(ctx context.Context, identifier int32, body 
 	return c.Client.Do(req)
 }
 
-// ListLocations performs a GET /api/v1/locations (the `ListLocations` operationId) request.
+// ListLocations performs a GET /api/locations (the `ListLocations` operationId) request.
 func (c *Client) ListLocations(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListLocationsRequest(c.Server)
 	if err != nil {
@@ -1660,7 +1660,7 @@ func (c *Client) ListLocations(ctx context.Context, reqEditors ...RequestEditorF
 	return c.Client.Do(req)
 }
 
-// CreateLocationWithBody performs a POST /api/v1/locations (the `CreateLocation` operationId) request,
+// CreateLocationWithBody performs a POST /api/locations (the `CreateLocation` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CreateLocationWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateLocationRequestWithBody(c.Server, contentType, body)
@@ -1674,7 +1674,7 @@ func (c *Client) CreateLocationWithBody(ctx context.Context, contentType string,
 	return c.Client.Do(req)
 }
 
-// CreateLocation performs a POST /api/v1/locations (the `CreateLocation` operationId) request.
+// CreateLocation performs a POST /api/locations (the `CreateLocation` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateLocation(ctx context.Context, body CreateLocationJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateLocationRequest(c.Server, body)
@@ -1688,7 +1688,7 @@ func (c *Client) CreateLocation(ctx context.Context, body CreateLocationJSONRequ
 	return c.Client.Do(req)
 }
 
-// ListManufacturers performs a GET /api/v1/manufacturers (the `ListManufacturers` operationId) request.
+// ListManufacturers performs a GET /api/manufacturers (the `ListManufacturers` operationId) request.
 func (c *Client) ListManufacturers(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListManufacturersRequest(c.Server)
 	if err != nil {
@@ -1701,7 +1701,7 @@ func (c *Client) ListManufacturers(ctx context.Context, reqEditors ...RequestEdi
 	return c.Client.Do(req)
 }
 
-// CreateManufacturerWithBody performs a POST /api/v1/manufacturers (the `CreateManufacturer` operationId) request,
+// CreateManufacturerWithBody performs a POST /api/manufacturers (the `CreateManufacturer` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CreateManufacturerWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateManufacturerRequestWithBody(c.Server, contentType, body)
@@ -1715,7 +1715,7 @@ func (c *Client) CreateManufacturerWithBody(ctx context.Context, contentType str
 	return c.Client.Do(req)
 }
 
-// CreateManufacturer performs a POST /api/v1/manufacturers (the `CreateManufacturer` operationId) request.
+// CreateManufacturer performs a POST /api/manufacturers (the `CreateManufacturer` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateManufacturer(ctx context.Context, body CreateManufacturerJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateManufacturerRequest(c.Server, body)
@@ -1729,7 +1729,7 @@ func (c *Client) CreateManufacturer(ctx context.Context, body CreateManufacturer
 	return c.Client.Do(req)
 }
 
-// ListPlatforms performs a GET /api/v1/platforms (the `ListPlatforms` operationId) request.
+// ListPlatforms performs a GET /api/platforms (the `ListPlatforms` operationId) request.
 func (c *Client) ListPlatforms(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListPlatformsRequest(c.Server)
 	if err != nil {
@@ -1742,7 +1742,7 @@ func (c *Client) ListPlatforms(ctx context.Context, reqEditors ...RequestEditorF
 	return c.Client.Do(req)
 }
 
-// CreatePlatformWithBody performs a POST /api/v1/platforms (the `CreatePlatform` operationId) request,
+// CreatePlatformWithBody performs a POST /api/platforms (the `CreatePlatform` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CreatePlatformWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreatePlatformRequestWithBody(c.Server, contentType, body)
@@ -1756,7 +1756,7 @@ func (c *Client) CreatePlatformWithBody(ctx context.Context, contentType string,
 	return c.Client.Do(req)
 }
 
-// CreatePlatform performs a POST /api/v1/platforms (the `CreatePlatform` operationId) request.
+// CreatePlatform performs a POST /api/platforms (the `CreatePlatform` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) CreatePlatform(ctx context.Context, body CreatePlatformJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreatePlatformRequest(c.Server, body)
@@ -1770,7 +1770,7 @@ func (c *Client) CreatePlatform(ctx context.Context, body CreatePlatformJSONRequ
 	return c.Client.Do(req)
 }
 
-// ListPrefixes performs a GET /api/v1/prefixes (the `ListPrefixes` operationId) request.
+// ListPrefixes performs a GET /api/prefixes (the `ListPrefixes` operationId) request.
 func (c *Client) ListPrefixes(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListPrefixesRequest(c.Server)
 	if err != nil {
@@ -1783,7 +1783,7 @@ func (c *Client) ListPrefixes(ctx context.Context, reqEditors ...RequestEditorFn
 	return c.Client.Do(req)
 }
 
-// CreatePrefixWithBody performs a POST /api/v1/prefixes (the `CreatePrefix` operationId) request,
+// CreatePrefixWithBody performs a POST /api/prefixes (the `CreatePrefix` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CreatePrefixWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreatePrefixRequestWithBody(c.Server, contentType, body)
@@ -1797,7 +1797,7 @@ func (c *Client) CreatePrefixWithBody(ctx context.Context, contentType string, b
 	return c.Client.Do(req)
 }
 
-// CreatePrefix performs a POST /api/v1/prefixes (the `CreatePrefix` operationId) request.
+// CreatePrefix performs a POST /api/prefixes (the `CreatePrefix` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) CreatePrefix(ctx context.Context, body CreatePrefixJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreatePrefixRequest(c.Server, body)
@@ -1811,7 +1811,7 @@ func (c *Client) CreatePrefix(ctx context.Context, body CreatePrefixJSONRequestB
 	return c.Client.Do(req)
 }
 
-// ListSites performs a GET /api/v1/sites (the `ListSites` operationId) request.
+// ListSites performs a GET /api/sites (the `ListSites` operationId) request.
 func (c *Client) ListSites(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListSitesRequest(c.Server)
 	if err != nil {
@@ -1824,7 +1824,7 @@ func (c *Client) ListSites(ctx context.Context, reqEditors ...RequestEditorFn) (
 	return c.Client.Do(req)
 }
 
-// CreateSiteWithBody performs a POST /api/v1/sites (the `CreateSite` operationId) request,
+// CreateSiteWithBody performs a POST /api/sites (the `CreateSite` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CreateSiteWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateSiteRequestWithBody(c.Server, contentType, body)
@@ -1838,7 +1838,7 @@ func (c *Client) CreateSiteWithBody(ctx context.Context, contentType string, bod
 	return c.Client.Do(req)
 }
 
-// CreateSite performs a POST /api/v1/sites (the `CreateSite` operationId) request.
+// CreateSite performs a POST /api/sites (the `CreateSite` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateSite(ctx context.Context, body CreateSiteJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateSiteRequest(c.Server, body)
@@ -1852,7 +1852,7 @@ func (c *Client) CreateSite(ctx context.Context, body CreateSiteJSONRequestBody,
 	return c.Client.Do(req)
 }
 
-// ListTags performs a GET /api/v1/tags (the `ListTags` operationId) request.
+// ListTags performs a GET /api/tags (the `ListTags` operationId) request.
 func (c *Client) ListTags(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListTagsRequest(c.Server)
 	if err != nil {
@@ -1865,7 +1865,7 @@ func (c *Client) ListTags(ctx context.Context, reqEditors ...RequestEditorFn) (*
 	return c.Client.Do(req)
 }
 
-// CreateTagWithBody performs a POST /api/v1/tags (the `CreateTag` operationId) request,
+// CreateTagWithBody performs a POST /api/tags (the `CreateTag` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CreateTagWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateTagRequestWithBody(c.Server, contentType, body)
@@ -1879,7 +1879,7 @@ func (c *Client) CreateTagWithBody(ctx context.Context, contentType string, body
 	return c.Client.Do(req)
 }
 
-// CreateTag performs a POST /api/v1/tags (the `CreateTag` operationId) request.
+// CreateTag performs a POST /api/tags (the `CreateTag` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateTag(ctx context.Context, body CreateTagJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateTagRequest(c.Server, body)
@@ -1893,7 +1893,7 @@ func (c *Client) CreateTag(ctx context.Context, body CreateTagJSONRequestBody, r
 	return c.Client.Do(req)
 }
 
-// ListTenants performs a GET /api/v1/tenants (the `ListTenants` operationId) request.
+// ListTenants performs a GET /api/tenants (the `ListTenants` operationId) request.
 func (c *Client) ListTenants(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListTenantsRequest(c.Server)
 	if err != nil {
@@ -1906,7 +1906,7 @@ func (c *Client) ListTenants(ctx context.Context, reqEditors ...RequestEditorFn)
 	return c.Client.Do(req)
 }
 
-// CreateTenantWithBody performs a POST /api/v1/tenants (the `CreateTenant` operationId) request,
+// CreateTenantWithBody performs a POST /api/tenants (the `CreateTenant` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CreateTenantWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateTenantRequestWithBody(c.Server, contentType, body)
@@ -1920,7 +1920,7 @@ func (c *Client) CreateTenantWithBody(ctx context.Context, contentType string, b
 	return c.Client.Do(req)
 }
 
-// CreateTenant performs a POST /api/v1/tenants (the `CreateTenant` operationId) request.
+// CreateTenant performs a POST /api/tenants (the `CreateTenant` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateTenant(ctx context.Context, body CreateTenantJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateTenantRequest(c.Server, body)
@@ -1934,7 +1934,7 @@ func (c *Client) CreateTenant(ctx context.Context, body CreateTenantJSONRequestB
 	return c.Client.Do(req)
 }
 
-// ListTunnelGroups performs a GET /api/v1/tunnel-groups (the `ListTunnelGroups` operationId) request.
+// ListTunnelGroups performs a GET /api/tunnel-groups (the `ListTunnelGroups` operationId) request.
 func (c *Client) ListTunnelGroups(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListTunnelGroupsRequest(c.Server)
 	if err != nil {
@@ -1947,7 +1947,7 @@ func (c *Client) ListTunnelGroups(ctx context.Context, reqEditors ...RequestEdit
 	return c.Client.Do(req)
 }
 
-// CreateTunnelGroupWithBody performs a POST /api/v1/tunnel-groups (the `CreateTunnelGroup` operationId) request,
+// CreateTunnelGroupWithBody performs a POST /api/tunnel-groups (the `CreateTunnelGroup` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CreateTunnelGroupWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateTunnelGroupRequestWithBody(c.Server, contentType, body)
@@ -1961,7 +1961,7 @@ func (c *Client) CreateTunnelGroupWithBody(ctx context.Context, contentType stri
 	return c.Client.Do(req)
 }
 
-// CreateTunnelGroup performs a POST /api/v1/tunnel-groups (the `CreateTunnelGroup` operationId) request.
+// CreateTunnelGroup performs a POST /api/tunnel-groups (the `CreateTunnelGroup` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateTunnelGroup(ctx context.Context, body CreateTunnelGroupJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateTunnelGroupRequest(c.Server, body)
@@ -1975,7 +1975,7 @@ func (c *Client) CreateTunnelGroup(ctx context.Context, body CreateTunnelGroupJS
 	return c.Client.Do(req)
 }
 
-// ListTunnelTerminations performs a GET /api/v1/tunnel-terminations (the `ListTunnelTerminations` operationId) request.
+// ListTunnelTerminations performs a GET /api/tunnel-terminations (the `ListTunnelTerminations` operationId) request.
 func (c *Client) ListTunnelTerminations(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListTunnelTerminationsRequest(c.Server)
 	if err != nil {
@@ -1988,7 +1988,7 @@ func (c *Client) ListTunnelTerminations(ctx context.Context, reqEditors ...Reque
 	return c.Client.Do(req)
 }
 
-// ListTunnels performs a GET /api/v1/tunnels (the `ListTunnels` operationId) request.
+// ListTunnels performs a GET /api/tunnels (the `ListTunnels` operationId) request.
 func (c *Client) ListTunnels(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListTunnelsRequest(c.Server)
 	if err != nil {
@@ -2001,7 +2001,7 @@ func (c *Client) ListTunnels(ctx context.Context, reqEditors ...RequestEditorFn)
 	return c.Client.Do(req)
 }
 
-// CreateTunnelWithBody performs a POST /api/v1/tunnels (the `CreateTunnel` operationId) request,
+// CreateTunnelWithBody performs a POST /api/tunnels (the `CreateTunnel` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CreateTunnelWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateTunnelRequestWithBody(c.Server, contentType, body)
@@ -2015,7 +2015,7 @@ func (c *Client) CreateTunnelWithBody(ctx context.Context, contentType string, b
 	return c.Client.Do(req)
 }
 
-// CreateTunnel performs a POST /api/v1/tunnels (the `CreateTunnel` operationId) request.
+// CreateTunnel performs a POST /api/tunnels (the `CreateTunnel` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateTunnel(ctx context.Context, body CreateTunnelJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateTunnelRequest(c.Server, body)
@@ -2029,7 +2029,7 @@ func (c *Client) CreateTunnel(ctx context.Context, body CreateTunnelJSONRequestB
 	return c.Client.Do(req)
 }
 
-// ListVirtualMachines performs a GET /api/v1/virtual-machines (the `ListVirtualMachines` operationId) request.
+// ListVirtualMachines performs a GET /api/virtual-machines (the `ListVirtualMachines` operationId) request.
 func (c *Client) ListVirtualMachines(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListVirtualMachinesRequest(c.Server)
 	if err != nil {
@@ -2042,7 +2042,7 @@ func (c *Client) ListVirtualMachines(ctx context.Context, reqEditors ...RequestE
 	return c.Client.Do(req)
 }
 
-// CreateVirtualMachineWithBody performs a POST /api/v1/virtual-machines (the `CreateVirtualMachine` operationId) request,
+// CreateVirtualMachineWithBody performs a POST /api/virtual-machines (the `CreateVirtualMachine` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CreateVirtualMachineWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateVirtualMachineRequestWithBody(c.Server, contentType, body)
@@ -2056,7 +2056,7 @@ func (c *Client) CreateVirtualMachineWithBody(ctx context.Context, contentType s
 	return c.Client.Do(req)
 }
 
-// CreateVirtualMachine performs a POST /api/v1/virtual-machines (the `CreateVirtualMachine` operationId) request.
+// CreateVirtualMachine performs a POST /api/virtual-machines (the `CreateVirtualMachine` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateVirtualMachine(ctx context.Context, body CreateVirtualMachineJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateVirtualMachineRequest(c.Server, body)
@@ -2070,7 +2070,7 @@ func (c *Client) CreateVirtualMachine(ctx context.Context, body CreateVirtualMac
 	return c.Client.Do(req)
 }
 
-// GetVirtualMachine performs a GET /api/v1/virtual-machines/{name} (the `GetVirtualMachine` operationId) request.
+// GetVirtualMachine performs a GET /api/virtual-machines/{name} (the `GetVirtualMachine` operationId) request.
 func (c *Client) GetVirtualMachine(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetVirtualMachineRequest(c.Server, name)
 	if err != nil {
@@ -2083,7 +2083,7 @@ func (c *Client) GetVirtualMachine(ctx context.Context, name string, reqEditors 
 	return c.Client.Do(req)
 }
 
-// UpdateVirtualMachineWithBody performs a PATCH /api/v1/virtual-machines/{name} (the `UpdateVirtualMachine` operationId) request,
+// UpdateVirtualMachineWithBody performs a PATCH /api/virtual-machines/{name} (the `UpdateVirtualMachine` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) UpdateVirtualMachineWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewUpdateVirtualMachineRequestWithBody(c.Server, name, contentType, body)
@@ -2097,7 +2097,7 @@ func (c *Client) UpdateVirtualMachineWithBody(ctx context.Context, name string, 
 	return c.Client.Do(req)
 }
 
-// UpdateVirtualMachine performs a PATCH /api/v1/virtual-machines/{name} (the `UpdateVirtualMachine` operationId) request.
+// UpdateVirtualMachine performs a PATCH /api/virtual-machines/{name} (the `UpdateVirtualMachine` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) UpdateVirtualMachine(ctx context.Context, name string, body UpdateVirtualMachineJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewUpdateVirtualMachineRequest(c.Server, name, body)
@@ -2111,7 +2111,7 @@ func (c *Client) UpdateVirtualMachine(ctx context.Context, name string, body Upd
 	return c.Client.Do(req)
 }
 
-// ListVirtualAddresses performs a GET /api/v1/virtual-machines/{name}/addresses (the `ListVirtualAddresses` operationId) request.
+// ListVirtualAddresses performs a GET /api/virtual-machines/{name}/addresses (the `ListVirtualAddresses` operationId) request.
 func (c *Client) ListVirtualAddresses(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListVirtualAddressesRequest(c.Server, name)
 	if err != nil {
@@ -2124,7 +2124,7 @@ func (c *Client) ListVirtualAddresses(ctx context.Context, name string, reqEdito
 	return c.Client.Do(req)
 }
 
-// CreateVirtualAddressWithBody performs a POST /api/v1/virtual-machines/{name}/addresses/create (the `CreateVirtualAddress` operationId) request,
+// CreateVirtualAddressWithBody performs a POST /api/virtual-machines/{name}/addresses/create (the `CreateVirtualAddress` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CreateVirtualAddressWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateVirtualAddressRequestWithBody(c.Server, name, contentType, body)
@@ -2138,7 +2138,7 @@ func (c *Client) CreateVirtualAddressWithBody(ctx context.Context, name string, 
 	return c.Client.Do(req)
 }
 
-// CreateVirtualAddress performs a POST /api/v1/virtual-machines/{name}/addresses/create (the `CreateVirtualAddress` operationId) request.
+// CreateVirtualAddress performs a POST /api/virtual-machines/{name}/addresses/create (the `CreateVirtualAddress` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateVirtualAddress(ctx context.Context, name string, body CreateVirtualAddressJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateVirtualAddressRequest(c.Server, name, body)
@@ -2152,7 +2152,7 @@ func (c *Client) CreateVirtualAddress(ctx context.Context, name string, body Cre
 	return c.Client.Do(req)
 }
 
-// ListVirtualDisks performs a GET /api/v1/virtual-machines/{name}/disks (the `ListVirtualDisks` operationId) request.
+// ListVirtualDisks performs a GET /api/virtual-machines/{name}/disks (the `ListVirtualDisks` operationId) request.
 func (c *Client) ListVirtualDisks(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListVirtualDisksRequest(c.Server, name)
 	if err != nil {
@@ -2165,7 +2165,7 @@ func (c *Client) ListVirtualDisks(ctx context.Context, name string, reqEditors .
 	return c.Client.Do(req)
 }
 
-// CreateVirtualDiskWithBody performs a POST /api/v1/virtual-machines/{name}/disks (the `CreateVirtualDisk` operationId) request,
+// CreateVirtualDiskWithBody performs a POST /api/virtual-machines/{name}/disks (the `CreateVirtualDisk` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CreateVirtualDiskWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateVirtualDiskRequestWithBody(c.Server, name, contentType, body)
@@ -2179,7 +2179,7 @@ func (c *Client) CreateVirtualDiskWithBody(ctx context.Context, name string, con
 	return c.Client.Do(req)
 }
 
-// CreateVirtualDisk performs a POST /api/v1/virtual-machines/{name}/disks (the `CreateVirtualDisk` operationId) request.
+// CreateVirtualDisk performs a POST /api/virtual-machines/{name}/disks (the `CreateVirtualDisk` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateVirtualDisk(ctx context.Context, name string, body CreateVirtualDiskJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateVirtualDiskRequest(c.Server, name, body)
@@ -2193,7 +2193,7 @@ func (c *Client) CreateVirtualDisk(ctx context.Context, name string, body Create
 	return c.Client.Do(req)
 }
 
-// ListVirtualInterfaces performs a GET /api/v1/virtual-machines/{name}/interfaces (the `ListVirtualInterfaces` operationId) request.
+// ListVirtualInterfaces performs a GET /api/virtual-machines/{name}/interfaces (the `ListVirtualInterfaces` operationId) request.
 func (c *Client) ListVirtualInterfaces(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListVirtualInterfacesRequest(c.Server, name)
 	if err != nil {
@@ -2206,7 +2206,7 @@ func (c *Client) ListVirtualInterfaces(ctx context.Context, name string, reqEdit
 	return c.Client.Do(req)
 }
 
-// CreateVirtualInterfaceWithBody performs a POST /api/v1/virtual-machines/{name}/interfaces/create (the `CreateVirtualInterface` operationId) request,
+// CreateVirtualInterfaceWithBody performs a POST /api/virtual-machines/{name}/interfaces/create (the `CreateVirtualInterface` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CreateVirtualInterfaceWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateVirtualInterfaceRequestWithBody(c.Server, name, contentType, body)
@@ -2220,7 +2220,7 @@ func (c *Client) CreateVirtualInterfaceWithBody(ctx context.Context, name string
 	return c.Client.Do(req)
 }
 
-// CreateVirtualInterface performs a POST /api/v1/virtual-machines/{name}/interfaces/create (the `CreateVirtualInterface` operationId) request.
+// CreateVirtualInterface performs a POST /api/virtual-machines/{name}/interfaces/create (the `CreateVirtualInterface` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateVirtualInterface(ctx context.Context, name string, body CreateVirtualInterfaceJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateVirtualInterfaceRequest(c.Server, name, body)
@@ -2234,7 +2234,7 @@ func (c *Client) CreateVirtualInterface(ctx context.Context, name string, body C
 	return c.Client.Do(req)
 }
 
-// ListVirtualJournalEntries performs a GET /api/v1/virtual-machines/{name}/journal-entries (the `ListVirtualJournalEntries` operationId) request.
+// ListVirtualJournalEntries performs a GET /api/virtual-machines/{name}/journal-entries (the `ListVirtualJournalEntries` operationId) request.
 func (c *Client) ListVirtualJournalEntries(ctx context.Context, name string, params *ListVirtualJournalEntriesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListVirtualJournalEntriesRequest(c.Server, name, params)
 	if err != nil {
@@ -2247,7 +2247,7 @@ func (c *Client) ListVirtualJournalEntries(ctx context.Context, name string, par
 	return c.Client.Do(req)
 }
 
-// AddVirtualJournalEntryWithBody performs a POST /api/v1/virtual-machines/{name}/journal-entries (the `AddVirtualJournalEntry` operationId) request,
+// AddVirtualJournalEntryWithBody performs a POST /api/virtual-machines/{name}/journal-entries (the `AddVirtualJournalEntry` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) AddVirtualJournalEntryWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewAddVirtualJournalEntryRequestWithBody(c.Server, name, contentType, body)
@@ -2261,7 +2261,7 @@ func (c *Client) AddVirtualJournalEntryWithBody(ctx context.Context, name string
 	return c.Client.Do(req)
 }
 
-// AddVirtualJournalEntry performs a POST /api/v1/virtual-machines/{name}/journal-entries (the `AddVirtualJournalEntry` operationId) request.
+// AddVirtualJournalEntry performs a POST /api/virtual-machines/{name}/journal-entries (the `AddVirtualJournalEntry` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) AddVirtualJournalEntry(ctx context.Context, name string, body AddVirtualJournalEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewAddVirtualJournalEntryRequest(c.Server, name, body)
@@ -2275,7 +2275,7 @@ func (c *Client) AddVirtualJournalEntry(ctx context.Context, name string, body A
 	return c.Client.Do(req)
 }
 
-// ListVirtualLabels performs a GET /api/v1/virtual-machines/{name}/labels (the `ListVirtualLabels` operationId) request.
+// ListVirtualLabels performs a GET /api/virtual-machines/{name}/labels (the `ListVirtualLabels` operationId) request.
 func (c *Client) ListVirtualLabels(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListVirtualLabelsRequest(c.Server, name)
 	if err != nil {
@@ -2288,7 +2288,7 @@ func (c *Client) ListVirtualLabels(ctx context.Context, name string, reqEditors 
 	return c.Client.Do(req)
 }
 
-// RemoveVirtualLabel performs a DELETE /api/v1/virtual-machines/{name}/labels/{key} (the `RemoveVirtualLabel` operationId) request.
+// RemoveVirtualLabel performs a DELETE /api/virtual-machines/{name}/labels/{key} (the `RemoveVirtualLabel` operationId) request.
 func (c *Client) RemoveVirtualLabel(ctx context.Context, name string, key string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewRemoveVirtualLabelRequest(c.Server, name, key)
 	if err != nil {
@@ -2301,7 +2301,7 @@ func (c *Client) RemoveVirtualLabel(ctx context.Context, name string, key string
 	return c.Client.Do(req)
 }
 
-// SetVirtualLabelWithBody performs a PUT /api/v1/virtual-machines/{name}/labels/{key} (the `SetVirtualLabel` operationId) request,
+// SetVirtualLabelWithBody performs a PUT /api/virtual-machines/{name}/labels/{key} (the `SetVirtualLabel` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) SetVirtualLabelWithBody(ctx context.Context, name string, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewSetVirtualLabelRequestWithBody(c.Server, name, key, contentType, body)
@@ -2315,7 +2315,7 @@ func (c *Client) SetVirtualLabelWithBody(ctx context.Context, name string, key s
 	return c.Client.Do(req)
 }
 
-// SetVirtualLabel performs a PUT /api/v1/virtual-machines/{name}/labels/{key} (the `SetVirtualLabel` operationId) request.
+// SetVirtualLabel performs a PUT /api/virtual-machines/{name}/labels/{key} (the `SetVirtualLabel` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) SetVirtualLabel(ctx context.Context, name string, key string, body SetVirtualLabelJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewSetVirtualLabelRequest(c.Server, name, key, body)
@@ -2329,7 +2329,7 @@ func (c *Client) SetVirtualLabel(ctx context.Context, name string, key string, b
 	return c.Client.Do(req)
 }
 
-// RemoveVirtualTag performs a DELETE /api/v1/virtual-machines/{name}/tags/{tag} (the `RemoveVirtualTag` operationId) request.
+// RemoveVirtualTag performs a DELETE /api/virtual-machines/{name}/tags/{tag} (the `RemoveVirtualTag` operationId) request.
 func (c *Client) RemoveVirtualTag(ctx context.Context, name string, tag string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewRemoveVirtualTagRequest(c.Server, name, tag)
 	if err != nil {
@@ -2342,7 +2342,7 @@ func (c *Client) RemoveVirtualTag(ctx context.Context, name string, tag string, 
 	return c.Client.Do(req)
 }
 
-// AddVirtualTag performs a PUT /api/v1/virtual-machines/{name}/tags/{tag} (the `AddVirtualTag` operationId) request.
+// AddVirtualTag performs a PUT /api/virtual-machines/{name}/tags/{tag} (the `AddVirtualTag` operationId) request.
 func (c *Client) AddVirtualTag(ctx context.Context, name string, tag string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewAddVirtualTagRequest(c.Server, name, tag)
 	if err != nil {
@@ -2355,7 +2355,7 @@ func (c *Client) AddVirtualTag(ctx context.Context, name string, tag string, req
 	return c.Client.Do(req)
 }
 
-// CreateVirtualTunnelTerminationWithBody performs a POST /api/v1/virtual-machines/{name}/tunnel-terminations/create (the `CreateVirtualTunnelTermination` operationId) request,
+// CreateVirtualTunnelTerminationWithBody performs a POST /api/virtual-machines/{name}/tunnel-terminations/create (the `CreateVirtualTunnelTermination` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CreateVirtualTunnelTerminationWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateVirtualTunnelTerminationRequestWithBody(c.Server, name, contentType, body)
@@ -2369,7 +2369,7 @@ func (c *Client) CreateVirtualTunnelTerminationWithBody(ctx context.Context, nam
 	return c.Client.Do(req)
 }
 
-// CreateVirtualTunnelTermination performs a POST /api/v1/virtual-machines/{name}/tunnel-terminations/create (the `CreateVirtualTunnelTermination` operationId) request.
+// CreateVirtualTunnelTermination performs a POST /api/virtual-machines/{name}/tunnel-terminations/create (the `CreateVirtualTunnelTermination` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateVirtualTunnelTermination(ctx context.Context, name string, body CreateVirtualTunnelTerminationJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateVirtualTunnelTerminationRequest(c.Server, name, body)
@@ -2383,7 +2383,7 @@ func (c *Client) CreateVirtualTunnelTermination(ctx context.Context, name string
 	return c.Client.Do(req)
 }
 
-// ListWirelessNetworks performs a GET /api/v1/wireless-networks (the `ListWirelessNetworks` operationId) request.
+// ListWirelessNetworks performs a GET /api/wireless-networks (the `ListWirelessNetworks` operationId) request.
 func (c *Client) ListWirelessNetworks(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListWirelessNetworksRequest(c.Server)
 	if err != nil {
@@ -2396,7 +2396,7 @@ func (c *Client) ListWirelessNetworks(ctx context.Context, reqEditors ...Request
 	return c.Client.Do(req)
 }
 
-// CreateWirelessNetworkWithBody performs a POST /api/v1/wireless-networks (the `CreateWirelessNetwork` operationId) request,
+// CreateWirelessNetworkWithBody performs a POST /api/wireless-networks (the `CreateWirelessNetwork` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CreateWirelessNetworkWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateWirelessNetworkRequestWithBody(c.Server, contentType, body)
@@ -2410,7 +2410,7 @@ func (c *Client) CreateWirelessNetworkWithBody(ctx context.Context, contentType 
 	return c.Client.Do(req)
 }
 
-// CreateWirelessNetwork performs a POST /api/v1/wireless-networks (the `CreateWirelessNetwork` operationId) request.
+// CreateWirelessNetwork performs a POST /api/wireless-networks (the `CreateWirelessNetwork` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateWirelessNetwork(ctx context.Context, body CreateWirelessNetworkJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateWirelessNetworkRequest(c.Server, body)
@@ -2433,7 +2433,7 @@ func NewListAddressRangesRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/address-ranges")
+	operationPath := fmt.Sprintf("/api/address-ranges")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2471,7 +2471,7 @@ func NewCreateAddressRangeRequestWithBody(server string, contentType string, bod
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/address-ranges")
+	operationPath := fmt.Sprintf("/api/address-ranges")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2507,7 +2507,7 @@ func NewDeleteAddressRequest(server string, identifier int32) (*http.Request, er
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/addresses/%s", pathParam0)
+	operationPath := fmt.Sprintf("/api/addresses/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2534,7 +2534,7 @@ func NewListCablesRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/cables")
+	operationPath := fmt.Sprintf("/api/cables")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2572,7 +2572,7 @@ func NewCreateCableRequestWithBody(server string, contentType string, body io.Re
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/cables")
+	operationPath := fmt.Sprintf("/api/cables")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2601,7 +2601,7 @@ func NewListClusterTypesRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/cluster-types")
+	operationPath := fmt.Sprintf("/api/cluster-types")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2639,7 +2639,7 @@ func NewCreateClusterTypeRequestWithBody(server string, contentType string, body
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/cluster-types")
+	operationPath := fmt.Sprintf("/api/cluster-types")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2668,7 +2668,7 @@ func NewListClustersRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/clusters")
+	operationPath := fmt.Sprintf("/api/clusters")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2706,7 +2706,7 @@ func NewCreateClusterRequestWithBody(server string, contentType string, body io.
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/clusters")
+	operationPath := fmt.Sprintf("/api/clusters")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2735,7 +2735,7 @@ func NewListDeviceRolesRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/device-roles")
+	operationPath := fmt.Sprintf("/api/device-roles")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2773,7 +2773,7 @@ func NewCreateDeviceRoleRequestWithBody(server string, contentType string, body 
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/device-roles")
+	operationPath := fmt.Sprintf("/api/device-roles")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2802,7 +2802,7 @@ func NewListDeviceTypesRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/device-types")
+	operationPath := fmt.Sprintf("/api/device-types")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2840,7 +2840,7 @@ func NewCreateDeviceTypeRequestWithBody(server string, contentType string, body 
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/device-types")
+	operationPath := fmt.Sprintf("/api/device-types")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2869,7 +2869,7 @@ func NewListDevicesRequest(server string, params *ListDevicesParams) (*http.Requ
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/devices")
+	operationPath := fmt.Sprintf("/api/devices")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2934,7 +2934,7 @@ func NewCreateDeviceRequestWithBody(server string, contentType string, body io.R
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/devices/create")
+	operationPath := fmt.Sprintf("/api/devices/create")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2970,7 +2970,7 @@ func NewGetDeviceRequest(server string, name string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/devices/%s", pathParam0)
+	operationPath := fmt.Sprintf("/api/devices/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3015,7 +3015,7 @@ func NewUpdateDeviceRequestWithBody(server string, name string, contentType stri
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/devices/%s", pathParam0)
+	operationPath := fmt.Sprintf("/api/devices/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3051,7 +3051,7 @@ func NewListAddressesRequest(server string, name string) (*http.Request, error) 
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/devices/%s/addresses", pathParam0)
+	operationPath := fmt.Sprintf("/api/devices/%s/addresses", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3096,7 +3096,7 @@ func NewCreateAddressRequestWithBody(server string, name string, contentType str
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/devices/%s/addresses/create", pathParam0)
+	operationPath := fmt.Sprintf("/api/devices/%s/addresses/create", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3132,7 +3132,7 @@ func NewListInterfacesRequest(server string, name string) (*http.Request, error)
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/devices/%s/interfaces", pathParam0)
+	operationPath := fmt.Sprintf("/api/devices/%s/interfaces", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3177,7 +3177,7 @@ func NewCreateInterfaceRequestWithBody(server string, name string, contentType s
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/devices/%s/interfaces/create", pathParam0)
+	operationPath := fmt.Sprintf("/api/devices/%s/interfaces/create", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3213,7 +3213,7 @@ func NewListDeviceJournalEntriesRequest(server string, name string, params *List
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/devices/%s/journal-entries", pathParam0)
+	operationPath := fmt.Sprintf("/api/devices/%s/journal-entries", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3297,7 +3297,7 @@ func NewAddDeviceJournalEntryRequestWithBody(server string, name string, content
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/devices/%s/journal-entries", pathParam0)
+	operationPath := fmt.Sprintf("/api/devices/%s/journal-entries", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3333,7 +3333,7 @@ func NewListDeviceLabelsRequest(server string, name string) (*http.Request, erro
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/devices/%s/labels", pathParam0)
+	operationPath := fmt.Sprintf("/api/devices/%s/labels", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3374,7 +3374,7 @@ func NewRemoveDeviceLabelRequest(server string, name string, key string) (*http.
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/devices/%s/labels/%s", pathParam0, pathParam1)
+	operationPath := fmt.Sprintf("/api/devices/%s/labels/%s", pathParam0, pathParam1)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3426,7 +3426,7 @@ func NewSetDeviceLabelRequestWithBody(server string, name string, key string, co
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/devices/%s/labels/%s", pathParam0, pathParam1)
+	operationPath := fmt.Sprintf("/api/devices/%s/labels/%s", pathParam0, pathParam1)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3462,7 +3462,7 @@ func NewListDeviceTagsRequest(server string, name string) (*http.Request, error)
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/devices/%s/tags", pathParam0)
+	operationPath := fmt.Sprintf("/api/devices/%s/tags", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3503,7 +3503,7 @@ func NewRemoveDeviceTagRequest(server string, name string, tag string) (*http.Re
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/devices/%s/tags/%s", pathParam0, pathParam1)
+	operationPath := fmt.Sprintf("/api/devices/%s/tags/%s", pathParam0, pathParam1)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3544,7 +3544,7 @@ func NewAddDeviceTagRequest(server string, name string, tag string) (*http.Reque
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/devices/%s/tags/%s", pathParam0, pathParam1)
+	operationPath := fmt.Sprintf("/api/devices/%s/tags/%s", pathParam0, pathParam1)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3589,7 +3589,7 @@ func NewCreateDeviceTunnelTerminationRequestWithBody(server string, name string,
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/devices/%s/tunnel-terminations/create", pathParam0)
+	operationPath := fmt.Sprintf("/api/devices/%s/tunnel-terminations/create", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3625,7 +3625,7 @@ func NewDeleteJournalEntryRequest(server string, identifier int32) (*http.Reques
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/journal-entries/%s", pathParam0)
+	operationPath := fmt.Sprintf("/api/journal-entries/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3670,7 +3670,7 @@ func NewUpdateJournalEntryRequestWithBody(server string, identifier int32, conte
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/journal-entries/%s", pathParam0)
+	operationPath := fmt.Sprintf("/api/journal-entries/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3699,7 +3699,7 @@ func NewListLocationsRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/locations")
+	operationPath := fmt.Sprintf("/api/locations")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3737,7 +3737,7 @@ func NewCreateLocationRequestWithBody(server string, contentType string, body io
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/locations")
+	operationPath := fmt.Sprintf("/api/locations")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3766,7 +3766,7 @@ func NewListManufacturersRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/manufacturers")
+	operationPath := fmt.Sprintf("/api/manufacturers")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3804,7 +3804,7 @@ func NewCreateManufacturerRequestWithBody(server string, contentType string, bod
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/manufacturers")
+	operationPath := fmt.Sprintf("/api/manufacturers")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3833,7 +3833,7 @@ func NewListPlatformsRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/platforms")
+	operationPath := fmt.Sprintf("/api/platforms")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3871,7 +3871,7 @@ func NewCreatePlatformRequestWithBody(server string, contentType string, body io
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/platforms")
+	operationPath := fmt.Sprintf("/api/platforms")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3900,7 +3900,7 @@ func NewListPrefixesRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/prefixes")
+	operationPath := fmt.Sprintf("/api/prefixes")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3938,7 +3938,7 @@ func NewCreatePrefixRequestWithBody(server string, contentType string, body io.R
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/prefixes")
+	operationPath := fmt.Sprintf("/api/prefixes")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3967,7 +3967,7 @@ func NewListSitesRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/sites")
+	operationPath := fmt.Sprintf("/api/sites")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -4005,7 +4005,7 @@ func NewCreateSiteRequestWithBody(server string, contentType string, body io.Rea
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/sites")
+	operationPath := fmt.Sprintf("/api/sites")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -4034,7 +4034,7 @@ func NewListTagsRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/tags")
+	operationPath := fmt.Sprintf("/api/tags")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -4072,7 +4072,7 @@ func NewCreateTagRequestWithBody(server string, contentType string, body io.Read
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/tags")
+	operationPath := fmt.Sprintf("/api/tags")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -4101,7 +4101,7 @@ func NewListTenantsRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/tenants")
+	operationPath := fmt.Sprintf("/api/tenants")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -4139,7 +4139,7 @@ func NewCreateTenantRequestWithBody(server string, contentType string, body io.R
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/tenants")
+	operationPath := fmt.Sprintf("/api/tenants")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -4168,7 +4168,7 @@ func NewListTunnelGroupsRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/tunnel-groups")
+	operationPath := fmt.Sprintf("/api/tunnel-groups")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -4206,7 +4206,7 @@ func NewCreateTunnelGroupRequestWithBody(server string, contentType string, body
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/tunnel-groups")
+	operationPath := fmt.Sprintf("/api/tunnel-groups")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -4235,7 +4235,7 @@ func NewListTunnelTerminationsRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/tunnel-terminations")
+	operationPath := fmt.Sprintf("/api/tunnel-terminations")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -4262,7 +4262,7 @@ func NewListTunnelsRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/tunnels")
+	operationPath := fmt.Sprintf("/api/tunnels")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -4300,7 +4300,7 @@ func NewCreateTunnelRequestWithBody(server string, contentType string, body io.R
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/tunnels")
+	operationPath := fmt.Sprintf("/api/tunnels")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -4329,7 +4329,7 @@ func NewListVirtualMachinesRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/virtual-machines")
+	operationPath := fmt.Sprintf("/api/virtual-machines")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -4367,7 +4367,7 @@ func NewCreateVirtualMachineRequestWithBody(server string, contentType string, b
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/virtual-machines")
+	operationPath := fmt.Sprintf("/api/virtual-machines")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -4403,7 +4403,7 @@ func NewGetVirtualMachineRequest(server string, name string) (*http.Request, err
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/virtual-machines/%s", pathParam0)
+	operationPath := fmt.Sprintf("/api/virtual-machines/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -4448,7 +4448,7 @@ func NewUpdateVirtualMachineRequestWithBody(server string, name string, contentT
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/virtual-machines/%s", pathParam0)
+	operationPath := fmt.Sprintf("/api/virtual-machines/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -4484,7 +4484,7 @@ func NewListVirtualAddressesRequest(server string, name string) (*http.Request, 
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/virtual-machines/%s/addresses", pathParam0)
+	operationPath := fmt.Sprintf("/api/virtual-machines/%s/addresses", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -4529,7 +4529,7 @@ func NewCreateVirtualAddressRequestWithBody(server string, name string, contentT
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/virtual-machines/%s/addresses/create", pathParam0)
+	operationPath := fmt.Sprintf("/api/virtual-machines/%s/addresses/create", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -4565,7 +4565,7 @@ func NewListVirtualDisksRequest(server string, name string) (*http.Request, erro
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/virtual-machines/%s/disks", pathParam0)
+	operationPath := fmt.Sprintf("/api/virtual-machines/%s/disks", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -4610,7 +4610,7 @@ func NewCreateVirtualDiskRequestWithBody(server string, name string, contentType
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/virtual-machines/%s/disks", pathParam0)
+	operationPath := fmt.Sprintf("/api/virtual-machines/%s/disks", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -4646,7 +4646,7 @@ func NewListVirtualInterfacesRequest(server string, name string) (*http.Request,
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/virtual-machines/%s/interfaces", pathParam0)
+	operationPath := fmt.Sprintf("/api/virtual-machines/%s/interfaces", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -4691,7 +4691,7 @@ func NewCreateVirtualInterfaceRequestWithBody(server string, name string, conten
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/virtual-machines/%s/interfaces/create", pathParam0)
+	operationPath := fmt.Sprintf("/api/virtual-machines/%s/interfaces/create", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -4727,7 +4727,7 @@ func NewListVirtualJournalEntriesRequest(server string, name string, params *Lis
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/virtual-machines/%s/journal-entries", pathParam0)
+	operationPath := fmt.Sprintf("/api/virtual-machines/%s/journal-entries", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -4811,7 +4811,7 @@ func NewAddVirtualJournalEntryRequestWithBody(server string, name string, conten
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/virtual-machines/%s/journal-entries", pathParam0)
+	operationPath := fmt.Sprintf("/api/virtual-machines/%s/journal-entries", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -4847,7 +4847,7 @@ func NewListVirtualLabelsRequest(server string, name string) (*http.Request, err
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/virtual-machines/%s/labels", pathParam0)
+	operationPath := fmt.Sprintf("/api/virtual-machines/%s/labels", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -4888,7 +4888,7 @@ func NewRemoveVirtualLabelRequest(server string, name string, key string) (*http
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/virtual-machines/%s/labels/%s", pathParam0, pathParam1)
+	operationPath := fmt.Sprintf("/api/virtual-machines/%s/labels/%s", pathParam0, pathParam1)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -4940,7 +4940,7 @@ func NewSetVirtualLabelRequestWithBody(server string, name string, key string, c
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/virtual-machines/%s/labels/%s", pathParam0, pathParam1)
+	operationPath := fmt.Sprintf("/api/virtual-machines/%s/labels/%s", pathParam0, pathParam1)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -4983,7 +4983,7 @@ func NewRemoveVirtualTagRequest(server string, name string, tag string) (*http.R
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/virtual-machines/%s/tags/%s", pathParam0, pathParam1)
+	operationPath := fmt.Sprintf("/api/virtual-machines/%s/tags/%s", pathParam0, pathParam1)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -5024,7 +5024,7 @@ func NewAddVirtualTagRequest(server string, name string, tag string) (*http.Requ
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/virtual-machines/%s/tags/%s", pathParam0, pathParam1)
+	operationPath := fmt.Sprintf("/api/virtual-machines/%s/tags/%s", pathParam0, pathParam1)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -5069,7 +5069,7 @@ func NewCreateVirtualTunnelTerminationRequestWithBody(server string, name string
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/virtual-machines/%s/tunnel-terminations/create", pathParam0)
+	operationPath := fmt.Sprintf("/api/virtual-machines/%s/tunnel-terminations/create", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -5098,7 +5098,7 @@ func NewListWirelessNetworksRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/wireless-networks")
+	operationPath := fmt.Sprintf("/api/wireless-networks")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -5136,7 +5136,7 @@ func NewCreateWirelessNetworkRequestWithBody(server string, contentType string, 
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/wireless-networks")
+	operationPath := fmt.Sprintf("/api/wireless-networks")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -5200,518 +5200,518 @@ func WithBaseURL(baseURL string) ClientOption {
 // ClientWithResponsesInterface is the interface specification for the client with responses above.
 type ClientWithResponsesInterface interface {
 
-	// ListAddressRangesWithResponse performs a GET /api/v1/address-ranges (the `ListAddressRanges` operationId) request.
+	// ListAddressRangesWithResponse performs a GET /api/address-ranges (the `ListAddressRanges` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListAddressRangesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListAddressRangesResponse, error)
 
-	// CreateAddressRangeWithBodyWithResponse performs a POST /api/v1/address-ranges (the `CreateAddressRange` operationId) request,
+	// CreateAddressRangeWithBodyWithResponse performs a POST /api/address-ranges (the `CreateAddressRange` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreateAddressRangeWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateAddressRangeResponse, error)
 
-	// CreateAddressRangeWithResponse performs a POST /api/v1/address-ranges (the `CreateAddressRange` operationId) request.
+	// CreateAddressRangeWithResponse performs a POST /api/address-ranges (the `CreateAddressRange` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateAddressRangeWithResponse(ctx context.Context, body CreateAddressRangeJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateAddressRangeResponse, error)
 
-	// DeleteAddressWithResponse performs a DELETE /api/v1/addresses/{identifier} (the `DeleteAddress` operationId) request.
+	// DeleteAddressWithResponse performs a DELETE /api/addresses/{identifier} (the `DeleteAddress` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	DeleteAddressWithResponse(ctx context.Context, identifier int32, reqEditors ...RequestEditorFn) (*DeleteAddressResponse, error)
 
-	// ListCablesWithResponse performs a GET /api/v1/cables (the `ListCables` operationId) request.
+	// ListCablesWithResponse performs a GET /api/cables (the `ListCables` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListCablesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListCablesResponse, error)
 
-	// CreateCableWithBodyWithResponse performs a POST /api/v1/cables (the `CreateCable` operationId) request,
+	// CreateCableWithBodyWithResponse performs a POST /api/cables (the `CreateCable` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreateCableWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateCableResponse, error)
 
-	// CreateCableWithResponse performs a POST /api/v1/cables (the `CreateCable` operationId) request.
+	// CreateCableWithResponse performs a POST /api/cables (the `CreateCable` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateCableWithResponse(ctx context.Context, body CreateCableJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateCableResponse, error)
 
-	// ListClusterTypesWithResponse performs a GET /api/v1/cluster-types (the `ListClusterTypes` operationId) request.
+	// ListClusterTypesWithResponse performs a GET /api/cluster-types (the `ListClusterTypes` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListClusterTypesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListClusterTypesResponse, error)
 
-	// CreateClusterTypeWithBodyWithResponse performs a POST /api/v1/cluster-types (the `CreateClusterType` operationId) request,
+	// CreateClusterTypeWithBodyWithResponse performs a POST /api/cluster-types (the `CreateClusterType` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreateClusterTypeWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateClusterTypeResponse, error)
 
-	// CreateClusterTypeWithResponse performs a POST /api/v1/cluster-types (the `CreateClusterType` operationId) request.
+	// CreateClusterTypeWithResponse performs a POST /api/cluster-types (the `CreateClusterType` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateClusterTypeWithResponse(ctx context.Context, body CreateClusterTypeJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateClusterTypeResponse, error)
 
-	// ListClustersWithResponse performs a GET /api/v1/clusters (the `ListClusters` operationId) request.
+	// ListClustersWithResponse performs a GET /api/clusters (the `ListClusters` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListClustersWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListClustersResponse, error)
 
-	// CreateClusterWithBodyWithResponse performs a POST /api/v1/clusters (the `CreateCluster` operationId) request,
+	// CreateClusterWithBodyWithResponse performs a POST /api/clusters (the `CreateCluster` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreateClusterWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateClusterResponse, error)
 
-	// CreateClusterWithResponse performs a POST /api/v1/clusters (the `CreateCluster` operationId) request.
+	// CreateClusterWithResponse performs a POST /api/clusters (the `CreateCluster` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateClusterWithResponse(ctx context.Context, body CreateClusterJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateClusterResponse, error)
 
-	// ListDeviceRolesWithResponse performs a GET /api/v1/device-roles (the `ListDeviceRoles` operationId) request.
+	// ListDeviceRolesWithResponse performs a GET /api/device-roles (the `ListDeviceRoles` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListDeviceRolesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListDeviceRolesResponse, error)
 
-	// CreateDeviceRoleWithBodyWithResponse performs a POST /api/v1/device-roles (the `CreateDeviceRole` operationId) request,
+	// CreateDeviceRoleWithBodyWithResponse performs a POST /api/device-roles (the `CreateDeviceRole` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreateDeviceRoleWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateDeviceRoleResponse, error)
 
-	// CreateDeviceRoleWithResponse performs a POST /api/v1/device-roles (the `CreateDeviceRole` operationId) request.
+	// CreateDeviceRoleWithResponse performs a POST /api/device-roles (the `CreateDeviceRole` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateDeviceRoleWithResponse(ctx context.Context, body CreateDeviceRoleJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateDeviceRoleResponse, error)
 
-	// ListDeviceTypesWithResponse performs a GET /api/v1/device-types (the `ListDeviceTypes` operationId) request.
+	// ListDeviceTypesWithResponse performs a GET /api/device-types (the `ListDeviceTypes` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListDeviceTypesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListDeviceTypesResponse, error)
 
-	// CreateDeviceTypeWithBodyWithResponse performs a POST /api/v1/device-types (the `CreateDeviceType` operationId) request,
+	// CreateDeviceTypeWithBodyWithResponse performs a POST /api/device-types (the `CreateDeviceType` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreateDeviceTypeWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateDeviceTypeResponse, error)
 
-	// CreateDeviceTypeWithResponse performs a POST /api/v1/device-types (the `CreateDeviceType` operationId) request.
+	// CreateDeviceTypeWithResponse performs a POST /api/device-types (the `CreateDeviceType` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateDeviceTypeWithResponse(ctx context.Context, body CreateDeviceTypeJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateDeviceTypeResponse, error)
 
-	// ListDevicesWithResponse performs a GET /api/v1/devices (the `ListDevices` operationId) request.
+	// ListDevicesWithResponse performs a GET /api/devices (the `ListDevices` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListDevicesWithResponse(ctx context.Context, params *ListDevicesParams, reqEditors ...RequestEditorFn) (*ListDevicesResponse, error)
 
-	// CreateDeviceWithBodyWithResponse performs a POST /api/v1/devices/create (the `CreateDevice` operationId) request,
+	// CreateDeviceWithBodyWithResponse performs a POST /api/devices/create (the `CreateDevice` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreateDeviceWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateDeviceResponse, error)
 
-	// CreateDeviceWithResponse performs a POST /api/v1/devices/create (the `CreateDevice` operationId) request.
+	// CreateDeviceWithResponse performs a POST /api/devices/create (the `CreateDevice` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateDeviceWithResponse(ctx context.Context, body CreateDeviceJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateDeviceResponse, error)
 
-	// GetDeviceWithResponse performs a GET /api/v1/devices/{name} (the `GetDevice` operationId) request.
+	// GetDeviceWithResponse performs a GET /api/devices/{name} (the `GetDevice` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetDeviceWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*GetDeviceResponse, error)
 
-	// UpdateDeviceWithBodyWithResponse performs a PATCH /api/v1/devices/{name} (the `UpdateDevice` operationId) request,
+	// UpdateDeviceWithBodyWithResponse performs a PATCH /api/devices/{name} (the `UpdateDevice` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	UpdateDeviceWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateDeviceResponse, error)
 
-	// UpdateDeviceWithResponse performs a PATCH /api/v1/devices/{name} (the `UpdateDevice` operationId) request.
+	// UpdateDeviceWithResponse performs a PATCH /api/devices/{name} (the `UpdateDevice` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	UpdateDeviceWithResponse(ctx context.Context, name string, body UpdateDeviceJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateDeviceResponse, error)
 
-	// ListAddressesWithResponse performs a GET /api/v1/devices/{name}/addresses (the `ListAddresses` operationId) request.
+	// ListAddressesWithResponse performs a GET /api/devices/{name}/addresses (the `ListAddresses` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListAddressesWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*ListAddressesResponse, error)
 
-	// CreateAddressWithBodyWithResponse performs a POST /api/v1/devices/{name}/addresses/create (the `CreateAddress` operationId) request,
+	// CreateAddressWithBodyWithResponse performs a POST /api/devices/{name}/addresses/create (the `CreateAddress` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreateAddressWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateAddressResponse, error)
 
-	// CreateAddressWithResponse performs a POST /api/v1/devices/{name}/addresses/create (the `CreateAddress` operationId) request.
+	// CreateAddressWithResponse performs a POST /api/devices/{name}/addresses/create (the `CreateAddress` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateAddressWithResponse(ctx context.Context, name string, body CreateAddressJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateAddressResponse, error)
 
-	// ListInterfacesWithResponse performs a GET /api/v1/devices/{name}/interfaces (the `ListInterfaces` operationId) request.
+	// ListInterfacesWithResponse performs a GET /api/devices/{name}/interfaces (the `ListInterfaces` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListInterfacesWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*ListInterfacesResponse, error)
 
-	// CreateInterfaceWithBodyWithResponse performs a POST /api/v1/devices/{name}/interfaces/create (the `CreateInterface` operationId) request,
+	// CreateInterfaceWithBodyWithResponse performs a POST /api/devices/{name}/interfaces/create (the `CreateInterface` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreateInterfaceWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateInterfaceResponse, error)
 
-	// CreateInterfaceWithResponse performs a POST /api/v1/devices/{name}/interfaces/create (the `CreateInterface` operationId) request.
+	// CreateInterfaceWithResponse performs a POST /api/devices/{name}/interfaces/create (the `CreateInterface` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateInterfaceWithResponse(ctx context.Context, name string, body CreateInterfaceJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateInterfaceResponse, error)
 
-	// ListDeviceJournalEntriesWithResponse performs a GET /api/v1/devices/{name}/journal-entries (the `ListDeviceJournalEntries` operationId) request.
+	// ListDeviceJournalEntriesWithResponse performs a GET /api/devices/{name}/journal-entries (the `ListDeviceJournalEntries` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListDeviceJournalEntriesWithResponse(ctx context.Context, name string, params *ListDeviceJournalEntriesParams, reqEditors ...RequestEditorFn) (*ListDeviceJournalEntriesResponse, error)
 
-	// AddDeviceJournalEntryWithBodyWithResponse performs a POST /api/v1/devices/{name}/journal-entries (the `AddDeviceJournalEntry` operationId) request,
+	// AddDeviceJournalEntryWithBodyWithResponse performs a POST /api/devices/{name}/journal-entries (the `AddDeviceJournalEntry` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	AddDeviceJournalEntryWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*AddDeviceJournalEntryResponse, error)
 
-	// AddDeviceJournalEntryWithResponse performs a POST /api/v1/devices/{name}/journal-entries (the `AddDeviceJournalEntry` operationId) request.
+	// AddDeviceJournalEntryWithResponse performs a POST /api/devices/{name}/journal-entries (the `AddDeviceJournalEntry` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	AddDeviceJournalEntryWithResponse(ctx context.Context, name string, body AddDeviceJournalEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*AddDeviceJournalEntryResponse, error)
 
-	// ListDeviceLabelsWithResponse performs a GET /api/v1/devices/{name}/labels (the `ListDeviceLabels` operationId) request.
+	// ListDeviceLabelsWithResponse performs a GET /api/devices/{name}/labels (the `ListDeviceLabels` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListDeviceLabelsWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*ListDeviceLabelsResponse, error)
 
-	// RemoveDeviceLabelWithResponse performs a DELETE /api/v1/devices/{name}/labels/{key} (the `RemoveDeviceLabel` operationId) request.
+	// RemoveDeviceLabelWithResponse performs a DELETE /api/devices/{name}/labels/{key} (the `RemoveDeviceLabel` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	RemoveDeviceLabelWithResponse(ctx context.Context, name string, key string, reqEditors ...RequestEditorFn) (*RemoveDeviceLabelResponse, error)
 
-	// SetDeviceLabelWithBodyWithResponse performs a PUT /api/v1/devices/{name}/labels/{key} (the `SetDeviceLabel` operationId) request,
+	// SetDeviceLabelWithBodyWithResponse performs a PUT /api/devices/{name}/labels/{key} (the `SetDeviceLabel` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	SetDeviceLabelWithBodyWithResponse(ctx context.Context, name string, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*SetDeviceLabelResponse, error)
 
-	// SetDeviceLabelWithResponse performs a PUT /api/v1/devices/{name}/labels/{key} (the `SetDeviceLabel` operationId) request.
+	// SetDeviceLabelWithResponse performs a PUT /api/devices/{name}/labels/{key} (the `SetDeviceLabel` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	SetDeviceLabelWithResponse(ctx context.Context, name string, key string, body SetDeviceLabelJSONRequestBody, reqEditors ...RequestEditorFn) (*SetDeviceLabelResponse, error)
 
-	// ListDeviceTagsWithResponse performs a GET /api/v1/devices/{name}/tags (the `ListDeviceTags` operationId) request.
+	// ListDeviceTagsWithResponse performs a GET /api/devices/{name}/tags (the `ListDeviceTags` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListDeviceTagsWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*ListDeviceTagsResponse, error)
 
-	// RemoveDeviceTagWithResponse performs a DELETE /api/v1/devices/{name}/tags/{tag} (the `RemoveDeviceTag` operationId) request.
+	// RemoveDeviceTagWithResponse performs a DELETE /api/devices/{name}/tags/{tag} (the `RemoveDeviceTag` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	RemoveDeviceTagWithResponse(ctx context.Context, name string, tag string, reqEditors ...RequestEditorFn) (*RemoveDeviceTagResponse, error)
 
-	// AddDeviceTagWithResponse performs a PUT /api/v1/devices/{name}/tags/{tag} (the `AddDeviceTag` operationId) request.
+	// AddDeviceTagWithResponse performs a PUT /api/devices/{name}/tags/{tag} (the `AddDeviceTag` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	AddDeviceTagWithResponse(ctx context.Context, name string, tag string, reqEditors ...RequestEditorFn) (*AddDeviceTagResponse, error)
 
-	// CreateDeviceTunnelTerminationWithBodyWithResponse performs a POST /api/v1/devices/{name}/tunnel-terminations/create (the `CreateDeviceTunnelTermination` operationId) request,
+	// CreateDeviceTunnelTerminationWithBodyWithResponse performs a POST /api/devices/{name}/tunnel-terminations/create (the `CreateDeviceTunnelTermination` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreateDeviceTunnelTerminationWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateDeviceTunnelTerminationResponse, error)
 
-	// CreateDeviceTunnelTerminationWithResponse performs a POST /api/v1/devices/{name}/tunnel-terminations/create (the `CreateDeviceTunnelTermination` operationId) request.
+	// CreateDeviceTunnelTerminationWithResponse performs a POST /api/devices/{name}/tunnel-terminations/create (the `CreateDeviceTunnelTermination` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateDeviceTunnelTerminationWithResponse(ctx context.Context, name string, body CreateDeviceTunnelTerminationJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateDeviceTunnelTerminationResponse, error)
 
-	// DeleteJournalEntryWithResponse performs a DELETE /api/v1/journal-entries/{identifier} (the `DeleteJournalEntry` operationId) request.
+	// DeleteJournalEntryWithResponse performs a DELETE /api/journal-entries/{identifier} (the `DeleteJournalEntry` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	DeleteJournalEntryWithResponse(ctx context.Context, identifier int32, reqEditors ...RequestEditorFn) (*DeleteJournalEntryResponse, error)
 
-	// UpdateJournalEntryWithBodyWithResponse performs a PATCH /api/v1/journal-entries/{identifier} (the `UpdateJournalEntry` operationId) request,
+	// UpdateJournalEntryWithBodyWithResponse performs a PATCH /api/journal-entries/{identifier} (the `UpdateJournalEntry` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	UpdateJournalEntryWithBodyWithResponse(ctx context.Context, identifier int32, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateJournalEntryResponse, error)
 
-	// UpdateJournalEntryWithResponse performs a PATCH /api/v1/journal-entries/{identifier} (the `UpdateJournalEntry` operationId) request.
+	// UpdateJournalEntryWithResponse performs a PATCH /api/journal-entries/{identifier} (the `UpdateJournalEntry` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	UpdateJournalEntryWithResponse(ctx context.Context, identifier int32, body UpdateJournalEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateJournalEntryResponse, error)
 
-	// ListLocationsWithResponse performs a GET /api/v1/locations (the `ListLocations` operationId) request.
+	// ListLocationsWithResponse performs a GET /api/locations (the `ListLocations` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListLocationsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListLocationsResponse, error)
 
-	// CreateLocationWithBodyWithResponse performs a POST /api/v1/locations (the `CreateLocation` operationId) request,
+	// CreateLocationWithBodyWithResponse performs a POST /api/locations (the `CreateLocation` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreateLocationWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateLocationResponse, error)
 
-	// CreateLocationWithResponse performs a POST /api/v1/locations (the `CreateLocation` operationId) request.
+	// CreateLocationWithResponse performs a POST /api/locations (the `CreateLocation` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateLocationWithResponse(ctx context.Context, body CreateLocationJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateLocationResponse, error)
 
-	// ListManufacturersWithResponse performs a GET /api/v1/manufacturers (the `ListManufacturers` operationId) request.
+	// ListManufacturersWithResponse performs a GET /api/manufacturers (the `ListManufacturers` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListManufacturersWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListManufacturersResponse, error)
 
-	// CreateManufacturerWithBodyWithResponse performs a POST /api/v1/manufacturers (the `CreateManufacturer` operationId) request,
+	// CreateManufacturerWithBodyWithResponse performs a POST /api/manufacturers (the `CreateManufacturer` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreateManufacturerWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateManufacturerResponse, error)
 
-	// CreateManufacturerWithResponse performs a POST /api/v1/manufacturers (the `CreateManufacturer` operationId) request.
+	// CreateManufacturerWithResponse performs a POST /api/manufacturers (the `CreateManufacturer` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateManufacturerWithResponse(ctx context.Context, body CreateManufacturerJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateManufacturerResponse, error)
 
-	// ListPlatformsWithResponse performs a GET /api/v1/platforms (the `ListPlatforms` operationId) request.
+	// ListPlatformsWithResponse performs a GET /api/platforms (the `ListPlatforms` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListPlatformsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListPlatformsResponse, error)
 
-	// CreatePlatformWithBodyWithResponse performs a POST /api/v1/platforms (the `CreatePlatform` operationId) request,
+	// CreatePlatformWithBodyWithResponse performs a POST /api/platforms (the `CreatePlatform` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreatePlatformWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreatePlatformResponse, error)
 
-	// CreatePlatformWithResponse performs a POST /api/v1/platforms (the `CreatePlatform` operationId) request.
+	// CreatePlatformWithResponse performs a POST /api/platforms (the `CreatePlatform` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreatePlatformWithResponse(ctx context.Context, body CreatePlatformJSONRequestBody, reqEditors ...RequestEditorFn) (*CreatePlatformResponse, error)
 
-	// ListPrefixesWithResponse performs a GET /api/v1/prefixes (the `ListPrefixes` operationId) request.
+	// ListPrefixesWithResponse performs a GET /api/prefixes (the `ListPrefixes` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListPrefixesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListPrefixesResponse, error)
 
-	// CreatePrefixWithBodyWithResponse performs a POST /api/v1/prefixes (the `CreatePrefix` operationId) request,
+	// CreatePrefixWithBodyWithResponse performs a POST /api/prefixes (the `CreatePrefix` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreatePrefixWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreatePrefixResponse, error)
 
-	// CreatePrefixWithResponse performs a POST /api/v1/prefixes (the `CreatePrefix` operationId) request.
+	// CreatePrefixWithResponse performs a POST /api/prefixes (the `CreatePrefix` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreatePrefixWithResponse(ctx context.Context, body CreatePrefixJSONRequestBody, reqEditors ...RequestEditorFn) (*CreatePrefixResponse, error)
 
-	// ListSitesWithResponse performs a GET /api/v1/sites (the `ListSites` operationId) request.
+	// ListSitesWithResponse performs a GET /api/sites (the `ListSites` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListSitesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListSitesResponse, error)
 
-	// CreateSiteWithBodyWithResponse performs a POST /api/v1/sites (the `CreateSite` operationId) request,
+	// CreateSiteWithBodyWithResponse performs a POST /api/sites (the `CreateSite` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreateSiteWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateSiteResponse, error)
 
-	// CreateSiteWithResponse performs a POST /api/v1/sites (the `CreateSite` operationId) request.
+	// CreateSiteWithResponse performs a POST /api/sites (the `CreateSite` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateSiteWithResponse(ctx context.Context, body CreateSiteJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateSiteResponse, error)
 
-	// ListTagsWithResponse performs a GET /api/v1/tags (the `ListTags` operationId) request.
+	// ListTagsWithResponse performs a GET /api/tags (the `ListTags` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListTagsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListTagsResponse, error)
 
-	// CreateTagWithBodyWithResponse performs a POST /api/v1/tags (the `CreateTag` operationId) request,
+	// CreateTagWithBodyWithResponse performs a POST /api/tags (the `CreateTag` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreateTagWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateTagResponse, error)
 
-	// CreateTagWithResponse performs a POST /api/v1/tags (the `CreateTag` operationId) request.
+	// CreateTagWithResponse performs a POST /api/tags (the `CreateTag` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateTagWithResponse(ctx context.Context, body CreateTagJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateTagResponse, error)
 
-	// ListTenantsWithResponse performs a GET /api/v1/tenants (the `ListTenants` operationId) request.
+	// ListTenantsWithResponse performs a GET /api/tenants (the `ListTenants` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListTenantsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListTenantsResponse, error)
 
-	// CreateTenantWithBodyWithResponse performs a POST /api/v1/tenants (the `CreateTenant` operationId) request,
+	// CreateTenantWithBodyWithResponse performs a POST /api/tenants (the `CreateTenant` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreateTenantWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateTenantResponse, error)
 
-	// CreateTenantWithResponse performs a POST /api/v1/tenants (the `CreateTenant` operationId) request.
+	// CreateTenantWithResponse performs a POST /api/tenants (the `CreateTenant` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateTenantWithResponse(ctx context.Context, body CreateTenantJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateTenantResponse, error)
 
-	// ListTunnelGroupsWithResponse performs a GET /api/v1/tunnel-groups (the `ListTunnelGroups` operationId) request.
+	// ListTunnelGroupsWithResponse performs a GET /api/tunnel-groups (the `ListTunnelGroups` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListTunnelGroupsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListTunnelGroupsResponse, error)
 
-	// CreateTunnelGroupWithBodyWithResponse performs a POST /api/v1/tunnel-groups (the `CreateTunnelGroup` operationId) request,
+	// CreateTunnelGroupWithBodyWithResponse performs a POST /api/tunnel-groups (the `CreateTunnelGroup` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreateTunnelGroupWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateTunnelGroupResponse, error)
 
-	// CreateTunnelGroupWithResponse performs a POST /api/v1/tunnel-groups (the `CreateTunnelGroup` operationId) request.
+	// CreateTunnelGroupWithResponse performs a POST /api/tunnel-groups (the `CreateTunnelGroup` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateTunnelGroupWithResponse(ctx context.Context, body CreateTunnelGroupJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateTunnelGroupResponse, error)
 
-	// ListTunnelTerminationsWithResponse performs a GET /api/v1/tunnel-terminations (the `ListTunnelTerminations` operationId) request.
+	// ListTunnelTerminationsWithResponse performs a GET /api/tunnel-terminations (the `ListTunnelTerminations` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListTunnelTerminationsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListTunnelTerminationsResponse, error)
 
-	// ListTunnelsWithResponse performs a GET /api/v1/tunnels (the `ListTunnels` operationId) request.
+	// ListTunnelsWithResponse performs a GET /api/tunnels (the `ListTunnels` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListTunnelsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListTunnelsResponse, error)
 
-	// CreateTunnelWithBodyWithResponse performs a POST /api/v1/tunnels (the `CreateTunnel` operationId) request,
+	// CreateTunnelWithBodyWithResponse performs a POST /api/tunnels (the `CreateTunnel` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreateTunnelWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateTunnelResponse, error)
 
-	// CreateTunnelWithResponse performs a POST /api/v1/tunnels (the `CreateTunnel` operationId) request.
+	// CreateTunnelWithResponse performs a POST /api/tunnels (the `CreateTunnel` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateTunnelWithResponse(ctx context.Context, body CreateTunnelJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateTunnelResponse, error)
 
-	// ListVirtualMachinesWithResponse performs a GET /api/v1/virtual-machines (the `ListVirtualMachines` operationId) request.
+	// ListVirtualMachinesWithResponse performs a GET /api/virtual-machines (the `ListVirtualMachines` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListVirtualMachinesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListVirtualMachinesResponse, error)
 
-	// CreateVirtualMachineWithBodyWithResponse performs a POST /api/v1/virtual-machines (the `CreateVirtualMachine` operationId) request,
+	// CreateVirtualMachineWithBodyWithResponse performs a POST /api/virtual-machines (the `CreateVirtualMachine` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreateVirtualMachineWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateVirtualMachineResponse, error)
 
-	// CreateVirtualMachineWithResponse performs a POST /api/v1/virtual-machines (the `CreateVirtualMachine` operationId) request.
+	// CreateVirtualMachineWithResponse performs a POST /api/virtual-machines (the `CreateVirtualMachine` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateVirtualMachineWithResponse(ctx context.Context, body CreateVirtualMachineJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateVirtualMachineResponse, error)
 
-	// GetVirtualMachineWithResponse performs a GET /api/v1/virtual-machines/{name} (the `GetVirtualMachine` operationId) request.
+	// GetVirtualMachineWithResponse performs a GET /api/virtual-machines/{name} (the `GetVirtualMachine` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetVirtualMachineWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*GetVirtualMachineResponse, error)
 
-	// UpdateVirtualMachineWithBodyWithResponse performs a PATCH /api/v1/virtual-machines/{name} (the `UpdateVirtualMachine` operationId) request,
+	// UpdateVirtualMachineWithBodyWithResponse performs a PATCH /api/virtual-machines/{name} (the `UpdateVirtualMachine` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	UpdateVirtualMachineWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateVirtualMachineResponse, error)
 
-	// UpdateVirtualMachineWithResponse performs a PATCH /api/v1/virtual-machines/{name} (the `UpdateVirtualMachine` operationId) request.
+	// UpdateVirtualMachineWithResponse performs a PATCH /api/virtual-machines/{name} (the `UpdateVirtualMachine` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	UpdateVirtualMachineWithResponse(ctx context.Context, name string, body UpdateVirtualMachineJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateVirtualMachineResponse, error)
 
-	// ListVirtualAddressesWithResponse performs a GET /api/v1/virtual-machines/{name}/addresses (the `ListVirtualAddresses` operationId) request.
+	// ListVirtualAddressesWithResponse performs a GET /api/virtual-machines/{name}/addresses (the `ListVirtualAddresses` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListVirtualAddressesWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*ListVirtualAddressesResponse, error)
 
-	// CreateVirtualAddressWithBodyWithResponse performs a POST /api/v1/virtual-machines/{name}/addresses/create (the `CreateVirtualAddress` operationId) request,
+	// CreateVirtualAddressWithBodyWithResponse performs a POST /api/virtual-machines/{name}/addresses/create (the `CreateVirtualAddress` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreateVirtualAddressWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateVirtualAddressResponse, error)
 
-	// CreateVirtualAddressWithResponse performs a POST /api/v1/virtual-machines/{name}/addresses/create (the `CreateVirtualAddress` operationId) request.
+	// CreateVirtualAddressWithResponse performs a POST /api/virtual-machines/{name}/addresses/create (the `CreateVirtualAddress` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateVirtualAddressWithResponse(ctx context.Context, name string, body CreateVirtualAddressJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateVirtualAddressResponse, error)
 
-	// ListVirtualDisksWithResponse performs a GET /api/v1/virtual-machines/{name}/disks (the `ListVirtualDisks` operationId) request.
+	// ListVirtualDisksWithResponse performs a GET /api/virtual-machines/{name}/disks (the `ListVirtualDisks` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListVirtualDisksWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*ListVirtualDisksResponse, error)
 
-	// CreateVirtualDiskWithBodyWithResponse performs a POST /api/v1/virtual-machines/{name}/disks (the `CreateVirtualDisk` operationId) request,
+	// CreateVirtualDiskWithBodyWithResponse performs a POST /api/virtual-machines/{name}/disks (the `CreateVirtualDisk` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreateVirtualDiskWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateVirtualDiskResponse, error)
 
-	// CreateVirtualDiskWithResponse performs a POST /api/v1/virtual-machines/{name}/disks (the `CreateVirtualDisk` operationId) request.
+	// CreateVirtualDiskWithResponse performs a POST /api/virtual-machines/{name}/disks (the `CreateVirtualDisk` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateVirtualDiskWithResponse(ctx context.Context, name string, body CreateVirtualDiskJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateVirtualDiskResponse, error)
 
-	// ListVirtualInterfacesWithResponse performs a GET /api/v1/virtual-machines/{name}/interfaces (the `ListVirtualInterfaces` operationId) request.
+	// ListVirtualInterfacesWithResponse performs a GET /api/virtual-machines/{name}/interfaces (the `ListVirtualInterfaces` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListVirtualInterfacesWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*ListVirtualInterfacesResponse, error)
 
-	// CreateVirtualInterfaceWithBodyWithResponse performs a POST /api/v1/virtual-machines/{name}/interfaces/create (the `CreateVirtualInterface` operationId) request,
+	// CreateVirtualInterfaceWithBodyWithResponse performs a POST /api/virtual-machines/{name}/interfaces/create (the `CreateVirtualInterface` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreateVirtualInterfaceWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateVirtualInterfaceResponse, error)
 
-	// CreateVirtualInterfaceWithResponse performs a POST /api/v1/virtual-machines/{name}/interfaces/create (the `CreateVirtualInterface` operationId) request.
+	// CreateVirtualInterfaceWithResponse performs a POST /api/virtual-machines/{name}/interfaces/create (the `CreateVirtualInterface` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateVirtualInterfaceWithResponse(ctx context.Context, name string, body CreateVirtualInterfaceJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateVirtualInterfaceResponse, error)
 
-	// ListVirtualJournalEntriesWithResponse performs a GET /api/v1/virtual-machines/{name}/journal-entries (the `ListVirtualJournalEntries` operationId) request.
+	// ListVirtualJournalEntriesWithResponse performs a GET /api/virtual-machines/{name}/journal-entries (the `ListVirtualJournalEntries` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListVirtualJournalEntriesWithResponse(ctx context.Context, name string, params *ListVirtualJournalEntriesParams, reqEditors ...RequestEditorFn) (*ListVirtualJournalEntriesResponse, error)
 
-	// AddVirtualJournalEntryWithBodyWithResponse performs a POST /api/v1/virtual-machines/{name}/journal-entries (the `AddVirtualJournalEntry` operationId) request,
+	// AddVirtualJournalEntryWithBodyWithResponse performs a POST /api/virtual-machines/{name}/journal-entries (the `AddVirtualJournalEntry` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	AddVirtualJournalEntryWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*AddVirtualJournalEntryResponse, error)
 
-	// AddVirtualJournalEntryWithResponse performs a POST /api/v1/virtual-machines/{name}/journal-entries (the `AddVirtualJournalEntry` operationId) request.
+	// AddVirtualJournalEntryWithResponse performs a POST /api/virtual-machines/{name}/journal-entries (the `AddVirtualJournalEntry` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	AddVirtualJournalEntryWithResponse(ctx context.Context, name string, body AddVirtualJournalEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*AddVirtualJournalEntryResponse, error)
 
-	// ListVirtualLabelsWithResponse performs a GET /api/v1/virtual-machines/{name}/labels (the `ListVirtualLabels` operationId) request.
+	// ListVirtualLabelsWithResponse performs a GET /api/virtual-machines/{name}/labels (the `ListVirtualLabels` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListVirtualLabelsWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*ListVirtualLabelsResponse, error)
 
-	// RemoveVirtualLabelWithResponse performs a DELETE /api/v1/virtual-machines/{name}/labels/{key} (the `RemoveVirtualLabel` operationId) request.
+	// RemoveVirtualLabelWithResponse performs a DELETE /api/virtual-machines/{name}/labels/{key} (the `RemoveVirtualLabel` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	RemoveVirtualLabelWithResponse(ctx context.Context, name string, key string, reqEditors ...RequestEditorFn) (*RemoveVirtualLabelResponse, error)
 
-	// SetVirtualLabelWithBodyWithResponse performs a PUT /api/v1/virtual-machines/{name}/labels/{key} (the `SetVirtualLabel` operationId) request,
+	// SetVirtualLabelWithBodyWithResponse performs a PUT /api/virtual-machines/{name}/labels/{key} (the `SetVirtualLabel` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	SetVirtualLabelWithBodyWithResponse(ctx context.Context, name string, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*SetVirtualLabelResponse, error)
 
-	// SetVirtualLabelWithResponse performs a PUT /api/v1/virtual-machines/{name}/labels/{key} (the `SetVirtualLabel` operationId) request.
+	// SetVirtualLabelWithResponse performs a PUT /api/virtual-machines/{name}/labels/{key} (the `SetVirtualLabel` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	SetVirtualLabelWithResponse(ctx context.Context, name string, key string, body SetVirtualLabelJSONRequestBody, reqEditors ...RequestEditorFn) (*SetVirtualLabelResponse, error)
 
-	// RemoveVirtualTagWithResponse performs a DELETE /api/v1/virtual-machines/{name}/tags/{tag} (the `RemoveVirtualTag` operationId) request.
+	// RemoveVirtualTagWithResponse performs a DELETE /api/virtual-machines/{name}/tags/{tag} (the `RemoveVirtualTag` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	RemoveVirtualTagWithResponse(ctx context.Context, name string, tag string, reqEditors ...RequestEditorFn) (*RemoveVirtualTagResponse, error)
 
-	// AddVirtualTagWithResponse performs a PUT /api/v1/virtual-machines/{name}/tags/{tag} (the `AddVirtualTag` operationId) request.
+	// AddVirtualTagWithResponse performs a PUT /api/virtual-machines/{name}/tags/{tag} (the `AddVirtualTag` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	AddVirtualTagWithResponse(ctx context.Context, name string, tag string, reqEditors ...RequestEditorFn) (*AddVirtualTagResponse, error)
 
-	// CreateVirtualTunnelTerminationWithBodyWithResponse performs a POST /api/v1/virtual-machines/{name}/tunnel-terminations/create (the `CreateVirtualTunnelTermination` operationId) request,
+	// CreateVirtualTunnelTerminationWithBodyWithResponse performs a POST /api/virtual-machines/{name}/tunnel-terminations/create (the `CreateVirtualTunnelTermination` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreateVirtualTunnelTerminationWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateVirtualTunnelTerminationResponse, error)
 
-	// CreateVirtualTunnelTerminationWithResponse performs a POST /api/v1/virtual-machines/{name}/tunnel-terminations/create (the `CreateVirtualTunnelTermination` operationId) request.
+	// CreateVirtualTunnelTerminationWithResponse performs a POST /api/virtual-machines/{name}/tunnel-terminations/create (the `CreateVirtualTunnelTermination` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateVirtualTunnelTerminationWithResponse(ctx context.Context, name string, body CreateVirtualTunnelTerminationJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateVirtualTunnelTerminationResponse, error)
 
-	// ListWirelessNetworksWithResponse performs a GET /api/v1/wireless-networks (the `ListWirelessNetworks` operationId) request.
+	// ListWirelessNetworksWithResponse performs a GET /api/wireless-networks (the `ListWirelessNetworks` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListWirelessNetworksWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListWirelessNetworksResponse, error)
 
-	// CreateWirelessNetworkWithBodyWithResponse performs a POST /api/v1/wireless-networks (the `CreateWirelessNetwork` operationId) request,
+	// CreateWirelessNetworkWithBodyWithResponse performs a POST /api/wireless-networks (the `CreateWirelessNetwork` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreateWirelessNetworkWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateWirelessNetworkResponse, error)
 
-	// CreateWirelessNetworkWithResponse performs a POST /api/v1/wireless-networks (the `CreateWirelessNetwork` operationId) request.
+	// CreateWirelessNetworkWithResponse performs a POST /api/wireless-networks (the `CreateWirelessNetwork` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateWirelessNetworkWithResponse(ctx context.Context, body CreateWirelessNetworkJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateWirelessNetworkResponse, error)
 }
@@ -9103,7 +9103,7 @@ func (r CreateWirelessNetworkResponse) ContentType() string {
 	return ""
 }
 
-// ListAddressRangesWithResponse performs a GET /api/v1/address-ranges (the `ListAddressRanges` operationId) request.
+// ListAddressRangesWithResponse performs a GET /api/address-ranges (the `ListAddressRanges` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListAddressRangesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListAddressRangesResponse, error) {
@@ -9114,7 +9114,7 @@ func (c *ClientWithResponses) ListAddressRangesWithResponse(ctx context.Context,
 	return ParseListAddressRangesResponse(rsp)
 }
 
-// CreateAddressRangeWithBodyWithResponse performs a POST /api/v1/address-ranges (the `CreateAddressRange` operationId) request,
+// CreateAddressRangeWithBodyWithResponse performs a POST /api/address-ranges (the `CreateAddressRange` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -9126,7 +9126,7 @@ func (c *ClientWithResponses) CreateAddressRangeWithBodyWithResponse(ctx context
 	return ParseCreateAddressRangeResponse(rsp)
 }
 
-// CreateAddressRangeWithResponse performs a POST /api/v1/address-ranges (the `CreateAddressRange` operationId) request.
+// CreateAddressRangeWithResponse performs a POST /api/address-ranges (the `CreateAddressRange` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreateAddressRangeWithResponse(ctx context.Context, body CreateAddressRangeJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateAddressRangeResponse, error) {
 	rsp, err := c.CreateAddressRange(ctx, body, reqEditors...)
@@ -9136,7 +9136,7 @@ func (c *ClientWithResponses) CreateAddressRangeWithResponse(ctx context.Context
 	return ParseCreateAddressRangeResponse(rsp)
 }
 
-// DeleteAddressWithResponse performs a DELETE /api/v1/addresses/{identifier} (the `DeleteAddress` operationId) request.
+// DeleteAddressWithResponse performs a DELETE /api/addresses/{identifier} (the `DeleteAddress` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) DeleteAddressWithResponse(ctx context.Context, identifier int32, reqEditors ...RequestEditorFn) (*DeleteAddressResponse, error) {
@@ -9147,7 +9147,7 @@ func (c *ClientWithResponses) DeleteAddressWithResponse(ctx context.Context, ide
 	return ParseDeleteAddressResponse(rsp)
 }
 
-// ListCablesWithResponse performs a GET /api/v1/cables (the `ListCables` operationId) request.
+// ListCablesWithResponse performs a GET /api/cables (the `ListCables` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListCablesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListCablesResponse, error) {
@@ -9158,7 +9158,7 @@ func (c *ClientWithResponses) ListCablesWithResponse(ctx context.Context, reqEdi
 	return ParseListCablesResponse(rsp)
 }
 
-// CreateCableWithBodyWithResponse performs a POST /api/v1/cables (the `CreateCable` operationId) request,
+// CreateCableWithBodyWithResponse performs a POST /api/cables (the `CreateCable` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -9170,7 +9170,7 @@ func (c *ClientWithResponses) CreateCableWithBodyWithResponse(ctx context.Contex
 	return ParseCreateCableResponse(rsp)
 }
 
-// CreateCableWithResponse performs a POST /api/v1/cables (the `CreateCable` operationId) request.
+// CreateCableWithResponse performs a POST /api/cables (the `CreateCable` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreateCableWithResponse(ctx context.Context, body CreateCableJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateCableResponse, error) {
 	rsp, err := c.CreateCable(ctx, body, reqEditors...)
@@ -9180,7 +9180,7 @@ func (c *ClientWithResponses) CreateCableWithResponse(ctx context.Context, body 
 	return ParseCreateCableResponse(rsp)
 }
 
-// ListClusterTypesWithResponse performs a GET /api/v1/cluster-types (the `ListClusterTypes` operationId) request.
+// ListClusterTypesWithResponse performs a GET /api/cluster-types (the `ListClusterTypes` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListClusterTypesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListClusterTypesResponse, error) {
@@ -9191,7 +9191,7 @@ func (c *ClientWithResponses) ListClusterTypesWithResponse(ctx context.Context, 
 	return ParseListClusterTypesResponse(rsp)
 }
 
-// CreateClusterTypeWithBodyWithResponse performs a POST /api/v1/cluster-types (the `CreateClusterType` operationId) request,
+// CreateClusterTypeWithBodyWithResponse performs a POST /api/cluster-types (the `CreateClusterType` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -9203,7 +9203,7 @@ func (c *ClientWithResponses) CreateClusterTypeWithBodyWithResponse(ctx context.
 	return ParseCreateClusterTypeResponse(rsp)
 }
 
-// CreateClusterTypeWithResponse performs a POST /api/v1/cluster-types (the `CreateClusterType` operationId) request.
+// CreateClusterTypeWithResponse performs a POST /api/cluster-types (the `CreateClusterType` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreateClusterTypeWithResponse(ctx context.Context, body CreateClusterTypeJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateClusterTypeResponse, error) {
 	rsp, err := c.CreateClusterType(ctx, body, reqEditors...)
@@ -9213,7 +9213,7 @@ func (c *ClientWithResponses) CreateClusterTypeWithResponse(ctx context.Context,
 	return ParseCreateClusterTypeResponse(rsp)
 }
 
-// ListClustersWithResponse performs a GET /api/v1/clusters (the `ListClusters` operationId) request.
+// ListClustersWithResponse performs a GET /api/clusters (the `ListClusters` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListClustersWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListClustersResponse, error) {
@@ -9224,7 +9224,7 @@ func (c *ClientWithResponses) ListClustersWithResponse(ctx context.Context, reqE
 	return ParseListClustersResponse(rsp)
 }
 
-// CreateClusterWithBodyWithResponse performs a POST /api/v1/clusters (the `CreateCluster` operationId) request,
+// CreateClusterWithBodyWithResponse performs a POST /api/clusters (the `CreateCluster` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -9236,7 +9236,7 @@ func (c *ClientWithResponses) CreateClusterWithBodyWithResponse(ctx context.Cont
 	return ParseCreateClusterResponse(rsp)
 }
 
-// CreateClusterWithResponse performs a POST /api/v1/clusters (the `CreateCluster` operationId) request.
+// CreateClusterWithResponse performs a POST /api/clusters (the `CreateCluster` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreateClusterWithResponse(ctx context.Context, body CreateClusterJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateClusterResponse, error) {
 	rsp, err := c.CreateCluster(ctx, body, reqEditors...)
@@ -9246,7 +9246,7 @@ func (c *ClientWithResponses) CreateClusterWithResponse(ctx context.Context, bod
 	return ParseCreateClusterResponse(rsp)
 }
 
-// ListDeviceRolesWithResponse performs a GET /api/v1/device-roles (the `ListDeviceRoles` operationId) request.
+// ListDeviceRolesWithResponse performs a GET /api/device-roles (the `ListDeviceRoles` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListDeviceRolesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListDeviceRolesResponse, error) {
@@ -9257,7 +9257,7 @@ func (c *ClientWithResponses) ListDeviceRolesWithResponse(ctx context.Context, r
 	return ParseListDeviceRolesResponse(rsp)
 }
 
-// CreateDeviceRoleWithBodyWithResponse performs a POST /api/v1/device-roles (the `CreateDeviceRole` operationId) request,
+// CreateDeviceRoleWithBodyWithResponse performs a POST /api/device-roles (the `CreateDeviceRole` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -9269,7 +9269,7 @@ func (c *ClientWithResponses) CreateDeviceRoleWithBodyWithResponse(ctx context.C
 	return ParseCreateDeviceRoleResponse(rsp)
 }
 
-// CreateDeviceRoleWithResponse performs a POST /api/v1/device-roles (the `CreateDeviceRole` operationId) request.
+// CreateDeviceRoleWithResponse performs a POST /api/device-roles (the `CreateDeviceRole` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreateDeviceRoleWithResponse(ctx context.Context, body CreateDeviceRoleJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateDeviceRoleResponse, error) {
 	rsp, err := c.CreateDeviceRole(ctx, body, reqEditors...)
@@ -9279,7 +9279,7 @@ func (c *ClientWithResponses) CreateDeviceRoleWithResponse(ctx context.Context, 
 	return ParseCreateDeviceRoleResponse(rsp)
 }
 
-// ListDeviceTypesWithResponse performs a GET /api/v1/device-types (the `ListDeviceTypes` operationId) request.
+// ListDeviceTypesWithResponse performs a GET /api/device-types (the `ListDeviceTypes` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListDeviceTypesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListDeviceTypesResponse, error) {
@@ -9290,7 +9290,7 @@ func (c *ClientWithResponses) ListDeviceTypesWithResponse(ctx context.Context, r
 	return ParseListDeviceTypesResponse(rsp)
 }
 
-// CreateDeviceTypeWithBodyWithResponse performs a POST /api/v1/device-types (the `CreateDeviceType` operationId) request,
+// CreateDeviceTypeWithBodyWithResponse performs a POST /api/device-types (the `CreateDeviceType` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -9302,7 +9302,7 @@ func (c *ClientWithResponses) CreateDeviceTypeWithBodyWithResponse(ctx context.C
 	return ParseCreateDeviceTypeResponse(rsp)
 }
 
-// CreateDeviceTypeWithResponse performs a POST /api/v1/device-types (the `CreateDeviceType` operationId) request.
+// CreateDeviceTypeWithResponse performs a POST /api/device-types (the `CreateDeviceType` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreateDeviceTypeWithResponse(ctx context.Context, body CreateDeviceTypeJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateDeviceTypeResponse, error) {
 	rsp, err := c.CreateDeviceType(ctx, body, reqEditors...)
@@ -9312,7 +9312,7 @@ func (c *ClientWithResponses) CreateDeviceTypeWithResponse(ctx context.Context, 
 	return ParseCreateDeviceTypeResponse(rsp)
 }
 
-// ListDevicesWithResponse performs a GET /api/v1/devices (the `ListDevices` operationId) request.
+// ListDevicesWithResponse performs a GET /api/devices (the `ListDevices` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListDevicesWithResponse(ctx context.Context, params *ListDevicesParams, reqEditors ...RequestEditorFn) (*ListDevicesResponse, error) {
@@ -9323,7 +9323,7 @@ func (c *ClientWithResponses) ListDevicesWithResponse(ctx context.Context, param
 	return ParseListDevicesResponse(rsp)
 }
 
-// CreateDeviceWithBodyWithResponse performs a POST /api/v1/devices/create (the `CreateDevice` operationId) request,
+// CreateDeviceWithBodyWithResponse performs a POST /api/devices/create (the `CreateDevice` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -9335,7 +9335,7 @@ func (c *ClientWithResponses) CreateDeviceWithBodyWithResponse(ctx context.Conte
 	return ParseCreateDeviceResponse(rsp)
 }
 
-// CreateDeviceWithResponse performs a POST /api/v1/devices/create (the `CreateDevice` operationId) request.
+// CreateDeviceWithResponse performs a POST /api/devices/create (the `CreateDevice` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreateDeviceWithResponse(ctx context.Context, body CreateDeviceJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateDeviceResponse, error) {
 	rsp, err := c.CreateDevice(ctx, body, reqEditors...)
@@ -9345,7 +9345,7 @@ func (c *ClientWithResponses) CreateDeviceWithResponse(ctx context.Context, body
 	return ParseCreateDeviceResponse(rsp)
 }
 
-// GetDeviceWithResponse performs a GET /api/v1/devices/{name} (the `GetDevice` operationId) request.
+// GetDeviceWithResponse performs a GET /api/devices/{name} (the `GetDevice` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetDeviceWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*GetDeviceResponse, error) {
@@ -9356,7 +9356,7 @@ func (c *ClientWithResponses) GetDeviceWithResponse(ctx context.Context, name st
 	return ParseGetDeviceResponse(rsp)
 }
 
-// UpdateDeviceWithBodyWithResponse performs a PATCH /api/v1/devices/{name} (the `UpdateDevice` operationId) request,
+// UpdateDeviceWithBodyWithResponse performs a PATCH /api/devices/{name} (the `UpdateDevice` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -9368,7 +9368,7 @@ func (c *ClientWithResponses) UpdateDeviceWithBodyWithResponse(ctx context.Conte
 	return ParseUpdateDeviceResponse(rsp)
 }
 
-// UpdateDeviceWithResponse performs a PATCH /api/v1/devices/{name} (the `UpdateDevice` operationId) request.
+// UpdateDeviceWithResponse performs a PATCH /api/devices/{name} (the `UpdateDevice` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) UpdateDeviceWithResponse(ctx context.Context, name string, body UpdateDeviceJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateDeviceResponse, error) {
 	rsp, err := c.UpdateDevice(ctx, name, body, reqEditors...)
@@ -9378,7 +9378,7 @@ func (c *ClientWithResponses) UpdateDeviceWithResponse(ctx context.Context, name
 	return ParseUpdateDeviceResponse(rsp)
 }
 
-// ListAddressesWithResponse performs a GET /api/v1/devices/{name}/addresses (the `ListAddresses` operationId) request.
+// ListAddressesWithResponse performs a GET /api/devices/{name}/addresses (the `ListAddresses` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListAddressesWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*ListAddressesResponse, error) {
@@ -9389,7 +9389,7 @@ func (c *ClientWithResponses) ListAddressesWithResponse(ctx context.Context, nam
 	return ParseListAddressesResponse(rsp)
 }
 
-// CreateAddressWithBodyWithResponse performs a POST /api/v1/devices/{name}/addresses/create (the `CreateAddress` operationId) request,
+// CreateAddressWithBodyWithResponse performs a POST /api/devices/{name}/addresses/create (the `CreateAddress` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -9401,7 +9401,7 @@ func (c *ClientWithResponses) CreateAddressWithBodyWithResponse(ctx context.Cont
 	return ParseCreateAddressResponse(rsp)
 }
 
-// CreateAddressWithResponse performs a POST /api/v1/devices/{name}/addresses/create (the `CreateAddress` operationId) request.
+// CreateAddressWithResponse performs a POST /api/devices/{name}/addresses/create (the `CreateAddress` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreateAddressWithResponse(ctx context.Context, name string, body CreateAddressJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateAddressResponse, error) {
 	rsp, err := c.CreateAddress(ctx, name, body, reqEditors...)
@@ -9411,7 +9411,7 @@ func (c *ClientWithResponses) CreateAddressWithResponse(ctx context.Context, nam
 	return ParseCreateAddressResponse(rsp)
 }
 
-// ListInterfacesWithResponse performs a GET /api/v1/devices/{name}/interfaces (the `ListInterfaces` operationId) request.
+// ListInterfacesWithResponse performs a GET /api/devices/{name}/interfaces (the `ListInterfaces` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListInterfacesWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*ListInterfacesResponse, error) {
@@ -9422,7 +9422,7 @@ func (c *ClientWithResponses) ListInterfacesWithResponse(ctx context.Context, na
 	return ParseListInterfacesResponse(rsp)
 }
 
-// CreateInterfaceWithBodyWithResponse performs a POST /api/v1/devices/{name}/interfaces/create (the `CreateInterface` operationId) request,
+// CreateInterfaceWithBodyWithResponse performs a POST /api/devices/{name}/interfaces/create (the `CreateInterface` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -9434,7 +9434,7 @@ func (c *ClientWithResponses) CreateInterfaceWithBodyWithResponse(ctx context.Co
 	return ParseCreateInterfaceResponse(rsp)
 }
 
-// CreateInterfaceWithResponse performs a POST /api/v1/devices/{name}/interfaces/create (the `CreateInterface` operationId) request.
+// CreateInterfaceWithResponse performs a POST /api/devices/{name}/interfaces/create (the `CreateInterface` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreateInterfaceWithResponse(ctx context.Context, name string, body CreateInterfaceJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateInterfaceResponse, error) {
 	rsp, err := c.CreateInterface(ctx, name, body, reqEditors...)
@@ -9444,7 +9444,7 @@ func (c *ClientWithResponses) CreateInterfaceWithResponse(ctx context.Context, n
 	return ParseCreateInterfaceResponse(rsp)
 }
 
-// ListDeviceJournalEntriesWithResponse performs a GET /api/v1/devices/{name}/journal-entries (the `ListDeviceJournalEntries` operationId) request.
+// ListDeviceJournalEntriesWithResponse performs a GET /api/devices/{name}/journal-entries (the `ListDeviceJournalEntries` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListDeviceJournalEntriesWithResponse(ctx context.Context, name string, params *ListDeviceJournalEntriesParams, reqEditors ...RequestEditorFn) (*ListDeviceJournalEntriesResponse, error) {
@@ -9455,7 +9455,7 @@ func (c *ClientWithResponses) ListDeviceJournalEntriesWithResponse(ctx context.C
 	return ParseListDeviceJournalEntriesResponse(rsp)
 }
 
-// AddDeviceJournalEntryWithBodyWithResponse performs a POST /api/v1/devices/{name}/journal-entries (the `AddDeviceJournalEntry` operationId) request,
+// AddDeviceJournalEntryWithBodyWithResponse performs a POST /api/devices/{name}/journal-entries (the `AddDeviceJournalEntry` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -9467,7 +9467,7 @@ func (c *ClientWithResponses) AddDeviceJournalEntryWithBodyWithResponse(ctx cont
 	return ParseAddDeviceJournalEntryResponse(rsp)
 }
 
-// AddDeviceJournalEntryWithResponse performs a POST /api/v1/devices/{name}/journal-entries (the `AddDeviceJournalEntry` operationId) request.
+// AddDeviceJournalEntryWithResponse performs a POST /api/devices/{name}/journal-entries (the `AddDeviceJournalEntry` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) AddDeviceJournalEntryWithResponse(ctx context.Context, name string, body AddDeviceJournalEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*AddDeviceJournalEntryResponse, error) {
 	rsp, err := c.AddDeviceJournalEntry(ctx, name, body, reqEditors...)
@@ -9477,7 +9477,7 @@ func (c *ClientWithResponses) AddDeviceJournalEntryWithResponse(ctx context.Cont
 	return ParseAddDeviceJournalEntryResponse(rsp)
 }
 
-// ListDeviceLabelsWithResponse performs a GET /api/v1/devices/{name}/labels (the `ListDeviceLabels` operationId) request.
+// ListDeviceLabelsWithResponse performs a GET /api/devices/{name}/labels (the `ListDeviceLabels` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListDeviceLabelsWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*ListDeviceLabelsResponse, error) {
@@ -9488,7 +9488,7 @@ func (c *ClientWithResponses) ListDeviceLabelsWithResponse(ctx context.Context, 
 	return ParseListDeviceLabelsResponse(rsp)
 }
 
-// RemoveDeviceLabelWithResponse performs a DELETE /api/v1/devices/{name}/labels/{key} (the `RemoveDeviceLabel` operationId) request.
+// RemoveDeviceLabelWithResponse performs a DELETE /api/devices/{name}/labels/{key} (the `RemoveDeviceLabel` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) RemoveDeviceLabelWithResponse(ctx context.Context, name string, key string, reqEditors ...RequestEditorFn) (*RemoveDeviceLabelResponse, error) {
@@ -9499,7 +9499,7 @@ func (c *ClientWithResponses) RemoveDeviceLabelWithResponse(ctx context.Context,
 	return ParseRemoveDeviceLabelResponse(rsp)
 }
 
-// SetDeviceLabelWithBodyWithResponse performs a PUT /api/v1/devices/{name}/labels/{key} (the `SetDeviceLabel` operationId) request,
+// SetDeviceLabelWithBodyWithResponse performs a PUT /api/devices/{name}/labels/{key} (the `SetDeviceLabel` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -9511,7 +9511,7 @@ func (c *ClientWithResponses) SetDeviceLabelWithBodyWithResponse(ctx context.Con
 	return ParseSetDeviceLabelResponse(rsp)
 }
 
-// SetDeviceLabelWithResponse performs a PUT /api/v1/devices/{name}/labels/{key} (the `SetDeviceLabel` operationId) request.
+// SetDeviceLabelWithResponse performs a PUT /api/devices/{name}/labels/{key} (the `SetDeviceLabel` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) SetDeviceLabelWithResponse(ctx context.Context, name string, key string, body SetDeviceLabelJSONRequestBody, reqEditors ...RequestEditorFn) (*SetDeviceLabelResponse, error) {
 	rsp, err := c.SetDeviceLabel(ctx, name, key, body, reqEditors...)
@@ -9521,7 +9521,7 @@ func (c *ClientWithResponses) SetDeviceLabelWithResponse(ctx context.Context, na
 	return ParseSetDeviceLabelResponse(rsp)
 }
 
-// ListDeviceTagsWithResponse performs a GET /api/v1/devices/{name}/tags (the `ListDeviceTags` operationId) request.
+// ListDeviceTagsWithResponse performs a GET /api/devices/{name}/tags (the `ListDeviceTags` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListDeviceTagsWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*ListDeviceTagsResponse, error) {
@@ -9532,7 +9532,7 @@ func (c *ClientWithResponses) ListDeviceTagsWithResponse(ctx context.Context, na
 	return ParseListDeviceTagsResponse(rsp)
 }
 
-// RemoveDeviceTagWithResponse performs a DELETE /api/v1/devices/{name}/tags/{tag} (the `RemoveDeviceTag` operationId) request.
+// RemoveDeviceTagWithResponse performs a DELETE /api/devices/{name}/tags/{tag} (the `RemoveDeviceTag` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) RemoveDeviceTagWithResponse(ctx context.Context, name string, tag string, reqEditors ...RequestEditorFn) (*RemoveDeviceTagResponse, error) {
@@ -9543,7 +9543,7 @@ func (c *ClientWithResponses) RemoveDeviceTagWithResponse(ctx context.Context, n
 	return ParseRemoveDeviceTagResponse(rsp)
 }
 
-// AddDeviceTagWithResponse performs a PUT /api/v1/devices/{name}/tags/{tag} (the `AddDeviceTag` operationId) request.
+// AddDeviceTagWithResponse performs a PUT /api/devices/{name}/tags/{tag} (the `AddDeviceTag` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) AddDeviceTagWithResponse(ctx context.Context, name string, tag string, reqEditors ...RequestEditorFn) (*AddDeviceTagResponse, error) {
@@ -9554,7 +9554,7 @@ func (c *ClientWithResponses) AddDeviceTagWithResponse(ctx context.Context, name
 	return ParseAddDeviceTagResponse(rsp)
 }
 
-// CreateDeviceTunnelTerminationWithBodyWithResponse performs a POST /api/v1/devices/{name}/tunnel-terminations/create (the `CreateDeviceTunnelTermination` operationId) request,
+// CreateDeviceTunnelTerminationWithBodyWithResponse performs a POST /api/devices/{name}/tunnel-terminations/create (the `CreateDeviceTunnelTermination` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -9566,7 +9566,7 @@ func (c *ClientWithResponses) CreateDeviceTunnelTerminationWithBodyWithResponse(
 	return ParseCreateDeviceTunnelTerminationResponse(rsp)
 }
 
-// CreateDeviceTunnelTerminationWithResponse performs a POST /api/v1/devices/{name}/tunnel-terminations/create (the `CreateDeviceTunnelTermination` operationId) request.
+// CreateDeviceTunnelTerminationWithResponse performs a POST /api/devices/{name}/tunnel-terminations/create (the `CreateDeviceTunnelTermination` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreateDeviceTunnelTerminationWithResponse(ctx context.Context, name string, body CreateDeviceTunnelTerminationJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateDeviceTunnelTerminationResponse, error) {
 	rsp, err := c.CreateDeviceTunnelTermination(ctx, name, body, reqEditors...)
@@ -9576,7 +9576,7 @@ func (c *ClientWithResponses) CreateDeviceTunnelTerminationWithResponse(ctx cont
 	return ParseCreateDeviceTunnelTerminationResponse(rsp)
 }
 
-// DeleteJournalEntryWithResponse performs a DELETE /api/v1/journal-entries/{identifier} (the `DeleteJournalEntry` operationId) request.
+// DeleteJournalEntryWithResponse performs a DELETE /api/journal-entries/{identifier} (the `DeleteJournalEntry` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) DeleteJournalEntryWithResponse(ctx context.Context, identifier int32, reqEditors ...RequestEditorFn) (*DeleteJournalEntryResponse, error) {
@@ -9587,7 +9587,7 @@ func (c *ClientWithResponses) DeleteJournalEntryWithResponse(ctx context.Context
 	return ParseDeleteJournalEntryResponse(rsp)
 }
 
-// UpdateJournalEntryWithBodyWithResponse performs a PATCH /api/v1/journal-entries/{identifier} (the `UpdateJournalEntry` operationId) request,
+// UpdateJournalEntryWithBodyWithResponse performs a PATCH /api/journal-entries/{identifier} (the `UpdateJournalEntry` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -9599,7 +9599,7 @@ func (c *ClientWithResponses) UpdateJournalEntryWithBodyWithResponse(ctx context
 	return ParseUpdateJournalEntryResponse(rsp)
 }
 
-// UpdateJournalEntryWithResponse performs a PATCH /api/v1/journal-entries/{identifier} (the `UpdateJournalEntry` operationId) request.
+// UpdateJournalEntryWithResponse performs a PATCH /api/journal-entries/{identifier} (the `UpdateJournalEntry` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) UpdateJournalEntryWithResponse(ctx context.Context, identifier int32, body UpdateJournalEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateJournalEntryResponse, error) {
 	rsp, err := c.UpdateJournalEntry(ctx, identifier, body, reqEditors...)
@@ -9609,7 +9609,7 @@ func (c *ClientWithResponses) UpdateJournalEntryWithResponse(ctx context.Context
 	return ParseUpdateJournalEntryResponse(rsp)
 }
 
-// ListLocationsWithResponse performs a GET /api/v1/locations (the `ListLocations` operationId) request.
+// ListLocationsWithResponse performs a GET /api/locations (the `ListLocations` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListLocationsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListLocationsResponse, error) {
@@ -9620,7 +9620,7 @@ func (c *ClientWithResponses) ListLocationsWithResponse(ctx context.Context, req
 	return ParseListLocationsResponse(rsp)
 }
 
-// CreateLocationWithBodyWithResponse performs a POST /api/v1/locations (the `CreateLocation` operationId) request,
+// CreateLocationWithBodyWithResponse performs a POST /api/locations (the `CreateLocation` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -9632,7 +9632,7 @@ func (c *ClientWithResponses) CreateLocationWithBodyWithResponse(ctx context.Con
 	return ParseCreateLocationResponse(rsp)
 }
 
-// CreateLocationWithResponse performs a POST /api/v1/locations (the `CreateLocation` operationId) request.
+// CreateLocationWithResponse performs a POST /api/locations (the `CreateLocation` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreateLocationWithResponse(ctx context.Context, body CreateLocationJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateLocationResponse, error) {
 	rsp, err := c.CreateLocation(ctx, body, reqEditors...)
@@ -9642,7 +9642,7 @@ func (c *ClientWithResponses) CreateLocationWithResponse(ctx context.Context, bo
 	return ParseCreateLocationResponse(rsp)
 }
 
-// ListManufacturersWithResponse performs a GET /api/v1/manufacturers (the `ListManufacturers` operationId) request.
+// ListManufacturersWithResponse performs a GET /api/manufacturers (the `ListManufacturers` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListManufacturersWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListManufacturersResponse, error) {
@@ -9653,7 +9653,7 @@ func (c *ClientWithResponses) ListManufacturersWithResponse(ctx context.Context,
 	return ParseListManufacturersResponse(rsp)
 }
 
-// CreateManufacturerWithBodyWithResponse performs a POST /api/v1/manufacturers (the `CreateManufacturer` operationId) request,
+// CreateManufacturerWithBodyWithResponse performs a POST /api/manufacturers (the `CreateManufacturer` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -9665,7 +9665,7 @@ func (c *ClientWithResponses) CreateManufacturerWithBodyWithResponse(ctx context
 	return ParseCreateManufacturerResponse(rsp)
 }
 
-// CreateManufacturerWithResponse performs a POST /api/v1/manufacturers (the `CreateManufacturer` operationId) request.
+// CreateManufacturerWithResponse performs a POST /api/manufacturers (the `CreateManufacturer` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreateManufacturerWithResponse(ctx context.Context, body CreateManufacturerJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateManufacturerResponse, error) {
 	rsp, err := c.CreateManufacturer(ctx, body, reqEditors...)
@@ -9675,7 +9675,7 @@ func (c *ClientWithResponses) CreateManufacturerWithResponse(ctx context.Context
 	return ParseCreateManufacturerResponse(rsp)
 }
 
-// ListPlatformsWithResponse performs a GET /api/v1/platforms (the `ListPlatforms` operationId) request.
+// ListPlatformsWithResponse performs a GET /api/platforms (the `ListPlatforms` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListPlatformsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListPlatformsResponse, error) {
@@ -9686,7 +9686,7 @@ func (c *ClientWithResponses) ListPlatformsWithResponse(ctx context.Context, req
 	return ParseListPlatformsResponse(rsp)
 }
 
-// CreatePlatformWithBodyWithResponse performs a POST /api/v1/platforms (the `CreatePlatform` operationId) request,
+// CreatePlatformWithBodyWithResponse performs a POST /api/platforms (the `CreatePlatform` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -9698,7 +9698,7 @@ func (c *ClientWithResponses) CreatePlatformWithBodyWithResponse(ctx context.Con
 	return ParseCreatePlatformResponse(rsp)
 }
 
-// CreatePlatformWithResponse performs a POST /api/v1/platforms (the `CreatePlatform` operationId) request.
+// CreatePlatformWithResponse performs a POST /api/platforms (the `CreatePlatform` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreatePlatformWithResponse(ctx context.Context, body CreatePlatformJSONRequestBody, reqEditors ...RequestEditorFn) (*CreatePlatformResponse, error) {
 	rsp, err := c.CreatePlatform(ctx, body, reqEditors...)
@@ -9708,7 +9708,7 @@ func (c *ClientWithResponses) CreatePlatformWithResponse(ctx context.Context, bo
 	return ParseCreatePlatformResponse(rsp)
 }
 
-// ListPrefixesWithResponse performs a GET /api/v1/prefixes (the `ListPrefixes` operationId) request.
+// ListPrefixesWithResponse performs a GET /api/prefixes (the `ListPrefixes` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListPrefixesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListPrefixesResponse, error) {
@@ -9719,7 +9719,7 @@ func (c *ClientWithResponses) ListPrefixesWithResponse(ctx context.Context, reqE
 	return ParseListPrefixesResponse(rsp)
 }
 
-// CreatePrefixWithBodyWithResponse performs a POST /api/v1/prefixes (the `CreatePrefix` operationId) request,
+// CreatePrefixWithBodyWithResponse performs a POST /api/prefixes (the `CreatePrefix` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -9731,7 +9731,7 @@ func (c *ClientWithResponses) CreatePrefixWithBodyWithResponse(ctx context.Conte
 	return ParseCreatePrefixResponse(rsp)
 }
 
-// CreatePrefixWithResponse performs a POST /api/v1/prefixes (the `CreatePrefix` operationId) request.
+// CreatePrefixWithResponse performs a POST /api/prefixes (the `CreatePrefix` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreatePrefixWithResponse(ctx context.Context, body CreatePrefixJSONRequestBody, reqEditors ...RequestEditorFn) (*CreatePrefixResponse, error) {
 	rsp, err := c.CreatePrefix(ctx, body, reqEditors...)
@@ -9741,7 +9741,7 @@ func (c *ClientWithResponses) CreatePrefixWithResponse(ctx context.Context, body
 	return ParseCreatePrefixResponse(rsp)
 }
 
-// ListSitesWithResponse performs a GET /api/v1/sites (the `ListSites` operationId) request.
+// ListSitesWithResponse performs a GET /api/sites (the `ListSites` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListSitesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListSitesResponse, error) {
@@ -9752,7 +9752,7 @@ func (c *ClientWithResponses) ListSitesWithResponse(ctx context.Context, reqEdit
 	return ParseListSitesResponse(rsp)
 }
 
-// CreateSiteWithBodyWithResponse performs a POST /api/v1/sites (the `CreateSite` operationId) request,
+// CreateSiteWithBodyWithResponse performs a POST /api/sites (the `CreateSite` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -9764,7 +9764,7 @@ func (c *ClientWithResponses) CreateSiteWithBodyWithResponse(ctx context.Context
 	return ParseCreateSiteResponse(rsp)
 }
 
-// CreateSiteWithResponse performs a POST /api/v1/sites (the `CreateSite` operationId) request.
+// CreateSiteWithResponse performs a POST /api/sites (the `CreateSite` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreateSiteWithResponse(ctx context.Context, body CreateSiteJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateSiteResponse, error) {
 	rsp, err := c.CreateSite(ctx, body, reqEditors...)
@@ -9774,7 +9774,7 @@ func (c *ClientWithResponses) CreateSiteWithResponse(ctx context.Context, body C
 	return ParseCreateSiteResponse(rsp)
 }
 
-// ListTagsWithResponse performs a GET /api/v1/tags (the `ListTags` operationId) request.
+// ListTagsWithResponse performs a GET /api/tags (the `ListTags` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListTagsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListTagsResponse, error) {
@@ -9785,7 +9785,7 @@ func (c *ClientWithResponses) ListTagsWithResponse(ctx context.Context, reqEdito
 	return ParseListTagsResponse(rsp)
 }
 
-// CreateTagWithBodyWithResponse performs a POST /api/v1/tags (the `CreateTag` operationId) request,
+// CreateTagWithBodyWithResponse performs a POST /api/tags (the `CreateTag` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -9797,7 +9797,7 @@ func (c *ClientWithResponses) CreateTagWithBodyWithResponse(ctx context.Context,
 	return ParseCreateTagResponse(rsp)
 }
 
-// CreateTagWithResponse performs a POST /api/v1/tags (the `CreateTag` operationId) request.
+// CreateTagWithResponse performs a POST /api/tags (the `CreateTag` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreateTagWithResponse(ctx context.Context, body CreateTagJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateTagResponse, error) {
 	rsp, err := c.CreateTag(ctx, body, reqEditors...)
@@ -9807,7 +9807,7 @@ func (c *ClientWithResponses) CreateTagWithResponse(ctx context.Context, body Cr
 	return ParseCreateTagResponse(rsp)
 }
 
-// ListTenantsWithResponse performs a GET /api/v1/tenants (the `ListTenants` operationId) request.
+// ListTenantsWithResponse performs a GET /api/tenants (the `ListTenants` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListTenantsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListTenantsResponse, error) {
@@ -9818,7 +9818,7 @@ func (c *ClientWithResponses) ListTenantsWithResponse(ctx context.Context, reqEd
 	return ParseListTenantsResponse(rsp)
 }
 
-// CreateTenantWithBodyWithResponse performs a POST /api/v1/tenants (the `CreateTenant` operationId) request,
+// CreateTenantWithBodyWithResponse performs a POST /api/tenants (the `CreateTenant` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -9830,7 +9830,7 @@ func (c *ClientWithResponses) CreateTenantWithBodyWithResponse(ctx context.Conte
 	return ParseCreateTenantResponse(rsp)
 }
 
-// CreateTenantWithResponse performs a POST /api/v1/tenants (the `CreateTenant` operationId) request.
+// CreateTenantWithResponse performs a POST /api/tenants (the `CreateTenant` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreateTenantWithResponse(ctx context.Context, body CreateTenantJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateTenantResponse, error) {
 	rsp, err := c.CreateTenant(ctx, body, reqEditors...)
@@ -9840,7 +9840,7 @@ func (c *ClientWithResponses) CreateTenantWithResponse(ctx context.Context, body
 	return ParseCreateTenantResponse(rsp)
 }
 
-// ListTunnelGroupsWithResponse performs a GET /api/v1/tunnel-groups (the `ListTunnelGroups` operationId) request.
+// ListTunnelGroupsWithResponse performs a GET /api/tunnel-groups (the `ListTunnelGroups` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListTunnelGroupsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListTunnelGroupsResponse, error) {
@@ -9851,7 +9851,7 @@ func (c *ClientWithResponses) ListTunnelGroupsWithResponse(ctx context.Context, 
 	return ParseListTunnelGroupsResponse(rsp)
 }
 
-// CreateTunnelGroupWithBodyWithResponse performs a POST /api/v1/tunnel-groups (the `CreateTunnelGroup` operationId) request,
+// CreateTunnelGroupWithBodyWithResponse performs a POST /api/tunnel-groups (the `CreateTunnelGroup` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -9863,7 +9863,7 @@ func (c *ClientWithResponses) CreateTunnelGroupWithBodyWithResponse(ctx context.
 	return ParseCreateTunnelGroupResponse(rsp)
 }
 
-// CreateTunnelGroupWithResponse performs a POST /api/v1/tunnel-groups (the `CreateTunnelGroup` operationId) request.
+// CreateTunnelGroupWithResponse performs a POST /api/tunnel-groups (the `CreateTunnelGroup` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreateTunnelGroupWithResponse(ctx context.Context, body CreateTunnelGroupJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateTunnelGroupResponse, error) {
 	rsp, err := c.CreateTunnelGroup(ctx, body, reqEditors...)
@@ -9873,7 +9873,7 @@ func (c *ClientWithResponses) CreateTunnelGroupWithResponse(ctx context.Context,
 	return ParseCreateTunnelGroupResponse(rsp)
 }
 
-// ListTunnelTerminationsWithResponse performs a GET /api/v1/tunnel-terminations (the `ListTunnelTerminations` operationId) request.
+// ListTunnelTerminationsWithResponse performs a GET /api/tunnel-terminations (the `ListTunnelTerminations` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListTunnelTerminationsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListTunnelTerminationsResponse, error) {
@@ -9884,7 +9884,7 @@ func (c *ClientWithResponses) ListTunnelTerminationsWithResponse(ctx context.Con
 	return ParseListTunnelTerminationsResponse(rsp)
 }
 
-// ListTunnelsWithResponse performs a GET /api/v1/tunnels (the `ListTunnels` operationId) request.
+// ListTunnelsWithResponse performs a GET /api/tunnels (the `ListTunnels` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListTunnelsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListTunnelsResponse, error) {
@@ -9895,7 +9895,7 @@ func (c *ClientWithResponses) ListTunnelsWithResponse(ctx context.Context, reqEd
 	return ParseListTunnelsResponse(rsp)
 }
 
-// CreateTunnelWithBodyWithResponse performs a POST /api/v1/tunnels (the `CreateTunnel` operationId) request,
+// CreateTunnelWithBodyWithResponse performs a POST /api/tunnels (the `CreateTunnel` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -9907,7 +9907,7 @@ func (c *ClientWithResponses) CreateTunnelWithBodyWithResponse(ctx context.Conte
 	return ParseCreateTunnelResponse(rsp)
 }
 
-// CreateTunnelWithResponse performs a POST /api/v1/tunnels (the `CreateTunnel` operationId) request.
+// CreateTunnelWithResponse performs a POST /api/tunnels (the `CreateTunnel` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreateTunnelWithResponse(ctx context.Context, body CreateTunnelJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateTunnelResponse, error) {
 	rsp, err := c.CreateTunnel(ctx, body, reqEditors...)
@@ -9917,7 +9917,7 @@ func (c *ClientWithResponses) CreateTunnelWithResponse(ctx context.Context, body
 	return ParseCreateTunnelResponse(rsp)
 }
 
-// ListVirtualMachinesWithResponse performs a GET /api/v1/virtual-machines (the `ListVirtualMachines` operationId) request.
+// ListVirtualMachinesWithResponse performs a GET /api/virtual-machines (the `ListVirtualMachines` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListVirtualMachinesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListVirtualMachinesResponse, error) {
@@ -9928,7 +9928,7 @@ func (c *ClientWithResponses) ListVirtualMachinesWithResponse(ctx context.Contex
 	return ParseListVirtualMachinesResponse(rsp)
 }
 
-// CreateVirtualMachineWithBodyWithResponse performs a POST /api/v1/virtual-machines (the `CreateVirtualMachine` operationId) request,
+// CreateVirtualMachineWithBodyWithResponse performs a POST /api/virtual-machines (the `CreateVirtualMachine` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -9940,7 +9940,7 @@ func (c *ClientWithResponses) CreateVirtualMachineWithBodyWithResponse(ctx conte
 	return ParseCreateVirtualMachineResponse(rsp)
 }
 
-// CreateVirtualMachineWithResponse performs a POST /api/v1/virtual-machines (the `CreateVirtualMachine` operationId) request.
+// CreateVirtualMachineWithResponse performs a POST /api/virtual-machines (the `CreateVirtualMachine` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreateVirtualMachineWithResponse(ctx context.Context, body CreateVirtualMachineJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateVirtualMachineResponse, error) {
 	rsp, err := c.CreateVirtualMachine(ctx, body, reqEditors...)
@@ -9950,7 +9950,7 @@ func (c *ClientWithResponses) CreateVirtualMachineWithResponse(ctx context.Conte
 	return ParseCreateVirtualMachineResponse(rsp)
 }
 
-// GetVirtualMachineWithResponse performs a GET /api/v1/virtual-machines/{name} (the `GetVirtualMachine` operationId) request.
+// GetVirtualMachineWithResponse performs a GET /api/virtual-machines/{name} (the `GetVirtualMachine` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetVirtualMachineWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*GetVirtualMachineResponse, error) {
@@ -9961,7 +9961,7 @@ func (c *ClientWithResponses) GetVirtualMachineWithResponse(ctx context.Context,
 	return ParseGetVirtualMachineResponse(rsp)
 }
 
-// UpdateVirtualMachineWithBodyWithResponse performs a PATCH /api/v1/virtual-machines/{name} (the `UpdateVirtualMachine` operationId) request,
+// UpdateVirtualMachineWithBodyWithResponse performs a PATCH /api/virtual-machines/{name} (the `UpdateVirtualMachine` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -9973,7 +9973,7 @@ func (c *ClientWithResponses) UpdateVirtualMachineWithBodyWithResponse(ctx conte
 	return ParseUpdateVirtualMachineResponse(rsp)
 }
 
-// UpdateVirtualMachineWithResponse performs a PATCH /api/v1/virtual-machines/{name} (the `UpdateVirtualMachine` operationId) request.
+// UpdateVirtualMachineWithResponse performs a PATCH /api/virtual-machines/{name} (the `UpdateVirtualMachine` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) UpdateVirtualMachineWithResponse(ctx context.Context, name string, body UpdateVirtualMachineJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateVirtualMachineResponse, error) {
 	rsp, err := c.UpdateVirtualMachine(ctx, name, body, reqEditors...)
@@ -9983,7 +9983,7 @@ func (c *ClientWithResponses) UpdateVirtualMachineWithResponse(ctx context.Conte
 	return ParseUpdateVirtualMachineResponse(rsp)
 }
 
-// ListVirtualAddressesWithResponse performs a GET /api/v1/virtual-machines/{name}/addresses (the `ListVirtualAddresses` operationId) request.
+// ListVirtualAddressesWithResponse performs a GET /api/virtual-machines/{name}/addresses (the `ListVirtualAddresses` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListVirtualAddressesWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*ListVirtualAddressesResponse, error) {
@@ -9994,7 +9994,7 @@ func (c *ClientWithResponses) ListVirtualAddressesWithResponse(ctx context.Conte
 	return ParseListVirtualAddressesResponse(rsp)
 }
 
-// CreateVirtualAddressWithBodyWithResponse performs a POST /api/v1/virtual-machines/{name}/addresses/create (the `CreateVirtualAddress` operationId) request,
+// CreateVirtualAddressWithBodyWithResponse performs a POST /api/virtual-machines/{name}/addresses/create (the `CreateVirtualAddress` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -10006,7 +10006,7 @@ func (c *ClientWithResponses) CreateVirtualAddressWithBodyWithResponse(ctx conte
 	return ParseCreateVirtualAddressResponse(rsp)
 }
 
-// CreateVirtualAddressWithResponse performs a POST /api/v1/virtual-machines/{name}/addresses/create (the `CreateVirtualAddress` operationId) request.
+// CreateVirtualAddressWithResponse performs a POST /api/virtual-machines/{name}/addresses/create (the `CreateVirtualAddress` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreateVirtualAddressWithResponse(ctx context.Context, name string, body CreateVirtualAddressJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateVirtualAddressResponse, error) {
 	rsp, err := c.CreateVirtualAddress(ctx, name, body, reqEditors...)
@@ -10016,7 +10016,7 @@ func (c *ClientWithResponses) CreateVirtualAddressWithResponse(ctx context.Conte
 	return ParseCreateVirtualAddressResponse(rsp)
 }
 
-// ListVirtualDisksWithResponse performs a GET /api/v1/virtual-machines/{name}/disks (the `ListVirtualDisks` operationId) request.
+// ListVirtualDisksWithResponse performs a GET /api/virtual-machines/{name}/disks (the `ListVirtualDisks` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListVirtualDisksWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*ListVirtualDisksResponse, error) {
@@ -10027,7 +10027,7 @@ func (c *ClientWithResponses) ListVirtualDisksWithResponse(ctx context.Context, 
 	return ParseListVirtualDisksResponse(rsp)
 }
 
-// CreateVirtualDiskWithBodyWithResponse performs a POST /api/v1/virtual-machines/{name}/disks (the `CreateVirtualDisk` operationId) request,
+// CreateVirtualDiskWithBodyWithResponse performs a POST /api/virtual-machines/{name}/disks (the `CreateVirtualDisk` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -10039,7 +10039,7 @@ func (c *ClientWithResponses) CreateVirtualDiskWithBodyWithResponse(ctx context.
 	return ParseCreateVirtualDiskResponse(rsp)
 }
 
-// CreateVirtualDiskWithResponse performs a POST /api/v1/virtual-machines/{name}/disks (the `CreateVirtualDisk` operationId) request.
+// CreateVirtualDiskWithResponse performs a POST /api/virtual-machines/{name}/disks (the `CreateVirtualDisk` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreateVirtualDiskWithResponse(ctx context.Context, name string, body CreateVirtualDiskJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateVirtualDiskResponse, error) {
 	rsp, err := c.CreateVirtualDisk(ctx, name, body, reqEditors...)
@@ -10049,7 +10049,7 @@ func (c *ClientWithResponses) CreateVirtualDiskWithResponse(ctx context.Context,
 	return ParseCreateVirtualDiskResponse(rsp)
 }
 
-// ListVirtualInterfacesWithResponse performs a GET /api/v1/virtual-machines/{name}/interfaces (the `ListVirtualInterfaces` operationId) request.
+// ListVirtualInterfacesWithResponse performs a GET /api/virtual-machines/{name}/interfaces (the `ListVirtualInterfaces` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListVirtualInterfacesWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*ListVirtualInterfacesResponse, error) {
@@ -10060,7 +10060,7 @@ func (c *ClientWithResponses) ListVirtualInterfacesWithResponse(ctx context.Cont
 	return ParseListVirtualInterfacesResponse(rsp)
 }
 
-// CreateVirtualInterfaceWithBodyWithResponse performs a POST /api/v1/virtual-machines/{name}/interfaces/create (the `CreateVirtualInterface` operationId) request,
+// CreateVirtualInterfaceWithBodyWithResponse performs a POST /api/virtual-machines/{name}/interfaces/create (the `CreateVirtualInterface` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -10072,7 +10072,7 @@ func (c *ClientWithResponses) CreateVirtualInterfaceWithBodyWithResponse(ctx con
 	return ParseCreateVirtualInterfaceResponse(rsp)
 }
 
-// CreateVirtualInterfaceWithResponse performs a POST /api/v1/virtual-machines/{name}/interfaces/create (the `CreateVirtualInterface` operationId) request.
+// CreateVirtualInterfaceWithResponse performs a POST /api/virtual-machines/{name}/interfaces/create (the `CreateVirtualInterface` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreateVirtualInterfaceWithResponse(ctx context.Context, name string, body CreateVirtualInterfaceJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateVirtualInterfaceResponse, error) {
 	rsp, err := c.CreateVirtualInterface(ctx, name, body, reqEditors...)
@@ -10082,7 +10082,7 @@ func (c *ClientWithResponses) CreateVirtualInterfaceWithResponse(ctx context.Con
 	return ParseCreateVirtualInterfaceResponse(rsp)
 }
 
-// ListVirtualJournalEntriesWithResponse performs a GET /api/v1/virtual-machines/{name}/journal-entries (the `ListVirtualJournalEntries` operationId) request.
+// ListVirtualJournalEntriesWithResponse performs a GET /api/virtual-machines/{name}/journal-entries (the `ListVirtualJournalEntries` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListVirtualJournalEntriesWithResponse(ctx context.Context, name string, params *ListVirtualJournalEntriesParams, reqEditors ...RequestEditorFn) (*ListVirtualJournalEntriesResponse, error) {
@@ -10093,7 +10093,7 @@ func (c *ClientWithResponses) ListVirtualJournalEntriesWithResponse(ctx context.
 	return ParseListVirtualJournalEntriesResponse(rsp)
 }
 
-// AddVirtualJournalEntryWithBodyWithResponse performs a POST /api/v1/virtual-machines/{name}/journal-entries (the `AddVirtualJournalEntry` operationId) request,
+// AddVirtualJournalEntryWithBodyWithResponse performs a POST /api/virtual-machines/{name}/journal-entries (the `AddVirtualJournalEntry` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -10105,7 +10105,7 @@ func (c *ClientWithResponses) AddVirtualJournalEntryWithBodyWithResponse(ctx con
 	return ParseAddVirtualJournalEntryResponse(rsp)
 }
 
-// AddVirtualJournalEntryWithResponse performs a POST /api/v1/virtual-machines/{name}/journal-entries (the `AddVirtualJournalEntry` operationId) request.
+// AddVirtualJournalEntryWithResponse performs a POST /api/virtual-machines/{name}/journal-entries (the `AddVirtualJournalEntry` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) AddVirtualJournalEntryWithResponse(ctx context.Context, name string, body AddVirtualJournalEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*AddVirtualJournalEntryResponse, error) {
 	rsp, err := c.AddVirtualJournalEntry(ctx, name, body, reqEditors...)
@@ -10115,7 +10115,7 @@ func (c *ClientWithResponses) AddVirtualJournalEntryWithResponse(ctx context.Con
 	return ParseAddVirtualJournalEntryResponse(rsp)
 }
 
-// ListVirtualLabelsWithResponse performs a GET /api/v1/virtual-machines/{name}/labels (the `ListVirtualLabels` operationId) request.
+// ListVirtualLabelsWithResponse performs a GET /api/virtual-machines/{name}/labels (the `ListVirtualLabels` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListVirtualLabelsWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*ListVirtualLabelsResponse, error) {
@@ -10126,7 +10126,7 @@ func (c *ClientWithResponses) ListVirtualLabelsWithResponse(ctx context.Context,
 	return ParseListVirtualLabelsResponse(rsp)
 }
 
-// RemoveVirtualLabelWithResponse performs a DELETE /api/v1/virtual-machines/{name}/labels/{key} (the `RemoveVirtualLabel` operationId) request.
+// RemoveVirtualLabelWithResponse performs a DELETE /api/virtual-machines/{name}/labels/{key} (the `RemoveVirtualLabel` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) RemoveVirtualLabelWithResponse(ctx context.Context, name string, key string, reqEditors ...RequestEditorFn) (*RemoveVirtualLabelResponse, error) {
@@ -10137,7 +10137,7 @@ func (c *ClientWithResponses) RemoveVirtualLabelWithResponse(ctx context.Context
 	return ParseRemoveVirtualLabelResponse(rsp)
 }
 
-// SetVirtualLabelWithBodyWithResponse performs a PUT /api/v1/virtual-machines/{name}/labels/{key} (the `SetVirtualLabel` operationId) request,
+// SetVirtualLabelWithBodyWithResponse performs a PUT /api/virtual-machines/{name}/labels/{key} (the `SetVirtualLabel` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -10149,7 +10149,7 @@ func (c *ClientWithResponses) SetVirtualLabelWithBodyWithResponse(ctx context.Co
 	return ParseSetVirtualLabelResponse(rsp)
 }
 
-// SetVirtualLabelWithResponse performs a PUT /api/v1/virtual-machines/{name}/labels/{key} (the `SetVirtualLabel` operationId) request.
+// SetVirtualLabelWithResponse performs a PUT /api/virtual-machines/{name}/labels/{key} (the `SetVirtualLabel` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) SetVirtualLabelWithResponse(ctx context.Context, name string, key string, body SetVirtualLabelJSONRequestBody, reqEditors ...RequestEditorFn) (*SetVirtualLabelResponse, error) {
 	rsp, err := c.SetVirtualLabel(ctx, name, key, body, reqEditors...)
@@ -10159,7 +10159,7 @@ func (c *ClientWithResponses) SetVirtualLabelWithResponse(ctx context.Context, n
 	return ParseSetVirtualLabelResponse(rsp)
 }
 
-// RemoveVirtualTagWithResponse performs a DELETE /api/v1/virtual-machines/{name}/tags/{tag} (the `RemoveVirtualTag` operationId) request.
+// RemoveVirtualTagWithResponse performs a DELETE /api/virtual-machines/{name}/tags/{tag} (the `RemoveVirtualTag` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) RemoveVirtualTagWithResponse(ctx context.Context, name string, tag string, reqEditors ...RequestEditorFn) (*RemoveVirtualTagResponse, error) {
@@ -10170,7 +10170,7 @@ func (c *ClientWithResponses) RemoveVirtualTagWithResponse(ctx context.Context, 
 	return ParseRemoveVirtualTagResponse(rsp)
 }
 
-// AddVirtualTagWithResponse performs a PUT /api/v1/virtual-machines/{name}/tags/{tag} (the `AddVirtualTag` operationId) request.
+// AddVirtualTagWithResponse performs a PUT /api/virtual-machines/{name}/tags/{tag} (the `AddVirtualTag` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) AddVirtualTagWithResponse(ctx context.Context, name string, tag string, reqEditors ...RequestEditorFn) (*AddVirtualTagResponse, error) {
@@ -10181,7 +10181,7 @@ func (c *ClientWithResponses) AddVirtualTagWithResponse(ctx context.Context, nam
 	return ParseAddVirtualTagResponse(rsp)
 }
 
-// CreateVirtualTunnelTerminationWithBodyWithResponse performs a POST /api/v1/virtual-machines/{name}/tunnel-terminations/create (the `CreateVirtualTunnelTermination` operationId) request,
+// CreateVirtualTunnelTerminationWithBodyWithResponse performs a POST /api/virtual-machines/{name}/tunnel-terminations/create (the `CreateVirtualTunnelTermination` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -10193,7 +10193,7 @@ func (c *ClientWithResponses) CreateVirtualTunnelTerminationWithBodyWithResponse
 	return ParseCreateVirtualTunnelTerminationResponse(rsp)
 }
 
-// CreateVirtualTunnelTerminationWithResponse performs a POST /api/v1/virtual-machines/{name}/tunnel-terminations/create (the `CreateVirtualTunnelTermination` operationId) request.
+// CreateVirtualTunnelTerminationWithResponse performs a POST /api/virtual-machines/{name}/tunnel-terminations/create (the `CreateVirtualTunnelTermination` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreateVirtualTunnelTerminationWithResponse(ctx context.Context, name string, body CreateVirtualTunnelTerminationJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateVirtualTunnelTerminationResponse, error) {
 	rsp, err := c.CreateVirtualTunnelTermination(ctx, name, body, reqEditors...)
@@ -10203,7 +10203,7 @@ func (c *ClientWithResponses) CreateVirtualTunnelTerminationWithResponse(ctx con
 	return ParseCreateVirtualTunnelTerminationResponse(rsp)
 }
 
-// ListWirelessNetworksWithResponse performs a GET /api/v1/wireless-networks (the `ListWirelessNetworks` operationId) request.
+// ListWirelessNetworksWithResponse performs a GET /api/wireless-networks (the `ListWirelessNetworks` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListWirelessNetworksWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListWirelessNetworksResponse, error) {
@@ -10214,7 +10214,7 @@ func (c *ClientWithResponses) ListWirelessNetworksWithResponse(ctx context.Conte
 	return ParseListWirelessNetworksResponse(rsp)
 }
 
-// CreateWirelessNetworkWithBodyWithResponse performs a POST /api/v1/wireless-networks (the `CreateWirelessNetwork` operationId) request,
+// CreateWirelessNetworkWithBodyWithResponse performs a POST /api/wireless-networks (the `CreateWirelessNetwork` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -10226,7 +10226,7 @@ func (c *ClientWithResponses) CreateWirelessNetworkWithBodyWithResponse(ctx cont
 	return ParseCreateWirelessNetworkResponse(rsp)
 }
 
-// CreateWirelessNetworkWithResponse performs a POST /api/v1/wireless-networks (the `CreateWirelessNetwork` operationId) request.
+// CreateWirelessNetworkWithResponse performs a POST /api/wireless-networks (the `CreateWirelessNetwork` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreateWirelessNetworkWithResponse(ctx context.Context, body CreateWirelessNetworkJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateWirelessNetworkResponse, error) {
 	rsp, err := c.CreateWirelessNetwork(ctx, body, reqEditors...)

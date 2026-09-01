@@ -3,8 +3,8 @@
 package browser
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration_test/browser_tester"
 	"testing"
 	"time"
@@ -16,11 +16,11 @@ func TestConversationsSidebarInfiniteScroll(t *testing.T) {
 	b.WaitReady(".sidebar-entry")
 	initial := b.CountElements(".sidebar-entry")
 	assert.True(t, initial > 0)
-	fmt.Printf("initial entries: %d\n", initial)
+	console.Format("initial entries: %d\n", initial)
 	b.ScrollToBottom(".sidebar")
 	time.Sleep(2 * time.Second)
 	after := b.CountElements(".sidebar-entry")
-	fmt.Printf("after scroll: %d\n", after)
+	console.Format("after scroll: %d\n", after)
 	assert.True(t, after > initial)
 }
 

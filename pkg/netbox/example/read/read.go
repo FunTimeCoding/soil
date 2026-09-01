@@ -1,7 +1,7 @@
 package read
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/netbox"
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
 )
@@ -21,27 +21,27 @@ func Read() {
 	// TODO: DataSource: Requires local, git or S3 source
 	//  Is this used to import entities?
 	for _, s := range n.MustSources() {
-		fmt.Printf("DataSource: %s\n", s.Format(f))
+		console.Format("DataSource: %s\n", s.Format(f))
 	}
 
 	// TODO: ExportTemplate, this optionally depends on DataSource
 	//  Whats a good use case?
 	for _, t := range n.MustExportTemplates() {
-		fmt.Printf("ExportTemplate: %s\n", t.Format(f))
+		console.Format("ExportTemplate: %s\n", t.Format(f))
 	}
 
 	// TODO: CustomField, CustomFieldChoice, CustomLink
 	//  Whats a good use case?
 	for _, i := range n.MustCustomFields() {
-		fmt.Printf("CustomField: %s\n", i.Format(f))
+		console.Format("CustomField: %s\n", i.Format(f))
 	}
 
 	for _, c := range n.MustCustomFieldChoices() {
-		fmt.Printf("CustomFieldChoice: %s\n", c.Format(f))
+		console.Format("CustomFieldChoice: %s\n", c.Format(f))
 	}
 
 	for _, l := range n.MustCustomLinks() {
-		fmt.Printf("CustomLink: %s\n", l.Format(f))
+		console.Format("CustomLink: %s\n", l.Format(f))
 	}
 
 	// TODO: Circuits, CircuitTypes, VirtualCircuits, VirtualCircuitTypes, CircuitGroups, Providers, ProviderAccounts, ProviderNetworks

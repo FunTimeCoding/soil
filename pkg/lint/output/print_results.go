@@ -1,7 +1,7 @@
 package output
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 )
 
@@ -17,7 +17,7 @@ func PrintResults(
 
 		if !c.Fixed && !c.Planned {
 			hasBlocked = true
-			fmt.Println(line)
+			console.Line(line)
 
 			continue
 		}
@@ -25,13 +25,13 @@ func PrintResults(
 		if summary {
 			if !seen[c.Path] {
 				seen[c.Path] = true
-				fmt.Println(c.Path)
+				console.Line(c.Path)
 			}
 
 			continue
 		}
 
-		fmt.Println(line)
+		console.Line(line)
 	}
 
 	return hasBlocked

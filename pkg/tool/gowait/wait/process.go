@@ -2,6 +2,7 @@ package wait
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/system/run"
 	"github.com/funtimecoding/soil/pkg/tool/gowait/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gowait/wait/option"
@@ -16,20 +17,23 @@ func Process(o *option.Wait) {
 		attempt++
 
 		if o.Verbose {
-			fmt.Printf("Check %d\n", attempt)
+			console.Format("Check %d\n", attempt)
 		}
 
 		r := run.New().NoPanic()
 		r.Start("pgrep", "-f", o.Process)
 
 		if r.Error != nil {
-			fmt.Printf("Done after %v\n", time.Since(start).Round(time.Second))
+			console.Format(
+				"Done after %v\n",
+				time.Since(start).Round(time.Second),
+			)
 
 			return
 		}
 
 		if o.Verbose {
-			fmt.Printf(
+			console.Format(
 				"Running: %s",
 				run.New().Start("pgrep", "-fa", o.Process),
 			)

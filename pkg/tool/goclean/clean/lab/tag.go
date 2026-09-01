@@ -1,7 +1,7 @@
 package lab
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/git"
 	"github.com/funtimecoding/soil/pkg/gitlab"
 	"github.com/funtimecoding/soil/pkg/gitlab/project"
@@ -25,7 +25,7 @@ func Tag(
 			continue
 		}
 
-		fmt.Printf("Delete tag: %s\n", t.Name)
+		console.Format("Delete tag: %s\n", t.Name)
 		c.MustDeleteTag(p.Identifier, t.Name)
 	}
 

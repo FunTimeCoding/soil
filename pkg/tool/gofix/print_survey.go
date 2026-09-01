@@ -1,7 +1,7 @@
 package gofix
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"sort"
 )
@@ -28,7 +28,7 @@ func printSurvey(
 	)
 
 	for _, e := range entries {
-		fmt.Printf(
+		console.Format(
 			"%4d  %-20s  %s\n",
 			e.count,
 			e.segment,

@@ -4,7 +4,7 @@ info:
   title: goalertlogd
   version: 1.0.0
 paths:
-  /api/v1/alerts:
+  /api/alerts:
     get:
       operationId: getAlerts
       parameters:
@@ -28,7 +28,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/alerts/recent:
+  /api/alerts/recent:
     get:
       operationId: getRecentAlerts
       parameters:
@@ -59,7 +59,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/alerts/top:
+  /api/alerts/top:
     get:
       operationId: getTopAlerts
       parameters:
@@ -95,7 +95,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/status:
+  /api/status:
     get:
       operationId: getStatus
       responses:

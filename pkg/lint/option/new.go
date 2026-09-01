@@ -2,6 +2,7 @@ package option
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	library "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
@@ -40,7 +41,11 @@ func New(
 	result.Count = len(result.Skips)
 
 	if result.Count > 0 && verbose {
-		fmt.Printf("Skips (%d): %s\n", result.Count, join.Comma(result.Skips))
+		console.Format(
+			"Skips (%d): %s\n",
+			result.Count,
+			join.Comma(result.Skips),
+		)
 	}
 
 	return result

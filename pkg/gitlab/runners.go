@@ -1,7 +1,7 @@
 package gitlab
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab/runner"
 	"gitlab.com/gitlab-org/api/client-go/v2"
@@ -49,7 +49,7 @@ func (c *Client) Runners(all bool) ([]*runner.Runner, error) {
 					continue
 				}
 
-				fmt.Printf("  %d Header %s: %v\n", number, k, v)
+				console.Format("  %d Header %s: %v\n", number, k, v)
 			}
 		}
 

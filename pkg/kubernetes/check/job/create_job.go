@@ -1,7 +1,7 @@
 package job
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/kubernetes/client"
 	"k8s.io/api/batch/v1"
 )
@@ -12,9 +12,9 @@ func createJob(
 	cron string,
 	name string,
 ) *v1.Job {
-	fmt.Printf("Create job %s in %s from %s\n", name, namespace, cron)
+	console.Format("Create job %s in %s from %s\n", name, namespace, cron)
 	result := k.CreateJobFromCron(namespace, cron, name)
-	fmt.Printf("  %s\n", result.Name)
+	console.Format("  %s\n", result.Name)
 
 	return result
 }

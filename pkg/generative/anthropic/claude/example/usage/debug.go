@@ -1,7 +1,7 @@
 package usage
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/example/common"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/pricing"
@@ -32,9 +32,9 @@ func Debug() {
 			return all[i].Time.Before(all[j].Time)
 		},
 	)
-	fmt.Printf("Total entries across all sessions: %d\n\n", len(all))
+	console.Format("Total entries across all sessions: %d\n\n", len(all))
 	window := 5 * time.Hour
-	fmt.Println("Gaps >= 1h in last 24h:")
+	console.Line("Gaps >= 1h in last 24h:")
 	cutoff24 := now().Add(-24 * time.Hour)
 
 	for i := 1; i < len(all); i++ {
@@ -51,7 +51,7 @@ func Debug() {
 				marker = " *** BLOCK BREAK ***"
 			}
 
-			fmt.Printf(
+			console.Format(
 				"  %s → %s  gap=%s%s\n",
 				all[i-1].Time.Format("Jan 02 15:04"),
 				all[i].Time.Format("15:04"),
@@ -61,16 +61,16 @@ func Debug() {
 		}
 	}
 
-	fmt.Println()
+	console.Line()
 	block := findActiveBlock(all)
 
 	if block == nil {
-		fmt.Println("no active block")
+		console.Line("no active block")
 
 		return
 	}
 
-	fmt.Printf(
+	console.Format(
 		"Active block: %s - %s (%d entries)\n",
 		block.start.Format("15:04"),
 		block.end.Format("15:04"),
@@ -85,7 +85,7 @@ func Debug() {
 		)
 	}
 
-	fmt.Printf(
+	console.Format(
 		"Cost: $%.2f / $140.00  (%.0f%%)\n",
 		totalCost,
 		(totalCost/140)*100,

@@ -1,7 +1,7 @@
 package example
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/ollama"
 )
@@ -13,6 +13,6 @@ func Embed() {
 		constant.Llama31,
 		"What are embeddings?",
 	) {
-		fmt.Printf("Embedding: %+v\n", e)
+		console.Format("Embedding: %+v\n", e)
 	}
 }

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
+	"github.com/funtimecoding/soil/pkg/console"
 )
 
 func Export() {
@@ -11,7 +12,7 @@ func Export() {
 	f := constant.ConfluenceDense
 
 	for _, p := range c.MustChildPages(c.DefaultSpace(), c.DefaultPage()) {
-		fmt.Println(p.Format(f))
+		console.Line(p.Format(f))
 		c.Export(p, fmt.Sprintf("fixture/wiki/example/%s.json", p.Name))
 	}
 }

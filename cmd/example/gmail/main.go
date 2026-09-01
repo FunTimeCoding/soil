@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/gmail"
 	"github.com/funtimecoding/soil/pkg/gmail/constant"
 )
@@ -13,7 +13,7 @@ func main() {
 	//   Maybe a Brave profile with the name can be opened?
 	c := gmail.NewEnvironment().Load()
 	r := c.Unread()
-	fmt.Printf("Unread (%d):\n", len(r.Messages))
+	console.Format("Unread (%d):\n", len(r.Messages))
 
 	for _, m := range r.Messages {
 		var subject string
@@ -26,6 +26,6 @@ func main() {
 			}
 		}
 
-		fmt.Printf("- %s\n", subject)
+		console.Format("- %s\n", subject)
 	}
 }

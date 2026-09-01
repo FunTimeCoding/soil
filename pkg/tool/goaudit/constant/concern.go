@@ -51,6 +51,7 @@ const (
 	IdentityNotStringText            = "identity.New() first argument is not a string literal"
 	IdentityMismatchKey              = "identity_mismatch"
 	OpenAPIMismatchKey               = "openapi_mismatch"
+	VersionedPathKey                 = "versioned_path"
 	BodylessErrorKey                 = "bodyless_error"
 	ErrorResponseOnNon500Key         = "error_response_on_non_500"
 	ErrorOnServerErrorKey            = "error_on_server_error"

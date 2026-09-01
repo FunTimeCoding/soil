@@ -1,14 +1,14 @@
 package parse_elite
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/raid/elite_parser"
 	"strings"
 )
 
 func printDefensiveTable(players []*elite_parser.AggregatedPlayer) {
-	fmt.Println("=== Defensive ===")
-	fmt.Printf(
+	console.Line("=== Defensive ===")
+	console.Format(
 		"%-25s %-15s %6s %6s %6s %6s %6s %6s %6s\n",
 		"Name",
 		"Profession",
@@ -20,10 +20,10 @@ func printDefensiveTable(players []*elite_parser.AggregatedPlayer) {
 		"Block",
 		"Invuln",
 	)
-	fmt.Println(strings.Repeat("-", 100))
+	console.Line(strings.Repeat("-", 100))
 
 	for _, p := range players {
-		fmt.Printf(
+		console.Format(
 			"%-25s %-15s %6d %6d %6d %6d %6d %6d %6d\n",
 			p.Name,
 			p.Profession,

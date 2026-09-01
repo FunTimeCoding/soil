@@ -1,23 +1,23 @@
 package example
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
+	"github.com/funtimecoding/soil/pkg/console"
 )
 
 func Watch() {
 	c := confluence.NewEnvironment()
 	f := constant.ConfluenceDense
-	fmt.Println("Watch")
+	console.Line("Watch")
 
 	for _, p := range c.MustWatched() {
-		fmt.Println(p.Format(f))
+		console.Line(p.Format(f))
 	}
 
-	fmt.Println("Favorite")
+	console.Line("Favorite")
 
 	for _, p := range c.MustFavorites() {
-		fmt.Println(p.Format(f))
+		console.Line(p.Format(f))
 	}
 }

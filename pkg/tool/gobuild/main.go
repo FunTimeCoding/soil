@@ -1,12 +1,12 @@
 package gobuild
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/build"
 	buildConstant "github.com/funtimecoding/soil/pkg/build/constant"
 	"github.com/funtimecoding/soil/pkg/build/option"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/strings/split"
 	"github.com/funtimecoding/soil/pkg/system"
@@ -65,7 +65,7 @@ func Main(
 				continue
 			}
 
-			fmt.Printf("Build %s\n", n)
+			console.Format("Build %s\n", n)
 			buildNamed(a, n, linuxAMD64, darwinARM64, darwinAMD64)
 		}
 
@@ -74,7 +74,7 @@ func Main(
 
 	if names := split.Comma(name); len(names) > 1 {
 		for _, n := range names {
-			fmt.Printf("Build %s\n", n)
+			console.Format("Build %s\n", n)
 			buildNamed(a, n, linuxAMD64, darwinARM64, darwinAMD64)
 		}
 

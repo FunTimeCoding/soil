@@ -1,9 +1,9 @@
 package gopackage
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
 	"github.com/funtimecoding/soil/pkg/build"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	system "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/join"
@@ -23,9 +23,9 @@ func Main(
 	var runs int
 
 	for _, name := range build.OutputDirectories() {
-		fmt.Printf("Name: %s\n", name)
+		console.Format("Name: %s\n", name)
 		outputDirectory := join.Relative(system.Temporary, name)
-		fmt.Printf("Output directory: %s\n", outputDirectory)
+		console.Format("Output directory: %s\n", outputDirectory)
 
 		for _, systemArchitecture := range build.SystemArchitectures() {
 			if build.GuessBinaryPath(name, systemArchitecture) != "" {
@@ -36,7 +36,7 @@ func Main(
 	}
 
 	if runs == 0 {
-		fmt.Println("No archive created")
+		console.Line("No archive created")
 		os.Exit(1)
 	}
 }

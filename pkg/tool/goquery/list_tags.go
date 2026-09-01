@@ -3,7 +3,7 @@ package goquery
 import (
 	"context"
 	"encoding/json"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 	"github.com/spf13/cobra"
@@ -42,7 +42,12 @@ func listTags(c *client.Client) *cobra.Command {
 					sourceType = *v.SourceType
 				}
 
-				fmt.Printf("%s  %s  %s\n", collection, pathPrefix, sourceType)
+				console.Format(
+					"%s  %s  %s\n",
+					collection,
+					pathPrefix,
+					sourceType,
+				)
 			}
 		},
 	}

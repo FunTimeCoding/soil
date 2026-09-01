@@ -7,6 +7,17 @@ import (
 )
 
 const PollInterval = 30 * time.Second
+const (
+	FloorTitle = "Floor"
+	FloorPath  = "/"
+
+	FloorEvent   = "floor"
+	SummaryEvent = "summary"
+
+	StorageWarnRatio = 0.8
+
+	ReleaseClass = "release"
+)
 
 var Identity = identity.New(
 	"goproxmoxd",

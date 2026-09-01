@@ -1,8 +1,8 @@
 package gocat
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/console"
 	library "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/strings/slice"
@@ -28,7 +28,7 @@ func Main(
 	files := slice.StripSuffix(system.Glob(pattern), library.TestSuffix)
 
 	if len(files) == 0 {
-		fmt.Println("No relevant files")
+		console.Line("No relevant files")
 
 		return
 	}
@@ -92,8 +92,8 @@ func Main(
 	}
 
 	if packageLine != "" {
-		fmt.Println(packageLine)
-		fmt.Println()
+		console.Line(packageLine)
+		console.Line()
 	}
 
 	if len(importSet) > 0 {
@@ -104,14 +104,14 @@ func Main(
 		}
 
 		sort.Strings(imports)
-		fmt.Println("import (")
+		console.Line("import (")
 
 		for _, imp := range imports {
-			fmt.Printf("\t%s\n", imp)
+			console.Format("\t%s\n", imp)
 		}
 
-		fmt.Println(")")
-		fmt.Println()
+		console.Line(")")
+		console.Line()
 	}
 
 	pastWasEmpty := false
@@ -122,11 +122,11 @@ func Main(
 		isTopLevel := functionRegex.MatchString(trimmed)
 
 		if isTopLevel && i > 0 && !pastWasEmpty {
-			fmt.Println()
+			console.Line()
 		}
 
 		if !isEmpty || !pastWasEmpty {
-			fmt.Println(line)
+			console.Line(line)
 		}
 
 		pastWasEmpty = isEmpty

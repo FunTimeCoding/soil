@@ -1,9 +1,9 @@
 package example
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/gitlab"
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 )
@@ -15,7 +15,7 @@ func BranchRequest() {
 	a.ParseSimple()
 	g := gitlab.NewEnvironment()
 	f := constant.Format
-	fmt.Println(
+	console.Line(
 		g.MustBranchRequest(
 			a.GetInteger64(argumentConstant.Project),
 			a.GetString(argumentConstant.Branch),

@@ -1,7 +1,7 @@
 package example
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/provision/salt"
 )
 
@@ -10,10 +10,10 @@ func Accept() {
 	result, e := c.AcceptKey("test-minion")
 
 	if e != nil {
-		fmt.Printf("accept error: %v\n", e)
+		console.Format("accept error: %v\n", e)
 
 		return
 	}
 
-	fmt.Printf("accepted: %v\n", result)
+	console.Format("accepted: %v\n", result)
 }

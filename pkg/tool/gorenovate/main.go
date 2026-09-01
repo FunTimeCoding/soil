@@ -1,8 +1,8 @@
 package gorenovate
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/kubernetes/client"
 	kubernetes "github.com/funtimecoding/soil/pkg/kubernetes/constant"
@@ -25,7 +25,7 @@ func Main(
 		missing = missingFiles(c)
 
 		for _, f := range missing {
-			fmt.Printf("matchFiles not found: %s\n", f)
+			console.Format("matchFiles not found: %s\n", f)
 		}
 	}
 
@@ -33,11 +33,11 @@ func Main(
 	f := kubernetes.Format
 
 	for _, j := range k.CronJobs(kubernetes.RenovateNamespace) {
-		fmt.Printf("CronJob: %s\n", j.Format(f))
+		console.Format("CronJob: %s\n", j.Format(f))
 	}
 
 	for _, j := range k.Jobs(kubernetes.RenovateNamespace) {
-		fmt.Printf("Job: %s\n", j.Format(f))
+		console.Format("Job: %s\n", j.Format(f))
 	}
 
 	if len(missing) > 0 {

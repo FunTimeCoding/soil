@@ -2,6 +2,7 @@ package guard
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/constant"
 	"github.com/spf13/cobra"
 	"os"
@@ -17,6 +18,10 @@ func New() *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
+			if environment.Exists(constant.NoGuardEnvironment) {
+				return
+			}
+
 			i := readInput()
 
 			if i.ToolName != "Bash" {

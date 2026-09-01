@@ -1,7 +1,7 @@
 package gitlab
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/forge"
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab/job"
@@ -14,7 +14,7 @@ func (c *Client) Jobs() []*job.Job {
 
 	for _, p := range c.PipelineProjects() {
 		if c.verbose {
-			fmt.Printf("Project: %s\n", p.Raw.NameWithNamespace)
+			console.Format("Project: %s\n", p.Raw.NameWithNamespace)
 		}
 
 		for i, j := range c.MustProjectJobs(p) {
@@ -27,7 +27,7 @@ func (c *Client) Jobs() []*job.Job {
 			}
 
 			if c.verbose {
-				fmt.Printf("  Job: %s\n", j.Format(f))
+				console.Format("  Job: %s\n", j.Format(f))
 			}
 
 			result = append(result, j)

@@ -1,7 +1,7 @@
 package goarchive
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/nwaples/rardecode/v2"
@@ -49,5 +49,5 @@ func extract(
 		count++
 	}
 
-	fmt.Printf("%s: %d files\n", output, count)
+	console.Format("%s: %d files\n", output, count)
 }

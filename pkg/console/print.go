@@ -1,7 +1,6 @@
 package console
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/strings/constant"
@@ -14,7 +13,7 @@ func Print(
 	indent int,
 	f *option.Format,
 ) {
-	fmt.Printf(
+	Format(
 		"%s%s: %s\n",
 		strings.Repeat(constant.DoubleSpace, indent),
 		title,

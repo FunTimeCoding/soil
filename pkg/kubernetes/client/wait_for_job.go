@@ -1,7 +1,7 @@
 package client
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors/job"
 	"github.com/funtimecoding/soil/pkg/errors/timeout"
 	"time"
@@ -26,7 +26,7 @@ func (c *Client) WaitForJob(
 		}
 
 		if j.Raw.Status.CompletionTime != nil {
-			fmt.Printf("job done: %s\n", name)
+			console.Format("job done: %s\n", name)
 
 			return nil
 		}
@@ -38,7 +38,7 @@ func (c *Client) WaitForJob(
 			return failure
 		}
 
-		fmt.Printf("job running: %s\n", name)
+		console.Format("job running: %s\n", name)
 		time.Sleep(10 * time.Second)
 	}
 }

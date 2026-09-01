@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/basic/request"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/basic/response"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/notation"
 )
 
@@ -60,7 +61,7 @@ func (c *Client) SearchV3(
 			return nil, e
 		}
 
-		fmt.Printf("Response: %d %s\n", status, r)
+		console.Format("Response: %d %s\n", status, r)
 	}
 
 	// Do not enrich, otherwise watchedIssueKeys will be recursive.

@@ -1,7 +1,7 @@
 package go_mod
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/system/run"
 )
@@ -11,7 +11,7 @@ func Update(
 	skipProxy bool,
 	continueOnError bool,
 ) {
-	fmt.Printf("%s\n", name)
+	console.Format("%s\n", name)
 	r := run.New()
 	r.Panic = false
 

@@ -1,6 +1,9 @@
 package constant
 
-import "github.com/funtimecoding/soil/pkg/identity"
+import (
+	"github.com/funtimecoding/soil/pkg/identity"
+	"regexp"
+)
 
 var Identity = identity.New(
 	"goaudit",
@@ -8,7 +11,10 @@ var Identity = identity.New(
 	"goaudit <repo-root> [<repo-root>...]",
 )
 
-var ConfigurationPaths = []string{".goaudit.yaml", "strata/tool/goaudit.yaml"}
+var (
+	ConfigurationPaths = []string{".goaudit.yaml", "strata/tool/goaudit.yaml"}
+	VersionedPathPattern = regexp.MustCompile(`^/api/v[0-9]+(/|$)`)
+)
 
 const (
 	ClaudeSettingsPath       = ".claude/settings.local.json"

@@ -1,7 +1,7 @@
 package hub
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/github"
 	"github.com/funtimecoding/soil/pkg/github/image"
 )
@@ -21,7 +21,7 @@ func Image(
 				continue
 			}
 
-			fmt.Printf("Delete image: %s@%s\n", p.Name, v.Digest)
+			console.Format("Delete image: %s@%s\n", p.Name, v.Digest)
 			c.MustDeletePackageVersion(p.Name, v.Identifier)
 		}
 	}

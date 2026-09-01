@@ -13,8 +13,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/option"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/server"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/service"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/web"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/worker"
-	"github.com/funtimecoding/soil/pkg/web"
+	webLib "github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
@@ -27,11 +28,11 @@ func Run(
 	v := service.New(o.Inventory)
 	l := logger.New(context.Background())
 	m := metric.New()
+	k := worker.New(v, constant.PollInterval, m.Registry(), l, r)
+	b := web.New(v, k)
 	lifecycle.New(
 		l,
-		lifecycle.WithWorker(
-			worker.New(v, constant.PollInterval, m.Registry(), l, r),
-		),
+		lifecycle.WithWorker(k),
 		lifecycle.WithServer(
 			lifecycleServer.New(
 				constant.Identity,
@@ -62,7 +63,7 @@ func Run(
 										request any,
 									) (any, error) {
 										response, e := f(x, w, r, request)
-										web.RecordTelemetry(t, operation, e)
+										webLib.RecordTelemetry(t, operation, e)
 
 										return response, e
 									}
@@ -72,8 +73,9 @@ func Run(
 						m,
 					)
 					model_context.New(v, r, t, o.Version).Mount(m)
+					b.Mount(m)
 				},
-			).WithMiddleware(web.RecoveryMiddleware(r)),
+			).WithMiddleware(b.Recovery(r)),
 		),
 	).RunUntilSignal()
 }

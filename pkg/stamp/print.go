@@ -1,9 +1,9 @@
 package stamp
 
-import "fmt"
+import "github.com/funtimecoding/soil/pkg/console"
 
 func (s *Stamp) Print() {
-	fmt.Printf(
+	console.Format(
 		"Version: %s\nGitHash: %s\nBuildDate: %s\n",
 		s.Version,
 		s.GitHash,

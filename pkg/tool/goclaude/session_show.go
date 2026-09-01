@@ -3,6 +3,7 @@ package goclaude
 import (
 	"context"
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/pricing"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
@@ -21,7 +22,7 @@ func sessionShow(c *command_context.Context) *cobra.Command {
 			identifier := resolveSession(c.Client(), arguments[0])
 
 			if identifier == "" {
-				fmt.Printf("session not found: %s\n", arguments[0])
+				console.Format("session not found: %s\n", arguments[0])
 
 				return
 			}
@@ -37,38 +38,38 @@ func sessionShow(c *command_context.Context) *cobra.Command {
 			}
 
 			d := response.JSON200
-			fmt.Printf("Identifier: %s\n", d.Identifier)
+			console.Format("Identifier: %s\n", d.Identifier)
 
 			if d.Name != nil {
-				fmt.Printf("Name: %s\n", *d.Name)
+				console.Format("Name: %s\n", *d.Name)
 			}
 
 			if d.Callsign != nil {
-				fmt.Printf("Callsign: %s\n", *d.Callsign)
+				console.Format("Callsign: %s\n", *d.Callsign)
 			}
 
 			if d.Alias != nil {
-				fmt.Printf("Alias: %s\n", *d.Alias)
+				console.Format("Alias: %s\n", *d.Alias)
 			}
 
 			if d.Slug != nil {
-				fmt.Printf("Slug: %s\n", *d.Slug)
+				console.Format("Slug: %s\n", *d.Slug)
 			}
 
 			if d.Created != nil {
-				fmt.Printf("Created: %s\n", *d.Created)
+				console.Format("Created: %s\n", *d.Created)
 			}
 
 			if d.TurnCount != nil {
-				fmt.Printf("Turns: %d\n", *d.TurnCount)
+				console.Format("Turns: %d\n", *d.TurnCount)
 			}
 
 			if d.Cost != nil {
-				fmt.Printf("Cost: $%.2f\n", *d.Cost)
+				console.Format("Cost: $%.2f\n", *d.Cost)
 			}
 
 			if d.Usage != nil && len(*d.Usage) > 0 {
-				fmt.Println("\nUsage:")
+				console.Line("\nUsage:")
 
 				for _, u := range *d.Usage {
 					marker := ""
@@ -77,7 +78,7 @@ func sessionShow(c *command_context.Context) *cobra.Command {
 						marker = " (unknown model, sonnet rates)"
 					}
 
-					fmt.Printf(
+					console.Format(
 						"  %-8s %d calls, %s input, %s output, %s cache-write, %s cache-read, $%.2f%s\n",
 						u.Model,
 						u.Calls,
@@ -92,35 +93,35 @@ func sessionShow(c *command_context.Context) *cobra.Command {
 			}
 
 			if d.Labels != nil && len(*d.Labels) > 0 {
-				fmt.Println("\nLabels:")
+				console.Line("\nLabels:")
 
 				for _, l := range *d.Labels {
-					fmt.Printf("  %s: %s\n", l.Key, l.Value)
+					console.Format("  %s: %s\n", l.Key, l.Value)
 				}
 			}
 
 			if d.Description != nil {
-				fmt.Printf("\n%s\n", *d.Description)
+				console.Format("\n%s\n", *d.Description)
 			}
 
 			if d.Completions != nil && len(*d.Completions) > 0 {
-				fmt.Println("\nCompletions:")
+				console.Line("\nCompletions:")
 
 				for _, o := range *d.Completions {
-					fmt.Printf("  [%s] %s\n", o.Kind, o.Topic)
+					console.Format("  [%s] %s\n", o.Kind, o.Topic)
 
 					if o.Summary != nil {
-						fmt.Printf("    %s\n", *o.Summary)
+						console.Format("    %s\n", *o.Summary)
 					}
 				}
 			}
 
 			if d.Summary != nil {
-				fmt.Printf("\nSummary:\n%s\n", *d.Summary)
+				console.Format("\nSummary:\n%s\n", *d.Summary)
 			}
 
 			if d.Pulses != nil && len(*d.Pulses) > 0 {
-				fmt.Println("\nPulses:")
+				console.Line("\nPulses:")
 
 				for _, p := range *d.Pulses {
 					from := "→"
@@ -129,7 +130,7 @@ func sessionShow(c *command_context.Context) *cobra.Command {
 						from = fmt.Sprintf("%s →", *p.From)
 					}
 
-					fmt.Printf("  %s %s\n", from, p.Body)
+					console.Format("  %s %s\n", from, p.Body)
 				}
 			}
 		},

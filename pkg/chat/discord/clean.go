@@ -1,8 +1,8 @@
 package discord
 
 import (
-	"fmt"
 	"github.com/bwmarrin/discordgo"
+	"github.com/funtimecoding/soil/pkg/console"
 )
 
 func (c *Client) Clean(
@@ -15,7 +15,7 @@ func (c *Client) Clean(
 			continue
 		}
 
-		fmt.Printf("Delete %d: %s\n", i, m.ID)
+		console.Format("Delete %d: %s\n", i, m.ID)
 		c.Delete(channel, m)
 	}
 }

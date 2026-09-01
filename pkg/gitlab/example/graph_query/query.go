@@ -1,7 +1,7 @@
 package graph_query
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/gitlab"
 )
 
@@ -49,6 +49,6 @@ func Query() {
 }`,
 		&runner,
 	)
-	fmt.Printf("Response: %+v\n", runner)
-	fmt.Printf("Runner: %+v\n", c.GraphRunner(1))
+	console.Format("Response: %+v\n", runner)
+	console.Format("Runner: %+v\n", c.GraphRunner(1))
 }

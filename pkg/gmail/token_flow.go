@@ -1,7 +1,7 @@
 package gmail
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/system"
 	"golang.org/x/oauth2"
 )
@@ -21,12 +21,12 @@ func (c *Client) tokenFlow(
 	if !skipExisting {
 		system.OpenBrowser(link)
 	} else {
-		fmt.Printf("Link: %s\n", link)
+		console.Format("Link: %s\n", link)
 	}
 
 	c.callback.Start()
 	code := c.callback.WaitForCallback()
-	fmt.Printf("Callback code: %s\n", code)
+	console.Format("Callback code: %s\n", code)
 
 	return c.exchange(o, code)
 }

@@ -80,19 +80,19 @@ type UpdateEntryJSONRequestBody = PostEntryRequest
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 
-	// (GET /api/v1/entries)
+	// (GET /api/entries)
 	GetEntries(w http.ResponseWriter, r *http.Request, params GetEntriesParams)
 
-	// (POST /api/v1/entries)
+	// (POST /api/entries)
 	PostEntry(w http.ResponseWriter, r *http.Request)
 
-	// (DELETE /api/v1/entries/{id})
+	// (DELETE /api/entries/{id})
 	DeleteEntry(w http.ResponseWriter, r *http.Request, id int)
 
-	// (PUT /api/v1/entries/{id})
+	// (PUT /api/entries/{id})
 	UpdateEntry(w http.ResponseWriter, r *http.Request, id int)
 
-	// (GET /api/v1/status)
+	// (GET /api/status)
 	GetStatus(w http.ResponseWriter, r *http.Request)
 }
 
@@ -403,11 +403,11 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 		ErrorHandlerFunc:   options.ErrorHandlerFunc,
 	}
 
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/entries", wrapper.GetEntries)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/entries", wrapper.PostEntry)
-	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/v1/entries/{id}", wrapper.DeleteEntry)
-	m.HandleFunc(http.MethodPut+" "+options.BaseURL+"/api/v1/entries/{id}", wrapper.UpdateEntry)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/status", wrapper.GetStatus)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/entries", wrapper.GetEntries)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/entries", wrapper.PostEntry)
+	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/entries/{id}", wrapper.DeleteEntry)
+	m.HandleFunc(http.MethodPut+" "+options.BaseURL+"/api/entries/{id}", wrapper.UpdateEntry)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/status", wrapper.GetStatus)
 
 	return m
 }
@@ -603,19 +603,19 @@ func (response GetStatus500JSONResponse) VisitGetStatusResponse(w http.ResponseW
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
 
-	// (GET /api/v1/entries)
+	// (GET /api/entries)
 	GetEntries(ctx context.Context, request GetEntriesRequestObject) (GetEntriesResponseObject, error)
 
-	// (POST /api/v1/entries)
+	// (POST /api/entries)
 	PostEntry(ctx context.Context, request PostEntryRequestObject) (PostEntryResponseObject, error)
 
-	// (DELETE /api/v1/entries/{id})
+	// (DELETE /api/entries/{id})
 	DeleteEntry(ctx context.Context, request DeleteEntryRequestObject) (DeleteEntryResponseObject, error)
 
-	// (PUT /api/v1/entries/{id})
+	// (PUT /api/entries/{id})
 	UpdateEntry(ctx context.Context, request UpdateEntryRequestObject) (UpdateEntryResponseObject, error)
 
-	// (GET /api/v1/status)
+	// (GET /api/status)
 	GetStatus(ctx context.Context, request GetStatusRequestObject) (GetStatusResponseObject, error)
 }
 
@@ -803,18 +803,18 @@ func (sh *strictHandler) GetStatus(w http.ResponseWriter, r *http.Request) {
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
+	"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",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

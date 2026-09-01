@@ -582,217 +582,217 @@ type CreateWirelessNetworkJSONRequestBody = CreateNameRequest
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 
-	// (GET /api/v1/address-ranges)
+	// (GET /api/address-ranges)
 	ListAddressRanges(w http.ResponseWriter, r *http.Request)
 
-	// (POST /api/v1/address-ranges)
+	// (POST /api/address-ranges)
 	CreateAddressRange(w http.ResponseWriter, r *http.Request)
 
-	// (DELETE /api/v1/addresses/{identifier})
+	// (DELETE /api/addresses/{identifier})
 	DeleteAddress(w http.ResponseWriter, r *http.Request, identifier int32)
 
-	// (GET /api/v1/cables)
+	// (GET /api/cables)
 	ListCables(w http.ResponseWriter, r *http.Request)
 
-	// (POST /api/v1/cables)
+	// (POST /api/cables)
 	CreateCable(w http.ResponseWriter, r *http.Request)
 
-	// (GET /api/v1/cluster-types)
+	// (GET /api/cluster-types)
 	ListClusterTypes(w http.ResponseWriter, r *http.Request)
 
-	// (POST /api/v1/cluster-types)
+	// (POST /api/cluster-types)
 	CreateClusterType(w http.ResponseWriter, r *http.Request)
 
-	// (GET /api/v1/clusters)
+	// (GET /api/clusters)
 	ListClusters(w http.ResponseWriter, r *http.Request)
 
-	// (POST /api/v1/clusters)
+	// (POST /api/clusters)
 	CreateCluster(w http.ResponseWriter, r *http.Request)
 
-	// (GET /api/v1/device-roles)
+	// (GET /api/device-roles)
 	ListDeviceRoles(w http.ResponseWriter, r *http.Request)
 
-	// (POST /api/v1/device-roles)
+	// (POST /api/device-roles)
 	CreateDeviceRole(w http.ResponseWriter, r *http.Request)
 
-	// (GET /api/v1/device-types)
+	// (GET /api/device-types)
 	ListDeviceTypes(w http.ResponseWriter, r *http.Request)
 
-	// (POST /api/v1/device-types)
+	// (POST /api/device-types)
 	CreateDeviceType(w http.ResponseWriter, r *http.Request)
 
-	// (GET /api/v1/devices)
+	// (GET /api/devices)
 	ListDevices(w http.ResponseWriter, r *http.Request, params ListDevicesParams)
 
-	// (POST /api/v1/devices/create)
+	// (POST /api/devices/create)
 	CreateDevice(w http.ResponseWriter, r *http.Request)
 
-	// (GET /api/v1/devices/{name})
+	// (GET /api/devices/{name})
 	GetDevice(w http.ResponseWriter, r *http.Request, name string)
 
-	// (PATCH /api/v1/devices/{name})
+	// (PATCH /api/devices/{name})
 	UpdateDevice(w http.ResponseWriter, r *http.Request, name string)
 
-	// (GET /api/v1/devices/{name}/addresses)
+	// (GET /api/devices/{name}/addresses)
 	ListAddresses(w http.ResponseWriter, r *http.Request, name string)
 
-	// (POST /api/v1/devices/{name}/addresses/create)
+	// (POST /api/devices/{name}/addresses/create)
 	CreateAddress(w http.ResponseWriter, r *http.Request, name string)
 
-	// (GET /api/v1/devices/{name}/interfaces)
+	// (GET /api/devices/{name}/interfaces)
 	ListInterfaces(w http.ResponseWriter, r *http.Request, name string)
 
-	// (POST /api/v1/devices/{name}/interfaces/create)
+	// (POST /api/devices/{name}/interfaces/create)
 	CreateInterface(w http.ResponseWriter, r *http.Request, name string)
 
-	// (GET /api/v1/devices/{name}/journal-entries)
+	// (GET /api/devices/{name}/journal-entries)
 	ListDeviceJournalEntries(w http.ResponseWriter, r *http.Request, name string, params ListDeviceJournalEntriesParams)
 
-	// (POST /api/v1/devices/{name}/journal-entries)
+	// (POST /api/devices/{name}/journal-entries)
 	AddDeviceJournalEntry(w http.ResponseWriter, r *http.Request, name string)
 
-	// (GET /api/v1/devices/{name}/labels)
+	// (GET /api/devices/{name}/labels)
 	ListDeviceLabels(w http.ResponseWriter, r *http.Request, name string)
 
-	// (DELETE /api/v1/devices/{name}/labels/{key})
+	// (DELETE /api/devices/{name}/labels/{key})
 	RemoveDeviceLabel(w http.ResponseWriter, r *http.Request, name string, key string)
 
-	// (PUT /api/v1/devices/{name}/labels/{key})
+	// (PUT /api/devices/{name}/labels/{key})
 	SetDeviceLabel(w http.ResponseWriter, r *http.Request, name string, key string)
 
-	// (GET /api/v1/devices/{name}/tags)
+	// (GET /api/devices/{name}/tags)
 	ListDeviceTags(w http.ResponseWriter, r *http.Request, name string)
 
-	// (DELETE /api/v1/devices/{name}/tags/{tag})
+	// (DELETE /api/devices/{name}/tags/{tag})
 	RemoveDeviceTag(w http.ResponseWriter, r *http.Request, name string, tag string)
 
-	// (PUT /api/v1/devices/{name}/tags/{tag})
+	// (PUT /api/devices/{name}/tags/{tag})
 	AddDeviceTag(w http.ResponseWriter, r *http.Request, name string, tag string)
 
-	// (POST /api/v1/devices/{name}/tunnel-terminations/create)
+	// (POST /api/devices/{name}/tunnel-terminations/create)
 	CreateDeviceTunnelTermination(w http.ResponseWriter, r *http.Request, name string)
 
-	// (DELETE /api/v1/journal-entries/{identifier})
+	// (DELETE /api/journal-entries/{identifier})
 	DeleteJournalEntry(w http.ResponseWriter, r *http.Request, identifier int32)
 
-	// (PATCH /api/v1/journal-entries/{identifier})
+	// (PATCH /api/journal-entries/{identifier})
 	UpdateJournalEntry(w http.ResponseWriter, r *http.Request, identifier int32)
 
-	// (GET /api/v1/locations)
+	// (GET /api/locations)
 	ListLocations(w http.ResponseWriter, r *http.Request)
 
-	// (POST /api/v1/locations)
+	// (POST /api/locations)
 	CreateLocation(w http.ResponseWriter, r *http.Request)
 
-	// (GET /api/v1/manufacturers)
+	// (GET /api/manufacturers)
 	ListManufacturers(w http.ResponseWriter, r *http.Request)
 
-	// (POST /api/v1/manufacturers)
+	// (POST /api/manufacturers)
 	CreateManufacturer(w http.ResponseWriter, r *http.Request)
 
-	// (GET /api/v1/platforms)
+	// (GET /api/platforms)
 	ListPlatforms(w http.ResponseWriter, r *http.Request)
 
-	// (POST /api/v1/platforms)
+	// (POST /api/platforms)
 	CreatePlatform(w http.ResponseWriter, r *http.Request)
 
-	// (GET /api/v1/prefixes)
+	// (GET /api/prefixes)
 	ListPrefixes(w http.ResponseWriter, r *http.Request)
 
-	// (POST /api/v1/prefixes)
+	// (POST /api/prefixes)
 	CreatePrefix(w http.ResponseWriter, r *http.Request)
 
-	// (GET /api/v1/sites)
+	// (GET /api/sites)
 	ListSites(w http.ResponseWriter, r *http.Request)
 
-	// (POST /api/v1/sites)
+	// (POST /api/sites)
 	CreateSite(w http.ResponseWriter, r *http.Request)
 
-	// (GET /api/v1/tags)
+	// (GET /api/tags)
 	ListTags(w http.ResponseWriter, r *http.Request)
 
-	// (POST /api/v1/tags)
+	// (POST /api/tags)
 	CreateTag(w http.ResponseWriter, r *http.Request)
 
-	// (GET /api/v1/tenants)
+	// (GET /api/tenants)
 	ListTenants(w http.ResponseWriter, r *http.Request)
 
-	// (POST /api/v1/tenants)
+	// (POST /api/tenants)
 	CreateTenant(w http.ResponseWriter, r *http.Request)
 
-	// (GET /api/v1/tunnel-groups)
+	// (GET /api/tunnel-groups)
 	ListTunnelGroups(w http.ResponseWriter, r *http.Request)
 
-	// (POST /api/v1/tunnel-groups)
+	// (POST /api/tunnel-groups)
 	CreateTunnelGroup(w http.ResponseWriter, r *http.Request)
 
-	// (GET /api/v1/tunnel-terminations)
+	// (GET /api/tunnel-terminations)
 	ListTunnelTerminations(w http.ResponseWriter, r *http.Request)
 
-	// (GET /api/v1/tunnels)
+	// (GET /api/tunnels)
 	ListTunnels(w http.ResponseWriter, r *http.Request)
 
-	// (POST /api/v1/tunnels)
+	// (POST /api/tunnels)
 	CreateTunnel(w http.ResponseWriter, r *http.Request)
 
-	// (GET /api/v1/virtual-machines)
+	// (GET /api/virtual-machines)
 	ListVirtualMachines(w http.ResponseWriter, r *http.Request)
 
-	// (POST /api/v1/virtual-machines)
+	// (POST /api/virtual-machines)
 	CreateVirtualMachine(w http.ResponseWriter, r *http.Request)
 
-	// (GET /api/v1/virtual-machines/{name})
+	// (GET /api/virtual-machines/{name})
 	GetVirtualMachine(w http.ResponseWriter, r *http.Request, name string)
 
-	// (PATCH /api/v1/virtual-machines/{name})
+	// (PATCH /api/virtual-machines/{name})
 	UpdateVirtualMachine(w http.ResponseWriter, r *http.Request, name string)
 
-	// (GET /api/v1/virtual-machines/{name}/addresses)
+	// (GET /api/virtual-machines/{name}/addresses)
 	ListVirtualAddresses(w http.ResponseWriter, r *http.Request, name string)
 
-	// (POST /api/v1/virtual-machines/{name}/addresses/create)
+	// (POST /api/virtual-machines/{name}/addresses/create)
 	CreateVirtualAddress(w http.ResponseWriter, r *http.Request, name string)
 
-	// (GET /api/v1/virtual-machines/{name}/disks)
+	// (GET /api/virtual-machines/{name}/disks)
 	ListVirtualDisks(w http.ResponseWriter, r *http.Request, name string)
 
-	// (POST /api/v1/virtual-machines/{name}/disks)
+	// (POST /api/virtual-machines/{name}/disks)
 	CreateVirtualDisk(w http.ResponseWriter, r *http.Request, name string)
 
-	// (GET /api/v1/virtual-machines/{name}/interfaces)
+	// (GET /api/virtual-machines/{name}/interfaces)
 	ListVirtualInterfaces(w http.ResponseWriter, r *http.Request, name string)
 
-	// (POST /api/v1/virtual-machines/{name}/interfaces/create)
+	// (POST /api/virtual-machines/{name}/interfaces/create)
 	CreateVirtualInterface(w http.ResponseWriter, r *http.Request, name string)
 
-	// (GET /api/v1/virtual-machines/{name}/journal-entries)
+	// (GET /api/virtual-machines/{name}/journal-entries)
 	ListVirtualJournalEntries(w http.ResponseWriter, r *http.Request, name string, params ListVirtualJournalEntriesParams)
 
-	// (POST /api/v1/virtual-machines/{name}/journal-entries)
+	// (POST /api/virtual-machines/{name}/journal-entries)
 	AddVirtualJournalEntry(w http.ResponseWriter, r *http.Request, name string)
 
-	// (GET /api/v1/virtual-machines/{name}/labels)
+	// (GET /api/virtual-machines/{name}/labels)
 	ListVirtualLabels(w http.ResponseWriter, r *http.Request, name string)
 
-	// (DELETE /api/v1/virtual-machines/{name}/labels/{key})
+	// (DELETE /api/virtual-machines/{name}/labels/{key})
 	RemoveVirtualLabel(w http.ResponseWriter, r *http.Request, name string, key string)
 
-	// (PUT /api/v1/virtual-machines/{name}/labels/{key})
+	// (PUT /api/virtual-machines/{name}/labels/{key})
 	SetVirtualLabel(w http.ResponseWriter, r *http.Request, name string, key string)
 
-	// (DELETE /api/v1/virtual-machines/{name}/tags/{tag})
+	// (DELETE /api/virtual-machines/{name}/tags/{tag})
 	RemoveVirtualTag(w http.ResponseWriter, r *http.Request, name string, tag string)
 
-	// (PUT /api/v1/virtual-machines/{name}/tags/{tag})
+	// (PUT /api/virtual-machines/{name}/tags/{tag})
 	AddVirtualTag(w http.ResponseWriter, r *http.Request, name string, tag string)
 
-	// (POST /api/v1/virtual-machines/{name}/tunnel-terminations/create)
+	// (POST /api/virtual-machines/{name}/tunnel-terminations/create)
 	CreateVirtualTunnelTermination(w http.ResponseWriter, r *http.Request, name string)
 
-	// (GET /api/v1/wireless-networks)
+	// (GET /api/wireless-networks)
 	ListWirelessNetworks(w http.ResponseWriter, r *http.Request)
 
-	// (POST /api/v1/wireless-networks)
+	// (POST /api/wireless-networks)
 	CreateWirelessNetwork(w http.ResponseWriter, r *http.Request)
 }
 
@@ -2476,77 +2476,77 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 		ErrorHandlerFunc:   options.ErrorHandlerFunc,
 	}
 
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/devices", wrapper.ListDevices)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/devices/{name}", wrapper.GetDevice)
-	m.HandleFunc(http.MethodPatch+" "+options.BaseURL+"/api/v1/devices/{name}", wrapper.UpdateDevice)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/devices/{name}/interfaces", wrapper.ListInterfaces)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/devices/{name}/addresses", wrapper.ListAddresses)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/devices/{name}/addresses/create", wrapper.CreateAddress)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/sites", wrapper.ListSites)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/sites", wrapper.CreateSite)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/tenants", wrapper.ListTenants)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/tenants", wrapper.CreateTenant)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/device-roles", wrapper.ListDeviceRoles)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/device-roles", wrapper.CreateDeviceRole)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/manufacturers", wrapper.ListManufacturers)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/manufacturers", wrapper.CreateManufacturer)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/device-types", wrapper.ListDeviceTypes)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/device-types", wrapper.CreateDeviceType)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/devices/{name}/interfaces/create", wrapper.CreateInterface)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/devices/create", wrapper.CreateDevice)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/cluster-types", wrapper.ListClusterTypes)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/cluster-types", wrapper.CreateClusterType)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/clusters", wrapper.ListClusters)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/clusters", wrapper.CreateCluster)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/virtual-machines", wrapper.ListVirtualMachines)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/virtual-machines", wrapper.CreateVirtualMachine)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/virtual-machines/{name}", wrapper.GetVirtualMachine)
-	m.HandleFunc(http.MethodPatch+" "+options.BaseURL+"/api/v1/virtual-machines/{name}", wrapper.UpdateVirtualMachine)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/virtual-machines/{name}/interfaces", wrapper.ListVirtualInterfaces)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/virtual-machines/{name}/addresses", wrapper.ListVirtualAddresses)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/virtual-machines/{name}/interfaces/create", wrapper.CreateVirtualInterface)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/virtual-machines/{name}/addresses/create", wrapper.CreateVirtualAddress)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/tags", wrapper.ListTags)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/tags", wrapper.CreateTag)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/devices/{name}/tags", wrapper.ListDeviceTags)
-	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/v1/devices/{name}/tags/{tag}", wrapper.RemoveDeviceTag)
-	m.HandleFunc(http.MethodPut+" "+options.BaseURL+"/api/v1/devices/{name}/tags/{tag}", wrapper.AddDeviceTag)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/prefixes", wrapper.ListPrefixes)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/prefixes", wrapper.CreatePrefix)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/address-ranges", wrapper.ListAddressRanges)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/address-ranges", wrapper.CreateAddressRange)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/locations", wrapper.ListLocations)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/locations", wrapper.CreateLocation)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/platforms", wrapper.ListPlatforms)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/platforms", wrapper.CreatePlatform)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/wireless-networks", wrapper.ListWirelessNetworks)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/wireless-networks", wrapper.CreateWirelessNetwork)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/virtual-machines/{name}/disks", wrapper.ListVirtualDisks)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/virtual-machines/{name}/disks", wrapper.CreateVirtualDisk)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/tunnel-groups", wrapper.ListTunnelGroups)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/tunnel-groups", wrapper.CreateTunnelGroup)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/tunnels", wrapper.ListTunnels)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/tunnels", wrapper.CreateTunnel)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/cables", wrapper.ListCables)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/cables", wrapper.CreateCable)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/tunnel-terminations", wrapper.ListTunnelTerminations)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/devices/{name}/tunnel-terminations/create", wrapper.CreateDeviceTunnelTermination)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/virtual-machines/{name}/tunnel-terminations/create", wrapper.CreateVirtualTunnelTermination)
-	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/v1/virtual-machines/{name}/tags/{tag}", wrapper.RemoveVirtualTag)
-	m.HandleFunc(http.MethodPut+" "+options.BaseURL+"/api/v1/virtual-machines/{name}/tags/{tag}", wrapper.AddVirtualTag)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/devices/{name}/labels", wrapper.ListDeviceLabels)
-	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/v1/devices/{name}/labels/{key}", wrapper.RemoveDeviceLabel)
-	m.HandleFunc(http.MethodPut+" "+options.BaseURL+"/api/v1/devices/{name}/labels/{key}", wrapper.SetDeviceLabel)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/virtual-machines/{name}/labels", wrapper.ListVirtualLabels)
-	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/v1/virtual-machines/{name}/labels/{key}", wrapper.RemoveVirtualLabel)
-	m.HandleFunc(http.MethodPut+" "+options.BaseURL+"/api/v1/virtual-machines/{name}/labels/{key}", wrapper.SetVirtualLabel)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/devices/{name}/journal-entries", wrapper.ListDeviceJournalEntries)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/devices/{name}/journal-entries", wrapper.AddDeviceJournalEntry)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/virtual-machines/{name}/journal-entries", wrapper.ListVirtualJournalEntries)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/virtual-machines/{name}/journal-entries", wrapper.AddVirtualJournalEntry)
-	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/v1/journal-entries/{identifier}", wrapper.DeleteJournalEntry)
-	m.HandleFunc(http.MethodPatch+" "+options.BaseURL+"/api/v1/journal-entries/{identifier}", wrapper.UpdateJournalEntry)
-	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/v1/addresses/{identifier}", wrapper.DeleteAddress)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/devices", wrapper.ListDevices)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/devices/{name}", wrapper.GetDevice)
+	m.HandleFunc(http.MethodPatch+" "+options.BaseURL+"/api/devices/{name}", wrapper.UpdateDevice)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/devices/{name}/interfaces", wrapper.ListInterfaces)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/devices/{name}/addresses", wrapper.ListAddresses)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/devices/{name}/addresses/create", wrapper.CreateAddress)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/sites", wrapper.ListSites)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/sites", wrapper.CreateSite)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/tenants", wrapper.ListTenants)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/tenants", wrapper.CreateTenant)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/device-roles", wrapper.ListDeviceRoles)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/device-roles", wrapper.CreateDeviceRole)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/manufacturers", wrapper.ListManufacturers)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/manufacturers", wrapper.CreateManufacturer)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/device-types", wrapper.ListDeviceTypes)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/device-types", wrapper.CreateDeviceType)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/devices/{name}/interfaces/create", wrapper.CreateInterface)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/devices/create", wrapper.CreateDevice)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/cluster-types", wrapper.ListClusterTypes)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/cluster-types", wrapper.CreateClusterType)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/clusters", wrapper.ListClusters)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/clusters", wrapper.CreateCluster)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/virtual-machines", wrapper.ListVirtualMachines)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/virtual-machines", wrapper.CreateVirtualMachine)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/virtual-machines/{name}", wrapper.GetVirtualMachine)
+	m.HandleFunc(http.MethodPatch+" "+options.BaseURL+"/api/virtual-machines/{name}", wrapper.UpdateVirtualMachine)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/virtual-machines/{name}/interfaces", wrapper.ListVirtualInterfaces)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/virtual-machines/{name}/addresses", wrapper.ListVirtualAddresses)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/virtual-machines/{name}/interfaces/create", wrapper.CreateVirtualInterface)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/virtual-machines/{name}/addresses/create", wrapper.CreateVirtualAddress)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/tags", wrapper.ListTags)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/tags", wrapper.CreateTag)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/devices/{name}/tags", wrapper.ListDeviceTags)
+	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/devices/{name}/tags/{tag}", wrapper.RemoveDeviceTag)
+	m.HandleFunc(http.MethodPut+" "+options.BaseURL+"/api/devices/{name}/tags/{tag}", wrapper.AddDeviceTag)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/prefixes", wrapper.ListPrefixes)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/prefixes", wrapper.CreatePrefix)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/address-ranges", wrapper.ListAddressRanges)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/address-ranges", wrapper.CreateAddressRange)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/locations", wrapper.ListLocations)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/locations", wrapper.CreateLocation)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/platforms", wrapper.ListPlatforms)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/platforms", wrapper.CreatePlatform)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/wireless-networks", wrapper.ListWirelessNetworks)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/wireless-networks", wrapper.CreateWirelessNetwork)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/virtual-machines/{name}/disks", wrapper.ListVirtualDisks)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/virtual-machines/{name}/disks", wrapper.CreateVirtualDisk)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/tunnel-groups", wrapper.ListTunnelGroups)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/tunnel-groups", wrapper.CreateTunnelGroup)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/tunnels", wrapper.ListTunnels)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/tunnels", wrapper.CreateTunnel)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/cables", wrapper.ListCables)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/cables", wrapper.CreateCable)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/tunnel-terminations", wrapper.ListTunnelTerminations)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/devices/{name}/tunnel-terminations/create", wrapper.CreateDeviceTunnelTermination)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/virtual-machines/{name}/tunnel-terminations/create", wrapper.CreateVirtualTunnelTermination)
+	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/virtual-machines/{name}/tags/{tag}", wrapper.RemoveVirtualTag)
+	m.HandleFunc(http.MethodPut+" "+options.BaseURL+"/api/virtual-machines/{name}/tags/{tag}", wrapper.AddVirtualTag)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/devices/{name}/labels", wrapper.ListDeviceLabels)
+	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/devices/{name}/labels/{key}", wrapper.RemoveDeviceLabel)
+	m.HandleFunc(http.MethodPut+" "+options.BaseURL+"/api/devices/{name}/labels/{key}", wrapper.SetDeviceLabel)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/virtual-machines/{name}/labels", wrapper.ListVirtualLabels)
+	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/virtual-machines/{name}/labels/{key}", wrapper.RemoveVirtualLabel)
+	m.HandleFunc(http.MethodPut+" "+options.BaseURL+"/api/virtual-machines/{name}/labels/{key}", wrapper.SetVirtualLabel)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/devices/{name}/journal-entries", wrapper.ListDeviceJournalEntries)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/devices/{name}/journal-entries", wrapper.AddDeviceJournalEntry)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/virtual-machines/{name}/journal-entries", wrapper.ListVirtualJournalEntries)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/virtual-machines/{name}/journal-entries", wrapper.AddVirtualJournalEntry)
+	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/journal-entries/{identifier}", wrapper.DeleteJournalEntry)
+	m.HandleFunc(http.MethodPatch+" "+options.BaseURL+"/api/journal-entries/{identifier}", wrapper.UpdateJournalEntry)
+	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/addresses/{identifier}", wrapper.DeleteAddress)
 
 	return m
 }
@@ -5106,217 +5106,217 @@ func (response CreateWirelessNetwork500JSONResponse) VisitCreateWirelessNetworkR
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
 
-	// (GET /api/v1/address-ranges)
+	// (GET /api/address-ranges)
 	ListAddressRanges(ctx context.Context, request ListAddressRangesRequestObject) (ListAddressRangesResponseObject, error)
 
-	// (POST /api/v1/address-ranges)
+	// (POST /api/address-ranges)
 	CreateAddressRange(ctx context.Context, request CreateAddressRangeRequestObject) (CreateAddressRangeResponseObject, error)
 
-	// (DELETE /api/v1/addresses/{identifier})
+	// (DELETE /api/addresses/{identifier})
 	DeleteAddress(ctx context.Context, request DeleteAddressRequestObject) (DeleteAddressResponseObject, error)
 
-	// (GET /api/v1/cables)
+	// (GET /api/cables)
 	ListCables(ctx context.Context, request ListCablesRequestObject) (ListCablesResponseObject, error)
 
-	// (POST /api/v1/cables)
+	// (POST /api/cables)
 	CreateCable(ctx context.Context, request CreateCableRequestObject) (CreateCableResponseObject, error)
 
-	// (GET /api/v1/cluster-types)
+	// (GET /api/cluster-types)
 	ListClusterTypes(ctx context.Context, request ListClusterTypesRequestObject) (ListClusterTypesResponseObject, error)
 
-	// (POST /api/v1/cluster-types)
+	// (POST /api/cluster-types)
 	CreateClusterType(ctx context.Context, request CreateClusterTypeRequestObject) (CreateClusterTypeResponseObject, error)
 
-	// (GET /api/v1/clusters)
+	// (GET /api/clusters)
 	ListClusters(ctx context.Context, request ListClustersRequestObject) (ListClustersResponseObject, error)
 
-	// (POST /api/v1/clusters)
+	// (POST /api/clusters)
 	CreateCluster(ctx context.Context, request CreateClusterRequestObject) (CreateClusterResponseObject, error)
 
-	// (GET /api/v1/device-roles)
+	// (GET /api/device-roles)
 	ListDeviceRoles(ctx context.Context, request ListDeviceRolesRequestObject) (ListDeviceRolesResponseObject, error)
 
-	// (POST /api/v1/device-roles)
+	// (POST /api/device-roles)
 	CreateDeviceRole(ctx context.Context, request CreateDeviceRoleRequestObject) (CreateDeviceRoleResponseObject, error)
 
-	// (GET /api/v1/device-types)
+	// (GET /api/device-types)
 	ListDeviceTypes(ctx context.Context, request ListDeviceTypesRequestObject) (ListDeviceTypesResponseObject, error)
 
-	// (POST /api/v1/device-types)
+	// (POST /api/device-types)
 	CreateDeviceType(ctx context.Context, request CreateDeviceTypeRequestObject) (CreateDeviceTypeResponseObject, error)
 
-	// (GET /api/v1/devices)
+	// (GET /api/devices)
 	ListDevices(ctx context.Context, request ListDevicesRequestObject) (ListDevicesResponseObject, error)
 
-	// (POST /api/v1/devices/create)
+	// (POST /api/devices/create)
 	CreateDevice(ctx context.Context, request CreateDeviceRequestObject) (CreateDeviceResponseObject, error)
 
-	// (GET /api/v1/devices/{name})
+	// (GET /api/devices/{name})
 	GetDevice(ctx context.Context, request GetDeviceRequestObject) (GetDeviceResponseObject, error)
 
-	// (PATCH /api/v1/devices/{name})
+	// (PATCH /api/devices/{name})
 	UpdateDevice(ctx context.Context, request UpdateDeviceRequestObject) (UpdateDeviceResponseObject, error)
 
-	// (GET /api/v1/devices/{name}/addresses)
+	// (GET /api/devices/{name}/addresses)
 	ListAddresses(ctx context.Context, request ListAddressesRequestObject) (ListAddressesResponseObject, error)
 
-	// (POST /api/v1/devices/{name}/addresses/create)
+	// (POST /api/devices/{name}/addresses/create)
 	CreateAddress(ctx context.Context, request CreateAddressRequestObject) (CreateAddressResponseObject, error)
 
-	// (GET /api/v1/devices/{name}/interfaces)
+	// (GET /api/devices/{name}/interfaces)
 	ListInterfaces(ctx context.Context, request ListInterfacesRequestObject) (ListInterfacesResponseObject, error)
 
-	// (POST /api/v1/devices/{name}/interfaces/create)
+	// (POST /api/devices/{name}/interfaces/create)
 	CreateInterface(ctx context.Context, request CreateInterfaceRequestObject) (CreateInterfaceResponseObject, error)
 
-	// (GET /api/v1/devices/{name}/journal-entries)
+	// (GET /api/devices/{name}/journal-entries)
 	ListDeviceJournalEntries(ctx context.Context, request ListDeviceJournalEntriesRequestObject) (ListDeviceJournalEntriesResponseObject, error)
 
-	// (POST /api/v1/devices/{name}/journal-entries)
+	// (POST /api/devices/{name}/journal-entries)
 	AddDeviceJournalEntry(ctx context.Context, request AddDeviceJournalEntryRequestObject) (AddDeviceJournalEntryResponseObject, error)
 
-	// (GET /api/v1/devices/{name}/labels)
+	// (GET /api/devices/{name}/labels)
 	ListDeviceLabels(ctx context.Context, request ListDeviceLabelsRequestObject) (ListDeviceLabelsResponseObject, error)
 
-	// (DELETE /api/v1/devices/{name}/labels/{key})
+	// (DELETE /api/devices/{name}/labels/{key})
 	RemoveDeviceLabel(ctx context.Context, request RemoveDeviceLabelRequestObject) (RemoveDeviceLabelResponseObject, error)
 
-	// (PUT /api/v1/devices/{name}/labels/{key})
+	// (PUT /api/devices/{name}/labels/{key})
 	SetDeviceLabel(ctx context.Context, request SetDeviceLabelRequestObject) (SetDeviceLabelResponseObject, error)
 
-	// (GET /api/v1/devices/{name}/tags)
+	// (GET /api/devices/{name}/tags)
 	ListDeviceTags(ctx context.Context, request ListDeviceTagsRequestObject) (ListDeviceTagsResponseObject, error)
 
-	// (DELETE /api/v1/devices/{name}/tags/{tag})
+	// (DELETE /api/devices/{name}/tags/{tag})
 	RemoveDeviceTag(ctx context.Context, request RemoveDeviceTagRequestObject) (RemoveDeviceTagResponseObject, error)
 
-	// (PUT /api/v1/devices/{name}/tags/{tag})
+	// (PUT /api/devices/{name}/tags/{tag})
 	AddDeviceTag(ctx context.Context, request AddDeviceTagRequestObject) (AddDeviceTagResponseObject, error)
 
-	// (POST /api/v1/devices/{name}/tunnel-terminations/create)
+	// (POST /api/devices/{name}/tunnel-terminations/create)
 	CreateDeviceTunnelTermination(ctx context.Context, request CreateDeviceTunnelTerminationRequestObject) (CreateDeviceTunnelTerminationResponseObject, error)
 
-	// (DELETE /api/v1/journal-entries/{identifier})
+	// (DELETE /api/journal-entries/{identifier})
 	DeleteJournalEntry(ctx context.Context, request DeleteJournalEntryRequestObject) (DeleteJournalEntryResponseObject, error)
 
-	// (PATCH /api/v1/journal-entries/{identifier})
+	// (PATCH /api/journal-entries/{identifier})
 	UpdateJournalEntry(ctx context.Context, request UpdateJournalEntryRequestObject) (UpdateJournalEntryResponseObject, error)
 
-	// (GET /api/v1/locations)
+	// (GET /api/locations)
 	ListLocations(ctx context.Context, request ListLocationsRequestObject) (ListLocationsResponseObject, error)
 
-	// (POST /api/v1/locations)
+	// (POST /api/locations)
 	CreateLocation(ctx context.Context, request CreateLocationRequestObject) (CreateLocationResponseObject, error)
 
-	// (GET /api/v1/manufacturers)
+	// (GET /api/manufacturers)
 	ListManufacturers(ctx context.Context, request ListManufacturersRequestObject) (ListManufacturersResponseObject, error)
 
-	// (POST /api/v1/manufacturers)
+	// (POST /api/manufacturers)
 	CreateManufacturer(ctx context.Context, request CreateManufacturerRequestObject) (CreateManufacturerResponseObject, error)
 
-	// (GET /api/v1/platforms)
+	// (GET /api/platforms)
 	ListPlatforms(ctx context.Context, request ListPlatformsRequestObject) (ListPlatformsResponseObject, error)
 
-	// (POST /api/v1/platforms)
+	// (POST /api/platforms)
 	CreatePlatform(ctx context.Context, request CreatePlatformRequestObject) (CreatePlatformResponseObject, error)
 
-	// (GET /api/v1/prefixes)
+	// (GET /api/prefixes)
 	ListPrefixes(ctx context.Context, request ListPrefixesRequestObject) (ListPrefixesResponseObject, error)
 
-	// (POST /api/v1/prefixes)
+	// (POST /api/prefixes)
 	CreatePrefix(ctx context.Context, request CreatePrefixRequestObject) (CreatePrefixResponseObject, error)
 
-	// (GET /api/v1/sites)
+	// (GET /api/sites)
 	ListSites(ctx context.Context, request ListSitesRequestObject) (ListSitesResponseObject, error)
 
-	// (POST /api/v1/sites)
+	// (POST /api/sites)
 	CreateSite(ctx context.Context, request CreateSiteRequestObject) (CreateSiteResponseObject, error)
 
-	// (GET /api/v1/tags)
+	// (GET /api/tags)
 	ListTags(ctx context.Context, request ListTagsRequestObject) (ListTagsResponseObject, error)
 
-	// (POST /api/v1/tags)
+	// (POST /api/tags)
 	CreateTag(ctx context.Context, request CreateTagRequestObject) (CreateTagResponseObject, error)
 
-	// (GET /api/v1/tenants)
+	// (GET /api/tenants)
 	ListTenants(ctx context.Context, request ListTenantsRequestObject) (ListTenantsResponseObject, error)
 
-	// (POST /api/v1/tenants)
+	// (POST /api/tenants)
 	CreateTenant(ctx context.Context, request CreateTenantRequestObject) (CreateTenantResponseObject, error)
 
-	// (GET /api/v1/tunnel-groups)
+	// (GET /api/tunnel-groups)
 	ListTunnelGroups(ctx context.Context, request ListTunnelGroupsRequestObject) (ListTunnelGroupsResponseObject, error)
 
-	// (POST /api/v1/tunnel-groups)
+	// (POST /api/tunnel-groups)
 	CreateTunnelGroup(ctx context.Context, request CreateTunnelGroupRequestObject) (CreateTunnelGroupResponseObject, error)
 
-	// (GET /api/v1/tunnel-terminations)
+	// (GET /api/tunnel-terminations)
 	ListTunnelTerminations(ctx context.Context, request ListTunnelTerminationsRequestObject) (ListTunnelTerminationsResponseObject, error)
 
-	// (GET /api/v1/tunnels)
+	// (GET /api/tunnels)
 	ListTunnels(ctx context.Context, request ListTunnelsRequestObject) (ListTunnelsResponseObject, error)
 
-	// (POST /api/v1/tunnels)
+	// (POST /api/tunnels)
 	CreateTunnel(ctx context.Context, request CreateTunnelRequestObject) (CreateTunnelResponseObject, error)
 
-	// (GET /api/v1/virtual-machines)
+	// (GET /api/virtual-machines)
 	ListVirtualMachines(ctx context.Context, request ListVirtualMachinesRequestObject) (ListVirtualMachinesResponseObject, error)
 
-	// (POST /api/v1/virtual-machines)
+	// (POST /api/virtual-machines)
 	CreateVirtualMachine(ctx context.Context, request CreateVirtualMachineRequestObject) (CreateVirtualMachineResponseObject, error)
 
-	// (GET /api/v1/virtual-machines/{name})
+	// (GET /api/virtual-machines/{name})
 	GetVirtualMachine(ctx context.Context, request GetVirtualMachineRequestObject) (GetVirtualMachineResponseObject, error)
 
-	// (PATCH /api/v1/virtual-machines/{name})
+	// (PATCH /api/virtual-machines/{name})
 	UpdateVirtualMachine(ctx context.Context, request UpdateVirtualMachineRequestObject) (UpdateVirtualMachineResponseObject, error)
 
-	// (GET /api/v1/virtual-machines/{name}/addresses)
+	// (GET /api/virtual-machines/{name}/addresses)
 	ListVirtualAddresses(ctx context.Context, request ListVirtualAddressesRequestObject) (ListVirtualAddressesResponseObject, error)
 
-	// (POST /api/v1/virtual-machines/{name}/addresses/create)
+	// (POST /api/virtual-machines/{name}/addresses/create)
 	CreateVirtualAddress(ctx context.Context, request CreateVirtualAddressRequestObject) (CreateVirtualAddressResponseObject, error)
 
-	// (GET /api/v1/virtual-machines/{name}/disks)
+	// (GET /api/virtual-machines/{name}/disks)
 	ListVirtualDisks(ctx context.Context, request ListVirtualDisksRequestObject) (ListVirtualDisksResponseObject, error)
 
-	// (POST /api/v1/virtual-machines/{name}/disks)
+	// (POST /api/virtual-machines/{name}/disks)
 	CreateVirtualDisk(ctx context.Context, request CreateVirtualDiskRequestObject) (CreateVirtualDiskResponseObject, error)
 
-	// (GET /api/v1/virtual-machines/{name}/interfaces)
+	// (GET /api/virtual-machines/{name}/interfaces)
 	ListVirtualInterfaces(ctx context.Context, request ListVirtualInterfacesRequestObject) (ListVirtualInterfacesResponseObject, error)
 
-	// (POST /api/v1/virtual-machines/{name}/interfaces/create)
+	// (POST /api/virtual-machines/{name}/interfaces/create)
 	CreateVirtualInterface(ctx context.Context, request CreateVirtualInterfaceRequestObject) (CreateVirtualInterfaceResponseObject, error)
 
-	// (GET /api/v1/virtual-machines/{name}/journal-entries)
+	// (GET /api/virtual-machines/{name}/journal-entries)
 	ListVirtualJournalEntries(ctx context.Context, request ListVirtualJournalEntriesRequestObject) (ListVirtualJournalEntriesResponseObject, error)
 
-	// (POST /api/v1/virtual-machines/{name}/journal-entries)
+	// (POST /api/virtual-machines/{name}/journal-entries)
 	AddVirtualJournalEntry(ctx context.Context, request AddVirtualJournalEntryRequestObject) (AddVirtualJournalEntryResponseObject, error)
 
-	// (GET /api/v1/virtual-machines/{name}/labels)
+	// (GET /api/virtual-machines/{name}/labels)
 	ListVirtualLabels(ctx context.Context, request ListVirtualLabelsRequestObject) (ListVirtualLabelsResponseObject, error)
 
-	// (DELETE /api/v1/virtual-machines/{name}/labels/{key})
+	// (DELETE /api/virtual-machines/{name}/labels/{key})
 	RemoveVirtualLabel(ctx context.Context, request RemoveVirtualLabelRequestObject) (RemoveVirtualLabelResponseObject, error)
 
-	// (PUT /api/v1/virtual-machines/{name}/labels/{key})
+	// (PUT /api/virtual-machines/{name}/labels/{key})
 	SetVirtualLabel(ctx context.Context, request SetVirtualLabelRequestObject) (SetVirtualLabelResponseObject, error)
 
-	// (DELETE /api/v1/virtual-machines/{name}/tags/{tag})
+	// (DELETE /api/virtual-machines/{name}/tags/{tag})
 	RemoveVirtualTag(ctx context.Context, request RemoveVirtualTagRequestObject) (RemoveVirtualTagResponseObject, error)
 
-	// (PUT /api/v1/virtual-machines/{name}/tags/{tag})
+	// (PUT /api/virtual-machines/{name}/tags/{tag})
 	AddVirtualTag(ctx context.Context, request AddVirtualTagRequestObject) (AddVirtualTagResponseObject, error)
 
-	// (POST /api/v1/virtual-machines/{name}/tunnel-terminations/create)
+	// (POST /api/virtual-machines/{name}/tunnel-terminations/create)
 	CreateVirtualTunnelTermination(ctx context.Context, request CreateVirtualTunnelTerminationRequestObject) (CreateVirtualTunnelTerminationResponseObject, error)
 
-	// (GET /api/v1/wireless-networks)
+	// (GET /api/wireless-networks)
 	ListWirelessNetworks(ctx context.Context, request ListWirelessNetworksRequestObject) (ListWirelessNetworksResponseObject, error)
 
-	// (POST /api/v1/wireless-networks)
+	// (POST /api/wireless-networks)
 	CreateWirelessNetwork(ctx context.Context, request CreateWirelessNetworkRequestObject) (CreateWirelessNetworkResponseObject, error)
 }
 
@@ -7372,70 +7372,70 @@ func (sh *strictHandler) CreateWirelessNetwork(w http.ResponseWriter, r *http.Re
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
+	"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",
-	"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",
+	"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",
-	"uYIlvtpwYNkAnWkOmzf814G7LUd09pM9ovfzpYq+Czy/JrGdunmZ9rLvUx6KYkULWkli+sE5p9DEqly2",
+	"uYIlvtpwYNkAzjSHzRv+24G7LUd09pM9ovfzpYq+Czy/JrGdunmZ9rLvUx6KYkULWkli+sE5p9DEqly2",
 	"bSNjia8gqi7acRT9sQhO/74L/pvCIjgN/uuoTHEfqfz20bvsweD+yyyI11Ek86ecrsGwyO+fFU0pWWG6",
 	"OWvJk+cOpIkSoARH/fKQ1ozqw/Y0O813qq1lEvmW7ix3OVsgrL4fsu9repAunzHR/obSxJAKh/zn9knk",
-	"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",
+	"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",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

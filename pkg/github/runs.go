@@ -1,7 +1,7 @@
 package github
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/forge"
 	"github.com/funtimecoding/soil/pkg/github/constant"
 	"github.com/funtimecoding/soil/pkg/github/run"
@@ -18,7 +18,7 @@ func (c *Client) Runs(
 
 	for _, a := range c.ActionRepository() {
 		if verbose {
-			fmt.Printf("Repository: %s/%s\n", owner, a.Name)
+			console.Format("Repository: %s/%s\n", owner, a.Name)
 		}
 
 		for i, r := range c.MustProjectRuns(owner, a.Name) {
@@ -31,7 +31,7 @@ func (c *Client) Runs(
 			}
 
 			if verbose {
-				fmt.Printf("Run %d: %s\n", i, r.Format(f))
+				console.Format("Run %d: %s\n", i, r.Format(f))
 			}
 
 			if loadJobs {

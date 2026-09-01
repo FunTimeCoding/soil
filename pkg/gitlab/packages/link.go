@@ -1,7 +1,7 @@
 package packages
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab/project"
 	"github.com/funtimecoding/soil/pkg/web/locator"
@@ -16,9 +16,9 @@ func Link(
 	verbose bool,
 ) string {
 	if verbose {
-		fmt.Printf("project: %+v\n", project)
-		fmt.Printf("package: %+v\n", p)
-		fmt.Printf("file: %+v\n", f)
+		console.Format("project: %+v\n", project)
+		console.Format("package: %+v\n", p)
+		console.Format("file: %+v\n", f)
 	}
 
 	result := locator.New(host).Base(constant.Base).Path(
@@ -31,7 +31,7 @@ func Link(
 	).String()
 
 	if verbose {
-		fmt.Printf("link: %s\n", result)
+		console.Format("link: %s\n", result)
 	}
 
 	return result

@@ -2,7 +2,7 @@ package goclaude
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
@@ -27,7 +27,7 @@ func sessionHeatmap(c *command_context.Context) *cobra.Command {
 			h := response.JSON200
 
 			if len(h.Entries) == 0 {
-				fmt.Println("no tool calls found")
+				console.Line("no tool calls found")
 
 				return
 			}
@@ -38,7 +38,7 @@ func sessionHeatmap(c *command_context.Context) *cobra.Command {
 				label = "commands"
 			}
 
-			fmt.Printf(
+			console.Format(
 				"%d sessions (%d with tool calls), %d total calls, %d distinct %s\n\n",
 				h.SessionCount,
 				h.SessionsWithCalls,
@@ -46,11 +46,11 @@ func sessionHeatmap(c *command_context.Context) *cobra.Command {
 				len(h.Entries),
 				label,
 			)
-			fmt.Printf("%-40s %6s %8s\n", "Tool", "Calls", "Sessions")
-			fmt.Printf("%-40s %6s %8s\n", "----", "-----", "--------")
+			console.Format("%-40s %6s %8s\n", "Tool", "Calls", "Sessions")
+			console.Format("%-40s %6s %8s\n", "----", "-----", "--------")
 
 			for _, entry := range h.Entries {
-				fmt.Printf(
+				console.Format(
 					"%-40s %6d %8d\n",
 					entry.Name,
 					entry.Calls,

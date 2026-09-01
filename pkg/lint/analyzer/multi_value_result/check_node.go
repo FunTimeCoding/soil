@@ -22,12 +22,23 @@ func checkNode(
 				p,
 				results,
 				call,
-				"multi-value result discarded as a bare statement",
+				fmt.Sprintf(
+					"multi-value result of %s discarded as a bare statement",
+					calleeName(call),
+				),
 			)
 		}
 	case *ast.GoStmt:
 		if multiValue(p, node.Call) {
-			report(p, results, node.Call, "multi-value result discarded by go")
+			report(
+				p,
+				results,
+				node.Call,
+				fmt.Sprintf(
+					"multi-value result of %s discarded by go",
+					calleeName(node.Call),
+				),
+			)
 		}
 	case *ast.DeferStmt:
 		if multiValue(p, node.Call) {
@@ -35,7 +46,10 @@ func checkNode(
 				p,
 				results,
 				node.Call,
-				"multi-value result discarded by defer",
+				fmt.Sprintf(
+					"multi-value result of %s discarded by defer",
+					calleeName(node.Call),
+				),
 			)
 		}
 	case *ast.CallExpr:

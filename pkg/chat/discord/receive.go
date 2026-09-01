@@ -1,9 +1,9 @@
 package discord
 
 import (
-	"fmt"
 	"github.com/bwmarrin/discordgo"
 	"github.com/funtimecoding/soil/pkg/chat/constant"
+	"github.com/funtimecoding/soil/pkg/console"
 )
 
 func (c *Client) receive(
@@ -29,8 +29,8 @@ func (c *Client) receive(
 			c.Send(s, m.ChannelID, "Done")
 		}
 	case constant.DiscordDetailsCommand:
-		fmt.Printf("Channel: %+v\n", c.Channel(s, m.ChannelID))
+		console.Format("Channel: %+v\n", c.Channel(s, m.ChannelID))
 	default:
-		fmt.Printf("Message: %+v\n", m.Message)
+		console.Format("Message: %+v\n", m.Message)
 	}
 }

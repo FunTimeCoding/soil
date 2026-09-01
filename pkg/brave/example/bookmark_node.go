@@ -1,12 +1,12 @@
 package example
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/brave"
 	"github.com/funtimecoding/soil/pkg/brave/bookmark/node"
 	"github.com/funtimecoding/soil/pkg/brave/constant"
+	"github.com/funtimecoding/soil/pkg/console"
 )
 
 func BookmarkNode() {
@@ -18,23 +18,23 @@ func BookmarkNode() {
 	b := brave.Bookmark(constant.DefaultProfile)
 	f := constant.Format
 	d := node.MustDirectoryByName(node.New(b.Root.Bar), directory)
-	fmt.Printf("Root: %s\n", d.Format(f))
+	console.Format("Root: %s\n", d.Format(f))
 
 	if depth > 0 {
 		node.WalkLevels(
 			d,
 			depth,
 			func(o *node.Node) {
-				fmt.Println(o.Format(f))
+				console.Line(o.Format(f))
 			},
 		)
 	} else {
 		for _, l := range node.Collect(d) {
-			fmt.Println(l.Format(f))
+			console.Line(l.Format(f))
 		}
 	}
 
 	for _, g := range node.GroupByDirectory(d) {
-		fmt.Printf("Group %s (%d)\n", g.Directory.Name, len(g.Links))
+		console.Format("Group %s (%d)\n", g.Directory.Name, len(g.Links))
 	}
 }

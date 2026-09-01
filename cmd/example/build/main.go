@@ -1,10 +1,10 @@
 package main
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/system"
 )
 
 func main() {
-	fmt.Printf("Executable: %s\n", system.ExecutablePath())
+	console.Format("Executable: %s\n", system.ExecutablePath())
 }

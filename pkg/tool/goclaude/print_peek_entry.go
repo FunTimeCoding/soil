@@ -1,13 +1,13 @@
 package goclaude
 
-import "fmt"
+import "github.com/funtimecoding/soil/pkg/console"
 
 func printPeekEntry(
 	userText string,
 	assistantContext *string,
 	limit int,
 ) {
-	fmt.Println(userText)
+	console.Line(userText)
 
 	if limit > 0 && assistantContext != nil && *assistantContext != "" {
 		text := *assistantContext
@@ -16,6 +16,6 @@ func printPeekEntry(
 			text = text[:limit]
 		}
 
-		fmt.Printf("  → %s\n", text)
+		console.Format("  → %s\n", text)
 	}
 }

@@ -2,7 +2,7 @@ package goclaude
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/time"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
@@ -23,7 +23,7 @@ func usage(c *command_context.Context) *cobra.Command {
 			errors.PanicOnError(e)
 
 			if response.StatusCode() == 204 || response.JSON200 == nil {
-				fmt.Println("No usage data yet.")
+				console.Line("No usage data yet.")
 
 				return
 			}
@@ -38,26 +38,26 @@ func usage(c *command_context.Context) *cobra.Command {
 				j.FableReset,
 				j.LastUpdated,
 			)
-			fmt.Printf(
+			console.Format(
 				"Session  %2d%%   resets %s\n",
 				r.FiveHourPercent,
 				r.FiveHourResetText(),
 			)
-			fmt.Printf(
+			console.Format(
 				"Weekly   %2d%%   resets %s\n",
 				r.SevenDayPercent,
 				r.SevenDayResetText(),
 			)
 
 			if r.HasFable() {
-				fmt.Printf(
+				console.Format(
 					"Fable    %2d%%   resets %s\n",
 					r.FablePercent,
 					r.FableReset,
 				)
 			}
 
-			fmt.Printf("Updated  %s\n", time.FormatCompact(r.LastUpdated))
+			console.Format("Updated  %s\n", time.FormatCompact(r.LastUpdated))
 		},
 	}
 }

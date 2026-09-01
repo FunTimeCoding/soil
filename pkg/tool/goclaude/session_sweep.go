@@ -2,7 +2,7 @@ package goclaude
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/spf13/cobra"
@@ -22,7 +22,7 @@ func sessionSweep(c *command_context.Context) *cobra.Command {
 			)
 			errors.PanicOnError(e)
 			r := response.JSON200
-			fmt.Printf(
+			console.Format(
 				"sweep: %d copied, %d updated, %d skipped\n",
 				r.Copied,
 				r.Updated,

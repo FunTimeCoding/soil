@@ -1,9 +1,9 @@
 package example
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/chat/telegram"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/generative/ollama"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/text/multi_line"
@@ -23,7 +23,7 @@ func OllamaReply() {
 
 	for _, m := range t.MessagesByChannel(c) {
 		if false {
-			fmt.Println(m.Format(f))
+			console.Line(m.Format(f))
 		}
 
 		if m.Text == "" {
@@ -37,12 +37,12 @@ func OllamaReply() {
 		g := o.GenerateFast(l.Render())
 
 		if false {
-			fmt.Println(g.Text)
+			console.Line(g.Text)
 			g.Print()
 		}
 
 		t.SendMessage(t.ChannelByName(c).Identifier, g.Text)
 	} else {
-		fmt.Println("Chat empty")
+		console.Line("Chat empty")
 	}
 }

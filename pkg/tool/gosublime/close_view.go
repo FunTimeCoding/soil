@@ -2,7 +2,7 @@ package gosublime
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/spf13/cobra"
 	"os"
@@ -44,7 +44,7 @@ func closeView(x *Context) *cobra.Command {
 				os.Exit(1)
 			}
 
-			fmt.Printf("closed view %d\n", identifier)
+			console.Format("closed view %d\n", identifier)
 		},
 	}
 }

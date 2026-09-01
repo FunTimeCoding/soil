@@ -4,7 +4,7 @@ info:
   title: gopnsensed
   version: 1.0.0
 paths:
-  /api/v1/leases:
+  /api/leases:
     get:
       operationId: listLeases
       parameters:
@@ -28,7 +28,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/hosts:
+  /api/hosts:
     get:
       operationId: listHosts
       parameters:
@@ -79,7 +79,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/hosts/{identifier}:
+  /api/hosts/{identifier}:
     put:
       operationId: setHost
       parameters:
@@ -138,7 +138,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/dnsmasq/reconfigure:
+  /api/dnsmasq/reconfigure:
     post:
       operationId: reconfigureDnsmasq
       responses:
@@ -150,7 +150,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/pools:
+  /api/pools:
     get:
       operationId: listPools
       parameters:
@@ -174,7 +174,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/rules:
+  /api/rules:
     get:
       operationId: listRules
       parameters:
@@ -198,7 +198,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/aliases:
+  /api/aliases:
     get:
       operationId: listAliases
       parameters:
@@ -222,7 +222,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/source-nat:
+  /api/source-nat:
     get:
       operationId: listSourceNat
       parameters:
@@ -246,7 +246,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/forwards:
+  /api/forwards:
     get:
       operationId: listForwards
       parameters:
@@ -270,7 +270,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/blocklists:
+  /api/blocklists:
     get:
       operationId: listBlocklists
       parameters:
@@ -294,7 +294,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/interfaces:
+  /api/interfaces:
     get:
       operationId: listInterfaces
       responses:
@@ -312,7 +312,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/log:
+  /api/log:
     get:
       operationId: firewallLog
       parameters:
@@ -336,7 +336,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/states:
+  /api/states:
     get:
       operationId: firewallStates
       parameters:

@@ -2,8 +2,8 @@ package gw2
 
 import (
 	"bytes"
-	"fmt"
 	"github.com/dimchansky/utfbom"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/gw2/log_manager"
 	"github.com/funtimecoding/soil/pkg/notation"
@@ -17,7 +17,7 @@ func ParseLogs(
 	reader, encoding := utfbom.Skip(bytes.NewReader(s))
 
 	if verbose {
-		fmt.Printf("Detected encoding: %s\n", encoding)
+		console.Format("Detected encoding: %s\n", encoding)
 	}
 
 	var f log_manager.LogFile

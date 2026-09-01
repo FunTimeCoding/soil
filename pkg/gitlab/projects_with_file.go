@@ -1,7 +1,7 @@
 package gitlab
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/gitlab/project"
 	"strings"
 )
@@ -18,7 +18,7 @@ func (c *Client) ProjectsWithFile(
 
 	for _, p := range c.MustProjects() {
 		if c.verbose {
-			fmt.Printf("Project: %s\n", p.Raw.NameWithNamespace)
+			console.Format("Project: %s\n", p.Raw.NameWithNamespace)
 		}
 
 		for _, n := range c.MustTree(p.Identifier) {

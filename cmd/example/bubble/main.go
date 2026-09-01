@@ -8,14 +8,14 @@ import (
 func main() {
 	if false {
 		var White = console.NewColor("#fff")
-		fmt.Println(White("W"))
+		console.Line(White("W"))
 	}
 
 	if false {
 		for r := range 15 {
 			for g := range 15 {
 				for b := range 15 {
-					fmt.Printf(
+					console.Format(
 						"%s",
 						console.NewColor(fmt.Sprintf("#%x%x%x", r, g, b))("W"),
 					)
@@ -30,7 +30,7 @@ func main() {
 		c := console.Gradient("#00ff00", "#ff0000", 250)
 
 		for i := range len(c) {
-			fmt.Printf("%s", c[i]("W"))
+			console.Format("%s", c[i]("W"))
 		}
 
 		println()

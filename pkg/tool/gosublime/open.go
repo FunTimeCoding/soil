@@ -2,7 +2,7 @@ package gosublime
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/generated/client"
 	"github.com/spf13/cobra"
@@ -37,7 +37,7 @@ func open(x *Context) *cobra.Command {
 				os.Exit(1)
 			}
 
-			fmt.Printf("opened view %d\n", r.JSON200.ViewId)
+			console.Format("opened view %d\n", r.JSON200.ViewId)
 		},
 	}
 }

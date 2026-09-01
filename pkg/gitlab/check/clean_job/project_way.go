@@ -1,7 +1,7 @@
 package clean_job
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/gitlab"
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
@@ -18,10 +18,10 @@ func ProjectWay(
 			continue
 		}
 
-		fmt.Printf("Job: %s\n", j.Format(f))
+		console.Format("Job: %s\n", j.Format(f))
 
 		if j.Trace != "" {
-			fmt.Printf("  Trace: %s\n", j.Trace)
+			console.Format("  Trace: %s\n", j.Trace)
 		}
 	}
 }

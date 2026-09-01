@@ -1,30 +1,30 @@
 package example
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/grafana"
 )
 
 func Read() {
 	g := grafana.NewEnvironment()
-	fmt.Println("Folders")
+	console.Line("Folders")
 
 	for _, f := range g.Folders() {
-		fmt.Printf("  %s\n", f.Title)
+		console.Format("  %s\n", f.Title)
 	}
 
-	fmt.Println("Dashboards")
+	console.Line("Dashboards")
 
 	for _, d := range g.Dashboards() {
-		fmt.Printf("  %s\n", d.Title)
+		console.Format("  %s\n", d.Title)
 	}
 
 	h := g.Home()
-	fmt.Printf("Home: %+v\n", h.Meta)
-	fmt.Println("Search")
+	console.Format("Home: %+v\n", h.Meta)
+	console.Line("Search")
 
 	for _, d := range g.Search() {
-		fmt.Printf("  %s\n", d.Title)
-		fmt.Printf("    %s\n", d.URL)
+		console.Format("  %s\n", d.Title)
+		console.Format("    %s\n", d.URL)
 	}
 }

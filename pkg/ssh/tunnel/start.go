@@ -2,6 +2,7 @@ package tunnel
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/ssh/constant"
 	"github.com/funtimecoding/soil/pkg/system"
@@ -34,7 +35,7 @@ func (t *Tunnel) Start(
 		}
 
 		if t.Verbose {
-			fmt.Printf("Command: %s\n", parts)
+			console.Format("Command: %s\n", parts)
 		}
 
 		r := run.New()
@@ -65,7 +66,7 @@ func (t *Tunnel) Start(
 		close(t.started)
 
 		if t.Verbose {
-			fmt.Printf(
+			console.Format(
 				"Forward up: %s:%d to %s:%d\n",
 				web.Localhost,
 				localPort,

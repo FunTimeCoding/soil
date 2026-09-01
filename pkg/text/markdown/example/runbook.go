@@ -1,8 +1,8 @@
 package example
 
 import (
-	"fmt"
-	console "github.com/funtimecoding/soil/pkg/console/constant"
+	"github.com/funtimecoding/soil/pkg/console"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/text/constant"
@@ -12,10 +12,10 @@ import (
 
 func Runbook() {
 	base := environment.Required(constant.WikiPathEnvironment)
-	f := console.ColorFormat
+	f := consoleConstant.ColorFormat
 
 	for _, n := range system.Files(base) {
-		fmt.Printf("File: %s\n", n)
+		console.Format("File: %s\n", n)
 		source := system.ReadBytes(base, n)
 
 		if false {
@@ -24,6 +24,6 @@ func Runbook() {
 
 		r := runbook.New(&source)
 		r.Parse(n)
-		fmt.Printf("Runbook: %+v\n", r)
+		console.Format("Runbook: %+v\n", r)
 	}
 }

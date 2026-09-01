@@ -39,5 +39,5 @@ func TestRunLifecycle(t *testing.T) {
 	defer l.Stop()
 	assert.Listen(t, port)
 	base := fmt.Sprintf("http://localhost:%d", port)
-	assert.HTTPStatus(t, fmt.Sprintf("%s/api/v1/status", base), http.StatusOK)
+	assert.HTTPStatus(t, fmt.Sprintf("%s/api/status", base), http.StatusOK)
 }

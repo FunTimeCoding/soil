@@ -1,7 +1,7 @@
 package basic
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/constant"
@@ -22,15 +22,15 @@ func (c *Client) Propfind() {
 
 	switch s.StatusCode {
 	case http.StatusMultiStatus:
-		fmt.Println("success")
+		console.Line("success")
 
 		if false {
 			// A lot of XML
-			fmt.Println("response body:", web.ReadString(s))
+			console.Line("response body:", web.ReadString(s))
 		}
 	case http.StatusUnauthorized:
-		fmt.Println(constant.Unauthorized)
+		console.Line(constant.Unauthorized)
 	default:
-		fmt.Printf("unexpected status: %d\n", s.StatusCode)
+		console.Format("unexpected status: %d\n", s.StatusCode)
 	}
 }

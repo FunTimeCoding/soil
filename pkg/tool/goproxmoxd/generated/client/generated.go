@@ -666,148 +666,148 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 // The interface specification for the client above.
 type ClientInterface interface {
 
-	// ListContainers performs a GET /api/v1/containers (the `ListContainers` operationId) request.
+	// ListContainers performs a GET /api/containers (the `ListContainers` operationId) request.
 	ListContainers(ctx context.Context, params *ListContainersParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetContainer performs a GET /api/v1/containers/{identifier} (the `GetContainer` operationId) request.
+	// GetContainer performs a GET /api/containers/{identifier} (the `GetContainer` operationId) request.
 	GetContainer(ctx context.Context, identifier int64, params *GetContainerParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ShutdownContainer performs a POST /api/v1/containers/{identifier}/shutdown (the `ShutdownContainer` operationId) request.
+	// ShutdownContainer performs a POST /api/containers/{identifier}/shutdown (the `ShutdownContainer` operationId) request.
 	ShutdownContainer(ctx context.Context, identifier int64, params *ShutdownContainerParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListContainerSnapshots performs a GET /api/v1/containers/{identifier}/snapshots (the `ListContainerSnapshots` operationId) request.
+	// ListContainerSnapshots performs a GET /api/containers/{identifier}/snapshots (the `ListContainerSnapshots` operationId) request.
 	ListContainerSnapshots(ctx context.Context, identifier int64, params *ListContainerSnapshotsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateContainerSnapshotWithBody performs a POST /api/v1/containers/{identifier}/snapshots (the `CreateContainerSnapshot` operationId) request,
+	// CreateContainerSnapshotWithBody performs a POST /api/containers/{identifier}/snapshots (the `CreateContainerSnapshot` operationId) request,
 	// with any type of body and a specified content type.
 	CreateContainerSnapshotWithBody(ctx context.Context, identifier int64, params *CreateContainerSnapshotParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateContainerSnapshot performs a POST /api/v1/containers/{identifier}/snapshots (the `CreateContainerSnapshot` operationId) request.
+	// CreateContainerSnapshot performs a POST /api/containers/{identifier}/snapshots (the `CreateContainerSnapshot` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateContainerSnapshot(ctx context.Context, identifier int64, params *CreateContainerSnapshotParams, body CreateContainerSnapshotJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// DeleteContainerSnapshot performs a DELETE /api/v1/containers/{identifier}/snapshots/{name} (the `DeleteContainerSnapshot` operationId) request.
+	// DeleteContainerSnapshot performs a DELETE /api/containers/{identifier}/snapshots/{name} (the `DeleteContainerSnapshot` operationId) request.
 	DeleteContainerSnapshot(ctx context.Context, identifier int64, name string, params *DeleteContainerSnapshotParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// RollbackContainerSnapshot performs a POST /api/v1/containers/{identifier}/snapshots/{name}/rollback (the `RollbackContainerSnapshot` operationId) request.
+	// RollbackContainerSnapshot performs a POST /api/containers/{identifier}/snapshots/{name}/rollback (the `RollbackContainerSnapshot` operationId) request.
 	RollbackContainerSnapshot(ctx context.Context, identifier int64, name string, params *RollbackContainerSnapshotParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// StartContainer performs a POST /api/v1/containers/{identifier}/start (the `StartContainer` operationId) request.
+	// StartContainer performs a POST /api/containers/{identifier}/start (the `StartContainer` operationId) request.
 	StartContainer(ctx context.Context, identifier int64, params *StartContainerParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// StopContainer performs a POST /api/v1/containers/{identifier}/stop (the `StopContainer` operationId) request.
+	// StopContainer performs a POST /api/containers/{identifier}/stop (the `StopContainer` operationId) request.
 	StopContainer(ctx context.Context, identifier int64, params *StopContainerParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// DeriveHardwareAddress performs a GET /api/v1/hardware-address (the `DeriveHardwareAddress` operationId) request.
+	// DeriveHardwareAddress performs a GET /api/hardware-address (the `DeriveHardwareAddress` operationId) request.
 	DeriveHardwareAddress(ctx context.Context, params *DeriveHardwareAddressParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListInstances performs a GET /api/v1/instances (the `ListInstances` operationId) request.
+	// ListInstances performs a GET /api/instances (the `ListInstances` operationId) request.
 	ListInstances(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListMachines performs a GET /api/v1/machines (the `ListMachines` operationId) request.
+	// ListMachines performs a GET /api/machines (the `ListMachines` operationId) request.
 	ListMachines(ctx context.Context, params *ListMachinesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateMachineWithBody performs a POST /api/v1/machines (the `CreateMachine` operationId) request,
+	// CreateMachineWithBody performs a POST /api/machines (the `CreateMachine` operationId) request,
 	// with any type of body and a specified content type.
 	CreateMachineWithBody(ctx context.Context, params *CreateMachineParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateMachine performs a POST /api/v1/machines (the `CreateMachine` operationId) request.
+	// CreateMachine performs a POST /api/machines (the `CreateMachine` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateMachine(ctx context.Context, params *CreateMachineParams, body CreateMachineJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// DeleteMachine performs a DELETE /api/v1/machines/{identifier} (the `DeleteMachine` operationId) request.
+	// DeleteMachine performs a DELETE /api/machines/{identifier} (the `DeleteMachine` operationId) request.
 	DeleteMachine(ctx context.Context, identifier int64, params *DeleteMachineParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetMachine performs a GET /api/v1/machines/{identifier} (the `GetMachine` operationId) request.
+	// GetMachine performs a GET /api/machines/{identifier} (the `GetMachine` operationId) request.
 	GetMachine(ctx context.Context, identifier int64, params *GetMachineParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// UpdateMachineWithBody performs a PATCH /api/v1/machines/{identifier} (the `UpdateMachine` operationId) request,
+	// UpdateMachineWithBody performs a PATCH /api/machines/{identifier} (the `UpdateMachine` operationId) request,
 	// with any type of body and a specified content type.
 	UpdateMachineWithBody(ctx context.Context, identifier int64, params *UpdateMachineParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// UpdateMachine performs a PATCH /api/v1/machines/{identifier} (the `UpdateMachine` operationId) request.
+	// UpdateMachine performs a PATCH /api/machines/{identifier} (the `UpdateMachine` operationId) request.
 	// Takes a body of the `application/json` content type.
 	UpdateMachine(ctx context.Context, identifier int64, params *UpdateMachineParams, body UpdateMachineJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CloneMachineWithBody performs a POST /api/v1/machines/{identifier}/clone (the `CloneMachine` operationId) request,
+	// CloneMachineWithBody performs a POST /api/machines/{identifier}/clone (the `CloneMachine` operationId) request,
 	// with any type of body and a specified content type.
 	CloneMachineWithBody(ctx context.Context, identifier int64, params *CloneMachineParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CloneMachine performs a POST /api/v1/machines/{identifier}/clone (the `CloneMachine` operationId) request.
+	// CloneMachine performs a POST /api/machines/{identifier}/clone (the `CloneMachine` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CloneMachine(ctx context.Context, identifier int64, params *CloneMachineParams, body CloneMachineJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ResetMachine performs a POST /api/v1/machines/{identifier}/reset (the `ResetMachine` operationId) request.
+	// ResetMachine performs a POST /api/machines/{identifier}/reset (the `ResetMachine` operationId) request.
 	ResetMachine(ctx context.Context, identifier int64, params *ResetMachineParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ShutdownMachine performs a POST /api/v1/machines/{identifier}/shutdown (the `ShutdownMachine` operationId) request.
+	// ShutdownMachine performs a POST /api/machines/{identifier}/shutdown (the `ShutdownMachine` operationId) request.
 	ShutdownMachine(ctx context.Context, identifier int64, params *ShutdownMachineParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListMachineSnapshots performs a GET /api/v1/machines/{identifier}/snapshots (the `ListMachineSnapshots` operationId) request.
+	// ListMachineSnapshots performs a GET /api/machines/{identifier}/snapshots (the `ListMachineSnapshots` operationId) request.
 	ListMachineSnapshots(ctx context.Context, identifier int64, params *ListMachineSnapshotsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateMachineSnapshotWithBody performs a POST /api/v1/machines/{identifier}/snapshots (the `CreateMachineSnapshot` operationId) request,
+	// CreateMachineSnapshotWithBody performs a POST /api/machines/{identifier}/snapshots (the `CreateMachineSnapshot` operationId) request,
 	// with any type of body and a specified content type.
 	CreateMachineSnapshotWithBody(ctx context.Context, identifier int64, params *CreateMachineSnapshotParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateMachineSnapshot performs a POST /api/v1/machines/{identifier}/snapshots (the `CreateMachineSnapshot` operationId) request.
+	// CreateMachineSnapshot performs a POST /api/machines/{identifier}/snapshots (the `CreateMachineSnapshot` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateMachineSnapshot(ctx context.Context, identifier int64, params *CreateMachineSnapshotParams, body CreateMachineSnapshotJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// DeleteMachineSnapshot performs a DELETE /api/v1/machines/{identifier}/snapshots/{name} (the `DeleteMachineSnapshot` operationId) request.
+	// DeleteMachineSnapshot performs a DELETE /api/machines/{identifier}/snapshots/{name} (the `DeleteMachineSnapshot` operationId) request.
 	DeleteMachineSnapshot(ctx context.Context, identifier int64, name string, params *DeleteMachineSnapshotParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// RollbackMachineSnapshot performs a POST /api/v1/machines/{identifier}/snapshots/{name}/rollback (the `RollbackMachineSnapshot` operationId) request.
+	// RollbackMachineSnapshot performs a POST /api/machines/{identifier}/snapshots/{name}/rollback (the `RollbackMachineSnapshot` operationId) request.
 	RollbackMachineSnapshot(ctx context.Context, identifier int64, name string, params *RollbackMachineSnapshotParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// StartMachine performs a POST /api/v1/machines/{identifier}/start (the `StartMachine` operationId) request.
+	// StartMachine performs a POST /api/machines/{identifier}/start (the `StartMachine` operationId) request.
 	StartMachine(ctx context.Context, identifier int64, params *StartMachineParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// StopMachine performs a POST /api/v1/machines/{identifier}/stop (the `StopMachine` operationId) request.
+	// StopMachine performs a POST /api/machines/{identifier}/stop (the `StopMachine` operationId) request.
 	StopMachine(ctx context.Context, identifier int64, params *StopMachineParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListNodes performs a GET /api/v1/nodes (the `ListNodes` operationId) request.
+	// ListNodes performs a GET /api/nodes (the `ListNodes` operationId) request.
 	ListNodes(ctx context.Context, params *ListNodesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListNetworks performs a GET /api/v1/nodes/{name}/networks (the `ListNetworks` operationId) request.
+	// ListNetworks performs a GET /api/nodes/{name}/networks (the `ListNetworks` operationId) request.
 	ListNetworks(ctx context.Context, name string, params *ListNetworksParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetNodeStatus performs a GET /api/v1/nodes/{name}/status (the `GetNodeStatus` operationId) request.
+	// GetNodeStatus performs a GET /api/nodes/{name}/status (the `GetNodeStatus` operationId) request.
 	GetNodeStatus(ctx context.Context, name string, params *GetNodeStatusParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListStorages performs a GET /api/v1/nodes/{name}/storages (the `ListStorages` operationId) request.
+	// ListStorages performs a GET /api/nodes/{name}/storages (the `ListStorages` operationId) request.
 	ListStorages(ctx context.Context, name string, params *ListStoragesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListStorageContent performs a GET /api/v1/nodes/{name}/storages/{storage}/content (the `ListStorageContent` operationId) request.
+	// ListStorageContent performs a GET /api/nodes/{name}/storages/{storage}/content (the `ListStorageContent` operationId) request.
 	ListStorageContent(ctx context.Context, name string, storage string, params *ListStorageContentParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// DownloadLocatorWithBody performs a POST /api/v1/nodes/{name}/storages/{storage}/download (the `DownloadLocator` operationId) request,
+	// DownloadLocatorWithBody performs a POST /api/nodes/{name}/storages/{storage}/download (the `DownloadLocator` operationId) request,
 	// with any type of body and a specified content type.
 	DownloadLocatorWithBody(ctx context.Context, name string, storage string, params *DownloadLocatorParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// DownloadLocator performs a POST /api/v1/nodes/{name}/storages/{storage}/download (the `DownloadLocator` operationId) request.
+	// DownloadLocator performs a POST /api/nodes/{name}/storages/{storage}/download (the `DownloadLocator` operationId) request.
 	// Takes a body of the `application/json` content type.
 	DownloadLocator(ctx context.Context, name string, storage string, params *DownloadLocatorParams, body DownloadLocatorJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListSnippets performs a GET /api/v1/snippets (the `ListSnippets` operationId) request.
+	// ListSnippets performs a GET /api/snippets (the `ListSnippets` operationId) request.
 	ListSnippets(ctx context.Context, params *ListSnippetsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateSnippetWithBody performs a POST /api/v1/snippets (the `CreateSnippet` operationId) request,
+	// CreateSnippetWithBody performs a POST /api/snippets (the `CreateSnippet` operationId) request,
 	// with any type of body and a specified content type.
 	CreateSnippetWithBody(ctx context.Context, params *CreateSnippetParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateSnippet performs a POST /api/v1/snippets (the `CreateSnippet` operationId) request.
+	// CreateSnippet performs a POST /api/snippets (the `CreateSnippet` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateSnippet(ctx context.Context, params *CreateSnippetParams, body CreateSnippetJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// DeleteSnippet performs a DELETE /api/v1/snippets/{name} (the `DeleteSnippet` operationId) request.
+	// DeleteSnippet performs a DELETE /api/snippets/{name} (the `DeleteSnippet` operationId) request.
 	DeleteSnippet(ctx context.Context, name string, params *DeleteSnippetParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetSnippet performs a GET /api/v1/snippets/{name} (the `GetSnippet` operationId) request.
+	// GetSnippet performs a GET /api/snippets/{name} (the `GetSnippet` operationId) request.
 	GetSnippet(ctx context.Context, name string, params *GetSnippetParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
 
-// ListContainers performs a GET /api/v1/containers (the `ListContainers` operationId) request.
+// ListContainers performs a GET /api/containers (the `ListContainers` operationId) request.
 func (c *Client) ListContainers(ctx context.Context, params *ListContainersParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListContainersRequest(c.Server, params)
 	if err != nil {
@@ -820,7 +820,7 @@ func (c *Client) ListContainers(ctx context.Context, params *ListContainersParam
 	return c.Client.Do(req)
 }
 
-// GetContainer performs a GET /api/v1/containers/{identifier} (the `GetContainer` operationId) request.
+// GetContainer performs a GET /api/containers/{identifier} (the `GetContainer` operationId) request.
 func (c *Client) GetContainer(ctx context.Context, identifier int64, params *GetContainerParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetContainerRequest(c.Server, identifier, params)
 	if err != nil {
@@ -833,7 +833,7 @@ func (c *Client) GetContainer(ctx context.Context, identifier int64, params *Get
 	return c.Client.Do(req)
 }
 
-// ShutdownContainer performs a POST /api/v1/containers/{identifier}/shutdown (the `ShutdownContainer` operationId) request.
+// ShutdownContainer performs a POST /api/containers/{identifier}/shutdown (the `ShutdownContainer` operationId) request.
 func (c *Client) ShutdownContainer(ctx context.Context, identifier int64, params *ShutdownContainerParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewShutdownContainerRequest(c.Server, identifier, params)
 	if err != nil {
@@ -846,7 +846,7 @@ func (c *Client) ShutdownContainer(ctx context.Context, identifier int64, params
 	return c.Client.Do(req)
 }
 
-// ListContainerSnapshots performs a GET /api/v1/containers/{identifier}/snapshots (the `ListContainerSnapshots` operationId) request.
+// ListContainerSnapshots performs a GET /api/containers/{identifier}/snapshots (the `ListContainerSnapshots` operationId) request.
 func (c *Client) ListContainerSnapshots(ctx context.Context, identifier int64, params *ListContainerSnapshotsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListContainerSnapshotsRequest(c.Server, identifier, params)
 	if err != nil {
@@ -859,7 +859,7 @@ func (c *Client) ListContainerSnapshots(ctx context.Context, identifier int64, p
 	return c.Client.Do(req)
 }
 
-// CreateContainerSnapshotWithBody performs a POST /api/v1/containers/{identifier}/snapshots (the `CreateContainerSnapshot` operationId) request,
+// CreateContainerSnapshotWithBody performs a POST /api/containers/{identifier}/snapshots (the `CreateContainerSnapshot` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CreateContainerSnapshotWithBody(ctx context.Context, identifier int64, params *CreateContainerSnapshotParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateContainerSnapshotRequestWithBody(c.Server, identifier, params, contentType, body)
@@ -873,7 +873,7 @@ func (c *Client) CreateContainerSnapshotWithBody(ctx context.Context, identifier
 	return c.Client.Do(req)
 }
 
-// CreateContainerSnapshot performs a POST /api/v1/containers/{identifier}/snapshots (the `CreateContainerSnapshot` operationId) request.
+// CreateContainerSnapshot performs a POST /api/containers/{identifier}/snapshots (the `CreateContainerSnapshot` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateContainerSnapshot(ctx context.Context, identifier int64, params *CreateContainerSnapshotParams, body CreateContainerSnapshotJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateContainerSnapshotRequest(c.Server, identifier, params, body)
@@ -887,7 +887,7 @@ func (c *Client) CreateContainerSnapshot(ctx context.Context, identifier int64, 
 	return c.Client.Do(req)
 }
 
-// DeleteContainerSnapshot performs a DELETE /api/v1/containers/{identifier}/snapshots/{name} (the `DeleteContainerSnapshot` operationId) request.
+// DeleteContainerSnapshot performs a DELETE /api/containers/{identifier}/snapshots/{name} (the `DeleteContainerSnapshot` operationId) request.
 func (c *Client) DeleteContainerSnapshot(ctx context.Context, identifier int64, name string, params *DeleteContainerSnapshotParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewDeleteContainerSnapshotRequest(c.Server, identifier, name, params)
 	if err != nil {
@@ -900,7 +900,7 @@ func (c *Client) DeleteContainerSnapshot(ctx context.Context, identifier int64, 
 	return c.Client.Do(req)
 }
 
-// RollbackContainerSnapshot performs a POST /api/v1/containers/{identifier}/snapshots/{name}/rollback (the `RollbackContainerSnapshot` operationId) request.
+// RollbackContainerSnapshot performs a POST /api/containers/{identifier}/snapshots/{name}/rollback (the `RollbackContainerSnapshot` operationId) request.
 func (c *Client) RollbackContainerSnapshot(ctx context.Context, identifier int64, name string, params *RollbackContainerSnapshotParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewRollbackContainerSnapshotRequest(c.Server, identifier, name, params)
 	if err != nil {
@@ -913,7 +913,7 @@ func (c *Client) RollbackContainerSnapshot(ctx context.Context, identifier int64
 	return c.Client.Do(req)
 }
 
-// StartContainer performs a POST /api/v1/containers/{identifier}/start (the `StartContainer` operationId) request.
+// StartContainer performs a POST /api/containers/{identifier}/start (the `StartContainer` operationId) request.
 func (c *Client) StartContainer(ctx context.Context, identifier int64, params *StartContainerParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewStartContainerRequest(c.Server, identifier, params)
 	if err != nil {
@@ -926,7 +926,7 @@ func (c *Client) StartContainer(ctx context.Context, identifier int64, params *S
 	return c.Client.Do(req)
 }
 
-// StopContainer performs a POST /api/v1/containers/{identifier}/stop (the `StopContainer` operationId) request.
+// StopContainer performs a POST /api/containers/{identifier}/stop (the `StopContainer` operationId) request.
 func (c *Client) StopContainer(ctx context.Context, identifier int64, params *StopContainerParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewStopContainerRequest(c.Server, identifier, params)
 	if err != nil {
@@ -939,7 +939,7 @@ func (c *Client) StopContainer(ctx context.Context, identifier int64, params *St
 	return c.Client.Do(req)
 }
 
-// DeriveHardwareAddress performs a GET /api/v1/hardware-address (the `DeriveHardwareAddress` operationId) request.
+// DeriveHardwareAddress performs a GET /api/hardware-address (the `DeriveHardwareAddress` operationId) request.
 func (c *Client) DeriveHardwareAddress(ctx context.Context, params *DeriveHardwareAddressParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewDeriveHardwareAddressRequest(c.Server, params)
 	if err != nil {
@@ -952,7 +952,7 @@ func (c *Client) DeriveHardwareAddress(ctx context.Context, params *DeriveHardwa
 	return c.Client.Do(req)
 }
 
-// ListInstances performs a GET /api/v1/instances (the `ListInstances` operationId) request.
+// ListInstances performs a GET /api/instances (the `ListInstances` operationId) request.
 func (c *Client) ListInstances(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListInstancesRequest(c.Server)
 	if err != nil {
@@ -965,7 +965,7 @@ func (c *Client) ListInstances(ctx context.Context, reqEditors ...RequestEditorF
 	return c.Client.Do(req)
 }
 
-// ListMachines performs a GET /api/v1/machines (the `ListMachines` operationId) request.
+// ListMachines performs a GET /api/machines (the `ListMachines` operationId) request.
 func (c *Client) ListMachines(ctx context.Context, params *ListMachinesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListMachinesRequest(c.Server, params)
 	if err != nil {
@@ -978,7 +978,7 @@ func (c *Client) ListMachines(ctx context.Context, params *ListMachinesParams, r
 	return c.Client.Do(req)
 }
 
-// CreateMachineWithBody performs a POST /api/v1/machines (the `CreateMachine` operationId) request,
+// CreateMachineWithBody performs a POST /api/machines (the `CreateMachine` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CreateMachineWithBody(ctx context.Context, params *CreateMachineParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateMachineRequestWithBody(c.Server, params, contentType, body)
@@ -992,7 +992,7 @@ func (c *Client) CreateMachineWithBody(ctx context.Context, params *CreateMachin
 	return c.Client.Do(req)
 }
 
-// CreateMachine performs a POST /api/v1/machines (the `CreateMachine` operationId) request.
+// CreateMachine performs a POST /api/machines (the `CreateMachine` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateMachine(ctx context.Context, params *CreateMachineParams, body CreateMachineJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateMachineRequest(c.Server, params, body)
@@ -1006,7 +1006,7 @@ func (c *Client) CreateMachine(ctx context.Context, params *CreateMachineParams,
 	return c.Client.Do(req)
 }
 
-// DeleteMachine performs a DELETE /api/v1/machines/{identifier} (the `DeleteMachine` operationId) request.
+// DeleteMachine performs a DELETE /api/machines/{identifier} (the `DeleteMachine` operationId) request.
 func (c *Client) DeleteMachine(ctx context.Context, identifier int64, params *DeleteMachineParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewDeleteMachineRequest(c.Server, identifier, params)
 	if err != nil {
@@ -1019,7 +1019,7 @@ func (c *Client) DeleteMachine(ctx context.Context, identifier int64, params *De
 	return c.Client.Do(req)
 }
 
-// GetMachine performs a GET /api/v1/machines/{identifier} (the `GetMachine` operationId) request.
+// GetMachine performs a GET /api/machines/{identifier} (the `GetMachine` operationId) request.
 func (c *Client) GetMachine(ctx context.Context, identifier int64, params *GetMachineParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetMachineRequest(c.Server, identifier, params)
 	if err != nil {
@@ -1032,7 +1032,7 @@ func (c *Client) GetMachine(ctx context.Context, identifier int64, params *GetMa
 	return c.Client.Do(req)
 }
 
-// UpdateMachineWithBody performs a PATCH /api/v1/machines/{identifier} (the `UpdateMachine` operationId) request,
+// UpdateMachineWithBody performs a PATCH /api/machines/{identifier} (the `UpdateMachine` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) UpdateMachineWithBody(ctx context.Context, identifier int64, params *UpdateMachineParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewUpdateMachineRequestWithBody(c.Server, identifier, params, contentType, body)
@@ -1046,7 +1046,7 @@ func (c *Client) UpdateMachineWithBody(ctx context.Context, identifier int64, pa
 	return c.Client.Do(req)
 }
 
-// UpdateMachine performs a PATCH /api/v1/machines/{identifier} (the `UpdateMachine` operationId) request.
+// UpdateMachine performs a PATCH /api/machines/{identifier} (the `UpdateMachine` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) UpdateMachine(ctx context.Context, identifier int64, params *UpdateMachineParams, body UpdateMachineJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewUpdateMachineRequest(c.Server, identifier, params, body)
@@ -1060,7 +1060,7 @@ func (c *Client) UpdateMachine(ctx context.Context, identifier int64, params *Up
 	return c.Client.Do(req)
 }
 
-// CloneMachineWithBody performs a POST /api/v1/machines/{identifier}/clone (the `CloneMachine` operationId) request,
+// CloneMachineWithBody performs a POST /api/machines/{identifier}/clone (the `CloneMachine` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CloneMachineWithBody(ctx context.Context, identifier int64, params *CloneMachineParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCloneMachineRequestWithBody(c.Server, identifier, params, contentType, body)
@@ -1074,7 +1074,7 @@ func (c *Client) CloneMachineWithBody(ctx context.Context, identifier int64, par
 	return c.Client.Do(req)
 }
 
-// CloneMachine performs a POST /api/v1/machines/{identifier}/clone (the `CloneMachine` operationId) request.
+// CloneMachine performs a POST /api/machines/{identifier}/clone (the `CloneMachine` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) CloneMachine(ctx context.Context, identifier int64, params *CloneMachineParams, body CloneMachineJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCloneMachineRequest(c.Server, identifier, params, body)
@@ -1088,7 +1088,7 @@ func (c *Client) CloneMachine(ctx context.Context, identifier int64, params *Clo
 	return c.Client.Do(req)
 }
 
-// ResetMachine performs a POST /api/v1/machines/{identifier}/reset (the `ResetMachine` operationId) request.
+// ResetMachine performs a POST /api/machines/{identifier}/reset (the `ResetMachine` operationId) request.
 func (c *Client) ResetMachine(ctx context.Context, identifier int64, params *ResetMachineParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewResetMachineRequest(c.Server, identifier, params)
 	if err != nil {
@@ -1101,7 +1101,7 @@ func (c *Client) ResetMachine(ctx context.Context, identifier int64, params *Res
 	return c.Client.Do(req)
 }
 
-// ShutdownMachine performs a POST /api/v1/machines/{identifier}/shutdown (the `ShutdownMachine` operationId) request.
+// ShutdownMachine performs a POST /api/machines/{identifier}/shutdown (the `ShutdownMachine` operationId) request.
 func (c *Client) ShutdownMachine(ctx context.Context, identifier int64, params *ShutdownMachineParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewShutdownMachineRequest(c.Server, identifier, params)
 	if err != nil {
@@ -1114,7 +1114,7 @@ func (c *Client) ShutdownMachine(ctx context.Context, identifier int64, params *
 	return c.Client.Do(req)
 }
 
-// ListMachineSnapshots performs a GET /api/v1/machines/{identifier}/snapshots (the `ListMachineSnapshots` operationId) request.
+// ListMachineSnapshots performs a GET /api/machines/{identifier}/snapshots (the `ListMachineSnapshots` operationId) request.
 func (c *Client) ListMachineSnapshots(ctx context.Context, identifier int64, params *ListMachineSnapshotsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListMachineSnapshotsRequest(c.Server, identifier, params)
 	if err != nil {
@@ -1127,7 +1127,7 @@ func (c *Client) ListMachineSnapshots(ctx context.Context, identifier int64, par
 	return c.Client.Do(req)
 }
 
-// CreateMachineSnapshotWithBody performs a POST /api/v1/machines/{identifier}/snapshots (the `CreateMachineSnapshot` operationId) request,
+// CreateMachineSnapshotWithBody performs a POST /api/machines/{identifier}/snapshots (the `CreateMachineSnapshot` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CreateMachineSnapshotWithBody(ctx context.Context, identifier int64, params *CreateMachineSnapshotParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateMachineSnapshotRequestWithBody(c.Server, identifier, params, contentType, body)
@@ -1141,7 +1141,7 @@ func (c *Client) CreateMachineSnapshotWithBody(ctx context.Context, identifier i
 	return c.Client.Do(req)
 }
 
-// CreateMachineSnapshot performs a POST /api/v1/machines/{identifier}/snapshots (the `CreateMachineSnapshot` operationId) request.
+// CreateMachineSnapshot performs a POST /api/machines/{identifier}/snapshots (the `CreateMachineSnapshot` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateMachineSnapshot(ctx context.Context, identifier int64, params *CreateMachineSnapshotParams, body CreateMachineSnapshotJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateMachineSnapshotRequest(c.Server, identifier, params, body)
@@ -1155,7 +1155,7 @@ func (c *Client) CreateMachineSnapshot(ctx context.Context, identifier int64, pa
 	return c.Client.Do(req)
 }
 
-// DeleteMachineSnapshot performs a DELETE /api/v1/machines/{identifier}/snapshots/{name} (the `DeleteMachineSnapshot` operationId) request.
+// DeleteMachineSnapshot performs a DELETE /api/machines/{identifier}/snapshots/{name} (the `DeleteMachineSnapshot` operationId) request.
 func (c *Client) DeleteMachineSnapshot(ctx context.Context, identifier int64, name string, params *DeleteMachineSnapshotParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewDeleteMachineSnapshotRequest(c.Server, identifier, name, params)
 	if err != nil {
@@ -1168,7 +1168,7 @@ func (c *Client) DeleteMachineSnapshot(ctx context.Context, identifier int64, na
 	return c.Client.Do(req)
 }
 
-// RollbackMachineSnapshot performs a POST /api/v1/machines/{identifier}/snapshots/{name}/rollback (the `RollbackMachineSnapshot` operationId) request.
+// RollbackMachineSnapshot performs a POST /api/machines/{identifier}/snapshots/{name}/rollback (the `RollbackMachineSnapshot` operationId) request.
 func (c *Client) RollbackMachineSnapshot(ctx context.Context, identifier int64, name string, params *RollbackMachineSnapshotParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewRollbackMachineSnapshotRequest(c.Server, identifier, name, params)
 	if err != nil {
@@ -1181,7 +1181,7 @@ func (c *Client) RollbackMachineSnapshot(ctx context.Context, identifier int64, 
 	return c.Client.Do(req)
 }
 
-// StartMachine performs a POST /api/v1/machines/{identifier}/start (the `StartMachine` operationId) request.
+// StartMachine performs a POST /api/machines/{identifier}/start (the `StartMachine` operationId) request.
 func (c *Client) StartMachine(ctx context.Context, identifier int64, params *StartMachineParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewStartMachineRequest(c.Server, identifier, params)
 	if err != nil {
@@ -1194,7 +1194,7 @@ func (c *Client) StartMachine(ctx context.Context, identifier int64, params *Sta
 	return c.Client.Do(req)
 }
 
-// StopMachine performs a POST /api/v1/machines/{identifier}/stop (the `StopMachine` operationId) request.
+// StopMachine performs a POST /api/machines/{identifier}/stop (the `StopMachine` operationId) request.
 func (c *Client) StopMachine(ctx context.Context, identifier int64, params *StopMachineParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewStopMachineRequest(c.Server, identifier, params)
 	if err != nil {
@@ -1207,7 +1207,7 @@ func (c *Client) StopMachine(ctx context.Context, identifier int64, params *Stop
 	return c.Client.Do(req)
 }
 
-// ListNodes performs a GET /api/v1/nodes (the `ListNodes` operationId) request.
+// ListNodes performs a GET /api/nodes (the `ListNodes` operationId) request.
 func (c *Client) ListNodes(ctx context.Context, params *ListNodesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListNodesRequest(c.Server, params)
 	if err != nil {
@@ -1220,7 +1220,7 @@ func (c *Client) ListNodes(ctx context.Context, params *ListNodesParams, reqEdit
 	return c.Client.Do(req)
 }
 
-// ListNetworks performs a GET /api/v1/nodes/{name}/networks (the `ListNetworks` operationId) request.
+// ListNetworks performs a GET /api/nodes/{name}/networks (the `ListNetworks` operationId) request.
 func (c *Client) ListNetworks(ctx context.Context, name string, params *ListNetworksParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListNetworksRequest(c.Server, name, params)
 	if err != nil {
@@ -1233,7 +1233,7 @@ func (c *Client) ListNetworks(ctx context.Context, name string, params *ListNetw
 	return c.Client.Do(req)
 }
 
-// GetNodeStatus performs a GET /api/v1/nodes/{name}/status (the `GetNodeStatus` operationId) request.
+// GetNodeStatus performs a GET /api/nodes/{name}/status (the `GetNodeStatus` operationId) request.
 func (c *Client) GetNodeStatus(ctx context.Context, name string, params *GetNodeStatusParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetNodeStatusRequest(c.Server, name, params)
 	if err != nil {
@@ -1246,7 +1246,7 @@ func (c *Client) GetNodeStatus(ctx context.Context, name string, params *GetNode
 	return c.Client.Do(req)
 }
 
-// ListStorages performs a GET /api/v1/nodes/{name}/storages (the `ListStorages` operationId) request.
+// ListStorages performs a GET /api/nodes/{name}/storages (the `ListStorages` operationId) request.
 func (c *Client) ListStorages(ctx context.Context, name string, params *ListStoragesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListStoragesRequest(c.Server, name, params)
 	if err != nil {
@@ -1259,7 +1259,7 @@ func (c *Client) ListStorages(ctx context.Context, name string, params *ListStor
 	return c.Client.Do(req)
 }
 
-// ListStorageContent performs a GET /api/v1/nodes/{name}/storages/{storage}/content (the `ListStorageContent` operationId) request.
+// ListStorageContent performs a GET /api/nodes/{name}/storages/{storage}/content (the `ListStorageContent` operationId) request.
 func (c *Client) ListStorageContent(ctx context.Context, name string, storage string, params *ListStorageContentParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListStorageContentRequest(c.Server, name, storage, params)
 	if err != nil {
@@ -1272,7 +1272,7 @@ func (c *Client) ListStorageContent(ctx context.Context, name string, storage st
 	return c.Client.Do(req)
 }
 
-// DownloadLocatorWithBody performs a POST /api/v1/nodes/{name}/storages/{storage}/download (the `DownloadLocator` operationId) request,
+// DownloadLocatorWithBody performs a POST /api/nodes/{name}/storages/{storage}/download (the `DownloadLocator` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) DownloadLocatorWithBody(ctx context.Context, name string, storage string, params *DownloadLocatorParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewDownloadLocatorRequestWithBody(c.Server, name, storage, params, contentType, body)
@@ -1286,7 +1286,7 @@ func (c *Client) DownloadLocatorWithBody(ctx context.Context, name string, stora
 	return c.Client.Do(req)
 }
 
-// DownloadLocator performs a POST /api/v1/nodes/{name}/storages/{storage}/download (the `DownloadLocator` operationId) request.
+// DownloadLocator performs a POST /api/nodes/{name}/storages/{storage}/download (the `DownloadLocator` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) DownloadLocator(ctx context.Context, name string, storage string, params *DownloadLocatorParams, body DownloadLocatorJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewDownloadLocatorRequest(c.Server, name, storage, params, body)
@@ -1300,7 +1300,7 @@ func (c *Client) DownloadLocator(ctx context.Context, name string, storage strin
 	return c.Client.Do(req)
 }
 
-// ListSnippets performs a GET /api/v1/snippets (the `ListSnippets` operationId) request.
+// ListSnippets performs a GET /api/snippets (the `ListSnippets` operationId) request.
 func (c *Client) ListSnippets(ctx context.Context, params *ListSnippetsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListSnippetsRequest(c.Server, params)
 	if err != nil {
@@ -1313,7 +1313,7 @@ func (c *Client) ListSnippets(ctx context.Context, params *ListSnippetsParams, r
 	return c.Client.Do(req)
 }
 
-// CreateSnippetWithBody performs a POST /api/v1/snippets (the `CreateSnippet` operationId) request,
+// CreateSnippetWithBody performs a POST /api/snippets (the `CreateSnippet` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CreateSnippetWithBody(ctx context.Context, params *CreateSnippetParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateSnippetRequestWithBody(c.Server, params, contentType, body)
@@ -1327,7 +1327,7 @@ func (c *Client) CreateSnippetWithBody(ctx context.Context, params *CreateSnippe
 	return c.Client.Do(req)
 }
 
-// CreateSnippet performs a POST /api/v1/snippets (the `CreateSnippet` operationId) request.
+// CreateSnippet performs a POST /api/snippets (the `CreateSnippet` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateSnippet(ctx context.Context, params *CreateSnippetParams, body CreateSnippetJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateSnippetRequest(c.Server, params, body)
@@ -1341,7 +1341,7 @@ func (c *Client) CreateSnippet(ctx context.Context, params *CreateSnippetParams,
 	return c.Client.Do(req)
 }
 
-// DeleteSnippet performs a DELETE /api/v1/snippets/{name} (the `DeleteSnippet` operationId) request.
+// DeleteSnippet performs a DELETE /api/snippets/{name} (the `DeleteSnippet` operationId) request.
 func (c *Client) DeleteSnippet(ctx context.Context, name string, params *DeleteSnippetParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewDeleteSnippetRequest(c.Server, name, params)
 	if err != nil {
@@ -1354,7 +1354,7 @@ func (c *Client) DeleteSnippet(ctx context.Context, name string, params *DeleteS
 	return c.Client.Do(req)
 }
 
-// GetSnippet performs a GET /api/v1/snippets/{name} (the `GetSnippet` operationId) request.
+// GetSnippet performs a GET /api/snippets/{name} (the `GetSnippet` operationId) request.
 func (c *Client) GetSnippet(ctx context.Context, name string, params *GetSnippetParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetSnippetRequest(c.Server, name, params)
 	if err != nil {
@@ -1376,7 +1376,7 @@ func NewListContainersRequest(server string, params *ListContainersParams) (*htt
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/containers")
+	operationPath := fmt.Sprintf("/api/containers")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1449,7 +1449,7 @@ func NewGetContainerRequest(server string, identifier int64, params *GetContaine
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/containers/%s", pathParam0)
+	operationPath := fmt.Sprintf("/api/containers/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1522,7 +1522,7 @@ func NewShutdownContainerRequest(server string, identifier int64, params *Shutdo
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/containers/%s/shutdown", pathParam0)
+	operationPath := fmt.Sprintf("/api/containers/%s/shutdown", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1595,7 +1595,7 @@ func NewListContainerSnapshotsRequest(server string, identifier int64, params *L
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/containers/%s/snapshots", pathParam0)
+	operationPath := fmt.Sprintf("/api/containers/%s/snapshots", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1679,7 +1679,7 @@ func NewCreateContainerSnapshotRequestWithBody(server string, identifier int64, 
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/containers/%s/snapshots", pathParam0)
+	operationPath := fmt.Sprintf("/api/containers/%s/snapshots", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1761,7 +1761,7 @@ func NewDeleteContainerSnapshotRequest(server string, identifier int64, name str
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/containers/%s/snapshots/%s", pathParam0, pathParam1)
+	operationPath := fmt.Sprintf("/api/containers/%s/snapshots/%s", pathParam0, pathParam1)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1841,7 +1841,7 @@ func NewRollbackContainerSnapshotRequest(server string, identifier int64, name s
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/containers/%s/snapshots/%s/rollback", pathParam0, pathParam1)
+	operationPath := fmt.Sprintf("/api/containers/%s/snapshots/%s/rollback", pathParam0, pathParam1)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1914,7 +1914,7 @@ func NewStartContainerRequest(server string, identifier int64, params *StartCont
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/containers/%s/start", pathParam0)
+	operationPath := fmt.Sprintf("/api/containers/%s/start", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1987,7 +1987,7 @@ func NewStopContainerRequest(server string, identifier int64, params *StopContai
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/containers/%s/stop", pathParam0)
+	operationPath := fmt.Sprintf("/api/containers/%s/stop", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2053,7 +2053,7 @@ func NewDeriveHardwareAddressRequest(server string, params *DeriveHardwareAddres
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/hardware-address")
+	operationPath := fmt.Sprintf("/api/hardware-address")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2115,7 +2115,7 @@ func NewListInstancesRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/instances")
+	operationPath := fmt.Sprintf("/api/instances")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2142,7 +2142,7 @@ func NewListMachinesRequest(server string, params *ListMachinesParams) (*http.Re
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/machines")
+	operationPath := fmt.Sprintf("/api/machines")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2219,7 +2219,7 @@ func NewCreateMachineRequestWithBody(server string, params *CreateMachineParams,
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/machines")
+	operationPath := fmt.Sprintf("/api/machines")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2282,7 +2282,7 @@ func NewDeleteMachineRequest(server string, identifier int64, params *DeleteMach
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/machines/%s", pathParam0)
+	operationPath := fmt.Sprintf("/api/machines/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2367,7 +2367,7 @@ func NewGetMachineRequest(server string, identifier int64, params *GetMachinePar
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/machines/%s", pathParam0)
+	operationPath := fmt.Sprintf("/api/machines/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2451,7 +2451,7 @@ func NewUpdateMachineRequestWithBody(server string, identifier int64, params *Up
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/machines/%s", pathParam0)
+	operationPath := fmt.Sprintf("/api/machines/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2537,7 +2537,7 @@ func NewCloneMachineRequestWithBody(server string, identifier int64, params *Clo
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/machines/%s/clone", pathParam0)
+	operationPath := fmt.Sprintf("/api/machines/%s/clone", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2612,7 +2612,7 @@ func NewResetMachineRequest(server string, identifier int64, params *ResetMachin
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/machines/%s/reset", pathParam0)
+	operationPath := fmt.Sprintf("/api/machines/%s/reset", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2685,7 +2685,7 @@ func NewShutdownMachineRequest(server string, identifier int64, params *Shutdown
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/machines/%s/shutdown", pathParam0)
+	operationPath := fmt.Sprintf("/api/machines/%s/shutdown", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2758,7 +2758,7 @@ func NewListMachineSnapshotsRequest(server string, identifier int64, params *Lis
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/machines/%s/snapshots", pathParam0)
+	operationPath := fmt.Sprintf("/api/machines/%s/snapshots", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2842,7 +2842,7 @@ func NewCreateMachineSnapshotRequestWithBody(server string, identifier int64, pa
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/machines/%s/snapshots", pathParam0)
+	operationPath := fmt.Sprintf("/api/machines/%s/snapshots", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2924,7 +2924,7 @@ func NewDeleteMachineSnapshotRequest(server string, identifier int64, name strin
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/machines/%s/snapshots/%s", pathParam0, pathParam1)
+	operationPath := fmt.Sprintf("/api/machines/%s/snapshots/%s", pathParam0, pathParam1)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3004,7 +3004,7 @@ func NewRollbackMachineSnapshotRequest(server string, identifier int64, name str
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/machines/%s/snapshots/%s/rollback", pathParam0, pathParam1)
+	operationPath := fmt.Sprintf("/api/machines/%s/snapshots/%s/rollback", pathParam0, pathParam1)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3077,7 +3077,7 @@ func NewStartMachineRequest(server string, identifier int64, params *StartMachin
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/machines/%s/start", pathParam0)
+	operationPath := fmt.Sprintf("/api/machines/%s/start", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3150,7 +3150,7 @@ func NewStopMachineRequest(server string, identifier int64, params *StopMachineP
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/machines/%s/stop", pathParam0)
+	operationPath := fmt.Sprintf("/api/machines/%s/stop", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3216,7 +3216,7 @@ func NewListNodesRequest(server string, params *ListNodesParams) (*http.Request,
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/nodes")
+	operationPath := fmt.Sprintf("/api/nodes")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3277,7 +3277,7 @@ func NewListNetworksRequest(server string, name string, params *ListNetworksPara
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/nodes/%s/networks", pathParam0)
+	operationPath := fmt.Sprintf("/api/nodes/%s/networks", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3338,7 +3338,7 @@ func NewGetNodeStatusRequest(server string, name string, params *GetNodeStatusPa
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/nodes/%s/status", pathParam0)
+	operationPath := fmt.Sprintf("/api/nodes/%s/status", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3399,7 +3399,7 @@ func NewListStoragesRequest(server string, name string, params *ListStoragesPara
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/nodes/%s/storages", pathParam0)
+	operationPath := fmt.Sprintf("/api/nodes/%s/storages", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3467,7 +3467,7 @@ func NewListStorageContentRequest(server string, name string, storage string, pa
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/nodes/%s/storages/%s/content", pathParam0, pathParam1)
+	operationPath := fmt.Sprintf("/api/nodes/%s/storages/%s/content", pathParam0, pathParam1)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3546,7 +3546,7 @@ func NewDownloadLocatorRequestWithBody(server string, name string, storage strin
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/nodes/%s/storages/%s/download", pathParam0, pathParam1)
+	operationPath := fmt.Sprintf("/api/nodes/%s/storages/%s/download", pathParam0, pathParam1)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3602,7 +3602,7 @@ func NewListSnippetsRequest(server string, params *ListSnippetsParams) (*http.Re
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/snippets")
+	operationPath := fmt.Sprintf("/api/snippets")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3667,7 +3667,7 @@ func NewCreateSnippetRequestWithBody(server string, params *CreateSnippetParams,
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/snippets")
+	operationPath := fmt.Sprintf("/api/snippets")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3730,7 +3730,7 @@ func NewDeleteSnippetRequest(server string, name string, params *DeleteSnippetPa
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/snippets/%s", pathParam0)
+	operationPath := fmt.Sprintf("/api/snippets/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3791,7 +3791,7 @@ func NewGetSnippetRequest(server string, name string, params *GetSnippetParams) 
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/snippets/%s", pathParam0)
+	operationPath := fmt.Sprintf("/api/snippets/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -3880,212 +3880,212 @@ func WithBaseURL(baseURL string) ClientOption {
 // ClientWithResponsesInterface is the interface specification for the client with responses above.
 type ClientWithResponsesInterface interface {
 
-	// ListContainersWithResponse performs a GET /api/v1/containers (the `ListContainers` operationId) request.
+	// ListContainersWithResponse performs a GET /api/containers (the `ListContainers` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListContainersWithResponse(ctx context.Context, params *ListContainersParams, reqEditors ...RequestEditorFn) (*ListContainersResponse, error)
 
-	// GetContainerWithResponse performs a GET /api/v1/containers/{identifier} (the `GetContainer` operationId) request.
+	// GetContainerWithResponse performs a GET /api/containers/{identifier} (the `GetContainer` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetContainerWithResponse(ctx context.Context, identifier int64, params *GetContainerParams, reqEditors ...RequestEditorFn) (*GetContainerResponse, error)
 
-	// ShutdownContainerWithResponse performs a POST /api/v1/containers/{identifier}/shutdown (the `ShutdownContainer` operationId) request.
+	// ShutdownContainerWithResponse performs a POST /api/containers/{identifier}/shutdown (the `ShutdownContainer` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ShutdownContainerWithResponse(ctx context.Context, identifier int64, params *ShutdownContainerParams, reqEditors ...RequestEditorFn) (*ShutdownContainerResponse, error)
 
-	// ListContainerSnapshotsWithResponse performs a GET /api/v1/containers/{identifier}/snapshots (the `ListContainerSnapshots` operationId) request.
+	// ListContainerSnapshotsWithResponse performs a GET /api/containers/{identifier}/snapshots (the `ListContainerSnapshots` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListContainerSnapshotsWithResponse(ctx context.Context, identifier int64, params *ListContainerSnapshotsParams, reqEditors ...RequestEditorFn) (*ListContainerSnapshotsResponse, error)
 
-	// CreateContainerSnapshotWithBodyWithResponse performs a POST /api/v1/containers/{identifier}/snapshots (the `CreateContainerSnapshot` operationId) request,
+	// CreateContainerSnapshotWithBodyWithResponse performs a POST /api/containers/{identifier}/snapshots (the `CreateContainerSnapshot` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreateContainerSnapshotWithBodyWithResponse(ctx context.Context, identifier int64, params *CreateContainerSnapshotParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateContainerSnapshotResponse, error)
 
-	// CreateContainerSnapshotWithResponse performs a POST /api/v1/containers/{identifier}/snapshots (the `CreateContainerSnapshot` operationId) request.
+	// CreateContainerSnapshotWithResponse performs a POST /api/containers/{identifier}/snapshots (the `CreateContainerSnapshot` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateContainerSnapshotWithResponse(ctx context.Context, identifier int64, params *CreateContainerSnapshotParams, body CreateContainerSnapshotJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateContainerSnapshotResponse, error)
 
-	// DeleteContainerSnapshotWithResponse performs a DELETE /api/v1/containers/{identifier}/snapshots/{name} (the `DeleteContainerSnapshot` operationId) request.
+	// DeleteContainerSnapshotWithResponse performs a DELETE /api/containers/{identifier}/snapshots/{name} (the `DeleteContainerSnapshot` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	DeleteContainerSnapshotWithResponse(ctx context.Context, identifier int64, name string, params *DeleteContainerSnapshotParams, reqEditors ...RequestEditorFn) (*DeleteContainerSnapshotResponse, error)
 
-	// RollbackContainerSnapshotWithResponse performs a POST /api/v1/containers/{identifier}/snapshots/{name}/rollback (the `RollbackContainerSnapshot` operationId) request.
+	// RollbackContainerSnapshotWithResponse performs a POST /api/containers/{identifier}/snapshots/{name}/rollback (the `RollbackContainerSnapshot` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	RollbackContainerSnapshotWithResponse(ctx context.Context, identifier int64, name string, params *RollbackContainerSnapshotParams, reqEditors ...RequestEditorFn) (*RollbackContainerSnapshotResponse, error)
 
-	// StartContainerWithResponse performs a POST /api/v1/containers/{identifier}/start (the `StartContainer` operationId) request.
+	// StartContainerWithResponse performs a POST /api/containers/{identifier}/start (the `StartContainer` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	StartContainerWithResponse(ctx context.Context, identifier int64, params *StartContainerParams, reqEditors ...RequestEditorFn) (*StartContainerResponse, error)
 
-	// StopContainerWithResponse performs a POST /api/v1/containers/{identifier}/stop (the `StopContainer` operationId) request.
+	// StopContainerWithResponse performs a POST /api/containers/{identifier}/stop (the `StopContainer` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	StopContainerWithResponse(ctx context.Context, identifier int64, params *StopContainerParams, reqEditors ...RequestEditorFn) (*StopContainerResponse, error)
 
-	// DeriveHardwareAddressWithResponse performs a GET /api/v1/hardware-address (the `DeriveHardwareAddress` operationId) request.
+	// DeriveHardwareAddressWithResponse performs a GET /api/hardware-address (the `DeriveHardwareAddress` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	DeriveHardwareAddressWithResponse(ctx context.Context, params *DeriveHardwareAddressParams, reqEditors ...RequestEditorFn) (*DeriveHardwareAddressResponse, error)
 
-	// ListInstancesWithResponse performs a GET /api/v1/instances (the `ListInstances` operationId) request.
+	// ListInstancesWithResponse performs a GET /api/instances (the `ListInstances` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListInstancesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListInstancesResponse, error)
 
-	// ListMachinesWithResponse performs a GET /api/v1/machines (the `ListMachines` operationId) request.
+	// ListMachinesWithResponse performs a GET /api/machines (the `ListMachines` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListMachinesWithResponse(ctx context.Context, params *ListMachinesParams, reqEditors ...RequestEditorFn) (*ListMachinesResponse, error)
 
-	// CreateMachineWithBodyWithResponse performs a POST /api/v1/machines (the `CreateMachine` operationId) request,
+	// CreateMachineWithBodyWithResponse performs a POST /api/machines (the `CreateMachine` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreateMachineWithBodyWithResponse(ctx context.Context, params *CreateMachineParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateMachineResponse, error)
 
-	// CreateMachineWithResponse performs a POST /api/v1/machines (the `CreateMachine` operationId) request.
+	// CreateMachineWithResponse performs a POST /api/machines (the `CreateMachine` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateMachineWithResponse(ctx context.Context, params *CreateMachineParams, body CreateMachineJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateMachineResponse, error)
 
-	// DeleteMachineWithResponse performs a DELETE /api/v1/machines/{identifier} (the `DeleteMachine` operationId) request.
+	// DeleteMachineWithResponse performs a DELETE /api/machines/{identifier} (the `DeleteMachine` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	DeleteMachineWithResponse(ctx context.Context, identifier int64, params *DeleteMachineParams, reqEditors ...RequestEditorFn) (*DeleteMachineResponse, error)
 
-	// GetMachineWithResponse performs a GET /api/v1/machines/{identifier} (the `GetMachine` operationId) request.
+	// GetMachineWithResponse performs a GET /api/machines/{identifier} (the `GetMachine` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetMachineWithResponse(ctx context.Context, identifier int64, params *GetMachineParams, reqEditors ...RequestEditorFn) (*GetMachineResponse, error)
 
-	// UpdateMachineWithBodyWithResponse performs a PATCH /api/v1/machines/{identifier} (the `UpdateMachine` operationId) request,
+	// UpdateMachineWithBodyWithResponse performs a PATCH /api/machines/{identifier} (the `UpdateMachine` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	UpdateMachineWithBodyWithResponse(ctx context.Context, identifier int64, params *UpdateMachineParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateMachineResponse, error)
 
-	// UpdateMachineWithResponse performs a PATCH /api/v1/machines/{identifier} (the `UpdateMachine` operationId) request.
+	// UpdateMachineWithResponse performs a PATCH /api/machines/{identifier} (the `UpdateMachine` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	UpdateMachineWithResponse(ctx context.Context, identifier int64, params *UpdateMachineParams, body UpdateMachineJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateMachineResponse, error)
 
-	// CloneMachineWithBodyWithResponse performs a POST /api/v1/machines/{identifier}/clone (the `CloneMachine` operationId) request,
+	// CloneMachineWithBodyWithResponse performs a POST /api/machines/{identifier}/clone (the `CloneMachine` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CloneMachineWithBodyWithResponse(ctx context.Context, identifier int64, params *CloneMachineParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CloneMachineResponse, error)
 
-	// CloneMachineWithResponse performs a POST /api/v1/machines/{identifier}/clone (the `CloneMachine` operationId) request.
+	// CloneMachineWithResponse performs a POST /api/machines/{identifier}/clone (the `CloneMachine` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CloneMachineWithResponse(ctx context.Context, identifier int64, params *CloneMachineParams, body CloneMachineJSONRequestBody, reqEditors ...RequestEditorFn) (*CloneMachineResponse, error)
 
-	// ResetMachineWithResponse performs a POST /api/v1/machines/{identifier}/reset (the `ResetMachine` operationId) request.
+	// ResetMachineWithResponse performs a POST /api/machines/{identifier}/reset (the `ResetMachine` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ResetMachineWithResponse(ctx context.Context, identifier int64, params *ResetMachineParams, reqEditors ...RequestEditorFn) (*ResetMachineResponse, error)
 
-	// ShutdownMachineWithResponse performs a POST /api/v1/machines/{identifier}/shutdown (the `ShutdownMachine` operationId) request.
+	// ShutdownMachineWithResponse performs a POST /api/machines/{identifier}/shutdown (the `ShutdownMachine` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ShutdownMachineWithResponse(ctx context.Context, identifier int64, params *ShutdownMachineParams, reqEditors ...RequestEditorFn) (*ShutdownMachineResponse, error)
 
-	// ListMachineSnapshotsWithResponse performs a GET /api/v1/machines/{identifier}/snapshots (the `ListMachineSnapshots` operationId) request.
+	// ListMachineSnapshotsWithResponse performs a GET /api/machines/{identifier}/snapshots (the `ListMachineSnapshots` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListMachineSnapshotsWithResponse(ctx context.Context, identifier int64, params *ListMachineSnapshotsParams, reqEditors ...RequestEditorFn) (*ListMachineSnapshotsResponse, error)
 
-	// CreateMachineSnapshotWithBodyWithResponse performs a POST /api/v1/machines/{identifier}/snapshots (the `CreateMachineSnapshot` operationId) request,
+	// CreateMachineSnapshotWithBodyWithResponse performs a POST /api/machines/{identifier}/snapshots (the `CreateMachineSnapshot` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreateMachineSnapshotWithBodyWithResponse(ctx context.Context, identifier int64, params *CreateMachineSnapshotParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateMachineSnapshotResponse, error)
 
-	// CreateMachineSnapshotWithResponse performs a POST /api/v1/machines/{identifier}/snapshots (the `CreateMachineSnapshot` operationId) request.
+	// CreateMachineSnapshotWithResponse performs a POST /api/machines/{identifier}/snapshots (the `CreateMachineSnapshot` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateMachineSnapshotWithResponse(ctx context.Context, identifier int64, params *CreateMachineSnapshotParams, body CreateMachineSnapshotJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateMachineSnapshotResponse, error)
 
-	// DeleteMachineSnapshotWithResponse performs a DELETE /api/v1/machines/{identifier}/snapshots/{name} (the `DeleteMachineSnapshot` operationId) request.
+	// DeleteMachineSnapshotWithResponse performs a DELETE /api/machines/{identifier}/snapshots/{name} (the `DeleteMachineSnapshot` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	DeleteMachineSnapshotWithResponse(ctx context.Context, identifier int64, name string, params *DeleteMachineSnapshotParams, reqEditors ...RequestEditorFn) (*DeleteMachineSnapshotResponse, error)
 
-	// RollbackMachineSnapshotWithResponse performs a POST /api/v1/machines/{identifier}/snapshots/{name}/rollback (the `RollbackMachineSnapshot` operationId) request.
+	// RollbackMachineSnapshotWithResponse performs a POST /api/machines/{identifier}/snapshots/{name}/rollback (the `RollbackMachineSnapshot` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	RollbackMachineSnapshotWithResponse(ctx context.Context, identifier int64, name string, params *RollbackMachineSnapshotParams, reqEditors ...RequestEditorFn) (*RollbackMachineSnapshotResponse, error)
 
-	// StartMachineWithResponse performs a POST /api/v1/machines/{identifier}/start (the `StartMachine` operationId) request.
+	// StartMachineWithResponse performs a POST /api/machines/{identifier}/start (the `StartMachine` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	StartMachineWithResponse(ctx context.Context, identifier int64, params *StartMachineParams, reqEditors ...RequestEditorFn) (*StartMachineResponse, error)
 
-	// StopMachineWithResponse performs a POST /api/v1/machines/{identifier}/stop (the `StopMachine` operationId) request.
+	// StopMachineWithResponse performs a POST /api/machines/{identifier}/stop (the `StopMachine` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	StopMachineWithResponse(ctx context.Context, identifier int64, params *StopMachineParams, reqEditors ...RequestEditorFn) (*StopMachineResponse, error)
 
-	// ListNodesWithResponse performs a GET /api/v1/nodes (the `ListNodes` operationId) request.
+	// ListNodesWithResponse performs a GET /api/nodes (the `ListNodes` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListNodesWithResponse(ctx context.Context, params *ListNodesParams, reqEditors ...RequestEditorFn) (*ListNodesResponse, error)
 
-	// ListNetworksWithResponse performs a GET /api/v1/nodes/{name}/networks (the `ListNetworks` operationId) request.
+	// ListNetworksWithResponse performs a GET /api/nodes/{name}/networks (the `ListNetworks` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListNetworksWithResponse(ctx context.Context, name string, params *ListNetworksParams, reqEditors ...RequestEditorFn) (*ListNetworksResponse, error)
 
-	// GetNodeStatusWithResponse performs a GET /api/v1/nodes/{name}/status (the `GetNodeStatus` operationId) request.
+	// GetNodeStatusWithResponse performs a GET /api/nodes/{name}/status (the `GetNodeStatus` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetNodeStatusWithResponse(ctx context.Context, name string, params *GetNodeStatusParams, reqEditors ...RequestEditorFn) (*GetNodeStatusResponse, error)
 
-	// ListStoragesWithResponse performs a GET /api/v1/nodes/{name}/storages (the `ListStorages` operationId) request.
+	// ListStoragesWithResponse performs a GET /api/nodes/{name}/storages (the `ListStorages` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListStoragesWithResponse(ctx context.Context, name string, params *ListStoragesParams, reqEditors ...RequestEditorFn) (*ListStoragesResponse, error)
 
-	// ListStorageContentWithResponse performs a GET /api/v1/nodes/{name}/storages/{storage}/content (the `ListStorageContent` operationId) request.
+	// ListStorageContentWithResponse performs a GET /api/nodes/{name}/storages/{storage}/content (the `ListStorageContent` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListStorageContentWithResponse(ctx context.Context, name string, storage string, params *ListStorageContentParams, reqEditors ...RequestEditorFn) (*ListStorageContentResponse, error)
 
-	// DownloadLocatorWithBodyWithResponse performs a POST /api/v1/nodes/{name}/storages/{storage}/download (the `DownloadLocator` operationId) request,
+	// DownloadLocatorWithBodyWithResponse performs a POST /api/nodes/{name}/storages/{storage}/download (the `DownloadLocator` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	DownloadLocatorWithBodyWithResponse(ctx context.Context, name string, storage string, params *DownloadLocatorParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*DownloadLocatorResponse, error)
 
-	// DownloadLocatorWithResponse performs a POST /api/v1/nodes/{name}/storages/{storage}/download (the `DownloadLocator` operationId) request.
+	// DownloadLocatorWithResponse performs a POST /api/nodes/{name}/storages/{storage}/download (the `DownloadLocator` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	DownloadLocatorWithResponse(ctx context.Context, name string, storage string, params *DownloadLocatorParams, body DownloadLocatorJSONRequestBody, reqEditors ...RequestEditorFn) (*DownloadLocatorResponse, error)
 
-	// ListSnippetsWithResponse performs a GET /api/v1/snippets (the `ListSnippets` operationId) request.
+	// ListSnippetsWithResponse performs a GET /api/snippets (the `ListSnippets` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListSnippetsWithResponse(ctx context.Context, params *ListSnippetsParams, reqEditors ...RequestEditorFn) (*ListSnippetsResponse, error)
 
-	// CreateSnippetWithBodyWithResponse performs a POST /api/v1/snippets (the `CreateSnippet` operationId) request,
+	// CreateSnippetWithBodyWithResponse performs a POST /api/snippets (the `CreateSnippet` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreateSnippetWithBodyWithResponse(ctx context.Context, params *CreateSnippetParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateSnippetResponse, error)
 
-	// CreateSnippetWithResponse performs a POST /api/v1/snippets (the `CreateSnippet` operationId) request.
+	// CreateSnippetWithResponse performs a POST /api/snippets (the `CreateSnippet` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateSnippetWithResponse(ctx context.Context, params *CreateSnippetParams, body CreateSnippetJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateSnippetResponse, error)
 
-	// DeleteSnippetWithResponse performs a DELETE /api/v1/snippets/{name} (the `DeleteSnippet` operationId) request.
+	// DeleteSnippetWithResponse performs a DELETE /api/snippets/{name} (the `DeleteSnippet` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	DeleteSnippetWithResponse(ctx context.Context, name string, params *DeleteSnippetParams, reqEditors ...RequestEditorFn) (*DeleteSnippetResponse, error)
 
-	// GetSnippetWithResponse performs a GET /api/v1/snippets/{name} (the `GetSnippet` operationId) request.
+	// GetSnippetWithResponse performs a GET /api/snippets/{name} (the `GetSnippet` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetSnippetWithResponse(ctx context.Context, name string, params *GetSnippetParams, reqEditors ...RequestEditorFn) (*GetSnippetResponse, error)
@@ -6163,7 +6163,7 @@ func (r GetSnippetResponse) ContentType() string {
 	return ""
 }
 
-// ListContainersWithResponse performs a GET /api/v1/containers (the `ListContainers` operationId) request.
+// ListContainersWithResponse performs a GET /api/containers (the `ListContainers` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListContainersWithResponse(ctx context.Context, params *ListContainersParams, reqEditors ...RequestEditorFn) (*ListContainersResponse, error) {
@@ -6174,7 +6174,7 @@ func (c *ClientWithResponses) ListContainersWithResponse(ctx context.Context, pa
 	return ParseListContainersResponse(rsp)
 }
 
-// GetContainerWithResponse performs a GET /api/v1/containers/{identifier} (the `GetContainer` operationId) request.
+// GetContainerWithResponse performs a GET /api/containers/{identifier} (the `GetContainer` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetContainerWithResponse(ctx context.Context, identifier int64, params *GetContainerParams, reqEditors ...RequestEditorFn) (*GetContainerResponse, error) {
@@ -6185,7 +6185,7 @@ func (c *ClientWithResponses) GetContainerWithResponse(ctx context.Context, iden
 	return ParseGetContainerResponse(rsp)
 }
 
-// ShutdownContainerWithResponse performs a POST /api/v1/containers/{identifier}/shutdown (the `ShutdownContainer` operationId) request.
+// ShutdownContainerWithResponse performs a POST /api/containers/{identifier}/shutdown (the `ShutdownContainer` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ShutdownContainerWithResponse(ctx context.Context, identifier int64, params *ShutdownContainerParams, reqEditors ...RequestEditorFn) (*ShutdownContainerResponse, error) {
@@ -6196,7 +6196,7 @@ func (c *ClientWithResponses) ShutdownContainerWithResponse(ctx context.Context,
 	return ParseShutdownContainerResponse(rsp)
 }
 
-// ListContainerSnapshotsWithResponse performs a GET /api/v1/containers/{identifier}/snapshots (the `ListContainerSnapshots` operationId) request.
+// ListContainerSnapshotsWithResponse performs a GET /api/containers/{identifier}/snapshots (the `ListContainerSnapshots` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListContainerSnapshotsWithResponse(ctx context.Context, identifier int64, params *ListContainerSnapshotsParams, reqEditors ...RequestEditorFn) (*ListContainerSnapshotsResponse, error) {
@@ -6207,7 +6207,7 @@ func (c *ClientWithResponses) ListContainerSnapshotsWithResponse(ctx context.Con
 	return ParseListContainerSnapshotsResponse(rsp)
 }
 
-// CreateContainerSnapshotWithBodyWithResponse performs a POST /api/v1/containers/{identifier}/snapshots (the `CreateContainerSnapshot` operationId) request,
+// CreateContainerSnapshotWithBodyWithResponse performs a POST /api/containers/{identifier}/snapshots (the `CreateContainerSnapshot` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -6219,7 +6219,7 @@ func (c *ClientWithResponses) CreateContainerSnapshotWithBodyWithResponse(ctx co
 	return ParseCreateContainerSnapshotResponse(rsp)
 }
 
-// CreateContainerSnapshotWithResponse performs a POST /api/v1/containers/{identifier}/snapshots (the `CreateContainerSnapshot` operationId) request.
+// CreateContainerSnapshotWithResponse performs a POST /api/containers/{identifier}/snapshots (the `CreateContainerSnapshot` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreateContainerSnapshotWithResponse(ctx context.Context, identifier int64, params *CreateContainerSnapshotParams, body CreateContainerSnapshotJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateContainerSnapshotResponse, error) {
 	rsp, err := c.CreateContainerSnapshot(ctx, identifier, params, body, reqEditors...)
@@ -6229,7 +6229,7 @@ func (c *ClientWithResponses) CreateContainerSnapshotWithResponse(ctx context.Co
 	return ParseCreateContainerSnapshotResponse(rsp)
 }
 
-// DeleteContainerSnapshotWithResponse performs a DELETE /api/v1/containers/{identifier}/snapshots/{name} (the `DeleteContainerSnapshot` operationId) request.
+// DeleteContainerSnapshotWithResponse performs a DELETE /api/containers/{identifier}/snapshots/{name} (the `DeleteContainerSnapshot` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) DeleteContainerSnapshotWithResponse(ctx context.Context, identifier int64, name string, params *DeleteContainerSnapshotParams, reqEditors ...RequestEditorFn) (*DeleteContainerSnapshotResponse, error) {
@@ -6240,7 +6240,7 @@ func (c *ClientWithResponses) DeleteContainerSnapshotWithResponse(ctx context.Co
 	return ParseDeleteContainerSnapshotResponse(rsp)
 }
 
-// RollbackContainerSnapshotWithResponse performs a POST /api/v1/containers/{identifier}/snapshots/{name}/rollback (the `RollbackContainerSnapshot` operationId) request.
+// RollbackContainerSnapshotWithResponse performs a POST /api/containers/{identifier}/snapshots/{name}/rollback (the `RollbackContainerSnapshot` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) RollbackContainerSnapshotWithResponse(ctx context.Context, identifier int64, name string, params *RollbackContainerSnapshotParams, reqEditors ...RequestEditorFn) (*RollbackContainerSnapshotResponse, error) {
@@ -6251,7 +6251,7 @@ func (c *ClientWithResponses) RollbackContainerSnapshotWithResponse(ctx context.
 	return ParseRollbackContainerSnapshotResponse(rsp)
 }
 
-// StartContainerWithResponse performs a POST /api/v1/containers/{identifier}/start (the `StartContainer` operationId) request.
+// StartContainerWithResponse performs a POST /api/containers/{identifier}/start (the `StartContainer` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) StartContainerWithResponse(ctx context.Context, identifier int64, params *StartContainerParams, reqEditors ...RequestEditorFn) (*StartContainerResponse, error) {
@@ -6262,7 +6262,7 @@ func (c *ClientWithResponses) StartContainerWithResponse(ctx context.Context, id
 	return ParseStartContainerResponse(rsp)
 }
 
-// StopContainerWithResponse performs a POST /api/v1/containers/{identifier}/stop (the `StopContainer` operationId) request.
+// StopContainerWithResponse performs a POST /api/containers/{identifier}/stop (the `StopContainer` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) StopContainerWithResponse(ctx context.Context, identifier int64, params *StopContainerParams, reqEditors ...RequestEditorFn) (*StopContainerResponse, error) {
@@ -6273,7 +6273,7 @@ func (c *ClientWithResponses) StopContainerWithResponse(ctx context.Context, ide
 	return ParseStopContainerResponse(rsp)
 }
 
-// DeriveHardwareAddressWithResponse performs a GET /api/v1/hardware-address (the `DeriveHardwareAddress` operationId) request.
+// DeriveHardwareAddressWithResponse performs a GET /api/hardware-address (the `DeriveHardwareAddress` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) DeriveHardwareAddressWithResponse(ctx context.Context, params *DeriveHardwareAddressParams, reqEditors ...RequestEditorFn) (*DeriveHardwareAddressResponse, error) {
@@ -6284,7 +6284,7 @@ func (c *ClientWithResponses) DeriveHardwareAddressWithResponse(ctx context.Cont
 	return ParseDeriveHardwareAddressResponse(rsp)
 }
 
-// ListInstancesWithResponse performs a GET /api/v1/instances (the `ListInstances` operationId) request.
+// ListInstancesWithResponse performs a GET /api/instances (the `ListInstances` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListInstancesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListInstancesResponse, error) {
@@ -6295,7 +6295,7 @@ func (c *ClientWithResponses) ListInstancesWithResponse(ctx context.Context, req
 	return ParseListInstancesResponse(rsp)
 }
 
-// ListMachinesWithResponse performs a GET /api/v1/machines (the `ListMachines` operationId) request.
+// ListMachinesWithResponse performs a GET /api/machines (the `ListMachines` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListMachinesWithResponse(ctx context.Context, params *ListMachinesParams, reqEditors ...RequestEditorFn) (*ListMachinesResponse, error) {
@@ -6306,7 +6306,7 @@ func (c *ClientWithResponses) ListMachinesWithResponse(ctx context.Context, para
 	return ParseListMachinesResponse(rsp)
 }
 
-// CreateMachineWithBodyWithResponse performs a POST /api/v1/machines (the `CreateMachine` operationId) request,
+// CreateMachineWithBodyWithResponse performs a POST /api/machines (the `CreateMachine` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -6318,7 +6318,7 @@ func (c *ClientWithResponses) CreateMachineWithBodyWithResponse(ctx context.Cont
 	return ParseCreateMachineResponse(rsp)
 }
 
-// CreateMachineWithResponse performs a POST /api/v1/machines (the `CreateMachine` operationId) request.
+// CreateMachineWithResponse performs a POST /api/machines (the `CreateMachine` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreateMachineWithResponse(ctx context.Context, params *CreateMachineParams, body CreateMachineJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateMachineResponse, error) {
 	rsp, err := c.CreateMachine(ctx, params, body, reqEditors...)
@@ -6328,7 +6328,7 @@ func (c *ClientWithResponses) CreateMachineWithResponse(ctx context.Context, par
 	return ParseCreateMachineResponse(rsp)
 }
 
-// DeleteMachineWithResponse performs a DELETE /api/v1/machines/{identifier} (the `DeleteMachine` operationId) request.
+// DeleteMachineWithResponse performs a DELETE /api/machines/{identifier} (the `DeleteMachine` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) DeleteMachineWithResponse(ctx context.Context, identifier int64, params *DeleteMachineParams, reqEditors ...RequestEditorFn) (*DeleteMachineResponse, error) {
@@ -6339,7 +6339,7 @@ func (c *ClientWithResponses) DeleteMachineWithResponse(ctx context.Context, ide
 	return ParseDeleteMachineResponse(rsp)
 }
 
-// GetMachineWithResponse performs a GET /api/v1/machines/{identifier} (the `GetMachine` operationId) request.
+// GetMachineWithResponse performs a GET /api/machines/{identifier} (the `GetMachine` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetMachineWithResponse(ctx context.Context, identifier int64, params *GetMachineParams, reqEditors ...RequestEditorFn) (*GetMachineResponse, error) {
@@ -6350,7 +6350,7 @@ func (c *ClientWithResponses) GetMachineWithResponse(ctx context.Context, identi
 	return ParseGetMachineResponse(rsp)
 }
 
-// UpdateMachineWithBodyWithResponse performs a PATCH /api/v1/machines/{identifier} (the `UpdateMachine` operationId) request,
+// UpdateMachineWithBodyWithResponse performs a PATCH /api/machines/{identifier} (the `UpdateMachine` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -6362,7 +6362,7 @@ func (c *ClientWithResponses) UpdateMachineWithBodyWithResponse(ctx context.Cont
 	return ParseUpdateMachineResponse(rsp)
 }
 
-// UpdateMachineWithResponse performs a PATCH /api/v1/machines/{identifier} (the `UpdateMachine` operationId) request.
+// UpdateMachineWithResponse performs a PATCH /api/machines/{identifier} (the `UpdateMachine` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) UpdateMachineWithResponse(ctx context.Context, identifier int64, params *UpdateMachineParams, body UpdateMachineJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateMachineResponse, error) {
 	rsp, err := c.UpdateMachine(ctx, identifier, params, body, reqEditors...)
@@ -6372,7 +6372,7 @@ func (c *ClientWithResponses) UpdateMachineWithResponse(ctx context.Context, ide
 	return ParseUpdateMachineResponse(rsp)
 }
 
-// CloneMachineWithBodyWithResponse performs a POST /api/v1/machines/{identifier}/clone (the `CloneMachine` operationId) request,
+// CloneMachineWithBodyWithResponse performs a POST /api/machines/{identifier}/clone (the `CloneMachine` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -6384,7 +6384,7 @@ func (c *ClientWithResponses) CloneMachineWithBodyWithResponse(ctx context.Conte
 	return ParseCloneMachineResponse(rsp)
 }
 
-// CloneMachineWithResponse performs a POST /api/v1/machines/{identifier}/clone (the `CloneMachine` operationId) request.
+// CloneMachineWithResponse performs a POST /api/machines/{identifier}/clone (the `CloneMachine` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CloneMachineWithResponse(ctx context.Context, identifier int64, params *CloneMachineParams, body CloneMachineJSONRequestBody, reqEditors ...RequestEditorFn) (*CloneMachineResponse, error) {
 	rsp, err := c.CloneMachine(ctx, identifier, params, body, reqEditors...)
@@ -6394,7 +6394,7 @@ func (c *ClientWithResponses) CloneMachineWithResponse(ctx context.Context, iden
 	return ParseCloneMachineResponse(rsp)
 }
 
-// ResetMachineWithResponse performs a POST /api/v1/machines/{identifier}/reset (the `ResetMachine` operationId) request.
+// ResetMachineWithResponse performs a POST /api/machines/{identifier}/reset (the `ResetMachine` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ResetMachineWithResponse(ctx context.Context, identifier int64, params *ResetMachineParams, reqEditors ...RequestEditorFn) (*ResetMachineResponse, error) {
@@ -6405,7 +6405,7 @@ func (c *ClientWithResponses) ResetMachineWithResponse(ctx context.Context, iden
 	return ParseResetMachineResponse(rsp)
 }
 
-// ShutdownMachineWithResponse performs a POST /api/v1/machines/{identifier}/shutdown (the `ShutdownMachine` operationId) request.
+// ShutdownMachineWithResponse performs a POST /api/machines/{identifier}/shutdown (the `ShutdownMachine` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ShutdownMachineWithResponse(ctx context.Context, identifier int64, params *ShutdownMachineParams, reqEditors ...RequestEditorFn) (*ShutdownMachineResponse, error) {
@@ -6416,7 +6416,7 @@ func (c *ClientWithResponses) ShutdownMachineWithResponse(ctx context.Context, i
 	return ParseShutdownMachineResponse(rsp)
 }
 
-// ListMachineSnapshotsWithResponse performs a GET /api/v1/machines/{identifier}/snapshots (the `ListMachineSnapshots` operationId) request.
+// ListMachineSnapshotsWithResponse performs a GET /api/machines/{identifier}/snapshots (the `ListMachineSnapshots` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListMachineSnapshotsWithResponse(ctx context.Context, identifier int64, params *ListMachineSnapshotsParams, reqEditors ...RequestEditorFn) (*ListMachineSnapshotsResponse, error) {
@@ -6427,7 +6427,7 @@ func (c *ClientWithResponses) ListMachineSnapshotsWithResponse(ctx context.Conte
 	return ParseListMachineSnapshotsResponse(rsp)
 }
 
-// CreateMachineSnapshotWithBodyWithResponse performs a POST /api/v1/machines/{identifier}/snapshots (the `CreateMachineSnapshot` operationId) request,
+// CreateMachineSnapshotWithBodyWithResponse performs a POST /api/machines/{identifier}/snapshots (the `CreateMachineSnapshot` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -6439,7 +6439,7 @@ func (c *ClientWithResponses) CreateMachineSnapshotWithBodyWithResponse(ctx cont
 	return ParseCreateMachineSnapshotResponse(rsp)
 }
 
-// CreateMachineSnapshotWithResponse performs a POST /api/v1/machines/{identifier}/snapshots (the `CreateMachineSnapshot` operationId) request.
+// CreateMachineSnapshotWithResponse performs a POST /api/machines/{identifier}/snapshots (the `CreateMachineSnapshot` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreateMachineSnapshotWithResponse(ctx context.Context, identifier int64, params *CreateMachineSnapshotParams, body CreateMachineSnapshotJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateMachineSnapshotResponse, error) {
 	rsp, err := c.CreateMachineSnapshot(ctx, identifier, params, body, reqEditors...)
@@ -6449,7 +6449,7 @@ func (c *ClientWithResponses) CreateMachineSnapshotWithResponse(ctx context.Cont
 	return ParseCreateMachineSnapshotResponse(rsp)
 }
 
-// DeleteMachineSnapshotWithResponse performs a DELETE /api/v1/machines/{identifier}/snapshots/{name} (the `DeleteMachineSnapshot` operationId) request.
+// DeleteMachineSnapshotWithResponse performs a DELETE /api/machines/{identifier}/snapshots/{name} (the `DeleteMachineSnapshot` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) DeleteMachineSnapshotWithResponse(ctx context.Context, identifier int64, name string, params *DeleteMachineSnapshotParams, reqEditors ...RequestEditorFn) (*DeleteMachineSnapshotResponse, error) {
@@ -6460,7 +6460,7 @@ func (c *ClientWithResponses) DeleteMachineSnapshotWithResponse(ctx context.Cont
 	return ParseDeleteMachineSnapshotResponse(rsp)
 }
 
-// RollbackMachineSnapshotWithResponse performs a POST /api/v1/machines/{identifier}/snapshots/{name}/rollback (the `RollbackMachineSnapshot` operationId) request.
+// RollbackMachineSnapshotWithResponse performs a POST /api/machines/{identifier}/snapshots/{name}/rollback (the `RollbackMachineSnapshot` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) RollbackMachineSnapshotWithResponse(ctx context.Context, identifier int64, name string, params *RollbackMachineSnapshotParams, reqEditors ...RequestEditorFn) (*RollbackMachineSnapshotResponse, error) {
@@ -6471,7 +6471,7 @@ func (c *ClientWithResponses) RollbackMachineSnapshotWithResponse(ctx context.Co
 	return ParseRollbackMachineSnapshotResponse(rsp)
 }
 
-// StartMachineWithResponse performs a POST /api/v1/machines/{identifier}/start (the `StartMachine` operationId) request.
+// StartMachineWithResponse performs a POST /api/machines/{identifier}/start (the `StartMachine` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) StartMachineWithResponse(ctx context.Context, identifier int64, params *StartMachineParams, reqEditors ...RequestEditorFn) (*StartMachineResponse, error) {
@@ -6482,7 +6482,7 @@ func (c *ClientWithResponses) StartMachineWithResponse(ctx context.Context, iden
 	return ParseStartMachineResponse(rsp)
 }
 
-// StopMachineWithResponse performs a POST /api/v1/machines/{identifier}/stop (the `StopMachine` operationId) request.
+// StopMachineWithResponse performs a POST /api/machines/{identifier}/stop (the `StopMachine` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) StopMachineWithResponse(ctx context.Context, identifier int64, params *StopMachineParams, reqEditors ...RequestEditorFn) (*StopMachineResponse, error) {
@@ -6493,7 +6493,7 @@ func (c *ClientWithResponses) StopMachineWithResponse(ctx context.Context, ident
 	return ParseStopMachineResponse(rsp)
 }
 
-// ListNodesWithResponse performs a GET /api/v1/nodes (the `ListNodes` operationId) request.
+// ListNodesWithResponse performs a GET /api/nodes (the `ListNodes` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListNodesWithResponse(ctx context.Context, params *ListNodesParams, reqEditors ...RequestEditorFn) (*ListNodesResponse, error) {
@@ -6504,7 +6504,7 @@ func (c *ClientWithResponses) ListNodesWithResponse(ctx context.Context, params 
 	return ParseListNodesResponse(rsp)
 }
 
-// ListNetworksWithResponse performs a GET /api/v1/nodes/{name}/networks (the `ListNetworks` operationId) request.
+// ListNetworksWithResponse performs a GET /api/nodes/{name}/networks (the `ListNetworks` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListNetworksWithResponse(ctx context.Context, name string, params *ListNetworksParams, reqEditors ...RequestEditorFn) (*ListNetworksResponse, error) {
@@ -6515,7 +6515,7 @@ func (c *ClientWithResponses) ListNetworksWithResponse(ctx context.Context, name
 	return ParseListNetworksResponse(rsp)
 }
 
-// GetNodeStatusWithResponse performs a GET /api/v1/nodes/{name}/status (the `GetNodeStatus` operationId) request.
+// GetNodeStatusWithResponse performs a GET /api/nodes/{name}/status (the `GetNodeStatus` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetNodeStatusWithResponse(ctx context.Context, name string, params *GetNodeStatusParams, reqEditors ...RequestEditorFn) (*GetNodeStatusResponse, error) {
@@ -6526,7 +6526,7 @@ func (c *ClientWithResponses) GetNodeStatusWithResponse(ctx context.Context, nam
 	return ParseGetNodeStatusResponse(rsp)
 }
 
-// ListStoragesWithResponse performs a GET /api/v1/nodes/{name}/storages (the `ListStorages` operationId) request.
+// ListStoragesWithResponse performs a GET /api/nodes/{name}/storages (the `ListStorages` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListStoragesWithResponse(ctx context.Context, name string, params *ListStoragesParams, reqEditors ...RequestEditorFn) (*ListStoragesResponse, error) {
@@ -6537,7 +6537,7 @@ func (c *ClientWithResponses) ListStoragesWithResponse(ctx context.Context, name
 	return ParseListStoragesResponse(rsp)
 }
 
-// ListStorageContentWithResponse performs a GET /api/v1/nodes/{name}/storages/{storage}/content (the `ListStorageContent` operationId) request.
+// ListStorageContentWithResponse performs a GET /api/nodes/{name}/storages/{storage}/content (the `ListStorageContent` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListStorageContentWithResponse(ctx context.Context, name string, storage string, params *ListStorageContentParams, reqEditors ...RequestEditorFn) (*ListStorageContentResponse, error) {
@@ -6548,7 +6548,7 @@ func (c *ClientWithResponses) ListStorageContentWithResponse(ctx context.Context
 	return ParseListStorageContentResponse(rsp)
 }
 
-// DownloadLocatorWithBodyWithResponse performs a POST /api/v1/nodes/{name}/storages/{storage}/download (the `DownloadLocator` operationId) request,
+// DownloadLocatorWithBodyWithResponse performs a POST /api/nodes/{name}/storages/{storage}/download (the `DownloadLocator` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -6560,7 +6560,7 @@ func (c *ClientWithResponses) DownloadLocatorWithBodyWithResponse(ctx context.Co
 	return ParseDownloadLocatorResponse(rsp)
 }
 
-// DownloadLocatorWithResponse performs a POST /api/v1/nodes/{name}/storages/{storage}/download (the `DownloadLocator` operationId) request.
+// DownloadLocatorWithResponse performs a POST /api/nodes/{name}/storages/{storage}/download (the `DownloadLocator` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) DownloadLocatorWithResponse(ctx context.Context, name string, storage string, params *DownloadLocatorParams, body DownloadLocatorJSONRequestBody, reqEditors ...RequestEditorFn) (*DownloadLocatorResponse, error) {
 	rsp, err := c.DownloadLocator(ctx, name, storage, params, body, reqEditors...)
@@ -6570,7 +6570,7 @@ func (c *ClientWithResponses) DownloadLocatorWithResponse(ctx context.Context, n
 	return ParseDownloadLocatorResponse(rsp)
 }
 
-// ListSnippetsWithResponse performs a GET /api/v1/snippets (the `ListSnippets` operationId) request.
+// ListSnippetsWithResponse performs a GET /api/snippets (the `ListSnippets` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListSnippetsWithResponse(ctx context.Context, params *ListSnippetsParams, reqEditors ...RequestEditorFn) (*ListSnippetsResponse, error) {
@@ -6581,7 +6581,7 @@ func (c *ClientWithResponses) ListSnippetsWithResponse(ctx context.Context, para
 	return ParseListSnippetsResponse(rsp)
 }
 
-// CreateSnippetWithBodyWithResponse performs a POST /api/v1/snippets (the `CreateSnippet` operationId) request,
+// CreateSnippetWithBodyWithResponse performs a POST /api/snippets (the `CreateSnippet` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -6593,7 +6593,7 @@ func (c *ClientWithResponses) CreateSnippetWithBodyWithResponse(ctx context.Cont
 	return ParseCreateSnippetResponse(rsp)
 }
 
-// CreateSnippetWithResponse performs a POST /api/v1/snippets (the `CreateSnippet` operationId) request.
+// CreateSnippetWithResponse performs a POST /api/snippets (the `CreateSnippet` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreateSnippetWithResponse(ctx context.Context, params *CreateSnippetParams, body CreateSnippetJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateSnippetResponse, error) {
 	rsp, err := c.CreateSnippet(ctx, params, body, reqEditors...)
@@ -6603,7 +6603,7 @@ func (c *ClientWithResponses) CreateSnippetWithResponse(ctx context.Context, par
 	return ParseCreateSnippetResponse(rsp)
 }
 
-// DeleteSnippetWithResponse performs a DELETE /api/v1/snippets/{name} (the `DeleteSnippet` operationId) request.
+// DeleteSnippetWithResponse performs a DELETE /api/snippets/{name} (the `DeleteSnippet` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) DeleteSnippetWithResponse(ctx context.Context, name string, params *DeleteSnippetParams, reqEditors ...RequestEditorFn) (*DeleteSnippetResponse, error) {
@@ -6614,7 +6614,7 @@ func (c *ClientWithResponses) DeleteSnippetWithResponse(ctx context.Context, nam
 	return ParseDeleteSnippetResponse(rsp)
 }
 
-// GetSnippetWithResponse performs a GET /api/v1/snippets/{name} (the `GetSnippet` operationId) request.
+// GetSnippetWithResponse performs a GET /api/snippets/{name} (the `GetSnippet` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetSnippetWithResponse(ctx context.Context, name string, params *GetSnippetParams, reqEditors ...RequestEditorFn) (*GetSnippetResponse, error) {

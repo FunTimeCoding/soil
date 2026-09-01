@@ -1,18 +1,18 @@
 package page
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/basic/response"
+	"github.com/funtimecoding/soil/pkg/console"
 )
 
 func PrintBody(b response.Body) {
 	if false {
-		fmt.Printf("    Storage: %s\n", b.Storage.Value)
+		console.Format("    Storage: %s\n", b.Storage.Value)
 	}
 
 	if false {
-		fmt.Printf("    Text: %s\n", ToText(b.Storage.Value))
+		console.Format("    Text: %s\n", ToText(b.Storage.Value))
 	}
 
-	fmt.Printf("    Markdown: %s\n", bodyToMarkdown(b))
+	console.Format("    Markdown: %s\n", bodyToMarkdown(b))
 }

@@ -2,6 +2,7 @@ package goclaude
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 )
@@ -21,5 +22,5 @@ func printToolSummary(
 		parts = append(parts, fmt.Sprintf("%d %s", tc.Count, tc.Name))
 	}
 
-	fmt.Printf("%d tool calls (%s)\n", total, join.CommaSpace(parts))
+	console.Format("%d tool calls (%s)\n", total, join.CommaSpace(parts))
 }

@@ -1,7 +1,7 @@
 package gotechnitium
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/technitium"
 	"github.com/spf13/cobra"
 )
@@ -17,7 +17,7 @@ func createZone(c *technitium.Client) *cobra.Command {
 			arguments []string,
 		) {
 			domain := c.MustCreateZone(arguments[0], zoneType)
-			fmt.Printf("created zone: %s\n", domain)
+			console.Format("created zone: %s\n", domain)
 		},
 	}
 	result.Flags().StringVar(

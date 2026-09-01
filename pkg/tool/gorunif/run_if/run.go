@@ -2,6 +2,7 @@ package run_if
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/strings/split"
 	"github.com/funtimecoding/soil/pkg/system/run"
 	"github.com/funtimecoding/soil/pkg/tool/gorunif/run_if/option"
@@ -20,7 +21,7 @@ func Run(o *option.RunIf) {
 
 	for _, p := range split.NewLine(strings.TrimSpace(r.OutputString)) {
 		if o.Verbose {
-			fmt.Printf("Change: %s\n", p)
+			console.Format("Change: %s\n", p)
 		}
 
 		var match bool
@@ -35,7 +36,7 @@ func Run(o *option.RunIf) {
 			changed = true
 
 			if o.Verbose {
-				fmt.Printf("Match: %s\n", o.Pattern)
+				console.Format("Match: %s\n", o.Pattern)
 			}
 
 			break

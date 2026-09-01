@@ -2,7 +2,7 @@ package wait
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/gowait/constant"
@@ -27,7 +27,7 @@ func Locator(o *option.Wait) {
 		attempt++
 
 		if o.Verbose {
-			fmt.Printf("%s %d\n", o.Locator, attempt)
+			console.Format("%s %d\n", o.Locator, attempt)
 		}
 
 		r, getFail := http.NewRequestWithContext(
@@ -41,7 +41,7 @@ func Locator(o *option.Wait) {
 
 		if doFail != nil {
 			if o.Verbose {
-				fmt.Printf("Do fail: %v\n", doFail)
+				console.Format("Do fail: %v\n", doFail)
 			}
 		} else {
 			body, readFail := io.ReadAll(result.Body)
@@ -49,22 +49,22 @@ func Locator(o *option.Wait) {
 
 			if readFail != nil {
 				if o.Verbose {
-					fmt.Printf("Read fail: %v\n", readFail)
+					console.Format("Read fail: %v\n", readFail)
 				}
 			} else if result.StatusCode == http.StatusOK {
 				content := string(body)
 
 				if o.Verbose {
-					fmt.Printf("Response: %s\n", content)
+					console.Format("Response: %s\n", content)
 				}
 
 				if strings.Contains(content, o.Contains) {
-					fmt.Println("Found")
+					console.Line("Found")
 
 					return
 				}
 			} else if o.Verbose {
-				fmt.Printf("Status: %d\n", result.StatusCode)
+				console.Format("Status: %d\n", result.StatusCode)
 			}
 		}
 

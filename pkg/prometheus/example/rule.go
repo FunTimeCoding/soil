@@ -1,21 +1,21 @@
 package example
 
 import (
-	"fmt"
-	console "github.com/funtimecoding/soil/pkg/console/constant"
+	"github.com/funtimecoding/soil/pkg/console"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus"
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"slices"
 )
 
 func Rule() {
-	f := console.ExtendedColorFormat.Copy()
+	f := consoleConstant.ExtendedColorFormat.Copy()
 	var severities []string
-	fmt.Println("Rules")
+	console.Line("Rules")
 
 	for _, r := range prometheus.NewEnvironment().MustRules().Alert() {
 		if r.RawAlert != nil {
-			fmt.Printf("Alert: %s\n", r.Format(f))
+			console.Format("Alert: %s\n", r.Format(f))
 
 			for k, v := range r.RawAlert.Labels {
 				if k == constant.SeverityLabel {
@@ -27,7 +27,7 @@ func Rule() {
 				}
 			}
 		} else if r.RawRecord != nil {
-			fmt.Printf("Record: %s\n", r.Format(f))
+			console.Format("Record: %s\n", r.Format(f))
 
 			for k, v := range r.RawRecord.Labels {
 				if k == constant.SeverityLabel {
@@ -39,9 +39,9 @@ func Rule() {
 				}
 			}
 		} else {
-			fmt.Printf("Rule: %+v\n", r)
+			console.Format("Rule: %+v\n", r)
 		}
 	}
 
-	fmt.Printf("Severities: %+v\n", severities)
+	console.Format("Severities: %+v\n", severities)
 }

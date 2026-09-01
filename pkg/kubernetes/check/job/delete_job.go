@@ -1,7 +1,7 @@
 package job
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/kubernetes/client"
 )
 
@@ -10,10 +10,10 @@ func deleteJob(
 	namespace string,
 	name string,
 ) {
-	fmt.Printf("Delete job %s in %s\n", name, namespace)
+	console.Format("Delete job %s in %s\n", name, namespace)
 
 	if j := k.Job(namespace, name); j != nil {
-		fmt.Printf("  %s\n", j.Name)
+		console.Format("  %s\n", j.Name)
 		k.DeleteJobWatch(namespace, j.Name)
 	}
 }

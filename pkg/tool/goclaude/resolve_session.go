@@ -2,7 +2,7 @@ package goclaude
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 )
 
@@ -20,7 +20,7 @@ func resolveSession(
 	}
 
 	if response.StatusCode() == 409 && response.JSON409 != nil {
-		fmt.Printf(
+		console.Format(
 			"ambiguous: %q matches %d sessions\n",
 			query,
 			len(response.JSON409.Matches),
@@ -45,7 +45,7 @@ func resolveSession(
 				display = "(discovered)"
 			}
 
-			fmt.Printf("  %s  %-7s  %s\n", m.Identifier[:8], name, display)
+			console.Format("  %s  %-7s  %s\n", m.Identifier[:8], name, display)
 		}
 
 		return ""

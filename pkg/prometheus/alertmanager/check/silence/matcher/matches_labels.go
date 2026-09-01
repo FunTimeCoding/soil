@@ -1,7 +1,7 @@
 package matcher
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/prometheus/alertmanager/api/v2/models"
 	"regexp"
 )
@@ -11,14 +11,14 @@ func matchesLabels(
 	l models.LabelSet,
 ) bool {
 	if false {
-		fmt.Printf(
+		console.Format(
 			"Matcher: name:%s value:%s regex:%v equal:%v\n",
 			*m.Name,
 			*m.Value,
 			*m.IsRegex,
 			*m.IsEqual,
 		)
-		fmt.Printf("LabelSet: %+v\n", l)
+		console.Format("LabelSet: %+v\n", l)
 	}
 
 	// Missing labels are treated as empty strings, matching Alertmanager behavior

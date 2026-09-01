@@ -1,8 +1,8 @@
 package alert
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/alert/option"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/opsgenie/opsgenie-go-sdk-v2/alert"
 )
 
@@ -19,7 +19,7 @@ func NewSlice(
 		if t == nil {
 			if t = p.Team.Guess(&a, verbose); t == nil {
 				if verbose {
-					fmt.Printf("Team not found: %+v\n", a)
+					console.Format("Team not found: %+v\n", a)
 				}
 
 				continue

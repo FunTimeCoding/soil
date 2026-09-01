@@ -1,8 +1,8 @@
 package job
 
 import (
-	"fmt"
-	console "github.com/funtimecoding/soil/pkg/console/constant"
+	"github.com/funtimecoding/soil/pkg/console"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/github"
 	"github.com/funtimecoding/soil/pkg/github/check/job/option"
 	"github.com/funtimecoding/soil/pkg/github/constant"
@@ -23,13 +23,13 @@ func Check(o *option.Job) {
 	owner := c.MustUser().Name
 
 	if o.Verbose {
-		fmt.Printf("Owner: %s\n", owner)
+		console.Format("Owner: %s\n", owner)
 	}
 
-	f := constant.Format.Copy().Tag(console.TagTimestamp)
+	f := constant.Format.Copy().Tag(consoleConstant.TagTimestamp)
 
 	for _, e := range elements {
-		fmt.Println(e.Format(f))
+		console.Line(e.Format(f))
 	}
 
 	if len(elements) == 0 {

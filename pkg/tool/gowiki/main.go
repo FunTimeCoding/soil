@@ -1,12 +1,12 @@
 package gowiki
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence"
 	atlassian "github.com/funtimecoding/soil/pkg/atlassian/constant"
-	console "github.com/funtimecoding/soil/pkg/console/constant"
+	"github.com/funtimecoding/soil/pkg/console"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/tool/gowiki/constant"
 )
@@ -31,30 +31,30 @@ func Main(
 	f := atlassian.ConfluenceFormat.Copy()
 
 	if a.GetBoolean(argumentConstant.Copyable) {
-		f.Tag(console.TagCopyable)
+		f.Tag(consoleConstant.TagCopyable)
 	}
 
 	if a.GetBoolean(argumentConstant.Watched) || a.GetBoolean(
 		argumentConstant.Favorites,
 	) {
-		fmt.Println("Watch")
+		console.Line("Watch")
 
 		for _, p := range c.MustWatched() {
-			fmt.Println(p.Format(f))
+			console.Line(p.Format(f))
 			p.PrintConsole()
 		}
 
-		fmt.Println("Favorite")
+		console.Line("Favorite")
 
 		for _, p := range c.MustFavorites() {
-			fmt.Println(p.Format(f))
+			console.Line(p.Format(f))
 		}
 
 		return
 	}
 
 	for _, p := range c.MustPages() {
-		fmt.Println(p.Format(f))
+		console.Line(p.Format(f))
 		p.PrintConsole()
 	}
 }

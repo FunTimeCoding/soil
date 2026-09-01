@@ -1,9 +1,9 @@
 package jira
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
+	"github.com/funtimecoding/soil/pkg/console"
 )
 
 func (c *Client) FillComments(v []*issue.Issue) error {
@@ -29,7 +29,7 @@ func (c *Client) FillComments(v []*issue.Issue) error {
 	}
 
 	if filled > 0 {
-		fmt.Printf("Filled comments for %d issue(s)\n", filled)
+		console.Format("Filled comments for %d issue(s)\n", filled)
 	}
 
 	return nil

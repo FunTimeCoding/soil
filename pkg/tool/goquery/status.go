@@ -3,7 +3,7 @@ package goquery
 import (
 	"context"
 	"encoding/json"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 	"github.com/spf13/cobra"
@@ -22,7 +22,7 @@ func status(c *client.Client) *cobra.Command {
 			defer errors.PanicClose(r.Body)
 			var s client.Status
 			errors.PanicOnError(json.NewDecoder(r.Body).Decode(&s))
-			fmt.Printf(
+			console.Format(
 				"Documents: %d  Embeddings: %d  Pending: %d\n",
 				s.TotalDocuments,
 				s.TotalEmbeddings,
@@ -31,9 +31,13 @@ func status(c *client.Client) *cobra.Command {
 
 			for _, v := range s.Collections {
 				if v.Path == "" {
-					fmt.Printf("  %s: %d documents\n", v.Name, v.DocumentCount)
+					console.Format(
+						"  %s: %d documents\n",
+						v.Name,
+						v.DocumentCount,
+					)
 				} else {
-					fmt.Printf(
+					console.Format(
 						"  %s: %d documents (%s %s)\n",
 						v.Name,
 						v.DocumentCount,

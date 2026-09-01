@@ -2,7 +2,7 @@ package gosublime
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/generated/client"
 	"github.com/spf13/cobra"
@@ -44,7 +44,7 @@ func create(x *Context) *cobra.Command {
 				os.Exit(1)
 			}
 
-			fmt.Printf("created view %d\n", r.JSON200.ViewId)
+			console.Format("created view %d\n", r.JSON200.ViewId)
 		},
 	}
 	result.Flags().StringVar(&syntax, "syntax", "", "syntax name")

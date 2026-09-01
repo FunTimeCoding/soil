@@ -1,7 +1,7 @@
 package lint
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint/option"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
@@ -18,7 +18,7 @@ func markdownFiles(
 	for _, p := range v.Files() {
 		if Skipped(skip, p) {
 			if verbose {
-				fmt.Printf("Skip markdown file: %s\n", p)
+				console.Format("Skip markdown file: %s\n", p)
 			}
 
 			continue
@@ -29,7 +29,7 @@ func markdownFiles(
 		}
 
 		if verbose {
-			fmt.Printf("Select markdown file: %s\n", p)
+			console.Format("Select markdown file: %s\n", p)
 		}
 
 		result = append(result, p)

@@ -1,8 +1,8 @@
 package alert
 
 import (
-	"fmt"
-	console "github.com/funtimecoding/soil/pkg/console/constant"
+	"github.com/funtimecoding/soil/pkg/console"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus/check/alert/option"
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
@@ -34,10 +34,10 @@ func Check(o *option.Alert) {
 		return
 	}
 
-	f := constant.Format.Copy().Tag(console.TagHost)
+	f := constant.Format.Copy().Tag(consoleConstant.TagHost)
 
 	if o.Copyable {
-		f.Tag(console.TagCopyable)
+		f.Tag(consoleConstant.TagCopyable)
 	}
 
 	if o.Extended {
@@ -48,15 +48,15 @@ func Check(o *option.Alert) {
 
 	for _, a := range alerts {
 		// TODO: Rule details
-		fmt.Println(a.Format(f))
+		console.Line(a.Format(f))
 
 		if r := m.Find(a.Name); r != nil {
-			fmt.Printf("  Rule: %s\n", r.Format(f))
+			console.Format("  Rule: %s\n", r.Format(f))
 		}
 	}
 
 	if !o.All && statistic.Relevant == 0 {
-		fmt.Printf(
+		console.Format(
 			"No relevant %s, %d in total\n",
 			monitor.GoAlert.Plural,
 			statistic.Total,

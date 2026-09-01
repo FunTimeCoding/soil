@@ -1,8 +1,8 @@
 package jira
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
+	"github.com/funtimecoding/soil/pkg/console"
 )
 
 func (c *Client) Addons() error {
@@ -13,7 +13,7 @@ func (c *Client) Addons() error {
 	}
 
 	// 403 {"message":"Client must be authenticated as a system administrator to access this resource.","status-code":403}
-	fmt.Printf("Addon: %d %s\n", status, body)
+	console.Format("Addon: %d %s\n", status, body)
 
 	return nil
 }

@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	generative "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
@@ -22,18 +23,18 @@ func (s *Server) authorized(r *http.Request) bool {
 	address := web.ClientAddress(r)
 
 	if s.tokenAuthentication && s.token != "" && t == s.token {
-		fmt.Printf("Authorized token:%s address:%s\n", t, address)
+		console.Format("Authorized token:%s address:%s\n", t, address)
 
 		return true
 	}
 
 	if s.openAuthentication && t != "" && s.validateOpenToken(t) {
-		fmt.Printf("Authorized OIDC address:%s\n", address)
+		console.Format("Authorized OIDC address:%s\n", address)
 
 		return true
 	}
 
-	fmt.Printf("Unauthorized token:%s address:%s\n", t, address)
+	console.Format("Unauthorized token:%s address:%s\n", t, address)
 
 	return false
 }

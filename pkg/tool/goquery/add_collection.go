@@ -2,7 +2,7 @@ package goquery
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 	"github.com/spf13/cobra"
@@ -30,7 +30,7 @@ func addCollection(c *client.Client) *cobra.Command {
 			r, e := c.PostCollection(context.Background(), body)
 			errors.PanicOnError(e)
 			defer errors.PanicClose(r.Body)
-			fmt.Printf("collection %s added\n", arguments[0])
+			console.Format("collection %s added\n", arguments[0])
 		},
 	}
 	result.Flags().StringVar(

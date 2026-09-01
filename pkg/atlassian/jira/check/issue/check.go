@@ -1,10 +1,10 @@
 package issue
 
 import (
-	"fmt"
 	atlassian "github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/check/issue/option"
-	console "github.com/funtimecoding/soil/pkg/console/constant"
+	"github.com/funtimecoding/soil/pkg/console"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/monitor"
 	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 )
@@ -21,11 +21,11 @@ func Check(o *option.Issue) {
 	f := atlassian.JiraFormat
 
 	if o.Copyable {
-		f.Tag(console.TagCopyable)
+		f.Tag(consoleConstant.TagCopyable)
 	}
 
 	for _, e := range elements {
-		fmt.Println(e.Format(f))
+		console.Line(e.Format(f))
 	}
 
 	if len(elements) == 0 {

@@ -1,7 +1,7 @@
 package example
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/hetzner"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 )
@@ -10,7 +10,7 @@ func Read() {
 	h := hetzner.NewEnvironment()
 
 	for _, z := range h.Zones() {
-		fmt.Printf(
+		console.Format(
 			"Zone: %s (ttl=%d, records=%d, status=%s)\n",
 			z.Name,
 			z.TTL,
@@ -22,7 +22,7 @@ func Read() {
 			values := join.CommaSpace(r.Values)
 
 			if r.TTL != nil {
-				fmt.Printf(
+				console.Format(
 					"  %s %s %s (ttl=%d)\n",
 					r.Type,
 					r.Name,
@@ -30,7 +30,7 @@ func Read() {
 					*r.TTL,
 				)
 			} else {
-				fmt.Printf("  %s %s %s\n", r.Type, r.Name, values)
+				console.Format("  %s %s %s\n", r.Type, r.Name, values)
 			}
 		}
 	}

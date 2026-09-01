@@ -2,8 +2,8 @@ package parse_elite
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/gw2/constant"
 	"github.com/funtimecoding/soil/pkg/raid/elite"
@@ -45,7 +45,7 @@ func PlayerStats() {
 	}
 
 	players := elite_parser.Aggregate(allStats)
-	fmt.Printf(
+	console.Format(
 		"Aggregated %d fights (%d skipped), %d player-profession entries\n\n",
 		fightCount,
 		skipped,
@@ -53,10 +53,10 @@ func PlayerStats() {
 	)
 	sorted := sortByDamage(players)
 	printOffensiveTable(sorted)
-	fmt.Println()
+	console.Line()
 	printDefensiveTable(sorted)
-	fmt.Println()
+	console.Line()
 	printSupportTable(sorted)
-	fmt.Println()
+	console.Line()
 	printBoonTable(sorted)
 }

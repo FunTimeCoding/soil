@@ -1,7 +1,7 @@
 package check
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/linux/constant"
 	"github.com/funtimecoding/soil/pkg/linux/systemd/command"
 	"github.com/funtimecoding/soil/pkg/linux/systemd/jc"
@@ -12,7 +12,7 @@ func Netstat(verbose bool) []*jc.Output {
 	output := Execute(command.Netstat())
 
 	if verbose {
-		fmt.Printf("Netstat raw: %s\n", output)
+		console.Format("Netstat raw: %s\n", output)
 	}
 
 	var result []*jc.Output

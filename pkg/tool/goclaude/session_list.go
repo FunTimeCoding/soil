@@ -2,7 +2,7 @@ package goclaude
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
@@ -77,7 +77,7 @@ func sessionList(c *command_context.Context) *cobra.Command {
 					shortIdentifier = shortIdentifier[:8]
 				}
 
-				fmt.Printf(
+				console.Format(
 					"%s  %s  %-7s %5d  %s %s",
 					ts,
 					shortIdentifier,
@@ -88,14 +88,14 @@ func sessionList(c *command_context.Context) *cobra.Command {
 				)
 
 				if peek && s.Preview != nil {
-					fmt.Printf("  %s", *s.Preview)
+					console.Format("  %s", *s.Preview)
 				}
 
 				if detail && s.Description != nil && *s.Description != "" {
-					fmt.Printf("\n    %s", *s.Description)
+					console.Format("\n    %s", *s.Description)
 				}
 
-				fmt.Println()
+				console.Line()
 			}
 		},
 	}

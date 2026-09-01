@@ -3,7 +3,7 @@ package alert
 import (
 	"fmt"
 	"github.com/docker/go-units"
-	console "github.com/funtimecoding/soil/pkg/console/constant"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
@@ -14,13 +14,13 @@ import (
 func (a *Alert) Format(f *option.Format) string {
 	s := status.New(f)
 
-	if f.HasTag(console.TagFingerprint) {
+	if f.HasTag(consoleConstant.TagFingerprint) {
 		s.String(a.Fingerprint)
 	}
 
 	s.String(a.formatEntity(f))
 
-	if f.HasTag(console.TagCategory) {
+	if f.HasTag(consoleConstant.TagCategory) {
 		s.String(a.formatCategory(f))
 	}
 
@@ -33,11 +33,11 @@ func (a *Alert) Format(f *option.Format) string {
 
 	s.String(a.formatSeverity(f))
 
-	if f.HasTag(console.TagHost) {
+	if f.HasTag(consoleConstant.TagHost) {
 		s.String(a.formatHost(f))
 	}
 
-	if f.HasTag(console.TagInstance) {
+	if f.HasTag(consoleConstant.TagInstance) {
 		s.String(a.formatInstance())
 	}
 
@@ -78,7 +78,7 @@ func (a *Alert) Format(f *option.Format) string {
 		}
 
 		if a.HostLink != "" {
-			if f.HasTag(console.TagCopyable) || f.HasTag(console.TagMarkdown) {
+			if f.HasTag(consoleConstant.TagCopyable) || f.HasTag(consoleConstant.TagMarkdown) {
 				s.DetailLink(a.HostLink, "Host", "Host")
 			}
 		}

@@ -1,10 +1,10 @@
 package example
 
 import (
-	"fmt"
 	chat "github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/chat/telegram"
 	"github.com/funtimecoding/soil/pkg/chat/telegram/message"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/generative/ollama"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/environment"
@@ -30,16 +30,16 @@ func OllamaSession() {
 		messages = t.MessagesByChannel(c)
 
 		if len(messages) > 0 {
-			fmt.Println("Messages already in channel")
+			console.Line("Messages already in channel")
 
 			for _, m := range messages {
-				fmt.Println(m.Format(f))
+				console.Line(m.Format(f))
 			}
 		}
 	}
 
 	go func() {
-		fmt.Printf("Listening to channel %s\n", c)
+		console.Format("Listening to channel %s\n", c)
 
 		for u := range t.Listen() {
 			if u.FromChat().Title != c {
@@ -53,7 +53,7 @@ func OllamaSession() {
 				continue
 			}
 
-			fmt.Println(m.Format(f))
+			console.Line(m.Format(f))
 			history := multi_line.New()
 
 			for _, e := range messages {
@@ -65,7 +65,7 @@ func OllamaSession() {
 			}
 
 			if history.Count() == 0 {
-				fmt.Println("Chat empty")
+				console.Line("Chat empty")
 
 				continue
 			}
@@ -75,7 +75,7 @@ func OllamaSession() {
 			decision := o.GenerateSimple(p.Render())
 
 			if verbose {
-				fmt.Printf("Decision: %s\n", decision.Text)
+				console.Format("Decision: %s\n", decision.Text)
 
 				if statistics {
 					decision.Print()
@@ -100,7 +100,7 @@ func OllamaSession() {
 			response := o.GenerateSimple(l.Render())
 
 			if verbose {
-				fmt.Printf("Response: %s\n", response.Text)
+				console.Format("Response: %s\n", response.Text)
 
 				if statistics {
 					response.Print()

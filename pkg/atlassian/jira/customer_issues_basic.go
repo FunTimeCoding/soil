@@ -1,8 +1,8 @@
 package jira
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
+	"github.com/funtimecoding/soil/pkg/console"
 	web "github.com/funtimecoding/soil/pkg/web/constant"
 )
 
@@ -20,7 +20,7 @@ func (c *Client) CustomerIssuesBasic() error {
 		return e
 	}
 
-	fmt.Printf("Basic response: %d %s", status, body)
+	console.Format("Basic response: %d %s", status, body)
 
 	return nil
 }

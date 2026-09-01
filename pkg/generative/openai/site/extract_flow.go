@@ -1,7 +1,7 @@
 package site
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"time"
 )
 
@@ -25,7 +25,7 @@ func (s *Site) ExtractFlow(verbose bool) string {
 	result := s.readMemories()
 
 	if verbose {
-		fmt.Printf("Memories: %d\n", len(result))
+		console.Format("Memories: %d\n", len(result))
 	}
 
 	if false {

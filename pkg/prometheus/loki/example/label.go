@@ -1,7 +1,7 @@
 package example
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/prometheus/loki"
 	"time"
 )
@@ -12,7 +12,7 @@ func Label() {
 	start := end.AddDate(0, 0, -7)
 
 	for _, l := range c.Labels(start, end) {
-		fmt.Printf("Label: %s\n", l)
-		fmt.Printf("  Values: %+v\n", c.LabelValues(start, end, l))
+		console.Format("Label: %s\n", l)
+		console.Format("  Values: %+v\n", c.LabelValues(start, end, l))
 	}
 }

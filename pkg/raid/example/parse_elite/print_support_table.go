@@ -1,14 +1,14 @@
 package parse_elite
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/raid/elite_parser"
 	"strings"
 )
 
 func printSupportTable(players []*elite_parser.AggregatedPlayer) {
-	fmt.Println("=== Support ===")
-	fmt.Printf(
+	console.Line("=== Support ===")
+	console.Format(
 		"%-25s %-15s %6s %6s %6s %8s %8s %5s %5s\n",
 		"Name",
 		"Profession",
@@ -20,10 +20,10 @@ func printSupportTable(players []*elite_parser.AggregatedPlayer) {
 		"Res",
 		"Stun",
 	)
-	fmt.Println(strings.Repeat("-", 110))
+	console.Line(strings.Repeat("-", 110))
 
 	for _, p := range players {
-		fmt.Printf(
+		console.Format(
 			"%-25s %-15s %6d %6d %6d %8d %8d %5d %5d\n",
 			p.Name,
 			p.Profession,

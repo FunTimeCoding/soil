@@ -1,7 +1,7 @@
 package goname
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/hetzner"
 	"github.com/spf13/cobra"
 )
@@ -17,7 +17,7 @@ func addRecord(c *hetzner.Client) *cobra.Command {
 		) {
 			z := zoneByName(c, arguments[0])
 			c.CreateRecord(z, arguments[1], arguments[2], arguments[3])
-			fmt.Printf(
+			console.Format(
 				"added %s %s.%s -> %s\n",
 				arguments[2],
 				arguments[1],

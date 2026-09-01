@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/nextcloud"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/constant"
@@ -17,7 +17,7 @@ func main() {
 
 	if false {
 		for _, f := range n.ReadDirectory("/") {
-			fmt.Printf(
+			console.Format(
 				"Name: %s, IsDir: %t, Size: %d\n",
 				f.Name(),
 				f.IsDir(),

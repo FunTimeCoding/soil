@@ -1,7 +1,7 @@
 package goquery
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 	"sort"
 )
@@ -11,7 +11,7 @@ func printFacets(facets *[]client.Facet) {
 		return
 	}
 
-	fmt.Println()
+	console.Line()
 
 	for _, f := range *facets {
 		if f.Values != nil && len(*f.Values) > 0 {
@@ -24,10 +24,10 @@ func printFacets(facets *[]client.Facet) {
 			sort.Strings(keys)
 
 			for _, k := range keys {
-				fmt.Printf("  %s=%s (%d)\n", f.Key, k, (*f.Values)[k])
+				console.Format("  %s=%s (%d)\n", f.Key, k, (*f.Values)[k])
 			}
 		} else {
-			fmt.Printf("  %s: %d distinct\n", f.Key, f.Distinct)
+			console.Format("  %s: %d distinct\n", f.Key, f.Distinct)
 		}
 	}
 }

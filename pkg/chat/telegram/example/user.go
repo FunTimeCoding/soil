@@ -1,11 +1,11 @@
 package example
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/chat/telegram"
+	"github.com/funtimecoding/soil/pkg/console"
 )
 
 func User() {
 	c := telegram.NewEnvironment()
-	fmt.Printf("User: %s\n", c.Self().UserName)
+	console.Format("User: %s\n", c.Self().UserName)
 }

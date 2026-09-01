@@ -2,6 +2,7 @@ package site
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"log"
 	"slices"
@@ -19,7 +20,7 @@ func (s *Site) OpenChat(name string) {
 	}
 
 	if false {
-		fmt.Printf("Name: %s\n", join.Comma(names))
+		console.Format("Name: %s\n", join.Comma(names))
 	}
 
 	s.protocol.ClickSearch(

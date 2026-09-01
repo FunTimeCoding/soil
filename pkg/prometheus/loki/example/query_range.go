@@ -1,7 +1,7 @@
 package example
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus/loki"
@@ -23,7 +23,7 @@ func QueryRange() {
 	)
 
 	if false {
-		fmt.Printf("QueryRange: %s %+v\n", m.Type, m.Statistic)
+		console.Format("QueryRange: %s %+v\n", m.Type, m.Statistic)
 	}
 
 	for _, v := range r {
@@ -40,7 +40,7 @@ func QueryRange() {
 			continue
 		}
 
-		fmt.Printf(
+		console.Format(
 			"%s %s %s %s\n",
 			v.Time.Format(timeConstant.DateMinute),
 			consoleConstant.Cyan("%s", route),
@@ -50,11 +50,11 @@ func QueryRange() {
 		h := v.ReadHeader()
 
 		for k := range h {
-			fmt.Printf("  Header %s: %s\n", k, h.Get(k))
+			console.Format("  Header %s: %s\n", k, h.Get(k))
 		}
 
 		if v.Text != "" {
-			fmt.Printf("  Text: >%s<\n", v.Text)
+			console.Format("  Text: >%s<\n", v.Text)
 		}
 	}
 }

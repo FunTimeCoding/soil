@@ -1,7 +1,7 @@
 package report
 
-import "fmt"
+import "github.com/funtimecoding/soil/pkg/console"
 
 func (r *Report) Print() {
-	fmt.Println(r.Encode())
+	console.Line(r.Encode())
 }

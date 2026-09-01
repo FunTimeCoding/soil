@@ -2,10 +2,10 @@ package chromium
 
 import (
 	"context"
-	"fmt"
 	"github.com/chromedp/cdproto/page"
 	"github.com/chromedp/cdproto/target"
 	"github.com/chromedp/chromedp"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"time"
 )
@@ -26,7 +26,7 @@ func (c *Client) NeedReload(
 	}
 
 	if !found {
-		fmt.Println("  No target")
+		console.Line("  No target")
 
 		return true
 	}
@@ -40,7 +40,7 @@ func (c *Client) NeedReload(
 
 	if e := chromedp.Run(run); e != nil {
 		if errors.Deadline(e) {
-			fmt.Println("  Timeout run")
+			console.Line("  Timeout run")
 
 			return true
 		}
@@ -66,7 +66,7 @@ func (c *Client) NeedReload(
 		),
 	); e != nil {
 		if errors.Deadline(e) {
-			fmt.Println("  Timeout resource")
+			console.Line("  Timeout resource")
 
 			return true
 		}

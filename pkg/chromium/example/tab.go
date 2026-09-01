@@ -1,8 +1,8 @@
 package example
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/chromium"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 )
 
@@ -15,5 +15,5 @@ func Tab() {
 		panic("tab not found")
 	}
 
-	fmt.Printf("Body: %+v", c.Body(t.Identifier))
+	console.Format("Body: %+v", c.Body(t.Identifier))
 }

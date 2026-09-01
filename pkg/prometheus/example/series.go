@@ -1,24 +1,27 @@
 package example
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/prometheus"
 )
 
 func Series() {
 	c := prometheus.NewEnvironment()
 	r := c.MustSeries()
-	fmt.Printf("Statistics: %+v\n", r.HeadStats)
-	fmt.Printf(
+	console.Format("Statistics: %+v\n", r.HeadStats)
+	console.Format(
 		"SeriesCountByLabelValuePair: %d\n",
 		len(r.SeriesCountByLabelValuePair),
 	)
-	fmt.Printf("SeriesCountByMetricName: %d\n", len(r.SeriesCountByMetricName))
-	fmt.Printf(
+	console.Format(
+		"SeriesCountByMetricName: %d\n",
+		len(r.SeriesCountByMetricName),
+	)
+	console.Format(
 		"LabelValueCountByLabelName: %d\n",
 		len(r.LabelValueCountByLabelName),
 	)
-	fmt.Printf(
+	console.Format(
 		"MemoryInBytesByLabelName: %d\n",
 		len(r.MemoryInBytesByLabelName),
 	)
@@ -28,10 +31,10 @@ func Series() {
 	}
 
 	for _, s := range r.SeriesCountByMetricName {
-		fmt.Printf("SeriesCountByMetricName: %+v\n", s)
+		console.Format("SeriesCountByMetricName: %+v\n", s)
 	}
 
 	for _, s := range r.SeriesCountByLabelValuePair {
-		fmt.Printf("SeriesCountByLabelValuePair: %+v\n", s)
+		console.Format("SeriesCountByLabelValuePair: %+v\n", s)
 	}
 }

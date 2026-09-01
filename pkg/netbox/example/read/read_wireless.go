@@ -1,7 +1,7 @@
 package read
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/netbox"
 )
@@ -11,17 +11,17 @@ func readWireless(
 	f *option.Format,
 ) {
 	for _, g := range n.MustWirelessNetworkGroups() {
-		fmt.Printf("WirelessNetworkGroup: %s\n", g.Format(f))
+		console.Format("WirelessNetworkGroup: %s\n", g.Format(f))
 	}
 
 	for _, e := range n.MustWirelessNetworks() {
-		fmt.Printf("WirelessNetwork: %s\n", e.Format(f))
+		console.Format("WirelessNetwork: %s\n", e.Format(f))
 	}
 
 	if false {
 		// TODO: What must devices have to show up in the picker?
 		for _, l := range n.MustWirelessLinks() {
-			fmt.Printf("WirelessLink: %s\n", l.Format(f))
+			console.Format("WirelessLink: %s\n", l.Format(f))
 		}
 	}
 }

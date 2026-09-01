@@ -1,8 +1,8 @@
 package token_check
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/common"
 )
@@ -12,23 +12,23 @@ func TokenCheck() {
 	user := environment.Required(constant.UserEnvironment)
 	token := environment.Required(constant.TokenEnvironment)
 	k := environment.Required(constant.JiraDefaultProjectKeyEnvironment)
-	fmt.Println("TokenCheck: raw /myself")
+	console.Line("TokenCheck: raw /myself")
 	rawMyself(host, user, token)
-	fmt.Println()
-	fmt.Println("TokenCheck: raw /search")
+	console.Line()
+	console.Line("TokenCheck: raw /search")
 	rawSearch(host, user, token, k)
-	fmt.Println()
-	fmt.Println("TokenCheck: SearchLimit(1)")
+	console.Line()
+	console.Line("TokenCheck: SearchLimit(1)")
 	issues := common.Jira().MustSearchLimit(
 		1,
 		"project = %s ORDER BY updated DESC",
 		k,
 	)
-	fmt.Printf("  Count: %d\n", len(issues))
+	console.Format("  Count: %d\n", len(issues))
 
 	for _, i := range issues {
-		fmt.Printf("  Issue: %s\n", i.Key)
+		console.Format("  Issue: %s\n", i.Key)
 	}
 
-	fmt.Println("TokenCheck: done")
+	console.Line("TokenCheck: done")
 }

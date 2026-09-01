@@ -1,7 +1,7 @@
 package example
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/github"
 	"github.com/funtimecoding/soil/pkg/github/constant"
 	"github.com/funtimecoding/soil/pkg/semver"
@@ -20,11 +20,11 @@ func LatestTags() {
 		latest := semver.Latest(tags)
 
 		if latest == "" {
-			fmt.Printf("%s: no semver tags\n", p.Name)
+			console.Format("%s: no semver tags\n", p.Name)
 
 			continue
 		}
 
-		fmt.Printf("%s: %s\n", p.Name, latest)
+		console.Format("%s: %s\n", p.Name, latest)
 	}
 }

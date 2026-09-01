@@ -4,7 +4,7 @@ info:
   title: gopostgresd
   version: 1.0.0
 paths:
-  /api/v1/instances:
+  /api/instances:
     get:
       operationId: listInstances
       responses:
@@ -16,7 +16,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/Instance"
-  /api/v1/query:
+  /api/query:
     post:
       operationId: query
       requestBody:
@@ -44,7 +44,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/explain:
+  /api/explain:
     post:
       operationId: explain
       requestBody:
@@ -72,7 +72,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/schemas:
+  /api/schemas:
     get:
       operationId: listSchemas
       parameters:
@@ -101,7 +101,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/tables:
+  /api/tables:
     get:
       operationId: listTables
       parameters:
@@ -137,7 +137,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/tables/{table}:
+  /api/tables/{table}:
     get:
       operationId: describeTable
       parameters:
@@ -179,7 +179,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/indexes:
+  /api/indexes:
     get:
       operationId: listIndexes
       parameters:
@@ -221,7 +221,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/table-sizes:
+  /api/table-sizes:
     get:
       operationId: tableSizes
       parameters:

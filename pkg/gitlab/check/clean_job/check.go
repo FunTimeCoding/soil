@@ -1,10 +1,10 @@
 package clean_job
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
-	console "github.com/funtimecoding/soil/pkg/console/constant"
+	"github.com/funtimecoding/soil/pkg/console"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab"
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"os"
@@ -17,17 +17,17 @@ func Check() {
 	a.String(argumentConstant.Match, "", "Description match")
 	a.ParseSimple()
 	g := gitlab.NewEnvironment()
-	f := constant.Format.Copy().Tag(console.TagDense)
+	f := constant.Format.Copy().Tag(consoleConstant.TagDense)
 	m := a.GetString(argumentConstant.Match)
 
 	if m == "" {
-		fmt.Printf(
+		console.Format(
 			"--%s must match a runner description\n",
 			argumentConstant.Match,
 		)
 
 		for _, r := range g.MustRunners(true) {
-			fmt.Println(r.Format(f))
+			console.Line(r.Format(f))
 		}
 
 		os.Exit(1)
@@ -36,7 +36,7 @@ func Check() {
 	r := g.RunnerByDescriptionMatch(m)
 
 	if r == nil {
-		fmt.Println("No runner match")
+		console.Line("No runner match")
 		os.Exit(1)
 	}
 

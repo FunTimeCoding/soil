@@ -1,7 +1,7 @@
 package example
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 )
@@ -12,9 +12,9 @@ func Official() {
 	password := environment.Required(constant.LokiPasswordEnvironment)
 
 	if false {
-		fmt.Printf("Host: %s\n", host)
-		fmt.Printf("User: %s\n", user)
-		fmt.Printf("Password: %s\n", password)
+		console.Format("Host: %s\n", host)
+		console.Format("User: %s\n", user)
+		console.Format("Password: %s\n", password)
 	}
 
 	// Imports have a big trail of dependencies which would need replaces.
@@ -39,5 +39,5 @@ func Official() {
 	//	false,
 	//)
 	//errors.PanicOnError(err)
-	//fmt.Printf("Response: %+v\n", resp)
+	//console.Format("Response: %+v\n", resp)
 }

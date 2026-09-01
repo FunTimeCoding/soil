@@ -1,12 +1,12 @@
 package generate_response
 
-import "fmt"
+import "github.com/funtimecoding/soil/pkg/console"
 
 func (r *Response) Print() {
-	fmt.Printf("Total: %dms\n", r.Total)
-	fmt.Printf("  Load: %dms\n", r.Load)
-	fmt.Printf("  Prompt evaluation: %dms\n", r.PromptEvaluation)
-	fmt.Printf("    Tokens/s: %.0f\n", r.PromptTokens)
-	fmt.Printf("  Evaluation: %dms\n", r.Evaluation)
-	fmt.Printf("    Tokens/s: %.0f\n", r.Tokens)
+	console.Format("Total: %dms\n", r.Total)
+	console.Format("  Load: %dms\n", r.Load)
+	console.Format("  Prompt evaluation: %dms\n", r.PromptEvaluation)
+	console.Format("    Tokens/s: %.0f\n", r.PromptTokens)
+	console.Format("  Evaluation: %dms\n", r.Evaluation)
+	console.Format("    Tokens/s: %.0f\n", r.Tokens)
 }

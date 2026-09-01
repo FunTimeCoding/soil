@@ -1,7 +1,7 @@
 package jira
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 )
 
@@ -17,6 +17,6 @@ func (c *Client) PrintIssueFields(
 	errors.PanicOnError(g)
 
 	for k, v := range fields {
-		fmt.Printf("Field: %s = %s\n", k, v)
+		console.Format("Field: %s = %s\n", k, v)
 	}
 }

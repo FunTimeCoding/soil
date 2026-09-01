@@ -2,7 +2,7 @@ package gosublime
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/spf13/cobra"
 	"os"
@@ -46,7 +46,13 @@ func views(x *Context) *cobra.Command {
 					path = "-"
 				}
 
-				fmt.Printf("%4d %s %s  %s\n", v.ViewId, dirty, v.Title, path)
+				console.Format(
+					"%4d %s %s  %s\n",
+					v.ViewId,
+					dirty,
+					v.Title,
+					path,
+				)
 			}
 		},
 	}

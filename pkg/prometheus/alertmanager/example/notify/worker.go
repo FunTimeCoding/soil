@@ -1,7 +1,7 @@
 package notify
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/advanced_option"
 	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
@@ -19,7 +19,7 @@ func worker(
 	for {
 		select {
 		case <-stop:
-			fmt.Println("Stopped")
+			console.Line("Stopped")
 
 			return
 		default:
@@ -29,17 +29,17 @@ func worker(
 			s.Alerts = now
 
 			for _, a := range add {
-				fmt.Printf("Add: %s\n", a.Name)
+				console.Format("Add: %s\n", a.Name)
 			}
 
 			if false {
 				for _, a := range stay {
-					fmt.Printf("Stay: %s\n", a.Name)
+					console.Format("Stay: %s\n", a.Name)
 				}
 			}
 
 			for _, a := range remove {
-				fmt.Printf("Remove: %s\n", a.Name)
+				console.Format("Remove: %s\n", a.Name)
 			}
 
 			if !s.Loaded {

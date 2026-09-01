@@ -1,7 +1,7 @@
 package lint
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"strings"
@@ -18,7 +18,7 @@ func runCheckers(
 ) {
 	for _, p := range paths {
 		if verbose {
-			fmt.Printf("Process: %s\n", p)
+			console.Format("Process: %s\n", p)
 		}
 
 		original := v.ReadString(p)

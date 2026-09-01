@@ -1,7 +1,7 @@
 package clean
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/git"
 	"github.com/funtimecoding/soil/pkg/git/remote"
 	"github.com/funtimecoding/soil/pkg/gitlab"
@@ -32,7 +32,7 @@ func Lab(
 	p := c.MustProjectByName(namespace, repository)
 
 	if o.Verbose {
-		fmt.Printf("Project: %d %s %s\n", p.Identifier, p.Namespace, p.Name)
+		console.Format("Project: %d %s %s\n", p.Identifier, p.Namespace, p.Name)
 	}
 
 	lab.Pipeline(o, c, p)

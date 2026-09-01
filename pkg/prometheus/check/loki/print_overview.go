@@ -1,7 +1,7 @@
 package loki
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/console/status"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 )
@@ -16,6 +16,6 @@ func printOverview(
 		).Integer(e.Count).String(
 			formatLatest(e),
 		)
-		fmt.Println(s.Format())
+		console.Line(s.Format())
 	}
 }

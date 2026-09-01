@@ -1,9 +1,9 @@
 package search
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 )
 
@@ -13,31 +13,31 @@ func searchAndy(
 	f *option.Format,
 ) {
 	if true {
-		fmt.Println("Search")
+		console.Line("Search")
 		issues := j.MustSearch(
 			"project = %s AND status != %s",
 			p,
 			constant.JiraClosed,
 		)
-		fmt.Printf("  Count: %d\n", len(issues))
+		console.Format("  Count: %d\n", len(issues))
 
 		for _, i := range issues {
-			fmt.Printf("  Issue: %s\n", i.Format(f))
+			console.Format("  Issue: %s\n", i.Format(f))
 		}
 	}
 
 	if true {
-		fmt.Println("SearchLimit")
+		console.Line("SearchLimit")
 		issues := j.MustSearchLimit(
 			5,
 			"project = %s AND status != %s",
 			p,
 			constant.JiraClosed,
 		)
-		fmt.Printf("  Count: %d\n", len(issues))
+		console.Format("  Count: %d\n", len(issues))
 
 		for _, i := range issues {
-			fmt.Printf("  Issue: %s\n", i.Format(f))
+			console.Format("  Issue: %s\n", i.Format(f))
 		}
 	}
 }

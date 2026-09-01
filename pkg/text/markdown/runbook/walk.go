@@ -1,7 +1,7 @@
 package runbook
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/yuin/goldmark/ast"
 	"strings"
@@ -21,7 +21,11 @@ func (r *Runbook) Walk(n ast.Node) {
 				section = &Section{Title: title}
 				r.Sections = append(r.Sections, *section)
 			} else {
-				fmt.Printf("Unexpected heading level %d: %s\n", h.Level, title)
+				console.Format(
+					"Unexpected heading level %d: %s\n",
+					h.Level,
+					title,
+				)
 			}
 		case ast.KindParagraph:
 			if r.Title == "" {

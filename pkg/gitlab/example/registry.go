@@ -1,9 +1,9 @@
 package example
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
 	"github.com/funtimecoding/soil/pkg/argument/constant"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/gitlab"
 )
 
@@ -19,9 +19,9 @@ func Registry() {
 		c.MustProjectByName(owner, repository).Identifier,
 		false,
 	)
-	fmt.Printf("Repositories: %d\n", len(r))
+	console.Format("Repositories: %d\n", len(r))
 
 	for _, r := range r {
-		fmt.Printf("Registry: %d %s\n", r.ID, r.Name)
+		console.Format("Registry: %d %s\n", r.ID, r.Name)
 	}
 }

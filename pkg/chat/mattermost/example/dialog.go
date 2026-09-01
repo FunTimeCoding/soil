@@ -2,7 +2,7 @@ package example
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/text/multi_line"
@@ -39,8 +39,8 @@ func Dialog() {
 			}
 
 			c.WriteOkay(notation.Encode(response, false))
-			fmt.Println("Request receive:")
-			fmt.Println(l.Render())
+			console.Line("Request receive:")
+			console.Line(l.Render())
 		},
 	)
 	s := web.ListenAsynchronous(w)
@@ -123,7 +123,7 @@ func Dialog() {
 				Options:     nil,
 			},
 		}
-		fmt.Printf("Dialog elements: %d\n", len(elements))
+		console.Format("Dialog elements: %d\n", len(elements))
 	}
 
 	if false {
@@ -163,8 +163,8 @@ func Dialog() {
 		)
 	}
 
-	fmt.Println("Cancel server with Ctrl-C")
+	console.Line("Cancel server with Ctrl-C")
 	system.KillSignalBlock()
-	fmt.Println("Shutdown server")
+	console.Line("Shutdown server")
 	web.GracefulShutdown(context.Background(), s, false)
 }

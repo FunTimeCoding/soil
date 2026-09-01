@@ -1,10 +1,10 @@
 package example
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
 	"github.com/funtimecoding/soil/pkg/argument/constant"
-	console "github.com/funtimecoding/soil/pkg/console/constant"
+	"github.com/funtimecoding/soil/pkg/console"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/tool/common"
 )
 
@@ -29,14 +29,14 @@ func Alert() {
 		return
 	}
 
-	f := console.ExtendedColorFormat.Copy()
+	f := consoleConstant.ExtendedColorFormat.Copy()
 	alerts := c.Open()
 
 	for _, a := range alerts {
-		fmt.Println(a.Format(f))
+		console.Line(a.Format(f))
 	}
 
 	if len(alerts) == 0 {
-		fmt.Println("No relevant alerts")
+		console.Line("No relevant alerts")
 	}
 }

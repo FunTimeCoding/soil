@@ -3,7 +3,7 @@
 package browser
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration_test/browser_tester"
 	"testing"
 )
@@ -17,7 +17,7 @@ func TestBrowserSentinelDebug(t *testing.T) {
 		"(() => { const el = document.querySelector('[hx-trigger=\"revealed\"]'); return el ? el.outerHTML : 'NOT FOUND'; })()",
 		&sentinelMarkup,
 	)
-	fmt.Printf("sentinel: %s\n", sentinelMarkup)
+	console.Format("sentinel: %s\n", sentinelMarkup)
 	var sidebarHeight float64
 	b.Evaluate(
 		"document.querySelector('.sidebar').scrollHeight",
@@ -28,7 +28,7 @@ func TestBrowserSentinelDebug(t *testing.T) {
 		"document.querySelector('.sidebar').clientHeight",
 		&sidebarClient,
 	)
-	fmt.Printf(
+	console.Format(
 		"sidebar scrollHeight: %.0f, clientHeight: %.0f\n",
 		sidebarHeight,
 		sidebarClient,
@@ -36,5 +36,5 @@ func TestBrowserSentinelDebug(t *testing.T) {
 	b.ScrollToBottom(".sidebar")
 	var scrollTop float64
 	b.Evaluate("document.querySelector('.sidebar').scrollTop", &scrollTop)
-	fmt.Printf("after scroll, scrollTop: %.0f\n", scrollTop)
+	console.Format("after scroll, scrollTop: %.0f\n", scrollTop)
 }

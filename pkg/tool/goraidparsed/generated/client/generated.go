@@ -115,19 +115,19 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 // The interface specification for the client above.
 type ClientInterface interface {
 
-	// PostGenerateWithBody performs a POST /api/v1/generate (the `PostGenerate` operationId) request,
+	// PostGenerateWithBody performs a POST /api/generate (the `PostGenerate` operationId) request,
 	// with any type of body and a specified content type.
 	PostGenerateWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PostGenerate performs a POST /api/v1/generate (the `PostGenerate` operationId) request.
+	// PostGenerate performs a POST /api/generate (the `PostGenerate` operationId) request.
 	// Takes a body of the `application/json` content type.
 	PostGenerate(ctx context.Context, body PostGenerateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetStatus performs a GET /api/v1/status (the `GetStatus` operationId) request.
+	// GetStatus performs a GET /api/status (the `GetStatus` operationId) request.
 	GetStatus(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
 
-// PostGenerateWithBody performs a POST /api/v1/generate (the `PostGenerate` operationId) request,
+// PostGenerateWithBody performs a POST /api/generate (the `PostGenerate` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) PostGenerateWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewPostGenerateRequestWithBody(c.Server, contentType, body)
@@ -141,7 +141,7 @@ func (c *Client) PostGenerateWithBody(ctx context.Context, contentType string, b
 	return c.Client.Do(req)
 }
 
-// PostGenerate performs a POST /api/v1/generate (the `PostGenerate` operationId) request.
+// PostGenerate performs a POST /api/generate (the `PostGenerate` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) PostGenerate(ctx context.Context, body PostGenerateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewPostGenerateRequest(c.Server, body)
@@ -155,7 +155,7 @@ func (c *Client) PostGenerate(ctx context.Context, body PostGenerateJSONRequestB
 	return c.Client.Do(req)
 }
 
-// GetStatus performs a GET /api/v1/status (the `GetStatus` operationId) request.
+// GetStatus performs a GET /api/status (the `GetStatus` operationId) request.
 func (c *Client) GetStatus(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetStatusRequest(c.Server)
 	if err != nil {
@@ -188,7 +188,7 @@ func NewPostGenerateRequestWithBody(server string, contentType string, body io.R
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/generate")
+	operationPath := fmt.Sprintf("/api/generate")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -217,7 +217,7 @@ func NewGetStatusRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/status")
+	operationPath := fmt.Sprintf("/api/status")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -279,17 +279,17 @@ func WithBaseURL(baseURL string) ClientOption {
 // ClientWithResponsesInterface is the interface specification for the client with responses above.
 type ClientWithResponsesInterface interface {
 
-	// PostGenerateWithBodyWithResponse performs a POST /api/v1/generate (the `PostGenerate` operationId) request,
+	// PostGenerateWithBodyWithResponse performs a POST /api/generate (the `PostGenerate` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	PostGenerateWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostGenerateResponse, error)
 
-	// PostGenerateWithResponse performs a POST /api/v1/generate (the `PostGenerate` operationId) request.
+	// PostGenerateWithResponse performs a POST /api/generate (the `PostGenerate` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	PostGenerateWithResponse(ctx context.Context, body PostGenerateJSONRequestBody, reqEditors ...RequestEditorFn) (*PostGenerateResponse, error)
 
-	// GetStatusWithResponse performs a GET /api/v1/status (the `GetStatus` operationId) request.
+	// GetStatusWithResponse performs a GET /api/status (the `GetStatus` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetStatusWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetStatusResponse, error)
@@ -384,7 +384,7 @@ func (r GetStatusResponse) ContentType() string {
 	return ""
 }
 
-// PostGenerateWithBodyWithResponse performs a POST /api/v1/generate (the `PostGenerate` operationId) request,
+// PostGenerateWithBodyWithResponse performs a POST /api/generate (the `PostGenerate` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -396,7 +396,7 @@ func (c *ClientWithResponses) PostGenerateWithBodyWithResponse(ctx context.Conte
 	return ParsePostGenerateResponse(rsp)
 }
 
-// PostGenerateWithResponse performs a POST /api/v1/generate (the `PostGenerate` operationId) request.
+// PostGenerateWithResponse performs a POST /api/generate (the `PostGenerate` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) PostGenerateWithResponse(ctx context.Context, body PostGenerateJSONRequestBody, reqEditors ...RequestEditorFn) (*PostGenerateResponse, error) {
 	rsp, err := c.PostGenerate(ctx, body, reqEditors...)
@@ -406,7 +406,7 @@ func (c *ClientWithResponses) PostGenerateWithResponse(ctx context.Context, body
 	return ParsePostGenerateResponse(rsp)
 }
 
-// GetStatusWithResponse performs a GET /api/v1/status (the `GetStatus` operationId) request.
+// GetStatusWithResponse performs a GET /api/status (the `GetStatus` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetStatusWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetStatusResponse, error) {

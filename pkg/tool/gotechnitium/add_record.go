@@ -1,7 +1,7 @@
 package gotechnitium
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/technitium"
 	"github.com/spf13/cobra"
@@ -19,7 +19,7 @@ func addRecord(c *technitium.Client) *cobra.Command {
 			arguments []string,
 		) {
 			r := c.MustAddRecord(arguments[0], recordType, value)
-			fmt.Printf("added: %s %s %v\n", r.Name, r.Type, r.Payload)
+			console.Format("added: %s %s %v\n", r.Name, r.Type, r.Payload)
 		},
 	}
 	result.Flags().StringVar(

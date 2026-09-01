@@ -1,7 +1,7 @@
 package git
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/go-git/go-git/v5"
 )
 
@@ -13,7 +13,7 @@ func IsClean(
 		if status.Worktree != git.Unmodified ||
 			status.Staging != git.Unmodified {
 			if log {
-				fmt.Printf(
+				console.Format(
 					"Status: worktree=%b staging=%b\n",
 					status.Worktree,
 					status.Staging,

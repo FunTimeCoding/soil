@@ -1,7 +1,7 @@
 package netbox
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/netbox/device"
 )
 
@@ -16,8 +16,8 @@ func (c *Client) UpdateSerial(
 	}
 
 	if c.verbose {
-		fmt.Printf("set serial device: %+v\n", d)
-		fmt.Printf("set serial raw device: %+v\n", d.Raw)
+		console.Format("set serial device: %+v\n", d)
+		console.Format("set serial raw device: %+v\n", d.Raw)
 	}
 
 	d.Serial = serial

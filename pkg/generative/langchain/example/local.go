@@ -2,7 +2,7 @@ package example
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/tmc/langchaingo/llms"
@@ -25,7 +25,7 @@ func Local() {
 					_ context.Context,
 					chunk []byte,
 				) error {
-					fmt.Printf("chunk len=%d: %s\n", len(chunk), chunk)
+					console.Format("chunk len=%d: %s\n", len(chunk), chunk)
 
 					return nil
 				},
@@ -41,5 +41,5 @@ func Local() {
 		llms.WithTemperature(0.0), // less is more deterministic
 	)
 	errors.PanicOnError(generateFail)
-	fmt.Printf("Response: %s\n", response)
+	console.Format("Response: %s\n", response)
 }

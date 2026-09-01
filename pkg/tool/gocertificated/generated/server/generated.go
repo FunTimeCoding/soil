@@ -199,40 +199,40 @@ type PostSigningRequestJSONRequestBody = SigningRequestBody
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 
-	// (GET /api/v1/authorities)
+	// (GET /api/authorities)
 	GetAuthorities(w http.ResponseWriter, r *http.Request)
 
-	// (POST /api/v1/authorities)
+	// (POST /api/authorities)
 	PostAuthority(w http.ResponseWriter, r *http.Request)
 
-	// (GET /api/v1/authorities/{name})
+	// (GET /api/authorities/{name})
 	GetAuthority(w http.ResponseWriter, r *http.Request, name string)
 
-	// (GET /api/v1/certificates)
+	// (GET /api/certificates)
 	GetCertificates(w http.ResponseWriter, r *http.Request, params GetCertificatesParams)
 
-	// (POST /api/v1/certificates)
+	// (POST /api/certificates)
 	PostCertificate(w http.ResponseWriter, r *http.Request)
 
-	// (GET /api/v1/certificates/{serial})
+	// (GET /api/certificates/{serial})
 	GetCertificate(w http.ResponseWriter, r *http.Request, serial string)
 
-	// (POST /api/v1/certificates/{serial}/revocation)
+	// (POST /api/certificates/{serial}/revocation)
 	PostRevocation(w http.ResponseWriter, r *http.Request, serial string)
 
-	// (GET /api/v1/publication)
+	// (GET /api/publication)
 	GetPublication(w http.ResponseWriter, r *http.Request)
 
-	// (POST /api/v1/publication)
+	// (POST /api/publication)
 	PostPublication(w http.ResponseWriter, r *http.Request)
 
-	// (GET /api/v1/revocation-list)
+	// (GET /api/revocation-list)
 	GetRevocationList(w http.ResponseWriter, r *http.Request, params GetRevocationListParams)
 
-	// (GET /api/v1/root)
+	// (GET /api/root)
 	GetRoot(w http.ResponseWriter, r *http.Request)
 
-	// (POST /api/v1/signing-requests)
+	// (POST /api/signing-requests)
 	PostSigningRequest(w http.ResponseWriter, r *http.Request)
 }
 
@@ -659,18 +659,18 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 		ErrorHandlerFunc:   options.ErrorHandlerFunc,
 	}
 
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/authorities", wrapper.GetAuthorities)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/authorities", wrapper.PostAuthority)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/authorities/{name}", wrapper.GetAuthority)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/certificates", wrapper.GetCertificates)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/certificates", wrapper.PostCertificate)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/certificates/{serial}", wrapper.GetCertificate)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/certificates/{serial}/revocation", wrapper.PostRevocation)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/signing-requests", wrapper.PostSigningRequest)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/publication", wrapper.GetPublication)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/publication", wrapper.PostPublication)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/root", wrapper.GetRoot)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/revocation-list", wrapper.GetRevocationList)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/authorities", wrapper.GetAuthorities)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/authorities", wrapper.PostAuthority)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/authorities/{name}", wrapper.GetAuthority)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/certificates", wrapper.GetCertificates)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/certificates", wrapper.PostCertificate)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/certificates/{serial}", wrapper.GetCertificate)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/certificates/{serial}/revocation", wrapper.PostRevocation)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/signing-requests", wrapper.PostSigningRequest)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/publication", wrapper.GetPublication)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/publication", wrapper.PostPublication)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/root", wrapper.GetRoot)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/revocation-list", wrapper.GetRevocationList)
 
 	return m
 }
@@ -1170,40 +1170,40 @@ func (response PostSigningRequest500JSONResponse) VisitPostSigningRequestRespons
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
 
-	// (GET /api/v1/authorities)
+	// (GET /api/authorities)
 	GetAuthorities(ctx context.Context, request GetAuthoritiesRequestObject) (GetAuthoritiesResponseObject, error)
 
-	// (POST /api/v1/authorities)
+	// (POST /api/authorities)
 	PostAuthority(ctx context.Context, request PostAuthorityRequestObject) (PostAuthorityResponseObject, error)
 
-	// (GET /api/v1/authorities/{name})
+	// (GET /api/authorities/{name})
 	GetAuthority(ctx context.Context, request GetAuthorityRequestObject) (GetAuthorityResponseObject, error)
 
-	// (GET /api/v1/certificates)
+	// (GET /api/certificates)
 	GetCertificates(ctx context.Context, request GetCertificatesRequestObject) (GetCertificatesResponseObject, error)
 
-	// (POST /api/v1/certificates)
+	// (POST /api/certificates)
 	PostCertificate(ctx context.Context, request PostCertificateRequestObject) (PostCertificateResponseObject, error)
 
-	// (GET /api/v1/certificates/{serial})
+	// (GET /api/certificates/{serial})
 	GetCertificate(ctx context.Context, request GetCertificateRequestObject) (GetCertificateResponseObject, error)
 
-	// (POST /api/v1/certificates/{serial}/revocation)
+	// (POST /api/certificates/{serial}/revocation)
 	PostRevocation(ctx context.Context, request PostRevocationRequestObject) (PostRevocationResponseObject, error)
 
-	// (GET /api/v1/publication)
+	// (GET /api/publication)
 	GetPublication(ctx context.Context, request GetPublicationRequestObject) (GetPublicationResponseObject, error)
 
-	// (POST /api/v1/publication)
+	// (POST /api/publication)
 	PostPublication(ctx context.Context, request PostPublicationRequestObject) (PostPublicationResponseObject, error)
 
-	// (GET /api/v1/revocation-list)
+	// (GET /api/revocation-list)
 	GetRevocationList(ctx context.Context, request GetRevocationListRequestObject) (GetRevocationListResponseObject, error)
 
-	// (GET /api/v1/root)
+	// (GET /api/root)
 	GetRoot(ctx context.Context, request GetRootRequestObject) (GetRootResponseObject, error)
 
-	// (POST /api/v1/signing-requests)
+	// (POST /api/signing-requests)
 	PostSigningRequest(ctx context.Context, request PostSigningRequestRequestObject) (PostSigningRequestResponseObject, error)
 }
 
@@ -1570,30 +1570,30 @@ func (sh *strictHandler) PostSigningRequest(w http.ResponseWriter, r *http.Reque
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
+	"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",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

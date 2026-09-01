@@ -1,7 +1,7 @@
 package lint
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/file_report"
 	"github.com/funtimecoding/soil/pkg/strings/join"
@@ -71,7 +71,7 @@ func Function(
 
 	s.Fix = func() {
 		if s.Fixed != "" {
-			fmt.Printf("Fix functions %s\n", path)
+			console.Format("Fix functions %s\n", path)
 			system.SaveFile(path, s.Fixed)
 		}
 	}

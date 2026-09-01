@@ -1,9 +1,9 @@
 package example
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/time/constant"
 	"time"
@@ -16,7 +16,7 @@ func Since() {
 	since := a.RequiredPositional(1, "SINCE")
 	m := mattermost.NewEnvironment(mattermost.WithVerbose(false))
 	c := m.MustTeamChannel(channel)
-	fmt.Printf("Channel: %s\n", c.Name)
+	console.Format("Channel: %s\n", c.Name)
 	t, e := time.ParseInLocation(
 		constant.DateMinute,
 		since,
@@ -35,7 +35,7 @@ func Since() {
 		}
 	}
 
-	fmt.Printf(
+	console.Format(
 		"Since %s: %d posts, %d roots, %d replies\n",
 		since,
 		len(posts),
@@ -44,7 +44,7 @@ func Since() {
 	)
 
 	for _, p := range posts {
-		fmt.Printf(
+		console.Format(
 			"  %s %s root=%v files=%d: %.60s\n",
 			p.Create.Format(constant.DateMinute),
 			p.User.Username,

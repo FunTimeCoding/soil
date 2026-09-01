@@ -1,7 +1,7 @@
 package job
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/kubernetes/client"
 	"time"
@@ -12,9 +12,9 @@ func waitForDone(
 	namespace string,
 	job string,
 ) {
-	fmt.Println("Sleep before wait")
+	console.Line("Sleep before wait")
 	time.Sleep(10 * time.Second)
 	printJobs(k, namespace)
-	fmt.Println("Wait for job")
+	console.Line("Wait for job")
 	errors.PanicOnError(k.WaitForJob(namespace, job, 0))
 }

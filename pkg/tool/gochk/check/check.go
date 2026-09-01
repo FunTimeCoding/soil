@@ -1,7 +1,7 @@
 package check
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	linuxConstant "github.com/funtimecoding/soil/pkg/linux/constant"
 	"github.com/funtimecoding/soil/pkg/linux/systemd/command"
 	"github.com/funtimecoding/soil/pkg/strings/join"
@@ -15,9 +15,9 @@ import (
 func Check(port string) {
 	switch runtime.GOOS {
 	case constant.Linux:
-		fmt.Println("Linux")
-		fmt.Printf("Cores: %d\n", runtime.NumCPU())
-		fmt.Printf("Failed: %s\n", Execute(command.Failed()))
+		console.Line("Linux")
+		console.Format("Cores: %d\n", runtime.NumCPU())
+		console.Format("Failed: %s\n", Execute(command.Failed()))
 		// TODO: Load average > CPU cores check
 		diskFull()
 
@@ -36,21 +36,21 @@ func Check(port string) {
 					}
 
 					found = append(found, n.LocalPort)
-					fmt.Printf("Found port: %s\n", n.LocalPort)
+					console.Format("Found port: %s\n", n.LocalPort)
 				}
 
 				slices.Sort(ports)
 				slices.Sort(found)
 
 				if !slices.Equal(ports, found) {
-					fmt.Printf("Expect ports: %s\n", join.Comma(ports))
-					fmt.Printf("Found ports: %s\n", join.Comma(found))
+					console.Format("Expect ports: %s\n", join.Comma(ports))
+					console.Format("Found ports: %s\n", join.Comma(found))
 				}
 			}
 		} else {
-			fmt.Println("jc not found")
+			console.Line("jc not found")
 		}
 	case constant.Darwin:
-		fmt.Println("Darwin")
+		console.Line("Darwin")
 	}
 }

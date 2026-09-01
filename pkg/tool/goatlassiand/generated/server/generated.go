@@ -335,100 +335,100 @@ type UpdateIssueJSONRequestBody = UpdateIssueRequest
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 
-	// (POST /api/v1/confluence/page)
+	// (POST /api/confluence/page)
 	CreatePage(w http.ResponseWriter, r *http.Request)
 
-	// (DELETE /api/v1/confluence/page/{identifier})
+	// (DELETE /api/confluence/page/{identifier})
 	DeletePage(w http.ResponseWriter, r *http.Request, identifier string, params DeletePageParams)
 
-	// (GET /api/v1/confluence/page/{identifier})
+	// (GET /api/confluence/page/{identifier})
 	GetPage(w http.ResponseWriter, r *http.Request, identifier string)
 
-	// (PUT /api/v1/confluence/page/{identifier})
+	// (PUT /api/confluence/page/{identifier})
 	UpdatePage(w http.ResponseWriter, r *http.Request, identifier string)
 
-	// (GET /api/v1/confluence/page/{identifier}/children)
+	// (GET /api/confluence/page/{identifier}/children)
 	GetPageChildren(w http.ResponseWriter, r *http.Request, identifier string)
 
-	// (POST /api/v1/confluence/page/{identifier}/comment)
+	// (POST /api/confluence/page/{identifier}/comment)
 	AddPageComment(w http.ResponseWriter, r *http.Request, identifier string)
 
-	// (GET /api/v1/confluence/page/{identifier}/draft)
+	// (GET /api/confluence/page/{identifier}/draft)
 	GetPageDraft(w http.ResponseWriter, r *http.Request, identifier string)
 
-	// (POST /api/v1/confluence/page/{identifier}/edit)
+	// (POST /api/confluence/page/{identifier}/edit)
 	EditPage(w http.ResponseWriter, r *http.Request, identifier string)
 
-	// (POST /api/v1/confluence/page/{identifier}/status)
+	// (POST /api/confluence/page/{identifier}/status)
 	SetPageStatus(w http.ResponseWriter, r *http.Request, identifier string)
 
-	// (GET /api/v1/confluence/pages)
+	// (GET /api/confluence/pages)
 	ListPages(w http.ResponseWriter, r *http.Request, params ListPagesParams)
 
-	// (GET /api/v1/confluence/search)
+	// (GET /api/confluence/search)
 	SearchPages(w http.ResponseWriter, r *http.Request, params SearchPagesParams)
 
-	// (GET /api/v1/confluence/spaces)
+	// (GET /api/confluence/spaces)
 	ListSpaces(w http.ResponseWriter, r *http.Request)
 
-	// (POST /api/v1/jira/issue)
+	// (POST /api/jira/issue)
 	CreateIssue(w http.ResponseWriter, r *http.Request)
 
-	// (GET /api/v1/jira/issue/{key})
+	// (GET /api/jira/issue/{key})
 	GetIssue(w http.ResponseWriter, r *http.Request, key string, params GetIssueParams)
 
-	// (GET /api/v1/jira/issue/{key}/checklist)
+	// (GET /api/jira/issue/{key}/checklist)
 	GetChecklist(w http.ResponseWriter, r *http.Request, key string)
 
-	// (POST /api/v1/jira/issue/{key}/checklist)
+	// (POST /api/jira/issue/{key}/checklist)
 	AddChecklistItem(w http.ResponseWriter, r *http.Request, key string)
 
-	// (DELETE /api/v1/jira/issue/{key}/checklist/{index})
+	// (DELETE /api/jira/issue/{key}/checklist/{index})
 	DeleteChecklistItem(w http.ResponseWriter, r *http.Request, key string, index int)
 
-	// (PUT /api/v1/jira/issue/{key}/checklist/{index})
+	// (PUT /api/jira/issue/{key}/checklist/{index})
 	EditChecklistItem(w http.ResponseWriter, r *http.Request, key string, index int)
 
-	// (POST /api/v1/jira/issue/{key}/checklist/{index}/toggle)
+	// (POST /api/jira/issue/{key}/checklist/{index}/toggle)
 	ToggleChecklistItem(w http.ResponseWriter, r *http.Request, key string, index int)
 
-	// (POST /api/v1/jira/issue/{key}/comment)
+	// (POST /api/jira/issue/{key}/comment)
 	AddIssueComment(w http.ResponseWriter, r *http.Request, key string)
 
-	// (DELETE /api/v1/jira/issue/{key}/comment/{identifier})
+	// (DELETE /api/jira/issue/{key}/comment/{identifier})
 	DeleteComment(w http.ResponseWriter, r *http.Request, key string, identifier string)
 
-	// (PUT /api/v1/jira/issue/{key}/comment/{identifier})
+	// (PUT /api/jira/issue/{key}/comment/{identifier})
 	UpdateComment(w http.ResponseWriter, r *http.Request, key string, identifier string)
 
-	// (POST /api/v1/jira/issue/{key}/link)
+	// (POST /api/jira/issue/{key}/link)
 	LinkIssues(w http.ResponseWriter, r *http.Request, key string)
 
-	// (POST /api/v1/jira/issue/{key}/transition)
+	// (POST /api/jira/issue/{key}/transition)
 	TransitionIssue(w http.ResponseWriter, r *http.Request, key string)
 
-	// (GET /api/v1/jira/issue/{key}/transitions)
+	// (GET /api/jira/issue/{key}/transitions)
 	GetTransitions(w http.ResponseWriter, r *http.Request, key string)
 
-	// (POST /api/v1/jira/issue/{key}/update)
+	// (POST /api/jira/issue/{key}/update)
 	UpdateIssue(w http.ResponseWriter, r *http.Request, key string)
 
-	// (GET /api/v1/jira/link-types)
+	// (GET /api/jira/link-types)
 	GetLinkTypes(w http.ResponseWriter, r *http.Request)
 
-	// (DELETE /api/v1/jira/link/{identifier})
+	// (DELETE /api/jira/link/{identifier})
 	DeleteLink(w http.ResponseWriter, r *http.Request, identifier string)
 
-	// (GET /api/v1/jira/meta)
+	// (GET /api/jira/meta)
 	GetCreateMeta(w http.ResponseWriter, r *http.Request, params GetCreateMetaParams)
 
-	// (GET /api/v1/jira/projects)
+	// (GET /api/jira/projects)
 	ListProjects(w http.ResponseWriter, r *http.Request)
 
-	// (GET /api/v1/jira/search)
+	// (GET /api/jira/search)
 	SearchIssues(w http.ResponseWriter, r *http.Request, params SearchIssuesParams)
 
-	// (GET /api/v1/jira/users)
+	// (GET /api/jira/users)
 	SearchUsers(w http.ResponseWriter, r *http.Request, params SearchUsersParams)
 }
 
@@ -1497,38 +1497,38 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 		ErrorHandlerFunc:   options.ErrorHandlerFunc,
 	}
 
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/jira/search", wrapper.SearchIssues)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/jira/issue/{key}", wrapper.GetIssue)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/jira/issue/{key}/transitions", wrapper.GetTransitions)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/jira/issue/{key}/transition", wrapper.TransitionIssue)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/jira/issue/{key}/comment", wrapper.AddIssueComment)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/jira/projects", wrapper.ListProjects)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/jira/issue", wrapper.CreateIssue)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/jira/issue/{key}/update", wrapper.UpdateIssue)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/jira/meta", wrapper.GetCreateMeta)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/jira/users", wrapper.SearchUsers)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/jira/issue/{key}/link", wrapper.LinkIssues)
-	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/v1/jira/link/{identifier}", wrapper.DeleteLink)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/jira/link-types", wrapper.GetLinkTypes)
-	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/v1/jira/issue/{key}/comment/{identifier}", wrapper.DeleteComment)
-	m.HandleFunc(http.MethodPut+" "+options.BaseURL+"/api/v1/jira/issue/{key}/comment/{identifier}", wrapper.UpdateComment)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/jira/issue/{key}/checklist", wrapper.GetChecklist)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/jira/issue/{key}/checklist", wrapper.AddChecklistItem)
-	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/v1/jira/issue/{key}/checklist/{index}", wrapper.DeleteChecklistItem)
-	m.HandleFunc(http.MethodPut+" "+options.BaseURL+"/api/v1/jira/issue/{key}/checklist/{index}", wrapper.EditChecklistItem)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/jira/issue/{key}/checklist/{index}/toggle", wrapper.ToggleChecklistItem)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/confluence/spaces", wrapper.ListSpaces)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/confluence/search", wrapper.SearchPages)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/confluence/page", wrapper.CreatePage)
-	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/v1/confluence/page/{identifier}", wrapper.DeletePage)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/confluence/page/{identifier}", wrapper.GetPage)
-	m.HandleFunc(http.MethodPut+" "+options.BaseURL+"/api/v1/confluence/page/{identifier}", wrapper.UpdatePage)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/confluence/page/{identifier}/children", wrapper.GetPageChildren)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/confluence/page/{identifier}/comment", wrapper.AddPageComment)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/confluence/page/{identifier}/draft", wrapper.GetPageDraft)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/confluence/page/{identifier}/status", wrapper.SetPageStatus)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/confluence/page/{identifier}/edit", wrapper.EditPage)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/confluence/pages", wrapper.ListPages)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/jira/search", wrapper.SearchIssues)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/jira/issue/{key}", wrapper.GetIssue)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/jira/issue/{key}/transitions", wrapper.GetTransitions)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/jira/issue/{key}/transition", wrapper.TransitionIssue)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/jira/issue/{key}/comment", wrapper.AddIssueComment)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/jira/projects", wrapper.ListProjects)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/jira/issue", wrapper.CreateIssue)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/jira/issue/{key}/update", wrapper.UpdateIssue)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/jira/meta", wrapper.GetCreateMeta)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/jira/users", wrapper.SearchUsers)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/jira/issue/{key}/link", wrapper.LinkIssues)
+	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/jira/link/{identifier}", wrapper.DeleteLink)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/jira/link-types", wrapper.GetLinkTypes)
+	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/jira/issue/{key}/comment/{identifier}", wrapper.DeleteComment)
+	m.HandleFunc(http.MethodPut+" "+options.BaseURL+"/api/jira/issue/{key}/comment/{identifier}", wrapper.UpdateComment)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/jira/issue/{key}/checklist", wrapper.GetChecklist)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/jira/issue/{key}/checklist", wrapper.AddChecklistItem)
+	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/jira/issue/{key}/checklist/{index}", wrapper.DeleteChecklistItem)
+	m.HandleFunc(http.MethodPut+" "+options.BaseURL+"/api/jira/issue/{key}/checklist/{index}", wrapper.EditChecklistItem)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/jira/issue/{key}/checklist/{index}/toggle", wrapper.ToggleChecklistItem)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/confluence/spaces", wrapper.ListSpaces)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/confluence/search", wrapper.SearchPages)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/confluence/page", wrapper.CreatePage)
+	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/confluence/page/{identifier}", wrapper.DeletePage)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/confluence/page/{identifier}", wrapper.GetPage)
+	m.HandleFunc(http.MethodPut+" "+options.BaseURL+"/api/confluence/page/{identifier}", wrapper.UpdatePage)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/confluence/page/{identifier}/children", wrapper.GetPageChildren)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/confluence/page/{identifier}/comment", wrapper.AddPageComment)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/confluence/page/{identifier}/draft", wrapper.GetPageDraft)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/confluence/page/{identifier}/status", wrapper.SetPageStatus)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/confluence/page/{identifier}/edit", wrapper.EditPage)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/confluence/pages", wrapper.ListPages)
 
 	return m
 }
@@ -2809,100 +2809,100 @@ func (response SearchUsers500JSONResponse) VisitSearchUsersResponse(w http.Respo
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
 
-	// (POST /api/v1/confluence/page)
+	// (POST /api/confluence/page)
 	CreatePage(ctx context.Context, request CreatePageRequestObject) (CreatePageResponseObject, error)
 
-	// (DELETE /api/v1/confluence/page/{identifier})
+	// (DELETE /api/confluence/page/{identifier})
 	DeletePage(ctx context.Context, request DeletePageRequestObject) (DeletePageResponseObject, error)
 
-	// (GET /api/v1/confluence/page/{identifier})
+	// (GET /api/confluence/page/{identifier})
 	GetPage(ctx context.Context, request GetPageRequestObject) (GetPageResponseObject, error)
 
-	// (PUT /api/v1/confluence/page/{identifier})
+	// (PUT /api/confluence/page/{identifier})
 	UpdatePage(ctx context.Context, request UpdatePageRequestObject) (UpdatePageResponseObject, error)
 
-	// (GET /api/v1/confluence/page/{identifier}/children)
+	// (GET /api/confluence/page/{identifier}/children)
 	GetPageChildren(ctx context.Context, request GetPageChildrenRequestObject) (GetPageChildrenResponseObject, error)
 
-	// (POST /api/v1/confluence/page/{identifier}/comment)
+	// (POST /api/confluence/page/{identifier}/comment)
 	AddPageComment(ctx context.Context, request AddPageCommentRequestObject) (AddPageCommentResponseObject, error)
 
-	// (GET /api/v1/confluence/page/{identifier}/draft)
+	// (GET /api/confluence/page/{identifier}/draft)
 	GetPageDraft(ctx context.Context, request GetPageDraftRequestObject) (GetPageDraftResponseObject, error)
 
-	// (POST /api/v1/confluence/page/{identifier}/edit)
+	// (POST /api/confluence/page/{identifier}/edit)
 	EditPage(ctx context.Context, request EditPageRequestObject) (EditPageResponseObject, error)
 
-	// (POST /api/v1/confluence/page/{identifier}/status)
+	// (POST /api/confluence/page/{identifier}/status)
 	SetPageStatus(ctx context.Context, request SetPageStatusRequestObject) (SetPageStatusResponseObject, error)
 
-	// (GET /api/v1/confluence/pages)
+	// (GET /api/confluence/pages)
 	ListPages(ctx context.Context, request ListPagesRequestObject) (ListPagesResponseObject, error)
 
-	// (GET /api/v1/confluence/search)
+	// (GET /api/confluence/search)
 	SearchPages(ctx context.Context, request SearchPagesRequestObject) (SearchPagesResponseObject, error)
 
-	// (GET /api/v1/confluence/spaces)
+	// (GET /api/confluence/spaces)
 	ListSpaces(ctx context.Context, request ListSpacesRequestObject) (ListSpacesResponseObject, error)
 
-	// (POST /api/v1/jira/issue)
+	// (POST /api/jira/issue)
 	CreateIssue(ctx context.Context, request CreateIssueRequestObject) (CreateIssueResponseObject, error)
 
-	// (GET /api/v1/jira/issue/{key})
+	// (GET /api/jira/issue/{key})
 	GetIssue(ctx context.Context, request GetIssueRequestObject) (GetIssueResponseObject, error)
 
-	// (GET /api/v1/jira/issue/{key}/checklist)
+	// (GET /api/jira/issue/{key}/checklist)
 	GetChecklist(ctx context.Context, request GetChecklistRequestObject) (GetChecklistResponseObject, error)
 
-	// (POST /api/v1/jira/issue/{key}/checklist)
+	// (POST /api/jira/issue/{key}/checklist)
 	AddChecklistItem(ctx context.Context, request AddChecklistItemRequestObject) (AddChecklistItemResponseObject, error)
 
-	// (DELETE /api/v1/jira/issue/{key}/checklist/{index})
+	// (DELETE /api/jira/issue/{key}/checklist/{index})
 	DeleteChecklistItem(ctx context.Context, request DeleteChecklistItemRequestObject) (DeleteChecklistItemResponseObject, error)
 
-	// (PUT /api/v1/jira/issue/{key}/checklist/{index})
+	// (PUT /api/jira/issue/{key}/checklist/{index})
 	EditChecklistItem(ctx context.Context, request EditChecklistItemRequestObject) (EditChecklistItemResponseObject, error)
 
-	// (POST /api/v1/jira/issue/{key}/checklist/{index}/toggle)
+	// (POST /api/jira/issue/{key}/checklist/{index}/toggle)
 	ToggleChecklistItem(ctx context.Context, request ToggleChecklistItemRequestObject) (ToggleChecklistItemResponseObject, error)
 
-	// (POST /api/v1/jira/issue/{key}/comment)
+	// (POST /api/jira/issue/{key}/comment)
 	AddIssueComment(ctx context.Context, request AddIssueCommentRequestObject) (AddIssueCommentResponseObject, error)
 
-	// (DELETE /api/v1/jira/issue/{key}/comment/{identifier})
+	// (DELETE /api/jira/issue/{key}/comment/{identifier})
 	DeleteComment(ctx context.Context, request DeleteCommentRequestObject) (DeleteCommentResponseObject, error)
 
-	// (PUT /api/v1/jira/issue/{key}/comment/{identifier})
+	// (PUT /api/jira/issue/{key}/comment/{identifier})
 	UpdateComment(ctx context.Context, request UpdateCommentRequestObject) (UpdateCommentResponseObject, error)
 
-	// (POST /api/v1/jira/issue/{key}/link)
+	// (POST /api/jira/issue/{key}/link)
 	LinkIssues(ctx context.Context, request LinkIssuesRequestObject) (LinkIssuesResponseObject, error)
 
-	// (POST /api/v1/jira/issue/{key}/transition)
+	// (POST /api/jira/issue/{key}/transition)
 	TransitionIssue(ctx context.Context, request TransitionIssueRequestObject) (TransitionIssueResponseObject, error)
 
-	// (GET /api/v1/jira/issue/{key}/transitions)
+	// (GET /api/jira/issue/{key}/transitions)
 	GetTransitions(ctx context.Context, request GetTransitionsRequestObject) (GetTransitionsResponseObject, error)
 
-	// (POST /api/v1/jira/issue/{key}/update)
+	// (POST /api/jira/issue/{key}/update)
 	UpdateIssue(ctx context.Context, request UpdateIssueRequestObject) (UpdateIssueResponseObject, error)
 
-	// (GET /api/v1/jira/link-types)
+	// (GET /api/jira/link-types)
 	GetLinkTypes(ctx context.Context, request GetLinkTypesRequestObject) (GetLinkTypesResponseObject, error)
 
-	// (DELETE /api/v1/jira/link/{identifier})
+	// (DELETE /api/jira/link/{identifier})
 	DeleteLink(ctx context.Context, request DeleteLinkRequestObject) (DeleteLinkResponseObject, error)
 
-	// (GET /api/v1/jira/meta)
+	// (GET /api/jira/meta)
 	GetCreateMeta(ctx context.Context, request GetCreateMetaRequestObject) (GetCreateMetaResponseObject, error)
 
-	// (GET /api/v1/jira/projects)
+	// (GET /api/jira/projects)
 	ListProjects(ctx context.Context, request ListProjectsRequestObject) (ListProjectsResponseObject, error)
 
-	// (GET /api/v1/jira/search)
+	// (GET /api/jira/search)
 	SearchIssues(ctx context.Context, request SearchIssuesRequestObject) (SearchIssuesResponseObject, error)
 
-	// (GET /api/v1/jira/users)
+	// (GET /api/jira/users)
 	SearchUsers(ctx context.Context, request SearchUsersRequestObject) (SearchUsersResponseObject, error)
 }
 
@@ -3870,50 +3870,50 @@ func (sh *strictHandler) SearchUsers(w http.ResponseWriter, r *http.Request, par
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
-	"dOB//wsAAP//",
+	"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",
+	"AgAA//8=",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

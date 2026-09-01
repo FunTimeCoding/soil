@@ -59,16 +59,16 @@ type GetChannelPostsParams struct {
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 	// GetChannelPosts Posts of a channel since a time, replies and attachment-only posts included, oldest first
-	// (GET /api/v1/channel/{name}/posts)
+	// (GET /api/channel/{name}/posts)
 	GetChannelPosts(w http.ResponseWriter, r *http.Request, name string, params GetChannelPostsParams)
 	// GetPostReactions Emoji names of a post's reactions
-	// (GET /api/v1/post/{identifier}/reactions)
+	// (GET /api/post/{identifier}/reactions)
 	GetPostReactions(w http.ResponseWriter, r *http.Request, identifier string)
 	// GetStatus Daemon identity and version
-	// (GET /api/v1/status)
+	// (GET /api/status)
 	GetStatus(w http.ResponseWriter, r *http.Request)
 	// GetThread Replies of a thread by its root post identifier, oldest first
-	// (GET /api/v1/thread/{identifier})
+	// (GET /api/thread/{identifier})
 	GetThread(w http.ResponseWriter, r *http.Request, identifier string)
 }
 
@@ -309,10 +309,10 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 		ErrorHandlerFunc:   options.ErrorHandlerFunc,
 	}
 
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/status", wrapper.GetStatus)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/channel/{name}/posts", wrapper.GetChannelPosts)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/post/{identifier}/reactions", wrapper.GetPostReactions)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/thread/{identifier}", wrapper.GetThread)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/status", wrapper.GetStatus)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/channel/{name}/posts", wrapper.GetChannelPosts)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/post/{identifier}/reactions", wrapper.GetPostReactions)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/thread/{identifier}", wrapper.GetThread)
 
 	return m
 }
@@ -492,16 +492,16 @@ func (response GetThread500JSONResponse) VisitGetThreadResponse(w http.ResponseW
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
 	// GetChannelPosts Posts of a channel since a time, replies and attachment-only posts included, oldest first
-	// (GET /api/v1/channel/{name}/posts)
+	// (GET /api/channel/{name}/posts)
 	GetChannelPosts(ctx context.Context, request GetChannelPostsRequestObject) (GetChannelPostsResponseObject, error)
 	// GetPostReactions Emoji names of a post's reactions
-	// (GET /api/v1/post/{identifier}/reactions)
+	// (GET /api/post/{identifier}/reactions)
 	GetPostReactions(ctx context.Context, request GetPostReactionsRequestObject) (GetPostReactionsResponseObject, error)
 	// GetStatus Daemon identity and version
-	// (GET /api/v1/status)
+	// (GET /api/status)
 	GetStatus(ctx context.Context, request GetStatusRequestObject) (GetStatusResponseObject, error)
 	// GetThread Replies of a thread by its root post identifier, oldest first
-	// (GET /api/v1/thread/{identifier})
+	// (GET /api/thread/{identifier})
 	GetThread(ctx context.Context, request GetThreadRequestObject) (GetThreadResponseObject, error)
 }
 
@@ -652,21 +652,21 @@ func (sh *strictHandler) GetThread(w http.ResponseWriter, r *http.Request, ident
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"5FVPj9u2E/0qBH8/oBfFcpoEDXQr2m2RQ5GFk1uwCLjSyOKC5CjDkQNjoe9eDCVL3rXW3qB/EKA3Wxxy",
-	"3rx5b+Zel+hbDBA46uJex7IBb9LPKyIk+dEStkBsIX2Gw2fet6ALHZls2Oq+zzTBl84SVLr4NIbdZIcw",
-	"vL2DknWfDe9uILYYIjz//UzDDgJ/thUEtrWFZ4NYuLmE6xojn8IpCQxD9dmksxrJyy9dGYYXbD3o7BRo",
-	"bd1w2TL4uFjL+MEQmb38P1tVpj3EaLaweEaIvHjQRaBgPFzm6Sj70bU5bXZMwxJ3H9hwF0/ZeyJ9pndA",
-	"0WK4DG1Ecog/TS4XbKhRnqoglmRbTi/rzdWHj+rn63cKd0CKG1B/GGYgj5FV6SwEVjWSqgx4DKrEEDsP",
-	"FFfSU8tOsmzRT3eqIxyFfrlaSyHYQjCt1YV+tVqvXulMt4abVHxuWpvvXuZlY0IAl99LLX3eYhy8toXU",
-	"N+HLCOR3lS7078C/DPHXKU7eI+OBgaIuPj2ucYxV8rT6armxIVVaYqjttiOoFIPxUpKVeAGns7EvB3Jn",
-	"vpk6yMYhsNibx/nfB7dXqSI1SkQZVkjK1JxIt1GJTSYAXzqg/Ywg2lCeh/Acy/U38sIwURK1P67XybwY",
-	"GEJi2bSts2XiOb+Lg/LmJJNRjXPv68Tz/wlqXej/5fOAzMfpmKdRIUlD55y5FaUI7BNfizYf8pWaqlLV",
-	"qU9bu4MwMtRn+vX69TfhPgdymN8LGCbNoOi/C1VK/eYbKbuYehrxCxB+M9aJNFHVwGUzKGiVzB877w3t",
-	"J66wVkaNFhqJM4mwTBG0zkJUJojq2JSNh8AvcNakDaXrKqgyha6CyKq2JK3rs8mdEpjfzxOwzwlMKTjP",
-	"mlTAbabACy6VYDWneMKND6bw8z35t2n/wpI67eKVxzubRk/MFPiW9+prA8MAElpVY6IKGP5FbSemvyNh",
-	"T1p6LO4j7gaJC2E/xPnCA5HGab8+pcdxA/9FLZyrfcywUPSvwwKNh4DjOsezQdu8T149LNHjCrkhMNUD",
-	"I54r92MKv+S7DSIPSvzuzfdPL56BsMPI/O8actDZYzduxk2SnDiEqNu9shwVLWjoZJ3IY0C7gwo7crrQ",
-	"DXNb5LnD0rgGIxdv37z9Sfc3/Z8BAAD//w==",
+	"5FVNj9s2EP0rBFugF8VymwQNdCvabZFDkYWTW7AIuNLI4kLkKMORA2Oh/14MKUvetdbeoB8I0JstDjlv",
+	"3rw3c69LdB168Bx0ca9D2YAz8ecVEZL86Ag7ILYQP8PhM+870IUOTNZv9TBkmuBzbwkqXXwcw26yQxje",
+	"3kHJesjSuxsIHfoAz38/07ADz59sBZ5tbeHZIBZuLuG6xsCncEoCw1B9MvGsRnLyS1eG4QVbBzo7BVrb",
+	"Nl22DC4s1jJ+MERmL//PVpVpByGYLSyeESIvHvQByBsHl3k6yn50bU6bHdOwxN17NtyHU/aeSJ/pHVCw",
+	"6C9DG5Ec4k+TywXra5SnKggl2Y7jy3pz9f6D+uX6rcIdkOIG1J+GGchhYFW2FjyrGklVBhx6VaIPvQMK",
+	"K+mp5VaybNFNd6ojHIX+cbWWQrADbzqrC/1ytV691JnuDDex+Nx0Ni8b4z20+b0UMuQdhmS0LcSmCVlG",
+	"8L6tdKH/AP41xV/HOHmMjAMGCrr4+LjAMVbJ0+qL5cb6WGaJvrbbnqBSDMZJPVbiBZnOxqYcmJ3JZuoh",
+	"GyfAYmMe53/n272KFalRH8qwQlKm5si4DUo8MgH43APtZwTB+vI8hOf4bbiRF9I4idT+tF5H56Jn8JFl",
+	"03WtLSPP+V1IspuTTC41bfuujjx/T1DrQn+Xz9MxH0djHueEJPV925pbkYnAPjG1CPMhX7GpKlYd+7S1",
+	"O/AjQ0OmX61ffRXucyDT8F7AMGkGRfy9r2Lq119J2cXU03xfgPC7sa1IE1UNXDZJQavo/NA7Z2g/cYW1",
+	"Mmq00EiciYRliqBrLQRlvKiOTdk48PwCZ01aX7Z9BVWmsK0gsKotSeuGLFlTovL7efYNOYEpBeRZhwqy",
+	"zRR4waISrOYUT1jxwfx9viH/MeFfWE+nLbxyeGfj3AmZAtfxXn1pIE0foVU1JiiP/j8UdmT6G1L1pKXH",
+	"yj7iLulbCPshzBdmhYZprT4lxnHx/k0hnCt8zLBQ8W9pb4ZDwHGR41kSNu+jSw+7cyqPGwJTPbDguVo/",
+	"xPBLjtsgctLgN2+7f3vfJMIOk/L/a8Wks8c+3IwLJHowhajbvbIcFC1o6GSLyGNAu4MKe2p1oRvmrsjz",
+	"FkvTNhi4ePP6zc96uBn+CgAA//8=",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

@@ -1,7 +1,7 @@
 package alliance
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/gw2"
 	"github.com/funtimecoding/soil/pkg/gw2/check/alliance/aleeva_report"
@@ -48,16 +48,16 @@ func Log(
 		0,
 		time.UTC,
 	)
-	fmt.Printf(
+	console.Format(
 		"Match-up start: %s\n",
 		matchUpStart.Format(timeConstant.DateMinute),
 	)
-	fmt.Printf("Alliance tag: %s\n", tag)
-	fmt.Printf("Team: %s\n", currentTeam)
-	fmt.Printf("At-risk cut-off member: %s\n", atRiskCutOff)
+	console.Format("Alliance tag: %s\n", tag)
+	console.Format("Team: %s\n", currentTeam)
+	console.Format("At-risk cut-off member: %s\n", atRiskCutOff)
 	gw2.ImportAleevaFiles()
 	members := gw2.MembersOfGuild(gw2.NewEnvironment(), tag)
-	fmt.Printf("Members count: %d\n", len(members))
+	console.Format("Members count: %d\n", len(members))
 	var onTeam []string
 	var onDiscord []string
 	var confirmedNotOnTeam []string
@@ -74,7 +74,7 @@ func Log(
 	aleevaFile := gw2.LatestAleevaFile(
 		system.FilesMatching(systemConstant.Temporary, constant.AleevaPrefix),
 	)
-	fmt.Printf(
+	console.Format(
 		"Latest Aleeva file: %s\n",
 		join.Absolute(systemConstant.Temporary, aleevaFile),
 	)
@@ -147,11 +147,11 @@ func Log(
 	}
 
 	if rowCount > 0 {
-		fmt.Printf("Not on team members (%d):\n", rowCount)
+		console.Format("Not on team members (%d):\n", rowCount)
 		errors.PanicOnError(t.Render())
 	}
 
-	fmt.Printf("Members: %s\n", stringJoin.Comma(members))
+	console.Format("Members: %s\n", stringJoin.Comma(members))
 	logs := log.NewSlice(
 		gw2.ParseLogs(system.ReadBytes(path, constant.LogFile), false),
 	)
@@ -164,10 +164,10 @@ func Log(
 	}
 
 	seen := log.LastSeenPerMemberSlice(members, logs, &matchUpStart)
-	fmt.Printf("Last seen since relink count: %d\n", len(seen))
+	console.Format("Last seen since relink count: %d\n", len(seen))
 
 	for _, v := range seen {
-		fmt.Printf(
+		console.Format(
 			"Last seen: %s: %s\n",
 			v.Name,
 			v.Time.Format(timeConstant.DateMinute),
@@ -187,7 +187,7 @@ func Log(
 			}
 		} else {
 			if slices.Contains(exceptionNames, member) {
-				fmt.Printf("Found anyway exception: %s\n", member)
+				console.Format("Found anyway exception: %s\n", member)
 			}
 		}
 	}
@@ -197,11 +197,11 @@ func Log(
 	for _, e := range exceptionNames {
 		if !slices.Contains(members, e) {
 			uselessException = append(uselessException, e)
-			fmt.Printf("Useless exception: %s\n", e)
+			console.Format("Useless exception: %s\n", e)
 		}
 	}
 
-	fmt.Printf("Useless exceptions: %d\n", len(uselessException))
+	console.Format("Useless exceptions: %d\n", len(uselessException))
 	guildReport := guilds.Parse(systemConstant.Temporary)
 
 	if false {
@@ -209,19 +209,19 @@ func Log(
 		for guild, guildMembers := range guildReport {
 			for _, e := range guildMembers {
 				if !slices.Contains(members, e) {
-					fmt.Printf("Guild member not found: %s %s\n", guild, e)
+					console.Format("Guild member not found: %s %s\n", guild, e)
 				}
 			}
 		}
 	}
 
 	sort.Strings(foundExceptions)
-	fmt.Printf(
+	console.Format(
 		"Exceptions (%d): %s\n",
 		len(foundExceptions),
 		stringJoin.Comma(foundExceptions),
 	)
-	fmt.Printf("Never seen count: %d\n", len(neverSeen))
+	console.Format("Never seen count: %d\n", len(neverSeen))
 	sort.Strings(neverSeen)
 
 	for _, name := range neverSeen {
@@ -247,14 +247,14 @@ func Log(
 			labels = append(labels, "at-risk")
 		}
 
-		fmt.Printf("Never seen: %s %s\n", name, stringJoin.Space(labels...))
+		console.Format("Never seen: %s %s\n", name, stringJoin.Space(labels...))
 	}
 
 	daysAgo := 56
 	ago := time.Now().AddDate(0, 0, -daysAgo)
 	seenDays := log.SeenDaysPerMemberSlice(members, logs, &ago)
-	fmt.Printf("Total members: %d\n", len(members))
-	fmt.Printf(
+	console.Format("Total members: %d\n", len(members))
+	console.Format(
 		"  Seen days count since %s (%d days): %d\n",
 		ago.Format(timeConstant.DateMinute),
 		daysAgo,
@@ -271,7 +271,7 @@ func Log(
 		}
 	}
 
-	fmt.Printf("  Less than four days count: %d\n", len(lessThanFour))
+	console.Format("  Less than four days count: %d\n", len(lessThanFour))
 	var neverSeenDays []string
 	var exceptionCount int
 	var noAleevaOrNotOnTeamCount int
@@ -297,10 +297,13 @@ func Log(
 		}
 	}
 
-	fmt.Printf("  Never seen days count: %d\n", len(neverSeenDays))
-	fmt.Printf("    Exception count: %d\n", exceptionCount)
-	fmt.Printf("    Confirmed not on team count: %d\n", confirmedNotOnTeamCount)
-	fmt.Printf(
+	console.Format("  Never seen days count: %d\n", len(neverSeenDays))
+	console.Format("    Exception count: %d\n", exceptionCount)
+	console.Format(
+		"    Confirmed not on team count: %d\n",
+		confirmedNotOnTeamCount,
+	)
+	console.Format(
 		"    No Aleeva count: %d\n",
 		noAleevaOrNotOnTeamCount-confirmedNotOnTeamCount,
 	)
@@ -316,7 +319,7 @@ func Log(
 			labels = append(labels, "at-risk")
 		}
 
-		fmt.Printf(
+		console.Format(
 			"Seen days: %d %s %s\n",
 			len(e.Days),
 			e.Name,
@@ -335,6 +338,6 @@ func Log(
 			labels = append(labels, "at-risk")
 		}
 
-		fmt.Printf("Seen days: 0 %s %s\n", e, stringJoin.Space(labels...))
+		console.Format("Seen days: 0 %s %s\n", e, stringJoin.Space(labels...))
 	}
 }

@@ -601,109 +601,109 @@ type CreateSnippetJSONRequestBody = SnippetCreateRequest
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 
-	// (GET /api/v1/containers)
+	// (GET /api/containers)
 	ListContainers(w http.ResponseWriter, r *http.Request, params ListContainersParams)
 
-	// (GET /api/v1/containers/{identifier})
+	// (GET /api/containers/{identifier})
 	GetContainer(w http.ResponseWriter, r *http.Request, identifier int64, params GetContainerParams)
 
-	// (POST /api/v1/containers/{identifier}/shutdown)
+	// (POST /api/containers/{identifier}/shutdown)
 	ShutdownContainer(w http.ResponseWriter, r *http.Request, identifier int64, params ShutdownContainerParams)
 
-	// (GET /api/v1/containers/{identifier}/snapshots)
+	// (GET /api/containers/{identifier}/snapshots)
 	ListContainerSnapshots(w http.ResponseWriter, r *http.Request, identifier int64, params ListContainerSnapshotsParams)
 
-	// (POST /api/v1/containers/{identifier}/snapshots)
+	// (POST /api/containers/{identifier}/snapshots)
 	CreateContainerSnapshot(w http.ResponseWriter, r *http.Request, identifier int64, params CreateContainerSnapshotParams)
 
-	// (DELETE /api/v1/containers/{identifier}/snapshots/{name})
+	// (DELETE /api/containers/{identifier}/snapshots/{name})
 	DeleteContainerSnapshot(w http.ResponseWriter, r *http.Request, identifier int64, name string, params DeleteContainerSnapshotParams)
 
-	// (POST /api/v1/containers/{identifier}/snapshots/{name}/rollback)
+	// (POST /api/containers/{identifier}/snapshots/{name}/rollback)
 	RollbackContainerSnapshot(w http.ResponseWriter, r *http.Request, identifier int64, name string, params RollbackContainerSnapshotParams)
 
-	// (POST /api/v1/containers/{identifier}/start)
+	// (POST /api/containers/{identifier}/start)
 	StartContainer(w http.ResponseWriter, r *http.Request, identifier int64, params StartContainerParams)
 
-	// (POST /api/v1/containers/{identifier}/stop)
+	// (POST /api/containers/{identifier}/stop)
 	StopContainer(w http.ResponseWriter, r *http.Request, identifier int64, params StopContainerParams)
 
-	// (GET /api/v1/hardware-address)
+	// (GET /api/hardware-address)
 	DeriveHardwareAddress(w http.ResponseWriter, r *http.Request, params DeriveHardwareAddressParams)
 
-	// (GET /api/v1/instances)
+	// (GET /api/instances)
 	ListInstances(w http.ResponseWriter, r *http.Request)
 
-	// (GET /api/v1/machines)
+	// (GET /api/machines)
 	ListMachines(w http.ResponseWriter, r *http.Request, params ListMachinesParams)
 
-	// (POST /api/v1/machines)
+	// (POST /api/machines)
 	CreateMachine(w http.ResponseWriter, r *http.Request, params CreateMachineParams)
 
-	// (DELETE /api/v1/machines/{identifier})
+	// (DELETE /api/machines/{identifier})
 	DeleteMachine(w http.ResponseWriter, r *http.Request, identifier int64, params DeleteMachineParams)
 
-	// (GET /api/v1/machines/{identifier})
+	// (GET /api/machines/{identifier})
 	GetMachine(w http.ResponseWriter, r *http.Request, identifier int64, params GetMachineParams)
 
-	// (PATCH /api/v1/machines/{identifier})
+	// (PATCH /api/machines/{identifier})
 	UpdateMachine(w http.ResponseWriter, r *http.Request, identifier int64, params UpdateMachineParams)
 
-	// (POST /api/v1/machines/{identifier}/clone)
+	// (POST /api/machines/{identifier}/clone)
 	CloneMachine(w http.ResponseWriter, r *http.Request, identifier int64, params CloneMachineParams)
 
-	// (POST /api/v1/machines/{identifier}/reset)
+	// (POST /api/machines/{identifier}/reset)
 	ResetMachine(w http.ResponseWriter, r *http.Request, identifier int64, params ResetMachineParams)
 
-	// (POST /api/v1/machines/{identifier}/shutdown)
+	// (POST /api/machines/{identifier}/shutdown)
 	ShutdownMachine(w http.ResponseWriter, r *http.Request, identifier int64, params ShutdownMachineParams)
 
-	// (GET /api/v1/machines/{identifier}/snapshots)
+	// (GET /api/machines/{identifier}/snapshots)
 	ListMachineSnapshots(w http.ResponseWriter, r *http.Request, identifier int64, params ListMachineSnapshotsParams)
 
-	// (POST /api/v1/machines/{identifier}/snapshots)
+	// (POST /api/machines/{identifier}/snapshots)
 	CreateMachineSnapshot(w http.ResponseWriter, r *http.Request, identifier int64, params CreateMachineSnapshotParams)
 
-	// (DELETE /api/v1/machines/{identifier}/snapshots/{name})
+	// (DELETE /api/machines/{identifier}/snapshots/{name})
 	DeleteMachineSnapshot(w http.ResponseWriter, r *http.Request, identifier int64, name string, params DeleteMachineSnapshotParams)
 
-	// (POST /api/v1/machines/{identifier}/snapshots/{name}/rollback)
+	// (POST /api/machines/{identifier}/snapshots/{name}/rollback)
 	RollbackMachineSnapshot(w http.ResponseWriter, r *http.Request, identifier int64, name string, params RollbackMachineSnapshotParams)
 
-	// (POST /api/v1/machines/{identifier}/start)
+	// (POST /api/machines/{identifier}/start)
 	StartMachine(w http.ResponseWriter, r *http.Request, identifier int64, params StartMachineParams)
 
-	// (POST /api/v1/machines/{identifier}/stop)
+	// (POST /api/machines/{identifier}/stop)
 	StopMachine(w http.ResponseWriter, r *http.Request, identifier int64, params StopMachineParams)
 
-	// (GET /api/v1/nodes)
+	// (GET /api/nodes)
 	ListNodes(w http.ResponseWriter, r *http.Request, params ListNodesParams)
 
-	// (GET /api/v1/nodes/{name}/networks)
+	// (GET /api/nodes/{name}/networks)
 	ListNetworks(w http.ResponseWriter, r *http.Request, name string, params ListNetworksParams)
 
-	// (GET /api/v1/nodes/{name}/status)
+	// (GET /api/nodes/{name}/status)
 	GetNodeStatus(w http.ResponseWriter, r *http.Request, name string, params GetNodeStatusParams)
 
-	// (GET /api/v1/nodes/{name}/storages)
+	// (GET /api/nodes/{name}/storages)
 	ListStorages(w http.ResponseWriter, r *http.Request, name string, params ListStoragesParams)
 
-	// (GET /api/v1/nodes/{name}/storages/{storage}/content)
+	// (GET /api/nodes/{name}/storages/{storage}/content)
 	ListStorageContent(w http.ResponseWriter, r *http.Request, name string, storage string, params ListStorageContentParams)
 
-	// (POST /api/v1/nodes/{name}/storages/{storage}/download)
+	// (POST /api/nodes/{name}/storages/{storage}/download)
 	DownloadLocator(w http.ResponseWriter, r *http.Request, name string, storage string, params DownloadLocatorParams)
 
-	// (GET /api/v1/snippets)
+	// (GET /api/snippets)
 	ListSnippets(w http.ResponseWriter, r *http.Request, params ListSnippetsParams)
 
-	// (POST /api/v1/snippets)
+	// (POST /api/snippets)
 	CreateSnippet(w http.ResponseWriter, r *http.Request, params CreateSnippetParams)
 
-	// (DELETE /api/v1/snippets/{name})
+	// (DELETE /api/snippets/{name})
 	DeleteSnippet(w http.ResponseWriter, r *http.Request, name string, params DeleteSnippetParams)
 
-	// (GET /api/v1/snippets/{name})
+	// (GET /api/snippets/{name})
 	GetSnippet(w http.ResponseWriter, r *http.Request, name string, params GetSnippetParams)
 }
 
@@ -2581,41 +2581,41 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 		ErrorHandlerFunc:   options.ErrorHandlerFunc,
 	}
 
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/instances", wrapper.ListInstances)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/hardware-address", wrapper.DeriveHardwareAddress)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/nodes", wrapper.ListNodes)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/nodes/{name}/status", wrapper.GetNodeStatus)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/machines", wrapper.ListMachines)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/machines", wrapper.CreateMachine)
-	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/v1/machines/{identifier}", wrapper.DeleteMachine)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/machines/{identifier}", wrapper.GetMachine)
-	m.HandleFunc(http.MethodPatch+" "+options.BaseURL+"/api/v1/machines/{identifier}", wrapper.UpdateMachine)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/machines/{identifier}/snapshots", wrapper.ListMachineSnapshots)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/machines/{identifier}/snapshots", wrapper.CreateMachineSnapshot)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/machines/{identifier}/snapshots/{name}/rollback", wrapper.RollbackMachineSnapshot)
-	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/v1/machines/{identifier}/snapshots/{name}", wrapper.DeleteMachineSnapshot)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/machines/{identifier}/start", wrapper.StartMachine)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/machines/{identifier}/stop", wrapper.StopMachine)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/machines/{identifier}/shutdown", wrapper.ShutdownMachine)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/machines/{identifier}/reset", wrapper.ResetMachine)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/nodes/{name}/networks", wrapper.ListNetworks)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/containers/{identifier}/start", wrapper.StartContainer)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/containers/{identifier}/stop", wrapper.StopContainer)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/containers/{identifier}/shutdown", wrapper.ShutdownContainer)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/containers", wrapper.ListContainers)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/containers/{identifier}", wrapper.GetContainer)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/containers/{identifier}/snapshots", wrapper.ListContainerSnapshots)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/containers/{identifier}/snapshots", wrapper.CreateContainerSnapshot)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/containers/{identifier}/snapshots/{name}/rollback", wrapper.RollbackContainerSnapshot)
-	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/v1/containers/{identifier}/snapshots/{name}", wrapper.DeleteContainerSnapshot)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/machines/{identifier}/clone", wrapper.CloneMachine)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/nodes/{name}/storages", wrapper.ListStorages)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/nodes/{name}/storages/{storage}/content", wrapper.ListStorageContent)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/snippets", wrapper.ListSnippets)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/snippets", wrapper.CreateSnippet)
-	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/v1/snippets/{name}", wrapper.DeleteSnippet)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/snippets/{name}", wrapper.GetSnippet)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/nodes/{name}/storages/{storage}/download", wrapper.DownloadLocator)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/instances", wrapper.ListInstances)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/hardware-address", wrapper.DeriveHardwareAddress)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/nodes", wrapper.ListNodes)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/nodes/{name}/status", wrapper.GetNodeStatus)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/machines", wrapper.ListMachines)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/machines", wrapper.CreateMachine)
+	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/machines/{identifier}", wrapper.DeleteMachine)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/machines/{identifier}", wrapper.GetMachine)
+	m.HandleFunc(http.MethodPatch+" "+options.BaseURL+"/api/machines/{identifier}", wrapper.UpdateMachine)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/machines/{identifier}/snapshots", wrapper.ListMachineSnapshots)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/machines/{identifier}/snapshots", wrapper.CreateMachineSnapshot)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/machines/{identifier}/snapshots/{name}/rollback", wrapper.RollbackMachineSnapshot)
+	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/machines/{identifier}/snapshots/{name}", wrapper.DeleteMachineSnapshot)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/machines/{identifier}/start", wrapper.StartMachine)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/machines/{identifier}/stop", wrapper.StopMachine)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/machines/{identifier}/shutdown", wrapper.ShutdownMachine)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/machines/{identifier}/reset", wrapper.ResetMachine)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/nodes/{name}/networks", wrapper.ListNetworks)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/containers/{identifier}/start", wrapper.StartContainer)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/containers/{identifier}/stop", wrapper.StopContainer)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/containers/{identifier}/shutdown", wrapper.ShutdownContainer)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/containers", wrapper.ListContainers)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/containers/{identifier}", wrapper.GetContainer)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/containers/{identifier}/snapshots", wrapper.ListContainerSnapshots)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/containers/{identifier}/snapshots", wrapper.CreateContainerSnapshot)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/containers/{identifier}/snapshots/{name}/rollback", wrapper.RollbackContainerSnapshot)
+	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/containers/{identifier}/snapshots/{name}", wrapper.DeleteContainerSnapshot)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/machines/{identifier}/clone", wrapper.CloneMachine)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/nodes/{name}/storages", wrapper.ListStorages)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/nodes/{name}/storages/{storage}/content", wrapper.ListStorageContent)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/snippets", wrapper.ListSnippets)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/snippets", wrapper.CreateSnippet)
+	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/snippets/{name}", wrapper.DeleteSnippet)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/snippets/{name}", wrapper.GetSnippet)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/nodes/{name}/storages/{storage}/download", wrapper.DownloadLocator)
 
 	return m
 }
@@ -4706,109 +4706,109 @@ func (response GetSnippet500JSONResponse) VisitGetSnippetResponse(w http.Respons
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
 
-	// (GET /api/v1/containers)
+	// (GET /api/containers)
 	ListContainers(ctx context.Context, request ListContainersRequestObject) (ListContainersResponseObject, error)
 
-	// (GET /api/v1/containers/{identifier})
+	// (GET /api/containers/{identifier})
 	GetContainer(ctx context.Context, request GetContainerRequestObject) (GetContainerResponseObject, error)
 
-	// (POST /api/v1/containers/{identifier}/shutdown)
+	// (POST /api/containers/{identifier}/shutdown)
 	ShutdownContainer(ctx context.Context, request ShutdownContainerRequestObject) (ShutdownContainerResponseObject, error)
 
-	// (GET /api/v1/containers/{identifier}/snapshots)
+	// (GET /api/containers/{identifier}/snapshots)
 	ListContainerSnapshots(ctx context.Context, request ListContainerSnapshotsRequestObject) (ListContainerSnapshotsResponseObject, error)
 
-	// (POST /api/v1/containers/{identifier}/snapshots)
+	// (POST /api/containers/{identifier}/snapshots)
 	CreateContainerSnapshot(ctx context.Context, request CreateContainerSnapshotRequestObject) (CreateContainerSnapshotResponseObject, error)
 
-	// (DELETE /api/v1/containers/{identifier}/snapshots/{name})
+	// (DELETE /api/containers/{identifier}/snapshots/{name})
 	DeleteContainerSnapshot(ctx context.Context, request DeleteContainerSnapshotRequestObject) (DeleteContainerSnapshotResponseObject, error)
 
-	// (POST /api/v1/containers/{identifier}/snapshots/{name}/rollback)
+	// (POST /api/containers/{identifier}/snapshots/{name}/rollback)
 	RollbackContainerSnapshot(ctx context.Context, request RollbackContainerSnapshotRequestObject) (RollbackContainerSnapshotResponseObject, error)
 
-	// (POST /api/v1/containers/{identifier}/start)
+	// (POST /api/containers/{identifier}/start)
 	StartContainer(ctx context.Context, request StartContainerRequestObject) (StartContainerResponseObject, error)
 
-	// (POST /api/v1/containers/{identifier}/stop)
+	// (POST /api/containers/{identifier}/stop)
 	StopContainer(ctx context.Context, request StopContainerRequestObject) (StopContainerResponseObject, error)
 
-	// (GET /api/v1/hardware-address)
+	// (GET /api/hardware-address)
 	DeriveHardwareAddress(ctx context.Context, request DeriveHardwareAddressRequestObject) (DeriveHardwareAddressResponseObject, error)
 
-	// (GET /api/v1/instances)
+	// (GET /api/instances)
 	ListInstances(ctx context.Context, request ListInstancesRequestObject) (ListInstancesResponseObject, error)
 
-	// (GET /api/v1/machines)
+	// (GET /api/machines)
 	ListMachines(ctx context.Context, request ListMachinesRequestObject) (ListMachinesResponseObject, error)
 
-	// (POST /api/v1/machines)
+	// (POST /api/machines)
 	CreateMachine(ctx context.Context, request CreateMachineRequestObject) (CreateMachineResponseObject, error)
 
-	// (DELETE /api/v1/machines/{identifier})
+	// (DELETE /api/machines/{identifier})
 	DeleteMachine(ctx context.Context, request DeleteMachineRequestObject) (DeleteMachineResponseObject, error)
 
-	// (GET /api/v1/machines/{identifier})
+	// (GET /api/machines/{identifier})
 	GetMachine(ctx context.Context, request GetMachineRequestObject) (GetMachineResponseObject, error)
 
-	// (PATCH /api/v1/machines/{identifier})
+	// (PATCH /api/machines/{identifier})
 	UpdateMachine(ctx context.Context, request UpdateMachineRequestObject) (UpdateMachineResponseObject, error)
 
-	// (POST /api/v1/machines/{identifier}/clone)
+	// (POST /api/machines/{identifier}/clone)
 	CloneMachine(ctx context.Context, request CloneMachineRequestObject) (CloneMachineResponseObject, error)
 
-	// (POST /api/v1/machines/{identifier}/reset)
+	// (POST /api/machines/{identifier}/reset)
 	ResetMachine(ctx context.Context, request ResetMachineRequestObject) (ResetMachineResponseObject, error)
 
-	// (POST /api/v1/machines/{identifier}/shutdown)
+	// (POST /api/machines/{identifier}/shutdown)
 	ShutdownMachine(ctx context.Context, request ShutdownMachineRequestObject) (ShutdownMachineResponseObject, error)
 
-	// (GET /api/v1/machines/{identifier}/snapshots)
+	// (GET /api/machines/{identifier}/snapshots)
 	ListMachineSnapshots(ctx context.Context, request ListMachineSnapshotsRequestObject) (ListMachineSnapshotsResponseObject, error)
 
-	// (POST /api/v1/machines/{identifier}/snapshots)
+	// (POST /api/machines/{identifier}/snapshots)
 	CreateMachineSnapshot(ctx context.Context, request CreateMachineSnapshotRequestObject) (CreateMachineSnapshotResponseObject, error)
 
-	// (DELETE /api/v1/machines/{identifier}/snapshots/{name})
+	// (DELETE /api/machines/{identifier}/snapshots/{name})
 	DeleteMachineSnapshot(ctx context.Context, request DeleteMachineSnapshotRequestObject) (DeleteMachineSnapshotResponseObject, error)
 
-	// (POST /api/v1/machines/{identifier}/snapshots/{name}/rollback)
+	// (POST /api/machines/{identifier}/snapshots/{name}/rollback)
 	RollbackMachineSnapshot(ctx context.Context, request RollbackMachineSnapshotRequestObject) (RollbackMachineSnapshotResponseObject, error)
 
-	// (POST /api/v1/machines/{identifier}/start)
+	// (POST /api/machines/{identifier}/start)
 	StartMachine(ctx context.Context, request StartMachineRequestObject) (StartMachineResponseObject, error)
 
-	// (POST /api/v1/machines/{identifier}/stop)
+	// (POST /api/machines/{identifier}/stop)
 	StopMachine(ctx context.Context, request StopMachineRequestObject) (StopMachineResponseObject, error)
 
-	// (GET /api/v1/nodes)
+	// (GET /api/nodes)
 	ListNodes(ctx context.Context, request ListNodesRequestObject) (ListNodesResponseObject, error)
 
-	// (GET /api/v1/nodes/{name}/networks)
+	// (GET /api/nodes/{name}/networks)
 	ListNetworks(ctx context.Context, request ListNetworksRequestObject) (ListNetworksResponseObject, error)
 
-	// (GET /api/v1/nodes/{name}/status)
+	// (GET /api/nodes/{name}/status)
 	GetNodeStatus(ctx context.Context, request GetNodeStatusRequestObject) (GetNodeStatusResponseObject, error)
 
-	// (GET /api/v1/nodes/{name}/storages)
+	// (GET /api/nodes/{name}/storages)
 	ListStorages(ctx context.Context, request ListStoragesRequestObject) (ListStoragesResponseObject, error)
 
-	// (GET /api/v1/nodes/{name}/storages/{storage}/content)
+	// (GET /api/nodes/{name}/storages/{storage}/content)
 	ListStorageContent(ctx context.Context, request ListStorageContentRequestObject) (ListStorageContentResponseObject, error)
 
-	// (POST /api/v1/nodes/{name}/storages/{storage}/download)
+	// (POST /api/nodes/{name}/storages/{storage}/download)
 	DownloadLocator(ctx context.Context, request DownloadLocatorRequestObject) (DownloadLocatorResponseObject, error)
 
-	// (GET /api/v1/snippets)
+	// (GET /api/snippets)
 	ListSnippets(ctx context.Context, request ListSnippetsRequestObject) (ListSnippetsResponseObject, error)
 
-	// (POST /api/v1/snippets)
+	// (POST /api/snippets)
 	CreateSnippet(ctx context.Context, request CreateSnippetRequestObject) (CreateSnippetResponseObject, error)
 
-	// (DELETE /api/v1/snippets/{name})
+	// (DELETE /api/snippets/{name})
 	DeleteSnippet(ctx context.Context, request DeleteSnippetRequestObject) (DeleteSnippetResponseObject, error)
 
-	// (GET /api/v1/snippets/{name})
+	// (GET /api/snippets/{name})
 	GetSnippet(ctx context.Context, request GetSnippetRequestObject) (GetSnippetResponseObject, error)
 }
 
@@ -5846,50 +5846,50 @@ func (sh *strictHandler) GetSnippet(w http.ResponseWriter, r *http.Request, name
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
+	"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",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

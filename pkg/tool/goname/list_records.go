@@ -1,7 +1,7 @@
 package goname
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/hetzner"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/spf13/cobra"
@@ -19,7 +19,7 @@ func listRecords(c *hetzner.Client) *cobra.Command {
 			z := zoneByName(c, arguments[0])
 
 			for _, r := range c.Records(z) {
-				fmt.Printf(
+				console.Format(
 					"%s %s %s\n",
 					r.Type,
 					r.Name,

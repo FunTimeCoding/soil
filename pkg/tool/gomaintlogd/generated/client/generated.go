@@ -145,33 +145,33 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 // The interface specification for the client above.
 type ClientInterface interface {
 
-	// GetEntries performs a GET /api/v1/entries (the `GetEntries` operationId) request.
+	// GetEntries performs a GET /api/entries (the `GetEntries` operationId) request.
 	GetEntries(ctx context.Context, params *GetEntriesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PostEntryWithBody performs a POST /api/v1/entries (the `PostEntry` operationId) request,
+	// PostEntryWithBody performs a POST /api/entries (the `PostEntry` operationId) request,
 	// with any type of body and a specified content type.
 	PostEntryWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PostEntry performs a POST /api/v1/entries (the `PostEntry` operationId) request.
+	// PostEntry performs a POST /api/entries (the `PostEntry` operationId) request.
 	// Takes a body of the `application/json` content type.
 	PostEntry(ctx context.Context, body PostEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// DeleteEntry performs a DELETE /api/v1/entries/{id} (the `DeleteEntry` operationId) request.
+	// DeleteEntry performs a DELETE /api/entries/{id} (the `DeleteEntry` operationId) request.
 	DeleteEntry(ctx context.Context, id int, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// UpdateEntryWithBody performs a PUT /api/v1/entries/{id} (the `UpdateEntry` operationId) request,
+	// UpdateEntryWithBody performs a PUT /api/entries/{id} (the `UpdateEntry` operationId) request,
 	// with any type of body and a specified content type.
 	UpdateEntryWithBody(ctx context.Context, id int, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// UpdateEntry performs a PUT /api/v1/entries/{id} (the `UpdateEntry` operationId) request.
+	// UpdateEntry performs a PUT /api/entries/{id} (the `UpdateEntry` operationId) request.
 	// Takes a body of the `application/json` content type.
 	UpdateEntry(ctx context.Context, id int, body UpdateEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetStatus performs a GET /api/v1/status (the `GetStatus` operationId) request.
+	// GetStatus performs a GET /api/status (the `GetStatus` operationId) request.
 	GetStatus(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
 
-// GetEntries performs a GET /api/v1/entries (the `GetEntries` operationId) request.
+// GetEntries performs a GET /api/entries (the `GetEntries` operationId) request.
 func (c *Client) GetEntries(ctx context.Context, params *GetEntriesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetEntriesRequest(c.Server, params)
 	if err != nil {
@@ -184,7 +184,7 @@ func (c *Client) GetEntries(ctx context.Context, params *GetEntriesParams, reqEd
 	return c.Client.Do(req)
 }
 
-// PostEntryWithBody performs a POST /api/v1/entries (the `PostEntry` operationId) request,
+// PostEntryWithBody performs a POST /api/entries (the `PostEntry` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) PostEntryWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewPostEntryRequestWithBody(c.Server, contentType, body)
@@ -198,7 +198,7 @@ func (c *Client) PostEntryWithBody(ctx context.Context, contentType string, body
 	return c.Client.Do(req)
 }
 
-// PostEntry performs a POST /api/v1/entries (the `PostEntry` operationId) request.
+// PostEntry performs a POST /api/entries (the `PostEntry` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) PostEntry(ctx context.Context, body PostEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewPostEntryRequest(c.Server, body)
@@ -212,7 +212,7 @@ func (c *Client) PostEntry(ctx context.Context, body PostEntryJSONRequestBody, r
 	return c.Client.Do(req)
 }
 
-// DeleteEntry performs a DELETE /api/v1/entries/{id} (the `DeleteEntry` operationId) request.
+// DeleteEntry performs a DELETE /api/entries/{id} (the `DeleteEntry` operationId) request.
 func (c *Client) DeleteEntry(ctx context.Context, id int, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewDeleteEntryRequest(c.Server, id)
 	if err != nil {
@@ -225,7 +225,7 @@ func (c *Client) DeleteEntry(ctx context.Context, id int, reqEditors ...RequestE
 	return c.Client.Do(req)
 }
 
-// UpdateEntryWithBody performs a PUT /api/v1/entries/{id} (the `UpdateEntry` operationId) request,
+// UpdateEntryWithBody performs a PUT /api/entries/{id} (the `UpdateEntry` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) UpdateEntryWithBody(ctx context.Context, id int, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewUpdateEntryRequestWithBody(c.Server, id, contentType, body)
@@ -239,7 +239,7 @@ func (c *Client) UpdateEntryWithBody(ctx context.Context, id int, contentType st
 	return c.Client.Do(req)
 }
 
-// UpdateEntry performs a PUT /api/v1/entries/{id} (the `UpdateEntry` operationId) request.
+// UpdateEntry performs a PUT /api/entries/{id} (the `UpdateEntry` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) UpdateEntry(ctx context.Context, id int, body UpdateEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewUpdateEntryRequest(c.Server, id, body)
@@ -253,7 +253,7 @@ func (c *Client) UpdateEntry(ctx context.Context, id int, body UpdateEntryJSONRe
 	return c.Client.Do(req)
 }
 
-// GetStatus performs a GET /api/v1/status (the `GetStatus` operationId) request.
+// GetStatus performs a GET /api/status (the `GetStatus` operationId) request.
 func (c *Client) GetStatus(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetStatusRequest(c.Server)
 	if err != nil {
@@ -275,7 +275,7 @@ func NewGetEntriesRequest(server string, params *GetEntriesParams) (*http.Reques
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/entries")
+	operationPath := fmt.Sprintf("/api/entries")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -400,7 +400,7 @@ func NewPostEntryRequestWithBody(server string, contentType string, body io.Read
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/entries")
+	operationPath := fmt.Sprintf("/api/entries")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -436,7 +436,7 @@ func NewDeleteEntryRequest(server string, id int) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/entries/%s", pathParam0)
+	operationPath := fmt.Sprintf("/api/entries/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -481,7 +481,7 @@ func NewUpdateEntryRequestWithBody(server string, id int, contentType string, bo
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/entries/%s", pathParam0)
+	operationPath := fmt.Sprintf("/api/entries/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -510,7 +510,7 @@ func NewGetStatusRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/status")
+	operationPath := fmt.Sprintf("/api/status")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -572,37 +572,37 @@ func WithBaseURL(baseURL string) ClientOption {
 // ClientWithResponsesInterface is the interface specification for the client with responses above.
 type ClientWithResponsesInterface interface {
 
-	// GetEntriesWithResponse performs a GET /api/v1/entries (the `GetEntries` operationId) request.
+	// GetEntriesWithResponse performs a GET /api/entries (the `GetEntries` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetEntriesWithResponse(ctx context.Context, params *GetEntriesParams, reqEditors ...RequestEditorFn) (*GetEntriesResponse, error)
 
-	// PostEntryWithBodyWithResponse performs a POST /api/v1/entries (the `PostEntry` operationId) request,
+	// PostEntryWithBodyWithResponse performs a POST /api/entries (the `PostEntry` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	PostEntryWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostEntryResponse, error)
 
-	// PostEntryWithResponse performs a POST /api/v1/entries (the `PostEntry` operationId) request.
+	// PostEntryWithResponse performs a POST /api/entries (the `PostEntry` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	PostEntryWithResponse(ctx context.Context, body PostEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*PostEntryResponse, error)
 
-	// DeleteEntryWithResponse performs a DELETE /api/v1/entries/{id} (the `DeleteEntry` operationId) request.
+	// DeleteEntryWithResponse performs a DELETE /api/entries/{id} (the `DeleteEntry` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	DeleteEntryWithResponse(ctx context.Context, id int, reqEditors ...RequestEditorFn) (*DeleteEntryResponse, error)
 
-	// UpdateEntryWithBodyWithResponse performs a PUT /api/v1/entries/{id} (the `UpdateEntry` operationId) request,
+	// UpdateEntryWithBodyWithResponse performs a PUT /api/entries/{id} (the `UpdateEntry` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	UpdateEntryWithBodyWithResponse(ctx context.Context, id int, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateEntryResponse, error)
 
-	// UpdateEntryWithResponse performs a PUT /api/v1/entries/{id} (the `UpdateEntry` operationId) request.
+	// UpdateEntryWithResponse performs a PUT /api/entries/{id} (the `UpdateEntry` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	UpdateEntryWithResponse(ctx context.Context, id int, body UpdateEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateEntryResponse, error)
 
-	// GetStatusWithResponse performs a GET /api/v1/status (the `GetStatus` operationId) request.
+	// GetStatusWithResponse performs a GET /api/status (the `GetStatus` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetStatusWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetStatusResponse, error)
@@ -848,7 +848,7 @@ func (r GetStatusResponse) ContentType() string {
 	return ""
 }
 
-// GetEntriesWithResponse performs a GET /api/v1/entries (the `GetEntries` operationId) request.
+// GetEntriesWithResponse performs a GET /api/entries (the `GetEntries` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetEntriesWithResponse(ctx context.Context, params *GetEntriesParams, reqEditors ...RequestEditorFn) (*GetEntriesResponse, error) {
@@ -859,7 +859,7 @@ func (c *ClientWithResponses) GetEntriesWithResponse(ctx context.Context, params
 	return ParseGetEntriesResponse(rsp)
 }
 
-// PostEntryWithBodyWithResponse performs a POST /api/v1/entries (the `PostEntry` operationId) request,
+// PostEntryWithBodyWithResponse performs a POST /api/entries (the `PostEntry` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -871,7 +871,7 @@ func (c *ClientWithResponses) PostEntryWithBodyWithResponse(ctx context.Context,
 	return ParsePostEntryResponse(rsp)
 }
 
-// PostEntryWithResponse performs a POST /api/v1/entries (the `PostEntry` operationId) request.
+// PostEntryWithResponse performs a POST /api/entries (the `PostEntry` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) PostEntryWithResponse(ctx context.Context, body PostEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*PostEntryResponse, error) {
 	rsp, err := c.PostEntry(ctx, body, reqEditors...)
@@ -881,7 +881,7 @@ func (c *ClientWithResponses) PostEntryWithResponse(ctx context.Context, body Po
 	return ParsePostEntryResponse(rsp)
 }
 
-// DeleteEntryWithResponse performs a DELETE /api/v1/entries/{id} (the `DeleteEntry` operationId) request.
+// DeleteEntryWithResponse performs a DELETE /api/entries/{id} (the `DeleteEntry` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) DeleteEntryWithResponse(ctx context.Context, id int, reqEditors ...RequestEditorFn) (*DeleteEntryResponse, error) {
@@ -892,7 +892,7 @@ func (c *ClientWithResponses) DeleteEntryWithResponse(ctx context.Context, id in
 	return ParseDeleteEntryResponse(rsp)
 }
 
-// UpdateEntryWithBodyWithResponse performs a PUT /api/v1/entries/{id} (the `UpdateEntry` operationId) request,
+// UpdateEntryWithBodyWithResponse performs a PUT /api/entries/{id} (the `UpdateEntry` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -904,7 +904,7 @@ func (c *ClientWithResponses) UpdateEntryWithBodyWithResponse(ctx context.Contex
 	return ParseUpdateEntryResponse(rsp)
 }
 
-// UpdateEntryWithResponse performs a PUT /api/v1/entries/{id} (the `UpdateEntry` operationId) request.
+// UpdateEntryWithResponse performs a PUT /api/entries/{id} (the `UpdateEntry` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) UpdateEntryWithResponse(ctx context.Context, id int, body UpdateEntryJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateEntryResponse, error) {
 	rsp, err := c.UpdateEntry(ctx, id, body, reqEditors...)
@@ -914,7 +914,7 @@ func (c *ClientWithResponses) UpdateEntryWithResponse(ctx context.Context, id in
 	return ParseUpdateEntryResponse(rsp)
 }
 
-// GetStatusWithResponse performs a GET /api/v1/status (the `GetStatus` operationId) request.
+// GetStatusWithResponse performs a GET /api/status (the `GetStatus` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetStatusWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetStatusResponse, error) {

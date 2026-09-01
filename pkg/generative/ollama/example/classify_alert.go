@@ -2,6 +2,7 @@ package example
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	generative "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/ollama"
 	"github.com/funtimecoding/soil/pkg/system"
@@ -22,16 +23,16 @@ func ClassifyAlert() {
 				alert,
 			),
 		)
-		fmt.Println(r.Text)
+		console.Line(r.Text)
 		r.Print()
 	}
 
 	if true {
 		p := ollama.ClassifyAlert()
 		r := o.GenerateNotation(p.Render())
-		fmt.Printf("Response: %+v\n", r)
+		console.Format("Response: %+v\n", r)
 		response := p.ParseResponse(r.Text)
-		fmt.Printf("To save: %s", response)
+		console.Format("To save: %s", response)
 		base := join.Absolute(constant.Temporary, generative.OllamaScheme)
 		system.EnsurePathExists(base)
 		system.SaveFile(

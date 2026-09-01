@@ -2,7 +2,7 @@ package goclaude
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
@@ -26,7 +26,7 @@ func sessionFind(c *command_context.Context) *cobra.Command {
 			matches := response.JSON200.Matches
 
 			if len(matches) == 0 {
-				fmt.Printf(
+				console.Format(
 					"no sessions with tool calls matching %q\n",
 					arguments[0],
 				)
@@ -35,7 +35,7 @@ func sessionFind(c *command_context.Context) *cobra.Command {
 			}
 
 			for _, m := range matches {
-				fmt.Printf("%4d  %.8s  %s\n", m.Count, m.SessionId, m.Name)
+				console.Format("%4d  %.8s  %s\n", m.Count, m.SessionId, m.Name)
 			}
 		},
 	}

@@ -2,7 +2,7 @@ package example
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/system/environment"
@@ -21,5 +21,5 @@ func Alternate() {
 		},
 	)
 	errors.PanicOnError(e)
-	fmt.Println(r.Choices[0].Message.Content)
+	console.Line(r.Choices[0].Message.Content)
 }

@@ -1,7 +1,7 @@
 package lint
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	lintConstant "github.com/funtimecoding/soil/pkg/lint/constant"
@@ -27,7 +27,7 @@ func Lint(
 	) {
 		if Skipped(skip, p) {
 			if verbose {
-				fmt.Printf("Skip empty directory: %s\n", p)
+				console.Format("Skip empty directory: %s\n", p)
 			}
 
 			continue
@@ -56,7 +56,7 @@ func Lint(
 	) {
 		if Skipped(skip, p) {
 			if verbose {
-				fmt.Printf("Skip file: %s\n", p)
+				console.Format("Skip file: %s\n", p)
 			}
 
 			continue
@@ -64,7 +64,7 @@ func Lint(
 
 		if !system.FileEmpty(p) {
 			if verbose {
-				fmt.Printf("Non empty file: %s\n", p)
+				console.Format("Non empty file: %s\n", p)
 			}
 
 			continue

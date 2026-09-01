@@ -4,7 +4,7 @@ info:
   title: goraidd
   version: 1.0.0
 paths:
-  /api/v1/logs:
+  /api/logs:
     get:
       operationId: getLogs
       parameters:
@@ -45,7 +45,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/reports:
+  /api/reports:
     get:
       operationId: getReports
       responses:

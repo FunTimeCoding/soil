@@ -3,7 +3,7 @@ package silence
 import (
 	"fmt"
 	"github.com/docker/go-units"
-	console "github.com/funtimecoding/soil/pkg/console/constant"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/time/constant"
@@ -22,14 +22,14 @@ func (s *Silence) Format(f *option.Format) string {
 
 	t.String(s.End.Format(constant.DateMinute))
 
-	if f.HasTag(console.TagState) {
+	if f.HasTag(consoleConstant.TagState) {
 		t.String(s.State)
 	}
 
 	t.DetailLink(s.Link, "Silence", "")
 
 	if v := s.formatComment(f); v != "" {
-		t.TagLine(console.TagComment, "  %s", v)
+		t.TagLine(consoleConstant.TagComment, "  %s", v)
 	}
 
 	return t.Format()

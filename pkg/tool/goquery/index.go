@@ -3,7 +3,7 @@ package goquery
 import (
 	"context"
 	"encoding/json"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 	"github.com/spf13/cobra"
@@ -31,7 +31,7 @@ func index(c *client.Client) *cobra.Command {
 			errors.PanicOnError(json.NewDecoder(r.Body).Decode(&results))
 
 			for _, v := range results {
-				fmt.Printf(
+				console.Format(
 					"%s: indexed=%d updated=%d unchanged=%d removed=%d\n",
 					v.Collection,
 					v.Indexed,

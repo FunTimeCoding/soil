@@ -1,7 +1,7 @@
 package goprocess
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/procfile"
@@ -33,7 +33,10 @@ func checkCommand() *cobra.Command {
 			}
 
 			sort.Strings(names)
-			fmt.Printf("valid procfile detected (%s)\n", join.CommaSpace(names))
+			console.Format(
+				"valid procfile detected (%s)\n",
+				join.CommaSpace(names),
+			)
 
 			return nil
 		},

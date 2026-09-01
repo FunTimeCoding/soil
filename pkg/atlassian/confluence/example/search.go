@@ -1,9 +1,9 @@
 package example
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
+	"github.com/funtimecoding/soil/pkg/console"
 )
 
 func Search() {
@@ -12,7 +12,7 @@ func Search() {
 
 	if true {
 		for _, r := range c.MustSearch("space=%s", c.DefaultSpace()) {
-			fmt.Println(r.Format(f))
+			console.Line(r.Format(f))
 		}
 	}
 

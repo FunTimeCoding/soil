@@ -400,169 +400,169 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 // The interface specification for the client above.
 type ClientInterface interface {
 
-	// CreatePageWithBody performs a POST /api/v1/confluence/page (the `CreatePage` operationId) request,
+	// CreatePageWithBody performs a POST /api/confluence/page (the `CreatePage` operationId) request,
 	// with any type of body and a specified content type.
 	CreatePageWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreatePage performs a POST /api/v1/confluence/page (the `CreatePage` operationId) request.
+	// CreatePage performs a POST /api/confluence/page (the `CreatePage` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreatePage(ctx context.Context, body CreatePageJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// DeletePage performs a DELETE /api/v1/confluence/page/{identifier} (the `DeletePage` operationId) request.
+	// DeletePage performs a DELETE /api/confluence/page/{identifier} (the `DeletePage` operationId) request.
 	DeletePage(ctx context.Context, identifier string, params *DeletePageParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetPage performs a GET /api/v1/confluence/page/{identifier} (the `GetPage` operationId) request.
+	// GetPage performs a GET /api/confluence/page/{identifier} (the `GetPage` operationId) request.
 	GetPage(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// UpdatePageWithBody performs a PUT /api/v1/confluence/page/{identifier} (the `UpdatePage` operationId) request,
+	// UpdatePageWithBody performs a PUT /api/confluence/page/{identifier} (the `UpdatePage` operationId) request,
 	// with any type of body and a specified content type.
 	UpdatePageWithBody(ctx context.Context, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// UpdatePage performs a PUT /api/v1/confluence/page/{identifier} (the `UpdatePage` operationId) request.
+	// UpdatePage performs a PUT /api/confluence/page/{identifier} (the `UpdatePage` operationId) request.
 	// Takes a body of the `application/json` content type.
 	UpdatePage(ctx context.Context, identifier string, body UpdatePageJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetPageChildren performs a GET /api/v1/confluence/page/{identifier}/children (the `GetPageChildren` operationId) request.
+	// GetPageChildren performs a GET /api/confluence/page/{identifier}/children (the `GetPageChildren` operationId) request.
 	GetPageChildren(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// AddPageCommentWithBody performs a POST /api/v1/confluence/page/{identifier}/comment (the `AddPageComment` operationId) request,
+	// AddPageCommentWithBody performs a POST /api/confluence/page/{identifier}/comment (the `AddPageComment` operationId) request,
 	// with any type of body and a specified content type.
 	AddPageCommentWithBody(ctx context.Context, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// AddPageComment performs a POST /api/v1/confluence/page/{identifier}/comment (the `AddPageComment` operationId) request.
+	// AddPageComment performs a POST /api/confluence/page/{identifier}/comment (the `AddPageComment` operationId) request.
 	// Takes a body of the `application/json` content type.
 	AddPageComment(ctx context.Context, identifier string, body AddPageCommentJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetPageDraft performs a GET /api/v1/confluence/page/{identifier}/draft (the `GetPageDraft` operationId) request.
+	// GetPageDraft performs a GET /api/confluence/page/{identifier}/draft (the `GetPageDraft` operationId) request.
 	GetPageDraft(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// EditPageWithBody performs a POST /api/v1/confluence/page/{identifier}/edit (the `EditPage` operationId) request,
+	// EditPageWithBody performs a POST /api/confluence/page/{identifier}/edit (the `EditPage` operationId) request,
 	// with any type of body and a specified content type.
 	EditPageWithBody(ctx context.Context, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// EditPage performs a POST /api/v1/confluence/page/{identifier}/edit (the `EditPage` operationId) request.
+	// EditPage performs a POST /api/confluence/page/{identifier}/edit (the `EditPage` operationId) request.
 	// Takes a body of the `application/json` content type.
 	EditPage(ctx context.Context, identifier string, body EditPageJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// SetPageStatusWithBody performs a POST /api/v1/confluence/page/{identifier}/status (the `SetPageStatus` operationId) request,
+	// SetPageStatusWithBody performs a POST /api/confluence/page/{identifier}/status (the `SetPageStatus` operationId) request,
 	// with any type of body and a specified content type.
 	SetPageStatusWithBody(ctx context.Context, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// SetPageStatus performs a POST /api/v1/confluence/page/{identifier}/status (the `SetPageStatus` operationId) request.
+	// SetPageStatus performs a POST /api/confluence/page/{identifier}/status (the `SetPageStatus` operationId) request.
 	// Takes a body of the `application/json` content type.
 	SetPageStatus(ctx context.Context, identifier string, body SetPageStatusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListPages performs a GET /api/v1/confluence/pages (the `ListPages` operationId) request.
+	// ListPages performs a GET /api/confluence/pages (the `ListPages` operationId) request.
 	ListPages(ctx context.Context, params *ListPagesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// SearchPages performs a GET /api/v1/confluence/search (the `SearchPages` operationId) request.
+	// SearchPages performs a GET /api/confluence/search (the `SearchPages` operationId) request.
 	SearchPages(ctx context.Context, params *SearchPagesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListSpaces performs a GET /api/v1/confluence/spaces (the `ListSpaces` operationId) request.
+	// ListSpaces performs a GET /api/confluence/spaces (the `ListSpaces` operationId) request.
 	ListSpaces(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateIssueWithBody performs a POST /api/v1/jira/issue (the `CreateIssue` operationId) request,
+	// CreateIssueWithBody performs a POST /api/jira/issue (the `CreateIssue` operationId) request,
 	// with any type of body and a specified content type.
 	CreateIssueWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// CreateIssue performs a POST /api/v1/jira/issue (the `CreateIssue` operationId) request.
+	// CreateIssue performs a POST /api/jira/issue (the `CreateIssue` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateIssue(ctx context.Context, body CreateIssueJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetIssue performs a GET /api/v1/jira/issue/{key} (the `GetIssue` operationId) request.
+	// GetIssue performs a GET /api/jira/issue/{key} (the `GetIssue` operationId) request.
 	GetIssue(ctx context.Context, key string, params *GetIssueParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetChecklist performs a GET /api/v1/jira/issue/{key}/checklist (the `GetChecklist` operationId) request.
+	// GetChecklist performs a GET /api/jira/issue/{key}/checklist (the `GetChecklist` operationId) request.
 	GetChecklist(ctx context.Context, key string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// AddChecklistItemWithBody performs a POST /api/v1/jira/issue/{key}/checklist (the `AddChecklistItem` operationId) request,
+	// AddChecklistItemWithBody performs a POST /api/jira/issue/{key}/checklist (the `AddChecklistItem` operationId) request,
 	// with any type of body and a specified content type.
 	AddChecklistItemWithBody(ctx context.Context, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// AddChecklistItem performs a POST /api/v1/jira/issue/{key}/checklist (the `AddChecklistItem` operationId) request.
+	// AddChecklistItem performs a POST /api/jira/issue/{key}/checklist (the `AddChecklistItem` operationId) request.
 	// Takes a body of the `application/json` content type.
 	AddChecklistItem(ctx context.Context, key string, body AddChecklistItemJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// DeleteChecklistItem performs a DELETE /api/v1/jira/issue/{key}/checklist/{index} (the `DeleteChecklistItem` operationId) request.
+	// DeleteChecklistItem performs a DELETE /api/jira/issue/{key}/checklist/{index} (the `DeleteChecklistItem` operationId) request.
 	DeleteChecklistItem(ctx context.Context, key string, index int, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// EditChecklistItemWithBody performs a PUT /api/v1/jira/issue/{key}/checklist/{index} (the `EditChecklistItem` operationId) request,
+	// EditChecklistItemWithBody performs a PUT /api/jira/issue/{key}/checklist/{index} (the `EditChecklistItem` operationId) request,
 	// with any type of body and a specified content type.
 	EditChecklistItemWithBody(ctx context.Context, key string, index int, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// EditChecklistItem performs a PUT /api/v1/jira/issue/{key}/checklist/{index} (the `EditChecklistItem` operationId) request.
+	// EditChecklistItem performs a PUT /api/jira/issue/{key}/checklist/{index} (the `EditChecklistItem` operationId) request.
 	// Takes a body of the `application/json` content type.
 	EditChecklistItem(ctx context.Context, key string, index int, body EditChecklistItemJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ToggleChecklistItem performs a POST /api/v1/jira/issue/{key}/checklist/{index}/toggle (the `ToggleChecklistItem` operationId) request.
+	// ToggleChecklistItem performs a POST /api/jira/issue/{key}/checklist/{index}/toggle (the `ToggleChecklistItem` operationId) request.
 	ToggleChecklistItem(ctx context.Context, key string, index int, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// AddIssueCommentWithBody performs a POST /api/v1/jira/issue/{key}/comment (the `AddIssueComment` operationId) request,
+	// AddIssueCommentWithBody performs a POST /api/jira/issue/{key}/comment (the `AddIssueComment` operationId) request,
 	// with any type of body and a specified content type.
 	AddIssueCommentWithBody(ctx context.Context, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// AddIssueComment performs a POST /api/v1/jira/issue/{key}/comment (the `AddIssueComment` operationId) request.
+	// AddIssueComment performs a POST /api/jira/issue/{key}/comment (the `AddIssueComment` operationId) request.
 	// Takes a body of the `application/json` content type.
 	AddIssueComment(ctx context.Context, key string, body AddIssueCommentJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// DeleteComment performs a DELETE /api/v1/jira/issue/{key}/comment/{identifier} (the `DeleteComment` operationId) request.
+	// DeleteComment performs a DELETE /api/jira/issue/{key}/comment/{identifier} (the `DeleteComment` operationId) request.
 	DeleteComment(ctx context.Context, key string, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// UpdateCommentWithBody performs a PUT /api/v1/jira/issue/{key}/comment/{identifier} (the `UpdateComment` operationId) request,
+	// UpdateCommentWithBody performs a PUT /api/jira/issue/{key}/comment/{identifier} (the `UpdateComment` operationId) request,
 	// with any type of body and a specified content type.
 	UpdateCommentWithBody(ctx context.Context, key string, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// UpdateComment performs a PUT /api/v1/jira/issue/{key}/comment/{identifier} (the `UpdateComment` operationId) request.
+	// UpdateComment performs a PUT /api/jira/issue/{key}/comment/{identifier} (the `UpdateComment` operationId) request.
 	// Takes a body of the `application/json` content type.
 	UpdateComment(ctx context.Context, key string, identifier string, body UpdateCommentJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// LinkIssuesWithBody performs a POST /api/v1/jira/issue/{key}/link (the `LinkIssues` operationId) request,
+	// LinkIssuesWithBody performs a POST /api/jira/issue/{key}/link (the `LinkIssues` operationId) request,
 	// with any type of body and a specified content type.
 	LinkIssuesWithBody(ctx context.Context, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// LinkIssues performs a POST /api/v1/jira/issue/{key}/link (the `LinkIssues` operationId) request.
+	// LinkIssues performs a POST /api/jira/issue/{key}/link (the `LinkIssues` operationId) request.
 	// Takes a body of the `application/json` content type.
 	LinkIssues(ctx context.Context, key string, body LinkIssuesJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// TransitionIssueWithBody performs a POST /api/v1/jira/issue/{key}/transition (the `TransitionIssue` operationId) request,
+	// TransitionIssueWithBody performs a POST /api/jira/issue/{key}/transition (the `TransitionIssue` operationId) request,
 	// with any type of body and a specified content type.
 	TransitionIssueWithBody(ctx context.Context, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// TransitionIssue performs a POST /api/v1/jira/issue/{key}/transition (the `TransitionIssue` operationId) request.
+	// TransitionIssue performs a POST /api/jira/issue/{key}/transition (the `TransitionIssue` operationId) request.
 	// Takes a body of the `application/json` content type.
 	TransitionIssue(ctx context.Context, key string, body TransitionIssueJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetTransitions performs a GET /api/v1/jira/issue/{key}/transitions (the `GetTransitions` operationId) request.
+	// GetTransitions performs a GET /api/jira/issue/{key}/transitions (the `GetTransitions` operationId) request.
 	GetTransitions(ctx context.Context, key string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// UpdateIssueWithBody performs a POST /api/v1/jira/issue/{key}/update (the `UpdateIssue` operationId) request,
+	// UpdateIssueWithBody performs a POST /api/jira/issue/{key}/update (the `UpdateIssue` operationId) request,
 	// with any type of body and a specified content type.
 	UpdateIssueWithBody(ctx context.Context, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// UpdateIssue performs a POST /api/v1/jira/issue/{key}/update (the `UpdateIssue` operationId) request.
+	// UpdateIssue performs a POST /api/jira/issue/{key}/update (the `UpdateIssue` operationId) request.
 	// Takes a body of the `application/json` content type.
 	UpdateIssue(ctx context.Context, key string, body UpdateIssueJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetLinkTypes performs a GET /api/v1/jira/link-types (the `GetLinkTypes` operationId) request.
+	// GetLinkTypes performs a GET /api/jira/link-types (the `GetLinkTypes` operationId) request.
 	GetLinkTypes(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// DeleteLink performs a DELETE /api/v1/jira/link/{identifier} (the `DeleteLink` operationId) request.
+	// DeleteLink performs a DELETE /api/jira/link/{identifier} (the `DeleteLink` operationId) request.
 	DeleteLink(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetCreateMeta performs a GET /api/v1/jira/meta (the `GetCreateMeta` operationId) request.
+	// GetCreateMeta performs a GET /api/jira/meta (the `GetCreateMeta` operationId) request.
 	GetCreateMeta(ctx context.Context, params *GetCreateMetaParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListProjects performs a GET /api/v1/jira/projects (the `ListProjects` operationId) request.
+	// ListProjects performs a GET /api/jira/projects (the `ListProjects` operationId) request.
 	ListProjects(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// SearchIssues performs a GET /api/v1/jira/search (the `SearchIssues` operationId) request.
+	// SearchIssues performs a GET /api/jira/search (the `SearchIssues` operationId) request.
 	SearchIssues(ctx context.Context, params *SearchIssuesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// SearchUsers performs a GET /api/v1/jira/users (the `SearchUsers` operationId) request.
+	// SearchUsers performs a GET /api/jira/users (the `SearchUsers` operationId) request.
 	SearchUsers(ctx context.Context, params *SearchUsersParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
 
-// CreatePageWithBody performs a POST /api/v1/confluence/page (the `CreatePage` operationId) request,
+// CreatePageWithBody performs a POST /api/confluence/page (the `CreatePage` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CreatePageWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreatePageRequestWithBody(c.Server, contentType, body)
@@ -576,7 +576,7 @@ func (c *Client) CreatePageWithBody(ctx context.Context, contentType string, bod
 	return c.Client.Do(req)
 }
 
-// CreatePage performs a POST /api/v1/confluence/page (the `CreatePage` operationId) request.
+// CreatePage performs a POST /api/confluence/page (the `CreatePage` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) CreatePage(ctx context.Context, body CreatePageJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreatePageRequest(c.Server, body)
@@ -590,7 +590,7 @@ func (c *Client) CreatePage(ctx context.Context, body CreatePageJSONRequestBody,
 	return c.Client.Do(req)
 }
 
-// DeletePage performs a DELETE /api/v1/confluence/page/{identifier} (the `DeletePage` operationId) request.
+// DeletePage performs a DELETE /api/confluence/page/{identifier} (the `DeletePage` operationId) request.
 func (c *Client) DeletePage(ctx context.Context, identifier string, params *DeletePageParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewDeletePageRequest(c.Server, identifier, params)
 	if err != nil {
@@ -603,7 +603,7 @@ func (c *Client) DeletePage(ctx context.Context, identifier string, params *Dele
 	return c.Client.Do(req)
 }
 
-// GetPage performs a GET /api/v1/confluence/page/{identifier} (the `GetPage` operationId) request.
+// GetPage performs a GET /api/confluence/page/{identifier} (the `GetPage` operationId) request.
 func (c *Client) GetPage(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetPageRequest(c.Server, identifier)
 	if err != nil {
@@ -616,7 +616,7 @@ func (c *Client) GetPage(ctx context.Context, identifier string, reqEditors ...R
 	return c.Client.Do(req)
 }
 
-// UpdatePageWithBody performs a PUT /api/v1/confluence/page/{identifier} (the `UpdatePage` operationId) request,
+// UpdatePageWithBody performs a PUT /api/confluence/page/{identifier} (the `UpdatePage` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) UpdatePageWithBody(ctx context.Context, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewUpdatePageRequestWithBody(c.Server, identifier, contentType, body)
@@ -630,7 +630,7 @@ func (c *Client) UpdatePageWithBody(ctx context.Context, identifier string, cont
 	return c.Client.Do(req)
 }
 
-// UpdatePage performs a PUT /api/v1/confluence/page/{identifier} (the `UpdatePage` operationId) request.
+// UpdatePage performs a PUT /api/confluence/page/{identifier} (the `UpdatePage` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) UpdatePage(ctx context.Context, identifier string, body UpdatePageJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewUpdatePageRequest(c.Server, identifier, body)
@@ -644,7 +644,7 @@ func (c *Client) UpdatePage(ctx context.Context, identifier string, body UpdateP
 	return c.Client.Do(req)
 }
 
-// GetPageChildren performs a GET /api/v1/confluence/page/{identifier}/children (the `GetPageChildren` operationId) request.
+// GetPageChildren performs a GET /api/confluence/page/{identifier}/children (the `GetPageChildren` operationId) request.
 func (c *Client) GetPageChildren(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetPageChildrenRequest(c.Server, identifier)
 	if err != nil {
@@ -657,7 +657,7 @@ func (c *Client) GetPageChildren(ctx context.Context, identifier string, reqEdit
 	return c.Client.Do(req)
 }
 
-// AddPageCommentWithBody performs a POST /api/v1/confluence/page/{identifier}/comment (the `AddPageComment` operationId) request,
+// AddPageCommentWithBody performs a POST /api/confluence/page/{identifier}/comment (the `AddPageComment` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) AddPageCommentWithBody(ctx context.Context, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewAddPageCommentRequestWithBody(c.Server, identifier, contentType, body)
@@ -671,7 +671,7 @@ func (c *Client) AddPageCommentWithBody(ctx context.Context, identifier string, 
 	return c.Client.Do(req)
 }
 
-// AddPageComment performs a POST /api/v1/confluence/page/{identifier}/comment (the `AddPageComment` operationId) request.
+// AddPageComment performs a POST /api/confluence/page/{identifier}/comment (the `AddPageComment` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) AddPageComment(ctx context.Context, identifier string, body AddPageCommentJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewAddPageCommentRequest(c.Server, identifier, body)
@@ -685,7 +685,7 @@ func (c *Client) AddPageComment(ctx context.Context, identifier string, body Add
 	return c.Client.Do(req)
 }
 
-// GetPageDraft performs a GET /api/v1/confluence/page/{identifier}/draft (the `GetPageDraft` operationId) request.
+// GetPageDraft performs a GET /api/confluence/page/{identifier}/draft (the `GetPageDraft` operationId) request.
 func (c *Client) GetPageDraft(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetPageDraftRequest(c.Server, identifier)
 	if err != nil {
@@ -698,7 +698,7 @@ func (c *Client) GetPageDraft(ctx context.Context, identifier string, reqEditors
 	return c.Client.Do(req)
 }
 
-// EditPageWithBody performs a POST /api/v1/confluence/page/{identifier}/edit (the `EditPage` operationId) request,
+// EditPageWithBody performs a POST /api/confluence/page/{identifier}/edit (the `EditPage` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) EditPageWithBody(ctx context.Context, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewEditPageRequestWithBody(c.Server, identifier, contentType, body)
@@ -712,7 +712,7 @@ func (c *Client) EditPageWithBody(ctx context.Context, identifier string, conten
 	return c.Client.Do(req)
 }
 
-// EditPage performs a POST /api/v1/confluence/page/{identifier}/edit (the `EditPage` operationId) request.
+// EditPage performs a POST /api/confluence/page/{identifier}/edit (the `EditPage` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) EditPage(ctx context.Context, identifier string, body EditPageJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewEditPageRequest(c.Server, identifier, body)
@@ -726,7 +726,7 @@ func (c *Client) EditPage(ctx context.Context, identifier string, body EditPageJ
 	return c.Client.Do(req)
 }
 
-// SetPageStatusWithBody performs a POST /api/v1/confluence/page/{identifier}/status (the `SetPageStatus` operationId) request,
+// SetPageStatusWithBody performs a POST /api/confluence/page/{identifier}/status (the `SetPageStatus` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) SetPageStatusWithBody(ctx context.Context, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewSetPageStatusRequestWithBody(c.Server, identifier, contentType, body)
@@ -740,7 +740,7 @@ func (c *Client) SetPageStatusWithBody(ctx context.Context, identifier string, c
 	return c.Client.Do(req)
 }
 
-// SetPageStatus performs a POST /api/v1/confluence/page/{identifier}/status (the `SetPageStatus` operationId) request.
+// SetPageStatus performs a POST /api/confluence/page/{identifier}/status (the `SetPageStatus` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) SetPageStatus(ctx context.Context, identifier string, body SetPageStatusJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewSetPageStatusRequest(c.Server, identifier, body)
@@ -754,7 +754,7 @@ func (c *Client) SetPageStatus(ctx context.Context, identifier string, body SetP
 	return c.Client.Do(req)
 }
 
-// ListPages performs a GET /api/v1/confluence/pages (the `ListPages` operationId) request.
+// ListPages performs a GET /api/confluence/pages (the `ListPages` operationId) request.
 func (c *Client) ListPages(ctx context.Context, params *ListPagesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListPagesRequest(c.Server, params)
 	if err != nil {
@@ -767,7 +767,7 @@ func (c *Client) ListPages(ctx context.Context, params *ListPagesParams, reqEdit
 	return c.Client.Do(req)
 }
 
-// SearchPages performs a GET /api/v1/confluence/search (the `SearchPages` operationId) request.
+// SearchPages performs a GET /api/confluence/search (the `SearchPages` operationId) request.
 func (c *Client) SearchPages(ctx context.Context, params *SearchPagesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewSearchPagesRequest(c.Server, params)
 	if err != nil {
@@ -780,7 +780,7 @@ func (c *Client) SearchPages(ctx context.Context, params *SearchPagesParams, req
 	return c.Client.Do(req)
 }
 
-// ListSpaces performs a GET /api/v1/confluence/spaces (the `ListSpaces` operationId) request.
+// ListSpaces performs a GET /api/confluence/spaces (the `ListSpaces` operationId) request.
 func (c *Client) ListSpaces(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListSpacesRequest(c.Server)
 	if err != nil {
@@ -793,7 +793,7 @@ func (c *Client) ListSpaces(ctx context.Context, reqEditors ...RequestEditorFn) 
 	return c.Client.Do(req)
 }
 
-// CreateIssueWithBody performs a POST /api/v1/jira/issue (the `CreateIssue` operationId) request,
+// CreateIssueWithBody performs a POST /api/jira/issue (the `CreateIssue` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) CreateIssueWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateIssueRequestWithBody(c.Server, contentType, body)
@@ -807,7 +807,7 @@ func (c *Client) CreateIssueWithBody(ctx context.Context, contentType string, bo
 	return c.Client.Do(req)
 }
 
-// CreateIssue performs a POST /api/v1/jira/issue (the `CreateIssue` operationId) request.
+// CreateIssue performs a POST /api/jira/issue (the `CreateIssue` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateIssue(ctx context.Context, body CreateIssueJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateIssueRequest(c.Server, body)
@@ -821,7 +821,7 @@ func (c *Client) CreateIssue(ctx context.Context, body CreateIssueJSONRequestBod
 	return c.Client.Do(req)
 }
 
-// GetIssue performs a GET /api/v1/jira/issue/{key} (the `GetIssue` operationId) request.
+// GetIssue performs a GET /api/jira/issue/{key} (the `GetIssue` operationId) request.
 func (c *Client) GetIssue(ctx context.Context, key string, params *GetIssueParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetIssueRequest(c.Server, key, params)
 	if err != nil {
@@ -834,7 +834,7 @@ func (c *Client) GetIssue(ctx context.Context, key string, params *GetIssueParam
 	return c.Client.Do(req)
 }
 
-// GetChecklist performs a GET /api/v1/jira/issue/{key}/checklist (the `GetChecklist` operationId) request.
+// GetChecklist performs a GET /api/jira/issue/{key}/checklist (the `GetChecklist` operationId) request.
 func (c *Client) GetChecklist(ctx context.Context, key string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetChecklistRequest(c.Server, key)
 	if err != nil {
@@ -847,7 +847,7 @@ func (c *Client) GetChecklist(ctx context.Context, key string, reqEditors ...Req
 	return c.Client.Do(req)
 }
 
-// AddChecklistItemWithBody performs a POST /api/v1/jira/issue/{key}/checklist (the `AddChecklistItem` operationId) request,
+// AddChecklistItemWithBody performs a POST /api/jira/issue/{key}/checklist (the `AddChecklistItem` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) AddChecklistItemWithBody(ctx context.Context, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewAddChecklistItemRequestWithBody(c.Server, key, contentType, body)
@@ -861,7 +861,7 @@ func (c *Client) AddChecklistItemWithBody(ctx context.Context, key string, conte
 	return c.Client.Do(req)
 }
 
-// AddChecklistItem performs a POST /api/v1/jira/issue/{key}/checklist (the `AddChecklistItem` operationId) request.
+// AddChecklistItem performs a POST /api/jira/issue/{key}/checklist (the `AddChecklistItem` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) AddChecklistItem(ctx context.Context, key string, body AddChecklistItemJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewAddChecklistItemRequest(c.Server, key, body)
@@ -875,7 +875,7 @@ func (c *Client) AddChecklistItem(ctx context.Context, key string, body AddCheck
 	return c.Client.Do(req)
 }
 
-// DeleteChecklistItem performs a DELETE /api/v1/jira/issue/{key}/checklist/{index} (the `DeleteChecklistItem` operationId) request.
+// DeleteChecklistItem performs a DELETE /api/jira/issue/{key}/checklist/{index} (the `DeleteChecklistItem` operationId) request.
 func (c *Client) DeleteChecklistItem(ctx context.Context, key string, index int, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewDeleteChecklistItemRequest(c.Server, key, index)
 	if err != nil {
@@ -888,7 +888,7 @@ func (c *Client) DeleteChecklistItem(ctx context.Context, key string, index int,
 	return c.Client.Do(req)
 }
 
-// EditChecklistItemWithBody performs a PUT /api/v1/jira/issue/{key}/checklist/{index} (the `EditChecklistItem` operationId) request,
+// EditChecklistItemWithBody performs a PUT /api/jira/issue/{key}/checklist/{index} (the `EditChecklistItem` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) EditChecklistItemWithBody(ctx context.Context, key string, index int, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewEditChecklistItemRequestWithBody(c.Server, key, index, contentType, body)
@@ -902,7 +902,7 @@ func (c *Client) EditChecklistItemWithBody(ctx context.Context, key string, inde
 	return c.Client.Do(req)
 }
 
-// EditChecklistItem performs a PUT /api/v1/jira/issue/{key}/checklist/{index} (the `EditChecklistItem` operationId) request.
+// EditChecklistItem performs a PUT /api/jira/issue/{key}/checklist/{index} (the `EditChecklistItem` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) EditChecklistItem(ctx context.Context, key string, index int, body EditChecklistItemJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewEditChecklistItemRequest(c.Server, key, index, body)
@@ -916,7 +916,7 @@ func (c *Client) EditChecklistItem(ctx context.Context, key string, index int, b
 	return c.Client.Do(req)
 }
 
-// ToggleChecklistItem performs a POST /api/v1/jira/issue/{key}/checklist/{index}/toggle (the `ToggleChecklistItem` operationId) request.
+// ToggleChecklistItem performs a POST /api/jira/issue/{key}/checklist/{index}/toggle (the `ToggleChecklistItem` operationId) request.
 func (c *Client) ToggleChecklistItem(ctx context.Context, key string, index int, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewToggleChecklistItemRequest(c.Server, key, index)
 	if err != nil {
@@ -929,7 +929,7 @@ func (c *Client) ToggleChecklistItem(ctx context.Context, key string, index int,
 	return c.Client.Do(req)
 }
 
-// AddIssueCommentWithBody performs a POST /api/v1/jira/issue/{key}/comment (the `AddIssueComment` operationId) request,
+// AddIssueCommentWithBody performs a POST /api/jira/issue/{key}/comment (the `AddIssueComment` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) AddIssueCommentWithBody(ctx context.Context, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewAddIssueCommentRequestWithBody(c.Server, key, contentType, body)
@@ -943,7 +943,7 @@ func (c *Client) AddIssueCommentWithBody(ctx context.Context, key string, conten
 	return c.Client.Do(req)
 }
 
-// AddIssueComment performs a POST /api/v1/jira/issue/{key}/comment (the `AddIssueComment` operationId) request.
+// AddIssueComment performs a POST /api/jira/issue/{key}/comment (the `AddIssueComment` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) AddIssueComment(ctx context.Context, key string, body AddIssueCommentJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewAddIssueCommentRequest(c.Server, key, body)
@@ -957,7 +957,7 @@ func (c *Client) AddIssueComment(ctx context.Context, key string, body AddIssueC
 	return c.Client.Do(req)
 }
 
-// DeleteComment performs a DELETE /api/v1/jira/issue/{key}/comment/{identifier} (the `DeleteComment` operationId) request.
+// DeleteComment performs a DELETE /api/jira/issue/{key}/comment/{identifier} (the `DeleteComment` operationId) request.
 func (c *Client) DeleteComment(ctx context.Context, key string, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewDeleteCommentRequest(c.Server, key, identifier)
 	if err != nil {
@@ -970,7 +970,7 @@ func (c *Client) DeleteComment(ctx context.Context, key string, identifier strin
 	return c.Client.Do(req)
 }
 
-// UpdateCommentWithBody performs a PUT /api/v1/jira/issue/{key}/comment/{identifier} (the `UpdateComment` operationId) request,
+// UpdateCommentWithBody performs a PUT /api/jira/issue/{key}/comment/{identifier} (the `UpdateComment` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) UpdateCommentWithBody(ctx context.Context, key string, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewUpdateCommentRequestWithBody(c.Server, key, identifier, contentType, body)
@@ -984,7 +984,7 @@ func (c *Client) UpdateCommentWithBody(ctx context.Context, key string, identifi
 	return c.Client.Do(req)
 }
 
-// UpdateComment performs a PUT /api/v1/jira/issue/{key}/comment/{identifier} (the `UpdateComment` operationId) request.
+// UpdateComment performs a PUT /api/jira/issue/{key}/comment/{identifier} (the `UpdateComment` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) UpdateComment(ctx context.Context, key string, identifier string, body UpdateCommentJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewUpdateCommentRequest(c.Server, key, identifier, body)
@@ -998,7 +998,7 @@ func (c *Client) UpdateComment(ctx context.Context, key string, identifier strin
 	return c.Client.Do(req)
 }
 
-// LinkIssuesWithBody performs a POST /api/v1/jira/issue/{key}/link (the `LinkIssues` operationId) request,
+// LinkIssuesWithBody performs a POST /api/jira/issue/{key}/link (the `LinkIssues` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) LinkIssuesWithBody(ctx context.Context, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewLinkIssuesRequestWithBody(c.Server, key, contentType, body)
@@ -1012,7 +1012,7 @@ func (c *Client) LinkIssuesWithBody(ctx context.Context, key string, contentType
 	return c.Client.Do(req)
 }
 
-// LinkIssues performs a POST /api/v1/jira/issue/{key}/link (the `LinkIssues` operationId) request.
+// LinkIssues performs a POST /api/jira/issue/{key}/link (the `LinkIssues` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) LinkIssues(ctx context.Context, key string, body LinkIssuesJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewLinkIssuesRequest(c.Server, key, body)
@@ -1026,7 +1026,7 @@ func (c *Client) LinkIssues(ctx context.Context, key string, body LinkIssuesJSON
 	return c.Client.Do(req)
 }
 
-// TransitionIssueWithBody performs a POST /api/v1/jira/issue/{key}/transition (the `TransitionIssue` operationId) request,
+// TransitionIssueWithBody performs a POST /api/jira/issue/{key}/transition (the `TransitionIssue` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) TransitionIssueWithBody(ctx context.Context, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewTransitionIssueRequestWithBody(c.Server, key, contentType, body)
@@ -1040,7 +1040,7 @@ func (c *Client) TransitionIssueWithBody(ctx context.Context, key string, conten
 	return c.Client.Do(req)
 }
 
-// TransitionIssue performs a POST /api/v1/jira/issue/{key}/transition (the `TransitionIssue` operationId) request.
+// TransitionIssue performs a POST /api/jira/issue/{key}/transition (the `TransitionIssue` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) TransitionIssue(ctx context.Context, key string, body TransitionIssueJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewTransitionIssueRequest(c.Server, key, body)
@@ -1054,7 +1054,7 @@ func (c *Client) TransitionIssue(ctx context.Context, key string, body Transitio
 	return c.Client.Do(req)
 }
 
-// GetTransitions performs a GET /api/v1/jira/issue/{key}/transitions (the `GetTransitions` operationId) request.
+// GetTransitions performs a GET /api/jira/issue/{key}/transitions (the `GetTransitions` operationId) request.
 func (c *Client) GetTransitions(ctx context.Context, key string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetTransitionsRequest(c.Server, key)
 	if err != nil {
@@ -1067,7 +1067,7 @@ func (c *Client) GetTransitions(ctx context.Context, key string, reqEditors ...R
 	return c.Client.Do(req)
 }
 
-// UpdateIssueWithBody performs a POST /api/v1/jira/issue/{key}/update (the `UpdateIssue` operationId) request,
+// UpdateIssueWithBody performs a POST /api/jira/issue/{key}/update (the `UpdateIssue` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) UpdateIssueWithBody(ctx context.Context, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewUpdateIssueRequestWithBody(c.Server, key, contentType, body)
@@ -1081,7 +1081,7 @@ func (c *Client) UpdateIssueWithBody(ctx context.Context, key string, contentTyp
 	return c.Client.Do(req)
 }
 
-// UpdateIssue performs a POST /api/v1/jira/issue/{key}/update (the `UpdateIssue` operationId) request.
+// UpdateIssue performs a POST /api/jira/issue/{key}/update (the `UpdateIssue` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) UpdateIssue(ctx context.Context, key string, body UpdateIssueJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewUpdateIssueRequest(c.Server, key, body)
@@ -1095,7 +1095,7 @@ func (c *Client) UpdateIssue(ctx context.Context, key string, body UpdateIssueJS
 	return c.Client.Do(req)
 }
 
-// GetLinkTypes performs a GET /api/v1/jira/link-types (the `GetLinkTypes` operationId) request.
+// GetLinkTypes performs a GET /api/jira/link-types (the `GetLinkTypes` operationId) request.
 func (c *Client) GetLinkTypes(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetLinkTypesRequest(c.Server)
 	if err != nil {
@@ -1108,7 +1108,7 @@ func (c *Client) GetLinkTypes(ctx context.Context, reqEditors ...RequestEditorFn
 	return c.Client.Do(req)
 }
 
-// DeleteLink performs a DELETE /api/v1/jira/link/{identifier} (the `DeleteLink` operationId) request.
+// DeleteLink performs a DELETE /api/jira/link/{identifier} (the `DeleteLink` operationId) request.
 func (c *Client) DeleteLink(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewDeleteLinkRequest(c.Server, identifier)
 	if err != nil {
@@ -1121,7 +1121,7 @@ func (c *Client) DeleteLink(ctx context.Context, identifier string, reqEditors .
 	return c.Client.Do(req)
 }
 
-// GetCreateMeta performs a GET /api/v1/jira/meta (the `GetCreateMeta` operationId) request.
+// GetCreateMeta performs a GET /api/jira/meta (the `GetCreateMeta` operationId) request.
 func (c *Client) GetCreateMeta(ctx context.Context, params *GetCreateMetaParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetCreateMetaRequest(c.Server, params)
 	if err != nil {
@@ -1134,7 +1134,7 @@ func (c *Client) GetCreateMeta(ctx context.Context, params *GetCreateMetaParams,
 	return c.Client.Do(req)
 }
 
-// ListProjects performs a GET /api/v1/jira/projects (the `ListProjects` operationId) request.
+// ListProjects performs a GET /api/jira/projects (the `ListProjects` operationId) request.
 func (c *Client) ListProjects(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListProjectsRequest(c.Server)
 	if err != nil {
@@ -1147,7 +1147,7 @@ func (c *Client) ListProjects(ctx context.Context, reqEditors ...RequestEditorFn
 	return c.Client.Do(req)
 }
 
-// SearchIssues performs a GET /api/v1/jira/search (the `SearchIssues` operationId) request.
+// SearchIssues performs a GET /api/jira/search (the `SearchIssues` operationId) request.
 func (c *Client) SearchIssues(ctx context.Context, params *SearchIssuesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewSearchIssuesRequest(c.Server, params)
 	if err != nil {
@@ -1160,7 +1160,7 @@ func (c *Client) SearchIssues(ctx context.Context, params *SearchIssuesParams, r
 	return c.Client.Do(req)
 }
 
-// SearchUsers performs a GET /api/v1/jira/users (the `SearchUsers` operationId) request.
+// SearchUsers performs a GET /api/jira/users (the `SearchUsers` operationId) request.
 func (c *Client) SearchUsers(ctx context.Context, params *SearchUsersParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewSearchUsersRequest(c.Server, params)
 	if err != nil {
@@ -1193,7 +1193,7 @@ func NewCreatePageRequestWithBody(server string, contentType string, body io.Rea
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/confluence/page")
+	operationPath := fmt.Sprintf("/api/confluence/page")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1229,7 +1229,7 @@ func NewDeletePageRequest(server string, identifier string, params *DeletePagePa
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/confluence/page/%s", pathParam0)
+	operationPath := fmt.Sprintf("/api/confluence/page/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1290,7 +1290,7 @@ func NewGetPageRequest(server string, identifier string) (*http.Request, error) 
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/confluence/page/%s", pathParam0)
+	operationPath := fmt.Sprintf("/api/confluence/page/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1335,7 +1335,7 @@ func NewUpdatePageRequestWithBody(server string, identifier string, contentType 
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/confluence/page/%s", pathParam0)
+	operationPath := fmt.Sprintf("/api/confluence/page/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1371,7 +1371,7 @@ func NewGetPageChildrenRequest(server string, identifier string) (*http.Request,
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/confluence/page/%s/children", pathParam0)
+	operationPath := fmt.Sprintf("/api/confluence/page/%s/children", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1416,7 +1416,7 @@ func NewAddPageCommentRequestWithBody(server string, identifier string, contentT
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/confluence/page/%s/comment", pathParam0)
+	operationPath := fmt.Sprintf("/api/confluence/page/%s/comment", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1452,7 +1452,7 @@ func NewGetPageDraftRequest(server string, identifier string) (*http.Request, er
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/confluence/page/%s/draft", pathParam0)
+	operationPath := fmt.Sprintf("/api/confluence/page/%s/draft", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1497,7 +1497,7 @@ func NewEditPageRequestWithBody(server string, identifier string, contentType st
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/confluence/page/%s/edit", pathParam0)
+	operationPath := fmt.Sprintf("/api/confluence/page/%s/edit", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1544,7 +1544,7 @@ func NewSetPageStatusRequestWithBody(server string, identifier string, contentTy
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/confluence/page/%s/status", pathParam0)
+	operationPath := fmt.Sprintf("/api/confluence/page/%s/status", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1573,7 +1573,7 @@ func NewListPagesRequest(server string, params *ListPagesParams) (*http.Request,
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/confluence/pages")
+	operationPath := fmt.Sprintf("/api/confluence/pages")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1635,7 +1635,7 @@ func NewSearchPagesRequest(server string, params *SearchPagesParams) (*http.Requ
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/confluence/search")
+	operationPath := fmt.Sprintf("/api/confluence/search")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1685,7 +1685,7 @@ func NewListSpacesRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/confluence/spaces")
+	operationPath := fmt.Sprintf("/api/confluence/spaces")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1723,7 +1723,7 @@ func NewCreateIssueRequestWithBody(server string, contentType string, body io.Re
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/jira/issue")
+	operationPath := fmt.Sprintf("/api/jira/issue")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1759,7 +1759,7 @@ func NewGetIssueRequest(server string, key string, params *GetIssueParams) (*htt
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/jira/issue/%s", pathParam0)
+	operationPath := fmt.Sprintf("/api/jira/issue/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1820,7 +1820,7 @@ func NewGetChecklistRequest(server string, key string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/jira/issue/%s/checklist", pathParam0)
+	operationPath := fmt.Sprintf("/api/jira/issue/%s/checklist", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1865,7 +1865,7 @@ func NewAddChecklistItemRequestWithBody(server string, key string, contentType s
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/jira/issue/%s/checklist", pathParam0)
+	operationPath := fmt.Sprintf("/api/jira/issue/%s/checklist", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1908,7 +1908,7 @@ func NewDeleteChecklistItemRequest(server string, key string, index int) (*http.
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/jira/issue/%s/checklist/%s", pathParam0, pathParam1)
+	operationPath := fmt.Sprintf("/api/jira/issue/%s/checklist/%s", pathParam0, pathParam1)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1960,7 +1960,7 @@ func NewEditChecklistItemRequestWithBody(server string, key string, index int, c
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/jira/issue/%s/checklist/%s", pathParam0, pathParam1)
+	operationPath := fmt.Sprintf("/api/jira/issue/%s/checklist/%s", pathParam0, pathParam1)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2003,7 +2003,7 @@ func NewToggleChecklistItemRequest(server string, key string, index int) (*http.
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/jira/issue/%s/checklist/%s/toggle", pathParam0, pathParam1)
+	operationPath := fmt.Sprintf("/api/jira/issue/%s/checklist/%s/toggle", pathParam0, pathParam1)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2048,7 +2048,7 @@ func NewAddIssueCommentRequestWithBody(server string, key string, contentType st
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/jira/issue/%s/comment", pathParam0)
+	operationPath := fmt.Sprintf("/api/jira/issue/%s/comment", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2091,7 +2091,7 @@ func NewDeleteCommentRequest(server string, key string, identifier string) (*htt
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/jira/issue/%s/comment/%s", pathParam0, pathParam1)
+	operationPath := fmt.Sprintf("/api/jira/issue/%s/comment/%s", pathParam0, pathParam1)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2143,7 +2143,7 @@ func NewUpdateCommentRequestWithBody(server string, key string, identifier strin
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/jira/issue/%s/comment/%s", pathParam0, pathParam1)
+	operationPath := fmt.Sprintf("/api/jira/issue/%s/comment/%s", pathParam0, pathParam1)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2190,7 +2190,7 @@ func NewLinkIssuesRequestWithBody(server string, key string, contentType string,
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/jira/issue/%s/link", pathParam0)
+	operationPath := fmt.Sprintf("/api/jira/issue/%s/link", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2237,7 +2237,7 @@ func NewTransitionIssueRequestWithBody(server string, key string, contentType st
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/jira/issue/%s/transition", pathParam0)
+	operationPath := fmt.Sprintf("/api/jira/issue/%s/transition", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2273,7 +2273,7 @@ func NewGetTransitionsRequest(server string, key string) (*http.Request, error) 
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/jira/issue/%s/transitions", pathParam0)
+	operationPath := fmt.Sprintf("/api/jira/issue/%s/transitions", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2318,7 +2318,7 @@ func NewUpdateIssueRequestWithBody(server string, key string, contentType string
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/jira/issue/%s/update", pathParam0)
+	operationPath := fmt.Sprintf("/api/jira/issue/%s/update", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2347,7 +2347,7 @@ func NewGetLinkTypesRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/jira/link-types")
+	operationPath := fmt.Sprintf("/api/jira/link-types")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2381,7 +2381,7 @@ func NewDeleteLinkRequest(server string, identifier string) (*http.Request, erro
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/jira/link/%s", pathParam0)
+	operationPath := fmt.Sprintf("/api/jira/link/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2408,7 +2408,7 @@ func NewGetCreateMetaRequest(server string, params *GetCreateMetaParams) (*http.
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/jira/meta")
+	operationPath := fmt.Sprintf("/api/jira/meta")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2478,7 +2478,7 @@ func NewListProjectsRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/jira/projects")
+	operationPath := fmt.Sprintf("/api/jira/projects")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2505,7 +2505,7 @@ func NewSearchIssuesRequest(server string, params *SearchIssuesParams) (*http.Re
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/jira/search")
+	operationPath := fmt.Sprintf("/api/jira/search")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2567,7 +2567,7 @@ func NewSearchUsersRequest(server string, params *SearchUsersParams) (*http.Requ
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/jira/users")
+	operationPath := fmt.Sprintf("/api/jira/users")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -2652,227 +2652,227 @@ func WithBaseURL(baseURL string) ClientOption {
 // ClientWithResponsesInterface is the interface specification for the client with responses above.
 type ClientWithResponsesInterface interface {
 
-	// CreatePageWithBodyWithResponse performs a POST /api/v1/confluence/page (the `CreatePage` operationId) request,
+	// CreatePageWithBodyWithResponse performs a POST /api/confluence/page (the `CreatePage` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreatePageWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreatePageResponse, error)
 
-	// CreatePageWithResponse performs a POST /api/v1/confluence/page (the `CreatePage` operationId) request.
+	// CreatePageWithResponse performs a POST /api/confluence/page (the `CreatePage` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreatePageWithResponse(ctx context.Context, body CreatePageJSONRequestBody, reqEditors ...RequestEditorFn) (*CreatePageResponse, error)
 
-	// DeletePageWithResponse performs a DELETE /api/v1/confluence/page/{identifier} (the `DeletePage` operationId) request.
+	// DeletePageWithResponse performs a DELETE /api/confluence/page/{identifier} (the `DeletePage` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	DeletePageWithResponse(ctx context.Context, identifier string, params *DeletePageParams, reqEditors ...RequestEditorFn) (*DeletePageResponse, error)
 
-	// GetPageWithResponse performs a GET /api/v1/confluence/page/{identifier} (the `GetPage` operationId) request.
+	// GetPageWithResponse performs a GET /api/confluence/page/{identifier} (the `GetPage` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetPageWithResponse(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*GetPageResponse, error)
 
-	// UpdatePageWithBodyWithResponse performs a PUT /api/v1/confluence/page/{identifier} (the `UpdatePage` operationId) request,
+	// UpdatePageWithBodyWithResponse performs a PUT /api/confluence/page/{identifier} (the `UpdatePage` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	UpdatePageWithBodyWithResponse(ctx context.Context, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdatePageResponse, error)
 
-	// UpdatePageWithResponse performs a PUT /api/v1/confluence/page/{identifier} (the `UpdatePage` operationId) request.
+	// UpdatePageWithResponse performs a PUT /api/confluence/page/{identifier} (the `UpdatePage` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	UpdatePageWithResponse(ctx context.Context, identifier string, body UpdatePageJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdatePageResponse, error)
 
-	// GetPageChildrenWithResponse performs a GET /api/v1/confluence/page/{identifier}/children (the `GetPageChildren` operationId) request.
+	// GetPageChildrenWithResponse performs a GET /api/confluence/page/{identifier}/children (the `GetPageChildren` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetPageChildrenWithResponse(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*GetPageChildrenResponse, error)
 
-	// AddPageCommentWithBodyWithResponse performs a POST /api/v1/confluence/page/{identifier}/comment (the `AddPageComment` operationId) request,
+	// AddPageCommentWithBodyWithResponse performs a POST /api/confluence/page/{identifier}/comment (the `AddPageComment` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	AddPageCommentWithBodyWithResponse(ctx context.Context, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*AddPageCommentResponse, error)
 
-	// AddPageCommentWithResponse performs a POST /api/v1/confluence/page/{identifier}/comment (the `AddPageComment` operationId) request.
+	// AddPageCommentWithResponse performs a POST /api/confluence/page/{identifier}/comment (the `AddPageComment` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	AddPageCommentWithResponse(ctx context.Context, identifier string, body AddPageCommentJSONRequestBody, reqEditors ...RequestEditorFn) (*AddPageCommentResponse, error)
 
-	// GetPageDraftWithResponse performs a GET /api/v1/confluence/page/{identifier}/draft (the `GetPageDraft` operationId) request.
+	// GetPageDraftWithResponse performs a GET /api/confluence/page/{identifier}/draft (the `GetPageDraft` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetPageDraftWithResponse(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*GetPageDraftResponse, error)
 
-	// EditPageWithBodyWithResponse performs a POST /api/v1/confluence/page/{identifier}/edit (the `EditPage` operationId) request,
+	// EditPageWithBodyWithResponse performs a POST /api/confluence/page/{identifier}/edit (the `EditPage` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	EditPageWithBodyWithResponse(ctx context.Context, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*EditPageResponse, error)
 
-	// EditPageWithResponse performs a POST /api/v1/confluence/page/{identifier}/edit (the `EditPage` operationId) request.
+	// EditPageWithResponse performs a POST /api/confluence/page/{identifier}/edit (the `EditPage` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	EditPageWithResponse(ctx context.Context, identifier string, body EditPageJSONRequestBody, reqEditors ...RequestEditorFn) (*EditPageResponse, error)
 
-	// SetPageStatusWithBodyWithResponse performs a POST /api/v1/confluence/page/{identifier}/status (the `SetPageStatus` operationId) request,
+	// SetPageStatusWithBodyWithResponse performs a POST /api/confluence/page/{identifier}/status (the `SetPageStatus` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	SetPageStatusWithBodyWithResponse(ctx context.Context, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*SetPageStatusResponse, error)
 
-	// SetPageStatusWithResponse performs a POST /api/v1/confluence/page/{identifier}/status (the `SetPageStatus` operationId) request.
+	// SetPageStatusWithResponse performs a POST /api/confluence/page/{identifier}/status (the `SetPageStatus` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	SetPageStatusWithResponse(ctx context.Context, identifier string, body SetPageStatusJSONRequestBody, reqEditors ...RequestEditorFn) (*SetPageStatusResponse, error)
 
-	// ListPagesWithResponse performs a GET /api/v1/confluence/pages (the `ListPages` operationId) request.
+	// ListPagesWithResponse performs a GET /api/confluence/pages (the `ListPages` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListPagesWithResponse(ctx context.Context, params *ListPagesParams, reqEditors ...RequestEditorFn) (*ListPagesResponse, error)
 
-	// SearchPagesWithResponse performs a GET /api/v1/confluence/search (the `SearchPages` operationId) request.
+	// SearchPagesWithResponse performs a GET /api/confluence/search (the `SearchPages` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	SearchPagesWithResponse(ctx context.Context, params *SearchPagesParams, reqEditors ...RequestEditorFn) (*SearchPagesResponse, error)
 
-	// ListSpacesWithResponse performs a GET /api/v1/confluence/spaces (the `ListSpaces` operationId) request.
+	// ListSpacesWithResponse performs a GET /api/confluence/spaces (the `ListSpaces` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListSpacesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListSpacesResponse, error)
 
-	// CreateIssueWithBodyWithResponse performs a POST /api/v1/jira/issue (the `CreateIssue` operationId) request,
+	// CreateIssueWithBodyWithResponse performs a POST /api/jira/issue (the `CreateIssue` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	CreateIssueWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateIssueResponse, error)
 
-	// CreateIssueWithResponse performs a POST /api/v1/jira/issue (the `CreateIssue` operationId) request.
+	// CreateIssueWithResponse performs a POST /api/jira/issue (the `CreateIssue` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateIssueWithResponse(ctx context.Context, body CreateIssueJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateIssueResponse, error)
 
-	// GetIssueWithResponse performs a GET /api/v1/jira/issue/{key} (the `GetIssue` operationId) request.
+	// GetIssueWithResponse performs a GET /api/jira/issue/{key} (the `GetIssue` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetIssueWithResponse(ctx context.Context, key string, params *GetIssueParams, reqEditors ...RequestEditorFn) (*GetIssueResponse, error)
 
-	// GetChecklistWithResponse performs a GET /api/v1/jira/issue/{key}/checklist (the `GetChecklist` operationId) request.
+	// GetChecklistWithResponse performs a GET /api/jira/issue/{key}/checklist (the `GetChecklist` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetChecklistWithResponse(ctx context.Context, key string, reqEditors ...RequestEditorFn) (*GetChecklistResponse, error)
 
-	// AddChecklistItemWithBodyWithResponse performs a POST /api/v1/jira/issue/{key}/checklist (the `AddChecklistItem` operationId) request,
+	// AddChecklistItemWithBodyWithResponse performs a POST /api/jira/issue/{key}/checklist (the `AddChecklistItem` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	AddChecklistItemWithBodyWithResponse(ctx context.Context, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*AddChecklistItemResponse, error)
 
-	// AddChecklistItemWithResponse performs a POST /api/v1/jira/issue/{key}/checklist (the `AddChecklistItem` operationId) request.
+	// AddChecklistItemWithResponse performs a POST /api/jira/issue/{key}/checklist (the `AddChecklistItem` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	AddChecklistItemWithResponse(ctx context.Context, key string, body AddChecklistItemJSONRequestBody, reqEditors ...RequestEditorFn) (*AddChecklistItemResponse, error)
 
-	// DeleteChecklistItemWithResponse performs a DELETE /api/v1/jira/issue/{key}/checklist/{index} (the `DeleteChecklistItem` operationId) request.
+	// DeleteChecklistItemWithResponse performs a DELETE /api/jira/issue/{key}/checklist/{index} (the `DeleteChecklistItem` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	DeleteChecklistItemWithResponse(ctx context.Context, key string, index int, reqEditors ...RequestEditorFn) (*DeleteChecklistItemResponse, error)
 
-	// EditChecklistItemWithBodyWithResponse performs a PUT /api/v1/jira/issue/{key}/checklist/{index} (the `EditChecklistItem` operationId) request,
+	// EditChecklistItemWithBodyWithResponse performs a PUT /api/jira/issue/{key}/checklist/{index} (the `EditChecklistItem` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	EditChecklistItemWithBodyWithResponse(ctx context.Context, key string, index int, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*EditChecklistItemResponse, error)
 
-	// EditChecklistItemWithResponse performs a PUT /api/v1/jira/issue/{key}/checklist/{index} (the `EditChecklistItem` operationId) request.
+	// EditChecklistItemWithResponse performs a PUT /api/jira/issue/{key}/checklist/{index} (the `EditChecklistItem` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	EditChecklistItemWithResponse(ctx context.Context, key string, index int, body EditChecklistItemJSONRequestBody, reqEditors ...RequestEditorFn) (*EditChecklistItemResponse, error)
 
-	// ToggleChecklistItemWithResponse performs a POST /api/v1/jira/issue/{key}/checklist/{index}/toggle (the `ToggleChecklistItem` operationId) request.
+	// ToggleChecklistItemWithResponse performs a POST /api/jira/issue/{key}/checklist/{index}/toggle (the `ToggleChecklistItem` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ToggleChecklistItemWithResponse(ctx context.Context, key string, index int, reqEditors ...RequestEditorFn) (*ToggleChecklistItemResponse, error)
 
-	// AddIssueCommentWithBodyWithResponse performs a POST /api/v1/jira/issue/{key}/comment (the `AddIssueComment` operationId) request,
+	// AddIssueCommentWithBodyWithResponse performs a POST /api/jira/issue/{key}/comment (the `AddIssueComment` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	AddIssueCommentWithBodyWithResponse(ctx context.Context, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*AddIssueCommentResponse, error)
 
-	// AddIssueCommentWithResponse performs a POST /api/v1/jira/issue/{key}/comment (the `AddIssueComment` operationId) request.
+	// AddIssueCommentWithResponse performs a POST /api/jira/issue/{key}/comment (the `AddIssueComment` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	AddIssueCommentWithResponse(ctx context.Context, key string, body AddIssueCommentJSONRequestBody, reqEditors ...RequestEditorFn) (*AddIssueCommentResponse, error)
 
-	// DeleteCommentWithResponse performs a DELETE /api/v1/jira/issue/{key}/comment/{identifier} (the `DeleteComment` operationId) request.
+	// DeleteCommentWithResponse performs a DELETE /api/jira/issue/{key}/comment/{identifier} (the `DeleteComment` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	DeleteCommentWithResponse(ctx context.Context, key string, identifier string, reqEditors ...RequestEditorFn) (*DeleteCommentResponse, error)
 
-	// UpdateCommentWithBodyWithResponse performs a PUT /api/v1/jira/issue/{key}/comment/{identifier} (the `UpdateComment` operationId) request,
+	// UpdateCommentWithBodyWithResponse performs a PUT /api/jira/issue/{key}/comment/{identifier} (the `UpdateComment` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	UpdateCommentWithBodyWithResponse(ctx context.Context, key string, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateCommentResponse, error)
 
-	// UpdateCommentWithResponse performs a PUT /api/v1/jira/issue/{key}/comment/{identifier} (the `UpdateComment` operationId) request.
+	// UpdateCommentWithResponse performs a PUT /api/jira/issue/{key}/comment/{identifier} (the `UpdateComment` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	UpdateCommentWithResponse(ctx context.Context, key string, identifier string, body UpdateCommentJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateCommentResponse, error)
 
-	// LinkIssuesWithBodyWithResponse performs a POST /api/v1/jira/issue/{key}/link (the `LinkIssues` operationId) request,
+	// LinkIssuesWithBodyWithResponse performs a POST /api/jira/issue/{key}/link (the `LinkIssues` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	LinkIssuesWithBodyWithResponse(ctx context.Context, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*LinkIssuesResponse, error)
 
-	// LinkIssuesWithResponse performs a POST /api/v1/jira/issue/{key}/link (the `LinkIssues` operationId) request.
+	// LinkIssuesWithResponse performs a POST /api/jira/issue/{key}/link (the `LinkIssues` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	LinkIssuesWithResponse(ctx context.Context, key string, body LinkIssuesJSONRequestBody, reqEditors ...RequestEditorFn) (*LinkIssuesResponse, error)
 
-	// TransitionIssueWithBodyWithResponse performs a POST /api/v1/jira/issue/{key}/transition (the `TransitionIssue` operationId) request,
+	// TransitionIssueWithBodyWithResponse performs a POST /api/jira/issue/{key}/transition (the `TransitionIssue` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	TransitionIssueWithBodyWithResponse(ctx context.Context, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*TransitionIssueResponse, error)
 
-	// TransitionIssueWithResponse performs a POST /api/v1/jira/issue/{key}/transition (the `TransitionIssue` operationId) request.
+	// TransitionIssueWithResponse performs a POST /api/jira/issue/{key}/transition (the `TransitionIssue` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	TransitionIssueWithResponse(ctx context.Context, key string, body TransitionIssueJSONRequestBody, reqEditors ...RequestEditorFn) (*TransitionIssueResponse, error)
 
-	// GetTransitionsWithResponse performs a GET /api/v1/jira/issue/{key}/transitions (the `GetTransitions` operationId) request.
+	// GetTransitionsWithResponse performs a GET /api/jira/issue/{key}/transitions (the `GetTransitions` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetTransitionsWithResponse(ctx context.Context, key string, reqEditors ...RequestEditorFn) (*GetTransitionsResponse, error)
 
-	// UpdateIssueWithBodyWithResponse performs a POST /api/v1/jira/issue/{key}/update (the `UpdateIssue` operationId) request,
+	// UpdateIssueWithBodyWithResponse performs a POST /api/jira/issue/{key}/update (the `UpdateIssue` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	UpdateIssueWithBodyWithResponse(ctx context.Context, key string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateIssueResponse, error)
 
-	// UpdateIssueWithResponse performs a POST /api/v1/jira/issue/{key}/update (the `UpdateIssue` operationId) request.
+	// UpdateIssueWithResponse performs a POST /api/jira/issue/{key}/update (the `UpdateIssue` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	UpdateIssueWithResponse(ctx context.Context, key string, body UpdateIssueJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateIssueResponse, error)
 
-	// GetLinkTypesWithResponse performs a GET /api/v1/jira/link-types (the `GetLinkTypes` operationId) request.
+	// GetLinkTypesWithResponse performs a GET /api/jira/link-types (the `GetLinkTypes` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetLinkTypesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetLinkTypesResponse, error)
 
-	// DeleteLinkWithResponse performs a DELETE /api/v1/jira/link/{identifier} (the `DeleteLink` operationId) request.
+	// DeleteLinkWithResponse performs a DELETE /api/jira/link/{identifier} (the `DeleteLink` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	DeleteLinkWithResponse(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*DeleteLinkResponse, error)
 
-	// GetCreateMetaWithResponse performs a GET /api/v1/jira/meta (the `GetCreateMeta` operationId) request.
+	// GetCreateMetaWithResponse performs a GET /api/jira/meta (the `GetCreateMeta` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetCreateMetaWithResponse(ctx context.Context, params *GetCreateMetaParams, reqEditors ...RequestEditorFn) (*GetCreateMetaResponse, error)
 
-	// ListProjectsWithResponse performs a GET /api/v1/jira/projects (the `ListProjects` operationId) request.
+	// ListProjectsWithResponse performs a GET /api/jira/projects (the `ListProjects` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListProjectsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListProjectsResponse, error)
 
-	// SearchIssuesWithResponse performs a GET /api/v1/jira/search (the `SearchIssues` operationId) request.
+	// SearchIssuesWithResponse performs a GET /api/jira/search (the `SearchIssues` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	SearchIssuesWithResponse(ctx context.Context, params *SearchIssuesParams, reqEditors ...RequestEditorFn) (*SearchIssuesResponse, error)
 
-	// SearchUsersWithResponse performs a GET /api/v1/jira/users (the `SearchUsers` operationId) request.
+	// SearchUsersWithResponse performs a GET /api/jira/users (the `SearchUsers` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	SearchUsersWithResponse(ctx context.Context, params *SearchUsersParams, reqEditors ...RequestEditorFn) (*SearchUsersResponse, error)
@@ -4435,7 +4435,7 @@ func (r SearchUsersResponse) ContentType() string {
 	return ""
 }
 
-// CreatePageWithBodyWithResponse performs a POST /api/v1/confluence/page (the `CreatePage` operationId) request,
+// CreatePageWithBodyWithResponse performs a POST /api/confluence/page (the `CreatePage` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -4447,7 +4447,7 @@ func (c *ClientWithResponses) CreatePageWithBodyWithResponse(ctx context.Context
 	return ParseCreatePageResponse(rsp)
 }
 
-// CreatePageWithResponse performs a POST /api/v1/confluence/page (the `CreatePage` operationId) request.
+// CreatePageWithResponse performs a POST /api/confluence/page (the `CreatePage` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreatePageWithResponse(ctx context.Context, body CreatePageJSONRequestBody, reqEditors ...RequestEditorFn) (*CreatePageResponse, error) {
 	rsp, err := c.CreatePage(ctx, body, reqEditors...)
@@ -4457,7 +4457,7 @@ func (c *ClientWithResponses) CreatePageWithResponse(ctx context.Context, body C
 	return ParseCreatePageResponse(rsp)
 }
 
-// DeletePageWithResponse performs a DELETE /api/v1/confluence/page/{identifier} (the `DeletePage` operationId) request.
+// DeletePageWithResponse performs a DELETE /api/confluence/page/{identifier} (the `DeletePage` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) DeletePageWithResponse(ctx context.Context, identifier string, params *DeletePageParams, reqEditors ...RequestEditorFn) (*DeletePageResponse, error) {
@@ -4468,7 +4468,7 @@ func (c *ClientWithResponses) DeletePageWithResponse(ctx context.Context, identi
 	return ParseDeletePageResponse(rsp)
 }
 
-// GetPageWithResponse performs a GET /api/v1/confluence/page/{identifier} (the `GetPage` operationId) request.
+// GetPageWithResponse performs a GET /api/confluence/page/{identifier} (the `GetPage` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetPageWithResponse(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*GetPageResponse, error) {
@@ -4479,7 +4479,7 @@ func (c *ClientWithResponses) GetPageWithResponse(ctx context.Context, identifie
 	return ParseGetPageResponse(rsp)
 }
 
-// UpdatePageWithBodyWithResponse performs a PUT /api/v1/confluence/page/{identifier} (the `UpdatePage` operationId) request,
+// UpdatePageWithBodyWithResponse performs a PUT /api/confluence/page/{identifier} (the `UpdatePage` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -4491,7 +4491,7 @@ func (c *ClientWithResponses) UpdatePageWithBodyWithResponse(ctx context.Context
 	return ParseUpdatePageResponse(rsp)
 }
 
-// UpdatePageWithResponse performs a PUT /api/v1/confluence/page/{identifier} (the `UpdatePage` operationId) request.
+// UpdatePageWithResponse performs a PUT /api/confluence/page/{identifier} (the `UpdatePage` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) UpdatePageWithResponse(ctx context.Context, identifier string, body UpdatePageJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdatePageResponse, error) {
 	rsp, err := c.UpdatePage(ctx, identifier, body, reqEditors...)
@@ -4501,7 +4501,7 @@ func (c *ClientWithResponses) UpdatePageWithResponse(ctx context.Context, identi
 	return ParseUpdatePageResponse(rsp)
 }
 
-// GetPageChildrenWithResponse performs a GET /api/v1/confluence/page/{identifier}/children (the `GetPageChildren` operationId) request.
+// GetPageChildrenWithResponse performs a GET /api/confluence/page/{identifier}/children (the `GetPageChildren` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetPageChildrenWithResponse(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*GetPageChildrenResponse, error) {
@@ -4512,7 +4512,7 @@ func (c *ClientWithResponses) GetPageChildrenWithResponse(ctx context.Context, i
 	return ParseGetPageChildrenResponse(rsp)
 }
 
-// AddPageCommentWithBodyWithResponse performs a POST /api/v1/confluence/page/{identifier}/comment (the `AddPageComment` operationId) request,
+// AddPageCommentWithBodyWithResponse performs a POST /api/confluence/page/{identifier}/comment (the `AddPageComment` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -4524,7 +4524,7 @@ func (c *ClientWithResponses) AddPageCommentWithBodyWithResponse(ctx context.Con
 	return ParseAddPageCommentResponse(rsp)
 }
 
-// AddPageCommentWithResponse performs a POST /api/v1/confluence/page/{identifier}/comment (the `AddPageComment` operationId) request.
+// AddPageCommentWithResponse performs a POST /api/confluence/page/{identifier}/comment (the `AddPageComment` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) AddPageCommentWithResponse(ctx context.Context, identifier string, body AddPageCommentJSONRequestBody, reqEditors ...RequestEditorFn) (*AddPageCommentResponse, error) {
 	rsp, err := c.AddPageComment(ctx, identifier, body, reqEditors...)
@@ -4534,7 +4534,7 @@ func (c *ClientWithResponses) AddPageCommentWithResponse(ctx context.Context, id
 	return ParseAddPageCommentResponse(rsp)
 }
 
-// GetPageDraftWithResponse performs a GET /api/v1/confluence/page/{identifier}/draft (the `GetPageDraft` operationId) request.
+// GetPageDraftWithResponse performs a GET /api/confluence/page/{identifier}/draft (the `GetPageDraft` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetPageDraftWithResponse(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*GetPageDraftResponse, error) {
@@ -4545,7 +4545,7 @@ func (c *ClientWithResponses) GetPageDraftWithResponse(ctx context.Context, iden
 	return ParseGetPageDraftResponse(rsp)
 }
 
-// EditPageWithBodyWithResponse performs a POST /api/v1/confluence/page/{identifier}/edit (the `EditPage` operationId) request,
+// EditPageWithBodyWithResponse performs a POST /api/confluence/page/{identifier}/edit (the `EditPage` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -4557,7 +4557,7 @@ func (c *ClientWithResponses) EditPageWithBodyWithResponse(ctx context.Context, 
 	return ParseEditPageResponse(rsp)
 }
 
-// EditPageWithResponse performs a POST /api/v1/confluence/page/{identifier}/edit (the `EditPage` operationId) request.
+// EditPageWithResponse performs a POST /api/confluence/page/{identifier}/edit (the `EditPage` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) EditPageWithResponse(ctx context.Context, identifier string, body EditPageJSONRequestBody, reqEditors ...RequestEditorFn) (*EditPageResponse, error) {
 	rsp, err := c.EditPage(ctx, identifier, body, reqEditors...)
@@ -4567,7 +4567,7 @@ func (c *ClientWithResponses) EditPageWithResponse(ctx context.Context, identifi
 	return ParseEditPageResponse(rsp)
 }
 
-// SetPageStatusWithBodyWithResponse performs a POST /api/v1/confluence/page/{identifier}/status (the `SetPageStatus` operationId) request,
+// SetPageStatusWithBodyWithResponse performs a POST /api/confluence/page/{identifier}/status (the `SetPageStatus` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -4579,7 +4579,7 @@ func (c *ClientWithResponses) SetPageStatusWithBodyWithResponse(ctx context.Cont
 	return ParseSetPageStatusResponse(rsp)
 }
 
-// SetPageStatusWithResponse performs a POST /api/v1/confluence/page/{identifier}/status (the `SetPageStatus` operationId) request.
+// SetPageStatusWithResponse performs a POST /api/confluence/page/{identifier}/status (the `SetPageStatus` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) SetPageStatusWithResponse(ctx context.Context, identifier string, body SetPageStatusJSONRequestBody, reqEditors ...RequestEditorFn) (*SetPageStatusResponse, error) {
 	rsp, err := c.SetPageStatus(ctx, identifier, body, reqEditors...)
@@ -4589,7 +4589,7 @@ func (c *ClientWithResponses) SetPageStatusWithResponse(ctx context.Context, ide
 	return ParseSetPageStatusResponse(rsp)
 }
 
-// ListPagesWithResponse performs a GET /api/v1/confluence/pages (the `ListPages` operationId) request.
+// ListPagesWithResponse performs a GET /api/confluence/pages (the `ListPages` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListPagesWithResponse(ctx context.Context, params *ListPagesParams, reqEditors ...RequestEditorFn) (*ListPagesResponse, error) {
@@ -4600,7 +4600,7 @@ func (c *ClientWithResponses) ListPagesWithResponse(ctx context.Context, params 
 	return ParseListPagesResponse(rsp)
 }
 
-// SearchPagesWithResponse performs a GET /api/v1/confluence/search (the `SearchPages` operationId) request.
+// SearchPagesWithResponse performs a GET /api/confluence/search (the `SearchPages` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) SearchPagesWithResponse(ctx context.Context, params *SearchPagesParams, reqEditors ...RequestEditorFn) (*SearchPagesResponse, error) {
@@ -4611,7 +4611,7 @@ func (c *ClientWithResponses) SearchPagesWithResponse(ctx context.Context, param
 	return ParseSearchPagesResponse(rsp)
 }
 
-// ListSpacesWithResponse performs a GET /api/v1/confluence/spaces (the `ListSpaces` operationId) request.
+// ListSpacesWithResponse performs a GET /api/confluence/spaces (the `ListSpaces` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListSpacesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListSpacesResponse, error) {
@@ -4622,7 +4622,7 @@ func (c *ClientWithResponses) ListSpacesWithResponse(ctx context.Context, reqEdi
 	return ParseListSpacesResponse(rsp)
 }
 
-// CreateIssueWithBodyWithResponse performs a POST /api/v1/jira/issue (the `CreateIssue` operationId) request,
+// CreateIssueWithBodyWithResponse performs a POST /api/jira/issue (the `CreateIssue` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -4634,7 +4634,7 @@ func (c *ClientWithResponses) CreateIssueWithBodyWithResponse(ctx context.Contex
 	return ParseCreateIssueResponse(rsp)
 }
 
-// CreateIssueWithResponse performs a POST /api/v1/jira/issue (the `CreateIssue` operationId) request.
+// CreateIssueWithResponse performs a POST /api/jira/issue (the `CreateIssue` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) CreateIssueWithResponse(ctx context.Context, body CreateIssueJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateIssueResponse, error) {
 	rsp, err := c.CreateIssue(ctx, body, reqEditors...)
@@ -4644,7 +4644,7 @@ func (c *ClientWithResponses) CreateIssueWithResponse(ctx context.Context, body 
 	return ParseCreateIssueResponse(rsp)
 }
 
-// GetIssueWithResponse performs a GET /api/v1/jira/issue/{key} (the `GetIssue` operationId) request.
+// GetIssueWithResponse performs a GET /api/jira/issue/{key} (the `GetIssue` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetIssueWithResponse(ctx context.Context, key string, params *GetIssueParams, reqEditors ...RequestEditorFn) (*GetIssueResponse, error) {
@@ -4655,7 +4655,7 @@ func (c *ClientWithResponses) GetIssueWithResponse(ctx context.Context, key stri
 	return ParseGetIssueResponse(rsp)
 }
 
-// GetChecklistWithResponse performs a GET /api/v1/jira/issue/{key}/checklist (the `GetChecklist` operationId) request.
+// GetChecklistWithResponse performs a GET /api/jira/issue/{key}/checklist (the `GetChecklist` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetChecklistWithResponse(ctx context.Context, key string, reqEditors ...RequestEditorFn) (*GetChecklistResponse, error) {
@@ -4666,7 +4666,7 @@ func (c *ClientWithResponses) GetChecklistWithResponse(ctx context.Context, key 
 	return ParseGetChecklistResponse(rsp)
 }
 
-// AddChecklistItemWithBodyWithResponse performs a POST /api/v1/jira/issue/{key}/checklist (the `AddChecklistItem` operationId) request,
+// AddChecklistItemWithBodyWithResponse performs a POST /api/jira/issue/{key}/checklist (the `AddChecklistItem` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -4678,7 +4678,7 @@ func (c *ClientWithResponses) AddChecklistItemWithBodyWithResponse(ctx context.C
 	return ParseAddChecklistItemResponse(rsp)
 }
 
-// AddChecklistItemWithResponse performs a POST /api/v1/jira/issue/{key}/checklist (the `AddChecklistItem` operationId) request.
+// AddChecklistItemWithResponse performs a POST /api/jira/issue/{key}/checklist (the `AddChecklistItem` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) AddChecklistItemWithResponse(ctx context.Context, key string, body AddChecklistItemJSONRequestBody, reqEditors ...RequestEditorFn) (*AddChecklistItemResponse, error) {
 	rsp, err := c.AddChecklistItem(ctx, key, body, reqEditors...)
@@ -4688,7 +4688,7 @@ func (c *ClientWithResponses) AddChecklistItemWithResponse(ctx context.Context, 
 	return ParseAddChecklistItemResponse(rsp)
 }
 
-// DeleteChecklistItemWithResponse performs a DELETE /api/v1/jira/issue/{key}/checklist/{index} (the `DeleteChecklistItem` operationId) request.
+// DeleteChecklistItemWithResponse performs a DELETE /api/jira/issue/{key}/checklist/{index} (the `DeleteChecklistItem` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) DeleteChecklistItemWithResponse(ctx context.Context, key string, index int, reqEditors ...RequestEditorFn) (*DeleteChecklistItemResponse, error) {
@@ -4699,7 +4699,7 @@ func (c *ClientWithResponses) DeleteChecklistItemWithResponse(ctx context.Contex
 	return ParseDeleteChecklistItemResponse(rsp)
 }
 
-// EditChecklistItemWithBodyWithResponse performs a PUT /api/v1/jira/issue/{key}/checklist/{index} (the `EditChecklistItem` operationId) request,
+// EditChecklistItemWithBodyWithResponse performs a PUT /api/jira/issue/{key}/checklist/{index} (the `EditChecklistItem` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -4711,7 +4711,7 @@ func (c *ClientWithResponses) EditChecklistItemWithBodyWithResponse(ctx context.
 	return ParseEditChecklistItemResponse(rsp)
 }
 
-// EditChecklistItemWithResponse performs a PUT /api/v1/jira/issue/{key}/checklist/{index} (the `EditChecklistItem` operationId) request.
+// EditChecklistItemWithResponse performs a PUT /api/jira/issue/{key}/checklist/{index} (the `EditChecklistItem` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) EditChecklistItemWithResponse(ctx context.Context, key string, index int, body EditChecklistItemJSONRequestBody, reqEditors ...RequestEditorFn) (*EditChecklistItemResponse, error) {
 	rsp, err := c.EditChecklistItem(ctx, key, index, body, reqEditors...)
@@ -4721,7 +4721,7 @@ func (c *ClientWithResponses) EditChecklistItemWithResponse(ctx context.Context,
 	return ParseEditChecklistItemResponse(rsp)
 }
 
-// ToggleChecklistItemWithResponse performs a POST /api/v1/jira/issue/{key}/checklist/{index}/toggle (the `ToggleChecklistItem` operationId) request.
+// ToggleChecklistItemWithResponse performs a POST /api/jira/issue/{key}/checklist/{index}/toggle (the `ToggleChecklistItem` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ToggleChecklistItemWithResponse(ctx context.Context, key string, index int, reqEditors ...RequestEditorFn) (*ToggleChecklistItemResponse, error) {
@@ -4732,7 +4732,7 @@ func (c *ClientWithResponses) ToggleChecklistItemWithResponse(ctx context.Contex
 	return ParseToggleChecklistItemResponse(rsp)
 }
 
-// AddIssueCommentWithBodyWithResponse performs a POST /api/v1/jira/issue/{key}/comment (the `AddIssueComment` operationId) request,
+// AddIssueCommentWithBodyWithResponse performs a POST /api/jira/issue/{key}/comment (the `AddIssueComment` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -4744,7 +4744,7 @@ func (c *ClientWithResponses) AddIssueCommentWithBodyWithResponse(ctx context.Co
 	return ParseAddIssueCommentResponse(rsp)
 }
 
-// AddIssueCommentWithResponse performs a POST /api/v1/jira/issue/{key}/comment (the `AddIssueComment` operationId) request.
+// AddIssueCommentWithResponse performs a POST /api/jira/issue/{key}/comment (the `AddIssueComment` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) AddIssueCommentWithResponse(ctx context.Context, key string, body AddIssueCommentJSONRequestBody, reqEditors ...RequestEditorFn) (*AddIssueCommentResponse, error) {
 	rsp, err := c.AddIssueComment(ctx, key, body, reqEditors...)
@@ -4754,7 +4754,7 @@ func (c *ClientWithResponses) AddIssueCommentWithResponse(ctx context.Context, k
 	return ParseAddIssueCommentResponse(rsp)
 }
 
-// DeleteCommentWithResponse performs a DELETE /api/v1/jira/issue/{key}/comment/{identifier} (the `DeleteComment` operationId) request.
+// DeleteCommentWithResponse performs a DELETE /api/jira/issue/{key}/comment/{identifier} (the `DeleteComment` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) DeleteCommentWithResponse(ctx context.Context, key string, identifier string, reqEditors ...RequestEditorFn) (*DeleteCommentResponse, error) {
@@ -4765,7 +4765,7 @@ func (c *ClientWithResponses) DeleteCommentWithResponse(ctx context.Context, key
 	return ParseDeleteCommentResponse(rsp)
 }
 
-// UpdateCommentWithBodyWithResponse performs a PUT /api/v1/jira/issue/{key}/comment/{identifier} (the `UpdateComment` operationId) request,
+// UpdateCommentWithBodyWithResponse performs a PUT /api/jira/issue/{key}/comment/{identifier} (the `UpdateComment` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -4777,7 +4777,7 @@ func (c *ClientWithResponses) UpdateCommentWithBodyWithResponse(ctx context.Cont
 	return ParseUpdateCommentResponse(rsp)
 }
 
-// UpdateCommentWithResponse performs a PUT /api/v1/jira/issue/{key}/comment/{identifier} (the `UpdateComment` operationId) request.
+// UpdateCommentWithResponse performs a PUT /api/jira/issue/{key}/comment/{identifier} (the `UpdateComment` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) UpdateCommentWithResponse(ctx context.Context, key string, identifier string, body UpdateCommentJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateCommentResponse, error) {
 	rsp, err := c.UpdateComment(ctx, key, identifier, body, reqEditors...)
@@ -4787,7 +4787,7 @@ func (c *ClientWithResponses) UpdateCommentWithResponse(ctx context.Context, key
 	return ParseUpdateCommentResponse(rsp)
 }
 
-// LinkIssuesWithBodyWithResponse performs a POST /api/v1/jira/issue/{key}/link (the `LinkIssues` operationId) request,
+// LinkIssuesWithBodyWithResponse performs a POST /api/jira/issue/{key}/link (the `LinkIssues` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -4799,7 +4799,7 @@ func (c *ClientWithResponses) LinkIssuesWithBodyWithResponse(ctx context.Context
 	return ParseLinkIssuesResponse(rsp)
 }
 
-// LinkIssuesWithResponse performs a POST /api/v1/jira/issue/{key}/link (the `LinkIssues` operationId) request.
+// LinkIssuesWithResponse performs a POST /api/jira/issue/{key}/link (the `LinkIssues` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) LinkIssuesWithResponse(ctx context.Context, key string, body LinkIssuesJSONRequestBody, reqEditors ...RequestEditorFn) (*LinkIssuesResponse, error) {
 	rsp, err := c.LinkIssues(ctx, key, body, reqEditors...)
@@ -4809,7 +4809,7 @@ func (c *ClientWithResponses) LinkIssuesWithResponse(ctx context.Context, key st
 	return ParseLinkIssuesResponse(rsp)
 }
 
-// TransitionIssueWithBodyWithResponse performs a POST /api/v1/jira/issue/{key}/transition (the `TransitionIssue` operationId) request,
+// TransitionIssueWithBodyWithResponse performs a POST /api/jira/issue/{key}/transition (the `TransitionIssue` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -4821,7 +4821,7 @@ func (c *ClientWithResponses) TransitionIssueWithBodyWithResponse(ctx context.Co
 	return ParseTransitionIssueResponse(rsp)
 }
 
-// TransitionIssueWithResponse performs a POST /api/v1/jira/issue/{key}/transition (the `TransitionIssue` operationId) request.
+// TransitionIssueWithResponse performs a POST /api/jira/issue/{key}/transition (the `TransitionIssue` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) TransitionIssueWithResponse(ctx context.Context, key string, body TransitionIssueJSONRequestBody, reqEditors ...RequestEditorFn) (*TransitionIssueResponse, error) {
 	rsp, err := c.TransitionIssue(ctx, key, body, reqEditors...)
@@ -4831,7 +4831,7 @@ func (c *ClientWithResponses) TransitionIssueWithResponse(ctx context.Context, k
 	return ParseTransitionIssueResponse(rsp)
 }
 
-// GetTransitionsWithResponse performs a GET /api/v1/jira/issue/{key}/transitions (the `GetTransitions` operationId) request.
+// GetTransitionsWithResponse performs a GET /api/jira/issue/{key}/transitions (the `GetTransitions` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetTransitionsWithResponse(ctx context.Context, key string, reqEditors ...RequestEditorFn) (*GetTransitionsResponse, error) {
@@ -4842,7 +4842,7 @@ func (c *ClientWithResponses) GetTransitionsWithResponse(ctx context.Context, ke
 	return ParseGetTransitionsResponse(rsp)
 }
 
-// UpdateIssueWithBodyWithResponse performs a POST /api/v1/jira/issue/{key}/update (the `UpdateIssue` operationId) request,
+// UpdateIssueWithBodyWithResponse performs a POST /api/jira/issue/{key}/update (the `UpdateIssue` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -4854,7 +4854,7 @@ func (c *ClientWithResponses) UpdateIssueWithBodyWithResponse(ctx context.Contex
 	return ParseUpdateIssueResponse(rsp)
 }
 
-// UpdateIssueWithResponse performs a POST /api/v1/jira/issue/{key}/update (the `UpdateIssue` operationId) request.
+// UpdateIssueWithResponse performs a POST /api/jira/issue/{key}/update (the `UpdateIssue` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) UpdateIssueWithResponse(ctx context.Context, key string, body UpdateIssueJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateIssueResponse, error) {
 	rsp, err := c.UpdateIssue(ctx, key, body, reqEditors...)
@@ -4864,7 +4864,7 @@ func (c *ClientWithResponses) UpdateIssueWithResponse(ctx context.Context, key s
 	return ParseUpdateIssueResponse(rsp)
 }
 
-// GetLinkTypesWithResponse performs a GET /api/v1/jira/link-types (the `GetLinkTypes` operationId) request.
+// GetLinkTypesWithResponse performs a GET /api/jira/link-types (the `GetLinkTypes` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetLinkTypesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetLinkTypesResponse, error) {
@@ -4875,7 +4875,7 @@ func (c *ClientWithResponses) GetLinkTypesWithResponse(ctx context.Context, reqE
 	return ParseGetLinkTypesResponse(rsp)
 }
 
-// DeleteLinkWithResponse performs a DELETE /api/v1/jira/link/{identifier} (the `DeleteLink` operationId) request.
+// DeleteLinkWithResponse performs a DELETE /api/jira/link/{identifier} (the `DeleteLink` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) DeleteLinkWithResponse(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*DeleteLinkResponse, error) {
@@ -4886,7 +4886,7 @@ func (c *ClientWithResponses) DeleteLinkWithResponse(ctx context.Context, identi
 	return ParseDeleteLinkResponse(rsp)
 }
 
-// GetCreateMetaWithResponse performs a GET /api/v1/jira/meta (the `GetCreateMeta` operationId) request.
+// GetCreateMetaWithResponse performs a GET /api/jira/meta (the `GetCreateMeta` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetCreateMetaWithResponse(ctx context.Context, params *GetCreateMetaParams, reqEditors ...RequestEditorFn) (*GetCreateMetaResponse, error) {
@@ -4897,7 +4897,7 @@ func (c *ClientWithResponses) GetCreateMetaWithResponse(ctx context.Context, par
 	return ParseGetCreateMetaResponse(rsp)
 }
 
-// ListProjectsWithResponse performs a GET /api/v1/jira/projects (the `ListProjects` operationId) request.
+// ListProjectsWithResponse performs a GET /api/jira/projects (the `ListProjects` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListProjectsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListProjectsResponse, error) {
@@ -4908,7 +4908,7 @@ func (c *ClientWithResponses) ListProjectsWithResponse(ctx context.Context, reqE
 	return ParseListProjectsResponse(rsp)
 }
 
-// SearchIssuesWithResponse performs a GET /api/v1/jira/search (the `SearchIssues` operationId) request.
+// SearchIssuesWithResponse performs a GET /api/jira/search (the `SearchIssues` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) SearchIssuesWithResponse(ctx context.Context, params *SearchIssuesParams, reqEditors ...RequestEditorFn) (*SearchIssuesResponse, error) {
@@ -4919,7 +4919,7 @@ func (c *ClientWithResponses) SearchIssuesWithResponse(ctx context.Context, para
 	return ParseSearchIssuesResponse(rsp)
 }
 
-// SearchUsersWithResponse performs a GET /api/v1/jira/users (the `SearchUsers` operationId) request.
+// SearchUsersWithResponse performs a GET /api/jira/users (the `SearchUsers` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) SearchUsersWithResponse(ctx context.Context, params *SearchUsersParams, reqEditors ...RequestEditorFn) (*SearchUsersResponse, error) {

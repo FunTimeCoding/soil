@@ -238,6 +238,11 @@ lifecycle.WithServer(
 REST routes (`/api/...`) and MCP routes (`/mcp`, `/sse`, `/message`)
 don't conflict on the same mux.
 
+API paths are unversioned: `/api/<resource>`, never `/api/v1/...`.
+APIs here break and roll forward rather than maintain versions, so
+a version segment would suggest a guarantee nobody keeps. Enforced
+by goaudit (`versioned_path`).
+
 ## OpenAPI Spec Patterns
 
 Optional arrays of objects generate `*[]*Type` when the items are

@@ -1,7 +1,7 @@
 package duplicate
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/text/dictionary"
 )
 
@@ -30,25 +30,25 @@ func Run() {
 		}
 	}
 
-	fmt.Printf("Checked %d words\n", total)
+	console.Format("Checked %d words\n", total)
 
 	if len(duplicates) == 0 {
-		fmt.Println("No duplicate words found")
+		console.Line("No duplicate words found")
 
 		return
 	}
 
-	fmt.Printf(
+	console.Format(
 		"Found %d duplicate words (%d extra occurrences):\n",
 		len(duplicates),
 		count,
 	)
 
 	for w, locations := range duplicates {
-		fmt.Printf("\n'%s' appears %d times:\n", w, len(locations))
+		console.Format("\n'%s' appears %d times:\n", w, len(locations))
 
 		for _, l := range locations {
-			fmt.Printf("- in category: %s\n", l.Category)
+			console.Format("- in category: %s\n", l.Category)
 		}
 	}
 }

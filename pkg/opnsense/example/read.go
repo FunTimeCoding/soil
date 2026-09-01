@@ -1,7 +1,7 @@
 package example
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/opnsense"
 )
 
@@ -9,7 +9,7 @@ func Read() {
 	c := opnsense.NewEnvironment()
 
 	for _, l := range c.MustLeases("") {
-		fmt.Printf(
+		console.Format(
 			"%s %s %s reserved:%t\n",
 			l.Address,
 			l.Hostname,
@@ -19,7 +19,7 @@ func Read() {
 	}
 
 	for _, r := range c.MustRules("") {
-		fmt.Printf(
+		console.Format(
 			"%s %s %s -> %s %s\n",
 			r.Interface,
 			r.Action,

@@ -276,49 +276,49 @@ type SetHostJSONRequestBody = HostRequest
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 
-	// (GET /api/v1/aliases)
+	// (GET /api/aliases)
 	ListAliases(w http.ResponseWriter, r *http.Request, params ListAliasesParams)
 
-	// (GET /api/v1/blocklists)
+	// (GET /api/blocklists)
 	ListBlocklists(w http.ResponseWriter, r *http.Request, params ListBlocklistsParams)
 
-	// (POST /api/v1/dnsmasq/reconfigure)
+	// (POST /api/dnsmasq/reconfigure)
 	ReconfigureDnsmasq(w http.ResponseWriter, r *http.Request)
 
-	// (GET /api/v1/forwards)
+	// (GET /api/forwards)
 	ListForwards(w http.ResponseWriter, r *http.Request, params ListForwardsParams)
 
-	// (GET /api/v1/hosts)
+	// (GET /api/hosts)
 	ListHosts(w http.ResponseWriter, r *http.Request, params ListHostsParams)
 
-	// (POST /api/v1/hosts)
+	// (POST /api/hosts)
 	AddHost(w http.ResponseWriter, r *http.Request, params AddHostParams)
 
-	// (DELETE /api/v1/hosts/{identifier})
+	// (DELETE /api/hosts/{identifier})
 	DeleteHost(w http.ResponseWriter, r *http.Request, identifier string, params DeleteHostParams)
 
-	// (PUT /api/v1/hosts/{identifier})
+	// (PUT /api/hosts/{identifier})
 	SetHost(w http.ResponseWriter, r *http.Request, identifier string, params SetHostParams)
 
-	// (GET /api/v1/interfaces)
+	// (GET /api/interfaces)
 	ListInterfaces(w http.ResponseWriter, r *http.Request)
 
-	// (GET /api/v1/leases)
+	// (GET /api/leases)
 	ListLeases(w http.ResponseWriter, r *http.Request, params ListLeasesParams)
 
-	// (GET /api/v1/log)
+	// (GET /api/log)
 	FirewallLog(w http.ResponseWriter, r *http.Request, params FirewallLogParams)
 
-	// (GET /api/v1/pools)
+	// (GET /api/pools)
 	ListPools(w http.ResponseWriter, r *http.Request, params ListPoolsParams)
 
-	// (GET /api/v1/rules)
+	// (GET /api/rules)
 	ListRules(w http.ResponseWriter, r *http.Request, params ListRulesParams)
 
-	// (GET /api/v1/source-nat)
+	// (GET /api/source-nat)
 	ListSourceNat(w http.ResponseWriter, r *http.Request, params ListSourceNatParams)
 
-	// (GET /api/v1/states)
+	// (GET /api/states)
 	FirewallStates(w http.ResponseWriter, r *http.Request, params FirewallStatesParams)
 }
 
@@ -926,21 +926,21 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 		ErrorHandlerFunc:   options.ErrorHandlerFunc,
 	}
 
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/leases", wrapper.ListLeases)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/hosts", wrapper.ListHosts)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/hosts", wrapper.AddHost)
-	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/v1/hosts/{identifier}", wrapper.DeleteHost)
-	m.HandleFunc(http.MethodPut+" "+options.BaseURL+"/api/v1/hosts/{identifier}", wrapper.SetHost)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/dnsmasq/reconfigure", wrapper.ReconfigureDnsmasq)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/pools", wrapper.ListPools)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/rules", wrapper.ListRules)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/aliases", wrapper.ListAliases)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/source-nat", wrapper.ListSourceNat)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/forwards", wrapper.ListForwards)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/blocklists", wrapper.ListBlocklists)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/interfaces", wrapper.ListInterfaces)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/log", wrapper.FirewallLog)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/states", wrapper.FirewallStates)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/leases", wrapper.ListLeases)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/hosts", wrapper.ListHosts)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/hosts", wrapper.AddHost)
+	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/hosts/{identifier}", wrapper.DeleteHost)
+	m.HandleFunc(http.MethodPut+" "+options.BaseURL+"/api/hosts/{identifier}", wrapper.SetHost)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/dnsmasq/reconfigure", wrapper.ReconfigureDnsmasq)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/pools", wrapper.ListPools)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/rules", wrapper.ListRules)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/aliases", wrapper.ListAliases)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/source-nat", wrapper.ListSourceNat)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/forwards", wrapper.ListForwards)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/blocklists", wrapper.ListBlocklists)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/interfaces", wrapper.ListInterfaces)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/log", wrapper.FirewallLog)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/states", wrapper.FirewallStates)
 
 	return m
 }
@@ -1486,49 +1486,49 @@ func (response FirewallStates500JSONResponse) VisitFirewallStatesResponse(w http
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
 
-	// (GET /api/v1/aliases)
+	// (GET /api/aliases)
 	ListAliases(ctx context.Context, request ListAliasesRequestObject) (ListAliasesResponseObject, error)
 
-	// (GET /api/v1/blocklists)
+	// (GET /api/blocklists)
 	ListBlocklists(ctx context.Context, request ListBlocklistsRequestObject) (ListBlocklistsResponseObject, error)
 
-	// (POST /api/v1/dnsmasq/reconfigure)
+	// (POST /api/dnsmasq/reconfigure)
 	ReconfigureDnsmasq(ctx context.Context, request ReconfigureDnsmasqRequestObject) (ReconfigureDnsmasqResponseObject, error)
 
-	// (GET /api/v1/forwards)
+	// (GET /api/forwards)
 	ListForwards(ctx context.Context, request ListForwardsRequestObject) (ListForwardsResponseObject, error)
 
-	// (GET /api/v1/hosts)
+	// (GET /api/hosts)
 	ListHosts(ctx context.Context, request ListHostsRequestObject) (ListHostsResponseObject, error)
 
-	// (POST /api/v1/hosts)
+	// (POST /api/hosts)
 	AddHost(ctx context.Context, request AddHostRequestObject) (AddHostResponseObject, error)
 
-	// (DELETE /api/v1/hosts/{identifier})
+	// (DELETE /api/hosts/{identifier})
 	DeleteHost(ctx context.Context, request DeleteHostRequestObject) (DeleteHostResponseObject, error)
 
-	// (PUT /api/v1/hosts/{identifier})
+	// (PUT /api/hosts/{identifier})
 	SetHost(ctx context.Context, request SetHostRequestObject) (SetHostResponseObject, error)
 
-	// (GET /api/v1/interfaces)
+	// (GET /api/interfaces)
 	ListInterfaces(ctx context.Context, request ListInterfacesRequestObject) (ListInterfacesResponseObject, error)
 
-	// (GET /api/v1/leases)
+	// (GET /api/leases)
 	ListLeases(ctx context.Context, request ListLeasesRequestObject) (ListLeasesResponseObject, error)
 
-	// (GET /api/v1/log)
+	// (GET /api/log)
 	FirewallLog(ctx context.Context, request FirewallLogRequestObject) (FirewallLogResponseObject, error)
 
-	// (GET /api/v1/pools)
+	// (GET /api/pools)
 	ListPools(ctx context.Context, request ListPoolsRequestObject) (ListPoolsResponseObject, error)
 
-	// (GET /api/v1/rules)
+	// (GET /api/rules)
 	ListRules(ctx context.Context, request ListRulesRequestObject) (ListRulesResponseObject, error)
 
-	// (GET /api/v1/source-nat)
+	// (GET /api/source-nat)
 	ListSourceNat(ctx context.Context, request ListSourceNatRequestObject) (ListSourceNatResponseObject, error)
 
-	// (GET /api/v1/states)
+	// (GET /api/states)
 	FirewallStates(ctx context.Context, request FirewallStatesRequestObject) (FirewallStatesResponseObject, error)
 }
 
@@ -1978,33 +1978,33 @@ func (sh *strictHandler) FirewallStates(w http.ResponseWriter, r *http.Request, 
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
+	"7FpRb9s2F/0rBL/v0Y2zrduD39K1RQJkQZFsT0UR0NK1zVYiFfIqaVD4vw8iJZG0Kcpu0jow9uaIFHl4",
+	"zuHl1WW+0UyWlRQgUNPZN6qzFZTM/DwruP1RKVmBQg7mr0wKBIHNT3ysgM6oRsXFkq4nNAedKV4hlyLa",
+	"DoLNC8i9trmUBTDRNPIcBPIFBxV9V7ASog32wVbDekIV3NVcNfN99Ed3ONpR2zEm/drClXzq5qBy/hky",
+	"bCZ9U8jsS8E1bhP0I0l40lrbRY4t7Z1SUm0vC7rH6bltt8Fxr0FXUmjYffwJhXsQeJtkJgoi8mYM13up",
+	"HpjK9xcylyXjz69xJVV8d2lQ9z/SF3Y5/TwtknHDnMvYNmB5rkDrKNys4KOSTp7C/4qp/IEpuE2hWLW4",
+	"txr2sVrAqRnRY7KbPQIoRsJuVF/DXQ1Hxfg6stKLAGm40O/UJ0boJbBYMHo6lfC14sqMvJCqZEhnNGcI",
+	"r5C7A+e7+Bs8B7lAUAuWxVsVmG0dDUkblCVd20OIG7hdto/GmzuqgFy+E6geIyJkw0YEjVywXdpvB+Np",
+	"zhUMT5Gms2BzKOLhW0mUmYw3qrqAMeeYPqIu5wPtWtZqAJVtGl5xYz6NrKzG943rGmrZiuKz5625Rxdi",
+	"CQWLyBOuepunjvCYga4AH6T6cuHrFd3NbfBAKHXiEKVMKfZoTXTPB4guWZbcqCXknMVbsI5LhwxrPa5L",
+	"C6p/oZsrxGTnmXgrjzH3QVqbPmPakydpGXH+yJZrQvWtiZ8DBCpMzJ46t32Dh+OEawpAeOf82LF9XRew",
+	"V3xjNcqSIc/iGWTGEJZStePsf4x7208A/qgI+pQkeMQKchkfNRl8dZM4iXToHKIjHVl3y7P7+UPD+YGU",
+	"DUZUgywRVdv2SGRtyPIdFfojMFPMuzdmxiuGcRM/h9denFHSXkCmlsmmp9nE98aQDbaFb0GFEDrxx+LT",
+	"DTKMBahlnNX5I26cpX2OywX+8drlt81alqDip+vuxkmdKc8RqEzSqp83DWTZF8AnszSaTaYMnKJtLFXU",
+	"nSXSHrYEbIaUAQv7kW4DYiqyuT6R6GZxToxXnZKO/86tLVvb7l8bkRfSrJVjwyhdykpoENrsx3tQ2jiH",
+	"/nJyenLakCMrEKzidEZ/M4+a6XBliJ6yik9ZwVmbbraRotlWBvdFTmf0kms8a/s07ypWAoLSdPZxI6LS",
+	"G2AqW5FqpZiGE8MtndG7GtRjV750f9rqbUy1T+YrzJTeDKxfT083irmsqgqeGYzTz9ruFDde7+H/K1jQ",
+	"Gf3f1NWNp23ReGorxlsuXm/udvqeK3hgRUFaok6al37fE1IKSVhrjCFgvICcoCQLwGzlATGdjYrzrsab",
+	"FvKN63ZEWroC9w56/iPmshY5eXt1Qxxrh1c1wOKEzYUumb6bKsikWPBlbQs1VVudCiW+dp3e2vfoFv+v",
+	"tzIh2vYl3hz5IQnxcJAWW8DJwlbB01Z/33U6IqN35f89bG6Qk46xw9vcQ+IEXcmxwHUujyxmmYuIHXTs",
+	"9mZDEQGBzbcPYSInTTLBM2LrlQbKC1DXR3liX4hHqrM8P7cXEElFr7cjAWELBEVwBeRBcYQJyWHB6gIJ",
+	"qnpQ9YaDqOqusPzJZoug8Y3MH5+NQ/8aZB2mpA3g9RPNlprau5eIaOdaiVwYPjMFDCF3Kj4e0lEszw2q",
+	"AM1GzJh+cx+ma3uwFWC/BUK/vTXPd7HceT8dcWP3tmpyZ+eq4Ks41DUVYCYHt/lYRuCRYBm1+cBr2/f5",
+	"nBBzwJX0JCcPHFcEVwwDNQ7nSktHzJgTWtWRSHcD+J/tXk50TZu9rnKGh01+LYRU5OsrFumU6cJ1+xkJ",
+	"zdbV1g7JTfsOcSs6fAoTYHGkm8uUNOGXcGxFEvsfB7tkqed/fiCWosMr2OPw1LO19ah0XYHn0pSfk9r9",
+	"xb7ysi6Jvftt0qbmU9V8zcR1LHjJMaZjX0b9SUJ2/7iwT8GrkEu3vkOL2sTDhYcskLeSskjvzQ+mxxFt",
+	"TXMfvuvONPwcXsMOhhNO1cVIUL02PY5IOHM1uc82XPCiSckMVYfXsIPhNLSXIa8Ew6SQ/d3sMYkZXjjv",
+	"oKp9gVyd/f1SBNXbiDxtkWFig3YevbHdjklYc1W3zzY1VBFk8wK8CtihxTXCWEnX638DAAD//w==",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

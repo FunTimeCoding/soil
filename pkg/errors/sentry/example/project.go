@@ -1,12 +1,12 @@
 package example
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors/sentry"
 )
 
 func Project() {
 	for _, p := range sentry.NewEnvironment().MustProjects() {
-		fmt.Printf("%+v\n", p)
+		console.Format("%+v\n", p)
 	}
 }

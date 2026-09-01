@@ -3,6 +3,7 @@ package gomcp
 import (
 	"context"
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/mark3labs/mcp-go/client"
 	"github.com/mark3labs/mcp-go/client/transport"
@@ -32,11 +33,11 @@ func probe(
 	errors.PanicOnError(c.Start(x))
 	_, e = c.Initialize(x, mcp.InitializeRequest{})
 	errors.PanicOnError(e)
-	fmt.Printf("Session ID: %s\n", c.GetTransport().GetSessionId())
+	console.Format("Session ID: %s\n", c.GetTransport().GetSessionId())
 	result, f := c.ListTools(x, mcp.ListToolsRequest{})
 	errors.PanicOnError(f)
 
 	for _, t := range result.Tools {
-		fmt.Printf("%s: %s\n", t.Name, t.Description)
+		console.Format("%s: %s\n", t.Name, t.Description)
 	}
 }

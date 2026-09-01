@@ -1,8 +1,8 @@
 package telegram
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/chat/constant"
+	"github.com/funtimecoding/soil/pkg/console"
 )
 
 func (c *Client) PrintDatabase() {
@@ -11,16 +11,16 @@ func (c *Client) PrintDatabase() {
 	}
 
 	f := constant.TelegramFormat
-	fmt.Println("Channels:")
+	console.Line("Channels:")
 
 	for _, h := range c.store.MustChannels() {
-		fmt.Println(h.Format(f))
+		console.Line(h.Format(f))
 	}
 
-	fmt.Println()
-	fmt.Println("Users:")
+	console.Line()
+	console.Line("Users:")
 
 	for _, u := range c.store.MustUsers() {
-		fmt.Println(u.Format(f))
+		console.Line(u.Format(f))
 	}
 }

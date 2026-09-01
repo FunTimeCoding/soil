@@ -1,13 +1,13 @@
 package site
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/generative/constant"
 )
 
 func (s *Site) Send(t string) {
 	if false {
-		fmt.Printf("Focused: %+v\n", s.protocol.Focused())
+		console.Format("Focused: %+v\n", s.protocol.Focused())
 
 		return
 	}

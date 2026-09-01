@@ -1,10 +1,10 @@
 package example
 
 import (
-	"fmt"
 	"github.com/andygrunwald/go-jira"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/common"
 )
 
@@ -25,11 +25,11 @@ func Issue() {
 		i = j.MustNewIssueUnverified(p, issueType, summary, description)
 	}
 
-	fmt.Println("Prepared:")
+	console.Line("Prepared:")
 	spew.Dump(i)
 
 	if false {
-		fmt.Println("Created:")
-		fmt.Println(j.MustCreateNative(i).Format(f))
+		console.Line("Created:")
+		console.Line(j.MustCreateNative(i).Format(f))
 	}
 }

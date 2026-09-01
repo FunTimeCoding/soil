@@ -23,11 +23,19 @@ const (
 
 	GuardBlockExit = 2
 	SedMessage     = "sed on macOS is BSD sed and its flags (notably -i) differ from GNU sed - use gsed instead"
+	NpxMessage     = "npx is blocked (supply-chain guard) - it downloads and executes npm packages on demand"
+	PipMessage     = "pip install is blocked (supply-chain guard) - no python dependencies may be installed on this system"
+
+	NoGuardEnvironment = "CLAUDE_NO_GUARD"
 
 	StatusLineDumpFile = "/tmp/goclaude-status-line.json"
 )
 
 var (
-	SedInvocation  = regexp.MustCompile(`(^|[|&;(\s])sed(\s|$)`)
+	SedInvocation = regexp.MustCompile(`(^|[|&;(\s])sed(\s|$)`)
+	NpxInvocation = regexp.MustCompile(`(^|[|&;(\s])npx(\s|$)`)
+	PipInvocation = regexp.MustCompile(
+		`(^|[|&;(\s])pip3?\s(.*\s)?install(\s|$)`,
+	)
 	ShortModelName = map[string]string{"Fable 5": "Fable"}
 )

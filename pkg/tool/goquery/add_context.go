@@ -2,7 +2,7 @@ package goquery
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 	"github.com/spf13/cobra"
@@ -27,7 +27,7 @@ func addContext(c *client.Client) *cobra.Command {
 			)
 			errors.PanicOnError(e)
 			defer errors.PanicClose(r.Body)
-			fmt.Printf("context added: %s %s\n", arguments[0], arguments[1])
+			console.Format("context added: %s %s\n", arguments[0], arguments[1])
 		},
 	}
 }

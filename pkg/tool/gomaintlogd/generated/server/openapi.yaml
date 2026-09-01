@@ -4,7 +4,7 @@ info:
   title: gomaintlogd
   version: 1.0.0
 paths:
-  /api/v1/entries:
+  /api/entries:
     get:
       operationId: getEntries
       parameters:
@@ -76,7 +76,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/entries/{id}:
+  /api/entries/{id}:
     put:
       operationId: updateEntry
       parameters:
@@ -127,7 +127,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/status:
+  /api/status:
     get:
       operationId: getStatus
       responses:

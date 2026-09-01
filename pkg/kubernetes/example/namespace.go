@@ -1,7 +1,7 @@
 package example
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/kubernetes/client"
 	"github.com/funtimecoding/soil/pkg/kubernetes/constant"
 )
@@ -11,6 +11,6 @@ func Namespace() {
 	f := constant.Format
 
 	for _, n := range k.Namespaces(nil) {
-		fmt.Println(n.Format(f))
+		console.Line(n.Format(f))
 	}
 }

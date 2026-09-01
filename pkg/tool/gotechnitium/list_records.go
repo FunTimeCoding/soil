@@ -1,7 +1,7 @@
 package gotechnitium
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/technitium"
 	"github.com/spf13/cobra"
 )
@@ -17,7 +17,7 @@ func listRecords(c *technitium.Client) *cobra.Command {
 			arguments []string,
 		) {
 			for _, r := range c.MustRecords(arguments[0], all) {
-				fmt.Printf("%s %s %v\n", r.Name, r.Type, r.Payload)
+				console.Format("%s %s %v\n", r.Name, r.Type, r.Payload)
 			}
 		},
 	}

@@ -1,9 +1,9 @@
 package example
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/chromium"
 	"github.com/funtimecoding/soil/pkg/chromium/constant"
+	"github.com/funtimecoding/soil/pkg/console"
 	library "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/strings/split/key_value"
 	"github.com/funtimecoding/soil/pkg/system"
@@ -30,7 +30,7 @@ func Tabs() {
 		}
 
 		name, _ := key_value.Space(t.Title)
-		fmt.Printf("%s %s\n", name, t.Locator)
+		console.Format("%s %s\n", name, t.Locator)
 		p := join.Absolute(system.Home(), systemConstant.DownloadsPath, name)
 
 		if !system.FileExists(p) {
@@ -40,7 +40,7 @@ func Tabs() {
 
 			c.Save(c.TargetContext(t.Identifier), t.Locator, p)
 		} else {
-			fmt.Println("  Exists")
+			console.Line("  Exists")
 		}
 	}
 }

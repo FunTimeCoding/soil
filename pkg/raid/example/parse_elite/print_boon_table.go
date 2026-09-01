@@ -1,14 +1,14 @@
 package parse_elite
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/raid/elite_parser"
 	"strings"
 )
 
 func printBoonTable(players []*elite_parser.AggregatedPlayer) {
-	fmt.Println("=== Boon Uptimes (avg %) ===")
-	fmt.Printf(
+	console.Line("=== Boon Uptimes (avg %) ===")
+	console.Format(
 		"%-25s %-15s %6s %6s %6s %6s %6s %6s %6s %6s\n",
 		"Name",
 		"Profession",
@@ -21,11 +21,11 @@ func printBoonTable(players []*elite_parser.AggregatedPlayer) {
 		"Resist",
 		"Alac",
 	)
-	fmt.Println(strings.Repeat("-", 115))
+	console.Line(strings.Repeat("-", 115))
 
 	for _, p := range players {
 		f := float64(p.Fights)
-		fmt.Printf(
+		console.Format(
 			"%-25s %-15s %6d %5.1f%% %5.1f%% %5.1f%% %5.1f%% %5.1f%% %5.1f%% %5.1f%%\n",
 			p.Name,
 			p.Profession,

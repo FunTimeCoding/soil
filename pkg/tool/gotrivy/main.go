@@ -1,8 +1,8 @@
 package gotrivy
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/kubernetes/client"
 	kubernetes "github.com/funtimecoding/soil/pkg/kubernetes/constant"
@@ -22,10 +22,10 @@ func Main(
 	f := kubernetes.Format
 
 	for _, j := range k.CronJobs(kubernetes.TrivyNamespace) {
-		fmt.Printf("CronJob: %s\n", j.Format(f))
+		console.Format("CronJob: %s\n", j.Format(f))
 	}
 
 	for _, j := range k.Jobs(kubernetes.TrivyNamespace) {
-		fmt.Printf("Job: %s\n", j.Format(f))
+		console.Format("Job: %s\n", j.Format(f))
 	}
 }

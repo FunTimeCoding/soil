@@ -2,6 +2,7 @@ package gosecret
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gosecret/constant"
 )
@@ -17,12 +18,12 @@ func Run(
 	}
 
 	if len(secrets) == 0 {
-		fmt.Println("No secrets found")
+		console.Line("No secrets found")
 
 		return nil
 	}
 
-	fmt.Printf("Found %d secret manifest(s)\n", len(secrets))
+	console.Format("Found %d secret manifest(s)\n", len(secrets))
 	var (
 		processed  int
 		inSync     int
@@ -64,10 +65,10 @@ func Run(
 			if s.InSync {
 				inSync++
 			} else {
-				fmt.Printf("✓ %s <- %s\n", path, s.DecodedPath)
+				console.Format("✓ %s <- %s\n", path, s.DecodedPath)
 			}
 		default:
-			fmt.Printf("✓ %s -> %s\n", path, s.DecodedPath)
+			console.Format("✓ %s -> %s\n", path, s.DecodedPath)
 		}
 	}
 
@@ -91,15 +92,15 @@ func Run(
 			return fmt.Errorf("%d secret(s) out of sync", len(mismatches))
 		}
 
-		fmt.Printf("✓ All %d secret(s) in sync\n", processed)
+		console.Format("✓ All %d secret(s) in sync\n", processed)
 	case constant.Encode:
-		fmt.Printf(
+		console.Format(
 			"\nEncoded %d secret(s), %d in sync\n",
 			processed-inSync,
 			inSync,
 		)
 	default:
-		fmt.Printf("\nProcessed %d secret(s)\n", processed)
+		console.Format("\nProcessed %d secret(s)\n", processed)
 	}
 
 	if len(fails) > 0 {

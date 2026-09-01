@@ -2,6 +2,7 @@ package gw2
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/gw2/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
@@ -25,7 +26,7 @@ func ImportAleevaFiles() {
 				constant.NotationSuffix,
 			),
 		)
-		fmt.Printf("Import: %s => %s\n", source, destination)
+		console.Format("Import: %s => %s\n", source, destination)
 		system.Move(source, destination)
 	}
 }

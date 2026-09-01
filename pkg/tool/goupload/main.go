@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/build"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	gitlab "github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab/packages"
@@ -62,11 +63,11 @@ func Main(
 	)
 	a.Parse(version, gitHash, buildDate)
 	locator := a.Required(argumentConstant.Locator)
-	fmt.Printf("Locator: %s\n", locator)
+	console.Format("Locator: %s\n", locator)
 	project := a.Required(argumentConstant.Project)
-	fmt.Printf("Project: %s\n", project)
+	console.Format("Project: %s\n", project)
 	tag := a.Required(argumentConstant.Tag)
-	fmt.Printf("Tag: %s\n", tag)
+	console.Format("Tag: %s\n", tag)
 	headers := build.Headers(a.GetString(argumentConstant.Header))
 	var runs int
 
@@ -75,9 +76,9 @@ func Main(
 			if p := build.GuessArchivePath(name, systemArchitecture); p != "" {
 				runs++
 				file := filepath.Base(p)
-				fmt.Printf("Archive: %s\n", file)
+				console.Format("Archive: %s\n", file)
 				l := packages.UploadLink(locator, project, name, tag, file)
-				fmt.Printf("Link: %s\n", l)
+				console.Format("Link: %s\n", l)
 				status, body := web.PutFile(
 					l,
 					headers,
@@ -85,7 +86,7 @@ func Main(
 				)
 
 				if status != http.StatusCreated {
-					fmt.Printf("Upload failed: %d %s\n", status, body)
+					console.Format("Upload failed: %d %s\n", status, body)
 					os.Exit(1)
 				}
 			}
@@ -93,7 +94,7 @@ func Main(
 	}
 
 	if runs == 0 {
-		fmt.Println("No archive uploaded")
+		console.Line("No archive uploaded")
 		os.Exit(1)
 	}
 }

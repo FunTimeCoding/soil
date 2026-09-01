@@ -2,7 +2,7 @@ package goclaude
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
@@ -23,7 +23,7 @@ func sessionEdit(c *command_context.Context) *cobra.Command {
 			identifier := resolveSession(c.Client(), arguments[0])
 
 			if identifier == "" {
-				fmt.Printf("session not found: %s\n", arguments[0])
+				console.Format("session not found: %s\n", arguments[0])
 
 				return
 			}
@@ -39,7 +39,7 @@ func sessionEdit(c *command_context.Context) *cobra.Command {
 			}
 
 			if body.Name == nil && body.Description == nil {
-				fmt.Println("provide --name or --description")
+				console.Line("provide --name or --description")
 
 				return
 			}
@@ -51,23 +51,23 @@ func sessionEdit(c *command_context.Context) *cobra.Command {
 			errors.PanicOnError(e)
 
 			if response.JSON409 != nil {
-				fmt.Println(response.JSON409.Error)
+				console.Line(response.JSON409.Error)
 
 				return
 			}
 
 			if response.JSON500 != nil {
-				fmt.Println(response.JSON500.Error)
+				console.Line(response.JSON500.Error)
 
 				return
 			}
 
 			if name != "" {
-				fmt.Printf("renamed: %s → %s\n", identifier, name)
+				console.Format("renamed: %s → %s\n", identifier, name)
 			}
 
 			if description != "" {
-				fmt.Printf("described: %s\n", identifier)
+				console.Format("described: %s\n", identifier)
 			}
 		},
 	}

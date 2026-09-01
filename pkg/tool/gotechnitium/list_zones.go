@@ -1,7 +1,7 @@
 package gotechnitium
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/technitium"
 	"github.com/spf13/cobra"
 )
@@ -15,7 +15,12 @@ func listZones(c *technitium.Client) *cobra.Command {
 			_ []string,
 		) {
 			for _, z := range c.MustZones() {
-				fmt.Printf("%s (%s) internal=%v\n", z.Name, z.Type, z.Internal)
+				console.Format(
+					"%s (%s) internal=%v\n",
+					z.Name,
+					z.Type,
+					z.Internal,
+				)
 			}
 		},
 	}

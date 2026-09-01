@@ -1,7 +1,7 @@
 package token_check
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"io"
 	"net/http"
@@ -20,6 +20,6 @@ func rawGet(
 	defer errors.PanicClose(response.Body)
 	body, g := io.ReadAll(response.Body)
 	errors.PanicOnError(g)
-	fmt.Printf("  Status: %d\n", response.StatusCode)
-	fmt.Printf("  Body (first 500): %.500s\n", body)
+	console.Format("  Status: %d\n", response.StatusCode)
+	console.Format("  Body (first 500): %.500s\n", body)
 }

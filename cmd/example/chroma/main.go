@@ -3,8 +3,8 @@
 package main
 
 import (
-	"fmt"
 	"github.com/amikos-tech/chroma-go/pkg/api/v2"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/generative/chroma"
 	"github.com/funtimecoding/soil/pkg/generative/chroma/example"
 )
@@ -16,11 +16,11 @@ func main() {
 	defer c.Close()
 
 	for _, d := range c.Databases(v2.NewDefaultTenant()) {
-		fmt.Printf("Database: %s\n", d.Name())
+		console.Format("Database: %s\n", d.Name())
 	}
 
 	for _, o := range c.Collections() {
-		fmt.Printf("Collection: %s\n", o.Name())
+		console.Format("Collection: %s\n", o.Name())
 	}
 
 	if false {

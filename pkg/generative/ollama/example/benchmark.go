@@ -2,6 +2,7 @@ package example
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/generative/ollama"
 	"strings"
 	"time"
@@ -17,7 +18,7 @@ func Benchmark() {
 		start := time.Now()
 		response := o.GenerateSimple(prompt)
 		duration := time.Since(start)
-		fmt.Printf(
+		console.Format(
 			"Attempt %d: Response: %s, Duration: %s, Tokens: %.0f\n",
 			i,
 			response.Text,

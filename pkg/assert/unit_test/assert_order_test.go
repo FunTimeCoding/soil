@@ -1,8 +1,8 @@
 package unit_test
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/console"
 	"testing"
 )
 
@@ -18,7 +18,7 @@ func TestGreater(t *testing.T) {
 	assert.Greater(t1, 1, 0)
 
 	if !t1.Failed() {
-		fmt.Println("unhappy less")
+		console.Line("unhappy less")
 		t.Fail()
 	}
 
@@ -27,7 +27,7 @@ func TestGreater(t *testing.T) {
 	assert.Greater(t2, 1, 1)
 
 	if !t2.Failed() {
-		fmt.Println("unhappy equal")
+		console.Line("unhappy equal")
 		t.Fail()
 	}
 }
@@ -40,7 +40,7 @@ func TestGreaterEqual(t *testing.T) {
 	assert.GreaterEqual(t1, 1, 0)
 
 	if !t1.Failed() {
-		fmt.Println("unhappy less")
+		console.Line("unhappy less")
 		t.Fail()
 	}
 }
@@ -52,7 +52,7 @@ func TestLess(t *testing.T) {
 	assert.Less(t1, 0, 1)
 
 	if !t1.Failed() {
-		fmt.Println("unhappy more")
+		console.Line("unhappy more")
 		t.Fail()
 	}
 
@@ -61,7 +61,7 @@ func TestLess(t *testing.T) {
 	assert.Less(t2, 1, 1)
 
 	if !t2.Failed() {
-		fmt.Println("unhappy equal")
+		console.Line("unhappy equal")
 		t.Fail()
 	}
 }
@@ -74,7 +74,7 @@ func TestLessEqual(t *testing.T) {
 	assert.LessEqual(t1, 0, 1)
 
 	if !t1.Failed() {
-		fmt.Println("unhappy more")
+		console.Line("unhappy more")
 		t.Fail()
 	}
 }

@@ -3,7 +3,7 @@ package goquery
 import (
 	"context"
 	"encoding/json"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 	"github.com/spf13/cobra"
@@ -60,17 +60,17 @@ func search(c *client.Client) *cobra.Command {
 			errors.PanicOnError(json.NewDecoder(r.Body).Decode(&outcome))
 
 			for _, v := range outcome.Results {
-				fmt.Printf("%.4f  %s  %s", v.Score, v.Path, v.Title)
+				console.Format("%.4f  %s  %s", v.Score, v.Path, v.Title)
 
 				if v.Metadata != nil && len(*v.Metadata) > 0 {
-					fmt.Printf("  %s", formatMetadata(*v.Metadata))
+					console.Format("  %s", formatMetadata(*v.Metadata))
 				}
 
-				fmt.Println()
+				console.Line()
 
 				if detail && v.Body != nil && *v.Body != "" {
 					for _, line := range strings.Split(*v.Body, "\n") {
-						fmt.Printf("    %s\n", line)
+						console.Format("    %s\n", line)
 					}
 				}
 			}

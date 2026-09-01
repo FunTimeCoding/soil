@@ -4,7 +4,7 @@ info:
   title: goproxmoxd
   version: 2.0.0
 paths:
-  /api/v1/instances:
+  /api/instances:
     get:
       operationId: listInstances
       responses:
@@ -16,7 +16,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/InstanceDetail"
-  /api/v1/hardware-address:
+  /api/hardware-address:
     get:
       operationId: deriveHardwareAddress
       parameters:
@@ -50,7 +50,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/nodes:
+  /api/nodes:
     get:
       operationId: listNodes
       parameters:
@@ -76,7 +76,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/nodes/{name}/status:
+  /api/nodes/{name}/status:
     get:
       operationId: getNodeStatus
       parameters:
@@ -112,7 +112,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/machines:
+  /api/machines:
     get:
       operationId: listMachines
       parameters:
@@ -173,7 +173,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/machines/{identifier}:
+  /api/machines/{identifier}:
     get:
       operationId: getMachine
       parameters:
@@ -318,7 +318,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/machines/{identifier}/snapshots:
+  /api/machines/{identifier}/snapshots:
     get:
       operationId: listMachineSnapshots
       parameters:
@@ -411,7 +411,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/machines/{identifier}/snapshots/{name}/rollback:
+  /api/machines/{identifier}/snapshots/{name}/rollback:
     post:
       operationId: rollbackMachineSnapshot
       parameters:
@@ -460,7 +460,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/machines/{identifier}/snapshots/{name}:
+  /api/machines/{identifier}/snapshots/{name}:
     delete:
       operationId: deleteMachineSnapshot
       parameters:
@@ -509,7 +509,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/machines/{identifier}/start:
+  /api/machines/{identifier}/start:
     post:
       operationId: startMachine
       parameters:
@@ -552,7 +552,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/machines/{identifier}/stop:
+  /api/machines/{identifier}/stop:
     post:
       operationId: stopMachine
       parameters:
@@ -595,7 +595,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/machines/{identifier}/shutdown:
+  /api/machines/{identifier}/shutdown:
     post:
       operationId: shutdownMachine
       parameters:
@@ -638,7 +638,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/machines/{identifier}/reset:
+  /api/machines/{identifier}/reset:
     post:
       operationId: resetMachine
       parameters:
@@ -681,7 +681,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/nodes/{name}/networks:
+  /api/nodes/{name}/networks:
     get:
       operationId: listNetworks
       parameters:
@@ -719,7 +719,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/containers/{identifier}/start:
+  /api/containers/{identifier}/start:
     post:
       operationId: startContainer
       parameters:
@@ -762,7 +762,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/containers/{identifier}/stop:
+  /api/containers/{identifier}/stop:
     post:
       operationId: stopContainer
       parameters:
@@ -805,7 +805,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/containers/{identifier}/shutdown:
+  /api/containers/{identifier}/shutdown:
     post:
       operationId: shutdownContainer
       parameters:
@@ -848,7 +848,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/containers:
+  /api/containers:
     get:
       operationId: listContainers
       parameters:
@@ -880,7 +880,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/containers/{identifier}:
+  /api/containers/{identifier}:
     get:
       operationId: getContainer
       parameters:
@@ -923,7 +923,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/containers/{identifier}/snapshots:
+  /api/containers/{identifier}/snapshots:
     get:
       operationId: listContainerSnapshots
       parameters:
@@ -1016,7 +1016,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/containers/{identifier}/snapshots/{name}/rollback:
+  /api/containers/{identifier}/snapshots/{name}/rollback:
     post:
       operationId: rollbackContainerSnapshot
       parameters:
@@ -1065,7 +1065,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/containers/{identifier}/snapshots/{name}:
+  /api/containers/{identifier}/snapshots/{name}:
     delete:
       operationId: deleteContainerSnapshot
       parameters:
@@ -1114,7 +1114,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/machines/{identifier}/clone:
+  /api/machines/{identifier}/clone:
     post:
       operationId: cloneMachine
       parameters:
@@ -1163,7 +1163,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/nodes/{name}/storages:
+  /api/nodes/{name}/storages:
     get:
       operationId: listStorages
       parameters:
@@ -1195,7 +1195,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/nodes/{name}/storages/{storage}/content:
+  /api/nodes/{name}/storages/{storage}/content:
     get:
       operationId: listStorageContent
       parameters:
@@ -1233,7 +1233,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/snippets:
+  /api/snippets:
     get:
       operationId: listSnippets
       parameters:
@@ -1288,7 +1288,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/snippets/{name}:
+  /api/snippets/{name}:
     get:
       operationId: getSnippet
       parameters:
@@ -1347,7 +1347,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/nodes/{name}/storages/{storage}/download:
+  /api/nodes/{name}/storages/{storage}/download:
     post:
       operationId: downloadLocator
       parameters:

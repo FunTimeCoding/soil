@@ -1,7 +1,7 @@
 package rule_list
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/prometheus/rule"
 	"github.com/go-test/deep"
 	"github.com/google/go-cmp/cmp"
@@ -20,7 +20,7 @@ func (l *List) Add(i *rule.Rule) {
 			if !LabelsSame(i.RawAlert, r.RawAlert) {
 				if false {
 					// This is fine
-					fmt.Printf(
+					console.Format(
 						"labels differ: %+v %+v\n",
 						i.RawAlert.Labels,
 						r.RawAlert.Labels,
@@ -29,7 +29,7 @@ func (l *List) Add(i *rule.Rule) {
 			} else if i.RawAlert.Query != r.RawAlert.Query {
 				if false {
 					// This is fine
-					fmt.Printf(
+					console.Format(
 						"queries differ: %s %s\n",
 						i.RawAlert.Query,
 						r.RawAlert.Query,

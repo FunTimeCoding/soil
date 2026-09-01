@@ -1,7 +1,7 @@
 package lab
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/gitlab"
 	"github.com/funtimecoding/soil/pkg/gitlab/branch"
@@ -25,14 +25,14 @@ func Pipeline(
 	}
 
 	if o.Verbose {
-		fmt.Printf("Default branch: %s\n", p.Raw.DefaultBranch)
-		fmt.Printf("Main branch: %s\n", mainBranch.Name)
+		console.Format("Default branch: %s\n", p.Raw.DefaultBranch)
+		console.Format("Main branch: %s\n", mainBranch.Name)
 
 		for _, b := range branches {
-			fmt.Printf("Branch: %s %s\n", b.Name, b.Raw.Commit.ID)
+			console.Format("Branch: %s %s\n", b.Name, b.Raw.Commit.ID)
 		}
 
-		fmt.Printf("Main hash: %s\n", mainHash)
+		console.Format("Main hash: %s\n", mainHash)
 	}
 
 	pipelines := c.MustPipelines(p.Identifier)
@@ -57,7 +57,7 @@ func Pipeline(
 			i.Ref == latestSemantic.Ref &&
 			i.SHA == mainHash {
 			if o.Verbose {
-				fmt.Printf("Skip pipeline (sematic): %s %s\n", i.Ref, i.SHA)
+				console.Format("Skip pipeline (sematic): %s %s\n", i.Ref, i.SHA)
 			}
 
 			continue
@@ -67,16 +67,16 @@ func Pipeline(
 			i.Ref == mainBranch.Name &&
 			i.SHA == latestMain.SHA {
 			if o.Verbose {
-				fmt.Printf("Skip pipeline (main): %s %s\n", i.Ref, i.SHA)
+				console.Format("Skip pipeline (main): %s %s\n", i.Ref, i.SHA)
 			}
 
 			continue
 		}
 
 		if o.Verbose {
-			fmt.Printf("Pipeline: %s %s\n", i.Ref, i.SHA)
+			console.Format("Pipeline: %s %s\n", i.Ref, i.SHA)
 		} else {
-			fmt.Printf("Pipeline: %s\n", i.Ref)
+			console.Format("Pipeline: %s\n", i.Ref)
 		}
 
 		c.MustDeletePipeline(p.Identifier, i.ID)

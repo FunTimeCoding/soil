@@ -1,7 +1,7 @@
 package common
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/gitlab"
 	"github.com/funtimecoding/soil/pkg/gitlab/project"
 	"os"
@@ -15,7 +15,7 @@ func FindProjectOrExit(
 	p := c.MustProjectByName(owner, repository)
 
 	if p == nil {
-		fmt.Printf("repository not found: %s/%s\n", owner, repository)
+		console.Format("repository not found: %s/%s\n", owner, repository)
 		os.Exit(1)
 	}
 

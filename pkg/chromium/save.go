@@ -2,9 +2,9 @@ package chromium
 
 import (
 	"context"
-	"fmt"
 	"github.com/chromedp/cdproto/page"
 	"github.com/chromedp/chromedp"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/time/constant"
 	"os"
@@ -16,23 +16,23 @@ func (c *Client) Save(
 	locator string,
 	filename string,
 ) {
-	fmt.Println("  Save")
+	console.Line("  Save")
 	start := time.Now()
-	fmt.Printf("    Start %v\n", start.Format(constant.Micro))
+	console.Format("    Start %v\n", start.Format(constant.Micro))
 	var b []byte
 	c.RunContext(
 		x,
 		chromedp.ActionFunc(
 			func(o context.Context) error {
 				t2 := time.Now()
-				fmt.Printf(
+				console.Format(
 					"    GetResourceTree %v\n",
 					t2.Format(constant.Micro),
 				)
 				t, e := page.GetResourceTree().Do(o)
 
 				if e != nil {
-					fmt.Printf(
+					console.Format(
 						"    GetResourceTree fail %v: %v\n",
 						time.Since(t2),
 						e,
@@ -41,12 +41,12 @@ func (c *Client) Save(
 					return e
 				}
 
-				fmt.Printf("    GetResourceTree took %v\n", time.Since(t2))
+				console.Format("    GetResourceTree took %v\n", time.Since(t2))
 				t3 := time.Now()
 				b, e = page.GetResourceContent(t.Frame.ID, locator).Do(o)
 
 				if e != nil {
-					fmt.Printf(
+					console.Format(
 						"    GetResourceContent fail %v: %v\n",
 						time.Since(t3),
 						e,
@@ -55,12 +55,15 @@ func (c *Client) Save(
 					return e
 				}
 
-				fmt.Printf("    GetResourceContent took %v\n", time.Since(t3))
+				console.Format(
+					"    GetResourceContent took %v\n",
+					time.Since(t3),
+				)
 
 				return nil
 			},
 		),
 	)
 	errors.PanicOnError(os.WriteFile(filename, b, 0644))
-	fmt.Printf("    Complete after: %v\n", time.Since(start))
+	console.Format("    Complete after: %v\n", time.Since(start))
 }

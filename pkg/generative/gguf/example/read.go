@@ -1,8 +1,8 @@
 package example
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/gpustack/gguf-parser-go"
 )
@@ -16,5 +16,5 @@ func Read() {
 		gguf_parser.UseMMap(),
 	)
 	errors.PanicOnError(e)
-	fmt.Printf("Parameters: %+v\n", result.Header)
+	console.Format("Parameters: %+v\n", result.Header)
 }

@@ -1,12 +1,12 @@
 package example
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/brave"
 	"github.com/funtimecoding/soil/pkg/brave/bookmark/node"
 	"github.com/funtimecoding/soil/pkg/brave/constant"
+	"github.com/funtimecoding/soil/pkg/console"
 )
 
 func BookmarkSearch() {
@@ -22,13 +22,13 @@ func BookmarkSearch() {
 	node.SetParents(root)
 
 	if len(results) == 0 {
-		fmt.Println("No results")
+		console.Line("No results")
 
 		return
 	}
 
 	for _, n := range results {
-		fmt.Println(n.Format(f))
-		fmt.Printf("  %s\n", n.FormatPath())
+		console.Line(n.Format(f))
+		console.Format("  %s\n", n.FormatPath())
 	}
 }

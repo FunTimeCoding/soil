@@ -1,7 +1,7 @@
 package example
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/git"
 	"github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab"
@@ -18,11 +18,16 @@ func CloneAll() {
 
 	for _, p := range projects {
 		i++
-		fmt.Printf("Project (%d/%d): %s\n", i, count, p.Raw.PathWithNamespace)
+		console.Format(
+			"Project (%d/%d): %s\n",
+			i,
+			count,
+			p.Raw.PathWithNamespace,
+		)
 		group := join.Absolute(base, p.Raw.Namespace.Path)
 		system.EnsurePathExists(group)
 		repository := join.Absolute(group, p.Raw.Path)
-		fmt.Printf("  Clone %s to %s\n", p.Raw.SSHURLToRepo, repository)
+		console.Format("  Clone %s to %s\n", p.Raw.SSHURLToRepo, repository)
 
 		if !system.DirectoryExists(repository) {
 			system.ChangeDirectory(group)

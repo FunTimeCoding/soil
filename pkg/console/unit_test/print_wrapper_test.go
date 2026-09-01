@@ -15,6 +15,6 @@ func TestResponse(t *testing.T) {
 
 func TestPrintWrapperAnchors(t *testing.T) {
 	console.Line()
-	console.Formatted("")
+	console.Format("")
 	assert.NotNil(t, console.Emit)
 }

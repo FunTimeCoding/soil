@@ -1,8 +1,8 @@
 package discord
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/chat/constant"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 )
 
@@ -22,7 +22,7 @@ func (c *Client) DeleteLoop(channel string) {
 		}
 
 		for i, m := range messages {
-			fmt.Printf("Delete %d: %s\n", i, m.ID)
+			console.Format("Delete %d: %s\n", i, m.ID)
 			c.Delete(channel, m)
 		}
 	}

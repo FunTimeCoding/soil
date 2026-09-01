@@ -2,20 +2,20 @@ package chromium
 
 import (
 	"context"
-	"fmt"
 	"github.com/chromedp/cdproto/cdp"
 	"github.com/chromedp/cdproto/page"
 	"github.com/chromedp/cdproto/target"
 	"github.com/chromedp/chromedp"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/time/constant"
 	"time"
 )
 
 func (c *Client) Activate(targetIdentifier string) {
-	fmt.Println("  Activate")
+	console.Line("  Activate")
 	start := time.Now()
-	fmt.Printf("    Start %v\n", start.Format(constant.Micro))
+	console.Format("    Start %v\n", start.Format(constant.Micro))
 	b, e := c.browser()
 	errors.PanicOnError(e)
 	t1 := time.Now()
@@ -24,7 +24,7 @@ func (c *Client) Activate(targetIdentifier string) {
 			cdp.WithExecutor(c.context, b),
 		),
 	)
-	fmt.Printf("    ActivateTarget took %v\n", time.Since(t1))
+	console.Format("    ActivateTarget took %v\n", time.Since(t1))
 	t2 := time.Now()
 	e = chromedp.Run(
 		c.TargetContext(targetIdentifier),
@@ -34,7 +34,7 @@ func (c *Client) Activate(targetIdentifier string) {
 			},
 		),
 	)
-	fmt.Printf("    Reload took %v (error: %v)\n", time.Since(t2), e)
+	console.Format("    Reload took %v (error: %v)\n", time.Since(t2), e)
 	errors.PanicOnError(e)
-	fmt.Printf("    Complete after: %v\n", time.Since(start))
+	console.Format("    Complete after: %v\n", time.Since(start))
 }

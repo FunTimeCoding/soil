@@ -1,7 +1,7 @@
 package monitor
 
-import "fmt"
+import "github.com/funtimecoding/soil/pkg/console"
 
 func NoRelevant(s string) {
-	fmt.Printf("No relevant %s\n", s)
+	console.Format("No relevant %s\n", s)
 }

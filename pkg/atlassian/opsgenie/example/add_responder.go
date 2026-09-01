@@ -1,8 +1,8 @@
 package example
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/tool/common"
 )
@@ -15,7 +15,7 @@ func AddResponder() {
 	f := constant.ExtendedColorFormat.Copy()
 
 	for _, a := range c.Open() {
-		fmt.Println(a.Format(f))
+		console.Line(a.Format(f))
 
 		if false {
 			c.AddResponderUser(a, r)

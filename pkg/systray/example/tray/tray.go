@@ -3,12 +3,12 @@
 package tray
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/getlantern/systray"
 )
 
 func Tray() {
-	fmt.Println("Start")
+	console.Line("Start")
 	systray.Run(onReady, onExit)
-	fmt.Println("After run")
+	console.Line("After run")
 }

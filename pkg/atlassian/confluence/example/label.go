@@ -1,9 +1,9 @@
 package example
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
+	"github.com/funtimecoding/soil/pkg/console"
 )
 
 func Label() {
@@ -11,12 +11,12 @@ func Label() {
 	f := constant.ConfluenceDense
 
 	for _, l := range c.MustLabels() {
-		fmt.Printf("Label: %+v\n", l)
+		console.Format("Label: %+v\n", l)
 	}
 
 	c.SetLabels([]string{"favourite"})
 
 	for _, o := range c.MustLabeled() {
-		fmt.Println(o.Format(f))
+		console.Line(o.Format(f))
 	}
 }

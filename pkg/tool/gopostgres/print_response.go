@@ -2,7 +2,7 @@ package gopostgres
 
 import (
 	"encoding/json"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"io"
@@ -22,5 +22,5 @@ func printResponse(r *http.Response) {
 
 	var v any
 	errors.PanicOnError(json.Unmarshal(b, &v))
-	fmt.Println(notation.MarshalIndent(v))
+	console.Line(notation.MarshalIndent(v))
 }

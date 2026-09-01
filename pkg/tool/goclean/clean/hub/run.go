@@ -1,7 +1,7 @@
 package hub
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/github"
 	"github.com/funtimecoding/soil/pkg/github/constant"
 	"github.com/funtimecoding/soil/pkg/github/run"
@@ -16,7 +16,7 @@ func Run(
 
 	if false {
 		latestRun := run.Latest(runs)
-		fmt.Printf("Latest run: %s\n", latestRun.Name)
+		console.Format("Latest run: %s\n", latestRun.Name)
 	}
 
 	for _, r := range runs {
@@ -24,7 +24,7 @@ func Run(
 			continue
 		}
 
-		fmt.Printf("Delete run: %d\n", r.Identifier)
+		console.Format("Delete run: %d\n", r.Identifier)
 		c.MustDeleteRun(namespace, repository, r.Identifier)
 	}
 }

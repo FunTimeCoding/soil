@@ -1,7 +1,7 @@
 package goclaude
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/constant"
@@ -24,7 +24,7 @@ func statusLine(c *command_context.Context) *cobra.Command {
 			errors.LogOnError(
 				os.WriteFile(constant.StatusLineDumpFile, body, 0o644),
 			)
-			fmt.Println(RunStatusLine(c.Client(), body))
+			console.Line(RunStatusLine(c.Client(), body))
 		},
 	}
 

@@ -1,33 +1,33 @@
 package example
 
 import (
-	"fmt"
-	console "github.com/funtimecoding/soil/pkg/console/constant"
+	"github.com/funtimecoding/soil/pkg/console"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry"
 )
 
 func Issue() {
 	c := sentry.NewEnvironment()
-	f := console.ColorFormat.Copy()
+	f := consoleConstant.ColorFormat.Copy()
 
 	for _, i := range c.MustIssuesSimple(true) {
-		fmt.Printf("Issue: %s\n", i.Format(f))
+		console.Format("Issue: %s\n", i.Format(f))
 	}
 
 	if false {
 		for _, o := range c.MustOrganizations() {
-			fmt.Printf("Organization: %s\n", o.Name)
+			console.Format("Organization: %s\n", o.Name)
 
 			for _, p := range c.MustOrganizationProjects(o.Slug) {
-				fmt.Printf("Project: %s\n", p.Name)
+				console.Format("Project: %s\n", p.Name)
 
 				for _, i := range c.MustIssues(
 					o.Slug,
 					p.Identifier,
 					constant.PeriodFortnight,
 				) {
-					fmt.Printf("Issue: %s\n", i.Format(f))
+					console.Format("Issue: %s\n", i.Format(f))
 				}
 			}
 		}

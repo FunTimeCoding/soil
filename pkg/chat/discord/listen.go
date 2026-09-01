@@ -1,8 +1,8 @@
 package discord
 
 import (
-	"fmt"
 	"github.com/bwmarrin/discordgo"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/system"
 )
 
@@ -15,7 +15,7 @@ func (c *Client) Listen(block bool) {
 		defer c.Close()
 	}
 
-	fmt.Println("Running")
+	console.Line("Running")
 
 	if block {
 		system.KillSignalBlock()

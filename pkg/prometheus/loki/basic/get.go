@@ -1,13 +1,13 @@
 package basic
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func (c *Client) Get(l string) string {
 	if c.verbose {
-		fmt.Printf("GET %s\n", l)
+		console.Format("GET %s\n", l)
 	}
 
 	r := web.NewGet(l)
@@ -15,13 +15,13 @@ func (c *Client) Get(l string) string {
 	s := web.Send(web.Client(), r)
 
 	if c.verbose {
-		fmt.Println("Request:")
-		fmt.Println(r)
-		fmt.Println("Response:")
-		fmt.Println(s)
+		console.Line("Request:")
+		console.Line(r)
+		console.Line("Response:")
+		console.Line(s)
 
 		if s.StatusCode >= 400 {
-			fmt.Printf("Error: %s\n", web.ReadString(s))
+			console.Format("Error: %s\n", web.ReadString(s))
 
 			return ""
 		}

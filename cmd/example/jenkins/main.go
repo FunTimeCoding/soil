@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/jenkins"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/constant"
@@ -13,13 +14,13 @@ func main() {
 
 	if false {
 		plugins := j.Plugins()
-		fmt.Printf("Count: %d\n", len(plugins))
+		console.Format("Count: %d\n", len(plugins))
 
 		for _, p := range plugins {
-			fmt.Printf("%s %s\n", p.ShortName, p.Version)
+			console.Format("%s %s\n", p.ShortName, p.Version)
 
 			if !p.Enabled {
-				fmt.Println("    DISABLED")
+				console.Line("    DISABLED")
 			}
 		}
 	}
@@ -28,7 +29,7 @@ func main() {
 		plugins := j.Basic().Get(
 			"/pluginManager/api/json?tree=plugins[shortName,version,hasUpdate,enabled]",
 		)
-		fmt.Println(plugins)
+		console.Line(plugins)
 	}
 
 	if true {
@@ -41,7 +42,7 @@ func main() {
 
 		for _, o := range j.Jobs() {
 			name := o.GetName()
-			fmt.Println(name)
+			console.Line(name)
 
 			if false {
 				b := j.Basic().Get(fmt.Sprintf("job/%s/config.xml", name))

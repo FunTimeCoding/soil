@@ -1,7 +1,7 @@
 package callback
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/errors/timeout"
 	"time"
@@ -9,7 +9,7 @@ import (
 
 func (s *Server) WaitForCallback() string {
 	if s.verbose {
-		fmt.Println("Wait for callback")
+		console.Line("Wait for callback")
 	}
 
 	select {

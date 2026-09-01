@@ -115,11 +115,11 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 // The interface specification for the client above.
 type ClientInterface interface {
 
-	// GetPackages performs a GET /api/v1/packages (the `GetPackages` operationId) request.
+	// GetPackages performs a GET /api/packages (the `GetPackages` operationId) request.
 	GetPackages(ctx context.Context, params *GetPackagesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
 
-// GetPackages performs a GET /api/v1/packages (the `GetPackages` operationId) request.
+// GetPackages performs a GET /api/packages (the `GetPackages` operationId) request.
 func (c *Client) GetPackages(ctx context.Context, params *GetPackagesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetPackagesRequest(c.Server, params)
 	if err != nil {
@@ -141,7 +141,7 @@ func NewGetPackagesRequest(server string, params *GetPackagesParams) (*http.Requ
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/packages")
+	operationPath := fmt.Sprintf("/api/packages")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -230,7 +230,7 @@ func WithBaseURL(baseURL string) ClientOption {
 // ClientWithResponsesInterface is the interface specification for the client with responses above.
 type ClientWithResponsesInterface interface {
 
-	// GetPackagesWithResponse performs a GET /api/v1/packages (the `GetPackages` operationId) request.
+	// GetPackagesWithResponse performs a GET /api/packages (the `GetPackages` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetPackagesWithResponse(ctx context.Context, params *GetPackagesParams, reqEditors ...RequestEditorFn) (*GetPackagesResponse, error)
@@ -284,7 +284,7 @@ func (r GetPackagesResponse) ContentType() string {
 	return ""
 }
 
-// GetPackagesWithResponse performs a GET /api/v1/packages (the `GetPackages` operationId) request.
+// GetPackagesWithResponse performs a GET /api/packages (the `GetPackages` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetPackagesWithResponse(ctx context.Context, params *GetPackagesParams, reqEditors ...RequestEditorFn) (*GetPackagesResponse, error) {

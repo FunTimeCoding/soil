@@ -1,13 +1,13 @@
 package frame_probe
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/chromium"
 	"github.com/funtimecoding/soil/pkg/chromium/constant"
+	"github.com/funtimecoding/soil/pkg/console"
 )
 
 func printIframeRoots(c *chromium.Client) {
-	fmt.Println("=== iframe target root frames ===")
+	console.Line("=== iframe target root frames ===")
 
 	for _, t := range c.Tabs() {
 		if t.Type != constant.IframeTabType {
@@ -15,7 +15,7 @@ func printIframeRoots(c *chromium.Client) {
 		}
 
 		root := frameTree(c, t.Identifier).Frame
-		fmt.Printf(
+		console.Format(
 			"target %s root frame %s match=%v %s\n",
 			t.Identifier,
 			root.ID,

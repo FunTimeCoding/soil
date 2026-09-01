@@ -1,8 +1,8 @@
 package status
 
 import (
-	"fmt"
-	console "github.com/funtimecoding/soil/pkg/console/constant"
+	"github.com/funtimecoding/soil/pkg/console"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/git/check/status/option"
 	"github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/git/repository"
@@ -27,11 +27,11 @@ func Check(o *option.Status) {
 	f := constant.Format.Copy()
 
 	if o.Verbose {
-		f.Tag(console.TagChanges)
+		f.Tag(consoleConstant.TagChanges)
 	}
 
 	for _, r := range elements {
-		fmt.Println(r.Format(f))
+		console.Line(r.Format(f))
 	}
 
 	if len(elements) == 0 {

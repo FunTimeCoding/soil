@@ -142,7 +142,7 @@ func Chroma() {
 	   		results[ecI] = docs
 	   	}
 
-	   	fmt.Printf("Results:\n")
+	   	console.Format("Results:\n")
 
 	   	for ecI, ec := range cases {
 	   		texts := make([]string, len(results[ecI]))
@@ -151,8 +151,8 @@ func Chroma() {
 	   			texts[docI] = doc.PageContent
 	   		}
 
-	   		fmt.Printf("%d. case: %s\n", ecI+1, ec.name)
-	   		fmt.Printf("    result: %s\n", join.CommaSpace(texts))
+	   		console.Format("%d. case: %s\n", ecI+1, ec.name)
+	   		console.Format("    result: %s\n", join.CommaSpace(texts))
 	   	}
 	   }
 	*/

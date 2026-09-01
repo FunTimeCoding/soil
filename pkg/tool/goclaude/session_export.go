@@ -2,7 +2,7 @@ package goclaude
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/spf13/cobra"
@@ -25,14 +25,14 @@ func sessionExport(c *command_context.Context) *cobra.Command {
 				errors.PanicOnError(e)
 
 				for _, path := range response.JSON200.Paths {
-					fmt.Printf("exported: %s\n", path)
+					console.Format("exported: %s\n", path)
 				}
 
 				return
 			}
 
 			if len(arguments) == 0 {
-				fmt.Println("provide a session id or use --all")
+				console.Line("provide a session id or use --all")
 
 				return
 			}
@@ -40,7 +40,7 @@ func sessionExport(c *command_context.Context) *cobra.Command {
 			identifier := resolveSession(c.Client(), arguments[0])
 
 			if identifier == "" {
-				fmt.Printf("session not found: %s\n", arguments[0])
+				console.Format("session not found: %s\n", arguments[0])
 
 				return
 			}
@@ -52,7 +52,7 @@ func sessionExport(c *command_context.Context) *cobra.Command {
 			errors.PanicOnError(e)
 
 			for _, path := range response.JSON200.Paths {
-				fmt.Printf("exported: %s\n", path)
+				console.Format("exported: %s\n", path)
 			}
 		},
 	}

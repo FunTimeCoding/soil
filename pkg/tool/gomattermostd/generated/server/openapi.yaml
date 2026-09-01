@@ -60,7 +60,7 @@ components:
           type: string
 
 paths:
-  /api/v1/status:
+  /api/status:
     get:
       operationId: getStatus
       summary: Daemon identity and version
@@ -72,7 +72,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Status"
 
-  /api/v1/channel/{name}/posts:
+  /api/channel/{name}/posts:
     get:
       operationId: getChannelPosts
       summary: Posts of a channel since a time, replies and attachment-only posts included, oldest first
@@ -114,7 +114,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
-  /api/v1/post/{identifier}/reactions:
+  /api/post/{identifier}/reactions:
     get:
       operationId: getPostReactions
       summary: Emoji names of a post's reactions
@@ -147,7 +147,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
 
-  /api/v1/thread/{identifier}:
+  /api/thread/{identifier}:
     get:
       operationId: getThread
       summary: Replies of a thread by its root post identifier, oldest first

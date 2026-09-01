@@ -1,7 +1,7 @@
 package parse
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/prometheus/common/model"
 	"log"
 )
@@ -24,7 +24,7 @@ func VectorFloatSingle(v model.Value) float64 {
 	}
 
 	for _, l := range vector {
-		fmt.Printf("Sample: %+v\n", l)
+		console.Format("Sample: %+v\n", l)
 	}
 
 	log.Panicf("too many samples: %d", count)

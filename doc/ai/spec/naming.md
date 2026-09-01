@@ -74,6 +74,13 @@ most specific English term for that domain artifact:
 | `DataDirectoryEnvironment` | `StorageDirectoryEnvironment` | env var pointing to storage dir |
 | `DataHost` (CDN constant) | `AssetHost` | CDN endpoint for media files |
 
+## Environment variable names
+
+Singular, even when the value is a comma-separated list:
+`CREDENTIAL_REVEALED_FIELD` carries `A,B,C`. The general
+avoid-plurals rule applies to env var names too - a list-valued
+variable does not earn a plural.
+
 ## HTTP handler conventions
 
 See `generated-api.md` for the full Server pattern. Summary:

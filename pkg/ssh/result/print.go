@@ -1,19 +1,19 @@
 package result
 
-import "fmt"
+import "github.com/funtimecoding/soil/pkg/console"
 
 func (r *Result) Print() {
 	if r.Exit != 0 || r.Error != nil {
-		fmt.Printf("Error (%d): %v\n", r.Exit, r.Error)
+		console.Format("Error (%d): %v\n", r.Exit, r.Error)
 	}
 
 	if r.OutputString != "" {
-		fmt.Println("Stdout:")
-		fmt.Println(r.OutputString)
+		console.Line("Stdout:")
+		console.Line(r.OutputString)
 	}
 
 	if r.ErrorString != "" {
-		fmt.Println("Stderr:")
-		fmt.Println(r.ErrorString)
+		console.Line("Stderr:")
+		console.Line(r.ErrorString)
 	}
 }

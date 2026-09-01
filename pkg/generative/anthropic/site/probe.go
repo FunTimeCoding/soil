@@ -1,17 +1,17 @@
 package site
 
-import "fmt"
+import "github.com/funtimecoding/soil/pkg/console"
 
 func (s *Site) Probe() {
 	n := s.protocol.Select("div[role='meter']", 0)
 
 	if n == nil {
-		fmt.Println("no meter found")
+		console.Line("no meter found")
 
 		return
 	}
 
-	fmt.Printf("aria-valuenow: %s\n\n", n.AttributeValue("aria-valuenow"))
-	fmt.Println("--- great-grandparent ---")
-	fmt.Println(s.protocol.Outer("div:has(> div > div > div[role='meter'])"))
+	console.Format("aria-valuenow: %s\n\n", n.AttributeValue("aria-valuenow"))
+	console.Line("--- great-grandparent ---")
+	console.Line(s.protocol.Outer("div:has(> div > div > div[role='meter'])"))
 }

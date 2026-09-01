@@ -1,15 +1,15 @@
 package frame_probe
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/chromium"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/notation"
 )
 
 func printTargets(c *chromium.Client) {
-	fmt.Println("=== Target.getTargets ===")
+	console.Line("=== Target.getTargets ===")
 
 	for _, t := range c.Targets() {
-		fmt.Println(notation.MarshalIndent(t))
+		console.Line(notation.MarshalIndent(t))
 	}
 }

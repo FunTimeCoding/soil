@@ -2,9 +2,9 @@ package example
 
 import (
 	"context"
-	"fmt"
 	"github.com/anthropics/anthropic-sdk-go"
 	"github.com/anthropics/anthropic-sdk-go/option"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/system/environment"
@@ -36,5 +36,5 @@ func Official() {
 		},
 	)
 	errors.PanicOnError(e)
-	fmt.Printf("%+v\n", r.Content)
+	console.Format("%+v\n", r.Content)
 }

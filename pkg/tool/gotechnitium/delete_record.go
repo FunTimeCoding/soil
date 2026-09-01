@@ -1,7 +1,7 @@
 package gotechnitium
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/technitium"
 	"github.com/spf13/cobra"
@@ -19,7 +19,12 @@ func deleteRecord(c *technitium.Client) *cobra.Command {
 			arguments []string,
 		) {
 			c.MustDeleteRecord(arguments[0], recordType, value)
-			fmt.Printf("deleted: %s %s %s\n", arguments[0], recordType, value)
+			console.Format(
+				"deleted: %s %s %s\n",
+				arguments[0],
+				recordType,
+				value,
+			)
 		},
 	}
 	result.Flags().StringVar(

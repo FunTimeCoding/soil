@@ -2,7 +2,7 @@ package goclaude
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/constant"
@@ -21,7 +21,7 @@ func sessionPeek(c *command_context.Context) *cobra.Command {
 			identifier := resolveSession(c.Client(), arguments[0])
 
 			if identifier == "" {
-				fmt.Printf("session not found: %s\n", arguments[0])
+				console.Format("session not found: %s\n", arguments[0])
 
 				return
 			}
@@ -34,13 +34,13 @@ func sessionPeek(c *command_context.Context) *cobra.Command {
 			p := response.JSON200
 			lines := p.LineCount
 			total := len(p.Entries)
-			fmt.Printf(
+			console.Format(
 				"%d lines, %d user messages\n",
 				lines,
 				p.UserMessageCount,
 			)
 			printToolSummary(p.TotalToolCalls, p.ToolCounts)
-			fmt.Println()
+			console.Line()
 
 			if total == 0 {
 				return
@@ -97,7 +97,7 @@ func sessionPeek(c *command_context.Context) *cobra.Command {
 
 			if samples > 0 && middle > 0 {
 				step := middle / samples
-				fmt.Printf("--- (%d messages) ---\n", middle)
+				console.Format("--- (%d messages) ---\n", middle)
 
 				for i := 0; i < samples; i++ {
 					idx := head + i*step
@@ -109,11 +109,11 @@ func sessionPeek(c *command_context.Context) *cobra.Command {
 					)
 				}
 			} else if middle > 0 {
-				fmt.Printf("--- (%d messages) ---\n", middle)
+				console.Format("--- (%d messages) ---\n", middle)
 			}
 
 			if tail > 0 {
-				fmt.Printf("---\n")
+				console.Format("---\n")
 
 				for j, entry := range p.Entries[total-tail:] {
 					limit := midLimit

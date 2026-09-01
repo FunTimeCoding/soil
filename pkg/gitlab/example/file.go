@@ -1,9 +1,9 @@
 package example
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
 	"github.com/funtimecoding/soil/pkg/argument/constant"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/gitlab"
 )
 
@@ -21,5 +21,5 @@ func File() {
 	g := gitlab.NewEnvironment()
 	p := g.MustProjectByName(owner, repository)
 	f := g.MustFile(p.Identifier, branch, file)
-	fmt.Printf("File: %+v\n", f)
+	console.Format("File: %+v\n", f)
 }

@@ -1,10 +1,10 @@
 package gomattermost
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
 	chat "github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/thread"
+	"github.com/funtimecoding/soil/pkg/console"
 	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/generative/ollama"
@@ -27,7 +27,7 @@ func Main(
 	a.Parse(version, gitHash, buildDate)
 	c := common.Mattermost()
 	t := timeLibrary.Midnight(time.Now())
-	fmt.Printf(
+	console.Format(
 		"Unresolved threads since %s\n",
 		t.Format(timeConstant.DateMinute),
 	)
@@ -86,9 +86,9 @@ Next step: unclear
 
 	for _, h := range relevant {
 		formatted := h.Format(f)
-		fmt.Println(formatted)
+		console.Line(formatted)
 		r := o.GenerateSimple(template.Execute(tem, formatted))
-		fmt.Printf("%s\n", consoleConstant.Magenta("%s", r.Text))
+		console.Format("%s\n", consoleConstant.Magenta("%s", r.Text))
 
 		if false {
 			r.Print()
@@ -96,6 +96,6 @@ Next step: unclear
 	}
 
 	if len(relevant) == 0 {
-		fmt.Println("No unresolved threads")
+		console.Line("No unresolved threads")
 	}
 }

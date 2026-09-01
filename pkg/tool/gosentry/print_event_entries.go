@@ -1,7 +1,7 @@
 package gosentry
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/basic/response"
 )
 
@@ -18,7 +18,7 @@ func printEventEntries(entries []response.EventEntry) {
 			}
 
 			if m != "" {
-				fmt.Printf("Message: %s\n", m)
+				console.Format("Message: %s\n", m)
 			}
 		}
 	}

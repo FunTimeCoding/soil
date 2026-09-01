@@ -2,7 +2,7 @@ package goclaude
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/spf13/cobra"
@@ -20,7 +20,7 @@ func sessionTools(c *command_context.Context) *cobra.Command {
 			identifier := resolveSession(c.Client(), arguments[0])
 
 			if identifier == "" {
-				fmt.Printf("session not found: %s\n", arguments[0])
+				console.Format("session not found: %s\n", arguments[0])
 
 				return
 			}
@@ -33,19 +33,19 @@ func sessionTools(c *command_context.Context) *cobra.Command {
 			t := response.JSON200
 
 			if len(t.Counts) == 0 {
-				fmt.Println("no tool calls found")
+				console.Line("no tool calls found")
 
 				return
 			}
 
-			fmt.Printf("%-40s %6s\n", "Tool", "Calls")
-			fmt.Printf("%-40s %6s\n", "----", "-----")
+			console.Format("%-40s %6s\n", "Tool", "Calls")
+			console.Format("%-40s %6s\n", "----", "-----")
 
 			for _, entry := range t.Counts {
-				fmt.Printf("%-40s %6d\n", entry.Name, entry.Count)
+				console.Format("%-40s %6d\n", entry.Name, entry.Count)
 			}
 
-			fmt.Printf(
+			console.Format(
 				"%-40s %6d  (%d distinct)\n",
 				"TOTAL",
 				t.Total,

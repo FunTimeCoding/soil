@@ -3,7 +3,7 @@ package goquery
 import (
 	"context"
 	"encoding/json"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 	"github.com/spf13/cobra"
@@ -29,13 +29,13 @@ func removeContext(c *client.Client) *cobra.Command {
 			errors.PanicOnError(json.NewDecoder(r.Body).Decode(&result))
 
 			if result["deleted"] {
-				fmt.Printf(
+				console.Format(
 					"context removed: %s %s\n",
 					arguments[0],
 					arguments[1],
 				)
 			} else {
-				fmt.Printf(
+				console.Format(
 					"context not found: %s %s\n",
 					arguments[0],
 					arguments[1],

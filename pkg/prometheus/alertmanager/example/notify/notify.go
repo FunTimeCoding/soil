@@ -1,7 +1,7 @@
 package notify
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/common"
 )
@@ -13,5 +13,5 @@ func Notify() {
 	go worker(stop, c, s)
 	system.KillSignalBlock()
 	close(stop)
-	fmt.Println("Stop")
+	console.Line("Stop")
 }

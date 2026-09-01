@@ -1,8 +1,8 @@
 package jira
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
+	"github.com/funtimecoding/soil/pkg/console"
 )
 
 func (c *Client) DynamicModules() error {
@@ -13,7 +13,7 @@ func (c *Client) DynamicModules() error {
 	}
 
 	// 401 {"message":"The request is not from a Connect app."}
-	fmt.Printf("DynamicModule: %d %s\n", status, body)
+	console.Format("DynamicModule: %d %s\n", status, body)
 
 	return nil
 }

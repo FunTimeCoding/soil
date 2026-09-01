@@ -186,42 +186,42 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 // The interface specification for the client above.
 type ClientInterface interface {
 
-	// ExplainWithBody performs a POST /api/v1/explain (the `Explain` operationId) request,
+	// ExplainWithBody performs a POST /api/explain (the `Explain` operationId) request,
 	// with any type of body and a specified content type.
 	ExplainWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// Explain performs a POST /api/v1/explain (the `Explain` operationId) request.
+	// Explain performs a POST /api/explain (the `Explain` operationId) request.
 	// Takes a body of the `application/json` content type.
 	Explain(ctx context.Context, body ExplainJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListIndexes performs a GET /api/v1/indexes (the `ListIndexes` operationId) request.
+	// ListIndexes performs a GET /api/indexes (the `ListIndexes` operationId) request.
 	ListIndexes(ctx context.Context, params *ListIndexesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListInstances performs a GET /api/v1/instances (the `ListInstances` operationId) request.
+	// ListInstances performs a GET /api/instances (the `ListInstances` operationId) request.
 	ListInstances(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// QueryWithBody performs a POST /api/v1/query (the `Query` operationId) request,
+	// QueryWithBody performs a POST /api/query (the `Query` operationId) request,
 	// with any type of body and a specified content type.
 	QueryWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// Query performs a POST /api/v1/query (the `Query` operationId) request.
+	// Query performs a POST /api/query (the `Query` operationId) request.
 	// Takes a body of the `application/json` content type.
 	Query(ctx context.Context, body QueryJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListSchemas performs a GET /api/v1/schemas (the `ListSchemas` operationId) request.
+	// ListSchemas performs a GET /api/schemas (the `ListSchemas` operationId) request.
 	ListSchemas(ctx context.Context, params *ListSchemasParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// TableSizes performs a GET /api/v1/table-sizes (the `TableSizes` operationId) request.
+	// TableSizes performs a GET /api/table-sizes (the `TableSizes` operationId) request.
 	TableSizes(ctx context.Context, params *TableSizesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListTables performs a GET /api/v1/tables (the `ListTables` operationId) request.
+	// ListTables performs a GET /api/tables (the `ListTables` operationId) request.
 	ListTables(ctx context.Context, params *ListTablesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// DescribeTable performs a GET /api/v1/tables/{table} (the `DescribeTable` operationId) request.
+	// DescribeTable performs a GET /api/tables/{table} (the `DescribeTable` operationId) request.
 	DescribeTable(ctx context.Context, table string, params *DescribeTableParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
 
-// ExplainWithBody performs a POST /api/v1/explain (the `Explain` operationId) request,
+// ExplainWithBody performs a POST /api/explain (the `Explain` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) ExplainWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewExplainRequestWithBody(c.Server, contentType, body)
@@ -235,7 +235,7 @@ func (c *Client) ExplainWithBody(ctx context.Context, contentType string, body i
 	return c.Client.Do(req)
 }
 
-// Explain performs a POST /api/v1/explain (the `Explain` operationId) request.
+// Explain performs a POST /api/explain (the `Explain` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) Explain(ctx context.Context, body ExplainJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewExplainRequest(c.Server, body)
@@ -249,7 +249,7 @@ func (c *Client) Explain(ctx context.Context, body ExplainJSONRequestBody, reqEd
 	return c.Client.Do(req)
 }
 
-// ListIndexes performs a GET /api/v1/indexes (the `ListIndexes` operationId) request.
+// ListIndexes performs a GET /api/indexes (the `ListIndexes` operationId) request.
 func (c *Client) ListIndexes(ctx context.Context, params *ListIndexesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListIndexesRequest(c.Server, params)
 	if err != nil {
@@ -262,7 +262,7 @@ func (c *Client) ListIndexes(ctx context.Context, params *ListIndexesParams, req
 	return c.Client.Do(req)
 }
 
-// ListInstances performs a GET /api/v1/instances (the `ListInstances` operationId) request.
+// ListInstances performs a GET /api/instances (the `ListInstances` operationId) request.
 func (c *Client) ListInstances(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListInstancesRequest(c.Server)
 	if err != nil {
@@ -275,7 +275,7 @@ func (c *Client) ListInstances(ctx context.Context, reqEditors ...RequestEditorF
 	return c.Client.Do(req)
 }
 
-// QueryWithBody performs a POST /api/v1/query (the `Query` operationId) request,
+// QueryWithBody performs a POST /api/query (the `Query` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) QueryWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewQueryRequestWithBody(c.Server, contentType, body)
@@ -289,7 +289,7 @@ func (c *Client) QueryWithBody(ctx context.Context, contentType string, body io.
 	return c.Client.Do(req)
 }
 
-// Query performs a POST /api/v1/query (the `Query` operationId) request.
+// Query performs a POST /api/query (the `Query` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) Query(ctx context.Context, body QueryJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewQueryRequest(c.Server, body)
@@ -303,7 +303,7 @@ func (c *Client) Query(ctx context.Context, body QueryJSONRequestBody, reqEditor
 	return c.Client.Do(req)
 }
 
-// ListSchemas performs a GET /api/v1/schemas (the `ListSchemas` operationId) request.
+// ListSchemas performs a GET /api/schemas (the `ListSchemas` operationId) request.
 func (c *Client) ListSchemas(ctx context.Context, params *ListSchemasParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListSchemasRequest(c.Server, params)
 	if err != nil {
@@ -316,7 +316,7 @@ func (c *Client) ListSchemas(ctx context.Context, params *ListSchemasParams, req
 	return c.Client.Do(req)
 }
 
-// TableSizes performs a GET /api/v1/table-sizes (the `TableSizes` operationId) request.
+// TableSizes performs a GET /api/table-sizes (the `TableSizes` operationId) request.
 func (c *Client) TableSizes(ctx context.Context, params *TableSizesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewTableSizesRequest(c.Server, params)
 	if err != nil {
@@ -329,7 +329,7 @@ func (c *Client) TableSizes(ctx context.Context, params *TableSizesParams, reqEd
 	return c.Client.Do(req)
 }
 
-// ListTables performs a GET /api/v1/tables (the `ListTables` operationId) request.
+// ListTables performs a GET /api/tables (the `ListTables` operationId) request.
 func (c *Client) ListTables(ctx context.Context, params *ListTablesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListTablesRequest(c.Server, params)
 	if err != nil {
@@ -342,7 +342,7 @@ func (c *Client) ListTables(ctx context.Context, params *ListTablesParams, reqEd
 	return c.Client.Do(req)
 }
 
-// DescribeTable performs a GET /api/v1/tables/{table} (the `DescribeTable` operationId) request.
+// DescribeTable performs a GET /api/tables/{table} (the `DescribeTable` operationId) request.
 func (c *Client) DescribeTable(ctx context.Context, table string, params *DescribeTableParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewDescribeTableRequest(c.Server, table, params)
 	if err != nil {
@@ -375,7 +375,7 @@ func NewExplainRequestWithBody(server string, contentType string, body io.Reader
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/explain")
+	operationPath := fmt.Sprintf("/api/explain")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -404,7 +404,7 @@ func NewListIndexesRequest(server string, params *ListIndexesParams) (*http.Requ
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/indexes")
+	operationPath := fmt.Sprintf("/api/indexes")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -478,7 +478,7 @@ func NewListInstancesRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/instances")
+	operationPath := fmt.Sprintf("/api/instances")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -516,7 +516,7 @@ func NewQueryRequestWithBody(server string, contentType string, body io.Reader) 
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/query")
+	operationPath := fmt.Sprintf("/api/query")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -545,7 +545,7 @@ func NewListSchemasRequest(server string, params *ListSchemasParams) (*http.Requ
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/schemas")
+	operationPath := fmt.Sprintf("/api/schemas")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -599,7 +599,7 @@ func NewTableSizesRequest(server string, params *TableSizesParams) (*http.Reques
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/table-sizes")
+	operationPath := fmt.Sprintf("/api/table-sizes")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -665,7 +665,7 @@ func NewListTablesRequest(server string, params *ListTablesParams) (*http.Reques
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/tables")
+	operationPath := fmt.Sprintf("/api/tables")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -738,7 +738,7 @@ func NewDescribeTableRequest(server string, table string, params *DescribeTableP
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/tables/%s", pathParam0)
+	operationPath := fmt.Sprintf("/api/tables/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -839,52 +839,52 @@ func WithBaseURL(baseURL string) ClientOption {
 // ClientWithResponsesInterface is the interface specification for the client with responses above.
 type ClientWithResponsesInterface interface {
 
-	// ExplainWithBodyWithResponse performs a POST /api/v1/explain (the `Explain` operationId) request,
+	// ExplainWithBodyWithResponse performs a POST /api/explain (the `Explain` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ExplainWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ExplainResponse, error)
 
-	// ExplainWithResponse performs a POST /api/v1/explain (the `Explain` operationId) request.
+	// ExplainWithResponse performs a POST /api/explain (the `Explain` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	ExplainWithResponse(ctx context.Context, body ExplainJSONRequestBody, reqEditors ...RequestEditorFn) (*ExplainResponse, error)
 
-	// ListIndexesWithResponse performs a GET /api/v1/indexes (the `ListIndexes` operationId) request.
+	// ListIndexesWithResponse performs a GET /api/indexes (the `ListIndexes` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListIndexesWithResponse(ctx context.Context, params *ListIndexesParams, reqEditors ...RequestEditorFn) (*ListIndexesResponse, error)
 
-	// ListInstancesWithResponse performs a GET /api/v1/instances (the `ListInstances` operationId) request.
+	// ListInstancesWithResponse performs a GET /api/instances (the `ListInstances` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListInstancesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListInstancesResponse, error)
 
-	// QueryWithBodyWithResponse performs a POST /api/v1/query (the `Query` operationId) request,
+	// QueryWithBodyWithResponse performs a POST /api/query (the `Query` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	QueryWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*QueryResponse, error)
 
-	// QueryWithResponse performs a POST /api/v1/query (the `Query` operationId) request.
+	// QueryWithResponse performs a POST /api/query (the `Query` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	QueryWithResponse(ctx context.Context, body QueryJSONRequestBody, reqEditors ...RequestEditorFn) (*QueryResponse, error)
 
-	// ListSchemasWithResponse performs a GET /api/v1/schemas (the `ListSchemas` operationId) request.
+	// ListSchemasWithResponse performs a GET /api/schemas (the `ListSchemas` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListSchemasWithResponse(ctx context.Context, params *ListSchemasParams, reqEditors ...RequestEditorFn) (*ListSchemasResponse, error)
 
-	// TableSizesWithResponse performs a GET /api/v1/table-sizes (the `TableSizes` operationId) request.
+	// TableSizesWithResponse performs a GET /api/table-sizes (the `TableSizes` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	TableSizesWithResponse(ctx context.Context, params *TableSizesParams, reqEditors ...RequestEditorFn) (*TableSizesResponse, error)
 
-	// ListTablesWithResponse performs a GET /api/v1/tables (the `ListTables` operationId) request.
+	// ListTablesWithResponse performs a GET /api/tables (the `ListTables` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListTablesWithResponse(ctx context.Context, params *ListTablesParams, reqEditors ...RequestEditorFn) (*ListTablesResponse, error)
 
-	// DescribeTableWithResponse performs a GET /api/v1/tables/{table} (the `DescribeTable` operationId) request.
+	// DescribeTableWithResponse performs a GET /api/tables/{table} (the `DescribeTable` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	DescribeTableWithResponse(ctx context.Context, table string, params *DescribeTableParams, reqEditors ...RequestEditorFn) (*DescribeTableResponse, error)
@@ -1316,7 +1316,7 @@ func (r DescribeTableResponse) ContentType() string {
 	return ""
 }
 
-// ExplainWithBodyWithResponse performs a POST /api/v1/explain (the `Explain` operationId) request,
+// ExplainWithBodyWithResponse performs a POST /api/explain (the `Explain` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -1328,7 +1328,7 @@ func (c *ClientWithResponses) ExplainWithBodyWithResponse(ctx context.Context, c
 	return ParseExplainResponse(rsp)
 }
 
-// ExplainWithResponse performs a POST /api/v1/explain (the `Explain` operationId) request.
+// ExplainWithResponse performs a POST /api/explain (the `Explain` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ExplainWithResponse(ctx context.Context, body ExplainJSONRequestBody, reqEditors ...RequestEditorFn) (*ExplainResponse, error) {
 	rsp, err := c.Explain(ctx, body, reqEditors...)
@@ -1338,7 +1338,7 @@ func (c *ClientWithResponses) ExplainWithResponse(ctx context.Context, body Expl
 	return ParseExplainResponse(rsp)
 }
 
-// ListIndexesWithResponse performs a GET /api/v1/indexes (the `ListIndexes` operationId) request.
+// ListIndexesWithResponse performs a GET /api/indexes (the `ListIndexes` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListIndexesWithResponse(ctx context.Context, params *ListIndexesParams, reqEditors ...RequestEditorFn) (*ListIndexesResponse, error) {
@@ -1349,7 +1349,7 @@ func (c *ClientWithResponses) ListIndexesWithResponse(ctx context.Context, param
 	return ParseListIndexesResponse(rsp)
 }
 
-// ListInstancesWithResponse performs a GET /api/v1/instances (the `ListInstances` operationId) request.
+// ListInstancesWithResponse performs a GET /api/instances (the `ListInstances` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListInstancesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListInstancesResponse, error) {
@@ -1360,7 +1360,7 @@ func (c *ClientWithResponses) ListInstancesWithResponse(ctx context.Context, req
 	return ParseListInstancesResponse(rsp)
 }
 
-// QueryWithBodyWithResponse performs a POST /api/v1/query (the `Query` operationId) request,
+// QueryWithBodyWithResponse performs a POST /api/query (the `Query` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -1372,7 +1372,7 @@ func (c *ClientWithResponses) QueryWithBodyWithResponse(ctx context.Context, con
 	return ParseQueryResponse(rsp)
 }
 
-// QueryWithResponse performs a POST /api/v1/query (the `Query` operationId) request.
+// QueryWithResponse performs a POST /api/query (the `Query` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) QueryWithResponse(ctx context.Context, body QueryJSONRequestBody, reqEditors ...RequestEditorFn) (*QueryResponse, error) {
 	rsp, err := c.Query(ctx, body, reqEditors...)
@@ -1382,7 +1382,7 @@ func (c *ClientWithResponses) QueryWithResponse(ctx context.Context, body QueryJ
 	return ParseQueryResponse(rsp)
 }
 
-// ListSchemasWithResponse performs a GET /api/v1/schemas (the `ListSchemas` operationId) request.
+// ListSchemasWithResponse performs a GET /api/schemas (the `ListSchemas` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListSchemasWithResponse(ctx context.Context, params *ListSchemasParams, reqEditors ...RequestEditorFn) (*ListSchemasResponse, error) {
@@ -1393,7 +1393,7 @@ func (c *ClientWithResponses) ListSchemasWithResponse(ctx context.Context, param
 	return ParseListSchemasResponse(rsp)
 }
 
-// TableSizesWithResponse performs a GET /api/v1/table-sizes (the `TableSizes` operationId) request.
+// TableSizesWithResponse performs a GET /api/table-sizes (the `TableSizes` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) TableSizesWithResponse(ctx context.Context, params *TableSizesParams, reqEditors ...RequestEditorFn) (*TableSizesResponse, error) {
@@ -1404,7 +1404,7 @@ func (c *ClientWithResponses) TableSizesWithResponse(ctx context.Context, params
 	return ParseTableSizesResponse(rsp)
 }
 
-// ListTablesWithResponse performs a GET /api/v1/tables (the `ListTables` operationId) request.
+// ListTablesWithResponse performs a GET /api/tables (the `ListTables` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListTablesWithResponse(ctx context.Context, params *ListTablesParams, reqEditors ...RequestEditorFn) (*ListTablesResponse, error) {
@@ -1415,7 +1415,7 @@ func (c *ClientWithResponses) ListTablesWithResponse(ctx context.Context, params
 	return ParseListTablesResponse(rsp)
 }
 
-// DescribeTableWithResponse performs a GET /api/v1/tables/{table} (the `DescribeTable` operationId) request.
+// DescribeTableWithResponse performs a GET /api/tables/{table} (the `DescribeTable` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) DescribeTableWithResponse(ctx context.Context, table string, params *DescribeTableParams, reqEditors ...RequestEditorFn) (*DescribeTableResponse, error) {

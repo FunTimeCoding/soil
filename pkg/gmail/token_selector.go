@@ -2,6 +2,7 @@ package gmail
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/maps"
 	"golang.org/x/oauth2"
@@ -9,11 +10,11 @@ import (
 )
 
 func tokenSelector(m map[string]*oauth2.Token) *oauth2.Token {
-	fmt.Printf("Select token by number\n")
+	console.Format("Select token by number\n")
 	sorted := maps.StringKeys(m)
 
 	for i, k := range sorted {
-		fmt.Printf("%d: %s\n", i+1, k)
+		console.Format("%d: %s\n", i+1, k)
 	}
 
 	var choice int

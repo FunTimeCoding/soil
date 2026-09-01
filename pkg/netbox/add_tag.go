@@ -1,7 +1,7 @@
 package netbox
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/netbox/device"
 )
 
@@ -16,7 +16,11 @@ func (c *Client) AddTag(
 	}
 
 	if c.verbose {
-		fmt.Printf("ADD tag: %s %s\n", t.Nested.GetName(), t.Nested.GetSlug())
+		console.Format(
+			"ADD tag: %s %s\n",
+			t.Nested.GetName(),
+			t.Nested.GetSlug(),
+		)
 	}
 
 	d, f := c.DeviceByName(deviceName)
@@ -26,8 +30,8 @@ func (c *Client) AddTag(
 	}
 
 	if c.verbose {
-		fmt.Printf("add tag device: %+v\n", d)
-		fmt.Printf("add tag raw device: %+v\n", d.Raw)
+		console.Format("add tag device: %+v\n", d)
+		console.Format("add tag raw device: %+v\n", d.Raw)
 	}
 
 	d.AddTag(t.Name)

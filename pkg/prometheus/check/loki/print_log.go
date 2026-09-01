@@ -1,7 +1,7 @@
 package loki
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/console/status"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/prometheus/loki/message"
@@ -18,6 +18,6 @@ func printLog(
 		).String(
 			m.Stream,
 		)
-		fmt.Println(s.Format())
+		console.Line(s.Format())
 	}
 }

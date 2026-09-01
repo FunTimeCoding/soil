@@ -2,7 +2,7 @@ package goclaude
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
@@ -23,7 +23,7 @@ func sessionPrint(c *command_context.Context) *cobra.Command {
 			identifier := resolveSession(c.Client(), arguments[0])
 
 			if identifier == "" {
-				fmt.Printf("session not found: %s\n", arguments[0])
+				console.Format("session not found: %s\n", arguments[0])
 
 				return
 			}
@@ -62,7 +62,7 @@ func sessionPrint(c *command_context.Context) *cobra.Command {
 				from, to, okay = parseTurnRange(turns)
 
 				if !okay {
-					fmt.Printf("invalid --turns range: %s\n", turns)
+					console.Format("invalid --turns range: %s\n", turns)
 
 					return
 				}
@@ -84,12 +84,16 @@ func sessionPrint(c *command_context.Context) *cobra.Command {
 				}
 
 				if m.Role == "user" {
-					fmt.Printf("## user [%d]\n\n%s\n\n", turnNumbers[i], m.Text)
+					console.Format(
+						"## user [%d]\n\n%s\n\n",
+						turnNumbers[i],
+						m.Text,
+					)
 
 					continue
 				}
 
-				fmt.Printf("## %s\n\n%s\n\n", m.Role, m.Text)
+				console.Format("## %s\n\n%s\n\n", m.Role, m.Text)
 			}
 		},
 	}

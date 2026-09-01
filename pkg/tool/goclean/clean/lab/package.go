@@ -1,7 +1,7 @@
 package lab
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/gitlab"
 	"github.com/funtimecoding/soil/pkg/gitlab/packages"
 	"github.com/funtimecoding/soil/pkg/gitlab/project"
@@ -30,7 +30,7 @@ func Package(
 				continue
 			}
 
-			fmt.Printf("Package: %s %s\n", a.Name, a.Version)
+			console.Format("Package: %s %s\n", a.Name, a.Version)
 			c.MustDeletePackage(p.Identifier, a.ID)
 		}
 	}

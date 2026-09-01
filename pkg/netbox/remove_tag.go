@@ -1,7 +1,7 @@
 package netbox
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/netbox/device"
 )
 
@@ -16,8 +16,8 @@ func (c *Client) RemoveTag(
 	}
 
 	if c.verbose {
-		fmt.Printf("remove tag device: %+v\n", d)
-		fmt.Printf("remove tag raw device: %+v\n", d.Raw)
+		console.Format("remove tag device: %+v\n", d)
+		console.Format("remove tag raw device: %+v\n", d.Raw)
 	}
 
 	d.RemoveTag(tag)

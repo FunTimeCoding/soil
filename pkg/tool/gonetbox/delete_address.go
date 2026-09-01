@@ -1,7 +1,6 @@
 package gonetbox
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
@@ -21,7 +20,7 @@ func deleteAddress(c *client.Client) *cobra.Command {
 			identifier, e := strconv.Atoi(arguments[0])
 			errors.PanicOnError(e)
 			console.Emit(c.DeleteAddress(int32(identifier)))
-			fmt.Println("address deleted")
+			console.Line("address deleted")
 		},
 	}
 }

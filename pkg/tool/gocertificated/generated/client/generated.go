@@ -264,59 +264,59 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 // The interface specification for the client above.
 type ClientInterface interface {
 
-	// GetAuthorities performs a GET /api/v1/authorities (the `GetAuthorities` operationId) request.
+	// GetAuthorities performs a GET /api/authorities (the `GetAuthorities` operationId) request.
 	GetAuthorities(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PostAuthorityWithBody performs a POST /api/v1/authorities (the `PostAuthority` operationId) request,
+	// PostAuthorityWithBody performs a POST /api/authorities (the `PostAuthority` operationId) request,
 	// with any type of body and a specified content type.
 	PostAuthorityWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PostAuthority performs a POST /api/v1/authorities (the `PostAuthority` operationId) request.
+	// PostAuthority performs a POST /api/authorities (the `PostAuthority` operationId) request.
 	// Takes a body of the `application/json` content type.
 	PostAuthority(ctx context.Context, body PostAuthorityJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetAuthority performs a GET /api/v1/authorities/{name} (the `GetAuthority` operationId) request.
+	// GetAuthority performs a GET /api/authorities/{name} (the `GetAuthority` operationId) request.
 	GetAuthority(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetCertificates performs a GET /api/v1/certificates (the `GetCertificates` operationId) request.
+	// GetCertificates performs a GET /api/certificates (the `GetCertificates` operationId) request.
 	GetCertificates(ctx context.Context, params *GetCertificatesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PostCertificateWithBody performs a POST /api/v1/certificates (the `PostCertificate` operationId) request,
+	// PostCertificateWithBody performs a POST /api/certificates (the `PostCertificate` operationId) request,
 	// with any type of body and a specified content type.
 	PostCertificateWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PostCertificate performs a POST /api/v1/certificates (the `PostCertificate` operationId) request.
+	// PostCertificate performs a POST /api/certificates (the `PostCertificate` operationId) request.
 	// Takes a body of the `application/json` content type.
 	PostCertificate(ctx context.Context, body PostCertificateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetCertificate performs a GET /api/v1/certificates/{serial} (the `GetCertificate` operationId) request.
+	// GetCertificate performs a GET /api/certificates/{serial} (the `GetCertificate` operationId) request.
 	GetCertificate(ctx context.Context, serial string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PostRevocation performs a POST /api/v1/certificates/{serial}/revocation (the `PostRevocation` operationId) request.
+	// PostRevocation performs a POST /api/certificates/{serial}/revocation (the `PostRevocation` operationId) request.
 	PostRevocation(ctx context.Context, serial string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetPublication performs a GET /api/v1/publication (the `GetPublication` operationId) request.
+	// GetPublication performs a GET /api/publication (the `GetPublication` operationId) request.
 	GetPublication(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PostPublication performs a POST /api/v1/publication (the `PostPublication` operationId) request.
+	// PostPublication performs a POST /api/publication (the `PostPublication` operationId) request.
 	PostPublication(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetRevocationList performs a GET /api/v1/revocation-list (the `GetRevocationList` operationId) request.
+	// GetRevocationList performs a GET /api/revocation-list (the `GetRevocationList` operationId) request.
 	GetRevocationList(ctx context.Context, params *GetRevocationListParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetRoot performs a GET /api/v1/root (the `GetRoot` operationId) request.
+	// GetRoot performs a GET /api/root (the `GetRoot` operationId) request.
 	GetRoot(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PostSigningRequestWithBody performs a POST /api/v1/signing-requests (the `PostSigningRequest` operationId) request,
+	// PostSigningRequestWithBody performs a POST /api/signing-requests (the `PostSigningRequest` operationId) request,
 	// with any type of body and a specified content type.
 	PostSigningRequestWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PostSigningRequest performs a POST /api/v1/signing-requests (the `PostSigningRequest` operationId) request.
+	// PostSigningRequest performs a POST /api/signing-requests (the `PostSigningRequest` operationId) request.
 	// Takes a body of the `application/json` content type.
 	PostSigningRequest(ctx context.Context, body PostSigningRequestJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
 
-// GetAuthorities performs a GET /api/v1/authorities (the `GetAuthorities` operationId) request.
+// GetAuthorities performs a GET /api/authorities (the `GetAuthorities` operationId) request.
 func (c *Client) GetAuthorities(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetAuthoritiesRequest(c.Server)
 	if err != nil {
@@ -329,7 +329,7 @@ func (c *Client) GetAuthorities(ctx context.Context, reqEditors ...RequestEditor
 	return c.Client.Do(req)
 }
 
-// PostAuthorityWithBody performs a POST /api/v1/authorities (the `PostAuthority` operationId) request,
+// PostAuthorityWithBody performs a POST /api/authorities (the `PostAuthority` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) PostAuthorityWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewPostAuthorityRequestWithBody(c.Server, contentType, body)
@@ -343,7 +343,7 @@ func (c *Client) PostAuthorityWithBody(ctx context.Context, contentType string, 
 	return c.Client.Do(req)
 }
 
-// PostAuthority performs a POST /api/v1/authorities (the `PostAuthority` operationId) request.
+// PostAuthority performs a POST /api/authorities (the `PostAuthority` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) PostAuthority(ctx context.Context, body PostAuthorityJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewPostAuthorityRequest(c.Server, body)
@@ -357,7 +357,7 @@ func (c *Client) PostAuthority(ctx context.Context, body PostAuthorityJSONReques
 	return c.Client.Do(req)
 }
 
-// GetAuthority performs a GET /api/v1/authorities/{name} (the `GetAuthority` operationId) request.
+// GetAuthority performs a GET /api/authorities/{name} (the `GetAuthority` operationId) request.
 func (c *Client) GetAuthority(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetAuthorityRequest(c.Server, name)
 	if err != nil {
@@ -370,7 +370,7 @@ func (c *Client) GetAuthority(ctx context.Context, name string, reqEditors ...Re
 	return c.Client.Do(req)
 }
 
-// GetCertificates performs a GET /api/v1/certificates (the `GetCertificates` operationId) request.
+// GetCertificates performs a GET /api/certificates (the `GetCertificates` operationId) request.
 func (c *Client) GetCertificates(ctx context.Context, params *GetCertificatesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetCertificatesRequest(c.Server, params)
 	if err != nil {
@@ -383,7 +383,7 @@ func (c *Client) GetCertificates(ctx context.Context, params *GetCertificatesPar
 	return c.Client.Do(req)
 }
 
-// PostCertificateWithBody performs a POST /api/v1/certificates (the `PostCertificate` operationId) request,
+// PostCertificateWithBody performs a POST /api/certificates (the `PostCertificate` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) PostCertificateWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewPostCertificateRequestWithBody(c.Server, contentType, body)
@@ -397,7 +397,7 @@ func (c *Client) PostCertificateWithBody(ctx context.Context, contentType string
 	return c.Client.Do(req)
 }
 
-// PostCertificate performs a POST /api/v1/certificates (the `PostCertificate` operationId) request.
+// PostCertificate performs a POST /api/certificates (the `PostCertificate` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) PostCertificate(ctx context.Context, body PostCertificateJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewPostCertificateRequest(c.Server, body)
@@ -411,7 +411,7 @@ func (c *Client) PostCertificate(ctx context.Context, body PostCertificateJSONRe
 	return c.Client.Do(req)
 }
 
-// GetCertificate performs a GET /api/v1/certificates/{serial} (the `GetCertificate` operationId) request.
+// GetCertificate performs a GET /api/certificates/{serial} (the `GetCertificate` operationId) request.
 func (c *Client) GetCertificate(ctx context.Context, serial string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetCertificateRequest(c.Server, serial)
 	if err != nil {
@@ -424,7 +424,7 @@ func (c *Client) GetCertificate(ctx context.Context, serial string, reqEditors .
 	return c.Client.Do(req)
 }
 
-// PostRevocation performs a POST /api/v1/certificates/{serial}/revocation (the `PostRevocation` operationId) request.
+// PostRevocation performs a POST /api/certificates/{serial}/revocation (the `PostRevocation` operationId) request.
 func (c *Client) PostRevocation(ctx context.Context, serial string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewPostRevocationRequest(c.Server, serial)
 	if err != nil {
@@ -437,7 +437,7 @@ func (c *Client) PostRevocation(ctx context.Context, serial string, reqEditors .
 	return c.Client.Do(req)
 }
 
-// GetPublication performs a GET /api/v1/publication (the `GetPublication` operationId) request.
+// GetPublication performs a GET /api/publication (the `GetPublication` operationId) request.
 func (c *Client) GetPublication(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetPublicationRequest(c.Server)
 	if err != nil {
@@ -450,7 +450,7 @@ func (c *Client) GetPublication(ctx context.Context, reqEditors ...RequestEditor
 	return c.Client.Do(req)
 }
 
-// PostPublication performs a POST /api/v1/publication (the `PostPublication` operationId) request.
+// PostPublication performs a POST /api/publication (the `PostPublication` operationId) request.
 func (c *Client) PostPublication(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewPostPublicationRequest(c.Server)
 	if err != nil {
@@ -463,7 +463,7 @@ func (c *Client) PostPublication(ctx context.Context, reqEditors ...RequestEdito
 	return c.Client.Do(req)
 }
 
-// GetRevocationList performs a GET /api/v1/revocation-list (the `GetRevocationList` operationId) request.
+// GetRevocationList performs a GET /api/revocation-list (the `GetRevocationList` operationId) request.
 func (c *Client) GetRevocationList(ctx context.Context, params *GetRevocationListParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetRevocationListRequest(c.Server, params)
 	if err != nil {
@@ -476,7 +476,7 @@ func (c *Client) GetRevocationList(ctx context.Context, params *GetRevocationLis
 	return c.Client.Do(req)
 }
 
-// GetRoot performs a GET /api/v1/root (the `GetRoot` operationId) request.
+// GetRoot performs a GET /api/root (the `GetRoot` operationId) request.
 func (c *Client) GetRoot(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetRootRequest(c.Server)
 	if err != nil {
@@ -489,7 +489,7 @@ func (c *Client) GetRoot(ctx context.Context, reqEditors ...RequestEditorFn) (*h
 	return c.Client.Do(req)
 }
 
-// PostSigningRequestWithBody performs a POST /api/v1/signing-requests (the `PostSigningRequest` operationId) request,
+// PostSigningRequestWithBody performs a POST /api/signing-requests (the `PostSigningRequest` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) PostSigningRequestWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewPostSigningRequestRequestWithBody(c.Server, contentType, body)
@@ -503,7 +503,7 @@ func (c *Client) PostSigningRequestWithBody(ctx context.Context, contentType str
 	return c.Client.Do(req)
 }
 
-// PostSigningRequest performs a POST /api/v1/signing-requests (the `PostSigningRequest` operationId) request.
+// PostSigningRequest performs a POST /api/signing-requests (the `PostSigningRequest` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) PostSigningRequest(ctx context.Context, body PostSigningRequestJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewPostSigningRequestRequest(c.Server, body)
@@ -526,7 +526,7 @@ func NewGetAuthoritiesRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/authorities")
+	operationPath := fmt.Sprintf("/api/authorities")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -564,7 +564,7 @@ func NewPostAuthorityRequestWithBody(server string, contentType string, body io.
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/authorities")
+	operationPath := fmt.Sprintf("/api/authorities")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -600,7 +600,7 @@ func NewGetAuthorityRequest(server string, name string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/authorities/%s", pathParam0)
+	operationPath := fmt.Sprintf("/api/authorities/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -627,7 +627,7 @@ func NewGetCertificatesRequest(server string, params *GetCertificatesParams) (*h
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/certificates")
+	operationPath := fmt.Sprintf("/api/certificates")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -740,7 +740,7 @@ func NewPostCertificateRequestWithBody(server string, contentType string, body i
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/certificates")
+	operationPath := fmt.Sprintf("/api/certificates")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -776,7 +776,7 @@ func NewGetCertificateRequest(server string, serial string) (*http.Request, erro
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/certificates/%s", pathParam0)
+	operationPath := fmt.Sprintf("/api/certificates/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -810,7 +810,7 @@ func NewPostRevocationRequest(server string, serial string) (*http.Request, erro
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/certificates/%s/revocation", pathParam0)
+	operationPath := fmt.Sprintf("/api/certificates/%s/revocation", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -837,7 +837,7 @@ func NewGetPublicationRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/publication")
+	operationPath := fmt.Sprintf("/api/publication")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -864,7 +864,7 @@ func NewPostPublicationRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/publication")
+	operationPath := fmt.Sprintf("/api/publication")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -891,7 +891,7 @@ func NewGetRevocationListRequest(server string, params *GetRevocationListParams)
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/revocation-list")
+	operationPath := fmt.Sprintf("/api/revocation-list")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -941,7 +941,7 @@ func NewGetRootRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/root")
+	operationPath := fmt.Sprintf("/api/root")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -979,7 +979,7 @@ func NewPostSigningRequestRequestWithBody(server string, contentType string, bod
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/signing-requests")
+	operationPath := fmt.Sprintf("/api/signing-requests")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1043,78 +1043,78 @@ func WithBaseURL(baseURL string) ClientOption {
 // ClientWithResponsesInterface is the interface specification for the client with responses above.
 type ClientWithResponsesInterface interface {
 
-	// GetAuthoritiesWithResponse performs a GET /api/v1/authorities (the `GetAuthorities` operationId) request.
+	// GetAuthoritiesWithResponse performs a GET /api/authorities (the `GetAuthorities` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetAuthoritiesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetAuthoritiesResponse, error)
 
-	// PostAuthorityWithBodyWithResponse performs a POST /api/v1/authorities (the `PostAuthority` operationId) request,
+	// PostAuthorityWithBodyWithResponse performs a POST /api/authorities (the `PostAuthority` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	PostAuthorityWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostAuthorityResponse, error)
 
-	// PostAuthorityWithResponse performs a POST /api/v1/authorities (the `PostAuthority` operationId) request.
+	// PostAuthorityWithResponse performs a POST /api/authorities (the `PostAuthority` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	PostAuthorityWithResponse(ctx context.Context, body PostAuthorityJSONRequestBody, reqEditors ...RequestEditorFn) (*PostAuthorityResponse, error)
 
-	// GetAuthorityWithResponse performs a GET /api/v1/authorities/{name} (the `GetAuthority` operationId) request.
+	// GetAuthorityWithResponse performs a GET /api/authorities/{name} (the `GetAuthority` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetAuthorityWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*GetAuthorityResponse, error)
 
-	// GetCertificatesWithResponse performs a GET /api/v1/certificates (the `GetCertificates` operationId) request.
+	// GetCertificatesWithResponse performs a GET /api/certificates (the `GetCertificates` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetCertificatesWithResponse(ctx context.Context, params *GetCertificatesParams, reqEditors ...RequestEditorFn) (*GetCertificatesResponse, error)
 
-	// PostCertificateWithBodyWithResponse performs a POST /api/v1/certificates (the `PostCertificate` operationId) request,
+	// PostCertificateWithBodyWithResponse performs a POST /api/certificates (the `PostCertificate` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	PostCertificateWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostCertificateResponse, error)
 
-	// PostCertificateWithResponse performs a POST /api/v1/certificates (the `PostCertificate` operationId) request.
+	// PostCertificateWithResponse performs a POST /api/certificates (the `PostCertificate` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	PostCertificateWithResponse(ctx context.Context, body PostCertificateJSONRequestBody, reqEditors ...RequestEditorFn) (*PostCertificateResponse, error)
 
-	// GetCertificateWithResponse performs a GET /api/v1/certificates/{serial} (the `GetCertificate` operationId) request.
+	// GetCertificateWithResponse performs a GET /api/certificates/{serial} (the `GetCertificate` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetCertificateWithResponse(ctx context.Context, serial string, reqEditors ...RequestEditorFn) (*GetCertificateResponse, error)
 
-	// PostRevocationWithResponse performs a POST /api/v1/certificates/{serial}/revocation (the `PostRevocation` operationId) request.
+	// PostRevocationWithResponse performs a POST /api/certificates/{serial}/revocation (the `PostRevocation` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	PostRevocationWithResponse(ctx context.Context, serial string, reqEditors ...RequestEditorFn) (*PostRevocationResponse, error)
 
-	// GetPublicationWithResponse performs a GET /api/v1/publication (the `GetPublication` operationId) request.
+	// GetPublicationWithResponse performs a GET /api/publication (the `GetPublication` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetPublicationWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetPublicationResponse, error)
 
-	// PostPublicationWithResponse performs a POST /api/v1/publication (the `PostPublication` operationId) request.
+	// PostPublicationWithResponse performs a POST /api/publication (the `PostPublication` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	PostPublicationWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*PostPublicationResponse, error)
 
-	// GetRevocationListWithResponse performs a GET /api/v1/revocation-list (the `GetRevocationList` operationId) request.
+	// GetRevocationListWithResponse performs a GET /api/revocation-list (the `GetRevocationList` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetRevocationListWithResponse(ctx context.Context, params *GetRevocationListParams, reqEditors ...RequestEditorFn) (*GetRevocationListResponse, error)
 
-	// GetRootWithResponse performs a GET /api/v1/root (the `GetRoot` operationId) request.
+	// GetRootWithResponse performs a GET /api/root (the `GetRoot` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetRootWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetRootResponse, error)
 
-	// PostSigningRequestWithBodyWithResponse performs a POST /api/v1/signing-requests (the `PostSigningRequest` operationId) request,
+	// PostSigningRequestWithBodyWithResponse performs a POST /api/signing-requests (the `PostSigningRequest` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	PostSigningRequestWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostSigningRequestResponse, error)
 
-	// PostSigningRequestWithResponse performs a POST /api/v1/signing-requests (the `PostSigningRequest` operationId) request.
+	// PostSigningRequestWithResponse performs a POST /api/signing-requests (the `PostSigningRequest` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	PostSigningRequestWithResponse(ctx context.Context, body PostSigningRequestJSONRequestBody, reqEditors ...RequestEditorFn) (*PostSigningRequestResponse, error)
 }
@@ -1716,7 +1716,7 @@ func (r PostSigningRequestResponse) ContentType() string {
 	return ""
 }
 
-// GetAuthoritiesWithResponse performs a GET /api/v1/authorities (the `GetAuthorities` operationId) request.
+// GetAuthoritiesWithResponse performs a GET /api/authorities (the `GetAuthorities` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetAuthoritiesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetAuthoritiesResponse, error) {
@@ -1727,7 +1727,7 @@ func (c *ClientWithResponses) GetAuthoritiesWithResponse(ctx context.Context, re
 	return ParseGetAuthoritiesResponse(rsp)
 }
 
-// PostAuthorityWithBodyWithResponse performs a POST /api/v1/authorities (the `PostAuthority` operationId) request,
+// PostAuthorityWithBodyWithResponse performs a POST /api/authorities (the `PostAuthority` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -1739,7 +1739,7 @@ func (c *ClientWithResponses) PostAuthorityWithBodyWithResponse(ctx context.Cont
 	return ParsePostAuthorityResponse(rsp)
 }
 
-// PostAuthorityWithResponse performs a POST /api/v1/authorities (the `PostAuthority` operationId) request.
+// PostAuthorityWithResponse performs a POST /api/authorities (the `PostAuthority` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) PostAuthorityWithResponse(ctx context.Context, body PostAuthorityJSONRequestBody, reqEditors ...RequestEditorFn) (*PostAuthorityResponse, error) {
 	rsp, err := c.PostAuthority(ctx, body, reqEditors...)
@@ -1749,7 +1749,7 @@ func (c *ClientWithResponses) PostAuthorityWithResponse(ctx context.Context, bod
 	return ParsePostAuthorityResponse(rsp)
 }
 
-// GetAuthorityWithResponse performs a GET /api/v1/authorities/{name} (the `GetAuthority` operationId) request.
+// GetAuthorityWithResponse performs a GET /api/authorities/{name} (the `GetAuthority` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetAuthorityWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*GetAuthorityResponse, error) {
@@ -1760,7 +1760,7 @@ func (c *ClientWithResponses) GetAuthorityWithResponse(ctx context.Context, name
 	return ParseGetAuthorityResponse(rsp)
 }
 
-// GetCertificatesWithResponse performs a GET /api/v1/certificates (the `GetCertificates` operationId) request.
+// GetCertificatesWithResponse performs a GET /api/certificates (the `GetCertificates` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetCertificatesWithResponse(ctx context.Context, params *GetCertificatesParams, reqEditors ...RequestEditorFn) (*GetCertificatesResponse, error) {
@@ -1771,7 +1771,7 @@ func (c *ClientWithResponses) GetCertificatesWithResponse(ctx context.Context, p
 	return ParseGetCertificatesResponse(rsp)
 }
 
-// PostCertificateWithBodyWithResponse performs a POST /api/v1/certificates (the `PostCertificate` operationId) request,
+// PostCertificateWithBodyWithResponse performs a POST /api/certificates (the `PostCertificate` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -1783,7 +1783,7 @@ func (c *ClientWithResponses) PostCertificateWithBodyWithResponse(ctx context.Co
 	return ParsePostCertificateResponse(rsp)
 }
 
-// PostCertificateWithResponse performs a POST /api/v1/certificates (the `PostCertificate` operationId) request.
+// PostCertificateWithResponse performs a POST /api/certificates (the `PostCertificate` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) PostCertificateWithResponse(ctx context.Context, body PostCertificateJSONRequestBody, reqEditors ...RequestEditorFn) (*PostCertificateResponse, error) {
 	rsp, err := c.PostCertificate(ctx, body, reqEditors...)
@@ -1793,7 +1793,7 @@ func (c *ClientWithResponses) PostCertificateWithResponse(ctx context.Context, b
 	return ParsePostCertificateResponse(rsp)
 }
 
-// GetCertificateWithResponse performs a GET /api/v1/certificates/{serial} (the `GetCertificate` operationId) request.
+// GetCertificateWithResponse performs a GET /api/certificates/{serial} (the `GetCertificate` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetCertificateWithResponse(ctx context.Context, serial string, reqEditors ...RequestEditorFn) (*GetCertificateResponse, error) {
@@ -1804,7 +1804,7 @@ func (c *ClientWithResponses) GetCertificateWithResponse(ctx context.Context, se
 	return ParseGetCertificateResponse(rsp)
 }
 
-// PostRevocationWithResponse performs a POST /api/v1/certificates/{serial}/revocation (the `PostRevocation` operationId) request.
+// PostRevocationWithResponse performs a POST /api/certificates/{serial}/revocation (the `PostRevocation` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) PostRevocationWithResponse(ctx context.Context, serial string, reqEditors ...RequestEditorFn) (*PostRevocationResponse, error) {
@@ -1815,7 +1815,7 @@ func (c *ClientWithResponses) PostRevocationWithResponse(ctx context.Context, se
 	return ParsePostRevocationResponse(rsp)
 }
 
-// GetPublicationWithResponse performs a GET /api/v1/publication (the `GetPublication` operationId) request.
+// GetPublicationWithResponse performs a GET /api/publication (the `GetPublication` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetPublicationWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetPublicationResponse, error) {
@@ -1826,7 +1826,7 @@ func (c *ClientWithResponses) GetPublicationWithResponse(ctx context.Context, re
 	return ParseGetPublicationResponse(rsp)
 }
 
-// PostPublicationWithResponse performs a POST /api/v1/publication (the `PostPublication` operationId) request.
+// PostPublicationWithResponse performs a POST /api/publication (the `PostPublication` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) PostPublicationWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*PostPublicationResponse, error) {
@@ -1837,7 +1837,7 @@ func (c *ClientWithResponses) PostPublicationWithResponse(ctx context.Context, r
 	return ParsePostPublicationResponse(rsp)
 }
 
-// GetRevocationListWithResponse performs a GET /api/v1/revocation-list (the `GetRevocationList` operationId) request.
+// GetRevocationListWithResponse performs a GET /api/revocation-list (the `GetRevocationList` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetRevocationListWithResponse(ctx context.Context, params *GetRevocationListParams, reqEditors ...RequestEditorFn) (*GetRevocationListResponse, error) {
@@ -1848,7 +1848,7 @@ func (c *ClientWithResponses) GetRevocationListWithResponse(ctx context.Context,
 	return ParseGetRevocationListResponse(rsp)
 }
 
-// GetRootWithResponse performs a GET /api/v1/root (the `GetRoot` operationId) request.
+// GetRootWithResponse performs a GET /api/root (the `GetRoot` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetRootWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetRootResponse, error) {
@@ -1859,7 +1859,7 @@ func (c *ClientWithResponses) GetRootWithResponse(ctx context.Context, reqEditor
 	return ParseGetRootResponse(rsp)
 }
 
-// PostSigningRequestWithBodyWithResponse performs a POST /api/v1/signing-requests (the `PostSigningRequest` operationId) request,
+// PostSigningRequestWithBodyWithResponse performs a POST /api/signing-requests (the `PostSigningRequest` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -1871,7 +1871,7 @@ func (c *ClientWithResponses) PostSigningRequestWithBodyWithResponse(ctx context
 	return ParsePostSigningRequestResponse(rsp)
 }
 
-// PostSigningRequestWithResponse performs a POST /api/v1/signing-requests (the `PostSigningRequest` operationId) request.
+// PostSigningRequestWithResponse performs a POST /api/signing-requests (the `PostSigningRequest` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) PostSigningRequestWithResponse(ctx context.Context, body PostSigningRequestJSONRequestBody, reqEditors ...RequestEditorFn) (*PostSigningRequestResponse, error) {
 	rsp, err := c.PostSigningRequest(ctx, body, reqEditors...)

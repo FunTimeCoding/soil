@@ -1,7 +1,7 @@
 package rerank_benchmark
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
@@ -18,7 +18,10 @@ func RerankBenchmark() {
 	errors.PanicOnError(e)
 
 	defer errors.PanicClose(r)
-	fmt.Printf("New (tokenizer + runtime + session): %v\n", time.Since(start))
+	console.Format(
+		"New (tokenizer + runtime + session): %v\n",
+		time.Since(start),
+	)
 
 	for _, c := range []benchmarkCase{
 		{label: "batch 30 distinct", documents: distinctDocuments(30)},
@@ -33,7 +36,7 @@ func RerankBenchmark() {
 		start = time.Now()
 		results, f := r.Rank("database migration strategy", c.documents)
 		errors.PanicOnError(f)
-		fmt.Printf(
+		console.Format(
 			"%s: %v (first score %.4f, last score %.4f)\n",
 			c.label,
 			time.Since(start),

@@ -1,6 +1,6 @@
 package file_report
 
-import "fmt"
+import "github.com/funtimecoding/soil/pkg/console"
 
 func (r *Report) ProcessConcerns(fix bool) {
 	if r.HasConcerns() {
@@ -8,7 +8,7 @@ func (r *Report) ProcessConcerns(fix bool) {
 			r.Fix()
 		} else {
 			for _, c := range r.Concerns {
-				fmt.Printf("%s: %s\n", c.Text, c.Path)
+				console.Format("%s: %s\n", c.Text, c.Path)
 			}
 		}
 	}

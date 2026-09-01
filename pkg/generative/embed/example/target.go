@@ -1,7 +1,7 @@
 package example
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/embed"
 )
@@ -12,7 +12,7 @@ func Target() {
 	errors.PanicOnError(f)
 
 	for _, vector := range result {
-		fmt.Printf(
+		console.Format(
 			"Dimensions: %d, first values: %v\n",
 			len(vector),
 			vector[:4],

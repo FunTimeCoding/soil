@@ -1,8 +1,8 @@
 package job
 
 import (
-	"fmt"
-	console "github.com/funtimecoding/soil/pkg/console/constant"
+	"github.com/funtimecoding/soil/pkg/console"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab/check/job/option"
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"github.com/funtimecoding/soil/pkg/monitor"
@@ -21,11 +21,11 @@ func Check(o *option.Job) {
 	f := constant.CheckFormat
 
 	if o.Copyable {
-		f.Tag(console.TagCopyable)
+		f.Tag(consoleConstant.TagCopyable)
 	}
 
 	for _, e := range elements {
-		fmt.Println(e.Format(f))
+		console.Line(e.Format(f))
 	}
 
 	if len(elements) == 0 {

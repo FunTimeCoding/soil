@@ -98,16 +98,16 @@ type GetTopAlertsParams struct {
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 
-	// (GET /api/v1/alerts)
+	// (GET /api/alerts)
 	GetAlerts(w http.ResponseWriter, r *http.Request, params GetAlertsParams)
 
-	// (GET /api/v1/alerts/recent)
+	// (GET /api/alerts/recent)
 	GetRecentAlerts(w http.ResponseWriter, r *http.Request, params GetRecentAlertsParams)
 
-	// (GET /api/v1/alerts/top)
+	// (GET /api/alerts/top)
 	GetTopAlerts(w http.ResponseWriter, r *http.Request, params GetTopAlertsParams)
 
-	// (GET /api/v1/status)
+	// (GET /api/status)
 	GetStatus(w http.ResponseWriter, r *http.Request)
 }
 
@@ -392,10 +392,10 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 		ErrorHandlerFunc:   options.ErrorHandlerFunc,
 	}
 
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/alerts", wrapper.GetAlerts)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/alerts/recent", wrapper.GetRecentAlerts)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/alerts/top", wrapper.GetTopAlerts)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/status", wrapper.GetStatus)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/alerts", wrapper.GetAlerts)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/alerts/recent", wrapper.GetRecentAlerts)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/alerts/top", wrapper.GetTopAlerts)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/status", wrapper.GetStatus)
 
 	return m
 }
@@ -546,16 +546,16 @@ func (response GetStatus500JSONResponse) VisitGetStatusResponse(w http.ResponseW
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
 
-	// (GET /api/v1/alerts)
+	// (GET /api/alerts)
 	GetAlerts(ctx context.Context, request GetAlertsRequestObject) (GetAlertsResponseObject, error)
 
-	// (GET /api/v1/alerts/recent)
+	// (GET /api/alerts/recent)
 	GetRecentAlerts(ctx context.Context, request GetRecentAlertsRequestObject) (GetRecentAlertsResponseObject, error)
 
-	// (GET /api/v1/alerts/top)
+	// (GET /api/alerts/top)
 	GetTopAlerts(ctx context.Context, request GetTopAlertsRequestObject) (GetTopAlertsResponseObject, error)
 
-	// (GET /api/v1/status)
+	// (GET /api/status)
 	GetStatus(ctx context.Context, request GetStatusRequestObject) (GetStatusResponseObject, error)
 }
 
@@ -705,18 +705,18 @@ func (sh *strictHandler) GetStatus(w http.ResponseWriter, r *http.Request) {
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"5FZNb9s4EP0rwuwetZazRS+6FWhT9BYkuQVBwVBjeQKKZEYjFUaQ/16QVPxJO0l7aID6IoPDGb1573Go",
-	"R9Cu886ilR7qR+j1EjsV/34yyNJfYu+d7TGseHYeWQhjHG0THrLyCDX0wmRbeCphQbZF9kxWsnGj7tDE",
-	"CqppSMhZZS52Kh+kTAvu7h61hAWrOszu7HFEJlnlg6JYjkVkmLoaOqhvYEExVgJj78yIDdyWmbyh6xTn",
-	"3vYUMh8GYmxSuQ0pE/wtsJtCa3qe0a6x3WZo+MLs+IRCIZztF0e08p0atEILQn65gVQrk5nDdRUhHwdm",
-	"VC8Xzpi82E6UuUTtuNl2A1nBFvkA2M72HJhr51+yshqRVYufB1bBj1lY2g07hl7jKUEPzGjFrM6TabKb",
-	"fsWye61OtklIygPUh0C2ih8yE6qTXbj4XhITYq1TgSrj2gZKGJH7SAeczeazeQDrPFrlCWr4EJdK8EqW",
-	"kcRKearGsypWiCstRsIC0xHhtwZq+IqS5Ii5rDoU5B7qm0eg8KqHAeM5SHw997yhQXjAcppTOcpu45GN",
-	"QkcQ/8/n4aGdFUwCKu8N6Yiouu+T3Jt6JNjFxH8ZF1DDP9VmQlbTeKz2DLUZUYpZrRK3DfaaySdDTdO0",
-	"6JToJdm2kCUWLY1oi9DhLJT4+EakpwDuToYMnnNFBptCXBEJL5Jqs7D1qdzTsmLUE6Jjkl7GHW8Rdj3e",
-	"1v0sHHdKoIZGCf4nFIU/OBH5auEyenOt922VHyRLsltGCV0UrGz73u0izp/yynogv3ICQOa4b90Gf7e9",
-	"Dm+3Vzjs2vlJweJuVTid7g2NRbxa3qu7Nh9px5yVvjvgN3k/1crel02mlyvkkTQWCe2f53KNI/5+BgAA",
-	"//8=",
+	"5FbBbts4EP0VYXaPWtu7i150K9Cm6C1IcguCgqHG8gQUyYxGLowg/16QVCQ7op2kPTRAc1HM4YzevPc4",
+	"1ANo13pn0UoH1QN0eoOtiv9+NMjSXWDnne0wrHh2HlkIYxxtHR6y8wgVdMJkG3gsYU22QfZMVrJxo27R",
+	"xAqqrknIWWXODyrPUoYFd3uHWsKCVS1md3a4RSbZ5YOiWI5FpB+66luormFNMVYCY+fMFmu4KTN5fdsq",
+	"zr3tMWTe98RYp3ITKQP8PbBToZGeJ7QjtpsMDZ+ZHZ9QKISz/eIWrXyjGq3QmpBfbiDVymTmcF1GyMeB",
+	"GdXJuTMmL7YTZS5QO6733UBWsEGeATvYngNz5fxLVlZbZNXgp55V8GMWlnb9gaFHPCXonhmtmN1ZMk12",
+	"089Y9lmrg20SknKGeg5kr/icmVCd7NrF95KYEGucClQZ19RQwha5i3TAv4vVYhXAOo9WeYIK/o9LJXgl",
+	"m0jiUnlaxvT4s8HIVqA5wvtaQwVfUJIWMZFVi4LcQXX9ABTec99jPASJrKeGJw6EeyyHIZXj6yae16hy",
+	"BPHfahUe2lnBpJ7y3pCOiJZ3XdJ6qkeCbUz8m3ENFfy1nMbjcpiNy2dumuaTYla7RGyNnWbyyU3DKC1a",
+	"JXpDtilkg0VDW7RF6HARSnx4I9JTAA/HQgbPmSKDdSGuiIQXSbVF2PpY7gu5ZNQDnGN6XsQdb1F1HGxj",
+	"M2vHrRKooFaC/whF1WdnIV8tXENvrvW+ffKdZEN2zyWhi4KVbd61V8T5U0YZ5/Arzz5kDvreJfBne2t+",
+	"qb3CXlfOD/IVt7vC6XRdaCzijfIurTV9mB2zVfrWgF8k/VQfz75mMo1cIm9JY5HQ/n4iRxzx70cAAAD/",
+	"/w==",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

@@ -1,6 +1,6 @@
 package gofix
 
-import "fmt"
+import "github.com/funtimecoding/soil/pkg/console"
 
 func printDiff(
 	path string,
@@ -11,7 +11,7 @@ func printDiff(
 		return
 	}
 
-	fmt.Printf("--- %s\n+++ %s\n", path, path)
+	console.Format("--- %s\n+++ %s\n", path, path)
 	originalLines := splitLines(original)
 	modifiedLines := splitLines(modified)
 
@@ -28,11 +28,11 @@ func printDiff(
 
 		if o != m {
 			if o != "" {
-				fmt.Printf("-%s\n", o)
+				console.Format("-%s\n", o)
 			}
 
 			if m != "" {
-				fmt.Printf("+%s\n", m)
+				console.Format("+%s\n", m)
 			}
 		}
 	}

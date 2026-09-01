@@ -1,7 +1,7 @@
 package basic
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
@@ -15,8 +15,8 @@ func (c *Client) Get(path string) string {
 	response := web.Send(web.Client(), r)
 
 	if false {
-		fmt.Println(r)
-		fmt.Println(response)
+		console.Line(r)
+		console.Line(response)
 	}
 
 	return web.ReadString(response)

@@ -1,7 +1,7 @@
 package clean
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	git "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclean/clean/option"
 	"github.com/funtimecoding/soil/pkg/web/constant"
@@ -20,6 +20,6 @@ func Run(o *option.Clean) {
 		Lab(o, r)
 	case git.UnknownProvider:
 		// TODO: Consider deleting tags except latest locally and pushing them to the server
-		fmt.Println("Unknown provider, nothing to clean")
+		console.Line("Unknown provider, nothing to clean")
 	}
 }

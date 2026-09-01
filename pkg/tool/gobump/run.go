@@ -1,8 +1,8 @@
 package gobump
 
 import (
-	"fmt"
 	"github.com/coreos/go-semver/semver"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/git"
 	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join/key_value"
@@ -43,7 +43,7 @@ func Run(o *option.Bump) {
 	}
 
 	nextString := key_value.Empty(gitConstant.VersionPrefix, next.String())
-	fmt.Printf("Tag: %s\n", nextString)
+	console.Format("Tag: %s\n", nextString)
 	git.Tag(nextString)
 	git.Push()
 }

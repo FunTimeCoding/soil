@@ -1,7 +1,7 @@
 package issue
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/text"
 	"github.com/funtimecoding/soil/pkg/text/option"
@@ -23,7 +23,7 @@ func (i *Issue) PrintComments() {
 			continue
 		}
 
-		fmt.Printf(
+		console.Format(
 			"  Comment: %s | %s | %s\n",
 			c.Author.Name,
 			CommentTime(c).Format(constant.DateMinute),

@@ -1,7 +1,7 @@
 package alert
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/openapi"
 	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
@@ -29,7 +29,7 @@ func New(
 		state = prometheus.None
 	} else {
 		if !slices.Contains(prometheus.AlertStates, state) {
-			fmt.Printf("Unexpected state: %s\n", state)
+			console.Format("Unexpected state: %s\n", state)
 		}
 	}
 

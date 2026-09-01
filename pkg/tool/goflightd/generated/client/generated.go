@@ -163,28 +163,28 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 // The interface specification for the client above.
 type ClientInterface interface {
 
-	// GetEvents performs a GET /api/v1/events (the `GetEvents` operationId) request.
+	// GetEvents performs a GET /api/events (the `GetEvents` operationId) request.
 	GetEvents(ctx context.Context, params *GetEventsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PostMarkWithBody performs a POST /api/v1/mark (the `PostMark` operationId) request,
+	// PostMarkWithBody performs a POST /api/mark (the `PostMark` operationId) request,
 	// with any type of body and a specified content type.
 	PostMarkWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// PostMark performs a POST /api/v1/mark (the `PostMark` operationId) request.
+	// PostMark performs a POST /api/mark (the `PostMark` operationId) request.
 	// Takes a body of the `application/json` content type.
 	PostMark(ctx context.Context, body PostMarkJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetMarks performs a GET /api/v1/marks (the `GetMarks` operationId) request.
+	// GetMarks performs a GET /api/marks (the `GetMarks` operationId) request.
 	GetMarks(ctx context.Context, params *GetMarksParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetSnapshots performs a GET /api/v1/snapshots (the `GetSnapshots` operationId) request.
+	// GetSnapshots performs a GET /api/snapshots (the `GetSnapshots` operationId) request.
 	GetSnapshots(ctx context.Context, params *GetSnapshotsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetStatus performs a GET /api/v1/status (the `GetStatus` operationId) request.
+	// GetStatus performs a GET /api/status (the `GetStatus` operationId) request.
 	GetStatus(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
 
-// GetEvents performs a GET /api/v1/events (the `GetEvents` operationId) request.
+// GetEvents performs a GET /api/events (the `GetEvents` operationId) request.
 func (c *Client) GetEvents(ctx context.Context, params *GetEventsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetEventsRequest(c.Server, params)
 	if err != nil {
@@ -197,7 +197,7 @@ func (c *Client) GetEvents(ctx context.Context, params *GetEventsParams, reqEdit
 	return c.Client.Do(req)
 }
 
-// PostMarkWithBody performs a POST /api/v1/mark (the `PostMark` operationId) request,
+// PostMarkWithBody performs a POST /api/mark (the `PostMark` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) PostMarkWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewPostMarkRequestWithBody(c.Server, contentType, body)
@@ -211,7 +211,7 @@ func (c *Client) PostMarkWithBody(ctx context.Context, contentType string, body 
 	return c.Client.Do(req)
 }
 
-// PostMark performs a POST /api/v1/mark (the `PostMark` operationId) request.
+// PostMark performs a POST /api/mark (the `PostMark` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) PostMark(ctx context.Context, body PostMarkJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewPostMarkRequest(c.Server, body)
@@ -225,7 +225,7 @@ func (c *Client) PostMark(ctx context.Context, body PostMarkJSONRequestBody, req
 	return c.Client.Do(req)
 }
 
-// GetMarks performs a GET /api/v1/marks (the `GetMarks` operationId) request.
+// GetMarks performs a GET /api/marks (the `GetMarks` operationId) request.
 func (c *Client) GetMarks(ctx context.Context, params *GetMarksParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetMarksRequest(c.Server, params)
 	if err != nil {
@@ -238,7 +238,7 @@ func (c *Client) GetMarks(ctx context.Context, params *GetMarksParams, reqEditor
 	return c.Client.Do(req)
 }
 
-// GetSnapshots performs a GET /api/v1/snapshots (the `GetSnapshots` operationId) request.
+// GetSnapshots performs a GET /api/snapshots (the `GetSnapshots` operationId) request.
 func (c *Client) GetSnapshots(ctx context.Context, params *GetSnapshotsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetSnapshotsRequest(c.Server, params)
 	if err != nil {
@@ -251,7 +251,7 @@ func (c *Client) GetSnapshots(ctx context.Context, params *GetSnapshotsParams, r
 	return c.Client.Do(req)
 }
 
-// GetStatus performs a GET /api/v1/status (the `GetStatus` operationId) request.
+// GetStatus performs a GET /api/status (the `GetStatus` operationId) request.
 func (c *Client) GetStatus(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetStatusRequest(c.Server)
 	if err != nil {
@@ -273,7 +273,7 @@ func NewGetEventsRequest(server string, params *GetEventsParams) (*http.Request,
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/events")
+	operationPath := fmt.Sprintf("/api/events")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -362,7 +362,7 @@ func NewPostMarkRequestWithBody(server string, contentType string, body io.Reade
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/mark")
+	operationPath := fmt.Sprintf("/api/mark")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -391,7 +391,7 @@ func NewGetMarksRequest(server string, params *GetMarksParams) (*http.Request, e
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/marks")
+	operationPath := fmt.Sprintf("/api/marks")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -445,7 +445,7 @@ func NewGetSnapshotsRequest(server string, params *GetSnapshotsParams) (*http.Re
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/snapshots")
+	operationPath := fmt.Sprintf("/api/snapshots")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -523,7 +523,7 @@ func NewGetStatusRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/status")
+	operationPath := fmt.Sprintf("/api/status")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -585,32 +585,32 @@ func WithBaseURL(baseURL string) ClientOption {
 // ClientWithResponsesInterface is the interface specification for the client with responses above.
 type ClientWithResponsesInterface interface {
 
-	// GetEventsWithResponse performs a GET /api/v1/events (the `GetEvents` operationId) request.
+	// GetEventsWithResponse performs a GET /api/events (the `GetEvents` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetEventsWithResponse(ctx context.Context, params *GetEventsParams, reqEditors ...RequestEditorFn) (*GetEventsResponse, error)
 
-	// PostMarkWithBodyWithResponse performs a POST /api/v1/mark (the `PostMark` operationId) request,
+	// PostMarkWithBodyWithResponse performs a POST /api/mark (the `PostMark` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	PostMarkWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostMarkResponse, error)
 
-	// PostMarkWithResponse performs a POST /api/v1/mark (the `PostMark` operationId) request.
+	// PostMarkWithResponse performs a POST /api/mark (the `PostMark` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	PostMarkWithResponse(ctx context.Context, body PostMarkJSONRequestBody, reqEditors ...RequestEditorFn) (*PostMarkResponse, error)
 
-	// GetMarksWithResponse performs a GET /api/v1/marks (the `GetMarks` operationId) request.
+	// GetMarksWithResponse performs a GET /api/marks (the `GetMarks` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetMarksWithResponse(ctx context.Context, params *GetMarksParams, reqEditors ...RequestEditorFn) (*GetMarksResponse, error)
 
-	// GetSnapshotsWithResponse performs a GET /api/v1/snapshots (the `GetSnapshots` operationId) request.
+	// GetSnapshotsWithResponse performs a GET /api/snapshots (the `GetSnapshots` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetSnapshotsWithResponse(ctx context.Context, params *GetSnapshotsParams, reqEditors ...RequestEditorFn) (*GetSnapshotsResponse, error)
 
-	// GetStatusWithResponse performs a GET /api/v1/status (the `GetStatus` operationId) request.
+	// GetStatusWithResponse performs a GET /api/status (the `GetStatus` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetStatusWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetStatusResponse, error)
@@ -863,7 +863,7 @@ func (r GetStatusResponse) ContentType() string {
 	return ""
 }
 
-// GetEventsWithResponse performs a GET /api/v1/events (the `GetEvents` operationId) request.
+// GetEventsWithResponse performs a GET /api/events (the `GetEvents` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetEventsWithResponse(ctx context.Context, params *GetEventsParams, reqEditors ...RequestEditorFn) (*GetEventsResponse, error) {
@@ -874,7 +874,7 @@ func (c *ClientWithResponses) GetEventsWithResponse(ctx context.Context, params 
 	return ParseGetEventsResponse(rsp)
 }
 
-// PostMarkWithBodyWithResponse performs a POST /api/v1/mark (the `PostMark` operationId) request,
+// PostMarkWithBodyWithResponse performs a POST /api/mark (the `PostMark` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -886,7 +886,7 @@ func (c *ClientWithResponses) PostMarkWithBodyWithResponse(ctx context.Context, 
 	return ParsePostMarkResponse(rsp)
 }
 
-// PostMarkWithResponse performs a POST /api/v1/mark (the `PostMark` operationId) request.
+// PostMarkWithResponse performs a POST /api/mark (the `PostMark` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) PostMarkWithResponse(ctx context.Context, body PostMarkJSONRequestBody, reqEditors ...RequestEditorFn) (*PostMarkResponse, error) {
 	rsp, err := c.PostMark(ctx, body, reqEditors...)
@@ -896,7 +896,7 @@ func (c *ClientWithResponses) PostMarkWithResponse(ctx context.Context, body Pos
 	return ParsePostMarkResponse(rsp)
 }
 
-// GetMarksWithResponse performs a GET /api/v1/marks (the `GetMarks` operationId) request.
+// GetMarksWithResponse performs a GET /api/marks (the `GetMarks` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetMarksWithResponse(ctx context.Context, params *GetMarksParams, reqEditors ...RequestEditorFn) (*GetMarksResponse, error) {
@@ -907,7 +907,7 @@ func (c *ClientWithResponses) GetMarksWithResponse(ctx context.Context, params *
 	return ParseGetMarksResponse(rsp)
 }
 
-// GetSnapshotsWithResponse performs a GET /api/v1/snapshots (the `GetSnapshots` operationId) request.
+// GetSnapshotsWithResponse performs a GET /api/snapshots (the `GetSnapshots` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetSnapshotsWithResponse(ctx context.Context, params *GetSnapshotsParams, reqEditors ...RequestEditorFn) (*GetSnapshotsResponse, error) {
@@ -918,7 +918,7 @@ func (c *ClientWithResponses) GetSnapshotsWithResponse(ctx context.Context, para
 	return ParseGetSnapshotsResponse(rsp)
 }
 
-// GetStatusWithResponse performs a GET /api/v1/status (the `GetStatus` operationId) request.
+// GetStatusWithResponse performs a GET /api/status (the `GetStatus` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetStatusWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetStatusResponse, error) {

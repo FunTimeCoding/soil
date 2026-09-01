@@ -2,8 +2,8 @@
 
 package tray
 
-import "fmt"
+import "github.com/funtimecoding/soil/pkg/console"
 
 func onExit() {
-	fmt.Println("onExit")
+	console.Line("onExit")
 }

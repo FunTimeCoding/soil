@@ -1,9 +1,9 @@
 package jira
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/basic/response"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/notation"
 	web "github.com/funtimecoding/soil/pkg/web/constant"
 )
@@ -34,7 +34,7 @@ func (c *Client) searchV3Page(
 	notation.MustDecode(r, &result, true)
 
 	if false {
-		fmt.Printf("Response: %d %s\n", status, r)
+		console.Format("Response: %d %s\n", status, r)
 	}
 
 	return &result, nil

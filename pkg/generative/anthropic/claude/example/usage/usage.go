@@ -1,7 +1,7 @@
 package usage
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/example/common"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/pricing"
@@ -34,7 +34,7 @@ func Usage() {
 	activeBlock := findActiveBlock(all)
 
 	if activeBlock == nil {
-		fmt.Println("no active 5h block")
+		console.Line("no active 5h block")
 
 		return
 	}
@@ -74,7 +74,7 @@ func Usage() {
 		remaining = 0
 	}
 
-	fmt.Printf(
+	console.Format(
 		"5h block: %s - %s  (%s remaining)\n\n",
 		activeBlock.start.Format("15:04"),
 		activeBlock.end.Format("15:04"),
@@ -82,7 +82,7 @@ func Usage() {
 	)
 
 	for model, m := range byModel {
-		fmt.Printf(
+		console.Format(
 			"  %-12s  %6d input, %6d output, %6d cache-create, %6d cache-read  (%d calls)\n",
 			model,
 			m.inputTokens,
@@ -93,7 +93,7 @@ func Usage() {
 		)
 	}
 
-	fmt.Printf(
+	console.Format(
 		"\nCost: $%.2f / $%.2f  (%.0f%%)\n",
 		totalCost,
 		costLimit,

@@ -1,7 +1,7 @@
 package check
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/system"
 )
 
@@ -14,11 +14,11 @@ func Pipe(
 
 	if verbose {
 		if stdout != "" {
-			fmt.Printf("Pipe output: %s\n", stdout)
+			console.Format("Pipe output: %s\n", stdout)
 		}
 
 		if stderr != "" {
-			fmt.Printf("Pipe error: %s\n", stderr)
+			console.Format("Pipe error: %s\n", stderr)
 		}
 	}
 

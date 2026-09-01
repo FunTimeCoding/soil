@@ -3,6 +3,7 @@ package packer
 import (
 	"fmt"
 	"github.com/coreos/go-semver/semver"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/provision/packer/build"
 	stringJoin "github.com/funtimecoding/soil/pkg/strings/join"
@@ -51,7 +52,7 @@ func (c *Client) Run(
 		"cleanup",
 		template,
 	}
-	fmt.Printf("Command: %s\n", stringJoin.Space(arguments...))
+	console.Format("Command: %s\n", stringJoin.Space(arguments...))
 
 	if headless {
 		var connectCommand string
@@ -73,15 +74,15 @@ func (c *Client) Run(
 		//  Check VNC if typing actually happens
 		//  Then proceed to actual unattended install
 		if connectCommand != "" {
-			fmt.Printf("Character device: %s\n", connectCommand)
+			console.Format("Character device: %s\n", connectCommand)
 		}
 	}
 
 	output, e := system.RunError(arguments...)
 
 	if e != nil {
-		fmt.Println("Error:")
+		console.Line("Error:")
 	}
 
-	fmt.Println(output)
+	console.Line(output)
 }

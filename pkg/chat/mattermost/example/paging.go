@@ -2,10 +2,10 @@ package example
 
 import (
 	"context"
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
 	"github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/web/locator"
@@ -18,7 +18,7 @@ func Paging() {
 	channel := a.RequiredPositional(0, "CHANNEL")
 	m := mattermost.NewEnvironment(mattermost.WithVerbose(false))
 	c := m.MustTeamChannel(channel)
-	fmt.Printf("Channel: %s\n", c.Name)
+	console.Format("Channel: %s\n", c.Name)
 	raw := model.NewAPIv4Client(
 		locator.New(environment.Required(constant.MattermostHostEnvironment)).String(),
 	)
@@ -34,7 +34,7 @@ func Paging() {
 		false,
 	)
 	errors.PanicOnError(e)
-	fmt.Printf("Requested per_page 1000, received %d\n", len(page.Order))
+	console.Format("Requested per_page 1000, received %d\n", len(page.Order))
 	seen := map[string]int{}
 	total := 0
 	anchor := ""
@@ -87,7 +87,7 @@ func Paging() {
 		}
 	}
 
-	fmt.Printf(
+	console.Format(
 		"Cursor walk: %d posts, %d unique, %d duplicated\n",
 		total,
 		len(seen),

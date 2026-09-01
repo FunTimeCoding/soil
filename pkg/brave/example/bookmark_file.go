@@ -1,10 +1,10 @@
 package example
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/brave"
 	"github.com/funtimecoding/soil/pkg/brave/bookmark/file"
 	"github.com/funtimecoding/soil/pkg/brave/constant"
+	"github.com/funtimecoding/soil/pkg/console"
 )
 
 func BookmarkFile() {
@@ -19,6 +19,6 @@ func BookmarkFile() {
 	)
 
 	for _, n := range all {
-		fmt.Println(n.Format(f))
+		console.Line(n.Format(f))
 	}
 }

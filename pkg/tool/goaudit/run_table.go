@@ -2,6 +2,7 @@ package goaudit
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/format"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
@@ -15,9 +16,9 @@ func runTable(
 	fmt.Print(format.Services(services))
 
 	for _, c := range identityWarnings {
-		fmt.Printf("%-14s%s\n", c.Path, c.Text)
+		console.Format("%-14s%s\n", c.Path, c.Text)
 	}
 
-	fmt.Println()
+	console.Line()
 	fmt.Print(format.Clients(clients))
 }

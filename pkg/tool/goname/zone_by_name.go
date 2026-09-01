@@ -1,7 +1,7 @@
 package goname
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/hetzner"
 	"github.com/funtimecoding/soil/pkg/hetzner/zone"
 	"os"
@@ -17,7 +17,7 @@ func zoneByName(
 		}
 	}
 
-	fmt.Printf("zone not found: %s\n", name)
+	console.Format("zone not found: %s\n", name)
 	os.Exit(1)
 
 	return nil

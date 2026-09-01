@@ -1,10 +1,10 @@
 package example
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/gw2"
 )
 
 func World() {
-	fmt.Printf("Worlds: %+v\n", gw2.NewEnvironment().Worlds())
+	console.Format("Worlds: %+v\n", gw2.NewEnvironment().Worlds())
 }

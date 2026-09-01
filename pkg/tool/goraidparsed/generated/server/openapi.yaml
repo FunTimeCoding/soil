@@ -4,7 +4,7 @@ info:
   title: goraidparsed
   version: 1.0.0
 paths:
-  /api/v1/generate:
+  /api/generate:
     post:
       operationId: postGenerate
       requestBody:
@@ -26,7 +26,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/status:
+  /api/status:
     get:
       operationId: getStatus
       responses:

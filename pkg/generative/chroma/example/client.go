@@ -1,8 +1,8 @@
 package example
 
 import (
-	"fmt"
 	"github.com/amikos-tech/chroma-go/pkg/api/v2"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/generative/chroma"
 	"github.com/funtimecoding/soil/pkg/generative/constant"
 )
@@ -35,11 +35,11 @@ func Client() {
 			),
 		),
 	)
-	fmt.Printf("Count: %d\n", c.Count(l))
+	console.Format("Count: %d\n", c.Count(l))
 
 	for _, g := range c.QueryText(l, "say hello").GetDocumentsGroups() {
 		for _, d := range g {
-			fmt.Printf("Document: %+v\n", d)
+			console.Format("Document: %+v\n", d)
 		}
 	}
 

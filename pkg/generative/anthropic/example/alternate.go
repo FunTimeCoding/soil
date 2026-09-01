@@ -3,7 +3,7 @@ package example
 import (
 	"context"
 	"errors"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/liushuangls/go-anthropic/v2"
@@ -27,17 +27,17 @@ func Alternate() {
 
 	if e != nil {
 		if n, okay := errors.AsType[*anthropic.APIError](e); okay {
-			fmt.Printf(
+			console.Format(
 				"Messages error, type: %s, message: %s",
 				n.Type,
 				n.Message,
 			)
 		} else {
-			fmt.Printf("Messages error: %v\n", e)
+			console.Format("Messages error: %v\n", e)
 		}
 
 		return
 	}
 
-	fmt.Println(r.Content[0].Text)
+	console.Line(r.Content[0].Text)
 }

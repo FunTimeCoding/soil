@@ -1,7 +1,7 @@
 package missing
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	library "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	text "github.com/funtimecoding/soil/pkg/text/constant"
@@ -26,7 +26,7 @@ func Run() {
 		}
 	}
 
-	fmt.Printf("Check %d words\n", total)
+	console.Format("Check %d words\n", total)
 	scanned := 0
 	errors.PanicOnError(
 		filepath.WalkDir(
@@ -59,7 +59,7 @@ func Run() {
 			},
 		),
 	)
-	fmt.Printf("Scanned %d files\n", scanned)
+	console.Format("Scanned %d files\n", scanned)
 	unused := make(map[string][]string)
 	used := 0
 
@@ -75,28 +75,28 @@ func Run() {
 		}
 	}
 
-	fmt.Printf("Results:\n")
-	fmt.Printf(
+	console.Format("Results:\n")
+	console.Format(
 		"Used: %d/%d words (%.1f%%)\n",
 		used,
 		total,
 		float64(used)/float64(total)*100,
 	)
-	fmt.Printf("Unused: %d words\n", total-used)
+	console.Format("Unused: %d words\n", total-used)
 
 	if len(unused) == 0 {
-		fmt.Println("No unused dictionary words")
+		console.Line("No unused dictionary words")
 
 		return
 	}
 
-	fmt.Println("Unused words by category:")
+	console.Line("Unused words by category:")
 
 	for c, words := range unused {
-		fmt.Printf("\n# %s (%d unused):\n", c, len(words))
+		console.Format("\n# %s (%d unused):\n", c, len(words))
 
 		for _, w := range words {
-			fmt.Printf("  %s\n", w)
+			console.Format("  %s\n", w)
 		}
 	}
 }

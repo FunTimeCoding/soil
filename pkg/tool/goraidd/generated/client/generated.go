@@ -127,14 +127,14 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 // The interface specification for the client above.
 type ClientInterface interface {
 
-	// GetLogs performs a GET /api/v1/logs (the `GetLogs` operationId) request.
+	// GetLogs performs a GET /api/logs (the `GetLogs` operationId) request.
 	GetLogs(ctx context.Context, params *GetLogsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetReports performs a GET /api/v1/reports (the `GetReports` operationId) request.
+	// GetReports performs a GET /api/reports (the `GetReports` operationId) request.
 	GetReports(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
 
-// GetLogs performs a GET /api/v1/logs (the `GetLogs` operationId) request.
+// GetLogs performs a GET /api/logs (the `GetLogs` operationId) request.
 func (c *Client) GetLogs(ctx context.Context, params *GetLogsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetLogsRequest(c.Server, params)
 	if err != nil {
@@ -147,7 +147,7 @@ func (c *Client) GetLogs(ctx context.Context, params *GetLogsParams, reqEditors 
 	return c.Client.Do(req)
 }
 
-// GetReports performs a GET /api/v1/reports (the `GetReports` operationId) request.
+// GetReports performs a GET /api/reports (the `GetReports` operationId) request.
 func (c *Client) GetReports(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetReportsRequest(c.Server)
 	if err != nil {
@@ -169,7 +169,7 @@ func NewGetLogsRequest(server string, params *GetLogsParams) (*http.Request, err
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/logs")
+	operationPath := fmt.Sprintf("/api/logs")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -259,7 +259,7 @@ func NewGetReportsRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/reports")
+	operationPath := fmt.Sprintf("/api/reports")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -321,12 +321,12 @@ func WithBaseURL(baseURL string) ClientOption {
 // ClientWithResponsesInterface is the interface specification for the client with responses above.
 type ClientWithResponsesInterface interface {
 
-	// GetLogsWithResponse performs a GET /api/v1/logs (the `GetLogs` operationId) request.
+	// GetLogsWithResponse performs a GET /api/logs (the `GetLogs` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetLogsWithResponse(ctx context.Context, params *GetLogsParams, reqEditors ...RequestEditorFn) (*GetLogsResponse, error)
 
-	// GetReportsWithResponse performs a GET /api/v1/reports (the `GetReports` operationId) request.
+	// GetReportsWithResponse performs a GET /api/reports (the `GetReports` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetReportsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetReportsResponse, error)
@@ -428,7 +428,7 @@ func (r GetReportsResponse) ContentType() string {
 	return ""
 }
 
-// GetLogsWithResponse performs a GET /api/v1/logs (the `GetLogs` operationId) request.
+// GetLogsWithResponse performs a GET /api/logs (the `GetLogs` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetLogsWithResponse(ctx context.Context, params *GetLogsParams, reqEditors ...RequestEditorFn) (*GetLogsResponse, error) {
@@ -439,7 +439,7 @@ func (c *ClientWithResponses) GetLogsWithResponse(ctx context.Context, params *G
 	return ParseGetLogsResponse(rsp)
 }
 
-// GetReportsWithResponse performs a GET /api/v1/reports (the `GetReports` operationId) request.
+// GetReportsWithResponse performs a GET /api/reports (the `GetReports` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetReportsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetReportsResponse, error) {

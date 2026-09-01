@@ -2,6 +2,7 @@ package lint
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/file_report"
 	"github.com/funtimecoding/soil/pkg/strings/join"
@@ -95,7 +96,7 @@ func Import(
 
 	s.Fix = func() {
 		if s.Fixed != "" {
-			fmt.Printf("Simplify import %s\n", path)
+			console.Format("Simplify import %s\n", path)
 			system.SaveFile(path, s.Fixed)
 		}
 	}

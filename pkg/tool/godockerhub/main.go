@@ -1,9 +1,9 @@
 package godockerhub
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/docker/hub"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
@@ -27,7 +27,7 @@ func Main(
 	image := a.GetString(argumentConstant.Image)
 
 	if image == "" {
-		fmt.Println("--image is required")
+		console.Line("--image is required")
 
 		return
 	}
@@ -47,6 +47,6 @@ func Main(
 			updated = t.LastUpdated.Format(timeConstant.DateMinute)
 		}
 
-		fmt.Printf("%-40s %s\n", t.Name, updated)
+		console.Format("%-40s %s\n", t.Name, updated)
 	}
 }

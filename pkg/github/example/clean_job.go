@@ -1,27 +1,27 @@
 package example
 
 import (
-	"fmt"
-	console "github.com/funtimecoding/soil/pkg/console/constant"
+	"github.com/funtimecoding/soil/pkg/console"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/github"
 	"github.com/funtimecoding/soil/pkg/github/constant"
 )
 
 func CleanJob() {
 	c := github.NewEnvironment()
-	f := console.ExtendedColorFormat.Copy()
+	f := consoleConstant.ExtendedColorFormat.Copy()
 	owner := constant.Namespace
 	repository := constant.Repository
 
 	for _, w := range c.MustWorkflows(owner, repository) {
-		fmt.Printf("Workflow: %s\n", w.Format(f))
+		console.Format("Workflow: %s\n", w.Format(f))
 	}
 
 	for _, r := range c.MustProjectRuns(owner, repository) {
-		fmt.Printf("Run: %s\n", r.Format(f))
+		console.Format("Run: %s\n", r.Format(f))
 
 		for _, j := range c.MustJobs(owner, repository, *r.Raw.ID) {
-			fmt.Printf("  Job: %s\n", j.Format(f))
+			console.Format("  Job: %s\n", j.Format(f))
 		}
 
 		c.MustDeleteRun(owner, repository, *r.Raw.ID)

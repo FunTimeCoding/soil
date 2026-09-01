@@ -1,7 +1,7 @@
 package order
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/text/dictionary"
 	"sort"
 )
@@ -15,5 +15,5 @@ func Run() {
 	}
 
 	dictionary.Write(f, c)
-	fmt.Printf("Sorted %d categories in %s\n", len(c), f)
+	console.Format("Sorted %d categories in %s\n", len(c), f)
 }

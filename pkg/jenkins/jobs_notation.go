@@ -3,6 +3,7 @@ package jenkins
 import (
 	"fmt"
 	"github.com/bndr/gojenkins"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/web"
 )
@@ -40,6 +41,6 @@ func (c *Client) JobsNotation() {
 	}
 
 	for i, js := range jobStrings {
-		fmt.Printf("Job %d: %s\n", i, js)
+		console.Format("Job %d: %s\n", i, js)
 	}
 }

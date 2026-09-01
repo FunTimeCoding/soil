@@ -1,7 +1,7 @@
 package hub
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/git"
 	"github.com/funtimecoding/soil/pkg/github"
 	"github.com/funtimecoding/soil/pkg/github/tag"
@@ -32,7 +32,7 @@ func Tag(
 			continue
 		}
 
-		fmt.Printf("Delete tag: %s\n", *t.Name)
+		console.Format("Delete tag: %s\n", *t.Name)
 		c.MustDeleteTag(namespace, repository, *t.Name)
 	}
 

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/custom_field_value"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/strings"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 )
@@ -26,25 +27,25 @@ func (i *Issue) CustomValue(field string) string {
 			switch cast := v.(type) {
 			case float64:
 				if verbose {
-					fmt.Println("Float value")
+					console.Line("Float value")
 				}
 
 				return fmt.Sprintf("%v", v)
 			case string:
 				if verbose {
-					fmt.Println("String value")
+					console.Line("String value")
 				}
 
 				return cast
 			case map[string]any:
 				if verbose {
-					fmt.Println("String-any map value")
+					console.Line("String-any map value")
 				}
 
 				return custom_field_value.FromMap(cast).Value
 			case []any:
 				if verbose {
-					fmt.Println("Any slice value")
+					console.Line("Any slice value")
 				}
 
 				var result []string
@@ -53,7 +54,7 @@ func (i *Issue) CustomValue(field string) string {
 					switch castInner := item.(type) {
 					case map[string]any:
 						if verbose {
-							fmt.Println("Map value")
+							console.Line("Map value")
 						}
 
 						result = append(
@@ -61,7 +62,7 @@ func (i *Issue) CustomValue(field string) string {
 							custom_field_value.FromMap(castInner).Value,
 						)
 					default:
-						fmt.Printf("Unexpected type inner: %T\n", item)
+						console.Format("Unexpected type inner: %T\n", item)
 					}
 				}
 
@@ -69,7 +70,7 @@ func (i *Issue) CustomValue(field string) string {
 
 				return join.Comma(result)
 			default:
-				fmt.Printf("Unexpected type: %T\n", v)
+				console.Format("Unexpected type: %T\n", v)
 
 				return fmt.Sprintf("%+v", v)
 			}

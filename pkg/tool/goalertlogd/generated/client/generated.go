@@ -162,20 +162,20 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 // The interface specification for the client above.
 type ClientInterface interface {
 
-	// GetAlerts performs a GET /api/v1/alerts (the `GetAlerts` operationId) request.
+	// GetAlerts performs a GET /api/alerts (the `GetAlerts` operationId) request.
 	GetAlerts(ctx context.Context, params *GetAlertsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetRecentAlerts performs a GET /api/v1/alerts/recent (the `GetRecentAlerts` operationId) request.
+	// GetRecentAlerts performs a GET /api/alerts/recent (the `GetRecentAlerts` operationId) request.
 	GetRecentAlerts(ctx context.Context, params *GetRecentAlertsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetTopAlerts performs a GET /api/v1/alerts/top (the `GetTopAlerts` operationId) request.
+	// GetTopAlerts performs a GET /api/alerts/top (the `GetTopAlerts` operationId) request.
 	GetTopAlerts(ctx context.Context, params *GetTopAlertsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// GetStatus performs a GET /api/v1/status (the `GetStatus` operationId) request.
+	// GetStatus performs a GET /api/status (the `GetStatus` operationId) request.
 	GetStatus(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
 
-// GetAlerts performs a GET /api/v1/alerts (the `GetAlerts` operationId) request.
+// GetAlerts performs a GET /api/alerts (the `GetAlerts` operationId) request.
 func (c *Client) GetAlerts(ctx context.Context, params *GetAlertsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetAlertsRequest(c.Server, params)
 	if err != nil {
@@ -188,7 +188,7 @@ func (c *Client) GetAlerts(ctx context.Context, params *GetAlertsParams, reqEdit
 	return c.Client.Do(req)
 }
 
-// GetRecentAlerts performs a GET /api/v1/alerts/recent (the `GetRecentAlerts` operationId) request.
+// GetRecentAlerts performs a GET /api/alerts/recent (the `GetRecentAlerts` operationId) request.
 func (c *Client) GetRecentAlerts(ctx context.Context, params *GetRecentAlertsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetRecentAlertsRequest(c.Server, params)
 	if err != nil {
@@ -201,7 +201,7 @@ func (c *Client) GetRecentAlerts(ctx context.Context, params *GetRecentAlertsPar
 	return c.Client.Do(req)
 }
 
-// GetTopAlerts performs a GET /api/v1/alerts/top (the `GetTopAlerts` operationId) request.
+// GetTopAlerts performs a GET /api/alerts/top (the `GetTopAlerts` operationId) request.
 func (c *Client) GetTopAlerts(ctx context.Context, params *GetTopAlertsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetTopAlertsRequest(c.Server, params)
 	if err != nil {
@@ -214,7 +214,7 @@ func (c *Client) GetTopAlerts(ctx context.Context, params *GetTopAlertsParams, r
 	return c.Client.Do(req)
 }
 
-// GetStatus performs a GET /api/v1/status (the `GetStatus` operationId) request.
+// GetStatus performs a GET /api/status (the `GetStatus` operationId) request.
 func (c *Client) GetStatus(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetStatusRequest(c.Server)
 	if err != nil {
@@ -236,7 +236,7 @@ func NewGetAlertsRequest(server string, params *GetAlertsParams) (*http.Request,
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/alerts")
+	operationPath := fmt.Sprintf("/api/alerts")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -286,7 +286,7 @@ func NewGetRecentAlertsRequest(server string, params *GetRecentAlertsParams) (*h
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/alerts/recent")
+	operationPath := fmt.Sprintf("/api/alerts/recent")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -352,7 +352,7 @@ func NewGetTopAlertsRequest(server string, params *GetTopAlertsParams) (*http.Re
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/alerts/top")
+	operationPath := fmt.Sprintf("/api/alerts/top")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -430,7 +430,7 @@ func NewGetStatusRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/status")
+	operationPath := fmt.Sprintf("/api/status")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -492,22 +492,22 @@ func WithBaseURL(baseURL string) ClientOption {
 // ClientWithResponsesInterface is the interface specification for the client with responses above.
 type ClientWithResponsesInterface interface {
 
-	// GetAlertsWithResponse performs a GET /api/v1/alerts (the `GetAlerts` operationId) request.
+	// GetAlertsWithResponse performs a GET /api/alerts (the `GetAlerts` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetAlertsWithResponse(ctx context.Context, params *GetAlertsParams, reqEditors ...RequestEditorFn) (*GetAlertsResponse, error)
 
-	// GetRecentAlertsWithResponse performs a GET /api/v1/alerts/recent (the `GetRecentAlerts` operationId) request.
+	// GetRecentAlertsWithResponse performs a GET /api/alerts/recent (the `GetRecentAlerts` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetRecentAlertsWithResponse(ctx context.Context, params *GetRecentAlertsParams, reqEditors ...RequestEditorFn) (*GetRecentAlertsResponse, error)
 
-	// GetTopAlertsWithResponse performs a GET /api/v1/alerts/top (the `GetTopAlerts` operationId) request.
+	// GetTopAlertsWithResponse performs a GET /api/alerts/top (the `GetTopAlerts` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetTopAlertsWithResponse(ctx context.Context, params *GetTopAlertsParams, reqEditors ...RequestEditorFn) (*GetTopAlertsResponse, error)
 
-	// GetStatusWithResponse performs a GET /api/v1/status (the `GetStatus` operationId) request.
+	// GetStatusWithResponse performs a GET /api/status (the `GetStatus` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetStatusWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetStatusResponse, error)
@@ -705,7 +705,7 @@ func (r GetStatusResponse) ContentType() string {
 	return ""
 }
 
-// GetAlertsWithResponse performs a GET /api/v1/alerts (the `GetAlerts` operationId) request.
+// GetAlertsWithResponse performs a GET /api/alerts (the `GetAlerts` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetAlertsWithResponse(ctx context.Context, params *GetAlertsParams, reqEditors ...RequestEditorFn) (*GetAlertsResponse, error) {
@@ -716,7 +716,7 @@ func (c *ClientWithResponses) GetAlertsWithResponse(ctx context.Context, params 
 	return ParseGetAlertsResponse(rsp)
 }
 
-// GetRecentAlertsWithResponse performs a GET /api/v1/alerts/recent (the `GetRecentAlerts` operationId) request.
+// GetRecentAlertsWithResponse performs a GET /api/alerts/recent (the `GetRecentAlerts` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetRecentAlertsWithResponse(ctx context.Context, params *GetRecentAlertsParams, reqEditors ...RequestEditorFn) (*GetRecentAlertsResponse, error) {
@@ -727,7 +727,7 @@ func (c *ClientWithResponses) GetRecentAlertsWithResponse(ctx context.Context, p
 	return ParseGetRecentAlertsResponse(rsp)
 }
 
-// GetTopAlertsWithResponse performs a GET /api/v1/alerts/top (the `GetTopAlerts` operationId) request.
+// GetTopAlertsWithResponse performs a GET /api/alerts/top (the `GetTopAlerts` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetTopAlertsWithResponse(ctx context.Context, params *GetTopAlertsParams, reqEditors ...RequestEditorFn) (*GetTopAlertsResponse, error) {
@@ -738,7 +738,7 @@ func (c *ClientWithResponses) GetTopAlertsWithResponse(ctx context.Context, para
 	return ParseGetTopAlertsResponse(rsp)
 }
 
-// GetStatusWithResponse performs a GET /api/v1/status (the `GetStatus` operationId) request.
+// GetStatusWithResponse performs a GET /api/status (the `GetStatus` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) GetStatusWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetStatusResponse, error) {

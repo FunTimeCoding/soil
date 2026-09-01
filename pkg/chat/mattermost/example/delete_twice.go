@@ -2,9 +2,9 @@ package example
 
 import (
 	"errors"
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/mattermost/mattermost/server/public/model"
 )
 
@@ -17,10 +17,10 @@ func DeleteTwice() {
 	p := m.MustPostSimple(c, "delete-twice probe")
 	m.MustDeletePost(p)
 	e := m.DeletePost(p)
-	fmt.Printf("Second delete error: %v\n", e)
+	console.Format("Second delete error: %v\n", e)
 	var f *model.AppError
 
 	if errors.As(e, &f) {
-		fmt.Printf("AppError identifier %s status %d\n", f.Id, f.StatusCode)
+		console.Format("AppError identifier %s status %d\n", f.Id, f.StatusCode)
 	}
 }

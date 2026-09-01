@@ -1,6 +1,6 @@
 package jira
 
-import "fmt"
+import "github.com/funtimecoding/soil/pkg/console"
 
 func (c *Client) FieldsV3() error {
 	status, body, e := c.basic.GetPath("/rest/api/3/field")
@@ -10,7 +10,7 @@ func (c *Client) FieldsV3() error {
 	}
 
 	// Does not contain more fields than the V2 API
-	fmt.Printf("Basic response: %d %s", status, body)
+	console.Format("Basic response: %d %s", status, body)
 
 	return nil
 }

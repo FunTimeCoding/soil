@@ -1,7 +1,7 @@
 package prometheus
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/prometheus/rule"
 	"github.com/funtimecoding/soil/pkg/prometheus/rule/rule_list"
 	"github.com/prometheus/client_golang/api/prometheus/v1"
@@ -25,7 +25,7 @@ func (c *Client) Rules() (*rule_list.List, error) {
 			case v1.RecordingRule:
 				result.Add(rule.NewRecord(&t, &group))
 			default:
-				fmt.Printf("  Unexpected: %s", reflect.TypeOf(r))
+				console.Format("  Unexpected: %s", reflect.TypeOf(r))
 			}
 		}
 	}

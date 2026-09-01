@@ -1,9 +1,9 @@
 package example
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/chat/telegram"
+	"github.com/funtimecoding/soil/pkg/console"
 )
 
 func Update() {
@@ -11,6 +11,6 @@ func Update() {
 	f := constant.TelegramFormat
 
 	for _, m := range c.Messages() {
-		fmt.Println(m.Format(f))
+		console.Line(m.Format(f))
 	}
 }

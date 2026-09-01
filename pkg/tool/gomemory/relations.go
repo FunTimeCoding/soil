@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
@@ -63,7 +64,7 @@ func relations(l **client.Client) *cobra.Command {
 			}
 
 			errors.PanicFlush(w)
-			fmt.Printf("%d relations\n", len(rows))
+			console.Format("%d relations\n", len(rows))
 		},
 	}
 	c.Flags().StringVar(&relationType, "type", "", "filter by relation type")

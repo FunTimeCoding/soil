@@ -1,7 +1,7 @@
 package file
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/yuin/goldmark/ast"
 )
 
@@ -17,16 +17,16 @@ func PrintNode(
 			return
 		}
 
-		fmt.Printf("Document: %s\n", v)
+		console.Format("Document: %s\n", v)
 	case *ast.Heading:
-		fmt.Printf("Heading: %s\n", Value(s, o))
+		console.Format("Heading: %s\n", Value(s, o))
 	case *ast.Paragraph:
-		fmt.Printf("Paragraph: %s\n", Value(s, o))
+		console.Format("Paragraph: %s\n", Value(s, o))
 	case *ast.Text:
-		fmt.Printf("Text: %s\n", string(o.Value(*s)))
+		console.Format("Text: %s\n", string(o.Value(*s)))
 	case *ast.FencedCodeBlock:
-		fmt.Printf("FencedCodeBlock: %s\n", Value(s, o))
+		console.Format("FencedCodeBlock: %s\n", Value(s, o))
 	default:
-		fmt.Printf("Unknown node type: %T\n", o)
+		console.Format("Unknown node type: %T\n", o)
 	}
 }

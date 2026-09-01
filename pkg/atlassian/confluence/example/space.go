@@ -1,15 +1,15 @@
 package example
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
+	"github.com/funtimecoding/soil/pkg/console"
 )
 
 func Space() {
 	f := constant.ConfluenceFormat
 
 	for _, s := range confluence.NewEnvironment().MustSpaces() {
-		fmt.Println(s.Format(f))
+		console.Line(s.Format(f))
 	}
 }

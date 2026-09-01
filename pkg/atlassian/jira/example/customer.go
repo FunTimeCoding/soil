@@ -1,7 +1,7 @@
 package example
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/strings"
 	"github.com/funtimecoding/soil/pkg/tool/common"
@@ -9,11 +9,11 @@ import (
 
 func Customer() {
 	j := common.Jira()
-	fmt.Printf("Information: %+v\n", j.MustCustomerInformation())
+	console.Format("Information: %+v\n", j.MustCustomerInformation())
 
 	if false {
 		for _, i := range j.MustCustomerIssues(true) {
-			fmt.Println(i.Format(constant.ColorFormat))
+			console.Line(i.Format(constant.ColorFormat))
 		}
 	}
 
@@ -21,11 +21,11 @@ func Customer() {
 		desks := j.MustDesks()
 
 		for _, e := range desks.Values {
-			fmt.Printf("Desk: %+v\n", e)
+			console.Format("Desk: %+v\n", e)
 			types := j.MustRequestTypes(strings.MustToInteger(e.ID), 0)
 
 			for _, t := range types.Values {
-				fmt.Printf("  Type: %+v\n", t)
+				console.Format("  Type: %+v\n", t)
 			}
 		}
 	}
@@ -37,6 +37,6 @@ func Customer() {
 			"Test software request",
 			"Requesting the software",
 		)
-		fmt.Printf("Issue: %+v\n", i)
+		console.Format("Issue: %+v\n", i)
 	}
 }

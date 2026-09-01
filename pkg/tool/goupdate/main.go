@@ -1,9 +1,9 @@
 package goupdate
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
+	"github.com/funtimecoding/soil/pkg/console"
 	library "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/github"
@@ -47,11 +47,11 @@ func Main(
 	continueOnError := a.GetBoolean(argumentConstant.Continue)
 
 	if len(exclusives) > 0 {
-		fmt.Printf("Exclusive matches: %s\n", join.Comma(exclusives))
+		console.Format("Exclusive matches: %s\n", join.Comma(exclusives))
 	}
 
 	if len(downgrades) > 0 {
-		fmt.Printf("Downgrades: %s\n", join.Comma(downgrades))
+		console.Format("Downgrades: %s\n", join.Comma(downgrades))
 	}
 
 	go_mod.UpdateDirectDependencies(exclusives, continueOnError)

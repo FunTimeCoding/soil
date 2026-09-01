@@ -1,9 +1,9 @@
 package example
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/assistant"
 	"github.com/funtimecoding/soil/pkg/assistant/message"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/system"
 )
 
@@ -12,15 +12,15 @@ func Listen() {
 		assistant.WithSubscriber(
 			func(m *message.Message) {
 				if m.Event == nil {
-					fmt.Printf("non-event message: %s\n", m.Type)
+					console.Format("non-event message: %s\n", m.Type)
 
 					return
 				}
 
-				fmt.Printf("%s %s\n", m.Type, m.Event.Origin)
-				fmt.Printf("  Time: %s\n", m.Event.Time)
-				fmt.Printf("  Raw: %s\n", string(m.Event.Raw))
-				fmt.Println()
+				console.Format("%s %s\n", m.Type, m.Event.Origin)
+				console.Format("  Time: %s\n", m.Event.Time)
+				console.Format("  Raw: %s\n", string(m.Event.Raw))
+				console.Line()
 			},
 		),
 	)

@@ -1,7 +1,7 @@
 package file
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/yuin/goldmark/ast"
 )
 
@@ -12,6 +12,6 @@ func PrintKind(
 	if n.Kind() == ast.KindText {
 		t := n.(*ast.Text)
 		e := t.Segment
-		fmt.Printf("Text kind: %s\n", string(e.Value(*s)))
+		console.Format("Text kind: %s\n", string(e.Value(*s)))
 	}
 }

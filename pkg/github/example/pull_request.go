@@ -1,7 +1,7 @@
 package example
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/github"
 )
 
@@ -11,21 +11,21 @@ func PullRequest() {
 	repositories := g.MustRepositories(u.Name)
 
 	for _, r := range repositories {
-		fmt.Printf("Repository: %s\n", *r.Name)
+		console.Format("Repository: %s\n", *r.Name)
 
 		for _, p := range g.MustPullRequests(u.Name, *r.Name) {
-			fmt.Printf("  PR: %s\n", *p.Title)
-			fmt.Printf("  %s\n", *p.HTMLURL)
+			console.Format("  PR: %s\n", *p.Title)
+			console.Format("  %s\n", *p.HTMLURL)
 		}
 	}
 
 	if true {
 		for _, r := range repositories {
-			fmt.Printf("Repository: %s\n", *r.Name)
+			console.Format("Repository: %s\n", *r.Name)
 
 			for _, i := range g.MustProjectIssues(u.Name, *r.Name) {
-				fmt.Printf("  Issue: %s\n", *i.Title)
-				fmt.Printf("  %s\n", *i.HTMLURL)
+				console.Format("  Issue: %s\n", *i.Title)
+				console.Format("  %s\n", *i.HTMLURL)
 			}
 		}
 	}

@@ -1,7 +1,7 @@
 package gosentry
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/basic/response"
 )
 
@@ -17,6 +17,6 @@ func printStacktrace(s *response.Stacktrace) {
 			continue
 		}
 
-		fmt.Printf("  %s (%s:%d)\n", f.Function, f.Filename, f.LineNo)
+		console.Format("  %s (%s:%d)\n", f.Function, f.Filename, f.LineNo)
 	}
 }

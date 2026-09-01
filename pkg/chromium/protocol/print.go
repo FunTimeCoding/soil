@@ -1,17 +1,17 @@
 package protocol
 
 import (
-	"fmt"
 	"github.com/chromedp/cdproto/cdp"
+	"github.com/funtimecoding/soil/pkg/console"
 )
 
 func Print(
 	n *cdp.Node,
 	attribute []string,
 ) {
-	fmt.Printf("  XPath: %s\n", n.FullXPath())
+	console.Format("  XPath: %s\n", n.FullXPath())
 
 	for _, a := range attribute {
-		fmt.Printf("  %s: %s\n", a, n.AttributeValue(a))
+		console.Format("  %s: %s\n", a, n.AttributeValue(a))
 	}
 }

@@ -1,8 +1,8 @@
 package alert
 
 import (
-	"fmt"
-	console "github.com/funtimecoding/soil/pkg/console/constant"
+	"github.com/funtimecoding/soil/pkg/console"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager"
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"time"
@@ -12,7 +12,7 @@ func printRules(
 	c *alertmanager.Client,
 	firing bool,
 ) {
-	f := console.ExtendedColorFormat.Copy()
+	f := consoleConstant.ExtendedColorFormat.Copy()
 
 	for _, r := range c.MustRules().Alert() {
 		if r.RawAlert != nil &&
@@ -24,6 +24,6 @@ func printRules(
 			continue
 		}
 
-		fmt.Println(r.Format(f))
+		console.Line(r.Format(f))
 	}
 }

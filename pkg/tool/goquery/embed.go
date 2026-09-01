@@ -3,7 +3,7 @@ package goquery
 import (
 	"context"
 	"encoding/json"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 	"github.com/spf13/cobra"
@@ -22,7 +22,7 @@ func embed(c *client.Client) *cobra.Command {
 			defer errors.PanicClose(r.Body)
 			var result client.EmbedResult
 			errors.PanicOnError(json.NewDecoder(r.Body).Decode(&result))
-			fmt.Printf(
+			console.Format(
 				"Embedded %d documents (%d chunks)\n",
 				result.Documents,
 				result.Chunks,

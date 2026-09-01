@@ -1,7 +1,7 @@
 package example
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/prometheus"
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/strings/split/key_value"
@@ -10,12 +10,12 @@ import (
 
 func Meta() {
 	c := prometheus.NewEnvironment()
-	fmt.Println("Metadata")
+	console.Line("Metadata")
 	m := make(map[string][]string)
 
 	for _, n := range c.AllMetrics() {
 		for k, elements := range c.MustMetadata(n) {
-			fmt.Printf("  %s\n", k)
+			console.Format("  %s\n", k)
 			prefix, _ := key_value.Underscore(k)
 
 			if slices.Contains(constant.ExampleGroups, prefix) {
@@ -25,24 +25,24 @@ func Meta() {
 			}
 
 			for _, d := range elements {
-				fmt.Printf("    %s", d.Type)
+				console.Format("    %s", d.Type)
 
 				if d.Unit != "" {
-					fmt.Printf(" %s", d.Unit)
+					console.Format(" %s", d.Unit)
 				}
 
-				fmt.Printf(" %s\n", d.Help)
+				console.Format(" %s\n", d.Help)
 			}
 		}
 	}
 
-	fmt.Println("Metric groups")
+	console.Line("Metric groups")
 
 	for k, v := range m {
-		fmt.Printf("%s: %d\n", k, len(v))
+		console.Format("%s: %d\n", k, len(v))
 
 		for _, n := range v {
-			fmt.Printf("  %s\n", n)
+			console.Format("  %s\n", n)
 		}
 	}
 }

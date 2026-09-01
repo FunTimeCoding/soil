@@ -1,9 +1,9 @@
 package protocol
 
 import (
-	"fmt"
 	"github.com/chromedp/cdproto/cdp"
 	"github.com/chromedp/chromedp"
+	"github.com/funtimecoding/soil/pkg/console"
 )
 
 func (p *Protocol) PrintNode(
@@ -15,14 +15,14 @@ func (p *Protocol) PrintNode(
 		p.context,
 		chromedp.Nodes(s, &result, chromedp.ByQueryAll),
 	)
-	fmt.Printf("Selector: %s\n", s)
+	console.Format("Selector: %s\n", s)
 
 	for i, n := range result {
-		fmt.Printf("Index: %d\n", i)
-		fmt.Printf("  XPath: %s\n", n.FullXPath())
+		console.Format("Index: %d\n", i)
+		console.Format("  XPath: %s\n", n.FullXPath())
 
 		for _, a := range attribute {
-			fmt.Printf("  %s: %s\n", a, n.AttributeValue(a))
+			console.Format("  %s: %s\n", a, n.AttributeValue(a))
 		}
 	}
 }

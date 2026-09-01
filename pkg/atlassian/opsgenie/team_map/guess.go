@@ -1,8 +1,8 @@
 package team_map
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/team"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/opsgenie/opsgenie-go-sdk-v2/alert"
 )
 
@@ -18,7 +18,7 @@ func (m *Map) Guess(
 
 	if name == "" {
 		if verbose {
-			fmt.Printf("No team: %+v\n", a)
+			console.Format("No team: %+v\n", a)
 		}
 
 		return nil
@@ -31,7 +31,7 @@ func (m *Map) Guess(
 	}
 
 	if verbose {
-		fmt.Printf("Guess fail: %+v\n", a)
+		console.Format("Guess fail: %+v\n", a)
 	}
 
 	return nil

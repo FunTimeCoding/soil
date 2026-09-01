@@ -2,7 +2,7 @@ package goquery
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 	"github.com/spf13/cobra"
@@ -23,7 +23,7 @@ func deleteCollection(c *client.Client) *cobra.Command {
 			)
 			errors.PanicOnError(e)
 			defer errors.PanicClose(r.Body)
-			fmt.Printf("collection %s deleted\n", arguments[0])
+			console.Format("collection %s deleted\n", arguments[0])
 		},
 	}
 }

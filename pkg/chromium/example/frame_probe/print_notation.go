@@ -1,8 +1,8 @@
 package frame_probe
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/chromium/constant"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/strings"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -10,8 +10,8 @@ import (
 )
 
 func printNotation() {
-	fmt.Println("=== raw /json ===")
-	fmt.Println(
+	console.Line("=== raw /json ===")
+	console.Line(
 		web.GetString(
 			web.InsecureClient(),
 			locator.New(environment.Required(constant.HostEnvironment)).Port(

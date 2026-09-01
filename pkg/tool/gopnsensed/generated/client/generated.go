@@ -341,63 +341,63 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 // The interface specification for the client above.
 type ClientInterface interface {
 
-	// ListAliases performs a GET /api/v1/aliases (the `ListAliases` operationId) request.
+	// ListAliases performs a GET /api/aliases (the `ListAliases` operationId) request.
 	ListAliases(ctx context.Context, params *ListAliasesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListBlocklists performs a GET /api/v1/blocklists (the `ListBlocklists` operationId) request.
+	// ListBlocklists performs a GET /api/blocklists (the `ListBlocklists` operationId) request.
 	ListBlocklists(ctx context.Context, params *ListBlocklistsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ReconfigureDnsmasq performs a POST /api/v1/dnsmasq/reconfigure (the `ReconfigureDnsmasq` operationId) request.
+	// ReconfigureDnsmasq performs a POST /api/dnsmasq/reconfigure (the `ReconfigureDnsmasq` operationId) request.
 	ReconfigureDnsmasq(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListForwards performs a GET /api/v1/forwards (the `ListForwards` operationId) request.
+	// ListForwards performs a GET /api/forwards (the `ListForwards` operationId) request.
 	ListForwards(ctx context.Context, params *ListForwardsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListHosts performs a GET /api/v1/hosts (the `ListHosts` operationId) request.
+	// ListHosts performs a GET /api/hosts (the `ListHosts` operationId) request.
 	ListHosts(ctx context.Context, params *ListHostsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// AddHostWithBody performs a POST /api/v1/hosts (the `AddHost` operationId) request,
+	// AddHostWithBody performs a POST /api/hosts (the `AddHost` operationId) request,
 	// with any type of body and a specified content type.
 	AddHostWithBody(ctx context.Context, params *AddHostParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// AddHost performs a POST /api/v1/hosts (the `AddHost` operationId) request.
+	// AddHost performs a POST /api/hosts (the `AddHost` operationId) request.
 	// Takes a body of the `application/json` content type.
 	AddHost(ctx context.Context, params *AddHostParams, body AddHostJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// DeleteHost performs a DELETE /api/v1/hosts/{identifier} (the `DeleteHost` operationId) request.
+	// DeleteHost performs a DELETE /api/hosts/{identifier} (the `DeleteHost` operationId) request.
 	DeleteHost(ctx context.Context, identifier string, params *DeleteHostParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// SetHostWithBody performs a PUT /api/v1/hosts/{identifier} (the `SetHost` operationId) request,
+	// SetHostWithBody performs a PUT /api/hosts/{identifier} (the `SetHost` operationId) request,
 	// with any type of body and a specified content type.
 	SetHostWithBody(ctx context.Context, identifier string, params *SetHostParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// SetHost performs a PUT /api/v1/hosts/{identifier} (the `SetHost` operationId) request.
+	// SetHost performs a PUT /api/hosts/{identifier} (the `SetHost` operationId) request.
 	// Takes a body of the `application/json` content type.
 	SetHost(ctx context.Context, identifier string, params *SetHostParams, body SetHostJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListInterfaces performs a GET /api/v1/interfaces (the `ListInterfaces` operationId) request.
+	// ListInterfaces performs a GET /api/interfaces (the `ListInterfaces` operationId) request.
 	ListInterfaces(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListLeases performs a GET /api/v1/leases (the `ListLeases` operationId) request.
+	// ListLeases performs a GET /api/leases (the `ListLeases` operationId) request.
 	ListLeases(ctx context.Context, params *ListLeasesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// FirewallLog performs a GET /api/v1/log (the `FirewallLog` operationId) request.
+	// FirewallLog performs a GET /api/log (the `FirewallLog` operationId) request.
 	FirewallLog(ctx context.Context, params *FirewallLogParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListPools performs a GET /api/v1/pools (the `ListPools` operationId) request.
+	// ListPools performs a GET /api/pools (the `ListPools` operationId) request.
 	ListPools(ctx context.Context, params *ListPoolsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListRules performs a GET /api/v1/rules (the `ListRules` operationId) request.
+	// ListRules performs a GET /api/rules (the `ListRules` operationId) request.
 	ListRules(ctx context.Context, params *ListRulesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// ListSourceNat performs a GET /api/v1/source-nat (the `ListSourceNat` operationId) request.
+	// ListSourceNat performs a GET /api/source-nat (the `ListSourceNat` operationId) request.
 	ListSourceNat(ctx context.Context, params *ListSourceNatParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
-	// FirewallStates performs a GET /api/v1/states (the `FirewallStates` operationId) request.
+	// FirewallStates performs a GET /api/states (the `FirewallStates` operationId) request.
 	FirewallStates(ctx context.Context, params *FirewallStatesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
 
-// ListAliases performs a GET /api/v1/aliases (the `ListAliases` operationId) request.
+// ListAliases performs a GET /api/aliases (the `ListAliases` operationId) request.
 func (c *Client) ListAliases(ctx context.Context, params *ListAliasesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListAliasesRequest(c.Server, params)
 	if err != nil {
@@ -410,7 +410,7 @@ func (c *Client) ListAliases(ctx context.Context, params *ListAliasesParams, req
 	return c.Client.Do(req)
 }
 
-// ListBlocklists performs a GET /api/v1/blocklists (the `ListBlocklists` operationId) request.
+// ListBlocklists performs a GET /api/blocklists (the `ListBlocklists` operationId) request.
 func (c *Client) ListBlocklists(ctx context.Context, params *ListBlocklistsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListBlocklistsRequest(c.Server, params)
 	if err != nil {
@@ -423,7 +423,7 @@ func (c *Client) ListBlocklists(ctx context.Context, params *ListBlocklistsParam
 	return c.Client.Do(req)
 }
 
-// ReconfigureDnsmasq performs a POST /api/v1/dnsmasq/reconfigure (the `ReconfigureDnsmasq` operationId) request.
+// ReconfigureDnsmasq performs a POST /api/dnsmasq/reconfigure (the `ReconfigureDnsmasq` operationId) request.
 func (c *Client) ReconfigureDnsmasq(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewReconfigureDnsmasqRequest(c.Server)
 	if err != nil {
@@ -436,7 +436,7 @@ func (c *Client) ReconfigureDnsmasq(ctx context.Context, reqEditors ...RequestEd
 	return c.Client.Do(req)
 }
 
-// ListForwards performs a GET /api/v1/forwards (the `ListForwards` operationId) request.
+// ListForwards performs a GET /api/forwards (the `ListForwards` operationId) request.
 func (c *Client) ListForwards(ctx context.Context, params *ListForwardsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListForwardsRequest(c.Server, params)
 	if err != nil {
@@ -449,7 +449,7 @@ func (c *Client) ListForwards(ctx context.Context, params *ListForwardsParams, r
 	return c.Client.Do(req)
 }
 
-// ListHosts performs a GET /api/v1/hosts (the `ListHosts` operationId) request.
+// ListHosts performs a GET /api/hosts (the `ListHosts` operationId) request.
 func (c *Client) ListHosts(ctx context.Context, params *ListHostsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListHostsRequest(c.Server, params)
 	if err != nil {
@@ -462,7 +462,7 @@ func (c *Client) ListHosts(ctx context.Context, params *ListHostsParams, reqEdit
 	return c.Client.Do(req)
 }
 
-// AddHostWithBody performs a POST /api/v1/hosts (the `AddHost` operationId) request,
+// AddHostWithBody performs a POST /api/hosts (the `AddHost` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) AddHostWithBody(ctx context.Context, params *AddHostParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewAddHostRequestWithBody(c.Server, params, contentType, body)
@@ -476,7 +476,7 @@ func (c *Client) AddHostWithBody(ctx context.Context, params *AddHostParams, con
 	return c.Client.Do(req)
 }
 
-// AddHost performs a POST /api/v1/hosts (the `AddHost` operationId) request.
+// AddHost performs a POST /api/hosts (the `AddHost` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) AddHost(ctx context.Context, params *AddHostParams, body AddHostJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewAddHostRequest(c.Server, params, body)
@@ -490,7 +490,7 @@ func (c *Client) AddHost(ctx context.Context, params *AddHostParams, body AddHos
 	return c.Client.Do(req)
 }
 
-// DeleteHost performs a DELETE /api/v1/hosts/{identifier} (the `DeleteHost` operationId) request.
+// DeleteHost performs a DELETE /api/hosts/{identifier} (the `DeleteHost` operationId) request.
 func (c *Client) DeleteHost(ctx context.Context, identifier string, params *DeleteHostParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewDeleteHostRequest(c.Server, identifier, params)
 	if err != nil {
@@ -503,7 +503,7 @@ func (c *Client) DeleteHost(ctx context.Context, identifier string, params *Dele
 	return c.Client.Do(req)
 }
 
-// SetHostWithBody performs a PUT /api/v1/hosts/{identifier} (the `SetHost` operationId) request,
+// SetHostWithBody performs a PUT /api/hosts/{identifier} (the `SetHost` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) SetHostWithBody(ctx context.Context, identifier string, params *SetHostParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewSetHostRequestWithBody(c.Server, identifier, params, contentType, body)
@@ -517,7 +517,7 @@ func (c *Client) SetHostWithBody(ctx context.Context, identifier string, params 
 	return c.Client.Do(req)
 }
 
-// SetHost performs a PUT /api/v1/hosts/{identifier} (the `SetHost` operationId) request.
+// SetHost performs a PUT /api/hosts/{identifier} (the `SetHost` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) SetHost(ctx context.Context, identifier string, params *SetHostParams, body SetHostJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewSetHostRequest(c.Server, identifier, params, body)
@@ -531,7 +531,7 @@ func (c *Client) SetHost(ctx context.Context, identifier string, params *SetHost
 	return c.Client.Do(req)
 }
 
-// ListInterfaces performs a GET /api/v1/interfaces (the `ListInterfaces` operationId) request.
+// ListInterfaces performs a GET /api/interfaces (the `ListInterfaces` operationId) request.
 func (c *Client) ListInterfaces(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListInterfacesRequest(c.Server)
 	if err != nil {
@@ -544,7 +544,7 @@ func (c *Client) ListInterfaces(ctx context.Context, reqEditors ...RequestEditor
 	return c.Client.Do(req)
 }
 
-// ListLeases performs a GET /api/v1/leases (the `ListLeases` operationId) request.
+// ListLeases performs a GET /api/leases (the `ListLeases` operationId) request.
 func (c *Client) ListLeases(ctx context.Context, params *ListLeasesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListLeasesRequest(c.Server, params)
 	if err != nil {
@@ -557,7 +557,7 @@ func (c *Client) ListLeases(ctx context.Context, params *ListLeasesParams, reqEd
 	return c.Client.Do(req)
 }
 
-// FirewallLog performs a GET /api/v1/log (the `FirewallLog` operationId) request.
+// FirewallLog performs a GET /api/log (the `FirewallLog` operationId) request.
 func (c *Client) FirewallLog(ctx context.Context, params *FirewallLogParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewFirewallLogRequest(c.Server, params)
 	if err != nil {
@@ -570,7 +570,7 @@ func (c *Client) FirewallLog(ctx context.Context, params *FirewallLogParams, req
 	return c.Client.Do(req)
 }
 
-// ListPools performs a GET /api/v1/pools (the `ListPools` operationId) request.
+// ListPools performs a GET /api/pools (the `ListPools` operationId) request.
 func (c *Client) ListPools(ctx context.Context, params *ListPoolsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListPoolsRequest(c.Server, params)
 	if err != nil {
@@ -583,7 +583,7 @@ func (c *Client) ListPools(ctx context.Context, params *ListPoolsParams, reqEdit
 	return c.Client.Do(req)
 }
 
-// ListRules performs a GET /api/v1/rules (the `ListRules` operationId) request.
+// ListRules performs a GET /api/rules (the `ListRules` operationId) request.
 func (c *Client) ListRules(ctx context.Context, params *ListRulesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListRulesRequest(c.Server, params)
 	if err != nil {
@@ -596,7 +596,7 @@ func (c *Client) ListRules(ctx context.Context, params *ListRulesParams, reqEdit
 	return c.Client.Do(req)
 }
 
-// ListSourceNat performs a GET /api/v1/source-nat (the `ListSourceNat` operationId) request.
+// ListSourceNat performs a GET /api/source-nat (the `ListSourceNat` operationId) request.
 func (c *Client) ListSourceNat(ctx context.Context, params *ListSourceNatParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListSourceNatRequest(c.Server, params)
 	if err != nil {
@@ -609,7 +609,7 @@ func (c *Client) ListSourceNat(ctx context.Context, params *ListSourceNatParams,
 	return c.Client.Do(req)
 }
 
-// FirewallStates performs a GET /api/v1/states (the `FirewallStates` operationId) request.
+// FirewallStates performs a GET /api/states (the `FirewallStates` operationId) request.
 func (c *Client) FirewallStates(ctx context.Context, params *FirewallStatesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewFirewallStatesRequest(c.Server, params)
 	if err != nil {
@@ -631,7 +631,7 @@ func NewListAliasesRequest(server string, params *ListAliasesParams) (*http.Requ
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/aliases")
+	operationPath := fmt.Sprintf("/api/aliases")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -685,7 +685,7 @@ func NewListBlocklistsRequest(server string, params *ListBlocklistsParams) (*htt
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/blocklists")
+	operationPath := fmt.Sprintf("/api/blocklists")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -739,7 +739,7 @@ func NewReconfigureDnsmasqRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/dnsmasq/reconfigure")
+	operationPath := fmt.Sprintf("/api/dnsmasq/reconfigure")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -766,7 +766,7 @@ func NewListForwardsRequest(server string, params *ListForwardsParams) (*http.Re
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/forwards")
+	operationPath := fmt.Sprintf("/api/forwards")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -820,7 +820,7 @@ func NewListHostsRequest(server string, params *ListHostsParams) (*http.Request,
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/hosts")
+	operationPath := fmt.Sprintf("/api/hosts")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -885,7 +885,7 @@ func NewAddHostRequestWithBody(server string, params *AddHostParams, contentType
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/hosts")
+	operationPath := fmt.Sprintf("/api/hosts")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -948,7 +948,7 @@ func NewDeleteHostRequest(server string, identifier string, params *DeleteHostPa
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/hosts/%s", pathParam0)
+	operationPath := fmt.Sprintf("/api/hosts/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1020,7 +1020,7 @@ func NewSetHostRequestWithBody(server string, identifier string, params *SetHost
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/hosts/%s", pathParam0)
+	operationPath := fmt.Sprintf("/api/hosts/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1076,7 +1076,7 @@ func NewListInterfacesRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/interfaces")
+	operationPath := fmt.Sprintf("/api/interfaces")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1103,7 +1103,7 @@ func NewListLeasesRequest(server string, params *ListLeasesParams) (*http.Reques
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/leases")
+	operationPath := fmt.Sprintf("/api/leases")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1157,7 +1157,7 @@ func NewFirewallLogRequest(server string, params *FirewallLogParams) (*http.Requ
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/log")
+	operationPath := fmt.Sprintf("/api/log")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1211,7 +1211,7 @@ func NewListPoolsRequest(server string, params *ListPoolsParams) (*http.Request,
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/pools")
+	operationPath := fmt.Sprintf("/api/pools")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1265,7 +1265,7 @@ func NewListRulesRequest(server string, params *ListRulesParams) (*http.Request,
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/rules")
+	operationPath := fmt.Sprintf("/api/rules")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1319,7 +1319,7 @@ func NewListSourceNatRequest(server string, params *ListSourceNatParams) (*http.
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/source-nat")
+	operationPath := fmt.Sprintf("/api/source-nat")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1373,7 +1373,7 @@ func NewFirewallStatesRequest(server string, params *FirewallStatesParams) (*htt
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/states")
+	operationPath := fmt.Sprintf("/api/states")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -1462,87 +1462,87 @@ func WithBaseURL(baseURL string) ClientOption {
 // ClientWithResponsesInterface is the interface specification for the client with responses above.
 type ClientWithResponsesInterface interface {
 
-	// ListAliasesWithResponse performs a GET /api/v1/aliases (the `ListAliases` operationId) request.
+	// ListAliasesWithResponse performs a GET /api/aliases (the `ListAliases` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListAliasesWithResponse(ctx context.Context, params *ListAliasesParams, reqEditors ...RequestEditorFn) (*ListAliasesResponse, error)
 
-	// ListBlocklistsWithResponse performs a GET /api/v1/blocklists (the `ListBlocklists` operationId) request.
+	// ListBlocklistsWithResponse performs a GET /api/blocklists (the `ListBlocklists` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListBlocklistsWithResponse(ctx context.Context, params *ListBlocklistsParams, reqEditors ...RequestEditorFn) (*ListBlocklistsResponse, error)
 
-	// ReconfigureDnsmasqWithResponse performs a POST /api/v1/dnsmasq/reconfigure (the `ReconfigureDnsmasq` operationId) request.
+	// ReconfigureDnsmasqWithResponse performs a POST /api/dnsmasq/reconfigure (the `ReconfigureDnsmasq` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ReconfigureDnsmasqWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ReconfigureDnsmasqResponse, error)
 
-	// ListForwardsWithResponse performs a GET /api/v1/forwards (the `ListForwards` operationId) request.
+	// ListForwardsWithResponse performs a GET /api/forwards (the `ListForwards` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListForwardsWithResponse(ctx context.Context, params *ListForwardsParams, reqEditors ...RequestEditorFn) (*ListForwardsResponse, error)
 
-	// ListHostsWithResponse performs a GET /api/v1/hosts (the `ListHosts` operationId) request.
+	// ListHostsWithResponse performs a GET /api/hosts (the `ListHosts` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListHostsWithResponse(ctx context.Context, params *ListHostsParams, reqEditors ...RequestEditorFn) (*ListHostsResponse, error)
 
-	// AddHostWithBodyWithResponse performs a POST /api/v1/hosts (the `AddHost` operationId) request,
+	// AddHostWithBodyWithResponse performs a POST /api/hosts (the `AddHost` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	AddHostWithBodyWithResponse(ctx context.Context, params *AddHostParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*AddHostResponse, error)
 
-	// AddHostWithResponse performs a POST /api/v1/hosts (the `AddHost` operationId) request.
+	// AddHostWithResponse performs a POST /api/hosts (the `AddHost` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	AddHostWithResponse(ctx context.Context, params *AddHostParams, body AddHostJSONRequestBody, reqEditors ...RequestEditorFn) (*AddHostResponse, error)
 
-	// DeleteHostWithResponse performs a DELETE /api/v1/hosts/{identifier} (the `DeleteHost` operationId) request.
+	// DeleteHostWithResponse performs a DELETE /api/hosts/{identifier} (the `DeleteHost` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	DeleteHostWithResponse(ctx context.Context, identifier string, params *DeleteHostParams, reqEditors ...RequestEditorFn) (*DeleteHostResponse, error)
 
-	// SetHostWithBodyWithResponse performs a PUT /api/v1/hosts/{identifier} (the `SetHost` operationId) request,
+	// SetHostWithBodyWithResponse performs a PUT /api/hosts/{identifier} (the `SetHost` operationId) request,
 	// with any type of body and a specified content type.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	SetHostWithBodyWithResponse(ctx context.Context, identifier string, params *SetHostParams, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*SetHostResponse, error)
 
-	// SetHostWithResponse performs a PUT /api/v1/hosts/{identifier} (the `SetHost` operationId) request.
+	// SetHostWithResponse performs a PUT /api/hosts/{identifier} (the `SetHost` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	SetHostWithResponse(ctx context.Context, identifier string, params *SetHostParams, body SetHostJSONRequestBody, reqEditors ...RequestEditorFn) (*SetHostResponse, error)
 
-	// ListInterfacesWithResponse performs a GET /api/v1/interfaces (the `ListInterfaces` operationId) request.
+	// ListInterfacesWithResponse performs a GET /api/interfaces (the `ListInterfaces` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListInterfacesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListInterfacesResponse, error)
 
-	// ListLeasesWithResponse performs a GET /api/v1/leases (the `ListLeases` operationId) request.
+	// ListLeasesWithResponse performs a GET /api/leases (the `ListLeases` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListLeasesWithResponse(ctx context.Context, params *ListLeasesParams, reqEditors ...RequestEditorFn) (*ListLeasesResponse, error)
 
-	// FirewallLogWithResponse performs a GET /api/v1/log (the `FirewallLog` operationId) request.
+	// FirewallLogWithResponse performs a GET /api/log (the `FirewallLog` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	FirewallLogWithResponse(ctx context.Context, params *FirewallLogParams, reqEditors ...RequestEditorFn) (*FirewallLogResponse, error)
 
-	// ListPoolsWithResponse performs a GET /api/v1/pools (the `ListPools` operationId) request.
+	// ListPoolsWithResponse performs a GET /api/pools (the `ListPools` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListPoolsWithResponse(ctx context.Context, params *ListPoolsParams, reqEditors ...RequestEditorFn) (*ListPoolsResponse, error)
 
-	// ListRulesWithResponse performs a GET /api/v1/rules (the `ListRules` operationId) request.
+	// ListRulesWithResponse performs a GET /api/rules (the `ListRules` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListRulesWithResponse(ctx context.Context, params *ListRulesParams, reqEditors ...RequestEditorFn) (*ListRulesResponse, error)
 
-	// ListSourceNatWithResponse performs a GET /api/v1/source-nat (the `ListSourceNat` operationId) request.
+	// ListSourceNatWithResponse performs a GET /api/source-nat (the `ListSourceNat` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	ListSourceNatWithResponse(ctx context.Context, params *ListSourceNatParams, reqEditors ...RequestEditorFn) (*ListSourceNatResponse, error)
 
-	// FirewallStatesWithResponse performs a GET /api/v1/states (the `FirewallStates` operationId) request.
+	// FirewallStatesWithResponse performs a GET /api/states (the `FirewallStates` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	FirewallStatesWithResponse(ctx context.Context, params *FirewallStatesParams, reqEditors ...RequestEditorFn) (*FirewallStatesResponse, error)
@@ -2254,7 +2254,7 @@ func (r FirewallStatesResponse) ContentType() string {
 	return ""
 }
 
-// ListAliasesWithResponse performs a GET /api/v1/aliases (the `ListAliases` operationId) request.
+// ListAliasesWithResponse performs a GET /api/aliases (the `ListAliases` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListAliasesWithResponse(ctx context.Context, params *ListAliasesParams, reqEditors ...RequestEditorFn) (*ListAliasesResponse, error) {
@@ -2265,7 +2265,7 @@ func (c *ClientWithResponses) ListAliasesWithResponse(ctx context.Context, param
 	return ParseListAliasesResponse(rsp)
 }
 
-// ListBlocklistsWithResponse performs a GET /api/v1/blocklists (the `ListBlocklists` operationId) request.
+// ListBlocklistsWithResponse performs a GET /api/blocklists (the `ListBlocklists` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListBlocklistsWithResponse(ctx context.Context, params *ListBlocklistsParams, reqEditors ...RequestEditorFn) (*ListBlocklistsResponse, error) {
@@ -2276,7 +2276,7 @@ func (c *ClientWithResponses) ListBlocklistsWithResponse(ctx context.Context, pa
 	return ParseListBlocklistsResponse(rsp)
 }
 
-// ReconfigureDnsmasqWithResponse performs a POST /api/v1/dnsmasq/reconfigure (the `ReconfigureDnsmasq` operationId) request.
+// ReconfigureDnsmasqWithResponse performs a POST /api/dnsmasq/reconfigure (the `ReconfigureDnsmasq` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ReconfigureDnsmasqWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ReconfigureDnsmasqResponse, error) {
@@ -2287,7 +2287,7 @@ func (c *ClientWithResponses) ReconfigureDnsmasqWithResponse(ctx context.Context
 	return ParseReconfigureDnsmasqResponse(rsp)
 }
 
-// ListForwardsWithResponse performs a GET /api/v1/forwards (the `ListForwards` operationId) request.
+// ListForwardsWithResponse performs a GET /api/forwards (the `ListForwards` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListForwardsWithResponse(ctx context.Context, params *ListForwardsParams, reqEditors ...RequestEditorFn) (*ListForwardsResponse, error) {
@@ -2298,7 +2298,7 @@ func (c *ClientWithResponses) ListForwardsWithResponse(ctx context.Context, para
 	return ParseListForwardsResponse(rsp)
 }
 
-// ListHostsWithResponse performs a GET /api/v1/hosts (the `ListHosts` operationId) request.
+// ListHostsWithResponse performs a GET /api/hosts (the `ListHosts` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListHostsWithResponse(ctx context.Context, params *ListHostsParams, reqEditors ...RequestEditorFn) (*ListHostsResponse, error) {
@@ -2309,7 +2309,7 @@ func (c *ClientWithResponses) ListHostsWithResponse(ctx context.Context, params 
 	return ParseListHostsResponse(rsp)
 }
 
-// AddHostWithBodyWithResponse performs a POST /api/v1/hosts (the `AddHost` operationId) request,
+// AddHostWithBodyWithResponse performs a POST /api/hosts (the `AddHost` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -2321,7 +2321,7 @@ func (c *ClientWithResponses) AddHostWithBodyWithResponse(ctx context.Context, p
 	return ParseAddHostResponse(rsp)
 }
 
-// AddHostWithResponse performs a POST /api/v1/hosts (the `AddHost` operationId) request.
+// AddHostWithResponse performs a POST /api/hosts (the `AddHost` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) AddHostWithResponse(ctx context.Context, params *AddHostParams, body AddHostJSONRequestBody, reqEditors ...RequestEditorFn) (*AddHostResponse, error) {
 	rsp, err := c.AddHost(ctx, params, body, reqEditors...)
@@ -2331,7 +2331,7 @@ func (c *ClientWithResponses) AddHostWithResponse(ctx context.Context, params *A
 	return ParseAddHostResponse(rsp)
 }
 
-// DeleteHostWithResponse performs a DELETE /api/v1/hosts/{identifier} (the `DeleteHost` operationId) request.
+// DeleteHostWithResponse performs a DELETE /api/hosts/{identifier} (the `DeleteHost` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) DeleteHostWithResponse(ctx context.Context, identifier string, params *DeleteHostParams, reqEditors ...RequestEditorFn) (*DeleteHostResponse, error) {
@@ -2342,7 +2342,7 @@ func (c *ClientWithResponses) DeleteHostWithResponse(ctx context.Context, identi
 	return ParseDeleteHostResponse(rsp)
 }
 
-// SetHostWithBodyWithResponse performs a PUT /api/v1/hosts/{identifier} (the `SetHost` operationId) request,
+// SetHostWithBodyWithResponse performs a PUT /api/hosts/{identifier} (the `SetHost` operationId) request,
 // with any type of body and a specified content type.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -2354,7 +2354,7 @@ func (c *ClientWithResponses) SetHostWithBodyWithResponse(ctx context.Context, i
 	return ParseSetHostResponse(rsp)
 }
 
-// SetHostWithResponse performs a PUT /api/v1/hosts/{identifier} (the `SetHost` operationId) request.
+// SetHostWithResponse performs a PUT /api/hosts/{identifier} (the `SetHost` operationId) request.
 // Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) SetHostWithResponse(ctx context.Context, identifier string, params *SetHostParams, body SetHostJSONRequestBody, reqEditors ...RequestEditorFn) (*SetHostResponse, error) {
 	rsp, err := c.SetHost(ctx, identifier, params, body, reqEditors...)
@@ -2364,7 +2364,7 @@ func (c *ClientWithResponses) SetHostWithResponse(ctx context.Context, identifie
 	return ParseSetHostResponse(rsp)
 }
 
-// ListInterfacesWithResponse performs a GET /api/v1/interfaces (the `ListInterfaces` operationId) request.
+// ListInterfacesWithResponse performs a GET /api/interfaces (the `ListInterfaces` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListInterfacesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListInterfacesResponse, error) {
@@ -2375,7 +2375,7 @@ func (c *ClientWithResponses) ListInterfacesWithResponse(ctx context.Context, re
 	return ParseListInterfacesResponse(rsp)
 }
 
-// ListLeasesWithResponse performs a GET /api/v1/leases (the `ListLeases` operationId) request.
+// ListLeasesWithResponse performs a GET /api/leases (the `ListLeases` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListLeasesWithResponse(ctx context.Context, params *ListLeasesParams, reqEditors ...RequestEditorFn) (*ListLeasesResponse, error) {
@@ -2386,7 +2386,7 @@ func (c *ClientWithResponses) ListLeasesWithResponse(ctx context.Context, params
 	return ParseListLeasesResponse(rsp)
 }
 
-// FirewallLogWithResponse performs a GET /api/v1/log (the `FirewallLog` operationId) request.
+// FirewallLogWithResponse performs a GET /api/log (the `FirewallLog` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) FirewallLogWithResponse(ctx context.Context, params *FirewallLogParams, reqEditors ...RequestEditorFn) (*FirewallLogResponse, error) {
@@ -2397,7 +2397,7 @@ func (c *ClientWithResponses) FirewallLogWithResponse(ctx context.Context, param
 	return ParseFirewallLogResponse(rsp)
 }
 
-// ListPoolsWithResponse performs a GET /api/v1/pools (the `ListPools` operationId) request.
+// ListPoolsWithResponse performs a GET /api/pools (the `ListPools` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListPoolsWithResponse(ctx context.Context, params *ListPoolsParams, reqEditors ...RequestEditorFn) (*ListPoolsResponse, error) {
@@ -2408,7 +2408,7 @@ func (c *ClientWithResponses) ListPoolsWithResponse(ctx context.Context, params 
 	return ParseListPoolsResponse(rsp)
 }
 
-// ListRulesWithResponse performs a GET /api/v1/rules (the `ListRules` operationId) request.
+// ListRulesWithResponse performs a GET /api/rules (the `ListRules` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListRulesWithResponse(ctx context.Context, params *ListRulesParams, reqEditors ...RequestEditorFn) (*ListRulesResponse, error) {
@@ -2419,7 +2419,7 @@ func (c *ClientWithResponses) ListRulesWithResponse(ctx context.Context, params 
 	return ParseListRulesResponse(rsp)
 }
 
-// ListSourceNatWithResponse performs a GET /api/v1/source-nat (the `ListSourceNat` operationId) request.
+// ListSourceNatWithResponse performs a GET /api/source-nat (the `ListSourceNat` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) ListSourceNatWithResponse(ctx context.Context, params *ListSourceNatParams, reqEditors ...RequestEditorFn) (*ListSourceNatResponse, error) {
@@ -2430,7 +2430,7 @@ func (c *ClientWithResponses) ListSourceNatWithResponse(ctx context.Context, par
 	return ParseListSourceNatResponse(rsp)
 }
 
-// FirewallStatesWithResponse performs a GET /api/v1/states (the `FirewallStates` operationId) request.
+// FirewallStatesWithResponse performs a GET /api/states (the `FirewallStates` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
 func (c *ClientWithResponses) FirewallStatesWithResponse(ctx context.Context, params *FirewallStatesParams, reqEditors ...RequestEditorFn) (*FirewallStatesResponse, error) {

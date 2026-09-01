@@ -2,6 +2,7 @@ package amtool
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/maps"
 	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/strings/split/key_value"
@@ -22,7 +23,7 @@ func Run(selected string) {
 	tool := join.Absolute(base, prometheus.AmtoolConfiguration)
 
 	if !run.CommandExists(prometheus.AmtoolCommand) {
-		fmt.Println(
+		console.Line(
 			"amtool missing: go install github.com/prometheus/alertmanager/cmd/amtool@latest",
 		)
 
@@ -30,7 +31,7 @@ func Run(selected string) {
 	}
 
 	if !system.FileExists(tool) {
-		fmt.Printf("Missing: %s\n", tool)
+		console.Format("Missing: %s\n", tool)
 
 		return
 	}
@@ -42,7 +43,7 @@ func Run(selected string) {
 
 	for _, f := range files {
 		if false {
-			fmt.Printf("File: %s\n", f)
+			console.Format("File: %s\n", f)
 		}
 
 		name, _ := key_value.Dot(f)
@@ -62,7 +63,7 @@ func Run(selected string) {
 	}
 
 	if len(contexts) == 0 {
-		fmt.Println("No contexts found")
+		console.Line("No contexts found")
 
 		return
 	}
@@ -72,9 +73,9 @@ func Run(selected string) {
 			v := locatorByContext[k]
 
 			if v == active.Locator {
-				fmt.Printf("* %s\n", k)
+				console.Format("* %s\n", k)
 			} else {
-				fmt.Printf("  %s\n", k)
+				console.Format("  %s\n", k)
 			}
 		}
 
@@ -82,13 +83,13 @@ func Run(selected string) {
 	}
 
 	if !slices.Contains(contexts, selected) {
-		fmt.Printf("Context not found: %s\n", selected)
+		console.Format("Context not found: %s\n", selected)
 
 		return
 	}
 
 	if active.Locator == locatorByContext[selected] {
-		fmt.Printf("Already active: %s\n", selected)
+		console.Format("Already active: %s\n", selected)
 
 		return
 	}
@@ -104,5 +105,5 @@ func Run(selected string) {
 		),
 		tool,
 	)
-	fmt.Printf("Now active: %s\n", selected)
+	console.Format("Now active: %s\n", selected)
 }

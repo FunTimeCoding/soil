@@ -3,6 +3,7 @@ package goc
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/ceph/constant"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/strings/split"
 	"github.com/funtimecoding/soil/pkg/system"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
@@ -18,7 +19,7 @@ func Run(
 	file := environment.Required(constant.ConfigurationEnvironment)
 
 	if verbose {
-		fmt.Printf("File: %s\n", file)
+		console.Format("File: %s\n", file)
 	}
 
 	base := join.Absolute(
@@ -28,13 +29,13 @@ func Run(
 	)
 
 	if verbose {
-		fmt.Printf("Base: %s\n", base)
+		console.Format("Base: %s\n", base)
 	}
 
 	active := split.Slash(file)[5]
 
 	if verbose {
-		fmt.Printf("Active: %s\n", active)
+		console.Format("Active: %s\n", active)
 	}
 
 	directories := system.Directories(base)
@@ -42,9 +43,9 @@ func Run(
 	if selected == "" {
 		for _, d := range directories {
 			if d == active {
-				fmt.Printf("* %s\n", d)
+				console.Format("* %s\n", d)
 			} else {
-				fmt.Printf("  %s\n", d)
+				console.Format("  %s\n", d)
 			}
 		}
 
@@ -52,7 +53,7 @@ func Run(
 	}
 
 	if !slices.Contains(directories, selected) {
-		fmt.Printf("Unexpected: %s\n", selected)
+		console.Format("Unexpected: %s\n", selected)
 
 		return
 	}
@@ -74,8 +75,8 @@ func Run(
 	)
 
 	if verbose {
-		fmt.Printf("newConfiguration: %s\n", newConfiguration)
-		fmt.Printf("newArgument: %s\n", newArgument)
+		console.Format("newConfiguration: %s\n", newConfiguration)
+		console.Format("newArgument: %s\n", newArgument)
 	}
 
 	environment.SetTerminal(constant.ConfigurationEnvironment, newConfiguration)

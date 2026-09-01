@@ -2,6 +2,7 @@ package goprocess
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/client"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/socket"
@@ -56,7 +57,7 @@ Commands:
 			}
 
 			if response != "ok" {
-				fmt.Println(response)
+				console.Line(response)
 			}
 
 			return nil

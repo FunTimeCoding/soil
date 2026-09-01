@@ -3,6 +3,7 @@ package build
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/build/option"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
@@ -31,10 +32,10 @@ func Go(o *option.Build) {
 		)
 	}
 
-	fmt.Printf("Name: %s\n", p.Name)
-	fmt.Printf("Output: %s\n", p.Output)
+	console.Format("Name: %s\n", p.Name)
+	console.Format("Output: %s\n", p.Output)
 	path := filepath.Dir(p.Output)
-	fmt.Printf("Path: %s\n", path)
+	console.Format("Path: %s\n", path)
 	system.EnsurePathExists(path)
 	s := []string{
 		constant.Go,
@@ -67,7 +68,7 @@ func Go(o *option.Build) {
 	r.Environment(constant.Architecture, p.Architecture)
 
 	if t := r.Start(s...); t != "" {
-		fmt.Printf("Output:\n%s", t)
+		console.Format("Output:\n%s", t)
 	}
 
 	errors.PanicOnError(r.Error)
@@ -80,11 +81,11 @@ func Go(o *option.Build) {
 			systemConstant.Binary,
 			p.Name,
 		)
-		fmt.Printf("Source: %s\n", p.Output)
-		fmt.Printf("Destination: %s\n", destination)
+		console.Format("Source: %s\n", p.Output)
+		console.Format("Destination: %s\n", destination)
 		system.ReplaceFile(p.Output, destination)
 		system.Executable(destination)
 	}
 
-	fmt.Printf("Size: %dM\n", system.FileSize(p.Output)/1024/1024)
+	console.Format("Size: %dM\n", system.FileSize(p.Output)/1024/1024)
 }

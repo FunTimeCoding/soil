@@ -1,7 +1,7 @@
 package lab
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/gitlab"
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab/image"
@@ -22,7 +22,7 @@ func Registry(
 
 		if strings.HasSuffix(r.Name, "/cache") {
 			for _, i := range images {
-				fmt.Printf("Image: %s\n", i.Name)
+				console.Format("Image: %s\n", i.Name)
 				c.MustDeleteImage(p.Identifier, r.ID, i.Name)
 			}
 
@@ -41,7 +41,7 @@ func Registry(
 				continue
 			}
 
-			fmt.Printf("Image: %s\n", i.Name)
+			console.Format("Image: %s\n", i.Name)
 			c.MustDeleteImage(p.Identifier, r.ID, i.Name)
 		}
 	}

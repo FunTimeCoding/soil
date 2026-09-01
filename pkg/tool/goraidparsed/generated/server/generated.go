@@ -50,10 +50,10 @@ type PostGenerateJSONRequestBody = GenerateRequest
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 
-	// (POST /api/v1/generate)
+	// (POST /api/generate)
 	PostGenerate(w http.ResponseWriter, r *http.Request)
 
-	// (GET /api/v1/status)
+	// (GET /api/status)
 	GetStatus(w http.ResponseWriter, r *http.Request)
 }
 
@@ -214,8 +214,8 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 		ErrorHandlerFunc:   options.ErrorHandlerFunc,
 	}
 
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/generate", wrapper.PostGenerate)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/status", wrapper.GetStatus)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/generate", wrapper.PostGenerate)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/status", wrapper.GetStatus)
 
 	return m
 }
@@ -280,10 +280,10 @@ func (response GetStatus200JSONResponse) VisitGetStatusResponse(w http.ResponseW
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
 
-	// (POST /api/v1/generate)
+	// (POST /api/generate)
 	PostGenerate(ctx context.Context, request PostGenerateRequestObject) (PostGenerateResponseObject, error)
 
-	// (GET /api/v1/status)
+	// (GET /api/status)
 	GetStatus(ctx context.Context, request GetStatusRequestObject) (GetStatusResponseObject, error)
 }
 
@@ -386,13 +386,13 @@ func (sh *strictHandler) GetStatus(w http.ResponseWriter, r *http.Request) {
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"tJRNb9QwEIb/SjVwDJstiEuOIFRxQ9sjQsjEb9KpNrY7nqy0qvLfke1E/UhKL/QWzecz74xzT60fgndw",
-	"Gqm5p9jeYDD585uIlwNi8C4iGYL4AFFGdiO504eeA6ihqMKup6kinOD0N1s45Y6xFTRVJLgbWWCp+TnX",
-	"2sj8VS2Z/s8tWk3lr+AgRnHA3YioazJrNPN2Xgaj1GTDB+UBVK1pOz6WNFYMcXOg2WBEzHnFXvL/DfqS",
-	"hsHozXZHtl/96PSRk52ih6z65xqPMrZIrtXoGF/miNn/+p7muHWLFMiu87kE6zH5ei+GbTASYamiEySy",
-	"d9TQ5W6/2ycsH+BMYGroUzZVeZjMUZvA9emy7mcNM7Mv207kRtm775Ya+uGjLkpTwUXUL96eU2zrnaLo",
-	"aEI4cpsT69uYSJZzT1/vBR019K5+eA/1/Bjq5xc3PdVFZUQ2FHkz/8f9/g3az/vL/S1iKxy0aHpA8KIX",
-	"i1x2l/T9/B8hnv4NXiVg7y46w8dMkqOXjT7cWo+NdV5By7XSGyr67D1sTHMNOXGLi0JbZpimvwEAAP//",
+	"tJRNb9QwEIb/ymrgGDYLiEuOIFRxQ9sjQsjEb9KpNrY7nqy0qvLfke2s+pGUXrq3aD6feWece2r9ELyD",
+	"00jNPcX2BoPJn99FvOwRg3cRyRDEB4gyshvJnT70FEANRRV2PU0V4Qinf9jCKXeMtaCpIsHdyAJLza+5",
+	"1krm7+qc6f/eotVU/goOYhR73I2IuiSzRjNv52UwSk02fFAeQNWStuNDSWPFEFcHmg1GxJwW7CX//6Av",
+	"aRiM3qx3ZPvNj04fOdkpesiif67xKGON5FqNjvFljpj9r+9pjlu2SIHsOp9LsB6Sr/di2AYjEZYqOkIi",
+	"e0cNfdzutruE5QOcCUwNfc6mKg+TOWoTuO5nATOwL6tO2EbZux+WGvrpo55lpsKKqF+9PaXY1jtFEdGE",
+	"cOA2J9a3MWGcbz19vRd01NC7+uEx1PNLqJ+f2/RUFJUR2VC0zfCfdrsLtJ+Xl/tbxFY4aBF0j+BFN2e5",
+	"7DaJ++UNIZ7+Cl4lYO82neFDJsnReZ0PV9ZjZZdX0HKndEE5n72ElVGuIUdusSm0ZYBp+hcAAP//",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

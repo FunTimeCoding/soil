@@ -1,8 +1,8 @@
 package alert
 
 import (
-	"fmt"
 	atlassian "github.com/funtimecoding/soil/pkg/atlassian/constant"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"strings"
 )
@@ -34,11 +34,11 @@ func (a *Alert) findName() string {
 
 		if result == atlassian.OpsgenieUnknownName {
 			if a.RawList != nil {
-				fmt.Printf("Unknown name (simple): %+v\n", a.RawList)
+				console.Format("Unknown name (simple): %+v\n", a.RawList)
 			}
 
 			if a.RawDetail != nil {
-				fmt.Printf("Unknown name (full): %+v\n", a.RawDetail)
+				console.Format("Unknown name (full): %+v\n", a.RawDetail)
 			}
 		}
 	}

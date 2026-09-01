@@ -11,10 +11,15 @@ func New(
 	password string,
 ) *Client {
 	f := system.Open(database)
+	defer errors.PanicClose(f)
 	d := gokeepasslib.NewDatabase()
 	d.Credentials = gokeepasslib.NewPasswordCredentials(password)
 	errors.PanicOnError(gokeepasslib.NewDecoder(f).Decode(d))
 	errors.PanicOnError(d.UnlockProtectedEntries())
 
-	return &Client{database: d}
+	return &Client{
+		database: d,
+		path:     database,
+		loaded:   system.Stat(database).ModTime(),
+	}
 }

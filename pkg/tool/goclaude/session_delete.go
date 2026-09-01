@@ -2,7 +2,7 @@ package goclaude
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/spf13/cobra"
@@ -20,7 +20,7 @@ func sessionDelete(c *command_context.Context) *cobra.Command {
 			identifier := resolveSession(c.Client(), arguments[0])
 
 			if identifier == "" {
-				fmt.Printf("session not found: %s\n", arguments[0])
+				console.Format("session not found: %s\n", arguments[0])
 
 				return
 			}
@@ -30,7 +30,7 @@ func sessionDelete(c *command_context.Context) *cobra.Command {
 				identifier,
 			)
 			errors.PanicOnError(e)
-			fmt.Printf("deleted: %s\n", identifier)
+			console.Format("deleted: %s\n", identifier)
 		},
 	}
 }

@@ -1,7 +1,7 @@
 package download
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	libraryConstant "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/gitlab"
@@ -32,7 +32,7 @@ func Run(o *option.Download) {
 	}
 
 	if p == nil {
-		fmt.Printf("package not found: %s\n", o.Package)
+		console.Format("package not found: %s\n", o.Package)
 		os.Exit(1)
 	}
 
@@ -46,7 +46,7 @@ func Run(o *option.Download) {
 	)
 
 	if f == nil {
-		fmt.Printf("architecture and system match not found")
+		console.Format("architecture and system match not found")
 		os.Exit(1)
 	}
 
@@ -62,7 +62,7 @@ func Run(o *option.Download) {
 		system.ExtractZip(f.FileName, system.WorkDirectory())
 		system.DeleteFile(f.FileName)
 	} else {
-		fmt.Printf("file already exists: %s\n", o.Package)
+		console.Format("file already exists: %s\n", o.Package)
 	}
 
 	system.Executable(o.Package)

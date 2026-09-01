@@ -1,18 +1,18 @@
 package main
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/runtime"
 	"github.com/funtimecoding/soil/pkg/system"
 )
 
 func main() {
 	w := system.WorkDirectory()
-	fmt.Printf("Directory: %s\n", w)
+	console.Format("Directory: %s\n", w)
 
 	if !runtime.RunningFromBinary() {
-		fmt.Println("Run from source")
+		console.Line("Run from source")
 	} else {
-		fmt.Println("Run from binary")
+		console.Line("Run from binary")
 	}
 }

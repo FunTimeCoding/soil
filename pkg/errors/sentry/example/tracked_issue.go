@@ -1,7 +1,7 @@
 package example
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry"
 )
@@ -11,6 +11,6 @@ func TrackedIssue() {
 	f := constant.ColorFormat.Copy()
 
 	for _, i := range c.MustTrackedIssues() {
-		fmt.Printf("Issue: %s\n", i.Format(f))
+		console.Format("Issue: %s\n", i.Format(f))
 	}
 }

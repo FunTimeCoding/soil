@@ -3,13 +3,13 @@
 package tray
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/getlantern/systray"
 	"github.com/getlantern/systray/example/icon"
 )
 
 func onReady() {
-	fmt.Println("onReady")
+	console.Line("onReady")
 	systray.SetIcon(icon.Data)
 	systray.SetTitle("Example Title")
 	systray.SetTooltip("Example Tooltip")
@@ -17,8 +17,8 @@ func onReady() {
 	mQuit.SetIcon(icon.Data)
 	go func() {
 		<-mQuit.ClickedCh
-		fmt.Println("Requesting quit")
+		console.Line("Requesting quit")
 		systray.Quit()
-		fmt.Println("Finished quitting")
+		console.Line("Finished quitting")
 	}()
 }

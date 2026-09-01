@@ -2,6 +2,7 @@ package sound
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/sound/constant"
 	"github.com/funtimecoding/soil/pkg/system"
@@ -17,7 +18,7 @@ func Play(
 	switch p := runtime.GOOS; p {
 	case systemConstant.Linux:
 		if verbose {
-			fmt.Println("Sound not implemented on Linux")
+			console.Line("Sound not implemented on Linux")
 		}
 	case systemConstant.Darwin:
 		result, e := system.RunError(
@@ -28,8 +29,8 @@ func Play(
 		)
 
 		if e != nil && verbose {
-			fmt.Printf("Sound error: %s\n", e)
-			fmt.Printf("Output: %s\n", result)
+			console.Format("Sound error: %s\n", e)
+			console.Format("Output: %s\n", result)
 		}
 	default:
 		unexpected.String(p)

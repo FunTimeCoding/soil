@@ -1,7 +1,7 @@
 package go_mod
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/system/run"
 )
@@ -17,7 +17,7 @@ func recoverDeadTag(
 		return nil
 	}
 
-	fmt.Printf("Dead tag: %s@%s - recovering\n", mod, version)
+	console.Format("Dead tag: %s@%s - recovering\n", mod, version)
 	dropRequire(mod)
 	cleanSum(mod, version)
 	r := run.New()

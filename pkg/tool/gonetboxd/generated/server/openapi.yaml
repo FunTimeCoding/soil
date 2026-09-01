@@ -4,7 +4,7 @@ info:
   title: gonetboxd
   version: 1.0.0
 paths:
-  /api/v1/devices:
+  /api/devices:
     get:
       operationId: listDevices
       parameters:
@@ -31,7 +31,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/devices/{name}:
+  /api/devices/{name}:
     get:
       operationId: getDevice
       parameters:
@@ -88,7 +88,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/devices/{name}/interfaces:
+  /api/devices/{name}/interfaces:
     get:
       operationId: listInterfaces
       parameters:
@@ -115,7 +115,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/devices/{name}/addresses:
+  /api/devices/{name}/addresses:
     get:
       operationId: listAddresses
       parameters:
@@ -142,7 +142,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/devices/{name}/addresses/create:
+  /api/devices/{name}/addresses/create:
     post:
       operationId: createAddress
       parameters:
@@ -171,7 +171,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/sites:
+  /api/sites:
     get:
       operationId: listSites
       responses:
@@ -212,7 +212,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/tenants:
+  /api/tenants:
     get:
       operationId: listTenants
       responses:
@@ -253,7 +253,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/device-roles:
+  /api/device-roles:
     get:
       operationId: listDeviceRoles
       responses:
@@ -294,7 +294,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/manufacturers:
+  /api/manufacturers:
     get:
       operationId: listManufacturers
       responses:
@@ -335,7 +335,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/device-types:
+  /api/device-types:
     get:
       operationId: listDeviceTypes
       responses:
@@ -376,7 +376,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/devices/{name}/interfaces/create:
+  /api/devices/{name}/interfaces/create:
     post:
       operationId: createInterface
       parameters:
@@ -405,7 +405,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/devices/create:
+  /api/devices/create:
     post:
       operationId: createDevice
       requestBody:
@@ -427,7 +427,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/cluster-types:
+  /api/cluster-types:
     get:
       operationId: listClusterTypes
       responses:
@@ -468,7 +468,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/clusters:
+  /api/clusters:
     get:
       operationId: listClusters
       responses:
@@ -509,7 +509,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/virtual-machines:
+  /api/virtual-machines:
     get:
       operationId: listVirtualMachines
       responses:
@@ -550,7 +550,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/virtual-machines/{name}:
+  /api/virtual-machines/{name}:
     get:
       operationId: getVirtualMachine
       parameters:
@@ -601,7 +601,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/virtual-machines/{name}/interfaces:
+  /api/virtual-machines/{name}/interfaces:
     get:
       operationId: listVirtualInterfaces
       parameters:
@@ -628,7 +628,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/virtual-machines/{name}/addresses:
+  /api/virtual-machines/{name}/addresses:
     get:
       operationId: listVirtualAddresses
       parameters:
@@ -655,7 +655,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/virtual-machines/{name}/interfaces/create:
+  /api/virtual-machines/{name}/interfaces/create:
     post:
       operationId: createVirtualInterface
       parameters:
@@ -684,7 +684,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/virtual-machines/{name}/addresses/create:
+  /api/virtual-machines/{name}/addresses/create:
     post:
       operationId: createVirtualAddress
       parameters:
@@ -713,7 +713,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/tags:
+  /api/tags:
     get:
       operationId: listTags
       responses:
@@ -754,7 +754,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/devices/{name}/tags:
+  /api/devices/{name}/tags:
     get:
       operationId: listDeviceTags
       parameters:
@@ -779,7 +779,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/devices/{name}/tags/{tag}:
+  /api/devices/{name}/tags/{tag}:
     put:
       operationId: addDeviceTag
       parameters:
@@ -836,7 +836,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/prefixes:
+  /api/prefixes:
     get:
       operationId: listPrefixes
       responses:
@@ -877,7 +877,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/address-ranges:
+  /api/address-ranges:
     get:
       operationId: listAddressRanges
       responses:
@@ -918,7 +918,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/locations:
+  /api/locations:
     get:
       operationId: listLocations
       responses:
@@ -959,7 +959,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/platforms:
+  /api/platforms:
     get:
       operationId: listPlatforms
       responses:
@@ -1000,7 +1000,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/wireless-networks:
+  /api/wireless-networks:
     get:
       operationId: listWirelessNetworks
       responses:
@@ -1041,7 +1041,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/virtual-machines/{name}/disks:
+  /api/virtual-machines/{name}/disks:
     get:
       operationId: listVirtualDisks
       parameters:
@@ -1096,7 +1096,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/tunnel-groups:
+  /api/tunnel-groups:
     get:
       operationId: listTunnelGroups
       responses:
@@ -1137,7 +1137,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/tunnels:
+  /api/tunnels:
     get:
       operationId: listTunnels
       responses:
@@ -1178,7 +1178,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/cables:
+  /api/cables:
     get:
       operationId: listCables
       responses:
@@ -1219,7 +1219,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/tunnel-terminations:
+  /api/tunnel-terminations:
     get:
       operationId: listTunnelTerminations
       responses:
@@ -1239,7 +1239,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/devices/{name}/tunnel-terminations/create:
+  /api/devices/{name}/tunnel-terminations/create:
     post:
       operationId: createDeviceTunnelTermination
       parameters:
@@ -1268,7 +1268,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/virtual-machines/{name}/tunnel-terminations/create:
+  /api/virtual-machines/{name}/tunnel-terminations/create:
     post:
       operationId: createVirtualTunnelTermination
       parameters:
@@ -1297,7 +1297,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/virtual-machines/{name}/tags/{tag}:
+  /api/virtual-machines/{name}/tags/{tag}:
     put:
       operationId: addVirtualTag
       parameters:
@@ -1354,7 +1354,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/devices/{name}/labels:
+  /api/devices/{name}/labels:
     get:
       operationId: listDeviceLabels
       parameters:
@@ -1381,7 +1381,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/devices/{name}/labels/{key}:
+  /api/devices/{name}/labels/{key}:
     put:
       operationId: setDeviceLabel
       parameters:
@@ -1440,7 +1440,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/virtual-machines/{name}/labels:
+  /api/virtual-machines/{name}/labels:
     get:
       operationId: listVirtualLabels
       parameters:
@@ -1467,7 +1467,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/virtual-machines/{name}/labels/{key}:
+  /api/virtual-machines/{name}/labels/{key}:
     put:
       operationId: setVirtualLabel
       parameters:
@@ -1526,7 +1526,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/devices/{name}/journal-entries:
+  /api/devices/{name}/journal-entries:
     get:
       operationId: listDeviceJournalEntries
       parameters:
@@ -1593,7 +1593,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/virtual-machines/{name}/journal-entries:
+  /api/virtual-machines/{name}/journal-entries:
     get:
       operationId: listVirtualJournalEntries
       parameters:
@@ -1660,7 +1660,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/journal-entries/{identifier}:
+  /api/journal-entries/{identifier}:
     patch:
       operationId: updateJournalEntry
       parameters:
@@ -1709,7 +1709,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/addresses/{identifier}:
+  /api/addresses/{identifier}:
     delete:
       operationId: deleteAddress
       parameters:

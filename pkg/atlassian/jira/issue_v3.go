@@ -1,8 +1,8 @@
 package jira
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
+	"github.com/funtimecoding/soil/pkg/console"
 	web "github.com/funtimecoding/soil/pkg/web/constant"
 )
 
@@ -22,7 +22,7 @@ func (c *Client) IssueV3(key string) error {
 		return e
 	}
 
-	fmt.Printf("Response: %d %s", status, body)
+	console.Format("Response: %d %s", status, body)
 
 	return nil
 }

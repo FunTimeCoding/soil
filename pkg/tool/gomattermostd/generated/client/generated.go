@@ -125,28 +125,28 @@ type ClientInterface interface {
 
 	// GetChannelPosts Posts of a channel since a time, replies and attachment-only posts included, oldest first
 	//
-	// Corresponds with GET /api/v1/channel/{name}/posts (the `GetChannelPosts` operationId).
+	// Corresponds with GET /api/channel/{name}/posts (the `GetChannelPosts` operationId).
 	GetChannelPosts(ctx context.Context, name string, params *GetChannelPostsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GetPostReactions Emoji names of a post's reactions
 	//
-	// Corresponds with GET /api/v1/post/{identifier}/reactions (the `GetPostReactions` operationId).
+	// Corresponds with GET /api/post/{identifier}/reactions (the `GetPostReactions` operationId).
 	GetPostReactions(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GetStatus Daemon identity and version
 	//
-	// Corresponds with GET /api/v1/status (the `GetStatus` operationId).
+	// Corresponds with GET /api/status (the `GetStatus` operationId).
 	GetStatus(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GetThread Replies of a thread by its root post identifier, oldest first
 	//
-	// Corresponds with GET /api/v1/thread/{identifier} (the `GetThread` operationId).
+	// Corresponds with GET /api/thread/{identifier} (the `GetThread` operationId).
 	GetThread(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
 
 // GetChannelPosts Posts of a channel since a time, replies and attachment-only posts included, oldest first
 //
-// Corresponds with GET /api/v1/channel/{name}/posts (the `GetChannelPosts` operationId).
+// Corresponds with GET /api/channel/{name}/posts (the `GetChannelPosts` operationId).
 func (c *Client) GetChannelPosts(ctx context.Context, name string, params *GetChannelPostsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetChannelPostsRequest(c.Server, name, params)
 	if err != nil {
@@ -161,7 +161,7 @@ func (c *Client) GetChannelPosts(ctx context.Context, name string, params *GetCh
 
 // GetPostReactions Emoji names of a post's reactions
 //
-// Corresponds with GET /api/v1/post/{identifier}/reactions (the `GetPostReactions` operationId).
+// Corresponds with GET /api/post/{identifier}/reactions (the `GetPostReactions` operationId).
 func (c *Client) GetPostReactions(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetPostReactionsRequest(c.Server, identifier)
 	if err != nil {
@@ -176,7 +176,7 @@ func (c *Client) GetPostReactions(ctx context.Context, identifier string, reqEdi
 
 // GetStatus Daemon identity and version
 //
-// Corresponds with GET /api/v1/status (the `GetStatus` operationId).
+// Corresponds with GET /api/status (the `GetStatus` operationId).
 func (c *Client) GetStatus(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetStatusRequest(c.Server)
 	if err != nil {
@@ -191,7 +191,7 @@ func (c *Client) GetStatus(ctx context.Context, reqEditors ...RequestEditorFn) (
 
 // GetThread Replies of a thread by its root post identifier, oldest first
 //
-// Corresponds with GET /api/v1/thread/{identifier} (the `GetThread` operationId).
+// Corresponds with GET /api/thread/{identifier} (the `GetThread` operationId).
 func (c *Client) GetThread(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetThreadRequest(c.Server, identifier)
 	if err != nil {
@@ -220,7 +220,7 @@ func NewGetChannelPostsRequest(server string, name string, params *GetChannelPos
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/channel/%s/posts", pathParam0)
+	operationPath := fmt.Sprintf("/api/channel/%s/posts", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -277,7 +277,7 @@ func NewGetPostReactionsRequest(server string, identifier string) (*http.Request
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/post/%s/reactions", pathParam0)
+	operationPath := fmt.Sprintf("/api/post/%s/reactions", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -304,7 +304,7 @@ func NewGetStatusRequest(server string) (*http.Request, error) {
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/status")
+	operationPath := fmt.Sprintf("/api/status")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -338,7 +338,7 @@ func NewGetThreadRequest(server string, identifier string) (*http.Request, error
 		return nil, err
 	}
 
-	operationPath := fmt.Sprintf("/api/v1/thread/%s", pathParam0)
+	operationPath := fmt.Sprintf("/api/thread/%s", pathParam0)
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -404,28 +404,28 @@ type ClientWithResponsesInterface interface {
 	//
 	// Returns a wrapper object for the known response body format(s).
 	//
-	// Corresponds with GET /api/v1/channel/{name}/posts (the `GetChannelPosts` operationId).
+	// Corresponds with GET /api/channel/{name}/posts (the `GetChannelPosts` operationId).
 	GetChannelPostsWithResponse(ctx context.Context, name string, params *GetChannelPostsParams, reqEditors ...RequestEditorFn) (*GetChannelPostsResponse, error)
 
 	// GetPostReactionsWithResponse Emoji names of a post's reactions
 	//
 	// Returns a wrapper object for the known response body format(s).
 	//
-	// Corresponds with GET /api/v1/post/{identifier}/reactions (the `GetPostReactions` operationId).
+	// Corresponds with GET /api/post/{identifier}/reactions (the `GetPostReactions` operationId).
 	GetPostReactionsWithResponse(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*GetPostReactionsResponse, error)
 
 	// GetStatusWithResponse Daemon identity and version
 	//
 	// Returns a wrapper object for the known response body format(s).
 	//
-	// Corresponds with GET /api/v1/status (the `GetStatus` operationId).
+	// Corresponds with GET /api/status (the `GetStatus` operationId).
 	GetStatusWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetStatusResponse, error)
 
 	// GetThreadWithResponse Replies of a thread by its root post identifier, oldest first
 	//
 	// Returns a wrapper object for the known response body format(s).
 	//
-	// Corresponds with GET /api/v1/thread/{identifier} (the `GetThread` operationId).
+	// Corresponds with GET /api/thread/{identifier} (the `GetThread` operationId).
 	GetThreadWithResponse(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*GetThreadResponse, error)
 }
 
@@ -639,7 +639,7 @@ func (r GetThreadResponse) ContentType() string {
 //
 // Returns a wrapper object for the known response body format(s).
 //
-// Corresponds with GET /api/v1/channel/{name}/posts (the `GetChannelPosts` operationId).
+// Corresponds with GET /api/channel/{name}/posts (the `GetChannelPosts` operationId).
 func (c *ClientWithResponses) GetChannelPostsWithResponse(ctx context.Context, name string, params *GetChannelPostsParams, reqEditors ...RequestEditorFn) (*GetChannelPostsResponse, error) {
 	rsp, err := c.GetChannelPosts(ctx, name, params, reqEditors...)
 	if err != nil {
@@ -652,7 +652,7 @@ func (c *ClientWithResponses) GetChannelPostsWithResponse(ctx context.Context, n
 //
 // Returns a wrapper object for the known response body format(s).
 //
-// Corresponds with GET /api/v1/post/{identifier}/reactions (the `GetPostReactions` operationId).
+// Corresponds with GET /api/post/{identifier}/reactions (the `GetPostReactions` operationId).
 func (c *ClientWithResponses) GetPostReactionsWithResponse(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*GetPostReactionsResponse, error) {
 	rsp, err := c.GetPostReactions(ctx, identifier, reqEditors...)
 	if err != nil {
@@ -665,7 +665,7 @@ func (c *ClientWithResponses) GetPostReactionsWithResponse(ctx context.Context, 
 //
 // Returns a wrapper object for the known response body format(s).
 //
-// Corresponds with GET /api/v1/status (the `GetStatus` operationId).
+// Corresponds with GET /api/status (the `GetStatus` operationId).
 func (c *ClientWithResponses) GetStatusWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetStatusResponse, error) {
 	rsp, err := c.GetStatus(ctx, reqEditors...)
 	if err != nil {
@@ -678,7 +678,7 @@ func (c *ClientWithResponses) GetStatusWithResponse(ctx context.Context, reqEdit
 //
 // Returns a wrapper object for the known response body format(s).
 //
-// Corresponds with GET /api/v1/thread/{identifier} (the `GetThread` operationId).
+// Corresponds with GET /api/thread/{identifier} (the `GetThread` operationId).
 func (c *ClientWithResponses) GetThreadWithResponse(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*GetThreadResponse, error) {
 	rsp, err := c.GetThread(ctx, identifier, reqEditors...)
 	if err != nil {

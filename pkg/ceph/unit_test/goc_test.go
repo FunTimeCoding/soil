@@ -1,9 +1,9 @@
 package unit_test
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/ceph/constant"
 	"github.com/funtimecoding/soil/pkg/ceph/goc"
+	"github.com/funtimecoding/soil/pkg/console"
 	strings "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"testing"
@@ -30,11 +30,11 @@ func TestEnvironment(t *testing.T) {
 
 	if false {
 		// Not working
-		fmt.Printf(
+		console.Format(
 			"Get escape: %s\n",
 			goc.GetEnvironmentEscape(constant.ConfigurationEnvironment),
 		)
-		fmt.Printf(
+		console.Format(
 			"Get escape: %s\n",
 			goc.GetEnvironmentEscape(constant.ArgumentEnvironment),
 		)

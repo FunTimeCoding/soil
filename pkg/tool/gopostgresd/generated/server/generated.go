@@ -121,28 +121,28 @@ type QueryJSONRequestBody = QueryRequest
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 
-	// (POST /api/v1/explain)
+	// (POST /api/explain)
 	Explain(w http.ResponseWriter, r *http.Request)
 
-	// (GET /api/v1/indexes)
+	// (GET /api/indexes)
 	ListIndexes(w http.ResponseWriter, r *http.Request, params ListIndexesParams)
 
-	// (GET /api/v1/instances)
+	// (GET /api/instances)
 	ListInstances(w http.ResponseWriter, r *http.Request)
 
-	// (POST /api/v1/query)
+	// (POST /api/query)
 	Query(w http.ResponseWriter, r *http.Request)
 
-	// (GET /api/v1/schemas)
+	// (GET /api/schemas)
 	ListSchemas(w http.ResponseWriter, r *http.Request, params ListSchemasParams)
 
-	// (GET /api/v1/table-sizes)
+	// (GET /api/table-sizes)
 	TableSizes(w http.ResponseWriter, r *http.Request, params TableSizesParams)
 
-	// (GET /api/v1/tables)
+	// (GET /api/tables)
 	ListTables(w http.ResponseWriter, r *http.Request, params ListTablesParams)
 
-	// (GET /api/v1/tables/{table})
+	// (GET /api/tables/{table})
 	DescribeTable(w http.ResponseWriter, r *http.Request, table string, params DescribeTableParams)
 }
 
@@ -556,14 +556,14 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 		ErrorHandlerFunc:   options.ErrorHandlerFunc,
 	}
 
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/instances", wrapper.ListInstances)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/query", wrapper.Query)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/v1/explain", wrapper.Explain)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/schemas", wrapper.ListSchemas)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/tables", wrapper.ListTables)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/tables/{table}", wrapper.DescribeTable)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/indexes", wrapper.ListIndexes)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/v1/table-sizes", wrapper.TableSizes)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/instances", wrapper.ListInstances)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/query", wrapper.Query)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/explain", wrapper.Explain)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/schemas", wrapper.ListSchemas)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/tables", wrapper.ListTables)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/tables/{table}", wrapper.DescribeTable)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/indexes", wrapper.ListIndexes)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/table-sizes", wrapper.TableSizes)
 
 	return m
 }
@@ -943,28 +943,28 @@ func (response DescribeTable500JSONResponse) VisitDescribeTableResponse(w http.R
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
 
-	// (POST /api/v1/explain)
+	// (POST /api/explain)
 	Explain(ctx context.Context, request ExplainRequestObject) (ExplainResponseObject, error)
 
-	// (GET /api/v1/indexes)
+	// (GET /api/indexes)
 	ListIndexes(ctx context.Context, request ListIndexesRequestObject) (ListIndexesResponseObject, error)
 
-	// (GET /api/v1/instances)
+	// (GET /api/instances)
 	ListInstances(ctx context.Context, request ListInstancesRequestObject) (ListInstancesResponseObject, error)
 
-	// (POST /api/v1/query)
+	// (POST /api/query)
 	Query(ctx context.Context, request QueryRequestObject) (QueryResponseObject, error)
 
-	// (GET /api/v1/schemas)
+	// (GET /api/schemas)
 	ListSchemas(ctx context.Context, request ListSchemasRequestObject) (ListSchemasResponseObject, error)
 
-	// (GET /api/v1/table-sizes)
+	// (GET /api/table-sizes)
 	TableSizes(ctx context.Context, request TableSizesRequestObject) (TableSizesResponseObject, error)
 
-	// (GET /api/v1/tables)
+	// (GET /api/tables)
 	ListTables(ctx context.Context, request ListTablesRequestObject) (ListTablesResponseObject, error)
 
-	// (GET /api/v1/tables/{table})
+	// (GET /api/tables/{table})
 	DescribeTable(ctx context.Context, request DescribeTableRequestObject) (DescribeTableResponseObject, error)
 }
 
@@ -1229,21 +1229,21 @@ func (sh *strictHandler) DescribeTable(w http.ResponseWriter, r *http.Request, t
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
+	"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",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

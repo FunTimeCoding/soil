@@ -2,7 +2,7 @@ package goclaude
 
 import (
 	"context"
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/pricing"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
@@ -33,7 +33,7 @@ func cost(c *command_context.Context) *cobra.Command {
 			r := response.JSON200
 
 			if r.Models == nil || len(*r.Models) == 0 {
-				fmt.Printf("No token usage in the last %d day(s).\n", days)
+				console.Format("No token usage in the last %d day(s).\n", days)
 
 				return
 			}
@@ -45,7 +45,7 @@ func cost(c *command_context.Context) *cobra.Command {
 					marker = " (unknown model, sonnet rates)"
 				}
 
-				fmt.Printf(
+				console.Format(
 					"  %-8s %d calls, %s input, %s output, %s cache-write, %s cache-read, $%.2f%s\n",
 					u.Model,
 					u.Calls,
@@ -58,7 +58,7 @@ func cost(c *command_context.Context) *cobra.Command {
 				)
 			}
 
-			fmt.Printf("\nTotal: $%.2f over %d day(s)\n", r.Cost, days)
+			console.Format("\nTotal: $%.2f over %d day(s)\n", r.Cost, days)
 		},
 	}
 	result.Flags().IntVar(&days, "days", 1, "trailing window in days")

@@ -1,7 +1,7 @@
 package event
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/kubernetes/check/event/option"
 	"github.com/funtimecoding/soil/pkg/kubernetes/client"
 	"github.com/funtimecoding/soil/pkg/kubernetes/constant"
@@ -22,6 +22,6 @@ func Print(o *option.Event) {
 	f := constant.Dense.Copy()
 
 	for _, e := range events {
-		fmt.Println(e.Format(f))
+		console.Line(e.Format(f))
 	}
 }

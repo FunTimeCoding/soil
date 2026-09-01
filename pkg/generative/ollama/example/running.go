@@ -1,7 +1,7 @@
 package example
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/generative/ollama"
 )
 
@@ -9,6 +9,6 @@ func Running() {
 	o := ollama.NewEnvironment()
 
 	for _, m := range o.MustRunning() {
-		fmt.Printf("Running: %+v\n", m)
+		console.Format("Running: %+v\n", m)
 	}
 }

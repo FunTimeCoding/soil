@@ -1,9 +1,9 @@
 package example
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/ssh/constant"
 	"github.com/funtimecoding/soil/pkg/ssh/tunnel"
 	"github.com/funtimecoding/soil/pkg/system"
@@ -22,7 +22,7 @@ func Forward() {
 		t.NoOutput = true
 	}
 
-	fmt.Printf("Start: %+v\n", t)
+	console.Format("Start: %+v\n", t)
 	t.Start(
 		a.Required(argumentConstant.Host),
 		a.Required(constant.TargetHost),
@@ -30,7 +30,7 @@ func Forward() {
 		0,
 	)
 	defer t.Stop()
-	fmt.Println("Sleep 10")
+	console.Line("Sleep 10")
 	system.Sleep(10)
-	fmt.Println("Stop")
+	console.Line("Stop")
 }

@@ -1,13 +1,13 @@
 package debian
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/debian/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 )
 
 func BuildPackage(packageName string) {
-	fmt.Println(
+	console.Line(
 		system.Run(
 			constant.DpkgDeb,
 			constant.BuildArgument,

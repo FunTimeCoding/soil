@@ -3,6 +3,7 @@ package example
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/common"
 	"time"
@@ -11,15 +12,21 @@ import (
 func Changelog() {
 	k := environment.Required(constant.JiraDefaultProjectKeyEnvironment)
 	j := common.Jira()
-	fmt.Println("Search (with changelog)...")
+	console.Line("Search (with changelog)...")
 	start := time.Now()
 	issues := j.MustSearch(
 		"project = %s AND status NOT IN (Backlog, Closed) ORDER BY updated ASC",
 		k,
 	)
 	elapsed := time.Since(start)
-	fmt.Printf("Fetched %d issues in %s\n\n", len(issues), elapsed)
-	fmt.Printf("  %-10s %-22s %6s %6s\n", "KEY", "STATUS", "CHANGE", "TRANS")
+	console.Format("Fetched %d issues in %s\n\n", len(issues), elapsed)
+	console.Format(
+		"  %-10s %-22s %6s %6s\n",
+		"KEY",
+		"STATUS",
+		"CHANGE",
+		"TRANS",
+	)
 
 	for _, i := range issues {
 		changeAge := int(time.Since(i.ChangeTime()).Hours() / 24)
@@ -52,7 +59,7 @@ func Changelog() {
 			}
 		}
 
-		fmt.Printf(
+		console.Format(
 			"  %-10s %-22s %5dd %6s\n",
 			i.Key,
 			i.Status,

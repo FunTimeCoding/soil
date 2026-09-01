@@ -1,7 +1,7 @@
 package check
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	stringLibrary "github.com/funtimecoding/soil/pkg/strings"
 	"github.com/funtimecoding/soil/pkg/strings/split"
 	"github.com/funtimecoding/soil/pkg/system/run"
@@ -20,9 +20,9 @@ func diskFull() {
 		point := p[0]
 
 		if u == 100 {
-			fmt.Printf("Disk full: %s", point)
+			console.Format("Disk full: %s", point)
 		} else if u > 90 {
-			fmt.Printf("Disk almost full: %s", point)
+			console.Format("Disk almost full: %s", point)
 		}
 	}
 }

@@ -4,7 +4,7 @@ info:
   title: goflightd
   version: 1.0.0
 paths:
-  /api/v1/status:
+  /api/status:
     get:
       operationId: getStatus
       responses:
@@ -20,7 +20,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/mark:
+  /api/mark:
     post:
       operationId: postMark
       requestBody:
@@ -48,7 +48,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/marks:
+  /api/marks:
     get:
       operationId: getMarks
       parameters:
@@ -72,7 +72,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/events:
+  /api/events:
     get:
       operationId: getEvents
       parameters:
@@ -108,7 +108,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
-  /api/v1/snapshots:
+  /api/snapshots:
     get:
       operationId: getSnapshots
       parameters:

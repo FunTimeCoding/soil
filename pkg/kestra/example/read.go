@@ -1,7 +1,7 @@
 package example
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/kestra"
 )
 
@@ -9,23 +9,23 @@ func Read() {
 	k := kestra.NewEnvironment()
 
 	if true {
-		fmt.Println("Namespaces")
+		console.Line("Namespaces")
 
 		for _, n := range k.Namespaces() {
-			fmt.Printf("Namespace: %+v\n", n)
+			console.Format("Namespace: %+v\n", n)
 
 			for _, f := range k.Flows(n) {
-				fmt.Printf("  Flow: %+v\n", f)
+				console.Format("  Flow: %+v\n", f)
 			}
 		}
 	}
 
 	if false {
 		// 404
-		fmt.Println("Users")
+		console.Line("Users")
 
 		for _, f := range k.Users() {
-			fmt.Printf("  %+v\n", f)
+			console.Format("  %+v\n", f)
 		}
 	}
 }
