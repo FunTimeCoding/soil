@@ -17,10 +17,12 @@ func Main(
 	defer func() { s.Flush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Web()
+	a.Metric()
 	a.Database()
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
 	o.Address = a.Address()
+	o.MetricAddress = a.MetricAddress()
 	o.PostgresLocator = a.GetString(argumentConstant.Postgres)
 	o.LitePath = a.GetString(argumentConstant.Lite)
 	o.Version = version

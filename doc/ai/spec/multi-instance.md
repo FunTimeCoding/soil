@@ -18,7 +18,8 @@ gopostgresd, goproxmoxd.
 
 YAML file with named instances. Each instance carries its own
 connection details and credentials. Loaded at startup via
-`--inventory` flag with a default of `go<tool>d.yaml`.
+`--inventory` flag, defaulting to `Identity.InventoryPath()` -
+`~/.local/share/go<tool>d/inventory.yaml`.
 
 ```
 pkg/tool/go<tool>d/inventory/

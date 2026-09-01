@@ -20,7 +20,7 @@ func Main(
 	a.Web()
 	a.String(
 		argumentConstant.Inventory,
-		"goprometheusd.yaml",
+		constant.Identity.InventoryPath(),
 		"Inventory file path",
 	)
 	a.Parse(version, gitHash, buildDate)

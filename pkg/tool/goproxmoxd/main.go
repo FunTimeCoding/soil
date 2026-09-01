@@ -18,14 +18,16 @@ func Main(
 	defer func() { s.Flush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Web()
+	a.Metric()
 	a.String(
 		argumentConstant.Inventory,
-		"goproxmoxd.yaml",
+		constant.Identity.InventoryPath(),
 		"Inventory file path",
 	)
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
 	o.Address = a.Address()
+	o.MetricAddress = a.MetricAddress()
 	o.Inventory = inventory.Load(a.GetString(argumentConstant.Inventory))
 	o.Version = version
 	Run(o, s)

@@ -1,6 +1,7 @@
 package option
 
 type Exporter struct {
-	Owner   string
-	Verbose bool
+	MetricAddress string
+	Owner         string
+	Verbose       bool
 }

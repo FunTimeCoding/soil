@@ -1,6 +1,7 @@
 package option
 
 type Gitlab struct {
-	Address string
-	Version string
+	Address       string
+	MetricAddress string
+	Version       string
 }

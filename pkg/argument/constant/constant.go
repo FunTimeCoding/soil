@@ -66,6 +66,7 @@ const (
 	Match          = "match"
 	Memory         = "memory"
 	Message        = "message"
+	MetricPort     = "metric-port"
 	Migrate        = "migrate"
 	Mine           = "mine"
 	Name           = "name"

@@ -27,7 +27,7 @@ func Run(
 		lifecycle.WithServer(
 			server.New(
 				constant.Identity,
-				webConstant.MetricAddress,
+				o.MetricAddress,
 				func(x *http.ServeMux) {
 					x.Handle(webConstant.MetricsPath, m.Exporter())
 				},

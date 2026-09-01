@@ -47,6 +47,8 @@ const (
 
 	GeneratedFile = "generated.go"
 
+	InventoryName = "inventory"
+
 	PhysicalTest0 = "00:00:00:00:00:00"
 	PhysicalTest1 = "00:00:00:00:00:01"
 	PhysicalTest2 = "00:00:00:00:00:02"

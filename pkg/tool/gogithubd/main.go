@@ -17,6 +17,7 @@ func Main(
 	r := reporter.New(constant.Identity.Name(), version).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
+	a.Metric()
 	a.Boolean(argumentConstant.Verbose, false, "Verbose output")
 	a.String(
 		argumentConstant.Owner,
@@ -25,6 +26,7 @@ func Main(
 	)
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
+	o.MetricAddress = a.MetricAddress()
 	o.Owner = a.GetString(argumentConstant.Owner)
 	o.Verbose = a.GetBoolean(argumentConstant.Verbose)
 	Run(o, r)

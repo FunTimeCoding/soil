@@ -35,6 +35,8 @@ const (
 	MissingSuffixText                = "no standard service suffix (expected *d)"
 	MissingSentryKey                 = "missing_sentry"
 	MissingSentryText                = "missing sentry reporter"
+	WebArgumentKey                   = "web_argument"
+	WebArgumentText                  = "main.go registers the port flag directly (use a.Web() or a.Metric())"
 	IdentityMissingFileKey           = "identity_missing_file"
 	IdentityMissingFileText          = "constant/constant.go not found"
 	IdentityNotParseableKey          = "identity_not_parseable"

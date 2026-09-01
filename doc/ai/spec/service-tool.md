@@ -67,6 +67,14 @@ the live resolved default.
 - The option struct carries `Address string` - the joined listen
   string from `a.Address()` - not a bare port
 
+Daemons that expose a Prometheus exporter also call `a.Metric()` -
+registers `--metric-port` with chain `METRIC_PORT` > 9090. The
+option struct carries `MetricAddress string` from
+`a.MetricAddress()`; `Run` mounts the exporter on its own lifecycle
+server at that address, binding all interfaces. Locally co-hosted
+exporter daemons each get a unique `--metric-port` in the Procfile,
+like `--port`.
+
 Services with a database also call `a.Database()` (registers `--lite`
 with chain `LITE_PATH` > `Identity.LitePath()`, and `--postgres` with
 chain `POSTGRES_LOCATOR` > empty) or `a.Lite()` alone for
@@ -90,6 +98,7 @@ func Run(o *option.Log, r face.Reporter) {
         lifecycle.WithWorker(worker.New(client, s, l, r, 1*time.Minute)),
         lifecycle.WithServer(
             server.New(
+                constant.Identity,
                 o.Address,
                 func(m *http.ServeMux) {
                     m.HandleFunc("/api/alerts", server.Alerts(s))

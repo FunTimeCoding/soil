@@ -54,7 +54,7 @@ type Worker interface {
 }
 ```
 
-Implemented by: `metric.Server`, `ticker.Ticker`, `reporter.Reporter`, and any struct with `Start()`/`Stop()`.
+Implemented by: `ticker.Ticker`, `reporter.Reporter`, and any struct with `Start()`/`Stop()`.
 
 ## WithServer
 
@@ -63,7 +63,7 @@ One option for all server configurations. The caller builds a
 
 ```go
 lifecycle.WithServer(
-    server.New(address, setup).
+    server.New(constant.Identity, address, setup).
         WithMiddleware(web.RecoveryMiddleware(r)),
 )
 ```
@@ -112,6 +112,7 @@ func Run(o *option.Config, r face.Reporter) {
         lifecycle.WithWorker(worker.New(l, r)),
         lifecycle.WithServer(
             server.New(
+                constant.Identity,
                 o.Address,
                 func(m *http.ServeMux) {
                     m.HandleFunc("/health", health)
@@ -139,7 +140,6 @@ These types implement the Worker interface:
 
 | Package                      | Type       | What it does                     |
 |------------------------------|------------|----------------------------------|
-| `pkg/metric`                 | `Server`   | Prometheus metrics HTTP endpoint |
 | `pkg/ticker`                 | `Ticker`   | Periodic function execution      |
 | `pkg/errors/sentry/reporter` | `Reporter` | Error capture + panic recovery   |
 | `pkg/system/reaper`          | `Reaper`   | Zombie process reaper            |

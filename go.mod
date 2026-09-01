@@ -49,7 +49,7 @@ require (
 	github.com/google/go-github/v90 v90.0.0
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674
-	github.com/gpustack/gguf-parser-go v0.26.2
+	github.com/gpustack/gguf-parser-go v0.26.3
 	github.com/grafana/grafana-openapi-client-go v0.0.0-20260828183528-15d99ca95e47
 	github.com/hashicorp/vault-client-go v0.4.3
 	github.com/hetznercloud/hcloud-go/v2 v2.47.0

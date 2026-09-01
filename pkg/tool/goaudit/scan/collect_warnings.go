@@ -15,6 +15,7 @@ func (s *Service) collectWarnings(
 	s.checkRun(path)
 	s.checkSuffix(path)
 	s.checkIdentity(v, path)
+	s.checkWebArgument(v, path)
 	s.checkOpenAPI(v, path)
 	s.checkVersionedPaths(v, path)
 	s.checkStrictServer(v, path)
