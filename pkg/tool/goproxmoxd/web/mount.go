@@ -11,4 +11,5 @@ func (s *Server) Mount(m *http.ServeMux) {
 	m.HandleFunc(route.Get(constant.PalettePath), palette.NewServe(s.registry))
 	m.HandleFunc(route.Get(constant.RootPattern), s.floor)
 	m.Handle(route.Get(constant.LivePath), s.event())
+	m.HandleFunc(route.Get(constant.FaviconPath), s.favicon)
 }
