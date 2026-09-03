@@ -17,6 +17,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/worker"
 	webLib "github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 )
 
@@ -72,8 +73,10 @@ func Run(
 						),
 						m,
 					)
-					model_context.New(v, r, t, o.Version).Mount(m)
-					b.Mount(m)
+					model_context.New(v, r, t, o.Version).Mount(
+						guard.New(m, o.ServiceTokens),
+					)
+					b.Mount(guard.New(m, o.ServiceTokens))
 				},
 			).WithMiddleware(b.Recovery(r)),
 		),

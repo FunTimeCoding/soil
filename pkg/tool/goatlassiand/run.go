@@ -16,6 +16,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/web"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/worker"
 	webLib "github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 )
 
@@ -62,8 +63,10 @@ func Run(
 						),
 						m,
 					)
-					model_context.New(j, c, r, t, o.Version).Mount(m)
-					b.Mount(m)
+					model_context.New(j, c, r, t, o.Version).Mount(
+						guard.New(m, o.ServiceTokens),
+					)
+					b.Mount(guard.New(m, o.ServiceTokens))
 				},
 			).WithMiddleware(b.Recovery(r)),
 		),

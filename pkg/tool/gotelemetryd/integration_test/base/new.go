@@ -12,6 +12,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/store"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/web"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
 )
@@ -22,7 +23,7 @@ func New(t *testing.T) *Server {
 	r := memory.New()
 	v := model_context_server.New(
 		t,
-		func(m *http.ServeMux) {
+		func(m *http.ServeMux, g *guard.Mux) {
 			generated.HandlerFromMux(
 				generated.NewStrictHandler(server.New(s, r), nil),
 				m,
@@ -32,8 +33,8 @@ func New(t *testing.T) *Server {
 				r,
 				mock_recorder.New(),
 				constant.DefaultVersion,
-			).Mount(m)
-			web.New(s).Mount(m)
+			).Mount(g)
+			web.New(s).Mount(g)
 		},
 	)
 

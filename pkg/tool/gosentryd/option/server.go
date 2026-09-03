@@ -1,7 +1,8 @@
 package option
 
 type Server struct {
-	Address      string
+	Address       string
+	ServiceTokens []string
 	Organization string
 	Version      string
 }

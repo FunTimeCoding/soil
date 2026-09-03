@@ -9,6 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/server"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
 )
@@ -18,7 +19,7 @@ func New(t *testing.T) *Server {
 	c := mock_client.New()
 	v := model_context_server.New(
 		t,
-		func(m *http.ServeMux) {
+		func(m *http.ServeMux, g *guard.Mux) {
 			generated.HandlerFromMux(
 				generated.NewStrictHandler(server.New(c, memory.New()), nil),
 				m,
@@ -28,7 +29,7 @@ func New(t *testing.T) *Server {
 				memory.New(),
 				mock_recorder.New(),
 				constant.DefaultVersion,
-			).Mount(m)
+			).Mount(g)
 		},
 	)
 

@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/option"
+	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 )
 
@@ -39,5 +40,6 @@ func Main(
 		webConstant.AuthorizationEncryptionSecretEnvironment,
 	)
 	o.PublicLocator = environment.Required(webConstant.PublicLocatorEnvironment)
+	o.ServiceTokens = web.ServiceTokens()
 	Run(o, s)
 }

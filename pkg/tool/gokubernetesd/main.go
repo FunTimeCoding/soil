@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/option"
+	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func Main(
@@ -22,6 +23,7 @@ func Main(
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
 	o.Address = a.Address()
+	o.ServiceTokens = web.ServiceTokens()
 	o.ReadOnly = a.GetBoolean(argumentConstant.ReadOnly)
 	o.LitePath = a.GetString(argumentConstant.Lite)
 	o.Version = version

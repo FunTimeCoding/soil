@@ -15,6 +15,7 @@ const (
 	NameEnvironment  = "CLAUDE_NAME"
 	HostEnvironment  = "CLAUDE_HOST"
 	PortEnvironment  = "CLAUDE_PORT"
+	TokenEnvironment = "CLAUDE_TOKEN"
 	PeekOutputBudget = 120
 	PeekContextLimit = 200
 

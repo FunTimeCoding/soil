@@ -30,7 +30,11 @@ func Main(
 			_ *cobra.Command,
 			_ []string,
 		) {
-			c.Initialize(host, port)
+			c.Initialize(
+				host,
+				port,
+				environment.Required(constant.TokenEnvironment),
+			)
 		},
 	}
 	o.PersistentFlags().StringVar(

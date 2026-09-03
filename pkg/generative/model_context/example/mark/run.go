@@ -10,6 +10,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/mark3labs/mcp-go/mcp"
 	mark "github.com/mark3labs/mcp-go/server"
 	"net/http"
@@ -110,7 +111,7 @@ func Run(o *option.Mark) {
 	} else {
 		v := server.New(s)
 		m := http.NewServeMux()
-		v.Setup(m)
+		v.Setup(guard.New(m, web.ServiceTokens()))
 		h := web.Server(m, generative.ModelContextAddress)
 		web.ServeAsynchronous(h)
 		system.KillSignalBlock()

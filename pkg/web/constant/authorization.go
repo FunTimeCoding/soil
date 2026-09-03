@@ -19,6 +19,8 @@ const (
 	AuthorizationFlowCookie    = "authorization_flow"
 	AuthorizationSubjectCookie = "authorization_subject"
 	AuthorizationDefaultScope  = "openid offline"
+
+	ServiceTokenEnvironment = "SERVICE_TOKEN"
 )
 
 // Notation key

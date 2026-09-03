@@ -77,6 +77,7 @@ const (
 )
 const (
 	HostEnvironment     = "ATL_HOST"
+	TokenEnvironment    = "ATL_TOKEN"
 	PortEnvironment     = "ATL_PORT"
 	InsecureEnvironment = "ATL_INSECURE"
 )

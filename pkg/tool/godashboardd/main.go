@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/option"
+	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 )
 
@@ -39,6 +40,7 @@ func Main(
 		webConstant.AuthorizationEncryptionSecretEnvironment,
 	)
 	o.PublicLocator = environment.Required(webConstant.PublicLocatorEnvironment)
+	o.ServiceTokens = web.ServiceTokens()
 	o.Version = version
 	Run(o, r)
 }

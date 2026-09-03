@@ -15,6 +15,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/store"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/watcher"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/web"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 )
 
@@ -37,8 +38,10 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					model_context.New(v, r, i.Recorder(), o.Version).Mount(m)
-					u.Mount(m)
+					model_context.New(v, r, i.Recorder(), o.Version).Mount(
+						guard.New(m, o.ServiceTokens),
+					)
+					u.Mount(guard.New(m, o.ServiceTokens))
 				},
 			).WithMiddleware(u.Recovery(r)),
 		),

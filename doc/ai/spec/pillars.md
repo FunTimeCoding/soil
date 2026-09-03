@@ -63,7 +63,7 @@ func Run(o *option.Config, r face.Reporter) {
                 func(m *http.ServeMux) {
                     t := telemetry.NewEnvironment()
                     // REST: strict handler + telemetry middleware
-                    // MCP: model_context.New(..., t, ...).Mount(m)
+                    // MCP: model_context.New(..., t, ...).Mount(guard.New(m, o.ServiceTokens))
                     // see model-context.md for the full wiring
                 },
             ).WithMiddleware(web.RecoveryMiddleware(r)),

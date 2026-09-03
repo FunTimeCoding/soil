@@ -12,6 +12,7 @@ var Identity = identity.New(
 
 const (
 	HostEnvironment      = "MEMORY_HOST"
+	TokenEnvironment     = "MEMORY_TOKEN"
 	PortEnvironment      = "MEMORY_PORT"
 	HiddenTagEnvironment = "MEMORY_HIDDEN_TAG"
 	TagCutset            = "[]\" \t"

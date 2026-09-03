@@ -16,6 +16,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/store"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/web"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/worker"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 )
 
@@ -50,7 +51,7 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					u.Mount(m)
+					u.Mount(guard.New(m, o.ServiceTokens))
 				},
 			).WithMiddleware(u.Recovery(r)),
 		),

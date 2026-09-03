@@ -11,5 +11,6 @@ func NewEnvironment(instance string) *Client {
 		environment.RequiredInteger(constant.PortEnvironment),
 		environment.Exists(constant.InsecureEnvironment),
 		instance,
+		environment.Required(constant.TokenEnvironment),
 	)
 }

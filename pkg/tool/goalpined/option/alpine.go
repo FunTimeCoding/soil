@@ -1,7 +1,7 @@
 package option
 
 type Alpine struct {
-	Address string
-	Token   string
+	Address       string
+	ServiceTokens []string
 	Version string
 }

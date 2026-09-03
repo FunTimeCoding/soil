@@ -1,6 +1,7 @@
 package option
 
 type Opnsense struct {
-	Address string
-	Version string
+	Address       string
+	ServiceTokens []string
+	Version       string
 }

@@ -1,7 +1,8 @@
 package option
 
 type Memory struct {
-	Address  string
-	LitePath string
-	Version  string
+	Address       string
+	ServiceTokens []string
+	LitePath      string
+	Version       string
 }

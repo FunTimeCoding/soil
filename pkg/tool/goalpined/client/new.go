@@ -6,7 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/locator"
-	"net/http"
 )
 
 func New(
@@ -16,13 +15,7 @@ func New(
 	base := locator.New(host).String()
 	c, e := client.NewClientWithResponses(
 		base,
-		client.WithRequestEditorFn(
-			func(_ context.Context, q *http.Request) error {
-				web.Bearer(q, token)
-
-				return nil
-			},
-		),
+		client.WithRequestEditorFn(web.BearerEditor(token)),
 	)
 	errors.PanicOnError(e)
 

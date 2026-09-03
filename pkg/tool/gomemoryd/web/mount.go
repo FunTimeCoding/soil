@@ -3,21 +3,18 @@ package web
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/funtimecoding/soil/pkg/web/palette"
 	"github.com/funtimecoding/soil/pkg/web/route"
-	"net/http"
 )
 
-func (s *Server) Mount(m *http.ServeMux) {
-	m.HandleFunc(
-		route.Get(webConstant.PalettePath),
-		palette.NewServe(s.registry),
-	)
-	m.HandleFunc(
+func (s *Server) Mount(g *guard.Mux) {
+	g.Open(route.Get(webConstant.PalettePath), palette.NewServe(s.registry))
+	g.Open(
 		route.Get(webConstant.PalettePath, constant.MemoriesPath),
 		s.paletteMemories,
 	)
-	m.HandleFunc(
+	g.Open(
 		route.Get(
 			webConstant.PalettePath,
 			constant.MemoriesPath,
@@ -25,14 +22,14 @@ func (s *Server) Mount(m *http.ServeMux) {
 		),
 		s.paletteMemoriesSearch,
 	)
-	m.HandleFunc(route.Get(webConstant.RootPattern), s.dashboard)
-	m.HandleFunc(route.Get(constant.MemoriesPath), s.memoriesPage)
-	m.HandleFunc(
+	g.Open(route.Get(webConstant.RootPattern), s.dashboard)
+	g.Open(route.Get(constant.MemoriesPath), s.memoriesPage)
+	g.Open(
 		route.Get(constant.MemoriesPath, "/{identifier}"),
 		s.memoryDetailPage,
 	)
-	m.HandleFunc(route.Get(constant.RelationsPath), s.relationsPage)
-	m.HandleFunc(route.Get(constant.ImpressionsPath), s.impressionsPage)
-	m.HandleFunc(route.Get(webConstant.SearchPath), s.searchPage)
-	m.HandleFunc(route.Get(webConstant.FaviconPath), s.favicon)
+	g.Open(route.Get(constant.RelationsPath), s.relationsPage)
+	g.Open(route.Get(constant.ImpressionsPath), s.impressionsPage)
+	g.Open(route.Get(webConstant.SearchPath), s.searchPage)
+	g.Open(route.Get(webConstant.FaviconPath), s.favicon)
 }

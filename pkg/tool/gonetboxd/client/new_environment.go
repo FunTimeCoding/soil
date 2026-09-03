@@ -10,5 +10,6 @@ func NewEnvironment() *Client {
 		environment.Required(constant.HostEnvironment),
 		environment.RequiredInteger(constant.PortEnvironment),
 		environment.Exists(constant.InsecureEnvironment),
+		environment.Required(constant.TokenEnvironment),
 	)
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/inventory"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/option"
+	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func Main(
@@ -27,6 +28,7 @@ func Main(
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
 	o.Address = a.Address()
+	o.ServiceTokens = web.ServiceTokens()
 	o.MetricAddress = a.MetricAddress()
 	o.Inventory = inventory.Load(a.GetString(argumentConstant.Inventory))
 	o.Version = version

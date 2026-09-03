@@ -9,5 +9,6 @@ func NewEnvironment() *Client {
 	return New(
 		environment.Required(constant.HostEnvironment),
 		environment.Exists(constant.InsecureEnvironment),
+		environment.Required(constant.TokenEnvironment),
 	)
 }

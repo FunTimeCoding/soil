@@ -1,11 +1,11 @@
 package conversations
 
-import "net/http"
+import "github.com/funtimecoding/soil/pkg/web/guard"
 
-func (s *Server) Mount(m *http.ServeMux) {
-	m.HandleFunc("GET /conversations", s.page)
-	m.HandleFunc("GET /conversations/sidebar", s.sidebar)
-	m.HandleFunc("GET /conversations/{identifier}/edit", s.editForm)
-	m.HandleFunc("POST /conversations/{identifier}/edit", s.editSubmit)
-	m.HandleFunc("GET /conversations/{identifier}", s.panel)
+func (s *Server) Mount(g *guard.Mux) {
+	g.Open("GET /conversations", s.page)
+	g.Open("GET /conversations/sidebar", s.sidebar)
+	g.Open("GET /conversations/{identifier}/edit", s.editForm)
+	g.Open("POST /conversations/{identifier}/edit", s.editSubmit)
+	g.Open("GET /conversations/{identifier}", s.panel)
 }

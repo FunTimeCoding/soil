@@ -4,29 +4,26 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/funtimecoding/soil/pkg/web/palette"
 	"github.com/funtimecoding/soil/pkg/web/route"
-	"net/http"
 )
 
-func (s *Server) Mount(m *http.ServeMux) {
-	m.HandleFunc(
-		route.Get(webConstant.PalettePath),
-		palette.NewServe(s.registry),
-	)
-	m.HandleFunc(route.Get(webConstant.RootPattern), s.dashboard)
-	m.HandleFunc(route.Get(constant.EntriesPath), s.entries)
-	m.HandleFunc(
+func (s *Server) Mount(g *guard.Mux) {
+	g.Open(route.Get(webConstant.PalettePath), palette.NewServe(s.registry))
+	g.Open(route.Get(webConstant.RootPattern), s.dashboard)
+	g.Open(route.Get(constant.EntriesPath), s.entries)
+	g.Open(
 		route.Get(
 			fmt.Sprintf("%s/{%s}", constant.EntryPath, constant.Identifier),
 		),
 		s.entryPage,
 	)
-	m.HandleFunc(route.Get(constant.AddEntryPath), s.add)
-	m.HandleFunc(route.Post(constant.AddEntryPath), s.addSubmit)
-	m.HandleFunc(route.Get(constant.DetailPath), s.detail)
-	m.HandleFunc(route.Get(constant.EditPath), s.edit)
-	m.HandleFunc(route.Post(constant.EditPath), s.editSubmit)
-	m.HandleFunc(route.Post(constant.DeletePath), s.delete)
-	m.HandleFunc(route.Get(webConstant.FaviconPath), s.favicon)
+	g.Open(route.Get(constant.AddEntryPath), s.add)
+	g.Open(route.Post(constant.AddEntryPath), s.addSubmit)
+	g.Open(route.Get(constant.DetailPath), s.detail)
+	g.Open(route.Get(constant.EditPath), s.edit)
+	g.Open(route.Post(constant.EditPath), s.editSubmit)
+	g.Open(route.Post(constant.DeletePath), s.delete)
+	g.Open(route.Get(webConstant.FaviconPath), s.favicon)
 }

@@ -1,11 +1,11 @@
 package constant
 
 const (
-	ModelContextGreetTool      = "greet"
-	ModelContextNameParameter  = "name"
-	ModelContextTokenParameter = "token"
-	ModelContextToolPrefix     = "mcp__"
-	ModelContextToolSeparator  = "__"
+	ModelContextGreetTool     = "greet"
+	ModelContextNameParameter = "name"
+	ModelContextTestToken     = "alfa"
+	ModelContextToolPrefix    = "mcp__"
+	ModelContextToolSeparator = "__"
 )
 
 const (

@@ -11,6 +11,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goitermd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/goitermd/option"
 	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 )
 
@@ -31,7 +32,7 @@ func Run(
 						r,
 						s.Recorder(),
 						o.Version,
-					).Mount(m)
+					).Mount(guard.New(m, o.ServiceTokens))
 				},
 			).WithMiddleware(web.RecoveryMiddleware(r)),
 		),

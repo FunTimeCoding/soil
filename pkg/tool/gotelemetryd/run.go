@@ -15,6 +15,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/store"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/web"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 )
 
@@ -43,8 +44,8 @@ func Run(
 						r,
 						i.Recorder(),
 						o.Version,
-					).Mount(m)
-					u.Mount(m)
+					).Mount(guard.New(m, o.ServiceTokens))
+					u.Mount(guard.New(m, o.ServiceTokens))
 				},
 			).WithMiddleware(u.Recovery(r)),
 		),

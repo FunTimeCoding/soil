@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
+	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
@@ -12,6 +13,7 @@ func New(
 	port int,
 	insecure bool,
 	instance string,
+	token string,
 ) *Client {
 	l := locator.New(host).Port(port)
 
@@ -19,7 +21,10 @@ func New(
 		l.Insecure()
 	}
 
-	c, e := client.NewClientWithResponses(l.String())
+	c, e := client.NewClientWithResponses(
+		l.String(),
+		client.WithRequestEditorFn(web.BearerEditor(token)),
+	)
 	errors.PanicOnError(e)
 
 	return &Client{

@@ -19,6 +19,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/store"
 	certificateWeb "github.com/funtimecoding/soil/pkg/tool/gocertificated/web"
 	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 )
 
@@ -77,8 +78,10 @@ func Run(
 						),
 						m,
 					)
-					model_context.New(s, v, r, t, o.Version).Mount(m)
-					i.Mount(m)
+					model_context.New(s, v, r, t, o.Version).Mount(
+						guard.New(m, o.ServiceTokens),
+					)
+					i.Mount(guard.New(m, o.ServiceTokens))
 				},
 			).WithMiddleware(i.Recovery(r)),
 		),

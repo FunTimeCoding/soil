@@ -2,23 +2,23 @@ package server
 
 import (
 	"github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/mark3labs/mcp-go/server"
-	"net/http"
 	"time"
 )
 
-func (s *Server) Setup(m *http.ServeMux) {
-	h := http.NewServeMux()
-	h.Handle(
-		constant.ModelContextPath,
-		server.NewStreamableHTTPServer(
-			s.server,
-			server.WithStreamableHTTPLogger(s.Logger()),
-			server.WithHeartbeatInterval(15*time.Second),
-		),
+func (s *Server) Setup(g *guard.Mux) {
+	h := server.NewStreamableHTTPServer(
+		s.server,
+		server.WithStreamableHTTPLogger(s.Logger()),
+		server.WithHeartbeatInterval(15*time.Second),
 	)
 	sse := server.NewSSEServer(s.server)
-	h.Handle(constant.EventPath, sse.SSEHandler())
-	h.Handle(constant.EventMessagePath, sse.MessageHandler())
-	s.wrapAuthentication(m, h)
+	s.register(g, constant.ModelContextPath, h)
+	s.register(g, constant.EventPath, sse.SSEHandler())
+	s.register(g, constant.EventMessagePath, sse.MessageHandler())
+
+	if s.openAuthentication {
+		g.Open(constant.ProtectedResource, s.protectedResource)
+	}
 }

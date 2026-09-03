@@ -43,6 +43,7 @@ const (
 
 const (
 	HostEnvironment     = "GOPNSENSED_HOST"
+	TokenEnvironment    = "GOPNSENSED_TOKEN"
 	PortEnvironment     = "GOPNSENSED_PORT"
 	InsecureEnvironment = "GOPNSENSED_INSECURE"
 )

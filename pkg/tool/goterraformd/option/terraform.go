@@ -2,6 +2,7 @@ package option
 
 type Terraform struct {
 	Address         string
+	ServiceTokens   []string
 	MetricAddress   string
 	Version         string
 	Repository      string

@@ -36,5 +36,7 @@ const (
 	EditPath       = "/edit"
 	DeletePath     = "/delete"
 	AddEntryPath   = "/add"
+
+	HostEnvironment  = "MAINTENANCE_LOG_HOST"
+	TokenEnvironment = "MAINTENANCE_LOG_TOKEN"
 )
-const HostEnvironment = "MAINTENANCE_LOG_HOST"

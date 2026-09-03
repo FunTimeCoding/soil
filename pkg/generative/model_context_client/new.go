@@ -4,9 +4,11 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/generative/model_context_client/bearer"
 	web "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
+	"net/http"
 	"testing"
 )
 
@@ -28,6 +30,7 @@ func New(
 			Endpoint: locator.New(web.Localhost).Insecure().Port(port).Path(
 				web.ModelContextPath,
 			).String(),
+			HTTPClient: &http.Client{Transport: bearer.Transport{}},
 		},
 		nil,
 	)

@@ -11,6 +11,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/model_context/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/server"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/web"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
 )
@@ -24,7 +25,7 @@ func New(t *testing.T) *Server {
 		Tester: s,
 		server: model_context_server.New(
 			t,
-			func(m *http.ServeMux) {
+			func(m *http.ServeMux, g *guard.Mux) {
 				generated.HandlerFromMux(
 					generated.NewStrictHandler(
 						server.New(
@@ -44,8 +45,8 @@ func New(t *testing.T) *Server {
 					l,
 					mock_recorder.New(),
 					constant.DefaultVersion,
-				).Mount(m)
-				web.New(s.Service).Mount(m)
+				).Mount(g)
+				web.New(s.Service).Mount(g)
 			},
 		),
 	}

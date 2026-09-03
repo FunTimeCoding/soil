@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/option"
+	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func Main(
@@ -24,6 +25,7 @@ func Main(
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
 	o.Address = a.Address()
+	o.ServiceTokens = web.ServiceTokens()
 	o.BridgePort = a.RequiredInteger(constant.BridgePortFlag)
 	o.Version = version
 	Run(o, s)

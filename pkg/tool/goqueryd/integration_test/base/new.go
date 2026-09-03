@@ -12,6 +12,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/server"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
 )
@@ -31,7 +32,7 @@ func New(t *testing.T) *Server {
 		reranker: a,
 		server: model_context_server.New(
 			t,
-			func(m *http.ServeMux) {
+			func(m *http.ServeMux, g *guard.Mux) {
 				generated.HandlerFromMux(
 					generated.NewStrictHandler(server.New(v, r), nil),
 					m,
@@ -41,7 +42,7 @@ func New(t *testing.T) *Server {
 					r,
 					mock_recorder.New(),
 					constant.DefaultVersion,
-				).Mount(m)
+				).Mount(g)
 			},
 		),
 	}

@@ -13,6 +13,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/option"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/server"
 	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 )
 
@@ -54,7 +55,9 @@ func Run(
 						),
 						m,
 					)
-					model_context.New(c, r, t, o.Version).Mount(m)
+					model_context.New(c, r, t, o.Version).Mount(
+						guard.New(m, o.ServiceTokens),
+					)
 				},
 			).WithMiddleware(web.RecoveryMiddleware(r)),
 		),

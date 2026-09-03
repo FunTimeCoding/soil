@@ -13,4 +13,5 @@ type Dashboard struct {
 	ClientSecret     string
 	EncryptionSecret string
 	PublicLocator    string
+	ServiceTokens    []string
 }

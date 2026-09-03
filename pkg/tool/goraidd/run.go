@@ -7,7 +7,9 @@ import (
 	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/raid_parser"
+	raidParserConstant "github.com/funtimecoding/soil/pkg/raid_parser/constant"
 	"github.com/funtimecoding/soil/pkg/relational"
+	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
 	generated "github.com/funtimecoding/soil/pkg/tool/goraidd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/option"
@@ -15,6 +17,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/store"
 	raidWeb "github.com/funtimecoding/soil/pkg/tool/goraidd/web"
 	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 )
 
@@ -31,7 +34,11 @@ func Run(
 		l,
 		r,
 	)
-	p := raid_parser.New("localhost:8081", true)
+	p := raid_parser.New(
+		"localhost:8081",
+		true,
+		environment.Required(raidParserConstant.TokenEnvironment),
+	)
 	u := raidWeb.New(s, o.ElitePath, o.OutputPath, p, authorizationClient(o))
 	lifecycle.New(
 		l,
@@ -66,7 +73,7 @@ func Run(
 						),
 						m,
 					)
-					u.Mount(m)
+					u.Mount(guard.New(m, o.ServiceTokens))
 				},
 			).WithMiddleware(u.Recovery(r)),
 		),

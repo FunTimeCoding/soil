@@ -9,6 +9,7 @@ import (
 	memoryClient "github.com/funtimecoding/soil/pkg/tool/gomemoryd/client"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	generated "github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"time"
 )
@@ -17,7 +18,12 @@ func Wait(l *logger.Logger) memoryClient.Client {
 	host := environment.Required(constant.HostEnvironment)
 	port := environment.RequiredInteger(constant.PortEnvironment)
 	base := locator.New(host).Port(port).Insecure().String()
-	c, e := generated.NewClient(base)
+	c, e := generated.NewClient(
+		base,
+		generated.WithRequestEditorFn(
+			web.BearerEditor(environment.Required(constant.TokenEnvironment)),
+		),
+	)
 	errors.PanicOnError(e)
 	deadline := time.Now().Add(time.Minute)
 

@@ -2,9 +2,9 @@ package model_context
 
 import (
 	"github.com/funtimecoding/soil/pkg/generative/model_context/server"
-	"net/http"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 )
 
-func (s *Server) Mount(m *http.ServeMux) {
-	server.New(s.server).Setup(m)
+func (s *Server) Mount(g *guard.Mux) {
+	server.New(s.server).Setup(g)
 }

@@ -2,17 +2,17 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/funtimecoding/soil/pkg/web/palette"
 	"github.com/funtimecoding/soil/pkg/web/route"
-	"net/http"
 )
 
-func (s *Server) Mount(m *http.ServeMux) {
-	m.HandleFunc(route.Get(constant.PalettePath), palette.NewServe(s.registry))
-	m.HandleFunc(route.Get(constant.RootPattern), s.dashboard)
-	m.Handle(route.Get(constant.LivePath), s.event())
-	m.HandleFunc(route.Post("/move-up"), s.moveUp)
-	m.HandleFunc(route.Post("/move-down"), s.moveDown)
-	m.HandleFunc(route.Post("/reorder"), s.reorder)
-	m.HandleFunc(route.Get(constant.FaviconPath), s.favicon)
+func (s *Server) Mount(g *guard.Mux) {
+	g.Open(route.Get(constant.PalettePath), palette.NewServe(s.registry))
+	g.Open(route.Get(constant.RootPattern), s.dashboard)
+	g.OpenMount(route.Get(constant.LivePath), s.event())
+	g.Open(route.Post("/move-up"), s.moveUp)
+	g.Open(route.Post("/move-down"), s.moveDown)
+	g.Open(route.Post("/reorder"), s.reorder)
+	g.Open(route.Get(constant.FaviconPath), s.favicon)
 }

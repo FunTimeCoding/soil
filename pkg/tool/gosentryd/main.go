@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/option"
+	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func Main(
@@ -21,6 +22,7 @@ func Main(
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
 	o.Address = a.Address()
+	o.ServiceTokens = web.ServiceTokens()
 	o.Organization = environment.Required(errors.OrganizationEnvironment)
 	o.Version = version
 	Run(o, s)

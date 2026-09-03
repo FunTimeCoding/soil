@@ -17,6 +17,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/model_context/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/web/authorization/client"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
 )
@@ -53,7 +54,7 @@ func New(t *testing.T) *Server {
 		Authorization: authorization,
 		server: model_context_server.New(
 			t,
-			func(m *http.ServeMux) {
+			func(m *http.ServeMux, g *guard.Mux) {
 				generated.HandlerFromMux(
 					generated.NewStrictHandler(server.New(s, v, r), nil),
 					m,
@@ -64,8 +65,8 @@ func New(t *testing.T) *Server {
 					r,
 					mock_recorder.New(),
 					library.DefaultVersion,
-				).Mount(m)
-				web.New(s, v, authorization).Mount(m)
+				).Mount(g)
+				web.New(s, v, authorization).Mount(g)
 			},
 		),
 	}

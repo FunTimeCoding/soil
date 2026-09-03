@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/keychain"
 	"github.com/funtimecoding/soil/pkg/tool/gocredentiald/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocredentiald/option"
+	"github.com/funtimecoding/soil/pkg/web"
 	"strings"
 )
 
@@ -23,6 +24,7 @@ func Main(
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
 	o.Address = a.Address()
+	o.ServiceTokens = web.ServiceTokens()
 	o.Version = version
 	o.Database = environment.Required(keepassConstant.DatabaseEnvironment)
 

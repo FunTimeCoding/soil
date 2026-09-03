@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/option"
+	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func Main(
@@ -22,6 +23,7 @@ func Main(
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
 	o.Address = a.Address()
+	o.ServiceTokens = web.ServiceTokens()
 	o.LitePath = a.GetString(argumentConstant.Lite)
 	o.SessionExportPath = environment.Required(
 		constant.SessionExportPathEnvironment,

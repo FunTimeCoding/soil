@@ -14,6 +14,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/web"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/worker"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 )
 
@@ -49,8 +50,8 @@ func Run(
 						r,
 						s.Recorder(),
 						o.Version,
-					).Mount(x)
-					b.Mount(x)
+					).Mount(guard.New(x, o.ServiceTokens))
+					b.Mount(guard.New(x, o.ServiceTokens))
 				},
 			).WithMiddleware(b.Recovery(r)),
 		),

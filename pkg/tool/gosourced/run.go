@@ -11,6 +11,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/option"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service"
 	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 )
 
@@ -28,7 +29,9 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					model_context.New(s, r, i.Recorder(), o.Version).Mount(m)
+					model_context.New(s, r, i.Recorder(), o.Version).Mount(
+						guard.New(m, o.ServiceTokens),
+					)
 				},
 			).WithMiddleware(web.RecoveryMiddleware(r)),
 		),

@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/option"
+	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func Main(
@@ -24,6 +25,7 @@ func Main(
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
 	o.Address = a.Address()
+	o.ServiceTokens = web.ServiceTokens()
 	o.Version = version
 	o.Repository = a.Required(argumentConstant.Repository)
 	o.ClonePath = a.Required(argumentConstant.ClonePath)

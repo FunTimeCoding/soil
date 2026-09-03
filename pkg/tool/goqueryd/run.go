@@ -20,6 +20,7 @@ import (
 	queryWeb "github.com/funtimecoding/soil/pkg/tool/goqueryd/web"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/worker"
 	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"time"
 )
@@ -70,8 +71,10 @@ func Run(
 						),
 						m,
 					)
-					model_context.New(v, r, t, o.Version).Mount(m)
-					u.Mount(m)
+					model_context.New(v, r, t, o.Version).Mount(
+						guard.New(m, o.ServiceTokens),
+					)
+					u.Mount(guard.New(m, o.ServiceTokens))
 				},
 			).WithMiddleware(u.Recovery(r)),
 		),

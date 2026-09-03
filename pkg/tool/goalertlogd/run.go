@@ -19,6 +19,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/worker"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"time"
 )
@@ -84,8 +85,10 @@ func Run(
 						),
 						m,
 					)
-					model_context.New(s, w, r, t, o.Version).Mount(m)
-					u.Mount(m)
+					model_context.New(s, w, r, t, o.Version).Mount(
+						guard.New(m, o.ServiceTokens),
+					)
+					u.Mount(guard.New(m, o.ServiceTokens))
 				},
 			).WithMiddleware(u.Recovery(r)),
 		),

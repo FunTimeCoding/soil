@@ -12,6 +12,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/mock_indexer"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
 )
@@ -29,7 +30,7 @@ func New(t *testing.T) *Server {
 		indexer: i,
 		server: model_context_server.New(
 			t,
-			func(m *http.ServeMux) {
+			func(m *http.ServeMux, g *guard.Mux) {
 				generated.HandlerFromMux(
 					generated.NewStrictHandler(server.New(v, r), nil),
 					m,
@@ -39,7 +40,7 @@ func New(t *testing.T) *Server {
 					r,
 					mock_recorder.New(),
 					constant.DefaultVersion,
-				).Mount(m)
+				).Mount(g)
 			},
 		),
 	}

@@ -10,5 +10,6 @@ var Identity = identity.New(
 
 const (
 	HostEnvironment = "GOSUBLIMED_HOST"
+	TokenEnvironment = "GOSUBLIMED_TOKEN"
 	DefaultHost     = "localhost:8580"
 )

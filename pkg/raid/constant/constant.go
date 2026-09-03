@@ -1,6 +1,7 @@
 package constant
 
 const HostEnvironment = "RAID_HOST"
+const TokenEnvironment = "RAID_TOKEN"
 const (
 	MinAllies   = 5
 	MinEnemies  = 5

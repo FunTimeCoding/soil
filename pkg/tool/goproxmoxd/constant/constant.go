@@ -73,6 +73,7 @@ const (
 )
 const (
 	HostEnvironment     = "PROX_HOST"
+	TokenEnvironment    = "PROX_TOKEN"
 	PortEnvironment     = "PROX_PORT"
 	InsecureEnvironment = "PROX_INSECURE"
 )

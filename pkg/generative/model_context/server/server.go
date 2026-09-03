@@ -18,6 +18,4 @@ type Server struct {
 	serverLocator        string
 	authorizationLocator string
 	clientIdentifier     string
-	tokenAuthentication  bool
-	token                string
 }

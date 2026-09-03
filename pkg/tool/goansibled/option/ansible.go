@@ -2,6 +2,7 @@ package option
 
 type Ansible struct {
 	Address         string
+	ServiceTokens   []string
 	Version         string
 	Repository      string
 	ClonePath       string

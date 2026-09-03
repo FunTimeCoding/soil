@@ -2,6 +2,7 @@ package option
 
 type Certificate struct {
 	Address            string
+	ServiceTokens      []string
 	PostgresLocator    string
 	LitePath           string
 	Project            string

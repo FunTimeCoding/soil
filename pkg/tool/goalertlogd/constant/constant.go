@@ -31,3 +31,4 @@ const (
 	Resolved   = "resolved"
 )
 const HostEnvironment = "ALERT_LOG_HOST"
+const TokenEnvironment = "ALERT_LOG_TOKEN"

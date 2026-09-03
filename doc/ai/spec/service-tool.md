@@ -159,7 +159,7 @@ under a `web/` package rather than `server/`. Use this pattern instead of
 pkg/tool/go<tool>d/web/
 ├── server.go           # type Server struct (dependencies + view)
 ├── new.go              # New(deps) *Server - constructs view
-├── mount.go            # (s *Server) Mount(m *http.ServeMux)
+├── mount.go            # (s *Server) Mount(g *guard.Mux)
 ├── recovery.go         # (s *Server) Recovery(r) - delegates to view.Recovery
 ├── constant.go         # inlineCSS (component CSS specific to this service)
 ├── <route>.go          # handler method: dashboard(), alerts()
@@ -293,7 +293,7 @@ Additional palettes can be defined in downstream repos.
 
 Key conventions:
 - `Server` struct holds dependencies and a `*view.View`
-- `Mount()` registers all routes using method values: `m.HandleFunc("GET /alerts", s.alerts)`
+- `Mount()` takes a `guard.Mux` and registers all routes through its verbs using method values: `g.Open(route.Get("/alerts"), s.alerts)` for board routes on non-SSO services; SSO services call `g.WithSession(s.require)` first and register their protected routes with `g.Session` (auth trio and favicon stay `Open`). Bare `m.HandleFunc` in a web package is flagged by the `route_guard` analyzer.
 - Handler methods named after the route, no `handle` prefix: `alerts()`, `dashboard()`, `addSubmit()`
 - Standalone HTML builders named after the component they produce: `alertsTable()`, `addForm()`, `detailRow()`
 - Handler and builder names never collide because the handler is named after the route (`add`), not the component (`addForm`)

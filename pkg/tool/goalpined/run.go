@@ -15,6 +15,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/option"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/server"
 	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 )
 
@@ -34,7 +35,9 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					s.Mount(m)
+					g := guard.New(m, o.ServiceTokens)
+					inner := http.NewServeMux()
+					s.Mount(inner)
 					generated.HandlerFromMux(
 						generated.NewStrictHandler(
 							server.New(r),
@@ -57,12 +60,11 @@ func Run(
 								},
 							},
 						),
-						m,
+						inner,
 					)
+					g.TokenMount("/", inner)
 					c.Mount(m)
 				},
-			).WithTokens(
-				[]string{o.Token},
 			).WithMiddleware(web.RecoveryMiddleware(r)),
 		),
 		lifecycle.WithServer(

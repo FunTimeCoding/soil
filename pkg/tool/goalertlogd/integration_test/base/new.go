@@ -17,6 +17,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/web"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/worker"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/model_context/mock_recorder"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
 	"time"
@@ -48,7 +49,7 @@ func New(t *testing.T) *Server {
 	w.Poll()
 	v := model_context_server.New(
 		t,
-		func(m *http.ServeMux) {
+		func(m *http.ServeMux, g *guard.Mux) {
 			generated.HandlerFromMux(
 				generated.NewStrictHandler(server.New(s, w, r), nil),
 				m,
@@ -59,8 +60,8 @@ func New(t *testing.T) *Server {
 				r,
 				mock_recorder.New(),
 				constant.DefaultVersion,
-			).Mount(m)
-			web.New(s, w).Mount(m)
+			).Mount(g)
+			web.New(s, w).Mount(g)
 		},
 	)
 

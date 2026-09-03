@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/inventory"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/option"
+	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func Main(
@@ -26,6 +27,7 @@ func Main(
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
 	o.Address = a.Address()
+	o.ServiceTokens = web.ServiceTokens()
 	o.Inventory = inventory.Load(a.GetString(argumentConstant.Inventory))
 	o.Version = version
 	Run(o, s)

@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/option"
+	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func Main(
@@ -21,6 +22,7 @@ func Main(
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
 	o.Address = a.Address()
+	o.ServiceTokens = web.ServiceTokens()
 	o.LitePath = a.GetString(argumentConstant.Lite)
 	o.Version = version
 	Run(o, s)

@@ -50,12 +50,16 @@ Spin up a real lifecycle with HTTP server on a dynamic port:
 port := system.FindUnusedPort(19400)
 address := fmt.Sprintf(":%d", port)
 l := lifecycle.New(
+    logger.New(context.Background()),
     lifecycle.WithWorker(p),
     lifecycle.WithServer(
-        address,
-        func(m *http.ServeMux) {
-            m.HandleFunc("/api/alerts", route.Alerts(s))
-        },
+        server.New(
+            constant.Identity,
+            address,
+            func(m *http.ServeMux) {
+                m.HandleFunc("/api/alerts", route.Alerts(s))
+            },
+        ),
     ),
 )
 l.Run()

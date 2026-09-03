@@ -124,13 +124,19 @@ func (s *Server) GetIssue(
 ## CLI Access
 
 Multi-command CLIs call the generated client directly. `Main()`
-constructs it once and hands it to every subcommand:
+constructs it once and hands it to every subcommand. Every client
+authenticates with the daemon's token (`<FAMILY>_TOKEN`, the
+`TokenEnvironment` constant beside the tool's `HostEnvironment`)
+via `web.BearerEditor`:
 
 ```go
 v, e := client.NewClient(
     locator.New(
         environment.Fallback(constant.HostEnvironment, web.Localhost),
     ).Port(web.ListenPort).Insecure().String(),
+    client.WithRequestEditorFn(
+        web.BearerEditor(environment.Required(constant.TokenEnvironment)),
+    ),
 )
 errors.PanicOnError(e)
 o.AddCommand(listItems(v))
@@ -165,10 +171,17 @@ type Client struct {
 }
 ```
 
-`client/new.go`:
+`client/new.go` - takes the daemon token alongside the host; the
+`NewEnvironment()` wrapper reads both from the tool's env family:
 ```go
-func New(host string) *Client {
-    c, e := generated.NewClientWithResponses(locator.New(host).String())
+func New(
+    host string,
+    token string,
+) *Client {
+    c, e := generated.NewClientWithResponses(
+        locator.New(host).String(),
+        generated.WithRequestEditorFn(web.BearerEditor(token)),
+    )
     errors.PanicOnError(e)
     return &Client{context: context.Background(), client: c}
 }
@@ -212,13 +225,15 @@ lifecycle.WithServer(
 )
 ```
 
-When MCP is also mounted, add the `model_context` import and call
-`Mount(m)`:
+When MCP is also mounted, add the `model_context` import and mount
+it through a `guard.Mux` carrying the service tokens (see
+`model-context.md` for the token threading):
 
 ```go
 import (
     "github.com/funtimecoding/soil/pkg/tool/go<tool>d/model_context"
     generated "github.com/funtimecoding/soil/pkg/tool/go<tool>d/generated/server"
+    "github.com/funtimecoding/soil/pkg/web/guard"
 )
 
 lifecycle.WithServer(
@@ -229,7 +244,7 @@ lifecycle.WithServer(
                 generated.NewStrictHandler(server.New(dep, r), nil),
                 m,
             )
-            model_context.New(dep, r).Mount(m)
+            model_context.New(dep, r).Mount(guard.New(m, o.ServiceTokens))
         },
     ).WithMiddleware(web.RecoveryMiddleware(r)),
 )

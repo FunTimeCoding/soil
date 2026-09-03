@@ -90,6 +90,7 @@ const (
 )
 const (
 	HostEnvironment     = "NETB_HOST"
+	TokenEnvironment    = "NETB_TOKEN"
 	PortEnvironment     = "NETB_PORT"
 	InsecureEnvironment = "NETB_INSECURE"
 )

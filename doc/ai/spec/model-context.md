@@ -17,7 +17,7 @@ pkg/tool/go<tool>d/
 ├── model_context/
 │   ├── server.go              # Server struct (holds MCPServer + dependencies)
 │   ├── new.go                 # New(deps, r face.Reporter) *Server
-│   ├── mount.go               # Mount(m *http.ServeMux) - HTTP transport setup
+│   ├── mount.go               # Mount(g *guard.Mux) - HTTP transport setup
 │   ├── register.go            # register() - wires all tools to the MCPServer
 │   ├── capture_fail.go        # captureFail(e error, message string)
 │   └── <tool_name>.go         # One file per tool function (get_alerts.go, etc.)
@@ -132,10 +132,12 @@ telemetry event. Import as
 `mark "github.com/funtimecoding/soil/pkg/generative/mark/server"`.
 ```
 
-`mount.go` - wires the MCP server onto the HTTP mux:
+`mount.go` - wires the MCP server onto the guard (the shared
+`pkg/generative/model_context/server` package registers every MCP
+transport route token-checked through it):
 ```go
-func (s *Server) Mount(m *http.ServeMux) {
-    generative.New(s.server).Setup(m)
+func (s *Server) Mount(g *guard.Mux) {
+    server.New(s.server).Setup(g)
 }
 ```
 
@@ -405,7 +407,10 @@ generated.HandlerFromMux(
 ## Wiring into run.go
 
 Mount MCP and REST on the same mux - REST routes (`/api/...`) and
-MCP routes (`/mcp`, `/sse`, `/message`) don't conflict:
+MCP routes (`/mcp`, `/sse`, `/message`) don't conflict. The MCP
+mount goes through a `guard.Mux` built from the service tokens
+(`o.ServiceTokens`, threaded main - option - run via
+`web.ServiceTokens()`):
 
 ```go
 import (
@@ -413,6 +418,7 @@ import (
     "github.com/funtimecoding/soil/pkg/tool/go<tool>d/model_context"
     generated "github.com/funtimecoding/soil/pkg/tool/go<tool>d/generated/server"
     "github.com/funtimecoding/soil/pkg/web"
+    "github.com/funtimecoding/soil/pkg/web/guard"
 )
 
 lifecycle.WithServer(
@@ -430,7 +436,9 @@ lifecycle.WithServer(
                 ),
                 m,
             )
-            model_context.New(s, r, t, p, o.Version).Mount(m)
+            model_context.New(s, r, t, p, o.Version).Mount(
+                guard.New(m, o.ServiceTokens),
+            )
         },
     ).WithMiddleware(web.RecoveryMiddleware(r)),
 )

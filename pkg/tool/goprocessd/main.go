@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/option"
+	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func Main(
@@ -27,6 +28,7 @@ func Main(
 	o.ProcfilePath = a.GetString(argumentConstant.File)
 	o.EnvrcPath = a.GetString("envrc")
 	o.Address = a.Address()
+	o.ServiceTokens = web.ServiceTokens()
 	o.Version = version
 	Run(o, s)
 }

@@ -14,6 +14,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/server"
 	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 )
 
@@ -54,7 +55,7 @@ func Run(
 							r,
 							s.Recorder(),
 							o.Version,
-						).Mount(u)
+						).Mount(guard.New(u, o.ServiceTokens))
 					},
 				).WithMiddleware(web.RecoveryMiddleware(r)),
 			),

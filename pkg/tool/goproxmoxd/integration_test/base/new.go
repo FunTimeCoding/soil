@@ -9,6 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/mock_service"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/mock_snippet"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/model_context"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
 )
@@ -20,13 +21,13 @@ func New(t *testing.T) *Server {
 	s := mock_service.New("test", c, mock_snippet.New())
 	v := model_context_server.New(
 		t,
-		func(m *http.ServeMux) {
+		func(m *http.ServeMux, g *guard.Mux) {
 			model_context.New(
 				s,
 				memory.New(),
 				mock_recorder.New(),
 				constant.DefaultVersion,
-			).Mount(m)
+			).Mount(g)
 		},
 	)
 

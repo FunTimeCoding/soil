@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/gosublime/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosublimed/generated/client"
+	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/spf13/cobra"
 	"os"
@@ -25,7 +26,12 @@ func Main(
 		host = constant.DefaultHost
 	}
 
-	c, e := client.NewClientWithResponses(locator.New(host).Insecure().String())
+	c, e := client.NewClientWithResponses(
+		locator.New(host).Insecure().String(),
+		client.WithRequestEditorFn(
+			web.BearerEditor(environment.Required(constant.TokenEnvironment)),
+		),
+	)
 
 	if e != nil {
 		errors.Printf("client: %v\n", e)

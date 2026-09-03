@@ -1,6 +1,7 @@
 package option
 
 type Sublime struct {
-	Address string
+	Address       string
+	ServiceTokens []string
 	Version string
 }

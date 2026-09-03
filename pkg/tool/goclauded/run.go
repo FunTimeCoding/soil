@@ -27,6 +27,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/connect"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/indexer"
 	library "github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"time"
 )
@@ -98,8 +99,10 @@ func Run(
 			),
 			m,
 		)
-		model_context.New(v, r, l, t, o.Version).Mount(m)
-		u.Mount(m)
+		model_context.New(v, r, l, t, o.Version).Mount(
+			guard.New(m, o.ServiceTokens),
+		)
+		u.Mount(guard.New(m, o.ServiceTokens))
 	}
 	middleware := u.Recovery(r)
 	srv := lifecycleServer.New(constant.Identity, address, setup).

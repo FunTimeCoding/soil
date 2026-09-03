@@ -14,6 +14,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/option"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/runner"
 	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 )
 
@@ -38,7 +39,9 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					model_context.New(n, s, r, i.Recorder(), o.Version).Mount(m)
+					model_context.New(n, s, r, i.Recorder(), o.Version).Mount(
+						guard.New(m, o.ServiceTokens),
+					)
 				},
 			).WithMiddleware(web.RecoveryMiddleware(r)),
 		),

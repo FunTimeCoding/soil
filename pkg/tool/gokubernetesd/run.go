@@ -14,6 +14,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/store"
 	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"os"
 )
@@ -44,7 +45,7 @@ func Run(
 						r,
 						i.Recorder(),
 						o.Version,
-					).Mount(m)
+					).Mount(guard.New(m, o.ServiceTokens))
 				},
 			).WithMiddleware(web.RecoveryMiddleware(r)),
 		),

@@ -13,6 +13,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/naming"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/omit_empty_zero"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/restricted_call"
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/route_guard"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/stray_comment"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/stray_constant"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/stray_variable"
@@ -36,6 +37,7 @@ func check(
 	naming.Check(p, results, faces)
 	forbidden_call.Check(p, results)
 	restricted_call.Check(p, results)
+	route_guard.Check(p, results)
 	forbidden_import.Check(p, results)
 	string_concatenation.Check(p, results)
 	string_constant.Check(p, results)

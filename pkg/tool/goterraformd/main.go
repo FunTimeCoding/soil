@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/option"
+	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func Main(
@@ -26,6 +27,7 @@ func Main(
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
 	o.Address = a.Address()
+	o.ServiceTokens = web.ServiceTokens()
 	o.MetricAddress = a.MetricAddress()
 	o.Version = version
 	o.Repository = a.Required(argumentConstant.Repository)
