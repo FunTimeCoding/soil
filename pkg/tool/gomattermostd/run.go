@@ -14,6 +14,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/server"
 	"github.com/funtimecoding/soil/pkg/web"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 )
@@ -42,12 +43,15 @@ func Run(
 					constant.Identity,
 					o.Address,
 					func(u *http.ServeMux) {
-						generated.HandlerFromMux(
-							generated.NewStrictHandler(
-								server.New(c, o.Version, r),
-								nil,
+						guard.New(u, o.ServiceTokens).TokenMount(
+							webConstant.InterfacePath,
+							generated.HandlerFromMux(
+								generated.NewStrictHandler(
+									server.New(c, o.Version, r),
+									nil,
+								),
+								http.NewServeMux(),
 							),
-							u,
 						)
 						model_context.New(
 							c,

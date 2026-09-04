@@ -15,6 +15,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/store"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/web"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 )
@@ -35,9 +36,12 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					generated.HandlerFromMux(
-						generated.NewStrictHandler(server.New(s, r), nil),
-						m,
+					guard.New(m, o.ServiceTokens).TokenMount(
+						webConstant.InterfacePath,
+						generated.HandlerFromMux(
+							generated.NewStrictHandler(server.New(s, r), nil),
+							http.NewServeMux(),
+						),
 					)
 					model_context.New(
 						service.New(s),

@@ -5,6 +5,7 @@ const (
 	RootPattern = "/{$}"
 
 	DialogPath       = "/dialog"
+	InterfacePath    = "/api/"
 	LivePath         = "/event"
 	SearchPath       = "/search"
 	FaviconPath      = "/favicon.ico"

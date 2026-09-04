@@ -49,29 +49,36 @@ func Run(
 				o.Address,
 				func(m *http.ServeMux) {
 					t := s.Recorder()
-					generated.HandlerFromMux(
-						generated.NewStrictHandler(
-							server.New(v, r),
-							[]generated.StrictMiddlewareFunc{
-								func(
-									f generated.StrictHandlerFunc,
-									operation string,
-								) generated.StrictHandlerFunc {
-									return func(
-										x context.Context,
-										w http.ResponseWriter,
-										r *http.Request,
-										request any,
-									) (any, error) {
-										response, e := f(x, w, r, request)
-										webLib.RecordTelemetry(t, operation, e)
+					guard.New(m, o.ServiceTokens).TokenMount(
+						webConstant.InterfacePath,
+						generated.HandlerFromMux(
+							generated.NewStrictHandler(
+								server.New(v, r),
+								[]generated.StrictMiddlewareFunc{
+									func(
+										f generated.StrictHandlerFunc,
+										operation string,
+									) generated.StrictHandlerFunc {
+										return func(
+											x context.Context,
+											w http.ResponseWriter,
+											r *http.Request,
+											request any,
+										) (any, error) {
+											response, e := f(x, w, r, request)
+											webLib.RecordTelemetry(
+												t,
+												operation,
+												e,
+											)
 
-										return response, e
-									}
+											return response, e
+										}
+									},
 								},
-							},
+							),
+							http.NewServeMux(),
 						),
-						m,
 					)
 					model_context.New(v, r, t, o.Version).Mount(
 						guard.New(m, o.ServiceTokens),

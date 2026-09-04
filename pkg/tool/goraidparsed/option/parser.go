@@ -1,8 +1,9 @@
 package option
 
 type Parser struct {
-	Address      string
-	ParserPath   string
-	TemplatePath string
-	OutputPath   string
+	Address       string
+	ParserPath    string
+	TemplatePath  string
+	OutputPath    string
+	ServiceTokens []string
 }

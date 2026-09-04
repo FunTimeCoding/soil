@@ -5,5 +5,6 @@ type Flight struct {
 	PostgresLocator string
 	LitePath        string
 	Predicate       string
+	ServiceTokens   []string
 	Version         string
 }

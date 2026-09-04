@@ -27,6 +27,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/connect"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/indexer"
 	library "github.com/funtimecoding/soil/pkg/web"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"time"
@@ -75,29 +76,32 @@ func Run(
 	t := i.Recorder()
 	u := web.New(v)
 	setup := func(m *http.ServeMux) {
-		generated.HandlerFromMux(
-			generated.NewStrictHandler(
-				server.New(v, l, r, h, o.SessionExportPath),
-				[]generated.StrictMiddlewareFunc{
-					func(
-						f generated.StrictHandlerFunc,
-						operation string,
-					) generated.StrictHandlerFunc {
-						return func(
-							x context.Context,
-							w http.ResponseWriter,
-							q *http.Request,
-							request any,
-						) (any, error) {
-							response, e := f(x, w, q, request)
-							library.RecordTelemetry(t, operation, e)
+		guard.New(m, o.ServiceTokens).TokenMount(
+			webConstant.InterfacePath,
+			generated.HandlerFromMux(
+				generated.NewStrictHandler(
+					server.New(v, l, r, h, o.SessionExportPath),
+					[]generated.StrictMiddlewareFunc{
+						func(
+							f generated.StrictHandlerFunc,
+							operation string,
+						) generated.StrictHandlerFunc {
+							return func(
+								x context.Context,
+								w http.ResponseWriter,
+								q *http.Request,
+								request any,
+							) (any, error) {
+								response, e := f(x, w, q, request)
+								library.RecordTelemetry(t, operation, e)
 
-							return response, e
-						}
+								return response, e
+							}
+						},
 					},
-				},
+				),
+				http.NewServeMux(),
 			),
-			m,
 		)
 		model_context.New(v, r, l, t, o.Version).Mount(
 			guard.New(m, o.ServiceTokens),

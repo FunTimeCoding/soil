@@ -17,6 +17,11 @@
       "allowedVersions": "<= v0.6.9"
     },
     {
+      "matchPackageNames": ["github.com/mark3labs/mcp-go"],
+      "allowedVersions": "< v1.0.0",
+      "description": "pinned: 1.0 implements protocol 2026-07-28 which removed protocol-level sessions (SEP-2567); goclauded session binding needs transport-independent identity first"
+    },
+    {
       "matchPackageNames": ["github.com/gdamore/tcell/v2"],
       "allowedVersions": "<= v2.13.7"
     },

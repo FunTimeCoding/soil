@@ -17,6 +17,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/store"
 	raidWeb "github.com/funtimecoding/soil/pkg/tool/goraidd/web"
 	"github.com/funtimecoding/soil/pkg/web"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 )
@@ -49,29 +50,32 @@ func Run(
 				o.Address,
 				func(m *http.ServeMux) {
 					t := i.Recorder()
-					generated.HandlerFromMux(
-						generated.NewStrictHandler(
-							server.New(s, o.OutputPath, r),
-							[]generated.StrictMiddlewareFunc{
-								func(
-									f generated.StrictHandlerFunc,
-									operation string,
-								) generated.StrictHandlerFunc {
-									return func(
-										x context.Context,
-										w http.ResponseWriter,
-										r *http.Request,
-										request any,
-									) (any, error) {
-										response, e := f(x, w, r, request)
-										web.RecordTelemetry(t, operation, e)
+					guard.New(m, o.ServiceTokens).TokenMount(
+						webConstant.InterfacePath,
+						generated.HandlerFromMux(
+							generated.NewStrictHandler(
+								server.New(s, o.OutputPath, r),
+								[]generated.StrictMiddlewareFunc{
+									func(
+										f generated.StrictHandlerFunc,
+										operation string,
+									) generated.StrictHandlerFunc {
+										return func(
+											x context.Context,
+											w http.ResponseWriter,
+											r *http.Request,
+											request any,
+										) (any, error) {
+											response, e := f(x, w, r, request)
+											web.RecordTelemetry(t, operation, e)
 
-										return response, e
-									}
+											return response, e
+										}
+									},
 								},
-							},
+							),
+							http.NewServeMux(),
 						),
-						m,
 					)
 					u.Mount(guard.New(m, o.ServiceTokens))
 				},

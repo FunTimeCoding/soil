@@ -60,7 +60,7 @@ tasks:
     - cd pkg/tool/gotelemetryd/generated/server && oapi-codegen --config config.yaml openapi.yaml
     silent: true
   build: {cmds: ['go run cmd/gobuild/main.go'], silent: true}
-  update: {cmds: ['goupdate'], silent: true}
+  update: {cmds: ['goupdate --downgrade github.com/mark3labs/mcp-go@v0.58.0'], silent: true}
   update-library: {cmds: [true], silent: true}
   tool:
     cmds:
