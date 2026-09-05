@@ -3,7 +3,7 @@
 Where test files live. Testing patterns (mocks, lifecycle HTTP,
 stores) are in `testing.md`; fixture layout is in `fixture.md`.
 
-Every test file lives in a `unit_test/` or `integration_test/`
+Every test file lives in a `unit/` or `integration/`
 directory. Source packages carry no `_test.go` files. Analyzer
 `testdata/` trees are exempt — fixture `_test.go` files there are
 fixtures, not tests.
@@ -12,24 +12,29 @@ Both homes sit directly under a domain root: `pkg/<domain>/`,
 `pkg/tool/<name>/`, or the repository's equivalent top-level
 grouping (an `internal/<domain>/`). Deeper
 subsystems consolidate up — a subsystem's integration facets live
-at `<root>/integration_test/<facet>/`, not beside the subsystem.
+at `<root>/integration/<facet>/`, not beside the subsystem.
 
-## unit_test/
+## unit/
 
-One external test package per domain root — `pkg/<domain>/unit_test/`
-or `pkg/tool/<name>/unit_test/`, never per subpackage. Tests from the
+One test package per domain root — `pkg/<domain>/unit/`
+or `pkg/tool/<name>/unit/`, never per subpackage. Tests from the
 whole subtree consolidate up into it. One test binary per domain
 instead of one per package: cold runs stop paying link tax, and a
 shared-file edit relinks one binary.
+
+Test homes carry normal package names, so regular files coexist
+with tests: helpers live beside the tests as plain `.go` files,
+and every `_test.go` file holds at least one test.
 
 All-or-nothing per root: a single in-package `_test.go` left behind
 resurrects that package's test binary.
 
 ### Black-box only
 
-`package unit_test`, exercising the public API. When a test needs
-white-box access, change the code, not the test boundary — in order
-of preference:
+`package unit`, exercising the public API — the test home is a
+separate package from everything it tests, so unexported symbols
+stay out of reach. When a test needs white-box access, change the
+code, not the test boundary — in order of preference:
 
 1. Use an existing accessor.
 2. Export the symbol, or add the missing constructor.
@@ -65,7 +70,7 @@ catches inherited misnomers.
 
 ## The line
 
-`unit_test/` is in-process; `integration_test/` crosses a process
+`unit/` is in-process; `integration/` crosses a process
 boundary or needs the environment.
 
 In-memory sqlite stores, fixture-file parsers, and in-process HTTP
@@ -75,12 +80,12 @@ integration. Environment-dependent integration tests additionally
 carry a build tag (`//go:build local`, `ci`); hermetic ones run
 untagged.
 
-## integration_test/
+## integration/
 
 Facet subpackages, one per surface:
 
 ```
-integration_test/
+integration/
 ├── base/                  # shared setup: exported, non-test code
 ├── client/                # generated REST client workflows
 ├── model_context/         # MCP tools
@@ -91,7 +96,7 @@ integration_test/
 
 `base/` exports the stack constructor (`New(t) *Server` with
 accessors and `Close()`) as plain package source — the
-`pkg/tool/goalertlogd/integration_test/base` shape. Setup
+`pkg/tool/goalertlogd/integration/base` shape. Setup
 constructors compile untagged even when the tests they serve are
 tagged: environment reads happen at call time, so tags belong on
 the test files only.

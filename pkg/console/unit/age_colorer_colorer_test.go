@@ -1,0 +1,43 @@
+package unit
+
+import (
+	"github.com/fatih/color"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/console/age_colorer"
+	"github.com/funtimecoding/soil/pkg/console/age_colorer/age_fixture"
+	"github.com/funtimecoding/soil/pkg/console/constant"
+	"github.com/funtimecoding/soil/pkg/math/range_mapping"
+	"github.com/funtimecoding/soil/pkg/math/ranges"
+	"testing"
+	"time"
+)
+
+func TestAgeColorerDefault(t *testing.T) {
+	g := age_fixture.New(0 * time.Hour)
+	y := age_fixture.New(15 * time.Hour)
+	r := age_fixture.New(30 * time.Hour)
+	c := age_colorer.Default(g, y, r)
+	assert.Any(
+		t,
+		[]*range_mapping.Mapping{
+			{Range: ranges.Range{L: 0, R: 0.3333333333333333}, Value: "green"},
+			{
+				Range: ranges.Range{
+					L: 0.3333333333333333,
+					R: 0.6666666666666666,
+				},
+				Value: "yellow",
+			},
+			{Range: ranges.Range{L: 0.6666666666666666, R: 1}, Value: "red"},
+		},
+		c.Mapping(),
+	)
+	c.Set(g)
+	c.Set(y)
+	c.Set(r)
+	color.NoColor = false
+	// Not sure if function pointers can be compared, so compare output
+	assert.String(t, constant.Green("%s", "g"), g.AgeColor()("g"))
+	assert.String(t, constant.Yellow("%s", "y"), y.AgeColor()("y"))
+	assert.String(t, constant.Red("%s", "r"), r.AgeColor()("r"))
+}

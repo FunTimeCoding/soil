@@ -1,0 +1,72 @@
+package integration
+
+import (
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/integration/web_interface_tester"
+	"net/http"
+	"net/url"
+	"testing"
+)
+
+func TestWebInterface(t *testing.T) {
+	o := web_interface_tester.New(t)
+	defer o.Close()
+	o.AssertStatus(constant.DashboardPath, http.StatusOK)
+	o.AssertStatus(constant.EntriesPath, http.StatusOK)
+	o.AssertStatus(constant.AddEntryPath, http.StatusOK)
+	assert.StringContains(t, "No entries found", o.Get(constant.DashboardPath))
+	addBody := o.PostForm(
+		constant.AddEntryPath,
+		url.Values{
+			"action":      {"restarted web server"},
+			"user":        {"jdoe"},
+			"system":      {"worker1"},
+			"service":     {"nginx"},
+			"description": {"nginx was unresponsive, restarted"},
+		},
+	)
+	assert.StringContains(t, "Entry added", addBody)
+	assert.StringContains(t, "restarted web server", addBody)
+	assert.StringContains(
+		t,
+		"restarted web server",
+		o.Get(constant.DashboardPath),
+	)
+	assert.StringContains(t, "jdoe", o.Get(constant.DashboardPath))
+	assert.StringContains(t, "worker1", o.Get(constant.EntriesPath))
+	detail := o.Get("/detail?id=1")
+	assert.StringContains(t, "nginx was unresponsive, restarted", detail)
+	assert.StringContains(t, "Edit", detail)
+	assert.StringContains(t, "Delete", detail)
+	assert.StringContains(t, "Permalink", detail)
+	assert.StringContains(t, `href="/entry/1"`, detail)
+	o.AssertStatus("/entry/1", http.StatusOK)
+	page := o.Get("/entry/1")
+	assert.StringContains(t, "nginx was unresponsive, restarted", page)
+	assert.StringContains(t, "worker1", page)
+	o.AssertStatus("/entry/9999", http.StatusNotFound)
+	assert.StringContains(
+		t,
+		"This entry no longer exists",
+		o.Get("/entry/9999"),
+	)
+	o.AssertStatus("/entry/nonsense", http.StatusNotFound)
+	edit := o.Get("/edit?id=1")
+	assert.StringContains(t, "restarted web server", edit)
+	assert.StringContains(t, "Save", edit)
+	editBody := o.PostForm(
+		"/edit?id=1",
+		url.Values{
+			"action":      {"cleared and documented"},
+			"user":        {"jdoe"},
+			"system":      {"worker1"},
+			"service":     {"nginx"},
+			"description": {"nginx was unresponsive, restarted and documented"},
+			"timestamp":   {"2026-03-19T10:00"},
+		},
+	)
+	assert.StringContains(t, "cleared and documented", editBody)
+	o.PostForm("/delete?id=1", nil)
+	assert.StringContains(t, "No entries found", o.Get(constant.DashboardPath))
+}

@@ -1,0 +1,11 @@
+package unit
+
+import (
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/text/constant"
+	"testing"
+)
+
+func TestConstant(t *testing.T) {
+	assert.String(t, "WIKI_PATH", constant.WikiPathEnvironment)
+}

@@ -14,7 +14,7 @@ pkg/tool/go<tool>/
 ├── option/
 │   ├── <name>.go                   # Option struct (named after tool/domain, not "Option")
 │   └── new.go                      # Factory: New() *<Name>
-├── unit_test/
+├── unit/
 │   └── option_test.go              # assert.NotNil(t, option.New()) - see test-placement.md
 ├── constant/
 │   └── constant.go                 # Tool constants (bucket names, identity)

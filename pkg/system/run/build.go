@@ -12,6 +12,10 @@ func (r *Run) build(s ...string) *exec.Cmd {
 		c.Dir = r.Directory
 	}
 
+	if r.Input != nil {
+		c.Stdin = r.Input
+	}
+
 	if len(r.environment) > 0 {
 		if r.replaceEnviron {
 			c.Env = r.environment

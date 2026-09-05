@@ -23,6 +23,10 @@ func retargetImports(
 	prefix := join.Empty(packagePath, "/")
 
 	for _, loaded := range all {
+		if strings.HasSuffix(loaded.ID, ".test") {
+			continue
+		}
+
 		for _, file := range loaded.Syntax {
 			touched := false
 

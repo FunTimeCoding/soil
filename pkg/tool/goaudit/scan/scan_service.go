@@ -33,7 +33,7 @@ func scanService(
 	)
 	s.Worker = v.DirectoryExists(filepath.Join(path, "worker"))
 	s.IntegrationTests = v.DirectoryExists(
-		filepath.Join(path, constant.IntegrationTestDirectory),
+		filepath.Join(path, constant.IntegrationDirectory),
 	)
 	s.Option = v.DirectoryExists(filepath.Join(path, "option"))
 	s.Run = v.Has(filepath.Join(path, "run.go"))

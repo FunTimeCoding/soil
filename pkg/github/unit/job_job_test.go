@@ -1,0 +1,21 @@
+package unit
+
+import (
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/github/job"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
+	"github.com/google/go-github/v90/github"
+	"testing"
+	"time"
+)
+
+func TestJob(t *testing.T) {
+	r := job.New(
+		&github.WorkflowJob{
+			Name:      new(constant.UpperAlfa),
+			CreatedAt: &github.Timestamp{},
+		},
+	)
+	r.Raw = nil
+	assert.Any(t, &job.Job{Name: "Alfa", CreatedAt: time.Time{}}, r)
+}

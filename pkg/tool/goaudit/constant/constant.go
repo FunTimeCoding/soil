@@ -20,10 +20,10 @@ const (
 	ClaudeSettingsPath       = ".claude/settings.local.json"
 	ConstantDirectory        = "constant"
 	ConstantFileName         = "constant.go"
-	IntegrationTestDirectory = "integration_test"
+	IntegrationDirectory     = "integration"
 	ModelContextDirectory    = "model_context"
 	PackageDirectory         = "pkg"
 	TestdataDirectory        = "testdata"
 	ToolDirectory            = "tool"
-	UnitTestDirectory        = "unit_test"
+	UnitDirectory            = "unit"
 )

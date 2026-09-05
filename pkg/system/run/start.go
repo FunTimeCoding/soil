@@ -18,11 +18,24 @@ func (r *Run) Start(s ...string) string {
 	c := r.build(s...)
 	var stdout bytes.Buffer
 	var stderr bytes.Buffer
-	c.Stdout = &stdout
-	c.Stderr = &stderr
+
+	if r.stdout == nil {
+		c.Stdout = &stdout
+	}
+
+	if r.stderr == nil {
+		c.Stderr = &stderr
+	}
+
 	e := r.startAndWait(c)
-	r.OutputString = stdout.String()
-	r.ErrorString = stderr.String()
+
+	if r.stdout == nil {
+		r.OutputString = stdout.String()
+	}
+
+	if r.stderr == nil {
+		r.ErrorString = stderr.String()
+	}
 
 	if e != nil {
 		r.Error = command.New(

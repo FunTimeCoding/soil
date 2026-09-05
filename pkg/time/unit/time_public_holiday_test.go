@@ -1,0 +1,14 @@
+package unit
+
+import (
+	"github.com/funtimecoding/soil/pkg/assert"
+	library "github.com/funtimecoding/soil/pkg/time"
+	"github.com/funtimecoding/soil/pkg/time/day"
+	"testing"
+	"time"
+)
+
+func TestPublicHoliday(t *testing.T) {
+	assert.True(t, library.PublicHoliday(day.New(2024, time.November, 1)))
+	assert.False(t, library.PublicHoliday(day.New(2024, time.November, 2)))
+}

@@ -52,6 +52,10 @@ func (s *Service) MovePackage(
 
 	p := findPackage(all, packagePath)
 
+	if p == nil || len(p.GoFiles) == 0 {
+		p = findTestPackage(all, packagePath)
+	}
+
 	if p == nil {
 		return failValidation(
 			r,

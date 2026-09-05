@@ -14,6 +14,7 @@ type Run struct {
 	stderr         io.Writer
 	registry       face.ProcessRegistry
 	Directory      string
+	Input          io.Reader
 	Panic          bool
 	Verbose        bool
 	OutputString   string

@@ -44,6 +44,10 @@ func (s *Service) RenamePackage(
 	}
 
 	if len(p.GoFiles) == 0 {
+		p = findTestPackage(all, packagePath)
+	}
+
+	if p == nil || len(p.GoFiles) == 0 {
 		return failValidation(
 			r,
 			fmt.Sprintf("package has no Go files: %s", packagePath),

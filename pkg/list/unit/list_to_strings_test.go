@@ -1,0 +1,22 @@
+package unit
+
+import (
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/list"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
+	"testing"
+)
+
+type Fixture string
+
+func (f Fixture) String() string {
+	return string(f)
+}
+
+func TestToStrings(t *testing.T) {
+	assert.Strings(
+		t,
+		[]string{"Alfa", "Bravo"},
+		list.ToStrings([]Fixture{constant.UpperAlfa, constant.UpperBravo}),
+	)
+}
