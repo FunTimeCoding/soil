@@ -6,14 +6,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/alpine/package_server"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
-	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
+	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	strings "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/constant"
-	generated "github.com/funtimecoding/soil/pkg/tool/goalpined/generated/server"
-	"github.com/funtimecoding/soil/pkg/tool/goalpined/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/option"
-	"github.com/funtimecoding/soil/pkg/tool/goalpined/server"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -27,48 +24,19 @@ func Run(
 	t := i.Recorder()
 	l := logger.New(context.Background())
 	s := package_server.NewEnvironment()
-	c := model_context.New(r, t, o.Version)
 	lifecycle.New(
 		l,
 		lifecycle.WithServer(
-			lifecycleServer.New(
+			server.New(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					g := guard.New(m, o.ServiceTokens)
-					inner := http.NewServeMux()
-					s.Mount(inner)
-					generated.HandlerFromMux(
-						generated.NewStrictHandler(
-							server.New(r),
-							[]generated.StrictMiddlewareFunc{
-								func(
-									f generated.StrictHandlerFunc,
-									operation string,
-								) generated.StrictHandlerFunc {
-									return func(
-										x context.Context,
-										w http.ResponseWriter,
-										q *http.Request,
-										request any,
-									) (any, error) {
-										response, e := f(x, w, q, request)
-										web.RecordTelemetry(t, operation, e)
-
-										return response, e
-									}
-								},
-							},
-						),
-						inner,
-					)
-					g.TokenMount("/", inner)
-					c.Mount(m)
+					Mount(s, r, t, o.Version, guard.New(m, o.ServiceTokens))
 				},
 			).WithMiddleware(web.RecoveryMiddleware(r)),
 		),
 		lifecycle.WithServer(
-			lifecycleServer.New(
+			server.New(
 				constant.Identity,
 				constant.FileAddress,
 				func(m *http.ServeMux) {

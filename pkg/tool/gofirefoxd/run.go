@@ -8,7 +8,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/option"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
@@ -37,7 +36,11 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					model_context.New(c, r, s.Recorder(), o.Version).Mount(
+					Mount(
+						c,
+						r,
+						s.Recorder(),
+						o.Version,
 						guard.New(m, o.ServiceTokens),
 					)
 				},

@@ -8,15 +8,23 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goquery/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"time"
 )
 
 func Wait(l *logger.Logger) *client.Client {
-	host := environment.Required(constant.HostEnvironment)
-	port := environment.RequiredInteger(constant.PortEnvironment)
-	base := locator.New(host).Port(port).Insecure().String()
-	c, e := client.NewClient(base)
+	base := locator.Environment(
+		constant.HostEnvironment,
+		constant.PortEnvironment,
+		constant.InsecureEnvironment,
+	).String()
+	c, e := client.NewClient(
+		base,
+		client.WithRequestEditorFn(
+			web.BearerEditor(environment.Required(constant.TokenEnvironment)),
+		),
+	)
 	errors.PanicOnError(e)
 	deadline := time.Now().Add(time.Minute)
 

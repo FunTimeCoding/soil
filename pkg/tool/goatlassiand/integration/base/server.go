@@ -7,5 +7,5 @@ import (
 
 type Server struct {
 	MockClient    *mock_client.Client
-	ContextServer *model_context_server.Server
+	*model_context_server.Server
 }

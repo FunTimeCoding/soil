@@ -1,14 +1,18 @@
 package client
 
 import (
-	alpine "github.com/funtimecoding/soil/pkg/alpine/constant"
+	"github.com/funtimecoding/soil/pkg/alpine/constant"
 	"github.com/funtimecoding/soil/pkg/system/environment"
-	"github.com/funtimecoding/soil/pkg/tool/goalpined/constant"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
 func NewEnvironment() *Client {
 	return New(
-		environment.Required(constant.HostEnvironment),
-		environment.Required(alpine.TokenEnvironment),
+		locator.Environment(
+			constant.HostEnvironment,
+			constant.PortEnvironment,
+			constant.InsecureEnvironment,
+		),
+		environment.Required(constant.TokenEnvironment),
 	)
 }

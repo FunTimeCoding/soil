@@ -9,7 +9,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gosproutd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/store"
@@ -38,10 +37,14 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					model_context.New(v, r, i.Recorder(), o.Version).Mount(
+					Mount(
+						v,
+						u,
+						r,
+						i.Recorder(),
+						o.Version,
 						guard.New(m, o.ServiceTokens),
 					)
-					u.Mount(guard.New(m, o.ServiceTokens))
 				},
 			).WithMiddleware(u.Recovery(r)),
 		),

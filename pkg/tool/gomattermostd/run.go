@@ -5,16 +5,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/chat/mattermost"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
-	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
+	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/constant"
-	generated "github.com/funtimecoding/soil/pkg/tool/gomattermostd/generated/server"
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/monitor"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/option"
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/server"
 	"github.com/funtimecoding/soil/pkg/web"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 )
@@ -39,27 +35,18 @@ func Run(
 		append(
 			p,
 			lifecycle.WithServer(
-				lifecycleServer.New(
+				server.New(
 					constant.Identity,
 					o.Address,
 					func(u *http.ServeMux) {
-						guard.New(u, o.ServiceTokens).TokenMount(
-							webConstant.InterfacePath,
-							generated.HandlerFromMux(
-								generated.NewStrictHandler(
-									server.New(c, o.Version, r),
-									nil,
-								),
-								http.NewServeMux(),
-							),
-						)
-						model_context.New(
+						Mount(
 							c,
 							m,
 							r,
 							s.Recorder(),
 							o.Version,
-						).Mount(guard.New(u, o.ServiceTokens))
+							guard.New(u, o.ServiceTokens),
+						)
 					},
 				).WithMiddleware(web.RecoveryMiddleware(r)),
 			),

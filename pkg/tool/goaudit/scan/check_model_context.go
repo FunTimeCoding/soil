@@ -3,6 +3,7 @@ package scan
 import (
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
+	"go/ast"
 	"path/filepath"
 )
 
@@ -31,4 +32,34 @@ func (s *Service) checkModelContext(
 	if v.Has(filepath.Join(mc, "nested.go")) {
 		s.addConcern(constant.StaleNestedKey, constant.StaleNestedText, path)
 	}
+
+	f := parseWebFile(v, filepath.Join(mc, constant.NewFileName))
+
+	if f == nil {
+		return
+	}
+
+	ast.Inspect(
+		f,
+		func(n ast.Node) bool {
+			c, okay := n.(*ast.CallExpr)
+
+			if !okay {
+				return true
+			}
+
+			if m, okay := c.Fun.(*ast.SelectorExpr); okay &&
+				m.Sel.Name == "NewMCPServer" {
+				s.addConcern(
+					constant.RawModelContextServerKey,
+					constant.RawModelContextServerText,
+					path,
+				)
+
+				return false
+			}
+
+			return true
+		},
+	)
 }

@@ -30,5 +30,9 @@ const (
 	Firing     = "firing"
 	Resolved   = "resolved"
 )
-const HostEnvironment = "ALERT_LOG_HOST"
-const TokenEnvironment = "ALERT_LOG_TOKEN"
+const (
+	HostEnvironment     = "GOALERTLOG_HOST"
+	PortEnvironment     = "GOALERTLOG_PORT"
+	InsecureEnvironment = "GOALERTLOG_INSECURE"
+	TokenEnvironment    = "GOALERTLOG_TOKEN" // #nosec G101 not a hardcoded secret
+)

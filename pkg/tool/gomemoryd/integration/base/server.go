@@ -11,5 +11,5 @@ type Server struct {
 	t       *testing.T
 	store   *store.Store
 	indexer *mock_indexer.Indexer
-	server  *model_context_server.Server
+	*model_context_server.Server
 }

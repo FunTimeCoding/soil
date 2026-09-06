@@ -7,5 +7,5 @@ import (
 
 type Server struct {
 	*service_tester.Tester
-	server *model_context_server.Server
+	*model_context_server.Server
 }

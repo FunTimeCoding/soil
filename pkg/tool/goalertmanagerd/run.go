@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/option"
 	"github.com/funtimecoding/soil/pkg/tool/goalertmanagerd/service"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -28,7 +27,11 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					model_context.New(v, r, s.Recorder(), o.Version).Mount(
+					Mount(
+						v,
+						r,
+						s.Recorder(),
+						o.Version,
 						guard.New(m, o.ServiceTokens),
 					)
 				},

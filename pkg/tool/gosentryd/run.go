@@ -8,7 +8,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gosentryd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/option"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
@@ -27,13 +26,14 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					model_context.New(
+					Mount(
 						sentry.NewEnvironment(),
 						o.Organization,
 						r,
 						s.Recorder(),
 						o.Version,
-					).Mount(guard.New(m, o.ServiceTokens))
+						guard.New(m, o.ServiceTokens),
+					)
 				},
 			).WithMiddleware(web.RecoveryMiddleware(r)),
 		),

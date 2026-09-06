@@ -5,12 +5,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/model_context/mock_recorder"
-	generated "github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/server"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/model_context"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/server"
+	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/web"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/mock_indexer"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -28,19 +27,17 @@ func New(t *testing.T) *Server {
 		t:       t,
 		store:   s,
 		indexer: i,
-		server: model_context_server.New(
+		Server: model_context_server.New(
 			t,
-			func(m *http.ServeMux, g *guard.Mux) {
-				generated.HandlerFromMux(
-					generated.NewStrictHandler(server.New(v, r), nil),
-					m,
-				)
-				model_context.New(
+			func(_ *http.ServeMux, g *guard.Mux) {
+				gomemoryd.Mount(
 					v,
+					web.New(v),
 					r,
 					mock_recorder.New(),
 					constant.DefaultVersion,
-				).Mount(g)
+					g,
+				)
 			},
 		),
 	}

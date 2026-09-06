@@ -7,16 +7,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
-	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
+	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/ticker"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	generated "github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/option"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/server"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/sweep"
@@ -26,8 +23,6 @@ import (
 	memory "github.com/funtimecoding/soil/pkg/tool/gomemoryd/connect"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/connect"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/indexer"
-	library "github.com/funtimecoding/soil/pkg/web"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"time"
@@ -76,40 +71,20 @@ func Run(
 	t := i.Recorder()
 	u := web.New(v)
 	setup := func(m *http.ServeMux) {
-		guard.New(m, o.ServiceTokens).TokenMount(
-			webConstant.InterfacePath,
-			generated.HandlerFromMux(
-				generated.NewStrictHandler(
-					server.New(v, l, r, h, o.SessionExportPath),
-					[]generated.StrictMiddlewareFunc{
-						func(
-							f generated.StrictHandlerFunc,
-							operation string,
-						) generated.StrictHandlerFunc {
-							return func(
-								x context.Context,
-								w http.ResponseWriter,
-								q *http.Request,
-								request any,
-							) (any, error) {
-								response, e := f(x, w, q, request)
-								library.RecordTelemetry(t, operation, e)
-
-								return response, e
-							}
-						},
-					},
-				),
-				http.NewServeMux(),
-			),
-		)
-		model_context.New(v, r, l, t, o.Version).Mount(
+		Mount(
+			v,
+			u,
+			l,
+			r,
+			h,
+			o.SessionExportPath,
+			t,
+			o.Version,
 			guard.New(m, o.ServiceTokens),
 		)
-		u.Mount(guard.New(m, o.ServiceTokens))
 	}
 	middleware := u.Recovery(r)
-	srv := lifecycleServer.New(constant.Identity, address, setup).
+	srv := server.New(constant.Identity, address, setup).
 		WithMiddleware(middleware).
 		WithProfiling().
 		WithDefaultCertificate()

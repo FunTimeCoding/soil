@@ -9,7 +9,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/metric"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/web"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/worker"
@@ -45,13 +44,14 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(x *http.ServeMux) {
-					model_context.New(
+					Mount(
 						c.Nested(),
+						b,
 						r,
 						s.Recorder(),
 						o.Version,
-					).Mount(guard.New(x, o.ServiceTokens))
-					b.Mount(guard.New(x, o.ServiceTokens))
+						guard.New(x, o.ServiceTokens),
+					)
 				},
 			).WithMiddleware(b.Recovery(r)),
 		),

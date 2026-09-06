@@ -4,18 +4,13 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
-	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
+	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
-	generated "github.com/funtimecoding/soil/pkg/tool/gomaintlogd/generated/server"
-	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/option"
-	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/server"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store"
-	maintenanceWeb "github.com/funtimecoding/soil/pkg/tool/gomaintlogd/web"
-	"github.com/funtimecoding/soil/pkg/web"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 )
@@ -28,46 +23,22 @@ func Run(
 	g := logger.New(context.Background())
 	s := store.New(relational.Open(g, o.PostgresLocator, o.LitePath))
 	defer s.Close()
-	v := maintenanceWeb.New(s)
+	v := web.New(s)
 	lifecycle.New(
 		g,
 		lifecycle.WithServer(
-			lifecycleServer.New(
+			server.New(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					t := i.Recorder()
-					guard.New(m, o.ServiceTokens).TokenMount(
-						webConstant.InterfacePath,
-						generated.HandlerFromMux(
-							generated.NewStrictHandler(
-								server.New(s, r),
-								[]generated.StrictMiddlewareFunc{
-									func(
-										f generated.StrictHandlerFunc,
-										operation string,
-									) generated.StrictHandlerFunc {
-										return func(
-											x context.Context,
-											w http.ResponseWriter,
-											r *http.Request,
-											request any,
-										) (any, error) {
-											response, e := f(x, w, r, request)
-											web.RecordTelemetry(t, operation, e)
-
-											return response, e
-										}
-									},
-								},
-							),
-							http.NewServeMux(),
-						),
-					)
-					model_context.New(s, r, t, o.Version).Mount(
+					Mount(
+						s,
+						v,
+						r,
+						i.Recorder(),
+						o.Version,
 						guard.New(m, o.ServiceTokens),
 					)
-					v.Mount(guard.New(m, o.ServiceTokens))
 				},
 			).WithMiddleware(v.Recovery(r)),
 		),

@@ -30,3 +30,10 @@ const (
 	GetUserProfile    = "get_user_profile"
 	RunMonitoring     = "run_monitoring"
 )
+
+const (
+	HostEnvironment     = "GOMATTERMOST_HOST"
+	PortEnvironment     = "GOMATTERMOST_PORT"
+	InsecureEnvironment = "GOMATTERMOST_INSECURE"
+	TokenEnvironment    = "GOMATTERMOST_TOKEN" // #nosec G101 not a hardcoded secret
+)

@@ -1,7 +1,10 @@
 package constant
 
 const (
-	TokenEnvironment        = "ALPINE_TOKEN"
+	HostEnvironment         = "GOALPINE_HOST"
+	PortEnvironment         = "GOALPINE_PORT"
+	InsecureEnvironment     = "GOALPINE_INSECURE"
+	TokenEnvironment        = "GOALPINE_TOKEN"
 	SignatureKeyEnvironment = "ALPINE_SIGNATURE_KEY"
 
 	SignaturePrefix = ".SIGN.RSA."

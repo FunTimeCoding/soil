@@ -4,20 +4,17 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
-	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
+	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/collector/bluetooth"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/collector/stream"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/collector/wireless"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/constant"
-	generated "github.com/funtimecoding/soil/pkg/tool/goflightd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/janitor"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/option"
-	"github.com/funtimecoding/soil/pkg/tool/goflightd/server"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/store"
 	"github.com/funtimecoding/soil/pkg/web"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"time"
@@ -51,38 +48,11 @@ func Run(
 	options = append(
 		options,
 		lifecycle.WithServer(
-			lifecycleServer.New(
+			server.New(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					t := i.Recorder()
-					guard.New(m, o.ServiceTokens).TokenMount(
-						webConstant.InterfacePath,
-						generated.HandlerFromMux(
-							generated.NewStrictHandler(
-								server.New(s, r),
-								[]generated.StrictMiddlewareFunc{
-									func(
-										f generated.StrictHandlerFunc,
-										operation string,
-									) generated.StrictHandlerFunc {
-										return func(
-											x context.Context,
-											w http.ResponseWriter,
-											r *http.Request,
-											request any,
-										) (any, error) {
-											response, e := f(x, w, r, request)
-											web.RecordTelemetry(t, operation, e)
-
-											return response, e
-										}
-									},
-								},
-							),
-							http.NewServeMux(),
-						),
-					)
+					Mount(s, r, i.Recorder(), guard.New(m, o.ServiceTokens))
 				},
 			).WithMiddleware(web.RecoveryMiddleware(r)),
 		),

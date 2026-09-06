@@ -9,11 +9,11 @@ import (
 )
 
 func New(
-	host string,
+	l *locator.Locator,
 	token string,
 ) *Client {
 	c, e := client.NewClientWithResponses(
-		locator.New(host).String(),
+		l.String(),
 		client.WithRequestEditorFn(web.BearerEditor(token)),
 	)
 	errors.PanicOnError(e)

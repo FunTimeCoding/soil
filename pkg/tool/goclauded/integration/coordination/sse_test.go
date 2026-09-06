@@ -80,7 +80,7 @@ func connectSSE(
 	t.Helper()
 	l := fmt.Sprintf(
 		"http://localhost:%d/event?subscribe=roster,activity,summary",
-		s.Port(),
+		s.Port,
 	)
 	r, e := http.Get(l)
 	assert.FatalOnError(t, e)

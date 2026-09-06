@@ -10,13 +10,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/mock_client"
 	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
-	generated "github.com/funtimecoding/soil/pkg/tool/goalertlogd/generated/server"
-	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/model_context"
-	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/server"
+	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/web"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/worker"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/model_context/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
@@ -49,19 +47,16 @@ func New(t *testing.T) *Server {
 	w.Poll()
 	v := model_context_server.New(
 		t,
-		func(m *http.ServeMux, g *guard.Mux) {
-			generated.HandlerFromMux(
-				generated.NewStrictHandler(server.New(s, w, r), nil),
-				m,
-			)
-			model_context.New(
+		func(_ *http.ServeMux, g *guard.Mux) {
+			goalertlogd.Mount(
 				s,
 				w,
+				web.New(s, w),
 				r,
 				mock_recorder.New(),
 				constant.DefaultVersion,
-			).Mount(g)
-			web.New(s, w).Mount(g)
+				g,
+			)
 		},
 	)
 
@@ -69,6 +64,6 @@ func New(t *testing.T) *Server {
 		Store:         s,
 		Worker:        w,
 		MockClient:    c,
-		ContextServer: v,
+		Server: v,
 	}
 }

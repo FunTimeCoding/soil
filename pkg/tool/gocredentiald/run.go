@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/gocredentiald/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gocredentiald/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gocredentiald/option"
 	"github.com/funtimecoding/soil/pkg/tool/gocredentiald/service"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -30,7 +29,11 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					model_context.New(v, r, i.Recorder(), o.Version).Mount(
+					Mount(
+						v,
+						r,
+						i.Recorder(),
+						o.Version,
 						guard.New(m, o.ServiceTokens),
 					)
 				},

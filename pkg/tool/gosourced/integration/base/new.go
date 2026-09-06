@@ -5,9 +5,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/model_context/mock_recorder"
+	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/inventory"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -26,14 +26,15 @@ func New(
 	v := model_context_server.New(
 		t,
 		func(m *http.ServeMux, g *guard.Mux) {
-			model_context.New(
+			gosourced.Mount(
 				s,
 				memory.New(),
 				mock_recorder.New(),
 				constant.DefaultVersion,
-			).Mount(g)
+				g,
+			)
 		},
 	)
 
-	return &Server{ContextServer: v, Directory: d}
+	return &Server{Server: v, Directory: d}
 }

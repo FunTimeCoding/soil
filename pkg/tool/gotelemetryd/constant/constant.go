@@ -35,4 +35,6 @@ const (
 	HeatmapPath  = "/"
 	EventsTitle  = "Events"
 	EventsPath   = "/events"
+
+	IngestPattern = "POST /api/events"
 )

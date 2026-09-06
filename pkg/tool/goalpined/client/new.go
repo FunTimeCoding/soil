@@ -9,10 +9,10 @@ import (
 )
 
 func New(
-	host string,
+	l *locator.Locator,
 	token string,
 ) *Client {
-	base := locator.New(host).String()
+	base := l.String()
 	c, e := client.NewClientWithResponses(
 		base,
 		client.WithRequestEditorFn(web.BearerEditor(token)),

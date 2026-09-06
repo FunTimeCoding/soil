@@ -8,7 +8,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gochromed/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/option"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
@@ -28,13 +27,14 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					model_context.New(
+					Mount(
 						c,
 						o.DownloadDirectory,
 						r,
 						s.Recorder(),
 						o.Version,
-					).Mount(guard.New(m, o.ServiceTokens))
+						guard.New(m, o.ServiceTokens),
+					)
 				},
 			).WithMiddleware(web.RecoveryMiddleware(r)),
 		),

@@ -19,7 +19,7 @@ func (o *Tester) Submit(
 	t.Helper()
 	r, e := http.NewRequest(
 		http.MethodPost,
-		fmt.Sprintf("http://127.0.0.1:%d%s", o.Server.Port(), path),
+		fmt.Sprintf("http://127.0.0.1:%d%s", o.Server.Port, path),
 		strings.NewReader(values.Encode()),
 	)
 	assert.FatalOnError(t, e)

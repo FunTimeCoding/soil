@@ -4,20 +4,16 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
-	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
+	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/metric"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager"
 	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
-	generated "github.com/funtimecoding/soil/pkg/tool/goalertlogd/generated/server"
-	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/option"
-	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/server"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store"
-	alertWeb "github.com/funtimecoding/soil/pkg/tool/goalertlogd/web"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/web"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/worker"
-	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -42,12 +38,12 @@ func Run(
 		30*24*time.Hour,
 		m.Registry(),
 	)
-	u := alertWeb.New(s, w)
+	u := web.New(s, w)
 	lifecycle.New(
 		g,
 		lifecycle.WithWorker(w),
 		lifecycle.WithServer(
-			lifecycleServer.New(
+			server.New(
 				constant.Identity,
 				o.MetricAddress,
 				func(x *http.ServeMux) {
@@ -56,42 +52,19 @@ func Run(
 			),
 		),
 		lifecycle.WithServer(
-			lifecycleServer.New(
+			server.New(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					t := i.Recorder()
-					guard.New(m, o.ServiceTokens).TokenMount(
-						webConstant.InterfacePath,
-						generated.HandlerFromMux(
-							generated.NewStrictHandler(
-								server.New(s, w, r),
-								[]generated.StrictMiddlewareFunc{
-									func(
-										f generated.StrictHandlerFunc,
-										operation string,
-									) generated.StrictHandlerFunc {
-										return func(
-											x context.Context,
-											w http.ResponseWriter,
-											r *http.Request,
-											request any,
-										) (any, error) {
-											response, e := f(x, w, r, request)
-											web.RecordTelemetry(t, operation, e)
-
-											return response, e
-										}
-									},
-								},
-							),
-							http.NewServeMux(),
-						),
-					)
-					model_context.New(s, w, r, t, o.Version).Mount(
+					Mount(
+						s,
+						w,
+						u,
+						r,
+						i.Recorder(),
+						o.Version,
 						guard.New(m, o.ServiceTokens),
 					)
-					u.Mount(guard.New(m, o.ServiceTokens))
 				},
 			).WithMiddleware(u.Recovery(r)),
 		),

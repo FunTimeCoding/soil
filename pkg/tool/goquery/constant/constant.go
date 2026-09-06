@@ -9,6 +9,8 @@ var Identity = identity.New(
 )
 
 const (
-	HostEnvironment = "QUERY_HOST"
-	PortEnvironment = "QUERY_PORT"
+	HostEnvironment     = "GOQUERY_HOST"
+	PortEnvironment     = "GOQUERY_PORT"
+	InsecureEnvironment = "GOQUERY_INSECURE"
+	TokenEnvironment    = "GOQUERY_TOKEN" // #nosec G101 not a hardcoded secret
 )

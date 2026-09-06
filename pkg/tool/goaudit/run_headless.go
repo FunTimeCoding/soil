@@ -36,5 +36,9 @@ func runHeadless(
 		r.AddConcern(c)
 	}
 
+	for _, c := range scan.ClientConstants(v) {
+		r.AddConcern(c)
+	}
+
 	return output.PrintResults(r.Entries, false)
 }

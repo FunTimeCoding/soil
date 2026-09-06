@@ -14,6 +14,4 @@ const (
 	ListPackages = "list_packages"
 
 	FileAddress = ":8081"
-
-	HostEnvironment = "ALPINE_HOST"
 )

@@ -1,15 +1,14 @@
 package server
 
 import (
-	"github.com/funtimecoding/soil/pkg/atlassian/confluence"
-	"github.com/funtimecoding/soil/pkg/atlassian/jira"
 	"github.com/funtimecoding/soil/pkg/face"
+	atlassianFace "github.com/funtimecoding/soil/pkg/tool/goatlassiand/face"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/service"
 )
 
 func New(
-	l *jira.Client,
-	c *confluence.Client,
+	l atlassianFace.JiraSource,
+	c atlassianFace.ConfluenceSource,
 	r face.Reporter,
 ) *Server {
 	return &Server{

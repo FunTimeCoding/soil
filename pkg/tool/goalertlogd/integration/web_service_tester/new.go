@@ -2,8 +2,10 @@ package web_service_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	generative "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/integration/base"
+	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"testing"
@@ -13,7 +15,10 @@ func New(t *testing.T) *Tester {
 	t.Helper()
 	s := base.New(t)
 	c, e := client.NewClientWithResponses(
-		locator.New(constant.Localhost).Insecure().Port(s.ContextServer.Port).String(),
+		locator.New(constant.Localhost).Insecure().Port(s.Port).String(),
+		client.WithRequestEditorFn(
+			web.BearerEditor(generative.ModelContextTestToken),
+		),
 	)
 	assert.FatalOnError(t, e)
 

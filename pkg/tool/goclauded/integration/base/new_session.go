@@ -8,5 +8,5 @@ import (
 func (s *Server) NewSession(t *testing.T) *model_context_tester.Session {
 	t.Helper()
 
-	return model_context_tester.New(t, s.server.Port)
+	return model_context_tester.New(t, s.Port)
 }

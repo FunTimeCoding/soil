@@ -9,7 +9,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/store"
@@ -39,13 +38,14 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					model_context.New(
+					Mount(
 						s,
 						o.ReadOnly,
 						r,
 						i.Recorder(),
 						o.Version,
-					).Mount(guard.New(m, o.ServiceTokens))
+						guard.New(m, o.ServiceTokens),
+					)
 				},
 			).WithMiddleware(web.RecoveryMiddleware(r)),
 		),

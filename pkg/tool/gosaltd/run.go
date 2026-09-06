@@ -11,7 +11,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/system/reaper"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gosaltd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/runner"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -40,7 +39,12 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					model_context.New(n, s, r, i.Recorder(), o.Version).Mount(
+					Mount(
+						n,
+						s,
+						r,
+						i.Recorder(),
+						o.Version,
 						guard.New(m, o.ServiceTokens),
 					)
 				},

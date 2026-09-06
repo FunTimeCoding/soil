@@ -9,6 +9,10 @@ func (s *Service) collectWarnings(
 ) {
 	s.checkStaleDirectories(v, path)
 	s.checkModelContext(v, path)
+	s.checkGuardBattery(v, path)
+	s.checkServiceMount(v, path)
+	s.checkRecordingMiddleware(v, path)
+	s.checkRootRoutes(v, path)
 	s.checkTopLevelArgument(v, path)
 	s.checkTopLevelResponse(v, path)
 	s.checkOption(path)

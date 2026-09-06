@@ -33,6 +33,7 @@ func Main(
 			c.Initialize(
 				host,
 				port,
+				environment.Exists(constant.InsecureEnvironment),
 				environment.Required(constant.TokenEnvironment),
 			)
 		},
@@ -46,7 +47,7 @@ func Main(
 	o.PersistentFlags().IntVar(
 		&port,
 		"port",
-		environment.FallbackInteger(constant.PortEnvironment, web.ListenPort),
+		environment.FallbackInteger(constant.PortEnvironment, 0),
 		"goclauded port",
 	)
 	o.AddCommand(sessionBranch(c))

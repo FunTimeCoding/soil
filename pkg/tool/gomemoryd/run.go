@@ -4,22 +4,17 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
-	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
+	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
-	generated "github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/memory_indexer"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/option"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/server"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
-	memoryWeb "github.com/funtimecoding/soil/pkg/tool/gomemoryd/web"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/web"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/connect"
-	"github.com/funtimecoding/soil/pkg/web"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 )
@@ -37,46 +32,22 @@ func Run(
 		environment.Fallback(constant.HiddenTagEnvironment, ""),
 	)
 	reconcileMemories(v)
-	u := memoryWeb.New(v)
+	u := web.New(v)
 	lifecycle.New(
 		l,
 		lifecycle.WithServer(
-			lifecycleServer.New(
+			server.New(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					t := i.Recorder()
-					guard.New(m, o.ServiceTokens).TokenMount(
-						webConstant.InterfacePath,
-						generated.HandlerFromMux(
-							generated.NewStrictHandler(
-								server.New(v, r),
-								[]generated.StrictMiddlewareFunc{
-									func(
-										f generated.StrictHandlerFunc,
-										operation string,
-									) generated.StrictHandlerFunc {
-										return func(
-											x context.Context,
-											w http.ResponseWriter,
-											r *http.Request,
-											request any,
-										) (any, error) {
-											response, e := f(x, w, r, request)
-											web.RecordTelemetry(t, operation, e)
-
-											return response, e
-										}
-									},
-								},
-							),
-							http.NewServeMux(),
-						),
-					)
-					model_context.New(v, r, t, o.Version).Mount(
+					Mount(
+						v,
+						u,
+						r,
+						i.Recorder(),
+						o.Version,
 						guard.New(m, o.ServiceTokens),
 					)
-					u.Mount(guard.New(m, o.ServiceTokens))
 				},
 			).WithMiddleware(u.Recovery(r)),
 		),

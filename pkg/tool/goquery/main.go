@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goquery/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/spf13/cobra"
 )
@@ -18,9 +19,16 @@ func Main(
 ) {
 	r := reporter.New(constant.Identity.Name(), version).Start()
 	defer func() { r.RecoverFlush(recover()) }()
-	host := environment.Required(constant.HostEnvironment)
-	port := environment.RequiredInteger(constant.PortEnvironment)
-	c, e := client.NewClient(locator.New(host).Port(port).Insecure().String())
+	c, e := client.NewClient(
+		locator.Environment(
+			constant.HostEnvironment,
+			constant.PortEnvironment,
+			constant.InsecureEnvironment,
+		).String(),
+		client.WithRequestEditorFn(
+			web.BearerEditor(environment.Required(constant.TokenEnvironment)),
+		),
+	)
 	errors.PanicOnError(e)
 	o := &cobra.Command{
 		Use:     constant.Identity.Usage(),

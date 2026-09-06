@@ -15,9 +15,11 @@ import (
 )
 
 func Wait(l *logger.Logger) memoryClient.Client {
-	host := environment.Required(constant.HostEnvironment)
-	port := environment.RequiredInteger(constant.PortEnvironment)
-	base := locator.New(host).Port(port).Insecure().String()
+	base := locator.Environment(
+		constant.HostEnvironment,
+		constant.PortEnvironment,
+		constant.InsecureEnvironment,
+	).String()
 	c, e := generated.NewClient(
 		base,
 		generated.WithRequestEditorFn(

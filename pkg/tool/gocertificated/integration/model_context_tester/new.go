@@ -10,5 +10,5 @@ func New(t *testing.T) *Tester {
 	t.Helper()
 	s := base.New(t)
 
-	return &Tester{Server: s, Client: model_context_client.New(t, s.Port())}
+	return &Tester{Server: s, Client: model_context_client.New(t, s.Port)}
 }

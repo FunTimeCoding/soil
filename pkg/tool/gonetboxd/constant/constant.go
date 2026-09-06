@@ -89,8 +89,8 @@ const (
 	VirtualMachine = "virtual_machine"
 )
 const (
-	HostEnvironment     = "NETB_HOST"
-	TokenEnvironment    = "NETB_TOKEN"
-	PortEnvironment     = "NETB_PORT"
-	InsecureEnvironment = "NETB_INSECURE"
+	HostEnvironment     = "GONETBOX_HOST"
+	TokenEnvironment    = "GONETBOX_TOKEN"
+	PortEnvironment     = "GONETBOX_PORT"
+	InsecureEnvironment = "GONETBOX_INSECURE"
 )

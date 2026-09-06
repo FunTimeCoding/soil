@@ -15,7 +15,7 @@ func (o *Tester) Page(
 	t.Helper()
 	r, e := http.NewRequest(
 		http.MethodGet,
-		fmt.Sprintf("http://127.0.0.1:%d%s", o.Server.Port(), path),
+		fmt.Sprintf("http://127.0.0.1:%d%s", o.Server.Port, path),
 		nil,
 	)
 	assert.FatalOnError(t, e)

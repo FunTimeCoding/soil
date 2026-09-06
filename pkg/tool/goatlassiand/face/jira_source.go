@@ -54,4 +54,5 @@ type JiraSource interface {
 	) error
 	FindUsers(query string) ([]jira.User, error)
 	Basic() *basic.Client
+	Nested() *jira.Client
 }

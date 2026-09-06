@@ -7,5 +7,5 @@ import (
 
 type Server struct {
 	Store  *store.Store
-	server *model_context_server.Server
+	*model_context_server.Server
 }

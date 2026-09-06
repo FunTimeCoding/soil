@@ -73,6 +73,38 @@ Key helpers:
 - `assert.NotListen(t, port)` - asserts port is closed
 - `assert.HTTPStatus(t, url, expectedStatus)` - GET request + status assertion
 
+## Guard Battery
+
+Every guarded daemon has `integration/guard/guard_test.go` (package
+`guard`): it starts the production `Mount` on a dynamic port via
+`generative/model_context_server.New(t, setup)` and asserts the full
+auth contract with the battery methods, mirroring the mount surface:
+
+- `VerifyBase` — health and version open
+- `VerifyInterface` — the `/api/` tree rejects bare requests (probes
+  `/api/guard-probe`; never spell the probe path at a call site)
+- `VerifyGuarded(path)` / `VerifyOpen(path)` / `VerifyOpenPost(path)`
+  — one per guarded route worth naming and per open mount, including
+  the dashboard root and live path of web-carrying daemons
+- `VerifyModelContext` — 401 bare on `/mcp` and `/sse`, handshake
+  with the test token
+- `VerifyStatus(path, status)` — exact status for a bare request,
+  where route existence needs pinning (the other verbs accept any
+  non-401, so a dead route passes them)
+
+The battery never invokes tool or REST handlers, so domain
+dependencies enter as typed nils or empty constructions
+(`inventory.New()`, in-memory stores); clients that validate their
+environment at construction always enter as typed nils. Daemons with
+an integration base run the guard test through the base, and bases
+run the full production `Mount` — mock clients flow through it
+because `Mount`, the REST server, and the model_context package all
+consume the daemon's `face/` interfaces, never the concrete clients.
+Session (SSO) web surfaces assert their favicon instead of the
+dashboard — the sign-in redirect points at a fake gate the test
+client cannot follow. Tests pass `constant.DefaultVersion` where a
+mount takes a version.
+
 ## Typed Response Parsing
 
 Use a generic helper to parse JSON responses in tests:

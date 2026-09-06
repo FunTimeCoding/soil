@@ -20,14 +20,12 @@ func Main(
 ) {
 	s := instrument.New(constant.Identity, version)
 	defer func() { s.Flush(recover()) }()
-	host := environment.Optional(constant.HostEnvironment)
-
-	if host == "" {
-		host = constant.DefaultHost
-	}
-
 	c, e := client.NewClientWithResponses(
-		locator.New(host).Insecure().String(),
+		locator.Environment(
+			constant.HostEnvironment,
+			constant.PortEnvironment,
+			constant.InsecureEnvironment,
+		).String(),
 		client.WithRequestEditorFn(
 			web.BearerEditor(environment.Required(constant.TokenEnvironment)),
 		),

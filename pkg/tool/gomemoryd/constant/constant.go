@@ -11,10 +11,11 @@ var Identity = identity.New(
 )
 
 const (
-	HostEnvironment      = "MEMORY_HOST"
-	TokenEnvironment     = "MEMORY_TOKEN"
-	PortEnvironment      = "MEMORY_PORT"
-	HiddenTagEnvironment = "MEMORY_HIDDEN_TAG"
+	HostEnvironment      = "GOMEMORY_HOST"
+	TokenEnvironment     = "GOMEMORY_TOKEN"
+	PortEnvironment      = "GOMEMORY_PORT"
+	InsecureEnvironment  = "GOMEMORY_INSECURE"
+	HiddenTagEnvironment = "GOMEMORY_HIDDEN_TAG"
 	TagCutset            = "[]\" \t"
 	TagStripNotice       = "Stripped [ ] \" from tag input, saved as:"
 

@@ -15,7 +15,7 @@ func New(
 
 	return &Tester{
 		server:    s,
-		Client:    model_context_client.New(t, s.ContextServer.Port),
+		Client:    model_context_client.New(t, s.Port),
 		Directory: s.Directory,
 	}
 }

@@ -9,7 +9,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/environment"
-	"github.com/funtimecoding/soil/pkg/tool/goprocessd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/option"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/procfile"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/server"
@@ -47,7 +46,11 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					model_context.New(s, r, i.Recorder(), o.Version).Mount(
+					Mount(
+						s,
+						r,
+						i.Recorder(),
+						o.Version,
 						guard.New(m, o.ServiceTokens),
 					)
 				},

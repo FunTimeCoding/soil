@@ -28,7 +28,8 @@ const (
 	Text         = "text"
 )
 const (
-	HostEnvironment     = "HAB_HOST"
-	PortEnvironment     = "HAB_PORT"
-	InsecureEnvironment = "HAB_INSECURE"
+	HostEnvironment     = "GOHABITICA_HOST"
+	PortEnvironment     = "GOHABITICA_PORT"
+	InsecureEnvironment = "GOHABITICA_INSECURE"
+	TokenEnvironment    = "GOHABITICA_TOKEN" // #nosec G101 not a hardcoded secret
 )

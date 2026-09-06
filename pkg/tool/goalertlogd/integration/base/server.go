@@ -11,5 +11,5 @@ type Server struct {
 	Store         *store.Store
 	Worker        *worker.Worker
 	MockClient    *mock_client.Client
-	ContextServer *model_context_server.Server
+	*model_context_server.Server
 }

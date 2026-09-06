@@ -13,5 +13,5 @@ type Server struct {
 	store    *store.Store
 	embedder face.Embedder
 	reranker *rerank.Reranker
-	server   *model_context_server.Server
+	*model_context_server.Server
 }

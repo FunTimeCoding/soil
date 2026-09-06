@@ -76,10 +76,10 @@ const (
 	TransitionIdentifier = "transition_identifier"
 )
 const (
-	HostEnvironment     = "ATL_HOST"
-	TokenEnvironment    = "ATL_TOKEN"
-	PortEnvironment     = "ATL_PORT"
-	InsecureEnvironment = "ATL_INSECURE"
+	HostEnvironment     = "GOATLASSIAN_HOST"
+	TokenEnvironment    = "GOATLASSIAN_TOKEN"
+	PortEnvironment     = "GOATLASSIAN_PORT"
+	InsecureEnvironment = "GOATLASSIAN_INSECURE"
 )
 
 const (

@@ -42,10 +42,10 @@ const (
 )
 
 const (
-	HostEnvironment     = "GOPNSENSED_HOST"
-	TokenEnvironment    = "GOPNSENSED_TOKEN"
-	PortEnvironment     = "GOPNSENSED_PORT"
-	InsecureEnvironment = "GOPNSENSED_INSECURE"
+	HostEnvironment     = "GOPNSENSE_HOST"
+	TokenEnvironment    = "GOPNSENSE_TOKEN"
+	PortEnvironment     = "GOPNSENSE_PORT"
+	InsecureEnvironment = "GOPNSENSE_INSECURE"
 )
 
 const DefaultLogLimit = 100

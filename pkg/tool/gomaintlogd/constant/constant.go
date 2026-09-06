@@ -37,6 +37,8 @@ const (
 	DeletePath     = "/delete"
 	AddEntryPath   = "/add"
 
-	HostEnvironment  = "MAINTENANCE_LOG_HOST"
-	TokenEnvironment = "MAINTENANCE_LOG_TOKEN"
+	HostEnvironment     = "GOMAINTLOG_HOST"
+	PortEnvironment     = "GOMAINTLOG_PORT"
+	InsecureEnvironment = "GOMAINTLOG_INSECURE"
+	TokenEnvironment    = "GOMAINTLOG_TOKEN" // #nosec G101 not a hardcoded secret
 )

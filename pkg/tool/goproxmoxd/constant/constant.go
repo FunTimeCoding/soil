@@ -72,8 +72,8 @@ const (
 	DeleteMachine             = "delete_machine"
 )
 const (
-	HostEnvironment     = "PROX_HOST"
-	TokenEnvironment    = "PROX_TOKEN"
-	PortEnvironment     = "PROX_PORT"
-	InsecureEnvironment = "PROX_INSECURE"
+	HostEnvironment     = "GOPROXMOX_HOST"
+	TokenEnvironment    = "GOPROXMOX_TOKEN"
+	PortEnvironment     = "GOPROXMOX_PORT"
+	InsecureEnvironment = "GOPROXMOX_INSECURE"
 )

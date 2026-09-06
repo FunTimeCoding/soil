@@ -6,12 +6,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/generative/ollama"
 	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/model_context/mock_recorder"
-	generated "github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/server"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/model_context"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/server"
+	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
@@ -30,19 +29,17 @@ func New(t *testing.T) *Server {
 		store:    s,
 		embedder: l,
 		reranker: a,
-		server: model_context_server.New(
+		Server: model_context_server.New(
 			t,
-			func(m *http.ServeMux, g *guard.Mux) {
-				generated.HandlerFromMux(
-					generated.NewStrictHandler(server.New(v, r), nil),
-					m,
-				)
-				model_context.New(
+			func(_ *http.ServeMux, g *guard.Mux) {
+				goqueryd.Mount(
 					v,
+					web.New(v),
 					r,
 					mock_recorder.New(),
 					constant.DefaultVersion,
-				).Mount(g)
+					g,
+				)
 			},
 		),
 	}

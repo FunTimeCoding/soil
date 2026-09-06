@@ -10,10 +10,21 @@ import (
 func (c *Context) Initialize(
 	host string,
 	port int,
+	insecure bool,
 	token string,
 ) {
+	l := locator.New(host)
+
+	if port != 0 {
+		l.Port(port)
+	}
+
+	if insecure {
+		l.Insecure()
+	}
+
 	r, e := client.NewClientWithResponses(
-		locator.New(host).Port(port).String(),
+		l.String(),
 		client.WithRequestEditorFn(web.BearerEditor(token)),
 	)
 	errors.PanicOnError(e)

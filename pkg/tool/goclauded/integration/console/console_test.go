@@ -11,7 +11,7 @@ import (
 func TestRegisterReturnsCallsign(t *testing.T) {
 	s := base.New(t)
 	defer s.Close()
-	c := console_tester.New(t, s.Port())
+	c := console_tester.New(t, s.Port)
 	callsign := c.Register("session-1")
 	assert.True(t, callsign != "")
 }
@@ -19,7 +19,7 @@ func TestRegisterReturnsCallsign(t *testing.T) {
 func TestRegisterSameSessionReturnsSameCallsign(t *testing.T) {
 	s := base.New(t)
 	defer s.Close()
-	c := console_tester.New(t, s.Port())
+	c := console_tester.New(t, s.Port)
 	first := c.Register("session-1")
 	second := c.Register("session-1")
 	assert.String(t, first, second)
@@ -28,7 +28,7 @@ func TestRegisterSameSessionReturnsSameCallsign(t *testing.T) {
 func TestCheckEmptyQueueReturnsEmpty(t *testing.T) {
 	s := base.New(t)
 	defer s.Close()
-	c := console_tester.New(t, s.Port())
+	c := console_tester.New(t, s.Port)
 	c.Register("session-1")
 	output := c.Check("session-1")
 	assert.String(t, "", output)
@@ -37,7 +37,7 @@ func TestCheckEmptyQueueReturnsEmpty(t *testing.T) {
 func TestCheckWithSessionActivity(t *testing.T) {
 	s := base.New(t)
 	defer s.Close()
-	c := console_tester.New(t, s.Port())
+	c := console_tester.New(t, s.Port)
 	c.Register("session-2")
 	a := s.NewSession(t)
 	defer a.Close()
@@ -50,7 +50,7 @@ func TestCheckWithSessionActivity(t *testing.T) {
 func TestCheckConsumesEntries(t *testing.T) {
 	s := base.New(t)
 	defer s.Close()
-	c := console_tester.New(t, s.Port())
+	c := console_tester.New(t, s.Port)
 	c.Register("session-2")
 	a := s.NewSession(t)
 	defer a.Close()
@@ -64,7 +64,7 @@ func TestCheckConsumesEntries(t *testing.T) {
 func TestCheckTimeout(t *testing.T) {
 	s := base.New(t)
 	defer s.Close()
-	c := console_tester.New(t, s.Port())
+	c := console_tester.New(t, s.Port)
 	callsign := c.Register("session-1")
 	s.Announce("session-1", callsign, "working", "")
 	c.Check("session-1")
@@ -81,7 +81,7 @@ func TestCheckTimeout(t *testing.T) {
 func TestCheckDirectMessage(t *testing.T) {
 	s := base.New(t)
 	defer s.Close()
-	c := console_tester.New(t, s.Port())
+	c := console_tester.New(t, s.Port)
 	receiver := c.Register("session-1")
 	sender := c.Register("session-2")
 	c.Check("session-1")
@@ -94,7 +94,7 @@ func TestCheckDirectMessage(t *testing.T) {
 func TestCheckCompletionActivity(t *testing.T) {
 	s := base.New(t)
 	defer s.Close()
-	c := console_tester.New(t, s.Port())
+	c := console_tester.New(t, s.Port)
 	c.Register("session-1")
 	other := c.Register("session-2")
 	s.Announce("session-2", other, "indexing", "")
@@ -113,7 +113,7 @@ func TestCheckReannounceAfterClearBindings(t *testing.T) {
 	defer a.Close()
 	a.Announce(a.Name(), "building things")
 	a.CheckLive()
-	c := console_tester.New(t, s.Port())
+	c := console_tester.New(t, s.Port)
 	c.Register("session-2")
 	c.Check("session-2")
 	s.Service.ClearBindings()

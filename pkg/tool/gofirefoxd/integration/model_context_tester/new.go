@@ -12,7 +12,7 @@ func New(t *testing.T) *Tester {
 
 	return &Tester{
 		server:     s,
-		Client:     model_context_client.New(t, s.ContextServer.Port),
+		Client:     model_context_client.New(t, s.Port),
 		MockClient: s.MockClient,
 	}
 }

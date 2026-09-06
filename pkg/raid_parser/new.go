@@ -9,16 +9,9 @@ import (
 )
 
 func New(
-	host string,
-	insecure bool,
+	l *locator.Locator,
 	token string,
 ) *Client {
-	l := locator.New(host)
-
-	if insecure {
-		l.Insecure()
-	}
-
 	c, e := client.NewClientWithResponses(
 		l.String(),
 		client.WithRequestEditorFn(web.BearerEditor(token)),

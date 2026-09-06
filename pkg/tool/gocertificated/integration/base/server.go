@@ -13,5 +13,5 @@ type Server struct {
 	Service       *service.Service
 	Forge         *mock_client.Client
 	Authorization *client.Client
-	server        *model_context_server.Server
+	*model_context_server.Server
 }

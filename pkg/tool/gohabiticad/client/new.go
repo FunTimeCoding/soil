@@ -4,21 +4,18 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/generated/client"
+	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
 func New(
-	host string,
-	port int,
-	insecure bool,
+	l *locator.Locator,
+	token string,
 ) *Client {
-	l := locator.New(host).Port(port)
-
-	if insecure {
-		l.Insecure()
-	}
-
-	c, e := client.NewClient(l.String())
+	c, e := client.NewClient(
+		l.String(),
+		client.WithRequestEditorFn(web.BearerEditor(token)),
+	)
 	errors.PanicOnError(e)
 
 	return &Client{context: context.Background(), client: c}

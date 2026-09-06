@@ -12,10 +12,11 @@ var Identity = identity.New(
 )
 
 const (
-	NameEnvironment  = "CLAUDE_NAME"
-	HostEnvironment  = "CLAUDE_HOST"
-	PortEnvironment  = "CLAUDE_PORT"
-	TokenEnvironment = "CLAUDE_TOKEN"
+	NameEnvironment     = "GOCLAUDE_NAME"
+	HostEnvironment     = "GOCLAUDE_HOST"
+	PortEnvironment     = "GOCLAUDE_PORT"
+	InsecureEnvironment = "GOCLAUDE_INSECURE"
+	TokenEnvironment    = "GOCLAUDE_TOKEN"
 	PeekOutputBudget = 120
 	PeekContextLimit = 200
 

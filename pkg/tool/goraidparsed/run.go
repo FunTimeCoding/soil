@@ -7,11 +7,9 @@ import (
 	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/constant"
-	generated "github.com/funtimecoding/soil/pkg/tool/goraidparsed/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/option"
 	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/server"
 	"github.com/funtimecoding/soil/pkg/web"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 )
@@ -29,39 +27,16 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					t := s.Recorder()
-					guard.New(m, o.ServiceTokens).TokenMount(
-						webConstant.InterfacePath,
-						generated.HandlerFromMux(
-							generated.NewStrictHandler(
-								server.New(
-									o.ParserPath,
-									o.TemplatePath,
-									o.OutputPath,
-									l,
-									r,
-								),
-								[]generated.StrictMiddlewareFunc{
-									func(
-										f generated.StrictHandlerFunc,
-										operation string,
-									) generated.StrictHandlerFunc {
-										return func(
-											x context.Context,
-											w http.ResponseWriter,
-											r *http.Request,
-											request any,
-										) (any, error) {
-											response, e := f(x, w, r, request)
-											web.RecordTelemetry(t, operation, e)
-
-											return response, e
-										}
-									},
-								},
-							),
-							http.NewServeMux(),
+					Mount(
+						server.New(
+							o.ParserPath,
+							o.TemplatePath,
+							o.OutputPath,
+							l,
+							r,
 						),
+						s.Recorder(),
+						guard.New(m, o.ServiceTokens),
 					)
 				},
 			).WithMiddleware(web.RecoveryMiddleware(r)),

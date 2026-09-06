@@ -172,8 +172,9 @@ defer func() { s.Flush(recover()) }()
   and `face.Reporter` for downstream components
 - `RecordCommand(name)` records a successful CLI command; it takes a
   string so the package stays cobra-free
-- The recorder reads `TELEMETRY_HOST` and `TELEMETRY_PORT`, speaking
-  https unless `TELEMETRY_INSECURE` is set
+- The recorder reads `GOTELEMETRY_HOST` and `GOTELEMETRY_PORT`
+  (falling back to localhost and the 8080 listen default), speaking
+  https unless `GOTELEMETRY_INSECURE` is set
 - Daemon `Run()` accepts `face.Instrument` and pulls the halves where
   it wires them; the concrete `*instrument.Instrument` never crosses
   `Run()`
