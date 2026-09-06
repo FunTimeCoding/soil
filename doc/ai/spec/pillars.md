@@ -8,30 +8,31 @@ graceful degradation, and usage insight.
 
 | Pillar | Where constructed | Where threaded |
 |--------|-------------------|----------------|
-| Reporter | `Main()` via `reporter.New` | `Run()` param -> workers, recovery middleware, model_context |
+| Reporter | `Main()` via `instrument.New` (the reporter half) | `Run()` pulls `i.Reporter()` -> workers, recovery middleware, model_context |
 | Logger | `Run()` via `logger.New(ctx)` | Workers, lifecycle |
 | Recovery | `Run()` via middleware + `recovery.New` | HTTP servers, worker loops |
-| Telemetry | `Run()` via `telemetry.NewEnvironment()` (inside the server setup callback) | REST strict middleware, MCP recorder hook |
+| Telemetry | `Main()` via `instrument.New` (the recorder half) | `Run()` pulls `i.Recorder()` -> `Mount()` recording middleware, MCP recorder hook |
 
 ## Vigilance
 
-The pillars are required, not optional. `telemetry.NewEnvironment()`
-uses `environment.Required` - the daemon exits at startup when the
-telemetry host and port variables are missing. The reporter tolerates
-an empty locator in code (noop hub, no nil checks - see below), but
-every deployment sets `SENTRY_LOCATOR`; a missing locator is a
-deployment mistake, not an operating mode. Fail loud at startup over
-running blind.
+The pillars are required, not optional - every service constructs
+all four unconditionally, with no branching on configuration. The
+recorder falls back to localhost and the listen default when
+`GOTELEMETRY_HOST` and `GOTELEMETRY_PORT` are unset (https unless
+`GOTELEMETRY_INSECURE`); the reporter tolerates an empty locator
+(noop hub, no nil checks - see below). Every deployment still sets
+`SENTRY_LOCATOR` and the telemetry family - absence is a
+deployment mistake, not an operating mode.
 
 ## Wiring Order
 
-`Main()` creates the reporter unconditionally. Empty locator produces
-noop behavior - no branching, no nil. `Run()` receives the reporter
-as `face.Reporter` (not on the option struct - option structs hold
-configuration, not constructed dependencies). `Run()` creates the
-logger and wires everything into lifecycle. The telemetry recorder is
-constructed inside the server setup callback, where both surfaces
-that consume it live.
+`Main()` creates the instrument unconditionally - `instrument.New`
+bundles the reporter and recorder behind one constructor and one
+exit defer (see `entrypoint.md`). Empty Sentry locator produces
+noop behavior - no branching, no nil. `Run()` receives it as
+`face.Instrument` (not on the option struct - option structs hold
+configuration, not constructed dependencies), pulls the halves
+where it wires them, and creates the logger.
 
 ```go
 func Main(
@@ -39,32 +40,31 @@ func Main(
     gitHash string,
     buildDate string,
 ) {
-    r := reporter.New(constant.Identity.Name(), version).Start()
-    defer func() { r.RecoverFlush(recover()) }()
-
+    s := instrument.New(constant.Identity, version)
+    defer func() { s.Flush(recover()) }()
     a := argument.NewInstance(constant.Identity)
     // ... register flags
     a.Parse(version, gitHash, buildDate)
     o := option.New()
     // ... populate option fields
-    Run(o, r)
+    Run(o, s)
 }
 ```
 
 ```go
-func Run(o *option.Config, r face.Reporter) {
+func Run(o *option.Config, i face.Instrument) {
+    r := i.Reporter()
     l := logger.New(context.Background())
     lifecycle.New(
         l,
         lifecycle.WithWorker(worker.New(l, r)),
         lifecycle.WithServer(
             server.New(
+                constant.Identity,
                 o.Address,
                 func(m *http.ServeMux) {
-                    t := telemetry.NewEnvironment()
-                    // REST: strict handler + telemetry middleware
-                    // MCP: model_context.New(..., t, ...).Mount(guard.New(m, o.ServiceTokens))
-                    // see model-context.md for the full wiring
+                    // domain deps first - see service-tool.md
+                    Mount(r, i.Recorder(), o.Version, guard.New(m, o.ServiceTokens))
                 },
             ).WithMiddleware(web.RecoveryMiddleware(r)),
         ),
@@ -98,15 +98,11 @@ Every REST operation and MCP tool call is recorded as a baseline
 event via `face.Recorder`, feeding gotelemetryd (usage heatmaps by
 tool, surface, actor, and outcome).
 
-**REST surface** - an inline `StrictMiddlewareFunc` closure wraps the
+**REST surface** - `web.RecordingMiddleware`, instantiated per
+service with its generated `StrictHandlerFunc` type, wraps the
 generated handlers and calls `web.RecordTelemetry(t, operation, e)`
-after each call. The closure is pasted per service and that is the
-canon pattern: each generated package declares its own
-`StrictHandlerFunc` type, so a shared middleware cannot type-check
-against all of them (the old `web.TelemetryMiddleware` was removed
-for this reason). If oapi-codegen ever supports emitting the wrapper
-inside `generated/`, the closure moves there - until then, paste the
-block. Full example in `model-context.md`.
+after each call - the type parameter is what lets the one helper
+serve every generated package. Full example in `generated-api.md`.
 
 **MCP surface** - `WithRecorder(t)` on the mark server factory
 installs an AfterCallTool hook that records every tool call. See
@@ -138,6 +134,6 @@ streaming endpoint governs the timeout choice. Mixed servers
 | Component | Logger | Reporter | Telemetry | Why |
 |-----------|--------|----------|-----------|-----|
 | Lifecycle workers | Yes (constructor param) | Yes (for recovery.New) | No | Workers need both for recovery logging |
-| HTTP route handlers | Via recovery middleware | Via recovery middleware | Via strict middleware | Middleware catches panics and records operations |
+| HTTP route handlers | Via recovery middleware | Via recovery middleware | Via recording middleware | Middleware catches panics and records operations |
 | MCP tool handlers | Not directly | Via Server struct + captureFail | Via WithRecorder hook | Tier 2 errors use captureFail -> response.CaptureFail |
 | Startup one-shot tasks | Yes (from Run) | Yes (for recovery.New if looping) | No | Same recovery pattern as workers |

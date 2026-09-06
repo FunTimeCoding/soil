@@ -279,174 +279,27 @@ func (s *Server) captureFail(
 
 ## REST Strict Server
 
-Services with REST APIs use oapi-codegen's strict server mode for
-typed request/response handling and telemetry middleware.
+Services with REST APIs use oapi-codegen's strict server mode.
+The full pattern - configs, handlers, error schemas, recording
+middleware, mounting - lives in `generated-api.md`; the error
+tiers and REST `captureFail` in `error-handling/rest.md`. MCP and
+REST share the `convert/` layer, the reporter, and the recorder.
 
-### Generation config
+## Wiring into mount.go
 
-```yaml
-generate:
-  std-http-server: true
-  strict-server: true
-  models: true
-  embedded-spec: true
-```
-
-### OpenAPI error schemas
-
-Every spec includes two error schemas, defined inline on each
-endpoint (not via `components/responses/` - those generate
-struct embeddings instead of direct type aliases, bug #1864):
-
-```yaml
-Error:
-  type: object
-  required: [error]
-  properties:
-    error:
-      type: string
-ErrorResponse:
-  type: object
-  required: [error, event_identifier]
-  properties:
-    error:
-      type: string
-    event_identifier:
-      type: string
-```
-
-`Error` is for 400/404 responses (tier 1 - input validation,
-application-level validation like missing instance selection).
-No Sentry event ID.
-
-`ErrorResponse` is for 500 responses (tier 2/3 - infrastructure
-failures). Carries the Sentry event ID so the caller can look
-up the full error.
-
-### Strict handler pattern
-
-Handlers implement `StrictServerInterface` - typed request objects
-in, typed response objects out, no `http.ResponseWriter`:
+MCP mounts through the daemon's top-level `Mount(...)` beside the
+REST tree, on the same `guard.Mux` (full shape in
+`generated-api.md`) - REST routes (`/api/...`) and MCP routes
+(`/mcp`, `/sse`, `/message`) don't conflict:
 
 ```go
-func (s *Server) GetAlerts(
-    _ context.Context,
-    r server.GetAlertsRequestObject,
-) (server.GetAlertsResponseObject, error) {
-    records, e := s.store.ByName(r.Params.Name)
-
-    if e != nil {
-        return server.GetAlerts500JSONResponse(
-            *s.captureFail(e, "failed to query alerts"),
-        ), nil
-    }
-
-    return server.GetAlerts200JSONResponse(toResponse(records)), nil
-}
+model_context.New(s, r, t, version).Mount(g)
 ```
 
-### REST captureFail
-
-Same pattern as MCP captureFail but returns `*server.ErrorResponse`
-instead of `(*mcp.CallToolResult, error)`:
-
-```go
-func (s *Server) captureFail(
-    e error,
-    message string,
-) *server.ErrorResponse {
-    return &server.ErrorResponse{
-        Error:           message,
-        EventIdentifier: s.reporter.CaptureException(e),
-    }
-}
-```
-
-The Server struct holds `reporter face.Reporter` for Sentry capture.
-
-### REST telemetry middleware
-
-Telemetry is one of the four pillars - see `pillars.md` for where it
-fits in the wiring order and the design posture (required at startup,
-fire-and-forget at runtime).
-
-Each service wires an inline `StrictMiddlewareFunc` that receives
-the operationID from the strict server generated code and records
-baseline telemetry via `web.RecordTelemetry`. The closure is inline
-because each service's generated package defines its own
-`StrictHandlerFunc` type - a shared helper can't satisfy them all
-(the old `web.TelemetryMiddleware` was removed for this reason):
-
-```go
-generated.HandlerFromMux(
-    generated.NewStrictHandler(
-        server.New(s, r),
-        []generated.StrictMiddlewareFunc{
-            func(
-                f generated.StrictHandlerFunc,
-                operation string,
-            ) generated.StrictHandlerFunc {
-                return func(
-                    x context.Context,
-                    w http.ResponseWriter,
-                    r *http.Request,
-                    request any,
-                ) (any, error) {
-                    response, e := f(x, w, r, request)
-                    web.RecordTelemetry(t, operation, e)
-
-                    return response, e
-                }
-            },
-        },
-    ),
-    m,
-)
-```
-
-## Wiring into run.go
-
-Mount MCP and REST on the same mux - REST routes (`/api/...`) and
-MCP routes (`/mcp`, `/sse`, `/message`) don't conflict. The MCP
-mount goes through a `guard.Mux` built from the service tokens
-(`o.ServiceTokens`, threaded main - option - run via
-`web.ServiceTokens()`):
-
-```go
-import (
-    "github.com/funtimecoding/soil/pkg/telemetry"
-    "github.com/funtimecoding/soil/pkg/tool/go<tool>d/model_context"
-    generated "github.com/funtimecoding/soil/pkg/tool/go<tool>d/generated/server"
-    "github.com/funtimecoding/soil/pkg/web"
-    "github.com/funtimecoding/soil/pkg/web/guard"
-)
-
-lifecycle.WithServer(
-    server.New(
-        o.Address,
-        func(m *http.ServeMux) {
-            t := telemetry.NewEnvironment()
-            generated.HandlerFromMux(
-                generated.NewStrictHandler(
-                    server.New(s, r),
-                    []generated.StrictMiddlewareFunc{
-                        // inline telemetry closure - see REST
-                        // telemetry middleware above
-                    },
-                ),
-                m,
-            )
-            model_context.New(s, r, t, p, o.Version).Mount(
-                guard.New(m, o.ServiceTokens),
-            )
-        },
-    ).WithMiddleware(web.RecoveryMiddleware(r)),
-)
-```
-
-- `generated` is the standard alias for the oapi-codegen package (`pkg/tool/go<tool>d/generated/server`)
-- The local `model_context` and `server` packages are imported without alias
-- Same telemetry recorder for both MCP baseline and REST baseline
+The `model_context` package is imported without alias. The
+recorder comes from the instrument in `Main()` (`i.Recorder()`,
+see `entrypoint.md`) - same recorder for both MCP baseline and
+REST baseline.
 
 ## What Not To Do
 

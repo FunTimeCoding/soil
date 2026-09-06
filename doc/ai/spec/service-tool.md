@@ -10,12 +10,16 @@ cmd/go<tool>/
 
 pkg/tool/go<tool>/
 ├── main.go                         # Main(): register flags, parse, build option, call Run()
-├── run.go                          # Run(o): wiring, lifecycle, signal block
+├── run.go                          # Run(o, i): wiring, lifecycle, signal block
+├── mount.go                        # Mount(deps..., g *guard.Mux) - the served surface
 ├── option/
 │   ├── <name>.go                   # Option struct (named after tool/domain, not "Option")
 │   └── new.go                      # Factory: New() *<Name>
 ├── unit/
 │   └── option_test.go              # assert.NotNil(t, option.New()) - see test-placement.md
+├── integration/
+│   └── guard/
+│       └── guard_test.go           # Guard battery over Mount - see testing.md
 ├── constant/
 │   └── constant.go                 # Tool constants (bucket names, identity)
 ├── store/                          # Persistence (if needed)
@@ -84,12 +88,15 @@ travel via environment, not argv.
 
 ## Run Function
 
-`Run(o, r)` constructs components and wires lifecycle. It receives the
-reporter from `Main()` as `face.Reporter` - not on the option struct.
-See `pillars.md` for the full wiring rationale.
+`Run(o, i)` constructs components and wires lifecycle. It receives
+the instrument from `Main()` as `face.Instrument` - not on the
+option struct - and pulls the reporter and recorder where it wires
+them (see `entrypoint.md`). See `pillars.md` for the full wiring
+rationale.
 
 ```go
-func Run(o *option.Log, r face.Reporter) {
+func Run(o *option.Log, i face.Instrument) {
+    r := i.Reporter()
     l := logger.New(context.Background())
     s := store.New(o.LitePath)
     defer s.Close()
@@ -101,7 +108,7 @@ func Run(o *option.Log, r face.Reporter) {
                 constant.Identity,
                 o.Address,
                 func(m *http.ServeMux) {
-                    m.HandleFunc("/api/alerts", server.Alerts(s))
+                    Mount(s, r, i.Recorder(), o.Version, guard.New(m, o.ServiceTokens))
                 },
             ).WithMiddleware(web.RecoveryMiddleware(r)),
         ),
@@ -110,7 +117,8 @@ func Run(o *option.Log, r face.Reporter) {
 ```
 
 Key conventions:
-- Logger constructed first, threaded to workers and lifecycle
+- Reporter pulled from the instrument first, then the logger,
+  threaded to workers and lifecycle
 - Reporter threaded to workers (for `recovery.New`) and recovery middleware
 - Use `WithServer(server.New(...).WithMiddleware(web.RecoveryMiddleware(r)))` - add `.WithProtected()` for plain REST servers
 - Server address is `o.Address`, produced by `a.Address()` in
@@ -118,10 +126,43 @@ Key conventions:
   surfaces without flags (examples, callback servers) use
   `web.AddressPort`, which resolves the same `BIND_ADDRESS` >
   loopback chain
-- Routes registered in the `func(*http.ServeMux)` callback
+- The server callback builds one `guard.Mux`
+  (`guard.New(m, o.ServiceTokens)`) and hands it to the daemon's
+  `Mount()` - routes register there, never directly on the mux
 - `RunUntilSignal()` handles run, signal block, and reverse-order stop
 - Store closed via `defer` before lifecycle starts
 - Avoid declaring intermediate variables for lifecycle or generative server when only used once
+
+## Mount Function
+
+`mount.go` sits beside `run.go` and owns everything the daemon
+serves: the token-guarded REST tree, the MCP mount, and the web
+mount when present. Domain dependencies come first - through the
+daemon's `face/` interfaces where they exist - then reporter,
+recorder, version, and the `*guard.Mux` last:
+
+```go
+func Mount(
+    s *store.Store,
+    w *worker.Worker,
+    u *web.Server,
+    r face.Reporter,
+    t face.Recorder,
+    version string,
+    g *guard.Mux,
+) {
+    g.TokenMount(...)                                // REST - generated-api.md
+    model_context.New(s, w, r, t, version).Mount(g)  // MCP - model-context.md
+    u.Mount(g)                                       // web - HTML Web Package below
+}
+```
+
+`Mount` is the production surface: the guard battery
+(`integration/guard/guard_test.go`, see `testing.md`) starts it on
+a dynamic port and asserts the full auth contract, and goaudit's
+guard rules enforce that the battery and the mount shape exist. A
+route registered in the run.go callback instead of `Mount` escapes
+both the guard and the battery.
 
 ## Server Functions
 
@@ -399,8 +440,9 @@ The distinction:
 
 ## MCP Integration
 
-When a daemon also exposes MCP tools, add a `model_context/` subpackage
-and mount it on the same mux as the REST API. See `model-context.md`.
+When a daemon also exposes MCP tools, add a `model_context/`
+subpackage and mount it through the daemon's `Mount()` on the same
+`guard.Mux` as the REST API. See `model-context.md`.
 
 `model_context/` is the standard package name - not `tool/` or
 `toolset/`.
