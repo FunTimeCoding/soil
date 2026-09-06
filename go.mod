@@ -1,6 +1,6 @@
 module github.com/funtimecoding/soil
 
-go 1.27.0
+go 1.27.1
 
 require (
 	charm.land/bubbles/v2 v2.2.1
@@ -92,7 +92,7 @@ require (
 	github.com/trivago/tgo v1.0.7
 	github.com/whilp/git-urls v1.0.0
 	github.com/yuin/goldmark v1.8.6
-	gitlab.com/gitlab-org/api/client-go/v2 v2.63.0
+	gitlab.com/gitlab-org/api/client-go/v2 v2.64.0
 	golang.org/x/crypto v0.56.0
 	golang.org/x/mod v0.40.0
 	golang.org/x/net v0.58.0
@@ -113,7 +113,7 @@ require (
 	k8s.io/metrics v0.37.0
 	maragu.dev/gomponents v1.3.0
 	maragu.dev/gomponents-htmx v0.6.1
-	mvdan.cc/sh/v3 v3.14.0
+	mvdan.cc/sh/v3 v3.14.1
 	sigs.k8s.io/yaml v1.6.0
 )
 
