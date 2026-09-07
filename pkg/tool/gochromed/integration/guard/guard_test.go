@@ -1,13 +1,12 @@
 package guard
 
 import (
-	"github.com/funtimecoding/soil/pkg/chromium"
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gochromed/mock_client"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
@@ -18,7 +17,7 @@ func TestGuard(t *testing.T) {
 		t,
 		func(_ *http.ServeMux, g *guard.Mux) {
 			gochromed.Mount(
-				chromium.New(webConstant.Localhost, 9222),
+				mock_client.New(),
 				t.TempDir(),
 				memory.New(),
 				mock_recorder.New(),
