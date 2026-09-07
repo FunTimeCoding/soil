@@ -14,8 +14,10 @@ type Server struct {
 	envrcPath    string
 	socketPath   string
 	running      int
+	waveActive   bool
 	countMutex   sync.Mutex
 	processMutex sync.RWMutex
 	commandMutex sync.Mutex
+	waveMutex    sync.Mutex
 	allDone      chan struct{}
 }

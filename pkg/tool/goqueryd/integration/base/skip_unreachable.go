@@ -1,11 +1,11 @@
 package base
 
-import "testing"
+import (
+	"github.com/funtimecoding/soil/pkg/generative/ollama/reachable_skip"
+	"testing"
+)
 
 func (s *Server) SkipUnreachable(t *testing.T) {
 	t.Helper()
-
-	if !s.embedder.Reachable() {
-		t.Skipf("embed host unreachable: %s", s.embedder.Locator())
-	}
+	reachable_skip.Skip(t)
 }

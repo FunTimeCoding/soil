@@ -3,16 +3,11 @@ package server
 import "fmt"
 
 func (s *Server) handleRestartAll() string {
-	s.commandMutex.Lock()
-	defer s.commandMutex.Unlock()
+	count, e := s.RestartWave()
 
-	for _, p := range s.snapshotProcesses() {
-		if e := p.Stop(); e != nil {
-			return fmt.Sprintf("error: %s", e)
-		}
-
-		s.spawn(p)
+	if e != nil {
+		return fmt.Sprintf("error: %s", e)
 	}
 
-	return "ok"
+	return fmt.Sprintf("ok: restarting %d processes in the background", count)
 }

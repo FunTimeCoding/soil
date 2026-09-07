@@ -9,7 +9,7 @@ import (
 func NewEnvironment() *Client {
 	return New(
 		environment.Fallback(constant.HostEnvironment, web.Localhost),
-		environment.FallbackInteger(constant.PortEnvironment, web.ListenPort),
+		environment.FallbackInteger(constant.PortEnvironment, 0),
 		environment.Exists(constant.InsecureEnvironment),
 	)
 }

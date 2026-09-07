@@ -7,9 +7,27 @@ func (e *Environment) Load(path string) error {
 		return loadError
 	}
 
+	current, exportError := exported(path, e.base)
+
+	if exportError != nil {
+		return exportError
+	}
+
 	e.mutex.Lock()
+	defer e.mutex.Unlock()
+
+	for key := range e.exported {
+		if _, present := current[key]; !present {
+			e.deleted[key] = struct{}{}
+		}
+	}
+
+	for key := range current {
+		delete(e.deleted, key)
+	}
+
 	e.overlay = overlay
-	e.mutex.Unlock()
+	e.exported = current
 
 	return nil
 }

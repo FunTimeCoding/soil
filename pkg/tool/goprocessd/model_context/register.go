@@ -51,6 +51,15 @@ func (s *Server) register() {
 	)
 	s.server.AddTool(
 		mcp.NewTool(
+			constant.ProcessRestartAll,
+			mcp.WithDescription(
+				"Restart every managed process as a sequential background wave. Returns immediately; watch progress via process_status, where started_at shows when each restart went through.",
+			),
+		),
+		mcp.NewTypedToolHandler(s.processRestartAll),
+	)
+	s.server.AddTool(
+		mcp.NewTool(
 			constant.ProcessReload,
 			mcp.WithDescription(
 				"Re-read the Procfile, or re-evaluate the environment file for future restarts.",

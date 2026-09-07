@@ -3,6 +3,7 @@ package process
 import (
 	"github.com/funtimecoding/soil/pkg/system/run"
 	"github.com/funtimecoding/soil/pkg/system/writer"
+	"time"
 )
 
 func (p *Process) run(environment []string) bool {
@@ -21,6 +22,7 @@ func (p *Process) run(environment []string) bool {
 	}
 
 	p.handle = handle
+	p.started = time.Now()
 	p.stoppedBySupervisor = false
 	p.mutex.Unlock()
 	e = handle.Wait()

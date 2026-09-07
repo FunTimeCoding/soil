@@ -10,16 +10,18 @@ var Identity = identity.New(
 
 const HistoryCapacity = 200
 const (
-	ProcessStatus  = "process_status"
-	ProcessLog     = "process_log"
-	ProcessRestart = "process_restart"
-	ProcessReload  = "process_reload"
+	ProcessStatus     = "process_status"
+	ProcessLog        = "process_log"
+	ProcessRestart    = "process_restart"
+	ProcessRestartAll = "process_restart_all"
+	ProcessReload     = "process_reload"
 )
 
 const (
-	UnknownProcess = "unknown process %s"
-	ProcfileScope  = "procfile"
-	EnvironmentScope = "environment"
+	UnknownProcess     = "unknown process %s"
+	WaveAlreadyRunning = "restart wave already running"
+	ProcfileScope      = "procfile"
+	EnvironmentScope   = "environment"
 )
 
 var Colors = []int{

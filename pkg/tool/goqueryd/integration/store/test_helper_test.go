@@ -5,6 +5,7 @@ package store
 import (
 	"github.com/funtimecoding/soil/pkg/assert/fixture"
 	"github.com/funtimecoding/soil/pkg/generative/ollama"
+	"github.com/funtimecoding/soil/pkg/generative/ollama/reachable_skip"
 	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
 	system "github.com/funtimecoding/soil/pkg/system/constant"
 	goqueryd "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
@@ -16,10 +17,7 @@ import (
 func openTestStore(t *testing.T) (*store.Store, *ollama.Client) {
 	t.Helper()
 	o := ollama.NewEnvironment()
-
-	if !o.Reachable() {
-		t.Skipf("embed host unreachable: %s", o.Locator())
-	}
+	reachable_skip.Skip(t)
 
 	return store.New(connection.NewMemory()), o
 }

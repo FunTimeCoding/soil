@@ -33,7 +33,11 @@ func TestStartStoppedProcess(t *testing.T) {
 func TestRestartAllLeavesEveryProcessRunning(t *testing.T) {
 	s := tester.New(t, "alfa: sleep 60\nbravo: sleep 60\n", "")
 	s.WaitOutput(t, "*alfa\n*bravo", "status")
-	assert.String(t, "ok", s.Send("restart-all"))
+	assert.String(
+		t,
+		"ok: restarting 2 processes in the background",
+		s.Send("restart-all"),
+	)
 	s.WaitOutput(t, "*alfa\n*bravo", "status")
 	time.Sleep(time.Second)
 	assert.String(t, "*alfa\n*bravo", s.Send("status"))

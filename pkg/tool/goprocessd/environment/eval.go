@@ -1,7 +1,6 @@
 package environment
 
 import (
-	"bufio"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/system/run"
 	"strings"
@@ -31,17 +30,8 @@ func eval(
 	}
 
 	result := make(map[string]string)
-	scanner := bufio.NewScanner(strings.NewReader(output))
-	scanner.Split(SplitNull)
 
-	for scanner.Scan() {
-		line := scanner.Text()
-		key, value, found := strings.Cut(line, "=")
-
-		if !found {
-			continue
-		}
-
+	for key, value := range parseNull(output) {
 		existing, exists := baseSet[key]
 
 		if !exists || existing != value {

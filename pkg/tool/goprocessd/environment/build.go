@@ -22,6 +22,10 @@ func (e *Environment) Build() []string {
 		merged[key] = value
 	}
 
+	for key := range e.deleted {
+		delete(merged, key)
+	}
+
 	result := make([]string, 0, len(merged))
 
 	for key, value := range merged {

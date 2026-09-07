@@ -17,3 +17,17 @@ func TestReloadEnvironment(t *testing.T) {
 	s.Send("restart", "alfa")
 	s.WaitContains(t, "updated", "log", "alfa")
 }
+
+func TestReloadEnvironmentRemovesVanishedExport(t *testing.T) {
+	t.Setenv("TEST_REMOVED", "ghost")
+	s := tester.New(
+		t,
+		"alfa: sh -c 'echo removed=${TEST_REMOVED:-gone} && sleep 60'\n",
+		"export TEST_REMOVED=ghost\n",
+	)
+	s.WaitContains(t, "removed=ghost", "log", "alfa")
+	s.WriteEnvrc("export TEST_OTHER=1\n")
+	s.Send("reload-environment")
+	s.Send("restart", "alfa")
+	s.WaitContains(t, "removed=gone", "log", "alfa")
+}

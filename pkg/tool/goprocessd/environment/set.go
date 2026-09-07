@@ -5,4 +5,5 @@ func (e *Environment) Set(
 	value string,
 ) {
 	e.overlay[key] = value
+	delete(e.deleted, key)
 }
