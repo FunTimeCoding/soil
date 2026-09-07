@@ -119,6 +119,7 @@ gonetbox
 gonetboxd
 gopackageapk
 gopackagedeb
+gopnsense
 gopnsensed
 gopostgres
 gopostgresd
@@ -131,6 +132,7 @@ goproxmoxd
 goqueryd
 goraid
 goraidd
+goraidparse
 goraidparsed
 gosalt
 gosaltd
