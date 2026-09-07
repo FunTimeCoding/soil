@@ -3,6 +3,7 @@ package web_service
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/integration/web_service_tester"
 	"net/http"
@@ -50,4 +51,36 @@ func TestWebService(t *testing.T) {
 	assert.FatalOnError(t, e)
 	assert.Integer(t, http.StatusOK, summary.StatusCode())
 	assert.NotEmpty(t, *summary.JSON200)
+}
+
+func TestIngestOperationNotRecorded(t *testing.T) {
+	o := web_service_tester.New(t)
+	defer o.Close()
+	x := context.Background()
+	_, e := o.Client.PostEventWithResponse(
+		x,
+		client.PostEventJSONRequestBody{
+			Tool:    "save_memory",
+			Surface: "model_context",
+			Actor:   "Blair",
+			Outcome: "success",
+		},
+	)
+	assert.FatalOnError(t, e)
+	summary, e := o.Client.GetSummaryWithResponse(x, &client.GetSummaryParams{})
+	assert.FatalOnError(t, e)
+	assert.Integer(t, http.StatusOK, summary.StatusCode())
+	summaryRecorded := false
+
+	for _, r := range o.Recorder.Calls {
+		if r.Tool == constant.IngestOperation {
+			t.Fatalf("ingest operation recorded: %s", r.Tool)
+		}
+
+		if r.Tool == "GetSummary" {
+			summaryRecorded = true
+		}
+	}
+
+	assert.True(t, summaryRecorded)
 }

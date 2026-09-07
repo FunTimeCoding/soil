@@ -27,7 +27,10 @@ func Mount(
 		generated.NewStrictHandler(
 			server.New(s, r),
 			[]generated.StrictMiddlewareFunc{
-				soilWeb.RecordingMiddleware[generated.StrictHandlerFunc](t),
+				soilWeb.RecordingMiddleware[generated.StrictHandlerFunc](
+					t,
+					constant.IngestOperation,
+				),
 			},
 		),
 		http.NewServeMux(),

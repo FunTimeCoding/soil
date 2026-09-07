@@ -36,5 +36,6 @@ const (
 	EventsTitle  = "Events"
 	EventsPath   = "/events"
 
-	IngestPattern = "POST /api/events"
+	IngestPattern   = "POST /api/events"
+	IngestOperation = "PostEvent"
 )

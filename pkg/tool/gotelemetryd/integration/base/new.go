@@ -18,6 +18,7 @@ func New(t *testing.T) *Server {
 	t.Helper()
 	s := store.New(lite.NewMemory())
 	r := memory.New()
+	recorder := mock_recorder.New()
 	v := model_context_server.New(
 		t,
 		func(_ *http.ServeMux, g *guard.Mux) {
@@ -25,12 +26,12 @@ func New(t *testing.T) *Server {
 				s,
 				web.New(s),
 				r,
-				mock_recorder.New(),
+				recorder,
 				constant.DefaultVersion,
 				g,
 			)
 		},
 	)
 
-	return &Server{Store: s, Server: v}
+	return &Server{Store: s, Recorder: recorder, Server: v}
 }

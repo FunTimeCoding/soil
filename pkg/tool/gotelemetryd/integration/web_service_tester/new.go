@@ -22,5 +22,5 @@ func New(t *testing.T) *Tester {
 	)
 	assert.FatalOnError(t, e)
 
-	return &Tester{server: s, Client: c}
+	return &Tester{server: s, Client: c, Recorder: s.Recorder}
 }
