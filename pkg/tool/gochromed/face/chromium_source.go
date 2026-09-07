@@ -2,6 +2,7 @@ package face
 
 import (
 	"context"
+	"github.com/chromedp/chromedp"
 	"github.com/funtimecoding/soil/pkg/chromium"
 	"github.com/funtimecoding/soil/pkg/chromium/snapshot"
 	"github.com/funtimecoding/soil/pkg/chromium/tab"
@@ -10,7 +11,13 @@ import (
 type ChromiumSource interface {
 	Wake(identifier string) error
 	Tabs() []*tab.Tab
+	TabByHost(s string) *tab.Tab
 	AcquireTarget(identifier string) context.Context
+	TargetContext(identifier string) context.Context
+	RunContext(
+		o context.Context,
+		a ...chromedp.Action,
+	)
 	CreateTab(l string) (string, error)
 	CloseTab(identifier string) error
 	Navigate(
