@@ -350,6 +350,15 @@ Without `nullable: true` on items, oapi-codegen generates
 keeps pointer convention consistent between the generated types
 and the `convert/` layer.
 
+Every non-2xx response carries a content body with a descriptive
+message - no bodyless error responses. Specs don't document
+framework-level 400s: oapi-codegen handles binding validation,
+and documenting it is the framework's job.
+
+Root-level `additionalProperties: true` breaks strict-server
+marshaling (the type alias loses its custom MarshalJSON) - use a
+`fields` sub-object instead.
+
 ## What Not To Do
 
 - Don't put hand-written code in `generated/` - that's machine output
