@@ -4,7 +4,7 @@ const InlineStyle = `
 .badge { padding: 2px 8px; border-radius: 4px; font-size: 0.8em; font-weight: bold; display: inline-block; }
 .badge-critical { background: #f8d7da; color: #721c24; }
 .badge-warning { background: #fff3cd; color: #856404; }
-.badge-opsgenie, .badge-adition-opsgenie { background: #cce5ff; color: #004085; }
+.badge[class*="opsgenie"] { background: #cce5ff; color: #004085; }
 .badge-info { background: #d1ecf1; color: #0c5460; }
 .badge-firing { background: #f8d7da; color: #721c24; }
 .badge-resolved { background: #d4edda; color: #155724; }

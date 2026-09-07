@@ -26,6 +26,7 @@ import (
 func New(t *testing.T) *Tester {
 	t.Helper()
 	q := base.New(t)
+	q.SkipUnreachable(t)
 	c, e := client.NewClient(
 		fmt.Sprintf("http://localhost:%d", q.Port),
 		client.WithRequestEditorFn(

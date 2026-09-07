@@ -9,6 +9,7 @@ import (
 func New(t *testing.T) *Tester {
 	t.Helper()
 	s := base.New(t)
+	s.SkipUnreachable(t)
 	t.Cleanup(s.Close)
 	c := model_context_client.New(t, s.Port)
 	t.Cleanup(c.Close)

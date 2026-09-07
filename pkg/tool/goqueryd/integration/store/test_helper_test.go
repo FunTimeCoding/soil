@@ -15,8 +15,13 @@ import (
 
 func openTestStore(t *testing.T) (*store.Store, *ollama.Client) {
 	t.Helper()
+	o := ollama.NewEnvironment()
 
-	return store.New(connection.NewMemory()), ollama.NewEnvironment()
+	if !o.Reachable() {
+		t.Skipf("embed host unreachable: %s", o.Locator())
+	}
+
+	return store.New(connection.NewMemory()), o
 }
 
 func indexedTestStore(t *testing.T) (*store.Store, *ollama.Client) {

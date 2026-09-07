@@ -44,8 +44,8 @@ Read the relevant spec before working in that area.
 
 This repository is a Claude Code plugin named `soil` and its own
 marketplace. General-purpose skills (session lifecycle, lint, commit
-messages) live here; skills specific to VirtualMinds infrastructure
-stay in the internal repositories. Skills reference runbooks via
+messages) live here; skills specific to a consumer's infrastructure
+stay in that consumer's repository. Skills reference runbooks via
 `${CLAUDE_PLUGIN_ROOT}` so paths resolve from any consuming repository.
 
 - `/plugin marketplace add <path-or-url-to-this-repo>` registers it

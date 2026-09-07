@@ -9,6 +9,7 @@ import (
 func New(t *testing.T) *Tester {
 	t.Helper()
 	s := base.New(t)
+	s.SkipUnreachable(t)
 	t.Cleanup(s.Close)
 
 	return &Tester{Service: service.New(s.Store(), s.Embedder(), s.Reranker())}
