@@ -1,6 +1,6 @@
 package search_option
 
-import "github.com/funtimecoding/soil/pkg/tool/goqueryd/rerank"
+import "github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 
 type Option struct {
 	Query      string
@@ -9,6 +9,6 @@ type Option struct {
 	Full       bool
 	Mode       string
 	Metadata   map[string]string
-	Reranker   *rerank.Reranker
+	Reranker   face.Reranker
 	Exclude    []string
 }
