@@ -9,11 +9,11 @@ func New(
 	host string,
 	key string,
 	secret string,
-	insecure bool,
+	untrusted bool,
 ) *Client {
 	errors.FatalOnEmpty(host, "host")
 	errors.FatalOnEmpty(key, "key")
 	errors.FatalOnEmpty(secret, "secret")
 
-	return &Client{basic: basic.New(host, key, secret, insecure)}
+	return &Client{basic: basic.New(host, key, secret, untrusted)}
 }

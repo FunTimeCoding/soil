@@ -54,8 +54,8 @@ func New(
 	var c *http.Client
 
 	if result.verbose {
-		c = verbose_transport.New(!result.selfSigned)
-	} else if result.selfSigned {
+		c = verbose_transport.New(!result.untrusted)
+	} else if result.untrusted {
 		c = web.InsecureClient()
 	}
 

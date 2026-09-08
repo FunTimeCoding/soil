@@ -1,6 +1,9 @@
 package constant
 
-import "github.com/funtimecoding/soil/pkg/identity"
+import (
+	"github.com/funtimecoding/soil/pkg/identity"
+	"time"
+)
 
 var Identity = identity.New(
 	"gomattermostd",
@@ -29,8 +32,32 @@ const (
 	GetUsers          = "get_users"
 	GetUserProfile    = "get_user_profile"
 	RunMonitoring     = "run_monitoring"
+	SubscribeThread   = "subscribe_thread"
+	UnsubscribeThread = "unsubscribe_thread"
+	ListSubscriptions = "list_subscriptions"
 )
 
+const (
+	ParameterRoot     = "root"
+	ParameterCallsign = "callsign"
+	ParameterAlias    = "alias"
+)
+
+const (
+	ExcerptLength    = 200
+	DigestBudget     = 700
+	EnumerateLimit   = 4
+	TruncationMarker = "…+more"
+	DigestIndent     = "    "
+	LabelPrefix      = 8
+)
+
+const (
+	ReconnectDelay = 2 * time.Second
+	DebounceWindow = 30 * time.Second
+	PurgeWindow    = 7 * 24 * time.Hour
+	PurgeInterval  = time.Hour
+)
 const (
 	HostEnvironment     = "GOMATTERMOST_HOST"
 	PortEnvironment     = "GOMATTERMOST_PORT"

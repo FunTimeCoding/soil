@@ -23,6 +23,7 @@ type Runner struct {
 	logger          *logger.Logger
 	reporter        face.Reporter
 	recovery        *recovery.Recovery
+	syncFailures    int
 	trigger         chan TriggerRequest
 	sync            chan SyncRequest
 	stop            chan struct{}

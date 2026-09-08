@@ -314,6 +314,10 @@ func (s *Server) register() {
 		mcp.NewTypedToolHandler(s.GetUserProfile),
 	)
 
+	if s.indexer != nil {
+		s.registerSubscription()
+	}
+
 	if s.monitor != nil {
 		s.server.AddTool(
 			mcp.NewTool(

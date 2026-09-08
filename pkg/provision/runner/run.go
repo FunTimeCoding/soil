@@ -36,10 +36,7 @@ func (r *Runner) run() {
 		case <-r.stop:
 			return
 		case <-syncTicker.C:
-			changed := false
-			r.recovery.Run(func() { changed = r.gitSync() })
-
-			if changed {
+			if r.syncTick() {
 				if r.initFunction != nil {
 					r.recovery.Run(r.initFunction)
 				}
@@ -63,6 +60,7 @@ func (r *Runner) run() {
 
 			if result == nil {
 				result = &SyncResult{Error: fmt.Errorf("sync failed")}
+				r.recovery.Run(r.healRepository)
 			}
 
 			request.Response <- result

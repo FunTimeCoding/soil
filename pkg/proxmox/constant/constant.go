@@ -8,7 +8,7 @@ const (
 	SecretEnvironment   = "PROXMOX_SECRET"
 	LogEnvironment      = "PROXMOX_LOG"
 	VerboseEnvironment  = "PROXMOX_VERBOSE"
-	InsecureEnvironment = "PROXMOX_INSECURE"
+	UntrustedEnvironment = "PROXMOX_UNTRUSTED"
 	TimeoutEnvironment  = "PROXMOX_TIMEOUT"
 )
 

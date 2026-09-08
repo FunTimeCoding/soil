@@ -1,6 +1,9 @@
 package constant
 
-import "github.com/funtimecoding/soil/pkg/console/constant"
+import (
+	"github.com/funtimecoding/soil/pkg/console/constant"
+	"time"
+)
 
 const (
 	MattermostHostEnvironment     = "MATTERMOST_HOST"
@@ -22,7 +25,10 @@ const (
 
 	MattermostEmptyEntityTag = ""
 
-	MattermostPostField = "post"
+	MattermostSocketWait = 5 * time.Second
+
+	MattermostPostField     = "post"
+	MattermostReactionField = "reaction"
 	// Emoji
 	MattermostCheckMark    = "white_check_mark"       // done
 	MattermostConstruction = "construction"           // in progress

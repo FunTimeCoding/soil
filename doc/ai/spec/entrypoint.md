@@ -155,6 +155,39 @@ Subcommand flags use `result.Flags().StringVar` (bound to local
 variables), not the argument instance. Required flags use
 `result.MarkFlagRequired`.
 
+## Mandatory and optional dependencies
+
+A client package reading its own environment offers one or both
+constructors:
+
+- `NewEnvironment()` for a dependency the program cannot run
+  without. It uses `environment.Required`, so a missing variable
+  panics at startup - the correct outcome when the program would be
+  useless anyway.
+- `NewOptional()` for a dependency the program works without. It
+  returns nil when the dependency is not configured, and the caller
+  gates on that:
+
+```go
+if claude := connector.NewOptional(); claude != nil {
+    // construct and register the feature
+}
+```
+
+The nil propagates as the feature's own absence rather than a
+separate flag - a nil connector means no worker, no store, and the
+tools it serves never register. One judgment, made where the
+knowledge lives, instead of every consumer testing a variable
+itself.
+
+Each package names its own discriminator: the variable that carries
+no sensible default. For `connector` that is the token, since host
+and port fall back to localhost.
+
+Offer `NewOptional` from a package whose consumers are not all
+known. A program that controls its own deployment can require
+whatever it likes.
+
 ## Instrument Integration
 
 Programs that carry telemetry - daemons and subcommand CLIs - create

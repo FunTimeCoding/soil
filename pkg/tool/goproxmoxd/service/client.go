@@ -33,8 +33,8 @@ func (s *Service) Client(instance string) (face.ProxmoxClient, error) {
 		o = append(o, proxmox.WithPort(i.Port))
 	}
 
-	if i.Insecure {
-		o = append(o, proxmox.WithInsecure())
+	if i.Untrusted {
+		o = append(o, proxmox.WithUntrusted())
 	}
 
 	if i.Timeout != "" {

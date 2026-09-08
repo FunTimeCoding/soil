@@ -22,8 +22,8 @@ func NewEnvironment() *Client {
 		option = append(option, WithToken(token, secret))
 	}
 
-	if environment.Exists(constant.InsecureEnvironment) {
-		option = append(option, WithInsecure())
+	if environment.Exists(constant.UntrustedEnvironment) {
+		option = append(option, WithUntrusted())
 	}
 
 	if environment.Exists(constant.LogEnvironment) {

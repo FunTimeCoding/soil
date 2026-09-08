@@ -17,4 +17,10 @@ const (
 	RunnerPath   = "path"
 
 	RunnerIndexLock = ".git/index.lock"
+
+	RunnerQuarantineSuffix = ".quarantine."
+	RunnerQuarantineFormat = "20060102T150405Z"
+
+	RunnerConsecutive = "consecutive"
+	RunnerError       = "error"
 )

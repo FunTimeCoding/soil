@@ -15,7 +15,8 @@ const (
 	NameEnvironment     = "GOCLAUDE_NAME"
 	HostEnvironment     = "GOCLAUDE_HOST"
 	PortEnvironment     = "GOCLAUDE_PORT"
-	InsecureEnvironment = "GOCLAUDE_INSECURE"
+	InsecureEnvironment  = "GOCLAUDE_INSECURE"
+	UntrustedEnvironment = "GOCLAUDE_UNTRUSTED"
 	TokenEnvironment    = "GOCLAUDE_TOKEN"
 	PeekOutputBudget = 120
 	PeekContextLimit = 200

@@ -9,7 +9,7 @@ type Instance struct {
 	Password    string `yaml:"password"`
 	Token       string `yaml:"token"`
 	Secret      string `yaml:"secret"`
-	Insecure    bool   `yaml:"insecure"`
+	Untrusted   bool   `yaml:"untrusted"`
 	Timeout     string `yaml:"timeout"`
 	SSHUser     string `yaml:"ssh_user"`
 	SSHPassword string `yaml:"ssh_password"`

@@ -10,6 +10,6 @@ func NewEnvironment() *Client {
 		environment.Required(constant.HostEnvironment),
 		environment.Required(constant.KeyEnvironment),
 		environment.Required(constant.SecretEnvironment),
-		environment.Exists(constant.InsecureEnvironment),
+		environment.Exists(constant.UntrustedEnvironment),
 	)
 }

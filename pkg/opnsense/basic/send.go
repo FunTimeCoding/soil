@@ -10,7 +10,7 @@ func (c *Client) send(r *http.Request) ([]byte, error) {
 	r.SetBasicAuth(c.key, c.secret)
 	client := web.Client()
 
-	if c.insecure {
+	if c.untrusted {
 		client = web.InsecureClient()
 	}
 

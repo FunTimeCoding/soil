@@ -13,9 +13,9 @@ type Client struct {
 	password   string
 	token      string
 	secret     string
-	selfSigned bool
-	log        bool
-	verbose    bool
-	port       int
-	timeout    time.Duration
+	untrusted bool
+	log       bool
+	verbose   bool
+	port      int
+	timeout   time.Duration
 }

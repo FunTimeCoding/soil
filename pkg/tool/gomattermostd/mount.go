@@ -3,10 +3,12 @@ package gomattermostd
 import (
 	"github.com/funtimecoding/soil/pkg/chat/mattermost"
 	"github.com/funtimecoding/soil/pkg/face"
+	mattermostFace "github.com/funtimecoding/soil/pkg/tool/gomattermostd/face"
 	generated "github.com/funtimecoding/soil/pkg/tool/gomattermostd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/monitor"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/server"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/store"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
@@ -16,6 +18,8 @@ import (
 func Mount(
 	c *mattermost.Client,
 	m *monitor.Monitor,
+	d *store.Store,
+	i mattermostFace.Indexer,
 	r face.Reporter,
 	t face.Recorder,
 	version string,
@@ -33,5 +37,5 @@ func Mount(
 			http.NewServeMux(),
 		),
 	)
-	model_context.New(c, m, r, t, version).Mount(g)
+	model_context.New(c, m, d, i, r, t, version).Mount(g)
 }

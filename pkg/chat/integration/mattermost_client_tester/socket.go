@@ -8,7 +8,7 @@ import (
 
 // The client dials the websocket during construction; hold the
 // upgraded connection open until the client side closes it.
-func socket(
+func (t *Tester) socket(
 	w http.ResponseWriter,
 	q *http.Request,
 ) {
@@ -20,6 +20,7 @@ func socket(
 	}
 
 	defer errors.LogClose(c)
+	t.accept(c)
 
 	for {
 		if _, _, f := c.ReadMessage(); f != nil {

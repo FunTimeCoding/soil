@@ -11,8 +11,8 @@ func NewEnvironment() *Client {
 		environment.Required(constant.TokenEnvironment),
 	)
 
-	if environment.Exists(constant.SelfSignedEnvironment) {
-		result.SelfSigned()
+	if environment.Exists(constant.UntrustedEnvironment) {
+		result.Untrusted()
 	}
 
 	return result

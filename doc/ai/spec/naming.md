@@ -81,6 +81,19 @@ Singular, even when the value is a comma-separated list:
 avoid-plurals rule applies to env var names too - a list-valued
 variable does not earn a plural.
 
+Transport and trust are separate axes and never share a variable:
+
+- `*_INSECURE` selects http instead of https - a locator concern,
+  fed to `locator.Environment`.
+- `*_UNTRUSTED` skips certificate verification - a client concern,
+  fed to `web.InsecureClient`.
+
+An endpoint can need one, the other, or both, and a single flag
+cannot express https-with-an-unverifiable-certificate. Where a
+client offers these as options, the same split applies:
+`WithInsecure` sets the scheme, `WithUntrusted` skips
+verification.
+
 ## HTTP handler conventions
 
 See `generated-api.md` for the full Server pattern. Summary:

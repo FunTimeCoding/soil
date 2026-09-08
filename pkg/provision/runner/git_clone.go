@@ -4,12 +4,16 @@ import "os"
 
 func (r *Runner) gitClone() {
 	if _, e := os.Stat(r.clonePath); e == nil {
-		r.gitConfigure()
-		r.gitClean()
-		r.gitFetch()
-		r.gitReset()
+		if r.validRepository() {
+			r.gitConfigure()
+			r.gitClean()
+			r.gitFetch()
+			r.gitReset()
 
-		return
+			return
+		}
+
+		r.quarantine()
 	}
 
 	r.logger.Structured("git_clone", "repository", r.repository)
