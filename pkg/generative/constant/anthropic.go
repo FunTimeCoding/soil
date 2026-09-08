@@ -34,3 +34,16 @@ const (
 	UsageMeterFable     = "Fable"
 	UsageResetPrefix    = "Resets "
 )
+const (
+	ClaudeDirectory              = ".claude"
+	ClaudeCredentialFile         = ".credentials.json"
+	AnthropicCredentialService   = "Claude Code-credentials"
+	AnthropicUtilizationLink     = "https://api.anthropic.com/api/oauth/usage"
+	AnthropicUtilizationBeta     = "oauth-2025-04-20"
+	AnthropicBetaHeader          = "anthropic-beta"
+	AnthropicBaseLinkEnvironment = "ANTHROPIC_BASE_URL"
+)
+const (
+	AnthropicLimitWeekly       = "weekly_all"
+	AnthropicLimitWeeklyScoped = "weekly_scoped"
+)

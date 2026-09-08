@@ -4,10 +4,11 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/time"
+	library "github.com/funtimecoding/soil/pkg/time"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/usage_result"
 	"github.com/spf13/cobra"
+	"time"
 )
 
 func usage(c *command_context.Context) *cobra.Command {
@@ -29,6 +30,12 @@ func usage(c *command_context.Context) *cobra.Command {
 			}
 
 			j := response.JSON200
+			var fableResetAt time.Time
+
+			if j.FableResetAt != nil {
+				fableResetAt = *j.FableResetAt
+			}
+
 			r := usage_result.New(
 				j.FiveHourPercent,
 				j.FiveHourReset,
@@ -36,6 +43,7 @@ func usage(c *command_context.Context) *cobra.Command {
 				j.SevenDayReset,
 				j.FablePercent,
 				j.FableReset,
+				fableResetAt,
 				j.LastUpdated,
 			)
 			console.Format(
@@ -53,11 +61,14 @@ func usage(c *command_context.Context) *cobra.Command {
 				console.Format(
 					"Fable    %2d%%   resets %s\n",
 					r.FablePercent,
-					r.FableReset,
+					r.FableResetText(),
 				)
 			}
 
-			console.Format("Updated  %s\n", time.FormatCompact(r.LastUpdated))
+			console.Format(
+				"Updated  %s\n",
+				library.FormatCompact(r.LastUpdated),
+			)
 		},
 	}
 }

@@ -9,6 +9,7 @@ func New(
 	sevenDayReset time.Time,
 	fablePercent int,
 	fableReset string,
+	fableResetAt time.Time,
 	lastUpdated time.Time,
 ) *Result {
 	return &Result{
@@ -18,6 +19,7 @@ func New(
 		SevenDayReset:   sevenDayReset,
 		FablePercent:    fablePercent,
 		FableReset:      fableReset,
+		FableResetAt:    fableResetAt,
 		LastUpdated:     lastUpdated,
 	}
 }

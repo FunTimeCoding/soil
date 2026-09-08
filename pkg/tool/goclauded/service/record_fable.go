@@ -1,8 +1,11 @@
 package service
 
+import "time"
+
 func (s *Service) recordFable(
 	percent int,
 	reset string,
+	resetAt *time.Time,
 ) error {
 	latest, e := s.store.LatestFableSnapshot()
 
@@ -14,7 +17,7 @@ func (s *Service) recordFable(
 		return nil
 	}
 
-	s.store.SaveFableSnapshot(percent, reset)
+	s.store.SaveFableSnapshot(percent, reset, resetAt)
 	s.store.TrimFableSnapshots()
 
 	return nil

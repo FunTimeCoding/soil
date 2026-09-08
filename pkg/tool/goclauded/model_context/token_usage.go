@@ -46,7 +46,7 @@ func (s *Server) tokenUsage(
 			fmt.Sprintf(
 				"Fable    %2d%%   resets %s",
 				result.FablePercent,
-				result.FableReset,
+				result.FableResetText(),
 			),
 		)
 	}

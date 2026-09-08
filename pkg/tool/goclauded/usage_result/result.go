@@ -9,5 +9,6 @@ type Result struct {
 	SevenDayReset   time.Time
 	FablePercent    int
 	FableReset      string
+	FableResetAt    time.Time
 	LastUpdated     time.Time
 }

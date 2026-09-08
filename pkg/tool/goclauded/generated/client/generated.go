@@ -376,13 +376,14 @@ type ToolsResponse struct {
 
 // UsageResponse defines model for UsageResponse.
 type UsageResponse struct {
-	FablePercent    int       `json:"fable_percent"`
-	FableReset      string    `json:"fable_reset"`
-	FiveHourPercent int       `json:"five_hour_percent"`
-	FiveHourReset   time.Time `json:"five_hour_reset"`
-	LastUpdated     time.Time `json:"last_updated"`
-	SevenDayPercent int       `json:"seven_day_percent"`
-	SevenDayReset   time.Time `json:"seven_day_reset"`
+	FablePercent    int        `json:"fable_percent"`
+	FableReset      string     `json:"fable_reset"`
+	FableResetAt    *time.Time `json:"fable_reset_at,omitempty"`
+	FiveHourPercent int        `json:"five_hour_percent"`
+	FiveHourReset   time.Time  `json:"five_hour_reset"`
+	LastUpdated     time.Time  `json:"last_updated"`
+	SevenDayPercent int        `json:"seven_day_percent"`
+	SevenDayReset   time.Time  `json:"seven_day_reset"`
 }
 
 // WaitResponse defines model for WaitResponse.

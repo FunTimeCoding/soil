@@ -16,9 +16,10 @@ import (
 )
 
 func main() {
-	usage.Usage()
+	anthropic.Utilization()
 
 	if false {
+		usage.Usage()
 		usage.Debug()
 		mistral.Prompt()
 		ollama.Chat()

@@ -12,9 +12,10 @@ func result(fiveHourReset time.Time) *usage_result.Result {
 		26,
 		fiveHourReset,
 		20,
-		time.Date(2026, 9, 2, 21, 0, 0, 0, time.UTC),
+		time.Date(2026, 9, 2, 21, 0, 0, 0, time.Local),
 		34,
 		"Wed 8:59 PM",
+		time.Time{},
 		time.Now(),
 	)
 }
@@ -51,4 +52,23 @@ func TestSevenDayResetText(t *testing.T) {
 
 func TestHasFable(t *testing.T) {
 	assert.True(t, result(time.Now()).HasFable())
+}
+
+func TestFableResetTextFallsBackToText(t *testing.T) {
+	assert.String(t, "Wed 8:59 PM", result(time.Now()).FableResetText())
+}
+
+func TestFableResetTextPrefersTimestamp(t *testing.T) {
+	r := usage_result.New(
+		26,
+		time.Now(),
+		20,
+		time.Now(),
+		34,
+		"",
+		time.Date(2026, 9, 15, 16, 59, 59, 0, time.Local),
+		time.Now(),
+	)
+	assert.True(t, r.HasFable())
+	assert.String(t, "Tue 16:59", r.FableResetText())
 }

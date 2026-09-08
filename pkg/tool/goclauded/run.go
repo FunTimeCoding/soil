@@ -102,5 +102,14 @@ func Run(
 		)
 	}
 
+	if v.UtilizationFallback() {
+		options = append(
+			options,
+			lifecycle.WithWorker(
+				ticker.New(5*time.Minute, v.PollUtilization, rec),
+			),
+		)
+	}
+
 	lifecycle.New(l, options...).RunUntilSignal()
 }

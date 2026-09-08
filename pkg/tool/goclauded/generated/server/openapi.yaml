@@ -783,6 +783,9 @@ components:
           type: integer
         fable_reset:
           type: string
+        fable_reset_at:
+          type: string
+          format: date-time
         last_updated:
           type: string
           format: date-time

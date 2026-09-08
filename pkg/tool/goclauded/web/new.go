@@ -36,13 +36,18 @@ func New(s *service.Service) *Server {
 			Category: web.PaletteNavigate,
 		},
 		palette.Command{
-			Label:    constant.ConversationsTitle,
-			Path:     constant.ConversationsPath,
+			Label:    constant.CoverageTitle,
+			Path:     constant.CoveragePath,
 			Category: web.PaletteNavigate,
 		},
 		palette.Command{
-			Label:    constant.CoverageTitle,
-			Path:     constant.CoveragePath,
+			Label:    constant.UsageTitle,
+			Path:     constant.UsagePath,
+			Category: web.PaletteNavigate,
+		},
+		palette.Command{
+			Label:    constant.ConversationsTitle,
+			Path:     constant.ConversationsPath,
 			Category: web.PaletteNavigate,
 		},
 	)

@@ -15,7 +15,7 @@ func (s *Server) GetUsage(
 		return server.GetUsage204Response{}, nil
 	}
 
-	return server.GetUsage200JSONResponse{
+	response := server.GetUsage200JSONResponse{
 		FiveHourPercent: result.FiveHourPercent,
 		FiveHourReset:   result.FiveHourReset,
 		SevenDayPercent: result.SevenDayPercent,
@@ -23,5 +23,11 @@ func (s *Server) GetUsage(
 		FablePercent:    result.FablePercent,
 		FableReset:      result.FableReset,
 		LastUpdated:     result.LastUpdated,
-	}, nil
+	}
+
+	if !result.FableResetAt.IsZero() {
+		response.FableResetAt = &result.FableResetAt
+	}
+
+	return response, nil
 }

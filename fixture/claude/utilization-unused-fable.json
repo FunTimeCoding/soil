@@ -1,0 +1,34 @@
+{
+  "limits": [
+    {
+      "kind": "session",
+      "group": "session",
+      "percent": 3,
+      "resets_at": "2026-09-08T18:49:59.566607+00:00",
+      "scope": null,
+      "is_active": true
+    },
+    {
+      "kind": "weekly_all",
+      "group": "weekly",
+      "percent": 0,
+      "resets_at": "2026-09-15T14:59:59.566636+00:00",
+      "scope": null,
+      "is_active": false
+    },
+    {
+      "kind": "weekly_scoped",
+      "group": "weekly",
+      "percent": 0,
+      "resets_at": null,
+      "scope": {
+        "model": {
+          "id": null,
+          "display_name": "Fable"
+        },
+        "surface": null
+      },
+      "is_active": false
+    }
+  ]
+}

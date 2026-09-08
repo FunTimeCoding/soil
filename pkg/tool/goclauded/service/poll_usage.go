@@ -20,7 +20,11 @@ func (s *Service) PollUsage() {
 		return
 	}
 
-	if e := s.recordFable(result.FablePercent, result.FableReset); e != nil {
+	if e := s.recordFable(
+		result.FablePercent,
+		result.FableReset,
+		nil,
+	); e != nil {
 		s.logger.Structured("fable snapshot failed", "error", e)
 	}
 

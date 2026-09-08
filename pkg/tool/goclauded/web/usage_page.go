@@ -22,5 +22,6 @@ func (s *Server) usagePage(
 			gomponents.Attr("sse-swap", constant.UsageChart),
 			s.usageChart(),
 		),
+		s.usageNote(),
 	)
 }
