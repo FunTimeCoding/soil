@@ -70,8 +70,8 @@ require (
 	github.com/oapi-codegen/runtime v1.7.0
 	github.com/olekukonko/tablewriter v1.1.4
 	github.com/ollama/ollama v0.33.3
-	github.com/openai/openai-go/v3 v3.57.0
-	github.com/openvex/go-vex v0.2.8
+	github.com/openai/openai-go/v3 v3.58.0
+	github.com/openvex/go-vex v0.2.9
 	github.com/opsgenie/opsgenie-go-sdk-v2 v1.2.23
 	github.com/pkg/sftp v1.13.11
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2
@@ -99,7 +99,7 @@ require (
 	golang.org/x/oauth2 v0.37.0
 	golang.org/x/sys v0.48.0
 	golang.org/x/time v0.16.0
-	golang.org/x/tools v0.49.0
+	golang.org/x/tools v0.50.0
 	gonum.org/v1/gonum v0.17.0
 	google.golang.org/api v0.297.0
 	google.golang.org/protobuf v1.36.12
@@ -276,7 +276,7 @@ require (
 	github.com/olekukonko/ll v0.1.6 // indirect
 	github.com/onsi/gomega v1.38.2 // indirect
 	github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c // indirect
-	github.com/package-url/packageurl-go v0.1.5 // indirect
+	github.com/package-url/packageurl-go v0.1.7 // indirect
 	github.com/pb33f/ordered-map/v2 v2.3.1 // indirect
 	github.com/pborman/uuid v1.2.1 // indirect
 	github.com/pelletier/go-toml v1.9.5 // indirect
