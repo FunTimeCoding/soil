@@ -1,16 +1,17 @@
 package monitor
 
 import (
-	"github.com/funtimecoding/soil/pkg/chat/mattermost"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	mattermost "github.com/funtimecoding/soil/pkg/tool/gomattermostd/face"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/monitor/option"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/monitor/scheduler"
 	"github.com/mattermost/mattermost/server/public/model"
 )
 
 func New(
-	c *mattermost.Client,
-	o *Configuration,
+	c mattermost.MattermostSource,
+	o *option.Monitor,
 	l *logger.Logger,
 	r face.Reporter,
 ) *Monitor {

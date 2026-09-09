@@ -1,16 +1,23 @@
 package gitlab
 
-import "gitlab.com/gitlab-org/api/client-go/v2"
+import (
+	"github.com/funtimecoding/soil/pkg/gitlab/commit"
+	"gitlab.com/gitlab-org/api/client-go/v2"
+)
 
 func (c *Client) ReadCommit(
 	project int64,
 	sha string,
-) (*gitlab.Commit, error) {
+) (*commit.Commit, error) {
 	result, _, e := c.client.Commits.GetCommit(
 		project,
 		sha,
 		&gitlab.GetCommitOptions{},
 	)
 
-	return result, wrapError(e)
+	if e != nil {
+		return nil, wrapError(e)
+	}
+
+	return commit.New(result), nil
 }

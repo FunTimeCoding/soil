@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
-	"gitlab.com/gitlab-org/api/client-go/v2"
 )
 
 func (s *Server) CreateMergeRequestNote(
@@ -25,11 +24,13 @@ func (s *Server) CreateMergeRequestNote(
 		return response.Fail("body is required")
 	}
 
-	v, _, e := s.client.Notes.CreateMergeRequestNote(
-		a.Project,
-		a.MergeRequest,
-		&gitlab.CreateMergeRequestNoteOptions{Body: &a.Body},
-	)
+	project, e := s.resolveProject(a.Project)
+
+	if e != nil {
+		return s.captureDetail(e)
+	}
+
+	v, e := s.client.CreateMergeRequestNote(project, a.MergeRequest, a.Body)
 
 	if e != nil {
 		return s.captureDetail(e)

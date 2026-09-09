@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
-	"gitlab.com/gitlab-org/api/client-go/v2"
 )
 
 func (s *Server) CreateBranch(
@@ -25,10 +24,13 @@ func (s *Server) CreateBranch(
 		return response.Fail("reference is required")
 	}
 
-	v, _, e := s.client.Branches.CreateBranch(
-		a.Project,
-		&gitlab.CreateBranchOptions{Branch: &a.Branch, Ref: &a.Reference},
-	)
+	project, e := s.resolveProject(a.Project)
+
+	if e != nil {
+		return s.captureDetail(e)
+	}
+
+	v, e := s.client.CreateBranch(project, a.Branch, a.Reference)
 
 	if e != nil {
 		return s.captureDetail(e)

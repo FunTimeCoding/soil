@@ -45,7 +45,7 @@ func Run(
 				o.Address,
 				func(x *http.ServeMux) {
 					Mount(
-						c.Nested(),
+						c,
 						b,
 						r,
 						s.Recorder(),

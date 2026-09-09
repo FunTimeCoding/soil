@@ -2,12 +2,11 @@ package tag
 
 import (
 	"github.com/funtimecoding/soil/pkg/git/constant"
-	"gitlab.com/gitlab-org/api/client-go/v2"
 	"golang.org/x/mod/semver"
 	"strings"
 )
 
-func Latest(v []*gitlab.Tag) *gitlab.Tag {
+func Latest(v []*Tag) *Tag {
 	result := v[0]
 
 	for _, e := range v {

@@ -3,13 +3,14 @@ package gitlab
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
+	"github.com/funtimecoding/soil/pkg/gitlab/registry_repository"
 	"gitlab.com/gitlab-org/api/client-go/v2"
 )
 
 func (c *Client) RegistryRepositories(
 	project int64,
 	panicOnForbidden bool,
-) ([]*gitlab.RegistryRepository, error) {
+) ([]*registry_repository.Repository, error) {
 	var result []*gitlab.RegistryRepository
 	number := int64(1)
 
@@ -28,7 +29,7 @@ func (c *Client) RegistryRepositories(
 			// Given correct token scope, this might be due to the GitLab server being configured wrong: https://forum.gitlab.com/t/cant-login-to-registry-due-to-denied-access-forbidden/63965/6
 			errors.Warning("registry repositories 403")
 
-			return result, nil
+			return registry_repository.NewSlice(result), nil
 		}
 
 		if e != nil {
@@ -44,5 +45,5 @@ func (c *Client) RegistryRepositories(
 		number++
 	}
 
-	return result, nil
+	return registry_repository.NewSlice(result), nil
 }

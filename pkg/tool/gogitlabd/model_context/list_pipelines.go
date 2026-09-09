@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
-	"gitlab.com/gitlab-org/api/client-go/v2"
 )
 
 func (s *Server) ListPipelines(
@@ -17,19 +16,13 @@ func (s *Server) ListPipelines(
 		return response.Fail("project is required")
 	}
 
-	o := &gitlab.ListProjectPipelinesOptions{
-		ListOptions: gitlab.ListOptions{PerPage: 20},
+	project, e := s.resolveProject(a.Project)
+
+	if e != nil {
+		return s.captureDetail(e)
 	}
 
-	if a.Reference != "" {
-		o.Ref = &a.Reference
-	}
-
-	if a.Status != "" {
-		o.Status = new(gitlab.BuildStateValue(a.Status))
-	}
-
-	v, _, e := s.client.Pipelines.ListProjectPipelines(a.Project, o)
+	v, e := s.client.Pipelines(project, a.Reference, a.Status, 20)
 
 	if e != nil {
 		return s.captureDetail(e)

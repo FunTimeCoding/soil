@@ -2,13 +2,13 @@ package gitlab
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"gitlab.com/gitlab-org/api/client-go/v2"
+	"github.com/funtimecoding/soil/pkg/gitlab/registry_repository"
 )
 
 func (c *Client) MustRegistryRepositories(
 	project int64,
 	panicOnForbidden bool,
-) []*gitlab.RegistryRepository {
+) []*registry_repository.Repository {
 	result, e := c.RegistryRepositories(project, panicOnForbidden)
 	errors.PanicOnError(e)
 

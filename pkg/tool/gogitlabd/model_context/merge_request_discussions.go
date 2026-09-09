@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
-	"gitlab.com/gitlab-org/api/client-go/v2"
 )
 
 func (s *Server) MergeRequestDiscussions(
@@ -21,13 +20,13 @@ func (s *Server) MergeRequestDiscussions(
 		return response.Fail("merge_request is required")
 	}
 
-	v, _, e := s.client.Discussions.ListMergeRequestDiscussions(
-		a.Project,
-		a.MergeRequest,
-		&gitlab.ListMergeRequestDiscussionsOptions{
-			ListOptions: gitlab.ListOptions{PerPage: 100},
-		},
-	)
+	project, e := s.resolveProject(a.Project)
+
+	if e != nil {
+		return s.captureDetail(e)
+	}
+
+	v, e := s.client.MergeRequestDiscussions(project, a.MergeRequest)
 
 	if e != nil {
 		return s.captureDetail(e)

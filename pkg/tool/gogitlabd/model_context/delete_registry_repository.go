@@ -6,7 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
-	"gitlab.com/gitlab-org/api/client-go/v2"
 )
 
 func (s *Server) DeleteRegistryRepository(
@@ -22,12 +21,13 @@ func (s *Server) DeleteRegistryRepository(
 		return response.Fail("path is required")
 	}
 
-	list, _, e := s.client.ContainerRegistry.ListProjectRegistryRepositories(
-		a.Project,
-		&gitlab.ListProjectRegistryRepositoriesOptions{
-			ListOptions: gitlab.ListOptions{PerPage: 100},
-		},
-	)
+	project, e := s.resolveProject(a.Project)
+
+	if e != nil {
+		return s.captureDetail(e)
+	}
+
+	list, e := s.client.RegistryRepositories(project, false)
 
 	if e != nil {
 		return s.captureDetail(e)
@@ -42,9 +42,9 @@ func (s *Server) DeleteRegistryRepository(
 				continue
 			}
 
-			if _, f := s.client.ContainerRegistry.DeleteRegistryRepository(
-				a.Project,
-				repository.ID,
+			if f := s.client.DeleteRegistryRepository(
+				project,
+				repository.Identifier,
 			); f != nil {
 				return s.captureDetail(f)
 			}
@@ -59,5 +59,5 @@ func (s *Server) DeleteRegistryRepository(
 		return response.Fail("no registry repository matches %s", a.Path)
 	}
 
-	return response.SuccessAny(map[string]any{"deleted": deleted})
+	return response.SuccessAny(deleted)
 }

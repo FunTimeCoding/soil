@@ -3,7 +3,10 @@ package guard
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
+	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/raid_parser"
+	"github.com/funtimecoding/soil/pkg/relational/lite"
+	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/store"
@@ -11,13 +14,27 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/authorization/client"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"net/http"
+	"path/filepath"
 	"testing"
 )
 
 func TestGuard(t *testing.T) {
-	var s *store.Store
-	var p *raid_parser.Client
+	logCache := t.TempDir()
+	system.WriteFile(
+		filepath.Join(logCache, "LogDataCache.json"),
+		[]byte("{}\n"),
+		0o600,
+	)
+	s := store.New(
+		lite.NewMemory(),
+		logCache,
+		filepath.Join(t.TempDir(), "elite"),
+		logger.New(t.Context()),
+		memory.New(),
+	)
+	p := raid_parser.New(locator.New("localhost"), "guard")
 	authorization := client.New(
 		"https://gate.example.org",
 		"tester",

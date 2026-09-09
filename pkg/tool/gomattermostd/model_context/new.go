@@ -1,7 +1,6 @@
 package model_context
 
 import (
-	"github.com/funtimecoding/soil/pkg/chat/mattermost"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/generative/mark/server"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/constant"
@@ -11,7 +10,7 @@ import (
 )
 
 func New(
-	m *mattermost.Client,
+	m mattermostFace.MattermostSource,
 	o *monitor.Monitor,
 	s *store.Store,
 	i mattermostFace.Indexer,

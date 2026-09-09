@@ -1,15 +1,14 @@
 package guard
 
 import (
-	"github.com/funtimecoding/soil/pkg/argocd"
 	"github.com/funtimecoding/soil/pkg/event/notifier"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/nextcloud/usage"
-	"github.com/funtimecoding/soil/pkg/prometheus"
+	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/service"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/store"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/web"
@@ -24,12 +23,10 @@ import (
 func TestGuard(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "board.yaml")
 	system.WriteFile(path, []byte("{}\n"), 0o600)
-	var p *prometheus.Client
-	var u *usage.Client
-	var a *argocd.Client
-	var c *store.Store
+	c := store.New(lite.NewMemory())
 	b := board.Load(path)
-	v := service.New(b, p, u, a, notifier.New(), logger.New(t.Context()))
+	m := mock_client.New()
+	v := service.New(b, m, m, m, notifier.New(), logger.New(t.Context()))
 	authorization := client.New(
 		"https://gate.example.org",
 		"tester",

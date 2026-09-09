@@ -16,7 +16,13 @@ func (s *Server) GetProject(
 		return response.Fail("project is required")
 	}
 
-	v, _, e := s.client.Projects.GetProject(a.Project, nil)
+	project, e := s.resolveProject(a.Project)
+
+	if e != nil {
+		return s.captureDetail(e)
+	}
+
+	v, e := s.client.Project(project)
 
 	if e != nil {
 		return s.captureDetail(e)

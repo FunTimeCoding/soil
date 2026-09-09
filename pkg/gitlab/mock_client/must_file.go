@@ -2,14 +2,14 @@ package mock_client
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"gitlab.com/gitlab-org/api/client-go/v2"
+	"github.com/funtimecoding/soil/pkg/gitlab/file"
 )
 
 func (c *Client) MustFile(
 	project int64,
 	branch string,
 	name string,
-) *gitlab.File {
+) *file.File {
 	result, e := c.File(project, branch, name)
 	errors.PanicOnError(e)
 

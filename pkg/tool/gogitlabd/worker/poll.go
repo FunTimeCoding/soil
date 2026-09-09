@@ -1,11 +1,11 @@
 package worker
 
 import (
+	"github.com/funtimecoding/soil/pkg/gitlab/pipeline"
 	"github.com/funtimecoding/soil/pkg/gitlab/project"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/types/board_entry"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/types/latest_pipeline"
-	"gitlab.com/gitlab-org/api/client-go/v2"
 	"slices"
 	"strings"
 	"time"
@@ -16,7 +16,7 @@ func (w *Worker) Poll() {
 		project   string
 		reference string
 	}
-	latest := make(map[key]*gitlab.PipelineInfo)
+	latest := make(map[key]*pipeline.Pipeline)
 	projects := make(map[string]*project.Project)
 
 	for _, p := range w.client.MustProjects() {
@@ -39,8 +39,8 @@ func (w *Worker) Poll() {
 		w.gauge.WithLabelValues(k.project, k.reference, i.Status).Set(1)
 		var updated time.Time
 
-		if i.UpdatedAt != nil {
-			updated = *i.UpdatedAt
+		if i.Update != nil {
+			updated = *i.Update
 		}
 
 		entries = append(
@@ -51,8 +51,8 @@ func (w *Worker) Poll() {
 				projects[k.project].Raw.WebURL,
 				k.reference,
 				i.Status,
-				i.ID,
-				i.WebURL,
+				i.Identifier,
+				i.Link,
 				updated,
 			),
 		)

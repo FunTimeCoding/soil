@@ -1,16 +1,20 @@
 package gitlab
 
-import "gitlab.com/gitlab-org/api/client-go/v2"
+import "github.com/funtimecoding/soil/pkg/gitlab/diff"
 
 func (c *Client) MergeRequestDiffs(
 	project int64,
-	mergeRequest int64,
-) ([]*gitlab.MergeRequestDiff, error) {
+	identifier int64,
+) ([]*diff.Diff, error) {
 	result, _, e := c.client.MergeRequests.ListMergeRequestDiffs(
 		project,
-		mergeRequest,
+		identifier,
 		nil,
 	)
 
-	return result, wrapError(e)
+	if e != nil {
+		return nil, wrapError(e)
+	}
+
+	return diff.NewMergeRequestSlice(result), nil
 }

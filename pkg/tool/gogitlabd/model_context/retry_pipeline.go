@@ -20,7 +20,13 @@ func (s *Server) RetryPipeline(
 		return response.Fail("pipeline is required")
 	}
 
-	v, _, e := s.client.Pipelines.RetryPipelineBuild(a.Project, a.Pipeline)
+	project, e := s.resolveProject(a.Project)
+
+	if e != nil {
+		return s.captureDetail(e)
+	}
+
+	v, e := s.client.RetryPipeline(project, a.Pipeline)
 
 	if e != nil {
 		return s.captureDetail(e)

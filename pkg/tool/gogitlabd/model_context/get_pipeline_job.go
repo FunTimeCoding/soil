@@ -20,7 +20,13 @@ func (s *Server) GetPipelineJob(
 		return response.Fail("job is required")
 	}
 
-	v, _, e := s.client.Jobs.GetJob(a.Project, a.Job)
+	project, e := s.resolveProject(a.Project)
+
+	if e != nil {
+		return s.captureDetail(e)
+	}
+
+	v, e := s.client.PipelineJob(project, a.Job)
 
 	if e != nil {
 		return s.captureDetail(e)

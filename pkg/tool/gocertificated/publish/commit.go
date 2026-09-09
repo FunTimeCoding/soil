@@ -37,5 +37,5 @@ func (p *Publisher) Commit(
 		return "", e
 	}
 
-	return result.ID, nil
+	return result.Identifier, nil
 }

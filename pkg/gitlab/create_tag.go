@@ -1,13 +1,16 @@
 package gitlab
 
-import "gitlab.com/gitlab-org/api/client-go/v2"
+import (
+	"github.com/funtimecoding/soil/pkg/gitlab/tag"
+	"gitlab.com/gitlab-org/api/client-go/v2"
+)
 
 func (c *Client) CreateTag(
 	project int64,
 	name string,
 	reference string,
 	message string,
-) (*gitlab.Tag, error) {
+) (*tag.Tag, error) {
 	result, _, e := c.client.Tags.CreateTag(
 		project,
 		&gitlab.CreateTagOptions{
@@ -17,5 +20,9 @@ func (c *Client) CreateTag(
 		},
 	)
 
-	return result, wrapError(e)
+	if e != nil {
+		return nil, wrapError(e)
+	}
+
+	return tag.New(result), nil
 }

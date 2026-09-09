@@ -2,14 +2,14 @@ package gogitlabd
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
+	gitlabFace "github.com/funtimecoding/soil/pkg/gitlab/face"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"gitlab.com/gitlab-org/api/client-go/v2"
 )
 
 func Mount(
-	c *gitlab.Client,
+	c gitlabFace.Forge,
 	b *web.Server,
 	r face.Reporter,
 	t face.Recorder,

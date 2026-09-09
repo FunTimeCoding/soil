@@ -2,10 +2,11 @@ package gitlab
 
 import (
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
+	"github.com/funtimecoding/soil/pkg/gitlab/tag"
 	"gitlab.com/gitlab-org/api/client-go/v2"
 )
 
-func (c *Client) Tags(project int64) ([]*gitlab.Tag, error) {
+func (c *Client) Tags(project int64) ([]*tag.Tag, error) {
 	result, _, e := c.client.Tags.ListTags(
 		project,
 		&gitlab.ListTagsOptions{
@@ -13,5 +14,9 @@ func (c *Client) Tags(project int64) ([]*gitlab.Tag, error) {
 		},
 	)
 
-	return result, wrapError(e)
+	if e != nil {
+		return nil, wrapError(e)
+	}
+
+	return tag.NewSlice(result), nil
 }

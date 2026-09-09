@@ -1,14 +1,14 @@
 package gosentryd
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors/sentry"
 	"github.com/funtimecoding/soil/pkg/face"
+	sentry "github.com/funtimecoding/soil/pkg/tool/gosentryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/model_context"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 )
 
 func Mount(
-	c *sentry.Client,
+	c sentry.SentrySource,
 	organization string,
 	r face.Reporter,
 	t face.Recorder,

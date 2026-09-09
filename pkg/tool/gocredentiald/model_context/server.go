@@ -2,12 +2,12 @@ package model_context
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/tool/gocredentiald/service"
+	credentialFace "github.com/funtimecoding/soil/pkg/tool/gocredentiald/face"
 	"github.com/mark3labs/mcp-go/server"
 )
 
 type Server struct {
 	server   *server.MCPServer
-	service  *service.Service
+	service  credentialFace.CredentialSource
 	reporter face.Reporter
 }

@@ -92,11 +92,15 @@ auth contract with the battery methods, mirroring the mount surface:
   where route existence needs pinning (the other verbs accept any
   non-401, so a dead route passes them)
 
-The battery never invokes tool or REST handlers, so domain
-dependencies enter as typed nils or empty constructions
-(`inventory.New()`, in-memory stores); clients that validate their
-environment at construction always enter as typed nils. Daemons with
-an integration base run the guard test through the base, and bases
+The battery never invokes tool or REST handlers, but every
+dependency still enters as something callable: external API
+clients as the daemon's `mock_client` through the `face/`
+interface Mount consumes, daemon-internal dependencies as empty
+constructions (`inventory.New()`, in-memory stores). Nil is never
+passed - mocks exist precisely so nothing downstream needs a nil
+check, and client code checks its dependencies for nil (almost)
+nowhere, ideally nowhere. Daemons with an integration
+base run the guard test through the base, and bases
 run the full production `Mount` — mock clients flow through it
 because `Mount`, the REST server, and the model_context package all
 consume the daemon's `face/` interfaces, never the concrete clients.

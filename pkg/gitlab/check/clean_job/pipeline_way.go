@@ -13,9 +13,9 @@ func PipelineWay(
 	f *option.Format,
 ) {
 	for _, i := range g.MustPipelines(p.Identifier) {
-		console.Format("Pipeline: %+v\n", i.ID)
+		console.Format("Pipeline: %+v\n", i.Identifier)
 
-		for _, j := range g.MustPipelineJobs(p.Identifier, i.ID) {
+		for _, j := range g.MustPipelineJobs(p.Identifier, i.Identifier) {
 			console.Format("  Job: %s\n", j.Format(f))
 		}
 	}

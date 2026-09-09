@@ -2,10 +2,10 @@ package gitlab
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"gitlab.com/gitlab-org/api/client-go/v2"
+	"github.com/funtimecoding/soil/pkg/gitlab/variable"
 )
 
-func (c *Client) MustVariables(project int64) []*gitlab.ProjectVariable {
+func (c *Client) MustVariables(project int64) []*variable.Variable {
 	result, e := c.Variables(project)
 	errors.PanicOnError(e)
 

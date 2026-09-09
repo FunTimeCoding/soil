@@ -2,14 +2,14 @@ package mock_client
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	"gitlab.com/gitlab-org/api/client-go/v2"
+	"github.com/funtimecoding/soil/pkg/gitlab/file"
 )
 
 func (c *Client) File(
 	_ int64,
 	_ string,
 	name string,
-) (*gitlab.File, error) {
+) (*file.File, error) {
 	f, exists := c.files[name]
 
 	if !exists {

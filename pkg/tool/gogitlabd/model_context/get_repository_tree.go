@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
-	"gitlab.com/gitlab-org/api/client-go/v2"
 )
 
 func (s *Server) GetRepositoryTree(
@@ -17,21 +16,13 @@ func (s *Server) GetRepositoryTree(
 		return response.Fail("project is required")
 	}
 
-	o := &gitlab.ListTreeOptions{ListOptions: gitlab.ListOptions{PerPage: 100}}
+	project, e := s.resolveProject(a.Project)
 
-	if a.Path != "" {
-		o.Path = &a.Path
+	if e != nil {
+		return s.captureDetail(e)
 	}
 
-	if a.Reference != "" {
-		o.Ref = &a.Reference
-	}
-
-	if a.Recursive {
-		o.Recursive = &a.Recursive
-	}
-
-	v, _, e := s.client.Repositories.ListTree(a.Project, o)
+	v, e := s.client.Tree(project, a.Path, a.Reference, a.Recursive, 0)
 
 	if e != nil {
 		return s.captureDetail(e)

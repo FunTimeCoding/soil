@@ -2,10 +2,10 @@ package runner
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/kubernetes/client"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/provision/runner"
 	"github.com/funtimecoding/soil/pkg/provision/store"
+	terraformFace "github.com/funtimecoding/soil/pkg/tool/goterraformd/face"
 )
 
 type Runner struct {
@@ -17,7 +17,7 @@ type Runner struct {
 	reporter       face.Reporter
 	registry       face.ProcessRegistry
 	metrics        *metrics
-	kubernetes     *client.Client
+	kubernetes     terraformFace.LeaseSource
 	stateNamespace string
 	stateLeaseName string
 }

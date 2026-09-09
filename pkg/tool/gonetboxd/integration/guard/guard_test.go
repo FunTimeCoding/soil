@@ -4,9 +4,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
-	"github.com/funtimecoding/soil/pkg/netbox"
+	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/store"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -14,14 +15,12 @@ import (
 )
 
 func TestGuard(t *testing.T) {
-	var c *netbox.Client
-	var s *store.Store
 	v := model_context_server.New(
 		t,
 		func(_ *http.ServeMux, g *guard.Mux) {
 			gonetboxd.Mount(
-				c,
-				s,
+				mock_client.New(),
+				store.New(lite.NewMemory()),
 				memory.New(),
 				mock_recorder.New(),
 				constant.DefaultVersion,

@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
-	"gitlab.com/gitlab-org/api/client-go/v2"
 )
 
 func (s *Server) GetFileContents(
@@ -21,13 +20,13 @@ func (s *Server) GetFileContents(
 		return response.Fail("path is required")
 	}
 
-	o := &gitlab.GetFileOptions{}
+	project, e := s.resolveProject(a.Project)
 
-	if a.Reference != "" {
-		o.Ref = &a.Reference
+	if e != nil {
+		return s.captureDetail(e)
 	}
 
-	v, _, e := s.client.RepositoryFiles.GetFile(a.Project, a.Path, o)
+	v, e := s.client.File(project, a.Reference, a.Path)
 
 	if e != nil {
 		return s.captureDetail(e)

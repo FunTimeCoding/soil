@@ -2,11 +2,11 @@ package gitlab
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"gitlab.com/gitlab-org/api/client-go/v2"
+	"github.com/funtimecoding/soil/pkg/gitlab/tree"
 )
 
-func (c *Client) MustTree(project int64) []*gitlab.TreeNode {
-	result, e := c.Tree(project)
+func (c *Client) MustTree(project int64) []*tree.Node {
+	result, e := c.Tree(project, "", "", false, 0)
 	errors.PanicOnError(e)
 
 	return result

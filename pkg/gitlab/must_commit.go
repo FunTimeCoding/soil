@@ -2,7 +2,7 @@ package gitlab
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"gitlab.com/gitlab-org/api/client-go/v2"
+	"github.com/funtimecoding/soil/pkg/gitlab/commit"
 )
 
 func (c *Client) MustCommit(
@@ -12,7 +12,7 @@ func (c *Client) MustCommit(
 	path string,
 	content string,
 	update bool,
-) *gitlab.Commit {
+) *commit.Commit {
 	result, e := c.Commit(project, branch, text, path, content, update)
 	errors.PanicOnError(e)
 

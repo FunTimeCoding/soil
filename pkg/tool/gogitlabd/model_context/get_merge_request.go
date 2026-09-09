@@ -20,11 +20,13 @@ func (s *Server) GetMergeRequest(
 		return response.Fail("merge_request is required")
 	}
 
-	v, _, e := s.client.MergeRequests.GetMergeRequest(
-		a.Project,
-		a.MergeRequest,
-		nil,
-	)
+	project, e := s.resolveProject(a.Project)
+
+	if e != nil {
+		return s.captureDetail(e)
+	}
+
+	v, e := s.client.MergeRequest(project, a.MergeRequest)
 
 	if e != nil {
 		return s.captureDetail(e)

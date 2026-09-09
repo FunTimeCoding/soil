@@ -1,12 +1,16 @@
 package gitlab
 
-import "gitlab.com/gitlab-org/api/client-go/v2"
+import "github.com/funtimecoding/soil/pkg/gitlab/variable"
 
 func (c *Client) ProjectVariable(
 	project int64,
 	key string,
-) (*gitlab.ProjectVariable, error) {
+) (*variable.Variable, error) {
 	result, _, e := c.client.ProjectVariables.GetVariable(project, key, nil)
 
-	return result, wrapError(e)
+	if e != nil {
+		return nil, wrapError(e)
+	}
+
+	return variable.New(result), nil
 }

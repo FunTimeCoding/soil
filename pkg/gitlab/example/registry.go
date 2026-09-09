@@ -22,6 +22,6 @@ func Registry() {
 	console.Format("Repositories: %d\n", len(r))
 
 	for _, r := range r {
-		console.Format("Registry: %d %s\n", r.ID, r.Name)
+		console.Format("Registry: %d %s\n", r.Identifier, r.Name)
 	}
 }

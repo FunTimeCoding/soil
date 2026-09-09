@@ -8,24 +8,23 @@ import (
 
 func (c *Client) ProjectMergeRequests(
 	project int64,
-	all bool,
+	state string,
 ) ([]*merge_request.Request, error) {
+	if state == "" {
+		state = constant.OpenedState
+	}
+
 	var result []*gitlab.BasicMergeRequest
 	number := int64(1)
 
 	for {
 		o := &gitlab.ListProjectMergeRequestsOptions{
-			State: new(constant.OpenedState),
+			State: &state,
 			ListOptions: gitlab.ListOptions{
 				PerPage: constant.PerPage100,
 				Page:    number,
 			},
 		}
-
-		if all {
-			o.State = new("all")
-		}
-
 		page, _, e := c.client.MergeRequests.ListProjectMergeRequests(
 			project,
 			o,

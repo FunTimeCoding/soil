@@ -1,7 +1,7 @@
 package mock_client
 
-import "gitlab.com/gitlab-org/api/client-go/v2"
+import "github.com/funtimecoding/soil/pkg/gitlab/file"
 
 func New() *Client {
-	return &Client{files: make(map[string]*gitlab.File)}
+	return &Client{files: make(map[string]*file.File)}
 }

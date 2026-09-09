@@ -1,10 +1,10 @@
 package mock_client
 
-import "gitlab.com/gitlab-org/api/client-go/v2"
+import "github.com/funtimecoding/soil/pkg/gitlab/registry_repository"
 
 func (c *Client) RegistryRepositories(
 	_ int64,
 	_ bool,
-) ([]*gitlab.RegistryRepository, error) {
+) ([]*registry_repository.Repository, error) {
 	return nil, nil
 }

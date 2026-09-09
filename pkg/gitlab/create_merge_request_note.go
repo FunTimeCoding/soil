@@ -1,17 +1,24 @@
 package gitlab
 
-import "gitlab.com/gitlab-org/api/client-go/v2"
+import (
+	"github.com/funtimecoding/soil/pkg/gitlab/note"
+	"gitlab.com/gitlab-org/api/client-go/v2"
+)
 
 func (c *Client) CreateMergeRequestNote(
 	project int64,
-	mergeRequest int64,
+	identifier int64,
 	body string,
-) (*gitlab.Note, error) {
+) (*note.Note, error) {
 	result, _, e := c.client.Notes.CreateMergeRequestNote(
 		project,
-		mergeRequest,
+		identifier,
 		&gitlab.CreateMergeRequestNoteOptions{Body: &body},
 	)
 
-	return result, wrapError(e)
+	if e != nil {
+		return nil, wrapError(e)
+	}
+
+	return note.New(result), nil
 }

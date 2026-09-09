@@ -23,9 +23,9 @@ func (s *Server) pipelineDetail(
 	errors.PanicOnError(f)
 	var ran gomponents.Node
 
-	if p.CreatedAt != nil {
+	if p.Create != nil {
 		ran = html.Small(
-			gomponents.Text(p.CreatedAt.Local().Format(timeConstant.DateYear)),
+			gomponents.Text(p.Create.Local().Format(timeConstant.DateYear)),
 		)
 	}
 
@@ -43,7 +43,7 @@ func (s *Server) pipelineDetail(
 
 	external := html.Small(
 		html.A(
-			html.Href(p.WebURL),
+			html.Href(p.Link),
 			html.Target("_blank"),
 			gomponents.Text("open in GitLab"),
 		),

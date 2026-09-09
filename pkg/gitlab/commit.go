@@ -1,6 +1,9 @@
 package gitlab
 
-import "gitlab.com/gitlab-org/api/client-go/v2"
+import (
+	"github.com/funtimecoding/soil/pkg/gitlab/commit"
+	"gitlab.com/gitlab-org/api/client-go/v2"
+)
 
 func (c *Client) Commit(
 	project int64,
@@ -9,7 +12,7 @@ func (c *Client) Commit(
 	path string,
 	content string,
 	update bool,
-) (*gitlab.Commit, error) {
+) (*commit.Commit, error) {
 	var action gitlab.FileActionValue
 
 	if update {
@@ -29,5 +32,9 @@ func (c *Client) Commit(
 		},
 	)
 
-	return result, wrapError(e)
+	if e != nil {
+		return nil, wrapError(e)
+	}
+
+	return commit.New(result), nil
 }

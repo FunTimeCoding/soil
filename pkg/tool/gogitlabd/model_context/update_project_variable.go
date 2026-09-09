@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
-	"gitlab.com/gitlab-org/api/client-go/v2"
 )
 
 func (s *Server) UpdateProjectVariable(
@@ -25,15 +24,19 @@ func (s *Server) UpdateProjectVariable(
 		return response.Fail("value is required")
 	}
 
-	v, _, e := s.client.ProjectVariables.UpdateVariable(
-		a.Project,
+	project, e := s.resolveProject(a.Project)
+
+	if e != nil {
+		return s.captureDetail(e)
+	}
+
+	v, e := s.client.UpdateProjectVariable(
+		project,
 		a.Key,
-		&gitlab.UpdateProjectVariableOptions{
-			Value:     &a.Value,
-			Protected: &a.Protected,
-			Masked:    &a.Masked,
-			Raw:       new(!a.Expand),
-		},
+		a.Value,
+		a.Protected,
+		a.Masked,
+		!a.Expand,
 	)
 
 	if e != nil {

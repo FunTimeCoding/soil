@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
-	"gitlab.com/gitlab-org/api/client-go/v2"
 )
 
 func (s *Server) ListCommits(
@@ -17,15 +16,13 @@ func (s *Server) ListCommits(
 		return response.Fail("project is required")
 	}
 
-	o := &gitlab.ListCommitsOptions{
-		ListOptions: gitlab.ListOptions{PerPage: 20},
+	project, e := s.resolveProject(a.Project)
+
+	if e != nil {
+		return s.captureDetail(e)
 	}
 
-	if a.Reference != "" {
-		o.RefName = &a.Reference
-	}
-
-	v, _, e := s.client.Commits.ListCommits(a.Project, o)
+	v, e := s.client.ListCommits(project, a.Reference, 0)
 
 	if e != nil {
 		return s.captureDetail(e)

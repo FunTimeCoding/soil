@@ -1,20 +1,19 @@
 package pipeline
 
 import (
-	"gitlab.com/gitlab-org/api/client-go/v2"
 	"golang.org/x/mod/semver"
 	"log"
 )
 
-func LatestSemantic(v []*gitlab.PipelineInfo) *gitlab.PipelineInfo {
+func LatestSemantic(v []*Pipeline) *Pipeline {
 	if len(v) == 0 {
 		log.Panic("empty slice")
 	}
 
-	var result *gitlab.PipelineInfo
+	var result *Pipeline
 
 	for _, e := range v {
-		if !semver.IsValid(e.Ref) {
+		if !semver.IsValid(e.Reference) {
 			continue
 		}
 
@@ -24,7 +23,7 @@ func LatestSemantic(v []*gitlab.PipelineInfo) *gitlab.PipelineInfo {
 			continue
 		}
 
-		if semver.Compare(e.Ref, result.Ref) > 0 {
+		if semver.Compare(e.Reference, result.Reference) > 0 {
 			result = e
 		}
 	}

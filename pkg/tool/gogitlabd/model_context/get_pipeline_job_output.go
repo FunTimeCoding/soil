@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
-	"io"
 )
 
 func (s *Server) GetPipelineJobOutput(
@@ -21,17 +20,17 @@ func (s *Server) GetPipelineJobOutput(
 		return response.Fail("job is required")
 	}
 
-	r, _, e := s.client.Jobs.GetTraceFile(a.Project, a.Job)
+	project, e := s.resolveProject(a.Project)
 
 	if e != nil {
 		return s.captureDetail(e)
 	}
 
-	b, e := io.ReadAll(r)
+	v, e := s.client.Trace(project, a.Job)
 
 	if e != nil {
 		return s.captureDetail(e)
 	}
 
-	return mcp.NewToolResultText(string(b)), nil
+	return mcp.NewToolResultText(v), nil
 }

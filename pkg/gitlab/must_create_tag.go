@@ -2,7 +2,7 @@ package gitlab
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"gitlab.com/gitlab-org/api/client-go/v2"
+	"github.com/funtimecoding/soil/pkg/gitlab/tag"
 )
 
 func (c *Client) MustCreateTag(
@@ -10,7 +10,7 @@ func (c *Client) MustCreateTag(
 	name string,
 	reference string,
 	message string,
-) *gitlab.Tag {
+) *tag.Tag {
 	result, e := c.CreateTag(project, name, reference, message)
 	errors.PanicOnError(e)
 

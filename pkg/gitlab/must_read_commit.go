@@ -2,13 +2,13 @@ package gitlab
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"gitlab.com/gitlab-org/api/client-go/v2"
+	"github.com/funtimecoding/soil/pkg/gitlab/commit"
 )
 
 func (c *Client) MustReadCommit(
 	project int64,
 	sha string,
-) *gitlab.Commit {
+) *commit.Commit {
 	result, e := c.ReadCommit(project, sha)
 	errors.PanicOnError(e)
 

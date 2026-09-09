@@ -1,20 +1,32 @@
 package gitlab
 
-import "gitlab.com/gitlab-org/api/client-go/v2"
+import (
+	"github.com/funtimecoding/soil/pkg/gitlab/variable"
+	"gitlab.com/gitlab-org/api/client-go/v2"
+)
 
 func (c *Client) CreateProjectVariable(
 	project int64,
 	key string,
 	value string,
-) (*gitlab.ProjectVariable, error) {
+	protected bool,
+	masked bool,
+	literal bool,
+) (*variable.Variable, error) {
 	result, _, e := c.client.ProjectVariables.CreateVariable(
 		project,
 		&gitlab.CreateProjectVariableOptions{
-			Key:   &key,
-			Value: &value,
-			Raw:   new(true),
+			Key:       &key,
+			Value:     &value,
+			Protected: &protected,
+			Masked:    &masked,
+			Raw:       &literal,
 		},
 	)
 
-	return result, wrapError(e)
+	if e != nil {
+		return nil, wrapError(e)
+	}
+
+	return variable.New(result), nil
 }

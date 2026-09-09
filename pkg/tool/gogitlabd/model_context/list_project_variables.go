@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
-	"gitlab.com/gitlab-org/api/client-go/v2"
 )
 
 func (s *Server) ListProjectVariables(
@@ -17,10 +16,13 @@ func (s *Server) ListProjectVariables(
 		return response.Fail("project is required")
 	}
 
-	v, _, e := s.client.ProjectVariables.ListVariables(
-		a.Project,
-		&gitlab.ListProjectVariablesOptions{},
-	)
+	project, e := s.resolveProject(a.Project)
+
+	if e != nil {
+		return s.captureDetail(e)
+	}
+
+	v, e := s.client.Variables(project)
 
 	if e != nil {
 		return s.captureDetail(e)

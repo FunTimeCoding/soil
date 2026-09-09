@@ -2,12 +2,12 @@ package server
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/netbox"
+	netbox "github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/store"
 )
 
 func New(
-	c *netbox.Client,
+	c netbox.NetboxSource,
 	s *store.Store,
 	r face.Reporter,
 ) *Server {

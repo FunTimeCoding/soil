@@ -4,6 +4,12 @@ Recovery middleware remains as a safety net for unexpected panics
 even on strict server services - it catches anything that slips
 past explicit error handling.
 
+Handler bodies split by service class: external API services call
+non-Must client methods and route failures through captureDetail;
+local store services may keep `Must*`/`PanicOnError` and lean on
+the recovery net. The Must/non-Must pair convention lives in
+`service-tool.md`.
+
 Services using oapi-codegen's strict server mode return typed error
 responses. The OpenAPI spec defines two error schemas:
 

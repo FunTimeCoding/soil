@@ -1,17 +1,18 @@
 package monitor
 
 import (
-	"github.com/funtimecoding/soil/pkg/chat/mattermost"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	mattermost "github.com/funtimecoding/soil/pkg/tool/gomattermostd/face"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/monitor/option"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/monitor/scheduler"
 	"github.com/mattermost/mattermost/server/public/model"
 	"sync"
 )
 
 type Monitor struct {
-	client               *mattermost.Client
-	configuration        *Configuration
+	client               mattermost.MattermostSource
+	configuration        *option.Monitor
 	logger               *logger.Logger
 	reporter             face.Reporter
 	scheduler            *scheduler.Scheduler

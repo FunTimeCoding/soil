@@ -2,11 +2,11 @@ package gitlab
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"gitlab.com/gitlab-org/api/client-go/v2"
+	"github.com/funtimecoding/soil/pkg/gitlab/pipeline"
 )
 
-func (c *Client) MustPipelines(project int64) []*gitlab.PipelineInfo {
-	result, e := c.Pipelines(project)
+func (c *Client) MustPipelines(project int64) []*pipeline.Pipeline {
+	result, e := c.Pipelines(project, "", "", 0)
 	errors.PanicOnError(e)
 
 	return result

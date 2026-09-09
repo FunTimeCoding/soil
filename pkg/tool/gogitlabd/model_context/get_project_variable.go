@@ -20,7 +20,13 @@ func (s *Server) GetProjectVariable(
 		return response.Fail("key is required")
 	}
 
-	v, _, e := s.client.ProjectVariables.GetVariable(a.Project, a.Key, nil)
+	project, e := s.resolveProject(a.Project)
+
+	if e != nil {
+		return s.captureDetail(e)
+	}
+
+	v, e := s.client.ProjectVariable(project, a.Key)
 
 	if e != nil {
 		return s.captureDetail(e)

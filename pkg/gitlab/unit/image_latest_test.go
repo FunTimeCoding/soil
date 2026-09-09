@@ -10,12 +10,12 @@ import (
 func TestImageLatest(t *testing.T) {
 	assert.Any(
 		t,
-		&gitlab.RegistryRepositoryTag{Path: "stub:v1.0.2"},
+		image.New(&gitlab.RegistryRepositoryTag{Path: "stub:v1.0.2"}),
 		image.Latest(
-			[]*gitlab.RegistryRepositoryTag{
-				{Path: "stub:v1.0.0"},
-				{Path: "stub:v1.0.1"},
-				{Path: "stub:v1.0.2"},
+			[]*image.Image{
+				image.New(&gitlab.RegistryRepositoryTag{Path: "stub:v1.0.0"}),
+				image.New(&gitlab.RegistryRepositoryTag{Path: "stub:v1.0.1"}),
+				image.New(&gitlab.RegistryRepositoryTag{Path: "stub:v1.0.2"}),
 			},
 		),
 	)

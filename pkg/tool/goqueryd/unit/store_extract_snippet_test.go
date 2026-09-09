@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
 	"strings"
 	"testing"
+	"unicode/utf8"
 )
 
 func TestExtractSnippetFindsQueryTerms(t *testing.T) {
@@ -43,4 +44,29 @@ func TestExtractSnippetTruncatesLongResult(t *testing.T) {
 	)
 	snippet, _ := store.ExtractSnippet(long, "keyword", 0)
 	assert.Less(t, 401, len(snippet))
+}
+
+func TestExtractSnippetTruncatesOnRuneBoundary(t *testing.T) {
+	long := strings.Join(
+		[]string{
+			"keyword",
+			strings.Repeat("a", 387),
+			strings.Repeat("—", 20),
+		},
+		" ",
+	)
+	snippet, _ := store.ExtractSnippet(long, "keyword", 0)
+	assert.True(t, utf8.ValidString(snippet))
+	assert.Less(t, 401, len(snippet))
+}
+
+func TestExtractSnippetChunkWindowOnRuneBoundary(t *testing.T) {
+	body := strings.Join(
+		[]string{strings.Repeat("—", 100), "keyword target line"},
+		"",
+	)
+	position := strings.Index(body, "keyword")
+	snippet, _ := store.ExtractSnippet(body, "keyword", position)
+	assert.True(t, utf8.ValidString(snippet))
+	assert.StringContains(t, "keyword", snippet)
 }

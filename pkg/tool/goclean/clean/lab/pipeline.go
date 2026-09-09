@@ -54,31 +54,39 @@ func Pipeline(
 
 	for _, i := range pipelines {
 		if latestSemantic != nil &&
-			i.Ref == latestSemantic.Ref &&
-			i.SHA == mainHash {
+			i.Reference == latestSemantic.Reference &&
+			i.Hash == mainHash {
 			if o.Verbose {
-				console.Format("Skip pipeline (sematic): %s %s\n", i.Ref, i.SHA)
+				console.Format(
+					"Skip pipeline (sematic): %s %s\n",
+					i.Reference,
+					i.Hash,
+				)
 			}
 
 			continue
 		}
 
 		if latestMain != nil &&
-			i.Ref == mainBranch.Name &&
-			i.SHA == latestMain.SHA {
+			i.Reference == mainBranch.Name &&
+			i.Hash == latestMain.Hash {
 			if o.Verbose {
-				console.Format("Skip pipeline (main): %s %s\n", i.Ref, i.SHA)
+				console.Format(
+					"Skip pipeline (main): %s %s\n",
+					i.Reference,
+					i.Hash,
+				)
 			}
 
 			continue
 		}
 
 		if o.Verbose {
-			console.Format("Pipeline: %s %s\n", i.Ref, i.SHA)
+			console.Format("Pipeline: %s %s\n", i.Reference, i.Hash)
 		} else {
-			console.Format("Pipeline: %s\n", i.Ref)
+			console.Format("Pipeline: %s\n", i.Reference)
 		}
 
-		c.MustDeletePipeline(p.Identifier, i.ID)
+		c.MustDeletePipeline(p.Identifier, i.Identifier)
 	}
 }

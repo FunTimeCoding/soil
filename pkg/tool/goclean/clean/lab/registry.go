@@ -14,7 +14,7 @@ func Registry(
 	p *project.Project,
 ) {
 	for _, r := range c.MustRegistryRepositories(p.Identifier, false) {
-		images := c.MustImages(p.Identifier, r.ID)
+		images := c.MustImages(p.Identifier, r.Identifier)
 
 		if len(images) == 0 {
 			continue
@@ -23,7 +23,7 @@ func Registry(
 		if strings.HasSuffix(r.Name, "/cache") {
 			for _, i := range images {
 				console.Format("Image: %s\n", i.Name)
-				c.MustDeleteImage(p.Identifier, r.ID, i.Name)
+				c.MustDeleteImage(p.Identifier, r.Identifier, i.Name)
 			}
 
 			continue
@@ -42,7 +42,7 @@ func Registry(
 			}
 
 			console.Format("Image: %s\n", i.Name)
-			c.MustDeleteImage(p.Identifier, r.ID, i.Name)
+			c.MustDeleteImage(p.Identifier, r.Identifier, i.Name)
 		}
 	}
 }

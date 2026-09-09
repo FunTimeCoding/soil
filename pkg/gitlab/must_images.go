@@ -2,13 +2,13 @@ package gitlab
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"gitlab.com/gitlab-org/api/client-go/v2"
+	"github.com/funtimecoding/soil/pkg/gitlab/image"
 )
 
 func (c *Client) MustImages(
 	project int64,
 	repository int64,
-) []*gitlab.RegistryRepositoryTag {
+) []*image.Image {
 	result, e := c.Images(project, repository)
 	errors.PanicOnError(e)
 

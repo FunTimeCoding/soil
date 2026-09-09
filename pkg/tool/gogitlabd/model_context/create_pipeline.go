@@ -27,24 +27,15 @@ func (s *Server) CreatePipeline(
 		return s.captureDetail(e)
 	}
 
-	options := &gitlab.CreatePipelineOptions{Ref: &a.Reference}
+	vars := make([]*gitlab.PipelineVariableOptions, 0, len(a.Variables))
 
-	if len(a.Variables) > 0 {
-		vars := make([]*gitlab.PipelineVariableOptions, 0, len(a.Variables))
-
-		for key, value := range a.Variables {
-			k := key
-			l := value
-			vars = append(
-				vars,
-				&gitlab.PipelineVariableOptions{Key: &k, Value: &l},
-			)
-		}
-
-		options.Variables = &vars
+	for key, value := range a.Variables {
+		k := key
+		l := value
+		vars = append(vars, &gitlab.PipelineVariableOptions{Key: &k, Value: &l})
 	}
 
-	v, _, e := s.client.Pipelines.CreatePipeline(project, options)
+	v, e := s.client.CreatePipeline(project, a.Reference, vars)
 
 	if e != nil {
 		return s.captureDetail(e)

@@ -1,16 +1,20 @@
 package gitlab
 
-import "gitlab.com/gitlab-org/api/client-go/v2"
+import "github.com/funtimecoding/soil/pkg/gitlab/discussion"
 
 func (c *Client) MergeRequestDiscussions(
 	project int64,
-	mergeRequest int64,
-) ([]*gitlab.Discussion, error) {
+	identifier int64,
+) ([]*discussion.Discussion, error) {
 	result, _, e := c.client.Discussions.ListMergeRequestDiscussions(
 		project,
-		mergeRequest,
+		identifier,
 		nil,
 	)
 
-	return result, wrapError(e)
+	if e != nil {
+		return nil, wrapError(e)
+	}
+
+	return discussion.NewSlice(result), nil
 }

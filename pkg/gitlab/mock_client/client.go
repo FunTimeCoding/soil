@@ -1,8 +1,8 @@
 package mock_client
 
-import "gitlab.com/gitlab-org/api/client-go/v2"
+import "github.com/funtimecoding/soil/pkg/gitlab/file"
 
 type Client struct {
-	files   map[string]*gitlab.File
-	commits []*Commit
+	files   map[string]*file.File
+	commits []*RecordedCommit
 }

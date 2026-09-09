@@ -2,11 +2,11 @@ package runner
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/kubernetes/client"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/provision/downstream"
 	"github.com/funtimecoding/soil/pkg/provision/runner"
 	"github.com/funtimecoding/soil/pkg/provision/store"
+	terraformFace "github.com/funtimecoding/soil/pkg/tool/goterraformd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/option"
 	"github.com/prometheus/client_golang/prometheus"
 )
@@ -18,7 +18,7 @@ func New(
 	r face.Reporter,
 	registry face.ProcessRegistry,
 	y *prometheus.Registry,
-	k *client.Client,
+	k terraformFace.LeaseSource,
 ) *Runner {
 	result := &Runner{
 		store:          s,

@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
-	"gitlab.com/gitlab-org/api/client-go/v2"
 )
 
 func (s *Server) GetCommitDiff(
@@ -21,13 +20,13 @@ func (s *Server) GetCommitDiff(
 		return response.Fail("sha is required")
 	}
 
-	v, _, e := s.client.Commits.GetCommitDiff(
-		a.Project,
-		a.Sha,
-		&gitlab.GetCommitDiffOptions{
-			ListOptions: gitlab.ListOptions{PerPage: 100},
-		},
-	)
+	project, e := s.resolveProject(a.Project)
+
+	if e != nil {
+		return s.captureDetail(e)
+	}
+
+	v, e := s.client.CommitDiff(project, a.Sha, 0)
 
 	if e != nil {
 		return s.captureDetail(e)

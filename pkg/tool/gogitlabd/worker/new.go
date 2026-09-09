@@ -4,14 +4,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
 	"github.com/funtimecoding/soil/pkg/event/notifier"
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/gitlab"
+	botFace "github.com/funtimecoding/soil/pkg/gitlab/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/prometheus/client_golang/prometheus"
 	"time"
 )
 
 func New(
-	client *gitlab.Client,
+	client botFace.Forge,
 	interval time.Duration,
 	y *prometheus.Registry,
 	l *logger.Logger,

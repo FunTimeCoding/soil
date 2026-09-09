@@ -2,21 +2,20 @@ package image
 
 import (
 	"github.com/funtimecoding/soil/pkg/constant"
-	"gitlab.com/gitlab-org/api/client-go/v2"
 	"golang.org/x/mod/semver"
 )
 
-func Latest(v []*gitlab.RegistryRepositoryTag) *gitlab.RegistryRepositoryTag {
+func Latest(v []*Image) *Image {
 	result := v[0]
 
 	for _, e := range v {
-		current := Version(e)
+		current := e.Version()
 		// skip latest
 		if current == constant.LatestVersion {
 			continue
 		}
 
-		if semver.Compare(current, Version(result)) > 0 {
+		if semver.Compare(current, result.Version()) > 0 {
 			result = e
 		}
 	}

@@ -9,7 +9,7 @@ import (
 func (c *Client) Images(
 	project int64,
 	repository int64,
-) ([]*gitlab.RegistryRepositoryTag, error) {
+) ([]*image.Image, error) {
 	result, _, e := c.client.ContainerRegistry.ListRegistryRepositoryTags(
 		project,
 		repository,
@@ -22,5 +22,5 @@ func (c *Client) Images(
 		return nil, wrapError(e)
 	}
 
-	return image.Sort(result), nil
+	return image.Sort(image.NewSlice(result)), nil
 }

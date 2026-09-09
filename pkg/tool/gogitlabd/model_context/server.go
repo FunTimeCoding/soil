@@ -2,12 +2,12 @@ package model_context
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
+	forge "github.com/funtimecoding/soil/pkg/gitlab/face"
 	"github.com/mark3labs/mcp-go/server"
-	"gitlab.com/gitlab-org/api/client-go/v2"
 )
 
 type Server struct {
 	server   *server.MCPServer
-	client   *gitlab.Client
+	client   forge.Forge
 	reporter face.Reporter
 }

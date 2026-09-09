@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
-	soilGitlab "github.com/funtimecoding/soil/pkg/gitlab"
+	"github.com/funtimecoding/soil/pkg/gitlab/mock_client"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd"
@@ -13,15 +13,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/worker"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/prometheus/client_golang/prometheus"
-	"gitlab.com/gitlab-org/api/client-go/v2"
 	"net/http"
 	"testing"
 	"time"
 )
 
 func TestGuard(t *testing.T) {
-	var c *soilGitlab.Client
-	var n *gitlab.Client
+	c := mock_client.New()
 	k := worker.New(
 		c,
 		time.Hour,
@@ -33,7 +31,7 @@ func TestGuard(t *testing.T) {
 		t,
 		func(_ *http.ServeMux, g *guard.Mux) {
 			gogitlabd.Mount(
-				n,
+				mock_client.New(),
 				web.New(c, k),
 				memory.New(),
 				mock_recorder.New(),

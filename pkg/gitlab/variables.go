@@ -2,10 +2,11 @@ package gitlab
 
 import (
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
+	"github.com/funtimecoding/soil/pkg/gitlab/variable"
 	"gitlab.com/gitlab-org/api/client-go/v2"
 )
 
-func (c *Client) Variables(project int64) ([]*gitlab.ProjectVariable, error) {
+func (c *Client) Variables(project int64) ([]*variable.Variable, error) {
 	var result []*gitlab.ProjectVariable
 	number := int64(1)
 
@@ -22,7 +23,7 @@ func (c *Client) Variables(project int64) ([]*gitlab.ProjectVariable, error) {
 
 		if r != nil && r.StatusCode == 403 {
 			// Do not panic
-			return result, nil
+			return variable.NewSlice(result), nil
 		}
 
 		if e != nil {
@@ -38,5 +39,5 @@ func (c *Client) Variables(project int64) ([]*gitlab.ProjectVariable, error) {
 		number++
 	}
 
-	return result, nil
+	return variable.NewSlice(result), nil
 }

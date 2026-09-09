@@ -12,6 +12,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/constant"
 	mattermostFace "github.com/funtimecoding/soil/pkg/tool/gomattermostd/face"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/monitor"
+	monitorOption "github.com/funtimecoding/soil/pkg/tool/gomattermostd/monitor/option"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/notifier"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/store"
@@ -58,7 +59,7 @@ func Run(
 
 	var m *monitor.Monitor
 
-	if v := monitor.LoadConfiguration(); v.Enabled {
+	if v := monitorOption.NewEnvironment(); v.Enabled {
 		m = monitor.New(c, v, l, r)
 		p = append(p, lifecycle.WithWorker(m))
 	}

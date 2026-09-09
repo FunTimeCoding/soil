@@ -1,7 +1,6 @@
 package model_context
 
 import (
-	"github.com/funtimecoding/soil/pkg/chat/mattermost"
 	"github.com/funtimecoding/soil/pkg/face"
 	mattermostFace "github.com/funtimecoding/soil/pkg/tool/gomattermostd/face"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/monitor"
@@ -11,7 +10,7 @@ import (
 
 type Server struct {
 	server       *server.MCPServer
-	client       *mattermost.Client
+	client       mattermostFace.MattermostSource
 	monitor      *monitor.Monitor
 	store    *store.Store
 	indexer  mattermostFace.Indexer

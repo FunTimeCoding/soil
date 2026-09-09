@@ -20,7 +20,13 @@ func (s *Server) GetCommit(
 		return response.Fail("sha is required")
 	}
 
-	v, _, e := s.client.Commits.GetCommit(a.Project, a.Sha, nil)
+	project, e := s.resolveProject(a.Project)
+
+	if e != nil {
+		return s.captureDetail(e)
+	}
+
+	v, e := s.client.ReadCommit(project, a.Sha)
 
 	if e != nil {
 		return s.captureDetail(e)

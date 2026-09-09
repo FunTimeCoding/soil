@@ -1,12 +1,16 @@
 package gitlab
 
-import "gitlab.com/gitlab-org/api/client-go/v2"
+import "github.com/funtimecoding/soil/pkg/gitlab/pipeline_detail"
 
 func (c *Client) Pipeline(
 	project int64,
-	pipeline int64,
-) (*gitlab.Pipeline, error) {
-	result, _, e := c.client.Pipelines.GetPipeline(project, pipeline)
+	identifier int64,
+) (*pipeline_detail.Detail, error) {
+	result, _, e := c.client.Pipelines.GetPipeline(project, identifier)
 
-	return result, wrapError(e)
+	if e != nil {
+		return nil, wrapError(e)
+	}
+
+	return pipeline_detail.New(result), nil
 }

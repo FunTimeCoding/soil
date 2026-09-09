@@ -7,9 +7,9 @@ import (
 
 func (c *Client) MustProjectMergeRequests(
 	project int64,
-	all bool,
+	state string,
 ) []*merge_request.Request {
-	result, e := c.ProjectMergeRequests(project, all)
+	result, e := c.ProjectMergeRequests(project, state)
 	errors.PanicOnError(e)
 
 	return result

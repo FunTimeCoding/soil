@@ -1,16 +1,20 @@
 package gitlab
 
-import "gitlab.com/gitlab-org/api/client-go/v2"
+import "github.com/funtimecoding/soil/pkg/gitlab/merge_request_detail"
 
 func (c *Client) MergeRequest(
 	project int64,
-	mergeRequest int64,
-) (*gitlab.MergeRequest, error) {
+	identifier int64,
+) (*merge_request_detail.Detail, error) {
 	result, _, e := c.client.MergeRequests.GetMergeRequest(
 		project,
-		mergeRequest,
+		identifier,
 		nil,
 	)
 
-	return result, wrapError(e)
+	if e != nil {
+		return nil, wrapError(e)
+	}
+
+	return merge_request_detail.New(result), nil
 }

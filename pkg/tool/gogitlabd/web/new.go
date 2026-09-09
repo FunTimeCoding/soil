@@ -1,7 +1,7 @@
 package web
 
 import (
-	"github.com/funtimecoding/soil/pkg/gitlab"
+	"github.com/funtimecoding/soil/pkg/gitlab/face"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/worker"
 	web "github.com/funtimecoding/soil/pkg/web/constant"
@@ -12,7 +12,7 @@ import (
 )
 
 func New(
-	c *gitlab.Client,
+	c face.Forge,
 	k *worker.Worker,
 ) *Server {
 	registry := palette.NewRegistry()

@@ -20,7 +20,13 @@ func (s *Server) GetPipeline(
 		return response.Fail("pipeline is required")
 	}
 
-	v, _, e := s.client.Pipelines.GetPipeline(a.Project, a.Pipeline)
+	project, e := s.resolveProject(a.Project)
+
+	if e != nil {
+		return s.captureDetail(e)
+	}
+
+	v, e := s.client.Pipeline(project, a.Pipeline)
 
 	if e != nil {
 		return s.captureDetail(e)

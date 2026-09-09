@@ -2,7 +2,7 @@ package gopnsensed
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/opnsense"
+	opnsense "github.com/funtimecoding/soil/pkg/tool/gopnsensed/face"
 	generated "github.com/funtimecoding/soil/pkg/tool/gopnsensed/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/server"
@@ -13,7 +13,7 @@ import (
 )
 
 func Mount(
-	c *opnsense.Client,
+	c opnsense.OpnsenseSource,
 	r face.Reporter,
 	t face.Recorder,
 	version string,

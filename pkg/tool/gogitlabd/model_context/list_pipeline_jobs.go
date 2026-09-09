@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
-	"gitlab.com/gitlab-org/api/client-go/v2"
 )
 
 func (s *Server) ListPipelineJobs(
@@ -21,11 +20,13 @@ func (s *Server) ListPipelineJobs(
 		return response.Fail("pipeline is required")
 	}
 
-	v, _, e := s.client.Jobs.ListPipelineJobs(
-		a.Project,
-		a.Pipeline,
-		&gitlab.ListJobsOptions{ListOptions: gitlab.ListOptions{PerPage: 100}},
-	)
+	project, e := s.resolveProject(a.Project)
+
+	if e != nil {
+		return s.captureDetail(e)
+	}
+
+	v, e := s.client.PipelineJobs(project, a.Pipeline)
 
 	if e != nil {
 		return s.captureDetail(e)

@@ -2,7 +2,7 @@ package gonetboxd
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/netbox"
+	netbox "github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
 	generated "github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/server"
@@ -14,7 +14,7 @@ import (
 )
 
 func Mount(
-	c *netbox.Client,
+	c netbox.NetboxSource,
 	s *store.Store,
 	r face.Reporter,
 	t face.Recorder,

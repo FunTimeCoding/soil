@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
-	"gitlab.com/gitlab-org/api/client-go/v2"
 )
 
 func (s *Server) ListMergeRequests(
@@ -17,15 +16,13 @@ func (s *Server) ListMergeRequests(
 		return response.Fail("project is required")
 	}
 
-	o := &gitlab.ListProjectMergeRequestsOptions{
-		ListOptions: gitlab.ListOptions{PerPage: 20},
+	project, e := s.resolveProject(a.Project)
+
+	if e != nil {
+		return s.captureDetail(e)
 	}
 
-	if a.State != "" {
-		o.State = &a.State
-	}
-
-	v, _, e := s.client.MergeRequests.ListProjectMergeRequests(a.Project, o)
+	v, e := s.client.ProjectMergeRequests(project, a.State)
 
 	if e != nil {
 		return s.captureDetail(e)

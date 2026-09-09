@@ -33,6 +33,8 @@ func ExtractSnippet(
 			end = len(body)
 		}
 
+		start = alignRuneStart(body, start)
+		end = alignRuneStart(body, end)
 		searchBody = body[start:end]
 
 		if start > 0 {
@@ -76,7 +78,8 @@ func ExtractSnippet(
 	snippet := strings.Join(lines[start:end], stringConstant.Unix)
 
 	if len(snippet) > constant.SnippetMaxLength {
-		snippet = fmt.Sprintf("%s...", snippet[:constant.SnippetMaxLength-3])
+		cut := alignRuneStart(snippet, constant.SnippetMaxLength-3)
+		snippet = fmt.Sprintf("%s...", snippet[:cut])
 	}
 
 	return snippet, lineOffset + bestLine + 1

@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
-	"gitlab.com/gitlab-org/api/client-go/v2"
 )
 
 func (s *Server) SearchRepositories(
@@ -17,10 +16,7 @@ func (s *Server) SearchRepositories(
 		return response.Fail("query is required")
 	}
 
-	v, _, e := s.client.Search.Projects(
-		a.Query,
-		&gitlab.SearchOptions{ListOptions: gitlab.ListOptions{PerPage: 20}},
-	)
+	v, e := s.client.SearchProject(a.Query)
 
 	if e != nil {
 		return s.captureDetail(e)

@@ -6,7 +6,7 @@ func (c *Client) ProjectsMergeRequests() []*merge_request.Request {
 	var result []*merge_request.Request
 
 	for _, identifier := range c.projects {
-		for _, e := range c.MustProjectMergeRequests(identifier, false) {
+		for _, e := range c.MustProjectMergeRequests(identifier, "") {
 			if e.Done() {
 				continue
 			}

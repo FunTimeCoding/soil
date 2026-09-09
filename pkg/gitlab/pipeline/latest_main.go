@@ -1,13 +1,11 @@
 package pipeline
 
-import "gitlab.com/gitlab-org/api/client-go/v2"
-
 func LatestMain(
-	v []*gitlab.PipelineInfo,
+	v []*Pipeline,
 	mainHash string,
-) *gitlab.PipelineInfo {
+) *Pipeline {
 	for _, e := range v {
-		if e.SHA == mainHash {
+		if e.Hash == mainHash {
 			return e
 		}
 	}

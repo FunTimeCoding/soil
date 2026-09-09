@@ -1,7 +1,6 @@
 package gomattermostd
 
 import (
-	"github.com/funtimecoding/soil/pkg/chat/mattermost"
 	"github.com/funtimecoding/soil/pkg/face"
 	mattermostFace "github.com/funtimecoding/soil/pkg/tool/gomattermostd/face"
 	generated "github.com/funtimecoding/soil/pkg/tool/gomattermostd/generated/server"
@@ -16,7 +15,7 @@ import (
 )
 
 func Mount(
-	c *mattermost.Client,
+	c mattermostFace.MattermostSource,
 	m *monitor.Monitor,
 	d *store.Store,
 	i mattermostFace.Indexer,

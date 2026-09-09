@@ -1,12 +1,16 @@
 package gitlab
 
-import "gitlab.com/gitlab-org/api/client-go/v2"
+import "github.com/funtimecoding/soil/pkg/gitlab/job"
 
 func (c *Client) CancelJob(
 	project int64,
-	job int64,
-) (*gitlab.Job, error) {
-	result, _, e := c.client.Jobs.CancelJob(project, job)
+	identifier int64,
+) (*job.Job, error) {
+	result, _, e := c.client.Jobs.CancelJob(project, identifier)
 
-	return result, wrapError(e)
+	if e != nil {
+		return nil, wrapError(e)
+	}
+
+	return c.enrichJob(job.New(result)), nil
 }
