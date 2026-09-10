@@ -25,7 +25,7 @@ func (s *Service) RenamePackageClause(
 		)
 	}
 
-	all, set, e := resolve.LoadPackages(directory, "./...")
+	all, set, e := loadPackages(directory, "./...")
 
 	if e != nil {
 		return nil, e

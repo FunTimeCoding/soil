@@ -36,7 +36,7 @@ func (s *Service) ApplyPattern(
 		return r, nil, nil
 	}
 
-	all, set, f := resolve.LoadPackages(directory, "./...")
+	all, set, f := loadPackages(directory, "./...")
 
 	if f != nil {
 		return nil, nil, f

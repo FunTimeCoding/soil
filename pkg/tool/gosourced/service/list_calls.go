@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/result"
 	"go/types"
 	"sort"
@@ -17,7 +16,7 @@ func (s *Service) ListCalls(
 	limit int,
 ) (*output.Results, *result.Inventory, error) {
 	r := output.NewResultsWithDirectory(directory)
-	all, _, e := resolve.LoadPackages(directory, "./...")
+	all, _, e := loadPackages(directory, "./...")
 
 	if e != nil {
 		return nil, nil, e

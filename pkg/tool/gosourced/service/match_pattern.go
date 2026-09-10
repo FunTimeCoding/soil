@@ -3,7 +3,6 @@ package service
 import (
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/match"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/result"
 	"go/types"
@@ -26,7 +25,7 @@ func (s *Service) MatchPattern(
 		return r, nil, nil
 	}
 
-	all, set, f := resolve.LoadPackages(directory, "./...")
+	all, set, f := loadPackages(directory, "./...")
 
 	if f != nil {
 		return nil, nil, f

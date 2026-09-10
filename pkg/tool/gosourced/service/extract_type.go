@@ -26,7 +26,7 @@ func (s *Service) ExtractType(
 		return failValidation(r, "source and target package are the same")
 	}
 
-	all, set, e := resolve.LoadPackages(directory, "./...")
+	all, set, e := loadPackages(directory, "./...")
 
 	if e != nil {
 		return nil, e

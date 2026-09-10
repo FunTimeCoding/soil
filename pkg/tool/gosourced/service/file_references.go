@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/result"
@@ -17,7 +16,7 @@ func (s *Service) FileReferences(
 	filePath string,
 ) (*output.Results, *result.FileReferences, error) {
 	r := output.NewResultsWithDirectory(directory)
-	all, set, e := resolve.LoadPackages(directory, "./...")
+	all, set, e := loadPackages(directory, "./...")
 
 	if e != nil {
 		return nil, nil, e

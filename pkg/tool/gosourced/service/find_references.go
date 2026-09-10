@@ -3,7 +3,6 @@ package service
 import (
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/result"
 )
 
@@ -14,7 +13,7 @@ func (s *Service) FindReferences(
 	receiver string,
 ) (*output.Results, *result.References, error) {
 	r := output.NewResultsWithDirectory(directory)
-	all, set, e := resolve.LoadPackages(directory, "./...")
+	all, set, e := loadPackages(directory, "./...")
 
 	if e != nil {
 		return nil, nil, e

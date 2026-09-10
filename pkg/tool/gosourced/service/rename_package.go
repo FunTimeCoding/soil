@@ -28,7 +28,7 @@ func (s *Service) RenamePackage(
 		)
 	}
 
-	all, set, e := resolve.LoadPackages(directory, "./...")
+	all, set, e := loadPackages(directory, "./...")
 
 	if e != nil {
 		return nil, e
@@ -36,21 +36,14 @@ func (s *Service) RenamePackage(
 
 	p := findPackage(all, packagePath)
 
-	if p == nil {
-		return failValidation(
-			r,
-			fmt.Sprintf("package not found: %s", packagePath),
-		)
-	}
-
-	if len(p.GoFiles) == 0 {
+	if p == nil || len(p.GoFiles) == 0 {
 		p = findTestPackage(all, packagePath)
 	}
 
 	if p == nil || len(p.GoFiles) == 0 {
 		return failValidation(
 			r,
-			fmt.Sprintf("package has no Go files: %s", packagePath),
+			fmt.Sprintf("package not found: %s", packagePath),
 		)
 	}
 
