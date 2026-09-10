@@ -35,6 +35,7 @@ func (s *Server) Mount(g *guard.Mux) {
 	)
 	g.Open(route.Get("/activity"), s.activityPage)
 	g.Open(route.Get(constant.CoveragePath), s.coveragePage)
+	g.Open(route.Get(constant.StatusPath), s.statusPage)
 	g.Open(route.Get(constant.UsagePath), s.usagePage)
 	g.Open(route.Get(constant.MessagesPath), s.messagesPage)
 	g.Open(route.Get(constant.HistoryPath), s.historyPage)

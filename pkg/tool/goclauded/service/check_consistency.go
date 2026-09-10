@@ -14,36 +14,17 @@ func (s *Service) CheckConsistency() {
 		databaseSet[i.Identifier] = true
 	}
 
-	cacheKeys := s.cache.Keys()
-	cacheSet := make(map[string]bool, len(cacheKeys))
-
-	for _, identifier := range cacheKeys {
-		cacheSet[identifier] = true
-	}
-
-	for identifier := range cacheSet {
-		if !databaseSet[identifier] {
-			s.store.CreateDiscovered(identifier)
-			s.RefreshFromCache(identifier)
-			s.logger.Structured(
-				"consistency_discovered",
-				constant.Identifier,
-				identifier,
-			)
+	for _, identifier := range s.cache.Keys() {
+		if databaseSet[identifier] {
+			continue
 		}
-	}
 
-	for _, i := range databaseSessions {
-		if !cacheSet[i.Identifier] {
-			s.logger.Structured(
-				"consistency_missing_jsonl",
-				constant.Identifier,
-				i.Identifier,
-				constant.SessionName,
-				i.Name,
-				constant.Alias,
-				i.Alias,
-			)
-		}
+		s.store.CreateDiscovered(identifier)
+		s.RefreshFromCache(identifier)
+		s.logger.Structured(
+			"consistency_discovered",
+			constant.Identifier,
+			identifier,
+		)
 	}
 }

@@ -93,6 +93,24 @@ type CoverageTool struct {
 	Registered  bool    `json:"registered"`
 }
 
+// DeleteReceiptResponse defines model for DeleteReceiptResponse.
+type DeleteReceiptResponse struct {
+	Completions   int       `json:"completions"`
+	ContextLoads  int       `json:"context_loads"`
+	EventMetadata int       `json:"event_metadata"`
+	Events        int       `json:"events"`
+	Identifier    string    `json:"identifier"`
+	Labels        int       `json:"labels"`
+	Name          string    `json:"name"`
+	Notifications int       `json:"notifications"`
+	Pulses        int       `json:"pulses"`
+	Queue         int       `json:"queue"`
+	Sources       *[]string `json:"sources,omitempty"`
+	Summaries     int       `json:"summaries"`
+	TrackerStates int       `json:"tracker_states"`
+	Transcript    *string   `json:"transcript,omitempty"`
+}
+
 // EditSessionRequest defines model for EditSessionRequest.
 type EditSessionRequest struct {
 	Description *string `json:"description,omitempty"`
@@ -128,6 +146,13 @@ type FindMatch struct {
 // FindResponse defines model for FindResponse.
 type FindResponse struct {
 	Matches []FindMatch `json:"matches"`
+}
+
+// FindingEntry defines model for FindingEntry.
+type FindingEntry struct {
+	Detail  string  `json:"detail"`
+	Kind    string  `json:"kind"`
+	Subject *string `json:"subject,omitempty"`
 }
 
 // HeatmapEntry defines model for HeatmapEntry.
@@ -318,6 +343,12 @@ type SessionDetailResponse struct {
 	Usage       *[]ModelUsage              `json:"usage,omitempty"`
 }
 
+// SessionEndRequest defines model for SessionEndRequest.
+type SessionEndRequest struct {
+	Reason  *string `json:"reason,omitempty"`
+	Session string  `json:"session"`
+}
+
 // SessionListResponse defines model for SessionListResponse.
 type SessionListResponse struct {
 	Sessions []SessionDetail `json:"sessions"`
@@ -329,6 +360,11 @@ type SessionMessage struct {
 	Role      string `json:"role"`
 	Text      string `json:"text"`
 	Timestamp string `json:"timestamp"`
+}
+
+// StatusResponse defines model for StatusResponse.
+type StatusResponse struct {
+	Findings []FindingEntry `json:"findings"`
 }
 
 // SweepResponse defines model for SweepResponse.
@@ -437,6 +473,11 @@ type GetSessionsHeatmapParams struct {
 	Bash *bool `form:"bash,omitempty" json:"bash,omitempty"`
 }
 
+// DeleteSessionByIdParams defines parameters for DeleteSessionById.
+type DeleteSessionByIdParams struct {
+	Confirm *string `form:"confirm,omitempty" json:"confirm,omitempty"`
+}
+
 // GetSessionToolContextParams defines parameters for GetSessionToolContext.
 type GetSessionToolContextParams struct {
 	Filter   string `form:"filter" json:"filter"`
@@ -473,6 +514,9 @@ type PostReleaseJSONRequestBody = ReleaseRequest
 
 // PostSendJSONRequestBody defines body for PostSend for application/json ContentType.
 type PostSendJSONRequestBody = SendRequest
+
+// PostSessionEndJSONRequestBody defines body for PostSessionEnd for application/json ContentType.
+type PostSessionEndJSONRequestBody = SessionEndRequest
 
 // PostEditSessionJSONRequestBody defines body for PostEditSession for application/json ContentType.
 type PostEditSessionJSONRequestBody = EditSessionRequest
@@ -522,6 +566,9 @@ type ServerInterface interface {
 	// (POST /api/send)
 	PostSend(w http.ResponseWriter, r *http.Request)
 
+	// (POST /api/session-end)
+	PostSessionEnd(w http.ResponseWriter, r *http.Request)
+
 	// (DELETE /api/session/{callsign})
 	DeleteSession(w http.ResponseWriter, r *http.Request, callsign string)
 
@@ -544,7 +591,7 @@ type ServerInterface interface {
 	GetSessionsHeatmap(w http.ResponseWriter, r *http.Request, params GetSessionsHeatmapParams)
 
 	// (DELETE /api/sessions/{identifier})
-	DeleteSessionById(w http.ResponseWriter, r *http.Request, identifier string)
+	DeleteSessionById(w http.ResponseWriter, r *http.Request, identifier string, params DeleteSessionByIdParams)
 
 	// (POST /api/sessions/{identifier}/context)
 	PostSessionContext(w http.ResponseWriter, r *http.Request, identifier string)
@@ -572,6 +619,9 @@ type ServerInterface interface {
 
 	// (GET /api/sessions/{identifier}/tools)
 	GetSessionTools(w http.ResponseWriter, r *http.Request, identifier string)
+
+	// (GET /api/status)
+	GetStatus(w http.ResponseWriter, r *http.Request)
 
 	// (POST /api/sweep)
 	PostSweep(w http.ResponseWriter, r *http.Request)
@@ -838,6 +888,20 @@ func (siw *ServerInterfaceWrapper) PostSend(w http.ResponseWriter, r *http.Reque
 	handler.ServeHTTP(w, r)
 }
 
+// PostSessionEnd operation middleware
+func (siw *ServerInterfaceWrapper) PostSessionEnd(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PostSessionEnd(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
 // DeleteSession operation middleware
 func (siw *ServerInterfaceWrapper) DeleteSession(w http.ResponseWriter, r *http.Request) {
 
@@ -1059,8 +1123,24 @@ func (siw *ServerInterfaceWrapper) DeleteSessionById(w http.ResponseWriter, r *h
 		return
 	}
 
+	// Parameter object where we will unmarshal all parameters from the context
+	var params DeleteSessionByIdParams
+
+	// ------------- Optional query parameter "confirm" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "confirm", r.URL.Query(), &params.Confirm, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "confirm"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "confirm", Err: err})
+		}
+		return
+	}
+
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.DeleteSessionById(w, r, identifier)
+		siw.Handler.DeleteSessionById(w, r, identifier, params)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -1333,6 +1413,20 @@ func (siw *ServerInterfaceWrapper) GetSessionTools(w http.ResponseWriter, r *htt
 	handler.ServeHTTP(w, r)
 }
 
+// GetStatus operation middleware
+func (siw *ServerInterfaceWrapper) GetStatus(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetStatus(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
 // PostSweep operation middleware
 func (siw *ServerInterfaceWrapper) PostSweep(w http.ResponseWriter, r *http.Request) {
 
@@ -1587,6 +1681,7 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	}
 
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/register", wrapper.PostRegister)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/session-end", wrapper.PostSessionEnd)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/check", wrapper.GetCheck)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/announce", wrapper.PostAnnounce)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/send", wrapper.PostSend)
@@ -1614,6 +1709,7 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/sessions/{identifier}/pulse", wrapper.PostSessionPulse)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/sessions/{identifier}/context", wrapper.PostSessionContext)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/backfill", wrapper.PostBackfill)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/status", wrapper.GetStatus)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/sweep", wrapper.PostSweep)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/timeline", wrapper.GetTimeline)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/cost", wrapper.GetCost)
@@ -1855,6 +1951,20 @@ func (response PostNotify200Response) VisitPostNotifyResponse(w http.ResponseWri
 	return nil
 }
 
+type PostNotify404JSONResponse Error
+
+func (response PostNotify404JSONResponse) VisitPostNotifyResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type PostNotify500JSONResponse ErrorResponse
 
 func (response PostNotify500JSONResponse) VisitPostNotifyResponse(w http.ResponseWriter) error {
@@ -2018,6 +2128,36 @@ func (response PostSend200Response) VisitPostSendResponse(w http.ResponseWriter)
 type PostSend500JSONResponse ErrorResponse
 
 func (response PostSend500JSONResponse) VisitPostSendResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type PostSessionEndRequestObject struct {
+	Body *PostSessionEndJSONRequestBody
+}
+
+type PostSessionEndResponseObject interface {
+	VisitPostSessionEndResponse(w http.ResponseWriter) error
+}
+
+type PostSessionEnd200Response struct {
+}
+
+func (response PostSessionEnd200Response) VisitPostSessionEndResponse(w http.ResponseWriter) error {
+	w.WriteHeader(200)
+	return nil
+}
+
+type PostSessionEnd500JSONResponse ErrorResponse
+
+func (response PostSessionEnd500JSONResponse) VisitPostSessionEndResponse(w http.ResponseWriter) error {
 
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(response); err != nil {
@@ -2283,18 +2423,39 @@ func (response GetSessionsHeatmap500JSONResponse) VisitGetSessionsHeatmapRespons
 
 type DeleteSessionByIdRequestObject struct {
 	Identifier string `json:"identifier"`
+	Params     DeleteSessionByIdParams
 }
 
 type DeleteSessionByIdResponseObject interface {
 	VisitDeleteSessionByIdResponse(w http.ResponseWriter) error
 }
 
-type DeleteSessionById200Response struct {
+type DeleteSessionById200JSONResponse DeleteReceiptResponse
+
+func (response DeleteSessionById200JSONResponse) VisitDeleteSessionByIdResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
 }
 
-func (response DeleteSessionById200Response) VisitDeleteSessionByIdResponse(w http.ResponseWriter) error {
-	w.WriteHeader(200)
-	return nil
+type DeleteSessionById409JSONResponse Error
+
+func (response DeleteSessionById409JSONResponse) VisitDeleteSessionByIdResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(409)
+	_, err := buf.WriteTo(w)
+	return err
 }
 
 type DeleteSessionById500JSONResponse ErrorResponse
@@ -2655,6 +2816,41 @@ func (response GetSessionTools500JSONResponse) VisitGetSessionToolsResponse(w ht
 	return err
 }
 
+type GetStatusRequestObject struct {
+}
+
+type GetStatusResponseObject interface {
+	VisitGetStatusResponse(w http.ResponseWriter) error
+}
+
+type GetStatus200JSONResponse StatusResponse
+
+func (response GetStatus200JSONResponse) VisitGetStatusResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetStatus500JSONResponse ErrorResponse
+
+func (response GetStatus500JSONResponse) VisitGetStatusResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type PostSweepRequestObject struct {
 }
 
@@ -2841,6 +3037,9 @@ type StrictServerInterface interface {
 	// (POST /api/send)
 	PostSend(ctx context.Context, request PostSendRequestObject) (PostSendResponseObject, error)
 
+	// (POST /api/session-end)
+	PostSessionEnd(ctx context.Context, request PostSessionEndRequestObject) (PostSessionEndResponseObject, error)
+
 	// (DELETE /api/session/{callsign})
 	DeleteSession(ctx context.Context, request DeleteSessionRequestObject) (DeleteSessionResponseObject, error)
 
@@ -2891,6 +3090,9 @@ type StrictServerInterface interface {
 
 	// (GET /api/sessions/{identifier}/tools)
 	GetSessionTools(ctx context.Context, request GetSessionToolsRequestObject) (GetSessionToolsResponseObject, error)
+
+	// (GET /api/status)
+	GetStatus(ctx context.Context, request GetStatusRequestObject) (GetStatusResponseObject, error)
 
 	// (POST /api/sweep)
 	PostSweep(ctx context.Context, request PostSweepRequestObject) (PostSweepResponseObject, error)
@@ -3258,6 +3460,37 @@ func (sh *strictHandler) PostSend(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// PostSessionEnd operation middleware
+func (sh *strictHandler) PostSessionEnd(w http.ResponseWriter, r *http.Request) {
+	var request PostSessionEndRequestObject
+
+	var body PostSessionEndJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.PostSessionEnd(ctx, request.(PostSessionEndRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "PostSessionEnd")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(PostSessionEndResponseObject); ok {
+		if err := validResponse.VisitPostSessionEndResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // DeleteSession operation middleware
 func (sh *strictHandler) DeleteSession(w http.ResponseWriter, r *http.Request, callsign string) {
 	var request DeleteSessionRequestObject
@@ -3442,10 +3675,11 @@ func (sh *strictHandler) GetSessionsHeatmap(w http.ResponseWriter, r *http.Reque
 }
 
 // DeleteSessionById operation middleware
-func (sh *strictHandler) DeleteSessionById(w http.ResponseWriter, r *http.Request, identifier string) {
+func (sh *strictHandler) DeleteSessionById(w http.ResponseWriter, r *http.Request, identifier string, params DeleteSessionByIdParams) {
 	var request DeleteSessionByIdRequestObject
 
 	request.Identifier = identifier
+	request.Params = params
 
 	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
 		return sh.ssi.DeleteSessionById(ctx, request.(DeleteSessionByIdRequestObject))
@@ -3723,6 +3957,30 @@ func (sh *strictHandler) GetSessionTools(w http.ResponseWriter, r *http.Request,
 	}
 }
 
+// GetStatus operation middleware
+func (sh *strictHandler) GetStatus(w http.ResponseWriter, r *http.Request) {
+	var request GetStatusRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetStatus(ctx, request.(GetStatusRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetStatus")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetStatusResponseObject); ok {
+		if err := validResponse.VisitGetStatusResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // PostSweep operation middleware
 func (sh *strictHandler) PostSweep(w http.ResponseWriter, r *http.Request) {
 	var request PostSweepRequestObject
@@ -3828,58 +4086,63 @@ func (sh *strictHandler) GetWait(w http.ResponseWriter, r *http.Request, params 
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
+	"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",
+	"lGUw/fHxvwEAAP//",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/session"
 )
 
 func (s *Service) Send(
@@ -11,16 +12,20 @@ func (s *Service) Send(
 	to string,
 	body string,
 ) error {
+	var holder *session.Session
+
 	if to != "" {
-		session, e := s.store.SessionByCallsign(to)
+		found, e := s.store.SessionByCallsign(to)
 
 		if e != nil {
 			return e
 		}
 
-		if session == nil {
+		if found == nil {
 			return not_found.New(constant.Callsign, to)
 		}
+
+		holder = found
 	}
 
 	if e := s.store.SendMessage(name, to, body); e != nil {
@@ -29,8 +34,13 @@ func (s *Service) Send(
 
 	formatted := fmt.Sprintf("%s: %s", name, body)
 
-	if to != "" {
-		return s.PushQueue(to, constant.QueueMessage, formatted)
+	if holder != nil {
+		return s.PushQueue(
+			holder.Identifier,
+			to,
+			constant.QueueMessage,
+			formatted,
+		)
 	}
 
 	return s.PushQueueBroadcast(constant.QueueMessage, formatted)

@@ -27,4 +27,6 @@ type Session struct {
 	LastSeen            time.Time `gorm:"column:last_seen"`
 	StartedAt           time.Time `gorm:"column:started_at"`
 	LastActiveAt        time.Time `gorm:"column:last_active_at"`
+	ClosedAt            *time.Time `gorm:"column:closed_at"`
+	ClosedReason        string     `gorm:"column:closed_reason"`
 }

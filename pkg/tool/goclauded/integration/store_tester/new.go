@@ -9,7 +9,7 @@ import (
 
 func New(t *testing.T) *Tester {
 	t.Helper()
-	now := time.Now()
+	now := time.Now().UTC()
 
 	return &Tester{
 		t:     t,

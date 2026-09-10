@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
 )
 
@@ -15,6 +16,12 @@ func (s *Server) PostNotify(
 		r.Body.Source,
 		r.Body.Body,
 	); e != nil {
+		if not_found.Is(e) {
+			return server.PostNotify404JSONResponse(
+				server.Error{Error: e.Error()},
+			), nil
+		}
+
 		return server.PostNotify500JSONResponse(
 			*s.captureFail(e, constant.UnexpectedError),
 		), nil

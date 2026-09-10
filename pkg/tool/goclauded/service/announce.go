@@ -16,13 +16,18 @@ func (s *Service) Announce(
 	}
 
 	if e := s.store.DeletePendingQueue(
+		sessionIdentifier,
 		name,
 		constant.QueueReannounce,
 	); e != nil {
 		return e
 	}
 
-	if e := s.store.DeletePendingQueue(name, constant.QueueTimeout); e != nil {
+	if e := s.store.DeletePendingQueue(
+		sessionIdentifier,
+		name,
+		constant.QueueTimeout,
+	); e != nil {
 		return e
 	}
 

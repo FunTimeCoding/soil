@@ -2,6 +2,7 @@ package web
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/strings/shorten"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/enriched_session"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -15,7 +16,7 @@ func sessionRow(s *enriched_session.Session) gomponents.Node {
 	}
 
 	if name == "" {
-		name = s.Identifier[:8]
+		name = shorten.Prefix(s.Identifier, 8)
 	}
 
 	var label []gomponents.Node

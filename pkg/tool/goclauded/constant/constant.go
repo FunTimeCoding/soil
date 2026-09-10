@@ -6,6 +6,10 @@ import (
 )
 
 const CoverageRecentWindow = 30 * 24 * time.Hour
+const CallsignReleaseWindow = 7 * 24 * time.Hour
+const CompleteTimeoutWindow = 30 * time.Minute
+const TimestampLayout = "2006-01-02 15:04:05.999999999-07:00"
+const UniversalSuffix = "+00:00"
 
 var (
 	ReservedLabelKeys = []string{
@@ -38,24 +42,26 @@ const (
 	To          = "to"
 	Body        = "body"
 
-	Announce     = "announce"
-	Complete     = "complete"
-	Update       = "update"
-	EditEvent    = "edit_event"
-	Status       = "status"
-	Roster       = "roster"
-	ListSessions = "list_sessions"
-	History      = "history"
-	HistoryCount = "history_count"
-	EditSession  = "edit_session"
-	Send         = "send"
-	Register     = "register"
-	Release      = "release"
-	Listen       = "listen"
-	Summarize    = "summarize"
-	Moment       = "moment"
-	TokenUsage   = "token_usage"
-	Description  = "description"
+	Announce      = "announce"
+	Complete      = "complete"
+	Update        = "update"
+	EditEvent     = "edit_event"
+	SessionStatus = "session_status"
+	Roster        = "roster"
+	ListSessions  = "list_sessions"
+	History       = "history"
+	HistoryCount  = "history_count"
+	EditSession   = "edit_session"
+	Send          = "send"
+	Register      = "register"
+	Status        = "status"
+	SessionEnd    = "session_end"
+	Release       = "release"
+	Listen        = "listen"
+	Summarize     = "summarize"
+	Moment        = "moment"
+	TokenUsage    = "token_usage"
+	Description   = "description"
 
 	Usage             = "usage"
 	Activity          = "activity"
@@ -125,6 +131,8 @@ const (
 	UsageTitle         = "Usage"
 	UsagePath          = "/usage"
 	UsageChart         = "usage_chart"
+	StatusTitle        = "Status"
+	StatusPath         = "/status"
 
 	ModelContextServersFile = ".mcp.json"
 

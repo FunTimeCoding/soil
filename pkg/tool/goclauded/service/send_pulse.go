@@ -19,7 +19,12 @@ func (s *Service) SendPulse(
 		}
 
 		if callsign != "" {
-			return s.PushQueue(callsign, constant.QueuePulse, body)
+			return s.PushQueue(
+				sessionIdentifier,
+				callsign,
+				constant.QueuePulse,
+				body,
+			)
 		}
 	}
 

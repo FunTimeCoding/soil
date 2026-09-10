@@ -23,7 +23,7 @@ func (s *Server) checkPreview(
 		}, nil
 	}
 
-	entries, e := s.service.PeekQueue(callsign)
+	entries, e := s.service.PeekQueue(sessionIdentifier, callsign)
 
 	if e != nil {
 		return server.GetCheck500JSONResponse(

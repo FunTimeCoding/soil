@@ -1,8 +1,7 @@
 package service
 
-import "time"
+import "github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 
 func (s *Service) sweepCallsignRelease() {
-	cutoff := s.clock().Add(-7 * 24 * time.Hour)
-	s.store.SweepCallsignRelease(cutoff)
+	s.store.SweepCallsignRelease(s.clock().Add(-constant.CallsignReleaseWindow))
 }

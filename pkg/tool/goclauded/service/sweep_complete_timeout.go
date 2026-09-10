@@ -3,11 +3,10 @@ package service
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"time"
 )
 
 func (s *Service) sweepCompleteTimeout() {
-	cutoff := s.clock().Add(-30 * time.Minute)
+	cutoff := s.clock().Add(-constant.CompleteTimeoutWindow)
 	sessions := s.store.SweepCompleteTimeout(cutoff)
 
 	for _, e := range sessions {
@@ -21,6 +20,7 @@ func (s *Service) sweepCompleteTimeout() {
 		)
 		errors.PanicOnError(
 			s.PushQueue(
+				e.Identifier,
 				e.CallsignValue(),
 				constant.QueueTimeout,
 				"30 minutes since completing. Removed from roster.",

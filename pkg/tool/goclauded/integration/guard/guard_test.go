@@ -12,7 +12,9 @@ func TestGuard(t *testing.T) {
 	c := s.Server
 	c.VerifyBase(t)
 	c.VerifyGuarded(t, "/api/sessions")
+	c.VerifyGuarded(t, "/api/status")
 	c.VerifyOpen(t, constant.DashboardPath)
+	c.VerifyOpen(t, constant.StatusPath)
 	c.VerifyOpen(t, "/event")
 	c.VerifyModelContext(t)
 }

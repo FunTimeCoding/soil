@@ -46,6 +46,7 @@ func postEvent(p *model.Post) *model.WebSocketEvent {
 
 func TestSocketEventBecomesNotification(t *testing.T) {
 	r := cross_service_tester.New(t, upstream, 10*time.Millisecond)
+	r.Goclauded.Store.HoldCallsign("kilo-session", "kilo")
 	r.Store.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))
 	r.Watcher.Start()
 	r.Upstream.Push(
@@ -63,7 +64,7 @@ func TestSocketEventBecomesNotification(t *testing.T) {
 	deadline := time.Now().Add(constant.MattermostSocketWait)
 
 	for time.Now().Before(deadline) {
-		result = r.Goclauded.Store.PendingNotifications("kilo")
+		result = r.Goclauded.Store.PendingNotifications("kilo-session")
 
 		if len(result) > 0 {
 			break
@@ -81,6 +82,7 @@ func TestSocketEventBecomesNotification(t *testing.T) {
 
 func TestSocketEventInUnwatchedThreadIgnored(t *testing.T) {
 	r := cross_service_tester.New(t, upstream, 10*time.Millisecond)
+	r.Goclauded.Store.HoldCallsign("kilo-session", "kilo")
 	r.Store.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))
 	r.Watcher.Start()
 	r.Upstream.Push(
@@ -95,5 +97,9 @@ func TestSocketEventInUnwatchedThreadIgnored(t *testing.T) {
 		),
 	)
 	time.Sleep(200 * time.Millisecond)
-	assert.Integer(t, 0, len(r.Goclauded.Store.PendingNotifications("kilo")))
+	assert.Integer(
+		t,
+		0,
+		len(r.Goclauded.Store.PendingNotifications("kilo-session")),
+	)
 }

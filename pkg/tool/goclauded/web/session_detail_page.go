@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/strings/shorten"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/subscription"
@@ -31,7 +32,7 @@ func (s *Server) sessionDetailPage(
 	}
 
 	errors.PanicOnError(e)
-	title := d.Identifier[:8]
+	title := shorten.Prefix(d.Identifier, 8)
 
 	if d.Alias != "" {
 		title = d.Alias
@@ -207,6 +208,13 @@ func (s *Server) sessionDetailPage(
 		html.Div(
 			gomponents.Attr("sse-swap", constant.Pulse),
 			s.pulseSection(d.Identifier),
+		),
+	)
+	content = append(
+		content,
+		html.P(
+			gomponents.Text("Delete confirmation: "),
+			html.Code(gomponents.Text(s.service.DeleteHash(d.Identifier))),
 		),
 	)
 	content = append(

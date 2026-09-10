@@ -20,7 +20,7 @@ func waitForNotification(
 	deadline := time.Now().Add(constant.MattermostSocketWait)
 
 	for time.Now().Before(deadline) {
-		result = r.Goclauded.Store.PendingNotifications("kilo")
+		result = r.Goclauded.Store.PendingNotifications("kilo-session")
 
 		if len(result) > 0 {
 			return result
@@ -34,6 +34,7 @@ func waitForNotification(
 
 func TestWatcherResumesAfterDroppedConnection(t *testing.T) {
 	r := cross_service_tester.New(t, upstream, 10*time.Millisecond)
+	r.Goclauded.Store.HoldCallsign("kilo-session", "kilo")
 	r.Store.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))
 	r.Watcher.Start()
 	r.Upstream.Push(

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/session"
+	"github.com/funtimecoding/soil/pkg/strings/shorten"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/writer"
 	"github.com/funtimecoding/soil/pkg/time/constant"
@@ -34,7 +35,7 @@ func (s *Server) exportSession(
 	}
 
 	if slug == "" {
-		slug = i.Identifier[:8]
+		slug = shorten.Prefix(i.Identifier, 8)
 	}
 
 	name := fmt.Sprintf(

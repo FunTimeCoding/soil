@@ -76,9 +76,18 @@ func (s *Server) register() {
 	)
 	s.server.AddTool(
 		mcp.NewTool(
+			constant.SessionStatus,
+			mcp.WithDescription(
+				"Show your own session state: name, current topic, files. Use to check what you announced. For the daemon's own problems use status.",
+			),
+		),
+		s.sessionStatus,
+	)
+	s.server.AddTool(
+		mcp.NewTool(
 			constant.Status,
 			mcp.WithDescription(
-				"Show your own session state: name, current topic, files. Use to check what you announced.",
+				"Report what is inconsistent inside goclauded: sessions whose transcript is missing, orphaned tracker state, queue entries addressed to a callsign nobody holds, callsigns held past their release window, and callsign pool exhaustion. Use to check whether the coordination state is sound before trusting it, or when something looks off.",
 			),
 		),
 		s.status,

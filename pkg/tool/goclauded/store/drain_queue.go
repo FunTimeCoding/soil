@@ -2,13 +2,18 @@ package store
 
 import "github.com/funtimecoding/soil/pkg/tool/goclauded/store/queue"
 
-func (s *Store) DrainQueue(callsign string) ([]queue.Entry, error) {
+func (s *Store) DrainQueue(
+	sessionIdentifier string,
+	callsign string,
+) ([]queue.Entry, error) {
+	condition, arguments := sessionKeyMatch(sessionIdentifier, callsign)
 	var result []queue.Entry
 
 	if e := s.database.Where(
-		"callsign = ? AND consumed = ?",
-		callsign,
-		false,
+		condition,
+		arguments...,
+	).Where(
+		"consumed_at IS NULL",
 	).Order(
 		"created_at",
 	).Find(
@@ -19,10 +24,13 @@ func (s *Store) DrainQueue(callsign string) ([]queue.Entry, error) {
 
 	if len(result) > 0 {
 		if e := s.database.Model(queue.Stub()).Where(
-			"callsign = ? AND consumed = ?",
-			callsign,
-			false,
-		).Update("consumed", true).Error; e != nil {
+			condition,
+			arguments...,
+		).Where(
+			"consumed_at IS NULL",
+		).Updates(
+			map[string]any{"consumed": true, "consumed_at": s.clock()},
+		).Error; e != nil {
 			return nil, e
 		}
 	}

@@ -35,13 +35,13 @@ func register(c *command_context.Context) *cobra.Command {
 			environmentFile := os.Getenv(constant.EnvironmentFileEnvironment)
 
 			if environmentFile != "" {
-				f, fe := os.OpenFile(
+				f, e := os.OpenFile(
 					environmentFile,
 					os.O_APPEND|os.O_CREATE|os.O_WRONLY,
 					0644,
 				)
 
-				if fe == nil {
+				if e == nil {
 					writer.Print(
 						f,
 						"export %s=%s\n",

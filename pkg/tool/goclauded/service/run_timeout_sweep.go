@@ -5,4 +5,5 @@ func (s *Service) RunTimeoutSweep() {
 	s.sweepCompleteTimeout()
 	s.sweepCallsignRelease()
 	s.cleanupQueue()
+	s.sweepEmptySessions()
 }

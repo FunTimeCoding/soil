@@ -52,6 +52,8 @@ func Main(
 	)
 	o.AddCommand(sessionBranch(c))
 	o.AddCommand(register(c))
+	o.AddCommand(sessionEnd(c))
+	o.AddCommand(status(c))
 	o.AddCommand(check(c))
 	o.AddCommand(statusLine(c))
 	o.AddCommand(guard.New())

@@ -10,13 +10,7 @@ func (s *Service) PushQueueBroadcast(
 		return e
 	}
 
-	var callsigns []string
-
-	for _, session := range sessions {
-		callsigns = append(callsigns, session.CallsignValue())
-	}
-
-	if e := s.store.PushQueueBroadcast(callsigns, kind, body); e != nil {
+	if e := s.store.PushQueueBroadcast(sessions, kind, body); e != nil {
 		return e
 	}
 

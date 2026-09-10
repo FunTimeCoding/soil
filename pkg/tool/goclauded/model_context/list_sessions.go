@@ -6,6 +6,7 @@ import (
 	library "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/strings/shorten"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -42,12 +43,12 @@ func (s *Server) listSessions(
 		}
 
 		if name == "" {
-			name = e.Identifier[:8]
+			name = shorten.Prefix(e.Identifier, 8)
 		}
 
 		line := fmt.Sprintf(
 			"%s  %-7s  %s  %d lines",
-			e.Identifier[:8],
+			shorten.Prefix(e.Identifier, 8),
 			e.Name,
 			name,
 			e.Lines,

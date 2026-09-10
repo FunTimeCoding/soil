@@ -11,7 +11,11 @@ func (s *Server) sessionDeleteAction(
 	r *http.Request,
 ) {
 	identifier := r.PathValue(constant.Identifier)
-	errors.PanicOnError(s.service.DeleteSession(identifier))
+	_, e := s.service.DeleteSession(
+		identifier,
+		s.service.DeleteHash(identifier),
+	)
+	errors.PanicOnError(e)
 	w.Header().Set("HX-Redirect", constant.SessionsPath)
 	w.WriteHeader(http.StatusOK)
 }

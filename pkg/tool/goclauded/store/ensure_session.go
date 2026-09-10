@@ -18,9 +18,11 @@ func (s *Store) EnsureSession(identifier string) (*ensure_result.Result, error) 
 
 		if e := s.database.Model(&i).Updates(
 			map[string]any{
-				"last_seen":  s.clock(),
-				"turn_count": i.TurnCount + 1,
-				"timed_out":  "",
+				"last_seen":     s.clock(),
+				"turn_count":    i.TurnCount + 1,
+				"timed_out":     "",
+				"closed_at":     nil,
+				"closed_reason": "",
 			},
 		).Error; e != nil {
 			return nil, e
@@ -43,7 +45,7 @@ func (s *Store) EnsureSession(identifier string) (*ensure_result.Result, error) 
 	}
 
 	if f := s.database.Create(
-		session.NewRegistered(identifier, name),
+		session.NewRegistered(identifier, name, s.clock()),
 	).Error; f != nil {
 		return nil, f
 	}

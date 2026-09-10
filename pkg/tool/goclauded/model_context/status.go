@@ -14,38 +14,30 @@ func (s *Server) status(
 	x context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	c, e := s.resolveCaller(x, constant.Status)
+	if _, e := s.resolveCaller(x, constant.Status); e != nil {
+		return s.captureFail(e, library.UnexpectedError)
+	}
+
+	findings, e := s.service.Findings()
 
 	if e != nil {
 		return s.captureFail(e, library.UnexpectedError)
 	}
 
-	if c.Callsign == "" {
-		return response.Fail(
-			"unknown session - announce first to bind your identity",
-		)
+	if len(findings) == 0 {
+		return response.Success("Nothing inconsistent.")
 	}
 
-	d, f := s.service.SessionByCallsign(c.Callsign)
+	var lines []string
 
-	if f != nil {
-		return s.captureFail(f, library.UnexpectedError)
-	}
+	for _, i := range findings {
+		line := fmt.Sprintf("[%s] %s", i.Kind, i.Detail)
 
-	if d == nil {
-		return response.Fail("session not found for %s", c.Callsign)
-	}
+		if i.Subject != "" {
+			line = fmt.Sprintf("[%s] %s: %s", i.Kind, i.Subject, i.Detail)
+		}
 
-	lines := []string{fmt.Sprintf("Name: %s", d.Name)}
-
-	if d.Topic != "" {
-		lines = append(lines, fmt.Sprintf("Topic: %s", d.Topic))
-	} else {
-		lines = append(lines, "Topic: (none)")
-	}
-
-	if d.Files != "" {
-		lines = append(lines, fmt.Sprintf("Files: %s", d.Files))
+		lines = append(lines, line)
 	}
 
 	return response.Success(join.NewLine(lines))

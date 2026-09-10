@@ -6,12 +6,11 @@ import (
 )
 
 func (s *Service) ClearBindings() {
-	callsigns := s.store.BoundCallsigns()
-
-	for _, c := range callsigns {
+	for _, e := range s.store.BoundSessions() {
 		errors.PanicOnError(
 			s.PushQueue(
-				c,
+				e.Identifier,
+				e.CallsignValue(),
 				constant.QueueReannounce,
 				"Re-announce required: MCP binding lost during service restart. Call announce with your session name and topic to restore.",
 			),

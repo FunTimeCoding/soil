@@ -26,6 +26,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/session-end:
+    post:
+      operationId: postSessionEnd
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SessionEndRequest"
+      responses:
+        "200":
+          description: Session marked closed.
+        "500":
+          description: Internal error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /api/check:
     get:
       operationId: getCheck
@@ -107,6 +125,12 @@ paths:
       responses:
         "200":
           description: Notification sent.
+        "404":
+          description: Callsign not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal error.
           content:
@@ -390,9 +414,24 @@ paths:
         required: true
         schema:
           type: string
+      - name: confirm
+        in: query
+        required: false
+        schema:
+          type: string
       responses:
         "200":
           description: Session deleted.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeleteReceiptResponse"
+        "409":
+          description: Delete refused.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal error.
           content:
@@ -653,6 +692,22 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/status:
+    get:
+      operationId: getStatus
+      responses:
+        "200":
+          description: Findings, empty when nothing is wrong.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StatusResponse"
+        "500":
+          description: Internal error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /api/sweep:
     post:
       operationId: postSweep
@@ -835,6 +890,15 @@ components:
       - session
       properties:
         session:
+          type: string
+    SessionEndRequest:
+      type: object
+      required:
+      - session
+      properties:
+        session:
+          type: string
+        reason:
           type: string
     RegisterResponse:
       type: object
@@ -1500,6 +1564,27 @@ components:
           type: integer
         skipped:
           type: integer
+    StatusResponse:
+      type: object
+      required:
+      - findings
+      properties:
+        findings:
+          type: array
+          items:
+            $ref: "#/components/schemas/FindingEntry"
+    FindingEntry:
+      type: object
+      required:
+      - kind
+      - detail
+      properties:
+        kind:
+          type: string
+        subject:
+          type: string
+        detail:
+          type: string
     SweepResponse:
       type: object
       required:
@@ -1513,3 +1598,49 @@ components:
           type: integer
         skipped:
           type: integer
+    DeleteReceiptResponse:
+      type: object
+      required:
+      - identifier
+      - name
+      - events
+      - event_metadata
+      - completions
+      - summaries
+      - labels
+      - pulses
+      - context_loads
+      - tracker_states
+      - queue
+      - notifications
+      properties:
+        identifier:
+          type: string
+        name:
+          type: string
+        events:
+          type: integer
+        event_metadata:
+          type: integer
+        completions:
+          type: integer
+        summaries:
+          type: integer
+        labels:
+          type: integer
+        pulses:
+          type: integer
+        context_loads:
+          type: integer
+        tracker_states:
+          type: integer
+        queue:
+          type: integer
+        notifications:
+          type: integer
+        transcript:
+          type: string
+        sources:
+          type: array
+          items:
+            type: string

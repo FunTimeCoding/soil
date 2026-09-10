@@ -20,9 +20,11 @@ func Main(
 	a := argument.NewInstance(constant.Identity)
 	a.Web()
 	a.Lite()
+	a.Metric()
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
 	o.Address = a.Address()
+	o.MetricAddress = a.MetricAddress()
 	o.ServiceTokens = web.ServiceTokens()
 	o.LitePath = a.GetString(argumentConstant.Lite)
 	o.SessionExportPath = environment.Required(

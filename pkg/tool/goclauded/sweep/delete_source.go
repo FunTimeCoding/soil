@@ -7,12 +7,13 @@ import (
 	"path/filepath"
 )
 
-func DeleteSource(sessionIdentifier string) {
+func DeleteSource(sessionIdentifier string) []string {
+	var result []string
 	base := sourcePath()
 	entries, e := os.ReadDir(base)
 
 	if e != nil {
-		return
+		return result
 	}
 
 	target := join.Empty(sessionIdentifier, constant.NotationLogExtension)
@@ -24,14 +25,20 @@ func DeleteSource(sessionIdentifier string) {
 
 		path := filepath.Join(base, entry.Name(), target)
 
-		if e := os.Remove(path); e != nil {
+		if f := os.Remove(path); f == nil {
+			result = append(result, path)
+		}
+
+		directory := filepath.Join(base, entry.Name(), sessionIdentifier)
+
+		if _, f := os.Stat(directory); f != nil {
 			continue
 		}
 
-		d := filepath.Join(base, entry.Name(), sessionIdentifier)
-
-		if e := os.RemoveAll(d); e != nil {
-			continue
+		if f := os.RemoveAll(directory); f == nil {
+			result = append(result, directory)
 		}
 	}
+
+	return result
 }

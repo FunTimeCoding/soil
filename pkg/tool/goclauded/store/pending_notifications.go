@@ -2,12 +2,14 @@ package store
 
 import "github.com/funtimecoding/soil/pkg/tool/goclauded/store/notification"
 
-func (s *Store) PendingNotifications(callsign string) ([]notification.Notification, error) {
+func (s *Store) PendingNotifications(
+	sessionIdentifier string,
+) ([]notification.Notification, error) {
 	var result []notification.Notification
 
 	if e := s.database.Where(
-		"callsign = ? AND consumed = ?",
-		callsign,
+		"session_identifier = ? AND consumed = ?",
+		sessionIdentifier,
 		false,
 	).Order(
 		"created_at",
@@ -19,8 +21,8 @@ func (s *Store) PendingNotifications(callsign string) ([]notification.Notificati
 
 	if len(result) > 0 {
 		if e := s.database.Model(notification.Stub()).Where(
-			"callsign = ? AND consumed = ?",
-			callsign,
+			"session_identifier = ? AND consumed = ?",
+			sessionIdentifier,
 			false,
 		).Update("consumed", true).Error; e != nil {
 			return nil, e

@@ -15,7 +15,8 @@ func TestDeleteSessionClearsTrackerState(t *testing.T) {
 	s.Service.PopulateCache()
 	s.Service.CheckConsistency()
 	assert.True(t, s.Store.GetSession("doomed") != nil)
-	errors.PanicOnError(s.Service.DeleteSession("doomed"))
+	_, e := s.Service.DeleteSession("doomed", s.Service.DeleteHash("doomed"))
+	errors.PanicOnError(e)
 	// the mock claude client does not remove the harbor file
 	errors.PanicOnError(os.Remove(filepath.Join(s.Harbor, "doomed.jsonl")))
 	_, tracked := s.Store.Store.TrackerStates()["doomed"]

@@ -6,9 +6,9 @@ import (
 )
 
 func (o *Tester) PendingNotifications(
-	callsign string,
+	sessionIdentifier string,
 ) []notification.Notification {
-	result, e := o.Store.PendingNotifications(callsign)
+	result, e := o.Store.PendingNotifications(sessionIdentifier)
 	assert.FatalOnError(o.t, e)
 
 	return result

@@ -5,9 +5,8 @@ import "time"
 func NewRegistered(
 	identifier string,
 	callsign string,
+	now time.Time,
 ) *Session {
-	now := time.Now()
-
 	return &Session{
 		Identifier: identifier,
 		Name:       callsign,

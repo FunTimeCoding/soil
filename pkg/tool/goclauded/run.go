@@ -9,10 +9,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/metric"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/ticker"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/gauge"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/option"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store"
@@ -23,6 +25,7 @@ import (
 	memory "github.com/funtimecoding/soil/pkg/tool/gomemoryd/connect"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/connect"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/indexer"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"time"
@@ -36,7 +39,7 @@ func Run(
 	start := time.Now()
 	l := logger.New(context.Background())
 	n := notifier.New()
-	s := store.New(lite.New(l, o.LitePath), time.Now)
+	s := store.New(lite.New(l, o.LitePath), universal)
 	h := claude.New().Base()
 	sweep.Run(h)
 	memoryClient := memory.Wait(l)
@@ -52,7 +55,7 @@ func Run(
 		n,
 		r,
 		h,
-		time.Now,
+		universal,
 		l,
 	)
 	v.ClearBindings()
@@ -66,6 +69,10 @@ func Run(
 	rec := recovery.New(l, r)
 	timeoutTicker := ticker.New(5*time.Minute, v.RunTimeoutSweep, rec)
 	memoryTicker := ticker.New(30*time.Second, v.PollMemory, rec)
+	m := metric.New()
+	findingGauge := gauge.New(v, l, m.Registry())
+	findingGauge.Poll()
+	gaugeTicker := ticker.New(5*time.Minute, findingGauge.Poll, rec)
 	w := watcher.New(v, l, r, h)
 	address := o.Address
 	t := i.Recorder()
@@ -91,8 +98,18 @@ func Run(
 	options := []lifecycle.Option{
 		lifecycle.WithWorker(w),
 		lifecycle.WithServer(srv),
+		lifecycle.WithServer(
+			server.New(
+				constant.Identity,
+				o.MetricAddress,
+				func(x *http.ServeMux) {
+					x.Handle(webConstant.MetricsPath, m.Exporter())
+				},
+			),
+		),
 		lifecycle.WithWorker(timeoutTicker),
 		lifecycle.WithWorker(memoryTicker),
+		lifecycle.WithWorker(gaugeTicker),
 	}
 
 	if environment.Exists(constant.MonitorUsageEnvironment) {
