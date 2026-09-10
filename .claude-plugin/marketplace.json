@@ -6,11 +6,11 @@
   "plugins": [
     {
       "name": "soil",
-      "source": "./",
-      "description": "General-purpose skills from the soil library: session lifecycle, lint, commit messages"
+      "source": "./strata/plugin/soil",
+      "description": "Session coordination for parallel Claude Code sessions: goclauded hooks, the Bash guard, plus skills for session lifecycle, lint, and commit messages"
     }
   ],
   "metadata": {
-    "description": "Skills from the soil library"
+    "description": "Session coordination and working skills from the soil library"
   }
 }

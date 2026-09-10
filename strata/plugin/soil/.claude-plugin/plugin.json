@@ -1,0 +1,8 @@
+{
+  "name": "soil",
+  "description": "Session coordination for parallel Claude Code sessions: goclauded hooks, the Bash guard, plus skills for session lifecycle, lint, and commit messages",
+  "version": "0.3.0",
+  "author": {
+    "name": "Alexander Reitzel"
+  }
+}
