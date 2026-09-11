@@ -104,6 +104,15 @@ See `generated-api.md` for the full Server pattern. Summary:
 - Function parameter that accepts a handler func: `serve`, not `handler`
 - Handler methods/functions are named after the resource they serve, without a `handle` prefix: `handleAlerts` → `alerts`, `handleDashboard` → `dashboard`, `handleAddSubmit` → `addSubmit`
 
+## Qualifier order
+
+Compound names order big-to-small: the domain noun first, the
+narrowing qualifier after - `CertificateKindServer`,
+`RegistryGitHub`, `ImagePrefixGitHub`. A name reads as the field
+or concept it populates, then its variant. Small-to-big forms
+(`GitHubPrefix` populating an `ImagePrefix` field) are the drift
+to correct when touched.
+
 ## Ordering variants
 
 Query and store methods that differ only in ordering are separate

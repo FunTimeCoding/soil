@@ -277,7 +277,43 @@ func (s *Server) captureFail(
 - Always convert results through the `convert/` package - never serialize raw domain objects
 - Error handling is two-tier - input validation vs infrastructure failures. See `error-handling/mcp.md`.
 
-## REST Strict Server
+## Results That Carry Warnings
+
+When an upstream API returns warnings alongside data, the client
+method returns a result type composing both - never a separate
+warnings return value, and never a panic-on-warning:
+
+```go
+package query_result
+
+type Result struct {
+    Value    model.Value
+    Warnings []string
+}
+```
+
+The result type gets its own leaf package (`query_result`,
+`label_result`) with a `New(value, warnings)` constructor. `Must`
+wrappers return the same type - warnings travel with the data
+either way, and the `convert/` package decides how they render in
+the tool response. Precedent: `pkg/prometheus/query_result` and
+`label_result`, consumed by goprometheusd and goalertmanagerd.
+
+## Paginated List Tools
+
+List tools with `limit`/`offset` parameters slice through the
+shared utility rather than open-coding bounds checks:
+
+```go
+page := paginate.Slice(result, int(a.Limit), int(a.Offset))
+```
+
+`paginate.Slice[T]` lives in
+`pkg/generative/model_context/paginate` and handles the
+out-of-range cases (offset past the end returns nil, zero limit
+means unlimited). Paginated responses wrap the page with
+metadata - at minimum the total count before slicing - so the
+model knows how much it has not seen.
 
 Services with REST APIs use oapi-codegen's strict server mode.
 The full pattern - configs, handlers, error schemas, recording
