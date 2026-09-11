@@ -52,7 +52,7 @@ require (
 	github.com/gpustack/gguf-parser-go v0.26.3
 	github.com/grafana/grafana-openapi-client-go v0.0.0-20260828183528-15d99ca95e47
 	github.com/hashicorp/vault-client-go v0.4.3
-	github.com/hetznercloud/hcloud-go/v2 v2.47.0
+	github.com/hetznercloud/hcloud-go/v2 v2.48.0
 	github.com/hupe1980/go-tiktoken v0.0.10
 	github.com/jackc/pgconn v1.14.3
 	github.com/jackc/pgx/v5 v5.11.0
@@ -70,7 +70,7 @@ require (
 	github.com/oapi-codegen/runtime v1.7.0
 	github.com/olekukonko/tablewriter v1.1.4
 	github.com/ollama/ollama v0.34.0
-	github.com/openai/openai-go/v3 v3.60.0
+	github.com/openai/openai-go/v3 v3.61.0
 	github.com/openvex/go-vex v0.2.9
 	github.com/opsgenie/opsgenie-go-sdk-v2 v1.2.23
 	github.com/pkg/sftp v1.13.11
@@ -81,7 +81,7 @@ require (
 	github.com/rivo/tview v0.42.0
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/sanity-io/litter v1.5.8
-	github.com/sashabaranov/go-openai v1.42.0
+	github.com/sashabaranov/go-openai v1.42.1
 	github.com/sirupsen/logrus v1.10.2
 	github.com/slok/go-http-metrics v0.13.0
 	github.com/spf13/cobra v1.10.2
