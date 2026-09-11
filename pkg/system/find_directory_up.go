@@ -1,7 +1,6 @@
 package system
 
 import (
-	"github.com/funtimecoding/soil/pkg/system/join"
 	"os"
 	"path/filepath"
 )
@@ -12,7 +11,7 @@ func FindDirectoryUp(
 ) string {
 	for {
 		if _, e := os.Stat(
-			join.Absolute(currentDirectory, nameToFind),
+			filepath.Join(currentDirectory, nameToFind),
 		); e == nil {
 			return currentDirectory
 		}
