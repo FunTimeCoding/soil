@@ -14,16 +14,27 @@ func (s *Server) rosterSection() gomponents.Node {
 		return html.P(gomponents.Text("No active sessions."))
 	}
 
+	identifiers := make([]string, 0, len(sessions))
+
+	for _, i := range sessions {
+		identifiers = append(identifiers, i.Identifier)
+	}
+
+	labels, f := s.service.LabelsBySessions(identifiers)
+	errors.PanicOnError(f)
+	pulses, g := s.service.LatestPulsesBySessions(identifiers)
+	errors.PanicOnError(g)
 	var cards []gomponents.Node
 
 	for i := range sessions {
-		labels, f := s.service.LabelsBySession(sessions[i].Identifier)
-		errors.PanicOnError(f)
-		latest, _, g := s.service.FindLatestPulse(sessions[i].Identifier)
-		errors.PanicOnError(g)
 		cards = append(
 			cards,
-			sessionCard(&sessions[i], sessions[i].Lines, labels, latest),
+			sessionCard(
+				&sessions[i],
+				sessions[i].Lines,
+				labels[sessions[i].Identifier],
+				pulses[sessions[i].Identifier],
+			),
 		)
 	}
 

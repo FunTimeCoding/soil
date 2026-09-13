@@ -7,7 +7,7 @@ func (s *Store) FindLatestPulse(
 ) (*pulse.Pulse, bool, error) {
 	var result pulse.Pulse
 	r := s.database.Where("session_identifier = ?", sessionIdentifier).Order(
-		"created_at DESC",
+		"created_at DESC, identifier DESC",
 	).Limit(
 		1,
 	).Find(

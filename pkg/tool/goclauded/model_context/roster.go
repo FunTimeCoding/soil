@@ -31,6 +31,24 @@ func (s *Server) roster(
 		return response.Success("No active sessions.")
 	}
 
+	identifiers := make([]string, 0, len(sessions))
+
+	for _, i := range sessions {
+		identifiers = append(identifiers, i.Identifier)
+	}
+
+	labels, f := s.service.LabelsBySessions(identifiers)
+
+	if f != nil {
+		return s.captureFail(f, library.UnexpectedError)
+	}
+
+	pulses, g := s.service.LatestPulsesBySessions(identifiers)
+
+	if g != nil {
+		return s.captureFail(g, library.UnexpectedError)
+	}
+
 	var lines []string
 
 	for _, session := range sessions {
@@ -65,29 +83,17 @@ func (s *Server) roster(
 			line = fmt.Sprintf("%s\n  %s", line, strings.Join(details, " · "))
 		}
 
-		labels, f := s.service.LabelsBySession(session.Identifier)
-
-		if f != nil {
-			return s.captureFail(f, library.UnexpectedError)
-		}
-
-		if len(labels) > 0 {
+		if entries := labels[session.Identifier]; len(entries) > 0 {
 			var pips []string
 
-			for _, l := range labels {
+			for _, l := range entries {
 				pips = append(pips, fmt.Sprintf("(%s:%s)", l.Key, l.Value))
 			}
 
 			line = fmt.Sprintf("%s\n  %s", line, join.Space(pips...))
 		}
 
-		l, found, g := s.service.FindLatestPulse(session.Identifier)
-
-		if g != nil {
-			return s.captureFail(g, library.UnexpectedError)
-		}
-
-		if found {
+		if l := pulses[session.Identifier]; l != nil {
 			line = fmt.Sprintf("%s\n  pulse: %s", line, l.Body)
 		}
 
