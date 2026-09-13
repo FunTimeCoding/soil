@@ -5,6 +5,6 @@ import "time"
 type Target struct {
 	Identifier string
 	Name       string
-	Timestamp  time.Time
+	LastSeen   time.Time
 	Labels     map[string]string
 }

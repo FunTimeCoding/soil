@@ -33,14 +33,14 @@ func (c *Client) RecentSessions(limit int) ([]*Target, error) {
 			name = *s.Name
 		}
 
-		timestamp := time.Time{}
+		lastSeen := time.Time{}
 
 		if s.LastSeen != nil {
 			if parsed, f := time.Parse(
 				time.RFC3339Nano,
 				*s.LastSeen,
 			); f == nil {
-				timestamp = parsed
+				lastSeen = parsed
 			}
 		}
 
@@ -52,10 +52,7 @@ func (c *Client) RecentSessions(limit int) ([]*Target, error) {
 			}
 		}
 
-		result = append(
-			result,
-			NewTarget(s.Identifier, name, timestamp, labels),
-		)
+		result = append(result, NewTarget(s.Identifier, name, lastSeen, labels))
 	}
 
 	return result, nil

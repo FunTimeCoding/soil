@@ -53,7 +53,7 @@ func TestRecentSessionsCarriesActivityTime(t *testing.T) {
 	assert.FatalOnError(t, e)
 	found := targetByIdentifier(targets, a.UUID)
 	assert.NotNil(t, found)
-	assert.False(t, found.Timestamp.IsZero())
+	assert.False(t, found.LastSeen.IsZero())
 }
 
 func TestRecentSessionsKeepsUnlabelledSessions(t *testing.T) {

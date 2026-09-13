@@ -5,7 +5,7 @@ import "time"
 func NewTarget(
 	identifier string,
 	name string,
-	timestamp time.Time,
+	lastSeen time.Time,
 	labels map[string]string,
 ) *Target {
 	if labels == nil {
@@ -15,7 +15,7 @@ func NewTarget(
 	return &Target{
 		Identifier: identifier,
 		Name:       name,
-		Timestamp:  timestamp,
+		LastSeen:   lastSeen,
 		Labels:     labels,
 	}
 }
