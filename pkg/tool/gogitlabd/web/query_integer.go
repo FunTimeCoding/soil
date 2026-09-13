@@ -6,7 +6,10 @@ import (
 	"strconv"
 )
 
-func queryInteger(r *http.Request, name string) int64 {
+func queryInteger(
+	r *http.Request,
+	name string,
+) int64 {
 	value := r.URL.Query().Get(name)
 
 	if value == "" {

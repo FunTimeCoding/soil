@@ -16,7 +16,10 @@ import (
 
 func New(
 	t *testing.T,
-	setup func(*http.ServeMux, *guard.Mux),
+	setup func(
+		*http.ServeMux,
+		*guard.Mux,
+	),
 ) *Server {
 	t.Helper()
 	p, n := system.ClaimPort()

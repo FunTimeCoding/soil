@@ -2,7 +2,10 @@ package service
 
 import "github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 
-func (s *Service) CloseSession(identifier string, reason string) error {
+func (s *Service) CloseSession(
+	identifier string,
+	reason string,
+) error {
 	r, found, e := s.store.FindSession(identifier)
 
 	if e != nil {

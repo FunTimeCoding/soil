@@ -11,14 +11,23 @@ func RecordingMiddleware[F ~func(
 	w http.ResponseWriter,
 	q *http.Request,
 	request any,
-) (any, error)](t face.Recorder, skip ...string) func(F, string) F {
+) (any, error)](
+	t face.Recorder,
+	skip ...string,
+) func(
+	F,
+	string,
+) F {
 	skipped := make(map[string]struct{}, len(skip))
 
 	for _, operation := range skip {
 		skipped[operation] = struct{}{}
 	}
 
-	return func(f F, operation string) F {
+	return func(
+		f F,
+		operation string,
+	) F {
 		if _, machine := skipped[operation]; machine {
 			return f
 		}

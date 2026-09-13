@@ -38,6 +38,7 @@ func TestMigrationWidensExistingMetadataTable(t *testing.T) {
 		_, e := database.Exec(s)
 		errors.PanicOnError(e)
 	}
+
 	s := store.New(database)
 	defer s.Close()
 	var key int

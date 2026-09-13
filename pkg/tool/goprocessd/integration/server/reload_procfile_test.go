@@ -11,7 +11,10 @@ import (
 	"time"
 )
 
-func countingEntry(t *testing.T, name string) (string, string) {
+func countingEntry(
+	t *testing.T,
+	name string,
+) (string, string) {
 	t.Helper()
 	marker := filepath.Join(t.TempDir(), "runs")
 
@@ -22,7 +25,10 @@ func countingEntry(t *testing.T, name string) (string, string) {
 	)
 }
 
-func launchCount(t *testing.T, marker string) int {
+func launchCount(
+	t *testing.T,
+	marker string,
+) int {
 	t.Helper()
 	content, e := os.ReadFile(marker)
 

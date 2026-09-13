@@ -6,7 +6,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/digest/event"
 )
 
-func collapsed(alias string, events []*event.Event) string {
+func collapsed(
+	alias string,
+	events []*event.Event,
+) string {
 	return fmt.Sprintf(
 		"[%s] %d new · %s · %s · %s\n%slatest — %s",
 		alias,

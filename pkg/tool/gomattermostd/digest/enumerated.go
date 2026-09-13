@@ -8,7 +8,10 @@ import (
 	"strings"
 )
 
-func enumerated(alias string, events []*event.Event) string {
+func enumerated(
+	alias string,
+	events []*event.Event,
+) string {
 	result := []string{
 		fmt.Sprintf("[%s] %d new · %s", alias, len(events), span(events)),
 	}

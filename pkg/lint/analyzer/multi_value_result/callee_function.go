@@ -6,7 +6,10 @@ import (
 	"golang.org/x/tools/go/packages"
 )
 
-func calleeFunction(p *packages.Package, call *ast.CallExpr) *types.Func {
+func calleeFunction(
+	p *packages.Package,
+	call *ast.CallExpr,
+) *types.Func {
 	var identifier *ast.Ident
 
 	switch fun := call.Fun.(type) {

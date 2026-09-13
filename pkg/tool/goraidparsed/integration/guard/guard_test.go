@@ -15,7 +15,10 @@ import (
 func TestGuard(t *testing.T) {
 	v := model_context_server.New(
 		t,
-		func(_ *http.ServeMux, g *guard.Mux) {
+		func(
+			_ *http.ServeMux,
+			g *guard.Mux,
+		) {
 			goraidparsed.Mount(
 				server.New(
 					t.TempDir(),

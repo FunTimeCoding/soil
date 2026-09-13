@@ -21,7 +21,10 @@ func TestGuard(t *testing.T) {
 	s := service.New(store.New(lite.NewMemory()), notifier.New())
 	v := model_context_server.New(
 		t,
-		func(_ *http.ServeMux, g *guard.Mux) {
+		func(
+			_ *http.ServeMux,
+			g *guard.Mux,
+		) {
 			gosproutd.Mount(
 				s,
 				web.New(s),

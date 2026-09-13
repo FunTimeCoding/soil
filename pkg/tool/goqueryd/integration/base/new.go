@@ -31,7 +31,10 @@ func New(t *testing.T) *Server {
 		reranker: a,
 		Server: model_context_server.New(
 			t,
-			func(_ *http.ServeMux, g *guard.Mux) {
+			func(
+				_ *http.ServeMux,
+				g *guard.Mux,
+			) {
 				goqueryd.Mount(
 					v,
 					web.New(v),

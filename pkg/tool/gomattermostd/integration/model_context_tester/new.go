@@ -7,7 +7,10 @@ import (
 	"testing"
 )
 
-func New(t *testing.T, configure func(*http.ServeMux)) *Tester {
+func New(
+	t *testing.T,
+	configure func(*http.ServeMux),
+) *Tester {
 	t.Helper()
 	s := base.New(t, configure)
 	c := model_context_client.New(t, s.ContextServer.Port)

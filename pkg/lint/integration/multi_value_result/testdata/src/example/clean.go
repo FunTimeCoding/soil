@@ -6,7 +6,10 @@ func single() string {
 	return "value"
 }
 
-func emit(text string, code int) {
+func emit(
+	text string,
+	code int,
+) {
 	fmt.Println(text, code)
 }
 

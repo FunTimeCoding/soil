@@ -16,7 +16,10 @@ func TestGuard(t *testing.T) {
 	s := mock_client.New()
 	v := model_context_server.New(
 		t,
-		func(_ *http.ServeMux, g *guard.Mux) {
+		func(
+			_ *http.ServeMux,
+			g *guard.Mux,
+		) {
 			gocredentiald.Mount(
 				s,
 				memory.New(),

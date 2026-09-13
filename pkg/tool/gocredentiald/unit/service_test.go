@@ -79,7 +79,10 @@ func fixtureDatabase(t *testing.T) string {
 	return path
 }
 
-func open(t *testing.T, path string) *service.Service {
+func open(
+	t *testing.T,
+	path string,
+) *service.Service {
 	t.Helper()
 
 	return openRevealed(t, path, nil)

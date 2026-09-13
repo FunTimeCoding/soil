@@ -869,3 +869,9 @@ func TestSpacingDoubleBlankAfterClosingBrace(t *testing.T) {
 		l,
 	)
 }
+
+func TestSpacingKeepsBlankAfterRangeWithMultilineLiteral(t *testing.T) {
+	source := "package example\n\nfunc Example() {\n\tvar total int\n\n\tfor _, name := range []string{\n\t\t\"alfa\",\n\t\t\"bravo\",\n\t} {\n\t\ttotal += len(name)\n\t}\n\n\tfmt.Println(total)\n}\n"
+	l := lint.Spacing(stringConstant.UpperAlfa, strings.NewReader(source))
+	assertReport(t, "Alfa", false, nil, source, l)
+}

@@ -25,7 +25,9 @@ func entriesTable(entries []entry.Entry) gomponents.Node {
 			html.Tr(
 				html.ID(fmt.Sprintf("row-%d", e.Identifier)),
 				html.Class("clickable-row"),
-				extended.Get(fragmentLocator(constant.DetailPath, e.Identifier)),
+				extended.Get(
+					fragmentLocator(constant.DetailPath, e.Identifier),
+				),
 				extended.Target(fmt.Sprintf("#%s", target)),
 				extended.Swap(webConstant.SwapOuter),
 				layout.TimeCell(e.Timestamp),

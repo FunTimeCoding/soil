@@ -14,13 +14,19 @@ import (
 func upstream(m *http.ServeMux) {
 	m.HandleFunc(
 		"/api/v4/posts/alfa",
-		func(w http.ResponseWriter, _ *http.Request) {
+		func(
+			w http.ResponseWriter,
+			_ *http.Request,
+		) {
 			web.Encode(w, &model.Post{Id: "alfa", ChannelId: "bravo"})
 		},
 	)
 	m.HandleFunc(
 		"/api/v4/posts/reply",
-		func(w http.ResponseWriter, _ *http.Request) {
+		func(
+			w http.ResponseWriter,
+			_ *http.Request,
+		) {
 			web.Encode(
 				w,
 				&model.Post{

@@ -26,7 +26,11 @@ func TestShortIdentifierSurvivesDisplayPaths(t *testing.T) {
 	assert.Integer(t, http.StatusOK, pageStatus(t, s, constant.SessionsPath))
 }
 
-func pageStatus(t *testing.T, s *base.Server, path string) int {
+func pageStatus(
+	t *testing.T,
+	s *base.Server,
+	path string,
+) int {
 	t.Helper()
 	response, e := http.Get(fmt.Sprintf("http://localhost:%d%s", s.Port, path))
 	assert.FatalOnError(t, e)

@@ -5,7 +5,10 @@ import (
 	"time"
 )
 
-func (s *Store) TouchRoot(root string, at time.Time) error {
+func (s *Store) TouchRoot(
+	root string,
+	at time.Time,
+) error {
 	return s.database.
 		Model(subscription.Stub()).
 		Where("root_identifier = ?", root).

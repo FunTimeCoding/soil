@@ -22,7 +22,9 @@ func TestGuard(t *testing.T) {
 	s := store.New(lite.NewMemory(), "highstate_runs")
 	n := runner.New(
 		option.New(),
-		func() *salt.Client { return salt.New("localhost", 1, "guard", "guard") },
+		func() *salt.Client {
+			return salt.New("localhost", 1, "guard", "guard")
+		},
 		s,
 		logger.New(t.Context()),
 		memory.New(),
@@ -30,7 +32,10 @@ func TestGuard(t *testing.T) {
 	)
 	v := model_context_server.New(
 		t,
-		func(_ *http.ServeMux, g *guard.Mux) {
+		func(
+			_ *http.ServeMux,
+			g *guard.Mux,
+		) {
 			gosaltd.Mount(
 				n,
 				s,

@@ -2,7 +2,10 @@ package service
 
 import "go/ast"
 
-func statementParent(path []ast.Node, statement ast.Node) ast.Node {
+func statementParent(
+	path []ast.Node,
+	statement ast.Node,
+) ast.Node {
 	for i, node := range path {
 		if node != statement {
 			continue

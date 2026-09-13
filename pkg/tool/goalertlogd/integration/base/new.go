@@ -49,7 +49,10 @@ func New(t *testing.T) *Server {
 	w.Poll()
 	v := model_context_server.New(
 		t,
-		func(_ *http.ServeMux, g *guard.Mux) {
+		func(
+			_ *http.ServeMux,
+			g *guard.Mux,
+		) {
 			goalertlogd.Mount(
 				s,
 				w,

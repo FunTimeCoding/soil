@@ -17,7 +17,10 @@ func New(t *testing.T) *Server {
 	c := mock_client.New()
 	v := model_context_server.New(
 		t,
-		func(m *http.ServeMux, g *guard.Mux) {
+		func(
+			m *http.ServeMux,
+			g *guard.Mux,
+		) {
 			goitermd.Mount(
 				c,
 				memory.New(),

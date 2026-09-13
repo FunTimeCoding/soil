@@ -5,7 +5,10 @@ import (
 	"go/types"
 )
 
-func (m *Matcher) assignable(expression ast.Expr, typeText string) bool {
+func (m *Matcher) assignable(
+	expression ast.Expr,
+	typeText string,
+) bool {
 	actual := m.information.TypeOf(expression)
 
 	if actual == nil {

@@ -5,7 +5,10 @@ import (
 	"go/token"
 )
 
-func (m *Matcher) Unify(pattern ast.Node, site ast.Node) bool {
+func (m *Matcher) Unify(
+	pattern ast.Node,
+	site ast.Node,
+) bool {
 	switch p := pattern.(type) {
 	case *ast.Ident:
 		if _, isHole := m.holes[p.Name]; isHole {

@@ -25,7 +25,10 @@ func TestGuard(t *testing.T) {
 	)
 	v := model_context_server.New(
 		t,
-		func(_ *http.ServeMux, g *guard.Mux) {
+		func(
+			_ *http.ServeMux,
+			g *guard.Mux,
+		) {
 			goprocessd.Mount(
 				s,
 				memory.New(),

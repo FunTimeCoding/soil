@@ -1,6 +1,9 @@
 package notifier
 
-func (n *Notifier) Notify(callsign string, body string) {
+func (n *Notifier) Notify(
+	callsign string,
+	body string,
+) {
 	if callsign == "" {
 		return
 	}

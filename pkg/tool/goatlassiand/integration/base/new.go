@@ -27,7 +27,10 @@ func New(t *testing.T) *Server {
 	var f *confluence.Client
 	v := model_context_server.New(
 		t,
-		func(_ *http.ServeMux, g *guard.Mux) {
+		func(
+			_ *http.ServeMux,
+			g *guard.Mux,
+		) {
 			goatlassiand.Mount(
 				mock_jira.New(),
 				c,

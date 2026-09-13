@@ -60,7 +60,10 @@ func (w *Worker) Poll() {
 
 	slices.SortFunc(
 		entries,
-		func(a *board_entry.Entry, b *board_entry.Entry) int {
+		func(
+			a *board_entry.Entry,
+			b *board_entry.Entry,
+		) int {
 			if c := b.Updated.Compare(a.Updated); c != 0 {
 				return c
 			}
@@ -80,7 +83,10 @@ func (w *Worker) Poll() {
 	if !slices.EqualFunc(
 		previous,
 		entries,
-		func(a *board_entry.Entry, b *board_entry.Entry) bool {
+		func(
+			a *board_entry.Entry,
+			b *board_entry.Entry,
+		) bool {
 			return *a == *b
 		},
 	) {

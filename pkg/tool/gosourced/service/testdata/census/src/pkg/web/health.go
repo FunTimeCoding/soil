@@ -18,7 +18,10 @@ func Gate(c *client.Client) string {
 	return "closed"
 }
 
-func Probe(c *client.Client, retries int) bool {
+func Probe(
+	c *client.Client,
+	retries int,
+) bool {
 	if c.Ready() && retries < 3 {
 		return true
 	}

@@ -15,8 +15,7 @@ func TestScanFileSplitsIdentifiers(t *testing.T) {
 		os.WriteFile(
 			filepath.Join(d, "sample.go"),
 			[]byte(
-				"noiseWithMatch\nsmtpd_banner\nghcr.io/aquasecurity/x\n"+
-					"naïveHandler\n",
+				"noiseWithMatch\nsmtpd_banner\nghcr.io/aquasecurity/x\nnaïveHandler\n",
 			),
 			0644,
 		),

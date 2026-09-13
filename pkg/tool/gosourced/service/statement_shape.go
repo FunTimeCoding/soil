@@ -18,7 +18,10 @@ func statementShape(
 	end := set.Position(node.End()).Offset
 	lineEnd := end
 
-	if index := strings.IndexByte(string(content[start:end]), '\n'); index >= 0 {
+	if index := strings.IndexByte(
+		string(content[start:end]),
+		'\n',
+	); index >= 0 {
 		lineEnd = start + index
 	}
 

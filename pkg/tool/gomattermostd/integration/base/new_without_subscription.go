@@ -23,7 +23,10 @@ func NewWithoutSubscription(
 		Upstream: upstream,
 		ContextServer: model_context_server.New(
 			t,
-			func(_ *http.ServeMux, g *guard.Mux) {
+			func(
+				_ *http.ServeMux,
+				g *guard.Mux,
+			) {
 				gomattermostd.Mount(
 					upstream.Client,
 					nil,

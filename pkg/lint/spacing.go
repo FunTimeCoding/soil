@@ -90,11 +90,14 @@ func Spacing(
 
 			pendingControl = false
 		} else if strings.HasPrefix(trimmed, "}") && endsWithBrace {
+			control := pendingControl
+
 			if len(blockStack) > 0 {
+				control = control || blockStack[len(blockStack)-1]
 				blockStack = blockStack[:len(blockStack)-1]
 			}
 
-			blockStack = append(blockStack, false)
+			blockStack = append(blockStack, control)
 			pendingControl = false
 		} else if endsWithBrace {
 			blockStack = append(blockStack, isControlStart || pendingControl)

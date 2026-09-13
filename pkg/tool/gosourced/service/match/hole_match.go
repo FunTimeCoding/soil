@@ -2,7 +2,10 @@ package match
 
 import "go/ast"
 
-func (m *Matcher) holeMatch(name string, site ast.Node) bool {
+func (m *Matcher) holeMatch(
+	name string,
+	site ast.Node,
+) bool {
 	expression, okay := site.(ast.Expr)
 
 	if !okay {

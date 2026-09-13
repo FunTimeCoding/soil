@@ -15,7 +15,10 @@ import (
 	"testing"
 )
 
-func New(t *testing.T, configure func(*http.ServeMux)) *Server {
+func New(
+	t *testing.T,
+	configure func(*http.ServeMux),
+) *Server {
 	t.Helper()
 	upstream := mattermost_client_tester.New(t, configure)
 	s := store.New(lite.NewMemory())
@@ -28,7 +31,10 @@ func New(t *testing.T, configure func(*http.ServeMux)) *Server {
 		Indexer:  index,
 		ContextServer: model_context_server.New(
 			t,
-			func(_ *http.ServeMux, g *guard.Mux) {
+			func(
+				_ *http.ServeMux,
+				g *guard.Mux,
+			) {
 				gomattermostd.Mount(
 					upstream.Client,
 					nil,

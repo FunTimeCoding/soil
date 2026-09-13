@@ -21,7 +21,10 @@ func New(t *testing.T) *Server {
 	recorder := mock_recorder.New()
 	v := model_context_server.New(
 		t,
-		func(_ *http.ServeMux, g *guard.Mux) {
+		func(
+			_ *http.ServeMux,
+			g *guard.Mux,
+		) {
 			gotelemetryd.Mount(
 				s,
 				web.New(s),

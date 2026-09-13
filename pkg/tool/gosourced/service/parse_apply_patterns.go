@@ -19,7 +19,11 @@ func parseApplyPatterns(
 		return nil, nil, f
 	}
 
-	if g := match.CheckApplyShape(patternSpec, replacementSpec, symbol); g != nil {
+	if g := match.CheckApplyShape(
+		patternSpec,
+		replacementSpec,
+		symbol,
+	); g != nil {
 		return nil, nil, g
 	}
 

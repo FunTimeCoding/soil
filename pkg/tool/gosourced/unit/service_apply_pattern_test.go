@@ -9,7 +9,10 @@ import (
 	"testing"
 )
 
-func gaugeContent(t *testing.T, directory string) string {
+func gaugeContent(
+	t *testing.T,
+	directory string,
+) string {
 	t.Helper()
 	b, e := os.ReadFile(filepath.Join(directory, "pkg/gauge/run.go"))
 	assert.FatalOnError(t, e)

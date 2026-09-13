@@ -16,7 +16,10 @@ import (
 func TestGuard(t *testing.T) {
 	v := model_context_server.New(
 		t,
-		func(_ *http.ServeMux, g *guard.Mux) {
+		func(
+			_ *http.ServeMux,
+			g *guard.Mux,
+		) {
 			gopostgresd.Mount(
 				service.New(inventory.New()),
 				memory.New(),

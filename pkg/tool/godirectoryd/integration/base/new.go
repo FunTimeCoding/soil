@@ -35,7 +35,10 @@ func New(t *testing.T) *Server {
 		Authorization: authorization,
 		Server: model_context_server.New(
 			t,
-			func(_ *http.ServeMux, g *guard.Mux) {
+			func(
+				_ *http.ServeMux,
+				g *guard.Mux,
+			) {
 				godirectoryd.Mount(
 					v,
 					web.New(v, authorization),

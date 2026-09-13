@@ -6,7 +6,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/process"
 )
 
-func currentLog(p *process.Process, name string) string {
+func currentLog(
+	p *process.Process,
+	name string,
+) string {
 	current, older := p.CurrentLog()
 
 	if len(current) == 0 && older == 0 {

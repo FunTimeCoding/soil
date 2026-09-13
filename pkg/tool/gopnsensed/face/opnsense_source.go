@@ -28,7 +28,10 @@ type OpnsenseSource interface {
 	Log(limit int) ([]*log_entry.Entry, error)
 	States(phrase string) ([]*state.State, error)
 	AddHost(h *request.Host) (string, error)
-	SetHost(identifier string, h *request.Host) error
+	SetHost(
+		identifier string,
+		h *request.Host,
+	) error
 	DeleteHost(identifier string) error
 	ReconfigureDnsmasq() error
 }

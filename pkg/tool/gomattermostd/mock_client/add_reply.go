@@ -5,7 +5,10 @@ import (
 	"github.com/mattermost/mattermost/server/public/model"
 )
 
-func (c *Client) AddReply(root string, identifier string) {
+func (c *Client) AddReply(
+	root string,
+	identifier string,
+) {
 	c.thread[root] = append(
 		c.thread[root],
 		post.New(&model.Post{Id: identifier, RootId: root}),

@@ -2,7 +2,10 @@ package service
 
 import "go/types"
 
-func sameObject(a types.Object, b types.Object) bool {
+func sameObject(
+	a types.Object,
+	b types.Object,
+) bool {
 	if a == b {
 		return true
 	}

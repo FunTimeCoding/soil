@@ -26,7 +26,12 @@ func TestNotifierNotifySkipsEmptyCallsign(t *testing.T) {
 	count := 0
 	s := httptest.NewServer(
 		http.HandlerFunc(
-			func(_ http.ResponseWriter, _ *http.Request) { count++ },
+			func(
+				_ http.ResponseWriter,
+				_ *http.Request,
+			) {
+				count++
+			},
 		),
 	)
 	defer s.Close()
@@ -40,7 +45,10 @@ func TestNotifierNotifySkipsEmptyCallsign(t *testing.T) {
 func TestNotifierNotifyCapturesFailureStatus(t *testing.T) {
 	s := httptest.NewServer(
 		http.HandlerFunc(
-			func(w http.ResponseWriter, _ *http.Request) {
+			func(
+				w http.ResponseWriter,
+				_ *http.Request,
+			) {
 				w.WriteHeader(http.StatusInternalServerError)
 			},
 		),

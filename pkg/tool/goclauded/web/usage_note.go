@@ -15,7 +15,10 @@ func (s *Server) usageNote() gomponents.Node {
 	if result := s.service.Usage(); result != nil {
 		items = append(
 			items,
-			fmt.Sprintf("Updated %s", library.FormatCompact(result.LastUpdated)),
+			fmt.Sprintf(
+				"Updated %s",
+				library.FormatCompact(result.LastUpdated),
+			),
 		)
 	}
 

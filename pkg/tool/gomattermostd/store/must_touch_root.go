@@ -5,6 +5,9 @@ import (
 	"time"
 )
 
-func (s *Store) MustTouchRoot(root string, at time.Time) {
+func (s *Store) MustTouchRoot(
+	root string,
+	at time.Time,
+) {
 	errors.PanicOnError(s.TouchRoot(root, at))
 }

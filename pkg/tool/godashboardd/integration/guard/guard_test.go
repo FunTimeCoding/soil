@@ -37,7 +37,10 @@ func TestGuard(t *testing.T) {
 	)
 	s := model_context_server.New(
 		t,
-		func(_ *http.ServeMux, g *guard.Mux) {
+		func(
+			_ *http.ServeMux,
+			g *guard.Mux,
+		) {
 			godashboardd.Mount(web.New(b, v, c, authorization), g)
 		},
 	)

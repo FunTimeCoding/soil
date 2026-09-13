@@ -25,7 +25,10 @@ func New(t *testing.T) *Server {
 		Store: s,
 		Server: model_context_server.New(
 			t,
-			func(_ *http.ServeMux, g *guard.Mux) {
+			func(
+				_ *http.ServeMux,
+				g *guard.Mux,
+			) {
 				gomaintlogd.Mount(
 					s,
 					web.New(s, events),

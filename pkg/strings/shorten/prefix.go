@@ -1,6 +1,9 @@
 package shorten
 
-func Prefix(value string, count int) string {
+func Prefix(
+	value string,
+	count int,
+) string {
 	r := []rune(value)
 
 	if len(r) <= count {

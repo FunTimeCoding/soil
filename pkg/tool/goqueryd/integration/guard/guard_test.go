@@ -24,7 +24,10 @@ func TestGuard(t *testing.T) {
 	v := service.New(s, ollama.NewEnvironment(), mock_reranker.New())
 	w := model_context_server.New(
 		t,
-		func(_ *http.ServeMux, g *guard.Mux) {
+		func(
+			_ *http.ServeMux,
+			g *guard.Mux,
+		) {
 			goqueryd.Mount(
 				v,
 				web.New(v),

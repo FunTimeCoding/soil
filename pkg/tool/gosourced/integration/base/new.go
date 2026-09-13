@@ -25,7 +25,10 @@ func New(
 	s := service.New(i)
 	v := model_context_server.New(
 		t,
-		func(m *http.ServeMux, g *guard.Mux) {
+		func(
+			m *http.ServeMux,
+			g *guard.Mux,
+		) {
 			gosourced.Mount(
 				s,
 				memory.New(),

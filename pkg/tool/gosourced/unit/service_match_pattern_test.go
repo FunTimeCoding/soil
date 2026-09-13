@@ -31,7 +31,7 @@ func TestMatchPattern(t *testing.T) {
 	)
 	assert.Integer(t, 1, len(match.Unmatched[0].Locations))
 	assert.String(t, "pkg/web/health.go", match.Unmatched[0].Locations[0].File)
-	assert.Integer(t, 22, match.Unmatched[0].Locations[0].Line)
+	assert.Integer(t, 25, match.Unmatched[0].Locations[0].Line)
 }
 
 func TestMatchPatternImported(t *testing.T) {

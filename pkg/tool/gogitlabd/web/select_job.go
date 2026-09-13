@@ -5,7 +5,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/gitlab/job"
 )
 
-func selectJob(jobs []*job.Job, requested int64) *job.Job {
+func selectJob(
+	jobs []*job.Job,
+	requested int64,
+) *job.Job {
 	if len(jobs) == 0 {
 		return nil
 	}

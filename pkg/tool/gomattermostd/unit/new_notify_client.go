@@ -15,7 +15,10 @@ func newNotifyClient(t *testing.T) (*notifySink, *connector.Client) {
 	result := &notifySink{}
 	server := httptest.NewServer(
 		http.HandlerFunc(
-			func(_ http.ResponseWriter, q *http.Request) {
+			func(
+				_ http.ResponseWriter,
+				q *http.Request,
+			) {
 				var v client.NotifyRequest
 				notation.MustDecode(string(system.ReadAll(q.Body)), &v, false)
 				result.add(v)

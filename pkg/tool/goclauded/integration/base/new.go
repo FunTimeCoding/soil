@@ -23,7 +23,10 @@ func New(t *testing.T) *Server {
 		Tester: s,
 		Server: model_context_server.New(
 			t,
-			func(_ *http.ServeMux, g *guard.Mux) {
+			func(
+				_ *http.ServeMux,
+				g *guard.Mux,
+			) {
 				goclauded.Mount(
 					s.Service,
 					web.New(s.Service),

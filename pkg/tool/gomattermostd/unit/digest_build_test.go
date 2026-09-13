@@ -10,7 +10,10 @@ import (
 	"time"
 )
 
-func digestAt(hour int, minute int) time.Time {
+func digestAt(
+	hour int,
+	minute int,
+) time.Time {
 	return time.Date(2026, 9, 8, hour, minute, 0, 0, time.UTC)
 }
 
@@ -192,7 +195,13 @@ func TestDigestBuildFlattensNewlines(t *testing.T) {
 func TestDigestBuildAuthorOverflow(t *testing.T) {
 	var events []*event.Event
 
-	for _, name := range []string{"Foxtrot", "Golf", "Hotel", "India", "Juliett"} {
+	for _, name := range []string{
+		"Foxtrot",
+		"Golf",
+		"Hotel",
+		"India",
+		"Juliett",
+	} {
 		events = append(
 			events,
 			event.New(constant.MessageEvent, name, "hello", digestAt(9, 0)),

@@ -2,7 +2,10 @@ package digest
 
 import "fmt"
 
-func plural(count int, noun string) string {
+func plural(
+	count int,
+	noun string,
+) string {
 	if count == 1 {
 		return fmt.Sprintf("%d %s", count, noun)
 	}

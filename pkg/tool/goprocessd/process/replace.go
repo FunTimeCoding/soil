@@ -2,7 +2,10 @@ package process
 
 import "sync"
 
-func Replace(previous *Process, command string) *Process {
+func Replace(
+	previous *Process,
+	command string,
+) *Process {
 	p := &Process{
 		Name:       previous.Name,
 		Command:    command,

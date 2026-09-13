@@ -7,7 +7,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/digest/event"
 )
 
-func Build(alias string, events []*event.Event) string {
+func Build(
+	alias string,
+	events []*event.Event,
+) string {
 	if len(events) == 0 {
 		return ""
 	}

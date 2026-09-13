@@ -44,6 +44,7 @@ func TestFilterWebService(t *testing.T) {
 		)
 		assert.FatalOnError(t, e)
 	}
+
 	all, e := c.GetEntriesWithResponse(x, &client.GetEntriesParams{})
 	assert.FatalOnError(t, e)
 	assert.Count(t, 3, *all.JSON200)
