@@ -304,6 +304,7 @@ type SessionDetail struct {
 	Description   *string       `json:"description,omitempty"`
 	Identifier    string        `json:"identifier"`
 	Labels        *[]LabelEntry `json:"labels,omitempty"`
+	LastSeen      *string       `json:"lastSeen,omitempty"`
 	Lines         int           `json:"lines"`
 	Name          *string       `json:"name,omitempty"`
 	Preview       *string       `json:"preview,omitempty"`

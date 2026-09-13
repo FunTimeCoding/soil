@@ -42,6 +42,20 @@ func TestRecentSessionsCarriesLabels(t *testing.T) {
 	assert.String(t, "staging", found.Labels["environment"])
 }
 
+func TestRecentSessionsCarriesActivityTime(t *testing.T) {
+	s := base.New(t)
+	defer s.Close()
+	a := s.NewSession(t)
+	defer a.Close()
+	a.Announce(a.Name(), "working")
+	a.CheckLive()
+	targets, e := s.Connector(t).RecentSessions(25)
+	assert.FatalOnError(t, e)
+	found := targetByIdentifier(targets, a.UUID)
+	assert.NotNil(t, found)
+	assert.False(t, found.Timestamp.IsZero())
+}
+
 func TestRecentSessionsKeepsUnlabelledSessions(t *testing.T) {
 	s := base.New(t)
 	defer s.Close()

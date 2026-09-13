@@ -1189,6 +1189,8 @@ components:
           type: string
         timestamp:
           type: string
+        lastSeen:
+          type: string
         workDirectory:
           type: string
         branch:

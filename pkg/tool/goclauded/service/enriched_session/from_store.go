@@ -10,6 +10,7 @@ func FromStore(
 	result.Identifier = i.Identifier
 	result.Slug = i.Slug
 	result.Timestamp = i.SessionTimestamp
+	result.LastSeen = i.LastSeen
 	result.WorkDirectory = i.WorkDirectory
 	result.Branch = i.Branch
 	result.Lines = i.Lines

@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
+	"time"
 )
 
 func (s *Server) GetSessions(
@@ -58,6 +59,10 @@ func (s *Server) GetSessions(
 			Identifier: i.Identifier,
 			Timestamp:  i.Timestamp,
 			Lines:      i.Lines,
+		}
+
+		if !i.LastSeen.IsZero() {
+			d.LastSeen = new(i.LastSeen.UTC().Format(time.RFC3339Nano))
 		}
 
 		if i.Name != "" {

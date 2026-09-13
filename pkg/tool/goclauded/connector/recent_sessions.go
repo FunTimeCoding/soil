@@ -33,10 +33,15 @@ func (c *Client) RecentSessions(limit int) ([]*Target, error) {
 			name = *s.Name
 		}
 
-		timestamp, f := time.Parse(time.RFC3339Nano, s.Timestamp)
+		timestamp := time.Time{}
 
-		if f != nil {
-			timestamp = time.Time{}
+		if s.LastSeen != nil {
+			if parsed, f := time.Parse(
+				time.RFC3339Nano,
+				*s.LastSeen,
+			); f == nil {
+				timestamp = parsed
+			}
 		}
 
 		labels := map[string]string{}
