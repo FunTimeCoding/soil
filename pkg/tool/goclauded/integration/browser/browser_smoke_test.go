@@ -4,7 +4,7 @@ package browser
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration/browser_tester"
+	"github.com/funtimecoding/soil/pkg/web/browser_tester"
 	"testing"
 )
 

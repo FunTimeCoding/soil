@@ -1,0 +1,35 @@
+dn: dc=example,dc=test
+objectClass: dcObject
+objectClass: organization
+dc: example
+o: example
+
+dn: ou=people,dc=example,dc=test
+objectClass: organizationalUnit
+ou: people
+
+dn: ou=groups,dc=example,dc=test
+objectClass: organizationalUnit
+ou: groups
+
+dn: uid=member,ou=people,dc=example,dc=test
+objectClass: inetOrgPerson
+uid: member
+cn: Member Person
+sn: Person
+mail: member@example.test
+userPassword: memberpassword
+
+dn: uid=outsider,ou=people,dc=example,dc=test
+objectClass: inetOrgPerson
+uid: outsider
+cn: Outsider Person
+sn: Person
+mail: outsider@example.test
+userPassword: outsiderpassword
+
+dn: cn=gate,ou=groups,dc=example,dc=test
+objectClass: posixGroup
+cn: gate
+gidNumber: 5000
+memberUid: member

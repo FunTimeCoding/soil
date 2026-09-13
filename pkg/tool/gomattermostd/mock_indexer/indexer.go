@@ -1,6 +1,6 @@
 package mock_indexer
 
 type Indexer struct {
-	indexed  []string
+	indexed   []string
 	forgotten []string
 }

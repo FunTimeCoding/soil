@@ -2,8 +2,9 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
-	"maragu.dev/gomponents-htmx"
 	"maragu.dev/gomponents/html"
 	"net/http"
 	"time"
@@ -44,9 +45,9 @@ func (s *Server) recent(
 		html.H1(gomponents.Text("Recent Alerts")),
 		html.Form(
 			html.Class("filter-form"),
-			htmx.Get(constant.RecentPath),
-			htmx.Target("#recent-table"),
-			htmx.Swap("innerHTML"),
+			extended.Get(constant.RecentPath),
+			extended.Target("#recent-table"),
+			extended.Swap(webConstant.SwapInner),
 			html.Div(
 				html.Class("grid"),
 				html.Label(

@@ -41,10 +41,10 @@ func New(
 	)
 
 	return &Tester{
-		Upstream: upstream,
-		Store:    s,
-		Watcher:  w,
+		Upstream:  upstream,
+		Store:     s,
+		Watcher:   w,
 		Goclauded: claude,
-		Reporter: r,
+		Reporter:  r,
 	}
 }

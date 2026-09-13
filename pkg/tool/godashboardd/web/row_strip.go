@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
+	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
@@ -18,7 +19,7 @@ func rowStrip(
 
 	return html.Div(
 		html.Class("board-rows"),
-		gomponents.Attr("sse-swap", eventName(v.Label)),
+		extended.StreamSwap(eventName(v.Label)),
 		rowSpans(labels, values),
 	)
 }

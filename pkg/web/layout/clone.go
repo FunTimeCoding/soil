@@ -11,5 +11,7 @@ func (p *Page) Clone() *Page {
 		footer:          p.footer,
 		liveEndpoint:    p.liveEndpoint,
 		paletteEndpoint: p.paletteEndpoint,
+		extended:        p.extended,
+		serverSide:      p.serverSide,
 	}
 }

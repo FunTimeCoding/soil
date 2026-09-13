@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
@@ -26,10 +27,10 @@ func historyFilters(activeKinds []string) gomponents.Node {
 			html.Type("checkbox"),
 			html.Name(constant.Kind),
 			html.Value(f.kind),
-			gomponents.Attr("hx-get", constant.HistoryPath),
-			gomponents.Attr("hx-include", "#history-filters"),
-			gomponents.Attr("hx-target", "#history-content"),
-			gomponents.Attr("hx-swap", "innerHTML"),
+			extended.Get(constant.HistoryPath),
+			extended.Include("#history-filters"),
+			extended.Target("#history-content"),
+			extended.Swap("innerHTML"),
 		}
 
 		if active[f.kind] {

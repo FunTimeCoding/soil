@@ -3,6 +3,7 @@ package worker_tester
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	"github.com/funtimecoding/soil/pkg/event/notifier"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/mock_client"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
@@ -20,6 +21,7 @@ func NewWithZeroRetention(t *testing.T) *Tester {
 	w := worker.New(
 		c,
 		s,
+		notifier.New(),
 		logger.New(context.Background()),
 		memory.New(),
 		1*time.Minute,

@@ -12,14 +12,14 @@ var Identity = identity.New(
 )
 
 const (
-	NameEnvironment     = "GOCLAUDE_NAME"
-	HostEnvironment     = "GOCLAUDE_HOST"
-	PortEnvironment     = "GOCLAUDE_PORT"
+	NameEnvironment      = "GOCLAUDE_NAME"
+	HostEnvironment      = "GOCLAUDE_HOST"
+	PortEnvironment      = "GOCLAUDE_PORT"
 	InsecureEnvironment  = "GOCLAUDE_INSECURE"
 	UntrustedEnvironment = "GOCLAUDE_UNTRUSTED"
-	TokenEnvironment    = "GOCLAUDE_TOKEN"
-	PeekOutputBudget = 120
-	PeekContextLimit = 200
+	TokenEnvironment     = "GOCLAUDE_TOKEN"
+	PeekOutputBudget     = 120
+	PeekContextLimit     = 200
 
 	EnvironmentFileEnvironment   = "CLAUDE_ENV_FILE"
 	SessionIdentifierEnvironment = "CLAUDE_SESSION_ID"
@@ -40,5 +40,4 @@ var (
 	PipInvocation = regexp.MustCompile(
 		`(^|[|&;(\s])pip3?\s(.*\s)?install(\s|$)`,
 	)
-	ShortModelName = map[string]string{"Fable 5": "Fable"}
 )

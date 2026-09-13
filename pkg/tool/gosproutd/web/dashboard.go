@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
+	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -26,6 +27,6 @@ func (s *Server) dashboard(
 		constant.DashboardPath,
 		html.H3(gomponents.Text("Seeds")),
 		sortLinks(modified),
-		html.Div(gomponents.Attr("sse-swap", event), table),
+		html.Div(extended.StreamSwap(event), table),
 	)
 }

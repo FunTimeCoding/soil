@@ -1,6 +1,7 @@
 package web
 
 import (
+	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/worker"
@@ -14,6 +15,7 @@ import (
 func New(
 	s *store.Store,
 	p *worker.Worker,
+	n face.EventNotifier,
 ) *Server {
 	registry := palette.NewRegistry()
 	registry.Register(
@@ -31,12 +33,14 @@ func New(
 
 	return &Server{
 		store:    s,
+		notifier: n,
 		worker:   p,
 		registry: registry,
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(web.ThemeSentinel).
 				WithStyle(constant.InlineStyle).
+				WithLiveEndpoint(web.LivePath).
 				WithCommandPalette(web.PalettePath).
 				WithItems(
 					navigation_item.New(

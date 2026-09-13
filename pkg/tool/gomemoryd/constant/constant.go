@@ -89,3 +89,13 @@ var RelationTypes = []string{
 	"sequence",
 	"deep-dive",
 }
+
+const (
+	SearchResultsMark   = "search-results"
+	SearchIndicatorMark = "search-indicator"
+	SearchControlMark   = "search-input"
+	SearchPlaceholder   = "search memories..."
+	SearchIndicatorText = "searching"
+	PrefixMark          = "*"
+	SearchLimit         = 20
+)

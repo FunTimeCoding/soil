@@ -12,6 +12,7 @@ import (
 func New(
 	a AlertSource,
 	s *store.Store,
+	n face.EventNotifier,
 	l *logger.Logger,
 	r face.Reporter,
 	interval time.Duration,
@@ -21,6 +22,7 @@ func New(
 	p := &Worker{
 		client:    a,
 		store:     s,
+		notifier:  n,
 		logger:    l,
 		recovery:  recovery.New(l, r),
 		interval:  interval,

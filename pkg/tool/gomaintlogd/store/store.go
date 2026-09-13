@@ -1,7 +1,11 @@
 package store
 
-import "gorm.io/gorm"
+import (
+	"github.com/funtimecoding/soil/pkg/face"
+	"gorm.io/gorm"
+)
 
 type Store struct {
 	database *gorm.DB
+	notifier face.EventNotifier
 }

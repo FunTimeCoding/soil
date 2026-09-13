@@ -3,6 +3,7 @@ package base
 import (
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	"github.com/funtimecoding/soil/pkg/event/notifier"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
@@ -16,7 +17,8 @@ import (
 
 func New(t *testing.T) *Server {
 	t.Helper()
-	s := store.New(lite.NewMemory())
+	events := notifier.New()
+	s := store.New(lite.NewMemory(), events)
 	r := memory.New()
 
 	return &Server{
@@ -26,7 +28,7 @@ func New(t *testing.T) *Server {
 			func(_ *http.ServeMux, g *guard.Mux) {
 				gomaintlogd.Mount(
 					s,
-					web.New(s),
+					web.New(s, events),
 					r,
 					mock_recorder.New(),
 					constant.DefaultVersion,

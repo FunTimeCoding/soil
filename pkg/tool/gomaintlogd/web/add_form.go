@@ -2,16 +2,17 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
-	"maragu.dev/gomponents-htmx"
 	"maragu.dev/gomponents/html"
 )
 
 func addForm() gomponents.Node {
 	return html.Form(
-		htmx.Post(constant.AddEntryPath),
-		htmx.Target("#add-form"),
-		htmx.Swap("outerHTML"),
+		extended.Post(constant.AddEntryPath),
+		extended.Target("#add-form"),
+		extended.Swap(webConstant.SwapOuter),
 		html.ID("add-form"),
 		html.Label(
 			gomponents.Text("Action (required)"),

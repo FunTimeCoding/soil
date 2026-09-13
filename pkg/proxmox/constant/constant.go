@@ -1,15 +1,15 @@
 package constant
 
 const (
-	HostEnvironment     = "PROXMOX_HOST"
-	UserEnvironment     = "PROXMOX_USER"
-	PasswordEnvironment = "PROXMOX_PASSWORD"
-	TokenEnvironment    = "PROXMOX_TOKEN"
-	SecretEnvironment   = "PROXMOX_SECRET"
-	LogEnvironment      = "PROXMOX_LOG"
-	VerboseEnvironment  = "PROXMOX_VERBOSE"
+	HostEnvironment      = "PROXMOX_HOST"
+	UserEnvironment      = "PROXMOX_USER"
+	PasswordEnvironment  = "PROXMOX_PASSWORD"
+	TokenEnvironment     = "PROXMOX_TOKEN"
+	SecretEnvironment    = "PROXMOX_SECRET"
+	LogEnvironment       = "PROXMOX_LOG"
+	VerboseEnvironment   = "PROXMOX_VERBOSE"
 	UntrustedEnvironment = "PROXMOX_UNTRUSTED"
-	TimeoutEnvironment  = "PROXMOX_TIMEOUT"
+	TimeoutEnvironment   = "PROXMOX_TIMEOUT"
 )
 
 const (

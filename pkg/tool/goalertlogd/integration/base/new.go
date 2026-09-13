@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	"github.com/funtimecoding/soil/pkg/event/notifier"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
@@ -43,7 +44,8 @@ func New(t *testing.T) *Server {
 	)
 	l := logger.New(context.Background())
 	r := memory.New()
-	w := worker.New(c, s, l, r, 1*time.Minute, 30*24*time.Hour, nil)
+	events := notifier.New()
+	w := worker.New(c, s, events, l, r, 1*time.Minute, 30*24*time.Hour, nil)
 	w.Poll()
 	v := model_context_server.New(
 		t,
@@ -51,7 +53,7 @@ func New(t *testing.T) *Server {
 			goalertlogd.Mount(
 				s,
 				w,
-				web.New(s, w),
+				web.New(s, w, events),
 				r,
 				mock_recorder.New(),
 				constant.DefaultVersion,
@@ -60,10 +62,5 @@ func New(t *testing.T) *Server {
 		},
 	)
 
-	return &Server{
-		Store:         s,
-		Worker:        w,
-		MockClient:    c,
-		Server: v,
-	}
+	return &Server{Store: s, Worker: w, MockClient: c, Server: v}
 }

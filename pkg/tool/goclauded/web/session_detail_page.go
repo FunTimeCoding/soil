@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/strings/shorten"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/web/extended"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/subscription"
 	"maragu.dev/gomponents"
@@ -206,7 +207,7 @@ func (s *Server) sessionDetailPage(
 	content = append(
 		content,
 		html.Div(
-			gomponents.Attr("sse-swap", constant.Pulse),
+			extended.StreamSwap(constant.Pulse),
 			s.pulseSection(d.Identifier),
 		),
 	)
@@ -237,14 +238,8 @@ func (s *Server) sessionDetailPage(
 			),
 			gomponents.Text(" · "),
 			html.A(
-				gomponents.Attr(
-					"hx-post",
-					fmt.Sprintf("/sessions/%s/delete", d.Identifier),
-				),
-				gomponents.Attr(
-					"hx-confirm",
-					"Delete this session and all its data?",
-				),
+				extended.Post(fmt.Sprintf("/sessions/%s/delete", d.Identifier)),
+				extended.Confirm("Delete this session and all its data?"),
 				html.Style("color: var(--pico-del-color); cursor: pointer"),
 				gomponents.Text("Delete"),
 			),

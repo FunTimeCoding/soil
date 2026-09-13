@@ -1,9 +1,9 @@
 package constant
 
 const (
-	HostEnvironment     = "OPNSENSE_HOST"
-	KeyEnvironment      = "OPNSENSE_KEY"
-	SecretEnvironment   = "OPNSENSE_SECRET"
+	HostEnvironment      = "OPNSENSE_HOST"
+	KeyEnvironment       = "OPNSENSE_KEY"
+	SecretEnvironment    = "OPNSENSE_SECRET"
 	UntrustedEnvironment = "OPNSENSE_UNTRUSTED"
 
 	Base = "api"

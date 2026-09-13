@@ -9,9 +9,9 @@ import (
 )
 
 type Tester struct {
-	Upstream *mattermost_client_tester.Tester
-	Store    *store.Store
-	Watcher  *watcher.Watcher
+	Upstream  *mattermost_client_tester.Tester
+	Store     *store.Store
+	Watcher   *watcher.Watcher
 	Goclauded *base.Server
-	Reporter *memory.Memory
+	Reporter  *memory.Memory
 }

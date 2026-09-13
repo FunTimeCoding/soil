@@ -2,6 +2,7 @@ package worker
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
+	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store"
 	"github.com/prometheus/client_golang/prometheus"
@@ -12,6 +13,7 @@ import (
 type Worker struct {
 	client    AlertSource
 	store     *store.Store
+	notifier  face.EventNotifier
 	logger    *logger.Logger
 	recovery  *recovery.Recovery
 	interval  time.Duration

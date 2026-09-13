@@ -10,6 +10,7 @@ import (
 )
 
 func (s *Server) Mount(g *guard.Mux) {
+	g.OpenMount(route.Get(webConstant.LivePath), s.event())
 	g.Open(route.Get(webConstant.PalettePath), palette.NewServe(s.registry))
 	g.Open(route.Get(webConstant.RootPattern), s.dashboard)
 	g.Open(route.Get(constant.EntriesPath), s.entries)

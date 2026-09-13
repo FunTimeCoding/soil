@@ -2,8 +2,8 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
+	"github.com/funtimecoding/soil/pkg/web/extended"
 	"github.com/funtimecoding/soil/pkg/web/subscription"
-	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
 )
@@ -19,9 +19,6 @@ func (s *Server) floor(
 		constant.FloorPath,
 		subscription.Query(constant.FloorEvent, constant.SummaryEvent),
 		summary(*f),
-		html.Div(
-			gomponents.Attr("sse-swap", constant.FloorEvent),
-			s.floorSections(*f),
-		),
+		html.Div(extended.StreamSwap(constant.FloorEvent), s.floorSections(*f)),
 	)
 }

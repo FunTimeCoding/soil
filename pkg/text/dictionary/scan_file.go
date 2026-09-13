@@ -24,16 +24,18 @@ func ScanFile(
 	}
 
 	errors.PanicOnError(s.Err())
-	content := strings.ToLower(b.String())
+	raw := b.String()
+	token := map[string]bool{}
+	tokenize(strings.ToLower(raw), token)
+	tokenize(
+		strings.ToLower(
+			splitDigit(strings.ReplaceAll(library.SplitCase(raw), "_", " ")),
+		),
+		token,
+	)
 
-	for wordKey, u := range w {
-		if !u.Used && library.HasWord(content, wordKey) {
-			u.Used = true
-		}
-
-		// TODO: Some words are parts of other words, is there a better way?
-		//  Some variables are capitalized, like noiseWithMatch and Match is the word, so no word boundary, but capital letter to indicate new word
-		if !u.Used && strings.Contains(content, wordKey) {
+	for _, u := range w {
+		if !u.Used && token[u.lower] {
 			u.Used = true
 		}
 	}

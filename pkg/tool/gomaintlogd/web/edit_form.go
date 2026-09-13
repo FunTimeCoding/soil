@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store/entry"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/extended"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"maragu.dev/gomponents"
-	"maragu.dev/gomponents-htmx"
 	"maragu.dev/gomponents/html"
 )
 
@@ -29,9 +30,9 @@ func editForm(
 			alert,
 			html.Form(
 				html.Class("edit-form"),
-				htmx.Post(fragmentLocator(constant.EditPath, e.Identifier)),
-				htmx.Target(target),
-				htmx.Swap("outerHTML"),
+				extended.Post(fragmentLocator(constant.EditPath, e.Identifier)),
+				extended.Target(target),
+				extended.Swap(webConstant.SwapOuter),
 				html.Div(
 					html.Class("grid"),
 					html.Label(
@@ -94,11 +95,11 @@ func editForm(
 					html.Button(
 						html.Type("button"),
 						html.Class("outline secondary"),
-						htmx.Get(
+						extended.Get(
 							fragmentLocator(constant.DetailPath, e.Identifier),
 						),
-						htmx.Target(target),
-						htmx.Swap("outerHTML"),
+						extended.Target(target),
+						extended.Swap(webConstant.SwapOuter),
 						gomponents.Text("Cancel"),
 					),
 				),

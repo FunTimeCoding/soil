@@ -15,6 +15,24 @@ a { text-decoration: none; }
 a:hover { text-decoration: none; color: var(--pico-primary-hover); }
 .time-cell { white-space: nowrap; }
 `
+	IndicatorStyle = `
+.htmx-request { opacity: 0.55; pointer-events: none; }
+.htmx-indicator { opacity: 0; transition: opacity 150ms ease-in; }
+.htmx-request .htmx-indicator,
+.htmx-request.htmx-indicator { opacity: 1; }
+.indicator-mark {
+	display: inline-block;
+	width: 0.7rem;
+	height: 0.7rem;
+	margin-right: 0.4rem;
+	border: 2px solid var(--pico-primary);
+	border-top-color: transparent;
+	border-radius: 50%;
+	vertical-align: middle;
+	animation: indicator-spin 700ms linear infinite;
+}
+@keyframes indicator-spin { to { transform: rotate(360deg); } }
+`
 	NotificationStyle = `
 #notifications:empty { display: none; }
 #notifications { margin-bottom: 1rem; }

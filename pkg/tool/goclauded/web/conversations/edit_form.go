@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	web "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -35,11 +36,10 @@ func (s *Server) editForm(
 			html.Class("edit-panel"),
 			html.H4(gomponents.Text("Edit Session")),
 			html.Form(
-				gomponents.Attr(
-					"hx-post",
+				extended.Post(
 					fmt.Sprintf("/conversations/%s/edit", identifier),
 				),
-				gomponents.Attr("hx-target", "#panel"),
+				extended.Target("#panel"),
 				html.Div(
 					html.Class("edit-field"),
 					html.Label(
@@ -70,11 +70,10 @@ func (s *Server) editForm(
 					html.Button(html.Type("submit"), gomponents.Text("Save")),
 					html.Button(
 						html.Type("button"),
-						gomponents.Attr(
-							"hx-get",
+						extended.Get(
 							fmt.Sprintf("/conversations/%s", identifier),
 						),
-						gomponents.Attr("hx-target", "#panel"),
+						extended.Target("#panel"),
 						gomponents.Text("Cancel"),
 					),
 				),

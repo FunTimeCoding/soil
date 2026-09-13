@@ -4,6 +4,7 @@ import (
 	"fmt"
 	library "github.com/funtimecoding/soil/pkg/time"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/timeline"
+	"github.com/funtimecoding/soil/pkg/web/extended"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -20,15 +21,9 @@ func timelineRow(e *timeline.Entry) gomponents.Node {
 			gomponents.Text(" "),
 			html.Span(
 				html.Class("rename-icon"),
-				gomponents.Attr(
-					"hx-get",
-					fmt.Sprintf("/history/%d/edit", e.Identifier),
-				),
-				gomponents.Attr(
-					"hx-target",
-					fmt.Sprintf("#event-%d", e.Identifier),
-				),
-				gomponents.Attr("hx-swap", "innerHTML"),
+				extended.Get(fmt.Sprintf("/history/%d/edit", e.Identifier)),
+				extended.Target(fmt.Sprintf("#event-%d", e.Identifier)),
+				extended.Swap("innerHTML"),
 				gomponents.Text("✎"),
 			),
 		)

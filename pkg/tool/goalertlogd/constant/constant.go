@@ -36,3 +36,9 @@ const (
 	InsecureEnvironment = "GOALERTLOG_INSECURE"
 	TokenEnvironment    = "GOALERTLOG_TOKEN" // #nosec G101 not a hardcoded secret
 )
+
+const (
+	EventSummary = "summary"
+	EventTop     = "top"
+	TopMark      = "top-table"
+)

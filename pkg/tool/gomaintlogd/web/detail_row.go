@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store/entry"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
-	"maragu.dev/gomponents-htmx"
 	"maragu.dev/gomponents/html"
 )
 
@@ -24,21 +25,21 @@ func detailRow(e *entry.Entry) gomponents.Node {
 					html.Class("detail-actions"),
 					html.Button(
 						html.Class("outline"),
-						htmx.Get(
+						extended.Get(
 							fragmentLocator(constant.EditPath, e.Identifier),
 						),
-						htmx.Target(target),
-						htmx.Swap("outerHTML"),
+						extended.Target(target),
+						extended.Swap(webConstant.SwapOuter),
 						gomponents.Text("Edit"),
 					),
 					html.Button(
 						html.Class("outline contrast"),
-						htmx.Post(
+						extended.Post(
 							fragmentLocator(constant.DeletePath, e.Identifier),
 						),
-						htmx.Confirm("Delete this entry?"),
-						gomponents.Attr(
-							"hx-on::after-request",
+						extended.Confirm("Delete this entry?"),
+						extended.Swap(webConstant.SwapNone),
+						extended.AfterRequest(
 							fmt.Sprintf(
 								"document.getElementById('row-%d')?.remove();document.getElementById('detail-%d')?.remove()",
 								e.Identifier,

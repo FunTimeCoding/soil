@@ -10,5 +10,7 @@ func (s *Store) Delete(identifier uint) error {
 		return fmt.Errorf("delete entry: %w", e)
 	}
 
+	s.notify()
+
 	return nil
 }

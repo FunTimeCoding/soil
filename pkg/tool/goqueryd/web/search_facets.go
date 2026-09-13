@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
+	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"sort"
@@ -53,12 +54,11 @@ func searchFacets(
 						html.Strong(gomponents.Textf("%s (%d)", value, count)),
 						gomponents.Text(" "),
 						html.A(
-							gomponents.Attr(
-								"hx-get",
+							extended.Get(
 								searchLink(query, collection, without),
 							),
-							gomponents.Attr("hx-target", "#search-results"),
-							gomponents.Attr("hx-swap", "innerHTML"),
+							extended.Target("#search-results"),
+							extended.Swap("innerHTML"),
 							gomponents.Text("×"),
 						),
 					),
@@ -68,12 +68,9 @@ func searchFacets(
 				items = append(
 					items,
 					html.A(
-						gomponents.Attr(
-							"hx-get",
-							searchLink(query, collection, with),
-						),
-						gomponents.Attr("hx-target", "#search-results"),
-						gomponents.Attr("hx-swap", "innerHTML"),
+						extended.Get(searchLink(query, collection, with)),
+						extended.Target("#search-results"),
+						extended.Swap("innerHTML"),
 						gomponents.Textf("%s (%d)", value, count),
 					),
 				)

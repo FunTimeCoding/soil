@@ -7,12 +7,12 @@ import (
 )
 
 type Client struct {
-	context    context.Context
-	client     *proxmox.Client
-	user       string
-	password   string
-	token      string
-	secret     string
+	context   context.Context
+	client    *proxmox.Client
+	user      string
+	password  string
+	token     string
+	secret    string
 	untrusted bool
 	log       bool
 	verbose   bool

@@ -12,18 +12,18 @@ var Identity = identity.New(
 )
 
 var (
-	ConfigurationPaths = []string{".goaudit.yaml", "strata/tool/goaudit.yaml"}
+	ConfigurationPaths   = []string{".goaudit.yaml", "strata/tool/goaudit.yaml"}
 	VersionedPathPattern = regexp.MustCompile(`^/api/v[0-9]+(/|$)`)
 )
 
 const (
-	ClaudeSettingsPath       = ".claude/settings.local.json"
-	ConstantDirectory        = "constant"
-	ConstantFileName         = "constant.go"
-	IntegrationDirectory     = "integration"
-	ModelContextDirectory    = "model_context"
-	PackageDirectory         = "pkg"
-	TestdataDirectory        = "testdata"
-	ToolDirectory            = "tool"
-	UnitDirectory            = "unit"
+	ClaudeSettingsPath    = ".claude/settings.local.json"
+	ConstantDirectory     = "constant"
+	ConstantFileName      = "constant.go"
+	IntegrationDirectory  = "integration"
+	ModelContextDirectory = "model_context"
+	PackageDirectory      = "pkg"
+	TestdataDirectory     = "testdata"
+	ToolDirectory         = "tool"
+	UnitDirectory         = "unit"
 )

@@ -1,0 +1,4 @@
+FROM alpine:3.24.1
+COPY tmp/godirectoryd/linux-amd64/godirectoryd /usr/local/bin
+EXPOSE 8080
+ENTRYPOINT ["godirectoryd"]

@@ -1,6 +1,8 @@
 package layout
 
 import (
+	"github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
@@ -17,17 +19,17 @@ func commandPalette(endpoint string) gomponents.Node {
 				html.Class("palette-input"),
 				gomponents.Attr("placeholder", "Type a command..."),
 				gomponents.Attr("autocomplete", "off"),
-				gomponents.Attr("hx-get", endpoint),
-				gomponents.Attr("hx-trigger", "keyup changed delay:200ms"),
-				gomponents.Attr("hx-target", "#palette-results"),
-				gomponents.Attr("hx-swap", "outerHTML"),
+				extended.Get(endpoint),
+				extended.Trigger(constant.TriggerType),
+				extended.Target("#palette-results"),
+				extended.Swap(constant.SwapOuter),
 				gomponents.Attr("name", "q"),
 			),
 			html.Div(
 				html.ID("palette-results"),
-				gomponents.Attr("hx-get", endpoint),
-				gomponents.Attr("hx-trigger", "load"),
-				gomponents.Attr("hx-swap", "outerHTML"),
+				extended.Get(endpoint),
+				extended.Trigger(constant.TriggerLoad),
+				extended.Swap(constant.SwapOuter),
 			),
 		),
 	)

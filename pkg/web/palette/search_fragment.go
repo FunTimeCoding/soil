@@ -1,6 +1,8 @@
 package palette
 
 import (
+	"github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
@@ -17,10 +19,10 @@ func SearchFragment(
 			html.Class("palette-input"),
 			gomponents.Attr("placeholder", placeholder),
 			gomponents.Attr("autocomplete", "off"),
-			gomponents.Attr("hx-get", endpoint),
-			gomponents.Attr("hx-trigger", "keyup changed delay:200ms"),
-			gomponents.Attr("hx-target", "#palette-search-results"),
-			gomponents.Attr("hx-swap", "outerHTML"),
+			extended.Get(endpoint),
+			extended.Trigger(constant.TriggerType),
+			extended.Target("#palette-search-results"),
+			extended.Swap(constant.SwapOuter),
 			gomponents.Attr("name", "q"),
 			gomponents.Attr("autofocus", ""),
 		),

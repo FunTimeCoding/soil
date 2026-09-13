@@ -42,7 +42,6 @@ openvex
 osquery
 qdrant
 technitium
-treminio
 trivy
 
 # Go
@@ -67,7 +66,6 @@ ghpr
 goalert
 goalertlog
 goalertlogd
-goalertmanager
 goalertmanagerd
 goalpine
 goalpined
@@ -93,7 +91,6 @@ goflightd
 gogenie
 goghjob
 goghpr
-gogithub
 gogithubd
 gogitlab
 gogitlabd
@@ -125,7 +122,6 @@ gopostgres
 gopostgresd
 goprocess
 goprocessd
-goprometheus
 goprometheusd
 goproxmox
 goproxmoxd
@@ -151,7 +147,6 @@ govolume
 gowait
 kevt
 maintlog
-netb
 
 # OS
 aarch

@@ -1,6 +1,7 @@
 package web
 
 import (
+	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store"
 	web "github.com/funtimecoding/soil/pkg/web/constant"
@@ -10,7 +11,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
-func New(s *store.Store) *Server {
+func New(
+	s *store.Store,
+	n face.EventNotifier,
+) *Server {
 	registry := palette.NewRegistry()
 	registry.Register(
 		palette.Command{
@@ -32,11 +36,13 @@ func New(s *store.Store) *Server {
 
 	return &Server{
 		store:    s,
+		notifier: n,
 		registry: registry,
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(web.ThemeArchive).
 				WithStyle(constant.InlineStyle).
+				WithLiveEndpoint(web.LivePath).
 				WithCommandPalette(web.PalettePath).
 				WithItems(
 					navigation_item.New(

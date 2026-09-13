@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	web "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -46,17 +47,14 @@ func (s *Server) historyEditForm(
 					),
 					html.Div(
 						html.Button(
-							gomponents.Attr(
-								"hx-post",
+							extended.Post(
 								fmt.Sprintf("/history/%d/edit", identifier),
 							),
-							gomponents.Attr(
-								"hx-target",
+							extended.Target(
 								fmt.Sprintf("#event-%d", identifier),
 							),
-							gomponents.Attr("hx-swap", "outerHTML"),
-							gomponents.Attr(
-								"hx-include",
+							extended.Swap("outerHTML"),
+							extended.Include(
 								fmt.Sprintf("#%s", textareaIdentifier),
 							),
 							gomponents.Text("Save"),

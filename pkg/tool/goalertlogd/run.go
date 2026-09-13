@@ -2,6 +2,7 @@ package goalertlogd
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/event/notifier"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
@@ -29,16 +30,18 @@ func Run(
 	m := metric.New()
 	s := store.New(relational.Open(g, o.PostgresLocator, o.LitePath))
 	defer s.Close()
+	events := notifier.New()
 	w := worker.New(
 		alertmanager.NewEnvironment(),
 		s,
+		events,
 		g,
 		r,
 		1*time.Minute,
 		30*24*time.Hour,
 		m.Registry(),
 	)
-	u := web.New(s, w)
+	u := web.New(s, w, events)
 	lifecycle.New(
 		g,
 		lifecycle.WithWorker(w),

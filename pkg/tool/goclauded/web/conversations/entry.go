@@ -3,6 +3,7 @@ package conversations
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/enriched_session"
+	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
@@ -23,19 +24,15 @@ func entry(s *enriched_session.Session) gomponents.Node {
 		nodes,
 		html.Div(
 			html.Class("entry-name"),
-			gomponents.Attr(
-				"hx-get",
-				fmt.Sprintf("/conversations/%s", s.Identifier),
-			),
-			gomponents.Attr("hx-target", "#panel"),
+			extended.Get(fmt.Sprintf("/conversations/%s", s.Identifier)),
+			extended.Target("#panel"),
 			html.Span(gomponents.Text(name)),
 			html.Span(
 				html.Class("rename-icon"),
-				gomponents.Attr(
-					"hx-get",
+				extended.Get(
 					fmt.Sprintf("/conversations/%s/edit", s.Identifier),
 				),
-				gomponents.Attr("hx-target", "#panel"),
+				extended.Target("#panel"),
 				gomponents.Attr("onclick", "event.stopPropagation()"),
 				gomponents.Text("✎"),
 			),

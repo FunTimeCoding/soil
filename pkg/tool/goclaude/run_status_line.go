@@ -13,7 +13,7 @@ func RunStatusLine(
 	input := parseStatusLineInput(body)
 	reportContext(c, input)
 	context := fmt.Sprintf("%d%%", int(input.ContextWindow.UsedPercentage))
-	model := shortModelName(input.Model.DisplayName)
+	model := input.Model.DisplayName
 
 	if model == "" {
 		return context

@@ -1,9 +1,12 @@
 package web
 
 import (
-	"fmt"
+	library "github.com/funtimecoding/soil/pkg/strings/constant"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	web "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/extended"
+	"github.com/funtimecoding/soil/pkg/web/layout"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -14,98 +17,47 @@ func (s *Server) searchPage(
 	r *http.Request,
 ) {
 	query := r.URL.Query().Get(constant.Query)
-	var content []gomponents.Node
-	content = append(
-		content,
-		html.H3(gomponents.Text(constant.SearchTitle)),
-		html.Form(
-			gomponents.Attr(web.FormMethod, http.MethodGet),
-			gomponents.Attr(web.FormAction, web.SearchPath),
-			html.Input(
-				html.Type("search"),
-				html.Name(constant.Query),
-				gomponents.Attr("placeholder", "search memories..."),
-				gomponents.Attr("value", query),
-				gomponents.Attr("autocomplete", "off"),
-			),
-			html.Button(
-				html.Type(web.FormSubmit),
-				gomponents.Text(constant.SearchTitle),
-			),
-		),
-	)
 
-	if query != "" {
-		results, e := s.service.SearchMemories(
-			query,
-			20,
-			"",
-			"",
-			constant.AllScope,
-		)
+	if s.view.IsExtendedRequest(r) {
+		s.view.RenderFragment(w, s.searchResults(query))
 
-		if e != nil {
-			content = append(
-				content,
-				html.P(gomponents.Textf("Search failed: %s", e.Error())),
-			)
-		} else if len(results) == 0 {
-			content = append(content, html.P(gomponents.Text("No results.")))
-		} else {
-			var rows []gomponents.Node
-
-			for _, m := range results {
-				var pips []gomponents.Node
-
-				for _, t := range m.Tags {
-					pips = append(
-						pips,
-						html.Span(html.Class("tag-pip"), gomponents.Text(t)),
-						gomponents.Text(" "),
-					)
-				}
-
-				rows = append(
-					rows,
-					html.Tr(
-						html.Td(
-							html.A(
-								gomponents.Attr(
-									"href",
-									fmt.Sprintf("/memories/%d", m.Identifier),
-								),
-								gomponents.Text(m.Name),
-							),
-						),
-						html.Td(html.Small(gomponents.Text(m.Description))),
-						html.Td(gomponents.Text(m.Type)),
-						html.Td(gomponents.Group(pips)),
-					),
-				)
-			}
-
-			content = append(
-				content,
-				html.P(gomponents.Textf("%d results", len(results))),
-				html.Table(
-					html.THead(
-						html.Tr(
-							html.Th(gomponents.Text("Name")),
-							html.Th(gomponents.Text("Description")),
-							html.Th(gomponents.Text("Type")),
-							html.Th(gomponents.Text("Tags")),
-						),
-					),
-					html.TBody(rows...),
-				),
-			)
-		}
+		return
 	}
 
 	s.view.RenderPage(
 		w,
 		constant.SearchTitle,
 		web.SearchPath,
-		content...,
+		html.H3(gomponents.Text(constant.SearchTitle)),
+		html.Form(
+			gomponents.Attr(web.FormMethod, http.MethodGet),
+			gomponents.Attr(web.FormAction, web.SearchPath),
+			html.Input(
+				html.ID(constant.SearchControlMark),
+				html.Type("search"),
+				html.Name(constant.Query),
+				gomponents.Attr("placeholder", constant.SearchPlaceholder),
+				gomponents.Attr("value", query),
+				gomponents.Attr("autocomplete", "off"),
+				extended.Get(web.SearchPath),
+				extended.Trigger(web.TriggerType),
+				extended.Target(
+					join.Empty(library.Hash, constant.SearchResultsMark),
+				),
+				extended.Swap(web.SwapInner),
+				extended.Indicator(
+					join.Empty(library.Hash, constant.SearchIndicatorMark),
+				),
+			),
+			html.Button(
+				html.Type(web.FormSubmit),
+				gomponents.Text(constant.SearchTitle),
+			),
+		),
+		layout.Indicator(
+			constant.SearchIndicatorMark,
+			constant.SearchIndicatorText,
+		),
+		html.Div(html.ID(constant.SearchResultsMark), s.searchResults(query)),
 	)
 }

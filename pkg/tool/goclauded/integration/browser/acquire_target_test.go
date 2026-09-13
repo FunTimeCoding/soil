@@ -8,7 +8,7 @@ import (
 	"github.com/chromedp/cdproto/target"
 	"github.com/chromedp/chromedp"
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration/browser_tester"
+	"github.com/funtimecoding/soil/pkg/web/browser_tester"
 	"testing"
 	"time"
 )

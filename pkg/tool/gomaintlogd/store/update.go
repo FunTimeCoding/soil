@@ -10,5 +10,7 @@ func (s *Store) Update(v *entry.Entry) error {
 		return fmt.Errorf("update entry: %w", e)
 	}
 
+	s.notify()
+
 	return nil
 }

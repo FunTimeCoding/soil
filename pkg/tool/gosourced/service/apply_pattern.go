@@ -165,11 +165,11 @@ func (s *Service) ApplyPattern(
 		plans = append(
 			plans,
 			applyPlan{
-				p:        reference.Package,
-				statement:     node,
-				parent:   parent,
-				bindings: unification.Bindings(),
-				anchor:   anchorNode(path),
+				p:         reference.Package,
+				statement: node,
+				parent:    parent,
+				bindings:  unification.Bindings(),
+				anchor:    anchorNode(path),
 			},
 		)
 	}

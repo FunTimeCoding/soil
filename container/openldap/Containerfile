@@ -1,0 +1,14 @@
+FROM alpine:3.24.1
+RUN apk add --no-cache \
+    openldap \
+    openldap-back-mdb \
+    openldap-clients \
+    openldap-overlay-memberof \
+    openldap-overlay-ppolicy \
+    openldap-overlay-refint \
+    openldap-passwd-argon2
+COPY config.ldif.template /etc/openldap/config.ldif.template
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+EXPOSE 389 636
+ENTRYPOINT ["entrypoint.sh"]

@@ -3,6 +3,7 @@ package layout
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
@@ -26,7 +27,8 @@ func (p *Page) Render() gomponents.Node {
 		html.Link(html.Rel("stylesheet"), html.Href(constant.Pico)),
 		html.StyleEl(gomponents.Raw(constant.BaseStyle)),
 		html.StyleEl(gomponents.Raw(constant.NotificationStyle)),
-		html.Script(html.Src(constant.Extended)),
+		html.StyleEl(gomponents.Raw(constant.IndicatorStyle)),
+		html.Script(html.Src(p.extendedSource())),
 	)
 
 	for _, s := range p.script {
@@ -36,7 +38,7 @@ func (p *Page) Render() gomponents.Node {
 	if p.liveEndpoint != "" {
 		head = append(
 			head,
-			html.Script(html.Src(constant.ServerSide)),
+			html.Script(html.Src(p.serverSideSource())),
 			html.StyleEl(gomponents.Raw(constant.ConnectionStyle)),
 		)
 	}
@@ -118,8 +120,8 @@ func (p *Page) Render() gomponents.Node {
 
 		mainAttrs = append(
 			mainAttrs,
-			gomponents.Attr("hx-ext", "sse"),
-			gomponents.Attr("sse-connect", endpoint),
+			extended.Extension("sse"),
+			extended.Connect(endpoint),
 		)
 	}
 

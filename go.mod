@@ -41,6 +41,7 @@ require (
 	github.com/glebarez/sqlite v1.11.0
 	github.com/go-git/go-billy/v5 v5.9.1
 	github.com/go-git/go-git/v5 v5.19.2
+	github.com/go-ldap/ldap/v3 v3.4.14
 	github.com/go-openapi/runtime v0.33.2
 	github.com/go-openapi/strfmt v0.27.2
 	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1
@@ -112,7 +113,6 @@ require (
 	k8s.io/client-go v0.37.0
 	k8s.io/metrics v0.37.0
 	maragu.dev/gomponents v1.3.0
-	maragu.dev/gomponents-htmx v0.6.1
 	mvdan.cc/sh/v3 v3.14.1
 	sigs.k8s.io/yaml v1.6.0
 )
@@ -122,6 +122,7 @@ require (
 	cloud.google.com/go/auth/oauth2adapt v0.2.8 // indirect
 	cloud.google.com/go/compute/metadata v0.9.0 // indirect
 	dario.cat/mergo v1.0.2 // indirect
+	github.com/Azure/go-ntlmssp v0.1.1 // indirect
 	github.com/JohannesKaufmann/dom v0.3.1 // indirect
 	github.com/Masterminds/semver/v3 v3.5.0 // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect

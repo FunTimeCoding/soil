@@ -1,0 +1,34 @@
+---
+name: directory-test
+on: {push: {branches: [main]}, pull_request: {branches: [main]}}
+jobs:
+  directory-test:
+    runs-on: ubuntu-latest
+    services:
+      openldap:
+        image: ghcr.io/funtimecoding/openldap:latest
+        ports: ['389:389']
+        env:
+          LDAP_SUFFIX: dc=example,dc=test
+          LDAP_ROOT_PASSWORD: pipelinerootpassword
+          LDAP_SERVICE_PASSWORD: pipelineservicepassword
+        options: >-
+          --health-cmd "ldapwhoami -x -H ldap://localhost"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+    env:
+      LDAP_HOST: localhost
+      LDAP_PORT: '389'
+      LDAP_INSECURE: 'true'
+      LDAP_BIND_DISTINGUISHED_NAME: cn=admin,dc=example,dc=test
+      LDAP_BIND_PASSWORD: pipelinerootpassword
+      LDAP_SERVICE_PASSWORD: pipelineservicepassword
+      LDAP_BASE_DISTINGUISHED_NAME: dc=example,dc=test
+      LDAP_USER_FILTER: (&(objectClass=inetOrgPerson)(|(uid=%s)(mail=%s)))
+      LDAP_GROUP_FILTER: (&(objectClass=posixGroup)(cn=gate)(memberUid=%s))
+    steps:
+    - {name: Repository, uses: actions/checkout@v4}
+    - {name: Go, uses: actions/setup-go@v5, with: {go-version-file: go.mod}}
+    - name: Test
+      run: go test -tags ci ./pkg/directory/... ./pkg/tool/godirectoryd/...

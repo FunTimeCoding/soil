@@ -2,8 +2,9 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
+	"github.com/funtimecoding/soil/pkg/web/extended"
+	"github.com/funtimecoding/soil/pkg/web/subscription"
 	"maragu.dev/gomponents"
-	"maragu.dev/gomponents-htmx"
 	"maragu.dev/gomponents/html"
 	"net/http"
 )
@@ -18,24 +19,16 @@ func (s *Server) dashboard(
 		return
 	}
 
-	s.view.RenderPage(
+	s.view.RenderLivePageWithSummary(
 		w,
 		constant.DashboardTitle,
 		constant.DashboardPath,
-		html.H1(gomponents.Text(constant.DashboardTitle)),
-		html.Div(
-			html.Class("summary-cards"),
-			html.Article(
-				html.Header(gomponents.Text("Total Entries")),
-				html.P(gomponents.Textf("%d", s.store.Count())),
-			),
-		),
+		subscription.Query(constant.EventSummary, constant.EventRecent),
+		s.summaryItems(),
 		html.H2(gomponents.Text("Recent Entries")),
 		html.Div(
-			html.ID("recent-table"),
-			htmx.Get(constant.DashboardPath),
-			htmx.Trigger("every 60s"),
-			htmx.Swap("innerHTML"),
+			html.ID(constant.RecentMark),
+			extended.StreamSwap(constant.EventRecent),
 			s.recentTable(),
 		),
 	)

@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
+	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
@@ -58,8 +59,7 @@ func (s *Server) pipelineDetail(
 			external,
 			html.Button(
 				html.Class("delete"),
-				gomponents.Attr(
-					"hx-post",
+				extended.Post(
 					fmt.Sprintf(
 						"%s?%s=%d&%s=%d",
 						constant.DeletePath,
@@ -69,15 +69,12 @@ func (s *Server) pipelineDetail(
 						pipeline,
 					),
 				),
-				gomponents.Attr(
-					"hx-confirm",
-					fmt.Sprintf("Delete pipeline #%d?", pipeline),
-				),
+				extended.Confirm(fmt.Sprintf("Delete pipeline #%d?", pipeline)),
 				gomponents.Text("Delete"),
 			),
 		),
 		html.Div(
-			gomponents.Attr("sse-swap", constant.PipelineEvent),
+			extended.StreamSwap(constant.PipelineEvent),
 			stageStrip(project, pipeline, jobs, selected),
 		),
 		s.logPane(project, pipeline, selected),

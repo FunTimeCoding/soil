@@ -2,6 +2,7 @@ package gomaintlogd
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/event/notifier"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
@@ -21,9 +22,10 @@ func Run(
 ) {
 	r := i.Reporter()
 	g := logger.New(context.Background())
-	s := store.New(relational.Open(g, o.PostgresLocator, o.LitePath))
+	events := notifier.New()
+	s := store.New(relational.Open(g, o.PostgresLocator, o.LitePath), events)
 	defer s.Close()
-	v := web.New(s)
+	v := web.New(s, events)
 	lifecycle.New(
 		g,
 		lifecycle.WithServer(

@@ -9,9 +9,9 @@ import (
 )
 
 type Server struct {
-	server       *server.MCPServer
-	client       mattermostFace.MattermostSource
-	monitor      *monitor.Monitor
+	server   *server.MCPServer
+	client   mattermostFace.MattermostSource
+	monitor  *monitor.Monitor
 	store    *store.Store
 	indexer  mattermostFace.Indexer
 	reporter face.Reporter

@@ -8,8 +8,8 @@ import (
 )
 
 type Server struct {
-	Store         *store.Store
-	Worker        *worker.Worker
-	MockClient    *mock_client.Client
+	Store      *store.Store
+	Worker     *worker.Worker
+	MockClient *mock_client.Client
 	*model_context_server.Server
 }

@@ -1,6 +1,8 @@
 package palette
 
 import (
+	"github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
@@ -46,9 +48,9 @@ func resultItem(r Result) gomponents.Node {
 		attrs = append(
 			attrs,
 			gomponents.Attr("href", "#"),
-			gomponents.Attr("hx-get", r.Command.Path),
-			gomponents.Attr("hx-target", r.Command.SwapTarget),
-			gomponents.Attr("hx-swap", "innerHTML"),
+			extended.Get(r.Command.Path),
+			extended.Target(r.Command.SwapTarget),
+			extended.Swap(constant.SwapInner),
 		)
 	} else {
 		attrs = append(attrs, gomponents.Attr("href", r.Command.Path))

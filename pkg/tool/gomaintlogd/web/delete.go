@@ -19,6 +19,5 @@ func (s *Server) delete(
 			),
 		),
 	)
-	w.Header().Set(web.ContentType, web.MarkupUnicode)
-	w.WriteHeader(http.StatusOK)
+	s.view.RenderStatus(w, "Deleted entry", web.LayoutStatusSuccess)
 }

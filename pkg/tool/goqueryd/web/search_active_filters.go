@@ -1,6 +1,7 @@
 package web
 
 import (
+	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"sort"
@@ -31,12 +32,9 @@ func searchActiveFilters(
 			html.Span(
 				gomponents.Textf("%s=%s ", k, metadata[k]),
 				html.A(
-					gomponents.Attr(
-						"hx-get",
-						searchLink(query, collection, without),
-					),
-					gomponents.Attr("hx-target", "#search-results"),
-					gomponents.Attr("hx-swap", "innerHTML"),
+					extended.Get(searchLink(query, collection, without)),
+					extended.Target("#search-results"),
+					extended.Swap("innerHTML"),
 					gomponents.Text("×"),
 				),
 				gomponents.Text("  "),

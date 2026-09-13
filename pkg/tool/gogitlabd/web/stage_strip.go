@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/gitlab/job"
+	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
@@ -42,12 +43,9 @@ func stageStrip(
 				chips,
 				html.A(
 					html.Class(class),
-					gomponents.Attr(
-						"hx-get",
-						detailLink(project, pipeline, j.Identifier),
-					),
-					gomponents.Attr("hx-target", "#pipeline-detail"),
-					gomponents.Attr("hx-swap", "outerHTML"),
+					extended.Get(detailLink(project, pipeline, j.Identifier)),
+					extended.Target("#pipeline-detail"),
+					extended.Swap("outerHTML"),
 					html.Img(
 						html.Class("status-icon"),
 						html.Src(statusIcon(j.Status)),

@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/gitlab/job"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/types/board_entry"
+	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
@@ -31,8 +32,7 @@ func (s *Server) logPane(
 	if board_entry.Active(j.Status) {
 		attributes = append(
 			attributes,
-			gomponents.Attr(
-				"hx-get",
+			extended.Get(
 				fmt.Sprintf(
 					"%s?%s=%d&%s=%d&%s=%d",
 					constant.JobPath,
@@ -44,8 +44,8 @@ func (s *Server) logPane(
 					j.Identifier,
 				),
 			),
-			gomponents.Attr("hx-trigger", "load delay:5s"),
-			gomponents.Attr("hx-swap", "outerHTML"),
+			extended.Trigger("load delay:5s"),
+			extended.Swap("outerHTML"),
 		)
 	}
 
@@ -66,8 +66,7 @@ func (s *Server) logPane(
 			header,
 			html.Button(
 				html.Class("retry"),
-				gomponents.Attr(
-					"hx-post",
+				extended.Post(
 					fmt.Sprintf(
 						"%s?%s=%d&%s=%d&%s=%d",
 						constant.RetryPath,
@@ -79,8 +78,8 @@ func (s *Server) logPane(
 						j.Identifier,
 					),
 				),
-				gomponents.Attr("hx-target", "#pipeline-detail"),
-				gomponents.Attr("hx-swap", "outerHTML"),
+				extended.Target("#pipeline-detail"),
+				extended.Swap("outerHTML"),
 				gomponents.Text("Retry"),
 			),
 		)

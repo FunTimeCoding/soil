@@ -15,7 +15,7 @@ func TestStatusLineRendersAndStores(t *testing.T) {
 	c := console_tester.New(t, s.Port)
 	c.Register("11111111-2222-3333-4444-555555555555")
 	line := c.StatusLine([]byte(fixture.Read("claude", "status-line.json")))
-	assert.String(t, "Fable 18%", line)
+	assert.String(t, "Fable 5 18%", line)
 	record, found, e := s.Service.FindSession(
 		"11111111-2222-3333-4444-555555555555",
 	)

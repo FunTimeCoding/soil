@@ -3,6 +3,7 @@ package conversations
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -46,12 +47,9 @@ func (s *Server) page(
 					),
 					html.Div(
 						html.ID("sidebar-entries"),
-						gomponents.Attr("hx-get", "/conversations/sidebar"),
-						gomponents.Attr(
-							"hx-trigger",
-							"session-edited from:body",
-						),
-						gomponents.Attr("hx-swap", "innerHTML"),
+						extended.Get("/conversations/sidebar"),
+						extended.Trigger("session-edited from:body"),
+						extended.Swap("innerHTML"),
 						gomponents.Group(entries),
 					),
 				),

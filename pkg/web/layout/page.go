@@ -21,4 +21,6 @@ type Page struct {
 	liveEndpoint    string
 	liveParams      string
 	paletteEndpoint string
+	extended        string
+	serverSide      string
 }

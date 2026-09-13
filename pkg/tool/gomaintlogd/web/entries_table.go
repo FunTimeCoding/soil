@@ -4,9 +4,10 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store/entry"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/extended"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"maragu.dev/gomponents"
-	"maragu.dev/gomponents-htmx"
 	"maragu.dev/gomponents/html"
 )
 
@@ -24,9 +25,9 @@ func entriesTable(entries []entry.Entry) gomponents.Node {
 			html.Tr(
 				html.ID(fmt.Sprintf("row-%d", e.Identifier)),
 				html.Class("clickable-row"),
-				htmx.Get(fragmentLocator(constant.DetailPath, e.Identifier)),
-				htmx.Target(fmt.Sprintf("#%s", target)),
-				htmx.Swap("outerHTML"),
+				extended.Get(fragmentLocator(constant.DetailPath, e.Identifier)),
+				extended.Target(fmt.Sprintf("#%s", target)),
+				extended.Swap(webConstant.SwapOuter),
 				layout.TimeCell(e.Timestamp),
 				html.Td(gomponents.Text(e.Action)),
 				html.Td(gomponents.Text(e.User)),

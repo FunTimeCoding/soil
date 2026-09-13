@@ -2,6 +2,7 @@ package web
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
@@ -19,12 +20,9 @@ func documentsNavigation(
 		links = append(
 			links,
 			html.A(
-				gomponents.Attr(
-					"hx-get",
-					documentsLink(basePath, page-1, sourceType),
-				),
-				gomponents.Attr("hx-target", "#documents-content"),
-				gomponents.Attr("hx-swap", "innerHTML"),
+				extended.Get(documentsLink(basePath, page-1, sourceType)),
+				extended.Target("#documents-content"),
+				extended.Swap("innerHTML"),
 				gomponents.Text("← Newer"),
 			),
 		)
@@ -38,12 +36,9 @@ func documentsNavigation(
 		links = append(
 			links,
 			html.A(
-				gomponents.Attr(
-					"hx-get",
-					documentsLink(basePath, page+1, sourceType),
-				),
-				gomponents.Attr("hx-target", "#documents-content"),
-				gomponents.Attr("hx-swap", "innerHTML"),
+				extended.Get(documentsLink(basePath, page+1, sourceType)),
+				extended.Target("#documents-content"),
+				extended.Swap("innerHTML"),
 				gomponents.Text("Older →"),
 			),
 		)

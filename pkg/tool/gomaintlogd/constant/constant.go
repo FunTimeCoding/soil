@@ -42,3 +42,9 @@ const (
 	InsecureEnvironment = "GOMAINTLOG_INSECURE"
 	TokenEnvironment    = "GOMAINTLOG_TOKEN" // #nosec G101 not a hardcoded secret
 )
+
+const (
+	EventSummary = "summary"
+	EventRecent  = "recent"
+	RecentMark   = "recent-table"
+)

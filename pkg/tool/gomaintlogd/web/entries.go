@@ -4,8 +4,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
-	"maragu.dev/gomponents-htmx"
 	"maragu.dev/gomponents/html"
 	"net/http"
 	"time"
@@ -58,9 +59,9 @@ func (s *Server) entries(
 		html.H1(gomponents.Text(constant.EntriesTitle)),
 		html.Form(
 			html.Class("filter-form"),
-			htmx.Get(constant.EntriesPath),
-			htmx.Target("#entries-table"),
-			htmx.Swap("innerHTML"),
+			extended.Get(constant.EntriesPath),
+			extended.Target("#entries-table"),
+			extended.Swap(webConstant.SwapInner),
 			html.Div(
 				html.Class("grid"),
 				html.Label(

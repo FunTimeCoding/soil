@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
+	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -87,10 +88,10 @@ func (s *Server) documentsPage(
 			html.Type("radio"),
 			html.Name(constant.SourceType),
 			html.Value(""),
-			gomponents.Attr("hx-get", fmt.Sprintf("/documents/%s", name)),
-			gomponents.Attr("hx-include", "#documents-filters"),
-			gomponents.Attr("hx-target", "#documents-content"),
-			gomponents.Attr("hx-swap", "innerHTML"),
+			extended.Get(fmt.Sprintf("/documents/%s", name)),
+			extended.Include("#documents-filters"),
+			extended.Target("#documents-content"),
+			extended.Swap("innerHTML"),
 		}
 
 		if sourceType == "" {
@@ -107,10 +108,10 @@ func (s *Server) documentsPage(
 				html.Type("radio"),
 				html.Name(constant.SourceType),
 				html.Value(value),
-				gomponents.Attr("hx-get", fmt.Sprintf("/documents/%s", name)),
-				gomponents.Attr("hx-include", "#documents-filters"),
-				gomponents.Attr("hx-target", "#documents-content"),
-				gomponents.Attr("hx-swap", "innerHTML"),
+				extended.Get(fmt.Sprintf("/documents/%s", name)),
+				extended.Include("#documents-filters"),
+				extended.Target("#documents-content"),
+				extended.Swap("innerHTML"),
 			}
 
 			if sourceType == value {

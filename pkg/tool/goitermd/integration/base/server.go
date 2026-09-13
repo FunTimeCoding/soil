@@ -6,6 +6,6 @@ import (
 )
 
 type Server struct {
-	MockClient    *mock_client.Client
+	MockClient *mock_client.Client
 	*model_context_server.Server
 }

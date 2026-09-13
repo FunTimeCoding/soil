@@ -1,0 +1,404 @@
+---
+openapi: "3.0.0"
+info:
+  title: godirectoryd
+  version: 1.0.0
+paths:
+  /api/user:
+    get:
+      operationId: getUser
+      responses:
+        "200":
+          description: Every user in the directory.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/User"
+        "500":
+          description: Failed to read the directory.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: postUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUser"
+      responses:
+        "200":
+          description: The created user.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "409":
+          description: The account already exists.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to create the user.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/user/{account}:
+    parameters:
+    - name: account
+      in: path
+      required: true
+      schema:
+        type: string
+    get:
+      operationId: getUserAccount
+      responses:
+        "200":
+          description: The requested user.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "404":
+          description: No such account.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to read the directory.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    patch:
+      operationId: patchUserAccount
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ModifyUser"
+      responses:
+        "200":
+          description: The updated user.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "404":
+          description: No such account.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to update the user.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteUserAccount
+      responses:
+        "200":
+          description: The account was removed.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Receipt"
+        "404":
+          description: No such account.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to remove the account.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/user/{account}/password:
+    parameters:
+    - name: account
+      in: path
+      required: true
+      schema:
+        type: string
+    post:
+      operationId: postUserAccountPassword
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SetPassword"
+      responses:
+        "200":
+          description: The password was set.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Receipt"
+        "404":
+          description: No such account.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to set the password.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/group:
+    get:
+      operationId: getGroup
+      responses:
+        "200":
+          description: Every group in the directory.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/Group"
+        "500":
+          description: Failed to read the directory.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: postGroup
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateGroup"
+      responses:
+        "200":
+          description: The created group.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Group"
+        "409":
+          description: The group already exists.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to create the group.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/group/{name}:
+    parameters:
+    - name: name
+      in: path
+      required: true
+      schema:
+        type: string
+    delete:
+      operationId: deleteGroupName
+      responses:
+        "200":
+          description: The group was removed.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Receipt"
+        "404":
+          description: No such group.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to remove the group.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/group/{name}/member:
+    parameters:
+    - name: name
+      in: path
+      required: true
+      schema:
+        type: string
+    post:
+      operationId: postGroupNameMember
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Member"
+      responses:
+        "200":
+          description: The group with its members.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Group"
+        "404":
+          description: No such group or account.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: The account is already a member.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to add the member.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/group/{name}/member/{account}:
+    parameters:
+    - name: name
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: account
+      in: path
+      required: true
+      schema:
+        type: string
+    delete:
+      operationId: deleteGroupNameMemberAccount
+      responses:
+        "200":
+          description: The group with its remaining members.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Group"
+        "404":
+          description: No such group, or the account is not a member.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to remove the member.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    User:
+      type: object
+      required: [account, name, surname, mail, unique, distinguished_name]
+      properties:
+        account:
+          type: string
+        name:
+          type: string
+        surname:
+          type: string
+        mail:
+          type: string
+        unique:
+          type: string
+        distinguished_name:
+          type: string
+    CreateUser:
+      type: object
+      required: [account, name, surname]
+      properties:
+        account:
+          type: string
+        name:
+          type: string
+        surname:
+          type: string
+        mail:
+          type: string
+        password:
+          type: string
+    ModifyUser:
+      type: object
+      properties:
+        name:
+          type: string
+        surname:
+          type: string
+        mail:
+          type: string
+    SetPassword:
+      type: object
+      required: [password]
+      properties:
+        password:
+          type: string
+    Group:
+      type: object
+      required: [name, number, member, distinguished_name]
+      properties:
+        name:
+          type: string
+        number:
+          type: integer
+        member:
+          type: array
+          items:
+            type: string
+        distinguished_name:
+          type: string
+    CreateGroup:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+    Member:
+      type: object
+      required: [account]
+      properties:
+        account:
+          type: string
+    Receipt:
+      type: object
+      required: [message]
+      properties:
+        message:
+          type: string
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+    ErrorResponse:
+      type: object
+      required: [error, event_identifier]
+      properties:
+        error:
+          type: string
+        event_identifier:
+          type: string

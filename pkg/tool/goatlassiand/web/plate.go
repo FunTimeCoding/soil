@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
+	"github.com/funtimecoding/soil/pkg/web/extended"
 	"github.com/funtimecoding/soil/pkg/web/subscription"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -25,18 +26,15 @@ func (s *Server) plate(
 		),
 		summary(issues),
 		html.H3(gomponents.Text(constant.PlateTitle)),
-		html.Div(
-			gomponents.Attr("sse-swap", constant.PlateEvent),
-			plateTable(issues),
-		),
+		html.Div(extended.StreamSwap(constant.PlateEvent), plateTable(issues)),
 		html.H3(gomponents.Text(constant.FavoritesTitle)),
 		html.Div(
-			gomponents.Attr("sse-swap", constant.FavoritesEvent),
+			extended.StreamSwap(constant.FavoritesEvent),
 			pagesTable(s.worker.Favorites()),
 		),
 		html.H3(gomponents.Text(constant.WatchedTitle)),
 		html.Div(
-			gomponents.Attr("sse-swap", constant.WatchedEvent),
+			extended.StreamSwap(constant.WatchedEvent),
 			pagesTable(s.worker.Watched()),
 		),
 	)

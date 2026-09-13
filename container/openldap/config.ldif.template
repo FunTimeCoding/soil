@@ -1,0 +1,45 @@
+dn: cn=config
+objectClass: olcGlobal
+cn: config
+olcArgsFile: @RUN_PATH@/slapd.args
+olcPidFile: @RUN_PATH@/slapd.pid
+@TLS_CERTIFICATE@
+@TLS_KEY@
+@TLS_AUTHORITY@
+
+dn: cn=module{0},cn=config
+objectClass: olcModuleList
+cn: module{0}
+olcModulePath: /usr/lib/openldap
+olcModuleLoad: back_mdb.so
+olcModuleLoad: argon2.so
+
+dn: cn=schema,cn=config
+objectClass: olcSchemaConfig
+cn: schema
+
+include: file:///etc/openldap/schema/core.ldif
+include: file:///etc/openldap/schema/cosine.ldif
+include: file:///etc/openldap/schema/inetorgperson.ldif
+include: file:///etc/openldap/schema/nis.ldif
+
+dn: olcDatabase={0}config,cn=config
+objectClass: olcDatabaseConfig
+olcDatabase: {0}config
+olcRootDN: cn=config
+olcRootPW: @ROOT_PASSWORD@
+olcAccess: {0}to * by dn.exact=gidNumber=0+uidNumber=0,cn=peercred,cn=external,cn=auth manage by * break
+
+dn: olcDatabase={1}mdb,cn=config
+objectClass: olcDatabaseConfig
+objectClass: olcMdbConfig
+olcDatabase: {1}mdb
+olcDbDirectory: @DATA_PATH@
+olcDbMaxSize: 1073741824
+olcSuffix: @SUFFIX@
+olcRootDN: @ROOT_DN@
+olcRootPW: @ROOT_PASSWORD@
+olcAccess: {0}to attrs=userPassword by self write by anonymous auth by dn.exact="@SERVICE_DN@" write by * none
+olcAccess: {1}to dn.subtree="@USER_BASE@" by dn.exact="@SERVICE_DN@" write by self read by users read by * none
+olcAccess: {2}to dn.subtree="@GROUP_BASE@" by dn.exact="@SERVICE_DN@" write by users read by * none
+olcAccess: {3}to * by self read by users read by * none

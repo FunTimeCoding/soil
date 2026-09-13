@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/web/extended"
 	"github.com/funtimecoding/soil/pkg/web/subscription"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -23,13 +24,10 @@ func (s *Server) dashboard(
 		),
 		s.usageSummary(),
 		html.H3(gomponents.Text("Roster")),
-		html.Div(
-			gomponents.Attr("sse-swap", constant.Roster),
-			s.rosterSection(),
-		),
+		html.Div(extended.StreamSwap(constant.Roster), s.rosterSection()),
 		html.H3(gomponents.Text("Recent Activity")),
 		html.Div(
-			gomponents.Attr("sse-swap", constant.Activity),
+			extended.StreamSwap(constant.Activity),
 			s.activitySection(nil),
 		),
 	)

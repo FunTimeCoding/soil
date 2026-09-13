@@ -8,6 +8,7 @@ import (
 )
 
 func (w *Worker) Poll() {
+	defer w.notify()
 	start := time.Now()
 	w.lastPoll.Store(start)
 
