@@ -57,7 +57,7 @@ require (
 	github.com/hupe1980/go-tiktoken v0.0.10
 	github.com/jackc/pgconn v1.14.3
 	github.com/jackc/pgx/v5 v5.11.0
-	github.com/kestra-io/client-sdk/go-sdk v1.3.0
+	github.com/kestra-io/client-sdk/go-sdk/v2 v2.0.0
 	github.com/liushuangls/go-anthropic/v2 v2.25.0
 	github.com/luthermonson/go-proxmox v0.8.1
 	github.com/mark3labs/mcp-go v0.58.0
