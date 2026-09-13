@@ -37,6 +37,20 @@ func (s *Server) GetSessions(
 		), nil
 	}
 
+	identifiers := make([]string, 0, len(sessions))
+
+	for _, i := range sessions {
+		identifiers = append(identifiers, i.Identifier)
+	}
+
+	labels, f := s.service.LabelsBySessions(identifiers)
+
+	if f != nil {
+		return server.GetSessions500JSONResponse(
+			*s.captureFail(f, constant.UnexpectedError),
+		), nil
+	}
+
 	var result []server.SessionDetail
 
 	for _, i := range sessions {
@@ -68,6 +82,19 @@ func (s *Server) GetSessions(
 
 		if i.Description != "" {
 			d.Description = &i.Description
+		}
+
+		if entries := labels[i.Identifier]; len(entries) > 0 {
+			carried := make([]server.LabelEntry, 0, len(entries))
+
+			for _, entry := range entries {
+				carried = append(
+					carried,
+					server.LabelEntry{Key: entry.Key, Value: entry.Value},
+				)
+			}
+
+			d.Labels = &carried
 		}
 
 		if peek {

@@ -39,7 +39,7 @@ func checkAssign(
 	results.AddConcern(
 		concern.NewFile(
 			constant.StringConcatenationKey,
-			"use fmt.Sprintf instead of string concatenation",
+			constant.StringConcatenationText,
 			p.Fset.Position(s.Pos()).Filename,
 			false,
 		),

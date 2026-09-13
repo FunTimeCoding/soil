@@ -49,7 +49,8 @@ const (
 	FixtureUnknownRuleText     = "unknown golint:fixture rule"
 	FixtureMisplacedText       = "golint:fixture directive must directly precede the declaration it sanctions"
 
-	StringConcatenationKey = "string_concatenation"
+	StringConcatenationKey  = "string_concatenation"
+	StringConcatenationText = "use join.Empty for pure joins, fmt.Sprintf when formatting"
 
 	BlankInsideFunctionKey  = "blank_inside_function"
 	BlankInsideFunctionText = "Blank line between statements inside function body"

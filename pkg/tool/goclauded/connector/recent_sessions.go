@@ -27,35 +27,22 @@ func (c *Client) RecentSessions(limit int) ([]*Target, error) {
 	result := []*Target{}
 
 	for _, s := range sessions.JSON200.Sessions {
-		detail, f := c.generated.GetSessionDetailWithResponse(
-			context.Background(),
-			s.Identifier,
-		)
-
-		if f != nil {
-			return nil, f
-		}
-
-		if detail.JSON200 == nil {
-			continue
-		}
-
 		name := ""
 
 		if s.Name != nil {
 			name = *s.Name
 		}
 
-		timestamp, g := time.Parse(time.RFC3339Nano, s.Timestamp)
+		timestamp, f := time.Parse(time.RFC3339Nano, s.Timestamp)
 
-		if g != nil {
+		if f != nil {
 			timestamp = time.Time{}
 		}
 
 		labels := map[string]string{}
 
-		if detail.JSON200.Labels != nil {
-			for _, l := range *detail.JSON200.Labels {
+		if s.Labels != nil {
+			for _, l := range *s.Labels {
 				labels[l.Key] = l.Value
 			}
 		}

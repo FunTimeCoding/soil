@@ -299,16 +299,17 @@ type SendRequest struct {
 
 // SessionDetail defines model for SessionDetail.
 type SessionDetail struct {
-	Alias         *string `json:"alias,omitempty"`
-	Branch        *string `json:"branch,omitempty"`
-	Description   *string `json:"description,omitempty"`
-	Identifier    string  `json:"identifier"`
-	Lines         int     `json:"lines"`
-	Name          *string `json:"name,omitempty"`
-	Preview       *string `json:"preview,omitempty"`
-	Slug          *string `json:"slug,omitempty"`
-	Timestamp     string  `json:"timestamp"`
-	WorkDirectory *string `json:"workDirectory,omitempty"`
+	Alias         *string       `json:"alias,omitempty"`
+	Branch        *string       `json:"branch,omitempty"`
+	Description   *string       `json:"description,omitempty"`
+	Identifier    string        `json:"identifier"`
+	Labels        *[]LabelEntry `json:"labels,omitempty"`
+	Lines         int           `json:"lines"`
+	Name          *string       `json:"name,omitempty"`
+	Preview       *string       `json:"preview,omitempty"`
+	Slug          *string       `json:"slug,omitempty"`
+	Timestamp     string        `json:"timestamp"`
+	WorkDirectory *string       `json:"workDirectory,omitempty"`
 }
 
 // SessionDetailCompletion defines model for SessionDetailCompletion.

@@ -23,4 +23,5 @@ func (s *Server) Mount(g *guard.Mux) {
 	g.Session(route.Post(constant.DeleteGroupPath), s.deleteGroupSubmit)
 	g.Session(route.Post(constant.AddMemberPath), s.addMemberSubmit)
 	g.Session(route.Post(constant.RemoveMemberPath), s.removeMemberSubmit)
+	g.Open(route.Get(webConstant.FaviconPath), s.favicon)
 }

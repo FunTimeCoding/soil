@@ -1201,6 +1201,10 @@ components:
           type: string
         lines:
           type: integer
+        labels:
+          type: array
+          items:
+            $ref: '#/components/schemas/LabelEntry'
     PeekResponse:
       type: object
       required:
