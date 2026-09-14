@@ -1,6 +1,6 @@
 package job
 
-import "gitlab.com/gitlab-org/api/client-go/v2"
+import "gitlab.com/gitlab-org/api/client-go/v3"
 
 func NewSlice(v []*gitlab.Job) []*Job {
 	var result []*Job

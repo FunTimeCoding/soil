@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/not_selected"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/mark3labs/mcp-go/server"
 )
 
@@ -26,7 +27,7 @@ func (s *Server) resolveDirectory(x context.Context) (string, error) {
 	m, okay := s.service.Module(name)
 
 	if !okay {
-		return "", not_found.New("module", name)
+		return "", not_found.New(constant.ModuleKind, name)
 	}
 
 	return m.Directory, nil

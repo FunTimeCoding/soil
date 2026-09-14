@@ -2,7 +2,7 @@ package mock_client
 
 import (
 	"github.com/funtimecoding/soil/pkg/gitlab/pipeline_detail"
-	"gitlab.com/gitlab-org/api/client-go/v2"
+	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
 func (c *Client) CreatePipeline(

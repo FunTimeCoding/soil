@@ -1,6 +1,6 @@
 package file
 
-import "github.com/yuin/goldmark/ast"
+import "github.com/yuin/goldmark/v2/ast"
 
 func NodeValue(
 	s *[]byte,
@@ -19,9 +19,9 @@ func NodeValue(
 	case *ast.Text:
 		// Both heading and paragraph can be text
 		if false {
-			return string(o.Value(*s))
+			return o.Value.Value(*s)
 		}
-	case *ast.FencedCodeBlock:
+	case *ast.CodeBlock:
 		return Value(s, o)
 	}
 

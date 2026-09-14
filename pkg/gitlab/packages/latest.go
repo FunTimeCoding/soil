@@ -2,7 +2,7 @@ package packages
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"gitlab.com/gitlab-org/api/client-go/v2"
+	"gitlab.com/gitlab-org/api/client-go/v3"
 	"golang.org/x/mod/semver"
 )
 

@@ -1,6 +1,6 @@
 package commit
 
-import "gitlab.com/gitlab-org/api/client-go/v2"
+import "gitlab.com/gitlab-org/api/client-go/v3"
 
 func NewSlice(v []*gitlab.Commit) []*Commit {
 	var result []*Commit

@@ -11,7 +11,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/common"
 	"github.com/funtimecoding/soil/pkg/tool/godownload/constant"
 	"github.com/funtimecoding/soil/pkg/tool/godownload/download/option"
-	library "gitlab.com/gitlab-org/api/client-go/v2"
+	library "gitlab.com/gitlab-org/api/client-go/v3"
 	"os"
 )
 

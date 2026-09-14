@@ -1,7 +1,7 @@
 package runbook
 
 import (
-	"github.com/yuin/goldmark/ast"
+	"github.com/yuin/goldmark/v2/ast"
 	"strings"
 )
 
@@ -13,7 +13,7 @@ func extractText(
 
 	for c := n.FirstChild(); c != nil; c = c.NextSibling() {
 		if c.Kind() == ast.KindText {
-			b.Write(c.(*ast.Text).Segment.Value(*source))
+			b.WriteString(c.(*ast.Text).Value.Value(*source))
 		}
 	}
 

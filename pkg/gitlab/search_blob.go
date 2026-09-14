@@ -1,6 +1,6 @@
 package gitlab
 
-import "gitlab.com/gitlab-org/api/client-go/v2"
+import "gitlab.com/gitlab-org/api/client-go/v3"
 
 func (c *Client) SearchBlob(query string) ([]*gitlab.Blob, error) {
 	var result []*gitlab.Blob

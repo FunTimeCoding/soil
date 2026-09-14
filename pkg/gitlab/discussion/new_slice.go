@@ -1,6 +1,6 @@
 package discussion
 
-import "gitlab.com/gitlab-org/api/client-go/v2"
+import "gitlab.com/gitlab-org/api/client-go/v3"
 
 func NewSlice(v []*gitlab.Discussion) []*Discussion {
 	result := make([]*Discussion, 0, len(v))

@@ -2,7 +2,7 @@ package constant
 
 import (
 	"github.com/funtimecoding/soil/pkg/console/constant"
-	"gitlab.com/gitlab-org/api/client-go/v2"
+	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
 const Base = "/api/v4"

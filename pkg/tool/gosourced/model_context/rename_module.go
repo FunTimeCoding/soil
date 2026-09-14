@@ -1,0 +1,59 @@
+package model_context
+
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/generative/mark/response"
+	"github.com/funtimecoding/soil/pkg/lint/concern"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/model_context/argument"
+	"github.com/mark3labs/mcp-go/mcp"
+)
+
+func (s *Server) renameModule(
+	x context.Context,
+	_ mcp.CallToolRequest,
+	a argument.RenameModule,
+) (*mcp.CallToolResult, error) {
+	if a.ModulePath == "" {
+		return response.Fail("module_path is required")
+	}
+
+	if a.NewModulePath == "" {
+		return response.Fail("new_module_path is required")
+	}
+
+	directory, e := s.resolveDirectory(x)
+
+	if e != nil {
+		return response.Fail("%s", e)
+	}
+
+	r, e := s.service.RenameModule(
+		directory,
+		a.ModulePath,
+		a.NewModulePath,
+		a.Force,
+		a.DryRun,
+	)
+
+	if e != nil {
+		return s.captureFail(e, constant.UnexpectedError)
+	}
+
+	var unfixed []*concern.Concern
+	var fixed []*concern.Concern
+
+	for _, c := range r.Entries {
+		if c.Fixed || c.Planned {
+			fixed = append(fixed, c)
+		} else {
+			unfixed = append(unfixed, c)
+		}
+	}
+
+	if len(unfixed) > 0 {
+		return response.Fail("%s", formatConcerns(unfixed))
+	}
+
+	return response.Success(formatConcerns(fixed))
+}

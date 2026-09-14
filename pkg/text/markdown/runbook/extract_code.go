@@ -1,20 +1,13 @@
 package runbook
 
 import (
-	"github.com/yuin/goldmark/ast"
+	"github.com/yuin/goldmark/v2/ast"
 	"strings"
 )
 
 func extractCode(
 	source *[]byte,
-	c *ast.FencedCodeBlock,
+	c *ast.CodeBlock,
 ) string {
-	var b strings.Builder
-
-	for i := 0; i < c.Lines().Len(); i++ {
-		l := c.Lines().At(i)
-		b.Write(l.Value(*source))
-	}
-
-	return strings.TrimSpace(b.String())
+	return strings.TrimSpace(c.Value.Str(*source))
 }

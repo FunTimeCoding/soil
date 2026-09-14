@@ -1,7 +1,7 @@
 package pipeline_detail
 
 import (
-	"gitlab.com/gitlab-org/api/client-go/v2"
+	"gitlab.com/gitlab-org/api/client-go/v3"
 	"time"
 )
 

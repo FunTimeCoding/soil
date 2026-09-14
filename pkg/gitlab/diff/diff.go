@@ -1,6 +1,6 @@
 package diff
 
-import "gitlab.com/gitlab-org/api/client-go/v2"
+import "gitlab.com/gitlab-org/api/client-go/v3"
 
 type Diff struct {
 	OldPath string

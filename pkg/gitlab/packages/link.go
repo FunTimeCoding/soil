@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab/project"
 	"github.com/funtimecoding/soil/pkg/web/locator"
-	"gitlab.com/gitlab-org/api/client-go/v2"
+	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
 func Link(

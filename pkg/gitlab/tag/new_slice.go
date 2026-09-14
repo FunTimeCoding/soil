@@ -1,6 +1,6 @@
 package tag
 
-import "gitlab.com/gitlab-org/api/client-go/v2"
+import "gitlab.com/gitlab-org/api/client-go/v3"
 
 func NewSlice(v []*gitlab.Tag) []*Tag {
 	result := make([]*Tag, 0, len(v))

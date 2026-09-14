@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/web/detail_error"
-	"gitlab.com/gitlab-org/api/client-go/v2"
+	"gitlab.com/gitlab-org/api/client-go/v3"
 	"net/http"
 )
 

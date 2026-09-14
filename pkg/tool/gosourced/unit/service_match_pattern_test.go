@@ -3,6 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"testing"
 )
 
@@ -144,7 +145,7 @@ func TestListCallsUnknownRegion(t *testing.T) {
 	r, inventory, e := s.ListCalls(d, "example/pkg/missing", 0)
 	assert.FatalOnError(t, e)
 	assert.True(t, inventory == nil)
-	testutil.AssertBlockedContains(t, r, "missing")
+	testutil.AssertBlockedContains(t, r, constant.MissingPackage)
 }
 
 func TestMatchPatternWhitespace(t *testing.T) {

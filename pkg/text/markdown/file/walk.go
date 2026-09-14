@@ -2,7 +2,7 @@ package file
 
 import (
 	"github.com/funtimecoding/soil/pkg/text/markdown/file/flat"
-	"github.com/yuin/goldmark/ast"
+	"github.com/yuin/goldmark/v2/ast"
 )
 
 func Walk(

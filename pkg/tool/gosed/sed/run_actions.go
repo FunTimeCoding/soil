@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/gitlab"
 	"github.com/funtimecoding/soil/pkg/strings/base64"
 	"github.com/funtimecoding/soil/pkg/tool/gosed/sed/option"
-	upstream "gitlab.com/gitlab-org/api/client-go/v2"
+	upstream "gitlab.com/gitlab-org/api/client-go/v3"
 	"log"
 )
 

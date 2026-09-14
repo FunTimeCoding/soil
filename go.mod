@@ -57,7 +57,7 @@ require (
 	github.com/hupe1980/go-tiktoken v0.0.10
 	github.com/jackc/pgconn v1.14.3
 	github.com/jackc/pgx/v5 v5.11.0
-	github.com/kestra-io/client-sdk/go-sdk v1.3.0
+	github.com/kestra-io/client-sdk/go-sdk/v2 v2.0.1
 	github.com/liushuangls/go-anthropic/v2 v2.25.0
 	github.com/luthermonson/go-proxmox v0.8.1
 	github.com/mark3labs/mcp-go v0.58.0
@@ -92,8 +92,8 @@ require (
 	github.com/tobischo/gokeepasslib/v3 v3.7.0
 	github.com/trivago/tgo v1.0.7
 	github.com/whilp/git-urls v1.0.0
-	github.com/yuin/goldmark v1.8.6
-	gitlab.com/gitlab-org/api/client-go/v2 v2.64.0
+	github.com/yuin/goldmark/v2 v2.1.0
+	gitlab.com/gitlab-org/api/client-go/v3 v3.9.0
 	golang.org/x/crypto v0.57.0
 	golang.org/x/mod v0.41.0
 	golang.org/x/net v0.59.0
@@ -315,6 +315,7 @@ require (
 	github.com/xanzy/ssh-agent v0.3.3 // indirect
 	github.com/xo/terminfo v0.0.0-20220910002029-abceb7e1c41e // indirect
 	github.com/yosida95/uritemplate/v3 v3.0.2 // indirect
+	github.com/yuin/goldmark v1.8.6 // indirect
 	go.opentelemetry.io/auto/sdk v1.2.1 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.69.0 // indirect
 	go.opentelemetry.io/otel v1.46.0 // indirect

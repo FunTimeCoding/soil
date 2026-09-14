@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/gitlab/pipeline"
 	"github.com/funtimecoding/soil/pkg/gitlab/tag"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/types/latest_pipeline"
-	"gitlab.com/gitlab-org/api/client-go/v2"
+	"gitlab.com/gitlab-org/api/client-go/v3"
 	"testing"
 )
 

@@ -546,8 +546,8 @@ github.com/json-iterator/go v1.1.12 h1:PV8peI4a0ysnczrg+LtxykD8LfKY9ML6u2jnxaEnr
 github.com/json-iterator/go v1.1.12/go.mod h1:e30LSqwooZae/UwlEbR2852Gd8hjQvJoHmT4TnhNGBo=
 github.com/jstemmer/go-junit-report v0.0.0-20190106144839-af01ea7f8024/go.mod h1:6v2b51hI/fHJwM22ozAgKL4VKDeJcHhJFhtBdhmNjmU=
 github.com/juju/gnuflag v0.0.0-20171113085948-2ce1bb71843d/go.mod h1:2PavIy+JPciBPrBUjwbNvtwB6RQlve+hkpll6QSNmOE=
-github.com/kestra-io/client-sdk/go-sdk v1.3.0 h1:nzFLhOLzLHoqtG6cc+zh9x58Dt84cKNyDQsoRIo5AK0=
-github.com/kestra-io/client-sdk/go-sdk v1.3.0/go.mod h1:6oIOWghMHfNXWJcs/HA9qr6oMagBFBHoVrhPsdBEep4=
+github.com/kestra-io/client-sdk/go-sdk/v2 v2.0.1 h1:tZR2SY+G9fatxzItScXI8PXmQqvbMFzFUWeGX0pcoDY=
+github.com/kestra-io/client-sdk/go-sdk/v2 v2.0.1/go.mod h1:ckpZC/7pTYvb7B2iLxY90UGKu374oBvDsGXJ8bWtlwk=
 github.com/kevinburke/ssh_config v1.2.0 h1:x584FjTGwHzMwvHx18PXxbBVzfnxogHaAReU4gf13a4=
 github.com/kevinburke/ssh_config v1.2.0/go.mod h1:CT57kijsi8u/K/BOFA39wgDQJ9CxiF4nAY/ojJ6r6mM=
 github.com/kisielk/gotool v1.0.0/go.mod h1:XhKaO+MFFWcvkIS/tQcRk01m1F5IRFswLeQ+oQHNcck=
@@ -908,10 +908,12 @@ github.com/yosida95/uritemplate/v3 v3.0.2/go.mod h1:ILOh0sOhIJR3+L/8afwt/kE++YT0
 github.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5taEt/CY=
 github.com/yuin/goldmark v1.8.6 h1:d0VcaP1sx9GkFVkoW+KtggpGi2KZ965i14b0+bDQST4=
 github.com/yuin/goldmark v1.8.6/go.mod h1:ip/1k0VRfGynBgxOz0yCqHrbZXhcjxyuS66Brc7iBKg=
+github.com/yuin/goldmark/v2 v2.1.0 h1:uXU6VbhKNw9xrD3R/Gg+NtuH7GWkLMLFaKsNvOyV4kE=
+github.com/yuin/goldmark/v2 v2.1.0/go.mod h1:G6M4/qOFtfn01/o14BU1UR2Lo5N3S9Qo7xCuz/sHjGQ=
 github.com/yusufpapurcu/wmi v1.2.4 h1:zFUKzehAFReQwLys1b/iSMl+JQGSCSjtVqQn9bBrPo0=
 github.com/yusufpapurcu/wmi v1.2.4/go.mod h1:SBZ9tNy3G9/m5Oi98Zks0QjeHVDvuK0qfxQmPyzfmi0=
-gitlab.com/gitlab-org/api/client-go/v2 v2.64.0 h1:PrLDC9rS6je6scB0VgXAh6gmoB7fk50bgdweKT37Vdg=
-gitlab.com/gitlab-org/api/client-go/v2 v2.64.0/go.mod h1:jLHVjfgFX/BsZnWXp6OsoXv1hKzBp2tSnNoxQTl3A08=
+gitlab.com/gitlab-org/api/client-go/v3 v3.9.0 h1:xJ/3n1HgnymiczqoN/cR6JdiDrAJFVxjbscBLA9amFI=
+gitlab.com/gitlab-org/api/client-go/v3 v3.9.0/go.mod h1:k7uYxRoIeuSqyWZSJfAPZlf0L32OH0lUBImAl4gWUFc=
 go.opencensus.io v0.18.0/go.mod h1:vKdFvxhtzZ9onBp9VKHK8z/sRpBMnKAsufL7wlDrCOA=
 go.opentelemetry.io/auto/sdk v1.2.1 h1:jXsnJ4Lmnqd11kwkBV2LgLoFMZKizbCi5fNZ/ipaZ64=
 go.opentelemetry.io/auto/sdk v1.2.1/go.mod h1:KRTj+aOaElaLi+wW1kO/DZRXwkF4C5xPbEe3ZiIhN7Y=

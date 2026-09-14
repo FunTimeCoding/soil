@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
-	"gitlab.com/gitlab-org/api/client-go/v2"
+	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
 func (s *Server) CreatePipeline(

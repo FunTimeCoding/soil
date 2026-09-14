@@ -1,6 +1,6 @@
 package image
 
-import "gitlab.com/gitlab-org/api/client-go/v2"
+import "gitlab.com/gitlab-org/api/client-go/v3"
 
 func NewSlice(v []*gitlab.RegistryRepositoryTag) []*Image {
 	result := make([]*Image, 0, len(v))

@@ -1,6 +1,6 @@
 package runner
 
-import "gitlab.com/gitlab-org/api/client-go/v2"
+import "gitlab.com/gitlab-org/api/client-go/v3"
 
 type Runner struct {
 	Identifier  int64

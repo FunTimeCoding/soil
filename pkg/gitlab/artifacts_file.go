@@ -2,7 +2,7 @@ package gitlab
 
 import (
 	"github.com/funtimecoding/soil/pkg/system"
-	"gitlab.com/gitlab-org/api/client-go/v2"
+	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
 func (c *Client) ArtifactsFile(

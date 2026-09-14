@@ -2,12 +2,11 @@ package file
 
 import (
 	"github.com/funtimecoding/soil/pkg/text/markdown/file/flat"
-	"github.com/yuin/goldmark"
-	"github.com/yuin/goldmark/text"
+	"github.com/yuin/goldmark/v2/parser"
 )
 
 func (f *File) Parse() *flat.Flat {
-	o := goldmark.DefaultParser().Parse(text.NewReader(*f.source))
+	o := parser.New().Parse(*f.source)
 	l := flat.New()
 
 	if false {

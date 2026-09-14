@@ -1,6 +1,6 @@
 package note
 
-import "gitlab.com/gitlab-org/api/client-go/v2"
+import "gitlab.com/gitlab-org/api/client-go/v3"
 
 func NewSlice(v []*gitlab.Note) []*Note {
 	result := make([]*Note, 0, len(v))

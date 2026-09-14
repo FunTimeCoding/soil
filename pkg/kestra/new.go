@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/strings/join/key_value"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/kestra-io/client-sdk/go-sdk/kestra_api_client"
+	"github.com/kestra-io/client-sdk/go-sdk/v2/kestra_api_client"
 	"net/http"
 )
 

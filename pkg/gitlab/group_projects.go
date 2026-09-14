@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab/project"
 	"github.com/gpustack/gguf-parser-go/util/ptr"
-	"gitlab.com/gitlab-org/api/client-go/v2"
+	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
 func (c *Client) GroupProjects(identifier ...int64) ([]*project.Project, error) {

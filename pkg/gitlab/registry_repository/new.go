@@ -1,6 +1,6 @@
 package registry_repository
 
-import "gitlab.com/gitlab-org/api/client-go/v2"
+import "gitlab.com/gitlab-org/api/client-go/v3"
 
 func New(v *gitlab.RegistryRepository) *Repository {
 	return &Repository{

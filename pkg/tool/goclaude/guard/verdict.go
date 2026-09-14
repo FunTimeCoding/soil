@@ -40,5 +40,15 @@ func Verdict(
 		return constant.SedMessage
 	}
 
+	unsupported, h := localXargsUnsupportedFlag(command)
+
+	if h != nil && constant.XargsInvocation.MatchString(command) {
+		return constant.XargsMessage
+	}
+
+	if unsupported {
+		return constant.XargsMessage
+	}
+
 	return ""
 }

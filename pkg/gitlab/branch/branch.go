@@ -2,7 +2,7 @@ package branch
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	"gitlab.com/gitlab-org/api/client-go/v2"
+	"gitlab.com/gitlab-org/api/client-go/v3"
 	"time"
 )
 

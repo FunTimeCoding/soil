@@ -3,7 +3,7 @@ package runbook
 import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/constant"
-	"github.com/yuin/goldmark/ast"
+	"github.com/yuin/goldmark/v2/ast"
 	"strings"
 )
 
@@ -41,17 +41,18 @@ func (r *Runbook) Walk(n ast.Node) {
 			}
 
 			description = extractText(r.source, child)
-		case ast.KindFencedCodeBlock:
-			if section != nil && description != "" {
+		case ast.KindCodeBlock:
+			code := child.(*ast.CodeBlock)
+
+			if code.CodeBlockKind == ast.CodeBlockKindFenced &&
+				section != nil &&
+				description != "" {
 				if len(r.Sections) > 0 {
 					r.Sections[len(r.Sections)-1].Commands = append(
 						r.Sections[len(r.Sections)-1].Commands,
 						Command{
 							Description: description,
-							Code: extractCode(
-								r.source,
-								child.(*ast.FencedCodeBlock),
-							),
+							Code: extractCode(r.source, code),
 						},
 					)
 				}

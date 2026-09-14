@@ -4,7 +4,7 @@ import (
 	"errors"
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/mark3labs/mcp-go/mcp"
-	"gitlab.com/gitlab-org/api/client-go/v2"
+	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
 func (s *Server) captureDetail(e error) (*mcp.CallToolResult, error) {

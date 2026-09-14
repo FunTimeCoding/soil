@@ -1,6 +1,6 @@
 package registry_repository
 
-import "gitlab.com/gitlab-org/api/client-go/v2"
+import "gitlab.com/gitlab-org/api/client-go/v3"
 
 func NewSlice(v []*gitlab.RegistryRepository) []*Repository {
 	result := make([]*Repository, 0, len(v))

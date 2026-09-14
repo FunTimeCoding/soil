@@ -2,7 +2,7 @@ package packages
 
 import (
 	"github.com/funtimecoding/soil/pkg/constant"
-	"gitlab.com/gitlab-org/api/client-go/v2"
+	"gitlab.com/gitlab-org/api/client-go/v3"
 	"log"
 )
 

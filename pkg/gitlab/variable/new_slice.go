@@ -1,6 +1,6 @@
 package variable
 
-import "gitlab.com/gitlab-org/api/client-go/v2"
+import "gitlab.com/gitlab-org/api/client-go/v3"
 
 func NewSlice(v []*gitlab.ProjectVariable) []*Variable {
 	result := make([]*Variable, 0, len(v))

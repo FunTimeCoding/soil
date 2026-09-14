@@ -3,7 +3,7 @@ package gitlab
 import (
 	"github.com/funtimecoding/soil/pkg/errors/ambiguous"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	"gitlab.com/gitlab-org/api/client-go/v2"
+	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
 func (c *Client) GroupByName(s string) (*gitlab.Group, error) {

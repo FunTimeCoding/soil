@@ -1,6 +1,6 @@
 package tree
 
-import "gitlab.com/gitlab-org/api/client-go/v2"
+import "gitlab.com/gitlab-org/api/client-go/v3"
 
 func NewSlice(v []*gitlab.TreeNode) []*Node {
 	result := make([]*Node, 0, len(v))

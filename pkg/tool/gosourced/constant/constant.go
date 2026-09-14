@@ -25,6 +25,7 @@ const (
 	MovePackage         = "move_package"
 	RenamePackage       = "rename_package"
 	RenamePackageClause = "rename_package_clause"
+	RenameModule        = "rename_module"
 	ExtractToFile       = "extract_to_file"
 	AddImport           = "add_import"
 	RemoveImport        = "remove_import"
@@ -34,4 +35,10 @@ const (
 	ReferenceLimit  = 25
 	MemberSeparator = "."
 	StandalonePath  = "standalone"
+	ParameterModule = "module"
+	ModuleKind      = "module"
+	ModuleQualifier = "module"
+	MissingPackage  = "missing"
+	ConcernMissing  = "missing"
+	ConcernChanged  = "changed"
 )

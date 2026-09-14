@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab/branch"
 	strings "github.com/funtimecoding/soil/pkg/strings/constant"
-	"gitlab.com/gitlab-org/api/client-go/v2"
+	"gitlab.com/gitlab-org/api/client-go/v3"
 	"testing"
 )
 

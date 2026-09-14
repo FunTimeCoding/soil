@@ -3,7 +3,7 @@ package gitlab
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/gitlab/project"
-	"gitlab.com/gitlab-org/api/client-go/v2"
+	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
 type Client struct {

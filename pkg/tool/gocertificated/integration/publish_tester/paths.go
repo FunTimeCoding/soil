@@ -1,6 +1,6 @@
 package publish_tester
 
-import "gitlab.com/gitlab-org/api/client-go/v2"
+import "gitlab.com/gitlab-org/api/client-go/v3"
 
 func Paths(v []*gitlab.CommitActionOptions) []string {
 	result := make([]string, 0, len(v))

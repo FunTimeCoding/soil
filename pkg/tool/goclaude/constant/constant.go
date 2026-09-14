@@ -28,6 +28,7 @@ const (
 	SedMessage     = "sed on macOS is BSD sed and its flags (notably -i) differ from GNU sed - use gsed instead"
 	NpxMessage     = "npx is blocked (supply-chain guard) - it downloads and executes npm packages on demand"
 	PipMessage     = "pip install is blocked (supply-chain guard) - no python dependencies may be installed on this system"
+	XargsMessage   = "xargs on macOS is BSD xargs and rejects the GNU flags -a and -d - redirect the file on stdin instead: xargs command < file"
 
 	NoGuardEnvironment = "CLAUDE_NO_GUARD"
 
@@ -35,7 +36,10 @@ const (
 )
 
 var (
-	SedInvocation = regexp.MustCompile(`(^|[|&;(\s])sed(\s|$)`)
+	SedInvocation   = regexp.MustCompile(`(^|[|&;(\s])sed(\s|$)`)
+	XargsInvocation = regexp.MustCompile(
+		`(^|[|&;(\s])xargs\s(.*\s)?(-a|-d|--arg-file|--delimiter)`,
+	)
 	NpxInvocation = regexp.MustCompile(`(^|[|&;(\s])npx(\s|$)`)
 	PipInvocation = regexp.MustCompile(
 		`(^|[|&;(\s])pip3?\s(.*\s)?install(\s|$)`,
