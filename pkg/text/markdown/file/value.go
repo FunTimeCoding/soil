@@ -15,7 +15,6 @@ func Value(
 	}
 
 	var b strings.Builder
-
 	errors.PanicOnError(
 		ast.Walk(
 			n,

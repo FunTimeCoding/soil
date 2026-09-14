@@ -55,7 +55,13 @@ func TestRenameModuleDryRun(t *testing.T) {
 func TestRenameModuleUnused(t *testing.T) {
 	d := testutil.PrepareTestPackage(t, serviceTestdata("module-rename/src"))
 	s := testService()
-	r, e := s.RenameModule(d, "example/other/v2", "example/other/v3", false, false)
+	r, e := s.RenameModule(
+		d,
+		"example/other/v2",
+		"example/other/v3",
+		false,
+		false,
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlockedContains(t, r, "no references")
 }

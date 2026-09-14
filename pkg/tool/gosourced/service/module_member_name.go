@@ -10,9 +10,5 @@ func moduleMemberName(symbol *ModuleSymbol) string {
 		return symbol.Name
 	}
 
-	return join.Empty(
-		symbol.Owner,
-		constant.MemberSeparator,
-		symbol.Name,
-	)
+	return join.Empty(symbol.Owner, constant.MemberSeparator, symbol.Name)
 }
