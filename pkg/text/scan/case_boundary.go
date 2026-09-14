@@ -2,7 +2,10 @@ package scan
 
 import "unicode"
 
-func caseBoundary(text []rune, index int) bool {
+func caseBoundary(
+	text []rune,
+	index int,
+) bool {
 	previous := text[index-1]
 
 	if unicode.IsLower(previous) || unicode.IsDigit(previous) {

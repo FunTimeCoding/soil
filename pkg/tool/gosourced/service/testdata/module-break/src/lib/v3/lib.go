@@ -8,6 +8,9 @@ func (w *Widget) Name() string {
 	return w.Label
 }
 
-func Make(label string, size int) *Widget {
+func Make(
+	label string,
+	size int,
+) *Widget {
 	return &Widget{Label: label}
 }

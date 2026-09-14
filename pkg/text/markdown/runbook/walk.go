@@ -52,7 +52,7 @@ func (r *Runbook) Walk(n ast.Node) {
 						r.Sections[len(r.Sections)-1].Commands,
 						Command{
 							Description: description,
-							Code: extractCode(r.source, code),
+							Code:        extractCode(r.source, code),
 						},
 					)
 				}
