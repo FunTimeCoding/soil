@@ -18,8 +18,8 @@ func (s *Server) extractToFile(
 		return response.Fail("file is required")
 	}
 
-	if a.Function == "" {
-		return response.Fail("function is required")
+	if a.Symbol == "" {
+		return response.Fail("symbol is required")
 	}
 
 	directory, e := s.resolveDirectory(x)
@@ -28,7 +28,7 @@ func (s *Server) extractToFile(
 		return response.Fail("%s", e)
 	}
 
-	r, e := s.service.ExtractToFile(directory, a.File, a.Function, a.DryRun)
+	r, e := s.service.ExtractToFile(directory, a.File, a.Symbol, a.DryRun)
 
 	if e != nil {
 		return s.captureFail(e, constant.UnexpectedError)

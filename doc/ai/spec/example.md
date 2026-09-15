@@ -1,6 +1,9 @@
 # Example Spec
 
-Conventions for example code that demonstrates library usage.
+Conventions for example code that demonstrates library usage. Every
+client package should have an `example/` when there is a real usage
+scenario to demonstrate - don't create empty or contrived examples
+just to fill the slot.
 
 ## Location
 

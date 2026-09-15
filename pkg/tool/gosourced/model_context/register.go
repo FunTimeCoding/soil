@@ -509,7 +509,7 @@ func (s *Server) register() {
 		mcp.NewTool(
 			constant.ExtractToFile,
 			mcp.WithDescription(
-				"Extract a function or method from a file into its own file. Carries needed imports, removes unused imports from the source.",
+				"Extract a function, method, or type from a file into its own file. Carries needed imports, removes unused imports from the source. When one identity remains in the source, the source is renamed to match it.",
 			),
 			mcp.WithString(
 				"file",
@@ -519,9 +519,11 @@ func (s *Server) register() {
 				),
 			),
 			mcp.WithString(
-				"function",
+				"symbol",
 				mcp.Required(),
-				mcp.Description("Function or method name to extract."),
+				mcp.Description(
+					"Function, method, or type name to extract. Types move without their methods - methods are their own identities. Grouped type declarations refuse.",
+				),
 			),
 			mcp.WithBoolean(
 				"dry_run",

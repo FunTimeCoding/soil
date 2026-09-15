@@ -219,7 +219,7 @@ func TestExtractToFile(t *testing.T) {
 		constant.ExtractToFile,
 		map[string]any{
 			"file":     "pkg/target/combined.go",
-			"function": "FormatName",
+			"symbol": "FormatName",
 		},
 	)
 	assert.StringContains(t, "format_name.go", result)
@@ -236,7 +236,7 @@ func TestExtractToFileNotFound(t *testing.T) {
 		constant.ExtractToFile,
 		map[string]any{
 			"file":     "pkg/target/combined.go",
-			"function": "Missing",
+			"symbol": "Missing",
 		},
 	)
 	assert.StringContains(t, "not found", e.Error())
@@ -252,7 +252,7 @@ func TestExtractToFileNoModule(t *testing.T) {
 		constant.ExtractToFile,
 		map[string]any{
 			"file":     "pkg/target/combined.go",
-			"function": "FormatName",
+			"symbol": "FormatName",
 		},
 	)
 	assert.StringContains(t, "use_module", e.Error())
@@ -269,7 +269,7 @@ func TestExtractToFileRenamesSource(t *testing.T) {
 		constant.ExtractToFile,
 		map[string]any{
 			"file":     "pkg/target/combined.go",
-			"function": "FormatName",
+			"symbol": "FormatName",
 		},
 	)
 	assert.StringContains(t, "format_name.go", result)

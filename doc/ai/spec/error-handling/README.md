@@ -6,6 +6,12 @@ Minimize `error` returns and `if e != nil` comparisons. Prefer `errors.PanicOnEr
 and rely on recovery chains to capture unexpected failures. Explicit error
 handling is reserved for cases where it is structurally required.
 
+The same posture for closing: prefer `errors.PanicClose` over checking
+close errors; use `LogClose` only in loops or uncertain contexts (e.g.
+validation). Eliminate error variables entirely when possible:
+`errors.PanicOnError(someCall())`. Error variable naming (`e`/`f`/`g`
+escalation) lives in `../naming.md`.
+
 ## Recovery Chain
 
 Three recovery layers wrap all program execution:
@@ -92,7 +98,7 @@ error is surfaced.
 ## Deviations
 
 **vs idiomatic Go**: idiomatic Go returns `(T, error)` from nearly everything. Here,
-error returns are the exception, not the rule. See `conventions.md`.
+error returns are the exception, not the rule.
 
 **vs Claude defaults**: Claude will tend to add `if e != nil` handling everywhere and
 thread errors up the call stack. Resist this. When in doubt, `PanicOnError`.

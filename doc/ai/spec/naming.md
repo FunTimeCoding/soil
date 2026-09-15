@@ -146,11 +146,25 @@ These are established conventions across the codebase:
 | `*goquery.Document` | `d` |
 | `*gzip.Writer` | `z` |
 | `*tar.Writer` | `t` |
-| `error` | see `conventions.md` Error Handling for full `e`/`f`/`g` escalation |
+| `error` | `e`, then `f`, `g` in the same scope (avoid shadowing) |
 | serialized markup (`[]byte` of yaml/xml/html) | `m` |
 | serialized notation (`[]byte` of json) | `j` |
+| headers | `h` |
+| `os.FileInfo` in loops | `i` |
+| files | `f` |
 
-See `conventions.md` for the full short variable name table.
+When e/f/g run out in deeply nested scopes, short `<verb>Fail` names
+(`createFail`, `saveFail`) - prefer short words like "fail" over
+"error". A descriptive error name is still a smell: the function
+wants refactoring. Eliminate the variable entirely when possible:
+`errors.PanicOnError(someCall())`.
+
+Prefer the short word and the concrete noun: `path` over
+`outputPath`, `name` over `fileName`, "fail" over "error". Single
+letters fit obvious types in local variables and struct receivers
+(the type already documents the receiver); function parameters prefer
+descriptive names - callers read the signature without seeing the
+body. Avoid `-ing` and plural forms in names.
 
 ## Single-character collision fallback
 

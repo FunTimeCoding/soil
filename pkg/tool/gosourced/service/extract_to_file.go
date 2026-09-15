@@ -10,6 +10,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/strings/camel"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
+	"go/ast"
 	"go/parser"
 	"go/token"
 	"os"
@@ -19,7 +20,7 @@ import (
 func (s *Service) ExtractToFile(
 	directory string,
 	filePath string,
-	functionName string,
+	symbolName string,
 	dryRun bool,
 ) (*output.Results, error) {
 	r := output.NewResultsWithDirectory(directory)
@@ -36,17 +37,43 @@ func (s *Service) ExtractToFile(
 		return nil, e
 	}
 
-	declaration, index := findFunctionDeclaration(file, functionName)
+	var declaration ast.Decl
+	functionDeclaration, index := findFunctionDeclaration(file, symbolName)
+
+	if functionDeclaration != nil {
+		declaration = functionDeclaration
+	}
+
+	if declaration == nil {
+		typeDeclaration, typeIndex, grouped := findTypeDeclaration(
+			file,
+			symbolName,
+		)
+
+		if grouped {
+			r.AddConcern(
+				concern.NewFile(
+					"validation",
+					fmt.Sprintf("%s is declared in a type group", symbolName),
+					filePath,
+					false,
+				),
+			)
+
+			return r, nil
+		}
+
+		if typeDeclaration != nil {
+			declaration = typeDeclaration
+			index = typeIndex
+		}
+	}
 
 	if declaration == nil {
 		r.AddConcern(
 			concern.NewFile(
 				"validation",
-				fmt.Sprintf(
-					"function %s not found in %s",
-					functionName,
-					filePath,
-				),
+				fmt.Sprintf("symbol %s not found in %s", symbolName, filePath),
 				filePath,
 				false,
 			),
@@ -55,7 +82,7 @@ func (s *Service) ExtractToFile(
 		return r, nil
 	}
 
-	if countFunctions(file) == 1 {
+	if !hasCompanionDeclaration(file, index) {
 		r.AddConcern(
 			concern.NewFile(
 				"validation",
@@ -70,7 +97,7 @@ func (s *Service) ExtractToFile(
 
 	targetPath := filepath.Join(
 		filepath.Dir(fullPath),
-		fmt.Sprintf("%s.go", camel.ToSnake(functionName)),
+		fmt.Sprintf("%s.go", camel.ToSnake(symbolName)),
 	)
 
 	if _, e := os.Stat(targetPath); e == nil {
@@ -97,12 +124,12 @@ func (s *Service) ExtractToFile(
 		return nil, e
 	}
 
-	moved, _ := dec.Dst.Nodes[declaration].(*dst.FuncDecl)
+	moved, _ := dec.Dst.Nodes[declaration].(dst.Decl)
 
 	if moved == nil {
 		return nil, not_found.Format(
 			"no decorated declaration for %s",
-			functionName,
+			symbolName,
 		)
 	}
 
@@ -115,7 +142,7 @@ func (s *Service) ExtractToFile(
 	}
 
 	file.Decls = append(file.Decls[:index], file.Decls[index+1:]...)
-	moved.Decs.Before = dst.EmptyLine
+	moved.Decorations().Before = dst.EmptyLine
 	target := &dst.File{
 		Name:  dst.NewIdent(file.Name.Name),
 		Decls: []dst.Decl{moved},
@@ -132,18 +159,26 @@ func (s *Service) ExtractToFile(
 	r.AddConcern(
 		concern.NewFile(
 			"extracted",
-			fmt.Sprintf("%s → %s", functionName, filepath.Base(targetPath)),
+			fmt.Sprintf("%s → %s", symbolName, filepath.Base(targetPath)),
 			filePath,
 			true,
 		),
 	)
 
-	if countFunctions(file) == 1 {
-		name := remainingFunctionName(file)
+	if countIdentities(file) == 1 {
+		name := remainingIdentityName(file)
 		renamePath := filepath.Join(
 			filepath.Dir(fullPath),
 			fmt.Sprintf("%s.go", camel.ToSnake(name)),
 		)
+
+		if renamePath == fullPath {
+			if dryRun {
+				r.MarkPlanned()
+			}
+
+			return r, nil
+		}
 
 		if _, e := os.Stat(renamePath); e == nil {
 			r.AddConcern(

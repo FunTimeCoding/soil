@@ -9,7 +9,7 @@ direction, and the criteria for introducing them.
 | Package | Role | Imports from |
 |---------|------|-------------|
 | `types/` | Pure domain types - validation schemas, metadata, enums. No persistence, no external service deps. | stdlib, shared libs |
-| `constant/` | Domain constants, enum values, instances, registries. Purely declarative - data definitions only, no logic. The only constant home - no bare `constant.go` outside it (the placement rule in `conventions.md`; goaudit flags strays). | `types/`, shared libs |
+| `constant/` | Domain constants, enum values, instances, registries. Purely declarative - data definitions only, no logic. The only constant home - no bare `constant.go` outside it (the placement rule in `conventions/constants.md`; goaudit flags strays). | `types/`, shared libs |
 | `model/` | Persistence-aware entities - gorm-tagged structs, JSON field parsing, DB convenience methods. | `types/`, shared libs, ORM |
 | `store/` | Data access - CRUD operations on model types. | `model/`, ORM |
 | `generated/client/` | oapi-codegen output - typed REST client. Machine output, don't edit. | stdlib |

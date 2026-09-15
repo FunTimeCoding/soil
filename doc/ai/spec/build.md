@@ -26,6 +26,9 @@ go build -ldflags "-X main.Version=v0.10.294 -X main.GitHash=144f841a -X main.Bu
 
 ## Install Semantics
 
+Local tool installation goes through `gobuild --copy-to-bin <name>` -
+never `go install`. Procfiles use `go run`.
+
 `--copy-to-bin` installs via `system.ReplaceFile` - write to a
 temporary file beside the destination, then rename over it. The
 destination always gets a fresh inode: in-place overwrite makes

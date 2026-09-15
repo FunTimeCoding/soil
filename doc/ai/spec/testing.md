@@ -1,6 +1,25 @@
 # Testing Spec
 
-Integration testing patterns for service tools. Unit testing philosophy lives in `conventions.md`; where test files live is `test-placement.md`.
+Testing philosophy and integration patterns for service tools. Where
+test files live is `test-placement.md`.
+
+## Philosophy
+
+- **Unix approach: silence on success, noise on failure.** No
+  progress logs (`t.Log("doing X...")`), no success logs
+  (`t.Logf("✓ X succeeded")`). Only `t.Fatalf()` for must-succeed
+  setup, `t.Errorf()` for validation failures.
+- **Assert package** - use `pkg/assert` for all test assertions.
+  Argument order is `(t, expected, actual)` - expected first, actual
+  second. Type-specific functions: `assert.String`, `assert.Integer`,
+  `assert.Float`, `assert.True`, `assert.NotNil`,
+  `assert.StringContains`, etc. The `forbidden_import` analyzer
+  refuses testify. Prefer `assert.*` helpers over raw `if` checks -
+  they reduce nesting.
+- **No defensive programming in tests** - "should work or blow up".
+  Extract helper functions and make them panic instead of returning
+  errors; helpers return only success values.
+- Prefer extracting logic to testable helpers over inline test code.
 
 ## Store Testing
 

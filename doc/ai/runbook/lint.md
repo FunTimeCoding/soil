@@ -23,8 +23,8 @@ no run at all.
 Read these before fixing lint issues or adding analyzers, relative
 to the plugin root:
 
-- `doc/ai/spec/conventions.md` - naming, formatting,
-  import ordering, file structure rules that lint enforces
+- `doc/ai/spec/conventions/` - formatting, file structure,
+  constants, and import rules that lint enforces
 - `doc/ai/spec/naming.md` - variable names, error
   progression, package names, constants
 - `doc/ai/spec/error-handling/` - PanicOnError

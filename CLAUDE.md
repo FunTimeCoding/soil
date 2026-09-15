@@ -4,7 +4,8 @@
 
 Design and coding specs live in `doc/ai/spec/`:
 
-- `conventions.md` - coding style, error handling, naming, structure
+- `conventions/` - coding style (README index; leaves: style, formatting, files, constants, constructors, imports, interfaces)
+- `comments.md` - when a comment earns its place: what to delete, graduate, refactor away, or keep
 - `naming.md` - banned identifier segments, replacement patterns, type/field naming rules
 - `entrypoint.md` - linker variables, Main(), sentry setup (shared by all cmd/ programs)
 - `service-tool.md` - long-running service tool pattern (Run, lifecycle wiring, routes)

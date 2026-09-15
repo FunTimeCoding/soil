@@ -97,6 +97,110 @@ func TestExtractRenamesSourceWhenOneRemains(t *testing.T) {
 	assert.True(t, os.IsNotExist(e))
 }
 
+func TestExtractTypeToFile(t *testing.T) {
+	d := testutil.PrepareTestPackage(t, serviceTestdata("extract-identity/src"))
+	s := testService()
+	r, e := s.ExtractToFile(d, "pkg/target/combined.go", "Widget", false)
+	assert.FatalOnError(t, e)
+	testutil.AssertBlocked(t, r, 0)
+	extracted := readFixtureFile(t, d, "pkg/target/widget.go")
+	assert.StringContains(t, "type Widget struct", extracted)
+	assert.StringContains(t, "// Widget holds a display name.", extracted)
+	source := readFixtureFile(t, d, "pkg/target/combined.go")
+	assert.True(t, !strings.Contains(source, "type Widget struct"))
+	assert.StringContains(t, "func (w *Widget) Trimmed(", source)
+	assert.StringContains(t, "func NewWidget(", source)
+}
+
+func TestExtractLeavesTypeWithoutRename(t *testing.T) {
+	d := testutil.PrepareTestPackage(t, serviceTestdata("extract-identity/src"))
+	s := testService()
+	r, e := s.ExtractToFile(d, "pkg/target/combined.go", "NewWidget", false)
+	assert.FatalOnError(t, e)
+	testutil.AssertBlocked(t, r, 0)
+	source := readFixtureFile(t, d, "pkg/target/combined.go")
+	assert.StringContains(t, "type Widget struct", source)
+	assert.StringContains(t, "func (w *Widget) Trimmed(", source)
+}
+
+func TestExtractFunctionRenamesSourceToType(t *testing.T) {
+	d := testutil.PrepareTestPackage(
+		t,
+		serviceTestdata("extract-type-pair/src"),
+	)
+	s := testService()
+	r, e := s.ExtractToFile(d, "pkg/target/combined.go", "NewWidget", false)
+	assert.FatalOnError(t, e)
+	testutil.AssertBlocked(t, r, 0)
+	extracted := readFixtureFile(t, d, "pkg/target/new_widget.go")
+	assert.StringContains(t, "func NewWidget(", extracted)
+	renamed := readFixtureFile(t, d, "pkg/target/widget.go")
+	assert.StringContains(t, "type Widget struct", renamed)
+	_, e = os.Stat(filepath.Join(d, "pkg/target/combined.go"))
+	assert.True(t, os.IsNotExist(e))
+}
+
+func TestExtractTypeRenamesSourceToFunction(t *testing.T) {
+	d := testutil.PrepareTestPackage(
+		t,
+		serviceTestdata("extract-type-pair/src"),
+	)
+	s := testService()
+	r, e := s.ExtractToFile(d, "pkg/target/combined.go", "Widget", false)
+	assert.FatalOnError(t, e)
+	testutil.AssertBlocked(t, r, 0)
+	extracted := readFixtureFile(t, d, "pkg/target/widget.go")
+	assert.StringContains(t, "type Widget struct", extracted)
+	renamed := readFixtureFile(t, d, "pkg/target/new_widget.go")
+	assert.StringContains(t, "func NewWidget(", renamed)
+	_, e = os.Stat(filepath.Join(d, "pkg/target/combined.go"))
+	assert.True(t, os.IsNotExist(e))
+}
+
+func TestExtractGroupedTypeRefuses(t *testing.T) {
+	d := testutil.PrepareTestPackage(
+		t,
+		serviceTestdata("extract-type-group/src"),
+	)
+	s := testService()
+	r, e := s.ExtractToFile(d, "pkg/target/combined.go", "Alpha", false)
+	assert.FatalOnError(t, e)
+	testutil.AssertBlocked(t, r, 1)
+	testutil.AssertBlockedContains(t, r, "type group")
+	source := readFixtureFile(t, d, "pkg/target/combined.go")
+	assert.StringContains(t, "Alpha struct{}", source)
+}
+
+func TestExtractTypeRefusesEmptyFile(t *testing.T) {
+	d := testutil.PrepareTestPackage(
+		t,
+		serviceTestdata("extract-type-single/src"),
+	)
+	s := testService()
+	r, e := s.ExtractToFile(d, "pkg/target/only.go", "Only", false)
+	assert.FatalOnError(t, e)
+	testutil.AssertBlocked(t, r, 1)
+	testutil.AssertBlockedContains(t, r, "empty file")
+}
+
+func TestExtractLeavesVariableBehind(t *testing.T) {
+	d := testutil.PrepareTestPackage(
+		t,
+		serviceTestdata("extract-var-companion/src"),
+	)
+	s := testService()
+	r, e := s.ExtractToFile(d, "pkg/target/combined.go", "Register", false)
+	assert.FatalOnError(t, e)
+	testutil.AssertBlocked(t, r, 0)
+	extracted := readFixtureFile(t, d, "pkg/target/register.go")
+	assert.StringContains(t, "func Register(", extracted)
+	renamed := readFixtureFile(t, d, "pkg/target/count.go")
+	assert.StringContains(t, "var registry", renamed)
+	assert.StringContains(t, "func Count(", renamed)
+	_, e = os.Stat(filepath.Join(d, "pkg/target/combined.go"))
+	assert.True(t, os.IsNotExist(e))
+}
+
 func TestExtractRefusesEmptyFile(t *testing.T) {
 	d := testutil.PrepareTestPackage(t, serviceTestdata("extract-single/src"))
 	s := testService()
