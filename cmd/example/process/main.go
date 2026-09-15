@@ -7,6 +7,6 @@ import (
 
 func main() {
 	for _, p := range process.New().Processes() {
-		console.Format("%d %d %s\n", p.Pid(), p.PPid(), p.Executable())
+		console.Format("%d %d %s\n", p.Identifier, p.Parent, p.Name)
 	}
 }

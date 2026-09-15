@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gosecret"
 	"github.com/funtimecoding/soil/pkg/tool/gosecret/constant"
-	"gopkg.in/yaml.v3"
+	"go.yaml.in/yaml/v3"
 	"os"
 	"path/filepath"
 	"strings"

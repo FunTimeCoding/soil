@@ -2,7 +2,7 @@ package key_reader
 
 import "time"
 
-func (r *Reader) press(key rune) {
+func (r *Reader) Press(key rune) {
 	r.mutex.Lock()
 	defer r.mutex.Unlock()
 	h, okay := r.handlers[key]
@@ -11,17 +11,14 @@ func (r *Reader) press(key rune) {
 		return
 	}
 
-	s := r.states[key]
-	t := time.Now()
-
-	if !s.holding {
-		s.press = t
-		s.holding = true
-
-		if h.Press != nil {
-			h.Press(key, t)
-		}
+	if _, held := r.pressed[key]; held {
+		return
 	}
 
-	s.lastKey = t
+	t := time.Now()
+	r.pressed[key] = t
+
+	if h.Press != nil {
+		h.Press(key, t)
+	}
 }

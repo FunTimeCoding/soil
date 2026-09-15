@@ -16,5 +16,4 @@ func (r *Reader) Register(
 	r.mutex.Lock()
 	defer r.mutex.Unlock()
 	r.handlers[k] = Callback{Press: press, Release: release}
-	r.states[k] = &state{}
 }

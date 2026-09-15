@@ -2,9 +2,9 @@ package example
 
 import (
 	"github.com/andygrunwald/go-jira"
-	"github.com/davecgh/go-spew/spew"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/tool/common"
 )
 
@@ -26,7 +26,7 @@ func Issue() {
 	}
 
 	console.Line("Prepared:")
-	spew.Dump(i)
+	console.Line(notation.MarshalIndent(i))
 
 	if false {
 		console.Line("Created:")

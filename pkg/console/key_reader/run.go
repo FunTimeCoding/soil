@@ -1,13 +1,10 @@
 package key_reader
 
-import "github.com/nsf/termbox-go"
+import (
+	"github.com/funtimecoding/soil/pkg/bubbletea"
+	"github.com/funtimecoding/soil/pkg/console/key_reader/model"
+)
 
 func (r *Reader) Run() {
-	r.checker()
-
-	for {
-		if e := termbox.PollEvent(); !r.event(e) {
-			return
-		}
-	}
+	bubbletea.Run(model.New(r), false)
 }

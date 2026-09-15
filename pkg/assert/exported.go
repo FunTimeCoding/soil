@@ -1,8 +1,7 @@
 package assert
 
 import (
-	"github.com/pmezard/go-difflib/difflib"
-	"github.com/sanity-io/litter"
+	"github.com/google/go-cmp/cmp"
 	"testing"
 )
 
@@ -15,24 +14,8 @@ func Exported(
 	actual any,
 ) {
 	t.Helper()
-	e := litter.Sdump(expect)
-	a := litter.Sdump(actual)
 
-	if e == a {
-		return
+	if d := cmp.Diff(expect, actual, ignoreUnexported()); d != "" {
+		t.Errorf("mismatch (-expect +actual):\n%s", d)
 	}
-
-	text, f := difflib.GetUnifiedDiffString(
-		difflib.UnifiedDiff{
-			A:       difflib.SplitLines(e),
-			B:       difflib.SplitLines(a),
-			Context: 10,
-		},
-	)
-
-	if f != nil {
-		panic(f)
-	}
-
-	t.Error(text)
 }

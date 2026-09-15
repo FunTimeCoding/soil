@@ -4,8 +4,7 @@ import "time"
 
 func New() *Reader {
 	return &Reader{
-		handlers:     make(map[rune]Callback),
-		states:       make(map[rune]*state),
-		releaseDelay: 200 * time.Millisecond,
+		handlers: make(map[rune]Callback),
+		pressed:  make(map[rune]time.Time),
 	}
 }

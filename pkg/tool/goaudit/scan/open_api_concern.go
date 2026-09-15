@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
-	"gopkg.in/yaml.v3"
+	"go.yaml.in/yaml/v3"
 	"path/filepath"
 )
 

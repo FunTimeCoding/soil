@@ -1,33 +1,24 @@
 package example
 
 import (
-	"github.com/akkuman/logrus-loki-hook"
-	"github.com/funtimecoding/soil/pkg/prometheus/constant"
-	"github.com/funtimecoding/soil/pkg/system/environment"
-	"github.com/funtimecoding/soil/pkg/web/locator"
-	"github.com/sirupsen/logrus"
+	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/prometheus/loki"
+	"github.com/funtimecoding/soil/pkg/time/constant"
+	"time"
 )
 
 func Write() {
-	host := environment.Required(constant.LokiHostEnvironment)
-	user := environment.Required(constant.LokiUserEnvironment)
-	password := environment.Required(constant.LokiPasswordEnvironment)
-	l := logrus.New()
-	h, e := hook.NewHook(
-		&hook.Config{
-			URL: locator.New(host).UserPassword(user, password).Path(
-				"/api/prom/push",
-			).String(),
-			LevelName: "severity",
-			Labels:    map[string]string{"application": "test"},
-		},
+	c := loki.NewEnvironment(true)
+	c.Push(map[string]string{"application": "example"}, "test message")
+	end := time.Now()
+	r, _ := c.QueryRange(
+		`{application="example"}`,
+		end.Add(-time.Hour),
+		end,
+		10,
 	)
 
-	if e != nil {
-		l.Error(e)
-	} else {
-		l.AddHook(h)
+	for _, v := range r {
+		console.Format("%s %s\n", v.Time.Format(constant.DateMinute), v.Text)
 	}
-
-	l.Info("test message")
 }

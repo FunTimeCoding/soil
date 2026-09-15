@@ -2,7 +2,7 @@ package relational
 
 import (
 	"errors"
-	"github.com/jackc/pgconn"
+	"github.com/jackc/pgx/v5/pgconn"
 )
 
 func IsErrorCode(

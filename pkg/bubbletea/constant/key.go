@@ -4,7 +4,7 @@ const (
 	KeyEnter  = "enter"
 	KeyEscape = "esc"
 
-	KeySpace = " "
+	KeySpace = "space"
 
 	KeyUp   = "up"
 	KeyDown = "down"
@@ -12,8 +12,10 @@ const (
 	KeyD = "d"
 	KeyJ = "j"
 	KeyK = "k"
+	KeyL = "l"
 	KeyM = "m"
 	KeyO = "o"
+	KeyP = "p"
 	KeyQ = "q"
 	KeyR = "r"
 
