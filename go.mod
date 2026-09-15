@@ -15,7 +15,7 @@ require (
 	github.com/amikos-tech/pure-tokenizers v0.1.5
 	github.com/andybrewer/mack v0.0.0-20251024001139-afd410b36447
 	github.com/andygrunwald/go-jira v1.17.0
-	github.com/anthropics/anthropic-sdk-go v1.72.0
+	github.com/anthropics/anthropic-sdk-go v1.73.0
 	github.com/apenella/go-ansible/v2 v2.4.2
 	github.com/bmatcuk/doublestar/v4 v4.10.0
 	github.com/bndr/gojenkins v1.2.0
@@ -92,8 +92,8 @@ require (
 	github.com/tobischo/gokeepasslib/v3 v3.7.0
 	github.com/trivago/tgo v1.0.7
 	github.com/whilp/git-urls v1.0.0
-	github.com/yuin/goldmark/v2 v2.1.0
-	gitlab.com/gitlab-org/api/client-go/v3 v3.9.0
+	github.com/yuin/goldmark/v2 v2.1.1
+	gitlab.com/gitlab-org/api/client-go/v3 v3.10.0
 	golang.org/x/crypto v0.57.0
 	golang.org/x/mod v0.41.0
 	golang.org/x/net v0.59.0
@@ -102,10 +102,10 @@ require (
 	golang.org/x/time v0.16.0
 	golang.org/x/tools v0.50.0
 	gonum.org/v1/gonum v0.17.0
-	google.golang.org/api v0.297.0
+	google.golang.org/api v0.298.0
 	google.golang.org/protobuf v1.36.12
 	gopkg.in/yaml.v3 v3.0.1
-	gorm.io/driver/postgres v1.6.2
+	gorm.io/driver/postgres v1.6.3
 	gorm.io/gorm v1.31.2
 	gotest.tools/v3 v3.5.2
 	k8s.io/api v0.37.0
