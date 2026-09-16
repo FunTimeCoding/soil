@@ -13,14 +13,14 @@ func TestCertificates(t *testing.T) {
 	s.AddCertificate(
 		"gate",
 		"gate-tls",
-		[]string{"gate.s3n.sh"},
+		[]string{"gate.example"},
 		time.Now().Add(89*24*time.Hour),
 		true,
 	)
 	s.AddCertificate(
 		"sentry",
 		"sentry-tls",
-		[]string{"sentry.s3n.sh"},
+		[]string{"sentry.example"},
 		time.Now().Add(28*24*time.Hour),
 		true,
 	)

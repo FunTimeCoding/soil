@@ -12,7 +12,7 @@ func Bundle() {
 		constant.Temporary,
 		"tmp/example",
 		"tmp/icon.icns",
-		"sh.s3n",
+		"com.example",
 		library.DefaultVersion,
 	)
 }
