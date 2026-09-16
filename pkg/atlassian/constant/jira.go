@@ -12,6 +12,8 @@ const (
 
 	JiraClosedStatusEnvironment = "JIRA_CLOSED_STATUS"
 
+	JiraWatchedIssuesEnvironment = "JIRA_WATCHED_ISSUES"
+
 	JiraTestIssueEnvironment = "JIRA_TEST_ISSUE"
 	JiraTestFieldEnvironment = "JIRA_TEST_FIELD"
 
@@ -41,6 +43,7 @@ const (
 	JiraQueryKey          = "jql"
 	JiraExpandKey         = "expand"
 	JiraAllFields         = "*all"
+	JiraKeyField          = "key"
 	JiraChangelogExpand   = "changelog"
 	JiraTimeFormat        = "2006-01-02T15:04:05.000-0700"
 	// Field names

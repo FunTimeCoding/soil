@@ -13,14 +13,21 @@ func (c *Client) IssueOption() (*option.Issue, error) {
 		return nil, e
 	}
 
-	keys, f := c.WatchedIssueKeys()
+	var keys []string
 
-	if f != nil {
-		return nil, f
+	if c.watchedIssues {
+		k, f := c.WatchedIssueKeys()
+
+		if f != nil {
+			return nil, f
+		}
+
+		keys = k
 	}
 
 	c.issueOption = option.New(c.locator, c.user, keys, c.closedStatus, m)
 	c.issueOption.Verbose = c.verbose
+	c.issueOption.WatchedLoaded = c.watchedIssues
 
 	return c.issueOption, nil
 }

@@ -9,9 +9,10 @@ import (
 )
 
 func main() {
-	jira.Changelog()
+	jira.WatchedState()
 
 	if false {
+		jira.Changelog()
 		confluence.Overview()
 		confluence.Export()
 		confluence.Page()
@@ -25,6 +26,7 @@ func main() {
 		jira.Issue()
 		search.Search()
 		jira.Watch()
+		jira.WatchedState()
 		jira.CustomValue()
 		token_check.TokenCheck()
 		opsgenie.AddResponder()

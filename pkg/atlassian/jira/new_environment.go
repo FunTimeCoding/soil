@@ -22,6 +22,10 @@ func NewEnvironment(o ...Option) *Client {
 		o = append(o, WithClosedStatus(v))
 	}
 
+	if environment.Exists(constant.JiraWatchedIssuesEnvironment) {
+		o = append(o, WithWatchedIssues())
+	}
+
 	return New(
 		environment.Required(constant.HostEnvironment),
 		environment.Required(constant.UserEnvironment),

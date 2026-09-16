@@ -39,12 +39,20 @@ func (c *Client) Search(
 			return nil, wrapError(e)
 		}
 
-		token = r.NextPageToken
 		result = append(result, issue.NewSlice(page, o)...)
 
-		if r.IsLast {
+		if r.NextPageToken == "" {
 			break
 		}
+
+		if r.NextPageToken == token {
+			return nil, fmt.Errorf(
+				"pagination token did not advance: %s",
+				token,
+			)
+		}
+
+		token = r.NextPageToken
 	}
 
 	return c.enrichMany(result), nil

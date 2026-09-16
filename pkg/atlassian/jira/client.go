@@ -25,4 +25,5 @@ type Client struct {
 	defaultIssueType   string
 	defaultProjectName string
 	defaultProjectKey  string
+	watchedIssues      bool
 }

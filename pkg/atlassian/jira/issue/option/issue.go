@@ -6,6 +6,7 @@ type Issue struct {
 	Locator       string
 	User          string
 	WatchedIssues []string
+	WatchedLoaded bool
 	FieldMap      *field_map.Map
 	Verbose       bool
 	ClosedStatus  []string
