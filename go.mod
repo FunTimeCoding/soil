@@ -64,12 +64,12 @@ require (
 	github.com/nwaples/rardecode/v2 v2.4.1
 	github.com/oapi-codegen/runtime v1.7.0
 	github.com/olekukonko/tablewriter v1.1.5
-	github.com/ollama/ollama v0.34.1
+	github.com/ollama/ollama v0.34.2
 	github.com/openai/openai-go/v3 v3.61.0
 	github.com/openvex/go-vex v0.2.9
 	github.com/opsgenie/opsgenie-go-sdk-v2 v1.2.23
 	github.com/pkg/sftp v1.13.11
-	github.com/prometheus/alertmanager v0.34.0
+	github.com/prometheus/alertmanager v0.34.1
 	github.com/prometheus/client_golang v1.24.1
 	github.com/prometheus/common v0.71.0
 	github.com/robfig/cron/v3 v3.0.1
@@ -84,8 +84,8 @@ require (
 	github.com/tobischo/gokeepasslib/v3 v3.7.0
 	github.com/trivago/tgo v1.0.7
 	github.com/whilp/git-urls v1.0.0
-	github.com/yuin/goldmark/v2 v2.1.1
-	gitlab.com/gitlab-org/api/client-go/v3 v3.10.0
+	github.com/yuin/goldmark/v2 v2.1.3
+	gitlab.com/gitlab-org/api/client-go/v3 v3.11.0
 	go.yaml.in/yaml/v3 v3.0.5
 	golang.org/x/crypto v0.57.0
 	golang.org/x/mod v0.41.0
