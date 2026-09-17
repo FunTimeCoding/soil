@@ -1,6 +1,6 @@
 package release
 
-import "github.com/google/go-github/v91/github"
+import "github.com/google/go-github/v92/github"
 
 func New(v *github.RepositoryRelease) *Release {
 	return &Release{

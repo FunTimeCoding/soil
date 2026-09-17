@@ -1,6 +1,6 @@
 package github
 
-import "github.com/google/go-github/v91/github"
+import "github.com/google/go-github/v92/github"
 
 func (c *Client) Notifications() ([]*github.Notification, error) {
 	result, _, e := c.client.Activity.ListNotifications(

@@ -44,7 +44,7 @@ require (
 	github.com/go-test/deep v1.1.1
 	github.com/gogpu/systray v0.3.0
 	github.com/google/go-cmp v0.7.0
-	github.com/google/go-github/v91 v91.0.0
+	github.com/google/go-github/v92 v92.0.0
 	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.4-0.20250319132907-e064f32e3674
 	github.com/gpustack/gguf-parser-go v0.26.3

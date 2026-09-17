@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/github/release"
 	"github.com/funtimecoding/soil/pkg/strings/constant"
-	"github.com/google/go-github/v91/github"
+	"github.com/google/go-github/v92/github"
 	"testing"
 	"time"
 )

@@ -1,6 +1,6 @@
 package container
 
-import "github.com/google/go-github/v91/github"
+import "github.com/google/go-github/v92/github"
 
 type Container struct {
 	Name       string

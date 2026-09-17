@@ -1,7 +1,7 @@
 package workflow
 
 import (
-	"github.com/google/go-github/v91/github"
+	"github.com/google/go-github/v92/github"
 	"time"
 )
 

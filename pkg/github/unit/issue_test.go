@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/github/issue"
 	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
-	"github.com/google/go-github/v91/github"
+	"github.com/google/go-github/v92/github"
 	"testing"
 )
 
