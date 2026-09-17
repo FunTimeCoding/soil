@@ -1,3 +1,7 @@
+---
+base: pkg/tool/goatlassiand
+---
+
 # Generated API
 
 Pattern for typed HTTP APIs using `oapi-codegen`. Use when a service
@@ -232,7 +236,7 @@ Every guarded daemon has a top-level `mount.go` beside `run.go`.
 the version, and a `*guard.Mux` last. It wraps the server in
 `NewStrictHandler` with the generic recording middleware, builds
 the tree on a fresh sub-mux via `HandlerFromMux`, and token-mounts
-it at the `/api/` prefix (`webConstant.InterfacePath`):
+it at the `route:/api/` prefix (`webConstant.InterfacePath`):
 
 ```go
 import (
@@ -274,8 +278,8 @@ in `pillars.md`.
 
 Daemons without MCP skip the `model_context` line (see
 `model-context.md` for the transport routes); web-carrying daemons
-add `u.Mount(g)` for their HTML surface. REST routes (`/api/...`),
-MCP routes (`/mcp`, `/sse`, `/message`), and web routes don't
+add `u.Mount(g)` for their HTML surface. REST routes (`route:/api/...`),
+MCP routes (`route:/mcp`, `route:/sse`, `route:/message`), and web routes don't
 conflict on the same mux.
 
 run.go builds exactly one `guard.Mux` per lifecycle server and
@@ -299,7 +303,7 @@ lifecycle.WithServer(
 route registered directly in the run.go callback escapes both the
 guard and the battery.
 
-API paths are unversioned: `/api/<resource>`, never `/api/v1/...`.
+API paths are unversioned: `route:/api/<resource>`, never `route:/api/<version>/...`.
 APIs here break and roll forward rather than maintain versions, so
 a version segment would suggest a guarantee nobody keeps. Enforced
 by goaudit (`versioned_path`).
@@ -330,7 +334,7 @@ ErrorResponse:
 `Error` carries tier 1 rejections (400/404, no Sentry event ID),
 `ErrorResponse` carries tier 2/3 failures (500, with the event
 ID) - the tiers and `captureFail` live in
-`error-handling/rest.md`.
+`doc/ai/spec/error-handling/rest.md`.
 
 Optional arrays of objects generate `*[]*Type` when the items are
 nullable. Use `nullable: true` with `allOf` wrapping:

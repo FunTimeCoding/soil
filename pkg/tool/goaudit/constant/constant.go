@@ -8,7 +8,7 @@ import (
 var Identity = identity.New(
 	"goaudit",
 	"Compliance matrix for services and clients",
-	"goaudit <repo-root> [<repo-root>...]",
+	"goaudit [flags] [root...]",
 )
 
 var (

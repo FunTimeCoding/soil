@@ -2,6 +2,7 @@ package lint
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/lint/option"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"strings"
@@ -12,12 +13,11 @@ func runCheckers(
 	fixes *virtual_file_system.System,
 	paths []string,
 	checkers []Checker,
-	fix bool,
-	verbose bool,
+	o *option.Lint,
 	r *output.Results,
 ) {
 	for _, p := range paths {
-		if verbose {
+		if o.Verbose {
 			console.Format("Process: %s\n", p)
 		}
 
@@ -28,7 +28,7 @@ func runCheckers(
 			result := check(p, strings.NewReader(content))
 
 			for _, c := range result.Concerns {
-				if c.Fixed && fix {
+				if c.Fixed && o.Fix {
 					r.AddConcern(c)
 				} else if !c.Fixed {
 					r.AddConcern(c)

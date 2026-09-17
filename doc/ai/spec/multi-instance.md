@@ -1,3 +1,7 @@
+---
+base: doc/ai/spec
+---
+
 # Multi-Instance Services
 
 Pattern for services that connect to multiple backends of the same

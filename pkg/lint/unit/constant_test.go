@@ -7,5 +7,5 @@ import (
 )
 
 func TestConstant(t *testing.T) {
-	assert.String(t, "---", constant.FrontMatterDelimiter)
+	assert.String(t, "base", constant.BaseKey)
 }

@@ -17,7 +17,7 @@ func Variable(
 		line, number := s.Text()
 		trimmed := strings.TrimSpace(line)
 
-		if strings.HasPrefix(trimmed, "//") {
+		if strings.HasPrefix(trimmed, constant.CommentPrefix) {
 			continue
 		}
 

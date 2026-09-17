@@ -146,7 +146,7 @@ a per-package sentinel for the same class:
   this nor `unexpected` - pass it through.
 
 Multi-instance daemons resolve their session-scoped instance
-through `pkg/inventory.Resolve`, which produces `not_found`
+through `go:pkg/inventory.Resolve`, which produces `not_found`
 and `not_selected`.
 
 **Message format:** `"subject condition: identifier"` - the what

@@ -4,9 +4,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/git"
+	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/option"
-	"os"
 )
 
 func Main(
@@ -28,8 +29,25 @@ func Main(
 	roots := a.Positionals()
 
 	if len(roots) == 0 {
-		a.PrintUsage()
-		os.Exit(1)
+		root := git.FindDirectory()
+
+		if root == "" {
+			system.Exitf(
+				1,
+				"no repository found above %s, pass a root\n",
+				system.WorkDirectory(),
+			)
+		}
+
+		roots = []string{root}
+	}
+
+	for i, root := range roots {
+		if !system.DirectoryExists(root) {
+			system.Exitf(1, "root does not exist: %s\n", root)
+		}
+
+		roots[i] = system.AbsolutePath(root)
 	}
 
 	o := option.New()

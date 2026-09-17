@@ -5,6 +5,7 @@ import "github.com/funtimecoding/soil/pkg/lint/output"
 func RunSingleParameterFixWithDirectory(
 	patterns []string,
 	directory string,
+	diff bool,
 	r *output.Results,
 ) {
 	if len(patterns) == 0 {
@@ -18,5 +19,5 @@ func RunSingleParameterFixWithDirectory(
 		return
 	}
 
-	ApplyEdits(fileSet, edits, directory, false)
+	ApplyEdits(fileSet, edits, directory, diff)
 }

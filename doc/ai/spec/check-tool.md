@@ -153,7 +153,7 @@ Items are registered in `pkg/monitor/constant/collector.go` via `collector.New(c
 
 ## Format Preset
 
-Each domain defines a base format in its `constant/constant.go`:
+Each domain defines a base format in its `<path>/constant/constant.go`:
 
 ```go
 var Format = option.Color.Copy()

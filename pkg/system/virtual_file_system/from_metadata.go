@@ -26,14 +26,18 @@ func FromMetadata(directory string) *System {
 					return nil
 				}
 
-				relative := strings.TrimPrefix(
-					path,
-					fmt.Sprintf("%s%s", directory, string(filepath.Separator)),
+				result.AddMetadata(
+					strings.TrimPrefix(
+						path,
+						fmt.Sprintf(
+							"%s%s",
+							directory,
+							string(filepath.Separator),
+						),
+					),
+					i.Size(),
+					i.ModTime(),
 				)
-				result.files[relative] = &File{
-					Size:    i.Size(),
-					ModTime: i.ModTime(),
-				}
 
 				return nil
 			},

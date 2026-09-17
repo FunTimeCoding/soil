@@ -1,3 +1,7 @@
+---
+base: pkg/tool
+---
+
 # MCP error handling
 
 MCP handlers have no recovery middleware. Panics would crash the handler without

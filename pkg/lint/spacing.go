@@ -74,7 +74,7 @@ func Spacing(
 		pastOpensBlock := strings.HasSuffix(pastTrimmed, "{") ||
 			strings.HasPrefix(pastTrimmed, "case ") ||
 			pastTrimmed == "default:" ||
-			strings.HasPrefix(pastTrimmed, "//")
+			strings.HasPrefix(pastTrimmed, constant.CommentPrefix)
 
 		isElseContinuation := strings.HasPrefix(trimmed, "} else")
 		endsWithBrace := strings.HasSuffix(trimmed, "{")
@@ -126,7 +126,7 @@ func Spacing(
 
 		// Decide on a held blank when the next non-blank line arrives.
 		if !isBlank && pendingBlank {
-			if strings.HasPrefix(trimmed, "//") {
+			if strings.HasPrefix(trimmed, constant.CommentPrefix) {
 				// Blank before a comment is always valid - emit both immediately.
 				// Clear needBlankAfterClosingBrace: the emitted blank satisfies it.
 				s.ChangedLine("")
@@ -163,7 +163,7 @@ func Spacing(
 				pastOpenedBrace := strings.HasSuffix(pastTrimmed, "{") ||
 					strings.HasPrefix(pastTrimmed, "case ") ||
 					pastTrimmed == "default:" ||
-					strings.HasPrefix(pastTrimmed, "//")
+					strings.HasPrefix(pastTrimmed, constant.CommentPrefix)
 
 				if pastOpenedBrace {
 					// Blank at start of block - always invalid.

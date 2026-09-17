@@ -1,6 +1,6 @@
 # Chart sessions
 
-Reference for the `/chart-sessions` skill - naming and
+Reference for the `/soil:chart-sessions` skill - naming and
 description conventions.
 
 ## Name conventions

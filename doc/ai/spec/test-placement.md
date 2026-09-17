@@ -3,9 +3,9 @@
 Where test files live. Testing patterns (mocks, lifecycle HTTP,
 stores) are in `testing.md`; fixture layout is in `fixture.md`.
 
-Every test file lives in a `unit/` or `integration/`
+Every test file lives in a `<path>/unit/` or `<path>/integration/`
 directory. Source packages carry no `_test.go` files. Analyzer
-`testdata/` trees are exempt — fixture `_test.go` files there are
+`<path>/testdata/` trees are exempt — fixture `_test.go` files there are
 fixtures, not tests.
 
 Both homes sit directly under a domain root: `pkg/<domain>/`,
@@ -41,7 +41,7 @@ code, not the test boundary — in order of preference:
 3. Whole-struct compares over the exported surface: `assert.Exported`
    (unexported fields are invisible to the comparator).
 4. Test-only fixtures in package source move to the test home;
-   fixture constants go to the domain's `constant/` package
+   fixture constants go to the domain's `<path>/constant/` package
    (`Fixture`-prefixed names, or a `sample.go` domain file for
    data blobs). A `constant_test.go` is never a constant home -
    a file by that name holds constant value assertions
@@ -63,14 +63,14 @@ Files: subpackage path joined with underscores, plus the concept —
 Root-package tests use the bare concept or the domain name.
 
 Colliding test function names get the subpackage camel prefix
-(`TestPort` in a `console/server` file becomes
+(`TestPort` in a `<path>/console/server/` file becomes
 `TestConsoleServerPort`). A collision the rule manufactures is
 resolved by naming what the test actually tests — which also
 catches inherited misnomers.
 
 ## The line
 
-`unit/` is in-process; `integration/` crosses a process
+`<path>/unit/` is in-process; `<path>/integration/` crosses a process
 boundary or needs the environment.
 
 In-memory sqlite stores, fixture-file parsers, and in-process HTTP
@@ -94,14 +94,14 @@ integration/
 └── worker/                # poll cycles
 ```
 
-`base/` exports the stack constructor (`New(t) *Server` with
+`<path>/base/` exports the stack constructor (`New(t) *Server` with
 accessors and `Close()`) as plain package source — the
 `pkg/tool/goalertlogd/integration/base` shape. Setup
 constructors compile untagged even when the tests they serve are
 tagged: environment reads happen at call time, so tags belong on
 the test files only.
 
-Analyzer tests live in their own subpackage with their `testdata/`
+Analyzer tests live in their own subpackage with their `<path>/testdata/`
 beside them — relative fixture paths keep working because each
 subpackage binary runs in its own directory.
 
@@ -110,7 +110,7 @@ subpackage binary runs in its own directory.
 - A test package may import a package with the same name as itself
   (the package's own name is not an identifier in its scope), so
   generated-vs-home clashes like a `client` test package importing
-  `generated/client` need no alias — golint de-aliases them.
+  `<path>/generated/client/` need no alias — golint de-aliases them.
 - golint's stub-test generation is wired off (`stubTest` is `false`
   in the `lint.Lint` call chain); source packages without tests do
   not get stubs demanded back.

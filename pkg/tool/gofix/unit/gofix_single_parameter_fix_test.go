@@ -12,7 +12,12 @@ import (
 func TestSingleParameterFix(t *testing.T) {
 	directory := writeSingleParameterTestModule(t)
 	r := output.NewResultsWithDirectory(directory)
-	gofix.RunSingleParameterFixWithDirectory([]string{"./..."}, directory, r)
+	gofix.RunSingleParameterFixWithDirectory(
+		[]string{"./..."},
+		directory,
+		false,
+		r,
+	)
 	t.Run(
 		"MethodCollapsed",
 		func(t *testing.T) {
@@ -90,7 +95,12 @@ func TestSingleParameterFix(t *testing.T) {
 func TestSingleParameterFixWithTestFiles(t *testing.T) {
 	directory := writeSingleParameterTestModuleWithTests(t)
 	r := output.NewResultsWithDirectory(directory)
-	gofix.RunSingleParameterFixWithDirectory([]string{"./..."}, directory, r)
+	gofix.RunSingleParameterFixWithDirectory(
+		[]string{"./..."},
+		directory,
+		false,
+		r,
+	)
 	t.Run(
 		"NotCorrupted",
 		func(t *testing.T) {

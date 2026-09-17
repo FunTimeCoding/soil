@@ -5,20 +5,29 @@ import (
 	"github.com/funtimecoding/soil/pkg/console"
 	library "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/git/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/strings/split"
 	system "github.com/funtimecoding/soil/pkg/system/constant"
 	"slices"
+	"strings"
 )
 
 func New(
 	raw string,
 	verbose bool,
 ) *Lint {
-	result := &Lint{Raw: raw}
+	result := &Lint{Verbose: verbose}
 
 	if raw != "" {
-		result.Skips = split.Comma(raw)
+		for _, skip := range split.Comma(raw) {
+			if !strings.Contains(skip, stringsConstant.Dot) &&
+				!strings.HasSuffix(skip, stringsConstant.Slash) {
+				skip = join.Empty(skip, stringsConstant.Slash)
+			}
+
+			result.Skips = append(result.Skips, skip)
+		}
 	}
 
 	for _, skip := range []string{
@@ -38,12 +47,10 @@ func New(
 		result.Skips = append(result.Skips, library.GeneratedFile)
 	}
 
-	result.Count = len(result.Skips)
-
-	if result.Count > 0 && verbose {
+	if verbose {
 		console.Format(
 			"Skips (%d): %s\n",
-			result.Count,
+			len(result.Skips),
 			join.Comma(result.Skips),
 		)
 	}

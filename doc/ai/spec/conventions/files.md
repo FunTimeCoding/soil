@@ -6,7 +6,7 @@
   `store.go`. The `file_identity` analyzer enforces it; gosourced
   `extract_to_file` is the instrument for splitting.
 - **Test files don't split** - one `_test.go` per feature, living in
-  the domain root's `unit/` with the subpackage prefix (see
+  the domain root's `<path>/unit/` with the subpackage prefix (see
   `../test-placement.md`).
 - **One struct with receivers per package** - see
   `../package-design.md` for the full rule and extraction pattern.

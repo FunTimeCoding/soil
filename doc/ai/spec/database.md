@@ -33,8 +33,8 @@ One sqlite driver per access style, both pure Go:
 - gorm stores use `glebarez/sqlite` through `relational/lite` - never
   `gorm.io/driver/sqlite`, which wraps the CGO driver and breaks under
   cross-compilation (gobuild builds with CGO disabled)
-- raw `database/sql` stores open through
-  `relational/lite/connection.New`, which carries the glebarez driver
+- raw `go:database/sql` stores open through
+  `go:pkg/relational/lite/connection.New`, which carries the glebarez driver
   registration
 
 ## Openers
@@ -45,7 +45,7 @@ Six constructors, each returning what its consumer actually uses:
   foreign_keys arrive as DSN `_pragma` parameters, so every pooled
   connection gets them (an `Exec` would only reach one)
 - `connection.New(l, path) *sql.DB` - the raw twin of `lite.New` for
-  stores that speak `database/sql` directly; logs; same DSN parameters
+  stores that speak `go:database/sql` directly; logs; same DSN parameters
 - `connection.NewMemory() *sql.DB` - in-memory for raw-store tests;
   a named shared-cache database, because raw query-while-iterating
   patterns deadlock on a pinned single connection and a plain
@@ -55,10 +55,10 @@ Six constructors, each returning what its consumer actually uses:
   connection would open its own empty database), no WAL
 - `relational.NewMapper(l, locator) *gorm.DB` - postgres, mapper
   only; logs; the postgres twin of `lite.New`. The underlying
-  `database/sql` pool is bounded (10 open, 5 idle) - bursts queue
+  `go:database/sql` pool is bounded (10 open, 5 idle) - bursts queue
   for a connection instead of exhausting the server's slots
 - `relational.New(locator) *Database` - the full object: pgx pool,
-  `database/sql`, mapper. For provisioning tools and services that
+  `go:database/sql`, mapper. For provisioning tools and services that
   query outside gorm; silent - a service using it as its store logs
   `relational.PostgresMessage` itself (one private consumer is the current case)
 

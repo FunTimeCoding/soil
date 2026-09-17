@@ -8,14 +8,17 @@ import (
 	"strings"
 )
 
-func runSurvey(patterns []string) {
+func runSurvey(
+	directory string,
+	patterns []string,
+) {
 	if len(patterns) == 0 {
 		patterns = []string{"./..."}
 	}
 
 	counts := make(map[string]int)
 	examples := make(map[string][]string)
-	all, _ := Load("", patterns)
+	all, _ := Load(directory, patterns)
 
 	for _, p := range all {
 		generated := buildGeneratedSet(p)

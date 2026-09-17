@@ -1,3 +1,7 @@
+---
+base: doc/ai/spec
+---
+
 # Entrypoint Spec
 
 Shared conventions for all `cmd/` programs - linker variables, `Main()`, reporter integration.

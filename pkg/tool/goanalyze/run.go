@@ -14,8 +14,8 @@ func Run(o *option.Analyze) {
 		patterns = []string{"./..."}
 	}
 
-	loaded := load(patterns)
-	results := output.NewResults()
+	loaded := load(o.Root, patterns)
+	results := output.NewResultsWithDirectory(o.Root)
 	faces := face.New(loaded)
 
 	for _, p := range loaded {

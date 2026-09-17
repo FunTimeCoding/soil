@@ -30,7 +30,7 @@ disk, production-matching foreign key enforcement:
 s := store.New(lite.NewMemory())
 ```
 
-Raw `database/sql` stores use `store.New(connection.NewMemory())`
+Raw `go:database/sql` stores use `store.New(connection.NewMemory())`
 the same way. Use the file openers with `t.TempDir()` only when the
 test genuinely needs a file on disk. Never call
 `gorm.Open` directly - the `restricted_call` analyzer confines it
@@ -94,18 +94,18 @@ Key helpers:
 
 ## Guard Battery
 
-Every guarded daemon has `integration/guard/guard_test.go` (package
+Every guarded daemon has `<path>/integration/guard/guard_test.go` (package
 `guard`): it starts the production `Mount` on a dynamic port via
 `generative/model_context_server.New(t, setup)` and asserts the full
 auth contract with the battery methods, mirroring the mount surface:
 
 - `VerifyBase` — health and version open
-- `VerifyInterface` — the `/api/` tree rejects bare requests (probes
-  `/api/guard-probe`; never spell the probe path at a call site)
+- `VerifyInterface` — the `route:/api/` tree rejects bare requests (probes
+  `route:/api/guard-probe`; never spell the probe path at a call site)
 - `VerifyGuarded(path)` / `VerifyOpen(path)` / `VerifyOpenPost(path)`
   — one per guarded route worth naming and per open mount, including
   the dashboard root and live path of web-carrying daemons
-- `VerifyModelContext` — 401 bare on `/mcp` and `/sse`, handshake
+- `VerifyModelContext` — 401 bare on `route:/mcp` and `route:/sse`, handshake
   with the test token
 - `VerifyStatus(path, status)` — exact status for a bare request,
   where route existence needs pinning (the other verbs accept any
@@ -113,7 +113,7 @@ auth contract with the battery methods, mirroring the mount surface:
 
 The battery never invokes tool or REST handlers, but every
 dependency still enters as something callable: external API
-clients as the daemon's `mock_client` through the `face/`
+clients as the daemon's `mock_client` through the `<path>/face/`
 interface Mount consumes, daemon-internal dependencies as empty
 constructions (`inventory.New()`, in-memory stores). Nil is never
 passed - mocks exist precisely so nothing downstream needs a nil
@@ -122,7 +122,7 @@ nowhere, ideally nowhere. Daemons with an integration
 base run the guard test through the base, and bases
 run the full production `Mount` — mock clients flow through it
 because `Mount`, the REST server, and the model_context package all
-consume the daemon's `face/` interfaces, never the concrete clients.
+consume the daemon's `<path>/face/` interfaces, never the concrete clients.
 Session (SSO) web surfaces assert their favicon instead of the
 dashboard — the sign-in redirect points at a fake gate the test
 client cannot follow. Tests pass `constant.DefaultVersion` where a

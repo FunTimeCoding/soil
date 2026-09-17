@@ -17,11 +17,11 @@ into the analyzer, not only a doc.
 - Alias only when package names collide in the same file.
 - Alias by the subsystem name, not the role in the current file:
   - `generative` for `pkg/generative/model_context/server` (when it
-    collides with the tool's own `server/`)
-  - `generated` for the oapi-codegen `server/` package (when it
-    collides with another `server/`)
+    collides with the tool's own `<path>/server/`)
+  - `generated` for the oapi-codegen `<path>/server/` package (when it
+    collides with another `<path>/server/`)
   - `webConstant` for `pkg/web/constant` (when it collides with a
-    local `constant/`)
+    local `<path>/constant/`)
 - **The more local package keeps the natural name** - when two
   packages share a last segment (e.g., both called `server`), the
   tool's own package is imported unaliased; the shared infrastructure

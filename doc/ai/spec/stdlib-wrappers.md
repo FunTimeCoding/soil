@@ -90,4 +90,4 @@ call plus boilerplate.
 - `os.Remove` in batch cleanup where failure is self-healing - use
   `hub.CaptureException` instead of panic
 - `json.Unmarshal` in try-parse patterns - flow control
-- Generated code (`client/generated.go`) - don't modify
+- Generated code (`<path>/generated/`) - don't modify

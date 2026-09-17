@@ -1,3 +1,7 @@
+---
+base: pkg/tool/goatlassiand
+---
+
 # Service Tool Spec
 
 Pattern for long-running service tools that use lifecycle for HTTP servers and background workers.
@@ -444,5 +448,5 @@ When a daemon also exposes MCP tools, add a `model_context/`
 subpackage and mount it through the daemon's `Mount()` on the same
 `guard.Mux` as the REST API. See `model-context.md`.
 
-`model_context/` is the standard package name - not `tool/` or
-`toolset/`.
+`<path>/model_context/` is the standard package name - not `<path>/tool/` or
+`<path>/toolset/`.

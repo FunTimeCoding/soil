@@ -1,40 +1,38 @@
 package lint
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
-	lintConstant "github.com/funtimecoding/soil/pkg/lint/constant"
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/option"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/system"
-	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"os"
+	"path/filepath"
 )
 
 func Lint(
-	skipString string,
-	verbose bool,
-	fix bool,
-	summary bool,
+	name string,
+	root string,
+	o *option.Lint,
 ) {
-	skip := option.New(skipString, verbose)
-	r := output.NewResults()
+	repo, empty := Walk(root, o)
+	configuration := o.Configuration
 
-	for _, p := range system.EmptyDirectories(
-		constant.CurrentDirectory,
-		verbose,
-	) {
-		if Skipped(skip, p) {
-			if verbose {
-				console.Format("Skip empty directory: %s\n", p)
-			}
+	if configuration != "" && !filepath.IsAbs(configuration) {
+		configuration = repo.Absolute(configuration)
+	}
 
+	o.Registries = loadConfiguration(configuration).Registries
+	r := output.NewResultsWithDirectory(repo.Root)
+	Header(name, repo.Root, scopeDetail(o, repo.Files))
+
+	for _, p := range empty {
+		if !InScope(o, p) {
 			continue
 		}
 
-		if fix {
-			system.Remove(p)
+		if o.Fix {
+			system.Remove(repo.Absolute(p))
 			r.AddConcern(
 				concern.NewFile(
 					"empty_directory",
@@ -50,40 +48,23 @@ func Lint(
 		}
 	}
 
-	for _, p := range system.FilesRecursive(
-		constant.CurrentDirectory,
-		verbose,
-	) {
-		if Skipped(skip, p) {
-			if verbose {
-				console.Format("Skip file: %s\n", p)
-			}
-
+	for _, p := range repo.Files.Files() {
+		if !InScope(o, p) || Skipped(o, p) {
 			continue
 		}
 
-		if !system.FileEmpty(p) {
-			if verbose {
-				console.Format("Non empty file: %s\n", p)
+		if repo.Files.FileAt(p).Size == 0 {
+			if o.Fix {
+				system.Remove(repo.Absolute(p))
+				r.AddConcern(
+					concern.NewFile("empty_file", "removed empty file", p, true),
+				)
+			} else {
+				r.AddConcern(
+					concern.NewFile("empty_file", "empty file", p, false),
+				)
 			}
 
-			continue
-		}
-
-		if fix {
-			system.Remove(p)
-			r.AddConcern(
-				concern.NewFile("empty_file", "removed empty file", p, true),
-			)
-		} else {
-			r.AddConcern(concern.NewFile("empty_file", "empty file", p, false))
-		}
-	}
-
-	v := virtual_file_system.From(constant.CurrentDirectory)
-
-	for _, p := range v.Files() {
-		if Skipped(skip, p) {
 			continue
 		}
 
@@ -91,12 +72,12 @@ func Lint(
 			continue
 		}
 
-		if IsExecutable(v.ReadString(p)) {
-			if fix {
-				system.Remove(p)
+		if IsExecutable(repo.Files.ReadString(p)) {
+			if o.Fix {
+				system.Remove(repo.Absolute(p))
 				r.AddConcern(
 					concern.NewFile(
-						lintConstant.StrayBinaryKey,
+						constant.StrayBinaryKey,
 						"removed stray binary",
 						p,
 						true,
@@ -105,8 +86,8 @@ func Lint(
 			} else {
 				r.AddConcern(
 					concern.NewFile(
-						lintConstant.StrayBinaryKey,
-						lintConstant.StrayBinaryText,
+						constant.StrayBinaryKey,
+						constant.StrayBinaryText,
 						p,
 						false,
 					),
@@ -115,13 +96,17 @@ func Lint(
 		}
 	}
 
-	fixes := Check(v, skip, fix, verbose, r)
+	fixes := Check(repo, o, r)
 
-	if fix {
-		fixes.Flush(constant.CurrentDirectory)
+	if o.Fix {
+		fixes.Flush(repo.Root)
 	}
 
-	hasBlocked := output.PrintResults(r.Entries, summary)
+	hasBlocked := output.PrintResults(r.Entries, o.Summary)
+
+	if o.Census {
+		output.PrintCensus(r.Unchecked)
+	}
 
 	if hasBlocked {
 		os.Exit(1)

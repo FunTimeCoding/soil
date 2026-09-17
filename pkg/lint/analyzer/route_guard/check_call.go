@@ -1,7 +1,6 @@
 package route_guard
 
 import (
-	"github.com/funtimecoding/soil/pkg/lint/analyzer/suppress"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"go/ast"
@@ -39,15 +38,6 @@ func checkCall(
 	}
 
 	if f.Name() != "Handle" && f.Name() != "HandleFunc" {
-		return
-	}
-
-	if suppress.IsSuppressed(
-		p.Fset,
-		p.Syntax,
-		call.Pos(),
-		"route_guard",
-	) {
 		return
 	}
 

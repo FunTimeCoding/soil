@@ -2,7 +2,6 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/segment"
 	"testing"
 )
@@ -114,8 +113,8 @@ func TestReplaceSegmentTrailingInitialism(t *testing.T) {
 func TestReplaceSegmentLeadingInitialism(t *testing.T) {
 	assert.String(
 		t,
-		"LocatorOption",
-		segment.ReplaceSegment("URLOption", "url", constant.PointerLocator),
+		"WaypointOption",
+		segment.ReplaceSegment("URLOption", "url", "waypoint"),
 	)
 }
 

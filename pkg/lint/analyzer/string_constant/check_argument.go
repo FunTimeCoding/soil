@@ -3,6 +3,7 @@ package string_constant
 import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/assert_call"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"go/ast"
 	"go/token"
@@ -29,7 +30,7 @@ func checkArgument(
 		}
 	}
 
-	value := strings.Trim(l.Value, "\"")
+	value := strings.Trim(l.Value, constant.Quote)
 
 	if value == "" {
 		return

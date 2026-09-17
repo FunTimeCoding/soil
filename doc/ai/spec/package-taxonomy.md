@@ -8,28 +8,28 @@ direction, and the criteria for introducing them.
 
 | Package | Role | Imports from |
 |---------|------|-------------|
-| `types/` | Pure domain types - validation schemas, metadata, enums. No persistence, no external service deps. | stdlib, shared libs |
-| `constant/` | Domain constants, enum values, instances, registries. Purely declarative - data definitions only, no logic. The only constant home - no bare `constant.go` outside it (the placement rule in `conventions/constants.md`; goaudit flags strays). | `types/`, shared libs |
-| `model/` | Persistence-aware entities - gorm-tagged structs, JSON field parsing, DB convenience methods. | `types/`, shared libs, ORM |
-| `store/` | Data access - CRUD operations on model types. | `model/`, ORM |
-| `generated/client/` | oapi-codegen output - typed REST client. Machine output, don't edit. | stdlib |
-| `generated/server/` | oapi-codegen output - `ServerInterface`, `HandlerFromMux`, types. Machine output, don't edit. | stdlib |
-| `client/` | Domain wrapper for the generated REST client. Used by the CLI. | `generated/client/` |
-| `server/` | REST implementation. Implements the generated `ServerInterface`. | `generated/server/`, `store/`, `convert/` |
-| `model_context/` | MCP tool implementations. Each method is a handler. | `store/`, `constant/`, `convert/`, `response/` |
-| `convert/` | Type filtering shared by `model_context/` and `server/`. | `types/`, `generated/server/` |
-| `web/` | HTML rendering (gomponents). Holds `*view.View` on Server. Flat; file-prefix grouping. | `store/`, `constant/`, `model/`, `web/view/` |
-| `integration/` | Cross-package tests using only the public API. Facet subpackages with shared setup in `base/` (see `test-placement.md`). | all exported packages |
+| `<path>/types/` | Pure domain types - validation schemas, metadata, enums. No persistence, no external service deps. | stdlib, shared libs |
+| `<path>/constant/` | Domain constants, enum values, instances, registries. Purely declarative - data definitions only, no logic. The only constant home - no bare `constant.go` outside it (the placement rule in `doc/ai/spec/conventions/constants.md`; goaudit flags strays). | `<path>/types/`, shared libs |
+| `<path>/model/` | Persistence-aware entities - gorm-tagged structs, JSON field parsing, DB convenience methods. | `<path>/types/`, shared libs, ORM |
+| `<path>/store/` | Data access - CRUD operations on model types. | `<path>/model/`, ORM |
+| `<path>/generated/client/` | oapi-codegen output - typed REST client. Machine output, don't edit. | stdlib |
+| `<path>/generated/server/` | oapi-codegen output - `ServerInterface`, `HandlerFromMux`, types. Machine output, don't edit. | stdlib |
+| `<path>/client/` | Domain wrapper for the generated REST client. Used by the CLI. | `<path>/generated/client/` |
+| `<path>/server/` | REST implementation. Implements the generated `ServerInterface`. | `<path>/generated/server/`, `<path>/store/`, `<path>/convert/` |
+| `<path>/model_context/` | MCP tool implementations. Each method is a handler. | `<path>/store/`, `<path>/constant/`, `<path>/convert/`, `<path>/response/` |
+| `<path>/convert/` | Type filtering shared by `<path>/model_context/` and `<path>/server/`. | `<path>/types/`, `<path>/generated/server/` |
+| `<path>/web/` | HTML rendering (gomponents). Holds `*view.View` on Server. Flat; file-prefix grouping. | `<path>/store/`, `<path>/constant/`, `<path>/model/`, `pkg/web/view/` |
+| `<path>/integration/` | Cross-package tests using only the public API. Facet subpackages with shared setup in `<path>/base/` (see `test-placement.md`). | all exported packages |
 
 ### Shared web packages (soil)
 
 | Package | Role |
 |---------|------|
-| `web/layout/` | Fluent HTML page builder. `New(identity)` + `With*` + `Clone()` + `Render()`. |
-| `web/layout/navigation_item/` | `New(path, label)` / `NewExternal(path, label)` for nav links. |
-| `web/palette/` | Command palette. `NewRegistry()`, `Register()`, `NewServe(registry)`. fzf-style fuzzy matching. |
-| `web/view/` | HTTP layer wrapping layout. `RenderPage`, `RenderFragment`, `IsExtendedRequest`. |
-| `web/theme/constant/` | CSS palette constants (pico.css overrides). Downstream repos can define additional palettes. |
+| `pkg/web/layout/` | Fluent HTML page builder. `New(identity)` + `With*` + `Clone()` + `Render()`. |
+| `pkg/web/layout/navigation_item/` | `New(path, label)` / `NewExternal(path, label)` for nav links. |
+| `pkg/web/palette/` | Command palette. `NewRegistry()`, `Register()`, `NewServe(registry)`. fzf-style fuzzy matching. |
+| `pkg/web/view/` | HTTP layer wrapping layout. `RenderPage`, `RenderFragment`, `IsExtendedRequest`. |
+| `pkg/web/constant/` | CSS palette constants (pico.css overrides, `palette.go`). Downstream repos can define additional palettes. |
 
 ## Dependency Direction
 
@@ -49,19 +49,19 @@ server/  model_context/  web/  client/  integration/
                     web/view/ → web/layout/ → web/layout/navigation_item/
 ```
 
-`server/`, `model_context/`, `web/`, and `client/` are leaf packages -
+`<path>/server/`, `<path>/model_context/`, `<path>/web/`, and `<path>/client/` are leaf packages -
 they import from lower layers but nothing imports from them (except
 tests and the run wiring).
 
 Cycle avoidance: if two packages need each other's types, the shared types
-belong in `types/` (or an interface in `face/`).
+belong in `<path>/types/` (or an interface in `<path>/face/`).
 
 ## When to Promote
 
-### `constant/` - from the start
+### `<path>/constant/` - from the start
 
-Constants live in `constant/` from the first constant - there is no
-bare-`constant.go` stage. Inside `constant/`:
+Constants live in `<path>/constant/` from the first constant - there is no
+bare-`constant.go` stage. Inside `<path>/constant/`:
 
 - `constant.go` - simple string/int constants
 - Typed iota enums - type and values together in a type-named file
@@ -72,10 +72,10 @@ bare-`constant.go` stage. Inside `constant/`:
 - Registries (lookup functions, slices of all instances) get
   `<concept>_list.go`, `<concept>_by_name.go`
 
-### No package → `types/`
+### No package → `<path>/types/`
 
 Introduce when domain types with methods appear that are not persistence
-entities. `types/` is a subtree - each type gets its own sub-package per the
+entities. `<path>/types/` is a subtree - each type gets its own sub-package per the
 one-struct rule:
 
 ```
@@ -85,13 +85,13 @@ types/
 └── image/          # Image struct + attribute accessors
 ```
 
-`types/` packages have no persistence deps (no ORM, no store). They define
-what the domain looks like; `model/` defines how it's stored.
+`<path>/types/` packages have no persistence deps (no ORM, no store). They define
+what the domain looks like; `<path>/model/` defines how it's stored.
 
-### No package → `model/`
+### No package → `<path>/model/`
 
 Introduce when persistence entities need sub-packages (multiple entity types
-with receivers). `model/` is a subtree:
+with receivers). `<path>/model/` is a subtree:
 
 ```
 model/
@@ -99,12 +99,12 @@ model/
 └── machine_form/    # Form struct + FieldMap()
 ```
 
-If there's only one entity, `model/` can stay flat (one struct file, one
+If there's only one entity, `<path>/model/` can stay flat (one struct file, one
 constructor). Extract sub-packages when a second entity with receivers appears.
 
-### No package → `helper/`
+### No package → `<path>/helper/`
 
-**Avoid.** `helper/` and `util/` are junk-drawer anti-patterns. Every function
+**Avoid.** `<path>/helper/` and `<path>/util/` are junk-drawer anti-patterns. Every function
 has a proper home:
 
 - Query/classification logic on domain data → registry struct (see below)
@@ -117,21 +117,21 @@ catch-all bucket.
 
 ### When to extract a registry
 
-When `constant/` accumulates query functions (lookups, predicates,
+When `<path>/constant/` accumulates query functions (lookups, predicates,
 classification, splitting) that operate on its declarative data, consider
 extracting them into a struct with methods in a dedicated package (e.g.
-`<concept>_registry/`). The struct holds references to the data; `constant/`
+`<concept>_registry/`). The struct holds references to the data; `<path>/constant/`
 instantiates it and exports the instance. Consumers call
 `constant.Registry.Method()`.
 
-This keeps `constant/` purely declarative and gives query logic a named,
+This keeps `<path>/constant/` purely declarative and gives query logic a named,
 testable home without scattering it across consumer packages.
 
-### No package → `integration/`
+### No package → `<path>/integration/`
 
 Introduce when cross-package tests exist. Tests live in facet
-subpackages (`client/`, `model_context/`, `web_interface/`, ...)
-with shared setup exported from `base/` — layout, naming, and the
+subpackages (`<path>/client/`, `<path>/model_context/`, `<path>/web_interface/`, ...)
+with shared setup exported from `<path>/base/` — layout, naming, and the
 unit/integration line are in `test-placement.md`.
 
 ## Flat Package Guidelines
@@ -158,7 +158,7 @@ helper functions, files under 80 LOC each.
 
 Split when a package exceeds ~80 files, or when a distinct subset has no
 dependency on the shared struct. Example: pure UI components that don't need
-server state could become `web/component/`.
+server state could become `<path>/web/component/`.
 
 ### Naming collisions in flat packages
 
@@ -177,13 +177,13 @@ The suffix matches the type name. This avoids collisions like `Debian`
 
 A service tool typically evolves in this order:
 
-1. **Base tree** - `option/`, `store/`, `server/` (or `web/`), `run.go`
-2. **MCP layer** - `model_context/` + tool registration
-3. **Constants outgrow** - promote `constant.go` → `constant/`
-4. **Types emerge** - extract `types/<concept>/` for non-persistence domain types
-5. **Model splits** - extract `model/<entity>/` when multiple entities appear
+1. **Base tree** - `<path>/option/`, `<path>/store/`, `<path>/server/` (or `<path>/web/`), `run.go`
+2. **MCP layer** - `<path>/model_context/` + tool registration
+3. **Constants outgrow** - promote `constant.go` → `<path>/constant/`
+4. **Types emerge** - extract `<path>/types/<concept>/` for non-persistence domain types
+5. **Model splits** - extract `<path>/model/<entity>/` when multiple entities appear
 6. **Query logic extracts** - operations on constant data move to a registry struct
-7. **Tests consolidate** - collect cross-package tests in `integration/`
+7. **Tests consolidate** - collect cross-package tests in `<path>/integration/`
 
 Not every service reaches every stage. Promote only when the criteria above
 are met.

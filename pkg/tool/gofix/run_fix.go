@@ -3,6 +3,7 @@ package gofix
 import "github.com/funtimecoding/soil/pkg/lint/output"
 
 func runFix(
+	directory string,
 	patterns []string,
 	diff bool,
 	r *output.Results,
@@ -11,7 +12,7 @@ func runFix(
 		patterns = []string{"./..."}
 	}
 
-	all, fileSet := Load("", patterns)
+	all, fileSet := Load(directory, patterns)
 	violations := FindViolations(all)
 
 	if len(violations) == 0 {
@@ -19,10 +20,10 @@ func runFix(
 	}
 
 	edits := BuildAllEdits(fileSet, all, violations, r)
-	ApplyEdits(fileSet, edits, "", diff)
+	ApplyEdits(fileSet, edits, directory, diff)
 
 	if !diff {
 		loadedFiles := BuildLoadedFiles(all)
-		FixUnloadedReferences(violations, loadedFiles, "", r)
+		FixUnloadedReferences(violations, loadedFiles, directory, r)
 	}
 }

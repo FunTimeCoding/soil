@@ -32,6 +32,7 @@ const (
 	HomeEnvironment = "HOME"
 
 	CurrentDirectory = "."
+	ParentDirectory  = ".."
 
 	GoExtension          = ".go"
 	GraphicExtension     = ".png"

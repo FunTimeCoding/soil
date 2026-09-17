@@ -6,8 +6,11 @@ import (
 	"golang.org/x/tools/go/packages"
 )
 
-func load(patterns []string) []*packages.Package {
-	result, _, e := resolve.LoadPackages("", patterns...)
+func load(
+	directory string,
+	patterns []string,
+) []*packages.Package {
+	result, _, e := resolve.LoadPackages(directory, patterns...)
 	errors.PanicOnError(e)
 
 	return resolve.PreferTestVariants(result)

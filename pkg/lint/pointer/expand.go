@@ -6,31 +6,40 @@ import (
 	"strings"
 )
 
-func Expand(s string) []string {
-	start := strings.Index(s, "{")
+func Expand(c *Candidate) []*Candidate {
+	start := strings.Index(c.Span, "{")
 
 	if start == -1 {
-		return []string{s}
+		return []*Candidate{c}
 	}
 
-	stop := strings.Index(s[start:], "}")
+	stop := strings.Index(c.Span[start:], "}")
 
 	if stop == -1 {
-		return []string{s}
+		return []*Candidate{c}
 	}
 
-	inner := s[start+1 : start+stop]
+	inner := c.Span[start+1 : start+stop]
 
 	if !strings.Contains(inner, constant.Comma) {
-		return []string{s}
+		return []*Candidate{c}
 	}
 
-	var result []string
+	var result []*Candidate
 
 	for _, alternative := range strings.Split(inner, constant.Comma) {
 		result = append(
 			result,
-			Expand(join.Empty(s[:start], alternative, s[start+stop+1:]))...,
+			Expand(
+				&Candidate{
+					Span: join.Empty(
+						c.Span[:start],
+						alternative,
+						c.Span[start+stop+1:],
+					),
+					Link: c.Link,
+				},
+			)...,
 		)
 	}
 

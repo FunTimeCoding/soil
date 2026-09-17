@@ -9,77 +9,77 @@ import (
 
 func TestClassify(t *testing.T) {
 	roots := []string{".claude", ".claude-plugin", "doc", "pkg", "skills"}
+	assert.String(t, "repository", classify("doc/ai/spec/naming.md", roots))
 	assert.String(
 		t,
 		"repository",
-		pointer.Classify("doc/ai/spec/naming.md", roots),
-	)
-	assert.String(
-		t,
-		"repository",
-		pointer.Classify(".claude/skills/sign-firefox/SKILL.md", roots),
+		classify(".claude/skills/sign-firefox/SKILL.md", roots),
 	)
 	assert.String(
 		t,
 		"repository",
-		pointer.Classify(".claude-plugin/plugin.json", roots),
+		classify(".claude-plugin/plugin.json", roots),
 	)
-	assert.String(t, "repository", pointer.Classify("./doc/ai/spec", roots))
+	assert.String(t, "repository", classify("./doc/ai/spec", roots))
 	assert.String(
 		t,
 		"repository",
-		pointer.Classify(
-			"${CLAUDE_PLUGIN_ROOT}/doc/ai/runbook/constant.md",
-			roots,
-		),
+		classify("${CLAUDE_PLUGIN_ROOT}/doc/ai/runbook/constant.md", roots),
 	)
-	assert.String(t, "unknown", pointer.Classify("tmp/gosec.json", roots))
-	assert.String(t, "unknown", pointer.Classify(constant.SoilModule, roots))
-	assert.String(t, "unknown", pointer.Classify("/chart-sessions", roots))
-	assert.String(t, "unknown", pointer.Classify("/api/goals", roots))
-	assert.String(t, "unknown", pointer.Classify("/debug/pprof/", roots))
-	assert.String(t, "unknown", pointer.Classify("//nolint", roots))
-	assert.String(t, "unknown", pointer.Classify("/etc/hosts", roots))
+	assert.String(t, "short", classify("tmp/gosec.json", roots))
+	assert.String(t, "short", classify(constant.SoilModule, roots))
+	assert.String(t, "command", classify("/chart-sessions", roots))
+	assert.String(t, "command", classify("/soil:lint", roots))
+	assert.String(t, "system", classify("/api/goals", roots))
+	assert.String(t, "system", classify("/debug/pprof/", roots))
+	assert.String(t, "pattern", classify("//nolint", roots))
+	assert.String(t, "system", classify("/etc/hosts", roots))
+	assert.String(t, "route", classify("route:/api/goals", roots))
+	assert.String(t, "path", classify("path:/bin/true", roots))
+	assert.String(t, "pattern", classify("s/a/b/g", roots))
+	assert.String(t, "import", classify("\"example.org/module\"", roots))
 	assert.String(
 		t,
-		"unknown",
-		pointer.Classify("pkg/web/RecoveryMiddleware", roots),
+		"repository",
+		classify("pkg/web/RecoveryMiddleware", roots),
 	)
+	assert.String(t, "repository", classify("pkg/provision/salt.Client", roots))
 	assert.String(
 		t,
-		"unknown",
-		pointer.Classify("pkg/provision/salt.Client", roots),
+		"repository",
+		classify("pkg/check/memory.LocalLines()", roots),
 	)
+	assert.String(t, "symbol", classify("go:pkg/provision/salt.Client", roots))
 	assert.String(
 		t,
-		"unknown",
-		pointer.Classify("pkg/check/memory.LocalLines()", roots),
+		"symbol",
+		classify("go:../github/soil/pkg/provision/salt.Client", roots),
 	)
+	assert.String(t, "placeholder", classify("go:pkg/<name>/Symbol", roots))
+	assert.String(t, "placeholder", classify("doc/ai/runbook/<name>.md", roots))
+	assert.String(t, "placeholder", classify("pkg/tool/*.go", roots))
+	assert.String(t, "placeholder", classify("$HOME/notes.md", roots))
 	assert.String(
 		t,
 		"placeholder",
-		pointer.Classify("doc/ai/runbook/<name>.md", roots),
-	)
-	assert.String(t, "placeholder", pointer.Classify("pkg/tool/*.go", roots))
-	assert.String(t, "placeholder", pointer.Classify("$HOME/notes.md", roots))
-	assert.String(
-		t,
-		"placeholder",
-		pointer.Classify("${CLAUDE_PLUGIN_ROOT}/skills/<name>/SKILL.md", roots),
+		classify("${CLAUDE_PLUGIN_ROOT}/skills/<name>/SKILL.md", roots),
 	)
 	assert.String(
 		t,
 		"sibling",
-		pointer.Classify("../github/soil/doc/ai/spec/naming.md", roots),
+		classify("../github/soil/doc/ai/spec/naming.md", roots),
 	)
-	assert.String(
-		t,
-		"absolute",
-		pointer.Classify("/Users/example/notes.md", roots),
-	)
+	assert.String(t, "absolute", classify("/Users/example/notes.md", roots))
 	assert.String(
 		t,
 		"locator",
-		pointer.Classify("https://code.claude.com/docs/en/skills", roots),
+		classify("https://code.claude.com/docs/en/skills", roots),
 	)
+}
+
+func classify(
+	s string,
+	roots []string,
+) string {
+	return string(pointer.Classify(s, roots))
 }

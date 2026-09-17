@@ -4,7 +4,7 @@
 
 Design and coding specs live in `doc/ai/spec/`:
 
-- `conventions/` - coding style (README index; leaves: style, formatting, files, constants, constructors, imports, interfaces)
+- `doc/ai/spec/conventions/` - coding style (README index; leaves: style, formatting, files, constants, constructors, imports, interfaces)
 - `comments.md` - when a comment earns its place: what to delete, graduate, refactor away, or keep
 - `naming.md` - banned identifier segments, replacement patterns, type/field naming rules
 - `entrypoint.md` - linker variables, Main(), sentry setup (shared by all cmd/ programs)
@@ -20,7 +20,7 @@ Design and coding specs live in `doc/ai/spec/`:
 - `taskfile.md` - task runner, git hooks, CI pipeline
 - `locator.md` - fluent URL builder (`pkg/web/locator`)
 - `generated-api.md` - OpenAPI codegen pattern (generated/, client/, server/ structure)
-- `error-handling/` - error handling strategies (README for principle + strategy, leaves: mcp, rest, external-api, infrastructure)
+- `doc/ai/spec/error-handling/` - error handling strategies (README for principle + strategy, leaves: mcp, rest, external-api, infrastructure)
 - `pillars.md` - unified service wiring: reporter, logger, recovery, telemetry
 - `stdlib-wrappers.md` - PanicOnError wrappers for filesystem, JSON, and time stdlib calls
 - `example.md` - example code conventions (pkg/<domain>/example/, cmd/example/)
@@ -38,7 +38,7 @@ Read the relevant spec before working in that area.
 - `pkg/` - library and service packages
 - `doc/ai/spec/` - design and coding specs
 - `.claude-plugin/` - Claude Code plugin manifest and marketplace catalog
-- `skills/` - plugin skills, invoked as `/soil:<name>` from consuming repositories
+- `strata/plugin/soil/skills/` - plugin skills, invoked as `/soil:<name>` from consuming repositories
 - `doc/ai/runbook/` - operational runbooks backing the skills
 
 ## Claude Code plugin

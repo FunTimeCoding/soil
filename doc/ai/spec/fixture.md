@@ -84,11 +84,11 @@ structure just as effectively as copied structure, and this
 repository is public. This applies at writing time; the
 leak-check at push time is the second net, not the first.
 
-## Do Not Use `testdata/`
+## Do Not Use `<path>/testdata/`
 
-Do not put fixtures inside packages as `testdata/` directories. All fixtures belong at the
+Do not put fixtures inside packages as `<path>/testdata/` directories. All fixtures belong at the
 repo root under `fixture/`. This keeps fixtures discoverable, shareable across packages, and
 consistent with the repo-root resolution pattern.
 
-**Exception:** analyzers under `pkg/lint/analyzer/` use `testdata/` because Go's
+**Exception:** analyzers under `pkg/lint/analyzer/` use `<path>/testdata/` because Go's
 `analysistest` framework requires that exact layout. That is the only sanctioned use.

@@ -10,14 +10,17 @@ import (
 
 func goFiles(
 	v *virtual_file_system.System,
-	skip *option.Lint,
-	verbose bool,
+	o *option.Lint,
 ) []string {
 	var result []string
 
 	for _, p := range v.Files() {
-		if Skipped(skip, p) {
-			if verbose {
+		if !InScope(o, p) {
+			continue
+		}
+
+		if Skipped(o, p) {
+			if o.Verbose {
 				console.Format("Skip go file: %s\n", p)
 			}
 
@@ -29,14 +32,14 @@ func goFiles(
 		}
 
 		if IsGeneratedHeader(v.ReadString(p)) {
-			if verbose {
+			if o.Verbose {
 				console.Format("Skip generated file: %s\n", p)
 			}
 
 			continue
 		}
 
-		if verbose {
+		if o.Verbose {
 			console.Format("Select go file: %s\n", p)
 		}
 

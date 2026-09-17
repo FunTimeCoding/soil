@@ -1,28 +1,22 @@
 package lint
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
-	"github.com/funtimecoding/soil/pkg/git"
 	"github.com/funtimecoding/soil/pkg/lint/option"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/lint/pointer"
-	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/lint/repository"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 )
 
 func Check(
-	v *virtual_file_system.System,
-	skip *option.Lint,
-	fix bool,
-	verbose bool,
+	repo *repository.Repository,
+	o *option.Lint,
 	r *output.Results,
 ) *virtual_file_system.System {
 	fixes := virtual_file_system.New()
-	paths := goFiles(v, skip, verbose)
 	runCheckers(
-		v,
+		repo.Files,
 		fixes,
-		paths,
+		goFiles(repo.Files, o),
 		[]Checker{
 			Import,
 			Function,
@@ -33,40 +27,23 @@ func Check(
 			Spacing,
 			VariableGrouping,
 		},
-		fix,
-		verbose,
+		o,
 		r,
 	)
 	runCheckers(
-		v,
+		repo.Files,
 		fixes,
-		markupFiles(v, skip, verbose),
+		markupFiles(repo.Files, o),
 		[]Checker{Markup},
-		fix,
-		verbose,
+		o,
 		r,
 	)
 	runCheckers(
-		v,
+		repo.Files,
 		fixes,
-		markdownFiles(v, skip, verbose),
-		[]Checker{
-			Pointers(
-				pointer.Roots(v.Files()),
-				func(p string) bool {
-					return v.Has(p) ||
-						v.DirectoryExists(p) ||
-						system.DirectoryExists(p)
-				},
-				func(p string) bool {
-					return system.FileExists(p) ||
-						system.DirectoryExists(p)
-				},
-				git.IgnoreMatcher(constant.CurrentDirectory),
-			),
-		},
-		fix,
-		verbose,
+		markdownFiles(repo.Files, o),
+		[]Checker{Pointers(resolver(repo, o), r.AddUnchecked)},
+		o,
 		r,
 	)
 

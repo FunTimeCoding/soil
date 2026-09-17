@@ -1,6 +1,7 @@
 package string_constant
 
 import (
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"go/ast"
 	"go/parser"
 	"go/token"
@@ -48,7 +49,7 @@ func parseConstants(
 					continue
 				}
 
-				value := strings.Trim(l.Value, "\"")
+				value := strings.Trim(l.Value, constant.Quote)
 				result[value] = append(
 					result[value],
 					knownConstant{name: name.Name, packageName: p},

@@ -7,8 +7,8 @@
   `*alert.Alert`) - define at the consumer. Domain types often
   already import `face`, so putting the interface in `face` would
   create an import cycle. Example: `AlertSource` in
-  `worker/worker.go`.
+  `<path>/worker/worker.go`.
 - **Mock convention** - hand-rolled structs in `mock_*` sub-packages
-  near the real implementation (e.g., `mock_notifier/`,
-  `mock_client/`). One file per method. Methods to manipulate state
+  near the real implementation (e.g., `<path>/mock_notifier/`,
+  `<path>/mock_client/`). One file per method. Methods to manipulate state
   for testing (e.g., `Add()`, `Remove()`).

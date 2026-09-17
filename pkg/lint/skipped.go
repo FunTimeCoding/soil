@@ -13,7 +13,7 @@ func Skipped(
 	o *option.Lint,
 	path string,
 ) bool {
-	if o.Count == 0 {
+	if len(o.Skips) == 0 {
 		return false
 	}
 

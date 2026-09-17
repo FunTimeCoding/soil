@@ -1,3 +1,7 @@
+---
+base: pkg/tool/goatlassiand
+---
+
 # Model Context Protocol Integration
 
 Pattern for exposing MCP tools from a service daemon, mounted on the same HTTP server as the REST API.
@@ -24,11 +28,11 @@ pkg/tool/go<tool>d/
 └── server/
 ```
 
-`model_context/` is a sibling of `server/`. Both implement the same
-domain operations - `server/` over REST, `model_context/` over MCP.
+`<path>/model_context/` is a sibling of `<path>/server/`. Both implement the same
+domain operations - `<path>/server/` over REST, `<path>/model_context/` over MCP.
 
-`model_context/` is the standard package name. Do not use `tool/` or
-`toolset/`.
+`<path>/model_context/` is the standard package name. Do not use `<path>/tool/` or
+`<path>/toolset/`.
 
 ## Convert Package
 
@@ -125,7 +129,7 @@ func New(s *store.Store, r face.Reporter, t face.Recorder, w *worker.Worker, ver
 }
 ```
 
-The factory (`mark/server`) handles tool capabilities, instructions,
+The factory (`pkg/generative/mark/server/`) handles tool capabilities, instructions,
 and baseline telemetry hooks. `WithRecorder(t)` registers an
 AfterCallTool hook that records every MCP tool call as a baseline
 telemetry event. Import as
@@ -172,7 +176,7 @@ func (s *Server) register() {
 ## Typed Tool Handlers
 
 The preferred pattern uses `mcp.NewTypedToolHandler` with an
-`argument/` struct. The struct's JSON tags must match the parameter
+`<path>/argument/` struct. The struct's JSON tags must match the parameter
 names in the tool definition:
 
 ```
@@ -275,7 +279,7 @@ func (s *Server) captureFail(
 - Infrastructure errors: `s.captureFail(e, "message")` - captures to Sentry with event ID
 - Error variables progress `e`, `f`, `g`, `h`, `i` - never reuse the same letter. See `naming.md`.
 - Always convert results through the `convert/` package - never serialize raw domain objects
-- Error handling is two-tier - input validation vs infrastructure failures. See `error-handling/mcp.md`.
+- Error handling is two-tier - input validation vs infrastructure failures. See `doc/ai/spec/error-handling/mcp.md`.
 
 ## Results That Carry Warnings
 
@@ -318,15 +322,15 @@ model knows how much it has not seen.
 Services with REST APIs use oapi-codegen's strict server mode.
 The full pattern - configs, handlers, error schemas, recording
 middleware, mounting - lives in `generated-api.md`; the error
-tiers and REST `captureFail` in `error-handling/rest.md`. MCP and
+tiers and REST `captureFail` in `doc/ai/spec/error-handling/rest.md`. MCP and
 REST share the `convert/` layer, the reporter, and the recorder.
 
 ## Wiring into mount.go
 
 MCP mounts through the daemon's top-level `Mount(...)` beside the
 REST tree, on the same `guard.Mux` (full shape in
-`generated-api.md`) - REST routes (`/api/...`) and MCP routes
-(`/mcp`, `/sse`, `/message`) don't conflict:
+`generated-api.md`) - REST routes (`route:/api/...`) and MCP routes
+(`route:/mcp`, `route:/sse`, `route:/message`) don't conflict:
 
 ```go
 model_context.New(s, r, t, version).Mount(g)
@@ -340,5 +344,5 @@ REST baseline.
 ## What Not To Do
 
 - Don't create a separate lifecycle server for MCP - one port, one mux
-- Don't name it `mcp/` - use `model_context/` (no acronyms in package names)
-- Don't name it `tool/` or `toolset/` - use `model_context/`
+- Don't name it `<path>/mcp/` - use `<path>/model_context/` (no acronyms in package names)
+- Don't name it `<path>/tool/` or `<path>/toolset/` - use `<path>/model_context/`

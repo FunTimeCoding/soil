@@ -10,14 +10,17 @@ import (
 
 func markupFiles(
 	v *virtual_file_system.System,
-	skip *option.Lint,
-	verbose bool,
+	o *option.Lint,
 ) []string {
 	var result []string
 
 	for _, p := range v.Files() {
-		if Skipped(skip, p) {
-			if verbose {
+		if !InScope(o, p) {
+			continue
+		}
+
+		if Skipped(o, p) {
+			if o.Verbose {
 				console.Format("Skip markup file: %s\n", p)
 			}
 
@@ -29,7 +32,7 @@ func markupFiles(
 			continue
 		}
 
-		if verbose {
+		if o.Verbose {
 			console.Format("Select markup file: %s\n", p)
 		}
 

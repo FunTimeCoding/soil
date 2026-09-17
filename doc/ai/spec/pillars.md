@@ -1,3 +1,7 @@
+---
+base: doc/ai/spec
+---
+
 # Pillars
 
 Every service wires four infrastructure concerns in a consistent

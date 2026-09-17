@@ -1,6 +1,9 @@
 package string_constant
 
-import "path/filepath"
+import (
+	"github.com/funtimecoding/soil/pkg/lint/constant"
+	"path/filepath"
+)
 
 func collectFromParents(
 	result map[string][]knownConstant,
@@ -11,7 +14,7 @@ func collectFromParents(
 	for {
 		collectFromConstantDirectory(result, current, "constant")
 
-		if filepath.Base(current) == "pkg" {
+		if filepath.Base(current) == constant.PackageDirectory {
 			break
 		}
 

@@ -1,3 +1,7 @@
+---
+base: pkg/gitlab
+---
+
 # Entity Wrapper Spec
 
 Pattern for wrapping entities from external systems with CLI rendering support.
@@ -257,7 +261,7 @@ method calls the page method in a loop. MCP tools use page
 methods with offset-to-page conversion. REST endpoints pass
 the page number through directly.
 
-### Client Method (`gitlab/project_jobs.go`)
+### Client Method (`pkg/gitlab/project_jobs.go`)
 
 Client handles the library call, delegates parsing to the entity package:
 
@@ -345,17 +349,17 @@ func (c *Client) Posts(tag string, limit int) []*post.Post {
 
 JSON shapes that serve a specific layer live in a subpackage named after that layer. One file per type, named after the type. The package name removes redundancy from type names (`response.Search` not `response.SearchResponse`).
 
-### `convert/` and `response/` - output type filtering
+### `<path>/convert/` and `<path>/response/` - output type filtering
 
 Types that shape what callers see. Scoped to where they're consumed:
 
-- Types shared by both REST and MCP → `convert/` (top-level sibling
-  of `server/` and `model_context/`)
-- Types used only by MCP tools → `model_context/response/`
-- Types used only by REST handlers → `server/response/`
+- Types shared by both REST and MCP → `<path>/convert/` (top-level sibling
+  of `<path>/server/` and `<path>/model_context/`)
+- Types used only by MCP tools → `<path>/model_context/response/`
+- Types used only by REST handlers → `<path>/server/response/`
 
-`convert/` is the primary location - see `model-context.md`. Layer-specific
-`response/` subpackages exist when a layer has output shapes not shared
+`<path>/convert/` is the primary location - see `model-context.md`. Layer-specific
+`<path>/response/` subpackages exist when a layer has output shapes not shared
 with the other.
 
 ```
@@ -375,13 +379,13 @@ pkg/<name>/
 
 This eliminates the `Data` suffix problem - `response.Link` vs `link.Link` provides disambiguation without a naming hack.
 
-### `argument/` - MCP tool parameter structs
+### `<path>/argument/` - MCP tool parameter structs
 
 JSON shapes for MCP tool input parameters. One file per argument type.
-Lives inside `model_context/argument/` - scoped to the layer that
+Lives inside `<path>/model_context/argument/` - scoped to the layer that
 consumes it.
 
-### `result/` - store return types
+### `<path>/result/` - store return types
 
 Exported types that a store returns to callers, separate from the store's internal types and methods. Used when the store has many return types that would otherwise collide with method names (e.g. `result.Status` vs `store.Status()` method).
 

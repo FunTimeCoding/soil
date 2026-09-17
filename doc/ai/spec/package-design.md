@@ -11,7 +11,7 @@ snake_case. Constructor lives in `new.go`.
 
 Data-only structs (no receivers) may coexist - one per file, named after
 the struct. Group related data structs in a dedicated sub-package when
-there are several (e.g. `response/` for response types, `option/` for
+there are several (e.g. `<path>/response/` for response types, `<path>/option/` for
 configuration). Data-only structs with external dependencies or distinct
 domain identity may also warrant their own package, even without receivers,
 to keep the parent package's import graph clean and the concept
@@ -19,7 +19,7 @@ self-contained.
 
 ## Bag Packages vs Own Packages
 
-Bag packages (`response/`, `request/`, `argument/`) hold pure data
+Bag packages (`<path>/response/`, `<path>/request/`, `<path>/argument/`) hold pure data
 structs - no functions, no receivers. Typically shapes from external
 APIs (Habitica, Jira, Sentry, Salt, Loki, brew). The package groups
 by role (what came in, what goes out), not by type.
@@ -43,7 +43,7 @@ Convert functions and domain constructors return pointers
 (`*server.Tunnel`, not `server.Tunnel`). Slice returns are slices
 of pointers (`[]*server.Tunnel`). This applies to:
 
-- `convert/` functions (netbox, proxmox, habitica, atlassian)
+- `<path>/convert/` functions (netbox, proxmox, habitica, atlassian)
 - `New()` and `Stub()` constructors
 - Source interface methods (`HabiticaSource`, `SublimeSource`, etc.)
 
@@ -84,7 +84,7 @@ real implementation.
 ## What Stays
 
 Package-level functions without a receiver are fine alongside the single
-struct. Constants live in the root's `constant/` package. Each function
+struct. Constants live in the root's `<path>/constant/` package. Each function
 gets its own file.
 
 Tool entrypoint packages (`pkg/tool/go<name>/`) often have no struct with

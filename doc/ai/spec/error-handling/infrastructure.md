@@ -96,7 +96,7 @@ layer design.
 
 ## HTTP Recovery Middleware
 
-`pkg/web/RecoveryMiddleware` is the shared HTTP recovery layer. It wraps
+`go:pkg/web/RecoveryMiddleware` is the shared HTTP recovery layer. It wraps
 the mux, catches panics from any handler, reports via `r.Recover(v)`,
 and returns 500. Wired into lifecycle via
 `server.New(...).WithMiddleware(web.RecoveryMiddleware(r))`.

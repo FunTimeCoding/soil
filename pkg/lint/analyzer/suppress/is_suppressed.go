@@ -2,6 +2,7 @@ package suppress
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"go/ast"
 	"go/token"
 	"strings"
@@ -28,7 +29,7 @@ func IsSuppressed(
 				}
 
 				text := strings.TrimSpace(
-					strings.TrimPrefix(comment.Text, "//"),
+					strings.TrimPrefix(comment.Text, constant.CommentPrefix),
 				)
 
 				if text == "goanalyze:ignore" || text == fmt.Sprintf(

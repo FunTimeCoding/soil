@@ -87,7 +87,7 @@ option.ExtendedColor = New().Extended().Color()
 
 ## Tags
 
-Constants in `status/tag/`:
+Constants in `pkg/gitlab/tag/`:
 
 ```
 Age, Assignee, Category, Changes, Cluster, Comment, Concerns, Copyable,
@@ -158,8 +158,8 @@ Each entity has:
 
 - `format.go` - main `Format(f)` method, builds status line
 - `format_<field>.go` - private per-field formatter reading `f.UseColor`, `f.UseCompact`, `f.HasTag()`
-- Fallback display values live in the service's `constant/` as an
-  entity-prefixed concept file (`constant/job.go` - see
+- Fallback display values live in the service's `<path>/constant/` as an
+  entity-prefixed concept file (`<path>/constant/job.go` - see
   `entity-wrapper.md`), never in the entity package
 
 ### Typical Format Method
@@ -221,7 +221,7 @@ func (b *Book) formatPages(f *option.Format) string {
 
 ## Domain Format Presets
 
-Each domain defines a base format in its `constant/constant.go`:
+Each domain defines a base format in its `<path>/constant/constant.go`:
 
 ```go
 var (

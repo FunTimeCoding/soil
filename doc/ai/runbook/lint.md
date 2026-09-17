@@ -8,15 +8,23 @@ task lint
 
 Runs the repository's lint pipeline — golint and golangci-lint
 everywhere, gofix and goanalyze where the taskfile includes them.
-Must be completely silent on success - any output is a failure.
+Each tool's first line names the repository it scanned; after that
+the pipeline is silent on success - any further output is a failure.
 Lint has multiple stages - clearing the first may reveal new
 issues from the next.
 
 Run the full pipeline once per completed code scope - it covers
 the whole repository and takes minutes. For doc-only edits, run
-`golint <path>` on the changed files instead (sub-second, same
-markdown checks). Comment-only and other lint-inert edits need
-no run at all.
+`golint <path>` on the changed files instead - the header says
+which repository and scope it selected, a path that doesn't exist
+exits non-zero, and the whole repository is still loaded so the
+markdown pointer checks stay exact. `--root` points it at another
+repository from wherever you stand, and `GOLINT_CONFIGURATION` (or
+`--configuration`) names an optional YAML with repository-private
+vocabulary such as container registries. Comment-only and other
+lint-inert edits need no run at all. `golint --census` prints the
+markdown references the pointer check could not resolve, sorted by
+reason with a count per reason; `--verbose` is the per-file trace.
 
 ## Relevant specs
 

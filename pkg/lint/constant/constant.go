@@ -3,8 +3,8 @@ package constant
 import "regexp"
 
 const (
-	FrontMatterDelimiter = "---"
-	MemberSeparator      = "."
+	MemberSeparator  = "."
+	RecursivePattern = "/..."
 
 	FrontMatterDelimiterKey  = "front_matter_delimiter"
 	FrontMatterDelimiterText = "No front matter delimiter"
