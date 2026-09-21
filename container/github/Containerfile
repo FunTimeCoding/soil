@@ -1,3 +1,3 @@
-FROM alpine:3.24.1
+FROM alpine:3.24.2
 COPY tmp/gogithubd/linux-amd64/gogithubd /usr/local/bin
 ENTRYPOINT ["gogithubd"]
