@@ -1,3 +1,3 @@
-FROM alpine:3.24.1
+FROM alpine:3.24.2
 COPY tmp/gogitlabd/linux-amd64/gogitlabd /usr/local/bin
 ENTRYPOINT ["gogitlabd"]
