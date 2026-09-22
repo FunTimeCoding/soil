@@ -14,9 +14,9 @@ require (
 	github.com/amikos-tech/pure-tokenizers v0.1.5
 	github.com/andybrewer/mack v0.0.0-20251024001139-afd410b36447
 	github.com/andygrunwald/go-jira v1.17.0
-	github.com/anthropics/anthropic-sdk-go v1.73.0
+	github.com/anthropics/anthropic-sdk-go v1.74.0
 	github.com/apenella/go-ansible/v2 v2.4.2
-	github.com/bmatcuk/doublestar/v4 v4.10.0
+	github.com/bmatcuk/doublestar/v4 v4.10.2
 	github.com/bndr/gojenkins v1.2.0
 	github.com/bwmarrin/discordgo v0.29.0
 	github.com/chromedp/cdproto v0.0.0-20260912003405-686a5c723acc
@@ -50,7 +50,7 @@ require (
 	github.com/gpustack/gguf-parser-go v0.26.3
 	github.com/grafana/grafana-openapi-client-go v0.0.0-20260828183528-15d99ca95e47
 	github.com/hashicorp/vault-client-go v0.4.3
-	github.com/hetznercloud/hcloud-go/v2 v2.48.0
+	github.com/hetznercloud/hcloud-go/v2 v2.49.0
 	github.com/hupe1980/go-tiktoken v0.0.10
 	github.com/jackc/pgx/v5 v5.11.0
 	github.com/kestra-io/client-sdk/go-sdk/v2 v2.0.1
@@ -65,7 +65,7 @@ require (
 	github.com/oapi-codegen/runtime v1.7.0
 	github.com/olekukonko/tablewriter v1.1.5
 	github.com/ollama/ollama v0.34.2
-	github.com/openai/openai-go/v3 v3.61.0
+	github.com/openai/openai-go/v3 v3.64.3
 	github.com/openvex/go-vex v0.2.9
 	github.com/opsgenie/opsgenie-go-sdk-v2 v1.2.23
 	github.com/pkg/sftp v1.13.11
@@ -84,8 +84,8 @@ require (
 	github.com/tobischo/gokeepasslib/v3 v3.7.0
 	github.com/trivago/tgo v1.0.7
 	github.com/whilp/git-urls v1.0.0
-	github.com/yuin/goldmark/v2 v2.1.3
-	gitlab.com/gitlab-org/api/client-go/v3 v3.11.0
+	github.com/yuin/goldmark/v2 v2.1.5
+	gitlab.com/gitlab-org/api/client-go/v3 v3.13.0
 	go.yaml.in/yaml/v3 v3.0.5
 	golang.org/x/crypto v0.57.0
 	golang.org/x/mod v0.41.0
@@ -95,7 +95,7 @@ require (
 	golang.org/x/time v0.16.0
 	golang.org/x/tools v0.50.0
 	gonum.org/v1/gonum v0.17.0
-	google.golang.org/api v0.298.0
+	google.golang.org/api v0.299.0
 	google.golang.org/protobuf v1.36.12
 	gorm.io/driver/postgres v1.6.3
 	gorm.io/gorm v1.31.2
@@ -110,9 +110,9 @@ require (
 )
 
 require (
-	cloud.google.com/go/auth v0.23.2 // indirect
+	cloud.google.com/go/auth v0.23.3 // indirect
 	cloud.google.com/go/auth/oauth2adapt v0.2.8 // indirect
-	cloud.google.com/go/compute/metadata v0.9.0 // indirect
+	cloud.google.com/go/compute/metadata v0.9.1 // indirect
 	dario.cat/mergo v1.0.2 // indirect
 	github.com/Azure/go-ntlmssp v0.1.1 // indirect
 	github.com/JohannesKaufmann/dom v0.3.1 // indirect
@@ -152,7 +152,7 @@ require (
 	github.com/emicklei/go-restful/v3 v3.13.0 // indirect
 	github.com/emirpasic/gods v1.18.1 // indirect
 	github.com/fatih/structs v1.1.0 // indirect
-	github.com/felixge/httpsnoop v1.0.4 // indirect
+	github.com/felixge/httpsnoop v1.1.0 // indirect
 	github.com/francoispqt/gojay v1.2.13 // indirect
 	github.com/fxamacker/cbor/v2 v2.9.1 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.12 // indirect
@@ -201,9 +201,9 @@ require (
 	github.com/google/go-querystring v1.2.0 // indirect
 	github.com/google/jsonschema-go v0.4.3 // indirect
 	github.com/google/pprof v0.0.0-20260302011040-a15ffb7f9dcc // indirect
-	github.com/google/s2a-go v0.1.9 // indirect
-	github.com/googleapis/enterprise-certificate-proxy v0.3.20 // indirect
-	github.com/googleapis/gax-go/v2 v2.24.0 // indirect
+	github.com/google/s2a-go v0.1.10 // indirect
+	github.com/googleapis/enterprise-certificate-proxy v0.3.22 // indirect
+	github.com/googleapis/gax-go/v2 v2.24.1 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-cleanhttp v0.5.2 // indirect
 	github.com/hashicorp/go-hclog v1.6.3 // indirect
@@ -316,8 +316,8 @@ require (
 	golang.org/x/sync v0.23.0 // indirect
 	golang.org/x/term v0.46.0 // indirect
 	golang.org/x/text v0.42.0 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20260819154853-08b0e4226688 // indirect
-	google.golang.org/grpc v1.83.2 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20260921155816-b14227669459 // indirect
+	google.golang.org/grpc v1.84.0 // indirect
 	gopkg.in/evanphx/json-patch.v4 v4.13.0 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1 // indirect
