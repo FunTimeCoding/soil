@@ -12,5 +12,6 @@ type Address struct {
 	ObjectType       string
 	ObjectIdentifier int64
 	Interface        *netbox.BriefInterface
+	VirtualInterface *VirtualInterface
 	Raw              *netbox.MACAddress
 }

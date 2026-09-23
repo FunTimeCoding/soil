@@ -35,6 +35,8 @@ func New(t *testing.T) *Server {
 			)
 		},
 	)
+	result := &Server{Store: s, Recorder: recorder, Server: v}
+	t.Cleanup(result.Close)
 
-	return &Server{Store: s, Recorder: recorder, Server: v}
+	return result
 }

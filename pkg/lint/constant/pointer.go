@@ -50,6 +50,7 @@ var (
 	}
 
 	MajorSuffix = regexp.MustCompile(`^v[0-9]+$`)
+	LineSuffix  = regexp.MustCompile(`:[0-9]+$`)
 	Address     = regexp.MustCompile(
 		`^[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+(:[0-9]*)?$`,
 	)

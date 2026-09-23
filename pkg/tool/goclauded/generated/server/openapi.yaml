@@ -44,6 +44,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/turn-end:
+    post:
+      operationId: postTurnEnd
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TurnEndRequest"
+      responses:
+        "200":
+          description: Turn end recorded.
+        "500":
+          description: Internal error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /api/check:
     get:
       operationId: getCheck
@@ -65,6 +83,58 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/CheckResponse"
+        "500":
+          description: Internal error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/channel:
+    get:
+      operationId: getChannel
+      parameters:
+      - name: callsign
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Immediate queue entries for this session.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CheckResponse"
+        "500":
+          description: Internal error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/channel/callsign:
+    get:
+      operationId: getChannelCallsign
+      parameters:
+      - name: session
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: since
+        in: query
+        required: true
+        schema:
+          type: string
+          format: date-time
+      responses:
+        "200":
+          description: The session announced and this is its callsign.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChannelCallsignResponse"
+        "204":
+          description: The session has not announced within the wait window.
         "500":
           description: Internal error.
           content:
@@ -107,6 +177,10 @@ paths:
       responses:
         "200":
           description: Message sent.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeliveryResponse"
         "500":
           description: Internal error.
           content:
@@ -125,6 +199,10 @@ paths:
       responses:
         "200":
           description: Notification sent.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeliveryResponse"
         "404":
           description: Callsign not found.
           content:
@@ -183,51 +261,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ResolveAmbiguousResponse"
-        "500":
-          description: Internal error.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-  /api/wait:
-    get:
-      operationId: getWait
-      parameters:
-      - name: callsign
-        in: query
-        required: true
-        schema:
-          type: string
-      - name: timeout
-        in: query
-        schema:
-          type: integer
-          default: 30
-      responses:
-        "200":
-          description: Pending messages or empty if timeout.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/WaitResponse"
-        "500":
-          description: Internal error.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
-  /api/listen:
-    post:
-      operationId: postListen
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/ListenRequest"
-      responses:
-        "200":
-          description: Listening state toggled.
         "500":
           description: Internal error.
           content:
@@ -639,6 +672,10 @@ paths:
       responses:
         "200":
           description: Pulse sent.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DeliveryResponse"
         "500":
           description: Internal error.
           content:
@@ -900,7 +937,21 @@ components:
           type: string
         reason:
           type: string
+    TurnEndRequest:
+      type: object
+      required:
+      - session
+      properties:
+        session:
+          type: string
     RegisterResponse:
+      type: object
+      required:
+      - callsign
+      properties:
+        callsign:
+          type: string
+    ChannelCallsignResponse:
       type: object
       required:
       - callsign
@@ -967,6 +1018,8 @@ components:
       properties:
         body:
           type: string
+        immediate:
+          type: boolean
     ContextRequest:
       type: object
       required:
@@ -1073,19 +1126,6 @@ components:
           type: string
         value:
           type: string
-    Message:
-      type: object
-      required:
-      - from
-      - body
-      - timestamp
-      properties:
-        from:
-          type: string
-        body:
-          type: string
-        timestamp:
-          type: string
     AnnounceRequest:
       type: object
       required:
@@ -1112,6 +1152,8 @@ components:
           type: string
         body:
           type: string
+        immediate:
+          type: boolean
     NotifyRequest:
       type: object
       required:
@@ -1125,23 +1167,14 @@ components:
           type: string
         body:
           type: string
-    WaitResponse:
+        immediate:
+          type: boolean
+    DeliveryResponse:
       type: object
       required:
-      - messages
+      - immediate
       properties:
-        messages:
-          type: array
-          items:
-            $ref: "#/components/schemas/Message"
-    ListenRequest:
-      type: object
-      required:
-      - callsign
-      properties:
-        callsign:
-          type: string
-        listening:
+        immediate:
           type: boolean
     ReleaseRequest:
       type: object
@@ -1190,6 +1223,12 @@ components:
         timestamp:
           type: string
         lastSeen:
+          type: string
+        lastPromptAt:
+          type: string
+        lastTurnEndAt:
+          type: string
+        closedAt:
           type: string
         workDirectory:
           type: string

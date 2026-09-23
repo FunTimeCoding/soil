@@ -79,7 +79,3 @@ func TestMoveBinaryAbsolutePath(t *testing.T) {
 	p.MoveBinary()
 	assert.True(t, system.FileExists(filepath.Join(p.BinaryRoot, "goexample")))
 }
-
-func packageRoot() string {
-	return filepath.Join(system.WorkDirectory(), "goexample_1.0.0-1_amd64")
-}

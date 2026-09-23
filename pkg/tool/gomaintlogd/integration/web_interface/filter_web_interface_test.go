@@ -11,7 +11,6 @@ import (
 
 func TestFilterWebInterface(t *testing.T) {
 	o := web_interface_tester.New(t)
-	defer o.Close()
 	o.PostForm(
 		constant.AddEntryPath,
 		url.Values{

@@ -8,6 +8,7 @@ import (
 
 func Update() {
 	c := telegram.NewEnvironment()
+	defer c.Close()
 	f := constant.TelegramFormat
 
 	for _, m := range c.Messages() {

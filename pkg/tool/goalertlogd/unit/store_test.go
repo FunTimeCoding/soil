@@ -1,15 +1,13 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/relational/lite"
-	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store/record"
 	"testing"
 	"time"
 )
 
 func TestTopAggregates(t *testing.T) {
-	s := store.New(lite.NewMemory())
+	s := newStore(t)
 
 	if e := s.Create(
 		record.Record{

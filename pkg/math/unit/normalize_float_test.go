@@ -1,32 +1,26 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/math/normalize"
+	"github.com/funtimecoding/soil/pkg/math/unit/math_tester"
 	"testing"
 )
 
-func TestNormalizeFloat(t *testing.T) {
-	// Meet minimum
-	normalizeFloatAssertFloat(t, 0, 0, 100, 0)
-	// Below minimum
-	normalizeFloatAssertFloat(t, -1, 0, 100, 0)
-	// Meet maximum
-	normalizeFloatAssertFloat(t, 100, 0, 100, 100)
-	// Above maximum
-	normalizeFloatAssertFloat(t, 101, 0, 100, 100)
-	// No maximum
-	normalizeFloatAssertFloat(t, 101, 0, 0, 101)
+func TestNormalizeFloatMeetMinimum(t *testing.T) {
+	math_tester.AssertNormalizeFloat(t, 0, 0, 0, 100)
 }
 
-func normalizeFloatAssertFloat(
-	t *testing.T,
-	f float64,
-	minimum float64,
-	maximum float64,
-	expect float64,
-) {
-	t.Helper()
-	normalize.Float(&f, minimum, maximum)
-	assert.Round(t, expect, f, 0)
+func TestNormalizeFloatBelowMinimum(t *testing.T) {
+	math_tester.AssertNormalizeFloat(t, 0, -1, 0, 100)
+}
+
+func TestNormalizeFloatMeetMaximum(t *testing.T) {
+	math_tester.AssertNormalizeFloat(t, 100, 100, 0, 100)
+}
+
+func TestNormalizeFloatAboveMaximum(t *testing.T) {
+	math_tester.AssertNormalizeFloat(t, 100, 101, 0, 100)
+}
+
+func TestNormalizeFloatNoMaximum(t *testing.T) {
+	math_tester.AssertNormalizeFloat(t, 101, 101, 0, 0)
 }

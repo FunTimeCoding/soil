@@ -3,29 +3,16 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
-	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"os"
 	"path/filepath"
 	"testing"
 )
 
-func assertEntriesInsideModule(
-	t *testing.T,
-	r *output.Results,
-) {
-	t.Helper()
-
-	for _, c := range r.Entries {
-		if filepath.IsAbs(c.Path) {
-			t.Errorf("rewrite target outside module: %s", c.Path)
-		}
-	}
-}
-
 func TestMoveWithCgoConsumerStaysInsideModule(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,
-		serviceTestdata("move-cgo-reference/src"),
+		service_tester.ServiceTestdata("move-cgo-reference/src"),
 	)
 	s := testService()
 	r, e := s.MoveSymbol(
@@ -42,7 +29,10 @@ func TestMoveWithCgoConsumerStaysInsideModule(t *testing.T) {
 }
 
 func TestMovePackageWithTestVariantsStaysInsideModule(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("test-home/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("test-home/src"),
+	)
 	e := os.MkdirAll(filepath.Join(d, "pkg/alfa/integration"), 0755)
 	assert.FatalOnError(t, e)
 	s := testService()

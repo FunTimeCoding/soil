@@ -55,6 +55,7 @@ const (
 	Add               = "add"
 	Remove            = "remove"
 	ReplaceAll        = "replace_all"
+	Tags              = "tags"
 
 	DashboardTitle   = "Dashboard"
 	DashboardPath    = "/"

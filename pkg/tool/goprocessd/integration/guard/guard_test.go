@@ -7,7 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/environment"
-	"github.com/funtimecoding/soil/pkg/tool/goprocessd/server"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/supervisor"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"path/filepath"
@@ -16,7 +16,7 @@ import (
 
 func TestGuard(t *testing.T) {
 	base := t.TempDir()
-	s := server.New(
+	s := supervisor.New(
 		nil,
 		environment.New(nil),
 		filepath.Join(base, "Procfile"),
@@ -41,4 +41,6 @@ func TestGuard(t *testing.T) {
 	defer v.Stop()
 	v.VerifyBase(t)
 	v.VerifyModelContext(t)
+	v.VerifyInterface(t)
+	v.VerifyGuarded(t, "/api/processes")
 }

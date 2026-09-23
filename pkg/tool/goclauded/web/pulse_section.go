@@ -53,6 +53,14 @@ func (s *Server) pulseSection(identifier string) gomponents.Node {
 				gomponents.Attr("placeholder", "pulse..."),
 				gomponents.Attr("autocomplete", "off"),
 			),
+			html.Label(
+				html.Input(
+					html.Type("checkbox"),
+					html.Name(constant.Immediate),
+					html.Value("true"),
+				),
+				gomponents.Text("wake now"),
+			),
 			html.Button(html.Type("submit"), gomponents.Text("Send")),
 		),
 	)

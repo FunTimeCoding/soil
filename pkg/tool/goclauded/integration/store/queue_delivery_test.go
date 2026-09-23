@@ -9,7 +9,7 @@ import (
 
 func TestQueueIsNotDeliveredToTheNextHolderOfTheName(t *testing.T) {
 	s := store_tester.New(t)
-	addSession(t, s, "first", "Frost", nil, "2026-09-01 10:00:00+00:00")
+	s.AddSession("first", "Frost", nil, "2026-09-01 10:00:00+00:00")
 	assert.FatalOnError(
 		t,
 		s.Store.PushQueue(
@@ -19,7 +19,7 @@ func TestQueueIsNotDeliveredToTheNextHolderOfTheName(t *testing.T) {
 			"for the first Frost",
 		),
 	)
-	addSession(t, s, "second", "Frost", "Frost", "2026-09-08 10:00:00+00:00")
+	s.AddSession("second", "Frost", "Frost", "2026-09-08 10:00:00+00:00")
 	inherited, e := s.Store.DrainQueue("second", "Frost")
 	assert.FatalOnError(t, e)
 	assert.Count(t, 0, inherited)
@@ -31,12 +31,12 @@ func TestQueueIsNotDeliveredToTheNextHolderOfTheName(t *testing.T) {
 
 func TestNotificationIsNotDeliveredToTheNextHolderOfTheName(t *testing.T) {
 	s := store_tester.New(t)
-	addSession(t, s, "first", "Frost", nil, "2026-09-01 10:00:00+00:00")
+	s.AddSession("first", "Frost", nil, "2026-09-01 10:00:00+00:00")
 	assert.FatalOnError(
 		t,
 		s.Store.SendNotification("first", "Frost", "Dale", "for the first"),
 	)
-	addSession(t, s, "second", "Frost", "Frost", "2026-09-08 10:00:00+00:00")
+	s.AddSession("second", "Frost", "Frost", "2026-09-08 10:00:00+00:00")
 	inherited, e := s.Store.PendingNotifications("second")
 	assert.FatalOnError(t, e)
 	assert.Count(t, 0, inherited)

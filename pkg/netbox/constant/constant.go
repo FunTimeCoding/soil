@@ -26,14 +26,14 @@ const (
 	VirtualInterfaceAddress = "virtualization.vminterface"
 	VirtualMachineAddress   = "virtualization.virtualmachine"
 
-	// SubnetAddress when assigning an IP address to a prefix/subnet
-	SubnetAddress = "ipam.prefix"
+	PrefixAddress = "ipam.prefix"
 
 	Interface = "/api"
 
 	SignatureHeader = "X-Hook-Signature"
 
-	FixtureAddress = "192.168.0.1/24"
+	FixtureAddress         = "192.168.0.1/24"
+	FixturePhysicalAddress = "02:00:00:00:00:01"
 
 	DeviceActiveStatus = "active"
 )
@@ -41,17 +41,15 @@ const (
 var (
 	Format = constant.ColorFormat.Copy()
 
-	// InternetObjectTypes an IP address can be assigned to
-	InternetObjectTypes = []string{
+	InternetAddressTargets = []string{
 		DeviceAddress,
 		InterfaceAddress,
 		VirtualMachineAddress,
 		VirtualInterfaceAddress,
-		SubnetAddress,
+		PrefixAddress,
 	}
 
-	// PhysicalObjectTypes a MAC address can be assigned to
-	PhysicalObjectTypes = []string{InterfaceAddress}
+	PhysicalAddressTargets = []string{InterfaceAddress, VirtualInterfaceAddress}
 )
 
 var NonSlug = regexp.MustCompile(`[^a-z0-9-]`)

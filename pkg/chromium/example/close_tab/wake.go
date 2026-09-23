@@ -8,6 +8,7 @@ import (
 
 func Wake() {
 	c := chromium.NewEnvironment()
+	defer c.Close()
 	identifier := environment.Required("CHROMIUM_TAB_ID")
 	console.Format("waking tab %s...\n", identifier)
 	e := c.Wake(identifier)

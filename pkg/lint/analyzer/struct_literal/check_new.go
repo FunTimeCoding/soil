@@ -42,15 +42,14 @@ func checkNew(
 	}
 
 	results.AddConcern(
-		concern.NewFile(
+		concern.NewPosition(
 			"struct_literal",
 			fmt.Sprintf(
 				"use a constructor function instead of new(%s.%s)",
 				t.Pkg().Name(),
 				t.Name(),
 			),
-			p.Fset.Position(call.Pos()).Filename,
-			false,
+			p.Fset.Position(call.Pos()),
 		),
 	)
 }

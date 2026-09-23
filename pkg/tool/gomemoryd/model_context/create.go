@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/save_option"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -45,11 +46,30 @@ func (s *Server) create(
 	o.Type = q.GetString(constant.Type, "")
 	o.Source = q.GetString(constant.Source, "")
 	o.ParentIdentifier = parentIdentifier
+	stripped := false
+
+	if raw := q.GetString(constant.Tags, ""); raw != "" {
+		o.Tags, stripped = splitTags(raw)
+	}
+
 	m, h := s.service.CreateMemory(o)
 
 	if h != nil {
 		return s.captureDetail(h)
 	}
 
-	return response.Success(fmt.Sprintf("Created memory %d", m.Identifier))
+	created := fmt.Sprintf("Created memory %d tags: %v", m.Identifier, m.Tags)
+
+	if !stripped {
+		return response.Success(created)
+	}
+
+	return response.Success(
+		join.NewLine(
+			[]string{
+				join.Space(constant.TagStripNotice, join.CommaSpace(o.Tags)),
+				created,
+			},
+		),
+	)
 }

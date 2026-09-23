@@ -9,9 +9,7 @@ import (
 
 func TestHistoryCountEmpty(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "bind identity")
 	result := a.MustCallTool(constant.HistoryCount, map[string]any{})
 	assert.StringContains(t, "1 events", result)
@@ -19,9 +17,7 @@ func TestHistoryCountEmpty(t *testing.T) {
 
 func TestHistoryCountMultiple(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "one")
 	a.Announce(a.Name(), "two")
 	a.MustCallTool(

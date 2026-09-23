@@ -193,5 +193,19 @@ func (s *Server) memoryDetailPage(
 		)
 	}
 
-	s.view.RenderPage(w, m.Name, constant.MemoriesPath, content...)
+	statistic, summary, e := s.service.MemoryTokenStatistic(identifier, m.Scope)
+
+	if e != nil {
+		s.view.RenderPage(w, m.Name, constant.MemoriesPath, content...)
+
+		return
+	}
+
+	s.view.RenderPageWithSummary(
+		w,
+		m.Name,
+		constant.MemoriesPath,
+		tokenStrip(m, statistic, summary),
+		content...,
+	)
 }

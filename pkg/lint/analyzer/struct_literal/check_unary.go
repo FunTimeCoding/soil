@@ -38,15 +38,14 @@ func checkUnary(
 	}
 
 	results.AddConcern(
-		concern.NewFile(
+		concern.NewPosition(
 			"struct_literal",
 			fmt.Sprintf(
 				"use a constructor function instead of &%s.%s{}",
 				t.Pkg().Name(),
 				t.Name(),
 			),
-			p.Fset.Position(expr.Pos()).Filename,
-			false,
+			p.Fset.Position(expr.Pos()),
 		),
 	)
 }

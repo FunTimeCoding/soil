@@ -1,7 +1,6 @@
 package gofix
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
@@ -77,15 +76,13 @@ func findSingleParameterEdits(
 				}
 
 				seen[f.Type.Params.Opening] = true
-				line := p.Fset.Position(f.Pos()).Line
 				r.AddConcern(
-					concern.NewFile(
+					concern.NewLine(
 						"single_parameter",
-						fmt.Sprintf(
-							"collapsed single parameter (line %d)",
-							line,
-						),
+						"collapsed single parameter",
 						name,
+						p.Fset.Position(f.Pos()).Line,
+						"",
 						true,
 					),
 				)

@@ -103,6 +103,18 @@ type NetboxSource interface {
 		i *network.Interface,
 	) (*physical_address.Address, error)
 	CreatePlatform(name string) (*platform.Platform, error)
+	UpdateInterface(
+		d *device.Device,
+		name string,
+		t netbox.InterfaceTypeValue,
+		h net.HardwareAddr,
+	) (*network.Interface, error)
+	PhysicalAddresses() ([]*physical_address.Address, error)
+	UpdateVirtualInterface(
+		vm *virtual_machine.Machine,
+		name string,
+		h net.HardwareAddr,
+	) (*netbox.VMInterface, error)
 	CreatePrefix(
 		cidr string,
 		s *site.Site,

@@ -9,9 +9,7 @@ import (
 
 func TestEditSessionAliasSelf(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "working")
 	a.MustCallTool(
 		constant.EditSession,
@@ -23,11 +21,8 @@ func TestEditSessionAliasSelf(t *testing.T) {
 
 func TestEditSessionAliasOther(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	b := s.NewSession(t)
-	defer b.Close()
 	a.Announce(a.Name(), "editor")
 	b.Announce(b.Name(), constant.FixtureTarget)
 	a.MustCallTool(
@@ -40,9 +35,7 @@ func TestEditSessionAliasOther(t *testing.T) {
 
 func TestEditSessionDescription(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "working")
 	a.MustCallTool(
 		constant.EditSession,
@@ -57,9 +50,7 @@ func TestEditSessionDescription(t *testing.T) {
 
 func TestEditSessionBoth(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "working")
 	a.MustCallTool(
 		constant.EditSession,

@@ -6,12 +6,7 @@ import (
 )
 
 func TestTrimToLastSentence(t *testing.T) {
-	tests := []struct {
-		name     string
-		input    string
-		expected string
-	}{
-		// Basic cases
+	tests := []trimToLastSentenceCase{
 		{
 			name:     "single_complete_sentence_with_period",
 			input:    "Hello world.",
@@ -27,7 +22,6 @@ func TestTrimToLastSentence(t *testing.T) {
 			input:    "Hello world?",
 			expected: "Hello world?",
 		},
-		// Multiple sentences
 		{
 			name:     "two_sentences_trim_after_first",
 			input:    "First sentence. Incomplete second",
@@ -38,7 +32,6 @@ func TestTrimToLastSentence(t *testing.T) {
 			input:    "First! Second? Third incomplete",
 			expected: "First! Second?",
 		},
-		// Edge cases with no complete sentences
 		{
 			name:     "no_sentence_terminator",
 			input:    "This is incomplete",
@@ -46,7 +39,6 @@ func TestTrimToLastSentence(t *testing.T) {
 		},
 		{name: "empty_string", input: "", expected: ""},
 		{name: "single_character", input: "a", expected: "a"},
-		// Punctuation at boundaries
 		{
 			name:     "ends_with_punctuation",
 			input:    "Complete sentence.",
@@ -63,7 +55,6 @@ func TestTrimToLastSentence(t *testing.T) {
 			input:    "Sentence.",
 			expected: "Sentence.",
 		},
-		// Special cases
 		{
 			name:     "multiple_punctuation_marks",
 			input:    "What?! Really.",
@@ -89,7 +80,6 @@ func TestTrimToLastSentence(t *testing.T) {
 			input:    "Well...",
 			expected: "Well...",
 		},
-		// Whitespace handling
 		{
 			name:     "trailing_whitespace_after_punctuation",
 			input:    "Sentence.   ",
@@ -100,7 +90,6 @@ func TestTrimToLastSentence(t *testing.T) {
 			input:    "First sentence.\nSecond incomplete",
 			expected: "First sentence.",
 		},
-		// Unicode/international
 		{
 			name:     "unicode_text",
 			input:    "Hello 世界. More text",

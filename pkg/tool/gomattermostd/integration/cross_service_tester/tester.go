@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration/base"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/store"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/watcher"
+	"testing"
 )
 
 type Tester struct {
@@ -14,4 +15,5 @@ type Tester struct {
 	Watcher   *watcher.Watcher
 	Goclauded *base.Server
 	Reporter  *memory.Memory
+	t         *testing.T
 }

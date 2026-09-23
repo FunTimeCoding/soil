@@ -2,8 +2,6 @@ package resolve
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/source/build_tag"
-	"github.com/funtimecoding/soil/pkg/strings/join"
 	"go/token"
 	"golang.org/x/tools/go/packages"
 )
@@ -14,17 +12,12 @@ func LoadPackages(
 ) ([]*packages.Package, *token.FileSet, error) {
 	set := token.NewFileSet()
 	c := &packages.Config{
-		Mode:  packages.LoadSyntax | packages.NeedModule,
-		Fset:  set,
-		Dir:   directory,
-		Tests: true,
+		Mode:       packages.LoadSyntax | packages.NeedModule,
+		Fset:       set,
+		Dir:        directory,
+		Tests:      true,
+		BuildFlags: BuildFlags(directory),
 	}
-	tags := build_tag.Discover(directory)
-
-	if len(tags) > 0 {
-		c.BuildFlags = []string{fmt.Sprintf("-tags=%s", join.Comma(tags))}
-	}
-
 	result, e := packages.Load(c, patterns...)
 
 	if e != nil {

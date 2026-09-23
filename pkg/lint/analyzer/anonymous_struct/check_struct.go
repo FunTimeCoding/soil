@@ -26,11 +26,10 @@ func checkStruct(
 	}
 
 	results.AddConcern(
-		concern.NewFile(
+		concern.NewPosition(
 			"anonymous_struct",
 			"anonymous struct; extract a named type",
-			p.Fset.Position(s.Pos()).Filename,
-			false,
+			p.Fset.Position(s.Pos()),
 		),
 	)
 }

@@ -30,11 +30,11 @@ func (s *Server) Click(
 		return response.Fail("uid %s not found - take a snapshot first", a.UID)
 	}
 
-	x := s.client.AcquireTarget(t.Identifier)
+	p := s.client.Page(t.Identifier)
 	e = withTimeoutAction(
 		constant.TargetTimeout,
 		func() error {
-			return s.client.ClickNode(x, backendIdentifier)
+			return p.ClickNode(backendIdentifier)
 		},
 	)
 
@@ -49,7 +49,7 @@ func (s *Server) Click(
 	nodes, e := withTimeout(
 		constant.TargetTimeout,
 		func() ([]*snapshot.Node, error) {
-			return s.client.Snapshot(x)
+			return p.Snapshot()
 		},
 	)
 

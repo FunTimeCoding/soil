@@ -2,11 +2,9 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"io"
-	"os"
 	"testing"
 )
 
@@ -27,14 +25,16 @@ func TestPrintResults(t *testing.T) {
 					"pkg/foo/baz.go",
 					true,
 				),
-				concern.NewFile(
+				concern.NewLine(
 					"call_format",
-					"formatted call (line 42)",
+					"formatted call",
 					"pkg/foo/baz.go",
+					42,
+					"",
 					true,
 				),
 			}
-			captured := captureStdout(
+			captured := testutil.CaptureStdout(
 				func() {
 					hasBlocked := output.PrintResults(entries, false)
 					assert.False(t, hasBlocked)
@@ -42,7 +42,7 @@ func TestPrintResults(t *testing.T) {
 			)
 			assert.String(
 				t,
-				"pkg/foo/bar.go: de-aliased sentry → constant (auto-fixed)\npkg/foo/baz.go: renamed dirName → directoryName (4 references) (auto-fixed)\npkg/foo/baz.go: formatted call (line 42) (auto-fixed)\n",
+				"pkg/foo/bar.go: de-aliased sentry → constant (auto-fixed)\npkg/foo/baz.go: renamed dirName → directoryName (4 references) (auto-fixed)\npkg/foo/baz.go:42: formatted call (auto-fixed)\n",
 				captured,
 			)
 		},
@@ -63,14 +63,16 @@ func TestPrintResults(t *testing.T) {
 					"pkg/foo/baz.go",
 					true,
 				),
-				concern.NewFile(
+				concern.NewLine(
 					"call_format",
-					"formatted call (line 42)",
+					"formatted call",
 					"pkg/foo/baz.go",
+					42,
+					"",
 					true,
 				),
 			}
-			captured := captureStdout(
+			captured := testutil.CaptureStdout(
 				func() {
 					hasBlocked := output.PrintResults(entries, true)
 					assert.False(t, hasBlocked)
@@ -96,7 +98,7 @@ func TestPrintResults(t *testing.T) {
 					false,
 				),
 			}
-			captured := captureStdout(
+			captured := testutil.CaptureStdout(
 				func() {
 					hasBlocked := output.PrintResults(entries, true)
 					assert.True(t, hasBlocked)
@@ -126,7 +128,7 @@ func TestPrintResults(t *testing.T) {
 					false,
 				),
 			}
-			captured := captureStdout(
+			captured := testutil.CaptureStdout(
 				func() {
 					hasBlocked := output.PrintResults(entries, false)
 					assert.True(t, hasBlocked)
@@ -142,7 +144,7 @@ func TestPrintResults(t *testing.T) {
 	t.Run(
 		"EmptyNoOutput",
 		func(t *testing.T) {
-			captured := captureStdout(
+			captured := testutil.CaptureStdout(
 				func() {
 					hasBlocked := output.PrintResults(nil, false)
 					assert.False(t, hasBlocked)
@@ -151,18 +153,4 @@ func TestPrintResults(t *testing.T) {
 			assert.String(t, "", captured)
 		},
 	)
-}
-
-func captureStdout(f func()) string {
-	original := os.Stdout
-	reader, writer, e := os.Pipe()
-	errors.PanicOnError(e)
-	os.Stdout = writer
-	f()
-	errors.PanicClose(writer)
-	os.Stdout = original
-	captured, e := io.ReadAll(reader)
-	errors.PanicOnError(e)
-
-	return string(captured)
 }

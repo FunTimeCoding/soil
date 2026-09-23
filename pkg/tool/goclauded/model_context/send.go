@@ -33,8 +33,10 @@ func (s *Server) send(
 	}
 
 	to := q.GetString(constant.To, "")
+	immediate := q.GetBool(constant.Immediate, false)
+	delivered, f := s.service.Send(c.Callsign, to, body, immediate)
 
-	if f := s.service.Send(c.Callsign, to, body); f != nil {
+	if f != nil {
 		if not_found.Is(f) {
 			return response.Fail(f.Error())
 		}
@@ -42,9 +44,18 @@ func (s *Server) send(
 		return s.captureFail(f, library.UnexpectedError)
 	}
 
-	if to != "" {
-		return response.Success(fmt.Sprintf("Sent to %s", to))
+	if to == "" {
+		return response.Success("Broadcast sent")
 	}
 
-	return response.Success("Broadcast sent")
+	if immediate && !delivered {
+		return response.Success(
+			fmt.Sprintf(
+				"Sent to %s, deferred to their next prompt - immediate delivery is rate limited for that session right now",
+				to,
+			),
+		)
+	}
+
+	return response.Success(fmt.Sprintf("Sent to %s", to))
 }

@@ -10,7 +10,6 @@ import (
 
 func TestModelContext(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	assert.Count(t, 9, o.Client.ListTools())
 	b := tab.New()
 	b.Identifier = 100

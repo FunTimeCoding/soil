@@ -17,7 +17,13 @@ func (s *Server) ListDevices(
 			return server.ListDevices500JSONResponse(*s.captureDetail(e)), nil
 		}
 
-		return server.ListDevices200JSONResponse(convert.Devices(devices)), nil
+		result := convert.Devices(devices)
+
+		if f := s.attachDeviceLabels(result); f != nil {
+			return server.ListDevices500JSONResponse(*s.captureDetail(f)), nil
+		}
+
+		return server.ListDevices200JSONResponse(result), nil
 	}
 
 	devices, e := s.client.Devices()
@@ -26,5 +32,11 @@ func (s *Server) ListDevices(
 		return server.ListDevices500JSONResponse(*s.captureDetail(e)), nil
 	}
 
-	return server.ListDevices200JSONResponse(convert.Devices(devices)), nil
+	result := convert.Devices(devices)
+
+	if f := s.attachDeviceLabels(result); f != nil {
+		return server.ListDevices500JSONResponse(*s.captureDetail(f)), nil
+	}
+
+	return server.ListDevices200JSONResponse(result), nil
 }

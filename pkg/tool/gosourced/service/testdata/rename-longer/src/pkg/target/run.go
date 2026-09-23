@@ -1,5 +1,7 @@
 package target
 
+import "example/pkg/target/constant"
+
 func Run() string {
-	return Alpha + Bold + Legend + Wide
+	return constant.Alpha + constant.Bold + constant.Legend + constant.Wide
 }

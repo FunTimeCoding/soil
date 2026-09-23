@@ -26,15 +26,14 @@ func checkConstant(
 	}
 
 	results.AddConcern(
-		concern.NewFile(
+		concern.NewPosition(
 			"string_constant",
 			fmt.Sprintf(
 				"constant %s.%s in expected value should be a literal",
 				c.Pkg().Name(),
 				c.Name(),
 			),
-			p.Fset.Position(i.Pos()).Filename,
-			false,
+			p.Fset.Position(i.Pos()),
 		),
 	)
 }

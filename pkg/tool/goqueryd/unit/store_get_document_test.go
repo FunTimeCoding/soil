@@ -3,11 +3,12 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/strings/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/store_tester"
 	"testing"
 )
 
 func TestGetDocumentByRelativePath(t *testing.T) {
-	s := indexedTestStore(t)
+	s := store_tester.IndexedTestStore(t)
 	defer s.Close()
 	d := s.MustGetDocument("test/alpha.md")
 	assert.NotNil(t, d)
@@ -16,7 +17,7 @@ func TestGetDocumentByRelativePath(t *testing.T) {
 }
 
 func TestGetDocumentByVirtualPath(t *testing.T) {
-	s := indexedTestStore(t)
+	s := store_tester.IndexedTestStore(t)
 	defer s.Close()
 	d := s.MustGetDocument("qmd://test/alpha.md")
 	assert.NotNil(t, d)
@@ -25,7 +26,7 @@ func TestGetDocumentByVirtualPath(t *testing.T) {
 }
 
 func TestFindDocumentMissIsNotFound(t *testing.T) {
-	s := indexedTestStore(t)
+	s := store_tester.IndexedTestStore(t)
 	defer s.Close()
 	d, found, e := s.FindDocument("test/nonexistent.md")
 	assert.FatalOnError(t, e)
@@ -34,7 +35,7 @@ func TestFindDocumentMissIsNotFound(t *testing.T) {
 }
 
 func TestGetDocumentWithContext(t *testing.T) {
-	s := indexedTestStore(t)
+	s := store_tester.IndexedTestStore(t)
 	defer s.Close()
 	s.AddContext("test", constant.Slash, "root context")
 	d := s.MustGetDocument("test/alpha.md")

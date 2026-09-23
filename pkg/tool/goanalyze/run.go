@@ -1,6 +1,7 @@
 package goanalyze
 
 import (
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/unclosed_resource"
 	"github.com/funtimecoding/soil/pkg/lint/face"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/goanalyze/option"
@@ -17,9 +18,10 @@ func Run(o *option.Analyze) {
 	loaded := load(o.Root, patterns)
 	results := output.NewResultsWithDirectory(o.Root)
 	faces := face.New(loaded)
+	summaries := unclosed_resource.NewSummaries(loaded)
 
 	for _, p := range loaded {
-		check(p, results, o.Comment, faces)
+		check(p, results, o.Comment, faces, summaries)
 	}
 
 	hasBlocked := output.PrintResults(results.Entries, o.Summary)

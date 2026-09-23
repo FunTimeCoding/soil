@@ -38,7 +38,7 @@ func (s *Service) Coverage() []*coverage.Server {
 		registered[server] = names
 	}
 
-	var calls []tool_call.Call
+	var calls []*tool_call.Call
 
 	for _, e := range s.Sessions() {
 		calls = append(calls, s.ToolCalls(e.Identifier)...)

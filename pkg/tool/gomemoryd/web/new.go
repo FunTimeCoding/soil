@@ -71,6 +71,10 @@ func New(s *service.Service) *Server {
 						constant.ImpressionsPath,
 						constant.ImpressionsTitle,
 					),
+					navigation_item.New(
+						constant.StatisticPath,
+						constant.StatisticTitle,
+					),
 					navigation_item.New(web.SearchPath, constant.SearchTitle),
 				),
 		),

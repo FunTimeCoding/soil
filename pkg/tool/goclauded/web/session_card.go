@@ -2,6 +2,7 @@ package web
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/time"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/label"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/pulse"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/session"
@@ -60,7 +61,7 @@ func sessionCard(
 		)
 	}
 
-	metadata = append(metadata, relativeTime(s.LastSeen))
+	metadata = append(metadata, time.Relative(sessionActivity(s)))
 	details = append(
 		details,
 		html.P(html.Small(gomponents.Text(strings.Join(metadata, " · ")))),
@@ -85,7 +86,7 @@ func sessionCard(
 	return html.A(
 		gomponents.Attr("href", fmt.Sprintf("/sessions/%s", s.Identifier)),
 		html.Class("session-card"),
-		html.H4(statusDot(s.LastSeen), gomponents.Text(s.Name)),
+		html.H4(statusDot(sessionActivity(s)), gomponents.Text(s.Name)),
 		gomponents.Group(details),
 	)
 }

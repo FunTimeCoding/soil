@@ -134,16 +134,69 @@ func TestMissingServerCaptureFailSkipsRecoveryOnly(t *testing.T) {
 	assertNoConcern(t, s[0], constant.MissingServerCaptureFailKey)
 }
 
-func assertNoConcern(
-	t *testing.T,
-	s *scan.Service,
-	key string,
-) {
-	t.Helper()
+func TestMissingCaptureDetailFlagged(t *testing.T) {
+	v := virtual_file_system.New()
+	v.WriteString(
+		"pkg/tool/gotestd/generated/server/config.yaml",
+		"generate:\n  strict-server: true\n",
+	)
+	v.WriteString(
+		"pkg/tool/gotestd/generated/server/openapi.yaml",
+		"---\nopenapi: \"3.0.0\"\ninfo:\n  title: gotestd\n  version: 1.0.0\n",
+	)
+	v.WriteString(
+		"pkg/tool/gotestd/server/get_thing.go",
+		"package server\n\nimport \"github.com/funtimecoding/soil/pkg/web/detail_error\"\n\nfunc (s *Server) GetThing() *detail_error.Detail {\n\treturn nil\n}\n",
+	)
+	v.WriteString("pkg/tool/gotestd/option/o.go", "package option\n")
+	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
+	s := scan.Services(v, "test", scan.NewConfiguration())
+	assert.Integer(t, 1, len(s))
+	assertConcern(t, s[0], constant.MissingCaptureDetailKey)
+}
 
-	for _, c := range s.Concerns {
-		if c.Key == key {
-			t.Errorf("unexpected concern with key %q found", key)
-		}
-	}
+func TestMissingCaptureDetailClean(t *testing.T) {
+	v := virtual_file_system.New()
+	v.WriteString(
+		"pkg/tool/gotestd/generated/server/config.yaml",
+		"generate:\n  strict-server: true\n",
+	)
+	v.WriteString(
+		"pkg/tool/gotestd/generated/server/openapi.yaml",
+		"---\nopenapi: \"3.0.0\"\ninfo:\n  title: gotestd\n  version: 1.0.0\n",
+	)
+	v.WriteString(
+		"pkg/tool/gotestd/server/get_thing.go",
+		"package server\n\nimport \"github.com/funtimecoding/soil/pkg/web/detail_error\"\n\nfunc (s *Server) GetThing() *detail_error.Detail {\n\treturn nil\n}\n",
+	)
+	v.WriteString(
+		"pkg/tool/gotestd/server/capture_detail.go",
+		"package server\n\nfunc (s *Server) captureDetail() {}\n",
+	)
+	v.WriteString("pkg/tool/gotestd/option/o.go", "package option\n")
+	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
+	s := scan.Services(v, "test", scan.NewConfiguration())
+	assert.Integer(t, 1, len(s))
+	assertNoConcern(t, s[0], constant.MissingCaptureDetailKey)
+}
+
+func TestMissingCaptureDetailNotWrapping(t *testing.T) {
+	v := virtual_file_system.New()
+	v.WriteString(
+		"pkg/tool/gotestd/generated/server/config.yaml",
+		"generate:\n  strict-server: true\n",
+	)
+	v.WriteString(
+		"pkg/tool/gotestd/generated/server/openapi.yaml",
+		"---\nopenapi: \"3.0.0\"\ninfo:\n  title: gotestd\n  version: 1.0.0\n",
+	)
+	v.WriteString(
+		"pkg/tool/gotestd/server/get_thing.go",
+		"package server\n\nfunc (s *Server) GetThing() string {\n\treturn \"ok\"\n}\n",
+	)
+	v.WriteString("pkg/tool/gotestd/option/o.go", "package option\n")
+	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
+	s := scan.Services(v, "test", scan.NewConfiguration())
+	assert.Integer(t, 1, len(s))
+	assertNoConcern(t, s[0], constant.MissingCaptureDetailKey)
 }

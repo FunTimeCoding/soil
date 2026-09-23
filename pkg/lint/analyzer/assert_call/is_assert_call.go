@@ -20,20 +20,14 @@ func IsAssertCall(
 	i, okay := s.X.(*ast.Ident)
 
 	if !okay {
-		return false
+		return isAssertHelperCall(p, call)
 	}
 
-	o := p.TypesInfo.ObjectOf(i)
+	n, okay := p.TypesInfo.ObjectOf(i).(*types.PkgName)
 
-	if o == nil {
-		return false
+	if okay && n.Imported().Name() == constant.AssertPackageName {
+		return true
 	}
 
-	n, okay := o.(*types.PkgName)
-
-	if !okay {
-		return false
-	}
-
-	return n.Imported().Name() == constant.AssertPackageName
+	return isAssertHelperCall(p, call)
 }

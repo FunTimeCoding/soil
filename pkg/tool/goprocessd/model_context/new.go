@@ -4,11 +4,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/generative/mark/server"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/constant"
-	supervisor "github.com/funtimecoding/soil/pkg/tool/goprocessd/server"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/supervisor"
 )
 
 func New(
-	s *supervisor.Server,
+	s *supervisor.Supervisor,
 	r face.Reporter,
 	t face.Recorder,
 	version string,

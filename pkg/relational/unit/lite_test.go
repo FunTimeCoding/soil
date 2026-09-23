@@ -8,16 +8,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/system"
-	"gorm.io/gorm"
 	"path/filepath"
 	"testing"
 )
-
-func closeMapper(m *gorm.DB) {
-	inner, e := m.DB()
-	errors.PanicOnError(e)
-	errors.PanicOnError(inner.Close())
-}
 
 func TestNewCreatesParentDirectory(t *testing.T) {
 	path := filepath.Join(t.TempDir(), "nested", constant.TestDatabase)
@@ -31,8 +24,6 @@ func TestNewMemoryPinsPool(t *testing.T) {
 	defer closeMapper(m)
 	inner, e := m.DB()
 	errors.PanicOnError(e)
-	// One in-memory database exists per connection - a second pooled
-	// connection would see an empty database
 	assert.Integer(t, 1, inner.Stats().MaxOpenConnections)
 }
 

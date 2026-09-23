@@ -20,11 +20,11 @@ func (s *Server) Snapshot(
 		return response.Fail(e.Error())
 	}
 
-	x := s.client.AcquireTarget(t.Identifier)
+	p := s.client.Page(t.Identifier)
 	nodes, e := withTimeout(
 		constant.TargetTimeout,
 		func() ([]*snapshot.Node, error) {
-			return s.client.Snapshot(x)
+			return p.Snapshot()
 		},
 	)
 

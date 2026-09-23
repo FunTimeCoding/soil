@@ -7,7 +7,7 @@ import (
 )
 
 func validateObjectType(objectType string) {
-	if !slices.Contains(constant.InternetObjectTypes, objectType) {
+	if !slices.Contains(constant.InternetAddressTargets, objectType) {
 		log.Panicf("unexpected object type: %s", objectType)
 	}
 }

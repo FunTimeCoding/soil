@@ -3,6 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"os"
 	"path/filepath"
 	"strings"
@@ -10,7 +11,10 @@ import (
 )
 
 func TestMovePackage(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("package-move/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("package-move/src"),
+	)
 	s := testService()
 	r, e := s.MovePackage(
 		d,
@@ -22,13 +26,13 @@ func TestMovePackage(t *testing.T) {
 	testutil.AssertBlocked(t, r, 0)
 	_, e = os.Stat(filepath.Join(d, "pkg/outer/store"))
 	assert.True(t, os.IsNotExist(e))
-	moved := readFixtureFile(t, d, "pkg/store/store.go")
+	moved := service_tester.ReadFixtureFile(t, d, "pkg/store/store.go")
 	assert.StringContains(t, "package store", moved)
-	run := readFixtureFile(t, d, "pkg/store/run.go")
+	run := service_tester.ReadFixtureFile(t, d, "pkg/store/run.go")
 	assertFormatted(t, run)
 	assert.StringContains(t, "example/pkg/store/sub", run)
 	assert.False(t, strings.Contains(run, "outer"))
-	caller := readFixtureFile(t, d, "pkg/caller/run.go")
+	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
 	assertFormatted(t, caller)
 	assert.StringContains(t, "\"example/pkg/store\"", caller)
 	assert.StringContains(t, "\"example/pkg/store/sub\"", caller)
@@ -36,7 +40,10 @@ func TestMovePackage(t *testing.T) {
 }
 
 func TestMovePackageBaseMismatch(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("package-move/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("package-move/src"),
+	)
 	s := testService()
 	r, e := s.MovePackage(
 		d,
@@ -50,7 +57,10 @@ func TestMovePackageBaseMismatch(t *testing.T) {
 }
 
 func TestMovePackageTargetExists(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("package-move/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("package-move/src"),
+	)
 	e := os.MkdirAll(filepath.Join(d, "pkg/store"), 0755)
 	assert.FatalOnError(t, e)
 	s := testService()
@@ -66,7 +76,10 @@ func TestMovePackageTargetExists(t *testing.T) {
 }
 
 func TestMovePackageIntoItself(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("package-move/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("package-move/src"),
+	)
 	s := testService()
 	r, e := s.MovePackage(
 		d,
@@ -80,7 +93,10 @@ func TestMovePackageIntoItself(t *testing.T) {
 }
 
 func TestMovePackageNotFound(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("package-move/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("package-move/src"),
+	)
 	s := testService()
 	r, e := s.MovePackage(
 		d,

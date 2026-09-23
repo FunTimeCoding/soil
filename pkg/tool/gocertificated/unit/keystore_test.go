@@ -6,13 +6,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/authority"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/keystore"
+	"github.com/funtimecoding/soil/pkg/tool/gocertificated/unit/authority_tester"
 	"os"
 	"path/filepath"
 	"testing"
 )
 
 func TestCertificateSurvivesArmorRoundTrip(t *testing.T) {
-	c := newRoot().Material().Certificate
+	c := authority_tester.NewRoot().Material().Certificate
 	assert.String(
 		t,
 		c.Subject.CommonName,
@@ -21,22 +22,22 @@ func TestCertificateSurvivesArmorRoundTrip(t *testing.T) {
 }
 
 func TestKeySignsAfterArmorRoundTrip(t *testing.T) {
-	root := newRoot()
+	root := authority_tester.NewRoot()
 	directory := filepath.Join(t.TempDir(), "material")
 	keystore.Write(directory, root.Material())
 	restored := authority.New(keystore.Read(directory))
-	cluster := newCluster(restored)
-	leaf := newLeaf(
+	cluster := authority_tester.NewCluster(restored)
+	leaf := authority_tester.NewLeaf(
 		cluster,
 		constant.FixtureCommonName,
 		[]string{constant.FixtureHost},
 	)
-	assert.Nil(t, verify(restored, cluster, leaf.Certificate))
+	assert.Nil(t, authority_tester.Verify(restored, cluster, leaf.Certificate))
 }
 
 func TestKeystoreRoundTripPreservesSubject(t *testing.T) {
 	directory := filepath.Join(t.TempDir(), "material")
-	keystore.Write(directory, newRoot().Material())
+	keystore.Write(directory, authority_tester.NewRoot().Material())
 	assert.String(
 		t,
 		"Example Root CA",
@@ -46,7 +47,7 @@ func TestKeystoreRoundTripPreservesSubject(t *testing.T) {
 
 func TestKeyFileIsNotReadableByOthers(t *testing.T) {
 	directory := filepath.Join(t.TempDir(), "material")
-	keystore.Write(directory, newRoot().Material())
+	keystore.Write(directory, authority_tester.NewRoot().Material())
 	i, e := os.Stat(filepath.Join(directory, constant.KeyFile))
 
 	if e != nil {

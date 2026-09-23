@@ -24,7 +24,7 @@ func TestResolveByNameNotFound(t *testing.T) {
 func TestAliasOwner(t *testing.T) {
 	s := store_tester.New(t)
 	s.EnsureSession("session-1")
-	editAlias(s, "session-1", "my-alias")
+	s.EditAlias("session-1", "my-alias")
 	owner, e := s.Store.AliasOwner("my-alias")
 	assert.FatalOnError(t, e)
 	assert.String(t, "session-1", owner)

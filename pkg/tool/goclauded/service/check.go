@@ -9,6 +9,10 @@ func (s *Service) Check(sessionIdentifier string) (*check_result.Result, error) 
 		return nil, e
 	}
 
+	if f := s.store.StampPrompt(sessionIdentifier, s.clock()); f != nil {
+		return nil, f
+	}
+
 	result := check_result.New()
 	result.Callsign = r.Callsign
 	entries, e := s.store.DrainQueue(sessionIdentifier, r.Callsign)

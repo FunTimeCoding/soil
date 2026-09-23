@@ -2,33 +2,11 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
-	"github.com/funtimecoding/soil/pkg/opnsense"
 	"github.com/funtimecoding/soil/pkg/opnsense/request"
-	"net/http"
-	"net/http/httptest"
 	"testing"
 )
-
-func canned(body string) *httptest.Server {
-	return httptest.NewTLSServer(
-		http.HandlerFunc(
-			func(
-				w http.ResponseWriter,
-				_ *http.Request,
-			) {
-				_, e := w.Write([]byte(body))
-				errors.PanicOnError(e)
-			},
-		),
-	)
-}
-
-func client(s *httptest.Server) *opnsense.Client {
-	return opnsense.New(s.Listener.Addr().String(), "key", "secret", true)
-}
 
 func TestDeleteHostReportsMissingEntry(t *testing.T) {
 	s := canned(`{"result":"not found"}`)

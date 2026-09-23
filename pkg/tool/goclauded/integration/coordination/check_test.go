@@ -12,17 +12,13 @@ import (
 
 func TestCheckCreatesSession(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	assert.True(t, a.Name() != "")
 }
 
 func TestCheckPreviewNoSession(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
-	a := s.NewSession(t)
-	defer a.Close()
+	s.NewSession(t)
 	restClient := s.RESTClient(t)
 	response, e := restClient.GetCheckWithResponse(
 		context.Background(),
@@ -38,11 +34,8 @@ func TestCheckPreviewNoSession(t *testing.T) {
 
 func TestCheckRecentActivity(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	b := s.NewSession(t)
-	defer b.Close()
 	a.Announce(a.Name(), "build search index")
 	b.CheckLive()
 	a.MustCallTool(
@@ -68,11 +61,8 @@ func TestCheckRecentActivity(t *testing.T) {
 
 func TestCheckRecentActivityLive(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	b := s.NewSession(t)
-	defer b.Close()
 	a.Announce(a.Name(), "search index")
 	b.Check()
 	a.MustCallTool(
@@ -90,11 +80,8 @@ func TestCheckRecentActivityLive(t *testing.T) {
 
 func TestCheckRecentActivityUpdate(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	b := s.NewSession(t)
-	defer b.Close()
 	a.Announce(a.Name(), "initial")
 	b.CheckLive()
 	a.MustCallTool(

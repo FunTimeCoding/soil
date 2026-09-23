@@ -3,12 +3,11 @@
 package cross_service
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/integration/cross_service_tester"
-	"slices"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/integration/fixture"
 	"testing"
 )
 
@@ -40,27 +39,10 @@ func TestProfileCollapsesChildrenUnderParent(t *testing.T) {
 	}
 
 	raw := s.MemoryClient.MustCallTool(constant.Profile, map[string]any{})
-	var profile profileResult
-	assert.FatalOnError(t, json.Unmarshal([]byte(raw), &profile))
-	indexIDs := make([]int64, len(profile.Index))
+	index := fixture.Section(raw, constant.IndexSectionHeading)
+	assert.StringContains(t, fmt.Sprintf("%d ", parentIdentifier), index)
 
-	for i, m := range profile.Index {
-		indexIDs[i] = m.Identifier
+	for _, name := range childNames {
+		assert.StringContains(t, name, index)
 	}
-
-	assert.True(t, slices.Contains(indexIDs, int64(parentIdentifier)))
-
-	for _, m := range profile.Index {
-		if m.Identifier == int64(parentIdentifier) {
-			assert.Count(t, 3, m.Children)
-
-			for _, name := range childNames {
-				assert.True(t, slices.Contains(m.Children, name))
-			}
-
-			return
-		}
-	}
-
-	t.Fatal("parent not found in index")
 }

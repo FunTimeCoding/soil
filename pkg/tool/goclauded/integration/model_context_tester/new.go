@@ -34,8 +34,7 @@ func New(
 		&client.GetCheckParams{Session: identifier},
 	)
 	assert.FatalOnError(t, f)
-
-	return &Session{
+	result := &Session{
 		Client:     c,
 		T:          t,
 		Context:    x,
@@ -43,4 +42,7 @@ func New(
 		UUID:       identifier,
 		PoolName:   response.JSON200.Callsign,
 	}
+	t.Cleanup(result.Close)
+
+	return result
 }

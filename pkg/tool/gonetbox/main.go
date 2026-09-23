@@ -57,6 +57,8 @@ func Main(
 	o.AddCommand(createDeviceType(c))
 	o.AddCommand(createDevice(c))
 	o.AddCommand(createInterface(c))
+	o.AddCommand(setInterfacePhysicalAddress(c))
+	o.AddCommand(setVirtualInterfacePhysicalAddress(c))
 	o.AddCommand(createAddress(c))
 	o.AddCommand(listClusterTypes(c))
 	o.AddCommand(listClusters(c))

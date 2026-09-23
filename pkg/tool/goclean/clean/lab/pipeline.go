@@ -3,17 +3,18 @@ package lab
 import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/gitlab"
 	"github.com/funtimecoding/soil/pkg/gitlab/branch"
+	"github.com/funtimecoding/soil/pkg/gitlab/face"
 	"github.com/funtimecoding/soil/pkg/gitlab/pipeline"
 	"github.com/funtimecoding/soil/pkg/gitlab/project"
+	"github.com/funtimecoding/soil/pkg/gitlab/status"
 	"github.com/funtimecoding/soil/pkg/tool/goclean/clean/option"
 	"log"
 )
 
 func Pipeline(
 	o *option.Clean,
-	c *gitlab.Client,
+	c face.Forge,
 	p *project.Project,
 ) {
 	branches := c.MustBranches(p.Identifier)
@@ -53,12 +54,22 @@ func Pipeline(
 	}
 
 	for _, i := range pipelines {
+		if !o.All && status.Active(i.Status) {
+			console.Format(
+				"Skip pipeline (active): %s %s\n",
+				i.Reference,
+				i.Status,
+			)
+
+			continue
+		}
+
 		if latestSemantic != nil &&
 			i.Reference == latestSemantic.Reference &&
 			i.Hash == mainHash {
 			if o.Verbose {
 				console.Format(
-					"Skip pipeline (sematic): %s %s\n",
+					"Skip pipeline (semantic): %s %s\n",
 					i.Reference,
 					i.Hash,
 				)

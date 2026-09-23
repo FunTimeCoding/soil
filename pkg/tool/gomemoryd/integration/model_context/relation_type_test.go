@@ -1,63 +1,15 @@
 package model_context
 
 import (
-	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/integration/model_context_tester"
 	"testing"
 )
 
-func relatedPair(
-	t *testing.T,
-	s *model_context_tester.Tester,
-) {
-	t.Helper()
-	s.MustCallTool(
-		constant.SaveMemory,
-		map[string]any{
-			constant.MemoryName:  "alpha",
-			constant.Content:     "alpha content",
-			constant.Description: "alpha description",
-		},
-	)
-	s.MustCallTool(
-		constant.SaveMemory,
-		map[string]any{
-			constant.MemoryName:  "beta",
-			constant.Content:     "beta content",
-			constant.Description: "beta description",
-		},
-	)
-}
-
-func relatedTypes(
-	t *testing.T,
-	s *model_context_tester.Tester,
-) []string {
-	t.Helper()
-	raw := s.MustCallTool(
-		constant.GetMemory,
-		map[string]any{constant.MemoryIdentifier: 1},
-	)
-	var result struct {
-		Related []struct {
-			Type string `json:"type"`
-		} `json:"related"`
-	}
-	assert.FatalOnError(t, json.Unmarshal([]byte(raw), &result))
-	types := make([]string, 0, len(result.Related))
-
-	for _, r := range result.Related {
-		types = append(types, r.Type)
-	}
-
-	return types
-}
-
 func TestRelateMemoriesWithType(t *testing.T) {
 	s := model_context_tester.New(t)
-	relatedPair(t, s)
+	s.RelatedPair()
 	result := s.MustCallTool(
 		constant.RelateMemories,
 		map[string]any{
@@ -67,14 +19,14 @@ func TestRelateMemoriesWithType(t *testing.T) {
 		},
 	)
 	assert.StringContains(t, "affinity", result)
-	types := relatedTypes(t, s)
+	types := s.RelatedTypes()
 	assert.Count(t, 1, types)
 	assert.String(t, "affinity", types[0])
 }
 
 func TestRelateMemoriesRejectsUnknownType(t *testing.T) {
 	s := model_context_tester.New(t)
-	relatedPair(t, s)
+	s.RelatedPair()
 	result := s.MustCallToolError(
 		constant.RelateMemories,
 		map[string]any{
@@ -88,7 +40,7 @@ func TestRelateMemoriesRejectsUnknownType(t *testing.T) {
 
 func TestRelateMemoriesRetypesExistingEdge(t *testing.T) {
 	s := model_context_tester.New(t)
-	relatedPair(t, s)
+	s.RelatedPair()
 	s.MustCallTool(
 		constant.RelateMemories,
 		map[string]any{
@@ -96,7 +48,7 @@ func TestRelateMemoriesRetypesExistingEdge(t *testing.T) {
 			constant.TargetIdentifier: 2,
 		},
 	)
-	types := relatedTypes(t, s)
+	types := s.RelatedTypes()
 	assert.Count(t, 1, types)
 	assert.String(t, "", types[0])
 	s.MustCallTool(
@@ -107,14 +59,14 @@ func TestRelateMemoriesRetypesExistingEdge(t *testing.T) {
 			constant.Type:             "informs",
 		},
 	)
-	types = relatedTypes(t, s)
+	types = s.RelatedTypes()
 	assert.Count(t, 1, types)
 	assert.String(t, "informs", types[0])
 }
 
 func TestUnrelateMemoriesRemovesEdge(t *testing.T) {
 	s := model_context_tester.New(t)
-	relatedPair(t, s)
+	s.RelatedPair()
 	s.MustCallTool(
 		constant.RelateMemories,
 		map[string]any{
@@ -130,13 +82,13 @@ func TestUnrelateMemoriesRemovesEdge(t *testing.T) {
 		},
 	)
 	assert.StringContains(t, "Unrelated", result)
-	types := relatedTypes(t, s)
+	types := s.RelatedTypes()
 	assert.Count(t, 0, types)
 }
 
 func TestUnrelateMemoriesIsDirectional(t *testing.T) {
 	s := model_context_tester.New(t)
-	relatedPair(t, s)
+	s.RelatedPair()
 	s.MustCallTool(
 		constant.RelateMemories,
 		map[string]any{
@@ -152,13 +104,13 @@ func TestUnrelateMemoriesIsDirectional(t *testing.T) {
 		},
 	)
 	assert.StringContains(t, "reverse", result)
-	types := relatedTypes(t, s)
+	types := s.RelatedTypes()
 	assert.Count(t, 1, types)
 }
 
 func TestRelateMemoriesUntypedKeepsExistingType(t *testing.T) {
 	s := model_context_tester.New(t)
-	relatedPair(t, s)
+	s.RelatedPair()
 	s.MustCallTool(
 		constant.RelateMemories,
 		map[string]any{
@@ -174,7 +126,7 @@ func TestRelateMemoriesUntypedKeepsExistingType(t *testing.T) {
 			constant.TargetIdentifier: 2,
 		},
 	)
-	types := relatedTypes(t, s)
+	types := s.RelatedTypes()
 	assert.Count(t, 1, types)
 	assert.String(t, "grounds", types[0])
 }

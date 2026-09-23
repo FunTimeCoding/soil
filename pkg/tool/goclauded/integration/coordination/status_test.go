@@ -15,9 +15,7 @@ import (
 
 func TestStatusReportsNothingWhenSound(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "status surface")
 	assert.StringContains(
 		t,
@@ -32,7 +30,6 @@ func TestStatusReportsNothingWhenSound(t *testing.T) {
 
 func TestStatusReportsFindingsAcrossSurfaces(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	assert.FatalOnError(
 		t,
 		s.Store.Store.PushQueue(
@@ -43,7 +40,6 @@ func TestStatusReportsFindingsAcrossSurfaces(t *testing.T) {
 		),
 	)
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "status surface")
 	result := a.MustCallTool(constant.Status, map[string]any{})
 	assert.StringContains(t, "unowned_queue", result)

@@ -12,5 +12,8 @@ func New(t *testing.T) *Tester {
 	s.SkipUnreachable(t)
 	t.Cleanup(s.Close)
 
-	return &Tester{Service: service.New(s.Store(), s.Embedder(), s.Reranker())}
+	return &Tester{
+		t:       t,
+		Service: service.New(s.Store(), s.Embedder(), s.Reranker()),
+	}
 }

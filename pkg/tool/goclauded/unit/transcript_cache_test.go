@@ -1,7 +1,6 @@
 package unit
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude"
@@ -11,18 +10,6 @@ import (
 	"path/filepath"
 	"testing"
 )
-
-func transcriptLine(
-	name string,
-	timestamp string,
-) string {
-	return fmt.Sprintf(
-		`{"type":"assistant","timestamp":"%s","message":{"content":[{"type":"tool_use","id":"t1","name":"%s","input":{}}]}}%s`,
-		timestamp,
-		name,
-		"\n",
-	)
-}
 
 func TestTranscriptCacheParity(t *testing.T) {
 	base := t.TempDir()

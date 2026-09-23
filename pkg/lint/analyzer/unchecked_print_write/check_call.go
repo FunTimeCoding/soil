@@ -48,11 +48,10 @@ func checkCall(
 	}
 
 	results.AddConcern(
-		concern.NewFile(
+		concern.NewPosition(
 			"unchecked_print_write",
 			"use writer.Print, errors.Printf, or check the error from fmt.Fprintf",
-			p.Fset.Position(call.Pos()).Filename,
-			false,
+			p.Fset.Position(call.Pos()),
 		),
 	)
 }

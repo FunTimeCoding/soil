@@ -10,8 +10,8 @@ import (
 )
 
 func (o *Tester) AssertMissing(
+	expectedAbsent string,
 	path string,
-	absent string,
 ) {
 	o.t.Helper()
 	r, e := http.Get(join.Empty(o.base, path))
@@ -19,5 +19,5 @@ func (o *Tester) AssertMissing(
 	defer errors.PanicClose(r.Body)
 	b, f := io.ReadAll(r.Body)
 	assert.FatalOnError(o.t, f)
-	assert.True(o.t, !strings.Contains(string(b), absent))
+	assert.True(o.t, !strings.Contains(string(b), expectedAbsent))
 }

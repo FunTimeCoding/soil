@@ -1,29 +1,22 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/math/reach_increase"
+	"github.com/funtimecoding/soil/pkg/math/unit/math_tester"
 	"testing"
 )
 
-func TestReachIncreaseInteger(t *testing.T) {
-	// Short by 1
-	reachIncreaseIntegerAssertInteger(t, 48, 49, 50, false)
-	// Reached exactly
-	reachIncreaseIntegerAssertInteger(t, 49, 50, 50, true)
-	// Exceed by 1
-	reachIncreaseIntegerAssertInteger(t, 49, 51, 50, true)
-	// Dip below
-	reachIncreaseIntegerAssertInteger(t, 51, 49, 50, false)
+func TestReachIncreaseIntegerShortByOne(t *testing.T) {
+	math_tester.AssertReachIncreaseInteger(t, false, 48, 49, 50)
 }
 
-func reachIncreaseIntegerAssertInteger(
-	t *testing.T,
-	past int,
-	now int,
-	threshold int,
-	expect bool,
-) {
-	t.Helper()
-	assert.Boolean(t, expect, reach_increase.Integer(past, now, threshold))
+func TestReachIncreaseIntegerReachedExactly(t *testing.T) {
+	math_tester.AssertReachIncreaseInteger(t, true, 49, 50, 50)
+}
+
+func TestReachIncreaseIntegerExceedByOne(t *testing.T) {
+	math_tester.AssertReachIncreaseInteger(t, true, 49, 51, 50)
+}
+
+func TestReachIncreaseIntegerDipBelow(t *testing.T) {
+	math_tester.AssertReachIncreaseInteger(t, false, 51, 49, 50)
 }

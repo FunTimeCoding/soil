@@ -4,9 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/convert"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -28,15 +26,5 @@ func (s *Server) profile(
 		return s.captureFail(e, "load profile")
 	}
 
-	return response.Success(
-		notation.MarshalIndent(
-			profileResponse{
-				Always:      convert.Memories(result.Always),
-				Relevant:    convert.SearchResults(result.Relevant),
-				Index:       result.Index,
-				Impressions: result.Impressions,
-				Completions: result.Completions,
-			},
-		),
-	)
+	return response.Success(result.Text)
 }

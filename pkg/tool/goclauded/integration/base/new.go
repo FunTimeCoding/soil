@@ -18,8 +18,7 @@ func New(t *testing.T) *Server {
 	t.Helper()
 	s := service_tester.New(t)
 	l := logger.New(t.Context())
-
-	return &Server{
+	result := &Server{
 		Tester: s,
 		Server: model_context_server.New(
 			t,
@@ -41,4 +40,7 @@ func New(t *testing.T) *Server {
 			},
 		),
 	}
+	t.Cleanup(result.Close)
+
+	return result
 }

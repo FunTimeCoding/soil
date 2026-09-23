@@ -3,7 +3,6 @@
 package client
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/directory"
 	"github.com/funtimecoding/soil/pkg/directory/constant"
@@ -11,19 +10,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"testing"
 )
-
-func person(account string) map[string][]string {
-	return map[string][]string{
-		"objectClass":             {"inetOrgPerson"},
-		constant.AccountAttribute: {account},
-		constant.NameAttribute:    {account},
-		"sn":                      {account},
-	}
-}
-
-func distinguished(account string) string {
-	return fmt.Sprintf("uid=%s,ou=people,dc=example,dc=test", account)
-}
 
 func TestAddModifyDelete(t *testing.T) {
 	c := directory.NewEnvironment()

@@ -13,5 +13,7 @@ func Normalize(s string) string {
 		result = result[:i]
 	}
 
+	result = constant.LineSuffix.ReplaceAllString(result, "")
+
 	return strings.TrimSuffix(result, "/")
 }

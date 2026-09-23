@@ -3,8 +3,8 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint"
-	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/constant"
+	"github.com/funtimecoding/soil/pkg/lint/unit/lint_tester"
 	"path/filepath"
 	"testing"
 )
@@ -17,14 +17,14 @@ func TestScopesNone(t *testing.T) {
 }
 
 func TestScopesFromRoot(t *testing.T) {
-	root := scopeTree(t)
+	root := lint_tester.ScopeTree(t)
 	scopes, e := lint.Scopes(root, root, []string{"doc/ai/spec/naming.md"})
 	assert.Nil(t, e)
 	assert.Strings(t, []string{"doc/ai/spec/naming.md"}, scopes)
 }
 
 func TestScopesFromSubdirectory(t *testing.T) {
-	root := scopeTree(t)
+	root := lint_tester.ScopeTree(t)
 	scopes, e := lint.Scopes(
 		root,
 		filepath.Join(root, "doc", "ai"),
@@ -35,7 +35,7 @@ func TestScopesFromSubdirectory(t *testing.T) {
 }
 
 func TestScopesAbsolute(t *testing.T) {
-	root := scopeTree(t)
+	root := lint_tester.ScopeTree(t)
 	scopes, e := lint.Scopes(
 		root,
 		t.TempDir(),
@@ -46,29 +46,20 @@ func TestScopesAbsolute(t *testing.T) {
 }
 
 func TestScopesRootItself(t *testing.T) {
-	root := scopeTree(t)
+	root := lint_tester.ScopeTree(t)
 	scopes, e := lint.Scopes(root, root, []string{"."})
 	assert.Nil(t, e)
 	assert.Strings(t, nil, scopes)
 }
 
 func TestScopesMissing(t *testing.T) {
-	root := scopeTree(t)
+	root := lint_tester.ScopeTree(t)
 	_, e := lint.Scopes(root, root, []string{"doc/ai/spec/ghost.md"})
 	assert.Error(t, e)
 }
 
 func TestScopesOutside(t *testing.T) {
-	root := scopeTree(t)
+	root := lint_tester.ScopeTree(t)
 	_, e := lint.Scopes(root, root, []string{".."})
 	assert.Error(t, e)
-}
-
-func scopeTree(t *testing.T) string {
-	t.Helper()
-	root := t.TempDir()
-	testutil.WriteFile(t, root, "doc/ai/spec/naming.md", "# Naming\n")
-	testutil.WriteFile(t, root, "pkg/lint/lint.go", "package lint\n")
-
-	return root
 }

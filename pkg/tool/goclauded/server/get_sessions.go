@@ -65,6 +65,20 @@ func (s *Server) GetSessions(
 			d.LastSeen = new(i.LastSeen.UTC().Format(time.RFC3339Nano))
 		}
 
+		if i.LastPromptAt != nil {
+			d.LastPromptAt = new(i.LastPromptAt.UTC().Format(time.RFC3339Nano))
+		}
+
+		if i.LastTurnEndAt != nil {
+			d.LastTurnEndAt = new(
+				i.LastTurnEndAt.UTC().Format(time.RFC3339Nano),
+			)
+		}
+
+		if i.ClosedAt != nil {
+			d.ClosedAt = new(i.ClosedAt.UTC().Format(time.RFC3339Nano))
+		}
+
 		if i.Name != "" {
 			d.Name = &i.Name
 		}

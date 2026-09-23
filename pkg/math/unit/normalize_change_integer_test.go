@@ -1,40 +1,23 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/math/normalize_change"
+	"github.com/funtimecoding/soil/pkg/math/unit/math_tester"
 	"testing"
 )
 
 func TestNormalizeChangeInteger(t *testing.T) {
-	normalizeChangeIntegerAssertInteger(t, 0, 1, 0, 100, 1)
-	normalizeChangeIntegerAssertInteger(t, 1, -2, 0, 100, -1)
-	normalizeChangeIntegerAssertInteger(t, 1, -3, 0, 100, -1)
-	normalizeChangeIntegerAssertInteger(t, 100, -100, 0, 100, -100)
-	normalizeChangeIntegerAssertInteger(t, 100, -150, 0, 100, -100)
-	normalizeChangeIntegerAssertInteger(t, 95, 20, 0, 100, 5)
+	math_tester.AssertNormalizeChangeInteger(t, 1, 0, 1, 0, 100)
+	math_tester.AssertNormalizeChangeInteger(t, -1, 1, -2, 0, 100)
+	math_tester.AssertNormalizeChangeInteger(t, -1, 1, -3, 0, 100)
+	math_tester.AssertNormalizeChangeInteger(t, -100, 100, -100, 0, 100)
+	math_tester.AssertNormalizeChangeInteger(t, -100, 100, -150, 0, 100)
+	math_tester.AssertNormalizeChangeInteger(t, 5, 95, 20, 0, 100)
 }
 
 func TestIntegerNoMaximum(t *testing.T) {
-	normalizeChangeIntegerAssertInteger(t, 0, 1, 0, 0, 1)
-	normalizeChangeIntegerAssertInteger(t, 1, -2, 0, 0, -1)
-	normalizeChangeIntegerAssertInteger(t, 1, -3, 0, 0, -1)
-	normalizeChangeIntegerAssertInteger(t, 100, -100, 0, 0, -100)
-	normalizeChangeIntegerAssertInteger(t, 100, -150, 0, 0, -100)
-}
-
-func normalizeChangeIntegerAssertInteger(
-	t *testing.T,
-	now int,
-	change int,
-	minimum int,
-	maximum int,
-	expect int,
-) {
-	t.Helper()
-	assert.Integer(
-		t,
-		expect,
-		normalize_change.Integer(now, change, minimum, maximum),
-	)
+	math_tester.AssertNormalizeChangeInteger(t, 1, 0, 1, 0, 0)
+	math_tester.AssertNormalizeChangeInteger(t, -1, 1, -2, 0, 0)
+	math_tester.AssertNormalizeChangeInteger(t, -1, 1, -3, 0, 0)
+	math_tester.AssertNormalizeChangeInteger(t, -100, 100, -100, 0, 0)
+	math_tester.AssertNormalizeChangeInteger(t, -100, 100, -150, 0, 0)
 }

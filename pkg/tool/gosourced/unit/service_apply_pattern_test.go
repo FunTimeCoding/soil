@@ -3,25 +3,18 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"os"
 	"path/filepath"
 	"strings"
 	"testing"
 )
 
-func gaugeContent(
-	t *testing.T,
-	directory string,
-) string {
-	t.Helper()
-	b, e := os.ReadFile(filepath.Join(directory, "pkg/gauge/run.go"))
-	assert.FatalOnError(t, e)
-
-	return string(b)
-}
-
 func TestApplyPatternDryRun(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("census/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("census/src"),
+	)
 	s := testService()
 	r, apply, e := s.ApplyPattern(
 		d,
@@ -41,12 +34,15 @@ func TestApplyPatternDryRun(t *testing.T) {
 	assert.Integer(t, 2, apply.Rewritten)
 	assert.Integer(t, 1, len(apply.Refused))
 	assert.True(t, apply.Applied)
-	content := gaugeContent(t, d)
+	content := service_tester.GaugeContent(t, d)
 	assert.True(t, !strings.Contains(content, "+ 1"))
 }
 
 func TestApplyPatternPartial(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("census/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("census/src"),
+	)
 	s := testService()
 	r, apply, e := s.ApplyPattern(
 		d,
@@ -63,14 +59,17 @@ func TestApplyPatternPartial(t *testing.T) {
 	assert.NotNil(t, apply)
 	assert.Integer(t, 2, apply.Rewritten)
 	assert.True(t, apply.Applied)
-	content := gaugeContent(t, d)
+	content := service_tester.GaugeContent(t, d)
 	assert.StringContains(t, "return pair.Compare(n, n) + 1", content)
 	assert.StringContains(t, "return pair.Compare(m, n) + 1", content)
 	assert.StringContains(t, "// order is deliberate", content)
 }
 
 func TestApplyPatternAllOrNothing(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("census/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("census/src"),
+	)
 	s := testService()
 	r, apply, e := s.ApplyPattern(
 		d,
@@ -89,12 +88,15 @@ func TestApplyPatternAllOrNothing(t *testing.T) {
 	assert.Integer(t, 0, apply.Rewritten)
 	assert.True(t, apply.Refusal != "")
 	assert.Integer(t, 1, len(apply.Refused))
-	content := gaugeContent(t, d)
+	content := service_tester.GaugeContent(t, d)
 	assert.True(t, !strings.Contains(content, "+ 1"))
 }
 
 func TestApplyPatternImport(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("census/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("census/src"),
+	)
 	s := testService()
 	r, apply, e := s.ApplyPattern(
 		d,
@@ -119,7 +121,10 @@ func TestApplyPatternImport(t *testing.T) {
 }
 
 func TestApplyPatternUnknownHole(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("census/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("census/src"),
+	)
 	s := testService()
 	r, apply, e := s.ApplyPattern(
 		d,

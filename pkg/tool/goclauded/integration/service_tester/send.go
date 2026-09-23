@@ -7,5 +7,6 @@ func (o *Tester) Send(
 	to string,
 	body string,
 ) {
-	assert.FatalOnError(o.t, o.Service.Send(name, to, body))
+	_, e := o.Service.Send(name, to, body, false)
+	assert.FatalOnError(o.t, e)
 }

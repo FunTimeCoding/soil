@@ -26,8 +26,10 @@ func TestRepositoryExistsIndependentOfWorkingDirectory(t *testing.T) {
 	assert.True(t, repo.Exists("tmp/note.txt"))
 	assert.True(t, repo.Exists("empty"))
 	assert.Boolean(t, false, repo.Exists("ghost"))
+	assert.Boolean(t, false, repo.Exists(""))
 	assert.True(t, repo.SiblingExists("../beside"))
 	assert.Boolean(t, false, repo.SiblingExists("../ghost"))
+	assert.Boolean(t, false, repo.SiblingExists(""))
 	assert.Strings(t, nil, repo.Siblings)
 	assert.Strings(t, nil, repo.ImplicitBases)
 }

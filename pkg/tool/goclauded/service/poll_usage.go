@@ -8,10 +8,13 @@ import (
 func (s *Service) PollUsage() {
 	defer func() {
 		if r := recover(); r != nil {
-			s.logger.Structured("usage poll failed", "error", r)
+			s.logger.Structured(
+				"usage poll failed",
+				append([]any{"error", r}, usageTabEvidence()...)...,
+			)
 		}
 	}()
-	browser := site.New()
+	browser := site.Attach(s.usageBrowser())
 	browser.ClickRefresh()
 	time.Sleep(2 * time.Second)
 	result := browser.ReadUsage()

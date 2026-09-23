@@ -5,16 +5,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/integration/publish_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gosecret"
-	"os"
 	"path/filepath"
 	"testing"
 )
 
 func TestOnlyTheNamedAuthorityBecomesASecret(t *testing.T) {
 	o := publish_tester.New(t)
-	defer o.Server.Close()
-	o.CreateRoot(t)
-	o.Publish(t)
+	o.CreateRoot()
+	o.Publish()
 	assert.Strings(
 		t,
 		[]string{
@@ -27,10 +25,9 @@ func TestOnlyTheNamedAuthorityBecomesASecret(t *testing.T) {
 
 func TestClusterAuthorityDeliversTheSecretPair(t *testing.T) {
 	o := publish_tester.New(t)
-	defer o.Server.Close()
-	o.CreateRoot(t)
-	o.CreateCluster(t)
-	o.Publish(t)
+	o.CreateRoot()
+	o.CreateCluster()
+	o.Publish()
 	assert.Strings(
 		t,
 		[]string{
@@ -47,10 +44,9 @@ func TestClusterAuthorityDeliversTheSecretPair(t *testing.T) {
 
 func TestDeliveredSecretIsATlsManifest(t *testing.T) {
 	o := publish_tester.New(t)
-	defer o.Server.Close()
-	o.CreateRoot(t)
-	o.CreateCluster(t)
-	o.Publish(t)
+	o.CreateRoot()
+	o.CreateCluster()
+	o.Publish()
 	manifest := publish_tester.Content(
 		o.Server.Forge.Commits()[0].Actions,
 		constant.FixtureSecretPath,
@@ -63,10 +59,9 @@ func TestDeliveredSecretIsATlsManifest(t *testing.T) {
 
 func TestDeliveredPairSatisfiesGosecret(t *testing.T) {
 	o := publish_tester.New(t)
-	defer o.Server.Close()
-	o.CreateRoot(t)
-	o.CreateCluster(t)
-	o.Publish(t)
+	o.CreateRoot()
+	o.CreateCluster()
+	o.Publish()
 	action := o.Server.Forge.Commits()[0].Actions
 	directory := t.TempDir()
 	manifest := filepath.Join(directory, "authority-secret.yaml")
@@ -86,13 +81,4 @@ func TestDeliveredPairSatisfiesGosecret(t *testing.T) {
 	result, e := gosecret.EncodeSecret(manifest)
 	assert.Nil(t, e)
 	assert.True(t, result.InSync)
-}
-
-func write(
-	t *testing.T,
-	path string,
-	content string,
-) {
-	t.Helper()
-	assert.FatalOnError(t, os.WriteFile(path, []byte(content), 0600))
 }

@@ -8,5 +8,5 @@ import (
 type callEntry struct {
 	ModTime time.Time
 	Size    int64
-	Calls   []tool_call.Call
+	Calls   []*tool_call.Call
 }

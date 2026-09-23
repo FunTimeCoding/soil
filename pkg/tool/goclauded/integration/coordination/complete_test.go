@@ -9,9 +9,7 @@ import (
 
 func TestComplete(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "building search index")
 	a.CheckLive()
 	a.MustCallTool(
@@ -26,9 +24,7 @@ func TestComplete(t *testing.T) {
 
 func TestCompleteHistoryEvent(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "reviewing proposals")
 	a.MustCallTool(
 		constant.Complete,
@@ -43,9 +39,7 @@ func TestCompleteHistoryEvent(t *testing.T) {
 
 func TestCompleteAndReannounce(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "first task")
 	a.CheckLive()
 	a.MustCallTool(
@@ -61,9 +55,7 @@ func TestCompleteAndReannounce(t *testing.T) {
 
 func TestCompleteWithExplicitTopic(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "main work")
 	a.MustCallTool(
 		constant.Complete,
@@ -83,9 +75,7 @@ func TestCompleteWithExplicitTopic(t *testing.T) {
 
 func TestCompleteNoTopicNoAnnounce(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "work")
 	a.MustCallTool(constant.Complete, map[string]any{constant.Message: "done"})
 	result := a.MustCallToolError(
@@ -97,9 +87,7 @@ func TestCompleteNoTopicNoAnnounce(t *testing.T) {
 
 func TestCompleteBeforeAnnounce(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	result := a.MustCallToolError(
 		constant.Complete,
 		map[string]any{constant.Message: "nothing to complete"},

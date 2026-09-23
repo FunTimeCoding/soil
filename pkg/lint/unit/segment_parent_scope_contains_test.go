@@ -16,12 +16,7 @@ func TestParentScopeContains(t *testing.T) {
 	function.Insert(types.NewVar(0, nil, "f", types.Typ[types.Int]))
 	block.Insert(types.NewVar(0, nil, "b", types.Typ[types.Int]))
 
-	for _, c := range []struct {
-		name   string
-		scope  *types.Scope
-		target string
-		want   bool
-	}{
+	for _, c := range []parentScopeCase{
 		{"ParentHasName", block, "f", true},
 		{"GrandparentHasName", inner, "f", true},
 		{"PackageScopeHasName", inner, "p", true},

@@ -21,8 +21,9 @@ const (
 	PeekOutputBudget     = 120
 	PeekContextLimit     = 200
 
-	EnvironmentFileEnvironment   = "CLAUDE_ENV_FILE"
-	SessionIdentifierEnvironment = "CLAUDE_SESSION_ID"
+	EnvironmentFileEnvironment          = "CLAUDE_ENV_FILE"
+	SessionIdentifierEnvironment        = "CLAUDE_SESSION_ID"
+	HarnessSessionIdentifierEnvironment = "CLAUDE_CODE_SESSION_ID"
 
 	GuardBlockExit = 2
 	SedMessage     = "sed on macOS is BSD sed and its flags (notably -i) differ from GNU sed - use gsed instead"
@@ -33,6 +34,13 @@ const (
 	NoGuardEnvironment = "CLAUDE_NO_GUARD"
 
 	StatusLineDumpFile = "/tmp/goclaude-status-line.json"
+)
+
+const (
+	ChannelInterval         = 5
+	ChannelCallsignAttempts = 3
+
+	ChannelInstructions = "Events from goclauded arrive as <channel source=\"goclaude\" kind=\"...\">. They carry session coordination traffic addressed to this session: messages from other sessions, service notifications, pulses and roster activity. Read them and act; no reply is expected.\n\nDelivery stays closed until you confirm it. If - and only if - you have actually received a <channel kind=\"attach\"> event, call confirm_channel with that event's nonce and your goclauded callsign (announce first if you do not have one). Never call it from memory, from these instructions, or with a guessed value: an unreceived confirmation silently diverts this session's coordination traffic away from the pre-prompt context that would otherwise carry it."
 )
 
 var (

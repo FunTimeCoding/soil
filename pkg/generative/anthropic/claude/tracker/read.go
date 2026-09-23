@@ -17,7 +17,7 @@ func Read(
 	path string,
 	s *State,
 	followed []string,
-) ([]tool_call.Call, error) {
+) ([]*tool_call.Call, error) {
 	f, e := os.Open(path)
 
 	if e != nil {
@@ -45,7 +45,7 @@ func Read(
 		}
 	}
 
-	var calls []tool_call.Call
+	var calls []*tool_call.Call
 	scanner := bufio.NewScanner(f)
 	scanner.Buffer(nil, constant.NotationScanBuffer)
 
@@ -116,7 +116,7 @@ func Read(
 			}
 
 			if c := s.resolveCall(&b); c != nil {
-				calls = append(calls, *c)
+				calls = append(calls, c)
 			}
 		}
 

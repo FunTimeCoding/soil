@@ -22,8 +22,7 @@ func New(t *testing.T) *Server {
 	i := mock_indexer.New()
 	v := service.New(s, i, i, i)
 	r := memory.New()
-
-	return &Server{
+	result := &Server{
 		t:       t,
 		store:   s,
 		indexer: i,
@@ -44,4 +43,7 @@ func New(t *testing.T) *Server {
 			},
 		),
 	}
+	t.Cleanup(result.Close)
+
+	return result
 }

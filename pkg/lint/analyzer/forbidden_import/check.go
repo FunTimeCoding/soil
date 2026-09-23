@@ -33,11 +33,10 @@ func Check(
 				}
 
 				results.AddConcern(
-					concern.NewFile(
+					concern.NewPosition(
 						"forbidden_import",
 						b.Message,
-						p.Fset.Position(i.Pos()).Filename,
-						false,
+						p.Fset.Position(i.Pos()),
 					),
 				)
 			}

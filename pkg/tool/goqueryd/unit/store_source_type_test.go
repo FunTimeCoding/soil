@@ -2,11 +2,12 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/store_tester"
 	"testing"
 )
 
 func TestSetAndGetSourceType(t *testing.T) {
-	s := openTestStore(t)
+	s := store_tester.OpenTestStore(t)
 	defer s.Close()
 	s.SetSourceType("docs", "design/", "design-doc")
 	result := s.GetSourceType("docs", "design/")
@@ -14,14 +15,14 @@ func TestSetAndGetSourceType(t *testing.T) {
 }
 
 func TestGetSourceTypeEmpty(t *testing.T) {
-	s := openTestStore(t)
+	s := store_tester.OpenTestStore(t)
 	defer s.Close()
 	result := s.GetSourceType("docs", "nonexistent/")
 	assert.String(t, "", result)
 }
 
 func TestRemoveSourceType(t *testing.T) {
-	s := openTestStore(t)
+	s := store_tester.OpenTestStore(t)
 	defer s.Close()
 	s.SetSourceType("docs", "temp/", "scratch")
 	s.SetSourceType("docs", "temp/", "")
@@ -30,7 +31,7 @@ func TestRemoveSourceType(t *testing.T) {
 }
 
 func TestResolveSourceTypeMostSpecificWins(t *testing.T) {
-	s := openTestStore(t)
+	s := store_tester.OpenTestStore(t)
 	defer s.Close()
 	s.SetSourceType("docs", "plan/", "plan")
 	s.SetSourceType("docs", "plan/seed/", "seed")
@@ -41,7 +42,7 @@ func TestResolveSourceTypeMostSpecificWins(t *testing.T) {
 }
 
 func TestResolveSourceTypeGlobalFallback(t *testing.T) {
-	s := openTestStore(t)
+	s := store_tester.OpenTestStore(t)
 	defer s.Close()
 	s.SetSourceType("", "memory/", "memory")
 	result := s.ResolveSourceType("any-collection", "memory/42.md")
@@ -49,7 +50,7 @@ func TestResolveSourceTypeGlobalFallback(t *testing.T) {
 }
 
 func TestResolveSourceTypeCollectionOverridesGlobal(t *testing.T) {
-	s := openTestStore(t)
+	s := store_tester.OpenTestStore(t)
 	defer s.Close()
 	s.SetSourceType("", "session/", "generic")
 	s.SetSourceType("summaries", "session/", "session-summary")

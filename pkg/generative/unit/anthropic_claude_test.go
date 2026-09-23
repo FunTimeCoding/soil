@@ -1,52 +1,26 @@
 package unit
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude"
-	"github.com/funtimecoding/soil/pkg/system"
-	"github.com/funtimecoding/soil/pkg/system/writer"
-	"path/filepath"
+	"github.com/funtimecoding/soil/pkg/generative/unit/claude_tester"
 	"testing"
 )
 
-func writeFixture(
-	t *testing.T,
-	lines []string,
-) *claude.Client {
-	t.Helper()
-	base := t.TempDir()
-	f := system.Create(filepath.Join(base, "fixture.jsonl"))
-
-	for _, line := range lines {
-		writer.Print(f, "%s\n", line)
-	}
-
-	errors.PanicClose(f)
-
-	return claude.NewDirectory(base)
-}
-
-func userLine(text string) string {
-	return fmt.Sprintf(`{"type":"user","message":{"content":"%s"}}`, text)
-}
-
-func assistantLine(text string) string {
-	return fmt.Sprintf(
-		`{"type":"assistant","message":{"content":[{"type":"text","text":"%s"}]}}`,
-		text,
-	)
-}
-
 func TestPeekPairsReplyWithItsUserMessage(t *testing.T) {
-	c := writeFixture(
+	c := claude_tester.WriteFixture(
 		t,
 		[]string{
-			userLine("this is the first user message of the session"),
-			assistantLine("reply to the first message"),
-			userLine("this is the second user message of the session"),
-			assistantLine("closing reply after the final user message"),
+			claude_tester.UserLine(
+				"this is the first user message of the session",
+			),
+			claude_tester.AssistantLine("reply to the first message"),
+			claude_tester.UserLine(
+				"this is the second user message of the session",
+			),
+			claude_tester.AssistantLine(
+				"closing reply after the final user message",
+			),
 		},
 	)
 	p := c.Peek("fixture")
@@ -64,12 +38,14 @@ func TestPeekPairsReplyWithItsUserMessage(t *testing.T) {
 }
 
 func TestPeekWithoutTrailingReply(t *testing.T) {
-	c := writeFixture(
+	c := claude_tester.WriteFixture(
 		t,
 		[]string{
-			userLine("this is the first user message of the session"),
-			assistantLine("reply to the first message"),
-			userLine("this is a final message that got no reply"),
+			claude_tester.UserLine(
+				"this is the first user message of the session",
+			),
+			claude_tester.AssistantLine("reply to the first message"),
+			claude_tester.UserLine("this is a final message that got no reply"),
 		},
 	)
 	p := c.Peek("fixture")

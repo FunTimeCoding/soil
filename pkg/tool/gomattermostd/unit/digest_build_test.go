@@ -7,15 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/digest/event"
 	"strings"
 	"testing"
-	"time"
 )
-
-func digestAt(
-	hour int,
-	minute int,
-) time.Time {
-	return time.Date(2026, 9, 8, hour, minute, 0, 0, time.UTC)
-}
 
 func TestDigestBuildEmpty(t *testing.T) {
 	assert.String(t, "", digest.Build("papa", nil))

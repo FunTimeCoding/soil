@@ -3,11 +3,11 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint"
-	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/option"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/lint/repository"
+	"github.com/funtimecoding/soil/pkg/lint/unit/lint_tester"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"testing"
 )
@@ -181,7 +181,7 @@ func TestCheckResultImportCollapsed(t *testing.T) {
 		"package foo\n\nimport (\n\t\"fmt\"\n)\n\nfunc Foo() {\n\tfmt.Println(\"hello\")\n}\n",
 	)
 	var r output.Results
-	lint.Check(repository.New(t.TempDir(), v), fixing(), &r)
+	lint.Check(repository.New(t.TempDir(), v), lint_tester.Fixing(), &r)
 	assertApplied(
 		t,
 		r.Entries,
@@ -197,7 +197,7 @@ func TestCheckResultBlankLineRemoved(t *testing.T) {
 		"package foo\n\nfunc Foo() {\n\ta := 1\n\n\t_ = a\n}\n",
 	)
 	var r output.Results
-	lint.Check(repository.New(t.TempDir(), v), fixing(), &r)
+	lint.Check(repository.New(t.TempDir(), v), lint_tester.Fixing(), &r)
 	assertApplied(
 		t,
 		r.Entries,
@@ -213,39 +213,11 @@ func TestCheckResultBlankLineInserted(t *testing.T) {
 		"package foo\n\nfunc Foo() {\n\ta := 1\n\tif a > 0 {\n\t\t_ = a\n\t}\n}\n",
 	)
 	var r output.Results
-	lint.Check(repository.New(t.TempDir(), v), fixing(), &r)
+	lint.Check(repository.New(t.TempDir(), v), lint_tester.Fixing(), &r)
 	assertApplied(
 		t,
 		r.Entries,
 		"pkg/foo/foo.go",
 		constant.MissingBlankBeforeControlText,
-	)
-}
-
-func fixing() *option.Lint {
-	o := option.New("", false)
-	o.Fix = true
-
-	return o
-}
-
-func assertApplied(
-	t *testing.T,
-	entries []*concern.Concern,
-	path string,
-	message string,
-) {
-	t.Helper()
-
-	for _, c := range entries {
-		if c.Path == path && c.Text == message && c.Fixed {
-			return
-		}
-	}
-
-	t.Errorf(
-		"expected applied concern {path: %q, text: %q} not found",
-		path,
-		message,
 	)
 }

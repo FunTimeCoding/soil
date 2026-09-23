@@ -30,27 +30,6 @@ func TestCompare(t *testing.T) {
 	)
 }
 
-func assertCompare(
-	t *testing.T,
-	expected strings_tester.Compare,
-	past []string,
-	now []string,
-) {
-	t.Helper()
-	add, remove, stay := strings.Compare(past, now)
-	assert.Strings(t, notNil(expected.Add), add)
-	assert.Strings(t, notNil(expected.Remove), remove)
-	assert.Strings(t, notNil(expected.Stay), stay)
-}
-
-func notNil(s []string) []string {
-	if s == nil {
-		return []string{}
-	}
-
-	return s
-}
-
 func TestDeleteDuplicates(t *testing.T) {
 	assert.Any(
 		t,

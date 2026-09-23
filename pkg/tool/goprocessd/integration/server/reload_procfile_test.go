@@ -4,40 +4,9 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/integration/tester"
-	"os"
-	"path/filepath"
-	"strings"
 	"testing"
 	"time"
 )
-
-func countingEntry(
-	t *testing.T,
-	name string,
-) (string, string) {
-	t.Helper()
-	marker := filepath.Join(t.TempDir(), "runs")
-
-	return marker, fmt.Sprintf(
-		"%s: sh -c \"echo run >> %s; sleep 60\"\n",
-		name,
-		marker,
-	)
-}
-
-func launchCount(
-	t *testing.T,
-	marker string,
-) int {
-	t.Helper()
-	content, e := os.ReadFile(marker)
-
-	if e != nil {
-		return 0
-	}
-
-	return len(strings.Fields(string(content)))
-}
 
 func TestReloadProcfileAddsNewEntry(t *testing.T) {
 	s := tester.New(t, "alfa: sleep 60\n", "")

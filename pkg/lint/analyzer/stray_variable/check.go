@@ -25,8 +25,6 @@ func Check(
 			continue
 		}
 
-		name := p.Fset.File(file.Pos()).Name()
-
 		for _, d := range file.Decls {
 			g, okay := d.(*ast.GenDecl)
 
@@ -59,14 +57,13 @@ func Check(
 					}
 
 					results.AddConcern(
-						concern.NewFile(
+						concern.NewPosition(
 							"stray_variable",
 							fmt.Sprintf(
 								"package-level variable %s outside constant/",
 								n.Name,
 							),
-							name,
-							false,
+							p.Fset.Position(n.Pos()),
 						),
 					)
 				}

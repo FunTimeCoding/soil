@@ -20,9 +20,15 @@ func Main(
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Boolean(argumentConstant.Verbose, false, "Verbose output")
+	a.Boolean(
+		argumentConstant.All,
+		false,
+		"Delete running and queued pipelines too",
+	)
 	a.Parse(version, gitHash, buildDate)
 	o := option.New()
 	o.GitLabHost = environment.Required(gitlab.HostEnvironment)
 	o.Verbose = a.GetBoolean(argumentConstant.Verbose)
+	o.All = a.GetBoolean(argumentConstant.All)
 	clean.Run(o)
 }

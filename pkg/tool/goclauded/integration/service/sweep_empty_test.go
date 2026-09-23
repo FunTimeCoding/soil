@@ -27,7 +27,7 @@ func TestSweepKeepsUnmarkedEmptySessionUntilCutoff(t *testing.T) {
 
 func TestSweepKeepsClosedSessionWithContent(t *testing.T) {
 	s := service_tester.New(t)
-	writeSessionFile(s.Harbor, "spoken", "some-slug")
+	s.WriteSessionFile("spoken", "some-slug")
 	s.Service.PopulateCache()
 	s.Service.CheckConsistency()
 	assert.FatalOnError(t, s.Service.CloseSession("spoken", "logout"))

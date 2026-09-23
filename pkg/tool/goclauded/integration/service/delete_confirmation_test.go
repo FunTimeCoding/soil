@@ -19,7 +19,7 @@ func TestDeleteEmptySessionNeedsNoConfirmation(t *testing.T) {
 
 func TestDeleteRefusesWithoutConfirmation(t *testing.T) {
 	s := service_tester.New(t)
-	writeSessionFile(s.Harbor, "doomed", "some-slug")
+	s.WriteSessionFile("doomed", "some-slug")
 	s.Service.PopulateCache()
 	s.Service.CheckConsistency()
 	_, e := s.Service.DeleteSession("doomed", "")
@@ -34,7 +34,7 @@ func TestDeleteRefusesWithoutConfirmation(t *testing.T) {
 
 func TestDeleteRejectsStaleConfirmation(t *testing.T) {
 	s := service_tester.New(t)
-	writeSessionFile(s.Harbor, "doomed", "some-slug")
+	s.WriteSessionFile("doomed", "some-slug")
 	s.Service.PopulateCache()
 	s.Service.CheckConsistency()
 	stale := s.Service.DeleteHash("doomed")
@@ -47,8 +47,8 @@ func TestDeleteRejectsStaleConfirmation(t *testing.T) {
 
 func TestDeleteRejectsForeignConfirmation(t *testing.T) {
 	s := service_tester.New(t)
-	writeSessionFile(s.Harbor, "doomed", "some-slug")
-	writeSessionFile(s.Harbor, "bystander", "other-slug")
+	s.WriteSessionFile("doomed", "some-slug")
+	s.WriteSessionFile("bystander", "other-slug")
 	s.Service.PopulateCache()
 	s.Service.CheckConsistency()
 	_, e := s.Service.DeleteSession("doomed", s.Service.DeleteHash("bystander"))

@@ -9,7 +9,6 @@ import (
 
 func TestModelContext(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	c := o.Client
 	assert.Count(t, 2, c.ListTools())
 	o.Seed("save_memory", constant.SurfaceModelContext, "Blair")

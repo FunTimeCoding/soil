@@ -4,7 +4,7 @@ import "github.com/funtimecoding/soil/pkg/generative/anthropic/claude/tool_call"
 
 func (s *Service) recordContextLoads(
 	identifier string,
-	calls []tool_call.Call,
+	calls []*tool_call.Call,
 ) {
 	loads := classifyContextLoads(identifier, calls)
 

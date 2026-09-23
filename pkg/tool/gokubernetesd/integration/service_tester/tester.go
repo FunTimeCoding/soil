@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/cluster"
 	dynamicFake "k8s.io/client-go/dynamic/fake"
 	kubernetesFake "k8s.io/client-go/kubernetes/fake"
+	"testing"
 )
 
 type Tester struct {
@@ -14,4 +15,5 @@ type Tester struct {
 	Cluster   *cluster.Cluster
 	Clientset *kubernetesFake.Clientset
 	Dynamic   *dynamicFake.FakeDynamicClient
+	t         *testing.T
 }

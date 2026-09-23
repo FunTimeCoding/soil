@@ -25,19 +25,16 @@ func Check(
 			continue
 		}
 
-		name := p.Fset.File(file.Pos()).Name()
-
 		for _, d := range file.Decls {
 			if f, okay := d.(*ast.FuncDecl); okay {
 				results.AddConcern(
-					concern.NewFile(
+					concern.NewPosition(
 						"constant_declaration",
 						fmt.Sprintf(
 							"func %s inside constant/ - constant packages are behavior-free",
 							f.Name.Name,
 						),
-						name,
-						false,
+						p.Fset.Position(f.Pos()),
 					),
 				)
 
@@ -58,14 +55,13 @@ func Check(
 				}
 
 				results.AddConcern(
-					concern.NewFile(
+					concern.NewPosition(
 						"constant_declaration",
 						fmt.Sprintf(
 							"type %s inside constant/ is not enum-shaped - record types live in types/ leaves",
 							t.Name.Name,
 						),
-						name,
-						false,
+						p.Fset.Position(t.Pos()),
 					),
 				)
 			}

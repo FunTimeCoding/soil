@@ -10,9 +10,7 @@ import (
 
 func TestSummarize(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "building things")
 	a.MustCallTool(
 		constant.Summarize,
@@ -26,9 +24,7 @@ func TestSummarize(t *testing.T) {
 
 func TestSummarizeHistoryEvent(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "building things")
 	a.MustCallTool(
 		constant.Summarize,
@@ -41,9 +37,7 @@ func TestSummarizeHistoryEvent(t *testing.T) {
 
 func TestSummarizeAmend(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "building things")
 	a.MustCallTool(
 		constant.Summarize,
@@ -60,9 +54,7 @@ func TestSummarizeAmend(t *testing.T) {
 
 func TestSummarizeAmendOneEvent(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "building things")
 	a.MustCallTool(
 		constant.Summarize,
@@ -76,9 +68,7 @@ func TestSummarizeAmendOneEvent(t *testing.T) {
 
 func TestSummarizeBeforeAnnounce(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	assert.StringContains(
 		t,
 		"announce first",

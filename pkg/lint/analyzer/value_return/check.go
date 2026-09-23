@@ -2,7 +2,6 @@ package value_return
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"go/ast"
@@ -23,12 +22,6 @@ func Check(
 
 	for _, file := range p.Syntax {
 		if ast.IsGenerated(file) {
-			continue
-		}
-
-		name := p.Fset.File(file.Pos()).Name()
-
-		if strings.HasSuffix(name, constant.TestSuffix) {
 			continue
 		}
 
@@ -75,8 +68,12 @@ func Check(
 						continue
 					}
 
+					if isGeneratedType(p, named) {
+						continue
+					}
+
 					results.AddConcern(
-						concern.NewFile(
+						concern.NewPosition(
 							"value_return",
 							fmt.Sprintf(
 								"%s returns %s.%s by value",
@@ -84,8 +81,7 @@ func Check(
 								a.Name(),
 								named.Obj().Name(),
 							),
-							p.Fset.Position(f.Pos()).Filename,
-							false,
+							p.Fset.Position(f.Pos()),
 						),
 					)
 				}

@@ -67,11 +67,10 @@ func Check(
 				}
 
 				results.AddConcern(
-					concern.NewFile(
+					concern.NewPosition(
 						"type_receiver",
 						"multiple types with receivers in one package; extract to subpackage",
-						p.Fset.Position(s.Pos()).Filename,
-						false,
+						p.Fset.Position(s.Pos()),
 					),
 				)
 				reported = true

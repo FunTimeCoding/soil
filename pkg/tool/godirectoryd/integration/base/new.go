@@ -29,8 +29,7 @@ func New(t *testing.T) *Server {
 		"https://directory.example.org/callback",
 		client.DeriveKey("tester-encryption-secret"),
 	)
-
-	return &Server{
+	result := &Server{
 		Service:       v,
 		Authorization: authorization,
 		Server: model_context_server.New(
@@ -50,4 +49,7 @@ func New(t *testing.T) *Server {
 			},
 		),
 	}
+	t.Cleanup(result.Close)
+
+	return result
 }

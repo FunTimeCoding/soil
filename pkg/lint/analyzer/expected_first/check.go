@@ -2,17 +2,13 @@ package expected_first
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/assert_call"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
-	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"go/ast"
 	"golang.org/x/tools/go/packages"
-	"strings"
 )
 
-// Check flags assert helpers whose expected parameter does not
-// directly follow t - helpers mirror the assert shape, expected
-// first, so the expected-slot analyzers read the right argument.
 func Check(
 	p *packages.Package,
 	results *output.Results,
@@ -25,30 +21,32 @@ func Check(
 		for _, d := range file.Decls {
 			f, okay := d.(*ast.FuncDecl)
 
-			if !okay || f.Recv != nil ||
-				!strings.HasPrefix(f.Name.Name, constant.AssertHelperPrefix) {
+			if !okay || !assert_call.HasAssertPrefix(f.Name.Name) {
 				continue
 			}
 
-			if !takesTestingFirst(p, f) {
+			leading := 0
+
+			if takesTestingFirst(p, f) {
+				leading = 1
+			} else if f.Recv == nil {
 				continue
 			}
 
 			index := expectedIndex(f.Type.Params)
 
-			if index <= 1 {
+			if index < 0 || index == leading {
 				continue
 			}
 
 			results.AddConcern(
-				concern.NewFile(
+				concern.NewPosition(
 					"expected_first",
 					fmt.Sprintf(
-						"assert helper %s: expected parameter must follow t",
+						"assert helper %s: expected parameter must lead",
 						f.Name.Name,
 					),
-					p.Fset.Position(f.Pos()).Filename,
-					false,
+					p.Fset.Position(f.Pos()),
 				),
 			)
 		}

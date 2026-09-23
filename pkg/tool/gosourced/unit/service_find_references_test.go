@@ -4,13 +4,22 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/result"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"testing"
 )
 
 func TestFindReferences(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("find-references/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("find-references/src"),
+	)
 	s := testService()
-	r, references, e := s.FindReferences(d, "example/pkg/target", "Used", "")
+	r, references, e := s.FindReferences(
+		d,
+		"example/pkg/target/constant",
+		"Used",
+		"",
+	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	assert.NotNil(t, references)
@@ -18,12 +27,15 @@ func TestFindReferences(t *testing.T) {
 	assert.Integer(t, 1, references.Total)
 	assert.Integer(t, 1, len(references.Locations))
 	assert.String(t, "pkg/caller/run.go", references.Locations[0].File)
-	assert.Integer(t, 8, references.Locations[0].Line)
+	assert.Integer(t, 11, references.Locations[0].Line)
 	assert.String(t, "example/pkg/caller", references.Locations[0].Package)
 }
 
 func TestFindReferencesMethod(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("find-references/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("find-references/src"),
+	)
 	s := testService()
 	r, references, e := s.FindReferences(
 		d,
@@ -39,26 +51,37 @@ func TestFindReferencesMethod(t *testing.T) {
 }
 
 func TestFindReferencesUnknownSymbol(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("find-references/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("find-references/src"),
+	)
 	s := testService()
-	r, references, e := s.FindReferences(d, "example/pkg/target", "Missing", "")
+	r, references, e := s.FindReferences(
+		d,
+		"example/pkg/target/constant",
+		"Missing",
+		"",
+	)
 	assert.FatalOnError(t, e)
 	assert.True(t, references == nil)
 	testutil.AssertBlockedContains(t, r, "Missing")
 }
 
 func TestFileReferences(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("find-references/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("find-references/src"),
+	)
 	s := testService()
 	r, references, e := s.FileReferences(
 		d,
-		"example/pkg/target",
-		"pkg/target/constant.go",
+		"example/pkg/target/constant",
+		"pkg/target/constant/constant.go",
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	assert.NotNil(t, references)
-	assert.String(t, "pkg/target/constant.go", references.File)
+	assert.String(t, "pkg/target/constant/constant.go", references.File)
 	assert.Integer(t, 2, len(references.Symbols))
 	assert.String(t, "Used", references.Symbols[0].Symbol)
 	assert.Integer(t, 1, references.Symbols[0].Total)
@@ -67,7 +90,10 @@ func TestFileReferences(t *testing.T) {
 }
 
 func TestFileReferencesMethods(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("find-references/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("find-references/src"),
+	)
 	s := testService()
 	r, references, e := s.FileReferences(
 		d,
@@ -85,7 +111,10 @@ func TestFileReferencesMethods(t *testing.T) {
 }
 
 func TestFileReferencesUnknownFile(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("find-references/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("find-references/src"),
+	)
 	s := testService()
 	r, references, e := s.FileReferences(
 		d,

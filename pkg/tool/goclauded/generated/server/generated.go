@@ -41,6 +41,11 @@ type BashDumpResponse struct {
 	Commands []string `json:"commands"`
 }
 
+// ChannelCallsignResponse defines model for ChannelCallsignResponse.
+type ChannelCallsignResponse struct {
+	Callsign string `json:"callsign"`
+}
+
 // CheckResponse defines model for CheckResponse.
 type CheckResponse struct {
 	Callsign string       `json:"callsign"`
@@ -109,6 +114,11 @@ type DeleteReceiptResponse struct {
 	Summaries     int       `json:"summaries"`
 	TrackerStates int       `json:"tracker_states"`
 	Transcript    *string   `json:"transcript,omitempty"`
+}
+
+// DeliveryResponse defines model for DeliveryResponse.
+type DeliveryResponse struct {
+	Immediate bool `json:"immediate"`
 }
 
 // EditSessionRequest defines model for EditSessionRequest.
@@ -191,19 +201,6 @@ type LabelResponse struct {
 	Change string `json:"change"`
 }
 
-// ListenRequest defines model for ListenRequest.
-type ListenRequest struct {
-	Callsign  string `json:"callsign"`
-	Listening *bool  `json:"listening,omitempty"`
-}
-
-// Message defines model for Message.
-type Message struct {
-	Body      string `json:"body"`
-	From      string `json:"from"`
-	Timestamp string `json:"timestamp"`
-}
-
 // MessagesResponse defines model for MessagesResponse.
 type MessagesResponse struct {
 	Messages []SessionMessage `json:"messages"`
@@ -224,9 +221,10 @@ type ModelUsage struct {
 
 // NotifyRequest defines model for NotifyRequest.
 type NotifyRequest struct {
-	Body     string `json:"body"`
-	Callsign string `json:"callsign"`
-	Source   string `json:"source"`
+	Body      string `json:"body"`
+	Callsign  string `json:"callsign"`
+	Immediate *bool  `json:"immediate,omitempty"`
+	Source    string `json:"source"`
 }
 
 // PeekEntry defines model for PeekEntry.
@@ -253,7 +251,8 @@ type PulseEntry struct {
 
 // PulseRequest defines model for PulseRequest.
 type PulseRequest struct {
-	Body string `json:"body"`
+	Body      string `json:"body"`
+	Immediate *bool  `json:"immediate,omitempty"`
 }
 
 // QueueEntry defines model for QueueEntry.
@@ -298,19 +297,23 @@ type ResolveResponse struct {
 
 // SendRequest defines model for SendRequest.
 type SendRequest struct {
-	Body     string  `json:"body"`
-	Callsign string  `json:"callsign"`
-	To       *string `json:"to,omitempty"`
+	Body      string  `json:"body"`
+	Callsign  string  `json:"callsign"`
+	Immediate *bool   `json:"immediate,omitempty"`
+	To        *string `json:"to,omitempty"`
 }
 
 // SessionDetail defines model for SessionDetail.
 type SessionDetail struct {
 	Alias         *string       `json:"alias,omitempty"`
 	Branch        *string       `json:"branch,omitempty"`
+	ClosedAt      *string       `json:"closedAt,omitempty"`
 	Description   *string       `json:"description,omitempty"`
 	Identifier    string        `json:"identifier"`
 	Labels        *[]LabelEntry `json:"labels,omitempty"`
+	LastPromptAt  *string       `json:"lastPromptAt,omitempty"`
 	LastSeen      *string       `json:"lastSeen,omitempty"`
+	LastTurnEndAt *string       `json:"lastTurnEndAt,omitempty"`
 	Lines         int           `json:"lines"`
 	Name          *string       `json:"name,omitempty"`
 	Preview       *string       `json:"preview,omitempty"`
@@ -418,6 +421,11 @@ type ToolsResponse struct {
 	Total  int             `json:"total"`
 }
 
+// TurnEndRequest defines model for TurnEndRequest.
+type TurnEndRequest struct {
+	Session string `json:"session"`
+}
+
 // UsageResponse defines model for UsageResponse.
 type UsageResponse struct {
 	FablePercent    int        `json:"fable_percent"`
@@ -430,15 +438,21 @@ type UsageResponse struct {
 	SevenDayReset   time.Time  `json:"seven_day_reset"`
 }
 
-// WaitResponse defines model for WaitResponse.
-type WaitResponse struct {
-	Messages []Message `json:"messages"`
-}
-
 // PostBackfillParams defines parameters for PostBackfill.
 type PostBackfillParams struct {
 	// Cold Reset tracker offsets and re-read every transcript whole.
 	Cold *bool `form:"cold,omitempty" json:"cold,omitempty"`
+}
+
+// GetChannelParams defines parameters for GetChannel.
+type GetChannelParams struct {
+	Callsign string `form:"callsign" json:"callsign"`
+}
+
+// GetChannelCallsignParams defines parameters for GetChannelCallsign.
+type GetChannelCallsignParams struct {
+	Session string    `form:"session" json:"session"`
+	Since   time.Time `form:"since" json:"since"`
 }
 
 // GetCheckParams defines parameters for GetCheck.
@@ -493,17 +507,8 @@ type GetTimelineParams struct {
 	Offset *int    `form:"offset,omitempty" json:"offset,omitempty"`
 }
 
-// GetWaitParams defines parameters for GetWait.
-type GetWaitParams struct {
-	Callsign string `form:"callsign" json:"callsign"`
-	Timeout  *int   `form:"timeout,omitempty" json:"timeout,omitempty"`
-}
-
 // PostAnnounceJSONRequestBody defines body for PostAnnounce for application/json ContentType.
 type PostAnnounceJSONRequestBody = AnnounceRequest
-
-// PostListenJSONRequestBody defines body for PostListen for application/json ContentType.
-type PostListenJSONRequestBody = ListenRequest
 
 // PostNotifyJSONRequestBody defines body for PostNotify for application/json ContentType.
 type PostNotifyJSONRequestBody = NotifyRequest
@@ -532,6 +537,9 @@ type PostSessionLabelJSONRequestBody = LabelRequest
 // PostSessionPulseJSONRequestBody defines body for PostSessionPulse for application/json ContentType.
 type PostSessionPulseJSONRequestBody = PulseRequest
 
+// PostTurnEndJSONRequestBody defines body for PostTurnEnd for application/json ContentType.
+type PostTurnEndJSONRequestBody = TurnEndRequest
+
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 
@@ -541,6 +549,12 @@ type ServerInterface interface {
 	// (POST /api/backfill)
 	PostBackfill(w http.ResponseWriter, r *http.Request, params PostBackfillParams)
 
+	// (GET /api/channel)
+	GetChannel(w http.ResponseWriter, r *http.Request, params GetChannelParams)
+
+	// (GET /api/channel/callsign)
+	GetChannelCallsign(w http.ResponseWriter, r *http.Request, params GetChannelCallsignParams)
+
 	// (GET /api/check)
 	GetCheck(w http.ResponseWriter, r *http.Request, params GetCheckParams)
 
@@ -549,9 +563,6 @@ type ServerInterface interface {
 
 	// (GET /api/coverage)
 	GetCoverage(w http.ResponseWriter, r *http.Request)
-
-	// (POST /api/listen)
-	PostListen(w http.ResponseWriter, r *http.Request)
 
 	// (POST /api/notify)
 	PostNotify(w http.ResponseWriter, r *http.Request)
@@ -631,11 +642,11 @@ type ServerInterface interface {
 	// (GET /api/timeline)
 	GetTimeline(w http.ResponseWriter, r *http.Request, params GetTimelineParams)
 
+	// (POST /api/turn-end)
+	PostTurnEnd(w http.ResponseWriter, r *http.Request)
+
 	// (GET /api/usage)
 	GetUsage(w http.ResponseWriter, r *http.Request)
-
-	// (GET /api/wait)
-	GetWait(w http.ResponseWriter, r *http.Request, params GetWaitParams)
 }
 
 // ServerInterfaceWrapper converts contexts to parameters.
@@ -685,6 +696,85 @@ func (siw *ServerInterfaceWrapper) PostBackfill(w http.ResponseWriter, r *http.R
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.PostBackfill(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetChannel operation middleware
+func (siw *ServerInterfaceWrapper) GetChannel(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetChannelParams
+
+	// ------------- Required query parameter "callsign" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, true, "callsign", r.URL.Query(), &params.Callsign, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "callsign"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "callsign", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetChannel(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetChannelCallsign operation middleware
+func (siw *ServerInterfaceWrapper) GetChannelCallsign(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetChannelCallsignParams
+
+	// ------------- Required query parameter "session" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, true, "session", r.URL.Query(), &params.Session, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "session"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "session", Err: err})
+		}
+		return
+	}
+
+	// ------------- Required query parameter "since" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, true, "since", r.URL.Query(), &params.Since, runtime.BindQueryParameterOptions{Type: "string", Format: "date-time"})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "since"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "since", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetChannelCallsign(w, r, params)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -778,20 +868,6 @@ func (siw *ServerInterfaceWrapper) GetCoverage(w http.ResponseWriter, r *http.Re
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.GetCoverage(w, r)
-	}))
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		handler = middleware(handler)
-	}
-
-	handler.ServeHTTP(w, r)
-}
-
-// PostListen operation middleware
-func (siw *ServerInterfaceWrapper) PostListen(w http.ResponseWriter, r *http.Request) {
-
-	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.PostListen(w, r)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -1502,11 +1578,11 @@ func (siw *ServerInterfaceWrapper) GetTimeline(w http.ResponseWriter, r *http.Re
 	handler.ServeHTTP(w, r)
 }
 
-// GetUsage operation middleware
-func (siw *ServerInterfaceWrapper) GetUsage(w http.ResponseWriter, r *http.Request) {
+// PostTurnEnd operation middleware
+func (siw *ServerInterfaceWrapper) PostTurnEnd(w http.ResponseWriter, r *http.Request) {
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.GetUsage(w, r)
+		siw.Handler.PostTurnEnd(w, r)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -1516,43 +1592,11 @@ func (siw *ServerInterfaceWrapper) GetUsage(w http.ResponseWriter, r *http.Reque
 	handler.ServeHTTP(w, r)
 }
 
-// GetWait operation middleware
-func (siw *ServerInterfaceWrapper) GetWait(w http.ResponseWriter, r *http.Request) {
-
-	var err error
-	_ = err
-
-	// Parameter object where we will unmarshal all parameters from the context
-	var params GetWaitParams
-
-	// ------------- Required query parameter "callsign" -------------
-
-	err = runtime.BindQueryParameterWithOptions("form", true, true, "callsign", r.URL.Query(), &params.Callsign, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
-	if err != nil {
-		var requiredError *runtime.RequiredParameterError
-		if errors.As(err, &requiredError) {
-			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "callsign"})
-		} else {
-			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "callsign", Err: err})
-		}
-		return
-	}
-
-	// ------------- Optional query parameter "timeout" -------------
-
-	err = runtime.BindQueryParameterWithOptions("form", true, false, "timeout", r.URL.Query(), &params.Timeout, runtime.BindQueryParameterOptions{Type: "integer", Format: ""})
-	if err != nil {
-		var requiredError *runtime.RequiredParameterError
-		if errors.As(err, &requiredError) {
-			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "timeout"})
-		} else {
-			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "timeout", Err: err})
-		}
-		return
-	}
+// GetUsage operation middleware
+func (siw *ServerInterfaceWrapper) GetUsage(w http.ResponseWriter, r *http.Request) {
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.GetWait(w, r, params)
+		siw.Handler.GetUsage(w, r)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -1684,14 +1728,15 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/register", wrapper.PostRegister)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/session-end", wrapper.PostSessionEnd)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/turn-end", wrapper.PostTurnEnd)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/check", wrapper.GetCheck)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/channel", wrapper.GetChannel)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/channel/callsign", wrapper.GetChannelCallsign)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/announce", wrapper.PostAnnounce)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/send", wrapper.PostSend)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/notify", wrapper.PostNotify)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/release", wrapper.PostRelease)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/resolve", wrapper.GetResolve)
-	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/wait", wrapper.GetWait)
-	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/listen", wrapper.PostListen)
 	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/session/{callsign}", wrapper.DeleteSession)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/sessions/edit", wrapper.PostEditSession)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/sessions", wrapper.GetSessions)
@@ -1789,6 +1834,86 @@ func (response PostBackfill200JSONResponse) VisitPostBackfillResponse(w http.Res
 type PostBackfill500JSONResponse ErrorResponse
 
 func (response PostBackfill500JSONResponse) VisitPostBackfillResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetChannelRequestObject struct {
+	Params GetChannelParams
+}
+
+type GetChannelResponseObject interface {
+	VisitGetChannelResponse(w http.ResponseWriter) error
+}
+
+type GetChannel200JSONResponse CheckResponse
+
+func (response GetChannel200JSONResponse) VisitGetChannelResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetChannel500JSONResponse ErrorResponse
+
+func (response GetChannel500JSONResponse) VisitGetChannelResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetChannelCallsignRequestObject struct {
+	Params GetChannelCallsignParams
+}
+
+type GetChannelCallsignResponseObject interface {
+	VisitGetChannelCallsignResponse(w http.ResponseWriter) error
+}
+
+type GetChannelCallsign200JSONResponse ChannelCallsignResponse
+
+func (response GetChannelCallsign200JSONResponse) VisitGetChannelCallsignResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetChannelCallsign204Response struct {
+}
+
+func (response GetChannelCallsign204Response) VisitGetChannelCallsignResponse(w http.ResponseWriter) error {
+	w.WriteHeader(204)
+	return nil
+}
+
+type GetChannelCallsign500JSONResponse ErrorResponse
+
+func (response GetChannelCallsign500JSONResponse) VisitGetChannelCallsignResponse(w http.ResponseWriter) error {
 
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(response); err != nil {
@@ -1907,36 +2032,6 @@ func (response GetCoverage500JSONResponse) VisitGetCoverageResponse(w http.Respo
 	return err
 }
 
-type PostListenRequestObject struct {
-	Body *PostListenJSONRequestBody
-}
-
-type PostListenResponseObject interface {
-	VisitPostListenResponse(w http.ResponseWriter) error
-}
-
-type PostListen200Response struct {
-}
-
-func (response PostListen200Response) VisitPostListenResponse(w http.ResponseWriter) error {
-	w.WriteHeader(200)
-	return nil
-}
-
-type PostListen500JSONResponse ErrorResponse
-
-func (response PostListen500JSONResponse) VisitPostListenResponse(w http.ResponseWriter) error {
-
-	var buf bytes.Buffer
-	if err := json.NewEncoder(&buf).Encode(response); err != nil {
-		return err
-	}
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(500)
-	_, err := buf.WriteTo(w)
-	return err
-}
-
 type PostNotifyRequestObject struct {
 	Body *PostNotifyJSONRequestBody
 }
@@ -1945,12 +2040,18 @@ type PostNotifyResponseObject interface {
 	VisitPostNotifyResponse(w http.ResponseWriter) error
 }
 
-type PostNotify200Response struct {
-}
+type PostNotify200JSONResponse DeliveryResponse
 
-func (response PostNotify200Response) VisitPostNotifyResponse(w http.ResponseWriter) error {
+func (response PostNotify200JSONResponse) VisitPostNotifyResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
-	return nil
+	_, err := buf.WriteTo(w)
+	return err
 }
 
 type PostNotify404JSONResponse Error
@@ -2119,12 +2220,18 @@ type PostSendResponseObject interface {
 	VisitPostSendResponse(w http.ResponseWriter) error
 }
 
-type PostSend200Response struct {
-}
+type PostSend200JSONResponse DeliveryResponse
 
-func (response PostSend200Response) VisitPostSendResponse(w http.ResponseWriter) error {
+func (response PostSend200JSONResponse) VisitPostSendResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
-	return nil
+	_, err := buf.WriteTo(w)
+	return err
 }
 
 type PostSend500JSONResponse ErrorResponse
@@ -2723,12 +2830,18 @@ type PostSessionPulseResponseObject interface {
 	VisitPostSessionPulseResponse(w http.ResponseWriter) error
 }
 
-type PostSessionPulse200Response struct {
-}
+type PostSessionPulse200JSONResponse DeliveryResponse
 
-func (response PostSessionPulse200Response) VisitPostSessionPulseResponse(w http.ResponseWriter) error {
+func (response PostSessionPulse200JSONResponse) VisitPostSessionPulseResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
-	return nil
+	_, err := buf.WriteTo(w)
+	return err
 }
 
 type PostSessionPulse500JSONResponse ErrorResponse
@@ -2924,6 +3037,36 @@ func (response GetTimeline500JSONResponse) VisitGetTimelineResponse(w http.Respo
 	return err
 }
 
+type PostTurnEndRequestObject struct {
+	Body *PostTurnEndJSONRequestBody
+}
+
+type PostTurnEndResponseObject interface {
+	VisitPostTurnEndResponse(w http.ResponseWriter) error
+}
+
+type PostTurnEnd200Response struct {
+}
+
+func (response PostTurnEnd200Response) VisitPostTurnEndResponse(w http.ResponseWriter) error {
+	w.WriteHeader(200)
+	return nil
+}
+
+type PostTurnEnd500JSONResponse ErrorResponse
+
+func (response PostTurnEnd500JSONResponse) VisitPostTurnEndResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type GetUsageRequestObject struct {
 }
 
@@ -2967,42 +3110,6 @@ func (response GetUsage500JSONResponse) VisitGetUsageResponse(w http.ResponseWri
 	return err
 }
 
-type GetWaitRequestObject struct {
-	Params GetWaitParams
-}
-
-type GetWaitResponseObject interface {
-	VisitGetWaitResponse(w http.ResponseWriter) error
-}
-
-type GetWait200JSONResponse WaitResponse
-
-func (response GetWait200JSONResponse) VisitGetWaitResponse(w http.ResponseWriter) error {
-
-	var buf bytes.Buffer
-	if err := json.NewEncoder(&buf).Encode(response); err != nil {
-		return err
-	}
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(200)
-	_, err := buf.WriteTo(w)
-	return err
-}
-
-type GetWait500JSONResponse ErrorResponse
-
-func (response GetWait500JSONResponse) VisitGetWaitResponse(w http.ResponseWriter) error {
-
-	var buf bytes.Buffer
-	if err := json.NewEncoder(&buf).Encode(response); err != nil {
-		return err
-	}
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(500)
-	_, err := buf.WriteTo(w)
-	return err
-}
-
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
 
@@ -3012,6 +3119,12 @@ type StrictServerInterface interface {
 	// (POST /api/backfill)
 	PostBackfill(ctx context.Context, request PostBackfillRequestObject) (PostBackfillResponseObject, error)
 
+	// (GET /api/channel)
+	GetChannel(ctx context.Context, request GetChannelRequestObject) (GetChannelResponseObject, error)
+
+	// (GET /api/channel/callsign)
+	GetChannelCallsign(ctx context.Context, request GetChannelCallsignRequestObject) (GetChannelCallsignResponseObject, error)
+
 	// (GET /api/check)
 	GetCheck(ctx context.Context, request GetCheckRequestObject) (GetCheckResponseObject, error)
 
@@ -3020,9 +3133,6 @@ type StrictServerInterface interface {
 
 	// (GET /api/coverage)
 	GetCoverage(ctx context.Context, request GetCoverageRequestObject) (GetCoverageResponseObject, error)
-
-	// (POST /api/listen)
-	PostListen(ctx context.Context, request PostListenRequestObject) (PostListenResponseObject, error)
 
 	// (POST /api/notify)
 	PostNotify(ctx context.Context, request PostNotifyRequestObject) (PostNotifyResponseObject, error)
@@ -3102,11 +3212,11 @@ type StrictServerInterface interface {
 	// (GET /api/timeline)
 	GetTimeline(ctx context.Context, request GetTimelineRequestObject) (GetTimelineResponseObject, error)
 
+	// (POST /api/turn-end)
+	PostTurnEnd(ctx context.Context, request PostTurnEndRequestObject) (PostTurnEndResponseObject, error)
+
 	// (GET /api/usage)
 	GetUsage(ctx context.Context, request GetUsageRequestObject) (GetUsageResponseObject, error)
-
-	// (GET /api/wait)
-	GetWait(ctx context.Context, request GetWaitRequestObject) (GetWaitResponseObject, error)
 }
 
 type StrictHandlerFunc func(ctx context.Context, w http.ResponseWriter, r *http.Request, request any) (any, error)
@@ -3205,6 +3315,58 @@ func (sh *strictHandler) PostBackfill(w http.ResponseWriter, r *http.Request, pa
 	}
 }
 
+// GetChannel operation middleware
+func (sh *strictHandler) GetChannel(w http.ResponseWriter, r *http.Request, params GetChannelParams) {
+	var request GetChannelRequestObject
+
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetChannel(ctx, request.(GetChannelRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetChannel")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetChannelResponseObject); ok {
+		if err := validResponse.VisitGetChannelResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetChannelCallsign operation middleware
+func (sh *strictHandler) GetChannelCallsign(w http.ResponseWriter, r *http.Request, params GetChannelCallsignParams) {
+	var request GetChannelCallsignRequestObject
+
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetChannelCallsign(ctx, request.(GetChannelCallsignRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetChannelCallsign")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetChannelCallsignResponseObject); ok {
+		if err := validResponse.VisitGetChannelCallsignResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // GetCheck operation middleware
 func (sh *strictHandler) GetCheck(w http.ResponseWriter, r *http.Request, params GetCheckParams) {
 	var request GetCheckRequestObject
@@ -3274,37 +3436,6 @@ func (sh *strictHandler) GetCoverage(w http.ResponseWriter, r *http.Request) {
 		sh.options.ResponseErrorHandlerFunc(w, r, err)
 	} else if validResponse, ok := response.(GetCoverageResponseObject); ok {
 		if err := validResponse.VisitGetCoverageResponse(w); err != nil {
-			sh.options.ResponseErrorHandlerFunc(w, r, err)
-		}
-	} else if response != nil {
-		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
-	}
-}
-
-// PostListen operation middleware
-func (sh *strictHandler) PostListen(w http.ResponseWriter, r *http.Request) {
-	var request PostListenRequestObject
-
-	var body PostListenJSONRequestBody
-	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
-		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
-		return
-	}
-	request.Body = &body
-
-	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
-		return sh.ssi.PostListen(ctx, request.(PostListenRequestObject))
-	}
-	for _, middleware := range sh.middlewares {
-		handler = middleware(handler, "PostListen")
-	}
-
-	response, err := handler(r.Context(), w, r, request)
-
-	if err != nil {
-		sh.options.ResponseErrorHandlerFunc(w, r, err)
-	} else if validResponse, ok := response.(PostListenResponseObject); ok {
-		if err := validResponse.VisitPostListenResponse(w); err != nil {
 			sh.options.ResponseErrorHandlerFunc(w, r, err)
 		}
 	} else if response != nil {
@@ -4033,6 +4164,37 @@ func (sh *strictHandler) GetTimeline(w http.ResponseWriter, r *http.Request, par
 	}
 }
 
+// PostTurnEnd operation middleware
+func (sh *strictHandler) PostTurnEnd(w http.ResponseWriter, r *http.Request) {
+	var request PostTurnEndRequestObject
+
+	var body PostTurnEndJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.PostTurnEnd(ctx, request.(PostTurnEndRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "PostTurnEnd")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(PostTurnEndResponseObject); ok {
+		if err := validResponse.VisitPostTurnEndResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // GetUsage operation middleware
 func (sh *strictHandler) GetUsage(w http.ResponseWriter, r *http.Request) {
 	var request GetUsageRequestObject
@@ -4057,94 +4219,69 @@ func (sh *strictHandler) GetUsage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// GetWait operation middleware
-func (sh *strictHandler) GetWait(w http.ResponseWriter, r *http.Request, params GetWaitParams) {
-	var request GetWaitRequestObject
-
-	request.Params = params
-
-	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
-		return sh.ssi.GetWait(ctx, request.(GetWaitRequestObject))
-	}
-	for _, middleware := range sh.middlewares {
-		handler = middleware(handler, "GetWait")
-	}
-
-	response, err := handler(r.Context(), w, r, request)
-
-	if err != nil {
-		sh.options.ResponseErrorHandlerFunc(w, r, err)
-	} else if validResponse, ok := response.(GetWaitResponseObject); ok {
-		if err := validResponse.VisitGetWaitResponse(w); err != nil {
-			sh.options.ResponseErrorHandlerFunc(w, r, err)
-		}
-	} else if response != nil {
-		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
-	}
-}
-
 // Base64 encoded, compressed with deflate, json marshaled OpenAPI spec.
 // Stored as a slice of fixed-width chunks rather than one concatenated
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
-	"1SRr5JayDKE/Pv43AAD//w==",
+	"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",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

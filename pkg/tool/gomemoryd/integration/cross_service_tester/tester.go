@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/model_context_client"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/integration/base"
+	"testing"
 )
 
 type Tester struct {
@@ -11,4 +12,5 @@ type Tester struct {
 	MemoryClient *model_context_client.Client
 	MemoryStore  *store.Store
 	QueryServer  *base.Server
+	t            *testing.T
 }

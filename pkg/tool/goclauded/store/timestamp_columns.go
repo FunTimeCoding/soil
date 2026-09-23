@@ -7,6 +7,8 @@ func timestampColumns() []timestampColumn {
 		{constant.SessionTable, "started_at"},
 		{constant.SessionTable, "last_seen"},
 		{constant.SessionTable, "last_active_at"},
+		{constant.SessionTable, "last_prompt_at"},
+		{constant.SessionTable, "last_turn_end_at"},
 		{constant.SessionTable, "closed_at"},
 		{"event", "created_at"},
 		{"queue", "created_at"},

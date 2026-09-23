@@ -63,19 +63,16 @@ func checkFile(
 		)
 	}
 
-	filename := p.Fset.Position(file.Pos()).Filename
-
 	if len(identities) > 1 {
 		results.AddConcern(
-			concern.NewFile(
+			concern.NewPosition(
 				"file_identity",
 				fmt.Sprintf(
 					"multiple identities in one file: %s and %s",
 					identities[0].name,
 					identities[1].name,
 				),
-				filename,
-				false,
+				p.Fset.Position(identities[1].position),
 			),
 		)
 
@@ -101,7 +98,7 @@ func checkFile(
 
 	if stem != expected {
 		results.AddConcern(
-			concern.NewFile(
+			concern.NewPosition(
 				"file_identity",
 				fmt.Sprintf(
 					"filename %s does not match identity %s (expected %s.go)",
@@ -109,8 +106,7 @@ func checkFile(
 					sole.name,
 					expected,
 				),
-				filename,
-				false,
+				p.Fset.Position(sole.position),
 			),
 		)
 	}

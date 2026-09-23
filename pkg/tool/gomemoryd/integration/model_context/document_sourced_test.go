@@ -8,28 +8,9 @@ import (
 	"testing"
 )
 
-func documentSourcedMemory(
-	t *testing.T,
-	s *model_context_tester.Tester,
-) int64 {
-	t.Helper()
-	o := save_option.New()
-	o.Name = "Retry"
-	o.Content = "Document-sourced content."
-	o.Description = ""
-	o.Type = "reference"
-	o.Scope = "alpha"
-	o.ProvenanceFile = "canon/Example.yaml"
-	o.ProvenanceAnchor = "Retry"
-	identifier, e := s.Store().CreateMemory(o)
-	assert.FatalOnError(t, e)
-
-	return identifier
-}
-
 func TestDocumentSourcedMemoryRejectsUpdate(t *testing.T) {
 	s := model_context_tester.New(t)
-	identifier := documentSourcedMemory(t, s)
+	identifier := s.DocumentSourcedMemory()
 	result := s.MustCallToolError(
 		constant.UpdateMemory,
 		map[string]any{
@@ -47,7 +28,7 @@ func TestDocumentSourcedMemoryRejectsUpdate(t *testing.T) {
 
 func TestDocumentSourcedMemoryRejectsForget(t *testing.T) {
 	s := model_context_tester.New(t)
-	identifier := documentSourcedMemory(t, s)
+	identifier := s.DocumentSourcedMemory()
 	result := s.MustCallToolError(
 		constant.ForgetMemory,
 		map[string]any{constant.MemoryIdentifier: identifier},
@@ -60,7 +41,7 @@ func TestDocumentSourcedMemoryRejectsForget(t *testing.T) {
 
 func TestDocumentSourcedMemoryRejectsTag(t *testing.T) {
 	s := model_context_tester.New(t)
-	identifier := documentSourcedMemory(t, s)
+	identifier := s.DocumentSourcedMemory()
 	result := s.MustCallToolError(
 		constant.TagMemory,
 		map[string]any{

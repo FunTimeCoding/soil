@@ -2,12 +2,10 @@ package stray_comment
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"go/ast"
 	"golang.org/x/tools/go/packages"
-	"strings"
 )
 
 func Check(
@@ -16,12 +14,6 @@ func Check(
 ) {
 	for _, file := range p.Syntax {
 		if ast.IsGenerated(file) {
-			continue
-		}
-
-		name := p.Fset.File(file.Pos()).Name()
-
-		if strings.HasSuffix(name, constant.TestSuffix) {
 			continue
 		}
 
@@ -38,15 +30,10 @@ func Check(
 				}
 
 				results.AddConcern(
-					concern.NewFile(
+					concern.NewPosition(
 						"stray_comment",
-						fmt.Sprintf(
-							"line %d: comment: %s",
-							p.Fset.Position(c.Pos()).Line,
-							firstLine(c.Text),
-						),
-						name,
-						false,
+						fmt.Sprintf("comment: %s", firstLine(c.Text)),
+						p.Fset.Position(c.Pos()),
 					),
 				)
 			}

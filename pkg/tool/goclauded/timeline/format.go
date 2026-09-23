@@ -13,5 +13,14 @@ func Format(e *Entry) string {
 		timestamp = t.Local().Format("Jan 02 15:04")
 	}
 
-	return fmt.Sprintf("%s  %s", timestamp, FormatDescription(e))
+	if e.Identifier == 0 {
+		return fmt.Sprintf("%s  %s", timestamp, FormatDescription(e))
+	}
+
+	return fmt.Sprintf(
+		"%s  [%d] %s",
+		timestamp,
+		e.Identifier,
+		FormatDescription(e),
+	)
 }

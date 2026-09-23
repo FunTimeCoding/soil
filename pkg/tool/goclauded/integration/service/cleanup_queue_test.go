@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration/fixture"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration/service_tester"
 	"testing"
 	"time"
@@ -16,7 +17,7 @@ func TestCleanupQueueRemovesConsumedEntries(t *testing.T) {
 	s.Store.Advance(25 * time.Hour)
 	s.Service.RunTimeoutSweep()
 	r = s.Check("session-1")
-	announces := entriesByKind(r.Entries, constant.QueueSessionAnnounce)
+	announces := fixture.EntriesByKind(r.Entries, constant.QueueSessionAnnounce)
 	assert.Count(t, 0, announces)
 }
 
@@ -27,6 +28,6 @@ func TestCleanupQueuePreservesUnconsumedEntries(t *testing.T) {
 	s.Store.Advance(25 * time.Hour)
 	s.Service.RunTimeoutSweep()
 	r = s.Check("session-1")
-	announces := entriesByKind(r.Entries, constant.QueueSessionAnnounce)
+	announces := fixture.EntriesByKind(r.Entries, constant.QueueSessionAnnounce)
 	assert.True(t, len(announces) > 0)
 }

@@ -53,5 +53,5 @@ func New(
 	c, e := client.NewClientWithResponses(s.URL)
 	errors.PanicOnError(e)
 
-	return &Tester{Client: c}
+	return &Tester{t: t, Client: c}
 }

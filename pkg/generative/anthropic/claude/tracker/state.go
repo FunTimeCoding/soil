@@ -17,5 +17,5 @@ type State struct {
 	FirstMessage     string
 	Usage            map[string]*pricing.Tokens
 	RecentMessages   []string
-	Pending          map[string]tool_call.Call
+	Pending          map[string]*tool_call.Call
 }

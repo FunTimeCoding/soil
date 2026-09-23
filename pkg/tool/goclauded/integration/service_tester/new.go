@@ -22,6 +22,7 @@ func New(t *testing.T) *Tester {
 	ci := mock_indexer.New()
 	n := mock_notifier.New()
 	harbor := t.TempDir()
+	c.Harbor = harbor
 
 	return &Tester{
 		Store: s,

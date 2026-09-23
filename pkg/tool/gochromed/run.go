@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/tool/gochromed/browser"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/option"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -28,7 +29,7 @@ func Run(
 				o.Address,
 				func(m *http.ServeMux) {
 					Mount(
-						c,
+						browser.New(c),
 						o.DownloadDirectory,
 						r,
 						s.Recorder(),

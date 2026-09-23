@@ -24,11 +24,10 @@ func report(
 	}
 
 	results.AddConcern(
-		concern.NewFile(
+		concern.NewPosition(
 			"multi_value_result",
 			message,
-			p.Fset.Position(call.Pos()).Filename,
-			false,
+			p.Fset.Position(call.Pos()),
 		),
 	)
 }

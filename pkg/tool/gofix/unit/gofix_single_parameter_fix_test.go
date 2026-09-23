@@ -5,12 +5,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gofix"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/unit/module_tester"
 	"path/filepath"
 	"testing"
 )
 
 func TestSingleParameterFix(t *testing.T) {
-	directory := writeSingleParameterTestModule(t)
+	directory := module_tester.SingleParameter(t)
 	r := output.NewResultsWithDirectory(directory)
 	gofix.RunSingleParameterFixWithDirectory(
 		[]string{"./..."},
@@ -76,24 +77,26 @@ func TestSingleParameterFix(t *testing.T) {
 		func(t *testing.T) {
 			applied := filterApplied(r.Entries)
 			assert.Integer(t, 2, len(applied))
-			assertResult(
+			assertResultAt(
 				t,
 				applied,
 				"method.go",
-				"collapsed single parameter (line 7)",
+				7,
+				"collapsed single parameter",
 			)
-			assertResult(
+			assertResultAt(
 				t,
 				applied,
 				"function.go",
-				"collapsed single parameter (line 3)",
+				3,
+				"collapsed single parameter",
 			)
 		},
 	)
 }
 
 func TestSingleParameterFixWithTestFiles(t *testing.T) {
-	directory := writeSingleParameterTestModuleWithTests(t)
+	directory := module_tester.SingleParameterWithTests(t)
 	r := output.NewResultsWithDirectory(directory)
 	gofix.RunSingleParameterFixWithDirectory(
 		[]string{"./..."},
@@ -111,62 +114,4 @@ func TestSingleParameterFixWithTestFiles(t *testing.T) {
 			)
 		},
 	)
-}
-
-func writeSingleParameterTestModuleWithTests(t *testing.T) string {
-	t.Helper()
-	directory := t.TempDir()
-	testutil.WriteFile(t, directory, "go.mod", "module example\n\ngo 1.22\n")
-	testutil.WriteFile(
-		t,
-		directory,
-		"find.go",
-		"package tested\n\nfunc FindLatest(\n\tv []string,\n) *string {\n\treturn nil\n}\n",
-	)
-	testutil.WriteFile(
-		t,
-		directory,
-		"find_test.go",
-		"package tested\n\nimport \"testing\"\n\nfunc TestFindLatest(t *testing.T) {}\n",
-	)
-
-	return directory
-}
-
-func writeSingleParameterTestModule(t *testing.T) string {
-	t.Helper()
-	directory := t.TempDir()
-	testutil.WriteFile(t, directory, "go.mod", "module example\n\ngo 1.22\n")
-	testutil.WriteFile(
-		t,
-		directory,
-		"method.go",
-		"package example\n\nimport \"context\"\n\ntype Client struct{}\n\nfunc (c *Client) Snapshot(\n\tx context.Context,\n) (string, error) {\n\treturn \"\", nil\n}\n",
-	)
-	testutil.WriteFile(
-		t,
-		directory,
-		"function.go",
-		"package example\n\nfunc Process(\n\tname string,\n) error {\n\treturn nil\n}\n",
-	)
-	testutil.WriteFile(
-		t,
-		directory,
-		"two_params.go",
-		"package example\n\nfunc TwoParams(\n\ta string,\n\tb string,\n) error {\n\treturn nil\n}\n",
-	)
-	testutil.WriteFile(
-		t,
-		directory,
-		"already_single.go",
-		"package example\n\nfunc Short(x int) {}\n",
-	)
-	testutil.WriteFile(
-		t,
-		directory,
-		"too_long.go",
-		"package example\n\nfunc VeryLongFunctionNameThatWouldExceedTheLimit(\n\tparameterWithAVeryLongName string,\n) error {\n\treturn nil\n}\n",
-	)
-
-	return directory
 }

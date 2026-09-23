@@ -5,14 +5,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
-	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
+	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/option"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/procfile"
-	"github.com/funtimecoding/soil/pkg/tool/goprocessd/server"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/socket"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/supervisor"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -31,7 +31,7 @@ func Run(
 		errors.Printf("warning: %s\n", f)
 	}
 
-	s := server.New(
+	s := supervisor.New(
 		entries,
 		env,
 		o.ProcfilePath,
@@ -42,7 +42,7 @@ func Run(
 	l := lifecycle.New(
 		logger.New(context.Background()),
 		lifecycle.WithServer(
-			lifecycleServer.New(
+			server.New(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {

@@ -3,6 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"os"
 	"path/filepath"
 	"strings"
@@ -10,35 +11,45 @@ import (
 )
 
 func TestRenamePackage(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("package-rename/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("package-rename/src"),
+	)
 	s := testService()
 	r, e := s.RenamePackage(d, "example/pkg/outer/store", "depot", false)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	_, e = os.Stat(filepath.Join(d, "pkg/outer/store"))
 	assert.True(t, os.IsNotExist(e))
-	moved := readFixtureFile(t, d, "pkg/outer/depot/store.go")
+	moved := service_tester.ReadFixtureFile(t, d, "pkg/outer/depot/store.go")
 	assertFormatted(t, moved)
 	assert.StringContains(t, "package depot", moved)
-	run := readFixtureFile(t, d, "pkg/outer/depot/run.go")
+	run := service_tester.ReadFixtureFile(t, d, "pkg/outer/depot/run.go")
 	assertFormatted(t, run)
 	assert.StringContains(t, "package depot", run)
 	assert.StringContains(t, "example/pkg/outer/depot/sub", run)
-	tests := readFixtureFile(t, d, "pkg/outer/depot/store_test.go")
+	tests := service_tester.ReadFixtureFile(
+		t,
+		d,
+		"pkg/outer/depot/store_test.go",
+	)
 	assert.StringContains(t, "package depot", tests)
-	caller := readFixtureFile(t, d, "pkg/caller/run.go")
+	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
 	assertFormatted(t, caller)
 	assert.StringContains(t, "\"example/pkg/outer/depot\"", caller)
 	assert.StringContains(t, "v := depot.Store{}", caller)
 	assert.False(t, strings.Contains(caller, "store"))
-	aliased := readFixtureFile(t, d, "pkg/aliased/run.go")
+	aliased := service_tester.ReadFixtureFile(t, d, "pkg/aliased/run.go")
 	assertFormatted(t, aliased)
 	assert.StringContains(t, "st \"example/pkg/outer/depot\"", aliased)
 	assert.StringContains(t, "return &st.Store{}", aliased)
 }
 
 func TestRenamePackageShadowed(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("rename-collision/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("rename-collision/src"),
+	)
 	s := testService()
 	r, e := s.RenamePackage(d, "example/pkg/outer/store", "depot", false)
 	assert.FatalOnError(t, e)
@@ -47,7 +58,10 @@ func TestRenamePackageShadowed(t *testing.T) {
 }
 
 func TestRenamePackageSameName(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("package-rename/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("package-rename/src"),
+	)
 	s := testService()
 	r, e := s.RenamePackage(d, "example/pkg/outer/store", "store", false)
 	assert.FatalOnError(t, e)
@@ -56,7 +70,10 @@ func TestRenamePackageSameName(t *testing.T) {
 }
 
 func TestRenamePackageInvalidName(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("package-rename/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("package-rename/src"),
+	)
 	s := testService()
 	r, e := s.RenamePackage(d, "example/pkg/outer/store", "9depot", false)
 	assert.FatalOnError(t, e)

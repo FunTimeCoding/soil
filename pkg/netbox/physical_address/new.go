@@ -33,12 +33,20 @@ func New(a *netbox.MACAddress) *Address {
 	}
 
 	var d *netbox.BriefInterface
+	var v *VirtualInterface
 
 	if r := a.AssignedObjectType.Get(); r != nil {
-		if *r == constant.InterfaceAddress {
+		switch *r {
+		case constant.InterfaceAddress:
 			notation.MustDecode(
 				notation.Encode(a.AssignedObject, false),
 				&d,
+				false,
+			)
+		case constant.VirtualInterfaceAddress:
+			notation.MustDecode(
+				notation.Encode(a.AssignedObject, false),
+				&v,
 				false,
 			)
 		}
@@ -51,6 +59,7 @@ func New(a *netbox.MACAddress) *Address {
 		ObjectType:       objectType,
 		ObjectIdentifier: object,
 		Interface:        d,
+		VirtualInterface: v,
 		Raw:              a,
 	}
 }

@@ -16,7 +16,7 @@ func TestFindingsReportUnkeyedRows(t *testing.T) {
 			VALUES ('Wren', 'message', 'unkeyed', 0, '2026-09-02 10:00:00+00:00')`,
 		).Error,
 	)
-	result := findingsByKind(t, s, constant.MigrationIncomplete)
+	result := s.FindingsByKind(constant.MigrationIncomplete)
 	assert.Count(t, 1, result)
 	assert.String(t, "queue", result[0].Subject)
 	assert.Integer(t, 1, result[0].Count)
@@ -26,6 +26,7 @@ func TestFindingsReportUnkeyedRows(t *testing.T) {
 func TestFindingsAreSilentWhenEveryRowCarriesItsSession(t *testing.T) {
 	s := service_tester.New(t)
 	r := s.Check("session-1")
-	assert.FatalOnError(t, s.Service.Send(r.Callsign, r.Callsign, "hello"))
-	assert.Count(t, 0, findingsByKind(t, s, constant.MigrationIncomplete))
+	_, e := s.Service.Send(r.Callsign, r.Callsign, "hello", false)
+	assert.FatalOnError(t, e)
+	assert.Count(t, 0, s.FindingsByKind(constant.MigrationIncomplete))
 }

@@ -12,11 +12,12 @@ func VariableGrouping(
 	s := file_report.New(path, r)
 	var pending []string
 	var pendingStart int
+	var pastDirective bool
 
 	for s.Scan() {
 		line, number := s.Text()
 
-		if isSingleLineVariable(line) {
+		if isSingleLineVariable(line) && !pastDirective {
 			if len(pending) == 0 {
 				pendingStart = number
 			}
@@ -34,6 +35,7 @@ func VariableGrouping(
 
 		pending = pending[:0]
 		s.PassLine(line)
+		pastDirective = isDirective(line)
 	}
 
 	if len(pending) > 1 {

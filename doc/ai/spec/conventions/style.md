@@ -19,6 +19,14 @@
   defer errors.PanicClose(file)
   ```
 
+- **By-reference for owned types** - a named struct type this module
+  owns travels as a pointer, and the scope is the whole chain rather
+  than the one site a finding names: parameters, and the slices and
+  maps that carry it, not only returns. `value_return` enforces the
+  return half; the rest is judgment. Converting forces the constructor
+  the codebase already wants, since `&pkg.X{}` trips `struct_literal`
+  for owned packages. Generated types stay by value - oapi-codegen
+  types cannot be made to travel by pointer.
 - **String concatenation** - use `join.Empty(a, b)`
   (`pkg/strings/join`) for pure string-string joins. Use
   `fmt.Sprintf` only when there is actual formatting (numbers,

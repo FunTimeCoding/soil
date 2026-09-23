@@ -9,7 +9,6 @@ import (
 
 func TestDeleteDocument(t *testing.T) {
 	s, o := openTestStore(t)
-	defer s.Close()
 	assert.FatalOnError(
 		t,
 		pushTestDocument(
@@ -30,7 +29,6 @@ func TestDeleteDocument(t *testing.T) {
 
 func TestDeleteDocumentNotFound(t *testing.T) {
 	s, _ := openTestStore(t)
-	defer s.Close()
 	deleted, e := s.DeleteDocument("notes", "nonexistent.md")
 	assert.FatalOnError(t, e)
 	assert.False(t, deleted)
@@ -38,7 +36,6 @@ func TestDeleteDocumentNotFound(t *testing.T) {
 
 func TestDeleteDocumentCleansOrphanedContent(t *testing.T) {
 	s, o := openTestStore(t)
-	defer s.Close()
 	assert.FatalOnError(
 		t,
 		pushTestDocument(
@@ -57,7 +54,6 @@ func TestDeleteDocumentCleansOrphanedContent(t *testing.T) {
 
 func TestDeleteDocumentPreservesSharedContent(t *testing.T) {
 	s, o := openTestStore(t)
-	defer s.Close()
 	body := "# Shared\n\nTwo documents share this body.\n"
 	assert.FatalOnError(
 		t,
@@ -76,7 +72,6 @@ func TestDeleteDocumentPreservesSharedContent(t *testing.T) {
 
 func TestDeleteDocumentRemovesFromSearch(t *testing.T) {
 	s, o := openTestStore(t)
-	defer s.Close()
 	assert.FatalOnError(
 		t,
 		pushTestDocument(

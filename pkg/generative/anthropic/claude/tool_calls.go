@@ -12,7 +12,7 @@ import (
 	"path/filepath"
 )
 
-func (c *Client) ToolCalls(sessionIdentifier string) []tool_call.Call {
+func (c *Client) ToolCalls(sessionIdentifier string) []*tool_call.Call {
 	path := filepath.Join(
 		c.base,
 		join.Empty(sessionIdentifier, constant.NotationLogExtension),
@@ -24,7 +24,7 @@ func (c *Client) ToolCalls(sessionIdentifier string) []tool_call.Call {
 	}
 
 	defer errors.PanicClose(f)
-	var result []tool_call.Call
+	var result []*tool_call.Call
 	scanner := bufio.NewScanner(f)
 	scanner.Buffer(nil, constant.NotationScanBuffer)
 
@@ -76,15 +76,9 @@ func (c *Client) ToolCalls(sessionIdentifier string) []tool_call.Call {
 				}
 			}
 
-			result = append(
-				result,
-				tool_call.Call{
-					Name:       b.Name,
-					Identifier: b.Identifier,
-					Timestamp:  line.Timestamp,
-					Detail:     detail,
-				},
-			)
+			call := tool_call.New(b.Name, b.Identifier, line.Timestamp)
+			call.Detail = detail
+			result = append(result, call)
 		}
 	}
 

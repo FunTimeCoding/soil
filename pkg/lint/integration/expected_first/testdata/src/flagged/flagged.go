@@ -5,6 +5,34 @@ import "testing"
 func Exercise(t *testing.T) {
 	assertValue(t, "actual", "expected")
 	assertBetween(t, 1, 2, 3)
+	assertShortSpelling(t, 1, true)
+}
+
+func assertShortSpelling(
+	t *testing.T,
+	value int,
+	expect bool,
+) {
+	t.Helper()
+
+	if (value > 0) != expect {
+		t.Fatal(value)
+	}
+}
+
+type Tester struct {
+	t *testing.T
+}
+
+func (o *Tester) AssertPath(
+	path string,
+	expected string,
+) {
+	o.t.Helper()
+
+	if path != expected {
+		o.t.Fatal(path)
+	}
 }
 
 func assertValue(

@@ -4,11 +4,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"testing"
 )
 
 func TestMatchPattern(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("census/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("census/src"),
+	)
 	s := testService()
 	r, match, e := s.MatchPattern(
 		d,
@@ -36,7 +40,10 @@ func TestMatchPattern(t *testing.T) {
 }
 
 func TestMatchPatternImported(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("census/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("census/src"),
+	)
 	s := testService()
 	r, match, e := s.MatchPattern(
 		d,
@@ -58,7 +65,10 @@ func TestMatchPatternImported(t *testing.T) {
 }
 
 func TestMatchPatternHoleConsistency(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("census/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("census/src"),
+	)
 	s := testService()
 	r, match, e := s.MatchPattern(
 		d,
@@ -78,7 +88,10 @@ func TestMatchPatternHoleConsistency(t *testing.T) {
 }
 
 func TestMatchPatternType(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("census/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("census/src"),
+	)
 	s := testService()
 	r, match, e := s.MatchPattern(
 		d,
@@ -101,7 +114,10 @@ func TestMatchPatternType(t *testing.T) {
 }
 
 func TestMatchPatternSpreadHoleType(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("census/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("census/src"),
+	)
 	s := testService()
 	r, match, e := s.MatchPattern(
 		d,
@@ -116,7 +132,10 @@ func TestMatchPatternSpreadHoleType(t *testing.T) {
 }
 
 func TestListCalls(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("census/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("census/src"),
+	)
 	s := testService()
 	r, inventory, e := s.ListCalls(d, "example/pkg/monitor", 0)
 	assert.FatalOnError(t, e)
@@ -140,7 +159,10 @@ func TestListCalls(t *testing.T) {
 }
 
 func TestListCallsUnknownRegion(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("census/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("census/src"),
+	)
 	s := testService()
 	r, inventory, e := s.ListCalls(d, "example/pkg/missing", 0)
 	assert.FatalOnError(t, e)
@@ -149,7 +171,10 @@ func TestListCallsUnknownRegion(t *testing.T) {
 }
 
 func TestMatchPatternWhitespace(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("census/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("census/src"),
+	)
 	s := testService()
 	r, match, e := s.MatchPattern(
 		d,

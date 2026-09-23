@@ -10,9 +10,7 @@ import (
 
 func TestEditCascadeSummary(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "building things")
 	a.MustCallTool(
 		constant.Summarize,
@@ -36,9 +34,7 @@ func TestEditCascadeSummary(t *testing.T) {
 
 func TestEditCascadeSummaryPushesIndexer(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "building things")
 	a.MustCallTool(
 		constant.EditSession,
@@ -66,9 +62,7 @@ func TestEditCascadeSummaryPushesIndexer(t *testing.T) {
 
 func TestEditCascadeCompletion(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "search index")
 	a.MustCallTool(
 		constant.Complete,
@@ -100,9 +94,7 @@ func TestEditCascadeCompletion(t *testing.T) {
 
 func TestEditMomentNoCascade(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "working")
 	a.MustCallTool(
 		constant.Moment,

@@ -59,12 +59,28 @@ func TestStrayConstantBlockFlagged(t *testing.T) {
 	)
 }
 
-func TestStrayConstantExemptByFilename(t *testing.T) {
+func TestStrayConstantFlaggedInBareConstantFile(t *testing.T) {
 	l := lint.StrayConstant(
 		"constant.go",
 		strings.NewReader("package example\n\nconst Foo = 1\n"),
 	)
-	assertReport(t, "constant.go", false, nil, "", l)
+	assertReport(
+		t,
+		"constant.go",
+		true,
+		[]*concern.Concern{
+			{
+				Key:      constant.StrayConstantKey,
+				Text:     constant.StrayConstantText,
+				Path:     "constant.go",
+				Type:     constant.ConcernLine,
+				Line:     3,
+				LineText: "const Foo = 1",
+			},
+		},
+		"",
+		l,
+	)
 }
 
 func TestStrayConstantFlaggedInConstantTestFile(t *testing.T) {

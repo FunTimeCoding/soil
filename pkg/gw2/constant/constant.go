@@ -19,4 +19,6 @@ const (
 
 	ExceptionFile = "exception.json"
 	GuildFile     = "guild.json"
+
+	MatchUpStartHour = 20
 )

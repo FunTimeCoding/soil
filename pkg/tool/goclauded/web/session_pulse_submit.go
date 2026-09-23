@@ -16,7 +16,13 @@ func (s *Server) sessionPulseSubmit(
 	body := r.FormValue(constant.Body)
 
 	if body != "" {
-		errors.PanicOnError(s.service.SendPulse(identifier, "", body))
+		_, e := s.service.SendPulse(
+			identifier,
+			"",
+			body,
+			r.FormValue(constant.Immediate) != "",
+		)
+		errors.PanicOnError(e)
 	}
 
 	http.Redirect(

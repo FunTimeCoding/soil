@@ -8,49 +8,25 @@ import (
 	"testing"
 )
 
-func edit(
-	s *store_tester.Tester,
-	identifier string,
-	a *edit_session.Session,
-) {
-	s.EditSession(identifier, a)
-}
-
-func editAlias(
-	s *store_tester.Tester,
-	identifier string,
-	alias string,
-) {
-	edit(s, identifier, edit_session.New().WithAlias(alias))
-}
-
-func editDescription(
-	s *store_tester.Tester,
-	identifier string,
-	description string,
-) {
-	edit(s, identifier, edit_session.New().WithDescription(description))
-}
-
 func TestSetAndGetAlias(t *testing.T) {
 	s := store_tester.New(t)
 	s.EnsureSession("session-1")
-	editAlias(s, "session-1", "my-project")
+	s.EditAlias("session-1", "my-project")
 	assert.String(t, "my-project", s.GetSession("session-1").AliasValue())
 }
 
 func TestSetAliasOverwrite(t *testing.T) {
 	s := store_tester.New(t)
 	s.EnsureSession("session-1")
-	editAlias(s, "session-1", "first-name")
-	editAlias(s, "session-1", "second-name")
+	s.EditAlias("session-1", "first-name")
+	s.EditAlias("session-1", "second-name")
 	assert.String(t, "second-name", s.GetSession("session-1").AliasValue())
 }
 
 func TestSetAndGetDescription(t *testing.T) {
 	s := store_tester.New(t)
 	s.EnsureSession("session-1")
-	editDescription(s, "session-1", "Fixed the auth bug")
+	s.EditDescription("session-1", "Fixed the auth bug")
 	assert.String(
 		t,
 		"Fixed the auth bug",
@@ -61,7 +37,7 @@ func TestSetAndGetDescription(t *testing.T) {
 func TestSetDescriptionWithoutAlias(t *testing.T) {
 	s := store_tester.New(t)
 	s.EnsureSession("session-1")
-	editDescription(s, "session-1", "Standalone description")
+	s.EditDescription("session-1", "Standalone description")
 	e := s.GetSession("session-1")
 	assert.String(t, "", e.AliasValue())
 	assert.String(t, "Standalone description", e.Description)
@@ -70,8 +46,8 @@ func TestSetDescriptionWithoutAlias(t *testing.T) {
 func TestSetAliasAndDescriptionIndependently(t *testing.T) {
 	s := store_tester.New(t)
 	s.EnsureSession("session-1")
-	editAlias(s, "session-1", "my-project")
-	editDescription(s, "session-1", "Refactored the CLI")
+	s.EditAlias("session-1", "my-project")
+	s.EditDescription("session-1", "Refactored the CLI")
 	e := s.GetSession("session-1")
 	assert.String(t, "my-project", e.AliasValue())
 	assert.String(t, "Refactored the CLI", e.Description)
@@ -80,8 +56,7 @@ func TestSetAliasAndDescriptionIndependently(t *testing.T) {
 func TestSetBothAtOnce(t *testing.T) {
 	s := store_tester.New(t)
 	s.EnsureSession("session-1")
-	edit(
-		s,
+	s.Edit(
 		"session-1",
 		edit_session.New().
 			WithAlias("my-project").
@@ -95,38 +70,38 @@ func TestSetBothAtOnce(t *testing.T) {
 func TestSetDescriptionDoesNotClearAlias(t *testing.T) {
 	s := store_tester.New(t)
 	s.EnsureSession("session-1")
-	editAlias(s, "session-1", "my-project")
-	editDescription(s, "session-1", "New description")
+	s.EditAlias("session-1", "my-project")
+	s.EditDescription("session-1", "New description")
 	assert.String(t, "my-project", s.GetSession("session-1").AliasValue())
 }
 
 func TestSetAliasDoesNotClearDescription(t *testing.T) {
 	s := store_tester.New(t)
 	s.EnsureSession("session-1")
-	editDescription(s, "session-1", "Important work")
-	editAlias(s, "session-1", "renamed")
+	s.EditDescription("session-1", "Important work")
+	s.EditAlias("session-1", "renamed")
 	assert.String(t, "Important work", s.GetSession("session-1").Description)
 }
 
 func TestEditTopic(t *testing.T) {
 	s := store_tester.New(t)
 	s.EnsureSession("session-1")
-	edit(s, "session-1", edit_session.New().WithTopic("debugging auth"))
+	s.Edit("session-1", edit_session.New().WithTopic("debugging auth"))
 	assert.String(t, "debugging auth", s.GetSession("session-1").Topic)
 }
 
 func TestNoOpEdit(t *testing.T) {
 	s := store_tester.New(t)
 	s.EnsureSession("session-1")
-	editAlias(s, "session-1", constant.FixtureBefore)
-	edit(s, "session-1", edit_session.New())
+	s.EditAlias("session-1", constant.FixtureBefore)
+	s.Edit("session-1", edit_session.New())
 	assert.String(t, "before", s.GetSession("session-1").AliasValue())
 }
 
 func TestResolveByAlias(t *testing.T) {
 	s := store_tester.New(t)
 	s.EnsureSession("session-1")
-	editAlias(s, "session-1", "my-project")
+	s.EditAlias("session-1", "my-project")
 	resolved, e := s.Store.ResolveSessionIdentifier("my-project")
 	assert.FatalOnError(t, e)
 	assert.True(t, resolved.Found())
@@ -147,8 +122,8 @@ func TestAliasedSessions(t *testing.T) {
 	s.EnsureSession("session-1")
 	s.EnsureSession("session-2")
 	s.EnsureSession("session-3")
-	editAlias(s, "session-1", "first")
-	editAlias(s, "session-2", "second")
+	s.EditAlias("session-1", "first")
+	s.EditAlias("session-2", "second")
 	aliased := s.Store.AliasedSessions()
 	assert.Count(t, 2, aliased)
 }

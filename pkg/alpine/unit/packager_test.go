@@ -6,6 +6,7 @@ import (
 	"encoding/hex"
 	"github.com/funtimecoding/soil/pkg/alpine/constant"
 	"github.com/funtimecoding/soil/pkg/alpine/packager"
+	"github.com/funtimecoding/soil/pkg/alpine/unit/packager_tester"
 	"github.com/funtimecoding/soil/pkg/assert"
 	library "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
@@ -18,7 +19,7 @@ import (
 
 func TestPackager(t *testing.T) {
 	actual := packager.New("goexample", library.DefaultVersion)
-	generifyPackager(actual)
+	packager_tester.StripTemporaryPrefix(actual)
 	assert.Any(
 		t,
 		&packager.Packager{
@@ -198,11 +199,4 @@ echo "Hello from Alpine package!"
 			}
 		}
 	}
-}
-
-func generifyPackager(p *packager.Packager) {
-	d := "gopackageapk-goexample"
-	p.WorkDirectory = system.StripUntilDirectory(p.WorkDirectory, d)
-	p.ControlDirectory = system.StripUntilDirectory(p.ControlDirectory, d)
-	p.ArchiveDirectory = system.StripUntilDirectory(p.ArchiveDirectory, d)
 }

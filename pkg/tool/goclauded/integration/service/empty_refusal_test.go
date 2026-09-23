@@ -8,21 +8,6 @@ import (
 	"testing"
 )
 
-func refusalFor(
-	t *testing.T,
-	s *service_tester.Tester,
-	identifier string,
-) string {
-	t.Helper()
-	r := s.Store.GetSession(identifier)
-	assert.True(t, r != nil)
-	result, e := s.Service.EmptyRefusal(r)
-	assert.FatalOnError(t, e)
-	assert.True(t, result != nil)
-
-	return result.Error()
-}
-
 func TestEmptyRefusalAcceptsAHusk(t *testing.T) {
 	s := service_tester.New(t)
 	s.Store.EnsureSession("husk")
@@ -36,14 +21,14 @@ func TestEmptyRefusalNamesTurns(t *testing.T) {
 	s := service_tester.New(t)
 	s.Store.EnsureSession("ghost")
 	s.Store.Store.UpdateFields("ghost", map[string]any{"turn_count": 12})
-	assert.String(t, "session has turns", refusalFor(t, s, "ghost"))
+	assert.String(t, "session has turns", s.RefusalFor("ghost"))
 }
 
 func TestEmptyRefusalNamesTranscriptLines(t *testing.T) {
 	s := service_tester.New(t)
 	s.Store.EnsureSession("ghost")
 	s.Store.Store.UpdateFields("ghost", map[string]any{"lines": 400})
-	assert.String(t, "session has transcript lines", refusalFor(t, s, "ghost"))
+	assert.String(t, "session has transcript lines", s.RefusalFor("ghost"))
 }
 
 func TestEmptyRefusalNamesCompletions(t *testing.T) {
@@ -57,7 +42,7 @@ func TestEmptyRefusalNamesCompletions(t *testing.T) {
 		"a summary",
 	)
 	assert.FatalOnError(t, e)
-	assert.String(t, "session has completions", refusalFor(t, s, "held"))
+	assert.String(t, "session has completions", s.RefusalFor("held"))
 }
 
 func TestEmptyRefusalNamesSummary(t *testing.T) {
@@ -67,7 +52,7 @@ func TestEmptyRefusalNamesSummary(t *testing.T) {
 		t,
 		s.Store.Store.UpsertSummary("held", r.Callsign, "a summary"),
 	)
-	assert.String(t, "session has a summary", refusalFor(t, s, "held"))
+	assert.String(t, "session has a summary", s.RefusalFor("held"))
 }
 
 func TestEmptyRefusalNamesLabels(t *testing.T) {
@@ -75,7 +60,7 @@ func TestEmptyRefusalNamesLabels(t *testing.T) {
 	s.Store.EnsureSession("held")
 	_, e := s.Store.Store.SetLabel("held", "role", "reviewer")
 	assert.FatalOnError(t, e)
-	assert.String(t, "session has labels", refusalFor(t, s, "held"))
+	assert.String(t, "session has labels", s.RefusalFor("held"))
 }
 
 func TestEmptyRefusalNamesPulses(t *testing.T) {
@@ -85,7 +70,7 @@ func TestEmptyRefusalNamesPulses(t *testing.T) {
 		t,
 		s.Store.Store.SendPulse("held", r.Callsign, "a pulse"),
 	)
-	assert.String(t, "session has pulses", refusalFor(t, s, "held"))
+	assert.String(t, "session has pulses", s.RefusalFor("held"))
 }
 
 func TestEmptyRefusalNamesContextLoads(t *testing.T) {
@@ -100,7 +85,7 @@ func TestEmptyRefusalNamesContextLoads(t *testing.T) {
 		t,
 		s.Store.Store.SaveContextLoads([]context_load.Load{*load}),
 	)
-	assert.String(t, "session has context loads", refusalFor(t, s, "held"))
+	assert.String(t, "session has context loads", s.RefusalFor("held"))
 }
 
 func TestEmptyRefusalNamesEventsBeyondLifecycle(t *testing.T) {
@@ -118,7 +103,7 @@ func TestEmptyRefusalNamesEventsBeyondLifecycle(t *testing.T) {
 	assert.String(
 		t,
 		"session has events beyond its lifecycle",
-		refusalFor(t, s, "held"),
+		s.RefusalFor("held"),
 	)
 }
 

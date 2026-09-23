@@ -9,20 +9,6 @@ import (
 	"testing"
 )
 
-func scopedOption(
-	name string,
-	scope string,
-) *save_option.Option {
-	o := save_option.New()
-	o.Name = name
-	o.Content = constant.FixtureContent
-	o.Description = name
-	o.Source = "test"
-	o.Scope = scope
-
-	return o
-}
-
 func TestServiceCreateMemoryRejectsReservedScope(t *testing.T) {
 	o := service_tester.New(t)
 

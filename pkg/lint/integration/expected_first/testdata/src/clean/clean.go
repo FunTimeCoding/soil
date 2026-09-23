@@ -42,3 +42,18 @@ func checkValue(
 		t.Fatal(actual)
 	}
 }
+
+type Tester struct {
+	t *testing.T
+}
+
+func (o *Tester) AssertPath(
+	expected string,
+	path string,
+) {
+	o.t.Helper()
+
+	if path != expected {
+		o.t.Fatal(path)
+	}
+}

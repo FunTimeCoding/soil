@@ -10,7 +10,6 @@ import (
 
 func TestModelContext(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	c := o.Client
 	assert.Count(t, 4, c.ListTools())
 	status := c.MustCallTool(constant.GetStatus, map[string]any{})

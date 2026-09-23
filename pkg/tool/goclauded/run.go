@@ -110,6 +110,7 @@ func Run(
 		lifecycle.WithWorker(timeoutTicker),
 		lifecycle.WithWorker(memoryTicker),
 		lifecycle.WithWorker(gaugeTicker),
+		lifecycle.WithWorker(v),
 	}
 
 	if environment.Exists(constant.MonitorUsageEnvironment) {

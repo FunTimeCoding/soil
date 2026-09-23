@@ -1,0 +1,36 @@
+---
+openapi: "3.0.0"
+info:
+  title: goprocessd
+  version: 1.0.0
+paths:
+  /api/processes:
+    get:
+      operationId: listProcesses
+      responses:
+        "200":
+          description: Every process in the Procfile and whether it runs.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Process"
+components:
+  schemas:
+    Process:
+      type: object
+      required:
+      - name
+      - command
+      - running
+      properties:
+        name:
+          type: string
+        command:
+          type: string
+        running:
+          type: boolean
+        started:
+          type: string
+          format: date-time

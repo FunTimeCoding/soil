@@ -23,8 +23,7 @@ func New(t *testing.T) *Server {
 	a := sharedReranker()
 	v := service.New(s, l, a)
 	r := memory.New()
-
-	return &Server{
+	result := &Server{
 		t:        t,
 		store:    s,
 		embedder: l,
@@ -46,4 +45,7 @@ func New(t *testing.T) *Server {
 			},
 		),
 	}
+	t.Cleanup(result.Close)
+
+	return result
 }

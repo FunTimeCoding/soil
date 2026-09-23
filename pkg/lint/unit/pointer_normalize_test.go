@@ -24,4 +24,10 @@ func TestNormalize(t *testing.T) {
 		pointer.Normalize("doc/plugins.md#convert"),
 	)
 	assert.String(t, "pkg/lint", pointer.Normalize("pkg/lint"))
+	assert.String(
+		t,
+		"pkg/lint/lint.go",
+		pointer.Normalize("pkg/lint/lint.go:17"),
+	)
+	assert.String(t, "route:/api", pointer.Normalize("route:/api"))
 }

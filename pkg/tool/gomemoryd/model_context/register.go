@@ -11,7 +11,7 @@ func (s *Server) register() {
 		mcp.NewTool(
 			constant.SaveMemory,
 			mcp.WithDescription(
-				"Create a new memory. Returns the created memory ID.",
+				"Create a new memory. Returns the created memory ID and its stored tags.",
 			),
 			mcp.WithString(
 				constant.MemoryName,
@@ -45,6 +45,12 @@ func (s *Server) register() {
 			mcp.WithNumber(
 				constant.ParentIdentifier,
 				mcp.Description("Parent memory ID (optional, for hierarchy)"),
+			),
+			mcp.WithString(
+				constant.Tags,
+				mcp.Description(
+					"Comma-separated tags to apply at creation, in the same transaction as the memory. Special tags: 'always' loads the memory in full on every profile call, 'no-index' hides it from the profile index.",
+				),
 			),
 		),
 		s.create,

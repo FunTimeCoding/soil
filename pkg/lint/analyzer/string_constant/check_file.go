@@ -19,8 +19,10 @@ func checkFile(
 		func(n ast.Node) bool {
 			switch v := n.(type) {
 			case *ast.CallExpr:
-				if assert_call.IsAssertCall(p, v) && len(v.Args) > 2 {
-					checkExpected(p, results, v.Args[1])
+				index := assert_call.ExpectedIndex(p, v)
+
+				if assert_call.IsAssertCall(p, v) && len(v.Args) > index+1 {
+					checkExpected(p, results, v.Args[index])
 				}
 
 				for _, a := range v.Args {

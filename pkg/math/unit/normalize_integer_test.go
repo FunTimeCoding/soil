@@ -1,32 +1,26 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/math/normalize"
+	"github.com/funtimecoding/soil/pkg/math/unit/math_tester"
 	"testing"
 )
 
-func TestNormalizeInteger(t *testing.T) {
-	// Meet minimum
-	normalizeIntegerAssertInteger(t, 0, 0, 100, 0)
-	// Below minimum
-	normalizeIntegerAssertInteger(t, -1, 0, 100, 0)
-	// Meet maximum
-	normalizeIntegerAssertInteger(t, 100, 0, 100, 100)
-	// Above maximum
-	normalizeIntegerAssertInteger(t, 101, 0, 100, 100)
-	// No maximum
-	normalizeIntegerAssertInteger(t, 101, 0, 0, 101)
+func TestNormalizeIntegerMeetMinimum(t *testing.T) {
+	math_tester.AssertNormalizeInteger(t, 0, 0, 0, 100)
 }
 
-func normalizeIntegerAssertInteger(
-	t *testing.T,
-	i int,
-	minimum int,
-	maximum int,
-	expect int,
-) {
-	t.Helper()
-	normalize.Integer(&i, minimum, maximum)
-	assert.Integer(t, expect, i)
+func TestNormalizeIntegerBelowMinimum(t *testing.T) {
+	math_tester.AssertNormalizeInteger(t, 0, -1, 0, 100)
+}
+
+func TestNormalizeIntegerMeetMaximum(t *testing.T) {
+	math_tester.AssertNormalizeInteger(t, 100, 100, 0, 100)
+}
+
+func TestNormalizeIntegerAboveMaximum(t *testing.T) {
+	math_tester.AssertNormalizeInteger(t, 100, 101, 0, 100)
+}
+
+func TestNormalizeIntegerNoMaximum(t *testing.T) {
+	math_tester.AssertNormalizeInteger(t, 101, 101, 0, 0)
 }

@@ -6,8 +6,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	gitlabConstant "github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab/job"
+	"github.com/funtimecoding/soil/pkg/gitlab/status"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/types/board_entry"
 	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -29,7 +29,7 @@ func (s *Server) logPane(
 	errors.PanicOnError(e)
 	attributes := []gomponents.Node{html.ID("log-pane"), html.Class("log-pane")}
 
-	if board_entry.Active(j.Status) {
+	if status.Active(j.Status) {
 		attributes = append(
 			attributes,
 			extended.Get(

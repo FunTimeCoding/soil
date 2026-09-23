@@ -20,8 +20,7 @@ func New(t *testing.T) *Server {
 	events := notifier.New()
 	s := store.New(lite.NewMemory(), events)
 	r := memory.New()
-
-	return &Server{
+	result := &Server{
 		Store: s,
 		Server: model_context_server.New(
 			t,
@@ -40,4 +39,7 @@ func New(t *testing.T) *Server {
 			},
 		),
 	}
+	t.Cleanup(result.Close)
+
+	return result
 }

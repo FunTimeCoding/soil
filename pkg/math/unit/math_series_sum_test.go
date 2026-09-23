@@ -1,21 +1,11 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/math"
+	"github.com/funtimecoding/soil/pkg/math/unit/math_tester"
 	"testing"
 )
 
 func TestSeriesSum(t *testing.T) {
-	assertSeriesSum(t, 1, 1)
-	assertSeriesSum(t, 9, 45)
-}
-
-func assertSeriesSum(
-	t *testing.T,
-	n int,
-	expect int,
-) {
-	t.Helper()
-	assert.Integer(t, expect, math.SeriesSum(n))
+	math_tester.AssertSeriesSum(t, 1, 1)
+	math_tester.AssertSeriesSum(t, 45, 9)
 }

@@ -13,7 +13,6 @@ import (
 
 func TestWebService(t *testing.T) {
 	o := web_service_tester.New(t)
-	defer o.Close()
 	c := o.Client
 	x := context.Background()
 	k := task.Stub()

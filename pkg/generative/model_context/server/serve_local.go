@@ -7,10 +7,10 @@ import (
 )
 
 func (s *Server) ServeLocal() {
-	errors.PanicOnError(
-		server.ServeStdio(
-			s.server,
-			server.WithErrorLogger(log.NewGenericLogger()),
-		),
-	)
+	if e := server.ServeStdio(
+		s.server,
+		server.WithErrorLogger(log.NewGenericLogger()),
+	); !errors.Canceled(e) {
+		errors.PanicOnError(e)
+	}
 }

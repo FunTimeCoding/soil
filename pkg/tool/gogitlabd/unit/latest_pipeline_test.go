@@ -2,50 +2,10 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/gitlab/branch"
 	"github.com/funtimecoding/soil/pkg/gitlab/pipeline"
-	"github.com/funtimecoding/soil/pkg/gitlab/tag"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/types/latest_pipeline"
-	"gitlab.com/gitlab-org/api/client-go/v3"
 	"testing"
 )
-
-func branches(name ...string) []*branch.Branch {
-	var result []*branch.Branch
-
-	for _, n := range name {
-		result = append(
-			result,
-			branch.New(&gitlab.Branch{Name: n, Commit: &gitlab.Commit{}}),
-		)
-	}
-
-	return result
-}
-
-func tags(name ...string) []*tag.Tag {
-	var result []*tag.Tag
-
-	for _, n := range name {
-		result = append(result, tag.New(&gitlab.Tag{Name: n}))
-	}
-
-	return result
-}
-
-func newPipeline(
-	identifier int64,
-	reference string,
-	status string,
-) *pipeline.Pipeline {
-	return pipeline.New(
-		&gitlab.PipelineInfo{
-			ID:     identifier,
-			Ref:    reference,
-			Status: status,
-		},
-	)
-}
 
 func TestLatestPipelineNewestWins(t *testing.T) {
 	r := latest_pipeline.New(

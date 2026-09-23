@@ -305,6 +305,27 @@ type Manufacturer struct {
 	Name       string `json:"name"`
 }
 
+// PhysicalAddress defines model for PhysicalAddress.
+type PhysicalAddress struct {
+	Address    string  `json:"address"`
+	Identifier int32   `json:"identifier"`
+	Interface  *string `json:"interface,omitempty"`
+}
+
+// PhysicalAddressOwner defines model for PhysicalAddressOwner.
+type PhysicalAddressOwner struct {
+	Address          string  `json:"address"`
+	Interface        *string `json:"interface,omitempty"`
+	ObjectIdentifier *int32  `json:"objectIdentifier,omitempty"`
+	ObjectKind       *string `json:"objectKind,omitempty"`
+	ObjectName       *string `json:"objectName,omitempty"`
+}
+
+// PhysicalAddressRequest defines model for PhysicalAddressRequest.
+type PhysicalAddressRequest struct {
+	Address string `json:"address"`
+}
+
 // Platform defines model for Platform.
 type Platform struct {
 	Identifier int32  `json:"identifier"`
@@ -507,6 +528,9 @@ type CreateAddressJSONRequestBody = CreateAddressRequest
 // CreateInterfaceJSONRequestBody defines body for CreateInterface for application/json ContentType.
 type CreateInterfaceJSONRequestBody = CreateInterfaceRequest
 
+// SetInterfacePhysicalAddressJSONRequestBody defines body for SetInterfacePhysicalAddress for application/json ContentType.
+type SetInterfacePhysicalAddressJSONRequestBody = PhysicalAddressRequest
+
 // AddDeviceJournalEntryJSONRequestBody defines body for AddDeviceJournalEntry for application/json ContentType.
 type AddDeviceJournalEntryJSONRequestBody = CreateJournalEntryRequest
 
@@ -560,6 +584,9 @@ type CreateVirtualDiskJSONRequestBody = CreateVirtualDiskRequest
 
 // CreateVirtualInterfaceJSONRequestBody defines body for CreateVirtualInterface for application/json ContentType.
 type CreateVirtualInterfaceJSONRequestBody = CreateVirtualInterfaceRequest
+
+// SetVirtualInterfacePhysicalAddressJSONRequestBody defines body for SetVirtualInterfacePhysicalAddress for application/json ContentType.
+type SetVirtualInterfacePhysicalAddressJSONRequestBody = PhysicalAddressRequest
 
 // AddVirtualJournalEntryJSONRequestBody defines body for AddVirtualJournalEntry for application/json ContentType.
 type AddVirtualJournalEntryJSONRequestBody = CreateJournalEntryRequest
@@ -760,6 +787,14 @@ type ClientInterface interface {
 	// Takes a body of the `application/json` content type.
 	CreateInterface(ctx context.Context, name string, body CreateInterfaceJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// SetInterfacePhysicalAddressWithBody performs a POST /api/devices/{name}/interfaces/{interface}/physical-address (the `SetInterfacePhysicalAddress` operationId) request,
+	// with any type of body and a specified content type.
+	SetInterfacePhysicalAddressWithBody(ctx context.Context, name string, pInterface string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// SetInterfacePhysicalAddress performs a POST /api/devices/{name}/interfaces/{interface}/physical-address (the `SetInterfacePhysicalAddress` operationId) request.
+	// Takes a body of the `application/json` content type.
+	SetInterfacePhysicalAddress(ctx context.Context, name string, pInterface string, body SetInterfacePhysicalAddressJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// ListDeviceJournalEntries performs a GET /api/devices/{name}/journal-entries (the `ListDeviceJournalEntries` operationId) request.
 	ListDeviceJournalEntries(ctx context.Context, name string, params *ListDeviceJournalEntriesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -834,6 +869,9 @@ type ClientInterface interface {
 	// CreateManufacturer performs a POST /api/manufacturers (the `CreateManufacturer` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateManufacturer(ctx context.Context, body CreateManufacturerJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ListPhysicalAddresses performs a GET /api/physical-addresses (the `ListPhysicalAddresses` operationId) request.
+	ListPhysicalAddresses(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// ListPlatforms performs a GET /api/platforms (the `ListPlatforms` operationId) request.
 	ListPlatforms(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -969,6 +1007,14 @@ type ClientInterface interface {
 	// CreateVirtualInterface performs a POST /api/virtual-machines/{name}/interfaces/create (the `CreateVirtualInterface` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateVirtualInterface(ctx context.Context, name string, body CreateVirtualInterfaceJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// SetVirtualInterfacePhysicalAddressWithBody performs a POST /api/virtual-machines/{name}/interfaces/{interface}/physical-address (the `SetVirtualInterfacePhysicalAddress` operationId) request,
+	// with any type of body and a specified content type.
+	SetVirtualInterfacePhysicalAddressWithBody(ctx context.Context, name string, pInterface string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// SetVirtualInterfacePhysicalAddress performs a POST /api/virtual-machines/{name}/interfaces/{interface}/physical-address (the `SetVirtualInterfacePhysicalAddress` operationId) request.
+	// Takes a body of the `application/json` content type.
+	SetVirtualInterfacePhysicalAddress(ctx context.Context, name string, pInterface string, body SetVirtualInterfacePhysicalAddressJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// ListVirtualJournalEntries performs a GET /api/virtual-machines/{name}/journal-entries (the `ListVirtualJournalEntries` operationId) request.
 	ListVirtualJournalEntries(ctx context.Context, name string, params *ListVirtualJournalEntriesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -1444,6 +1490,34 @@ func (c *Client) CreateInterface(ctx context.Context, name string, body CreateIn
 	return c.Client.Do(req)
 }
 
+// SetInterfacePhysicalAddressWithBody performs a POST /api/devices/{name}/interfaces/{interface}/physical-address (the `SetInterfacePhysicalAddress` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) SetInterfacePhysicalAddressWithBody(ctx context.Context, name string, pInterface string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewSetInterfacePhysicalAddressRequestWithBody(c.Server, name, pInterface, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// SetInterfacePhysicalAddress performs a POST /api/devices/{name}/interfaces/{interface}/physical-address (the `SetInterfacePhysicalAddress` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) SetInterfacePhysicalAddress(ctx context.Context, name string, pInterface string, body SetInterfacePhysicalAddressJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewSetInterfacePhysicalAddressRequest(c.Server, name, pInterface, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 // ListDeviceJournalEntries performs a GET /api/devices/{name}/journal-entries (the `ListDeviceJournalEntries` operationId) request.
 func (c *Client) ListDeviceJournalEntries(ctx context.Context, name string, params *ListDeviceJournalEntriesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListDeviceJournalEntriesRequest(c.Server, name, params)
@@ -1719,6 +1793,19 @@ func (c *Client) CreateManufacturerWithBody(ctx context.Context, contentType str
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateManufacturer(ctx context.Context, body CreateManufacturerJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateManufacturerRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// ListPhysicalAddresses performs a GET /api/physical-addresses (the `ListPhysicalAddresses` operationId) request.
+func (c *Client) ListPhysicalAddresses(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListPhysicalAddressesRequest(c.Server)
 	if err != nil {
 		return nil, err
 	}
@@ -2224,6 +2311,34 @@ func (c *Client) CreateVirtualInterfaceWithBody(ctx context.Context, name string
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateVirtualInterface(ctx context.Context, name string, body CreateVirtualInterfaceJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateVirtualInterfaceRequest(c.Server, name, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// SetVirtualInterfacePhysicalAddressWithBody performs a POST /api/virtual-machines/{name}/interfaces/{interface}/physical-address (the `SetVirtualInterfacePhysicalAddress` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) SetVirtualInterfacePhysicalAddressWithBody(ctx context.Context, name string, pInterface string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewSetVirtualInterfacePhysicalAddressRequestWithBody(c.Server, name, pInterface, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// SetVirtualInterfacePhysicalAddress performs a POST /api/virtual-machines/{name}/interfaces/{interface}/physical-address (the `SetVirtualInterfacePhysicalAddress` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) SetVirtualInterfacePhysicalAddress(ctx context.Context, name string, pInterface string, body SetVirtualInterfacePhysicalAddressJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewSetVirtualInterfacePhysicalAddressRequest(c.Server, name, pInterface, body)
 	if err != nil {
 		return nil, err
 	}
@@ -3197,6 +3312,60 @@ func NewCreateInterfaceRequestWithBody(server string, name string, contentType s
 	return req, nil
 }
 
+// NewSetInterfacePhysicalAddressRequest calls the generic SetInterfacePhysicalAddress builder with application/json body
+func NewSetInterfacePhysicalAddressRequest(server string, name string, pInterface string, body SetInterfacePhysicalAddressJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewSetInterfacePhysicalAddressRequestWithBody(server, name, pInterface, "application/json", bodyReader)
+}
+
+// NewSetInterfacePhysicalAddressRequestWithBody constructs an http.Request for the SetInterfacePhysicalAddress method, with any body, and a specified content type
+func NewSetInterfacePhysicalAddressRequestWithBody(server string, name string, pInterface string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "name", name, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithOptions("simple", false, "interface", pInterface, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/devices/%s/interfaces/%s/physical-address", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
 // NewListDeviceJournalEntriesRequest constructs an http.Request for the ListDeviceJournalEntries method
 func NewListDeviceJournalEntriesRequest(server string, name string, params *ListDeviceJournalEntriesParams) (*http.Request, error) {
 	var err error
@@ -3820,6 +3989,33 @@ func NewCreateManufacturerRequestWithBody(server string, contentType string, bod
 	}
 
 	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewListPhysicalAddressesRequest constructs an http.Request for the ListPhysicalAddresses method
+func NewListPhysicalAddressesRequest(server string) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/physical-addresses")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
 
 	return req, nil
 }
@@ -4711,6 +4907,60 @@ func NewCreateVirtualInterfaceRequestWithBody(server string, name string, conten
 	return req, nil
 }
 
+// NewSetVirtualInterfacePhysicalAddressRequest calls the generic SetVirtualInterfacePhysicalAddress builder with application/json body
+func NewSetVirtualInterfacePhysicalAddressRequest(server string, name string, pInterface string, body SetVirtualInterfacePhysicalAddressJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewSetVirtualInterfacePhysicalAddressRequestWithBody(server, name, pInterface, "application/json", bodyReader)
+}
+
+// NewSetVirtualInterfacePhysicalAddressRequestWithBody constructs an http.Request for the SetVirtualInterfacePhysicalAddress method, with any body, and a specified content type
+func NewSetVirtualInterfacePhysicalAddressRequestWithBody(server string, name string, pInterface string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "name", name, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	var pathParam1 string
+
+	pathParam1, err = runtime.StyleParamWithOptions("simple", false, "interface", pInterface, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/virtual-machines/%s/interfaces/%s/physical-address", pathParam0, pathParam1)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
 // NewListVirtualJournalEntriesRequest constructs an http.Request for the ListVirtualJournalEntries method
 func NewListVirtualJournalEntriesRequest(server string, name string, params *ListVirtualJournalEntriesParams) (*http.Request, error) {
 	var err error
@@ -5355,6 +5605,16 @@ type ClientWithResponsesInterface interface {
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateInterfaceWithResponse(ctx context.Context, name string, body CreateInterfaceJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateInterfaceResponse, error)
 
+	// SetInterfacePhysicalAddressWithBodyWithResponse performs a POST /api/devices/{name}/interfaces/{interface}/physical-address (the `SetInterfacePhysicalAddress` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	SetInterfacePhysicalAddressWithBodyWithResponse(ctx context.Context, name string, pInterface string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*SetInterfacePhysicalAddressResponse, error)
+
+	// SetInterfacePhysicalAddressWithResponse performs a POST /api/devices/{name}/interfaces/{interface}/physical-address (the `SetInterfacePhysicalAddress` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	SetInterfacePhysicalAddressWithResponse(ctx context.Context, name string, pInterface string, body SetInterfacePhysicalAddressJSONRequestBody, reqEditors ...RequestEditorFn) (*SetInterfacePhysicalAddressResponse, error)
+
 	// ListDeviceJournalEntriesWithResponse performs a GET /api/devices/{name}/journal-entries (the `ListDeviceJournalEntries` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
@@ -5459,6 +5719,11 @@ type ClientWithResponsesInterface interface {
 	// CreateManufacturerWithResponse performs a POST /api/manufacturers (the `CreateManufacturer` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateManufacturerWithResponse(ctx context.Context, body CreateManufacturerJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateManufacturerResponse, error)
+
+	// ListPhysicalAddressesWithResponse performs a GET /api/physical-addresses (the `ListPhysicalAddresses` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	ListPhysicalAddressesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListPhysicalAddressesResponse, error)
 
 	// ListPlatformsWithResponse performs a GET /api/platforms (the `ListPlatforms` operationId) request.
 	//
@@ -5644,6 +5909,16 @@ type ClientWithResponsesInterface interface {
 	// CreateVirtualInterfaceWithResponse performs a POST /api/virtual-machines/{name}/interfaces/create (the `CreateVirtualInterface` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateVirtualInterfaceWithResponse(ctx context.Context, name string, body CreateVirtualInterfaceJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateVirtualInterfaceResponse, error)
+
+	// SetVirtualInterfacePhysicalAddressWithBodyWithResponse performs a POST /api/virtual-machines/{name}/interfaces/{interface}/physical-address (the `SetVirtualInterfacePhysicalAddress` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	SetVirtualInterfacePhysicalAddressWithBodyWithResponse(ctx context.Context, name string, pInterface string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*SetVirtualInterfacePhysicalAddressResponse, error)
+
+	// SetVirtualInterfacePhysicalAddressWithResponse performs a POST /api/virtual-machines/{name}/interfaces/{interface}/physical-address (the `SetVirtualInterfacePhysicalAddress` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	SetVirtualInterfacePhysicalAddressWithResponse(ctx context.Context, name string, pInterface string, body SetVirtualInterfacePhysicalAddressJSONRequestBody, reqEditors ...RequestEditorFn) (*SetVirtualInterfacePhysicalAddressResponse, error)
 
 	// ListVirtualJournalEntriesWithResponse performs a GET /api/virtual-machines/{name}/journal-entries (the `ListVirtualJournalEntries` operationId) request.
 	//
@@ -6724,6 +6999,54 @@ func (r CreateInterfaceResponse) ContentType() string {
 	return ""
 }
 
+type SetInterfacePhysicalAddressResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *PhysicalAddress
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r SetInterfacePhysicalAddressResponse) GetJSON200() *PhysicalAddress {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r SetInterfacePhysicalAddressResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r SetInterfacePhysicalAddressResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r SetInterfacePhysicalAddressResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r SetInterfacePhysicalAddressResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r SetInterfacePhysicalAddressResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type ListDeviceJournalEntriesResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -7424,6 +7747,54 @@ func (r CreateManufacturerResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r CreateManufacturerResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type ListPhysicalAddressesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *[]PhysicalAddressOwner
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r ListPhysicalAddressesResponse) GetJSON200() *[]PhysicalAddressOwner {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r ListPhysicalAddressesResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r ListPhysicalAddressesResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r ListPhysicalAddressesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListPhysicalAddressesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ListPhysicalAddressesResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -8630,6 +9001,54 @@ func (r CreateVirtualInterfaceResponse) ContentType() string {
 	return ""
 }
 
+type SetVirtualInterfacePhysicalAddressResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *PhysicalAddress
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r SetVirtualInterfacePhysicalAddressResponse) GetJSON200() *PhysicalAddress {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r SetVirtualInterfacePhysicalAddressResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r SetVirtualInterfacePhysicalAddressResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r SetVirtualInterfacePhysicalAddressResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r SetVirtualInterfacePhysicalAddressResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r SetVirtualInterfacePhysicalAddressResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type ListVirtualJournalEntriesResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -9444,6 +9863,28 @@ func (c *ClientWithResponses) CreateInterfaceWithResponse(ctx context.Context, n
 	return ParseCreateInterfaceResponse(rsp)
 }
 
+// SetInterfacePhysicalAddressWithBodyWithResponse performs a POST /api/devices/{name}/interfaces/{interface}/physical-address (the `SetInterfacePhysicalAddress` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) SetInterfacePhysicalAddressWithBodyWithResponse(ctx context.Context, name string, pInterface string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*SetInterfacePhysicalAddressResponse, error) {
+	rsp, err := c.SetInterfacePhysicalAddressWithBody(ctx, name, pInterface, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseSetInterfacePhysicalAddressResponse(rsp)
+}
+
+// SetInterfacePhysicalAddressWithResponse performs a POST /api/devices/{name}/interfaces/{interface}/physical-address (the `SetInterfacePhysicalAddress` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) SetInterfacePhysicalAddressWithResponse(ctx context.Context, name string, pInterface string, body SetInterfacePhysicalAddressJSONRequestBody, reqEditors ...RequestEditorFn) (*SetInterfacePhysicalAddressResponse, error) {
+	rsp, err := c.SetInterfacePhysicalAddress(ctx, name, pInterface, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseSetInterfacePhysicalAddressResponse(rsp)
+}
+
 // ListDeviceJournalEntriesWithResponse performs a GET /api/devices/{name}/journal-entries (the `ListDeviceJournalEntries` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -9673,6 +10114,17 @@ func (c *ClientWithResponses) CreateManufacturerWithResponse(ctx context.Context
 		return nil, err
 	}
 	return ParseCreateManufacturerResponse(rsp)
+}
+
+// ListPhysicalAddressesWithResponse performs a GET /api/physical-addresses (the `ListPhysicalAddresses` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) ListPhysicalAddressesWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListPhysicalAddressesResponse, error) {
+	rsp, err := c.ListPhysicalAddresses(ctx, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListPhysicalAddressesResponse(rsp)
 }
 
 // ListPlatformsWithResponse performs a GET /api/platforms (the `ListPlatforms` operationId) request.
@@ -10080,6 +10532,28 @@ func (c *ClientWithResponses) CreateVirtualInterfaceWithResponse(ctx context.Con
 		return nil, err
 	}
 	return ParseCreateVirtualInterfaceResponse(rsp)
+}
+
+// SetVirtualInterfacePhysicalAddressWithBodyWithResponse performs a POST /api/virtual-machines/{name}/interfaces/{interface}/physical-address (the `SetVirtualInterfacePhysicalAddress` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) SetVirtualInterfacePhysicalAddressWithBodyWithResponse(ctx context.Context, name string, pInterface string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*SetVirtualInterfacePhysicalAddressResponse, error) {
+	rsp, err := c.SetVirtualInterfacePhysicalAddressWithBody(ctx, name, pInterface, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseSetVirtualInterfacePhysicalAddressResponse(rsp)
+}
+
+// SetVirtualInterfacePhysicalAddressWithResponse performs a POST /api/virtual-machines/{name}/interfaces/{interface}/physical-address (the `SetVirtualInterfacePhysicalAddress` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) SetVirtualInterfacePhysicalAddressWithResponse(ctx context.Context, name string, pInterface string, body SetVirtualInterfacePhysicalAddressJSONRequestBody, reqEditors ...RequestEditorFn) (*SetVirtualInterfacePhysicalAddressResponse, error) {
+	rsp, err := c.SetVirtualInterfacePhysicalAddress(ctx, name, pInterface, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseSetVirtualInterfacePhysicalAddressResponse(rsp)
 }
 
 // ListVirtualJournalEntriesWithResponse performs a GET /api/virtual-machines/{name}/journal-entries (the `ListVirtualJournalEntries` operationId) request.
@@ -10932,6 +11406,39 @@ func ParseCreateInterfaceResponse(rsp *http.Response) (*CreateInterfaceResponse,
 	return response, nil
 }
 
+// ParseSetInterfacePhysicalAddressResponse parses an HTTP response from a SetInterfacePhysicalAddressWithResponse call
+func ParseSetInterfacePhysicalAddressResponse(rsp *http.Response) (*SetInterfacePhysicalAddressResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &SetInterfacePhysicalAddressResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest PhysicalAddress
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseListDeviceJournalEntriesResponse parses an HTTP response from a ListDeviceJournalEntriesWithResponse call
 func ParseListDeviceJournalEntriesResponse(rsp *http.Response) (*ListDeviceJournalEntriesResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -11406,6 +11913,39 @@ func ParseCreateManufacturerResponse(rsp *http.Response) (*CreateManufacturerRes
 			return nil, err
 		}
 		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListPhysicalAddressesResponse parses an HTTP response from a ListPhysicalAddressesWithResponse call
+func ParseListPhysicalAddressesResponse(rsp *http.Response) (*ListPhysicalAddressesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListPhysicalAddressesResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []PhysicalAddressOwner
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -12231,6 +12771,39 @@ func ParseCreateVirtualInterfaceResponse(rsp *http.Response) (*CreateVirtualInte
 			return nil, err
 		}
 		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseSetVirtualInterfacePhysicalAddressResponse parses an HTTP response from a SetVirtualInterfacePhysicalAddressWithResponse call
+func ParseSetVirtualInterfacePhysicalAddressResponse(rsp *http.Response) (*SetVirtualInterfacePhysicalAddressResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &SetVirtualInterfacePhysicalAddressResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest PhysicalAddress
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse

@@ -6,6 +6,7 @@ import (
 	library "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/time"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 	"strings"
@@ -94,7 +95,12 @@ func (s *Server) roster(
 		}
 
 		if l := pulses[session.Identifier]; l != nil {
-			line = fmt.Sprintf("%s\n  pulse: %s", line, l.Body)
+			line = fmt.Sprintf(
+				"%s\n  pulse: %s (%s)",
+				line,
+				l.Body,
+				time.Relative(l.CreatedAt),
+			)
 		}
 
 		lines = append(lines, line)

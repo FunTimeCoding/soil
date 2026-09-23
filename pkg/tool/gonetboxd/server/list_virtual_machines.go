@@ -38,5 +38,11 @@ func (s *Server) ListVirtualMachines(
 		result = append(result, entry)
 	}
 
+	if f := s.attachVirtualLabels(result); f != nil {
+		return server.ListVirtualMachines500JSONResponse(
+			*s.captureDetail(f),
+		), nil
+	}
+
 	return server.ListVirtualMachines200JSONResponse(result), nil
 }

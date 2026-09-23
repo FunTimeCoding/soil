@@ -42,6 +42,20 @@ func (b *Builder) Server() *server.MCPServer {
 		)
 	}
 
+	if b.connected != nil {
+		connected := b.connected
+		hooks.AddAfterInitialize(
+			func(
+				_ context.Context,
+				_ any,
+				_ *mcp.InitializeRequest,
+				_ *mcp.InitializeResult,
+			) {
+				connected()
+			},
+		)
+	}
+
 	options := []server.ServerOption{
 		server.WithToolCapabilities(true),
 		server.WithInstructions(b.instructions),
@@ -56,6 +70,10 @@ func (b *Builder) Server() *server.MCPServer {
 
 	if b.resources {
 		options = append(options, server.WithResourceCapabilities(true, false))
+	}
+
+	if b.experimental != nil {
+		options = append(options, server.WithExperimental(b.experimental))
 	}
 
 	return server.NewMCPServer(b.name, b.version, options...)

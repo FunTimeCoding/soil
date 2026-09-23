@@ -30,5 +30,7 @@ func (c *Client) AssignPhysicalToInterface(
 		return nil, e
 	}
 
+	c.cache.PhysicalAddresses = nil
+
 	return physical_address.New(result), nil
 }

@@ -10,7 +10,6 @@ import (
 
 func TestModelContext(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	assert.Count(t, 8, o.Client.ListTools())
 	n := session.Stub()
 	n.Identifier = "sess-1"

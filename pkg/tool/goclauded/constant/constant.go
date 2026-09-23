@@ -41,6 +41,7 @@ const (
 	Files       = "files"
 	To          = "to"
 	Body        = "body"
+	Immediate   = "immediate"
 
 	Announce      = "announce"
 	Complete      = "complete"
@@ -57,7 +58,6 @@ const (
 	Status        = "status"
 	SessionEnd    = "session_end"
 	Release       = "release"
-	Listen        = "listen"
 	Summarize     = "summarize"
 	Moment        = "moment"
 	TokenUsage    = "token_usage"
@@ -115,6 +115,9 @@ const (
 	QueueMemoryCreate    = "memory_create"
 	QueueTimeout         = "timeout"
 	QueueReannounce      = "reannounce"
+
+	ImmediateLimit  = 6
+	ImmediateWindow = 5 * time.Minute
 
 	DashboardTitle     = "Dashboard"
 	DashboardPath      = "/"

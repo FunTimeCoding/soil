@@ -35,6 +35,11 @@ type BashDumpResponse struct {
 	Commands []string `json:"commands"`
 }
 
+// ChannelCallsignResponse defines model for ChannelCallsignResponse.
+type ChannelCallsignResponse struct {
+	Callsign string `json:"callsign"`
+}
+
 // CheckResponse defines model for CheckResponse.
 type CheckResponse struct {
 	Callsign string       `json:"callsign"`
@@ -103,6 +108,11 @@ type DeleteReceiptResponse struct {
 	Summaries     int       `json:"summaries"`
 	TrackerStates int       `json:"tracker_states"`
 	Transcript    *string   `json:"transcript,omitempty"`
+}
+
+// DeliveryResponse defines model for DeliveryResponse.
+type DeliveryResponse struct {
+	Immediate bool `json:"immediate"`
 }
 
 // EditSessionRequest defines model for EditSessionRequest.
@@ -185,19 +195,6 @@ type LabelResponse struct {
 	Change string `json:"change"`
 }
 
-// ListenRequest defines model for ListenRequest.
-type ListenRequest struct {
-	Callsign  string `json:"callsign"`
-	Listening *bool  `json:"listening,omitempty"`
-}
-
-// Message defines model for Message.
-type Message struct {
-	Body      string `json:"body"`
-	From      string `json:"from"`
-	Timestamp string `json:"timestamp"`
-}
-
 // MessagesResponse defines model for MessagesResponse.
 type MessagesResponse struct {
 	Messages []SessionMessage `json:"messages"`
@@ -218,9 +215,10 @@ type ModelUsage struct {
 
 // NotifyRequest defines model for NotifyRequest.
 type NotifyRequest struct {
-	Body     string `json:"body"`
-	Callsign string `json:"callsign"`
-	Source   string `json:"source"`
+	Body      string `json:"body"`
+	Callsign  string `json:"callsign"`
+	Immediate *bool  `json:"immediate,omitempty"`
+	Source    string `json:"source"`
 }
 
 // PeekEntry defines model for PeekEntry.
@@ -247,7 +245,8 @@ type PulseEntry struct {
 
 // PulseRequest defines model for PulseRequest.
 type PulseRequest struct {
-	Body string `json:"body"`
+	Body      string `json:"body"`
+	Immediate *bool  `json:"immediate,omitempty"`
 }
 
 // QueueEntry defines model for QueueEntry.
@@ -292,19 +291,23 @@ type ResolveResponse struct {
 
 // SendRequest defines model for SendRequest.
 type SendRequest struct {
-	Body     string  `json:"body"`
-	Callsign string  `json:"callsign"`
-	To       *string `json:"to,omitempty"`
+	Body      string  `json:"body"`
+	Callsign  string  `json:"callsign"`
+	Immediate *bool   `json:"immediate,omitempty"`
+	To        *string `json:"to,omitempty"`
 }
 
 // SessionDetail defines model for SessionDetail.
 type SessionDetail struct {
 	Alias         *string       `json:"alias,omitempty"`
 	Branch        *string       `json:"branch,omitempty"`
+	ClosedAt      *string       `json:"closedAt,omitempty"`
 	Description   *string       `json:"description,omitempty"`
 	Identifier    string        `json:"identifier"`
 	Labels        *[]LabelEntry `json:"labels,omitempty"`
+	LastPromptAt  *string       `json:"lastPromptAt,omitempty"`
 	LastSeen      *string       `json:"lastSeen,omitempty"`
+	LastTurnEndAt *string       `json:"lastTurnEndAt,omitempty"`
 	Lines         int           `json:"lines"`
 	Name          *string       `json:"name,omitempty"`
 	Preview       *string       `json:"preview,omitempty"`
@@ -412,6 +415,11 @@ type ToolsResponse struct {
 	Total  int             `json:"total"`
 }
 
+// TurnEndRequest defines model for TurnEndRequest.
+type TurnEndRequest struct {
+	Session string `json:"session"`
+}
+
 // UsageResponse defines model for UsageResponse.
 type UsageResponse struct {
 	FablePercent    int        `json:"fable_percent"`
@@ -424,15 +432,21 @@ type UsageResponse struct {
 	SevenDayReset   time.Time  `json:"seven_day_reset"`
 }
 
-// WaitResponse defines model for WaitResponse.
-type WaitResponse struct {
-	Messages []Message `json:"messages"`
-}
-
 // PostBackfillParams defines parameters for PostBackfill.
 type PostBackfillParams struct {
 	// Cold Reset tracker offsets and re-read every transcript whole.
 	Cold *bool `form:"cold,omitempty" json:"cold,omitempty"`
+}
+
+// GetChannelParams defines parameters for GetChannel.
+type GetChannelParams struct {
+	Callsign string `form:"callsign" json:"callsign"`
+}
+
+// GetChannelCallsignParams defines parameters for GetChannelCallsign.
+type GetChannelCallsignParams struct {
+	Session string    `form:"session" json:"session"`
+	Since   time.Time `form:"since" json:"since"`
 }
 
 // GetCheckParams defines parameters for GetCheck.
@@ -487,17 +501,8 @@ type GetTimelineParams struct {
 	Offset *int    `form:"offset,omitempty" json:"offset,omitempty"`
 }
 
-// GetWaitParams defines parameters for GetWait.
-type GetWaitParams struct {
-	Callsign string `form:"callsign" json:"callsign"`
-	Timeout  *int   `form:"timeout,omitempty" json:"timeout,omitempty"`
-}
-
 // PostAnnounceJSONRequestBody defines body for PostAnnounce for application/json ContentType.
 type PostAnnounceJSONRequestBody = AnnounceRequest
-
-// PostListenJSONRequestBody defines body for PostListen for application/json ContentType.
-type PostListenJSONRequestBody = ListenRequest
 
 // PostNotifyJSONRequestBody defines body for PostNotify for application/json ContentType.
 type PostNotifyJSONRequestBody = NotifyRequest
@@ -525,6 +530,9 @@ type PostSessionLabelJSONRequestBody = LabelRequest
 
 // PostSessionPulseJSONRequestBody defines body for PostSessionPulse for application/json ContentType.
 type PostSessionPulseJSONRequestBody = PulseRequest
+
+// PostTurnEndJSONRequestBody defines body for PostTurnEnd for application/json ContentType.
+type PostTurnEndJSONRequestBody = TurnEndRequest
 
 // RequestEditorFn is the function signature for the RequestEditor callback function
 type RequestEditorFn func(ctx context.Context, req *http.Request) error
@@ -611,6 +619,12 @@ type ClientInterface interface {
 	// PostBackfill performs a POST /api/backfill (the `PostBackfill` operationId) request.
 	PostBackfill(ctx context.Context, params *PostBackfillParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// GetChannel performs a GET /api/channel (the `GetChannel` operationId) request.
+	GetChannel(ctx context.Context, params *GetChannelParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetChannelCallsign performs a GET /api/channel/callsign (the `GetChannelCallsign` operationId) request.
+	GetChannelCallsign(ctx context.Context, params *GetChannelCallsignParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// GetCheck performs a GET /api/check (the `GetCheck` operationId) request.
 	GetCheck(ctx context.Context, params *GetCheckParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -619,14 +633,6 @@ type ClientInterface interface {
 
 	// GetCoverage performs a GET /api/coverage (the `GetCoverage` operationId) request.
 	GetCoverage(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	// PostListenWithBody performs a POST /api/listen (the `PostListen` operationId) request,
-	// with any type of body and a specified content type.
-	PostListenWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	// PostListen performs a POST /api/listen (the `PostListen` operationId) request.
-	// Takes a body of the `application/json` content type.
-	PostListen(ctx context.Context, body PostListenJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// PostNotifyWithBody performs a POST /api/notify (the `PostNotify` operationId) request,
 	// with any type of body and a specified content type.
@@ -751,11 +757,16 @@ type ClientInterface interface {
 	// GetTimeline performs a GET /api/timeline (the `GetTimeline` operationId) request.
 	GetTimeline(ctx context.Context, params *GetTimelineParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// PostTurnEndWithBody performs a POST /api/turn-end (the `PostTurnEnd` operationId) request,
+	// with any type of body and a specified content type.
+	PostTurnEndWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostTurnEnd performs a POST /api/turn-end (the `PostTurnEnd` operationId) request.
+	// Takes a body of the `application/json` content type.
+	PostTurnEnd(ctx context.Context, body PostTurnEndJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// GetUsage performs a GET /api/usage (the `GetUsage` operationId) request.
 	GetUsage(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
-
-	// GetWait performs a GET /api/wait (the `GetWait` operationId) request.
-	GetWait(ctx context.Context, params *GetWaitParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
 
 // PostAnnounceWithBody performs a POST /api/announce (the `PostAnnounce` operationId) request,
@@ -799,6 +810,32 @@ func (c *Client) PostBackfill(ctx context.Context, params *PostBackfillParams, r
 	return c.Client.Do(req)
 }
 
+// GetChannel performs a GET /api/channel (the `GetChannel` operationId) request.
+func (c *Client) GetChannel(ctx context.Context, params *GetChannelParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetChannelRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetChannelCallsign performs a GET /api/channel/callsign (the `GetChannelCallsign` operationId) request.
+func (c *Client) GetChannelCallsign(ctx context.Context, params *GetChannelCallsignParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetChannelCallsignRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 // GetCheck performs a GET /api/check (the `GetCheck` operationId) request.
 func (c *Client) GetCheck(ctx context.Context, params *GetCheckParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetCheckRequest(c.Server, params)
@@ -828,34 +865,6 @@ func (c *Client) GetCost(ctx context.Context, params *GetCostParams, reqEditors 
 // GetCoverage performs a GET /api/coverage (the `GetCoverage` operationId) request.
 func (c *Client) GetCoverage(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetCoverageRequest(c.Server)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-// PostListenWithBody performs a POST /api/listen (the `PostListen` operationId) request,
-// with any type of body and a specified content type.
-func (c *Client) PostListenWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPostListenRequestWithBody(c.Server, contentType, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return c.Client.Do(req)
-}
-
-// PostListen performs a POST /api/listen (the `PostListen` operationId) request.
-// Takes a body of the `application/json` content type.
-func (c *Client) PostListen(ctx context.Context, body PostListenJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewPostListenRequest(c.Server, body)
 	if err != nil {
 		return nil, err
 	}
@@ -1339,9 +1348,10 @@ func (c *Client) GetTimeline(ctx context.Context, params *GetTimelineParams, req
 	return c.Client.Do(req)
 }
 
-// GetUsage performs a GET /api/usage (the `GetUsage` operationId) request.
-func (c *Client) GetUsage(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewGetUsageRequest(c.Server)
+// PostTurnEndWithBody performs a POST /api/turn-end (the `PostTurnEnd` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) PostTurnEndWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostTurnEndRequestWithBody(c.Server, contentType, body)
 	if err != nil {
 		return nil, err
 	}
@@ -1352,9 +1362,23 @@ func (c *Client) GetUsage(ctx context.Context, reqEditors ...RequestEditorFn) (*
 	return c.Client.Do(req)
 }
 
-// GetWait performs a GET /api/wait (the `GetWait` operationId) request.
-func (c *Client) GetWait(ctx context.Context, params *GetWaitParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
-	req, err := NewGetWaitRequest(c.Server, params)
+// PostTurnEnd performs a POST /api/turn-end (the `PostTurnEnd` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) PostTurnEnd(ctx context.Context, body PostTurnEndJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostTurnEndRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetUsage performs a GET /api/usage (the `GetUsage` operationId) request.
+func (c *Client) GetUsage(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetUsageRequest(c.Server)
 	if err != nil {
 		return nil, err
 	}
@@ -1452,6 +1476,114 @@ func NewPostBackfillRequest(server string, params *PostBackfillParams) (*http.Re
 	}
 
 	req, err := http.NewRequest(http.MethodPost, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetChannelRequest constructs an http.Request for the GetChannel method
+func NewGetChannelRequest(server string, params *GetChannelParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/channel")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "callsign", params.Callsign, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+			return nil, err
+		} else {
+			for _, qp := range strings.Split(queryFrag, "&") {
+				rawQueryFragments = append(rawQueryFragments, qp)
+			}
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetChannelCallsignRequest constructs an http.Request for the GetChannelCallsign method
+func NewGetChannelCallsignRequest(server string, params *GetChannelCallsignParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/channel/callsign")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "session", params.Session, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+			return nil, err
+		} else {
+			for _, qp := range strings.Split(queryFrag, "&") {
+				rawQueryFragments = append(rawQueryFragments, qp)
+			}
+		}
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "since", params.Since, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: "date-time"}); err != nil {
+			return nil, err
+		} else {
+			for _, qp := range strings.Split(queryFrag, "&") {
+				rawQueryFragments = append(rawQueryFragments, qp)
+			}
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -1598,46 +1730,6 @@ func NewGetCoverageRequest(server string) (*http.Request, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	return req, nil
-}
-
-// NewPostListenRequest calls the generic PostListen builder with application/json body
-func NewPostListenRequest(server string, body PostListenJSONRequestBody) (*http.Request, error) {
-	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
-	if err != nil {
-		return nil, err
-	}
-	bodyReader = bytes.NewReader(buf)
-	return NewPostListenRequestWithBody(server, "application/json", bodyReader)
-}
-
-// NewPostListenRequestWithBody constructs an http.Request for the PostListen method, with any body, and a specified content type
-func NewPostListenRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
-	var err error
-
-	serverURL, err := url.Parse(server)
-	if err != nil {
-		return nil, err
-	}
-
-	operationPath := fmt.Sprintf("/api/listen")
-	if operationPath[0] == '/' {
-		operationPath = "." + operationPath
-	}
-
-	queryURL, err := serverURL.Parse(operationPath)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("Content-Type", contentType)
 
 	return req, nil
 }
@@ -2787,6 +2879,46 @@ func NewGetTimelineRequest(server string, params *GetTimelineParams) (*http.Requ
 	return req, nil
 }
 
+// NewPostTurnEndRequest calls the generic PostTurnEnd builder with application/json body
+func NewPostTurnEndRequest(server string, body PostTurnEndJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPostTurnEndRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewPostTurnEndRequestWithBody constructs an http.Request for the PostTurnEnd method, with any body, and a specified content type
+func NewPostTurnEndRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/turn-end")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
 // NewGetUsageRequest constructs an http.Request for the GetUsage method
 func NewGetUsageRequest(server string) (*http.Request, error) {
 	var err error
@@ -2804,68 +2936,6 @@ func NewGetUsageRequest(server string) (*http.Request, error) {
 	queryURL, err := serverURL.Parse(operationPath)
 	if err != nil {
 		return nil, err
-	}
-
-	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
-	if err != nil {
-		return nil, err
-	}
-
-	return req, nil
-}
-
-// NewGetWaitRequest constructs an http.Request for the GetWait method
-func NewGetWaitRequest(server string, params *GetWaitParams) (*http.Request, error) {
-	var err error
-
-	serverURL, err := url.Parse(server)
-	if err != nil {
-		return nil, err
-	}
-
-	operationPath := fmt.Sprintf("/api/wait")
-	if operationPath[0] == '/' {
-		operationPath = "." + operationPath
-	}
-
-	queryURL, err := serverURL.Parse(operationPath)
-	if err != nil {
-		return nil, err
-	}
-
-	if params != nil {
-		// queryValues collects non-styled parameters (passthrough, JSON)
-		// that are safe to round-trip through url.Values.Encode().
-		queryValues := queryURL.Query()
-		// rawQueryFragments collects pre-encoded query fragments from
-		// styled parameters, preserving literal commas as delimiters
-		// per the OpenAPI spec (e.g. "color=blue,black,brown").
-		var rawQueryFragments []string
-
-		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "callsign", params.Callsign, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
-			return nil, err
-		} else {
-			for _, qp := range strings.Split(queryFrag, "&") {
-				rawQueryFragments = append(rawQueryFragments, qp)
-			}
-		}
-
-		if params.Timeout != nil {
-
-			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "timeout", *params.Timeout, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
-				return nil, err
-			} else {
-				for _, qp := range strings.Split(queryFrag, "&") {
-					rawQueryFragments = append(rawQueryFragments, qp)
-				}
-			}
-
-		}
-
-		if encoded := queryValues.Encode(); encoded != "" {
-			rawQueryFragments = append(rawQueryFragments, encoded)
-		}
-		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
 	}
 
 	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
@@ -2935,6 +3005,16 @@ type ClientWithResponsesInterface interface {
 	// Returns a wrapper object for the known response body format(s).
 	PostBackfillWithResponse(ctx context.Context, params *PostBackfillParams, reqEditors ...RequestEditorFn) (*PostBackfillResponse, error)
 
+	// GetChannelWithResponse performs a GET /api/channel (the `GetChannel` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetChannelWithResponse(ctx context.Context, params *GetChannelParams, reqEditors ...RequestEditorFn) (*GetChannelResponse, error)
+
+	// GetChannelCallsignWithResponse performs a GET /api/channel/callsign (the `GetChannelCallsign` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetChannelCallsignWithResponse(ctx context.Context, params *GetChannelCallsignParams, reqEditors ...RequestEditorFn) (*GetChannelCallsignResponse, error)
+
 	// GetCheckWithResponse performs a GET /api/check (the `GetCheck` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
@@ -2949,16 +3029,6 @@ type ClientWithResponsesInterface interface {
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetCoverageWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetCoverageResponse, error)
-
-	// PostListenWithBodyWithResponse performs a POST /api/listen (the `PostListen` operationId) request,
-	// with any type of body and a specified content type.
-	//
-	// Returns a wrapper object for the known response body format(s).
-	PostListenWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostListenResponse, error)
-
-	// PostListenWithResponse performs a POST /api/listen (the `PostListen` operationId) request.
-	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
-	PostListenWithResponse(ctx context.Context, body PostListenJSONRequestBody, reqEditors ...RequestEditorFn) (*PostListenResponse, error)
 
 	// PostNotifyWithBodyWithResponse performs a POST /api/notify (the `PostNotify` operationId) request,
 	// with any type of body and a specified content type.
@@ -3135,15 +3205,20 @@ type ClientWithResponsesInterface interface {
 	// Returns a wrapper object for the known response body format(s).
 	GetTimelineWithResponse(ctx context.Context, params *GetTimelineParams, reqEditors ...RequestEditorFn) (*GetTimelineResponse, error)
 
+	// PostTurnEndWithBodyWithResponse performs a POST /api/turn-end (the `PostTurnEnd` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	PostTurnEndWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostTurnEndResponse, error)
+
+	// PostTurnEndWithResponse performs a POST /api/turn-end (the `PostTurnEnd` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	PostTurnEndWithResponse(ctx context.Context, body PostTurnEndJSONRequestBody, reqEditors ...RequestEditorFn) (*PostTurnEndResponse, error)
+
 	// GetUsageWithResponse performs a GET /api/usage (the `GetUsage` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetUsageWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetUsageResponse, error)
-
-	// GetWaitWithResponse performs a GET /api/wait (the `GetWait` operationId) request.
-	//
-	// Returns a wrapper object for the known response body format(s).
-	GetWaitWithResponse(ctx context.Context, params *GetWaitParams, reqEditors ...RequestEditorFn) (*GetWaitResponse, error)
 }
 
 type PostAnnounceResponse struct {
@@ -3236,6 +3311,102 @@ func (r PostBackfillResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r PostBackfillResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type GetChannelResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *CheckResponse
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetChannelResponse) GetJSON200() *CheckResponse {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetChannelResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetChannelResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetChannelResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetChannelResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetChannelResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type GetChannelCallsignResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *ChannelCallsignResponse
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetChannelCallsignResponse) GetJSON200() *ChannelCallsignResponse {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetChannelCallsignResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetChannelCallsignResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetChannelCallsignResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetChannelCallsignResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetChannelCallsignResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -3386,54 +3557,20 @@ func (r GetCoverageResponse) ContentType() string {
 	return ""
 }
 
-type PostListenResponse struct {
-	Body         []byte
-	HTTPResponse *http.Response
-	// JSON500 the response for an HTTP 500 `application/json` response
-	JSON500 *ErrorResponse
-}
-
-// GetJSON500 returns the response for an HTTP 500 `application/json` response
-func (r PostListenResponse) GetJSON500() *ErrorResponse {
-	return r.JSON500
-}
-
-// GetBody returns the raw response body bytes
-func (r PostListenResponse) GetBody() []byte {
-	return r.Body
-}
-
-// Status returns HTTPResponse.Status
-func (r PostListenResponse) Status() string {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.Status
-	}
-	return http.StatusText(0)
-}
-
-// StatusCode returns HTTPResponse.StatusCode
-func (r PostListenResponse) StatusCode() int {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.StatusCode
-	}
-	return 0
-}
-
-// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
-func (r PostListenResponse) ContentType() string {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.Header.Get("Content-Type")
-	}
-	return ""
-}
-
 type PostNotifyResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *DeliveryResponse
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r PostNotifyResponse) GetJSON200() *DeliveryResponse {
+	return r.JSON200
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
@@ -3629,8 +3766,15 @@ func (r GetResolveResponse) ContentType() string {
 type PostSendResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *DeliveryResponse
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r PostSendResponse) GetJSON200() *DeliveryResponse {
+	return r.JSON200
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -4390,8 +4534,15 @@ func (r GetSessionPeekResponse) ContentType() string {
 type PostSessionPulseResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *DeliveryResponse
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r PostSessionPulseResponse) GetJSON200() *DeliveryResponse {
+	return r.JSON200
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -4668,6 +4819,47 @@ func (r GetTimelineResponse) ContentType() string {
 	return ""
 }
 
+type PostTurnEndResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r PostTurnEndResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r PostTurnEndResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r PostTurnEndResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostTurnEndResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r PostTurnEndResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type GetUsageResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -4716,54 +4908,6 @@ func (r GetUsageResponse) ContentType() string {
 	return ""
 }
 
-type GetWaitResponse struct {
-	Body         []byte
-	HTTPResponse *http.Response
-	// JSON200 the response for an HTTP 200 `application/json` response
-	JSON200 *WaitResponse
-	// JSON500 the response for an HTTP 500 `application/json` response
-	JSON500 *ErrorResponse
-}
-
-// GetJSON200 returns the response for an HTTP 200 `application/json` response
-func (r GetWaitResponse) GetJSON200() *WaitResponse {
-	return r.JSON200
-}
-
-// GetJSON500 returns the response for an HTTP 500 `application/json` response
-func (r GetWaitResponse) GetJSON500() *ErrorResponse {
-	return r.JSON500
-}
-
-// GetBody returns the raw response body bytes
-func (r GetWaitResponse) GetBody() []byte {
-	return r.Body
-}
-
-// Status returns HTTPResponse.Status
-func (r GetWaitResponse) Status() string {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.Status
-	}
-	return http.StatusText(0)
-}
-
-// StatusCode returns HTTPResponse.StatusCode
-func (r GetWaitResponse) StatusCode() int {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.StatusCode
-	}
-	return 0
-}
-
-// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
-func (r GetWaitResponse) ContentType() string {
-	if r.HTTPResponse != nil {
-		return r.HTTPResponse.Header.Get("Content-Type")
-	}
-	return ""
-}
-
 // PostAnnounceWithBodyWithResponse performs a POST /api/announce (the `PostAnnounce` operationId) request,
 // with any type of body and a specified content type.
 //
@@ -4797,6 +4941,28 @@ func (c *ClientWithResponses) PostBackfillWithResponse(ctx context.Context, para
 	return ParsePostBackfillResponse(rsp)
 }
 
+// GetChannelWithResponse performs a GET /api/channel (the `GetChannel` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetChannelWithResponse(ctx context.Context, params *GetChannelParams, reqEditors ...RequestEditorFn) (*GetChannelResponse, error) {
+	rsp, err := c.GetChannel(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetChannelResponse(rsp)
+}
+
+// GetChannelCallsignWithResponse performs a GET /api/channel/callsign (the `GetChannelCallsign` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetChannelCallsignWithResponse(ctx context.Context, params *GetChannelCallsignParams, reqEditors ...RequestEditorFn) (*GetChannelCallsignResponse, error) {
+	rsp, err := c.GetChannelCallsign(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetChannelCallsignResponse(rsp)
+}
+
 // GetCheckWithResponse performs a GET /api/check (the `GetCheck` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -4828,28 +4994,6 @@ func (c *ClientWithResponses) GetCoverageWithResponse(ctx context.Context, reqEd
 		return nil, err
 	}
 	return ParseGetCoverageResponse(rsp)
-}
-
-// PostListenWithBodyWithResponse performs a POST /api/listen (the `PostListen` operationId) request,
-// with any type of body and a specified content type.
-//
-// Returns a wrapper object for the known response body format(s).
-func (c *ClientWithResponses) PostListenWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostListenResponse, error) {
-	rsp, err := c.PostListenWithBody(ctx, contentType, body, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParsePostListenResponse(rsp)
-}
-
-// PostListenWithResponse performs a POST /api/listen (the `PostListen` operationId) request.
-// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
-func (c *ClientWithResponses) PostListenWithResponse(ctx context.Context, body PostListenJSONRequestBody, reqEditors ...RequestEditorFn) (*PostListenResponse, error) {
-	rsp, err := c.PostListen(ctx, body, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParsePostListenResponse(rsp)
 }
 
 // PostNotifyWithBodyWithResponse performs a POST /api/notify (the `PostNotify` operationId) request,
@@ -5237,6 +5381,28 @@ func (c *ClientWithResponses) GetTimelineWithResponse(ctx context.Context, param
 	return ParseGetTimelineResponse(rsp)
 }
 
+// PostTurnEndWithBodyWithResponse performs a POST /api/turn-end (the `PostTurnEnd` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) PostTurnEndWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostTurnEndResponse, error) {
+	rsp, err := c.PostTurnEndWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostTurnEndResponse(rsp)
+}
+
+// PostTurnEndWithResponse performs a POST /api/turn-end (the `PostTurnEnd` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) PostTurnEndWithResponse(ctx context.Context, body PostTurnEndJSONRequestBody, reqEditors ...RequestEditorFn) (*PostTurnEndResponse, error) {
+	rsp, err := c.PostTurnEnd(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostTurnEndResponse(rsp)
+}
+
 // GetUsageWithResponse performs a GET /api/usage (the `GetUsage` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -5246,17 +5412,6 @@ func (c *ClientWithResponses) GetUsageWithResponse(ctx context.Context, reqEdito
 		return nil, err
 	}
 	return ParseGetUsageResponse(rsp)
-}
-
-// GetWaitWithResponse performs a GET /api/wait (the `GetWait` operationId) request.
-//
-// Returns a wrapper object for the known response body format(s).
-func (c *ClientWithResponses) GetWaitWithResponse(ctx context.Context, params *GetWaitParams, reqEditors ...RequestEditorFn) (*GetWaitResponse, error) {
-	rsp, err := c.GetWait(ctx, params, reqEditors...)
-	if err != nil {
-		return nil, err
-	}
-	return ParseGetWaitResponse(rsp)
 }
 
 // ParsePostAnnounceResponse parses an HTTP response from a PostAnnounceWithResponse call
@@ -5315,6 +5470,75 @@ func ParsePostBackfillResponse(rsp *http.Response) (*PostBackfillResponse, error
 			return nil, err
 		}
 		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetChannelResponse parses an HTTP response from a GetChannelWithResponse call
+func ParseGetChannelResponse(rsp *http.Response) (*GetChannelResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetChannelResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest CheckResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetChannelCallsignResponse parses an HTTP response from a GetChannelCallsignWithResponse call
+func ParseGetChannelCallsignResponse(rsp *http.Response) (*GetChannelCallsignResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetChannelCallsignResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ChannelCallsignResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case rsp.StatusCode == 204:
+		break // No content-type
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -5427,35 +5651,6 @@ func ParseGetCoverageResponse(rsp *http.Response) (*GetCoverageResponse, error) 
 	return response, nil
 }
 
-// ParsePostListenResponse parses an HTTP response from a PostListenWithResponse call
-func ParsePostListenResponse(rsp *http.Response) (*PostListenResponse, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	response := &PostListenResponse{
-		Body:         bodyBytes,
-		HTTPResponse: rsp,
-	}
-
-	switch {
-	case rsp.StatusCode == 200:
-		break // No content-type
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest ErrorResponse
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON500 = &dest
-
-	}
-
-	return response, nil
-}
-
 // ParsePostNotifyResponse parses an HTTP response from a PostNotifyWithResponse call
 func ParsePostNotifyResponse(rsp *http.Response) (*PostNotifyResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -5470,8 +5665,12 @@ func ParsePostNotifyResponse(rsp *http.Response) (*PostNotifyResponse, error) {
 	}
 
 	switch {
-	case rsp.StatusCode == 200:
-		break // No content-type
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest DeliveryResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
@@ -5615,8 +5814,12 @@ func ParsePostSendResponse(rsp *http.Response) (*PostSendResponse, error) {
 	}
 
 	switch {
-	case rsp.StatusCode == 200:
-		break // No content-type
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest DeliveryResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -6151,8 +6354,12 @@ func ParsePostSessionPulseResponse(rsp *http.Response) (*PostSessionPulseRespons
 	}
 
 	switch {
-	case rsp.StatusCode == 200:
-		break // No content-type
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest DeliveryResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -6331,6 +6538,35 @@ func ParseGetTimelineResponse(rsp *http.Response) (*GetTimelineResponse, error) 
 	return response, nil
 }
 
+// ParsePostTurnEndResponse parses an HTTP response from a PostTurnEndWithResponse call
+func ParsePostTurnEndResponse(rsp *http.Response) (*PostTurnEndResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostTurnEndResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case rsp.StatusCode == 200:
+		break // No content-type
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseGetUsageResponse parses an HTTP response from a GetUsageWithResponse call
 func ParseGetUsageResponse(rsp *http.Response) (*GetUsageResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -6354,39 +6590,6 @@ func ParseGetUsageResponse(rsp *http.Response) (*GetUsageResponse, error) {
 
 	case rsp.StatusCode == 204:
 		break // No content-type
-
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
-		var dest ErrorResponse
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON500 = &dest
-
-	}
-
-	return response, nil
-}
-
-// ParseGetWaitResponse parses an HTTP response from a GetWaitWithResponse call
-func ParseGetWaitResponse(rsp *http.Response) (*GetWaitResponse, error) {
-	bodyBytes, err := io.ReadAll(rsp.Body)
-	defer func() { _ = rsp.Body.Close() }()
-	if err != nil {
-		return nil, err
-	}
-
-	response := &GetWaitResponse{
-		Body:         bodyBytes,
-		HTTPResponse: rsp,
-	}
-
-	switch {
-	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
-		var dest WaitResponse
-		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
-			return nil, err
-		}
-		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse

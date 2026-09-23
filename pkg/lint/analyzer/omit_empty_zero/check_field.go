@@ -43,14 +43,13 @@ func checkField(
 	}
 
 	results.AddConcern(
-		concern.NewFile(
+		concern.NewPosition(
 			"omit_empty_zero",
 			fmt.Sprintf(
 				"field %s: omitempty stops omitting the zero value under json/v2 - use omitzero",
 				fieldName(field),
 			),
-			p.Fset.Position(field.Pos()).Filename,
-			false,
+			p.Fset.Position(field.Pos()),
 		),
 	)
 }

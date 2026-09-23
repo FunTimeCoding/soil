@@ -9,9 +9,7 @@ import (
 
 func TestUpdate(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "first topic")
 	a.CheckLive()
 	a.MustCallTool(
@@ -29,9 +27,7 @@ func TestUpdate(t *testing.T) {
 
 func TestUpdateMultiple(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "step one")
 	a.CheckLive()
 	a.MustCallTool(
@@ -55,9 +51,7 @@ func TestUpdateMultiple(t *testing.T) {
 
 func TestUpdateHistoryEvents(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "initial")
 	a.MustCallTool(
 		constant.Update,
@@ -72,9 +66,7 @@ func TestUpdateHistoryEvents(t *testing.T) {
 
 func TestUpdateBeforeAnnounce(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	assert.StringContains(
 		t,
 		"announce first",

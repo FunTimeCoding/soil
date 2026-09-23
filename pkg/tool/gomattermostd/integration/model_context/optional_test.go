@@ -6,19 +6,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/integration/base"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/integration/model_context_tester"
-	"github.com/modelcontextprotocol/go-sdk/mcp"
 	"testing"
 )
-
-func toolNames(v []*mcp.Tool) []string {
-	var result []string
-
-	for _, e := range v {
-		result = append(result, e.Name)
-	}
-
-	return result
-}
 
 func TestSubscriptionToolsAbsentWithoutGoclauded(t *testing.T) {
 	s := base.NewWithoutSubscription(t, upstream)

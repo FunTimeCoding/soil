@@ -23,6 +23,7 @@ func New(t *testing.T) *Tester {
 	assert.FatalOnError(t, e)
 
 	return &Tester{
+		t:          t,
 		server:     s,
 		Client:     c,
 		Worker:     s.Worker,

@@ -9,7 +9,7 @@ import (
 func TestFlagged(t *testing.T) {
 	p, results := testutil.LoadTestPackage(t, "testdata/src/flagged")
 	expected_first.Check(p, results)
-	testutil.AssertBlocked(t, results, 2)
+	testutil.AssertBlocked(t, results, 4)
 }
 
 func TestClean(t *testing.T) {

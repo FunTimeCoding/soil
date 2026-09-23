@@ -11,7 +11,6 @@ import (
 
 func TestWebService(t *testing.T) {
 	o := web_service_tester.New(t)
-	defer o.Close()
 	c := o.Client
 	x := context.Background()
 	status, e := c.GetStatusWithResponse(x)
@@ -46,7 +45,6 @@ func TestWebService(t *testing.T) {
 
 func TestWebServiceResolve(t *testing.T) {
 	o := web_service_tester.New(t)
-	defer o.Close()
 	c := o.Client
 	x := context.Background()
 	o.MockClient.Remove("fp1")

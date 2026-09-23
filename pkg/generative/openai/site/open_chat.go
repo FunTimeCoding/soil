@@ -3,6 +3,7 @@ package site
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"log"
 	"slices"
@@ -10,9 +11,11 @@ import (
 
 func (s *Site) OpenChat(name string) {
 	var names []string
-	s.protocol.Evaluate(
-		`Array.from(document.querySelectorAll('a[href^="/c/"] span[dir="auto"]')).map(span => span.textContent.trim())`,
-		&names,
+	errors.PanicOnError(
+		s.session.Evaluate(
+			`Array.from(document.querySelectorAll('a[href^="/c/"] span[dir="auto"]')).map(span => span.textContent.trim())`,
+			&names,
+		),
 	)
 
 	if !slices.Contains(names, name) {
@@ -23,7 +26,7 @@ func (s *Site) OpenChat(name string) {
 		console.Format("Name: %s\n", join.Comma(names))
 	}
 
-	s.protocol.ClickSearch(
+	s.session.ClickSearch(
 		fmt.Sprintf(
 			`//a[contains(@href, "/c/")]//span[@dir="auto" and text()="%s"]`,
 			name,

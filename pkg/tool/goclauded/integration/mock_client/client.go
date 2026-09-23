@@ -6,4 +6,5 @@ type Client struct {
 	sessions      map[string]*session.Session
 	UserMessages  map[string][]string
 	FirstMessages map[string]string
+	Harbor        string
 }

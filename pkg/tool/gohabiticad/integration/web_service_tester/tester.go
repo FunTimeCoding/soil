@@ -4,10 +4,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/integration/base"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/mock_client"
+	"testing"
 )
 
 type Tester struct {
 	server     *base.Server
 	Client     *client.ClientWithResponses
 	MockClient *mock_client.Client
+	t          *testing.T
 }

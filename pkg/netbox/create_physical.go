@@ -24,5 +24,7 @@ func (c *Client) CreatePhysical(
 		return nil, e
 	}
 
+	c.cache.PhysicalAddresses = nil
+
 	return physical_address.New(result), nil
 }

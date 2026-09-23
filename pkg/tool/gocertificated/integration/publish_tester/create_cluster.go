@@ -4,11 +4,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/generated/server"
-	"testing"
 )
 
-func (o *Tester) CreateCluster(t *testing.T) {
-	t.Helper()
+func (o *Tester) CreateCluster() {
+	o.t.Helper()
 	domain := []string{
 		constant.FixtureDomain,
 		constant.FixtureInternalDomain,
@@ -24,5 +23,5 @@ func (o *Tester) CreateCluster(t *testing.T) {
 			PermittedAddress: &address,
 		},
 	)
-	assert.FatalOnError(t, e)
+	assert.FatalOnError(o.t, e)
 }

@@ -2,6 +2,7 @@ package lint
 
 import (
 	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors"
 	lintConstant "github.com/funtimecoding/soil/pkg/lint/constant"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
@@ -19,6 +20,13 @@ func Patterns(
 	parent := join.Empty(constant.ParentDirectory, stringsConstant.Slash)
 
 	for _, p := range patterns {
+		if strings.HasSuffix(p, constant.GoExtension) {
+			return nil, errors.Format(
+				"provide a package directory pattern, not a file",
+				p,
+			)
+		}
+
 		if p != constant.CurrentDirectory &&
 			!strings.HasPrefix(p, current) &&
 			!strings.HasPrefix(p, parent) &&

@@ -4,11 +4,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/generated/server"
-	"testing"
 )
 
-func (o *Tester) IssueLeaf(t *testing.T) {
-	t.Helper()
+func (o *Tester) IssueLeaf() {
+	o.t.Helper()
 	host := []string{constant.FixtureHost}
 	_, _, e := o.Server.Service.IssueCertificate(
 		&server.CertificateBody{
@@ -18,5 +17,5 @@ func (o *Tester) IssueLeaf(t *testing.T) {
 			Host:       &host,
 		},
 	)
-	assert.FatalOnError(t, e)
+	assert.FatalOnError(o.t, e)
 }

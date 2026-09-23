@@ -21,5 +21,5 @@ func New(
 		},
 	)
 
-	return &Tester{Client: c, Server: s}
+	return &Tester{t: t, Client: c, Server: s}
 }

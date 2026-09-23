@@ -20,7 +20,7 @@ func (s *Server) History(
 		return response.Fail(e.Error())
 	}
 
-	h, e := s.client.History(t.Identifier)
+	h, e := s.client.Page(t.Identifier).History()
 
 	if e != nil {
 		return s.captureDetail(e)

@@ -10,7 +10,6 @@ import (
 
 func TestHybridSearchReturnsResults(t *testing.T) {
 	s, o := indexedTestStore(t)
-	defer s.Close()
 	e := embedTestDocuments(s, o)
 	assert.FatalOnError(t, e)
 	option := search_option.New("search pipeline", 10)
@@ -21,7 +20,6 @@ func TestHybridSearchReturnsResults(t *testing.T) {
 
 func TestHybridSearchDiffersFromKeyword(t *testing.T) {
 	s, o := indexedTestStore(t)
-	defer s.Close()
 	e := embedTestDocuments(s, o)
 	assert.FatalOnError(t, e)
 	keyword := s.MustSearchKeyword("context resolution", 5, "", false, nil)
@@ -43,7 +41,6 @@ func TestHybridSearchDiffersFromKeyword(t *testing.T) {
 
 func TestSearchFallsBackToKeywordWithoutEmbeddings(t *testing.T) {
 	s, o := indexedTestStore(t)
-	defer s.Close()
 	option := search_option.New("chunking strategy", 10)
 	outcome := s.SearchWithFallback(option, o)
 	assert.True(t, outcome.Degraded)
@@ -52,7 +49,6 @@ func TestSearchFallsBackToKeywordWithoutEmbeddings(t *testing.T) {
 
 func TestHybridSearchMetadataFilter(t *testing.T) {
 	s, o := indexedTestStore(t)
-	defer s.Close()
 	e := embedTestDocuments(s, o)
 	assert.FatalOnError(t, e)
 	s.SetMetadata("test", "alpha.md", map[string][]string{"scope": {"alpha"}})

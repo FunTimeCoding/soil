@@ -9,7 +9,6 @@ import (
 
 func TestModelContext(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	assert.Count(t, 7, o.Client.ListTools())
 	created := o.Client.MustCallTool(
 		constant.CreateView,

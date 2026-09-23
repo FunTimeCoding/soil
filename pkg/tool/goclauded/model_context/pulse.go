@@ -24,10 +24,11 @@ func (s *Server) pulse(
 		return response.Fail("line is required: %v", e)
 	}
 
-	if f := s.service.SendPulse(
+	if _, f := s.service.SendPulse(
 		c.SessionIdentifier,
 		c.Callsign,
 		line,
+		false,
 	); f != nil {
 		return s.captureFail(f, library.UnexpectedError)
 	}

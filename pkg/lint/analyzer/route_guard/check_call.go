@@ -42,11 +42,10 @@ func checkCall(
 	}
 
 	results.AddConcern(
-		concern.NewFile(
+		concern.NewPosition(
 			"route_guard",
 			"register routes through guard verbs (Open, Token, Session), not directly on the mux",
-			p.Fset.Position(call.Pos()).Filename,
-			false,
+			p.Fset.Position(call.Pos()),
 		),
 	)
 }

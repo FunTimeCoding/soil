@@ -5,39 +5,8 @@ import (
 	libraryConstant "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/integration/model_context_tester"
-	"github.com/funtimecoding/soil/pkg/web"
-	"github.com/mattermost/mattermost/server/public/model"
-	"net/http"
 	"testing"
 )
-
-func upstream(m *http.ServeMux) {
-	m.HandleFunc(
-		"/api/v4/posts/alfa",
-		func(
-			w http.ResponseWriter,
-			_ *http.Request,
-		) {
-			web.Encode(w, &model.Post{Id: "alfa", ChannelId: "bravo"})
-		},
-	)
-	m.HandleFunc(
-		"/api/v4/posts/reply",
-		func(
-			w http.ResponseWriter,
-			_ *http.Request,
-		) {
-			web.Encode(
-				w,
-				&model.Post{
-					Id:        "reply",
-					RootId:    "alfa",
-					ChannelId: "bravo",
-				},
-			)
-		},
-	)
-}
 
 func TestSubscribeThreadStoresAndIndexes(t *testing.T) {
 	r := model_context_tester.New(t, upstream)

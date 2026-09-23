@@ -2,24 +2,13 @@ package coordination
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration/base"
 	"testing"
 )
 
-func labelBody(
-	key string,
-	value string,
-	from string,
-) client.LabelRequest {
-	return client.LabelRequest{Key: key, Value: &value, From: &from}
-}
-
 func TestRestLabelSetUpdateRemove(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "working")
 	a.CheckLive()
 	set, e := a.RestClient.PostSessionLabelWithResponse(

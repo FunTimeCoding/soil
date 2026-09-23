@@ -16,6 +16,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
+	"time"
 )
 
 func Run(
@@ -24,7 +25,7 @@ func Run(
 ) {
 	r := i.Reporter()
 	l := logger.New(context.Background())
-	s := store.New(lite.New(l, o.LitePath))
+	s := store.New(lite.New(l, o.LitePath), time.Now)
 	defer s.Close()
 	v := service.New(s, notifier.New())
 	w := watcher.New(v, l, r, o.SeedDirectory)
@@ -46,7 +47,7 @@ func Run(
 						guard.New(m, o.ServiceTokens),
 					)
 				},
-			).WithMiddleware(u.Recovery(r)),
+			).WithMiddleware(u.Recovery(r)).WithDefaultCertificate(),
 		),
 	).RunUntilSignal()
 }

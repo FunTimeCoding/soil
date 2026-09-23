@@ -9,11 +9,8 @@ import (
 
 func TestSendDirectMessage(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	b := s.NewSession(t)
-	defer b.Close()
 	a.Announce(a.Name(), "sender")
 	b.Announce(b.Name(), "receiver")
 	b.CheckLive()
@@ -33,11 +30,8 @@ func TestSendDirectMessage(t *testing.T) {
 
 func TestSendBroadcast(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	b := s.NewSession(t)
-	defer b.Close()
 	a.Announce(a.Name(), "sender")
 	b.Announce(b.Name(), "listener")
 	b.CheckLive()

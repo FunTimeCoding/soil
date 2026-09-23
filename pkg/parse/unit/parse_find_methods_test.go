@@ -6,14 +6,6 @@ import (
 	"testing"
 )
 
-func chainedSource() string {
-	return "package test\n\nfunc Run() {\n\tlayout.New(i).WithTheme(theme.Straw).WithCommandPalette(\"/palette\")\n}\n"
-}
-
-func routeSource() string {
-	return "package test\n\nfunc Run() {\n\tm.HandleFunc(\"GET /palette\", a)\n\tm.HandleFunc(\"GET /favicon.ico\", b)\n}\n"
-}
-
 func TestFindMethodsChained(t *testing.T) {
 	f, _, e := parse.Source("test.go", chainedSource())
 	assert.Nil(t, e)

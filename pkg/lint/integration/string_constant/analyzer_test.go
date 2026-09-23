@@ -43,3 +43,21 @@ func TestExpected(t *testing.T) {
 	string_constant.Check(p, results)
 	testutil.AssertBlocked(t, results, 5)
 }
+
+func TestTester(t *testing.T) {
+	temporary := testutil.PrepareTestPackage(t, "testdata/src/tester")
+	testutil.WriteModFile(t, temporary, "tester.test")
+	p, results := testutil.LoadFromDirectory(t, temporary)
+	string_constant.Check(p, results)
+	testutil.AssertBlocked(t, results, 2)
+	testutil.AssertBlockedContains(
+		t,
+		results,
+		`constant constant.Name in expected value should be a literal`,
+	)
+	testutil.AssertBlockedContains(
+		t,
+		results,
+		`string literal "name" has constant constant.Name`,
+	)
+}

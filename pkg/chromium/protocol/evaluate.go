@@ -3,8 +3,8 @@ package protocol
 import "github.com/chromedp/chromedp"
 
 func (p *Protocol) Evaluate(
-	s string,
+	expression string,
 	result any,
-) {
-	p.client.RunContext(p.context, chromedp.Evaluate(s, &result))
+) error {
+	return chromedp.Run(p.context, chromedp.Evaluate(expression, result))
 }

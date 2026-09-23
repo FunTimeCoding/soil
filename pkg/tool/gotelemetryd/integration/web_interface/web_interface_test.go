@@ -9,7 +9,6 @@ import (
 
 func TestWebInterface(t *testing.T) {
 	o := web_interface_tester.New(t)
-	defer o.Close()
-	o.AssertStatus(constant.HeatmapPath, http.StatusOK)
-	o.AssertStatus(constant.EventsPath, http.StatusOK)
+	o.AssertStatus(http.StatusOK, constant.HeatmapPath)
+	o.AssertStatus(http.StatusOK, constant.EventsPath)
 }

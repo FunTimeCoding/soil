@@ -25,7 +25,7 @@ func (s *Server) dashboard(
 		w,
 		constant.DashboardTitle,
 		constant.DashboardPath,
-		html.H3(gomponents.Text("Seeds")),
+		html.H3(gomponents.Text(constant.SeedsTitle)),
 		sortLinks(modified),
 		html.Div(extended.StreamSwap(event), table),
 	)

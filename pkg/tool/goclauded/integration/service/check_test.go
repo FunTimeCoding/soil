@@ -3,26 +3,11 @@ package service
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration/fixture"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration/service_tester"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/queue"
 	"testing"
 	"time"
 )
-
-func entriesByKind(
-	entries []queue.Entry,
-	kind string,
-) []queue.Entry {
-	var result []queue.Entry
-
-	for _, e := range entries {
-		if e.Kind == kind {
-			result = append(result, e)
-		}
-	}
-
-	return result
-}
 
 func TestCheckNewSession(t *testing.T) {
 	s := service_tester.New(t)
@@ -45,7 +30,7 @@ func TestCheckWithMessage(t *testing.T) {
 	s.Send(r1.Callsign, "", "broadcast")
 	r := s.Check("session-1")
 	assert.True(t, r.Changed)
-	messages := entriesByKind(r.Entries, constant.QueueMessage)
+	messages := fixture.EntriesByKind(r.Entries, constant.QueueMessage)
 	assert.Count(t, 1, messages)
 }
 
@@ -58,7 +43,7 @@ func TestCheckWithTimeout(t *testing.T) {
 	s.Service.RunTimeoutSweep()
 	r = s.Check("session-1")
 	assert.True(t, r.Changed)
-	timeouts := entriesByKind(r.Entries, constant.QueueTimeout)
+	timeouts := fixture.EntriesByKind(r.Entries, constant.QueueTimeout)
 	assert.Count(t, 1, timeouts)
 	assert.String(
 		t,
@@ -74,7 +59,7 @@ func TestCheckWithReannounce(t *testing.T) {
 	s.Service.ClearBindings()
 	r = s.Check("session-1")
 	assert.True(t, r.Changed)
-	reannounce := entriesByKind(r.Entries, constant.QueueReannounce)
+	reannounce := fixture.EntriesByKind(r.Entries, constant.QueueReannounce)
 	assert.Count(t, 1, reannounce)
 }
 
@@ -86,7 +71,7 @@ func TestCheckWithSessionActivity(t *testing.T) {
 	s.Announce("session-2", r2.Callsign, "other work", "pkg/auth")
 	r := s.Check("session-1")
 	assert.True(t, r.Changed)
-	announces := entriesByKind(r.Entries, constant.QueueSessionAnnounce)
+	announces := fixture.EntriesByKind(r.Entries, constant.QueueSessionAnnounce)
 	assert.True(t, len(announces) > 0)
 }
 
@@ -100,7 +85,7 @@ func TestCheckCompleteTimeout(t *testing.T) {
 	s.Service.RunTimeoutSweep()
 	r = s.Check("session-1")
 	assert.True(t, r.Changed)
-	timeouts := entriesByKind(r.Entries, constant.QueueTimeout)
+	timeouts := fixture.EntriesByKind(r.Entries, constant.QueueTimeout)
 	assert.Count(t, 1, timeouts)
 	assert.String(
 		t,
@@ -115,10 +100,10 @@ func TestCheckConsumesEntries(t *testing.T) {
 	r2 := s.Store.EnsureSession("session-2")
 	s.Send(r2.Callsign, r1.Callsign, "hello")
 	first := s.Check("session-1")
-	messages := entriesByKind(first.Entries, constant.QueueMessage)
+	messages := fixture.EntriesByKind(first.Entries, constant.QueueMessage)
 	assert.Count(t, 1, messages)
 	second := s.Check("session-1")
-	messages = entriesByKind(second.Entries, constant.QueueMessage)
+	messages = fixture.EntriesByKind(second.Entries, constant.QueueMessage)
 	assert.Count(t, 0, messages)
 }
 
@@ -132,6 +117,9 @@ func TestCheckWithCompletionActivity(t *testing.T) {
 	s.Store.Advance(time.Second)
 	r := s.Check("session-1")
 	assert.True(t, r.Changed)
-	completions := entriesByKind(r.Entries, constant.QueueSessionComplete)
+	completions := fixture.EntriesByKind(
+		r.Entries,
+		constant.QueueSessionComplete,
+	)
 	assert.True(t, len(completions) > 0)
 }

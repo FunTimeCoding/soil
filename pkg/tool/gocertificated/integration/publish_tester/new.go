@@ -8,5 +8,5 @@ import (
 func New(t *testing.T) *Tester {
 	t.Helper()
 
-	return &Tester{Server: base.New(t)}
+	return &Tester{Server: base.New(t), t: t}
 }

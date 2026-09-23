@@ -11,11 +11,14 @@ func (s *Server) PostNotify(
 	_ context.Context,
 	r server.PostNotifyRequestObject,
 ) (server.PostNotifyResponseObject, error) {
-	if e := s.service.SendNotification(
+	delivered, e := s.service.SendNotification(
 		r.Body.Callsign,
 		r.Body.Source,
 		r.Body.Body,
-	); e != nil {
+		r.Body.Immediate != nil && *r.Body.Immediate,
+	)
+
+	if e != nil {
 		if not_found.Is(e) {
 			return server.PostNotify404JSONResponse(
 				server.Error{Error: e.Error()},
@@ -27,5 +30,5 @@ func (s *Server) PostNotify(
 		), nil
 	}
 
-	return server.PostNotify200Response{}, nil
+	return server.PostNotify200JSONResponse{Immediate: delivered}, nil
 }

@@ -10,7 +10,7 @@ import (
 )
 
 func Compute(
-	calls []tool_call.Call,
+	calls []*tool_call.Call,
 	registered map[string][]string,
 	paths map[string]string,
 	configured map[string]bool,

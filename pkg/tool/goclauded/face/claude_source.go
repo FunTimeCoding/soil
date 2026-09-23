@@ -16,7 +16,7 @@ type ClaudeSource interface {
 	Peek(sessionIdentifier string) *peek.Peek
 	Delete(sessionIdentifier string)
 	SessionsByTool(toolFilter string) []*claude.SessionToolCount
-	ToolCalls(sessionIdentifier string) []tool_call.Call
+	ToolCalls(sessionIdentifier string) []*tool_call.Call
 	ToolContext(
 		sessionIdentifier string,
 		toolFilter string,

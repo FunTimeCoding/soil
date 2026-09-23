@@ -43,11 +43,10 @@ func checkArgument(
 	}
 
 	results.AddConcern(
-		concern.NewFile(
+		concern.NewPosition(
 			"string_constant",
 			formatMessage(value, list),
-			p.Fset.Position(l.Pos()).Filename,
-			false,
+			p.Fset.Position(l.Pos()),
 		),
 	)
 }

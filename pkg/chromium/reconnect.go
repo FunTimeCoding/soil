@@ -3,6 +3,7 @@ package chromium
 import (
 	"fmt"
 	"github.com/chromedp/chromedp"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"log/slog"
 )
 
@@ -15,6 +16,15 @@ func (c *Client) reconnect() error {
 	}
 
 	c.cancel()
+
+	for _, x := range c.targets {
+		go func() {
+			if e := chromedp.Cancel(x); !errors.Deadline(e) {
+				errors.LogOnError(e)
+			}
+		}()
+	}
+
 	clear(c.targets)
 	fresh, cancel := chromedp.NewContext(c.allocator)
 
@@ -26,7 +36,11 @@ func (c *Client) reconnect() error {
 
 	c.context = fresh
 	c.cancel = cancel
-	c.listenTargets()
+
+	if e := c.listenTargets(); e != nil {
+		return fmt.Errorf("cdp reconnect listen: %w", e)
+	}
+
 	slog.Info("reconnected CDP context")
 
 	return nil

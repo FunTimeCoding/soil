@@ -10,7 +10,6 @@ import (
 
 func TestDashboardIsLive(t *testing.T) {
 	o := web_interface_tester.New(t)
-	defer o.Close()
 	body := o.Get(constant.DashboardPath)
 	assert.StringContains(t, "sse-connect", body)
 	assert.StringContains(t, "summary_strip", body)
@@ -19,7 +18,6 @@ func TestDashboardIsLive(t *testing.T) {
 
 func TestDashboardNoLongerPolls(t *testing.T) {
 	o := web_interface_tester.New(t)
-	defer o.Close()
 	assert.True(
 		t,
 		!strings.Contains(o.Get(constant.DashboardPath), "every 60s"),

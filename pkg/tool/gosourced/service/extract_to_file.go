@@ -5,16 +5,21 @@ import (
 	"github.com/dave/dst"
 	"github.com/dave/dst/decorator"
 	"github.com/dave/dst/decorator/resolver/goast"
+	"github.com/dave/dst/decorator/resolver/gopackages"
+	libraryConstant "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"github.com/funtimecoding/soil/pkg/strings/camel"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"go/ast"
 	"go/parser"
 	"go/token"
+	"golang.org/x/tools/go/packages"
 	"os"
 	"path/filepath"
+	"strings"
 )
 
 func (s *Service) ExtractToFile(
@@ -116,7 +121,12 @@ func (s *Service) ExtractToFile(
 	dec := decorator.NewDecoratorWithImports(
 		fileSet,
 		constant.StandalonePath,
-		goast.New(),
+		goast.WithResolver(
+			gopackages.WithConfig(
+				filepath.Dir(fullPath),
+				packages.Config{BuildFlags: resolve.BuildFlags(directory)},
+			),
+		),
 	)
 	source, e := dec.DecorateFile(file)
 
@@ -148,11 +158,15 @@ func (s *Service) ExtractToFile(
 		Decls: []dst.Decl{moved},
 	}
 
-	if e := restoreExtracted(source, fullPath, dryRun); e != nil {
+	for _, line := range buildConstraints(file) {
+		target.Decs.Start.Append(line, "\n")
+	}
+
+	if e := restoreExtracted(directory, source, fullPath, dryRun); e != nil {
 		return nil, e
 	}
 
-	if e := restoreExtracted(target, targetPath, dryRun); e != nil {
+	if e := restoreExtracted(directory, target, targetPath, dryRun); e != nil {
 		return nil, e
 	}
 
@@ -166,6 +180,27 @@ func (s *Service) ExtractToFile(
 	)
 
 	if countIdentities(file) == 1 {
+		if strings.HasSuffix(fullPath, libraryConstant.TestSuffix) {
+			r.AddConcern(
+				concern.NewFile(
+					"extracted",
+					fmt.Sprintf(
+						"%s was not renamed: test file naming is not one-identity-per-file; rename it by hand if %s no longer fits",
+						filepath.Base(fullPath),
+						filepath.Base(fullPath),
+					),
+					filePath,
+					true,
+				),
+			)
+
+			if dryRun {
+				r.MarkPlanned()
+			}
+
+			return r, nil
+		}
+
 		name := remainingIdentityName(file)
 		renamePath := filepath.Join(
 			filepath.Dir(fullPath),

@@ -29,6 +29,7 @@ func probe(
 
 	c, e := client.NewStreamableHttpClient(locator, opts...)
 	errors.PanicOnError(e)
+	defer errors.PanicClose(c)
 	x := context.Background()
 	errors.PanicOnError(c.Start(x))
 	_, e = c.Initialize(x, mcp.InitializeRequest{})

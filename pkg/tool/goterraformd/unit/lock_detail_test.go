@@ -2,21 +2,11 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/kubernetes/types/native/lease"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/types/lock_detail"
-	coordination "k8s.io/api/coordination/v1"
-	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"testing"
 	"time"
 )
-
-func annotated(v map[string]string) *lease.Lease {
-	return lease.New(
-		&coordination.Lease{ObjectMeta: meta.ObjectMeta{Annotations: v}},
-		"in-cluster",
-	)
-}
 
 func TestLockDetailParsesAnnotation(t *testing.T) {
 	d := lock_detail.New(

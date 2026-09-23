@@ -36,4 +36,6 @@ func TestBlocked(t *testing.T) {
 	testutil.AssertBlocked(t, results, 2)
 	testutil.AssertBlockedContains(t, results, "pflag")
 	testutil.AssertBlockedContains(t, results, "testify")
+	testutil.AssertBlockedAt(t, results, "flag_import.go", 3)
+	testutil.AssertBlockedAt(t, results, "testify_import.go", 3)
 }

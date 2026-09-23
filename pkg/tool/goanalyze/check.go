@@ -20,8 +20,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/string_concatenation"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/string_constant"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/struct_literal"
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/tester_receiver"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/type_receiver"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/unchecked_print_write"
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/unclosed_resource"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/value_return"
 	"github.com/funtimecoding/soil/pkg/lint/face"
 	"github.com/funtimecoding/soil/pkg/lint/output"
@@ -33,6 +35,7 @@ func check(
 	results *output.Results,
 	comment bool,
 	faces *face.Set,
+	summaries *unclosed_resource.Summaries,
 ) {
 	naming.Check(p, results, faces)
 	forbidden_call.Check(p, results)
@@ -49,12 +52,14 @@ func check(
 	omit_empty_zero.Check(p, results)
 	file_identity.Check(p, results)
 	type_receiver.Check(p, results)
+	tester_receiver.Check(p, results)
 	unchecked_print_write.Check(p, results)
 	anonymous_struct.Check(p, results)
 	value_return.Check(p, results)
 	stray_variable.Check(p, results)
 	stray_constant.Check(p, results)
 	constant_declaration.Check(p, results)
+	unclosed_resource.Check(p, results, summaries)
 
 	if comment {
 		stray_comment.Check(p, results)

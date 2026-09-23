@@ -6,20 +6,30 @@ func (s *Service) SendPulse(
 	sessionIdentifier string,
 	fromName string,
 	body string,
-) error {
+	immediate bool,
+) (bool, error) {
 	if e := s.store.SendPulse(sessionIdentifier, fromName, body); e != nil {
-		return e
+		return false, e
 	}
 
 	if fromName == "" {
 		callsign, e := s.store.CallsignBySessionIdentifier(sessionIdentifier)
 
 		if e != nil {
-			return e
+			return false, e
 		}
 
 		if callsign != "" {
-			return s.PushQueue(
+			if immediate {
+				return s.PushQueueImmediate(
+					sessionIdentifier,
+					callsign,
+					constant.QueuePulse,
+					body,
+				)
+			}
+
+			return false, s.PushQueue(
 				sessionIdentifier,
 				callsign,
 				constant.QueuePulse,
@@ -30,5 +40,5 @@ func (s *Service) SendPulse(
 
 	s.notify()
 
-	return nil
+	return false, nil
 }

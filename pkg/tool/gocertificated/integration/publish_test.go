@@ -8,9 +8,8 @@ import (
 
 func TestFirstPublishWritesBothRootFilesInOneCommit(t *testing.T) {
 	o := publish_tester.New(t)
-	defer o.Server.Close()
-	o.CreateRoot(t)
-	o.Publish(t)
+	o.CreateRoot()
+	o.Publish()
 	commit := o.Server.Forge.Commits()
 	assert.Integer(t, 1, len(commit))
 	assert.Strings(
@@ -25,9 +24,8 @@ func TestFirstPublishWritesBothRootFilesInOneCommit(t *testing.T) {
 
 func TestMissingFileIsCreatedNotUpdated(t *testing.T) {
 	o := publish_tester.New(t)
-	defer o.Server.Close()
-	o.CreateRoot(t)
-	o.Publish(t)
+	o.CreateRoot()
+	o.Publish()
 	assert.String(
 		t,
 		"create",
@@ -37,10 +35,9 @@ func TestMissingFileIsCreatedNotUpdated(t *testing.T) {
 
 func TestExistingFileIsUpdatedNotCreated(t *testing.T) {
 	o := publish_tester.New(t)
-	defer o.Server.Close()
 	o.Server.Forge.SeedFile("certificate/root/certificate.pem", "stale")
-	o.CreateRoot(t)
-	o.Publish(t)
+	o.CreateRoot()
+	o.Publish()
 	assert.String(
 		t,
 		"update",
@@ -50,11 +47,10 @@ func TestExistingFileIsUpdatedNotCreated(t *testing.T) {
 
 func TestSecondPublishOnlyCarriesTheNewAuthority(t *testing.T) {
 	o := publish_tester.New(t)
-	defer o.Server.Close()
-	o.CreateRoot(t)
-	o.Publish(t)
-	o.CreateCluster(t)
-	o.Publish(t)
+	o.CreateRoot()
+	o.Publish()
+	o.CreateCluster()
+	o.Publish()
 	commit := o.Server.Forge.Commits()
 	assert.Integer(t, 2, len(commit))
 	assert.Strings(
@@ -71,20 +67,18 @@ func TestSecondPublishOnlyCarriesTheNewAuthority(t *testing.T) {
 
 func TestPublishWithNothingPendingWritesNoCommit(t *testing.T) {
 	o := publish_tester.New(t)
-	defer o.Server.Close()
-	o.CreateRoot(t)
-	o.Publish(t)
-	o.Publish(t)
+	o.CreateRoot()
+	o.Publish()
+	o.Publish()
 	assert.Integer(t, 1, len(o.Server.Forge.Commits()))
 }
 
 func TestLeafCertificatesAreNeverPublished(t *testing.T) {
 	o := publish_tester.New(t)
-	defer o.Server.Close()
-	o.CreateRoot(t)
-	o.CreateCluster(t)
-	o.IssueLeaf(t)
-	o.Publish(t)
+	o.CreateRoot()
+	o.CreateCluster()
+	o.IssueLeaf()
+	o.Publish()
 	commit := o.Server.Forge.Commits()
 	assert.Integer(t, 1, len(commit))
 	assert.Integer(t, 6, len(commit[0].Actions))

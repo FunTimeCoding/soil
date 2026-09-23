@@ -12,7 +12,6 @@ import (
 
 func TestWebService(t *testing.T) {
 	o := web_service_tester.New(t)
-	defer o.Close()
 	c := o.Client
 	x := context.Background()
 	post, e := c.PostEventWithResponse(
@@ -55,7 +54,6 @@ func TestWebService(t *testing.T) {
 
 func TestIngestOperationNotRecorded(t *testing.T) {
 	o := web_service_tester.New(t)
-	defer o.Close()
 	x := context.Background()
 	_, e := o.Client.PostEventWithResponse(
 		x,

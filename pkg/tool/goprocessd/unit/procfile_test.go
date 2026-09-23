@@ -4,8 +4,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/procfile"
-	"os"
-	"path/filepath"
 	"testing"
 )
 
@@ -56,15 +54,4 @@ func TestParseCommandWithColons(t *testing.T) {
 	entries, e := procfile.Parse(path)
 	errors.PanicOnError(e)
 	assert.String(t, "sh -c \"echo host:port\"", entries[0].Command)
-}
-
-func writeProcfile(
-	t *testing.T,
-	content string,
-) string {
-	t.Helper()
-	path := filepath.Join(t.TempDir(), "Procfile")
-	errors.PanicOnError(os.WriteFile(path, []byte(content), 0644))
-
-	return path
 }

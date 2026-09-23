@@ -1,14 +1,11 @@
 package publish_tester
 
-import (
-	"github.com/funtimecoding/soil/pkg/assert"
-	"testing"
-)
+import "github.com/funtimecoding/soil/pkg/assert"
 
-func (o *Tester) Publish(t *testing.T) string {
-	t.Helper()
+func (o *Tester) Publish() string {
+	o.t.Helper()
 	commit, _, e := o.Server.Service.Publish()
-	assert.FatalOnError(t, e)
+	assert.FatalOnError(o.t, e)
 
 	return commit
 }

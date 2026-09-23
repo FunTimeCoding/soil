@@ -9,11 +9,8 @@ import (
 
 func TestRelease(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	b := s.NewSession(t)
-	defer b.Close()
 	a.Announce(a.Name(), "temporary work")
 	b.Announce(b.Name(), "watching")
 	b.CheckLive()
@@ -26,11 +23,8 @@ func TestRelease(t *testing.T) {
 
 func TestReleaseHistoryEvent(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	b := s.NewSession(t)
-	defer b.Close()
 	a.Announce(a.Name(), "observer")
 	b.Announce(b.Name(), "departing")
 	b.MustCallTool(constant.Release, map[string]any{})

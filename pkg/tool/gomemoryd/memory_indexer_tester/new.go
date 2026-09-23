@@ -23,5 +23,5 @@ func New(
 	c, e := client.NewClient(s.URL)
 	errors.PanicOnError(e)
 
-	return &Tester{Indexer: memory_indexer.New(c)}
+	return &Tester{t: t, Indexer: memory_indexer.New(c)}
 }

@@ -1,7 +1,7 @@
 package other
 
-import "example/pkg/target"
+import "example/pkg/target/constant"
 
 func Run() string {
-	return target.Mode
+	return constant.Mode
 }

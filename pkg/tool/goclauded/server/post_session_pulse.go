@@ -10,11 +10,18 @@ func (s *Server) PostSessionPulse(
 	_ context.Context,
 	r server.PostSessionPulseRequestObject,
 ) (server.PostSessionPulseResponseObject, error) {
-	if e := s.service.SendPulse(r.Identifier, "", r.Body.Body); e != nil {
+	delivered, e := s.service.SendPulse(
+		r.Identifier,
+		"",
+		r.Body.Body,
+		r.Body.Immediate != nil && *r.Body.Immediate,
+	)
+
+	if e != nil {
 		return server.PostSessionPulse500JSONResponse(
 			*s.captureFail(e, constant.UnexpectedError),
 		), nil
 	}
 
-	return server.PostSessionPulse200Response{}, nil
+	return server.PostSessionPulse200JSONResponse{Immediate: delivered}, nil
 }

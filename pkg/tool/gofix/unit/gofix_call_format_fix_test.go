@@ -5,12 +5,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gofix"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/unit/module_tester"
 	"path/filepath"
 	"testing"
 )
 
 func TestCallFormatFix(t *testing.T) {
-	directory := writeCallFormatTestModule(t)
+	directory := module_tester.CallFormat(t)
 	r := output.NewResultsWithDirectory(directory)
 	gofix.RunCallFormatFixWithDirectory([]string{"./..."}, directory, r)
 	t.Run(
@@ -223,165 +224,46 @@ func TestCallFormatFix(t *testing.T) {
 		func(t *testing.T) {
 			applied := filterApplied(r.Entries)
 			assert.Integer(t, 12, len(applied))
-			assertResult(
+			assertResultAt(
 				t,
 				applied,
 				"long_single_line.go",
-				"formatted call (line 4)",
+				4,
+				"formatted call",
 			)
-			assertResult(
-				t,
-				applied,
-				"shared_line.go",
-				"formatted call (line 8)",
-			)
-			assertResult(
+			assertResultAt(t, applied, "shared_line.go", 8, "formatted call")
+			assertResultAt(
 				t,
 				applied,
 				"first_arg_on_paren_line.go",
-				"formatted call (line 4)",
+				4,
+				"formatted call",
 			)
-			assertResult(
-				t,
-				applied,
-				"nested_indent.go",
-				"formatted call (line 6)",
-			)
-			assertResult(
-				t,
-				applied,
-				"deep_method.go",
-				"formatted call (line 14)",
-			)
-			assertResult(
+			assertResultAt(t, applied, "nested_indent.go", 6, "formatted call")
+			assertResultAt(t, applied, "deep_method.go", 14, "formatted call")
+			assertResultAt(
 				t,
 				applied,
 				"multiple_violations.go",
-				"formatted call (line 4)",
+				4,
+				"formatted call",
 			)
-			assertResult(
+			assertResultAt(
 				t,
 				applied,
 				"collapse_multi_line.go",
-				"formatted call (line 4)",
+				4,
+				"formatted call",
 			)
-			assertResult(t, applied, "compliant.go", "formatted call (line 5)")
-			assertResult(
+			assertResultAt(t, applied, "compliant.go", 5, "formatted call")
+			assertResultAt(
 				t,
 				applied,
 				"collapse_single_arg.go",
-				"formatted call (line 4)",
+				4,
+				"formatted call",
 			)
-			assertResult(
-				t,
-				applied,
-				"boundary_at_80.go",
-				"formatted call (line 4)",
-			)
+			assertResultAt(t, applied, "boundary_at_80.go", 4, "formatted call")
 		},
 	)
-}
-
-func writeCallFormatTestModule(t *testing.T) string {
-	t.Helper()
-	directory := t.TempDir()
-	testutil.WriteFile(t, directory, "go.mod", "module example\n\ngo 1.22\n")
-	testutil.WriteFile(
-		t,
-		directory,
-		"long_single_line.go",
-		"package example\n\nfunc LongSingleLine() {\n\ttwoArgs(\"something-long-enough\", \"to-push-this-well-past-the-eighty-character-column-limit\")\n}\n\nfunc twoArgs(a, b string) {}\n",
-	)
-	testutil.WriteFile(
-		t,
-		directory,
-		"shared_line.go",
-		"package example\n\ntype Options struct {\n\tValue int\n}\n\nfunc SharedLine() {\n\twithStruct(\n\t\t\"name\", Options{\n\t\t\tValue: 1,\n\t\t},\n\t)\n}\n\nfunc withStruct(a string, b Options) {}\n",
-	)
-	testutil.WriteFile(
-		t,
-		directory,
-		"first_arg_on_paren_line.go",
-		"package example\n\nfunc FirstArgOnParenLine() {\n\twithMap(\"name\",\n\t\tmap[string]any{\n\t\t\t\"key\": \"value\",\n\t\t},\n\t)\n}\n\nfunc withMap(a string, b map[string]any) {}\n",
-	)
-	testutil.WriteFile(
-		t,
-		directory,
-		"nested_indent.go",
-		"package example\n\nfunc NestedIndent() {\n\tif true {\n\t\tif true {\n\t\t\ttwoArgs(\"something-long-enough-to-exceed\", \"the-eighty-character-limit-at-this-indent-level\")\n\t\t}\n\t}\n}\n",
-	)
-	testutil.WriteFile(
-		t,
-		directory,
-		"compliant.go",
-		"package example\n\nfunc Compliant() {\n\ttwoArgs(\"alpha\", \"bravo\")\n\ttwoArgs(\n\t\t\"alpha\",\n\t\t\"bravo\",\n\t)\n}\n",
-	)
-	testutil.WriteFile(
-		t,
-		directory,
-		"multiple_violations.go",
-		"package example\n\nfunc MultipleViolations() {\n\tfourArgs(\n\t\t\"adopted\", \"bravo\",\n\t\t\"charlie\", \"delta\",\n\t)\n}\n\nfunc fourArgs(a, b, c, d string) {}\n",
-	)
-	testutil.WriteFile(
-		t,
-		directory,
-		"deep_method.go",
-		"package example\n\ntype Logger struct{}\n\nfunc (l *Logger) Structured(args ...string) {}\n\ntype Poller struct {\n\tlogger *Logger\n}\n\nfunc (p *Poller) Run() {\n\tdefer func() {\n\t\tif v := recover(); v != nil {\n\t\t\tp.logger.Structured(\n\t\t\t\t\"recover failed\",\n\t\t\t\t\"error\", \"value\",\n\t\t\t)\n\t\t}\n\t}()\n}\n",
-	)
-	testutil.WriteFile(
-		t,
-		directory,
-		"collapse_single_arg.go",
-		"package example\n\nfunc CollapseSingleArg() {\n\toneArg(\n\t\t\"short\",\n\t)\n}\n\nfunc oneArg(a string) {}\n",
-	)
-	testutil.WriteFile(
-		t,
-		directory,
-		"boundary_at_80.go",
-		"package example\n\nfunc BoundaryAt80() {\n\ttwoArgs(\n\t\t\"aaaaaaaaaaaaaaaaaaaaaa\",\n\t\t\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\n\t)\n}\n",
-	)
-	testutil.WriteFile(
-		t,
-		directory,
-		"boundary_at_81.go",
-		"package example\n\nfunc BoundaryAt81() {\n\ttwoArgs(\n\t\t\"aaaaaaaaaaaaaaaaaaaaaa\",\n\t\t\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\n\t)\n}\n",
-	)
-	testutil.WriteFile(
-		t,
-		directory,
-		"collapse_multi_line.go",
-		"package example\n\nfunc CollapseMultiLine() {\n\ttwoArgs(\n\t\t\"alpha\",\n\t\t\"bravo\",\n\t)\n}\n",
-	)
-	testutil.WriteFile(
-		t,
-		directory,
-		"collapse_preserves_long.go",
-		"package example\n\nfunc CollapsePreservesLong() {\n\ttwoArgs(\n\t\t\"something-long-enough\",\n\t\t\"to-push-this-well-past-the-eighty-character-column-limit\",\n\t)\n}\n",
-	)
-	testutil.WriteFile(
-		t,
-		directory,
-		"struct_field_padding.go",
-		"package example\n\ntype Thing struct {\n\tLongFieldName string\n\tShort         string\n}\n\nfunc StructFieldPadding() Thing {\n\treturn Thing{\n\t\tLongFieldName: \"value\",\n\t\tShort: someFunc(\n\t\t\t\"aaaaaaaaaaaaaaaaa\",\n\t\t\t\"bbbbbbbbbbbbbbbbbbbbbbbb\",\n\t\t),\n\t}\n}\n\nfunc someFunc(a, b string) string { return a }\n",
-	)
-	testutil.WriteFile(
-		t,
-		directory,
-		"trailing_content.go",
-		"package example\n\ntype Chain struct{}\n\nfunc (c Chain) Method(a, b string) Chain { return c }\nfunc (c Chain) Suffix() {}\n\nfunc TrailingContent() {\n\tChain{}.Method(\n\t\t\"aaaaaaaaaaaaaaaaaaa\",\n\t\t\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\n\t).Suffix()\n}\n",
-	)
-	testutil.WriteFile(
-		t,
-		directory,
-		"ellipsis_stays.go",
-		"package example\n\nfunc EllipsisStays(items []string) {\n\tvariadicFunc(\n\t\titems...,\n\t)\n}\n\nfunc variadicFunc(args ...string) {}\n",
-	)
-	testutil.WriteFile(
-		t,
-		directory,
-		"var_block_padding.go",
-		"package example\n\nvar (\n\tLongName = someFunc(\"short\", \"args\")\n\tX        = someFunc(\n\t\t\"aaaaaaaaaaaaaaaaaaaaa\",\n\t\t\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\n\t)\n)\n",
-	)
-
-	return directory
 }

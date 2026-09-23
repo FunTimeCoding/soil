@@ -22,9 +22,10 @@ type Session struct {
 	WorkDirectory       string     `gorm:"column:work_directory"`
 	Branch              string     `gorm:"column:branch"`
 	SessionTimestamp    string     `gorm:"column:session_timestamp"`
-	Listening           bool       `gorm:"column:listening"`
 	TimedOut            string     `gorm:"column:timed_out"`
 	LastSeen            time.Time  `gorm:"column:last_seen"`
+	LastPromptAt        *time.Time `gorm:"column:last_prompt_at"`
+	LastTurnEndAt       *time.Time `gorm:"column:last_turn_end_at"`
 	StartedAt           time.Time  `gorm:"column:started_at"`
 	LastActiveAt        time.Time  `gorm:"column:last_active_at"`
 	ClosedAt            *time.Time `gorm:"column:closed_at"`

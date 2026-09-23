@@ -1,13 +1,18 @@
 package protocol
 
-import "github.com/funtimecoding/soil/pkg/chromium"
+import (
+	"github.com/funtimecoding/soil/pkg/chromium"
+	"github.com/funtimecoding/soil/pkg/chromium/constant"
+)
 
-func New(tab string) *Protocol {
-	c := chromium.NewEnvironment()
+func New(
+	c *chromium.Client,
+	tab string,
+) *Protocol {
 	t := c.TabByHost(tab)
 
 	if t == nil {
-		panic("tab not found")
+		panic(constant.TabNotFound)
 	}
 
 	return &Protocol{client: c, context: c.TargetContext(t.Identifier)}

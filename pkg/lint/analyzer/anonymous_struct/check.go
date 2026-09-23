@@ -1,12 +1,9 @@
 package anonymous_struct
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"go/ast"
 	"golang.org/x/tools/go/packages"
-	"path/filepath"
-	"strings"
 )
 
 func Check(
@@ -15,12 +12,6 @@ func Check(
 ) {
 	for _, file := range p.Syntax {
 		if ast.IsGenerated(file) {
-			continue
-		}
-
-		name := filepath.Base(p.Fset.File(file.Pos()).Name())
-
-		if strings.HasSuffix(name, constant.TestSuffix) {
 			continue
 		}
 

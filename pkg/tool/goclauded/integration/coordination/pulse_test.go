@@ -10,9 +10,7 @@ import (
 
 func TestExternalPulseReachesSessionViaQueue(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "working")
 	a.CheckLive()
 	r, e := a.RestClient.PostSessionPulseWithResponse(
@@ -30,9 +28,7 @@ func TestExternalPulseReachesSessionViaQueue(t *testing.T) {
 
 func TestModelContextSelfPulseDoesNotEchoBack(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "working")
 	a.CheckLive()
 	a.MustCallTool(
@@ -46,9 +42,7 @@ func TestModelContextSelfPulseDoesNotEchoBack(t *testing.T) {
 
 func TestExternalPulseConsumedOnDrain(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "working")
 	a.CheckLive()
 	r, e := a.RestClient.PostSessionPulseWithResponse(

@@ -230,17 +230,14 @@ func (s *Server) register() {
 				mcp.Required(),
 				mcp.Description("Message text"),
 			),
-		),
-		s.send,
-	)
-	s.server.AddTool(
-		mcp.NewTool(
-			constant.Listen,
-			mcp.WithDescription(
-				"Opt in to being woken by messages from other sessions. When listening, inbound messages will wake you in a new turn.",
+			mcp.WithBoolean(
+				constant.Immediate,
+				mcp.Description(
+					"Wake the recipient now instead of waiting for their next prompt. Only for messages that cannot wait - an immediate message costs the recipient a turn the moment it lands.",
+				),
 			),
 		),
-		s.listen,
+		s.send,
 	)
 	s.server.AddTool(
 		mcp.NewTool(

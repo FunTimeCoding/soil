@@ -23,11 +23,11 @@ func (s *Server) Navigate(
 		return response.Fail(e.Error())
 	}
 
-	x := s.client.AcquireTarget(t.Identifier)
+	p := s.client.Page(t.Identifier)
 	e = withTimeoutAction(
 		constant.TargetTimeout,
 		func() error {
-			return s.client.Navigate(x, a.Locator)
+			return p.Navigate(a.Locator)
 		},
 	)
 

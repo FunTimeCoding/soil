@@ -35,11 +35,11 @@ func (s *Server) Fill(
 	}
 
 	direct := a.Direct != nil && *a.Direct
-	x := s.client.AcquireTarget(t.Identifier)
+	p := s.client.Page(t.Identifier)
 	e = withTimeoutAction(
 		constant.TargetTimeout,
 		func() error {
-			return s.client.FillNode(x, backendIdentifier, a.Value, direct)
+			return p.FillNode(backendIdentifier, a.Value, direct)
 		},
 	)
 
@@ -54,7 +54,7 @@ func (s *Server) Fill(
 	nodes, e := withTimeout(
 		constant.TargetTimeout,
 		func() ([]*snapshot.Node, error) {
-			return s.client.Snapshot(x)
+			return p.Snapshot()
 		},
 	)
 

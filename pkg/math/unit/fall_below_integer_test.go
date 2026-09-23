@@ -1,29 +1,22 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/math/fall_below"
+	"github.com/funtimecoding/soil/pkg/math/unit/math_tester"
 	"testing"
 )
 
-func TestFallBelowInteger(t *testing.T) {
-	// Short by 1
-	fallBelowIntegerAssertInteger(t, 51, 50, 50, false)
-	// Reached exactly
-	fallBelowIntegerAssertInteger(t, 50, 49, 50, true)
-	// Exceed by 1
-	fallBelowIntegerAssertInteger(t, 51, 49, 50, true)
-	// Go above
-	fallBelowIntegerAssertInteger(t, 49, 51, 50, false)
+func TestFallBelowIntegerShortByOne(t *testing.T) {
+	math_tester.AssertFallBelowInteger(t, false, 51, 50, 50)
 }
 
-func fallBelowIntegerAssertInteger(
-	t *testing.T,
-	past int,
-	now int,
-	threshold int,
-	expect bool,
-) {
-	t.Helper()
-	assert.Boolean(t, expect, fall_below.Integer(past, now, threshold))
+func TestFallBelowIntegerReachedExactly(t *testing.T) {
+	math_tester.AssertFallBelowInteger(t, true, 50, 49, 50)
+}
+
+func TestFallBelowIntegerExceedByOne(t *testing.T) {
+	math_tester.AssertFallBelowInteger(t, true, 51, 49, 50)
+}
+
+func TestFallBelowIntegerGoAbove(t *testing.T) {
+	math_tester.AssertFallBelowInteger(t, false, 49, 51, 50)
 }

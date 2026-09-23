@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/service"
 	web "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
+	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/palette"
 	"github.com/funtimecoding/soil/pkg/web/view"
 	"maragu.dev/gomponents"
@@ -19,6 +20,11 @@ func New(s *service.Service) *Server {
 			Path:     "/",
 			Category: web.PaletteNavigate,
 		},
+		palette.Command{
+			Label:    constant.SessionsTitle,
+			Path:     constant.SessionsPath,
+			Category: web.PaletteNavigate,
+		},
 	)
 
 	return &Server{
@@ -29,6 +35,20 @@ func New(s *service.Service) *Server {
 				WithTheme(web.ThemeSprout).
 				WithStyle(constant.InlineStyle).
 				WithCommandPalette(web.PalettePath).
+				WithItems(
+					navigation_item.New(
+						constant.DashboardPath,
+						constant.SeedsTitle,
+					),
+					navigation_item.New(
+						constant.SessionsPath,
+						constant.SessionsTitle,
+					),
+					navigation_item.New(
+						constant.CountersPath,
+						constant.CountersTitle,
+					),
+				).
 				WithScript(
 					"https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js",
 				).

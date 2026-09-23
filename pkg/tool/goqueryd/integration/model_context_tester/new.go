@@ -14,5 +14,5 @@ func New(t *testing.T) *Tester {
 	c := model_context_client.New(t, s.Port)
 	t.Cleanup(c.Close)
 
-	return &Tester{Client: c, base: s}
+	return &Tester{t: t, Client: c, base: s}
 }

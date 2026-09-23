@@ -10,7 +10,7 @@ import (
 func (c *Client) Pulse(
 	sessionIdentifier string,
 	body string,
-) error {
+) (bool, error) {
 	response, e := c.generated.PostSessionPulseWithResponse(
 		context.Background(),
 		sessionIdentifier,
@@ -18,12 +18,15 @@ func (c *Client) Pulse(
 	)
 
 	if e != nil {
-		return e
+		return false, e
 	}
 
 	if response.StatusCode() != http.StatusOK {
-		return unexpected.Format("pulse status %d", response.StatusCode())
+		return false, unexpected.Format(
+			"pulse status %d",
+			response.StatusCode(),
+		)
 	}
 
-	return nil
+	return false, nil
 }

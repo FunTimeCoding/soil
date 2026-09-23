@@ -6,12 +6,12 @@ import (
 )
 
 func (s *Site) printNewButton() {
-	s.protocol.PrintNode(
+	s.session.PrintNode(
 		constant.OpenAINewSelector,
 		constant.OpenAIUsefulAttributes,
 	)
 	protocol.Print(
-		s.protocol.Select(constant.OpenAINewSelector, 0),
+		s.session.Select(constant.OpenAINewSelector, 0),
 		constant.OpenAIUsefulAttributes,
 	)
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/server"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service"
 )
 
 func (s *Server) GetProfile(
@@ -25,16 +26,20 @@ func (s *Server) GetProfile(
 		), nil
 	}
 
+	visible := service.NewProfileResult(
+		s.visibleMemories(result.Always),
+		s.visibleSummaries(result.Index),
+		s.visibleSearchResults(result.Relevant),
+		result.Impressions,
+		result.Completions,
+	)
 	response := server.GetProfile200JSONResponse{
-		Always: make([]server.ProfileMemory, 0, len(result.Always)),
-		Index:  make([]server.ProfileSummary, 0, len(result.Index)),
+		Text:   visible.Text,
+		Always: make([]server.ProfileMemory, 0, len(visible.Always)),
+		Index:  make([]server.ProfileSummary, 0, len(visible.Index)),
 	}
 
-	for _, m := range result.Always {
-		if s.skipHidden(m.Tags) {
-			continue
-		}
-
+	for _, m := range visible.Always {
 		entry := server.ProfileMemory{
 			Identifier:  int(m.Identifier),
 			Name:        m.Name,
@@ -53,14 +58,10 @@ func (s *Server) GetProfile(
 		response.Always = append(response.Always, entry)
 	}
 
-	if len(result.Relevant) > 0 {
-		relevant := make([]server.ProfileSearchResult, 0, len(result.Relevant))
+	if len(visible.Relevant) > 0 {
+		relevant := make([]server.ProfileSearchResult, 0, len(visible.Relevant))
 
-		for _, r := range result.Relevant {
-			if s.skipHidden(r.Tags) {
-				continue
-			}
-
+		for _, r := range visible.Relevant {
 			entry := server.ProfileSearchResult{
 				Identifier:  int(r.Identifier),
 				Name:        r.Name,
@@ -81,11 +82,7 @@ func (s *Server) GetProfile(
 		response.Relevant = &relevant
 	}
 
-	for _, m := range result.Index {
-		if s.skipHidden(m.Tags) {
-			continue
-		}
-
+	for _, m := range visible.Index {
 		entry := server.ProfileSummary{
 			Identifier:  int(m.Identifier),
 			Name:        m.Name,
@@ -160,6 +157,9 @@ func (s *Server) GetProfile(
 			RelevantTokens:     d.RelevantTokens,
 			RelevantTrimmed:    d.RelevantTrimmed,
 			TotalTokens:        d.TotalTokens,
+			Hidden: len(result.Always) - len(visible.Always) +
+				len(result.Index) - len(visible.Index) +
+				len(result.Relevant) - len(visible.Relevant),
 		}
 	}
 

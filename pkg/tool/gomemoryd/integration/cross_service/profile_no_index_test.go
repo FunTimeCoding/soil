@@ -3,13 +3,12 @@
 package cross_service
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/integration/cross_service_tester"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/integration/fixture"
 	goquerydConstant "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
-	"slices"
 	"testing"
 )
 
@@ -48,15 +47,15 @@ func TestProfileHidesNoIndexMemoriesFromIndex(t *testing.T) {
 			constant.Topic: "error handling patterns in MCP services",
 		},
 	)
-	var profile profileResult
-	assert.FatalOnError(t, json.Unmarshal([]byte(raw), &profile))
-	target := int64(identifier)
-	indexIDs := make([]int64, len(profile.Index))
-
-	for i, m := range profile.Index {
-		indexIDs[i] = m.Identifier
-	}
-
-	assert.False(t, slices.Contains(indexIDs, target))
-	assert.True(t, slices.Contains(collectIDs(profile.Relevant), target))
+	mark := fmt.Sprintf("(%d)", identifier)
+	assert.StringNotContains(
+		t,
+		fmt.Sprintf("%d error handling pattern", identifier),
+		fixture.Section(raw, constant.IndexSectionHeading),
+	)
+	assert.StringContains(
+		t,
+		mark,
+		fixture.Section(raw, constant.RelevantSectionHeading),
+	)
 }

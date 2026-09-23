@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/identity"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
-	"github.com/funtimecoding/soil/pkg/web/view"
+	"github.com/funtimecoding/soil/pkg/web/unit/web_tester"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -15,20 +15,9 @@ import (
 	"testing"
 )
 
-func panicServe(
-	http.ResponseWriter,
-	*http.Request,
-) {
-	panic("store failed")
-}
-
-func recoveryView() *view.View {
-	return view.New(layout.New(identity.New("test", "test tool", "test")))
-}
-
 func TestRecoveryPage(t *testing.T) {
 	v := recoveryView()
-	wrapped := v.Recovery(memory.New())(http.HandlerFunc(panicServe))
+	wrapped := v.Recovery(memory.New())(http.HandlerFunc(web_tester.PanicServe))
 	recorder := httptest.NewRecorder()
 	wrapped.ServeHTTP(
 		recorder,
@@ -41,15 +30,10 @@ func TestRecoveryPage(t *testing.T) {
 	assert.True(t, strings.Contains(body, "<nav"))
 }
 
-func renderBrand(l *layout.Page) string {
-	recorder := httptest.NewRecorder()
-	view.New(l).RenderPage(recorder, "", constant.RootPath)
-
-	return recorder.Body.String()
-}
-
 func TestBrandLinksHome(t *testing.T) {
-	body := renderBrand(layout.New(identity.New("test", "test tool", "test")))
+	body := web_tester.RenderBrand(
+		layout.New(identity.New("test", "test tool", "test")),
+	)
 	assert.True(
 		t,
 		strings.Contains(body, `<a href="/"><strong>test</strong></a>`),
@@ -58,7 +42,7 @@ func TestBrandLinksHome(t *testing.T) {
 }
 
 func TestLiveBrandCarriesConnectionDot(t *testing.T) {
-	body := renderBrand(
+	body := web_tester.RenderBrand(
 		layout.New(identity.New("test", "test tool", "test")).
 			WithLiveEndpoint(constant.LivePath),
 	)
@@ -91,7 +75,7 @@ func TestRenderPageWithSummary(t *testing.T) {
 
 func TestRecoveryFragment(t *testing.T) {
 	v := recoveryView()
-	wrapped := v.Recovery(memory.New())(http.HandlerFunc(panicServe))
+	wrapped := v.Recovery(memory.New())(http.HandlerFunc(web_tester.PanicServe))
 	recorder := httptest.NewRecorder()
 	request := httptest.NewRequest(http.MethodGet, constant.RootPath, nil)
 	request.Header.Set(constant.ExtendedRequest, "true")

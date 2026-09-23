@@ -1,25 +1,15 @@
 package unit
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/tracker"
+	"github.com/funtimecoding/soil/pkg/generative/unit/claude_tester"
+	"github.com/funtimecoding/soil/pkg/system/writer"
 	"os"
 	"path/filepath"
 	"testing"
 )
-
-func writeLine(
-	f *os.File,
-	line string,
-) {
-	_, e := fmt.Fprintf(f, "%s\n", line)
-
-	if e != nil {
-		panic(e)
-	}
-}
 
 func TestColdStart(t *testing.T) {
 	d := t.TempDir()
@@ -30,22 +20,25 @@ func TestColdStart(t *testing.T) {
 		t.Fatal(e)
 	}
 
-	writeLine(f, `{"type":"permission-mode","sessionId":"abc"}`)
-	writeLine(
+	writer.Print(f, "%s\n", `{"type":"permission-mode","sessionId":"abc"}`)
+	writer.Print(
 		f,
+		"%s\n",
 		`{"type":"user","timestamp":"2026-05-26T11:00:00.000Z","sessionId":"abc","slug":"my-slug","cwd":"/home/user","gitBranch":"main","message":{"role":"user","content":"can you help me fix the login bug"}}`,
 	)
-	writeLine(
+	writer.Print(
 		f,
+		"%s\n",
 		`{"type":"assistant","timestamp":"2026-05-26T11:01:00.000Z","sessionId":"abc","message":{"role":"assistant","content":"hi"}}`,
 	)
-	writeLine(
+	writer.Print(
 		f,
+		"%s\n",
 		`{"type":"user","timestamp":"2026-05-26T12:00:00.000Z","sessionId":"abc","message":{"role":"user","content":"now update the tests to match"}}`,
 	)
 	errors.PanicClose(f)
 	s := tracker.New()
-	assert.Nil(t, trackerRead(path, s))
+	assert.Nil(t, claude_tester.TrackerRead(path, s))
 	assert.Integer(t, 4, s.Lines)
 	assert.String(t, "2026-05-26T11:00:00.000Z", s.FirstTimestamp)
 	assert.String(t, "2026-05-26T12:00:00.000Z", s.LastTimestamp)
@@ -66,17 +59,19 @@ func TestIncremental(t *testing.T) {
 		t.Fatal(e)
 	}
 
-	writeLine(
+	writer.Print(
 		f,
+		"%s\n",
 		`{"type":"user","timestamp":"2026-05-26T11:00:00.000Z","sessionId":"abc","slug":"my-slug","cwd":"/home/user","gitBranch":"main","message":{"role":"user","content":"can you help me fix the login bug"}}`,
 	)
-	writeLine(
+	writer.Print(
 		f,
+		"%s\n",
 		`{"type":"assistant","timestamp":"2026-05-26T11:01:00.000Z","sessionId":"abc","message":{"role":"assistant","content":"hi"}}`,
 	)
 	errors.PanicClose(f)
 	s := tracker.New()
-	assert.Nil(t, trackerRead(path, s))
+	assert.Nil(t, claude_tester.TrackerRead(path, s))
 	assert.Integer(t, 2, s.Lines)
 	assert.Integer(t, 1, s.UserMessageCount)
 	assert.String(t, "can you help me fix the login bug", s.FirstMessage)
@@ -87,16 +82,18 @@ func TestIncremental(t *testing.T) {
 		t.Fatal(e)
 	}
 
-	writeLine(
+	writer.Print(
 		f,
+		"%s\n",
 		`{"type":"user","timestamp":"2026-05-26T12:00:00.000Z","sessionId":"abc","message":{"role":"user","content":"now update the tests to match"}}`,
 	)
-	writeLine(
+	writer.Print(
 		f,
+		"%s\n",
 		`{"type":"assistant","timestamp":"2026-05-26T12:01:00.000Z","sessionId":"abc","message":{"role":"assistant","content":"ok"}}`,
 	)
 	errors.PanicClose(f)
-	assert.Nil(t, trackerRead(path, s))
+	assert.Nil(t, claude_tester.TrackerRead(path, s))
 	assert.Integer(t, 4, s.Lines)
 	assert.Integer(t, 2, s.UserMessageCount)
 	assert.String(t, "can you help me fix the login bug", s.FirstMessage)
@@ -114,25 +111,27 @@ func TestIncrementalDoesNotOverwriteColdFields(t *testing.T) {
 		t.Fatal(e)
 	}
 
-	writeLine(
+	writer.Print(
 		f,
+		"%s\n",
 		`{"type":"user","timestamp":"2026-05-26T11:00:00.000Z","sessionId":"abc","slug":"original","cwd":"/original","gitBranch":"main"}`,
 	)
 	errors.PanicClose(f)
 	s := tracker.New()
-	assert.Nil(t, trackerRead(path, s))
+	assert.Nil(t, claude_tester.TrackerRead(path, s))
 	f, e = os.OpenFile(path, os.O_APPEND|os.O_WRONLY, 0644)
 
 	if e != nil {
 		t.Fatal(e)
 	}
 
-	writeLine(
+	writer.Print(
 		f,
+		"%s\n",
 		`{"type":"user","timestamp":"2026-05-26T12:00:00.000Z","sessionId":"abc","slug":"different","cwd":"/different","gitBranch":"feature"}`,
 	)
 	errors.PanicClose(f)
-	assert.Nil(t, trackerRead(path, s))
+	assert.Nil(t, claude_tester.TrackerRead(path, s))
 	assert.String(t, "original", s.Slug)
 	assert.String(t, "/original", s.WorkDirectory)
 	assert.String(t, "main", s.Branch)
@@ -140,7 +139,7 @@ func TestIncrementalDoesNotOverwriteColdFields(t *testing.T) {
 
 func TestMissingFile(t *testing.T) {
 	s := tracker.New()
-	e := trackerRead("/nonexistent/path.jsonl", s)
+	e := claude_tester.TrackerRead("/nonexistent/path.jsonl", s)
 	assert.True(t, e != nil)
 	assert.Integer(t, 0, s.Lines)
 }
@@ -154,21 +153,12 @@ func TestNoTimestamps(t *testing.T) {
 		t.Fatal(e)
 	}
 
-	writeLine(f, `{"type":"permission-mode","sessionId":"abc"}`)
-	writeLine(f, `{"type":"file-history-snapshot"}`)
+	writer.Print(f, "%s\n", `{"type":"permission-mode","sessionId":"abc"}`)
+	writer.Print(f, "%s\n", `{"type":"file-history-snapshot"}`)
 	errors.PanicClose(f)
 	s := tracker.New()
-	assert.Nil(t, trackerRead(path, s))
+	assert.Nil(t, claude_tester.TrackerRead(path, s))
 	assert.Integer(t, 2, s.Lines)
 	assert.String(t, "", s.FirstTimestamp)
 	assert.String(t, "", s.LastTimestamp)
-}
-
-func trackerRead(
-	path string,
-	s *tracker.State,
-) error {
-	_, e := tracker.Read(path, s, nil)
-
-	return e
 }

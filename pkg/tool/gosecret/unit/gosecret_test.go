@@ -5,20 +5,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gosecret"
-	"github.com/funtimecoding/soil/pkg/tool/gosecret/constant"
 	"go.yaml.in/yaml/v3"
 	"os"
-	"path/filepath"
 	"strings"
 	"testing"
 )
-
-func writeSecret(t *testing.T) string {
-	path := filepath.Join(t.TempDir(), "example-secret.yaml")
-	errors.PanicOnError(os.WriteFile(path, []byte(constant.TestManifest), 0644))
-
-	return path
-}
 
 func TestEncodeSecret(t *testing.T) {
 	path := writeSecret(t)

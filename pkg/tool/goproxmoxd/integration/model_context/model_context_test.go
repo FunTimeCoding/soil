@@ -9,14 +9,12 @@ import (
 
 func TestListNodes(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	result := o.Client.MustCallTool(constant.ListNodes, nil)
 	assert.StringContains(t, "test", result)
 }
 
 func TestListMachines(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	o.MockClient.AddMachine("test", 100, "web-server")
 	result := o.Client.MustCallTool(
 		constant.ListMachines,
@@ -27,7 +25,6 @@ func TestListMachines(t *testing.T) {
 
 func TestCreateMachineCloudInit(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	result := o.Client.MustCallTool(
 		constant.CreateMachine,
 		map[string]any{
@@ -41,7 +38,6 @@ func TestCreateMachineCloudInit(t *testing.T) {
 
 func TestCreateMachineWithDiskImport(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	result := o.Client.MustCallTool(
 		constant.CreateMachine,
 		map[string]any{
@@ -57,7 +53,6 @@ func TestCreateMachineWithDiskImport(t *testing.T) {
 
 func TestCreateMachineCDROM(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	result := o.Client.MustCallTool(
 		constant.CreateMachine,
 		map[string]any{
@@ -71,7 +66,6 @@ func TestCreateMachineCDROM(t *testing.T) {
 
 func TestCreateMachineCDROMAndCloudInitError(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	result := o.Client.MustCallToolError(
 		constant.CreateMachine,
 		map[string]any{
@@ -86,7 +80,6 @@ func TestCreateMachineCDROMAndCloudInitError(t *testing.T) {
 
 func TestUpdateMachine(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	o.MockClient.AddMachine("test", 100, "original")
 	result := o.Client.MustCallTool(
 		constant.UpdateMachine,
@@ -102,7 +95,6 @@ func TestUpdateMachine(t *testing.T) {
 
 func TestUpdateMachineDelete(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	o.MockClient.AddMachine("test", 100, "tagged-vm")
 	result := o.Client.MustCallTool(
 		constant.UpdateMachine,
@@ -117,7 +109,6 @@ func TestUpdateMachineDelete(t *testing.T) {
 
 func TestUpdateMachineSetAndDeleteConflict(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	o.MockClient.AddMachine("test", 100, "conflict-vm")
 	result := o.Client.MustCallToolError(
 		constant.UpdateMachine,
@@ -133,7 +124,6 @@ func TestUpdateMachineSetAndDeleteConflict(t *testing.T) {
 
 func TestUpdateMachineNoChanges(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	o.MockClient.AddMachine("test", 100, "original")
 	result := o.Client.MustCallToolError(
 		constant.UpdateMachine,
@@ -144,7 +134,6 @@ func TestUpdateMachineNoChanges(t *testing.T) {
 
 func TestCloneMachine(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	o.MockClient.AddMachine("test", 100, "template")
 	result := o.Client.MustCallTool(
 		constant.CloneMachine,
@@ -159,7 +148,6 @@ func TestCloneMachine(t *testing.T) {
 
 func TestSnippetCRUD(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	o.Client.MustCallTool(
 		constant.CreateSnippet,
 		map[string]any{
@@ -184,7 +172,6 @@ func TestSnippetCRUD(t *testing.T) {
 
 func TestListStorages(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	o.MockClient.AddStorage("test", "local", "dir", "iso,snippets")
 	result := o.Client.MustCallTool(
 		constant.ListStorages,
@@ -195,7 +182,6 @@ func TestListStorages(t *testing.T) {
 
 func TestGetMachine(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	o.MockClient.AddMachine("test", 100, "web-server")
 	result := o.Client.MustCallTool(
 		constant.GetMachine,
@@ -206,7 +192,6 @@ func TestGetMachine(t *testing.T) {
 
 func TestDeleteMachine(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	o.MockClient.AddMachine("test", 100, "disposable")
 	result := o.Client.MustCallTool(
 		constant.DeleteMachine,
@@ -217,7 +202,6 @@ func TestDeleteMachine(t *testing.T) {
 
 func TestDeleteMachineRunning(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	o.MockClient.AddMachine("test", 100, "running-vm")
 	o.MockClient.SetMachineStatus("test", 100, "running")
 	result := o.Client.MustCallToolError(
@@ -229,7 +213,6 @@ func TestDeleteMachineRunning(t *testing.T) {
 
 func TestStartMachine(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	o.MockClient.AddMachine("test", 100, "stopped-vm")
 	result := o.Client.MustCallTool(
 		constant.StartMachine,
@@ -240,7 +223,6 @@ func TestStartMachine(t *testing.T) {
 
 func TestCreateMachineSnapshot(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	o.MockClient.AddMachine("test", 100, "snapshot-target")
 	result := o.Client.MustCallTool(
 		constant.CreateMachineSnapshot,
@@ -255,7 +237,6 @@ func TestCreateMachineSnapshot(t *testing.T) {
 
 func TestMachineNotFound(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	result := o.Client.MustCallToolError(
 		constant.GetMachine,
 		map[string]any{"identifier": 999, "node": "test"},
@@ -265,7 +246,6 @@ func TestMachineNotFound(t *testing.T) {
 
 func TestStartContainer(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	o.MockClient.AddContainer("test", 101, "stopped-container")
 	result := o.Client.MustCallTool(
 		constant.StartContainer,
@@ -276,7 +256,6 @@ func TestStartContainer(t *testing.T) {
 
 func TestStopContainer(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	o.MockClient.AddContainer("test", 101, "running-container")
 	result := o.Client.MustCallTool(
 		constant.StopContainer,
@@ -287,7 +266,6 @@ func TestStopContainer(t *testing.T) {
 
 func TestShutdownContainer(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	o.MockClient.AddContainer("test", 101, "running-container")
 	result := o.Client.MustCallTool(
 		constant.ShutdownContainer,

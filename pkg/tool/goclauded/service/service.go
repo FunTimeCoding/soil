@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/funtimecoding/soil/pkg/chromium"
 	library "github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/face"
@@ -8,6 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/client"
 	queryd "github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
+	"sync"
 	"time"
 )
 
@@ -23,5 +25,9 @@ type Service struct {
 	logger            *logger.Logger
 	harbor            string
 	cache             *session_cache.Cache
+	browser           *chromium.Client
+	browserMutex      sync.Mutex
 	lastMemoryPoll    string
+	done              chan struct{}
+	doneOnce          sync.Once
 }

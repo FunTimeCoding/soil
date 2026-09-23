@@ -2,29 +2,13 @@ package coordination
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/connector"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration/base"
 	"testing"
 )
 
-func targetByIdentifier(
-	targets []*connector.Target,
-	identifier string,
-) *connector.Target {
-	for _, t := range targets {
-		if t.Identifier == identifier {
-			return t
-		}
-	}
-
-	return nil
-}
-
 func TestRecentSessionsCarriesLabels(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "working")
 	a.CheckLive()
 	set, e := a.RestClient.PostSessionLabelWithResponse(
@@ -44,9 +28,7 @@ func TestRecentSessionsCarriesLabels(t *testing.T) {
 
 func TestRecentSessionsCarriesActivityTime(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "working")
 	a.CheckLive()
 	targets, e := s.Connector(t).RecentSessions(25)
@@ -58,9 +40,7 @@ func TestRecentSessionsCarriesActivityTime(t *testing.T) {
 
 func TestRecentSessionsKeepsUnlabelledSessions(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "working")
 	a.CheckLive()
 	targets, e := s.Connector(t).RecentSessions(25)

@@ -7,6 +7,30 @@ import (
 	"testing"
 )
 
+func TestVariableGroupingDirectiveKeepsItsDeclaration(t *testing.T) {
+	r := lint.VariableGrouping(
+		"test.go",
+		strings.NewReader(
+			"package main\n\n//go:embed x\nvar a embed.FS\nvar b = 2\n",
+		),
+	)
+	assert.Boolean(t, false, r.HasConcerns())
+}
+
+func TestVariableGroupingStopsBeforeDirective(t *testing.T) {
+	r := lint.VariableGrouping(
+		"test.go",
+		strings.NewReader(
+			"package main\n\nvar a = 1\nvar b = 2\n//go:embed x\nvar c embed.FS\n",
+		),
+	)
+	assert.String(
+		t,
+		"package main\n\nvar (\n\ta = 1\n\tb = 2\n)\n//go:embed x\nvar c embed.FS\n",
+		r.Fixed,
+	)
+}
+
 func TestVariableGroupingConsecutive(t *testing.T) {
 	r := lint.VariableGrouping(
 		"test.go",

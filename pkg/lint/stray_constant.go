@@ -4,7 +4,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/file_report"
 	"io"
-	"path/filepath"
 	"strings"
 )
 
@@ -13,10 +12,8 @@ func StrayConstant(
 	r io.Reader,
 ) *file_report.Report {
 	s := file_report.New(path, r)
-	base := filepath.Base(path)
 
-	if base == "constant.go" ||
-		constantDirectory(path) {
+	if constantDirectory(path) {
 		for s.Scan() {
 			line, _ := s.Text()
 			s.PassLine(line)

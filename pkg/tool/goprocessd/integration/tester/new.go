@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/procfile"
-	"github.com/funtimecoding/soil/pkg/tool/goprocessd/server"
+	"github.com/funtimecoding/soil/pkg/tool/goprocessd/supervisor"
 	"os"
 	"path/filepath"
 	"testing"
@@ -33,7 +33,7 @@ func New(
 	errors.PanicOnError(e)
 	env := environment.New(os.Environ())
 	errors.PanicOnError(env.Load(envrcPath))
-	s := server.New(entries, env, procfilePath, envrcPath, socketPath)
+	s := supervisor.New(entries, env, procfilePath, envrcPath, socketPath)
 	go func() { errors.PanicOnError(s.Run()) }()
 	time.Sleep(100 * time.Millisecond)
 	t.Cleanup(

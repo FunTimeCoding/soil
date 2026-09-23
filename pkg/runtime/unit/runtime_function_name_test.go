@@ -6,8 +6,6 @@ import (
 	"testing"
 )
 
-func Fixture() {}
-
 func TestFunctionName(t *testing.T) {
 	assert.String(
 		t,

@@ -9,9 +9,7 @@ import (
 
 func TestCompletePushesIndexer(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "building things")
 	a.MustCallTool(
 		constant.EditSession,
@@ -28,9 +26,7 @@ func TestCompletePushesIndexer(t *testing.T) {
 
 func TestCompleteWithoutSlugSkipsPush(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "building things")
 	a.MustCallTool(
 		constant.Complete,

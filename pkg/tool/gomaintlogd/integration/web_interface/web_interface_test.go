@@ -11,10 +11,9 @@ import (
 
 func TestWebInterface(t *testing.T) {
 	o := web_interface_tester.New(t)
-	defer o.Close()
-	o.AssertStatus(constant.DashboardPath, http.StatusOK)
-	o.AssertStatus(constant.EntriesPath, http.StatusOK)
-	o.AssertStatus(constant.AddEntryPath, http.StatusOK)
+	o.AssertStatus(http.StatusOK, constant.DashboardPath)
+	o.AssertStatus(http.StatusOK, constant.EntriesPath)
+	o.AssertStatus(http.StatusOK, constant.AddEntryPath)
 	assert.StringContains(t, "No entries found", o.Get(constant.DashboardPath))
 	addBody := o.PostForm(
 		constant.AddEntryPath,
@@ -41,17 +40,17 @@ func TestWebInterface(t *testing.T) {
 	assert.StringContains(t, "Delete", detail)
 	assert.StringContains(t, "Permalink", detail)
 	assert.StringContains(t, `href="/entry/1"`, detail)
-	o.AssertStatus("/entry/1", http.StatusOK)
+	o.AssertStatus(http.StatusOK, "/entry/1")
 	page := o.Get("/entry/1")
 	assert.StringContains(t, "nginx was unresponsive, restarted", page)
 	assert.StringContains(t, "worker1", page)
-	o.AssertStatus("/entry/9999", http.StatusNotFound)
+	o.AssertStatus(http.StatusNotFound, "/entry/9999")
 	assert.StringContains(
 		t,
 		"This entry no longer exists",
 		o.Get("/entry/9999"),
 	)
-	o.AssertStatus("/entry/nonsense", http.StatusNotFound)
+	o.AssertStatus(http.StatusNotFound, "/entry/nonsense")
 	edit := o.Get("/edit?id=1")
 	assert.StringContains(t, "restarted web server", edit)
 	assert.StringContains(t, "Save", edit)

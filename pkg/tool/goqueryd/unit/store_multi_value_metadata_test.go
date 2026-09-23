@@ -4,52 +4,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/store_tester"
 	"testing"
 )
 
-func taggedStore(t *testing.T) *store.Store {
-	t.Helper()
-	s := openTestStore(t)
-	directory := t.TempDir()
-	writeFixture(t, directory, "alfa.md", "# Alfa\n\nKeyword quasar.\n")
-	writeFixture(t, directory, "bravo.md", "# Bravo\n\nKeyword quasar.\n")
-	writeFixture(t, directory, "charlie.md", "# Charlie\n\nKeyword quasar.\n")
-	s.AddCollection("test", directory, constant.DefaultGlob)
-	s.Index("test")
-	s.SetMetadata(
-		"test",
-		"alfa.md",
-		map[string][]string{
-			constant.FixtureTagKey:    {constant.FixtureBuildValue, "groom"},
-			constant.FixtureAuthorKey: {"one"},
-		},
-	)
-	s.SetMetadata(
-		"test",
-		"bravo.md",
-		map[string][]string{
-			constant.FixtureTagKey:    {constant.FixtureBuildValue},
-			constant.FixtureAuthorKey: {"two"},
-		},
-	)
-	s.SetMetadata(
-		"test",
-		"charlie.md",
-		map[string][]string{
-			constant.FixtureTagKey:    {"groom"},
-			constant.FixtureAuthorKey: {"one"},
-		},
-	)
-
-	return s
-}
-
-func tagFilter(value string) map[string]string {
-	return map[string]string{constant.FixtureTagKey: value}
-}
-
 func TestDocumentIsFoundByEitherOfItsValues(t *testing.T) {
-	s := taggedStore(t)
+	s := store_tester.TaggedStore(t)
 	defer s.Close()
 	build := s.MustSearchKeyword(
 		"quasar",
@@ -64,7 +24,7 @@ func TestDocumentIsFoundByEitherOfItsValues(t *testing.T) {
 }
 
 func TestAbsentValueMatchesNothing(t *testing.T) {
-	s := taggedStore(t)
+	s := store_tester.TaggedStore(t)
 	defer s.Close()
 	assert.Count(
 		t,
@@ -74,7 +34,7 @@ func TestAbsentValueMatchesNothing(t *testing.T) {
 }
 
 func TestTwoFiltersNarrowTogether(t *testing.T) {
-	s := taggedStore(t)
+	s := store_tester.TaggedStore(t)
 	defer s.Close()
 	results := s.MustSearchKeyword(
 		"quasar",
@@ -91,7 +51,7 @@ func TestTwoFiltersNarrowTogether(t *testing.T) {
 }
 
 func TestReplaceRemovesDroppedValues(t *testing.T) {
-	s := taggedStore(t)
+	s := store_tester.TaggedStore(t)
 	defer s.Close()
 	s.SetMetadata(
 		"test",
@@ -108,7 +68,7 @@ func TestReplaceRemovesDroppedValues(t *testing.T) {
 }
 
 func TestScalarKeyStaysScalar(t *testing.T) {
-	s := taggedStore(t)
+	s := store_tester.TaggedStore(t)
 	defer s.Close()
 	filter := map[string]string{constant.FixtureAuthorKey: "one"}
 	results := s.EnrichResults(
@@ -120,7 +80,7 @@ func TestScalarKeyStaysScalar(t *testing.T) {
 }
 
 func TestResultCarriesEveryValue(t *testing.T) {
-	s := taggedStore(t)
+	s := store_tester.TaggedStore(t)
 	defer s.Close()
 	two := map[string]string{constant.FixtureAuthorKey: "two"}
 	results := s.EnrichResults(
@@ -138,10 +98,10 @@ func TestResultCarriesEveryValue(t *testing.T) {
 }
 
 func TestCollectionFacetsCountEachValue(t *testing.T) {
-	s := taggedStore(t)
+	s := store_tester.TaggedStore(t)
 	defer s.Close()
 	facets := s.CollectionFacets("test", nil, 20, constant.FixtureTagKey)
-	tag := findFacet(facets, constant.FixtureTagKey)
+	tag := store_tester.FindFacet(facets, constant.FixtureTagKey)
 	assert.NotNil(t, tag)
 	assert.Integer(t, 2, tag.Distinct)
 	assert.Integer(t, 2, tag.Values[constant.FixtureBuildValue])
@@ -149,7 +109,7 @@ func TestCollectionFacetsCountEachValue(t *testing.T) {
 }
 
 func TestPanelQueryShape(t *testing.T) {
-	s := taggedStore(t)
+	s := store_tester.TaggedStore(t)
 	defer s.Close()
 	filter := tagFilter(constant.FixtureBuildValue)
 	found := s.MustSearchKeyword("quasar", 10, "", false, filter)
@@ -163,7 +123,7 @@ func TestPanelQueryShape(t *testing.T) {
 }
 
 func TestRepeatedValueStoresOnce(t *testing.T) {
-	s := taggedStore(t)
+	s := store_tester.TaggedStore(t)
 	defer s.Close()
 	s.SetMetadata(
 		"test",

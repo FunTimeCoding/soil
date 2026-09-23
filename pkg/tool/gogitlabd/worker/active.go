@@ -1,10 +1,10 @@
 package worker
 
-import "github.com/funtimecoding/soil/pkg/tool/gogitlabd/types/board_entry"
+import "github.com/funtimecoding/soil/pkg/gitlab/status"
 
 func (w *Worker) Active() bool {
 	for _, entry := range w.Entries() {
-		if board_entry.Active(entry.Status) {
+		if status.Active(entry.Status) {
 			return true
 		}
 	}

@@ -4,26 +4,16 @@ import (
 	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/integration/fixture"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/integration/model_context_tester"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/save_option"
+	"strings"
 	"testing"
 )
 
-func decode(
-	t *testing.T,
-	raw string,
-) map[string]any {
-	t.Helper()
-	var result map[string]any
-	assert.FatalOnError(t, json.Unmarshal([]byte(raw), &result))
-
-	return result
-}
-
 func TestGetMemoryCompactByDefault(t *testing.T) {
 	s := model_context_tester.New(t)
-	identifier := documentSourcedMemory(t, s)
-	result := decode(
+	identifier := s.DocumentSourcedMemory()
+	result := fixture.Decode(
 		t,
 		s.MustCallTool(
 			constant.GetMemory,
@@ -54,8 +44,8 @@ func TestGetMemoryCompactByDefault(t *testing.T) {
 
 func TestGetMemoryDetailCarriesProvenance(t *testing.T) {
 	s := model_context_tester.New(t)
-	identifier := documentSourcedMemory(t, s)
-	result := decode(
+	identifier := s.DocumentSourcedMemory()
+	result := fixture.Decode(
 		t,
 		s.MustCallTool(
 			constant.GetMemory,
@@ -70,26 +60,9 @@ func TestGetMemoryDetailCarriesProvenance(t *testing.T) {
 	assert.True(t, result["is_active"].(bool))
 }
 
-func emptyContentParent(
-	t *testing.T,
-	s *model_context_tester.Tester,
-) int64 {
-	t.Helper()
-	o := save_option.New()
-	o.Name = "Document"
-	o.Content = ""
-	o.Description = "document description"
-	o.Type = "reference"
-	o.ProvenanceFile = "canon/Document.yaml"
-	identifier, e := s.Store().CreateMemory(o)
-	assert.FatalOnError(t, e)
-
-	return identifier
-}
-
 func TestGetMemoryGroupCompactByDefault(t *testing.T) {
 	s := model_context_tester.New(t)
-	parent := emptyContentParent(t, s)
+	parent := s.EmptyContentParent()
 	s.MustCallTool(
 		constant.SaveMemory,
 		map[string]any{
@@ -99,7 +72,7 @@ func TestGetMemoryGroupCompactByDefault(t *testing.T) {
 			constant.ParentIdentifier: parent,
 		},
 	)
-	result := decode(
+	result := fixture.Decode(
 		t,
 		s.MustCallTool(
 			constant.GetMemoryGroup,
@@ -128,7 +101,7 @@ func TestGetMemoryGroupCompactByDefault(t *testing.T) {
 
 func TestGetMemoryGroupCarriesRelations(t *testing.T) {
 	s := model_context_tester.New(t)
-	parent := emptyContentParent(t, s)
+	parent := s.EmptyContentParent()
 	s.MustCallTool(
 		constant.SaveMemory,
 		map[string]any{
@@ -154,7 +127,7 @@ func TestGetMemoryGroupCarriesRelations(t *testing.T) {
 			constant.Type:             "deep-dive",
 		},
 	)
-	result := decode(
+	result := fixture.Decode(
 		t,
 		s.MustCallTool(
 			constant.GetMemoryGroup,
@@ -170,8 +143,8 @@ func TestGetMemoryGroupCarriesRelations(t *testing.T) {
 
 func TestGetMemoryGroupDetailCarriesProvenance(t *testing.T) {
 	s := model_context_tester.New(t)
-	parent := documentSourcedMemory(t, s)
-	result := decode(
+	parent := s.DocumentSourcedMemory()
+	result := fixture.Decode(
 		t,
 		s.MustCallTool(
 			constant.GetMemoryGroup,
@@ -285,15 +258,15 @@ func TestProfileAlwaysTierCompact(t *testing.T) {
 			constant.Add:              constant.AlwaysTag,
 		},
 	)
-	result := decode(t, s.MustCallTool(constant.Profile, map[string]any{}))
-	always := result[constant.AlwaysTag].([]any)
-	assert.Count(t, 1, always)
-	first := always[0].(map[string]any)
-	assert.String(t, "gamma content", first[constant.Content].(string))
+	always := fixture.Section(
+		s.MustCallTool(constant.Profile, map[string]any{}),
+		constant.AlwaysSectionHeading,
+	)
+	assert.Integer(t, 1, strings.Count(always, constant.MemoryHeadingPrefix))
+	assert.StringContains(t, "## gamma (1)", always)
+	assert.StringContains(t, "gamma content", always)
 
 	for _, key := range []string{"created_at", "is_active", constant.Type} {
-		if _, found := first[key]; found {
-			t.Errorf("profile always tier carries %s", key)
-		}
+		assert.StringNotContains(t, key, always)
 	}
 }

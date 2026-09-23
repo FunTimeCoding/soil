@@ -31,6 +31,10 @@ type Forge interface {
 		project int64,
 		identifier int64,
 	) error
+	MustDeletePipeline(
+		project int64,
+		identifier int64,
+	)
 	Tags(project int64) ([]*tag.Tag, error)
 	MustTags(project int64) []*tag.Tag
 	CreateTag(

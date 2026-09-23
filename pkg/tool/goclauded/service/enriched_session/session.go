@@ -7,6 +7,9 @@ type Session struct {
 	Slug          string
 	Timestamp     string
 	LastSeen      time.Time
+	LastPromptAt  *time.Time
+	LastTurnEndAt *time.Time
+	ClosedAt      *time.Time
 	WorkDirectory string
 	Branch        string
 	Lines         int

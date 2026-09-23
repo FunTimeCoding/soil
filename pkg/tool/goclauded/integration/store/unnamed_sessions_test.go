@@ -23,7 +23,7 @@ func TestUnnamedSessionsFilterAndOrder(t *testing.T) {
 		"session-3",
 		map[string]any{"session_timestamp": "2026-07-02T10:00:00Z"},
 	)
-	editAlias(s, "session-3", "charted")
+	s.EditAlias("session-3", "charted")
 	sessions, e := s.Store.UnnamedSessions(0, 0)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 2, sessions)

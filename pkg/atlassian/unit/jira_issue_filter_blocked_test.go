@@ -1,7 +1,6 @@
 package unit
 
 import (
-	"github.com/andygrunwald/go-jira"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
@@ -24,21 +23,4 @@ func TestFilterBlocked(t *testing.T) {
 	assert.Count(t, 2, actual)
 	assert.String(t, "TEST-1", actual[0].Key)
 	assert.String(t, "TEST-3", actual[1].Key)
-}
-
-func blockBy(
-	i *jira.Issue,
-	key string,
-	status string,
-) {
-	i.Fields.IssueLinks = append(
-		i.Fields.IssueLinks,
-		&jira.IssueLink{
-			Type: jira.IssueLinkType{Inward: constant.JiraBlockedBy},
-			InwardIssue: &jira.Issue{
-				Key:    key,
-				Fields: &jira.IssueFields{Status: &jira.Status{Name: status}},
-			},
-		},
-	)
 }

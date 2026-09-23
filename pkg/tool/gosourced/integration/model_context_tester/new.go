@@ -14,6 +14,7 @@ func New(
 	s := base.New(t, fixture)
 
 	return &Tester{
+		t:         t,
 		server:    s,
 		Client:    model_context_client.New(t, s.Port),
 		Directory: s.Directory,

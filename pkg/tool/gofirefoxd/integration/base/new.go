@@ -30,6 +30,8 @@ func New(t *testing.T) *Server {
 			)
 		},
 	)
+	result := &Server{MockClient: c, Server: v}
+	t.Cleanup(result.Close)
 
-	return &Server{MockClient: c, Server: v}
+	return result
 }

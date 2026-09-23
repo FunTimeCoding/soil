@@ -6,12 +6,12 @@ import (
 )
 
 func (s *Site) clickNew() {
-	n := s.protocol.Select(constant.OpenAINewSelector, 0)
+	n := s.session.Select(constant.OpenAINewSelector, 0)
 
 	if n == nil {
 		return
 	}
 
-	s.protocol.ClickSearch(n.FullXPath())
+	s.session.ClickSearch(n.FullXPath())
 	time.Sleep(1 * time.Second)
 }

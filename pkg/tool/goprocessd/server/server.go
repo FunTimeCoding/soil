@@ -1,23 +1,7 @@
 package server
 
-import (
-	"github.com/funtimecoding/soil/pkg/tool/goprocessd/environment"
-	"github.com/funtimecoding/soil/pkg/tool/goprocessd/process"
-	"sync"
-)
+import "github.com/funtimecoding/soil/pkg/tool/goprocessd/supervisor"
 
 type Server struct {
-	processes    []*process.Process
-	maxNameWidth int
-	environment  *environment.Environment
-	procfilePath string
-	envrcPath    string
-	socketPath   string
-	running      int
-	waveActive   bool
-	countMutex   sync.Mutex
-	processMutex sync.RWMutex
-	commandMutex sync.Mutex
-	waveMutex    sync.Mutex
-	allDone      chan struct{}
+	supervisor *supervisor.Supervisor
 }

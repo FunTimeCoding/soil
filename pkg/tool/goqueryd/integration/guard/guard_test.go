@@ -20,7 +20,6 @@ import (
 
 func TestGuard(t *testing.T) {
 	s := store.New(connection.NewMemory())
-	defer s.Close()
 	v := service.New(s, ollama.NewEnvironment(), mock_reranker.New())
 	w := model_context_server.New(
 		t,

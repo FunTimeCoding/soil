@@ -1,77 +1,21 @@
 package unit
 
 import (
-	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/chat/constant"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/notation"
-	"github.com/funtimecoding/soil/pkg/relational/lite"
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/mock_client"
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/notifier"
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/store"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/store/subscription"
-	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/watcher"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/worker_tester"
 	"github.com/mattermost/mattermost/server/public/model"
 	"testing"
-	"time"
 )
 
-func newDispatchWatcher(
-	t *testing.T,
-) (*watcher.Watcher, *store.Store, *mock_client.Client, *notifySink) {
-	t.Helper()
-	sink, c := newNotifyClient(t)
-	s := store.New(lite.NewMemory())
-	r := memory.New()
-	chat := mock_client.New("selfuser")
-
-	return watcher.New(
-		chat,
-		s,
-		notifier.New(c, "mattermost", r),
-		logger.New(context.Background()),
-		r,
-		time.Hour,
-	), s, chat, sink
-}
-
-func dispatchAt() time.Time {
-	return time.Date(2026, 9, 8, 14, 32, 0, 0, time.Local)
-}
-
-func postEvent(p *model.Post) *model.WebSocketEvent {
-	v := &model.WebSocketEvent{}
-	v = v.SetEvent(model.WebsocketEventPosted)
-
-	return v.SetData(
-		map[string]any{constant.MattermostPostField: notation.Encode(p, false)},
-	)
-}
-
-func reactionEvent(
-	kind model.WebsocketEventType,
-	r *model.Reaction,
-) *model.WebSocketEvent {
-	v := &model.WebSocketEvent{}
-	v = v.SetEvent(kind)
-
-	return v.SetData(
-		map[string]any{
-			constant.MattermostReactionField: notation.Encode(r, false),
-		},
-	)
-}
-
 func TestWatcherDispatchReplyInWatchedThread(t *testing.T) {
-	w, s, chat, sink := newDispatchWatcher(t)
-	chat.AddPost("alfa")
-	chat.AddUser("foxtrot", "Foxtrot")
-	s.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))
-	w.Index("alfa")
-	w.Dispatch(
-		postEvent(
+	o := worker_tester.NewDispatchWatcher(t)
+	o.Client.AddPost("alfa")
+	o.Client.AddUser("foxtrot", "Foxtrot")
+	o.Store.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))
+	o.Watcher.Index("alfa")
+	o.Watcher.Dispatch(
+		worker_tester.PostEvent(
 			&model.Post{
 				Id:       "reply",
 				RootId:   "alfa",
@@ -81,19 +25,19 @@ func TestWatcherDispatchReplyInWatchedThread(t *testing.T) {
 			},
 		),
 	)
-	w.Flush("alfa")
-	result := sink.all()
+	o.Watcher.Flush("alfa")
+	result := o.Sink.All()
 	assert.Integer(t, 1, len(result))
 	assert.String(t, "kilo", result[0].Callsign)
 	assert.String(t, "[papa] 14:32 · Foxtrot: first message", result[0].Body)
 }
 
 func TestWatcherDispatchIgnoresUnwatchedThread(t *testing.T) {
-	w, s, chat, sink := newDispatchWatcher(t)
-	chat.AddUser("foxtrot", "Foxtrot")
-	s.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))
-	w.Dispatch(
-		postEvent(
+	o := worker_tester.NewDispatchWatcher(t)
+	o.Client.AddUser("foxtrot", "Foxtrot")
+	o.Store.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))
+	o.Watcher.Dispatch(
+		worker_tester.PostEvent(
 			&model.Post{
 				Id:      "reply",
 				RootId:  "other",
@@ -102,17 +46,17 @@ func TestWatcherDispatchIgnoresUnwatchedThread(t *testing.T) {
 			},
 		),
 	)
-	w.Flush("other")
-	assert.Integer(t, 0, len(sink.all()))
+	o.Watcher.Flush("other")
+	assert.Integer(t, 0, len(o.Sink.All()))
 }
 
 func TestWatcherDispatchIgnoresOwnPost(t *testing.T) {
-	w, s, chat, sink := newDispatchWatcher(t)
-	chat.AddPost("alfa")
-	s.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))
-	w.Index("alfa")
-	w.Dispatch(
-		postEvent(
+	o := worker_tester.NewDispatchWatcher(t)
+	o.Client.AddPost("alfa")
+	o.Store.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))
+	o.Watcher.Index("alfa")
+	o.Watcher.Dispatch(
+		worker_tester.PostEvent(
 			&model.Post{
 				Id:      "reply",
 				RootId:  "alfa",
@@ -121,19 +65,19 @@ func TestWatcherDispatchIgnoresOwnPost(t *testing.T) {
 			},
 		),
 	)
-	w.Flush("alfa")
-	assert.Integer(t, 0, len(sink.all()))
+	o.Watcher.Flush("alfa")
+	assert.Integer(t, 0, len(o.Sink.All()))
 }
 
 func TestWatcherDispatchReactionResolvesThroughIndex(t *testing.T) {
-	w, s, chat, sink := newDispatchWatcher(t)
-	chat.AddPost("alfa")
-	chat.AddReply("alfa", "reply")
-	chat.AddUser("golf", "Golf")
-	s.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))
-	w.Index("alfa")
-	w.Dispatch(
-		reactionEvent(
+	o := worker_tester.NewDispatchWatcher(t)
+	o.Client.AddPost("alfa")
+	o.Client.AddReply("alfa", "reply")
+	o.Client.AddUser("golf", "Golf")
+	o.Store.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))
+	o.Watcher.Index("alfa")
+	o.Watcher.Dispatch(
+		worker_tester.ReactionEvent(
 			model.WebsocketEventReactionAdded,
 			&model.Reaction{
 				UserId:    "golf",
@@ -142,20 +86,20 @@ func TestWatcherDispatchReactionResolvesThroughIndex(t *testing.T) {
 			},
 		),
 	)
-	w.Flush("alfa")
-	result := sink.all()
+	o.Watcher.Flush("alfa")
+	result := o.Sink.All()
 	assert.Integer(t, 1, len(result))
 	assert.StringContains(t, "Golf reacted :eyes:", result[0].Body)
 }
 
 func TestWatcherDispatchReactionOnUnknownPostIgnored(t *testing.T) {
-	w, s, chat, sink := newDispatchWatcher(t)
-	chat.AddPost("alfa")
-	chat.AddUser("golf", "Golf")
-	s.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))
-	w.Index("alfa")
-	w.Dispatch(
-		reactionEvent(
+	o := worker_tester.NewDispatchWatcher(t)
+	o.Client.AddPost("alfa")
+	o.Client.AddUser("golf", "Golf")
+	o.Store.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))
+	o.Watcher.Index("alfa")
+	o.Watcher.Dispatch(
+		worker_tester.ReactionEvent(
 			model.WebsocketEventReactionAdded,
 			&model.Reaction{
 				UserId:    "golf",
@@ -164,19 +108,19 @@ func TestWatcherDispatchReactionOnUnknownPostIgnored(t *testing.T) {
 			},
 		),
 	)
-	w.Flush("alfa")
-	assert.Integer(t, 0, len(sink.all()))
+	o.Watcher.Flush("alfa")
+	assert.Integer(t, 0, len(o.Sink.All()))
 }
 
 func TestWatcherForgetStopsMatching(t *testing.T) {
-	w, s, chat, sink := newDispatchWatcher(t)
-	chat.AddPost("alfa")
-	chat.AddUser("foxtrot", "Foxtrot")
-	s.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))
-	w.Index("alfa")
-	w.Forget("alfa")
-	w.Dispatch(
-		postEvent(
+	o := worker_tester.NewDispatchWatcher(t)
+	o.Client.AddPost("alfa")
+	o.Client.AddUser("foxtrot", "Foxtrot")
+	o.Store.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))
+	o.Watcher.Index("alfa")
+	o.Watcher.Forget("alfa")
+	o.Watcher.Dispatch(
+		worker_tester.PostEvent(
 			&model.Post{
 				Id:      "reply",
 				RootId:  "alfa",
@@ -185,6 +129,6 @@ func TestWatcherForgetStopsMatching(t *testing.T) {
 			},
 		),
 	)
-	w.Flush("alfa")
-	assert.Integer(t, 0, len(sink.all()))
+	o.Watcher.Flush("alfa")
+	assert.Integer(t, 0, len(o.Sink.All()))
 }

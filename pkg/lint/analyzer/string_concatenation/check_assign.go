@@ -23,7 +23,8 @@ func checkAssign(
 
 	b, okay := t.Underlying().(*types.Basic)
 
-	if !okay || b.Kind() != types.String {
+	if !okay || (b.Kind() != types.String &&
+		b.Kind() != types.UntypedString) {
 		return
 	}
 
@@ -37,11 +38,10 @@ func checkAssign(
 	}
 
 	results.AddConcern(
-		concern.NewFile(
+		concern.NewPosition(
 			constant.StringConcatenationKey,
 			constant.StringConcatenationText,
-			p.Fset.Position(s.Pos()).Filename,
-			false,
+			p.Fset.Position(s.Pos()),
 		),
 	)
 }

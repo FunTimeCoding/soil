@@ -7,6 +7,7 @@ import (
 
 func Collection() {
 	c := chroma.NewEnvironment()
+	defer c.Close()
 
 	for _, l := range c.Collections() {
 		console.Format("Collection: %s\n", l.Name())

@@ -17,4 +17,5 @@ type Memory struct {
 	ProvenanceAnchor string            `json:"provenance_anchor,omitempty"`
 	ProvenanceHash   string            `json:"provenance_hash,omitempty"`
 	Ordinal          int               `json:"ordinal,omitzero"`
+	Children         []string          `json:"children,omitempty"`
 }

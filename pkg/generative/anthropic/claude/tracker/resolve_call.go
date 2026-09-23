@@ -15,5 +15,5 @@ func (s *State) resolveCall(b *notation.ContentBlock) *tool_call.Call {
 	delete(s.Pending, b.ToolUseIdentifier)
 	c.Result = string(b.Content)
 
-	return &c
+	return c
 }

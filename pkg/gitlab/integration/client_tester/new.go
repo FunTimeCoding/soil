@@ -20,6 +20,7 @@ func New(
 	t.Cleanup(s.Close)
 
 	return &Tester{
+		t: t,
 		Client: gitlab.New(
 			web.TrimScheme(s.URL),
 			"test-token",

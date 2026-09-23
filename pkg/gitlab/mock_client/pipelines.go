@@ -8,5 +8,5 @@ func (c *Client) Pipelines(
 	_ string,
 	_ int64,
 ) ([]*pipeline.Pipeline, error) {
-	return nil, nil
+	return c.pipelines, nil
 }

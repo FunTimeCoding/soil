@@ -23,7 +23,12 @@ func checkBinary(
 
 	b, okay := t.Underlying().(*types.Basic)
 
-	if !okay || b.Kind() != types.String {
+	if !okay || (b.Kind() != types.String &&
+		b.Kind() != types.UntypedString) {
+		return
+	}
+
+	if containsRawString(e) {
 		return
 	}
 
@@ -37,11 +42,10 @@ func checkBinary(
 	}
 
 	results.AddConcern(
-		concern.NewFile(
+		concern.NewPosition(
 			constant.StringConcatenationKey,
 			constant.StringConcatenationText,
-			p.Fset.Position(e.Pos()).Filename,
-			false,
+			p.Fset.Position(e.Pos()),
 		),
 	)
 }

@@ -11,6 +11,9 @@ func FromStore(
 	result.Slug = i.Slug
 	result.Timestamp = i.SessionTimestamp
 	result.LastSeen = i.LastSeen
+	result.LastPromptAt = i.LastPromptAt
+	result.LastTurnEndAt = i.LastTurnEndAt
+	result.ClosedAt = i.ClosedAt
 	result.WorkDirectory = i.WorkDirectory
 	result.Branch = i.Branch
 	result.Lines = i.Lines

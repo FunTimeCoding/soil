@@ -9,7 +9,7 @@ import (
 
 func classifyContextLoads(
 	sessionIdentifier string,
-	calls []tool_call.Call,
+	calls []*tool_call.Call,
 ) []context_load.Load {
 	var result []context_load.Load
 	modePending := false
@@ -26,7 +26,7 @@ func classifyContextLoads(
 			tag := inputString(c.Input, constant.Tag)
 
 			if modePending && tag != "" {
-				result = append(result, *modeLoad(sessionIdentifier, &c, tag))
+				result = append(result, *modeLoad(sessionIdentifier, c, tag))
 				modePending = false
 			}
 
@@ -36,7 +36,7 @@ func classifyContextLoads(
 		if c.Name == constant.ProfileTool {
 			result = append(
 				result,
-				profileLoads(sessionIdentifier, &c)...,
+				profileLoads(sessionIdentifier, c)...,
 			)
 
 			continue
@@ -45,7 +45,7 @@ func classifyContextLoads(
 		if c.Name == constant.SearchMemoryTool {
 			result = append(
 				result,
-				searchLoads(sessionIdentifier, &c)...,
+				searchLoads(sessionIdentifier, c)...,
 			)
 
 			continue
@@ -54,7 +54,7 @@ func classifyContextLoads(
 		if strings.HasPrefix(c.Name, constant.GetMemoryTool) {
 			result = append(
 				result,
-				memoryLoads(sessionIdentifier, &c)...,
+				memoryLoads(sessionIdentifier, c)...,
 			)
 		}
 	}

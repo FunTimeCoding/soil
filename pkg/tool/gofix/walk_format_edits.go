@@ -1,7 +1,6 @@
 package gofix
 
 import (
-	"fmt"
 	"github.com/dave/dst"
 	"github.com/dave/dst/decorator"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/element_format"
@@ -56,13 +55,12 @@ func walkFormatEdits(
 					) {
 						changed[name] = destinationFile
 						r.AddConcern(
-							concern.NewFile(
+							concern.NewLine(
 								"call_format",
-								fmt.Sprintf(
-									"formatted call (line %d)",
-									fileSet.Position(astCall.Lparen).Line,
-								),
+								"formatted call",
 								name,
+								fileSet.Position(astCall.Lparen).Line,
+								"",
 								apply,
 							),
 						)
@@ -98,13 +96,12 @@ func walkFormatEdits(
 					) {
 						changed[name] = destinationFile
 						r.AddConcern(
-							concern.NewFile(
+							concern.NewLine(
 								"composite_format",
-								fmt.Sprintf(
-									"formatted composite literal (line %d)",
-									fileSet.Position(astLit.Lbrace).Line,
-								),
+								"formatted composite literal",
 								name,
+								fileSet.Position(astLit.Lbrace).Line,
+								"",
 								apply,
 							),
 						)

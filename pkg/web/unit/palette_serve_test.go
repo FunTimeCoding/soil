@@ -5,13 +5,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/palette"
+	"github.com/funtimecoding/soil/pkg/web/unit/web_tester"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 )
 
 func TestServeEmptyQuery(t *testing.T) {
-	serve := palette.NewServe(testRegistry())
+	serve := palette.NewServe(web_tester.NewRegistry())
 	w := httptest.NewRecorder()
 	q := httptest.NewRequest(http.MethodGet, constant.PalettePath, nil)
 	serve(w, q)
@@ -22,7 +23,7 @@ func TestServeEmptyQuery(t *testing.T) {
 }
 
 func TestServeWithQuery(t *testing.T) {
-	serve := palette.NewServe(testRegistry())
+	serve := palette.NewServe(web_tester.NewRegistry())
 	w := httptest.NewRecorder()
 	q := httptest.NewRequest(
 		http.MethodGet,
@@ -35,7 +36,7 @@ func TestServeWithQuery(t *testing.T) {
 }
 
 func TestServeNoResults(t *testing.T) {
-	serve := palette.NewServe(testRegistry())
+	serve := palette.NewServe(web_tester.NewRegistry())
 	w := httptest.NewRecorder()
 	q := httptest.NewRequest(
 		http.MethodGet,
@@ -48,7 +49,7 @@ func TestServeNoResults(t *testing.T) {
 }
 
 func TestServeAcronymHighlight(t *testing.T) {
-	serve := palette.NewServe(testRegistry())
+	serve := palette.NewServe(web_tester.NewRegistry())
 	w := httptest.NewRecorder()
 	q := httptest.NewRequest(
 		http.MethodGet,
@@ -62,7 +63,7 @@ func TestServeAcronymHighlight(t *testing.T) {
 }
 
 func TestServeResultsAreLinks(t *testing.T) {
-	serve := palette.NewServe(testRegistry())
+	serve := palette.NewServe(web_tester.NewRegistry())
 	w := httptest.NewRecorder()
 	q := httptest.NewRequest(
 		http.MethodGet,

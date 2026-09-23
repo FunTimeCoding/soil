@@ -52,7 +52,11 @@ func (c *Client) RecentSessions(limit int) ([]*Target, error) {
 			}
 		}
 
-		result = append(result, NewTarget(s.Identifier, name, lastSeen, labels))
+		target := NewTarget(s.Identifier, name, lastSeen, labels)
+		target.LastPromptAt = parseMoment(s.LastPromptAt)
+		target.LastTurnEndAt = parseMoment(s.LastTurnEndAt)
+		target.ClosedAt = parseMoment(s.ClosedAt)
+		result = append(result, target)
 	}
 
 	return result, nil

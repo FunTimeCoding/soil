@@ -7,6 +7,7 @@ import (
 
 func Dump() {
 	s := site.New()
+	defer s.Close()
 	r := s.ReadUsage()
 
 	if r == nil {

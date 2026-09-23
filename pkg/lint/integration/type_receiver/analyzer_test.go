@@ -10,6 +10,7 @@ func TestBlocked(t *testing.T) {
 	p, results := testutil.LoadTestPackage(t, "testdata/src/example")
 	type_receiver.Check(p, results)
 	testutil.AssertBlocked(t, results, 1)
+	testutil.AssertBlockedAt(t, results, "flagged.go", 3)
 }
 
 func TestUnexported(t *testing.T) {

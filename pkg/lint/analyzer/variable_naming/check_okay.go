@@ -29,15 +29,14 @@ func checkOkay(
 		}
 
 		results.AddConcern(
-			concern.NewFile(
+			concern.NewPosition(
 				"variable_naming",
 				fmt.Sprintf(
 					"variable %s should be named %s",
 					f.ident.Name,
 					expected,
 				),
-				p.Fset.Position(f.ident.Pos()).Filename,
-				false,
+				p.Fset.Position(f.ident.Pos()),
 			),
 		)
 	}

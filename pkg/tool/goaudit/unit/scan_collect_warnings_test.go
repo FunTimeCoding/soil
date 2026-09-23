@@ -92,19 +92,3 @@ func TestCleanServiceNoConcerns(t *testing.T) {
 	assert.Integer(t, 1, len(s))
 	assert.Integer(t, 0, len(s[0].Concerns))
 }
-
-func assertConcern(
-	t *testing.T,
-	s *scan.Service,
-	key string,
-) {
-	t.Helper()
-
-	for _, c := range s.Concerns {
-		if c.Key == key {
-			return
-		}
-	}
-
-	t.Errorf("expected concern with key %q not found", key)
-}

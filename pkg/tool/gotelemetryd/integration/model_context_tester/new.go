@@ -11,6 +11,7 @@ func New(t *testing.T) *Tester {
 	s := base.New(t)
 
 	return &Tester{
+		t:      t,
 		server: s,
 		Client: model_context_client.New(t, s.Port),
 		Store:  s.Store,

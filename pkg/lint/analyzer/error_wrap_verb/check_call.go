@@ -76,14 +76,13 @@ func checkCall(
 		}
 
 		results.AddConcern(
-			concern.NewFile(
+			concern.NewPosition(
 				"error_wrap_verb",
 				fmt.Sprintf(
 					"error argument formatted with %%%c - use %%w so errors.Is and errors.As unwrap the chain",
 					letter,
 				),
-				p.Fset.Position(call.Pos()).Filename,
-				false,
+				p.Fset.Position(call.Pos()),
 			),
 		)
 

@@ -9,9 +9,7 @@ import (
 
 func TestCompletionTableAfterComplete(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "search index")
 	a.MustCallTool(
 		constant.Complete,
@@ -27,9 +25,7 @@ func TestCompletionTableAfterComplete(t *testing.T) {
 
 func TestCompletionTableAfterUpdate(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "initial")
 	a.MustCallTool(
 		constant.Update,
@@ -48,11 +44,8 @@ func TestCompletionTableAfterUpdate(t *testing.T) {
 
 func TestCompletionTableHookContext(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	b := s.NewSession(t)
-	defer b.Close()
 	a.Announce(a.Name(), "search index")
 	b.CheckLive()
 	a.MustCallTool(constant.Complete, map[string]any{constant.Message: "done"})

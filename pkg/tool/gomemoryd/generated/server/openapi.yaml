@@ -190,6 +190,27 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/tokens:
+    get:
+      operationId: getTokens
+      parameters:
+      - name: scope
+        in: query
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Rendered token statistic per memory, heaviest first.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TokenSummary"
+        "500":
+          description: Failed to compute token statistics.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /api/statistics:
     get:
       operationId: getStatistics
@@ -435,8 +456,11 @@ components:
           type: string
     ProfileResponse:
       type: object
-      required: [always, index]
+      required: [always, index, text]
       properties:
+        text:
+          type: string
+          description: The rendered profile exactly as the model receives it.
         always:
           type: array
           items:
@@ -459,10 +483,59 @@ components:
             $ref: "#/components/schemas/ProfileCompletion"
         detail:
           $ref: "#/components/schemas/ProfileDetail"
+    TokenSummary:
+      type: object
+      required: [statistic, block, description, withheld]
+      properties:
+        statistic:
+          type: array
+          items:
+            $ref: "#/components/schemas/TokenStatistic"
+        block:
+          $ref: "#/components/schemas/Spread"
+        description:
+          $ref: "#/components/schemas/Spread"
+        withheld:
+          type: integer
+          description: Memories counted in the spreads but withheld from the listing.
+    TokenStatistic:
+      type: object
+      required: [identifier, name, block, description]
+      properties:
+        identifier:
+          type: integer
+          format: int64
+        name:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        block:
+          type: integer
+        description:
+          type: integer
+    Spread:
+      type: object
+      required: [median, ninetieth, ninety_ninth, maximum, total]
+      properties:
+        median:
+          type: integer
+        ninetieth:
+          type: integer
+        ninety_ninth:
+          type: integer
+        maximum:
+          type: integer
+        total:
+          type: integer
     ProfileDetail:
       type: object
-      required: [budget, always_tokens, index_tokens, index_trimmed, completion_tokens, completions_trimmed, impression_tokens, impressions_trimmed, relevant_tokens, relevant_trimmed, total_tokens]
+      required: [budget, always_tokens, index_tokens, index_trimmed, completion_tokens, completions_trimmed, impression_tokens, impressions_trimmed, relevant_tokens, relevant_trimmed, total_tokens, hidden]
       properties:
+        hidden:
+          type: integer
+          description: Entries withheld from this surface by the hidden tag; token counts include them.
         budget:
           type: integer
         always_tokens:

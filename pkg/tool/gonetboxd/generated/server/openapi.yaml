@@ -405,6 +405,59 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/devices/{name}/interfaces/{interface}/physical-address:
+    post:
+      operationId: setInterfacePhysicalAddress
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Device name.
+      - name: interface
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Interface name.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PhysicalAddressRequest"
+      responses:
+        "200":
+          description: The hardware address now assigned to the interface.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PhysicalAddress"
+        "500":
+          description: Failed to assign the hardware address.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/physical-addresses:
+    get:
+      operationId: listPhysicalAddresses
+      responses:
+        "200":
+          description: Every hardware address and the object carrying it.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PhysicalAddressOwner"
+        "500":
+          description: Failed to list hardware addresses.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /api/devices/create:
     post:
       operationId: createDevice
@@ -651,6 +704,41 @@ paths:
                   - $ref: "#/components/schemas/Address"
         "500":
           description: Failed to list virtual addresses.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/virtual-machines/{name}/interfaces/{interface}/physical-address:
+    post:
+      operationId: setVirtualInterfacePhysicalAddress
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Virtual machine name.
+      - name: interface
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Interface name.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PhysicalAddressRequest"
+      responses:
+        "200":
+          description: The hardware address now assigned to the interface.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PhysicalAddress"
+        "500":
+          description: Failed to assign the hardware address.
           content:
             application/json:
               schema:
@@ -1768,6 +1856,38 @@ components:
             nullable: true
             allOf:
             - $ref: "#/components/schemas/Label"
+    PhysicalAddressOwner:
+      type: object
+      required: [address]
+      properties:
+        address:
+          type: string
+        objectKind:
+          type: string
+        objectIdentifier:
+          type: integer
+          format: int32
+        objectName:
+          type: string
+        interface:
+          type: string
+    PhysicalAddressRequest:
+      type: object
+      required: [address]
+      properties:
+        address:
+          type: string
+    PhysicalAddress:
+      type: object
+      required: [identifier, address]
+      properties:
+        identifier:
+          type: integer
+          format: int32
+        address:
+          type: string
+        interface:
+          type: string
     Interface:
       type: object
       required:

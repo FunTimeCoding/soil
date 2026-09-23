@@ -7,3 +7,5 @@ var Identity = identity.New(
 	"NetBox infrastructure inventory CLI",
 	"gonetbox [command]",
 )
+
+const VirtualPhysicalAddressUsage = "set-virtual-interface-physical-address [machine] [interface] [address]"

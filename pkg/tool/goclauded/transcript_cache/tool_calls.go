@@ -2,7 +2,7 @@ package transcript_cache
 
 import "github.com/funtimecoding/soil/pkg/generative/anthropic/claude/tool_call"
 
-func (c *Cache) ToolCalls(sessionIdentifier string) []tool_call.Call {
+func (c *Cache) ToolCalls(sessionIdentifier string) []*tool_call.Call {
 	modTime, size, exists := c.fileState(sessionIdentifier)
 
 	if !exists {

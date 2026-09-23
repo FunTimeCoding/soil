@@ -40,5 +40,8 @@ func LoadFromDirectory(
 		t.Fatalf("package errors: %v", p.Errors)
 	}
 
-	return p, output.NewResultsWithDirectory(fmt.Sprintf("%s/", directory))
+	results := output.NewResultsWithDirectory(fmt.Sprintf("%s/", directory))
+	t.Cleanup(func() { AssertPositioned(t, results) })
+
+	return p, results
 }

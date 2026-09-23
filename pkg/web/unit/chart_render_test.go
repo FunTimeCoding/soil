@@ -2,20 +2,12 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/web/chart"
 	"github.com/funtimecoding/soil/pkg/web/chart/series"
-	"strings"
+	"github.com/funtimecoding/soil/pkg/web/unit/web_tester"
 	"testing"
 	"time"
 )
-
-func renderChart(c *chart.Chart) string {
-	var b strings.Builder
-	errors.PanicOnError(c.Render().Render(&b))
-
-	return b.String()
-}
 
 func TestChartStepPath(t *testing.T) {
 	start := time.Date(2026, 8, 26, 21, 0, 0, 0, time.UTC)
@@ -23,7 +15,7 @@ func TestChartStepPath(t *testing.T) {
 	weekly := series.New("Weekly", "chart-series-a").
 		Add(start.Add(24*time.Hour), 10).
 		Add(start.Add(48*time.Hour), 20)
-	markup := renderChart(
+	markup := web_tester.RenderChart(
 		chart.New(start, end).
 			WithNow(start.Add(72 * time.Hour)).
 			WithSeries(weekly).
@@ -45,7 +37,7 @@ func TestChartProjectionCapped(t *testing.T) {
 	end := start.AddDate(0, 0, 7)
 	weekly := series.New("Weekly", "chart-series-a").
 		Add(start.Add(24*time.Hour), 80)
-	markup := renderChart(
+	markup := web_tester.RenderChart(
 		chart.New(start, end).
 			WithNow(start.Add(24 * time.Hour)).
 			WithSeries(weekly).

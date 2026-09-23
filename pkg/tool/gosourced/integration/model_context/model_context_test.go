@@ -14,7 +14,6 @@ func TestListModules(t *testing.T) {
 		t,
 		"../../service/testdata/unexport-function/src",
 	)
-	defer o.Close()
 	result := o.Client.MustCallTool(constant.ListModules, map[string]any{})
 	assert.StringContains(t, "test", result)
 }
@@ -24,7 +23,6 @@ func TestUseModule(t *testing.T) {
 		t,
 		"../../service/testdata/unexport-function/src",
 	)
-	defer o.Close()
 	result := o.Client.MustCallTool(
 		constant.UseModule,
 		map[string]any{"module": "test"},
@@ -37,7 +35,6 @@ func TestUseModuleUnknown(t *testing.T) {
 		t,
 		"../../service/testdata/unexport-function/src",
 	)
-	defer o.Close()
 	_, e := o.Client.CallTool(
 		constant.UseModule,
 		map[string]any{"module": "missing"},
@@ -50,7 +47,6 @@ func TestChangeVisibilityExport(t *testing.T) {
 		t,
 		"../../service/testdata/export-function/src",
 	)
-	defer o.Close()
 	o.Client.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
 	result := o.Client.MustCallTool(
 		constant.ChangeVisibility,
@@ -72,7 +68,6 @@ func TestChangeVisibilityNoModule(t *testing.T) {
 		t,
 		"../../service/testdata/unexport-function/src",
 	)
-	defer o.Close()
 	_, e := o.Client.CallTool(
 		constant.ChangeVisibility,
 		map[string]any{
@@ -85,7 +80,6 @@ func TestChangeVisibilityNoModule(t *testing.T) {
 
 func TestChangeVisibilityCrossPackageBlocked(t *testing.T) {
 	o := model_context_tester.New(t, "../../service/testdata/cross-package/src")
-	defer o.Close()
 	o.Client.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
 	_, e := o.Client.CallTool(
 		constant.ChangeVisibility,
@@ -102,7 +96,6 @@ func TestRenameSymbol(t *testing.T) {
 		t,
 		"../../service/testdata/rename-function/src",
 	)
-	defer o.Close()
 	o.Client.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
 	result := o.Client.MustCallTool(
 		constant.RenameSymbol,
@@ -125,7 +118,6 @@ func TestRenameSymbolToUnexportedBlocked(t *testing.T) {
 		t,
 		"../../service/testdata/rename-unexport/src",
 	)
-	defer o.Close()
 	o.Client.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
 	_, e := o.Client.CallTool(
 		constant.RenameSymbol,
@@ -143,7 +135,6 @@ func TestRenameSymbolSameName(t *testing.T) {
 		t,
 		"../../service/testdata/rename-function/src",
 	)
-	defer o.Close()
 	o.Client.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
 	_, e := o.Client.CallTool(
 		constant.RenameSymbol,
@@ -161,7 +152,6 @@ func TestRenameSymbolNoModule(t *testing.T) {
 		t,
 		"../../service/testdata/rename-function/src",
 	)
-	defer o.Close()
 	_, e := o.Client.CallTool(
 		constant.RenameSymbol,
 		map[string]any{
@@ -178,7 +168,6 @@ func TestRenameSymbolMissingParams(t *testing.T) {
 		t,
 		"../../service/testdata/rename-function/src",
 	)
-	defer o.Close()
 	_, e := o.Client.CallTool(
 		constant.RenameSymbol,
 		map[string]any{
@@ -195,7 +184,6 @@ func TestRenameSymbolNotFound(t *testing.T) {
 		t,
 		"../../service/testdata/rename-function/src",
 	)
-	defer o.Close()
 	o.Client.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
 	_, e := o.Client.CallTool(
 		constant.RenameSymbol,
@@ -213,12 +201,11 @@ func TestExtractToFile(t *testing.T) {
 		t,
 		"../../service/testdata/extract-function/src",
 	)
-	defer o.Close()
 	o.Client.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
 	result := o.Client.MustCallTool(
 		constant.ExtractToFile,
 		map[string]any{
-			"file":     "pkg/target/combined.go",
+			"file":   "pkg/target/combined.go",
 			"symbol": "FormatName",
 		},
 	)
@@ -230,14 +217,10 @@ func TestExtractToFileNotFound(t *testing.T) {
 		t,
 		"../../service/testdata/extract-function/src",
 	)
-	defer o.Close()
 	o.Client.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
 	_, e := o.Client.CallTool(
 		constant.ExtractToFile,
-		map[string]any{
-			"file":     "pkg/target/combined.go",
-			"symbol": "Missing",
-		},
+		map[string]any{"file": "pkg/target/combined.go", "symbol": "Missing"},
 	)
 	assert.StringContains(t, "not found", e.Error())
 }
@@ -247,11 +230,10 @@ func TestExtractToFileNoModule(t *testing.T) {
 		t,
 		"../../service/testdata/extract-function/src",
 	)
-	defer o.Close()
 	_, e := o.Client.CallTool(
 		constant.ExtractToFile,
 		map[string]any{
-			"file":     "pkg/target/combined.go",
+			"file":   "pkg/target/combined.go",
 			"symbol": "FormatName",
 		},
 	)
@@ -263,12 +245,11 @@ func TestExtractToFileRenamesSource(t *testing.T) {
 		t,
 		"../../service/testdata/extract-last-pair/src",
 	)
-	defer o.Close()
 	o.Client.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
 	result := o.Client.MustCallTool(
 		constant.ExtractToFile,
 		map[string]any{
-			"file":     "pkg/target/combined.go",
+			"file":   "pkg/target/combined.go",
 			"symbol": "FormatName",
 		},
 	)
@@ -280,7 +261,6 @@ func TestExtractToFileRenamesSource(t *testing.T) {
 
 func TestAddImport(t *testing.T) {
 	o := model_context_tester.New(t, "../../service/testdata/import-empty/src")
-	defer o.Close()
 	o.Client.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
 	result := o.Client.MustCallTool(
 		constant.AddImport,
@@ -297,7 +277,6 @@ func TestRemoveImport(t *testing.T) {
 		t,
 		"../../service/testdata/import-grouped/src",
 	)
-	defer o.Close()
 	o.Client.MustCallTool(constant.UseModule, map[string]any{"module": "test"})
 	result := o.Client.MustCallTool(
 		constant.RemoveImport,

@@ -16,11 +16,14 @@ func (s *Server) PostSend(
 		to = *r.Body.To
 	}
 
-	if e := s.service.Send(r.Body.Callsign, to, r.Body.Body); e != nil {
+	immediate := r.Body.Immediate != nil && *r.Body.Immediate
+	delivered, e := s.service.Send(r.Body.Callsign, to, r.Body.Body, immediate)
+
+	if e != nil {
 		return server.PostSend500JSONResponse(
 			*s.captureFail(e, constant.UnexpectedError),
 		), nil
 	}
 
-	return server.PostSend200Response{}, nil
+	return server.PostSend200JSONResponse{Immediate: delivered}, nil
 }

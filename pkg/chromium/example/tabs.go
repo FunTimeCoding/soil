@@ -3,6 +3,7 @@ package example
 import (
 	"github.com/funtimecoding/soil/pkg/chromium"
 	"github.com/funtimecoding/soil/pkg/chromium/constant"
+	"github.com/funtimecoding/soil/pkg/chromium/protocol"
 	"github.com/funtimecoding/soil/pkg/console"
 	library "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/strings/split/key_value"
@@ -14,11 +15,7 @@ import (
 
 func Tabs() {
 	c := chromium.NewEnvironment()
-
-	if false {
-		// Do not close tabs
-		defer c.Close()
-	}
+	defer c.Close()
 
 	for _, t := range c.Tabs() {
 		if t.Type != constant.PageTabType {
@@ -34,11 +31,13 @@ func Tabs() {
 		p := join.Absolute(system.Home(), systemConstant.DownloadsPath, name)
 
 		if !system.FileExists(p) {
-			if c.NeedReload(t.Identifier, t.Locator) {
+			page := protocol.NewIdentifier(c, t.Identifier)
+
+			if page.NeedReload(t.Locator) {
 				c.Activate(t.Identifier)
 			}
 
-			c.Save(c.TargetContext(t.Identifier), t.Locator, p)
+			page.Save(t.Locator, p)
 		} else {
 			console.Line("  Exists")
 		}

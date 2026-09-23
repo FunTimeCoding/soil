@@ -3,31 +3,13 @@ package coordination
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration/base"
 	"testing"
 )
 
-func clientEntriesByKind(
-	entries []client.QueueEntry,
-	kind string,
-) []client.QueueEntry {
-	var result []client.QueueEntry
-
-	for _, e := range entries {
-		if e.Kind == kind {
-			result = append(result, e)
-		}
-	}
-
-	return result
-}
-
 func TestAnnounce(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "reviewing proposals")
 	r := a.CheckLive()
 	announces := clientEntriesByKind(r.Entries, constant.QueueSessionAnnounce)
@@ -37,9 +19,7 @@ func TestAnnounce(t *testing.T) {
 
 func TestAnnounceReannounce(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "first topic")
 	a.CheckLive()
 	a.Announce(a.Name(), "second topic")

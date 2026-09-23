@@ -10,9 +10,7 @@ import (
 
 func TestEventSessionIdentifier(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "working")
 	a.MustCallTool(constant.Moment, map[string]any{constant.Line: "a moment"})
 	a.MustCallTool(constant.Complete, map[string]any{constant.Message: "done"})
@@ -28,9 +26,7 @@ func TestEventSessionIdentifier(t *testing.T) {
 
 func TestSummarySessionIdentifier(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "working")
 	a.MustCallTool(
 		constant.Summarize,
@@ -43,9 +39,7 @@ func TestSummarySessionIdentifier(t *testing.T) {
 
 func TestCompletionSessionIdentifier(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "working")
 	a.MustCallTool(constant.Complete, map[string]any{constant.Message: "done"})
 	var found bool

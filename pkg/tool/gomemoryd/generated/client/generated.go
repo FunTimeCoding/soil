@@ -85,6 +85,9 @@ type ProfileDetail struct {
 	Budget             int `json:"budget"`
 	CompletionTokens   int `json:"completion_tokens"`
 	CompletionsTrimmed int `json:"completions_trimmed"`
+
+	// Hidden Entries withheld from this surface by the hidden tag; token counts include them.
+	Hidden             int `json:"hidden"`
 	ImpressionTokens   int `json:"impression_tokens"`
 	ImpressionsTrimmed int `json:"impressions_trimmed"`
 	IndexTokens        int `json:"index_tokens"`
@@ -123,6 +126,9 @@ type ProfileResponse struct {
 	Impressions *[]ProfileImpression   `json:"impressions,omitempty"`
 	Index       []ProfileSummary       `json:"index"`
 	Relevant    *[]ProfileSearchResult `json:"relevant,omitempty"`
+
+	// Text The rendered profile exactly as the model receives it.
+	Text string `json:"text"`
 }
 
 // ProfileSearchResult defines model for ProfileSearchResult.
@@ -171,10 +177,38 @@ type SourcedMemory struct {
 	ProvenanceHash   string `json:"provenance_hash"`
 }
 
+// Spread defines model for Spread.
+type Spread struct {
+	Maximum     int `json:"maximum"`
+	Median      int `json:"median"`
+	Ninetieth   int `json:"ninetieth"`
+	NinetyNinth int `json:"ninety_ninth"`
+	Total       int `json:"total"`
+}
+
 // Statistics defines model for Statistics.
 type Statistics struct {
 	Scopes []NamedCount `json:"scopes"`
 	Tags   []NamedCount `json:"tags"`
+}
+
+// TokenStatistic defines model for TokenStatistic.
+type TokenStatistic struct {
+	Block       int       `json:"block"`
+	Description int       `json:"description"`
+	Identifier  int64     `json:"identifier"`
+	Name        string    `json:"name"`
+	Tags        *[]string `json:"tags,omitempty"`
+}
+
+// TokenSummary defines model for TokenSummary.
+type TokenSummary struct {
+	Block       Spread           `json:"block"`
+	Description Spread           `json:"description"`
+	Statistic   []TokenStatistic `json:"statistic"`
+
+	// Withheld Memories counted in the spreads but withheld from the listing.
+	Withheld int `json:"withheld"`
 }
 
 // VersionEntry defines model for VersionEntry.
@@ -226,6 +260,11 @@ type PostRelationJSONBody struct {
 // GetRelationsParams defines parameters for GetRelations.
 type GetRelationsParams struct {
 	Type  *string `form:"type,omitempty" json:"type,omitempty"`
+	Scope *string `form:"scope,omitempty" json:"scope,omitempty"`
+}
+
+// GetTokensParams defines parameters for GetTokens.
+type GetTokensParams struct {
 	Scope *string `form:"scope,omitempty" json:"scope,omitempty"`
 }
 
@@ -374,6 +413,9 @@ type ClientInterface interface {
 
 	// GetStatistics performs a GET /api/statistics (the `GetStatistics` operationId) request.
 	GetStatistics(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetTokens performs a GET /api/tokens (the `GetTokens` operationId) request.
+	GetTokens(ctx context.Context, params *GetTokensParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GetVersions performs a GET /api/versions (the `GetVersions` operationId) request.
 	GetVersions(ctx context.Context, params *GetVersionsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -572,6 +614,19 @@ func (c *Client) GetRelations(ctx context.Context, params *GetRelationsParams, r
 // GetStatistics performs a GET /api/statistics (the `GetStatistics` operationId) request.
 func (c *Client) GetStatistics(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetStatisticsRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetTokens performs a GET /api/tokens (the `GetTokens` operationId) request.
+func (c *Client) GetTokens(ctx context.Context, params *GetTokensParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetTokensRequest(c.Server, params)
 	if err != nil {
 		return nil, err
 	}
@@ -1117,6 +1172,60 @@ func NewGetStatisticsRequest(server string) (*http.Request, error) {
 	return req, nil
 }
 
+// NewGetTokensRequest constructs an http.Request for the GetTokens method
+func NewGetTokensRequest(server string, params *GetTokensParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/tokens")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if params.Scope != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "scope", *params.Scope, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewGetVersionsRequest constructs an http.Request for the GetVersions method
 func NewGetVersionsRequest(server string, params *GetVersionsParams) (*http.Request, error) {
 	var err error
@@ -1309,6 +1418,11 @@ type ClientWithResponsesInterface interface {
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetStatisticsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetStatisticsResponse, error)
+
+	// GetTokensWithResponse performs a GET /api/tokens (the `GetTokens` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetTokensWithResponse(ctx context.Context, params *GetTokensParams, reqEditors ...RequestEditorFn) (*GetTokensResponse, error)
 
 	// GetVersionsWithResponse performs a GET /api/versions (the `GetVersions` operationId) request.
 	//
@@ -1844,6 +1958,54 @@ func (r GetStatisticsResponse) ContentType() string {
 	return ""
 }
 
+type GetTokensResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *TokenSummary
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetTokensResponse) GetJSON200() *TokenSummary {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetTokensResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetTokensResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetTokensResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetTokensResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetTokensResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type GetVersionsResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -2055,6 +2217,17 @@ func (c *ClientWithResponses) GetStatisticsWithResponse(ctx context.Context, req
 		return nil, err
 	}
 	return ParseGetStatisticsResponse(rsp)
+}
+
+// GetTokensWithResponse performs a GET /api/tokens (the `GetTokens` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetTokensWithResponse(ctx context.Context, params *GetTokensParams, reqEditors ...RequestEditorFn) (*GetTokensResponse, error) {
+	rsp, err := c.GetTokens(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetTokensResponse(rsp)
 }
 
 // GetVersionsWithResponse performs a GET /api/versions (the `GetVersions` operationId) request.
@@ -2420,6 +2593,39 @@ func ParseGetStatisticsResponse(rsp *http.Response) (*GetStatisticsResponse, err
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
 		var dest Statistics
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetTokensResponse parses an HTTP response from a GetTokensWithResponse call
+func ParseGetTokensResponse(rsp *http.Response) (*GetTokensResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetTokensResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest TokenSummary
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}

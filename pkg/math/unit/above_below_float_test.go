@@ -1,42 +1,37 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/math/above_below"
+	"github.com/funtimecoding/soil/pkg/math/unit/math_tester"
 	"testing"
 )
 
 func TestAboveBelowFloat(t *testing.T) {
-	aboveBelowFloatAssertFloat(t, 1, 0, true, false)
-	aboveBelowFloatAssertFloat(t, -1, 0, false, true)
-	aboveBelowFloatAssertFloat(t, 0, 0, false, false)
-	aboveBelowFloatAssertFloat(t, 1, 1, false, false)
-	aboveBelowFloatAssertFloat(t, -1, 1, false, false)
-	aboveBelowFloatAssertFloat(t, 0, 1, false, false)
-	aboveBelowFloatAssertFloat(t, 2, 1, true, false)
-	aboveBelowFloatAssertFloat(t, -2, 1, false, true)
-}
-
-func aboveBelowFloatAssertFloat(
-	t *testing.T,
-	f float64,
-	magnitude float64,
-	expectAbove bool,
-	expectBelow bool,
-) {
-	t.Helper()
-	var above bool
-	var below bool
-	above_below.Float(
-		f,
-		magnitude,
-		func() {
-			above = true
-		},
-		func() {
-			below = true
-		},
+	math_tester.AssertAboveBelowFloat(
+		t,
+		math_tester.AboveBelow{Above: true},
+		1,
+		0,
 	)
-	assert.Boolean(t, expectAbove, above)
-	assert.Boolean(t, expectBelow, below)
+	math_tester.AssertAboveBelowFloat(
+		t,
+		math_tester.AboveBelow{Below: true},
+		-1,
+		0,
+	)
+	math_tester.AssertAboveBelowFloat(t, math_tester.AboveBelow{}, 0, 0)
+	math_tester.AssertAboveBelowFloat(t, math_tester.AboveBelow{}, 1, 1)
+	math_tester.AssertAboveBelowFloat(t, math_tester.AboveBelow{}, -1, 1)
+	math_tester.AssertAboveBelowFloat(t, math_tester.AboveBelow{}, 0, 1)
+	math_tester.AssertAboveBelowFloat(
+		t,
+		math_tester.AboveBelow{Above: true},
+		2,
+		1,
+	)
+	math_tester.AssertAboveBelowFloat(
+		t,
+		math_tester.AboveBelow{Below: true},
+		-2,
+		1,
+	)
 }

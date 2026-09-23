@@ -1,37 +1,22 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/math/above_below"
+	"github.com/funtimecoding/soil/pkg/math/unit/math_tester"
 	"testing"
 )
 
 func TestAboveBelowInteger(t *testing.T) {
-	aboveBelowIntegerAssertInteger(t, 1, 0, true, false)
-	aboveBelowIntegerAssertInteger(t, -1, 0, false, true)
-	aboveBelowIntegerAssertInteger(t, 0, 0, false, false)
-}
-
-func aboveBelowIntegerAssertInteger(
-	t *testing.T,
-	f int,
-	magnitude int,
-	expectAbove bool,
-	expectBelow bool,
-) {
-	t.Helper()
-	var above bool
-	var below bool
-	above_below.Integer(
-		f,
-		magnitude,
-		func() {
-			above = true
-		},
-		func() {
-			below = true
-		},
+	math_tester.AssertAboveBelowInteger(
+		t,
+		math_tester.AboveBelow{Above: true},
+		1,
+		0,
 	)
-	assert.Boolean(t, expectAbove, above)
-	assert.Boolean(t, expectBelow, below)
+	math_tester.AssertAboveBelowInteger(
+		t,
+		math_tester.AboveBelow{Below: true},
+		-1,
+		0,
+	)
+	math_tester.AssertAboveBelowInteger(t, math_tester.AboveBelow{}, 0, 0)
 }

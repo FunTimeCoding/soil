@@ -7,5 +7,6 @@ import (
 
 func User() {
 	c := telegram.NewEnvironment()
+	defer c.Close()
 	console.Format("User: %s\n", c.Self().UserName)
 }

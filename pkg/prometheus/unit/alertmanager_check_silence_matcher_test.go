@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/check/silence/matcher"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/silence"
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/unit/silence_tester"
 	"github.com/prometheus/alertmanager/api/v2/models"
 	"testing"
 	"time"
@@ -14,14 +15,7 @@ func TestMatchesWithExactMatcher(t *testing.T) {
 	now := time.Now()
 	start := now.Add(-1 * time.Hour)
 	end := now.Add(1 * time.Hour)
-	tests := []struct {
-		name          string
-		matcherName   string
-		matcherValue  string
-		labels        models.LabelSet
-		expectedMatch bool
-		description   string
-	}{
+	tests := []silenceMatcherCase{
 		{
 			name:         "exact match with existing label",
 			matcherName:  "job",
@@ -74,7 +68,7 @@ func TestMatchesWithExactMatcher(t *testing.T) {
 		t.Run(
 			tt.name,
 			func(t *testing.T) {
-				s := newSilence(
+				s := silence_tester.NewSilence(
 					&start,
 					&end,
 					tt.matcherName,
@@ -82,7 +76,7 @@ func TestMatchesWithExactMatcher(t *testing.T) {
 					new(true),
 					new(false),
 				)
-				a := newAlert(tt.labels)
+				a := alert.NewFromLabels(tt.labels)
 				matched := len(matcher.Matches(s, []*alert.Alert{a}, now)) > 0
 
 				if matched != tt.expectedMatch {
@@ -102,14 +96,7 @@ func TestMatchesWithNotEqualMatcher(t *testing.T) {
 	now := time.Now()
 	start := now.Add(-1 * time.Hour)
 	end := now.Add(1 * time.Hour)
-	tests := []struct {
-		name          string
-		matcherName   string
-		matcherValue  string
-		labels        models.LabelSet
-		expectedMatch bool
-		description   string
-	}{
+	tests := []silenceMatcherCase{
 		{
 			name:         "not equal with matching value",
 			matcherName:  "job",
@@ -165,7 +152,7 @@ func TestMatchesWithNotEqualMatcher(t *testing.T) {
 		t.Run(
 			tt.name,
 			func(t *testing.T) {
-				s := newSilence(
+				s := silence_tester.NewSilence(
 					&start,
 					&end,
 					tt.matcherName,
@@ -173,7 +160,7 @@ func TestMatchesWithNotEqualMatcher(t *testing.T) {
 					new(false),
 					new(false),
 				)
-				a := newAlert(tt.labels)
+				a := alert.NewFromLabels(tt.labels)
 				matched := len(matcher.Matches(s, []*alert.Alert{a}, now)) > 0
 
 				if matched != tt.expectedMatch {
@@ -193,14 +180,7 @@ func TestMatchesWithRegexMatcher(t *testing.T) {
 	now := time.Now()
 	start := now.Add(-1 * time.Hour)
 	end := now.Add(1 * time.Hour)
-	tests := []struct {
-		name          string
-		matcherName   string
-		matcherValue  string
-		labels        models.LabelSet
-		expectedMatch bool
-		description   string
-	}{
+	tests := []silenceMatcherCase{
 		{
 			name:         "regex match with matching value",
 			matcherName:  "job",
@@ -264,17 +244,19 @@ func TestMatchesWithRegexMatcher(t *testing.T) {
 		t.Run(
 			tt.name,
 			func(t *testing.T) {
+				equal := new(true)
+				regex := new(true)
 				matched := len(
 					matcher.Matches(
-						newSilence(
+						silence_tester.NewSilence(
 							&start,
 							&end,
 							tt.matcherName,
 							tt.matcherValue,
-							new(true), // equal
-							new(true), // regex
+							equal,
+							regex,
 						),
-						[]*alert.Alert{newAlert(tt.labels)},
+						[]*alert.Alert{alert.NewFromLabels(tt.labels)},
 						now,
 					),
 				) > 0
@@ -296,14 +278,7 @@ func TestMatchesWithNotRegexMatcher(t *testing.T) {
 	now := time.Now()
 	start := now.Add(-1 * time.Hour)
 	end := now.Add(1 * time.Hour)
-	tests := []struct {
-		name          string
-		matcherName   string
-		matcherValue  string
-		labels        models.LabelSet
-		expectedMatch bool
-		description   string
-	}{
+	tests := []silenceMatcherCase{
 		{
 			name:         "not regex with matching value",
 			matcherName:  "job",
@@ -348,7 +323,7 @@ func TestMatchesWithNotRegexMatcher(t *testing.T) {
 		t.Run(
 			tt.name,
 			func(t *testing.T) {
-				s := newSilence(
+				s := silence_tester.NewSilence(
 					&start,
 					&end,
 					tt.matcherName,
@@ -356,7 +331,7 @@ func TestMatchesWithNotRegexMatcher(t *testing.T) {
 					new(false),
 					new(true),
 				)
-				a := newAlert(tt.labels)
+				a := alert.NewFromLabels(tt.labels)
 				matched := len(matcher.Matches(s, []*alert.Alert{a}, now)) > 0
 
 				if matched != tt.expectedMatch {
@@ -376,18 +351,12 @@ func TestMatchesWithMultipleMatchers(t *testing.T) {
 	now := time.Now()
 	start := now.Add(-1 * time.Hour)
 	end := now.Add(1 * time.Hour)
-	tests := []struct {
-		name          string
-		matchers      []*models.Matcher
-		labels        models.LabelSet
-		expectedMatch bool
-		description   string
-	}{
+	tests := []silenceMatcherSetCase{
 		{
 			name: "all matchers match",
 			matchers: []*models.Matcher{
-				newMatcher("alertname", "HighCPU", true, false),
-				newMatcher(
+				silence_tester.NewMatcher("alertname", "HighCPU", true, false),
+				silence_tester.NewMatcher(
 					constant.SeverityLabel,
 					constant.CriticalSeverity,
 					true,
@@ -404,8 +373,8 @@ func TestMatchesWithMultipleMatchers(t *testing.T) {
 		{
 			name: "one matcher doesn't match",
 			matchers: []*models.Matcher{
-				newMatcher("alertname", "HighCPU", true, false),
-				newMatcher(
+				silence_tester.NewMatcher("alertname", "HighCPU", true, false),
+				silence_tester.NewMatcher(
 					constant.SeverityLabel,
 					constant.WarningSeverity,
 					true,
@@ -422,8 +391,8 @@ func TestMatchesWithMultipleMatchers(t *testing.T) {
 		{
 			name: "combined positive and negative matchers",
 			matchers: []*models.Matcher{
-				newMatcher("alertname", "HighCPU", true, false),
-				newMatcher("job", "test", false, false),
+				silence_tester.NewMatcher("alertname", "HighCPU", true, false),
+				silence_tester.NewMatcher("job", "test", false, false),
 			},
 			labels: models.LabelSet{
 				"alertname": "HighCPU",
@@ -435,8 +404,8 @@ func TestMatchesWithMultipleMatchers(t *testing.T) {
 		{
 			name: "negative matcher with missing label",
 			matchers: []*models.Matcher{
-				newMatcher("alertname", "HighCPU", true, false),
-				newMatcher("job", "test", false, false),
+				silence_tester.NewMatcher("alertname", "HighCPU", true, false),
+				silence_tester.NewMatcher("job", "test", false, false),
 			},
 			labels:        models.LabelSet{"alertname": "HighCPU"},
 			expectedMatch: true,
@@ -448,8 +417,8 @@ func TestMatchesWithMultipleMatchers(t *testing.T) {
 		t.Run(
 			tt.name,
 			func(t *testing.T) {
-				s := newSilenceWithMatchers(&start, &end, tt.matchers)
-				a := newAlert(tt.labels)
+				s := silence.NewFromMatchers(&start, &end, tt.matchers)
+				a := alert.NewFromLabels(tt.labels)
 				matched := len(matcher.Matches(s, []*alert.Alert{a}, now)) > 0
 
 				if matched != tt.expectedMatch {
@@ -467,13 +436,7 @@ func TestMatchesWithMultipleMatchers(t *testing.T) {
 
 func TestMatchesWithTimeWindow(t *testing.T) {
 	now := time.Now()
-	tests := []struct {
-		name          string
-		start         time.Time
-		end           time.Time
-		expectedMatch bool
-		description   string
-	}{
+	tests := []silenceWindowCase{
 		{
 			name:          "silence is active",
 			start:         now.Add(-1 * time.Hour),
@@ -515,7 +478,7 @@ func TestMatchesWithTimeWindow(t *testing.T) {
 		t.Run(
 			tt.name,
 			func(t *testing.T) {
-				s := newSilence(
+				s := silence_tester.NewSilence(
 					&tt.start,
 					&tt.end,
 					"alertname",
@@ -523,7 +486,9 @@ func TestMatchesWithTimeWindow(t *testing.T) {
 					new(true),
 					new(false),
 				)
-				a := newAlert(models.LabelSet{"alertname": "HighCPU"})
+				a := alert.NewFromLabels(
+					models.LabelSet{"alertname": "HighCPU"},
+				)
 				matched := len(matcher.Matches(s, []*alert.Alert{a}, now)) > 0
 
 				if matched != tt.expectedMatch {
@@ -541,7 +506,7 @@ func TestMatchesWithTimeWindow(t *testing.T) {
 
 func TestMatchesWithMultipleAlerts(t *testing.T) {
 	now := time.Now()
-	s := newSilence(
+	s := silence_tester.NewSilence(
 		new(now.Add(-1*time.Hour)),
 		new(now.Add(1*time.Hour)),
 		constant.SeverityLabel,
@@ -550,16 +515,16 @@ func TestMatchesWithMultipleAlerts(t *testing.T) {
 		new(false),
 	)
 	alerts := []*alert.Alert{
-		newAlert(
+		alert.NewFromLabels(
 			models.LabelSet{"alertname": "HighCPU", "severity": "critical"},
 		),
-		newAlert(
+		alert.NewFromLabels(
 			models.LabelSet{"alertname": "HighMemory", "severity": "warning"},
 		),
-		newAlert(
+		alert.NewFromLabels(
 			models.LabelSet{"alertname": "DiskFull", "severity": "critical"},
 		),
-		newAlert(
+		alert.NewFromLabels(
 			models.LabelSet{"alertname": "NetworkIssue", "severity": "info"},
 		),
 	}
@@ -577,43 +542,4 @@ func TestMatchesWithMultipleAlerts(t *testing.T) {
 			)
 		}
 	}
-}
-
-func newMatcher(
-	name string,
-	value string,
-	equal bool,
-	regex bool,
-) *models.Matcher {
-	return &models.Matcher{
-		Name:    &name,
-		Value:   &value,
-		IsEqual: &equal,
-		IsRegex: &regex,
-	}
-}
-
-func newSilence(
-	start *time.Time,
-	end *time.Time,
-	matcherName string,
-	matcherValue string,
-	equal *bool,
-	regex *bool,
-) *silence.Silence {
-	m := newMatcher(matcherName, matcherValue, *equal, *regex)
-
-	return newSilenceWithMatchers(start, end, []*models.Matcher{m})
-}
-
-func newSilenceWithMatchers(
-	start *time.Time,
-	end *time.Time,
-	m []*models.Matcher,
-) *silence.Silence {
-	return silence.NewFromMatchers(start, end, m)
-}
-
-func newAlert(l models.LabelSet) *alert.Alert {
-	return alert.NewFromLabels(l)
 }

@@ -2,13 +2,11 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/chat/telegram/store"
-	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"testing"
 )
 
 func TestStoreRoundTrip(t *testing.T) {
-	s := store.New(lite.NewMemory())
+	s := newStore(t)
 	s.MustSaveChannel(-100, "announcements")
 	s.MustSaveChannel(-100, "announcements")
 	s.MustSaveUser(7, "admin")

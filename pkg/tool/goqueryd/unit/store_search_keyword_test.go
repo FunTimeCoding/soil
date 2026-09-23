@@ -3,11 +3,12 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/store_tester"
 	"testing"
 )
 
 func TestSearchKeywordFindsDocument(t *testing.T) {
-	s := indexedTestStore(t)
+	s := store_tester.IndexedTestStore(t)
 	defer s.Close()
 	results := s.MustSearchKeyword("hybrid search pipeline", 10, "", false, nil)
 	assert.Count(t, 1, results)
@@ -15,7 +16,7 @@ func TestSearchKeywordFindsDocument(t *testing.T) {
 }
 
 func TestSearchKeywordRanking(t *testing.T) {
-	s := indexedTestStore(t)
+	s := store_tester.IndexedTestStore(t)
 	defer s.Close()
 	results := s.MustSearchKeyword("documents", 10, "", false, nil)
 	assert.Greater(t, 0, results[0].Score)
@@ -23,12 +24,22 @@ func TestSearchKeywordRanking(t *testing.T) {
 }
 
 func TestSearchKeywordCollectionFilter(t *testing.T) {
-	s := openTestStore(t)
+	s := store_tester.OpenTestStore(t)
 	defer s.Close()
 	first := t.TempDir()
 	second := t.TempDir()
-	writeFixture(t, first, "one.md", "# One\n\nUnique keyword aardvark.\n")
-	writeFixture(t, second, "two.md", "# Two\n\nUnique keyword aardvark.\n")
+	store_tester.WriteFixture(
+		t,
+		first,
+		"one.md",
+		"# One\n\nUnique keyword aardvark.\n",
+	)
+	store_tester.WriteFixture(
+		t,
+		second,
+		"two.md",
+		"# Two\n\nUnique keyword aardvark.\n",
+	)
 	s.AddCollection("first", first, constant.DefaultGlob)
 	s.AddCollection("second", second, constant.DefaultGlob)
 	s.Index("first")
@@ -41,14 +52,14 @@ func TestSearchKeywordCollectionFilter(t *testing.T) {
 }
 
 func TestSearchKeywordVirtualPath(t *testing.T) {
-	s := indexedTestStore(t)
+	s := store_tester.IndexedTestStore(t)
 	defer s.Close()
 	results := s.MustSearchKeyword("hybrid search pipeline", 10, "", false, nil)
 	assert.String(t, "qmd://test/alpha.md", results[0].VirtualPath)
 }
 
 func TestSearchKeywordNegation(t *testing.T) {
-	s := indexedTestStore(t)
+	s := store_tester.IndexedTestStore(t)
 	defer s.Close()
 	all := s.MustSearchKeyword("search documents", 10, "", false, nil)
 	negated := s.MustSearchKeyword("search -pipeline", 10, "", false, nil)
@@ -56,16 +67,16 @@ func TestSearchKeywordNegation(t *testing.T) {
 }
 
 func TestSearchKeywordQuotedPhrase(t *testing.T) {
-	s := openTestStore(t)
+	s := store_tester.OpenTestStore(t)
 	defer s.Close()
 	directory := t.TempDir()
-	writeFixture(
+	store_tester.WriteFixture(
 		t,
 		directory,
 		"exact.md",
 		"# Exact\n\nThe quick brown fox jumps over the lazy dog.\n",
 	)
-	writeFixture(
+	store_tester.WriteFixture(
 		t,
 		directory,
 		"partial.md",
@@ -79,11 +90,21 @@ func TestSearchKeywordQuotedPhrase(t *testing.T) {
 }
 
 func TestSearchKeywordMetadataFilter(t *testing.T) {
-	s := openTestStore(t)
+	s := store_tester.OpenTestStore(t)
 	defer s.Close()
 	directory := t.TempDir()
-	writeFixture(t, directory, "plain.md", "# Plain\n\nKeyword quasar.\n")
-	writeFixture(t, directory, "scoped.md", "# Scoped\n\nKeyword quasar.\n")
+	store_tester.WriteFixture(
+		t,
+		directory,
+		"plain.md",
+		"# Plain\n\nKeyword quasar.\n",
+	)
+	store_tester.WriteFixture(
+		t,
+		directory,
+		"scoped.md",
+		"# Scoped\n\nKeyword quasar.\n",
+	)
 	s.AddCollection("test", directory, constant.DefaultGlob)
 	s.Index("test")
 	s.SetMetadata("test", "scoped.md", map[string][]string{"scope": {"alpha"}})
@@ -101,16 +122,21 @@ func TestSearchKeywordMetadataFilter(t *testing.T) {
 }
 
 func TestSearchKeywordMetadataNarrowsCandidates(t *testing.T) {
-	s := openTestStore(t)
+	s := store_tester.OpenTestStore(t)
 	defer s.Close()
 	directory := t.TempDir()
-	writeFixture(
+	store_tester.WriteFixture(
 		t,
 		directory,
 		"noise.md",
 		"# Noise\n\nquasar quasar quasar quasar quasar.\n",
 	)
-	writeFixture(t, directory, "target.md", "# Target\n\nOne quasar only.\n")
+	store_tester.WriteFixture(
+		t,
+		directory,
+		"target.md",
+		"# Target\n\nOne quasar only.\n",
+	)
 	s.AddCollection("test", directory, constant.DefaultGlob)
 	s.Index("test")
 	s.SetMetadata("test", "target.md", map[string][]string{"scope": {"alpha"}})
@@ -129,11 +155,21 @@ func TestSearchKeywordMetadataNarrowsCandidates(t *testing.T) {
 }
 
 func TestSearchKeywordSourceTypeFilterDeferred(t *testing.T) {
-	s := openTestStore(t)
+	s := store_tester.OpenTestStore(t)
 	defer s.Close()
 	directory := t.TempDir()
-	writeFixture(t, directory, "one.md", "# One\n\nKeyword quasar.\n")
-	writeFixture(t, directory, "two.md", "# Two\n\nKeyword quasar.\n")
+	store_tester.WriteFixture(
+		t,
+		directory,
+		"one.md",
+		"# One\n\nKeyword quasar.\n",
+	)
+	store_tester.WriteFixture(
+		t,
+		directory,
+		"two.md",
+		"# Two\n\nKeyword quasar.\n",
+	)
 	s.AddCollection("test", directory, constant.DefaultGlob)
 	s.Index("test")
 	s.SetMetadata(

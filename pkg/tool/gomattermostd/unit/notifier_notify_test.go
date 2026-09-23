@@ -5,16 +5,17 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/connector"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/notifier"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/worker_tester"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 )
 
 func TestNotifierNotify(t *testing.T) {
-	sink, c := newNotifyClient(t)
+	sink, c := worker_tester.NewSink(t)
 	r := memory.New()
 	notifier.New(c, "mattermost", r).Notify("kilo", "first message")
-	received := sink.all()
+	received := sink.All()
 	assert.Integer(t, 1, len(received))
 	assert.String(t, "kilo", received[0].Callsign)
 	assert.String(t, "mattermost", received[0].Source)

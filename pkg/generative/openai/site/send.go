@@ -7,10 +7,10 @@ import (
 
 func (s *Site) Send(t string) {
 	if false {
-		console.Format("Focused: %+v\n", s.protocol.Focused())
+		console.Format("Focused: %+v\n", s.session.Focused())
 
 		return
 	}
 
-	s.protocol.EnterText(constant.OpenAIPromptSelector, t)
+	s.session.EnterText(constant.OpenAIPromptSelector, t)
 }

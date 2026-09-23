@@ -48,7 +48,7 @@ func checkFunction(
 		}
 
 		results.AddConcern(
-			concern.NewFile(
+			concern.NewPosition(
 				"variable_naming",
 				fmt.Sprintf(
 					"variable %s of type %s should be named %s",
@@ -56,8 +56,7 @@ func checkFunction(
 					v.typ.String(),
 					ideal,
 				),
-				p.Fset.Position(v.ident.Pos()).Filename,
-				false,
+				p.Fset.Position(v.ident.Pos()),
 			),
 		)
 	}

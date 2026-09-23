@@ -5,27 +5,18 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/unit/scan_tester"
 	"testing"
 )
-
-func rootSpec() string {
-	return `info:
-  title: Test
-paths:
-  /metrics:
-    get: {}
-  /raw:
-    get: {}
-  /api/power:
-    get: {}
-`
-}
 
 func TestRootRouteUncoveredFlagged(t *testing.T) {
 	v := virtual_file_system.New()
 	v.WriteString("pkg/tool/gotestd/option/o.go", "package option\n")
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
-	v.WriteString("pkg/tool/gotestd/generated/server/openapi.yaml", rootSpec())
+	v.WriteString(
+		"pkg/tool/gotestd/generated/server/openapi.yaml",
+		scan_tester.RootSpec(),
+	)
 	v.WriteString(
 		"pkg/tool/gotestd/mount.go",
 		`package gotestd
@@ -44,7 +35,10 @@ func TestRootRouteExplicitMountsClean(t *testing.T) {
 	v := virtual_file_system.New()
 	v.WriteString("pkg/tool/gotestd/option/o.go", "package option\n")
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
-	v.WriteString("pkg/tool/gotestd/generated/server/openapi.yaml", rootSpec())
+	v.WriteString(
+		"pkg/tool/gotestd/generated/server/openapi.yaml",
+		scan_tester.RootSpec(),
+	)
 	v.WriteString(
 		"pkg/tool/gotestd/constant/constant.go",
 		`package constant
@@ -72,7 +66,10 @@ func TestRootRouteSlashMountClean(t *testing.T) {
 	v := virtual_file_system.New()
 	v.WriteString("pkg/tool/gotestd/option/o.go", "package option\n")
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
-	v.WriteString("pkg/tool/gotestd/generated/server/openapi.yaml", rootSpec())
+	v.WriteString(
+		"pkg/tool/gotestd/generated/server/openapi.yaml",
+		scan_tester.RootSpec(),
+	)
 	v.WriteString(
 		"pkg/tool/gotestd/mount.go",
 		`package gotestd

@@ -11,7 +11,6 @@ import (
 
 func TestFilterWebService(t *testing.T) {
 	o := web_service_tester.New(t)
-	defer o.Close()
 	c := o.Client
 	x := context.Background()
 	system1 := "worker1"
@@ -22,12 +21,7 @@ func TestFilterWebService(t *testing.T) {
 	user2 := "bob"
 	desc := "test"
 
-	for _, entry := range []struct {
-		action  string
-		user    string
-		system  *string
-		service *string
-	}{
+	for _, entry := range []filterEntryCase{
 		{"restart", user1, &system1, &service1},
 		{"backup", user2, &system2, &service2},
 		{"deploy", user1, &system2, &service1},

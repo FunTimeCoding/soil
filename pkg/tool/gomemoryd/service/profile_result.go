@@ -8,4 +8,5 @@ type ProfileResult struct {
 	Index       []store.MemorySummary `json:"index"`
 	Impressions []store.Impression    `json:"impressions,omitempty"`
 	Completions []CompletionEntry     `json:"completions,omitempty"`
+	Text        string                `json:"-"`
 }

@@ -14,12 +14,12 @@ require (
 	github.com/amikos-tech/pure-tokenizers v0.1.5
 	github.com/andybrewer/mack v0.0.0-20251024001139-afd410b36447
 	github.com/andygrunwald/go-jira v1.17.0
-	github.com/anthropics/anthropic-sdk-go v1.74.0
+	github.com/anthropics/anthropic-sdk-go v1.75.0
 	github.com/apenella/go-ansible/v2 v2.4.2
 	github.com/bmatcuk/doublestar/v4 v4.10.2
 	github.com/bndr/gojenkins v1.2.0
 	github.com/bwmarrin/discordgo v0.29.0
-	github.com/chromedp/cdproto v0.0.0-20260912003405-686a5c723acc
+	github.com/chromedp/cdproto v0.0.0-20260922220944-a19bff23514f
 	github.com/chromedp/chromedp v0.16.0
 	github.com/coder/websocket v1.8.15
 	github.com/coreos/go-oidc/v3 v3.21.0
@@ -63,9 +63,8 @@ require (
 	github.com/netbox-community/go-netbox/v4 v4.3.0
 	github.com/nwaples/rardecode/v2 v2.4.1
 	github.com/oapi-codegen/runtime v1.7.0
-	github.com/olekukonko/tablewriter v1.1.5
-	github.com/ollama/ollama v0.34.2
-	github.com/openai/openai-go/v3 v3.64.3
+	github.com/ollama/ollama v0.34.3
+	github.com/openai/openai-go/v3 v3.66.0
 	github.com/openvex/go-vex v0.2.9
 	github.com/opsgenie/opsgenie-go-sdk-v2 v1.2.23
 	github.com/pkg/sftp v1.13.11
@@ -255,9 +254,6 @@ require (
 	github.com/oklog/run v1.2.0 // indirect
 	github.com/oklog/ulid v1.3.1 // indirect
 	github.com/oklog/ulid/v2 v2.1.2 // indirect
-	github.com/olekukonko/cat v0.0.0-20250911104152-50322a0618f6 // indirect
-	github.com/olekukonko/errors v1.2.0 // indirect
-	github.com/olekukonko/ll v0.1.6 // indirect
 	github.com/onsi/gomega v1.38.2 // indirect
 	github.com/package-url/packageurl-go v0.1.7 // indirect
 	github.com/pb33f/ordered-map/v2 v2.3.1 // indirect

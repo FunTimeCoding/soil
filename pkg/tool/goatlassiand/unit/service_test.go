@@ -7,14 +7,7 @@ import (
 )
 
 func TestReplaceUnique(t *testing.T) {
-	cases := []struct {
-		name    string
-		content string
-		old     string
-		new     string
-		expect  string
-		fail    string
-	}{
+	cases := []replaceUniqueCase{
 		{"single match", "Hello world", "world", "there", "Hello there", ""},
 		{
 			"not found",

@@ -9,9 +9,7 @@ import (
 
 func TestHistoryFormatsIDs(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "test topic")
 	history := a.MustCallTool(constant.History, map[string]any{})
 	assert.StringContains(t, "announced: test topic", history)
@@ -19,9 +17,7 @@ func TestHistoryFormatsIDs(t *testing.T) {
 
 func TestHistoryLimit(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "topic-alpha")
 	a.Announce(a.Name(), "topic-bravo")
 	a.Announce(a.Name(), "topic-charlie")
@@ -35,9 +31,7 @@ func TestHistoryLimit(t *testing.T) {
 
 func TestHistorySkip(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "topic-alpha")
 	a.Announce(a.Name(), "topic-bravo")
 	a.Announce(a.Name(), "topic-charlie")
@@ -51,9 +45,7 @@ func TestHistorySkip(t *testing.T) {
 
 func TestHistoryAllKinds(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "working")
 	a.MustCallTool(
 		constant.Update,

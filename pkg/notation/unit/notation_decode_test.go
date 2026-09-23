@@ -3,9 +3,9 @@ package unit
 import (
 	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/notation/fixture"
 	"testing"
 )
 
@@ -21,23 +21,6 @@ func TestDecodeStrict(t *testing.T) {
 	assert.Any(t, []int{1}, actual)
 }
 
-type User struct {
-	Name    string         `json:"name"`
-	Unknown map[string]any `json:"-"`
-}
-
-func (u *User) UnmarshalJSON(b []byte) error {
-	// Prevent recursion
-	type Alias User
-	v := (*Alias)(u)
-
-	return notation.UnmarshalUnknown(b, v, constant.UnknownField)
-}
-
-func (u *User) UnknownField() map[string]any {
-	return u.Unknown
-}
-
 func TestUnknown(t *testing.T) {
 	raw := `{
 		"name": "jdoe",
@@ -45,7 +28,7 @@ func TestUnknown(t *testing.T) {
 		"location": "Earth",
 		"skills": ["Go", "Kubernetes"]
 	}`
-	var u User
+	var u fixture.User
 	errors.PanicOnError(json.Unmarshal([]byte(raw), &u))
 	assert.String(t, "jdoe", u.Name)
 	assert.Any(t, "Development", u.Unknown["department"])

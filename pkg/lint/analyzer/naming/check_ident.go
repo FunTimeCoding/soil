@@ -32,14 +32,13 @@ func checkIdent(
 
 	if r.Banned {
 		results.AddConcern(
-			concern.NewFile(
+			concern.NewPosition(
 				"naming",
 				fmt.Sprintf(
 					"avoid %q in name, use a more specific term",
 					r.Segment,
 				),
-				p.Fset.Position(ident.Pos()).Filename,
-				false,
+				p.Fset.Position(ident.Pos()),
 			),
 		)
 
@@ -47,11 +46,10 @@ func checkIdent(
 	}
 
 	results.AddConcern(
-		concern.NewFile(
+		concern.NewPosition(
 			"naming",
 			segment.FormatMessage(r.Applicable, r.Segment, ident.Name),
-			p.Fset.Position(ident.Pos()).Filename,
-			false,
+			p.Fset.Position(ident.Pos()),
 		),
 	)
 }

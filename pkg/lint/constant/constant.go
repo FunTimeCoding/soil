@@ -5,6 +5,7 @@ import "regexp"
 const (
 	MemberSeparator  = "."
 	RecursivePattern = "/..."
+	DirectivePrefix  = "//go:"
 
 	FrontMatterDelimiterKey  = "front_matter_delimiter"
 	FrontMatterDelimiterText = "No front matter delimiter"
@@ -40,7 +41,7 @@ const (
 	MissingBlankAfterControlText = "Missing blank line after control block"
 
 	StrayConstantKey  = "stray_constant"
-	StrayConstantText = "Top-level const outside of a constant file or constant package"
+	StrayConstantText = "Top-level const outside of a constant package"
 
 	FixturePrefix              = "// golint:fixture "
 	StrayConstantRule          = "stray_constant"
@@ -79,6 +80,9 @@ const (
 	AssertPackageName  = "assert"
 	AssertHelperPrefix = "assert"
 	AssertTestingType  = "*testing.T"
+	TesterSuffix       = "_tester"
+
+	ExpectedParameterPrefix = "expect"
 
 	MaxLineLength = 80
 	TabWidth      = 4

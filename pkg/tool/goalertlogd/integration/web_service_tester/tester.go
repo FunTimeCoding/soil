@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/integration/base"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/worker"
+	"testing"
 )
 
 type Tester struct {
@@ -12,4 +13,5 @@ type Tester struct {
 	Client     *client.ClientWithResponses
 	Worker     *worker.Worker
 	MockClient *mock_client.Client
+	t          *testing.T
 }

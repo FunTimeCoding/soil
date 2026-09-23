@@ -6,7 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
 	"github.com/spf13/cobra"
-	"io"
 )
 
 func profile(l **client.Client) *cobra.Command {
@@ -31,10 +30,20 @@ func profile(l **client.Client) *cobra.Command {
 
 			r, e := (*l).GetProfile(context.Background(), params)
 			errors.PanicOnError(e)
-			defer errors.PanicClose(r.Body)
-			body, e := io.ReadAll(r.Body)
-			errors.PanicOnError(e)
-			fmt.Print(string(body))
+			parsed, f := client.ParseGetProfileResponse(r)
+			errors.PanicOnError(f)
+
+			if parsed.JSON200 == nil {
+				fmt.Print(string(parsed.Body))
+
+				return
+			}
+
+			fmt.Print(parsed.JSON200.Text)
+
+			if parsed.JSON200.Detail != nil {
+				fmt.Print(budgetTable(parsed.JSON200.Detail, parsed.JSON200))
+			}
 		},
 	}
 	c.Flags().StringVar(

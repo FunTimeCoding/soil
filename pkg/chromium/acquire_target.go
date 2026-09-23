@@ -20,7 +20,7 @@ func (c *Client) AcquireTarget(identifier string) context.Context {
 	}
 
 	x, _ := chromedp.NewContext(
-		c.context,
+		context.WithoutCancel(c.context),
 		chromedp.WithTargetID(target.ID(identifier)),
 	)
 	c.targets[identifier] = x

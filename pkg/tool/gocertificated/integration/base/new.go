@@ -44,8 +44,7 @@ func New(t *testing.T) *Server {
 		"https://certificate.example.org/callback",
 		client.DeriveKey("tester-encryption-secret"),
 	)
-
-	return &Server{
+	result := &Server{
 		Store:         s,
 		Service:       v,
 		Forge:         f,
@@ -68,4 +67,7 @@ func New(t *testing.T) *Server {
 			},
 		),
 	}
+	t.Cleanup(result.Close)
+
+	return result
 }

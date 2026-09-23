@@ -1,7 +1,7 @@
 package site
 
-import "github.com/funtimecoding/soil/pkg/chromium/protocol"
+import "github.com/funtimecoding/soil/pkg/chromium/session"
 
 func New() *Site {
-	return &Site{protocol: protocol.New("chatgpt.com")}
+	return &Site{session: session.New("chatgpt.com")}
 }

@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service/format"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
 	"slices"
 	"strings"
@@ -30,8 +31,6 @@ func (s *Service) Profile(
 	}
 
 	result := &ProfileResult{Always: always}
-	alwaysTokens := s.countTokens(always)
-	remaining := max(constant.ProfileBudget-alwaysTokens, 0)
 	alwaysIDs := map[int64]bool{}
 
 	for _, m := range always {
@@ -76,7 +75,19 @@ func (s *Service) Profile(
 		childrenByParent[parent] = names
 	}
 
+	alwaysTokens := 0
+
+	for i := range always {
+		if children, found := childrenByParent[always[i].Identifier]; found {
+			always[i].Children = children
+		}
+
+		alwaysTokens += s.tokenizer.Count(format.AlwaysMemory(&always[i]))
+	}
+
+	remaining := max(constant.ProfileBudget-alwaysTokens, 0)
 	indexTrimmed := 0
+	indexTokens := 0
 
 	for _, m := range allMemories {
 		if alwaysIDs[m.Identifier] {
@@ -95,7 +106,7 @@ func (s *Service) Profile(
 			m.Children = children
 		}
 
-		tokens := s.countTokens(m)
+		tokens := s.tokenizer.Count(format.IndexEntry(&m))
 
 		if remaining-tokens < 0 {
 			indexTrimmed++
@@ -104,10 +115,12 @@ func (s *Service) Profile(
 		}
 
 		remaining -= tokens
+		indexTokens += tokens
 		result.Index = append(result.Index, m)
 	}
 
 	completionsTrimmed := 0
+	completionTokens := 0
 
 	if scope == "" {
 		completions, f := s.ListCompletions()
@@ -120,8 +133,7 @@ func (s *Service) Profile(
 					name = name[:i]
 				}
 
-				entry := CompletionEntry{SessionName: name, Body: r.Body}
-				tokens := s.countTokens(entry)
+				tokens := s.tokenizer.Count(format.Completion(name, r.Body))
 
 				if remaining-tokens < 0 {
 					completionsTrimmed++
@@ -130,19 +142,24 @@ func (s *Service) Profile(
 				}
 
 				remaining -= tokens
-				result.Completions = append(result.Completions, entry)
+				completionTokens += tokens
+				result.Completions = append(
+					result.Completions,
+					CompletionEntry{SessionName: name, Body: r.Body},
+				)
 			}
 		}
 	}
 
 	impressionsTrimmed := 0
+	impressionTokens := 0
 
 	if scope == "" {
 		impressions, f := s.LatestImpressions(10)
 
 		if f == nil {
-			for _, i := range impressions {
-				tokens := s.countTokens(i)
+			for i := range impressions {
+				tokens := s.tokenizer.Count(format.Impression(&impressions[i]))
 
 				if remaining-tokens < 0 {
 					impressionsTrimmed++
@@ -151,12 +168,14 @@ func (s *Service) Profile(
 				}
 
 				remaining -= tokens
-				result.Impressions = append(result.Impressions, i)
+				impressionTokens += tokens
+				result.Impressions = append(result.Impressions, impressions[i])
 			}
 		}
 	}
 
 	relevantTrimmed := 0
+	relevantTokens := 0
 
 	if topic != "" && scope == "" {
 		exclude := make([]string, len(always))
@@ -171,8 +190,8 @@ func (s *Service) Profile(
 			return nil, nil, fmt.Errorf("search relevant memories: %w", f)
 		}
 
-		for _, r := range relevant {
-			tokens := s.countTokens(r)
+		for i := range relevant {
+			tokens := s.tokenizer.Count(format.RelevantMemory(&relevant[i]))
 
 			if remaining-tokens < 0 {
 				relevantTrimmed++
@@ -181,23 +200,25 @@ func (s *Service) Profile(
 			}
 
 			remaining -= tokens
-			result.Relevant = append(result.Relevant, r)
+			relevantTokens += tokens
+			result.Relevant = append(result.Relevant, relevant[i])
 		}
 	}
 
+	result.Text = ProfileText(result)
 	var d *ProfileDetail
 
 	if detail {
 		d = &ProfileDetail{
 			Budget:             constant.ProfileBudget,
 			AlwaysTokens:       alwaysTokens,
-			IndexTokens:        s.countTokens(result.Index),
+			IndexTokens:        indexTokens,
 			IndexTrimmed:       indexTrimmed,
-			CompletionTokens:   s.countTokens(result.Completions),
+			CompletionTokens:   completionTokens,
 			CompletionsTrimmed: completionsTrimmed,
-			ImpressionTokens:   s.countTokens(result.Impressions),
+			ImpressionTokens:   impressionTokens,
 			ImpressionsTrimmed: impressionsTrimmed,
-			RelevantTokens:     s.countTokens(result.Relevant),
+			RelevantTokens:     relevantTokens,
 			RelevantTrimmed:    relevantTrimmed,
 			TotalTokens:        constant.ProfileBudget - remaining,
 		}

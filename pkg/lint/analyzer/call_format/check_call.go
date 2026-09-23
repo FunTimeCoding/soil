@@ -32,23 +32,21 @@ func checkCall(
 
 	if openLine == closeLine {
 		results.AddConcern(
-			concern.NewFile(
+			concern.NewPosition(
 				"call_format",
 				fmt.Sprintf(
 					"call exceeds %d characters; split arguments to separate lines",
 					constant.MaxLineLength,
 				),
-				p.Fset.Position(call.Pos()).Filename,
-				false,
+				p.Fset.Position(call.Pos()),
 			),
 		)
 	} else {
 		results.AddConcern(
-			concern.NewFile(
+			concern.NewPosition(
 				"call_format",
 				"each argument should be on its own line",
-				p.Fset.Position(call.Args[0].Pos()).Filename,
-				false,
+				p.Fset.Position(call.Args[0].Pos()),
 			),
 		)
 	}

@@ -1,19 +1,11 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/identity"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"testing"
 )
-
-func testInstance(t *testing.T) *argument.Instance {
-	t.Helper()
-
-	return argument.NewInstance(identity.New("gotest", "test tool", "gotest"))
-}
 
 func TestWebDefaults(t *testing.T) {
 	t.Setenv(constant.PortEnvironment, "")

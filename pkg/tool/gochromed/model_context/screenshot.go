@@ -22,11 +22,11 @@ func (s *Server) Screenshot(
 		return response.Fail(e.Error())
 	}
 
-	x := s.client.AcquireTarget(t.Identifier)
+	p := s.client.Page(t.Identifier)
 	b, e := withTimeout(
 		constant.TargetTimeout,
 		func() ([]byte, error) {
-			return s.client.Screenshot(x)
+			return p.Screenshot()
 		},
 	)
 

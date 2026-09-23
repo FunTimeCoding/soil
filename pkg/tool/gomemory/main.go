@@ -8,7 +8,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomemory/constant"
 	memoryConstant "github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/spf13/cobra"
 )
@@ -32,7 +33,14 @@ func Main(
 			_ []string,
 		) {
 			base := locator.New(host).Port(port).Insecure().String()
-			c, e := client.NewClient(base)
+			c, e := client.NewClient(
+				base,
+				client.WithRequestEditorFn(
+					web.BearerEditor(
+						environment.Required(memoryConstant.TokenEnvironment),
+					),
+				),
+			)
 			errors.PanicOnError(e)
 			l = c
 		},
@@ -40,7 +48,10 @@ func Main(
 	o.PersistentFlags().StringVar(
 		&host,
 		"host",
-		environment.Fallback(memoryConstant.HostEnvironment, web.Localhost),
+		environment.Fallback(
+			memoryConstant.HostEnvironment,
+			webConstant.Localhost,
+		),
 		"gomemoryd host",
 	)
 	o.PersistentFlags().IntVar(
@@ -48,11 +59,12 @@ func Main(
 		"port",
 		environment.FallbackInteger(
 			memoryConstant.PortEnvironment,
-			web.ListenPort,
+			webConstant.ListenPort,
 		),
 		"gomemoryd port",
 	)
 	o.AddCommand(profile(&l))
+	o.AddCommand(statistic(&l))
 	o.AddCommand(relations(&l))
 	errors.PanicOnError(o.Execute())
 }

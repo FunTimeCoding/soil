@@ -9,9 +9,7 @@ import (
 
 func TestLabelReservedKeyBlocked(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "labeling")
 
 	for _, key := range constant.ReservedLabelKeys {
@@ -29,9 +27,7 @@ func TestLabelReservedKeyBlocked(t *testing.T) {
 
 func TestLabelCustomKey(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "labeling")
 	a.MustCallTool(
 		constant.Label,

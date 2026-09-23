@@ -9,6 +9,7 @@ import (
 
 func CloseTab() {
 	c := chromium.NewEnvironment()
+	defer c.Close()
 	console.Line("listing tabs via HTTP...")
 
 	for _, t := range c.Tabs() {

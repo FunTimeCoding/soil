@@ -6,8 +6,8 @@
 task lint
 ```
 
-Runs the repository's lint pipeline — golint and golangci-lint
-everywhere, gofix and goanalyze where the taskfile includes them.
+Runs the repository's lint pipeline — golint, golangci-lint, gofix,
+goanalyze and goaudit, in that order.
 Each tool's first line names the repository it scanned; after that
 the pipeline is silent on success - any further output is a failure.
 Lint has multiple stages - clearing the first may reveal new

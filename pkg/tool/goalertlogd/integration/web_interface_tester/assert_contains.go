@@ -9,8 +9,8 @@ import (
 )
 
 func (o *Tester) AssertContains(
-	path string,
 	expected string,
+	path string,
 ) {
 	o.t.Helper()
 	r, e := http.Get(join.Empty(o.base, path))

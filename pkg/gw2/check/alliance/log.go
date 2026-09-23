@@ -1,8 +1,9 @@
 package alliance
 
 import (
+	"charm.land/lipgloss/v2"
+	"charm.land/lipgloss/v2/table"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/gw2"
 	"github.com/funtimecoding/soil/pkg/gw2/check/alliance/aleeva_report"
 	"github.com/funtimecoding/soil/pkg/gw2/check/alliance/exceptions"
@@ -17,8 +18,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/join"
 	timeLibrary "github.com/funtimecoding/soil/pkg/time"
 	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
-	"github.com/olekukonko/tablewriter"
-	"os"
 	"slices"
 	"sort"
 	"time"
@@ -42,7 +41,7 @@ func Log(
 		start.Year(),
 		start.Month(),
 		start.Day(),
-		20, // not 18, because log times are in UTC too
+		constant.MatchUpStartHour,
 		0,
 		0,
 		0,
@@ -84,8 +83,14 @@ func Log(
 		exceptionNames = append(exceptionNames, e.Name)
 	}
 
-	t := tablewriter.NewWriter(os.Stdout)
-	t.Header([]string{"Name", "Account(s)", "Team(s)"})
+	t := table.New().Headers("Name", "Account(s)", "Team(s)").StyleFunc(
+		func(
+			_ int,
+			_ int,
+		) lipgloss.Style {
+			return lipgloss.NewStyle().Padding(0, 1)
+		},
+	)
 	var verifiedAccounts []string
 	var rowCount int
 
@@ -123,14 +128,10 @@ func Log(
 		}
 
 		rowCount++
-		errors.PanicOnError(
-			t.Append(
-				[]string{
-					r.DiscordName,
-					stringJoin.Comma(r.Gw2Accounts),
-					stringJoin.Comma(teams),
-				},
-			),
+		t.Row(
+			r.DiscordName,
+			stringJoin.Comma(r.Gw2Accounts),
+			stringJoin.Comma(teams),
 		)
 
 		for account, teamIdentifier := range r.WvwTeams {
@@ -148,7 +149,7 @@ func Log(
 
 	if rowCount > 0 {
 		console.Format("Not on team members (%d):\n", rowCount)
-		errors.PanicOnError(t.Render())
+		console.Line(t.Render())
 	}
 
 	console.Format("Members: %s\n", stringJoin.Comma(members))
@@ -203,18 +204,6 @@ func Log(
 
 	console.Format("Useless exceptions: %d\n", len(uselessException))
 	guildReport := guilds.Parse(systemConstant.Temporary)
-
-	if false {
-		// To maintain guilds.json
-		for guild, guildMembers := range guildReport {
-			for _, e := range guildMembers {
-				if !slices.Contains(members, e) {
-					console.Format("Guild member not found: %s %s\n", guild, e)
-				}
-			}
-		}
-	}
-
 	sort.Strings(foundExceptions)
 	console.Format(
 		"Exceptions (%d): %s\n",

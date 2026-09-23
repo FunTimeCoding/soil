@@ -8,25 +8,23 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
-	"testing"
 )
 
 func (o *Tester) Submit(
-	t *testing.T,
 	path string,
 	values url.Values,
 ) string {
-	t.Helper()
+	o.t.Helper()
 	r, e := http.NewRequest(
 		http.MethodPost,
 		fmt.Sprintf("http://127.0.0.1:%d%s", o.Server.Port, path),
 		strings.NewReader(values.Encode()),
 	)
-	assert.FatalOnError(t, e)
+	assert.FatalOnError(o.t, e)
 	r.Header.Set(constant.ContentType, constant.FormEncoded)
 	r.AddCookie(o.Server.Authorization.SubjectCookie("tester"))
 	result, e := http.DefaultClient.Do(r)
-	assert.FatalOnError(t, e)
+	assert.FatalOnError(o.t, e)
 
 	return web.ReadString(result)
 }

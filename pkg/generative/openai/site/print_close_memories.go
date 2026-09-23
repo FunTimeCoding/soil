@@ -7,11 +7,11 @@ import (
 )
 
 func (s *Site) printCloseMemories() {
-	s.protocol.PrintNode(
+	s.session.PrintNode(
 		constant.OpenAICloseMemoriesSelector,
 		constant.OpenAIUsefulAttributes,
 	)
-	n := s.protocol.Select(constant.OpenAICloseMemoriesSelector, 2)
+	n := s.session.Select(constant.OpenAICloseMemoriesSelector, 2)
 	console.Line("Close dialog index 2")
 	protocol.Print(n, constant.OpenAIUsefulAttributes)
 }

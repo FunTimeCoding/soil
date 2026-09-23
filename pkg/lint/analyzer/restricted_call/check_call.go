@@ -45,11 +45,10 @@ func checkCall(
 	}
 
 	results.AddConcern(
-		concern.NewFile(
+		concern.NewPosition(
 			"restricted_call",
 			rule.Message,
-			p.Fset.Position(call.Pos()).Filename,
-			false,
+			p.Fset.Position(call.Pos()),
 		),
 	)
 }

@@ -10,28 +10,6 @@ import (
 	"testing"
 )
 
-func writeEnvrc(
-	t *testing.T,
-	path string,
-	content string,
-) {
-	t.Helper()
-	assert.FatalOnError(t, os.WriteFile(path, []byte(content), 0o644))
-}
-
-func buildContains(
-	built []string,
-	entry string,
-) bool {
-	for _, candidate := range built {
-		if candidate == entry {
-			return true
-		}
-	}
-
-	return false
-}
-
 func TestLoadRemovesVanishedExport(t *testing.T) {
 	path := filepath.Join(t.TempDir(), ".envrc")
 	e := environment.New(

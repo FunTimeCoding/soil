@@ -3,55 +3,13 @@ package worker
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/chat/constant"
-	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/notification"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/integration/cross_service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/store/subscription"
-	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/mattermost/mattermost/server/public/model"
-	"net/http"
 	"testing"
 	"time"
 )
-
-func upstream(m *http.ServeMux) {
-	m.HandleFunc(
-		"/api/v4/users/me",
-		func(
-			w http.ResponseWriter,
-			_ *http.Request,
-		) {
-			web.Encode(w, &model.User{Id: "self", Username: "assistant"})
-		},
-	)
-	m.HandleFunc(
-		"/api/v4/users/foxtrot",
-		func(
-			w http.ResponseWriter,
-			_ *http.Request,
-		) {
-			web.Encode(w, &model.User{Id: "foxtrot", Username: "Foxtrot"})
-		},
-	)
-	m.HandleFunc(
-		"/api/v4/posts/alfa",
-		func(
-			w http.ResponseWriter,
-			_ *http.Request,
-		) {
-			web.Encode(w, &model.Post{Id: "alfa", ChannelId: "bravo"})
-		},
-	)
-}
-
-func postEvent(p *model.Post) *model.WebSocketEvent {
-	v := &model.WebSocketEvent{}
-	v = v.SetEvent(model.WebsocketEventPosted)
-
-	return v.SetData(
-		map[string]any{constant.MattermostPostField: notation.Encode(p, false)},
-	)
-}
 
 func TestSocketEventBecomesNotification(t *testing.T) {
 	r := cross_service_tester.New(t, upstream, 10*time.Millisecond)

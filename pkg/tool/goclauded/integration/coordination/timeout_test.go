@@ -10,9 +10,7 @@ import (
 
 func TestInactivityTimeout(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "working on something")
 	a.CheckLive()
 	s.Store.Advance(2 * time.Hour)
@@ -29,9 +27,7 @@ func TestInactivityTimeout(t *testing.T) {
 
 func TestCompleteTimeoutCoordination(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "a task")
 	a.MustCallTool(constant.Complete, map[string]any{constant.Message: "done"})
 	a.CheckLive()
@@ -49,9 +45,7 @@ func TestCompleteTimeoutCoordination(t *testing.T) {
 
 func TestNoFalseTimeout(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "still working")
 	a.CheckLive()
 	s.Store.Advance(30 * time.Minute)
@@ -63,9 +57,7 @@ func TestNoFalseTimeout(t *testing.T) {
 
 func TestTimeoutClearsOnCheck(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "working")
 	a.CheckLive()
 	s.Store.Advance(2 * time.Hour)
@@ -80,11 +72,8 @@ func TestTimeoutClearsOnCheck(t *testing.T) {
 
 func TestTimeoutVisibleToOthers(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	b := s.NewSession(t)
-	defer b.Close()
 	a.Announce(a.Name(), "going quiet")
 	b.Announce(b.Name(), "watching")
 	s.Store.Advance(2 * time.Hour)

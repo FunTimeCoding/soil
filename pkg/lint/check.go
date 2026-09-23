@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/option"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/lint/repository"
+	"github.com/funtimecoding/soil/pkg/lint/spacing"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 )
 
@@ -24,7 +25,7 @@ func Check(
 			PackageName,
 			StrayConstant,
 			FixtureDirective,
-			Spacing,
+			spacing.Check,
 			VariableGrouping,
 		},
 		o,

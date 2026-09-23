@@ -35,15 +35,14 @@ func checkDefer(
 	}
 
 	results.AddConcern(
-		concern.NewFile(
+		concern.NewPosition(
 			"defer_close",
 			fmt.Sprintf(
 				"use defer errors.PanicClose(%s) instead of defer %s.Close()",
 				types.ExprString(call.X),
 				types.ExprString(call.X),
 			),
-			p.Fset.Position(d.Pos()).Filename,
-			false,
+			p.Fset.Position(d.Pos()),
 		),
 	)
 }

@@ -5,9 +5,6 @@ import (
 	"golang.org/x/tools/go/packages"
 )
 
-// ArgumentRanges collects the source ranges of every argument
-// passed to an assert call in the file. Literals inside these
-// ranges are expected values - the sanctioned home of literals.
 func ArgumentRanges(
 	p *packages.Package,
 	file *ast.File,

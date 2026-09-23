@@ -15,7 +15,6 @@ import (
 
 func TestDeleteHashRendersOnDetailPage(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	identifier := "11111111-2222-3333-4444-555555555555"
 	s.Store.EnsureSession(identifier)
 	s.Store.Store.UpdateFields(
@@ -36,7 +35,6 @@ func TestDeleteHashRendersOnDetailPage(t *testing.T) {
 
 func TestDeleteHashStaysOutOfMachineSurfaces(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	s.Store.EnsureSession("11111111-2222-3333-4444-555555555555")
 	s.Store.Store.UpdateFields(
 		"11111111-2222-3333-4444-555555555555",
@@ -58,7 +56,6 @@ func TestDeleteHashStaysOutOfMachineSurfaces(t *testing.T) {
 	assert.FatalOnError(t, f)
 	assert.StringNotContains(t, hash, string(list.Body))
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "hash containment")
 	assert.StringNotContains(
 		t,

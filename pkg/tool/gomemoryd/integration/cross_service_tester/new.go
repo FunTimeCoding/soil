@@ -67,6 +67,7 @@ func New(t *testing.T) *Tester {
 	)
 
 	return &Tester{
+		t:            t,
 		QueryClient:  queryClient,
 		MemoryClient: memoryClient,
 		MemoryStore:  s,

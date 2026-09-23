@@ -3,11 +3,15 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"testing"
 )
 
 func TestRenameFunction(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("rename-function/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("rename-function/src"),
+	)
 	s := testService()
 	r, e := s.Rename(
 		d,
@@ -20,18 +24,22 @@ func TestRenameFunction(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	assert.True(t, len(r.Entries) >= 3)
-	declaration := readFixtureFile(t, d, "pkg/target/is_generated_header.go")
+	declaration := service_tester.ReadFixtureFile(
+		t,
+		d,
+		"pkg/target/is_generated_header.go",
+	)
 	assert.StringContains(t, "func IsGenerated(", declaration)
-	inPackage := readFixtureFile(t, d, "pkg/target/check.go")
+	inPackage := service_tester.ReadFixtureFile(t, d, "pkg/target/check.go")
 	assert.StringContains(t, "IsGenerated(content)", inPackage)
-	crossPackage := readFixtureFile(t, d, "pkg/caller/run.go")
+	crossPackage := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
 	assert.StringContains(t, "target.IsGenerated(content)", crossPackage)
 }
 
 func TestRenameFunctionSamePackage(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,
-		serviceTestdata("unexport-function/src"),
+		service_tester.ServiceTestdata("unexport-function/src"),
 	)
 	s := testService()
 	r, e := s.Rename(
@@ -44,14 +52,21 @@ func TestRenameFunctionSamePackage(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	declaration := readFixtureFile(t, d, "pkg/target/is_generated.go")
+	declaration := service_tester.ReadFixtureFile(
+		t,
+		d,
+		"pkg/target/is_generated.go",
+	)
 	assert.StringContains(t, "func WasGenerated(", declaration)
-	run := readFixtureFile(t, d, "pkg/target/run.go")
+	run := service_tester.ReadFixtureFile(t, d, "pkg/target/run.go")
 	assert.StringContains(t, "WasGenerated(name)", run)
 }
 
 func TestRenameMethod(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("rename-method/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("rename-method/src"),
+	)
 	s := testService()
 	r, e := s.Rename(
 		d,
@@ -64,29 +79,32 @@ func TestRenameMethod(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
 	assert.True(t, len(r.Entries) >= 3)
-	method := readFixtureFile(t, d, "pkg/target/find_by_name.go")
+	method := service_tester.ReadFixtureFile(t, d, "pkg/target/find_by_name.go")
 	assert.StringContains(t, "func (s *Store) LookupByName(", method)
-	inPackage := readFixtureFile(t, d, "pkg/target/run.go")
+	inPackage := service_tester.ReadFixtureFile(t, d, "pkg/target/run.go")
 	assert.StringContains(t, "v.LookupByName(\"test\")", inPackage)
-	crossPackage := readFixtureFile(t, d, "pkg/caller/run.go")
+	crossPackage := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
 	assert.StringContains(t, "s.LookupByName(\"test\")", crossPackage)
 }
 
 func TestRenameToUnexportedBlockedByCrossPackage(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("rename-unexport/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("rename-unexport/src"),
+	)
 	s := testService()
 	r, e := s.Rename(d, "example/pkg/target", "Validate", "check", "", false)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "would lose access")
-	source := readFixtureFile(t, d, "pkg/target/validate.go")
+	source := service_tester.ReadFixtureFile(t, d, "pkg/target/validate.go")
 	assert.StringContains(t, "func Validate(", source)
 }
 
 func TestRenameToUnexportedAllowedWithinPackage(t *testing.T) {
 	d := testutil.PrepareTestPackage(
 		t,
-		serviceTestdata("unexport-function/src"),
+		service_tester.ServiceTestdata("unexport-function/src"),
 	)
 	s := testService()
 	r, e := s.Rename(
@@ -99,12 +117,19 @@ func TestRenameToUnexportedAllowedWithinPackage(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	declaration := readFixtureFile(t, d, "pkg/target/is_generated.go")
+	declaration := service_tester.ReadFixtureFile(
+		t,
+		d,
+		"pkg/target/is_generated.go",
+	)
 	assert.StringContains(t, "func wasGenerated(", declaration)
 }
 
 func TestRenameCollision(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("rename-function/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("rename-function/src"),
+	)
 	s := testService()
 	r, e := s.Rename(
 		d,
@@ -120,7 +145,10 @@ func TestRenameCollision(t *testing.T) {
 }
 
 func TestRenameSymbolNotFound(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("rename-function/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("rename-function/src"),
+	)
 	s := testService()
 	r, e := s.Rename(d, "example/pkg/target", "Missing", "Something", "", false)
 	assert.FatalOnError(t, e)
@@ -129,7 +157,10 @@ func TestRenameSymbolNotFound(t *testing.T) {
 }
 
 func TestRenamePackageNotFound(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("rename-function/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("rename-function/src"),
+	)
 	s := testService()
 	r, e := s.Rename(
 		d,
@@ -145,7 +176,10 @@ func TestRenamePackageNotFound(t *testing.T) {
 }
 
 func TestRenameReceiverNotFound(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("rename-method/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("rename-method/src"),
+	)
 	s := testService()
 	r, e := s.Rename(
 		d,
@@ -161,7 +195,10 @@ func TestRenameReceiverNotFound(t *testing.T) {
 }
 
 func TestRenameMethodNotFound(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("rename-method/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("rename-method/src"),
+	)
 	s := testService()
 	r, e := s.Rename(
 		d,
@@ -177,7 +214,10 @@ func TestRenameMethodNotFound(t *testing.T) {
 }
 
 func TestRenameMethodCollision(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("method-collision/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("method-collision/src"),
+	)
 	s := testService()
 	r, e := s.Rename(d, "example/pkg/target", "Save", "Load", "Store", false)
 	assert.FatalOnError(t, e)
@@ -186,7 +226,10 @@ func TestRenameMethodCollision(t *testing.T) {
 }
 
 func TestRenameSameName(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("rename-function/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("rename-function/src"),
+	)
 	s := testService()
 	r, e := s.Rename(
 		d,
@@ -202,11 +245,14 @@ func TestRenameSameName(t *testing.T) {
 }
 
 func TestRenameLongerKeepsComments(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("rename-longer/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("rename-longer/src"),
+	)
 	s := testService()
 	r, e := s.Rename(
 		d,
-		"example/pkg/target",
+		"example/pkg/target/constant",
 		"Legend",
 		"TargetLegendExtended",
 		"",
@@ -214,13 +260,17 @@ func TestRenameLongerKeepsComments(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	source := readFixtureFile(t, d, "pkg/target/constant.go")
+	source := service_tester.ReadFixtureFile(
+		t,
+		d,
+		"pkg/target/constant/constant.go",
+	)
 	assertFormatted(t, source)
 	assert.StringContains(t, "TargetLegendExtended = \"--legend\"", source)
 	assert.StringContains(t, "// alpha trailing", source)
 	assert.StringContains(t, "// bold trailing", source)
 	assert.StringContains(t, "// wide trailing", source)
-	run := readFixtureFile(t, d, "pkg/target/run.go")
+	run := service_tester.ReadFixtureFile(t, d, "pkg/target/run.go")
 	assertFormatted(t, run)
 	assert.StringContains(t, "TargetLegendExtended", run)
 }

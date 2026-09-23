@@ -6,28 +6,19 @@ import (
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	integration "github.com/funtimecoding/soil/pkg/tool/goclauded/integration/fixture"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration/service_tester"
 	"os"
 	"path/filepath"
-	"strings"
 	"testing"
 )
-
-func oversizedLine() string {
-	return join.Empty(
-		`{"type":"assistant","timestamp":"2026-08-16T00:30:00.000Z",`,
-		`"message":{"role":"assistant","content":[{"type":"text","text":"`,
-		strings.Repeat("x", 2*1024*1024),
-		`"}]}}`,
-	)
-}
 
 func TestOversizedLineDoesNotStopExtraction(t *testing.T) {
 	s := service_tester.New(t)
 	s.Store.EnsureSession("oversized-session")
 	body := join.Empty(
 		fixture.Read("claude", "context-loads.jsonl"),
-		oversizedLine(),
+		integration.OversizedLine(),
 		"\n",
 	)
 	errors.PanicOnError(

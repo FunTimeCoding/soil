@@ -13,4 +13,6 @@ type Builder struct {
 	verbose      bool
 	resources    bool
 	recorder     face.Recorder
+	experimental map[string]any
+	connected    func()
 }

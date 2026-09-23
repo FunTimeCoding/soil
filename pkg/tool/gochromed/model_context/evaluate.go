@@ -23,12 +23,12 @@ func (s *Server) Evaluate(
 		return response.Fail(e.Error())
 	}
 
-	x := s.client.AcquireTarget(t.Identifier)
+	p := s.client.Page(t.Identifier)
 	var result any
 	e = withTimeoutAction(
 		constant.TargetTimeout,
 		func() error {
-			return s.client.Evaluate(x, a.Expression, &result)
+			return p.Evaluate(a.Expression, &result)
 		},
 	)
 

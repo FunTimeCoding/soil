@@ -1,0 +1,41 @@
+package forwarding_function
+
+import (
+	"fmt"
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/forwarding_function"
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/source/resolve"
+	"go/token"
+	"golang.org/x/tools/go/packages"
+	"testing"
+)
+
+func TestForwardingFunction(t *testing.T) {
+	directory := testutil.PrepareTestPackage(t, "testdata/src/example")
+	configuration := &packages.Config{
+		Mode:  packages.LoadSyntax | packages.NeedModule,
+		Fset:  token.NewFileSet(),
+		Dir:   directory,
+		Tests: true,
+	}
+	loaded, e := packages.Load(configuration, "./...")
+
+	if e != nil {
+		t.Fatalf("load: %s", e)
+	}
+
+	results := output.NewResultsWithDirectory(fmt.Sprintf("%s/", directory))
+
+	for _, p := range resolve.PreferTestVariants(loaded) {
+		if len(p.Errors) > 0 {
+			t.Fatalf("package errors: %v", p.Errors)
+		}
+
+		forwarding_function.Check(p, results)
+	}
+
+	testutil.AssertBlocked(t, results, 2)
+	testutil.AssertBlockedContains(t, results, "small only forwards to NewSize")
+	testutil.AssertBlockedContains(t, results, "plain only forwards to add")
+}

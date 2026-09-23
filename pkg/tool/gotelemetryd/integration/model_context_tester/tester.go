@@ -4,10 +4,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/model_context_client"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/integration/base"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/store"
+	"testing"
 )
 
 type Tester struct {
 	server *base.Server
 	Client *model_context_client.Client
 	Store  *store.Store
+	t      *testing.T
 }

@@ -23,6 +23,40 @@ func TestCreateMemory(t *testing.T) {
 	assert.Count(t, 1, memories)
 }
 
+func TestCreateMemoryWithTags(t *testing.T) {
+	s := model_context_tester.New(t)
+	result := s.MustCallTool(
+		constant.SaveMemory,
+		map[string]any{
+			constant.MemoryName:  "test memory",
+			constant.Content:     "test content",
+			constant.Description: "a test",
+			constant.Tags:        "build,groom",
+		},
+	)
+	assert.StringContains(t, "Created memory", result)
+	m, e := s.Store().GetMemory(1)
+	assert.FatalOnError(t, e)
+	assert.Strings(t, []string{"build", "groom"}, m.Tags)
+}
+
+func TestCreateMemoryStripsTagCruft(t *testing.T) {
+	s := model_context_tester.New(t)
+	result := s.MustCallTool(
+		constant.SaveMemory,
+		map[string]any{
+			constant.MemoryName:  "test memory",
+			constant.Content:     "test content",
+			constant.Description: "a test",
+			constant.Tags:        `["build", "groom"]`,
+		},
+	)
+	assert.StringContains(t, "Stripped", result)
+	m, e := s.Store().GetMemory(1)
+	assert.FatalOnError(t, e)
+	assert.Strings(t, []string{"build", "groom"}, m.Tags)
+}
+
 func TestUpdateMemory(t *testing.T) {
 	s := model_context_tester.New(t)
 	s.MustCallTool(

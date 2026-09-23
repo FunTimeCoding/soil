@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/directory"
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/service"
 	"os"
 	"testing"
 )
@@ -15,10 +14,6 @@ import (
 func TestMain(m *testing.M) {
 	bootstrap(directory.NewEnvironment())
 	os.Exit(m.Run())
-}
-
-func stack() *service.Service {
-	return service.New(directory.NewEnvironment())
 }
 
 func TestUserLifecycle(t *testing.T) {

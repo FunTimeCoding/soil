@@ -29,5 +29,5 @@ func New(t *testing.T) *Tester {
 		nil,
 	)
 
-	return &Tester{Store: s, Worker: w, MockClient: c}
+	return &Tester{t: t, Store: s, Worker: w, MockClient: c}
 }

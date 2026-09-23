@@ -41,6 +41,7 @@ func New(
 	)
 
 	return &Tester{
+		t:         t,
 		Upstream:  upstream,
 		Store:     s,
 		Watcher:   w,

@@ -18,7 +18,7 @@ func scopeDetail(
 	count := 0
 
 	for _, p := range v.Files() {
-		if InScope(o, p) {
+		if InScope(o, p) && !Skipped(o, p) {
 			count++
 		}
 	}

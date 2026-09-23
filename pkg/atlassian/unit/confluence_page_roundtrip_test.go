@@ -7,10 +7,7 @@ import (
 )
 
 func TestRoundTripStorageToMarkdownToStorage(t *testing.T) {
-	cases := []struct {
-		name    string
-		storage string
-	}{
+	cases := []storageRoundTripCase{
 		{"plain paragraph", "<p>Hello world</p>"},
 		{"two paragraphs", "<p>First</p><p>Second</p>"},
 		{"bullet list", "<ul><li><p>Alfa</p></li><li><p>Bravo</p></li></ul>"},
@@ -44,9 +41,6 @@ func TestRoundTripStorageToMarkdownToStorage(t *testing.T) {
 			func(t *testing.T) {
 				markdown := page.ToMarkdown(c.storage)
 				restored := page.ToStorage(markdown)
-
-				// Round-trip the restored storage back to markdown
-				// to verify the semantic content survives
 				assert.String(t, markdown, page.ToMarkdown(restored))
 			},
 		)
@@ -54,11 +48,7 @@ func TestRoundTripStorageToMarkdownToStorage(t *testing.T) {
 }
 
 func TestRoundTripMarkdownToStorageToMarkdown(t *testing.T) {
-	cases := []struct {
-		name     string
-		markdown string
-		expect   string // empty means expect identical round-trip
-	}{
+	cases := []markdownRoundTripCase{
 		{"plain paragraph", "Hello world", ""},
 		{"two paragraphs", "First\n\nSecond", ""},
 		{"bullet list", "- Alfa\n- Bravo", ""},
@@ -69,13 +59,8 @@ func TestRoundTripMarkdownToStorageToMarkdown(t *testing.T) {
 		{"code inline", "Use `fmt.Println` here", ""},
 		{"hard break", "Line one  \nLine two", ""},
 		{"code block", "```\nfmt.Println(\"hello\")\n```", ""},
-		{ // drift: blank line inserted between outer and inner item
-			"nested list",
-			"- Outer\n    - Inner",
-			"- Outer\n  \n  - Inner",
-		},
+		{"nested list", "- Outer\n    - Inner", "- Outer\n  \n  - Inner"},
 		{
-			// drift: separator and cell padding normalized by html-to-markdown
 			"table",
 			"| Name | Value |\n| --- | --- |\n| Alfa | One |",
 			"| Name | Value |\n|------|-------|\n| Alfa | One   |",
@@ -89,8 +74,8 @@ func TestRoundTripMarkdownToStorageToMarkdown(t *testing.T) {
 				restored := page.ToMarkdown(page.ToStorage(c.markdown))
 				expect := c.markdown
 
-				if c.expect != "" {
-					expect = c.expect
+				if c.drift != "" {
+					expect = c.drift
 				}
 
 				assert.String(t, expect, restored)

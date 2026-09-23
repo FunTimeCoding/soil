@@ -4,11 +4,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/generated/server"
-	"testing"
 )
 
-func (o *Tester) CreateRoot(t *testing.T) {
-	t.Helper()
+func (o *Tester) CreateRoot() {
+	o.t.Helper()
 	country := constant.FixtureCountry
 	province := constant.FixtureProvince
 	organization := constant.FixtureOrganization
@@ -22,5 +21,5 @@ func (o *Tester) CreateRoot(t *testing.T) {
 			Organization: &organization,
 		},
 	)
-	assert.FatalOnError(t, e)
+	assert.FatalOnError(o.t, e)
 }

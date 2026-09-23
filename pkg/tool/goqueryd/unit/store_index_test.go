@@ -5,20 +5,21 @@ import (
 	library "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/store_tester"
 	"os"
 	"path/filepath"
 	"testing"
 )
 
 func TestIndexNewDocuments(t *testing.T) {
-	s := indexedTestStore(t)
+	s := store_tester.IndexedTestStore(t)
 	defer s.Close()
 	status := s.MustStatus()
 	assert.Integer(t, 5, status.TotalDocuments)
 }
 
 func TestIndexUnchanged(t *testing.T) {
-	s := indexedTestStore(t)
+	s := store_tester.IndexedTestStore(t)
 	defer s.Close()
 	result := s.Index("test")
 	assert.Integer(t, 0, result.Indexed)
@@ -27,24 +28,39 @@ func TestIndexUnchanged(t *testing.T) {
 }
 
 func TestIndexUpdatedContent(t *testing.T) {
-	s := openTestStore(t)
+	s := store_tester.OpenTestStore(t)
 	defer s.Close()
 	directory := t.TempDir()
-	writeFixture(t, directory, "doc.md", "# Original\n\nOriginal content.\n")
+	store_tester.WriteFixture(
+		t,
+		directory,
+		"doc.md",
+		"# Original\n\nOriginal content.\n",
+	)
 	s.AddCollection("test", directory, constant.DefaultGlob)
 	s.Index("test")
-	writeFixture(t, directory, "doc.md", "# Updated\n\nUpdated content.\n")
+	store_tester.WriteFixture(
+		t,
+		directory,
+		"doc.md",
+		"# Updated\n\nUpdated content.\n",
+	)
 	result := s.Index("test")
 	assert.Integer(t, 0, result.Indexed)
 	assert.Integer(t, 1, result.Updated)
 }
 
 func TestIndexRemovedDocument(t *testing.T) {
-	s := openTestStore(t)
+	s := store_tester.OpenTestStore(t)
 	defer s.Close()
 	directory := t.TempDir()
-	writeFixture(t, directory, "keep.md", "# Keep\n\nStays.\n")
-	writeFixture(t, directory, "remove.md", "# Remove\n\nGoes away.\n")
+	store_tester.WriteFixture(t, directory, "keep.md", "# Keep\n\nStays.\n")
+	store_tester.WriteFixture(
+		t,
+		directory,
+		"remove.md",
+		"# Remove\n\nGoes away.\n",
+	)
 	s.AddCollection("test", directory, constant.DefaultGlob)
 	s.Index("test")
 	errors.PanicOnError(os.Remove(filepath.Join(directory, "remove.md")))
@@ -55,22 +71,37 @@ func TestIndexRemovedDocument(t *testing.T) {
 }
 
 func TestIndexSkipsHiddenFiles(t *testing.T) {
-	s := openTestStore(t)
+	s := store_tester.OpenTestStore(t)
 	defer s.Close()
 	directory := t.TempDir()
-	writeFixture(t, directory, "visible.md", "# Visible\n\nContent.\n")
-	writeFixture(t, directory, ".hidden/secret.md", "# Secret\n\nHidden.\n")
+	store_tester.WriteFixture(
+		t,
+		directory,
+		"visible.md",
+		"# Visible\n\nContent.\n",
+	)
+	store_tester.WriteFixture(
+		t,
+		directory,
+		".hidden/secret.md",
+		"# Secret\n\nHidden.\n",
+	)
 	s.AddCollection("test", directory, constant.DefaultGlob)
 	result := s.Index("test")
 	assert.Integer(t, 1, result.Indexed)
 }
 
 func TestIndexSkipsGeneratedFiles(t *testing.T) {
-	s := openTestStore(t)
+	s := store_tester.OpenTestStore(t)
 	defer s.Close()
 	directory := t.TempDir()
-	writeFixture(t, directory, "real.go", "package foo\n\nfunc Real() {}\n")
-	writeFixture(
+	store_tester.WriteFixture(
+		t,
+		directory,
+		"real.go",
+		"package foo\n\nfunc Real() {}\n",
+	)
+	store_tester.WriteFixture(
 		t,
 		directory,
 		library.GeneratedFile,

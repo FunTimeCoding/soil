@@ -9,13 +9,11 @@ import (
 
 func TestEveryToolIsRegistered(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	assert.Count(t, 12, o.Client.ListTools())
 }
 
 func TestChainIsBuiltThroughTools(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	o.CreateRoot()
 	assert.StringContains(t, "Example Issuing CA", o.CreateCluster())
 	assert.StringContains(
@@ -27,7 +25,6 @@ func TestChainIsBuiltThroughTools(t *testing.T) {
 
 func TestSecondRootIsRefusedThroughTools(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	o.CreateRoot()
 	assert.StringContains(
 		t,
@@ -38,7 +35,6 @@ func TestSecondRootIsRefusedThroughTools(t *testing.T) {
 
 func TestIssuedCertificateReturnsItsKeyOnce(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	o.CreateRoot()
 	o.CreateCluster()
 	issued := o.Client.MustCallTool(
@@ -60,7 +56,6 @@ func TestIssuedCertificateReturnsItsKeyOnce(t *testing.T) {
 
 func TestRootCertificateToolServesTheAnchor(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	o.CreateRoot()
 	assert.StringContains(
 		t,
@@ -71,7 +66,6 @@ func TestRootCertificateToolServesTheAnchor(t *testing.T) {
 
 func TestPublishThroughToolsCommitsTheChain(t *testing.T) {
 	o := model_context_tester.New(t)
-	defer o.Close()
 	o.CreateRoot()
 	o.CreateCluster()
 	o.Client.MustCallTool(constant.Publish, map[string]any{})

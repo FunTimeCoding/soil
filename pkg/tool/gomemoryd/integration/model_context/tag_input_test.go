@@ -7,23 +7,8 @@ import (
 	"testing"
 )
 
-func taggedMemory(t *testing.T) *model_context_tester.Tester {
-	t.Helper()
-	s := model_context_tester.New(t)
-	s.MustCallTool(
-		constant.SaveMemory,
-		map[string]any{
-			constant.MemoryName:  "alfa",
-			constant.Content:     "first",
-			constant.Description: "a test",
-		},
-	)
-
-	return s
-}
-
 func TestTagInputStripsNotationArray(t *testing.T) {
-	s := taggedMemory(t)
+	s := model_context_tester.NewTagged(t)
 	result := s.MustCallTool(
 		constant.TagMemory,
 		map[string]any{
@@ -40,7 +25,7 @@ func TestTagInputStripsNotationArray(t *testing.T) {
 }
 
 func TestTagInputStaysQuietWhenClean(t *testing.T) {
-	s := taggedMemory(t)
+	s := model_context_tester.NewTagged(t)
 	result := s.MustCallTool(
 		constant.TagMemory,
 		map[string]any{

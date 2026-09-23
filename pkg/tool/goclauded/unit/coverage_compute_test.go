@@ -5,23 +5,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/tool_call"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/coverage"
 	"testing"
-	"time"
 )
-
-func coverageNow() time.Time {
-	return time.Date(2026, 8, 22, 12, 0, 0, 0, time.UTC)
-}
-
-func coverageCall(
-	name string,
-	timestamp string,
-) tool_call.Call {
-	return tool_call.Call{Name: name, Timestamp: timestamp}
-}
 
 func TestCoverageComputeWindows(t *testing.T) {
 	servers := coverage.Compute(
-		[]tool_call.Call{
+		[]*tool_call.Call{
 			coverageCall("mcp__alfa__list_items", "2026-08-20T10:00:00Z"),
 			coverageCall("mcp__alfa__list_items", "2026-01-05T10:00:00Z"),
 			coverageCall("mcp__alfa__get_item", "2026-01-05T10:00:00Z"),
@@ -50,7 +38,7 @@ func TestCoverageComputeWindows(t *testing.T) {
 
 func TestCoverageComputeRetiredName(t *testing.T) {
 	servers := coverage.Compute(
-		[]tool_call.Call{
+		[]*tool_call.Call{
 			coverageCall("mcp__alfa__old_name", "2026-08-20T10:00:00Z"),
 		},
 		map[string][]string{"alfa": {"new_name"}},
@@ -85,7 +73,7 @@ func TestCoverageComputeConfiguredOnly(t *testing.T) {
 
 func TestCoverageComputeIgnoresOtherTools(t *testing.T) {
 	servers := coverage.Compute(
-		[]tool_call.Call{
+		[]*tool_call.Call{
 			coverageCall("Bash", "2026-08-20T10:00:00Z"),
 			coverageCall("Read", "2026-08-20T10:00:00Z"),
 		},
@@ -100,7 +88,7 @@ func TestCoverageComputeIgnoresOtherTools(t *testing.T) {
 
 func TestCoverageComputeAliasFold(t *testing.T) {
 	servers := coverage.Compute(
-		[]tool_call.Call{
+		[]*tool_call.Call{
 			coverageCall("mcp__alfa__list_items", "2026-08-20T10:00:00Z"),
 			coverageCall(
 				"mcp__claude_ai_Alfa__list_items",
@@ -124,7 +112,7 @@ func TestCoverageComputeAliasFold(t *testing.T) {
 
 func TestCoverageComputeUnconfiguredObserved(t *testing.T) {
 	servers := coverage.Compute(
-		[]tool_call.Call{
+		[]*tool_call.Call{
 			coverageCall("mcp__gone__old_tool", "2026-08-20T10:00:00Z"),
 		},
 		map[string][]string{},

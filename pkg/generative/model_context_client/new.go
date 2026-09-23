@@ -35,6 +35,8 @@ func New(
 		nil,
 	)
 	assert.FatalOnError(t, e)
+	result := &Client{t: t, context: x, session: s}
+	t.Cleanup(result.Close)
 
-	return &Client{t: t, context: x, session: s}
+	return result
 }

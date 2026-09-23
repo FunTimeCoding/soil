@@ -11,17 +11,14 @@ func (s *State) recordCall(
 	timestamp string,
 ) {
 	if s.Pending == nil {
-		s.Pending = map[string]tool_call.Call{}
+		s.Pending = map[string]*tool_call.Call{}
 	}
 
 	if len(s.Pending) >= constant.ClaudePendingCallLimit {
 		s.dropOldestPending()
 	}
 
-	s.Pending[b.Identifier] = tool_call.Call{
-		Name:       b.Name,
-		Identifier: b.Identifier,
-		Timestamp:  timestamp,
-		Input:      string(b.Input),
-	}
+	c := tool_call.New(b.Name, b.Identifier, timestamp)
+	c.Input = string(b.Input)
+	s.Pending[b.Identifier] = c
 }

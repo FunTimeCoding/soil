@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/strings/shorten"
+	"github.com/funtimecoding/soil/pkg/time"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/web/extended"
 	"github.com/funtimecoding/soil/pkg/web/layout"
@@ -145,7 +146,7 @@ func (s *Server) sessionDetailPage(
 			identity,
 			html.Tr(
 				html.Td(html.Strong(gomponents.Text("Last Seen"))),
-				html.Td(gomponents.Text(relativeTime(d.Session.LastSeen))),
+				html.Td(gomponents.Text(time.Relative(d.Session.LastSeen))),
 			),
 		)
 	}

@@ -507,10 +507,10 @@ func TestPointersBasedSiblingInteriorDead(t *testing.T) {
 }
 
 func TestPointersCommandResolves(t *testing.T) {
-	checker, count := pointer_tester.Counting(".claude/skills/leak-check")
+	checker, count := pointer_tester.Counting(".claude/skills/sign-firefox")
 	l := checker(
 		constant.UpperAlfa,
-		strings.NewReader("Invoke `/leak-check` before pushing.\n"),
+		strings.NewReader("Invoke `/sign-firefox` before pushing.\n"),
 	)
 	assertReport(t, "Alfa", false, nil, "", l)
 	assert.Integer(t, 0, *count)

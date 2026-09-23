@@ -11,7 +11,6 @@ import (
 
 func TestStatusLineRendersAndStores(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	c := console_tester.New(t, s.Port)
 	c.Register("11111111-2222-3333-4444-555555555555")
 	line := c.StatusLine([]byte(fixture.Read("claude", "status-line.json")))
@@ -28,7 +27,6 @@ func TestStatusLineRendersAndStores(t *testing.T) {
 
 func TestStatusLineKeepsUnmappedModelName(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	c := console_tester.New(t, s.Port)
 	c.Register("11111111-2222-3333-4444-555555555555")
 	body := strings.ReplaceAll(
@@ -41,7 +39,6 @@ func TestStatusLineKeepsUnmappedModelName(t *testing.T) {
 
 func TestStatusLineRateSnapshotDedupe(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	c := console_tester.New(t, s.Port)
 	c.Register("11111111-2222-3333-4444-555555555555")
 	body := []byte(fixture.Read("claude", "status-line.json"))

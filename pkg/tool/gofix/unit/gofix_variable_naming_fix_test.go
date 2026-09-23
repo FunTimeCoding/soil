@@ -5,12 +5,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/gofix"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/unit/module_tester"
 	"path/filepath"
 	"testing"
 )
 
 func TestVariableNamingFix(t *testing.T) {
-	directory := writeVariableNamingTestModule(t)
+	directory := module_tester.VariableNaming(t)
 	r := output.NewResultsWithDirectory(directory)
 	gofix.RunVariableNamingFixWithDirectory(
 		[]string{"./..."},
@@ -87,36 +88,4 @@ func TestVariableNamingFix(t *testing.T) {
 			)
 		},
 	)
-}
-
-func writeVariableNamingTestModule(t *testing.T) string {
-	t.Helper()
-	directory := t.TempDir()
-	testutil.WriteFile(t, directory, "go.mod", "module example\n\ngo 1.22\n")
-	testutil.WriteFile(
-		t,
-		directory,
-		"wrong_single.go",
-		"package example\n\nimport \"fmt\"\n\nfunc WrongSingle() {\n\tx := fmt.Errorf(\"test\")\n\t_ = x\n}\n",
-	)
-	testutil.WriteFile(
-		t,
-		directory,
-		"error_renamed.go",
-		"package example\n\nimport \"fmt\"\n\nfunc ErrorRenamed() {\n\terr := fmt.Errorf(\"test\")\n\t_ = err\n}\n",
-	)
-	testutil.WriteFile(
-		t,
-		directory,
-		"error_chain_renamed.go",
-		"package example\n\nimport \"fmt\"\n\nfunc ErrorChainRenamed() {\n\terr := fmt.Errorf(\"first\")\n\terr2 := fmt.Errorf(\"second\")\n\t_ = err\n\t_ = err2\n}\n",
-	)
-	testutil.WriteFile(
-		t,
-		directory,
-		"correct.go",
-		"package example\n\nimport \"fmt\"\n\nfunc CorrectUntouched() {\n\te := fmt.Errorf(\"test\")\n\ts := \"hello\"\n\t_ = e\n\t_ = s\n}\n",
-	)
-
-	return directory
 }

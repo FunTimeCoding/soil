@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration/fixture"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration/service_tester"
 	"testing"
 	"time"
@@ -17,6 +18,6 @@ func TestAnnounceClearsPendingTimeout(t *testing.T) {
 	s.Service.RunTimeoutSweep()
 	s.Announce("session-1", r.Callsign, "back again", "")
 	r = s.Check("session-1")
-	timeouts := entriesByKind(r.Entries, constant.QueueTimeout)
+	timeouts := fixture.EntriesByKind(r.Entries, constant.QueueTimeout)
 	assert.Count(t, 0, timeouts)
 }

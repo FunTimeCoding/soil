@@ -11,9 +11,7 @@ import (
 
 func TestTimelinePagination(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 
 	for i := 1; i <= 12; i++ {
 		a.Announce(a.Name(), fmt.Sprintf("topic-%02d", i))

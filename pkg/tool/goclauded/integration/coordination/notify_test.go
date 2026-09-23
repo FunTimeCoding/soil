@@ -10,9 +10,7 @@ import (
 
 func TestNotifyReachesSessionViaQueue(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "working")
 	a.CheckLive()
 	r, e := a.RestClient.PostNotifyWithResponse(
@@ -37,9 +35,7 @@ func TestNotifyReachesSessionViaQueue(t *testing.T) {
 
 func TestNotifyConsumedOnDrain(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "working")
 	a.CheckLive()
 	r, e := a.RestClient.PostNotifyWithResponse(

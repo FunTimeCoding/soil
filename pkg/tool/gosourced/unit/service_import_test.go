@@ -3,17 +3,21 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
 	"strings"
 	"testing"
 )
 
 func TestAddImportToGrouped(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("import-grouped/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("import-grouped/src"),
+	)
 	s := testService()
 	r, e := s.AddImport(d, "pkg/target/example.go", "os", "", false)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	source := readFixtureFile(t, d, "pkg/target/example.go")
+	source := service_tester.ReadFixtureFile(t, d, "pkg/target/example.go")
 	assert.StringContains(t, "\"os\"", source)
 	assert.StringContains(t, "\"fmt\"", source)
 	assert.StringContains(t, "// Example formats a trimmed value.", source)
@@ -26,17 +30,23 @@ func TestAddImportToGrouped(t *testing.T) {
 }
 
 func TestAddImportToEmpty(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("import-empty/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("import-empty/src"),
+	)
 	s := testService()
 	r, e := s.AddImport(d, "pkg/target/example.go", "fmt", "", false)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	source := readFixtureFile(t, d, "pkg/target/example.go")
+	source := service_tester.ReadFixtureFile(t, d, "pkg/target/example.go")
 	assert.StringContains(t, "\"fmt\"", source)
 }
 
 func TestAddImportWithAlias(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("import-grouped/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("import-grouped/src"),
+	)
 	s := testService()
 	r, e := s.AddImport(
 		d,
@@ -47,24 +57,30 @@ func TestAddImportWithAlias(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	source := readFixtureFile(t, d, "pkg/target/example.go")
+	source := service_tester.ReadFixtureFile(t, d, "pkg/target/example.go")
 	assert.StringContains(t, "fp \"path/filepath\"", source)
 }
 
 func TestRemoveImport(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("import-grouped/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("import-grouped/src"),
+	)
 	s := testService()
 	r, e := s.RemoveImport(d, "pkg/target/example.go", "strings", false)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 0)
-	source := readFixtureFile(t, d, "pkg/target/example.go")
+	source := service_tester.ReadFixtureFile(t, d, "pkg/target/example.go")
 	assert.True(t, !strings.Contains(source, "\"strings\""))
 	assert.StringContains(t, "strings.TrimSpace", source)
 	assert.StringContains(t, "\"fmt\"", source)
 }
 
 func TestRemoveImportNotFound(t *testing.T) {
-	d := testutil.PrepareTestPackage(t, serviceTestdata("import-grouped/src"))
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("import-grouped/src"),
+	)
 	s := testService()
 	r, e := s.RemoveImport(d, "pkg/target/example.go", "os", false)
 	assert.FatalOnError(t, e)

@@ -17,10 +17,6 @@ func New(
 		locator.New(host).Port(port).Scheme(constant.Socket).String(),
 	)
 	c, cancel := chromedp.NewContext(allocator)
-	// Force CDP websocket initialization so Browser is non-nil for
-	// methods that access it directly (e.g. CloseTab).
-	_, e := chromedp.Targets(c)
-	errors.PanicOnError(e)
 	result := &Client{
 		host:            host,
 		port:            port,
@@ -30,7 +26,7 @@ func New(
 		cancel:          cancel,
 		targets:         make(map[string]context.Context),
 	}
-	result.listenTargets()
+	errors.PanicOnError(result.listenTargets())
 
 	return result
 }

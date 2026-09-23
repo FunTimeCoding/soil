@@ -38,6 +38,8 @@ func New(
 			)
 		},
 	)
+	result := &Server{Server: v, Directory: d}
+	t.Cleanup(result.Close)
 
-	return &Server{Server: v, Directory: d}
+	return result
 }

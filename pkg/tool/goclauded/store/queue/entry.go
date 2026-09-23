@@ -8,6 +8,7 @@ type Entry struct {
 	Callsign          string     `gorm:"column:callsign"`
 	Kind              string     `gorm:"column:kind"`
 	Body              string     `gorm:"column:body"`
+	Immediate         bool       `gorm:"column:immediate"`
 	Consumed          bool       `gorm:"column:consumed"`
 	ConsumedAt        *time.Time `gorm:"column:consumed_at"`
 	CreatedAt         time.Time  `gorm:"column:created_at"`

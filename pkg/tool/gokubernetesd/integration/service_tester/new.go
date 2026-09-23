@@ -21,6 +21,7 @@ func New(t *testing.T) *Tester {
 	c := cluster.NewWithResources("test", set, dynamic, nil, apiResources())
 
 	return &Tester{
+		t:         t,
 		Tester:    s,
 		Service:   service.NewWithCluster(s.Store, c),
 		Cluster:   c,

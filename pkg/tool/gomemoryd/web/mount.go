@@ -29,6 +29,7 @@ func (s *Server) Mount(g *guard.Mux) {
 		s.memoryDetailPage,
 	)
 	g.Open(route.Get(constant.RelationsPath), s.relationsPage)
+	g.Open(route.Get(constant.StatisticPath), s.statisticPage)
 	g.Open(route.Get(constant.ImpressionsPath), s.impressionsPage)
 	g.Open(route.Get(webConstant.SearchPath), s.searchPage)
 	g.Open(route.Get(webConstant.FaviconPath), s.favicon)

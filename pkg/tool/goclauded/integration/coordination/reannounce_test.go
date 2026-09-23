@@ -9,9 +9,7 @@ import (
 
 func TestReannounceAfterRestart(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "building things")
 	a.CheckLive()
 	s.Service.ClearBindings()
@@ -22,9 +20,7 @@ func TestReannounceAfterRestart(t *testing.T) {
 
 func TestReannounceNotSetWithoutPriorBinding(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.CheckLive()
 	s.Service.ClearBindings()
 	r := a.CheckLive()
@@ -34,9 +30,7 @@ func TestReannounceNotSetWithoutPriorBinding(t *testing.T) {
 
 func TestAnnounceClearsReannounce(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "first topic")
 	a.CheckLive()
 	s.Service.ClearBindings()
@@ -48,9 +42,7 @@ func TestAnnounceClearsReannounce(t *testing.T) {
 
 func TestReannounceConsumedByCheck(t *testing.T) {
 	s := base.New(t)
-	defer s.Close()
 	a := s.NewSession(t)
-	defer a.Close()
 	a.Announce(a.Name(), "building things")
 	a.CheckLive()
 	s.Service.ClearBindings()
