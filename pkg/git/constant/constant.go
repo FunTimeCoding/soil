@@ -27,8 +27,29 @@ const (
 	CommitTimeFormat = "--format=%ct"
 	Pathspec         = "--"
 
-	RevParse     = "rev-parse"
-	GitDirectory = "--git-dir"
+	RevParse             = "rev-parse"
+	GitDirectory         = "--git-dir"
+	AbbreviatedReference = "--abbrev-ref"
+	SymbolicFullName     = "--symbolic-full-name"
+	Upstream             = "@{upstream}"
+	Cached               = "--cached"
+	ShowToplevel         = "--show-toplevel"
+	HooksDirectory       = "hooks"
+	Configuration               = "config"
+	Get                  = "--get"
+	HooksPathKey         = "core.hooksPath"
+	RemoteHead           = "refs/remotes/origin/HEAD"
+
+	HookPreCommit     = "pre-commit"
+	HookPrePush       = "pre-push"
+	HookCommitMessage = "commit-msg"
+	HookPostCheckout  = "post-checkout"
+	HookPostMerge     = "post-merge"
+
+	RangeAll    = "all files"
+	RangeNone   = "nothing pushed"
+	ZeroHash    = "0000000000000000000000000000000000000000"
+	RangeStaged = "staged files"
 
 	Porcelain = "--porcelain"
 
@@ -46,6 +67,14 @@ const (
 
 var (
 	MainBranches = []string{MainBranch, MasterBranch}
+
+	Hooks = []string{
+		HookPreCommit,
+		HookPrePush,
+		HookCommitMessage,
+		HookPostCheckout,
+		HookPostMerge,
+	}
 
 	Format = constant.ExtendedColorFormat.Copy()
 )

@@ -9,4 +9,5 @@ const (
 	Three        = "3"
 	Four         = "4"
 	Five         = "5"
+	Digits       = "0123456789"
 )

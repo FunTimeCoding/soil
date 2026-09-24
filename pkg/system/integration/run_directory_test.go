@@ -3,6 +3,7 @@ package integration
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/run"
 	"path/filepath"
 	"strings"
@@ -15,6 +16,6 @@ func TestRunDirectory(t *testing.T) {
 	errors.PanicOnError(e)
 	r := run.New()
 	r.Directory = directory
-	output := r.Start("sh", "-c", "pwd")
+	output := r.Start(constant.Shell, constant.ShellCommand, "pwd")
 	assert.String(t, directory, strings.TrimSpace(output))
 }

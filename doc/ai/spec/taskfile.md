@@ -1,6 +1,6 @@
 # Taskfile Spec
 
-Standard project automation using [Task](https://taskfile.dev). The taskfile defines the local development pipeline and integrates with lefthook for git hooks.
+Standard project automation using [Task](https://taskfile.dev). The taskfile defines the local development pipeline; `gohook` wires it into git hooks.
 
 ## Standard Tasks
 
@@ -23,7 +23,7 @@ tasks:
 | Task       | Steps                 | Purpose                                   |
 |------------|-----------------------|-------------------------------------------|
 | `default`  | lint -> test -> build | Full local pipeline (`task` with no args) |
-| `pre-push` | lint -> test          | Git pre-push hook via lefthook            |
+| `pre-push` | lint -> test          | Git pre-push hook via gohook              |
 
 ### Individual Tasks
 
@@ -35,15 +35,22 @@ tasks:
 | `check` | `gosec -fmt=json ...` | Security scan |
 | `generate` | `oapi-codegen --config config.yaml ...` per service | Regenerate OpenAPI clients and servers (see `generated-api.md`) |
 | `update` | `goupdate` with pinned downgrades | Dependency update with known-bad version pins |
-| `tool` | installs gotestsum, golint, goanalyze, gofix, goaudit, gobuild, golangci-lint, oapi-codegen | Dev tooling bootstrap |
+| `tool` | installs gotestsum, golint, goanalyze, gofix, goaudit, gobuild, gohook, golangci-lint, oapi-codegen | Dev tooling bootstrap |
 
-## Lefthook Integration
+## Git Hook Integration
 
 ```yaml
-pre-push: {jobs: [{run: task pre-push}]}
+pre-push:
+  - run: task pre-push
 ```
 
-The `pre-push` hook runs lint + test before every push. Configured in `.lefthook.yaml`.
+The `pre-push` hook runs lint + test before every push. Configured in
+`strata/tool/gohook.yaml` (or `.gohook.yaml` at the root), installed
+with `gohook install`. Each hook is a list of jobs; a job is a `run`
+command and an optional `paths` list, and a job with paths only runs
+when a matching file changed since the upstream ref. That is how a
+repository with several toolchains keeps each hook to the work that
+changed.
 
 ## GitHub Actions
 

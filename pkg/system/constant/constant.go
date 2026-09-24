@@ -18,6 +18,9 @@ const (
 
 	OpenCommand    = "open"
 	XdgOpenCommand = "xdg-open"
+	Shell           = "/bin/sh"
+	ShellCommand    = "-c"
+	PathEnvironment = "PATH"
 
 	CommandPath                 = "cmd"
 	BoardPath                   = "board"

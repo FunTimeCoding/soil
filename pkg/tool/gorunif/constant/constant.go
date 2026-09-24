@@ -8,8 +8,4 @@ var Identity = identity.New(
 	"gorunif [flags] <command>",
 )
 
-const (
-	Base   = "base"
-	Head   = "head"
-	Suffix = "suffix"
-)
+const Suffix = "suffix"

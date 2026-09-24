@@ -1,49 +1,33 @@
 package run_if
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/strings/split"
+	"github.com/funtimecoding/soil/pkg/git/changed"
+	"github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/run"
 	"github.com/funtimecoding/soil/pkg/tool/gorunif/run_if/option"
-	"strings"
 )
 
-func Run(o *option.RunIf) {
-	r := run.New()
-	r.Start(
-		"git",
-		"diff",
-		"--name-only",
-		fmt.Sprintf("%s..%s", resolveBase(o.Base), o.Head),
-	)
-	changed := false
+func Run(o *option.RunIf) bool {
+	var r *changed.Range
 
-	for _, p := range split.NewLine(strings.TrimSpace(r.OutputString)) {
-		if o.Verbose {
-			console.Format("Change: %s\n", p)
-		}
-
-		var match bool
-
-		if o.Suffix {
-			match = strings.HasSuffix(p, o.Pattern)
-		} else {
-			match = strings.HasPrefix(p, o.Pattern)
-		}
-
-		if match {
-			changed = true
-
-			if o.Verbose {
-				console.Format("Match: %s\n", o.Pattern)
-			}
-
-			break
-		}
+	if o.Base == "" {
+		r = changed.NewPush(o.Directory)
+	} else {
+		r = changed.New(o.Base, o.Head)
 	}
 
-	if changed {
-		run.New().Execute("sh", "-c", o.Execute)
+	if !r.All && !Matches(o, r.Files(o.Directory)) {
+		return false
 	}
+
+	e := run.New()
+	e.Directory = o.Directory
+	e.Execute(constant.Shell, constant.ShellCommand, o.Execute)
+
+	if o.Verbose {
+		console.Format("Ran: %s\n", o.Execute)
+	}
+
+	return true
 }
