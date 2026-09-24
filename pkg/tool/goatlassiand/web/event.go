@@ -27,8 +27,31 @@ func (s *Server) event() http.HandlerFunc {
 				)
 			}
 
+			if subs.Has(constant.NewestEvent) {
+				layout.PushEvent(
+					w,
+					constant.NewestEvent,
+					issuesTable(s.worker.Newest(), constant.NewestEmpty),
+				)
+			}
+
 			if subs.Has(constant.PlateEvent) {
-				layout.PushEvent(w, constant.PlateEvent, plateTable(issues))
+				layout.PushEvent(
+					w,
+					constant.PlateEvent,
+					issuesTable(issues, constant.PlateEmpty),
+				)
+			}
+
+			if subs.Has(constant.WatchedIssuesEvent) {
+				layout.PushEvent(
+					w,
+					constant.WatchedIssuesEvent,
+					issuesTable(
+						s.worker.WatchedIssues(),
+						constant.WatchedIssuesEmpty,
+					),
+				)
 			}
 
 			if subs.Has(constant.FavoritesEvent) {
@@ -39,10 +62,10 @@ func (s *Server) event() http.HandlerFunc {
 				)
 			}
 
-			if subs.Has(constant.WatchedEvent) {
+			if subs.Has(constant.WatchedPagesEvent) {
 				layout.PushEvent(
 					w,
-					constant.WatchedEvent,
+					constant.WatchedPagesEvent,
 					pagesTable(s.worker.Watched()),
 				)
 			}

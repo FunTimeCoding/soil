@@ -14,28 +14,58 @@ func (s *Server) plate(
 	_ *http.Request,
 ) {
 	issues := s.worker.Issues()
-	s.view.RenderLivePageWithSummary(
-		w,
-		constant.PlateTitle,
-		constant.PlatePath,
-		subscription.Query(
-			constant.PlateEvent,
-			constant.FavoritesEvent,
-			constant.WatchedEvent,
-			constant.SummaryEvent,
-		),
-		summary(issues),
+	var events []string
+	var content []gomponents.Node
+
+	if s.worker.HasProject() {
+		events = append(events, constant.NewestEvent)
+		content = append(
+			content,
+			html.H3(gomponents.Text(constant.NewestTitle)),
+			html.Div(
+				extended.StreamSwap(constant.NewestEvent),
+				issuesTable(s.worker.Newest(), constant.NewestEmpty),
+			),
+		)
+	}
+
+	events = append(
+		events,
+		constant.PlateEvent,
+		constant.WatchedIssuesEvent,
+		constant.FavoritesEvent,
+		constant.WatchedPagesEvent,
+		constant.SummaryEvent,
+	)
+	content = append(
+		content,
 		html.H3(gomponents.Text(constant.PlateTitle)),
-		html.Div(extended.StreamSwap(constant.PlateEvent), plateTable(issues)),
+		html.Div(
+			extended.StreamSwap(constant.PlateEvent),
+			issuesTable(issues, constant.PlateEmpty),
+		),
+		html.H3(gomponents.Text(constant.WatchedIssuesTitle)),
+		html.Div(
+			extended.StreamSwap(constant.WatchedIssuesEvent),
+			issuesTable(s.worker.WatchedIssues(), constant.WatchedIssuesEmpty),
+		),
 		html.H3(gomponents.Text(constant.FavoritesTitle)),
 		html.Div(
 			extended.StreamSwap(constant.FavoritesEvent),
 			pagesTable(s.worker.Favorites()),
 		),
-		html.H3(gomponents.Text(constant.WatchedTitle)),
+		html.H3(gomponents.Text(constant.WatchedPagesTitle)),
 		html.Div(
-			extended.StreamSwap(constant.WatchedEvent),
+			extended.StreamSwap(constant.WatchedPagesEvent),
 			pagesTable(s.worker.Watched()),
 		),
+	)
+	s.view.RenderLivePageWithSummary(
+		w,
+		constant.PlateTitle,
+		constant.PlatePath,
+		subscription.Query(events...),
+		summary(issues),
+		content...,
 	)
 }

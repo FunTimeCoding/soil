@@ -1,10 +1,29 @@
 package constant
 
+import "fmt"
+
 const (
 	FixtureQuietPage = `<!doctype html><title>quiet</title>
 <body><p id="mark">quiet</p></body>`
 
-	FixtureBusyPage = `<!doctype html><title>busy</title>
+	FixtureUnloadPage = `<!doctype html><title>unload</title>
+<body><p id="mark">unload</p><script>
+window.addEventListener('beforeunload', function (e) {
+  e.preventDefault();
+  e.returnValue = '';
+});
+</script></body>`
+
+	FixtureHeavyPagePrefix = `<!doctype html><title>heavy</title>
+<body><p id="mark">heavy</p>`
+
+	FixtureHeavyPageSuffix = `</body>`
+
+	FixtureHeavyRowFormat = "<div class=\"row\">row %d padding text</div>"
+)
+
+const (
+	busyPageFormat = `<!doctype html><title>busy</title>
 <body><p id="mark">busy</p><div id="sink"></div><script>
 setInterval(function () {
   var d = document.createElement('span');
@@ -16,30 +35,21 @@ setInterval(function () {
     sink.removeChild(sink.firstChild);
   }
 
-  fetch('` + FixturePingRoute + `').catch(function () {});
+  fetch('%s').catch(function () {});
 }, 50);
 </script></body>`
 
-	FixtureStalledPage = `<!doctype html><title>stalled</title>
+	stalledPageFormat = `<!doctype html><title>stalled</title>
 <body><p id="mark">stalled</p>
-<img src="` + FixtureHangRoute + `" alt="never arrives"></body>`
+<img src="%s" alt="never arrives"></body>`
 
-	FixtureUnloadPage = `<!doctype html><title>unload</title>
-<body><p id="mark">unload</p><script>
-window.addEventListener('beforeunload', function (e) {
-  e.preventDefault();
-  e.returnValue = '';
-});
-</script></body>`
-
-	FixturePopupPage = `<!doctype html><title>popup</title>
+	popupPageFormat = `<!doctype html><title>popup</title>
 <body><p id="mark">popup</p>
-<script>window.open('` + FixtureQuietRoute + `', '_blank');</script></body>`
+<script>window.open('%s', '_blank');</script></body>`
+)
 
-	FixtureHeavyPagePrefix = `<!doctype html><title>heavy</title>
-<body><p id="mark">heavy</p>`
-
-	FixtureHeavyPageSuffix = `</body>`
-
-	FixtureHeavyRowFormat = "<div class=\"row\">row %d padding text</div>"
+var (
+	FixtureBusyPage    = fmt.Sprintf(busyPageFormat, FixturePingRoute)
+	FixtureStalledPage = fmt.Sprintf(stalledPageFormat, FixtureHangRoute)
+	FixturePopupPage   = fmt.Sprintf(popupPageFormat, FixtureQuietRoute)
 )

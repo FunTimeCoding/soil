@@ -1,7 +1,9 @@
 package constant
 
+import "github.com/funtimecoding/soil/pkg/text/template"
+
 const SearchWorkflowURI = "goqueryd://guide/search-workflow"
-const SearchWorkflow = `# Search Workflow
+const searchWorkflowTemplate = `# Search Workflow
 
 goqueryd is a local search engine for documents and code. It
 combines BM25 full-text search, vector similarity, and
@@ -12,7 +14,7 @@ cross-encoder reranking to return ranked results.
 Two types of collections hold documents:
 
 **Filesystem collections** scan a directory with a glob pattern
-(default ` + "`**/*.md`" + `). Populated by calling index, which
+(default {{.Glob}}). Populated by calling index, which
 detects new, changed, and removed files via content hashing.
 
 **Push collections** receive documents via the push tool. No
@@ -86,3 +88,8 @@ more specific prefixes add detail.
 Pushing unchanged content is cheap - content-hash dedup skips
 re-embedding when the body hasn't changed.
 `
+
+var SearchWorkflow = template.Execute(
+	template.New("search_workflow", searchWorkflowTemplate),
+	map[string]string{"Glob": "`**/*.md`"},
+)

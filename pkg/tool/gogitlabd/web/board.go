@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
 	"github.com/funtimecoding/soil/pkg/web/extended"
 	"github.com/funtimecoding/soil/pkg/web/subscription"
+	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
 )
@@ -17,8 +18,18 @@ func (s *Server) board(
 		w,
 		constant.BoardTitle,
 		constant.BoardPath,
-		subscription.Query(constant.BoardEvent, constant.SummaryEvent),
+		subscription.Query(
+			constant.RequestEvent,
+			constant.BoardEvent,
+			constant.SummaryEvent,
+		),
 		summary(entries),
+		html.H3(gomponents.Text(constant.RequestTitle)),
+		html.Div(
+			extended.StreamSwap(constant.RequestEvent),
+			requestTable(s.worker.Requests()),
+		),
+		html.H3(gomponents.Text(constant.BoardTitle)),
 		html.Div(
 			extended.StreamSwap(constant.BoardEvent),
 			s.boardTable(entries),

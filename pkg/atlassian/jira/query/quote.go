@@ -1,16 +1,13 @@
 package query
 
-import (
-	"fmt"
-	"strings"
-)
+import "fmt"
 
 func Quote(v []string) []string {
-	for i, e := range v {
-		if strings.ContainsRune(e, ' ') {
-			v[i] = fmt.Sprintf("'%s'", e)
-		}
+	result := make([]string, 0, len(v))
+
+	for _, e := range v {
+		result = append(result, fmt.Sprintf("'%s'", e))
 	}
 
-	return v
+	return result
 }

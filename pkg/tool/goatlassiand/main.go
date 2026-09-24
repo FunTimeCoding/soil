@@ -2,7 +2,9 @@ package goatlassiand
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
+	atlassian "github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/instrument"
+	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/option"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -21,6 +23,7 @@ func Main(
 	o := option.New()
 	o.Address = a.Address()
 	o.ServiceTokens = web.ServiceTokens()
+	o.Project = environment.Slice(atlassian.JiraDefaultProjectKeyEnvironment)
 	o.Version = version
 	Run(o, s)
 }

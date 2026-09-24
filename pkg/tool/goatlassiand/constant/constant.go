@@ -86,15 +86,27 @@ const (
 	PlateTitle = "Plate"
 	PlatePath  = "/"
 
-	FavoritesTitle = "Favourites"
-	WatchedTitle   = "Watched"
+	FavoritesTitle     = "Favourites"
+	WatchedPagesTitle  = "Watched Pages"
+	WatchedIssuesTitle = "Watched Issues"
 
-	PlateEvent     = "plate"
-	FavoritesEvent = "favorites"
-	WatchedEvent   = "watched"
-	SummaryEvent   = "summary"
+	PlateEvent         = "plate"
+	FavoritesEvent     = "favorites"
+	WatchedPagesEvent  = "watched_pages"
+	WatchedIssuesEvent = "watched_issues"
+	SummaryEvent       = "summary"
 
-	PlateQuery = "(assignee = currentUser() OR reporter = currentUser()) AND statusCategory != Done ORDER BY updated DESC"
+	NewestTitle = "Newest Issues"
+	NewestEvent = "newest"
+	NewestLimit = 3
+
+	PlateEmpty         = "Nothing on the plate."
+	WatchedIssuesEmpty = "No watched issues."
+	NewestEmpty        = "No recent issues."
+
+	PlateQuery         = "(assignee = currentUser() OR reporter = currentUser()) AND statusCategory != Done AND status NOT IN (%s) ORDER BY updated DESC"
+	WatchedIssuesQuery = "issue in watchedIssues() AND statusCategory != Done AND status NOT IN (%s) ORDER BY updated DESC"
+	NewestQuery        = "project in (%s) AND statusCategory != Done AND status NOT IN (%s) ORDER BY created DESC"
 
 	PollInterval = time.Minute
 )

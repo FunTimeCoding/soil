@@ -1,22 +1,18 @@
 package runner
 
-import "os"
+import "github.com/funtimecoding/soil/pkg/system"
 
 func (r *Runner) gitClone() {
-	if _, e := os.Stat(r.clonePath); e == nil {
-		if r.validRepository() {
-			r.gitConfigure()
-			r.gitClean()
-			r.gitFetch()
-			r.gitReset()
+	if system.DirectoryExists(r.clonePath) && r.validRepository() {
+		r.gitConfigure()
+		r.gitClean()
+		r.gitFetch()
+		r.gitReset()
 
-			return
-		}
-
-		r.quarantine()
+		return
 	}
 
 	r.logger.Structured("git_clone", "repository", r.repository)
-	r.newRun().Start("git", "clone", r.repository, r.clonePath)
+	r.installClone(r.stageClone())
 	r.gitConfigure()
 }

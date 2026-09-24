@@ -28,6 +28,11 @@ const (
 	BoardEvent    = "board"
 	SummaryEvent  = "summary"
 	PipelineEvent = "pipeline_strip"
+	RequestEvent  = "request"
+
+	RequestTitle = "Merge Requests"
+	RequestEmpty = "No open merge requests."
+	RequestLimit = 3
 )
 
 var Identity = identity.New(

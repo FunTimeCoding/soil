@@ -19,7 +19,10 @@ type Worker struct {
 	notifier   *notifier.Notifier
 	stop       chan struct{}
 	mutex      sync.RWMutex
-	issues     []*issue.Issue
-	favorites  []*page.Page
-	watched    []*page.Page
+	project       []string
+	issues        []*issue.Issue
+	watchedIssues []*issue.Issue
+	newest        []*issue.Issue
+	favorites     []*page.Page
+	watched       []*page.Page
 }

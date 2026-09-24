@@ -9,9 +9,12 @@ import (
 	"maragu.dev/gomponents/html"
 )
 
-func plateTable(issues []*issue.Issue) gomponents.Node {
+func issuesTable(
+	issues []*issue.Issue,
+	empty string,
+) gomponents.Node {
 	if len(issues) == 0 {
-		return html.P(gomponents.Text("Nothing on the plate."))
+		return html.P(gomponents.Text(empty))
 	}
 
 	rows := make([]gomponents.Node, 0, len(issues))
@@ -44,7 +47,7 @@ func plateTable(issues []*issue.Issue) gomponents.Node {
 	}
 
 	return html.Table(
-		html.Class("plate-table"),
+		html.Class("issue-table"),
 		html.THead(
 			html.Tr(
 				html.Th(),

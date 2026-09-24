@@ -21,6 +21,10 @@ const (
 	RunnerQuarantineSuffix = ".quarantine."
 	RunnerQuarantineFormat = "20060102T150405Z"
 
+	RunnerHealThreshold = 3
+	RunnerStagePattern  = "provision-clone-"
+	RunnerStageSuffix   = ".stage"
+
 	RunnerConsecutive = "consecutive"
 	RunnerError       = "error"
 )

@@ -75,10 +75,19 @@ func (w *Worker) Poll() {
 			return strings.Compare(a.Reference, b.Reference)
 		},
 	)
+	requests := w.fetchRequests()
 	w.mutex.Lock()
 	previous := w.entries
+	previousRequests := w.requests
 	w.entries = entries
+	w.requests = requests
 	w.mutex.Unlock()
+
+	if !slices.EqualFunc(previousRequests, requests, sameRequest) {
+		w.notifier.Notify()
+
+		return
+	}
 
 	if !slices.EqualFunc(
 		previous,

@@ -13,6 +13,7 @@ import (
 func New(
 	client *jira.Client,
 	c *confluence.Client,
+	project []string,
 	interval time.Duration,
 	l *logger.Logger,
 	r face.Reporter,
@@ -20,6 +21,7 @@ func New(
 	return &Worker{
 		client:     client,
 		confluence: c,
+		project:    project,
 		interval:   interval,
 		recovery:   recovery.New(l, r),
 		notifier:   notifier.New(),

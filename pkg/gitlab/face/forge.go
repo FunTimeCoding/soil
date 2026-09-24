@@ -70,6 +70,8 @@ type Forge interface {
 		project int64,
 		state string,
 	) ([]*merge_request.Request, error)
+	AssignedMergeRequests(all bool) ([]*merge_request.Request, error)
+	ReviewingMergeRequests(all bool) ([]*merge_request.Request, error)
 	Variables(project int64) ([]*variable.Variable, error)
 	ProjectVariable(
 		project int64,

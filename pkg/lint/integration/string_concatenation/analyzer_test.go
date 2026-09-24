@@ -9,5 +9,5 @@ import (
 func TestBlocked(t *testing.T) {
 	p, results := testutil.LoadTestPackage(t, "testdata/src/example")
 	string_concatenation.Check(p, results)
-	testutil.AssertBlocked(t, results, 5)
+	testutil.AssertBlocked(t, results, 6)
 }

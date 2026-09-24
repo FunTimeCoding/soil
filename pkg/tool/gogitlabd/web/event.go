@@ -29,6 +29,14 @@ func (s *Server) event() http.HandlerFunc {
 				)
 			}
 
+			if subs.Has(constant.RequestEvent) {
+				layout.PushEvent(
+					w,
+					constant.RequestEvent,
+					requestTable(s.worker.Requests()),
+				)
+			}
+
 			if subs.Has(constant.BoardEvent) {
 				layout.PushEvent(w, constant.BoardEvent, s.boardTable(entries))
 			}

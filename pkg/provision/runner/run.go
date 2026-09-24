@@ -60,7 +60,10 @@ func (r *Runner) run() {
 
 			if result == nil {
 				result = &SyncResult{Error: fmt.Errorf("sync failed")}
+				r.syncFailures++
 				r.recovery.Run(r.healRepository)
+			} else {
+				r.syncFailures = 0
 			}
 
 			request.Response <- result

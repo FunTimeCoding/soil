@@ -28,10 +28,6 @@ func checkBinary(
 		return
 	}
 
-	if containsRawString(e) {
-		return
-	}
-
 	if suppress.IsSuppressed(
 		p.Fset,
 		p.Syntax,

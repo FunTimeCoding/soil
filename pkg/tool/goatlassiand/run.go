@@ -24,7 +24,7 @@ func Run(
 	j := jira.NewEnvironment()
 	c := confluence.NewEnvironment()
 	l := logger.New(context.Background())
-	k := worker.New(j, c, constant.PollInterval, l, r)
+	k := worker.New(j, c, o.Project, constant.PollInterval, l, r)
 	b := web.New(k)
 	lifecycle.New(
 		l,

@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
 	"github.com/funtimecoding/soil/pkg/event/notifier"
 	"github.com/funtimecoding/soil/pkg/gitlab/face"
+	"github.com/funtimecoding/soil/pkg/gitlab/merge_request"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/types/board_entry"
 	"github.com/prometheus/client_golang/prometheus"
 	"sync"
@@ -19,4 +20,5 @@ type Worker struct {
 	stop     chan struct{}
 	mutex    sync.RWMutex
 	entries  []*board_entry.Entry
+	requests []*merge_request.Request
 }
