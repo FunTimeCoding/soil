@@ -22,7 +22,10 @@ func Annotate(
 		relative := filepath.ToSlash(
 			strings.TrimPrefix(e.Function.File, r.Root),
 		)
-		mutants := byFile[path.Join(m.Module, strings.TrimPrefix(relative, "/"))]
+		mutants := byFile[path.Join(
+			m.Module,
+			strings.TrimPrefix(relative, "/"),
+		)]
 
 		if len(mutants) == 0 {
 			continue

@@ -30,7 +30,10 @@ func NewServer(r *Recorder) *httptest.Server {
 					respond(w, constant.FixtureMacRecord)
 				case path == "/api/dcim/mac-addresses/":
 					respond(w, constant.FixtureMacList)
-				case strings.HasPrefix(path, "/api/virtualization/interfaces/") &&
+				case strings.HasPrefix(
+					path,
+					"/api/virtualization/interfaces/",
+				) &&
 					q.Method == http.MethodPut:
 					body := decodeBody(q)
 

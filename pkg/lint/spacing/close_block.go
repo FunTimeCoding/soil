@@ -3,7 +3,10 @@ package spacing
 import "strings"
 
 func (s *Spacing) closeBlock(h *shape) {
-	if !strings.HasPrefix(h.trimmed, "}") || h.elseContinuation || h.endsWithBrace {
+	if !strings.HasPrefix(
+		h.trimmed,
+		"}",
+	) || h.elseContinuation || h.endsWithBrace {
 		s.needBlankAfterClosingBrace = false
 
 		return

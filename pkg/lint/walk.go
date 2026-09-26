@@ -47,7 +47,10 @@ func Walk(
 						return filepath.SkipDir
 					}
 
-					if !Skipped(o, join.Empty(relative, stringsConstant.Slash)) &&
+					if !Skipped(
+						o,
+						join.Empty(relative, stringsConstant.Slash),
+					) &&
 						system.IsEmptyDirectory(p) {
 						empty = append(empty, relative)
 					}
@@ -62,7 +65,10 @@ func Walk(
 				i, g := d.Info()
 				errors.PanicOnError(g)
 
-				if Skipped(o, join.Empty(path.Dir(relative), stringsConstant.Slash)) {
+				if Skipped(
+					o,
+					join.Empty(path.Dir(relative), stringsConstant.Slash),
+				) {
 					v.AddMetadata(relative, i.Size(), i.ModTime())
 
 					return nil

@@ -14,7 +14,10 @@ func IsGeneratedHeader(content string) bool {
 	) {
 		trimmed := strings.TrimSpace(line)
 
-		if !strings.HasPrefix(trimmed, stringsConstant.DoubleSlash) && trimmed != "" {
+		if !strings.HasPrefix(
+			trimmed,
+			stringsConstant.DoubleSlash,
+		) && trimmed != "" {
 			return false
 		}
 

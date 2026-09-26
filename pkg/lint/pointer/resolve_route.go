@@ -23,7 +23,10 @@ func (r *Resolver) resolveRoute(
 
 	for _, base := range bases {
 		if strings.HasPrefix(route, constant.RestRoutePrefix) {
-			if paths, found := r.Routes(base); found && MatchRoute(route, paths) {
+			if paths, found := r.Routes(base); found && MatchRoute(
+				route,
+				paths,
+			) {
 				return &Resolution{Verdict: constant.VerdictLive}
 			}
 		}

@@ -35,12 +35,20 @@ func TestBuildOptionsDefaults(t *testing.T) {
 	assert.String(
 		t,
 		"virtio-scsi-pci",
-		service_tester.RequireOption(t, options, constant.DiskControllerOption).(string),
+		service_tester.RequireOption(
+			t,
+			options,
+			constant.DiskControllerOption,
+		).(string),
 	)
 	assert.String(
 		t,
 		"local-lvm:32,aio=io_uring,backup=1,cache=none,discard=on,iothread=1,replicate=1",
-		service_tester.RequireOption(t, options, constant.PrimaryDiskOption).(string),
+		service_tester.RequireOption(
+			t,
+			options,
+			constant.PrimaryDiskOption,
+		).(string),
 	)
 	assert.String(
 		t,
@@ -50,7 +58,11 @@ func TestBuildOptionsDefaults(t *testing.T) {
 	assert.String(
 		t,
 		"virtio,bridge=vmbr0",
-		service_tester.RequireOption(t, options, constant.PrimaryNetworkOption).(string),
+		service_tester.RequireOption(
+			t,
+			options,
+			constant.PrimaryNetworkOption,
+		).(string),
 	)
 	assert.Integer(
 		t,
@@ -65,7 +77,11 @@ func TestBuildOptionsDefaults(t *testing.T) {
 	assert.String(
 		t,
 		"host",
-		service_tester.RequireOption(t, options, constant.ProcessorOption).(string),
+		service_tester.RequireOption(
+			t,
+			options,
+			constant.ProcessorOption,
+		).(string),
 	)
 	_, hasIDE := service_tester.FindOption(
 		options,
@@ -136,12 +152,20 @@ func TestBuildOptionsCustomValues(t *testing.T) {
 	assert.String(
 		t,
 		"virtio,bridge=vmbr0",
-		service_tester.RequireOption(t, options, constant.PrimaryNetworkOption).(string),
+		service_tester.RequireOption(
+			t,
+			options,
+			constant.PrimaryNetworkOption,
+		).(string),
 	)
 	assert.String(
 		t,
 		"l26",
-		service_tester.RequireOption(t, options, constant.OperatingSystemOption).(string),
+		service_tester.RequireOption(
+			t,
+			options,
+			constant.OperatingSystemOption,
+		).(string),
 	)
 	assert.String(
 		t,
@@ -158,7 +182,11 @@ func TestBuildOptionsDiskImport(t *testing.T) {
 	assert.String(
 		t,
 		"local-lvm:0,import-from=local:import/debian-13-generic-amd64.qcow2,aio=io_uring,backup=1,cache=none,discard=on,iothread=1,replicate=1",
-		service_tester.RequireOption(t, options, constant.PrimaryDiskOption).(string),
+		service_tester.RequireOption(
+			t,
+			options,
+			constant.PrimaryDiskOption,
+		).(string),
 	)
 }
 
@@ -171,7 +199,11 @@ func TestBuildOptionsDiskImportCustomStorage(t *testing.T) {
 	assert.String(
 		t,
 		"ceph-pool:0,import-from=local:import/debian-13.qcow2,aio=io_uring,backup=1,cache=none,discard=on,iothread=1,replicate=1",
-		service_tester.RequireOption(t, options, constant.PrimaryDiskOption).(string),
+		service_tester.RequireOption(
+			t,
+			options,
+			constant.PrimaryDiskOption,
+		).(string),
 	)
 }
 
@@ -183,7 +215,11 @@ func TestBuildOptionsCDROM(t *testing.T) {
 	assert.String(
 		t,
 		"local:iso/debian-13.iso,media=cdrom",
-		service_tester.RequireOption(t, options, constant.RemovableDriveOption).(string),
+		service_tester.RequireOption(
+			t,
+			options,
+			constant.RemovableDriveOption,
+		).(string),
 	)
 }
 
@@ -196,7 +232,11 @@ func TestBuildOptionsCloudInitTakesIDE2OverCDROM(t *testing.T) {
 	assert.String(
 		t,
 		"local-lvm:cloudinit",
-		service_tester.RequireOption(t, options, constant.RemovableDriveOption).(string),
+		service_tester.RequireOption(
+			t,
+			options,
+			constant.RemovableDriveOption,
+		).(string),
 	)
 }
 
@@ -208,7 +248,11 @@ func TestBuildOptionsCloudInit(t *testing.T) {
 	assert.String(
 		t,
 		"admin",
-		service_tester.RequireOption(t, options, constant.CloudInitUserOption).(string),
+		service_tester.RequireOption(
+			t,
+			options,
+			constant.CloudInitUserOption,
+		).(string),
 	)
 	assert.String(
 		t,
@@ -222,7 +266,11 @@ func TestBuildOptionsCloudInit(t *testing.T) {
 	assert.String(
 		t,
 		"local-lvm:cloudinit",
-		service_tester.RequireOption(t, options, constant.RemovableDriveOption).(string),
+		service_tester.RequireOption(
+			t,
+			options,
+			constant.RemovableDriveOption,
+		).(string),
 	)
 }
 
@@ -237,12 +285,20 @@ func TestBuildOptionsCloudInitFull(t *testing.T) {
 	assert.String(
 		t,
 		"deploy",
-		service_tester.RequireOption(t, options, constant.CloudInitUserOption).(string),
+		service_tester.RequireOption(
+			t,
+			options,
+			constant.CloudInitUserOption,
+		).(string),
 	)
 	assert.String(
 		t,
 		"secret",
-		service_tester.RequireOption(t, options, constant.CloudInitPasswordOption).(string),
+		service_tester.RequireOption(
+			t,
+			options,
+			constant.CloudInitPasswordOption,
+		).(string),
 	)
 	assert.String(
 		t,
@@ -261,7 +317,11 @@ func TestBuildOptionsCloudInitFull(t *testing.T) {
 	assert.String(
 		t,
 		"local-lvm:cloudinit",
-		service_tester.RequireOption(t, options, constant.RemovableDriveOption).(string),
+		service_tester.RequireOption(
+			t,
+			options,
+			constant.RemovableDriveOption,
+		).(string),
 	)
 }
 
@@ -282,7 +342,11 @@ func TestBuildOptionsCloudInitSSHKeysOnly(t *testing.T) {
 	assert.String(
 		t,
 		"local-lvm:cloudinit",
-		service_tester.RequireOption(t, options, constant.RemovableDriveOption).(string),
+		service_tester.RequireOption(
+			t,
+			options,
+			constant.RemovableDriveOption,
+		).(string),
 	)
 }
 
@@ -294,7 +358,11 @@ func TestBuildOptionsCustomCPUType(t *testing.T) {
 	assert.String(
 		t,
 		"x86-64-v2-AES",
-		service_tester.RequireOption(t, options, constant.ProcessorOption).(string),
+		service_tester.RequireOption(
+			t,
+			options,
+			constant.ProcessorOption,
+		).(string),
 	)
 }
 
@@ -307,7 +375,11 @@ func TestBuildOptionsSearchDomain(t *testing.T) {
 	assert.String(
 		t,
 		"local",
-		service_tester.RequireOption(t, options, constant.SearchDomainOption).(string),
+		service_tester.RequireOption(
+			t,
+			options,
+			constant.SearchDomainOption,
+		).(string),
 	)
 }
 
@@ -336,6 +408,10 @@ func TestBuildOptionsCustomDiskSize(t *testing.T) {
 	assert.String(
 		t,
 		"local-lvm:100,aio=io_uring,backup=1,cache=none,discard=on,iothread=1,replicate=1",
-		service_tester.RequireOption(t, options, constant.PrimaryDiskOption).(string),
+		service_tester.RequireOption(
+			t,
+			options,
+			constant.PrimaryDiskOption,
+		).(string),
 	)
 }

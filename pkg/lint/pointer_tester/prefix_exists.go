@@ -6,7 +6,10 @@ import (
 	"strings"
 )
 
-func prefixExists(all []string) func(string, string) bool {
+func prefixExists(all []string) func(
+	string,
+	string,
+) bool {
 	return func(
 		directory string,
 		prefix string,

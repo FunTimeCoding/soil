@@ -30,7 +30,12 @@ func Attribute(
 			profile := coverage.RunTestAlone(root, binary, t, directory)
 			var keys []string
 
-			for _, k := range coverage.CoveredKeys(coverage.Functions(root, profile)) {
+			for _, k := range coverage.CoveredKeys(
+				coverage.Functions(
+					root,
+					profile,
+				),
+			) {
 				if i.ByKey(k) != nil {
 					keys = append(keys, k)
 				}

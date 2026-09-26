@@ -57,7 +57,12 @@ func Lint(
 			if o.Fix {
 				system.Remove(repo.Absolute(p))
 				r.AddConcern(
-					concern.NewFile("empty_file", "removed empty file", p, true),
+					concern.NewFile(
+						"empty_file",
+						"removed empty file",
+						p,
+						true,
+					),
 				)
 			} else {
 				r.AddConcern(

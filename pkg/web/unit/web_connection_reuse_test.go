@@ -15,13 +15,19 @@ func TestConnectionReuse(t *testing.T) {
 	var opened atomic.Int64
 	s := httptest.NewUnstartedServer(
 		http.HandlerFunc(
-			func(w http.ResponseWriter, _ *http.Request) {
+			func(
+				w http.ResponseWriter,
+				_ *http.Request,
+			) {
 				_, e := w.Write([]byte("connection-reuse-payload"))
 				errors.PanicOnError(e)
 			},
 		),
 	)
-	s.Config.ConnState = func(_ net.Conn, c http.ConnState) {
+	s.Config.ConnState = func(
+		_ net.Conn,
+		c http.ConnState,
+	) {
 		if c == http.StateNew {
 			opened.Add(1)
 		}

@@ -1,4 +1,4 @@
-package aptly
+package mock_client
 
 func (c *Client) LatestVersion(
 	repository string,

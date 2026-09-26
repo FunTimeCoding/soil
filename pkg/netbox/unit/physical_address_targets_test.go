@@ -30,6 +30,9 @@ func TestPhysicalAddressTargetsPermitVirtualInterfaces(t *testing.T) {
 func TestPhysicalAddressTargetsRefuseDevices(t *testing.T) {
 	assert.False(
 		t,
-		slices.Contains(constant.PhysicalAddressTargets, constant.DeviceAddress),
+		slices.Contains(
+			constant.PhysicalAddressTargets,
+			constant.DeviceAddress,
+		),
 	)
 }

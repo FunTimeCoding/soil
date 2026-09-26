@@ -10,6 +10,13 @@ func Counting(existing ...string) (lint.Checker, *int) {
 
 	return lint.Pointers(
 		Resolver(existing...),
-		func(string, int, string, constant.Reason) { count++ },
+		func(
+			string,
+			int,
+			string,
+			constant.Reason,
+		) {
+			count++
+		},
 	), &count
 }

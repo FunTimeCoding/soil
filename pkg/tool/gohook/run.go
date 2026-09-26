@@ -72,7 +72,10 @@ func Run(
 		}
 
 		if guard {
-			if touched := NewEntries(before, changed.Unstaged(c.Root)); len(touched) > 0 {
+			if touched := NewEntries(
+				before,
+				changed.Unstaged(c.Root),
+			); len(touched) > 0 {
 				console.Format(
 					constant.JobModified,
 					o.Hook,

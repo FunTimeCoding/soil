@@ -13,7 +13,12 @@ import (
 
 func Pointers(
 	r *pointer.Resolver,
-	unchecked func(string, int, string, constant.Reason),
+	unchecked func(
+		string,
+		int,
+		string,
+		constant.Reason,
+	),
 ) Checker {
 	return func(
 		path string,

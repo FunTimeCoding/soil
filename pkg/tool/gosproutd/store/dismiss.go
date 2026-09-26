@@ -6,7 +6,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/store/decision"
 )
 
-func (s *Store) Dismiss(identifier uint, state constant.State) {
+func (s *Store) Dismiss(
+	identifier uint,
+	state constant.State,
+) {
 	errors.PanicOnError(
 		s.mapper.Model(decision.Stub()).Where(
 			"identifier = ?",
