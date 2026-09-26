@@ -55,7 +55,7 @@ func TestSearchKeywordVirtualPath(t *testing.T) {
 	s := store_tester.IndexedTestStore(t)
 	defer s.Close()
 	results := s.MustSearchKeyword("hybrid search pipeline", 10, "", false, nil)
-	assert.String(t, "qmd://test/alpha.md", results[0].VirtualPath)
+	assert.String(t, "qmd://test/alfa.md", results[0].VirtualPath)
 }
 
 func TestSearchKeywordNegation(t *testing.T) {
@@ -107,7 +107,7 @@ func TestSearchKeywordMetadataFilter(t *testing.T) {
 	)
 	s.AddCollection("test", directory, constant.DefaultGlob)
 	s.Index("test")
-	s.SetMetadata("test", "scoped.md", map[string][]string{"scope": {"alpha"}})
+	s.SetMetadata("test", "scoped.md", map[string][]string{"scope": {"alfa"}})
 	all := s.MustSearchKeyword("quasar", 10, "", false, nil)
 	assert.Count(t, 2, all)
 	filtered := s.MustSearchKeyword(
@@ -115,7 +115,7 @@ func TestSearchKeywordMetadataFilter(t *testing.T) {
 		10,
 		"",
 		false,
-		map[string]string{"scope": "alpha"},
+		map[string]string{"scope": "alfa"},
 	)
 	assert.Count(t, 1, filtered)
 	assert.String(t, "Scoped", filtered[0].Title)
@@ -139,7 +139,7 @@ func TestSearchKeywordMetadataNarrowsCandidates(t *testing.T) {
 	)
 	s.AddCollection("test", directory, constant.DefaultGlob)
 	s.Index("test")
-	s.SetMetadata("test", "target.md", map[string][]string{"scope": {"alpha"}})
+	s.SetMetadata("test", "target.md", map[string][]string{"scope": {"alfa"}})
 	top := s.MustSearchKeyword("quasar", 1, "", false, nil)
 	assert.Count(t, 1, top)
 	assert.String(t, "Noise", top[0].Title)
@@ -148,7 +148,7 @@ func TestSearchKeywordMetadataNarrowsCandidates(t *testing.T) {
 		1,
 		"",
 		false,
-		map[string]string{"scope": "alpha"},
+		map[string]string{"scope": "alfa"},
 	)
 	assert.Count(t, 1, filtered)
 	assert.String(t, "Target", filtered[0].Title)

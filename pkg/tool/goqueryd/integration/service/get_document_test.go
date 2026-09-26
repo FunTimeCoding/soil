@@ -12,7 +12,7 @@ import (
 func TestGetDocument(t *testing.T) {
 	s := service_tester.New(t)
 	s.IndexFixtures()
-	document, similar, e := s.Service.GetDocument("test/alpha.md")
+	document, similar, e := s.Service.GetDocument("test/alfa.md")
 	assert.FatalOnError(t, e)
 	assert.NotNil(t, document)
 	assert.String(t, "Search Pipeline", document.Title)
@@ -22,7 +22,7 @@ func TestGetDocument(t *testing.T) {
 func TestGetDocumentNotFoundWithSuggestions(t *testing.T) {
 	s := service_tester.New(t)
 	s.IndexFixtures()
-	document, similar, e := s.Service.GetDocument("test/alfa.md")
+	document, similar, e := s.Service.GetDocument("test/alfaa.md")
 	assert.FatalOnError(t, e)
 	assert.Nil(t, document)
 	assert.Greater(t, 0, len(similar))

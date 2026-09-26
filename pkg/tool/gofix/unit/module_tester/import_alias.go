@@ -50,16 +50,16 @@ func ImportAlias(t *testing.T) string {
 			"package example\n\nimport _ \"testmodule/pkg/helper\"\n\nfunc BlankImport() {}\n",
 		).
 		File(
-			"pkg/alpha/constant/constant.go",
+			"pkg/alfa/constant/constant.go",
 			"package constant\n\nfunc One() string { return \"one\" }\n",
 		).
 		File(
-			"pkg/beta/constant/constant.go",
+			"pkg/bravo/constant/constant.go",
 			"package constant\n\nfunc Two() string { return \"two\" }\n",
 		).
 		File(
 			"multiple_same_name.go",
-			"package example\n\nimport (\n\ta \"testmodule/pkg/alpha/constant\"\n\tb \"testmodule/pkg/beta/constant\"\n)\n\nfunc UseMultiple() string {\n\treturn a.One() + b.Two()\n}\n",
+			"package example\n\nimport (\n\ta \"testmodule/pkg/alfa/constant\"\n\tb \"testmodule/pkg/bravo/constant\"\n)\n\nfunc UseMultiple() string {\n\treturn a.One() + b.Two()\n}\n",
 		).
 		File(
 			"struct_field.go",

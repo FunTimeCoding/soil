@@ -35,7 +35,7 @@ const (
 	Cached               = "--cached"
 	ShowToplevel         = "--show-toplevel"
 	HooksDirectory       = "hooks"
-	Configuration               = "config"
+	Configuration        = "config"
 	Get                  = "--get"
 	HooksPathKey         = "core.hooksPath"
 	RemoteHead           = "refs/remotes/origin/HEAD"

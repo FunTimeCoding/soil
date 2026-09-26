@@ -13,3 +13,15 @@ const (
 )
 
 const NotAvailable = "n/a"
+const (
+	LaunchctlList    = "list"
+	LaunchctlHeader  = "PID"
+	LaunchctlAbsent  = "-"
+	LaunchctlSuccess = "0"
+
+	LaunchAgentDirectory  = "/Library/LaunchAgents"
+	LaunchDaemonDirectory = "/Library/LaunchDaemons"
+	UserLaunchAgents      = "Library/LaunchAgents"
+	SystemLaunchPrefix    = "/System/"
+	PropertyListExtension = ".plist"
+)

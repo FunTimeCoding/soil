@@ -20,6 +20,8 @@ tasks:
     silent: true
   generate:
     cmds:
+    - cd pkg/tool/goagentd/generated/client && oapi-codegen --config config.yaml ../server/openapi.yaml
+    - cd pkg/tool/goagentd/generated/server && oapi-codegen --config config.yaml openapi.yaml
     - cd pkg/tool/goalertlogd/generated/client && oapi-codegen --config config.yaml ../server/openapi.yaml
     - cd pkg/tool/goalertlogd/generated/server && oapi-codegen --config config.yaml openapi.yaml
     - cd pkg/tool/goalpined/generated/client && oapi-codegen --config config.yaml ../server/openapi.yaml
@@ -44,6 +46,8 @@ tasks:
     - cd pkg/tool/gomemoryd/generated/server && oapi-codegen --config config.yaml openapi.yaml
     - cd pkg/tool/gonetboxd/generated/client && oapi-codegen --config config.yaml ../server/openapi.yaml
     - cd pkg/tool/gonetboxd/generated/server && oapi-codegen --config config.yaml openapi.yaml
+    - cd pkg/tool/gooutpostd/generated/client && oapi-codegen --config config.yaml ../server/openapi.yaml
+    - cd pkg/tool/gooutpostd/generated/server && oapi-codegen --config config.yaml openapi.yaml
     - cd pkg/tool/goprocessd/generated/client && oapi-codegen --config config.yaml ../server/openapi.yaml
     - cd pkg/tool/goprocessd/generated/server && oapi-codegen --config config.yaml openapi.yaml
     - cd pkg/tool/gopnsensed/generated/client && oapi-codegen --config config.yaml ../server/openapi.yaml

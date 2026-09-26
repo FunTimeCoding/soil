@@ -71,7 +71,7 @@ func TestCallFormatFix(t *testing.T) {
 		func(t *testing.T) {
 			assert.String(
 				t,
-				"package example\n\nfunc Compliant() {\n\ttwoArgs(\"alpha\", \"bravo\")\n\ttwoArgs(\"alpha\", \"bravo\")\n}\n",
+				"package example\n\nfunc Compliant() {\n\ttwoArgs(\"alfa\", \"bravo\")\n\ttwoArgs(\"alfa\", \"bravo\")\n}\n",
 				testutil.ReadFile(t, filepath.Join(directory, "compliant.go")),
 			)
 		},
@@ -107,7 +107,7 @@ func TestCallFormatFix(t *testing.T) {
 		func(t *testing.T) {
 			assert.String(
 				t,
-				"package example\n\nfunc CollapseMultiLine() {\n\ttwoArgs(\"alpha\", \"bravo\")\n}\n",
+				"package example\n\nfunc CollapseMultiLine() {\n\ttwoArgs(\"alfa\", \"bravo\")\n}\n",
 				testutil.ReadFile(
 					t,
 					filepath.Join(directory, "collapse_multi_line.go"),

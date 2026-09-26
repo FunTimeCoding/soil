@@ -34,12 +34,12 @@ func TestMoveCommentTargetDrift(t *testing.T) {
 	)
 	assertFormatted(t, moved)
 	assert.StringContains(t, "const Host = \"bravo\" // host trailing", moved)
-	assert.StringContains(t, "// Alpha document.", moved)
-	assert.StringContains(t, "const Alpha = \"alfa\" // alpha trailing", moved)
+	assert.StringContains(t, "// Alfa document.", moved)
+	assert.StringContains(t, "const Alfa = \"kilo\" // alfa trailing", moved)
 	assert.True(
 		t,
 		strings.Index(moved, "// host trailing") <
-			strings.Index(moved, "// Alpha document."),
+			strings.Index(moved, "// Alfa document."),
 	)
 }
 
@@ -99,7 +99,7 @@ func TestMoveCommentGroupScrub(t *testing.T) {
 	testutil.AssertBlocked(t, r, 0)
 	source := service_tester.ReadFixtureFile(t, d, "pkg/keeper/constant.go")
 	assertFormatted(t, source)
-	assert.StringContains(t, "epsilon = \"juliet\"", source)
+	assert.StringContains(t, "echo = \"juliet\"", source)
 	assert.StringContains(t, "// Keeper vocabulary.", source)
 	assert.False(t, strings.Contains(source, "// Delta document."))
 	assert.False(t, strings.Contains(source, "// delta trailing"))
@@ -123,7 +123,7 @@ func TestMoveCommentGroupDocument(t *testing.T) {
 	r, e := s.MoveSymbols(
 		d,
 		"example/pkg/keeper",
-		[]string{"delta", "epsilon"},
+		[]string{"delta", "echo"},
 		"",
 		"example/pkg/target/constant",
 		"constant.go",
@@ -145,5 +145,5 @@ func TestMoveCommentGroupDocument(t *testing.T) {
 	assert.StringContains(t, "// Keeper vocabulary.", moved)
 	assert.StringContains(t, "// Delta document.", moved)
 	assert.StringContains(t, "Delta = \"india\" // delta trailing", moved)
-	assert.StringContains(t, "Epsilon = \"juliet\"", moved)
+	assert.StringContains(t, "Echo = \"juliet\"", moved)
 }

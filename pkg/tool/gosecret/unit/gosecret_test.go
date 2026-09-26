@@ -17,7 +17,7 @@ func TestEncodeSecret(t *testing.T) {
 	errors.PanicOnError(
 		os.WriteFile(
 			decodedPath,
-			[]byte("=== ALPHA ===\ntwo\n=== BETA ===\nfirst\nsecond\n"),
+			[]byte("=== ALFA ===\ntwo\n=== BRAVO ===\nfirst\nsecond\n"),
 			0600,
 		),
 	)
@@ -32,12 +32,12 @@ func TestEncodeSecret(t *testing.T) {
 	var m gosecret.SecretManifest
 	errors.PanicOnError(yaml.Unmarshal(b, &m))
 	assert.Integer(t, 2, len(m.Payload))
-	alpha, e := base64.StdEncoding.DecodeString(m.Payload["ALPHA"])
+	alfa, e := base64.StdEncoding.DecodeString(m.Payload["ALFA"])
 	errors.PanicOnError(e)
-	assert.String(t, "two", string(alpha))
-	beta, e := base64.StdEncoding.DecodeString(m.Payload["BETA"])
+	assert.String(t, "two", string(alfa))
+	bravo, e := base64.StdEncoding.DecodeString(m.Payload["BRAVO"])
 	errors.PanicOnError(e)
-	assert.String(t, "first\nsecond\n", string(beta))
+	assert.String(t, "first\nsecond\n", string(bravo))
 	s, e = gosecret.EncodeSecret(path)
 	errors.PanicOnError(e)
 	assert.True(t, s.InSync)
@@ -56,7 +56,7 @@ func TestCheckSyncAfterDecode(t *testing.T) {
 	assert.True(t, s.InSync)
 	inSync, e := gosecret.CheckSync(
 		s.DecodedPath,
-		map[string]string{"ALPHA": "one", "GAMMA": "three"},
+		map[string]string{"ALFA": "one", "CHARLIE": "three"},
 	)
 	errors.PanicOnError(e)
 	assert.True(t, inSync)

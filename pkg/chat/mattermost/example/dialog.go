@@ -58,7 +58,7 @@ func Dialog() {
 			p,
 			[]*model.MessageAttachment{
 				{
-					AuthorName: "alpha",
+					AuthorName: "alfa",
 					Title:      "bravo",
 					Text:       "charlie",
 					Color:      "#36a64f",

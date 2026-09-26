@@ -2,7 +2,7 @@ package example
 
 func alreadySplit() {
 	twoArguments(
-		"alpha",
+		"alfa",
 		"bravo",
 	)
 }

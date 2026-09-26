@@ -7,17 +7,17 @@ func (o *Tester) RelatedPair() {
 	o.MustCallTool(
 		constant.SaveMemory,
 		map[string]any{
-			constant.MemoryName:  "alpha",
-			constant.Content:     "alpha content",
-			constant.Description: "alpha description",
+			constant.MemoryName:  "alfa",
+			constant.Content:     "alfa content",
+			constant.Description: "alfa description",
 		},
 	)
 	o.MustCallTool(
 		constant.SaveMemory,
 		map[string]any{
-			constant.MemoryName:  "beta",
-			constant.Content:     "beta content",
-			constant.Description: "beta description",
+			constant.MemoryName:  "bravo",
+			constant.Content:     "bravo content",
+			constant.Description: "bravo description",
 		},
 	)
 }

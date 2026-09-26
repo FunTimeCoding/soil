@@ -1,7 +1,7 @@
 package constant
 
 const (
-	Alpha  = "a" // alpha trailing
+	Alfa   = "a" // alfa trailing
 	Bold   = "b" // bold trailing
 	Legend = "--legend"
 

@@ -23,6 +23,6 @@ metadata: {name: example-secret}
 type: Opaque
 # noinspection SpellCheckingInspection
 data:
-  ALPHA: b25l
-  GAMMA: dGhyZWU=
+  ALFA: b25l
+  CHARLIE: dGhyZWU=
 `

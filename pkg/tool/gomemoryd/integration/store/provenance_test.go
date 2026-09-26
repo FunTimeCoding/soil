@@ -14,7 +14,7 @@ func TestCreateMemoryWithProvenance(t *testing.T) {
 	o.Content = "Broken draws are retried."
 	o.Description = ""
 	o.Type = "reference"
-	o.Scope = "alpha"
+	o.Scope = "alfa"
 	o.Metadata = map[string]string{"kind": "mechanism", "guard": "true"}
 	o.ProvenanceFile = "canon/Example.yaml"
 	o.ProvenanceAnchor = "Retry"
@@ -43,7 +43,7 @@ func TestListDocumentSourced(t *testing.T) {
 	o.Content = "parent"
 	o.Description = "file parent"
 	o.Type = "reference"
-	o.Scope = "alpha"
+	o.Scope = "alfa"
 	o.ProvenanceFile = "canon/Example.yaml"
 	o.ProvenanceHash = "parent-hash"
 	parent := s.CreateMemory(o)
@@ -51,14 +51,14 @@ func TestListDocumentSourced(t *testing.T) {
 	child.Name = "Shard"
 	child.Content = "shard text"
 	child.Type = "reference"
-	child.Scope = "alpha"
+	child.Scope = "alfa"
 	child.ParentIdentifier = &parent
 	child.ProvenanceFile = "canon/Example.yaml"
 	child.ProvenanceAnchor = "Shard"
 	child.ProvenanceHash = "shard-hash"
 	child.Ordinal = 1
 	s.CreateMemory(child)
-	sourced, e := s.Store.ListDocumentSourced("alpha")
+	sourced, e := s.Store.ListDocumentSourced("alfa")
 	assert.FatalOnError(t, e)
 	assert.Count(t, 2, sourced)
 	assert.String(t, "Example", sourced[0].Name)
@@ -76,7 +76,7 @@ func TestUpdateMemoryReplacesMetadataAndOrdinal(t *testing.T) {
 	o.Name = "Shard"
 	o.Content = "first text"
 	o.Type = "reference"
-	o.Scope = "alpha"
+	o.Scope = "alfa"
 	o.Metadata = map[string]string{"kind": "mechanism"}
 	o.ProvenanceFile = "canon/Example.yaml"
 	o.ProvenanceAnchor = "Shard"

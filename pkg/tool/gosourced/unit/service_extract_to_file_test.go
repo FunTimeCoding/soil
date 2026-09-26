@@ -208,12 +208,12 @@ func TestExtractGroupedTypeRefuses(t *testing.T) {
 		service_tester.ServiceTestdata("extract-type-group/src"),
 	)
 	s := testService()
-	r, e := s.ExtractToFile(d, "pkg/target/combined.go", "Alpha", false)
+	r, e := s.ExtractToFile(d, "pkg/target/combined.go", "Alfa", false)
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "type group")
 	source := service_tester.ReadFixtureFile(t, d, "pkg/target/combined.go")
-	assert.StringContains(t, "Alpha struct{}", source)
+	assert.StringContains(t, "Alfa  struct{}", source)
 }
 
 func TestExtractTypeRefusesEmptyFile(t *testing.T) {

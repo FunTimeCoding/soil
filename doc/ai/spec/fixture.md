@@ -76,8 +76,8 @@ func TestParse(t *testing.T) {
 ## Fixture content
 
 Fixtures use boring synthetic vocabulary: reserved names
-(`host.example`, `server.test`), greek-letter and NATO-alphabet
-placeholders, generic technical nouns. Never invent
+(`host.example`, `server.test`), NATO-alphabet placeholders,
+generic technical nouns. Never invent
 sensitive-flavored names or values (`CardNumber`, recovery
 codes, card digits) - invented structure silhouettes private
 structure just as effectively as copied structure, and this

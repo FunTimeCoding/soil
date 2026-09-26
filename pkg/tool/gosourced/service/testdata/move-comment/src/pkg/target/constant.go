@@ -1,5 +1,5 @@
 package target
 
-// Alpha document.
+// Alfa document.
 // golint:fixture stray_constant
-const alpha = "alfa" // alpha trailing
+const alfa = "kilo" // alfa trailing

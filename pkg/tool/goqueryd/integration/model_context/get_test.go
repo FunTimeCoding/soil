@@ -10,14 +10,14 @@ import (
 
 func TestGetDocument(t *testing.T) {
 	s := indexFixtures(t)
-	result := s.Get("test/alpha.md")
+	result := s.Get("test/alfa.md")
 	assert.StringContains(t, "Search Pipeline", result)
 	assert.StringContains(t, "hybrid search pipeline", result)
 }
 
 func TestGetDocumentVirtualPath(t *testing.T) {
 	s := indexFixtures(t)
-	result := s.Get("qmd://test/alpha.md")
+	result := s.Get("qmd://test/alfa.md")
 	assert.StringContains(t, "Search Pipeline", result)
 }
 
@@ -25,7 +25,7 @@ func TestGetDocumentNotFoundSuggestsAlternatives(t *testing.T) {
 	s := indexFixtures(t)
 	result := s.MustCallToolError(
 		constant.Get,
-		map[string]any{constant.Path: "test/alfa.md"},
+		map[string]any{constant.Path: "test/alfaa.md"},
 	)
 	assert.StringContains(t, "Did you mean", result)
 }

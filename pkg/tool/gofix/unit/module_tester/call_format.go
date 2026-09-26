@@ -24,7 +24,7 @@ func CallFormat(t *testing.T) string {
 		).
 		File(
 			"compliant.go",
-			"package example\n\nfunc Compliant() {\n\ttwoArgs(\"alpha\", \"bravo\")\n\ttwoArgs(\n\t\t\"alpha\",\n\t\t\"bravo\",\n\t)\n}\n",
+			"package example\n\nfunc Compliant() {\n\ttwoArgs(\"alfa\", \"bravo\")\n\ttwoArgs(\n\t\t\"alfa\",\n\t\t\"bravo\",\n\t)\n}\n",
 		).
 		File(
 			"multiple_violations.go",
@@ -48,7 +48,7 @@ func CallFormat(t *testing.T) string {
 		).
 		File(
 			"collapse_multi_line.go",
-			"package example\n\nfunc CollapseMultiLine() {\n\ttwoArgs(\n\t\t\"alpha\",\n\t\t\"bravo\",\n\t)\n}\n",
+			"package example\n\nfunc CollapseMultiLine() {\n\ttwoArgs(\n\t\t\"alfa\",\n\t\t\"bravo\",\n\t)\n}\n",
 		).
 		File(
 			"collapse_preserves_long.go",

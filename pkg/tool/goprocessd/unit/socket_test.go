@@ -14,7 +14,7 @@ func TestPathDeterministic(t *testing.T) {
 }
 
 func TestPathDifferentDirectories(t *testing.T) {
-	a := socket.Path("/tmp/alpha/Procfile")
+	a := socket.Path("/tmp/alfa/Procfile")
 	b := socket.Path("/tmp/bravo/Procfile")
 	assert.True(t, a != b)
 }

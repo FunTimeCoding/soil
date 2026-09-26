@@ -12,7 +12,7 @@ func (o *Tester) DocumentSourcedMemory() int64 {
 	p.Content = "Document-sourced content."
 	p.Description = ""
 	p.Type = "reference"
-	p.Scope = "alpha"
+	p.Scope = "alfa"
 	p.ProvenanceFile = "canon/Example.yaml"
 	p.ProvenanceAnchor = "Retry"
 	identifier, e := o.Store().CreateMemory(p)

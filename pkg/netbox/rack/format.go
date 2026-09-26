@@ -39,8 +39,8 @@ func (r *Rack) Format(f *option.Format) string {
 
 	s.Line("  Created: %s", r.Raw.Created.Get().Format(constant.DateMinute))
 	s.Line("  Updated: %s", r.Raw.LastUpdated.Get().Format(constant.DateMinute))
-	s.Line("  Devices: %d", r.Raw.DeviceCount)
-	s.Line("  Unit height: %d", r.Raw.UHeight)
+	s.Line("  Devices: %d", r.Raw.GetDeviceCount())
+	s.Line("  Unit height: %d", r.Raw.GetUHeight())
 
 	return s.Format()
 }

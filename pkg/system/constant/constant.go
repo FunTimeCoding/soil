@@ -16,8 +16,8 @@ const (
 	DarwinARM64 = "darwin-arm64"
 	DarwinAMD64 = "darwin-amd64"
 
-	OpenCommand    = "open"
-	XdgOpenCommand = "xdg-open"
+	OpenCommand     = "open"
+	XdgOpenCommand  = "xdg-open"
 	Shell           = "/bin/sh"
 	ShellCommand    = "-c"
 	PathEnvironment = "PATH"

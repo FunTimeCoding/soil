@@ -12,13 +12,13 @@ import (
 )
 
 type Worker struct {
-	client     *jira.Client
-	confluence *confluence.Client
-	interval   time.Duration
-	recovery   *recovery.Recovery
-	notifier   *notifier.Notifier
-	stop       chan struct{}
-	mutex      sync.RWMutex
+	client        *jira.Client
+	confluence    *confluence.Client
+	interval      time.Duration
+	recovery      *recovery.Recovery
+	notifier      *notifier.Notifier
+	stop          chan struct{}
+	mutex         sync.RWMutex
 	project       []string
 	issues        []*issue.Issue
 	watchedIssues []*issue.Issue

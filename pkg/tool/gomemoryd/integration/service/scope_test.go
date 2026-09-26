@@ -32,18 +32,18 @@ func TestServiceCreateRoutesCollectionByScope(t *testing.T) {
 	_, e := o.Service.CreateMemory(scopedOption("default entry", ""))
 	assert.FatalOnError(t, e)
 	assert.String(t, "memories", o.Indexer.Pushed[0].Collection)
-	_, f := o.Service.CreateMemory(scopedOption("scoped entry", "alpha"))
+	_, f := o.Service.CreateMemory(scopedOption("scoped entry", "alfa"))
 	assert.FatalOnError(t, f)
 	assert.Count(t, 2, o.Indexer.Pushed)
-	assert.String(t, "alpha", o.Indexer.Pushed[1].Collection)
+	assert.String(t, "alfa", o.Indexer.Pushed[1].Collection)
 	scope := o.Indexer.Pushed[1].Metadata[constant.Scope]
 	assert.Count(t, 1, scope)
-	assert.String(t, "alpha", scope[0])
+	assert.String(t, "alfa", scope[0])
 }
 
 func TestServiceUpdatePreservesMetadataAndOrdinal(t *testing.T) {
 	o := service_tester.New(t)
-	p := scopedOption("scoped entry", "alpha")
+	p := scopedOption("scoped entry", "alfa")
 	p.Metadata = map[string]string{"kind": "mechanism"}
 	p.Ordinal = 2
 	m, e := o.Service.CreateMemory(p)
@@ -57,28 +57,28 @@ func TestServiceUpdatePreservesMetadataAndOrdinal(t *testing.T) {
 	assert.FatalOnError(t, f)
 	assert.String(t, "mechanism", updated.Metadata["kind"])
 	assert.Integer(t, 2, updated.Ordinal)
-	assert.String(t, "alpha", o.Indexer.Pushed[1].Collection)
+	assert.String(t, "alfa", o.Indexer.Pushed[1].Collection)
 }
 
 func TestServiceProfileScoped(t *testing.T) {
 	o := service_tester.New(t)
 	_, e := o.Service.CreateMemory(scopedOption("default entry", ""))
 	assert.FatalOnError(t, e)
-	_, f := o.Service.CreateMemory(scopedOption("scoped entry", "alpha"))
+	_, f := o.Service.CreateMemory(scopedOption("scoped entry", "alfa"))
 	assert.FatalOnError(t, f)
 	parent, g := o.Service.GetMemory(2)
 	assert.FatalOnError(t, g)
-	second := scopedOption("second shard", "alpha")
+	second := scopedOption("second shard", "alfa")
 	second.ParentIdentifier = &parent.Identifier
 	second.Ordinal = 2
 	_, h := o.Service.CreateMemory(second)
 	assert.FatalOnError(t, h)
-	first := scopedOption("first shard", "alpha")
+	first := scopedOption("first shard", "alfa")
 	first.ParentIdentifier = &parent.Identifier
 	first.Ordinal = 1
 	_, i := o.Service.CreateMemory(first)
 	assert.FatalOnError(t, i)
-	result, _, g := o.Service.Profile("", "alpha", false)
+	result, _, g := o.Service.Profile("", "alfa", false)
 	assert.FatalOnError(t, g)
 	assert.Count(t, 1, result.Index)
 	assert.String(t, "scoped entry", result.Index[0].Name)

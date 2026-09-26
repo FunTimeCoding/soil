@@ -13,9 +13,9 @@ func TestContextHierarchicalResolution(t *testing.T) {
 	defer s.Close()
 	s.AddContext("test", strings.Slash, "root context")
 	s.AddContext("test", "/tools/", "tools context")
-	root := s.ResolveContext("test", "alpha.md")
+	root := s.ResolveContext("test", "alfa.md")
 	assert.String(t, "root context", root)
-	sub := s.ResolveContext("test", "tools/gamma.md")
+	sub := s.ResolveContext("test", "tools/charlie.md")
 	assert.StringContains(t, "root context", sub)
 	assert.StringContains(t, "tools context", sub)
 }

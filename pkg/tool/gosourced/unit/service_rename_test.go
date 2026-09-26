@@ -267,7 +267,7 @@ func TestRenameLongerKeepsComments(t *testing.T) {
 	)
 	assertFormatted(t, source)
 	assert.StringContains(t, "TargetLegendExtended = \"--legend\"", source)
-	assert.StringContains(t, "// alpha trailing", source)
+	assert.StringContains(t, "// alfa trailing", source)
 	assert.StringContains(t, "// bold trailing", source)
 	assert.StringContains(t, "// wide trailing", source)
 	run := service_tester.ReadFixtureFile(t, d, "pkg/target/run.go")

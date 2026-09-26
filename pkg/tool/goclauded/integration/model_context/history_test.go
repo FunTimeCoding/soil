@@ -18,7 +18,7 @@ func TestHistoryFormatsIDs(t *testing.T) {
 func TestHistoryLimit(t *testing.T) {
 	s := base.New(t)
 	a := s.NewSession(t)
-	a.Announce(a.Name(), "topic-alpha")
+	a.Announce(a.Name(), "topic-alfa")
 	a.Announce(a.Name(), "topic-bravo")
 	a.Announce(a.Name(), "topic-charlie")
 	history := a.MustCallTool(
@@ -26,13 +26,13 @@ func TestHistoryLimit(t *testing.T) {
 		map[string]any{constant.Limit: float64(1)},
 	)
 	assert.StringContains(t, "topic-charlie", history)
-	assert.StringNotContains(t, "topic-alpha", history)
+	assert.StringNotContains(t, "topic-alfa", history)
 }
 
 func TestHistorySkip(t *testing.T) {
 	s := base.New(t)
 	a := s.NewSession(t)
-	a.Announce(a.Name(), "topic-alpha")
+	a.Announce(a.Name(), "topic-alfa")
 	a.Announce(a.Name(), "topic-bravo")
 	a.Announce(a.Name(), "topic-charlie")
 	history := a.MustCallTool(

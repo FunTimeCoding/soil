@@ -13,5 +13,5 @@ const (
 	// Delta document.
 	delta = "india" // delta trailing
 
-	epsilon = "juliet"
+	echo = "juliet"
 )

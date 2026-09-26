@@ -1,10 +1,10 @@
 package target
 
 type (
-	Alpha struct{}
-	Beta  struct{}
+	Alfa  struct{}
+	Bravo struct{}
 )
 
-func NewAlpha() *Alpha {
-	return &Alpha{}
+func NewAlfa() *Alfa {
+	return &Alfa{}
 }

@@ -21,15 +21,15 @@ func TestScopeSeparatesListing(t *testing.T) {
 	p.Content = "Lives in a named scope."
 	p.Description = "scoped"
 	p.Type = "reference"
-	p.Scope = "alpha"
+	p.Scope = "alfa"
 	s.CreateMemory(p)
 	defaults := s.ListMemories("", "", "", true)
 	assert.Count(t, 1, defaults)
 	assert.String(t, "default memory", defaults[0].Name)
-	scoped := s.ListMemories("", "", "alpha", true)
+	scoped := s.ListMemories("", "", "alfa", true)
 	assert.Count(t, 1, scoped)
 	assert.String(t, "scoped memory", scoped[0].Name)
-	assert.String(t, "alpha", scoped[0].Scope)
+	assert.String(t, "alfa", scoped[0].Scope)
 	all := s.ListMemories("", "", constant.AllScope, true)
 	assert.Count(t, 2, all)
 }
@@ -47,12 +47,12 @@ func TestScopeSeparatesSearch(t *testing.T) {
 	p.Content = "The turbine spins in a named scope."
 	p.Description = "scoped turbine"
 	p.Type = "reference"
-	p.Scope = "alpha"
+	p.Scope = "alfa"
 	s.CreateMemory(p)
 	defaults := s.SearchMemories("turbine", 10, "", "", "")
 	assert.Count(t, 1, defaults)
 	assert.String(t, "default note", defaults[0].Name)
-	scoped := s.SearchMemories("turbine", 10, "", "", "alpha")
+	scoped := s.SearchMemories("turbine", 10, "", "", "alfa")
 	assert.Count(t, 1, scoped)
 	assert.String(t, "scoped note", scoped[0].Name)
 	all := s.SearchMemories("turbine", 10, "", "", constant.AllScope)

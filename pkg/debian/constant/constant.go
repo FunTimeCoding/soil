@@ -17,3 +17,5 @@ const (
 	UpgradeRestart = "restart"
 	UpgradeKeep    = "keep"
 )
+
+const PackageKeyFields = 3

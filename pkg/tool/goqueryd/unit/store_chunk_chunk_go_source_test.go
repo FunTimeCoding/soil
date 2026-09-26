@@ -12,7 +12,7 @@ import (
 func TestChunkGoSourceSplitsAtDeclarations(t *testing.T) {
 	body := strings.Repeat("\t// line\n", 200)
 	source := fmt.Sprintf(
-		"package main\n\nfunc Alpha() {\n%s}\n\nfunc Beta() {\n%s}\n\nfunc Gamma() {\n%s}\n",
+		"package main\n\nfunc Alfa() {\n%s}\n\nfunc Bravo() {\n%s}\n\nfunc Charlie() {\n%s}\n",
 		body,
 		body,
 		body,
@@ -23,13 +23,13 @@ func TestChunkGoSourceSplitsAtDeclarations(t *testing.T) {
 	found := false
 
 	for _, c := range chunks {
-		if strings.Contains(c.Text, "func Beta") {
+		if strings.Contains(c.Text, "func Bravo") {
 			found = true
 		}
 	}
 
 	if !found {
-		t.Errorf("expected a chunk containing func Beta")
+		t.Errorf("expected a chunk containing func Bravo")
 	}
 }
 

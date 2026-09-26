@@ -21,18 +21,18 @@ var (
 		WithQuote(QuoteDouble).
 		WithRawQuote(QuoteBacktick)
 	GoModule = language.New("Go Module").
-		WithFilename(module.ModFile, module.SumFile).
-		WithLineComment(strings.DoubleSlash)
+			WithFilename(module.ModFile, module.SumFile).
+			WithLineComment(strings.DoubleSlash)
 	C = language.New("C").
 		WithExtension(".c", ".h").
 		WithLineComment(strings.DoubleSlash).
 		WithBlockComment(BlockOpenC, BlockCloseC).
 		WithQuote(QuoteDouble)
 	CPlusPlus = language.New("C++").
-		WithExtension(".cc", ".cpp", ".cxx", ".hpp", ".hh").
-		WithLineComment(strings.DoubleSlash).
-		WithBlockComment(BlockOpenC, BlockCloseC).
-		WithQuote(QuoteDouble)
+			WithExtension(".cc", ".cpp", ".cxx", ".hpp", ".hh").
+			WithLineComment(strings.DoubleSlash).
+			WithBlockComment(BlockOpenC, BlockCloseC).
+			WithQuote(QuoteDouble)
 	Java = language.New("Java").
 		WithExtension(".java").
 		WithLineComment(strings.DoubleSlash).
@@ -50,18 +50,18 @@ var (
 		WithQuote(QuoteDouble).
 		WithNested()
 	JavaScript = language.New("JavaScript").
-		WithExtension(".js", ".mjs", ".cjs", ".jsx").
-		WithShebang("node").
-		WithLineComment(strings.DoubleSlash).
-		WithBlockComment(BlockOpenC, BlockCloseC).
-		WithQuote(QuoteDouble, QuoteSingle).
-		WithRawQuote(QuoteBacktick)
+			WithExtension(".js", ".mjs", ".cjs", ".jsx").
+			WithShebang("node").
+			WithLineComment(strings.DoubleSlash).
+			WithBlockComment(BlockOpenC, BlockCloseC).
+			WithQuote(QuoteDouble, QuoteSingle).
+			WithRawQuote(QuoteBacktick)
 	TypeScript = language.New("TypeScript").
-		WithExtension(".ts", ".tsx").
-		WithLineComment(strings.DoubleSlash).
-		WithBlockComment(BlockOpenC, BlockCloseC).
-		WithQuote(QuoteDouble, QuoteSingle).
-		WithRawQuote(QuoteBacktick)
+			WithExtension(".ts", ".tsx").
+			WithLineComment(strings.DoubleSlash).
+			WithBlockComment(BlockOpenC, BlockCloseC).
+			WithQuote(QuoteDouble, QuoteSingle).
+			WithRawQuote(QuoteBacktick)
 	Vue = language.New("Vue").
 		WithExtension(".vue").
 		WithLineComment(strings.DoubleSlash).
@@ -101,10 +101,10 @@ var (
 			WithLineComment(strings.DoubleSlash).
 			WithBlockComment(BlockOpenC, BlockCloseC)
 	Terraform = language.New("Terraform").
-		WithExtension(".tf", ".tfvars", ".hcl").
-		WithLineComment(strings.Hash, strings.DoubleSlash).
-		WithBlockComment(BlockOpenC, BlockCloseC).
-		WithQuote(QuoteDouble)
+			WithExtension(".tf", ".tfvars", ".hcl").
+			WithLineComment(strings.Hash, strings.DoubleSlash).
+			WithBlockComment(BlockOpenC, BlockCloseC).
+			WithQuote(QuoteDouble)
 	CSS = language.New("CSS").
 		WithExtension(".css").
 		WithBlockComment(BlockOpenC, BlockCloseC)
@@ -203,11 +203,6 @@ var (
 			"chefignore",
 		).
 		WithLineComment(strings.Hash)
-	Nix = language.New("Nix").
-		WithExtension(".nix").
-		WithLineComment(strings.Hash).
-		WithBlockComment(BlockOpenC, BlockCloseC).
-		WithQuote(QuoteDouble)
 	R = language.New("R").
 		WithExtension(".r", ".R").
 		WithLineComment(strings.Hash)
@@ -342,7 +337,6 @@ var (
 		Systemd,
 		Cron,
 		GitConfiguration,
-		Nix,
 		R,
 		Elixir,
 		Lua,

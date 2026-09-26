@@ -10,8 +10,8 @@ import (
 func TestAncestors(t *testing.T) {
 	assert.Strings(
 		t,
-		[]string{"doc/guide/alpha", "doc/guide", "doc"},
-		pointer.Ancestors("doc/guide/alpha/reader/README.md"),
+		[]string{"doc/guide/alfa", "doc/guide", "doc"},
+		pointer.Ancestors("doc/guide/alfa/reader/README.md"),
 	)
 	assert.Strings(t, nil, pointer.Ancestors("doc/README.md"))
 	assert.Strings(t, nil, pointer.Ancestors(constant.ReadmeFile))

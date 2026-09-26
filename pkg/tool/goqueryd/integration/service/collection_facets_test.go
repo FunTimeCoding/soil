@@ -16,7 +16,7 @@ func TestCollectionFacets(t *testing.T) {
 		s.Service.PushDocument(
 			"notes",
 			"a.md",
-			"# Alpha\n\nFirst.\n",
+			"# Alfa\n\nFirst.\n",
 			map[string][]string{
 				constant.FixtureAuthorKey: {"alice"},
 				constant.FixtureTagKey:    {"design"},
@@ -28,7 +28,7 @@ func TestCollectionFacets(t *testing.T) {
 		s.Service.PushDocument(
 			"notes",
 			"b.md",
-			"# Beta\n\nSecond.\n",
+			"# Bravo\n\nSecond.\n",
 			map[string][]string{
 				constant.FixtureAuthorKey: {"alice"},
 				constant.FixtureTagKey:    {constant.FixtureBuildValue},
@@ -40,7 +40,7 @@ func TestCollectionFacets(t *testing.T) {
 		s.Service.PushDocument(
 			"notes",
 			"c.md",
-			"# Gamma\n\nThird.\n",
+			"# Charlie\n\nThird.\n",
 			map[string][]string{
 				constant.FixtureAuthorKey: {"bob"},
 				constant.FixtureTagKey:    {constant.FixtureBuildValue},
@@ -67,7 +67,7 @@ func TestCollectionFacetsForKey(t *testing.T) {
 		s.Service.PushDocument(
 			"notes",
 			"a.md",
-			"# Alpha\n\nFirst.\n",
+			"# Alfa\n\nFirst.\n",
 			map[string][]string{
 				constant.FixtureAuthorKey: {"alice"},
 				constant.FixtureTagKey:    {"design"},
@@ -79,7 +79,7 @@ func TestCollectionFacetsForKey(t *testing.T) {
 		s.Service.PushDocument(
 			"notes",
 			"b.md",
-			"# Beta\n\nSecond.\n",
+			"# Bravo\n\nSecond.\n",
 			map[string][]string{
 				constant.FixtureAuthorKey: {"bob"},
 				constant.FixtureTagKey:    {constant.FixtureBuildValue},

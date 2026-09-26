@@ -9,6 +9,7 @@ import (
 func unitRoot(packageDirectory string) string {
 	return join.Absolute(
 		packageDirectory,
+		system.Resources,
 		system.Library,
 		constant.SystemdDirectory,
 		constant.SystemDirectory,

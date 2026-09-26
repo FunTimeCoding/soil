@@ -102,13 +102,13 @@ func TestAddMemberUnknownUser(t *testing.T) {
 
 func TestGroupNumberIncrements(t *testing.T) {
 	s := stack()
-	first, e := s.CreateGroup("alpha")
+	first, e := s.CreateGroup("alfa")
 	assert.FatalOnError(t, e)
 
-	defer func() { assert.FatalOnError(t, s.DeleteGroup("alpha")) }()
-	second, f := s.CreateGroup("beta")
+	defer func() { assert.FatalOnError(t, s.DeleteGroup("alfa")) }()
+	second, f := s.CreateGroup("bravo")
 	assert.FatalOnError(t, f)
 
-	defer func() { assert.FatalOnError(t, s.DeleteGroup("beta")) }()
+	defer func() { assert.FatalOnError(t, s.DeleteGroup("bravo")) }()
 	assert.Integer(t, first.Number+1, second.Number)
 }

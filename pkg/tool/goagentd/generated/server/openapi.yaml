@@ -1,0 +1,65 @@
+---
+openapi: "3.0.0"
+info:
+  title: goagentd
+  version: 1.0.0
+paths:
+  /api/run:
+    post:
+      operationId: postRun
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RunRequest"
+      responses:
+        "202":
+          description: Intent accepted and execution started.
+        "400":
+          description: Empty or invalid intent.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: A run is already in progress.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /api/status:
+    get:
+      operationId: getStatus
+      responses:
+        "200":
+          description: Current runner state and result.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StatusResponse"
+components:
+  schemas:
+    RunRequest:
+      type: object
+      required:
+      - intent
+      properties:
+        intent:
+          type: string
+    StatusResponse:
+      type: object
+      required:
+      - state
+      properties:
+        state:
+          type: string
+        result:
+          type: string
+    Error:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: string

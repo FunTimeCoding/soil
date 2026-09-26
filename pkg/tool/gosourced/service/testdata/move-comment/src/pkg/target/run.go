@@ -1,5 +1,5 @@
 package target
 
 func Run() string {
-	return alpha
+	return alfa
 }

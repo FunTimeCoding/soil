@@ -12,7 +12,7 @@ func CompositeFormat(t *testing.T) string {
 		).
 		File(
 			"first_on_brace_line.go",
-			"package example\n\nfunc FirstOnBraceLine() []string {\n\treturn []string{\"alpha\",\n\t\t\"bravo\",\n\t}\n}\n",
+			"package example\n\nfunc FirstOnBraceLine() []string {\n\treturn []string{\"alfa\",\n\t\t\"bravo\",\n\t}\n}\n",
 		).
 		File(
 			"nested_calls.go",

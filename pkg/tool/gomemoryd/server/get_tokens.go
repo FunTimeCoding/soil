@@ -25,8 +25,8 @@ func (s *Server) GetTokens(
 	}
 
 	response := server.GetTokens200JSONResponse{
-		Statistic: make([]server.TokenStatistic, 0, len(summary.Statistic)),
-		Block:     spread(summary.Block),
+		Statistic:   make([]server.TokenStatistic, 0, len(summary.Statistic)),
+		Block:       spread(summary.Block),
 		Description: spread(summary.Description),
 		Withheld:    summary.Withheld,
 	}

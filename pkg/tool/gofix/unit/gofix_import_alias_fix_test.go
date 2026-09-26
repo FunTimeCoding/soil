@@ -108,7 +108,7 @@ func TestImportAliasFix(t *testing.T) {
 		func(t *testing.T) {
 			assert.String(
 				t,
-				"package example\n\nimport (\n\ta \"testmodule/pkg/alpha/constant\"\n\tb \"testmodule/pkg/beta/constant\"\n)\n\nfunc UseMultiple() string {\n\treturn a.One() + b.Two()\n}\n",
+				"package example\n\nimport (\n\ta \"testmodule/pkg/alfa/constant\"\n\tb \"testmodule/pkg/bravo/constant\"\n)\n\nfunc UseMultiple() string {\n\treturn a.One() + b.Two()\n}\n",
 				testutil.ReadFile(
 					t,
 					filepath.Join(directory, "multiple_same_name.go"),

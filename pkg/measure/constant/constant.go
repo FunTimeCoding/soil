@@ -33,7 +33,6 @@ const (
 	ColumnPath     = "PATH"
 	RowTotal       = "TOTAL"
 
-
 	VendorDirectory      = "vendor"
 	NodeModulesDirectory = "node_modules"
 	FinderMetadataFile   = ".DS_Store"

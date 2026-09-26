@@ -203,10 +203,10 @@ func TestPointersConventionWord(t *testing.T) {
 }
 
 func TestPointersRelativeLinkWithDirectory(t *testing.T) {
-	l := pointer_tester.Checker("doc/guide/client/alpha.md")(
+	l := pointer_tester.Checker("doc/guide/client/alfa.md")(
 		"doc/guide/clients.md",
 		strings.NewReader(
-			"| Alpha | JSON API | [client/alpha.md](client/alpha.md) |\n",
+			"| Alfa | JSON API | [client/alfa.md](client/alfa.md) |\n",
 		),
 	)
 	assertReport(t, "doc/guide/clients.md", false, nil, "", l)
@@ -214,33 +214,33 @@ func TestPointersRelativeLinkWithDirectory(t *testing.T) {
 
 func TestPointersAncestorResolves(t *testing.T) {
 	l := pointer_tester.Checker(
-		"doc/guide/alpha/charlie",
-		"doc/guide/alpha/charlie/Delta.md",
+		"doc/guide/alfa/charlie",
+		"doc/guide/alfa/charlie/Delta.md",
 	)(
-		"doc/guide/alpha/reader/README.md",
+		"doc/guide/alfa/reader/README.md",
 		strings.NewReader(
 			"Charlie lives in `charlie/` and delta in `charlie/Delta.md`.\n",
 		),
 	)
-	assertReport(t, "doc/guide/alpha/reader/README.md", false, nil, "", l)
+	assertReport(t, "doc/guide/alfa/reader/README.md", false, nil, "", l)
 }
 
 func TestPointersAncestorPrefixResolves(t *testing.T) {
 	l := pointer_tester.Checker(
-		"doc/notes/alpha",
-		"doc/notes/alpha/a8-foxtrot.md",
+		"doc/notes/alfa",
+		"doc/notes/alfa/a8-foxtrot.md",
 	)(
 		"doc/notes/bravo/b303-echo.md",
-		strings.NewReader("Continues `alpha/a8`.\n"),
+		strings.NewReader("Continues `alfa/a8`.\n"),
 	)
 	assertReport(t, "doc/notes/bravo/b303-echo.md", false, nil, "", l)
 }
 
 func TestPointersAncestorPrefixMissingTallies(t *testing.T) {
-	checker, count := pointer_tester.Counting("doc/notes/alpha")
+	checker, count := pointer_tester.Counting("doc/notes/alfa")
 	l := checker(
 		"doc/notes/bravo/b303-echo.md",
-		strings.NewReader("Continues `alpha/a9`.\n"),
+		strings.NewReader("Continues `alfa/a9`.\n"),
 	)
 	assertReport(t, "doc/notes/bravo/b303-echo.md", false, nil, "", l)
 	assert.Integer(t, 1, *count)
@@ -312,24 +312,24 @@ func TestPointersBasedSeveral(t *testing.T) {
 		"../github/soil/pkg/tool/goalertlogd",
 		"../github/soil/pkg/tool/goalertlogd/store",
 		"container",
-		"container/alpha",
-		"container/alpha/compose.yaml",
+		"container/alfa",
+		"container/alfa/compose.yaml",
 	)(
 		constant.UpperAlfa,
 		strings.NewReader(
-			"---\nbase: ../github/soil/pkg/tool/goalertlogd, container\n---\nRecords sit in `store/` and the service in `alpha/compose.yaml`.\n",
+			"---\nbase: ../github/soil/pkg/tool/goalertlogd, container\n---\nRecords sit in `store/` and the service in `alfa/compose.yaml`.\n",
 		),
 	)
 	assertReport(t, "Alfa", false, nil, "", l)
 }
 
 func TestPointersBasedSeveralInteriorDead(t *testing.T) {
-	line := "The service is in `alpha/compose.yml` today."
+	line := "The service is in `alfa/compose.yml` today."
 	l := pointer_tester.Checker(
 		"pkg/tool/goalertlogd",
 		"container",
-		"container/alpha",
-		"container/alpha/compose.yaml",
+		"container/alfa",
+		"container/alfa/compose.yaml",
 	)(
 		constant.UpperAlfa,
 		strings.NewReader(
@@ -573,10 +573,10 @@ func TestPointersRouteTallies(t *testing.T) {
 
 func TestPointersRouteWithoutSpecificationDead(t *testing.T) {
 	line := "Lists at `route:/api/alerts`."
-	l := pointer_tester.Checker("pkg/tool/alpha")(
+	l := pointer_tester.Checker("pkg/tool/alfa")(
 		constant.UpperAlfa,
 		strings.NewReader(
-			fmt.Sprintf("---\nbase: pkg/tool/alpha\n---\n%s\n", line),
+			fmt.Sprintf("---\nbase: pkg/tool/alfa\n---\n%s\n", line),
 		),
 	)
 	assertReport(t, "Alfa", true, pointer_tester.DeadAt("Alfa", 4, line), "", l)
@@ -585,13 +585,13 @@ func TestPointersRouteWithoutSpecificationDead(t *testing.T) {
 func TestPointersRouteLive(t *testing.T) {
 	l := pointer_tester.Routes(
 		map[string][]string{
-			"pkg/tool/alpha": {"/api/alerts", "/api/alerts/{name}"},
+			"pkg/tool/alfa": {"/api/alerts", "/api/alerts/{name}"},
 		},
-		"pkg/tool/alpha",
+		"pkg/tool/alfa",
 	)(
 		constant.UpperAlfa,
 		strings.NewReader(
-			"---\nbase: pkg/tool/alpha\n---\nLists at `route:/api/alerts`, one at `route:/api/alerts/{identifier}`, filtered by `route:/api/alerts?name=x` and `route:/api/...`.\n",
+			"---\nbase: pkg/tool/alfa\n---\nLists at `route:/api/alerts`, one at `route:/api/alerts/{identifier}`, filtered by `route:/api/alerts?name=x` and `route:/api/...`.\n",
 		),
 	)
 	assertReport(t, "Alfa", false, nil, "", l)
@@ -600,12 +600,12 @@ func TestPointersRouteLive(t *testing.T) {
 func TestPointersRouteDead(t *testing.T) {
 	line := "Lists at `route:/api/ghosts` today."
 	l := pointer_tester.Routes(
-		map[string][]string{"pkg/tool/alpha": {"/api/alerts"}},
-		"pkg/tool/alpha",
+		map[string][]string{"pkg/tool/alfa": {"/api/alerts"}},
+		"pkg/tool/alfa",
 	)(
 		constant.UpperAlfa,
 		strings.NewReader(
-			fmt.Sprintf("---\nbase: pkg/tool/alpha\n---\n%s\n", line),
+			fmt.Sprintf("---\nbase: pkg/tool/alfa\n---\n%s\n", line),
 		),
 	)
 	assertReport(t, "Alfa", true, pointer_tester.DeadAt("Alfa", 4, line), "", l)
@@ -614,18 +614,18 @@ func TestPointersRouteDead(t *testing.T) {
 func TestPointersRouteLiteralLive(t *testing.T) {
 	l := pointer_tester.Literals(
 		map[string][]string{
-			"pkg/tool/alpha": {
+			"pkg/tool/alfa": {
 				`WidgetsPath = "/widgets"`,
 				`mux.HandleFunc("/memories/", list)`,
 			},
 		},
 		nil,
 		nil,
-		"pkg/tool/alpha",
+		"pkg/tool/alfa",
 	)(
 		constant.UpperAlfa,
 		strings.NewReader(
-			"---\nbase: pkg/tool/alpha\n---\nPages at `route:/widgets` and `route:/memories/{identifier}`.\n",
+			"---\nbase: pkg/tool/alfa\n---\nPages at `route:/widgets` and `route:/memories/{identifier}`.\n",
 		),
 	)
 	assertReport(t, "Alfa", false, nil, "", l)
@@ -634,14 +634,14 @@ func TestPointersRouteLiteralLive(t *testing.T) {
 func TestPointersRouteLiteralDead(t *testing.T) {
 	line := "Pages at `route:/ghosts` today."
 	l := pointer_tester.Literals(
-		map[string][]string{"pkg/tool/alpha": {`WidgetsPath = "/widgets"`}},
+		map[string][]string{"pkg/tool/alfa": {`WidgetsPath = "/widgets"`}},
 		nil,
 		nil,
-		"pkg/tool/alpha",
+		"pkg/tool/alfa",
 	)(
 		constant.UpperAlfa,
 		strings.NewReader(
-			fmt.Sprintf("---\nbase: pkg/tool/alpha\n---\n%s\n", line),
+			fmt.Sprintf("---\nbase: pkg/tool/alfa\n---\n%s\n", line),
 		),
 	)
 	assertReport(t, "Alfa", true, pointer_tester.DeadAt("Alfa", 4, line), "", l)
@@ -650,16 +650,16 @@ func TestPointersRouteLiteralDead(t *testing.T) {
 func TestPointersRouteLiteralInSharedTree(t *testing.T) {
 	l := pointer_tester.Literals(
 		map[string][]string{
-			"pkg/tool/alpha":       {`WidgetsPath = "/widgets"`},
+			"pkg/tool/alfa":        {`WidgetsPath = "/widgets"`},
 			"../github/shared/pkg": {`HealthPath = "/health"`},
 		},
 		nil,
 		[]string{"../github/shared/pkg"},
-		"pkg/tool/alpha",
+		"pkg/tool/alfa",
 	)(
 		constant.UpperAlfa,
 		strings.NewReader(
-			"---\nbase: pkg/tool/alpha\n---\nProbes `route:/health`.\n",
+			"---\nbase: pkg/tool/alfa\n---\nProbes `route:/health`.\n",
 		),
 	)
 	assertReport(t, "Alfa", false, nil, "", l)
@@ -667,12 +667,12 @@ func TestPointersRouteLiteralInSharedTree(t *testing.T) {
 
 func TestPointersImageLive(t *testing.T) {
 	l := pointer_tester.Literals(
-		map[string][]string{"": {"image: ghcr.io/example/alpha:v1"}},
+		map[string][]string{"": {"image: ghcr.io/example/alfa:v1"}},
 		nil,
 		nil,
 	)(
 		constant.UpperAlfa,
-		strings.NewReader("Runs `ghcr.io/example/alpha`.\n"),
+		strings.NewReader("Runs `ghcr.io/example/alfa`.\n"),
 	)
 	assertReport(t, "Alfa", false, nil, "", l)
 }

@@ -33,8 +33,8 @@ func TestContainsLiteral(t *testing.T) {
 	assert.True(
 		t,
 		pointer.ContainsLiteral(
-			"image: ghcr.io/example/alpha:v1",
-			"ghcr.io/example/alpha",
+			"image: ghcr.io/example/alfa:v1",
+			"ghcr.io/example/alfa",
 		),
 	)
 	assert.False(t, pointer.ContainsLiteral(`"/widgets-detail"`, "/widgets"))
@@ -42,8 +42,8 @@ func TestContainsLiteral(t *testing.T) {
 	assert.False(
 		t,
 		pointer.ContainsLiteral(
-			"image: ghcr.io/example/alphabet:v1",
-			"ghcr.io/example/alpha",
+			"image: ghcr.io/example/alfalfa:v1",
+			"ghcr.io/example/alfa",
 		),
 	)
 }

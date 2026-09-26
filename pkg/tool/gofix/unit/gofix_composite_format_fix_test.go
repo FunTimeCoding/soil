@@ -32,7 +32,7 @@ func TestCompositeFormatFix(t *testing.T) {
 		func(t *testing.T) {
 			assert.String(
 				t,
-				"package example\n\nfunc FirstOnBraceLine() []string {\n\treturn []string{\"alpha\", \"bravo\"}\n}\n",
+				"package example\n\nfunc FirstOnBraceLine() []string {\n\treturn []string{\"alfa\", \"bravo\"}\n}\n",
 				testutil.ReadFile(
 					t,
 					filepath.Join(directory, "first_on_brace_line.go"),

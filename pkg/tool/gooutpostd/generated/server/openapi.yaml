@@ -1,0 +1,71 @@
+---
+openapi: "3.0.0"
+info:
+  title: gooutpostd
+  version: 1.0.0
+paths:
+  /api/services:
+    get:
+      operationId: listServices
+      parameters:
+      - name: origin
+        in: query
+        description: Keep only services attributed to this origin.
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Every service this host carries, with its provenance.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Service"
+  /api/host:
+    get:
+      operationId: getHost
+      responses:
+        "200":
+          description: How this machine names itself to the inventory.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Host"
+components:
+  schemas:
+    Service:
+      type: object
+      required:
+      - name
+      - state
+      - origin
+      - deliberate
+      properties:
+        name:
+          type: string
+        state:
+          type: string
+        origin:
+          type: string
+        source:
+          type: string
+        version:
+          type: string
+        deliberate:
+          type: boolean
+    Host:
+      type: object
+      required:
+      - hostname
+      - platform
+      properties:
+        hostname:
+          type: string
+        platform:
+          type: string
+        hardware_addresses:
+          type: array
+          items:
+            type: string

@@ -56,7 +56,7 @@ func TestGetMemoryDetailCarriesProvenance(t *testing.T) {
 		),
 	)
 	assert.String(t, "canon/Example.yaml", result["provenance_file"].(string))
-	assert.String(t, "alpha", result[constant.Scope].(string))
+	assert.String(t, "alfa", result[constant.Scope].(string))
 	assert.True(t, result["is_active"].(bool))
 }
 
@@ -246,9 +246,9 @@ func TestProfileAlwaysTierCompact(t *testing.T) {
 	s.MustCallTool(
 		constant.SaveMemory,
 		map[string]any{
-			constant.MemoryName:  "gamma",
-			constant.Content:     "gamma content",
-			constant.Description: "gamma description",
+			constant.MemoryName:  "charlie",
+			constant.Content:     "charlie content",
+			constant.Description: "charlie description",
 		},
 	)
 	s.MustCallTool(
@@ -263,8 +263,8 @@ func TestProfileAlwaysTierCompact(t *testing.T) {
 		constant.AlwaysSectionHeading,
 	)
 	assert.Integer(t, 1, strings.Count(always, constant.MemoryHeadingPrefix))
-	assert.StringContains(t, "## gamma (1)", always)
-	assert.StringContains(t, "gamma content", always)
+	assert.StringContains(t, "## charlie (1)", always)
+	assert.StringContains(t, "charlie content", always)
 
 	for _, key := range []string{"created_at", "is_active", constant.Type} {
 		assert.StringNotContains(t, key, always)
