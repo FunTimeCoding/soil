@@ -77,7 +77,7 @@ func (s *Service) Events(
 			break
 		}
 
-		if !q.Unfiltered {
+		if !q.IncludeMuted {
 			muted, g := s.IsMuted(ev.Reason, ev.Message, clusterName)
 
 			if g != nil {

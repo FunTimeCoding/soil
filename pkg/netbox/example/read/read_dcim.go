@@ -120,8 +120,12 @@ func readDCIM(
 		console.Format("PowerPort: %s\n", p.Format(f))
 	}
 
-	for _, p := range n.MustFrontPorts() {
-		console.Format("FrontPort: %s\n", p.Format(f))
+	if false {
+		// TODO: go-netbox v4.3.0 requires rear_port, NetBox 4.6 returns null
+		//  and carries rear_ports instead. No newer SDK release exists.
+		for _, p := range n.MustFrontPorts() {
+			console.Format("FrontPort: %s\n", p.Format(f))
+		}
 	}
 
 	for _, p := range n.MustRearPorts() {

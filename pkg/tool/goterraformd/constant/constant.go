@@ -22,7 +22,10 @@ const (
 	Status      = "status"
 	Identifier  = "id"
 
-	Command = "terraform"
+	Command          = "terraform"
+	Init             = "init"
+	NotationArgument = "-json"
+	UpgradeArgument  = "-upgrade"
 
 	TerraformPathEnvironment  = "TERRAFORM_PATH"
 	DownstreamEnvironment     = "DOWNSTREAM_HOSTS"
@@ -32,4 +35,6 @@ const (
 	StateNamespace = "terraform"
 	StateLease     = "lock-tfstate-default-state"
 	LockAnnotation = "app.terraform.io/lock-info"
+
+	FixtureLockDetail = `{"ID":"11111111-2222-4333-8444-555555555555","Operation":"OperationTypePlan","Info":"","Who":"user@host.example","Version":"1.0.0","Created":"2020-01-02T03:04:05.123456789Z","Path":""}`
 )

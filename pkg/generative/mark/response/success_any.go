@@ -6,5 +6,5 @@ import (
 )
 
 func SuccessAny(v any) (*mcp.CallToolResult, error) {
-	return Success(notation.MarshalIndent(v))
+	return Success(notation.MarshalIndent(notation.Without(v, "Raw")))
 }

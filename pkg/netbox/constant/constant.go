@@ -2,6 +2,7 @@ package constant
 
 import (
 	"github.com/funtimecoding/soil/pkg/console/constant"
+	"github.com/netbox-community/go-netbox/v4"
 	"regexp"
 )
 
@@ -39,6 +40,23 @@ const (
 	FixturePhysicalAddress = "02:00:00:00:00:01"
 
 	DeviceActiveStatus = "active"
+
+	Eth0 = "eth0"
+	Eth1 = "eth1"
+
+	InterfaceVirtual      = "virtual"
+	InterfaceFastEthernet = "100base-tx"
+	Interface1000BaseT    = "1000base-t"
+	Interface2500BaseT    = "2.5gbase-t"
+
+	// Status label
+	RackActiveLabel     = "Active"
+	RackDeprecatedLabel = "Deprecated"
+	// Status value
+	RackActive     = "active"
+	RackDeprecated = "deprecated"
+	RackUnknown    = "unknown"
+	RackUnexpected = "unexpected"
 )
 
 var (
@@ -53,6 +71,34 @@ var (
 	}
 
 	PhysicalAddressTargets = []string{InterfaceAddress, VirtualInterfaceAddress}
-)
 
-var NonSlug = regexp.MustCompile(`[^a-z0-9-]`)
+	NonSlug = regexp.MustCompile(`[^a-z0-9-]`)
+
+	InterfaceTypes = []netbox.InterfaceTypeValue{
+		InterfaceVirtual,
+		InterfaceFastEthernet,
+		Interface1000BaseT,
+		Interface2500BaseT,
+	}
+
+	ObjectTypeAlias = map[string]string{
+		DeviceAddress:            "Device",
+		InterfaceAddress:         "Interface",
+		PrefixAddress:            "Prefix",
+		VirtualInterfaceAddress:  "Interface",
+		VirtualMachineAddress:    "Virtual Machine",
+		"dcim.consoleport":       "Console Port",
+		"dcim.devicerole":        "Device Role",
+		"dcim.devicetype":        "Device Type",
+		"dcim.location":          "Location",
+		"dcim.moduletype":        "Module Type",
+		"dcim.powerport":         "Power Port",
+		"dcim.rack":              "Rack",
+		"dcim.site":              "Site",
+		"ipam.ipaddress":         "IP Address",
+		"ipam.iprange":           "IP Range",
+		"ipam.vlan":              "VLAN",
+		"tenancy.tenant":         "Tenant",
+		"virtualization.cluster": "Cluster",
+	}
+)

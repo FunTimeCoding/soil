@@ -28,4 +28,7 @@ const (
 
 	GzipHeaderSize  = 10
 	GzipMinimumSize = 20
+
+	Architecture = "x86_64"
+	Release      = "1"
 )

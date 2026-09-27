@@ -35,6 +35,16 @@ func Main(
 		"Output path, defaults to tmp/$NAME/$OS-$ARCH/$NAME",
 	)
 	a.String(argumentConstant.BuildTags, "", "Build tags")
+	a.String(
+		buildConstant.ModuleFlag,
+		"",
+		"Build from an external module path instead of the work directory",
+	)
+	a.String(
+		buildConstant.ModuleVersionFlag,
+		"",
+		"Module version to build, required with module",
+	)
 	a.Boolean(buildConstant.CopyToBinFlag, false, "Copy to $HOME/bin")
 	a.Boolean(systemConstant.LinuxAMD64, false, "Linux AMD64")
 	a.Boolean(systemConstant.DarwinARM64, false, "Darwin ARM64")
@@ -52,6 +62,17 @@ func Main(
 	}
 
 	name := a.Argument(0)
+
+	if module := a.GetString(buildConstant.ModuleFlag); module != "" {
+		o := option.New()
+		o.Name = name
+		o.Module = module
+		o.Version = a.GetString(buildConstant.ModuleVersionFlag)
+		o.BuildTags = a.GetString(argumentConstant.BuildTags)
+		build.Module(o)
+
+		return
+	}
 
 	if name == argumentConstant.All {
 		name = ""

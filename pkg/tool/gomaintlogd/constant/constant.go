@@ -41,9 +41,7 @@ const (
 	PortEnvironment     = "GOMAINTLOG_PORT"
 	InsecureEnvironment = "GOMAINTLOG_INSECURE"
 	TokenEnvironment    = "GOMAINTLOG_TOKEN" // #nosec G101 not a hardcoded secret
-)
 
-const (
 	EventSummary = "summary"
 	EventRecent  = "recent"
 	RecentMark   = "recent-table"

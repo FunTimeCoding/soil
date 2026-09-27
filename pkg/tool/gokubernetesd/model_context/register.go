@@ -1,6 +1,7 @@
 package model_context
 
 import (
+	"github.com/funtimecoding/soil/pkg/generative/model_context/option"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -60,12 +61,7 @@ func (s *Server) register() {
 					"Filter by field selector (e.g. metadata.name=my-pod)",
 				),
 			),
-			mcp.WithBoolean(
-				"unfiltered",
-				mcp.Description(
-					"Return the full object without filtering noise (managedFields, last-applied-configuration)",
-				),
-			),
+			option.Unfiltered(),
 		),
 		mcp.NewTypedToolHandler(s.Get),
 	)
@@ -89,12 +85,7 @@ func (s *Server) register() {
 				"namespace",
 				mcp.Description("Namespace (default: default)"),
 			),
-			mcp.WithBoolean(
-				"unfiltered",
-				mcp.Description(
-					"Return the full object without filtering noise (managedFields, last-applied-configuration)",
-				),
-			),
+			option.Unfiltered(),
 		),
 		mcp.NewTypedToolHandler(s.Describe),
 	)
@@ -176,8 +167,10 @@ func (s *Server) register() {
 				mcp.Description("Maximum events to return"),
 			),
 			mcp.WithBoolean(
-				"unfiltered",
-				mcp.Description("Show all events including muted"),
+				constant.IncludeMuted,
+				mcp.Description(
+					"Include events that are muted (default false)",
+				),
 			),
 		),
 		mcp.NewTypedToolHandler(s.Events),
@@ -255,10 +248,7 @@ func (s *Server) register() {
 				"name",
 				mcp.Description("Application name for detail view"),
 			),
-			mcp.WithBoolean(
-				"unfiltered",
-				mcp.Description("Show all resources even when synced"),
-			),
+			option.Unfiltered(),
 		),
 		mcp.NewTypedToolHandler(s.Argocd),
 	)
@@ -276,10 +266,7 @@ func (s *Server) register() {
 				"namespace",
 				mcp.Description("Namespace (required for detail view)"),
 			),
-			mcp.WithBoolean(
-				"unfiltered",
-				mcp.Description("Return the full object without filtering"),
-			),
+			option.Unfiltered(),
 		),
 		mcp.NewTypedToolHandler(s.Certificates),
 	)

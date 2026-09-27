@@ -16,6 +16,12 @@ const (
 
 	UpgradeRestart = "restart"
 	UpgradeKeep    = "keep"
-)
 
-const PackageKeyFields = 3
+	PackageKeyFields = 3
+
+	HostEnvironment     = "APTLY_HOST"
+	PortEnvironment     = "APTLY_PORT"
+	InsecureEnvironment = "APTLY_INSECURE"
+	UsernameEnvironment = "APTLY_USERNAME"
+	PasswordEnvironment = "APTLY_PASSWORD"
+)

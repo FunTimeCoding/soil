@@ -23,12 +23,12 @@ func (s *Server) Events(
 		x,
 		cluster,
 		service.EventsQuery{
-			Namespace:  a.Namespace,
-			Kind:       a.Kind,
-			Name:       a.Name,
-			Type:       a.Type,
-			Limit:      a.Limit,
-			Unfiltered: a.Unfiltered,
+			Namespace:    a.Namespace,
+			Kind:         a.Kind,
+			Name:         a.Name,
+			Type:         a.Type,
+			Limit:        a.Limit,
+			IncludeMuted: a.IncludeMuted,
 		},
 	)
 

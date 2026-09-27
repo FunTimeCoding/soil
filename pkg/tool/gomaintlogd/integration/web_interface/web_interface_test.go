@@ -1,13 +1,73 @@
 package web_interface
 
 import (
+	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/integration/web_interface_tester"
 	"net/http"
 	"net/url"
+	"strings"
 	"testing"
 )
+
+func TestFilterWebInterface(t *testing.T) {
+	o := web_interface_tester.New(t)
+	o.PostForm(
+		constant.AddEntryPath,
+		url.Values{
+			"action":      {"restart"},
+			"user":        {"alice"},
+			"system":      {"worker1"},
+			"service":     {"nginx"},
+			"description": {"test"},
+		},
+	)
+	o.PostForm(
+		constant.AddEntryPath,
+		url.Values{
+			"action":      {"backup"},
+			"user":        {"bob"},
+			"system":      {"worker2"},
+			"service":     {"nginx"},
+			"description": {"test"},
+		},
+	)
+	b := o.Get("/entries?system=worker1")
+	assert.StringContains(t, "restart", b)
+	assert.StringContains(t, "worker1", b)
+	assert.StringContains(
+		t,
+		"backup",
+		o.Get(fmt.Sprintf("/entries?user=%s", "bob")),
+	)
+	assert.StringContains(
+		t,
+		"restart",
+		o.Get(fmt.Sprintf("/entries?user=%s", "alice")),
+	)
+	assert.StringContains(
+		t,
+		"No entries found",
+		o.Get("/entries?system=nonexistent"),
+	)
+}
+
+func TestDashboardIsLive(t *testing.T) {
+	o := web_interface_tester.New(t)
+	body := o.Get(constant.DashboardPath)
+	assert.StringContains(t, "sse-connect", body)
+	assert.StringContains(t, "summary_strip", body)
+	assert.StringContains(t, "recent", body)
+}
+
+func TestDashboardNoLongerPolls(t *testing.T) {
+	o := web_interface_tester.New(t)
+	assert.True(
+		t,
+		!strings.Contains(o.Get(constant.DashboardPath), "every 60s"),
+	)
+}
 
 func TestWebInterface(t *testing.T) {
 	o := web_interface_tester.New(t)

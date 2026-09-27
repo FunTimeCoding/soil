@@ -57,8 +57,10 @@ const (
 	Prune     = "--prune"
 	PruneTags = "--prune-tags"
 
-	Push = "push"
-	Tags = "--tags"
+	Push            = "push"
+	Commit          = "commit"
+	MessageArgument = "-m"
+	Tags            = "--tags"
 
 	HeadReference = "HEAD"
 

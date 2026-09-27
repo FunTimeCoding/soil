@@ -1,5 +1,7 @@
 package service
 
+import "github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+
 func (s *Service) emptyChecks() []emptyCheck {
 	return []emptyCheck{
 		{s.store.CountSessionCompletions, "session has completions"},
@@ -9,7 +11,10 @@ func (s *Service) emptyChecks() []emptyCheck {
 		{s.store.CountSessionContextLoads, "session has context loads"},
 		{
 			func(i string) (int64, error) {
-				return s.store.CountSessionEventsExcluding(i, lifecycleKinds())
+				return s.store.CountSessionEventsExcluding(
+					i,
+					constant.LifecycleKinds,
+				)
 			},
 			"session has events beyond its lifecycle",
 		},

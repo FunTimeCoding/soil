@@ -3,7 +3,6 @@ package check
 import (
 	"github.com/funtimecoding/soil/pkg/console"
 	linuxConstant "github.com/funtimecoding/soil/pkg/linux/constant"
-	"github.com/funtimecoding/soil/pkg/linux/systemd/command"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/strings/split"
 	"github.com/funtimecoding/soil/pkg/system/constant"
@@ -17,7 +16,10 @@ func Check(port string) {
 	case constant.Linux:
 		console.Line("Linux")
 		console.Format("Cores: %d\n", runtime.NumCPU())
-		console.Format("Failed: %s\n", Execute(command.Failed()))
+		console.Format(
+			"Failed: %s\n",
+			Execute(linuxConstant.SystemdFailedCommand),
+		)
 		// TODO: Load average > CPU cores check
 		diskFull()
 

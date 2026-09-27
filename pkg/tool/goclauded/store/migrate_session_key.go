@@ -1,6 +1,7 @@
 package store
 
 import (
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"gorm.io/gorm"
 	"log"
 )
@@ -8,7 +9,7 @@ import (
 func migrateSessionKey(d *gorm.DB) {
 	var pending []string
 
-	for _, t := range sessionKeyTables() {
+	for _, t := range constant.SessionKeyTables {
 		if sessionKeyPending(d, t) {
 			pending = append(pending, t)
 		}

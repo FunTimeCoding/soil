@@ -19,8 +19,7 @@ const (
 	PendingValue = "–"
 
 	RefreshInterval = 30 * time.Second
-)
-const (
+
 	IconHost          = "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/png/"
 	FilesLabel        = "Files"
 	SharesLabel       = "Shares"
@@ -30,9 +29,9 @@ const (
 	MissingLabel      = "Missing"
 	RowEventPrefix    = "rows-"
 	LabelAttribute    = "data-label"
-)
-const LabelColumn = "label"
-const (
+
+	LabelColumn = "label"
+
 	DefaultTailColumns = 4
 	NextcloudWidget    = "nextcloud"
 	ArgocdWidget       = "argocd"

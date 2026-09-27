@@ -1,6 +1,9 @@
 package collector
 
-import "github.com/prometheus/client_golang/prometheus"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
+	"github.com/prometheus/client_golang/prometheus"
+)
 
 func newStorage(
 	registry *prometheus.Registry,
@@ -10,25 +13,25 @@ func newStorage(
 			registry,
 			"proxmox_storage_status",
 			"Storage status, one series per observed status with value 1",
-			withStatus(storageLabel()),
+			withStatus(constant.StorageLabels),
 		),
 		used: gauge(
 			registry,
 			"proxmox_storage_used_bytes",
 			"Storage space used in bytes",
-			storageLabel(),
+			constant.StorageLabels,
 		),
 		total: gauge(
 			registry,
 			"proxmox_storage_total_bytes",
 			"Storage size in bytes",
-			storageLabel(),
+			constant.StorageLabels,
 		),
 		shared: gauge(
 			registry,
 			"proxmox_storage_shared",
 			"Whether the storage is shared among cluster nodes",
-			storageLabel(),
+			constant.StorageLabels,
 		),
 	}
 

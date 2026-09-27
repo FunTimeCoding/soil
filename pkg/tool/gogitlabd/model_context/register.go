@@ -2,6 +2,7 @@ package model_context
 
 import (
 	argument "github.com/funtimecoding/soil/pkg/argument/constant"
+	"github.com/funtimecoding/soil/pkg/generative/model_context/option"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -160,6 +161,7 @@ func (s *Server) register() {
 				mcp.Required(),
 				mcp.Description("Pipeline ID"),
 			),
+			option.Raw(),
 		),
 		mcp.NewTypedToolHandler(s.ListPipelineJobs),
 	)
@@ -177,6 +179,7 @@ func (s *Server) register() {
 				mcp.Required(),
 				mcp.Description("Job ID"),
 			),
+			option.Raw(),
 		),
 		mcp.NewTypedToolHandler(s.GetPipelineJob),
 	)
@@ -228,6 +231,7 @@ func (s *Server) register() {
 				mcp.Required(),
 				mcp.Description("Job ID"),
 			),
+			option.Raw(),
 		),
 		mcp.NewTypedToolHandler(s.RetryPipelineJob),
 	)
@@ -262,6 +266,7 @@ func (s *Server) register() {
 				mcp.Required(),
 				mcp.Description("Job ID"),
 			),
+			option.Raw(),
 		),
 		mcp.NewTypedToolHandler(s.CancelPipelineJob),
 	)

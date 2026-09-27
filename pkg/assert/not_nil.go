@@ -6,8 +6,8 @@ func NotNil(
 	t *testing.T,
 	actual any,
 ) {
-	if actual == nil {
+	if nilValue(actual) {
 		t.Helper()
-		t.Errorf("expected not nil, got nil")
+		t.Errorf("expected not nil, got %T", actual)
 	}
 }

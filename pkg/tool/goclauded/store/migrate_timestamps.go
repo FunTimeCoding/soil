@@ -12,17 +12,17 @@ func migrateTimestamps(d *gorm.DB) {
 	converted := 0
 	skipped := 0
 
-	for _, c := range timestampColumns() {
+	for _, c := range constant.TimestampColumns {
 		var rows []timestampValue
 		d.Raw(
 			fmt.Sprintf(
 				`SELECT identifier, CAST(%s AS TEXT) AS value FROM %s
 				WHERE %s IS NOT NULL AND %s != '' AND %s NOT LIKE ?`,
-				c.column,
-				c.table,
-				c.column,
-				c.column,
-				c.column,
+				c.Name,
+				c.Table,
+				c.Name,
+				c.Name,
+				c.Name,
 			),
 			fmt.Sprintf("%%%s", constant.UniversalSuffix),
 		).Scan(&rows)
@@ -39,8 +39,8 @@ func migrateTimestamps(d *gorm.DB) {
 			d.Exec(
 				fmt.Sprintf(
 					"UPDATE %s SET %s = ? WHERE identifier = ?",
-					c.table,
-					c.column,
+					c.Table,
+					c.Name,
 				),
 				t.UTC().Format(constant.TimestampLayout),
 				r.Identifier,

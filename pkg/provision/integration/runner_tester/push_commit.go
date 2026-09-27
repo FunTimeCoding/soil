@@ -1,6 +1,7 @@
 package runner_tester
 
 import (
+	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/system"
@@ -29,7 +30,7 @@ func (o *Tester) PushCommit(
 		"-c",
 		"user.email=runner-tester@localhost",
 		"commit",
-		"-m",
+		gitConstant.MessageArgument,
 		join.Space("change", name),
 	)
 	c = run.New()

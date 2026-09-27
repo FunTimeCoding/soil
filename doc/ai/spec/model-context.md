@@ -55,6 +55,29 @@ construction in the handler is acceptable. The convert package adds
 value when types are nested, shared between REST and MCP, or when
 filtering out sensitive fields.
 
+A daemon with no REST surface has no second layer to share with, so
+its slim types live in `<path>/model_context/response/` instead, one file
+per type with a `New<Type>` and `New<Type>Slice` beside them -
+`gogitlabd` and `goproxmoxd` are the shape. The types carry
+snake_case json tags, which is what keeps the response keys stable
+when a Go field is renamed.
+
+### The floor under it
+
+`response.SuccessAny` removes the entity-wrapper `Raw` field at any
+depth before marshalling, so a tool that has not been converted yet
+no longer ships its whole upstream object to the model. That is a
+floor, not a licence: `Raw` is one field, and a domain object still
+carries every other curated field, including nested ones repeated
+per element. `convert/` remains where a response shape is decided.
+
+`Raw` exists for CLI rendering - `status.Raw()` gated by
+`option.Format.ShowRaw` - and reaches the model only because the
+field is exported. See `entity-wrapper.md` for what it is. It stays
+a Go field regardless - internal code reads through it wherever a
+curated view lacks a field, and `command grep -rn '\.Raw\.'` counts
+where.
+
 ## Service Layer
 
 When a daemon has compound operations (fetch-then-merge edits,
@@ -273,13 +296,44 @@ func (s *Server) captureFail(
 
 - Required params: `r.RequireString(...)` / `r.RequireFloat(...)` - return `response.Fail(...)` on failure
 - Optional params: `r.GetString(constant.Key, "")` / `r.GetFloat(constant.Key, 0)` / `r.GetBool(constant.Key, false)`
-- JSON results: `response.SuccessAny(converted)` - serializes via `notation.MarshalIndent`
+- JSON results: `response.SuccessAny(converted)` - serializes via `notation.MarshalIndent`, with the entity-wrapper `Raw` field removed at any depth
 - Text results: `response.Success("comment added")`
 - Validation errors: `response.Fail("message: %v", err)` - wraps `mcp.NewToolResultError`
 - Infrastructure errors: `s.captureFail(e, "message")` - captures to Sentry with event ID
 - Error variables progress `e`, `f`, `g`, `h`, `i` - never reuse the same letter. See `naming.md`.
 - Always convert results through the `convert/` package - never serialize raw domain objects
 - Error handling is two-tier - input validation vs infrastructure failures. See `doc/ai/spec/error-handling/mcp.md`.
+
+## Parameters that widen a response
+
+Two of these exist, they mean different things, and each is defined
+once so the wording cannot drift:
+
+- `option.Raw()` - include the entity-wrapper `Raw` passthrough. The
+  handler branches to `response.SuccessAnyRaw`, which skips the
+  strip. Name the argument field `Raw bool` with `json:"raw"`.
+- `option.Unfiltered()` - keep fields a service would otherwise
+  remove as noise, `managedFields` and
+  `last-applied-configuration` being the kubernetes case.
+
+Both live in `pkg/generative/model_context/option`, both default
+false, and both take their parameter name from the `Parameter*`
+family in `pkg/generative/constant/`. Register them by calling the
+helper rather than writing `mcp.WithBoolean` inline - that is the
+whole point of them existing.
+
+They are not synonyms and must not be merged. `raw` adds a field;
+`unfiltered` stops a service removing fields. gokubernetesd carried
+one name over three different behaviours until the descriptions
+disagreed with each other - two tools filtering object noise, one
+including muted events, one claiming a sync filter its code never
+implemented. The two that were genuinely about noise now share
+`option.Unfiltered()`; the muting one became `include_muted`, which
+is the `include_*` idiom for "show the class hidden by default".
+
+A tool-specific widener stays tool-specific: `IncludeMuted` lives in
+`pkg/tool/gokubernetesd/constant/`, not in `generative/`, which also
+keeps its `string_constant` blast radius inside that tool.
 
 ## Results That Carry Warnings
 

@@ -6,8 +6,8 @@ func FatalNotNil(
 	t *testing.T,
 	actual any,
 ) {
-	if actual == nil {
+	if nilValue(actual) {
 		t.Helper()
-		t.Fatalf("expected not nil, got nil")
+		t.Fatalf("expected not nil, got %T", actual)
 	}
 }

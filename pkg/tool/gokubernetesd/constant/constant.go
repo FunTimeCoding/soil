@@ -31,3 +31,5 @@ const (
 	Patch           = "patch"
 	Apply           = "apply"
 )
+
+const IncludeMuted = "include_muted"

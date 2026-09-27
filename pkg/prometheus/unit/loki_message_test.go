@@ -9,6 +9,6 @@ import (
 
 func TestMessage(t *testing.T) {
 	r, v := message.NewSlice(query_result.New())
-	assert.NotNil(t, r)
+	assert.Count(t, 0, r)
 	assert.NotNil(t, v)
 }

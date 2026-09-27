@@ -3,13 +3,12 @@ package check
 import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/linux/constant"
-	"github.com/funtimecoding/soil/pkg/linux/systemd/command"
 	"github.com/funtimecoding/soil/pkg/linux/systemd/jc"
 	"github.com/funtimecoding/soil/pkg/notation"
 )
 
 func Netstat(verbose bool) []*jc.Output {
-	output := Execute(command.Netstat())
+	output := Execute(constant.NetstatCommand)
 
 	if verbose {
 		console.Format("Netstat raw: %s\n", output)

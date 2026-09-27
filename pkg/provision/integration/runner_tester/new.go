@@ -3,6 +3,7 @@ package runner_tester
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/runner"
@@ -30,7 +31,7 @@ func New(t *testing.T) *Tester {
 		"user.email=runner-tester@localhost",
 		"commit",
 		"--allow-empty",
-		"-m",
+		gitConstant.MessageArgument,
 		"initial",
 	)
 	c = run.New()

@@ -4,6 +4,7 @@ package integration
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/gohook/constant"
 	"path/filepath"
@@ -20,7 +21,14 @@ func TestPreCommitThroughGitRefusesFixer(t *testing.T) {
 	)
 	write(clone, "a.go", "package a\n")
 	command(clone, "add", "a.go")
-	r := attempt(clone, nil, "commit", "-q", "-m", "first")
+	r := attempt(
+		clone,
+		nil,
+		"commit",
+		"-q",
+		gitConstant.MessageArgument,
+		"first",
+	)
 	assert.Integer(t, 1, r.Exit)
 	assert.StringContains(
 		t,
@@ -37,7 +45,14 @@ func TestPreCommitThroughGitRefusesFixer(t *testing.T) {
 	assert.Integer(
 		t,
 		0,
-		attempt(clone, nil, "commit", "-q", "-m", "first").Exit,
+		attempt(
+			clone,
+			nil,
+			"commit",
+			"-q",
+			gitConstant.MessageArgument,
+			"first",
+		).Exit,
 	)
 }
 
@@ -45,13 +60,27 @@ func TestCommitMessageThroughGitReceivesArgument(t *testing.T) {
 	clone := installed(t, "commit-msg:\n  - run: grep -q '^[a-z]' {1}\n")
 	write(clone, "b.go", "package b\n")
 	command(clone, "add", "b.go")
-	r := attempt(clone, nil, "commit", "-q", "-m", "Capitalised")
+	r := attempt(
+		clone,
+		nil,
+		"commit",
+		"-q",
+		gitConstant.MessageArgument,
+		"Capitalised",
+	)
 	assert.Integer(t, 1, r.Exit)
 	assert.StringContains(t, "job 1 failed", r.ErrorString)
 	assert.Integer(
 		t,
 		0,
-		attempt(clone, nil, "commit", "-q", "-m", "lowercase").Exit,
+		attempt(
+			clone,
+			nil,
+			"commit",
+			"-q",
+			gitConstant.MessageArgument,
+			"lowercase",
+		).Exit,
 	)
 }
 
@@ -62,7 +91,14 @@ func TestSkipVariableThroughGit(t *testing.T) {
 	assert.Integer(
 		t,
 		1,
-		attempt(clone, nil, "commit", "-q", "-m", "blocked").Exit,
+		attempt(
+			clone,
+			nil,
+			"commit",
+			"-q",
+			gitConstant.MessageArgument,
+			"blocked",
+		).Exit,
 	)
 	assert.Integer(
 		t,
@@ -72,7 +108,7 @@ func TestSkipVariableThroughGit(t *testing.T) {
 			map[string]string{constant.SkipEnvironment: constant.SkipValue},
 			"commit",
 			"-q",
-			"-m",
+			gitConstant.MessageArgument,
 			"skipped",
 		).Exit,
 	)

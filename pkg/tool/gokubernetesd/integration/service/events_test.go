@@ -50,7 +50,7 @@ func TestEventsMutedFiltered(t *testing.T) {
 	assert.String(t, "Pulled", result[0].Reason)
 }
 
-func TestEventsMutedUnfiltered(t *testing.T) {
+func TestEventsMutedIncluded(t *testing.T) {
 	s := service_tester.New(t)
 	s.AddEvent(
 		"kube-system",
@@ -73,9 +73,9 @@ func TestEventsMutedUnfiltered(t *testing.T) {
 		context.Background(),
 		"test",
 		service.EventsQuery{
-			Namespace:  "kube-system",
-			Limit:      50,
-			Unfiltered: true,
+			Namespace:    "kube-system",
+			Limit:        50,
+			IncludeMuted: true,
 		},
 	)
 	assert.Nil(t, e)

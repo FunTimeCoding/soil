@@ -17,7 +17,9 @@ const (
 	ParameterMessage    = "message"
 	ParameterName       = "name"
 	ParameterQuery      = "query"
+	ParameterRaw        = "raw"
 	ParameterTitle      = "title"
+	ParameterUnfiltered = "unfiltered"
 )
 
 const (

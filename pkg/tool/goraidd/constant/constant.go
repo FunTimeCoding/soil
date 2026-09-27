@@ -17,9 +17,9 @@ const (
 	RaidsPath    = "/raids"
 	PlayersTitle = "Players"
 	PlayersPath  = "/players"
-)
-const PageSize = 50
-const (
+
+	PageSize = 50
+
 	EnrichCutoffDays     = 14
 	FileDateLayout       = "20060102"
 	FileDatePrefixLength = 8

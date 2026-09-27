@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/netbox/bookmark"
+	"github.com/funtimecoding/soil/pkg/netbox/object_type"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -15,7 +16,10 @@ func bookmarkTable(bookmarks []*bookmark.Bookmark) gomponents.Node {
 			rows,
 			html.Tr(
 				html.Td(bookmarkLink(b)),
-				html.Td(html.Class("reference"), gomponents.Text(b.ObjectType)),
+				html.Td(
+					html.Class("reference"),
+					gomponents.Text(object_type.Label(b.ObjectType)),
+				),
 				layout.TimeCell(b.Created),
 			),
 		)

@@ -1,6 +1,9 @@
 package collector
 
-import "github.com/prometheus/client_golang/prometheus"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
+	"github.com/prometheus/client_golang/prometheus"
+)
 
 func newBackup(
 	registry *prometheus.Registry,
@@ -10,13 +13,13 @@ func newBackup(
 			registry,
 			"proxmox_guest_backup_missing",
 			"Present when the guest is covered by no backup job",
-			backupLabel(),
+			constant.BackupLabels,
 		),
 		missingCount: gauge(
 			registry,
 			"proxmox_backup_missing_count",
 			"Number of guests covered by no backup job",
-			hypervisorLabel(),
+			constant.HypervisorLabels,
 		),
 	}
 

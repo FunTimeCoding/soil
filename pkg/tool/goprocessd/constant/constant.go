@@ -21,6 +21,8 @@ const (
 	ProcessRestart    = "process_restart"
 	ProcessRestartAll = "process_restart_all"
 	ProcessReload     = "process_reload"
+
+	ListCommand = "list"
 )
 
 const (

@@ -11,6 +11,8 @@ const (
 	Tidy    = "tidy"
 	Edit    = "edit"
 	Build   = "build"
+	Install = "install"
+	List    = "list"
 	Get     = "get"
 	Version = "version"
 
@@ -19,7 +21,9 @@ const (
 	TagsArgument        = "-tags"
 	TimeZoneTag         = "timetzdata"
 
-	VersionArgument = "-go"
+	VersionArgument  = "-go"
+	ModuleArgument   = "-m"
+	NotationArgument = "-json"
 
 	LinkerSetVariable = "-X"
 
@@ -27,6 +31,7 @@ const (
 	System        = "GOOS"
 	Architecture  = "GOARCH"
 	Proxy         = "GOPROXY"
+	Binary        = "GOBIN"
 
 	Direct = "direct"
 

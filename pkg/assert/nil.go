@@ -1,27 +1,13 @@
 package assert
 
-import (
-	"reflect"
-	"testing"
-)
+import "testing"
 
 func Nil(
 	t *testing.T,
 	actual any,
 ) {
-	if actual == nil {
-		return
-	}
-
-	t.Helper()
-	v := reflect.ValueOf(actual)
-
-	switch v.Kind() {
-	case reflect.Pointer, reflect.Slice, reflect.Map, reflect.Chan, reflect.Func, reflect.Interface:
-		if !v.IsNil() {
-			t.Errorf("expected nil, got %T", actual)
-		}
-	default:
+	if !nilValue(actual) {
+		t.Helper()
 		t.Errorf("expected nil, got %T", actual)
 	}
 }

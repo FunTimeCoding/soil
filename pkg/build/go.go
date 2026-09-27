@@ -1,13 +1,11 @@
 package build
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/build/option"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
-	stringJoin "github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/system"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/join"
@@ -41,14 +39,7 @@ func Go(o *option.Build) {
 		constant.Go,
 		constant.Build,
 		constant.LinkerFlagsArgument,
-		stringJoin.Space(
-			constant.LinkerSetVariable,
-			fmt.Sprintf("main.Version=%s", GitTag()),
-			constant.LinkerSetVariable,
-			fmt.Sprintf("main.GitHash=%s", GitHash()),
-			constant.LinkerSetVariable,
-			fmt.Sprintf("main.BuildDate=%s", Date()),
-		),
+		LinkerFlags(GitTag(), GitHash(), Date()),
 	}
 	s = append(s, constant.TagsArgument, Tags(p.BuildTags))
 	s = append(s, []string{constant.OutputArgument, p.Output, p.MainPath}...)

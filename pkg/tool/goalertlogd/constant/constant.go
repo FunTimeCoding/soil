@@ -24,20 +24,16 @@ const (
 	DashboardPath  = "/"
 	RecentTitle    = "Recent"
 	RecentPath     = "/recent"
-)
-const (
+
 	DateFormat = "2006-01-02T15:04:05Z07:00"
 	Firing     = "firing"
 	Resolved   = "resolved"
-)
-const (
+
 	HostEnvironment     = "GOALERTLOG_HOST"
 	PortEnvironment     = "GOALERTLOG_PORT"
 	InsecureEnvironment = "GOALERTLOG_INSECURE"
 	TokenEnvironment    = "GOALERTLOG_TOKEN" // #nosec G101 not a hardcoded secret
-)
 
-const (
 	EventSummary = "summary"
 	EventTop     = "top"
 	TopMark      = "top-table"

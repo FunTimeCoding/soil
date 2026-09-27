@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/model_context/argument"
+	gitLabResponse "github.com/funtimecoding/soil/pkg/tool/gogitlabd/model_context/response"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -32,5 +33,9 @@ func (s *Server) CancelPipelineJob(
 		return s.captureDetail(e)
 	}
 
-	return response.SuccessAny(v)
+	if a.Raw {
+		return response.SuccessAnyRaw(v)
+	}
+
+	return response.SuccessAny(gitLabResponse.NewJob(v))
 }

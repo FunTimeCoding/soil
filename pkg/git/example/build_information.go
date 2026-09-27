@@ -3,6 +3,7 @@ package example
 import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/git"
+	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/time/constant"
 	"time"
@@ -12,7 +13,7 @@ func BuildInformation() {
 	p := system.WorkDirectory()
 	r := git.Open(p)
 	h := git.Head(r).Hash()
-	console.Format("Short hash: %s\n", h.String()[:8])
+	console.Format("Short hash: %s\n", h.String()[:gitConstant.HashLength])
 
 	if false {
 		c := git.CommitFromHash(r, h)
