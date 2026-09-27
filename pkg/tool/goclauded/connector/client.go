@@ -4,4 +4,7 @@ import "github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 
 type Client struct {
 	generated *client.ClientWithResponses
+	base      string
+	token     string
+	untrusted bool
 }

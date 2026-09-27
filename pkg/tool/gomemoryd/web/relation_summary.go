@@ -2,6 +2,7 @@ package web
 
 import (
 	"fmt"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -50,7 +51,7 @@ func (s *Server) relationSummary() gomponents.Node {
 		params.Set(constant.Type, constant.UntypedFilter)
 		entries = append(
 			entries,
-			gomponents.Text(" · "),
+			gomponents.Text(stringsConstant.SpacedMiddot),
 			html.A(
 				gomponents.Attr(
 					"href",

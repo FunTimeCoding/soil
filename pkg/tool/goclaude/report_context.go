@@ -25,15 +25,22 @@ func reportContext(
 		body.Model = new(input.Model.DisplayName)
 	}
 
-	if input.RateLimits != nil {
+	if input.RateLimits != nil &&
+		input.RateLimits.FiveHour != nil &&
+		input.RateLimits.SevenDay != nil {
 		body.FiveHourPercent = new(
 			int(input.RateLimits.FiveHour.UsedPercentage),
 		)
 		body.SevenDayPercent = new(
 			int(input.RateLimits.SevenDay.UsedPercentage),
 		)
-		body.FiveHourReset = new(input.RateLimits.FiveHour.ResetsAt)
-		body.SevenDayReset = new(input.RateLimits.SevenDay.ResetsAt)
+		body.FiveHourReset = resetEpoch(input.RateLimits.FiveHour.ResetsAt)
+		body.SevenDayReset = resetEpoch(input.RateLimits.SevenDay.ResetsAt)
+	}
+
+	if f := fableScope(input.RateLimits); f != nil && f.Utilization != nil {
+		body.FablePercent = new(int(*f.Utilization))
+		body.FableReset = fableResetEpoch(f.ResetsAt)
 	}
 
 	if _, e := c.PostSessionContextWithResponse(

@@ -21,10 +21,9 @@ func (s *Server) plate(
 		events = append(events, constant.NewestEvent)
 		content = append(
 			content,
-			html.H3(gomponents.Text(constant.NewestTitle)),
 			html.Div(
 				extended.StreamSwap(constant.NewestEvent),
-				issuesTable(s.worker.Newest(), constant.NewestEmpty),
+				issuesSection(constant.NewestTitle, s.worker.Newest()),
 			),
 		)
 	}
@@ -39,25 +38,24 @@ func (s *Server) plate(
 	)
 	content = append(
 		content,
-		html.H3(gomponents.Text(constant.PlateTitle)),
 		html.Div(
 			extended.StreamSwap(constant.PlateEvent),
-			issuesTable(issues, constant.PlateEmpty),
+			plateSection(issues),
 		),
-		html.H3(gomponents.Text(constant.WatchedIssuesTitle)),
 		html.Div(
 			extended.StreamSwap(constant.WatchedIssuesEvent),
-			issuesTable(s.worker.WatchedIssues(), constant.WatchedIssuesEmpty),
+			issuesSection(
+				constant.WatchedIssuesTitle,
+				s.worker.WatchedIssues(),
+			),
 		),
-		html.H3(gomponents.Text(constant.FavoritesTitle)),
 		html.Div(
 			extended.StreamSwap(constant.FavoritesEvent),
-			pagesTable(s.worker.Favorites()),
+			pagesSection(constant.FavoritesTitle, s.worker.Favorites()),
 		),
-		html.H3(gomponents.Text(constant.WatchedPagesTitle)),
 		html.Div(
 			extended.StreamSwap(constant.WatchedPagesEvent),
-			pagesTable(s.worker.Watched()),
+			pagesSection(constant.WatchedPagesTitle, s.worker.Watched()),
 		),
 	)
 	s.view.RenderLivePageWithSummary(

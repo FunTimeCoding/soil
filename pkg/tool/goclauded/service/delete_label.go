@@ -3,6 +3,7 @@ package service
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/label_change"
 )
 
 func (s *Service) DeleteLabel(
@@ -21,7 +22,7 @@ func (s *Service) DeleteLabel(
 		return fmt.Sprintf("%s (not set)", key), nil
 	}
 
-	change := fmt.Sprintf("%s %s→ (unset)", key, old)
+	change := label_change.Format(key, old, "")
 
 	if e := s.store.LogEvent(
 		sessionIdentifier,
@@ -30,7 +31,8 @@ func (s *Service) DeleteLabel(
 		map[string]string{
 			constant.Target: target,
 			constant.Key:    key,
-			"change":        change,
+			constant.Past:   old,
+			constant.Now:    "",
 		},
 	); e != nil {
 		return "", e

@@ -36,7 +36,7 @@ func (s *Store) EditSession(
 		return nil
 	}
 
-	updates["last_seen"] = s.clock()
+	updates[constant.LastSeenColumn] = s.clock()
 
 	return s.database.Model(session.Stub()).Where(
 		"identifier = ?",

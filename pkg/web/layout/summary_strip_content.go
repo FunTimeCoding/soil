@@ -1,8 +1,8 @@
 package layout
 
 import (
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"maragu.dev/gomponents"
-	"strings"
 )
 
 func SummaryStripContent(items []string) gomponents.Node {
@@ -12,7 +12,7 @@ func SummaryStripContent(items []string) gomponents.Node {
 				"style",
 				"padding-top:0;padding-bottom:0.5rem;opacity:0.6;font-size:0.85rem",
 			),
-			gomponents.Text(strings.Join(items, " · ")),
+			gomponents.Text(join.Middot(items)),
 		},
 	)
 }

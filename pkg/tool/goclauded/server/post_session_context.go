@@ -24,6 +24,18 @@ func (s *Server) PostSessionContext(
 
 	s.service.RecordContext(r.Identifier, r.Body.UsedPercentage, window, model)
 
+	if r.Body.FablePercent != nil {
+		if e := s.service.RecordFable(
+			*r.Body.FablePercent,
+			"",
+			epochTimePointer(r.Body.FableReset),
+		); e != nil {
+			return server.PostSessionContext500JSONResponse(
+				*s.captureFail(e, constant.UnexpectedError),
+			), nil
+		}
+	}
+
 	if r.Body.FiveHourPercent == nil || r.Body.SevenDayPercent == nil {
 		return server.PostSessionContext200Response{}, nil
 	}

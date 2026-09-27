@@ -33,7 +33,7 @@ func (s *Server) event() http.HandlerFunc {
 				layout.PushEvent(
 					w,
 					constant.RequestEvent,
-					requestTable(s.worker.Requests()),
+					requestSection(s.worker.Requests()),
 				)
 			}
 

@@ -60,6 +60,13 @@
     "seven_day": {
       "used_percentage": 1,
       "resets_at": 1700006400
-    }
+    },
+    "model_scoped": [
+      {
+        "display_name": "Fable",
+        "utilization": 34,
+        "resets_at": "2023-11-15T00:00:00Z"
+      }
+    ]
   }
 }

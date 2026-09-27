@@ -1,6 +1,7 @@
 package web
 
 import (
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
@@ -10,7 +11,7 @@ func impressionWindowLinks(active int) gomponents.Node {
 
 	for _, d := range []int{2, 7, 30} {
 		if len(nodes) > 0 {
-			nodes = append(nodes, gomponents.Text(" · "))
+			nodes = append(nodes, gomponents.Text(constant.SpacedMiddot))
 		}
 
 		label := gomponents.Textf("%dd", d)

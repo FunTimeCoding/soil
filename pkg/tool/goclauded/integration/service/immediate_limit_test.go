@@ -48,7 +48,7 @@ func TestImmediateRecoversAfterTheWindow(t *testing.T) {
 	assert.FatalOnError(t, e)
 	assert.False(t, blocked)
 	s.Store.Advance(constant.ImmediateWindow + time.Minute)
-	allowed, f := s.Service.Send(r2.Callsign, r1.Callsign, "after", true)
+	allowed, f := s.Service.Send(r2.Callsign, r1.Callsign, "later", true)
 	assert.FatalOnError(t, f)
 	assert.True(t, allowed)
 }

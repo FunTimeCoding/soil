@@ -1,6 +1,7 @@
 package web
 
 import (
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
@@ -31,7 +32,10 @@ func paginationLinks(
 
 	if offset+limit < total {
 		if len(navigation) > 0 {
-			navigation = append(navigation, gomponents.Text(" · "))
+			navigation = append(
+				navigation,
+				gomponents.Text(constant.SpacedMiddot),
+			)
 		}
 
 		navigation = append(

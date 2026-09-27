@@ -2,6 +2,7 @@ package web
 
 import (
 	"fmt"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -16,7 +17,7 @@ func relationTypeFilter(
 	entries := []gomponents.Node{
 		html.Small(gomponents.Text("Type: ")),
 		relationFilterLink(fmt.Sprintf("all (%d)", total), "", current),
-		gomponents.Text(" · "),
+		gomponents.Text(stringsConstant.SpacedMiddot),
 		relationFilterLink(
 			fmt.Sprintf("untyped (%d)", untyped),
 			constant.UntypedFilter,
@@ -31,7 +32,7 @@ func relationTypeFilter(
 
 		entries = append(
 			entries,
-			gomponents.Text(" · "),
+			gomponents.Text(stringsConstant.SpacedMiddot),
 			relationFilterLink(
 				fmt.Sprintf("%s (%d)", name, typeCounts[name]),
 				name,

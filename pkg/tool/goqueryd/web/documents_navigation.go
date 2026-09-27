@@ -2,6 +2,7 @@ package web
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -30,7 +31,7 @@ func documentsNavigation(
 
 	if hasMore {
 		if len(links) > 0 {
-			links = append(links, gomponents.Text(" · "))
+			links = append(links, gomponents.Text(constant.SpacedMiddot))
 		}
 
 		links = append(

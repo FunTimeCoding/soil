@@ -1,6 +1,7 @@
 package web
 
 import (
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -32,7 +33,7 @@ func (s *Server) scopeFilter(
 
 		entries = append(
 			entries,
-			gomponents.Text(" · "),
+			gomponents.Text(stringsConstant.SpacedMiddot),
 			scopeLink(label, label, current, tag, memoryType),
 		)
 	}

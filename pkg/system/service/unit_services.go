@@ -45,7 +45,7 @@ func (c *Client) unitServices() []*Service {
 	for unit, state := range units {
 		result = append(
 			result,
-			newUnitService(
+			NewUnitService(
 				unit,
 				state,
 				path[unit],

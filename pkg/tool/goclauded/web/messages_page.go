@@ -1,6 +1,7 @@
 package web
 
 import (
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -71,7 +72,10 @@ func (s *Server) messagesPage(
 
 	if hasMore {
 		if len(navigation) > 0 {
-			navigation = append(navigation, gomponents.Text(" · "))
+			navigation = append(
+				navigation,
+				gomponents.Text(stringsConstant.SpacedMiddot),
+			)
 		}
 
 		navigation = append(

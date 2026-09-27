@@ -10,7 +10,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/option"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/store"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 )
@@ -23,6 +23,7 @@ func Run(
 	l := logger.New(context.Background())
 	s := store.New(relational.Open(l, o.PostgresLocator, o.LitePath))
 	defer s.Close()
+	b := web.New(o.Client)
 	lifecycle.New(
 		l,
 		lifecycle.WithServer(
@@ -32,6 +33,7 @@ func Run(
 				func(m *http.ServeMux) {
 					Mount(
 						o.Client,
+						b,
 						s,
 						r,
 						i.Recorder(),
@@ -39,7 +41,7 @@ func Run(
 						guard.New(m, o.ServiceTokens),
 					)
 				},
-			).WithMiddleware(web.RecoveryMiddleware(r)),
+			).WithMiddleware(b.Recovery(r)),
 		),
 	).RunUntilSignal()
 }

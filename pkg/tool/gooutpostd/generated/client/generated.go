@@ -27,6 +27,7 @@ type Service struct {
 	Deliberate bool    `json:"deliberate"`
 	Name       string  `json:"name"`
 	Origin     string  `json:"origin"`
+	Package    *string `json:"package,omitempty"`
 	Source     *string `json:"source,omitempty"`
 	State      string  `json:"state"`
 	Version    *string `json:"version,omitempty"`

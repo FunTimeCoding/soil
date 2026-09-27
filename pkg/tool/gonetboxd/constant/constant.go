@@ -89,6 +89,12 @@ const (
 	VirtualMachine = "virtual_machine"
 )
 const (
+	BookmarkTitle = "Bookmarks"
+	BookmarkPath  = "/"
+	BookmarkNone  = "Nothing bookmarked yet."
+)
+
+const (
 	HostEnvironment     = "GONETBOX_HOST"
 	TokenEnvironment    = "GONETBOX_TOKEN"
 	PortEnvironment     = "GONETBOX_PORT"

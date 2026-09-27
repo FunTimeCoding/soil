@@ -5,6 +5,7 @@ func NewService(
 	state string,
 	origin string,
 	source string,
+	packageName string,
 	version string,
 	deliberate bool,
 ) *Service {
@@ -13,6 +14,7 @@ func NewService(
 		State:      state,
 		Origin:     origin,
 		Source:     source,
+		Package:    packageName,
 		Version:    version,
 		Deliberate: deliberate,
 	}

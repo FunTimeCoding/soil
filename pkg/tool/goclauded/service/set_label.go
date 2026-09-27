@@ -3,6 +3,7 @@ package service
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/label_change"
 )
 
 func (s *Service) SetLabel(
@@ -18,16 +19,11 @@ func (s *Service) SetLabel(
 		return "", e
 	}
 
-	var change string
-
-	switch old {
-	case value:
+	if old == value {
 		return fmt.Sprintf("%s %s (unchanged)", key, value), nil
-	case "":
-		change = fmt.Sprintf("%s (unset)→%s", key, value)
-	default:
-		change = fmt.Sprintf("%s %s→%s", key, old, value)
 	}
+
+	change := label_change.Format(key, old, value)
 
 	if e := s.store.LogEvent(
 		sessionIdentifier,
@@ -36,7 +32,8 @@ func (s *Service) SetLabel(
 		map[string]string{
 			constant.Target: target,
 			constant.Key:    key,
-			"change":        change,
+			constant.Past:   old,
+			constant.Now:    value,
 		},
 	); e != nil {
 		return "", e

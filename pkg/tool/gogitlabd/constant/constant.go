@@ -31,7 +31,6 @@ const (
 	RequestEvent  = "request"
 
 	RequestTitle = "Merge Requests"
-	RequestEmpty = "No open merge requests."
 	RequestLimit = 3
 )
 

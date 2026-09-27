@@ -20,9 +20,10 @@ const (
 	AnthropicUsageFragment = "#settings/usage"
 
 	UsageMeterSession   = "Current session"
-	UsageMeterAllModels = "All models"
-	UsageMeterFable     = "Fable"
-	UsageResetPrefix    = "Resets "
+	UsageMeterWeek      = "This week"
+	UsageMeterFableWeek = "Fable this week"
+	UsageResetMarker    = "Resets "
+	UsageScopeFable     = "Fable"
 
 	ClaudeDirectory              = ".claude"
 	ClaudeCredentialFile         = ".credentials.json"

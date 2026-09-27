@@ -2,6 +2,7 @@ package web
 
 import (
 	"fmt"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	library "github.com/funtimecoding/soil/pkg/time"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
@@ -89,7 +90,10 @@ func (s *Server) memoriesPage(
 
 		if memoryType != "" {
 			if len(filters) > 0 {
-				filters = append(filters, gomponents.Text(" · "))
+				filters = append(
+					filters,
+					gomponents.Text(stringsConstant.SpacedMiddot),
+				)
 			}
 
 			filters = append(filters, gomponents.Textf("type: %s", memoryType))
@@ -97,7 +101,7 @@ func (s *Server) memoriesPage(
 
 		filters = append(
 			filters,
-			gomponents.Text(" · "),
+			gomponents.Text(stringsConstant.SpacedMiddot),
 			html.A(
 				gomponents.Attr("href", constant.MemoriesPath),
 				gomponents.Text("clear"),

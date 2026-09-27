@@ -23,7 +23,7 @@ func (s *Service) PollUsage() {
 		return
 	}
 
-	if e := s.recordFable(
+	if e := s.RecordFable(
 		result.FablePercent,
 		result.FableReset,
 		nil,

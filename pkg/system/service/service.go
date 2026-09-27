@@ -5,6 +5,7 @@ type Service struct {
 	State      string
 	Origin     string
 	Source     string
+	Package    string
 	Version    string
 	Deliberate bool
 }

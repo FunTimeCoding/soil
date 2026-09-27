@@ -49,6 +49,8 @@ type CheckResponse struct {
 
 // ContextRequest defines model for ContextRequest.
 type ContextRequest struct {
+	FablePercent    *int    `json:"fable_percent,omitempty"`
+	FableReset      *int64  `json:"fable_reset,omitempty"`
 	FiveHourPercent *int    `json:"five_hour_percent,omitempty"`
 	FiveHourReset   *int64  `json:"five_hour_reset,omitempty"`
 	Model           *string `json:"model,omitempty"`

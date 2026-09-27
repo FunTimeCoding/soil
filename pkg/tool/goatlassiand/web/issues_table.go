@@ -9,14 +9,7 @@ import (
 	"maragu.dev/gomponents/html"
 )
 
-func issuesTable(
-	issues []*issue.Issue,
-	empty string,
-) gomponents.Node {
-	if len(issues) == 0 {
-		return html.P(gomponents.Text(empty))
-	}
-
+func issuesTable(issues []*issue.Issue) gomponents.Node {
 	rows := make([]gomponents.Node, 0, len(issues))
 
 	for _, i := range issues {

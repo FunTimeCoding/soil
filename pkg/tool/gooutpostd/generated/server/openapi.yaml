@@ -51,6 +51,8 @@ components:
           type: string
         source:
           type: string
+        package:
+          type: string
         version:
           type: string
         deliberate:

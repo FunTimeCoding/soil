@@ -2,7 +2,7 @@ package service
 
 import "time"
 
-func (s *Service) recordFable(
+func (s *Service) RecordFable(
 	percent int,
 	reset string,
 	resetAt *time.Time,

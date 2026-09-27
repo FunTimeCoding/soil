@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/enriched_session"
 	"maragu.dev/gomponents"
@@ -70,14 +71,14 @@ func (s *Server) sessionsPage(
 				gomponents.Attr("href", constant.SessionsPath),
 				gomponents.Text("All"),
 			),
-			gomponents.Text(" · "),
+			gomponents.Text(stringsConstant.SpacedMiddot),
 			html.Strong(gomponents.Text("Active")),
 		)
 	} else {
 		filters = append(
 			filters,
 			html.Strong(gomponents.Text("All")),
-			gomponents.Text(" · "),
+			gomponents.Text(stringsConstant.SpacedMiddot),
 			html.A(
 				gomponents.Attr("href", "/sessions?active=true"),
 				gomponents.Text("Active"),
@@ -128,7 +129,10 @@ func (s *Server) sessionsPage(
 
 	if offset+limit < total {
 		if len(navigation) > 0 {
-			navigation = append(navigation, gomponents.Text(" · "))
+			navigation = append(
+				navigation,
+				gomponents.Text(stringsConstant.SpacedMiddot),
+			)
 		}
 
 		navigation = append(

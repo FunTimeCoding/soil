@@ -1041,6 +1041,11 @@ components:
         seven_day_reset:
           type: integer
           format: int64
+        fable_percent:
+          type: integer
+        fable_reset:
+          type: integer
+          format: int64
     LabelRequest:
       type: object
       required:

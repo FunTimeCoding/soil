@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/strings/shorten"
 	"github.com/funtimecoding/soil/pkg/time"
@@ -229,7 +230,7 @@ func (s *Server) sessionDetailPage(
 				),
 				gomponents.Text("Edit"),
 			),
-			gomponents.Text(" · "),
+			gomponents.Text(stringsConstant.SpacedMiddot),
 			html.A(
 				gomponents.Attr(
 					"href",
@@ -237,7 +238,7 @@ func (s *Server) sessionDetailPage(
 				),
 				gomponents.Text("View conversation"),
 			),
-			gomponents.Text(" · "),
+			gomponents.Text(stringsConstant.SpacedMiddot),
 			html.A(
 				extended.Post(fmt.Sprintf("/sessions/%s/delete", d.Identifier)),
 				extended.Confirm("Delete this session and all its data?"),

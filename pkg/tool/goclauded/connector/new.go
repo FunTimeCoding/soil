@@ -22,5 +22,10 @@ func New(
 	generated, e := client.NewClientWithResponses(base, options...)
 	errors.PanicOnError(e)
 
-	return &Client{generated: generated}
+	return &Client{
+		generated: generated,
+		base:      base,
+		token:     token,
+		untrusted: untrusted,
+	}
 }

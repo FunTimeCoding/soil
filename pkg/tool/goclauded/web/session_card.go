@@ -2,13 +2,13 @@ package web
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/time"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/label"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/pulse"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/session"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
-	"strings"
 )
 
 func sessionCard(
@@ -64,7 +64,7 @@ func sessionCard(
 	metadata = append(metadata, time.Relative(sessionActivity(s)))
 	details = append(
 		details,
-		html.P(html.Small(gomponents.Text(strings.Join(metadata, " · ")))),
+		html.P(html.Small(gomponents.Text(join.Middot(metadata)))),
 	)
 
 	if len(labels) > 0 {

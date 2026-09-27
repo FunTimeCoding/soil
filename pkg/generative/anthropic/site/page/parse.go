@@ -28,19 +28,16 @@ func Parse(markup string) *Usage {
 			}
 
 			label := strings.TrimSpace(span.Text())
-			reset := strings.TrimPrefix(
-				strings.TrimSpace(span.Parent().Next().Text()),
-				constant.UsageResetPrefix,
-			)
+			reset := resetText(span.Parent().Next().Text())
 
 			switch label {
 			case constant.UsageMeterSession:
 				result.SessionPercent = percent
 				result.SessionReset = reset
-			case constant.UsageMeterAllModels:
+			case constant.UsageMeterWeek:
 				result.WeeklyAllPercent = percent
 				result.WeeklyAllReset = reset
-			case constant.UsageMeterFable:
+			case constant.UsageMeterFableWeek:
 				result.FablePercent = percent
 				result.FableReset = reset
 			default:
@@ -52,8 +49,8 @@ func Parse(markup string) *Usage {
 	)
 
 	if !found[constant.UsageMeterSession] ||
-		!found[constant.UsageMeterAllModels] ||
-		!found[constant.UsageMeterFable] {
+		!found[constant.UsageMeterWeek] ||
+		!found[constant.UsageMeterFableWeek] {
 		return nil
 	}
 

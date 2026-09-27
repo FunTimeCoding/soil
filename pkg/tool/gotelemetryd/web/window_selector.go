@@ -2,6 +2,7 @@ package web
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
@@ -38,7 +39,10 @@ func windowSelector(
 			)
 		}
 
-		windowLinks = append(windowLinks, gomponents.Text(" · "))
+		windowLinks = append(
+			windowLinks,
+			gomponents.Text(constant.SpacedMiddot),
+		)
 	}
 
 	var groupLinks []gomponents.Node
@@ -58,7 +62,7 @@ func windowSelector(
 			)
 		}
 
-		groupLinks = append(groupLinks, gomponents.Text(" · "))
+		groupLinks = append(groupLinks, gomponents.Text(constant.SpacedMiddot))
 	}
 
 	return html.P(

@@ -1,48 +1,57 @@
-<div>
-  <section>
-    <div>
-      <div>
-        <div><span id="meter-session">Current session</span></div>
-        <span>Resets in 50 min</span>
-      </div>
-      <div>
-        <div role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="32" aria-labelledby="meter-session"></div>
-        <span>32% used</span>
-      </div>
+<div class="flex flex-col gap-lg">
+  <div class="flex w-full flex-wrap items-center justify-between gap-x-lg gap-y-sm">
+    <div class="flex w-52 shrink-0 flex-col gap-xs">
+      <span class="inline-flex items-center gap-xs"><span id="_r_hg_" class="text-body text-primary">Current session</span></span>
+      <span class="text-footnote text-secondary">Resets at 4:15 AM</span>
     </div>
-  </section>
-  <section>
-    <div>
-      <div>
-        <div><span id="meter-all-models">All models</span></div>
-        <span>Resets Wed 8:59 PM</span>
+    <div class="flex min-w-48 flex-1 items-center gap-md">
+      <div class="flex-1">
+        <div data-cds="Meter" data-variant="accent" class="w-full">
+          <div data-variant="accent" data-size="sm" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="7" aria-valuetext="7% used" aria-labelledby="_r_hg_" class="w-full overflow-hidden rounded-full h-1 bg-accent"></div>
+        </div>
       </div>
-      <div>
-        <div role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="22" aria-labelledby="meter-all-models"></div>
-        <span>22% used</span>
-      </div>
+      <span class="min-w-20 whitespace-nowrap text-right text-footnote text-secondary">7% used</span>
     </div>
-    <div>
-      <div>
-        <div><span id="meter-fable">Fable</span></div>
-        <span>Resets Wed 8:59 PM</span>
-      </div>
-      <div>
-        <div role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="34" aria-labelledby="meter-fable"></div>
-        <span>34% used</span>
-      </div>
+  </div>
+  <div class="flex w-full flex-wrap items-center justify-between gap-x-lg gap-y-sm">
+    <div class="flex w-52 shrink-0 flex-col gap-xs">
+      <span class="inline-flex items-center gap-xs"><span id="_r_hi_" class="text-body text-primary">This week</span></span>
+      <span class="text-footnote text-secondary">Resets Thursday 6:00 PM</span>
     </div>
-  </section>
-  <section>
-    <div>
-      <div>
-        <div><span id="meter-credits">Usage credits</span></div>
-        <span>Resets Sep 1</span>
+    <div class="flex min-w-48 flex-1 items-center gap-md">
+      <div class="flex-1">
+        <div data-cds="Meter" data-variant="accent" class="w-full">
+          <div data-variant="accent" data-size="sm" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="41" aria-valuetext="41% used" aria-labelledby="_r_hi_" class="w-full overflow-hidden rounded-full h-1 bg-accent"></div>
+        </div>
       </div>
-      <div>
-        <div role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-labelledby="meter-credits"></div>
-        <span>0% used</span>
-      </div>
+      <span class="min-w-20 whitespace-nowrap text-right text-footnote text-secondary">41% used</span>
     </div>
-  </section>
+  </div>
+  <div class="flex w-full flex-wrap items-center justify-between gap-x-lg gap-y-sm">
+    <div class="flex w-52 shrink-0 flex-col gap-xs">
+      <span class="inline-flex items-center gap-xs"><span id="_r_hk_" class="text-body text-primary">Fable this week</span></span>
+      <span class="text-footnote text-secondary">Separate weekly limit for Fable · Resets Thursday 6:00 PM</span>
+    </div>
+    <div class="flex min-w-48 flex-1 items-center gap-md">
+      <div class="flex-1">
+        <div data-cds="Meter" data-variant="accent" class="w-full">
+          <div data-variant="accent" data-size="sm" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="18" aria-valuetext="18% used" aria-labelledby="_r_hk_" class="w-full overflow-hidden rounded-full h-1 bg-accent"></div>
+        </div>
+      </div>
+      <span class="min-w-20 whitespace-nowrap text-right text-footnote text-secondary">18% used</span>
+    </div>
+  </div>
+  <div class="flex w-full flex-wrap items-center justify-between gap-x-lg gap-y-sm">
+    <div class="flex w-52 shrink-0 flex-col gap-xs">
+      <span class="inline-flex items-center gap-xs"><span id="_r_i7_" class="text-body text-primary">Claude Code</span></span>
+    </div>
+    <div class="flex min-w-48 flex-1 items-center gap-md">
+      <div class="flex-1">
+        <div data-cds="Meter" data-variant="accent" class="w-full">
+          <div data-variant="accent" data-size="sm" role="meter" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100" aria-valuetext="100%" aria-labelledby="_r_i7_" class="w-full overflow-hidden rounded-full h-1 bg-accent"></div>
+        </div>
+      </div>
+      <span class="min-w-20 whitespace-nowrap text-right text-footnote text-secondary">100%</span>
+    </div>
+  </div>
 </div>

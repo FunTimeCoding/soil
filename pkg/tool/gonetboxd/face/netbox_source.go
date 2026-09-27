@@ -1,6 +1,7 @@
 package face
 
 import (
+	"github.com/funtimecoding/soil/pkg/netbox/bookmark"
 	"github.com/funtimecoding/soil/pkg/netbox/cable"
 	"github.com/funtimecoding/soil/pkg/netbox/cluster"
 	"github.com/funtimecoding/soil/pkg/netbox/cluster_type"
@@ -48,6 +49,7 @@ type NetboxSource interface {
 		name string,
 		tag string,
 	) (*virtual_machine.Machine, error)
+	Bookmarks() ([]*bookmark.Bookmark, error)
 	Cables() ([]*cable.Cable, error)
 	ClusterByName(n string) (*cluster.Cluster, error)
 	Clusters() ([]*cluster.Cluster, error)

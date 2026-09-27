@@ -1,8 +1,8 @@
 package web
 
 import (
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/store/decision"
-	"strings"
 )
 
 func frameNames(d *decision.Decision) string {
@@ -12,5 +12,5 @@ func frameNames(d *decision.Decision) string {
 		result = append(result, v.Name)
 	}
 
-	return strings.Join(result, " · ")
+	return join.Middot(result)
 }

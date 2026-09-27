@@ -20,6 +20,7 @@ const (
 	SemicolonSpace = "; "
 	Slash          = "/"
 	Space          = " "
+	SpacedMiddot   = " · "
 	Tab            = "\t"
 	Underscore     = "_"
 	Unix           = "\n"

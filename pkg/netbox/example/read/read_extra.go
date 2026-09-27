@@ -18,6 +18,10 @@ func readExtra(
 		console.Format("Tag: %s\n", t.Format(f))
 	}
 
+	for _, b := range n.MustBookmarks() {
+		console.Format("Bookmark: %s\n", b.Format(f))
+	}
+
 	if false {
 		// TODO: on load: panic: no value given for required property data_path
 		for _, c := range n.MustConfigurationContexts() {

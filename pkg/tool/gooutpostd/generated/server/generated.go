@@ -34,6 +34,7 @@ type Service struct {
 	Deliberate bool    `json:"deliberate"`
 	Name       string  `json:"name"`
 	Origin     string  `json:"origin"`
+	Package    *string `json:"package,omitempty"`
 	Source     *string `json:"source,omitempty"`
 	State      string  `json:"state"`
 	Version    *string `json:"version,omitempty"`
@@ -384,14 +385,14 @@ func (sh *strictHandler) ListServices(w http.ResponseWriter, r *http.Request, pa
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"pFNNb9swDP0rArejEWfbzfdhHbZbj0UxKDITs7BFlWQSBEH++yApX2vS7bCTZNJ84nt83EPgKXHEaArd",
-	"HjQMOPlyfWC1fCbhhGKEJTp46bde8Jfve0HVGiXDqVxslxA6UBOKKzg0p4AX8bv8PbBa9BPe/TmN3pYs",
-	"053koQHB1zUJ9tA9XWCuip7Pr/HiBYNlxEeUDQW85dHjSAsUb9edLJhH9DEXvtsjC60o3k0pryXcr1L7",
-	"86VLZoOixPHflI90K9K5j+aaya0CGYTikgs82ZhzK+a1JVbr4ep5+DSbz+aFYcLoE0EHX0qogeRtKKq1",
-	"PlE7HI2xwnJkVb0Rx+89dPANrRgn966J49Egn+fzfASOhrGU+ZRGCqWwfdEqQHVfvn0UXEIHH9qLPduj",
-	"N9uCX5j1qEEoWSXwwFtnA6mbfBgoosuKqSNTHJfO2NmAjuIGo7HsZhni0FRKWm2i79L6SWqPp5+yIOIn",
-	"NBSF7mn/po8fiMlxHHfuBOu8mdBibdjXPkhdnd8M8nygg9c1yg5OvrtM9yLJW3c8/6fE5539m9an/bnZ",
-	"5Fv5v25QzpQrx+wUF7wIoTZuSzbkabgkvMHoY8A6hMPhdwAAAP//",
+	"pFNNjxMxDP0rUeBYdQrc5o5YBLc9rlbIzbgdLzNx1nZbVVX/O0rSL7YtHPaUTDx+ee/5ZecDj4kjRlPf",
+	"7ryGHkco2wdWy2sSTihGWE57kG4Dgr+g6wRV6ykZjmVj24S+9WpCcen3k+MBiMA2f/esFmHEmz+nAWzB",
+	"Mt4o7ide8HVFgp1vn84wF03Pp9t4/oLBMuIjypoCXuvocKA5CtglkznzgBBz412OLLSkeJs+hN+wvN2m",
+	"vJJwp2R/szhX1ihKHP9vx8GKinTiOLlUee1OBqG44AJPNuTaknllidU6f3G9/zSdTWdFfcIIiXzrv5Sj",
+	"LNr64mgDiZr+EJolliU7DkYcv3e+9d/QSqgyd00cD+H5PJvlJXA0jKUNUhoolMbmRasBNZl591Fw4Vv/",
+	"oTlHtznktin4RVmHGoSSVQEPvHHWk7oRQk8RXXZMHZnisHDGznp0FNcYjWU7zRD7SZWkNUJ6V9ZPUns8",
+	"/pQNERjRUNS3T7s3PH4gJsdx2LojrAMzofnKsKs8SF2d39Tn+fjWv65Qtv6YyfN0z5a8TcfzOy0+ved/",
+	"eX18W1ev/Nr+r2uUk+SqMSfFBRAh1InbkPV5Gi4JrzFCDFiHsN//CQAA//8=",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

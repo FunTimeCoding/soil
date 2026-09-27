@@ -2,6 +2,7 @@ package web
 
 import (
 	"fmt"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -32,5 +33,11 @@ func sortLinks(modified bool) gomponents.Node {
 		recent = html.Strong(gomponents.Text(constant.SortModified))
 	}
 
-	return html.P(html.Small(priority, gomponents.Text(" · "), recent))
+	return html.P(
+		html.Small(
+			priority,
+			gomponents.Text(stringsConstant.SpacedMiddot),
+			recent,
+		),
+	)
 }

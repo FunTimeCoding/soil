@@ -12,7 +12,7 @@ func TestQueueWindowIgnoresTheBoundLocation(t *testing.T) {
 	s := store_tester.New(t)
 	assert.FatalOnError(
 		t,
-		s.Store.PushQueue("", "Nobody", constant.QueueTimeout, "now"),
+		s.Store.PushQueue("", "Nobody", constant.QueueTimeout, "queued"),
 	)
 	east, e := time.LoadLocation("Europe/Berlin")
 	assert.FatalOnError(t, e)
@@ -30,7 +30,7 @@ func TestQueueWindowExcludesRowOutsideTheWindow(t *testing.T) {
 	s := store_tester.New(t)
 	assert.FatalOnError(
 		t,
-		s.Store.PushQueue("", "Nobody", constant.QueueTimeout, "now"),
+		s.Store.PushQueue("", "Nobody", constant.QueueTimeout, "queued"),
 	)
 	utc, e := time.LoadLocation("UTC")
 	assert.FatalOnError(t, e)

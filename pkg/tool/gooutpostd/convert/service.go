@@ -11,6 +11,7 @@ func Service(s *service.Service) server.Service {
 		State:      s.State,
 		Origin:     s.Origin,
 		Source:     &s.Source,
+		Package:    &s.Package,
 		Version:    &s.Version,
 		Deliberate: s.Deliberate,
 	}

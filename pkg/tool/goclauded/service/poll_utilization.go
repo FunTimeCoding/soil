@@ -46,7 +46,7 @@ func (s *Service) PollUtilization() {
 	}
 
 	if result.FableSeen {
-		if e := s.recordFable(
+		if e := s.RecordFable(
 			result.FablePercent,
 			"",
 			fableReset(result.FableReset),

@@ -21,6 +21,9 @@ const (
 
 	PageLimit int32 = 1000
 
+	ObjectLinkField  = "url"
+	InterfaceSegment = "/api/"
+
 	DeviceAddress           = "dcim.device"
 	InterfaceAddress        = "dcim.interface"
 	VirtualInterfaceAddress = "virtualization.vminterface"

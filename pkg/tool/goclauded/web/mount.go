@@ -12,6 +12,7 @@ func (s *Server) Mount(g *guard.Mux) {
 	g.Open(route.Get(webConstant.PalettePath), palette.NewServe(s.registry))
 	g.Open(route.Get(webConstant.RootPattern), s.dashboard)
 	g.OpenMount(route.Get(webConstant.LivePath), s.event())
+	g.Token(route.Get(constant.EventStreamPath), s.eventStream())
 	g.Open(route.Get(constant.SessionsPath), s.sessionsPage)
 	g.Open(
 		route.Get(constant.SessionsPath, "/{identifier}"),

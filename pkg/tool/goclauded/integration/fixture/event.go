@@ -1,6 +1,7 @@
 package fixture
 
 type Event struct {
-	Name    string
-	Payload string
+	Name       string
+	Identifier string
+	Payload    string
 }

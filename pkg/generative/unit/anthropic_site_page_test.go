@@ -10,12 +10,12 @@ import (
 func TestPageParse(t *testing.T) {
 	result := page.Parse(fixture.Read("claude", "usage-page.html"))
 	assert.NotNil(t, result)
-	assert.Integer(t, 32, result.SessionPercent)
-	assert.String(t, "in 50 min", result.SessionReset)
-	assert.Integer(t, 22, result.WeeklyAllPercent)
-	assert.String(t, "Wed 8:59 PM", result.WeeklyAllReset)
-	assert.Integer(t, 34, result.FablePercent)
-	assert.String(t, "Wed 8:59 PM", result.FableReset)
+	assert.Integer(t, 7, result.SessionPercent)
+	assert.String(t, "at 4:15 AM", result.SessionReset)
+	assert.Integer(t, 41, result.WeeklyAllPercent)
+	assert.String(t, "Thursday 6:00 PM", result.WeeklyAllReset)
+	assert.Integer(t, 18, result.FablePercent)
+	assert.String(t, "Thursday 6:00 PM", result.FableReset)
 }
 
 func TestPageParseEmpty(t *testing.T) {

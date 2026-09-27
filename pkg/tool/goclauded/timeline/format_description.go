@@ -3,6 +3,7 @@ package timeline
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/label_change"
 )
 
 func FormatDescription(e *Entry) string {
@@ -64,7 +65,15 @@ func FormatDescription(e *Entry) string {
 
 		return fmt.Sprintf("%s summarized: %s", actor, body)
 	case "label":
-		return fmt.Sprintf("%s label: %s", actor, e.meta("change"))
+		return fmt.Sprintf(
+			"%s label: %s",
+			actor,
+			label_change.Format(
+				e.meta(constant.Key),
+				e.meta(constant.Past),
+				e.meta(constant.Now),
+			),
+		)
 	case "release":
 		return fmt.Sprintf("%s left", actor)
 	case "register":

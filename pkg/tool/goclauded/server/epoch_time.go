@@ -3,9 +3,11 @@ package server
 import "time"
 
 func epochTime(v *int64) time.Time {
-	if v == nil {
+	result := epochTimePointer(v)
+
+	if result == nil {
 		return time.Time{}
 	}
 
-	return time.Unix(*v, 0)
+	return *result
 }

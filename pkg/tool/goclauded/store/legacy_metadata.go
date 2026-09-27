@@ -42,7 +42,13 @@ func legacyMetadata(
 		}
 
 		if body != "" {
-			result["change"] = body
+			key, past, now := parseLabelChange(body)
+
+			if key != "" {
+				result[constant.Key] = key
+				result[constant.Past] = past
+				result[constant.Now] = now
+			}
 		}
 
 		if len(result) > 0 {

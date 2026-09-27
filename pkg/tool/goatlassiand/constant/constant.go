@@ -100,9 +100,7 @@ const (
 	NewestEvent = "newest"
 	NewestLimit = 3
 
-	PlateEmpty         = "Nothing on the plate."
-	WatchedIssuesEmpty = "No watched issues."
-	NewestEmpty        = "No recent issues."
+	PlateClean = "All clean."
 
 	PlateQuery         = "(assignee = currentUser() OR reporter = currentUser()) AND statusCategory != Done AND status NOT IN (%s) ORDER BY updated DESC"
 	WatchedIssuesQuery = "issue in watchedIssues() AND statusCategory != Done AND status NOT IN (%s) ORDER BY updated DESC"

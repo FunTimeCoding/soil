@@ -6,27 +6,24 @@ import (
 	"testing"
 )
 
-func TestPlatePageRendersBothIssueSections(t *testing.T) {
+func TestPlateSectionAffirmsWhenClean(t *testing.T) {
 	o := web_interface_tester.New(t)
-	o.AssertContains("Plate", constant.PlatePath)
-	o.AssertContains("Watched Issues", constant.PlatePath)
+	o.AssertContains("All clean.", constant.PlatePath)
 }
 
-func TestPlatePageRendersBothPageSections(t *testing.T) {
+func TestEmptySectionsHideTheirHeadings(t *testing.T) {
 	o := web_interface_tester.New(t)
-	o.AssertContains("Favourites", constant.PlatePath)
-	o.AssertContains("Watched Pages", constant.PlatePath)
+	o.AssertMissing("Watched Issues", constant.PlatePath)
+	o.AssertMissing("Favourites", constant.PlatePath)
+	o.AssertMissing("Watched Pages", constant.PlatePath)
 }
 
-func TestWatchedIssuesSectionIsLive(t *testing.T) {
+func TestHiddenSectionsKeepTheirLiveTargets(t *testing.T) {
 	o := web_interface_tester.New(t)
+	o.AssertContains(`sse-swap="plate"`, constant.PlatePath)
 	o.AssertContains(`sse-swap="watched_issues"`, constant.PlatePath)
-}
-
-func TestEmptyIssueSectionsNameWhichIsEmpty(t *testing.T) {
-	o := web_interface_tester.New(t)
-	o.AssertContains("Nothing on the plate.", constant.PlatePath)
-	o.AssertContains("No watched issues.", constant.PlatePath)
+	o.AssertContains(`sse-swap="favorites"`, constant.PlatePath)
+	o.AssertContains(`sse-swap="watched_pages"`, constant.PlatePath)
 }
 
 func TestNewestSectionAbsentWithoutConfiguredProject(t *testing.T) {
@@ -35,9 +32,8 @@ func TestNewestSectionAbsentWithoutConfiguredProject(t *testing.T) {
 	o.AssertMissing(`sse-swap="newest"`, constant.PlatePath)
 }
 
-func TestNewestSectionPresentWithConfiguredProject(t *testing.T) {
+func TestNewestSectionKeepsLiveTargetWithConfiguredProject(t *testing.T) {
 	o := web_interface_tester.NewWithProject(t, []string{"ABC"})
-	o.AssertContains("Newest Issues", constant.PlatePath)
 	o.AssertContains(`sse-swap="newest"`, constant.PlatePath)
-	o.AssertContains("No recent issues.", constant.PlatePath)
+	o.AssertMissing("Newest Issues", constant.PlatePath)
 }

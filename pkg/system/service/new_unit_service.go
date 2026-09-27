@@ -5,9 +5,9 @@ import (
 	"strings"
 )
 
-func newUnitService(
+func NewUnitService(
 	unit string,
-	unitState string,
+	state string,
 	path string,
 	name string,
 	policies map[string]*Policy,
@@ -16,9 +16,10 @@ func newUnitService(
 	if name == "" {
 		return NewService(
 			unit,
-			unitState,
+			state,
 			constant.ServiceOriginLocal,
 			path,
+			"",
 			"",
 			true,
 		)
@@ -38,9 +39,10 @@ func newUnitService(
 
 	return NewService(
 		unit,
-		unitState,
+		state,
 		origin,
 		policy.Origin,
+		name,
 		policy.Version,
 		manual[name],
 	)

@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration/base"
 	"net/http"
 	"strings"
@@ -35,8 +36,14 @@ func Subscribe(
 			if strings.HasPrefix(line, "event: ") {
 				name = strings.TrimPrefix(line, "event: ")
 				lines = nil
-			} else if strings.HasPrefix(line, "data: ") {
-				lines = append(lines, strings.TrimPrefix(line, "data: "))
+			} else if strings.HasPrefix(
+				line,
+				constant.StreamPayloadPrefix,
+			) {
+				lines = append(
+					lines,
+					strings.TrimPrefix(line, constant.StreamPayloadPrefix),
+				)
 			} else if line == "" && name != "" {
 				events <- Event{Name: name, Payload: join.NewLine(lines)}
 				name = ""

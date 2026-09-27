@@ -8,10 +8,6 @@ import (
 )
 
 func pagesTable(pages []*page.Page) gomponents.Node {
-	if len(pages) == 0 {
-		return html.P(gomponents.Text("None."))
-	}
-
 	rows := make([]gomponents.Node, 0, len(pages))
 
 	for _, p := range pages {

@@ -15,6 +15,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/queue"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/rate_snapshot"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/session"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/subscription"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/summary"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/tracker_state"
 	"gorm.io/gorm"
@@ -44,9 +45,11 @@ func New(
 			queue.Stub(),
 			tracker_state.Stub(),
 			context_load.Stub(),
+			subscription.Stub(),
 		),
 	)
 	migrateEventMetadata(d)
+	migrateLabelChange(d)
 	migrateTimestamps(d)
 	migrateConsumedAt(d)
 	migrateSessionKey(d)

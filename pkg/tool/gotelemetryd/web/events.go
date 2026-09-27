@@ -3,6 +3,7 @@ package web
 import (
 	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/errors"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/store"
 	"github.com/funtimecoding/soil/pkg/web/layout"
@@ -111,7 +112,10 @@ func (s *Server) events(
 
 	if hasMore {
 		if len(navigation) > 0 {
-			navigation = append(navigation, gomponents.Text(" · "))
+			navigation = append(
+				navigation,
+				gomponents.Text(stringsConstant.SpacedMiddot),
+			)
 		}
 
 		navigation = append(

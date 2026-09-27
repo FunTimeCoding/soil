@@ -9,7 +9,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/time"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/mark3labs/mcp-go/mcp"
-	"strings"
 )
 
 func (s *Server) roster(
@@ -81,7 +80,7 @@ func (s *Server) roster(
 		}
 
 		if len(details) > 0 {
-			line = fmt.Sprintf("%s\n  %s", line, strings.Join(details, " · "))
+			line = fmt.Sprintf("%s\n  %s", line, join.Middot(details))
 		}
 
 		if entries := labels[session.Identifier]; len(entries) > 0 {

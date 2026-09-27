@@ -25,4 +25,5 @@ func TestJoin(t *testing.T) {
 	assert.String(t, "ab", join.Empty(s...))
 	assert.String(t, "a;b", join.Semicolon(s))
 	assert.String(t, "a; b", join.SemicolonSpace(s))
+	assert.String(t, "a · b", join.Middot(s))
 }

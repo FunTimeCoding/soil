@@ -2,7 +2,6 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/gitlab/merge_request"
-	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -10,10 +9,6 @@ import (
 )
 
 func requestTable(requests []*merge_request.Request) gomponents.Node {
-	if len(requests) == 0 {
-		return html.P(gomponents.Text(constant.RequestEmpty))
-	}
-
 	rows := make([]gomponents.Node, 0, len(requests))
 
 	for _, r := range requests {
