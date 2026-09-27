@@ -50,11 +50,7 @@ func Go(o *option.Build) {
 			fmt.Sprintf("main.BuildDate=%s", Date()),
 		),
 	}
-
-	if p.BuildTags != "" {
-		s = append(s, constant.TagsArgument, p.BuildTags)
-	}
-
+	s = append(s, constant.TagsArgument, Tags(p.BuildTags))
 	s = append(s, []string{constant.OutputArgument, p.Output, p.MainPath}...)
 	r := run.New()
 	r.Verbose = true

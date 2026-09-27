@@ -18,7 +18,7 @@ func (c *Client) launchServices() []*Service {
 	for _, directory := range []string{
 		constant.LaunchDaemonDirectory,
 		constant.LaunchAgentDirectory,
-		filepath.Join(c.home, constant.UserLaunchAgents),
+		filepath.Join(system.Home(), constant.UserLaunchAgents),
 	} {
 		if !system.DirectoryExists(directory) {
 			continue

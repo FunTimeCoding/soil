@@ -17,6 +17,7 @@ const (
 	LinkerFlagsArgument = "-ldflags"
 	OutputArgument      = "-o"
 	TagsArgument        = "-tags"
+	TimeZoneTag         = "timetzdata"
 
 	VersionArgument = "-go"
 
