@@ -1,0 +1,4 @@
+FROM alpine:3.24.2
+COPY tmp/goatlasd/linux-amd64/goatlasd /usr/local/bin
+EXPOSE 8080
+ENTRYPOINT ["goatlasd"]

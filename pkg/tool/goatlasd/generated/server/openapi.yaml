@@ -1,0 +1,174 @@
+---
+openapi: "3.0.0"
+info:
+  title: goatlasd
+  version: 1.0.0
+paths:
+  /api/placements:
+    get:
+      operationId: listPlacements
+      parameters:
+      - name: place
+        in: query
+        description: Restrict to placements on this device or virtual machine.
+        schema:
+          type: string
+      - name: source
+        in: query
+        description: Restrict to placements attested by this source.
+        schema:
+          type: string
+      - name: package
+        in: query
+        description: Restrict to placements carrying this package.
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Placements, ordered by place then scope then name.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Placement"
+        "500":
+          description: The placement store could not be read.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/sightings:
+    get:
+      operationId: listSightings
+      parameters:
+      - name: unclaimed
+        in: query
+        description: Restrict to hosts that resolve to no inventory object.
+        schema:
+          type: boolean
+      - name: place
+        in: query
+        description: Restrict to hosts resolving to this device or machine.
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Hosts seen on the network, ordered by place then hostname.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Sighting"
+        "500":
+          description: The sighting store could not be read.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/places:
+    get:
+      operationId: listPlaces
+      responses:
+        "200":
+          description: Places carrying placements, most loaded first.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Place"
+        "500":
+          description: The placement store could not be read.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    Placement:
+      type: object
+      required:
+      - source
+      - kind
+      - name
+      - seen
+      properties:
+        source:
+          type: string
+        kind:
+          type: string
+        scope:
+          type: string
+        name:
+          type: string
+        package:
+          type: string
+        version:
+          type: string
+        placeKind:
+          type: string
+        placeIdentifier:
+          type: integer
+          format: int32
+        placeName:
+          type: string
+        seen:
+          type: string
+          format: date-time
+    Sighting:
+      type: object
+      required:
+      - source
+      - hardwareAddress
+      - address
+      - reserved
+      - seen
+      properties:
+        source:
+          type: string
+        hardwareAddress:
+          type: string
+        address:
+          type: string
+        hostname:
+          type: string
+        reserved:
+          type: boolean
+        placeKind:
+          type: string
+        placeIdentifier:
+          type: integer
+          format: int32
+        placeName:
+          type: string
+        seen:
+          type: string
+          format: date-time
+    Place:
+      type: object
+      required:
+      - name
+      - kind
+      - count
+      properties:
+        name:
+          type: string
+        kind:
+          type: string
+        identifier:
+          type: integer
+          format: int32
+        count:
+          type: integer
+    ErrorResponse:
+      type: object
+      required:
+      - error
+      - event_identifier
+      properties:
+        error:
+          type: string
+        event_identifier:
+          type: string
