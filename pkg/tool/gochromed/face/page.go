@@ -14,6 +14,16 @@ type Page interface {
 		expression string,
 		result any,
 	) error
+	EvaluatePromise(
+		expression string,
+		result any,
+	) error
+	Location() (string, error)
+	SetValue(
+		s string,
+		value string,
+	) error
+	ClickTrusted(s string) error
 	ClickNode(backendNodeIdentifier int64) error
 	FillNode(
 		backendNodeIdentifier int64,
