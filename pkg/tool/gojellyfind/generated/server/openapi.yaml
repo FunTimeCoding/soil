@@ -1,0 +1,362 @@
+---
+openapi: "3.0.0"
+info:
+  title: gojellyfind
+  version: 1.0.0
+paths:
+  /api/libraries:
+    get:
+      operationId: listLibraries
+      responses:
+        "200":
+          description: Media libraries.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/Library"
+        "500":
+          description: Failed to list libraries.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/items:
+    get:
+      operationId: searchItems
+      parameters:
+      - name: q
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Search term.
+      - name: types
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Comma-separated item types.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: per_page
+        in: query
+        required: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Search result page.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchResult"
+        "500":
+          description: Failed to search items.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/items/{identifier}:
+    get:
+      operationId: getItem
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Item identifier.
+      responses:
+        "200":
+          description: Item detail.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Item"
+        "500":
+          description: Failed to get item.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/items/{identifier}/episodes:
+    get:
+      operationId: getEpisodes
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Series identifier.
+      responses:
+        "200":
+          description: Episodes of the series.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/Item"
+        "500":
+          description: Failed to get episodes.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/items/{identifier}/tracks:
+    get:
+      operationId: getTracks
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Album identifier.
+      responses:
+        "200":
+          description: Tracks of the album.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/Item"
+        "500":
+          description: Failed to get tracks.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/sessions:
+    get:
+      operationId: listSessions
+      responses:
+        "200":
+          description: Active playback sessions.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/Session"
+        "500":
+          description: Failed to list sessions.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/sessions/{identifier}/play:
+    post:
+      operationId: play
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Session identifier.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PlayRequest"
+      responses:
+        "204":
+          description: Playback started.
+        "500":
+          description: Failed to start playback.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/sessions/{identifier}/command:
+    post:
+      operationId: playbackCommand
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Session identifier.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PlaybackCommandRequest"
+      responses:
+        "204":
+          description: Command sent.
+        "500":
+          description: Failed to send command.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/sessions/{identifier}/volume:
+    post:
+      operationId: setVolume
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Session identifier.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/VolumeRequest"
+      responses:
+        "204":
+          description: Volume set.
+        "500":
+          description: Failed to set volume.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    Library:
+      type: object
+      required: [id, name]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        collection_type:
+          type: string
+    Item:
+      type: object
+      required: [id, name, type]
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        overview:
+          type: string
+        genres:
+          type: array
+          items:
+            type: string
+        production_year:
+          type: integer
+        community_rating:
+          type: number
+        official_rating:
+          type: string
+        run_time_ticks:
+          type: integer
+          format: int64
+        series_name:
+          type: string
+        season_number:
+          type: integer
+        episode_number:
+          type: integer
+        is_folder:
+          type: boolean
+    SearchResult:
+      type: object
+      required: [total, page, items]
+      properties:
+        total:
+          type: integer
+        page:
+          type: integer
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/Item"
+    Session:
+      type: object
+      required: [id, device_name, device_id, client, play_state, supports_remote]
+      properties:
+        id:
+          type: string
+        device_name:
+          type: string
+        device_id:
+          type: string
+        client:
+          type: string
+        user_name:
+          type: string
+        now_playing_name:
+          type: string
+        now_playing_type:
+          type: string
+        now_playing_id:
+          type: string
+        play_state:
+          type: string
+        position:
+          type: string
+        supports_remote:
+          type: boolean
+    PlayRequest:
+      type: object
+      required: [item_ids]
+      properties:
+        item_ids:
+          type: array
+          items:
+            type: string
+        play_command:
+          type: string
+        start_position_ticks:
+          type: integer
+          format: int64
+    PlaybackCommandRequest:
+      type: object
+      required: [command]
+      properties:
+        command:
+          type: string
+        seek_position_ticks:
+          type: integer
+          format: int64
+    VolumeRequest:
+      type: object
+      required: [level]
+      properties:
+        level:
+          type: integer
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+    ErrorResponse:
+      type: object
+      required: [error, event_identifier]
+      properties:
+        error:
+          type: string
+        event_identifier:
+          type: string
