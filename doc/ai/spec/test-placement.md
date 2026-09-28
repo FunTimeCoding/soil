@@ -59,7 +59,7 @@ not a parameter list.
 ### Naming
 
 Files: subpackage path joined with underscores, plus the concept —
-`store_get_document_test.go`, `types_native_event_test.go`.
+`store_get_document_test.go`, `alertmanager_alert_filter_alerts_test.go`.
 Root-package tests use the bare concept or the domain name.
 
 Colliding test function names get the subpackage camel prefix
@@ -77,8 +77,11 @@ In-memory sqlite stores, fixture-file parsers, and in-process HTTP
 servers on dynamic ports stay unit. Shelling out (the go toolchain,
 local binaries) or requiring services, credentials, or a display is
 integration. Environment-dependent integration tests additionally
-carry a build tag (`//go:build local`, `ci`); hermetic ones run
-untagged.
+carry a build tag (`//go:build local`, `ci`, `browser`); hermetic
+ones run untagged. Only `local` reaches the gate — `task test`
+passes that tag alone, so a test under any other tag runs solely
+when invoked explicitly. Choosing the tag chooses whether anything
+will notice the test failing.
 
 ## integration/
 
@@ -111,9 +114,8 @@ subpackage binary runs in its own directory.
   (the package's own name is not an identifier in its scope), so
   generated-vs-home clashes like a `client` test package importing
   `<path>/generated/client/` need no alias — golint de-aliases them.
-- golint's stub-test generation is wired off (`stubTest` is `false`
-  in the `lint.Lint` call chain); source packages without tests do
-  not get stubs demanded back.
+- golint has no stub-test generation; a source package without
+  tests is never asked for one.
 - CWD-relative paths in tests anchor via `git.FindDirectory` or
   `fixture.Path`, never parent-depth walking — moves between
   directory depths must not break them.

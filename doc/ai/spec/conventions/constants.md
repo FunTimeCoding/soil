@@ -3,24 +3,31 @@
 ## Placement
 
 Constants live in the subsystem's `<path>/constant/` package (e.g.
-`pkg/tool/gobuild/constant/`), in `constant.go`. Large non-vocabulary
-assets (CSS, JS, SQL, HTML string blobs) go to domain files beside it
-in the same package - `style.go`, `script.go`, `query.go` - keeping
-`constant.go` readable as the vocabulary home.
+`pkg/tool/gobuild/constant/`), in `constant.go`. A payload rather than
+a vocabulary goes to a domain file beside it in the same package -
+`style.go` for CSS, `script.go` for JS, `query.go` for SQL,
+`sample.go` for data blobs and fixture text - keeping `constant.go`
+readable as the vocabulary home. The payload-or-vocabulary
+distinction is the rule and those filenames are only its common
+cases; a new kind of payload earns a domain file too rather than
+crowding the vocabulary.
 
 Don't create package-local `constant.go` files - add to the nearest
 `<path>/constant/` package and export the constant, even when only one
 package uses it today. Deeper subpackages share their subsystem
 root's `<path>/constant/` rather than growing their own: `<path>/constant/` lives
 only at `pkg/<domain>/` or `pkg/tool/<name>/`, with `pkg/constant` as
-the global home. Subsystem vocabularies inside a shared `<path>/constant/`
-take a per-subsystem domain file.
+the global home. Subsystem vocabularies inside a shared
+`<path>/constant/` take a per-subsystem domain file once the package
+outgrows a single readable file; below that the whole vocabulary
+stays in `constant.go`, however many subsystems it spans.
 
 Prefix a symbol with its subsystem qualifier when collision or
-ambiguity forces it - `systemd.go` with `SystemdCommand`, `lite.go`
-with `LiteDialectName` (qualifier-first, the `http.MethodGet` shape);
-distinctive collision-free names keep their shortness. Either way the
-name must stand alone, readable without the file around it.
+ambiguity forces it - `SystemdCommand`, `LiteDialectName`,
+`MattermostHostEnvironment` (qualifier-first, the `http.MethodGet`
+shape); distinctive collision-free names keep their shortness. The
+name must stand alone, readable without the file around it - which is
+what lets a whole subsystem vocabulary sit in one `constant.go`.
 
 Group with `const (...)` blocks per semantic domain - multiple groups
 with comment headers are the idiom for large vocabularies. When an
@@ -70,11 +77,11 @@ functions.
   in constant values, not just names. `Link = "link"` not
   `Link = "url"`. The value should be the honest, full-word form.
 - **Semantic constant splitting** - when the same string serves
-  different layers (DB column, HTML form field, domain key), use
-  separate constants even if the values are identical today:
-  `NameFieldKey = "name"` (field system), `NameColumn = "name"`
-  (GORM), `NameParameter = "name"` (web routes/forms). They could
-  diverge independently.
+  different layers, use separate constants even if the values are
+  identical today: `go:pkg/git/constant.MessageArgument` and
+  `go:pkg/constant.ModuleArgument` are both `-m`, one git's commit
+  message flag and one `go list -m`. They could diverge
+  independently, and one shared constant would couple the two.
 - **Propagate generic constants toward soil** - when a constant is
   used across multiple tools or packages (e.g. `FormMethod =
   "method"` for HTML forms), it belongs in soil's shared vocabulary
