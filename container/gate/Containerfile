@@ -1,0 +1,4 @@
+FROM alpine:3.24.2
+COPY tmp/gogated/linux-amd64/gogated /usr/local/bin
+EXPOSE 8080
+ENTRYPOINT ["gogated"]

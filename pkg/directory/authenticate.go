@@ -44,11 +44,11 @@ func (c *Client) Authenticate(
 		return nil, validation.New("invalid credentials")
 	}
 
-	return &Entry{
-		Unique:            found.GetAttributeValue(constant.UniqueAttribute),
-		Account:           found.GetAttributeValue(constant.AccountAttribute),
-		Mail:              found.GetAttributeValue(constant.MailAttribute),
-		Name:              found.GetAttributeValue(constant.NameAttribute),
-		DistinguishedName: found.DN,
-	}, nil
+	return NewEntry(
+		found.GetAttributeValue(constant.UniqueAttribute),
+		found.GetAttributeValue(constant.AccountAttribute),
+		found.GetAttributeValue(constant.MailAttribute),
+		found.GetAttributeValue(constant.NameAttribute),
+		found.DN,
+	), nil
 }
