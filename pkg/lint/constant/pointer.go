@@ -1,6 +1,9 @@
 package constant
 
-import "regexp"
+import (
+	"github.com/funtimecoding/soil/pkg/web/constant"
+	"regexp"
+)
 
 const (
 	ConventionWordKey  = "convention_word"
@@ -8,6 +11,9 @@ const (
 
 	BareSlashKey  = "bare_slash"
 	BareSlashText = "Bare /api/ span - write route:/api/... so it checks against the openapi specification"
+
+	UndeclaredHostKey  = "undeclared_host"
+	UndeclaredHostText = "Locator host not declared in front matter hosts"
 
 	PluginRootPrefix = "${CLAUDE_PLUGIN_ROOT}/"
 
@@ -36,18 +42,22 @@ const (
 
 var (
 	VerdictKeys = map[Verdict]string{
-		VerdictDead:       DeadPointerKey,
-		VerdictAbsolute:   AbsolutePointerKey,
-		VerdictConvention: ConventionWordKey,
-		VerdictBareSlash:  BareSlashKey,
+		VerdictDead:           DeadPointerKey,
+		VerdictAbsolute:       AbsolutePointerKey,
+		VerdictConvention:     ConventionWordKey,
+		VerdictBareSlash:      BareSlashKey,
+		VerdictUndeclaredHost: UndeclaredHostKey,
 	}
 
 	VerdictTexts = map[Verdict]string{
-		VerdictDead:       DeadPointerText,
-		VerdictAbsolute:   AbsolutePointerText,
-		VerdictConvention: ConventionWordText,
-		VerdictBareSlash:  BareSlashText,
+		VerdictDead:           DeadPointerText,
+		VerdictAbsolute:       AbsolutePointerText,
+		VerdictConvention:     ConventionWordText,
+		VerdictBareSlash:      BareSlashText,
+		VerdictUndeclaredHost: UndeclaredHostText,
 	}
+
+	ImplicitHosts = []string{constant.Localhost, constant.Loopback}
 
 	MajorSuffix = regexp.MustCompile(`^v[0-9]+$`)
 	LineSuffix  = regexp.MustCompile(`:[0-9]+$`)
@@ -93,6 +103,7 @@ var (
 		"compact",
 		"config",
 		"help",
+		"hooks",
 		"mcp",
 		"memory",
 		"model",

@@ -6,6 +6,7 @@ const (
 	VerdictAbsolute
 	VerdictConvention
 	VerdictBareSlash
+	VerdictUndeclaredHost
 	VerdictTallied
 )
 

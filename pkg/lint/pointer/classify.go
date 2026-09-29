@@ -11,14 +11,14 @@ func Classify(
 	s string,
 	roots []string,
 ) constant.PointerClass {
-	if strings.Contains(s, "://") {
-		return constant.PointerClassLocator
-	}
-
 	trimmed, plugin := strings.CutPrefix(s, constant.PluginRootPrefix)
 
 	if strings.ContainsAny(trimmed, "<>*$") {
 		return constant.PointerClassPlaceholder
+	}
+
+	if strings.Contains(s, "://") {
+		return constant.PointerClassLocator
 	}
 
 	if strings.HasPrefix(trimmed, constant.SchemeGo) {

@@ -4,7 +4,7 @@ import "github.com/funtimecoding/soil/pkg/lint/constant"
 
 func (r *Resolver) Resolve(
 	path string,
-	bases []string,
+	d *Declared,
 	c *Candidate,
 ) *Resolution {
 	if c.Link && !IsPath(c.Span) {
@@ -12,12 +12,14 @@ func (r *Resolver) Resolve(
 	}
 
 	switch Classify(c.Span, r.Roots) {
+	case constant.PointerClassLocator:
+		return resolveLocator(d.Hosts, c.Span)
 	case constant.PointerClassShort:
-		return r.resolveShort(path, bases, c.Span)
+		return r.resolveShort(path, d.Bases, c.Span)
 	case constant.PointerClassCommand:
-		return r.resolveCommand(c.Span)
+		return r.resolveCommand(d.Commands, c.Span)
 	case constant.PointerClassRoute:
-		return r.resolveRoute(bases, c.Span)
+		return r.resolveRoute(d.Bases, c.Span)
 	case constant.PointerClassSystem:
 		return resolveSystem(c.Span)
 	case constant.PointerClassPath:

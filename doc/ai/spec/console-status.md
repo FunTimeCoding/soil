@@ -1,3 +1,9 @@
+---
+hosts:
+- jira.example.com
+- grafana.example.com
+---
+
 # Console Status Spec
 
 Fluent builder for structured single-line console output with optional detail lines.

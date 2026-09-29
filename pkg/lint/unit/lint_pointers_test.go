@@ -823,3 +823,150 @@ func TestPointersBareLinkAnchorSuffix(t *testing.T) {
 	)
 	assertReport(t, "doc/guide/index.md", false, nil, "", l)
 }
+
+func TestPointersHostDeclared(t *testing.T) {
+	l := pointer_tester.Checker()(
+		constant.UpperAlfa,
+		strings.NewReader(
+			"---\nhosts: alfa.example\n---\nStatus at `https://alfa.example/api/v2/status` and [console](http://alfa.example:8080/console).\n",
+		),
+	)
+	assertReport(t, "Alfa", false, nil, "", l)
+}
+
+func TestPointersHostDeclaredList(t *testing.T) {
+	l := pointer_tester.Checker()(
+		constant.UpperAlfa,
+		strings.NewReader(
+			"---\nhosts:\n- alfa.example\n- bravo.example\n---\nMirrors `https://alfa.example/` and `https://user:secret@bravo.example/`.\n",
+		),
+	)
+	assertReport(t, "Alfa", false, nil, "", l)
+}
+
+func TestPointersHostUndeclared(t *testing.T) {
+	line := "Status at `https://ghost.example/api/v2/status` today."
+	l := pointer_tester.Checker()(
+		constant.UpperAlfa,
+		strings.NewReader(fmt.Sprintf("%s\n", line)),
+	)
+	assertReport(
+		t,
+		"Alfa",
+		true,
+		pointer_tester.UndeclaredHost("Alfa", 1, line, 1),
+		"",
+		l,
+	)
+}
+
+func TestPointersHostUndeclaredLink(t *testing.T) {
+	line := "See [ticket](https://ghost.example/browse/X-1) first."
+	l := pointer_tester.Checker()(
+		constant.UpperAlfa,
+		strings.NewReader(
+			fmt.Sprintf("---\nhosts: other.example\n---\n%s\n", line),
+		),
+	)
+	assertReport(
+		t,
+		"Alfa",
+		true,
+		pointer_tester.UndeclaredHost("Alfa", 4, line, 1),
+		"",
+		l,
+	)
+}
+
+func TestPointersHostImplicit(t *testing.T) {
+	l := pointer_tester.Checker()(
+		constant.UpperAlfa,
+		strings.NewReader(
+			"Listens on `http://localhost:8090/mcp` and `http://127.0.0.1:9191`.\n",
+		),
+	)
+	assertReport(t, "Alfa", false, nil, "", l)
+}
+
+func TestPointersHostPlaceholder(t *testing.T) {
+	l := pointer_tester.Checker()(
+		constant.UpperAlfa,
+		strings.NewReader(
+			"Fetch `https://$DD_HOST/api/v2/products/` or `https://<master>:443`.\n",
+		),
+	)
+	assertReport(t, "Alfa", false, nil, "", l)
+}
+
+func TestPointersSchemeTallies(t *testing.T) {
+	checker, seen := pointer_tester.Recording()
+	l := checker(
+		constant.UpperAlfa,
+		strings.NewReader(
+			"Resource `guide://summary`, share `smb://files.example/team`, link `tcp://10.0.0.1:8080`.\n",
+		),
+	)
+	assertReport(t, "Alfa", false, nil, "", l)
+	assert.Strings(
+		t,
+		[]string{
+			"Alfa:1 scheme guide://summary",
+			"Alfa:1 scheme smb://files.example/team",
+			"Alfa:1 scheme tcp://10.0.0.1:8080",
+		},
+		*seen,
+	)
+}
+
+func TestPointersCommandDeclared(t *testing.T) {
+	checker, count := pointer_tester.Counting()
+	l := checker(
+		constant.UpperAlfa,
+		strings.NewReader(
+			"---\ncommands:\n- /nodes\n- /migration\n---\nThe ACL applies to `/nodes` and the `/migration` znode stays absent.\n",
+		),
+	)
+	assertReport(t, "Alfa", false, nil, "", l)
+	assert.Integer(t, 0, *count)
+}
+
+func TestPointersCommandDeclaredScalar(t *testing.T) {
+	checker, count := pointer_tester.Counting()
+	l := checker(
+		constant.UpperAlfa,
+		strings.NewReader(
+			"---\ncommands: /compact\n---\nThe harness handles `/compact` itself and `/ghost` stays dead.\n",
+		),
+	)
+	assertReport(
+		t,
+		"Alfa",
+		true,
+		pointer_tester.DeadAt(
+			"Alfa",
+			4,
+			"The harness handles `/compact` itself and `/ghost` stays dead.",
+		),
+		"",
+		l,
+	)
+	assert.Integer(t, 0, *count)
+}
+
+func TestPointersHostMalformed(t *testing.T) {
+	line := "Broken at `https://alfa.example:port/status` today."
+	l := pointer_tester.Checker()(
+		constant.UpperAlfa,
+		strings.NewReader(
+			fmt.Sprintf("---\nhosts: alfa.example\n---\n%s\n", line),
+		),
+	)
+	assertReport(
+		t,
+		"Alfa",
+		true,
+		pointer_tester.UndeclaredHost("Alfa", 4, line, 1),
+		"",
+		l,
+	)
+}

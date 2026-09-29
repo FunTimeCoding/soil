@@ -7,7 +7,14 @@ import (
 	"strings"
 )
 
-func (r *Resolver) resolveCommand(candidate string) *Resolution {
+func (r *Resolver) resolveCommand(
+	declared []string,
+	candidate string,
+) *Resolution {
+	if slices.Contains(declared, candidate) {
+		return &Resolution{Verdict: constant.VerdictLive}
+	}
+
 	name := strings.TrimPrefix(candidate, stringsConstant.Slash)
 
 	if slices.Contains(constant.HarnessCommands, name) {

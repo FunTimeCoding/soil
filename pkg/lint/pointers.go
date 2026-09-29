@@ -6,7 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/file_report"
 	"github.com/funtimecoding/soil/pkg/lint/pointer"
 	"github.com/funtimecoding/soil/pkg/markup/front_matter"
-	"github.com/funtimecoding/soil/pkg/strings/split"
 	"io"
 	"strings"
 )
@@ -28,7 +27,7 @@ func Pointers(
 		errors.PanicOnError(e)
 		content := string(b)
 		s := file_report.New(path, strings.NewReader(content))
-		var bases []string
+		declared := pointer.NewDeclared()
 		dead := 0
 		baseLine := 0
 		skip := 0
@@ -39,21 +38,16 @@ func Pointers(
 			var d declaration
 
 			if f.Decode(&d) == nil {
-				for _, declared := range d.Base {
-					for _, value := range split.Comma(declared) {
-						value = strings.TrimSpace(value)
-
-						if value == "" {
-							continue
-						}
-
-						if r.BaseExists(value) {
-							bases = append(bases, value)
-						} else {
-							dead++
-						}
+				for _, value := range declaredValues(d.Base) {
+					if r.BaseExists(value) {
+						declared.Bases = append(declared.Bases, value)
+					} else {
+						dead++
 					}
 				}
+
+				declared.Hosts = declaredValues(d.Hosts)
+				declared.Commands = declaredValues(d.Commands)
 			}
 		}
 
@@ -79,7 +73,7 @@ func Pointers(
 
 			for _, c := range pointer.Extract(line) {
 				for _, expanded := range pointer.Expand(c) {
-					v := r.Resolve(path, bases, expanded)
+					v := r.Resolve(path, declared, expanded)
 
 					if v.Verdict == constant.VerdictTallied {
 						unchecked(path, number, expanded.Span, v.Reason)

@@ -8,6 +8,7 @@ const (
 	ReasonNetwork    Reason = "network"
 	ReasonPattern    Reason = "pattern"
 	ReasonRoute      Reason = "route"
+	ReasonScheme     Reason = "scheme"
 	ReasonSlash      Reason = "slash"
 	ReasonSystem     Reason = "system"
 	ReasonUnanchored Reason = "unanchored"
