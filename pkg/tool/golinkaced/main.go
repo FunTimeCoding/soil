@@ -1,0 +1,27 @@
+package golinkaced
+
+import (
+	"github.com/funtimecoding/soil/pkg/argument"
+	"github.com/funtimecoding/soil/pkg/instrument"
+	"github.com/funtimecoding/soil/pkg/linkace"
+	"github.com/funtimecoding/soil/pkg/tool/golinkaced/constant"
+	"github.com/funtimecoding/soil/pkg/tool/golinkaced/option"
+	"github.com/funtimecoding/soil/pkg/web"
+)
+
+func Main(
+	version string,
+	gitHash string,
+	buildDate string,
+) {
+	s := instrument.New(constant.Identity, version)
+	defer func() { s.Flush(recover()) }()
+	a := argument.NewInstance(constant.Identity)
+	a.Web()
+	a.Parse(version, gitHash, buildDate)
+	o := option.New()
+	o.Address = a.Address()
+	o.ServiceTokens = web.ServiceTokens()
+	o.Version = version
+	Run(o, linkace.NewEnvironment(), s)
+}

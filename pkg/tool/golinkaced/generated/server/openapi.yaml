@@ -1,0 +1,773 @@
+---
+openapi: "3.0.0"
+info:
+  title: golinkaced
+  version: 1.0.0
+paths:
+  /api/links:
+    get:
+      operationId: getLinks
+      parameters:
+      - name: list
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+        description: List ID to filter by.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+        description: Page number (1-based).
+      responses:
+        "200":
+          description: Links in the list, or all links.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LinkPage"
+        "500":
+          description: Failed to fetch links.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/search:
+    get:
+      operationId: search
+      parameters:
+      - name: query
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Search query string.
+      - name: type
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Entity type to search (link, list, tag). Omit for all.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+        description: Page number for link results (1-based).
+      responses:
+        "200":
+          description: Search results.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchResult"
+        "500":
+          description: Failed to search.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/links/add:
+    post:
+      operationId: addLink
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddLinkRequest"
+      responses:
+        "200":
+          description: Created link.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Link"
+        "500":
+          description: Failed to add link.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/links/{identifier}:
+    put:
+      operationId: editLink
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        description: Link ID.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EditLinkRequest"
+      responses:
+        "200":
+          description: Updated link.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Link"
+        "500":
+          description: Failed to edit link.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteLink
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        description: Link ID.
+      responses:
+        "200":
+          description: Link deleted.
+        "500":
+          description: Failed to delete link.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/links/{identifier}/notes:
+    get:
+      operationId: getLinkNotes
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        description: Link ID.
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+        description: Page number (1-based).
+      responses:
+        "200":
+          description: Notes for the link.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NotePage"
+        "500":
+          description: Failed to fetch notes.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/links/{identifier}/tags/append:
+    post:
+      operationId: appendTag
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        description: Link ID.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TagNameRequest"
+      responses:
+        "200":
+          description: Updated link.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Link"
+        "500":
+          description: Failed to append tag.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/links/{identifier}/tags/remove:
+    post:
+      operationId: removeTag
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        description: Link ID.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TagNameRequest"
+      responses:
+        "200":
+          description: Updated link.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Link"
+        "500":
+          description: Failed to remove tag.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/links/{identifier}/lists/append:
+    post:
+      operationId: appendList
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        description: Link ID.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ListNameRequest"
+      responses:
+        "200":
+          description: Updated link.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Link"
+        "500":
+          description: Failed to append list.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/links/{identifier}/lists/remove:
+    post:
+      operationId: removeList
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        description: Link ID.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ListNameRequest"
+      responses:
+        "200":
+          description: Updated link.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Link"
+        "500":
+          description: Failed to remove list.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/lists:
+    get:
+      operationId: getLists
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+        description: Page number (1-based).
+      responses:
+        "200":
+          description: All lists.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ListPage"
+        "500":
+          description: Failed to fetch lists.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: createList
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateListRequest"
+      responses:
+        "200":
+          description: Created list.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/List"
+        "500":
+          description: Failed to create list.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/lists/{identifier}:
+    put:
+      operationId: editList
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        description: List ID.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EditListRequest"
+      responses:
+        "200":
+          description: Updated list.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/List"
+        "500":
+          description: Failed to edit list.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteList
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        description: List ID.
+      responses:
+        "200":
+          description: List deleted.
+        "500":
+          description: Failed to delete list.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/lists/{identifier}/branch:
+    delete:
+      operationId: deleteBranch
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        description: List ID.
+      responses:
+        "200":
+          description: List and all its links deleted.
+        "500":
+          description: Failed to delete branch.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/tags:
+    get:
+      operationId: getTags
+      parameters:
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+        description: Page number (1-based).
+      responses:
+        "200":
+          description: All tags.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TagPage"
+        "500":
+          description: Failed to fetch tags.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: createTag
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateTagRequest"
+      responses:
+        "200":
+          description: Created tag.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tag"
+        "500":
+          description: Failed to create tag.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/tags/{identifier}:
+    put:
+      operationId: editTag
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        description: Tag ID.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EditTagRequest"
+      responses:
+        "200":
+          description: Updated tag.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tag"
+        "500":
+          description: Failed to edit tag.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteTag
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        description: Tag ID.
+      responses:
+        "200":
+          description: Tag deleted.
+        "500":
+          description: Failed to delete tag.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/notes:
+    post:
+      operationId: addNote
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddNoteRequest"
+      responses:
+        "200":
+          description: Created note.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Note"
+        "500":
+          description: Failed to add note.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/notes/{identifier}:
+    put:
+      operationId: editNote
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        description: Note ID.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EditNoteRequest"
+      responses:
+        "200":
+          description: Updated note.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Note"
+        "500":
+          description: Failed to edit note.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteNote
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int32
+        description: Note ID.
+      responses:
+        "200":
+          description: Note deleted.
+        "500":
+          description: Failed to delete note.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    Link:
+      type: object
+      required:
+      - identifier
+      - name
+      - link
+      properties:
+        identifier:
+          type: integer
+          format: int32
+        name:
+          type: string
+        link:
+          type: string
+    List:
+      type: object
+      required:
+      - identifier
+      - name
+      properties:
+        identifier:
+          type: integer
+          format: int32
+        name:
+          type: string
+    Tag:
+      type: object
+      required:
+      - identifier
+      - name
+      properties:
+        identifier:
+          type: integer
+          format: int32
+        name:
+          type: string
+    Note:
+      type: object
+      required:
+      - identifier
+      - text
+      properties:
+        identifier:
+          type: integer
+          format: int32
+        text:
+          type: string
+    LinkPage:
+      type: object
+      properties:
+        total:
+          type: integer
+        links:
+          type: array
+          items:
+            $ref: "#/components/schemas/Link"
+    ListPage:
+      type: object
+      properties:
+        total:
+          type: integer
+        lists:
+          type: array
+          items:
+            $ref: "#/components/schemas/List"
+    TagPage:
+      type: object
+      properties:
+        total:
+          type: integer
+        tags:
+          type: array
+          items:
+            $ref: "#/components/schemas/Tag"
+    NotePage:
+      type: object
+      properties:
+        total:
+          type: integer
+        notes:
+          type: array
+          items:
+            $ref: "#/components/schemas/Note"
+    AddLinkRequest:
+      type: object
+      required:
+      - link
+      properties:
+        list:
+          type: string
+          description: List name or ID.
+        name:
+          type: string
+        link:
+          type: string
+    EditLinkRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        link:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        lists:
+          type: array
+          items:
+            type: string
+    TagNameRequest:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: Tag name.
+    ListNameRequest:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          description: List name.
+    CreateListRequest:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+    EditListRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+    CreateTagRequest:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+    EditTagRequest:
+      type: object
+      properties:
+        name:
+          type: string
+    AddNoteRequest:
+      type: object
+      required:
+      - link_identifier
+      - text
+      properties:
+        link_identifier:
+          type: integer
+          format: int32
+        text:
+          type: string
+    EditNoteRequest:
+      type: object
+      required:
+      - text
+      properties:
+        text:
+          type: string
+    SearchResult:
+      type: object
+      properties:
+        links:
+          type: array
+          items:
+            $ref: "#/components/schemas/Link"
+        lists:
+          type: array
+          items:
+            $ref: "#/components/schemas/List"
+        tags:
+          type: array
+          items:
+            $ref: "#/components/schemas/Tag"
+    ErrorResponse:
+      type: object
+      required: [error, event_identifier]
+      properties:
+        error:
+          type: string
+        event_identifier:
+          type: string
