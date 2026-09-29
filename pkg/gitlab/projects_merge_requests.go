@@ -2,18 +2,24 @@ package gitlab
 
 import "github.com/funtimecoding/soil/pkg/gitlab/merge_request"
 
-func (c *Client) ProjectsMergeRequests() []*merge_request.Request {
+func (c *Client) ProjectsMergeRequests() ([]*merge_request.Request, error) {
 	var result []*merge_request.Request
 
 	for _, identifier := range c.projects {
-		for _, e := range c.MustProjectMergeRequests(identifier, "") {
-			if e.Done() {
+		requests, e := c.ProjectMergeRequests(identifier, "")
+
+		if e != nil {
+			return nil, e
+		}
+
+		for _, r := range requests {
+			if r.Done() {
 				continue
 			}
 
-			result = append(result, e)
+			result = append(result, r)
 		}
 	}
 
-	return result
+	return result, nil
 }

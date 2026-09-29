@@ -10,7 +10,7 @@ func MergeRequest() {
 	g := gitlab.NewEnvironment()
 	f := constant.Format
 
-	for _, r := range g.ProjectsMergeRequests() {
+	for _, r := range g.MustProjectsMergeRequests() {
 		console.Line(r.Format(f))
 	}
 }

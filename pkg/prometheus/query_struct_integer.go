@@ -11,20 +11,25 @@ func (c *Client) QueryStructInteger(
 	q string,
 	fallback int,
 	t time.Time,
-) *integer.Result {
-	result := parse.Generic(c.MustQuery(q, t).Value)
+) (*integer.Result, error) {
+	v, e := c.Query(q, t)
 
-	if len(result) == 0 {
-		r := integer.New()
-		r.Value = fallback
-
-		return r
+	if e != nil {
+		return nil, e
 	}
 
+	result := parse.Generic(v.Value)
 	r := integer.New()
+
+	if len(result) == 0 {
+		r.Value = fallback
+
+		return r, nil
+	}
+
 	r.Time = result[0].Time
 	r.Value = strings.ToInteger(result[0].Value, fallback)
 	r.Raw = result[0]
 
-	return r
+	return r, nil
 }

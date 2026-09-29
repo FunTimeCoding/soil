@@ -8,10 +8,12 @@ import (
 func (c *Client) enrichProjectJobs(
 	v []*job.Job,
 	p *project.Project,
-) []*job.Job {
+) ([]*job.Job, error) {
 	for _, j := range v {
-		c.enrichProjectJob(j, p)
+		if _, e := c.enrichProjectJob(j, p); e != nil {
+			return nil, e
+		}
 	}
 
-	return v
+	return v, nil
 }

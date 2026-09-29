@@ -12,5 +12,5 @@ func (c *Client) ProjectJobs(p *project.Project) ([]*job.Job, error) {
 		return nil, wrapError(e)
 	}
 
-	return c.enrichProjectJobs(job.NewSlice(result), p), nil
+	return c.enrichProjectJobs(job.NewSlice(result), p)
 }

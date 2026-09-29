@@ -425,9 +425,13 @@ complete answer, not a miss. Examples: `FindBranchRequest`,
 `FindPostBefore`, `FindSession`, `FindLatestPulse`,
 `FindDocument`, `FileExists`.
 
-Helper methods that iterate over results (e.g. `CollectionByName`,
-`TagByName`) call the Must variants internally since their callers
-expect panics.
+Helpers that compose other calls (`ProjectsWithFile`, `Jobs`,
+`RunnersByTag`) follow the same pair: the plain form composes the
+plain variants and returns the first error, and a Must twin panics
+on it. A method body never calls a Must variant - the panic belongs
+to the caller's choice of variant, not to the helper, and a plain
+signature that panics underneath breaks the MCP and REST callers
+the pair exists for.
 
 ## Internal REST Client
 

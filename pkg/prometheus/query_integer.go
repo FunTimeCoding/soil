@@ -1,24 +1,31 @@
 package prometheus
 
-import "time"
+import (
+	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"time"
+)
 
 func (c *Client) QueryInteger(
 	q string,
 	t time.Time,
-) int {
-	result := c.QueryIntegers(q, t)
+) (int, error) {
+	result, e := c.QueryIntegers(q, t)
 
-	if len(result) == 0 {
-		return 0
+	if e != nil {
+		return 0, e
 	}
 
 	if len(result) > 1 {
-		panic("more than one result")
+		return 0, validation.New(
+			"query %s returned %d series, expected one",
+			q,
+			len(result),
+		)
 	}
 
 	for _, v := range result {
-		return v
+		return v, nil
 	}
 
-	return 0
+	return 0, nil
 }

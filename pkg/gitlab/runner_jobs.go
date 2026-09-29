@@ -47,5 +47,5 @@ func (c *Client) RunnerJobs(
 		number++
 	}
 
-	return c.enrichJobs(job.NewSlice(result)), nil
+	return c.enrichJobs(job.NewSlice(result))
 }

@@ -9,12 +9,23 @@ import (
 func (c *Client) QueryFloats(
 	q string,
 	t time.Time,
-) map[string]float64 {
+) (map[string]float64, error) {
 	result := make(map[string]float64)
+	v, e := c.Query(q, t)
 
-	for _, r := range parse.Generic(c.MustQuery(q, t).Value) {
-		result[r.Metric] = strings.MustToFloat(r.Value)
+	if e != nil {
+		return nil, e
 	}
 
-	return result
+	for _, r := range parse.Generic(v.Value) {
+		value, f := strings.ParseFloat(r.Value)
+
+		if f != nil {
+			return nil, f
+		}
+
+		result[r.Metric] = value
+	}
+
+	return result, nil
 }

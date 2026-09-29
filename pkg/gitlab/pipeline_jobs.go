@@ -19,8 +19,11 @@ func (c *Client) PipelineJobs(
 		return nil, wrapError(e)
 	}
 
-	return c.enrichProjectJobs(
-		job.NewSlice(result),
-		c.MustProject(project),
-	), nil
+	p, f := c.Project(project)
+
+	if f != nil {
+		return nil, f
+	}
+
+	return c.enrichProjectJobs(job.NewSlice(result), p)
 }

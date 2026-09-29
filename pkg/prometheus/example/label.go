@@ -8,7 +8,7 @@ import (
 func Label() {
 	console.Line("Labels:")
 
-	for _, m := range prometheus.NewEnvironment().AllLabels() {
+	for _, m := range prometheus.NewEnvironment().MustAllLabels() {
 		console.Format("  %s\n", m)
 	}
 }

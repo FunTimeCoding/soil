@@ -12,5 +12,5 @@ func (c *Client) Retry(
 		return nil, wrapError(e)
 	}
 
-	return c.enrichJob(job.New(result)), nil
+	return c.enrichJob(job.New(result))
 }

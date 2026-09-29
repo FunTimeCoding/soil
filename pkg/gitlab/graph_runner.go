@@ -5,9 +5,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/gitlab/response"
 )
 
-func (c *Client) GraphRunner(identifier int64) *response.Runner {
+func (c *Client) GraphRunner(identifier int64) (*response.Runner, error) {
 	result := response.New()
-	c.MustQuery(
+	e := c.Query(
 		fmt.Sprintf(
 			"query {runner(id: \"gid://gitlab/Ci::Runner/%d\") { id description status runnerType managers { nodes { systemId ipAddress version revision } } } }",
 			identifier,
@@ -15,5 +15,9 @@ func (c *Client) GraphRunner(identifier int64) *response.Runner {
 		&result,
 	)
 
-	return result
+	if e != nil {
+		return nil, e
+	}
+
+	return result, nil
 }

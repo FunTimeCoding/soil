@@ -9,12 +9,23 @@ import (
 func (c *Client) QueryIntegers(
 	q string,
 	t time.Time,
-) map[string]int {
+) (map[string]int, error) {
 	result := make(map[string]int)
+	v, e := c.Query(q, t)
 
-	for _, r := range parse.Generic(c.MustQuery(q, t).Value) {
-		result[r.Metric] = strings.MustToInteger(r.Value)
+	if e != nil {
+		return nil, e
 	}
 
-	return result
+	for _, r := range parse.Generic(v.Value) {
+		value, f := strings.ParseInteger(r.Value)
+
+		if f != nil {
+			return nil, f
+		}
+
+		result[r.Metric] = value
+	}
+
+	return result, nil
 }

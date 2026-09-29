@@ -15,7 +15,7 @@ func Search() {
 	}
 
 	if true {
-		for _, r := range c.ActionRepository() {
+		for _, r := range c.MustActionRepository() {
 			console.Format("Code: %+v\n", *r.Raw.Name)
 		}
 	}

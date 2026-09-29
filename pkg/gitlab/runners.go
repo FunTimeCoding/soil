@@ -62,5 +62,5 @@ func (c *Client) Runners(all bool) ([]*runner.Runner, error) {
 		number++
 	}
 
-	return c.enrichRunners(runner.NewSlice(runner.Deduplicate(result))), nil
+	return c.enrichRunners(runner.NewSlice(runner.Deduplicate(result)))
 }

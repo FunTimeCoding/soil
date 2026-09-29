@@ -16,5 +16,5 @@ func collect(
 		o.Verbose = false
 	}
 
-	return monitor.OnlyConcerns(c.Runs(true, o.Verbose), o.All)
+	return monitor.OnlyConcerns(c.MustRuns(true, o.Verbose), o.All)
 }

@@ -1,12 +1,7 @@
 package prometheus
 
-import (
-	"github.com/funtimecoding/soil/pkg/prometheus/parse"
-	"time"
-)
+import "time"
 
-func (c *Client) QueryVector(q string) float64 {
-	return parse.VectorFloatSingle(
-		c.MustQuery(q, time.Now().Add(-time.Hour)).Value,
-	)
+func (c *Client) QueryVector(q string) (float64, error) {
+	return c.QueryFloat(q, time.Now().Add(-time.Hour))
 }

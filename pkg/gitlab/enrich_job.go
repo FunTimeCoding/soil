@@ -1,14 +1,28 @@
 package gitlab
 
-import "github.com/funtimecoding/soil/pkg/gitlab/job"
+import (
+	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"github.com/funtimecoding/soil/pkg/gitlab/job"
+)
 
-func (c *Client) enrichJob(j *job.Job) *job.Job {
-	if j.Raw.Project.ID == 0 {
-		panic("project cannot be 0")
+func (c *Client) enrichJob(j *job.Job) (*job.Job, error) {
+	identifier := j.ProjectIdentifier()
+
+	if identifier == 0 {
+		return nil, validation.New("job %d has no project", j.Identifier)
 	}
 
-	j.Project = c.MustProject(j.Raw.Project.ID)
-	c.enrichJobCommon(j)
+	p, e := c.Project(identifier)
 
-	return j
+	if e != nil {
+		return nil, e
+	}
+
+	j.Project = p
+
+	if f := c.enrichJobCommon(j); f != nil {
+		return nil, f
+	}
+
+	return j, nil
 }

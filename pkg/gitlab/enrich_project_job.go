@@ -8,9 +8,12 @@ import (
 func (c *Client) enrichProjectJob(
 	j *job.Job,
 	p *project.Project,
-) *job.Job {
+) (*job.Job, error) {
 	j.Project = p
-	c.enrichJobCommon(j)
 
-	return j
+	if e := c.enrichJobCommon(j); e != nil {
+		return nil, e
+	}
+
+	return j, nil
 }

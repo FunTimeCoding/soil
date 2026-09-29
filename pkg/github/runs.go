@@ -10,21 +10,44 @@ import (
 func (c *Client) Runs(
 	loadJobs bool,
 	verbose bool,
-) []*run.Run {
+) ([]*run.Run, error) {
 	var result []*run.Run
 	cleanup := forge.AutoCleanup()
 	f := constant.Format
-	owner := c.MustUser().Name
+	u, e := c.User()
 
-	for _, a := range c.ActionRepository() {
+	if e != nil {
+		return nil, e
+	}
+
+	owner := u.Name
+	repositories, g := c.ActionRepository()
+
+	if g != nil {
+		return nil, g
+	}
+
+	for _, a := range repositories {
 		if verbose {
 			console.Format("Repository: %s/%s\n", owner, a.Name)
 		}
 
-		for i, r := range c.MustProjectRuns(owner, a.Name) {
+		runs, h := c.ProjectRuns(owner, a.Name)
+
+		if h != nil {
+			return nil, h
+		}
+
+		for i, r := range runs {
 			if i > 0 {
 				if cleanup {
-					c.MustDeleteRun(owner, a.Name, r.Identifier)
+					if deleteFail := c.DeleteRun(
+						owner,
+						a.Name,
+						r.Identifier,
+					); deleteFail != nil {
+						return nil, deleteFail
+					}
 				}
 
 				continue
@@ -35,7 +58,13 @@ func (c *Client) Runs(
 			}
 
 			if loadJobs {
-				r.Jobs = c.MustJobs(owner, a.Name, r.Identifier)
+				jobs, jobFail := c.Jobs(owner, a.Name, r.Identifier)
+
+				if jobFail != nil {
+					return nil, jobFail
+				}
+
+				r.Jobs = jobs
 			}
 
 			r.Validate()
@@ -43,5 +72,5 @@ func (c *Client) Runs(
 		}
 	}
 
-	return result
+	return result, nil
 }

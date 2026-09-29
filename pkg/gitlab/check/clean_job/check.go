@@ -5,6 +5,7 @@ import (
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/console"
 	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/gitlab"
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"os"
@@ -33,9 +34,10 @@ func Check() {
 		os.Exit(1)
 	}
 
-	r := g.RunnerByDescriptionMatch(m)
+	r, found, e := g.FindRunnerByDescription(m)
+	errors.PanicOnError(e)
 
-	if r == nil {
+	if !found {
 		console.Line("No runner match")
 		os.Exit(1)
 	}

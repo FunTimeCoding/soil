@@ -50,5 +50,5 @@ func Query() {
 		&runner,
 	)
 	console.Format("Response: %+v\n", runner)
-	console.Format("Runner: %+v\n", c.GraphRunner(1))
+	console.Format("Runner: %+v\n", c.MustGraphRunner(1))
 }

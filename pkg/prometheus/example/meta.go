@@ -13,7 +13,7 @@ func Meta() {
 	console.Line("Metadata")
 	m := make(map[string][]string)
 
-	for _, n := range c.AllMetrics() {
+	for _, n := range c.MustAllMetrics() {
 		for k, elements := range c.MustMetadata(n) {
 			console.Format("  %s\n", k)
 			prefix, _ := key_value.Underscore(k)

@@ -9,19 +9,31 @@ import (
 func (c *Client) ProjectsWithFile(
 	path string,
 	caseInsensitive bool,
-) []*project.Project {
+) ([]*project.Project, error) {
 	var result []*project.Project
 
 	if caseInsensitive {
 		path = strings.ToLower(path)
 	}
 
-	for _, p := range c.MustProjects() {
+	projects, e := c.Projects()
+
+	if e != nil {
+		return nil, e
+	}
+
+	for _, p := range projects {
 		if c.verbose {
 			console.Format("Project: %s\n", p.Raw.NameWithNamespace)
 		}
 
-		for _, n := range c.MustTree(p.Identifier) {
+		nodes, f := c.Tree(p.Identifier, "", "", false, 0)
+
+		if f != nil {
+			return nil, f
+		}
+
+		for _, n := range nodes {
 			if path == n.Path ||
 				(caseInsensitive && path == strings.ToLower(n.Path)) {
 				result = append(result, p)
@@ -31,5 +43,5 @@ func (c *Client) ProjectsWithFile(
 		}
 	}
 
-	return result
+	return result, nil
 }

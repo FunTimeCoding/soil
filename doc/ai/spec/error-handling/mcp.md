@@ -62,7 +62,8 @@ depending on its API:
 
 - Sentry, Habitica, Jellyfin, Confluence: `*detail_error.Detail`
   from `parseDetail` in the HTTP client
-- GitLab: `*gitlab.ErrorResponse` → `e.Message`
+- GitLab: `*detail_error.Detail` from `wrapError` in the client,
+  `*gitlab.ErrorResponse` → `e.Message` where a call bypasses it
 - Mattermost: `*model.AppError` → `e.Message`
 - NetBox: `*netbox.GenericOpenAPIError` → `common.ExtractMessage`
   parses `detail` string, then field-level validation errors

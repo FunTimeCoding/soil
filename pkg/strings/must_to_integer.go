@@ -1,16 +1,11 @@
 package strings
 
-import (
-	"strconv"
-	"strings"
-)
-
 func MustToInteger(s string) int {
-	result, e := strconv.ParseInt(strings.TrimSpace(s), 10, 32)
+	result, e := ParseInteger(s)
 
 	if e != nil {
 		panic(e)
 	}
 
-	return int(result)
+	return result
 }

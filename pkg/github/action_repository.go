@@ -2,15 +2,26 @@ package github
 
 import "github.com/funtimecoding/soil/pkg/github/repository"
 
-func (c *Client) ActionRepository() []*repository.Repository {
+func (c *Client) ActionRepository() ([]*repository.Repository, error) {
 	var result []*repository.Repository
+	u, e := c.User()
 
-	for _, o := range c.MustSearchCode(
+	if e != nil {
+		return nil, e
+	}
+
+	codes, f := c.SearchCode(
 		"actions/checkout user:%s in:file language:yaml",
-		c.MustUser().Name,
-	) {
+		u.Name,
+	)
+
+	if f != nil {
+		return nil, f
+	}
+
+	for _, o := range codes {
 		result = append(result, repository.New(o.Raw.Repository))
 	}
 
-	return result
+	return result, nil
 }

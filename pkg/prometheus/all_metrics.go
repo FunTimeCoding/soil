@@ -5,10 +5,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 )
 
-func (c *Client) AllMetrics() []string {
-	return c.MustLabelValues(
-		constant.Name,
-		[]string{},
-		library.StartOfTime,
-	).Values
+func (c *Client) AllMetrics() ([]string, error) {
+	result, e := c.LabelValues(constant.Name, []string{}, library.StartOfTime)
+
+	if e != nil {
+		return nil, e
+	}
+
+	return result.Values, nil
 }

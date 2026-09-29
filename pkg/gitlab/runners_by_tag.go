@@ -5,16 +5,25 @@ import (
 	"slices"
 )
 
-func (c *Client) RunnersByTag(tag string) []*runner.Runner {
+func (c *Client) RunnersByTag(tag string) ([]*runner.Runner, error) {
 	var result []*runner.Runner
+	runners, e := c.Runners(true)
 
-	for _, r := range c.MustRunners(true) {
-		r = c.MustRunner(r.Identifier)
+	if e != nil {
+		return nil, e
+	}
 
-		if slices.Contains(r.Tags, tag) {
-			result = append(result, r)
+	for _, r := range runners {
+		detail, f := c.Runner(r.Identifier)
+
+		if f != nil {
+			return nil, f
+		}
+
+		if slices.Contains(detail.Tags, tag) {
+			result = append(result, detail)
 		}
 	}
 
-	return c.enrichRunners(result)
+	return result, nil
 }

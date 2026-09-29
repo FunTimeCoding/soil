@@ -7,20 +7,36 @@ import (
 	"github.com/funtimecoding/soil/pkg/gitlab/job"
 )
 
-func (c *Client) Jobs() []*job.Job {
+func (c *Client) Jobs() ([]*job.Job, error) {
 	var result []*job.Job
 	cleanup := forge.AutoCleanup()
 	f := constant.Format
+	projects, e := c.PipelineProjects()
 
-	for _, p := range c.PipelineProjects() {
+	if e != nil {
+		return nil, e
+	}
+
+	for _, p := range projects {
 		if c.verbose {
 			console.Format("Project: %s\n", p.Raw.NameWithNamespace)
 		}
 
-		for i, j := range c.MustProjectJobs(p) {
+		jobs, g := c.ProjectJobs(p)
+
+		if g != nil {
+			return nil, g
+		}
+
+		for i, j := range jobs {
 			if i > 0 {
 				if cleanup {
-					c.MustDeletePipeline(p.Identifier, j.Raw.Pipeline.ID)
+					if h := c.DeletePipeline(
+						p.Identifier,
+						j.Raw.Pipeline.ID,
+					); h != nil {
+						return nil, h
+					}
 				}
 
 				continue
@@ -34,5 +50,5 @@ func (c *Client) Jobs() []*job.Job {
 		}
 	}
 
-	return result
+	return result, nil
 }

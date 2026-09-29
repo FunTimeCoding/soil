@@ -9,5 +9,5 @@ func (c *Client) Runner(identifier int64) (*runner.Runner, error) {
 		return nil, wrapError(e)
 	}
 
-	return c.enrichRunner(runner.NewDetail(result)), nil
+	return c.enrichRunner(runner.NewDetail(result))
 }
