@@ -1,0 +1,14 @@
+package chromium
+
+import (
+	"github.com/funtimecoding/soil/pkg/chromium/constant"
+	"github.com/funtimecoding/soil/pkg/strings"
+	"github.com/funtimecoding/soil/pkg/system/environment"
+)
+
+func ListeningEnvironment() bool {
+	return Listening(
+		environment.Required(constant.HostEnvironment),
+		strings.MustToInteger(environment.Required(constant.PortEnvironment)),
+	)
+}

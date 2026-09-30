@@ -19,8 +19,3 @@ const (
 )
 
 const Path = "/api/websocket"
-const (
-	EventContext = "event"
-	TypeKey      = "type"
-	RawKey       = "raw"
-)

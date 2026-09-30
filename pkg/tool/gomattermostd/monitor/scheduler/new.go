@@ -1,6 +1,7 @@
 package scheduler
 
 import (
+	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/robfig/cron/v3"
@@ -15,8 +16,7 @@ func New(
 	return &Scheduler{
 		schedule: schedule,
 		task:     task,
-		logger:   l,
-		reporter: r,
+		recovery: recovery.New(l, r),
 		cron:     cron.New(),
 	}
 }

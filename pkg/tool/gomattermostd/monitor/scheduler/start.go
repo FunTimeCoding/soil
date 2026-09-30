@@ -10,18 +10,7 @@ func (s *Scheduler) Start() {
 		panic("scheduler already running")
 	}
 
-	entry, e := s.cron.AddFunc(
-		s.schedule,
-		func() {
-			defer func() {
-				if v := recover(); v != nil {
-					s.reporter.Recover(v)
-					s.logger.Plain("scheduler recovered from panic: %v", v)
-				}
-			}()
-			s.task()
-		},
-	)
+	entry, e := s.cron.AddFunc(s.schedule, func() { s.recovery.Run(s.task) })
 	errors.PanicOnError(e)
 	s.entry = entry
 	s.cron.Start()

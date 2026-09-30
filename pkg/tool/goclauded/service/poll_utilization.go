@@ -3,11 +3,6 @@ package service
 import "github.com/funtimecoding/soil/pkg/generative/anthropic/utilization"
 
 func (s *Service) PollUtilization() {
-	defer func() {
-		if r := recover(); r != nil {
-			s.logger.Structured("utilization poll failed", "error", r)
-		}
-	}()
 	c := utilization.ReadCredential()
 
 	if c == nil {

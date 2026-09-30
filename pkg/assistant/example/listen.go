@@ -1,14 +1,19 @@
 package example
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/assistant"
 	"github.com/funtimecoding/soil/pkg/assistant/message"
 	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/system"
 )
 
 func Listen() {
 	a := assistant.NewEnvironment(
+		logger.New(context.Background()),
+		memory.New(),
 		assistant.WithSubscriber(
 			func(m *message.Message) {
 				if m.Event == nil {
