@@ -4,11 +4,16 @@ base: pkg/tool
 
 # MCP error handling
 
-MCP handlers have no recovery middleware. Panics would crash the handler without
-producing a response. All errors must be translated to tool results.
+MCP tool handlers run without panic recovery of their own: mcp-go's
+recovery is an opt-in server option that is not enabled, so a panic
+escapes the handler and is caught by the HTTP recovery middleware,
+which answers an HTML 500 the model cannot read as a tool result.
+Every error a handler meets must therefore be translated to a tool
+result, and no client call a handler makes may panic underneath it -
+the Must/non-Must pair in `service-tool.md` exists for this.
 
-Do not add per-handler recover defers to MCP tools - the mcp-go framework
-handles recovery internally.
+Do not add per-handler recover defers as a workaround; the fix is
+in the client or in the server builder.
 
 Two tiers:
 
@@ -57,24 +62,21 @@ func (s *Server) captureDetail(e error) (*mcp.CallToolResult, error) {
 }
 ```
 
-Each service's `captureDetail` checks for different error types
-depending on its API:
+Each service's `captureDetail` whitelists the error types its own
+client produces - the inventory is the `capture_detail.go` file in
+every `<path>/model_context/` package, not this list. The shapes
+that recur:
 
-- Sentry, Habitica, Jellyfin, Confluence: `*detail_error.Detail`
-  from `parseDetail` in the HTTP client
-- GitLab: `*detail_error.Detail` from `wrapError` in the client,
-  `*gitlab.ErrorResponse` → `e.Message` where a call bypasses it
-- Mattermost: `*model.AppError` → `e.Message`
-- NetBox: `*netbox.GenericOpenAPIError` → `common.ExtractMessage`
-  parses `detail` string, then field-level validation errors
-  (`__all__` and per-field arrays). Shared between REST and MCP
-  surfaces via `gonetboxd/common/`.
-- Jira/Confluence (goatlassiand): `*jira.Error` → `jiraMessage`
-  (joins all ErrorMessages + Errors map with "; "),
-  `*detail_error.Detail`
-- Proxmox: sentinel errors via `errors.Is` (`ErrNotFound`,
-  `ErrNotAuthorized`, `ErrTimeout`)
-- GORM services: `gorm.ErrRecordNotFound` via `errors.Is`
+- a typed detail from the HTTP client, `*detail_error.Detail` from
+  `parseDetail` or a `wrapError` - the message field is relayed
+- a caller-contract error, `*validation.Detail` - relayed the same
+  way when the cause is upstream data rather than model input
+- an SDK error type with a message field, such as Mattermost's
+  `*model.AppError`
+- sentinel errors matched with `errors.Is` - a driver's not-found,
+  a context deadline, a client's own sentinels
+- a shared extractor when REST and MCP surfaces need the same
+  parsing, as gonetboxd's `common.ExtractMessage`
 
 Most handlers call `captureDetail(e)` directly:
 

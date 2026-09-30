@@ -331,10 +331,8 @@ const (
 ### Themes
 
 Theme constants (`Theme*` in `pkg/web/constant/`, one `theme_<name>.go` per palette) are pico.css custom property
-overrides. Each service picks one in its `New` (ThemeAmethyst, ThemeArchive,
-ThemeCortex, ThemeHearth, ThemeSentinel, ThemeSlate, ThemeSprout,
-ThemeTangerine, ThemeTyria - check the files for the current set).
-Additional palettes can be defined in downstream repos.
+overrides. Each service picks one in its `New`; the files are the
+current set. Additional palettes can be defined in downstream repos.
 
 Key conventions:
 - `Server` struct holds dependencies and a `*view.View`
@@ -400,13 +398,13 @@ External API client methods come in pairs:
 
 ```go
 // links.go
-func (c *Client) Links(collection int32) ([]*link.Link, error) {
+func (c *Client) Links() ([]*link.Link, error) {
     // ... returns error on failure
 }
 
 // must_links.go
-func (c *Client) MustLinks(collection int32) []*link.Link {
-    result, e := c.Links(collection)
+func (c *Client) MustLinks() []*link.Link {
+    result, e := c.Links()
     errors.PanicOnError(e)
     return result
 }
