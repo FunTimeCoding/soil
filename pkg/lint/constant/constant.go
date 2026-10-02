@@ -6,6 +6,7 @@ const (
 	MemberSeparator  = "."
 	RecursivePattern = "/..."
 	DirectivePrefix  = "//go:"
+	ByValueDirective = "//goanalyze:by-value"
 
 	FrontMatterDelimiterKey  = "front_matter_delimiter"
 	FrontMatterDelimiterText = "No front matter delimiter"

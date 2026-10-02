@@ -2,12 +2,21 @@ package value_return
 
 import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
-	"github.com/funtimecoding/soil/pkg/lint/analyzer/value_return"
 	"testing"
 )
 
 func TestBlocked(t *testing.T) {
-	p, results := testutil.LoadTestPackage(t, "testdata/src/example")
-	value_return.Check(p, results)
-	testutil.AssertBlocked(t, results, 3)
+	testutil.AssertBlocked(t, checked(t), 5)
+}
+
+func TestAMarkedTypeIsNotFlagged(t *testing.T) {
+	testutil.AssertNotBlockedContains(t, checked(t), "MarkedByValue")
+}
+
+func TestADirectiveWithoutAReasonIsStillFlagged(t *testing.T) {
+	testutil.AssertBlockedContains(t, checked(t), "BareDirectiveByValue")
+}
+
+func TestATypeDeclaredBesideAMarkedOneIsStillFlagged(t *testing.T) {
+	testutil.AssertBlockedContains(t, checked(t), "UnmarkedByValue")
 }

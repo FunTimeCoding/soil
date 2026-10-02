@@ -14,6 +14,7 @@ const (
 	BuildTags      = "build-tags"
 	Bulk           = "bulk"
 	Census         = "census"
+	Check          = "check"
 	Clean          = "clean"
 	Close          = "close"
 	Cluster        = "cluster"
@@ -151,4 +152,5 @@ const (
 	Warning        = "warning"
 	Watched        = "watched"
 	Web            = "web"
+	Width          = "width"
 )

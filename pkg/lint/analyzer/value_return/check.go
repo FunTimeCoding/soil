@@ -68,7 +68,7 @@ func Check(
 						continue
 					}
 
-					if isGeneratedType(p, named) {
+					if isGeneratedType(p, named) || isValueType(p, named) {
 						continue
 					}
 
