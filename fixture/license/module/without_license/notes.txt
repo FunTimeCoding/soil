@@ -1,0 +1,1 @@
+A module directory that ships no license file.

@@ -32,6 +32,7 @@ const (
 	TestdataPath                = "testdata"
 	IdeaPath                    = ".idea"
 	KubernetesConfigurationPath = ".kube/config"
+	LicensePath                 = "license"
 	MarkdownPath                = "markdown"
 	MemoryPath                  = "memory"
 	NotationPath                = "notation"

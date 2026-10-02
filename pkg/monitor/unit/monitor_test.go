@@ -56,7 +56,7 @@ func TestConstant(t *testing.T) {
 }
 
 func TestItemConstant(t *testing.T) {
-	assert.Count(t, 15, monitorConstant.Collectors)
+	assert.Count(t, 16, monitorConstant.Collectors)
 }
 
 func TestSource(t *testing.T) {

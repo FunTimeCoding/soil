@@ -104,6 +104,13 @@ var (
 		5*time.Minute,
 		DefaultSource,
 	)
+	GoLicense = collector.New(
+		"golicense",
+		"license",
+		"dependency licenses",
+		time.Hour,
+		DefaultSource,
+	)
 	GoSentry = collector.New(
 		"gosentry",
 		"sentry",
@@ -145,6 +152,7 @@ var (
 		GoImage,
 		GoJira,
 		GoKevt,
+		GoLicense,
 		GoSentry,
 		GoSilence,
 		GoVersion,
