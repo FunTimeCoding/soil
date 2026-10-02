@@ -1,6 +1,9 @@
 package constant
 
-import "github.com/funtimecoding/soil/pkg/identity"
+import (
+	"github.com/funtimecoding/soil/pkg/identity"
+	"regexp"
+)
 
 var Identity = identity.New(
 	"goflow",
@@ -14,4 +17,11 @@ const (
 	Delimiter    = "---"
 	FixtureWidth = 40
 	Pipe         = "|"
+	Backtick     = '`'
+	Whitespace   = " \t\n\r\v\f"
+	Indent       = " \t"
+
+	HardLineBreak = "hard line break"
 )
+
+var BlockOpenerPattern = regexp.MustCompile(`^>|^(?:[*+-]|#{1,6}|\d+[).])$`)

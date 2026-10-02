@@ -32,7 +32,7 @@ func Official() {
 					},
 				},
 			},
-			Model: anthropic.ModelClaudeSonnet4_5,
+			Model: anthropic.ModelClaudeSonnet5_5,
 		},
 	)
 	errors.PanicOnError(e)

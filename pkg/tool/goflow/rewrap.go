@@ -5,10 +5,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goflow/constant"
 	"github.com/yuin/goldmark/v2/ast"
 	"strings"
+	"unicode/utf8"
 )
 
 func rewrap(
 	source []byte,
+	literal []bool,
 	n ast.BlockNode,
 	width int,
 ) *patch {
@@ -32,24 +34,23 @@ func rewrap(
 	}
 
 	longest := 0
-	var text []string
 
 	for _, line := range strings.Split(string(source[start:last.Stop]), "\n") {
-		longest = max(longest, len(line))
-	}
-
-	for _, s := range segments {
-		text = append(text, strings.TrimSpace(string(source[s.Start:s.Stop])))
+		longest = max(longest, utf8.RuneCountInString(line))
 	}
 
 	if longest <= width {
 		return nil
 	}
 
-	wrapped := wrap(strings.Join(text, " "), width-len(prefix))
+	indent := utf8.RuneCountInString(prefix)
+	wrapped := wrap(
+		bind(units(source, literal, first.Start, last.Stop)),
+		width-indent,
+	)
 
 	for i := 1; i < len(wrapped); i++ {
-		wrapped[i] = join.Empty(strings.Repeat(" ", len(prefix)), wrapped[i])
+		wrapped[i] = join.Empty(strings.Repeat(" ", indent), wrapped[i])
 	}
 
 	wrapped[0] = join.Empty(prefix, wrapped[0])

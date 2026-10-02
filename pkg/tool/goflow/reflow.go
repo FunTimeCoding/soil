@@ -1,10 +1,7 @@
 package goflow
 
 import (
-	"errors"
 	"github.com/yuin/goldmark/v2/ast"
-	"github.com/yuin/goldmark/v2/extension"
-	"github.com/yuin/goldmark/v2/parser"
 	"slices"
 	"strings"
 )
@@ -15,10 +12,11 @@ func Reflow(
 ) (string, error) {
 	source := []byte(content)
 	body := front(source)
+	document := parse(source)
+	mask := literal(source, document)
 	var patches []*patch
 	e := ast.Walk(
-		parser.New(parser.WithExtensions(extension.NewTableParser())).
-			Parse(source),
+		document,
 		func(
 			n ast.Node,
 			entering bool,
@@ -29,7 +27,7 @@ func Reflow(
 				return ast.WalkContinue, nil
 			}
 
-			if p := rewrap(source, b, width); p != nil && p.start >= body {
+			if p := rewrap(source, mask, b, width); p != nil && p.start >= body {
 				patches = append(patches, p)
 			}
 
@@ -64,11 +62,11 @@ func Reflow(
 	}
 
 	b.Write(source[at:])
-	rewrapped := b.String()
+	rewrapped := []byte(b.String())
 
-	if !slices.Equal(words(content), words(rewrapped)) {
-		return content, errors.New("word sequence changed")
+	if f := verify(source, document, rewrapped); f != nil {
+		return content, f
 	}
 
-	return rewrapped, nil
+	return string(rewrapped), nil
 }

@@ -3,6 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/tool/goflow"
 	"github.com/funtimecoding/soil/pkg/tool/goflow/constant"
 	"strings"
 	"testing"
@@ -173,6 +174,78 @@ func TestAnOpeningDelimiterWithNoCloseIsNotFrontMatter(t *testing.T) {
 		"---\none two three four five six seven eight\nnine\n",
 		reflow(t, "---\none two three four five six seven eight nine\n"),
 	)
+}
+
+func TestWhitespaceInsideACodeSpanSurvives(t *testing.T) {
+	assert.String(
+		t,
+		"one two three four `a  b` five six seven\neight\n",
+		reflow(t, "one two three four `a  b` five six seven eight\n"),
+	)
+}
+
+func TestACodeSpanIsNeverSplitAcrossLines(t *testing.T) {
+	assert.String(
+		t,
+		"one two three four five six\n`go run main.go` seven\n",
+		reflow(t, "one two three four five six `go run main.go` seven\n"),
+	)
+}
+
+func TestACodeSpanAlreadySplitIsRejoined(t *testing.T) {
+	assert.String(
+		t,
+		"one `go run main.go` two three four five\nsix seven eight nine\n",
+		reflow(
+			t,
+			"one `go run\nmain.go` two three four five six seven eight nine\n",
+		),
+	)
+}
+
+func TestWidthCountsCharactersNotBytes(t *testing.T) {
+	content := "→ → → → → → → → → → → → → → → → → → → →\n"
+	assert.String(t, content, reflow(t, content))
+}
+
+func TestADashTravelsWithTheWordBeforeIt(t *testing.T) {
+	assert.String(
+		t,
+		"one two three four five six seven\neight - nine\n",
+		reflow(t, "one two three four five six seven eight - nine\n"),
+	)
+}
+
+func TestAnOrderedMarkerTravelsWithTheWordBeforeIt(t *testing.T) {
+	assert.String(
+		t,
+		"one two three four five six seven\neight 1. nine\n",
+		reflow(t, "one two three four five six seven eight 1. nine\n"),
+	)
+}
+
+func TestAHashTravelsWithTheWordBeforeIt(t *testing.T) {
+	assert.String(
+		t,
+		"one two three four five six seven\neight ## nine\n",
+		reflow(t, "one two three four five six seven eight ## nine\n"),
+	)
+}
+
+func TestAQuoteMarkTravelsWithTheWordBeforeIt(t *testing.T) {
+	assert.String(
+		t,
+		"one two three four five six seven\neight >nine\n",
+		reflow(t, "one two three four five six seven eight >nine\n"),
+	)
+}
+
+func TestAWrapThatWouldDropAHardLineBreakIsRefused(t *testing.T) {
+	_, e := goflow.Reflow(
+		"one two three four five six seven eight  \nnine\n",
+		constant.FixtureWidth,
+	)
+	assert.Error(t, e)
 }
 
 func TestEveryWordSurvivesAReflow(t *testing.T) {

@@ -1,34 +1,37 @@
 package goflow
 
-import "strings"
+import (
+	"strings"
+	"unicode/utf8"
+)
 
 func wrap(
-	text string,
+	units []string,
 	width int,
 ) []string {
 	var result []string
 	var line strings.Builder
+	length := 0
 
-	for _, word := range strings.Fields(text) {
-		if line.Len() == 0 {
-			line.WriteString(word)
+	for _, unit := range units {
+		size := utf8.RuneCountInString(unit)
 
-			continue
-		}
-
-		if line.Len()+1+len(word) > width {
+		if length > 0 && length+1+size > width {
 			result = append(result, line.String())
 			line.Reset()
-			line.WriteString(word)
-
-			continue
+			length = 0
 		}
 
-		line.WriteString(" ")
-		line.WriteString(word)
+		if length > 0 {
+			line.WriteString(" ")
+			length++
+		}
+
+		line.WriteString(unit)
+		length += size
 	}
 
-	if line.Len() > 0 {
+	if length > 0 {
 		result = append(result, line.String())
 	}
 

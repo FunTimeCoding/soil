@@ -1,7 +1,10 @@
 package goflow
 
-import "strings"
+import "github.com/yuin/goldmark/v2/ast"
 
-func words(content string) []string {
-	return strings.Fields(content)
+func words(
+	source []byte,
+	document ast.Node,
+) []string {
+	return units(source, literal(source, document), 0, len(source))
 }
