@@ -1,8 +1,8 @@
-package goflow
+package reflow
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/tool/goflow/constant"
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/yuin/goldmark/v2/ast"
 )
 
@@ -24,7 +24,7 @@ func shape(document ast.Node) []string {
 				if !okay {
 					result = append(result, n.Kind().String())
 				} else if t.HardLineBreak() {
-					result = append(result, constant.HardLineBreak)
+					result = append(result, constant.HardLineBreakShape)
 				}
 
 				return ast.WalkContinue, nil

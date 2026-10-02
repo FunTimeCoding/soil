@@ -1,8 +1,8 @@
-package goflow
+package reflow
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/tool/goflow/constant"
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/yuin/goldmark/v2/ast"
 )
 

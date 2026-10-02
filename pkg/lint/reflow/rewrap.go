@@ -1,8 +1,8 @@
-package goflow
+package reflow
 
 import (
+	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/tool/goflow/constant"
 	"github.com/yuin/goldmark/v2/ast"
 	"strings"
 	"unicode/utf8"

@@ -1,8 +1,8 @@
-package goflow
+package reflow
 
 import (
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/tool/goflow/constant"
 )
 
 func bind(units []string) []string {

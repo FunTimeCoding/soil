@@ -1,7 +1,7 @@
-package goflow
+package reflow
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goflow/constant"
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"strings"
 )
 
@@ -29,7 +29,10 @@ func units(
 		if literal[i] && c == '\n' {
 			c = ' '
 
-			for i+1 < stop && strings.IndexByte(constant.Indent, source[i+1]) >= 0 {
+			for i+1 < stop && strings.IndexByte(
+				constant.HorizontalWhitespace,
+				source[i+1],
+			) >= 0 {
 				i++
 			}
 		}

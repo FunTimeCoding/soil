@@ -1,4 +1,4 @@
-package goflow
+package reflow
 
 type patch struct {
 	start   int

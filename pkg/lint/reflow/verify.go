@@ -1,4 +1,4 @@
-package goflow
+package reflow
 
 import (
 	"errors"

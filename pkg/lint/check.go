@@ -43,7 +43,7 @@ func Check(
 		repo.Files,
 		fixes,
 		markdownFiles(repo.Files, o),
-		[]Checker{Pointers(resolver(repo, o), r.AddUnchecked)},
+		[]Checker{Pointers(resolver(repo, o), r.AddUnchecked), Reflow},
 		o,
 		r,
 	)

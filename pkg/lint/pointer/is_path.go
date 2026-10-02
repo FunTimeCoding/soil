@@ -6,7 +6,7 @@ import (
 )
 
 func IsPath(s string) bool {
-	if s == "" || strings.ContainsAny(s, " \t") {
+	if s == "" || strings.ContainsAny(s, constant.HorizontalWhitespace) {
 		return false
 	}
 

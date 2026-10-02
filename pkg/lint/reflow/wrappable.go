@@ -1,4 +1,4 @@
-package goflow
+package reflow
 
 import "github.com/yuin/goldmark/v2/ast"
 
