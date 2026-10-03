@@ -75,7 +75,7 @@ tasks:
     silent: true
   build: {cmds: ['go run cmd/gobuild/main.go'], silent: true}
   update:
-    cmds: ['goupdate --downgrade github.com/mark3labs/mcp-go@v0.58.0']
+    cmds: ['goupdate --downgrade github.com/mark3labs/mcp-go@v0.58.0 --downgrade github.com/chromedp/cdproto@v0.0.0-20260714215040-dc233986426f']
     silent: true
   update-library: {cmds: [true], silent: true}
   tool:
