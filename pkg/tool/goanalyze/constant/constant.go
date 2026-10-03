@@ -7,3 +7,5 @@ var Identity = identity.New(
 	"Go source analyzer",
 	"goanalyze [flags] [pattern...]",
 )
+
+const ConfigurationPath = "strata/tool/goanalyze.yaml"

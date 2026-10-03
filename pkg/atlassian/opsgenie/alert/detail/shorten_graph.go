@@ -3,10 +3,6 @@ package detail
 import "strings"
 
 func shortenGraph(s string) string {
-	if false {
-		s = strings.ReplaceAll(s, "&g0.tab=0", "")
-	}
-
 	s = strings.ReplaceAll(s, "&g0.explain=0", "")
 	s = strings.ReplaceAll(s, "&g0.engine=prometheus", "")
 	s = strings.ReplaceAll(s, "&g0.stacked=0", "")

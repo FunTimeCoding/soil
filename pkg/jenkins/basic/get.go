@@ -1,7 +1,6 @@
 package basic
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
@@ -12,12 +11,6 @@ func (c *Client) Get(path string) string {
 	r.SetBasicAuth(c.user, c.password)
 	r.Header.Add(constant.ContentType, constant.Object)
 	r.Header.Add(constant.Accept, constant.Object)
-	response := web.Send(web.Client(), r)
 
-	if false {
-		console.Line(r)
-		console.Line(response)
-	}
-
-	return web.ReadString(response)
+	return web.ReadString(web.Send(web.Client(), r))
 }

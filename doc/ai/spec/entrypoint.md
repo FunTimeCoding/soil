@@ -79,7 +79,10 @@ func Main(
 
 `argument.NewInstance` takes the tool's identity, creates a scoped
 flag set, and wires `--help` from the identity. `Parse()` registers
-`--version`, parses, and exits cleanly on `--help` or `--version`.
+`--version`, parses, and exits cleanly on `--help` or `--version`. It also
+registers `--notation` unless the tool already has one; `--version --notation`
+prints the stamp as JSON (`pkg/stamp/report`), the same shape the lifecycle
+server's version route serves.
 After parsing, populate the option struct using instance getters
 (`a.GetString`, `a.GetBoolean`, `a.GetDuration`) or required
 variants (`a.Required`, `a.RequiredInteger`).
@@ -105,9 +108,8 @@ func Main(
     defer func() { s.Flush(recover()) }()
     c := client.NewEnvironment()
     o := &cobra.Command{
-        Use:     constant.Identity.Usage(),
-        Short:   constant.Identity.Description(),
-        Version: argument.CobraVersion(version, gitHash, buildDate),
+        Use:   constant.Identity.Usage(),
+        Short: constant.Identity.Description(),
         PersistentPostRun: func(
             m *cobra.Command,
             _ []string,
@@ -117,6 +119,7 @@ func Main(
     }
     o.AddCommand(listItems(c))
     o.AddCommand(createItem(c))
+    argument.CobraStamp(o, constant.Identity, version, gitHash, buildDate)
     errors.PanicOnError(o.Execute())
 }
 ```
@@ -125,8 +128,10 @@ The `PersistentPostRun` hook records CLI telemetry for every
 successful command under the command's own name. Commands do not
 record individually.
 
-Cobra handles `--version` via the `Version` field and `--help`
-natively. Identity provides `Use` and `Short` on the root command.
+`argument.CobraStamp` stamps the identity and gives Cobra its version: the same
+block every tool prints on `--version`, or the JSON report with `--notation`.
+Cobra handles `--help` natively. Identity provides `Use` and `Short` on the
+root command.
 No option struct - each subcommand owns its own flags.
 
 Each subcommand lives in its own file and returns a `*cobra.Command`:

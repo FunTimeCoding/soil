@@ -2,9 +2,7 @@ package site
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/strings/join"
 	"log"
 	"slices"
 )
@@ -20,10 +18,6 @@ func (s *Site) OpenChat(name string) {
 
 	if !slices.Contains(names, name) {
 		log.Panicf("chat not found: %s", name)
-	}
-
-	if false {
-		console.Format("Name: %s\n", join.Comma(names))
 	}
 
 	s.session.ClickSearch(

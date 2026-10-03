@@ -14,5 +14,5 @@ func AssertScaleInteger(
 	factor float64,
 ) {
 	t.Helper()
-	assert.Integer(t, expected, scale.Integer(from, to, factor))
+	assert.Integer(t, expected, scale.Value(from, to, factor))
 }

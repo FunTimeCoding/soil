@@ -10,6 +10,7 @@ func isDirective(text string) bool {
 		"//sys",
 		"//export",
 		"// noinspection ",
+		"// renovate: ",
 	} {
 		if strings.HasPrefix(text, prefix) {
 			return true

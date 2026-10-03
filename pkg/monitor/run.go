@@ -15,18 +15,7 @@ import (
 func Run(name string) *report.Report {
 	r := run.New()
 	r.Panic = false
-	arguments := []string{fmt.Sprintf("--%s", argumentConstant.Notation)}
-
-	if false {
-		if name == monitor.GoFile.Name {
-			arguments = append(
-				arguments,
-				fmt.Sprintf("--%s", argumentConstant.Verbose),
-			)
-		}
-	}
-
-	r.Start(append([]string{name}, arguments...)...)
+	r.Start(name, fmt.Sprintf("--%s", argumentConstant.Notation))
 	result := report.New()
 
 	if r.Error != nil {

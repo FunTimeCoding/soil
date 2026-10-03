@@ -9,8 +9,7 @@ func (p *Protocol) EvaluatePromise(
 	expression string,
 	result any,
 ) error {
-	return chromedp.Run(
-		p.context,
+	return p.run(
 		chromedp.Evaluate(
 			expression,
 			result,

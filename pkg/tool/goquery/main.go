@@ -31,9 +31,8 @@ func Main(
 	)
 	errors.PanicOnError(e)
 	o := &cobra.Command{
-		Use:     constant.Identity.Usage(),
-		Short:   constant.Identity.Description(),
-		Version: argument.CobraVersion(version, gitHash, buildDate),
+		Use:   constant.Identity.Usage(),
+		Short: constant.Identity.Description(),
 	}
 	o.AddCommand(search(c))
 	o.AddCommand(list(c))
@@ -47,5 +46,6 @@ func Main(
 	o.AddCommand(listMetadata(c))
 	o.AddCommand(removeContext(c))
 	o.AddCommand(status(c))
+	argument.CobraStamp(o, constant.Identity, version, gitHash, buildDate)
 	errors.PanicOnError(o.Execute())
 }

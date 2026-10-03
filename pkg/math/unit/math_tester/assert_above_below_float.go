@@ -14,7 +14,7 @@ func AssertAboveBelowFloat(
 ) {
 	t.Helper()
 	var actual AboveBelow
-	above_below.Float(
+	above_below.Call(
 		f,
 		magnitude,
 		func() {

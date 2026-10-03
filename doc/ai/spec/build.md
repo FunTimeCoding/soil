@@ -18,12 +18,20 @@ gobuild --native            # enable CGO
 For each target architecture, `gobuild` runs:
 
 ```
-go build -ldflags "-X main.Version=v0.10.294 -X main.GitHash=144f841a -X main.BuildDate=2026-02-20T13:36:08+01:00" -o tmp/<name>/<os>-<arch>/<name> cmd/<name>/main.go
+go build -ldflags "-X main.Version=v0.10.294 -X main.GitHash=144f841a -X main.BuildDate=2026-02-20T13:36:08+01:00 -X github.com/funtimecoding/soil/pkg/stamp/constant.Module=github.com/funtimecoding/soil -X github.com/funtimecoding/soil/pkg/stamp/constant.Dirty=0" -o tmp/<name>/<os>-<arch>/<name> cmd/<name>/main.go
 ```
 
 - **Version** - latest git tag (`git describe --tags --abbrev=0`)
 - **GitHash** - short commit hash (`git rev-parse --short HEAD`)
 - **BuildDate** - current time in RFC3339
+- **Module** - the module path from `go.mod`; a file-path build carries none
+  in Go's own build information
+- **Dirty** - `1` when the work tree had uncommitted changes, so the hash does
+  not describe what was built
+
+A binary installed with `go install` carries no linker stamp; the stamp falls
+back to Go's build information (`runtime/debug`) for its version, revision and
+module, so `--version` is never empty.
 
 ## Install Semantics
 
@@ -77,6 +85,7 @@ pkg/build/
   architectures.go               # Architectures(): iterates selected targets
   git_tag.go                     # GitTag(): latest git tag
   git_hash.go                    # GitHash(): short commit hash
+  git_dirty.go                   # GitDirty(): uncommitted changes present
   date.go                        # Date(): RFC3339 now
   guess_main_path.go             # GuessMainPath(): cmd/<name>/main.go
   option/

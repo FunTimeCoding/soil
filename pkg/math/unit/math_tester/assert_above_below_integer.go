@@ -14,7 +14,7 @@ func AssertAboveBelowInteger(
 ) {
 	t.Helper()
 	var actual AboveBelow
-	above_below.Integer(
+	above_below.Call(
 		f,
 		magnitude,
 		func() {

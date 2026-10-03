@@ -45,7 +45,7 @@ func TestCompositeFormatFix(t *testing.T) {
 		func(t *testing.T) {
 			assert.String(
 				t,
-				"package example\n\ntype Item struct {\n\tValue int\n}\n\nfunc NewItem(v int) *Item {\n\treturn &Item{Value: v}\n}\n\nfunc NestedCalls() []*Item {\n\treturn []*Item{\n\t\tNewItem(1),\n\t\tNewItem(2),\n\t}\n}\n",
+				"package example\n\ntype Item struct {\n\tValue int\n}\n\nfunc NewItem(v int) *Item {\n\treturn &Item{Value: v}\n}\n\nfunc NestedCalls() []*Item {\n\treturn []*Item{NewItem(1), NewItem(2)}\n}\n",
 				testutil.ReadFile(
 					t,
 					filepath.Join(directory, "nested_calls.go"),
@@ -107,7 +107,7 @@ func TestCompositeFormatFix(t *testing.T) {
 		func(t *testing.T) {
 			assert.String(
 				t,
-				"package example\n\nfunc MultiLineElement() [][]int {\n\treturn [][]int{\n\t\t{1, 2},\n\t\t{3},\n\t}\n}\n",
+				"package example\n\nfunc MultiLineElement() [][]int {\n\treturn [][]int{{1, 2}, {3}}\n}\n",
 				testutil.ReadFile(
 					t,
 					filepath.Join(directory, "multi_line_element.go"),
@@ -132,7 +132,7 @@ func TestCompositeFormatFix(t *testing.T) {
 		"ResultEntries",
 		func(t *testing.T) {
 			applied := filterApplied(r.Entries)
-			assert.Integer(t, 9, len(applied))
+			assert.Integer(t, 10, len(applied))
 			assertResultAt(
 				t,
 				applied,
@@ -154,13 +154,7 @@ func TestCompositeFormatFix(t *testing.T) {
 				12,
 				"formatted composite literal",
 			)
-			assertResultAt(
-				t,
-				applied,
-				"collapse_short_slice.go",
-				4,
-				"formatted composite literal",
-			)
+			assertResultAt(t, applied, "nested_calls.go", 13, "formatted call")
 			assertResultAt(
 				t,
 				applied,
@@ -186,9 +180,29 @@ func TestCompositeFormatFix(t *testing.T) {
 				t,
 				applied,
 				"multi_line_element.go",
+				4,
+				"formatted composite literal",
+			)
+			assertResultAt(
+				t,
+				applied,
+				"multi_line_element.go",
 				5,
 				"formatted composite literal",
 			)
+			assertResultAt(
+				t,
+				applied,
+				"collapse_short_slice.go",
+				4,
+				"formatted composite literal",
+			)
+		},
+	)
+	t.Run(
+		"SecondRunChangesNothing",
+		func(t *testing.T) {
+			assertSecondRunQuiet(t, directory)
 		},
 	)
 }

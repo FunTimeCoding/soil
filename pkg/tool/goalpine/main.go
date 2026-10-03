@@ -18,11 +18,11 @@ func Main(
 	defer func() { r.RecoverFlush(recover()) }()
 	c := client.NewEnvironment()
 	o := &cobra.Command{
-		Use:     constant.Identity.Usage(),
-		Short:   constant.Identity.Description(),
-		Version: argument.CobraVersion(version, gitHash, buildDate),
+		Use:   constant.Identity.Usage(),
+		Short: constant.Identity.Description(),
 	}
 	o.AddCommand(packages(c))
 	o.AddCommand(upload(c))
+	argument.CobraStamp(o, constant.Identity, version, gitHash, buildDate)
 	errors.PanicOnError(o.Execute())
 }

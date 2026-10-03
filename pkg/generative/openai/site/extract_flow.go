@@ -7,19 +7,9 @@ import (
 
 func (s *Site) ExtractFlow(verbose bool) string {
 	s.NewChat()
-
-	if false {
-		s.printProfile()
-	}
-
 	s.clickProfile()
 	s.clickSettings()
 	s.clickPersonalize()
-
-	if false {
-		s.printMemories()
-	}
-
 	s.clickMemories()
 	time.Sleep(2 * time.Second)
 	result := s.readMemories()
@@ -28,16 +18,7 @@ func (s *Site) ExtractFlow(verbose bool) string {
 		console.Format("Memories: %d\n", len(result))
 	}
 
-	if false {
-		s.printCloseMemories()
-	}
-
 	s.clickCloseMemories()
-
-	if false {
-		s.printCloseSettings()
-	}
-
 	s.clickCloseSettings()
 
 	return result

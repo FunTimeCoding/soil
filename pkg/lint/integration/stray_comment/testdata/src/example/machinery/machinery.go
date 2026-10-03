@@ -11,6 +11,7 @@ var Data string
 // Helper returns true.
 func Helper() bool {
 	// noinspection SpellCheckingInspection
+	// renovate: datasource=docker
 	// the training could not resist
 	return true
 }

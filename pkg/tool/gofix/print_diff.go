@@ -1,6 +1,9 @@
 package gofix
 
-import "github.com/funtimecoding/soil/pkg/console"
+import (
+	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/constant"
+)
 
 func printDiff(
 	path string,
@@ -12,28 +15,35 @@ func printDiff(
 	}
 
 	console.Format("--- %s\n+++ %s\n", path, path)
-	originalLines := splitLines(original)
-	modifiedLines := splitLines(modified)
+	lines := diffLines(original, modified)
+	shown := make([]bool, len(lines))
 
-	for i := 0; i < len(originalLines) || i < len(modifiedLines); i++ {
-		var o, m string
-
-		if i < len(originalLines) {
-			o = originalLines[i]
+	for i, l := range lines {
+		if l.Mark == " " {
+			continue
 		}
 
-		if i < len(modifiedLines) {
-			m = modifiedLines[i]
-		}
-
-		if o != m {
-			if o != "" {
-				console.Format("-%s\n", o)
-			}
-
-			if m != "" {
-				console.Format("+%s\n", m)
+		for j := i - constant.DiffContext; j <= i+constant.DiffContext; j++ {
+			if j >= 0 && j < len(lines) {
+				shown[j] = true
 			}
 		}
+	}
+
+	gap := false
+
+	for i, l := range lines {
+		if !shown[i] {
+			gap = true
+
+			continue
+		}
+
+		if gap {
+			console.Format("@@\n")
+			gap = false
+		}
+
+		console.Format("%s%s\n", l.Mark, l.Text)
 	}
 }

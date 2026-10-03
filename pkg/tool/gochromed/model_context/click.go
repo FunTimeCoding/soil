@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/chromium/snapshot"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gochromed/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -31,12 +30,7 @@ func (s *Server) Click(
 	}
 
 	p := s.client.Page(t.Identifier)
-	e = withTimeoutAction(
-		constant.TargetTimeout,
-		func() error {
-			return p.ClickNode(backendIdentifier)
-		},
-	)
+	e = p.ClickNode(backendIdentifier)
 
 	if e != nil {
 		return s.captureDetail(e)
@@ -46,12 +40,7 @@ func (s *Server) Click(
 		return response.Success("clicked %s", a.UID)
 	}
 
-	nodes, e := withTimeout(
-		constant.TargetTimeout,
-		func() ([]*snapshot.Node, error) {
-			return p.Snapshot()
-		},
-	)
+	nodes, e := p.Snapshot()
 
 	if e != nil {
 		return s.captureDetail(e)

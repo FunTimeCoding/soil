@@ -18,9 +18,8 @@ func Main(
 	defer func() { s.Flush(recover()) }()
 	c := client.NewEnvironment()
 	o := &cobra.Command{
-		Use:     constant.Identity.Usage(),
-		Short:   constant.Identity.Description(),
-		Version: argument.CobraVersion(version, gitHash, buildDate),
+		Use:   constant.Identity.Usage(),
+		Short: constant.Identity.Description(),
 		PersistentPostRun: func(
 			m *cobra.Command,
 			_ []string,
@@ -37,5 +36,6 @@ func Main(
 	o.AddCommand(allocate(c))
 	o.AddCommand(gear(c))
 	o.AddCommand(equip(c))
+	argument.CobraStamp(o, constant.Identity, version, gitHash, buildDate)
 	errors.PanicOnError(o.Execute())
 }

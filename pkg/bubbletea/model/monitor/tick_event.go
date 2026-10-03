@@ -13,7 +13,7 @@ import (
 	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 )
 
-func (m *Model) tickEvent(g tick.Message) (*Model, tea.Cmd) {
+func (m *Model) tickEvent(_ tick.Message) (*Model, tea.Cmd) {
 	var result tea.BatchMsg
 
 	if m.connect && m.second == 0 {
@@ -56,15 +56,6 @@ func (m *Model) tickEvent(g tick.Message) (*Model, tea.Cmd) {
 	m.topBar = top.Format()
 	bottom := status.New(f)
 	bottom.String(m.hostname)
-
-	if false {
-		bottom.String(g.Time.Format(timeConstant.DateSecond))
-	}
-
-	if false {
-		bottom.Integer(60 - m.second%60)
-	}
-
 	bottom.String(fmt.Sprintf("%dx%d", m.width, m.height))
 	m.bottomBar = bottom.Format()
 	m.second++

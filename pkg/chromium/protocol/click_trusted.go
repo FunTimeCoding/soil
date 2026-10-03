@@ -7,8 +7,7 @@ import (
 )
 
 func (p *Protocol) ClickTrusted(s string) error {
-	return chromedp.Run(
-		p.context,
+	return p.run(
 		chromedp.ActionFunc(
 			func(v context.Context) error {
 				return page.BringToFront().Do(v)

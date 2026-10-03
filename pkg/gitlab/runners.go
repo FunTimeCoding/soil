@@ -1,11 +1,9 @@
 package gitlab
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab/runner"
 	"gitlab.com/gitlab-org/api/client-go/v3"
-	"slices"
 )
 
 func (c *Client) Runners(all bool) ([]*runner.Runner, error) {
@@ -14,7 +12,6 @@ func (c *Client) Runners(all bool) ([]*runner.Runner, error) {
 
 	for {
 		var page []*gitlab.Runner
-		var response *gitlab.Response
 		var e error
 		options := &gitlab.ListRunnersOptions{
 			ListOptions: gitlab.ListOptions{
@@ -24,32 +21,13 @@ func (c *Client) Runners(all bool) ([]*runner.Runner, error) {
 		}
 
 		if all {
-			page, response, e = c.allRunners(options)
+			page, _, e = c.allRunners(options)
 		} else {
-			page, response, e = c.ownerRunners(options)
+			page, _, e = c.ownerRunners(options)
 		}
 
 		if e != nil {
 			return nil, wrapError(e)
-		}
-
-		if false {
-			headerKeys := []string{
-				"X-Next-Page",
-				"X-Page",
-				"X-Prev-Page",
-				"X-Total",
-				"X-Total-Pages",
-				"X-Per-Page",
-			}
-
-			for k, v := range response.Header {
-				if !slices.Contains(headerKeys, k) {
-					continue
-				}
-
-				console.Format("  %d Header %s: %v\n", number, k, v)
-			}
 		}
 
 		result = append(result, page...)

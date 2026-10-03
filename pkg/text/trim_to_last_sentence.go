@@ -9,9 +9,5 @@ func TrimToLastSentence(text string) string {
 		return text
 	}
 
-	if i >= 0 && i+1 < len(text) {
-		return text[:i+1]
-	}
-
-	return text
+	return text[:i+1]
 }

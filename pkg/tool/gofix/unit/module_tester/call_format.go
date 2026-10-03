@@ -70,5 +70,13 @@ func CallFormat(t *testing.T) string {
 			"var_block_padding.go",
 			"package example\n\nvar (\n\tLongName = someFunc(\"short\", \"args\")\n\tX        = someFunc(\n\t\t\"aaaaaaaaaaaaaaaaaaaaa\",\n\t\t\"bbbbbbbbbbbbbbbbbbbbbbbbbbbbb\",\n\t)\n)\n",
 		).
+		File(
+			"nested_long_line.go",
+			"package example\n\nfunc NestedLongLine(prefix string, value string) string {\n\treturn wrapThree(prefix, \"some-long-enough-leading-argument\", outerOne(innerOne(value)))\n}\n\nfunc wrapThree(a, b, c string) string { return a }\n\nfunc outerOne(a string) string { return a }\n\nfunc innerOne(a string) string { return a }\n",
+		).
+		File(
+			"exploded_nested.go",
+			"package example\n\nfunc ExplodedNested(value string) string {\n\treturn outerOne(\n\t\tinnerOne(\n\t\t\tvalue,\n\t\t),\n\t)\n}\n",
+		).
 		Directory()
 }

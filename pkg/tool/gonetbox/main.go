@@ -18,9 +18,8 @@ func Main(
 	defer func() { r.RecoverFlush(recover()) }()
 	c := client.NewEnvironment()
 	o := &cobra.Command{
-		Use:     constant.Identity.Usage(),
-		Short:   constant.Identity.Description(),
-		Version: argument.CobraVersion(version, gitHash, buildDate),
+		Use:   constant.Identity.Usage(),
+		Short: constant.Identity.Description(),
 	}
 	o.AddCommand(listDevices(c))
 	o.AddCommand(getDevice(c))
@@ -98,5 +97,6 @@ func Main(
 	o.AddCommand(createPrefix(c))
 	o.AddCommand(listCables(c))
 	o.AddCommand(createCable(c))
+	argument.CobraStamp(o, constant.Identity, version, gitHash, buildDate)
 	errors.PanicOnError(o.Execute())
 }

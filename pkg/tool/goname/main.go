@@ -18,13 +18,13 @@ func Main(
 	defer func() { r.RecoverFlush(recover()) }()
 	c := hetzner.NewEnvironment()
 	o := &cobra.Command{
-		Use:     constant.Identity.Usage(),
-		Short:   constant.Identity.Description(),
-		Version: argument.CobraVersion(version, gitHash, buildDate),
+		Use:   constant.Identity.Usage(),
+		Short: constant.Identity.Description(),
 	}
 	o.AddCommand(listZones(c))
 	o.AddCommand(listRecords(c))
 	o.AddCommand(addRecord(c))
 	o.AddCommand(deleteRecord(c))
+	argument.CobraStamp(o, constant.Identity, version, gitHash, buildDate)
 	errors.PanicOnError(o.Execute())
 }

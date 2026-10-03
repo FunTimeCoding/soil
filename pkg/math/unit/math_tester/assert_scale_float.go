@@ -14,5 +14,5 @@ func AssertScaleFloat(
 	factor float64,
 ) {
 	t.Helper()
-	assert.Round(t, expected, scale.Float(from, to, factor), 1)
+	assert.Round(t, expected, scale.Value(from, to, factor), 1)
 }

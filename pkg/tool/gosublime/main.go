@@ -38,9 +38,8 @@ func Main(
 
 	x := &Context{Client: c}
 	o := &cobra.Command{
-		Use:     constant.Identity.Usage(),
-		Short:   constant.Identity.Description(),
-		Version: argument.CobraVersion(version, gitHash, buildDate),
+		Use:   constant.Identity.Usage(),
+		Short: constant.Identity.Description(),
 		PersistentPostRun: func(
 			m *cobra.Command,
 			_ []string,
@@ -55,5 +54,6 @@ func Main(
 	o.AddCommand(open(x))
 	o.AddCommand(save(x))
 	o.AddCommand(closeView(x))
+	argument.CobraStamp(o, constant.Identity, version, gitHash, buildDate)
 	errors.PanicOnError(o.Execute())
 }

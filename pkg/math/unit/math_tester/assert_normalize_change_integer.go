@@ -18,6 +18,6 @@ func AssertNormalizeChangeInteger(
 	assert.Integer(
 		t,
 		expected,
-		normalize_change.Integer(now, change, minimum, maximum),
+		normalize_change.Value(now, change, minimum, maximum),
 	)
 }

@@ -23,9 +23,8 @@ func Main(
 	var port int
 	c := command_context.New()
 	o := &cobra.Command{
-		Use:     constant.Identity.Usage(),
-		Short:   constant.Identity.Description(),
-		Version: argument.CobraVersion(version, gitHash, buildDate),
+		Use:   constant.Identity.Usage(),
+		Short: constant.Identity.Description(),
 		PersistentPreRun: func(
 			_ *cobra.Command,
 			_ []string,
@@ -61,5 +60,6 @@ func Main(
 	o.AddCommand(serveChannel(c, version, r))
 	o.AddCommand(usage(c))
 	o.AddCommand(cost(c))
+	argument.CobraStamp(o, constant.Identity, version, gitHash, buildDate)
 	errors.PanicOnError(o.Execute())
 }

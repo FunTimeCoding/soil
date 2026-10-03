@@ -4,8 +4,6 @@ import (
 	"github.com/dave/dst"
 	"github.com/dave/dst/decorator"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/element_format"
-	"github.com/funtimecoding/soil/pkg/lint/concern"
-	"github.com/funtimecoding/soil/pkg/lint/output"
 	"go/ast"
 	"go/token"
 )
@@ -15,12 +13,10 @@ func walkFormatEdits(
 	dec *decorator.Decorator,
 	fileSet *token.FileSet,
 	source []byte,
-	name string,
 	collapse bool,
-	apply bool,
-	r *output.Results,
-	changed map[string]*dst.File,
-) {
+) []*formatChange {
+	var result []*formatChange
+	stale := 0
 	var walk func(
 		dst.Node,
 		*dst.CompositeLit,
@@ -33,7 +29,9 @@ func walkFormatEdits(
 	) {
 		switch node := n.(type) {
 		case *dst.CallExpr:
-			if len(node.Args) > 0 {
+			changed := false
+
+			if stale == 0 && len(node.Args) > 0 {
 				astNode := dec.Ast.Nodes[node]
 				astCall, okay := astNode.(*ast.CallExpr)
 
@@ -53,19 +51,21 @@ func walkFormatEdits(
 						node.Args,
 						collapse,
 					) {
-						changed[name] = destinationFile
-						r.AddConcern(
-							concern.NewLine(
-								"call_format",
-								"formatted call",
-								name,
-								fileSet.Position(astCall.Lparen).Line,
-								"",
-								apply,
-							),
+						changed = true
+						result = append(
+							result,
+							&formatChange{
+								Kind:    "call_format",
+								Message: "formatted call",
+								Offset:  fileSet.Position(astCall.Lparen).Offset,
+							},
 						)
 					}
 				}
+			}
+
+			if changed {
+				stale++
 			}
 
 			walk(node.Fun, parentLit, 0)
@@ -73,8 +73,14 @@ func walkFormatEdits(
 			for _, arg := range node.Args {
 				walk(arg, parentLit, 0)
 			}
+
+			if changed {
+				stale--
+			}
 		case *dst.CompositeLit:
-			if len(node.Elts) > 0 {
+			changed := false
+
+			if stale == 0 && len(node.Elts) > 0 {
 				astNode := dec.Ast.Nodes[node]
 				astLit, okay := astNode.(*ast.CompositeLit)
 
@@ -94,19 +100,21 @@ func walkFormatEdits(
 						node.Elts,
 						collapse,
 					) {
-						changed[name] = destinationFile
-						r.AddConcern(
-							concern.NewLine(
-								"composite_format",
-								"formatted composite literal",
-								name,
-								fileSet.Position(astLit.Lbrace).Line,
-								"",
-								apply,
-							),
+						changed = true
+						result = append(
+							result,
+							&formatChange{
+								Kind:    "composite_format",
+								Message: "formatted composite literal",
+								Offset:  fileSet.Position(astLit.Lbrace).Offset,
+							},
 						)
 					}
 				}
+			}
+
+			if changed {
+				stale++
 			}
 
 			if node.Type != nil {
@@ -115,6 +123,10 @@ func walkFormatEdits(
 
 			for _, el := range node.Elts {
 				walk(el, node, 0)
+			}
+
+			if changed {
+				stale--
 			}
 		case *dst.KeyValueExpr:
 			walk(node.Key, parentLit, 0)
@@ -173,4 +185,6 @@ func walkFormatEdits(
 			return true
 		},
 	)
+
+	return result
 }

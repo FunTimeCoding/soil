@@ -18,6 +18,6 @@ func AssertNormalizeChangeFloat(
 	assert.Float(
 		t,
 		expected,
-		normalize_change.Float(now, change, minimum, maximum),
+		normalize_change.Value(now, change, minimum, maximum),
 	)
 }

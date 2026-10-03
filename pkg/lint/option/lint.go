@@ -9,4 +9,5 @@ type Lint struct {
 	Census        bool
 	Fix           bool
 	Summary       bool
+	Metadata      bool
 }

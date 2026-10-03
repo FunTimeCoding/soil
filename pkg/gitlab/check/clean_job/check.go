@@ -13,8 +13,6 @@ import (
 
 func Check() {
 	a := argument.NewSimple("clean-job")
-	a.String(argumentConstant.Namespace, "", "Namespace")
-	a.String(argumentConstant.Project, "", "Project")
 	a.String(argumentConstant.Match, "", "Description match")
 	a.ParseSimple()
 	g := gitlab.NewEnvironment()
@@ -43,19 +41,4 @@ func Check() {
 	}
 
 	RunnerWay(g, r, f)
-
-	if false {
-		p := g.MustProjectByName(
-			a.Required(argumentConstant.Namespace),
-			a.Required(argumentConstant.Project),
-		)
-
-		if false {
-			PipelineWay(g, p, f)
-		}
-
-		if false {
-			ProjectWay(g, p, f)
-		}
-	}
 }

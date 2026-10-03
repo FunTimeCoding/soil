@@ -13,8 +13,7 @@ func (p *Protocol) fillNodeDirect(
 	backendNodeIdentifier int64,
 	value string,
 ) error {
-	return chromedp.Run(
-		p.context,
+	return p.run(
 		chromedp.ActionFunc(
 			func(v context.Context) error {
 				o, e := dom.ResolveNode().WithBackendNodeID(

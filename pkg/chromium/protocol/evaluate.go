@@ -6,5 +6,5 @@ func (p *Protocol) Evaluate(
 	expression string,
 	result any,
 ) error {
-	return chromedp.Run(p.context, chromedp.Evaluate(expression, result))
+	return p.run(chromedp.Evaluate(expression, result))
 }

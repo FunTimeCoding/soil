@@ -58,7 +58,10 @@ func (s *Server) create(
 		return s.captureDetail(h)
 	}
 
-	created := fmt.Sprintf("Created memory %d tags: %v", m.Identifier, m.Tags)
+	created := s.withReferences(
+		fmt.Sprintf("Created memory %d tags: %v", m.Identifier, m.Tags),
+		m,
+	)
 
 	if !stripped {
 		return response.Success(created)

@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/chromium/snapshot"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gochromed/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -36,12 +35,7 @@ func (s *Server) Fill(
 
 	direct := a.Direct != nil && *a.Direct
 	p := s.client.Page(t.Identifier)
-	e = withTimeoutAction(
-		constant.TargetTimeout,
-		func() error {
-			return p.FillNode(backendIdentifier, a.Value, direct)
-		},
-	)
+	e = p.FillNode(backendIdentifier, a.Value, direct)
 
 	if e != nil {
 		return s.captureDetail(e)
@@ -51,12 +45,7 @@ func (s *Server) Fill(
 		return response.Success("filled %s", a.UID)
 	}
 
-	nodes, e := withTimeout(
-		constant.TargetTimeout,
-		func() ([]*snapshot.Node, error) {
-			return p.Snapshot()
-		},
-	)
+	nodes, e := p.Snapshot()
 
 	if e != nil {
 		return s.captureDetail(e)

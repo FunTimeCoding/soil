@@ -31,9 +31,17 @@ func TestLinkerFlagsSetEveryVariable(t *testing.T) {
 		t,
 		join.Empty(
 			"-X main.Version=v1.2.3 -X main.GitHash=abc1234 ",
-			"-X main.BuildDate=2026-01-01T00:00:00Z",
+			"-X main.BuildDate=2026-01-01T00:00:00Z ",
+			"-X github.com/funtimecoding/soil/pkg/stamp/constant.Module=example.com/tool ",
+			"-X github.com/funtimecoding/soil/pkg/stamp/constant.Dirty=1",
 		),
-		build.LinkerFlags("v1.2.3", "abc1234", "2026-01-01T00:00:00Z"),
+		build.LinkerFlags(
+			"v1.2.3",
+			"abc1234",
+			"2026-01-01T00:00:00Z",
+			"example.com/tool",
+			true,
+		),
 	)
 }
 

@@ -69,6 +69,19 @@ Each memory has:
   search results
 - **type** - categorization: user, feedback, project, reference
 
+## References
+
+Write paths and symbols in backticks the way documentation does -
+a repository path, a sibling checkout's path with its ../ prefix,
+go: for a Go symbol, route: for an HTTP route - and cite another
+memory as memory://<scope>/<name>, the scope "default" for the
+unscoped ones. A path that no longer exists is written as prose,
+not as a path. When gomemoryd knows the checkout, save_memory and
+update_memory list what does not resolve after saving: dead
+paths, missing memories, and paths left bare in prose. The save
+is never refused. check_references lists the same for every
+memory that is not document-sourced.
+
 ## Growth
 
 The corpus grows through the graph. New material lands as

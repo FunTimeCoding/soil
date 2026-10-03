@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/tool/goanalyze/configuration"
 	"github.com/funtimecoding/soil/pkg/tool/goanalyze/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goanalyze/option"
 )
@@ -19,7 +20,11 @@ func Main(
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Boolean("summary", false, "One line per file")
-	a.Boolean("comment", false, "Include the stray_comment lint")
+	a.Boolean(
+		"comment",
+		false,
+		"Include the stray_comment lint (default on where strata/tool/goanalyze.yaml sets comment: true)",
+	)
 	a.String(
 		argumentConstant.Root,
 		"",
@@ -37,7 +42,7 @@ func Main(
 	o := option.New()
 	o.Root = root
 	o.Summary = a.GetBoolean("summary")
-	o.Comment = a.GetBoolean("comment")
+	o.Comment = a.GetBoolean("comment") || configuration.Load(root).Comment
 	o.Patterns = patterns
 	Run(o)
 }

@@ -6,13 +6,5 @@ import (
 )
 
 func PrintBody(b response.Body) {
-	if false {
-		console.Format("    Storage: %s\n", b.Storage.Value)
-	}
-
-	if false {
-		console.Format("    Text: %s\n", ToText(b.Storage.Value))
-	}
-
 	console.Format("    Markdown: %s\n", bodyToMarkdown(b))
 }

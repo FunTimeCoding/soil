@@ -68,23 +68,6 @@ func (r *Rule) Format(f *option.Format) string {
 
 			s.Line("%s", output)
 		}
-
-		if false {
-			if false {
-				r.RawAlert.LastEvaluation = time.Time{}
-			}
-
-			r.RawAlert.Name = ""
-			r.RawAlert.State = ""
-			r.RawAlert.Health = ""
-			r.RawAlert.Duration = 0
-			r.RawAlert.Query = ""
-			delete(r.RawAlert.Labels, constant.SeverityKey)
-			delete(r.RawAlert.Annotations, constant.SummaryKey)
-			delete(r.RawAlert.Annotations, constant.DescriptionKey)
-			delete(r.RawAlert.Annotations, constant.RunbookKey)
-			delete(r.RawAlert.Annotations, constant.DurationKey)
-		}
 	}
 
 	s.RawList(r)

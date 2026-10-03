@@ -2,7 +2,6 @@ package request
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -92,29 +91,6 @@ func Hooks(
 				s server.ClientSession,
 			) {
 				l.Info("Session registered", "session", s.SessionID())
-			},
-		)
-		h.AddOnRequestInitialization(
-			func(
-				_ context.Context,
-				identifier any,
-				a any,
-			) error {
-				if q, okay := a.(*mcp.ListToolsRequest); okay {
-					if false {
-						l.Info(
-							"ListToolsRequest",
-							constant.MarkIdentifierKey,
-							identifier,
-							"request",
-							q,
-						)
-
-						return errors.New("unauthorized")
-					}
-				}
-
-				return nil
 			},
 		)
 	}

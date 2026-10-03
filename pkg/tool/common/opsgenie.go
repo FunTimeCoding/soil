@@ -40,18 +40,6 @@ func Opsgenie() *opsgenie.Client {
 		result.TeamMap().AddKey("Infinite Loopsies", "INF")
 	}
 
-	result.ShortAlert(
-		func(s string) string {
-			if false {
-				switch s {
-				case prometheus.HighMemoryUsage:
-					return "Memory"
-				}
-			}
-
-			return s
-		},
-	)
 	result.ShortUser(
 		func(s string) string {
 			if strings.Contains(s, stringConstant.At) {

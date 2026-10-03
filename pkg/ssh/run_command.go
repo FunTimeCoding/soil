@@ -19,9 +19,9 @@ func (c *Client) RunCommand(o *command.Command) *result.Result {
 	if o.RequestTeletype {
 		errors.PanicOnError(
 			s.RequestPty(
-				"xterm",
-				25,
-				80,
+				constant.TerminalType,
+				constant.TerminalHeight,
+				constant.TerminalWidth,
 				ssh.TerminalModes{
 					ssh.TTY_OP_ISPEED: constant.TerminalBaudRate,
 					ssh.TTY_OP_OSPEED: constant.TerminalBaudRate,

@@ -24,11 +24,6 @@ func WalkTree(
 
 				l.Add(NodeValue(s, n))
 
-				if false {
-					PrintNode(s, n)
-					PrintKind(s, n)
-				}
-
 				return ast.WalkContinue, nil
 			},
 		),

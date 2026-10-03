@@ -89,10 +89,6 @@ Next step: unclear
 		console.Line(formatted)
 		r := o.GenerateSimple(template.Execute(tem, formatted))
 		console.Format("%s\n", consoleConstant.Magenta("%s", r.Text))
-
-		if false {
-			r.Print()
-		}
 	}
 
 	if len(relevant) == 0 {

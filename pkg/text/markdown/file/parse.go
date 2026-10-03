@@ -6,14 +6,5 @@ import (
 )
 
 func (f *File) Parse() *flat.Flat {
-	o := parser.New().Parse(*f.source)
-	l := flat.New()
-
-	if false {
-		Walk(f.source, o, l)
-	}
-
-	WalkTree(f.source, o, l)
-
-	return l
+	return WalkTree(f.source, parser.New().Parse(*f.source), flat.New())
 }

@@ -23,4 +23,10 @@ const (
 
 	FixtureCloseSettlePeriod = 1500 * time.Millisecond
 	FixtureEventTimeout      = 5 * time.Second
+	FixtureCallTimeout       = 500 * time.Millisecond
+)
+
+const (
+	FixtureHungPromise = "new Promise(() => {})"
+	FixtureSum         = "1 + 1"
 )

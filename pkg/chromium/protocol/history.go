@@ -11,8 +11,7 @@ import (
 func (p *Protocol) History() (*history.Result, error) {
 	var currentIndex int64
 	var entries []*page.NavigationEntry
-	e := chromedp.Run(
-		p.context,
+	e := p.run(
 		chromedp.ActionFunc(
 			func(x context.Context) error {
 				var e error

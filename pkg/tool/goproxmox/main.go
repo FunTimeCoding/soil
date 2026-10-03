@@ -19,9 +19,8 @@ func Main(
 	var instance string
 	c := command_context.New()
 	o := &cobra.Command{
-		Use:     constant.Identity.Usage(),
-		Short:   constant.Identity.Description(),
-		Version: argument.CobraVersion(version, gitHash, buildDate),
+		Use:   constant.Identity.Usage(),
+		Short: constant.Identity.Description(),
 		PersistentPreRun: func(
 			_ *cobra.Command,
 			_ []string,
@@ -67,5 +66,6 @@ func Main(
 	o.AddCommand(getSnippet(c))
 	o.AddCommand(listSnippets(c))
 	o.AddCommand(deleteSnippet(c))
+	argument.CobraStamp(o, constant.Identity, version, gitHash, buildDate)
 	errors.PanicOnError(o.Execute())
 }

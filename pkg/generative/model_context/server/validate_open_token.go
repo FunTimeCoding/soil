@@ -1,23 +1,12 @@
 package server
 
-import (
-	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
-)
+import "github.com/funtimecoding/soil/pkg/console"
 
 func (s *Server) validateOpenToken(token string) bool {
-	t, e := s.tokenVerifier().Verify(s.context, token)
-
-	if e != nil {
+	if _, e := s.tokenVerifier().Verify(s.context, token); e != nil {
 		console.Format("OIDC validate fail: %v\n", e)
 
 		return false
-	}
-
-	if false {
-		claims := make(map[string]any)
-		errors.PanicOnError(t.Claims(&claims))
-		console.Format("OIDC claims: %+v\n", claims)
 	}
 
 	return true

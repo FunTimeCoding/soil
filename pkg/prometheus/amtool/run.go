@@ -42,10 +42,6 @@ func Run(selected string) {
 	locatorByContext := make(map[string]string)
 
 	for _, f := range files {
-		if false {
-			console.Format("File: %s\n", f)
-		}
-
 		name, _ := key_value.Dot(f)
 
 		if strings.HasPrefix(name, prometheus.AmtoolConfigurationPrefix) {

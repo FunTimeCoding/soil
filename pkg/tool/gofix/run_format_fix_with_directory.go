@@ -1,8 +1,11 @@
 package gofix
 
 import (
+	"bytes"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
+	"os"
 )
 
 func RunFormatFixWithDirectory(
@@ -16,34 +19,46 @@ func RunFormatFixWithDirectory(
 	}
 
 	all, _ := Load(directory, patterns)
-	changed := findFormatEdits(all, r, true, !diff)
 
-	if len(changed) == 0 {
-		return
-	}
+	for _, name := range formatFiles(all) {
+		source, e := os.ReadFile(name)
 
-	if diff {
-		printDestinationDiffs(changed)
+		if e != nil {
+			errors.Printf("read %s: %s\n", name, e)
 
-		return
-	}
-
-	writeDestinationFiles(changed)
-
-	for pass := range 5 {
-		all, _ = Load(directory, patterns)
-		changed = findFormatEdits(all, r, false, true)
-
-		if len(changed) == 0 {
-			return
+			continue
 		}
 
-		writeDestinationFiles(changed)
+		f, e := formatFile(name, source)
 
-		for path := range changed {
-			errors.Printf("pass %d: still changing %s\n", pass+2, path)
+		if e != nil {
+			errors.Printf("format %s: %s\n", name, e)
+
+			continue
+		}
+
+		if bytes.Equal(f.Source, source) {
+			continue
+		}
+
+		for _, c := range f.Changes {
+			r.AddConcern(
+				concern.NewLine(c.Kind, c.Message, name, c.Line, "", !diff),
+			)
+		}
+
+		if !f.Converged {
+			errors.Printf("format fix did not converge for %s\n", name)
+		}
+
+		if diff {
+			printDiff(name, source, f.Source)
+
+			continue
+		}
+
+		if e = os.WriteFile(name, f.Source, 0644); e != nil {
+			errors.Printf("write %s: %s\n", name, e)
 		}
 	}
-
-	errors.Printf("format fix did not converge within 6 passes\n")
 }

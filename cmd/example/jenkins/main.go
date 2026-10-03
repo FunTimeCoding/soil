@@ -53,8 +53,4 @@ func main() {
 			}
 		}
 	}
-
-	if false {
-		j.JobsNotation()
-	}
 }

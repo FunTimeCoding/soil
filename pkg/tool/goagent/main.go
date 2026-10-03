@@ -23,9 +23,8 @@ func Main(
 	var host string
 	var port int
 	o := &cobra.Command{
-		Use:     goagent.Identity.Usage(),
-		Short:   goagent.Identity.Description(),
-		Version: argument.CobraVersion(version, gitHash, buildDate),
+		Use:   goagent.Identity.Usage(),
+		Short: goagent.Identity.Description(),
 	}
 	o.PersistentFlags().StringVar(
 		&host,
@@ -48,5 +47,6 @@ func Main(
 	}
 	o.AddCommand(submit(newClient))
 	o.AddCommand(status(newClient))
+	argument.CobraStamp(o, goagent.Identity, version, gitHash, buildDate)
 	errors.PanicOnError(o.Execute())
 }

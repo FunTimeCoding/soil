@@ -11,6 +11,7 @@ type Service struct {
 	indexer   face.Indexer
 	searcher  face.Searcher
 	lister    face.Lister
-	tokenizer *tokenizer.Encoder
-	hiddenTag string
+	tokenizer     *tokenizer.Encoder
+	hiddenTag     string
+	referenceRoot string
 }

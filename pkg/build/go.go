@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/go_mod"
 	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
@@ -39,7 +40,13 @@ func Go(o *option.Build) {
 		constant.Go,
 		constant.Build,
 		constant.LinkerFlagsArgument,
-		LinkerFlags(GitTag(), GitHash(), Date()),
+		LinkerFlags(
+			GitTag(),
+			GitHash(),
+			Date(),
+			go_mod.Read().Module.Mod.Path,
+			GitDirty(),
+		),
 	}
 	s = append(s, constant.TagsArgument, Tags(p.BuildTags))
 	s = append(s, []string{constant.OutputArgument, p.Output, p.MainPath}...)

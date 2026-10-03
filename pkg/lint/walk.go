@@ -65,7 +65,7 @@ func Walk(
 				i, g := d.Info()
 				errors.PanicOnError(g)
 
-				if Skipped(
+				if o.Metadata || Skipped(
 					o,
 					join.Empty(path.Dir(relative), stringsConstant.Slash),
 				) {

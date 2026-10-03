@@ -11,6 +11,9 @@ const (
 	ForcePTYArgument         = "-tt"
 	VerboseArgument          = "-v"
 
+	TerminalType     = "xterm"
+	TerminalHeight   = 25
+	TerminalWidth    = 80
 	TerminalBaudRate = 14400
 )
 const (

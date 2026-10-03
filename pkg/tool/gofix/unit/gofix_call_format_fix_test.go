@@ -32,7 +32,7 @@ func TestCallFormatFix(t *testing.T) {
 		func(t *testing.T) {
 			assert.String(
 				t,
-				"package example\n\ntype Options struct {\n\tValue int\n}\n\nfunc SharedLine() {\n\twithStruct(\n\t\t\"name\",\n\t\tOptions{Value: 1},\n\t)\n}\n\nfunc withStruct(a string, b Options) {}\n",
+				"package example\n\ntype Options struct {\n\tValue int\n}\n\nfunc SharedLine() {\n\twithStruct(\"name\", Options{Value: 1})\n}\n\nfunc withStruct(a string, b Options) {}\n",
 				testutil.ReadFile(
 					t,
 					filepath.Join(directory, "shared_line.go"),
@@ -45,7 +45,7 @@ func TestCallFormatFix(t *testing.T) {
 		func(t *testing.T) {
 			assert.String(
 				t,
-				"package example\n\nfunc FirstArgOnParenLine() {\n\twithMap(\n\t\t\"name\",\n\t\tmap[string]any{\"key\": \"value\"},\n\t)\n}\n\nfunc withMap(a string, b map[string]any) {}\n",
+				"package example\n\nfunc FirstArgOnParenLine() {\n\twithMap(\"name\", map[string]any{\"key\": \"value\"})\n}\n\nfunc withMap(a string, b map[string]any) {}\n",
 				testutil.ReadFile(
 					t,
 					filepath.Join(directory, "first_arg_on_paren_line.go"),
@@ -220,10 +220,36 @@ func TestCallFormatFix(t *testing.T) {
 		},
 	)
 	t.Run(
+		"NestedLongLineSplitsOnlyTheOuterCall",
+		func(t *testing.T) {
+			assert.String(
+				t,
+				"package example\n\nfunc NestedLongLine(prefix string, value string) string {\n\treturn wrapThree(\n\t\tprefix,\n\t\t\"some-long-enough-leading-argument\",\n\t\touterOne(innerOne(value)),\n\t)\n}\n\nfunc wrapThree(a, b, c string) string { return a }\n\nfunc outerOne(a string) string { return a }\n\nfunc innerOne(a string) string { return a }\n",
+				testutil.ReadFile(
+					t,
+					filepath.Join(directory, "nested_long_line.go"),
+				),
+			)
+		},
+	)
+	t.Run(
+		"ExplodedNestedCollapsesInOneRun",
+		func(t *testing.T) {
+			assert.String(
+				t,
+				"package example\n\nfunc ExplodedNested(value string) string {\n\treturn outerOne(innerOne(value))\n}\n",
+				testutil.ReadFile(
+					t,
+					filepath.Join(directory, "exploded_nested.go"),
+				),
+			)
+		},
+	)
+	t.Run(
 		"ResultEntries",
 		func(t *testing.T) {
 			applied := filterApplied(r.Entries)
-			assert.Integer(t, 12, len(applied))
+			assert.Integer(t, 15, len(applied))
 			assertResultAt(
 				t,
 				applied,
@@ -235,12 +261,26 @@ func TestCallFormatFix(t *testing.T) {
 			assertResultAt(
 				t,
 				applied,
+				"shared_line.go",
+				9,
+				"formatted composite literal",
+			)
+			assertResultAt(
+				t,
+				applied,
 				"first_arg_on_paren_line.go",
 				4,
 				"formatted call",
 			)
+			assertResultAt(
+				t,
+				applied,
+				"first_arg_on_paren_line.go",
+				5,
+				"formatted composite literal",
+			)
 			assertResultAt(t, applied, "nested_indent.go", 6, "formatted call")
-			assertResultAt(t, applied, "deep_method.go", 14, "formatted call")
+			assertResultAt(t, applied, "compliant.go", 5, "formatted call")
 			assertResultAt(
 				t,
 				applied,
@@ -248,14 +288,7 @@ func TestCallFormatFix(t *testing.T) {
 				4,
 				"formatted call",
 			)
-			assertResultAt(
-				t,
-				applied,
-				"collapse_multi_line.go",
-				4,
-				"formatted call",
-			)
-			assertResultAt(t, applied, "compliant.go", 5, "formatted call")
+			assertResultAt(t, applied, "deep_method.go", 14, "formatted call")
 			assertResultAt(
 				t,
 				applied,
@@ -264,6 +297,40 @@ func TestCallFormatFix(t *testing.T) {
 				"formatted call",
 			)
 			assertResultAt(t, applied, "boundary_at_80.go", 4, "formatted call")
+			assertResultAt(
+				t,
+				applied,
+				"collapse_multi_line.go",
+				4,
+				"formatted call",
+			)
+			assertResultAt(
+				t,
+				applied,
+				"nested_long_line.go",
+				4,
+				"formatted call",
+			)
+			assertResultAt(
+				t,
+				applied,
+				"exploded_nested.go",
+				4,
+				"formatted call",
+			)
+			assertResultAt(
+				t,
+				applied,
+				"exploded_nested.go",
+				5,
+				"formatted call",
+			)
+		},
+	)
+	t.Run(
+		"SecondRunChangesNothing",
+		func(t *testing.T) {
+			assertSecondRunQuiet(t, directory)
 		},
 	)
 }

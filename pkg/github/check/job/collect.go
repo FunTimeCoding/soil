@@ -11,9 +11,8 @@ func collect(
 	c *github.Client,
 	o *option.Job,
 ) []*run.Run {
-	if o.Notation && o.Verbose {
-		o.Verbose = false
-	}
-
-	return monitor.OnlyConcerns(c.MustRuns(true, o.Verbose), o.All)
+	return monitor.OnlyConcerns(
+		c.MustRuns(true, o.Verbose && !o.Notation),
+		o.All,
+	)
 }

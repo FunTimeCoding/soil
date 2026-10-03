@@ -6,8 +6,5 @@ func (p *Protocol) SetValue(
 	s string,
 	value string,
 ) error {
-	return chromedp.Run(
-		p.context,
-		chromedp.SetValue(s, value, chromedp.ByQuery),
-	)
+	return p.run(chromedp.SetValue(s, value, chromedp.ByQuery))
 }

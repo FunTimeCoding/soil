@@ -10,11 +10,6 @@ import (
 
 func (c *Client) Propfind() {
 	r := web.NewPropfind(c.fileRoot)
-
-	if false {
-		r.Header.Set(constant.Accept, constant.Object)
-	}
-
 	r.SetBasicAuth(c.user, c.password)
 	s := web.Send(web.Client(), r)
 	defer errors.LogClose(s.Body)
@@ -22,10 +17,6 @@ func (c *Client) Propfind() {
 	switch s.StatusCode {
 	case http.StatusMultiStatus:
 		console.Line("success")
-
-		if false {
-			console.Line("response body:", web.ReadString(s))
-		}
 	case http.StatusUnauthorized:
 		console.Line(constant.Unauthorized)
 	default:

@@ -205,3 +205,42 @@ func TestTargetCachePrunesOnDestroy(t *testing.T) {
 	time.Sleep(2 * time.Second)
 	assert.Integer(t, 0, s.Client.TargetCount())
 }
+
+func TestFirstCallUnderDerivedDeadlineStrandsTarget(t *testing.T) {
+	s := base.New(t)
+	identifier := s.OpenTab(constant.FixtureQuietRoute)
+	x, cancel := context.WithTimeout(
+		s.Client.TargetContext(identifier),
+		constant.FixtureEventTimeout,
+	)
+	var sum int
+	assert.FatalOnError(
+		t,
+		chromedp.Run(x, chromedp.Evaluate(constant.FixtureSum, &sum)),
+	)
+	cancel()
+	s.AssertTabAlive(identifier)
+	p := protocol.NewIdentifier(
+		s.Client,
+		identifier,
+	).WithTimeout(constant.FixtureCallTimeout)
+	stranded := p.Evaluate(constant.FixtureSum, &sum)
+	assert.ErrorIs(t, stranded, context.DeadlineExceeded)
+}
+
+func TestEvaluateTimeoutKeepsTabUsable(t *testing.T) {
+	s := base.New(t)
+	identifier := s.OpenTab(constant.FixtureQuietRoute)
+	p := protocol.NewIdentifier(
+		s.Client,
+		identifier,
+	).WithTimeout(constant.FixtureCallTimeout)
+	var result any
+	hung := p.EvaluatePromise(constant.FixtureHungPromise, &result)
+	assert.ErrorIs(t, hung, context.DeadlineExceeded)
+	s.AssertTabAlive(identifier)
+	var sum int
+	answered := p.Evaluate(constant.FixtureSum, &sum)
+	assert.FatalOnError(t, answered)
+	assert.Integer(t, 2, sum)
+}

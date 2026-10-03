@@ -1,12 +1,8 @@
 package rule_list
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/prometheus/rule"
 	"github.com/go-test/deep"
-	"github.com/google/go-cmp/cmp"
-	"github.com/google/go-cmp/cmp/cmpopts"
-	"github.com/prometheus/client_golang/api/prometheus/v1"
 	"log"
 )
 
@@ -17,45 +13,19 @@ func (l *List) Add(i *rule.Rule) {
 		}
 
 		if i.RawAlert != nil && r.RawAlert != nil {
-			if !LabelsSame(i.RawAlert, r.RawAlert) {
-				if false {
-					console.Format(
-						"labels differ: %+v %+v\n",
-						i.RawAlert.Labels,
-						r.RawAlert.Labels,
-					)
-				}
-			} else if i.RawAlert.Query != r.RawAlert.Query {
-				if false {
-					console.Format(
-						"queries differ: %s %s\n",
-						i.RawAlert.Query,
-						r.RawAlert.Query,
-					)
-				}
-			} else {
-				if !cmp.Equal(
-					i.RawAlert,
-					r.RawAlert,
-					cmpopts.IgnoreFields(
-						v1.AlertingRule{},
-						"EvaluationTime",
-						"LastEvaluation",
-					),
-				) {
-					log.Panicf(
-						"duplicate RawAlert: name=%s comparison=%+v",
-						r.Name,
-						deep.Equal(i.RawAlert, r.RawAlert),
-					)
-				}
+			if alertDrifted(i.RawAlert, r.RawAlert) {
+				log.Panicf(
+					"duplicate RawAlert: name=%s comparison=%+v",
+					r.Name,
+					deep.Equal(i.RawAlert, r.RawAlert),
+				)
 			}
 		} else if i.RawRecord != nil && r.RawRecord != nil {
-			if c := deep.Equal(i.RawAlert, r.RawAlert); len(c) != 0 {
+			if recordDrifted(i.RawRecord, r.RawRecord) {
 				log.Panicf(
 					"duplicate RawRecord: name=%s comparison=%+v",
 					r.Name,
-					c,
+					deep.Equal(i.RawRecord, r.RawRecord),
 				)
 			}
 		} else {

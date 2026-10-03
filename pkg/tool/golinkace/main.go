@@ -23,9 +23,8 @@ func Main(
 	var linkaceHost string
 	c := command_context.New()
 	o := &cobra.Command{
-		Use:     constant.Identity.Usage(),
-		Short:   constant.Identity.Description(),
-		Version: argument.CobraVersion(version, gitHash, buildDate),
+		Use:   constant.Identity.Usage(),
+		Short: constant.Identity.Description(),
 		PersistentPreRun: func(
 			_ *cobra.Command,
 			_ []string,
@@ -90,5 +89,6 @@ func Main(
 	o.AddCommand(deleteLink(c))
 	o.AddCommand(notes(c))
 	o.AddCommand(addNote(c))
+	argument.CobraStamp(o, constant.Identity, version, gitHash, buildDate)
 	errors.PanicOnError(o.Execute())
 }

@@ -1,17 +1,17 @@
 package rule_list
 
-import "github.com/prometheus/client_golang/api/prometheus/v1"
+import "github.com/prometheus/common/model"
 
 func LabelsSame(
-	a *v1.AlertingRule,
-	b *v1.AlertingRule,
+	a model.LabelSet,
+	b model.LabelSet,
 ) bool {
-	if len(a.Labels) != len(b.Labels) {
+	if len(a) != len(b) {
 		return false
 	}
 
-	for k, v := range a.Labels {
-		if b.Labels[k] != v {
+	for k, v := range a {
+		if b[k] != v {
 			return false
 		}
 	}

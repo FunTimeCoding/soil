@@ -28,14 +28,11 @@ func TestStatusNested(t *testing.T) {
 	assert.String(t, "1 | a | b\n  line1\n  line2\n", appleOutput)
 	orangeOutput := fmt.Sprintf("%s\n", orange.Format(f.Indent(1)))
 	assert.String(t, "  2 | c | d\n    line1\n    line2\n", orangeOutput)
-
-	if false {
-		assert.String(
-			t,
-			"1 | a | b\n  line1\n  line2\n  2 | c | d\n    line1\n    line2\n",
-			key_value.Empty(appleOutput, orangeOutput),
-		)
-	}
+	assert.String(
+		t,
+		"1 | a | b\n  line1\n  line2\n  2 | c | d\n    line1\n    line2\n",
+		key_value.Empty(appleOutput, orangeOutput),
+	)
 }
 
 func TestTagLine(t *testing.T) {

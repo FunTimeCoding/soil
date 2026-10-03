@@ -3,6 +3,7 @@ package lint
 import (
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/constant"
+	"github.com/funtimecoding/soil/pkg/lint/installed"
 	"github.com/funtimecoding/soil/pkg/lint/option"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/system"
@@ -105,6 +106,12 @@ func Lint(
 
 	if o.Fix {
 		fixes.Flush(repo.Root)
+	}
+
+	if len(o.Scopes) == 0 {
+		for _, c := range installed.Check(repo.Root) {
+			r.AddConcern(c)
+		}
 	}
 
 	hasBlocked := output.PrintResults(r.Entries, o.Summary)

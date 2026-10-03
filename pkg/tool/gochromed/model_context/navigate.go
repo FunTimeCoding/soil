@@ -3,7 +3,6 @@ package model_context
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gochromed/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -24,12 +23,7 @@ func (s *Server) Navigate(
 	}
 
 	p := s.client.Page(t.Identifier)
-	e = withTimeoutAction(
-		constant.TargetTimeout,
-		func() error {
-			return p.Navigate(a.Locator)
-		},
-	)
+	e = p.Navigate(a.Locator)
 
 	if e != nil {
 		return s.captureDetail(e)

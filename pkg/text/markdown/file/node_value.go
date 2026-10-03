@@ -7,18 +7,10 @@ func NodeValue(
 	n ast.Node,
 ) string {
 	switch o := n.(type) {
-	case *ast.Document:
-		if false {
-			return Value(s, o)
-		}
 	case *ast.Heading:
 		return Value(s, o)
 	case *ast.Paragraph:
 		return Value(s, o)
-	case *ast.Text:
-		if false {
-			return o.Value.Value(*s)
-		}
 	case *ast.CodeBlock:
 		return Value(s, o)
 	}

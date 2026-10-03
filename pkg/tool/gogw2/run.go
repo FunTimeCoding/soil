@@ -5,10 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gogw2/option"
 )
 
-func Run(o *option.Alliance) {
+func Run(_ *option.Alliance) {
 	alliance.Check()
-
-	if false {
-		alliance.PrintAccount()
-	}
 }

@@ -38,9 +38,8 @@ func Main(
 
 	x := &Context{Client: c, Telemetry: s.Recorder()}
 	o := &cobra.Command{
-		Use:     constant.Identity.Usage(),
-		Short:   constant.Identity.Description(),
-		Version: argument.CobraVersion(version, gitHash, buildDate),
+		Use:   constant.Identity.Usage(),
+		Short: constant.Identity.Description(),
 		PersistentPostRun: func(
 			m *cobra.Command,
 			_ []string,
@@ -51,5 +50,6 @@ func Main(
 	o.AddCommand(listPlacements(x))
 	o.AddCommand(listPlaces(x))
 	o.AddCommand(listSightings(x))
+	argument.CobraStamp(o, constant.Identity, version, gitHash, buildDate)
 	errors.PanicOnError(o.Execute())
 }

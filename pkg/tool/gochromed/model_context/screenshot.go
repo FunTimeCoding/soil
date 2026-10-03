@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/tool/gochromed/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gochromed/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
 	"os"
@@ -23,12 +22,7 @@ func (s *Server) Screenshot(
 	}
 
 	p := s.client.Page(t.Identifier)
-	b, e := withTimeout(
-		constant.TargetTimeout,
-		func() ([]byte, error) {
-			return p.Screenshot()
-		},
-	)
+	b, e := p.Screenshot()
 
 	if e != nil {
 		return s.captureDetail(e)

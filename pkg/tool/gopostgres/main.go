@@ -26,9 +26,8 @@ func Main(
 	)
 	errors.PanicOnError(e)
 	o := &cobra.Command{
-		Use:     constant.Identity.Usage(),
-		Short:   constant.Identity.Description(),
-		Version: argument.CobraVersion(version, gitHash, buildDate),
+		Use:   constant.Identity.Usage(),
+		Short: constant.Identity.Description(),
 	}
 	o.AddCommand(listInstances(v))
 	o.AddCommand(query(v))
@@ -38,5 +37,6 @@ func Main(
 	o.AddCommand(describeTable(v))
 	o.AddCommand(listIndexes(v))
 	o.AddCommand(tableSizes(v))
+	argument.CobraStamp(o, constant.Identity, version, gitHash, buildDate)
 	errors.PanicOnError(o.Execute())
 }

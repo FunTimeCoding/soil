@@ -35,9 +35,6 @@ const (
 	JiraServiceDesk = "/rest/servicedeskapi"
 	JiraRequest     = "/request"
 
-	JiraDynamic = "/rest/atlassian-connect/1/app/module/dynamic"
-	JiraAddon   = "/rest/atlassian-connect/1/addons"
-
 	JiraMaximumResultsKey = "maxResults"
 	JiraNextPageTokenKey  = "nextPageToken"
 	JiraQueryKey          = "jql"

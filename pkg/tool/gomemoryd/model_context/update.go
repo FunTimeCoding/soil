@@ -52,5 +52,7 @@ func (s *Server) update(
 		return s.captureDetail(i)
 	}
 
-	return response.Success(fmt.Sprintf("Updated memory %d", m.Identifier))
+	return response.Success(
+		s.withReferences(fmt.Sprintf("Updated memory %d", m.Identifier), m),
+	)
 }

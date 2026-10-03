@@ -30,6 +30,8 @@ func Run(
 	idx := memory_indexer.New(connect.Wait(l))
 	v := service.New(s, idx, idx, idx).WithHiddenTag(
 		environment.Fallback(constant.HiddenTagEnvironment, ""),
+	).WithReferenceRoot(
+		environment.Fallback(constant.ReferenceRootEnvironment, ""),
 	)
 	reconcileMemories(v)
 	u := web.New(v)

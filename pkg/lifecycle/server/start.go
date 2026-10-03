@@ -2,6 +2,7 @@ package server
 
 import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/constant"
+	"github.com/funtimecoding/soil/pkg/stamp/report"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/route"
@@ -32,15 +33,9 @@ func (s *Server) Start() {
 			w http.ResponseWriter,
 			_ *http.Request,
 		) {
-			b := s.identity.Stamp()
 			web.EncodeNotation(
 				w,
-				&Version{
-					Name:      s.identity.Name(),
-					Version:   b.Version,
-					GitHash:   b.GitHash,
-					BuildDate: b.BuildDate,
-				},
+				report.New(s.identity.Name(), s.identity.Stamp()),
 			)
 		},
 	)

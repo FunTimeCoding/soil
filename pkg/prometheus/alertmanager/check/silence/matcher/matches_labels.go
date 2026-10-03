@@ -1,7 +1,6 @@
 package matcher
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/prometheus/alertmanager/api/v2/models"
 	"regexp"
 )
@@ -10,17 +9,6 @@ func matchesLabels(
 	m *models.Matcher,
 	l models.LabelSet,
 ) bool {
-	if false {
-		console.Format(
-			"Matcher: name:%s value:%s regex:%v equal:%v\n",
-			*m.Name,
-			*m.Value,
-			*m.IsRegex,
-			*m.IsEqual,
-		)
-		console.Format("LabelSet: %+v\n", l)
-	}
-
 	value := l[*m.Name]
 
 	if *m.IsRegex {

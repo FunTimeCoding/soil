@@ -8,7 +8,11 @@ var Identity = identity.New(
 	"gofix [flags] [pattern...]",
 )
 
-const MaxSingleParameterLength = 80
+const (
+	MaxSingleParameterLength = 80
+	MaxFormatPasses          = 10
+	DiffContext              = 2
+)
 
 var (
 	Whitelist = map[string]bool{

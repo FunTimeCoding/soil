@@ -284,6 +284,13 @@ func (s *Server) register() {
 	)
 	s.server.AddTool(
 		mcp.NewTool(
+			constant.CheckReferences,
+			mcp.WithDescription(constant.CheckReferencesSummary),
+		),
+		s.checkReferences,
+	)
+	s.server.AddTool(
+		mcp.NewTool(
 			constant.TagMemory,
 			mcp.WithDescription(
 				"Add, remove, or replace tags on a memory. At least one of add, remove, or replace_all is required. Tags are comma-separated. Special tags: 'always' loads the memory in full on every profile call, 'no-index' hides it from the profile index (still reachable via topic matching, search, and relations).",

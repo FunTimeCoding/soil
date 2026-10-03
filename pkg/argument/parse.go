@@ -3,7 +3,10 @@ package argument
 import (
 	"errors"
 	"github.com/funtimecoding/soil/pkg/argument/constant"
+	"github.com/funtimecoding/soil/pkg/console"
 	libraryErrors "github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/stamp/report"
 	"github.com/spf13/pflag"
 	"os"
 )
@@ -15,6 +18,11 @@ func (i *Instance) Parse(
 ) {
 	i.identity.WithStamp(version, gitHash, buildDate)
 	i.flags.Bool(constant.Version, false, "Show version information and exit")
+
+	if i.flags.Lookup(constant.Notation) == nil {
+		i.flags.Bool(constant.Notation, false, constant.NotationUsage)
+	}
+
 	e := i.ParseArguments(os.Args[1:])
 
 	if errors.Is(e, pflag.ErrHelp) {
@@ -24,8 +32,19 @@ func (i *Instance) Parse(
 	v, f := i.flags.GetBool(constant.Version)
 	libraryErrors.PanicOnError(f)
 
-	if v {
-		i.identity.Stamp().Print()
-		os.Exit(0)
+	if !v {
+		return
 	}
+
+	if n, g := i.flags.GetBool(constant.Notation); g == nil && n {
+		console.Line(
+			notation.MarshalIndent(
+				report.New(i.identity.Name(), i.identity.Stamp()),
+			),
+		)
+	} else {
+		i.identity.Stamp().Print()
+	}
+
+	os.Exit(0)
 }

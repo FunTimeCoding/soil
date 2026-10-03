@@ -9,8 +9,7 @@ import (
 func (p *Protocol) Snapshot() ([]*snapshot.Node, error) {
 	var result []*snapshot.Node
 	var fail error
-	e := chromedp.Run(
-		p.context,
+	e := p.run(
 		chromedp.ActionFunc(
 			func(v context.Context) error {
 				result, fail = snapshot.Take(v)
