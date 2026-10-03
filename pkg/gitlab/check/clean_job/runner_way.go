@@ -29,7 +29,6 @@ func RunnerWay(
 			console.Format("  Start timeout: %s\n", j.Stage)
 
 			if console.AskConfirmation("Retry job?") {
-				// TODO: Untested
 				g.MustRetryJob(j)
 			}
 		}

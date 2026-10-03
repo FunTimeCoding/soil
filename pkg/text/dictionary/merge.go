@@ -2,9 +2,6 @@ package dictionary
 
 import "sort"
 
-// Merge reads source dictionary files and merges their categories into the
-// target. Categories with matching names are combined; words are deduplicated
-// and sorted. The merged result is written back to target.
 func Merge(
 	target string,
 	sources ...string,

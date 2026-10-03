@@ -17,7 +17,6 @@ func (m *Map) FindProvider(host string) string {
 				return knownProvider
 			}
 
-			// host may also have the port ":2222" in it
 			if strings.HasPrefix(host, knownHost) {
 				return knownProvider
 			}

@@ -5,9 +5,6 @@ import (
 	"testing"
 )
 
-// Deep comparison over the exported surface only - unexported
-// fields are invisible to the comparator, so black-box tests can
-// whole-compare entities without reaching into private state.
 func Exported(
 	t *testing.T,
 	expect any,

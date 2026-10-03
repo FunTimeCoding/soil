@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/assert/fixture"
-	"github.com/funtimecoding/soil/pkg/console"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -215,70 +214,56 @@ func TestDeviate(t *testing.T) {
 
 func TestGreater(t *testing.T) {
 	assert.Greater(t, 0, 1)
-	// Unhappy less
-	t1 := &testing.T{}
-	assert.Greater(t1, 1, 0)
+}
 
-	if !t1.Failed() {
-		console.Line("unhappy less")
-		t.Fail()
-	}
+func TestGreaterRejectsLess(t *testing.T) {
+	inner := &testing.T{}
+	assert.Greater(inner, 1, 0)
+	assert.True(t, inner.Failed())
+}
 
-	// Unhappy equal
-	t2 := &testing.T{}
-	assert.Greater(t2, 1, 1)
-
-	if !t2.Failed() {
-		console.Line("unhappy equal")
-		t.Fail()
-	}
+func TestGreaterRejectsEqual(t *testing.T) {
+	inner := &testing.T{}
+	assert.Greater(inner, 1, 1)
+	assert.True(t, inner.Failed())
 }
 
 func TestGreaterEqual(t *testing.T) {
 	assert.GreaterEqual(t, 0, 1)
 	assert.GreaterEqual(t, 1, 1)
-	// Unhappy less
-	t1 := &testing.T{}
-	assert.GreaterEqual(t1, 1, 0)
+}
 
-	if !t1.Failed() {
-		console.Line("unhappy less")
-		t.Fail()
-	}
+func TestGreaterEqualRejectsLess(t *testing.T) {
+	inner := &testing.T{}
+	assert.GreaterEqual(inner, 1, 0)
+	assert.True(t, inner.Failed())
 }
 
 func TestLess(t *testing.T) {
 	assert.Less(t, 1, 0)
-	// Unhappy more
-	t1 := &testing.T{}
-	assert.Less(t1, 0, 1)
+}
 
-	if !t1.Failed() {
-		console.Line("unhappy more")
-		t.Fail()
-	}
+func TestLessRejectsMore(t *testing.T) {
+	inner := &testing.T{}
+	assert.Less(inner, 0, 1)
+	assert.True(t, inner.Failed())
+}
 
-	// Unhappy equal
-	t2 := &testing.T{}
-	assert.Less(t2, 1, 1)
-
-	if !t2.Failed() {
-		console.Line("unhappy equal")
-		t.Fail()
-	}
+func TestLessRejectsEqual(t *testing.T) {
+	inner := &testing.T{}
+	assert.Less(inner, 1, 1)
+	assert.True(t, inner.Failed())
 }
 
 func TestLessEqual(t *testing.T) {
 	assert.LessEqual(t, 1, 0)
 	assert.LessEqual(t, 1, 1)
-	// Unhappy more
-	t1 := &testing.T{}
-	assert.LessEqual(t1, 0, 1)
+}
 
-	if !t1.Failed() {
-		console.Line("unhappy more")
-		t.Fail()
-	}
+func TestLessEqualRejectsMore(t *testing.T) {
+	inner := &testing.T{}
+	assert.LessEqual(inner, 0, 1)
+	assert.True(t, inner.Failed())
 }
 
 func TestRound(t *testing.T) {

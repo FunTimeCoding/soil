@@ -1,6 +1,5 @@
 package strings
 
-// common returns the elements in a that are in b
 func common(
 	a []string,
 	b []string,

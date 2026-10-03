@@ -54,7 +54,8 @@ systems (database columns, API responses from your own services).
 Use the non-Must variants when the error outcome changes control
 flow (try-parse patterns, validating external input).
 
-For HTTP response bodies: `notation.MustDecodeBytes(system.ReadAll(resp.Body), &v, false)`.
+For HTTP response bodies:
+`notation.MustDecodeBytes(system.ReadAll(resp.Body), &v, false)`.
 
 ## Time - `pkg/time/`
 
@@ -67,7 +68,7 @@ stdlib `time` when the stdlib package is no longer needed directly.
 
 ## Web, MCP, and process patterns
 
-The same doctrine above stdlib: prefer the soil helper over the raw
+The same rule above stdlib: prefer the soil helper over the raw
 call plus boilerplate.
 
 | Raw pattern | Soil replacement |

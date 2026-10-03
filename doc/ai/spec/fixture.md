@@ -1,9 +1,10 @@
 # Fixture Pattern
 
-Test fixtures (static files used by tests) live at `<repo-root>/fixture/<subdir>/` and are
-loaded via helpers in `pkg/assert/fixture`. The root is located by walking up from the test
-work directory to the nearest git root - so paths are always absolute and test-location
-independent.
+Test fixtures (static files used by tests) live at
+`<repo-root>/fixture/<subdir>/` and are loaded via helpers in
+`pkg/assert/fixture`. The root is located by walking up from the test work
+directory to the nearest git root - so paths are always absolute and
+test-location independent.
 
 ## Helpers
 
@@ -15,9 +16,10 @@ fixture.File("hypertext", "test.html")   // → *os.File (already opened)
 fixture.Read("markdown", "1.md")         // → file contents as string
 ```
 
-Use `Path` when passing to a function that takes a file path.
-Use `File` when passing to a function that takes `*os.File` (e.g. `goquery.NewDocumentFromReader`).
-Use `Read` when you need the raw string content in the test itself.
+- Use `Path` when passing to a function that takes a file path.
+- Use `File` when passing to a function that takes `*os.File` (e.g.
+  `goquery.NewDocumentFromReader`).
+- Use `Read` when you need the raw string content in the test itself.
 
 ## Directory Layout
 
@@ -29,12 +31,13 @@ Use `Read` when you need the raw string content in the test itself.
     └── <subdir>/       # One subdir per domain/package under test
 ```
 
-Each subdirectory groups fixtures for a single domain. Subdirectory names are string constants
-so callers never hardcode bare strings.
+Each subdirectory groups fixtures for a single domain. Subdirectory names are
+string constants so callers never hardcode bare strings.
 
 ## Subdirectory Constants
 
-Constants keep fixture paths refactorable and prevent bare string literals in tests.
+Constants keep fixture paths refactorable and prevent bare string literals in
+tests.
 
 **soil** - constants live in `pkg/system/constant/constant.go`:
 
@@ -43,8 +46,9 @@ HypertextPath = "hypertext"
 MarkdownPath  = "markdown"
 ```
 
-In other repos, define equivalent constants in a dedicated directory-constant package and add
-one entry per fixture subdirectory whenever a new one is created.
+In other repos, define equivalent constants in a dedicated directory-constant
+package and add one entry per fixture subdirectory whenever a new one is
+created.
 
 ## Test Pattern
 
@@ -86,9 +90,11 @@ scanning happens at push time is the second net, not the first.
 
 ## Do Not Use `<path>/testdata/`
 
-Do not put fixtures inside packages as `<path>/testdata/` directories. All fixtures belong at the
-repo root under `fixture/`. This keeps fixtures discoverable, shareable across packages, and
-consistent with the repo-root resolution pattern.
+Do not put fixtures inside packages as `<path>/testdata/` directories. All
+fixtures belong at the repo root under `fixture/`. This keeps fixtures
+discoverable, shareable across packages, and consistent with the repo-root
+resolution pattern.
 
-**Exception:** analyzers under `pkg/lint/analyzer/` use `<path>/testdata/` because Go's
-`analysistest` framework requires that exact layout. That is the only sanctioned use.
+**Exception:** analyzers under `pkg/lint/analyzer/` use `<path>/testdata/`
+because Go's `analysistest` framework requires that exact layout. That is the
+only sanctioned use.

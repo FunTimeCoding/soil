@@ -127,7 +127,6 @@ func (s *Server) PostGenerate(
 		}
 	}
 
-	// Re-scan after tiddler generation for the output HTML
 	if reportSource == "" {
 		updated := system.ReadDirectory(workdir)
 

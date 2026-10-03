@@ -286,9 +286,16 @@ func (c *Client) ProjectJobs(p *project.Project) ([]*job.Job, error) {
 
 ## The `basic/` Subpackage
 
-**First, look for an importable client library.** Many APIs have well-maintained Go clients (GitHub, GitLab, Prometheus, etc.) - prefer those over building from scratch. `basic/` exists for two situations: (1) no good library exists and a hand-rolled HTTP client is the permanent solution, or (2) as temporary scaffolding while exploring an unfamiliar API before deciding whether to keep it or replace it with a library later.
+**First, look for an importable client library.** Many APIs have well-maintained
+Go clients (GitHub, GitLab, Prometheus, etc.) - prefer those over building from
+scratch. `basic/` exists for two situations: (1) no good library exists and a
+hand-rolled HTTP client is the permanent solution, or (2) as temporary
+scaffolding while exploring an unfamiliar API before deciding whether to keep it
+or replace it with a library later.
 
-When a client talks to a JSON API (vs. scraping HTML) and no suitable library exists, the raw HTTP layer lives in a `basic/` subpackage. The top-level client embeds it and returns typed entities.
+When a client talks to a JSON API (vs. scraping HTML) and no suitable library
+exists, the raw HTTP layer lives in a `basic/` subpackage. The top-level client
+embeds it and returns typed entities.
 
 ```
 pkg/<name>/
@@ -302,7 +309,8 @@ pkg/<name>/
     └── get.go         # Get(path string) string
 ```
 
-`basic/get.go` from `pkg/jenkins/basic` - builds URL with locator, sets auth, sends:
+`basic/get.go` from `pkg/jenkins/basic` - builds URL with locator, sets auth,
+sends:
 
 ```go
 func (c *Client) Get(path string) string {
@@ -316,10 +324,16 @@ func (c *Client) Get(path string) string {
 }
 ```
 
-For JSON APIs with typed responses, `Get` accepts an `out any` param and decodes into it:
+For JSON APIs with typed responses, `Get` accepts an `out any` param
+and decodes into it. A client that MCP or REST handlers call sends
+through `web.Do` and returns the error - `web.Send` panics, which the
+handler cannot turn into a tool result. `web.Do` also classifies 404
+as `not_found` and other non-okay statuses as `unexpected`, and keeps
+the query string out of its errors, since some APIs carry
+credentials there. `web.DoBytes` is the same for downloads:
 
 ```go
-func (c *Client) Get(path string, params map[string]string, out any) {
+func (c *Client) Get(path string, params map[string]string, out any) error {
     l := c.base.Copy().Path(path)
     for k, v := range params {
         l.Set(k, v)
@@ -327,27 +341,38 @@ func (c *Client) Get(path string, params map[string]string, out any) {
     r := web.NewGet(l.String())
     r.SetBasicAuth(c.user, c.token)
     r.Header.Set(webconstant.UserAgent, constant.UserAgent)
-    response := web.Send(web.Client(), r)
+    response, e := web.Do(web.Client(), r)
+    if e != nil {
+        return e
+    }
     defer errors.PanicClose(response.Body)
-    errors.PanicOnError(json.NewDecoder(response.Body).Decode(out))
+    return json.NewDecoder(response.Body).Decode(out)
 }
 ```
+
+An API whose error responses carry a structured reason worth relaying
+calls `web.Client().Do` and reads the body itself before classifying.
 
 The top-level client calls `basic.Get` and wraps results into entities:
 
 ```go
-func (c *Client) Posts(tag string, limit int) []*post.Post {
-    var out []post.PostData
-    c.basic.Get("/posts", map[string]string{"tags": tag}, &out)
-    return post.NewSlice(out)
+func (c *Client) Posts(tag string, limit int) ([]*post.Post, error) {
+    var out []post.PostPayload
+    if e := c.basic.Get("/posts", map[string]string{"tags": tag}, &out); e != nil {
+        return nil, e
+    }
+    return post.NewSlice(out), nil
 }
 ```
 
-`basic/` is omitted when the client is simple enough to do HTTP directly (e.g., scraper clients using goquery, single-endpoint tools).
+`basic/` is omitted when the client is simple enough to do HTTP directly (e.g.,
+scraper clients using goquery, single-endpoint tools).
 
 ## Semantic Layer Subpackages
 
-JSON shapes that serve a specific layer live in a subpackage named after that layer. One file per type, named after the type. The package name removes redundancy from type names (`response.Search` not `response.SearchResponse`).
+JSON shapes that serve a specific layer live in a subpackage named after that
+layer. One file per type, named after the type. The package name removes
+redundancy from type names (`response.Search` not `response.SearchResponse`).
 
 ### `<path>/convert/` and `<path>/response/` - output type filtering
 
@@ -358,9 +383,9 @@ Types that shape what callers see. Scoped to where they're consumed:
 - Types used only by MCP tools → `<path>/model_context/response/`
 - Types used only by REST handlers → `<path>/server/response/`
 
-`<path>/convert/` is the primary location - see `model-context.md`. Layer-specific
-`<path>/response/` subpackages exist when a layer has output shapes not shared
-with the other.
+`<path>/convert/` is the primary location - see `model-context.md`.
+Layer-specific `<path>/response/` subpackages exist when a layer has output
+shapes not shared with the other.
 
 ```
 pkg/<name>/
@@ -377,7 +402,8 @@ pkg/<name>/
     └── new.go
 ```
 
-This eliminates the `Data` suffix problem - `response.Link` vs `link.Link` provides disambiguation without a naming hack.
+This eliminates the `Data` suffix problem - `response.Link` vs `link.Link`
+provides disambiguation without a naming hack.
 
 ### `<path>/argument/` - MCP tool parameter structs
 
@@ -387,14 +413,18 @@ consumes it.
 
 ### `<path>/result/` - store return types
 
-Exported types that a store returns to callers, separate from the store's internal types and methods. Used when the store has many return types that would otherwise collide with method names (e.g. `result.Status` vs `store.Status()` method).
+Exported types that a store returns to callers, separate from the store's
+internal types and methods. Used when the store has many return types that would
+otherwise collide with method names (e.g. `result.Status` vs `store.Status()`
+method).
 
 ## Key Principles
 
 1. **Structs are pure data** - no client references, no HTTP logic
 2. **Entities own their presentation** - `Format(f)` method on the entity
 3. **Client does HTTP only** - fetches response, delegates parsing
-4. **Wrap external types** - `New(v *library.Type)` maps fields, stores `Raw` for passthrough
+4. **Wrap external types** - `New(v *library.Type)` maps fields, stores `Raw`
+   for passthrough
 5. **Color is optional** - controlled by `option.Format.UseColor`
 6. **Missing data has fallbacks** - constants like `NoUser`, `NoProject`
 7. **Prefer importable libraries** - `basic/` is a fallback, not a default

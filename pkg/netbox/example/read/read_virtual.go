@@ -10,7 +10,6 @@ func readVirtual(
 	n *netbox.Client,
 	f *option.Format,
 ) {
-	// Virtualization
 	for _, g := range n.MustClusterGroups() {
 		console.Format("ClusterGroup: %s\n", g.Format(f))
 	}

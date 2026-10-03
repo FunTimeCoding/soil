@@ -11,7 +11,6 @@ func (m *Model) fetchEvent(g fetch.Message) {
 
 	if !m.connect {
 		for i := range rows {
-			// Delete last column, user
 			rows[i] = rows[i][:len(rows[i])-1]
 		}
 	}

@@ -18,7 +18,7 @@ var (
 		"undefined",
 		0,
 		DefaultSource,
-	) // For monitor errors
+	)
 
 	GoBrew = collector.New(
 		"gobrew",

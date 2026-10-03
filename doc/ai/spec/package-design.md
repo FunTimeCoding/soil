@@ -9,20 +9,19 @@ Each package has at most one struct that carries methods (receivers). That
 struct is the package's identity. Its file is named after the struct in
 snake_case. Constructor lives in `new.go`.
 
-Data-only structs (no receivers) may coexist - one per file, named after
-the struct. Group related data structs in a dedicated sub-package when
-there are several (e.g. `<path>/response/` for response types, `<path>/option/` for
-configuration). Data-only structs with external dependencies or distinct
-domain identity may also warrant their own package, even without receivers,
-to keep the parent package's import graph clean and the concept
-self-contained.
+Data-only structs (no receivers) may coexist - one per file, named after the
+struct. Group related data structs in a dedicated sub-package when there are
+several (e.g. `<path>/response/` for response types, `<path>/option/` for
+configuration). Data-only structs with external dependencies or distinct domain
+identity may also warrant their own package, even without receivers, to keep the
+parent package's import graph clean and the concept self-contained.
 
 ## Bag Packages vs Own Packages
 
-Bag packages (`<path>/response/`, `<path>/request/`, `<path>/argument/`) hold pure data
-structs - no functions, no receivers. Typically shapes from external
-APIs (Habitica, Jira, Sentry, Salt, Loki, brew). The package groups
-by role (what came in, what goes out), not by type.
+Bag packages (`<path>/response/`, `<path>/request/`, `<path>/argument/`) hold
+pure data structs - no functions, no receivers. Typically shapes from external
+APIs (Habitica, Jira, Sentry, Salt, Loki, brew). The package groups by role
+(what came in, what goes out), not by type.
 
 When a type has distinct domain identity within our code - or gains
 behavior (formatters, receivers, helpers) - it moves to its own

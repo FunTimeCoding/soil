@@ -13,7 +13,6 @@ func ParseLocator(s string) *url.URL {
 		panic("locator must have a scheme")
 	}
 
-	// If no scheme is provided, the host becomes the scheme, which is wrong.
 	result, e := url.Parse(s)
 	errors.PanicOnError(e)
 

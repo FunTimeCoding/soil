@@ -16,7 +16,7 @@ func New(
 	t.Helper()
 	result := &Tester{t: t, ready: make(chan struct{})}
 	m := http.NewServeMux()
-	m.HandleFunc("/api/v4/websocket", result.socket)
+	m.HandleFunc("/api/v4/websocket", result.holdSocket)
 	configure(m)
 	s := httptest.NewServer(m)
 	t.Cleanup(s.Close)

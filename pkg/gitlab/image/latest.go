@@ -10,7 +10,7 @@ func Latest(v []*Image) *Image {
 
 	for _, e := range v {
 		current := e.Version()
-		// skip latest
+
 		if current == constant.LatestVersion {
 			continue
 		}

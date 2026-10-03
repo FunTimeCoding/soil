@@ -10,7 +10,6 @@ const (
 	AutoCleanupEnvironment = "KUBERNETES_AUTO_CLEANUP"
 )
 
-// NodeAll analogous to NamespaceAll
 const NodeAll = ""
 const (
 	Kubectl        = "kubectl"
@@ -28,7 +27,7 @@ const (
 	ExecuteSubResource = "exec"
 )
 
-const DNSConfigurationForming = "DNSConfigForming" // Event reason
+const DNSConfigurationForming = "DNSConfigForming"
 
 var IrrelevantEventReason = []string{DNSConfigurationForming}
 
@@ -45,7 +44,8 @@ const (
 	ManualHubJob = "manual-hub"
 )
 
-var NameExpression = regexp.MustCompile(`^[a-z0-9]([-a-z0-9]*[a-z0-9])?$`) // DNS-1123
+// Reference: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#dns-label-names
+var NameExpression = regexp.MustCompile(`^[a-z0-9]([-a-z0-9]*[a-z0-9])?$`)
 
 const (
 	TrivyArgument = "trivy"

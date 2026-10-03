@@ -5,13 +5,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
+// Reference: https://grafana.com/docs/loki/latest/reference/loki-http-api
 func New(
 	host string,
 	user string,
 	password string,
 	verbose bool,
 ) *Client {
-	// https://grafana.com/docs/loki/latest/reference/loki-http-api
 	return &Client{
 		user:     user,
 		password: password,

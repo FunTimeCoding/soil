@@ -80,6 +80,17 @@ func TestANestedListItemRewrapsToItsDeeperIndent(t *testing.T) {
 	)
 }
 
+func TestNeighbouringItemsStayApartWhenOneRewraps(t *testing.T) {
+	assert.String(
+		t,
+		"- **One:** short\n- **Two:** one two three four five six\n  seven eight\n- **Three:** short\n",
+		rewrapped(
+			t,
+			"- **One:** short\n- **Two:** one two three four five six seven eight\n- **Three:** short\n",
+		),
+	)
+}
+
 func TestASecondParagraphInsideAListItemKeepsItsIndent(t *testing.T) {
 	assert.String(
 		t,
@@ -241,6 +252,14 @@ func TestAQuoteMarkTravelsWithTheWordBeforeIt(t *testing.T) {
 		t,
 		"one two three four five six seven\neight >nine\n",
 		rewrapped(t, "one two three four five six seven eight >nine\n"),
+	)
+}
+
+func TestADecimalAtALineStartStaysProse(t *testing.T) {
+	assert.String(
+		t,
+		"one two three four five six seven eight\n2.5 nine\n",
+		rewrapped(t, "one two three four five six seven eight 2.5 nine\n"),
 	)
 }
 

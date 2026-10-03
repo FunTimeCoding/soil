@@ -13,7 +13,6 @@ func PostFile(
 	user string,
 	password string,
 ) {
-	// HTTP upload closes it
 	f := system.Open(name)
 	r := NewPostBytes(locator, f)
 	r.SetBasicAuth(user, password)

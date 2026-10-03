@@ -165,6 +165,10 @@ func TestNoPositionalsAcceptsFlags(t *testing.T) {
 	a.NoPositionals("hint")
 }
 
+func TestPositionalOutOfBoundsIsEmpty(t *testing.T) {
+	assert.String(t, "", argument.Positional(99))
+}
+
 func TestWebDefaults(t *testing.T) {
 	t.Setenv(webConstant.PortEnvironment, "")
 	t.Setenv(webConstant.BindEnvironment, "")

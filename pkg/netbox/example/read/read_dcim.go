@@ -10,7 +10,6 @@ func readDCIM(
 	n *netbox.Client,
 	f *option.Format,
 ) {
-	// Data Center Infrastructure Management
 	for _, l := range n.MustLocations() {
 		console.Format("Location: %s\n", l.Format(f))
 	}
@@ -43,9 +42,6 @@ func readDCIM(
 		}
 
 		if false {
-			// TODO: on load: panic: no value given for required property device
-			//  Even if name is set
-			//  But this worked yesterday..?
 			for _, i := range n.MustDeviceModuleBays(d.Name) {
 				console.Format("  ModuleBay: %s\n", i.Format(f))
 			}
@@ -89,8 +85,6 @@ func readDCIM(
 	}
 
 	if false {
-		// TODO: on load: panic: no value given for required property device
-		//  This also worked - is something corrupt in the devices?
 		for _, i := range n.MustModuleBays() {
 			console.Format("ModuleBay: %s\n", i.Format(f))
 		}
@@ -121,23 +115,19 @@ func readDCIM(
 	}
 
 	if false {
-		// TODO: go-netbox v4.3.0 requires rear_port, NetBox 4.6 returns null
-		//  and carries rear_ports instead. No newer SDK release exists.
 		for _, p := range n.MustFrontPorts() {
 			console.Format("FrontPort: %s\n", p.Format(f))
 		}
 	}
 
 	for _, p := range n.MustRearPorts() {
-		console.Format("FrontPort: %s\n", p.Format(f))
+		console.Format("RearPort: %s\n", p.Format(f))
 	}
 
 	for _, c := range n.MustVirtualDeviceContexts() {
 		console.Format("VirtualDeviceContext: %s\n", c.Format(f))
 	}
 
-	// TODO: How to create DeviceBay? "device not compatible"
-	//  And where to create DeviceBayTemplate? API only?
 	for _, t := range n.MustDeviceBayTemplates() {
 		console.Format("DeviceBayTemplate: %s\n", t.Format(f))
 	}

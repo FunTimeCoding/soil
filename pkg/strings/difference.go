@@ -1,6 +1,5 @@
 package strings
 
-// difference returns the elements in a that are not in b
 func difference(
 	a []string,
 	b []string,

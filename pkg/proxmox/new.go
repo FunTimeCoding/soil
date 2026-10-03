@@ -10,11 +10,11 @@ import (
 	"net/http"
 )
 
+// Reference: https://pve.proxmox.com/pve-docs/api-viewer
 func New(
 	host string,
 	o ...Option,
 ) *Client {
-	// https://pve.proxmox.com/pve-docs/api-viewer
 	result := &Client{context: context.Background()}
 
 	for _, p := range o {

@@ -1,6 +1,5 @@
 package constant
 
-// Method
 const (
 	Delete   = "DELETE"
 	Get      = "GET"

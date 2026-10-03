@@ -10,6 +10,8 @@ const (
 	NoPTYArgument            = "-T"
 	ForcePTYArgument         = "-tt"
 	VerboseArgument          = "-v"
+
+	TerminalBaudRate = 14400
 )
 const (
 	TargetHost = "target-host"

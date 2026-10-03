@@ -8,7 +8,6 @@ import (
 	"net"
 )
 
-// CreatePhysicalInterface Create MAC address and assign to existing interface
 func (c *Client) CreatePhysicalInterface(
 	a net.HardwareAddr,
 	description string,

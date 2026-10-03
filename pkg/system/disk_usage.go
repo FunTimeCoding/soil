@@ -5,7 +5,6 @@ package system
 import "syscall"
 
 func DiskUsage(path string) *DiskUsageReport {
-	// TODO: Make OS-independent: https://github.com/ricochet2200/go-disk-usage
 	var s syscall.Statfs_t
 	result := &DiskUsageReport{Path: path}
 

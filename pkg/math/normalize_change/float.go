@@ -1,8 +1,5 @@
 package normalize_change
 
-// Float
-//
-//	See Integer
 func Float(
 	now float64,
 	change float64,

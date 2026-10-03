@@ -1,10 +1,5 @@
 package normalize_change
 
-// Integer
-//
-//	If now is at maximum and change is positive, change is 0
-//	If now is below maximum and change exceeds it, change is the remaining amount
-//	Same for the minimum
 func Integer(
 	now int,
 	change int,

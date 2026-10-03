@@ -24,8 +24,10 @@ podman run --rm \
   "
 ```
 
-3. The output `.xpi` will have a hex-prefixed filename - this is normal. Rename it to `browser-bridge-<version>.xpi`.
-4. Report the path to the signed `.xpi` for installation via `about:addons` > gear > "Install Add-on From File".
+3. The output `.xpi` will have a hex-prefixed filename - this is normal. Rename
+   it to `browser-bridge-<version>.xpi`.
+4. Report the path to the signed `.xpi` for installation via `about:addons` >
+   gear > "Install Add-on From File".
 
 ## Maintenance links for the operator
 

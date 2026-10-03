@@ -6,8 +6,6 @@ import (
 	"path/filepath"
 )
 
-// The runner is the only git user in its container, so a lock
-// present between commands survived a killed git process.
 func (r *Runner) gitClean() {
 	lock := filepath.Join(r.clonePath, constant.RunnerIndexLock)
 

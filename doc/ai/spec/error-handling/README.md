@@ -2,9 +2,10 @@
 
 ## Principle
 
-Minimize `error` returns and `if e != nil` comparisons. Prefer `errors.PanicOnError`
-and rely on recovery chains to capture unexpected failures. Explicit error
-handling is reserved for cases where it is structurally required.
+Minimize `error` returns and `if e != nil` comparisons. Prefer
+`errors.PanicOnError` and rely on recovery chains to capture unexpected
+failures. Explicit error handling is reserved for cases where it is structurally
+required.
 
 The same posture for closing: prefer `errors.PanicClose` over checking
 close errors; use `LogClose` only in loops or uncertain contexts (e.g.
@@ -16,11 +17,12 @@ escalation) lives in `../naming.md`.
 
 Three recovery layers wrap all program execution:
 
-**Entrypoint** (`Main()`): `defer func() { r.RecoverFlush(recover()) }()` captures
-panics from the entire program. See `entrypoint.md`.
+**Entrypoint** (`Main()`): `defer func() { r.RecoverFlush(recover()) }()`
+captures panics from the entire program. See `entrypoint.md`.
 
-**HTTP middleware** (`web.RecoveryMiddleware`): wraps the HTTP mux. Panics from web
-handlers are caught, reported via `r.Recover(v)`, and converted to 500 responses.
+**HTTP middleware** (`web.RecoveryMiddleware`): wraps the HTTP mux. Panics from
+web handlers are caught, reported via `r.Recover(v)`, and converted to 500
+responses.
 
 **Worker goroutines**: per-iteration work runs through the shared
 `recovery.Recovery` component (`pkg/errors/sentry/recovery`). Panics are
@@ -47,10 +49,10 @@ errors.PanicOnError(s.store.Save(record))
 
 ### Flow control exception: return `error`
 
-Use when the error outcome changes what happens next - not just "something went wrong"
-but "this specific failure path has distinct handling." The canonical example is a
-job worker marking status transitions: a failed status update means the job must be
-skipped, which requires the caller to act differently.
+Use when the error outcome changes what happens next - not just "something went
+wrong" but "this specific failure path has distinct handling." The canonical
+example is a job worker marking status transitions: a failed status update means
+the job must be skipped, which requires the caller to act differently.
 
 ```go
 if e := w.store.UpdateStatus(job.ID, "processing"); e != nil {
@@ -90,15 +92,19 @@ error is surfaced.
 
 ## Leaves
 
-- [mcp.md](mcp.md) - MCP tiers, captureFail, captureDetail, detail_error, parseDetail
+- [mcp.md](mcp.md) - MCP tiers, captureFail, captureDetail, detail_error,
+  parseDetail
 - [rest.md](rest.md) - strict server tiers, clientError, captureFail on REST
-- [external-api.md](external-api.md) - captureDetail pattern, default posture, sentinel classification, typed errors, message format
-- [infrastructure.md](infrastructure.md) - store method rule, worker recovery, HTTP recovery, Sentry enrichment, external process, self-healing
+- [external-api.md](external-api.md) - captureDetail pattern, default posture,
+  sentinel classification, typed errors, message format
+- [infrastructure.md](infrastructure.md) - store method rule, worker recovery,
+  HTTP recovery, Sentry enrichment, external process, self-healing
 
 ## Deviations
 
-**vs idiomatic Go**: idiomatic Go returns `(T, error)` from nearly everything. Here,
-error returns are the exception, not the rule.
+**vs idiomatic Go**: idiomatic Go returns `(T, error)` from nearly everything.
+Here, error returns are the exception, not the rule.
 
-**vs Claude defaults**: Claude will tend to add `if e != nil` handling everywhere and
-thread errors up the call stack. Resist this. When in doubt, `PanicOnError`.
+**vs Claude defaults**: Claude will tend to add `if e != nil` handling
+everywhere and thread errors up the call stack. Resist this. When in doubt,
+`PanicOnError`.

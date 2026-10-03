@@ -1,8 +1,5 @@
 package scale
 
-// Float
-// At factor 0: from value
-// At factor 1: to value
 func Float(
 	from float64,
 	to float64,

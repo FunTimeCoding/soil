@@ -10,7 +10,6 @@ func Latest(v []*Tag) *Tag {
 	result := v[0]
 
 	for _, e := range v {
-		// only consider tags with prefix
 		if !strings.HasPrefix(e.Name, constant.VersionPrefix) {
 			continue
 		}

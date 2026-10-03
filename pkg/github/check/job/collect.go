@@ -12,7 +12,6 @@ func collect(
 	o *option.Job,
 ) []*run.Run {
 	if o.Notation && o.Verbose {
-		// Verbose breaks JSON stdout
 		o.Verbose = false
 	}
 

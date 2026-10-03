@@ -3,6 +3,7 @@ package ssh
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/ssh/command"
+	"github.com/funtimecoding/soil/pkg/ssh/constant"
 	"github.com/funtimecoding/soil/pkg/ssh/result"
 	"github.com/funtimecoding/soil/pkg/strings/join/key_value"
 	"github.com/funtimecoding/soil/pkg/strings/trim"
@@ -22,15 +23,13 @@ func (c *Client) RunCommand(o *command.Command) *result.Result {
 				25,
 				80,
 				ssh.TerminalModes{
-					//ssh.ECHO:          0,     // disable echo
-					ssh.TTY_OP_ISPEED: 14400, // input speed kilo-baud
-					ssh.TTY_OP_OSPEED: 14400, // output speed in kilo-baud
+					ssh.TTY_OP_ISPEED: constant.TerminalBaudRate,
+					ssh.TTY_OP_OSPEED: constant.TerminalBaudRate,
 				},
 			),
 		)
 	}
 
-	setEnvironment(s, o)
 	var text string
 
 	if prefix := EnvironmentPrefix(o); prefix != "" {

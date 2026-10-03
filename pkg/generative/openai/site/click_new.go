@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Site) clickNew() {
-	n := s.session.Select(constant.OpenAINewSelector, 0)
+	n := s.session.Select(constant.OpenAINewSelector, constant.OpenAINewIndex)
 
 	if n == nil {
 		return

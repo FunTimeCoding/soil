@@ -1,6 +1,7 @@
 # Build Spec
 
-`gobuild` cross-compiles Go binaries with version metadata injected via linker flags.
+`gobuild` cross-compiles Go binaries with version metadata injected via linker
+flags.
 
 ## Usage
 
@@ -58,11 +59,13 @@ tmp/<name>/
 
 ## Entry Point Contract
 
-See `entrypoint.md` for the linker variable and `Main()` convention. `gobuild` injects `Version`, `GitHash`, and `BuildDate` at compile time.
+See `entrypoint.md` for the linker variable and `Main()` convention. `gobuild`
+injects `Version`, `GitHash`, and `BuildDate` at compile time.
 
 ## Main Path Resolution
 
-`gobuild` locates the entry point via `build.GuessMainPath(name)`, which looks for `cmd/<name>/main.go`. Override with `--main` flag.
+`gobuild` locates the entry point via `build.GuessMainPath(name)`, which looks
+for `cmd/<name>/main.go`. Override with `--main` flag.
 
 ## Packages
 

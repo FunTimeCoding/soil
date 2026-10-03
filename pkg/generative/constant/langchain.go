@@ -23,8 +23,6 @@ var LangchainExampleFunctions = []llms.FunctionDefinition{
 		),
 	},
 	{
-		// I found that providing a tool for Ollama to give the final response significantly
-		// increases the chances of success.
 		Name:        "finalResponse",
 		Description: "Provide the final response to the user query",
 		Parameters: json.RawMessage(

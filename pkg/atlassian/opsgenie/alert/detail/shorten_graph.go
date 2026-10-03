@@ -4,7 +4,6 @@ import "strings"
 
 func shortenGraph(s string) string {
 	if false {
-		// This is helpful to have the graph selected
 		s = strings.ReplaceAll(s, "&g0.tab=0", "")
 	}
 

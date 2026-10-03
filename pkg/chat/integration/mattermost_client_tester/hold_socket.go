@@ -6,9 +6,7 @@ import (
 	"net/http"
 )
 
-// The client dials the websocket during construction; hold the
-// upgraded connection open until the client side closes it.
-func (t *Tester) socket(
+func (t *Tester) holdSocket(
 	w http.ResponseWriter,
 	q *http.Request,
 ) {

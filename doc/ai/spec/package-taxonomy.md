@@ -49,9 +49,9 @@ server/  model_context/  web/  client/  integration/
                     web/view/ → web/layout/ → web/layout/navigation_item/
 ```
 
-`<path>/server/`, `<path>/model_context/`, `<path>/web/`, and `<path>/client/` are leaf packages -
-they import from lower layers but nothing imports from them (except
-tests and the run wiring).
+`<path>/server/`, `<path>/model_context/`, `<path>/web/`, and `<path>/client/`
+are leaf packages - they import from lower layers but nothing imports from them
+(except tests and the run wiring).
 
 Cycle avoidance: if two packages need each other's types, the shared types
 belong in `<path>/types/` (or an interface in `<path>/face/`).
@@ -75,8 +75,8 @@ bare-`constant.go` stage. Inside `<path>/constant/`:
 ### No package → `<path>/types/`
 
 Introduce when domain types with methods appear that are not persistence
-entities. `<path>/types/` is a subtree - each type gets its own sub-package per the
-one-struct rule:
+entities. `<path>/types/` is a subtree - each type gets its own sub-package per
+the one-struct rule:
 
 ```
 types/
@@ -85,8 +85,8 @@ types/
 └── image/          # Image struct + attribute accessors
 ```
 
-`<path>/types/` packages have no persistence deps (no ORM, no store). They define
-what the domain looks like; `<path>/model/` defines how it's stored.
+`<path>/types/` packages have no persistence deps (no ORM, no store). They
+define what the domain looks like; `<path>/model/` defines how it's stored.
 
 ### No package → `<path>/model/`
 
@@ -104,8 +104,8 @@ constructor). Extract sub-packages when a second entity with receivers appears.
 
 ### No package → `<path>/helper/`
 
-**Avoid.** `<path>/helper/` and `<path>/util/` are junk-drawer anti-patterns. Every function
-has a proper home:
+**Avoid.** `<path>/helper/` and `<path>/util/` are junk-drawer anti-patterns.
+Every function has a proper home:
 
 - Query/classification logic on domain data → registry struct (see below)
 - Single-consumer utilities → private function in the consumer package
@@ -120,8 +120,8 @@ catch-all bucket.
 When `<path>/constant/` accumulates query functions (lookups, predicates,
 classification, splitting) that operate on its declarative data, consider
 extracting them into a struct with methods in a dedicated package (e.g.
-`<concept>_registry/`). The struct holds references to the data; `<path>/constant/`
-instantiates it and exports the instance. Consumers call
+`<concept>_registry/`). The struct holds references to the data;
+`<path>/constant/` instantiates it and exports the instance. Consumers call
 `constant.Registry.Method()`.
 
 This keeps `<path>/constant/` purely declarative and gives query logic a named,
@@ -129,9 +129,9 @@ testable home without scattering it across consumer packages.
 
 ### No package → `<path>/integration/`
 
-Introduce when cross-package tests exist. Tests live in facet
-subpackages (`<path>/client/`, `<path>/model_context/`, `<path>/web_interface/`, ...)
-with shared setup exported from `<path>/base/` — layout, naming, and the
+Introduce when cross-package tests exist. Tests live in facet subpackages
+(`<path>/client/`, `<path>/model_context/`, `<path>/web_interface/`, ...) with
+shared setup exported from `<path>/base/` — layout, naming, and the
 unit/integration line are in `test-placement.md`.
 
 ## Flat Package Guidelines
@@ -177,12 +177,16 @@ The suffix matches the type name. This avoids collisions like `Debian`
 
 A service tool typically evolves in this order:
 
-1. **Base tree** - `<path>/option/`, `<path>/store/`, `<path>/server/` (or `<path>/web/`), `run.go`
+1. **Base tree** - `<path>/option/`, `<path>/store/`, `<path>/server/` (or
+   `<path>/web/`), `run.go`
 2. **MCP layer** - `<path>/model_context/` + tool registration
 3. **Constants outgrow** - promote `constant.go` → `<path>/constant/`
-4. **Types emerge** - extract `<path>/types/<concept>/` for non-persistence domain types
-5. **Model splits** - extract `<path>/model/<entity>/` when multiple entities appear
-6. **Query logic extracts** - operations on constant data move to a registry struct
+4. **Types emerge** - extract `<path>/types/<concept>/` for non-persistence
+   domain types
+5. **Model splits** - extract `<path>/model/<entity>/` when multiple entities
+   appear
+6. **Query logic extracts** - operations on constant data move to a registry
+   struct
 7. **Tests consolidate** - collect cross-package tests in `<path>/integration/`
 
 Not every service reaches every stage. Promote only when the criteria above

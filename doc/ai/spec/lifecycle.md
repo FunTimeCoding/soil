@@ -1,6 +1,8 @@
 # Lifecycle Spec
 
-Reusable application lifecycle manager for service-style applications that serve HTTP routes and run background workers. Handles startup ordering and reverse-order shutdown.
+Reusable application lifecycle manager for service-style applications that serve
+HTTP routes and run background workers. Handles startup ordering and
+reverse-order shutdown.
 
 ## Package
 
@@ -8,7 +10,9 @@ Reusable application lifecycle manager for service-style applications that serve
 
 ## Core Concept
 
-Components (servers and workers) are registered via functional options. They start in registration order and stop in reverse registration order. `RunUntilSignal()` handles the run/block/stop sequence.
+Components (servers and workers) are registered via functional options. They
+start in registration order and stop in reverse registration order.
+`RunUntilSignal()` handles the run/block/stop sequence.
 
 ## File Layout
 
@@ -54,7 +58,8 @@ type Worker interface {
 }
 ```
 
-Implemented by: `ticker.Ticker`, `reporter.Reporter`, and any struct with `Start()`/`Stop()`.
+Implemented by: `ticker.Ticker`, `reporter.Reporter`, and any struct with
+`Start()`/`Stop()`.
 
 ## WithServer
 
@@ -81,7 +86,7 @@ Builder methods on `*server.Server`:
   an address. Used in tests with `system.ClaimPort()`.
 
 Mixed servers (REST routes + MCP/SSE on the same mux) omit
-`WithProtected()` - the streaming endpoint governs the timeout.
+`WithProtected()` - the streaming endpoint decides the timeout.
 
 ## Registration Order Matters
 
@@ -99,8 +104,10 @@ Stop happens in reverse: the server shuts down before the worker stops.
 
 ## What Stays Outside Lifecycle
 
-- **Sentry** - lives in `Main()`, not `Run()`. See `entrypoint.md`. The `recover()` defer in `Main()` catches panics from `Run()`.
-- **App-specific setup** - database connections, client construction, configuration parsing. All happen before `lifecycle.New()`.
+- **Sentry** - lives in `Main()`, not `Run()`. See `entrypoint.md`. The
+  `recover()` defer in `Main()` catches panics from `Run()`.
+- **App-specific setup** - database connections, client construction,
+  configuration parsing. All happen before `lifecycle.New()`.
 
 ## Usage Pattern
 
@@ -130,9 +137,13 @@ reporter creation.
 
 To make a type usable as a `lifecycle.Worker`:
 
-- **Move runtime parameters into constructor.** If `Start(hourly bool)` takes args, move them to `New(..., hourly)` so `Start()` takes none.
-- **Move callbacks into options.** If `Start(fn)` takes a callback, add a `WithSubscriber(fn)` option so `Start()` reads from the struct.
-- **HTTP servers become route registrars.** If a server type owns its own `*http.Server`, extract a `Setup(m *http.ServeMux)` method and let lifecycle own the HTTP serving via `WithServer`.
+- **Move runtime parameters into constructor.** If `Start(hourly bool)` takes
+  args, move them to `New(..., hourly)` so `Start()` takes none.
+- **Move callbacks into options.** If `Start(fn)` takes a callback, add a
+  `WithSubscriber(fn)` option so `Start()` reads from the struct.
+- **HTTP servers become route registrars.** If a server type owns its own
+  `*http.Server`, extract a `Setup(m *http.ServeMux)` method and let lifecycle
+  own the HTTP serving via `WithServer`.
 
 ## Soil Components with Start()/Stop()
 

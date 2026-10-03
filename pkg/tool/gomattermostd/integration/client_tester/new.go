@@ -15,10 +15,6 @@ import (
 	"testing"
 )
 
-// New serves a mock Mattermost upstream, points the daemon's REST
-// server at it, and returns a generated client against that server.
-// The upstream pre-answers the team lookup for the "tango" team the
-// client construction requires; the rest comes from configure.
 func New(
 	t *testing.T,
 	configure func(*http.ServeMux),

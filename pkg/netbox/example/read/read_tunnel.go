@@ -10,7 +10,6 @@ func readTunnel(
 	n *netbox.Client,
 	f *option.Format,
 ) {
-	// VPN
 	for _, g := range n.MustTunnelGroups() {
 		console.Format("TunnelGroup: %s\n", g.Format(f))
 	}

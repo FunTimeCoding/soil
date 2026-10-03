@@ -7,6 +7,5 @@ import (
 
 func Statistic() {
 	c := loki.NewEnvironment(true)
-	// TODO: Somehow just returns zeroes
 	console.Format("Statistic: %s", c.Statistic(`{namespace!=""}`))
 }

@@ -20,7 +20,7 @@ const (
 	LokiSeries     = "/series"
 	LokiStatistic  = "/index/stats"
 	LokiValues     = "/values"
-	// Stream
+
 	Stdout           = "stdout"
 	Stderr           = "stderr"
 	LokiMaximumLimit = 5000

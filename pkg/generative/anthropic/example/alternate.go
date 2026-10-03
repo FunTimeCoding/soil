@@ -10,7 +10,6 @@ import (
 )
 
 func Alternate() {
-	// https://github.com/liushuangls/go-anthropic
 	c := anthropic.NewClient(
 		environment.Required(constant.AnthropicTokenEnvironment),
 	)

@@ -9,11 +9,11 @@ const (
 	OllamaHost     = constant.Localhost
 	OllamaPort int = 11434
 
-	Llama31   = "llama3.1"    // 8b
-	Llama32   = "llama3.2"    // 3b
-	Llama321b = "llama3.2:1b" // 1b
+	Llama31   = "llama3.1"
+	Llama32   = "llama3.2"
+	Llama321b = "llama3.2:1b"
 
-	OllamaEmbedModel = "nomic-embed-text" // 768 dimensions
+	OllamaEmbedModel = "nomic-embed-text"
 
 	OllamaSystemRole    = "system"
 	OllamaUserRole      = "user"

@@ -114,10 +114,10 @@ enriched:
 - `face.BodyProvider` (`Body() []byte`) - e.g.
   `*netbox.GenericOpenAPIError` - attaches the response body as
   a `response` context.
-- `face.ContextProvider` (`ErrorContext() (string, map[string]any)`)
-  - e.g. `*command.CommandError` ("process"), `*job.JobError`
-  ("job"), `*detail_error.Detail` ("upstream": status, detail,
-  body) - attaches the map under the key the error names.
+- `face.ContextProvider` (`ErrorContext() (string, map[string]any)`) - e.g.
+  `*command.CommandError` ("process"), `*job.JobError` ("job"),
+  `*detail_error.Detail` ("upstream": status, detail, body) - attaches the map
+  under the key the error names.
 
 This is the enrichment mechanism: errors carry their own story,
 and the single capture at the recovery boundary attaches it.

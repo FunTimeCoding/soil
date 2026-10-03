@@ -34,7 +34,6 @@ func (c *Client) Runners(all bool) ([]*runner.Runner, error) {
 		}
 
 		if false {
-			// Paging does not make sense, duplicates are returned
 			headerKeys := []string{
 				"X-Next-Page",
 				"X-Page",

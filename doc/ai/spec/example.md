@@ -7,8 +7,8 @@ just to fill the slot.
 
 ## Location
 
-Example functions live in `pkg/<domain>/example/` subpackages. Entry points that run them
-live in `cmd/example/<name>/main.go`.
+Example functions live in `pkg/<domain>/example/` subpackages. Entry points that
+run them live in `cmd/example/<name>/main.go`.
 
 ```
 pkg/gitlab/example/runner.go        → func Runner()
@@ -31,8 +31,8 @@ func Runner() {
 
 ## Multi-Function Examples
 
-When an example needs private helper functions, use a subdirectory. The exported entry
-point and each helper get their own file.
+When an example needs private helper functions, use a subdirectory. The exported
+entry point and each helper get their own file.
 
 ```
 pkg/kubernetes/example/node_check/
@@ -45,9 +45,9 @@ Entry points are exported. Helpers are private.
 
 ## cmd/example/ Entry Points
 
-Each `cmd/example/<name>/main.go` is a **single file**. No helper files, no splits.
-`go run main.go` only compiles the one file passed to it, so all code must be reachable
-from that file via imports.
+Each `cmd/example/<name>/main.go` is a **single file**. No helper files, no
+splits. `go run main.go` only compiles the one file passed to it, so all code
+must be reachable from that file via imports.
 
 ```go
 package main
@@ -61,8 +61,8 @@ func main() {
 
 ### Disabled Scenarios
 
-The live example runs at the top level. Disabled examples go in a single `if false`
-block at the bottom.
+The live example runs at the top level. Disabled examples go in a single
+`if false` block at the bottom.
 
 ```go
 func main() {
@@ -77,6 +77,9 @@ func main() {
 
 ## What Not to Do
 
-- Do not split `cmd/example/` into multiple `.go` files - breaks `go run main.go`
-- Do not put private helpers in `cmd/example/` - move them to `pkg/<domain>/example/`
-- Do not put complex logic directly in `cmd/example/<name>/main.go` - extract to a `pkg` example function
+- Do not split `cmd/example/` into multiple `.go` files - breaks
+  `go run main.go`
+- Do not put private helpers in `cmd/example/` - move them to
+  `pkg/<domain>/example/`
+- Do not put complex logic directly in `cmd/example/<name>/main.go` - extract to
+  a `pkg` example function

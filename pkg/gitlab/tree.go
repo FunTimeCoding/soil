@@ -35,7 +35,6 @@ func (c *Client) Tree(
 	result, r, e := c.client.Repositories.ListTree(project, o)
 
 	if r != nil && r.StatusCode == 404 {
-		// Do not panic
 		return []*tree.Node{}, nil
 	}
 

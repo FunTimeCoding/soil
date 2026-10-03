@@ -18,14 +18,23 @@ func Check(
 		}
 
 		regions := emptyRegions(file)
+		docs := declarationDocs(file)
 
 		for _, group := range file.Comments {
+			referenced := false
+
 			for _, c := range group.List {
 				if isDirective(c.Text) {
 					continue
 				}
 
 				if isEmptinessMarker(c, regions) {
+					continue
+				}
+
+				if docs[group] && !referenced && isReference(c.Text) {
+					referenced = true
+
 					continue
 				}
 

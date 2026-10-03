@@ -49,10 +49,9 @@ const (
 	Interface1000BaseT    = "1000base-t"
 	Interface2500BaseT    = "2.5gbase-t"
 
-	// Status label
 	RackActiveLabel     = "Active"
 	RackDeprecatedLabel = "Deprecated"
-	// Status value
+
 	RackActive     = "active"
 	RackDeprecated = "deprecated"
 	RackUnknown    = "unknown"

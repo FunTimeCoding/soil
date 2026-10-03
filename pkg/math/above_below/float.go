@@ -1,8 +1,5 @@
 package above_below
 
-// Float
-//
-//	See Integer
 func Float(
 	f float64,
 	magnitude float64,

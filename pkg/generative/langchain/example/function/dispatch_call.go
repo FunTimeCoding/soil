@@ -6,8 +6,6 @@ import (
 )
 
 func dispatchCall(c *Call) (llms.MessageContent, bool) {
-	// ollama doesn't always respond with a *valid* function call. As we're using prompt
-	// engineering to inject the tools, it may hallucinate.
 	if !validTool(c.Tool) {
 		log.Printf(
 			"invalid function call: %#v, prompting model to try again",
@@ -20,7 +18,6 @@ func dispatchCall(c *Call) (llms.MessageContent, bool) {
 		), true
 	}
 
-	// we could make this more dynamic by parsing the function schema
 	switch c.Tool {
 	case "getCurrentWeather":
 		l, okay := c.Input["location"].(string)
@@ -49,7 +46,6 @@ func dispatchCall(c *Call) (llms.MessageContent, bool) {
 
 		return llms.MessageContent{}, false
 	default:
-		// we already checked above if we had a valid tool
 		panic("unreachable")
 	}
 }

@@ -1,6 +1,7 @@
 # Naming Conventions
 
-Enforced by the `goanalyze` naming analyzer (`pkg/lint/analyzer/naming/`). Auto-fixed by `gofix`.
+Enforced by the `goanalyze` naming analyzer (`pkg/lint/analyzer/naming/`).
+Auto-fixed by `gofix`.
 
 The full banned-segment list lives in `pkg/lint/segment/` - `suggestions.go`
 (~50 abbreviations with letter/word replacements: `id`, `url`, `mcp`, `dir`,
@@ -37,8 +38,8 @@ pattern for the segments where the fix isn't a mechanical replacement.
 
 ## Type name conflicts
 
-When stripping a banned suffix would produce a name already taken in the same package,
-append `Payload` instead of stripping:
+When stripping a banned suffix would produce a name already taken in the same
+package, append `Payload` instead of stripping:
 
 ```go
 // Comment type exists → can't strip to Comment
@@ -56,13 +57,13 @@ Avoid acronym-based type names. Prefer a plain English noun:
 type Meta struct { ... }  // was SDKInfo - holds SDK name/version/packages
 ```
 
-`Meta` is appropriate when the struct holds metadata about a tool or runtime component
-and no collision exists in the package.
+`Meta` is appropriate when the struct holds metadata about a tool or runtime
+component and no collision exists in the package.
 
 ## Domain terms
 
-Some names contain a banned segment but refer to a real-world domain concept. Rename to the
-most specific English term for that domain artifact:
+Some names contain a banned segment but refer to a real-world domain concept.
+Rename to the most specific English term for that domain artifact:
 
 | Original | Renamed | Rationale |
 |----------|---------|-----------|
@@ -98,11 +99,14 @@ verification.
 
 See `generated-api.md` for the full Server pattern. Summary:
 
-- The struct implementing `ServerInterface` is named `Server`, never `Handler` or `Router`
+- The struct implementing `ServerInterface` is named `Server`, never `Handler`
+  or `Router`
 - Receiver on `*Server` methods: `s`
 - `*http.Request` parameter: `q` (avoids collision with receiver)
 - Function parameter that accepts a handler func: `serve`, not `handler`
-- Handler methods/functions are named after the resource they serve, without a `handle` prefix: `handleAlerts` → `alerts`, `handleDashboard` → `dashboard`, `handleAddSubmit` → `addSubmit`
+- Handler methods/functions are named after the resource they serve, without a
+  `handle` prefix: `handleAlerts` → `alerts`, `handleDashboard` → `dashboard`,
+  `handleAddSubmit` → `addSubmit`
 
 ## Qualifier order
 
@@ -127,13 +131,15 @@ reader nothing. The name carries the semantics:
 
 ## HTML node builder naming
 
-Functions returning `g.Node` (gomponents HTML builders) are named after the component they produce, not the action of building it:
+Functions returning `g.Node` (gomponents HTML builders) are named after the
+component they produce, not the action of building it:
 
 - `alertsTable()` - renders the alerts table
 - `addForm()` - renders the add entry form
 - `navigationLink()` - renders a navigation link
 
-File name follows the function name: `alerts_table.go`, `add_form.go`, `nav_link.go`.
+File name follows the function name: `alerts_table.go`, `add_form.go`,
+`nav_link.go`.
 
 ## Variable shorthands
 
@@ -168,17 +174,22 @@ body. Avoid `-ing` and plural forms in names.
 
 ## Single-character collision fallback
 
-When the suggested single character is already taken in scope (e.g. `m` is the receiver of `*Model`), step through the letters of the full word in order until a free one is found:
+When the suggested single character is already taken in scope (e.g. `m` is the
+receiver of `*Model`), step through the letters of the full word in order until
+a free one is found:
 
 - `markup` → `m`, `a`, `r`, `k`, `u`, `p`
-- `notation` → `j` (first letter of json, the dominant format), then `n`, `o`, `t`, `a`, `i`
+- `notation` → `j` (first letter of json, the dominant format), then `n`, `o`,
+  `t`, `a`, `i`
 - `error` → `e`, `f`, `g`, `h`
 
-The linter suggests only the first option. Choosing a later letter when there is a collision is left to the developer.
+The linter suggests only the first option. Choosing a later letter when there is
+a collision is left to the developer.
 
 ## HTML custom attributes
 
-`data-*` attributes are HTML's custom attribute mechanism. Use `Custom` as the replacement term:
+`data-*` attributes are HTML's custom attribute mechanism. Use `Custom` as the
+replacement term:
 
 ```go
 CustomPrefix       = "data-"   // was DataPrefix

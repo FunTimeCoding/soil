@@ -30,7 +30,6 @@ func UnmarshalUnknown(
 		j := f.Tag.Get(constant.NotationKey)
 
 		if j != "" && j != "-" {
-			// omitempty tags
 			for x := 0; x < len(j); x++ {
 				if j[x] == ',' {
 					j = j[:x]
@@ -41,7 +40,6 @@ func UnmarshalUnknown(
 
 			known[j] = true
 		} else if j == "" {
-			// no tag = lowercase field
 			known[f.Name] = true
 		}
 	}

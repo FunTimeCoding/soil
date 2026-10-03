@@ -51,10 +51,6 @@ func checkEntryGuards(
 				continue
 			}
 
-			// A reference into the target package naturalizes on
-			// restore: the decorator carries the import path on the
-			// ident and the target restorer renders its own path
-			// bare, adding no self-import.
 			if importPath == targetPackagePath {
 				continue
 			}

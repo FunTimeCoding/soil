@@ -8,9 +8,6 @@ import (
 	"path/filepath"
 )
 
-// A mismatch in either direction rewrites visibility silently -
-// a constrained symbol lands unconstrained, or the reverse - so
-// both refuse; hand-moving stays the escape hatch.
 func planConstraints(
 	set *token.FileSet,
 	target *packages.Package,

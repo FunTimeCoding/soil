@@ -41,7 +41,6 @@ func main() {
 		openai.Client()
 		anthropic.Official()
 		anthropic.Alternate()
-		langchain.Chroma()
 		function.Function()
 		langchain.Local()
 		openWebUI.Load()

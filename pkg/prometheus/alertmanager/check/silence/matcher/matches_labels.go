@@ -21,7 +21,6 @@ func matchesLabels(
 		console.Format("LabelSet: %+v\n", l)
 	}
 
-	// Missing labels are treated as empty strings, matching Alertmanager behavior
 	value := l[*m.Name]
 
 	if *m.IsRegex {
@@ -32,19 +31,15 @@ func matchesLabels(
 		}
 
 		if *m.IsEqual {
-			// =~
 			return r.MatchString(value)
 		}
 
-		// !~
 		return !r.MatchString(value)
 	}
 
 	if *m.IsEqual {
-		// =
 		return value == *m.Value
 	}
 
-	// !=
 	return value != *m.Value
 }

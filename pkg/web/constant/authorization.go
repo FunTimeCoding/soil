@@ -23,7 +23,6 @@ const (
 	ServiceTokenEnvironment = "SERVICE_TOKEN"
 )
 
-// Notation key
 const (
 	AuthorizationServer   = "authorization_servers"
 	AuthorizationResource = "resource"

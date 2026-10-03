@@ -6,10 +6,8 @@ import (
 )
 
 func PublicHoliday(t time.Time) bool {
-	for _, d := range constant.PublicHolidays {
-		if d.Year() == t.Year() &&
-			d.Month() == t.Month() &&
-			d.Day() == t.Day() {
+	for _, h := range constant.PublicHolidays {
+		if h.On(t) {
 			return true
 		}
 	}

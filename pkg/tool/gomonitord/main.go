@@ -23,8 +23,6 @@ func Main(
 	a.Parse(version, gitHash, buildDate)
 
 	if false {
-		// Start server: go run cmd/gomonitord/main.go localhost:3002
-		// Connect: websocat ws://127.0.0.1:3002 --protocol echo
 		errors.PanicOnError(coder.Run())
 	}
 

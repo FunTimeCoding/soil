@@ -9,9 +9,6 @@ import (
 	"time"
 )
 
-// echo reads from the WebSocket connection and then writes
-// the received message back to it.
-// The entire function has 10s to complete.
 func echo(
 	c *websocket.Conn,
 	l *rate.Limiter,

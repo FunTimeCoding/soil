@@ -6,9 +6,6 @@ import (
 	"github.com/mattermost/mattermost/server/public/model"
 )
 
-// LatestPosts fetches the newest posts for display, returned oldest
-// first. Not to be confused with PostsBefore, which skips the newest
-// posts and collects older ones for deletion workflows.
 func (c *Client) LatestPosts(
 	h *model.Channel,
 	limit int,

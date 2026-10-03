@@ -1,6 +1,5 @@
 package constant
 
-// Scheme
 const (
 	Insecure     = "http"
 	Secure       = "https"

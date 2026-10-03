@@ -22,7 +22,6 @@ func Function() {
 	)
 	errors.PanicOnError(clientFail)
 	var messages []llms.MessageContent
-	// system message defines the available tools.
 	messages = append(
 		messages,
 		llms.TextParts(llms.ChatMessageTypeSystem, systemMessage()),
@@ -60,7 +59,6 @@ func Function() {
 
 			messages = append(messages, m)
 		} else {
-			// Ollama doesn't always respond with a function call, let it try again.
 			log.Printf("Not a call: %v", choice1.Content)
 			messages = append(
 				messages,

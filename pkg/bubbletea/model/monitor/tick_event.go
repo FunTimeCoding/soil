@@ -25,7 +25,6 @@ func (m *Model) tickEvent(g tick.Message) (*Model, tea.Cmd) {
 
 	if m.second%60 == 0 {
 		if m.second == 0 {
-			// Load on startup
 			result = append(result, fetch.Command())
 		} else {
 			if m.connect {

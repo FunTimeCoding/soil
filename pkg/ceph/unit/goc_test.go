@@ -11,13 +11,11 @@ import (
 
 func TestEnvironment(t *testing.T) {
 	if false {
-		// Only works for the running process
 		environment.Set(constant.ConfigurationEnvironment, strings.UpperAlfa)
 		environment.Set(constant.ArgumentEnvironment, strings.UpperBravo)
 	}
 
 	if false {
-		// Not sure if this works
 		goc.SetEnvironmentEscape(
 			constant.ConfigurationEnvironment,
 			strings.UpperAlfa,
@@ -29,7 +27,6 @@ func TestEnvironment(t *testing.T) {
 	}
 
 	if false {
-		// Not working
 		console.Format(
 			"Get escape: %s\n",
 			goc.GetEnvironmentEscape(constant.ConfigurationEnvironment),

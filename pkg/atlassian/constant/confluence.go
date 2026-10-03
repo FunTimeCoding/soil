@@ -38,7 +38,7 @@ const (
 	ConfluenceGetDraft       = "get-draft"
 
 	ConfluenceExpand = "expand"
-	// Body format
+
 	ConfluenceViewFormat      = "view"
 	ConfluenceAtlasFormat     = "atlas_doc_format"
 	ConfluenceStorageFormat   = "storage"

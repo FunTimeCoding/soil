@@ -10,6 +10,7 @@ import (
 	"net/url"
 )
 
+// Reference: https://github.com/ollama/ollama/blob/main/docs/api.md
 func New(o ...Option) *Client {
 	result := &Client{context: context.Background()}
 
@@ -33,7 +34,6 @@ func New(o ...Option) *Client {
 		scheme = web.Insecure
 	}
 
-	// https://github.com/ollama/ollama/blob/main/docs/api.md
 	result.client = api.NewClient(
 		&url.URL{
 			Scheme: scheme,

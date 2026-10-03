@@ -15,10 +15,7 @@ import (
 	"time"
 )
 
-// Pins the chunk-forward behavior: the server caps posts-since
-// responses keeping the oldest, so a capped first page must be
-// followed up past its newest post and the pages merged.
-func TestPostsSinceChunks(t *testing.T) {
+func TestPostsSinceFollowsPastACappedPageAndMerges(t *testing.T) {
 	capped := &model.PostList{Posts: map[string]*model.Post{}}
 
 	for i := range constant.MattermostSinceChunkThreshold {
@@ -96,10 +93,7 @@ func TestPostsSinceChunks(t *testing.T) {
 	assert.Any(t, "foxtrot", posts[len(posts)-1].Raw.Id)
 }
 
-// Pins two regressions: GetPostsSince running with collapsed
-// threads (only roots returned), and attachment-only posts with
-// an empty message being dropped.
-func TestPostsSinceIncludesRepliesAndAttachments(t *testing.T) {
+func TestPostsSinceIncludesRepliesAndAttachmentOnlyPosts(t *testing.T) {
 	var collapsed string
 	r := mattermost_client_tester.New(
 		t,

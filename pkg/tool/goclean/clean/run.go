@@ -19,7 +19,6 @@ func Run(o *option.Clean) {
 	case git.GitLabProvider:
 		Lab(o, r)
 	case git.UnknownProvider:
-		// TODO: Consider deleting tags except latest locally and pushing them to the server
 		console.Line("Unknown provider, nothing to clean")
 	}
 }

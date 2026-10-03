@@ -32,7 +32,6 @@ func (c *Client) Run(
 		preseed,
 		join.Absolute(c.packerWebDirectory, constant.PreseedConfiguration),
 	)
-	// packer plugins install github.com/hashicorp/qemu
 	b := build.New(architecture, 4444, username, password)
 	b.SetBuilder(
 		c.packerWebDirectory,
@@ -70,9 +69,6 @@ func (c *Client) Run(
 			)
 		}
 
-		// TODO: Typing happens via VNC, the character device does not reflect that
-		//  Check VNC if typing actually happens
-		//  Then proceed to actual unattended install
 		if connectCommand != "" {
 			console.Format("Character device: %s\n", connectCommand)
 		}

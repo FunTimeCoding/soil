@@ -1,6 +1,7 @@
 package github
 
 import (
+	"github.com/funtimecoding/soil/pkg/github/constant"
 	"github.com/funtimecoding/soil/pkg/github/run"
 	"github.com/google/go-github/v92/github"
 )
@@ -11,7 +12,7 @@ func (c *Client) ProjectRuns(
 ) ([]*run.Run, error) {
 	var result []*run.Run
 	o := &github.ListWorkflowRunsOptions{
-		ListOptions: github.ListOptions{PerPage: 100}, // Cannot go higher than 100
+		ListOptions: github.ListOptions{PerPage: constant.MaximumPerPage},
 	}
 
 	for {

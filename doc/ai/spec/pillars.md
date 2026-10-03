@@ -130,7 +130,7 @@ server.New(address, setup).
 ```
 
 Omit `WithProtected()` for streaming servers (MCP, SSE) - the
-streaming endpoint governs the timeout choice. Mixed servers
+streaming endpoint decides the timeout choice. Mixed servers
 (REST + MCP on the same mux) omit it for the same reason.
 
 ## What Each Component Receives

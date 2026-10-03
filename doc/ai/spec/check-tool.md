@@ -1,6 +1,7 @@
 # Check Tool Spec
 
-Pattern for CLI tools that fetch, filter, and display entities from external systems.
+Pattern for CLI tools that fetch, filter, and display entities from external
+systems.
 
 ## Package Structure
 
@@ -34,7 +35,9 @@ pkg/argument/
 
 See `entrypoint.md` for linker variables, `Main()`, and sentry setup.
 
-After the standard entrypoint setup, `Main()` registers check-specific flags (copyable, notation, all) on the argument instance, builds the option struct, and calls `Check()`.
+After the standard entrypoint setup, `Main()` registers check-specific flags
+(copyable, notation, all) on the argument instance, builds the option struct,
+and calls `Check()`.
 
 ## Option Struct
 
@@ -96,7 +99,8 @@ func Check(o *option.Issue) {
 
 ## Collect Function
 
-`collect()` is private, extracts data fetching from the check function. Returns a slice of entity pointers.
+`collect()` is private, extracts data fetching from the check function. Returns
+a slice of entity pointers.
 
 ```go
 func collect() []*issue.Issue {
@@ -109,9 +113,12 @@ func collect() []*issue.Issue {
 
 ## Notation Mode
 
-Every check tool must support `--notation` for monitoring integrations. Notation produces JSON output via `printNotation()` and returns early before the format loop.
+Every check tool must support `--notation` for monitoring integrations. Notation
+produces JSON output via `printNotation()` and returns early before the format
+loop.
 
-`printNotation()` takes a slice of entities and the option struct. It follows a fixed structure:
+`printNotation()` takes a slice of entities and the option struct. It follows a
+fixed structure:
 
 ```go
 func printNotation(
@@ -144,12 +151,16 @@ The steps:
 
 1. `report.New()` - create a report
 2. `report.Trim(v, r, o.All, item)` - cap the slice unless `--all` is set
-3. `r.AddItem(item, identifier, severity, detail, link, create)` - add each entity as a report item
+3. `r.AddItem(item, identifier, severity, detail, link, create)` - add each
+   entity as a report item
 4. `r.Print()` - output JSON
 
-Each entity must expose `MonitorIdentifier`, `Link`, and a timestamp field for `AddItem`. The severity (`constant.Critical`, `constant.Warning`) is domain-specific.
+Each entity must expose `MonitorIdentifier`, `Link`, and a timestamp field for
+`AddItem`. The severity (`constant.Critical`, `constant.Warning`) is
+domain-specific.
 
-Items are registered in `pkg/monitor/constant/collector.go` via `collector.New(command, name, plural)`.
+Items are registered in `pkg/monitor/constant/collector.go` via
+`collector.New(command, name, plural)`.
 
 ## Format Preset
 
@@ -159,7 +170,8 @@ Each domain defines a base format in its `<path>/constant/constant.go`:
 var Format = option.Color.Copy()
 ```
 
-The check function copies this preset and applies option flags. Common flag mappings:
+The check function copies this preset and applies option flags. Common flag
+mappings:
 
 | Option        | Format effect            |
 |---------------|--------------------------|
@@ -184,7 +196,9 @@ on the same instance in Main().
 
 ## Multi-Entity Domains
 
-Some domains have multiple entity types that each warrant their own check tool. Each entity gets a separate entrypoint and check package, sharing the domain client and constants.
+Some domains have multiple entity types that each warrant their own check tool.
+Each entity gets a separate entrypoint and check package, sharing the domain
+client and constants.
 
 ```
 cmd/go<tool1>/
@@ -215,15 +229,20 @@ pkg/<domain>/check/<entity2>/
     └── new.go
 ```
 
-Each check package follows the same structure as a single-entity tool. The key differences:
+Each check package follows the same structure as a single-entity tool. The key
+differences:
 
 - **Separate entrypoints**: one `cmd/go<tool>/` per entity type
-- **Separate check packages**: `check/<entity1>/` and `check/<entity2>/` are siblings
+- **Separate check packages**: `check/<entity1>/` and `check/<entity2>/` are
+  siblings
 - **Separate monitor items**: each entity has its own `collector.New()` entry
-- **Shared domain**: client, constants, and format preset live in the parent domain package
-- **Separate option structs**: named after the entity (`Job`, `Request`, `Outdated`), not the domain
+- **Shared domain**: client, constants, and format preset live in the parent
+  domain package
+- **Separate option structs**: named after the entity (`Job`, `Request`,
+  `Outdated`), not the domain
 
-Examples: `goghjob`/`goghpr` (GitHub jobs and pull requests), `goalert`/`gosilence` (Prometheus alerts and silences).
+Examples: `goghjob`/`goghpr` (GitHub jobs and pull requests),
+`goalert`/`gosilence` (Prometheus alerts and silences).
 
 ## No Relevant Output
 

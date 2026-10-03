@@ -8,7 +8,6 @@ import (
 )
 
 func TestRelevantLabels(t *testing.T) {
-	// TODO: Enter valid parseable results
 	assert.Any(
 		t,
 		[]string{"container"},

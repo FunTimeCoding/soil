@@ -12,9 +12,6 @@ import (
 var memoryCounter atomic.Int64
 
 func NewMemory() *sql.DB {
-	// Named shared-cache database: every pooled connection sees the same
-	// memory database (a plain :memory: is one database per connection),
-	// and the counter keeps separate NewMemory calls isolated
 	database, e := sql.Open(
 		constant.LiteDriverName,
 		fmt.Sprintf(

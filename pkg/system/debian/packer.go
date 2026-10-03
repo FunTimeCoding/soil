@@ -19,10 +19,6 @@ func (c *Client) Packer(
 	r *release.Release,
 	architecture string,
 ) {
-	// Start before running this, not yet supported on M1:
-	// src/virtualization-tools/bin/libvirt/run.sh
-	// src/virtualization-tools/bin/libvirt/virtlogd.sh
-	// virt-manager --debug
 	switch architecture {
 	case systemConstant.AMD64:
 		// pass

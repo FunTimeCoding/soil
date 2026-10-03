@@ -4,7 +4,8 @@ base: doc/ai/spec
 
 # Entrypoint Spec
 
-Shared conventions for all `cmd/` programs - linker variables, `Main()`, reporter integration.
+Shared conventions for all `cmd/` programs - linker variables, `Main()`,
+reporter integration.
 
 ## Linker Variables
 
@@ -246,7 +247,10 @@ recovery middleware.
 
 ### `os.Exit` and reporter
 
-Some tools call `os.Exit(1)` for expected failure conditions (no results, validation failures, upload errors). This intentionally bypasses the reporter defer - these are not crashes and should not be reported as errors. The reporter covers unexpected panics only.
+Some tools call `os.Exit(1)` for expected failure conditions (no results,
+validation failures, upload errors). This intentionally bypasses the reporter
+defer - these are not crashes and should not be reported as errors. The reporter
+covers unexpected panics only.
 
 Exit codes are `0` for success and `1` for every failure. Nothing
 distinguishes failure kinds by number - the response body already

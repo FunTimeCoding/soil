@@ -17,12 +17,6 @@ import (
 	"os"
 )
 
-// Run Test payloads for curl/stdin (JSON-RPC over stdio or HTTP):
-//
-//	{"jsonrpc": "2.0", "id": 3, "method": "resources/list", "params": {}}
-//	{"jsonrpc": "2.0", "id": 6, "method": "resources/read", "params": {"uri": "docs://readme"}}
-//	{"jsonrpc": "2.0", "id": 6, "method": "resources/read", "params": {"uri": "users://123/profile"}}
-//	{"jsonrpc": "2.0", "id": 6, "method": "resources/read", "params": {"uri": "users://122/profile"}}
 func Run(o *option.Mark) {
 	s := mark.NewMCPServer(
 		"Demo",

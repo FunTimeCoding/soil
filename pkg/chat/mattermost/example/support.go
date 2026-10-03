@@ -19,7 +19,4 @@ func Support() {
 		"I have a problem with my server, its not responding anymore",
 	)
 	user2.MustReply(h, t, "Can you try to restart it?")
-	// TODO: wipe channel before
-	// TODO: multiple different problems with successful answers
-	// TODO: import all messages into Chroma
 }

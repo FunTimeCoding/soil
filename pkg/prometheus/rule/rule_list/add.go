@@ -19,7 +19,6 @@ func (l *List) Add(i *rule.Rule) {
 		if i.RawAlert != nil && r.RawAlert != nil {
 			if !LabelsSame(i.RawAlert, r.RawAlert) {
 				if false {
-					// This is fine
 					console.Format(
 						"labels differ: %+v %+v\n",
 						i.RawAlert.Labels,
@@ -28,7 +27,6 @@ func (l *List) Add(i *rule.Rule) {
 				}
 			} else if i.RawAlert.Query != r.RawAlert.Query {
 				if false {
-					// This is fine
 					console.Format(
 						"queries differ: %s %s\n",
 						i.RawAlert.Query,

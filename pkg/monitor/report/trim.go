@@ -18,8 +18,8 @@ func Trim[T any](
 		return v
 	}
 
-	if c := len(v); c > constant.NotationReport {
-		v = v[0:constant.NotationReport]
+	if c := len(v); c > constant.NotationReportLimit {
+		v = v[0:constant.NotationReportLimit]
 		r.AddItem(
 			o,
 			o.IntegerIdentifier(0),
@@ -28,7 +28,7 @@ func Trim[T any](
 				"Too many %s (%d), showing only the newest %d",
 				o.Plural,
 				c,
-				constant.NotationReport,
+				constant.NotationReportLimit,
 			),
 			"",
 			&time.Time{},

@@ -15,7 +15,6 @@ func IsSecretManifest(path string) (bool, error) {
 	var m SecretManifest
 
 	if e := yaml.Unmarshal(b, &m); e != nil {
-		// Not a valid YAML or doesn't match our structure, skip
 		return false, nil
 	}
 

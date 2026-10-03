@@ -38,7 +38,7 @@ func Local() {
 		x,
 		c,
 		query,
-		llms.WithTemperature(0.0), // less is more deterministic
+		llms.WithTemperature(0.0),
 	)
 	errors.PanicOnError(generateFail)
 	console.Format("Response: %s\n", response)

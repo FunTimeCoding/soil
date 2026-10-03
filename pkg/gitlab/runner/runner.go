@@ -12,7 +12,7 @@ type Runner struct {
 	Online      bool
 	Paused      bool
 	Tags        []string
-	Address     string // Loaded separately via GraphQL
+	Address     string
 	concern     []string
 	RawList     *gitlab.Runner
 	RawDetail   *gitlab.RunnerDetails

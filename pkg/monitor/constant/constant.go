@@ -7,10 +7,9 @@ const (
 	FileEnvironment   = "MONITOR_FILE"
 	ManualEnvironment = "MONITOR_MANUAL"
 
-	NotationReport int = 10 // Limit
+	NotationReportLimit int = 10
 )
 
-// Command
 const (
 	LoginCommand  = "login"
 	LogoutCommand = "logout"

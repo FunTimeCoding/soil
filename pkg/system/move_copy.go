@@ -1,9 +1,6 @@
 package system
 
-import (
-	"github.com/funtimecoding/soil/pkg/errors"
-	"os"
-)
+import "github.com/funtimecoding/soil/pkg/errors"
 
 func MoveCopy(
 	source string,
@@ -14,13 +11,10 @@ func MoveCopy(
 	output := Create(destination)
 	defer errors.LogClose(output)
 	Copy(input, output)
-	// Close before trying to remove for Windows
-	// https://stackoverflow.com/a/64943554/246801
-	errors.PanicClose(input)
 
 	if IsExecutable(source) {
 		Executable(destination)
 	}
 
-	errors.PanicOnError(os.Remove(source))
+	closeAndRemove(input, source)
 }

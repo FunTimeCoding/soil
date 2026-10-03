@@ -15,7 +15,6 @@ func (s *Server) validateOpenToken(token string) bool {
 	}
 
 	if false {
-		// TODO: Log claims?
 		claims := make(map[string]any)
 		errors.PanicOnError(t.Claims(&claims))
 		console.Format("OIDC claims: %+v\n", claims)

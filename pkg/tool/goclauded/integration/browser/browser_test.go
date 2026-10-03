@@ -22,7 +22,6 @@ func TestAcquireTargetDoesNotCloseTab(t *testing.T) {
 		cdp.WithExecutor(b.Context, browser),
 	)
 	assert.FatalOnError(t, e)
-	// Cancel func discarded - calling it triggers chromedp cleanup that closes the tab
 	cached, _ := chromedp.NewContext(
 		b.Context,
 		chromedp.WithTargetID(identifier),
@@ -40,7 +39,6 @@ func TestAcquireTargetDoesNotCloseTab(t *testing.T) {
 	t.Run(
 		"cached context survives repeated use",
 		func(t *testing.T) {
-			// Goroutine + select: the timeout mechanism that doesn't touch the context chain
 			for i := 0; i < 5; i++ {
 				done := make(chan error, 1)
 				go func() {
@@ -72,8 +70,6 @@ func TestAcquireTargetDoesNotCloseTab(t *testing.T) {
 			wrapped, cancel := context.WithTimeout(fresh, 10*time.Second)
 			var v string
 			assert.FatalOnError(t, chromedp.Run(wrapped, chromedp.Title(&v)))
-			// cancel() propagates Done through the context chain; chromedp's
-			// internal goroutine sees it and calls DetachFromTarget + CloseTarget
 			cancel()
 			assert.String(t, "test", v)
 			time.Sleep(time.Second)
@@ -83,7 +79,6 @@ func TestAcquireTargetDoesNotCloseTab(t *testing.T) {
 				done <- chromedp.Run(fresh, chromedp.Title(&check))
 			}()
 
-			// Tab is either errored or unreachable - both confirm destruction
 			select {
 			case f := <-done:
 				assert.NotNil(t, f)

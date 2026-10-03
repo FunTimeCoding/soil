@@ -76,7 +76,6 @@ const (
 	TestSuffix = "_test.go"
 )
 
-// For console status option
 const (
 	LabelKey = "label"
 	TagKey   = "tag"

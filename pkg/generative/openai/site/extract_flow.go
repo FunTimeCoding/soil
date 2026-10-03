@@ -29,7 +29,6 @@ func (s *Site) ExtractFlow(verbose bool) string {
 	}
 
 	if false {
-		// Unstable selector
 		s.printCloseMemories()
 	}
 

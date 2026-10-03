@@ -10,7 +10,6 @@ func (c *Client) ArtifactsFile(
 	reference string,
 	job string,
 ) (string, error) {
-	// This only works for successful jobs
 	reader, _, e := c.client.Jobs.DownloadArtifactsFile(
 		project,
 		reference,

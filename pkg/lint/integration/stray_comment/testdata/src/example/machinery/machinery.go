@@ -10,6 +10,7 @@ var Data string
 
 // Helper returns true.
 func Helper() bool {
+	// noinspection SpellCheckingInspection
 	// the training could not resist
 	return true
 }

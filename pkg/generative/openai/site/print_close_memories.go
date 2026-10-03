@@ -11,7 +11,10 @@ func (s *Site) printCloseMemories() {
 		constant.OpenAICloseMemoriesSelector,
 		constant.OpenAIUsefulAttributes,
 	)
-	n := s.session.Select(constant.OpenAICloseMemoriesSelector, 2)
-	console.Line("Close dialog index 2")
+	n := s.session.Select(
+		constant.OpenAICloseMemoriesSelector,
+		constant.OpenAICloseMemoriesIndex,
+	)
+	console.Format("Close dialog index %d\n", constant.OpenAICloseMemoriesIndex)
 	protocol.Print(n, constant.OpenAIUsefulAttributes)
 }

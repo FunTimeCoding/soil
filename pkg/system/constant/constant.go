@@ -1,7 +1,11 @@
 package constant
 
-import "time"
+import (
+	"syscall"
+	"time"
+)
 
+const RuntimePreemptionSignal = syscall.Signal(23)
 const (
 	Tilde = "~"
 
@@ -48,7 +52,6 @@ const (
 	Retry = 50 * time.Millisecond
 )
 
-// File hierarchy system
 const (
 	Binary    = "bin"
 	Library   = "lib"
@@ -58,7 +61,6 @@ const (
 	Temporary = "tmp"
 )
 
-// macOS specific paths
 const (
 	DarwinLibrary = "Library"
 	DarwinLogs    = "Logs"

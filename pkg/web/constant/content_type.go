@@ -1,6 +1,5 @@
 package constant
 
-// Content type
 const (
 	Form        = "multipart/form-data"
 	FormEncoded = "application/x-www-form-urlencoded"

@@ -20,7 +20,6 @@ func Check(port string) {
 			"Failed: %s\n",
 			Execute(linuxConstant.SystemdFailedCommand),
 		)
-		// TODO: Load average > CPU cores check
 		diskFull()
 
 		if run.CommandExists(linuxConstant.Jc) {

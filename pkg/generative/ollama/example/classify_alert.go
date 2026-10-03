@@ -15,8 +15,6 @@ func ClassifyAlert() {
 
 	if false {
 		alert := "ECCMemoryError"
-		// DiskNearFull answer is consistently "not broken"
-		// ECCMemoryError answer is inconsistent
 		r := o.GenerateNotation(
 			fmt.Sprintf(
 				"Answer a JSON object with 2 strings: Reason and Answer. Assess in one short sentence first, then answer already-broken or not-yet-broken. Does this Prometheus alert indicate something is already-broken or not-yet-broken: %s\nAlready-broken examples: DiskFull, Timeout\nNot-yet-broken examples: DiskNearFull, HighLatency",

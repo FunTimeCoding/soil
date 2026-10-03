@@ -17,8 +17,8 @@ in the client or in the server builder.
 
 Two tiers:
 
-**Tier 1 - Input validation** (bad params from the model): use `response.Fail`. No
-Sentry - these are model mistakes, not infrastructure failures.
+**Tier 1 - Input validation** (bad params from the model): use `response.Fail`.
+No Sentry - these are model mistakes, not infrastructure failures.
 
 ```go
 id, f := r.RequireString(parameter.Identifier)
@@ -28,8 +28,9 @@ if f != nil {
 }
 ```
 
-`response.Fail` wraps `mcp.NewToolResultError` with `fmt.Sprintf` and returns the
-standard `(*mcp.CallToolResult, error)` tuple. Use it for all input validation.
+`response.Fail` wraps `mcp.NewToolResultError` with `fmt.Sprintf` and returns
+the standard `(*mcp.CallToolResult, error)` tuple. Use it for all input
+validation.
 
 **Tier 2 - Infrastructure failure** (store, DB, external call): capture
 to Sentry and return a structured error with the event ID. Two layers:

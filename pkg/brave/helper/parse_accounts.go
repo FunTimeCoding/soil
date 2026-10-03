@@ -1,6 +1,9 @@
 package helper
 
-import "google.golang.org/protobuf/encoding/protowire"
+import (
+	"github.com/funtimecoding/soil/pkg/brave/constant"
+	"google.golang.org/protobuf/encoding/protowire"
+)
 
 func ParseAccounts(b []byte) (name string, email string, photo string, gaia string) {
 	position := 0
@@ -24,18 +27,18 @@ func ParseAccounts(b []byte) (name string, email string, photo string, gaia stri
 
 			position += y
 
-			if fieldNum == 1 {
+			if fieldNum == constant.AccountNestedField {
 				return ParseAccounts(v)
 			}
 
 			switch fieldNum {
-			case 2: // Name
+			case constant.AccountNameField:
 				name = string(v)
-			case 3: // Email
+			case constant.AccountEmailField:
 				email = string(v)
-			case 4: // Photo URL
+			case constant.AccountPhotoField:
 				photo = string(v)
-			case 10: // GAIA ID
+			case constant.AccountGaiaField:
 				gaia = string(v)
 			}
 		case protowire.VarintType:

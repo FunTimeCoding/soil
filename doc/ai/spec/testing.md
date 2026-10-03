@@ -38,7 +38,8 @@ to `pkg/relational/` (see `database.md`).
 
 ## Mock Clients
 
-Mock external dependencies using hand-rolled structs (see Interfaces section in `conventions.md`). Mocks expose methods to manipulate state during a test:
+Mock external dependencies using hand-rolled structs (see Interfaces section in
+`conventions.md`). Mocks expose methods to manipulate state during a test:
 
 ```go
 c := mock_client.New()
@@ -59,7 +60,8 @@ records := s.ByName("HighMemory")
 assert.Count(t, 1, records)
 ```
 
-This pattern tests the full save/resolve lifecycle: add alerts to mock, poll, assert store state, remove from mock, poll again, assert resolution.
+This pattern tests the full save/resolve lifecycle: add alerts to mock, poll,
+assert store state, remove from mock, poll again, assert resolution.
 
 ## Lifecycle HTTP Testing
 
@@ -164,7 +166,8 @@ assert.Integer(t, 2, status.TotalRecords)
 
 ## Mid-Test State Manipulation
 
-Integration tests can manipulate mock state between assertions to verify behavior changes:
+Integration tests can manipulate mock state between assertions to verify
+behavior changes:
 
 ```go
 // Initial state: alert firing

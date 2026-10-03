@@ -40,7 +40,6 @@ func New(
 		result.closedStatus = []string{constant.JiraClosed}
 	}
 
-	// Verify token. Search V2 returns 200 even if token is invalid.
 	_, e := result.User()
 	errors.PanicOnError(e)
 

@@ -11,9 +11,9 @@ const (
 
 	SystemdNoLegend = "--no-legend"
 
-	SystemdAll   = "--all"   // Units in memory, including dead and empty
-	SystemdFull  = "--full"  // Do not shorten unit names
-	SystemdPlain = "--plain" // Dependencies as a list instead of tree
+	SystemdAll   = "--all"
+	SystemdFull  = "--full"
+	SystemdPlain = "--plain"
 
 	SystemdState    = "--state"
 	SystemdNotFound = "not-found"

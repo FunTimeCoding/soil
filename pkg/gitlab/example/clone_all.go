@@ -34,7 +34,6 @@ func CloneAll() {
 			git.Run(constant.Clone, p.Raw.SSHURLToRepo)
 
 			if false {
-				// Fails with SSH agent on Windows
 				git.Clone(p.Raw.SSHURLToRepo, repository)
 			}
 		}

@@ -30,10 +30,14 @@ func TestClient(t *testing.T) {
 		"MATTERMOST_INSECURE",
 		chatConstant.MattermostInsecureEnvironment,
 	)
-	assert.String(t, "construction", chatConstant.MattermostConstruction)
-	assert.String(t, "hourglass_flowing_sand", chatConstant.MattermostHourglass)
-	assert.String(t, "repeat", chatConstant.MattermostRepeat)
-	assert.String(t, "thread", chatConstant.MattermostThread)
+	assert.String(t, "construction", chatConstant.MattermostProgressReaction)
+	assert.String(
+		t,
+		"hourglass_flowing_sand",
+		chatConstant.MattermostWaitingReaction,
+	)
+	assert.String(t, "repeat", chatConstant.MattermostForwardedReaction)
+	assert.String(t, "thread", chatConstant.MattermostThreadReaction)
 }
 
 func TestConstant(t *testing.T) {

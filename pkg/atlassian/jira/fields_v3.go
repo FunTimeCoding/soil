@@ -9,7 +9,6 @@ func (c *Client) FieldsV3() error {
 		return e
 	}
 
-	// Does not contain more fields than the V2 API
 	console.Format("Basic response: %d %s", status, body)
 
 	return nil

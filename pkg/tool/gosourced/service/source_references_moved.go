@@ -6,10 +6,6 @@ import (
 	"golang.org/x/tools/go/packages"
 )
 
-// sourceReferencesMoved reports whether any code staying in the source package
-// references a moving symbol. When it does and the moved code also references
-// back into source, the move would create a source<->target import cycle, so
-// back-reference qualification must refuse.
 func sourceReferencesMoved(
 	p *packages.Package,
 	entries []*moveEntry,

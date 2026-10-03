@@ -20,9 +20,10 @@ const (
 	SignatureHeader = "X-Hub-Signature-256"
 
 	ContainerPackageType = "container"
+
+	MaximumPerPage = 100
 )
 
-// Pull request state
 const (
 	All    = "all"
 	Open   = "open"
@@ -34,19 +35,17 @@ var (
 	NotationFormat = option.New()
 )
 
-// Status
 const (
 	CompletedStatus  = "completed"
 	QueuedStatus     = "queued"
 	InProgressStatus = "in_progress"
 )
 
-// Conclusion
 const (
 	SuccessConclusion = "success"
 	FailureConclusion = "failure"
 )
 
-const RunFailedConcern = "failed" // Validation concern
+const RunFailedConcern = "failed"
 const WorkflowActiveState = "active"
 const NoTags = "no tags"

@@ -35,7 +35,6 @@ func OptimizeWhitespace(
 	}
 
 	if s.NewlineAtEnd {
-		// If no newline at the end, add one
 		if len(result) > 0 && result[len(result)-1] != "" {
 			result = append(result, "")
 		}

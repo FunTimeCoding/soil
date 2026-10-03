@@ -23,14 +23,11 @@ func readExtra(
 	}
 
 	if false {
-		// TODO: on load: panic: no value given for required property data_path
 		for _, c := range n.MustConfigurationContexts() {
 			console.Format("ConfigContext: %s\n", c.Format(f))
 		}
 	}
 
-	// TODO: Must specify either local content or a data file
-	//  How, what is this for?
 	for _, t := range n.MustConfigurationTemplates() {
 		console.Format("ConfigTemplate: %s\n", t.Format(f))
 	}

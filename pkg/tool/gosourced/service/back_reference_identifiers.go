@@ -6,10 +6,6 @@ import (
 	"golang.org/x/tools/go/packages"
 )
 
-// backReferenceIdentifiers returns every identifier inside node that resolves to a
-// top-level symbol of package p and is not itself moving (excluded). These are
-// the references that, once the declaration lands in the target package, must
-// be qualified as source.Name and the source package imported.
 func backReferenceIdentifiers(
 	p *packages.Package,
 	excluded map[token.Pos]bool,

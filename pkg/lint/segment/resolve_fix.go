@@ -5,9 +5,6 @@ import (
 	"go/types"
 )
 
-// ResolveFix picks a replacement, walking own + child + parent scopes for
-// collision detection. The keyword guard prevents replacements that would
-// produce a Go reserved word.
 func ResolveFix(
 	name string,
 	segment string,

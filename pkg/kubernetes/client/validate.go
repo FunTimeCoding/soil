@@ -5,8 +5,6 @@ import (
 	"reflect"
 )
 
-// Validate reports the first unset field, so constructor wiring
-// stays covered even for fields added after the check was written.
 func (c *Client) Validate() error {
 	v := reflect.ValueOf(*c)
 

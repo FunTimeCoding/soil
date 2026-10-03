@@ -35,7 +35,6 @@ func Query() {
 		console.Format("Metric: %s Count: %d\n", k, cardinalityPerMetric[k])
 	}
 
-	// TODO: prometheus_tsdb_symbol_table_size_bytes
 	console.Format(
 		"Load: %.1f %.1f %.1f\n",
 		c.MustQueryFloat(constant.Load1, t),

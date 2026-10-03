@@ -27,7 +27,7 @@ const (
 
 	JiraCommentPageSize = 100
 	JiraCommentCap      = 20
-	// API paths
+
 	JiraBase   = "/rest/api/3"
 	JiraIssue  = "/issue"
 	JiraSearch = "/search/jql"
@@ -37,7 +37,7 @@ const (
 
 	JiraDynamic = "/rest/atlassian-connect/1/app/module/dynamic"
 	JiraAddon   = "/rest/atlassian-connect/1/addons"
-	// Query parameter keys
+
 	JiraMaximumResultsKey = "maxResults"
 	JiraNextPageTokenKey  = "nextPageToken"
 	JiraQueryKey          = "jql"
@@ -46,7 +46,7 @@ const (
 	JiraKeyField          = "key"
 	JiraChangelogExpand   = "changelog"
 	JiraTimeFormat        = "2006-01-02T15:04:05.000-0700"
-	// Field names
+
 	JiraAssigneeName     = "Assignee"
 	JiraAttachmentName   = "Attachment"
 	JiraDescriptionName  = "Description"
@@ -62,7 +62,7 @@ const (
 	JiraTeamName         = "Team"
 	JiraDevelopmentName  = "Development"
 	JiraParentEpic       = "parentEpic"
-	// Status
+
 	JiraInProgress = "In Progress"
 	JiraClosed     = "Closed"
 
@@ -93,7 +93,7 @@ const (
 	JiraUnknownValue = "unknown value"
 
 	JiraDefaultPriority = "Default"
-	// Issue type
+
 	JiraBugType     = "Bug"
 	JiraEpicType    = "Epic"
 	JiraStoryType   = "Story"

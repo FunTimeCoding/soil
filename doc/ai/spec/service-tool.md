@@ -4,7 +4,8 @@ base: pkg/tool/goatlassiand
 
 # Service Tool Spec
 
-Pattern for long-running service tools that use lifecycle for HTTP servers and background workers.
+Pattern for long-running service tools that use lifecycle for HTTP servers and
+background workers.
 
 ## Package Structure
 
@@ -83,11 +84,11 @@ server at that address, binding all interfaces. Locally co-hosted
 exporter daemons each get a unique `--metric-port` in the Procfile,
 like `--port`.
 
-Services with a database also call `a.Database()` (registers `--lite`
-with chain `LITE_PATH` > `Identity.LitePath()`, and `--postgres` with
-chain `POSTGRES_LOCATOR` > empty) or `a.Lite()` alone for
-sqlite-only raw stores - `--lite` and `LITE_PATH` mean sqlite,
-nothing else. See `database.md` for the selection convention. The locator flag exists for development; credentials
+Services with a database also call `a.Database()` (registers `--lite` with chain
+`LITE_PATH` > `Identity.LitePath()`, and `--postgres` with chain
+`POSTGRES_LOCATOR` > empty) or `a.Lite()` alone for sqlite-only raw stores -
+`--lite` and `LITE_PATH` mean sqlite, nothing else. See `database.md` for the
+selection convention. The locator flag exists for development; credentials
 travel via environment, not argv.
 
 ## Run Function
@@ -124,7 +125,8 @@ Key conventions:
 - Reporter pulled from the instrument first, then the logger,
   threaded to workers and lifecycle
 - Reporter threaded to workers (for `recovery.New`) and recovery middleware
-- Use `WithServer(server.New(...).WithMiddleware(web.RecoveryMiddleware(r)))` - add `.WithProtected()` for plain REST servers
+- Use `WithServer(server.New(...).WithMiddleware(web.RecoveryMiddleware(r)))` -
+  add `.WithProtected()` for plain REST servers
 - Server address is `o.Address`, produced by `a.Address()` in
   `Main()` - see Entry Point. Never format a listen address by hand;
   surfaces without flags (examples, callback servers) use
@@ -135,7 +137,8 @@ Key conventions:
   `Mount()` - routes register there, never directly on the mux
 - `RunUntilSignal()` handles run, signal block, and reverse-order stop
 - Store closed via `defer` before lifecycle starts
-- Avoid declaring intermediate variables for lifecycle or generative server when only used once
+- Avoid declaring intermediate variables for lifecycle or generative server when
+  only used once
 
 ## Mount Function
 
@@ -188,9 +191,12 @@ func Alerts(s *store.Store) http.HandlerFunc {
 }
 ```
 
-- `web.EncodeNotation(w, result)` - sets Content-Type JSON header and encodes result as JSON (the common case)
-- `web.Encode(w, result)` - encodes result as JSON without setting headers (use when headers are set separately, e.g. with a non-200 status code)
-- `web.ObjectHeader(w)` - sets Content-Type JSON header only (use with `web.Encode` when you need a custom status code between header and body)
+- `web.EncodeNotation(w, result)` - sets Content-Type JSON header and encodes
+  result as JSON (the common case)
+- `web.Encode(w, result)` - encodes result as JSON without setting headers (use
+  when headers are set separately, e.g. with a non-200 status code)
+- `web.ObjectHeader(w)` - sets Content-Type JSON header only (use with
+  `web.Encode` when you need a custom status code between header and body)
 - Use `argument.*` constants for query parameter names
 - Response structs in `response.go`, constants in the tool's `constant/`
 
@@ -330,21 +336,32 @@ const (
 
 ### Themes
 
-Theme constants (`Theme*` in `pkg/web/constant/`, one `theme_<name>.go` per palette) are pico.css custom property
-overrides. Each service picks one in its `New`; the files are the
-current set. Additional palettes can be defined in downstream repos.
+Theme constants (`Theme*` in `pkg/web/constant/`, one `theme_<name>.go` per
+palette) are pico.css custom property overrides. Each service picks one in its
+`New`; the files are the current set. Additional palettes can be defined in
+downstream repos.
 
 Key conventions:
 - `Server` struct holds dependencies and a `*view.View`
-- `Mount()` takes a `guard.Mux` and registers all routes through its verbs using method values: `g.Open(route.Get("/alerts"), s.alerts)` for board routes on non-SSO services; SSO services call `g.WithSession(s.require)` first and register their protected routes with `g.Session` (auth trio and favicon stay `Open`). Bare `m.HandleFunc` in a web package is flagged by the `route_guard` analyzer.
-- Handler methods named after the route, no `handle` prefix: `alerts()`, `dashboard()`, `addSubmit()`
-- Standalone HTML builders named after the component they produce: `alertsTable()`, `addForm()`, `detailRow()`
-- Handler and builder names never collide because the handler is named after the route (`add`), not the component (`addForm`)
-- Methods that access server state (store, worker) stay as methods; pure renderers are standalone functions
+- `Mount()` takes a `guard.Mux` and registers all routes through its verbs using
+  method values: `g.Open(route.Get("/alerts"), s.alerts)` for board routes on
+  non-SSO services; SSO services call `g.WithSession(s.require)` first and
+  register their protected routes with `g.Session` (auth trio and favicon stay
+  `Open`). Bare `m.HandleFunc` in a web package is flagged by the `route_guard`
+  analyzer.
+- Handler methods named after the route, no `handle` prefix: `alerts()`,
+  `dashboard()`, `addSubmit()`
+- Standalone HTML builders named after the component they produce:
+  `alertsTable()`, `addForm()`, `detailRow()`
+- Handler and builder names never collide because the handler is named after the
+  route (`add`), not the component (`addForm`)
+- Methods that access server state (store, worker) stay as methods; pure
+  renderers are standalone functions
 
 ## Workers
 
-Workers implement `face.Worker` (`Start()` + `Stop()`). See `lifecycle.md` for details.
+Workers implement `face.Worker` (`Start()` + `Stop()`). See `lifecycle.md` for
+details.
 
 ## Daemon / CLI Split
 

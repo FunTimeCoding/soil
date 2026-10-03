@@ -12,7 +12,6 @@ func (c *Client) Propfind() {
 	r := web.NewPropfind(c.fileRoot)
 
 	if false {
-		// WebDAV is XML
 		r.Header.Set(constant.Accept, constant.Object)
 	}
 
@@ -25,7 +24,6 @@ func (c *Client) Propfind() {
 		console.Line("success")
 
 		if false {
-			// A lot of XML
 			console.Line("response body:", web.ReadString(s))
 		}
 	case http.StatusUnauthorized:

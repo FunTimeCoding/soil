@@ -1,7 +1,5 @@
 package math
 
-// ExceededByPercent
-// Check if past exceeded a hundredPercent mark by percent by becoming now
 func ExceededByPercent(
 	past float64,
 	now float64,

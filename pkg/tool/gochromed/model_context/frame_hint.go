@@ -6,10 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/strings/join"
 )
 
-// frameHint lists the cross-origin iframe targets rendered inside the
-// given tab. Their content is invisible to the tab's accessibility
-// tree because each frame is a separate target; appending this hint
-// to snapshot output tells the model how to reach them.
 func (s *Server) frameHint(identifier string) string {
 	var lines []string
 

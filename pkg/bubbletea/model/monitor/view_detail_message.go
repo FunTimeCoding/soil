@@ -1,3 +1,3 @@
 package monitor
 
-type viewDetailMessage string // unused string
+type viewDetailMessage string

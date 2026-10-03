@@ -10,14 +10,12 @@ func CommitFromHash(
 	r *git.Repository,
 	h plumbing.Hash,
 ) *object.Commit {
-	// annotated tag
 	if t, tagFail := r.TagObject(h); tagFail == nil {
 		if c, commitFail := t.Commit(); commitFail == nil {
 			return c
 		}
 	}
 
-	// lightweight tag
 	if c, objectFail := r.CommitObject(h); objectFail == nil {
 		return c
 	}

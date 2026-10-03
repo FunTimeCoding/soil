@@ -2,10 +2,6 @@ package web
 
 import "net/http"
 
-// Server Timeouts are the caller's responsibility; see lifecycle/server.WithProtected
-// for slowloris protection on request/response servers.
-//
-// nolint:gosec
 func Server(
 	h http.Handler,
 	address string,

@@ -7,8 +7,6 @@ import (
 	"net"
 )
 
-// CreateInterfacePhysical Create new interface and assign MAC address to it
-// If MAC address does not exist, it will be created
 func (c *Client) CreateInterfacePhysical(
 	d *device.Device,
 	name string,
@@ -23,7 +21,6 @@ func (c *Client) CreateInterfacePhysical(
 
 	v := netbox.NewBriefDeviceRequest()
 	v.SetName(d.Name)
-	// MAC must be assigned before it can be set as primary
 	i, f := c.createInterfaceWriteable(
 		netbox.NewWritableInterfaceRequest(
 			netbox.BriefDeviceRequestAsBriefInterfaceRequestDevice(v),
@@ -42,6 +39,5 @@ func (c *Client) CreateInterfacePhysical(
 		return nil, g
 	}
 
-	// set as primary
 	return c.UpdateInterface(d, name, t, h)
 }

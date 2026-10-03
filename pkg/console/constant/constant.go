@@ -10,7 +10,6 @@ const (
 	RedColor    = "red"
 	YellowColor = "yellow"
 
-	// Output formats
 	FormatText     = "text"
 	FormatNotation = "notation"
 	FormatMarkdown = "markdown"

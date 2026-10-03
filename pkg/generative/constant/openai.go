@@ -2,8 +2,7 @@ package constant
 
 const (
 	OpenAITokenEnvironment = "OPENAI_TOKEN"
-	// 768 dimensions, LM Studio model naming
-	OpenAIEmbedModel = "text-embedding-nomic-embed-text-v1.5@f16"
+	OpenAIEmbedModel       = "text-embedding-nomic-embed-text-v1.5@f16"
 
 	OpenAINewSelector           = `a[data-testid="create-new-chat-button"]`
 	OpenAIProfileSelector       = `[data-testid="accounts-profile-button"]`
@@ -12,8 +11,10 @@ const (
 	OpenAIMemoriesSelector      = `[class="btn relative btn-secondary btn-small"]`
 	OpenAICloseMemoriesSelector = `div[role="dialog"] [data-testid="close-button"]`
 	OpenAICloseSettingsSelector = `div[role="tablist"] [data-testid="close-button"]`
-	OpenAIPromptSelector        = `#prompt-textarea` // OpenAINewSelector not unique, requires index
-	// OpenAICloseMemoriesSelector not unique, requires index
+	OpenAIPromptSelector        = `#prompt-textarea`
+
+	OpenAINewIndex           int = 0
+	OpenAICloseMemoriesIndex int = 2
 )
 
 var OpenAIUsefulAttributes = []string{"data-testid", "aria-label"}

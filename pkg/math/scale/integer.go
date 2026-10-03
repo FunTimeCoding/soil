@@ -2,9 +2,6 @@ package scale
 
 import "github.com/funtimecoding/soil/pkg/math/normalize"
 
-// Integer
-// At factor 0: from value
-// At factor 1: to value
 func Integer(
 	from int,
 	to int,

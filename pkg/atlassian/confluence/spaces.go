@@ -7,8 +7,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/notation"
 )
 
+// Reference: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-space/#api-spaces-get
 func (c *Client) Spaces() ([]*space.Space, error) {
-	// https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-space/#api-spaces-get
 	l := c.basic.Base().Copy().Path(constant.ConfluenceSpace).Set(
 		constant.ConfluenceStatus,
 		constant.ConfluenceCurrentStatus,

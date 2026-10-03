@@ -22,7 +22,6 @@ func (c *Client) Variables(project int64) ([]*variable.Variable, error) {
 		)
 
 		if r != nil && r.StatusCode == 403 {
-			// Do not panic
 			return variable.NewSlice(result), nil
 		}
 

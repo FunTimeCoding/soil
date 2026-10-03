@@ -21,7 +21,6 @@ func Read() {
 	}
 
 	if false {
-		// 404
 		console.Line("Users")
 
 		for _, f := range k.Users() {

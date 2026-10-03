@@ -2,10 +2,10 @@ package system
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/system/constant"
 	"log"
 	"os"
 	"os/signal"
-	"syscall"
 )
 
 func SignalCancelContext(l *log.Logger) context.Context {
@@ -13,11 +13,15 @@ func SignalCancelContext(l *log.Logger) context.Context {
 	signal.Notify(channel)
 	result, cancel := context.WithCancel(context.Background())
 	go func() {
-		// Signal 23 (SIGURG) is sent repeatedly for some Kubernetes
-		// reason. Ignore signal 23.
-		if h := <-channel; h != syscall.Signal(23) {
+		for h := range channel {
+			if h == constant.RuntimePreemptionSignal {
+				continue
+			}
+
 			l.Printf("Signal: %+v (%d)\n", h, h)
 			cancel()
+
+			return
 		}
 	}()
 

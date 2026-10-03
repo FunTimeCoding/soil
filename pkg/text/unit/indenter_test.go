@@ -26,67 +26,33 @@ func TestIndenterParse(t *testing.T) {
 		},
 		indenter.Parse("a\nb"),
 	)
-	// 1 space
-	assert.Any(
-		t,
-		&indenter.Node{
-			Children: []*indenter.Node{
-				{
-					Text: "a",
-					Children: []*indenter.Node{
-						{Text: "b", Children: []*indenter.Node{}},
+}
+
+func TestIndenterParseNestsAtAnyIndentWidth(t *testing.T) {
+	for _, input := range []string{
+		"a\n b",
+		"a\n  b",
+		"a\n   b",
+		"a\n    b",
+	} {
+		assert.Any(
+			t,
+			&indenter.Node{
+				Children: []*indenter.Node{
+					{
+						Text: "a",
+						Children: []*indenter.Node{
+							{Text: "b", Children: []*indenter.Node{}},
+						},
 					},
 				},
 			},
-		},
-		indenter.Parse("a\n b"),
-	)
-	// 2 space
-	assert.Any(
-		t,
-		&indenter.Node{
-			Children: []*indenter.Node{
-				{
-					Text: "a",
-					Children: []*indenter.Node{
-						{Text: "b", Children: []*indenter.Node{}},
-					},
-				},
-			},
-		},
-		indenter.Parse("a\n  b"),
-	)
-	// 3 space
-	assert.Any(
-		t,
-		&indenter.Node{
-			Children: []*indenter.Node{
-				{
-					Text: "a",
-					Children: []*indenter.Node{
-						{Text: "b", Children: []*indenter.Node{}},
-					},
-				},
-			},
-		},
-		indenter.Parse("a\n   b"),
-	)
-	// 4 space
-	assert.Any(
-		t,
-		&indenter.Node{
-			Children: []*indenter.Node{
-				{
-					Text: "a",
-					Children: []*indenter.Node{
-						{Text: "b", Children: []*indenter.Node{}},
-					},
-				},
-			},
-		},
-		indenter.Parse("a\n    b"),
-	)
-	// 4 space with blank line
+			indenter.Parse(input),
+		)
+	}
+}
+
+func TestIndenterParseNestsAcrossBlankLine(t *testing.T) {
 	assert.Any(
 		t,
 		&indenter.Node{

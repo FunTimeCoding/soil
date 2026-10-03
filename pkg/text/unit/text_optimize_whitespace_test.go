@@ -7,16 +7,19 @@ import (
 	"testing"
 )
 
-func TestOptimizeWhitespace(t *testing.T) {
-	// One blank line is allowed
+func TestOptimizeWhitespaceKeepsOneBlankLine(t *testing.T) {
 	assert.String(t, "", text.OptimizeWhitespace("", nil))
 	assert.String(t, "A\nB\n", text.OptimizeWhitespace("A\nB\n", nil))
 	assert.String(t, "A\n\nB\n", text.OptimizeWhitespace("A\n\nB\n", nil))
 	assert.String(t, "A\n\nB\n", text.OptimizeWhitespace("A\n\n\nB\n", nil))
 	assert.String(t, "A\n\nB\n", text.OptimizeWhitespace("A\n \n \nB\n\n", nil))
-	// Fix missing newline at the end
+}
+
+func TestOptimizeWhitespaceAddsMissingFinalNewline(t *testing.T) {
 	assert.String(t, "A\nB\n", text.OptimizeWhitespace("A\nB", nil))
-	// No blank line is allowed
+}
+
+func TestOptimizeWhitespaceRemovesBlankLinesWhenNoneAllowed(t *testing.T) {
 	zeroBlank := option.New()
 	zeroBlank.AllowedBlankLines = 0
 	assert.String(t, "A\nB\n", text.OptimizeWhitespace("A\n\nB\n", zeroBlank))

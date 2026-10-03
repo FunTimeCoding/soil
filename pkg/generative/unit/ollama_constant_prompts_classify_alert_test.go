@@ -7,7 +7,6 @@ import (
 )
 
 func TestClassifyAlert(t *testing.T) {
-	// Classify A or B
 	assert.String(
 		t,
 		`Instructions: Decide if this Prometheus alert is already-broken or not-yet-broken

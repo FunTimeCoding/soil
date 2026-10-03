@@ -10,7 +10,6 @@ import (
 func Client() {
 	c := chroma.NewEnvironment()
 	defer c.Close()
-	// The default embedding function is used
 	l := c.Collection(
 		"col1",
 		v2.WithCollectionMetadataCreate(
@@ -23,7 +22,6 @@ func Client() {
 	)
 	c.Add(
 		l,
-		//v2.WithIDGenerator(v2.NewULIDGenerator()),
 		v2.WithIDs("1", "2"),
 		v2.WithTexts("hello world", "goodbye world"),
 		v2.WithMetadatas(

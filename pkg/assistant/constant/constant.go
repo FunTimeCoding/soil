@@ -5,7 +5,6 @@ const (
 	TokenEnvironment = "HOME_ASSISTANT_TOKEN"
 )
 
-// Message type
 const (
 	Authenticate           = "auth"
 	AuthenticationRequired = "auth_required"

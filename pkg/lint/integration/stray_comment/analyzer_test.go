@@ -33,7 +33,12 @@ func TestStrayComment(t *testing.T) {
 		stray_comment.Check(p, results)
 	}
 
-	testutil.AssertBlocked(t, results, 4)
+	testutil.AssertBlocked(t, results, 7)
 	testutil.AssertBlockedContains(t, results, "narrates the obvious")
 	testutil.AssertBlockedContains(t, results, "pass the token along")
+	testutil.AssertBlockedContains(t, results, "example.com/inside")
+	testutil.AssertBlockedContains(t, results, "example.com/second")
+	testutil.AssertBlockedContains(t, results, "prose and more")
+	testutil.AssertNotBlockedContains(t, results, "example.com/api")
+	testutil.AssertNotBlockedContains(t, results, "example.com/first")
 }

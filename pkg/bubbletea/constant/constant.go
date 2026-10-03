@@ -11,6 +11,13 @@ const (
 	ItemDetailColumn     = "Detail"
 	ItemUserColumn       = "User"
 
+	ColumnPadding = 2
+	TableBorder   = 2
+
+	MonitorTopBarHeight      = 1
+	MonitorBottomBarHeight   = 1
+	MonitorTableHeaderHeight = 3
+
 	KeyEnter  = "enter"
 	KeyEscape = "esc"
 	KeySpace  = "space"

@@ -24,3 +24,11 @@ const (
 	LinkType      = "url"
 	DirectoryType = "folder"
 )
+
+const (
+	AccountNestedField = 1
+	AccountNameField   = 2
+	AccountEmailField  = 3
+	AccountPhotoField  = 4
+	AccountGaiaField   = 10
+)

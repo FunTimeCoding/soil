@@ -10,7 +10,7 @@ func (m *Model) updateColumns() {
 		return
 	}
 
-	remaining := m.width - 2 // 2 for border
+	remaining := m.width - constant.TableBorder
 	var detailIndex int
 
 	for i, c := range m.table.Columns() {
@@ -18,26 +18,26 @@ func (m *Model) updateColumns() {
 		case constant.ItemIdentifierColumn:
 			w := columnWidth(c, m.table, i)
 			m.table.Columns()[i].Width = w
-			remaining -= w + 2 // 2 for padding
+			remaining -= w + constant.ColumnPadding
 		case constant.ItemScoreColumn:
 			w := columnWidth(c, m.table, i)
 			m.table.Columns()[i].Width = w
-			remaining -= w + 2 // 2 for padding
+			remaining -= w + constant.ColumnPadding
 		case constant.ItemSeverityColumn:
 			w := columnWidth(c, m.table, i)
 			m.table.Columns()[i].Width = w
-			remaining -= w + 2 // 2 for padding
+			remaining -= w + constant.ColumnPadding
 		case constant.ItemDetailColumn:
 			detailIndex = i
 		case constant.ItemUserColumn:
 			w := columnWidth(c, m.table, i)
 			m.table.Columns()[i].Width = w
-			remaining -= w + 2 // 2 for padding
+			remaining -= w + constant.ColumnPadding
 		default:
 			log.Panicf("unexpected: %s", c.Title)
 		}
 	}
 
-	m.table.Columns()[detailIndex].Width = remaining - 2 // 2 for padding
+	m.table.Columns()[detailIndex].Width = remaining - constant.ColumnPadding
 	m.table.SetWidth(m.width)
 }

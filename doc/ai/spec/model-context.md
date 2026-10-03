@@ -4,11 +4,14 @@ base: pkg/tool/goatlassiand
 
 # Model Context Protocol Integration
 
-Pattern for exposing MCP tools from a service daemon, mounted on the same HTTP server as the REST API.
+Pattern for exposing MCP tools from a service daemon, mounted on the same HTTP
+server as the REST API.
 
 ## When to Use
 
-Add a `model_context/` subpackage when a daemon needs to expose MCP tools alongside its REST API. Tools typically mirror the read-oriented operations already available via REST endpoints.
+Add a `model_context/` subpackage when a daemon needs to expose MCP tools
+alongside its REST API. Tools typically mirror the read-oriented operations
+already available via REST endpoints.
 
 ## Package Structure
 
@@ -28,11 +31,12 @@ pkg/tool/go<tool>d/
 └── server/
 ```
 
-`<path>/model_context/` is a sibling of `<path>/server/`. Both implement the same
-domain operations - `<path>/server/` over REST, `<path>/model_context/` over MCP.
+`<path>/model_context/` is a sibling of `<path>/server/`. Both implement the
+same domain operations - `<path>/server/` over REST, `<path>/model_context/`
+over MCP.
 
-`<path>/model_context/` is the standard package name. Do not use `<path>/tool/` or
-`<path>/toolset/`.
+`<path>/model_context/` is the standard package name. Do not use `<path>/tool/`
+or `<path>/toolset/`.
 
 ## Convert Package
 
@@ -110,7 +114,8 @@ from handlers are fine until compound logic appears.
 
 ## Constants
 
-Tool name and tool-specific parameter constants live in `pkg/tool/go<tool>d/constant/constant.go`:
+Tool name and tool-specific parameter constants live in
+`pkg/tool/go<tool>d/constant/constant.go`:
 
 ```go
 const (
@@ -123,7 +128,10 @@ const (
 )
 ```
 
-Reusable parameter names shared across multiple MCP tools (`query`, `limit`, `key`, `body`, `identifier`, `title`, `message`) live in `pkg/generative/constant/model_context.go` and are referenced as `constant.ParameterQuery`, `constant.ParameterLimit`, etc.
+Reusable parameter names shared across multiple MCP tools (`query`, `limit`,
+`key`, `body`, `identifier`, `title`, `message`) live in
+`pkg/generative/constant/model_context.go` and are referenced as
+`constant.ParameterQuery`, `constant.ParameterLimit`, etc.
 
 ## Server Struct
 
@@ -152,10 +160,10 @@ func New(s *store.Store, r face.Reporter, t face.Recorder, w *worker.Worker, ver
 }
 ```
 
-The factory (`pkg/generative/mark/server/`) handles tool capabilities, instructions,
-and baseline telemetry hooks. `WithRecorder(t)` registers an
-AfterCallTool hook that records every MCP tool call as a baseline
-telemetry event. Import as
+The factory (`pkg/generative/mark/server/`) handles tool capabilities,
+instructions, and baseline telemetry hooks. `WithRecorder(t)` registers an
+AfterCallTool hook that records every MCP tool call as a baseline telemetry
+event. Import as
 `mark "github.com/funtimecoding/soil/pkg/generative/mark/server"`.
 ```
 
@@ -294,15 +302,24 @@ func (s *Server) captureFail(
 }
 ```
 
-- Required params: `r.RequireString(...)` / `r.RequireFloat(...)` - return `response.Fail(...)` on failure
-- Optional params: `r.GetString(constant.Key, "")` / `r.GetFloat(constant.Key, 0)` / `r.GetBool(constant.Key, false)`
-- JSON results: `response.SuccessAny(converted)` - serializes via `notation.MarshalIndent`, with the entity-wrapper `Raw` field removed at any depth
+- Required params: `r.RequireString(...)` / `r.RequireFloat(...)` - return
+  `response.Fail(...)` on failure
+- Optional params: `r.GetString(constant.Key, "")` /
+  `r.GetFloat(constant.Key, 0)` / `r.GetBool(constant.Key, false)`
+- JSON results: `response.SuccessAny(converted)` - serializes via
+  `notation.MarshalIndent`, with the entity-wrapper `Raw` field removed at any
+  depth
 - Text results: `response.Success("comment added")`
-- Validation errors: `response.Fail("message: %v", err)` - wraps `mcp.NewToolResultError`
-- Infrastructure errors: `s.captureFail(e, "message")` - captures to Sentry with event ID
-- Error variables progress `e`, `f`, `g`, `h`, `i` - never reuse the same letter. See `naming.md`.
-- Always convert results through the `convert/` package - never serialize raw domain objects
-- Error handling is two-tier - input validation vs infrastructure failures. See `doc/ai/spec/error-handling/mcp.md`.
+- Validation errors: `response.Fail("message: %v", err)` - wraps
+  `mcp.NewToolResultError`
+- Infrastructure errors: `s.captureFail(e, "message")` - captures to Sentry with
+  event ID
+- Error variables progress `e`, `f`, `g`, `h`, `i` - never reuse the same
+  letter. See `naming.md`.
+- Always convert results through the `convert/` package - never serialize raw
+  domain objects
+- Error handling is two-tier - input validation vs infrastructure failures. See
+  `doc/ai/spec/error-handling/mcp.md`.
 
 ## Parameters that widen a response
 
@@ -354,7 +371,7 @@ The result type gets its own leaf package (`query_result`,
 `label_result`) with a `New(value, warnings)` constructor. `Must`
 wrappers return the same type - warnings travel with the data
 either way, and the `convert/` package decides how they render in
-the tool response. Precedent: `pkg/prometheus/query_result` and
+the tool response. Example: `pkg/prometheus/query_result` and
 `label_result`, consumed by goprometheusd and goalertmanagerd.
 
 ## Paginated List Tools
@@ -398,5 +415,7 @@ REST baseline.
 ## What Not To Do
 
 - Don't create a separate lifecycle server for MCP - one port, one mux
-- Don't name it `<path>/mcp/` - use `<path>/model_context/` (no acronyms in package names)
-- Don't name it `<path>/tool/` or `<path>/toolset/` - use `<path>/model_context/`
+- Don't name it `<path>/mcp/` - use `<path>/model_context/` (no acronyms in
+  package names)
+- Don't name it `<path>/tool/` or `<path>/toolset/` - use
+  `<path>/model_context/`

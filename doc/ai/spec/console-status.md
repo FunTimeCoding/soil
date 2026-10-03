@@ -6,11 +6,13 @@ hosts:
 
 # Console Status Spec
 
-Fluent builder for structured single-line console output with optional detail lines.
+Fluent builder for structured single-line console output with optional detail
+lines.
 
 ## Output Format
 
-A status line has a **header** of pipe-separated bubbles, optionally followed by indented **detail lines**:
+A status line has a **header** of pipe-separated bubbles, optionally followed by
+indented **detail lines**:
 
 ```
 bubble1 | bubble2 | bubble3
@@ -43,14 +45,20 @@ All return `*Status` for chaining.
 
 - `Line(format, a...)` - extended line (shown when `ShowExtended`)
 - `Lines(v ...string)` - multiple extended lines (each indented with `"  "`)
-- `TagLine(tag, format, a...)` - line grouped by tag (shown when tag is in `format.Tags`)
-- `DetailLink(url, label, prefix)` - link with format-aware rendering (see Link Rendering below)
+- `TagLine(tag, format, a...)` - line grouped by tag (shown when tag is in
+  `format.Tags`)
+- `DetailLink(url, label, prefix)` - link with format-aware rendering (see Link
+  Rendering below)
 
-`ShowExtended` controls whether `Line`/`Lines` detail lines are included. When off, only the bubble header renders - useful for dense list views. `TagLine` and `DetailLink` are independent of `ShowExtended`; they have their own visibility rules (tags and link mode respectively).
+`ShowExtended` controls whether `Line`/`Lines` detail lines are included. When
+off, only the bubble header renders - useful for dense list views. `TagLine` and
+`DetailLink` are independent of `ShowExtended`; they have their own visibility
+rules (tags and link mode respectively).
 
 ### Debug Methods
 
-- `Raw(a, title)` - `"  {title}: {%+v}"` (shown when `ShowRaw`, magenta when color)
+- `Raw(a, title)` - `"  {title}: {%+v}"` (shown when `ShowRaw`, magenta when
+  color)
 - `RawList(a)` - `Raw(a, "RawList")`
 - `RawDetail(a)` - `Raw(a, "RawDetail")`
 
@@ -104,22 +112,30 @@ Score, State, Status, Timestamp, Type, Usage, Wiki
 
 Tags serve two purposes:
 
-1. **Display toggles** - `TagLine` content only renders when its tag is active. Example: `s.TagLine(tag.Comment, "  %s", comment)` only shows when `tag.Comment` is in the format.
-2. **Semantic hints** - checked in rendering methods to switch output mode. `tag.Markdown` selects Markdown links, `tag.Copyable` selects plain-text links.
+1. **Display toggles** - `TagLine` content only renders when its tag is active.
+   Example: `s.TagLine(tag.Comment, "  %s", comment)` only shows when
+   `tag.Comment` is in the format.
+2. **Semantic hints** - checked in rendering methods to switch output mode.
+   `tag.Markdown` selects Markdown links, `tag.Copyable` selects plain-text
+   links.
 
 ## Link Rendering
 
 `DetailLink(url, label, prefix)` renders a link based on active tags:
 
-- **Default (no tag)** - OSC8 hyperlink as a bubble: `label` (clickable, no color, terminal provides underline). Dense.
-- **`tag.Markdown`** - Markdown detail line: `[label](url)` or `prefix: [label](url)`
+- **Default (no tag)** - OSC8 hyperlink as a bubble: `label` (clickable, no
+  color, terminal provides underline). Dense.
+- **`tag.Markdown`** - Markdown detail line: `[label](url)` or
+  `prefix: [label](url)`
 - **`tag.Copyable`** - plain URL detail line: `url` or `prefix: url`
 
 Parameters:
 
 - `url` - the URL (no-op if empty)
-- `label` - short clickable text for OSC8/markdown (defaults to `"Link"` if empty)
-- `prefix` - annotation prepended in copyable/markdown mode (omitted in OSC8 mode, ignored if empty)
+- `label` - short clickable text for OSC8/markdown (defaults to `"Link"` if
+  empty)
+- `prefix` - annotation prepended in copyable/markdown mode (omitted in OSC8
+  mode, ignored if empty)
 
 ### Examples
 
@@ -163,7 +179,8 @@ Every domain entity implements this interface.
 Each entity has:
 
 - `format.go` - main `Format(f)` method, builds status line
-- `format_<field>.go` - private per-field formatter reading `f.UseColor`, `f.UseCompact`, `f.HasTag()`
+- `format_<field>.go` - private per-field formatter reading `f.UseColor`,
+  `f.UseCompact`, `f.HasTag()`
 - Fallback display values live in the service's `<path>/constant/` as an
   entity-prefixed concept file (`<path>/constant/job.go` - see
   `entity-wrapper.md`), never in the entity package
@@ -207,7 +224,8 @@ func (r *Request) formatState(f *option.Format) string {
 }
 ```
 
-Pattern: check `f.UseColor`, apply ANSI color. Check empty value, return fallback constant (yellow when colored to signal missing data).
+Pattern: check `f.UseColor`, apply ANSI color. Check empty value, return
+fallback constant (yellow when colored to signal missing data).
 
 ### Field Formatter with Fallback
 
@@ -244,4 +262,7 @@ f := option.ExtendedColor.Copy().Tag(tag.Identifier)
 
 ## Format Threading
 
-`*option.Format` is passed as a function argument through the entire rendering chain. It is never stored on entities - only on `constant` package vars and CLI-level variables. The format flows: CLI entry point -> `entity.Format(f)` -> `entity.format*(f)`.
+`*option.Format` is passed as a function argument through the entire rendering
+chain. It is never stored on entities - only on `constant` package vars and
+CLI-level variables. The format flows: CLI entry point -> `entity.Format(f)` ->
+`entity.format*(f)`.

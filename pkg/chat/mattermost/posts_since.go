@@ -7,15 +7,6 @@ import (
 	"time"
 )
 
-// PostsSince fetches posts created after the given time, replies
-// and attachment-only posts included, returned oldest first. Not
-// to be confused with LatestPosts, which is count-based.
-//
-// The server caps each posts-since response at roughly a thousand
-// posts, keeping the oldest - so the fetch chunks forward, moving
-// since past the newest received post until a chunk comes back
-// smaller than the cap. The chunk guard bounds pathological
-// windows; a window that large returns its oldest posts only.
 func (c *Client) PostsSince(
 	h *model.Channel,
 	since time.Time,

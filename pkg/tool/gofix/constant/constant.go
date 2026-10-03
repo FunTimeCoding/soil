@@ -12,7 +12,6 @@ const MaxSingleParameterLength = 80
 
 var (
 	Whitelist = map[string]bool{
-		// Single letters (always acceptable)
 		"a": true,
 		"b": true,
 		"c": true,
@@ -39,8 +38,6 @@ var (
 		"x": true,
 		"y": true,
 		"z": true,
-
-		// Go keywords and builtins
 		"any":     true,
 		"bool":    true,
 		"byte":    true,
@@ -76,8 +73,6 @@ var (
 		"uint16":  true,
 		"uint32":  true,
 		"uint64":  true,
-
-		// Already banned (handled by naming analyzer)
 		"url":     true,
 		"mcp":     true,
 		"dir":     true,
@@ -124,8 +119,6 @@ var (
 		"cols":    true,
 		"loc":     true,
 		"dep":     true,
-
-		// Common English words used in identifiers
 		"accept":         true,
 		"access":         true,
 		"account":        true,
@@ -1245,8 +1238,6 @@ var (
 		"yield":          true,
 		"zero":           true,
 		"zone":           true,
-
-		// Domain words and proper nouns from survey
 		"sentry":     true,
 		"prometheus": true,
 		"jira":       true,
@@ -1276,8 +1267,6 @@ var (
 		"zulu":       true,
 		"gaia":       true,
 		"kevt":       true,
-
-		// Short words from survey (not already in common English words above)
 		"age":  true,
 		"ago":  true,
 		"aid":  true,
@@ -1517,8 +1506,6 @@ var (
 		"zig":  true,
 		"zip":  true,
 		"zoo":  true,
-
-		// Common plural/verb forms from survey
 		"alerts":      true,
 		"bytes":       true,
 		"changes":     true,
@@ -1622,8 +1609,6 @@ var (
 		"updated":     true,
 		"uploaded":    true,
 		"validated":   true,
-
-		// Technical terms from survey
 		"amd64":        true,
 		"architecture": true,
 		"cgroup":       true,
@@ -1685,8 +1670,6 @@ var (
 		"vnc":          true,
 		"vpn":          true,
 		"wss":          true,
-
-		// Project-specific identifiers from survey
 		"enrich":   true,
 		"hx":       true,
 		"osc8":     true,
@@ -1708,8 +1691,6 @@ var (
 		"ones":     true,
 		"andy":     true,
 		"xray":     true,
-
-		// Version identifiers
 		"v1": true,
 		"v2": true,
 		"v3": true,

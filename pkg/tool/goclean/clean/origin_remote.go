@@ -17,7 +17,6 @@ func originRemote(
 
 	if result == nil {
 		system.Exitf(1, "could not identify provider: %s\n", o.GitLabHost)
-		// make static analyzer happy
 		result = remote.New("", "", "")
 	}
 

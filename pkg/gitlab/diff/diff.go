@@ -9,5 +9,5 @@ type Diff struct {
 	Renamed bool
 	Deleted bool
 	Patch   string
-	Raw     *gitlab.Diff // nil when built from a merge request diff
+	Raw     *gitlab.Diff
 }

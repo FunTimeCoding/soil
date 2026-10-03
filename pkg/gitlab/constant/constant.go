@@ -15,16 +15,12 @@ const (
 
 var RequestStates = []string{OpenedState, MergedState, ClosedState}
 
-// Identifier Sort field
 const Identifier = "id"
-
-// Sort order
 const (
 	Ascending  = "asc"
 	Descending = "desc"
 )
 
-// Job status
 const (
 	JobSuccess            = "success"
 	JobFail               = "failed"
@@ -58,7 +54,6 @@ const (
 	TokenHeader = "X-Gitlab-Token" // #nosec G101 not a hardcoded secret
 )
 
-// Environment variables during jobs
 const (
 	CommitTag         = "CI_COMMIT_TAG"
 	InterfaceLocator  = "CI_API_V4_URL"

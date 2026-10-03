@@ -4,7 +4,8 @@ hosts: taskfile.dev
 
 # Taskfile Spec
 
-Standard project automation using [Task](https://taskfile.dev). The taskfile defines the local development pipeline; `gohook` wires it into git hooks.
+Standard project automation using [Task](https://taskfile.dev). The taskfile
+defines the local development pipeline; `gohook` wires it into git hooks.
 
 ## Standard Tasks
 

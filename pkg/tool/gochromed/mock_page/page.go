@@ -1,3 +1,5 @@
 package mock_page
 
-type Page struct{}
+type Page struct {
+	evaluation any
+}

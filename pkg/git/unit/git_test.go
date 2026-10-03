@@ -5,12 +5,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/git"
 	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/git/remote"
-	"github.com/funtimecoding/soil/pkg/github/action"
-	github "github.com/funtimecoding/soil/pkg/github/constant"
 	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/contains"
-	"github.com/funtimecoding/soil/pkg/system"
-	"github.com/funtimecoding/soil/pkg/system/environment"
 	"os"
 	"path/filepath"
 	"testing"
@@ -23,31 +19,11 @@ func TestConstant(t *testing.T) {
 	assert.Integer(t, 7, gitConstant.HashLength)
 }
 
-func TestBranch(t *testing.T) {
-	system.PrintEnvironment()
-	e := gitConstant.MainBranch
-
-	if action.IsActionRun() {
-		r := environment.Required(github.ReferenceEnvironment)
-
-		if r != gitConstant.MainBranch {
-			e = r
-		}
-	}
-
-	actual := git.Branch(git.FindDirectory())
-
-	if false {
-		// Sometimes HEAD
-		assert.String(t, e, actual)
-	}
-
-	// TODO: Add reference environment to list if missing
-	//  Then count somewhere what observations there are
+func TestBranchIsMainOrDetachedHead(t *testing.T) {
 	assert.True(
 		t,
 		contains.Any(
-			[]string{actual},
+			[]string{git.Branch(git.FindDirectory())},
 			[]string{gitConstant.MainBranch, gitConstant.HeadReference},
 		),
 	)

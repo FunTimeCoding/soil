@@ -12,7 +12,6 @@ func (c *Client) DynamicModules() error {
 		return e
 	}
 
-	// 401 {"message":"The request is not from a Connect app."}
 	console.Format("DynamicModule: %d %s\n", status, body)
 
 	return nil

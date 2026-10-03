@@ -18,7 +18,6 @@ func NewMemory() *gorm.DB {
 	errors.PanicOnError(e)
 	inner, f := m.DB()
 	errors.PanicOnError(f)
-	// A pooled second connection would open its own empty in-memory database
 	inner.SetMaxOpenConns(1)
 
 	return m

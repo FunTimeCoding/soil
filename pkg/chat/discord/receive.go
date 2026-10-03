@@ -18,13 +18,11 @@ func (c *Client) receive(
 	case constant.DiscordPingCommand:
 		c.Send(s, c.UserChannel(s, m.Author.ID).ID, "pong")
 	case constant.DiscordCleanCommand:
-		if m.GuildID == "" {
-			// Direct message
+		if directMessage(m) {
 			channel := c.UserChannel(s, m.Author.ID).ID
 			c.Clean(s, channel, true)
 			c.Send(s, channel, "Done")
 		} else {
-			// Channel
 			c.Clean(s, m.ChannelID, false)
 			c.Send(s, m.ChannelID, "Done")
 		}

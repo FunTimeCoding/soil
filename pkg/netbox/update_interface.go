@@ -9,8 +9,6 @@ import (
 	"net"
 )
 
-// UpdateInterface Update existing interface by name and assign MAC address to it
-// If MAC address does not exist, it will be created
 func (c *Client) UpdateInterface(
 	d *device.Device,
 	name string,

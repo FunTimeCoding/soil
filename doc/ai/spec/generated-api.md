@@ -303,10 +303,10 @@ lifecycle.WithServer(
 route registered directly in the run.go callback escapes both the
 guard and the battery.
 
-API paths are unversioned: `route:/api/<resource>`, never `route:/api/<version>/...`.
-APIs here break and roll forward rather than maintain versions, so
-a version segment would suggest a guarantee nobody keeps. Enforced
-by goaudit (`versioned_path`).
+API paths are unversioned: `route:/api/<resource>`, never
+`route:/api/<version>/...`. APIs here break and roll forward rather than
+maintain versions, so a version segment would suggest a guarantee nobody keeps.
+Enforced by goaudit (`versioned_path`).
 
 ## OpenAPI Spec Patterns
 

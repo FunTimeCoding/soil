@@ -29,7 +29,6 @@ func Registry(
 			continue
 		}
 
-		// TODO: This still doesn't delete the latest, test now to see what happens
 		latest := image.Latest(images)
 
 		for _, i := range images {

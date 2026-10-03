@@ -35,7 +35,6 @@ func TestScoreColorerDefault(t *testing.T) {
 	c.Set(y)
 	c.Set(r)
 	color.NoColor = false
-	// Not sure if function pointers can be compared, so compare output
 	assert.String(t, constant.Green("%s", "g"), g.ScoreColor()("g"))
 	assert.String(t, constant.Yellow("%s", "y"), y.ScoreColor()("y"))
 	assert.String(t, constant.Red("%s", "r"), r.ScoreColor()("r"))

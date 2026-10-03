@@ -11,7 +11,7 @@ func (s *Site) printNewButton() {
 		constant.OpenAIUsefulAttributes,
 	)
 	protocol.Print(
-		s.session.Select(constant.OpenAINewSelector, 0),
+		s.session.Select(constant.OpenAINewSelector, constant.OpenAINewIndex),
 		constant.OpenAIUsefulAttributes,
 	)
 }

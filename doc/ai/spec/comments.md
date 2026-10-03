@@ -44,11 +44,11 @@ somebody reading a function.
 
 ## What to graduate
 
-A comment carrying a **design decision** - why this shape rather than
-the obvious one, what was tried and rejected, how two mechanisms relate
-- goes to the service's design doc, and the code
-keeps nothing. Not a pointer, not a summary. The design doc is found by
-the reader who needs the why; the reader of the function does not.
+A comment carrying a **design decision** - why this shape rather than the
+obvious one, what was tried and rejected, how two mechanisms relate - goes to
+the service's design doc, and the code keeps nothing. Not a pointer, not a
+summary. The design doc is found by the reader who needs the why; the reader of
+the function does not.
 
 The tell is length. A comment that takes a paragraph to say why is
 design documentation that was written in the wrong file.

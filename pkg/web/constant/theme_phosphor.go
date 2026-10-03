@@ -1,7 +1,5 @@
 package constant
 
-// Phosphor is the night control room: radar-screen green on a
-// cold blue-black, for services that watch things in flight.
 const ThemePhosphor = `
 :root {
 	--pico-background-color: #0a0f16;

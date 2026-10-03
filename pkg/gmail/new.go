@@ -6,7 +6,6 @@ import (
 )
 
 func New(directory string) *Client {
-	// TODO: If port is busy, fail or block until it is free
 	return &Client{
 		context:   context.Background(),
 		directory: directory,

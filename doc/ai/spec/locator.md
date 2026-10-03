@@ -1,13 +1,16 @@
 # Locator
 
-`pkg/web/locator` is a fluent URL builder used throughout the codebase. Use it whenever constructing a URL - never concatenate strings manually.
+`pkg/web/locator` is a fluent URL builder used throughout the codebase. Use it
+whenever constructing a URL - never concatenate strings manually.
 
 ## Core Behavior
 
-- `locator.New(host)` defaults to **HTTPS** - no need to specify the scheme for normal use
+- `locator.New(host)` defaults to **HTTPS** - no need to specify the scheme for
+  normal use
 - All builder methods return `*Locator` for chaining
 - `String()` produces the final URL string
-- `Copy()` deep-copies a locator - use this when storing a base locator in a client and building per-request URLs from it
+- `Copy()` deep-copies a locator - use this when storing a base locator in a
+  client and building per-request URLs from it
 
 ## Common Patterns
 
@@ -81,7 +84,8 @@ locator.New(host).UserPassword(user, password).String()
 
 ### Passing to oapi-codegen generated client
 
-Generated clients expect a full URL with scheme. Use `locator.New(host).String()`:
+Generated clients expect a full URL with scheme. Use
+`locator.New(host).String()`:
 
 ```go
 c, err := client.NewClient(locator.New(host).String())
@@ -111,4 +115,5 @@ c, err := client.NewClient(locator.New(host).String())
 
 - Don't concatenate `"https://" + host` - use `locator.New(host).String()`
 - Don't mutate a stored base locator - always `Copy()` it first
-- Don't pass a bare hostname to a generated HTTP client - wrap with `locator.New(host).String()`
+- Don't pass a bare hostname to a generated HTTP client - wrap with
+  `locator.New(host).String()`

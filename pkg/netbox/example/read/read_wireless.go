@@ -19,7 +19,6 @@ func readWireless(
 	}
 
 	if false {
-		// TODO: What must devices have to show up in the picker?
 		for _, l := range n.MustWirelessLinks() {
 			console.Format("WirelessLink: %s\n", l.Format(f))
 		}

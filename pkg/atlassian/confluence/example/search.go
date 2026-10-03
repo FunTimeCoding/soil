@@ -17,7 +17,6 @@ func Search() {
 	}
 
 	if false {
-		// Working syntax examples
 		c.MustSearch("favorite=currentUser()")
 		c.MustSearch(`label IN ("ExampleLabel")`)
 		c.MustSearch("creator IN (currentUser())")

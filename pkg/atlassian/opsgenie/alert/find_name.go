@@ -13,7 +13,6 @@ func (a *Alert) findName() string {
 	var details map[string]string
 
 	if a.RawList != nil {
-		// details and description not available
 		message = a.RawList.Message
 	}
 

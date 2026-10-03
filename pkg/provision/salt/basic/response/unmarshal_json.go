@@ -2,8 +2,6 @@ package response
 
 import "encoding/json"
 
-// Salt's full_return yields a bare bool instead of the return
-// object when a minion does not respond.
 func (r *LocalReturn) UnmarshalJSON(b []byte) error {
 	var responded bool
 

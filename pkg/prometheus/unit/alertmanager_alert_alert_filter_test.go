@@ -9,7 +9,6 @@ import (
 )
 
 func TestAlertFilter(t *testing.T) {
-	// TODO: Test cases
 	o := advanced_option.New()
 	assert.Any(t, []*alert.Alert{}, alert_filter.New(o).Run([]*alert.Alert{}))
 }

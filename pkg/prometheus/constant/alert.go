@@ -3,7 +3,7 @@ package constant
 const (
 	Watchdog                = "Watchdog"
 	KubernetesCronJobFailed = "KubernetesCronJobFailed"
-	// Entity
+
 	EntityAddressPool   = "AddressPool"
 	EntityBackup        = "Backup"
 	EntityBattery       = "Battery"
@@ -54,7 +54,7 @@ const (
 	EntityTemperature   = "Temperature"
 	EntityToken         = "Token"
 	EntityVolume        = "Volume"
-	// Category
+
 	CategoryBad          = "Bad"
 	CategoryBehind       = "Behind"
 	CategoryBig          = "Big"

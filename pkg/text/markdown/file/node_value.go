@@ -8,7 +8,6 @@ func NodeValue(
 ) string {
 	switch o := n.(type) {
 	case *ast.Document:
-		// Has no value
 		if false {
 			return Value(s, o)
 		}
@@ -17,7 +16,6 @@ func NodeValue(
 	case *ast.Paragraph:
 		return Value(s, o)
 	case *ast.Text:
-		// Both heading and paragraph can be text
 		if false {
 			return o.Value.Value(*s)
 		}

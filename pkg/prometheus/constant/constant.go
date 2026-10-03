@@ -16,7 +16,6 @@ const (
 	InsecureEnvironment = "PROMETHEUS_INSECURE"
 )
 
-// Metric
 const (
 	Up      = "up"
 	Restart = "kube_pod_container_status_restarts_total"
@@ -25,7 +24,6 @@ const (
 	Load15  = "node_load15"
 )
 
-// Query result type
 const (
 	Matrix = "matrix"
 	Vector = "vector"
@@ -33,7 +31,6 @@ const (
 	String = "string"
 )
 
-// Label
 const (
 	Name          = model.MetricNameLabel
 	InstanceLabel = model.InstanceLabel
@@ -80,14 +77,13 @@ const (
 
 	KubernetesPrefix = "Kube"
 
-	HighMemoryUsage = "HighMemoryUsage" // Test alert name
+	HighMemoryUsage = "HighMemoryUsage"
 
 	Alerts = "/alerts"
 
 	PermanentTag = "#permanent"
 )
 
-// Alert label
 const (
 	AlertnameLabel = model.AlertNameLabel
 
@@ -98,13 +94,11 @@ const (
 	MessageLabel     = "message"
 )
 
-// Alert state
 const (
 	ActiveState     = "active"
 	SuppressedState = "suppressed"
 )
 
-// Severity
 const (
 	CriticalSeverity    = "critical"
 	InformationSeverity = "info"
@@ -113,8 +107,8 @@ const (
 	WarningSeverity     = "warning"
 )
 
-const ExpiredState = "expired"          // Silence state
-const NodeNotReady = "KubeNodeNotReady" // Alert name
+const ExpiredState = "expired"
+const NodeNotReady = "KubeNodeNotReady"
 
 var (
 	AlertmanagerFormat = constant.ColorFormat.Copy().Tag(constant.TagComment)

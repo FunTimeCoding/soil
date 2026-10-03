@@ -80,9 +80,10 @@ proven otherwise.
 
 **Two shapes for classified errors:**
 
-*Simple sentinel* - `var ErrorBrowserUnreachable = errors.New("browser unreachable")`.
-Fixed message, matched with `errors.Is`. Use when the message
-doesn't vary by instance - the condition is the full story.
+*Simple sentinel* -
+`var ErrorBrowserUnreachable = errors.New("browser unreachable")`. Fixed
+message, matched with `errors.Is`. Use when the message doesn't vary by
+instance - the condition is the full story.
 
 *Typed error* - a struct carrying a formatted message, matched
 with `errors.As`. Use when the message needs instance context

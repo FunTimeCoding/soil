@@ -1,3 +1,3 @@
 package monitor
 
-type removeToastMessage int // ID
+type removeToastMessage int

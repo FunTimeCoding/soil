@@ -5,8 +5,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/n8n"
 )
 
+// Reference: https://docs.n8n.io/api/api-reference/
 func main() {
-	// https://docs.n8n.io/api/api-reference/
 	for _, w := range n8n.NewEnvironment().Workflows() {
 		console.Format("Workflow: %s\n", w.Name)
 

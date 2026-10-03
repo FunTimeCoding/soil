@@ -13,14 +13,14 @@ cases; a new kind of payload earns a domain file too rather than
 crowding the vocabulary.
 
 Don't create package-local `constant.go` files - add to the nearest
-`<path>/constant/` package and export the constant, even when only one
-package uses it today. Deeper subpackages share their subsystem
-root's `<path>/constant/` rather than growing their own: `<path>/constant/` lives
-only at `pkg/<domain>/` or `pkg/tool/<name>/`, with `pkg/constant` as
-the global home. Subsystem vocabularies inside a shared
-`<path>/constant/` take a per-subsystem domain file once the package
-outgrows a single readable file; below that the whole vocabulary
-stays in `constant.go`, however many subsystems it spans.
+`<path>/constant/` package and export the constant, even when only one package
+uses it today. Deeper subpackages share their subsystem root's
+`<path>/constant/` rather than growing their own: `<path>/constant/` lives only
+at `pkg/<domain>/` or `pkg/tool/<name>/`, with `pkg/constant` as the global
+home. Subsystem vocabularies inside a shared `<path>/constant/` take a
+per-subsystem domain file once the package outgrows a single readable file;
+below that the whole vocabulary stays in `constant.go`, however many subsystems
+it spans.
 
 Prefix a symbol with its subsystem qualifier when collision or
 ambiguity forces it - `SystemdCommand`, `LiteDialectName`,
@@ -29,8 +29,9 @@ shape); distinctive collision-free names keep their shortness. The
 name must stand alone, readable without the file around it - which is
 what lets a whole subsystem vocabulary sit in one `constant.go`.
 
-Group with `const (...)` blocks per semantic domain - multiple groups
-with comment headers are the idiom for large vocabularies. When an
+Group with `const (...)` blocks per semantic domain - groups separated
+by blank lines are the idiom for large vocabularies, and the names
+carry what a group is. When an
 iota enum is defined with a named type, the type and its const values
 move together into a type-named file (`variable_kind.go` for
 `VariableKind`) - separating them across packages creates circular

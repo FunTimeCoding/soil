@@ -3,7 +3,7 @@ package system
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"os"
-	"strings"
+	"syscall"
 )
 
 func Move(
@@ -11,8 +11,7 @@ func Move(
 	to string,
 ) {
 	if e := os.Rename(from, to); e != nil {
-		// Example: "rename godownload /usr/local/bin/godownload: invalid cross-device link"
-		if strings.HasSuffix(e.Error(), "invalid cross-device link") {
+		if errors.Is(e, syscall.EXDEV) {
 			MoveCopy(from, to)
 		} else {
 			errors.PanicOnError(e)

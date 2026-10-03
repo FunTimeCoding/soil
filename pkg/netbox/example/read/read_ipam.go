@@ -10,7 +10,6 @@ func readIPAM(
 	n *netbox.Client,
 	f *option.Format,
 ) {
-	// IP Address Management
 	for _, t := range n.MustServiceTemplates() {
 		console.Format("ServiceTemplate: %s\n", t.Format(f))
 	}
@@ -20,7 +19,6 @@ func readIPAM(
 	}
 
 	if false {
-		// TODO: on load: panic: json: cannot unmarshal number into Go struct field _PaginatedVLANGroupList.results.vid_ranges of type []int32
 		for _, g := range n.MustVirtualNetworkGroups() {
 			console.Format("VirtualNetworkGroup: %s\n", g.Format(f))
 		}

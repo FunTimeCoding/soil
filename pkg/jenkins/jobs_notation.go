@@ -29,7 +29,6 @@ func (c *Client) JobsNotation() {
 		errors.PanicOnError(f)
 
 		if false {
-			// TODO: Body is already read, would have to craft entire request
 			jobStrings[i] = web.ReadString(r2)
 		}
 

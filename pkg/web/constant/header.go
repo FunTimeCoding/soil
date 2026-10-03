@@ -1,6 +1,5 @@
 package constant
 
-// Header
 const (
 	Accept            = "Accept"
 	AcceptLanguage    = "Accept-Language"

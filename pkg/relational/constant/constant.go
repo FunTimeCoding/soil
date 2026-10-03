@@ -15,7 +15,6 @@ const (
 	LiteDriverName  = "sqlite"
 	LiteDialectName = "sqlite"
 
-	// Applied per pooled connection - an Exec would only reach one
 	LiteFileParameters   = "?_pragma=journal_mode(WAL)&_pragma=foreign_keys(1)"
 	LiteMemoryParameters = "?_pragma=foreign_keys(1)"
 

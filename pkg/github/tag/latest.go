@@ -11,7 +11,6 @@ func Latest(v []*github.RepositoryTag) *github.RepositoryTag {
 	var tags []string
 
 	for _, t := range v {
-		// Only consider tags with prefix
 		if strings.HasPrefix(*t.Name, constant.VersionPrefix) {
 			tags = append(tags, *t.Name)
 		}

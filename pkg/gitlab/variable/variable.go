@@ -9,7 +9,7 @@ type Variable struct {
 	Protected   bool
 	Masked      bool
 	Hidden      bool
-	Literal     bool // upstream raw: the value is not expanded
+	Literal     bool
 	Scope       string
 	Description string
 	Raw         *gitlab.ProjectVariable
