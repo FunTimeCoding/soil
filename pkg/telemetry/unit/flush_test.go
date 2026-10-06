@@ -5,10 +5,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/telemetry"
 	"github.com/funtimecoding/soil/pkg/telemetry/constant"
 	"github.com/funtimecoding/soil/pkg/telemetry/record"
+	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
 	"net/http"
 	"net/http/httptest"
-	"net/url"
-	"strconv"
 	"sync/atomic"
 	"testing"
 )
@@ -27,11 +26,8 @@ func TestFlushWaitsForRecordDelivery(t *testing.T) {
 		),
 	)
 	defer s.Close()
-	u, e := url.Parse(s.URL)
-	assert.FatalOnError(t, e)
-	port, e := strconv.Atoi(u.Port())
-	assert.FatalOnError(t, e)
-	c := telemetry.New(u.Hostname(), port, true)
+	host, port := upstream_tester.HostPort(t, s.URL)
+	c := telemetry.New(host, port, true)
 	c.Record(
 		record.NewDomain(
 			"alfa_list",

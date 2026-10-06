@@ -1,11 +1,14 @@
 package scan
 
-import "github.com/funtimecoding/soil/pkg/system/virtual_file_system"
+import (
+	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/audit_configuration"
+)
 
 func (s *Service) collectWarnings(
 	v *virtual_file_system.System,
 	path string,
-	configuration *Configuration,
+	configuration *audit_configuration.Configuration,
 ) {
 	s.checkStaleDirectories(v, path)
 	s.checkModelContext(v, path)

@@ -1,12 +1,15 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
 
-func listDeviceJournalEntries(c *client.Client) *cobra.Command {
+func listDeviceJournalEntries(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var limit int32
 	var offset int32
 	result := &cobra.Command{
@@ -17,9 +20,7 @@ func listDeviceJournalEntries(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(
-				c.ListDeviceJournalEntries(arguments[0], limit, offset),
-			)
+			t.Emit(c.ListDeviceJournalEntries(arguments[0], limit, offset))
 		},
 	}
 	result.Flags().Int32Var(

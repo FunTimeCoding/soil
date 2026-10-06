@@ -9,6 +9,8 @@ const (
 	EntrySeparator      = " - "
 	ChildIndent         = "    + "
 	RankSeparator       = " rank "
+	BasePrefix          = "Base: "
+	Backtick            = "`"
 )
 
 const (

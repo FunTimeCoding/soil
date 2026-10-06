@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/service_tester"
+	"path/filepath"
 	"strings"
 	"testing"
 )
@@ -86,4 +87,31 @@ func TestRemoveImportNotFound(t *testing.T) {
 	assert.FatalOnError(t, e)
 	testutil.AssertBlocked(t, r, 1)
 	testutil.AssertBlockedContains(t, r, "not found")
+}
+
+func TestAddImportRefusesAFileOutsideTheModule(t *testing.T) {
+	d := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("import-grouped/src"),
+	)
+	other := testutil.PrepareTestPackage(
+		t,
+		service_tester.ServiceTestdata("import-grouped/src"),
+	)
+	source := service_tester.ReadFixtureFile(t, other, "pkg/target/example.go")
+	r, e := testService().AddImport(
+		d,
+		filepath.Join(other, "pkg/target/example.go"),
+		"os",
+		"",
+		false,
+	)
+	assert.FatalOnError(t, e)
+	testutil.AssertBlocked(t, r, 1)
+	testutil.AssertBlockedContains(t, r, "outside the active module")
+	assert.String(
+		t,
+		source,
+		service_tester.ReadFixtureFile(t, other, "pkg/target/example.go"),
+	)
 }

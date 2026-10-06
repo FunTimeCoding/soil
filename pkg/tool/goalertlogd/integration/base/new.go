@@ -2,14 +2,13 @@ package base
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/event/notifier"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/mock_client"
-	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd"
@@ -30,7 +29,7 @@ func New(t *testing.T) *Server {
 		alert.NewBasic(
 			"fp1",
 			"HighMemory",
-			prometheus.CriticalSeverity,
+			constant.CriticalSeverity,
 			"Memory above 90%",
 		),
 	)
@@ -38,7 +37,7 @@ func New(t *testing.T) *Server {
 		alert.NewBasic(
 			"fp2",
 			"DiskFull",
-			prometheus.WarningSeverity,
+			constant.WarningSeverity,
 			"Disk usage above 85%",
 		),
 	)
@@ -59,7 +58,6 @@ func New(t *testing.T) *Server {
 				web.New(s, w, events),
 				r,
 				mock_recorder.New(),
-				constant.DefaultVersion,
 				g,
 			)
 		},

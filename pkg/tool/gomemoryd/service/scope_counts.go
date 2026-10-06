@@ -1,7 +1,7 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 
-func (s *Service) ScopeCounts() ([]store.ScopeCount, error) {
+func (s *Service) ScopeCounts() ([]record.ScopeCount, error) {
 	return s.store.ScopeCounts()
 }

@@ -1,7 +1,6 @@
 package guard
 
 import (
-	library "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
@@ -35,7 +34,6 @@ func TestGuard(t *testing.T) {
 				s.Service,
 				memory.New(),
 				mock_recorder.New(),
-				library.DefaultVersion,
 				g,
 			)
 		},

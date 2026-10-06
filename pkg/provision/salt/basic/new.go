@@ -1,36 +1,24 @@
 package basic
 
 import (
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/provision/salt/session"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
-	"net/http"
 )
 
 func New(
-	host string,
-	port int,
+	base *locator.Locator,
 	user string,
 	password string,
 	eauth string,
-	insecure bool,
 ) *Client {
-	l := locator.New(host)
+	s := session.New(newRequester(base), user, password, eauth)
+	errors.PanicOnError(s.Renew())
 
-	if port != 0 {
-		l.Port(port)
+	return &Client{
+		requester: newRequester(base).
+			WithAuthorizer(s).
+			WithHeader(constant.Accept, constant.Object),
 	}
-
-	if insecure {
-		l.Insecure()
-	}
-
-	result := &Client{
-		base:     l.String(),
-		user:     user,
-		password: password,
-		eauth:    eauth,
-		client:   &http.Client{},
-	}
-	result.login()
-
-	return result
 }

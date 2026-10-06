@@ -5,5 +5,4 @@ type Server struct {
 	ServiceTokens []string
 	ReadOnly      bool
 	LitePath      string
-	Version       string
 }

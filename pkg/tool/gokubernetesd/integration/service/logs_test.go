@@ -6,8 +6,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/integration/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/integration/service_tester/pod"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/ambiguous_pods"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/query"
 	"testing"
 )
 
@@ -17,7 +17,7 @@ func TestLogsDirectPod(t *testing.T) {
 	_, e := s.Service.Logs(
 		context.Background(),
 		"test",
-		service.LogsQuery{Name: "nginx-abc123", Namespace: "default"},
+		query.Logs{Name: "nginx-abc123", Namespace: "default"},
 	)
 	assert.Nil(t, e)
 }
@@ -31,7 +31,7 @@ func TestLogsAmbiguousPods(t *testing.T) {
 	_, e := s.Service.Logs(
 		context.Background(),
 		"test",
-		service.LogsQuery{Name: "deployment/nginx", Namespace: "default"},
+		query.Logs{Name: "deployment/nginx", Namespace: "default"},
 	)
 	assert.NotNil(t, e)
 	var ap *ambiguous_pods.AmbiguousPods
@@ -47,7 +47,7 @@ func TestLogsSinglePodDeployment(t *testing.T) {
 	_, e := s.Service.Logs(
 		context.Background(),
 		"test",
-		service.LogsQuery{Name: "deployment/redis", Namespace: "default"},
+		query.Logs{Name: "deployment/redis", Namespace: "default"},
 	)
 	assert.Nil(t, e)
 }

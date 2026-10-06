@@ -1,14 +1,17 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 	"strconv"
 )
 
-func createVirtualDisk(c *client.Client) *cobra.Command {
+func createVirtualDisk(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "create-virtual-disk [vm] [name] [size-megabytes]",
 		Short: "Create a disk on a virtual machine",
@@ -19,9 +22,7 @@ func createVirtualDisk(c *client.Client) *cobra.Command {
 		) {
 			size, e := strconv.Atoi(arguments[2])
 			errors.PanicOnError(e)
-			console.Emit(
-				c.CreateVirtualDisk(arguments[0], arguments[1], int32(size)),
-			)
+			t.Emit(c.CreateVirtualDisk(arguments[0], arguments[1], int32(size)))
 		},
 	}
 }

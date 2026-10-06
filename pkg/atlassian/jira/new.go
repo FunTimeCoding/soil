@@ -26,7 +26,7 @@ func New(
 			jira.BasicAuthTransport{Username: user, Password: token},
 			host,
 		),
-		basic:   basic.New(host, user, token),
+		basic:   basic.New(locator.New(host), user, token),
 		service: service_client.New(host, user, token),
 		locator: locator.New(host).String(),
 		user:    user,

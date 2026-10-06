@@ -7,12 +7,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/option"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/audit_configuration"
 	"os"
 	"path/filepath"
 )
 
 func Run(o *option.Audit) {
-	configuration := scan.LoadConfiguration(
+	configuration := audit_configuration.Load(
 		system.FirstFile(constant.ConfigurationPaths...),
 	)
 	failed := false

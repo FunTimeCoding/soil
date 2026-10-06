@@ -1,25 +1,12 @@
 package basic
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/constant"
-	"net/http"
+	"github.com/funtimecoding/soil/pkg/web/requester/request"
 )
 
-func (c *Client) Propfind() {
-	r := web.NewPropfind(c.fileRoot)
-	r.SetBasicAuth(c.user, c.password)
-	s := web.Send(web.Client(), r)
-	defer errors.LogClose(s.Body)
+func (c *Client) Propfind() error {
+	_, e := c.requester.Bytes(request.New(constant.Propfind, ""))
 
-	switch s.StatusCode {
-	case http.StatusMultiStatus:
-		console.Line("success")
-	case http.StatusUnauthorized:
-		console.Line(constant.Unauthorized)
-	default:
-		console.Format("unexpected status: %d\n", s.StatusCode)
-	}
+	return e
 }

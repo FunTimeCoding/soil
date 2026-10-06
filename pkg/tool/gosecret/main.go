@@ -9,12 +9,8 @@ import (
 	"os"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	r := reporter.New(constant.Identity.Name(), version)
+func Main() {
+	r := reporter.New(constant.Identity.Name())
 	r.Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	var (
@@ -41,7 +37,7 @@ func Main(
 		library.CurrentDirectory,
 		"Directory to scan for secret manifests",
 	)
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
 
 	if checkMode && encodeMode {
 		errors.Printf("Error: --check and --encode are mutually exclusive\n")

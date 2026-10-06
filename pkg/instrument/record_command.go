@@ -1,17 +1,8 @@
 package instrument
 
-import (
-	"github.com/funtimecoding/soil/pkg/telemetry/constant"
-	"github.com/funtimecoding/soil/pkg/telemetry/record"
-)
+import "github.com/funtimecoding/soil/pkg/telemetry/constant"
 
 func (i *Instrument) RecordCommand(name string) {
-	i.recorder.Record(
-		record.NewDomain(
-			name,
-			constant.CommandLine,
-			constant.User,
-			constant.Success,
-		),
-	)
+	i.record(name, constant.Success)
+	i.command = ""
 }

@@ -4,7 +4,6 @@ type Terraform struct {
 	Address         string
 	ServiceTokens   []string
 	MetricAddress   string
-	Version         string
 	Repository      string
 	ClonePath       string
 	TerraformPath   string

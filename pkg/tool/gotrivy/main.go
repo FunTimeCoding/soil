@@ -9,15 +9,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gotrivy/constant"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	r := reporter.New(constant.Identity.Name(), version).Start()
+func Main() {
+	r := reporter.New(constant.Identity.Name()).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
 	k := client.NewEnvironment()
 	f := kubernetes.Format
 

@@ -1,12 +1,15 @@
 package gohabitica
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/client"
 	"github.com/spf13/cobra"
 )
 
-func gear(c *client.Client) *cobra.Command {
+func gear(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "gear",
 		Short: "List owned gear",
@@ -14,7 +17,7 @@ func gear(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			console.Emit(c.Gear())
+			t.Emit(c.Gear())
 		},
 	}
 }

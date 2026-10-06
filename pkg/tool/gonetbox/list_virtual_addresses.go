@@ -1,12 +1,15 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
 
-func listVirtualAddresses(c *client.Client) *cobra.Command {
+func listVirtualAddresses(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "list-virtual-addresses [vm]",
 		Short: "List IP addresses for a virtual machine",
@@ -15,7 +18,7 @@ func listVirtualAddresses(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(c.ListVirtualAddresses(arguments[0]))
+			t.Emit(c.ListVirtualAddresses(arguments[0]))
 		},
 	}
 }

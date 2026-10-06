@@ -3,6 +3,7 @@ package service
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/relocation"
 	"go/token"
 	"golang.org/x/tools/go/packages"
 	"strconv"
@@ -12,7 +13,7 @@ func checkEntryGuards(
 	all []*packages.Package,
 	p *packages.Package,
 	target *packages.Package,
-	entries []*moveEntry,
+	entries []*relocation.Entry,
 	packagePath string,
 	targetPackagePath string,
 	qualifyBackReferences bool,
@@ -28,23 +29,23 @@ func checkEntryGuards(
 	excluded := make(map[token.Pos]bool)
 
 	for _, entry := range entries {
-		excluded[entry.object.Pos()] = true
+		excluded[entry.Object.Pos()] = true
 	}
 
 	for _, entry := range entries {
 		if !qualifyBackReferences {
-			dependencies := moveDependencies(p, excluded, entry.node)
+			dependencies := moveDependencies(p, excluded, entry.Node)
 
 			if len(dependencies) > 0 {
 				return fmt.Sprintf(
 					"%s references package-local symbols: %s",
-					entry.symbol,
+					entry.Symbol,
 					join.CommaSpace(dependencies),
 				)
 			}
 		}
 
-		for _, c := range entry.carried {
+		for _, c := range entry.Carried {
 			importPath, f := strconv.Unquote(c.Path.Value)
 
 			if f != nil {

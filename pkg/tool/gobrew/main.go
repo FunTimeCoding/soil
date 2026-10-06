@@ -9,12 +9,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gobrew/constant"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	r := reporter.New(constant.Identity.Name(), version).Start()
+func Main() {
+	r := reporter.New(constant.Identity.Name()).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Boolean(
@@ -24,7 +20,7 @@ func Main(
 	)
 	a.Boolean(argumentConstant.Notation, false, "JSON output")
 	a.Boolean(argumentConstant.All, false, "Include filtered in output")
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
 	o := option.New()
 	o.Copyable = a.GetBoolean(argumentConstant.Copyable)
 	o.Notation = a.GetBoolean(argumentConstant.Notation)

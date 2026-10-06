@@ -3,11 +3,15 @@ package gopostgres
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/generated/client"
 	"github.com/spf13/cobra"
 )
 
-func query(c *client.Client) *cobra.Command {
+func query(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var instance string
 	result := &cobra.Command{
 		Use:   "query [sql]",
@@ -25,7 +29,7 @@ func query(c *client.Client) *cobra.Command {
 				},
 			)
 			errors.PanicOnError(e)
-			printResponse(r)
+			printResponse(t, r)
 		},
 	}
 	result.Flags().StringVar(

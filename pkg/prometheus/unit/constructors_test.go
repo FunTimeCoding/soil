@@ -19,6 +19,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/prometheus/rule/rule_list"
 	strings "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"testing"
 )
 
@@ -47,7 +48,7 @@ func TestConstructors(t *testing.T) {
 	assert.NotNil(
 		t,
 		basic.New(
-			strings.UpperAlfa,
+			locator.New(strings.UpperAlfa),
 			strings.UpperBravo,
 			strings.UpperCharlie,
 			false,

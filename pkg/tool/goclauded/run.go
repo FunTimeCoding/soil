@@ -86,7 +86,6 @@ func Run(
 			h,
 			o.SessionExportPath,
 			t,
-			o.Version,
 			guard.New(m, o.ServiceTokens),
 		)
 	}

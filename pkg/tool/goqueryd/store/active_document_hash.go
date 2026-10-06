@@ -10,5 +10,5 @@ func (s *Store) ActiveDocumentHash(
 		return ""
 	}
 
-	return d.hash
+	return d.Hash
 }

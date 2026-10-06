@@ -1,14 +1,17 @@
 package goalertlog
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	soilTime "github.com/funtimecoding/soil/pkg/time"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/client"
 	"github.com/spf13/cobra"
 	"time"
 )
 
-func topAlerts(c *client.Client) *cobra.Command {
+func topAlerts(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var count int
 	var start string
 	var end string
@@ -32,7 +35,7 @@ func topAlerts(c *client.Client) *cobra.Command {
 				from = soilTime.Parse(time.RFC3339, start)
 			}
 
-			console.Emit(c.TopAlerts(count, from, to))
+			t.Emit(c.TopAlerts(count, from, to))
 		},
 	}
 	result.Flags().IntVar(&count, "count", 10, "how many alerts to return")

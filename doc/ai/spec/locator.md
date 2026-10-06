@@ -36,50 +36,29 @@ func (c *Client) Get(path string, params map[string]string) {
 }
 ```
 
-### Ad-hoc URL construction
+### One-line builds
 
 ```go
+// ad-hoc URL construction
 locator.New(host).Path("/api/alerts").Set("name", name).String()
-```
 
-### Non-standard port
-
-```go
+// non-standard port → https://host:8080
 locator.New(host).Port(8080).String()
-// → https://host:8080
-```
 
-### HTTP (insecure)
-
-```go
+// HTTP, insecure → http://host
 locator.New(host).Insecure().String()
-// → http://host
-```
 
-### Custom scheme (WebSocket, etc.)
-
-```go
+// custom scheme - WebSocket and the like
 locator.New(host).Port(port).Scheme("wss").String()
-```
 
-### Path with fmt-style formatting
-
-```go
+// path with fmt-style formatting
 locator.New(host).Path("/%s/-/merge_requests", project).String()
-```
 
-### Reusable base path
-
-```go
+// reusable base path → https://host:port/api/alerts
 locator.New(host).Port(port).Base("/api").Path("/alerts").String()
-// → https://host:port/api/alerts
-```
 
-### Basic auth
-
-```go
+// basic auth → https://user:password@host
 locator.New(host).UserPassword(user, password).String()
-// → https://user:password@host
 ```
 
 ### Passing to oapi-codegen generated client

@@ -1,6 +1,6 @@
 package constant
 
-import "github.com/gorilla/websocket"
+import "time"
 
 const (
 	PluginEnvironment = "MONITOR_PLUGINS"
@@ -8,20 +8,7 @@ const (
 	ManualEnvironment = "MONITOR_MANUAL"
 
 	NotationReportLimit int = 10
-)
 
-const (
-	LoginCommand  = "login"
-	LogoutCommand = "logout"
-	FlagCommand   = "flag"
-	ClearCommand  = "clear"
-	PingCommand   = "ping"
-
-	LoginResponseCommand = "login-response"
-	FlagAddCommand       = "flag-add"
-	FlagRemoveCommand    = "flag-remove"
-)
-
-var (
-	Upgrader = websocket.Upgrader{}
+	ReconnectDelay = 5 * time.Second
+	OwnerFormat    = "%s@%s"
 )

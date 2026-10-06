@@ -3,12 +3,13 @@ package store
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/record"
 )
 
 func (s *Store) allEmbeddings(
 	collection string,
 	metadata map[string]string,
-) []embeddingCandidate {
+) []record.EmbeddingCandidate {
 	sql := `
 		SELECT
 			d.collection || '/' || d.path AS filepath,
@@ -38,24 +39,24 @@ func (s *Store) allEmbeddings(
 	rows, e := s.database.Query(sql, arguments...)
 	errors.PanicOnError(e)
 	defer errors.PanicClose(rows)
-	var result []embeddingCandidate
+	var result []record.EmbeddingCandidate
 
 	for rows.Next() {
-		var c embeddingCandidate
+		var c record.EmbeddingCandidate
 		var blob []byte
 		errors.PanicOnError(
 			rows.Scan(
-				&c.filePath,
-				&c.collection,
-				&c.path,
-				&c.title,
-				&c.hash,
-				&c.body,
-				&c.position,
+				&c.FilePath,
+				&c.Collection,
+				&c.Path,
+				&c.Title,
+				&c.Hash,
+				&c.Body,
+				&c.Position,
 				&blob,
 			),
 		)
-		c.vector = bytesToFloat32(blob)
+		c.Vector = bytesToFloat32(blob)
 		result = append(result, c)
 	}
 

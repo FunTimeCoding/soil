@@ -1,8 +1,11 @@
 package store
 
-import "github.com/funtimecoding/soil/pkg/errors"
+import (
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
+)
 
-func (s *Store) ListRelated(identifier int64) ([]Related, error) {
+func (s *Store) ListRelated(identifier int64) ([]record.Related, error) {
 	rows, e := s.database.Query(
 		`SELECT m.identifier, m.name, m.description, m.scope, r.type
 		FROM memory_relation r
@@ -23,10 +26,10 @@ func (s *Store) ListRelated(identifier int64) ([]Related, error) {
 	}
 
 	defer errors.LogClose(rows)
-	var result []Related
+	var result []record.Related
 
 	for rows.Next() {
-		var r Related
+		var r record.Related
 		f := rows.Scan(
 			&r.Identifier,
 			&r.Name,

@@ -4,7 +4,8 @@ import "regexp"
 
 const (
 	MemberSeparator  = "."
-	RecursivePattern = "/..."
+	InterfacesKind   = "interfaces"
+	SummaryKind      = "resource_summary"
 	DirectivePrefix  = "//go:"
 	ByValueDirective = "//goanalyze:by-value"
 

@@ -1,12 +1,15 @@
 package gohabitica
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/client"
 	"github.com/spf13/cobra"
 )
 
-func create(c *client.Client) *cobra.Command {
+func create(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var taskType string
 	var text string
 	var notes string
@@ -17,7 +20,7 @@ func create(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			console.Emit(c.CreateTask(taskType, text, notes))
+			t.Emit(c.CreateTask(taskType, text, notes))
 		},
 	}
 	result.Flags().StringVar(

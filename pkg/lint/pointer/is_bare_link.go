@@ -8,8 +8,8 @@ import (
 func isBareLink(target string) bool {
 	return target != "" &&
 		!strings.ContainsAny(target, constant.HorizontalWhitespace) &&
-		!strings.Contains(target, "://") &&
-		!strings.HasPrefix(target, "#") &&
+		!strings.Contains(target, constant.LocatorSeparator) &&
+		!strings.HasPrefix(target, constant.FragmentSeparator) &&
 		!strings.ContainsAny(target, "<>*$") &&
 		strings.ContainsRune(target, '.')
 }

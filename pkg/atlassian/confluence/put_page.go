@@ -6,7 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page/page_put"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
-	"github.com/funtimecoding/soil/pkg/notation"
 )
 
 func (c *Client) PutPage(
@@ -17,7 +16,9 @@ func (c *Client) PutPage(
 	message string,
 	status string,
 ) (*page.Page, error) {
-	result, e := c.basic.PutV2Path(
+	var p *response.Page
+
+	if e := c.basic.PutV2Path(
 		fmt.Sprintf("%s/%s", constant.ConfluencePage, identifier),
 		page_put.NewWithStatus(
 			identifier,
@@ -27,14 +28,10 @@ func (c *Client) PutPage(
 			message,
 			status,
 		).Encode(),
-	)
-
-	if e != nil {
+		&p,
+	); e != nil {
 		return nil, e
 	}
-
-	var p *response.Page
-	notation.MustDecode(result, &p, false)
 
 	return page.New(p, c.host), nil
 }

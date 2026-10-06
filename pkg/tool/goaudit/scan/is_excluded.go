@@ -3,13 +3,14 @@ package scan
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/audit_configuration"
 	"strings"
 )
 
 func isExcluded(
 	root string,
 	path string,
-	configuration *Configuration,
+	configuration *audit_configuration.Configuration,
 ) bool {
 	relative := strings.TrimPrefix(path, fmt.Sprintf("%s/", root))
 

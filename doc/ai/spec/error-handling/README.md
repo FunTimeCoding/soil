@@ -38,7 +38,7 @@ produces noop behavior. No nil-guards needed.
 
 ## When to Use Each Strategy
 
-### Default: `PanicOnError`
+### Default: panic on error
 
 Use everywhere covered by a recovery layer - web handlers, workers, REST route
 handlers. Do not return the error to the caller. Do not write `if e != nil`.
@@ -47,7 +47,7 @@ handlers. Do not return the error to the caller. Do not write `if e != nil`.
 errors.PanicOnError(s.store.Save(record))
 ```
 
-### Flow control exception: return `error`
+### Flow control exception: return the error
 
 Use when the error outcome changes what happens next - not just "something went
 wrong" but "this specific failure path has distinct handling." The canonical
@@ -97,8 +97,9 @@ error is surfaced.
 - [rest.md](rest.md) - strict server tiers, clientError, captureFail on REST
 - [external-api.md](external-api.md) - captureDetail pattern, default posture,
   sentinel classification, typed errors, message format
-- [infrastructure.md](infrastructure.md) - store method rule, worker recovery,
-  HTTP recovery, Sentry enrichment, external process, self-healing
+- [infrastructure.md](infrastructure.md) - store method rule, web handler
+  panics, worker recovery, HTTP recovery, Sentry enrichment, external process,
+  self-healing
 
 ## Deviations
 

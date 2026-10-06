@@ -2,10 +2,10 @@ package server
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/server"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
 )
 
-func convertSearchResults(results []store.SearchResult) []server.SearchResult {
+func convertSearchResults(results []search.Result) []server.SearchResult {
 	converted := make([]server.SearchResult, len(results))
 
 	for i, r := range results {

@@ -9,7 +9,7 @@ import (
 func printIframeRoots(c *chromium.Client) {
 	console.Line("=== iframe target root frames ===")
 
-	for _, t := range c.Tabs() {
+	for _, t := range c.MustTabs() {
 		if t.Type != constant.IframeTabType {
 			continue
 		}

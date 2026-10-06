@@ -18,7 +18,6 @@ func Mount(
 	b *proxmoxWeb.Server,
 	r face.Reporter,
 	t face.Recorder,
-	version string,
 	g *guard.Mux,
 ) {
 	g.TokenMount(
@@ -33,6 +32,6 @@ func Mount(
 			http.NewServeMux(),
 		),
 	)
-	model_context.New(v, r, t, version).Mount(g)
+	model_context.New(v, r, t).Mount(g)
 	b.Mount(g)
 }

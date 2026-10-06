@@ -25,6 +25,11 @@ func links(c *command_context.Context) *cobra.Command {
 				&client.GetLinksParams{},
 			)
 			errors.PanicOnError(e)
+
+			if r.JSON200 == nil {
+				c.Terminal().Reject(r.Status(), r.Body)
+			}
+
 			f := constant.Format
 
 			for _, l := range *r.JSON200.Links {

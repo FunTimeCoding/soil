@@ -2,14 +2,14 @@ package web
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
 
 func (s *Server) renderSearchResults(
-	results []store.SearchResult,
-	facets []store.Facet,
+	results []search.Result,
+	facets []search.Facet,
 	degraded bool,
 	query string,
 	collection string,

@@ -11,12 +11,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclean/constant"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	r := reporter.New(constant.Identity.Name(), version).Start()
+func Main() {
+	r := reporter.New(constant.Identity.Name()).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Boolean(argumentConstant.Verbose, false, "Verbose output")
@@ -25,7 +21,7 @@ func Main(
 		false,
 		"Delete running and queued pipelines too",
 	)
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
 	o := option.New()
 	o.GitLabHost = environment.Required(gitlab.HostEnvironment)
 	o.Verbose = a.GetBoolean(argumentConstant.Verbose)

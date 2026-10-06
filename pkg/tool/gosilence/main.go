@@ -9,12 +9,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosilence/constant"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	r := reporter.New(constant.Identity.Name(), version).Start()
+func Main() {
+	r := reporter.New(constant.Identity.Name()).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Boolean(
@@ -26,7 +22,7 @@ func Main(
 	a.Boolean(argumentConstant.All, false, "Include filtered in output")
 	a.String(argumentConstant.Set, "", "Name, creates or updates")
 	a.String(argumentConstant.Duration, "", "Duration, default 10m")
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
 	o := option.New()
 	o.Notation = a.GetBoolean(argumentConstant.Notation)
 	o.All = a.GetBoolean(argumentConstant.All)

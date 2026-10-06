@@ -34,5 +34,5 @@ func findDeclaration(
 		return findFunction(target, symbol)
 	}
 
-	return findMethod(target, symbol, receiver)
+	return findMember(target, symbol, receiver)
 }

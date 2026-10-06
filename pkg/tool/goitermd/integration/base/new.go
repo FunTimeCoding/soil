@@ -1,7 +1,6 @@
 package base
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
@@ -21,13 +20,7 @@ func New(t *testing.T) *Server {
 			m *http.ServeMux,
 			g *guard.Mux,
 		) {
-			goitermd.Mount(
-				c,
-				memory.New(),
-				mock_recorder.New(),
-				constant.DefaultVersion,
-				g,
-			)
+			goitermd.Mount(c, memory.New(), mock_recorder.New(), g)
 		},
 	)
 	result := &Server{MockClient: c, Server: v}

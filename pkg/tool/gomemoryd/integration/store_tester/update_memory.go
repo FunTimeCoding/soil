@@ -10,5 +10,6 @@ func (o *Tester) UpdateMemory(
 	option *save_option.Option,
 ) {
 	o.t.Helper()
-	assert.FatalOnError(o.t, o.Store.UpdateMemory(identifier, option))
+	_, e := o.Store.UpdateMemory(identifier, option)
+	assert.FatalOnError(o.t, e)
 }

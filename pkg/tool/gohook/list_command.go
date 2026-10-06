@@ -1,12 +1,13 @@
 package gohook
 
 import (
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gohook/configuration"
 	"github.com/funtimecoding/soil/pkg/tool/gohook/constant"
 	"github.com/spf13/cobra"
 )
 
-func listCommand() *cobra.Command {
+func listCommand(t *terminal.Terminal) *cobra.Command {
 	return &cobra.Command{
 		Use:   constant.List,
 		Short: "Show hooks, jobs and the change range each hook would use",
@@ -15,7 +16,7 @@ func listCommand() *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			List(configuration.Load(root()))
+			List(configuration.Load(root(t)))
 		},
 	}
 }

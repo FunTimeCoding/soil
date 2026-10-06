@@ -1,9 +1,11 @@
 package store
 
+import "github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
+
 func ExcludePaths(
-	results []SearchResult,
+	results []search.Result,
 	exclude []string,
-) []SearchResult {
+) []search.Result {
 	if len(exclude) == 0 {
 		return results
 	}
@@ -14,7 +16,7 @@ func ExcludePaths(
 		set[p] = true
 	}
 
-	var filtered []SearchResult
+	var filtered []search.Result
 
 	for _, r := range results {
 		if set[r.Path] {

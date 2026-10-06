@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/band/constant"
+	"github.com/funtimecoding/soil/pkg/band/response"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 )
 
@@ -27,7 +28,7 @@ func (c *Client) RequestPowerState(state int) error {
 		return e
 	}
 
-	var result requestPowerStateOutput
+	var result response.RequestPowerState
 
 	if f := xml.Unmarshal(body, &result); f != nil {
 		return f

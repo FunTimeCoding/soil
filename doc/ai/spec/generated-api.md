@@ -115,6 +115,8 @@ The framework handles Content-Type headers, status codes, and JSON
 serialization. No `web.EncodeNotation` or manual `w.WriteHeader`
 needed.
 
+### Shared converters
+
 When a server operation uses converters shared with `model_context/`,
 import the `convert/` package:
 ```go
@@ -175,6 +177,14 @@ client doesn't serve well:
   domain entities with `Format()` support (the daemon bridge
   factory pattern - see `entity-wrapper.md`)
 
+For services with a third-party upstream, the external API client lives
+at `pkg/<domain>/` (see `service-tool.md`). The `client/` wrapper and
+the external API client serve different consumers - `client/` talks to
+our own daemon, `pkg/<domain>/` is for the daemon (and MCP-only
+services) talking to the upstream.
+
+### Construction
+
 `client/client.go`:
 ```go
 type Client struct {
@@ -213,6 +223,8 @@ func NewEnvironment() *Client {
 }
 ```
 
+### Operations
+
 `client/<operation>.go`:
 ```go
 func (c *Client) Alerts() string {
@@ -221,12 +233,6 @@ func (c *Client) Alerts() string {
     return web.ReadString(result)
 }
 ```
-
-For services with a third-party upstream, the external API client lives
-at `pkg/<domain>/` (see `service-tool.md`). The `client/` wrapper and
-the external API client serve different consumers - `client/` talks to
-our own daemon, `pkg/<domain>/` is for the daemon (and MCP-only
-services) talking to the upstream.
 
 ## Mounting
 
@@ -270,6 +276,8 @@ func Mount(
 }
 ```
 
+### Inside Mount
+
 `web.RecordingMiddleware` records baseline telemetry per
 operationID via `web.RecordTelemetry` - the type parameter lets
 the one helper serve every generated package's own
@@ -281,6 +289,8 @@ Daemons without MCP skip the `model_context` line (see
 add `u.Mount(g)` for their HTML surface. REST routes (`route:/api/...`),
 MCP routes (`route:/mcp`, `route:/sse`, `route:/message`), and web routes don't
 conflict on the same mux.
+
+### The mux in run.go
 
 run.go builds exactly one `guard.Mux` per lifecycle server and
 hands it to `Mount` - service tokens thread main - option - run
@@ -303,12 +313,9 @@ lifecycle.WithServer(
 route registered directly in the run.go callback escapes both the
 guard and the battery.
 
-API paths are unversioned: `route:/api/<resource>`, never
-`route:/api/<version>/...`. APIs here break and roll forward rather than
-maintain versions, so a version segment would suggest a guarantee nobody keeps.
-Enforced by goaudit (`versioned_path`).
-
 ## OpenAPI Spec Patterns
+
+### Error schemas
 
 Every spec includes two error schemas, defined inline on each
 endpoint (not via `components/responses/` - those generate
@@ -336,6 +343,8 @@ ErrorResponse:
 ID) - the tiers and `captureFail` live in
 `doc/ai/spec/error-handling/rest.md`.
 
+### Nullable arrays
+
 Optional arrays of objects generate `*[]*Type` when the items are
 nullable. Use `nullable: true` with `allOf` wrapping:
 
@@ -354,10 +363,17 @@ Without `nullable: true` on items, oapi-codegen generates
 keeps pointer convention consistent between the generated types
 and the `convert/` layer.
 
+### Responses and paths
+
 Every non-2xx response carries a content body with a descriptive
 message - no bodyless error responses. Specs don't document
 framework-level 400s: oapi-codegen handles binding validation,
 and documenting it is the framework's job.
+
+API paths are unversioned: `route:/api/<resource>`, never
+`route:/api/<version>/...`. APIs here break and roll forward rather than
+maintain versions, so a version segment would suggest a guarantee nobody keeps.
+Enforced by goaudit (`versioned_path`).
 
 Root-level `additionalProperties: true` breaks strict-server
 marshaling (the type alias loses its custom MarshalJSON) - use a

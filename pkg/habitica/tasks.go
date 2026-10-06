@@ -1,18 +1,20 @@
 package habitica
 
 import (
+	"github.com/funtimecoding/soil/pkg/habitica/constant"
 	"github.com/funtimecoding/soil/pkg/habitica/task"
-	"github.com/funtimecoding/soil/pkg/strings/join"
+	"net/url"
 )
 
 func (c *Client) Tasks(taskType string) ([]*task.Task, error) {
-	path := "/tasks/user"
+	v := url.Values{}
 
 	if taskType != "" {
-		path = join.Empty(path, "?type=", taskType)
+		v.Set(constant.TypeParameter, taskType)
 	}
 
 	var result []*task.Task
+	e := c.basic.Get("/tasks/user", v, &result)
 
-	return result, c.get(path, &result)
+	return result, e
 }

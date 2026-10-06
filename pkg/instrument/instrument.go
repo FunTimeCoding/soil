@@ -8,4 +8,5 @@ import (
 type Instrument struct {
 	reporter *reporter.Reporter
 	recorder *telemetry.Client
+	command  string
 }

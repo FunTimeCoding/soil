@@ -27,3 +27,8 @@ const (
 	AuthorizationServer   = "authorization_servers"
 	AuthorizationResource = "resource"
 )
+
+const (
+	TokenExchangeFailed     = "token exchange failed"
+	ProviderDiscoveryFailed = "identity provider discovery failed"
+)

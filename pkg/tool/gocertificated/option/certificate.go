@@ -15,5 +15,4 @@ type Certificate struct {
 	ClientSecret       string
 	EncryptionSecret   string
 	PublicLocator      string
-	Version            string
 }

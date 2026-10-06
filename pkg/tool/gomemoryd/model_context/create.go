@@ -46,6 +46,7 @@ func (s *Server) create(
 	o.Type = q.GetString(constant.Type, "")
 	o.Source = q.GetString(constant.Source, "")
 	o.ParentIdentifier = parentIdentifier
+	o.Base = baseChange(q)
 	stripped := false
 
 	if raw := q.GetString(constant.Tags, ""); raw != "" {

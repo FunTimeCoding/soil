@@ -33,6 +33,11 @@ func sessionPrint(c *command_context.Context) *cobra.Command {
 				identifier,
 			)
 			errors.PanicOnError(e)
+
+			if response.JSON200 == nil {
+				c.Terminal().Reject(response.Status(), response.Body)
+			}
+
 			var messages []client.SessionMessage
 			var turnNumbers []int
 			turn := 0

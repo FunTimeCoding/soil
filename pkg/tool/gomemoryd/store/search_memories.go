@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 )
 
 func (s *Store) SearchMemories(
@@ -13,7 +14,7 @@ func (s *Store) SearchMemories(
 	memoryType string,
 	tag string,
 	scope string,
-) ([]SearchResult, error) {
+) ([]record.SearchResult, error) {
 	var parts []string
 	var arguments []any
 	parts = append(
@@ -56,10 +57,10 @@ func (s *Store) SearchMemories(
 	}
 
 	defer errors.LogClose(rows)
-	var result []SearchResult
+	var result []record.SearchResult
 
 	for rows.Next() {
-		var r SearchResult
+		var r record.SearchResult
 		e := rows.Scan(
 			&r.Identifier,
 			&r.Name,
@@ -77,6 +78,7 @@ func (s *Store) SearchMemories(
 		}
 
 		r.Tags = s.tagsForMemory(r.Identifier)
+		r.Metadata = s.metadataForMemory(r.Identifier)
 		result = append(result, r)
 	}
 

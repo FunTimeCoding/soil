@@ -7,8 +7,8 @@ import (
 	"github.com/dave/dst/decorator/resolver/gopackages"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
 	"golang.org/x/tools/go/packages"
-	"os"
 	"path/filepath"
 )
 
@@ -16,7 +16,7 @@ func restoreExtracted(
 	directory string,
 	file *dst.File,
 	path string,
-	dryRun bool,
+	out *sink.Sink,
 ) error {
 	restorer := decorator.NewRestorerWithImports(
 		constant.StandalonePath,
@@ -31,9 +31,7 @@ func restoreExtracted(
 		return e
 	}
 
-	if dryRun {
-		return nil
-	}
+	out.Write(path, buffer.Bytes())
 
-	return os.WriteFile(path, buffer.Bytes(), 0644)
+	return nil
 }

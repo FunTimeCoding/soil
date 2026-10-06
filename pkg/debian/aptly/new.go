@@ -2,7 +2,8 @@ package aptly
 
 import (
 	"github.com/funtimecoding/soil/pkg/web/locator"
-	"net/http"
+	"github.com/funtimecoding/soil/pkg/web/requester"
+	"github.com/funtimecoding/soil/pkg/web/requester/authorizer/basic"
 )
 
 func New(
@@ -18,10 +19,11 @@ func New(
 		l.Insecure()
 	}
 
-	return &Client{
-		Base:     l.String(),
-		Username: username,
-		Password: password,
-		client:   &http.Client{},
+	result := requester.New(l)
+
+	if username != "" {
+		result.WithAuthorizer(basic.New(username, password))
 	}
+
+	return &Client{requester: result}
 }

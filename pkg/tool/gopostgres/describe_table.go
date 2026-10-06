@@ -3,11 +3,15 @@ package gopostgres
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/generated/client"
 	"github.com/spf13/cobra"
 )
 
-func describeTable(c *client.Client) *cobra.Command {
+func describeTable(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var instance string
 	var schema string
 	result := &cobra.Command{
@@ -28,7 +32,7 @@ func describeTable(c *client.Client) *cobra.Command {
 
 			r, e := c.DescribeTable(context.Background(), arguments[0], p)
 			errors.PanicOnError(e)
-			printResponse(r)
+			printResponse(t, r)
 		},
 	}
 	result.Flags().StringVar(

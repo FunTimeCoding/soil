@@ -1,9 +1,9 @@
 package stamp
 
 type Stamp struct {
-	Version   string
-	GitHash   string
-	BuildDate string
-	Module    string
-	Dirty     bool
+	Version    string
+	GitHash    string
+	CommitDate string
+	Module     string
+	Dirty      bool
 }

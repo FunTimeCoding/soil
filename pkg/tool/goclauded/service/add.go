@@ -1,9 +1,12 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/door"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
+)
 
 func add(
-	seen map[int64]*door,
+	seen map[int64]*door.Door,
 	loaded map[int64]bool,
 	identifier int64,
 	name string,
@@ -25,10 +28,5 @@ func add(
 		kind = *edge.Type
 	}
 
-	seen[identifier] = &door{
-		Identifier: identifier,
-		Name:       name,
-		Relation:   kind,
-		Source:     otherName,
-	}
+	seen[identifier] = door.New(identifier, name, kind, otherName)
 }

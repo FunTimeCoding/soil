@@ -7,16 +7,26 @@ import (
 
 func Extract(line string) []*Candidate {
 	var result []*Candidate
+	var prose []string
 	parts := strings.Split(line, "`")
 
-	for i := 1; i < len(parts)-1; i += 2 {
-		if IsPath(parts[i]) {
-			result = append(result, NewSpan(parts[i]))
+	for i, part := range parts {
+		if i%2 == 0 || i == len(parts)-1 {
+			prose = append(prose, part)
+
+			continue
+		}
+
+		if IsPath(part) {
+			result = append(result, NewSpan(part))
 		}
 	}
 
-	for _, m := range constant.LinkTarget.FindAllStringSubmatch(line, -1) {
-		if IsPath(m[1]) || isBareLink(m[1]) {
+	for _, m := range constant.LinkTarget.FindAllStringSubmatch(
+		strings.Join(prose, "`"),
+		-1,
+	) {
+		if IsPath(m[1]) || isBareLink(m[1]) || isAnchor(m[1]) {
 			result = append(result, NewLink(m[1]))
 		}
 	}

@@ -12,16 +12,12 @@ import (
 	"log"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	r := reporter.New(constant.Identity.Name(), version)
+func Main() {
+	r := reporter.New(constant.Identity.Name())
 	r.Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
 	hostname := host.StripDomain(system.Hostname())
 	n := netbox.NewEnvironment()
 

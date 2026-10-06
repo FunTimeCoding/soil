@@ -5,17 +5,12 @@ package rerank
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/system/environment"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/rerank"
 	"testing"
 )
 
 func TestRank(t *testing.T) {
-	r, e := rerank.New(
-		environment.Required(constant.ModelEnvironment),
-		environment.Required(constant.TokenizerEnvironment),
-	)
+	r, e := rerank.NewEnvironment()
 	assert.FatalOnError(t, e)
 
 	defer errors.PanicClose(r)

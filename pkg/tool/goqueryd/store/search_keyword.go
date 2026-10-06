@@ -3,6 +3,8 @@ package store
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
 	"math"
 )
 
@@ -12,7 +14,7 @@ func (s *Store) SearchKeyword(
 	collection string,
 	full bool,
 	metadata map[string]string,
-) ([]SearchResult, error) {
+) ([]search.Result, error) {
 	fullTextSearch := BuildFullTextSearchQuery(query)
 
 	if fullTextSearch == "" {
@@ -62,10 +64,10 @@ func (s *Store) SearchKeyword(
 	}
 
 	defer errors.PanicClose(rows)
-	var result []SearchResult
+	var result []search.Result
 
 	for rows.Next() {
-		var r SearchResult
+		var r search.Result
 		var bm25 float64
 		var body string
 
@@ -85,6 +87,7 @@ func (s *Store) SearchKeyword(
 		r.Context = s.ResolveContext(r.Collection, r.Path)
 		r.Score = math.Abs(bm25) / (1 + math.Abs(bm25))
 		r.Source = "full_text_search"
+		r.ChunkPosition = constant.NoChunkPosition
 		snippet, line := ExtractSnippet(body, query, 0)
 		r.Snippet = snippet
 		r.SnippetLine = line

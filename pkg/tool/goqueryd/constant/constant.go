@@ -44,10 +44,6 @@ const (
 	Description = "description"
 	Key         = "key"
 
-	DefaultSequenceLength = 512
-	ModelEnvironment      = "RERANK_MODEL"
-	TokenizerEnvironment  = "RERANK_TOKENIZER"
-
 	ChunkSize        = 3600
 	ChunkOverlap     = 540
 	ChunkWindow      = 800

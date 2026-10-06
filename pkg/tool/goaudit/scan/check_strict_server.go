@@ -3,6 +3,7 @@ package scan
 import (
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/strict_server"
 	"go.yaml.in/yaml/v3"
 	"path/filepath"
 )
@@ -34,7 +35,7 @@ func (s *Service) checkStrictServer(
 		return
 	}
 
-	var c strictServerConfiguration
+	var c strict_server.Configuration
 
 	if yaml.Unmarshal(v.Read(configurationFile), &c) != nil {
 		s.addConcern(

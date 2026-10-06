@@ -1,0 +1,58 @@
+package gofix
+
+import (
+	"bytes"
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/lint/concern"
+	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/workspace"
+)
+
+func formatThrough(
+	patterns []string,
+	directory string,
+	w *workspace.Workspace,
+	r *output.Results,
+) {
+	if len(patterns) == 0 {
+		patterns = []string{"./..."}
+	}
+
+	all, _ := loadThrough(directory, patterns, w)
+
+	for _, name := range formatFiles(all) {
+		source, e := w.Read(name)
+
+		if e != nil {
+			errors.Printf("read %s: %s\n", name, e)
+
+			continue
+		}
+
+		f, e := formatFile(name, source)
+
+		if e != nil {
+			errors.Printf("format %s: %s\n", name, e)
+
+			continue
+		}
+
+		if bytes.Equal(f.Source, source) {
+			continue
+		}
+
+		for _, c := range f.Changes {
+			r.AddConcern(
+				concern.NewLine(c.Kind, c.Message, name, c.Line, "", !w.Diff()),
+			)
+		}
+
+		if !f.Converged {
+			errors.Printf("format fix did not converge for %s\n", name)
+		}
+
+		if e = w.Write(name, f.Source); e != nil {
+			errors.Printf("write %s: %s\n", name, e)
+		}
+	}
+}

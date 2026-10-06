@@ -1,12 +1,15 @@
 package goraid
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/raid"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/spf13/cobra"
 )
 
-func reports(c *raid.Client) *cobra.Command {
+func reports(
+	c *raid.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "reports",
 		Short: "List generated reports",
@@ -14,7 +17,7 @@ func reports(c *raid.Client) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			console.Emit(c.Reports())
+			t.Emit(c.Reports())
 		},
 	}
 }

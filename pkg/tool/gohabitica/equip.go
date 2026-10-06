@@ -1,12 +1,15 @@
 package gohabitica
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/client"
 	"github.com/spf13/cobra"
 )
 
-func equip(c *client.Client) *cobra.Command {
+func equip(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "equip <key>",
 		Short: "Equip a gear item by key",
@@ -15,7 +18,7 @@ func equip(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(c.EquipGear(arguments[0]))
+			t.Emit(c.EquipGear(arguments[0]))
 		},
 	}
 }

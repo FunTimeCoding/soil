@@ -1,12 +1,15 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
 
-func createDeviceRole(c *client.Client) *cobra.Command {
+func createDeviceRole(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "create-device-role [name]",
 		Short: "Create a NetBox device role",
@@ -15,7 +18,7 @@ func createDeviceRole(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(c.CreateDeviceRole(arguments[0]))
+			t.Emit(c.CreateDeviceRole(arguments[0]))
 		},
 	}
 }

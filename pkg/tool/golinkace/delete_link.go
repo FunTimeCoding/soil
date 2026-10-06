@@ -6,7 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/golinkace/command_context"
 	"github.com/spf13/cobra"
-	"os"
 	"strconv"
 )
 
@@ -28,12 +27,11 @@ func deleteLink(c *command_context.Context) *cobra.Command {
 			errors.PanicOnError(f)
 
 			if r.HTTPResponse.StatusCode != 204 {
-				errors.Printf(
+				c.Terminal().Exitf(
 					"unexpected status: %s\n%s\n",
 					r.HTTPResponse.Status,
 					string(r.Body),
 				)
-				os.Exit(1)
 			}
 
 			fmt.Printf("deleted link %d\n", identifier)

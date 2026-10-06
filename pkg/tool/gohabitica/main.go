@@ -4,38 +4,31 @@ import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/instrument"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gohabitica/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/client"
 	"github.com/spf13/cobra"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	s := instrument.New(constant.Identity, version)
+func Main() {
+	s := instrument.NewCommandLine(constant.Identity)
 	defer func() { s.Flush(recover()) }()
+	t := terminal.New(s)
 	c := client.NewEnvironment()
 	o := &cobra.Command{
 		Use:   constant.Identity.Usage(),
 		Short: constant.Identity.Description(),
-		PersistentPostRun: func(
-			m *cobra.Command,
-			_ []string,
-		) {
-			s.RecordCommand(m.Name())
-		},
 	}
-	o.AddCommand(tasks(c))
-	o.AddCommand(create(c))
-	o.AddCommand(score(c))
-	o.AddCommand(tags(c))
-	o.AddCommand(statistic(c))
-	o.AddCommand(cron(c))
-	o.AddCommand(allocate(c))
-	o.AddCommand(gear(c))
-	o.AddCommand(equip(c))
-	argument.CobraStamp(o, constant.Identity, version, gitHash, buildDate)
+	o.AddCommand(tasks(c, t))
+	o.AddCommand(create(c, t))
+	o.AddCommand(score(c, t))
+	o.AddCommand(tags(c, t))
+	o.AddCommand(statistic(c, t))
+	o.AddCommand(cron(c, t))
+	o.AddCommand(allocate(c, t))
+	o.AddCommand(gear(c, t))
+	o.AddCommand(equip(c, t))
+	argument.CobraInstrument(o, s)
+	argument.CobraStamp(o, constant.Identity)
 	errors.PanicOnError(o.Execute())
 }

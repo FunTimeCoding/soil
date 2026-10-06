@@ -8,19 +8,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/web"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	i := instrument.New(constant.Identity, version)
+func Main() {
+	i := instrument.New(constant.Identity)
 	defer func() { i.Flush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Web()
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
 	o := option.New()
 	o.Address = a.Address()
 	o.ServiceTokens = web.ServiceTokens()
-	o.Version = version
 	Run(o, i)
 }

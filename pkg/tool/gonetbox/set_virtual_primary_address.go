@@ -1,13 +1,16 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	generated "github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"github.com/spf13/cobra"
 )
 
-func setVirtualPrimaryAddress(c *client.Client) *cobra.Command {
+func setVirtualPrimaryAddress(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "set-virtual-primary-address [vm] [address]",
 		Short: "Set the primary IP address of a virtual machine",
@@ -16,7 +19,7 @@ func setVirtualPrimaryAddress(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(
+			t.Emit(
 				c.UpdateVirtualMachine(
 					arguments[0],
 					generated.UpdateVirtualMachineRequest{

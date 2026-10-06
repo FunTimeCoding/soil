@@ -39,7 +39,7 @@ func New(
 	m := http.NewServeMux()
 	generated.HandlerFromMux(
 		generated.NewStrictHandler(
-			server.New(upstream.Client, "test", memory.New()),
+			server.New(upstream.Client, memory.New()),
 			nil,
 		),
 		m,

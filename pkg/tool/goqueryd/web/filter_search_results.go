@@ -1,16 +1,16 @@
 package web
 
-import "github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
+import "github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
 
 func FilterSearchResults(
-	outcome *store.SearchOutcome,
+	outcome *search.Outcome,
 	metadata map[string]string,
-) ([]store.SearchResult, []store.Facet) {
+) ([]search.Result, []search.Facet) {
 	if len(metadata) == 0 {
-		return outcome.Results, store.ComputeFacets(outcome.Results, 20)
+		return outcome.Results, search.ComputeFacets(outcome.Results, 20)
 	}
 
-	var filtered []store.SearchResult
+	var filtered []search.Result
 
 	for _, r := range outcome.Results {
 		if matchesFilter(r.Metadata, metadata) {
@@ -18,5 +18,5 @@ func FilterSearchResults(
 		}
 	}
 
-	return filtered, store.ComputeFacets(filtered, 20)
+	return filtered, search.ComputeFacets(filtered, 20)
 }

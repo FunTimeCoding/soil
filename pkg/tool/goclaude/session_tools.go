@@ -30,6 +30,11 @@ func sessionTools(c *command_context.Context) *cobra.Command {
 				identifier,
 			)
 			errors.PanicOnError(e)
+
+			if response.JSON200 == nil {
+				c.Terminal().Reject(response.Status(), response.Body)
+			}
+
 			t := response.JSON200
 
 			if len(t.Counts) == 0 {

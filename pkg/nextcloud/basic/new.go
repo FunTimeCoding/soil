@@ -1,16 +1,19 @@
 package basic
 
-import "github.com/funtimecoding/soil/pkg/nextcloud/helper"
+import (
+	"github.com/funtimecoding/soil/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/web/requester"
+	"github.com/funtimecoding/soil/pkg/web/requester/authorizer/basic"
+)
 
 func New(
-	host string,
+	fileRoot *locator.Locator,
 	user string,
 	password string,
 ) *Client {
 	return &Client{
-		base:     helper.Base(host),
-		fileRoot: helper.FileRoot(host, user),
-		user:     user,
-		password: password,
+		requester: requester.New(fileRoot).WithAuthorizer(
+			basic.New(user, password),
+		),
 	}
 }

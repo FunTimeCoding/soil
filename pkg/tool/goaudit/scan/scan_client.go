@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/matrix"
 	"path/filepath"
 	"strings"
 )
@@ -13,18 +14,18 @@ func scanClient(
 	root string,
 	path string,
 	repo string,
-) *Client {
+) *matrix.Client {
 	relative := strings.TrimPrefix(path, fmt.Sprintf("%s/", root))
+	result := matrix.NewClient()
+	result.Path = fmt.Sprintf("pkg/%s", relative)
+	result.Repo = repo
+	result.Must = hasMustFiles(v, path)
+	result.Basic = v.DirectoryExists(filepath.Join(path, "basic"))
+	result.Constant = v.DirectoryExists(
+		filepath.Join(path, constant.ConstantDirectory),
+	)
+	result.Example = v.DirectoryExists(filepath.Join(path, "example"))
+	result.Entity = hasEntityPackages(v, path)
 
-	return &Client{
-		Path:  fmt.Sprintf("pkg/%s", relative),
-		Repo:  repo,
-		Must:  hasMustFiles(v, path),
-		Basic: v.DirectoryExists(filepath.Join(path, "basic")),
-		Constant: v.DirectoryExists(
-			filepath.Join(path, constant.ConstantDirectory),
-		),
-		Example: v.DirectoryExists(filepath.Join(path, "example")),
-		Entity:  hasEntityPackages(v, path),
-	}
+	return result
 }

@@ -1,16 +1,21 @@
 package basic
 
-import "github.com/funtimecoding/soil/pkg/web/locator"
+import (
+	"github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/web/requester"
+	"github.com/funtimecoding/soil/pkg/web/requester/authorizer/basic"
+)
 
 func New(
-	host string,
+	base *locator.Locator,
 	user string,
 	token string,
 ) *Client {
 	return &Client{
-		user:  user,
-		token: token,
-		host:  host,
-		base:  locator.New(host),
+		requester: requester.New(base).
+			WithAuthorizer(basic.New(user, token)).
+			WithHeader(constant.Accept, constant.Object),
+		base: base,
 	}
 }

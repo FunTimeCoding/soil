@@ -62,6 +62,9 @@ const (
 	MessageArgument = "-m"
 	Tags            = "--tags"
 
+	Describe       = "describe"
+	NoAbbreviation = "--abbrev=0"
+
 	HeadReference = "HEAD"
 
 	HashLength = 7

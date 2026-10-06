@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/audit_configuration"
 	"testing"
 )
 
@@ -24,7 +25,7 @@ func TestNilNilReturnFlagged(t *testing.T) {
 	)
 	v.WriteString("pkg/tool/gotestd/option/o.go", "package option\n")
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
-	s := scan.Services(v, "test", scan.NewConfiguration())
+	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
 	assertConcern(t, s[0], constant.NilNilReturnKey)
 }
@@ -45,7 +46,7 @@ func TestNilNilReturnClean(t *testing.T) {
 	)
 	v.WriteString("pkg/tool/gotestd/option/o.go", "package option\n")
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
-	s := scan.Services(v, "test", scan.NewConfiguration())
+	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
 	assertNoConcern(t, s[0], constant.NilNilReturnKey)
 }
@@ -66,7 +67,7 @@ func TestHttpErrorFlagged(t *testing.T) {
 	)
 	v.WriteString("pkg/tool/gotestd/option/o.go", "package option\n")
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
-	s := scan.Services(v, "test", scan.NewConfiguration())
+	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
 	assertConcern(t, s[0], constant.HttpErrorInStrictKey)
 }
@@ -87,7 +88,7 @@ func TestHttpErrorClean(t *testing.T) {
 	)
 	v.WriteString("pkg/tool/gotestd/option/o.go", "package option\n")
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
-	s := scan.Services(v, "test", scan.NewConfiguration())
+	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
 	assertNoConcern(t, s[0], constant.HttpErrorInStrictKey)
 }
@@ -108,7 +109,7 @@ func TestMissingServerCaptureFailFlagged(t *testing.T) {
 	)
 	v.WriteString("pkg/tool/gotestd/option/o.go", "package option\n")
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
-	s := scan.Services(v, "test", scan.NewConfiguration())
+	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
 	assertConcern(t, s[0], constant.MissingServerCaptureFailKey)
 }
@@ -129,7 +130,7 @@ func TestMissingServerCaptureFailSkipsRecoveryOnly(t *testing.T) {
 	)
 	v.WriteString("pkg/tool/gotestd/option/o.go", "package option\n")
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
-	s := scan.Services(v, "test", scan.NewConfiguration())
+	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
 	assertNoConcern(t, s[0], constant.MissingServerCaptureFailKey)
 }
@@ -150,7 +151,7 @@ func TestMissingCaptureDetailFlagged(t *testing.T) {
 	)
 	v.WriteString("pkg/tool/gotestd/option/o.go", "package option\n")
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
-	s := scan.Services(v, "test", scan.NewConfiguration())
+	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
 	assertConcern(t, s[0], constant.MissingCaptureDetailKey)
 }
@@ -175,7 +176,7 @@ func TestMissingCaptureDetailClean(t *testing.T) {
 	)
 	v.WriteString("pkg/tool/gotestd/option/o.go", "package option\n")
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
-	s := scan.Services(v, "test", scan.NewConfiguration())
+	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
 	assertNoConcern(t, s[0], constant.MissingCaptureDetailKey)
 }
@@ -196,7 +197,7 @@ func TestMissingCaptureDetailNotWrapping(t *testing.T) {
 	)
 	v.WriteString("pkg/tool/gotestd/option/o.go", "package option\n")
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
-	s := scan.Services(v, "test", scan.NewConfiguration())
+	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
 	assertNoConcern(t, s[0], constant.MissingCaptureDetailKey)
 }

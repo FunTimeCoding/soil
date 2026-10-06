@@ -1,9 +1,9 @@
 package model_context
 
-import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 
 type memoryWithHistory struct {
-	store.Memory
-	Related []store.Related `json:"related,omitempty"`
-	History []store.Version `json:"history,omitempty"`
+	record.Memory
+	Related []record.Related `json:"related,omitempty"`
+	History []record.Version `json:"history,omitempty"`
 }

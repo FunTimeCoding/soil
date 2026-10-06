@@ -16,5 +16,13 @@ func (r *Reranker) Close() error {
 		r.tokenizer = nil
 	}
 
+	r.counterMutex.Lock()
+	defer r.counterMutex.Unlock()
+
+	if r.counter != nil {
+		errors.PanicOnError(r.counter.Close())
+		r.counter = nil
+	}
+
 	return nil
 }

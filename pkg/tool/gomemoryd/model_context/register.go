@@ -52,15 +52,17 @@ func (s *Server) register() {
 					"Comma-separated tags to apply at creation, in the same transaction as the memory. Special tags: 'always' loads the memory in full on every profile call, 'no-index' hides it from the profile index.",
 				),
 			),
+			mcp.WithString(
+				constant.Base,
+				mcp.Description(constant.BaseParameterDescription),
+			),
 		),
 		s.create,
 	)
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.UpdateMemory,
-			mcp.WithDescription(
-				"Update an existing memory. Records the previous version in history. Tags are preserved.",
-			),
+			mcp.WithDescription(constant.UpdateMemoryDescription),
 			mcp.WithNumber(
 				constant.MemoryIdentifier,
 				mcp.Required(),
@@ -68,24 +70,31 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				constant.MemoryName,
-				mcp.Required(),
-				mcp.Description("Short name for identification"),
+				mcp.Description("New name; omit to keep the current one"),
 			),
 			mcp.WithString(
 				constant.Content,
-				mcp.Required(),
-				mcp.Description("The updated memory content"),
+				mcp.Description("New content; omit to keep the current body"),
 			),
 			mcp.WithString(
 				constant.Description,
-				mcp.Required(),
-				mcp.Description("One-line description for index and search"),
+				mcp.Description(
+					"New one-line description for index and search; omit to keep the current one",
+				),
 			),
 			mcp.WithString(
 				constant.Source,
 				mcp.Description(
 					"Session name of the caller (optional, for version attribution)",
 				),
+			),
+			mcp.WithString(
+				constant.Base,
+				mcp.Description(constant.BaseUpdateDescription),
+			),
+			mcp.WithBoolean(
+				constant.ClearBase,
+				mcp.Description(constant.ClearBaseDescription),
 			),
 		),
 		s.update,

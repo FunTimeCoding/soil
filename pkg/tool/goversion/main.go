@@ -18,12 +18,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goversion/constant"
 )
 
-func Main(
-	programVersion string,
-	gitHash string,
-	buildDate string,
-) {
-	r := reporter.New(constant.Identity.Name(), programVersion).Start()
+func Main() {
+	r := reporter.New(constant.Identity.Name()).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Boolean(argumentConstant.Notation, false, "JSON output")
@@ -37,7 +33,7 @@ func Main(
 			monitor.GoVersion.Plural,
 		),
 	)
-	a.Parse(programVersion, gitHash, buildDate)
+	a.Parse()
 	o := option.New()
 	o.Notation = a.GetBoolean(argumentConstant.Notation)
 	o.All = a.GetBoolean(argumentConstant.All)

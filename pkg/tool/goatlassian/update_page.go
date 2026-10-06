@@ -1,12 +1,15 @@
 package goatlassian
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
 )
 
-func updatePage(c *client.Client) *cobra.Command {
+func updatePage(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var message string
 	result := &cobra.Command{
 		Use:   "update-page [identifier] [title] [body]",
@@ -22,9 +25,7 @@ func updatePage(c *client.Client) *cobra.Command {
 				m = &message
 			}
 
-			console.Emit(
-				c.UpdatePage(arguments[0], arguments[1], arguments[2], m),
-			)
+			t.Emit(c.UpdatePage(arguments[0], arguments[1], arguments[2], m))
 		},
 	}
 	result.Flags().StringVar(&message, "message", "", "version comment")

@@ -1,7 +1,6 @@
 package basic
 
 import (
-	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/salt/basic/response"
 )
@@ -11,7 +10,9 @@ func (c *Client) LocalClientAsync(
 	function string,
 	arguments []string,
 ) (string, error) {
-	b, e := c.Post(
+	var r response.Async
+
+	if e := c.Post(
 		"",
 		commandRequest{
 			Client:     constant.SaltLocalAsyncClient,
@@ -20,16 +21,9 @@ func (c *Client) LocalClientAsync(
 			Arguments:  arguments,
 			TargetType: constant.SaltGlobTarget,
 		},
-	)
-
-	if e != nil {
+		&r,
+	); e != nil {
 		return "", e
-	}
-
-	var r response.Async
-
-	if f := json.Unmarshal(b, &r); f != nil {
-		return "", f
 	}
 
 	if len(r.Return) == 0 {

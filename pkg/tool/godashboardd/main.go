@@ -3,7 +3,7 @@ package godashboardd
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/constant"
@@ -12,18 +12,14 @@ import (
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	r := reporter.New(constant.Identity.Name(), version).Start()
-	defer func() { r.RecoverFlush(recover()) }()
+func Main() {
+	s := instrument.New(constant.Identity)
+	defer func() { s.Flush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Web()
 	a.Database()
 	a.String(argumentConstant.Board, constant.BoardFile, constant.BoardUsage)
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
 	o := option.New()
 	o.Address = a.Address()
 	o.Board = board.Load(a.GetString(argumentConstant.Board))
@@ -41,6 +37,5 @@ func Main(
 	)
 	o.PublicLocator = environment.Required(webConstant.PublicLocatorEnvironment)
 	o.ServiceTokens = web.ServiceTokens()
-	o.Version = version
-	Run(o, r)
+	Run(o, s)
 }

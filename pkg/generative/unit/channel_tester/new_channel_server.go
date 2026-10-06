@@ -8,7 +8,6 @@ import (
 func NewChannelServer() *channel.Server {
 	return channel.New(
 		identity.New("goclaude", "channel test", "goclaude [command]"),
-		"0.0.0",
 		"",
 	)
 }

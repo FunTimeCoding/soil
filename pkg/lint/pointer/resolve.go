@@ -1,51 +1,32 @@
 package pointer
 
-import "github.com/funtimecoding/soil/pkg/lint/constant"
+import (
+	"github.com/funtimecoding/soil/pkg/lint/constant"
+	"strings"
+)
 
 func (r *Resolver) Resolve(
 	path string,
 	d *Declared,
 	c *Candidate,
 ) *Resolution {
-	if c.Link && !IsPath(c.Span) {
-		return r.resolveLink(path, c.Span)
+	span, fragment, found := strings.Cut(c.Span, constant.FragmentSeparator)
+
+	if !found ||
+		strings.Contains(c.Span, constant.LocatorSeparator) ||
+		(span == "" && !c.Link) {
+		return r.resolveSpan(path, d, c)
 	}
 
-	switch Classify(c.Span, r.Roots) {
-	case constant.PointerClassLocator:
-		return resolveLocator(d.Hosts, c.Span)
-	case constant.PointerClassShort:
-		return r.resolveShort(path, d.Bases, c.Span)
-	case constant.PointerClassCommand:
-		return r.resolveCommand(d.Commands, c.Span)
-	case constant.PointerClassRoute:
-		return r.resolveRoute(d.Bases, c.Span)
-	case constant.PointerClassSystem:
-		return resolveSystem(c.Span)
-	case constant.PointerClassPath:
-		return &Resolution{
-			Verdict: constant.VerdictTallied,
-			Reason:  constant.ReasonSystem,
-		}
-	case constant.PointerClassImport:
-		return &Resolution{
-			Verdict: constant.VerdictTallied,
-			Reason:  constant.ReasonImport,
-		}
-	case constant.PointerClassPattern:
-		return &Resolution{
-			Verdict: constant.VerdictTallied,
-			Reason:  constant.ReasonPattern,
-		}
-	case constant.PointerClassAbsolute:
-		return &Resolution{Verdict: constant.VerdictAbsolute}
-	case constant.PointerClassSibling:
-		return r.resolveSibling(path, c.Span)
-	case constant.PointerClassSymbol:
-		return r.resolveSymbol(c.Span)
-	case constant.PointerClassRepository:
-		return r.resolveRepository(c.Span)
+	result := &Resolution{Verdict: constant.VerdictLive, Target: path}
+
+	if span != "" {
+		result = r.resolveSpan(path, d, &Candidate{Span: span, Link: c.Link})
 	}
 
-	return &Resolution{Verdict: constant.VerdictLive}
+	if result.Verdict != constant.VerdictLive {
+		return result
+	}
+
+	return r.resolveFragment(result.Target, fragment)
 }

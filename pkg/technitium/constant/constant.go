@@ -5,3 +5,8 @@ const (
 	TokenEnvironment     = "TECHNITIUM_TOKEN"
 	UntrustedEnvironment = "TECHNITIUM_UNTRUSTED"
 )
+
+const (
+	Base       = "/api"
+	OkayStatus = "ok"
+)

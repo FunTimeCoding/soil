@@ -1,6 +1,9 @@
 package gofix
 
-import "github.com/funtimecoding/soil/pkg/lint/output"
+import (
+	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/workspace"
+)
 
 func RunImportAliasFixWithDirectory(
 	patterns []string,
@@ -8,16 +11,7 @@ func RunImportAliasFixWithDirectory(
 	diff bool,
 	r *output.Results,
 ) {
-	if len(patterns) == 0 {
-		patterns = []string{"./..."}
-	}
-
-	all, fileSet := Load(directory, patterns)
-	edits := findImportAliasEdits(fileSet, all, r)
-
-	if len(edits) == 0 {
-		return
-	}
-
-	ApplyEdits(fileSet, edits, directory, diff)
+	w := workspace.New(diff, directory)
+	aliasThrough(patterns, directory, w, r)
+	finish(w, r)
 }

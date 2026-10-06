@@ -1,7 +1,6 @@
 package opnsense
 
 import (
-	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/opnsense/constant"
 	"github.com/funtimecoding/soil/pkg/opnsense/network_interface"
 	"github.com/funtimecoding/soil/pkg/opnsense/response"
@@ -9,16 +8,10 @@ import (
 )
 
 func (c *Client) Interfaces() ([]*network_interface.Interface, error) {
-	b, e := c.basic.Get(constant.InterfaceState, nil)
-
-	if e != nil {
-		return nil, e
-	}
-
 	var out map[string]response.NetworkInterface
 
-	if f := json.Unmarshal(b, &out); f != nil {
-		return nil, f
+	if e := c.basic.Get(constant.InterfaceState, nil, &out); e != nil {
+		return nil, e
 	}
 
 	var devices []string

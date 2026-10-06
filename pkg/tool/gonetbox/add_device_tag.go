@@ -1,12 +1,15 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
 
-func addDeviceTag(c *client.Client) *cobra.Command {
+func addDeviceTag(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "add-device-tag [device] [tag]",
 		Short: "Add a tag to a device",
@@ -15,7 +18,7 @@ func addDeviceTag(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(c.AddDeviceTag(arguments[0], arguments[1]))
+			t.Emit(c.AddDeviceTag(arguments[0], arguments[1]))
 		},
 	}
 }

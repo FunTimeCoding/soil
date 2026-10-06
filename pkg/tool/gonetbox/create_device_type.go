@@ -1,13 +1,16 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
 
-func createDeviceType(c *client.Client) *cobra.Command {
+func createDeviceType(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var manufacturer string
 	result := &cobra.Command{
 		Use:   "create-device-type [model]",
@@ -17,7 +20,7 @@ func createDeviceType(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(c.CreateDeviceType(arguments[0], manufacturer))
+			t.Emit(c.CreateDeviceType(arguments[0], manufacturer))
 		},
 	}
 	result.Flags().StringVar(

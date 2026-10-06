@@ -45,6 +45,7 @@ technitium
 trivy
 
 # Go
+GOFLAGS
 GOPROXY
 errcheck
 goanalyze

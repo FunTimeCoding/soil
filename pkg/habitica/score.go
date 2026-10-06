@@ -14,10 +14,12 @@ func (c *Client) Score(
 	}
 
 	var result *score.Score
-
-	return result, c.post(
+	e := c.basic.Post(
 		join.Empty("/tasks/", taskIdentifier, "/score/", direction),
+		nil,
 		nil,
 		&result,
 	)
+
+	return result, e
 }

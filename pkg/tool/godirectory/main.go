@@ -3,8 +3,8 @@ package godirectory
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/soil/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/instrument"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/godirectory/constant"
 	daemon "github.com/funtimecoding/soil/pkg/tool/godirectoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/generated/client"
@@ -13,21 +13,19 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	r := reporter.New(constant.Identity.Name(), version).Start()
-	defer func() { r.RecoverFlush(recover()) }()
+func Main() {
+	s := instrument.NewCommandLine(constant.Identity)
+	defer func() { s.Flush(recover()) }()
+	t := terminal.New(s)
 	c, e := client.NewClientWithResponses(
 		locator.Environment(
 			daemon.HostEnvironment,
 			daemon.PortEnvironment,
 			daemon.InsecureEnvironment,
 		).String(),
+		client.WithHTTPClient(web.StallClient()),
 		client.WithRequestEditorFn(
-			web.BearerEditor(environment.Required(daemon.TokenEnvironment)),
+			web.DeferredBearerEditor(t.Required, daemon.TokenEnvironment),
 		),
 	)
 	errors.PanicOnError(e)
@@ -35,8 +33,9 @@ func Main(
 		Use:   constant.Identity.Usage(),
 		Short: constant.Identity.Description(),
 	}
-	o.AddCommand(user(c))
-	o.AddCommand(group(c))
-	argument.CobraStamp(o, constant.Identity, version, gitHash, buildDate)
+	o.AddCommand(user(c, t))
+	o.AddCommand(group(c, t))
+	argument.CobraInstrument(o, s)
+	argument.CobraStamp(o, constant.Identity)
 	errors.PanicOnError(o.Execute())
 }

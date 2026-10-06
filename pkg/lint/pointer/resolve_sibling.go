@@ -6,14 +6,16 @@ func (r *Resolver) resolveSibling(
 	path string,
 	candidate string,
 ) *Resolution {
-	if r.SiblingExists(Normalize(candidate)) {
-		return &Resolution{Verdict: constant.VerdictLive}
+	normalized := Normalize(candidate)
+
+	if r.SiblingExists(normalized) {
+		return &Resolution{Verdict: constant.VerdictLive, Target: normalized}
 	}
 
 	relative, inside := Relative(path, candidate)
 
 	if inside && r.Exists(relative) {
-		return &Resolution{Verdict: constant.VerdictLive}
+		return &Resolution{Verdict: constant.VerdictLive, Target: relative}
 	}
 
 	return &Resolution{Verdict: constant.VerdictDead}

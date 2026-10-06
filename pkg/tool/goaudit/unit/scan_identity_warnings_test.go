@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/audit_configuration"
 	"testing"
 )
 
@@ -33,7 +34,7 @@ func TestIdentityWarningsSkipsServices(t *testing.T) {
 		len(
 			scan.IdentityWarnings(
 				v,
-				scan.Services(v, "test", scan.NewConfiguration()),
+				scan.Services(v, "test", audit_configuration.New()),
 			),
 		),
 	)

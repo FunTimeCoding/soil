@@ -25,7 +25,14 @@ func (s *Service) ReferenceCensus() ([]*reference.Report, error) {
 			continue
 		}
 
-		if f := reference.Check(m.Content, r, s.named); len(f) > 0 {
+		f := reference.Check(
+			m.Content,
+			reference.Bases(m.Metadata[constant.BaseKey]),
+			r,
+			s.named,
+		)
+
+		if len(f) > 0 {
 			result = append(
 				result,
 				reference.NewReport(m.Identifier, m.Name, f),

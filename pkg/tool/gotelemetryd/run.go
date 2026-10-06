@@ -37,7 +37,6 @@ func Run(
 						u,
 						r,
 						store_recorder.New(s, r),
-						o.Version,
 						guard.New(m, o.ServiceTokens),
 					)
 				},

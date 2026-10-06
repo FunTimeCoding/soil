@@ -16,7 +16,6 @@ func Mount(
 	c habitica.HabiticaSource,
 	r face.Reporter,
 	t face.Recorder,
-	version string,
 	g *guard.Mux,
 ) {
 	g.TokenMount(
@@ -31,5 +30,5 @@ func Mount(
 			http.NewServeMux(),
 		),
 	)
-	model_context.New(c, r, t, version).Mount(g)
+	model_context.New(c, r, t).Mount(g)
 }

@@ -6,7 +6,7 @@ import (
 	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service/format"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 	"slices"
 	"strings"
 )
@@ -43,7 +43,7 @@ func (s *Service) Profile(
 		return nil, nil, fmt.Errorf("list memories: %w", f)
 	}
 
-	childSummaries := map[int64][]store.MemorySummary{}
+	childSummaries := map[int64][]record.MemorySummary{}
 
 	for _, m := range allMemories {
 		if m.ParentIdentifier != nil {
@@ -60,8 +60,8 @@ func (s *Service) Profile(
 		slices.SortStableFunc(
 			children,
 			func(
-				a store.MemorySummary,
-				b store.MemorySummary,
+				a record.MemorySummary,
+				b record.MemorySummary,
 			) int {
 				return a.Ordinal - b.Ordinal
 			},

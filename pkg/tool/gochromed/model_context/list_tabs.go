@@ -13,7 +13,12 @@ func (s *Server) ListTabs(
 	_ mcp.CallToolRequest,
 	_ argument.ListTabs,
 ) (*mcp.CallToolResult, error) {
-	tabs := s.client.Tabs()
+	tabs, e := s.client.Tabs()
+
+	if e != nil {
+		return s.captureDetail(e)
+	}
+
 	type entry struct {
 		Identifier string `json:"id"`
 		Title      string `json:"title"`

@@ -40,8 +40,6 @@ func Module(o *option.Build) {
 	r.Execute(
 		constant.Go,
 		constant.Install,
-		constant.LinkerFlagsArgument,
-		LinkerFlags(o.Version, ShortHash(v.Hash), Date(), o.Module, false),
 		constant.TagsArgument,
 		Tags(o.BuildTags),
 		fmt.Sprintf("%s/cmd/%s@%s", o.Module, o.Name, o.Version),

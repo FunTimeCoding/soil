@@ -36,7 +36,7 @@ func TestMissingSentryWithOptionalReporter(t *testing.T) {
 	v.WriteString("cmd/gotest/main.go", "package main\n")
 	v.WriteString(
 		"pkg/tool/gotest/run.go",
-		"package gotest\n\nimport \"github.com/funtimecoding/soil/pkg/errors/sentry/reporter\"\n\nfunc Run() {\n\tr := reporter.NewOptional(\"gotest\", \"v0.1.0\")\n}\n",
+		"package gotest\n\nimport \"github.com/funtimecoding/soil/pkg/errors/sentry/reporter\"\n\nfunc Run() {\n\tr := reporter.NewOptional(\"gotest\")\n}\n",
 	)
 	result := scan.MissingSentry(v)
 	assert.Integer(t, 0, len(result))
@@ -47,7 +47,18 @@ func TestMissingSentryWithInstrument(t *testing.T) {
 	v.WriteString("cmd/gotest/main.go", "package main\n")
 	v.WriteString(
 		"pkg/tool/gotest/run.go",
-		"package gotest\n\nimport \"github.com/funtimecoding/soil/pkg/instrument\"\n\nfunc Run() {\n\ts := instrument.New(constant.Identity, \"v0.1.0\")\n}\n",
+		"package gotest\n\nimport \"github.com/funtimecoding/soil/pkg/instrument\"\n\nfunc Run() {\n\ts := instrument.New(constant.Identity)\n}\n",
+	)
+	result := scan.MissingSentry(v)
+	assert.Integer(t, 0, len(result))
+}
+
+func TestMissingSentryWithCommandLineInstrument(t *testing.T) {
+	v := virtual_file_system.New()
+	v.WriteString("cmd/gotest/main.go", "package main\n")
+	v.WriteString(
+		"pkg/tool/gotest/main.go",
+		"package gotest\n\nimport \"github.com/funtimecoding/soil/pkg/instrument\"\n\nfunc Main() {\n\ts := instrument.NewCommandLine(constant.Identity)\n}\n",
 	)
 	result := scan.MissingSentry(v)
 	assert.Integer(t, 0, len(result))

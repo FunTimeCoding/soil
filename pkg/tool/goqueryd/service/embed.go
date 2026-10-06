@@ -12,7 +12,7 @@ func (s *Service) Embed() (*embed.Embed, error) {
 	now := time.Now().UTC().Format(time.RFC3339)
 
 	for _, p := range pending {
-		chunks := chunk.Document(p.Body, p.Path)
+		chunks := chunk.Document(p.Body, p.Path, s.reranker)
 		texts := make([]string, len(chunks))
 
 		for i, c := range chunks {

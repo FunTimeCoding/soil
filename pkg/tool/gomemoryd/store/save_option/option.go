@@ -8,6 +8,7 @@ type Option struct {
 	Scope            string
 	Tags             []string
 	Metadata         map[string]string
+	Base             *string
 	Source           string
 	ParentIdentifier *int64
 	ProvenanceFile   string

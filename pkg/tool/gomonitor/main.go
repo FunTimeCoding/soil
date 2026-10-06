@@ -11,19 +11,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomonitor/option"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	r := reporter.New(constant.Identity.Name(), version).Start()
+func Main() {
+	r := reporter.New(constant.Identity.Name()).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Boolean(argumentConstant.Connect, false, "Connect to the server")
 	a.Boolean(argumentConstant.Once, false, "Run once and exit")
 	a.Boolean(argumentConstant.DryRun, false, "Print sources without executing")
 	a.Boolean(argumentConstant.Parallel, false, "Run checks in parallel")
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
 	o := option.New()
 	o.Once = a.GetBoolean(argumentConstant.Once)
 	o.Connect = a.GetBoolean(argumentConstant.Connect)

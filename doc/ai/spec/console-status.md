@@ -29,7 +29,12 @@ With indentation (each level = 2 spaces):
 
 ## Status Builder
 
-`status.New(f *option.Format) *Status`
+`status.New(f *option.Format) *Status` builds it, and `Format() string`
+renders it in this order:
+
+1. Header: `[indent][bubble1 | bubble2 | ...]`
+2. Tag lines: only those whose tag is in `format.Tags`
+3. Extended lines: only when `format.ShowExtended`
 
 ### Bubble Methods (header values, pipe-separated)
 
@@ -55,22 +60,11 @@ off, only the bubble header renders - useful for dense list views. `TagLine` and
 `DetailLink` are independent of `ShowExtended`; they have their own visibility
 rules (tags and link mode respectively).
 
-### Debug Methods
+Debug lines, shown when `ShowRaw`:
 
-- `Raw(a, title)` - `"  {title}: {%+v}"` (shown when `ShowRaw`, magenta when
-  color)
+- `Raw(a, title)` - `"  {title}: {%+v}"` (magenta when color)
 - `RawList(a)` - `Raw(a, "RawList")`
 - `RawDetail(a)` - `Raw(a, "RawDetail")`
-
-### Terminal
-
-- `Format() string` - renders the output
-
-## Render Order
-
-1. Header: `[indent][bubble1 | bubble2 | ...]`
-2. Tag lines: only those whose tag is in `format.Tags`
-3. Extended lines: only when `format.ShowExtended`
 
 ## Format Option
 
@@ -92,7 +86,7 @@ Fluent builder methods (all return `*Format`):
 
 Query methods: `HasTag(v)`, `HasFilter(k, v)`, `HasFilterKey(k)`.
 
-### Presets
+Presets:
 
 ```go
 option.Color         = New().Color()

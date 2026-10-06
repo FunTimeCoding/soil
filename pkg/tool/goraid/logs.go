@@ -1,13 +1,16 @@
 package goraid
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/raid"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/spf13/cobra"
 	"time"
 )
 
-func logs(c *raid.Client) *cobra.Command {
+func logs(
+	c *raid.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var offset int
 	var limit int
 	var start string
@@ -33,22 +36,22 @@ func logs(c *raid.Client) *cobra.Command {
 			}
 
 			if start != "" {
-				t, f := time.Parse(time.RFC3339, start)
+				parsed, f := time.Parse(time.RFC3339, start)
 
 				if f == nil {
-					s = &t
+					s = &parsed
 				}
 			}
 
 			if end != "" {
-				t, f := time.Parse(time.RFC3339, end)
+				parsed, f := time.Parse(time.RFC3339, end)
 
 				if f == nil {
-					e = &t
+					e = &parsed
 				}
 			}
 
-			console.Emit(c.Logs(o, l, s, e))
+			t.Emit(c.Logs(o, l, s, e))
 		},
 	}
 	result.Flags().IntVar(&offset, "offset", 0, "offset into log list")

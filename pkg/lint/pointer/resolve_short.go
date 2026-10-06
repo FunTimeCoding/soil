@@ -14,7 +14,7 @@ func (r *Resolver) resolveShort(
 ) *Resolution {
 	if full, anchored := r.anchored(bases, candidate); anchored {
 		if r.Exists(full) || r.SiblingExists(full) || r.Ignored(full) {
-			return &Resolution{Verdict: constant.VerdictLive}
+			return &Resolution{Verdict: constant.VerdictLive, Target: full}
 		}
 
 		return &Resolution{Verdict: constant.VerdictDead}
@@ -22,13 +22,13 @@ func (r *Resolver) resolveShort(
 
 	if relative, inside := Relative(path, candidate); inside &&
 		r.Exists(relative) {
-		return &Resolution{Verdict: constant.VerdictLive}
+		return &Resolution{Verdict: constant.VerdictLive, Target: relative}
 	}
 
 	normalized := Normalize(candidate)
 
-	if r.ancestorExists(path, normalized) {
-		return &Resolution{Verdict: constant.VerdictLive}
+	if target, found := r.ancestor(path, normalized); found {
+		return &Resolution{Verdict: constant.VerdictLive, Target: target}
 	}
 
 	first, _, _ := strings.Cut(normalized, stringsConstant.Slash)
@@ -76,7 +76,7 @@ func (r *Resolver) resolveShort(
 
 	if full, anchored := r.anchored(r.ImplicitBases, candidate); anchored {
 		if r.Exists(full) || r.SiblingExists(full) || r.Ignored(full) {
-			return &Resolution{Verdict: constant.VerdictLive}
+			return &Resolution{Verdict: constant.VerdictLive, Target: full}
 		}
 
 		return &Resolution{Verdict: constant.VerdictDead}

@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/tool_call"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/memory_payload"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/context_load"
 	"strconv"
 )
@@ -10,7 +11,7 @@ import (
 func memoryLoad(
 	sessionIdentifier string,
 	c *tool_call.Call,
-	entry *memoryEntry,
+	entry *memory_payload.Entry,
 ) *context_load.Load {
 	result := context_load.New()
 	result.SessionIdentifier = sessionIdentifier

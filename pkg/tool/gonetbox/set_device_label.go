@@ -1,12 +1,15 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
 
-func setDeviceLabel(c *client.Client) *cobra.Command {
+func setDeviceLabel(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "set-device-label [device] [key] [value]",
 		Short: "Set a key-value label on a device",
@@ -15,9 +18,7 @@ func setDeviceLabel(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(
-				c.SetDeviceLabel(arguments[0], arguments[1], arguments[2]),
-			)
+			t.Emit(c.SetDeviceLabel(arguments[0], arguments[1], arguments[2]))
 		},
 	}
 }

@@ -1,16 +1,17 @@
 package server
 
 import (
-	"errors"
-	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors/classify"
+	"github.com/funtimecoding/soil/pkg/tool/golinkaced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/generated/server"
-	"github.com/funtimecoding/soil/pkg/web/detail_error"
 )
 
 func (s *Server) captureDetail(e error) *server.ErrorResponse {
-	if d, okay := errors.AsType[*detail_error.Detail](e); okay {
-		return s.captureFail(e, d.Detail)
+	detail := classify.Message(e, constant.RequestFailed)
+
+	if !classify.Reportable(e) {
+		return &server.ErrorResponse{Error: detail}
 	}
 
-	return s.captureFail(e, constant.UnexpectedError)
+	return s.captureFail(e, detail)
 }

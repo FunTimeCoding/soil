@@ -4,27 +4,25 @@ import (
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/basic/response"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
-	"github.com/funtimecoding/soil/pkg/notation"
 )
 
 func (c *Client) ChildPagesByIdentifier(
 	identifier string,
 ) ([]*page.Page, error) {
-	body, e := c.basic.GetV2(
+	var children *response.Pages
+
+	if e := c.basic.Get(
 		c.basic.Base().Copy().Path(
 			"%s/%s%s",
 			constant.ConfluencePage,
 			identifier,
 			constant.ConfluenceChildren,
 		).String(),
-	)
-
-	if e != nil {
+		&children,
+	); e != nil {
 		return nil, e
 	}
 
-	var children *response.Pages
-	notation.MustDecode(body, &children, false)
 	var result []*page.Page
 
 	for _, p := range children.Results {

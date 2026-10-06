@@ -11,24 +11,39 @@ var Identity = identity.New(
 )
 
 const (
-	ListModules         = "list_modules"
-	UseModule           = "use_module"
-	FindReferences      = "find_references"
-	MatchPattern        = "match_pattern"
-	ApplyPattern        = "apply_pattern"
-	ListCalls           = "list_calls"
-	ChangeVisibility    = "change_visibility"
-	RenameSymbol        = "rename_symbol"
-	MoveSymbol          = "move_symbol"
-	MoveSymbols         = "move_symbols"
-	ExtractType         = "extract_type"
-	MovePackage         = "move_package"
-	RenamePackage       = "rename_package"
-	RenamePackageClause = "rename_package_clause"
-	RenameModule        = "rename_module"
-	ExtractToFile       = "extract_to_file"
-	AddImport           = "add_import"
-	RemoveImport        = "remove_import"
+	ListModules          = "list_modules"
+	UseModule            = "use_module"
+	FindReferences       = "find_references"
+	MatchPattern         = "match_pattern"
+	FindLiterals         = "find_literals"
+	IntroduceConstructor = "introduce_constructor"
+	ApplyPattern         = "apply_pattern"
+	ListCalls            = "list_calls"
+	ChangeVisibility     = "change_visibility"
+	RenameSymbol         = "rename_symbol"
+	MoveSymbol           = "move_symbol"
+	MoveSymbols          = "move_symbols"
+	ExtractType          = "extract_type"
+	MovePackage          = "move_package"
+	RenamePackage        = "rename_package"
+	RenamePackageClause  = "rename_package_clause"
+	RenameModule         = "rename_module"
+	ExtractToFile        = "extract_to_file"
+	AddImport            = "add_import"
+	RemoveImport         = "remove_import"
+	RemoveParameters     = "remove_parameters"
+)
+
+const (
+	ConcernValidation      = "validation"
+	ConcernRemoved         = "removed"
+	ConcernValueUse        = "value_use"
+	ConcernStillUsed       = "still_used"
+	ConcernSideEffect      = "side_effect"
+	ConcernLocal           = "local"
+	ConcernUnusedParameter = "unused_parameter"
+	ConcernWrittenOnly     = "written_only"
+	ConcernConcurrentWrite = "concurrent_write"
 )
 
 const (
@@ -41,4 +56,11 @@ const (
 	MissingPackage  = "missing"
 	ConcernMissing  = "missing"
 	ConcernChanged  = "changed"
+)
+
+const (
+	OperationWrite         = "write"
+	OperationRemove        = "remove"
+	OperationMakeDirectory = "make_directory"
+	OperationRename        = "rename"
 )

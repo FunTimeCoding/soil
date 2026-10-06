@@ -6,5 +6,4 @@ type Log struct {
 	MetricAddress   string
 	PostgresLocator string
 	LitePath        string
-	Version         string
 }

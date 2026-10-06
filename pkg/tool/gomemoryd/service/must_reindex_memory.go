@@ -2,10 +2,10 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 )
 
-func (s *Service) MustReindexMemory(m *store.Memory) {
+func (s *Service) MustReindexMemory(m *record.Memory) {
 	if !s.indexable(m) {
 		errors.LogOnError(
 			s.indexer.Delete(

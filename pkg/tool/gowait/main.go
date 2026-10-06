@@ -10,12 +10,8 @@ import (
 	"time"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	r := reporter.New(constant.Identity.Name(), version).Start()
+func Main() {
+	r := reporter.New(constant.Identity.Name()).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.String(argumentConstant.File, "", "File to wait for")
@@ -24,7 +20,7 @@ func Main(
 	a.String(argumentConstant.Contains, "", "String for locator")
 	a.Duration(argumentConstant.Timeout, 3*time.Minute, "")
 	a.Boolean(argumentConstant.Verbose, false, "Verbose output")
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
 	o := option.New()
 	o.File = a.GetString(argumentConstant.File)
 	o.Process = a.GetString(argumentConstant.Process)

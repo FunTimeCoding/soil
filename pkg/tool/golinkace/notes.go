@@ -29,6 +29,10 @@ func notes(c *command_context.Context) *cobra.Command {
 			)
 			errors.PanicOnError(f)
 
+			if r.JSON200 == nil {
+				c.Terminal().Reject(r.Status(), r.Body)
+			}
+
 			if r.JSON200.Notes != nil {
 				for _, n := range *r.JSON200.Notes {
 					fmt.Println(note.FromDaemon(n).Format())

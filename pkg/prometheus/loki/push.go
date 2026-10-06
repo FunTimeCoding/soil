@@ -8,12 +8,12 @@ import (
 func (c *Client) Push(
 	labels map[string]string,
 	lines ...string,
-) {
+) error {
 	s := stream.New(labels)
 
 	for _, l := range lines {
 		s.Add(time.Now(), l)
 	}
 
-	c.basic.Push(s)
+	return c.basic.Push(s)
 }

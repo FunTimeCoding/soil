@@ -39,16 +39,12 @@ configuration, not constructed dependencies), pulls the halves
 where it wires them, and creates the logger.
 
 ```go
-func Main(
-    version string,
-    gitHash string,
-    buildDate string,
-) {
-    s := instrument.New(constant.Identity, version)
+func Main() {
+    s := instrument.New(constant.Identity)
     defer func() { s.Flush(recover()) }()
     a := argument.NewInstance(constant.Identity)
     // ... register flags
-    a.Parse(version, gitHash, buildDate)
+    a.Parse()
     o := option.New()
     // ... populate option fields
     Run(o, s)

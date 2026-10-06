@@ -2,6 +2,7 @@ package store
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/strings/distance"
 	"sort"
 	"strings"
 )
@@ -33,13 +34,10 @@ func (s *Store) FindSimilarFiles(
 			return nil, f
 		}
 
-		distance := levenshtein(strings.ToLower(path), lower)
+		d := distance.Levenshtein(strings.ToLower(path), lower)
 
-		if distance <= 5 {
-			candidates = append(
-				candidates,
-				scored{path: path, distance: distance},
-			)
+		if d <= 5 {
+			candidates = append(candidates, scored{path: path, distance: d})
 		}
 	}
 

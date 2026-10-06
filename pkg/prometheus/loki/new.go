@@ -1,6 +1,10 @@
 package loki
 
-import "github.com/funtimecoding/soil/pkg/prometheus/loki/basic"
+import (
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/loki/basic"
+	"github.com/funtimecoding/soil/pkg/web/locator"
+)
 
 func New(
 	host string,
@@ -8,5 +12,12 @@ func New(
 	password string,
 	verbose bool,
 ) *Client {
-	return &Client{basic: basic.New(host, user, password, verbose)}
+	return &Client{
+		basic: basic.New(
+			locator.New(host).Base(constant.LokiBase),
+			user,
+			password,
+			verbose,
+		),
+	}
 }

@@ -5,23 +5,20 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/golinkace/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/golinkace/constant"
 	web "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/spf13/cobra"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	s := instrument.New(constant.Identity, version)
+func Main() {
+	s := instrument.NewCommandLine(constant.Identity)
 	defer func() { s.Flush(recover()) }()
 	var host string
 	var port int
 	var linkaceHost string
-	c := command_context.New()
+	c := command_context.New(terminal.New(s))
 	o := &cobra.Command{
 		Use:   constant.Identity.Usage(),
 		Short: constant.Identity.Description(),
@@ -34,14 +31,8 @@ func Main(
 				port,
 				environment.Exists(constant.DaemonInsecureEnvironment),
 				linkaceHost,
-				environment.Required(constant.DaemonTokenEnvironment),
+				c.Terminal().Required(constant.DaemonTokenEnvironment),
 			)
-		},
-		PersistentPostRun: func(
-			m *cobra.Command,
-			_ []string,
-		) {
-			s.RecordCommand(m.Name())
 		},
 	}
 	o.PersistentFlags().StringVar(
@@ -89,6 +80,7 @@ func Main(
 	o.AddCommand(deleteLink(c))
 	o.AddCommand(notes(c))
 	o.AddCommand(addNote(c))
-	argument.CobraStamp(o, constant.Identity, version, gitHash, buildDate)
+	argument.CobraInstrument(o, s)
+	argument.CobraStamp(o, constant.Identity)
 	errors.PanicOnError(o.Execute())
 }

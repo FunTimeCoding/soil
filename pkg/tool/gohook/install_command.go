@@ -1,12 +1,13 @@
 package gohook
 
 import (
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gohook/configuration"
 	"github.com/funtimecoding/soil/pkg/tool/gohook/constant"
 	"github.com/spf13/cobra"
 )
 
-func installCommand() *cobra.Command {
+func installCommand(t *terminal.Terminal) *cobra.Command {
 	return &cobra.Command{
 		Use:   constant.Install,
 		Short: "Write hook stubs for every hook the configuration names",
@@ -15,7 +16,7 @@ func installCommand() *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			Install(configuration.Load(root()))
+			Install(configuration.Load(root(t)))
 		},
 	}
 }

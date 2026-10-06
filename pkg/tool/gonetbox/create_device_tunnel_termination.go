@@ -1,13 +1,16 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
 
-func createDeviceTunnelTermination(c *client.Client) *cobra.Command {
+func createDeviceTunnelTermination(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var tunnel string
 	var interfaceName string
 	var role string
@@ -19,7 +22,7 @@ func createDeviceTunnelTermination(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(
+			t.Emit(
 				c.CreateDeviceTunnelTermination(
 					arguments[0],
 					tunnel,

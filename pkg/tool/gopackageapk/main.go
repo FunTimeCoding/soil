@@ -8,16 +8,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gopackageapk/option"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	r := reporter.New(constant.Identity.Name(), version)
+func Main() {
+	r := reporter.New(constant.Identity.Name())
 	r.Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
 	o := option.New()
 	o.Executable = a.RequiredPositional(0, "EXECUTABLE")
 	o.PackageVersion = semver.Trim(a.RequiredPositional(1, "PACKAGE_VERSION"))

@@ -1,0 +1,89 @@
+package store
+
+import (
+	"database/sql"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/save_option"
+)
+
+func writeMemory(
+	t *sql.Tx,
+	identifier int64,
+	o *save_option.Option,
+	now string,
+) error {
+	_, e := t.Exec(
+		`UPDATE memory SET name = ?, content = ?, description = ?, provenance_hash = ?, ordinal = ?, updated_at = ?
+		WHERE identifier = ?`,
+		o.Name,
+		o.Content,
+		o.Description,
+		o.ProvenanceHash,
+		o.Ordinal,
+		now,
+		identifier,
+	)
+
+	if e != nil {
+		return e
+	}
+
+	_, e = t.Exec(
+		`INSERT INTO memory_version (memory_identifier, name, content, description, changed_at, change_type, source)
+		VALUES (?, ?, ?, ?, ?, 'updated', ?)`,
+		identifier,
+		o.Name,
+		o.Content,
+		o.Description,
+		now,
+		o.Source,
+	)
+
+	if e != nil {
+		return e
+	}
+
+	_, e = t.Exec(
+		`DELETE FROM memory_tag WHERE memory_identifier = ?`,
+		identifier,
+	)
+
+	if e != nil {
+		return e
+	}
+
+	for _, tag := range o.Tags {
+		_, e = t.Exec(
+			`INSERT INTO memory_tag (memory_identifier, tag) VALUES (?, ?)`,
+			identifier,
+			tag,
+		)
+
+		if e != nil {
+			return e
+		}
+	}
+
+	_, e = t.Exec(
+		`DELETE FROM memory_metadata WHERE memory_identifier = ?`,
+		identifier,
+	)
+
+	if e != nil {
+		return e
+	}
+
+	for key, value := range o.Metadata {
+		_, e = t.Exec(
+			`INSERT INTO memory_metadata (memory_identifier, key, value) VALUES (?, ?, ?)`,
+			identifier,
+			key,
+			value,
+		)
+
+		if e != nil {
+			return e
+		}
+	}
+
+	return nil
+}

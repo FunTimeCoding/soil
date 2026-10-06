@@ -1,15 +1,16 @@
 package goatlassian
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
-	"os"
 	"strconv"
 )
 
-func toggleChecklistItem(c *client.Client) *cobra.Command {
+func toggleChecklistItem(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "toggle-checklist-item [key] [index]",
 		Short: "Toggle a checklist item by one-based index",
@@ -21,11 +22,10 @@ func toggleChecklistItem(c *client.Client) *cobra.Command {
 			index, e := strconv.Atoi(arguments[1])
 
 			if e != nil {
-				errors.Printf("invalid index: %s\n", arguments[1])
-				os.Exit(1)
+				t.Exitf("invalid index: %s\n", arguments[1])
 			}
 
-			console.Emit(c.ToggleChecklistItem(arguments[0], index))
+			t.Emit(c.ToggleChecklistItem(arguments[0], index))
 		},
 	}
 }

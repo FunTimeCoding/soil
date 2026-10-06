@@ -1,14 +1,13 @@
 package guard
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration/mock_notifier"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd"
-	sproutConstant "github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/store"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/web"
@@ -30,18 +29,11 @@ func TestGuard(t *testing.T) {
 			_ *http.ServeMux,
 			g *guard.Mux,
 		) {
-			gosproutd.Mount(
-				v,
-				web.New(v),
-				memory.New(),
-				mock_recorder.New(),
-				constant.DefaultVersion,
-				g,
-			)
+			gosproutd.Mount(v, web.New(v), memory.New(), mock_recorder.New(), g)
 		},
 	)
 	defer w.Stop()
 	w.VerifyBase(t)
-	w.VerifyOpen(t, sproutConstant.DashboardPath)
+	w.VerifyOpen(t, constant.DashboardPath)
 	w.VerifyModelContext(t)
 }

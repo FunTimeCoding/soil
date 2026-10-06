@@ -5,7 +5,9 @@ packages. Use the wrapper instead of the raw call + manual error
 handling. This keeps call sites clean and routes all error behavior
 through `errors.PanicOnError`.
 
-## Filesystem - `pkg/system/`
+## Filesystem
+
+In `pkg/system/`:
 
 | Wrapper | Wraps | Notes |
 |---------|-------|-------|
@@ -39,7 +41,9 @@ When the raw stdlib call is used for flow control (checking existence
 with `os.IsNotExist`, scanning directories that may not exist yet),
 the wrapper is not appropriate - the caller needs the error.
 
-## JSON - `pkg/notation/`
+## JSON
+
+In `pkg/notation/`:
 
 | Wrapper | Wraps | Notes |
 |---------|-------|-------|
@@ -57,7 +61,9 @@ flow (try-parse patterns, validating external input).
 For HTTP response bodies:
 `notation.MustDecodeBytes(system.ReadAll(resp.Body), &v, false)`.
 
-## Time - `pkg/time/`
+## Time
+
+In `pkg/time/`:
 
 | Wrapper | Wraps | Notes |
 |---------|-------|-------|

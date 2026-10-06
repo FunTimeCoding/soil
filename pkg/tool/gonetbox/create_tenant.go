@@ -1,12 +1,15 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
 
-func createTenant(c *client.Client) *cobra.Command {
+func createTenant(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "create-tenant [name]",
 		Short: "Create a NetBox tenant",
@@ -15,7 +18,7 @@ func createTenant(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(c.CreateTenant(arguments[0]))
+			t.Emit(c.CreateTenant(arguments[0]))
 		},
 	}
 }

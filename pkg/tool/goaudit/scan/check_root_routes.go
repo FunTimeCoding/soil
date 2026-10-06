@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/open_api"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"go.yaml.in/yaml/v3"
 	"maps"
@@ -22,7 +23,7 @@ func (s *Service) checkRootRoutes(
 		return
 	}
 
-	var spec openAPISpec
+	var spec open_api.Spec
 
 	if yaml.Unmarshal(v.Read(file), &spec) != nil {
 		return

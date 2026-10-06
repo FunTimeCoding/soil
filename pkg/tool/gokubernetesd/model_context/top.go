@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/model_context/argument"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/query"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -23,10 +23,7 @@ func (s *Server) Top(
 		return response.Fail(e.Error())
 	}
 
-	q := service.TopQuery{
-		Namespace:     a.Namespace,
-		AllNamespaces: a.AllNamespaces,
-	}
+	q := query.Top{Namespace: a.Namespace, AllNamespaces: a.AllNamespaces}
 
 	switch a.ResourceType {
 	case "nodes":

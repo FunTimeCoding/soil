@@ -30,6 +30,11 @@ func createLink(c *command_context.Context) *cobra.Command {
 			}
 			r, e := c.Client().AddLinkWithResponse(context.Background(), body)
 			errors.PanicOnError(e)
+
+			if r.JSON200 == nil {
+				c.Terminal().Reject(r.Status(), r.Body)
+			}
+
 			fmt.Println(
 				link.FromDaemon(*r.JSON200, c.Host()).Format(
 					linkaceConstant.Format,

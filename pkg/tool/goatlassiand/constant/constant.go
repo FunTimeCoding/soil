@@ -108,3 +108,5 @@ const (
 
 	PollInterval = time.Minute
 )
+
+const RequestFailed = "atlassian request failed"

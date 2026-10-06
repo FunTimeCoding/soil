@@ -1,6 +1,9 @@
 package gofix
 
-import "github.com/funtimecoding/soil/pkg/lint/output"
+import (
+	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/workspace"
+)
 
 func RunSingleParameterFixWithDirectory(
 	patterns []string,
@@ -8,16 +11,7 @@ func RunSingleParameterFixWithDirectory(
 	diff bool,
 	r *output.Results,
 ) {
-	if len(patterns) == 0 {
-		patterns = []string{"./..."}
-	}
-
-	all, fileSet := Load(directory, patterns)
-	edits := findSingleParameterEdits(all, r)
-
-	if len(edits) == 0 {
-		return
-	}
-
-	ApplyEdits(fileSet, edits, directory, diff)
+	w := workspace.New(diff, directory)
+	parameterThrough(patterns, directory, w, r)
+	finish(w, r)
 }

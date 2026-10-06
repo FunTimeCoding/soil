@@ -25,9 +25,11 @@ func (s *Service) PollUtilization() {
 		return
 	}
 
-	result := utilization.Read(c.AccessToken)
+	result, e := utilization.Read(c.AccessToken)
 
-	if result == nil {
+	if e != nil {
+		s.logger.Structured("utilization poll failed", "error", e)
+
 		return
 	}
 

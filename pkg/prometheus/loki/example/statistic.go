@@ -7,5 +7,5 @@ import (
 
 func Statistic() {
 	c := loki.NewEnvironment(true)
-	console.Format("Statistic: %s", c.Statistic(`{namespace!=""}`))
+	console.Format("Statistic: %s", c.MustStatistic(`{namespace!=""}`))
 }

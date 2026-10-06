@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/audit_configuration"
 	"testing"
 )
 
@@ -27,7 +28,7 @@ func New(r face.Reporter) *Server {
 }
 `,
 	)
-	s := scan.Services(v, "test", scan.NewConfiguration())
+	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
 	assertConcern(t, s[0], constant.RawModelContextServerKey)
 }
@@ -54,7 +55,7 @@ func New(
 }
 `,
 	)
-	s := scan.Services(v, "test", scan.NewConfiguration())
+	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
 	assertNoConcern(t, s[0], constant.RawModelContextServerKey)
 }

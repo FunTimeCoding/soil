@@ -31,6 +31,11 @@ func addNote(c *command_context.Context) *cobra.Command {
 				},
 			)
 			errors.PanicOnError(f)
+
+			if r.JSON200 == nil {
+				c.Terminal().Reject(r.Status(), r.Body)
+			}
+
 			fmt.Println(note.FromDaemon(*r.JSON200).Format())
 		},
 	}

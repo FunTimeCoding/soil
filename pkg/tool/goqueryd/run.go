@@ -29,7 +29,7 @@ func Run(
 	l := logger.New(context.Background())
 	s := store.New(connection.New(l, o.LitePath))
 	defer s.Close()
-	a, e := rerank.New(o.RerankModel, o.RerankTokenizer)
+	a, e := rerank.NewEnvironment()
 	errors.PanicOnError(e)
 	defer errors.LogClose(a)
 	v := service.New(s, embed.NewEnvironment(), a)
@@ -42,14 +42,7 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					Mount(
-						v,
-						u,
-						r,
-						i.Recorder(),
-						o.Version,
-						guard.New(m, o.ServiceTokens),
-					)
+					Mount(v, u, r, i.Recorder(), guard.New(m, o.ServiceTokens))
 				},
 			).WithMiddleware(u.Recovery(r)),
 		),

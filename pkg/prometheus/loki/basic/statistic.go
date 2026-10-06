@@ -6,10 +6,11 @@ import (
 	"time"
 )
 
-func (c *Client) Statistic(query string) string {
+func (c *Client) Statistic(query string) (string, error) {
 	now := time.Now()
 	oneWeekAgo := now.AddDate(0, 0, -7)
-	result := c.Get(
+
+	return c.Text(
 		c.base.Copy().Path(constant.LokiStatistic).SetInteger64(
 			web.ParameterStart,
 			oneWeekAgo.UnixNano(),
@@ -18,6 +19,4 @@ func (c *Client) Statistic(query string) string {
 			now.UnixNano(),
 		).Set(web.ParameterQuery, query).String(),
 	)
-
-	return result
 }

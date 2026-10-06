@@ -40,7 +40,13 @@ func Run(
 		),
 		environment.Required(raidParserConstant.TokenEnvironment),
 	)
-	u := web.New(s, o.ElitePath, o.OutputPath, p, authorizationClient(o))
+	u := web.New(
+		s,
+		o.ElitePath,
+		o.OutputPath,
+		p,
+		authorizationClient(o).WithReporter(r),
+	)
 	lifecycle.New(
 		l,
 		lifecycle.WithWorker(s),

@@ -4,6 +4,8 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/apply_result"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/query"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"sigs.k8s.io/yaml"
@@ -12,8 +14,8 @@ import (
 func (s *Service) ApplyResource(
 	x context.Context,
 	clusterName string,
-	q ApplyQuery,
-) (*ApplyResult, error) {
+	q query.Apply,
+) (*apply_result.Result, error) {
 	c, e := s.ClusterByName(clusterName)
 
 	if e != nil {
@@ -140,5 +142,5 @@ func (s *Service) ApplyResource(
 		return nil, h
 	}
 
-	return &ApplyResult{Kind: kind, Name: name, Namespace: namespace}, nil
+	return apply_result.New(kind, name, namespace), nil
 }

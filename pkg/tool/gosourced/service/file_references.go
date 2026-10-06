@@ -4,9 +4,11 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/source/index/xref"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/result"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/result/references"
 	"path/filepath"
 )
 
@@ -16,7 +18,13 @@ func (s *Service) FileReferences(
 	filePath string,
 ) (*output.Results, *result.FileReferences, error) {
 	r := output.NewResultsWithDirectory(directory)
-	all, set, e := loadPackages(directory, "./...")
+	pattern := packagePath
+
+	if s.full {
+		pattern = "./..."
+	}
+
+	all, set, e := loadPackages(directory, pattern)
 
 	if e != nil {
 		return nil, nil, e
@@ -27,7 +35,7 @@ func (s *Service) FileReferences(
 	if p == nil {
 		r.AddConcern(
 			concern.NewFile(
-				"validation",
+				constant.ConcernValidation,
 				fmt.Sprintf("package not found: %s", packagePath),
 				"",
 				false,
@@ -48,7 +56,7 @@ func (s *Service) FileReferences(
 	if file == nil {
 		r.AddConcern(
 			concern.NewFile(
-				"validation",
+				constant.ConcernValidation,
 				fmt.Sprintf("file not found in %s: %s", packagePath, filePath),
 				"",
 				false,
@@ -63,7 +71,7 @@ func (s *Service) FileReferences(
 	if len(symbols) == 0 {
 		r.AddConcern(
 			concern.NewFile(
-				"validation",
+				constant.ConcernValidation,
 				"file declares no top-level symbols",
 				"",
 				false,
@@ -73,35 +81,55 @@ func (s *Service) FileReferences(
 		return r, nil, nil
 	}
 
-	var entries []*result.References
+	var entries []*references.References
+	var i *xref.Index
+
+	if !s.full {
+		i = s.workspace(directory).References()
+	}
 
 	for _, q := range symbols {
 		declaration, _, f := findDeclaration(
 			all,
 			packagePath,
-			q.name,
-			q.receiver,
+			q.Name,
+			q.Receiver,
 		)
 
 		if f != nil {
-			r.AddConcern(concern.NewFile("validation", f.Error(), "", false))
+			r.AddConcern(
+				concern.NewFile(
+					constant.ConcernValidation,
+					f.Error(),
+					"",
+					false,
+				),
+			)
 
 			return r, nil, nil
 		}
 
-		name := q.name
+		name := q.Name
 
-		if q.receiver != "" {
-			name = join.Empty(q.receiver, constant.MemberSeparator, q.name)
+		if q.Receiver != "" {
+			name = join.Empty(q.Receiver, constant.MemberSeparator, q.Name)
 		}
 
-		entries = append(
-			entries,
-			result.NewReferences(
-				name,
-				referenceLocations(directory, all, set, declaration, full),
-			),
-		)
+		locations := referenceLocations(directory, all, set, declaration, full)
+
+		if i != nil {
+			locations = indexedLocations(
+				directory,
+				i,
+				all,
+				set,
+				packagePath,
+				declaration,
+				full,
+			)
+		}
+
+		entries = append(entries, references.New(name, locations))
 	}
 
 	return r, result.NewFileReferences(filePath, entries), nil

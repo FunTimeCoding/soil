@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/audit_configuration"
 	"testing"
 )
 
@@ -12,7 +13,7 @@ func TestWarningMissingOption(t *testing.T) {
 	v := virtual_file_system.New()
 	v.WriteString("pkg/tool/gotestd/server/r.go", "package server\n")
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
-	s := scan.Services(v, "test", scan.NewConfiguration())
+	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
 	assertConcern(t, s[0], constant.MissingOptionKey)
 }
@@ -21,7 +22,7 @@ func TestWarningMissingRun(t *testing.T) {
 	v := virtual_file_system.New()
 	v.WriteString("pkg/tool/gotestd/server/r.go", "package server\n")
 	v.WriteString("pkg/tool/gotestd/option/o.go", "package option\n")
-	s := scan.Services(v, "test", scan.NewConfiguration())
+	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
 	assertConcern(t, s[0], constant.MissingRunKey)
 }
@@ -31,7 +32,7 @@ func TestWarningNoSuffix(t *testing.T) {
 	v.WriteString("pkg/tool/gotest/server/r.go", "package server\n")
 	v.WriteString("pkg/tool/gotest/option/o.go", "package option\n")
 	v.WriteString("pkg/tool/gotest/run.go", "package gotest\n")
-	s := scan.Services(v, "test", scan.NewConfiguration())
+	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
 	assertConcern(t, s[0], constant.MissingSuffixKey)
 }
@@ -44,7 +45,7 @@ func TestWarningRouteExists(t *testing.T) {
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
 	assertConcern(
 		t,
-		scan.Services(v, "test", scan.NewConfiguration())[0],
+		scan.Services(v, "test", audit_configuration.New())[0],
 		constant.StaleRouteKey,
 	)
 }
@@ -59,7 +60,7 @@ func TestWarningMissingMountGo(t *testing.T) {
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
 	assertConcern(
 		t,
-		scan.Services(v, "test", scan.NewConfiguration())[0],
+		scan.Services(v, "test", audit_configuration.New())[0],
 		constant.MissingMountKey,
 	)
 }
@@ -74,7 +75,7 @@ func TestWarningMissingCaptureFail(t *testing.T) {
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
 	assertConcern(
 		t,
-		scan.Services(v, "test", scan.NewConfiguration())[0],
+		scan.Services(v, "test", audit_configuration.New())[0],
 		constant.MissingCaptureFailKey,
 	)
 }
@@ -88,7 +89,7 @@ func TestCleanServiceNoConcerns(t *testing.T) {
 	)
 	v.WriteString("pkg/tool/gotestd/option/o.go", "package option\n")
 	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
-	s := scan.Services(v, "test", scan.NewConfiguration())
+	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
 	assert.Integer(t, 0, len(s[0].Concerns))
 }

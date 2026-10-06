@@ -12,7 +12,7 @@ func (c *Client) Item(identifier string) (*item.Item, error) {
 	v := url.Values{}
 	v.Set("Fields", constant.ItemFields)
 	var r response.Item
-	e := c.get(fmt.Sprintf("/Items/%s", identifier), v, &r)
+	e := c.basic.Get(fmt.Sprintf("/Items/%s", identifier), v, &r)
 
 	if e != nil {
 		return nil, e

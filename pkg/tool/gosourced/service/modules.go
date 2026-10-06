@@ -1,7 +1,7 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/gosourced/inventory"
+import "github.com/funtimecoding/soil/pkg/source/inventory/module"
 
-func (s *Service) Modules() []inventory.Module {
+func (s *Service) Modules() []module.Module {
 	return s.inventory.Modules
 }

@@ -1,10 +1,13 @@
 package service
 
-import "go/types"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/module_symbol"
+	"go/types"
+)
 
 func moduleMember(
 	target *types.Package,
-	symbol *ModuleSymbol,
+	symbol *module_symbol.Symbol,
 ) types.Object {
 	if symbol.Owner == "" {
 		return target.Scope().Lookup(symbol.Name)

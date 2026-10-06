@@ -1,7 +1,7 @@
 # Build Spec
 
-`gobuild` cross-compiles Go binaries with version metadata injected via linker
-flags.
+`gobuild` cross-compiles Go binaries. The version stamp is Go's own build
+information - nothing is injected.
 
 ## Usage
 
@@ -18,20 +18,28 @@ gobuild --native            # enable CGO
 For each target architecture, `gobuild` runs:
 
 ```
-go build -ldflags "-X main.Version=v0.10.294 -X main.GitHash=144f841a -X main.BuildDate=2026-02-20T13:36:08+01:00 -X github.com/funtimecoding/soil/pkg/stamp/constant.Module=github.com/funtimecoding/soil -X github.com/funtimecoding/soil/pkg/stamp/constant.Dirty=0" -o tmp/<name>/<os>-<arch>/<name> cmd/<name>/main.go
+go build -tags timetzdata -o tmp/<name>/<os>-<arch>/<name> ./cmd/<name>
 ```
 
-- **Version** - latest git tag (`git describe --tags --abbrev=0`)
-- **GitHash** - short commit hash (`git rev-parse --short HEAD`)
-- **BuildDate** - current time in RFC3339
-- **Module** - the module path from `go.mod`; a file-path build carries none
-  in Go's own build information
-- **Dirty** - `1` when the work tree had uncommitted changes, so the hash does
-  not describe what was built
+It builds the package, never the file: a file-path build
+(`cmd/<name>/main.go`) records no module and no version control state, while
+a package build stamps both. `pkg/stamp` reads them at runtime through
+`runtime/debug`:
 
-A binary installed with `go install` carries no linker stamp; the stamp falls
-back to Go's build information (`runtime/debug`) for its version, revision and
-module, so `--version` is never empty.
+- **Version** - the module version Go derives from the tags: `v0.11.170` on a
+  tag, a pseudo-version such as `v0.11.171-0.20261003213813-fd20dc25a022`
+  between tags, `+dirty` appended for uncommitted changes. `--version` prints
+  a pseudo-version as the tag it follows (`v0.11.170 (untagged)`); the JSON
+  report keeps Go's value.
+- **GitHash** - `vcs.revision`, shortened
+- **CommitDate** - `vcs.time`, the commit's time rather than the build's
+- **Module** - the main module path
+- **Dirty** - `vcs.modified`
+
+A `go install`ed binary carries the same stamp, minus the version control
+fields when installed from the module proxy. A build without a git checkout
+fails unless `-buildvcs=false` is passed; CI checks out with full history, so
+tags and revision are present.
 
 ## Install Semantics
 
@@ -65,15 +73,14 @@ tmp/<name>/
   darwin-amd64/<name>
 ```
 
-## Entry Point Contract
+## Entry Point
 
-See `entrypoint.md` for the linker variable and `Main()` convention. `gobuild`
-injects `Version`, `GitHash`, and `BuildDate` at compile time.
-
-## Main Path Resolution
+See `entrypoint.md` for the `Main()` convention. `main` passes nothing; the
+stamp comes from `stamp.New()`.
 
 `gobuild` locates the entry point via `build.GuessMainPath(name)`, which looks
-for `cmd/<name>/main.go`. Override with `--main` flag.
+for `cmd/<name>/main.go`. Override with `--main` flag. Either way the build
+target is the file's package (`build.Package`).
 
 ## Packages
 
@@ -81,13 +88,10 @@ for `cmd/<name>/main.go`. Override with `--main` flag.
 cmd/gobuild/main.go              # entry point
 pkg/tool/gobuild/main.go         # Main(): flags, dispatch
 pkg/build/
-  go.go                          # Go(): runs go build with ldflags
+  go.go                          # Go(): runs go build on the package
   architectures.go               # Architectures(): iterates selected targets
-  git_tag.go                     # GitTag(): latest git tag
-  git_hash.go                    # GitHash(): short commit hash
-  git_dirty.go                   # GitDirty(): uncommitted changes present
-  date.go                        # Date(): RFC3339 now
   guess_main_path.go             # GuessMainPath(): cmd/<name>/main.go
+  package.go                     # Package(): main file to its package
   option/
     build.go                     # Build option struct
     new.go                       # constructor

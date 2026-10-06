@@ -20,12 +20,8 @@ import (
 	"os"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	r := reporter.New(constant.Identity.Name(), version).Start()
+func Main() {
+	r := reporter.New(constant.Identity.Name()).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Boolean(argumentConstant.Continue, false, "Continue on error")
@@ -43,7 +39,7 @@ func Main(
 		nil,
 		"One or more downgrades to apply after update, comma separated",
 	)
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
 	continueOnError := a.GetBoolean(argumentConstant.Continue)
 
 	if len(exclusives) > 0 {

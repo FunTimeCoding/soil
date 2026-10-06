@@ -1,50 +1,21 @@
 package basic
 
 import (
-	atlassian "github.com/funtimecoding/soil/pkg/atlassian/constant"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/locator"
-	"io"
+	"github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/requester/request"
 	"net/http"
-	"strings"
 )
 
 func (c *Client) PutV2Path(
-	p string,
+	path string,
 	body string,
-) (string, error) {
-	r, e := http.NewRequest(
-		http.MethodPut,
-		locator.New(c.host).Base(atlassian.ConfluenceBase).Path(p).String(),
-		strings.NewReader(body),
+	out any,
+) error {
+	return c.requester.Notation(
+		request.New(http.MethodPut, path).WithBody(
+			constant.Object,
+			[]byte(body),
+		),
+		out,
 	)
-
-	if e != nil {
-		return "", e
-	}
-
-	r.SetBasicAuth(c.user, c.token)
-	r.Header[webConstant.Accept] = []string{webConstant.Object}
-	r.Header[webConstant.ContentType] = []string{webConstant.Object}
-	result, f := http.DefaultClient.Do(r)
-
-	if f != nil {
-		return "", f
-	}
-
-	b, g := io.ReadAll(result.Body)
-
-	if h := result.Body.Close(); h != nil {
-		return "", h
-	}
-
-	if g != nil {
-		return "", g
-	}
-
-	if result.StatusCode >= http.StatusBadRequest {
-		return "", parseDetail(b, result.Status)
-	}
-
-	return string(b), nil
 }

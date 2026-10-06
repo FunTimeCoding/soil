@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/web/requester"
 )
 
 func New(
@@ -20,6 +21,7 @@ func New(
 	result := &Client{
 		host:            host,
 		port:            port,
+		requester:       requester.New(locator.New(host).Port(port).Insecure()),
 		allocator:       allocator,
 		allocatorCancel: allocatorCancel,
 		context:         c,

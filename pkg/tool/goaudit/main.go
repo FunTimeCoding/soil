@@ -10,12 +10,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/option"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	r := reporter.New(constant.Identity.Name(), version)
+func Main() {
+	r := reporter.New(constant.Identity.Name())
 	r.Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
@@ -25,7 +21,7 @@ func Main(
 		"Print compliance tables instead of lint-style concerns",
 	)
 	a.Boolean(argumentConstant.Web, false, "Print what each web frontend uses")
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
 	roots := a.Positionals()
 
 	if len(roots) == 0 {

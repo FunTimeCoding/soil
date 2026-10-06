@@ -16,12 +16,8 @@ import (
 	"log"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	r := reporter.NewOptional(constant.Identity.Name(), version).Start()
+func Main() {
+	r := reporter.NewOptional(constant.Identity.Name()).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.String(
@@ -50,7 +46,7 @@ func Main(
 	a.Boolean(systemConstant.DarwinARM64, false, "Darwin ARM64")
 	a.Boolean(systemConstant.DarwinAMD64, false, "Darwin AMD64")
 	a.Boolean(buildConstant.Native, false, "Enable CGO")
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
 	linuxAMD64 := a.GetBoolean(systemConstant.LinuxAMD64)
 	darwinARM64 := a.GetBoolean(systemConstant.DarwinARM64)
 	darwinAMD64 := a.GetBoolean(systemConstant.DarwinAMD64)

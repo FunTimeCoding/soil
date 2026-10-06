@@ -1,18 +1,20 @@
 package basic
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/technitium/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
-	"net/http"
+	"github.com/funtimecoding/soil/pkg/web/requester"
+	"github.com/funtimecoding/soil/pkg/web/requester/authorizer/bearer"
 )
 
 func New(
-	host string,
+	root *locator.Locator,
 	token string,
 ) *Client {
+	base := root.Copy().Base(constant.Base)
+
 	return &Client{
-		base:   join.Empty(locator.New(host).String(), "/api"),
-		token:  token,
-		client: &http.Client{},
+		requester: requester.New(base).WithAuthorizer(bearer.New(token)),
+		base:      base.String(),
 	}
 }

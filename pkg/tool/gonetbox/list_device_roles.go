@@ -1,12 +1,15 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
 
-func listDeviceRoles(c *client.Client) *cobra.Command {
+func listDeviceRoles(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "list-device-roles",
 		Short: "List all NetBox device roles",
@@ -14,7 +17,7 @@ func listDeviceRoles(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			console.Emit(c.ListDeviceRoles())
+			t.Emit(c.ListDeviceRoles())
 		},
 	}
 }

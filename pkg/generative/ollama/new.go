@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 	generative "github.com/funtimecoding/soil/pkg/generative/constant"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/ollama/ollama/api"
-	"net/http"
 	"net/url"
 )
 
@@ -29,9 +29,9 @@ func New(o ...Option) *Client {
 	var scheme string
 
 	if result.secure {
-		scheme = web.Secure
+		scheme = webConstant.Secure
 	} else {
-		scheme = web.Insecure
+		scheme = webConstant.Insecure
 	}
 
 	result.client = api.NewClient(
@@ -39,7 +39,7 @@ func New(o ...Option) *Client {
 			Scheme: scheme,
 			Host:   fmt.Sprintf("%s:%d", result.host, result.port),
 		},
-		http.DefaultClient,
+		web.LongStallClient(),
 	)
 
 	return result

@@ -1,8 +1,11 @@
 package store
 
-import "github.com/funtimecoding/soil/pkg/errors"
+import (
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/record"
+)
 
-func (s *Store) PendingEmbeddings() []PendingDocument {
+func (s *Store) PendingEmbeddings() []record.PendingDocument {
 	rows, e := s.database.Query(
 		`
 		SELECT d.hash, c.body, MIN(d.path) AS path
@@ -15,10 +18,10 @@ func (s *Store) PendingEmbeddings() []PendingDocument {
 	)
 	errors.PanicOnError(e)
 	defer errors.PanicClose(rows)
-	var result []PendingDocument
+	var result []record.PendingDocument
 
 	for rows.Next() {
-		var p PendingDocument
+		var p record.PendingDocument
 		errors.PanicOnError(rows.Scan(&p.Hash, &p.Body, &p.Path))
 		result = append(result, p)
 	}

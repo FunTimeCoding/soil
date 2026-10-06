@@ -1,12 +1,15 @@
 package goatlassian
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
 )
 
-func getPage(c *client.Client) *cobra.Command {
+func getPage(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "get-page [identifier]",
 		Short: "Get a Confluence page by ID with body content",
@@ -15,7 +18,7 @@ func getPage(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(c.GetPage(arguments[0]))
+			t.Emit(c.GetPage(arguments[0]))
 		},
 	}
 }

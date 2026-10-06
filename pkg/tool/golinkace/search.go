@@ -27,6 +27,10 @@ func search(c *command_context.Context) *cobra.Command {
 			)
 			errors.PanicOnError(e)
 
+			if r.JSON200 == nil {
+				c.Terminal().Reject(r.Status(), r.Body)
+			}
+
 			if r.JSON200.Links == nil || len(*r.JSON200.Links) == 0 {
 				errors.Printf("no results")
 

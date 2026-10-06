@@ -1,13 +1,16 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
 
-func createLocation(c *client.Client) *cobra.Command {
+func createLocation(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var site string
 	result := &cobra.Command{
 		Use:   "create-location [name]",
@@ -17,7 +20,7 @@ func createLocation(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(c.CreateLocation(arguments[0], site))
+			t.Emit(c.CreateLocation(arguments[0], site))
 		},
 	}
 	result.Flags().StringVar(&site, "site", "", "site name (required)")

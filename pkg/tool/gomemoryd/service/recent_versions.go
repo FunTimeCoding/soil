@@ -1,10 +1,10 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 
 func (s *Service) RecentVersions(
 	since string,
 	limit int,
-) ([]store.Version, error) {
+) ([]record.Version, error) {
 	return s.store.RecentVersions(since, limit, s.hiddenTag)
 }

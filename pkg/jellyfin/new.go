@@ -1,9 +1,8 @@
 package jellyfin
 
 import (
-	"github.com/funtimecoding/soil/pkg/jellyfin/transport"
+	"github.com/funtimecoding/soil/pkg/jellyfin/basic"
 	"github.com/funtimecoding/soil/pkg/web/locator"
-	"net/http"
 )
 
 func New(
@@ -12,7 +11,6 @@ func New(
 	token string,
 ) *Client {
 	return &Client{
-		base: locator.New(host).Port(port).Insecure().String(),
-		http: &http.Client{Transport: transport.New(token)},
+		basic: basic.New(locator.New(host).Port(port).Insecure(), token),
 	}
 }

@@ -9,9 +9,9 @@ import (
 
 func Write() {
 	c := loki.NewEnvironment(true)
-	c.Push(map[string]string{"application": "example"}, "test message")
+	c.MustPush(map[string]string{"application": "example"}, "test message")
 	end := time.Now()
-	r, _ := c.QueryRange(
+	r, _ := c.MustQueryRange(
 		`{application="example"}`,
 		end.Add(-time.Hour),
 		end,

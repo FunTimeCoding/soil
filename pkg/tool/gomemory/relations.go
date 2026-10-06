@@ -6,15 +6,20 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
 	"github.com/spf13/cobra"
 	"io"
+	"net/http"
 	"os"
 	"text/tabwriter"
 )
 
-func relations(l **client.Client) *cobra.Command {
+func relations(
+	l **client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var relationType string
 	var untyped bool
 	var scope string
@@ -44,6 +49,13 @@ func relations(l **client.Client) *cobra.Command {
 			defer errors.PanicClose(r.Body)
 			body, e := io.ReadAll(r.Body)
 			errors.PanicOnError(e)
+
+			if r.StatusCode >= http.StatusBadRequest {
+				t.Reject(r.Status, body)
+
+				return
+			}
+
 			var rows []client.Relation
 			errors.PanicOnError(json.Unmarshal(body, &rows))
 			w := tabwriter.NewWriter(os.Stdout, 0, 4, 2, ' ', 0)

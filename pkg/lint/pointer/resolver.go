@@ -1,5 +1,7 @@
 package pointer
 
+import "github.com/funtimecoding/soil/pkg/markup/heading"
+
 type Resolver struct {
 	Roots         []string
 	ImplicitBases []string
@@ -17,5 +19,6 @@ type Resolver struct {
 		string,
 		string,
 	) bool
-	Routes func(string) ([]string, bool)
+	Routes   func(string) ([]string, bool)
+	Headings func(string) ([]*heading.Heading, bool)
 }

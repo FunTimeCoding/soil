@@ -1,12 +1,15 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
 
-func listTunnels(c *client.Client) *cobra.Command {
+func listTunnels(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "list-tunnels",
 		Short: "List all NetBox tunnels",
@@ -14,7 +17,7 @@ func listTunnels(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			console.Emit(c.ListTunnels())
+			t.Emit(c.ListTunnels())
 		},
 	}
 }

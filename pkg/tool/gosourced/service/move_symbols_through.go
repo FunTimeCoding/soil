@@ -1,0 +1,288 @@
+package service
+
+import (
+	"fmt"
+	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/source/resolve"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/relocation"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
+	"go/ast"
+	"go/token"
+	"go/types"
+	"golang.org/x/tools/go/packages"
+	"path"
+	"path/filepath"
+)
+
+func (s *Service) moveSymbolsThrough(
+	directory string,
+	packagePath string,
+	symbols []string,
+	filePath string,
+	targetPackagePath string,
+	targetFile string,
+	create bool,
+	qualifyBackReferences bool,
+	out *sink.Sink,
+) (*output.Results, error) {
+	r := output.NewResultsWithDirectory(directory)
+
+	if packagePath == targetPackagePath {
+		return failValidation(r, "source and target package are the same")
+	}
+
+	if filePath != "" && len(symbols) > 0 {
+		return failValidation(r, "pass symbols or file, not both")
+	}
+
+	if filePath == "" && len(symbols) == 0 {
+		return failValidation(r, "pass symbols or file")
+	}
+
+	all, set, e := s.referenceLoad(
+		directory,
+		packagePath,
+		targetPackagePath,
+		func(loaded []*packages.Package, loadedSet *token.FileSet) []types.Object {
+			return movedObjects(
+				directory,
+				loaded,
+				loadedSet,
+				packagePath,
+				symbols,
+				filePath,
+			)
+		},
+	)
+
+	if e != nil {
+		return nil, e
+	}
+
+	p := findPackage(all, packagePath)
+
+	if p == nil {
+		return failValidation(
+			r,
+			fmt.Sprintf("package not found: %s", packagePath),
+		)
+	}
+
+	if filePath != "" {
+		full := filePath
+
+		if !filepath.IsAbs(full) {
+			full = filepath.Join(directory, filePath)
+		}
+
+		file := findSyntaxFile(set, p, full)
+
+		if file == nil {
+			return failValidation(
+				r,
+				fmt.Sprintf("file not found in %s: %s", packagePath, filePath),
+			)
+		}
+
+		symbols, e = expandFileSymbols(file)
+
+		if e != nil {
+			return failValidation(r, e.Error())
+		}
+	}
+
+	unique := make(map[string]bool)
+
+	for _, name := range symbols {
+		if unique[name] {
+			return failValidation(r, fmt.Sprintf("duplicate symbol: %s", name))
+		}
+
+		unique[name] = true
+	}
+
+	entries, message := buildMoveEntries(
+		all,
+		p,
+		packagePath,
+		symbols,
+		targetFile,
+	)
+
+	if message != "" {
+		return failValidation(r, message)
+	}
+
+	if message := checkMethodSet(entries); message != "" {
+		return failValidation(r, message)
+	}
+
+	target := findPackage(all, targetPackagePath)
+
+	if target == nil && !create {
+		return failValidation(
+			r,
+			fmt.Sprintf(
+				"target package not found: %s - pass create to create it",
+				targetPackagePath,
+			),
+		)
+	}
+
+	newNames := make(map[string]string)
+
+	for _, entry := range entries {
+		if previous, taken := newNames[entry.NewName]; taken {
+			return failValidation(
+				r,
+				fmt.Sprintf(
+					"%s and %s both move as %s",
+					previous,
+					entry.Symbol,
+					entry.NewName,
+				),
+			)
+		}
+
+		newNames[entry.NewName] = entry.Symbol
+
+		if target != nil {
+			if f := checkScopeCollision(target, entry.NewName); f != nil {
+				return failValidation(r, f.Error())
+			}
+		}
+	}
+
+	if qualifyBackReferences {
+		excluded := make(map[token.Pos]bool)
+		moved := make(map[types.Object]bool)
+
+		for _, entry := range entries {
+			excluded[entry.Object.Pos()] = true
+			moved[entry.Object] = true
+		}
+
+		back := false
+
+		for _, entry := range entries {
+			idents := backReferenceIdentifiers(p, excluded, entry.Node)
+
+			if len(idents) == 0 {
+				continue
+			}
+
+			back = true
+
+			for _, ident := range idents {
+				if o := p.TypesInfo.Uses[ident]; !o.Exported() {
+					return failValidation(
+						r,
+						fmt.Sprintf(
+							"%s references unexported %s - export it first",
+							entry.Symbol,
+							o.Name(),
+						),
+					)
+				}
+			}
+
+			entry.BackIdentifiers = idents
+		}
+
+		if back && sourceReferencesMoved(p, entries, moved) {
+			return failValidation(
+				r,
+				fmt.Sprintf(
+					"move would create an import cycle: %s references a moved symbol",
+					packagePath,
+				),
+			)
+		}
+	}
+
+	if message := checkEntryGuards(
+		all,
+		p,
+		target,
+		entries,
+		packagePath,
+		targetPackagePath,
+		qualifyBackReferences,
+	); message != "" {
+		return failValidation(r, message)
+	}
+
+	moveDirectory, e := targetDirectory(p, target, targetPackagePath)
+
+	if e != nil {
+		return failValidation(r, e.Error())
+	}
+
+	constraints, message := planConstraints(set, target, entries, moveDirectory)
+
+	if message != "" {
+		return failValidation(r, message)
+	}
+
+	targetPackageName := path.Base(targetPackagePath)
+
+	if target != nil {
+		targetPackageName = target.Types.Name()
+	}
+
+	var external []relocation.QualifiedReference
+	renames := make(map[*ast.Ident]string)
+
+	for _, entry := range entries {
+		for _, f := range resolve.FindAllReferences(all, entry.Object) {
+			if insideMoved(entries, f.Ident.Pos()) {
+				if entry.Flipped {
+					renames[f.Ident] = entry.NewName
+				}
+
+				continue
+			}
+
+			external = append(
+				external,
+				relocation.QualifiedReference{
+					Reference: f,
+					NewName:   entry.NewName,
+				},
+			)
+		}
+	}
+
+	qualifications, blocked := planQualifications(
+		set,
+		external,
+		packagePath,
+		targetPackagePath,
+		targetPackageName,
+	)
+
+	if qualifications == nil {
+		return failValidation(
+			r,
+			fmt.Sprintf("no available import name in %s", blocked),
+		)
+	}
+
+	plan := relocation.NewPlan()
+	plan.Set = set
+	plan.All = all
+	plan.Source = p
+	plan.Target = target
+	plan.Resolver = resolve.NewNames(all)
+	plan.Entries = entries
+	plan.Constraints = constraints
+	plan.Qualifications = qualifications
+	plan.Renames = renames
+	plan.PackagePath = packagePath
+	plan.TargetPackagePath = targetPackagePath
+	plan.TargetPackageName = targetPackageName
+	plan.MoveDirectory = moveDirectory
+	plan.CreateTarget = target == nil
+
+	return executeMove(r, plan, out)
+}

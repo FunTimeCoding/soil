@@ -1,8 +1,11 @@
 package store
 
-import "github.com/funtimecoding/soil/pkg/errors"
+import (
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
+)
 
-func (s *Store) ListTags() ([]TagCount, error) {
+func (s *Store) ListTags() ([]record.TagCount, error) {
 	rows, e := s.database.Query(
 		`SELECT t.tag, COUNT(*) as count
 		FROM memory_tag t
@@ -16,10 +19,10 @@ func (s *Store) ListTags() ([]TagCount, error) {
 	}
 
 	defer errors.LogClose(rows)
-	var result []TagCount
+	var result []record.TagCount
 
 	for rows.Next() {
-		var tc TagCount
+		var tc record.TagCount
 		e := rows.Scan(&tc.Tag, &tc.Count)
 
 		if e != nil {

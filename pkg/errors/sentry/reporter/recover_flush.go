@@ -1,7 +1,7 @@
 package reporter
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/errors/sentry"
 	"os"
 )
@@ -13,7 +13,7 @@ func (r *Reporter) RecoverFlush(v any) {
 	}
 
 	if v != nil {
-		fmt.Printf("Captured panic: %v\n", v)
+		errors.Printf("Captured panic: %v\n", v)
 		os.Exit(1)
 	}
 }

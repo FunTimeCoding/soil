@@ -35,6 +35,22 @@ func TestAListAfterABoldColonIsClean(t *testing.T) {
 	assert.Any(t, []int(nil), reflow.Interruptions("**Items:**\n- one\n"))
 }
 
+func TestAQuotedProseDashIsFlagged(t *testing.T) {
+	assert.Any(t, []int{2}, reflow.Interruptions("one two\n- \"three\" four\n"))
+}
+
+func TestAParenthesisedProseDashIsFlagged(t *testing.T) {
+	assert.Any(t, []int{2}, reflow.Interruptions("one two\n- (three) four\n"))
+}
+
+func TestAQuotedCapitalisedItemIsClean(t *testing.T) {
+	assert.Any(t, []int(nil), reflow.Interruptions("one two\n- \"Three\"\n"))
+}
+
+func TestACodeItemIsClean(t *testing.T) {
+	assert.Any(t, []int(nil), reflow.Interruptions("one two\n- `three`\n"))
+}
+
 func TestACapitalisedItemIsClean(t *testing.T) {
 	assert.Any(t, []int(nil), reflow.Interruptions("one two\n- Three\n"))
 }

@@ -12,13 +12,9 @@ func New(
 	organization string,
 	r face.Reporter,
 	t face.Recorder,
-	version string,
 ) *Server {
 	result := &Server{
-		server: server.New(
-			constant.Identity,
-			version,
-		).WithRecorder(t).Server(),
+		server:       server.New(constant.Identity).WithRecorder(t).Server(),
 		client:       c,
 		organization: organization,
 		reporter:     r,

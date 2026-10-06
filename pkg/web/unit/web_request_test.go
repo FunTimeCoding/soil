@@ -34,7 +34,3 @@ func TestGetList(t *testing.T) {
 		),
 	)
 }
-
-func TestClient(t *testing.T) {
-	assert.Any(t, &http.Client{}, web.Client())
-}

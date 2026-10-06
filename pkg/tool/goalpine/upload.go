@@ -2,13 +2,16 @@ package goalpine
 
 import (
 	alpine "github.com/funtimecoding/soil/pkg/alpine/constant"
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goalpine/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/client"
 	"github.com/spf13/cobra"
 )
 
-func upload(c *client.Client) *cobra.Command {
+func upload(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	result := &cobra.Command{
 		Use:   "upload [file]",
 		Short: "Upload an apk package and rebuild the index",
@@ -23,9 +26,7 @@ func upload(c *client.Client) *cobra.Command {
 			cobra.CheckErr(f)
 			architecture, g := o.Flags().GetString(constant.ArchitectureFlag)
 			cobra.CheckErr(g)
-			console.Emit(
-				c.Upload(arguments[0], version, repository, architecture),
-			)
+			t.Emit(c.Upload(arguments[0], version, repository, architecture))
 		},
 	}
 	result.Flags().String(

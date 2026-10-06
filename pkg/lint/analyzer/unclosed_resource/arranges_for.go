@@ -7,5 +7,5 @@ func (s *Summaries) arrangesFor(f *types.Func) bool {
 		return false
 	}
 
-	return s.arranges[f]
+	return s.arranges[functionKey(f)]
 }

@@ -3,10 +3,14 @@ package goname
 import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/hetzner"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/spf13/cobra"
 )
 
-func addRecord(c *hetzner.Client) *cobra.Command {
+func addRecord(
+	c *hetzner.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "add-record [zone] [name] [type] [value]",
 		Short: "Add a record - CNAME targets need the trailing dot",
@@ -15,7 +19,7 @@ func addRecord(c *hetzner.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			z := zoneByName(c, arguments[0])
+			z := zoneByName(c, arguments[0], t)
 			c.CreateRecord(z, arguments[1], arguments[2], arguments[3])
 			console.Format(
 				"added %s %s.%s -> %s\n",

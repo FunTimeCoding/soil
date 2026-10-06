@@ -30,7 +30,6 @@ func Run(
 						habitica.NewEnvironment(),
 						r,
 						s.Recorder(),
-						o.Version,
 						guard.New(m, o.ServiceTokens),
 					)
 				},

@@ -7,7 +7,7 @@ import (
 )
 
 func (c *Client) IssueV3(key string) error {
-	status, body, e := c.basic.Get(
+	body, e := c.basic.Bytes(
 		c.basic.Base().Copy().Base(constant.JiraBase).Path(
 			"%s/%s",
 			constant.JiraIssue,
@@ -22,7 +22,7 @@ func (c *Client) IssueV3(key string) error {
 		return e
 	}
 
-	console.Format("Response: %d %s", status, body)
+	console.Format("Response: %s", body)
 
 	return nil
 }

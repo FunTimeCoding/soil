@@ -4,6 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/band/constant"
+	"github.com/funtimecoding/soil/pkg/band/response"
 )
 
 func enumerate[T any](
@@ -21,7 +22,7 @@ func enumerate[T any](
 		return nil, e
 	}
 
-	var context enumerateResponse
+	var context response.Enumerate
 
 	if f := xml.Unmarshal(opened, &context); f != nil {
 		return nil, f

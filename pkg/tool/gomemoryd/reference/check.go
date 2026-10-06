@@ -4,20 +4,19 @@ import (
 	lintConstant "github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/pointer"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"strings"
 )
 
 func Check(
 	content string,
+	bases []string,
 	r *pointer.Resolver,
 	named func(
 		scope string,
 		name string,
 	) bool,
 ) []*Finding {
-	var result []*Finding
-	declared := pointer.NewDeclared()
+	declared, result := declare(bases, r)
 
 	for _, line := range strings.Split(content, stringsConstant.Unix) {
 		parts := strings.Split(line, string(lintConstant.Backtick))
@@ -29,34 +28,7 @@ func Check(
 				continue
 			}
 
-			if strings.HasPrefix(part, constant.MemoryScheme) {
-				if !cited(part, named) {
-					result = append(
-						result,
-						NewFinding(part, constant.MissingMemoryText),
-					)
-				}
-
-				continue
-			}
-
-			if !pointer.IsPath(part) {
-				continue
-			}
-
-			for _, c := range pointer.Expand(pointer.NewSpan(part)) {
-				v := r.Resolve("", declared, c)
-
-				if v.Verdict == lintConstant.VerdictLive ||
-					v.Verdict == lintConstant.VerdictTallied {
-					continue
-				}
-
-				result = append(
-					result,
-					NewFinding(c.Span, lintConstant.VerdictTexts[v.Verdict]),
-				)
-			}
+			result = append(result, spanFindings(part, declared, r, named)...)
 		}
 	}
 

@@ -1,3 +1,5 @@
 package mock_reranker
 
-type Reranker struct{}
+type Reranker struct {
+	allowance int
+}

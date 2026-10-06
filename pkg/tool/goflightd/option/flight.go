@@ -6,5 +6,4 @@ type Flight struct {
 	LitePath        string
 	Predicate       string
 	ServiceTokens   []string
-	Version         string
 }

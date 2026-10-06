@@ -1,11 +1,13 @@
 package basic
 
-import "github.com/funtimecoding/soil/pkg/web/locator"
+import (
+	"github.com/funtimecoding/soil/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/web/requester"
+)
 
 type Client struct {
-	host    string
-	user    string
-	token   string
-	verbose bool
-	base    *locator.Locator
+	requester *requester.Requester
+	old       *requester.Requester
+	root      *locator.Locator
+	base      *locator.Locator
 }

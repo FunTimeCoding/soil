@@ -1,14 +1,14 @@
 package web
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board/layout"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
 
 func entryItem(
-	v *board.Entry,
+	v *layout.Entry,
 	values map[string][]string,
 ) gomponents.Node {
 	nodes := []gomponents.Node{

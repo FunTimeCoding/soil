@@ -11,12 +11,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/web"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	s := instrument.New(constant.Identity, version)
+func Main() {
+	s := instrument.New(constant.Identity)
 	defer func() { s.Flush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Web()
@@ -24,12 +20,11 @@ func Main(
 	a.Database()
 	a.String(argumentConstant.Repository, "", "Git repository URL")
 	a.String(argumentConstant.ClonePath, "", "Local repository path")
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
 	o := option.New()
 	o.Address = a.Address()
 	o.ServiceTokens = web.ServiceTokens()
 	o.MetricAddress = a.MetricAddress()
-	o.Version = version
 	o.Repository = a.Required(argumentConstant.Repository)
 	o.ClonePath = a.Required(argumentConstant.ClonePath)
 	o.TerraformPath = environment.Required(constant.TerraformPathEnvironment)

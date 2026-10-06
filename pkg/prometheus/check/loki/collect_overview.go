@@ -17,7 +17,7 @@ func collectOverview(
 	var result []*overview
 
 	for _, n := range namespaces {
-		r, _ := c.QueryRange(
+		r, _ := c.MustQueryRange(
 			fmt.Sprintf(`{namespace="%s"}`, n),
 			start,
 			end,

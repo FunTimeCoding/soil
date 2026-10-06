@@ -34,6 +34,15 @@ func (e GetSearchParamsMode) Valid() bool {
 	}
 }
 
+// ChunkPreview defines model for ChunkPreview.
+type ChunkPreview struct {
+	Allowance int              `json:"allowance"`
+	Chunks    []PreviewChunk   `json:"chunks"`
+	Model     string           `json:"model"`
+	Sections  []PreviewSection `json:"sections"`
+	Window    int              `json:"window"`
+}
+
 // CollectionStatus defines model for CollectionStatus.
 type CollectionStatus struct {
 	DocumentCount int    `json:"document_count"`
@@ -83,6 +92,67 @@ type ListOutcome struct {
 	Results []SearchResult `json:"results"`
 }
 
+// OversizeChunk defines model for OversizeChunk.
+type OversizeChunk struct {
+	Bytes     int `json:"bytes"`
+	FirstLine int `json:"first_line"`
+	Index     int `json:"index"`
+	LastLine  int `json:"last_line"`
+	Tokens    int `json:"tokens"`
+}
+
+// OversizeFile defines model for OversizeFile.
+type OversizeFile struct {
+	Chunks     []OversizeChunk `json:"chunks"`
+	Collection string          `json:"collection"`
+	Path       string          `json:"path"`
+	Worst      int             `json:"worst"`
+}
+
+// OversizeReport defines model for OversizeReport.
+type OversizeReport struct {
+	Allowance int            `json:"allowance"`
+	Files     []OversizeFile `json:"files"`
+	Model     string         `json:"model"`
+	Window    int            `json:"window"`
+}
+
+// PreviewBlock defines model for PreviewBlock.
+type PreviewBlock struct {
+	FirstLine int    `json:"first_line"`
+	Kind      string `json:"kind"`
+	LastLine  int    `json:"last_line"`
+	Tokens    int    `json:"tokens"`
+}
+
+// PreviewChunk defines model for PreviewChunk.
+type PreviewChunk struct {
+	Bytes      int   `json:"bytes"`
+	CutChecked bool  `json:"cut_checked"`
+	CutLevel   int   `json:"cut_level"`
+	CutLines   []int `json:"cut_lines"`
+	FirstLine  int   `json:"first_line"`
+	Index      int   `json:"index"`
+	LastLine   int   `json:"last_line"`
+	Piece      bool  `json:"piece"`
+	Tokens     int   `json:"tokens"`
+}
+
+// PreviewSection defines model for PreviewSection.
+type PreviewSection struct {
+	Blocks    []PreviewBlock `json:"blocks"`
+	FirstLine int            `json:"first_line"`
+	LastLine  int            `json:"last_line"`
+	Level     int            `json:"level"`
+	Title     string         `json:"title"`
+	Tokens    int            `json:"tokens"`
+}
+
+// RechunkResult defines model for RechunkResult.
+type RechunkResult struct {
+	Documents []string `json:"documents"`
+}
+
 // SearchOutcome defines model for SearchOutcome.
 type SearchOutcome struct {
 	Degraded *bool          `json:"degraded,omitempty"`
@@ -121,6 +191,12 @@ type Status struct {
 	PendingEmbeddings int                `json:"pending_embeddings"`
 	TotalDocuments    int                `json:"total_documents"`
 	TotalEmbeddings   int                `json:"total_embeddings"`
+}
+
+// PostChunkJSONBody defines parameters for PostChunk.
+type PostChunkJSONBody struct {
+	Body string `json:"body"`
+	Path string `json:"path"`
 }
 
 // DeleteCollectionParams defines parameters for DeleteCollection.
@@ -189,6 +265,11 @@ type GetMetadataParams struct {
 	Key        *string `form:"key,omitempty" json:"key,omitempty"`
 }
 
+// GetOversizeParams defines parameters for GetOversize.
+type GetOversizeParams struct {
+	Collection *string `form:"collection,omitempty" json:"collection,omitempty"`
+}
+
 // GetSearchParams defines parameters for GetSearch.
 type GetSearchParams struct {
 	Query      string               `form:"query" json:"query"`
@@ -216,6 +297,9 @@ type PostTagJSONBody struct {
 	Path       string  `json:"path"`
 	SourceType string  `json:"source_type"`
 }
+
+// PostChunkJSONRequestBody defines body for PostChunk for application/json ContentType.
+type PostChunkJSONRequestBody PostChunkJSONBody
 
 // PostCollectionJSONRequestBody defines body for PostCollection for application/json ContentType.
 type PostCollectionJSONRequestBody PostCollectionJSONBody
@@ -306,6 +390,14 @@ func WithRequestEditorFn(fn RequestEditorFn) ClientOption {
 // The interface specification for the client above.
 type ClientInterface interface {
 
+	// PostChunkWithBody performs a POST /api/chunk (the `PostChunk` operationId) request,
+	// with any type of body and a specified content type.
+	PostChunkWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostChunk performs a POST /api/chunk (the `PostChunk` operationId) request.
+	// Takes a body of the `application/json` content type.
+	PostChunk(ctx context.Context, body PostChunkJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// DeleteCollection performs a DELETE /api/collection (the `DeleteCollection` operationId) request.
 	DeleteCollection(ctx context.Context, params *DeleteCollectionParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -362,6 +454,12 @@ type ClientInterface interface {
 	// GetMetadata performs a GET /api/metadata (the `GetMetadata` operationId) request.
 	GetMetadata(ctx context.Context, params *GetMetadataParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// GetOversize performs a GET /api/oversize (the `GetOversize` operationId) request.
+	GetOversize(ctx context.Context, params *GetOversizeParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostRechunk performs a POST /api/rechunk (the `PostRechunk` operationId) request.
+	PostRechunk(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// GetSearch performs a GET /api/search (the `GetSearch` operationId) request.
 	GetSearch(ctx context.Context, params *GetSearchParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -381,6 +479,34 @@ type ClientInterface interface {
 
 	// GetTags performs a GET /api/tags (the `GetTags` operationId) request.
 	GetTags(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+}
+
+// PostChunkWithBody performs a POST /api/chunk (the `PostChunk` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) PostChunkWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostChunkRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// PostChunk performs a POST /api/chunk (the `PostChunk` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) PostChunk(ctx context.Context, body PostChunkJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostChunkRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
 }
 
 // DeleteCollection performs a DELETE /api/collection (the `DeleteCollection` operationId) request.
@@ -599,6 +725,32 @@ func (c *Client) GetMetadata(ctx context.Context, params *GetMetadataParams, req
 	return c.Client.Do(req)
 }
 
+// GetOversize performs a GET /api/oversize (the `GetOversize` operationId) request.
+func (c *Client) GetOversize(ctx context.Context, params *GetOversizeParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetOversizeRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// PostRechunk performs a POST /api/rechunk (the `PostRechunk` operationId) request.
+func (c *Client) PostRechunk(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostRechunkRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 // GetSearch performs a GET /api/search (the `GetSearch` operationId) request.
 func (c *Client) GetSearch(ctx context.Context, params *GetSearchParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetSearchRequest(c.Server, params)
@@ -677,6 +829,46 @@ func (c *Client) GetTags(ctx context.Context, reqEditors ...RequestEditorFn) (*h
 		return nil, err
 	}
 	return c.Client.Do(req)
+}
+
+// NewPostChunkRequest calls the generic PostChunk builder with application/json body
+func NewPostChunkRequest(server string, body PostChunkJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPostChunkRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewPostChunkRequestWithBody constructs an http.Request for the PostChunk method, with any body, and a specified content type
+func NewPostChunkRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/chunk")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
 }
 
 // NewDeleteCollectionRequest constructs an http.Request for the DeleteCollection method
@@ -1281,6 +1473,87 @@ func NewGetMetadataRequest(server string, params *GetMetadataParams) (*http.Requ
 	return req, nil
 }
 
+// NewGetOversizeRequest constructs an http.Request for the GetOversize method
+func NewGetOversizeRequest(server string, params *GetOversizeParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/oversize")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if params.Collection != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "collection", *params.Collection, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewPostRechunkRequest constructs an http.Request for the PostRechunk method
+func NewPostRechunkRequest(server string) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/rechunk")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewGetSearchRequest constructs an http.Request for the GetSearch method
 func NewGetSearchRequest(server string, params *GetSearchParams) (*http.Request, error) {
 	var err error
@@ -1615,6 +1888,16 @@ func WithBaseURL(baseURL string) ClientOption {
 // ClientWithResponsesInterface is the interface specification for the client with responses above.
 type ClientWithResponsesInterface interface {
 
+	// PostChunkWithBodyWithResponse performs a POST /api/chunk (the `PostChunk` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	PostChunkWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostChunkResponse, error)
+
+	// PostChunkWithResponse performs a POST /api/chunk (the `PostChunk` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	PostChunkWithResponse(ctx context.Context, body PostChunkJSONRequestBody, reqEditors ...RequestEditorFn) (*PostChunkResponse, error)
+
 	// DeleteCollectionWithResponse performs a DELETE /api/collection (the `DeleteCollection` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
@@ -1695,6 +1978,16 @@ type ClientWithResponsesInterface interface {
 	// Returns a wrapper object for the known response body format(s).
 	GetMetadataWithResponse(ctx context.Context, params *GetMetadataParams, reqEditors ...RequestEditorFn) (*GetMetadataResponse, error)
 
+	// GetOversizeWithResponse performs a GET /api/oversize (the `GetOversize` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetOversizeWithResponse(ctx context.Context, params *GetOversizeParams, reqEditors ...RequestEditorFn) (*GetOversizeResponse, error)
+
+	// PostRechunkWithResponse performs a POST /api/rechunk (the `PostRechunk` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	PostRechunkWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*PostRechunkResponse, error)
+
 	// GetSearchWithResponse performs a GET /api/search (the `GetSearch` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
@@ -1724,6 +2017,47 @@ type ClientWithResponsesInterface interface {
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetTagsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetTagsResponse, error)
+}
+
+type PostChunkResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *ChunkPreview
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r PostChunkResponse) GetJSON200() *ChunkPreview {
+	return r.JSON200
+}
+
+// GetBody returns the raw response body bytes
+func (r PostChunkResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r PostChunkResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostChunkResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r PostChunkResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
 }
 
 type DeleteCollectionResponse struct {
@@ -2293,6 +2627,102 @@ func (r GetMetadataResponse) ContentType() string {
 	return ""
 }
 
+type GetOversizeResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *OversizeReport
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetOversizeResponse) GetJSON200() *OversizeReport {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetOversizeResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetOversizeResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetOversizeResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetOversizeResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetOversizeResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type PostRechunkResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *RechunkResult
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r PostRechunkResponse) GetJSON200() *RechunkResult {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r PostRechunkResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r PostRechunkResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r PostRechunkResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostRechunkResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r PostRechunkResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type GetSearchResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -2526,6 +2956,28 @@ func (r GetTagsResponse) ContentType() string {
 	return ""
 }
 
+// PostChunkWithBodyWithResponse performs a POST /api/chunk (the `PostChunk` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) PostChunkWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostChunkResponse, error) {
+	rsp, err := c.PostChunkWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostChunkResponse(rsp)
+}
+
+// PostChunkWithResponse performs a POST /api/chunk (the `PostChunk` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) PostChunkWithResponse(ctx context.Context, body PostChunkJSONRequestBody, reqEditors ...RequestEditorFn) (*PostChunkResponse, error) {
+	rsp, err := c.PostChunk(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostChunkResponse(rsp)
+}
+
 // DeleteCollectionWithResponse performs a DELETE /api/collection (the `DeleteCollection` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -2702,6 +3154,28 @@ func (c *ClientWithResponses) GetMetadataWithResponse(ctx context.Context, param
 	return ParseGetMetadataResponse(rsp)
 }
 
+// GetOversizeWithResponse performs a GET /api/oversize (the `GetOversize` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetOversizeWithResponse(ctx context.Context, params *GetOversizeParams, reqEditors ...RequestEditorFn) (*GetOversizeResponse, error) {
+	rsp, err := c.GetOversize(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetOversizeResponse(rsp)
+}
+
+// PostRechunkWithResponse performs a POST /api/rechunk (the `PostRechunk` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) PostRechunkWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*PostRechunkResponse, error) {
+	rsp, err := c.PostRechunk(ctx, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostRechunkResponse(rsp)
+}
+
 // GetSearchWithResponse performs a GET /api/search (the `GetSearch` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -2766,6 +3240,32 @@ func (c *ClientWithResponses) GetTagsWithResponse(ctx context.Context, reqEditor
 		return nil, err
 	}
 	return ParseGetTagsResponse(rsp)
+}
+
+// ParsePostChunkResponse parses an HTTP response from a PostChunkWithResponse call
+func ParsePostChunkResponse(rsp *http.Response) (*PostChunkResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostChunkResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ChunkPreview
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	}
+
+	return response, nil
 }
 
 // ParseDeleteCollectionResponse parses an HTTP response from a DeleteCollectionWithResponse call
@@ -3141,6 +3641,72 @@ func ParseGetMetadataResponse(rsp *http.Response) (*GetMetadataResponse, error) 
 	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
 		var dest []*Facet
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetOversizeResponse parses an HTTP response from a GetOversizeWithResponse call
+func ParseGetOversizeResponse(rsp *http.Response) (*GetOversizeResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetOversizeResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest OversizeReport
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePostRechunkResponse parses an HTTP response from a PostRechunkWithResponse call
+func ParsePostRechunkResponse(rsp *http.Response) (*PostRechunkResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostRechunkResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest RechunkResult
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
 			return nil, err
 		}

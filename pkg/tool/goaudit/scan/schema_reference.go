@@ -1,8 +1,11 @@
 package scan
 
-import "strings"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/open_api"
+	"strings"
+)
 
-func schemaReference(r errorHandlingResponse) string {
+func schemaReference(r open_api.Response) string {
 	if r.Content == nil {
 		return ""
 	}

@@ -1,8 +1,10 @@
 package unclosed_resource
 
 import (
+	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/unclosed_resource"
+	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"golang.org/x/tools/go/packages"
 	"testing"
 )
@@ -24,6 +26,19 @@ func TestClean(t *testing.T) {
 		p,
 		results,
 		unclosed_resource.NewSummaries([]*packages.Package{p}),
+	)
+	testutil.AssertBlocked(t, results, 0)
+}
+
+func TestArrangedInSeparateLoad(t *testing.T) {
+	directory := testutil.PrepareTestPackage(t, "testdata/src/elsewhere")
+	p, results := testutil.LoadFromDirectory(t, directory)
+	helper, _, e := resolve.LoadPackages(directory, "./helper")
+	assert.FatalOnError(t, e)
+	unclosed_resource.Check(
+		p,
+		results,
+		unclosed_resource.NewSummaries(append(helper, p)),
 	)
 	testutil.AssertBlocked(t, results, 0)
 }

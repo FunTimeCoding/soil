@@ -25,3 +25,5 @@ const (
 	GetEvent          = "get_event"
 	DeleteIssue       = "delete_issue"
 )
+
+const RequestFailed = "sentry request failed"

@@ -4,9 +4,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/audit_configuration"
 )
 
-func runPermissions(configuration *scan.Configuration) bool {
+func runPermissions(configuration *audit_configuration.Configuration) bool {
 	r := output.NewResults()
 
 	for _, c := range scan.ModelContextPermissions(

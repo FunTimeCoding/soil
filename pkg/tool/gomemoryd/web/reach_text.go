@@ -2,11 +2,11 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 	"slices"
 )
 
-func reachText(m *store.Memory) string {
+func reachText(m *record.Memory) string {
 	if slices.Contains(m.Tags, constant.AlwaysTag) {
 		return "always - in context every session"
 	}

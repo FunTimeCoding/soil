@@ -22,7 +22,6 @@ func (c *Client) AddComment(
 			},
 		},
 	}
-	_, e := c.basic.PostOldPath("/content", notation.Encode(payload, false))
 
-	return e
+	return c.basic.PostOldPath("/content", notation.Encode(payload, false))
 }

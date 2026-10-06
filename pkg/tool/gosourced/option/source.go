@@ -1,10 +1,9 @@
 package option
 
-import "github.com/funtimecoding/soil/pkg/tool/gosourced/inventory"
+import "github.com/funtimecoding/soil/pkg/source/inventory"
 
 type Source struct {
 	Address       string
 	ServiceTokens []string
-	Version       string
 	Inventory     *inventory.Inventory
 }

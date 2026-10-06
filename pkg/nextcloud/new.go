@@ -12,7 +12,7 @@ func New(
 	password string,
 ) *Client {
 	return &Client{
-		basic:  basic.New(host, user, password),
+		basic:  basic.New(helper.FileRootLocator(host, user), user, password),
 		author: author.New(helper.FileRoot(host, user), user, password),
 	}
 }

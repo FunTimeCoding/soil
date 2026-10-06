@@ -1,9 +1,9 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 
 func (s *Service) ListDocumentSourced(
 	scope string,
-) ([]store.SourcedMemory, error) {
+) ([]record.SourcedMemory, error) {
 	return s.store.ListDocumentSourced(scope)
 }

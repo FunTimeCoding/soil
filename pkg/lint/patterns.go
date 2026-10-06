@@ -3,7 +3,7 @@ package lint
 import (
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
-	lintConstant "github.com/funtimecoding/soil/pkg/lint/constant"
+	goModule "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"path/filepath"
@@ -36,7 +36,7 @@ func Patterns(
 			continue
 		}
 
-		path, recursive := strings.CutSuffix(p, lintConstant.RecursivePattern)
+		path, recursive := strings.CutSuffix(p, goModule.RecursivePattern)
 		scopes, e := Scopes(root, work, []string{path})
 
 		if e != nil {
@@ -50,7 +50,7 @@ func Patterns(
 		}
 
 		if recursive {
-			translated = join.Empty(translated, lintConstant.RecursivePattern)
+			translated = join.Empty(translated, goModule.RecursivePattern)
 		}
 
 		result = append(result, translated)

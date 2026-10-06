@@ -1,11 +1,13 @@
 package store
 
+import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
+
 func (s *Store) ListRootMemories(
 	memoryType string,
 	tag string,
 	scope string,
 	activeOnly bool,
-) ([]MemorySummary, error) {
+) ([]record.MemorySummary, error) {
 	roots := true
 
 	return s.queryMemories(memoryType, tag, scope, activeOnly, &roots)

@@ -4,12 +4,12 @@ import (
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/crap"
 	"github.com/funtimecoding/soil/pkg/crap/option"
-	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gocrap/constant"
 	"github.com/spf13/cobra"
 )
 
-func attributeCommand() *cobra.Command {
+func attributeCommand(t *terminal.Terminal) *cobra.Command {
 	o := option.NewAttribute()
 	result := &cobra.Command{
 		Use:   constant.AttributeUsage,
@@ -21,7 +21,10 @@ func attributeCommand() *cobra.Command {
 		) {
 			o.Root = root()
 			o.Patterns = patterns(arguments)
-			system.ExitOnCode(crap.RunAttribute(o))
+
+			if c := crap.RunAttribute(o); c != 0 {
+				t.Exit(c)
+			}
 		},
 	}
 	f := result.Flags()

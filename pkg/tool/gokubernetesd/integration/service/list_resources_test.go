@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/integration/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/integration/service_tester/pod"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/query"
 	"testing"
 )
 
@@ -16,7 +16,7 @@ func TestListResources(t *testing.T) {
 	result, e := s.Service.ListResources(
 		context.Background(),
 		"test",
-		service.ListQuery{ResourceType: "pods", Namespace: "default"},
+		query.List{ResourceType: "pods", Namespace: "default"},
 	)
 	assert.Nil(t, e)
 	assert.Count(t, 2, result)
@@ -32,7 +32,7 @@ func TestListResourcesWithRestarts(t *testing.T) {
 	result, e := s.Service.ListResources(
 		context.Background(),
 		"test",
-		service.ListQuery{ResourceType: "pods", Namespace: "default"},
+		query.List{ResourceType: "pods", Namespace: "default"},
 	)
 	assert.Nil(t, e)
 	assert.Count(t, 1, result)
@@ -45,7 +45,7 @@ func TestListResourcesEmpty(t *testing.T) {
 	result, e := s.Service.ListResources(
 		context.Background(),
 		"test",
-		service.ListQuery{ResourceType: "pods", Namespace: "default"},
+		query.List{ResourceType: "pods", Namespace: "default"},
 	)
 	assert.Nil(t, e)
 	assert.Count(t, 0, result)
@@ -56,7 +56,7 @@ func TestListResourcesUnknownCluster(t *testing.T) {
 	_, e := s.Service.ListResources(
 		context.Background(),
 		"nonexistent",
-		service.ListQuery{ResourceType: "pods", Namespace: "default"},
+		query.List{ResourceType: "pods", Namespace: "default"},
 	)
 	assert.NotNil(t, e)
 }

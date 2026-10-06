@@ -3,11 +3,15 @@ package gopostgres
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/generated/client"
 	"github.com/spf13/cobra"
 )
 
-func listIndexes(c *client.Client) *cobra.Command {
+func listIndexes(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var instance string
 	var schema string
 	var table string
@@ -29,7 +33,7 @@ func listIndexes(c *client.Client) *cobra.Command {
 
 			r, e := c.ListIndexes(context.Background(), p)
 			errors.PanicOnError(e)
-			printResponse(r)
+			printResponse(t, r)
 		},
 	}
 	result.Flags().StringVar(

@@ -1,13 +1,13 @@
 package web
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board/layout"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
 
 func sectionCard(
-	v *board.Section,
+	v *layout.Section,
 	values map[string][]string,
 ) gomponents.Node {
 	var nodes []gomponents.Node

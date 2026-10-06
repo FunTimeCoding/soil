@@ -1,7 +1,6 @@
 package goproxmox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmox/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
@@ -19,7 +18,7 @@ func downloadLocator(c *command_context.Context) *cobra.Command {
 			_ *cobra.Command,
 			a []string,
 		) {
-			console.Emit(
+			c.Terminal().Emit(
 				c.Client().DownloadLocator(
 					a[0],
 					a[1],

@@ -4,12 +4,13 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/ambiguous_pods"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/query"
 )
 
 func (s *Service) Logs(
 	x context.Context,
 	clusterName string,
-	q LogsQuery,
+	q query.Logs,
 ) (string, error) {
 	c, e := s.ClusterByName(clusterName)
 

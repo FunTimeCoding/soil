@@ -1,12 +1,15 @@
 package goatlassian
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
 )
 
-func setPageStatus(c *client.Client) *cobra.Command {
+func setPageStatus(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "set-page-status [identifier] [current|draft]",
 		Short: "Publish or unpublish a Confluence page",
@@ -15,7 +18,7 @@ func setPageStatus(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(c.SetPageStatus(arguments[0], arguments[1]))
+			t.Emit(c.SetPageStatus(arguments[0], arguments[1]))
 		},
 	}
 }

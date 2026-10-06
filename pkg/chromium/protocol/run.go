@@ -1,8 +1,11 @@
 package protocol
 
 import (
-	"context"
+	"fmt"
 	"github.com/chromedp/chromedp"
+	"github.com/funtimecoding/soil/pkg/chromium/constant"
+	"github.com/funtimecoding/soil/pkg/errors/connection"
+	connectionConstant "github.com/funtimecoding/soil/pkg/errors/constant"
 	"time"
 )
 
@@ -20,6 +23,11 @@ func (p *Protocol) run(actions ...chromedp.Action) error {
 	case e := <-done:
 		return e
 	case <-time.After(p.timeout):
-		return context.DeadlineExceeded
+		return connection.New(
+			connectionConstant.Timeout,
+			constant.BrowserTab,
+			"",
+			fmt.Sprintf(constant.Asleep, p.timeout),
+		)
 	}
 }

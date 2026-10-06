@@ -3,10 +3,8 @@ package gojellyfin
 import (
 	"context"
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/generated/client"
 	"github.com/spf13/cobra"
-	"os"
 )
 
 func play(x *Context) *cobra.Command {
@@ -37,17 +35,15 @@ func play(x *Context) *cobra.Command {
 			)
 
 			if e != nil {
-				errors.Printf("error: %v\n", e)
-				os.Exit(1)
+				x.Terminal.Exitf("error: %v\n", e)
 			}
 
 			if r.HTTPResponse.StatusCode != 204 {
-				errors.Printf(
+				x.Terminal.Exitf(
 					"unexpected status: %s\n%s\n",
 					r.HTTPResponse.Status,
 					string(r.Body),
 				)
-				os.Exit(1)
 			}
 
 			fmt.Println("playback started")

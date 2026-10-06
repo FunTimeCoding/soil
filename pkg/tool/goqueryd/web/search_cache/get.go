@@ -1,11 +1,11 @@
 package search_cache
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
 	"time"
 )
 
-func (c *Cache) Get(key string) *store.SearchOutcome {
+func (c *Cache) Get(key string) *search.Outcome {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	e, found := c.entries[key]

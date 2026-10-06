@@ -1,12 +1,15 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
 
-func listDeviceTypes(c *client.Client) *cobra.Command {
+func listDeviceTypes(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "list-device-types",
 		Short: "List all NetBox device types",
@@ -14,7 +17,7 @@ func listDeviceTypes(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			console.Emit(c.ListDeviceTypes())
+			t.Emit(c.ListDeviceTypes())
 		},
 	}
 }

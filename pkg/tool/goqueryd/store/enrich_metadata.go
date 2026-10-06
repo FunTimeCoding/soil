@@ -1,9 +1,12 @@
 package store
 
-import "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
+)
 
 func (s *Store) enrichMetadata(
-	results []SearchResult,
+	results []search.Result,
 	identifiers []int,
 ) {
 	metadata := s.metadataByDocuments(identifiers)

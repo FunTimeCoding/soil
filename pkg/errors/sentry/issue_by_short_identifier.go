@@ -1,7 +1,6 @@
 package sentry
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/basic/response"
@@ -13,23 +12,18 @@ func (c *Client) IssueByShortIdentifier(
 	organization string,
 	identifier string,
 ) (*issue.Issue, error) {
-	b, e := c.basic.Get(
+	var result []response.Issue
+
+	if e := c.basic.Get(
 		fmt.Sprintf(
 			"projects/%s/%s/issues",
 			organization,
 			strings.ToLower(identifier[:strings.LastIndex(identifier, "-")]),
 		),
 		map[string]string{"shortIdLookup": "1", "query": identifier},
-	)
-
-	if e != nil {
+		&result,
+	); e != nil {
 		return nil, e
-	}
-
-	var result []response.Issue
-
-	if f := json.Unmarshal(b, &result); f != nil {
-		return nil, f
 	}
 
 	if len(result) == 0 {

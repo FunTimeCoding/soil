@@ -1,12 +1,13 @@
 package gohook
 
 import (
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gohook/configuration"
 	"github.com/funtimecoding/soil/pkg/tool/gohook/constant"
 	"github.com/spf13/cobra"
 )
 
-func uninstallCommand() *cobra.Command {
+func uninstallCommand(t *terminal.Terminal) *cobra.Command {
 	return &cobra.Command{
 		Use:   constant.Uninstall,
 		Short: "Remove hook stubs gohook wrote",
@@ -15,7 +16,7 @@ func uninstallCommand() *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			Uninstall(configuration.Load(root()))
+			Uninstall(configuration.Load(root(t)))
 		},
 	}
 }

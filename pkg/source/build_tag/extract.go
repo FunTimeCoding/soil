@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func extract(path string) []string {
+func Extract(path string) []string {
 	file, e := os.Open(path)
 
 	if e != nil {

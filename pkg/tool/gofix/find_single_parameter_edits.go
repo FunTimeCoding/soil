@@ -4,16 +4,17 @@ import (
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/workspace"
 	"go/ast"
 	"go/token"
 	"golang.org/x/tools/go/packages"
-	"os"
 	"path/filepath"
 )
 
 func findSingleParameterEdits(
 	all []*packages.Package,
 	r *output.Results,
+	w *workspace.Workspace,
 ) []edit {
 	var result []edit
 	sourceCache := make(map[string][]byte)
@@ -49,7 +50,7 @@ func findSingleParameterEdits(
 
 			if !okay {
 				var e error
-				source, e = os.ReadFile(name)
+				source, e = w.Read(name)
 
 				if e != nil {
 					continue

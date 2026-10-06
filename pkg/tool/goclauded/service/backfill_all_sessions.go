@@ -1,9 +1,12 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/errors"
+import (
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/backfill_result"
+)
 
-func (s *Service) BackfillAllSessions() *BackfillResult {
-	r := &BackfillResult{}
+func (s *Service) BackfillAllSessions() *backfill_result.Result {
+	r := backfill_result.New()
 	sessions, e := s.store.AllSessions(0, 0)
 	errors.PanicOnError(e)
 

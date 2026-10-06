@@ -50,6 +50,8 @@ tasks:
     - cd pkg/tool/gomattermostd/generated/server && oapi-codegen --config config.yaml openapi.yaml
     - cd pkg/tool/gomemoryd/generated/client && oapi-codegen --config config.yaml ../server/openapi.yaml
     - cd pkg/tool/gomemoryd/generated/server && oapi-codegen --config config.yaml openapi.yaml
+    - cd pkg/tool/gomonitord/generated/client && oapi-codegen --config config.yaml ../server/openapi.yaml
+    - cd pkg/tool/gomonitord/generated/server && oapi-codegen --config config.yaml openapi.yaml
     - cd pkg/tool/gonetboxd/generated/client && oapi-codegen --config config.yaml ../server/openapi.yaml
     - cd pkg/tool/gonetboxd/generated/server && oapi-codegen --config config.yaml openapi.yaml
     - cd pkg/tool/gooutpostd/generated/client && oapi-codegen --config config.yaml ../server/openapi.yaml

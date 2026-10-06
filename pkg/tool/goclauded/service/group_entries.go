@@ -1,9 +1,12 @@
 package service
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/memory_payload"
+)
 
-func groupEntries(body string) []memoryEntry {
-	var payload groupPayload
+func groupEntries(body string) []memory_payload.Entry {
+	var payload memory_payload.Group
 
 	if json.Unmarshal([]byte(body), &payload) != nil {
 		return nil
@@ -13,5 +16,5 @@ func groupEntries(body string) []memoryEntry {
 		return nil
 	}
 
-	return append([]memoryEntry{*payload.Parent}, payload.Children...)
+	return append([]memory_payload.Entry{*payload.Parent}, payload.Children...)
 }

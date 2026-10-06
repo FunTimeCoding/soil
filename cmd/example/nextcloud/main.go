@@ -12,11 +12,12 @@ func main() {
 	n := nextcloud.NewEnvironment()
 
 	if false {
-		n.Status()
+		n.MustStatus()
+		console.Line("success")
 	}
 
 	if false {
-		for _, f := range n.ReadDirectory("/") {
+		for _, f := range n.MustReadDirectory("/") {
 			console.Format(
 				"Name: %s, IsDir: %t, Size: %d\n",
 				f.Name(),
@@ -27,14 +28,14 @@ func main() {
 	}
 
 	if false {
-		n.DownloadFile(
+		n.MustDownloadFile(
 			"example.png",
 			join.Absolute(system.Home(), constant.DownloadsPath, "example.png"),
 		)
 	}
 
 	if false {
-		n.UploadFile(
+		n.MustUploadFile(
 			"example2.png",
 			join.Absolute(system.Home(), constant.DownloadsPath),
 			"example.png",

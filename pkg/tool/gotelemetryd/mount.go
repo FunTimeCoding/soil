@@ -20,7 +20,6 @@ func Mount(
 	u *web.Server,
 	r face.Reporter,
 	t face.Recorder,
-	version string,
 	g *guard.Mux,
 ) {
 	h := generated.HandlerFromMux(
@@ -37,6 +36,6 @@ func Mount(
 	)
 	g.TokenMount(webConstant.InterfacePath, h)
 	g.OpenMount(constant.IngestPattern, h)
-	model_context.New(service.New(s), r, t, version).Mount(g)
+	model_context.New(service.New(s), r, t).Mount(g)
 	u.Mount(g)
 }

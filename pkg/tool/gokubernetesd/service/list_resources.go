@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/format"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/query"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/resource"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/response"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -12,7 +13,7 @@ import (
 func (s *Service) ListResources(
 	x context.Context,
 	clusterName string,
-	q ListQuery,
+	q query.List,
 ) ([]response.ResourceSummary, error) {
 	c, e := s.ClusterByName(clusterName)
 

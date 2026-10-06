@@ -3,6 +3,7 @@ package service
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/relocation"
 	"go/token"
 	"golang.org/x/tools/go/packages"
 	"path/filepath"
@@ -11,19 +12,19 @@ import (
 func planConstraints(
 	set *token.FileSet,
 	target *packages.Package,
-	entries []*moveEntry,
+	entries []*relocation.Entry,
 	moveDirectory string,
 ) (map[string][]string, string) {
 	result := make(map[string][]string)
 
 	for _, entry := range entries {
-		lines := fileConstraintLines(entry.file)
+		lines := fileConstraintLines(entry.File)
 
-		if existing, seen := result[entry.targetFile]; seen {
+		if existing, seen := result[entry.TargetFile]; seen {
 			if join.NewLine(existing) != join.NewLine(lines) {
 				return nil, fmt.Sprintf(
 					"sources moving to %s carry different build constraints (%q vs %q)",
-					entry.targetFile,
+					entry.TargetFile,
 					join.Space(existing...),
 					join.Space(lines...),
 				)
@@ -32,7 +33,7 @@ func planConstraints(
 			continue
 		}
 
-		result[entry.targetFile] = lines
+		result[entry.TargetFile] = lines
 	}
 
 	if target == nil {

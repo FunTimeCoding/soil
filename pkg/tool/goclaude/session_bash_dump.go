@@ -22,6 +22,10 @@ func sessionBashDump(c *command_context.Context) *cobra.Command {
 			)
 			errors.PanicOnError(e)
 
+			if response.JSON200 == nil {
+				c.Terminal().Reject(response.Status(), response.Body)
+			}
+
 			for _, command := range response.JSON200.Commands {
 				console.Line(command)
 			}

@@ -7,6 +7,7 @@ const (
 	TokenEnvironment = "LINKACE_TOKEN"
 
 	DefaultPerPage = 24
+	BasePath       = "api/v2"
 
 	ListSubject = "list"
 	TagSubject  = "tag"

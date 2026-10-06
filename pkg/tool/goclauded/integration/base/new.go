@@ -1,7 +1,6 @@
 package base
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
@@ -34,7 +33,6 @@ func New(t *testing.T) *Server {
 					t.TempDir(),
 					t.TempDir(),
 					mock_recorder.New(),
-					constant.DefaultVersion,
 					g,
 				)
 			},

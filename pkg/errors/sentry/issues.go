@@ -1,7 +1,6 @@
 package sentry
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/basic/response"
@@ -24,19 +23,14 @@ func (c *Client) Issues(
 		query["statsPeriod"] = period
 	}
 
-	b, e := c.basic.Get(
-		fmt.Sprintf("organizations/%s/issues", organization),
-		query,
-	)
-
-	if e != nil {
-		return nil, e
-	}
-
 	var result []response.Issue
 
-	if f := json.Unmarshal(b, &result); f != nil {
-		return nil, f
+	if e := c.basic.Get(
+		fmt.Sprintf("organizations/%s/issues", organization),
+		query,
+		&result,
+	); e != nil {
+		return nil, e
 	}
 
 	return issue.NewSlice(result), nil

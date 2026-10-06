@@ -2,21 +2,24 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/stamp"
+	"github.com/funtimecoding/soil/pkg/stamp/report"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"testing"
 )
 
 func TestACobraToolPrintsTheSameVersionBlockAsEveryTool(t *testing.T) {
-	assert.String(
-		t,
-		"Version: v1.2.3\nGitHash: abc1234\nBuildDate: 2026-01-01T00:00:00Z\nModule: github.com/funtimecoding/soil\nDirty: false\n",
-		cobraVersion(t, "--version"),
-	)
+	assert.String(t, stamp.New().Text(), cobraVersion(t, "--version"))
 }
 
 func TestACobraToolPrintsTheVersionAsNotation(t *testing.T) {
 	assert.String(
 		t,
-		"{\n\t\"name\": \"gotest\",\n\t\"version\": \"v1.2.3\",\n\t\"git_hash\": \"abc1234\",\n\t\"build_date\": \"2026-01-01T00:00:00Z\",\n\t\"module\": \"github.com/funtimecoding/soil\",\n\t\"dirty\": false\n}\n",
+		join.Empty(
+			string(notation.MarshalIndent(report.New("gotest", stamp.New()))),
+			"\n",
+		),
 		cobraVersion(t, "--version", "--notation"),
 	)
 }

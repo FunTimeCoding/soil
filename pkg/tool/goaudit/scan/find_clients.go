@@ -2,6 +2,8 @@ package scan
 
 import (
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/audit_configuration"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/matrix"
 	"path/filepath"
 )
 
@@ -10,9 +12,9 @@ func findClients(
 	root string,
 	current string,
 	repo string,
-	configuration *Configuration,
-) []*Client {
-	var result []*Client
+	configuration *audit_configuration.Configuration,
+) []*matrix.Client {
+	var result []*matrix.Client
 
 	if v.Has(filepath.Join(current, "client.go")) &&
 		!isExcluded(root, current, configuration) {

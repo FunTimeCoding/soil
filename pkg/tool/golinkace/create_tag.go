@@ -25,6 +25,11 @@ func createTag(c *command_context.Context) *cobra.Command {
 				client.CreateTagJSONRequestBody{Name: arguments[0]},
 			)
 			errors.PanicOnError(e)
+
+			if r.JSON200 == nil {
+				c.Terminal().Reject(r.Status(), r.Body)
+			}
+
 			fmt.Println(
 				tag.FromDaemon(*r.JSON200, c.Host()).Format(constant.Format),
 			)

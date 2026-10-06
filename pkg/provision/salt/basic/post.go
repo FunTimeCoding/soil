@@ -1,29 +1,17 @@
 package basic
 
-import "net/http"
+import (
+	"github.com/funtimecoding/soil/pkg/web/requester/request"
+	"net/http"
+)
 
 func (c *Client) Post(
 	path string,
 	body any,
-) ([]byte, error) {
-	b, code, e := c.exchange(http.MethodPost, path, body)
-
-	if e != nil {
-		return nil, e
-	}
-
-	if code == http.StatusUnauthorized {
-		c.login()
-		b, code, e = c.exchange(http.MethodPost, path, body)
-
-		if e != nil {
-			return nil, e
-		}
-	}
-
-	if code >= http.StatusBadRequest {
-		return nil, parseDetail(b, code)
-	}
-
-	return b, nil
+	out any,
+) error {
+	return c.requester.Notation(
+		request.New(http.MethodPost, path).WithNotation(body),
+		out,
+	)
 }

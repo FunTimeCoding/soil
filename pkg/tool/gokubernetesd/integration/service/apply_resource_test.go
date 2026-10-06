@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/integration/service_tester"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/query"
 	"testing"
 )
 
@@ -14,10 +14,7 @@ func TestApplyResource(t *testing.T) {
 	result, e := s.Service.ApplyResource(
 		context.Background(),
 		"test",
-		service.ApplyQuery{
-			Manifest:  constant.FixtureManifest,
-			Namespace: "default",
-		},
+		query.Apply{Manifest: constant.FixtureManifest, Namespace: "default"},
 	)
 	assert.Nil(t, e)
 	assert.String(t, "ConfigMap", result.Kind)
@@ -30,19 +27,13 @@ func TestApplyResourceAlreadyExists(t *testing.T) {
 	_, f := s.Service.ApplyResource(
 		context.Background(),
 		"test",
-		service.ApplyQuery{
-			Manifest:  constant.FixtureManifest,
-			Namespace: "default",
-		},
+		query.Apply{Manifest: constant.FixtureManifest, Namespace: "default"},
 	)
 	assert.Nil(t, f)
 	_, e := s.Service.ApplyResource(
 		context.Background(),
 		"test",
-		service.ApplyQuery{
-			Manifest:  constant.FixtureManifest,
-			Namespace: "default",
-		},
+		query.Apply{Manifest: constant.FixtureManifest, Namespace: "default"},
 	)
 	assert.NotNil(t, e)
 }
@@ -52,16 +43,13 @@ func TestApplyResourceOverride(t *testing.T) {
 	_, f := s.Service.ApplyResource(
 		context.Background(),
 		"test",
-		service.ApplyQuery{
-			Manifest:  constant.FixtureManifest,
-			Namespace: "default",
-		},
+		query.Apply{Manifest: constant.FixtureManifest, Namespace: "default"},
 	)
 	assert.Nil(t, f)
 	result, e := s.Service.ApplyResource(
 		context.Background(),
 		"test",
-		service.ApplyQuery{
+		query.Apply{
 			Manifest:  constant.FixtureManifest,
 			Namespace: "default",
 			Override:  true,
@@ -76,7 +64,7 @@ func TestApplyResourceDryRun(t *testing.T) {
 	result, e := s.Service.ApplyResource(
 		context.Background(),
 		"test",
-		service.ApplyQuery{
+		query.Apply{
 			Manifest:  constant.FixtureManifest,
 			Namespace: "default",
 			DryRun:    true,

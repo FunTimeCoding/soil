@@ -1,12 +1,15 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
 
-func createClusterType(c *client.Client) *cobra.Command {
+func createClusterType(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "create-cluster-type [name]",
 		Short: "Create a NetBox cluster type",
@@ -15,7 +18,7 @@ func createClusterType(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(c.CreateClusterType(arguments[0]))
+			t.Emit(c.CreateClusterType(arguments[0]))
 		},
 	}
 }

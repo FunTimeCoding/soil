@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
 	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -73,7 +73,7 @@ func (s *Server) documentsPage(
 	}
 
 	var filters []gomponents.Node
-	var sourceTypeFacet *store.Facet
+	var sourceTypeFacet *search.Facet
 
 	for i, f := range outcome.Facets {
 		if f.Key == constant.SourceType && f.Values != nil {

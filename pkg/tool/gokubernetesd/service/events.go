@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/format"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/query"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/response"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
 	"sort"
@@ -13,7 +14,7 @@ import (
 func (s *Service) Events(
 	x context.Context,
 	clusterName string,
-	q EventsQuery,
+	q query.Events,
 ) ([]response.EventEntry, error) {
 	c, e := s.ClusterByName(clusterName)
 

@@ -30,7 +30,9 @@ pkg/<service>/
 
 ## Example: GitLab Jobs
 
-### Entity Struct (`job/job.go`)
+### Entity Struct
+
+`job/job.go`:
 
 Pure data, no client references:
 
@@ -39,7 +41,7 @@ package job
 
 import (
     "github.com/funtimecoding/soil/pkg/gitlab/project"
-    "gitlab.com/gitlab-org/api/client-go/v2"
+    "gitlab.com/gitlab-org/api/client-go/v3"
     "time"
 )
 
@@ -62,7 +64,9 @@ type Job struct {
 }
 ```
 
-### Constants (`constant/job.go`)
+### Constants
+
+`constant/job.go`:
 
 Fallback values for missing data live in the service's `constant/`
 package as an entity-prefixed concept file - never as a
@@ -81,7 +85,9 @@ const (
 )
 ```
 
-### Main Formatter (`job/format.go`)
+### Main Formatter
+
+`job/format.go`:
 
 Composes field formatters into a status line:
 
@@ -118,7 +124,9 @@ func (j *Job) Format(f *option.Format) string {
 }
 ```
 
-### Field Formatter (`job/format_name.go`)
+### Field Formatter
+
+`job/format_name.go`:
 
 Each field has its own formatter with color support:
 
@@ -139,7 +147,9 @@ func (j *Job) formatName(f *option.Format) string {
 }
 ```
 
-### Field Formatter with Fallback (`job/format_concern.go`)
+### Field Formatter with Fallback
+
+`job/format_concern.go`:
 
 Handle missing values gracefully:
 
@@ -167,7 +177,9 @@ func (j *Job) formatConcern(f *option.Format) string {
 }
 ```
 
-### Factory (`job/new.go`)
+### Factory
+
+`job/new.go`:
 
 Wraps the external library type into a pure entity:
 
@@ -176,7 +188,7 @@ package job
 
 import (
     "github.com/funtimecoding/soil/pkg/monitor/item/constant"
-    "gitlab.com/gitlab-org/api/client-go/v2"
+    "gitlab.com/gitlab-org/api/client-go/v3"
 )
 
 func New(v *gitlab.Job) *Job {
@@ -193,12 +205,14 @@ func New(v *gitlab.Job) *Job {
 }
 ```
 
-### Slice Factory (`job/new_slice.go`)
+### Slice Factory
+
+`job/new_slice.go`:
 
 ```go
 package job
 
-import "gitlab.com/gitlab-org/api/client-go/v2"
+import "gitlab.com/gitlab-org/api/client-go/v3"
 
 func NewSlice(v []*gitlab.Job) []*Job {
     var result []*Job
@@ -211,13 +225,15 @@ func NewSlice(v []*gitlab.Job) []*Job {
 }
 ```
 
-### Daemon Bridge Factory (`<entity>/from_daemon.go`)
+### Daemon Bridge Factory
+
+`<entity>/from_daemon.go`:
 
 When a CLI calls a daemon's REST API instead of the upstream
 directly, the generated client returns its own types (e.g.
 `client.Link`). A `FromDaemon()` constructor maps these back
-to domain types so `Format()` stays available. (No implementation
-in soil yet - the pattern lives in downstream repos.)
+to domain types so `Format()` stays available -
+`pkg/linkace/link/from_daemon.go` is one.
 
 ```go
 package link
@@ -237,11 +253,13 @@ func FromDaemon(v client.Link, host string) *Link {
 `FromDaemonSlice()` follows the same pattern as `NewSlice()`.
 The `host` parameter enables `Format()` to build clickable URLs.
 
-### Page Type (`page/page.go`)
+### Page Type
+
+`page/page.go`:
 
 When an upstream API paginates, expose page-level access via a
-generic page type alongside the fetch-all methods (like
-`FromDaemon`, currently implemented in downstream repos):
+generic page type alongside the fetch-all methods
+(`pkg/linkace/page/page.go`):
 
 ```go
 package page
@@ -261,7 +279,9 @@ method calls the page method in a loop. MCP tools use page
 methods with offset-to-page conversion. REST endpoints pass
 the page number through directly.
 
-### Client Method (`pkg/gitlab/project_jobs.go`)
+### Client Method
+
+`pkg/gitlab/project_jobs.go`:
 
 Client handles the library call, delegates parsing to the entity package:
 
@@ -291,11 +311,15 @@ Go clients (GitHub, GitLab, Prometheus, etc.) - prefer those over building from
 scratch. `basic/` exists for two situations: (1) no good library exists and a
 hand-rolled HTTP client is the permanent solution, or (2) as temporary
 scaffolding while exploring an unfamiliar API before deciding whether to keep it
-or replace it with a library later.
+or replace it with a library later. `basic/` is omitted when the client is
+simple enough to do HTTP directly (e.g., scraper clients using goquery,
+single-endpoint tools).
 
 When a client talks to a JSON API (vs. scraping HTML) and no suitable library
 exists, the raw HTTP layer lives in a `basic/` subpackage. The top-level client
-embeds it and returns typed entities.
+embeds it and returns typed entities. `basic/` holds a
+`pkg/web/requester`, configured once with base locator, authorizer,
+headers and, where needed, client and refusal reading.
 
 ```
 pkg/<name>/
@@ -303,55 +327,46 @@ pkg/<name>/
 ├── new.go             # New(host, token string) *Client
 ├── new_environment.go # NewEnvironment() reads env vars, calls New()
 ├── <entities>.go      # Methods returning []*entity.Entity
+├── must_<entities>.go # Must twins for CLIs and examples
 └── basic/
-    ├── client.go      # Client struct: host, port, auth fields
-    ├── new.go         # New(...) *Client
-    └── get.go         # Get(path string) string
+    ├── client.go      # Client struct: api *requester.Requester
+    ├── new.go         # New(base *locator.Locator, ...) *Client
+    └── get.go         # Get(path, params, out) error
 ```
 
-`basic/get.go` from `pkg/jenkins/basic` - builds URL with locator, sets auth,
-sends:
+### Construction
+
+`basic.New` takes the base locator rather than a host, so a test can
+point it at a local server:
 
 ```go
-func (c *Client) Get(path string) string {
-    r := web.NewGet(locator.New(c.host).Port(c.port).Path(path).String())
-    r.SetBasicAuth(c.user, c.password)
-    r.Header.Add(constant.ContentType, constant.Object)
-    r.Header.Add(constant.Accept, constant.Object)
-    response := web.Send(web.Client(), r)
-
-    return web.ReadString(response)
+func New(base *locator.Locator, token string) *Client {
+    return &Client{
+        api: requester.New(base).
+            WithAuthorizer(bearer.New(token)).
+            WithHeader(constant.Accept, constant.Object),
+    }
 }
-```
 
-For JSON APIs with typed responses, `Get` accepts an `out any` param
-and decodes into it. A client that MCP or REST handlers call sends
-through `web.Do` and returns the error - `web.Send` panics, which the
-handler cannot turn into a tool result. `web.Do` also classifies 404
-as `not_found` and other non-okay statuses as `unexpected`, and keeps
-the query string out of its errors, since some APIs carry
-credentials there. `web.DoBytes` is the same for downloads:
-
-```go
 func (c *Client) Get(path string, params map[string]string, out any) error {
-    l := c.base.Copy().Path(path)
+    q := request.Get(path)
     for k, v := range params {
-        l.Set(k, v)
+        q.WithParameter(k, v)
     }
-    r := web.NewGet(l.String())
-    r.SetBasicAuth(c.user, c.token)
-    r.Header.Set(webconstant.UserAgent, constant.UserAgent)
-    response, e := web.Do(web.Client(), r)
-    if e != nil {
-        return e
-    }
-    defer errors.PanicClose(response.Body)
-    return json.NewDecoder(response.Body).Decode(out)
+    return c.api.Notation(q, out)
 }
 ```
 
-An API whose error responses carry a structured reason worth relaying
-calls `web.Client().Do` and reads the body itself before classifying.
+### Errors
+
+Every method returns its error: 404 is `not_found`, other refusals
+`unexpected` with the site's reason, transport failures classified
+and free of query strings. A CLI or example calls the `Must` twin.
+An API that refuses in its own shape - HTML, a 200 with an error
+envelope - reads it with `WithRefusal` or checks the envelope after
+decoding.
+
+### Wrapping into entities
 
 The top-level client calls `basic.Get` and wraps results into entities:
 
@@ -365,18 +380,16 @@ func (c *Client) Posts(tag string, limit int) ([]*post.Post, error) {
 }
 ```
 
-`basic/` is omitted when the client is simple enough to do HTTP directly (e.g.,
-scraper clients using goquery, single-endpoint tools).
-
 ## Semantic Layer Subpackages
 
 JSON shapes that serve a specific layer live in a subpackage named after that
 layer. One file per type, named after the type. The package name removes
 redundancy from type names (`response.Search` not `response.SearchResponse`).
 
-### `<path>/convert/` and `<path>/response/` - output type filtering
+### Output Type Filtering
 
-Types that shape what callers see. Scoped to where they're consumed:
+`<path>/convert/` and `<path>/response/` hold the types that shape what
+callers see. Scoped to where they're consumed:
 
 - Types shared by both REST and MCP → `<path>/convert/` (top-level sibling
   of `<path>/server/` and `<path>/model_context/`)
@@ -405,18 +418,18 @@ pkg/<name>/
 This eliminates the `Data` suffix problem - `response.Link` vs `link.Link`
 provides disambiguation without a naming hack.
 
-### `<path>/argument/` - MCP tool parameter structs
+### MCP Tool Parameter Structs
 
-JSON shapes for MCP tool input parameters. One file per argument type.
-Lives inside `<path>/model_context/argument/` - scoped to the layer that
-consumes it.
+`<path>/argument/` holds the JSON shapes for MCP tool input parameters. One file
+per argument type. Lives inside `<path>/model_context/argument/` - scoped to the
+layer that consumes it.
 
-### `<path>/result/` - store return types
+### Store Return Types
 
-Exported types that a store returns to callers, separate from the store's
-internal types and methods. Used when the store has many return types that would
-otherwise collide with method names (e.g. `result.Status` vs `store.Status()`
-method).
+`<path>/result/` holds the exported types that a store returns to callers,
+separate from the store's internal types and methods. Used when the store has
+many return types that would otherwise collide with method names (e.g.
+`result.Status` vs `store.Status()` method).
 
 ## Key Principles
 

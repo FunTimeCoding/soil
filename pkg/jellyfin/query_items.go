@@ -11,7 +11,7 @@ func (c *Client) queryItems(
 	p url.Values,
 ) ([]*item.Item, int, error) {
 	var out response.Items
-	e := c.get(path, p, &out)
+	e := c.basic.Get(path, p, &out)
 
 	if e != nil {
 		return nil, 0, e

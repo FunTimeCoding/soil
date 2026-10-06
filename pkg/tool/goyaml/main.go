@@ -8,16 +8,12 @@ import (
 	"strings"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	r := reporter.New(constant.Identity.Name(), version)
+func Main() {
+	r := reporter.New(constant.Identity.Name())
 	r.Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
 
 	if a.ArgumentCount() == 0 {
 		system.Exitf(1, "%s\n", constant.Identity.Usage())

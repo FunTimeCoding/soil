@@ -23,6 +23,6 @@ func NewPollWorker(
 		time.Minute,
 		y,
 		logger.New(context.Background()),
-		reporter.NewOptional(constant.Identity.Name(), "test"),
+		reporter.NewOptional(constant.Identity.Name()),
 	), y
 }

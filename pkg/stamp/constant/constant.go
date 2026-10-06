@@ -10,6 +10,6 @@ const (
 	TimeKey            = "vcs.time"
 	ModifiedKey        = "vcs.modified"
 	ModifiedValue      = "true"
-	ModuleVariable     = "github.com/funtimecoding/soil/pkg/stamp/constant.Module"
-	DirtyVariable      = "github.com/funtimecoding/soil/pkg/stamp/constant.Dirty"
+	UntaggedFormat     = "%s (untagged)"
+	Untagged           = "untagged"
 )

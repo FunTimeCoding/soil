@@ -2,28 +2,35 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/receipt"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/deletion"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/session"
 )
 
 func (s *Service) deleteCounts(r *session.Session) (*receipt.Receipt, error) {
 	result := receipt.New(r.Identifier, r.Name)
 
-	for _, c := range []countTarget{
-		{s.store.CountSessionEvents, &result.Events},
-		{s.store.CountSessionEventMetadata, &result.EventMetadata},
-		{s.store.CountSessionCompletions, &result.Completions},
-		{s.store.CountSessionSummaries, &result.Summaries},
-		{s.store.CountSessionLabels, &result.Labels},
-		{s.store.CountSessionPulses, &result.Pulses},
-		{s.store.CountSessionContextLoads, &result.ContextLoads},
+	for _, c := range []deletion.CountTarget{
+		{Read: s.store.CountSessionEvents, Target: &result.Events},
+		{
+			Read:   s.store.CountSessionEventMetadata,
+			Target: &result.EventMetadata,
+		},
+		{Read: s.store.CountSessionCompletions, Target: &result.Completions},
+		{Read: s.store.CountSessionSummaries, Target: &result.Summaries},
+		{Read: s.store.CountSessionLabels, Target: &result.Labels},
+		{Read: s.store.CountSessionPulses, Target: &result.Pulses},
+		{
+			Read:   s.store.CountSessionContextLoads,
+			Target: &result.ContextLoads,
+		},
 	} {
-		count, e := c.read(r.Identifier)
+		count, e := c.Read(r.Identifier)
 
 		if e != nil {
 			return nil, e
 		}
 
-		*c.target = count
+		*c.Target = count
 	}
 
 	if _, tracked := s.store.TrackerStates()[r.Identifier]; tracked {

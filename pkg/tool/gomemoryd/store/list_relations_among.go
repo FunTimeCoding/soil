@@ -5,11 +5,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 )
 
 func (s *Store) ListRelationsAmong(
 	identifiers []int64,
-) ([]RelationOverview, error) {
+) ([]record.RelationOverview, error) {
 	if len(identifiers) == 0 {
 		return nil, nil
 	}
@@ -47,10 +48,10 @@ func (s *Store) ListRelationsAmong(
 	}
 
 	defer errors.LogClose(rows)
-	var result []RelationOverview
+	var result []record.RelationOverview
 
 	for rows.Next() {
-		var r RelationOverview
+		var r record.RelationOverview
 		f := rows.Scan(
 			&r.SourceIdentifier,
 			&r.SourceName,

@@ -8,12 +8,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gochk/constant"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	r := reporter.New(constant.Identity.Name(), version).Start()
+func Main() {
+	r := reporter.New(constant.Identity.Name()).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.String(
@@ -21,6 +17,6 @@ func Main(
 		"",
 		"Port, multiple values separated by comma",
 	)
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
 	check.Check(a.GetString(argumentConstant.Port))
 }

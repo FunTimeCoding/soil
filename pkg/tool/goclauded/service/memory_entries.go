@@ -1,9 +1,12 @@
 package service
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/memory_payload"
+)
 
-func memoryEntries(body string) []memoryEntry {
-	var many []memoryEntry
+func memoryEntries(body string) []memory_payload.Entry {
+	var many []memory_payload.Entry
 
 	if json.Unmarshal([]byte(body), &many) == nil && len(many) > 0 {
 		return many
@@ -13,10 +16,10 @@ func memoryEntries(body string) []memoryEntry {
 		return group
 	}
 
-	var one memoryEntry
+	var one memory_payload.Entry
 
 	if json.Unmarshal([]byte(body), &one) == nil && one.Identifier > 0 {
-		return []memoryEntry{one}
+		return []memory_payload.Entry{one}
 	}
 
 	return nil

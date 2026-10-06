@@ -3,9 +3,7 @@ package gojellyfin
 import (
 	"context"
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/spf13/cobra"
-	"os"
 )
 
 func libraries(x *Context) *cobra.Command {
@@ -20,17 +18,15 @@ func libraries(x *Context) *cobra.Command {
 			r, e := x.Client.ListLibrariesWithResponse(context.Background())
 
 			if e != nil {
-				errors.Printf("error: %v\n", e)
-				os.Exit(1)
+				x.Terminal.Exitf("error: %v\n", e)
 			}
 
 			if r.JSON200 == nil {
-				errors.Printf(
+				x.Terminal.Exitf(
 					"unexpected status: %s\n%s\n",
 					r.HTTPResponse.Status,
 					string(r.Body),
 				)
-				os.Exit(1)
 			}
 
 			for _, l := range *r.JSON200 {

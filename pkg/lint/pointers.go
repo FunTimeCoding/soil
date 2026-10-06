@@ -61,6 +61,7 @@ func Pointers(
 						addPointerConcern(
 							s,
 							constant.VerdictDead,
+							"",
 							path,
 							number,
 							line,
@@ -82,7 +83,14 @@ func Pointers(
 					}
 
 					if v.Verdict != constant.VerdictLive {
-						addPointerConcern(s, v.Verdict, path, number, line)
+						addPointerConcern(
+							s,
+							v.Verdict,
+							v.Hint,
+							path,
+							number,
+							line,
+						)
 					}
 				}
 			}

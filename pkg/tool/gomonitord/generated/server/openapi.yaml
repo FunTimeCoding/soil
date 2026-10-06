@@ -1,0 +1,114 @@
+---
+openapi: "3.0.0"
+info:
+  title: gomonitord
+  version: 1.0.0
+paths:
+  /api/claims:
+    get:
+      operationId: getClaims
+      responses:
+        "200":
+          description: Every claim, ordered by item and owner.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Claim"
+        "500":
+          description: Failed to list claims.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    put:
+      operationId: putClaim
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ClaimRequest"
+      responses:
+        "200":
+          description: The claim, new or already held.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Claim"
+        "400":
+          description: Item or owner missing.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to store the claim.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteClaim
+      parameters:
+      - name: item
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: owner
+        in: query
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          description: Released, or there was nothing to release.
+        "400":
+          description: Item or owner missing.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to release the claim.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    Claim:
+      type: object
+      required: [item, owner, created_at]
+      properties:
+        item:
+          type: string
+        owner:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+    ClaimRequest:
+      type: object
+      required: [item, owner]
+      properties:
+        item:
+          type: string
+        owner:
+          type: string
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+    ErrorResponse:
+      type: object
+      required: [error, event_identifier]
+      properties:
+        error:
+          type: string
+        event_identifier:
+          type: string

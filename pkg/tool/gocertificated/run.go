@@ -41,7 +41,7 @@ func Run(
 			o.SecretPath,
 		),
 	)
-	i := web.New(s, v, authorizationClient(o))
+	i := web.New(s, v, authorizationClient(o).WithReporter(r))
 	lifecycle.New(
 		g,
 		lifecycle.WithServer(
@@ -55,7 +55,6 @@ func Run(
 						i,
 						r,
 						u.Recorder(),
-						o.Version,
 						guard.New(m, o.ServiceTokens),
 					)
 				},

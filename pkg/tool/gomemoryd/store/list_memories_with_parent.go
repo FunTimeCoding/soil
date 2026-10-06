@@ -1,8 +1,11 @@
 package store
 
-import "github.com/funtimecoding/soil/pkg/errors"
+import (
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
+)
 
-func (s *Store) listMemoriesWithParent(parentIdentifier int64) ([]MemorySummary, error) {
+func (s *Store) listMemoriesWithParent(parentIdentifier int64) ([]record.MemorySummary, error) {
 	rows, e := s.database.Query(
 		`SELECT identifier, name, description, type, scope, updated_at, parent_identifier
 		FROM memory
@@ -16,10 +19,10 @@ func (s *Store) listMemoriesWithParent(parentIdentifier int64) ([]MemorySummary,
 	}
 
 	defer errors.LogClose(rows)
-	var result []MemorySummary
+	var result []record.MemorySummary
 
 	for rows.Next() {
-		var m MemorySummary
+		var m record.MemorySummary
 		e := rows.Scan(
 			&m.Identifier,
 			&m.Name,

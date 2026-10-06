@@ -1,12 +1,10 @@
 package basic
 
-import (
-	"github.com/funtimecoding/soil/pkg/atlassian/constant"
-	"github.com/funtimecoding/soil/pkg/web/locator"
-)
+import "github.com/funtimecoding/soil/pkg/web/requester/request"
 
-func (c *Client) GetPath(path string) (string, error) {
-	return c.Get(
-		locator.New(c.host).Base(constant.ConfluenceOldBase).Path(path).String(),
-	)
+func (c *Client) GetPath(
+	path string,
+	out any,
+) error {
+	return c.old.Notation(request.Get(path), out)
 }

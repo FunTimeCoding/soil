@@ -165,7 +165,6 @@ instructions, and baseline telemetry hooks. `WithRecorder(t)` registers an
 AfterCallTool hook that records every MCP tool call as a baseline telemetry
 event. Import as
 `mark "github.com/funtimecoding/soil/pkg/generative/mark/server"`.
-```
 
 `mount.go` - wires the MCP server onto the guard (the shared
 `pkg/generative/model_context/server` package registers every MCP
@@ -241,7 +240,7 @@ func (s *Server) ListLinks(
         return s.captureFail(e, "failed to list links")
     }
 
-    return response.SuccessAny(map[string]any{"links": result})
+    return response.SuccessAny(map[string]any{"links": links})
 }
 ```
 
@@ -292,15 +291,10 @@ func (s *Server) getAlerts(
 }
 ```
 
-`capture_fail.go`:
-```go
-func (s *Server) captureFail(
-    e error,
-    message string,
-) (*mcp.CallToolResult, error) {
-    return response.CaptureFail(s.reporter, e, message)
-}
-```
+`captureFail` lives in `capture_fail.go` - the shape is in
+`error-handling/mcp.md#the-capture-primitive`.
+
+### Quick reference
 
 - Required params: `r.RequireString(...)` / `r.RequireFloat(...)` - return
   `response.Fail(...)` on failure
@@ -390,13 +384,13 @@ means unlimited). Paginated responses wrap the page with
 metadata - at minimum the total count before slicing - so the
 model knows how much it has not seen.
 
+## Wiring into mount.go
+
 Services with REST APIs use oapi-codegen's strict server mode.
 The full pattern - configs, handlers, error schemas, recording
 middleware, mounting - lives in `generated-api.md`; the error
 tiers and REST `captureFail` in `doc/ai/spec/error-handling/rest.md`. MCP and
 REST share the `convert/` layer, the reporter, and the recorder.
-
-## Wiring into mount.go
 
 MCP mounts through the daemon's top-level `Mount(...)` beside the
 REST tree, on the same `guard.Mux` (full shape in

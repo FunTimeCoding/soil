@@ -10,5 +10,6 @@ func New() *Resolver {
 		PrefixExists:  absentIn,
 		Literal:       absentIn,
 		Routes:        noRoutes,
+		Headings:      noHeadings,
 	}
 }

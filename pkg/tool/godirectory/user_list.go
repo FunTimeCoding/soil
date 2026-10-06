@@ -5,11 +5,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/generated/client"
 	"github.com/spf13/cobra"
 )
 
-func userList(c *client.ClientWithResponses) *cobra.Command {
+func userList(
+	c *client.ClientWithResponses,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "list",
 		Short: "List directory users",
@@ -20,6 +24,11 @@ func userList(c *client.ClientWithResponses) *cobra.Command {
 		) {
 			result, e := c.GetUserWithResponse(context.Background())
 			errors.PanicOnError(e)
+
+			if result.JSON200 == nil {
+				t.Reject(result.Status(), result.Body)
+			}
+
 			console.Line(notation.MarshalIndent(result.JSON200))
 		},
 	}

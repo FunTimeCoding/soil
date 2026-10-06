@@ -29,6 +29,11 @@ func appendTag(c *command_context.Context) *cobra.Command {
 				client.AppendTagJSONRequestBody{Name: arguments[1]},
 			)
 			errors.PanicOnError(f)
+
+			if r.JSON200 == nil {
+				c.Terminal().Reject(r.Status(), r.Body)
+			}
+
 			fmt.Println(
 				link.FromDaemon(*r.JSON200, c.Host()).Format(constant.Format),
 			)

@@ -80,7 +80,6 @@ func Run(
 							index,
 							r,
 							s.Recorder(),
-							o.Version,
 							guard.New(u, o.ServiceTokens),
 						)
 					},

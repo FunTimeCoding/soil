@@ -5,11 +5,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/generated/client"
 	"github.com/spf13/cobra"
 )
 
-func userCreate(c *client.ClientWithResponses) *cobra.Command {
+func userCreate(
+	c *client.ClientWithResponses,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var mail, password string
 	result := &cobra.Command{
 		Use:   "create <account> <name> <surname>",
@@ -35,6 +39,11 @@ func userCreate(c *client.ClientWithResponses) *cobra.Command {
 
 			response, e := c.PostUserWithResponse(context.Background(), body)
 			errors.PanicOnError(e)
+
+			if response.JSON200 == nil {
+				t.Reject(response.Status(), response.Body)
+			}
+
 			console.Line(notation.MarshalIndent(response.JSON200))
 		},
 	}

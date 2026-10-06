@@ -1,8 +1,8 @@
 package convert
 
-import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 
-func Memories(memories []store.Memory) []*SlimMemory {
+func Memories(memories []record.Memory) []*SlimMemory {
 	result := make([]*SlimMemory, 0, len(memories))
 
 	for i := range memories {

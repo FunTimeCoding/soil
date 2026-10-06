@@ -7,6 +7,8 @@ const (
 	TokenEnvironment    = "NEXTCLOUD_TOKEN"
 )
 const (
-	InformationPath = "/ocs/v2.php/apps/serverinfo/api/v1/info?format=json"
+	InformationPath = "/ocs/v2.php/apps/serverinfo/api/v1/info"
+	FormatParameter = "format"
+	NotationFormat      = "json"
 	TokenHeader     = "NC-Token"
 )

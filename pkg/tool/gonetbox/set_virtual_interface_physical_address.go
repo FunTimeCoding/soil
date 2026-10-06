@@ -1,13 +1,16 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetbox/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
 
-func setVirtualInterfacePhysicalAddress(c *client.Client) *cobra.Command {
+func setVirtualInterfacePhysicalAddress(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   constant.VirtualPhysicalAddressUsage,
 		Short: "Assign a MAC address to an existing virtual machine interface",
@@ -16,7 +19,7 @@ func setVirtualInterfacePhysicalAddress(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(
+			t.Emit(
 				c.SetVirtualInterfacePhysicalAddress(
 					arguments[0],
 					arguments[1],

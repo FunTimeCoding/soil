@@ -7,7 +7,7 @@ import (
 
 func (c *Client) Libraries() ([]*library.Library, error) {
 	var out response.Libraries
-	e := c.get("/Library/MediaFolders", nil, &out)
+	e := c.basic.Get("/Library/MediaFolders", nil, &out)
 
 	if e != nil {
 		return nil, e

@@ -23,7 +23,7 @@ func Run(
 	t := i.Recorder()
 	l := logger.New(context.Background())
 	s := service.New(directory.NewEnvironment())
-	u := web.New(s, authorizationClient(o))
+	u := web.New(s, authorizationClient(o).WithReporter(r))
 	lifecycle.New(
 		l,
 		lifecycle.WithServer(
@@ -31,7 +31,7 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					Mount(s, u, r, t, o.Version, guard.New(m, o.ServiceTokens))
+					Mount(s, u, r, t, guard.New(m, o.ServiceTokens))
 				},
 			).WithMiddleware(u.Recovery(r)),
 		),

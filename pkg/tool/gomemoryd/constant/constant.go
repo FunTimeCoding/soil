@@ -56,6 +56,10 @@ const (
 	Remove            = "remove"
 	ReplaceAll        = "replace_all"
 	Tags              = "tags"
+	Base              = "base"
+	ClearBase         = "clear_base"
+
+	BaseKey = "base"
 
 	DashboardTitle   = "Dashboard"
 	DashboardPath    = "/"

@@ -3,19 +3,15 @@ package gogithubd
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/gogithubd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogithubd/option"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	r := reporter.New(constant.Identity.Name(), version).Start()
-	defer func() { r.RecoverFlush(recover()) }()
+func Main() {
+	s := instrument.New(constant.Identity)
+	defer func() { s.Flush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Metric()
 	a.Boolean(argumentConstant.Verbose, false, "Verbose output")
@@ -24,10 +20,10 @@ func Main(
 		environment.Optional(constant.OwnerEnvironment),
 		"GitHub owner",
 	)
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
 	o := option.New()
 	o.MetricAddress = a.MetricAddress()
 	o.Owner = a.GetString(argumentConstant.Owner)
 	o.Verbose = a.GetBoolean(argumentConstant.Verbose)
-	Run(o, r)
+	Run(o, s)
 }

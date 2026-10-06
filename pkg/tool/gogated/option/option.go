@@ -11,5 +11,4 @@ type Option struct {
 	AdminClientIdentifier string
 	AdminClientSecret     string
 	ServiceTokens         []string
-	Version               string
 }

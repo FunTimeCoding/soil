@@ -20,7 +20,7 @@ func (c *Client) Play(
 		v.Set("startPositionTicks", fmt.Sprint(startPositionTicks))
 	}
 
-	return c.post(
+	return c.basic.Post(
 		fmt.Sprintf("/Sessions/%s/Playing", sessionIdentifier),
 		v,
 		nil,

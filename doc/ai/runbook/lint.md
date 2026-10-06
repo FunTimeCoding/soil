@@ -49,10 +49,48 @@ to the plugin root:
 
 ## Common situations
 
-**Fixing lint issues**: separate obvious fixes from judgment calls.
-Discuss ambiguous ones before changing. See the `/soil:lint` skill
-for the full posture on what not to do.
+### Fixing lint issues
 
-**After a large refactor**: run `task lint` to catch naming drift,
+Separate obvious fixes from judgment calls.
+Discuss ambiguous ones before changing, grouped by the question they
+raise rather than by file or count. See the `/soil:lint` skill for
+the full posture on what not to do.
+
+### A check refuses new code
+
+Change the code to conform, even when
+that means restructuring or moving it to another repository. Widening
+what the check accepts is a design decision raised as a choice before
+anything is written, never a change riding inside a feature. An exemption that
+holds names a boundary with a mechanical cause, the way a sibling check
+already draws it; an allowlist for awkward cases is a blind spot.
+Moving vocabulary out of the check's reach so it stops firing is the
+same blind spot - when constants collide, add more constants with the
+same value and different names (`conventions/constants.md`).
+
+### Extracting a constant
+
+`string_constant` matches by value, and a
+constant reaches every file under the directory owning its
+`<path>/constant/` package - one directly under `pkg` reaches the
+whole repository. Grep the value inside that subtree before extracting. The
+findings converge over two or three rounds, and they show in
+goanalyze while a scoped golint reports nothing, so check with
+goanalyze between rounds. Findings in files you never opened, inside
+that subtree, are yours.
+
+### Changing a check
+
+Fix every finding a changed or new analyzer
+raises before installing its binary, because `task lint` runs the
+installed binary - new source beside an old binary shows you the
+findings and nobody else. Install only at zero in every repository
+the check reaches, including one that reaches it through a `replace`
+directive. A new analyzer goes the same way: build it, clear it,
+then register it.
+
+### After a large refactor
+
+Run `task lint` to catch naming drift,
 unused imports, spacing violations. Run `goaudit` to catch structural
 drift.

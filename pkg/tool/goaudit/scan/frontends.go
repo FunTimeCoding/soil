@@ -1,12 +1,15 @@
 package scan
 
-import "github.com/funtimecoding/soil/pkg/system/virtual_file_system"
+import (
+	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/matrix"
+)
 
 func Frontends(
 	v *virtual_file_system.System,
 	services []*Service,
-) []*Frontend {
-	var result []*Frontend
+) []*matrix.Frontend {
+	var result []*matrix.Frontend
 
 	for _, s := range services {
 		if !s.Web {

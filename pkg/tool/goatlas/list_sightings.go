@@ -3,12 +3,10 @@ package goatlas
 import (
 	"context"
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/time"
 	"github.com/funtimecoding/soil/pkg/tool/goatlas/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/generated/client"
 	"github.com/spf13/cobra"
-	"os"
 )
 
 func listSightings(x *Context) *cobra.Command {
@@ -35,17 +33,15 @@ func listSightings(x *Context) *cobra.Command {
 			r, e := x.Client.ListSightingsWithResponse(context.Background(), p)
 
 			if e != nil {
-				errors.Printf("error: %v\n", e)
-				os.Exit(1)
+				x.Terminal.Exitf("error: %v\n", e)
 			}
 
 			if r.JSON200 == nil {
-				errors.Printf(
+				x.Terminal.Exitf(
 					"unexpected status: %s\n%s\n",
 					r.HTTPResponse.Status,
 					string(r.Body),
 				)
-				os.Exit(1)
 			}
 
 			for _, v := range *r.JSON200 {

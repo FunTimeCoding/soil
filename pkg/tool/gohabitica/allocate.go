@@ -1,12 +1,15 @@
 package gohabitica
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/client"
 	"github.com/spf13/cobra"
 )
 
-func allocate(c *client.Client) *cobra.Command {
+func allocate(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "allocate <stat>",
 		Short: "Allocate a stat point: str, con, int, per",
@@ -15,7 +18,7 @@ func allocate(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(c.AllocateStat(arguments[0]))
+			t.Emit(c.AllocateStat(arguments[0]))
 		},
 	}
 }

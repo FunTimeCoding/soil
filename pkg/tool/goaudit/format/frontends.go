@@ -3,10 +3,10 @@ package format
 import (
 	"github.com/funtimecoding/soil/pkg/console/table"
 	"github.com/funtimecoding/soil/pkg/integers"
-	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/matrix"
 )
 
-func Frontends(frontends []*scan.Frontend) string {
+func Frontends(frontends []*matrix.Frontend) string {
 	t := table.New(
 		"FRONTEND",
 		"REPO",

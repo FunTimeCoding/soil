@@ -6,10 +6,11 @@ import (
 	"time"
 )
 
-func (c *Client) Series(series string) string {
+func (c *Client) Series(series string) (string, error) {
 	now := time.Now()
 	oneWeekAgo := now.AddDate(0, 0, -7)
-	result := c.Get(
+
+	return c.Text(
 		c.base.Copy().Path(constant.LokiSeries).SetInteger64(
 			web.ParameterStart,
 			oneWeekAgo.Unix(),
@@ -18,6 +19,4 @@ func (c *Client) Series(series string) string {
 			now.Unix(),
 		).Set("match[]", series).String(),
 	)
-
-	return result
 }

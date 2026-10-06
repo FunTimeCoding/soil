@@ -15,15 +15,11 @@ import (
 	"strings"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	r := reporter.New(constant.Identity.Name(), version).Start()
+func Main() {
+	r := reporter.New(constant.Identity.Name()).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
 	pattern := filepath.Join(library.CurrentDirectory, "*.go")
 	files := slice.StripSuffix(system.Glob(pattern), library.TestSuffix)
 

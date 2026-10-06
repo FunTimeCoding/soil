@@ -9,7 +9,7 @@ import (
 func printFrameTrees(c *chromium.Client) {
 	console.Line("=== Page.getFrameTree per page tab ===")
 
-	for _, t := range c.Tabs() {
+	for _, t := range c.MustTabs() {
 		if t.Type != constant.PageTabType {
 			continue
 		}

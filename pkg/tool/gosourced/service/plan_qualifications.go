@@ -1,24 +1,27 @@
 package service
 
-import "go/token"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/relocation"
+	"go/token"
+)
 
 func planQualifications(
 	fileSet *token.FileSet,
-	references []qualifiedReference,
+	references []relocation.QualifiedReference,
 	sourcePackagePath string,
 	targetPackagePath string,
 	targetPackageName string,
-) (map[string]*fileQualification, string) {
-	result := make(map[string]*fileQualification)
+) (map[string]*relocation.FileQualification, string) {
+	result := make(map[string]*relocation.FileQualification)
 
 	for _, f := range references {
-		position := fileSet.Position(f.reference.Ident.Pos())
+		position := fileSet.Position(f.Reference.Ident.Pos())
 		q, exists := result[position.Filename]
 
 		if !exists {
 			file := findSyntaxFile(
 				fileSet,
-				f.reference.Package,
+				f.Reference.Package,
 				position.Filename,
 			)
 
@@ -26,29 +29,29 @@ func planQualifications(
 				continue
 			}
 
-			q = newFileQualification(
+			q = relocation.NewFileQualification(
 				file,
-				f.reference.Package,
+				f.Reference.Package,
 				sourcePackagePath,
 			)
 			result[position.Filename] = q
 		}
 
-		q.idents[f.reference.Ident] = f.newName
-		q.positions = append(
-			q.positions,
-			qualifiedPosition{
-				position: position,
-				oldName:  f.reference.Ident.Name,
-				newName:  f.newName,
+		q.Idents[f.Reference.Ident] = f.NewName
+		q.Positions = append(
+			q.Positions,
+			relocation.QualifiedPosition{
+				Position: position,
+				OldName:  f.Reference.Ident.Name,
+				NewName:  f.NewName,
 			},
 		)
 	}
 
 	for filename, q := range result {
-		q.name = chooseImportName(q.file, targetPackagePath, targetPackageName)
+		q.Name = chooseImportName(q.File, targetPackagePath, targetPackageName)
 
-		if q.name == nil {
+		if q.Name == nil {
 			return nil, filename
 		}
 	}

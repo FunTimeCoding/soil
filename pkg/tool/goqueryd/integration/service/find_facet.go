@@ -1,11 +1,11 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
+import "github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
 
 func findFacet(
-	facets []store.Facet,
+	facets []search.Facet,
 	key string,
-) *store.Facet {
+) *search.Facet {
 	for _, f := range facets {
 		if f.Key == key {
 			return &f

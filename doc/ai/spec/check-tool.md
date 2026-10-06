@@ -7,7 +7,7 @@ systems.
 
 ```
 cmd/go<tool>/
-└── main.go                         # Linker vars, delegates to Main()
+└── main.go                         # delegates to Main()
 
 pkg/tool/go<tool>/
 ├── main.go                         # Main(): register arguments, parse, build option, call Check
@@ -33,7 +33,7 @@ pkg/argument/
 
 ## Entry Point
 
-See `entrypoint.md` for linker variables, `Main()`, and sentry setup.
+See `entrypoint.md` for `main`, `Main()`, and sentry setup.
 
 After the standard entrypoint setup, `Main()` registers check-specific flags
 (copyable, notation, all) on the argument instance, builds the option struct,

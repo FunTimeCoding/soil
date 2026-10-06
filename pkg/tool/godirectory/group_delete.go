@@ -5,11 +5,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/generated/client"
 	"github.com/spf13/cobra"
 )
 
-func groupDelete(c *client.ClientWithResponses) *cobra.Command {
+func groupDelete(
+	c *client.ClientWithResponses,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "delete <name>",
 		Short: "Remove a directory group",
@@ -23,6 +27,11 @@ func groupDelete(c *client.ClientWithResponses) *cobra.Command {
 				a[0],
 			)
 			errors.PanicOnError(e)
+
+			if result.JSON200 == nil {
+				t.Reject(result.Status(), result.Body)
+			}
+
 			console.Line(notation.MarshalIndent(result.JSON200))
 		},
 	}

@@ -1,22 +1,13 @@
 package stamp
 
-import (
-	"github.com/funtimecoding/soil/pkg/stamp/constant"
-	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
-)
+import "runtime/debug"
 
-func New(
-	version string,
-	gitHash string,
-	date string,
-) *Stamp {
-	b := fromBuildInformation()
+func New() *Stamp {
+	i, okay := debug.ReadBuildInfo()
 
-	return &Stamp{
-		Version:   firstSet(version, b.Version, constant.DefaultVersion),
-		GitHash:   firstSet(gitHash, b.GitHash, constant.DefaultGitHash),
-		BuildDate: firstSet(date, b.BuildDate, constant.DefaultDate),
-		Module:    firstSet(constant.Module, b.Module),
-		Dirty:     constant.Dirty == stringsConstant.BooleanTrue || b.Dirty,
+	if !okay {
+		return Read(nil)
 	}
+
+	return Read(i)
 }

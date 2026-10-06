@@ -91,7 +91,7 @@ func Run(
 		webConstant.SignInPath,
 		join.Empty(o.Issuer, webConstant.CallbackPath),
 		client.DeriveKey(o.Secret),
-	)
+	).WithReporter(r)
 	v := server.New(s)
 	administration := web.New(s, authorization, o.SuperUserMail)
 	go runCleanupLoop(s)
@@ -108,7 +108,6 @@ func Run(
 						s,
 						r,
 						i.Recorder(),
-						o.Version,
 						guard.New(m, o.ServiceTokens),
 					)
 				},

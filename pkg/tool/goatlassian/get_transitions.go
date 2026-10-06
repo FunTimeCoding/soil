@@ -1,12 +1,15 @@
 package goatlassian
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
 )
 
-func getTransitions(c *client.Client) *cobra.Command {
+func getTransitions(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "get-transitions [key]",
 		Short: "List available transitions for a Jira issue",
@@ -15,7 +18,7 @@ func getTransitions(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(c.GetTransitions(arguments[0]))
+			t.Emit(c.GetTransitions(arguments[0]))
 		},
 	}
 }

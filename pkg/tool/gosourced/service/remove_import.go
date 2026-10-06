@@ -1,14 +1,8 @@
 package service
 
 import (
-	"fmt"
-	"github.com/dave/dst/decorator"
-	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/decoration"
-	"go/parser"
-	"go/token"
-	"path/filepath"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
 )
 
 func (s *Service) RemoveImport(
@@ -17,51 +11,12 @@ func (s *Service) RemoveImport(
 	importPath string,
 	dryRun bool,
 ) (*output.Results, error) {
-	r := output.NewResultsWithDirectory(directory)
-	fullPath := filePath
-
-	if !filepath.IsAbs(fullPath) {
-		fullPath = filepath.Join(directory, filePath)
-	}
-
-	fileSet := token.NewFileSet()
-	file, e := decorator.ParseFile(fileSet, fullPath, nil, parser.ParseComments)
-
-	if e != nil {
-		return nil, e
-	}
-
-	if !decoration.RemoveImport(file, importPath) {
-		r.AddConcern(
-			concern.NewFile(
-				"validation",
-				fmt.Sprintf("import %s not found in %s", importPath, filePath),
-				filePath,
-				false,
-			),
-		)
-
-		return r, nil
-	}
-
-	e = decoration.WriteFile(file, fullPath, dryRun)
-
-	if e != nil {
-		return nil, e
-	}
-
-	r.AddConcern(
-		concern.NewFile(
-			"import",
-			fmt.Sprintf("removed %s", importPath),
-			filePath,
-			true,
-		),
+	return s.transact(
+		directory,
+		nil,
+		dryRun,
+		func(d string, out *sink.Sink) (*output.Results, error) {
+			return removeImportThrough(d, filePath, importPath, out)
+		},
 	)
-
-	if dryRun {
-		r.MarkPlanned()
-	}
-
-	return r, nil
 }

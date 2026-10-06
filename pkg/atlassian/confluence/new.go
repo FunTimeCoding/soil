@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/basic"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
 func New(
@@ -21,7 +22,7 @@ func New(
 		f(result)
 	}
 
-	result.basic = basic.New(result.host, user, token, result.verbose)
+	result.basic = basic.New(locator.New(result.host), user, token)
 
 	return result
 }

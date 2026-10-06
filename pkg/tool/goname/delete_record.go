@@ -3,10 +3,14 @@ package goname
 import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/hetzner"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/spf13/cobra"
 )
 
-func deleteRecord(c *hetzner.Client) *cobra.Command {
+func deleteRecord(
+	c *hetzner.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "delete-record [zone] [name] [type]",
 		Short: "Delete a record",
@@ -15,7 +19,7 @@ func deleteRecord(c *hetzner.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			z := zoneByName(c, arguments[0])
+			z := zoneByName(c, arguments[0], t)
 			c.DeleteRecord(z, arguments[1], arguments[2])
 			console.Format(
 				"deleted %s %s.%s\n",

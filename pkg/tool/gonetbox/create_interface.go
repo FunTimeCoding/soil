@@ -1,13 +1,16 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
 
-func createInterface(c *client.Client) *cobra.Command {
+func createInterface(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var interfaceType string
 	var physicalAddress string
 	result := &cobra.Command{
@@ -18,7 +21,7 @@ func createInterface(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(
+			t.Emit(
 				c.CreateInterface(
 					arguments[0],
 					arguments[1],

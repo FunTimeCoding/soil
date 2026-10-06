@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/decoration"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
 	"sort"
 )
 
@@ -10,7 +11,7 @@ func restoreDecorations(
 	decorations *decoration.Set,
 	names *resolve.Names,
 	skip map[string]bool,
-	dryRun bool,
+	out *sink.Sink,
 ) error {
 	var filenames []string
 
@@ -30,7 +31,7 @@ func restoreDecorations(
 			decorations.Aliases[file],
 			file,
 			filename,
-			dryRun,
+			out,
 		)
 
 		if e != nil {

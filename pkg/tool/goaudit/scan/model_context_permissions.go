@@ -8,6 +8,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/audit_configuration"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/claude_settings"
 	"os"
 	"path/filepath"
 	"sort"
@@ -16,7 +18,7 @@ import (
 
 func ModelContextPermissions(
 	base string,
-	configuration *Configuration,
+	configuration *audit_configuration.Configuration,
 ) []*concern.Concern {
 	if len(configuration.ModelContext) == 0 {
 		return nil
@@ -28,7 +30,7 @@ func ModelContextPermissions(
 		return nil
 	}
 
-	var s Settings
+	var s claude_settings.Settings
 
 	if e := notation.DecodeBytes(b, &s); e != nil {
 		return nil

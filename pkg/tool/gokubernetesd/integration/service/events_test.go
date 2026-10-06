@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/integration/service_tester"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/query"
 	"testing"
 )
 
@@ -14,7 +14,7 @@ func TestEvents(t *testing.T) {
 	result, e := s.Service.Events(
 		context.Background(),
 		"test",
-		service.EventsQuery{Namespace: "default", Limit: 50},
+		query.Events{Namespace: "default", Limit: 50},
 	)
 	assert.Nil(t, e)
 	assert.Count(t, 1, result)
@@ -43,7 +43,7 @@ func TestEventsMutedFiltered(t *testing.T) {
 	result, e := s.Service.Events(
 		context.Background(),
 		"test",
-		service.EventsQuery{Namespace: "kube-system", Limit: 50},
+		query.Events{Namespace: "kube-system", Limit: 50},
 	)
 	assert.Nil(t, e)
 	assert.Count(t, 1, result)
@@ -72,7 +72,7 @@ func TestEventsMutedIncluded(t *testing.T) {
 	result, e := s.Service.Events(
 		context.Background(),
 		"test",
-		service.EventsQuery{
+		query.Events{
 			Namespace:    "kube-system",
 			Limit:        50,
 			IncludeMuted: true,

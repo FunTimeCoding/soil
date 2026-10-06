@@ -11,8 +11,7 @@ func Mount(
 	c firefox.FirefoxSource,
 	r face.Reporter,
 	t face.Recorder,
-	version string,
 	g *guard.Mux,
 ) {
-	model_context.New(c, r, t, version).Mount(g)
+	model_context.New(c, r, t).Mount(g)
 }

@@ -808,22 +808,6 @@ func TestPointersBareLinkExisting(t *testing.T) {
 	assertReport(t, "doc/guide/index.md", false, nil, "", l)
 }
 
-func TestPointersBareLinkAnchorIgnored(t *testing.T) {
-	l := pointer_tester.Checker()(
-		"doc/guide/index.md",
-		strings.NewReader("Jump to [section](#section) below.\n"),
-	)
-	assertReport(t, "doc/guide/index.md", false, nil, "", l)
-}
-
-func TestPointersBareLinkAnchorSuffix(t *testing.T) {
-	l := pointer_tester.Checker("doc/guide/other.md")(
-		"doc/guide/index.md",
-		strings.NewReader("See [other](other.md#part) there.\n"),
-	)
-	assertReport(t, "doc/guide/index.md", false, nil, "", l)
-}
-
 func TestPointersHostDeclared(t *testing.T) {
 	l := pointer_tester.Checker()(
 		constant.UpperAlfa,

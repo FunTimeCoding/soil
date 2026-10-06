@@ -17,7 +17,7 @@ func Tabs() {
 	c := chromium.NewEnvironment()
 	defer c.Close()
 
-	for _, t := range c.Tabs() {
+	for _, t := range c.MustTabs() {
 		if t.Type != constant.PageTabType {
 			continue
 		}

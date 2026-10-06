@@ -1,13 +1,21 @@
 package store
 
+import (
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/record"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
+)
+
 func (s *Store) EnrichResults(
-	results []SearchResult,
+	results []search.Result,
 	metadata map[string]string,
-) []SearchResult {
-	var keys []documentKey
+) []search.Result {
+	var keys []record.DocumentKey
 
 	for _, r := range results {
-		keys = append(keys, documentKey{r.Collection, r.Path})
+		keys = append(
+			keys,
+			record.DocumentKey{Collection: r.Collection, Path: r.Path},
+		)
 	}
 
 	identifierMap := s.documentIdentifiers(keys)
@@ -18,7 +26,7 @@ func (s *Store) EnrichResults(
 	}
 
 	s.enrichMetadata(results, identifiers)
-	var enriched []SearchResult
+	var enriched []search.Result
 
 	for _, r := range results {
 		if !matchesMetadata(r.Metadata, r.SourceType, metadata) {

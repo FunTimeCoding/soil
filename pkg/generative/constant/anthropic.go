@@ -28,6 +28,7 @@ const (
 	ClaudeDirectory              = ".claude"
 	ClaudeCredentialFile         = ".credentials.json"
 	AnthropicCredentialService   = "Claude Code-credentials"
+	AnthropicServiceHost         = "api.anthropic.com"
 	AnthropicUtilizationLink     = "https://api.anthropic.com/api/oauth/usage"
 	AnthropicUtilizationBeta     = "oauth-2025-04-20"
 	AnthropicBetaHeader          = "anthropic-beta"

@@ -11,14 +11,16 @@ func New(
 	untrusted bool,
 	token string,
 ) *Client {
-	options := []client.ClientOption{
-		client.WithRequestEditorFn(web.BearerEditor(token)),
-	}
+	c := web.Client()
 
 	if untrusted {
-		options = append(options, client.WithHTTPClient(web.InsecureClient()))
+		c = web.InsecureClient()
 	}
 
+	options := []client.ClientOption{
+		client.WithHTTPClient(c),
+		client.WithRequestEditorFn(web.BearerEditor(token)),
+	}
 	generated, e := client.NewClientWithResponses(base, options...)
 	errors.PanicOnError(e)
 

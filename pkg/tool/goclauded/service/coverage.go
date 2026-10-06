@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/audit_configuration"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/coverage"
 	"path/filepath"
 	"time"
@@ -19,7 +20,7 @@ func (s *Service) Coverage() []*coverage.Server {
 		configurationPaths = append(configurationPaths, filepath.Join(root, p))
 	}
 
-	configuration := scan.LoadConfiguration(
+	configuration := audit_configuration.Load(
 		system.FirstFile(configurationPaths...),
 	)
 	registered := map[string][]string{}

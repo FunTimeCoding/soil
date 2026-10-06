@@ -5,18 +5,19 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/workspace"
 	"go/ast"
 	"go/parser"
 	"go/token"
-	"os"
 )
 
 func fixFileReferences(
 	path string,
 	renames []exportedRename,
 	r *output.Results,
+	w *workspace.Workspace,
 ) {
-	content, e := os.ReadFile(path)
+	content, e := w.Read(path)
 
 	if e != nil {
 		return
@@ -79,6 +80,6 @@ func fixFileReferences(
 	)
 
 	if offset != 0 {
-		errors.PanicOnError(os.WriteFile(path, modified, 0644))
+		errors.PanicOnError(w.Write(path, modified))
 	}
 }

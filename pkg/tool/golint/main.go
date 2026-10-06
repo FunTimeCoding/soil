@@ -12,12 +12,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/golint/constant"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	r := reporter.New(constant.Identity.Name(), version).Start()
+func Main() {
+	r := reporter.New(constant.Identity.Name()).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Boolean(argumentConstant.Fix, false, "Fix concerns that can be fixed")
@@ -43,7 +39,7 @@ func Main(
 		"Repository vocabulary configuration path (private registries)",
 	)
 	a.Boolean(argumentConstant.Verbose, false, "Verbose output")
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
 	root, work := lint.Root(a.GetString(argumentConstant.Root))
 	scopes, e := lint.Scopes(root, work, a.Positionals())
 

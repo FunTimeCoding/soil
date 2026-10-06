@@ -3,11 +3,12 @@ package service
 import (
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/module_symbol"
 )
 
 func addModuleSymbol(
-	seen map[string]*ModuleSymbol,
-	symbol *ModuleSymbol,
+	seen map[string]*module_symbol.Symbol,
+	symbol *module_symbol.Symbol,
 ) {
 	key := join.Empty(
 		symbol.PackagePath,

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/result"
 	"go/types"
 	"sort"
@@ -16,7 +17,7 @@ func (s *Service) ListCalls(
 	limit int,
 ) (*output.Results, *result.Inventory, error) {
 	r := output.NewResultsWithDirectory(directory)
-	all, _, e := loadPackages(directory, "./...")
+	all, e := s.regionPackages(directory, region)
 
 	if e != nil {
 		return nil, nil, e
@@ -50,7 +51,7 @@ func (s *Service) ListCalls(
 	if !found {
 		r.AddConcern(
 			concern.NewFile(
-				"validation",
+				constant.ConcernValidation,
 				fmt.Sprintf("no packages under region: %s", region),
 				"",
 				false,

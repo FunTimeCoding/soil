@@ -26,6 +26,11 @@ func searchTag(c *command_context.Context) *cobra.Command {
 				&client.SearchParams{Query: arguments[0], Type: &entityType},
 			)
 			errors.PanicOnError(e)
+
+			if r.JSON200 == nil {
+				c.Terminal().Reject(r.Status(), r.Body)
+			}
+
 			f := constant.Format
 
 			if r.JSON200.Tags != nil {

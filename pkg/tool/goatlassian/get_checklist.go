@@ -1,12 +1,15 @@
 package goatlassian
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
 )
 
-func getChecklist(c *client.Client) *cobra.Command {
+func getChecklist(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "get-checklist [key]",
 		Short: "Read an issue's checklist",
@@ -15,7 +18,7 @@ func getChecklist(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(c.GetChecklist(arguments[0]))
+			t.Emit(c.GetChecklist(arguments[0]))
 		},
 	}
 }

@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/basic/response"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/search_result"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
-	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
@@ -17,18 +16,16 @@ func (c *Client) Search(
 		query = fmt.Sprintf(query, a...)
 	}
 
-	body, e := c.basic.Get(
+	var result *response.Search
+
+	if e := c.basic.Get(
 		locator.New(c.host).Base(constant.ConfluenceOldBase).Path(
 			constant.ConfluenceSearch,
 		).Set(constant.ConfluenceQuery, query).String(),
-	)
-
-	if e != nil {
+		&result,
+	); e != nil {
 		return nil, e
 	}
-
-	var result *response.Search
-	notation.MustDecode(body, &result, false)
 
 	return search_result.NewSlice(result.Results), nil
 }

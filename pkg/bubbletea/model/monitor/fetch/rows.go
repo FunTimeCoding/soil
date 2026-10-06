@@ -12,7 +12,7 @@ func (m *Message) Rows() []table.Row {
 		result = append(
 			result,
 			table.Row{
-				i.Identifier,
+				i.Label,
 				fmt.Sprintf("%.1f", i.Score),
 				string(i.Severity),
 				i.Detail,

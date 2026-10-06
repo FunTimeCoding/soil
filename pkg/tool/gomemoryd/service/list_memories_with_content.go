@@ -1,18 +1,18 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 
 func (s *Service) ListMemoriesWithContent(
 	tag string,
 	scope string,
-) ([]store.Memory, error) {
+) ([]record.Memory, error) {
 	summaries, e := s.store.ListMemories("", tag, scope, true)
 
 	if e != nil {
 		return nil, e
 	}
 
-	var result []store.Memory
+	var result []record.Memory
 
 	for _, sum := range summaries {
 		m, e := s.store.GetMemory(sum.Identifier)

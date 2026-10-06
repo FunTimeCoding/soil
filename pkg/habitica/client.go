@@ -1,10 +1,7 @@
 package habitica
 
-import "net/http"
+import "github.com/funtimecoding/soil/pkg/habitica/basic"
 
 type Client struct {
-	base           string
-	userIdentifier string
-	token          string
-	client         *http.Client
+	basic *basic.Client
 }

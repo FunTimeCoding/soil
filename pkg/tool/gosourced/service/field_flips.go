@@ -3,23 +3,24 @@ package service
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/relocation"
 	"go/types"
 	"golang.org/x/tools/go/packages"
 )
 
 func fieldFlips(
 	all []*packages.Package,
-	entries []*moveEntry,
+	entries []*relocation.Entry,
 	typeObject types.Object,
 	memberNames map[string]bool,
-) ([]*fieldFlip, string) {
+) ([]*relocation.FieldFlip, string) {
 	structure, okay := typeObject.Type().(*types.Named).Underlying().(*types.Struct)
 
 	if !okay {
 		return nil, ""
 	}
 
-	var result []*fieldFlip
+	var result []*relocation.FieldFlip
 
 	for i := range structure.NumFields() {
 		field := structure.Field(i)
@@ -62,12 +63,7 @@ func fieldFlips(
 
 		result = append(
 			result,
-			&fieldFlip{
-				object:     field,
-				newName:    newName,
-				references: references,
-			},
-		)
+			relocation.NewFieldFlip(field, newName, references))
 	}
 
 	return result, ""

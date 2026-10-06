@@ -3,16 +3,17 @@ package service
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/relocation"
 	"go/types"
 )
 
-func checkMethodSet(entries []*moveEntry) string {
+func checkMethodSet(entries []*relocation.Entry) string {
 	for _, entry := range entries {
-		if _, okay := entry.object.(*types.TypeName); !okay {
+		if _, okay := entry.Object.(*types.TypeName); !okay {
 			continue
 		}
 
-		named, okay := entry.object.Type().(*types.Named)
+		named, okay := entry.Object.Type().(*types.Named)
 
 		if !okay || named.NumMethods() == 0 {
 			continue
@@ -20,7 +21,7 @@ func checkMethodSet(entries []*moveEntry) string {
 
 		return fmt.Sprintf(
 			"%s has methods - use %s to move a type with its method set",
-			entry.symbol,
+			entry.Symbol,
 			constant.ExtractType,
 		)
 	}

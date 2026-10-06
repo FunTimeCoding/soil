@@ -10,6 +10,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/memory_indexer_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service/format"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/token_summary"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/web"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face/search_option"
@@ -144,7 +145,7 @@ func TestIndexEntry(t *testing.T) {
 		t,
 		"12 cache warms on boot [build deploy] - the first request pays nothing",
 		format.IndexEntry(
-			&store.MemorySummary{
+			&record.MemorySummary{
 				Identifier:  12,
 				Name:        "cache warms on boot",
 				Description: "the first request pays nothing",
@@ -159,7 +160,7 @@ func TestIndexEntryWithoutTags(t *testing.T) {
 		t,
 		"34 retry with backoff - double the wait after every failure",
 		format.IndexEntry(
-			&store.MemorySummary{
+			&record.MemorySummary{
 				Identifier:  34,
 				Name:        "retry with backoff",
 				Description: "double the wait after every failure",
@@ -173,7 +174,7 @@ func TestIndexEntryWithChildren(t *testing.T) {
 		t,
 		"56 timeouts cascade [build] - one slow upstream stalls the pool\n    + pool exhaustion, upstream budget",
 		format.IndexEntry(
-			&store.MemorySummary{
+			&record.MemorySummary{
 				Identifier:  56,
 				Name:        "timeouts cascade",
 				Description: "one slow upstream stalls the pool",
@@ -189,7 +190,7 @@ func TestIndexEntryOmitsTimestamp(t *testing.T) {
 		t,
 		"2026",
 		format.IndexEntry(
-			&store.MemorySummary{
+			&record.MemorySummary{
 				Identifier:  78,
 				Name:        "index rebuild is idempotent",
 				Description: "running it twice changes nothing",
@@ -204,7 +205,7 @@ func TestAlwaysMemory(t *testing.T) {
 		t,
 		"## cache warms on boot (12) [always]\nThe first request pays nothing.\n",
 		format.AlwaysMemory(
-			&store.Memory{
+			&record.Memory{
 				Identifier: 12,
 				Name:       "cache warms on boot",
 				Content:    "The first request pays nothing.",
@@ -219,7 +220,7 @@ func TestAlwaysMemoryListsChildren(t *testing.T) {
 		t,
 		"## timeouts cascade (56) [always]\nOne slow upstream stalls the pool.\n    + pool exhaustion, upstream budget\n",
 		format.AlwaysMemory(
-			&store.Memory{
+			&record.Memory{
 				Identifier: 56,
 				Name:       "timeouts cascade",
 				Content:    "One slow upstream stalls the pool.",
@@ -235,11 +236,61 @@ func TestAlwaysMemoryOmitsDescription(t *testing.T) {
 		t,
 		"retrieval hook",
 		format.AlwaysMemory(
-			&store.Memory{
+			&record.Memory{
 				Identifier:  12,
 				Name:        "cache warms on boot",
 				Content:     "The first request pays nothing.",
 				Description: "a retrieval hook, not the body",
+			},
+		),
+	)
+}
+
+func TestAlwaysMemoryPrintsItsBase(t *testing.T) {
+	assert.String(
+		t,
+		"## error capture (12)\nBase: `../soil/doc/ai/spec/error-handling`\n- `mcp.md` - the tiers\n",
+		format.AlwaysMemory(
+			&record.Memory{
+				Identifier: 12,
+				Name:       "error capture",
+				Content:    "- `mcp.md` - the tiers",
+				Metadata: map[string]string{
+					"base": "../soil/doc/ai/spec/error-handling",
+				},
+			},
+		),
+	)
+}
+
+func TestAlwaysMemoryPrintsEveryBase(t *testing.T) {
+	assert.StringContains(
+		t,
+		"Base: `doc/ai/spec`, `../soil/doc/ai/spec`\n",
+		format.AlwaysMemory(
+			&record.Memory{
+				Identifier: 12,
+				Name:       "specs",
+				Content:    "Read `naming.md`.",
+				Metadata: map[string]string{
+					"base": "doc/ai/spec, ../soil/doc/ai/spec",
+				},
+			},
+		),
+	)
+}
+
+func TestRelevantMemoryPrintsItsBase(t *testing.T) {
+	assert.StringContains(
+		t,
+		"\nBase: `doc/ai/runbook`\nSee `fleet.md`.\n",
+		format.RelevantMemory(
+			&record.SearchResult{
+				Identifier: 7,
+				Name:       "deploy",
+				Content:    "See `fleet.md`.",
+				Rank:       1,
+				Metadata:   map[string]string{"base": "doc/ai/runbook"},
 			},
 		),
 	)

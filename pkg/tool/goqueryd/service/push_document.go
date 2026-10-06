@@ -27,7 +27,7 @@ func (s *Service) PushDocument(
 	title := store.ExtractTitle(body, path)
 	s.store.InsertContent(hash, body, now)
 	s.store.InsertDocument(collection, path, title, hash, now)
-	chunks := chunk.Document(body, path)
+	chunks := chunk.Document(body, path, s.reranker)
 	texts := make([]string, len(chunks))
 
 	for i, c := range chunks {

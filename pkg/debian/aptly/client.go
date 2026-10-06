@@ -1,10 +1,7 @@
 package aptly
 
-import "net/http"
+import "github.com/funtimecoding/soil/pkg/web/requester"
 
 type Client struct {
-	Base     string
-	Username string
-	Password string
-	client   *http.Client
+	requester *requester.Requester
 }

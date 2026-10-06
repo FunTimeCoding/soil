@@ -131,6 +131,65 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/oversize:
+    get:
+      operationId: getOversize
+      parameters:
+      - name: collection
+        in: query
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Chunks whose token count exceeds the reranker allowance, grouped by file.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/OversizeReport"
+        "500":
+          description: Failed to measure chunks.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/chunk:
+    post:
+      operationId: postChunk
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [path, body]
+              properties:
+                path:
+                  type: string
+                body:
+                  type: string
+      responses:
+        "200":
+          description: How the body would be chunked, with token counts.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChunkPreview"
+  /api/rechunk:
+    post:
+      operationId: postRechunk
+      responses:
+        "200":
+          description: Documents whose embeddings were deleted because their chunking changed.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RechunkResult"
+        "500":
+          description: Failed to compare or delete embeddings.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /api/index:
     post:
       operationId: postIndex
@@ -574,6 +633,128 @@ components:
           type: integer
         pending_embeddings:
           type: integer
+    OversizeReport:
+      type: object
+      required: [model, window, allowance, files]
+      properties:
+        model:
+          type: string
+        window:
+          type: integer
+        allowance:
+          type: integer
+        files:
+          type: array
+          items:
+            $ref: "#/components/schemas/OversizeFile"
+    OversizeFile:
+      type: object
+      required: [collection, path, worst, chunks]
+      properties:
+        collection:
+          type: string
+        path:
+          type: string
+        worst:
+          type: integer
+        chunks:
+          type: array
+          items:
+            $ref: "#/components/schemas/OversizeChunk"
+    OversizeChunk:
+      type: object
+      required: [index, first_line, last_line, bytes, tokens]
+      properties:
+        index:
+          type: integer
+        first_line:
+          type: integer
+        last_line:
+          type: integer
+        bytes:
+          type: integer
+        tokens:
+          type: integer
+    ChunkPreview:
+      type: object
+      required: [model, window, allowance, chunks, sections]
+      properties:
+        model:
+          type: string
+        window:
+          type: integer
+        allowance:
+          type: integer
+        chunks:
+          type: array
+          items:
+            $ref: "#/components/schemas/PreviewChunk"
+        sections:
+          type: array
+          items:
+            $ref: "#/components/schemas/PreviewSection"
+    PreviewChunk:
+      type: object
+      required: [index, first_line, last_line, bytes, tokens, piece, cut_checked, cut_level, cut_lines]
+      properties:
+        index:
+          type: integer
+        first_line:
+          type: integer
+        last_line:
+          type: integer
+        bytes:
+          type: integer
+        tokens:
+          type: integer
+        piece:
+          type: boolean
+        cut_checked:
+          type: boolean
+        cut_level:
+          type: integer
+        cut_lines:
+          type: array
+          items:
+            type: integer
+    PreviewSection:
+      type: object
+      required: [level, title, first_line, last_line, tokens, blocks]
+      properties:
+        level:
+          type: integer
+        title:
+          type: string
+        first_line:
+          type: integer
+        last_line:
+          type: integer
+        tokens:
+          type: integer
+        blocks:
+          type: array
+          items:
+            $ref: "#/components/schemas/PreviewBlock"
+    PreviewBlock:
+      type: object
+      required: [kind, first_line, last_line, tokens]
+      properties:
+        kind:
+          type: string
+        first_line:
+          type: integer
+        last_line:
+          type: integer
+        tokens:
+          type: integer
+    RechunkResult:
+      type: object
+      required: [documents]
+      properties:
+        documents:
+          type: array
+          items:
+            type: string
     CollectionStatus:
       type: object
       required: [name, path, pattern, document_count]

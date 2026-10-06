@@ -1,15 +1,14 @@
 package guard
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/constant"
 	"github.com/spf13/cobra"
-	"os"
 	"runtime"
 )
 
-func New() *cobra.Command {
+func New(t *terminal.Terminal) *cobra.Command {
 	result := &cobra.Command{
 		Use:   "guard",
 		Short: "Check a tool call for command mistakes (PreToolUse hook)",
@@ -34,8 +33,7 @@ func New() *cobra.Command {
 				return
 			}
 
-			errors.Printf("%s\n", v)
-			os.Exit(constant.GuardBlockExit)
+			t.Blockln(constant.GuardBlockExit, v)
 		},
 	}
 

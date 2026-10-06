@@ -1,12 +1,15 @@
 package goalertlog
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/client"
 	"github.com/spf13/cobra"
 )
 
-func alerts(c *client.Client) *cobra.Command {
+func alerts(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "alerts",
 		Short: "List recent alerts",
@@ -15,7 +18,7 @@ func alerts(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			console.Emit(c.Alerts())
+			t.Emit(c.Alerts())
 		},
 	}
 }

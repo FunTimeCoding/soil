@@ -1,12 +1,15 @@
 package goatlassian
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
 )
 
-func getLinkTypes(c *client.Client) *cobra.Command {
+func getLinkTypes(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "get-link-types",
 		Short: "List available issue link types",
@@ -15,7 +18,7 @@ func getLinkTypes(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			console.Emit(c.GetLinkTypes())
+			t.Emit(c.GetLinkTypes())
 		},
 	}
 }

@@ -3,13 +3,17 @@ package goagent
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goagentd/client"
 	"github.com/spf13/cobra"
 	"net/http"
 	"os"
 )
 
-func submit(newClient func() *client.Client) *cobra.Command {
+func submit(
+	newClient func() *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "submit <file>",
 		Short: "Submit an intent file to the runner",
@@ -26,11 +30,9 @@ func submit(newClient func() *client.Client) *cobra.Command {
 			case http.StatusAccepted:
 				fmt.Println("intent submitted")
 			case http.StatusConflict:
-				fmt.Println("already running")
-				os.Exit(1)
+				t.Exitln("already running")
 			default:
-				fmt.Printf("submit failed (%d)\n", code)
-				os.Exit(1)
+				t.Exitf("submit failed (%d)\n", code)
 			}
 		},
 	}

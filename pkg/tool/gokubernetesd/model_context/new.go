@@ -12,13 +12,9 @@ func New(
 	readOnly bool,
 	r face.Reporter,
 	t face.Recorder,
-	version string,
 ) *Server {
 	result := &Server{
-		server: server.New(
-			constant.Identity,
-			version,
-		).WithResources().WithRecorder(
+		server: server.New(constant.Identity).WithResources().WithRecorder(
 			t,
 		).Server(),
 		service:  s,

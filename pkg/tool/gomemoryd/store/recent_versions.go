@@ -3,13 +3,14 @@ package store
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 )
 
 func (s *Store) RecentVersions(
 	since string,
 	limit int,
 	excludeTag string,
-) ([]Version, error) {
+) ([]record.Version, error) {
 	parts := []string{
 		`SELECT identifier, memory_identifier, name, content, description, changed_at, change_type, source
 		FROM memory_version WHERE changed_at > ?`,
@@ -33,10 +34,10 @@ func (s *Store) RecentVersions(
 	}
 
 	defer errors.LogClose(rows)
-	var versions []Version
+	var versions []record.Version
 
 	for rows.Next() {
-		var v Version
+		var v record.Version
 		e := rows.Scan(
 			&v.Identifier,
 			&v.MemoryIdentifier,

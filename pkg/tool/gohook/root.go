@@ -3,17 +3,14 @@ package gohook
 import (
 	"github.com/funtimecoding/soil/pkg/git"
 	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/terminal"
 )
 
-func root() string {
+func root(t *terminal.Terminal) string {
 	r := git.FindDirectory()
 
 	if r == "" {
-		system.Exitf(
-			1,
-			"no repository found above %s\n",
-			system.WorkDirectory(),
-		)
+		t.Exitf("no repository found above %s\n", system.WorkDirectory())
 	}
 
 	return r

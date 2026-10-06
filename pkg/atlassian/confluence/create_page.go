@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page/page_post"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
-	"github.com/funtimecoding/soil/pkg/notation"
 )
 
 func (c *Client) CreatePage(
@@ -14,7 +13,9 @@ func (c *Client) CreatePage(
 	title string,
 	markdown string,
 ) (*page.Page, error) {
-	body, e := c.basic.PostV2Path(
+	var result *response.Page
+
+	if e := c.basic.PostV2Path(
 		constant.ConfluencePage,
 		page_post.New(
 			spaceIdentifier,
@@ -22,14 +23,10 @@ func (c *Client) CreatePage(
 			title,
 			page.ToStorage(markdown),
 		).Encode(),
-	)
-
-	if e != nil {
+		&result,
+	); e != nil {
 		return nil, e
 	}
-
-	var result *response.Page
-	notation.MustDecode(body, &result, false)
 
 	return page.New(result, c.host), nil
 }

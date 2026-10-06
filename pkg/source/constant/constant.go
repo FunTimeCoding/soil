@@ -41,3 +41,18 @@ var KnownTags = map[string]bool{
 	"ignore":    true,
 	"race":      true,
 }
+
+const (
+	IndexFormatVersion = "2"
+
+	StorageName    = "gosourced"
+	IndexDirectory = "index"
+
+	IndexPackageKind    = "package"
+	IndexImportsKind    = "imports"
+	IndexFactsKind      = "facts"
+	IndexExternalKind   = "external"
+	IndexReferencesKind = "references"
+
+	IndexBulkThreshold = 50
+)

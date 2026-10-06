@@ -6,17 +6,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/console"
 	libraryErrors "github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/stamp"
 	"github.com/funtimecoding/soil/pkg/stamp/report"
 	"github.com/spf13/pflag"
 	"os"
 )
 
-func (i *Instance) Parse(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	i.identity.WithStamp(version, gitHash, buildDate)
+func (i *Instance) Parse() {
 	i.flags.Bool(constant.Version, false, "Show version information and exit")
 
 	if i.flags.Lookup(constant.Notation) == nil {
@@ -36,14 +32,12 @@ func (i *Instance) Parse(
 		return
 	}
 
+	s := stamp.New()
+
 	if n, g := i.flags.GetBool(constant.Notation); g == nil && n {
-		console.Line(
-			notation.MarshalIndent(
-				report.New(i.identity.Name(), i.identity.Stamp()),
-			),
-		)
+		console.Line(notation.MarshalIndent(report.New(i.identity.Name(), s)))
 	} else {
-		i.identity.Stamp().Print()
+		s.Print()
 	}
 
 	os.Exit(0)

@@ -7,9 +7,15 @@ import (
 )
 
 func (s *Server) frameHint(identifier string) string {
+	tabs, e := s.client.Tabs()
+
+	if e != nil {
+		return ""
+	}
+
 	var lines []string
 
-	for _, t := range s.client.Tabs() {
+	for _, t := range tabs {
 		if t.Type != constant.IframeTabType ||
 			t.ParentIdentifier != identifier {
 			continue

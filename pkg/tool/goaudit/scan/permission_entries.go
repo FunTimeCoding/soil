@@ -2,10 +2,11 @@ package scan
 
 import (
 	"github.com/funtimecoding/soil/pkg/generative/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/claude_settings"
 	"strings"
 )
 
-func permissionEntries(s *Settings) []string {
+func permissionEntries(s *claude_settings.Settings) []string {
 	if s.Permissions == nil {
 		return nil
 	}

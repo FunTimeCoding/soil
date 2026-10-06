@@ -1,7 +1,7 @@
 package basic
 
-import "fmt"
+import "github.com/funtimecoding/soil/pkg/strings/join"
 
 func (c *Client) Next(path string) string {
-	return fmt.Sprintf("https://%s%s", c.host, path)
+	return join.Empty(c.root.String(), path)
 }

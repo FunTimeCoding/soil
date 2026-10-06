@@ -17,7 +17,7 @@ func Classify(
 		return constant.PointerClassPlaceholder
 	}
 
-	if strings.Contains(s, "://") {
+	if strings.Contains(s, constant.LocatorSeparator) {
 		return constant.PointerClassLocator
 	}
 

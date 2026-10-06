@@ -3,11 +3,15 @@ package gopostgres
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/generated/client"
 	"github.com/spf13/cobra"
 )
 
-func listSchemas(c *client.Client) *cobra.Command {
+func listSchemas(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var instance string
 	result := &cobra.Command{
 		Use:   "list-schemas",
@@ -21,7 +25,7 @@ func listSchemas(c *client.Client) *cobra.Command {
 				&client.ListSchemasParams{Instance: instancePointer(instance)},
 			)
 			errors.PanicOnError(e)
-			printResponse(r)
+			printResponse(t, r)
 		},
 	}
 	result.Flags().StringVar(

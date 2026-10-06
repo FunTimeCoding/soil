@@ -1,14 +1,14 @@
 package web
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board/layout"
 	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
 
 func rowStrip(
-	v *board.Entry,
+	v *layout.Entry,
 	values []string,
 ) gomponents.Node {
 	labels := rowLabels(v)

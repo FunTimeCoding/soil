@@ -36,7 +36,7 @@ func collect(
 		}
 	}
 
-	r, _ := c.QueryRange(query, start, end, limit)
+	r, _ := c.MustQueryRange(query, start, end, limit)
 	var result []*message.Message
 
 	for _, v := range r {

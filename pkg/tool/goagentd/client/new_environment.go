@@ -17,6 +17,7 @@ func NewEnvironment() *Client {
 			constant.PortEnvironment,
 			constant.InsecureEnvironment,
 		).String(),
+		client.WithHTTPClient(web.StallClient()),
 		client.WithRequestEditorFn(
 			web.BearerEditor(environment.Required(constant.TokenEnvironment)),
 		),

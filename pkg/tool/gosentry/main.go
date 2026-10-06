@@ -9,12 +9,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosentry/constant"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	r := reporter.New(constant.Identity.Name(), version).Start()
+func Main() {
+	r := reporter.New(constant.Identity.Name()).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Boolean(
@@ -30,7 +26,7 @@ func Main(
 		"",
 		"Show details for a specific issue (e.g. GO-1B)",
 	)
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
 
 	if i := a.GetString(argumentConstant.Issue); i != "" {
 		showIssue(i)

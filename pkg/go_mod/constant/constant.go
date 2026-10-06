@@ -20,6 +20,7 @@ const (
 	Copyleft       = "copyleft"
 
 	AllPackages          = "./..."
+	RecursivePattern     = "/..."
 	DependenciesArgument = "-deps"
 	FormatArgument       = "-f"
 	ModuleTemplate       = "{{if not .Standard}}{{.Module.Main}} {{.Module.Path}} {{.Module.Version}} {{.Module.Dir}}{{end}}"

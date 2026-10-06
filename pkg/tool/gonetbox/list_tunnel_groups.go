@@ -1,12 +1,15 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
 
-func listTunnelGroups(c *client.Client) *cobra.Command {
+func listTunnelGroups(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "list-tunnel-groups",
 		Short: "List all NetBox tunnel groups",
@@ -14,7 +17,7 @@ func listTunnelGroups(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			console.Emit(c.ListTunnelGroups())
+			t.Emit(c.ListTunnelGroups())
 		},
 	}
 }

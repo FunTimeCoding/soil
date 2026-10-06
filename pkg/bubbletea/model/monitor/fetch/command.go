@@ -23,28 +23,14 @@ func Command() tea.Cmd {
 		file := fmt.Sprintf("%s-", constant.GoFile.Prefix)
 
 		for i, t := range result.Items {
-			if strings.HasPrefix(t.Identifier, alert) {
-				t.Identifier = fmt.Sprintf("%s%d", alert, i+1)
+			t.Label = t.Identifier
 
-				continue
-			}
+			for _, prefix := range []string{alert, silence, event, file} {
+				if strings.HasPrefix(t.Identifier, prefix) {
+					t.Label = fmt.Sprintf("%s%d", prefix, i+1)
 
-			if strings.HasPrefix(t.Identifier, silence) {
-				t.Identifier = fmt.Sprintf("%s%d", silence, i+1)
-
-				continue
-			}
-
-			if strings.HasPrefix(t.Identifier, event) {
-				t.Identifier = fmt.Sprintf("%s%d", event, i+1)
-
-				continue
-			}
-
-			if strings.HasPrefix(t.Identifier, file) {
-				t.Identifier = fmt.Sprintf("%s%d", file, i+1)
-
-				continue
+					break
+				}
 			}
 		}
 

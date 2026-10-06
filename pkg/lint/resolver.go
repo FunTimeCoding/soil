@@ -23,6 +23,7 @@ func resolver(
 	r.PrefixExists = p.PrefixExists
 	r.Literal = p.Literal
 	r.Routes = p.Routes
+	r.Headings = p.Headings
 
 	return r
 }

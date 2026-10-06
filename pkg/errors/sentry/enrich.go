@@ -2,9 +2,9 @@ package sentry
 
 import "github.com/getsentry/sentry-go"
 
-func enrich(
+func Enrich(
 	e *sentry.Event,
 	h *sentry.EventHint,
 ) *sentry.Event {
-	return enrichErrorContext(enrichResponseBody(e, h), h)
+	return enrichConnection(enrichErrorContext(enrichResponseBody(e, h), h), h)
 }

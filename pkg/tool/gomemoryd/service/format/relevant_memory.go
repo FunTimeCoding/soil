@@ -6,10 +6,10 @@ import (
 	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 )
 
-func RelevantMemory(r *store.SearchResult) string {
+func RelevantMemory(r *record.SearchResult) string {
 	return join.Empty(
 		constant.MemoryHeadingPrefix,
 		r.Name,
@@ -20,6 +20,7 @@ func RelevantMemory(r *store.SearchResult) string {
 		constant.RankSeparator,
 		floats.ToStringRounded(r.Rank),
 		stringConstant.Unix,
+		baseLine(r.Metadata),
 		r.Content,
 		stringConstant.Unix,
 	)

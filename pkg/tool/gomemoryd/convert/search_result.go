@@ -1,8 +1,8 @@
 package convert
 
-import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 
-func SearchResult(r *store.SearchResult) *SlimSearchResult {
+func SearchResult(r *record.SearchResult) *SlimSearchResult {
 	return &SlimSearchResult{
 		Identifier:       r.Identifier,
 		Name:             r.Name,

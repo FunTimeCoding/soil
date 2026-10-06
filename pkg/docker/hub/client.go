@@ -1,7 +1,7 @@
 package hub
 
-import "github.com/funtimecoding/soil/pkg/web/locator"
+import "github.com/funtimecoding/soil/pkg/web/requester"
 
 type Client struct {
-	base *locator.Locator
+	requester *requester.Requester
 }

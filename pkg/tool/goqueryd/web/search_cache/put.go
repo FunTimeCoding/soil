@@ -1,13 +1,13 @@
 package search_cache
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
 	"time"
 )
 
 func (c *Cache) Put(
 	key string,
-	outcome *store.SearchOutcome,
+	outcome *search.Outcome,
 ) {
 	c.mu.Lock()
 	defer c.mu.Unlock()

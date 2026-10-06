@@ -1,7 +1,6 @@
 package base
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
@@ -25,14 +24,7 @@ func New(t *testing.T) *Server {
 			_ *http.ServeMux,
 			g *guard.Mux,
 		) {
-			gotelemetryd.Mount(
-				s,
-				web.New(s),
-				r,
-				recorder,
-				constant.DefaultVersion,
-				g,
-			)
+			gotelemetryd.Mount(s, web.New(s), r, recorder, g)
 		},
 	)
 	result := &Server{Store: s, Recorder: recorder, Server: v}

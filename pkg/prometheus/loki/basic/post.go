@@ -1,27 +1,23 @@
 package basic
 
 import (
-	"bytes"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/constant"
-	"log"
+	"github.com/funtimecoding/soil/pkg/web/requester/request"
+	"net/http"
 )
 
 func (c *Client) Post(
-	l string,
+	path string,
 	body []byte,
-) {
+) error {
 	if c.verbose {
-		console.Format("POST %s\n%s\n", l, body)
+		console.Format("POST %s\n%s\n", path, body)
 	}
 
-	r := web.NewPostBytes(l, bytes.NewReader(body))
-	r.Header.Set(constant.ContentType, constant.Object)
-	r.SetBasicAuth(c.user, c.password)
-	s := web.Send(web.Client(), r)
+	_, e := c.requester.Bytes(
+		request.New(http.MethodPost, path).WithBody(constant.Object, body),
+	)
 
-	if s.StatusCode >= 400 {
-		log.Panicf("push failed %d: %s", s.StatusCode, web.ReadString(s))
-	}
+	return e
 }

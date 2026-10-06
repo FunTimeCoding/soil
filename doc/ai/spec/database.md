@@ -101,7 +101,7 @@ Wiring in `Main()` - `a.Database()` registers `--lite` (chain:
 
 ```go
 a.Database()
-a.Parse(version, gitHash, buildDate)
+a.Parse()
 o := option.New()
 o.PostgresLocator = a.GetString(argument.Postgres)
 o.LitePath = a.GetString(argument.Lite)
@@ -141,6 +141,22 @@ Tests build the same store over a throwaway file:
 ```go
 s := store.New(lite.New(filepath.Join(t.TempDir(), constant.TestDatabase)))
 ```
+
+## Migrations
+
+`AutoMigrate` adds columns and never renames or drops them. A changed
+`column:` tag therefore creates a fresh empty column and leaves the data
+in the old one, silently, until reads come back empty. When a rename
+reaches a model's field, rename the Go field and keep the column tag;
+when the column itself has to change, ship `Migrator().RenameColumn` in
+the same change as the tag.
+
+An upsert through `clause.OnConflict` writes from two lists, and only one
+of them is the struct: identity columns go in `Columns`, and every
+payload column must also be listed in `DoUpdates`. A column missing
+there is written on the first insert and never again, while the rest of
+the row keeps refreshing around it. Test an upsert by saving twice with
+a changed value and asserting the second one wins.
 
 ## Deployment
 

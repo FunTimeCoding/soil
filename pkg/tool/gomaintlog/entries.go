@@ -1,12 +1,15 @@
 package gomaintlog
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/client"
 	"github.com/spf13/cobra"
 )
 
-func entries(c *client.Client) *cobra.Command {
+func entries(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "entries",
 		Short: "List maintenance log entries",
@@ -15,7 +18,7 @@ func entries(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			console.Emit(c.Entries())
+			t.Emit(c.Entries())
 		},
 	}
 }

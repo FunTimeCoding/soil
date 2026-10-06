@@ -3,6 +3,7 @@ package scan
 import (
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/audit_configuration"
 	"path/filepath"
 	"sort"
 	"strings"
@@ -11,7 +12,7 @@ import (
 func Services(
 	v *virtual_file_system.System,
 	repo string,
-	configuration *Configuration,
+	configuration *audit_configuration.Configuration,
 ) []*Service {
 	var result []*Service
 	toolDirectory := "pkg/tool"

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/basic/response"
-	"github.com/funtimecoding/soil/pkg/notation"
 )
 
 func (c *Client) commentPage(
@@ -12,7 +11,8 @@ func (c *Client) commentPage(
 	startAt int,
 ) (*response.Comments, error) {
 	var result response.Comments
-	_, r, e := c.basic.Get(
+
+	if e := c.basic.Get(
 		c.basic.Base().Copy().Base("/rest/api/2").Path(
 			fmt.Sprintf("%s/%s/comment", constant.JiraIssue, key),
 		).SetInteger(
@@ -22,13 +22,10 @@ func (c *Client) commentPage(
 			"startAt",
 			startAt,
 		).String(),
-	)
-
-	if e != nil {
+		&result,
+	); e != nil {
 		return nil, e
 	}
-
-	notation.MustDecode(r, &result, true)
 
 	return &result, nil
 }

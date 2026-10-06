@@ -12,8 +12,7 @@ func Mount(
 	downloadDirectory string,
 	r face.Reporter,
 	t face.Recorder,
-	version string,
 	g *guard.Mux,
 ) {
-	model_context.New(c, downloadDirectory, r, t, version).Mount(g)
+	model_context.New(c, downloadDirectory, r, t).Mount(g)
 }

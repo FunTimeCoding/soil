@@ -4,10 +4,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/hetzner"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/spf13/cobra"
 )
 
-func listRecords(c *hetzner.Client) *cobra.Command {
+func listRecords(
+	c *hetzner.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "list-records [zone]",
 		Short: "List records in a zone",
@@ -16,7 +20,7 @@ func listRecords(c *hetzner.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			z := zoneByName(c, arguments[0])
+			z := zoneByName(c, arguments[0], t)
 
 			for _, r := range c.Records(z) {
 				console.Format(

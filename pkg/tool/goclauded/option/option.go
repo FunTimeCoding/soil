@@ -5,6 +5,5 @@ type Option struct {
 	MetricAddress     string
 	ServiceTokens     []string
 	LitePath          string
-	Version           string
 	SessionExportPath string
 }

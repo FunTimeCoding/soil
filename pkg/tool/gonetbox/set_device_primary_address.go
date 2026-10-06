@@ -1,13 +1,16 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	generated "github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"github.com/spf13/cobra"
 )
 
-func setDevicePrimaryAddress(c *client.Client) *cobra.Command {
+func setDevicePrimaryAddress(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "set-device-primary-address [device] [address]",
 		Short: "Set the primary IP address of a device",
@@ -16,7 +19,7 @@ func setDevicePrimaryAddress(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(
+			t.Emit(
 				c.UpdateDevice(
 					arguments[0],
 					generated.UpdateDeviceRequest{PrimaryAddress: &arguments[1]},

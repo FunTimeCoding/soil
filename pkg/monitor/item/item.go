@@ -9,6 +9,7 @@ import (
 type Item struct {
 	collector  *collector.Collector
 	Identifier string
+	Label      string
 	Severity   constant.Severity
 	Detail     string
 	Status     constant.Status

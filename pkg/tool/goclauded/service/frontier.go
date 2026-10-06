@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/door"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
 	"sort"
 )
@@ -8,8 +9,8 @@ import (
 func frontier(
 	edges []client.Relation,
 	loaded map[int64]bool,
-) []door {
-	seen := map[int64]*door{}
+) []door.Door {
+	seen := map[int64]*door.Door{}
 
 	for _, edge := range edges {
 		add(
@@ -32,7 +33,7 @@ func frontier(
 		)
 	}
 
-	var result []door
+	var result []door.Door
 
 	for _, one := range seen {
 		result = append(result, *one)

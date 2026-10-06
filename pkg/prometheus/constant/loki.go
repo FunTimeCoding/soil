@@ -31,3 +31,5 @@ const (
 	LokiNotationType = "json"
 	SlogMessage      = "msg"
 )
+
+const LokiMarkupOpenings = "<{["

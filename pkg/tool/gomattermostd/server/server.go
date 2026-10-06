@@ -7,6 +7,5 @@ import (
 
 type Server struct {
 	client   mattermost.MattermostSource
-	version  string
 	reporter face.Reporter
 }

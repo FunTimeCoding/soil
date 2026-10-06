@@ -4,7 +4,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/basic/response"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
-	"github.com/funtimecoding/soil/pkg/notation"
 )
 
 func (c *Client) pageWithStatus(
@@ -21,14 +20,11 @@ func (c *Client) pageWithStatus(
 		u = u.Set(constant.ConfluenceStatus, status)
 	}
 
-	body, e := c.basic.GetV2(u.String())
+	var result *response.Page
 
-	if e != nil {
+	if e := c.basic.Get(u.String(), &result); e != nil {
 		return nil, e
 	}
-
-	var result *response.Page
-	notation.MustDecode(body, &result, false)
 
 	return page.New(result, c.host), nil
 }

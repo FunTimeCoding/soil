@@ -23,6 +23,11 @@ func sessionFind(c *command_context.Context) *cobra.Command {
 				&client.GetSessionsFindParams{Tool: arguments[0]},
 			)
 			errors.PanicOnError(e)
+
+			if response.JSON200 == nil {
+				c.Terminal().Reject(response.Status(), response.Body)
+			}
+
 			matches := response.JSON200.Matches
 
 			if len(matches) == 0 {

@@ -3,6 +3,8 @@ package opnsense
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/opnsense/basic"
+	"github.com/funtimecoding/soil/pkg/opnsense/constant"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
 func New(
@@ -15,5 +17,12 @@ func New(
 	errors.FatalOnEmpty(key, "key")
 	errors.FatalOnEmpty(secret, "secret")
 
-	return &Client{basic: basic.New(host, key, secret, untrusted)}
+	return &Client{
+		basic: basic.New(
+			locator.New(host).Base(constant.Base),
+			key,
+			secret,
+			untrusted,
+		),
+	}
 }

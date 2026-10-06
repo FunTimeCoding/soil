@@ -24,6 +24,11 @@ func sessionHeatmap(c *command_context.Context) *cobra.Command {
 				&client.GetSessionsHeatmapParams{Bash: &bash},
 			)
 			errors.PanicOnError(e)
+
+			if response.JSON200 == nil {
+				c.Terminal().Reject(response.Status(), response.Body)
+			}
+
 			h := response.JSON200
 
 			if len(h.Entries) == 0 {

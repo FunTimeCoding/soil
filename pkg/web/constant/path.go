@@ -21,6 +21,5 @@ const (
 	EventPath        = "/sse"
 	EventMessagePath = "/message"
 
-	EchoPath    = "/echo"
-	MonitorPath = "/monitor"
+	EchoPath = "/echo"
 )

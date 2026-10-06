@@ -4,7 +4,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/basic/response"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
-	"github.com/funtimecoding/soil/pkg/notation"
 )
 
 func (c *Client) PagesBySpace(
@@ -31,14 +30,12 @@ func (c *Client) PagesBySpace(
 	var result []*response.Page
 
 	for {
-		body, e := c.basic.GetV2(l)
+		var s *response.Pages
 
-		if e != nil {
+		if e := c.basic.Get(l, &s); e != nil {
 			return nil, e
 		}
 
-		var s *response.Pages
-		notation.MustDecode(body, &s, false)
 		result = append(result, s.Results...)
 
 		if s.Links.Next == "" {

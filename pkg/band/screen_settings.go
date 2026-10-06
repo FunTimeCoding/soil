@@ -1,7 +1,10 @@
 package band
 
-import "github.com/funtimecoding/soil/pkg/band/constant"
+import (
+	"github.com/funtimecoding/soil/pkg/band/constant"
+	"github.com/funtimecoding/soil/pkg/band/response"
+)
 
-func (c *Client) ScreenSettings() (*ScreenSettingsResponse, error) {
-	return get[ScreenSettingsResponse](c, constant.ScreenSettingsResource)
+func (c *Client) ScreenSettings() (*response.ScreenSettings, error) {
+	return get[response.ScreenSettings](c, constant.ScreenSettingsResource)
 }

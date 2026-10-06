@@ -3,6 +3,7 @@ package store
 import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/generative/embed"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
 	"sort"
 )
 
@@ -13,7 +14,7 @@ func (s *Store) SearchVector(
 	full bool,
 	metadata map[string]string,
 	m face.Embedder,
-) ([]SearchResult, error) {
+) ([]search.Result, error) {
 	queryVector, e := embed.Single(m, query)
 
 	if e != nil {
@@ -23,45 +24,45 @@ func (s *Store) SearchVector(
 	candidates := s.allEmbeddings(collection, withoutSourceType(metadata))
 
 	for i := range candidates {
-		candidates[i].distance = cosineDistance(
+		candidates[i].Distance = cosineDistance(
 			queryVector,
-			candidates[i].vector,
+			candidates[i].Vector,
 		)
 	}
 
 	sort.Slice(
 		candidates,
 		func(i, j int) bool {
-			return candidates[i].distance < candidates[j].distance
+			return candidates[i].Distance < candidates[j].Distance
 		},
 	)
 	seen := map[string]bool{}
-	var result []SearchResult
+	var result []search.Result
 
 	for _, c := range candidates {
-		if seen[c.filePath] {
+		if seen[c.FilePath] {
 			continue
 		}
 
-		seen[c.filePath] = true
-		r := SearchResult{
-			VirtualPath:   buildVirtualPath(c.collection, c.path),
-			FilePath:      c.filePath,
-			Collection:    c.collection,
-			Path:          c.path,
-			Title:         c.title,
-			Hash:          c.hash,
-			Score:         1 - c.distance,
+		seen[c.FilePath] = true
+		r := search.Result{
+			VirtualPath:   buildVirtualPath(c.Collection, c.Path),
+			FilePath:      c.FilePath,
+			Collection:    c.Collection,
+			Path:          c.Path,
+			Title:         c.Title,
+			Hash:          c.Hash,
+			Score:         1 - c.Distance,
 			Source:        "vec",
-			Context:       s.ResolveContext(c.collection, c.path),
-			ChunkPosition: c.position,
+			Context:       s.ResolveContext(c.Collection, c.Path),
+			ChunkPosition: c.Position,
 		}
-		snippet, line := ExtractSnippet(c.body, query, r.ChunkPosition)
+		snippet, line := ExtractSnippet(c.Body, query, r.ChunkPosition)
 		r.Snippet = snippet
 		r.SnippetLine = line
 
 		if full {
-			r.Body = c.body
+			r.Body = c.Body
 		}
 
 		result = append(result, r)

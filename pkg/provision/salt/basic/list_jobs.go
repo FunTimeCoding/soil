@@ -1,22 +1,15 @@
 package basic
 
 import (
-	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/salt/basic/response"
 )
 
 func (c *Client) ListJobs() ([]response.Job, error) {
-	b, e := c.Get(constant.SaltJobsPath)
-
-	if e != nil {
-		return nil, e
-	}
-
 	var r response.JobList
 
-	if f := json.Unmarshal(b, &r); f != nil {
-		return nil, f
+	if e := c.Get(constant.SaltJobsPath, &r); e != nil {
+		return nil, e
 	}
 
 	if len(r.Return) == 0 {

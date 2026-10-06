@@ -1,7 +1,11 @@
 package gosublime
 
-import "github.com/funtimecoding/soil/pkg/tool/gosublimed/generated/client"
+import (
+	"github.com/funtimecoding/soil/pkg/terminal"
+	"github.com/funtimecoding/soil/pkg/tool/gosublimed/generated/client"
+)
 
 type Context struct {
-	Client *client.ClientWithResponses
+	Client   *client.ClientWithResponses
+	Terminal *terminal.Terminal
 }

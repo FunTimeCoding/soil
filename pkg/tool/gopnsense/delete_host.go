@@ -1,12 +1,15 @@
 package gopnsense
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/client"
 	"github.com/spf13/cobra"
 )
 
-func deleteHost(c *client.Client) *cobra.Command {
+func deleteHost(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var apply bool
 	result := &cobra.Command{
 		Use:   "delete-host <identifier>",
@@ -16,7 +19,7 @@ func deleteHost(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			a []string,
 		) {
-			console.Emit(c.DeleteHost(a[0], &apply))
+			t.Emit(c.DeleteHost(a[0], &apply))
 		},
 	}
 	result.Flags().BoolVar(

@@ -13,6 +13,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/chromium/integration/lifetime/lifetime_tester"
 	"github.com/funtimecoding/soil/pkg/chromium/protocol"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/timeout"
 	"runtime"
 	"testing"
 	"time"
@@ -110,7 +111,7 @@ func TestProtocolAbsentTabLeavesClientUsable(t *testing.T) {
 		lifetime_tester.ProtocolAbsent(t, s.Client),
 	)
 	assert.Integer(t, 0, s.Client.TargetCount())
-	assert.NotNil(t, s.Client.TabByHost(constant.FixtureQuietRoute))
+	assert.NotNil(t, s.Client.MustTabByHost(constant.FixtureQuietRoute))
 	s.AssertTabAlive(identifier)
 }
 
@@ -225,7 +226,7 @@ func TestFirstCallUnderDerivedDeadlineStrandsTarget(t *testing.T) {
 		identifier,
 	).WithTimeout(constant.FixtureCallTimeout)
 	stranded := p.Evaluate(constant.FixtureSum, &sum)
-	assert.ErrorIs(t, stranded, context.DeadlineExceeded)
+	assert.True(t, timeout.Is(stranded))
 }
 
 func TestEvaluateTimeoutKeepsTabUsable(t *testing.T) {
@@ -237,7 +238,8 @@ func TestEvaluateTimeoutKeepsTabUsable(t *testing.T) {
 	).WithTimeout(constant.FixtureCallTimeout)
 	var result any
 	hung := p.EvaluatePromise(constant.FixtureHungPromise, &result)
-	assert.ErrorIs(t, hung, context.DeadlineExceeded)
+	assert.True(t, timeout.Is(hung))
+	assert.StringContains(t, "browser tab: did not answer within", hung.Error())
 	s.AssertTabAlive(identifier)
 	var sum int
 	answered := p.Evaluate(constant.FixtureSum, &sum)

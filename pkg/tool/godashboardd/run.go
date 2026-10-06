@@ -9,7 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/prometheus"
 	"github.com/funtimecoding/soil/pkg/relational"
-	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board/connection"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/option"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/service"
@@ -22,8 +22,9 @@ import (
 
 func Run(
 	o *option.Dashboard,
-	r face.Reporter,
+	i face.Instrument,
 ) {
+	r := i.Reporter()
 	l := logger.New(context.Background())
 	c := store.New(relational.Open(l, o.PostgresLocator, o.LitePath))
 	defer c.Close()
@@ -31,7 +32,7 @@ func Run(
 		o.Board,
 		prometheus.New(
 			o.Board.Connection.Prometheus.Host,
-			board.Port(o.Board.Connection.Prometheus),
+			connection.Port(o.Board.Connection.Prometheus),
 			o.Board.Connection.Prometheus.Secure,
 			"",
 			"",
@@ -42,7 +43,7 @@ func Run(
 		notifier.New(),
 		l,
 	)
-	u := web.New(o.Board, v, c, authorizationClient(o))
+	u := web.New(o.Board, v, c, authorizationClient(o).WithReporter(r))
 	lifecycle.New(
 		l,
 		lifecycle.WithWorker(worker.New(v, constant.RefreshInterval, l, r)),

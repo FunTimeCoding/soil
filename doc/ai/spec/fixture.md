@@ -88,7 +88,7 @@ structure just as effectively as copied structure, and this
 repository is public. This applies at writing time; whatever
 scanning happens at push time is the second net, not the first.
 
-## Do Not Use `<path>/testdata/`
+## Do Not Use testdata Directories
 
 Do not put fixtures inside packages as `<path>/testdata/` directories. All
 fixtures belong at the repo root under `fixture/`. This keeps fixtures

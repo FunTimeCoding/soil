@@ -33,7 +33,6 @@ func Run(
 						o.DownloadDirectory,
 						r,
 						s.Recorder(),
-						o.Version,
 						guard.New(m, o.ServiceTokens),
 					)
 				},

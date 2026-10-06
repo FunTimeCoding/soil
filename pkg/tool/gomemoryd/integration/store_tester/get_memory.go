@@ -2,10 +2,10 @@ package store_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 )
 
-func (o *Tester) GetMemory(identifier int64) *store.Memory {
+func (o *Tester) GetMemory(identifier int64) *record.Memory {
 	o.t.Helper()
 	m, e := o.Store.GetMemory(identifier)
 	assert.FatalOnError(o.t, e)

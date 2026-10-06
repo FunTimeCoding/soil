@@ -17,12 +17,8 @@ import (
 	"path/filepath"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	r := reporter.New(constant.Identity.Name(), version).Start()
+func Main() {
+	r := reporter.New(constant.Identity.Name()).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	locatorDefault := ""
 
@@ -61,7 +57,7 @@ func Main(
 		headerDefault,
 		"Header for authentication in key=value format",
 	)
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
 	locator := a.Required(argumentConstant.Locator)
 	console.Format("Locator: %s\n", locator)
 	project := a.Required(argumentConstant.Project)

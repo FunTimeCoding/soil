@@ -4,8 +4,6 @@ import (
 	"charm.land/bubbletea/v2"
 	"github.com/funtimecoding/soil/pkg/bubbletea/constant"
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/fetch"
-	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
-	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/system"
 )
 
@@ -24,13 +22,6 @@ func (m *Model) keyEvent(g tea.KeyMsg) (tea.Model, tea.Cmd) {
 			m.table.Focus()
 		}
 	case constant.KeyQ, constant.KeyCtrlC:
-		if m.connect {
-			m.client.Write(
-				join.Comma([]string{monitorConstant.LogoutCommand, m.user}),
-			)
-			m.client.Close()
-		}
-
 		return m, tea.Quit
 	case constant.KeyD:
 		return m, viewDetail()
@@ -49,14 +40,7 @@ func (m *Model) keyEvent(g tea.KeyMsg) (tea.Model, tea.Cmd) {
 
 		return m, nil
 	case constant.KeyEnter:
-		if m.connect {
-			r := m.table.SelectedRow()
-			m.client.Write(
-				join.Comma([]string{monitorConstant.FlagCommand, r[0]}),
-			)
-		}
-
-		return m, nil
+		return m, m.toggleClaim()
 	case "t":
 		return m, tea.Batch(addToast("Pressed t"))
 	}

@@ -9,4 +9,7 @@ const (
 
 	UserHeader  = "x-api-user"
 	TokenHeader = "x-api-key"
+
+	StatParameter = "stat"
+	TypeParameter = "type"
 )

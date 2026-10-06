@@ -3,6 +3,7 @@ package scan
 import (
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/audit_configuration"
 	"path/filepath"
 )
 
@@ -11,7 +12,7 @@ func scanService(
 	path string,
 	name string,
 	repo string,
-	c *Configuration,
+	c *audit_configuration.Configuration,
 ) *Service {
 	s := &Service{Name: name, Repo: repo, Path: path}
 	s.ModelContext = v.DirectoryExists(

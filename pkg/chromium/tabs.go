@@ -3,21 +3,15 @@ package chromium
 import (
 	"github.com/funtimecoding/soil/pkg/chromium/constant"
 	"github.com/funtimecoding/soil/pkg/chromium/tab"
-	"github.com/funtimecoding/soil/pkg/notation"
-	"github.com/funtimecoding/soil/pkg/web"
-	"github.com/funtimecoding/soil/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/web/requester/request"
 )
 
-func (c *Client) Tabs() []*tab.Tab {
+func (c *Client) Tabs() ([]*tab.Tab, error) {
 	var result []*tab.Tab
-	notation.MustDecode(
-		web.GetString(
-			web.InsecureClient(),
-			locator.New(c.host).Port(c.port).Path(constant.NotationPath).Insecure().String(),
-		),
-		&result,
-		true,
-	)
 
-	return result
+	if e := c.requester.Notation(request.Get(constant.NotationPath), &result); e != nil {
+		return nil, e
+	}
+
+	return result, nil
 }

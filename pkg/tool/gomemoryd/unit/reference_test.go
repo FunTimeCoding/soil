@@ -90,3 +90,99 @@ func TestACitedMemoryThatIsMissingIsReported(t *testing.T) {
 		check("Pairs with `memory://default/gone memory`."),
 	)
 }
+
+func TestALiveHeadingPasses(t *testing.T) {
+	assert.Count(t, 0, check("See `doc/real.md#usage` first."))
+}
+
+func TestADeadHeadingIsReportedWithTheNearest(t *testing.T) {
+	assert.Any(
+		t,
+		[]*reference.Finding{
+			reference.NewFinding(
+				"doc/real.md#usages",
+				"Referenced heading does not exist - nearest: #usage (\"Usage\"), #real (\"Real\")",
+			),
+		},
+		check("See `doc/real.md#usages` first."),
+	)
+}
+
+func TestAHeadingOnADeadPathReportsThePath(t *testing.T) {
+	assert.Any(
+		t,
+		[]*reference.Finding{
+			reference.NewFinding(
+				"doc/gone.md#usage",
+				"Referenced path does not exist",
+			),
+		},
+		check("See `doc/gone.md#usage` first."),
+	)
+}
+
+func TestABareNameUnderABaseResolves(t *testing.T) {
+	assert.Count(t, 0, checkUnder("See `real.md` first.", "doc"))
+}
+
+func TestADeadBareNameUnderABaseIsReported(t *testing.T) {
+	assert.Any(
+		t,
+		[]*reference.Finding{
+			reference.NewFinding("gone.md", "Referenced path does not exist"),
+		},
+		checkUnder("See `gone.md` first.", "doc"),
+	)
+}
+
+func TestABareNameTriesEveryBase(t *testing.T) {
+	assert.Count(t, 0, checkUnder("See `real.go` and `real.md`.", "doc", "pkg"))
+}
+
+func TestAHeadingUnderABaseIsChecked(t *testing.T) {
+	assert.Any(
+		t,
+		[]*reference.Finding{
+			reference.NewFinding(
+				"real.md#usages",
+				"Referenced heading does not exist - nearest: #usage (\"Usage\"), #real (\"Real\")",
+			),
+		},
+		checkUnder("See `real.md#usages` first.", "doc"),
+	)
+}
+
+func TestADeadBaseIsReported(t *testing.T) {
+	assert.Any(
+		t,
+		[]*reference.Finding{
+			reference.NewFinding("doc/gone", "Referenced path does not exist"),
+		},
+		checkUnder("Nothing cited.", "doc/gone"),
+	)
+}
+
+func TestAnIdentifierUnderABaseIsNotAPath(t *testing.T) {
+	assert.Count(
+		t,
+		0,
+		checkUnder("Call `w.poll`, `response.Fail` and `v.Detail`.", "doc"),
+	)
+}
+
+func TestABareNameWithoutABaseIsNotChecked(t *testing.T) {
+	assert.Count(t, 0, check("See `gone.md` first."))
+}
+
+func TestAFragmentOnANonMarkdownTargetIsReported(t *testing.T) {
+	assert.Any(
+		t,
+		[]*reference.Finding{
+			reference.NewFinding(
+				"pkg/real.go#check",
+				"Fragment on a non-markdown target - only markdown headings can be referenced",
+			),
+		},
+		check("See `pkg/real.go#check` first."),
+	)
+}

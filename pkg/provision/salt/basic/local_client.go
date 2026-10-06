@@ -1,17 +1,19 @@
 package basic
 
 import (
-	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/salt/basic/response"
+	"github.com/funtimecoding/soil/pkg/provision/salt/basic/response/local_return"
 )
 
 func (c *Client) LocalClient(
 	target string,
 	function string,
 	arguments []string,
-) (map[string]response.LocalReturn, error) {
-	b, e := c.Post(
+) (map[string]local_return.LocalReturn, error) {
+	var r response.Local
+
+	if e := c.Post(
 		"",
 		commandRequest{
 			Client:     constant.SaltLocalClient,
@@ -21,16 +23,9 @@ func (c *Client) LocalClient(
 			TargetType: constant.SaltGlobTarget,
 			FullReturn: true,
 		},
-	)
-
-	if e != nil {
+		&r,
+	); e != nil {
 		return nil, e
-	}
-
-	var r response.Local
-
-	if f := json.Unmarshal(b, &r); f != nil {
-		return nil, f
 	}
 
 	if len(r.Return) == 0 {

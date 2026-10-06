@@ -20,7 +20,6 @@ func Mount(
 	u *alertWeb.Server,
 	r face.Reporter,
 	t face.Recorder,
-	version string,
 	g *guard.Mux,
 ) {
 	g.TokenMount(
@@ -35,6 +34,6 @@ func Mount(
 			http.NewServeMux(),
 		),
 	)
-	model_context.New(s, w, r, t, version).Mount(g)
+	model_context.New(s, w, r, t).Mount(g)
 	u.Mount(g)
 }

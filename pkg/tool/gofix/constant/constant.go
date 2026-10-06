@@ -8,6 +8,7 @@ var Identity = identity.New(
 	"gofix [flags] [pattern...]",
 )
 
+const ConcernConcurrentWrite = "concurrent_write"
 const (
 	MaxSingleParameterLength = 80
 	MaxFormatPasses          = 10

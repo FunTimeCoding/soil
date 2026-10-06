@@ -1,12 +1,15 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
 
-func listManufacturers(c *client.Client) *cobra.Command {
+func listManufacturers(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "list-manufacturers",
 		Short: "List all NetBox manufacturers",
@@ -14,7 +17,7 @@ func listManufacturers(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			console.Emit(c.ListManufacturers())
+			t.Emit(c.ListManufacturers())
 		},
 	}
 }

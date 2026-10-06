@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face/search_option"
 )
 
@@ -10,7 +10,7 @@ func (s *Service) SearchRelevant(
 	query string,
 	limit int,
 	exclude []string,
-) ([]store.SearchResult, error) {
+) ([]record.SearchResult, error) {
 	o := search_option.New(query, constant.DefaultCollection, limit)
 	o.Exclude = exclude
 	results, e := s.searcher.Search(o)
@@ -19,7 +19,7 @@ func (s *Service) SearchRelevant(
 		return nil, e
 	}
 
-	var matches []store.SearchResult
+	var matches []record.SearchResult
 
 	for _, r := range results {
 		identifier, f := extractIdentifier(r.Path)
@@ -36,7 +36,7 @@ func (s *Service) SearchRelevant(
 
 		matches = append(
 			matches,
-			store.SearchResult{
+			record.SearchResult{
 				Identifier:  m.Identifier,
 				Name:        m.Name,
 				Content:     m.Content,
@@ -45,6 +45,7 @@ func (s *Service) SearchRelevant(
 				UpdatedAt:   m.UpdatedAt,
 				Rank:        r.Score,
 				Tags:        m.Tags,
+				Metadata:    m.Metadata,
 			},
 		)
 	}

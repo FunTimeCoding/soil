@@ -4,11 +4,15 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
 	"github.com/spf13/cobra"
 )
 
-func profile(l **client.Client) *cobra.Command {
+func profile(
+	l **client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var topic string
 	var detail bool
 	c := &cobra.Command{
@@ -34,7 +38,7 @@ func profile(l **client.Client) *cobra.Command {
 			errors.PanicOnError(f)
 
 			if parsed.JSON200 == nil {
-				fmt.Print(string(parsed.Body))
+				t.Reject(parsed.Status(), parsed.Body)
 
 				return
 			}

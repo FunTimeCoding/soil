@@ -1,12 +1,8 @@
 package usage
 
-import "github.com/funtimecoding/soil/pkg/web"
-
 func New(
-	host string,
-	port int,
-	secure bool,
-	token string,
-) *Client {
-	return &Client{base: web.Link(host, port, secure), token: token}
+	files int64,
+	shares int64,
+) *Usage {
+	return &Usage{Files: files, Shares: shares}
 }

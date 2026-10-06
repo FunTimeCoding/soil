@@ -11,7 +11,7 @@ background workers.
 
 ```
 cmd/go<tool>/
-└── main.go                         # Linker vars, delegates to Main()
+└── main.go                         # delegates to Main()
 
 pkg/tool/go<tool>/
 ├── main.go                         # Main(): register flags, parse, build option, call Run()
@@ -46,7 +46,7 @@ pkg/tool/go<tool>/
 
 ## Entry Point
 
-See `entrypoint.md` for linker variables, `Main()`, and sentry setup.
+See `entrypoint.md` for `main`, `Main()`, and sentry setup.
 
 Every serving daemon registers the common web parameters through the
 argument instance - one call, same everywhere:
@@ -54,7 +54,7 @@ argument instance - one call, same everywhere:
 ```go
 a := argument.NewInstance(constant.Identity)
 a.Web()
-a.Parse(version, gitHash, buildDate)
+a.Parse()
 o := option.New()
 o.Address = a.Address()
 Run(o)
@@ -121,7 +121,8 @@ func Run(o *option.Log, i face.Instrument) {
 }
 ```
 
-Key conventions:
+### Key conventions
+
 - Reporter pulled from the instrument first, then the logger,
   threaded to workers and lifecycle
 - Reporter threaded to workers (for `recovery.New`) and recovery middleware
@@ -281,6 +282,8 @@ func New(s *store.Store) *Server {
 }
 ```
 
+#### Summary strip and live updates
+
 **Summary strip** - `layout.WithSummary(items ...string)` renders
 a dot-separated muted line inside main. The view exposes
 `RenderLivePageWithSummary` for pages that need dynamic summary
@@ -293,6 +296,8 @@ to `main`. The summary strip gets `sse-swap="summary_strip"`
 automatically. Services push updates via `layout.SummaryStripContent`
 with event name `layout.SummaryStrip`. Replaces manual
 `WithScript(web.ServerSide)` + wrapper div pattern.
+
+#### Handlers use the view
 
 Handlers use the view directly - no `pageLayout`, `renderPage`,
 `renderFragment`, `isHTMX`, or `navigationLink` wrapper functions:
@@ -363,7 +368,7 @@ Key conventions:
 Workers implement `face.Worker` (`Start()` + `Stop()`). See `lifecycle.md` for
 details.
 
-## Daemon / CLI Split
+## Daemon and CLI Split
 
 Long-running services come in pairs:
 
@@ -403,7 +408,7 @@ with REST import it into both `model_context/` and `server/`.
 domain types, `model_context/`) belong in `pkg/tool/go<tool>d/`, not
 in the shared library.
 
-### Must/non-Must Pattern
+### Must and Non-Must Pattern
 
 External API client methods come in pairs:
 

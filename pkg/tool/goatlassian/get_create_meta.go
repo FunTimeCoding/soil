@@ -1,13 +1,16 @@
 package goatlassian
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
 )
 
-func getCreateMeta(c *client.Client) *cobra.Command {
+func getCreateMeta(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var project string
 	var issueType string
 	var expand string
@@ -19,7 +22,7 @@ func getCreateMeta(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			console.Emit(c.GetCreateMeta(project, issueType, expand))
+			t.Emit(c.GetCreateMeta(project, issueType, expand))
 		},
 	}
 	result.Flags().StringVar(&project, "project", "", "project key (required)")

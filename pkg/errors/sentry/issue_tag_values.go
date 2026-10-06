@@ -1,7 +1,6 @@
 package sentry
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/basic/response"
 	"strconv"
@@ -19,7 +18,9 @@ func (c *Client) IssueTagValues(
 		q["limit"] = strconv.Itoa(limit)
 	}
 
-	b, e := c.basic.Get(
+	var result []response.TagValue
+
+	if e := c.basic.Get(
 		fmt.Sprintf(
 			"organizations/%s/issues/%s/tags/%s/values",
 			organization,
@@ -27,16 +28,9 @@ func (c *Client) IssueTagValues(
 			tag,
 		),
 		q,
-	)
-
-	if e != nil {
+		&result,
+	); e != nil {
 		return nil, e
-	}
-
-	var result []response.TagValue
-
-	if f := json.Unmarshal(b, &result); f != nil {
-		return nil, f
 	}
 
 	return result, nil

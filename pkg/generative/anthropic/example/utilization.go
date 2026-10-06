@@ -34,10 +34,10 @@ func Utilization() {
 		return
 	}
 
-	r := utilization.Read(c.AccessToken)
+	r, e := utilization.Read(c.AccessToken)
 
-	if r == nil {
-		console.Line("no utilization data")
+	if e != nil {
+		console.Format("no utilization data: %s\n", e)
 
 		return
 	}

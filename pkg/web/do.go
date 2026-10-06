@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	libraryErrors "github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/connection"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"net/http"
@@ -15,6 +16,10 @@ func Do(
 	r *http.Request,
 ) (*http.Response, error) {
 	result, e := c.Do(r)
+
+	if f := connection.Classify(e); f != nil {
+		return nil, f
+	}
 
 	if transport, failed := errors.AsType[*url.Error](e); failed {
 		return nil, fmt.Errorf(

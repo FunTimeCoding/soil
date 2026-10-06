@@ -4,13 +4,13 @@ import (
 	"bytes"
 	"github.com/dave/dst"
 	"github.com/dave/dst/decorator"
-	"os"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
 )
 
 func WriteFile(
 	file *dst.File,
 	path string,
-	dryRun bool,
+	out *sink.Sink,
 ) error {
 	var buffer bytes.Buffer
 
@@ -18,9 +18,7 @@ func WriteFile(
 		return e
 	}
 
-	if dryRun {
-		return nil
-	}
+	out.Write(path, buffer.Bytes())
 
-	return os.WriteFile(path, buffer.Bytes(), 0644)
+	return nil
 }

@@ -1,7 +1,6 @@
 package base
 
 import (
-	library "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/directory"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
@@ -10,7 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/service"
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/web"
 	"github.com/funtimecoding/soil/pkg/web/authorization/client"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
@@ -25,7 +24,7 @@ func New(t *testing.T) *Server {
 		"https://gate.example.org",
 		"tester",
 		"tester-secret",
-		webConstant.SignInPath,
+		constant.SignInPath,
 		"https://directory.example.org/callback",
 		client.DeriveKey("tester-encryption-secret"),
 	)
@@ -43,7 +42,6 @@ func New(t *testing.T) *Server {
 					web.New(v, authorization),
 					memory.New(),
 					mock_recorder.New(),
-					library.DefaultVersion,
 					g,
 				)
 			},

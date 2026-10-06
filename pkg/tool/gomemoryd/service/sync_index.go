@@ -1,8 +1,8 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 
-func (s *Service) syncIndex(m *store.Memory) error {
+func (s *Service) syncIndex(m *record.Memory) error {
 	if !s.indexable(m) {
 		return s.indexer.Delete(
 			ScopeCollection(m.Scope),

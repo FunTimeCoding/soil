@@ -1,12 +1,15 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
 
-func addDeviceJournalEntry(c *client.Client) *cobra.Command {
+func addDeviceJournalEntry(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var kind string
 	result := &cobra.Command{
 		Use:   "add-device-journal-entry [device] [comments]",
@@ -16,9 +19,7 @@ func addDeviceJournalEntry(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(
-				c.AddDeviceJournalEntry(arguments[0], kind, arguments[1]),
-			)
+			t.Emit(c.AddDeviceJournalEntry(arguments[0], kind, arguments[1]))
 		},
 	}
 	result.Flags().StringVar(

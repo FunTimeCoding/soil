@@ -11,5 +11,5 @@ func checkCollision(
 		return checkScopeCollision(p, targetName)
 	}
 
-	return checkMethodCollision(p, targetName, receiver)
+	return checkMemberCollision(p, targetName, receiver)
 }

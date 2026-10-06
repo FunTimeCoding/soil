@@ -6,7 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/errors/ambiguous"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	"github.com/funtimecoding/soil/pkg/notation"
 )
 
 func (c *Client) PageBySpaceAndName(
@@ -19,7 +18,9 @@ func (c *Client) PageBySpaceAndName(
 		return nil, e
 	}
 
-	body, f := c.basic.GetV2(
+	var result *response.Pages
+
+	if f := c.basic.Get(
 		c.basic.Base().Copy().Path(constant.ConfluencePage).Set(
 			constant.ConfluenceBodyFormat,
 			constant.ConfluenceStorageFormat,
@@ -27,14 +28,10 @@ func (c *Client) PageBySpaceAndName(
 			constant.ConfluenceSpaceIdentifier,
 			s.Identifier,
 		).Set(constant.ConfluenceTitle, name).String(),
-	)
-
-	if f != nil {
+		&result,
+	); f != nil {
 		return nil, f
 	}
-
-	var result *response.Pages
-	notation.MustDecode(body, &result, false)
 
 	if len(result.Results) == 0 {
 		return nil, not_found.Format(

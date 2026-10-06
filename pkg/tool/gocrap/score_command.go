@@ -5,12 +5,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/crap"
 	crapConstant "github.com/funtimecoding/soil/pkg/crap/constant"
 	"github.com/funtimecoding/soil/pkg/crap/option"
-	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gocrap/constant"
 	"github.com/spf13/cobra"
 )
 
-func scoreCommand() *cobra.Command {
+func scoreCommand(t *terminal.Terminal) *cobra.Command {
 	o := option.New()
 	result := &cobra.Command{
 		Use:   constant.ScoreUsage,
@@ -22,7 +22,10 @@ func scoreCommand() *cobra.Command {
 		) {
 			o.Root = root()
 			o.Patterns = patterns(arguments)
-			system.ExitOnCode(crap.Run(o))
+
+			if c := crap.Run(o); c != 0 {
+				t.Exit(c)
+			}
 		},
 	}
 	f := result.Flags()

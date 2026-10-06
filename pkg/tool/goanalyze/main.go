@@ -5,18 +5,15 @@ import (
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/lint"
+	"github.com/funtimecoding/soil/pkg/source/build_tag"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/goanalyze/configuration"
 	"github.com/funtimecoding/soil/pkg/tool/goanalyze/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goanalyze/option"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	r := reporter.New(constant.Identity.Name(), version).Start()
+func Main() {
+	r := reporter.New(constant.Identity.Name()).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Boolean("summary", false, "One line per file")
@@ -25,12 +22,18 @@ func Main(
 		false,
 		"Include the stray_comment lint (default on where strata/tool/goanalyze.yaml sets comment: true)",
 	)
+	a.Boolean(
+		"full",
+		false,
+		"Index by loading the whole module instead of the persisted per-package facts",
+	)
 	a.String(
 		argumentConstant.Root,
 		"",
 		"Repository root to analyze, discovered upward from the working directory when empty",
 	)
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
+	build_tag.Memoize()
 	root, work := lint.Root(a.GetString(argumentConstant.Root))
 	patterns, e := lint.Patterns(root, work, a.Positionals())
 
@@ -43,6 +46,7 @@ func Main(
 	o.Root = root
 	o.Summary = a.GetBoolean("summary")
 	o.Comment = a.GetBoolean("comment") || configuration.Load(root).Comment
+	o.Full = a.GetBoolean("full")
 	o.Patterns = patterns
 	Run(o)
 }

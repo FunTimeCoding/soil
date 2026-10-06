@@ -1,12 +1,15 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
 
-func listDevices(c *client.Client) *cobra.Command {
+func listDevices(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var query string
 	result := &cobra.Command{
 		Use:   "list-devices",
@@ -21,7 +24,7 @@ func listDevices(c *client.Client) *cobra.Command {
 				q = &query
 			}
 
-			console.Emit(c.ListDevices(q))
+			t.Emit(c.ListDevices(q))
 		},
 	}
 	result.Flags().StringVar(&query, "query", "", "filter by name")

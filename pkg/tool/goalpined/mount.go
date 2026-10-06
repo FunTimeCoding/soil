@@ -16,7 +16,6 @@ func Mount(
 	p *package_server.Server,
 	r face.Reporter,
 	t face.Recorder,
-	version string,
 	g *guard.Mux,
 ) {
 	inner := http.NewServeMux()
@@ -31,5 +30,5 @@ func Mount(
 		inner,
 	)
 	g.TokenMount(constant.Slash, inner)
-	model_context.New(r, t, version).Mount(g)
+	model_context.New(r, t).Mount(g)
 }

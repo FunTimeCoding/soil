@@ -1,27 +1,24 @@
 package hub
 
 import (
-	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/docker/constant"
 	"github.com/funtimecoding/soil/pkg/docker/hub/tag"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/web"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/requester/request"
 )
 
-func (c *Client) Tags(image string) []*tag.Tag {
-	r := web.NewGet(
-		c.base.Copy().Path(join.Empty(image, "/tags")).Set(
+func (c *Client) Tags(image string) ([]*tag.Tag, error) {
+	var result tag.ListResponse
+
+	if e := c.requester.Notation(
+		request.Get(join.Empty(image, "/tags")).WithParameter(
 			constant.PageSizeParameter,
 			constant.PageSize,
-		).String(),
-	)
-	r.Header.Set(webConstant.Accept, webConstant.Object)
-	response := web.Send(web.Client(), r)
-	defer errors.PanicClose(response.Body)
-	var result tag.ListResponse
-	errors.PanicOnError(json.NewDecoder(response.Body).Decode(&result))
+		),
+		&result,
+	); e != nil {
+		return nil, e
+	}
 
-	return tag.NewSlice(result.Results)
+	return tag.NewSlice(result.Results), nil
 }

@@ -1,29 +1,47 @@
 package gofix
 
-import "github.com/funtimecoding/soil/pkg/lint/output"
+import (
+	"github.com/funtimecoding/soil/pkg/lint/face"
+	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/source/index"
+	"github.com/funtimecoding/soil/pkg/source/resolve"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/option"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/workspace"
+)
 
 func runFix(
-	directory string,
-	patterns []string,
-	diff bool,
+	o *option.Fix,
+	w *workspace.Workspace,
 	r *output.Results,
 ) {
+	patterns := o.Patterns
+
 	if len(patterns) == 0 {
 		patterns = []string{"./..."}
 	}
 
-	all, fileSet := Load(directory, patterns)
-	violations := FindViolations(all)
+	reported := listReported(o.Root, patterns)
+
+	if o.Full || resolve.CoversMainModule(patterns) {
+		fixModule(o, patterns, reported, nil, w, r)
+
+		return
+	}
+
+	loaded, fileSet := loadThrough(o.Root, patterns, w)
+	handle := index.New(o.IndexDirectory(), o.Root, face.Kind())
+	faces := face.FromWorkspace(handle, loaded)
+	violations := FindViolations(loaded, reported, faces)
 
 	if len(violations) == 0 {
 		return
 	}
 
-	edits := BuildAllEdits(fileSet, all, violations, r)
-	ApplyEdits(fileSet, edits, directory, diff)
+	if anyExported(violations) {
+		targetedFix(o, patterns, reported, faces, violations, handle, w, r)
 
-	if !diff {
-		loadedFiles := BuildLoadedFiles(all)
-		FixUnloadedReferences(violations, loadedFiles, directory, r)
+		return
 	}
+
+	applyNaming(fileSet, loaded, violations, o, w, r, nil)
 }

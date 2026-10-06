@@ -38,6 +38,11 @@ func sessionContext(c *command_context.Context) *cobra.Command {
 				},
 			)
 			errors.PanicOnError(e)
+
+			if response.JSON200 == nil {
+				c.Terminal().Reject(response.Status(), response.Body)
+			}
+
 			results := response.JSON200.Results
 
 			if len(results) == 0 {

@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/convert"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -36,7 +36,7 @@ func (s *Server) get(
 		return s.captureFail(f, "load relations")
 	}
 
-	var history []store.Version
+	var history []record.Version
 
 	if q.GetBool(constant.IncludeHistory, false) {
 		history, e = s.service.GetMemoryHistory(identifier)

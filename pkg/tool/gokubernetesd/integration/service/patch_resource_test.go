@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/integration/service_tester"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/query"
 	"k8s.io/apimachinery/pkg/types"
 	"testing"
 )
@@ -15,7 +15,7 @@ func TestPatchResource(t *testing.T) {
 	e := s.Service.PatchResource(
 		context.Background(),
 		"test",
-		service.PatchQuery{
+		query.Patch{
 			ResourceType: "deployments",
 			Name:         "nginx",
 			Namespace:    "default",
@@ -27,7 +27,7 @@ func TestPatchResource(t *testing.T) {
 	result, f := s.Service.GetResource(
 		context.Background(),
 		"test",
-		service.GetQuery{
+		query.Get{
 			ResourceType: "deployments",
 			Name:         "nginx",
 			Namespace:    "default",

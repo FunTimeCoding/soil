@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/source/imports"
 	"github.com/funtimecoding/soil/pkg/strings/camel"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/relocation"
 	"go/ast"
 	"golang.org/x/tools/go/packages"
 	"unicode"
@@ -15,14 +16,14 @@ func buildMoveEntries(
 	packagePath string,
 	symbols []string,
 	targetFile string,
-) ([]*moveEntry, string) {
+) ([]*relocation.Entry, string) {
 	batch := make(map[string]bool)
 
 	for _, name := range symbols {
 		batch[name] = true
 	}
 
-	var result []*moveEntry
+	var result []*relocation.Entry
 
 	for _, symbol := range symbols {
 		o, _, e := findDeclaration(all, packagePath, symbol, "")
@@ -76,21 +77,18 @@ func buildMoveEntries(
 			name = fmt.Sprintf("%s.go", camel.ToSnake(newName))
 		}
 
-		result = append(
-			result,
-			&moveEntry{
-				symbol:      symbol,
-				newName:     newName,
-				flipped:     flipped,
-				object:      o,
-				file:        file,
-				declaration: declaration,
-				spec:        spec,
-				node:        node,
-				carried:     imports.UsedBy(file, node),
-				targetFile:  name,
-			},
-		)
+		entry := relocation.NewEntry()
+		entry.Symbol = symbol
+		entry.NewName = newName
+		entry.Flipped = flipped
+		entry.Object = o
+		entry.File = file
+		entry.Declaration = declaration
+		entry.Spec = spec
+		entry.Node = node
+		entry.Carried = imports.UsedBy(file, node)
+		entry.TargetFile = name
+		result = append(result, entry)
 	}
 
 	return result, ""

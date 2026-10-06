@@ -6,29 +6,34 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/source/build_tag"
+	"github.com/funtimecoding/soil/pkg/source/inventory"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/option"
 	"os"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	r := reporter.New(constant.Identity.Name(), version).Start()
+func Main() {
+	r := reporter.New(constant.Identity.Name()).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Boolean("diff", false, "Show diff without applying")
 	a.Boolean("survey", false, "Print violations without fixing")
 	a.Boolean("rename", false, "Variable letter rename mode")
 	a.Boolean("summary", false, "One line per modified file")
+	a.Boolean(
+		"full",
+		false,
+		"Load the whole module for the naming pass instead of the persisted per-package facts",
+	)
 	a.String(
 		argumentConstant.Root,
 		"",
 		"Repository root to fix, discovered upward from the working directory when empty",
 	)
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
+	build_tag.Memoize()
 	root, work := lint.Root(a.GetString(argumentConstant.Root))
 	patterns, e := lint.Patterns(root, work, a.Positionals())
 
@@ -50,10 +55,15 @@ func Main(
 	if a.GetBoolean("rename") {
 		RunVariableNamingFixWithDirectory(patterns, root, diff, s)
 	} else {
-		runFix(root, patterns, diff, s)
-		RunFormatFixWithDirectory(patterns, root, diff, s)
-		RunSingleParameterFixWithDirectory(patterns, root, diff, s)
-		RunImportAliasFixWithDirectory(patterns, root, diff, s)
+		o := option.New()
+		o.Root = root
+		o.Patterns = patterns
+		o.Diff = diff
+		o.Full = a.GetBoolean("full")
+		o.Replacing = inventory.LoadOptional(inventory.DefaultPath()).Replacing(
+			root,
+		)
+		RunDefault(o, s)
 	}
 
 	hasBlocked := output.PrintResults(s.Entries, a.GetBoolean("summary"))

@@ -5,12 +5,14 @@ import (
 	"github.com/amikos-tech/pure-onnx/ort"
 	"github.com/amikos-tech/pure-tokenizers"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/system/join"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 )
 
 func New(
-	modelPath string,
-	tokenizerPath string,
+	name string,
+	directory string,
+	sequenceLength int,
 ) (*Reranker, error) {
 	if !ort.IsInitialized() {
 		if e := ort.InitializeEnvironmentWithBootstrap(); e != nil {
@@ -18,10 +20,11 @@ func New(
 		}
 	}
 
+	path := join.Join(directory, constant.RerankTokenizerFile)
 	tokenizer, e := tokenizers.FromFile(
-		tokenizerPath,
+		path,
 		tokenizers.WithTruncation(
-			uintptr(constant.DefaultSequenceLength),
+			uintptr(sequenceLength),
 			tokenizers.TruncationDirectionRight,
 			tokenizers.TruncationStrategyLongestFirst,
 		),
@@ -29,7 +32,7 @@ func New(
 			true,
 			tokenizers.PaddingStrategy{
 				Tag:       tokenizers.PaddingStrategyFixed,
-				FixedSize: uintptr(constant.DefaultSequenceLength),
+				FixedSize: uintptr(sequenceLength),
 			},
 		),
 	)
@@ -38,17 +41,39 @@ func New(
 		return nil, fmt.Errorf("load tokenizer: %w", e)
 	}
 
-	session, f := newSession(modelPath, constant.DefaultSequenceLength)
+	counter, f := newCounter(path)
 
 	if f != nil {
 		errors.PanicOnError(tokenizer.Close())
 
-		return nil, f
+		return nil, fmt.Errorf("load counter: %w", f)
 	}
 
-	return &Reranker{
-		sequenceLength: constant.DefaultSequenceLength,
+	result := &Reranker{
+		name:           name,
+		sequenceLength: sequenceLength,
 		tokenizer:      tokenizer,
-		session:        session,
-	}, nil
+		counter:        counter,
+	}
+
+	if g := result.measureSpecials(); g != nil {
+		errors.PanicOnError(result.Close())
+
+		return nil, fmt.Errorf("measure special tokens: %w", g)
+	}
+
+	session, h := newSession(
+		join.Join(directory, constant.RerankModelFile),
+		sequenceLength,
+	)
+
+	if h != nil {
+		errors.PanicOnError(result.Close())
+
+		return nil, h
+	}
+
+	result.session = session
+
+	return result, nil
 }

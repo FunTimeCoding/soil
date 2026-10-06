@@ -2,7 +2,7 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/system"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/result"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/result/location"
 	"go/token"
 	"go/types"
 	"golang.org/x/tools/go/packages"
@@ -15,8 +15,8 @@ func referenceLocations(
 	set *token.FileSet,
 	declaration types.Object,
 	excludeFile string,
-) []*result.Location {
-	var locations []*result.Location
+) []*location.Location {
+	var locations []*location.Location
 	references := objectReferences(
 		all,
 		func(o types.Object) bool {
@@ -37,7 +37,7 @@ func referenceLocations(
 
 		locations = append(
 			locations,
-			result.NewLocation(
+			location.New(
 				system.RelativePath(directory, position.Filename),
 				position.Line,
 				f.Package.PkgPath,

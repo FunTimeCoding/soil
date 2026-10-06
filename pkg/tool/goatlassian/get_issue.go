@@ -1,12 +1,15 @@
 package goatlassian
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
 )
 
-func getIssue(c *client.Client) *cobra.Command {
+func getIssue(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var comments bool
 	result := &cobra.Command{
 		Use:   "get-issue [key]",
@@ -16,7 +19,7 @@ func getIssue(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(c.GetIssue(arguments[0], comments))
+			t.Emit(c.GetIssue(arguments[0], comments))
 		},
 	}
 	result.Flags().BoolVar(

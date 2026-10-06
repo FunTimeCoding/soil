@@ -1,5 +1,8 @@
 package constant
 
+import "time"
+
+const CommandLineTimeout = 500 * time.Millisecond
 const (
 	ModelContext = "model_context"
 	CommandLine  = "command_line"
@@ -10,6 +13,7 @@ const (
 
 	Success = "success"
 	Error   = "error"
+	Blocked = "blocked"
 
 	Baseline = "baseline"
 	Domain   = "domain"

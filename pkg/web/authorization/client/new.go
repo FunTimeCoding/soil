@@ -25,5 +25,6 @@ func New(
 		signInPath:      signInPath,
 		callbackLocator: callbackLocator,
 		seal:            seal,
+		requester:       newRequester(issuer),
 	}
 }

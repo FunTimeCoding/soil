@@ -5,26 +5,29 @@ import (
 	"github.com/dave/dst"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/decoration"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/relocation"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
 	"go/ast"
-	"os"
 	"sort"
 )
 
 func executeMove(
 	r *output.Results,
-	plan *movePlan,
+	plan *relocation.Plan,
+	out *sink.Sink,
 ) (*output.Results, error) {
-	for _, entry := range plan.entries {
-		if !entry.flipped {
+	for _, entry := range plan.Entries {
+		if !entry.Flipped {
 			continue
 		}
 
-		position := plan.set.Position(entry.object.Pos())
+		position := plan.Set.Position(entry.Object.Pos())
 		r.AddConcern(
 			concern.NewLine(
 				"exported",
-				fmt.Sprintf("%s → %s", entry.symbol, entry.newName),
+				fmt.Sprintf("%s → %s", entry.Symbol, entry.NewName),
 				position.Filename,
 				position.Line,
 				"",
@@ -35,24 +38,24 @@ func executeMove(
 
 	decorations := decoration.NewSet()
 
-	for _, entry := range plan.entries {
+	for _, entry := range plan.Entries {
 		if _, e := decorations.DecorateFile(
-			plan.set,
-			plan.source,
-			entry.file,
+			plan.Set,
+			plan.Source,
+			entry.File,
 		); e != nil {
 			return nil, e
 		}
 	}
 
-	for ident, name := range plan.renames {
-		owner, file := findOwningFile(plan.all, ident.Pos())
+	for ident, name := range plan.Renames {
+		owner, file := findOwningFile(plan.All, ident.Pos())
 
 		if file == nil {
 			continue
 		}
 
-		if _, e := decorations.DecorateFile(plan.set, owner, file); e != nil {
+		if _, e := decorations.DecorateFile(plan.Set, owner, file); e != nil {
 			return nil, e
 		}
 
@@ -61,68 +64,30 @@ func executeMove(
 		}
 	}
 
-	var filenames []string
+	e := applyQualifications(
+		r,
+		decorations,
+		plan.Set,
+		plan.Qualifications,
+		plan.TargetPackagePath,
+	)
 
-	for filename := range plan.qualifications {
-		filenames = append(filenames, filename)
+	if e != nil {
+		return nil, e
 	}
 
-	sort.Strings(filenames)
-
-	for _, filename := range filenames {
-		q := plan.qualifications[filename]
-		file, e := decorations.DecorateFile(plan.set, q.owner, q.file)
-
-		if e != nil {
-			return nil, e
-		}
-
-		for ident, newName := range q.idents {
-			d := decorations.DecoratedIdent(q.owner, ident)
-
-			if d == nil {
-				continue
-			}
-
-			d.Name = newName
-			d.Path = plan.targetPackagePath
-		}
-
-		if q.name != nil && q.name.alias != "" && !q.name.imported {
-			decorations.AddAlias(file, plan.targetPackagePath, q.name.alias)
-		}
-
-		for _, qp := range q.positions {
-			r.AddConcern(
-				concern.NewLine(
-					"qualified",
-					fmt.Sprintf(
-						"%s → %s.%s",
-						qp.oldName,
-						q.name.local,
-						qp.newName,
-					),
-					qp.position.Filename,
-					qp.position.Line,
-					"",
-					true,
-				),
-			)
-		}
-	}
-
-	for _, entry := range plan.entries {
-		for _, ident := range entry.backIdentifiers {
-			if d := decorations.DecoratedIdent(plan.source, ident); d != nil {
-				d.Path = plan.packagePath
+	for _, entry := range plan.Entries {
+		for _, ident := range entry.BackIdentifiers {
+			if d := decorations.DecoratedIdent(plan.Source, ident); d != nil {
+				d.Path = plan.PackagePath
 			}
 		}
 	}
 
-	groups := make(map[string][]*moveEntry)
+	groups := make(map[string][]*relocation.Entry)
 
-	for _, entry := range plan.entries {
-		groups[entry.targetFile] = append(groups[entry.targetFile], entry)
+	for _, entry := range plan.Entries {
+		groups[entry.TargetFile] = append(groups[entry.TargetFile], entry)
 	}
 
 	var groupNames []string
@@ -137,7 +102,7 @@ func executeMove(
 	for _, name := range groupNames {
 		transplants[name] = transplantEntries(
 			decorations,
-			plan.source,
+			plan.Source,
 			groups[name],
 		)
 	}
@@ -145,29 +110,29 @@ func executeMove(
 	removedSpecs := make(map[ast.Spec]bool)
 	sourceNames := make(map[string]bool)
 
-	for _, entry := range plan.entries {
-		filename := plan.set.Position(entry.file.Pos()).Filename
+	for _, entry := range plan.Entries {
+		filename := plan.Set.Position(entry.File.Pos()).Filename
 		sourceNames[filename] = true
 
-		if entry.spec != nil {
-			if removedSpecs[entry.spec] {
+		if entry.Spec != nil {
+			if removedSpecs[entry.Spec] {
 				continue
 			}
 
-			removedSpecs[entry.spec] = true
+			removedSpecs[entry.Spec] = true
 		}
 
 		file := decorations.Files[filename]
 		declaration, _ := decorations.DecoratedNode(
-			plan.source,
-			entry.declaration,
+			plan.Source,
+			entry.Declaration,
 		).(dst.Decl)
 		var spec dst.Spec
 
-		if entry.spec != nil {
+		if entry.Spec != nil {
 			spec, _ = decorations.DecoratedNode(
-				plan.source,
-				entry.spec,
+				plan.Source,
+				entry.Spec,
 			).(dst.Spec)
 		}
 
@@ -188,20 +153,20 @@ func executeMove(
 			continue
 		}
 
-		if !plan.dryRun {
-			if e := os.Remove(filename); e != nil {
-				return nil, e
-			}
-		}
-
+		out.Remove(filename)
 		deleted[filename] = true
-		r.AddConcern(concern.NewFile("removed", "empty file", filename, true))
+		r.AddConcern(
+			concern.NewFile(
+				constant.ConcernRemoved,
+				"empty file",
+				filename,
+				true,
+			),
+		)
 	}
 
-	if plan.createTarget && !plan.dryRun {
-		if e := os.MkdirAll(plan.moveDirectory, 0755); e != nil {
-			return nil, e
-		}
+	if plan.CreateTarget {
+		out.MakeDirectory(plan.MoveDirectory)
 	}
 
 	for _, name := range groupNames {
@@ -222,9 +187,9 @@ func executeMove(
 					"moved",
 					fmt.Sprintf(
 						"%s → %s.%s",
-						entry.symbol,
-						plan.targetPackageName,
-						entry.newName,
+						entry.Symbol,
+						plan.TargetPackageName,
+						entry.NewName,
 					),
 					targetPath,
 					true,
@@ -246,21 +211,17 @@ func executeMove(
 	for _, filename := range restoredNames {
 		file := decorations.Files[filename]
 		e := restoreDecoratedFile(
-			plan.resolver,
+			plan.Resolver,
 			decorations.PackagePaths[file],
 			decorations.Aliases[file],
 			file,
 			filename,
-			plan.dryRun,
+			out,
 		)
 
 		if e != nil {
 			return nil, e
 		}
-	}
-
-	if plan.dryRun {
-		r.MarkPlanned()
 	}
 
 	return r, nil

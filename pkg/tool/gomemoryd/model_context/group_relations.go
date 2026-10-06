@@ -1,9 +1,9 @@
 package model_context
 
-import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 
 func groupRelations(
-	edges []store.RelationOverview,
+	edges []record.RelationOverview,
 	members map[int64]bool,
 ) []groupRelation {
 	var outward []groupRelation

@@ -3,6 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/audit_configuration"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/unit/scan_tester"
 	"testing"
 )
@@ -85,7 +86,7 @@ func TestModelContextPermissionsMappedPathMissing(t *testing.T) {
 		base,
 		`{"permissions":{"allow":["mcp__bravo__anything"]}}`,
 	)
-	configuration := scan.NewConfiguration()
+	configuration := audit_configuration.New()
 	configuration.ModelContext = map[string]string{"bravo": "pkg/tool/gobravod"}
 	result := scan.ModelContextPermissions(base, configuration)
 	assert.Integer(t, 1, len(result))
@@ -105,6 +106,6 @@ func TestModelContextPermissionsNoMap(t *testing.T) {
 		base,
 		`{"permissions":{"allow":["mcp__alfa__alfa_search"]}}`,
 	)
-	result := scan.ModelContextPermissions(base, scan.NewConfiguration())
+	result := scan.ModelContextPermissions(base, audit_configuration.New())
 	assert.Integer(t, 0, len(result))
 }

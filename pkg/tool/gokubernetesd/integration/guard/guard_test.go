@@ -1,7 +1,6 @@
 package guard
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
@@ -26,14 +25,7 @@ func TestGuard(t *testing.T) {
 			_ *http.ServeMux,
 			g *guard.Mux,
 		) {
-			gokubernetesd.Mount(
-				s,
-				true,
-				memory.New(),
-				mock_recorder.New(),
-				constant.DefaultVersion,
-				g,
-			)
+			gokubernetesd.Mount(s, true, memory.New(), mock_recorder.New(), g)
 		},
 	)
 	defer v.Stop()

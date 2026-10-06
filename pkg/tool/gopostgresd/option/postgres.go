@@ -6,5 +6,4 @@ type Postgres struct {
 	Address       string
 	ServiceTokens []string
 	Inventory     *inventory.Inventory
-	Version       string
 }

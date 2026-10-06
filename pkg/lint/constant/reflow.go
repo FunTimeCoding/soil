@@ -18,6 +18,7 @@ const (
 	InterruptingListKey  = "interrupting_list"
 	InterruptingListText = "List starts directly under a paragraph line - join a prose dash back, or put a blank line or a colon before a real list"
 	EmphasisMarkers      = "*_"
+	OpeningMarks         = "\"'(“‘"
 )
 
 var BlockOpenerPattern = regexp.MustCompile(`^>|^(?:[*+-]|#{1,6}|\d+[).])$`)

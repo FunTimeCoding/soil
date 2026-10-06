@@ -47,7 +47,9 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				"receiver",
-				mcp.Description("Receiver type name for methods, e.g. Store."),
+				mcp.Description(
+					"Type name for methods and struct fields, e.g. Store.",
+				),
 			),
 			mcp.WithString(
 				"file",
@@ -106,6 +108,73 @@ func (s *Server) register() {
 	)
 	s.server.AddTool(
 		mcp.NewTool(
+			constant.FindLiterals,
+			mcp.WithDescription(
+				"Census of every composite literal and new() of a struct type across the module, before giving it a constructor. Sites outside the declaring package come back grouped by shape - the fields each sets in declaration order, & for an address, markers unkeyed, elided (type left out in a slice or map literal), value (no &), nested (not the sole value of an assignment or var) - with an exemplar and locations per group. Sites inside the declaring package and on the expected side of an assert are only counted. Read-only, no files change.",
+			),
+			mcp.WithString(
+				"package_path",
+				mcp.Required(),
+				mcp.Description(
+					"Full import path of the package declaring the type.",
+				),
+			),
+			mcp.WithString(
+				"type",
+				mcp.Required(),
+				mcp.Description("Struct type name, e.g. Shape."),
+			),
+		),
+		mcp.NewTypedToolHandler(s.findLiterals),
+	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.IntroduceConstructor,
+			mcp.WithDescription(
+				"Give a struct a constructor and rewrite its literal sites outside the declaring package to call it. The name follows the package: New in new.go when the struct is alone, NewFoo in new_foo.go in a bag of data structs; a struct sharing its package with a receiver struct refuses with the extract_type move to make first. Parameters are field names in declaration order - none by default (blank constructor, add parameters as needed), a list, or the fields every site sets. Only sites setting exactly the parameters are rewritten, an expression swap that is safe anywhere; every other site is reported with its reason (value literal, misses a field, sets fields beyond the constructor, evaluation order of calls, comments inside). Run find_literals first and dry_run before writing.",
+			),
+			mcp.WithString(
+				"package_path",
+				mcp.Required(),
+				mcp.Description(
+					"Full import path of the package declaring the type.",
+				),
+			),
+			mcp.WithString(
+				"type",
+				mcp.Required(),
+				mcp.Description("Exported struct type name, e.g. Shape."),
+			),
+			mcp.WithArray(
+				"parameters",
+				mcp.Description(
+					"Field names to take as parameters; they appear in declaration order. Excludes parameters_from_sites.",
+				),
+				mcp.Items(map[string]any{"type": "string"}),
+			),
+			mcp.WithBoolean(
+				"parameters_from_sites",
+				mcp.Description(
+					"Take as parameters the fields every outside site sets.",
+				),
+			),
+			mcp.WithBoolean(
+				"assign_rest",
+				mcp.Description(
+					"Also rewrite sites setting more than the parameters when they are the sole value of an assignment or var: the constructor call, then one field assignment per remaining field.",
+				),
+			),
+			mcp.WithBoolean(
+				"dry_run",
+				mcp.Description(
+					"Report what the call would change without writing anything.",
+				),
+			),
+		),
+		mcp.NewTypedToolHandler(s.introduceConstructor),
+	)
+	s.server.AddTool(
+		mcp.NewTool(
 			constant.ApplyPattern,
 			mcp.WithDescription(
 				"Apply a bulk edit to every site matching a pattern: run the match_pattern check, then rewrite each matched site's statement from the pattern shape to the replacement shape, holes carrying the site's own expressions. Imports are managed automatically. By default all-or-nothing: any unmatched or refused site means nothing is written and the report explains why; pass partial to rewrite the matched sites and take the remainder as hand work. Sites with comments in the statement refuse rather than lose them. Run with dry_run first.",
@@ -139,7 +208,7 @@ func (s *Server) register() {
 				"replacement",
 				mcp.Required(),
 				mcp.Description(
-					"Target shape - a Go function with the same hole names and exactly one body statement, e.g. func replacement(c *client.Client, key string) { console.Emit(c.DeleteComment(key)) }.",
+					"Target shape - a Go function with the same hole names and exactly one body statement, e.g. func replacement(c *client.Client, t *terminal.Terminal, key string) { t.Emit(c.DeleteComment(key)) }.",
 				),
 			),
 			mcp.WithBoolean(
@@ -183,7 +252,7 @@ func (s *Server) register() {
 		mcp.NewTool(
 			constant.ChangeVisibility,
 			mcp.WithDescription(
-				"Change the visibility of a Go function, method, type, or constant by toggling its first letter case. Updates all references across the module.",
+				"Change the visibility of a Go function, method, struct field, type, or constant by toggling its first letter case. Updates all references across the module.",
 			),
 			mcp.WithString(
 				"symbol",
@@ -199,7 +268,9 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				"receiver",
-				mcp.Description("Receiver type name for methods, e.g. Store."),
+				mcp.Description(
+					"Type name for methods and struct fields, e.g. Store.",
+				),
 			),
 			mcp.WithBoolean(
 				"dry_run",
@@ -214,7 +285,7 @@ func (s *Server) register() {
 		mcp.NewTool(
 			constant.RenameSymbol,
 			mcp.WithDescription(
-				"Rename a Go function, method, type, or constant. Updates all references across the module.",
+				"Rename a Go function, method, struct field, type, or constant. Updates all references across the module, composite literal keys included. Embedded fields refuse - rename the type instead.",
 			),
 			mcp.WithString(
 				"package_path",
@@ -233,7 +304,9 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				"receiver",
-				mcp.Description("Receiver type name for methods, e.g. Store."),
+				mcp.Description(
+					"Type name for methods and struct fields, e.g. Store.",
+				),
 			),
 			mcp.WithBoolean(
 				"dry_run",
@@ -243,6 +316,57 @@ func (s *Server) register() {
 			),
 		),
 		mcp.NewTypedToolHandler(s.renameSymbol),
+	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.RemoveParameters,
+			mcp.WithDescription(
+				"Remove parameters from Go functions and methods, dropping the matching argument at every call site in the module. Batch: a parameter only passed on to another removed parameter in the batch counts as unused. Refuses a parameter still used in its body, a function used as a value or satisfying an interface, and any drop that would remove a call. Locals left unused are removed; leftover parameters and write-only fields are reported. All-or-nothing.",
+			),
+			mcp.WithArray(
+				"functions",
+				mcp.Required(),
+				mcp.Description(
+					"Functions and the parameters to remove from each.",
+				),
+				mcp.Items(
+					map[string]any{
+						"type": "object",
+						"properties": map[string]any{
+							"package_path": map[string]any{
+								"type":        "string",
+								"description": "Full import path of the package.",
+							},
+							"name": map[string]any{
+								"type":        "string",
+								"description": "Function or method name.",
+							},
+							"receiver": map[string]any{
+								"type":        "string",
+								"description": "Receiver type name for methods, e.g. Store.",
+							},
+							"parameters": map[string]any{
+								"type":        "array",
+								"items":       map[string]any{"type": "string"},
+								"description": "Parameter names to remove.",
+							},
+						},
+						"required": []string{
+							"package_path",
+							"name",
+							"parameters",
+						},
+					},
+				),
+			),
+			mcp.WithBoolean(
+				"dry_run",
+				mcp.Description(
+					"Report what the call would change without writing anything. Emits the same lines a real run does.",
+				),
+			),
+		),
+		mcp.NewTypedToolHandler(s.removeParameters),
 	)
 	s.server.AddTool(
 		mcp.NewTool(

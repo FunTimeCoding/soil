@@ -1,12 +1,15 @@
 package goatlassian
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
 )
 
-func getPageChildren(c *client.Client) *cobra.Command {
+func getPageChildren(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "get-page-children [identifier]",
 		Short: "List child pages of a Confluence page",
@@ -15,7 +18,7 @@ func getPageChildren(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(c.GetPageChildren(arguments[0]))
+			t.Emit(c.GetPageChildren(arguments[0]))
 		},
 	}
 }

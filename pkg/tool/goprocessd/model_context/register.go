@@ -62,7 +62,7 @@ func (s *Server) register() {
 		mcp.NewTool(
 			constant.ProcessReload,
 			mcp.WithDescription(
-				"Re-read the Procfile, or re-evaluate the environment file for future restarts.",
+				"procfile: re-read the Procfile and apply it now - new entries start, removed ones stop, and every entry whose command changed restarts. environment: re-evaluate the environment file for future restarts only; running processes keep theirs.",
 			),
 			mcp.WithString(
 				"scope",

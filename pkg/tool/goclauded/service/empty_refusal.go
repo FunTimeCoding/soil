@@ -27,14 +27,14 @@ func (s *Service) EmptyRefusal(r *session.Session) (*refusal.Refusal, error) {
 	}
 
 	for _, c := range s.emptyChecks() {
-		count, e := c.count(r.Identifier)
+		count, e := c.Count(r.Identifier)
 
 		if e != nil {
 			return nil, e
 		}
 
 		if count > 0 {
-			return refusal.New(c.message), nil
+			return refusal.New(c.Message), nil
 		}
 	}
 

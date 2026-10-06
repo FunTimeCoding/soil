@@ -1,8 +1,8 @@
 package web
 
-import "github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
+import "github.com/funtimecoding/soil/pkg/tool/godashboardd/board/layout"
 
-func weight(v *board.Section) int {
+func weight(v *layout.Section) int {
 	result := len(v.Entries)
 
 	if v.Name != "" {

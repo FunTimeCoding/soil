@@ -4,13 +4,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/parse"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/matrix"
 	"path/filepath"
 )
 
 func scanFrontend(
 	v *virtual_file_system.System,
 	s *Service,
-) *Frontend {
+) *matrix.Frontend {
 	web := filepath.Join(s.Path, constant.WebDirectory)
 	construct := parseWebFile(v, filepath.Join(web, constant.NewFileName))
 
@@ -19,12 +20,12 @@ func scanFrontend(
 		return nil
 	}
 
-	f := &Frontend{
-		Name:    s.Name,
-		Repo:    s.Repo,
-		Theme:   constant.UnknownTheme,
-		Favicon: v.Has(filepath.Join(web, constant.FaviconFile)),
-	}
+	f := matrix.NewFrontend(
+		s.Name,
+		s.Repo,
+		constant.UnknownTheme,
+		v.Has(filepath.Join(web, constant.FaviconFile)),
+	)
 	theme := parse.FindMethods(construct, constant.ThemeMethod)
 
 	if len(theme) > 0 {

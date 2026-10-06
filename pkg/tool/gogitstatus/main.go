@@ -13,12 +13,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gogitstatus/constant"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	r := reporter.New(constant.Identity.Name(), version).Start()
+func Main() {
+	r := reporter.New(constant.Identity.Name()).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Boolean(argumentConstant.Notation, false, "JSON output")
@@ -37,7 +33,7 @@ func Main(
 			monitor.GoGitStatus.Plural,
 		),
 	)
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
 	o := option.New()
 	o.Notation = a.GetBoolean(argumentConstant.Notation)
 	o.All = a.GetBoolean(argumentConstant.All)

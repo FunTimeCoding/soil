@@ -4,25 +4,26 @@ import (
 	"fmt"
 	"github.com/dave/dst"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/decoration"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/relocation"
 	"os"
 	"path/filepath"
 )
 
 func writeMoveTarget(
 	d *decoration.Set,
-	plan *movePlan,
+	plan *relocation.Plan,
 	fileName string,
 	transplants []dst.Decl,
 ) (string, error) {
-	targetPath := filepath.Join(plan.moveDirectory, fileName)
+	targetPath := filepath.Join(plan.MoveDirectory, fileName)
 
-	if plan.target != nil {
+	if plan.Target != nil {
 		if astFile := findSyntaxFile(
-			plan.set,
-			plan.target,
+			plan.Set,
+			plan.Target,
 			targetPath,
 		); astFile != nil {
-			file, e := d.DecorateFile(plan.set, plan.target, astFile)
+			file, e := d.DecorateFile(plan.Set, plan.Target, astFile)
 
 			if e != nil {
 				return targetPath, e
@@ -42,11 +43,11 @@ func writeMoveTarget(
 	}
 
 	file := &dst.File{
-		Name:  dst.NewIdent(plan.targetPackageName),
+		Name:  dst.NewIdent(plan.TargetPackageName),
 		Decls: transplants,
 	}
 
-	if lines := plan.constraints[fileName]; len(lines) > 0 {
+	if lines := plan.Constraints[fileName]; len(lines) > 0 {
 		for _, line := range lines {
 			file.Decs.Start.Append(line)
 		}
@@ -55,7 +56,7 @@ func writeMoveTarget(
 	}
 
 	d.Files[targetPath] = file
-	d.PackagePaths[file] = plan.targetPackagePath
+	d.PackagePaths[file] = plan.TargetPackagePath
 
 	return targetPath, nil
 }

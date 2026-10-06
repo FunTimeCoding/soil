@@ -1,11 +1,11 @@
 package web
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board/layout"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/constant"
 )
 
-func rowLabels(v *board.Entry) []string {
+func rowLabels(v *layout.Entry) []string {
 	if v.Widget == constant.NextcloudWidget {
 		return []string{constant.FilesLabel, constant.SharesLabel}
 	}

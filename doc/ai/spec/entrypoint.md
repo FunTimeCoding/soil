@@ -4,30 +4,25 @@ base: doc/ai/spec
 
 # Entrypoint Spec
 
-Shared conventions for all `cmd/` programs - linker variables, `Main()`,
-reporter integration.
+Shared conventions for all `cmd/` programs - `main`, `Main()`, reporter
+integration.
 
-## Linker Variables
+## main
 
-Every `cmd/<name>/main.go` declares linker variables and delegates to `Main()`:
+Every `cmd/<name>/main.go` only delegates to `Main()`:
 
 ```go
 package main
 
 import "github.com/funtimecoding/soil/pkg/tool/go<tool>"
 
-var (
-    Version   string
-    GitHash   string
-    BuildDate string
-)
-
 func main() {
-    go<tool>.Main(Version, GitHash, BuildDate)
+    go<tool>.Main()
 }
 ```
 
-These are injected by `gobuild` at compile time - see `build.md`.
+Nothing is linked in. The version stamp is Go's own build information, read by
+`stamp.New()` - see `build.md`.
 
 ## Main Function
 
@@ -51,12 +46,8 @@ single verb.
 ### Flat-flag Main (daemons, single-purpose tools)
 
 ```go
-func Main(
-    version string,
-    gitHash string,
-    buildDate string,
-) {
-    r := reporter.New(constant.Identity.Name(), version).Start()
+func Main() {
+    r := reporter.New(constant.Identity.Name()).Start()
     defer func() { r.RecoverFlush(recover()) }()
     a := argument.NewInstance(constant.Identity)
     a.String(argument.File, "", "File to wait for")
@@ -65,7 +56,7 @@ func Main(
     a.String(argument.Contains, "", "String for locator")
     a.Duration(argument.Timeout, 3*time.Minute, "")
     a.Boolean(argument.Verbose, false, "Verbose output")
-    a.Parse(version, gitHash, buildDate)
+    a.Parse()
     o := option.New()
     o.File = a.GetString(argument.File)
     o.Process = a.GetString(argument.Process)
@@ -99,40 +90,40 @@ Retrieval methods: `GetBoolean`, `GetString`, `GetInteger`,
 ### Subcommand Main (multi-operation tools)
 
 ```go
-func Main(
-    version string,
-    gitHash string,
-    buildDate string,
-) {
-    s := instrument.New(constant.Identity, version)
+func Main() {
+    s := instrument.NewCommandLine(constant.Identity)
     defer func() { s.Flush(recover()) }()
     c := client.NewEnvironment()
     o := &cobra.Command{
         Use:   constant.Identity.Usage(),
         Short: constant.Identity.Description(),
-        PersistentPostRun: func(
-            m *cobra.Command,
-            _ []string,
-        ) {
-            s.RecordCommand(m.Name())
-        },
     }
     o.AddCommand(listItems(c))
     o.AddCommand(createItem(c))
-    argument.CobraStamp(o, constant.Identity, version, gitHash, buildDate)
+    argument.CobraInstrument(o, s)
+    argument.CobraStamp(o, constant.Identity)
     errors.PanicOnError(o.Execute())
 }
 ```
 
-The `PersistentPostRun` hook records CLI telemetry for every
-successful command under the command's own name. Commands do not
-record individually.
+#### Telemetry and the version stamp
 
-`argument.CobraStamp` stamps the identity and gives Cobra its version: the same
+`argument.CobraInstrument` records CLI telemetry for every command under
+its full path (`gonix character list`): success after the command runs,
+error when a panic ends it, through the deferred `Flush`. A root's own
+`PersistentPreRun`/`PostRun` keep running. `instrument.NewCommandLine`
+waits at most half a second at exit for the record to send, so an
+unreachable telemetry host never holds a shell. Commands do not record
+individually; an `os.Exit` inside a command skips both the record and the
+flush.
+
+`argument.CobraStamp` gives Cobra the build's version: the same
 block every tool prints on `--version`, or the JSON report with `--notation`.
 Cobra handles `--help` natively. Identity provides `Use` and `Short` on the
 root command.
 No option struct - each subcommand owns its own flags.
+
+#### One file per subcommand
 
 Each subcommand lives in its own file and returns a `*cobra.Command`:
 
@@ -207,9 +198,12 @@ and the telemetry recorder - behind one constructor and one exit
 defer.
 
 ```go
-s := instrument.New(constant.Identity, version)
+s := instrument.New(constant.Identity)
 defer func() { s.Flush(recover()) }()
 ```
+
+The Sentry release is the tag the build is on or follows
+(`stamp.New().Tag()`), read by the reporter itself.
 
 - `Recorder()` and `Reporter()` expose the halves as `face.Recorder`
   and `face.Reporter` for downstream components
@@ -250,12 +244,14 @@ Run(o, r)
 See `pillars.md` for the full wiring pattern including logger and
 recovery middleware.
 
-### `os.Exit` and reporter
+### Direct exits and the reporter
 
 Some tools call `os.Exit(1)` for expected failure conditions (no results,
 validation failures, upload errors). This intentionally bypasses the reporter
 defer - these are not crashes and should not be reported as errors. The reporter
 covers unexpected panics only.
+
+### Exit codes
 
 Exit codes are `0` for success and `1` for every failure. Nothing
 distinguishes failure kinds by number - the response body already
@@ -271,3 +267,19 @@ captured daemon-side - the `event_identifier` in the body is the
 handle for it, so capturing again would duplicate one failure as
 two events. Only transport failures reach the reporter, through the
 normal panic path.
+
+A Cobra CLI emits and exits through a `pkg/terminal` `Terminal` built in
+`Main` from the instrument (`t := terminal.New(s)`) and handed to each
+subcommand beside its client. `t.Emit(response)` prints the body to stdout,
+or at 400 and above to stderr and exits `1`; `t.Exitln` and `t.Exitf` write
+to stderr and exit `1`, `t.Exit` exits with a code. A typed client's
+response is checked before its `JSON200` is read - `t.Reject(r.Status(),
+r.Body)` when it is nil. `t.Blockln` is for a protocol exit that is neither
+success nor failure, such as a hook refusing a tool call: the command records
+`blocked`. A token comes from `t.Required`, read once the command runs:
+`web.DeferredBearerEditor(t.Required, name)` reads it on the first request,
+so a missing token ends the command as `error` and `--help` needs none.
+Results go to stdout, failures to stderr, so a pipe receives only results.
+Every exit records the running command's outcome in telemetry and flushes it
+first - still without the reporter. A command that calls `os.Exit` directly
+records nothing; that is the shape the terminal replaces.

@@ -15,13 +15,7 @@ func cobraVersion(
 ) string {
 	t.Helper()
 	o := &cobra.Command{Use: "gotest", Run: func(*cobra.Command, []string) {}}
-	argument.CobraStamp(
-		o,
-		identity.New("gotest", "test tool", "gotest"),
-		"v1.2.3",
-		"abc1234",
-		"2026-01-01T00:00:00Z",
-	)
+	argument.CobraStamp(o, identity.New("gotest", "test tool", "gotest"))
 	var b bytes.Buffer
 	o.SetOut(&b)
 	o.SetArgs(arguments)

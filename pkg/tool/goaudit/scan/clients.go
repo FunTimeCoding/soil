@@ -3,14 +3,16 @@ package scan
 import (
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/audit_configuration"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/matrix"
 	"sort"
 )
 
 func Clients(
 	v *virtual_file_system.System,
 	repository string,
-	configuration *Configuration,
-) []*Client {
+	configuration *audit_configuration.Configuration,
+) []*matrix.Client {
 	result := findClients(
 		v,
 		constant.PackageDirectory,

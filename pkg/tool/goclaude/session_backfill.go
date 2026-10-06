@@ -30,6 +30,11 @@ func sessionBackfill(c *command_context.Context) *cobra.Command {
 				parameters,
 			)
 			errors.PanicOnError(e)
+
+			if response.JSON200 == nil {
+				c.Terminal().Reject(response.Status(), response.Body)
+			}
+
 			r := response.JSON200
 			console.Format(
 				"backfill: %d enriched, %d skipped\n",

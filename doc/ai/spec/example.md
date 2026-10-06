@@ -43,7 +43,7 @@ pkg/kubernetes/example/node_check/
 
 Entry points are exported. Helpers are private.
 
-## cmd/example/ Entry Points
+## Example Entry Points
 
 Each `cmd/example/<name>/main.go` is a **single file**. No helper files, no
 splits. `go run main.go` only compiles the one file passed to it, so all code

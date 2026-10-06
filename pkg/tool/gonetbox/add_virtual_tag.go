@@ -1,12 +1,15 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
 
-func addVirtualTag(c *client.Client) *cobra.Command {
+func addVirtualTag(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "add-virtual-tag [vm] [tag]",
 		Short: "Add a tag to a virtual machine",
@@ -15,7 +18,7 @@ func addVirtualTag(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(c.AddVirtualTag(arguments[0], arguments[1]))
+			t.Emit(c.AddVirtualTag(arguments[0], arguments[1]))
 		},
 	}
 }

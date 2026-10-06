@@ -2,6 +2,7 @@ package constant
 
 const (
 	ReasonExternal   Reason = "external"
+	ReasonHeading    Reason = "heading"
 	ReasonHome       Reason = "home"
 	ReasonImage      Reason = "image"
 	ReasonImport     Reason = "import"

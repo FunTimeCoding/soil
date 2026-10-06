@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/model_context/argument"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/query"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -34,7 +34,7 @@ func (s *Server) Patch(
 	f := s.service.PatchResource(
 		x,
 		cluster,
-		service.PatchQuery{
+		query.Patch{
 			ResourceType: a.ResourceType,
 			Name:         a.Name,
 			Namespace:    a.Namespace,

@@ -10,6 +10,7 @@ const (
 	Authenticate      = "WWW-Authenticate"
 	Authorization     = "Authorization"
 	ContentType       = "Content-Type"
+	Cookie            = "Cookie"
 	ExtendedRedirect  = "HX-Redirect"
 	ExtendedRequest   = "HX-Request"
 	ForwardedFor      = "X-Forwarded-For"

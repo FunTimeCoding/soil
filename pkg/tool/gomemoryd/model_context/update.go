@@ -23,36 +23,31 @@ func (s *Server) update(
 		return guard, g
 	}
 
-	name, f := q.RequireString(constant.MemoryName)
+	existing, f := s.service.GetMemory(int64(identifier))
 
 	if f != nil {
-		return response.Fail("name is required")
-	}
-
-	content, g := q.RequireString(constant.Content)
-
-	if g != nil {
-		return response.Fail("content is required")
-	}
-
-	description, h := q.RequireString(constant.Description)
-
-	if h != nil {
-		return response.Fail("description is required")
+		return s.captureDetail(f)
 	}
 
 	o := save_option.New()
-	o.Name = name
-	o.Content = content
-	o.Description = description
+	o.Name = textOr(q, constant.MemoryName, existing.Name)
+	o.Content = textOr(q, constant.Content, existing.Content)
+	o.Description = textOr(q, constant.Description, existing.Description)
 	o.Source = q.GetString(constant.Source, "")
-	m, i := s.service.UpdateMemory(int64(identifier), o)
+	o.Base = baseChange(q)
+	m, rewritten, h := s.service.UpdateMemory(int64(identifier), o)
 
-	if i != nil {
-		return s.captureDetail(i)
+	if h != nil {
+		return s.captureDetail(h)
 	}
 
 	return response.Success(
-		s.withReferences(fmt.Sprintf("Updated memory %d", m.Identifier), m),
+		s.withReferences(
+			withRewritten(
+				fmt.Sprintf("Updated memory %d", m.Identifier),
+				rewritten,
+			),
+			m,
+		),
 	)
 }

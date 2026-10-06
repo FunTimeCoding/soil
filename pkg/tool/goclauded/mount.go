@@ -22,7 +22,6 @@ func Mount(
 	harborPath string,
 	sessionExportPath string,
 	t face.Recorder,
-	version string,
 	g *guard.Mux,
 ) {
 	g.TokenMount(
@@ -37,6 +36,6 @@ func Mount(
 			http.NewServeMux(),
 		),
 	)
-	model_context.New(v, r, l, t, version).Mount(g)
+	model_context.New(v, r, l, t).Mount(g)
 	u.Mount(g)
 }

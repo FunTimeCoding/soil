@@ -76,7 +76,7 @@ func TestHiddenTagLeavesIndex(t *testing.T) {
 	q.Content = "updated quiet content"
 	q.Description = "quiet description"
 	q.Source = "test"
-	_, e = o.Service.UpdateMemory(m.Identifier, q)
+	_, _, e = o.Service.UpdateMemory(m.Identifier, q)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 1, o.Indexer.Pushed)
 	assert.Count(t, 2, o.Indexer.Deleted)
@@ -174,11 +174,56 @@ func TestServiceUpdatePreservesMetadataAndOrdinal(t *testing.T) {
 	q.Content = "updated"
 	q.Description = "scoped entry"
 	q.Source = "test"
-	updated, f := o.Service.UpdateMemory(m.Identifier, q)
+	updated, _, f := o.Service.UpdateMemory(m.Identifier, q)
 	assert.FatalOnError(t, f)
 	assert.String(t, "mechanism", updated.Metadata["kind"])
 	assert.Integer(t, 2, updated.Ordinal)
 	assert.String(t, "alfa", o.Indexer.Pushed[1].Collection)
+}
+
+func TestServiceCreateMemoryWithBase(t *testing.T) {
+	o := service_tester.New(t)
+	p := scopedOption("error capture", "")
+	p.Base = new("../soil/doc/ai/spec/error-handling")
+	m, e := o.Service.CreateMemory(p)
+	assert.FatalOnError(t, e)
+	assert.String(
+		t,
+		"../soil/doc/ai/spec/error-handling",
+		m.Metadata[constant.BaseKey],
+	)
+}
+
+func TestServiceUpdateKeepsBaseWhenOmitted(t *testing.T) {
+	o := service_tester.New(t)
+	m := createBased(t, o)
+	updated, _, e := o.Service.UpdateMemory(m.Identifier, updateOption())
+	assert.FatalOnError(t, e)
+	assert.String(t, "doc", updated.Metadata[constant.BaseKey])
+	assert.String(t, "mechanism", updated.Metadata["kind"])
+}
+
+func TestServiceUpdateClearsBaseWhenEmpty(t *testing.T) {
+	o := service_tester.New(t)
+	m := createBased(t, o)
+	q := updateOption()
+	q.Base = new("")
+	updated, _, e := o.Service.UpdateMemory(m.Identifier, q)
+	assert.FatalOnError(t, e)
+	_, found := updated.Metadata[constant.BaseKey]
+	assert.Boolean(t, false, found)
+	assert.String(t, "mechanism", updated.Metadata["kind"])
+}
+
+func TestServiceUpdateReplacesBase(t *testing.T) {
+	o := service_tester.New(t)
+	m := createBased(t, o)
+	q := updateOption()
+	q.Base = new("pkg")
+	updated, _, e := o.Service.UpdateMemory(m.Identifier, q)
+	assert.FatalOnError(t, e)
+	assert.String(t, "pkg", updated.Metadata[constant.BaseKey])
+	assert.String(t, "mechanism", updated.Metadata["kind"])
 }
 
 func TestServiceProfileScoped(t *testing.T) {
@@ -233,7 +278,7 @@ func TestServiceUpdateMemoryPreservesTags(t *testing.T) {
 	q.Content = "updated content"
 	q.Description = "updated desc"
 	q.Source = "test"
-	updated, e := o.Service.UpdateMemory(m.Identifier, q)
+	updated, _, e := o.Service.UpdateMemory(m.Identifier, q)
 	assert.FatalOnError(t, e)
 	assert.String(t, "updated content", updated.Content)
 	assert.Count(t, 2, updated.Tags)
@@ -247,6 +292,109 @@ func TestServiceUpdateMemoryNonexistentFails(t *testing.T) {
 	p.Content = constant.FixtureContent
 	p.Description = "desc"
 	p.Source = "test"
-	_, e := o.Service.UpdateMemory(999, p)
+	_, _, e := o.Service.UpdateMemory(999, p)
 	assert.Error(t, e)
+}
+
+func TestServiceUpdateWritesGivenEmptyContent(t *testing.T) {
+	o := service_tester.New(t)
+	m := createNamed(t, o, "pace", "", "Original body.")
+	q := renameOption(m, "pace")
+	q.Content = ""
+	updated, _, e := o.Service.UpdateMemory(m.Identifier, q)
+	assert.FatalOnError(t, e)
+	assert.String(t, "", updated.Content)
+	assert.String(t, "pace", updated.Description)
+}
+
+func TestServiceRenameRewritesCitations(t *testing.T) {
+	o := service_tester.New(t)
+	m := createNamed(t, o, "pace", "", "Original body.")
+	citing := createNamed(
+		t,
+		o,
+		"citing",
+		"",
+		"See `memory://default/pace` first.",
+	)
+	q := renameOption(m, "tempo")
+	_, rewritten, e := o.Service.UpdateMemory(m.Identifier, q)
+	assert.FatalOnError(t, e)
+	assert.Count(t, 1, rewritten)
+	assert.String(t, "citing", rewritten[0].Name)
+	reloaded, f := o.Service.GetMemory(citing.Identifier)
+	assert.FatalOnError(t, f)
+	assert.String(t, "See `memory://default/tempo` first.", reloaded.Content)
+}
+
+func TestServiceRenameLeavesSimilarNames(t *testing.T) {
+	o := service_tester.New(t)
+	m := createNamed(t, o, "pace", "", "Original body.")
+	citing := createNamed(
+		t,
+		o,
+		"citing",
+		"",
+		"See `memory://default/pace of work` first.",
+	)
+	q := renameOption(m, "tempo")
+	_, rewritten, e := o.Service.UpdateMemory(m.Identifier, q)
+	assert.FatalOnError(t, e)
+	assert.Count(t, 0, rewritten)
+	reloaded, f := o.Service.GetMemory(citing.Identifier)
+	assert.FatalOnError(t, f)
+	assert.String(
+		t,
+		"See `memory://default/pace of work` first.",
+		reloaded.Content,
+	)
+}
+
+func TestServiceRenameFollowsScope(t *testing.T) {
+	o := service_tester.New(t)
+	m := createNamed(t, o, "pace", "alfa", "Original body.")
+	citing := createNamed(
+		t,
+		o,
+		"citing",
+		"",
+		"See `memory://alfa/pace` and `memory://default/pace`.",
+	)
+	q := renameOption(m, "tempo")
+	_, _, e := o.Service.UpdateMemory(m.Identifier, q)
+	assert.FatalOnError(t, e)
+	reloaded, f := o.Service.GetMemory(citing.Identifier)
+	assert.FatalOnError(t, f)
+	assert.String(
+		t,
+		"See `memory://alfa/tempo` and `memory://default/pace`.",
+		reloaded.Content,
+	)
+}
+
+func TestServiceRenameOntoExistingNameIsRefused(t *testing.T) {
+	o := service_tester.New(t)
+	m := createNamed(t, o, "pace", "", "Original body.")
+	createNamed(t, o, "tempo", "", "Another body.")
+	q := renameOption(m, "tempo")
+	_, _, e := o.Service.UpdateMemory(m.Identifier, q)
+	assert.True(t, validation.Is(e))
+	reloaded, f := o.Service.GetMemory(m.Identifier)
+	assert.FatalOnError(t, f)
+	assert.String(t, "pace", reloaded.Name)
+}
+
+func TestServiceRenameVersionsTheRewrittenMemory(t *testing.T) {
+	o := service_tester.New(t)
+	m := createNamed(t, o, "pace", "", "Original body.")
+	citing := createNamed(t, o, "citing", "", "See `memory://default/pace`.")
+	q := renameOption(m, "tempo")
+	_, _, e := o.Service.UpdateMemory(m.Identifier, q)
+	assert.FatalOnError(t, e)
+	history, f := o.Service.GetMemoryHistory(citing.Identifier)
+	assert.FatalOnError(t, f)
+	last := history[len(history)-1]
+	assert.String(t, "rewritten", last.ChangeType)
+	assert.String(t, "test", last.Source)
+	assert.String(t, "See `memory://default/tempo`.", last.Content)
 }

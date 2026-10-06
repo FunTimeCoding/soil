@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/dave/dst"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/decoration"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/relocation"
 	"go/ast"
 	"go/token"
 	"golang.org/x/tools/go/packages"
@@ -12,45 +13,45 @@ import (
 func transplantEntries(
 	d *decoration.Set,
 	source *packages.Package,
-	entries []*moveEntry,
+	entries []*relocation.Entry,
 ) []dst.Decl {
-	ordered := append([]*moveEntry{}, entries...)
+	ordered := append([]*relocation.Entry{}, entries...)
 	sort.Slice(
 		ordered,
 		func(
 			i int,
 			j int,
 		) bool {
-			return ordered[i].object.Pos() < ordered[j].object.Pos()
+			return ordered[i].Object.Pos() < ordered[j].Object.Pos()
 		},
 	)
 	seen := make(map[ast.Node]bool)
 	var result []dst.Decl
 	groupIndex := make(map[token.Token]int)
-	groups := make(map[token.Token][]*transplantSpec)
+	groups := make(map[token.Token][]*relocation.TransplantSpec)
 
 	for _, entry := range ordered {
-		if entry.spec == nil {
-			if seen[entry.declaration] {
+		if entry.Spec == nil {
+			if seen[entry.Declaration] {
 				continue
 			}
 
-			seen[entry.declaration] = true
-			declaration := d.DecoratedNode(source, entry.declaration).(dst.Decl)
+			seen[entry.Declaration] = true
+			declaration := d.DecoratedNode(source, entry.Declaration).(dst.Decl)
 			declaration.Decorations().Before = dst.EmptyLine
 			result = append(result, declaration)
 
 			continue
 		}
 
-		if seen[entry.spec] {
+		if seen[entry.Spec] {
 			continue
 		}
 
-		seen[entry.spec] = true
-		g := entry.declaration.(*ast.GenDecl)
-		declaration := d.DecoratedNode(source, entry.declaration).(*dst.GenDecl)
-		spec := d.DecoratedNode(source, entry.spec).(dst.Spec)
+		seen[entry.Spec] = true
+		g := entry.Declaration.(*ast.GenDecl)
+		declaration := d.DecoratedNode(source, entry.Declaration).(*dst.GenDecl)
+		spec := d.DecoratedNode(source, entry.Spec).(dst.Spec)
 		single := len(g.Specs) == 1
 
 		if g.Tok == token.TYPE {
@@ -66,12 +67,7 @@ func transplantEntries(
 
 		groups[g.Tok] = append(
 			groups[g.Tok],
-			&transplantSpec{
-				declaration: declaration,
-				spec:        spec,
-				single:      single,
-			},
-		)
+			relocation.NewTransplantSpec(declaration, spec, single))
 	}
 
 	for tok, parts := range groups {
@@ -79,19 +75,19 @@ func transplantEntries(
 
 		if len(parts) == 1 {
 			result[i] = transplantSingle(
-				parts[0].declaration,
-				parts[0].spec,
-				parts[0].single,
+				parts[0].Declaration,
+				parts[0].Spec,
+				parts[0].Single,
 			)
 
 			continue
 		}
 
-		parent := parts[0].declaration
+		parent := parts[0].Declaration
 		whole := len(parts) == len(parent.Specs)
 
 		for _, part := range parts {
-			if part.declaration != parent {
+			if part.Declaration != parent {
 				whole = false
 			}
 		}
@@ -113,7 +109,7 @@ func transplantEntries(
 		counts := make(map[*dst.GenDecl]int)
 
 		for _, part := range parts {
-			counts[part.declaration]++
+			counts[part.Declaration]++
 		}
 
 		merged := &dst.GenDecl{Tok: tok, Lparen: true, Rparen: true}
@@ -121,21 +117,21 @@ func transplantEntries(
 		carried := make(map[*dst.GenDecl]bool)
 
 		for _, part := range parts {
-			absorbed := counts[part.declaration] ==
-				len(part.declaration.Specs)
+			absorbed := counts[part.Declaration] ==
+				len(part.Declaration.Specs)
 
-			if absorbed && !carried[part.declaration] {
-				carried[part.declaration] = true
-				part.spec.Decorations().Start.Prepend(
-					part.declaration.Decs.Start.All()...,
+			if absorbed && !carried[part.Declaration] {
+				carried[part.Declaration] = true
+				part.Spec.Decorations().Start.Prepend(
+					part.Declaration.Decs.Start.All()...,
 				)
 			}
 
-			if part.spec.Decorations().Before == dst.None {
-				part.spec.Decorations().Before = dst.NewLine
+			if part.Spec.Decorations().Before == dst.None {
+				part.Spec.Decorations().Before = dst.NewLine
 			}
 
-			merged.Specs = append(merged.Specs, part.spec)
+			merged.Specs = append(merged.Specs, part.Spec)
 		}
 
 		result[i] = merged

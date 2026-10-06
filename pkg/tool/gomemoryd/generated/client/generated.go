@@ -54,12 +54,12 @@ type MemoryResponse struct {
 	Identifier int64 `json:"identifier"`
 }
 
-// MemoryUpdateRequest defines model for MemoryUpdateRequest.
+// MemoryUpdateRequest Omitted fields keep their stored values.
 type MemoryUpdateRequest struct {
-	Content        string             `json:"content"`
-	Description    string             `json:"description"`
+	Content        *string            `json:"content,omitempty"`
+	Description    *string            `json:"description,omitempty"`
 	Metadata       *map[string]string `json:"metadata,omitempty"`
-	Name           string             `json:"name"`
+	Name           *string            `json:"name,omitempty"`
 	Ordinal        *int               `json:"ordinal,omitempty"`
 	ProvenanceHash *string            `json:"provenance_hash,omitempty"`
 	Source         *string            `json:"source,omitempty"`

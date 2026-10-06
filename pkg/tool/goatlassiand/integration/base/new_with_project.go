@@ -4,13 +4,12 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira"
-	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand"
-	atlassianConstant "github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/mock_client/mock_jira"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/web"
@@ -42,14 +41,13 @@ func NewWithProject(
 						j,
 						f,
 						project,
-						atlassianConstant.PollInterval,
+						constant.PollInterval,
 						logger.New(context.Background()),
 						memory.New(),
 					),
 				),
 				memory.New(),
 				mock_recorder.New(),
-				constant.DefaultVersion,
 				g,
 			)
 		},

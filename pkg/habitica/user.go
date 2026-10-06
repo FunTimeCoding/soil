@@ -1,17 +1,10 @@
 package habitica
 
-import (
-	"github.com/funtimecoding/soil/pkg/habitica/user"
-	"net/http"
-)
+import "github.com/funtimecoding/soil/pkg/habitica/user"
 
 func (c *Client) user() (*user.User, error) {
 	var result *user.User
-	r, e := c.do(http.MethodGet, "/user", nil)
+	e := c.basic.Get("/user", nil, &result)
 
-	if e != nil {
-		return result, e
-	}
-
-	return result, c.decode(r, &result)
+	return result, e
 }

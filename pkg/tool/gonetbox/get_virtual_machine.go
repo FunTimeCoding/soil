@@ -1,12 +1,15 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
 
-func getVirtualMachine(c *client.Client) *cobra.Command {
+func getVirtualMachine(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "get-virtual-machine [name]",
 		Short: "Get a NetBox virtual machine by name",
@@ -15,7 +18,7 @@ func getVirtualMachine(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(c.GetVirtualMachine(arguments[0]))
+			t.Emit(c.GetVirtualMachine(arguments[0]))
 		},
 	}
 }

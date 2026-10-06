@@ -14,6 +14,10 @@ func sameObject(
 		return false
 	}
 
+	if a.Pos().IsValid() && a.Pos() == b.Pos() && a.Name() == b.Name() {
+		return true
+	}
+
 	first, okay := a.(*types.Func)
 
 	if okay {

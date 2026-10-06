@@ -47,7 +47,17 @@ func interruption(
 		return 0, false
 	}
 
-	r, _ := utf8.DecodeRune(source[start:])
+	rest := source[start:]
 
-	return itemLine, unicode.IsLower(r)
+	for len(rest) > 0 {
+		r, size := utf8.DecodeRune(rest)
+
+		if !strings.ContainsRune(constant.OpeningMarks, r) {
+			return itemLine, unicode.IsLower(r)
+		}
+
+		rest = rest[size:]
+	}
+
+	return 0, false
 }

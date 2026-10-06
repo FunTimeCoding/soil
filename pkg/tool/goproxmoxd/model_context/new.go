@@ -11,10 +11,9 @@ func New(
 	v proxFace.Service,
 	r face.Reporter,
 	t face.Recorder,
-	version string,
 ) *Server {
 	result := &Server{
-		server: server.New(constant.Identity, version).WithInstructions(
+		server: server.New(constant.Identity).WithInstructions(
 			constant.Identity.RenderInstructions(
 				map[string]bool{constant.MultiInstance: len(v.Instances()) > 1},
 			),

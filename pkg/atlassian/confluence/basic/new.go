@@ -7,16 +7,20 @@ import (
 
 // Reference: https://developer.atlassian.com/cloud/confluence/rest/v2
 func New(
-	host string,
+	root *locator.Locator,
 	user string,
 	token string,
-	verbose bool,
 ) *Client {
+	base := root.Copy().Base(constant.ConfluenceBase)
+
 	return &Client{
-		host:    host,
-		user:    user,
-		token:   token,
-		verbose: verbose,
-		base:    locator.New(host).Base(constant.ConfluenceBase),
+		requester: newRequester(base, user, token),
+		old: newRequester(
+			root.Copy().Base(constant.ConfluenceOldBase),
+			user,
+			token,
+		),
+		root: root,
+		base: base,
 	}
 }

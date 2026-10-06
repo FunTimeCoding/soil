@@ -5,11 +5,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/generated/client"
 	"github.com/spf13/cobra"
 )
 
-func userPassword(c *client.ClientWithResponses) *cobra.Command {
+func userPassword(
+	c *client.ClientWithResponses,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "password <account> <password>",
 		Short: "Set a directory user's password",
@@ -24,6 +28,11 @@ func userPassword(c *client.ClientWithResponses) *cobra.Command {
 				client.PostUserAccountPasswordJSONRequestBody{Password: a[1]},
 			)
 			errors.PanicOnError(e)
+
+			if result.JSON200 == nil {
+				t.Reject(result.Status(), result.Body)
+			}
+
 			console.Line(notation.MarshalIndent(result.JSON200))
 		},
 	}

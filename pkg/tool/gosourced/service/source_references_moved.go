@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/relocation"
 	"go/ast"
 	"go/types"
 	"golang.org/x/tools/go/packages"
@@ -8,7 +9,7 @@ import (
 
 func sourceReferencesMoved(
 	p *packages.Package,
-	entries []*moveEntry,
+	entries []*relocation.Entry,
 	moved map[types.Object]bool,
 ) bool {
 	for _, file := range p.Syntax {

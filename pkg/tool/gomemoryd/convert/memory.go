@@ -1,8 +1,8 @@
 package convert
 
-import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 
-func Memory(m *store.Memory) *SlimMemory {
+func Memory(m *record.Memory) *SlimMemory {
 	return &SlimMemory{
 		Identifier:       m.Identifier,
 		Name:             m.Name,

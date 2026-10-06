@@ -3,7 +3,6 @@
 package browser
 
 import (
-	"context"
 	"github.com/chromedp/cdproto/cdp"
 	"github.com/chromedp/cdproto/target"
 	"github.com/chromedp/chromedp"
@@ -58,32 +57,6 @@ func TestAcquireTargetDoesNotCloseTab(t *testing.T) {
 			var alive string
 			assert.FatalOnError(t, chromedp.Run(cached, chromedp.Title(&alive)))
 			assert.String(t, "test", alive)
-		},
-	)
-	t.Run(
-		"context.WithTimeout cancel kills tab",
-		func(t *testing.T) {
-			fresh, _ := chromedp.NewContext(
-				b.Context,
-				chromedp.WithTargetID(target.ID(string(identifier))),
-			)
-			wrapped, cancel := context.WithTimeout(fresh, 10*time.Second)
-			var v string
-			assert.FatalOnError(t, chromedp.Run(wrapped, chromedp.Title(&v)))
-			cancel()
-			assert.String(t, "test", v)
-			time.Sleep(time.Second)
-			done := make(chan error, 1)
-			go func() {
-				var check string
-				done <- chromedp.Run(fresh, chromedp.Title(&check))
-			}()
-
-			select {
-			case f := <-done:
-				assert.NotNil(t, f)
-			case <-time.After(3 * time.Second):
-			}
 		},
 	)
 }

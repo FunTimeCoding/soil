@@ -5,5 +5,4 @@ type Log struct {
 	ServiceTokens   []string
 	PostgresLocator string
 	LitePath        string
-	Version         string
 }

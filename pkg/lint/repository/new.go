@@ -1,6 +1,7 @@
 package repository
 
 import (
+	"github.com/funtimecoding/soil/pkg/markup/heading"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 )
@@ -14,6 +15,7 @@ func New(
 		Files:    files,
 		contents: map[string][]string{},
 		routes:   map[string][]string{},
+		headings: map[string][]*heading.Heading{},
 		missing:  map[string]bool{},
 	}
 	result.Modules = modulePaths(result.Root)

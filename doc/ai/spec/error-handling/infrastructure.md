@@ -40,6 +40,8 @@ if e := s.service.UpdateStatus(id, status); e != nil {
 }
 ```
 
+## Web Handler Panics
+
 Web handlers rely on panic + recovery middleware. Services whose
 web package exposes a `Recovery` delegate (wrapping `view.Recovery`)
 render the panic into the page layout: a notification item carrying
@@ -102,7 +104,7 @@ and returns 500. Wired into lifecycle via
 `server.New(...).WithMiddleware(web.RecoveryMiddleware(r))`.
 See `lifecycle.md`.
 
-### Sentry enrichment providers
+## Sentry Enrichment Providers
 
 `pkg/errors/sentry/start.go` installs a `BeforeSend` hook that
 checks every error - on both `CaptureException` and `Recover`

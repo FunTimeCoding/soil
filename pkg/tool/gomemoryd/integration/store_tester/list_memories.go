@@ -2,7 +2,7 @@ package store_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 )
 
 func (o *Tester) ListMemories(
@@ -10,7 +10,7 @@ func (o *Tester) ListMemories(
 	tag string,
 	scope string,
 	activeOnly bool,
-) []store.MemorySummary {
+) []record.MemorySummary {
 	o.t.Helper()
 	result, e := o.Store.ListMemories(memoryType, tag, scope, activeOnly)
 	assert.FatalOnError(o.t, e)

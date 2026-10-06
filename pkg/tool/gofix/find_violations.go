@@ -6,12 +6,19 @@ import (
 	"golang.org/x/tools/go/packages"
 )
 
-func FindViolations(all []*packages.Package) []violation {
+func FindViolations(
+	all []*packages.Package,
+	reported map[string]bool,
+	faces *face.Set,
+) []violation {
 	var result []violation
 	seen := make(map[token.Pos]bool)
-	faces := face.New(all)
 
 	for _, p := range all {
+		if !reported[p.PkgPath] {
+			continue
+		}
+
 		generatedFiles := buildGeneratedSet(p)
 
 		for ident, o := range p.TypesInfo.Defs {

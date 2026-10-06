@@ -9,9 +9,15 @@ import (
 func load(
 	directory string,
 	patterns []string,
-) []*packages.Package {
-	result, _, e := resolve.LoadPackages(directory, patterns...)
+) ([]*packages.Package, map[string]bool, []*packages.Package) {
+	reported, e := resolve.ListPackages(directory, patterns...)
 	errors.PanicOnError(e)
+	result, _, e := resolve.LoadPackages(
+		directory,
+		resolve.WithMainModule(patterns)...,
+	)
+	errors.PanicOnError(e)
+	loaded := resolve.PreferTestVariants(result)
 
-	return resolve.PreferTestVariants(result)
+	return loaded, reported, loadReached(directory, loaded)
 }

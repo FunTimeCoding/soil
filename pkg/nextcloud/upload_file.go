@@ -1,11 +1,27 @@
 package nextcloud
 
-import "github.com/funtimecoding/soil/pkg/system"
+import (
+	"github.com/funtimecoding/soil/pkg/errors"
+	"os"
+)
 
 func (c *Client) UploadFile(
 	path string,
 	sourcePath string,
 	sourceName string,
-) {
-	c.author.WriteFile(path, system.ReadBytes(sourcePath, sourceName))
+) error {
+	r, e := os.OpenRoot(sourcePath)
+
+	if e != nil {
+		return e
+	}
+
+	defer errors.LogClose(r)
+	b, f := r.ReadFile(sourceName)
+
+	if f != nil {
+		return f
+	}
+
+	return c.author.WriteFile(path, b)
 }

@@ -17,8 +17,9 @@ import (
 
 func Run(
 	o *option.Exporter,
-	r face.Reporter,
+	i face.Instrument,
 ) {
+	r := i.Reporter()
 	l := logger.New(context.Background())
 	m := metric.New()
 	lifecycle.New(

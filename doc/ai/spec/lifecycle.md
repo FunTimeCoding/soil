@@ -2,11 +2,7 @@
 
 Reusable application lifecycle manager for service-style applications that serve
 HTTP routes and run background workers. Handles startup ordering and
-reverse-order shutdown.
-
-## Package
-
-`pkg/lifecycle/`
+reverse-order shutdown. It lives in `pkg/lifecycle/`.
 
 ## Core Concept
 
@@ -145,7 +141,7 @@ To make a type usable as a `lifecycle.Worker`:
   `*http.Server`, extract a `Setup(m *http.ServeMux)` method and let lifecycle
   own the HTTP serving via `WithServer`.
 
-## Soil Components with Start()/Stop()
+## Soil Components with Start and Stop
 
 These types implement the Worker interface:
 

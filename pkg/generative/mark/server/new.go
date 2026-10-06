@@ -1,14 +1,14 @@
 package server
 
-import "github.com/funtimecoding/soil/pkg/identity"
+import (
+	"github.com/funtimecoding/soil/pkg/identity"
+	"github.com/funtimecoding/soil/pkg/stamp"
+)
 
-func New(
-	i *identity.Tool,
-	version string,
-) *Builder {
+func New(i *identity.Tool) *Builder {
 	return &Builder{
 		name:         i.Name(),
-		version:      version,
+		version:      stamp.New().Tag(),
 		instructions: i.Instructions(),
 	}
 }

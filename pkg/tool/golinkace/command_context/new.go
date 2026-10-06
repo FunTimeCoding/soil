@@ -1,5 +1,7 @@
 package command_context
 
-func New() *Context {
-	return &Context{}
+import "github.com/funtimecoding/soil/pkg/terminal"
+
+func New(t *terminal.Terminal) *Context {
+	return &Context{terminal: t}
 }

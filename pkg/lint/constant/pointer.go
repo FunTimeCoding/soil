@@ -1,6 +1,7 @@
 package constant
 
 import (
+	library "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"regexp"
 )
@@ -14,6 +15,19 @@ const (
 
 	UndeclaredHostKey  = "undeclared_host"
 	UndeclaredHostText = "Locator host not declared in front matter hosts"
+
+	DeadHeadingKey  = "dead_heading"
+	DeadHeadingText = "Referenced heading does not exist"
+
+	FragmentTargetKey  = "fragment_target"
+	FragmentTargetText = "Fragment on a non-markdown target - only markdown headings can be referenced"
+
+	FragmentSeparator = "#"
+	LocatorSeparator  = "://"
+	HintSeparator     = " - "
+	NearestPrefix     = "nearest: "
+	NearestFormat     = "#%s (%q)"
+	NearestLimit      = 3
 
 	PluginRootPrefix = "${CLAUDE_PLUGIN_ROOT}/"
 
@@ -47,6 +61,8 @@ var (
 		VerdictConvention:     ConventionWordKey,
 		VerdictBareSlash:      BareSlashKey,
 		VerdictUndeclaredHost: UndeclaredHostKey,
+		VerdictDeadHeading:    DeadHeadingKey,
+		VerdictFragmentTarget: FragmentTargetKey,
 	}
 
 	VerdictTexts = map[Verdict]string{
@@ -55,9 +71,26 @@ var (
 		VerdictConvention:     ConventionWordText,
 		VerdictBareSlash:      BareSlashText,
 		VerdictUndeclaredHost: UndeclaredHostText,
+		VerdictDeadHeading:    DeadHeadingText,
+		VerdictFragmentTarget: FragmentTargetText,
 	}
 
 	ImplicitHosts = []string{constant.Localhost, constant.Loopback}
+
+	BareNameExtensions = []string{
+		library.MarkdownExtension,
+		library.GoExtension,
+		library.MarkupExtension,
+		library.ShortMarkupExtension,
+		library.HypertextExtension,
+		".py",
+		".sh",
+		".json",
+		".toml",
+		".sql",
+		".txt",
+		".mod",
+	}
 
 	MajorSuffix = regexp.MustCompile(`^v[0-9]+$`)
 	LineSuffix  = regexp.MustCompile(`:[0-9]+$`)

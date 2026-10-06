@@ -1,7 +1,6 @@
 package goproxmox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmox/command_context"
 	"github.com/spf13/cobra"
 )
@@ -15,7 +14,7 @@ func deleteSnippet(c *command_context.Context) *cobra.Command {
 			_ *cobra.Command,
 			a []string,
 		) {
-			console.Emit(c.Client().DeleteSnippet(a[0]))
+			c.Terminal().Emit(c.Client().DeleteSnippet(a[0]))
 		},
 	}
 }

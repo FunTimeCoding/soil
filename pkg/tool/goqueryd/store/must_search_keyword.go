@@ -1,6 +1,9 @@
 package store
 
-import "github.com/funtimecoding/soil/pkg/errors"
+import (
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
+)
 
 func (s *Store) MustSearchKeyword(
 	query string,
@@ -8,7 +11,7 @@ func (s *Store) MustSearchKeyword(
 	collection string,
 	full bool,
 	metadata map[string]string,
-) []SearchResult {
+) []search.Result {
 	result, e := s.SearchKeyword(query, limit, collection, full, metadata)
 	errors.PanicOnError(e)
 

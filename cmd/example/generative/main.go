@@ -11,7 +11,6 @@ import (
 	anthropicServer "github.com/funtimecoding/soil/pkg/generative/model_context/example/anthropic"
 	"github.com/funtimecoding/soil/pkg/generative/model_context/example/mark"
 	ollama "github.com/funtimecoding/soil/pkg/generative/ollama/example"
-	openWebUI "github.com/funtimecoding/soil/pkg/generative/open_webui/example"
 	openai "github.com/funtimecoding/soil/pkg/generative/openai/example"
 )
 
@@ -43,7 +42,6 @@ func main() {
 		anthropic.Alternate()
 		function.Function()
 		langchain.Local()
-		openWebUI.Load()
 		anthropicServer.Run()
 		mark.Main()
 		gguf.Read()

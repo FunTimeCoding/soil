@@ -5,10 +5,10 @@ import (
 	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 )
 
-func IndexEntry(m *store.MemorySummary) string {
+func IndexEntry(m *record.MemorySummary) string {
 	line := join.Empty(
 		integers64.ToString(m.Identifier),
 		stringConstant.Space,

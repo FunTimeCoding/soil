@@ -66,7 +66,10 @@ preserved across updates.
 Each memory has:
 - **content** - the memory text
 - **description** - one-line summary for index listings and
-  search results
+  search results: what the memory is and when it matters,
+  never where something lives. Paths, file names and
+  "the rule lives in" clauses belong in the content, where
+  they are checked; a description names topics, not homes
 - **type** - categorization: user, feedback, project, reference
 
 ## References
@@ -81,6 +84,13 @@ update_memory list what does not resolve after saving: dead
 paths, missing memories, and paths left bare in prose. The save
 is never refused. check_references lists the same for every
 memory that is not document-sourced.
+
+Point at the section a rule lives in, not only its file:
+path#heading-slug, checked like the path. When several references
+share a directory, set it as the memory's base - the base
+parameter on save_memory and update_memory - and write the files
+by bare name: mcp.md is then checked as that directory's file,
+and the base shows as the first line of the body.
 
 ## Growth
 

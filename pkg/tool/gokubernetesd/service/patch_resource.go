@@ -2,13 +2,14 @@ package service
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/query"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 func (s *Service) PatchResource(
 	x context.Context,
 	clusterName string,
-	q PatchQuery,
+	q query.Patch,
 ) error {
 	c, e := s.ClusterByName(clusterName)
 

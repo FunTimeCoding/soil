@@ -6,12 +6,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/format"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/matrix"
 )
 
 func runTable(
 	services []*scan.Service,
 	identityWarnings []*concern.Concern,
-	clients []*scan.Client,
+	clients []*matrix.Client,
 ) {
 	fmt.Print(format.Services(services))
 

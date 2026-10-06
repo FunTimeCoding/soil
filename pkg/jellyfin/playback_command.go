@@ -16,7 +16,7 @@ func (c *Client) PlaybackCommand(
 		v.Set("seekPositionTicks", fmt.Sprint(seekPositionTicks))
 	}
 
-	return c.post(
+	return c.basic.Post(
 		fmt.Sprintf("/Sessions/%s/Playing/%s", sessionIdentifier, command),
 		v,
 		nil,

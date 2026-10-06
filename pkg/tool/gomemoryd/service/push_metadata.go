@@ -3,10 +3,10 @@ package service
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 )
 
-func pushMetadata(m *store.Memory) map[string][]string {
+func pushMetadata(m *record.Memory) map[string][]string {
 	result := map[string][]string{}
 
 	for key, value := range m.Metadata {

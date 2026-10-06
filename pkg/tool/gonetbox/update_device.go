@@ -1,13 +1,16 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	generated "github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"github.com/spf13/cobra"
 )
 
-func updateDevice(c *client.Client) *cobra.Command {
+func updateDevice(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var location string
 	var platform string
 	var tenant string
@@ -48,7 +51,7 @@ func updateDevice(c *client.Client) *cobra.Command {
 				body.Description = &description
 			}
 
-			console.Emit(c.UpdateDevice(arguments[0], body))
+			t.Emit(c.UpdateDevice(arguments[0], body))
 		},
 	}
 	result.Flags().StringVar(

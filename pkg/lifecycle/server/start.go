@@ -2,6 +2,7 @@ package server
 
 import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/constant"
+	"github.com/funtimecoding/soil/pkg/stamp"
 	"github.com/funtimecoding/soil/pkg/stamp/report"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
@@ -11,12 +12,6 @@ import (
 )
 
 func (s *Server) Start() {
-	if s.identity.Stamp() == nil {
-		panic(
-			"identity has no stamp - argument.Parse stamps it, tests use identity.Example",
-		)
-	}
-
 	s.Setup(s.Mux)
 	s.Mux.HandleFunc(
 		route.Get(webConstant.HealthPath),
@@ -33,10 +28,7 @@ func (s *Server) Start() {
 			w http.ResponseWriter,
 			_ *http.Request,
 		) {
-			web.EncodeNotation(
-				w,
-				report.New(s.identity.Name(), s.identity.Stamp()),
-			)
+			web.EncodeNotation(w, report.New(s.identity.Name(), stamp.New()))
 		},
 	)
 

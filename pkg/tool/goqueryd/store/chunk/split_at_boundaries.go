@@ -1,7 +1,5 @@
 package chunk
 
-import "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
-
 func splitAtBoundaries(
 	content string,
 	boundaries []int,
@@ -14,28 +12,12 @@ func splitAtBoundaries(
 			continue
 		}
 
-		text := content[start:boundary]
-
-		if len(text) > constant.ChunkSize {
-			result = append(result, chunkMarkdown(text)...)
-		} else {
-			result = append(result, Chunk{Text: text, Position: start})
-		}
-
+		result = append(result, segment(content[start:boundary], start)...)
 		start = boundary
 	}
 
 	if start < len(content) {
-		text := content[start:]
-
-		if len(text) > constant.ChunkSize {
-			for _, c := range chunkMarkdown(text) {
-				c.Position += start
-				result = append(result, c)
-			}
-		} else {
-			result = append(result, Chunk{Text: text, Position: start})
-		}
+		result = append(result, segment(content[start:], start)...)
 	}
 
 	return result

@@ -1,12 +1,12 @@
 package web
 
-import "github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
+import "github.com/funtimecoding/soil/pkg/tool/godashboardd/board/layout"
 
 func Pack(
-	sections []*board.Section,
+	sections []*layout.Section,
 	columns int,
-) [][]*board.Section {
-	result := make([][]*board.Section, columns)
+) [][]*layout.Section {
+	result := make([][]*layout.Section, columns)
 	weights := make([]int, columns)
 
 	for _, v := range sections {

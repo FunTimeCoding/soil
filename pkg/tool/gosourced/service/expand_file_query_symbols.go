@@ -1,12 +1,13 @@
 package service
 
 import (
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/pattern_site"
 	"go/ast"
 	"go/token"
 )
 
-func expandFileQuerySymbols(file *ast.File) []*querySymbol {
-	var result []*querySymbol
+func expandFileQuerySymbols(file *ast.File) []*pattern_site.QuerySymbol {
+	var result []*pattern_site.QuerySymbol
 
 	for _, d := range file.Decls {
 		switch declaration := d.(type) {
@@ -19,11 +20,7 @@ func expandFileQuerySymbols(file *ast.File) []*querySymbol {
 
 			result = append(
 				result,
-				&querySymbol{
-					name:     declaration.Name.Name,
-					receiver: receiver,
-				},
-			)
+				pattern_site.NewQuerySymbol(declaration.Name.Name, receiver))
 		case *ast.GenDecl:
 			if declaration.Tok == token.IMPORT {
 				continue
@@ -37,10 +34,16 @@ func expandFileQuerySymbols(file *ast.File) []*querySymbol {
 							continue
 						}
 
-						result = append(result, &querySymbol{name: n.Name})
+						result = append(
+							result,
+							pattern_site.NewQuerySymbol(n.Name, ""),
+						)
 					}
 				case *ast.TypeSpec:
-					result = append(result, &querySymbol{name: spec.Name.Name})
+					result = append(
+						result,
+						pattern_site.NewQuerySymbol(spec.Name.Name, ""),
+					)
 				}
 			}
 		}

@@ -3,11 +3,15 @@ package gopostgres
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/generated/client"
 	"github.com/spf13/cobra"
 )
 
-func listInstances(c *client.Client) *cobra.Command {
+func listInstances(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "list-instances",
 		Short: "List configured PostgreSQL instances",
@@ -17,7 +21,7 @@ func listInstances(c *client.Client) *cobra.Command {
 		) {
 			r, e := c.ListInstances(context.Background())
 			errors.PanicOnError(e)
-			printResponse(r)
+			printResponse(t, r)
 		},
 	}
 }

@@ -1,14 +1,17 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 	"strconv"
 )
 
-func updateJournalEntry(c *client.Client) *cobra.Command {
+func updateJournalEntry(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var kind string
 	var comments string
 	result := &cobra.Command{
@@ -21,9 +24,7 @@ func updateJournalEntry(c *client.Client) *cobra.Command {
 		) {
 			identifier, e := strconv.Atoi(arguments[0])
 			errors.PanicOnError(e)
-			console.Emit(
-				c.UpdateJournalEntry(int32(identifier), kind, comments),
-			)
+			t.Emit(c.UpdateJournalEntry(int32(identifier), kind, comments))
 		},
 	}
 	result.Flags().StringVar(

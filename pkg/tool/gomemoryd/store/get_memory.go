@@ -1,13 +1,15 @@
 package store
 
-func (s *Store) GetMemory(identifier int64) (*Memory, error) {
+import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
+
+func (s *Store) GetMemory(identifier int64) (*record.Memory, error) {
 	row := s.database.QueryRow(
 		`SELECT identifier, name, content, description, type, scope, created_at, updated_at, is_active, parent_identifier,
 			provenance_file, provenance_anchor, provenance_hash, ordinal
 		FROM memory WHERE identifier = ?`,
 		identifier,
 	)
-	m := &Memory{}
+	m := record.NewMemory()
 	var active int
 	e := row.Scan(
 		&m.Identifier,

@@ -5,7 +5,7 @@ import (
 	"github.com/dave/dst"
 	"github.com/dave/dst/decorator"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
-	"os"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
 )
 
 func restoreDecoratedFile(
@@ -14,7 +14,7 @@ func restoreDecoratedFile(
 	aliases map[string]string,
 	file *dst.File,
 	path string,
-	dryRun bool,
+	out *sink.Sink,
 ) error {
 	r := decorator.NewRestorerWithImports(packagePath, resolver)
 	f := r.FileRestorer()
@@ -29,9 +29,7 @@ func restoreDecoratedFile(
 		return e
 	}
 
-	if dryRun {
-		return nil
-	}
+	out.Write(path, buffer.Bytes())
 
-	return os.WriteFile(path, buffer.Bytes(), 0644)
+	return nil
 }

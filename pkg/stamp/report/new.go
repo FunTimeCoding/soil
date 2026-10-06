@@ -7,11 +7,11 @@ func New(
 	s *stamp.Stamp,
 ) *Report {
 	return &Report{
-		Name:      name,
-		Version:   s.Version,
-		GitHash:   s.GitHash,
-		BuildDate: s.BuildDate,
-		Module:    s.Module,
-		Dirty:     s.Dirty,
+		Name:       name,
+		Version:    s.Version,
+		GitHash:    s.GitHash,
+		CommitDate: s.CommitDate,
+		Module:     s.Module,
+		Dirty:      s.Dirty,
 	}
 }

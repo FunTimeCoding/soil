@@ -29,7 +29,7 @@ func Start(
 			TracesSampleRate: 1.0,
 			AttachStacktrace: true,
 			DataCollection:   &sentry.DataCollection{},
-			BeforeSend:       enrich,
+			BeforeSend:       Enrich,
 		},
 	)
 	errors.FatalOnError(e)

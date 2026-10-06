@@ -3,8 +3,9 @@ package gopostgres
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgres/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/generated/client"
 	web "github.com/funtimecoding/soil/pkg/web/constant"
@@ -12,13 +13,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	r := reporter.New(constant.Identity.Name(), version).Start()
-	defer func() { r.RecoverFlush(recover()) }()
+func Main() {
+	s := instrument.NewCommandLine(constant.Identity)
+	defer func() { s.Flush(recover()) }()
+	t := terminal.New(s)
 	v, e := client.NewClient(
 		locator.New(
 			environment.Fallback(constant.HostEnvironment, web.Localhost),
@@ -29,14 +27,15 @@ func Main(
 		Use:   constant.Identity.Usage(),
 		Short: constant.Identity.Description(),
 	}
-	o.AddCommand(listInstances(v))
-	o.AddCommand(query(v))
-	o.AddCommand(explain(v))
-	o.AddCommand(listSchemas(v))
-	o.AddCommand(listTables(v))
-	o.AddCommand(describeTable(v))
-	o.AddCommand(listIndexes(v))
-	o.AddCommand(tableSizes(v))
-	argument.CobraStamp(o, constant.Identity, version, gitHash, buildDate)
+	o.AddCommand(listInstances(v, t))
+	o.AddCommand(query(v, t))
+	o.AddCommand(explain(v, t))
+	o.AddCommand(listSchemas(v, t))
+	o.AddCommand(listTables(v, t))
+	o.AddCommand(describeTable(v, t))
+	o.AddCommand(listIndexes(v, t))
+	o.AddCommand(tableSizes(v, t))
+	argument.CobraInstrument(o, s)
+	argument.CobraStamp(o, constant.Identity)
 	errors.PanicOnError(o.Execute())
 }

@@ -1,7 +1,10 @@
 package basic
 
-import "github.com/funtimecoding/soil/pkg/web/locator"
+import "github.com/funtimecoding/soil/pkg/web/requester/request"
 
-func (c *Client) GetPath(path string) (int, string, error) {
-	return c.Get(locator.New(c.host).Path(path).String())
+func (c *Client) GetPath(
+	path string,
+	out any,
+) error {
+	return c.requester.Notation(request.Get(path), out)
 }

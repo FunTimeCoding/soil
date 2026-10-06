@@ -1,12 +1,15 @@
 package goatlassian
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
 )
 
-func addPageComment(c *client.Client) *cobra.Command {
+func addPageComment(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "add-page-comment [identifier] [body]",
 		Short: "Add a comment to a Confluence page",
@@ -15,7 +18,7 @@ func addPageComment(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(c.AddPageComment(arguments[0], arguments[1]))
+			t.Emit(c.AddPageComment(arguments[0], arguments[1]))
 		},
 	}
 }

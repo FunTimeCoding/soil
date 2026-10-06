@@ -6,7 +6,7 @@ func (c *Client) SetVolume(
 	sessionIdentifier string,
 	level int,
 ) error {
-	return c.post(
+	return c.basic.Post(
 		fmt.Sprintf("/Sessions/%s/Command", sessionIdentifier),
 		nil,
 		map[string]any{

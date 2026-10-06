@@ -16,7 +16,7 @@ func (c *Client) Cron() (*cron.Cron, error) {
 		return result, nil
 	}
 
-	if f := c.postDiscard("/cron"); f != nil {
+	if f := c.basic.PostDiscard("/cron"); f != nil {
 		return cron.Stub(), f
 	}
 

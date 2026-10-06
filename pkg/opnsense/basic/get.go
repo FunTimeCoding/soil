@@ -1,26 +1,17 @@
 package basic
 
-import (
-	"github.com/funtimecoding/soil/pkg/opnsense/constant"
-	"github.com/funtimecoding/soil/pkg/web/locator"
-	"net/http"
-)
+import "github.com/funtimecoding/soil/pkg/web/requester/request"
 
 func (c *Client) Get(
 	path string,
 	query map[string]string,
-) ([]byte, error) {
-	l := locator.New(c.host).Base(constant.Base).Path(path)
+	out any,
+) error {
+	q := request.Get(path)
 
 	for k, v := range query {
-		l.Set(k, v)
+		q.WithParameter(k, v)
 	}
 
-	r, e := http.NewRequest(http.MethodGet, l.String(), nil)
-
-	if e != nil {
-		return nil, e
-	}
-
-	return c.send(r)
+	return c.requester.Notation(q, out)
 }

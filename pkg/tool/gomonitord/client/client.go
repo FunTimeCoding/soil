@@ -1,0 +1,13 @@
+package client
+
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/tool/gomonitord/generated/client"
+)
+
+type Client struct {
+	context context.Context
+	client  *client.ClientWithResponses
+	base    string
+	token   string
+}

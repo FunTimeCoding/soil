@@ -21,14 +21,13 @@ func Mount(
 	i mattermostFace.Indexer,
 	r face.Reporter,
 	t face.Recorder,
-	version string,
 	g *guard.Mux,
 ) {
 	g.TokenMount(
 		constant.InterfacePath,
 		generated.HandlerFromMux(
 			generated.NewStrictHandler(
-				server.New(c, version, r),
+				server.New(c, r),
 				[]generated.StrictMiddlewareFunc{
 					web.RecordingMiddleware[generated.StrictHandlerFunc](t),
 				},
@@ -36,5 +35,5 @@ func Mount(
 			http.NewServeMux(),
 		),
 	)
-	model_context.New(c, m, d, i, r, t, version).Mount(g)
+	model_context.New(c, m, d, i, r, t).Mount(g)
 }

@@ -13,4 +13,11 @@ const (
 	PortEnvironment     = "GOQUERY_PORT"
 	InsecureEnvironment = "GOQUERY_INSECURE"
 	TokenEnvironment    = "GOQUERY_TOKEN" // #nosec G101 not a hardcoded secret
+
+	SnapshotDirectory = "snapshot"
+	WordListLimit     = 20
+
+	SnapshotFlag    = "snapshot"
+	CompareFlag     = "compare"
+	RestructureFlag = "restructure"
 )

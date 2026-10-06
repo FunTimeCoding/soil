@@ -84,7 +84,7 @@ func TestRunServerVersion(t *testing.T) {
 		logger.New(context.Background()),
 		lifecycle.WithServer(
 			server.New(
-				identity.Example().WithStamp("v1", "hash", "date"),
+				identity.Example(),
 				"",
 				func(_ *http.ServeMux) {},
 			).WithListener(n),
@@ -98,7 +98,7 @@ func TestRunServerVersion(t *testing.T) {
 	assert.Integer(t, http.StatusOK, response.StatusCode)
 	b, e := io.ReadAll(response.Body)
 	errors.PanicOnError(e)
-	assert.StringContains(t, "v1", string(b))
+	assert.StringContains(t, `"commit_date"`, string(b))
 	assert.StringContains(t, "example", string(b))
 }
 

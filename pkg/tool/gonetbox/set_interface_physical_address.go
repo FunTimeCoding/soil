@@ -1,12 +1,15 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
 
-func setInterfacePhysicalAddress(c *client.Client) *cobra.Command {
+func setInterfacePhysicalAddress(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "set-interface-physical-address [device] [interface] [address]",
 		Short: "Assign a MAC address to an existing device interface",
@@ -15,7 +18,7 @@ func setInterfacePhysicalAddress(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(
+			t.Emit(
 				c.SetInterfacePhysicalAddress(
 					arguments[0],
 					arguments[1],

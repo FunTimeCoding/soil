@@ -2,10 +2,10 @@ package format
 
 import (
 	"github.com/funtimecoding/soil/pkg/console/table"
-	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/matrix"
 )
 
-func Clients(clients []*scan.Client) string {
+func Clients(clients []*matrix.Client) string {
 	t := table.New(
 		"CLIENT",
 		"REPO",

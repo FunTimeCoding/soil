@@ -15,7 +15,7 @@ func QueryRange() {
 	c := loki.NewEnvironment(false)
 	end := time.Now()
 	start := end.Add(-24 * time.Hour)
-	r, m := c.QueryRange(
+	r, m := c.MustQueryRange(
 		`{namespace="bot"} | json | msg="request_start", http_route="/github"`,
 		start,
 		end,

@@ -1,7 +1,9 @@
 package board
 
-func (b *Board) Entries() []*Entry {
-	var result []*Entry
+import "github.com/funtimecoding/soil/pkg/tool/godashboardd/board/layout"
+
+func (b *Board) Entries() []*layout.Entry {
+	var result []*layout.Entry
 
 	for _, c := range b.Top {
 		for _, s := range c.Sections {

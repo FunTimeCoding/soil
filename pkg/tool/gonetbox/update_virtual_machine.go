@@ -1,13 +1,16 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	generated "github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"github.com/spf13/cobra"
 )
 
-func updateVirtualMachine(c *client.Client) *cobra.Command {
+func updateVirtualMachine(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var platform string
 	var tenant string
 	var cores float32
@@ -43,7 +46,7 @@ func updateVirtualMachine(c *client.Client) *cobra.Command {
 				body.Status = &status
 			}
 
-			console.Emit(c.UpdateVirtualMachine(arguments[0], body))
+			t.Emit(c.UpdateVirtualMachine(arguments[0], body))
 		},
 	}
 	result.Flags().StringVar(

@@ -1,11 +1,12 @@
 package monitor
 
 import (
+	"charm.land/bubbletea/v2"
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/fetch"
 	"time"
 )
 
-func (m *Model) fetchEvent(g fetch.Message) {
+func (m *Model) fetchEvent(g fetch.Message) tea.Cmd {
 	m.items = g.Items
 	rows := g.Rows()
 
@@ -18,4 +19,7 @@ func (m *Model) fetchEvent(g fetch.Message) {
 	m.lastFetch = time.Now()
 	m.table.SetRows(rows)
 	m.updateColumns()
+	m.applyClaims()
+
+	return m.releaseGone()
 }

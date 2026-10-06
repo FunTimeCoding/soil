@@ -1,12 +1,15 @@
 package goatlassian
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
 )
 
-func searchIssues(c *client.Client) *cobra.Command {
+func searchIssues(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var limit int
 	result := &cobra.Command{
 		Use:   "search-issues [query]",
@@ -22,7 +25,7 @@ func searchIssues(c *client.Client) *cobra.Command {
 				l = &limit
 			}
 
-			console.Emit(c.SearchIssues(arguments[0], l))
+			t.Emit(c.SearchIssues(arguments[0], l))
 		},
 	}
 	result.Flags().IntVar(&limit, "limit", 0, "maximum number of results")

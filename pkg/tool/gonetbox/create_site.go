@@ -1,12 +1,15 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
 
-func createSite(c *client.Client) *cobra.Command {
+func createSite(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "create-site [name]",
 		Short: "Create a NetBox site",
@@ -15,7 +18,7 @@ func createSite(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(c.CreateSite(arguments[0]))
+			t.Emit(c.CreateSite(arguments[0]))
 		},
 	}
 }

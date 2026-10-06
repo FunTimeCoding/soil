@@ -36,12 +36,14 @@ func hasSentryReporter(
 			}
 		}
 
-		if parse.HasCall(
-			f,
-			"github.com/funtimecoding/soil/pkg/instrument",
-			"New",
-		) {
-			return true
+		for _, name := range []string{"New", "NewCommandLine"} {
+			if parse.HasCall(
+				f,
+				"github.com/funtimecoding/soil/pkg/instrument",
+				name,
+			) {
+				return true
+			}
 		}
 	}
 

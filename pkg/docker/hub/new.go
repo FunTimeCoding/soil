@@ -6,5 +6,5 @@ import (
 )
 
 func New() *Client {
-	return &Client{base: locator.New(constant.Host).Base(constant.BasePath)}
+	return NewWithBase(locator.New(constant.Host).Base(constant.BasePath))
 }

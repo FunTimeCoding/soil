@@ -31,7 +31,6 @@ func Run(
 						o.Organization,
 						r,
 						s.Recorder(),
-						o.Version,
 						guard.New(m, o.ServiceTokens),
 					)
 				},

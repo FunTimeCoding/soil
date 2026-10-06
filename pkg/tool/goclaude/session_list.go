@@ -43,6 +43,10 @@ func sessionList(c *command_context.Context) *cobra.Command {
 			)
 			errors.PanicOnError(e)
 
+			if response.JSON200 == nil {
+				c.Terminal().Reject(response.Status(), response.Body)
+			}
+
 			for _, s := range response.JSON200.Sessions {
 				ts := formatTimestamp(s.Timestamp)
 				alias := ""

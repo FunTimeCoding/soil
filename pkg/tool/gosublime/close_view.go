@@ -3,9 +3,7 @@ package gosublime
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/spf13/cobra"
-	"os"
 	"strconv"
 )
 
@@ -21,8 +19,7 @@ func closeView(x *Context) *cobra.Command {
 			identifier, e := strconv.Atoi(arguments[0])
 
 			if e != nil {
-				errors.Printf("invalid id: %s\n", arguments[0])
-				os.Exit(1)
+				x.Terminal.Exitf("invalid id: %s\n", arguments[0])
 			}
 
 			r, f := x.Client.CloseViewWithResponse(
@@ -31,17 +28,15 @@ func closeView(x *Context) *cobra.Command {
 			)
 
 			if f != nil {
-				errors.Printf("error: %v\n", f)
-				os.Exit(1)
+				x.Terminal.Exitf("error: %v\n", f)
 			}
 
 			if r.HTTPResponse.StatusCode != 204 {
-				errors.Printf(
+				x.Terminal.Exitf(
 					"unexpected status: %s\n%s\n",
 					r.HTTPResponse.Status,
 					string(r.Body),
 				)
-				os.Exit(1)
 			}
 
 			console.Format("closed view %d\n", identifier)

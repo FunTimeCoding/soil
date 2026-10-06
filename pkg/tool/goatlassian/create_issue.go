@@ -2,15 +2,17 @@ package goatlassian
 
 import (
 	"encoding/json"
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
-	"os"
 	"strings"
 )
 
-func createIssue(c *client.Client) *cobra.Command {
+func createIssue(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var project string
 	var issueType string
 	var description string
@@ -35,12 +37,11 @@ func createIssue(c *client.Client) *cobra.Command {
 
 			if fields != "" {
 				if e := json.Unmarshal([]byte(fields), &fieldMap); e != nil {
-					errors.Printf("fields must be a JSON object: %v\n", e)
-					os.Exit(1)
+					t.Exitf("fields must be a JSON object: %v\n", e)
 				}
 			}
 
-			console.Emit(
+			t.Emit(
 				c.CreateIssue(
 					project,
 					issueType,

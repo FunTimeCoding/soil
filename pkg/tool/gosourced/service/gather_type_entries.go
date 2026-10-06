@@ -3,6 +3,7 @@ package service
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/source/imports"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/relocation"
 	"go/ast"
 	"go/token"
 	"go/types"
@@ -15,7 +16,7 @@ func gatherTypeEntries(
 	p *packages.Package,
 	typeObject types.Object,
 	targetFile string,
-) ([]*moveEntry, string) {
+) ([]*relocation.Entry, string) {
 	named, okay := typeObject.Type().(*types.Named)
 
 	if !okay {
@@ -28,7 +29,7 @@ func gatherTypeEntries(
 		objects = append(objects, named.Method(i))
 	}
 
-	var result []*moveEntry
+	var result []*relocation.Entry
 
 	for _, o := range objects {
 		file, declaration, spec := findDeclarationNode(p, o)
@@ -49,20 +50,17 @@ func gatherTypeEntries(
 			name = filepath.Base(set.Position(file.Pos()).Filename)
 		}
 
-		result = append(
-			result,
-			&moveEntry{
-				symbol:      o.Name(),
-				newName:     o.Name(),
-				object:      o,
-				file:        file,
-				declaration: declaration,
-				spec:        spec,
-				node:        node,
-				carried:     imports.UsedBy(file, node),
-				targetFile:  name,
-			},
-		)
+		entry := relocation.NewEntry()
+		entry.Symbol = o.Name()
+		entry.NewName = o.Name()
+		entry.Object = o
+		entry.File = file
+		entry.Declaration = declaration
+		entry.Spec = spec
+		entry.Node = node
+		entry.Carried = imports.UsedBy(file, node)
+		entry.TargetFile = name
+		result = append(result, entry)
 	}
 
 	return result, ""

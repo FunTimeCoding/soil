@@ -1,8 +1,8 @@
 package convert
 
-import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 
-func SearchResults(results []store.SearchResult) []*SlimSearchResult {
+func SearchResults(results []record.SearchResult) []*SlimSearchResult {
 	result := make([]*SlimSearchResult, 0, len(results))
 
 	for i := range results {

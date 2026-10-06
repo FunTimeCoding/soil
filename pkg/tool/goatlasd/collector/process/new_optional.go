@@ -24,6 +24,7 @@ func NewOptional() *Collector {
 			processConstant.PortEnvironment,
 			processConstant.InsecureEnvironment,
 		).String(),
+		client.WithHTTPClient(web.StallClient()),
 		client.WithRequestEditorFn(web.BearerEditor(token)),
 	)
 	errors.PanicOnError(e)

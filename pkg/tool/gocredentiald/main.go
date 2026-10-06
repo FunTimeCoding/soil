@@ -12,20 +12,15 @@ import (
 	"strings"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	s := instrument.New(constant.Identity, version)
+func Main() {
+	s := instrument.New(constant.Identity)
 	defer func() { s.Flush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Web()
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
 	o := option.New()
 	o.Address = a.Address()
 	o.ServiceTokens = web.ServiceTokens()
-	o.Version = version
 	o.Database = environment.Required(keepassConstant.DatabaseEnvironment)
 
 	if revealed := environment.Optional(

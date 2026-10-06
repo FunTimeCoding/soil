@@ -1,15 +1,15 @@
 package goname
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/hetzner"
 	"github.com/funtimecoding/soil/pkg/hetzner/zone"
-	"os"
+	"github.com/funtimecoding/soil/pkg/terminal"
 )
 
 func zoneByName(
 	c *hetzner.Client,
 	name string,
+	t *terminal.Terminal,
 ) *zone.Zone {
 	for _, z := range c.Zones() {
 		if z.Name == name {
@@ -17,8 +17,7 @@ func zoneByName(
 		}
 	}
 
-	console.Format("zone not found: %s\n", name)
-	os.Exit(1)
+	t.Exitf("zone not found: %s\n", name)
 
 	return nil
 }

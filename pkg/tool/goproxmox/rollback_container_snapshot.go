@@ -1,7 +1,6 @@
 package goproxmox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmox/command_context"
 	"github.com/spf13/cobra"
@@ -27,7 +26,7 @@ func rollbackContainerSnapshot(c *command_context.Context) *cobra.Command {
 				n = &node
 			}
 
-			console.Emit(
+			c.Terminal().Emit(
 				c.Client().RollbackContainerSnapshot(identifier, name, n),
 			)
 		},

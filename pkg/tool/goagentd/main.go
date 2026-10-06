@@ -9,12 +9,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/web"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	s := instrument.New(constant.Identity, version)
+func Main() {
+	s := instrument.New(constant.Identity)
 	defer func() { s.Flush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Web()
@@ -23,7 +19,7 @@ func Main(
 		soil.CurrentDirectory,
 		"Workspace directory for Claude Code",
 	)
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
 	o := option.New()
 	o.Address = a.Address()
 	o.Workspace = a.GetString("workspace")

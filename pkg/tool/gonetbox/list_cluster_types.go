@@ -1,12 +1,15 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
 
-func listClusterTypes(c *client.Client) *cobra.Command {
+func listClusterTypes(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "list-cluster-types",
 		Short: "List all NetBox cluster types",
@@ -14,7 +17,7 @@ func listClusterTypes(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			console.Emit(c.ListClusterTypes())
+			t.Emit(c.ListClusterTypes())
 		},
 	}
 }

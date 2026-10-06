@@ -1,12 +1,15 @@
 package goalpine
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/client"
 	"github.com/spf13/cobra"
 )
 
-func packages(c *client.Client) *cobra.Command {
+func packages(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "packages [name]",
 		Short: "List packages in the repository index",
@@ -21,7 +24,7 @@ func packages(c *client.Client) *cobra.Command {
 				name = arguments[0]
 			}
 
-			console.Emit(c.Packages(name))
+			t.Emit(c.Packages(name))
 		},
 	}
 }

@@ -9,7 +9,7 @@ import (
 func New(tab string) *Session {
 	c := chromium.NewEnvironment()
 
-	if c.TabByHost(tab) == nil {
+	if c.MustTabByHost(tab) == nil {
 		c.Close()
 		panic(constant.TabNotFound)
 	}

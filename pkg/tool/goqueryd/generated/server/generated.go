@@ -41,6 +41,15 @@ func (e GetSearchParamsMode) Valid() bool {
 	}
 }
 
+// ChunkPreview defines model for ChunkPreview.
+type ChunkPreview struct {
+	Allowance int              `json:"allowance"`
+	Chunks    []PreviewChunk   `json:"chunks"`
+	Model     string           `json:"model"`
+	Sections  []PreviewSection `json:"sections"`
+	Window    int              `json:"window"`
+}
+
 // CollectionStatus defines model for CollectionStatus.
 type CollectionStatus struct {
 	DocumentCount int    `json:"document_count"`
@@ -90,6 +99,67 @@ type ListOutcome struct {
 	Results []SearchResult `json:"results"`
 }
 
+// OversizeChunk defines model for OversizeChunk.
+type OversizeChunk struct {
+	Bytes     int `json:"bytes"`
+	FirstLine int `json:"first_line"`
+	Index     int `json:"index"`
+	LastLine  int `json:"last_line"`
+	Tokens    int `json:"tokens"`
+}
+
+// OversizeFile defines model for OversizeFile.
+type OversizeFile struct {
+	Chunks     []OversizeChunk `json:"chunks"`
+	Collection string          `json:"collection"`
+	Path       string          `json:"path"`
+	Worst      int             `json:"worst"`
+}
+
+// OversizeReport defines model for OversizeReport.
+type OversizeReport struct {
+	Allowance int            `json:"allowance"`
+	Files     []OversizeFile `json:"files"`
+	Model     string         `json:"model"`
+	Window    int            `json:"window"`
+}
+
+// PreviewBlock defines model for PreviewBlock.
+type PreviewBlock struct {
+	FirstLine int    `json:"first_line"`
+	Kind      string `json:"kind"`
+	LastLine  int    `json:"last_line"`
+	Tokens    int    `json:"tokens"`
+}
+
+// PreviewChunk defines model for PreviewChunk.
+type PreviewChunk struct {
+	Bytes      int   `json:"bytes"`
+	CutChecked bool  `json:"cut_checked"`
+	CutLevel   int   `json:"cut_level"`
+	CutLines   []int `json:"cut_lines"`
+	FirstLine  int   `json:"first_line"`
+	Index      int   `json:"index"`
+	LastLine   int   `json:"last_line"`
+	Piece      bool  `json:"piece"`
+	Tokens     int   `json:"tokens"`
+}
+
+// PreviewSection defines model for PreviewSection.
+type PreviewSection struct {
+	Blocks    []PreviewBlock `json:"blocks"`
+	FirstLine int            `json:"first_line"`
+	LastLine  int            `json:"last_line"`
+	Level     int            `json:"level"`
+	Title     string         `json:"title"`
+	Tokens    int            `json:"tokens"`
+}
+
+// RechunkResult defines model for RechunkResult.
+type RechunkResult struct {
+	Documents []string `json:"documents"`
+}
+
 // SearchOutcome defines model for SearchOutcome.
 type SearchOutcome struct {
 	Degraded *bool          `json:"degraded,omitempty"`
@@ -128,6 +198,12 @@ type Status struct {
 	PendingEmbeddings int                `json:"pending_embeddings"`
 	TotalDocuments    int                `json:"total_documents"`
 	TotalEmbeddings   int                `json:"total_embeddings"`
+}
+
+// PostChunkJSONBody defines parameters for PostChunk.
+type PostChunkJSONBody struct {
+	Body string `json:"body"`
+	Path string `json:"path"`
 }
 
 // DeleteCollectionParams defines parameters for DeleteCollection.
@@ -196,6 +272,11 @@ type GetMetadataParams struct {
 	Key        *string `form:"key,omitempty" json:"key,omitempty"`
 }
 
+// GetOversizeParams defines parameters for GetOversize.
+type GetOversizeParams struct {
+	Collection *string `form:"collection,omitempty" json:"collection,omitempty"`
+}
+
 // GetSearchParams defines parameters for GetSearch.
 type GetSearchParams struct {
 	Query      string               `form:"query" json:"query"`
@@ -224,6 +305,9 @@ type PostTagJSONBody struct {
 	SourceType string  `json:"source_type"`
 }
 
+// PostChunkJSONRequestBody defines body for PostChunk for application/json ContentType.
+type PostChunkJSONRequestBody PostChunkJSONBody
+
 // PostCollectionJSONRequestBody defines body for PostCollection for application/json ContentType.
 type PostCollectionJSONRequestBody PostCollectionJSONBody
 
@@ -241,6 +325,9 @@ type PostTagJSONRequestBody PostTagJSONBody
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
+
+	// (POST /api/chunk)
+	PostChunk(w http.ResponseWriter, r *http.Request)
 
 	// (DELETE /api/collection)
 	DeleteCollection(w http.ResponseWriter, r *http.Request, params DeleteCollectionParams)
@@ -278,6 +365,12 @@ type ServerInterface interface {
 	// (GET /api/metadata)
 	GetMetadata(w http.ResponseWriter, r *http.Request, params GetMetadataParams)
 
+	// (GET /api/oversize)
+	GetOversize(w http.ResponseWriter, r *http.Request, params GetOversizeParams)
+
+	// (POST /api/rechunk)
+	PostRechunk(w http.ResponseWriter, r *http.Request)
+
 	// (GET /api/search)
 	GetSearch(w http.ResponseWriter, r *http.Request, params GetSearchParams)
 
@@ -302,6 +395,20 @@ type ServerInterfaceWrapper struct {
 }
 
 type MiddlewareFunc func(http.Handler) http.Handler
+
+// PostChunk operation middleware
+func (siw *ServerInterfaceWrapper) PostChunk(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PostChunk(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
 
 // DeleteCollection operation middleware
 func (siw *ServerInterfaceWrapper) DeleteCollection(w http.ResponseWriter, r *http.Request) {
@@ -689,6 +796,53 @@ func (siw *ServerInterfaceWrapper) GetMetadata(w http.ResponseWriter, r *http.Re
 	handler.ServeHTTP(w, r)
 }
 
+// GetOversize operation middleware
+func (siw *ServerInterfaceWrapper) GetOversize(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetOversizeParams
+
+	// ------------- Optional query parameter "collection" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "collection", r.URL.Query(), &params.Collection, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "collection"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "collection", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetOversize(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// PostRechunk operation middleware
+func (siw *ServerInterfaceWrapper) PostRechunk(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.PostRechunk(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
 // GetSearch operation middleware
 func (siw *ServerInterfaceWrapper) GetSearch(w http.ResponseWriter, r *http.Request) {
 
@@ -1024,6 +1178,9 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/search", wrapper.GetSearch)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/list", wrapper.GetList)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/status", wrapper.GetStatus)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/oversize", wrapper.GetOversize)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/chunk", wrapper.PostChunk)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/rechunk", wrapper.PostRechunk)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/index", wrapper.PostIndex)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/embed", wrapper.PostEmbed)
 	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/collection", wrapper.DeleteCollection)
@@ -1040,6 +1197,28 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/tag", wrapper.PostTag)
 
 	return m
+}
+
+type PostChunkRequestObject struct {
+	Body *PostChunkJSONRequestBody
+}
+
+type PostChunkResponseObject interface {
+	VisitPostChunkResponse(w http.ResponseWriter) error
+}
+
+type PostChunk200JSONResponse ChunkPreview
+
+func (response PostChunk200JSONResponse) VisitPostChunkResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
 }
 
 type DeleteCollectionRequestObject struct {
@@ -1460,6 +1639,77 @@ func (response GetMetadata500JSONResponse) VisitGetMetadataResponse(w http.Respo
 	return err
 }
 
+type GetOversizeRequestObject struct {
+	Params GetOversizeParams
+}
+
+type GetOversizeResponseObject interface {
+	VisitGetOversizeResponse(w http.ResponseWriter) error
+}
+
+type GetOversize200JSONResponse OversizeReport
+
+func (response GetOversize200JSONResponse) VisitGetOversizeResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetOversize500JSONResponse ErrorResponse
+
+func (response GetOversize500JSONResponse) VisitGetOversizeResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type PostRechunkRequestObject struct {
+}
+
+type PostRechunkResponseObject interface {
+	VisitPostRechunkResponse(w http.ResponseWriter) error
+}
+
+type PostRechunk200JSONResponse RechunkResult
+
+func (response PostRechunk200JSONResponse) VisitPostRechunkResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type PostRechunk500JSONResponse ErrorResponse
+
+func (response PostRechunk500JSONResponse) VisitPostRechunkResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type GetSearchRequestObject struct {
 	Params GetSearchParams
 }
@@ -1635,6 +1885,9 @@ func (response GetTags500JSONResponse) VisitGetTagsResponse(w http.ResponseWrite
 // StrictServerInterface represents all server handlers.
 type StrictServerInterface interface {
 
+	// (POST /api/chunk)
+	PostChunk(ctx context.Context, request PostChunkRequestObject) (PostChunkResponseObject, error)
+
 	// (DELETE /api/collection)
 	DeleteCollection(ctx context.Context, request DeleteCollectionRequestObject) (DeleteCollectionResponseObject, error)
 
@@ -1670,6 +1923,12 @@ type StrictServerInterface interface {
 
 	// (GET /api/metadata)
 	GetMetadata(ctx context.Context, request GetMetadataRequestObject) (GetMetadataResponseObject, error)
+
+	// (GET /api/oversize)
+	GetOversize(ctx context.Context, request GetOversizeRequestObject) (GetOversizeResponseObject, error)
+
+	// (POST /api/rechunk)
+	PostRechunk(ctx context.Context, request PostRechunkRequestObject) (PostRechunkResponseObject, error)
 
 	// (GET /api/search)
 	GetSearch(ctx context.Context, request GetSearchRequestObject) (GetSearchResponseObject, error)
@@ -1724,6 +1983,37 @@ type strictHandler struct {
 	ssi         StrictServerInterface
 	middlewares []StrictMiddlewareFunc
 	options     StrictHTTPServerOptions
+}
+
+// PostChunk operation middleware
+func (sh *strictHandler) PostChunk(w http.ResponseWriter, r *http.Request) {
+	var request PostChunkRequestObject
+
+	var body PostChunkJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.PostChunk(ctx, request.(PostChunkRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "PostChunk")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(PostChunkResponseObject); ok {
+		if err := validResponse.VisitPostChunkResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
 }
 
 // DeleteCollection operation middleware
@@ -2057,6 +2347,56 @@ func (sh *strictHandler) GetMetadata(w http.ResponseWriter, r *http.Request, par
 	}
 }
 
+// GetOversize operation middleware
+func (sh *strictHandler) GetOversize(w http.ResponseWriter, r *http.Request, params GetOversizeParams) {
+	var request GetOversizeRequestObject
+
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetOversize(ctx, request.(GetOversizeRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetOversize")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetOversizeResponseObject); ok {
+		if err := validResponse.VisitGetOversizeResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// PostRechunk operation middleware
+func (sh *strictHandler) PostRechunk(w http.ResponseWriter, r *http.Request) {
+	var request PostRechunkRequestObject
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.PostRechunk(ctx, request.(PostRechunkRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "PostRechunk")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(PostRechunkResponseObject); ok {
+		if err := validResponse.VisitPostRechunkResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // GetSearch operation middleware
 func (sh *strictHandler) GetSearch(w http.ResponseWriter, r *http.Request, params GetSearchParams) {
 	var request GetSearchRequestObject
@@ -2193,31 +2533,39 @@ func (sh *strictHandler) GetTags(w http.ResponseWriter, r *http.Request) {
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
+	"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",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

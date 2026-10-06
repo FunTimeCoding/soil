@@ -9,18 +9,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/web"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	s := instrument.New(constant.Identity, version)
+func Main() {
+	s := instrument.New(constant.Identity)
 	defer func() { s.Flush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.String(argumentConstant.File, "Procfile", "Path to Procfile")
 	a.String("envrc", ".envrc", "Path to .envrc file")
 	a.Web()
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
 	a.NoPositionals(
 		"goprocessd is the daemon and takes no commands - control a running daemon with: goprocess run <command>",
 	)
@@ -29,6 +25,5 @@ func Main(
 	o.EnvrcPath = a.GetString("envrc")
 	o.Address = a.Address()
 	o.ServiceTokens = web.ServiceTokens()
-	o.Version = version
 	Run(o, s)
 }

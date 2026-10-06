@@ -4,37 +4,17 @@ import (
 	"charm.land/bubbletea/v2"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/fetch"
-	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/receive"
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/tick"
 	console "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status"
-	"github.com/funtimecoding/soil/pkg/monitor/constant"
-	"github.com/funtimecoding/soil/pkg/strings/join"
 	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 )
 
 func (m *Model) tickEvent(_ tick.Message) (*Model, tea.Cmd) {
 	var result tea.BatchMsg
 
-	if m.connect && m.second == 0 {
-		m.client.Connect()
-		m.client.Write(
-			join.Comma([]string{constant.LoginCommand, m.user, m.hostname}),
-		)
-	}
-
-	if m.second%60 == 0 {
-		if m.second == 0 {
-			result = append(result, fetch.Command())
-		} else {
-			if m.connect {
-				m.client.Write(constant.PingCommand)
-			}
-
-			if m.auto {
-				result = append(result, fetch.Command())
-			}
-		}
+	if m.second%60 == 0 && (m.second == 0 || m.auto) {
+		result = append(result, fetch.Command())
 	}
 
 	f := console.ExtendedColorFormat.Copy()
@@ -53,6 +33,14 @@ func (m *Model) tickEvent(_ tick.Message) (*Model, tea.Cmd) {
 		)
 	}
 
+	if m.monitor != nil {
+		if m.claimError != nil {
+			top.String("claims offline")
+		} else {
+			top.String(fmt.Sprintf("claims: %d", len(m.claims)))
+		}
+	}
+
 	m.topBar = top.Format()
 	bottom := status.New(f)
 	bottom.String(m.hostname)
@@ -60,10 +48,6 @@ func (m *Model) tickEvent(_ tick.Message) (*Model, tea.Cmd) {
 	m.bottomBar = bottom.Format()
 	m.second++
 	result = append(result, tick.Command())
-
-	if m.connect {
-		result = append(result, receive.Command(m.client))
-	}
 
 	return m, tea.Batch(result...)
 }

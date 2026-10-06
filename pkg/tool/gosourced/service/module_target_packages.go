@@ -1,10 +1,13 @@
 package service
 
-import "go/types"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/module_symbol"
+	"go/types"
+)
 
 func moduleTargetPackages(
 	directory string,
-	symbols []*ModuleSymbol,
+	symbols []*module_symbol.Symbol,
 	modulePath string,
 	newModulePath string,
 ) map[string]*types.Package {

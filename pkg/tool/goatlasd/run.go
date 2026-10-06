@@ -32,7 +32,7 @@ func Run(
 	s := store.New(m)
 	n := netbox.NewEnvironment()
 	e := metric.New()
-	u := web.New(s, authorizationClient(o))
+	u := web.New(s, authorizationClient(o).WithReporter(r))
 	lifecycle.New(
 		l,
 		lifecycle.WithWorker(

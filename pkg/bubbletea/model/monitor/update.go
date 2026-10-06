@@ -3,8 +3,8 @@ package monitor
 import (
 	"charm.land/bubbletea/v2"
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/claim"
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/fetch"
-	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/receive"
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/tick"
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/toast"
 	"time"
@@ -21,9 +21,13 @@ func (m *Model) Update(s tea.Msg) (tea.Model, tea.Cmd) {
 	case tick.Message:
 		return m.tickEvent(g)
 	case fetch.Message:
-		m.fetchEvent(g)
-	case receive.Message:
-		m.receiveEvent(g)
+		c := m.fetchEvent(g)
+		t, result := m.table.Update(s)
+		m.table = &t
+
+		return m, tea.Batch(c, result)
+	case claim.Message:
+		return m, m.claimEvent(g)
 	case addToastMessage:
 		n := toast.New(m.nextToast, string(g))
 		m.toast = append(m.toast, n)

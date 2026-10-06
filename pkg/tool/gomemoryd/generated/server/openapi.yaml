@@ -381,7 +381,7 @@ components:
           type: integer
     MemoryUpdateRequest:
       type: object
-      required: [name, content, description]
+      description: Omitted fields keep their stored values.
       properties:
         name:
           type: string

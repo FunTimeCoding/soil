@@ -1,7 +1,6 @@
 package opnsense
 
 import (
-	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/opnsense/constant"
 	"github.com/funtimecoding/soil/pkg/opnsense/response"
@@ -13,16 +12,10 @@ func postSave(
 	path string,
 	body any,
 ) (*response.Save, error) {
-	b, e := c.basic.Post(path, body)
-
-	if e != nil {
-		return nil, e
-	}
-
 	var out response.Save
 
-	if f := json.Unmarshal(b, &out); f != nil {
-		return nil, f
+	if e := c.basic.Post(path, body, &out); e != nil {
+		return nil, e
 	}
 
 	if out.Result != constant.SavedResult {

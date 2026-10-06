@@ -1,8 +1,7 @@
 package jellyfin
 
-import "net/http"
+import "github.com/funtimecoding/soil/pkg/jellyfin/basic"
 
 type Client struct {
-	base string
-	http *http.Client
+	basic *basic.Client
 }

@@ -12,12 +12,6 @@ func TestFlagged(t *testing.T) {
 	testutil.AssertBlocked(t, results, 5)
 }
 
-func TestBuildMetadataSanctioned(t *testing.T) {
-	p, results := testutil.LoadTestPackage(t, "testdata/src/metadata")
-	stray_variable.Check(p, results)
-	testutil.AssertBlocked(t, results, 1)
-}
-
 func TestClean(t *testing.T) {
 	p, results := testutil.LoadTestPackage(t, "testdata/src/clean")
 	stray_variable.Check(p, results)

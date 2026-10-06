@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/open_api"
 	"go.yaml.in/yaml/v3"
 	"path/filepath"
 )
@@ -20,7 +21,7 @@ func openAPIConcern(
 		return nil
 	}
 
-	var s openAPISpec
+	var s open_api.Spec
 
 	if yaml.Unmarshal(v.Read(file), &s) != nil {
 		return nil

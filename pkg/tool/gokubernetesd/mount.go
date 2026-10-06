@@ -12,8 +12,7 @@ func Mount(
 	readOnly bool,
 	r face.Reporter,
 	t face.Recorder,
-	version string,
 	g *guard.Mux,
 ) {
-	model_context.New(s, readOnly, r, t, version).Mount(g)
+	model_context.New(s, readOnly, r, t).Mount(g)
 }

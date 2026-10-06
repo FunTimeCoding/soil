@@ -1,7 +1,6 @@
 package goproxmox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmox/command_context"
 	"github.com/spf13/cobra"
@@ -27,7 +26,9 @@ func createSnapshot(c *command_context.Context) *cobra.Command {
 				n = &node
 			}
 
-			console.Emit(c.Client().CreateMachineSnapshot(identifier, name, n))
+			c.Terminal().Emit(
+				c.Client().CreateMachineSnapshot(identifier, name, n),
+			)
 		},
 	}
 	result.Flags().StringVar(&name, "name", "", "snapshot name (required)")

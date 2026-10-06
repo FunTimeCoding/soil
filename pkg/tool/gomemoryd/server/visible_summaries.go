@@ -1,11 +1,11 @@
 package server
 
-import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 
 func (s *Server) visibleSummaries(
-	summaries []store.MemorySummary,
-) []store.MemorySummary {
-	result := make([]store.MemorySummary, 0, len(summaries))
+	summaries []record.MemorySummary,
+) []record.MemorySummary {
+	result := make([]record.MemorySummary, 0, len(summaries))
 
 	for _, m := range summaries {
 		if s.skipHidden(m.Tags) {

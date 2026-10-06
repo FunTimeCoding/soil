@@ -8,88 +8,52 @@ import (
 func (s *Store) UpdateMemory(
 	identifier int64,
 	o *save_option.Option,
-) error {
+) ([]int64, error) {
 	now := time.Now().UTC().Format(time.RFC3339)
 	t, e := s.database.Begin()
 
 	if e != nil {
-		return e
+		return nil, e
 	}
 
 	defer rollback(t)
-	_, e = t.Exec(
-		`UPDATE memory SET name = ?, content = ?, description = ?, provenance_hash = ?, ordinal = ?, updated_at = ?
-		WHERE identifier = ?`,
-		o.Name,
-		o.Content,
-		o.Description,
-		o.ProvenanceHash,
-		o.Ordinal,
-		now,
+	var name, scope string
+	e = t.QueryRow(
+		`SELECT name, scope FROM memory WHERE identifier = ?`,
 		identifier,
-	)
+	).Scan(&name, &scope)
 
 	if e != nil {
-		return e
+		return nil, e
 	}
 
-	_, e = t.Exec(
-		`INSERT INTO memory_version (memory_identifier, name, content, description, changed_at, change_type, source)
-		VALUES (?, ?, ?, ?, ?, 'updated', ?)`,
-		identifier,
-		o.Name,
-		o.Content,
-		o.Description,
-		now,
-		o.Source,
-	)
+	renamed := o.Name != name
 
-	if e != nil {
-		return e
-	}
-
-	_, e = t.Exec(
-		`DELETE FROM memory_tag WHERE memory_identifier = ?`,
-		identifier,
-	)
-
-	if e != nil {
-		return e
-	}
-
-	for _, tag := range o.Tags {
-		_, e = t.Exec(
-			`INSERT INTO memory_tag (memory_identifier, tag) VALUES (?, ?)`,
-			identifier,
-			tag,
-		)
-
-		if e != nil {
-			return e
+	if renamed {
+		if e = renameCheck(t, identifier, scope, o.Name); e != nil {
+			return nil, e
 		}
 	}
 
-	_, e = t.Exec(
-		`DELETE FROM memory_metadata WHERE memory_identifier = ?`,
-		identifier,
-	)
-
-	if e != nil {
-		return e
+	if e = writeMemory(t, identifier, o, now); e != nil {
+		return nil, e
 	}
 
-	for key, value := range o.Metadata {
-		_, e = t.Exec(
-			`INSERT INTO memory_metadata (memory_identifier, key, value) VALUES (?, ?, ?)`,
-			identifier,
-			key,
-			value,
+	var rewritten []int64
+
+	if renamed {
+		rewritten, e = rewriteCitations(
+			t,
+			citation(scope, name),
+			citation(scope, o.Name),
+			o.Source,
+			now,
 		)
 
 		if e != nil {
-			return e
+			return nil, e
 		}
 	}
 
-	return t.Commit()
+	return rewritten, t.Commit()
 }

@@ -1,7 +1,6 @@
 package sentry
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/basic/response"
 	"strconv"
@@ -22,19 +21,14 @@ func (c *Client) Releases(
 		q["limit"] = strconv.Itoa(limit)
 	}
 
-	b, e := c.basic.Get(
-		fmt.Sprintf("organizations/%s/releases", organization),
-		q,
-	)
-
-	if e != nil {
-		return nil, e
-	}
-
 	var result []response.Release
 
-	if f := json.Unmarshal(b, &result); f != nil {
-		return nil, f
+	if e := c.basic.Get(
+		fmt.Sprintf("organizations/%s/releases", organization),
+		q,
+		&result,
+	); e != nil {
+		return nil, e
 	}
 
 	return result, nil

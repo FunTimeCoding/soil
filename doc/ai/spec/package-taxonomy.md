@@ -58,7 +58,7 @@ belong in `<path>/types/` (or an interface in `<path>/face/`).
 
 ## When to Promote
 
-### `<path>/constant/` - from the start
+### Constants from the start
 
 Constants live in `<path>/constant/` from the first constant - there is no
 bare-`constant.go` stage. Inside `<path>/constant/`:
@@ -72,7 +72,7 @@ bare-`constant.go` stage. Inside `<path>/constant/`:
 - Registries (lookup functions, slices of all instances) get
   `<concept>_list.go`, `<concept>_by_name.go`
 
-### No package → `<path>/types/`
+### Promoting to types
 
 Introduce when domain types with methods appear that are not persistence
 entities. `<path>/types/` is a subtree - each type gets its own sub-package per
@@ -88,7 +88,7 @@ types/
 `<path>/types/` packages have no persistence deps (no ORM, no store). They
 define what the domain looks like; `<path>/model/` defines how it's stored.
 
-### No package → `<path>/model/`
+### Promoting to model
 
 Introduce when persistence entities need sub-packages (multiple entity types
 with receivers). `<path>/model/` is a subtree:
@@ -102,7 +102,7 @@ model/
 If there's only one entity, `<path>/model/` can stay flat (one struct file, one
 constructor). Extract sub-packages when a second entity with receivers appears.
 
-### No package → `<path>/helper/`
+### No helper packages
 
 **Avoid.** `<path>/helper/` and `<path>/util/` are junk-drawer anti-patterns.
 Every function has a proper home:
@@ -127,12 +127,12 @@ extracting them into a struct with methods in a dedicated package (e.g.
 This keeps `<path>/constant/` purely declarative and gives query logic a named,
 testable home without scattering it across consumer packages.
 
-### No package → `<path>/integration/`
+### Promoting to integration
 
-Introduce when cross-package tests exist. Tests live in facet subpackages
-(`<path>/client/`, `<path>/model_context/`, `<path>/web_interface/`, ...) with
-shared setup exported from `<path>/base/` — layout, naming, and the
-unit/integration line are in `test-placement.md`.
+Introduce `<path>/integration/` when cross-package tests exist. Tests live in
+facet subpackages (`<path>/client/`, `<path>/model_context/`,
+`<path>/web_interface/`, ...) with shared setup exported from `<path>/base/` —
+layout, naming, and the unit/integration line are in `test-placement.md`.
 
 ## Flat Package Guidelines
 

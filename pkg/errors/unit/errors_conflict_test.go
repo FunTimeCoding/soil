@@ -8,10 +8,10 @@ import (
 )
 
 func TestConflictClassifiesByType(t *testing.T) {
-	e := conflict.Format("authority already live: %s", "host")
-	assert.String(t, "authority already live: host", e.Error())
+	e := conflict.Format("authority already live: %s", "alfa")
+	assert.String(t, "authority already live: alfa", e.Error())
 	assert.True(t, conflict.Is(e))
-	assert.False(t, conflict.Is(errors.New("authority already live: host")))
+	assert.False(t, conflict.Is(errors.New("authority already live: alfa")))
 	assert.False(t, conflict.Is(nil))
 }
 

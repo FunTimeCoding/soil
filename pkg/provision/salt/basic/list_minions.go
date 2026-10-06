@@ -7,16 +7,10 @@ import (
 )
 
 func (c *Client) ListMinions() ([]response.Minion, error) {
-	b, e := c.Get(constant.SaltMinionsPath)
-
-	if e != nil {
-		return nil, e
-	}
-
 	var r response.MinionList
 
-	if f := json.Unmarshal(b, &r); f != nil {
-		return nil, f
+	if e := c.Get(constant.SaltMinionsPath, &r); e != nil {
+		return nil, e
 	}
 
 	if len(r.Return) == 0 {

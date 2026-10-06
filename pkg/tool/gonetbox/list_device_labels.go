@@ -1,12 +1,15 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
 
-func listDeviceLabels(c *client.Client) *cobra.Command {
+func listDeviceLabels(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "list-device-labels [device]",
 		Short: "List labels on a device",
@@ -15,7 +18,7 @@ func listDeviceLabels(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(c.ListDeviceLabels(arguments[0]))
+			t.Emit(c.ListDeviceLabels(arguments[0]))
 		},
 	}
 }

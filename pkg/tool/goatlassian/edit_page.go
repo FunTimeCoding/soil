@@ -1,13 +1,16 @@
 package goatlassian
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
 )
 
-func editPage(c *client.Client) *cobra.Command {
+func editPage(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var old string
 	var replacement string
 	var title string
@@ -21,7 +24,7 @@ func editPage(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(
+			t.Emit(
 				c.EditPage(
 					arguments[0],
 					old,

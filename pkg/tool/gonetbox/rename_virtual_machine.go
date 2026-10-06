@@ -1,13 +1,16 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	generated "github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"github.com/spf13/cobra"
 )
 
-func renameVirtualMachine(c *client.Client) *cobra.Command {
+func renameVirtualMachine(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "rename-virtual-machine [name] [new-name]",
 		Short: "Rename a NetBox virtual machine",
@@ -16,7 +19,7 @@ func renameVirtualMachine(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(
+			t.Emit(
 				c.UpdateVirtualMachine(
 					arguments[0],
 					generated.UpdateVirtualMachineRequest{Name: &arguments[1]},

@@ -9,7 +9,7 @@ func (r *Reranker) Rank(
 	result := make([]rerank.Result, len(documents))
 
 	for i := range documents {
-		result[i] = rerank.Result{Index: i}
+		result[i] = rerank.Result{Index: i, Score: float64(len(documents) - i)}
 	}
 
 	return result, nil

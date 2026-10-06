@@ -1,13 +1,16 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	generated "github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
 	"github.com/spf13/cobra"
 )
 
-func renameDevice(c *client.Client) *cobra.Command {
+func renameDevice(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "rename-device [name] [new-name]",
 		Short: "Rename a NetBox device",
@@ -16,7 +19,7 @@ func renameDevice(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(
+			t.Emit(
 				c.UpdateDevice(
 					arguments[0],
 					generated.UpdateDeviceRequest{Name: &arguments[1]},

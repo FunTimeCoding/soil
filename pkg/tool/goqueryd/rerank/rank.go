@@ -16,14 +16,16 @@ func (r *Reranker) Rank(
 	r.mutex.Lock()
 	defer r.mutex.Unlock()
 	queries := make([]string, len(documents))
+	texts := make([]string, len(documents))
 
 	for i := range queries {
 		queries[i] = query
+		texts[i] = valid(documents[i])
 	}
 
 	encodings, e := r.tokenizer.EncodePairs(
 		queries,
-		documents,
+		texts,
 		tokenizers.WithAddSpecialTokens(),
 		tokenizers.WithReturnAttentionMask(),
 	)

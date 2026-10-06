@@ -13,4 +13,6 @@ const (
 	NotationPath = "/json"
 
 	TabNotFound = "tab not found"
+	BrowserTab  = "browser tab"
+	Asleep      = "did not answer within %s - a sleeping tab answers once activated"
 )

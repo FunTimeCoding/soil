@@ -25,6 +25,11 @@ func tags(c *command_context.Context) *cobra.Command {
 				&client.GetTagsParams{},
 			)
 			errors.PanicOnError(e)
+
+			if r.JSON200 == nil {
+				c.Terminal().Reject(r.Status(), r.Body)
+			}
+
 			f := constant.Format
 
 			for _, t := range *r.JSON200.Tags {

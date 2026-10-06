@@ -1,12 +1,15 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
 
-func getDevice(c *client.Client) *cobra.Command {
+func getDevice(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "get-device [name]",
 		Short: "Get a NetBox device by name",
@@ -15,7 +18,7 @@ func getDevice(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(c.GetDevice(arguments[0]))
+			t.Emit(c.GetDevice(arguments[0]))
 		},
 	}
 }

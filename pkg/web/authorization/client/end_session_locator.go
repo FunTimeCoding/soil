@@ -1,7 +1,10 @@
 package client
 
 func (c *Client) endSessionLocator() string {
-	c.ensureProvider()
+	if c.ensureProvider() != nil {
+		return ""
+	}
+
 	var m discoveryMetadata
 
 	if e := c.provider.Claims(&m); e != nil {

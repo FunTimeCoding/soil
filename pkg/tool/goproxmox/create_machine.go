@@ -1,7 +1,6 @@
 package goproxmox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmox/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
@@ -105,7 +104,7 @@ func createMachine(c *command_context.Context) *cobra.Command {
 				body.Start = &start
 			}
 
-			console.Emit(c.Client().CreateMachine(body))
+			c.Terminal().Emit(c.Client().CreateMachine(body))
 		},
 	}
 	result.Flags().StringVar(&node, "node", "", "target node")

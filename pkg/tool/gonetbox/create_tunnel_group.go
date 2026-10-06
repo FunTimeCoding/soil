@@ -1,12 +1,15 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
 
-func createTunnelGroup(c *client.Client) *cobra.Command {
+func createTunnelGroup(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "create-tunnel-group [name]",
 		Short: "Create a NetBox tunnel group",
@@ -15,7 +18,7 @@ func createTunnelGroup(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(c.CreateTunnelGroup(arguments[0]))
+			t.Emit(c.CreateTunnelGroup(arguments[0]))
 		},
 	}
 }

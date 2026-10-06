@@ -31,6 +31,11 @@ func sessionPeek(c *command_context.Context) *cobra.Command {
 				identifier,
 			)
 			errors.PanicOnError(e)
+
+			if response.JSON200 == nil {
+				c.Terminal().Reject(response.Status(), response.Body)
+			}
+
 			p := response.JSON200
 			lines := p.LineCount
 			total := len(p.Entries)

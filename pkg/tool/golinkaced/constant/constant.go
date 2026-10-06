@@ -22,4 +22,6 @@ const (
 	AddNote   = "add_note"
 
 	ListParameter = "list"
+
+	RequestFailed = "linkace request failed"
 )

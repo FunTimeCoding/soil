@@ -29,6 +29,11 @@ func createList(c *command_context.Context) *cobra.Command {
 				},
 			)
 			errors.PanicOnError(e)
+
+			if r.JSON200 == nil {
+				c.Terminal().Reject(r.Status(), r.Body)
+			}
+
 			fmt.Println(
 				list.FromDaemon(*r.JSON200, c.Host()).Format(constant.Format),
 			)

@@ -35,7 +35,7 @@ func TestGuard(t *testing.T) {
 			goatlasd.Mount(
 				s,
 				web.New(s, authorization),
-				reporter.New(constant.Identity.Name(), ""),
+				reporter.New(constant.Identity.Name()),
 				mock_recorder.New(),
 				g,
 			)

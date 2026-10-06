@@ -25,6 +25,6 @@ func (s *Server) generate(
 		files = append(files, filepath.Join(s.elitePath, notationName))
 	}
 
-	s.parser.Generate(files, nil)
+	s.parser.MustGenerate(files, nil)
 	http.Redirect(w, r, goraidd.ReportsPath, http.StatusSeeOther)
 }

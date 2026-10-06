@@ -10,12 +10,8 @@ import (
 	"os"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	r := reporter.New(constant.Identity.Name(), version).Start()
+func Main() {
+	r := reporter.New(constant.Identity.Name()).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 
 	if len(os.Args) >= 3 && os.Args[1] == "merge" {
@@ -25,7 +21,7 @@ func Main(
 	}
 
 	a := argument.NewInstance(constant.Identity)
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
 	order.Run()
 	missing.Run()
 	duplicate.Run()

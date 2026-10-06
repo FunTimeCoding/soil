@@ -1,6 +1,7 @@
 package argocd
 
+import "github.com/funtimecoding/soil/pkg/web/requester"
+
 type Client struct {
-	base  string
-	token string
+	requester *requester.Requester
 }

@@ -1,7 +1,6 @@
 package sentry
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/basic/response"
@@ -40,19 +39,14 @@ func (c *Client) SearchEvents(
 		q.Set("cursor", cursor)
 	}
 
-	b, e := c.basic.GetValues(
-		fmt.Sprintf("organizations/%s/events", organization),
-		q,
-	)
-
-	if e != nil {
-		return nil, e
-	}
-
 	var result response.EventSearch
 
-	if f := json.Unmarshal(b, &result); f != nil {
-		return nil, f
+	if e := c.basic.GetValues(
+		fmt.Sprintf("organizations/%s/events", organization),
+		q,
+		&result,
+	); e != nil {
+		return nil, e
 	}
 
 	return result.Rows, nil

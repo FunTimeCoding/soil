@@ -1,8 +1,11 @@
 package store
 
-import "github.com/funtimecoding/soil/pkg/errors"
+import (
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
+)
 
-func (s *Store) RecentImpressions(since string) ([]Impression, error) {
+func (s *Store) RecentImpressions(since string) ([]record.Impression, error) {
 	rows, e := s.database.Query(
 		`SELECT identifier, content, source, created_at
 		FROM impression WHERE created_at > ? ORDER BY identifier DESC`,
@@ -14,10 +17,10 @@ func (s *Store) RecentImpressions(since string) ([]Impression, error) {
 	}
 
 	defer errors.LogClose(rows)
-	var result []Impression
+	var result []record.Impression
 
 	for rows.Next() {
-		var i Impression
+		var i record.Impression
 		e := rows.Scan(&i.Identifier, &i.Content, &i.Source, &i.CreatedAt)
 
 		if e != nil {

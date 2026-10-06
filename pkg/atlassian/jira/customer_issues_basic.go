@@ -7,7 +7,7 @@ import (
 )
 
 func (c *Client) CustomerIssuesBasic() error {
-	status, body, e := c.basic.Get(
+	body, e := c.basic.Bytes(
 		c.basic.Base().Copy().Base(constant.JiraServiceDesk).Path(
 			constant.JiraRequest,
 		).SetInteger(
@@ -20,7 +20,7 @@ func (c *Client) CustomerIssuesBasic() error {
 		return e
 	}
 
-	console.Format("Basic response: %d %s", status, body)
+	console.Format("Basic response: %s", body)
 
 	return nil
 }

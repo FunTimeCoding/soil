@@ -21,6 +21,11 @@ func sessionSweep(c *command_context.Context) *cobra.Command {
 				context.Background(),
 			)
 			errors.PanicOnError(e)
+
+			if response.JSON200 == nil {
+				c.Terminal().Reject(response.Status(), response.Body)
+			}
+
 			r := response.JSON200
 			console.Format(
 				"sweep: %d copied, %d updated, %d skipped\n",

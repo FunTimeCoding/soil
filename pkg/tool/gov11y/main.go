@@ -9,17 +9,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/vulnerability/check/vulnerability/option"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	r := reporter.New(constant.Identity.Name(), version).Start()
+func Main() {
+	r := reporter.New(constant.Identity.Name()).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.String(argumentConstant.Filter, "", "modules, comma separated")
 	a.Boolean(argumentConstant.Verbose, false, "Verbose output")
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
 	o := option.New()
 	o.Verbose = a.GetBoolean(argumentConstant.Verbose)
 	o.Filter = a.Slice(argumentConstant.Filter)

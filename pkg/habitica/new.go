@@ -2,10 +2,9 @@ package habitica
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/habitica/basic"
 	"github.com/funtimecoding/soil/pkg/habitica/constant"
-	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/web/locator"
-	"net/http"
 )
 
 func New(
@@ -18,9 +17,10 @@ func New(
 	errors.FatalOnEmpty(token, "token")
 
 	return &Client{
-		base:           join.Empty(locator.New(host).String(), constant.Base),
-		userIdentifier: userIdentifier,
-		token:          token,
-		client:         &http.Client{},
+		basic: basic.New(
+			locator.New(host).Base(constant.Base),
+			userIdentifier,
+			token,
+		),
 	}
 }

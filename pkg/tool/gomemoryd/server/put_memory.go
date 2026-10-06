@@ -11,10 +11,18 @@ func (s *Server) PutMemory(
 	_ context.Context,
 	r server.PutMemoryRequestObject,
 ) (server.PutMemoryResponseObject, error) {
+	existing, e := s.service.GetMemory(r.Identifier)
+
+	if e != nil {
+		return server.PutMemory500JSONResponse(
+			*s.captureFail(e, constant.UnexpectedError),
+		), nil
+	}
+
 	o := save_option.New()
-	o.Name = r.Body.Name
-	o.Content = r.Body.Content
-	o.Description = r.Body.Description
+	o.Name = valueOr(r.Body.Name, existing.Name)
+	o.Content = valueOr(r.Body.Content, existing.Content)
+	o.Description = valueOr(r.Body.Description, existing.Description)
 
 	if r.Body.Tags != nil {
 		o.Tags = *r.Body.Tags
@@ -36,11 +44,11 @@ func (s *Server) PutMemory(
 		o.Ordinal = *r.Body.Ordinal
 	}
 
-	m, e := s.service.UpdateMemory(r.Identifier, o)
+	m, _, f := s.service.UpdateMemory(r.Identifier, o)
 
-	if e != nil {
+	if f != nil {
 		return server.PutMemory500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
+			*s.captureFail(f, constant.UnexpectedError),
 		), nil
 	}
 

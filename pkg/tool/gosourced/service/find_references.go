@@ -3,7 +3,8 @@ package service
 import (
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/result"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/result/references"
 )
 
 func (s *Service) FindReferences(
@@ -11,9 +12,15 @@ func (s *Service) FindReferences(
 	packagePath string,
 	symbol string,
 	receiver string,
-) (*output.Results, *result.References, error) {
+) (*output.Results, *references.References, error) {
 	r := output.NewResultsWithDirectory(directory)
-	all, set, e := loadPackages(directory, "./...")
+	pattern := packagePath
+
+	if s.full {
+		pattern = "./..."
+	}
+
+	all, set, e := loadPackages(directory, pattern)
 
 	if e != nil {
 		return nil, nil, e
@@ -22,12 +29,28 @@ func (s *Service) FindReferences(
 	declaration, _, e := findDeclaration(all, packagePath, symbol, receiver)
 
 	if e != nil {
-		r.AddConcern(concern.NewFile("validation", e.Error(), "", false))
+		r.AddConcern(
+			concern.NewFile(constant.ConcernValidation, e.Error(), "", false),
+		)
 
 		return r, nil, nil
 	}
 
-	locations := referenceLocations(directory, all, set, declaration, "")
+	if s.full {
+		locations := referenceLocations(directory, all, set, declaration, "")
 
-	return r, result.NewReferences(symbol, locations), nil
+		return r, references.New(symbol, locations), nil
+	}
+
+	locations := indexedLocations(
+		directory,
+		s.workspace(directory).References(),
+		all,
+		set,
+		packagePath,
+		declaration,
+		"",
+	)
+
+	return r, references.New(symbol, locations), nil
 }

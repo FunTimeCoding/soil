@@ -1,5 +1,5 @@
 package nextcloud
 
-func (c *Client) Status() {
-	c.basic.Propfind()
+func (c *Client) Status() error {
+	return c.basic.Propfind()
 }

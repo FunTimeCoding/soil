@@ -10,6 +10,6 @@ func Exitf(
 	format string,
 	a ...any,
 ) {
-	fmt.Printf(format, a...)
+	_, _ = fmt.Fprintf(os.Stderr, format, a...)
 	os.Exit(code)
 }

@@ -1,12 +1,15 @@
 package goatlassian
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
 )
 
-func listPages(c *client.Client) *cobra.Command {
+func listPages(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var status string
 	result := &cobra.Command{
 		Use:   "list-pages [space-identifier]",
@@ -16,7 +19,7 @@ func listPages(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(c.ListPages(arguments[0], status))
+			t.Emit(c.ListPages(arguments[0], status))
 		},
 	}
 	result.Flags().StringVar(&status, "status", "", "page status filter")

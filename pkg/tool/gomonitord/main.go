@@ -2,23 +2,24 @@ package gomonitord
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/soil/pkg/monitor/gorilla"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
+	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/tool/gomonitord/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomonitord/option"
 	"github.com/funtimecoding/soil/pkg/web"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	r := reporter.New(constant.Identity.Name(), version).Start()
-	defer func() { r.RecoverFlush(recover()) }()
+func Main() {
+	s := instrument.New(constant.Identity)
+	defer func() { s.Flush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
-	a.Parse(version, gitHash, buildDate)
-	gorilla.Run(
-		web.AddressHostPort(webConstant.Localhost, webConstant.ListenPort),
-	)
+	a.Web()
+	a.Database()
+	a.Parse()
+	o := option.New()
+	o.Address = a.Address()
+	o.ServiceTokens = web.ServiceTokens()
+	o.PostgresLocator = a.GetString(argumentConstant.Postgres)
+	o.LitePath = a.GetString(argumentConstant.Lite)
+	Run(o, s)
 }

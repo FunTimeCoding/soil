@@ -1,10 +1,9 @@
 package client
 
 import (
-	"encoding/json"
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/requester/request"
 	"net/http"
 	"net/url"
 )
@@ -13,7 +12,7 @@ func (c *Client) exchangeCode(
 	code string,
 	verifier string,
 	callbackLocator string,
-) *tokenResponse {
+) (*tokenResponse, error) {
 	form := url.Values{
 		"grant_type":    {"authorization_code"},
 		"code":          {code},
@@ -22,19 +21,16 @@ func (c *Client) exchangeCode(
 		"client_secret": {c.secret},
 		"code_verifier": {verifier},
 	}
-	r, e := http.PostForm(join.Empty(c.issuer, "/token"), form)
-	errors.PanicOnError(e)
+	q := request.Absolute(join.Empty(c.issuer, "/token")).WithBody(
+		constant.FormEncoded,
+		[]byte(form.Encode()),
+	)
+	q.Method = http.MethodPost
+	var result tokenResponse
 
-	defer errors.PanicClose(r.Body)
-
-	if r.StatusCode != http.StatusOK {
-		errors.PanicOnError(
-			unexpected.Format("token exchange status: %d", r.StatusCode),
-		)
+	if e := c.requester.Notation(q, &result); e != nil {
+		return nil, e
 	}
 
-	var result tokenResponse
-	errors.PanicOnError(json.NewDecoder(r.Body).Decode(&result))
-
-	return &result
+	return &result, nil
 }

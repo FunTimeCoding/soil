@@ -2,7 +2,7 @@ package store_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 )
 
 func (o *Tester) SearchMemories(
@@ -11,7 +11,7 @@ func (o *Tester) SearchMemories(
 	memoryType string,
 	tag string,
 	scope string,
-) []store.SearchResult {
+) []record.SearchResult {
 	o.t.Helper()
 	result, e := o.Store.SearchMemories(query, limit, memoryType, tag, scope)
 	assert.FatalOnError(o.t, e)

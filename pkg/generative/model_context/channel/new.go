@@ -11,7 +11,6 @@ import (
 
 func New(
 	i *identity.Tool,
-	version string,
 	instructions string,
 ) *Server {
 	result := &Server{
@@ -20,7 +19,7 @@ func New(
 		ready: make(chan struct{}),
 		open:  make(chan struct{}),
 	}
-	result.server = server.New(i, version).
+	result.server = server.New(i).
 		WithInstructions(instructions).
 		WithExperimental(
 			map[string]any{constant.ChannelCapability: map[string]any{}},

@@ -1,13 +1,16 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
 
-func createTunnel(c *client.Client) *cobra.Command {
+func createTunnel(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var encapsulation string
 	var group string
 	result := &cobra.Command{
@@ -18,7 +21,7 @@ func createTunnel(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(c.CreateTunnel(arguments[0], encapsulation, group))
+			t.Emit(c.CreateTunnel(arguments[0], encapsulation, group))
 		},
 	}
 	result.Flags().StringVar(

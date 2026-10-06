@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/audit_configuration"
 	"testing"
 )
 
@@ -11,7 +12,7 @@ func TestClientsDiscovered(t *testing.T) {
 	v := virtual_file_system.New()
 	v.WriteString("pkg/gitlab/client.go", "package gitlab\n")
 	v.WriteString("pkg/gitlab/constant/constant.go", "package constant\n")
-	c := scan.Clients(v, "test", scan.NewConfiguration())
+	c := scan.Clients(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(c))
 	assert.String(t, "pkg/gitlab", c[0].Path)
 	assert.Boolean(t, true, c[0].Constant)
@@ -20,7 +21,11 @@ func TestClientsDiscovered(t *testing.T) {
 func TestClientsExcludesTool(t *testing.T) {
 	v := virtual_file_system.New()
 	v.WriteString("pkg/tool/gotestd/client.go", "package gotestd\n")
-	assert.Integer(t, 0, len(scan.Clients(v, "test", scan.NewConfiguration())))
+	assert.Integer(
+		t,
+		0,
+		len(scan.Clients(v, "test", audit_configuration.New())),
+	)
 }
 
 func TestClientsExcludesConfiguration(t *testing.T) {
@@ -33,7 +38,9 @@ func TestClientsExcludesConfiguration(t *testing.T) {
 			scan.Clients(
 				v,
 				"test",
-				&scan.Configuration{Exclude: []string{"pkg/relational"}},
+				&audit_configuration.Configuration{
+					Exclude: []string{"pkg/relational"},
+				},
 			),
 		),
 	)
@@ -42,7 +49,7 @@ func TestClientsExcludesConfiguration(t *testing.T) {
 func TestClientsNested(t *testing.T) {
 	v := virtual_file_system.New()
 	v.WriteString("pkg/chat/mattermost/client.go", "package mattermost\n")
-	c := scan.Clients(v, "test", scan.NewConfiguration())
+	c := scan.Clients(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(c))
 	assert.String(t, "pkg/chat/mattermost", c[0].Path)
 }

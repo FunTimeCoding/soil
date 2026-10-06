@@ -5,5 +5,4 @@ type Option struct {
 	EnvrcPath     string
 	Address       string
 	ServiceTokens []string
-	Version       string
 }

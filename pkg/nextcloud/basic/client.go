@@ -1,8 +1,7 @@
 package basic
 
+import "github.com/funtimecoding/soil/pkg/web/requester"
+
 type Client struct {
-	base     string
-	fileRoot string
-	user     string
-	password string
+	requester *requester.Requester
 }

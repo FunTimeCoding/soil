@@ -30,7 +30,6 @@ func Run(
 						service.New(o.Inventory),
 						r,
 						i.Recorder(),
-						o.Version,
 						guard.New(m, o.ServiceTokens),
 					)
 				},

@@ -3,12 +3,16 @@ package gonetbox
 import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 	"strconv"
 )
 
-func deleteAddress(c *client.Client) *cobra.Command {
+func deleteAddress(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "delete-address [identifier]",
 		Short: "Delete an IP address by identifier",
@@ -19,7 +23,7 @@ func deleteAddress(c *client.Client) *cobra.Command {
 		) {
 			identifier, e := strconv.Atoi(arguments[0])
 			errors.PanicOnError(e)
-			console.Emit(c.DeleteAddress(int32(identifier)))
+			t.Emit(c.DeleteAddress(int32(identifier)))
 			console.Line("address deleted")
 		},
 	}

@@ -15,6 +15,7 @@ func New(
 	base := l.String()
 	c, e := client.NewClientWithResponses(
 		base,
+		client.WithHTTPClient(web.StallClient()),
 		client.WithRequestEditorFn(web.BearerEditor(token)),
 	)
 	errors.PanicOnError(e)

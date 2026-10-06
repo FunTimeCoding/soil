@@ -2,10 +2,9 @@ package cross_service_tester
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	generative "github.com/funtimecoding/soil/pkg/generative/constant"
+	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_client"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
@@ -30,7 +29,7 @@ func New(t *testing.T) *Tester {
 	c, e := client.NewClient(
 		fmt.Sprintf("http://localhost:%d", q.Port),
 		client.WithRequestEditorFn(
-			soilWeb.BearerEditor(generative.ModelContextTestToken),
+			soilWeb.BearerEditor(constant.ModelContextTestToken),
 		),
 	)
 	errors.PanicOnError(e)
@@ -44,14 +43,7 @@ func New(t *testing.T) *Tester {
 			_ *http.ServeMux,
 			g *guard.Mux,
 		) {
-			gomemoryd.Mount(
-				v,
-				web.New(v),
-				r,
-				mock_recorder.New(),
-				constant.DefaultVersion,
-				g,
-			)
+			gomemoryd.Mount(v, web.New(v), r, mock_recorder.New(), g)
 		},
 	)
 	queryClient := model_context_client.New(t, q.Port)

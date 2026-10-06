@@ -6,7 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page/page_file"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page/page_post"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
-	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/system"
 )
 
@@ -29,7 +28,9 @@ func (c *Client) Import(
 		return nil, g
 	}
 
-	body, h := c.basic.PostV2Path(
+	var result *response.Page
+
+	if h := c.basic.PostV2Path(
 		constant.ConfluencePage,
 		page_post.New(
 			s.Identifier,
@@ -37,14 +38,10 @@ func (c *Client) Import(
 			f.Name,
 			page.ToMarkup(f.Body),
 		).Encode(),
-	)
-
-	if h != nil {
+		&result,
+	); h != nil {
 		return nil, h
 	}
-
-	var result *response.Page
-	notation.MustDecode(body, &result, false)
 
 	return page.New(result, c.host), nil
 }

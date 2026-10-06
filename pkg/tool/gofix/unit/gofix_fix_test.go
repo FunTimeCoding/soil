@@ -4,7 +4,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/testutil"
+	"github.com/funtimecoding/soil/pkg/lint/face"
 	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"github.com/funtimecoding/soil/pkg/tool/gofix"
 	"github.com/funtimecoding/soil/pkg/tool/gofix/unit/module_tester"
 	"path/filepath"
@@ -15,9 +17,11 @@ func TestFix(t *testing.T) {
 	directory := module_tester.Fix(t)
 	r := output.NewResultsWithDirectory(directory)
 	all, fileSet := gofix.Load(directory, []string{"./..."})
-	violations := gofix.FindViolations(all)
+	reported, e := resolve.ListPackages(directory, "./...")
+	assert.FatalOnError(t, e)
+	violations := gofix.FindViolations(all, reported, face.New(all))
 	edits := gofix.BuildAllEdits(fileSet, all, violations, r)
-	gofix.ApplyEdits(fileSet, edits, directory, false)
+	gofix.ApplyEdits(fileSet, edits, directory, false, r)
 	loadedFiles := gofix.BuildLoadedFiles(all)
 	gofix.FixUnloadedReferences(violations, loadedFiles, directory, r)
 	t.Run(

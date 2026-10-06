@@ -13,9 +13,8 @@ func Mount(
 	u *web.Server,
 	r face.Reporter,
 	t face.Recorder,
-	version string,
 	g *guard.Mux,
 ) {
-	model_context.New(v, r, t, version).Mount(g)
+	model_context.New(v, r, t).Mount(g)
 	u.Mount(g)
 }

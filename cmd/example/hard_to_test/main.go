@@ -45,7 +45,6 @@ func main() {
 		errors.PanicOnError(e)
 	}
 
-	web.GetBytes(nil, "")
 	web.Post(nil, "", "")
 	web.Patch(nil, "", "")
 	web.PostBytes(nil, "", nil)

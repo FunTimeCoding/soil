@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/xml"
 	"github.com/funtimecoding/soil/pkg/band/constant"
+	"github.com/funtimecoding/soil/pkg/band/response"
 	"github.com/funtimecoding/soil/pkg/digest"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/strings/join"
@@ -73,15 +74,15 @@ func (c *Client) call(
 			c.password,
 		),
 	)
-	response, h := c.client.Do(second)
+	r, h := c.client.Do(second)
 
 	if h != nil {
 		return nil, h
 	}
 
-	body, i := io.ReadAll(response.Body)
+	body, i := io.ReadAll(r.Body)
 
-	if j := response.Body.Close(); j != nil {
+	if j := r.Body.Close(); j != nil {
 		return nil, j
 	}
 
@@ -89,8 +90,8 @@ func (c *Client) call(
 		return nil, i
 	}
 
-	if response.StatusCode >= http.StatusBadRequest {
-		var fault FaultResponse
+	if r.StatusCode >= http.StatusBadRequest {
+		var fault response.Fault
 
 		if xml.Unmarshal(body, &fault) == nil && fault.Text != "" {
 			return nil, unexpected.Format(
@@ -100,7 +101,7 @@ func (c *Client) call(
 			)
 		}
 
-		return nil, unexpected.Format("band %s: %s", resource, response.Status)
+		return nil, unexpected.Format("band %s: %s", resource, r.Status)
 	}
 
 	return body, nil

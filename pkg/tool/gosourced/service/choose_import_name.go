@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/relocation"
 	"go/ast"
 	"path"
 )
@@ -10,12 +11,12 @@ func chooseImportName(
 	file *ast.File,
 	importPath string,
 	packageName string,
-) *importName {
+) *relocation.ImportName {
 	names := importLocalNames(file)
 
 	for local, p := range names {
 		if p == importPath {
-			return &importName{local: local, imported: true}
+			return relocation.NewImportName(local, true)
 		}
 	}
 
@@ -28,10 +29,10 @@ func chooseImportName(
 
 	for _, c := range candidates {
 		if _, taken := names[c]; !taken {
-			result := &importName{local: c}
+			result := relocation.NewImportName(c, false)
 
 			if c != packageName {
-				result.alias = c
+				result.Alias = c
 			}
 
 			return result

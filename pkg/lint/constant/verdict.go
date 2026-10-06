@@ -8,6 +8,8 @@ const (
 	VerdictBareSlash
 	VerdictUndeclaredHost
 	VerdictTallied
+	VerdictDeadHeading
+	VerdictFragmentTarget
 )
 
 type Verdict int

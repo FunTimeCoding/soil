@@ -1,9 +1,12 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/lint/concern"
+import (
+	"github.com/funtimecoding/soil/pkg/lint/concern"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/module_symbol"
+)
 
 func moduleBreakage(
-	symbol *ModuleSymbol,
+	symbol *module_symbol.Symbol,
 	key string,
 	text string,
 ) *concern.Concern {

@@ -2,11 +2,15 @@ package goatlassian
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
 )
 
-func deletePage(c *client.Client) *cobra.Command {
+func deletePage(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var draft bool
 	result := &cobra.Command{
 		Use:   "delete-page [identifier]",
@@ -16,7 +20,7 @@ func deletePage(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(c.DeletePage(arguments[0], draft))
+			t.Emit(c.DeletePage(arguments[0], draft))
 			console.Format("deleted page %s\n", arguments[0])
 		},
 	}

@@ -2,11 +2,15 @@ package goatlassian
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/client"
 	"github.com/spf13/cobra"
 )
 
-func linkIssues(c *client.Client) *cobra.Command {
+func linkIssues(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var linkType string
 	result := &cobra.Command{
 		Use:   "link-issues [key] [target-key]",
@@ -16,7 +20,7 @@ func linkIssues(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(c.LinkIssues(arguments[0], arguments[1], linkType))
+			t.Emit(c.LinkIssues(arguments[0], arguments[1], linkType))
 			console.Format("linked %s to %s\n", arguments[0], arguments[1])
 		},
 	}

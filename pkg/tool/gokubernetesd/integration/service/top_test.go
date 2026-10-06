@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/integration/service_tester"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/query"
 	"testing"
 )
 
@@ -39,7 +39,7 @@ func TestTopPods(t *testing.T) {
 	result, e := s.Service.TopPods(
 		context.Background(),
 		"test",
-		service.TopQuery{Namespace: "default"},
+		query.Top{Namespace: "default"},
 	)
 	assert.Nil(t, e)
 	assert.Count(t, 2, result)
@@ -60,7 +60,7 @@ func TestTopPodContainers(t *testing.T) {
 	result, e := s.Service.TopPodContainers(
 		context.Background(),
 		"test",
-		service.TopQuery{Namespace: "default"},
+		query.Top{Namespace: "default"},
 	)
 	assert.Nil(t, e)
 	assert.Count(t, 2, result)

@@ -31,16 +31,16 @@ func (s *Store) Index(collection string) *index.Index {
 		existing := s.findActiveDocument(collection, relative)
 
 		if existing != nil {
-			if existing.hash == hash {
-				if existing.title != title {
-					s.updateDocumentTitle(existing.identifier, title, now)
+			if existing.Hash == hash {
+				if existing.Title != title {
+					s.updateDocumentTitle(existing.Identifier, title, now)
 					r.Updated++
 				} else {
 					r.Unchanged++
 				}
 			} else {
 				s.InsertContent(hash, content, now)
-				s.updateDocument(existing.identifier, title, hash, now)
+				s.updateDocument(existing.Identifier, title, hash, now)
 				r.Updated++
 			}
 		} else {

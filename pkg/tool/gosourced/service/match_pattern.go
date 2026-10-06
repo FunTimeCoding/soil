@@ -3,7 +3,10 @@ package service
 import (
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/match"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/matcher"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/pattern_site"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/result"
 	"go/types"
 	"golang.org/x/tools/go/ast/astutil"
@@ -20,12 +23,14 @@ func (s *Service) MatchPattern(
 	specification, e := match.Parse(pattern)
 
 	if e != nil {
-		r.AddConcern(concern.NewFile("validation", e.Error(), "", false))
+		r.AddConcern(
+			concern.NewFile(constant.ConcernValidation, e.Error(), "", false),
+		)
 
 		return r, nil, nil
 	}
 
-	all, set, f := loadPackages(directory, "./...")
+	all, set, f := s.censusPackages(directory, packagePath)
 
 	if f != nil {
 		return nil, nil, f
@@ -34,7 +39,9 @@ func (s *Service) MatchPattern(
 	declaration, _, g := findDeclaration(all, packagePath, symbol, receiver)
 
 	if g != nil {
-		r.AddConcern(concern.NewFile("validation", g.Error(), "", false))
+		r.AddConcern(
+			concern.NewFile(constant.ConcernValidation, g.Error(), "", false),
+		)
 
 		return r, nil, nil
 	}
@@ -42,7 +49,9 @@ func (s *Service) MatchPattern(
 	targets, h := anchorSet(declaration, receiver)
 
 	if h != nil {
-		r.AddConcern(concern.NewFile("validation", h.Error(), "", false))
+		r.AddConcern(
+			concern.NewFile(constant.ConcernValidation, h.Error(), "", false),
+		)
 
 		return r, nil, nil
 	}
@@ -59,7 +68,7 @@ func (s *Service) MatchPattern(
 	contents := map[string][]byte{}
 	total := 0
 	matched := 0
-	var entries []*siteEntry
+	var entries []*pattern_site.Entry
 
 	for _, reference := range objectReferences(all, isAnchor) {
 		file := syntaxFileAt(reference.Package, reference.Ident.Pos())
@@ -75,7 +84,7 @@ func (s *Service) MatchPattern(
 			reference.Ident.End(),
 		)
 		node := siteNode(path)
-		unification := match.New(
+		unification := matcher.New(
 			specification,
 			reference.Package.TypesInfo,
 			reference.Package.Types,

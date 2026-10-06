@@ -1,10 +1,10 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 
 func (s *Service) GetMemoryGroup(
 	identifier int64,
-) (*store.Memory, []store.Memory, error) {
+) (*record.Memory, []record.Memory, error) {
 	parent, e := s.store.GetMemory(identifier)
 
 	if e != nil {
@@ -17,7 +17,7 @@ func (s *Service) GetMemoryGroup(
 		return nil, nil, e
 	}
 
-	var children []store.Memory
+	var children []record.Memory
 
 	for _, sum := range summaries {
 		m, f := s.store.GetMemory(sum.Identifier)

@@ -12,7 +12,11 @@ func (s *Server) resolveTab(
 	title string,
 	l string,
 ) (*tab.Tab, error) {
-	tabs := s.client.Tabs()
+	tabs, e := s.client.Tabs()
+
+	if e != nil {
+		return nil, e
+	}
 
 	if tabIdentifier != "" {
 		for _, t := range tabs {

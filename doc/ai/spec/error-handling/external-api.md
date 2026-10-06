@@ -5,7 +5,9 @@ Proxmox) encounter errors that don't fit cleanly into tier 1 or tier 2.
 A NetBox "name must be unique" is the caller's mistake - but we haven't
 seen enough of these errors to know which are safe to exclude from Sentry.
 
-**Default posture: capture everything to Sentry.** The 400/500 split
+## Default posture: capture everything
+
+Capture everything to Sentry. The 400/500 split
 is for the caller. The Sentry capture is for us. These are independent
 decisions. An error can be a 400 to the caller (they sent a duplicate
 name) AND captured to Sentry (we want visibility into what errors our
@@ -13,7 +15,9 @@ services encounter). Only stop capturing specific errors after they've
 been seen enough to be identified as noise - by adding sentinel-based
 exclusions, not by skipping the tier.
 
-**Upstream errors are always 500.** We haven't classified which
+## Upstream errors are always 500
+
+We haven't classified which
 upstream errors are truly client mistakes vs infra failures vs
 auth issues. Until a specific error has been observed enough to
 route differently, everything from an external API is 500 with
@@ -25,8 +29,10 @@ Not all upstream APIs return structured errors. Some return
 opaque errors or HTML error pages. For those, the fallback
 message is all we can offer.
 
-**The captureDetail pattern:** a per-service method that checks
-for the upstream's error types and extracts the best message.
+## The captureDetail pattern
+
+A per-service method that checks for the upstream's error types and
+extracts the best message.
 Returns `*server.ErrorResponse` - always 500, always Sentry.
 
 ```go
@@ -78,7 +84,9 @@ for the classified error before falling through to
 `captureDetail`. The default remains capture-everything until
 proven otherwise.
 
-**Two shapes for classified errors:**
+### Simple sentinels and typed errors
+
+Two shapes for classified errors.
 
 *Simple sentinel* -
 `var ErrorBrowserUnreachable = errors.New("browser unreachable")`. Fixed
@@ -113,6 +121,8 @@ errors; the type is the classification.
 The dividing line: does the message need context from the call
 site? If yes, typed error. If no, simple sentinel.
 
+### Shared error classes
+
 The shared typed classes live in `pkg/errors`, each with
 `Format` (or `New`) and `Is`. Reach for these before inventing
 a per-package sentinel for the same class:
@@ -136,6 +146,9 @@ a per-package sentinel for the same class:
   or not installed. The 503-shaped class.
 - `timeout` - waiting ran out. `timeout.Is` also matches
   `context.DeadlineExceeded`.
+- `dropped` - the answer broke off mid-way: an unexpected EOF, a
+  reset, a closed HTTP/2 stream. Retried like a timeout on idempotent
+  requests.
 - `unexpected` - an upstream replied with a surprise; message
   shape `"<subject> status: %d"` or `"unexpected <subject>:
   <value>"`. The package also carries the panic helpers
@@ -150,7 +163,9 @@ Multi-instance daemons resolve their session-scoped instance
 through `go:pkg/inventory.Resolve`, which produces `not_found`
 and `not_selected`.
 
-**Message format:** `"subject condition: identifier"` - the what
+## Message format
+
+An error message reads `"subject condition: identifier"` - the what
 before the which. Examples: `"machine not found: 123"`,
 `"collection not found: favorites"`, `"browser unreachable"`.
 The subject tells you what failed. The identifier tells you
@@ -158,8 +173,8 @@ which one. Construct the message where the knowledge is - the
 function that did the lookup, not the handler that routes the
 response.
 
-**Wrap-label format:** when wrapping an underlying error with
-the operation that was attempted, the label is `"verb noun:
+When wrapping an underlying error with the operation that was
+attempted, the wrap label is `"verb noun:
 %w"` - `"list tabs: %w"`, `"create entry: %w"`, `"download
 vocabulary: %w"`. Never `"failed to X"` or `"X fail"` - the
 error position already says it failed.

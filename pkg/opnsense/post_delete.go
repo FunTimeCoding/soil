@@ -1,7 +1,6 @@
 package opnsense
 
 import (
-	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/opnsense/constant"
@@ -14,16 +13,10 @@ func postDelete(
 	path string,
 	identifier string,
 ) error {
-	b, e := c.basic.Post(path, struct{}{})
-
-	if e != nil {
-		return e
-	}
-
 	var out response.Save
 
-	if f := json.Unmarshal(b, &out); f != nil {
-		return f
+	if e := c.basic.Post(path, struct{}{}, &out); e != nil {
+		return e
 	}
 
 	if out.Result == constant.NotFoundResult {

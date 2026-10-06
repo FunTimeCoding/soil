@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/model_context/argument"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/query"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -27,7 +27,7 @@ func (s *Server) Get(
 		result, f := s.service.GetResource(
 			x,
 			cluster,
-			service.GetQuery{
+			query.Get{
 				ResourceType: a.ResourceType,
 				Name:         a.Name,
 				Namespace:    a.Namespace,
@@ -45,7 +45,7 @@ func (s *Server) Get(
 	result, f := s.service.ListResources(
 		x,
 		cluster,
-		service.ListQuery{
+		query.List{
 			ResourceType:  a.ResourceType,
 			Namespace:     a.Namespace,
 			AllNamespaces: a.AllNamespaces,

@@ -3,7 +3,6 @@ package jira
 import (
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/basic/response"
-	"github.com/funtimecoding/soil/pkg/notation"
 	web "github.com/funtimecoding/soil/pkg/web/constant"
 )
 
@@ -29,13 +28,10 @@ func (c *Client) searchV3Page(
 	}
 
 	var result response.Search
-	_, r, e := c.basic.Get(b.String())
 
-	if e != nil {
+	if e := c.basic.Get(b.String(), &result); e != nil {
 		return nil, e
 	}
-
-	notation.MustDecode(r, &result, true)
 
 	return &result, nil
 }

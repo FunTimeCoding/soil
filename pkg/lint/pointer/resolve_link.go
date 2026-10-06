@@ -9,7 +9,7 @@ func (r *Resolver) resolveLink(
 	relative, inside := Relative(path, target)
 
 	if inside && r.Exists(relative) {
-		return &Resolution{Verdict: constant.VerdictLive}
+		return &Resolution{Verdict: constant.VerdictLive, Target: relative}
 	}
 
 	return &Resolution{Verdict: constant.VerdictDead}

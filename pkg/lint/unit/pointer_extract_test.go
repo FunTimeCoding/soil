@@ -30,7 +30,24 @@ func TestExtract(t *testing.T) {
 		[]*pointer.Candidate{pointer.NewLink("naming.md")},
 		pointer.Extract("[naming](naming.md)"),
 	)
-	assert.Any(t, []*pointer.Candidate(nil), pointer.Extract("[top](#top)"))
+	assert.Any(
+		t,
+		[]*pointer.Candidate{pointer.NewLink("#top")},
+		pointer.Extract("[top](#top)"),
+	)
+	assert.Any(
+		t,
+		[]*pointer.Candidate(nil),
+		pointer.Extract("Write `[top](#top)` for an anchor."),
+	)
+	assert.Any(
+		t,
+		[]*pointer.Candidate{
+			pointer.NewSpan("doc/ai"),
+			pointer.NewLink("doc/ai/runbook/lint.md"),
+		},
+		pointer.Extract("See `doc/ai` and [lint](doc/ai/runbook/lint.md)."),
+	)
 	assert.Any(
 		t,
 		[]*pointer.Candidate{pointer.NewLink("https://host.example")},

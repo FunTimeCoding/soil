@@ -1,12 +1,15 @@
 package gopnsense
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/client"
 	"github.com/spf13/cobra"
 )
 
-func reconfigure(c *client.Client) *cobra.Command {
+func reconfigure(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "reconfigure",
 		Short: "Apply pending Dnsmasq configuration",
@@ -14,7 +17,7 @@ func reconfigure(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			console.Emit(c.ReconfigureDnsmasq())
+			t.Emit(c.ReconfigureDnsmasq())
 		},
 	}
 }

@@ -4,7 +4,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/basic/response"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/space"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
-	"github.com/funtimecoding/soil/pkg/notation"
 )
 
 // Reference: https://developer.atlassian.com/cloud/confluence/rest/v2/api-group-space/#api-spaces-get
@@ -16,14 +15,12 @@ func (c *Client) Spaces() ([]*space.Space, error) {
 	var result []*response.Space
 
 	for {
-		body, e := c.basic.GetV2(l)
+		var s *response.Spaces
 
-		if e != nil {
+		if e := c.basic.Get(l, &s); e != nil {
 			return nil, e
 		}
 
-		var s *response.Spaces
-		notation.MustDecode(body, &s, false)
 		result = append(result, s.Results...)
 
 		if s.Links.Next == "" {

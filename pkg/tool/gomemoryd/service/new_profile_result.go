@@ -1,12 +1,12 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 
 func NewProfileResult(
-	always []store.Memory,
-	index []store.MemorySummary,
-	relevant []store.SearchResult,
-	impressions []store.Impression,
+	always []record.Memory,
+	index []record.MemorySummary,
+	relevant []record.SearchResult,
+	impressions []record.Impression,
 	completions []CompletionEntry,
 ) *ProfileResult {
 	result := &ProfileResult{

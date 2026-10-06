@@ -3,12 +3,16 @@ package gonetbox
 import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 	"strconv"
 )
 
-func deleteJournalEntry(c *client.Client) *cobra.Command {
+func deleteJournalEntry(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "delete-journal-entry [identifier]",
 		Short: "Delete a journal entry",
@@ -19,7 +23,7 @@ func deleteJournalEntry(c *client.Client) *cobra.Command {
 		) {
 			identifier, e := strconv.Atoi(arguments[0])
 			errors.PanicOnError(e)
-			console.Emit(c.DeleteJournalEntry(int32(identifier)))
+			t.Emit(c.DeleteJournalEntry(int32(identifier)))
 			console.Line("journal entry deleted")
 		},
 	}

@@ -7,5 +7,4 @@ type Proxmox struct {
 	ServiceTokens []string
 	MetricAddress string
 	Inventory     *inventory.Inventory
-	Version       string
 }

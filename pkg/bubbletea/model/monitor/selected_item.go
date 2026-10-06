@@ -3,13 +3,11 @@ package monitor
 import "github.com/funtimecoding/soil/pkg/monitor/item"
 
 func (m *Model) selectedItem() *item.Item {
-	identifier := m.table.SelectedRow()[0]
+	r := m.table.SelectedRow()
 
-	for _, i := range m.items {
-		if i.Identifier == identifier {
-			return i
-		}
+	if r == nil {
+		return nil
 	}
 
-	return nil
+	return m.itemByLabel(r[0])
 }

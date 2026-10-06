@@ -10,8 +10,7 @@ Design and coding specs live in `doc/ai/spec/`:
   refactor away, or keep
 - `naming.md` - banned identifier segments, replacement patterns, type/field
   naming rules
-- `entrypoint.md` - linker variables, Main(), sentry setup (shared by all cmd/
-  programs)
+- `entrypoint.md` - main, Main(), sentry setup (shared by all cmd/ programs)
 - `service-tool.md` - long-running service tool pattern (Run, lifecycle wiring,
   routes)
 - `check-tool.md` - CLI check tool pattern (fetch, filter, format, print)
@@ -23,7 +22,7 @@ Design and coding specs live in `doc/ai/spec/`:
 - `testing.md` - integration testing patterns (mocks, lifecycle HTTP, store)
 - `test-placement.md` - where test files live (unit_test/ and integration_test/
   homes, black-box rule, facet layout)
-- `build.md` - gobuild cross-compilation and linker variable convention
+- `build.md` - gobuild cross-compilation and the build information stamp
 - `taskfile.md` - task runner, git hooks, CI pipeline
 - `locator.md` - fluent URL builder (`pkg/web/locator`)
 - `generated-api.md` - OpenAPI codegen pattern (generated/, client/, server/

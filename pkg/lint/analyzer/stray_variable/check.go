@@ -52,10 +52,6 @@ func Check(
 						continue
 					}
 
-					if isBuildMetadata(p, n) {
-						continue
-					}
-
 					results.AddConcern(
 						concern.NewPosition(
 							"stray_variable",

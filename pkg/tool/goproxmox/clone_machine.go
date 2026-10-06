@@ -1,7 +1,6 @@
 package goproxmox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmox/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/client"
@@ -45,7 +44,7 @@ func cloneMachine(c *command_context.Context) *cobra.Command {
 				body.Snapshot = &snapshot
 			}
 
-			console.Emit(c.Client().CloneMachine(identifier, n, body))
+			c.Terminal().Emit(c.Client().CloneMachine(identifier, n, body))
 		},
 	}
 	result.Flags().StringVar(&node, "node", "", "node name")

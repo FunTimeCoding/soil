@@ -1,12 +1,7 @@
 package basic
 
-import "net/http"
+import "github.com/funtimecoding/soil/pkg/web/requester"
 
 type Client struct {
-	base     string
-	token    string
-	user     string
-	password string
-	eauth    string
-	client   *http.Client
+	requester *requester.Requester
 }

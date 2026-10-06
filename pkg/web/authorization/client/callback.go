@@ -46,7 +46,14 @@ func (c *Client) Callback(
 		return
 	}
 
-	tokens := c.exchangeCode(code, flow.Verifier, flow.CallbackLocator)
+	tokens, e := c.exchangeCode(code, flow.Verifier, flow.CallbackLocator)
+
+	if e != nil {
+		c.fail(w, e, constant.TokenExchangeFailed)
+
+		return
+	}
+
 	identifierToken := tokens.IdentifierToken
 
 	if identifierToken == "" {
@@ -59,7 +66,12 @@ func (c *Client) Callback(
 		return
 	}
 
-	c.ensureProvider()
+	if e = c.ensureProvider(); e != nil {
+		c.fail(w, e, constant.ProviderDiscoveryFailed)
+
+		return
+	}
+
 	verified, e := c.verifier.Verify(context.Background(), identifierToken)
 
 	if e != nil {

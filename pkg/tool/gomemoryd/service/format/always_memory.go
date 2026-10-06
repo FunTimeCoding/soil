@@ -5,10 +5,10 @@ import (
 	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 )
 
-func AlwaysMemory(m *store.Memory) string {
+func AlwaysMemory(m *record.Memory) string {
 	block := join.Empty(
 		constant.MemoryHeadingPrefix,
 		m.Name,
@@ -17,6 +17,7 @@ func AlwaysMemory(m *store.Memory) string {
 		constant.IdentifierClose,
 		tagSuffix(m.Tags),
 		stringConstant.Unix,
+		baseLine(m.Metadata),
 		m.Content,
 		stringConstant.Unix,
 	)

@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/module_symbol"
 	"go/token"
 	"golang.org/x/tools/go/packages"
 	"sort"
@@ -11,8 +12,8 @@ func moduleSymbols(
 	all []*packages.Package,
 	set *token.FileSet,
 	modulePath string,
-) []*ModuleSymbol {
-	seen := make(map[string]*ModuleSymbol)
+) []*module_symbol.Symbol {
+	seen := make(map[string]*module_symbol.Symbol)
 
 	for _, loaded := range all {
 		if strings.HasSuffix(loaded.ID, ".test") ||
@@ -30,13 +31,13 @@ func moduleSymbols(
 
 			addModuleSymbol(
 				seen,
-				&ModuleSymbol{
-					PackagePath: o.Pkg().Path(),
-					Owner:       selectionOwner(selection),
-					Name:        o.Name(),
-					Object:      o,
-					Position:    set.Position(expression.Pos()),
-				},
+				module_symbol.New(
+					o.Pkg().Path(),
+					selectionOwner(selection),
+					o.Name(),
+					o,
+					set.Position(expression.Pos()),
+				),
 			)
 		}
 
@@ -48,12 +49,13 @@ func moduleSymbols(
 
 			addModuleSymbol(
 				seen,
-				&ModuleSymbol{
-					PackagePath: o.Pkg().Path(),
-					Name:        o.Name(),
-					Object:      o,
-					Position:    set.Position(identity.Pos()),
-				},
+				module_symbol.New(
+					o.Pkg().Path(),
+					"",
+					o.Name(),
+					o,
+					set.Position(identity.Pos()),
+				),
 			)
 		}
 	}
@@ -65,7 +67,7 @@ func moduleSymbols(
 	}
 
 	sort.Strings(keys)
-	var result []*ModuleSymbol
+	var result []*module_symbol.Symbol
 
 	for _, key := range keys {
 		result = append(result, seen[key])

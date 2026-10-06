@@ -10,5 +10,5 @@ func (c *Client) CreatePipeline(
 	_ string,
 	_ []*gitlab.PipelineVariableOptions,
 ) (*pipeline_detail.Detail, error) {
-	return nil, nil
+	return nil, c.pipelineFailure
 }

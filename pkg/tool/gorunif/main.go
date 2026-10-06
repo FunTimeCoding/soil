@@ -11,12 +11,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gorunif/run_if/option"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	r := reporter.New(constant.Identity.Name(), version).Start()
+func Main() {
+	r := reporter.New(constant.Identity.Name()).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.String(
@@ -27,7 +23,7 @@ func Main(
 	a.String(argumentConstant.Head, git.HeadReference, "Head commit")
 	a.Boolean(constant.Suffix, false, "Match path as suffix instead of prefix")
 	a.Boolean(argumentConstant.Verbose, false, "Verbose output")
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
 	o := option.New()
 	o.Directory = system.WorkDirectory()
 	o.Verbose = a.GetBoolean(argumentConstant.Verbose)

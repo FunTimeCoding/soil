@@ -1,12 +1,15 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
 
-func createPrefix(c *client.Client) *cobra.Command {
+func createPrefix(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	var site string
 	var description string
 	result := &cobra.Command{
@@ -17,7 +20,7 @@ func createPrefix(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(c.CreatePrefix(arguments[0], site, description))
+			t.Emit(c.CreatePrefix(arguments[0], site, description))
 		},
 	}
 	result.Flags().StringVar(&site, "site", "", "site name (optional)")

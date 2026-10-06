@@ -7,7 +7,7 @@ import (
 
 func (c *Client) Sessions() ([]*session.Session, error) {
 	var out []response.Session
-	e := c.get("/Sessions", nil, &out)
+	e := c.basic.Get("/Sessions", nil, &out)
 
 	if e != nil {
 		return nil, e

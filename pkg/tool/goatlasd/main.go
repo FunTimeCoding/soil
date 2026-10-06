@@ -12,12 +12,8 @@ import (
 	"time"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	s := instrument.New(constant.Identity, version)
+func Main() {
+	s := instrument.New(constant.Identity)
 	defer func() { s.Flush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Web()
@@ -29,7 +25,7 @@ func Main(
 		7*24*time.Hour,
 		constant.RetentionUsage,
 	)
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
 	o := option.New()
 	o.Address = a.Address()
 	o.MetricAddress = a.MetricAddress()

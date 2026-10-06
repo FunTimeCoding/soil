@@ -1,12 +1,15 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
 
-func listVirtualDisks(c *client.Client) *cobra.Command {
+func listVirtualDisks(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "list-virtual-disks [vm]",
 		Short: "List disks on a virtual machine",
@@ -15,7 +18,7 @@ func listVirtualDisks(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			console.Emit(c.ListVirtualDisks(arguments[0]))
+			t.Emit(c.ListVirtualDisks(arguments[0]))
 		},
 	}
 }

@@ -44,14 +44,7 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(x *http.ServeMux) {
-					Mount(
-						c,
-						b,
-						r,
-						s.Recorder(),
-						o.Version,
-						guard.New(x, o.ServiceTokens),
-					)
+					Mount(c, b, r, s.Recorder(), guard.New(x, o.ServiceTokens))
 				},
 			).WithMiddleware(b.Recovery(r)),
 		),

@@ -1,12 +1,15 @@
 package gonetbox
 
 import (
-	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 	"github.com/spf13/cobra"
 )
 
-func listAddressRanges(c *client.Client) *cobra.Command {
+func listAddressRanges(
+	c *client.Client,
+	t *terminal.Terminal,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   "list-address-ranges",
 		Short: "List all IP address ranges",
@@ -15,7 +18,7 @@ func listAddressRanges(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			console.Emit(c.ListAddressRanges())
+			t.Emit(c.ListAddressRanges())
 		},
 	}
 }

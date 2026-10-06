@@ -17,7 +17,9 @@ in the client or in the server builder.
 
 Two tiers:
 
-**Tier 1 - Input validation** (bad params from the model): use `response.Fail`.
+## Tier 1: input validation
+
+Bad params from the model: use `response.Fail`.
 No Sentry - these are model mistakes, not infrastructure failures.
 
 ```go
@@ -32,8 +34,19 @@ if f != nil {
 the standard `(*mcp.CallToolResult, error)` tuple. Use it for all input
 validation.
 
-**Tier 2 - Infrastructure failure** (store, DB, external call): capture
-to Sentry and return a structured error with the event ID. Two layers:
+## Tier 2: infrastructure failure
+
+Store, DB, external call: capture to Sentry and return a structured
+error with the event ID.
+
+Any `error` value from a function call in an MCP handler is worth
+capturing. Even local file I/O errors. `response.Fail` is only for
+validation where the handler constructs the error message itself
+(e.g. "service is required").
+
+Two layers:
+
+### The capture primitive
 
 `captureFail` is the primitive - a private method on the Server struct
 that wraps `response.CaptureFail`. Takes the error and a model-facing
@@ -47,6 +60,8 @@ func (s *Server) captureFail(
     return response.CaptureFail(s.reporter, e, message)
 }
 ```
+
+### Per-service capture
 
 `captureDetail` is the per-service wrapper that whitelists known error
 types. It checks for API-specific typed errors, relays their message
@@ -79,6 +94,8 @@ that recur:
 - a shared extractor when REST and MCP surfaces need the same
   parsing, as gonetboxd's `common.ExtractMessage`
 
+### Calling them from a handler
+
 Most handlers call `captureDetail(e)` directly:
 
 ```go
@@ -93,19 +110,27 @@ Use `captureFail(e, message)` directly only when the handler knows
 a specific message that `captureDetail` can't derive - e.g. after
 a multi-step operation where the context matters.
 
-**`detail_error.Detail`** (`pkg/web/detail_error/`): a shared typed
+## Shared pieces
+
+### The detail error type
+
+`detail_error.Detail` (`pkg/web/detail_error/`) is a shared typed
 error carrying a `Detail` string and `Status` string. HTTP clients
 return this from `parseDetail` when the API response contains a
 known error message field. The `Detail` field is what gets relayed
 to the model.
 
-**`constant.UnexpectedError`** (`pkg/constant/`): the shared fallback
+### The unexpected-error fallback
+
+`constant.UnexpectedError` (`pkg/constant/`) is the shared fallback
 message - `"unexpected error"`. Honest about not knowing what went
 wrong. The model gets this alongside the sentry event ID and can
 look up the full error if needed. Never lie about the cause - don't
 use "API unreachable" or "database unreachable" as catch-all messages.
 
-**`parseDetail`** in HTTP clients: checks the response status code
+### Parsing upstream error bodies
+
+`parseDetail` in HTTP clients checks the response status code
 and parses the error body for a known message field. Each API has
 its own shape:
 
@@ -119,6 +144,8 @@ its own shape:
 If the known field is found, returns `detail_error.New(message, status)`.
 Otherwise returns `fmt.Errorf("%s", status)`.
 
+### Capturing through the reporter
+
 `response.CaptureFail` captures the exception via the reporter and
 returns structured JSON with `error` and `event_identifier` fields via
 `response.FailAny`. The event ID lets the model look up the
@@ -128,8 +155,3 @@ conversation.
 The reporter is threaded into the MCP server (same pattern as web and
 workers). The reporter is never nil - it always exists, even in noop
 mode.
-
-Design principle: any `error` value from a function call in an MCP
-handler is worth capturing. Even local file I/O errors.
-`response.Fail` is only for validation where the handler constructs
-the error message itself (e.g. "service is required").

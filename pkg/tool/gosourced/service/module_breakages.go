@@ -4,12 +4,13 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/module_symbol"
 	"go/types"
 )
 
 func moduleBreakages(
 	targets map[string]*types.Package,
-	symbols []*ModuleSymbol,
+	symbols []*module_symbol.Symbol,
 	modulePath string,
 	newModulePath string,
 ) []*concern.Concern {

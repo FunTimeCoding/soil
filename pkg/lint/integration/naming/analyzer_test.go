@@ -13,3 +13,9 @@ func TestBlocked(t *testing.T) {
 	naming.Check(p, results, face.New([]*packages.Package{p}))
 	testutil.AssertBlocked(t, results, 57)
 }
+
+func TestImplementingMethodWithOwnParameterNames(t *testing.T) {
+	p, results := testutil.LoadTestPackage(t, "testdata/src/implementing")
+	naming.Check(p, results, face.New([]*packages.Package{p}))
+	testutil.AssertBlocked(t, results, 0)
+}

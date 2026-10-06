@@ -10,12 +10,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/godockerhub/constant"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	r := reporter.New(constant.Identity.Name(), version).Start()
+func Main() {
+	r := reporter.New(constant.Identity.Name()).Start()
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.String(
@@ -23,7 +19,7 @@ func Main(
 		"",
 		"Image to list tags for (e.g. library/golang)",
 	)
-	a.Parse(version, gitHash, buildDate)
+	a.Parse()
 	image := a.GetString(argumentConstant.Image)
 
 	if image == "" {
@@ -33,7 +29,7 @@ func Main(
 	}
 
 	c := hub.New()
-	tags := c.Tags(image)
+	tags := c.MustTags(image)
 	limit := len(tags)
 
 	if limit > constant.MaxDisplay {

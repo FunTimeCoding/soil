@@ -2,12 +2,12 @@ package web
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/token_summary"
 )
 
 func tokenStrip(
-	m *store.Memory,
+	m *record.Memory,
 	statistic *token_summary.Statistic,
 	summary *token_summary.Summary,
 ) []string {

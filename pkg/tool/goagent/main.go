@@ -4,8 +4,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
-	"github.com/funtimecoding/soil/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/instrument"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	goagent "github.com/funtimecoding/soil/pkg/tool/goagent/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goagentd/client"
 	agent "github.com/funtimecoding/soil/pkg/tool/goagentd/constant"
@@ -13,13 +13,10 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func Main(
-	version string,
-	gitHash string,
-	buildDate string,
-) {
-	r := reporter.New(goagent.Identity.Name(), version).Start()
-	defer func() { r.RecoverFlush(recover()) }()
+func Main() {
+	s := instrument.NewCommandLine(goagent.Identity)
+	defer func() { s.Flush(recover()) }()
+	t := terminal.New(s)
 	var host string
 	var port int
 	o := &cobra.Command{
@@ -39,14 +36,11 @@ func Main(
 		"goagentd port",
 	)
 	newClient := func() *client.Client {
-		return client.New(
-			host,
-			port,
-			environment.Required(agent.TokenEnvironment),
-		)
+		return client.New(host, port, t.Required(agent.TokenEnvironment))
 	}
-	o.AddCommand(submit(newClient))
+	o.AddCommand(submit(newClient, t))
 	o.AddCommand(status(newClient))
-	argument.CobraStamp(o, goagent.Identity, version, gitHash, buildDate)
+	argument.CobraInstrument(o, s)
+	argument.CobraStamp(o, goagent.Identity)
 	errors.PanicOnError(o.Execute())
 }

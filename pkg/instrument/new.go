@@ -6,12 +6,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/telemetry"
 )
 
-func New(
-	i *identity.Tool,
-	version string,
-) *Instrument {
+func New(i *identity.Tool) *Instrument {
 	return &Instrument{
-		reporter: reporter.New(i.Name(), version).Start(),
+		reporter: reporter.New(i.Name()).Start(),
 		recorder: telemetry.NewEnvironment(),
 	}
 }

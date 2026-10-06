@@ -14,7 +14,6 @@ import (
 
 func serveChannel(
 	c *command_context.Context,
-	version string,
 	r face.Reporter,
 ) *cobra.Command {
 	var interval int
@@ -26,11 +25,7 @@ func serveChannel(
 			_ *cobra.Command,
 			_ []string,
 		) {
-			s := channel.New(
-				constant.Identity,
-				version,
-				constant.ChannelInstructions,
-			)
+			s := channel.New(constant.Identity, constant.ChannelInstructions)
 			go runChannel(
 				c,
 				s,
