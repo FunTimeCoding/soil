@@ -105,7 +105,7 @@ require (
 	k8s.io/apimachinery v0.37.1
 	k8s.io/client-go v0.37.1
 	k8s.io/metrics v0.37.1
-	maragu.dev/gomponents v1.3.0
+	maragu.dev/gomponents v1.4.0
 	mvdan.cc/sh/v3 v3.14.1
 	sigs.k8s.io/yaml v1.6.0
 )
