@@ -3,12 +3,12 @@ package pointer_tester
 import (
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/constant"
-	"github.com/funtimecoding/soil/pkg/lint/pointer"
+	"github.com/funtimecoding/soil/pkg/lint/pointer/resolver"
 )
 
 func Registries(registries ...string) (lint.Checker, *[]string) {
 	var seen []string
-	r := pointer.New()
+	r := resolver.New()
 	r.Roots = Roots()
 	r.Registries = registries
 

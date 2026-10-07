@@ -1,6 +1,9 @@
 package index
 
-import "path"
+import (
+	"github.com/funtimecoding/soil/pkg/source/types/memo_entry"
+	"path"
+)
 
 func (w *Workspace) fetch(
 	kind string,
@@ -10,15 +13,15 @@ func (w *Workspace) fetch(
 ) (any, bool) {
 	k := path.Join(kind, slot)
 
-	if e := w.memo[k]; e != nil && e.key == key {
-		return e.value, true
+	if e := w.memo[k]; e != nil && e.Key == key {
+		return e.Value, true
 	}
 
 	if !w.store.Read(kind, key, fresh) {
 		return nil, false
 	}
 
-	w.memo[k] = &memoEntry{key: key, value: fresh}
+	w.memo[k] = memo_entry.New(key, fresh)
 
 	return fresh, true
 }

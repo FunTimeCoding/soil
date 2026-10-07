@@ -1,7 +1,7 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/source/index"
+	"github.com/funtimecoding/soil/pkg/source/index/kind"
 	"go/types"
 	"golang.org/x/tools/go/packages"
 )
@@ -10,8 +10,8 @@ func countingKind(
 	name string,
 	extracted *int,
 	external *int,
-) *index.Kind {
-	return index.NewKind(
+) *kind.Kind {
+	return kind.New(
 		name,
 		func() any {
 			return new(string)

@@ -7,22 +7,23 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/palette"
+	"github.com/funtimecoding/soil/pkg/web/palette/registry"
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
 func New(k *worker.Worker) *Server {
-	registry := palette.NewRegistry()
-	registry.Register(
-		palette.Command{
-			Label:    constant.PlateTitle,
-			Path:     constant.PlatePath,
-			Category: web.PaletteNavigate,
-		},
+	r := registry.New()
+	r.Register(
+		palette.NewCommand(
+			constant.PlateTitle,
+			constant.PlatePath,
+			web.PaletteNavigate,
+		),
 	)
 
 	return &Server{
 		worker:   k,
-		registry: registry,
+		registry: r,
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(web.ThemeAtlas).

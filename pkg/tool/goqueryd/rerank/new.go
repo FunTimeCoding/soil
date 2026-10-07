@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/system/join"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/types/rerank_session"
 )
 
 func New(
@@ -62,7 +63,7 @@ func New(
 		return nil, fmt.Errorf("measure special tokens: %w", g)
 	}
 
-	session, h := newSession(
+	session, h := rerank_session.New(
 		join.Join(directory, constant.RerankModelFile),
 		sequenceLength,
 	)

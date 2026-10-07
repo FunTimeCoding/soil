@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/convert"
+	memoryResponse "github.com/funtimecoding/soil/pkg/tool/gomemoryd/model_context/response"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -39,7 +40,7 @@ func (s *Server) getGroup(
 		return s.captureFail(f, "load group relations")
 	}
 
-	relations := groupRelations(edges, members)
+	relations := memoryResponse.GroupRelations(edges, members)
 	payload := map[string]any{}
 
 	if len(relations) > 0 {

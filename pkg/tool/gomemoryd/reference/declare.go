@@ -3,11 +3,12 @@ package reference
 import (
 	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/pointer"
+	"github.com/funtimecoding/soil/pkg/lint/pointer/resolver"
 )
 
 func declare(
 	bases []string,
-	r *pointer.Resolver,
+	r *resolver.Resolver,
 ) (*pointer.Declared, []*Finding) {
 	result := pointer.NewDeclared()
 	var dead []*Finding

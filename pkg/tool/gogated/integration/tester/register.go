@@ -6,13 +6,14 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/gogated/types/register"
 	"testing"
 )
 
 func (o *Tester) Register(
 	t *testing.T,
 	redirectLocators []string,
-) *RegisterResult {
+) *register.Response {
 	t.Helper()
 	body, e := json.Marshal(
 		map[string]any{
@@ -36,7 +37,7 @@ func (o *Tester) Register(
 
 	defer errors.PanicClose(r.Body)
 	assert.Integer(t, 201, r.StatusCode)
-	var result RegisterResult
+	var result register.Response
 	assert.FatalOnError(t, json.NewDecoder(r.Body).Decode(&result))
 
 	return &result

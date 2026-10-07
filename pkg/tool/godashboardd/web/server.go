@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/service"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/store"
 	"github.com/funtimecoding/soil/pkg/web/authorization/client"
-	"github.com/funtimecoding/soil/pkg/web/palette"
+	"github.com/funtimecoding/soil/pkg/web/palette/registry"
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
@@ -16,5 +16,5 @@ type Server struct {
 	authorization *client.Client
 	labels        map[string]bool
 	view          *view.View
-	registry      *palette.Registry
+	registry      *registry.Registry
 }

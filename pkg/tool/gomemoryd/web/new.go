@@ -7,48 +7,50 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/palette"
+	"github.com/funtimecoding/soil/pkg/web/palette/registry"
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
 func New(s *service.Service) *Server {
-	registry := palette.NewRegistry()
-	registry.Register(
-		palette.Command{
-			Label:    constant.DashboardTitle,
-			Path:     constant.DashboardPath,
-			Category: web.PaletteNavigate,
-		},
-		palette.Command{
-			Label:    constant.MemoriesTitle,
-			Path:     constant.MemoriesPath,
-			Category: web.PaletteNavigate,
-		},
-		palette.Command{
-			Label:    constant.RelationsTitle,
-			Path:     constant.RelationsPath,
-			Category: web.PaletteNavigate,
-		},
-		palette.Command{
-			Label:    constant.ImpressionsTitle,
-			Path:     constant.ImpressionsPath,
-			Category: web.PaletteNavigate,
-		},
-		palette.Command{
-			Label:    constant.SearchTitle,
-			Path:     web.SearchPath,
-			Category: web.PaletteNavigate,
-		},
-		palette.Command{
-			Label:      "Search memories",
-			Path:       "/palette/memories",
-			Category:   web.PaletteSearch,
-			SwapTarget: ".palette-body",
-		},
+	r := registry.New()
+	search := palette.NewCommand(
+		"Search memories",
+		"/palette/memories",
+		web.PaletteSearch,
+	)
+	search.SwapTarget = ".palette-body"
+	r.Register(
+		palette.NewCommand(
+			constant.DashboardTitle,
+			constant.DashboardPath,
+			web.PaletteNavigate,
+		),
+		palette.NewCommand(
+			constant.MemoriesTitle,
+			constant.MemoriesPath,
+			web.PaletteNavigate,
+		),
+		palette.NewCommand(
+			constant.RelationsTitle,
+			constant.RelationsPath,
+			web.PaletteNavigate,
+		),
+		palette.NewCommand(
+			constant.ImpressionsTitle,
+			constant.ImpressionsPath,
+			web.PaletteNavigate,
+		),
+		palette.NewCommand(
+			constant.SearchTitle,
+			web.SearchPath,
+			web.PaletteNavigate,
+		),
+		search,
 	)
 
 	return &Server{
 		service:  s,
-		registry: registry,
+		registry: r,
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(web.ThemeCortex).

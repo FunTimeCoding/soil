@@ -7,6 +7,7 @@ import (
 	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/notation/fixture"
+	"github.com/funtimecoding/soil/pkg/notation/fixture/user"
 	"github.com/funtimecoding/soil/pkg/notation/loader"
 	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/system"
@@ -101,7 +102,7 @@ func TestUnknown(t *testing.T) {
 		"location": "Earth",
 		"skills": ["Go", "Kubernetes"]
 	}`
-	var u fixture.User
+	var u user.User
 	errors.PanicOnError(json.Unmarshal([]byte(raw), &u))
 	assert.String(t, "jdoe", u.Name)
 	assert.Any(t, "Development", u.Unknown["department"])

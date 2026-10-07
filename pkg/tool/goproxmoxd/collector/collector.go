@@ -1,12 +1,15 @@
 package collector
 
-import "github.com/prometheus/client_golang/prometheus"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/collector/metric"
+	"github.com/prometheus/client_golang/prometheus"
+)
 
 type Collector struct {
-	node      *Node
-	guest     *Guest
-	storage   *Storage
-	backup    *Backup
-	scrape    *Scrape
+	node      *metric.Node
+	guest     *metric.Guest
+	storage   *metric.Storage
+	backup    *metric.Backup
+	scrape    *metric.Scrape
 	clearable []*prometheus.GaugeVec
 }

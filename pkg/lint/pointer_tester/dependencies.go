@@ -2,14 +2,14 @@ package pointer_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/lint"
-	"github.com/funtimecoding/soil/pkg/lint/pointer"
+	"github.com/funtimecoding/soil/pkg/lint/pointer/resolver"
 	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"strings"
 )
 
 func Dependencies(modules ...string) lint.Checker {
-	r := pointer.New()
+	r := resolver.New()
 	r.Roots = Roots()
 	r.Dependency = func(span string) bool {
 		for _, m := range modules {

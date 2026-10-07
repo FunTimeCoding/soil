@@ -9,6 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/palette"
+	"github.com/funtimecoding/soil/pkg/web/palette/registry"
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
@@ -17,50 +18,46 @@ func New(
 	v *service.Service,
 	authorization *client.Client,
 ) *Server {
-	registry := palette.NewRegistry()
-	registry.Register(
-		palette.Command{
-			Label:    constant.DashboardTitle,
-			Path:     constant.DashboardPath,
-			Category: web.PaletteNavigate,
-		},
-		palette.Command{
-			Label:    constant.AuthoritiesTitle,
-			Path:     constant.AuthoritiesPath,
-			Category: web.PaletteNavigate,
-		},
-		palette.Command{
-			Label:    constant.CertificatesTitle,
-			Path:     constant.CertificatesPath,
-			Category: web.PaletteNavigate,
-		},
-		palette.Command{
-			Label:    constant.CreateAuthorityTitle,
-			Path:     constant.CreateAuthorityPath,
-			Category: web.PaletteAction,
-		},
-		palette.Command{
-			Label:    constant.IssueCertificateTitle,
-			Path:     constant.IssueCertificatePath,
-			Category: web.PaletteAction,
-		},
-		palette.Command{
-			Label:    constant.RootTitle,
-			Path:     constant.RootPath,
-			Category: web.PaletteAction,
-		},
-		palette.Command{
-			Label:    web.SignOutTitle,
-			Path:     web.SignOutPath,
-			Category: web.PaletteAction,
-		},
+	r := registry.New()
+	r.Register(
+		palette.NewCommand(
+			constant.DashboardTitle,
+			constant.DashboardPath,
+			web.PaletteNavigate,
+		),
+		palette.NewCommand(
+			constant.AuthoritiesTitle,
+			constant.AuthoritiesPath,
+			web.PaletteNavigate,
+		),
+		palette.NewCommand(
+			constant.CertificatesTitle,
+			constant.CertificatesPath,
+			web.PaletteNavigate,
+		),
+		palette.NewCommand(
+			constant.CreateAuthorityTitle,
+			constant.CreateAuthorityPath,
+			web.PaletteAction,
+		),
+		palette.NewCommand(
+			constant.IssueCertificateTitle,
+			constant.IssueCertificatePath,
+			web.PaletteAction,
+		),
+		palette.NewCommand(
+			constant.RootTitle,
+			constant.RootPath,
+			web.PaletteAction,
+		),
+		palette.NewCommand(web.SignOutTitle, web.SignOutPath, web.PaletteAction),
 	)
 
 	return &Server{
 		store:         s,
 		service:       v,
 		authorization: authorization,
-		registry:      registry,
+		registry:      r,
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(web.ThemeSentinel).

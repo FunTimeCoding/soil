@@ -2,6 +2,7 @@ package rerank
 
 import (
 	"github.com/amikos-tech/pure-tokenizers"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/types/rerank_session"
 	"sync"
 )
 
@@ -12,7 +13,7 @@ type Reranker struct {
 	counter        *tokenizers.Tokenizer
 	pairSpecials   int
 	singleSpecials int
-	session        *rerankSession
+	session        *rerank_session.Session
 	mutex          sync.Mutex
 	counterMutex   sync.Mutex
 }

@@ -1,41 +1,45 @@
 package web_tester
 
-import "github.com/funtimecoding/soil/pkg/web/palette"
+import (
+	"github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/palette"
+	"github.com/funtimecoding/soil/pkg/web/palette/registry"
+)
 
-func NewRegistry() *palette.Registry {
-	r := palette.NewRegistry()
+func NewRegistry() *registry.Registry {
+	r := registry.New()
 	r.Register(
-		palette.Command{Label: "Dashboard", Path: "/", Category: "navigate"},
-		palette.Command{
-			Label:    "Create project",
-			Path:     "/projects/new",
-			Category: "action",
-		},
-		palette.Command{
-			Label:    "Sessions",
-			Path:     "/sessions",
-			Category: "navigate",
-		},
-		palette.Command{
-			Label:    "Start build",
-			Path:     "/builds/start",
-			Category: "action",
-		},
-		palette.Command{
-			Label:    "Metrics",
-			Path:     "/metrics",
-			Category: "navigate",
-		},
-		palette.Command{
-			Label:    "Push deploy",
-			Path:     "/deploys/push",
-			Category: "action",
-		},
-		palette.Command{
-			Label:    "Search logs",
-			Path:     "/logs/search",
-			Category: "navigate",
-		},
+		palette.NewCommand(
+			"Dashboard",
+			constant.RootPath,
+			constant.PaletteNavigate,
+		),
+		palette.NewCommand(
+			"Create project",
+			"/projects/new",
+			constant.PaletteAction,
+		),
+		palette.NewCommand("Sessions", "/sessions", constant.PaletteNavigate),
+		palette.NewCommand(
+			"Start build",
+			"/builds/start",
+			constant.PaletteAction,
+		),
+		palette.NewCommand(
+			"Metrics",
+			constant.MetricsPath,
+			constant.PaletteNavigate,
+		),
+		palette.NewCommand(
+			"Push deploy",
+			"/deploys/push",
+			constant.PaletteAction,
+		),
+		palette.NewCommand(
+			"Search logs",
+			"/logs/search",
+			constant.PaletteNavigate,
+		),
 	)
 
 	return r

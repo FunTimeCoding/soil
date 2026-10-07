@@ -1,13 +1,13 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/lint/pointer"
+	"github.com/funtimecoding/soil/pkg/lint/pointer/resolver"
 	"github.com/funtimecoding/soil/pkg/markup/heading"
 	"slices"
 )
 
-func stubResolver() *pointer.Resolver {
-	result := pointer.New()
+func stubResolver() *resolver.Resolver {
+	result := resolver.New()
 	result.Roots = []string{"doc", "pkg"}
 	result.Exists = func(p string) bool {
 		return slices.Contains(

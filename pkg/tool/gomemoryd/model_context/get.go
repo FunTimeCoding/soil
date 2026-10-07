@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/convert"
+	memoryResponse "github.com/funtimecoding/soil/pkg/tool/gomemoryd/model_context/response"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -49,22 +50,18 @@ func (s *Server) get(
 	if q.GetBool(constant.Detail, false) {
 		return response.Success(
 			notation.MarshalIndent(
-				memoryWithHistory{
-					Memory:  *m,
-					Related: related,
-					History: history,
-				},
+				memoryResponse.NewMemoryWithHistory(*m, related, history),
 			),
 		)
 	}
 
 	return response.Success(
 		notation.MarshalIndent(
-			slimMemoryWithHistory{
-				SlimMemory: *convert.Memory(m),
-				Related:    related,
-				History:    history,
-			},
+			memoryResponse.NewSlimMemoryWithHistory(
+				*convert.Memory(m),
+				related,
+				history,
+			),
 		),
 	)
 }

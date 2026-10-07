@@ -13,6 +13,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/requester/authorizer/basic"
 	"github.com/funtimecoding/soil/pkg/web/requester/authorizer/query"
 	"github.com/funtimecoding/soil/pkg/web/requester/request"
+	"github.com/funtimecoding/soil/pkg/web/types/renewing_authorizer"
 	"net/http"
 	"net/url"
 	"testing"
@@ -105,24 +106,24 @@ func TestPostIsSentOnce(t *testing.T) {
 }
 
 func TestUnauthorizedRenewsOnce(t *testing.T) {
-	a := &renewing{token: "stale"}
+	a := renewing_authorizer.New("stale")
 	var out named
 	e := newRequester(t, newRenewingServer(t, "Bearer fresh").URL).
 		WithAuthorizer(a).
 		Notation(request.Get("/items"), &out)
 	assert.FatalOnError(t, e)
 	assert.String(t, "alfa", out.Name)
-	assert.Integer(t, 1, a.renewed)
+	assert.Integer(t, 1, a.Renewed)
 }
 
 func TestSecondUnauthorizedIsReturned(t *testing.T) {
-	a := &renewing{token: "stale"}
+	a := renewing_authorizer.New("stale")
 	_, e := newRequester(t, newRenewingServer(t, "Bearer never").URL).
 		WithAuthorizer(a).
 		Bytes(request.Get("/items"))
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(t, "status: 401", e.Error())
-	assert.Integer(t, 1, a.renewed)
+	assert.Integer(t, 1, a.Renewed)
 }
 
 func TestAbsoluteLocatorLeavesTheBase(t *testing.T) {

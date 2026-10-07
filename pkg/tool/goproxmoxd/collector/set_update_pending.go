@@ -5,5 +5,5 @@ func (c *Collector) SetUpdatePending(
 	node string,
 	count int,
 ) {
-	c.node.updatePending.WithLabelValues(hypervisor, node).Set(float64(count))
+	c.node.UpdatePending.WithLabelValues(hypervisor, node).Set(float64(count))
 }

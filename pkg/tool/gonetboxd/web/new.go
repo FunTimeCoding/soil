@@ -7,22 +7,23 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/palette"
+	"github.com/funtimecoding/soil/pkg/web/palette/registry"
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
 func New(c face.NetboxSource) *Server {
-	registry := palette.NewRegistry()
-	registry.Register(
-		palette.Command{
-			Label:    constant.BookmarkTitle,
-			Path:     constant.BookmarkPath,
-			Category: web.PaletteNavigate,
-		},
+	r := registry.New()
+	r.Register(
+		palette.NewCommand(
+			constant.BookmarkTitle,
+			constant.BookmarkPath,
+			web.PaletteNavigate,
+		),
 	)
 
 	return &Server{
 		client:   c,
-		registry: registry,
+		registry: r,
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(web.ThemeAmethyst).

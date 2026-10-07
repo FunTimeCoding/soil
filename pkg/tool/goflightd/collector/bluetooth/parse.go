@@ -3,10 +3,11 @@ package bluetooth
 import (
 	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goflightd/types/bluetooth_report"
 )
 
 func Parse(text string) map[string]string {
-	var v report
+	var v bluetooth_report.Report
 
 	if json.Unmarshal([]byte(text), &v) != nil {
 		return nil

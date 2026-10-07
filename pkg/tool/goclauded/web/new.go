@@ -9,59 +9,60 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/palette"
+	"github.com/funtimecoding/soil/pkg/web/palette/registry"
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
 func New(s *service.Service) *Server {
-	registry := palette.NewRegistry()
-	registry.Register(
-		palette.Command{
-			Label:    constant.DashboardTitle,
-			Path:     constant.DashboardPath,
-			Category: web.PaletteNavigate,
-		},
-		palette.Command{
-			Label:    constant.SessionsTitle,
-			Path:     constant.SessionsPath,
-			Category: web.PaletteNavigate,
-		},
-		palette.Command{
-			Label:    constant.MessagesTitle,
-			Path:     constant.MessagesPath,
-			Category: web.PaletteNavigate,
-		},
-		palette.Command{
-			Label:    constant.HistoryTitle,
-			Path:     constant.HistoryPath,
-			Category: web.PaletteNavigate,
-		},
-		palette.Command{
-			Label:    constant.CoverageTitle,
-			Path:     constant.CoveragePath,
-			Category: web.PaletteNavigate,
-		},
-		palette.Command{
-			Label:    constant.UsageTitle,
-			Path:     constant.UsagePath,
-			Category: web.PaletteNavigate,
-		},
-		palette.Command{
-			Label:    constant.StatusTitle,
-			Path:     constant.StatusPath,
-			Category: web.PaletteNavigate,
-		},
-		palette.Command{
-			Label:    constant.ConversationsTitle,
-			Path:     constant.ConversationsPath,
-			Category: web.PaletteNavigate,
-		},
+	r := registry.New()
+	r.Register(
+		palette.NewCommand(
+			constant.DashboardTitle,
+			constant.DashboardPath,
+			web.PaletteNavigate,
+		),
+		palette.NewCommand(
+			constant.SessionsTitle,
+			constant.SessionsPath,
+			web.PaletteNavigate,
+		),
+		palette.NewCommand(
+			constant.MessagesTitle,
+			constant.MessagesPath,
+			web.PaletteNavigate,
+		),
+		palette.NewCommand(
+			constant.HistoryTitle,
+			constant.HistoryPath,
+			web.PaletteNavigate,
+		),
+		palette.NewCommand(
+			constant.CoverageTitle,
+			constant.CoveragePath,
+			web.PaletteNavigate,
+		),
+		palette.NewCommand(
+			constant.UsageTitle,
+			constant.UsagePath,
+			web.PaletteNavigate,
+		),
+		palette.NewCommand(
+			constant.StatusTitle,
+			constant.StatusPath,
+			web.PaletteNavigate,
+		),
+		palette.NewCommand(
+			constant.ConversationsTitle,
+			constant.ConversationsPath,
+			web.PaletteNavigate,
+		),
 	)
 
 	return &Server{
 		service:       s,
 		notifier:      s.Notifier(),
 		conversations: conversations.New(s),
-		registry:      registry,
+		registry:      r,
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(web.ThemeHearth).

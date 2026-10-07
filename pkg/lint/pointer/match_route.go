@@ -14,7 +14,7 @@ func MatchRoute(
 	for _, p := range paths {
 		have := strings.Split(strings.Trim(p, constant.Slash), constant.Slash)
 
-		if matchSegments(want, have) {
+		if MatchSegments(want, have) {
 			return true
 		}
 	}

@@ -9,6 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/palette"
+	"github.com/funtimecoding/soil/pkg/web/palette/registry"
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
@@ -17,25 +18,25 @@ func New(
 	p *worker.Worker,
 	n face.EventNotifier,
 ) *Server {
-	registry := palette.NewRegistry()
-	registry.Register(
-		palette.Command{
-			Label:    constant.DashboardTitle,
-			Path:     constant.DashboardPath,
-			Category: web.PaletteNavigate,
-		},
-		palette.Command{
-			Label:    constant.RecentTitle,
-			Path:     constant.RecentPath,
-			Category: web.PaletteNavigate,
-		},
+	r := registry.New()
+	r.Register(
+		palette.NewCommand(
+			constant.DashboardTitle,
+			constant.DashboardPath,
+			web.PaletteNavigate,
+		),
+		palette.NewCommand(
+			constant.RecentTitle,
+			constant.RecentPath,
+			web.PaletteNavigate,
+		),
 	)
 
 	return &Server{
 		store:    s,
 		notifier: n,
 		worker:   p,
-		registry: registry,
+		registry: r,
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(web.ThemeSentinel).

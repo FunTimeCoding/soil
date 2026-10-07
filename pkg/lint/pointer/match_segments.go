@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func matchSegments(
+func MatchSegments(
 	want []string,
 	have []string,
 ) bool {

@@ -1,10 +1,13 @@
 package xref
 
-import "cmp"
+import (
+	"cmp"
+	"github.com/funtimecoding/soil/pkg/source/index/record"
+)
 
 func compareSites(
-	a *Site,
-	b *Site,
+	a *record.Site,
+	b *record.Site,
 ) int {
 	return cmp.Or(
 		cmp.Compare(a.File, b.File),

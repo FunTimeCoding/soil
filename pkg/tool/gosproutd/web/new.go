@@ -7,29 +7,30 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/palette"
+	"github.com/funtimecoding/soil/pkg/web/palette/registry"
 	"github.com/funtimecoding/soil/pkg/web/view"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
 
 func New(s *service.Service) *Server {
-	registry := palette.NewRegistry()
-	registry.Register(
-		palette.Command{
-			Label:    "Dashboard",
-			Path:     "/",
-			Category: web.PaletteNavigate,
-		},
-		palette.Command{
-			Label:    constant.SessionsTitle,
-			Path:     constant.SessionsPath,
-			Category: web.PaletteNavigate,
-		},
+	r := registry.New()
+	r.Register(
+		palette.NewCommand(
+			constant.DashboardTitle,
+			constant.DashboardPath,
+			web.PaletteNavigate,
+		),
+		palette.NewCommand(
+			constant.SessionsTitle,
+			constant.SessionsPath,
+			web.PaletteNavigate,
+		),
 	)
 
 	return &Server{
 		service:  s,
-		registry: registry,
+		registry: r,
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(web.ThemeSprout).

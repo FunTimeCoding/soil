@@ -3,12 +3,14 @@ package runbook
 import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/text/markdown/runbook/command"
+	"github.com/funtimecoding/soil/pkg/text/markdown/runbook/section"
 	"github.com/yuin/goldmark/v2/ast"
 	"strings"
 )
 
 func (r *Runbook) Walk(n ast.Node) {
-	var section *Section
+	var s *section.Section
 	var description string
 
 	for child := n.FirstChild(); child != nil; child = child.NextSibling() {
@@ -18,8 +20,8 @@ func (r *Runbook) Walk(n ast.Node) {
 			title := extractText(r.source, h)
 
 			if h.Level == 2 {
-				section = &Section{Title: title}
-				r.Sections = append(r.Sections, *section)
+				s = section.New(title)
+				r.Sections = append(r.Sections, s)
 			} else {
 				console.Format(
 					"Unexpected heading level %d: %s\n",
@@ -35,9 +37,9 @@ func (r *Runbook) Walk(n ast.Node) {
 				)
 			}
 
-			if section == nil {
-				section = &Section{Title: "Uncategorized"}
-				r.Sections = append(r.Sections, *section)
+			if s == nil {
+				s = section.New("Uncategorized")
+				r.Sections = append(r.Sections, s)
 			}
 
 			description = extractText(r.source, child)
@@ -45,18 +47,12 @@ func (r *Runbook) Walk(n ast.Node) {
 			code := child.(*ast.CodeBlock)
 
 			if code.CodeBlockKind == ast.CodeBlockKindFenced &&
-				section != nil &&
+				s != nil &&
 				description != "" {
-				if len(r.Sections) > 0 {
-					r.Sections[len(r.Sections)-1].Commands = append(
-						r.Sections[len(r.Sections)-1].Commands,
-						Command{
-							Description: description,
-							Code:        extractCode(r.source, code),
-						},
-					)
-				}
-
+				s.Commands = append(
+					s.Commands,
+					command.New(description, extractCode(r.source, code)),
+				)
 				description = ""
 			}
 		}

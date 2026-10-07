@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/convert"
+	memoryResponse "github.com/funtimecoding/soil/pkg/tool/gomemoryd/model_context/response"
 	"github.com/mark3labs/mcp-go/mcp"
 	"strconv"
 	"strings"
@@ -38,7 +39,7 @@ func (s *Server) getMany(
 		if detail {
 			result = append(
 				result,
-				memoryWithHistory{Memory: *m, Related: related},
+				memoryResponse.NewMemoryWithHistory(*m, related, nil),
 			)
 
 			continue
@@ -46,10 +47,11 @@ func (s *Server) getMany(
 
 		result = append(
 			result,
-			slimMemoryWithHistory{
-				SlimMemory: *convert.Memory(m),
-				Related:    related,
-			},
+			memoryResponse.NewSlimMemoryWithHistory(
+				*convert.Memory(m),
+				related,
+				nil,
+			),
 		)
 	}
 

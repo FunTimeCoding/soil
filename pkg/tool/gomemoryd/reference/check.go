@@ -2,7 +2,7 @@ package reference
 
 import (
 	lintConstant "github.com/funtimecoding/soil/pkg/lint/constant"
-	"github.com/funtimecoding/soil/pkg/lint/pointer"
+	"github.com/funtimecoding/soil/pkg/lint/pointer/resolver"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 )
@@ -10,7 +10,7 @@ import (
 func Check(
 	content string,
 	bases []string,
-	r *pointer.Resolver,
+	r *resolver.Resolver,
 	named func(
 		scope string,
 		name string,

@@ -5,13 +5,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/file_report"
 	"github.com/funtimecoding/soil/pkg/lint/pointer"
+	"github.com/funtimecoding/soil/pkg/lint/pointer/resolver"
 	"github.com/funtimecoding/soil/pkg/markup/front_matter"
 	"io"
 	"strings"
 )
 
 func Pointers(
-	r *pointer.Resolver,
+	r *resolver.Resolver,
 	unchecked func(
 		string,
 		int,

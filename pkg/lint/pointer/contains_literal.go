@@ -27,9 +27,9 @@ func ContainsLiteral(
 
 		start := offset + i
 		end := start + len(needle)
-		before := start == 0 || !isPathRune(rune(content[start-1]))
+		before := start == 0 || !IsPathRune(rune(content[start-1]))
 		after := end == len(content) ||
-			!isPathRune(rune(content[end])) ||
+			!IsPathRune(rune(content[end])) ||
 			(open && content[end] == '/')
 
 		if before && after {

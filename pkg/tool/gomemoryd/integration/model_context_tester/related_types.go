@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/model_context/response"
 )
 
 func (o *Tester) RelatedTypes() []string {
@@ -12,7 +13,7 @@ func (o *Tester) RelatedTypes() []string {
 		constant.GetMemory,
 		map[string]any{constant.MemoryIdentifier: 1},
 	)
-	var parsed relationTypeResult
+	var parsed response.SlimMemoryWithHistory
 	assert.FatalOnError(o.t, json.Unmarshal([]byte(raw), &parsed))
 	result := make([]string, 0, len(parsed.Related))
 

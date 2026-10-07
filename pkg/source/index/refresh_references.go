@@ -3,14 +3,15 @@ package index
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/source/constant"
+	"github.com/funtimecoding/soil/pkg/source/index/record"
 	"github.com/funtimecoding/soil/pkg/source/index/xref"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"slices"
 )
 
-func (w *Workspace) refreshReferences() map[string]*xref.References {
+func (w *Workspace) refreshReferences() map[string]*record.References {
 	g := w.graph
-	result := make(map[string]*xref.References, len(g.Units))
+	result := make(map[string]*record.References, len(g.Units))
 	keys := make(map[string]string)
 	var directories []string
 
@@ -20,11 +21,11 @@ func (w *Workspace) refreshReferences() map[string]*xref.References {
 			constant.IndexReferencesKind,
 			path,
 			k,
-			xref.NewReferences(),
+			record.NewReferences(),
 		)
 
 		if found {
-			result[path] = r.(*xref.References)
+			result[path] = r.(*record.References)
 
 			continue
 		}

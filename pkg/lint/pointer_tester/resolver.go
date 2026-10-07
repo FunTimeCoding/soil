@@ -1,9 +1,9 @@
 package pointer_tester
 
-import "github.com/funtimecoding/soil/pkg/lint/pointer"
+import "github.com/funtimecoding/soil/pkg/lint/pointer/resolver"
 
-func Resolver(existing ...string) *pointer.Resolver {
-	r := pointer.New()
+func Resolver(existing ...string) *resolver.Resolver {
+	r := resolver.New()
 	r.Roots = Roots()
 	r.Exists = exists(existing)
 	r.SiblingExists = exists(existing)

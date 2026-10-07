@@ -5,14 +5,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/connector"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/types/notify_sink"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 )
 
-func NewSink(t *testing.T) (*Sink, *connector.Client) {
+func NewSink(t *testing.T) (*notify_sink.Sink, *connector.Client) {
 	t.Helper()
-	result := &Sink{}
+	result := notify_sink.New()
 	server := httptest.NewServer(
 		http.HandlerFunc(
 			func(

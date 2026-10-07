@@ -5,7 +5,7 @@ import (
 	"maragu.dev/gomponents/html"
 )
 
-func resultList(results []Result) gomponents.Node {
+func ResultList(results []Result) gomponents.Node {
 	if len(results) == 0 {
 		return html.Div(
 			html.Class("palette-empty"),

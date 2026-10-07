@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func isBareLink(target string) bool {
+func IsBareLink(target string) bool {
 	return target != "" &&
 		!strings.ContainsAny(target, constant.HorizontalWhitespace) &&
 		!strings.Contains(target, constant.LocatorSeparator) &&

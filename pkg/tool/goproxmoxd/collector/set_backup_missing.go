@@ -10,7 +10,7 @@ func (c *Collector) SetBackupMissing(
 	guests []*proxmox.BackupGuestEntry,
 ) {
 	for _, g := range guests {
-		c.backup.missing.WithLabelValues(
+		c.backup.Missing.WithLabelValues(
 			hypervisor,
 			g.Type,
 			strconv.Itoa(g.VMID),
@@ -18,5 +18,5 @@ func (c *Collector) SetBackupMissing(
 		).Set(1)
 	}
 
-	c.backup.missingCount.WithLabelValues(hypervisor).Set(float64(len(guests)))
+	c.backup.MissingCount.WithLabelValues(hypervisor).Set(float64(len(guests)))
 }

@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
 	gogated "github.com/funtimecoding/soil/pkg/tool/gogated/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gogated/types/result"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/google/uuid"
 	"net/http"
@@ -16,7 +17,7 @@ func (o *Tester) Authorize(
 	t *testing.T,
 	clientIdentifier string,
 	redirectLocator string,
-) *AuthorizeResult {
+) *result.Authorize {
 	t.Helper()
 	verifier := fmt.Sprintf("%s%s", uuid.New(), uuid.New())
 	challenge := computeCodeChallenge(verifier)
@@ -92,10 +93,10 @@ func (o *Tester) Authorize(
 		}
 	}
 
-	return &AuthorizeResult{
-		Code:                 code,
-		CodeVerifier:         verifier,
-		RedirectLocator:      redirectLocator,
-		AuthenticationCookie: authenticationCookie,
-	}
+	return result.NewAuthorize(
+		code,
+		verifier,
+		redirectLocator,
+		authenticationCookie,
+	)
 }

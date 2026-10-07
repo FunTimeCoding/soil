@@ -13,6 +13,6 @@ func (c *Collector) SetScrape(
 		value = 1
 	}
 
-	c.scrape.success.WithLabelValues(hypervisor).Set(value)
-	c.scrape.duration.WithLabelValues(hypervisor).Set(duration.Seconds())
+	c.scrape.Success.WithLabelValues(hypervisor).Set(value)
+	c.scrape.Duration.WithLabelValues(hypervisor).Set(duration.Seconds())
 }

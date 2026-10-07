@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/server"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/types/profile"
 )
 
 func (s *Server) GetProfile(
@@ -26,7 +26,7 @@ func (s *Server) GetProfile(
 		), nil
 	}
 
-	visible := service.NewProfileResult(
+	visible := profile.NewResult(
 		s.visibleMemories(result.Always),
 		s.visibleSummaries(result.Index),
 		s.visibleSearchResults(result.Relevant),

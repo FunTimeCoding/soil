@@ -1,13 +1,13 @@
 package cache
 
 import (
-	"github.com/funtimecoding/soil/pkg/source/index"
+	"github.com/funtimecoding/soil/pkg/source/index/kind"
 	"github.com/funtimecoding/soil/pkg/source/types/cache_entry"
 )
 
 func New(
 	directory string,
-	kinds ...*index.Kind,
+	kinds ...*kind.Kind,
 ) *Cache {
 	return &Cache{
 		directory: directory,

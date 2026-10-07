@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/palette"
+	"github.com/funtimecoding/soil/pkg/web/palette/registry"
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
@@ -15,19 +16,19 @@ func New(
 	c face.Forge,
 	k *worker.Worker,
 ) *Server {
-	registry := palette.NewRegistry()
-	registry.Register(
-		palette.Command{
-			Label:    constant.BoardTitle,
-			Path:     constant.BoardPath,
-			Category: web.PaletteNavigate,
-		},
+	r := registry.New()
+	r.Register(
+		palette.NewCommand(
+			constant.BoardTitle,
+			constant.BoardPath,
+			web.PaletteNavigate,
+		),
 	)
 
 	return &Server{
 		client:   c,
 		worker:   k,
-		registry: registry,
+		registry: r,
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(web.ThemeTanuki).

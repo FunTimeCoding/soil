@@ -2,7 +2,7 @@ package face
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/rerank"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/types/rerank_result"
 )
 
 type Reranker interface {
@@ -10,7 +10,7 @@ type Reranker interface {
 	Rank(
 		query string,
 		documents []string,
-	) ([]rerank.Result, error)
+	) ([]*rerank_result.Result, error)
 	Name() string
 	SequenceLength() int
 }

@@ -2,7 +2,7 @@ package palette
 
 import "sort"
 
-func sortResults(results []Result) {
+func SortResults(results []Result) {
 	sort.Slice(
 		results,
 		func(i, j int) bool {

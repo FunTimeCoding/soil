@@ -4,7 +4,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"github.com/funtimecoding/soil/pkg/web/palette"
 	"github.com/funtimecoding/soil/pkg/web/route"
 )
 
@@ -13,7 +12,7 @@ func (s *Server) Mount(g *guard.Mux) {
 	g.Open(route.Get(webConstant.SignInPath), s.signIn)
 	g.Open(route.Get(webConstant.CallbackPath), s.callback)
 	g.Open(route.Get(webConstant.SignOutPath), s.signOut)
-	g.Session(route.Get(webConstant.PalettePath), palette.NewServe(s.registry))
+	g.Session(route.Get(webConstant.PalettePath), s.registry.Serve())
 	g.Session(route.Get(webConstant.RootPattern), s.dashboard)
 	g.Session(route.Get(constant.AuthoritiesPath), s.authorities)
 	g.Session(route.Get(constant.CertificatesPath), s.certificates)

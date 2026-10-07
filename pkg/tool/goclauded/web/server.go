@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/web/conversations"
-	"github.com/funtimecoding/soil/pkg/web/palette"
+	"github.com/funtimecoding/soil/pkg/web/palette/registry"
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
@@ -13,5 +13,5 @@ type Server struct {
 	notifier      face.EventNotifier
 	conversations *conversations.Server
 	view          *view.View
-	registry      *palette.Registry
+	registry      *registry.Registry
 }

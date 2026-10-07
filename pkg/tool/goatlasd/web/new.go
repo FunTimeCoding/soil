@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/palette"
+	"github.com/funtimecoding/soil/pkg/web/palette/registry"
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
@@ -15,34 +16,34 @@ func New(
 	s *store.Store,
 	authorization *client.Client,
 ) *Server {
-	registry := palette.NewRegistry()
-	registry.Register(
-		palette.Command{
-			Label:    constant.DashboardTitle,
-			Path:     webConstant.RootPath,
-			Category: webConstant.PaletteNavigate,
-		},
-		palette.Command{
-			Label:    constant.PlacementsTitle,
-			Path:     constant.PlacementsPath,
-			Category: webConstant.PaletteNavigate,
-		},
-		palette.Command{
-			Label:    constant.SightingsTitle,
-			Path:     constant.SightingsPath,
-			Category: webConstant.PaletteNavigate,
-		},
-		palette.Command{
-			Label:    webConstant.SignOutTitle,
-			Path:     webConstant.SignOutPath,
-			Category: webConstant.PaletteAction,
-		},
+	r := registry.New()
+	r.Register(
+		palette.NewCommand(
+			constant.DashboardTitle,
+			webConstant.RootPath,
+			webConstant.PaletteNavigate,
+		),
+		palette.NewCommand(
+			constant.PlacementsTitle,
+			constant.PlacementsPath,
+			webConstant.PaletteNavigate,
+		),
+		palette.NewCommand(
+			constant.SightingsTitle,
+			constant.SightingsPath,
+			webConstant.PaletteNavigate,
+		),
+		palette.NewCommand(
+			webConstant.SignOutTitle,
+			webConstant.SignOutPath,
+			webConstant.PaletteAction,
+		),
 	)
 
 	return &Server{
 		store:         s,
 		authorization: authorization,
-		palette:       registry,
+		palette:       r,
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(webConstant.ThemeTerritory).

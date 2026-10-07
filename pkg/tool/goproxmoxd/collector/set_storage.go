@@ -1,6 +1,9 @@
 package collector
 
-import "github.com/luthermonson/go-proxmox"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/collector/metric"
+	"github.com/luthermonson/go-proxmox"
+)
 
 func (c *Collector) SetStorage(
 	hypervisor string,
@@ -13,10 +16,10 @@ func (c *Collector) SetStorage(
 		r.PluginType,
 		sortedContent(r.Content),
 	}
-	c.storage.status.WithLabelValues(
-		withLabel(label, r.Status)...,
+	c.storage.Status.WithLabelValues(
+		metric.WithLabel(label, r.Status)...,
 	).Set(1)
-	c.storage.used.WithLabelValues(label...).Set(float64(r.Disk))
-	c.storage.total.WithLabelValues(label...).Set(float64(r.MaxDisk))
-	c.storage.shared.WithLabelValues(label...).Set(float64(r.Shared))
+	c.storage.Used.WithLabelValues(label...).Set(float64(r.Disk))
+	c.storage.Total.WithLabelValues(label...).Set(float64(r.MaxDisk))
+	c.storage.Shared.WithLabelValues(label...).Set(float64(r.Shared))
 }

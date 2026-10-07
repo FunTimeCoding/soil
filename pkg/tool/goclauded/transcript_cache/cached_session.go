@@ -1,6 +1,9 @@
 package transcript_cache
 
-import "github.com/funtimecoding/soil/pkg/generative/anthropic/claude/session"
+import (
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/session"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/transcript_cache/entry"
+)
 
 func (c *Cache) cachedSession(identifier string) *session.Session {
 	modTime, size, exists := c.fileState(identifier)
@@ -10,20 +13,16 @@ func (c *Cache) cachedSession(identifier string) *session.Session {
 	}
 
 	c.mutex.RLock()
-	entry, found := c.sessions[identifier]
+	e, found := c.sessions[identifier]
 	c.mutex.RUnlock()
 
-	if found && entry.ModTime.Equal(modTime) && entry.Size == size {
-		return entry.Session
+	if found && e.ModTime.Equal(modTime) && e.Size == size {
+		return e.Session
 	}
 
 	s := c.Session(identifier)
 	c.mutex.Lock()
-	c.sessions[identifier] = &sessionEntry{
-		ModTime: modTime,
-		Size:    size,
-		Session: s,
-	}
+	c.sessions[identifier] = entry.NewSession(modTime, size, s)
 	c.mutex.Unlock()
 
 	return s

@@ -4,13 +4,12 @@ import (
 	tool "github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
-	"github.com/funtimecoding/soil/pkg/web/palette"
 	"github.com/funtimecoding/soil/pkg/web/route"
 	"net/http"
 )
 
 func (s *Server) Mount(g *guard.Mux) {
-	g.Open(route.Get(constant.PalettePath), palette.NewServe(s.registry))
+	g.Open(route.Get(constant.PalettePath), s.registry.Serve())
 	g.Open(route.Get(constant.RootPattern), s.board)
 	g.Open(route.Get(tool.PipelinePath), s.pipeline)
 	g.Open(route.Get(tool.JobPath), s.job)

@@ -3,6 +3,7 @@ package reference
 import (
 	lintConstant "github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/pointer"
+	"github.com/funtimecoding/soil/pkg/lint/pointer/resolver"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"strings"
 )
@@ -10,7 +11,7 @@ import (
 func spanFindings(
 	span string,
 	d *pointer.Declared,
-	r *pointer.Resolver,
+	r *resolver.Resolver,
 	named func(
 		scope string,
 		name string,

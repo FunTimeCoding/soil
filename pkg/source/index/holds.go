@@ -7,7 +7,7 @@ func (w *Workspace) holds(
 	slot string,
 	key string,
 ) bool {
-	if e := w.memo[path.Join(kind, slot)]; e != nil && e.key == key {
+	if e := w.memo[path.Join(kind, slot)]; e != nil && e.Key == key {
 		return true
 	}
 

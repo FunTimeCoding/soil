@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/palette"
+	"github.com/funtimecoding/soil/pkg/web/palette/registry"
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
@@ -16,35 +17,35 @@ func New(
 	authorization *client.Client,
 	superUserMail string,
 ) *Server {
-	registry := palette.NewRegistry()
-	registry.Register(
-		palette.Command{
-			Label:    constant.ClientsTitle,
-			Path:     constant.ClientsPath,
-			Category: webConstant.PaletteNavigate,
-		},
-		palette.Command{
-			Label:    constant.CreateTitle,
-			Path:     constant.CreatePath,
-			Category: webConstant.PaletteAction,
-		},
-		palette.Command{
-			Label:    constant.SessionsTitle,
-			Path:     constant.SessionsPath,
-			Category: webConstant.PaletteNavigate,
-		},
-		palette.Command{
-			Label:    constant.SignOutTitle,
-			Path:     webConstant.SignOutPath,
-			Category: webConstant.PaletteAction,
-		},
+	r := registry.New()
+	r.Register(
+		palette.NewCommand(
+			constant.ClientsTitle,
+			constant.ClientsPath,
+			webConstant.PaletteNavigate,
+		),
+		palette.NewCommand(
+			constant.CreateTitle,
+			constant.CreatePath,
+			webConstant.PaletteAction,
+		),
+		palette.NewCommand(
+			constant.SessionsTitle,
+			constant.SessionsPath,
+			webConstant.PaletteNavigate,
+		),
+		palette.NewCommand(
+			constant.SignOutTitle,
+			webConstant.SignOutPath,
+			webConstant.PaletteAction,
+		),
 	)
 
 	return &Server{
 		service:       s,
 		authorization: authorization,
 		superUserMail: superUserMail,
-		registry:      registry,
+		registry:      r,
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(webConstant.ThemeAmethyst).

@@ -3,6 +3,7 @@ package reference
 import (
 	lintConstant "github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/pointer"
+	"github.com/funtimecoding/soil/pkg/lint/pointer/resolver"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 )
@@ -10,7 +11,7 @@ import (
 func underBases(
 	span string,
 	bases []string,
-	r *pointer.Resolver,
+	r *resolver.Resolver,
 ) *Finding {
 	var closest *pointer.Resolution
 

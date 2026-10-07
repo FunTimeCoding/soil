@@ -10,6 +10,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/palette"
+	"github.com/funtimecoding/soil/pkg/web/palette/registry"
 	"github.com/funtimecoding/soil/pkg/web/view"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -21,35 +22,25 @@ func New(
 	c *store.Store,
 	authorization *client.Client,
 ) *Server {
-	registry := palette.NewRegistry()
-	registry.Register(
-		palette.Command{
-			Label:    constant.DashboardTitle,
-			Path:     constant.DashboardPath,
-			Category: web.PaletteNavigate,
-		},
-		palette.Command{
-			Label:    constant.HeatmapTitle,
-			Path:     constant.HeatmapPath,
-			Category: web.PaletteNavigate,
-		},
-		palette.Command{
-			Label:    web.SignOutTitle,
-			Path:     web.SignOutPath,
-			Category: web.PaletteAction,
-		},
+	r := registry.New()
+	r.Register(
+		palette.NewCommand(
+			constant.DashboardTitle,
+			constant.DashboardPath,
+			web.PaletteNavigate,
+		),
+		palette.NewCommand(
+			constant.HeatmapTitle,
+			constant.HeatmapPath,
+			web.PaletteNavigate,
+		),
+		palette.NewCommand(web.SignOutTitle, web.SignOutPath, web.PaletteAction),
 	)
 	labels := map[string]bool{}
 
 	for _, entry := range b.Entries() {
 		labels[entry.Label] = true
-		registry.Register(
-			palette.Command{
-				Label:    entry.Label,
-				Path:     entry.Link,
-				Category: web.PaletteLink,
-			},
-		)
+		r.Register(palette.NewCommand(entry.Label, entry.Link, web.PaletteLink))
 	}
 
 	return &Server{
@@ -58,7 +49,7 @@ func New(
 		store:         c,
 		authorization: authorization,
 		labels:        labels,
-		registry:      registry,
+		registry:      r,
 		view: view.New(
 			layout.New(constant.Identity).
 				WithTheme(web.ThemeSentinel).

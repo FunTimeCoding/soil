@@ -11,8 +11,8 @@ func TestRegistrationReturnsClientCredentials(t *testing.T) {
 	result := o.Register(t, []string{"http://localhost/callback"})
 	assert.StringContains(t, "-", result.ClientIdentifier)
 	assert.StringContains(t, "-", result.ClientSecret)
-	assert.Integer(t, 1, len(result.RedirectURIs))
-	assert.String(t, "http://localhost/callback", result.RedirectURIs[0])
+	assert.Integer(t, 1, len(result.RedirectLocators))
+	assert.String(t, "http://localhost/callback", result.RedirectLocators[0])
 }
 
 func TestRegistrationCreatesUniqueClients(t *testing.T) {

@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/raid_parser"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/store"
 	"github.com/funtimecoding/soil/pkg/web/authorization/client"
-	"github.com/funtimecoding/soil/pkg/web/palette"
+	"github.com/funtimecoding/soil/pkg/web/palette/registry"
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
@@ -15,5 +15,5 @@ type Server struct {
 	parser        *raid_parser.Client
 	authorization *client.Client
 	view          *view.View
-	registry      *palette.Registry
+	registry      *registry.Registry
 }

@@ -1,8 +1,10 @@
 package index
 
+import "github.com/funtimecoding/soil/pkg/source/index/kind"
+
 func Externals[T any](
 	w *Workspace,
-	k *Kind,
+	k *kind.Kind,
 ) []T {
 	if k.External == nil {
 		return nil

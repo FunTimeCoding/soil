@@ -7,7 +7,7 @@ func (c *Collector) SetVersion(
 	node string,
 	v *proxmox.Version,
 ) {
-	c.node.version.WithLabelValues(
+	c.node.Version.WithLabelValues(
 		hypervisor,
 		node,
 		v.Release,

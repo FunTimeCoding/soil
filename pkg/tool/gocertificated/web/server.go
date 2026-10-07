@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/service"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/store"
 	"github.com/funtimecoding/soil/pkg/web/authorization/client"
-	"github.com/funtimecoding/soil/pkg/web/palette"
+	"github.com/funtimecoding/soil/pkg/web/palette/registry"
 	"github.com/funtimecoding/soil/pkg/web/view"
 )
 
@@ -13,5 +13,5 @@ type Server struct {
 	service       *service.Service
 	authorization *client.Client
 	view          *view.View
-	registry      *palette.Registry
+	registry      *registry.Registry
 }

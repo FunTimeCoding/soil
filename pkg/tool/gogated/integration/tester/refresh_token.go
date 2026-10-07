@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/gogated/types/result"
 	"net/url"
 	"testing"
 )
@@ -14,7 +15,7 @@ func (o *Tester) RefreshToken(
 	clientIdentifier string,
 	clientSecret string,
 	refreshToken string,
-) *TokenResult {
+) *result.Token {
 	t.Helper()
 	form := url.Values{
 		"grant_type":    {"refresh_token"},
@@ -34,7 +35,7 @@ func (o *Tester) RefreshToken(
 		t.Fatalf("refresh failed: %d", r.StatusCode)
 	}
 
-	var result TokenResult
+	var result result.Token
 	assert.FatalOnError(t, json.NewDecoder(r.Body).Decode(&result))
 
 	return &result

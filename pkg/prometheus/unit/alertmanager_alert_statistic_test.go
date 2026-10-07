@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/statistic"
+	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/statistic/count"
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"testing"
 )
@@ -27,9 +28,9 @@ func TestCountStatistics(t *testing.T) {
 		&statistic.Statistic{
 			Total:    1,
 			Relevant: 1,
-			Severity: statistic.SeverityCount{Critical: 1},
-			State:    statistic.StateCount{Active: 1},
-			Group:    statistic.GroupCount{All: 1, Other: 1},
+			Severity: count.Severity{Critical: 1},
+			State:    count.State{Active: 1},
+			Group:    count.Group{All: 1, Other: 1},
 		},
 		s.CountAfterProcessing(
 			[]*alert.Alert{

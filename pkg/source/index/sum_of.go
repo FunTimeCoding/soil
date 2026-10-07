@@ -2,6 +2,7 @@ package index
 
 import (
 	"crypto/sha256"
+	"github.com/funtimecoding/soil/pkg/source/types/file_sum"
 	"os"
 )
 
@@ -13,9 +14,9 @@ func (w *Workspace) sumOf(path string) ([32]byte, bool) {
 	}
 
 	if cached := w.sums[path]; cached != nil &&
-		cached.size == i.Size() &&
-		cached.modified.Equal(i.ModTime()) {
-		return cached.sum, true
+		cached.Size == i.Size() &&
+		cached.Modified.Equal(i.ModTime()) {
+		return cached.Sum, true
 	}
 
 	content, f := os.ReadFile(path)
@@ -25,7 +26,7 @@ func (w *Workspace) sumOf(path string) ([32]byte, bool) {
 	}
 
 	result := sha256.Sum256(content)
-	w.sums[path] = &fileSum{size: i.Size(), modified: i.ModTime(), sum: result}
+	w.sums[path] = file_sum.New(i.Size(), i.ModTime(), result)
 
 	return result, true
 }

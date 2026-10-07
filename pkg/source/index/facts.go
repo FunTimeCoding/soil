@@ -1,10 +1,13 @@
 package index
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/funtimecoding/soil/pkg/source/index/kind"
+)
 
 func Facts[T any](
 	w *Workspace,
-	k *Kind,
+	k *kind.Kind,
 ) map[string]T {
 	w.lock.Lock()
 	defer w.lock.Unlock()

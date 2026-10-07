@@ -2,10 +2,11 @@ package index
 
 import (
 	"github.com/funtimecoding/soil/pkg/source/constant"
+	"github.com/funtimecoding/soil/pkg/source/index/kind"
 	"github.com/funtimecoding/soil/pkg/source/index/record"
 )
 
-func (w *Workspace) walkExternals(k *Kind) ([]any, []string) {
+func (w *Workspace) walkExternals(k *kind.Kind) ([]any, []string) {
 	var queue []string
 
 	for _, n := range w.graph.Nodes {

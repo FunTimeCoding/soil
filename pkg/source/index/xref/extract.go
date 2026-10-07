@@ -1,6 +1,7 @@
 package xref
 
 import (
+	"github.com/funtimecoding/soil/pkg/source/index/record"
 	"go/types"
 	"golang.org/x/tools/go/packages"
 	"path/filepath"
@@ -10,8 +11,8 @@ import (
 func Extract(
 	p *packages.Package,
 	workspace map[string]bool,
-) *References {
-	result := NewReferences()
+) *record.References {
+	result := record.NewReferences()
 
 	for i, o := range p.TypesInfo.Uses {
 		if o == nil || o.Pkg() == nil || o.Pkg() == p.Types ||
@@ -32,7 +33,7 @@ func Extract(
 		position := p.Fset.Position(i.Pos())
 		result.Targets[target] = append(
 			result.Targets[target],
-			NewSite(
+			record.NewSite(
 				filepath.Base(position.Filename),
 				position.Line,
 				position.Column,

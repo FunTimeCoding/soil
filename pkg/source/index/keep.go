@@ -1,6 +1,9 @@
 package index
 
-import "path"
+import (
+	"github.com/funtimecoding/soil/pkg/source/types/memo_entry"
+	"path"
+)
 
 func (w *Workspace) keep(
 	kind string,
@@ -9,5 +12,5 @@ func (w *Workspace) keep(
 	v any,
 ) {
 	w.store.Write(kind, key, v)
-	w.memo[path.Join(kind, slot)] = &memoEntry{key: key, value: v}
+	w.memo[path.Join(kind, slot)] = memo_entry.New(key, v)
 }

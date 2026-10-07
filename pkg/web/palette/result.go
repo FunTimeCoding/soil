@@ -1,7 +1,7 @@
 package palette
 
 type Result struct {
-	Command   Command
+	Command   *Command
 	Score     int
 	Positions []int
 }
