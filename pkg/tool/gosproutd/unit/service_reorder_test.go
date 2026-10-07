@@ -3,7 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/strings/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gosproutd/service"
+	"github.com/funtimecoding/soil/pkg/tool/gosproutd/types/discovered_file"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/unit/service_tester"
 	"testing"
 )
@@ -11,7 +11,7 @@ import (
 func TestMoveUpNotifies(t *testing.T) {
 	s := service_tester.New(t)
 	s.Service.Sync(
-		[]service.DiscoveredFile{
+		[]discovered_file.File{
 			{
 				Name:        constant.LowerAlfa,
 				Path:        "alfa.md",
@@ -35,7 +35,7 @@ func TestMoveUpNotifies(t *testing.T) {
 func TestSetPositionNotifies(t *testing.T) {
 	s := service_tester.New(t)
 	s.Service.Sync(
-		[]service.DiscoveredFile{
+		[]discovered_file.File{
 			{
 				Name:        constant.LowerAlfa,
 				Path:        "alfa.md",
@@ -65,7 +65,7 @@ func TestSetPositionNotifies(t *testing.T) {
 func TestReorderNotifies(t *testing.T) {
 	s := service_tester.New(t)
 	s.Service.Sync(
-		[]service.DiscoveredFile{
+		[]discovered_file.File{
 			{
 				Name:        constant.LowerAlfa,
 				Path:        "alfa.md",

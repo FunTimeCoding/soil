@@ -1,7 +1,7 @@
 package mock_client
 
-import "github.com/funtimecoding/soil/pkg/generative/anthropic/claude"
+import "github.com/funtimecoding/soil/pkg/generative/types/session_tool_count"
 
-func (c *Client) SessionsByTool(toolFilter string) []*claude.SessionToolCount {
+func (c *Client) SessionsByTool(toolFilter string) []*session_tool_count.Count {
 	return nil
 }

@@ -3,6 +3,7 @@ package page_put
 import (
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/basic/response"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/types/page_version"
 )
 
 func New(
@@ -20,6 +21,6 @@ func New(
 			Representation: constant.ConfluenceStorageFormat,
 			Value:          body,
 		},
-		Version: Version{Number: version, Message: message},
+		Version: page_version.Version{Number: version, Message: message},
 	}
 }

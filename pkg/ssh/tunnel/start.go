@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/ssh/constant"
+	"github.com/funtimecoding/soil/pkg/ssh/types/tunnel_result"
 	"github.com/funtimecoding/soil/pkg/system"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/run"
@@ -19,7 +20,7 @@ func (t *Tunnel) Start(
 	targetHost string,
 	targetPort int,
 	localPort int,
-) *Result {
+) *tunnel_result.Result {
 	if localPort == 0 {
 		localPort = system.FindUnusedPort(web.ListenPort)
 	}
@@ -94,5 +95,5 @@ func (t *Tunnel) Start(
 	<-t.started
 	<-t.listening
 
-	return &Result{LocalPort: localPort}
+	return tunnel_result.New(localPort)
 }

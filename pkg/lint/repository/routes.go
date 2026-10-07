@@ -3,6 +3,7 @@ package repository
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/lint/constant"
+	"github.com/funtimecoding/soil/pkg/lint/types/repository_specification"
 	"github.com/funtimecoding/soil/pkg/system"
 	"go.yaml.in/yaml/v3"
 	"maps"
@@ -30,7 +31,7 @@ func (r *Repository) Routes(directory string) ([]string, bool) {
 
 	b, e := os.ReadFile(p)
 	errors.PanicOnError(e)
-	var s specification
+	var s repository_specification.Specification
 	errors.PanicOnError(yaml.Unmarshal(b, &s))
 	paths := slices.Sorted(maps.Keys(s.Paths))
 	r.routes[directory] = paths

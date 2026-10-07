@@ -1,9 +1,12 @@
 package publish
 
-import "gitlab.com/gitlab-org/api/client-go/v3"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/gocertificated/types/change"
+	"gitlab.com/gitlab-org/api/client-go/v3"
+)
 
 func (p *Publisher) Commit(
-	v []*Change,
+	v []*change.Change,
 	message string,
 ) (string, error) {
 	var action []*gitlab.CommitActionOptions

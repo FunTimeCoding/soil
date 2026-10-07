@@ -1,11 +1,11 @@
 package classifier
 
 import (
-	"github.com/funtimecoding/soil/pkg/measure/language"
+	"github.com/funtimecoding/soil/pkg/measure/types/language_block"
 	"strings"
 )
 
-func (c *Classifier) opener(rest string) *language.Block {
+func (c *Classifier) opener(rest string) *language_block.Block {
 	for _, b := range c.language.BlockComments {
 		if strings.HasPrefix(rest, b.Open) {
 			return b

@@ -3,6 +3,7 @@ package physical_address
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
+	"github.com/funtimecoding/soil/pkg/netbox/types/virtual_interface"
 	"github.com/funtimecoding/soil/pkg/network"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/netbox-community/go-netbox/v4"
@@ -33,7 +34,7 @@ func New(a *netbox.MACAddress) *Address {
 	}
 
 	var d *netbox.BriefInterface
-	var v *VirtualInterface
+	var v *virtual_interface.Interface
 
 	if r := a.AssignedObjectType.Get(); r != nil {
 		switch *r {

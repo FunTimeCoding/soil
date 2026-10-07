@@ -1,10 +1,13 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/linkace/link"
+import (
+	"github.com/funtimecoding/soil/pkg/linkace/link"
+	"github.com/funtimecoding/soil/pkg/tool/golinkaced/types/edit_link_option"
+)
 
 func (s *Service) EditLink(
 	identifier int,
-	o EditLinkOptions,
+	o edit_link_option.Option,
 ) (*link.Link, error) {
 	existing, e := s.client.LinkByIdentifier(identifier)
 

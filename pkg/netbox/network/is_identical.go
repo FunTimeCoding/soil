@@ -1,6 +1,8 @@
 package network
 
-func (i *Interface) IsIdentical(d *Definition) bool {
+import "github.com/funtimecoding/soil/pkg/netbox/types/network_definition"
+
+func (i *Interface) IsIdentical(d *network_definition.Definition) bool {
 	if string(i.Type) != d.Type {
 		return false
 	}

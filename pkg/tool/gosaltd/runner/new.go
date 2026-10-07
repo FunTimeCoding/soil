@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/provision/runner"
 	"github.com/funtimecoding/soil/pkg/provision/salt"
 	"github.com/funtimecoding/soil/pkg/provision/store"
+	"github.com/funtimecoding/soil/pkg/provision/types/runner_option"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/option"
 )
 
@@ -26,7 +27,7 @@ func New(
 		recovery:      recovery.New(l, r),
 	}
 	result.provision = runner.New(
-		runner.Configuration{
+		runner_option.Option{
 			Repository:      o.Repository,
 			ClonePath:       o.ClonePath,
 			ToolPath:        o.SaltPath,

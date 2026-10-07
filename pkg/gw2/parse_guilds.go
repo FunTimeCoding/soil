@@ -2,14 +2,14 @@ package gw2
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/gw2/log_manager"
+	"github.com/funtimecoding/soil/pkg/gw2/log_manager/response"
 	"github.com/funtimecoding/soil/pkg/notation"
 )
 
-func ParseGuilds(s string) []*log_manager.Guild {
+func ParseGuilds(s string) []*response.Guild {
 	var guilds map[string]any
 	notation.MustDecode(s, &guilds, false)
-	var result []*log_manager.Guild
+	var result []*response.Guild
 
 	for k, v := range guilds {
 		if v == nil {
@@ -18,13 +18,13 @@ func ParseGuilds(s string) []*log_manager.Guild {
 			continue
 		}
 
-		var guild log_manager.Guild
+		var g response.Guild
 
-		if e := notation.Decode(notation.Encode(v, false), &guild); e != nil {
+		if e := notation.Decode(notation.Encode(v, false), &g); e != nil {
 			errors.PanicOnError(e)
 		}
 
-		result = append(result, &guild)
+		result = append(result, &g)
 	}
 
 	return result

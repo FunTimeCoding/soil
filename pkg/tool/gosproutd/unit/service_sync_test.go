@@ -3,7 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/strings/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gosproutd/service"
+	"github.com/funtimecoding/soil/pkg/tool/gosproutd/types/discovered_file"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/unit/service_tester"
 	"testing"
 )
@@ -11,7 +11,7 @@ import (
 func TestSyncAddsNewFiles(t *testing.T) {
 	s := service_tester.New(t)
 	s.Service.Sync(
-		[]service.DiscoveredFile{
+		[]discovered_file.File{
 			{
 				Name:        constant.LowerAlfa,
 				Path:        "alfa.md",
@@ -36,7 +36,7 @@ func TestSyncAddsNewFiles(t *testing.T) {
 func TestSyncRemovesDeletedFiles(t *testing.T) {
 	s := service_tester.New(t)
 	s.Service.Sync(
-		[]service.DiscoveredFile{
+		[]discovered_file.File{
 			{
 				Name:        constant.LowerAlfa,
 				Path:        "alfa.md",
@@ -53,7 +53,7 @@ func TestSyncRemovesDeletedFiles(t *testing.T) {
 	)
 	s.Notifier.Reset()
 	s.Service.Sync(
-		[]service.DiscoveredFile{
+		[]discovered_file.File{
 			{
 				Name:        constant.LowerAlfa,
 				Path:        "alfa.md",
@@ -71,7 +71,7 @@ func TestSyncRemovesDeletedFiles(t *testing.T) {
 func TestSyncUpdatesContent(t *testing.T) {
 	s := service_tester.New(t)
 	s.Service.Sync(
-		[]service.DiscoveredFile{
+		[]discovered_file.File{
 			{
 				Name:        constant.LowerAlfa,
 				Path:        "alfa.md",
@@ -81,7 +81,7 @@ func TestSyncUpdatesContent(t *testing.T) {
 		},
 	)
 	s.Service.Sync(
-		[]service.DiscoveredFile{
+		[]discovered_file.File{
 			{
 				Name:        constant.LowerAlfa,
 				Path:        "alfa.md",
@@ -97,7 +97,7 @@ func TestSyncUpdatesContent(t *testing.T) {
 func TestSyncPreservesPositionOnUpdate(t *testing.T) {
 	s := service_tester.New(t)
 	s.Service.Sync(
-		[]service.DiscoveredFile{
+		[]discovered_file.File{
 			{
 				Name:        constant.LowerAlfa,
 				Path:        "alfa.md",
@@ -114,7 +114,7 @@ func TestSyncPreservesPositionOnUpdate(t *testing.T) {
 	)
 	s.Service.SetPosition(s.Service.Seeds()[1].Identifier, 1)
 	s.Service.Sync(
-		[]service.DiscoveredFile{
+		[]discovered_file.File{
 			{
 				Name:        constant.LowerAlfa,
 				Path:        "alfa.md",

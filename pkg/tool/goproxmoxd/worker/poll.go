@@ -2,6 +2,9 @@ package worker
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/floor"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/floor/guest"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/floor/node"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/floor/storage"
 	"slices"
 	"strings"
 	"time"
@@ -28,8 +31,8 @@ func (w *Worker) Poll() {
 	slices.SortFunc(
 		f.Nodes,
 		func(
-			a floor.Node,
-			b floor.Node,
+			a node.Node,
+			b node.Node,
 		) int {
 			if c := strings.Compare(a.Hypervisor, b.Hypervisor); c != 0 {
 				return c
@@ -41,8 +44,8 @@ func (w *Worker) Poll() {
 	slices.SortFunc(
 		f.Guests,
 		func(
-			a floor.Guest,
-			b floor.Guest,
+			a guest.Guest,
+			b guest.Guest,
 		) int {
 			if c := strings.Compare(a.Hypervisor, b.Hypervisor); c != 0 {
 				return c
@@ -58,8 +61,8 @@ func (w *Worker) Poll() {
 	slices.SortFunc(
 		f.Storages,
 		func(
-			a floor.Storage,
-			b floor.Storage,
+			a storage.Storage,
+			b storage.Storage,
 		) int {
 			if c := strings.Compare(a.Hypervisor, b.Hypervisor); c != 0 {
 				return c

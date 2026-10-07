@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/gw2"
 	"github.com/funtimecoding/soil/pkg/gw2/constant"
 	"github.com/funtimecoding/soil/pkg/gw2/log_manager/log"
-	"github.com/funtimecoding/soil/pkg/raid"
+	"github.com/funtimecoding/soil/pkg/raid/model/fight"
 	"github.com/funtimecoding/soil/pkg/system"
 	"path/filepath"
 )
@@ -20,7 +20,7 @@ func (s *Store) syncLogCache() {
 	count := 0
 
 	for _, l := range logs {
-		f := raid.NewFight()
+		f := fight.New()
 		f.Filename = l.Raw.FileName
 		f.Timestamp = l.Time
 		f.MapIdentifier = l.Raw.MapIdentifier

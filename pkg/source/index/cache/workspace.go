@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/source/index"
 	"github.com/funtimecoding/soil/pkg/source/module_graph"
 	"github.com/funtimecoding/soil/pkg/source/snapshot"
+	"github.com/funtimecoding/soil/pkg/source/types/cache_entry"
 	"slices"
 )
 
@@ -12,24 +13,24 @@ func (c *Cache) Workspace(root string) *index.Workspace {
 	cached := c.entries[root]
 	c.lock.Unlock()
 
-	if cached != nil && snapshot.Take(cached.trees...).Same(cached.snapshot) {
-		return cached.workspace
+	if cached != nil && snapshot.Take(cached.Trees...).Same(cached.Snapshot) {
+		return cached.Workspace
 	}
 
 	trees := module_graph.Trees(root)
 	taken := snapshot.Take(trees...)
 	var w *index.Workspace
 
-	if cached != nil && slices.Equal(cached.trees, trees) {
-		w = index.Next(cached.workspace, cached.snapshot.Diff(taken))
+	if cached != nil && slices.Equal(cached.Trees, trees) {
+		w = index.Next(cached.Workspace, cached.Snapshot.Diff(taken))
 	} else {
 		w = index.New(c.directory, root, c.kinds...)
 	}
 
-	fresh := &entry{trees: trees, snapshot: taken, workspace: w}
+	fresh := cache_entry.New(trees, taken, w)
 	c.lock.Lock()
 	c.entries[root] = fresh
 	c.lock.Unlock()
 
-	return fresh.workspace
+	return fresh.Workspace
 }

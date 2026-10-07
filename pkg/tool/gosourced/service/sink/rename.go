@@ -1,12 +1,15 @@
 package sink
 
-import "github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/sink_operation"
+)
 
 func (s *Sink) Rename(
 	path string,
 	target string,
 ) {
-	s.record(
-		&operation{kind: constant.OperationRename, path: path, target: target},
-	)
+	o := sink_operation.New(constant.OperationRename, path)
+	o.Target = target
+	s.record(o)
 }

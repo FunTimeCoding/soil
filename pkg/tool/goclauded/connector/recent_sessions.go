@@ -4,10 +4,11 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/target"
 	"time"
 )
 
-func (c *Client) RecentSessions(limit int) ([]*Target, error) {
+func (c *Client) RecentSessions(limit int) ([]*target.Target, error) {
 	sessions, e := c.generated.GetSessionsWithResponse(
 		context.Background(),
 		&client.GetSessionsParams{Limit: &limit},
@@ -24,7 +25,7 @@ func (c *Client) RecentSessions(limit int) ([]*Target, error) {
 		)
 	}
 
-	result := []*Target{}
+	result := []*target.Target{}
 
 	for _, s := range sessions.JSON200.Sessions {
 		name := ""
@@ -52,11 +53,11 @@ func (c *Client) RecentSessions(limit int) ([]*Target, error) {
 			}
 		}
 
-		target := NewTarget(s.Identifier, name, lastSeen, labels)
-		target.LastPromptAt = parseMoment(s.LastPromptAt)
-		target.LastTurnEndAt = parseMoment(s.LastTurnEndAt)
-		target.ClosedAt = parseMoment(s.ClosedAt)
-		result = append(result, target)
+		t := target.New(s.Identifier, name, lastSeen, labels)
+		t.LastPromptAt = parseMoment(s.LastPromptAt)
+		t.LastTurnEndAt = parseMoment(s.LastTurnEndAt)
+		t.ClosedAt = parseMoment(s.ClosedAt)
+		result = append(result, t)
 	}
 
 	return result, nil

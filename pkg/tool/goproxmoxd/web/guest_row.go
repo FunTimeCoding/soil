@@ -3,12 +3,12 @@ package web
 import (
 	"github.com/funtimecoding/soil/pkg/proxmox/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/floor"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/floor/guest"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
 
-func (s *Server) guestRow(g floor.Guest) gomponents.Node {
+func (s *Server) guestRow(g guest.Guest) gomponents.Node {
 	dot := "status-dot"
 	stopped := g.Status != constant.RunningStatus
 

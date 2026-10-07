@@ -1,8 +1,12 @@
 package store
 
-import "time"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/model/usage_event"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/types/query_option"
+	"time"
+)
 
-func (s *Store) Recent(o *QueryOption) ([]UsageEvent, error) {
+func (s *Store) Recent(o *query_option.Option) ([]usage_event.Event, error) {
 	query := s.mapper.Order("created_at DESC")
 
 	if o.Tool != "" {
@@ -45,7 +49,7 @@ func (s *Store) Recent(o *QueryOption) ([]UsageEvent, error) {
 		query = query.Limit(o.Limit)
 	}
 
-	var result []UsageEvent
+	var result []usage_event.Event
 
 	return result, query.Find(&result).Error
 }

@@ -2,13 +2,14 @@ package process
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/system/types/process_entry"
 	"github.com/shirou/gopsutil/v4/process"
 )
 
-func (c *Client) Processes() []*Entry {
+func (c *Client) Processes() []*process_entry.Entry {
 	list, e := process.Processes()
 	errors.PanicOnError(e)
-	var result []*Entry
+	var result []*process_entry.Entry
 
 	for _, p := range list {
 		parent, f := p.Ppid()
@@ -18,7 +19,7 @@ func (c *Client) Processes() []*Entry {
 			continue
 		}
 
-		result = append(result, NewEntry(p.Pid, parent, name))
+		result = append(result, process_entry.New(p.Pid, parent, name))
 	}
 
 	return result

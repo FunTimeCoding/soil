@@ -12,7 +12,7 @@ func (s *Snapshot) Changed(roots ...string) []string {
 		for path, n := range now {
 			b, okay := before[path]
 
-			if !okay || b.size != n.size || !b.modified.Equal(n.modified) {
+			if !okay || b.Size != n.Size || !b.Modified.Equal(n.Modified) {
 				result = append(result, path)
 			}
 		}

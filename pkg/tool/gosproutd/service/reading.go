@@ -1,14 +1,14 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/connector"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/target"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/pulse"
 	"time"
 )
 
 func (s *Service) Reading(
 	session string,
-	target *connector.Target,
+	target *target.Target,
 ) *pulse.Reading {
 	result := pulse.New()
 	unpulsed := s.store.UnpulsedAnswers(session)

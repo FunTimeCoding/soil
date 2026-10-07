@@ -6,12 +6,12 @@ func (c *Client) DraftPages() ([]*page.Page, error) {
 	var result []*page.Page
 
 	for _, e := range c.pages {
-		if e.deleted || e.page == nil {
+		if e.Deleted || e.Page == nil {
 			continue
 		}
 
-		if e.page.Status == "draft" {
-			result = append(result, toPage(e.page))
+		if e.Page.Status == "draft" {
+			result = append(result, toPage(e.Page))
 		}
 	}
 

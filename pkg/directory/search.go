@@ -1,6 +1,7 @@
 package directory
 
 import (
+	"github.com/funtimecoding/soil/pkg/directory/types/search_record"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/go-ldap/ldap/v3"
 )
@@ -8,7 +9,7 @@ import (
 func (c *Client) Search(
 	filter string,
 	attributes []string,
-) ([]*Record, error) {
+) ([]*search_record.Record, error) {
 	connection, e := c.connect()
 
 	if e != nil {
@@ -34,7 +35,7 @@ func (c *Client) Search(
 		return nil, unexpectedSearch(f)
 	}
 
-	var result []*Record
+	var result []*search_record.Record
 
 	for _, entry := range found.Entries {
 		values := map[string][]string{}
@@ -43,10 +44,7 @@ func (c *Client) Search(
 			values[attribute.Name] = attribute.Values
 		}
 
-		result = append(
-			result,
-			&Record{DistinguishedName: entry.DN, Attributes: values},
-		)
+		result = append(result, search_record.New(entry.DN, values))
 	}
 
 	return result, nil

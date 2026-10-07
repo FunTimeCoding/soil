@@ -3,7 +3,7 @@ package model_context_tester
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/model/usage_event"
 )
 
 func (o *Tester) Seed(
@@ -11,7 +11,7 @@ func (o *Tester) Seed(
 	surface string,
 	actor string,
 ) {
-	e := store.NewUsageEvent()
+	e := usage_event.New()
 	e.Tool = tool
 	e.Surface = surface
 	e.Actor = actor

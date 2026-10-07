@@ -2,8 +2,8 @@ package table
 
 func (t *Table) Add(values ...string) {
 	for i, v := range values {
-		if i < len(t.columns) && len(v) > t.columns[i].width {
-			t.columns[i].width = len(v)
+		if i < len(t.columns) && len(v) > t.columns[i].Width {
+			t.columns[i].Width = len(v)
 		}
 	}
 

@@ -26,8 +26,8 @@ func (r *Reaper) reap() {
 			map[string]any{
 				"pid":         reaped,
 				"exit_status": status.ExitStatus(),
-				"comm":        detail.comm,
-				"ppid":        detail.ppid,
+				"comm":        detail.Comm,
+				"ppid":        detail.Ppid,
 			},
 		)
 	}

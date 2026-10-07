@@ -5,14 +5,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/generated/server"
-	"github.com/funtimecoding/soil/pkg/tool/gocertificated/store"
+	"github.com/funtimecoding/soil/pkg/tool/gocertificated/types/filter"
 )
 
 func (s *Server) GetCertificates(
 	_ context.Context,
 	r server.GetCertificatesRequestObject,
 ) (server.GetCertificatesResponseObject, error) {
-	f := store.NewFilter()
+	f := filter.New()
 
 	if r.Params.Authority != nil {
 		f.Authority = *r.Params.Authority

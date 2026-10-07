@@ -1,5 +1,7 @@
 package link
 
+import "github.com/funtimecoding/soil/pkg/linkace/types/relation"
+
 type Link struct {
 	Identifier      int
 	Title           string
@@ -10,6 +12,6 @@ type Link struct {
 	Visibility      int
 	ListIdentifiers []int
 	TagIdentifiers  []int
-	Lists           []Relation
-	Tags            []Relation
+	Lists           []relation.Relation
+	Tags            []relation.Relation
 }

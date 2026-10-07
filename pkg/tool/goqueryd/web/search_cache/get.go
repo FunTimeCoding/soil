@@ -1,11 +1,11 @@
 package search_cache
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/result"
 	"time"
 )
 
-func (c *Cache) Get(key string) *search.Outcome {
+func (c *Cache) Get(key string) *result.Outcome {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 	e, found := c.entries[key]
@@ -14,7 +14,7 @@ func (c *Cache) Get(key string) *search.Outcome {
 		return nil
 	}
 
-	if time.Now().After(e.expiry) {
+	if time.Now().After(e.Expiry) {
 		delete(c.entries, key)
 		c.removeFromOrder(key)
 
@@ -23,5 +23,5 @@ func (c *Cache) Get(key string) *search.Outcome {
 
 	c.promoteInOrder(key)
 
-	return e.outcome
+	return e.Outcome
 }

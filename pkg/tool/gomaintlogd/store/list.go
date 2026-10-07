@@ -3,9 +3,10 @@ package store
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store/entry"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/types/filter"
 )
 
-func (s *Store) List(f *Filter) ([]entry.Entry, error) {
+func (s *Store) List(f *filter.Filter) ([]entry.Entry, error) {
 	q := s.database.Model(entry.New())
 
 	if f != nil {

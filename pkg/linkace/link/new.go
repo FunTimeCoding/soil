@@ -1,24 +1,27 @@
 package link
 
-import "github.com/funtimecoding/soil/pkg/linkace/response"
+import (
+	"github.com/funtimecoding/soil/pkg/linkace/response"
+	"github.com/funtimecoding/soil/pkg/linkace/types/relation"
+)
 
 func New(
 	v response.Link,
 	host string,
 ) *Link {
-	lists := make([]Relation, len(v.Lists))
+	lists := make([]relation.Relation, len(v.Lists))
 	listIdentifiers := make([]int, len(v.Lists))
 
 	for i, l := range v.Lists {
-		lists[i] = Relation{Identifier: l.Identifier, Name: l.Name}
+		lists[i] = relation.Relation{Identifier: l.Identifier, Name: l.Name}
 		listIdentifiers[i] = l.Identifier
 	}
 
-	tags := make([]Relation, len(v.Tags))
+	tags := make([]relation.Relation, len(v.Tags))
 	tagIdentifiers := make([]int, len(v.Tags))
 
 	for i, t := range v.Tags {
-		tags[i] = Relation{Identifier: t.Identifier, Name: t.Name}
+		tags[i] = relation.Relation{Identifier: t.Identifier, Name: t.Name}
 		tagIdentifiers[i] = t.Identifier
 	}
 

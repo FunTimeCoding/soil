@@ -3,12 +3,12 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/system/constant"
-	"github.com/funtimecoding/soil/pkg/system/service"
+	"github.com/funtimecoding/soil/pkg/system/types/service"
 	"testing"
 )
 
 func TestNewUnitServiceCarriesTheOwningPackage(t *testing.T) {
-	v := service.NewUnitService(
+	v := service.NewUnit(
 		"foxtrot.service",
 		constant.ServiceRunning,
 		"/lib/systemd/system/foxtrot.service",
@@ -23,7 +23,7 @@ func TestNewUnitServiceCarriesTheOwningPackage(t *testing.T) {
 }
 
 func TestNewUnitServiceWithoutPackageCarriesNone(t *testing.T) {
-	v := service.NewUnitService(
+	v := service.NewUnit(
 		"charlie.service",
 		constant.ServiceFailed,
 		"/etc/systemd/system/charlie.service",

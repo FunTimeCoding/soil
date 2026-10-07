@@ -2,6 +2,7 @@ package directory
 
 import (
 	"github.com/funtimecoding/soil/pkg/directory/constant"
+	"github.com/funtimecoding/soil/pkg/directory/types/entry"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/errors/ambiguous"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
@@ -11,7 +12,7 @@ import (
 func (c *Client) Authenticate(
 	account string,
 	password string,
-) (*Entry, error) {
+) (*entry.Entry, error) {
 	connection, e := c.connect()
 
 	if e != nil {
@@ -44,7 +45,7 @@ func (c *Client) Authenticate(
 		return nil, validation.New("invalid credentials")
 	}
 
-	return NewEntry(
+	return entry.New(
 		found.GetAttributeValue(constant.UniqueAttribute),
 		found.GetAttributeValue(constant.AccountAttribute),
 		found.GetAttributeValue(constant.MailAttribute),

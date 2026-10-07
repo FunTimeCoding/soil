@@ -1,8 +1,11 @@
 package message
 
-import "github.com/funtimecoding/soil/pkg/prometheus/loki/basic/query_result"
+import (
+	"github.com/funtimecoding/soil/pkg/prometheus/loki/basic/query_result"
+	"github.com/funtimecoding/soil/pkg/prometheus/types/message_meta"
+)
 
-func NewSlice(v *query_result.Result) ([]*Message, *Meta) {
+func NewSlice(v *query_result.Result) ([]*Message, *message_meta.Meta) {
 	var result []*Message
 
 	for _, e := range v.Result {
@@ -11,5 +14,5 @@ func NewSlice(v *query_result.Result) ([]*Message, *Meta) {
 		}
 	}
 
-	return result, &Meta{Type: v.ResultType, Statistic: v.Stats}
+	return result, message_meta.New(v.ResultType, v.Stats)
 }

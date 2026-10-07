@@ -6,8 +6,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/provision/downstream"
 	"github.com/funtimecoding/soil/pkg/provision/runner"
 	"github.com/funtimecoding/soil/pkg/provision/store"
+	"github.com/funtimecoding/soil/pkg/provision/types/runner_option"
 	terraformFace "github.com/funtimecoding/soil/pkg/tool/goterraformd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/option"
+	"github.com/funtimecoding/soil/pkg/tool/goterraformd/types/metric"
 	"github.com/prometheus/client_golang/prometheus"
 )
 
@@ -31,7 +33,7 @@ func New(
 		stateNamespace: o.StateNamespace,
 		stateLeaseName: o.StateLease,
 	}
-	result.metrics = newMetrics(y, result.stateLease)
+	result.metrics = metric.New(y, result.stateLease)
 	result.seedLastSuccess()
 	var targets []face.Downstream
 
@@ -40,7 +42,7 @@ func New(
 	}
 
 	result.provision = runner.New(
-		runner.Configuration{
+		runner_option.Option{
 			Repository:      o.Repository,
 			ClonePath:       o.ClonePath,
 			ToolPath:        o.TerraformPath,

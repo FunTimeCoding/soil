@@ -1,11 +1,11 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/gocertificated/publish"
+	"github.com/funtimecoding/soil/pkg/tool/gocertificated/types/change"
 	"time"
 )
 
-func (s *Service) Publish() (string, []*publish.Change, error) {
+func (s *Service) Publish() (string, []*change.Change, error) {
 	pending, e := s.store.Unpublished()
 
 	if e != nil {

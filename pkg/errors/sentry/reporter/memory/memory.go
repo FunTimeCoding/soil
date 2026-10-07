@@ -1,5 +1,7 @@
 package memory
 
+import "github.com/funtimecoding/soil/pkg/errors/types/reported_event"
+
 type Memory struct {
-	events []*Event
+	events []*reported_event.Event
 }

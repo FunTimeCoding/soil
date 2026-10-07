@@ -1,12 +1,15 @@
 package service
 
-import "strings"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/golinkaced/types/search_result"
+	"strings"
+)
 
 func (s *Service) Search(
 	query string,
 	entityType string,
-) (*SearchResult, error) {
-	result := &SearchResult{}
+) (*search_result.Result, error) {
+	result := search_result.New()
 	lower := strings.ToLower(query)
 
 	if entityType == "" || entityType == "link" {

@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/fetch"
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/tick"
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/toast"
+	"github.com/funtimecoding/soil/pkg/bubbletea/types/modal"
 	"time"
 )
 
@@ -54,7 +55,7 @@ func (m *Model) Update(s tea.Msg) (tea.Model, tea.Cmd) {
 		return m, nil
 	case viewDetailMessage:
 		i := m.selectedItem()
-		m.modal = &Modal{content: fmt.Sprintf("Details: %+v", i)}
+		m.modal = modal.New(fmt.Sprintf("Details: %+v", i))
 	}
 
 	t, result := m.table.Update(s)

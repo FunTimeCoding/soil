@@ -3,14 +3,15 @@ package service
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gogated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/model/client"
+	"github.com/funtimecoding/soil/pkg/tool/gogated/types/register_client"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"strings"
 )
 
 func (s *Service) RegisterClient(
-	r *RegisterClientRequest,
-) (*RegisterClientResponse, error) {
+	r *register_client.Request,
+) (*register_client.Response, error) {
 	clientIdentifier := uuid.New().String()
 	secret := uuid.New().String()
 	hash, e := bcrypt.GenerateFromPassword([]byte(secret), bcrypt.DefaultCost)
@@ -42,9 +43,9 @@ func (s *Service) RegisterClient(
 		return nil, e
 	}
 
-	return &RegisterClientResponse{
-		ClientIdentifier: clientIdentifier,
-		ClientSecret:     secret,
-		RedirectLocators: r.RedirectLocators,
-	}, nil
+	return register_client.NewResponse(
+		clientIdentifier,
+		secret,
+		r.RedirectLocators,
+	), nil
 }

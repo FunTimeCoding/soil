@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/result"
 	"math"
 )
 
@@ -14,7 +14,7 @@ func (s *Store) SearchKeyword(
 	collection string,
 	full bool,
 	metadata map[string]string,
-) ([]search.Result, error) {
+) ([]result.Search, error) {
 	fullTextSearch := BuildFullTextSearchQuery(query)
 
 	if fullTextSearch == "" {
@@ -64,10 +64,10 @@ func (s *Store) SearchKeyword(
 	}
 
 	defer errors.PanicClose(rows)
-	var result []search.Result
+	var u []result.Search
 
 	for rows.Next() {
-		var r search.Result
+		var r result.Search
 		var bm25 float64
 		var body string
 
@@ -96,12 +96,12 @@ func (s *Store) SearchKeyword(
 			r.Body = body
 		}
 
-		result = append(result, r)
+		u = append(u, r)
 	}
 
 	if e := rows.Err(); e != nil {
 		return nil, e
 	}
 
-	return result, nil
+	return u, nil
 }

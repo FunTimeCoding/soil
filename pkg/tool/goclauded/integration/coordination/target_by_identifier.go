@@ -1,11 +1,11 @@
 package coordination
 
-import "github.com/funtimecoding/soil/pkg/tool/goclauded/connector"
+import "github.com/funtimecoding/soil/pkg/tool/goclauded/types/target"
 
 func targetByIdentifier(
-	targets []*connector.Target,
+	targets []*target.Target,
 	identifier string,
-) *connector.Target {
+) *target.Target {
 	for _, t := range targets {
 		if t.Identifier == identifier {
 			return t

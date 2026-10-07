@@ -4,12 +4,13 @@ import (
 	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/store/event"
+	"github.com/funtimecoding/soil/pkg/tool/goflightd/types/stream_line"
 	"path"
 	"time"
 )
 
 func (c *Collector) record(b []byte) {
-	var l line
+	var l stream_line.Line
 
 	if json.Unmarshal(b, &l) != nil {
 		return

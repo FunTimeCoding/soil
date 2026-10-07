@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/web/authorization/client/types/flow_state"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/google/uuid"
 	"net/http"
@@ -24,12 +25,7 @@ func (c *Client) SignIn(
 	}
 
 	b, e := json.Marshal(
-		&FlowState{
-			Verifier:        verifier,
-			State:           state,
-			ReturnPath:      returnPath,
-			CallbackLocator: c.callbackLocator,
-		},
+		flow_state.New(verifier, state, returnPath, c.callbackLocator),
 	)
 	errors.PanicOnError(e)
 	encrypted, e := c.encrypt(b)

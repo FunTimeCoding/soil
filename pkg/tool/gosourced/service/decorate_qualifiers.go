@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
-	"github.com/funtimecoding/soil/pkg/source/resolve"
+	"github.com/funtimecoding/soil/pkg/source/types/resolve_reference"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/decoration"
 	"go/token"
 )
@@ -13,7 +13,7 @@ func decorateQualifiers(
 	r *output.Results,
 	decorations *decoration.Set,
 	set *token.FileSet,
-	qualifiers []resolve.Reference,
+	qualifiers []resolve_reference.Reference,
 	oldName string,
 	newName string,
 ) error {

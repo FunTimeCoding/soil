@@ -1,6 +1,6 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
+import "github.com/funtimecoding/soil/pkg/tool/goqueryd/store/result"
 
 func (s *Service) ListDocuments(
 	collection string,
@@ -8,7 +8,7 @@ func (s *Service) ListDocuments(
 	limit int,
 	offset int,
 	full bool,
-) (*search.ListOutcome, error) {
+) (*result.ListOutcome, error) {
 	results, e := s.store.ListDocuments(
 		collection,
 		metadata,
@@ -21,7 +21,7 @@ func (s *Service) ListDocuments(
 		return nil, e
 	}
 
-	return search.NewListOutcome(
+	return result.NewListOutcome(
 		results,
 		s.store.CollectionFacets(collection, metadata, 20),
 	), nil

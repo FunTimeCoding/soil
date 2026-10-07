@@ -1,6 +1,7 @@
 package unclosed_resource
 
 import (
+	"github.com/funtimecoding/soil/pkg/lint/types/resource_candidate"
 	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"go/ast"
 	"go/token"
@@ -11,8 +12,8 @@ import (
 func candidates(
 	p *packages.Package,
 	body *ast.BlockStmt,
-) []candidate {
-	var result []candidate
+) []resource_candidate.Candidate {
+	var result []resource_candidate.Candidate
 	ast.Inspect(
 		body,
 		func(n ast.Node) bool {
@@ -43,7 +44,11 @@ func candidates(
 
 				result = append(
 					result,
-					candidate{object: o, position: i.Pos(), call: call},
+					resource_candidate.Candidate{
+						Object:   o,
+						Position: i.Pos(),
+						Call:     call,
+					},
 				)
 			}
 

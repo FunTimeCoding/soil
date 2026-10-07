@@ -2,7 +2,7 @@ package web
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/types/top"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"time"
@@ -29,7 +29,7 @@ func (s *Server) topTable() gomponents.Node {
 		html.TBody(
 			gomponents.Map(
 				records,
-				func(r store.TopRecord) gomponents.Node {
+				func(r top.Record) gomponents.Node {
 					return html.Tr(
 						html.Td(
 							html.A(

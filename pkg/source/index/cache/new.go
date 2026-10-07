@@ -1,6 +1,9 @@
 package cache
 
-import "github.com/funtimecoding/soil/pkg/source/index"
+import (
+	"github.com/funtimecoding/soil/pkg/source/index"
+	"github.com/funtimecoding/soil/pkg/source/types/cache_entry"
+)
 
 func New(
 	directory string,
@@ -9,6 +12,6 @@ func New(
 	return &Cache{
 		directory: directory,
 		kinds:     kinds,
-		entries:   make(map[string]*entry),
+		entries:   make(map[string]*cache_entry.Entry),
 	}
 }

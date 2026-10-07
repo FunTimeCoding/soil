@@ -2,15 +2,15 @@ package worker
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/floor"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/floor/node"
 )
 
 func (w *Worker) pollNode(
 	c face.ProxmoxClient,
 	hypervisor string,
 	name string,
-) *floor.Node {
-	result := floor.Node{Hypervisor: hypervisor, Name: name}
+) *node.Node {
+	result := node.Node{Hypervisor: hypervisor, Name: name}
 	n, e := c.Node(name)
 
 	if e != nil {

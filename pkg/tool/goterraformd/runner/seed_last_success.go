@@ -7,5 +7,5 @@ func (r *Runner) seedLastSuccess() {
 		return
 	}
 
-	r.metrics.lastSuccess.Set(float64(v.Unix()))
+	r.metrics.LastSuccess.Set(float64(v.Unix()))
 }

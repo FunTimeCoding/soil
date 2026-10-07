@@ -3,11 +3,11 @@ package store_recorder
 import (
 	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/telemetry/record"
-	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/model/usage_event"
 )
 
 func (r *Recorder) Record(e *record.Record) {
-	u := store.NewUsageEvent()
+	u := usage_event.New()
 	u.Tool = e.Tool
 	u.Surface = e.Surface
 	u.Actor = e.Actor

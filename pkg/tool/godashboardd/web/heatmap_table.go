@@ -2,13 +2,13 @@ package web
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/tool/godashboardd/store"
+	"github.com/funtimecoding/soil/pkg/tool/godashboardd/types/summary"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
 
-func heatmapTable(summaries []store.Summary) gomponents.Node {
+func heatmapTable(summaries []summary.Summary) gomponents.Node {
 	if len(summaries) == 0 {
 		return html.P(gomponents.Text("No clicks recorded yet."))
 	}

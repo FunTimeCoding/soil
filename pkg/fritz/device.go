@@ -3,9 +3,10 @@ package fritz
 import (
 	"encoding/xml"
 	"github.com/funtimecoding/soil/pkg/fritz/constant"
+	"github.com/funtimecoding/soil/pkg/fritz/response"
 )
 
-func (c *Client) Device() (*DeviceResponse, error) {
+func (c *Client) Device() (*response.Device, error) {
 	body, e := c.call(
 		constant.DevicePath,
 		constant.DeviceService,
@@ -16,7 +17,7 @@ func (c *Client) Device() (*DeviceResponse, error) {
 		return nil, e
 	}
 
-	var result DeviceResponse
+	var result response.Device
 
 	if f := xml.Unmarshal(body, &result); f != nil {
 		return nil, f

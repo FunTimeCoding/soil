@@ -1,6 +1,9 @@
 package output
 
-import "github.com/funtimecoding/soil/pkg/lint/constant"
+import (
+	"github.com/funtimecoding/soil/pkg/lint/constant"
+	"github.com/funtimecoding/soil/pkg/lint/types/unchecked"
+)
 
 func (r *Results) AddUnchecked(
 	path string,
@@ -10,11 +13,5 @@ func (r *Results) AddUnchecked(
 ) {
 	r.Unchecked = append(
 		r.Unchecked,
-		&Unchecked{
-			Path:   r.Relativize(path),
-			Line:   line,
-			Span:   span,
-			Reason: reason,
-		},
-	)
+		unchecked.New(r.Relativize(path), line, span, reason))
 }

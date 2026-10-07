@@ -2,11 +2,12 @@ package browser_tester
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/web/types/snapshot_node"
 	"strings"
 )
 
 func formatNodes(
-	nodes []*SnapshotNode,
+	nodes []*snapshot_node.Node,
 	depth int,
 ) string {
 	var b strings.Builder

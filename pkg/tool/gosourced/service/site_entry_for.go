@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/source/resolve"
+	"github.com/funtimecoding/soil/pkg/source/types/resolve_reference"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/pattern_site"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/result/location"
@@ -16,7 +16,7 @@ func (s *Service) siteEntryFor(
 	contents map[string][]byte,
 	node ast.Node,
 	anchor ast.Node,
-	reference resolve.Reference,
+	reference resolve_reference.Reference,
 ) (*pattern_site.Entry, error) {
 	position := set.Position(reference.Ident.Pos())
 	content, okay := contents[position.Filename]

@@ -2,11 +2,11 @@ package store
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/raid"
+	"github.com/funtimecoding/soil/pkg/raid/model/fight"
 )
 
-func (s *Store) RaidFights(raidIdentifier int) []raid.Fight {
-	var fights []raid.Fight
+func (s *Store) RaidFights(raidIdentifier int) []fight.Fight {
+	var fights []fight.Fight
 	errors.PanicOnError(
 		s.mapper.
 			Where("raid_id = ?", raidIdentifier).

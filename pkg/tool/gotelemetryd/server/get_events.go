@@ -5,14 +5,14 @@ import (
 	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/generated/server"
-	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/types/query_option"
 )
 
 func (s *Server) GetEvents(
 	_ context.Context,
 	r server.GetEventsRequestObject,
 ) (server.GetEventsResponseObject, error) {
-	o := store.NewQueryOption()
+	o := query_option.New()
 
 	if r.Params.Tool != nil {
 		o.Tool = *r.Params.Tool

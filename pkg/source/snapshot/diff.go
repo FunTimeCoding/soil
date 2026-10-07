@@ -14,7 +14,7 @@ func (s *Snapshot) Diff(other *Snapshot) []string {
 		for path, b := range before {
 			n, okay := now[path]
 
-			if !okay || n.size != b.size || !n.modified.Equal(b.modified) {
+			if !okay || n.Size != b.Size || !n.Modified.Equal(b.Modified) {
 				changed[path] = true
 			}
 		}

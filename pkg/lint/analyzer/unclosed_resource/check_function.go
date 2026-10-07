@@ -15,10 +15,10 @@ func checkFunction(
 	s *Summaries,
 ) {
 	for _, c := range candidates(p, body) {
-		if closes(p, body, c.object) ||
-			escapes(p, body, c.object, carriesFrom) ||
+		if closes(p, body, c.Object) ||
+			escapes(p, body, c.Object, carriesFrom) ||
 			isBorrowed(p, body, c) ||
-			s.arrangesFor(calleeOf(p, c.call)) {
+			s.arrangesFor(calleeOf(p, c.Call)) {
 			continue
 		}
 
@@ -27,10 +27,10 @@ func checkFunction(
 				"unclosed_resource",
 				fmt.Sprintf(
 					"%s is never closed; use %s",
-					c.object.Name(),
-					closeSuggestion(c.object),
+					c.Object.Name(),
+					closeSuggestion(c.Object),
 				),
-				p.Fset.Position(c.position),
+				p.Fset.Position(c.Position),
 			),
 		)
 	}

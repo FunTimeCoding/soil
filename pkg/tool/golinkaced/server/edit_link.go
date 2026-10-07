@@ -3,14 +3,14 @@ package server
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/generated/server"
-	"github.com/funtimecoding/soil/pkg/tool/golinkaced/service"
+	"github.com/funtimecoding/soil/pkg/tool/golinkaced/types/edit_link_option"
 )
 
 func (s *Server) EditLink(
 	_ context.Context,
 	r server.EditLinkRequestObject,
 ) (server.EditLinkResponseObject, error) {
-	o := service.EditLinkOptions{}
+	o := edit_link_option.Option{}
 
 	if r.Body.Name != nil {
 		o.Name = *r.Body.Name

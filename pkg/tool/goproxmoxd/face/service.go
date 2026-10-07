@@ -2,15 +2,15 @@ package face
 
 import (
 	"github.com/funtimecoding/soil/pkg/proxmox/node_status"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/inventory"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/model_context/argument/create_machine"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/model_context/argument/update_machine"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/instance"
 	"github.com/luthermonson/go-proxmox"
 )
 
 type Service interface {
-	Instances() []inventory.Instance
-	Instance(name string) (*inventory.Instance, bool)
+	Instances() []instance.Instance
+	Instance(name string) (*instance.Instance, bool)
 	ResolveInstance(explicit string) (string, error)
 	ActiveInstance(sessionIdentifier string) (string, bool)
 	SetActiveInstance(

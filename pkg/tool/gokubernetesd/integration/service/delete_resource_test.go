@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/integration/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/integration/service_tester/pod"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/query"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/request"
 	"testing"
 )
 
@@ -23,7 +23,7 @@ func TestDeleteResource(t *testing.T) {
 	result, f := s.Service.ListResources(
 		context.Background(),
 		"test",
-		query.List{ResourceType: "pods", Namespace: "default"},
+		request.List{ResourceType: "pods", Namespace: "default"},
 	)
 	assert.Nil(t, f)
 	assert.Count(t, 0, result)

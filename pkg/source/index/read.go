@@ -1,6 +1,9 @@
 package index
 
-import "github.com/funtimecoding/soil/pkg/source/constant"
+import (
+	"github.com/funtimecoding/soil/pkg/source/constant"
+	"github.com/funtimecoding/soil/pkg/source/index/record"
+)
 
 func (w *Workspace) read(
 	path string,
@@ -10,14 +13,14 @@ func (w *Workspace) read(
 		constant.IndexPackageKind,
 		path,
 		key,
-		NewPackageRecord(""),
+		record.NewPackage(""),
 	)
 
 	if !okay {
 		return false
 	}
 
-	w.fingerprints[path] = v.(*PackageRecord).Fingerprint
+	w.fingerprints[path] = v.(*record.Package).Fingerprint
 	complete := true
 
 	for _, k := range w.kinds {

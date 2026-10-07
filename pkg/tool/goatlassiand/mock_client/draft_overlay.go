@@ -8,16 +8,16 @@ import (
 func (c *Client) DraftOverlay(identifier string) (*page.Page, error) {
 	e, okay := c.pages[identifier]
 
-	if !okay || e.deleted {
+	if !okay || e.Deleted {
 		return nil, not_found.New("page", identifier)
 	}
 
-	if e.draft != nil {
-		return toPage(e.draft), nil
+	if e.Draft != nil {
+		return toPage(e.Draft), nil
 	}
 
-	if e.page != nil {
-		return toPage(e.page), nil
+	if e.Page != nil {
+		return toPage(e.Page), nil
 	}
 
 	return nil, not_found.New("page", identifier)

@@ -4,14 +4,14 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/query"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/request"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/response"
 )
 
 func (s *Service) LogsAll(
 	x context.Context,
 	clusterName string,
-	q query.Logs,
+	q request.Logs,
 ) ([]response.PodLog, error) {
 	c, e := s.ClusterByName(clusterName)
 

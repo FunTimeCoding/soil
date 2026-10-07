@@ -1,11 +1,11 @@
 package store
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/result"
 	"sort"
 )
 
-func sortByScore(v []search.Ranked) {
+func sortByScore(v []result.Ranked) {
 	sort.Slice(
 		v,
 		func(i, j int) bool {

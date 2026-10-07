@@ -1,12 +1,13 @@
 package claude
 
 import (
+	"github.com/funtimecoding/soil/pkg/generative/types/session_tool_count"
 	"sort"
 	"strings"
 )
 
-func (c *Client) SessionsByTool(toolFilter string) []*SessionToolCount {
-	var result []*SessionToolCount
+func (c *Client) SessionsByTool(toolFilter string) []*session_tool_count.Count {
+	var result []*session_tool_count.Count
 
 	for _, s := range c.Sessions() {
 		count := 0
@@ -21,7 +22,7 @@ func (c *Client) SessionsByTool(toolFilter string) []*SessionToolCount {
 			continue
 		}
 
-		result = append(result, &SessionToolCount{Session: s, Count: count})
+		result = append(result, session_tool_count.New(s, count))
 	}
 
 	sort.Slice(

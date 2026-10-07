@@ -1,13 +1,14 @@
 package search_cache
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/result"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/types/search_cache_entry"
 	"time"
 )
 
 func (c *Cache) Put(
 	key string,
-	outcome *search.Outcome,
+	outcome *result.Outcome,
 ) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
@@ -19,7 +20,7 @@ func (c *Cache) Put(
 		c.order = c.order[1:]
 	}
 
-	c.entries[key] = &entry{outcome: outcome, expiry: time.Now().Add(c.ttl)}
+	c.entries[key] = search_cache_entry.New(outcome, time.Now().Add(c.ttl))
 	c.removeFromOrder(key)
 	c.order = append(c.order, key)
 }

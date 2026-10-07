@@ -15,15 +15,15 @@ func (c *Client) UpdateGroup(
 	}
 
 	if title != "" {
-		g.title = title
+		g.Title = title
 	}
 
 	if color != "" {
-		g.color = color
+		g.Color = color
 	}
 
 	if collapsed != nil {
-		g.collapsed = *collapsed
+		g.Collapsed = *collapsed
 	}
 
 	c.groups[groupIdentifier] = g

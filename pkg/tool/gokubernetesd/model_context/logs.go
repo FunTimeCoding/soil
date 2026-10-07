@@ -8,7 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/model_context/argument"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/ambiguous_pods"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/query"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/request"
 	"github.com/mark3labs/mcp-go/mcp"
 	"strings"
 )
@@ -32,7 +32,7 @@ func (s *Server) Logs(
 		return response.Fail(e.Error())
 	}
 
-	q := query.Logs{
+	q := request.Logs{
 		Name:       a.Name,
 		Namespace:  a.Namespace,
 		Container:  a.Container,

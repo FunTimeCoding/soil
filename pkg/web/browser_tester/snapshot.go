@@ -6,9 +6,10 @@ import (
 	"github.com/chromedp/cdproto/accessibility"
 	"github.com/chromedp/chromedp"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/web/types/snapshot_node"
 )
 
-func (b *Browser) Snapshot() []*SnapshotNode {
+func (b *Browser) Snapshot() []*snapshot_node.Node {
 	b.T.Helper()
 	var nodes []*accessibility.Node
 	errors.PanicOnError(
@@ -24,8 +25,8 @@ func (b *Browser) Snapshot() []*SnapshotNode {
 			),
 		),
 	)
-	lookup := make(map[accessibility.NodeID]*SnapshotNode)
-	var roots []*SnapshotNode
+	lookup := make(map[accessibility.NodeID]*snapshot_node.Node)
+	var roots []*snapshot_node.Node
 	uid := 0
 
 	for _, n := range nodes {
@@ -52,12 +53,7 @@ func (b *Browser) Snapshot() []*SnapshotNode {
 		}
 
 		uid++
-		sn := &SnapshotNode{
-			UID:   fmt.Sprintf("e%d", uid),
-			Role:  role,
-			Name:  name,
-			Value: value,
-		}
+		sn := snapshot_node.New(fmt.Sprintf("e%d", uid), role, name, value)
 		lookup[n.NodeID] = sn
 
 		if n.ParentID != "" {

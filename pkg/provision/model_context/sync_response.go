@@ -2,12 +2,12 @@ package model_context
 
 import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/provision/runner"
+	"github.com/funtimecoding/soil/pkg/provision/types/update"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func SyncResponse(
-	result *runner.SyncResult,
+	result *update.Result,
 	e error,
 ) (*mcp.CallToolResult, error) {
 	if e != nil {

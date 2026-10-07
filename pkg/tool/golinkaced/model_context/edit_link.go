@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/model_context/argument"
-	"github.com/funtimecoding/soil/pkg/tool/golinkaced/service"
+	"github.com/funtimecoding/soil/pkg/tool/golinkaced/types/edit_link_option"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -15,7 +15,7 @@ func (s *Server) EditLink(
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.EditLink(
 		a.Identifier,
-		service.EditLinkOptions{
+		edit_link_option.Option{
 			Name:        a.Name,
 			Link:        a.Link,
 			Description: a.Description,

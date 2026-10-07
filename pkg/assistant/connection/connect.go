@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assistant/constant"
 	"github.com/funtimecoding/soil/pkg/assistant/message"
+	"github.com/funtimecoding/soil/pkg/assistant/types/authenticate_command"
 	"github.com/funtimecoding/soil/pkg/errors"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/gorilla/websocket"
@@ -30,10 +31,7 @@ func (c *Connection) Connect() {
 		case constant.AuthenticationRequired:
 			errors.PanicOnError(
 				c.connection.WriteJSON(
-					&authenticateCommand{
-						Type:  constant.Authenticate,
-						Token: c.token,
-					},
+					authenticate_command.New(constant.Authenticate, c.token),
 				),
 			)
 		case constant.AuthenticationInvalid:

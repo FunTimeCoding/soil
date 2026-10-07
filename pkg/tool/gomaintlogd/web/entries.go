@@ -3,7 +3,7 @@ package web
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/types/filter"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
@@ -16,7 +16,7 @@ func (s *Server) entries(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	f := store.NewFilter()
+	f := filter.New()
 
 	if v := r.URL.Query().Get(constant.System); v != "" {
 		f.System = v

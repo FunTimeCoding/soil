@@ -1,5 +1,7 @@
 package mock_client
 
+import "github.com/funtimecoding/soil/pkg/tool/gofirefoxd/types/tab_group"
+
 func (c *Client) GroupTabs(
 	tabIdentifiers []int,
 	groupIdentifier int,
@@ -13,7 +15,7 @@ func (c *Client) GroupTabs(
 		identifier = c.groupIdentifier
 	}
 
-	c.groups[identifier] = &group{title: title, color: color}
+	c.groups[identifier] = tab_group.New(title, color)
 
 	for _, tabIdentifier := range tabIdentifiers {
 		for i, t := range c.tabs {

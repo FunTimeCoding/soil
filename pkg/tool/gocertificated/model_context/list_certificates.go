@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/model_context/argument"
-	"github.com/funtimecoding/soil/pkg/tool/gocertificated/store"
+	"github.com/funtimecoding/soil/pkg/tool/gocertificated/types/filter"
 	"github.com/mark3labs/mcp-go/mcp"
 	"time"
 )
@@ -16,7 +16,7 @@ func (s *Server) listCertificates(
 	_ mcp.CallToolRequest,
 	a argument.ListCertificates,
 ) (*mcp.CallToolResult, error) {
-	f := store.NewFilter()
+	f := filter.New()
 	f.Authority = a.Authority
 	f.Kind = a.Kind
 	f.Limit = int(a.Limit)

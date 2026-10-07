@@ -1,7 +1,7 @@
 package web
 
 import (
-	"github.com/funtimecoding/soil/pkg/raid"
+	"github.com/funtimecoding/soil/pkg/raid/model/fight"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
@@ -31,7 +31,7 @@ func (s *Server) logs(
 		)
 	}
 
-	var fights []raid.Fight
+	var fights []fight.Fight
 
 	if filtered {
 		for _, f := range all {

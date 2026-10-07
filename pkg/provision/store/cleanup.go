@@ -3,6 +3,7 @@ package store
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/provision/constant"
+	"github.com/funtimecoding/soil/pkg/provision/model/run"
 	"time"
 )
 
@@ -14,6 +15,6 @@ func (s *Store) Cleanup() {
 				"created_at < ?",
 				time.Now().Add(-constant.StoreRetentionAge),
 			).
-			Delete(&Run{}).Error,
+			Delete(run.New()).Error,
 	)
 }

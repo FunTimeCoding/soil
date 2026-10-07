@@ -1,8 +1,11 @@
 package attribution
 
-import "sort"
+import (
+	"github.com/funtimecoding/soil/pkg/crap/types/load"
+	"sort"
+)
 
-func (m *Matrix) Loads() []*Load {
+func (m *Matrix) Loads() []*load.Load {
 	alone := map[string]int{}
 	total := map[string]int{}
 
@@ -16,10 +19,10 @@ func (m *Matrix) Loads() []*Load {
 		}
 	}
 
-	result := make([]*Load, 0, len(m.Tests))
+	result := make([]*load.Load, 0, len(m.Tests))
 
 	for _, t := range m.Tests {
-		result = append(result, NewLoad(t, total[t], alone[t]))
+		result = append(result, load.New(t, total[t], alone[t]))
 	}
 
 	sort.SliceStable(

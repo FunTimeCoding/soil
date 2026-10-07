@@ -2,10 +2,10 @@ package convert
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/generated/server"
-	"github.com/funtimecoding/soil/pkg/tool/gocertificated/publish"
+	"github.com/funtimecoding/soil/pkg/tool/gocertificated/types/change"
 )
 
-func Changes(v []*publish.Change) []server.PendingChange {
+func Changes(v []*change.Change) []server.PendingChange {
 	result := make([]server.PendingChange, 0, len(v))
 
 	for _, c := range v {

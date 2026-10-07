@@ -2,6 +2,7 @@ package index
 
 import (
 	"github.com/funtimecoding/soil/pkg/source/constant"
+	"github.com/funtimecoding/soil/pkg/source/index/record"
 	"github.com/funtimecoding/soil/pkg/source/index/xref"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"reflect"
@@ -13,8 +14,8 @@ var formatVersion = sync.OnceValue(
 		return join.Space(
 			constant.IndexFormatVersion,
 			Shape(
-				reflect.TypeFor[PackageRecord](),
-				reflect.TypeFor[ExternalRecord](),
+				reflect.TypeFor[record.Package](),
+				reflect.TypeFor[record.External](),
 				reflect.TypeFor[xref.References](),
 			),
 		)

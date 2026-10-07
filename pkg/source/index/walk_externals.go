@@ -1,6 +1,9 @@
 package index
 
-import "github.com/funtimecoding/soil/pkg/source/constant"
+import (
+	"github.com/funtimecoding/soil/pkg/source/constant"
+	"github.com/funtimecoding/soil/pkg/source/index/record"
+)
 
 func (w *Workspace) walkExternals(k *Kind) ([]any, []string) {
 	var queue []string
@@ -28,11 +31,11 @@ func (w *Workspace) walkExternals(k *Kind) ([]any, []string) {
 		}
 
 		key := externalKey(path, externalVersion(path, w.graph.Requirements))
-		record, found := w.fetch(
+		r, found := w.fetch(
 			constant.IndexImportsKind,
 			path,
 			key,
-			NewExternalRecord(nil),
+			record.NewExternal(nil),
 		)
 		v, held := w.fetch(
 			kindStore(constant.IndexExternalKind, k),
@@ -48,7 +51,7 @@ func (w *Workspace) walkExternals(k *Kind) ([]any, []string) {
 		}
 
 		result = append(result, v)
-		queue = append(queue, record.(*ExternalRecord).Imports...)
+		queue = append(queue, r.(*record.External).Imports...)
 	}
 
 	return result, missing

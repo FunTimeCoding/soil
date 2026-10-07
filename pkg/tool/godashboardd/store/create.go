@@ -1,5 +1,10 @@
 package store
 
+import "github.com/funtimecoding/soil/pkg/tool/godashboardd/model/click"
+
 func (s *Store) Create(label string) error {
-	return s.mapper.Create(&Click{Label: label}).Error
+	c := click.New()
+	c.Label = label
+
+	return s.mapper.Create(c).Error
 }

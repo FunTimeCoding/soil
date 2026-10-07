@@ -4,6 +4,7 @@ import (
 	"charm.land/bubbles/v2/table"
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/claim"
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/toast"
+	"github.com/funtimecoding/soil/pkg/bubbletea/types/modal"
 	"github.com/funtimecoding/soil/pkg/monitor/item"
 	"github.com/funtimecoding/soil/pkg/tool/gomonitord/client"
 	"time"
@@ -30,6 +31,6 @@ type Model struct {
 	toast          []*toast.Toast
 	nextToast      int
 	initialResized bool
-	modal          *Modal
+	modal          *modal.Modal
 	lastFetch      time.Time
 }

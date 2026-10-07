@@ -1,9 +1,9 @@
 package mock_directory
 
-import "github.com/funtimecoding/soil/pkg/directory"
+import "github.com/funtimecoding/soil/pkg/directory/types/entry"
 
 type Directory struct {
-	entries   []*directory.Entry
+	entries   []*entry.Entry
 	passwords map[string]string
 	members   map[string]bool
 	failure   error

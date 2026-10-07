@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/integration/service_tester"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/query"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/request"
 	"testing"
 )
 
@@ -14,7 +14,7 @@ func TestDescribeResource(t *testing.T) {
 	result, e := s.Service.DescribeResource(
 		context.Background(),
 		"test",
-		query.Describe{
+		request.Describe{
 			ResourceType: "deployments",
 			Name:         "nginx",
 			Namespace:    "default",
@@ -31,7 +31,7 @@ func TestDescribeResourceFiltered(t *testing.T) {
 	result, e := s.Service.DescribeResource(
 		context.Background(),
 		"test",
-		query.Describe{
+		request.Describe{
 			ResourceType: "deployments",
 			Name:         "nginx",
 			Namespace:    "default",

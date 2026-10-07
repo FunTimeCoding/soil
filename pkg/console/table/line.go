@@ -20,7 +20,7 @@ func (t *Table) line(
 			v = values[i]
 		}
 
-		b.WriteString(pad(v, c.width, c.right))
+		b.WriteString(pad(v, c.Width, c.Right))
 	}
 
 	b.WriteString(constant.Unix)

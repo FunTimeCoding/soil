@@ -1,9 +1,12 @@
 package runner
 
-import "github.com/funtimecoding/soil/pkg/errors/conflict"
+import (
+	"github.com/funtimecoding/soil/pkg/errors/conflict"
+	"github.com/funtimecoding/soil/pkg/provision/types/update"
+)
 
-func (r *Runner) Sync() (*SyncResult, error) {
-	request := SyncRequest{Response: make(chan *SyncResult, 1)}
+func (r *Runner) Sync() (*update.Result, error) {
+	request := update.Request{Response: make(chan *update.Result, 1)}
 
 	select {
 	case r.sync <- request:

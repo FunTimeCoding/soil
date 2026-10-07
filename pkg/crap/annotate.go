@@ -2,6 +2,7 @@ package crap
 
 import (
 	"github.com/funtimecoding/soil/pkg/crap/mutation"
+	"github.com/funtimecoding/soil/pkg/crap/mutation_report"
 	"github.com/funtimecoding/soil/pkg/crap/report"
 	"path"
 	"path/filepath"
@@ -10,7 +11,7 @@ import (
 
 func Annotate(
 	r *report.Report,
-	m *mutation.Report,
+	m *mutation_report.Report,
 ) {
 	byFile := m.ByFile()
 

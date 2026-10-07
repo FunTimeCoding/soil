@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/tool/gogated/service"
+	"github.com/funtimecoding/soil/pkg/tool/gogated/service/response"
 	"testing"
 )
 
-func (o *Tester) Discovery(t *testing.T) *service.DiscoveryDocument {
+func (o *Tester) Discovery(t *testing.T) *response.Discovery {
 	t.Helper()
 	r, e := o.client.Get(
 		fmt.Sprintf(
@@ -21,7 +21,7 @@ func (o *Tester) Discovery(t *testing.T) *service.DiscoveryDocument {
 
 	defer errors.PanicClose(r.Body)
 	assert.Integer(t, 200, r.StatusCode)
-	var d service.DiscoveryDocument
+	var d response.Discovery
 	assert.FatalOnError(t, json.NewDecoder(r.Body).Decode(&d))
 
 	return &d

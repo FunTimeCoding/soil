@@ -1,13 +1,13 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/result"
 	"math"
 )
 
 func (s *Service) CollectionFacetsForKey(
 	collection string,
 	key string,
-) []search.Facet {
+) []result.Facet {
 	return s.store.CollectionFacets(collection, nil, math.MaxInt, key)
 }

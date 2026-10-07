@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/message"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/notation"
+	"github.com/funtimecoding/soil/pkg/generative/types/tool_context_result"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"os"
 	"path/filepath"
@@ -17,7 +18,7 @@ func (c *Client) ToolContext(
 	sessionIdentifier string,
 	toolFilter string,
 	surroundCount int,
-) []ToolContextResult {
+) []tool_context_result.Result {
 	path := filepath.Join(
 		c.base,
 		join.Empty(sessionIdentifier, constant.NotationLogExtension),
@@ -98,7 +99,7 @@ func (c *Client) ToolContext(
 		messages = append(messages, im)
 	}
 
-	var results []ToolContextResult
+	var results []tool_context_result.Result
 
 	for i, im := range messages {
 		if len(im.ToolUses) == 0 {
@@ -106,7 +107,7 @@ func (c *Client) ToolContext(
 		}
 
 		for _, toolName := range im.ToolUses {
-			r := ToolContextResult{ToolName: toolName}
+			r := tool_context_result.Result{ToolName: toolName}
 			start := i - surroundCount
 
 			if start < 0 {

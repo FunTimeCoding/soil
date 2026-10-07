@@ -1,8 +1,10 @@
 package runner
 
-func (r *Runner) Status() *Result {
+import "github.com/funtimecoding/soil/pkg/tool/goagentd/types/run_result"
+
+func (r *Runner) Status() *run_result.Result {
 	r.mutex.Lock()
 	defer r.mutex.Unlock()
 
-	return &Result{State: r.state, Result: r.result}
+	return run_result.New(r.state, r.result)
 }

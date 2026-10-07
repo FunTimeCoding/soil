@@ -1,6 +1,8 @@
 package runner_tester
 
-func (o *Tester) LastApply() *ApplyCall {
+import "github.com/funtimecoding/soil/pkg/provision/types/apply_call"
+
+func (o *Tester) LastApply() *apply_call.Call {
 	o.mutex.Lock()
 	defer o.mutex.Unlock()
 

@@ -3,6 +3,8 @@ package worker
 import (
 	"github.com/funtimecoding/soil/pkg/proxmox/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/floor"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/floor/guest"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/floor/storage"
 )
 
 func (w *Worker) pollInstance(
@@ -22,7 +24,7 @@ func (w *Worker) pollInstance(
 	}
 
 	w.collector.Clear(hypervisor)
-	guests := []floor.Guest{}
+	guests := []guest.Guest{}
 
 	for _, r := range resources {
 		switch r.Type {
@@ -38,7 +40,7 @@ func (w *Worker) pollInstance(
 
 			guests = append(
 				guests,
-				floor.Guest{
+				guest.Guest{
 					Hypervisor:  hypervisor,
 					Node:        r.Node,
 					Kind:        r.Type,
@@ -54,7 +56,7 @@ func (w *Worker) pollInstance(
 			w.collector.SetStorage(hypervisor, r)
 			f.Storages = append(
 				f.Storages,
-				floor.Storage{
+				storage.Storage{
 					Hypervisor: hypervisor,
 					Name:       r.Storage,
 					Used:       r.Disk,

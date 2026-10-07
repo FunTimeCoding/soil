@@ -1,12 +1,15 @@
 package sink
 
-import "github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/sink_operation"
+)
 
 func (s *Sink) Write(
 	path string,
 	content []byte,
 ) {
-	s.record(
-		&operation{kind: constant.OperationWrite, path: path, content: content},
-	)
+	o := sink_operation.New(constant.OperationWrite, path)
+	o.Content = content
+	s.record(o)
 }

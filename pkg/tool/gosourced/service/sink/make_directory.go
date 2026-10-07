@@ -1,7 +1,10 @@
 package sink
 
-import "github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/sink_operation"
+)
 
 func (s *Sink) MakeDirectory(path string) {
-	s.record(&operation{kind: constant.OperationMakeDirectory, path: path})
+	s.record(sink_operation.New(constant.OperationMakeDirectory, path))
 }

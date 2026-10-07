@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/types/metric"
 	"github.com/prometheus/client_golang/prometheus"
 	"sync/atomic"
 	"time"
@@ -21,5 +22,5 @@ type Worker struct {
 	stop      chan struct{}
 	lastPoll  atomic.Value
 	registry  *prometheus.Registry
-	metrics   *metrics
+	metrics   *metric.Metric
 }

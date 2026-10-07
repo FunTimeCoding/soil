@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/result"
 )
 
 func (s *Store) ListDocuments(
@@ -14,7 +14,7 @@ func (s *Store) ListDocuments(
 	limit int,
 	offset int,
 	full bool,
-) ([]search.Result, error) {
+) ([]result.Search, error) {
 	var parts []string
 	var arguments []any
 
@@ -55,11 +55,11 @@ func (s *Store) ListDocuments(
 	}
 
 	defer errors.PanicClose(rows)
-	var result []search.Result
+	var u []result.Search
 	var identifiers []int
 
 	for rows.Next() {
-		var r search.Result
+		var r result.Search
 		var identifier int
 		var modifiedAt string
 
@@ -79,14 +79,14 @@ func (s *Store) ListDocuments(
 		r.FilePath = join.Empty(r.Collection, constant.Slash, r.Path)
 		r.Source = "list"
 		identifiers = append(identifiers, identifier)
-		result = append(result, r)
+		u = append(u, r)
 	}
 
 	if e := rows.Err(); e != nil {
 		return nil, e
 	}
 
-	s.enrichMetadata(result, identifiers)
+	s.enrichMetadata(u, identifiers)
 
-	return result, nil
+	return u, nil
 }

@@ -1,11 +1,13 @@
 package mock_client
 
+import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/types/impression_call"
+
 func (c *Client) SaveImpression(
 	content string,
 	source string,
 ) {
 	c.Impressions = append(
 		c.Impressions,
-		ImpressionCall{Content: content, Source: source},
+		impression_call.Call{Content: content, Source: source},
 	)
 }

@@ -78,6 +78,8 @@ const (
 
 	SessionTable         = "session"
 	SummaryTable         = "summary"
+	LabelTable           = "label"
+	PulseTable           = "pulse"
 	RateSnapshotTable    = "rate_snapshot"
 	FableSnapshotTable   = "fable_snapshot"
 	SummaryColumn        = "summary"

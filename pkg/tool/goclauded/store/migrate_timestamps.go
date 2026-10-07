@@ -3,6 +3,7 @@ package store
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/timestamp_value"
 	"gorm.io/gorm"
 	"log"
 	"time"
@@ -13,7 +14,7 @@ func migrateTimestamps(d *gorm.DB) {
 	skipped := 0
 
 	for _, c := range constant.TimestampColumns {
-		var rows []timestampValue
+		var rows []timestamp_value.Value
 		d.Raw(
 			fmt.Sprintf(
 				`SELECT identifier, CAST(%s AS TEXT) AS value FROM %s

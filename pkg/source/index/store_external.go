@@ -2,6 +2,7 @@ package index
 
 import (
 	"github.com/funtimecoding/soil/pkg/source/constant"
+	"github.com/funtimecoding/soil/pkg/source/index/record"
 	"go/types"
 )
 
@@ -16,7 +17,7 @@ func (w *Workspace) storeExternal(p *types.Package) {
 			imports = append(imports, d.Path())
 		}
 
-		w.keep(constant.IndexImportsKind, path, k, NewExternalRecord(imports))
+		w.keep(constant.IndexImportsKind, path, k, record.NewExternal(imports))
 	}
 
 	for _, kind := range w.kinds {

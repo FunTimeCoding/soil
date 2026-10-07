@@ -13,7 +13,7 @@ func TestASuccessfulResponseIsPrintedWithoutExiting(t *testing.T) {
 	assert.String(t, "alfa\n", f.output.String())
 	assert.String(t, "", f.failure.String())
 	assert.Count(t, 0, f.exits)
-	assert.Count(t, 0, f.ends.outcomes)
+	assert.Count(t, 0, f.ends.Outcomes)
 }
 
 func TestARejectedResponseGoesToFailureAndExitsOne(t *testing.T) {
@@ -22,7 +22,7 @@ func TestARejectedResponseGoesToFailureAndExitsOne(t *testing.T) {
 	assert.String(t, "", f.output.String())
 	assert.String(t, "not found\n", f.failure.String())
 	assert.Integers(t, []int{1}, f.exits)
-	assert.Strings(t, []string{"error"}, f.ends.outcomes)
+	assert.Strings(t, []string{"error"}, f.ends.Outcomes)
 }
 
 func TestExitfWritesToFailureAndExitsOne(t *testing.T) {
@@ -30,14 +30,14 @@ func TestExitfWritesToFailureAndExitsOne(t *testing.T) {
 	f.terminal.Exitf("invalid level: %s\n", "alfa")
 	assert.String(t, "invalid level: alfa\n", f.failure.String())
 	assert.Integers(t, []int{1}, f.exits)
-	assert.Strings(t, []string{"error"}, f.ends.outcomes)
+	assert.Strings(t, []string{"error"}, f.ends.Outcomes)
 }
 
 func TestExitZeroEndsTheCommandAsSucceeded(t *testing.T) {
 	f := newFixture()
 	f.terminal.Exit(0)
 	assert.Integers(t, []int{0}, f.exits)
-	assert.Strings(t, []string{"success"}, f.ends.outcomes)
+	assert.Strings(t, []string{"success"}, f.ends.Outcomes)
 }
 
 func TestBlocklnWritesToFailureAndEndsTheCommandAsBlocked(t *testing.T) {
@@ -46,7 +46,7 @@ func TestBlocklnWritesToFailureAndEndsTheCommandAsBlocked(t *testing.T) {
 	assert.String(t, "", f.output.String())
 	assert.String(t, "alfa\n", f.failure.String())
 	assert.Integers(t, []int{2}, f.exits)
-	assert.Strings(t, []string{"blocked"}, f.ends.outcomes)
+	assert.Strings(t, []string{"blocked"}, f.ends.Outcomes)
 }
 
 func TestRejectJoinsStatusAndBody(t *testing.T) {
@@ -54,7 +54,7 @@ func TestRejectJoinsStatusAndBody(t *testing.T) {
 	f.terminal.Reject("401 Unauthorized", []byte("alfa"))
 	assert.String(t, "401 Unauthorized: alfa\n", f.failure.String())
 	assert.Integers(t, []int{1}, f.exits)
-	assert.Strings(t, []string{"error"}, f.ends.outcomes)
+	assert.Strings(t, []string{"error"}, f.ends.Outcomes)
 }
 
 func TestRejectWithoutBodyPrintsTheStatus(t *testing.T) {
@@ -78,7 +78,7 @@ func TestRequiredExitsOneWhenTheVariableIsUnset(t *testing.T) {
 	assert.String(t, "", f.output.String())
 	assert.String(t, "TERMINAL_ALFA not set\n", f.failure.String())
 	assert.Integers(t, []int{1}, f.exits)
-	assert.Strings(t, []string{"error"}, f.ends.outcomes)
+	assert.Strings(t, []string{"error"}, f.ends.Outcomes)
 }
 
 func TestAnEmptyBodyPrintsNothing(t *testing.T) {

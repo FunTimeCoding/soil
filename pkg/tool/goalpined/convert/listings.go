@@ -1,11 +1,11 @@
 package convert
 
 import (
-	"github.com/funtimecoding/soil/pkg/alpine/package_server"
+	"github.com/funtimecoding/soil/pkg/alpine/types/listing"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/generated/server"
 )
 
-func Listings(listings []*package_server.Listing) []server.Listing {
+func Listings(listings []*listing.Listing) []server.Listing {
 	result := []server.Listing{}
 
 	for _, l := range listings {

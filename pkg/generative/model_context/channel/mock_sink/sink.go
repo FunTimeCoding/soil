@@ -1,8 +1,11 @@
 package mock_sink
 
-import "sync"
+import (
+	"github.com/funtimecoding/soil/pkg/generative/types/sink_event"
+	"sync"
+)
 
 type Sink struct {
 	mutex sync.Mutex
-	event []Event
+	event []sink_event.Event
 }

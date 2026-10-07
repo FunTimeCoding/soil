@@ -5,7 +5,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/raid"
+	"github.com/funtimecoding/soil/pkg/raid/model/fight"
+	"github.com/funtimecoding/soil/pkg/raid/model/player_fight_statistic"
+	"github.com/funtimecoding/soil/pkg/raid/model/raid"
 	"gorm.io/gorm"
 )
 
@@ -16,9 +18,9 @@ func New(
 	l *logger.Logger,
 	r face.Reporter,
 ) *Store {
-	errors.PanicOnError(m.AutoMigrate(raid.NewRaid()))
-	errors.PanicOnError(m.AutoMigrate(raid.NewFight()))
-	errors.PanicOnError(m.AutoMigrate(raid.NewPlayerFightStatistic()))
+	errors.PanicOnError(m.AutoMigrate(raid.New()))
+	errors.PanicOnError(m.AutoMigrate(fight.New()))
+	errors.PanicOnError(m.AutoMigrate(player_fight_statistic.New()))
 	s := &Store{
 		mapper:       m,
 		logger:       l,

@@ -2,13 +2,13 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/result"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search_option"
 )
 
-func (s *Service) Search(o *search_option.Option) *search.Outcome {
+func (s *Service) Search(o *search_option.Option) *result.Outcome {
 	o.Reranker = s.reranker
-	var outcome *search.Outcome
+	var outcome *result.Outcome
 
 	if o.Mode == "keyword" {
 		limit := o.Limit + len(o.Exclude)
@@ -21,7 +21,7 @@ func (s *Service) Search(o *search_option.Option) *search.Outcome {
 		)
 
 		if e != nil {
-			return search.NewDegradedOutcome(e)
+			return result.NewDegradedOutcome(e)
 		}
 
 		filtered := store.ExcludePaths(results, o.Exclude)
@@ -30,12 +30,12 @@ func (s *Service) Search(o *search_option.Option) *search.Outcome {
 			filtered = filtered[:o.Limit]
 		}
 
-		outcome = search.NewOutcome(s.store.EnrichResults(filtered, o.Metadata))
+		outcome = result.NewOutcome(s.store.EnrichResults(filtered, o.Metadata))
 	} else {
 		outcome = s.store.SearchWithFallback(o, s.embedder)
 	}
 
-	outcome.Facets = search.ComputeFacets(outcome.Results, 20)
+	outcome.Facets = result.ComputeFacets(outcome.Results, 20)
 
 	return outcome
 }

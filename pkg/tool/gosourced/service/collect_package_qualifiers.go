@@ -2,7 +2,7 @@ package service
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/source/resolve"
+	"github.com/funtimecoding/soil/pkg/source/types/resolve_reference"
 	"go/token"
 	"go/types"
 	"golang.org/x/tools/go/packages"
@@ -14,8 +14,8 @@ func collectPackageQualifiers(
 	packagePath string,
 	oldName string,
 	newName string,
-) ([]resolve.Reference, string) {
-	var result []resolve.Reference
+) ([]resolve_reference.Reference, string) {
+	var result []resolve_reference.Reference
 
 	for _, loaded := range all {
 		for ident, o := range loaded.TypesInfo.Uses {
@@ -49,7 +49,7 @@ func collectPackageQualifiers(
 
 			result = append(
 				result,
-				resolve.Reference{Ident: ident, Package: loaded},
+				resolve_reference.Reference{Ident: ident, Package: loaded},
 			)
 		}
 	}

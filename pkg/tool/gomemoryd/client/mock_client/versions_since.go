@@ -1,10 +1,10 @@
 package mock_client
 
-import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/client"
+import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/types/version_entry"
 
 func (c *Client) VersionsSince(
 	_ string,
 	_ int,
-) []client.VersionEntry {
+) []version_entry.Entry {
 	return nil
 }

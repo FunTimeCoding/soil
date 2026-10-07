@@ -1,10 +1,10 @@
 package web
 
-import "github.com/funtimecoding/soil/pkg/tool/goraidd/store"
+import "github.com/funtimecoding/soil/pkg/tool/goraidd/store/record"
 
-func groupByRaid(rows []store.PlayerRaidRow) [][]store.PlayerRaidRow {
-	var result [][]store.PlayerRaidRow
-	var current []store.PlayerRaidRow
+func groupByRaid(rows []record.PlayerRaid) [][]record.PlayerRaid {
+	var result [][]record.PlayerRaid
+	var current []record.PlayerRaid
 	var currentIdentifier uint
 
 	for _, r := range rows {

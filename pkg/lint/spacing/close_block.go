@@ -1,12 +1,15 @@
 package spacing
 
-import "strings"
+import (
+	"github.com/funtimecoding/soil/pkg/lint/types/spacing_shape"
+	"strings"
+)
 
-func (s *Spacing) closeBlock(h *shape) {
+func (s *Spacing) closeBlock(h *spacing_shape.Shape) {
 	if !strings.HasPrefix(
-		h.trimmed,
+		h.Trimmed,
 		"}",
-	) || h.elseContinuation || h.endsWithBrace {
+	) || h.ElseContinuation || h.EndsWithBrace {
 		s.needBlankAfterClosingBrace = false
 
 		return
@@ -19,5 +22,5 @@ func (s *Spacing) closeBlock(h *shape) {
 		s.blockStack = s.blockStack[:len(s.blockStack)-1]
 	}
 
-	s.needBlankAfterClosingBrace = h.trimmed == "}" && isControl
+	s.needBlankAfterClosingBrace = h.Trimmed == "}" && isControl
 }

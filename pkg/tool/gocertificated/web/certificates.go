@@ -3,7 +3,7 @@ package web
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gocertificated/store"
+	"github.com/funtimecoding/soil/pkg/tool/gocertificated/types/filter"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -13,7 +13,7 @@ func (s *Server) certificates(
 	w http.ResponseWriter,
 	_ *http.Request,
 ) {
-	result, e := s.store.Certificates(store.NewFilter())
+	result, e := s.store.Certificates(filter.New())
 	errors.PanicOnError(e)
 	s.view.RenderPage(
 		w,

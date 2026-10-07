@@ -7,6 +7,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/runner"
+	"github.com/funtimecoding/soil/pkg/provision/types/apply_call"
+	"github.com/funtimecoding/soil/pkg/provision/types/runner_option"
 	"github.com/funtimecoding/soil/pkg/system/run"
 	"path/filepath"
 	"testing"
@@ -39,7 +41,7 @@ func New(t *testing.T) *Tester {
 	c.Start("git", "push", "origin", constant.RunnerBranch)
 	result := &Tester{t: t, ClonePath: clone, remote: remote}
 	result.Runner = runner.New(
-		runner.Configuration{
+		runner_option.Option{
 			Repository: remote,
 			ClonePath:  clone,
 			ToolPath:   ".",
@@ -47,10 +49,7 @@ func New(t *testing.T) *Tester {
 				parameters map[string]any,
 				triggerSource string,
 			) any {
-				call := &ApplyCall{
-					Parameters:    parameters,
-					TriggerSource: triggerSource,
-				}
+				call := apply_call.New(parameters, triggerSource)
 				result.mutex.Lock()
 				result.applied = append(result.applied, call)
 				result.mutex.Unlock()

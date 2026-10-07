@@ -3,6 +3,8 @@ package runner
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/provision/constant"
+	"github.com/funtimecoding/soil/pkg/provision/types/trigger"
+	"github.com/funtimecoding/soil/pkg/provision/types/update"
 	"time"
 )
 
@@ -55,11 +57,12 @@ func (r *Runner) run() {
 
 			r.recovery.Run(func() { r.apply(nil, constant.RunnerTriggerTimer) })
 		case request := <-r.sync:
-			var result *SyncResult
+			var result *update.Result
 			r.recovery.Run(func() { result = r.syncWithDiff() })
 
 			if result == nil {
-				result = &SyncResult{Error: fmt.Errorf("sync failed")}
+				result = update.NewResult()
+				result.Error = fmt.Errorf("sync failed")
 				r.syncFailures++
 				r.recovery.Run(r.healRepository)
 			} else {
@@ -87,7 +90,8 @@ func (r *Runner) run() {
 			)
 
 			if request.Response != nil {
-				result := &TriggerResult{Value: value}
+				result := trigger.NewResult()
+				result.Value = value
 
 				if value == nil {
 					result.Error = fmt.Errorf("apply failed")

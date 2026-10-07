@@ -2,7 +2,7 @@ package mock_directory
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/directory"
+	"github.com/funtimecoding/soil/pkg/directory/types/entry"
 )
 
 func (d *Directory) Add(
@@ -14,7 +14,7 @@ func (d *Directory) Add(
 ) {
 	d.entries = append(
 		d.entries,
-		directory.NewEntry(
+		entry.New(
 			unique,
 			account,
 			mail,

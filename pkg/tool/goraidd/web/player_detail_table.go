@@ -2,12 +2,12 @@ package web
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/tool/goraidd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/store/record"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
 
-func playerDetailTable(rows []store.PlayerRaidRow) gomponents.Node {
+func playerDetailTable(rows []record.PlayerRaid) gomponents.Node {
 	if len(rows) == 0 {
 		return html.P(html.Em(gomponents.Text("No stats for this player.")))
 	}

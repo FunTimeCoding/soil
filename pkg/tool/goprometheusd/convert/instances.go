@@ -1,9 +1,9 @@
 package convert
 
-import "github.com/funtimecoding/soil/pkg/tool/goprometheusd/inventory"
+import "github.com/funtimecoding/soil/pkg/tool/goprometheusd/types/instance"
 
 func Instances(
-	v []inventory.Instance,
+	v []instance.Instance,
 	active string,
 ) []*SlimInstance {
 	var result []*SlimInstance

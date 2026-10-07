@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/types/metric"
 	"github.com/prometheus/client_golang/prometheus"
 	"time"
 )
@@ -32,7 +33,7 @@ func New(
 	}
 
 	if y != nil {
-		p.metrics = newMetrics(y)
+		p.metrics = metric.New(y)
 	}
 
 	return p

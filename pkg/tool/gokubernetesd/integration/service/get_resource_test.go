@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/integration/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/integration/service_tester/pod"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/query"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/request"
 	"testing"
 )
 
@@ -15,7 +15,7 @@ func TestGetResource(t *testing.T) {
 	result, e := s.Service.GetResource(
 		context.Background(),
 		"test",
-		query.Get{
+		request.Get{
 			ResourceType: "pods",
 			Name:         "nginx",
 			Namespace:    "default",
@@ -31,7 +31,7 @@ func TestGetResourceFiltered(t *testing.T) {
 	result, e := s.Service.GetResource(
 		context.Background(),
 		"test",
-		query.Get{
+		request.Get{
 			ResourceType: "pods",
 			Name:         "nginx",
 			Namespace:    "default",
@@ -49,7 +49,7 @@ func TestGetResourceUnfiltered(t *testing.T) {
 	result, e := s.Service.GetResource(
 		context.Background(),
 		"test",
-		query.Get{
+		request.Get{
 			ResourceType: "pods",
 			Name:         "nginx",
 			Namespace:    "default",
@@ -66,7 +66,7 @@ func TestGetResourceNotFound(t *testing.T) {
 	_, e := s.Service.GetResource(
 		context.Background(),
 		"test",
-		query.Get{
+		request.Get{
 			ResourceType: "pods",
 			Name:         "nonexistent",
 			Namespace:    "default",

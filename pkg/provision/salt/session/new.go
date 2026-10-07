@@ -1,6 +1,9 @@
 package session
 
-import "github.com/funtimecoding/soil/pkg/web/requester"
+import (
+	"github.com/funtimecoding/soil/pkg/provision/types/salt_login_request"
+	"github.com/funtimecoding/soil/pkg/web/requester"
+)
 
 func New(
 	login *requester.Requester,
@@ -10,7 +13,7 @@ func New(
 ) *Session {
 	return &Session{
 		login: login,
-		request: loginRequest{
+		request: salt_login_request.Request{
 			Username: user,
 			Password: password,
 			EAuth:    eauth,

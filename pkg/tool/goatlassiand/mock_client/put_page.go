@@ -16,36 +16,36 @@ func (c *Client) PutPage(
 ) (*page.Page, error) {
 	e, okay := c.pages[identifier]
 
-	if !okay || e.deleted {
+	if !okay || e.Deleted {
 		return nil, not_found.New("page", identifier)
 	}
 
 	if status == constant.ConfluenceDraftStatus {
-		if e.page == nil {
+		if e.Page == nil {
 			return nil, not_found.New("page", identifier)
 		}
 
-		draft := *e.page
+		draft := *e.Page
 		draft.Title = title
 		draft.Body.Storage.Value = body
 		draft.Version.Number = version
 		draft.Version.Message = message
 		draft.Status = constant.ConfluenceDraftStatus
-		e.draft = &draft
+		e.Draft = &draft
 
-		return toPage(e.draft), nil
+		return toPage(e.Draft), nil
 	}
 
-	if e.page == nil {
+	if e.Page == nil {
 		return nil, not_found.New("page", identifier)
 	}
 
-	e.page.Title = title
-	e.page.Body.Storage.Value = body
-	e.page.Version.Number = version
-	e.page.Version.Message = message
-	e.page.Status = constant.ConfluenceCurrentStatus
-	e.draft = nil
+	e.Page.Title = title
+	e.Page.Body.Storage.Value = body
+	e.Page.Version.Number = version
+	e.Page.Version.Message = message
+	e.Page.Status = constant.ConfluenceCurrentStatus
+	e.Draft = nil
 
-	return toPage(e.page), nil
+	return toPage(e.Page), nil
 }

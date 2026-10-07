@@ -2,6 +2,7 @@ package loki
 
 import (
 	"github.com/funtimecoding/soil/pkg/prometheus/loki/message"
+	"github.com/funtimecoding/soil/pkg/prometheus/types/message_meta"
 	"time"
 )
 
@@ -10,7 +11,7 @@ func (c *Client) QueryRange(
 	start time.Time,
 	end time.Time,
 	limit int,
-) ([]*message.Message, *message.Meta, error) {
+) ([]*message.Message, *message_meta.Meta, error) {
 	r, e := c.basic.QueryRange(query, start, end, limit)
 
 	if e != nil {

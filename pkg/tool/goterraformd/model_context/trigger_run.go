@@ -3,7 +3,7 @@ package model_context
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/provision/runner"
+	"github.com/funtimecoding/soil/pkg/provision/types/trigger"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -15,14 +15,14 @@ func (s *Server) triggerRun(
 	target := r.GetString(constant.Target, "")
 	update := r.GetBool(constant.Update, false)
 	synchronous := r.GetBool(constant.Synchronous, false)
-	request := runner.TriggerRequest{Update: update}
+	request := trigger.Request{Update: update}
 
 	if target != "" {
 		request.Parameters = map[string]any{constant.Target: target}
 	}
 
 	if synchronous {
-		request.Response = make(chan *runner.TriggerResult, 1)
+		request.Response = make(chan *trigger.Result, 1)
 	}
 
 	e := s.runner.Trigger(request)

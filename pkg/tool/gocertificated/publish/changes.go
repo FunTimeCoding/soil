@@ -4,17 +4,18 @@ import (
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/store/record"
+	"github.com/funtimecoding/soil/pkg/tool/gocertificated/types/change"
 	"path"
 )
 
-func (p *Publisher) Changes(v []record.Record) ([]*Change, error) {
-	var result []*Change
+func (p *Publisher) Changes(v []record.Record) ([]*change.Change, error) {
+	var result []*change.Change
 
 	for _, r := range v {
 		reason := join.Space(r.Kind, r.CommonName)
 		result = append(
 			result,
-			NewChange(
+			change.New(
 				path.Join(
 					p.authorityDirectory,
 					r.Name,
@@ -23,7 +24,7 @@ func (p *Publisher) Changes(v []record.Record) ([]*Change, error) {
 				reason,
 				r.Certificate,
 			),
-			NewChange(
+			change.New(
 				path.Join(p.authorityDirectory, r.Name, constant.KeyFile),
 				reason,
 				r.Key,

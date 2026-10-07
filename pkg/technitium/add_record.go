@@ -3,6 +3,7 @@ package technitium
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/technitium/record"
+	"github.com/funtimecoding/soil/pkg/technitium/response"
 	"net/url"
 )
 
@@ -11,7 +12,7 @@ func (c *Client) AddRecord(
 	recordType string,
 	value string,
 ) (*record.Record, error) {
-	var result addRecordResponse
+	var result response.AddRecord
 	path := fmt.Sprintf(
 		"/zones/records/add?domain=%s&type=%s",
 		url.QueryEscape(domain),

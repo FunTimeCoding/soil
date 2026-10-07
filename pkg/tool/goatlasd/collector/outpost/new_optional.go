@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/strings/split"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/types/target"
 	outpostConstant "github.com/funtimecoding/soil/pkg/tool/gooutpostd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gooutpostd/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
@@ -22,7 +23,7 @@ func NewOptional(l *logger.Logger) *Collector {
 
 	port := environment.RequiredInteger(outpostConstant.PortEnvironment)
 	insecure := environment.Exists(outpostConstant.InsecureEnvironment)
-	var targets []*Target
+	var targets []*target.Target
 
 	for _, host := range split.Comma(hosts) {
 		u := locator.New(host)
@@ -41,7 +42,7 @@ func NewOptional(l *logger.Logger) *Collector {
 			client.WithRequestEditorFn(web.BearerEditor(token)),
 		)
 		errors.PanicOnError(e)
-		targets = append(targets, NewTarget(host, c))
+		targets = append(targets, target.New(host, c))
 	}
 
 	return New(targets, l)

@@ -8,7 +8,7 @@ func (c *Client) AddComment(
 ) error {
 	e, okay := c.pages[pageIdentifier]
 
-	if !okay || e.deleted {
+	if !okay || e.Deleted {
 		return not_found.New("page", pageIdentifier)
 	}
 

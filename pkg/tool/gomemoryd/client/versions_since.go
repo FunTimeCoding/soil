@@ -4,12 +4,13 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/types/version_entry"
 )
 
 func (c *RestClient) VersionsSince(
 	since string,
 	limit int,
-) []VersionEntry {
+) []version_entry.Entry {
 	r, e := c.http.GetVersions(
 		context.Background(),
 		&client.GetVersionsParams{Since: since, Limit: &limit},
@@ -26,12 +27,12 @@ func (c *RestClient) VersionsSince(
 		return nil
 	}
 
-	var result []VersionEntry
+	var result []version_entry.Entry
 
 	for _, v := range *parsed.JSON200 {
 		result = append(
 			result,
-			VersionEntry{
+			version_entry.Entry{
 				MemoryIdentifier: v.MemoryIdentifier,
 				Name:             v.Name,
 				Description:      v.Description,

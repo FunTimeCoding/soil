@@ -4,7 +4,7 @@ import (
 	"crypto/x509"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gocertificated/store"
+	"github.com/funtimecoding/soil/pkg/tool/gocertificated/types/filter"
 	"math/big"
 )
 
@@ -15,7 +15,7 @@ func (s *Service) RevocationList(name string) ([]byte, error) {
 		return nil, e
 	}
 
-	f := store.NewFilter()
+	f := filter.New()
 	f.Authority = name
 	f.Revoked = new(true)
 	revoked, g := s.store.Certificates(f)

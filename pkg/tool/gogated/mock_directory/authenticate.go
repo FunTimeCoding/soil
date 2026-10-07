@@ -1,8 +1,8 @@
 package mock_directory
 
 import (
-	"github.com/funtimecoding/soil/pkg/directory"
 	"github.com/funtimecoding/soil/pkg/directory/constant"
+	"github.com/funtimecoding/soil/pkg/directory/types/entry"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 )
@@ -10,21 +10,21 @@ import (
 func (d *Directory) Authenticate(
 	account string,
 	password string,
-) (*directory.Entry, error) {
+) (*entry.Entry, error) {
 	if d.failure != nil {
 		return nil, d.failure
 	}
 
-	for _, entry := range d.entries {
-		if entry.Account != account && entry.Mail != account {
+	for _, n := range d.entries {
+		if n.Account != account && n.Mail != account {
 			continue
 		}
 
-		if d.passwords[entry.Account] != password {
+		if d.passwords[n.Account] != password {
 			return nil, validation.New("invalid credentials")
 		}
 
-		return entry, nil
+		return n, nil
 	}
 
 	return nil, not_found.New(constant.Subject, account)

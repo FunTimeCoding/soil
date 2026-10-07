@@ -1,6 +1,9 @@
 package key_reader
 
-import "time"
+import (
+	"github.com/funtimecoding/soil/pkg/console/types/key_callback"
+	"time"
+)
 
 func (r *Reader) Register(
 	k rune,
@@ -15,5 +18,5 @@ func (r *Reader) Register(
 ) {
 	r.mutex.Lock()
 	defer r.mutex.Unlock()
-	r.handlers[k] = Callback{Press: press, Release: release}
+	r.handlers[k] = key_callback.Callback{Press: press, Release: release}
 }

@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
+	"github.com/funtimecoding/soil/pkg/source/types/resolve_reference"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/relocation"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
 	"go/ast"
@@ -92,7 +93,7 @@ func (s *Service) extractTypeThrough(
 		)
 	}
 
-	references := make(map[*relocation.Entry][]resolve.Reference)
+	references := make(map[*relocation.Entry][]resolve_reference.Reference)
 
 	for _, entry := range entries {
 		references[entry] = resolve.FindAllReferences(all, entry.Object)

@@ -9,15 +9,15 @@ func (s *Sink) Commit() error {
 	for _, o := range s.operations {
 		var e error
 
-		switch o.kind {
+		switch o.Kind {
 		case constant.OperationWrite:
-			e = os.WriteFile(o.path, o.content, 0644)
+			e = os.WriteFile(o.Path, o.Content, 0644)
 		case constant.OperationRemove:
-			e = os.Remove(o.path)
+			e = os.Remove(o.Path)
 		case constant.OperationMakeDirectory:
-			e = os.MkdirAll(o.path, 0755)
+			e = os.MkdirAll(o.Path, 0755)
 		case constant.OperationRename:
-			e = os.Rename(o.path, o.target)
+			e = os.Rename(o.Path, o.Target)
 		}
 
 		if e != nil {

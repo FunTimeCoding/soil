@@ -2,13 +2,13 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gocertificated/publish"
+	"github.com/funtimecoding/soil/pkg/tool/gocertificated/types/change"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
 )
 
-func publishForm(v []*publish.Change) gomponents.Node {
+func publishForm(v []*change.Change) gomponents.Node {
 	if len(v) == 0 {
 		return html.P(html.Em(gomponents.Text("Everything is published.")))
 	}

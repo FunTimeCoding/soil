@@ -3,10 +3,10 @@ package web
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/proxmox/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/floor"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/floor/guest"
 )
 
-func load(g floor.Guest) string {
+func load(g guest.Guest) string {
 	if g.Status != constant.RunningStatus || g.MemoryTotal == 0 {
 		return ""
 	}

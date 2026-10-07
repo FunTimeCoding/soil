@@ -13,14 +13,14 @@ func (c *Client) UpdatePage(
 ) (*page.Page, error) {
 	e, okay := c.pages[identifier]
 
-	if !okay || e.deleted || e.page == nil {
+	if !okay || e.Deleted || e.Page == nil {
 		return nil, not_found.New("page", identifier)
 	}
 
-	e.page.Title = title
-	e.page.Body.Storage.Value = markdown
-	e.page.Version.Number++
-	e.page.Version.Message = message
+	e.Page.Title = title
+	e.Page.Body.Storage.Value = markdown
+	e.Page.Version.Number++
+	e.Page.Version.Message = message
 
-	return toPage(e.page), nil
+	return toPage(e.Page), nil
 }

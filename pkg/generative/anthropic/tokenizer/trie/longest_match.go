@@ -8,7 +8,7 @@ func (t *Trie) LongestMatch(
 	best := 0
 
 	for i := position; i < len(text); i++ {
-		child, found := node.children[text[i]]
+		child, found := node.Children[text[i]]
 
 		if !found {
 			break
@@ -16,7 +16,7 @@ func (t *Trie) LongestMatch(
 
 		node = child
 
-		if node.terminal {
+		if node.Terminal {
 			best = i - position + 1
 		}
 	}

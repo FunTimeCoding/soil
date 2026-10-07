@@ -1,6 +1,7 @@
 package unclosed_resource
 
 import (
+	"github.com/funtimecoding/soil/pkg/lint/types/resource_candidate"
 	"go/ast"
 	"golang.org/x/tools/go/packages"
 )
@@ -8,9 +9,9 @@ import (
 func isBorrowed(
 	p *packages.Package,
 	body *ast.BlockStmt,
-	c candidate,
+	c resource_candidate.Candidate,
 ) bool {
-	selector, okay := c.call.Fun.(*ast.SelectorExpr)
+	selector, okay := c.Call.Fun.(*ast.SelectorExpr)
 
 	if !okay {
 		return false

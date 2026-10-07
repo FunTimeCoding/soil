@@ -1,15 +1,15 @@
 package log
 
 import (
-	"github.com/funtimecoding/soil/pkg/gw2/log_manager"
+	"github.com/funtimecoding/soil/pkg/gw2/log_manager/response"
 	"strings"
 )
 
-func New(l *log_manager.Log) *Log {
+func New(l *response.Log) *Log {
 	var accounts []string
 
-	for _, player := range l.Players {
-		accounts = append(accounts, strings.TrimPrefix(player.AccountName, ":"))
+	for _, p := range l.Players {
+		accounts = append(accounts, strings.TrimPrefix(p.AccountName, ":"))
 	}
 
 	return &Log{

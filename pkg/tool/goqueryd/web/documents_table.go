@@ -2,12 +2,12 @@ package web
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/result"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
 
-func documentsTable(documents []search.Result) gomponents.Node {
+func documentsTable(documents []result.Search) gomponents.Node {
 	if len(documents) == 0 {
 		return html.P(gomponents.Text("No documents."))
 	}

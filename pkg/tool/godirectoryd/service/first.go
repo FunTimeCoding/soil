@@ -1,9 +1,9 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/directory"
+import "github.com/funtimecoding/soil/pkg/directory/types/search_record"
 
 func first(
-	record *directory.Record,
+	record *search_record.Record,
 	name string,
 ) string {
 	values := record.Attributes[name]

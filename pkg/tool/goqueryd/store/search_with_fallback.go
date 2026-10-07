@@ -2,18 +2,18 @@ package store
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/result"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search_option"
 )
 
 func (s *Store) SearchWithFallback(
 	o *search_option.Option,
 	m face.Embedder,
-) *search.Outcome {
+) *result.Outcome {
 	status, e := s.Status()
 
 	if e != nil {
-		return search.NewDegradedOutcome(e)
+		return result.NewDegradedOutcome(e)
 	}
 
 	if status.TotalEmbeddings == 0 {
@@ -27,7 +27,7 @@ func (s *Store) SearchWithFallback(
 		)
 
 		if f != nil {
-			return search.NewDegradedOutcome(f)
+			return result.NewDegradedOutcome(f)
 		}
 
 		filtered := ExcludePaths(results, o.Exclude)
@@ -36,7 +36,7 @@ func (s *Store) SearchWithFallback(
 			filtered = filtered[:o.Limit]
 		}
 
-		result := search.NewOutcome(filtered)
+		result := result.NewOutcome(filtered)
 		result.Degraded = true
 
 		return result
@@ -55,7 +55,7 @@ func (s *Store) SearchWithFallback(
 		)
 
 		if g != nil {
-			return search.NewDegradedOutcome(g)
+			return result.NewDegradedOutcome(g)
 		}
 
 		filtered := ExcludePaths(keyword, o.Exclude)
@@ -64,11 +64,11 @@ func (s *Store) SearchWithFallback(
 			filtered = filtered[:o.Limit]
 		}
 
-		result := search.NewDegradedOutcome(f)
+		result := result.NewDegradedOutcome(f)
 		result.Results = filtered
 
 		return result
 	}
 
-	return search.NewOutcome(results)
+	return result.NewOutcome(results)
 }

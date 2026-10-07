@@ -1,6 +1,7 @@
 package session
 
 import (
+	"github.com/funtimecoding/soil/pkg/provision/types/salt_login_request"
 	"github.com/funtimecoding/soil/pkg/web/requester"
 	"sync"
 )
@@ -8,6 +9,6 @@ import (
 type Session struct {
 	mutex   sync.Mutex
 	login   *requester.Requester
-	request loginRequest
+	request salt_login_request.Request
 	token   string
 }

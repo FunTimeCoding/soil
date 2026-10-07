@@ -6,15 +6,16 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/collector/outpost"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/face"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/types/target"
 )
 
 func outpostCollector(sources ...face.OutpostSource) *outpost.Collector {
-	var targets []*outpost.Target
+	var targets []*target.Target
 
 	for i, s := range sources {
 		targets = append(
 			targets,
-			outpost.NewTarget(constant.FixtureOutpostNames[i], s),
+			target.New(constant.FixtureOutpostNames[i], s),
 		)
 	}
 

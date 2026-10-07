@@ -2,13 +2,14 @@ package reaper
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/system/types/zombie_detail"
 	"os"
 	"strconv"
 	"strings"
 )
 
-func (r *Reaper) scan() map[int]zombieDetail {
-	result := map[int]zombieDetail{}
+func (r *Reaper) scan() map[int]zombie_detail.Detail {
+	result := map[int]zombie_detail.Detail{}
 	entries, e := os.ReadDir("/proc")
 
 	if e != nil {
@@ -34,18 +35,18 @@ func (r *Reaper) scan() map[int]zombieDetail {
 			continue
 		}
 
-		detail := zombieDetail{}
+		detail := zombie_detail.Detail{}
 
 		for _, line := range strings.Split(content, "\n") {
 			if strings.HasPrefix(line, "Name:\t") {
-				detail.comm = strings.TrimPrefix(line, "Name:\t")
+				detail.Comm = strings.TrimPrefix(line, "Name:\t")
 			}
 
 			if strings.HasPrefix(line, "PPid:\t") {
 				v, f := strconv.Atoi(strings.TrimPrefix(line, "PPid:\t"))
 
 				if f == nil {
-					detail.ppid = v
+					detail.Ppid = v
 				}
 			}
 		}

@@ -2,10 +2,11 @@ package utilization
 
 import (
 	"encoding/json"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/utilization/credential"
 	"time"
 )
 
-func ParseCredential(raw string) *Credential {
+func ParseCredential(raw string) *credential.Credential {
 	if raw == "" {
 		return nil
 	}
@@ -20,10 +21,10 @@ func ParseCredential(raw string) *Credential {
 		return nil
 	}
 
-	return &Credential{
-		AccessToken:      stored.Claude.AccessToken,
-		SubscriptionType: stored.Claude.SubscriptionType,
-		RateLimitTier:    stored.Claude.RateLimitTier,
-		ExpiresAt:        time.UnixMilli(stored.Claude.ExpiresAt),
-	}
+	return credential.New(
+		stored.Claude.AccessToken,
+		stored.Claude.SubscriptionType,
+		stored.Claude.RateLimitTier,
+		time.UnixMilli(stored.Claude.ExpiresAt),
+	)
 }

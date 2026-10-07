@@ -1,7 +1,10 @@
 package sink
 
-import "github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/sink_operation"
+)
 
 func (s *Sink) Remove(path string) {
-	s.record(&operation{kind: constant.OperationRemove, path: path})
+	s.record(sink_operation.New(constant.OperationRemove, path))
 }

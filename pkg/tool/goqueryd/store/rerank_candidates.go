@@ -1,15 +1,15 @@
 package store
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/result"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search_option"
 )
 
 func rerankCandidates(
 	o *search_option.Option,
-	candidates []search.Ranked,
+	candidates []result.Ranked,
 	bodies map[string]string,
-) []search.Ranked {
+) []result.Ranked {
 	if o.Reranker == nil || len(candidates) == 0 {
 		return candidates
 	}
@@ -18,8 +18,8 @@ func rerankCandidates(
 
 	for i, c := range candidates {
 		documents[i] = RerankText(
-			bodies[c.Result.FilePath],
-			&c.Result,
+			bodies[c.Search.FilePath],
+			&c.Search,
 			o.Reranker,
 		)
 	}
@@ -30,18 +30,18 @@ func rerankCandidates(
 		return candidates
 	}
 
-	result := make([]search.Ranked, len(candidates))
+	s := make([]result.Ranked, len(candidates))
 
 	for i, r := range ranked {
-		result[i] = search.Ranked{
-			Result: candidates[r.Index].Result,
+		s[i] = result.Ranked{
+			Search: candidates[r.Index].Search,
 			Score:  r.Score,
 		}
-		result[i].Result.Score = r.Score
-		result[i].Result.Source = "rerank"
+		s[i].Search.Score = r.Score
+		s[i].Search.Source = "rerank"
 	}
 
-	sortByScore(result)
+	sortByScore(s)
 
-	return result
+	return s
 }

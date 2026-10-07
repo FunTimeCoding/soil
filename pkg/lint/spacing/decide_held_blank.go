@@ -2,13 +2,14 @@ package spacing
 
 import (
 	"github.com/funtimecoding/soil/pkg/lint/constant"
+	"github.com/funtimecoding/soil/pkg/lint/types/spacing_shape"
 	"strings"
 )
 
-func (s *Spacing) decideHeldBlank(h *shape) bool {
-	if strings.HasPrefix(h.trimmed, constant.CommentPrefix) {
+func (s *Spacing) decideHeldBlank(h *spacing_shape.Shape) bool {
+	if strings.HasPrefix(h.Trimmed, constant.CommentPrefix) {
 		s.report.ChangedLine("")
-		s.report.ChangedLine(h.line)
+		s.report.ChangedLine(h.Line)
 		s.pendingBlank = false
 		s.needBlankAfterClosingBrace = false
 
@@ -17,13 +18,13 @@ func (s *Spacing) decideHeldBlank(h *shape) bool {
 
 	s.pendingBlank = false
 
-	if h.topLevel {
+	if h.TopLevel {
 		s.decideTopLevelBlank(h)
 
 		return false
 	}
 
-	if h.pastOpensBlock {
+	if h.PastOpensBlock {
 		s.concern(
 			constant.BlankInsideFunctionKey,
 			constant.BlankInsideFunctionText,
@@ -33,7 +34,7 @@ func (s *Spacing) decideHeldBlank(h *shape) bool {
 	} else if s.needBlankAfterClosingBrace {
 		s.report.ChangedLine("")
 		s.needBlankAfterClosingBrace = false
-	} else if h.controlStart || h.exit || h.deferral {
+	} else if h.ControlStart || h.Exit || h.Deferral {
 		s.report.ChangedLine("")
 	} else {
 		s.concern(

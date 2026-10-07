@@ -1,8 +1,8 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/gocertificated/publish"
+import "github.com/funtimecoding/soil/pkg/tool/gocertificated/types/change"
 
-func (s *Service) Pending() ([]*publish.Change, error) {
+func (s *Service) Pending() ([]*change.Change, error) {
 	result, e := s.store.Unpublished()
 
 	if e != nil {

@@ -3,12 +3,12 @@ package web
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/types/query_option"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
 
-func filterBar(o *store.QueryOption) gomponents.Node {
+func filterBar(o *query_option.Option) gomponents.Node {
 	var active []gomponents.Node
 
 	if o.Tool != "" {

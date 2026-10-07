@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
 	"github.com/funtimecoding/soil/pkg/errors/not_selected"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/types/issue_update"
 	"github.com/trivago/tgo/tcontainer"
 )
 
@@ -15,7 +16,7 @@ func (s *Service) UpdateIssue(
 	reporter string,
 	labels []string,
 	fields map[string]any,
-) (*IssueUpdate, error) {
+) (*issue_update.Update, error) {
 	if summary == "" &&
 		description == "" &&
 		assignee == "" &&
@@ -92,9 +93,5 @@ func (s *Service) UpdateIssue(
 		return nil, fmt.Errorf("issue updated but retrieval failed: %w", k)
 	}
 
-	return &IssueUpdate{
-		Before:           before,
-		After:            after,
-		CustomFieldNames: customFieldNames,
-	}, nil
+	return issue_update.New(before, after, customFieldNames), nil
 }

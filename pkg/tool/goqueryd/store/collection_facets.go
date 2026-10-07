@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/result"
 	"sort"
 )
 
@@ -13,7 +13,7 @@ func (s *Store) CollectionFacets(
 	metadata map[string]string,
 	threshold int,
 	keys ...string,
-) []search.Facet {
+) []result.Facet {
 	var parts []string
 	var arguments []any
 	parts = append(
@@ -87,18 +87,18 @@ func (s *Store) CollectionFacets(
 	}
 
 	sort.Strings(sorted)
-	var result []search.Facet
+	var r []result.Facet
 
 	for _, key := range sorted {
 		values := counts[key]
-		f := search.Facet{Key: key, Distinct: len(values)}
+		f := result.Facet{Key: key, Distinct: len(values)}
 
 		if f.Distinct <= threshold {
 			f.Values = values
 		}
 
-		result = append(result, f)
+		r = append(r, f)
 	}
 
-	return result
+	return r
 }

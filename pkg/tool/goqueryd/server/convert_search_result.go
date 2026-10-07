@@ -2,10 +2,10 @@ package server
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/server"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/result"
 )
 
-func convertSearchResult(r search.Result) *server.SearchResult {
+func convertSearchResult(r result.Search) *server.SearchResult {
 	result := &server.SearchResult{
 		Collection:  r.Collection,
 		FilePath:    r.FilePath,

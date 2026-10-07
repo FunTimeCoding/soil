@@ -3,12 +3,12 @@ package store
 import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/chunk"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/result"
 )
 
 func RerankText(
 	body string,
-	r *search.Result,
+	r *result.Search,
 	t face.TokenCounter,
 ) string {
 	if body == "" {

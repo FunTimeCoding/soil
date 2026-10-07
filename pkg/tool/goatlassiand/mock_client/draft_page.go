@@ -9,12 +9,12 @@ import (
 func (c *Client) DraftPage(identifier string) (*page.Page, error) {
 	e, okay := c.pages[identifier]
 
-	if !okay || e.deleted {
+	if !okay || e.Deleted {
 		return nil, not_found.New("page", identifier)
 	}
 
-	if e.page != nil && e.page.Status == constant.ConfluenceDraftStatus {
-		return toPage(e.page), nil
+	if e.Page != nil && e.Page.Status == constant.ConfluenceDraftStatus {
+		return toPage(e.Page), nil
 	}
 
 	return nil, not_found.New("page", identifier)

@@ -2,11 +2,11 @@ package web
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/raid"
+	"github.com/funtimecoding/soil/pkg/raid/model/fight"
 	"strings"
 )
 
-func fightMap(f raid.Fight) string {
+func fightMap(f fight.Fight) string {
 	if strings.Contains(f.MapName, "Green Alpine") {
 		return "GBL"
 	}

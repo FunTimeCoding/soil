@@ -3,6 +3,7 @@ package index
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/source/constant"
+	"github.com/funtimecoding/soil/pkg/source/index/record"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"golang.org/x/tools/go/packages"
 )
@@ -47,7 +48,7 @@ func (w *Workspace) compute(
 			constant.IndexPackageKind,
 			path,
 			k,
-			NewPackageRecord(fingerprint),
+			record.NewPackage(fingerprint),
 		)
 		w.fingerprints[path] = fingerprint
 

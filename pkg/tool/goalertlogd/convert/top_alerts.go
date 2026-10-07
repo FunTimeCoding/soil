@@ -2,10 +2,10 @@ package convert
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/generated/server"
-	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/types/top"
 )
 
-func TopAlerts(records []store.TopRecord) []server.TopAlertsResponse {
+func TopAlerts(records []top.Record) []server.TopAlertsResponse {
 	result := make([]server.TopAlertsResponse, 0, len(records))
 
 	for _, c := range records {

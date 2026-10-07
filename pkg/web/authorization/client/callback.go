@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/web/authorization/client/types/flow_state"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
@@ -28,7 +29,7 @@ func (c *Client) Callback(
 		return
 	}
 
-	var flow FlowState
+	var flow flow_state.State
 	errors.PanicOnError(json.Unmarshal(b, &flow))
 	state := r.URL.Query().Get("state")
 

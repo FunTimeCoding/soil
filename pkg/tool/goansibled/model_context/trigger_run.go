@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	provision "github.com/funtimecoding/soil/pkg/provision/constant"
-	"github.com/funtimecoding/soil/pkg/provision/runner"
+	"github.com/funtimecoding/soil/pkg/provision/types/trigger"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -16,7 +16,7 @@ func (s *Server) triggerRun(
 	playbook := r.GetString(constant.Playbook, "")
 	update := r.GetBool(constant.Update, false)
 	synchronous := r.GetBool(constant.Synchronous, false)
-	request := runner.TriggerRequest{Update: update}
+	request := trigger.Request{Update: update}
 
 	if playbook != "" {
 		request.Parameters = map[string]any{constant.Playbook: playbook}
@@ -31,7 +31,7 @@ func (s *Server) triggerRun(
 	}
 
 	if synchronous {
-		request.Response = make(chan *runner.TriggerResult, 1)
+		request.Response = make(chan *trigger.Result, 1)
 	}
 
 	e := s.runner.Trigger(request)

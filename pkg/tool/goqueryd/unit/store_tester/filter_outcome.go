@@ -2,12 +2,12 @@ package store_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/result"
 )
 
-func FilterOutcome() *search.Outcome {
-	return search.NewOutcome(
-		[]search.Result{
+func FilterOutcome() *result.Outcome {
+	return result.NewOutcome(
+		[]result.Search{
 			{
 				Title: "alfa",
 				Metadata: map[string][]string{

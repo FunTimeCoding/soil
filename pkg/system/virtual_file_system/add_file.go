@@ -1,16 +1,17 @@
 package virtual_file_system
 
-import "time"
+import (
+	"github.com/funtimecoding/soil/pkg/system/virtual_file_system/file"
+	"time"
+)
 
 func (s *System) AddFile(
 	path string,
 	content []byte,
 	modTime time.Time,
 ) {
-	s.files[path] = &File{
-		Content: content,
-		Size:    int64(len(content)),
-		ModTime: modTime,
-		Loaded:  true,
-	}
+	f := file.New(int64(len(content)), modTime)
+	f.Content = content
+	f.Loaded = true
+	s.files[path] = f
 }

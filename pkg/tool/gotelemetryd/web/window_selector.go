@@ -2,7 +2,9 @@ package web
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/types/selector_option"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
@@ -11,16 +13,16 @@ func windowSelector(
 	currentWindow string,
 	currentGroup string,
 ) gomponents.Node {
-	windows := []SelectorOption{
-		{"1h", "1 hour"},
-		{"24h", "24 hours"},
-		{"168h", "7 days"},
-		{"720h", "30 days"},
+	windows := []*selector_option.Option{
+		selector_option.New("1h", "1 hour"),
+		selector_option.New("24h", "24 hours"),
+		selector_option.New("168h", "7 days"),
+		selector_option.New("720h", "30 days"),
 	}
-	groups := []SelectorOption{
-		{"tool", "by tool"},
-		{"surface", "by tool + surface"},
-		{"kind", "by tool + kind"},
+	groups := []*selector_option.Option{
+		selector_option.New(constant.Tool, "by tool"),
+		selector_option.New(constant.Surface, "by tool + surface"),
+		selector_option.New(constant.Kind, "by tool + kind"),
 	}
 	var windowLinks []gomponents.Node
 
@@ -41,7 +43,7 @@ func windowSelector(
 
 		windowLinks = append(
 			windowLinks,
-			gomponents.Text(constant.SpacedMiddot),
+			gomponents.Text(stringsConstant.SpacedMiddot),
 		)
 	}
 
@@ -62,7 +64,10 @@ func windowSelector(
 			)
 		}
 
-		groupLinks = append(groupLinks, gomponents.Text(constant.SpacedMiddot))
+		groupLinks = append(
+			groupLinks,
+			gomponents.Text(stringsConstant.SpacedMiddot),
+		)
 	}
 
 	return html.P(

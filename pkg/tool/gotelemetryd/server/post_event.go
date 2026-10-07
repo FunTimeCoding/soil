@@ -5,14 +5,14 @@ import (
 	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/generated/server"
-	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/model/usage_event"
 )
 
 func (s *Server) PostEvent(
 	_ context.Context,
 	r server.PostEventRequestObject,
 ) (server.PostEventResponseObject, error) {
-	e := store.NewUsageEvent()
+	e := usage_event.New()
 	e.Tool = r.Body.Tool
 	e.Surface = r.Body.Surface
 	e.Actor = r.Body.Actor

@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/store"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/store_recorder"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/types/query_option"
 	"testing"
 )
 
@@ -21,7 +22,7 @@ func TestStoreRecorder(t *testing.T) {
 	)
 	e.Detail = map[string]string{"operation": "GetSummary"}
 	r.Record(e)
-	events, queryError := s.Recent(store.NewQueryOption())
+	events, queryError := s.Recent(query_option.New())
 
 	if queryError != nil {
 		t.Fatalf("recent: %v", queryError)

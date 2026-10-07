@@ -12,19 +12,19 @@ func (s *Spacing) step(
 	s.trackBlocks(h)
 	s.trackParentheses(line)
 
-	if !h.blank && s.pendingBlank && s.decideHeldBlank(h) {
+	if !h.Blank && s.pendingBlank && s.decideHeldBlank(h) {
 		return
 	}
 
 	s.requireBlanks(h)
 
-	if h.blank && s.pastWasBlank {
+	if h.Blank && s.pastWasBlank {
 		s.extraneousBlank(h)
 
 		return
 	}
 
-	if h.blank {
+	if h.Blank {
 		s.holdBlank(number)
 
 		return
@@ -33,5 +33,5 @@ func (s *Spacing) step(
 	s.report.ChangedLine(line)
 	s.closeBlock(h)
 	s.pastLine = line
-	s.pastWasBlank = h.blank
+	s.pastWasBlank = h.Blank
 }

@@ -3,6 +3,7 @@ package technitium
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/technitium/record"
+	"github.com/funtimecoding/soil/pkg/technitium/response"
 	"net/url"
 )
 
@@ -10,7 +11,7 @@ func (c *Client) Records(
 	domain string,
 	listZone bool,
 ) ([]*record.Record, error) {
-	var result recordsResponse
+	var result response.Records
 	path := fmt.Sprintf("/zones/records/get?domain=%s", url.QueryEscape(domain))
 
 	if listZone {

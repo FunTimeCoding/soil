@@ -3,10 +3,10 @@ package web
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/proxmox/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/floor"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/floor/guest"
 )
 
-func (s *Server) guestLink(g floor.Guest) string {
+func (s *Server) guestLink(g guest.Guest) string {
 	i, okay := s.service.Instance(g.Hypervisor)
 
 	if !okay {

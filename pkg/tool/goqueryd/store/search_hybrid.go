@@ -2,14 +2,14 @@ package store
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/result"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search_option"
 )
 
 func (s *Store) SearchHybrid(
 	o *search_option.Option,
 	m face.Embedder,
-) ([]search.Result, error) {
+) ([]result.Search, error) {
 	fetchFull := o.Full || o.Reranker != nil
 	keywordResults, e := s.SearchKeyword(
 		o.Query,
@@ -42,14 +42,14 @@ func (s *Store) SearchHybrid(
 		merged[:min(o.Limit*3, len(merged))],
 		bodies,
 	)
-	unenriched := make([]search.Result, 0, len(candidates))
+	unenriched := make([]result.Search, 0, len(candidates))
 
 	for _, c := range candidates {
 		if !o.Full {
-			c.Result.Body = ""
+			c.Search.Body = ""
 		}
 
-		unenriched = append(unenriched, c.Result)
+		unenriched = append(unenriched, c.Search)
 	}
 
 	enriched := s.EnrichResults(unenriched, o.Metadata)

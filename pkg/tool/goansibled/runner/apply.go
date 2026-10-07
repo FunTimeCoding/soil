@@ -2,7 +2,7 @@ package runner
 
 import (
 	provision "github.com/funtimecoding/soil/pkg/provision/constant"
-	"github.com/funtimecoding/soil/pkg/provision/store"
+	"github.com/funtimecoding/soil/pkg/provision/model/run"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/constant"
 	"path/filepath"
 	"time"
@@ -20,7 +20,7 @@ func (r *Runner) apply(
 		playbooks = []string{v.(string)}
 	}
 
-	var results []*store.Run
+	var results []*run.Run
 
 	for _, p := range playbooks {
 		record := r.store.NewRun()

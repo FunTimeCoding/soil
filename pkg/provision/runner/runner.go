@@ -4,6 +4,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/provision/types/trigger"
+	"github.com/funtimecoding/soil/pkg/provision/types/update"
 )
 
 type Runner struct {
@@ -24,7 +26,7 @@ type Runner struct {
 	reporter        face.Reporter
 	recovery        *recovery.Recovery
 	syncFailures    int
-	trigger         chan TriggerRequest
-	sync            chan SyncRequest
+	trigger         chan trigger.Request
+	sync            chan update.Request
 	stop            chan struct{}
 }

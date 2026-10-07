@@ -1,16 +1,19 @@
 package package_server
 
-import "github.com/funtimecoding/soil/pkg/alpine/index"
+import (
+	"github.com/funtimecoding/soil/pkg/alpine/index"
+	"github.com/funtimecoding/soil/pkg/alpine/types/listing"
+)
 
 func Filter(
-	listings []*Listing,
+	listings []*listing.Listing,
 	name string,
-) []*Listing {
+) []*listing.Listing {
 	if name == "" {
 		return listings
 	}
 
-	var result []*Listing
+	var result []*listing.Listing
 
 	for _, l := range listings {
 		var entries []*index.Entry

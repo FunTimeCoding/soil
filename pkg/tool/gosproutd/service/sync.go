@@ -1,6 +1,8 @@
 package service
 
-func (s *Service) Sync(files []DiscoveredFile) {
+import "github.com/funtimecoding/soil/pkg/tool/gosproutd/types/discovered_file"
+
+func (s *Service) Sync(files []discovered_file.File) {
 	s.mutex.Lock()
 	defer s.mutex.Unlock()
 	var paths []string

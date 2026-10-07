@@ -1,5 +1,7 @@
 package tagged
 
+import "github.com/funtimecoding/soil/pkg/console/types/raw"
+
 func New(
 	identifier int,
 	name string,
@@ -8,6 +10,6 @@ func New(
 	return &Tagged{
 		Identifier: identifier,
 		Name:       name,
-		Raw:        &Raw{String: rawName},
+		Raw:        raw.New(rawName),
 	}
 }

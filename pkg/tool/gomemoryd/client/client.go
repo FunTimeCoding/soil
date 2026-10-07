@@ -1,12 +1,15 @@
 package client
 
-import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/types/version_entry"
+)
 
 type Client interface {
 	VersionsSince(
 		since string,
 		limit int,
-	) []VersionEntry
+	) []version_entry.Entry
 	SaveImpression(
 		content string,
 		source string,

@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/digest"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
+	"github.com/funtimecoding/soil/pkg/fritz/response"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"io"
 	"net/http"
@@ -72,15 +73,15 @@ func (c *Client) call(
 			c.password,
 		),
 	)
-	response, h := c.client.Do(second)
+	r, h := c.client.Do(second)
 
 	if h != nil {
 		return nil, h
 	}
 
-	body, i := io.ReadAll(response.Body)
+	body, i := io.ReadAll(r.Body)
 
-	if j := response.Body.Close(); j != nil {
+	if j := r.Body.Close(); j != nil {
 		return nil, j
 	}
 
@@ -88,25 +89,20 @@ func (c *Client) call(
 		return nil, i
 	}
 
-	if response.StatusCode >= http.StatusBadRequest {
-		var fault FaultResponse
+	if r.StatusCode >= http.StatusBadRequest {
+		var a response.Fault
 
-		if xml.Unmarshal(body, &fault) == nil && fault.Code != "" {
+		if xml.Unmarshal(body, &a) == nil && a.Code != "" {
 			return nil, unexpected.Format(
 				"fritz %s %s: fault %s (%s)",
 				path,
 				action,
-				fault.Code,
-				fault.Description,
+				a.Code,
+				a.Description,
 			)
 		}
 
-		return nil, unexpected.Format(
-			"fritz %s %s: %s",
-			path,
-			action,
-			response.Status,
-		)
+		return nil, unexpected.Format("fritz %s %s: %s", path, action, r.Status)
 	}
 
 	return body, nil

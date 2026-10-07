@@ -3,6 +3,7 @@ package store
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store/record"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/types/top"
 	"time"
 )
 
@@ -10,8 +11,8 @@ func (s *Store) Top(
 	n int,
 	start time.Time,
 	end time.Time,
-) ([]TopRecord, error) {
-	var rows []topRow
+) ([]top.Record, error) {
+	var rows []top.Row
 	q := s.database.
 		Model(record.Stub()).
 		Select(
@@ -37,12 +38,12 @@ func (s *Store) Top(
 		return nil, e
 	}
 
-	result := make([]TopRecord, 0, len(rows))
+	result := make([]top.Record, 0, len(rows))
 
 	for _, r := range rows {
 		result = append(
 			result,
-			TopRecord{
+			top.Record{
 				Name:  r.Name,
 				Count: r.Count,
 				AverageDuration: time.Duration(

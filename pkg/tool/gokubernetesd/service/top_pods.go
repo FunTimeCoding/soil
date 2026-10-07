@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unreachable"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/format"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/query"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/request"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/response"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
@@ -16,7 +16,7 @@ import (
 func (s *Service) TopPods(
 	x context.Context,
 	clusterName string,
-	q query.Top,
+	q request.Top,
 ) ([]response.PodMetrics, error) {
 	c, e := s.ClusterByName(clusterName)
 

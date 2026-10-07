@@ -1,12 +1,16 @@
 package store
 
-import "time"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/model/usage_event"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/types/summary_row"
+	"time"
+)
 
 func (s *Store) Summary(
 	since string,
 	until string,
 	groupBy string,
-) ([]SummaryRow, error) {
+) ([]summary_row.Row, error) {
 	selectClause := "tool, COUNT(*) as count"
 	groupClause := "tool"
 
@@ -20,7 +24,7 @@ func (s *Store) Summary(
 		groupClause = "tool, kind"
 	}
 
-	query := s.mapper.Model(&UsageEvent{}).
+	query := s.mapper.Model(usage_event.New()).
 		Select(selectClause).
 		Group(groupClause).
 		Order("count DESC")
@@ -41,7 +45,7 @@ func (s *Store) Summary(
 		}
 	}
 
-	var result []SummaryRow
+	var result []summary_row.Row
 
 	return result, query.Find(&result).Error
 }

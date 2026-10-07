@@ -6,7 +6,7 @@ import (
 	markResponse "github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/model_context/response"
-	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/types/query_option"
 	"github.com/mark3labs/mcp-go/mcp"
 	"time"
 )
@@ -15,7 +15,7 @@ func (s *Server) query(
 	_ context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	o := store.NewQueryOption()
+	o := query_option.New()
 	o.Tool = r.GetString(constant.Tool, "")
 	o.Surface = r.GetString(constant.Surface, "")
 	o.Actor = r.GetString(constant.Actor, "")

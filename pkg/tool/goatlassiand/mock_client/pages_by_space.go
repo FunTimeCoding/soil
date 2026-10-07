@@ -16,19 +16,19 @@ func (c *Client) PagesBySpace(
 	var result []*page.Page
 
 	for _, e := range c.pages {
-		if e.deleted || e.page == nil {
+		if e.Deleted || e.Page == nil {
 			continue
 		}
 
-		if e.page.SpaceIdentifier != identifier {
+		if e.Page.SpaceIdentifier != identifier {
 			continue
 		}
 
-		if e.page.Status != status {
+		if e.Page.Status != status {
 			continue
 		}
 
-		result = append(result, toPage(e.page))
+		result = append(result, toPage(e.Page))
 	}
 
 	return result, nil

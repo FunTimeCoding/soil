@@ -7,7 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/types/filter"
 	"github.com/mark3labs/mcp-go/mcp"
 	"time"
 )
@@ -16,7 +16,7 @@ func (s *Server) list(
 	_ context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	filter := store.NewFilter()
+	filter := filter.New()
 
 	if y := r.GetString(constant.System, ""); y != "" {
 		filter.System = y

@@ -5,11 +5,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/resolve_result"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/session"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/match"
 )
 
 func (s *Store) ResolveSessionIdentifier(query string) (*resolve_result.Result, error) {
 	seen := map[string]bool{}
-	var matches []*resolve_result.Match
+	var matches []*match.Match
 	var byCallsign session.Session
 	r := s.database.Where("callsign = ?", query).Limit(1).Find(&byCallsign)
 

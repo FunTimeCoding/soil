@@ -4,13 +4,13 @@ import (
 	"fmt"
 	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goraidd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/store/record"
 	web "github.com/funtimecoding/soil/pkg/web/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
 
-func raidsTable(rows []store.RaidRow) gomponents.Node {
+func raidsTable(rows []record.Raid) gomponents.Node {
 	if len(rows) == 0 {
 		return html.P(html.Em(gomponents.Text("No raids created yet.")))
 	}
@@ -27,7 +27,7 @@ func raidsTable(rows []store.RaidRow) gomponents.Node {
 		html.TBody(
 			gomponents.Map(
 				rows,
-				func(r store.RaidRow) gomponents.Node {
+				func(r record.Raid) gomponents.Node {
 					return html.Tr(
 						html.Td(
 							html.A(

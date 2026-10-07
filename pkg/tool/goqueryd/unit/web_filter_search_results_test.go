@@ -3,7 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/result"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/store_tester"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/web"
 	"testing"
@@ -49,8 +49,8 @@ func TestFilterSearchResultsFacetsFollowTheFilter(t *testing.T) {
 }
 
 func TestFilterSearchResultsSuppressesUniquePerResultKeys(t *testing.T) {
-	outcome := search.NewOutcome(
-		[]search.Result{
+	outcome := result.NewOutcome(
+		[]result.Search{
 			{
 				Title:    "alfa",
 				Metadata: map[string][]string{constant.Path: {"one"}},

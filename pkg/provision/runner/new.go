@@ -4,10 +4,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/provision/types/runner_option"
+	"github.com/funtimecoding/soil/pkg/provision/types/trigger"
+	"github.com/funtimecoding/soil/pkg/provision/types/update"
 )
 
 func New(
-	c Configuration,
+	c runner_option.Option,
 	l *logger.Logger,
 	r face.Reporter,
 ) *Runner {
@@ -25,8 +28,8 @@ func New(
 		logger:          l,
 		reporter:        r,
 		recovery:        recovery.New(l, r),
-		trigger:         make(chan TriggerRequest, 1),
-		sync:            make(chan SyncRequest, 1),
+		trigger:         make(chan trigger.Request, 1),
+		sync:            make(chan update.Request, 1),
 		stop:            make(chan struct{}),
 	}
 }

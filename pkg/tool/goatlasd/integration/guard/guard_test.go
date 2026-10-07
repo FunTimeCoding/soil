@@ -1,17 +1,16 @@
 package guard
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd"
-	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/migrate"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/store"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/web"
 	"github.com/funtimecoding/soil/pkg/web/authorization/client"
-	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
@@ -25,7 +24,7 @@ func TestGuard(t *testing.T) {
 		"https://gate.example.org",
 		"tester",
 		"tester-secret",
-		webConstant.SignInPath,
+		constant.SignInPath,
 		"https://atlas.example.org/callback",
 		client.DeriveKey("tester-encryption-secret"),
 	)
@@ -35,7 +34,7 @@ func TestGuard(t *testing.T) {
 			goatlasd.Mount(
 				s,
 				web.New(s, authorization),
-				reporter.New(constant.Identity.Name()),
+				memory.New(),
 				mock_recorder.New(),
 				g,
 			)

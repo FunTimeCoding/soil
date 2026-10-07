@@ -5,13 +5,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	goModule "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/source/module_graph"
+	"github.com/funtimecoding/soil/pkg/source/types/snapshot_stamp"
 	"io/fs"
 	"path/filepath"
 	"strings"
 )
 
-func walk(root string) map[string]stamp {
-	result := make(map[string]stamp)
+func walk(root string) map[string]snapshot_stamp.Stamp {
+	result := make(map[string]snapshot_stamp.Stamp)
 	errors.PanicOnError(
 		filepath.WalkDir(
 			root,
@@ -44,7 +45,10 @@ func walk(root string) map[string]stamp {
 					return nil
 				}
 
-				result[path] = stamp{size: i.Size(), modified: i.ModTime()}
+				result[path] = snapshot_stamp.Stamp{
+					Size:     i.Size(),
+					Modified: i.ModTime(),
+				}
 
 				return nil
 			},

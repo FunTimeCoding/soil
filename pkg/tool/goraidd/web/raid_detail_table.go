@@ -2,13 +2,13 @@ package web
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/tool/goraidd/store"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/store/record"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"strings"
 )
 
-func raidDetailTable(rows []store.RaidPlayerRow) gomponents.Node {
+func raidDetailTable(rows []record.RaidPlayer) gomponents.Node {
 	if len(rows) == 0 {
 		return html.P(
 			html.Em(gomponents.Text("No player stats for this raid.")),
@@ -34,7 +34,7 @@ func raidDetailTable(rows []store.RaidPlayerRow) gomponents.Node {
 		html.TBody(
 			gomponents.Map(
 				rows,
-				func(r store.RaidPlayerRow) gomponents.Node {
+				func(r record.RaidPlayer) gomponents.Node {
 					seconds := float64(r.ActiveTimeMS) / 1000
 					minutes := seconds / 60
 					icon := fmt.Sprintf(

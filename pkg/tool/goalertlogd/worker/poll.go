@@ -13,12 +13,12 @@ func (w *Worker) Poll() {
 	w.lastPoll.Store(start)
 
 	if w.metrics != nil {
-		w.metrics.lastPollTime.SetToCurrentTime()
+		w.metrics.LastPollTime.SetToCurrentTime()
 	}
 
 	defer func() {
 		if w.metrics != nil {
-			w.metrics.pollDuration.Observe(time.Since(start).Seconds())
+			w.metrics.PollDuration.Observe(time.Since(start).Seconds())
 		}
 	}()
 	alerts, _ := w.client.MustAlerts(advanced_option.New(), nil)
@@ -60,7 +60,7 @@ func (w *Worker) Poll() {
 		open[a.Fingerprint] = true
 
 		if w.metrics != nil {
-			w.metrics.alertsTotal.Inc()
+			w.metrics.AlertsTotal.Inc()
 		}
 	}
 
@@ -77,7 +77,7 @@ func (w *Worker) Poll() {
 	}
 
 	if w.metrics != nil {
-		w.metrics.alertsFiring.Set(float64(w.store.MustUnresolvedCount()))
-		w.metrics.recordsTotal.Set(float64(w.store.MustCount()))
+		w.metrics.AlertsFiring.Set(float64(w.store.MustUnresolvedCount()))
+		w.metrics.RecordsTotal.Set(float64(w.store.MustCount()))
 	}
 }

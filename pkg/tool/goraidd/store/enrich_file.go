@@ -4,9 +4,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/gw2/constant"
 	"github.com/funtimecoding/soil/pkg/notation"
-	"github.com/funtimecoding/soil/pkg/raid"
 	"github.com/funtimecoding/soil/pkg/raid/elite"
 	"github.com/funtimecoding/soil/pkg/raid/elite_parser"
+	"github.com/funtimecoding/soil/pkg/raid/model/fight"
+	"github.com/funtimecoding/soil/pkg/raid/model/player_fight_statistic"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/time"
@@ -22,19 +23,19 @@ func (s *Store) enrichFile(
 	}
 
 	b := system.ReadBytes(base, name)
-	var fight elite.Fight
-	notation.MustDecodeBytes(b, &fight, false)
-	timestamp := time.Parse("2006-01-02 15:04:05 -07:00", fight.TimeStartStd)
+	var f elite.Fight
+	notation.MustDecodeBytes(b, &f, false)
+	timestamp := time.Parse("2006-01-02 15:04:05 -07:00", f.TimeStartStd)
 	alliedTeamIdentifier := 0
 
-	if len(fight.Players) > 0 {
-		alliedTeamIdentifier = fight.Players[0].TeamIdentifier
+	if len(f.Players) > 0 {
+		alliedTeamIdentifier = f.Players[0].TeamIdentifier
 	}
 
 	enemyCount := 0
 	enemyTeams := map[int]int{}
 
-	for _, target := range fight.Targets {
+	for _, target := range f.Targets {
 		if target.TeamIdentifier == 0 {
 			continue
 		}
@@ -45,7 +46,7 @@ func (s *Store) enrichFile(
 
 	enemyTeamsString := string(notation.Marshal(enemyTeams))
 	zevtcBase := strings.TrimSuffix(name, constant.DetailedWvWKillSuffix)
-	var fightRow raid.Fight
+	var fightRow fight.Fight
 	lookup := s.mapper.
 		Where("filename LIKE ?", join.Empty("%", zevtcBase, "%")).
 		First(&fightRow)
@@ -62,28 +63,28 @@ func (s *Store) enrichFile(
 	s.mapper.Model(&fightRow).Updates(
 		map[string]any{
 			"timestamp":      timestamp,
-			"duration_ms":    fight.DurationMS,
-			"map_id":         fight.MapIdentifier,
-			"map_name":       fight.FightName,
-			"allied_count":   len(fight.Players),
+			"duration_ms":    f.DurationMS,
+			"map_id":         f.MapIdentifier,
+			"map_name":       f.FightName,
+			"allied_count":   len(f.Players),
 			"allied_team_id": alliedTeamIdentifier,
 			"enemy_count":    enemyCount,
 			"enemy_teams":    enemyTeamsString,
-			"success":        fight.Success,
+			"success":        f.Success,
 			"enriched":       true,
 		},
 	)
 
-	if !elite_parser.IsValidFight(&fight) {
+	if !elite_parser.IsValidFight(&f) {
 		return
 	}
 
 	s.mapper.Where("filename = ?", fightRow.Filename).
-		Delete(raid.NewPlayerFightStatistic())
-	stats := elite_parser.Extract(&fight)
+		Delete(player_fight_statistic.New())
+	stats := elite_parser.Extract(&f)
 
 	for _, stat := range stats {
-		row := raid.NewPlayerFightStatistic()
+		row := player_fight_statistic.New()
 		row.Filename = fightRow.Filename
 		row.Account = stat.Identity.Account
 		row.Name = stat.Identity.Name

@@ -4,16 +4,17 @@ import (
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/run"
+	"github.com/funtimecoding/soil/pkg/system/types/service"
 	"path/filepath"
 	"strings"
 )
 
-func (c *Client) launchServices() []*Service {
+func (c *Client) launchServices() []*service.Service {
 	r := run.New()
 	r.Panic = false
 	r.Start(constant.Launchctl, constant.LaunchctlList)
 	loaded := ParseLaunchctl(r.OutputString)
-	var result []*Service
+	var result []*service.Service
 
 	for _, directory := range []string{
 		constant.LaunchDaemonDirectory,
@@ -40,7 +41,7 @@ func (c *Client) launchServices() []*Service {
 
 			result = append(
 				result,
-				NewService(
+				service.New(
 					label,
 					current,
 					constant.ServiceOriginLocal,

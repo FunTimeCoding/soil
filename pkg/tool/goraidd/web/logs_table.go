@@ -2,7 +2,7 @@ package web
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/raid"
+	"github.com/funtimecoding/soil/pkg/raid/model/fight"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"maragu.dev/gomponents"
@@ -10,7 +10,7 @@ import (
 )
 
 func logsTable(
-	fights []raid.Fight,
+	fights []fight.Fight,
 	offset, total int,
 	startValue, endValue string,
 	filtered bool,
@@ -44,7 +44,7 @@ func logsTable(
 			html.TBody(
 				gomponents.Map(
 					fights,
-					func(f raid.Fight) gomponents.Node {
+					func(f fight.Fight) gomponents.Node {
 						return html.Tr(
 							html.Td(
 								html.Input(

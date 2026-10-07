@@ -1,9 +1,11 @@
 package service
 
-func (s *Service) SigningKeys() *SigningKeySet {
-	return &SigningKeySet{
-		Keys: []*SigningKey{
+import "github.com/funtimecoding/soil/pkg/tool/gogated/service/response"
+
+func (s *Service) SigningKeys() *response.SigningKeySet {
+	return response.NewSigningKeySet(
+		[]*response.SigningKey{
 			publicKeyToSigningKey(&s.signingKey.PublicKey, s.keyIdentifier),
 		},
-	}
+	)
 }

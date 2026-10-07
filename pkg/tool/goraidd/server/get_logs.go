@@ -3,7 +3,7 @@ package server
 import (
 	"context"
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/raid"
+	"github.com/funtimecoding/soil/pkg/raid/model/fight"
 	"github.com/funtimecoding/soil/pkg/time/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/generated/server"
 )
@@ -13,7 +13,7 @@ func (s *Server) GetLogs(
 	r server.GetLogsRequestObject,
 ) (server.GetLogsResponseObject, error) {
 	all := s.store.Fights()
-	var fights []raid.Fight
+	var fights []fight.Fight
 
 	for _, f := range all {
 		if r.Params.Start != nil && f.Timestamp.Before(*r.Params.Start) {

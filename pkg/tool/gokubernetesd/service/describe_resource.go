@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/describe_result"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/format"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/query"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/request"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/resource"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/response"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -16,7 +16,7 @@ import (
 func (s *Service) DescribeResource(
 	x context.Context,
 	clusterName string,
-	q query.Describe,
+	q request.Describe,
 ) (*describe_result.Result, error) {
 	c, e := s.ClusterByName(clusterName)
 

@@ -1,8 +1,11 @@
 package store
 
-import "github.com/funtimecoding/soil/pkg/tool/gocertificated/store/record"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/gocertificated/store/record"
+	"github.com/funtimecoding/soil/pkg/tool/gocertificated/types/filter"
+)
 
-func (s *Store) Certificates(f *Filter) ([]record.Record, error) {
+func (s *Store) Certificates(f *filter.Filter) ([]record.Record, error) {
 	var result []record.Record
 	d := s.database.Order("not_after")
 

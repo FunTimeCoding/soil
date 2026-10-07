@@ -7,7 +7,7 @@ func (c *Cache) evictExpired() {
 	var kept []string
 
 	for _, key := range c.order {
-		if e, found := c.entries[key]; found && now.Before(e.expiry) {
+		if e, found := c.entries[key]; found && now.Before(e.Expiry) {
 			kept = append(kept, key)
 		} else {
 			delete(c.entries, key)

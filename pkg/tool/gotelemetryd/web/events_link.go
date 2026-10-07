@@ -2,11 +2,11 @@ package web
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/types/query_option"
 )
 
 func eventsLink(
-	o *store.QueryOption,
+	o *query_option.Option,
 	page int,
 ) string {
 	link := fmt.Sprintf("/events?page=%d", page)

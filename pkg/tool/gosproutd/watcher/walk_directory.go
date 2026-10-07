@@ -5,14 +5,15 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/gosproutd/types/scanned_file"
 	"os"
 	"path/filepath"
 	"strings"
 )
 
-func (w *Watcher) walkDirectory() []scannedFile {
+func (w *Watcher) walkDirectory() []scanned_file.File {
 	times, dirty := w.gitTimes()
-	var result []scannedFile
+	var result []scanned_file.File
 	errors.PanicOnError(
 		filepath.Walk(
 			w.seedDirectory,
@@ -53,15 +54,15 @@ func (w *Watcher) walkDirectory() []scannedFile {
 
 				result = append(
 					result,
-					scannedFile{
-						name: strings.TrimSuffix(
+					scanned_file.File{
+						Name: strings.TrimSuffix(
 							filepath.Base(path),
 							constant.MarkdownExtension,
 						),
-						path:        relative,
-						contentHash: fmt.Sprintf("%x", sha256.Sum256(b)),
-						content:     string(b),
-						modifiedAt:  modifiedAt,
+						Path:        relative,
+						ContentHash: fmt.Sprintf("%x", sha256.Sum256(b)),
+						Content:     string(b),
+						ModifiedAt:  modifiedAt,
 					},
 				)
 

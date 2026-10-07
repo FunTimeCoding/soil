@@ -6,23 +6,24 @@ import (
 	"github.com/coder/websocket/wsjson"
 	"github.com/funtimecoding/soil/pkg/errors/timeout"
 	"github.com/funtimecoding/soil/pkg/errors/unreachable"
+	"github.com/funtimecoding/soil/pkg/firefox/types/message"
 	"time"
 )
 
 func (c *Client) send(
 	method string,
 	parameters any,
-) (*reply, error) {
+) (*message.Reply, error) {
 	c.mutex.Lock()
 	connection := c.connection
 	c.mutex.Unlock()
 
 	if connection == nil {
-		return &reply{}, unreachable.Format("extension not connected")
+		return message.NewReply(), unreachable.Format("extension not connected")
 	}
 
 	identifier := int(c.identifier.Add(1))
-	channel := make(chan *reply, 1)
+	channel := make(chan *message.Reply, 1)
 	c.mutex.Lock()
 	c.pending[identifier] = channel
 	c.mutex.Unlock()
@@ -35,25 +36,23 @@ func (c *Client) send(
 	e := wsjson.Write(
 		context.Background(),
 		connection,
-		&request{
-			Method:     method,
-			Parameters: parameters,
-			Identifier: identifier,
-		},
-	)
+		message.NewRequest(method, parameters, identifier))
 
 	if e != nil {
-		return &reply{}, fmt.Errorf("%s: %w", method, e)
+		return message.NewReply(), fmt.Errorf("%s: %w", method, e)
 	}
 
 	select {
 	case r := <-channel:
 		if r.Error != "" {
-			return &reply{}, fmt.Errorf("%s: %s", method, r.Error)
+			return message.NewReply(), fmt.Errorf("%s: %s", method, r.Error)
 		}
 
 		return r, nil
 	case <-time.After(10 * time.Second):
-		return &reply{}, timeout.Format("%s: timeout waiting for reply", method)
+		return message.NewReply(), timeout.Format(
+			"%s: timeout waiting for reply",
+			method,
+		)
 	}
 }

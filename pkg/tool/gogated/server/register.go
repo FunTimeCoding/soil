@@ -4,7 +4,8 @@ import (
 	"encoding/json"
 	library "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gogated/service"
+	"github.com/funtimecoding/soil/pkg/tool/gogated/types/register"
+	"github.com/funtimecoding/soil/pkg/tool/gogated/types/register_client"
 	"github.com/funtimecoding/soil/pkg/web"
 	"net/http"
 )
@@ -13,7 +14,7 @@ func (s *Server) register(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	var body registerRequest
+	var body register.Request
 
 	if e := json.NewDecoder(r.Body).Decode(&body); e != nil {
 		http.Error(w, library.InvalidRequestBody, http.StatusBadRequest)
@@ -46,7 +47,7 @@ func (s *Server) register(
 	}
 
 	result, e := s.service.RegisterClient(
-		service.NewRegisterClientRequest(
+		register_client.NewRequest(
 			body.RedirectLocators,
 			grantTypes,
 			responseTypes,
@@ -64,13 +65,12 @@ func (s *Server) register(
 	w.WriteHeader(http.StatusCreated)
 	web.EncodeNotation(
 		w,
-		&registerResponse{
-			ClientIdentifier:        result.ClientIdentifier,
-			ClientSecret:            result.ClientSecret,
-			RedirectLocators:        result.RedirectLocators,
-			GrantTypes:              grantTypes,
-			ResponseTypes:           responseTypes,
-			TokenEndpointAuthMethod: body.TokenEndpointAuthMethod,
-		},
-	)
+		register.NewResponse(
+			result.ClientIdentifier,
+			result.ClientSecret,
+			result.RedirectLocators,
+			grantTypes,
+			responseTypes,
+			body.TokenEndpointAuthMethod,
+		))
 }

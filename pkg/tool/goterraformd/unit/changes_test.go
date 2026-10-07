@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/provision/store"
+	"github.com/funtimecoding/soil/pkg/provision/model/run"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/runner"
 	"testing"
 )
@@ -42,7 +42,7 @@ Apply complete! Resources: 0 added, 0 changed, 0 destroyed.`
 }
 
 func TestChangesError(t *testing.T) {
-	record := &store.Run{} // goanalyze:ignore struct_literal
+	record := run.New()
 	record.Output = "module.a.b: Creation complete after 1s"
 	assert.Count(t, 0, runner.Changes(record))
 }

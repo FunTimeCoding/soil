@@ -4,8 +4,8 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/model_context/argument"
-	"github.com/funtimecoding/soil/pkg/tool/gogated/service"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/types/credential"
+	"github.com/funtimecoding/soil/pkg/tool/gogated/types/register_client"
 	"github.com/mark3labs/mcp-go/mcp"
 	"strings"
 )
@@ -16,7 +16,7 @@ func (s *Server) createClient(
 	a argument.CreateClient,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.service.RegisterClient(
-		service.NewFleetClientRequest(
+		register_client.NewFleetRequest(
 			strings.Fields(a.RedirectLocator),
 			strings.Fields(a.Scope),
 		),

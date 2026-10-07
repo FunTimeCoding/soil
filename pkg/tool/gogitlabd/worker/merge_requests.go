@@ -3,6 +3,7 @@ package worker
 import (
 	"github.com/funtimecoding/soil/pkg/gitlab/merge_request"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/types/request_key"
 	"slices"
 )
 
@@ -10,11 +11,11 @@ func MergeRequests(
 	assigned []*merge_request.Request,
 	reviewing []*merge_request.Request,
 ) []*merge_request.Request {
-	seen := make(map[requestKey]bool)
+	seen := make(map[request_key.Key]bool)
 	result := make([]*merge_request.Request, 0, len(assigned)+len(reviewing))
 
 	for _, r := range slices.Concat(assigned, reviewing) {
-		k := requestKey{r.Project, r.Identifier}
+		k := request_key.Key{Project: r.Project, Identifier: r.Identifier}
 
 		if seen[k] {
 			continue

@@ -1,11 +1,11 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/generative/anthropic/claude"
+import "github.com/funtimecoding/soil/pkg/generative/types/tool_context_result"
 
 func (s *Service) ToolContext(
 	sessionIdentifier string,
 	toolFilter string,
 	surroundCount int,
-) []claude.ToolContextResult {
+) []tool_context_result.Result {
 	return s.client.ToolContext(sessionIdentifier, toolFilter, surroundCount)
 }

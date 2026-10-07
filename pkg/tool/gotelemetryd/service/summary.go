@@ -1,11 +1,11 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/gotelemetryd/store"
+import "github.com/funtimecoding/soil/pkg/tool/gotelemetryd/types/summary_row"
 
 func (s *Service) Summary(
 	since string,
 	until string,
 	groupBy string,
-) ([]store.SummaryRow, error) {
+) ([]summary_row.Row, error) {
 	return s.store.Summary(since, until, groupBy)
 }

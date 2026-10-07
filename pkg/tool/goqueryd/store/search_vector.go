@@ -3,7 +3,7 @@ package store
 import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/generative/embed"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/result"
 	"sort"
 )
 
@@ -14,7 +14,7 @@ func (s *Store) SearchVector(
 	full bool,
 	metadata map[string]string,
 	m face.Embedder,
-) ([]search.Result, error) {
+) ([]result.Search, error) {
 	queryVector, e := embed.Single(m, query)
 
 	if e != nil {
@@ -37,7 +37,7 @@ func (s *Store) SearchVector(
 		},
 	)
 	seen := map[string]bool{}
-	var result []search.Result
+	var u []result.Search
 
 	for _, c := range candidates {
 		if seen[c.FilePath] {
@@ -45,7 +45,7 @@ func (s *Store) SearchVector(
 		}
 
 		seen[c.FilePath] = true
-		r := search.Result{
+		r := result.Search{
 			VirtualPath:   buildVirtualPath(c.Collection, c.Path),
 			FilePath:      c.FilePath,
 			Collection:    c.Collection,
@@ -65,12 +65,12 @@ func (s *Store) SearchVector(
 			r.Body = c.Body
 		}
 
-		result = append(result, r)
+		u = append(u, r)
 
-		if len(result) >= limit {
+		if len(u) >= limit {
 			break
 		}
 	}
 
-	return result, nil
+	return u, nil
 }

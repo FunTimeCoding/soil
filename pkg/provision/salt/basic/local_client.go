@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/salt/basic/response"
 	"github.com/funtimecoding/soil/pkg/provision/salt/basic/response/local_return"
+	"github.com/funtimecoding/soil/pkg/provision/types/salt_command_request"
 )
 
 func (c *Client) LocalClient(
@@ -15,7 +16,7 @@ func (c *Client) LocalClient(
 
 	if e := c.Post(
 		"",
-		commandRequest{
+		salt_command_request.Request{
 			Client:     constant.SaltLocalClient,
 			Target:     target,
 			Function:   function,

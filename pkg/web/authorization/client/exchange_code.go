@@ -2,6 +2,7 @@ package client
 
 import (
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/web/authorization/client/response"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/requester/request"
 	"net/http"
@@ -12,7 +13,7 @@ func (c *Client) exchangeCode(
 	code string,
 	verifier string,
 	callbackLocator string,
-) (*tokenResponse, error) {
+) (*response.Token, error) {
 	form := url.Values{
 		"grant_type":    {"authorization_code"},
 		"code":          {code},
@@ -26,7 +27,7 @@ func (c *Client) exchangeCode(
 		[]byte(form.Encode()),
 	)
 	q.Method = http.MethodPost
-	var result tokenResponse
+	var result response.Token
 
 	if e := c.requester.Notation(q, &result); e != nil {
 		return nil, e

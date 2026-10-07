@@ -3,11 +3,12 @@ package service
 import (
 	separator "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/system/types/service_policy"
 	"strings"
 )
 
-func ParsePolicy(output string) map[string]*Policy {
-	result := make(map[string]*Policy)
+func ParsePolicy(output string) map[string]*service_policy.Policy {
+	result := make(map[string]*service_policy.Policy)
 	var name string
 	var installed bool
 
@@ -21,7 +22,7 @@ func ParsePolicy(output string) map[string]*Policy {
 		if !strings.HasPrefix(line, separator.Space) &&
 			strings.HasSuffix(trimmed, separator.Colon) {
 			name = strings.TrimSuffix(trimmed, separator.Colon)
-			result[name] = &Policy{}
+			result[name] = service_policy.New()
 			installed = false
 
 			continue

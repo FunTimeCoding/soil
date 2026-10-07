@@ -1,6 +1,8 @@
 package internet_address
 
-func (a *Address) IsIdentical(d *Definition) bool {
+import "github.com/funtimecoding/soil/pkg/netbox/types/internet_address_definition"
+
+func (a *Address) IsIdentical(d *internet_address_definition.Definition) bool {
 	if !a.Address.Equal(d.Address) {
 		return false
 	}

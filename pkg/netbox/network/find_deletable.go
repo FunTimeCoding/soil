@@ -1,8 +1,10 @@
 package network
 
+import "github.com/funtimecoding/soil/pkg/netbox/types/network_definition"
+
 func FindDeletable(
 	known []*Interface,
-	expected []*Definition,
+	expected []*network_definition.Definition,
 ) []*Interface {
 	var result []*Interface
 

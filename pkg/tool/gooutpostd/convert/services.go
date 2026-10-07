@@ -1,7 +1,7 @@
 package convert
 
 import (
-	"github.com/funtimecoding/soil/pkg/system/service"
+	"github.com/funtimecoding/soil/pkg/system/types/service"
 	"github.com/funtimecoding/soil/pkg/tool/gooutpostd/generated/server"
 )
 

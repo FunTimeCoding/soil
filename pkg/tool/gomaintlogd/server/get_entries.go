@@ -4,14 +4,14 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/generated/server"
-	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/types/filter"
 )
 
 func (s *Server) GetEntries(
 	_ context.Context,
 	r server.GetEntriesRequestObject,
 ) (server.GetEntriesResponseObject, error) {
-	f := store.NewFilter()
+	f := filter.New()
 
 	if r.Params.System != nil {
 		f.System = *r.Params.System

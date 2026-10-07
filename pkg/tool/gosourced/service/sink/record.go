@@ -1,16 +1,19 @@
 package sink
 
-import "github.com/funtimecoding/soil/pkg/system"
+import (
+	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/tool/gosourced/types/sink_operation"
+)
 
-func (s *Sink) record(o *operation) {
-	if !system.InsideDirectory(s.root, o.path) {
-		s.dropped = append(s.dropped, o.path)
+func (s *Sink) record(o *sink_operation.Operation) {
+	if !system.InsideDirectory(s.root, o.Path) {
+		s.dropped = append(s.dropped, o.Path)
 
 		return
 	}
 
-	if o.target != "" && !system.InsideDirectory(s.root, o.target) {
-		s.dropped = append(s.dropped, o.target)
+	if o.Target != "" && !system.InsideDirectory(s.root, o.Target) {
+		s.dropped = append(s.dropped, o.Target)
 
 		return
 	}

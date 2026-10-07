@@ -1,17 +1,18 @@
 package virtual_file_system
 
-import "time"
+import (
+	"github.com/funtimecoding/soil/pkg/system/virtual_file_system/file"
+	"time"
+)
 
 func (s *System) Write(
 	path string,
 	content []byte,
 ) {
 	s.checkLimits(len(content))
-	s.files[path] = &File{
-		Content: content,
-		Size:    int64(len(content)),
-		ModTime: time.Now(),
-		Loaded:  true,
-	}
+	f := file.New(int64(len(content)), time.Now())
+	f.Content = content
+	f.Loaded = true
+	s.files[path] = f
 	s.written[path] = true
 }

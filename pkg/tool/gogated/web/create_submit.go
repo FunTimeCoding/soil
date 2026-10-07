@@ -3,7 +3,7 @@ package web
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gogated/service"
+	"github.com/funtimecoding/soil/pkg/tool/gogated/types/register_client"
 	"github.com/funtimecoding/soil/pkg/web/form"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -51,7 +51,7 @@ func (s *Server) createSubmit(
 	}
 
 	result, e := s.service.RegisterClient(
-		service.NewFleetClientRequest(redirectLocators, scopeSlice),
+		register_client.NewFleetRequest(redirectLocators, scopeSlice),
 	)
 	errors.PanicOnError(e)
 	s.view.RenderPage(

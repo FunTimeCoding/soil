@@ -8,6 +8,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/integration/runner_tester"
 	"github.com/funtimecoding/soil/pkg/provision/runner"
+	"github.com/funtimecoding/soil/pkg/provision/types/runner_option"
+	"github.com/funtimecoding/soil/pkg/provision/types/trigger"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/run"
@@ -21,7 +23,7 @@ import (
 func TestSetupReturnsFalseSkipsApply(t *testing.T) {
 	applied := false
 	r := runner.New(
-		runner.Configuration{
+		runner_option.Option{
 			SetupFunction: func() bool { return false },
 			ApplyFunction: func(
 				_ map[string]any,
@@ -53,7 +55,7 @@ func TestDrainChannelsOnStop(t *testing.T) {
 		},
 	)
 	r := runner.New(
-		runner.Configuration{
+		runner_option.Option{
 			SetupFunction: func() bool {
 				<-gate
 
@@ -70,8 +72,8 @@ func TestDrainChannelsOnStop(t *testing.T) {
 		memory.New(),
 	)
 	r.Start()
-	response := make(chan *runner.TriggerResult, 1)
-	e := r.Trigger(runner.TriggerRequest{Response: response})
+	response := make(chan *trigger.Result, 1)
+	e := r.Trigger(trigger.Request{Response: response})
 	assert.FatalOnError(t, e)
 	close(gate)
 
@@ -86,7 +88,7 @@ func TestDrainChannelsOnStop(t *testing.T) {
 func TestTriggerCallsApply(t *testing.T) {
 	s := runner_tester.New(t)
 	s.WaitForApply(1)
-	s.Trigger(runner.TriggerRequest{})
+	s.Trigger(trigger.Request{})
 	s.WaitForApply(2)
 	assert.String(t, "manual", s.LastApply().TriggerSource)
 }
@@ -94,9 +96,7 @@ func TestTriggerCallsApply(t *testing.T) {
 func TestTriggerWithParameters(t *testing.T) {
 	s := runner_tester.New(t)
 	s.WaitForApply(1)
-	s.Trigger(
-		runner.TriggerRequest{Parameters: map[string]any{"target": "specific"}},
-	)
+	s.Trigger(trigger.Request{Parameters: map[string]any{"target": "specific"}})
 	s.WaitForApply(2)
 	assert.String(t, "specific", s.LastApply().Parameters["target"].(string))
 }
@@ -104,8 +104,8 @@ func TestTriggerWithParameters(t *testing.T) {
 func TestSynchronousTrigger(t *testing.T) {
 	s := runner_tester.New(t)
 	s.WaitForApply(1)
-	response := make(chan *runner.TriggerResult, 1)
-	s.Trigger(runner.TriggerRequest{Response: response})
+	response := make(chan *trigger.Result, 1)
+	s.Trigger(trigger.Request{Response: response})
 	result := <-response
 	assert.Nil(t, result.Error)
 	assert.NotNil(t, result.Value)

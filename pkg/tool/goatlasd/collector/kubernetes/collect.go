@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/gazetteer"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/model/placement"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/types/kubernetes_key"
 	"time"
 )
 
@@ -13,12 +14,16 @@ func (c *Collector) Collect(
 	s *gazetteer.Gazetteer,
 ) ([]*placement.Placement, error) {
 	var result []*placement.Placement
-	seen := map[key]bool{}
+	seen := map[kubernetes_key.Key]bool{}
 	now := time.Now()
 
 	for _, p := range c.kubernetes.Pods(nil) {
 		node := p.Raw.Spec.NodeName
-		k := key{scope: p.Raw.Namespace, name: ApplicationName(p), node: node}
+		k := kubernetes_key.Key{
+			Scope: p.Raw.Namespace,
+			Name:  ApplicationName(p),
+			Node:  node,
+		}
 
 		if seen[k] {
 			continue
@@ -31,8 +36,8 @@ func (c *Collector) Collect(
 			placement.New(
 				constant.SourceKubernetes,
 				constant.KindService,
-				k.scope,
-				k.name,
+				k.Scope,
+				k.Name,
 				where,
 				now,
 			),

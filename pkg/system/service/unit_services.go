@@ -1,8 +1,11 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/system/constant"
+import (
+	"github.com/funtimecoding/soil/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/system/types/service"
+)
 
-func (c *Client) unitServices() []*Service {
+func (c *Client) unitServices() []*service.Service {
 	units := ParseUnits(
 		output(
 			constant.Systemctl,
@@ -40,12 +43,12 @@ func (c *Client) unitServices() []*Service {
 		),
 	)
 	manual := ParseManual(output(constant.AptMark, constant.AptMarkManual))
-	var result []*Service
+	var result []*service.Service
 
 	for unit, state := range units {
 		result = append(
 			result,
-			NewUnitService(
+			service.NewUnit(
 				unit,
 				state,
 				path[unit],

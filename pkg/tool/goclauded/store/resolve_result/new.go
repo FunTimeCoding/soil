@@ -1,5 +1,7 @@
 package resolve_result
 
-func New(matches []*Match) *Result {
+import "github.com/funtimecoding/soil/pkg/tool/goclauded/types/match"
+
+func New(matches []*match.Match) *Result {
 	return &Result{Matches: matches}
 }

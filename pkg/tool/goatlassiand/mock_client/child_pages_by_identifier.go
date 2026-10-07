@@ -8,12 +8,12 @@ func (c *Client) ChildPagesByIdentifier(
 	var result []*page.Page
 
 	for _, e := range c.pages {
-		if e.deleted || e.page == nil {
+		if e.Deleted || e.Page == nil {
 			continue
 		}
 
-		if e.page.ParentIdentifier == identifier {
-			result = append(result, toPage(e.page))
+		if e.Page.ParentIdentifier == identifier {
+			result = append(result, toPage(e.Page))
 		}
 	}
 

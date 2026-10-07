@@ -1,6 +1,8 @@
 package utilization
 
-func ReadCredential() *Credential {
+import "github.com/funtimecoding/soil/pkg/generative/anthropic/utilization/credential"
+
+func ReadCredential() *credential.Credential {
 	if !Supported() {
 		return nil
 	}

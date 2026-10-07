@@ -1,8 +1,8 @@
 package relocation
 
-import "github.com/funtimecoding/soil/pkg/source/resolve"
+import "github.com/funtimecoding/soil/pkg/source/types/resolve_reference"
 
 type QualifiedReference struct {
-	Reference resolve.Reference
+	Reference resolve_reference.Reference
 	NewName   string
 }

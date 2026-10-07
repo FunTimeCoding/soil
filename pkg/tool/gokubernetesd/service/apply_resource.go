@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/apply_result"
-	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/query"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/request"
 	"k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"sigs.k8s.io/yaml"
@@ -14,7 +14,7 @@ import (
 func (s *Service) ApplyResource(
 	x context.Context,
 	clusterName string,
-	q query.Apply,
+	q request.Apply,
 ) (*apply_result.Result, error) {
 	c, e := s.ClusterByName(clusterName)
 

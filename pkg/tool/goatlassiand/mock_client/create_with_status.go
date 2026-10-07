@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/basic/response"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/page"
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/types/page_entry"
 )
 
 func (c *Client) createWithStatus(
@@ -32,7 +33,7 @@ func (c *Client) createWithStatus(
 	r.Links = response.Links{
 		WebUI: fmt.Sprintf("/spaces/ops/pages/%s/%s", identifier, title),
 	}
-	c.pages[identifier] = &entry{page: r}
+	c.pages[identifier] = page_entry.New(r)
 
 	return toPage(r), nil
 }

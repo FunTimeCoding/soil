@@ -5,11 +5,11 @@ import "github.com/funtimecoding/soil/pkg/errors/not_found"
 func (c *Client) Delete(pageIdentifier string) error {
 	e, okay := c.pages[pageIdentifier]
 
-	if !okay || e.deleted || e.page == nil || e.page.Status != "current" {
+	if !okay || e.Deleted || e.Page == nil || e.Page.Status != "current" {
 		return not_found.New("page", pageIdentifier)
 	}
 
-	e.deleted = true
+	e.Deleted = true
 
 	return nil
 }

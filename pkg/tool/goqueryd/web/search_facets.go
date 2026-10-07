@@ -1,7 +1,7 @@
 package web
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/result"
 	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -9,7 +9,7 @@ import (
 )
 
 func searchFacets(
-	facets []search.Facet,
+	facets []result.Facet,
 	query string,
 	collection string,
 	activeMetadata map[string]string,

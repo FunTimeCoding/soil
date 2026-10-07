@@ -2,10 +2,10 @@ package cross_service_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/connector"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/target"
 )
 
-func (o *Tester) Target(identifier string) *connector.Target {
+func (o *Tester) Target(identifier string) *target.Target {
 	o.t.Helper()
 	targets, e := o.Coordinator.RecentSessions(50)
 	assert.FatalOnError(o.t, e)

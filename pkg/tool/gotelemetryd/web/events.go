@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/types/query_option"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -27,7 +27,7 @@ func (s *Server) events(
 
 	limit := 50
 	offset := (page - 1) * limit
-	o := store.NewQueryOption()
+	o := query_option.New()
 	o.Tool = r.URL.Query().Get(constant.Tool)
 	o.Surface = r.URL.Query().Get(constant.Surface)
 	o.Actor = r.URL.Query().Get(constant.Actor)

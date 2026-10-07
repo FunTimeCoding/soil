@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/brave"
 	"github.com/funtimecoding/soil/pkg/brave/bookmark/node"
 	"github.com/funtimecoding/soil/pkg/brave/constant"
+	"github.com/funtimecoding/soil/pkg/brave/types/directory_group"
 	"github.com/funtimecoding/soil/pkg/console"
 )
 
@@ -34,7 +35,7 @@ func BookmarkNode() {
 		}
 	}
 
-	for _, g := range node.GroupByDirectory(d) {
+	for _, g := range directory_group.GroupByDirectory(d) {
 		console.Format("Group %s (%d)\n", g.Directory.Name, len(g.Links))
 	}
 }

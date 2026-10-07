@@ -2,15 +2,15 @@ package store
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/result"
 )
 
 func fuse(
 	exclude []string,
-	lists ...[]search.Result,
-) ([]search.Ranked, map[string]string) {
+	lists ...[]result.Search,
+) ([]result.Ranked, map[string]string) {
 	scores := map[string]float64{}
-	byPath := map[string]search.Result{}
+	byPath := map[string]result.Search{}
 	bodies := map[string]string{}
 
 	for _, results := range lists {
@@ -37,7 +37,7 @@ func fuse(
 		excluded[p] = true
 	}
 
-	result := make([]search.Ranked, 0, len(scores))
+	s := make([]result.Ranked, 0, len(scores))
 
 	for path, score := range scores {
 		r := byPath[path]
@@ -48,10 +48,10 @@ func fuse(
 
 		r.Score = score
 		r.Source = "hybrid"
-		result = append(result, search.Ranked{Result: r, Score: score})
+		s = append(s, result.Ranked{Search: r, Score: score})
 	}
 
-	sortByScore(result)
+	sortByScore(s)
 
-	return result, bodies
+	return s, bodies
 }

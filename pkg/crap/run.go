@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/crap/constant"
 	"github.com/funtimecoding/soil/pkg/crap/coverage"
 	"github.com/funtimecoding/soil/pkg/crap/index"
-	"github.com/funtimecoding/soil/pkg/crap/mutation"
+	"github.com/funtimecoding/soil/pkg/crap/mutation_report"
 	"github.com/funtimecoding/soil/pkg/crap/option"
 	"github.com/funtimecoding/soil/pkg/crap/score"
 	"github.com/funtimecoding/soil/pkg/notation"
@@ -27,7 +27,7 @@ func Run(o *option.Report) int {
 	)
 
 	if o.Mutation != "" {
-		Annotate(r, mutation.Load(o.Mutation))
+		Annotate(r, mutation_report.Load(o.Mutation))
 	}
 
 	var b *baseline.Baseline

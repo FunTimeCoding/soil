@@ -1,19 +1,21 @@
 package trie
 
+import "github.com/funtimecoding/soil/pkg/generative/types/trie_node"
+
 func (t *Trie) Insert(token string) {
-	node := t.root
+	n := t.root
 
 	for i := 0; i < len(token); i++ {
 		b := token[i]
-		child, found := node.children[b]
+		child, found := n.Children[b]
 
 		if !found {
-			child = &Node{children: map[byte]*Node{}}
-			node.children[b] = child
+			child = trie_node.New()
+			n.Children[b] = child
 		}
 
-		node = child
+		n = child
 	}
 
-	node.terminal = true
+	n.Terminal = true
 }

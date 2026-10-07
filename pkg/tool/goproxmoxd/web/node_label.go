@@ -2,10 +2,10 @@ package web
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/floor"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/floor/node"
 )
 
-func nodeLabel(n floor.Node) string {
+func nodeLabel(n node.Node) string {
 	if n.Hypervisor == n.Name {
 		return n.Name
 	}

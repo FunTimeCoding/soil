@@ -25,7 +25,7 @@ func (m *Model) View() tea.View {
 			m.height,
 			lipgloss.Center,
 			lipgloss.Center,
-			constant.Modal.Render(m.modal.content),
+			constant.Modal.Render(m.modal.Content),
 		)
 	}
 

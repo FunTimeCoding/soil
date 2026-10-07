@@ -3,11 +3,12 @@ package package_server
 import (
 	"github.com/funtimecoding/soil/pkg/alpine/constant"
 	"github.com/funtimecoding/soil/pkg/alpine/index"
+	"github.com/funtimecoding/soil/pkg/alpine/types/listing"
 	"path/filepath"
 	"strings"
 )
 
-func Indexes(root string) ([]*Listing, error) {
+func Indexes(root string) ([]*listing.Listing, error) {
 	paths, e := filepath.Glob(
 		filepath.Join(root, "*", "*", "*", constant.IndexArchive),
 	)
@@ -16,7 +17,7 @@ func Indexes(root string) ([]*Listing, error) {
 		return nil, e
 	}
 
-	var result []*Listing
+	var result []*listing.Listing
 
 	for _, path := range paths {
 		entries, f := index.Read(path)
@@ -34,13 +35,7 @@ func Indexes(root string) ([]*Listing, error) {
 		parts := strings.Split(relative, string(filepath.Separator))
 		result = append(
 			result,
-			&Listing{
-				Version:      parts[0],
-				Repository:   parts[1],
-				Architecture: parts[2],
-				Packages:     entries,
-			},
-		)
+			listing.New(parts[0], parts[1], parts[2], entries))
 	}
 
 	return result, nil

@@ -7,11 +7,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/gitlab/pipeline"
 	"github.com/funtimecoding/soil/pkg/gitlab/project"
 	"github.com/funtimecoding/soil/pkg/gitlab/tag"
+	"github.com/funtimecoding/soil/pkg/gitlab/types/recorded_commit"
 )
 
 type Client struct {
 	files             map[string]*file.File
-	commits           []*RecordedCommit
+	commits           []*recorded_commit.Commit
 	branches          []*branch.Branch
 	tags              []*tag.Tag
 	projects          []*project.Project

@@ -1,15 +1,18 @@
 package store
 
-import "github.com/funtimecoding/soil/pkg/errors"
+import (
+	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/store/record"
+)
 
-func (s *Store) RaidPlayerStats(raidIdentifier int) []RaidPlayerRow {
-	var rows []RaidPlayerRow
+func (s *Store) RaidPlayerStats(raidIdentifier int) []record.RaidPlayer {
+	var rows []record.RaidPlayer
 	errors.PanicOnError(
 		s.mapper.
-			Table("player_fight_stats").
+			Table("player_fight_statistics").
 			Select(
-				"player_fight_stats.account",
-				"max(player_fight_stats.name) as name",
+				"player_fight_statistics.account",
+				"max(player_fight_statistics.name) as name",
 				"profession",
 				"count(*) as fights",
 				"sum(damage) as damage",
@@ -23,10 +26,10 @@ func (s *Store) RaidPlayerStats(raidIdentifier int) []RaidPlayerRow {
 				"avg(dist_to_com) as dist_to_com",
 			).
 			Joins(
-				"JOIN fights ON fights.filename = player_fight_stats.filename",
+				"JOIN fights ON fights.filename = player_fight_statistics.filename",
 			).
 			Where("fights.raid_id = ?", raidIdentifier).
-			Group("player_fight_stats.account, profession").
+			Group("player_fight_statistics.account, profession").
 			Order("sum(damage) DESC").
 			Find(&rows).Error,
 	)

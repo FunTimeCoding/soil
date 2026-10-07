@@ -4,17 +4,18 @@ import (
 	"cmp"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/constant"
+	"github.com/funtimecoding/soil/pkg/lint/types/unchecked"
 	"maps"
 	"slices"
 )
 
-func CensusLines(entries []*Unchecked) []string {
+func CensusLines(entries []*unchecked.Unchecked) []string {
 	sorted := slices.Clone(entries)
 	slices.SortFunc(
 		sorted,
 		func(
-			x *Unchecked,
-			y *Unchecked,
+			x *unchecked.Unchecked,
+			y *unchecked.Unchecked,
 		) int {
 			return cmp.Or(
 				cmp.Compare(x.Reason, y.Reason),
