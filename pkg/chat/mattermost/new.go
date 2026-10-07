@@ -46,7 +46,7 @@ func New(o ...Option) *Client {
 		}
 	}
 
-	result.RefreshSocket()
+	result.MustRefreshSocket()
 
 	return result
 }

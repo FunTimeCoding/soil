@@ -1,3 +1,2 @@
 ---
-pre-push:
-- run: task pre-push
+pre-push: [{run: 'task pre-push'}]

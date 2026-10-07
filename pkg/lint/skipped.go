@@ -1,33 +1,10 @@
 package lint
 
-import (
-	"fmt"
-	"github.com/funtimecoding/soil/pkg/lint/option"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
-	"github.com/funtimecoding/soil/pkg/system"
-	"path/filepath"
-	"strings"
-)
+import "github.com/funtimecoding/soil/pkg/lint/option"
 
 func Skipped(
 	o *option.Lint,
 	path string,
 ) bool {
-	if len(o.Skips) == 0 {
-		return false
-	}
-
-	for _, p := range o.Skips {
-		if strings.Contains(p, constant.Dot) &&
-			!strings.Contains(p, constant.Slash) {
-			if system.Match(p, filepath.Base(path)) {
-				return true
-			}
-		} else if strings.HasPrefix(path, p) ||
-			strings.Contains(path, fmt.Sprintf("/%s", p)) {
-			return true
-		}
-	}
-
-	return false
+	return SkippedBy(o.Skips, path)
 }

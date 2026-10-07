@@ -10,6 +10,12 @@ func (t *Tester) holdSocket(
 	w http.ResponseWriter,
 	q *http.Request,
 ) {
+	if t.refused() {
+		w.WriteHeader(http.StatusServiceUnavailable)
+
+		return
+	}
+
 	u := websocket.Upgrader{}
 	c, e := u.Upgrade(w, q, nil)
 

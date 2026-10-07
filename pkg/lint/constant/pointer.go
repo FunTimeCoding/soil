@@ -37,7 +37,7 @@ const (
 
 	BaseKey = "base"
 
-	ConfigurationEnvironment = "GOLINT_CONFIGURATION"
+	ConfigurationPath = "strata/tool/golint.yaml"
 
 	PackageDirectory      = "pkg"
 	RestSpecificationPath = "generated/server/openapi.yaml"

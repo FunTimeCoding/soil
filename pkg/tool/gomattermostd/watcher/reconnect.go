@@ -11,14 +11,21 @@ func (w *Watcher) reconnect(reason string) bool {
 		fmt.Errorf("websocket %s, reconnecting", reason),
 	)
 
-	select {
-	case <-w.done:
-		return false
-	case <-time.After(constant.ReconnectDelay):
+	for {
+		select {
+		case <-w.done:
+			return false
+		case <-time.After(constant.ReconnectDelay):
+		}
+
+		e := w.client.RefreshSocket()
+
+		if e == nil {
+			w.client.WebSocket().Listen()
+
+			return true
+		}
+
+		w.logger.Plain("websocket refresh failed: %v", e)
 	}
-
-	w.client.RefreshSocket()
-	w.client.WebSocket().Listen()
-
-	return true
 }

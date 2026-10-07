@@ -45,7 +45,7 @@ func Check(
 		markdownFiles(repo.Files, o),
 		[]Checker{
 			Pointers(resolver(repo, o), r.AddUnchecked),
-			Reflow,
+			Unless(o.ReflowSkips, Reflow),
 			InterruptingList,
 		},
 		o,

@@ -164,6 +164,23 @@ func TestPostsSinceIncludesRepliesAndAttachmentOnlyPosts(t *testing.T) {
 	assert.Any(t, []string{"golf"}, []string(posts[2].Raw.FileIds))
 }
 
+func TestRefreshSocketReturnsTheDialError(t *testing.T) {
+	r := mattermost_client_tester.New(t, func(_ *http.ServeMux) {})
+	before := r.Client.WebSocket()
+	defer before.Close()
+	r.Refuse(1)
+	e := r.Client.RefreshSocket()
+	assert.NotNil(t, e)
+	assert.StringContains(t, "bad handshake", e.Error())
+	assert.True(t, before == r.Client.WebSocket())
+	assert.Integer(t, 1, r.Accepted())
+	assert.Nil(t, r.Client.RefreshSocket())
+	after := r.Client.WebSocket()
+	defer after.Close()
+	assert.True(t, before != after)
+	assert.Integer(t, 2, r.Accepted())
+}
+
 func TestSocketDeliversPushedEvent(t *testing.T) {
 	r := mattermost_client_tester.New(t, func(_ *http.ServeMux) {})
 	w := r.Client.WebSocket()

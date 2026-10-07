@@ -5,10 +5,8 @@ import (
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/lint"
-	lintConstant "github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/option"
 	"github.com/funtimecoding/soil/pkg/system"
-	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/golint/constant"
 )
 
@@ -33,11 +31,6 @@ func Main() {
 		"",
 		"Repository root to lint, discovered upward from the working directory when empty",
 	)
-	a.String(
-		argumentConstant.Configuration,
-		environment.Fallback(lintConstant.ConfigurationEnvironment, ""),
-		"Repository vocabulary configuration path (private registries)",
-	)
 	a.Boolean(argumentConstant.Verbose, false, "Verbose output")
 	a.Parse()
 	root, work := lint.Root(a.GetString(argumentConstant.Root))
@@ -52,7 +45,6 @@ func Main() {
 		a.GetBoolean(argumentConstant.Verbose),
 	)
 	o.Scopes = scopes
-	o.Configuration = a.GetString(argumentConstant.Configuration)
 	o.Census = a.GetBoolean(argumentConstant.Census)
 	o.Fix = a.GetBoolean(argumentConstant.Fix)
 	o.Summary = a.GetBoolean(argumentConstant.Summary)

@@ -12,6 +12,7 @@ type Tester struct {
 	t          *testing.T
 	connection *websocket.Conn
 	accepted   int
+	refusals   int
 	ready      chan struct{}
 	once       sync.Once
 	mutex      sync.Mutex

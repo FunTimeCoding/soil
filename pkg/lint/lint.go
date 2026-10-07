@@ -8,7 +8,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/system"
 	"os"
-	"path/filepath"
 )
 
 func Lint(
@@ -17,13 +16,9 @@ func Lint(
 	o *option.Lint,
 ) {
 	repo, empty := Walk(root, o)
-	configuration := o.Configuration
-
-	if configuration != "" && !filepath.IsAbs(configuration) {
-		configuration = repo.Absolute(configuration)
-	}
-
-	o.Registries = loadConfiguration(configuration).Registries
+	c := loadConfiguration(repo.Root)
+	o.Registries = c.Registries
+	o.ReflowSkips = c.Reflow.Skip
 	r := output.NewResultsWithDirectory(repo.Root)
 	Header(name, repo.Root, scopeDetail(o, repo.Files))
 

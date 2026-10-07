@@ -13,7 +13,7 @@ func Reflow(
 	source := []byte(content)
 	body := front(source)
 	document := parse(source)
-	mask := literal(source, document)
+	mask := atomic(source, document)
 	var patches []*patch
 	e := ast.Walk(
 		document,

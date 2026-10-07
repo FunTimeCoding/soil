@@ -207,6 +207,61 @@ func TestACodeSpanIsNeverSplitAcrossLines(t *testing.T) {
 	)
 }
 
+func TestALinkIsNeverSplitAcrossLines(t *testing.T) {
+	assert.String(
+		t,
+		"one two three four five six\n[seven eight](https://e.x/a) nine\n",
+		rewrapped(
+			t,
+			"one two three four five six [seven eight](https://e.x/a) nine\n",
+		),
+	)
+}
+
+func TestALinkLongerThanTheWidthStandsAlone(t *testing.T) {
+	assert.String(
+		t,
+		"short\n[a link text](https://example.net/a/path/longer/than/forty)\nafter\n",
+		rewrapped(
+			t,
+			"short [a link text](https://example.net/a/path/longer/than/forty) after\n",
+		),
+	)
+}
+
+func TestALinkAlreadySplitIsRejoined(t *testing.T) {
+	assert.String(
+		t,
+		"one [seven eight](https://e.x/a) two\nthree four five six seven eight nine ten\n",
+		rewrapped(
+			t,
+			"one [seven\neight](https://e.x/a) two three four five six seven eight nine ten\n",
+		),
+	)
+}
+
+func TestALinkWithATitleIsOneUnit(t *testing.T) {
+	assert.String(
+		t,
+		"one two three four five six\n[seven](https://e.x/a \"t u\") nine\n",
+		rewrapped(
+			t,
+			"one two three four five six [seven](https://e.x/a \"t u\") nine\n",
+		),
+	)
+}
+
+func TestAnImageIsNeverSplitAcrossLines(t *testing.T) {
+	assert.String(
+		t,
+		"one two three four five six\n![seven eight](https://e.x/a) nine\n",
+		rewrapped(
+			t,
+			"one two three four five six ![seven eight](https://e.x/a) nine\n",
+		),
+	)
+}
+
 func TestACodeSpanAlreadySplitIsRejoined(t *testing.T) {
 	assert.String(
 		t,

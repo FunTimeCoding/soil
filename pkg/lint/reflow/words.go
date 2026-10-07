@@ -6,5 +6,5 @@ func words(
 	source []byte,
 	document ast.Node,
 ) []string {
-	return units(source, literal(source, document), 0, len(source))
+	return units(source, atomic(source, document), 0, len(source))
 }
