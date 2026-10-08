@@ -12,7 +12,12 @@ func (c *Client) CloseTab(identifier string) error {
 		return e
 	}
 
-	return target.CloseTarget(target.ID(identifier)).Do(
-		cdp.WithExecutor(c.context, b),
+	_, e = cdp.Call(
+		c.context,
+		b,
+		target.CloseTarget,
+		target.CloseTargetParams{TargetID: target.ID(identifier)},
 	)
+
+	return e
 }

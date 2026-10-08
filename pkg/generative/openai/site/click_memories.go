@@ -3,11 +3,11 @@ package site
 import "github.com/funtimecoding/soil/pkg/generative/constant"
 
 func (s *Site) clickMemories() {
-	n := s.session.Select(constant.OpenAIMemoriesSelector, 0)
+	n, okay := s.session.MustFindNode(constant.OpenAIMemoriesSelector, 0)
 
-	if n == nil {
+	if !okay {
 		return
 	}
 
-	s.session.ClickSearch(n.FullXPath())
+	s.session.MustClickSearch(n.FullXPath())
 }

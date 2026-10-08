@@ -36,7 +36,7 @@ func Pointers(
 		if f, found := front_matter.Extract(content); found {
 			skip = f.Lines
 			baseLine = f.Line(constant.BaseKey)
-			var d declaration
+			var d Declaration
 
 			if f.Decode(&d) == nil {
 				for _, value := range declaredValues(d.Base) {

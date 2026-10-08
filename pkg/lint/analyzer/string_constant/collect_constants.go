@@ -1,7 +1,7 @@
 package string_constant
 
-func collectConstants(packageDirectory string) map[string][]knownConstant {
-	result := make(map[string][]knownConstant)
+func collectConstants(packageDirectory string) map[string][]KnownConstant {
+	result := make(map[string][]KnownConstant)
 	collectFromConstantFile(result, packageDirectory, "")
 	collectFromConstantDirectory(result, packageDirectory, "constant")
 	collectFromParents(result, packageDirectory)

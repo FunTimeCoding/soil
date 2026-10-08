@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context/argument"
+	mattermostResponse "github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context/response"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mattermost/mattermost/server/public/model"
 	"sort"
@@ -75,14 +76,7 @@ func (s *Server) MyChannels(
 		channels = channels[:limit]
 	}
 
-	type row struct {
-		Identifier  string `json:"identifier"`
-		Name        string `json:"name"`
-		DisplayName string `json:"display_name"`
-		Type        string `json:"type"`
-		LastPostAt  string `json:"last_post_at"`
-	}
-	rows := make([]row, len(channels))
+	rows := make([]*mattermostResponse.JoinedChannel, len(channels))
 
 	for i, c := range channels {
 		typeName := ""
@@ -99,13 +93,13 @@ func (s *Server) MyChannels(
 		}
 
 		displayName := s.channelDisplayName(c)
-		rows[i] = row{
-			Identifier:  c.Id,
-			Name:        c.Name,
-			DisplayName: displayName,
-			Type:        typeName,
-			LastPostAt:  formatMilli(c.LastPostAt),
-		}
+		rows[i] = mattermostResponse.NewJoinedChannel(
+			c.Id,
+			c.Name,
+			displayName,
+			typeName,
+			formatMilli(c.LastPostAt),
+		)
 	}
 
 	return response.SuccessAny(rows)

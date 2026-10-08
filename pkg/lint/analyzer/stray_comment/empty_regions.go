@@ -2,8 +2,8 @@ package stray_comment
 
 import "go/ast"
 
-func emptyRegions(file *ast.File) []region {
-	var result []region
+func emptyRegions(file *ast.File) []Region {
+	var result []Region
 	ast.Inspect(
 		file,
 		func(n ast.Node) bool {
@@ -12,14 +12,14 @@ func emptyRegions(file *ast.File) []region {
 				if len(t.List) == 0 {
 					result = append(
 						result,
-						region{From: t.Lbrace, To: t.Rbrace},
+						Region{From: t.Lbrace, To: t.Rbrace},
 					)
 				}
 			case *ast.InterfaceType:
 				if len(t.Methods.List) == 0 {
 					result = append(
 						result,
-						region{From: t.Methods.Opening, To: t.Methods.Closing},
+						Region{From: t.Methods.Opening, To: t.Methods.Closing},
 					)
 				}
 			case *ast.SwitchStmt:

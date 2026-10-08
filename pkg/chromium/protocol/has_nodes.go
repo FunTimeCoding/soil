@@ -1,16 +1,13 @@
 package protocol
 
-import (
-	"github.com/chromedp/cdproto/cdp"
-	"github.com/chromedp/chromedp"
-)
+import "github.com/chromedp/chromedp"
 
-func (p *Protocol) HasNodes(s string) bool {
-	var nodes []*cdp.Node
-	p.client.RunContext(
-		p.context,
-		chromedp.Nodes(s, &nodes, chromedp.AtLeast(0)),
-	)
+func (p *Protocol) HasNodes(s string) (bool, error) {
+	nodes, e := run(p, chromedp.Nodes(s, chromedp.AtLeast(0)))
 
-	return len(nodes) > 0
+	if e != nil {
+		return false, e
+	}
+
+	return len(nodes) > 0, nil
 }

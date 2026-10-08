@@ -8,7 +8,7 @@ import (
 
 func (c *Client) RunContext(
 	o context.Context,
-	a ...chromedp.Action,
+	steps ...chromedp.Action[chromedp.Void],
 ) {
-	errors.PanicOnError(chromedp.Run(o, a...))
+	errors.PanicOnError(chromedp.Do(o, steps...))
 }

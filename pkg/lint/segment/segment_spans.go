@@ -1,9 +1,12 @@
 package segment
 
-import "strings"
+import (
+	"github.com/funtimecoding/soil/pkg/lint/types/segment_span"
+	"strings"
+)
 
-func segmentSpans(name string) []segmentSpan {
-	var result []segmentSpan
+func segmentSpans(name string) []*segment_span.Span {
+	var result []*segment_span.Span
 	offset := 0
 
 	for partIndex, part := range strings.Split(name, "_") {
@@ -21,11 +24,11 @@ func segmentSpans(name string) []segmentSpan {
 
 			result = append(
 				result,
-				segmentSpan{
-					start: offset + len(string(r[:start])),
-					end:   offset + len(string(r[:i])),
-					lower: strings.ToLower(string(r[start:i])),
-				},
+				segment_span.New(
+					offset+len(string(r[:start])),
+					offset+len(string(r[:i])),
+					strings.ToLower(string(r[start:i])),
+				),
 			)
 			start = i
 		}
@@ -33,11 +36,11 @@ func segmentSpans(name string) []segmentSpan {
 		if start < len(r) {
 			result = append(
 				result,
-				segmentSpan{
-					start: offset + len(string(r[:start])),
-					end:   offset + len(part),
-					lower: strings.ToLower(string(r[start:])),
-				},
+				segment_span.New(
+					offset+len(string(r[:start])),
+					offset+len(part),
+					strings.ToLower(string(r[start:])),
+				),
 			)
 		}
 

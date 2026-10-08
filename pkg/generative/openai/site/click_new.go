@@ -6,12 +6,15 @@ import (
 )
 
 func (s *Site) clickNew() {
-	n := s.session.Select(constant.OpenAINewSelector, constant.OpenAINewIndex)
+	n, okay := s.session.MustFindNode(
+		constant.OpenAINewSelector,
+		constant.OpenAINewIndex,
+	)
 
-	if n == nil {
+	if !okay {
 		return
 	}
 
-	s.session.ClickSearch(n.FullXPath())
+	s.session.MustClickSearch(n.FullXPath())
 	time.Sleep(1 * time.Second)
 }

@@ -10,6 +10,7 @@ func (s *Server) ServeLocal() {
 	if e := server.ServeStdio(
 		s.server,
 		server.WithErrorLogger(log.NewGenericLogger()),
+		server.WithStdioContextFunc(LegacyProtocol),
 	); !errors.Canceled(e) {
 		errors.PanicOnError(e)
 	}

@@ -1,3 +1,3 @@
 package unit
 
-type fixedEmbedder struct{}
+type FixedEmbedder struct{}

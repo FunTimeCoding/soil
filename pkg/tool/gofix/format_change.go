@@ -1,6 +1,6 @@
 package gofix
 
-type formatChange struct {
+type FormatChange struct {
 	Kind    string
 	Message string
 	Offset  int

@@ -1,5 +1,5 @@
 package guard
 
-type toolInput struct {
+type ToolInput struct {
 	Command string `json:"command"`
 }

@@ -9,7 +9,7 @@ import (
 func collectFromVariableDeclaration(
 	y *types.Info,
 	s *ast.DeclStmt,
-	result *[]typedVariable,
+	result *[]TypedVariable,
 ) {
 	g, okay := s.Decl.(*ast.GenDecl)
 
@@ -37,7 +37,7 @@ func collectFromVariableDeclaration(
 
 			*result = append(
 				*result,
-				typedVariable{
+				TypedVariable{
 					ident:       name,
 					typ:         o.Type(),
 					precedence:  typePrecedence(o.Type()),

@@ -17,8 +17,8 @@ func findVariableNamingEdits(
 	fileSet *token.FileSet,
 	all []*packages.Package,
 	r *output.Results,
-) []edit {
-	var result []edit
+) []Edit {
+	var result []Edit
 	seen := make(map[token.Pos]bool)
 
 	for _, p := range all {
@@ -69,7 +69,7 @@ func findVariableNamingEdits(
 						for _, e := range references {
 							result = append(
 								result,
-								edit{
+								Edit{
 									position: e.Ident.Pos(),
 									end:      e.Ident.End(),
 									newText:  rename.NewName,

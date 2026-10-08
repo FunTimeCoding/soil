@@ -1,9 +1,9 @@
 package unit
 
 import (
+	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/check/silence/matcher"
-	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/silence"
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus/unit/silence_tester"
 	"github.com/prometheus/alertmanager/api/v2/models"
@@ -11,350 +11,271 @@ import (
 	"time"
 )
 
-func TestMatchesWithExactMatcher(t *testing.T) {
-	now := time.Now()
-	start := now.Add(-1 * time.Hour)
-	end := now.Add(1 * time.Hour)
-	tests := []silenceMatcherCase{
-		{
-			name:         "exact match with existing label",
-			matcherName:  "job",
-			matcherValue: "test",
-			labels: models.LabelSet{
-				"job":       "test",
-				"alertname": "HighCPU",
-			},
-			expectedMatch: true,
-			description:   "Should match when label exists and value equals",
-		},
-		{
-			name:         "exact match with different value",
-			matcherName:  "job",
-			matcherValue: "test",
-			labels: models.LabelSet{
-				"job":       "production",
-				"alertname": "HighCPU",
-			},
-			expectedMatch: false,
-			description:   "Should not match when label exists but value differs",
-		},
-		{
-			name:          "exact match with missing label",
-			matcherName:   "job",
-			matcherValue:  "test",
-			labels:        models.LabelSet{"alertname": "HighCPU"},
-			expectedMatch: false,
-			description:   "Should not match when label is missing (treated as empty string)",
-		},
-		{
-			name:          "exact match empty string with missing label",
-			matcherName:   "job",
-			matcherValue:  "",
-			labels:        models.LabelSet{"alertname": "HighCPU"},
-			expectedMatch: true,
-			description:   "Should match when matcher is empty and label is missing",
-		},
-		{
-			name:          "exact match empty string with existing empty label",
-			matcherName:   "job",
-			matcherValue:  "",
-			labels:        models.LabelSet{"job": "", "alertname": "HighCPU"},
-			expectedMatch: true,
-			description:   "Should match when both matcher and label are empty",
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(
-			tt.name,
-			func(t *testing.T) {
-				s := silence_tester.NewSilence(
-					&start,
-					&end,
-					tt.matcherName,
-					tt.matcherValue,
-					new(true),
-					new(false),
-				)
-				a := alert.NewFromLabels(tt.labels)
-				matched := len(matcher.Matches(s, []*alert.Alert{a}, now)) > 0
-
-				if matched != tt.expectedMatch {
-					t.Errorf(
-						"%s: expected match=%v, got match=%v",
-						tt.description,
-						tt.expectedMatch,
-						matched,
-					)
-				}
-			},
-		)
-	}
+func TestMatchesExactExistingLabel(t *testing.T) {
+	assert.True(
+		t,
+		matchesSingle(
+			"job",
+			"test",
+			true,
+			false,
+			models.LabelSet{"job": "test", "alertname": "HighCPU"},
+		),
+	)
 }
 
-func TestMatchesWithNotEqualMatcher(t *testing.T) {
-	now := time.Now()
-	start := now.Add(-1 * time.Hour)
-	end := now.Add(1 * time.Hour)
-	tests := []silenceMatcherCase{
-		{
-			name:         "not equal with matching value",
-			matcherName:  "job",
-			matcherValue: "test",
-			labels: models.LabelSet{
-				"job":       "test",
-				"alertname": "HighCPU",
-			},
-			expectedMatch: false,
-			description:   "Should not match when values are equal",
-		},
-		{
-			name:         "not equal with different value",
-			matcherName:  "job",
-			matcherValue: "test",
-			labels: models.LabelSet{
-				"job":       "production",
-				"alertname": "HighCPU",
-			},
-			expectedMatch: true,
-			description:   "Should match when values differ",
-		},
-		{
-			name:          "not equal with missing label",
-			matcherName:   "job",
-			matcherValue:  "test",
-			labels:        models.LabelSet{"alertname": "HighCPU"},
-			expectedMatch: true,
-			description:   "Should match when label is missing (empty != test)",
-		},
-		{
-			name:          "not equal empty string with missing label",
-			matcherName:   "job",
-			matcherValue:  "",
-			labels:        models.LabelSet{"alertname": "HighCPU"},
-			expectedMatch: false,
-			description:   "Should not match when both are empty",
-		},
-		{
-			name:         "not equal empty string with non-empty label",
-			matcherName:  "job",
-			matcherValue: "",
-			labels: models.LabelSet{
-				"job":       "test",
-				"alertname": "HighCPU",
-			},
-			expectedMatch: true,
-			description:   "Should match when label is non-empty and matcher is empty",
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(
-			tt.name,
-			func(t *testing.T) {
-				s := silence_tester.NewSilence(
-					&start,
-					&end,
-					tt.matcherName,
-					tt.matcherValue,
-					new(false),
-					new(false),
-				)
-				a := alert.NewFromLabels(tt.labels)
-				matched := len(matcher.Matches(s, []*alert.Alert{a}, now)) > 0
-
-				if matched != tt.expectedMatch {
-					t.Errorf(
-						"%s: expected match=%v, got match=%v",
-						tt.description,
-						tt.expectedMatch,
-						matched,
-					)
-				}
-			},
-		)
-	}
+func TestMatchesExactDifferentValue(t *testing.T) {
+	assert.False(
+		t,
+		matchesSingle(
+			"job",
+			"test",
+			true,
+			false,
+			models.LabelSet{"job": "production", "alertname": "HighCPU"},
+		),
+	)
 }
 
-func TestMatchesWithRegexMatcher(t *testing.T) {
-	now := time.Now()
-	start := now.Add(-1 * time.Hour)
-	end := now.Add(1 * time.Hour)
-	tests := []silenceMatcherCase{
-		{
-			name:         "regex match with matching value",
-			matcherName:  "job",
-			matcherValue: "test.*",
-			labels: models.LabelSet{
-				"job":       "test-job",
-				"alertname": "HighCPU",
-			},
-			expectedMatch: true,
-			description:   "Should match when regex matches",
-		},
-		{
-			name:         "regex match with non-matching value",
-			matcherName:  "job",
-			matcherValue: "test.*",
-			labels: models.LabelSet{
-				"job":       "production",
-				"alertname": "HighCPU",
-			},
-			expectedMatch: false,
-			description:   "Should not match when regex doesn't match",
-		},
-		{
-			name:          "regex match with missing label",
-			matcherName:   "job",
-			matcherValue:  "test.*",
-			labels:        models.LabelSet{"alertname": "HighCPU"},
-			expectedMatch: false,
-			description:   "Should not match when label is missing (empty doesn't match test.*)",
-		},
-		{
-			name:          "regex match empty string with missing label",
-			matcherName:   "job",
-			matcherValue:  "",
-			labels:        models.LabelSet{"alertname": "HighCPU"},
-			expectedMatch: true,
-			description:   "Should match when regex is empty and label is missing",
-		},
-		{
-			name:          "regex match wildcard with missing label",
-			matcherName:   "job",
-			matcherValue:  ".*",
-			labels:        models.LabelSet{"alertname": "HighCPU"},
-			expectedMatch: true,
-			description:   "Should match when regex is .* (matches empty string)",
-		},
-		{
-			name:         "regex match wildcard with existing label",
-			matcherName:  "job",
-			matcherValue: ".*",
-			labels: models.LabelSet{
-				"job":       "test",
-				"alertname": "HighCPU",
-			},
-			expectedMatch: true,
-			description:   "Should match when regex is .* (matches any string)",
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(
-			tt.name,
-			func(t *testing.T) {
-				equal := new(true)
-				regex := new(true)
-				matched := len(
-					matcher.Matches(
-						silence_tester.NewSilence(
-							&start,
-							&end,
-							tt.matcherName,
-							tt.matcherValue,
-							equal,
-							regex,
-						),
-						[]*alert.Alert{alert.NewFromLabels(tt.labels)},
-						now,
-					),
-				) > 0
-
-				if matched != tt.expectedMatch {
-					t.Errorf(
-						"%s: expected match=%v, got match=%v",
-						tt.description,
-						tt.expectedMatch,
-						matched,
-					)
-				}
-			},
-		)
-	}
+func TestMatchesExactMissingLabel(t *testing.T) {
+	assert.False(
+		t,
+		matchesSingle(
+			"job",
+			"test",
+			true,
+			false,
+			models.LabelSet{"alertname": "HighCPU"},
+		),
+	)
 }
 
-func TestMatchesWithNotRegexMatcher(t *testing.T) {
-	now := time.Now()
-	start := now.Add(-1 * time.Hour)
-	end := now.Add(1 * time.Hour)
-	tests := []silenceMatcherCase{
-		{
-			name:         "not regex with matching value",
-			matcherName:  "job",
-			matcherValue: "test.*",
-			labels: models.LabelSet{
-				"job":       "test-job",
-				"alertname": "HighCPU",
-			},
-			expectedMatch: false,
-			description:   "Should not match when regex matches",
-		},
-		{
-			name:         "not regex with non-matching value",
-			matcherName:  "job",
-			matcherValue: "test.*",
-			labels: models.LabelSet{
-				"job":       "production",
-				"alertname": "HighCPU",
-			},
-			expectedMatch: true,
-			description:   "Should match when regex doesn't match",
-		},
-		{
-			name:          "not regex with missing label",
-			matcherName:   "job",
-			matcherValue:  "test.*",
-			labels:        models.LabelSet{"alertname": "HighCPU"},
-			expectedMatch: true,
-			description:   "Should match when label is missing (empty doesn't match test.*)",
-		},
-		{
-			name:          "not regex wildcard with missing label",
-			matcherName:   "job",
-			matcherValue:  ".*",
-			labels:        models.LabelSet{"alertname": "HighCPU"},
-			expectedMatch: false,
-			description:   "Should not match when regex is .* (it matches empty string)",
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(
-			tt.name,
-			func(t *testing.T) {
-				s := silence_tester.NewSilence(
-					&start,
-					&end,
-					tt.matcherName,
-					tt.matcherValue,
-					new(false),
-					new(true),
-				)
-				a := alert.NewFromLabels(tt.labels)
-				matched := len(matcher.Matches(s, []*alert.Alert{a}, now)) > 0
-
-				if matched != tt.expectedMatch {
-					t.Errorf(
-						"%s: expected match=%v, got match=%v",
-						tt.description,
-						tt.expectedMatch,
-						matched,
-					)
-				}
-			},
-		)
-	}
+func TestMatchesExactEmptyMissingLabel(t *testing.T) {
+	assert.True(
+		t,
+		matchesSingle(
+			"job",
+			"",
+			true,
+			false,
+			models.LabelSet{"alertname": "HighCPU"},
+		),
+	)
 }
 
-func TestMatchesWithMultipleMatchers(t *testing.T) {
-	now := time.Now()
-	start := now.Add(-1 * time.Hour)
-	end := now.Add(1 * time.Hour)
-	tests := []silenceMatcherSetCase{
-		{
-			name: "all matchers match",
-			matchers: []*models.Matcher{
+func TestMatchesExactEmptyExistingEmptyLabel(t *testing.T) {
+	assert.True(
+		t,
+		matchesSingle(
+			"job",
+			"",
+			true,
+			false,
+			models.LabelSet{"job": "", "alertname": "HighCPU"},
+		),
+	)
+}
+
+func TestMatchesNotEqualMatchingValue(t *testing.T) {
+	assert.False(
+		t,
+		matchesSingle(
+			"job",
+			"test",
+			false,
+			false,
+			models.LabelSet{"job": "test", "alertname": "HighCPU"},
+		),
+	)
+}
+
+func TestMatchesNotEqualDifferentValue(t *testing.T) {
+	assert.True(
+		t,
+		matchesSingle(
+			"job",
+			"test",
+			false,
+			false,
+			models.LabelSet{"job": "production", "alertname": "HighCPU"},
+		),
+	)
+}
+
+func TestMatchesNotEqualMissingLabel(t *testing.T) {
+	assert.True(
+		t,
+		matchesSingle(
+			"job",
+			"test",
+			false,
+			false,
+			models.LabelSet{"alertname": "HighCPU"},
+		),
+	)
+}
+
+func TestMatchesNotEqualEmptyMissingLabel(t *testing.T) {
+	assert.False(
+		t,
+		matchesSingle(
+			"job",
+			"",
+			false,
+			false,
+			models.LabelSet{"alertname": "HighCPU"},
+		),
+	)
+}
+
+func TestMatchesNotEqualEmptyNonEmptyLabel(t *testing.T) {
+	assert.True(
+		t,
+		matchesSingle(
+			"job",
+			"",
+			false,
+			false,
+			models.LabelSet{"job": "test", "alertname": "HighCPU"},
+		),
+	)
+}
+
+func TestMatchesRegexMatchingValue(t *testing.T) {
+	assert.True(
+		t,
+		matchesSingle(
+			"job",
+			"test.*",
+			true,
+			true,
+			models.LabelSet{"job": "test-job", "alertname": "HighCPU"},
+		),
+	)
+}
+
+func TestMatchesRegexNonMatchingValue(t *testing.T) {
+	assert.False(
+		t,
+		matchesSingle(
+			"job",
+			"test.*",
+			true,
+			true,
+			models.LabelSet{"job": "production", "alertname": "HighCPU"},
+		),
+	)
+}
+
+func TestMatchesRegexMissingLabel(t *testing.T) {
+	assert.False(
+		t,
+		matchesSingle(
+			"job",
+			"test.*",
+			true,
+			true,
+			models.LabelSet{"alertname": "HighCPU"},
+		),
+	)
+}
+
+func TestMatchesRegexEmptyMissingLabel(t *testing.T) {
+	assert.True(
+		t,
+		matchesSingle(
+			"job",
+			"",
+			true,
+			true,
+			models.LabelSet{"alertname": "HighCPU"},
+		),
+	)
+}
+
+func TestMatchesRegexWildcardMissingLabel(t *testing.T) {
+	assert.True(
+		t,
+		matchesSingle(
+			"job",
+			".*",
+			true,
+			true,
+			models.LabelSet{"alertname": "HighCPU"},
+		),
+	)
+}
+
+func TestMatchesRegexWildcardExistingLabel(t *testing.T) {
+	assert.True(
+		t,
+		matchesSingle(
+			"job",
+			".*",
+			true,
+			true,
+			models.LabelSet{"job": "test", "alertname": "HighCPU"},
+		),
+	)
+}
+
+func TestMatchesNotRegexMatchingValue(t *testing.T) {
+	assert.False(
+		t,
+		matchesSingle(
+			"job",
+			"test.*",
+			false,
+			true,
+			models.LabelSet{"job": "test-job", "alertname": "HighCPU"},
+		),
+	)
+}
+
+func TestMatchesNotRegexNonMatchingValue(t *testing.T) {
+	assert.True(
+		t,
+		matchesSingle(
+			"job",
+			"test.*",
+			false,
+			true,
+			models.LabelSet{"job": "production", "alertname": "HighCPU"},
+		),
+	)
+}
+
+func TestMatchesNotRegexMissingLabel(t *testing.T) {
+	assert.True(
+		t,
+		matchesSingle(
+			"job",
+			"test.*",
+			false,
+			true,
+			models.LabelSet{"alertname": "HighCPU"},
+		),
+	)
+}
+
+func TestMatchesNotRegexWildcardMissingLabel(t *testing.T) {
+	assert.False(
+		t,
+		matchesSingle(
+			"job",
+			".*",
+			false,
+			true,
+			models.LabelSet{"alertname": "HighCPU"},
+		),
+	)
+}
+
+func TestMatchesSetAllMatch(t *testing.T) {
+	assert.True(
+		t,
+		matchesSet(
+			[]*models.Matcher{
 				silence_tester.NewMatcher("alertname", "HighCPU", true, false),
 				silence_tester.NewMatcher(
 					constant.SeverityLabel,
@@ -363,16 +284,16 @@ func TestMatchesWithMultipleMatchers(t *testing.T) {
 					false,
 				),
 			},
-			labels: models.LabelSet{
-				"alertname": "HighCPU",
-				"severity":  "critical",
-			},
-			expectedMatch: true,
-			description:   "Should match when all matchers match",
-		},
-		{
-			name: "one matcher doesn't match",
-			matchers: []*models.Matcher{
+			models.LabelSet{"alertname": "HighCPU", "severity": "critical"},
+		),
+	)
+}
+
+func TestMatchesSetOneMismatch(t *testing.T) {
+	assert.False(
+		t,
+		matchesSet(
+			[]*models.Matcher{
 				silence_tester.NewMatcher("alertname", "HighCPU", true, false),
 				silence_tester.NewMatcher(
 					constant.SeverityLabel,
@@ -381,127 +302,69 @@ func TestMatchesWithMultipleMatchers(t *testing.T) {
 					false,
 				),
 			},
-			labels: models.LabelSet{
-				"alertname": "HighCPU",
-				"severity":  "critical",
-			},
-			expectedMatch: false,
-			description:   "Should not match when any matcher doesn't match",
-		},
-		{
-			name: "combined positive and negative matchers",
-			matchers: []*models.Matcher{
-				silence_tester.NewMatcher("alertname", "HighCPU", true, false),
-				silence_tester.NewMatcher("job", "test", false, false),
-			},
-			labels: models.LabelSet{
-				"alertname": "HighCPU",
-				"job":       "production",
-			},
-			expectedMatch: true,
-			description:   "Should match when positive and negative matchers both match",
-		},
-		{
-			name: "negative matcher with missing label",
-			matchers: []*models.Matcher{
-				silence_tester.NewMatcher("alertname", "HighCPU", true, false),
-				silence_tester.NewMatcher("job", "test", false, false),
-			},
-			labels:        models.LabelSet{"alertname": "HighCPU"},
-			expectedMatch: true,
-			description:   "Should match when negative matcher matches missing label",
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(
-			tt.name,
-			func(t *testing.T) {
-				s := silence.NewFromMatchers(&start, &end, tt.matchers)
-				a := alert.NewFromLabels(tt.labels)
-				matched := len(matcher.Matches(s, []*alert.Alert{a}, now)) > 0
-
-				if matched != tt.expectedMatch {
-					t.Errorf(
-						"%s: expected match=%v, got match=%v",
-						tt.description,
-						tt.expectedMatch,
-						matched,
-					)
-				}
-			},
-		)
-	}
+			models.LabelSet{"alertname": "HighCPU", "severity": "critical"},
+		),
+	)
 }
 
-func TestMatchesWithTimeWindow(t *testing.T) {
-	now := time.Now()
-	tests := []silenceWindowCase{
-		{
-			name:          "silence is active",
-			start:         now.Add(-1 * time.Hour),
-			end:           now.Add(1 * time.Hour),
-			expectedMatch: true,
-			description:   "Should match when current time is within silence window",
-		},
-		{
-			name:          "silence not started yet",
-			start:         now.Add(1 * time.Hour),
-			end:           now.Add(2 * time.Hour),
-			expectedMatch: false,
-			description:   "Should not match when silence hasn't started",
-		},
-		{
-			name:          "silence already expired",
-			start:         now.Add(-2 * time.Hour),
-			end:           now.Add(-1 * time.Hour),
-			expectedMatch: false,
-			description:   "Should not match when silence has expired",
-		},
-		{
-			name:          "silence starts exactly now",
-			start:         now,
-			end:           now.Add(1 * time.Hour),
-			expectedMatch: true,
-			description:   "Should match when silence starts exactly at current time",
-		},
-		{
-			name:          "silence ends exactly now",
-			start:         now.Add(-1 * time.Hour),
-			end:           now,
-			expectedMatch: false,
-			description:   "Should not match when silence ends exactly at current time",
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(
-			tt.name,
-			func(t *testing.T) {
-				s := silence_tester.NewSilence(
-					&tt.start,
-					&tt.end,
-					"alertname",
-					"HighCPU",
-					new(true),
-					new(false),
-				)
-				a := alert.NewFromLabels(
-					models.LabelSet{"alertname": "HighCPU"},
-				)
-				matched := len(matcher.Matches(s, []*alert.Alert{a}, now)) > 0
-
-				if matched != tt.expectedMatch {
-					t.Errorf(
-						"%s: expected match=%v, got match=%v",
-						tt.description,
-						tt.expectedMatch,
-						matched,
-					)
-				}
+func TestMatchesSetPositiveAndNegative(t *testing.T) {
+	assert.True(
+		t,
+		matchesSet(
+			[]*models.Matcher{
+				silence_tester.NewMatcher("alertname", "HighCPU", true, false),
+				silence_tester.NewMatcher("job", "test", false, false),
 			},
-		)
-	}
+			models.LabelSet{"alertname": "HighCPU", "job": "production"},
+		),
+	)
+}
+
+func TestMatchesSetNegativeMissingLabel(t *testing.T) {
+	assert.True(
+		t,
+		matchesSet(
+			[]*models.Matcher{
+				silence_tester.NewMatcher("alertname", "HighCPU", true, false),
+				silence_tester.NewMatcher("job", "test", false, false),
+			},
+			models.LabelSet{"alertname": "HighCPU"},
+		),
+	)
+}
+
+func TestMatchesWindowActive(t *testing.T) {
+	now := time.Now()
+	assert.True(
+		t,
+		matchesWindow(now.Add(-1*time.Hour), now.Add(1*time.Hour), now),
+	)
+}
+
+func TestMatchesWindowNotStarted(t *testing.T) {
+	now := time.Now()
+	assert.False(
+		t,
+		matchesWindow(now.Add(1*time.Hour), now.Add(2*time.Hour), now),
+	)
+}
+
+func TestMatchesWindowExpired(t *testing.T) {
+	now := time.Now()
+	assert.False(
+		t,
+		matchesWindow(now.Add(-2*time.Hour), now.Add(-1*time.Hour), now),
+	)
+}
+
+func TestMatchesWindowStartsNow(t *testing.T) {
+	now := time.Now()
+	assert.True(t, matchesWindow(now, now.Add(1*time.Hour), now))
+}
+
+func TestMatchesWindowEndsNow(t *testing.T) {
+	now := time.Now()
+	assert.False(t, matchesWindow(now.Add(-1*time.Hour), now, now))
 }
 
 func TestMatchesWithMultipleAlerts(t *testing.T) {

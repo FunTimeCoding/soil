@@ -62,6 +62,25 @@ func TestSessionUsesMiddleware(t *testing.T) {
 	assert.True(t, called)
 }
 
+func TestSessionAcceptsTheServiceBearerWithoutSigningIn(t *testing.T) {
+	m := http.NewServeMux()
+	guard.New(m, []string{"alfa"}).WithSession(refuse).Session(
+		"GET /target",
+		web_tester.Serve,
+	)
+	assert.Integer(t, http.StatusOK, web_tester.Request(t, m, "alfa"))
+	assert.Integer(t, http.StatusFound, web_tester.Request(t, m, ""))
+}
+
+func TestSessionWithAWrongBearerStillNeedsTheSignIn(t *testing.T) {
+	m := http.NewServeMux()
+	guard.New(m, []string{"alfa"}).WithSession(refuse).Session(
+		"GET /target",
+		web_tester.Serve,
+	)
+	assert.Integer(t, http.StatusFound, web_tester.Request(t, m, "bravo"))
+}
+
 func TestSessionWithoutMiddlewarePanics(t *testing.T) {
 	defer func() { assert.NotNil(t, recover()) }()
 	guard.New(http.NewServeMux(), []string{"alfa"}).Session(

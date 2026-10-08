@@ -1,6 +1,6 @@
 package gopnsense
 
-type hostFlags struct {
+type HostFlags struct {
 	host             string
 	domain           string
 	address          string

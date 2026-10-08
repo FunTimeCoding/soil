@@ -2,6 +2,6 @@ package unit
 
 import "fmt"
 
-func (l *commandLog) BeginCommand(name string) {
+func (l *CommandLog) BeginCommand(name string) {
 	l.entries = append(l.entries, fmt.Sprintf("begin %s", name))
 }

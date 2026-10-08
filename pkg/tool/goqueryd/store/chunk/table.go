@@ -1,10 +1,10 @@
 package chunk
 
-type table struct {
+type Table struct {
 	start     int
 	headerEnd int
 	end       int
-	rows      []line
+	rows      []Line
 	heading   string
 	caption   string
 }

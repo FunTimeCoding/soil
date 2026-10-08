@@ -19,6 +19,7 @@ func deleteReceipt(r *receipt.Receipt) *server.DeleteReceiptResponse {
 		TrackerStates: int(r.TrackerStates),
 		Queue:         int(r.Queue),
 		Notifications: int(r.Notifications),
+		SearchEntries: int(r.SearchEntries),
 	}
 
 	if r.Transcript != "" {

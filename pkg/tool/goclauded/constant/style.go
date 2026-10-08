@@ -147,10 +147,75 @@ const ConversationStyle = `
 		white-space: pre-wrap;
 		word-wrap: break-word;
 	}
-	.sidebar-filter {
+	.search-form {
+		margin-bottom: 0.5rem;
+	}
+	.search-input {
 		width: 100%;
 		padding: 0.4rem 0.5rem;
-		margin-bottom: 0.5rem;
+		margin-bottom: 0.25rem;
 		font-size: 0.85rem;
+	}
+	.search-kinds {
+		display: flex;
+		gap: 0.75rem;
+		font-size: 0.8rem;
+	}
+	.search-kinds label {
+		margin: 0;
+	}
+	.search-progress {
+		display: block;
+		color: var(--pico-muted-color);
+		margin-bottom: 0.5rem;
+	}
+	.search-result {
+		margin-bottom: 0.25rem;
+	}
+	.search-result summary {
+		padding: 0.5rem;
+		cursor: pointer;
+		border-radius: var(--pico-border-radius);
+	}
+	.search-result summary:hover {
+		background: var(--pico-muted-border-color);
+	}
+	.search-result summary small {
+		color: var(--pico-muted-color);
+		display: block;
+	}
+	.search-snippet {
+		padding: 0.35rem 0.5rem 0.35rem 1.25rem;
+		font-size: 0.85rem;
+		cursor: pointer;
+		border-radius: var(--pico-border-radius);
+		word-wrap: break-word;
+	}
+	.search-snippet:hover {
+		background: var(--pico-muted-border-color);
+	}
+	.search-snippet small {
+		color: var(--pico-muted-color);
+		margin-right: 0.4rem;
+		text-transform: uppercase;
+	}
+	.message-tool {
+		border-left: 3px solid var(--pico-muted-color);
+		font-size: 0.9rem;
+	}
+	.search-hit {
+		outline: 1px solid var(--pico-mark-background-color);
+	}
+	.search-current {
+		outline: 3px solid var(--pico-mark-background-color);
+	}
+	.hit-counter {
+		position: sticky;
+		bottom: 0;
+		text-align: right;
+		color: var(--pico-muted-color);
+		font-size: 0.85rem;
+		padding: 0.25rem 0;
+		background: var(--pico-background-color);
 	}
 `

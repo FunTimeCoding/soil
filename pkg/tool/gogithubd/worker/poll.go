@@ -6,12 +6,7 @@ import (
 )
 
 func (w *Worker) Poll() {
-	type key struct {
-		repo     string
-		workflow string
-		branch   string
-	}
-	latest := make(map[key]*run.Run)
+	latest := make(map[[3]string]*run.Run)
 
 	for _, repo := range w.client.MustRepositories(w.owner) {
 		name := repo.GetName()
@@ -21,7 +16,7 @@ func (w *Worker) Poll() {
 				continue
 			}
 
-			k := key{name, r.Name, r.Branch}
+			k := [3]string{name, r.Name, r.Branch}
 
 			if existing, okay := latest[k]; !okay || r.Identifier > existing.Identifier {
 				latest[k] = r
@@ -32,11 +27,12 @@ func (w *Worker) Poll() {
 	w.gauge.Reset()
 
 	for k, r := range latest {
+		repository, workflow, branch := k[0], k[1], k[2]
 		w.gauge.WithLabelValues(
 			w.owner,
-			k.repo,
-			k.workflow,
-			k.branch,
+			repository,
+			workflow,
+			branch,
 			r.Conclusion,
 		).Set(1)
 	}

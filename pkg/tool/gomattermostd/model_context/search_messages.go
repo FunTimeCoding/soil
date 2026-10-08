@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/post"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context/argument"
+	mattermostResponse "github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context/response"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -36,22 +37,14 @@ func (s *Server) SearchMessages(
 		return s.captureDetail(g)
 	}
 
-	type row struct {
-		Identifier string   `json:"identifier"`
-		Channel    string   `json:"channel"`
-		Username   string   `json:"username"`
-		Message    string   `json:"message"`
-		CreateAt   string   `json:"create_at"`
-		FileIds    []string `json:"file_ids,omitempty"`
-	}
-	var rows []row
+	var rows []*mattermostResponse.MessageMatch
 
 	for _, p := range posts {
-		r := row{
-			Identifier: p.Raw.Id,
-			Message:    p.Message,
-			CreateAt:   formatTime(p.Create),
-		}
+		r := mattermostResponse.NewMessageMatch(
+			p.Raw.Id,
+			p.Message,
+			formatTime(p.Create),
+		)
 
 		if p.User != nil {
 			r.Username = p.User.Username

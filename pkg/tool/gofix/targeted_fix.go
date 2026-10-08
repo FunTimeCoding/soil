@@ -15,7 +15,7 @@ func targetedFix(
 	patterns []string,
 	reported map[string]bool,
 	faces *face.Set,
-	violations []violation,
+	violations []Violation,
 	handle *index.Workspace,
 	w *workspace.Workspace,
 	r *output.Results,

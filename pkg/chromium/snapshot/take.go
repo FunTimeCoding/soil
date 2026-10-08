@@ -4,10 +4,19 @@ import (
 	"context"
 	"fmt"
 	"github.com/chromedp/cdproto/accessibility"
+	"github.com/chromedp/cdproto/cdp"
 )
 
-func Take(c context.Context) ([]*Node, error) {
-	nodes, e := accessibility.GetFullAXTree().Do(c)
+func Take(
+	c context.Context,
+	s cdp.Session,
+) ([]*Node, error) {
+	tree, e := cdp.Call(
+		c,
+		s,
+		accessibility.GetFullAXTree,
+		accessibility.GetFullAXTreeParams{},
+	)
 
 	if e != nil {
 		return nil, e
@@ -17,7 +26,7 @@ func Take(c context.Context) ([]*Node, error) {
 	var roots []*Node
 	uid := 0
 
-	for _, n := range nodes {
+	for _, n := range tree.Nodes {
 		if n.Ignored {
 			continue
 		}

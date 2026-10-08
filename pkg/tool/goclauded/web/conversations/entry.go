@@ -2,6 +2,7 @@ package conversations
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/enriched_session"
 	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
@@ -16,7 +17,7 @@ func entry(s *enriched_session.Session) gomponents.Node {
 	}
 
 	if name == "" {
-		name = "unnamed"
+		name = constant.UnnamedSession
 	}
 
 	var nodes []gomponents.Node
@@ -24,8 +25,6 @@ func entry(s *enriched_session.Session) gomponents.Node {
 		nodes,
 		html.Div(
 			html.Class("entry-name"),
-			extended.Get(fmt.Sprintf("/conversations/%s", s.Identifier)),
-			extended.Target("#panel"),
 			html.Span(gomponents.Text(name)),
 			html.Span(
 				html.Class("rename-icon"),
@@ -57,6 +56,8 @@ func entry(s *enriched_session.Session) gomponents.Node {
 	return html.Div(
 		html.ID(fmt.Sprintf("entry-%s", s.Identifier)),
 		html.Class("sidebar-entry"),
+		extended.Get(fmt.Sprintf("/conversations/%s", s.Identifier)),
+		extended.Target("#panel"),
 		gomponents.Group(nodes),
 	)
 }

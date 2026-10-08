@@ -8,7 +8,7 @@ import (
 
 func splitTable(
 	content string,
-	t *table,
+	t *Table,
 	c face.TokenCounter,
 ) []Chunk {
 	header := content[t.start:t.headerEnd]

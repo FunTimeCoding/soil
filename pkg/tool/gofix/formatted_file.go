@@ -1,7 +1,7 @@
 package gofix
 
-type formattedFile struct {
+type FormattedFile struct {
 	Source    []byte
-	Changes   []*formatChange
+	Changes   []*FormatChange
 	Converged bool
 }

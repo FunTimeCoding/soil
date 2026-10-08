@@ -27,4 +27,5 @@ func (s *Service) EnrichSession(identifier string) {
 	s.store.SaveTrackerState(identifier, state)
 	s.RefreshSession(identifier, state)
 	s.recordContextLoads(identifier, calls)
+	s.search.Append(identifier, path)
 }

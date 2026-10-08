@@ -3,9 +3,9 @@ package reader
 import "github.com/funtimecoding/soil/pkg/console"
 
 func (s *Reader) Probe() {
-	n := s.Protocol.Select("div[role='meter']", 0)
+	n, okay := s.Protocol.MustFindNode("div[role='meter']", 0)
 
-	if n == nil {
+	if !okay {
 		console.Line("no meter found")
 
 		return
@@ -13,5 +13,7 @@ func (s *Reader) Probe() {
 
 	console.Format("aria-valuenow: %s\n\n", n.AttributeValue("aria-valuenow"))
 	console.Line("--- great-grandparent ---")
-	console.Line(s.Protocol.Outer("div:has(> div > div > div[role='meter'])"))
+	console.Line(
+		s.Protocol.MustOuter("div:has(> div > div > div[role='meter'])"),
+	)
 }

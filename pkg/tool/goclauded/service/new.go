@@ -4,6 +4,7 @@ import (
 	library "github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/face"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/search_index"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/session_cache"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/client"
@@ -17,6 +18,7 @@ func New(
 	m client.Client,
 	summaryIndexer queryd.Indexer,
 	completionIndexer queryd.Indexer,
+	x *search_index.Index,
 	n face.Notifier,
 	r library.Reporter,
 	harbor string,
@@ -29,6 +31,7 @@ func New(
 		memory:            m,
 		summaryIndexer:    summaryIndexer,
 		completionIndexer: completionIndexer,
+		search:            x,
 		notifier:          n,
 		reporter:          r,
 		harbor:            harbor,

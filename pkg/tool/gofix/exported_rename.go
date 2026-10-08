@@ -1,6 +1,6 @@
 package gofix
 
-type exportedRename struct {
+type ExportedRename struct {
 	oldName string
 	newName string
 }

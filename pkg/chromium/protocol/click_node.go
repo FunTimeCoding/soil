@@ -10,27 +10,44 @@ import (
 )
 
 func (p *Protocol) ClickNode(backendNodeIdentifier int64) error {
-	return p.run(
-		chromedp.ActionFunc(
-			func(v context.Context) error {
-				o, e := dom.ResolveNode().WithBackendNodeID(
-					cdp.BackendNodeID(backendNodeIdentifier),
-				).Do(v)
+	return p.do(
+		chromedp.Func(
+			func(
+				v context.Context,
+				t *chromedp.Target,
+			) error {
+				o, e := cdp.Call(
+					v,
+					t,
+					dom.ResolveNode,
+					dom.ResolveNodeParams{
+						BackendNodeID: cdp.BackendNodeID(backendNodeIdentifier),
+					},
+				)
 
 				if e != nil {
 					return e
 				}
 
-				_, exception, e := runtime.CallFunctionOn(
-					"function() { this.click() }",
-				).WithObjectID(o.ObjectID).Do(v)
+				r, e := cdp.Call(
+					v,
+					t,
+					runtime.CallFunctionOn,
+					runtime.CallFunctionOnParams{
+						FunctionDeclaration: "function() { this.click() }",
+						ObjectID:            o.Object.ObjectID,
+					},
+				)
 
 				if e != nil {
 					return e
 				}
 
-				if exception != nil {
-					return fmt.Errorf("click failed: %s", exception.Text)
+				if r.ExceptionDetails != nil {
+					return fmt.Errorf(
+						"click failed: %s",
+						r.ExceptionDetails.Text,
+					)
 				}
 
 				return nil

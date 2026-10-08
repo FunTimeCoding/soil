@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/terminal/unit/command_end_recorder"
 )
 
-type fixture struct {
+type Fixture struct {
 	terminal *terminal.Terminal
 	output   *bytes.Buffer
 	failure  *bytes.Buffer

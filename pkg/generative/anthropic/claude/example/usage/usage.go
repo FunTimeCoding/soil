@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/example/common"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/pricing"
+	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/usage_entry"
 	"sort"
 )
 
@@ -39,14 +40,8 @@ func Usage() {
 		return
 	}
 
-	type modelTotals struct {
-		inputTokens              int
-		outputTokens             int
-		cacheCreationInputTokens int
-		cacheReadInputTokens     int
-		count                    int
-	}
-	byModel := map[string]*modelTotals{}
+	byModel := map[string]*usage_entry.Entry{}
+	calls := map[string]int{}
 	var totalCost float64
 
 	for _, t := range activeBlock.entries {
@@ -54,15 +49,15 @@ func Usage() {
 		m, okay := byModel[key]
 
 		if !okay {
-			m = &modelTotals{}
+			m = usage_entry.New("", key, 0, 0, 0, 0, 0, 0)
 			byModel[key] = m
 		}
 
-		m.inputTokens += t.Entry.InputTokens
-		m.outputTokens += t.Entry.OutputTokens
-		m.cacheCreationInputTokens += t.Entry.CacheCreationInputTokens
-		m.cacheReadInputTokens += t.Entry.CacheReadInputTokens
-		m.count++
+		m.InputTokens += t.Entry.InputTokens
+		m.OutputTokens += t.Entry.OutputTokens
+		m.CacheCreationInputTokens += t.Entry.CacheCreationInputTokens
+		m.CacheReadInputTokens += t.Entry.CacheReadInputTokens
+		calls[key]++
 		totalCost += pricing.EntryCost(key, t.Entry)
 	}
 
@@ -85,11 +80,11 @@ func Usage() {
 		console.Format(
 			"  %-12s  %6d input, %6d output, %6d cache-create, %6d cache-read  (%d calls)\n",
 			model,
-			m.inputTokens,
-			m.outputTokens,
-			m.cacheCreationInputTokens,
-			m.cacheReadInputTokens,
-			m.count,
+			m.InputTokens,
+			m.OutputTokens,
+			m.CacheCreationInputTokens,
+			m.CacheReadInputTokens,
+			calls[model],
 		)
 	}
 

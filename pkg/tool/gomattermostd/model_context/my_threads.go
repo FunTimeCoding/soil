@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context/argument"
+	mattermostResponse "github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context/response"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mattermost/mattermost/server/public/model"
 )
@@ -49,34 +50,20 @@ func (s *Server) MyThreads(
 		return s.captureDetail(e)
 	}
 
-	type participant struct {
-		Username string `json:"username"`
-	}
-	type row struct {
-		PostIdentifier string        `json:"post_identifier"`
-		Channel        string        `json:"channel,omitempty"`
-		Author         string        `json:"author"`
-		Message        string        `json:"message"`
-		ReplyCount     int64         `json:"reply_count"`
-		UnreadReplies  int64         `json:"unread_replies"`
-		UnreadMentions int64         `json:"unread_mentions"`
-		LastReplyAt    string        `json:"last_reply_at"`
-		Participants   []participant `json:"participants,omitempty"`
-	}
-	var rows []row
+	var rows []*mattermostResponse.Thread
 
 	for _, thread := range threads.Threads {
 		if a.UnreadOnly && thread.UnreadReplies == 0 {
 			continue
 		}
 
-		r := row{
-			PostIdentifier: thread.PostId,
-			ReplyCount:     thread.ReplyCount,
-			UnreadReplies:  thread.UnreadReplies,
-			UnreadMentions: thread.UnreadMentions,
-			LastReplyAt:    formatMilli(thread.LastReplyAt),
-		}
+		r := mattermostResponse.NewThread(
+			thread.PostId,
+			thread.ReplyCount,
+			thread.UnreadReplies,
+			thread.UnreadMentions,
+			formatMilli(thread.LastReplyAt),
+		)
 
 		if thread.Post != nil {
 			r.Message = thread.Post.Message
@@ -100,7 +87,7 @@ func (s *Server) MyThreads(
 			if p != nil {
 				r.Participants = append(
 					r.Participants,
-					participant{Username: p.Username},
+					mattermostResponse.NewParticipant(p.Username),
 				)
 			}
 		}

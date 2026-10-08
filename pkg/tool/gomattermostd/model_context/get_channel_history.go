@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/post"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context/argument"
+	mattermostResponse "github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context/response"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mattermost/mattermost/server/public/model"
 )
@@ -72,22 +73,14 @@ func (s *Server) GetChannelHistory(
 		}
 	}
 
-	type row struct {
-		Identifier     string   `json:"id"`
-		Username       string   `json:"username"`
-		Message        string   `json:"message"`
-		CreateAt       string   `json:"create_at"`
-		RootIdentifier *string  `json:"root_id,omitempty"`
-		FileIds        []string `json:"file_ids,omitempty"`
-	}
-	rows := make([]row, len(posts))
+	rows := make([]*mattermostResponse.HistoryPost, len(posts))
 
 	for i, p := range posts {
-		r := row{
-			Identifier: p.Raw.Id,
-			Message:    p.Message,
-			CreateAt:   formatTime(p.Create),
-		}
+		r := mattermostResponse.NewHistoryPost(
+			p.Raw.Id,
+			p.Message,
+			formatTime(p.Create),
+		)
 
 		if p.User != nil {
 			r.Username = p.User.Username

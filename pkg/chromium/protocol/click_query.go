@@ -2,9 +2,6 @@ package protocol
 
 import "github.com/chromedp/chromedp"
 
-func (p *Protocol) ClickQuery(s string) {
-	p.client.RunContext(
-		p.context,
-		chromedp.Click(s, chromedp.NodeVisible, chromedp.ByQuery),
-	)
+func (p *Protocol) ClickQuery(s string) error {
+	return p.do(chromedp.Click(chromedp.CSS(s), chromedp.NodeVisible))
 }

@@ -9,15 +9,14 @@ import (
 func (b *Browser) ScrollToBottom(selector string) {
 	b.T.Helper()
 	errors.PanicOnError(
-		chromedp.Run(
+		chromedp.Do(
 			b.Context,
-			chromedp.Evaluate(
+			chromedp.Evaluate[chromedp.Void](
 				fmt.Sprintf(
 					"document.querySelector('%s').scrollTo(0, document.querySelector('%s').scrollHeight)",
 					selector,
 					selector,
 				),
-				nil,
 			),
 		),
 	)

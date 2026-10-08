@@ -2,7 +2,7 @@ package variable_naming
 
 import "github.com/funtimecoding/soil/pkg/lint/constant"
 
-func applyParameterExemptions(variables []typedVariable) {
+func applyParameterExemptions(variables []TypedVariable) {
 	typeCount := map[string]int{}
 
 	for _, v := range variables {

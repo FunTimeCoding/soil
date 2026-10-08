@@ -1,5 +1,5 @@
 package graph_query
 
-type projectPayload struct {
-	Project projectDetail `json:"project"`
+type ProjectPayload struct {
+	Project ProjectDetail `json:"project"`
 }

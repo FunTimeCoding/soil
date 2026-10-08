@@ -8,8 +8,8 @@ import (
 func collectVariables(
 	y *types.Info,
 	body *ast.BlockStmt,
-) []typedVariable {
-	var result []typedVariable
+) []TypedVariable {
+	var result []TypedVariable
 	ast.Inspect(
 		body,
 		func(n ast.Node) bool {

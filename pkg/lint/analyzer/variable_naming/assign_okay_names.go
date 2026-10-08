@@ -7,9 +7,9 @@ import (
 	"sort"
 )
 
-func assignOkayNames(forms []okayForm) map[*ast.Ident]string {
+func assignOkayNames(forms []OkayForm) map[*ast.Ident]string {
 	result := map[*ast.Ident]string{}
-	byScope := map[*types.Scope][]okayForm{}
+	byScope := map[*types.Scope][]OkayForm{}
 
 	for _, f := range forms {
 		byScope[f.scope] = append(byScope[f.scope], f)

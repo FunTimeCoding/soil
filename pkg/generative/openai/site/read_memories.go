@@ -1,11 +1,11 @@
 package site
 
 func (s *Site) readMemories() string {
-	if !s.session.HasNodes(`//table`) {
+	if !s.session.MustHasNodes(`//table`) {
 		return ""
 	}
 
-	s.session.WaitVisible(`//table//tbody/div[1]`)
+	s.session.MustWaitVisible(`//table//tbody/div[1]`)
 
-	return s.session.Outer("table")
+	return s.session.MustOuter("table")
 }

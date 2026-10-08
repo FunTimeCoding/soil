@@ -9,7 +9,7 @@ import (
 func collectFromParams(
 	y *types.Info,
 	f *ast.FuncDecl,
-	result *[]typedVariable,
+	result *[]TypedVariable,
 ) {
 	if f.Type == nil || f.Type.Params == nil {
 		return
@@ -29,7 +29,7 @@ func collectFromParams(
 
 			*result = append(
 				*result,
-				typedVariable{
+				TypedVariable{
 					ident:       name,
 					typ:         o.Type(),
 					precedence:  typePrecedence(o.Type()),

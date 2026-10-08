@@ -5,9 +5,9 @@ import (
 	"go/token"
 )
 
-type reachedModule struct {
+type ReachedModule struct {
 	directory string
 	fileSet   *token.FileSet
-	edits     []edit
+	edits     []Edit
 	concerns  []*concern.Concern
 }

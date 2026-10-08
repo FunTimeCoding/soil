@@ -4,7 +4,7 @@ import "strings"
 
 func trimmed(
 	content string,
-	l line,
+	l Line,
 ) string {
 	return strings.TrimSpace(content[l.start:l.end])
 }

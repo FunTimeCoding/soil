@@ -9,8 +9,8 @@ import (
 	"path/filepath"
 )
 
-func loadConfiguration(root string) *configuration {
-	result := &configuration{}
+func loadConfiguration(root string) *Configuration {
+	result := &Configuration{}
 	b, e := os.ReadFile(filepath.Join(root, constant.ConfigurationPath))
 
 	if errors.Is(e, fs.ErrNotExist) {

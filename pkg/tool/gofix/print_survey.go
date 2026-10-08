@@ -3,6 +3,8 @@ package gofix
 import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"maps"
+	"slices"
 	"sort"
 )
 
@@ -10,29 +12,20 @@ func printSurvey(
 	counts map[string]int,
 	examples map[string][]string,
 ) {
-	type entry struct {
-		segment string
-		count   int
-	}
-	var entries []entry
-
-	for segment, count := range counts {
-		entries = append(entries, entry{segment, count})
-	}
-
+	segments := slices.Collect(maps.Keys(counts))
 	sort.Slice(
-		entries,
+		segments,
 		func(i, j int) bool {
-			return entries[i].count > entries[j].count
+			return counts[segments[i]] > counts[segments[j]]
 		},
 	)
 
-	for _, e := range entries {
+	for _, s := range segments {
 		console.Format(
 			"%4d  %-20s  %s\n",
-			e.count,
-			e.segment,
-			join.CommaSpace(examples[e.segment]),
+			counts[s],
+			s,
+			join.CommaSpace(examples[s]),
 		)
 	}
 }

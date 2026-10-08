@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context/argument"
+	mattermostResponse "github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context/response"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -22,21 +23,15 @@ func (s *Server) ListSubscriptions(
 		return s.captureDetail(e)
 	}
 
-	type row struct {
-		Root      string `json:"root"`
-		Label     string `json:"label"`
-		Channel   string `json:"channel"`
-		LastEvent string `json:"last_event"`
-	}
-	rows := make([]row, len(result))
+	rows := make([]*mattermostResponse.Subscription, len(result))
 
 	for i, v := range result {
-		rows[i] = row{
-			Root:      v.RootIdentifier,
-			Label:     v.Label(),
-			Channel:   v.ChannelIdentifier,
-			LastEvent: formatTime(v.LastEvent),
-		}
+		rows[i] = mattermostResponse.NewSubscription(
+			v.RootIdentifier,
+			v.Label(),
+			v.ChannelIdentifier,
+			formatTime(v.LastEvent),
+		)
 	}
 
 	return response.SuccessAny(map[string]any{"subscriptions": rows})

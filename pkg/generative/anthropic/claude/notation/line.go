@@ -3,6 +3,7 @@ package notation
 import "encoding/json"
 
 type Line struct {
+	Identifier    string          `json:"uuid"`
 	Type          string          `json:"type"`
 	Slug          string          `json:"slug"`
 	Timestamp     string          `json:"timestamp"`

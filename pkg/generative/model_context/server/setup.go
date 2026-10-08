@@ -3,6 +3,7 @@ package server
 import (
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
+	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 	"time"
 )
@@ -12,6 +13,9 @@ func (s *Server) Setup(g *guard.Mux) {
 		s.server,
 		server.WithStreamableHTTPLogger(s.Logger()),
 		server.WithHeartbeatInterval(15*time.Second),
+		server.WithStreamableHTTPProtocolVersions(
+			mcp.LegacyProtocolVersions()...,
+		),
 	)
 	sse := server.NewSSEServer(s.server)
 	s.register(g, constant.ModelContextPath, h)

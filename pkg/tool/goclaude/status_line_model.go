@@ -1,5 +1,5 @@
 package goclaude
 
-type statusLineModel struct {
+type StatusLineModel struct {
 	DisplayName string `json:"display_name"`
 }

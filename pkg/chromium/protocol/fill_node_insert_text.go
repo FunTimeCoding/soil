@@ -14,19 +14,31 @@ func (p *Protocol) fillNodeInsertText(
 	backendNodeIdentifier int64,
 	value string,
 ) error {
-	return p.run(
-		chromedp.ActionFunc(
-			func(v context.Context) error {
-				o, e := dom.ResolveNode().WithBackendNodeID(
-					cdp.BackendNodeID(backendNodeIdentifier),
-				).Do(v)
+	return p.do(
+		chromedp.Func(
+			func(
+				v context.Context,
+				t *chromedp.Target,
+			) error {
+				o, e := cdp.Call(
+					v,
+					t,
+					dom.ResolveNode,
+					dom.ResolveNodeParams{
+						BackendNodeID: cdp.BackendNodeID(backendNodeIdentifier),
+					},
+				)
 
 				if e != nil {
 					return e
 				}
 
-				_, exception, e := runtime.CallFunctionOn(
-					`function() {
+				r, e := cdp.Call(
+					v,
+					t,
+					runtime.CallFunctionOn,
+					runtime.CallFunctionOnParams{
+						FunctionDeclaration: `function() {
 						this.focus();
 						if (this.tagName.toLowerCase() === 'select') {
 							return 'select';
@@ -34,17 +46,29 @@ func (p *Protocol) fillNodeInsertText(
 						document.execCommand('selectAll');
 						return 'text';
 					}`,
-				).WithObjectID(o.ObjectID).Do(v)
+						ObjectID: o.Object.ObjectID,
+					},
+				)
 
 				if e != nil {
 					return e
 				}
 
-				if exception != nil {
-					return fmt.Errorf("fill focus failed: %s", exception.Text)
+				if r.ExceptionDetails != nil {
+					return fmt.Errorf(
+						"fill focus failed: %s",
+						r.ExceptionDetails.Text,
+					)
 				}
 
-				return input.InsertText(value).Do(v)
+				_, e = cdp.Call(
+					v,
+					t,
+					input.InsertText,
+					input.InsertTextParams{Text: value},
+				)
+
+				return e
 			},
 		),
 	)

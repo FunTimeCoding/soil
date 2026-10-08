@@ -9,7 +9,7 @@ import (
 )
 
 func parseConstants(
-	result map[string][]knownConstant,
+	result map[string][]KnownConstant,
 	path string,
 	p string,
 ) {
@@ -52,7 +52,7 @@ func parseConstants(
 				value := strings.Trim(l.Value, constant.Quote)
 				result[value] = append(
 					result[value],
-					knownConstant{name: name.Name, packageName: p},
+					KnownConstant{name: name.Name, packageName: p},
 				)
 			}
 		}

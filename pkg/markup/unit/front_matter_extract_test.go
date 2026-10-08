@@ -34,17 +34,17 @@ func TestFrontMatterExtractAbsent(t *testing.T) {
 
 func TestFrontMatterDecodeScalarOrList(t *testing.T) {
 	f, _ := front_matter.Extract("---\nbase: pkg/lint, pkg/markup\n---\n")
-	var scalar declaration
+	var scalar Declaration
 	assert.Nil(t, f.Decode(&scalar))
 	assert.Strings(t, []string{"pkg/lint, pkg/markup"}, scalar.Base)
 	f, _ = front_matter.Extract(
 		"---\nbase:\n  - pkg/lint\n  - pkg/markup\n---\n",
 	)
-	var list declaration
+	var list Declaration
 	assert.Nil(t, f.Decode(&list))
 	assert.Strings(t, []string{"pkg/lint", "pkg/markup"}, list.Base)
 }
 
-type declaration struct {
+type Declaration struct {
 	Base scalar_or_list.Strings `yaml:"base"`
 }

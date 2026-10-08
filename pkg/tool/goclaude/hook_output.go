@@ -1,5 +1,5 @@
 package goclaude
 
-type hookOutput struct {
-	HookSpecificOutput hookSpecificOutput `json:"hookSpecificOutput"`
+type HookOutput struct {
+	HookSpecificOutput HookSpecificOutput `json:"hookSpecificOutput"`
 }

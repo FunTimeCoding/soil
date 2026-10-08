@@ -8,6 +8,7 @@ import (
 type Context struct {
 	host     string
 	port     int
-	client   *client.ClientWithResponses
-	terminal *terminal.Terminal
+	client     *client.ClientWithResponses
+	longClient *client.ClientWithResponses
+	terminal   *terminal.Terminal
 }

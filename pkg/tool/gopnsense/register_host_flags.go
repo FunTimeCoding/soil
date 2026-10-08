@@ -4,7 +4,7 @@ import "github.com/spf13/cobra"
 
 func registerHostFlags(
 	c *cobra.Command,
-	f *hostFlags,
+	f *HostFlags,
 ) {
 	c.Flags().StringVar(&f.host, "host", "", "hostname without the domain")
 	c.Flags().StringVar(&f.domain, "domain", "", "domain of the host")

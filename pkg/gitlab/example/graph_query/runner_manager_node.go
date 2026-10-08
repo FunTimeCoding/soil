@@ -1,6 +1,6 @@
 package graph_query
 
-type runnerManagerNode struct {
+type RunnerManagerNode struct {
 	SystemIdentifier string `json:"systemId"`
 	IPAddress        string `json:"ipAddress"`
 	Version          string `json:"version"`

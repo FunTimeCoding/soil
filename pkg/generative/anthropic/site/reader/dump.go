@@ -6,5 +6,5 @@ import (
 )
 
 func (s *Reader) Dump() {
-	console.Line(s.Protocol.Outer(constant.AnthropicBodyElement))
+	console.Line(s.Protocol.MustOuter(constant.AnthropicBodyElement))
 }

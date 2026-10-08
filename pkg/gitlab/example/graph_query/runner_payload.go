@@ -1,5 +1,5 @@
 package graph_query
 
-type runnerPayload struct {
-	Runner runnerDetail `json:"runner"`
+type RunnerPayload struct {
+	Runner RunnerDetail `json:"runner"`
 }

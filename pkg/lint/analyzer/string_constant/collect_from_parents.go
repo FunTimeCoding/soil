@@ -6,7 +6,7 @@ import (
 )
 
 func collectFromParents(
-	result map[string][]knownConstant,
+	result map[string][]KnownConstant,
 	directory string,
 ) {
 	current := filepath.Dir(directory)

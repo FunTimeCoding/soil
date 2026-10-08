@@ -9,9 +9,9 @@ import (
 func newSaltServer(
 	t *testing.T,
 	password string,
-) *saltServer {
+) *SaltServer {
 	t.Helper()
-	result := &saltServer{}
+	result := &SaltServer{}
 	result.Server = httptest.NewServer(
 		http.HandlerFunc(
 			func(

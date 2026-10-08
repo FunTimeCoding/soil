@@ -75,8 +75,8 @@ func TestDetachCarriesSessionOnly(t *testing.T) {
 		s.Client.Context(),
 		chromedp.WithTargetID(target.ID(identifier)),
 	)
-	var body string
-	s.Client.RunContext(x, chromedp.OuterHTML(constant.BodySelector, &body))
+	_, f := chromedp.Run(x, chromedp.OuterHTML(constant.BodySelector))
+	assert.FatalOnError(t, f)
 	cancel()
 	e := lifetime_tester.AwaitEvent(t, detached)
 	assert.String(t, "", e.TargetIdentifier)
@@ -97,7 +97,7 @@ func TestProtocolReadsBorrowedTab(t *testing.T) {
 	s := base.New(t)
 	identifier := s.OpenTab(constant.FixtureQuietRoute)
 	p := protocol.New(s.Client, constant.FixtureQuietRoute)
-	assert.StringContains(t, "quiet", p.Body())
+	assert.StringContains(t, "quiet", p.MustBody())
 	assert.Integer(t, 1, s.Client.TargetCount())
 	s.AssertTabAlive(identifier)
 }
@@ -168,8 +168,8 @@ func TestCancelDerivedTargetContextKeepsTab(t *testing.T) {
 	s := base.New(t)
 	identifier := s.OpenTab(constant.FixtureQuietRoute)
 	x, cancel := context.WithCancel(s.Client.TargetContext(identifier))
-	var body string
-	s.Client.RunContext(x, chromedp.OuterHTML(constant.BodySelector, &body))
+	body, e := chromedp.Run(x, chromedp.OuterHTML(constant.BodySelector))
+	assert.FatalOnError(t, e)
 	assert.StringContains(t, "quiet", body)
 	cancel()
 	s.AssertTabAlive(identifier)
@@ -182,8 +182,8 @@ func TestCancelAcquiredTargetContextTakesTab(t *testing.T) {
 		s.Client.Context(),
 		chromedp.WithTargetID(target.ID(identifier)),
 	)
-	var body string
-	s.Client.RunContext(x, chromedp.OuterHTML(constant.BodySelector, &body))
+	body, e := chromedp.Run(x, chromedp.OuterHTML(constant.BodySelector))
+	assert.FatalOnError(t, e)
 	assert.StringContains(t, "quiet", body)
 	cancel()
 	s.AssertTabGone(identifier)
@@ -214,17 +214,15 @@ func TestFirstCallUnderDerivedDeadlineStrandsTarget(t *testing.T) {
 		s.Client.TargetContext(identifier),
 		constant.FixtureEventTimeout,
 	)
-	var sum int
-	assert.FatalOnError(
-		t,
-		chromedp.Run(x, chromedp.Evaluate(constant.FixtureSum, &sum)),
-	)
+	_, e := chromedp.Run(x, chromedp.Evaluate[int](constant.FixtureSum))
+	assert.FatalOnError(t, e)
 	cancel()
 	s.AssertTabAlive(identifier)
 	p := protocol.NewIdentifier(
 		s.Client,
 		identifier,
 	).WithTimeout(constant.FixtureCallTimeout)
+	var sum int
 	stranded := p.Evaluate(constant.FixtureSum, &sum)
 	assert.True(t, timeout.Is(stranded))
 }

@@ -10,10 +10,10 @@ import (
 
 func reachReplacing(
 	o *option.Fix,
-	violations []violation,
+	violations []Violation,
 	r *output.Results,
-) ([]*reachedModule, bool) {
-	renames := make(map[string]violation)
+) ([]*ReachedModule, bool) {
+	renames := make(map[string]Violation)
 
 	for _, v := range violations {
 		if v.fix == "" || !v.object.Exported() {
@@ -29,7 +29,7 @@ func reachReplacing(
 		return nil, true
 	}
 
-	var result []*reachedModule
+	var result []*ReachedModule
 
 	for _, other := range o.Replacing {
 		m, e := reachModule(o.IndexDirectory(), other, renames)

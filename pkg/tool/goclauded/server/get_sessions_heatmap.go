@@ -12,11 +12,7 @@ func (s *Server) GetSessionsHeatmap(
 ) (server.GetSessionsHeatmapResponseObject, error) {
 	sessions := s.service.Sessions()
 	bash := r.Params.Bash != nil && *r.Params.Bash
-	type stats struct {
-		Calls    int
-		Sessions int
-	}
-	counts := map[string]*stats{}
+	counts := map[string]*server.HeatmapEntry{}
 	totalCalls := 0
 	sessionsWithCalls := 0
 
@@ -48,7 +44,7 @@ func (s *Server) GetSessionsHeatmap(
 			totalCalls++
 
 			if counts[key] == nil {
-				counts[key] = &stats{}
+				counts[key] = &server.HeatmapEntry{Name: key}
 			}
 
 			counts[key].Calls++
@@ -62,15 +58,8 @@ func (s *Server) GetSessionsHeatmap(
 
 	var entries []server.HeatmapEntry
 
-	for name, st := range counts {
-		entries = append(
-			entries,
-			server.HeatmapEntry{
-				Name:     name,
-				Calls:    st.Calls,
-				Sessions: st.Sessions,
-			},
-		)
+	for _, entry := range counts {
+		entries = append(entries, *entry)
 	}
 
 	sort.Slice(

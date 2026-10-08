@@ -1,6 +1,6 @@
 package goclaude
 
-type hookInput struct {
+type HookInput struct {
 	SessionIdentifier string `json:"session_id"`
 	Reason            string `json:"reason"`
 }

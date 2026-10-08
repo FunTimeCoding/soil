@@ -1,12 +1,12 @@
 package protocol
 
 import (
-	"github.com/chromedp/cdproto/cdp"
+	"github.com/chromedp/chromedp"
 	"github.com/funtimecoding/soil/pkg/console"
 )
 
 func Print(
-	n *cdp.Node,
+	n *chromedp.Node,
 	attribute []string,
 ) {
 	console.Format("  XPath: %s\n", n.FullXPath())

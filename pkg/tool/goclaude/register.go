@@ -60,8 +60,8 @@ func register(c *command_context.Context) *cobra.Command {
 
 			errors.PanicOnError(
 				json.NewEncoder(os.Stdout).Encode(
-					hookOutput{
-						HookSpecificOutput: hookSpecificOutput{
+					HookOutput{
+						HookSpecificOutput: HookSpecificOutput{
 							HookEventName: "SessionStart",
 							AdditionalContext: fmt.Sprintf(
 								"[goclauded] Called %s today.",

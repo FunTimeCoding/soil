@@ -1,6 +1,6 @@
 package lint
 
-type configuration struct {
+type Configuration struct {
 	Registries []string            `yaml:"registries"`
-	Reflow     reflowConfiguration `yaml:"reflow"`
+	Reflow     ReflowConfiguration `yaml:"reflow"`
 }

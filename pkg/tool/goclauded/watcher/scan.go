@@ -7,4 +7,5 @@ func (w *Watcher) scan() {
 	w.service.PopulateCache()
 	w.service.BackfillSessions()
 	w.service.CheckConsistency()
+	w.service.CatchUpSearch()
 }

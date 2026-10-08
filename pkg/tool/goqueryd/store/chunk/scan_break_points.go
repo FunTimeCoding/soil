@@ -5,8 +5,8 @@ import (
 	"sort"
 )
 
-func scanBreakPoints(text string) []breakPoint {
-	seen := map[int]breakPoint{}
+func scanBreakPoints(text string) []BreakPoint {
+	seen := map[int]BreakPoint{}
 
 	for _, p := range constant.BreakPatterns {
 		for _, match := range p.Pattern.FindAllStringIndex(text, -1) {
@@ -14,7 +14,7 @@ func scanBreakPoints(text string) []breakPoint {
 			existing, found := seen[position]
 
 			if !found || p.Score > existing.score {
-				seen[position] = breakPoint{
+				seen[position] = BreakPoint{
 					position: position,
 					score:    p.Score,
 				}
@@ -22,7 +22,7 @@ func scanBreakPoints(text string) []breakPoint {
 		}
 	}
 
-	result := make([]breakPoint, 0, len(seen))
+	result := make([]BreakPoint, 0, len(seen))
 
 	for _, b := range seen {
 		result = append(result, b)

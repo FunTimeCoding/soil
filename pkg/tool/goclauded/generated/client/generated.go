@@ -106,6 +106,7 @@ type DeleteReceiptResponse struct {
 	Notifications int       `json:"notifications"`
 	Pulses        int       `json:"pulses"`
 	Queue         int       `json:"queue"`
+	SearchEntries int       `json:"search_entries"`
 	Sources       *[]string `json:"sources,omitempty"`
 	Summaries     int       `json:"summaries"`
 	TrackerStates int       `json:"tracker_states"`
@@ -291,6 +292,31 @@ type ResolveResponse struct {
 	Identifier string `json:"identifier"`
 }
 
+// SearchConversation defines model for SearchConversation.
+type SearchConversation struct {
+	Count   int         `json:"count"`
+	Hits    []SearchHit `json:"hits"`
+	Latest  string      `json:"latest"`
+	Name    string      `json:"name"`
+	Session string      `json:"session"`
+}
+
+// SearchHit defines model for SearchHit.
+type SearchHit struct {
+	At         string `json:"at"`
+	Identifier string `json:"identifier"`
+	Kind       string `json:"kind"`
+	Role       string `json:"role"`
+	Snippet    string `json:"snippet"`
+}
+
+// SearchResponse defines model for SearchResponse.
+type SearchResponse struct {
+	Conversations []SearchConversation `json:"conversations"`
+	Indexed       int                  `json:"indexed"`
+	Total         int                  `json:"total"`
+}
+
 // SendRequest defines model for SendRequest.
 type SendRequest struct {
 	Body      string  `json:"body"`
@@ -348,6 +374,11 @@ type SessionDetailResponse struct {
 type SessionEndRequest struct {
 	Reason  *string `json:"reason,omitempty"`
 	Session string  `json:"session"`
+}
+
+// SessionLabelResponse defines model for SessionLabelResponse.
+type SessionLabelResponse struct {
+	Labels []LabelEntry `json:"labels"`
 }
 
 // SessionListResponse defines model for SessionListResponse.
@@ -434,6 +465,20 @@ type UsageResponse struct {
 	SevenDayReset   time.Time  `json:"seven_day_reset"`
 }
 
+// WindowBlock defines model for WindowBlock.
+type WindowBlock struct {
+	At         string `json:"at"`
+	Identifier string `json:"identifier"`
+	Kind       string `json:"kind"`
+	Role       string `json:"role"`
+	Text       string `json:"text"`
+}
+
+// WindowResponse defines model for WindowResponse.
+type WindowResponse struct {
+	Blocks []WindowBlock `json:"blocks"`
+}
+
 // PostBackfillParams defines parameters for PostBackfill.
 type PostBackfillParams struct {
 	// Cold Reset tracker offsets and re-read every transcript whole.
@@ -485,6 +530,13 @@ type GetSessionsHeatmapParams struct {
 	Bash *bool `form:"bash,omitempty" json:"bash,omitempty"`
 }
 
+// GetSessionsSearchParams defines parameters for GetSessionsSearch.
+type GetSessionsSearchParams struct {
+	Query string    `form:"query" json:"query"`
+	Kinds *[]string `form:"kinds,omitempty" json:"kinds,omitempty"`
+	Limit *int      `form:"limit,omitempty" json:"limit,omitempty"`
+}
+
 // DeleteSessionByIdParams defines parameters for DeleteSessionById.
 type DeleteSessionByIdParams struct {
 	Confirm *string `form:"confirm,omitempty" json:"confirm,omitempty"`
@@ -494,6 +546,12 @@ type DeleteSessionByIdParams struct {
 type GetSessionToolContextParams struct {
 	Filter   string `form:"filter" json:"filter"`
 	Surround *int   `form:"surround,omitempty" json:"surround,omitempty"`
+}
+
+// GetSessionWindowParams defines parameters for GetSessionWindow.
+type GetSessionWindowParams struct {
+	Around string `form:"around" json:"around"`
+	Count  *int   `form:"count,omitempty" json:"count,omitempty"`
 }
 
 // GetTimelineParams defines parameters for GetTimeline.
@@ -705,6 +763,9 @@ type ClientInterface interface {
 	// GetSessionsHeatmap performs a GET /api/sessions/heatmap (the `GetSessionsHeatmap` operationId) request.
 	GetSessionsHeatmap(ctx context.Context, params *GetSessionsHeatmapParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// GetSessionsSearch performs a GET /api/sessions/search (the `GetSessionsSearch` operationId) request.
+	GetSessionsSearch(ctx context.Context, params *GetSessionsSearchParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// DeleteSessionById performs a DELETE /api/sessions/{identifier} (the `DeleteSessionById` operationId) request.
 	DeleteSessionById(ctx context.Context, identifier string, params *DeleteSessionByIdParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -721,6 +782,9 @@ type ClientInterface interface {
 
 	// PostSessionExport performs a POST /api/sessions/{identifier}/export (the `PostSessionExport` operationId) request.
 	PostSessionExport(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetSessionLabel performs a GET /api/sessions/{identifier}/label (the `GetSessionLabel` operationId) request.
+	GetSessionLabel(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// PostSessionLabelWithBody performs a POST /api/sessions/{identifier}/label (the `PostSessionLabel` operationId) request,
 	// with any type of body and a specified content type.
@@ -749,6 +813,9 @@ type ClientInterface interface {
 
 	// GetSessionTools performs a GET /api/sessions/{identifier}/tools (the `GetSessionTools` operationId) request.
 	GetSessionTools(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetSessionWindow performs a GET /api/sessions/{identifier}/window (the `GetSessionWindow` operationId) request.
+	GetSessionWindow(ctx context.Context, identifier string, params *GetSessionWindowParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GetStatus performs a GET /api/status (the `GetStatus` operationId) request.
 	GetStatus(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -1136,6 +1203,19 @@ func (c *Client) GetSessionsHeatmap(ctx context.Context, params *GetSessionsHeat
 	return c.Client.Do(req)
 }
 
+// GetSessionsSearch performs a GET /api/sessions/search (the `GetSessionsSearch` operationId) request.
+func (c *Client) GetSessionsSearch(ctx context.Context, params *GetSessionsSearchParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetSessionsSearchRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 // DeleteSessionById performs a DELETE /api/sessions/{identifier} (the `DeleteSessionById` operationId) request.
 func (c *Client) DeleteSessionById(ctx context.Context, identifier string, params *DeleteSessionByIdParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewDeleteSessionByIdRequest(c.Server, identifier, params)
@@ -1193,6 +1273,19 @@ func (c *Client) GetSessionDetail(ctx context.Context, identifier string, reqEdi
 // PostSessionExport performs a POST /api/sessions/{identifier}/export (the `PostSessionExport` operationId) request.
 func (c *Client) PostSessionExport(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewPostSessionExportRequest(c.Server, identifier)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetSessionLabel performs a GET /api/sessions/{identifier}/label (the `GetSessionLabel` operationId) request.
+func (c *Client) GetSessionLabel(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetSessionLabelRequest(c.Server, identifier)
 	if err != nil {
 		return nil, err
 	}
@@ -1301,6 +1394,19 @@ func (c *Client) GetSessionToolContext(ctx context.Context, identifier string, p
 // GetSessionTools performs a GET /api/sessions/{identifier}/tools (the `GetSessionTools` operationId) request.
 func (c *Client) GetSessionTools(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetSessionToolsRequest(c.Server, identifier)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetSessionWindow performs a GET /api/sessions/{identifier}/window (the `GetSessionWindow` operationId) request.
+func (c *Client) GetSessionWindow(ctx context.Context, identifier string, params *GetSessionWindowParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetSessionWindowRequest(c.Server, identifier, params)
 	if err != nil {
 		return nil, err
 	}
@@ -2308,6 +2414,80 @@ func NewGetSessionsHeatmapRequest(server string, params *GetSessionsHeatmapParam
 	return req, nil
 }
 
+// NewGetSessionsSearchRequest constructs an http.Request for the GetSessionsSearch method
+func NewGetSessionsSearchRequest(server string, params *GetSessionsSearchParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/sessions/search")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "query", params.Query, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+			return nil, err
+		} else {
+			for _, qp := range strings.Split(queryFrag, "&") {
+				rawQueryFragments = append(rawQueryFragments, qp)
+			}
+		}
+
+		if params.Kinds != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "kinds", *params.Kinds, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "array", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if params.Limit != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "limit", *params.Limit, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
 // NewDeleteSessionByIdRequest constructs an http.Request for the DeleteSessionById method
 func NewDeleteSessionByIdRequest(server string, identifier string, params *DeleteSessionByIdParams) (*http.Request, error) {
 	var err error
@@ -2477,6 +2657,40 @@ func NewPostSessionExportRequest(server string, identifier string) (*http.Reques
 	}
 
 	req, err := http.NewRequest(http.MethodPost, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetSessionLabelRequest constructs an http.Request for the GetSessionLabel method
+func NewGetSessionLabelRequest(server string, identifier string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "identifier", identifier, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/sessions/%s/label", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -2739,6 +2953,75 @@ func NewGetSessionToolsRequest(server string, identifier string) (*http.Request,
 	queryURL, err := serverURL.Parse(operationPath)
 	if err != nil {
 		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetSessionWindowRequest constructs an http.Request for the GetSessionWindow method
+func NewGetSessionWindowRequest(server string, identifier string, params *GetSessionWindowParams) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "identifier", identifier, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/sessions/%s/window", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "around", params.Around, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+			return nil, err
+		} else {
+			for _, qp := range strings.Split(queryFrag, "&") {
+				rawQueryFragments = append(rawQueryFragments, qp)
+			}
+		}
+
+		if params.Count != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "count", *params.Count, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
 	}
 
 	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
@@ -3127,6 +3410,11 @@ type ClientWithResponsesInterface interface {
 	// Returns a wrapper object for the known response body format(s).
 	GetSessionsHeatmapWithResponse(ctx context.Context, params *GetSessionsHeatmapParams, reqEditors ...RequestEditorFn) (*GetSessionsHeatmapResponse, error)
 
+	// GetSessionsSearchWithResponse performs a GET /api/sessions/search (the `GetSessionsSearch` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetSessionsSearchWithResponse(ctx context.Context, params *GetSessionsSearchParams, reqEditors ...RequestEditorFn) (*GetSessionsSearchResponse, error)
+
 	// DeleteSessionByIdWithResponse performs a DELETE /api/sessions/{identifier} (the `DeleteSessionById` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
@@ -3151,6 +3439,11 @@ type ClientWithResponsesInterface interface {
 	//
 	// Returns a wrapper object for the known response body format(s).
 	PostSessionExportWithResponse(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*PostSessionExportResponse, error)
+
+	// GetSessionLabelWithResponse performs a GET /api/sessions/{identifier}/label (the `GetSessionLabel` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetSessionLabelWithResponse(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*GetSessionLabelResponse, error)
 
 	// PostSessionLabelWithBodyWithResponse performs a POST /api/sessions/{identifier}/label (the `PostSessionLabel` operationId) request,
 	// with any type of body and a specified content type.
@@ -3191,6 +3484,11 @@ type ClientWithResponsesInterface interface {
 	//
 	// Returns a wrapper object for the known response body format(s).
 	GetSessionToolsWithResponse(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*GetSessionToolsResponse, error)
+
+	// GetSessionWindowWithResponse performs a GET /api/sessions/{identifier}/window (the `GetSessionWindow` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetSessionWindowWithResponse(ctx context.Context, identifier string, params *GetSessionWindowParams, reqEditors ...RequestEditorFn) (*GetSessionWindowResponse, error)
 
 	// GetStatusWithResponse performs a GET /api/status (the `GetStatus` operationId) request.
 	//
@@ -4183,6 +4481,54 @@ func (r GetSessionsHeatmapResponse) ContentType() string {
 	return ""
 }
 
+type GetSessionsSearchResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *SearchResponse
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetSessionsSearchResponse) GetJSON200() *SearchResponse {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetSessionsSearchResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetSessionsSearchResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetSessionsSearchResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetSessionsSearchResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetSessionsSearchResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type DeleteSessionByIdResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -4383,6 +4729,54 @@ func (r PostSessionExportResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r PostSessionExportResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type GetSessionLabelResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *SessionLabelResponse
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetSessionLabelResponse) GetJSON200() *SessionLabelResponse {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetSessionLabelResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetSessionLabelResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetSessionLabelResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetSessionLabelResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetSessionLabelResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -4671,6 +5065,61 @@ func (r GetSessionToolsResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r GetSessionToolsResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type GetSessionWindowResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *WindowResponse
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetSessionWindowResponse) GetJSON200() *WindowResponse {
+	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r GetSessionWindowResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetSessionWindowResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetSessionWindowResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetSessionWindowResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetSessionWindowResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetSessionWindowResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -5207,6 +5656,17 @@ func (c *ClientWithResponses) GetSessionsHeatmapWithResponse(ctx context.Context
 	return ParseGetSessionsHeatmapResponse(rsp)
 }
 
+// GetSessionsSearchWithResponse performs a GET /api/sessions/search (the `GetSessionsSearch` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetSessionsSearchWithResponse(ctx context.Context, params *GetSessionsSearchParams, reqEditors ...RequestEditorFn) (*GetSessionsSearchResponse, error) {
+	rsp, err := c.GetSessionsSearch(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetSessionsSearchResponse(rsp)
+}
+
 // DeleteSessionByIdWithResponse performs a DELETE /api/sessions/{identifier} (the `DeleteSessionById` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -5260,6 +5720,17 @@ func (c *ClientWithResponses) PostSessionExportWithResponse(ctx context.Context,
 		return nil, err
 	}
 	return ParsePostSessionExportResponse(rsp)
+}
+
+// GetSessionLabelWithResponse performs a GET /api/sessions/{identifier}/label (the `GetSessionLabel` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetSessionLabelWithResponse(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*GetSessionLabelResponse, error) {
+	rsp, err := c.GetSessionLabel(ctx, identifier, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetSessionLabelResponse(rsp)
 }
 
 // PostSessionLabelWithBodyWithResponse performs a POST /api/sessions/{identifier}/label (the `PostSessionLabel` operationId) request,
@@ -5348,6 +5819,17 @@ func (c *ClientWithResponses) GetSessionToolsWithResponse(ctx context.Context, i
 		return nil, err
 	}
 	return ParseGetSessionToolsResponse(rsp)
+}
+
+// GetSessionWindowWithResponse performs a GET /api/sessions/{identifier}/window (the `GetSessionWindow` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetSessionWindowWithResponse(ctx context.Context, identifier string, params *GetSessionWindowParams, reqEditors ...RequestEditorFn) (*GetSessionWindowResponse, error) {
+	rsp, err := c.GetSessionWindow(ctx, identifier, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetSessionWindowResponse(rsp)
 }
 
 // GetStatusWithResponse performs a GET /api/status (the `GetStatus` operationId) request.
@@ -6094,6 +6576,39 @@ func ParseGetSessionsHeatmapResponse(rsp *http.Response) (*GetSessionsHeatmapRes
 	return response, nil
 }
 
+// ParseGetSessionsSearchResponse parses an HTTP response from a GetSessionsSearchWithResponse call
+func ParseGetSessionsSearchResponse(rsp *http.Response) (*GetSessionsSearchResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetSessionsSearchResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest SearchResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseDeleteSessionByIdResponse parses an HTTP response from a DeleteSessionByIdWithResponse call
 func ParseDeleteSessionByIdResponse(rsp *http.Response) (*DeleteSessionByIdResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -6230,6 +6745,39 @@ func ParsePostSessionExportResponse(rsp *http.Response) (*PostSessionExportRespo
 			return nil, err
 		}
 		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetSessionLabelResponse parses an HTTP response from a GetSessionLabelWithResponse call
+func ParseGetSessionLabelResponse(rsp *http.Response) (*GetSessionLabelResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetSessionLabelResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest SessionLabelResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -6428,6 +6976,46 @@ func ParseGetSessionToolsResponse(rsp *http.Response) (*GetSessionToolsResponse,
 			return nil, err
 		}
 		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetSessionWindowResponse parses an HTTP response from a GetSessionWindowWithResponse call
+func ParseGetSessionWindowResponse(rsp *http.Response) (*GetSessionWindowResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetSessionWindowResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest WindowResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse

@@ -5,9 +5,9 @@ import (
 	"strings"
 )
 
-func findCodeFences(text string) []codeFence {
+func findCodeFences(text string) []CodeFence {
 	matches := constant.FencePattern.FindAllStringIndex(text, -1)
-	var result []codeFence
+	var result []CodeFence
 	inFence := false
 	start := 0
 
@@ -18,7 +18,7 @@ func findCodeFences(text string) []codeFence {
 		} else {
 			result = append(
 				result,
-				codeFence{
+				CodeFence{
 					start: start,
 					end: match[0] + len(
 						strings.TrimSpace(text[match[0]:match[1]]),
@@ -30,7 +30,7 @@ func findCodeFences(text string) []codeFence {
 	}
 
 	if inFence {
-		result = append(result, codeFence{start: start, end: len(text)})
+		result = append(result, CodeFence{start: start, end: len(text)})
 	}
 
 	return result

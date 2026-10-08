@@ -18,8 +18,9 @@ require (
 	github.com/apenella/go-ansible/v2 v2.5.0
 	github.com/bmatcuk/doublestar/v4 v4.10.2
 	github.com/bwmarrin/discordgo v0.29.0
-	github.com/chromedp/cdproto v0.0.0-20260714215040-dc233986426f
-	github.com/chromedp/chromedp v0.16.0
+	github.com/chromedp/cdproto v0.157.8
+	github.com/chromedp/chromedp v0.20.1
+	github.com/chromedp/chromedp/remote v0.2.0
 	github.com/coder/websocket v1.8.15
 	github.com/coreos/go-oidc/v3 v3.21.0
 	github.com/coreos/go-semver v0.3.1
@@ -56,7 +57,7 @@ require (
 	github.com/kestra-io/client-sdk/go-sdk/v2 v2.0.1
 	github.com/liushuangls/go-anthropic/v2 v2.25.0
 	github.com/luthermonson/go-proxmox v0.8.2
-	github.com/mark3labs/mcp-go v0.58.0
+	github.com/mark3labs/mcp-go v1.1.1
 	github.com/mattermost/mattermost/server/public v0.4.4
 	github.com/modelcontextprotocol/go-sdk v1.8.0
 	github.com/muesli/termenv v0.16.0
@@ -139,7 +140,6 @@ require (
 	github.com/charmbracelet/x/term v0.2.2 // indirect
 	github.com/charmbracelet/x/termios v0.1.1 // indirect
 	github.com/charmbracelet/x/windows v0.2.2 // indirect
-	github.com/chromedp/sysutil v1.1.0 // indirect
 	github.com/clipperhouse/displaywidth v0.11.0 // indirect
 	github.com/clipperhouse/uax29/v2 v2.7.0 // indirect
 	github.com/cloudflare/circl v1.6.3 // indirect

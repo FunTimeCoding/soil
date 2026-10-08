@@ -2,7 +2,7 @@ package loki
 
 import "time"
 
-type overview struct {
+type Overview struct {
 	Namespace string
 	Count     int
 	Latest    time.Time

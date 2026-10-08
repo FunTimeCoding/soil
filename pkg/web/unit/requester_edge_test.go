@@ -104,7 +104,7 @@ func TestRefusalReadsCommonShapes(t *testing.T) {
 
 func TestAnswerThatIsNotNotationIsUnexpected(t *testing.T) {
 	s, _ := newScriptedServer(t, "<html>", http.StatusOK)
-	var out named
+	var out Named
 	e := newRequester(t, s.URL).Notation(request.Get("/items"), &out)
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(t, "/items: answer is not JSON", e.Error())

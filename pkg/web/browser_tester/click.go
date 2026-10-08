@@ -7,5 +7,5 @@ import (
 
 func (b *Browser) Click(selector string) {
 	b.T.Helper()
-	errors.PanicOnError(chromedp.Run(b.Context, chromedp.Click(selector)))
+	errors.PanicOnError(chromedp.Do(b.Context, chromedp.Click(selector)))
 }

@@ -6,8 +6,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/terminal/unit/command_end_recorder"
 )
 
-func newFixture() *fixture {
-	result := &fixture{
+func newFixture() *Fixture {
+	result := &Fixture{
 		output:  &bytes.Buffer{},
 		failure: &bytes.Buffer{},
 		ends:    command_end_recorder.New(),

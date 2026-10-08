@@ -1,6 +1,6 @@
 package guard
 
-type input struct {
+type Input struct {
 	ToolName  string    `json:"tool_name"`
-	ToolInput toolInput `json:"tool_input"`
+	ToolInput ToolInput `json:"tool_input"`
 }

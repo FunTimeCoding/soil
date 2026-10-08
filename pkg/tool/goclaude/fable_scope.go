@@ -2,7 +2,7 @@ package goclaude
 
 import "github.com/funtimecoding/soil/pkg/generative/constant"
 
-func fableScope(limits *statusLineRateLimits) *statusLineModelScoped {
+func fableScope(limits *StatusLineRateLimits) *StatusLineModelScoped {
 	if limits == nil {
 		return nil
 	}

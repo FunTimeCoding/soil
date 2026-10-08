@@ -7,7 +7,7 @@ import (
 
 func caption(
 	content string,
-	lines []line,
+	lines []Line,
 	tableLine int,
 ) string {
 	i := tableLine - 1

@@ -12,7 +12,12 @@ func (c *Client) Wake(identifier string) error {
 		return e
 	}
 
-	return target.ActivateTarget(target.ID(identifier)).Do(
-		cdp.WithExecutor(c.context, b),
+	_, e = cdp.Call(
+		c.context,
+		b,
+		target.ActivateTarget,
+		target.ActivateTargetParams{TargetID: target.ID(identifier)},
 	)
+
+	return e
 }

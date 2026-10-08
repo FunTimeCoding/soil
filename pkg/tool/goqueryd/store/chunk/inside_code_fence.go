@@ -2,7 +2,7 @@ package chunk
 
 func insideCodeFence(
 	position int,
-	fences []codeFence,
+	fences []CodeFence,
 ) bool {
 	for _, f := range fences {
 		if position > f.start && position < f.end {

@@ -13,13 +13,13 @@ import (
 )
 
 func referencesThrough(
-	violations []violation,
+	violations []Violation,
 	loadedFiles map[string]bool,
 	directory string,
 	r *output.Results,
 	w *workspace.Workspace,
 ) {
-	var renames []exportedRename
+	var renames []ExportedRename
 
 	for _, v := range violations {
 		if v.fix == "" {
@@ -32,7 +32,7 @@ func referencesThrough(
 
 		renames = append(
 			renames,
-			exportedRename{
+			ExportedRename{
 				oldName: v.ident.Name,
 				newName: segment.ReplaceSegment(v.ident.Name, v.segment, v.fix),
 			},

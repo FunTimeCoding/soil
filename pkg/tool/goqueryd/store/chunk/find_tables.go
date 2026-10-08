@@ -5,8 +5,8 @@ import (
 	"strings"
 )
 
-func findTables(content string) []*table {
-	var result []*table
+func findTables(content string) []*Table {
+	var result []*Table
 	lines := lineSpans(content)
 	inside := false
 	heading := ""
@@ -38,7 +38,7 @@ func findTables(content string) []*table {
 			continue
 		}
 
-		t := &table{
+		t := &Table{
 			start:     lines[i].start,
 			headerEnd: lines[i+1].end,
 			heading:   heading,

@@ -1,8 +1,8 @@
 package utilization
 
-type limit struct {
+type Limit struct {
 	Kind     string  `json:"kind"`
 	Percent  int     `json:"percent"`
 	ResetsAt *string `json:"resets_at"`
-	Scope    *scope  `json:"scope"`
+	Scope    *Scope  `json:"scope"`
 }

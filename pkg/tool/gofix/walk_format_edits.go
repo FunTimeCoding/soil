@@ -14,8 +14,8 @@ func walkFormatEdits(
 	fileSet *token.FileSet,
 	source []byte,
 	collapse bool,
-) []*formatChange {
-	var result []*formatChange
+) []*FormatChange {
+	var result []*FormatChange
 	stale := 0
 	var walk func(
 		dst.Node,
@@ -54,7 +54,7 @@ func walkFormatEdits(
 						changed = true
 						result = append(
 							result,
-							&formatChange{
+							&FormatChange{
 								Kind:    "call_format",
 								Message: "formatted call",
 								Offset:  fileSet.Position(astCall.Lparen).Offset,
@@ -103,7 +103,7 @@ func walkFormatEdits(
 						changed = true
 						result = append(
 							result,
-							&formatChange{
+							&FormatChange{
 								Kind:    "composite_format",
 								Message: "formatted composite literal",
 								Offset:  fileSet.Position(astLit.Lbrace).Offset,

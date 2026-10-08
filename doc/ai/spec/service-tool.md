@@ -352,8 +352,10 @@ Key conventions:
   method values: `g.Open(route.Get("/alerts"), s.alerts)` for board routes on
   non-SSO services; SSO services call `g.WithSession(s.require)` first and
   register their protected routes with `g.Session` (auth trio and favicon stay
-  `Open`). Bare `m.HandleFunc` in a web package is flagged by the `route_guard`
-  analyzer.
+  `Open`). A session route also answers to the service bearer token, so the
+  tokens that open REST and MCP open the pages too, with the same full access -
+  in the `Authorization` header only, never a cookie or a query string. Bare
+  `m.HandleFunc` in a web package is flagged by the `route_guard` analyzer.
 - Handler methods named after the route, no `handle` prefix: `alerts()`,
   `dashboard()`, `addSubmit()`
 - Standalone HTML builders named after the component they produce:

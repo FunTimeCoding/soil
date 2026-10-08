@@ -20,7 +20,7 @@ func (s *Site) OpenChat(name string) {
 		log.Panicf("chat not found: %s", name)
 	}
 
-	s.session.ClickSearch(
+	s.session.MustClickSearch(
 		fmt.Sprintf(
 			`//a[contains(@href, "/c/")]//span[@dir="auto" and text()="%s"]`,
 			name,

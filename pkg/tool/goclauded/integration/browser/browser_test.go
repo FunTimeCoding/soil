@@ -3,7 +3,6 @@
 package browser
 
 import (
-	"github.com/chromedp/cdproto/cdp"
 	"github.com/chromedp/cdproto/target"
 	"github.com/chromedp/chromedp"
 	"github.com/funtimecoding/soil/pkg/assert"
@@ -16,24 +15,25 @@ import (
 func TestAcquireTargetDoesNotCloseTab(t *testing.T) {
 	b := browser_tester.New(t)
 	b.Navigate("about:blank")
-	browser := chromedp.FromContext(b.Context).Browser
-	identifier, e := target.CreateTarget("about:blank").Do(
-		cdp.WithExecutor(b.Context, browser),
+	created, e := chromedp.CallBrowser(
+		b.Context,
+		target.CreateTarget,
+		target.CreateTargetParams{URL: "about:blank"},
 	)
 	assert.FatalOnError(t, e)
 	cached, _ := chromedp.NewContext(
 		b.Context,
-		chromedp.WithTargetID(identifier),
+		chromedp.WithTargetID(created.TargetID),
 	)
 	assert.FatalOnError(
 		t,
-		chromedp.Run(
+		chromedp.Do(
 			cached,
 			chromedp.Navigate("data:text/html,<title>test</title>"),
 		),
 	)
-	var title string
-	assert.FatalOnError(t, chromedp.Run(cached, chromedp.Title(&title)))
+	title, e := chromedp.Run(cached, chromedp.Title())
+	assert.FatalOnError(t, e)
 	assert.String(t, "test", title)
 	t.Run(
 		"cached context survives repeated use",
@@ -41,8 +41,8 @@ func TestAcquireTargetDoesNotCloseTab(t *testing.T) {
 			for i := 0; i < 5; i++ {
 				done := make(chan error, 1)
 				go func() {
-					var v string
-					done <- chromedp.Run(cached, chromedp.Title(&v))
+					_, f := chromedp.Run(cached, chromedp.Title())
+					done <- f
 				}()
 
 				select {
@@ -54,8 +54,8 @@ func TestAcquireTargetDoesNotCloseTab(t *testing.T) {
 			}
 
 			time.Sleep(time.Second)
-			var alive string
-			assert.FatalOnError(t, chromedp.Run(cached, chromedp.Title(&alive)))
+			alive, f := chromedp.Run(cached, chromedp.Title())
+			assert.FatalOnError(t, f)
 			assert.String(t, "test", alive)
 		},
 	)
@@ -117,21 +117,28 @@ func TestConversationsSidebarInfiniteScroll(t *testing.T) {
 	assert.True(t, after > initial)
 }
 
-func TestConversationsSidebarFilter(t *testing.T) {
+func TestConversationsSidebarSearch(t *testing.T) {
 	b := browser_tester.New(t)
-	b.Navigate("http://localhost:8583/conversations")
+	b.Navigate("https://localhost:8583/conversations")
 	b.WaitReady(".sidebar-entry")
-	total := b.CountElements(".sidebar-entry")
 	b.Evaluate(
-		"document.querySelector('.sidebar-filter').value = 'goclauded'; document.querySelector('.sidebar-filter').dispatchEvent(new Event('input'))",
+		"document.querySelector('.search-input').value = 'goclauded'; document.querySelector('.search-input').dispatchEvent(new Event('input', {bubbles: true}))",
 		nil,
 	)
-	time.Sleep(500 * time.Millisecond)
-	var visible int
-	b.Evaluate(
-		"document.querySelectorAll('.sidebar-entry:not([style*=\"display: none\"])').length",
-		&visible,
+	b.WaitCondition(
+		"document.querySelectorAll('.search-result').length > 0 && document.querySelectorAll('.htmx-request, .htmx-swapping, .htmx-settling').length === 0",
 	)
-	assert.True(t, visible > 0)
-	assert.True(t, visible < total)
+	assert.True(t, b.CountElements("#sidebar-entries mark") > 0)
+	b.Evaluate("document.querySelector('.search-snippet').click()", nil)
+	b.WaitCondition(
+		"document.querySelectorAll('#panel .search-current').length == 1",
+	)
+	assert.True(t, b.CountElements("#panel .search-hit") > 0)
+	b.Evaluate(
+		"document.dispatchEvent(new KeyboardEvent('keydown', {key: 'n'}))",
+		nil,
+	)
+	b.WaitCondition(
+		"(document.getElementById('hit-counter').textContent || '').indexOf('hit ') === 0",
+	)
 }

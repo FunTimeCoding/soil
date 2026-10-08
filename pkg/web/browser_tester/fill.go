@@ -11,6 +11,6 @@ func (b *Browser) Fill(
 ) {
 	b.T.Helper()
 	errors.PanicOnError(
-		chromedp.Run(b.Context, chromedp.SendKeys(selector, value)),
+		chromedp.Do(b.Context, chromedp.SendKeys(selector, value)),
 	)
 }

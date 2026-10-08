@@ -9,21 +9,29 @@ import (
 	"time"
 )
 
-func (p *Protocol) run(actions ...chromedp.Action) error {
+func run[T any](
+	p *Protocol,
+	a chromedp.Action[T],
+) (T, error) {
 	if p.timeout <= 0 {
-		return chromedp.Run(p.context, actions...)
+		return chromedp.Run(p.context, a)
 	}
 
+	var result T
 	done := make(chan error, 1)
 	go func() {
-		done <- chromedp.Run(p.context, actions...)
+		v, e := chromedp.Run(p.context, a)
+		result = v
+		done <- e
 	}()
 
 	select {
 	case e := <-done:
-		return e
+		return result, e
 	case <-time.After(p.timeout):
-		return connection.New(
+		var zero T
+
+		return zero, connection.New(
 			connectionConstant.Timeout,
 			constant.BrowserTab,
 			"",

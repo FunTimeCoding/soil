@@ -6,7 +6,7 @@ import (
 	"go/types"
 )
 
-type typedVariable struct {
+type TypedVariable struct {
 	ident           *ast.Ident
 	typ             types.Type
 	precedence      int

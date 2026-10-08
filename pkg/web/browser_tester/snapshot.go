@@ -1,7 +1,6 @@
 package browser_tester
 
 import (
-	"context"
 	"fmt"
 	"github.com/chromedp/cdproto/accessibility"
 	"github.com/chromedp/chromedp"
@@ -11,25 +10,17 @@ import (
 
 func (b *Browser) Snapshot() []*snapshot_node.Node {
 	b.T.Helper()
-	var nodes []*accessibility.Node
-	errors.PanicOnError(
-		chromedp.Run(
-			b.Context,
-			chromedp.ActionFunc(
-				func(c context.Context) error {
-					var e error
-					nodes, e = accessibility.GetFullAXTree().Do(c)
-
-					return e
-				},
-			),
-		),
+	tree, e := chromedp.Call(
+		b.Context,
+		accessibility.GetFullAXTree,
+		accessibility.GetFullAXTreeParams{},
 	)
+	errors.PanicOnError(e)
 	lookup := make(map[accessibility.NodeID]*snapshot_node.Node)
 	var roots []*snapshot_node.Node
 	uid := 0
 
-	for _, n := range nodes {
+	for _, n := range tree.Nodes {
 		if n.Ignored {
 			continue
 		}

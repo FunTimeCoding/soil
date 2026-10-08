@@ -1,5 +1,5 @@
 package utilization
 
-type scopeModel struct {
+type ScopeModel struct {
 	DisplayName string `json:"display_name"`
 }

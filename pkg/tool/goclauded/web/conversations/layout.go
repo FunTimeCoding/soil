@@ -26,9 +26,9 @@ func layout(content ...gomponents.Node) gomponents.Node {
 			),
 			html.Body(
 				gomponents.Group(content),
-				html.Script(gomponents.Raw(constant.SidebarFilterScript)),
 				html.Script(gomponents.Raw(constant.InfiniteScrollScript)),
 				html.Script(gomponents.Raw(constant.ScrollToBottomScript)),
+				html.Script(gomponents.Raw(constant.HitNavigationScript)),
 			),
 		),
 	)

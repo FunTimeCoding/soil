@@ -6,8 +6,8 @@ import (
 	"os"
 )
 
-func readHookInput() *hookInput {
-	var input hookInput
+func readHookInput() *HookInput {
+	var input HookInput
 	errors.PanicOnError(json.NewDecoder(os.Stdin).Decode(&input))
 
 	return &input

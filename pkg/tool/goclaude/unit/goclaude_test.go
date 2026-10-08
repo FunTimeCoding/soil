@@ -2,6 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/guard"
 	"testing"
 )
@@ -55,6 +56,88 @@ func TestVerdictBlocksPipInstall(t *testing.T) {
 		"pip install is blocked",
 		guard.Verdict("darwin", "pip --no-cache-dir install requests"),
 	)
+}
+
+func TestVerdictBlocksASinglePythonReplacement(t *testing.T) {
+	assert.String(
+		t,
+		"a single python search-and-replace in one file is an Edit call - use the Edit tool; for several replacements in one file, use goreplace (search/replace blocks on stdin, all or none)",
+		guard.Verdict(
+			"linux",
+			"python3 - <<'EOF'\np='notes.md'\ns=open(p).read()\ns=s.replace('old text','new text')\nopen(p,'w').write(s)\nEOF",
+		),
+	)
+	assert.StringContains(
+		t,
+		"use the Edit tool",
+		guard.Verdict(
+			"darwin",
+			"python3 - <<'PY'\nimport pathlib\np = pathlib.Path(\"notes.md\")\nt = p.read_text()\nold = \"alpha\"\nassert old in t\np.write_text(t.replace(old, \"beta\"))\nprint(\"done\")\nPY\ngo test ./...",
+		),
+	)
+	assert.StringContains(
+		t,
+		"use the Edit tool",
+		guard.Verdict(
+			"darwin",
+			`python3 -c "p='notes.md'; s=open(p).read(); open(p,'w').write(s.replace('a','b'))"`,
+		),
+	)
+}
+
+func TestVerdictAllowsPythonThatIsNotASingleReplacement(t *testing.T) {
+	for _, command := range []string{
+		"python3 - <<'EOF'\np='notes.md'\ns=open(p).read()\ns=s.replace('a','b').replace('c','d')\nopen(p,'w').write(s)\nEOF",
+		"python3 - <<'EOF'\np='notes.md'\ns=open(p).read()\nfor a, b in [('a','b'),('c','d')]:\n    s=s.replace(a,b)\nopen(p,'w').write(s)\nEOF",
+		"python3 - <<'EOF'\nimport re\np='notes.md'\ns=open(p).read()\ns=re.sub('a+','b',s)\nopen(p,'w').write(s.replace('c','d'))\nEOF",
+		"python3 - <<'EOF'\np='notes.md'\ns=open(p).read()\nopen(p,'w').write(s.replace('a','b', 1))\nEOF",
+		"python3 - <<'EOF'\ns=open('in.md').read()\nopen('out.md','w').write(s.replace('a','b'))\nEOF",
+		"python3 - <<'EOF'\nprint(open('notes.md').read().replace('a','b'))\nEOF",
+		`podman run --rm image python3 -c "s=open('/m/x').read(); open('/m/x','w').write(s.replace('a','b'))"`,
+		"python3 tools/rewrite.py notes.md",
+	} {
+		assert.String(t, "", guard.Verdict("darwin", command))
+	}
+}
+
+func TestVerdictAllowsASingleReplacementProbeThatRestores(t *testing.T) {
+	edit := "python3 - <<'PY'\np='pkg/x/run.go'\ns=open(p).read()\ns=s.replace('a','b')\nopen(p,'w').write(s)\nPY\n"
+	assert.String(
+		t,
+		"",
+		guard.Verdict(
+			"darwin",
+			join.Empty(
+				"cp pkg/x/run.go /tmp/run.bak && ",
+				edit,
+				"go test ./pkg/x/; cp /tmp/run.bak pkg/x/run.go",
+			),
+		),
+	)
+	assert.String(
+		t,
+		"",
+		guard.Verdict(
+			"darwin",
+			join.Empty(edit, "go test ./pkg/x/; git checkout -- pkg/x/run.go"),
+		),
+	)
+}
+
+func TestVerdictBlocksASingleReplacementThatIsNotRestored(t *testing.T) {
+	edit := "python3 - <<'PY'\np='pkg/x/run.go'\ns=open(p).read()\ns=s.replace('a','b')\nopen(p,'w').write(s)\nPY\n"
+
+	for _, command := range []string{
+		join.Empty("cp pkg/x/run.go /tmp/run.bak && ", edit, "go test ./pkg/x/"),
+		join.Empty(edit, "cp /tmp/other.bak pkg/x/other.go"),
+		join.Empty("cp /tmp/run.bak pkg/x/run.go; ", edit),
+	} {
+		assert.StringContains(
+			t,
+			"use the Edit tool",
+			guard.Verdict("darwin", command),
+		)
+	}
 }
 
 func TestVerdictAllowsPackageQueries(t *testing.T) {

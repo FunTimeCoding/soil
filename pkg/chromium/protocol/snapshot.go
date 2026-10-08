@@ -7,21 +7,13 @@ import (
 )
 
 func (p *Protocol) Snapshot() ([]*snapshot.Node, error) {
-	var result []*snapshot.Node
-	var fail error
-	e := p.run(
-		chromedp.ActionFunc(
-			func(v context.Context) error {
-				result, fail = snapshot.Take(v)
-
-				return fail
-			},
-		),
+	return run(
+		p,
+		func(
+			v context.Context,
+			t *chromedp.Target,
+		) ([]*snapshot.Node, error) {
+			return snapshot.Take(v, t)
+		},
 	)
-
-	if e != nil {
-		return nil, e
-	}
-
-	return result, nil
 }

@@ -6,7 +6,7 @@ import (
 )
 
 func renderPiece(
-	t *table,
+	t *Table,
 	header string,
 	marker string,
 	rows string,

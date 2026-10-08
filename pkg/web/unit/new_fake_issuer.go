@@ -7,9 +7,9 @@ import (
 	"testing"
 )
 
-func newFakeIssuer(t *testing.T) *fakeIssuer {
+func newFakeIssuer(t *testing.T) *FakeIssuer {
 	t.Helper()
-	result := &fakeIssuer{}
+	result := &FakeIssuer{}
 	result.Server = httptest.NewServer(
 		http.HandlerFunc(
 			func(

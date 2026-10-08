@@ -3,8 +3,8 @@ package chunk
 import "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 
 func findBestCutoff(
-	points []breakPoint,
-	fences []codeFence,
+	points []BreakPoint,
+	fences []CodeFence,
 	target int,
 ) int {
 	window := target - constant.ChunkWindow

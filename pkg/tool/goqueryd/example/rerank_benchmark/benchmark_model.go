@@ -20,7 +20,7 @@ func benchmarkModel(m *rerank_model.Model) {
 		time.Since(start),
 	)
 
-	for _, c := range []benchmarkCase{
+	for _, c := range []BenchmarkCase{
 		{label: "batch 30 distinct", documents: distinctDocuments(30)},
 		{label: "batch 30 distinct", documents: distinctDocuments(30)},
 		{label: "batch 7 distinct", documents: distinctDocuments(7)},

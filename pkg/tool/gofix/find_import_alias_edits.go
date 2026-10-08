@@ -13,8 +13,8 @@ func findImportAliasEdits(
 	fileSet *token.FileSet,
 	all []*packages.Package,
 	r *output.Results,
-) []edit {
-	var result []edit
+) []Edit {
+	var result []Edit
 	seen := make(map[token.Pos]bool)
 
 	for _, p := range all {

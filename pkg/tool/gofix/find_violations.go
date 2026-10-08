@@ -10,8 +10,8 @@ func FindViolations(
 	all []*packages.Package,
 	reported map[string]bool,
 	faces *face.Set,
-) []violation {
-	var result []violation
+) []Violation {
+	var result []Violation
 	seen := make(map[token.Pos]bool)
 
 	for _, p := range all {

@@ -1,5 +1,5 @@
 package utilization
 
-type response struct {
-	Limits []limit `json:"limits"`
+type Response struct {
+	Limits []Limit `json:"limits"`
 }

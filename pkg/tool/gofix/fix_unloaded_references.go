@@ -6,7 +6,7 @@ import (
 )
 
 func FixUnloadedReferences(
-	violations []violation,
+	violations []Violation,
 	loadedFiles map[string]bool,
 	directory string,
 	r *output.Results,

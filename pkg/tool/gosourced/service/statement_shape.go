@@ -1,10 +1,8 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/join"
 	"go/ast"
 	"go/token"
-	"sort"
 	"strings"
 )
 
@@ -25,12 +23,8 @@ func statementShape(
 		lineEnd = start + index
 	}
 
-	type replacement struct {
-		start int
-		end   int
-		text  string
-	}
-	var replacements []replacement
+	var b strings.Builder
+	cursor := start
 	ast.Inspect(
 		node,
 		func(n ast.Node) bool {
@@ -49,34 +43,26 @@ func statementShape(
 				return true
 			}
 
+			var text string
+
 			switch leaf := n.(type) {
 			case *ast.Ident:
-				replacements = append(
-					replacements,
-					replacement{start: from, end: to, text: "IDENT"},
-				)
+				text = "IDENT"
 			case *ast.BasicLit:
-				replacements = append(
-					replacements,
-					replacement{start: from, end: to, text: leaf.Kind.String()},
-				)
+				text = leaf.Kind.String()
+			default:
+				return true
 			}
+
+			b.Write(content[cursor:from])
+			b.WriteString(text)
+			cursor = to
 
 			return true
 		},
 	)
-	sort.Slice(
-		replacements,
-		func(i, j int) bool {
-			return replacements[i].start > replacements[j].start
-		},
-	)
-	line := string(content[start:lineEnd])
-	exemplar := strings.TrimSpace(line)
+	b.Write(content[cursor:lineEnd])
 
-	for _, r := range replacements {
-		line = join.Empty(line[:r.start-start], r.text, line[r.end-start:])
-	}
-
-	return strings.TrimSpace(line), exemplar
+	return strings.TrimSpace(b.String()),
+		strings.TrimSpace(string(content[start:lineEnd]))
 }

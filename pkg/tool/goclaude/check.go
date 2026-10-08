@@ -25,8 +25,8 @@ func check(c *command_context.Context) *cobra.Command {
 
 			errors.PanicOnError(
 				json.NewEncoder(os.Stdout).Encode(
-					hookOutput{
-						HookSpecificOutput: hookSpecificOutput{
+					HookOutput{
+						HookSpecificOutput: HookSpecificOutput{
 							HookEventName:     "UserPromptSubmit",
 							AdditionalContext: o,
 						},

@@ -9,51 +9,59 @@ import (
 )
 
 func (c *Client) Watch(observe func(*event.Event)) error {
-	chromedp.ListenBrowser(
-		c.context,
-		func(v any) {
-			switch e := v.(type) {
-			case *target.EventTargetCreated:
-				observe(
-					event.New(
-						constant.EventKindCreated,
-						string(e.TargetInfo.TargetID),
-						e.TargetInfo.URL,
-					),
-				)
-			case *target.EventTargetInfoChanged:
-				observe(
-					event.New(
-						constant.EventKindChanged,
-						string(e.TargetInfo.TargetID),
-						e.TargetInfo.URL,
-					),
-				)
-			case *target.EventTargetDestroyed:
-				observe(
-					event.New(
-						constant.EventKindDestroyed,
-						string(e.TargetID),
-						"",
-					),
-				)
-			case *target.EventAttachedToTarget:
-				observe(
-					event.New(
-						constant.EventKindAttached,
-						string(e.TargetInfo.TargetID),
-						e.TargetInfo.URL,
-					),
-				)
-			case *target.EventDetachedFromTarget:
-				observe(
-					event.NewSession(
-						constant.EventKindDetached,
-						string(e.SessionID),
-					),
-				)
-			}
+	go forward(
+		chromedp.BrowserEvents(c.context, target.TargetCreated),
+		func(v target.EventTargetCreated) *event.Event {
+			return event.New(
+				constant.EventKindCreated,
+				string(v.TargetInfo.TargetID),
+				v.TargetInfo.URL,
+			)
 		},
+		observe,
+	)
+	go forward(
+		chromedp.BrowserEvents(c.context, target.TargetInfoChanged),
+		func(v target.EventTargetInfoChanged) *event.Event {
+			return event.New(
+				constant.EventKindChanged,
+				string(v.TargetInfo.TargetID),
+				v.TargetInfo.URL,
+			)
+		},
+		observe,
+	)
+	go forward(
+		chromedp.BrowserEvents(c.context, target.TargetDestroyed),
+		func(v target.EventTargetDestroyed) *event.Event {
+			return event.New(
+				constant.EventKindDestroyed,
+				string(v.TargetID),
+				"",
+			)
+		},
+		observe,
+	)
+	go forward(
+		chromedp.BrowserEvents(c.context, target.AttachedToTarget),
+		func(v target.EventAttachedToTarget) *event.Event {
+			return event.New(
+				constant.EventKindAttached,
+				string(v.TargetInfo.TargetID),
+				v.TargetInfo.URL,
+			)
+		},
+		observe,
+	)
+	go forward(
+		chromedp.BrowserEvents(c.context, target.DetachedFromTarget),
+		func(v target.EventDetachedFromTarget) *event.Event {
+			return event.NewSession(
+				constant.EventKindDetached,
+				string(v.SessionID),
+			)
+		},
+		observe,
 	)
 	b, e := c.browser()
 
@@ -61,5 +69,12 @@ func (c *Client) Watch(observe func(*event.Event)) error {
 		return e
 	}
 
-	return target.SetDiscoverTargets(true).Do(cdp.WithExecutor(c.context, b))
+	_, e = cdp.Call(
+		c.context,
+		b,
+		target.SetDiscoverTargets,
+		target.SetDiscoverTargetsParams{Discover: true},
+	)
+
+	return e
 }

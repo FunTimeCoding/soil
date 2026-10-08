@@ -5,10 +5,10 @@ import "github.com/sergi/go-diff/diffmatchpatch"
 func diffLines(
 	original []byte,
 	modified []byte,
-) []*diffLine {
+) []*DiffLine {
 	m := diffmatchpatch.New()
 	a, b, lines := m.DiffLinesToChars(string(original), string(modified))
-	var result []*diffLine
+	var result []*DiffLine
 
 	for _, d := range m.DiffCharsToLines(m.DiffMain(a, b, false), lines) {
 		mark := " "
@@ -22,7 +22,7 @@ func diffLines(
 		}
 
 		for _, line := range splitLines([]byte(d.Text)) {
-			result = append(result, &diffLine{Mark: mark, Text: line})
+			result = append(result, &DiffLine{Mark: mark, Text: line})
 		}
 	}
 

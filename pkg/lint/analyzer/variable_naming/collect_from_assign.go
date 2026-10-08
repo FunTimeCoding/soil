@@ -9,7 +9,7 @@ import (
 func collectFromAssign(
 	y *types.Info,
 	s *ast.AssignStmt,
-	result *[]typedVariable,
+	result *[]TypedVariable,
 ) {
 	if s.Tok != token.DEFINE {
 		return
@@ -39,7 +39,7 @@ func collectFromAssign(
 
 		*result = append(
 			*result,
-			typedVariable{
+			TypedVariable{
 				ident:       ident,
 				typ:         o.Type(),
 				precedence:  typePrecedence(o.Type()),

@@ -1,5 +1,5 @@
 package utilization
 
-type storedCredential struct {
-	Claude claudeCredential `json:"claudeAiOauth"`
+type StoredCredential struct {
+	Claude ClaudeCredential `json:"claudeAiOauth"`
 }

@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-type block struct {
+type Block struct {
 	start   time.Time
 	end     time.Time
 	entries []*common.Timestamped

@@ -1,8 +1,6 @@
 package command_context
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 )
@@ -23,11 +21,6 @@ func (c *Context) Initialize(
 		l.Insecure()
 	}
 
-	r, e := client.NewClientWithResponses(
-		l.String(),
-		client.WithHTTPClient(web.StallClient()),
-		client.WithRequestEditorFn(web.BearerEditor(token)),
-	)
-	errors.PanicOnError(e)
-	c.client = r
+	c.client = connect(l.String(), web.StallClient(), token)
+	c.longClient = connect(l.String(), web.LongStallClient(), token)
 }

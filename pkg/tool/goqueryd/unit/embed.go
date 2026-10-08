@@ -1,6 +1,6 @@
 package unit
 
-func (f *fixedEmbedder) Embed(v []string) ([][]float32, error) {
+func (f *FixedEmbedder) Embed(v []string) ([][]float32, error) {
 	result := make([][]float32, len(v))
 
 	for i := range v {

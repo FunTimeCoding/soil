@@ -6,5 +6,5 @@ import (
 )
 
 func (s *Reader) ReadUsage() *page.Usage {
-	return page.Parse(s.Protocol.Outer(constant.AnthropicBodyElement))
+	return page.Parse(s.Protocol.MustOuter(constant.AnthropicBodyElement))
 }

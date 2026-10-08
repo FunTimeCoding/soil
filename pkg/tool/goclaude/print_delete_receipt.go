@@ -18,6 +18,7 @@ func printDeleteReceipt(r *client.DeleteReceiptResponse) {
 		{"tracker state", r.TrackerStates},
 		{"queue", r.Queue},
 		{"notification", r.Notifications},
+		{"search entry", r.SearchEntries},
 	}
 
 	for _, row := range rows {

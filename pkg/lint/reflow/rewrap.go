@@ -13,7 +13,7 @@ func rewrap(
 	literal []bool,
 	n ast.BlockNode,
 	width int,
-) *patch {
+) *Patch {
 	segments := n.Source()
 
 	if len(segments) == 0 {
@@ -55,7 +55,7 @@ func rewrap(
 
 	wrapped[0] = join.Empty(prefix, wrapped[0])
 
-	return &patch{
+	return &Patch{
 		start:   start,
 		stop:    last.Stop,
 		content: join.NewLine(wrapped),

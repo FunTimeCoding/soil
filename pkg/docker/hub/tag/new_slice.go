@@ -1,6 +1,6 @@
 package tag
 
-func NewSlice(v []response) []*Tag {
+func NewSlice(v []Response) []*Tag {
 	var result []*Tag
 
 	for i := range v {

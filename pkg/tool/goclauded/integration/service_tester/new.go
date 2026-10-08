@@ -4,9 +4,11 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration/mock_notifier"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration/store_tester"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/search_index"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service"
 	memoryMock "github.com/funtimecoding/soil/pkg/tool/gomemoryd/client/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/mock_indexer"
@@ -21,6 +23,7 @@ func New(t *testing.T) *Tester {
 	si := mock_indexer.New()
 	ci := mock_indexer.New()
 	n := mock_notifier.New()
+	x := search_index.New(connection.NewMemory())
 	harbor := t.TempDir()
 	c.Harbor = harbor
 
@@ -33,6 +36,7 @@ func New(t *testing.T) *Tester {
 			mc,
 			si,
 			ci,
+			x,
 			n,
 			memory.New(),
 			harbor,
@@ -45,5 +49,6 @@ func New(t *testing.T) *Tester {
 		CompletionIndexer: ci,
 		Notifier:          n,
 		Memory:            mc,
+		Search:            x,
 	}
 }

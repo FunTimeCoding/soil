@@ -5,7 +5,7 @@ import (
 	"sync"
 )
 
-type saltServer struct {
+type SaltServer struct {
 	*httptest.Server
 	mutex  sync.Mutex
 	logins int

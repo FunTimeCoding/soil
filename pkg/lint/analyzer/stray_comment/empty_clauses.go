@@ -5,8 +5,8 @@ import (
 	"go/token"
 )
 
-func emptyClauses(body *ast.BlockStmt) []region {
-	var result []region
+func emptyClauses(body *ast.BlockStmt) []Region {
+	var result []Region
 
 	for index, clause := range body.List {
 		var from token.Pos
@@ -33,7 +33,7 @@ func emptyClauses(body *ast.BlockStmt) []region {
 			to = body.List[index+1].Pos()
 		}
 
-		result = append(result, region{From: from, To: to})
+		result = append(result, Region{From: from, To: to})
 	}
 
 	return result

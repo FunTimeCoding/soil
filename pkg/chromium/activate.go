@@ -1,7 +1,6 @@
 package chromium
 
 import (
-	"context"
 	"github.com/chromedp/cdproto/cdp"
 	"github.com/chromedp/cdproto/page"
 	"github.com/chromedp/cdproto/target"
@@ -19,20 +18,19 @@ func (c *Client) Activate(targetIdentifier string) {
 	b, e := c.browser()
 	errors.PanicOnError(e)
 	t1 := time.Now()
-	errors.PanicOnError(
-		target.ActivateTarget(target.ID(targetIdentifier)).Do(
-			cdp.WithExecutor(c.context, b),
-		),
+	_, e = cdp.Call(
+		c.context,
+		b,
+		target.ActivateTarget,
+		target.ActivateTargetParams{TargetID: target.ID(targetIdentifier)},
 	)
+	errors.PanicOnError(e)
 	console.Format("    ActivateTarget took %v\n", time.Since(t1))
 	t2 := time.Now()
-	e = chromedp.Run(
+	_, e = chromedp.Call(
 		c.TargetContext(targetIdentifier),
-		chromedp.ActionFunc(
-			func(x context.Context) error {
-				return page.Reload().Do(x)
-			},
-		),
+		page.Reload,
+		page.ReloadParams{},
 	)
 	console.Format("    Reload took %v (error: %v)\n", time.Since(t2), e)
 	errors.PanicOnError(e)

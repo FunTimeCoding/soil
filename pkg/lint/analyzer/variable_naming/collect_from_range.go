@@ -8,7 +8,7 @@ import (
 func collectFromRange(
 	y *types.Info,
 	s *ast.RangeStmt,
-	result *[]typedVariable,
+	result *[]TypedVariable,
 ) {
 	for _, expr := range []ast.Expr{s.Key, s.Value} {
 		if expr == nil {
@@ -29,7 +29,7 @@ func collectFromRange(
 
 		*result = append(
 			*result,
-			typedVariable{
+			TypedVariable{
 				ident:       ident,
 				typ:         o.Type(),
 				precedence:  typePrecedence(o.Type()),

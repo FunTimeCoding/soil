@@ -9,8 +9,8 @@ import (
 func collectOkayForms(
 	y *types.Info,
 	f *ast.FuncDecl,
-) []okayForm {
-	var result []okayForm
+) []OkayForm {
+	var result []OkayForm
 
 	if f.Body == nil {
 		return result
@@ -39,7 +39,7 @@ func collectOkayForms(
 
 		result = append(
 			result,
-			okayForm{ident: ident, scope: o.Parent(), position: ident.Pos()},
+			OkayForm{ident: ident, scope: o.Parent(), position: ident.Pos()},
 		)
 	}
 	ast.Inspect(

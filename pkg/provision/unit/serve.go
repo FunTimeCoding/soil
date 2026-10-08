@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-func (s *saltServer) serve(
+func (s *SaltServer) serve(
 	w http.ResponseWriter,
 	r *http.Request,
 	password string,

@@ -1,5 +1,5 @@
 package graph_query
 
-type runnerManagers struct {
-	Nodes []runnerManagerNode `json:"nodes"`
+type RunnerManagers struct {
+	Nodes []RunnerManagerNode `json:"nodes"`
 }

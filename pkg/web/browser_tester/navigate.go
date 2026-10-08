@@ -7,5 +7,5 @@ import (
 
 func (b *Browser) Navigate(l string) {
 	b.T.Helper()
-	errors.PanicOnError(chromedp.Run(b.Context, chromedp.Navigate(l)))
+	errors.PanicOnError(chromedp.Do(b.Context, chromedp.Navigate(l)))
 }

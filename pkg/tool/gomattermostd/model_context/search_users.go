@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context/argument"
+	mattermostResponse "github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context/response"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -29,27 +30,19 @@ func (s *Server) SearchUsers(
 		return s.captureDetail(e)
 	}
 
-	type row struct {
-		Identifier string `json:"identifier"`
-		Username   string `json:"username"`
-		FirstName  string `json:"first_name,omitempty"`
-		LastName   string `json:"last_name,omitempty"`
-		Nickname   string `json:"nickname,omitempty"`
-		Email      string `json:"email,omitempty"`
-	}
-	var rows []row
+	var rows []*mattermostResponse.UserMatch
 
 	for _, u := range autocomplete.Users {
 		rows = append(
 			rows,
-			row{
-				Identifier: u.Id,
-				Username:   u.Username,
-				FirstName:  u.FirstName,
-				LastName:   u.LastName,
-				Nickname:   u.Nickname,
-				Email:      u.Email,
-			},
+			mattermostResponse.NewUserMatch(
+				u.Id,
+				u.Username,
+				u.FirstName,
+				u.LastName,
+				u.Nickname,
+				u.Email,
+			),
 		)
 	}
 

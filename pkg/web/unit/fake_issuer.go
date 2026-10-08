@@ -5,7 +5,7 @@ import (
 	"sync"
 )
 
-type fakeIssuer struct {
+type FakeIssuer struct {
 	*httptest.Server
 	mutex     sync.Mutex
 	discovery int

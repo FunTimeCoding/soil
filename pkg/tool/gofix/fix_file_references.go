@@ -13,7 +13,7 @@ import (
 
 func fixFileReferences(
 	path string,
-	renames []exportedRename,
+	renames []ExportedRename,
 	r *output.Results,
 	w *workspace.Workspace,
 ) {

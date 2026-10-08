@@ -6,8 +6,5 @@ import (
 )
 
 func (p *Protocol) Navigate(l string) error {
-	return p.run(
-		chromedp.Navigate(l),
-		chromedp.WaitReady(constant.BodySelector),
-	)
+	return p.do(chromedp.Navigate(l), chromedp.WaitReady(constant.BodySelector))
 }

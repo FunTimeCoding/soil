@@ -37,7 +37,7 @@ func Tabs() {
 				c.Activate(t.Identifier)
 			}
 
-			page.Save(t.Locator, p)
+			page.MustSave(t.Locator, p)
 		} else {
 			console.Line("  Exists")
 		}

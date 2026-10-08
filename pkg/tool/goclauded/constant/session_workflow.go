@@ -27,7 +27,7 @@ active topic, pass a topic parameter.
 
 **summarize** - record a session summary covering the full arc
 of the session. One summary per session; calling again amends.
-Summaries are pushed to the search index for future sessions.
+Summaries are pushed to goqueryd for future sessions.
 
 **moment** - capture a single line in the event stream. No
 notifications, no indexing. Moments accumulate quietly.
@@ -61,6 +61,17 @@ A UserPromptSubmit hook fires every turn and shows:
 The hook handles orientation automatically. Call history for
 deeper lookback with limit, offset, since, before, and kind
 filters.
+
+## Past conversations
+
+**search_conversations** - find exact words, names, paths or
+commands in every earlier conversation. A conversation matches
+when each term appears somewhere in it; messages by default,
+kinds adds edits and tool calls. Searching by meaning goes
+through goqueryd instead.
+
+**read_conversation** - read the exchange around a hit, passing
+the hit's session and identifier.
 
 ## Timeouts
 

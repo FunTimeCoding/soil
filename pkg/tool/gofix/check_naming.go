@@ -9,7 +9,7 @@ import (
 func checkNaming(
 	ident *ast.Ident,
 	o types.Object,
-) *violation {
+) *Violation {
 	v, isVariable := o.(*types.Var)
 	isField := isVariable && v.IsField()
 	r := segment.Check(ident.Name, isVariable, isField)
@@ -20,7 +20,7 @@ func checkNaming(
 
 	fix := segment.ResolveFix(ident.Name, r.Segment, r.Applicable, o)
 
-	return &violation{
+	return &Violation{
 		ident:   ident,
 		object:  o,
 		segment: r.Segment,

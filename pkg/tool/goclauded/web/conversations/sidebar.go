@@ -21,31 +21,6 @@ func (s *Server) sidebar(
 		}
 	}
 
-	sessions, e := s.service.EnrichedSessions(0, 0)
-	errors.PanicOnError(e)
-	limit := 30
-
-	if skip >= len(sessions) {
-		return
-	}
-
-	sessions = sessions[skip:]
-	hasMore := len(sessions) > limit
-
-	if hasMore {
-		sessions = sessions[:limit]
-	}
-
-	var entries []gomponents.Node
-
-	for _, e := range sessions {
-		entries = append(entries, entry(e))
-	}
-
-	if hasMore {
-		entries = append(entries, sentinel(skip+limit))
-	}
-
 	w.Header().Set(web.ContentType, "text/html; charset=utf-8")
-	errors.PanicOnError(gomponents.Group(entries).Render(w))
+	errors.PanicOnError(gomponents.Group(s.sidebarNodes(skip)).Render(w))
 }

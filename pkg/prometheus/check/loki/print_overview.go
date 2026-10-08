@@ -7,7 +7,7 @@ import (
 )
 
 func printOverview(
-	entries []*overview,
+	entries []*Overview,
 	f *option.Format,
 ) {
 	for _, e := range entries {

@@ -1,5 +1,5 @@
 package unit
 
-type commandLog struct {
+type CommandLog struct {
 	entries []string
 }

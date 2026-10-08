@@ -10,7 +10,7 @@ func (b *Browser) WaitVisible(selector string) {
 	x, cancel := context.WithTimeout(b.Context, b.Timeout)
 	defer cancel()
 
-	if chromedp.Run(x, chromedp.WaitVisible(selector)) != nil {
+	if chromedp.Do(x, chromedp.WaitVisible(selector)) != nil {
 		b.T.Fatalf("not visible within %s: %s", b.Timeout, selector)
 	}
 }

@@ -21,7 +21,12 @@ func (s *Server) ReadBody(
 		return response.Fail(e.Error())
 	}
 
-	body := s.client.Page(t.Identifier).Body()
+	body, e := s.client.Page(t.Identifier).Body()
+
+	if e != nil {
+		return s.captureDetail(e)
+	}
+
 	path := filepath.Join(
 		s.downloadDirectory,
 		fmt.Sprintf("chrome_%s.html", t.Identifier),

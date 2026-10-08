@@ -1,21 +1,22 @@
 package protocol
 
 import (
-	"github.com/chromedp/cdproto/runtime"
 	"github.com/chromedp/chromedp"
+	"github.com/funtimecoding/soil/pkg/chromium"
 )
 
 func (p *Protocol) EvaluatePromise(
 	expression string,
 	result any,
 ) error {
-	return p.run(
-		chromedp.Evaluate(
-			expression,
-			result,
-			func(q *runtime.EvaluateParams) *runtime.EvaluateParams {
-				return q.WithAwaitPromise(true)
-			},
-		),
+	value, e := run(
+		p,
+		chromedp.Evaluate[[]byte](expression, chromedp.EvalAwaitPromise),
 	)
+
+	if e != nil {
+		return e
+	}
+
+	return chromium.Decode(value, result)
 }

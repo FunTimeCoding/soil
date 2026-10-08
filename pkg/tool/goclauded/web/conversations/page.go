@@ -13,25 +13,6 @@ func (s *Server) page(
 	w http.ResponseWriter,
 	_ *http.Request,
 ) {
-	sessions, e := s.service.EnrichedSessions(0, 0)
-	errors.PanicOnError(e)
-	limit := 30
-	hasMore := len(sessions) > limit
-
-	if hasMore {
-		sessions = sessions[:limit]
-	}
-
-	var entries []gomponents.Node
-
-	for _, e := range sessions {
-		entries = append(entries, entry(e))
-	}
-
-	if hasMore {
-		entries = append(entries, sentinel(limit))
-	}
-
 	w.Header().Set(constant.ContentType, "text/html; charset=utf-8")
 	errors.PanicOnError(
 		layout(
@@ -39,18 +20,13 @@ func (s *Server) page(
 				html.Class("conversation-layout"),
 				html.Div(
 					html.Class("sidebar"),
-					html.Input(
-						html.Type(constant.SearchInputType),
-						html.Class("sidebar-filter"),
-						gomponents.Attr("placeholder", "Filter..."),
-						gomponents.Attr("oninput", "filterSidebar(this.value)"),
-					),
+					searchForm(),
 					html.Div(
 						html.ID("sidebar-entries"),
 						extended.Get("/conversations/sidebar"),
 						extended.Trigger("session-edited from:body"),
 						extended.Swap("innerHTML"),
-						gomponents.Group(entries),
+						gomponents.Group(s.sidebarNodes(0)),
 					),
 				),
 				html.Div(

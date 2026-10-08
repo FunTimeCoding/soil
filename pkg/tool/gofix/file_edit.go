@@ -1,6 +1,6 @@
 package gofix
 
-type fileEdit struct {
+type FileEdit struct {
 	offset  int
 	length  int
 	newText string

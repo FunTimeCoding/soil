@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/model_context/argument"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/model_context/instance_response"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 )
@@ -19,25 +20,18 @@ func (s *Server) listInstances(
 		active, _ = s.service.ActiveInstance(session.SessionID())
 	}
 
-	type entry struct {
-		Name     string `json:"name"`
-		Host     string `json:"host"`
-		Port     int    `json:"port"`
-		Database string `json:"database"`
-		Active   bool   `json:"active"`
-	}
-	var result []entry
+	var result []*instance_response.Response
 
 	for _, i := range s.service.Instances() {
 		result = append(
 			result,
-			entry{
-				Name:     i.Name,
-				Host:     i.Host,
-				Port:     i.Port,
-				Database: i.Database,
-				Active:   i.Name == active,
-			},
+			instance_response.New(
+				i.Name,
+				i.Host,
+				i.Port,
+				i.Database,
+				i.Name == active,
+			),
 		)
 	}
 

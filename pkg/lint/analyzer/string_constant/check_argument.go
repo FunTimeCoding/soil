@@ -15,7 +15,7 @@ func checkArgument(
 	p *packages.Package,
 	results *output.Results,
 	e ast.Expr,
-	constants map[string][]knownConstant,
+	constants map[string][]KnownConstant,
 	expected []assert_call.Range,
 ) {
 	l, okay := e.(*ast.BasicLit)

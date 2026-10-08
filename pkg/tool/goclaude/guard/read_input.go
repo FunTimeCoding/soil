@@ -6,8 +6,8 @@ import (
 	"os"
 )
 
-func readInput() *input {
-	var result input
+func readInput() *Input {
+	var result Input
 	errors.PanicOnError(json.NewDecoder(os.Stdin).Decode(&result))
 
 	return &result

@@ -10,7 +10,7 @@ func setHost(
 	c *client.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
-	f := &hostFlags{}
+	f := &HostFlags{}
 	result := &cobra.Command{
 		Use:   "set-host <identifier>",
 		Short: "Update a Dnsmasq host entry",

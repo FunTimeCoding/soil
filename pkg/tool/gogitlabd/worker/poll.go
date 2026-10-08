@@ -12,11 +12,7 @@ import (
 )
 
 func (w *Worker) Poll() {
-	type key struct {
-		project   string
-		reference string
-	}
-	latest := make(map[key]*pipeline.Pipeline)
+	latest := make(map[[2]string]*pipeline.Pipeline)
 	projects := make(map[string]*project.Project)
 
 	for _, p := range w.client.MustProjects() {
@@ -28,7 +24,7 @@ func (w *Worker) Poll() {
 			w.client.MustTags(p.Identifier),
 			w.client.MustPipelines(p.Identifier),
 		) {
-			latest[key{name, reference}] = i
+			latest[[2]string{name, reference}] = i
 		}
 	}
 
@@ -36,7 +32,8 @@ func (w *Worker) Poll() {
 	entries := make([]*board_entry.Entry, 0, len(latest))
 
 	for k, i := range latest {
-		w.gauge.WithLabelValues(k.project, k.reference, i.Status).Set(1)
+		name, reference := k[0], k[1]
+		w.gauge.WithLabelValues(name, reference, i.Status).Set(1)
 		var updated time.Time
 
 		if i.Update != nil {
@@ -46,10 +43,10 @@ func (w *Worker) Poll() {
 		entries = append(
 			entries,
 			board_entry.New(
-				k.project,
-				projects[k.project].Identifier,
-				projects[k.project].Raw.WebURL,
-				k.reference,
+				name,
+				projects[name].Identifier,
+				projects[name].Raw.WebURL,
+				reference,
 				i.Status,
 				i.Identifier,
 				i.Link,

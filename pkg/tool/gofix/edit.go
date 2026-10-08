@@ -2,7 +2,7 @@ package gofix
 
 import "go/token"
 
-type edit struct {
+type Edit struct {
 	position token.Pos
 	end      token.Pos
 	newText  string

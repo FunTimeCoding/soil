@@ -12,6 +12,7 @@ const (
 	ExtendedConfirm      = "hx-confirm"
 	ExtendedExtension    = "hx-ext"
 	ExtendedIndicator    = "hx-indicator"
+	ExtendedSync         = "hx-sync"
 	ExtendedOnPrefix     = "hx-on:"
 	ExtendedAfterRequest = "hx-on::after-request"
 	ServerSideConnect    = "sse-connect"
@@ -31,8 +32,10 @@ const (
 	IndicatorMarkClass     = "indicator-mark"
 )
 
+const SyncReplace = "this:replace"
 const (
 	TriggerLoad   = "load"
 	TriggerChange = "change"
 	TriggerType   = "keyup changed delay:200ms"
+	TriggerForm   = "input delay:200ms, submit"
 )

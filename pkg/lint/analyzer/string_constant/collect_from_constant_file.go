@@ -6,7 +6,7 @@ import (
 )
 
 func collectFromConstantFile(
-	result map[string][]knownConstant,
+	result map[string][]KnownConstant,
 	directory string,
 	p string,
 ) {

@@ -49,6 +49,13 @@ func (s *Service) DeleteSession(
 		return nil, g
 	}
 
+	entries, g := s.search.DeleteSession(identifier)
+
+	if g != nil {
+		return nil, g
+	}
+
+	result.SearchEntries = int64(entries)
 	s.cache.Delete(identifier)
 	s.notify()
 

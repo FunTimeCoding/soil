@@ -112,6 +112,7 @@ type DeleteReceiptResponse struct {
 	Notifications int       `json:"notifications"`
 	Pulses        int       `json:"pulses"`
 	Queue         int       `json:"queue"`
+	SearchEntries int       `json:"search_entries"`
 	Sources       *[]string `json:"sources,omitempty"`
 	Summaries     int       `json:"summaries"`
 	TrackerStates int       `json:"tracker_states"`
@@ -297,6 +298,31 @@ type ResolveResponse struct {
 	Identifier string `json:"identifier"`
 }
 
+// SearchConversation defines model for SearchConversation.
+type SearchConversation struct {
+	Count   int         `json:"count"`
+	Hits    []SearchHit `json:"hits"`
+	Latest  string      `json:"latest"`
+	Name    string      `json:"name"`
+	Session string      `json:"session"`
+}
+
+// SearchHit defines model for SearchHit.
+type SearchHit struct {
+	At         string `json:"at"`
+	Identifier string `json:"identifier"`
+	Kind       string `json:"kind"`
+	Role       string `json:"role"`
+	Snippet    string `json:"snippet"`
+}
+
+// SearchResponse defines model for SearchResponse.
+type SearchResponse struct {
+	Conversations []SearchConversation `json:"conversations"`
+	Indexed       int                  `json:"indexed"`
+	Total         int                  `json:"total"`
+}
+
 // SendRequest defines model for SendRequest.
 type SendRequest struct {
 	Body      string  `json:"body"`
@@ -354,6 +380,11 @@ type SessionDetailResponse struct {
 type SessionEndRequest struct {
 	Reason  *string `json:"reason,omitempty"`
 	Session string  `json:"session"`
+}
+
+// SessionLabelResponse defines model for SessionLabelResponse.
+type SessionLabelResponse struct {
+	Labels []LabelEntry `json:"labels"`
 }
 
 // SessionListResponse defines model for SessionListResponse.
@@ -440,6 +471,20 @@ type UsageResponse struct {
 	SevenDayReset   time.Time  `json:"seven_day_reset"`
 }
 
+// WindowBlock defines model for WindowBlock.
+type WindowBlock struct {
+	At         string `json:"at"`
+	Identifier string `json:"identifier"`
+	Kind       string `json:"kind"`
+	Role       string `json:"role"`
+	Text       string `json:"text"`
+}
+
+// WindowResponse defines model for WindowResponse.
+type WindowResponse struct {
+	Blocks []WindowBlock `json:"blocks"`
+}
+
 // PostBackfillParams defines parameters for PostBackfill.
 type PostBackfillParams struct {
 	// Cold Reset tracker offsets and re-read every transcript whole.
@@ -491,6 +536,13 @@ type GetSessionsHeatmapParams struct {
 	Bash *bool `form:"bash,omitempty" json:"bash,omitempty"`
 }
 
+// GetSessionsSearchParams defines parameters for GetSessionsSearch.
+type GetSessionsSearchParams struct {
+	Query string    `form:"query" json:"query"`
+	Kinds *[]string `form:"kinds,omitempty" json:"kinds,omitempty"`
+	Limit *int      `form:"limit,omitempty" json:"limit,omitempty"`
+}
+
 // DeleteSessionByIdParams defines parameters for DeleteSessionById.
 type DeleteSessionByIdParams struct {
 	Confirm *string `form:"confirm,omitempty" json:"confirm,omitempty"`
@@ -500,6 +552,12 @@ type DeleteSessionByIdParams struct {
 type GetSessionToolContextParams struct {
 	Filter   string `form:"filter" json:"filter"`
 	Surround *int   `form:"surround,omitempty" json:"surround,omitempty"`
+}
+
+// GetSessionWindowParams defines parameters for GetSessionWindow.
+type GetSessionWindowParams struct {
+	Around string `form:"around" json:"around"`
+	Count  *int   `form:"count,omitempty" json:"count,omitempty"`
 }
 
 // GetTimelineParams defines parameters for GetTimeline.
@@ -605,6 +663,9 @@ type ServerInterface interface {
 	// (GET /api/sessions/heatmap)
 	GetSessionsHeatmap(w http.ResponseWriter, r *http.Request, params GetSessionsHeatmapParams)
 
+	// (GET /api/sessions/search)
+	GetSessionsSearch(w http.ResponseWriter, r *http.Request, params GetSessionsSearchParams)
+
 	// (DELETE /api/sessions/{identifier})
 	DeleteSessionById(w http.ResponseWriter, r *http.Request, identifier string, params DeleteSessionByIdParams)
 
@@ -616,6 +677,9 @@ type ServerInterface interface {
 
 	// (POST /api/sessions/{identifier}/export)
 	PostSessionExport(w http.ResponseWriter, r *http.Request, identifier string)
+
+	// (GET /api/sessions/{identifier}/label)
+	GetSessionLabel(w http.ResponseWriter, r *http.Request, identifier string)
 
 	// (POST /api/sessions/{identifier}/label)
 	PostSessionLabel(w http.ResponseWriter, r *http.Request, identifier string)
@@ -634,6 +698,9 @@ type ServerInterface interface {
 
 	// (GET /api/sessions/{identifier}/tools)
 	GetSessionTools(w http.ResponseWriter, r *http.Request, identifier string)
+
+	// (GET /api/sessions/{identifier}/window)
+	GetSessionWindow(w http.ResponseWriter, r *http.Request, identifier string, params GetSessionWindowParams)
 
 	// (GET /api/status)
 	GetStatus(w http.ResponseWriter, r *http.Request)
@@ -1188,6 +1255,65 @@ func (siw *ServerInterfaceWrapper) GetSessionsHeatmap(w http.ResponseWriter, r *
 	handler.ServeHTTP(w, r)
 }
 
+// GetSessionsSearch operation middleware
+func (siw *ServerInterfaceWrapper) GetSessionsSearch(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetSessionsSearchParams
+
+	// ------------- Required query parameter "query" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, true, "query", r.URL.Query(), &params.Query, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "query"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "query", Err: err})
+		}
+		return
+	}
+
+	// ------------- Optional query parameter "kinds" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "kinds", r.URL.Query(), &params.Kinds, runtime.BindQueryParameterOptions{Type: "array", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "kinds"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "kinds", Err: err})
+		}
+		return
+	}
+
+	// ------------- Optional query parameter "limit" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "limit", r.URL.Query(), &params.Limit, runtime.BindQueryParameterOptions{Type: "integer", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "limit"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "limit", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetSessionsSearch(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
 // DeleteSessionById operation middleware
 func (siw *ServerInterfaceWrapper) DeleteSessionById(w http.ResponseWriter, r *http.Request) {
 
@@ -1299,6 +1425,32 @@ func (siw *ServerInterfaceWrapper) PostSessionExport(w http.ResponseWriter, r *h
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.PostSessionExport(w, r, identifier)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetSessionLabel operation middleware
+func (siw *ServerInterfaceWrapper) GetSessionLabel(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "identifier" -------------
+	var identifier string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "identifier", r.PathValue("identifier"), &identifier, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "identifier", Err: err})
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetSessionLabel(w, r, identifier)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -1484,6 +1636,61 @@ func (siw *ServerInterfaceWrapper) GetSessionTools(w http.ResponseWriter, r *htt
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.GetSessionTools(w, r, identifier)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetSessionWindow operation middleware
+func (siw *ServerInterfaceWrapper) GetSessionWindow(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// ------------- Path parameter "identifier" -------------
+	var identifier string
+
+	err = runtime.BindStyledParameterWithOptions("simple", "identifier", r.PathValue("identifier"), &identifier, runtime.BindStyledParameterOptions{ParamLocation: runtime.ParamLocationPath, Explode: false, Required: true, Type: "string", Format: "", ValueIsUnescaped: true})
+	if err != nil {
+		siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "identifier", Err: err})
+		return
+	}
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetSessionWindowParams
+
+	// ------------- Required query parameter "around" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, true, "around", r.URL.Query(), &params.Around, runtime.BindQueryParameterOptions{Type: "string", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "around"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "around", Err: err})
+		}
+		return
+	}
+
+	// ------------- Optional query parameter "count" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "count", r.URL.Query(), &params.Count, runtime.BindQueryParameterOptions{Type: "integer", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "count"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "count", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetSessionWindow(w, r, identifier, params)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -1745,15 +1952,18 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/sessions/heatmap", wrapper.GetSessionsHeatmap)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/coverage", wrapper.GetCoverage)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/sessions/find", wrapper.GetSessionsFind)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/sessions/search", wrapper.GetSessionsSearch)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/sessions/bash-dump", wrapper.GetSessionsBashDump)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/sessions/export", wrapper.PostSessionsExport)
 	m.HandleFunc(http.MethodDelete+" "+options.BaseURL+"/api/sessions/{identifier}", wrapper.DeleteSessionById)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/sessions/{identifier}/detail", wrapper.GetSessionDetail)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/sessions/{identifier}/peek", wrapper.GetSessionPeek)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/sessions/{identifier}/messages", wrapper.GetSessionMessages)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/sessions/{identifier}/window", wrapper.GetSessionWindow)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/sessions/{identifier}/tools", wrapper.GetSessionTools)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/sessions/{identifier}/tool-context", wrapper.GetSessionToolContext)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/sessions/{identifier}/export", wrapper.PostSessionExport)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/sessions/{identifier}/label", wrapper.GetSessionLabel)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/sessions/{identifier}/label", wrapper.PostSessionLabel)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/sessions/{identifier}/pulse", wrapper.PostSessionPulse)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/sessions/{identifier}/context", wrapper.PostSessionContext)
@@ -2532,6 +2742,42 @@ func (response GetSessionsHeatmap500JSONResponse) VisitGetSessionsHeatmapRespons
 	return err
 }
 
+type GetSessionsSearchRequestObject struct {
+	Params GetSessionsSearchParams
+}
+
+type GetSessionsSearchResponseObject interface {
+	VisitGetSessionsSearchResponse(w http.ResponseWriter) error
+}
+
+type GetSessionsSearch200JSONResponse SearchResponse
+
+func (response GetSessionsSearch200JSONResponse) VisitGetSessionsSearchResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetSessionsSearch500JSONResponse ErrorResponse
+
+func (response GetSessionsSearch500JSONResponse) VisitGetSessionsSearchResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type DeleteSessionByIdRequestObject struct {
 	Identifier string `json:"identifier"`
 	Params     DeleteSessionByIdParams
@@ -2703,6 +2949,42 @@ func (response PostSessionExport404JSONResponse) VisitPostSessionExportResponse(
 type PostSessionExport500JSONResponse ErrorResponse
 
 func (response PostSessionExport500JSONResponse) VisitPostSessionExportResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetSessionLabelRequestObject struct {
+	Identifier string `json:"identifier"`
+}
+
+type GetSessionLabelResponseObject interface {
+	VisitGetSessionLabelResponse(w http.ResponseWriter) error
+}
+
+type GetSessionLabel200JSONResponse SessionLabelResponse
+
+func (response GetSessionLabel200JSONResponse) VisitGetSessionLabelResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetSessionLabel500JSONResponse ErrorResponse
+
+func (response GetSessionLabel500JSONResponse) VisitGetSessionLabelResponse(w http.ResponseWriter) error {
 
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(response); err != nil {
@@ -2922,6 +3204,57 @@ func (response GetSessionTools200JSONResponse) VisitGetSessionToolsResponse(w ht
 type GetSessionTools500JSONResponse ErrorResponse
 
 func (response GetSessionTools500JSONResponse) VisitGetSessionToolsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetSessionWindowRequestObject struct {
+	Identifier string `json:"identifier"`
+	Params     GetSessionWindowParams
+}
+
+type GetSessionWindowResponseObject interface {
+	VisitGetSessionWindowResponse(w http.ResponseWriter) error
+}
+
+type GetSessionWindow200JSONResponse WindowResponse
+
+func (response GetSessionWindow200JSONResponse) VisitGetSessionWindowResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetSessionWindow404JSONResponse Error
+
+func (response GetSessionWindow404JSONResponse) VisitGetSessionWindowResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetSessionWindow500JSONResponse ErrorResponse
+
+func (response GetSessionWindow500JSONResponse) VisitGetSessionWindowResponse(w http.ResponseWriter) error {
 
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(response); err != nil {
@@ -3175,6 +3508,9 @@ type StrictServerInterface interface {
 	// (GET /api/sessions/heatmap)
 	GetSessionsHeatmap(ctx context.Context, request GetSessionsHeatmapRequestObject) (GetSessionsHeatmapResponseObject, error)
 
+	// (GET /api/sessions/search)
+	GetSessionsSearch(ctx context.Context, request GetSessionsSearchRequestObject) (GetSessionsSearchResponseObject, error)
+
 	// (DELETE /api/sessions/{identifier})
 	DeleteSessionById(ctx context.Context, request DeleteSessionByIdRequestObject) (DeleteSessionByIdResponseObject, error)
 
@@ -3186,6 +3522,9 @@ type StrictServerInterface interface {
 
 	// (POST /api/sessions/{identifier}/export)
 	PostSessionExport(ctx context.Context, request PostSessionExportRequestObject) (PostSessionExportResponseObject, error)
+
+	// (GET /api/sessions/{identifier}/label)
+	GetSessionLabel(ctx context.Context, request GetSessionLabelRequestObject) (GetSessionLabelResponseObject, error)
 
 	// (POST /api/sessions/{identifier}/label)
 	PostSessionLabel(ctx context.Context, request PostSessionLabelRequestObject) (PostSessionLabelResponseObject, error)
@@ -3204,6 +3543,9 @@ type StrictServerInterface interface {
 
 	// (GET /api/sessions/{identifier}/tools)
 	GetSessionTools(ctx context.Context, request GetSessionToolsRequestObject) (GetSessionToolsResponseObject, error)
+
+	// (GET /api/sessions/{identifier}/window)
+	GetSessionWindow(ctx context.Context, request GetSessionWindowRequestObject) (GetSessionWindowResponseObject, error)
 
 	// (GET /api/status)
 	GetStatus(ctx context.Context, request GetStatusRequestObject) (GetStatusResponseObject, error)
@@ -3809,6 +4151,32 @@ func (sh *strictHandler) GetSessionsHeatmap(w http.ResponseWriter, r *http.Reque
 	}
 }
 
+// GetSessionsSearch operation middleware
+func (sh *strictHandler) GetSessionsSearch(w http.ResponseWriter, r *http.Request, params GetSessionsSearchParams) {
+	var request GetSessionsSearchRequestObject
+
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetSessionsSearch(ctx, request.(GetSessionsSearchRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetSessionsSearch")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetSessionsSearchResponseObject); ok {
+		if err := validResponse.VisitGetSessionsSearchResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // DeleteSessionById operation middleware
 func (sh *strictHandler) DeleteSessionById(w http.ResponseWriter, r *http.Request, identifier string, params DeleteSessionByIdParams) {
 	var request DeleteSessionByIdRequestObject
@@ -3914,6 +4282,32 @@ func (sh *strictHandler) PostSessionExport(w http.ResponseWriter, r *http.Reques
 		sh.options.ResponseErrorHandlerFunc(w, r, err)
 	} else if validResponse, ok := response.(PostSessionExportResponseObject); ok {
 		if err := validResponse.VisitPostSessionExportResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetSessionLabel operation middleware
+func (sh *strictHandler) GetSessionLabel(w http.ResponseWriter, r *http.Request, identifier string) {
+	var request GetSessionLabelRequestObject
+
+	request.Identifier = identifier
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetSessionLabel(ctx, request.(GetSessionLabelRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetSessionLabel")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetSessionLabelResponseObject); ok {
+		if err := validResponse.VisitGetSessionLabelResponse(w); err != nil {
 			sh.options.ResponseErrorHandlerFunc(w, r, err)
 		}
 	} else if response != nil {
@@ -4092,6 +4486,33 @@ func (sh *strictHandler) GetSessionTools(w http.ResponseWriter, r *http.Request,
 	}
 }
 
+// GetSessionWindow operation middleware
+func (sh *strictHandler) GetSessionWindow(w http.ResponseWriter, r *http.Request, identifier string, params GetSessionWindowParams) {
+	var request GetSessionWindowRequestObject
+
+	request.Identifier = identifier
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetSessionWindow(ctx, request.(GetSessionWindowRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetSessionWindow")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetSessionWindowResponseObject); ok {
+		if err := validResponse.VisitGetSessionWindowResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // GetStatus operation middleware
 func (sh *strictHandler) GetStatus(w http.ResponseWriter, r *http.Request) {
 	var request GetStatusRequestObject
@@ -4226,64 +4647,70 @@ func (sh *strictHandler) GetUsage(w http.ResponseWriter, r *http.Request) {
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"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",
+	"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",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

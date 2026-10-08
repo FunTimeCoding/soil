@@ -1,7 +1,7 @@
 package frame_probe
 
 import (
-	"context"
+	"github.com/chromedp/cdproto/cdp"
 	"github.com/chromedp/cdproto/page"
 	"github.com/chromedp/chromedp"
 	"github.com/funtimecoding/soil/pkg/chromium"
@@ -12,20 +12,12 @@ func frameTree(
 	c *chromium.Client,
 	identifier string,
 ) *page.FrameTree {
-	var result *page.FrameTree
-	errors.PanicOnError(
-		chromedp.Run(
-			c.AcquireTarget(identifier),
-			chromedp.ActionFunc(
-				func(v context.Context) error {
-					var e error
-					result, e = page.GetFrameTree().Do(v)
-
-					return e
-				},
-			),
-		),
+	result, e := chromedp.Call(
+		c.AcquireTarget(identifier),
+		page.GetFrameTree,
+		cdp.Empty{},
 	)
+	errors.PanicOnError(e)
 
-	return result
+	return result.FrameTree
 }

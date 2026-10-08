@@ -1,6 +1,6 @@
 package chunk
 
-type breakPoint struct {
+type BreakPoint struct {
 	position int
 	score    int
 }

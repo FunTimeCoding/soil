@@ -6,7 +6,7 @@ import (
 )
 
 func formatNamespace(
-	e *overview,
+	e *Overview,
 	f *option.Format,
 ) string {
 	if f.UseColor && e.Count > 0 {

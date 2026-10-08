@@ -1,5 +1,5 @@
 package graph_query
 
-type projectDetail struct {
+type ProjectDetail struct {
 	Identifier string `json:"id"`
 }

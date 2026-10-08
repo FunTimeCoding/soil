@@ -11,7 +11,7 @@ func formatPass(
 	name string,
 	source []byte,
 	collapse bool,
-) ([]*formatChange, []byte, error) {
+) ([]*FormatChange, []byte, error) {
 	fileSet := token.NewFileSet()
 	file, e := parser.ParseFile(fileSet, name, source, parser.ParseComments)
 

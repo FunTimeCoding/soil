@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context/argument"
+	mattermostResponse "github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context/response"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -28,21 +29,14 @@ func (s *Server) GetThreadReplies(
 		return s.captureDetail(f)
 	}
 
-	type row struct {
-		Identifier string   `json:"id"`
-		Username   string   `json:"username"`
-		Message    string   `json:"message"`
-		CreateAt   string   `json:"create_at"`
-		FileIds    []string `json:"file_ids,omitempty"`
-	}
-	rows := make([]row, len(replies))
+	rows := make([]*mattermostResponse.Reply, len(replies))
 
 	for i, r := range replies {
-		rows[i] = row{
-			Identifier: r.Raw.Id,
-			Message:    r.Message,
-			CreateAt:   formatTime(r.Create),
-		}
+		rows[i] = mattermostResponse.NewReply(
+			r.Raw.Id,
+			r.Message,
+			formatTime(r.Create),
+		)
 
 		if r.User != nil {
 			rows[i].Username = r.User.Username

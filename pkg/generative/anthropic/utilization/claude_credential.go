@@ -1,6 +1,6 @@
 package utilization
 
-type claudeCredential struct {
+type ClaudeCredential struct {
 	AccessToken      string `json:"accessToken"`
 	SubscriptionType string `json:"subscriptionType"`
 	RateLimitTier    string `json:"rateLimitTier"`

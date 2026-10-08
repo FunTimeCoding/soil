@@ -2,7 +2,7 @@ package variable_naming
 
 import "github.com/funtimecoding/soil/pkg/lint/constant"
 
-func isEligible(v typedVariable) bool {
+func isEligible(v TypedVariable) bool {
 	if v.exempt {
 		return false
 	}

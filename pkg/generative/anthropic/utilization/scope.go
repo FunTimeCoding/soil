@@ -1,5 +1,5 @@
 package utilization
 
-type scope struct {
-	Model *scopeModel `json:"model"`
+type Scope struct {
+	Model *ScopeModel `json:"model"`
 }

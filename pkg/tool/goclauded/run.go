@@ -11,11 +11,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/metric"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
+	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/ticker"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/gauge"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/option"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/search_index"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/sweep"
@@ -28,6 +30,7 @@ import (
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
+	"path/filepath"
 	"time"
 )
 
@@ -46,12 +49,19 @@ func Run(
 	queryClient := connect.Wait(l)
 	summaryIdx := indexer.New(queryClient, constant.SummarySourceType)
 	completionIdx := indexer.New(queryClient, constant.CompletionSourceType)
+	x := search_index.New(
+		connection.New(
+			l,
+			filepath.Join(filepath.Dir(o.LitePath), constant.SearchIndexFile),
+		),
+	)
 	v := service.New(
 		s,
 		transcript_cache.New(claude.New()),
 		memoryClient,
 		summaryIdx,
 		completionIdx,
+		x,
 		n,
 		r,
 		h,
@@ -67,6 +77,7 @@ func Run(
 	l.Structured("started", "elapsed", time.Since(start).Seconds())
 	go warm(v)
 	rec := recovery.New(l, r)
+	go rec.Run(v.CatchUpSearch)
 	timeoutTicker := ticker.New(5*time.Minute, v.RunTimeoutSweep, rec)
 	memoryTicker := ticker.New(30*time.Second, v.PollMemory, rec)
 	m := metric.New()

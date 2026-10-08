@@ -2,7 +2,7 @@ package gopnsense
 
 import "github.com/funtimecoding/soil/pkg/tool/gopnsensed/generated/client"
 
-func hostRequest(f *hostFlags) *client.HostRequest {
+func hostRequest(f *HostFlags) *client.HostRequest {
 	return &client.HostRequest{
 		Host:             optional(f.host),
 		Domain:           optional(f.domain),

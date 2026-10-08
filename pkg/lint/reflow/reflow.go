@@ -14,7 +14,7 @@ func Reflow(
 	body := front(source)
 	document := parse(source)
 	mask := atomic(source, document)
-	var patches []*patch
+	var patches []*Patch
 	e := ast.Walk(
 		document,
 		func(
@@ -42,8 +42,8 @@ func Reflow(
 	slices.SortFunc(
 		patches,
 		func(
-			a *patch,
-			b *patch,
+			a *Patch,
+			b *Patch,
 		) int {
 			return a.start - b.start
 		},

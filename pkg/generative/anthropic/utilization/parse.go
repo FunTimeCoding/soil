@@ -6,7 +6,7 @@ import (
 )
 
 func Parse(body []byte) *Result {
-	var parsed response
+	var parsed Response
 
 	if e := json.Unmarshal(body, &parsed); e != nil {
 		return nil

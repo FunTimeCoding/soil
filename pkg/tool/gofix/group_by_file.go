@@ -8,10 +8,10 @@ import (
 
 func groupByFile(
 	fileSet *token.FileSet,
-	edits []edit,
+	edits []Edit,
 	directory string,
-) map[string][]fileEdit {
-	result := make(map[string][]fileEdit)
+) map[string][]FileEdit {
+	result := make(map[string][]FileEdit)
 	workingDirectory := directory
 
 	if workingDirectory == "" {
@@ -29,7 +29,7 @@ func groupByFile(
 
 		result[path] = append(
 			result[path],
-			fileEdit{
+			FileEdit{
 				offset:  position.Offset,
 				length:  endPosition.Offset - position.Offset,
 				newText: e.newText,

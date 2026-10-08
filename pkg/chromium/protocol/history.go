@@ -1,34 +1,21 @@
 package protocol
 
 import (
-	"context"
-	"github.com/chromedp/cdproto/page"
 	"github.com/chromedp/chromedp"
 	"github.com/funtimecoding/soil/pkg/chromium/history"
 	"github.com/funtimecoding/soil/pkg/chromium/history/entry"
 )
 
 func (p *Protocol) History() (*history.Result, error) {
-	var currentIndex int64
-	var entries []*page.NavigationEntry
-	e := p.run(
-		chromedp.ActionFunc(
-			func(x context.Context) error {
-				var e error
-				currentIndex, entries, e = page.GetNavigationHistory().Do(x)
-
-				return e
-			},
-		),
-	)
+	h, e := run(p, chromedp.NavigationEntries())
 
 	if e != nil {
 		return nil, e
 	}
 
-	result := history.New(currentIndex)
+	result := history.New(h.CurrentIndex)
 
-	for _, n := range entries {
+	for _, n := range h.Entries {
 		result.Entries = append(result.Entries, entry.New(n.Title, n.URL))
 	}
 

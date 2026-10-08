@@ -15,8 +15,8 @@ import (
 func reachModule(
 	indexDirectory string,
 	directory string,
-	renames map[string]violation,
-) (*reachedModule, error) {
+	renames map[string]Violation,
+) (*ReachedModule, error) {
 	i := index.New(indexDirectory, directory).References()
 
 	if unindexed := i.Unindexed(); len(unindexed) > 0 {
@@ -48,7 +48,7 @@ func reachModule(
 		return nil, e
 	}
 
-	result := &reachedModule{directory: directory, fileSet: set}
+	result := &ReachedModule{directory: directory, fileSet: set}
 	seen := make(map[token.Pos]bool)
 
 	for _, p := range all {
@@ -73,7 +73,7 @@ func reachModule(
 			replacement := segment.ReplaceSegment(ident.Name, v.segment, v.fix)
 			result.edits = append(
 				result.edits,
-				edit{
+				Edit{
 					position: ident.Pos(),
 					end:      ident.End(),
 					newText:  replacement,

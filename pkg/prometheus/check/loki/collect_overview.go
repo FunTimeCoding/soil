@@ -11,10 +11,10 @@ func collectOverview(
 	c *loki.Client,
 	namespaces []string,
 	since time.Duration,
-) []*overview {
+) []*Overview {
 	end := time.Now()
 	start := end.Add(-since)
-	var result []*overview
+	var result []*Overview
 
 	for _, n := range namespaces {
 		r, _ := c.MustQueryRange(
@@ -25,7 +25,7 @@ func collectOverview(
 		)
 		result = append(
 			result,
-			&overview{Namespace: n, Count: len(r), Latest: latest(r)},
+			&Overview{Namespace: n, Count: len(r), Latest: latest(r)},
 		)
 	}
 

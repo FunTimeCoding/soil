@@ -1,5 +1,5 @@
 package lint
 
-type reflowConfiguration struct {
+type ReflowConfiguration struct {
 	Skip []string `yaml:"skip"`
 }

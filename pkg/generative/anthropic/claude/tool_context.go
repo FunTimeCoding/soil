@@ -30,11 +30,8 @@ func (c *Client) ToolContext(
 	}
 
 	defer errors.PanicClose(f)
-	type indexedMessage struct {
-		Message  message.Message
-		ToolUses []string
-	}
-	var messages []indexedMessage
+	var messages []message.Message
+	var toolUses [][]string
 	scanner := bufio.NewScanner(f)
 	scanner.Buffer(nil, constant.NotationScanBuffer)
 
@@ -65,14 +62,7 @@ func (c *Client) ToolContext(
 			continue
 		}
 
-		im := indexedMessage{
-			Message: message.Message{
-				Role:      m.Role,
-				Text:      text,
-				Timestamp: line.Timestamp,
-				IsMeta:    line.Meta || IsSystemNoise(text),
-			},
-		}
+		var uses []string
 
 		if line.Type == "assistant" {
 			var blocks []json.RawMessage
@@ -90,23 +80,32 @@ func (c *Client) ToolContext(
 					}
 
 					if strings.Contains(b.Name, toolFilter) {
-						im.ToolUses = append(im.ToolUses, b.Name)
+						uses = append(uses, b.Name)
 					}
 				}
 			}
 		}
 
-		messages = append(messages, im)
+		messages = append(
+			messages,
+			message.Message{
+				Role:      m.Role,
+				Text:      text,
+				Timestamp: line.Timestamp,
+				IsMeta:    line.Meta || IsSystemNoise(text),
+			},
+		)
+		toolUses = append(toolUses, uses)
 	}
 
 	var results []tool_context_result.Result
 
-	for i, im := range messages {
-		if len(im.ToolUses) == 0 {
+	for i, uses := range toolUses {
+		if len(uses) == 0 {
 			continue
 		}
 
-		for _, toolName := range im.ToolUses {
+		for _, toolName := range uses {
 			r := tool_context_result.Result{ToolName: toolName}
 			start := i - surroundCount
 
@@ -115,11 +114,11 @@ func (c *Client) ToolContext(
 			}
 
 			for j := start; j < i; j++ {
-				if messages[j].Message.IsMeta {
+				if messages[j].IsMeta {
 					continue
 				}
 
-				r.Before = append(r.Before, messages[j].Message)
+				r.Before = append(r.Before, messages[j])
 			}
 
 			end := i + surroundCount + 1
@@ -129,11 +128,11 @@ func (c *Client) ToolContext(
 			}
 
 			for j := i + 1; j < end; j++ {
-				if messages[j].Message.IsMeta {
+				if messages[j].IsMeta {
 					continue
 				}
 
-				r.After = append(r.After, messages[j].Message)
+				r.After = append(r.After, messages[j])
 			}
 
 			results = append(results, r)

@@ -39,7 +39,7 @@ func TestSearchHybridFusesKeywordAndVectorResults(t *testing.T) {
 	)
 	results, e := s.SearchHybrid(
 		search_option.New("zulu", 10),
-		new(fixedEmbedder),
+		new(FixedEmbedder),
 	)
 	assert.FatalOnError(t, e)
 	var paths []string

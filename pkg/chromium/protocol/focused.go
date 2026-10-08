@@ -1,12 +1,9 @@
 package protocol
 
-import "github.com/funtimecoding/soil/pkg/errors"
-
-func (p *Protocol) Focused() map[string]any {
+func (p *Protocol) Focused() (map[string]any, error) {
 	var result map[string]any
-	errors.PanicOnError(
-		p.Evaluate(
-			`(function() {
+	e := p.Evaluate(
+		`(function() {
                 try {
                     const focused = document.activeElement;
                     if (focused) {
@@ -24,9 +21,12 @@ func (p *Protocol) Focused() map[string]any {
                     return { error: e.message };
                 }
             })()`,
-			&result,
-		),
+		&result,
 	)
 
-	return result
+	if e != nil {
+		return nil, e
+	}
+
+	return result, nil
 }

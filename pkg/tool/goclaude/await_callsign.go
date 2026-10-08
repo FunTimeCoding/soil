@@ -23,7 +23,7 @@ func awaitCallsign(
 	}
 
 	for failures := 0; failures < constant.ChannelCallsignAttempts; {
-		response, e := c.Client().GetChannelCallsignWithResponse(
+		response, e := c.LongClient().GetChannelCallsignWithResponse(
 			context.Background(),
 			&client.GetChannelCallsignParams{Session: session, Since: since},
 		)

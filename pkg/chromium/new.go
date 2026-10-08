@@ -3,6 +3,7 @@ package chromium
 import (
 	"context"
 	"github.com/chromedp/chromedp"
+	"github.com/chromedp/chromedp/remote"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
@@ -13,7 +14,7 @@ func New(
 	host string,
 	port int,
 ) *Client {
-	allocator, allocatorCancel := chromedp.NewRemoteAllocator(
+	allocator, allocatorCancel := remote.NewAllocator(
 		context.Background(),
 		locator.New(host).Port(port).Scheme(constant.Socket).String(),
 	)

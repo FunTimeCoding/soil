@@ -15,8 +15,8 @@ func findSingleParameterEdits(
 	all []*packages.Package,
 	r *output.Results,
 	w *workspace.Workspace,
-) []edit {
-	var result []edit
+) []Edit {
+	var result []Edit
 	sourceCache := make(map[string][]byte)
 	seen := make(map[token.Pos]bool)
 

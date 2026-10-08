@@ -7,7 +7,7 @@ import (
 
 func formatMessage(
 	value string,
-	list []knownConstant,
+	list []KnownConstant,
 ) string {
 	if len(list) == 1 {
 		return fmt.Sprintf(

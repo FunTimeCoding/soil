@@ -18,7 +18,7 @@ func pollChannel(
 	stalled := map[string]string{
 		constant.ChannelKindMeta: constant.ChannelStalledKind,
 	}
-	response, e := c.Client().GetChannelWithResponse(
+	response, e := c.LongClient().GetChannelWithResponse(
 		context.Background(),
 		&client.GetChannelParams{Callsign: callsign},
 	)

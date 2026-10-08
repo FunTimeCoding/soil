@@ -2,6 +2,7 @@ package protocol
 
 import (
 	"context"
+	"github.com/chromedp/cdproto/cdp"
 	"github.com/chromedp/cdproto/page"
 	"github.com/chromedp/chromedp"
 	"github.com/funtimecoding/soil/pkg/console"
@@ -10,10 +11,10 @@ import (
 )
 
 func (p *Protocol) NeedReload(locator string) bool {
-	run, cancelRun := context.WithTimeout(p.context, 1*time.Second)
-	defer cancelRun()
+	attach, cancelAttach := context.WithTimeout(p.context, 1*time.Second)
+	defer cancelAttach()
 
-	if e := chromedp.Run(run); e != nil {
+	if e := chromedp.Do(attach); e != nil {
 		if errors.Deadline(e) {
 			console.Line("  Timeout run")
 
@@ -24,17 +25,28 @@ func (p *Protocol) NeedReload(locator string) bool {
 	resource, cancelResource := context.WithTimeout(p.context, 1*time.Second)
 	defer cancelResource()
 
-	if e := chromedp.Run(
+	if e := chromedp.Do(
 		resource,
-		chromedp.ActionFunc(
-			func(o context.Context) error {
-				t, e := page.GetResourceTree().Do(o)
+		chromedp.Func(
+			func(
+				o context.Context,
+				s *chromedp.Target,
+			) error {
+				t, e := cdp.Call(o, s, page.GetResourceTree, cdp.Empty{})
 
 				if e != nil {
 					return e
 				}
 
-				_, e = page.GetResourceContent(t.Frame.ID, locator).Do(o)
+				_, e = cdp.Call(
+					o,
+					s,
+					page.GetResourceContent,
+					page.GetResourceContentParams{
+						FrameID: t.FrameTree.Frame.ID,
+						URL:     locator,
+					},
+				)
 
 				return e
 			},

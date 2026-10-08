@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context/argument"
+	mattermostResponse "github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context/response"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -24,25 +25,17 @@ func (s *Server) ListChannels(
 		return s.captureDetail(e)
 	}
 
-	type row struct {
-		Identifier  string `json:"id"`
-		Name        string `json:"name"`
-		DisplayName string `json:"display_name"`
-		Type        string `json:"type"`
-		Purpose     string `json:"purpose"`
-		Header      string `json:"header"`
-	}
-	rows := make([]row, len(page))
+	rows := make([]*mattermostResponse.Channel, len(page))
 
 	for i, c := range page {
-		rows[i] = row{
-			Identifier:  c.Id,
-			Name:        c.Name,
-			DisplayName: c.DisplayName,
-			Type:        channelTypeName(c.Type),
-			Purpose:     c.Purpose,
-			Header:      c.Header,
-		}
+		rows[i] = mattermostResponse.NewChannel(
+			c.Id,
+			c.Name,
+			c.DisplayName,
+			channelTypeName(c.Type),
+			c.Purpose,
+			c.Header,
+		)
 	}
 
 	return response.SuccessAny(

@@ -4,7 +4,7 @@ import "go/ast"
 
 func isEmptinessMarker(
 	c *ast.Comment,
-	regions []region,
+	regions []Region,
 ) bool {
 	if c.Text != "// pass" && c.Text != "// marker" {
 		return false

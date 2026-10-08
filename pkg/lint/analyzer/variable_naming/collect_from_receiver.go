@@ -9,7 +9,7 @@ import (
 func collectFromReceiver(
 	y *types.Info,
 	f *ast.FuncDecl,
-	result *[]typedVariable,
+	result *[]TypedVariable,
 ) {
 	if f.Recv == nil {
 		return
@@ -29,7 +29,7 @@ func collectFromReceiver(
 
 			*result = append(
 				*result,
-				typedVariable{
+				TypedVariable{
 					ident:       name,
 					typ:         o.Type(),
 					precedence:  typePrecedence(o.Type()),

@@ -2,6 +2,7 @@ package struct_placement
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
 	"github.com/funtimecoding/soil/pkg/strings/join"
@@ -20,7 +21,7 @@ func Check(
 	for _, name := range scope.Names() {
 		t, okay := scope.Lookup(name).(*types.TypeName)
 
-		if !okay || t.IsAlias() || generated(p, t.Pos()) {
+		if !okay || t.IsAlias() || lint.IsGeneratedPosition(p, t.Pos()) {
 			continue
 		}
 

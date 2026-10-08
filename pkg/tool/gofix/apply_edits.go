@@ -8,7 +8,7 @@ import (
 
 func ApplyEdits(
 	fileSet *token.FileSet,
-	edits []edit,
+	edits []Edit,
 	directory string,
 	diff bool,
 	r *output.Results,

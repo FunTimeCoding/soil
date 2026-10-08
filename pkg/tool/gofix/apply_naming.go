@@ -11,7 +11,7 @@ import (
 func applyNaming(
 	fileSet *token.FileSet,
 	all []*packages.Package,
-	violations []violation,
+	violations []Violation,
 	o *option.Fix,
 	w *workspace.Workspace,
 	r *output.Results,

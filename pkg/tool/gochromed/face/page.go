@@ -6,7 +6,7 @@ import (
 )
 
 type Page interface {
-	Body() string
+	Body() (string, error)
 	Navigate(l string) error
 	Snapshot() ([]*snapshot.Node, error)
 	Screenshot() ([]byte, error)

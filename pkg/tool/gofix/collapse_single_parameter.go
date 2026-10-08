@@ -10,7 +10,7 @@ func collapseSingleParameter(
 	fileSet *token.FileSet,
 	f *ast.FuncDecl,
 	source []byte,
-) []edit {
+) []Edit {
 	params := f.Type.Params
 
 	if params == nil || len(params.List) != 1 {
@@ -44,7 +44,7 @@ func collapseSingleParameter(
 		return nil
 	}
 
-	return []edit{
+	return []Edit{
 		{
 			position: params.Opening + 1,
 			end:      params.Closing,

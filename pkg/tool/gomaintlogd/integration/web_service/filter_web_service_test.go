@@ -21,21 +21,30 @@ func TestFilterWebService(t *testing.T) {
 	user2 := "bob"
 	desc := "test"
 
-	for _, entry := range []filterEntryCase{
-		{"restart", user1, &system1, &service1},
-		{"backup", user2, &system2, &service2},
-		{"deploy", user1, &system2, &service1},
+	for _, b := range []client.PostEntryJSONRequestBody{
+		{
+			Action:      "restart",
+			User:        user1,
+			System:      &system1,
+			Service:     &service1,
+			Description: &desc,
+		},
+		{
+			Action:      "backup",
+			User:        user2,
+			System:      &system2,
+			Service:     &service2,
+			Description: &desc,
+		},
+		{
+			Action:      "deploy",
+			User:        user1,
+			System:      &system2,
+			Service:     &service1,
+			Description: &desc,
+		},
 	} {
-		_, e := c.PostEntryWithResponse(
-			x,
-			client.PostEntryJSONRequestBody{
-				Action:      entry.action,
-				User:        entry.user,
-				System:      entry.system,
-				Service:     entry.service,
-				Description: &desc,
-			},
-		)
+		_, e := c.PostEntryWithResponse(x, b)
 		assert.FatalOnError(t, e)
 	}
 

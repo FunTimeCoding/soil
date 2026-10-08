@@ -1,6 +1,6 @@
 package chunk
 
-type codeFence struct {
+type CodeFence struct {
 	start int
 	end   int
 }

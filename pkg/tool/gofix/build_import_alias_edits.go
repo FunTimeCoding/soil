@@ -12,11 +12,11 @@ func buildImportAliasEdits(
 	spec *ast.ImportSpec,
 	alias string,
 	declaredName string,
-) []edit {
-	var result []edit
+) []Edit {
+	var result []Edit
 	result = append(
 		result,
-		edit{position: spec.Name.Pos(), end: spec.Path.Pos(), newText: ""},
+		Edit{position: spec.Name.Pos(), end: spec.Path.Pos(), newText: ""},
 	)
 	ast.Inspect(
 		file,
@@ -50,7 +50,7 @@ func buildImportAliasEdits(
 			if alias != declaredName {
 				result = append(
 					result,
-					edit{
+					Edit{
 						position: ident.Pos(),
 						end:      ident.End(),
 						newText:  declaredName,

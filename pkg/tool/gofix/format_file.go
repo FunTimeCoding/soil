@@ -8,9 +8,9 @@ import (
 func formatFile(
 	name string,
 	source []byte,
-) (*formattedFile, error) {
+) (*FormattedFile, error) {
 	_, originalLines := significantTokens(source)
-	result := &formattedFile{Source: source, Converged: true}
+	result := &FormattedFile{Source: source, Converged: true}
 	seen := make(map[int]bool)
 
 	for _, collapse := range []bool{true, false} {

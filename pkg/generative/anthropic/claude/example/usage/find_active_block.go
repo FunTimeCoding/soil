@@ -5,14 +5,14 @@ import (
 	"time"
 )
 
-func findActiveBlock(all []*common.Timestamped) *block {
+func findActiveBlock(all []*common.Timestamped) *Block {
 	if len(all) == 0 {
 		return nil
 	}
 
 	window := 5 * time.Hour
 	n := now()
-	var current *block
+	var current *Block
 
 	for _, ts := range all {
 		needNew := current == nil
@@ -27,7 +27,7 @@ func findActiveBlock(all []*common.Timestamped) *block {
 
 		if needNew {
 			start := ts.Time.Truncate(time.Hour)
-			current = &block{start: start, end: start.Add(window)}
+			current = &Block{start: start, end: start.Add(window)}
 		}
 
 		current.entries = append(current.entries, ts)

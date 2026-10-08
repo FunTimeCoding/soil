@@ -8,13 +8,13 @@ import (
 	"testing"
 )
 
-type getMemoryResult struct {
+type GetMemoryResult struct {
 	Identifier int64          `json:"identifier"`
 	Name       string         `json:"name"`
-	Related    []relatedEntry `json:"related"`
+	Related    []RelatedEntry `json:"related"`
 }
 
-type relatedEntry struct {
+type RelatedEntry struct {
 	Identifier  int64    `json:"identifier"`
 	Name        string   `json:"name"`
 	Description string   `json:"description"`
@@ -57,7 +57,7 @@ func TestGetMemoryIncludesRelated(t *testing.T) {
 		constant.GetMemory,
 		map[string]any{constant.MemoryIdentifier: 1},
 	)
-	var result getMemoryResult
+	var result GetMemoryResult
 	assert.FatalOnError(t, json.Unmarshal([]byte(raw), &result))
 	assert.String(t, "error handling", result.Name)
 	assert.Count(t, 1, result.Related)

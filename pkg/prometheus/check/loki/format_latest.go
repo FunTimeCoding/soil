@@ -2,7 +2,7 @@ package loki
 
 import "github.com/funtimecoding/soil/pkg/time/constant"
 
-func formatLatest(e *overview) string {
+func formatLatest(e *Overview) string {
 	if e.Latest.IsZero() {
 		return ""
 	}

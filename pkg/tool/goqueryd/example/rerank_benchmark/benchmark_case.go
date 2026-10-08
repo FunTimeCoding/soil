@@ -1,6 +1,6 @@
 package rerank_benchmark
 
-type benchmarkCase struct {
+type BenchmarkCase struct {
 	label     string
 	documents []string
 }

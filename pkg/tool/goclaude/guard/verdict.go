@@ -26,6 +26,10 @@ func Verdict(
 		return constant.PipMessage
 	}
 
+	if localSingleReplacement(command) {
+		return constant.SingleReplacementMessage
+	}
+
 	if system != "darwin" {
 		return ""
 	}

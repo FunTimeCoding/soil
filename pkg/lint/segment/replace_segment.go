@@ -1,6 +1,7 @@
 package segment
 
 import (
+	"github.com/funtimecoding/soil/pkg/lint/types/segment_span"
 	"github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/strings/split"
@@ -9,12 +10,11 @@ import (
 )
 
 func ReplaceSegment(name, old, replacement string) string {
-	spans := segmentSpans(name)
-	var target *segmentSpan
+	var target *segment_span.Span
 
-	for i := range spans {
-		if spans[i].lower == old {
-			target = &spans[i]
+	for _, s := range segmentSpans(name) {
+		if s.Lower == old {
+			target = s
 
 			break
 		}
@@ -24,7 +24,7 @@ func ReplaceSegment(name, old, replacement string) string {
 		return name
 	}
 
-	firstUpper := unicode.IsUpper(rune(name[target.start]))
+	firstUpper := unicode.IsUpper(rune(name[target.Start]))
 	words := split.Underscore(replacement)
 	underscore := strings.Contains(name, constant.Underscore)
 	var b strings.Builder
@@ -43,5 +43,5 @@ func ReplaceSegment(name, old, replacement string) string {
 		}
 	}
 
-	return join.Empty(name[:target.start], b.String(), name[target.end:])
+	return join.Empty(name[:target.Start], b.String(), name[target.End:])
 }

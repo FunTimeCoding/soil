@@ -21,6 +21,25 @@ func TestResolveByNameNotFound(t *testing.T) {
 	assert.String(t, "", resolved)
 }
 
+func TestResolveModelContextSession(t *testing.T) {
+	s := store_tester.New(t)
+	r := s.EnsureSession("session-1")
+	s.BindModelContextSession(r.Callsign, "mcp-session-abc")
+	name, identifier, e := s.Store.ResolveModelContextSession("mcp-session-abc")
+	assert.FatalOnError(t, e)
+	assert.String(t, r.Callsign, name)
+	assert.String(t, "session-1", identifier)
+}
+
+func TestResolveModelContextSessionEmpty(t *testing.T) {
+	s := store_tester.New(t)
+	s.EnsureSession("session-1")
+	name, identifier, e := s.Store.ResolveModelContextSession("")
+	assert.FatalOnError(t, e)
+	assert.String(t, "", name)
+	assert.String(t, "", identifier)
+}
+
 func TestAliasOwner(t *testing.T) {
 	s := store_tester.New(t)
 	s.EnsureSession("session-1")

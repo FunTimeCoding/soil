@@ -18,7 +18,7 @@ func checkFile(
 	file *ast.File,
 	name string,
 ) {
-	var identities []identity
+	var identities []Identity
 
 	for _, d := range file.Decls {
 		g, okay := d.(*ast.GenDecl)
@@ -36,7 +36,7 @@ func checkFile(
 
 			identities = append(
 				identities,
-				identity{name: t.Name.Name, position: t.Pos()},
+				Identity{name: t.Name.Name, position: t.Pos()},
 			)
 		}
 	}
@@ -51,7 +51,7 @@ func checkFile(
 		if f.Recv == nil {
 			identities = append(
 				identities,
-				identity{name: f.Name.Name, position: f.Pos()},
+				Identity{name: f.Name.Name, position: f.Pos()},
 			)
 
 			continue
@@ -59,7 +59,7 @@ func checkFile(
 
 		identities = append(
 			identities,
-			identity{name: f.Name.Name, position: f.Pos(), method: f},
+			Identity{name: f.Name.Name, position: f.Pos(), method: f},
 		)
 	}
 

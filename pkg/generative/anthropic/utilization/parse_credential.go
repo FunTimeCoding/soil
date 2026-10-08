@@ -11,7 +11,7 @@ func ParseCredential(raw string) *credential.Credential {
 		return nil
 	}
 
-	var stored storedCredential
+	var stored StoredCredential
 
 	if e := json.Unmarshal([]byte(raw), &stored); e != nil {
 		return nil

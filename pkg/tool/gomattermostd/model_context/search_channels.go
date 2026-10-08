@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context/argument"
+	mattermostResponse "github.com/funtimecoding/soil/pkg/tool/gomattermostd/model_context/response"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mattermost/mattermost/server/public/model"
 	"strings"
@@ -35,14 +36,7 @@ func (s *Server) SearchChannels(
 		return s.captureDetail(e)
 	}
 
-	type row struct {
-		Identifier  string `json:"identifier"`
-		Name        string `json:"name"`
-		DisplayName string `json:"display_name"`
-		Type        string `json:"type"`
-		LastPostAt  string `json:"last_post_at,omitempty"`
-	}
-	var rows []row
+	var rows []*mattermostResponse.ChannelMatch
 
 	for _, c := range channels {
 		typeName := channelTypeName(c.Type)
@@ -64,12 +58,12 @@ func (s *Server) SearchChannels(
 			}
 		}
 
-		r := row{
-			Identifier:  c.Id,
-			Name:        c.Name,
-			DisplayName: displayName,
-			Type:        typeName,
-		}
+		r := mattermostResponse.NewChannelMatch(
+			c.Id,
+			c.Name,
+			displayName,
+			typeName,
+		)
 
 		if c.LastPostAt > 0 {
 			r.LastPostAt = formatMilli(c.LastPostAt)

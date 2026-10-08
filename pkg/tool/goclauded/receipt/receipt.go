@@ -13,6 +13,7 @@ type Receipt struct {
 	TrackerStates int64
 	Queue         int64
 	Notifications int64
+	SearchEntries int64
 	Transcript    string
 	Sources       []string
 }

@@ -6,7 +6,7 @@ import (
 	"go/types"
 )
 
-type okayForm struct {
+type OkayForm struct {
 	ident    *ast.Ident
 	scope    *types.Scope
 	position token.Pos

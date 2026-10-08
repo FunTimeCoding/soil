@@ -12,11 +12,16 @@ func (c *Client) CreateTab(l string) (string, error) {
 		return "", e
 	}
 
-	identifier, e := target.CreateTarget(l).Do(cdp.WithExecutor(c.context, b))
+	result, e := cdp.Call(
+		c.context,
+		b,
+		target.CreateTarget,
+		target.CreateTargetParams{URL: l},
+	)
 
 	if e != nil {
 		return "", e
 	}
 
-	return string(identifier), nil
+	return string(result.TargetID), nil
 }

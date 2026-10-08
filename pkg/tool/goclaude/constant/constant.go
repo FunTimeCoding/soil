@@ -53,3 +53,19 @@ var (
 		`(^|[|&;(\s])pip3?\s(.*\s)?install(\s|$)`,
 	)
 )
+
+const SingleReplacementMessage = "a single python search-and-replace in one file is an Edit call - use the Edit tool; for several replacements in one file, use goreplace (search/replace blocks on stdin, all or none)"
+
+var (
+	PythonReplaceCall  = regexp.MustCompile(`\.replace\(`)
+	PythonReplaceCount = regexp.MustCompile(`,\s*-?\d+\s*\)`)
+	PythonRegexModule  = regexp.MustCompile(`\bre\.`)
+	PythonLoop         = regexp.MustCompile(`\b(for|while)\b`)
+	PythonRead         = regexp.MustCompile(`\.read\(\)|\.read_text\(`)
+	PythonWrite        = regexp.MustCompile(`\.write\(|\.write_text\(`)
+	PythonFileTarget   = regexp.MustCompile(
+		`\b(?:open|Path)\(\s*([A-Za-z_]\w*|'[^']*'|"[^"]*")`,
+	)
+)
+
+const PythonAssignment = `\b%s\s*=\s*(?:[\w.]*Path\(\s*)?['"]([^'"]+)['"]`

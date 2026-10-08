@@ -13,10 +13,10 @@ import (
 func BuildAllEdits(
 	fileSet *token.FileSet,
 	all []*packages.Package,
-	violations []violation,
+	violations []Violation,
 	r *output.Results,
-) []edit {
-	var result []edit
+) []Edit {
+	var result []Edit
 
 	for _, v := range violations {
 		path := fileSet.File(v.ident.Pos()).Name()
@@ -54,7 +54,7 @@ func BuildAllEdits(
 			newName := segment.ReplaceSegment(e.Ident.Name, v.segment, v.fix)
 			result = append(
 				result,
-				edit{
+				Edit{
 					position: e.Ident.Pos(),
 					end:      e.Ident.End(),
 					newText:  newName,

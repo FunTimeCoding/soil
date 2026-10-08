@@ -5,7 +5,7 @@ import (
 	"go/token"
 )
 
-type identity struct {
+type Identity struct {
 	name     string
 	position token.Pos
 	method   *ast.FuncDecl

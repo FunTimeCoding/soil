@@ -21,11 +21,8 @@ func (s *Store) FindSimilarFiles(
 
 	defer errors.PanicClose(rows)
 	lower := strings.ToLower(query)
-	type scored struct {
-		path     string
-		distance int
-	}
-	var candidates []scored
+	var candidates []string
+	distances := map[string]int{}
 
 	for rows.Next() {
 		var path string
@@ -37,7 +34,8 @@ func (s *Store) FindSimilarFiles(
 		d := distance.Levenshtein(strings.ToLower(path), lower)
 
 		if d <= 5 {
-			candidates = append(candidates, scored{path: path, distance: d})
+			candidates = append(candidates, path)
+			distances[path] = d
 		}
 	}
 
@@ -48,7 +46,7 @@ func (s *Store) FindSimilarFiles(
 	sort.Slice(
 		candidates,
 		func(i, j int) bool {
-			return candidates[i].distance < candidates[j].distance
+			return distances[candidates[i]] < distances[candidates[j]]
 		},
 	)
 
@@ -56,11 +54,5 @@ func (s *Store) FindSimilarFiles(
 		candidates = candidates[:limit]
 	}
 
-	result := make([]string, len(candidates))
-
-	for i, c := range candidates {
-		result[i] = c.path
-	}
-
-	return result, nil
+	return candidates, nil
 }

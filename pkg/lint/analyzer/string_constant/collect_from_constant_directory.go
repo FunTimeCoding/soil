@@ -8,7 +8,7 @@ import (
 )
 
 func collectFromConstantDirectory(
-	result map[string][]knownConstant,
+	result map[string][]KnownConstant,
 	directory string,
 	subDirectory string,
 ) {

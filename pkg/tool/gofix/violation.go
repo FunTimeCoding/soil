@@ -5,7 +5,7 @@ import (
 	"go/types"
 )
 
-type violation struct {
+type Violation struct {
 	ident   *ast.Ident
 	object  types.Object
 	segment string

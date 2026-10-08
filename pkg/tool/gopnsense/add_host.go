@@ -10,7 +10,7 @@ func addHost(
 	c *client.Client,
 	t *terminal.Terminal,
 ) *cobra.Command {
-	f := &hostFlags{}
+	f := &HostFlags{}
 	result := &cobra.Command{
 		Use:   "add-host",
 		Short: "Add a Dnsmasq host entry",

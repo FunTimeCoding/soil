@@ -1,5 +1,5 @@
 package unit
 
-type named struct {
+type Named struct {
 	Name string `json:"name"`
 }

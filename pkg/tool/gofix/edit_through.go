@@ -9,7 +9,7 @@ import (
 
 func editThrough(
 	fileSet *token.FileSet,
-	edits []edit,
+	edits []Edit,
 	directory string,
 	w *workspace.Workspace,
 ) {

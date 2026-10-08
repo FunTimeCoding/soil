@@ -4,7 +4,7 @@ import "github.com/funtimecoding/soil/pkg/face"
 
 func assemble(
 	content string,
-	tables []*table,
+	tables []*Table,
 	pulled map[int]bool,
 	c face.TokenCounter,
 ) []Chunk {

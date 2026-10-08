@@ -6,7 +6,7 @@ import (
 	"sort"
 )
 
-func assignLetters(variables []typedVariable) map[*ast.Ident]string {
+func assignLetters(variables []TypedVariable) map[*ast.Ident]string {
 	result := make(map[*ast.Ident]string)
 	taken := make(map[string]bool)
 	singleLetterVars := filterEligible(variables)

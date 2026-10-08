@@ -15,7 +15,7 @@ type Fixture struct {
 	Value string
 }
 
-type exportedFixture struct {
+type ExportedFixture struct {
 	Value  string
 	hidden string
 }
@@ -179,16 +179,16 @@ func TestFatalOnError(t *testing.T) {
 func TestExported(t *testing.T) {
 	assert.Exported(
 		t,
-		&exportedFixture{Value: "a"},
-		&exportedFixture{Value: "a"},
+		&ExportedFixture{Value: "a"},
+		&ExportedFixture{Value: "a"},
 	)
 }
 
 func TestExportedIgnoresPrivateFields(t *testing.T) {
 	assert.Exported(
 		t,
-		&exportedFixture{Value: "a", hidden: "b"},
-		&exportedFixture{Value: "a", hidden: "c"},
+		&ExportedFixture{Value: "a", hidden: "b"},
+		&ExportedFixture{Value: "a", hidden: "c"},
 	)
 }
 

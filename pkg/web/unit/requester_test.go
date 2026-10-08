@@ -21,7 +21,7 @@ import (
 
 func TestNotationSendsAgentHeaderAndAuthorization(t *testing.T) {
 	s, seen := newScriptedServer(t, `{"name":"alfa"}`, http.StatusOK)
-	var out named
+	var out Named
 	e := newRequester(t, s.URL).
 		WithUserAgent("bravo/1.0").
 		WithHeader(constant.Accept, "text/css").
@@ -107,7 +107,7 @@ func TestPostIsSentOnce(t *testing.T) {
 
 func TestUnauthorizedRenewsOnce(t *testing.T) {
 	a := renewing_authorizer.New("stale")
-	var out named
+	var out Named
 	e := newRequester(t, newRenewingServer(t, "Bearer fresh").URL).
 		WithAuthorizer(a).
 		Notation(request.Get("/items"), &out)

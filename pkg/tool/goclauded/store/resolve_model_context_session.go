@@ -3,6 +3,10 @@ package store
 import "github.com/funtimecoding/soil/pkg/tool/goclauded/store/session"
 
 func (s *Store) ResolveModelContextSession(modelContextSessionIdentifier string) (string, string, error) {
+	if modelContextSessionIdentifier == "" {
+		return "", "", nil
+	}
+
 	var i session.Session
 	result := s.database.Where(
 		"model_context_session = ?",

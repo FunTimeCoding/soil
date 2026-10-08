@@ -11,9 +11,9 @@ func runInstrumented(
 	t *testing.T,
 	root *cobra.Command,
 	arguments ...string,
-) *commandLog {
+) *CommandLog {
 	t.Helper()
-	result := &commandLog{}
+	result := &CommandLog{}
 	argument.CobraInstrument(root, result)
 	root.SetArgs(arguments)
 	assert.FatalOnError(t, root.Execute())

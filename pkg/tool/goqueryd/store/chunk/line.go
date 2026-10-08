@@ -1,6 +1,6 @@
 package chunk
 
-type line struct {
+type Line struct {
 	start int
 	end   int
 }

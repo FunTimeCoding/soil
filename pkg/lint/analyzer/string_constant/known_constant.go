@@ -1,6 +1,6 @@
 package string_constant
 
-type knownConstant struct {
+type KnownConstant struct {
 	name        string
 	packageName string
 }

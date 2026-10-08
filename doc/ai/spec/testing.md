@@ -107,6 +107,8 @@ auth contract with the battery methods, mirroring the mount surface:
 - `VerifyGuarded(path)` / `VerifyOpen(path)` / `VerifyOpenPost(path)`
   — one per guarded route worth naming and per open mount, including
   the dashboard root and live path of web-carrying daemons
+- `VerifySession(path)` — a session page redirects a bare request to sign-on,
+  reported by `web.HaltingClient` without following, and serves the test token
 - `VerifyModelContext` — 401 bare on `route:/mcp` and `route:/sse`, handshake
   with the test token
 - `VerifyStatus(path, status)` — exact status for a bare request,
@@ -125,10 +127,11 @@ base run the guard test through the base, and bases
 run the full production `Mount` — mock clients flow through it
 because `Mount`, the REST server, and the model_context package all
 consume the daemon's `<path>/face/` interfaces, never the concrete clients.
-Session (SSO) web surfaces assert their favicon instead of the
-dashboard — the sign-in redirect points at a fake gate the test
-client cannot follow. Tests pass `constant.DefaultVersion` where a
-mount takes a version.
+Session (SSO) web surfaces assert their favicon open and their
+dashboard with `VerifySession`; a page whose handler reaches an
+external client the battery cannot serve, or a live stream that
+holds its headers, is not worth the wait. Tests pass
+`constant.DefaultVersion` where a mount takes a version.
 
 ## Typed Response Parsing
 

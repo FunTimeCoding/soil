@@ -1,11 +1,4 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "ignorePaths": ["py/sublime_bridge/.python-version"],
-  "packageRules": [
-    {
-      "matchPackageNames": ["github.com/mark3labs/mcp-go"],
-      "allowedVersions": "< v1.0.0",
-      "description": "pinned: 1.0 implements protocol 2026-07-28 which removed protocol-level sessions (SEP-2567); goclauded session binding needs transport-independent identity first"
-    }
-  ]
+  "ignorePaths": ["py/sublime_bridge/.python-version"]
 }
