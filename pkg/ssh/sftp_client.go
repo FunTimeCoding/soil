@@ -10,7 +10,7 @@ func (c *Client) sftpClient() *sftp.Client {
 		return c.sftp
 	}
 
-	result, e := sftp.NewClient(c.client)
+	result, e := sftp.NewClient(c.dialed())
 	errors.PanicOnError(e)
 	c.sftp = result
 

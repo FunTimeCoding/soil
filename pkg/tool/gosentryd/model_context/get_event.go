@@ -26,5 +26,5 @@ func (s *Server) GetEvent(
 		return s.captureDetail(e)
 	}
 
-	return response.SuccessAny(result)
+	return s.succeed(result)
 }

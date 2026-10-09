@@ -3,6 +3,7 @@ package watcher
 import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/reacher"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/digest/event"
 	mattermostFace "github.com/funtimecoding/soil/pkg/tool/gomattermostd/face"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/notifier"
@@ -17,6 +18,8 @@ type Watcher struct {
 	notifier *notifier.Notifier
 	logger   *logger.Logger
 	reporter face.Reporter
+	reacher  *reacher.Reacher
+	host     string
 	window   time.Duration
 	self     string
 	index    map[string]string

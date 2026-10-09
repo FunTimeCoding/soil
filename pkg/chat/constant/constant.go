@@ -33,6 +33,9 @@ const (
 
 	MattermostSocketWait = 5 * time.Second
 
+	MattermostKeepAlive  = 25 * time.Second
+	MattermostPingWait   = time.Second
+
 	MattermostPostField     = "post"
 	MattermostReactionField = "reaction"
 

@@ -10,9 +10,10 @@ import (
 func Mount(
 	c sentry.SentrySource,
 	organization string,
+	host string,
 	r face.Reporter,
 	t face.Recorder,
 	g *guard.Mux,
 ) {
-	model_context.New(c, organization, r, t).Mount(g)
+	model_context.New(c, organization, host, r, t).Mount(g)
 }

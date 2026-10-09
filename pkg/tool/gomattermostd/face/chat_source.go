@@ -12,4 +12,5 @@ type ChatSource interface {
 	Thread(p *model.Post) ([]*post.Post, error)
 	WebSocket() *model.WebSocketClient
 	RefreshSocket() error
+	Host() string
 }

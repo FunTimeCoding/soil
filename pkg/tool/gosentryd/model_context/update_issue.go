@@ -27,5 +27,5 @@ func (s *Server) UpdateIssue(
 		return s.captureDetail(e)
 	}
 
-	return response.SuccessAny(result)
+	return s.succeed(result)
 }

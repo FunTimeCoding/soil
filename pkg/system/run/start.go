@@ -7,6 +7,7 @@ import (
 	library "github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/errors/command"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/strings/trim"
 	"os/exec"
 )
 
@@ -30,11 +31,11 @@ func (r *Run) Start(s ...string) string {
 	e := r.startAndWait(c)
 
 	if r.stdout == nil {
-		r.OutputString = stdout.String()
+		r.OutputString = trim.NewLine(stdout.String())
 	}
 
 	if r.stderr == nil {
-		r.ErrorString = stderr.String()
+		r.ErrorString = trim.NewLine(stderr.String())
 	}
 
 	if e != nil {

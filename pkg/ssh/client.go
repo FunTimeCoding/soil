@@ -6,7 +6,11 @@ import (
 )
 
 type Client struct {
-	client *ssh.Client
-	sftp   *sftp.Client
-	Panic  bool
+	user         string
+	host         string
+	secure       bool
+	authenticate func() (ssh.AuthMethod, error)
+	client       *ssh.Client
+	sftp         *sftp.Client
+	Panic        bool
 }

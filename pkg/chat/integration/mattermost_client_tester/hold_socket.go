@@ -25,6 +25,14 @@ func (t *Tester) holdSocket(
 
 	defer errors.LogClose(c)
 	t.accept(c)
+	inner := c.PingHandler()
+	c.SetPingHandler(
+		func(s string) error {
+			t.countPing()
+
+			return inner(s)
+		},
+	)
 
 	for {
 		if _, _, f := c.ReadMessage(); f != nil {

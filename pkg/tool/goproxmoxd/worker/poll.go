@@ -18,11 +18,15 @@ func (w *Worker) Poll() {
 		e := w.pollInstance(i.Name, f)
 
 		if e != nil {
-			w.log.Plain("poll hypervisor %s failed: %v", i.Name, e)
+			w.logFailure(i.Name, e)
 			w.collector.Clear(i.Name)
 			w.collector.SetScrape(i.Name, false, time.Since(start))
 
 			continue
+		}
+
+		if edge := w.reacher.Observe(i.Name, nil); edge != nil {
+			w.log.Plain("poll hypervisor %s", edge)
 		}
 
 		w.collector.SetScrape(i.Name, true, time.Since(start))

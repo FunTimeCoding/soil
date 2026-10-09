@@ -16,7 +16,7 @@ func main() {
 	console.Format("Node: %s\n", n)
 
 	if false {
-		s := ssh.New(system.User().Username, n, false)
+		s := ssh.New(system.User().Username, n, false).MustDial()
 		defer s.Close()
 		r := s.Run("ls")
 		console.Format("Run: %s\n", r.OutputString)
@@ -33,7 +33,7 @@ func main() {
 			),
 			"id_rsa_insecure",
 			false,
-		)
+		).MustDial()
 		defer s.Close()
 		r := s.Run("ls")
 		console.Format("Run: %s\n", r.OutputString)

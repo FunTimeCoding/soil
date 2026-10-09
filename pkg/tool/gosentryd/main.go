@@ -20,5 +20,6 @@ func Main() {
 	o.Address = a.Address()
 	o.ServiceTokens = web.ServiceTokens()
 	o.Organization = environment.Required(errors.OrganizationEnvironment)
+	o.Host = environment.Required(errors.HostEnvironment)
 	Run(o, s)
 }

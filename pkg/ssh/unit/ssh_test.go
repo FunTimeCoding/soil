@@ -2,11 +2,12 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/errors/unreachable"
 	"github.com/funtimecoding/soil/pkg/ssh"
 	"github.com/funtimecoding/soil/pkg/ssh/command"
 	sshConstant "github.com/funtimecoding/soil/pkg/ssh/constant"
-	"github.com/funtimecoding/soil/pkg/ssh/result"
 	"github.com/funtimecoding/soil/pkg/strings/constant"
+	"github.com/funtimecoding/soil/pkg/system/result"
 	"testing"
 )
 
@@ -31,4 +32,22 @@ func TestResult(t *testing.T) {
 
 func TestEnvironmentPrefix(t *testing.T) {
 	assert.String(t, "", ssh.EnvironmentPrefix(command.New(constant.UpperAlfa)))
+}
+
+func TestPanicDefault(t *testing.T) {
+	assert.True(t, ssh.NewWithPassword("alfa", "localhost", "", false).Panic)
+	assert.False(
+		t,
+		ssh.NewWithPassword("alfa", "localhost", "", false).NoPanic().Panic,
+	)
+}
+
+func TestNotDialed(t *testing.T) {
+	defer func() { assert.NotNil(t, recover()) }()
+	ssh.NewWithPassword("alfa", "localhost", "", false).Run("true")
+}
+
+func TestDialUnreachable(t *testing.T) {
+	e := ssh.NewWithPassword("alfa", "unknown.invalid", "", false).Dial()
+	assert.True(t, unreachable.Is(e))
 }

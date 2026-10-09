@@ -7,5 +7,7 @@ func (c *Client) Close() {
 		errors.LogClose(c.sftp)
 	}
 
-	errors.LogClose(c.client)
+	if c.client != nil {
+		errors.LogClose(c.client)
+	}
 }

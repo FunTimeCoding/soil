@@ -2,6 +2,7 @@ package mattermost
 
 func (c *Client) RefreshSocket() error {
 	if c.webSocket != nil {
+		c.stopKeepAlive()
 		c.webSocket.Close()
 	}
 
@@ -12,6 +13,7 @@ func (c *Client) RefreshSocket() error {
 	}
 
 	c.webSocket = s
+	c.startKeepAlive()
 
 	return nil
 }

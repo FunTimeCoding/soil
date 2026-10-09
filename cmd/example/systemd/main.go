@@ -17,7 +17,7 @@ func main() {
 	service := a.RequiredPositional(1, "SERVICE")
 	console.Format("Host: %s\n", host)
 	console.Format("Service: %s\n", service)
-	s := ssh.New(system.User().Username, host, true)
+	s := ssh.New(system.User().Username, host, true).MustDial()
 	defer s.Close()
 	c := systemd.New(s)
 

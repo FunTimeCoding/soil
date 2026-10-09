@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/event/notifier"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/reacher"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/collector"
 	proxFace "github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
 	"github.com/prometheus/client_golang/prometheus"
@@ -25,6 +26,7 @@ func New(
 		log:       l,
 		recovery:  recovery.New(l, r),
 		notifier:  notifier.New(),
+		reacher:   reacher.New(),
 		stop:      make(chan struct{}),
 	}
 }

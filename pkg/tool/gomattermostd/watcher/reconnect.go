@@ -2,14 +2,19 @@ package watcher
 
 import (
 	"fmt"
+	reacherConstant "github.com/funtimecoding/soil/pkg/reacher/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/constant"
 	"time"
 )
 
 func (w *Watcher) reconnect(reason string) bool {
-	w.reporter.CaptureException(
-		fmt.Errorf("websocket %s, reconnecting", reason),
-	)
+	if edge := w.reacher.Fail(w.host, reason); edge != nil {
+		w.reporter.CaptureWithContext(
+			fmt.Errorf("websocket %s, reconnecting", reason),
+			reacherConstant.ContextKey,
+			edge.Context(),
+		)
+	}
 
 	for {
 		select {
@@ -18,14 +23,18 @@ func (w *Watcher) reconnect(reason string) bool {
 		case <-time.After(constant.ReconnectDelay):
 		}
 
-		e := w.client.RefreshSocket()
+		if e := w.client.RefreshSocket(); e != nil {
+			w.reacher.Observe(w.host, e)
 
-		if e == nil {
-			w.client.WebSocket().Listen()
-
-			return true
+			continue
 		}
 
-		w.logger.Plain("websocket refresh failed: %v", e)
+		if edge := w.reacher.Succeed(w.host); edge != nil {
+			w.logger.Plain("%s", edge)
+		}
+
+		w.client.WebSocket().Listen()
+
+		return true
 	}
 }

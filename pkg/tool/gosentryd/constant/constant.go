@@ -26,4 +26,7 @@ const (
 	DeleteIssue       = "delete_issue"
 )
 
-const RequestFailed = "sentry request failed"
+const (
+	RequestFailed = "sentry request failed"
+	SinceFormat   = "15:04:05"
+)

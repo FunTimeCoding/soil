@@ -22,5 +22,5 @@ func (s *Server) DeleteIssue(
 		return s.captureDetail(e)
 	}
 
-	return response.SuccessAny(nil)
+	return s.succeed(nil)
 }

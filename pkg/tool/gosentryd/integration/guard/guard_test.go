@@ -21,6 +21,7 @@ func TestGuard(t *testing.T) {
 			gosentryd.Mount(
 				mock_client.New(),
 				"test",
+				"sentry.test",
 				memory.New(),
 				mock_recorder.New(),
 				g,

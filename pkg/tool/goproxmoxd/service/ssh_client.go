@@ -29,6 +29,11 @@ func (s *Service) SSHClient(instance string) (face.SnippetClient, error) {
 	}
 
 	c := ssh.NewWithPassword(i.SSHUser, i.Host, i.SSHPassword, false)
+
+	if e := c.Dial(); e != nil {
+		return nil, e
+	}
+
 	s.sshClients[instance] = c
 
 	return c, nil

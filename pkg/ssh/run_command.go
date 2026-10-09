@@ -2,17 +2,18 @@ package ssh
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
+	processError "github.com/funtimecoding/soil/pkg/errors/command"
 	"github.com/funtimecoding/soil/pkg/ssh/command"
 	"github.com/funtimecoding/soil/pkg/ssh/constant"
-	"github.com/funtimecoding/soil/pkg/ssh/result"
 	"github.com/funtimecoding/soil/pkg/strings/join/key_value"
 	"github.com/funtimecoding/soil/pkg/strings/trim"
+	"github.com/funtimecoding/soil/pkg/system/result"
 	"github.com/funtimecoding/soil/pkg/system/secure_shell"
 	"golang.org/x/crypto/ssh"
 )
 
 func (c *Client) RunCommand(o *command.Command) *result.Result {
-	s := secure_shell.Session(c.client)
+	s := secure_shell.Session(c.dialed())
 	defer secure_shell.CloseSession(s)
 	stdout, stderr := secure_shell.SessionBuffers(s)
 
@@ -39,11 +40,20 @@ func (c *Client) RunCommand(o *command.Command) *result.Result {
 	}
 
 	e := s.Run(text)
-
-	return result.New(
+	r := result.New(
 		trim.NewLine(stdout.String()),
 		trim.NewLine(stderr.String()),
 		secure_shell.Exit(e),
-		e,
+		nil,
 	)
+
+	if e != nil {
+		r.Error = processError.New(text, r.OutputString, r.ErrorString, e)
+	}
+
+	if c.Panic {
+		errors.PanicOnError(r.Error)
+	}
+
+	return r
 }

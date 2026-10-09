@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
 	"github.com/funtimecoding/soil/pkg/event/notifier"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/reacher"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/collector"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/floor"
@@ -18,6 +19,7 @@ type Worker struct {
 	log       *logger.Logger
 	recovery  *recovery.Recovery
 	notifier  *notifier.Notifier
+	reacher   *reacher.Reacher
 	stop      chan struct{}
 	mutex     sync.RWMutex
 	floor     *floor.Floor

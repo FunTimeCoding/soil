@@ -35,5 +35,5 @@ func (s *Server) SearchEvents(
 		return s.captureDetail(f)
 	}
 
-	return response.SuccessAny(result)
+	return s.succeed(result)
 }

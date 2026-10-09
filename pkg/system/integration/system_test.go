@@ -19,7 +19,7 @@ func TestRunStart(t *testing.T) {
 	r1.Panic = false
 	r1.Start("echo", "test")
 	assert.True(t, r1.Error == nil)
-	assert.String(t, "test\n", r1.OutputString)
+	assert.String(t, "test", r1.OutputString)
 	assert.String(t, "", r1.ErrorString)
 	assert.Integer(t, 0, r1.Exit)
 	r2 := run.New()
@@ -90,7 +90,7 @@ func TestRunEnvironment(t *testing.T) {
 		constant.ShellCommand,
 		"echo $INTEGRATION_VALUE",
 	)
-	assert.String(t, "expected\n", output)
+	assert.String(t, "expected", output)
 }
 
 func TestRunSetEnvironment(t *testing.T) {
@@ -102,7 +102,7 @@ func TestRunSetEnvironment(t *testing.T) {
 		constant.ShellCommand,
 		"echo $INTEGRATION_ONLY:$HOME",
 	)
-	assert.String(t, "replaced:\n", output)
+	assert.String(t, "replaced:", output)
 }
 
 func TestRunInput(t *testing.T) {
@@ -111,8 +111,8 @@ func TestRunInput(t *testing.T) {
 	r.Input = strings.NewReader("first\nsecond\n")
 	output := r.Start("cat")
 	assert.True(t, r.Error == nil)
-	assert.String(t, "first\nsecond\n", output)
-	assert.String(t, "first\nsecond\n", r.OutputString)
+	assert.String(t, "first\nsecond", output)
+	assert.String(t, "first\nsecond", r.OutputString)
 }
 
 func TestRunInputWithWriters(t *testing.T) {
@@ -124,7 +124,7 @@ func TestRunInputWithWriters(t *testing.T) {
 	r.Writers(nil, &stderr)
 	output := r.Start("sort")
 	assert.True(t, r.Error == nil)
-	assert.String(t, "apple\nbanana\ncherry\n", output)
+	assert.String(t, "apple\nbanana\ncherry", output)
 	assert.String(t, "", stderr.String())
 }
 
@@ -148,7 +148,7 @@ func TestRunWritersStdout(t *testing.T) {
 	assert.String(t, "out\n", stdout.String())
 	assert.String(t, "", output)
 	assert.String(t, "", r.OutputString)
-	assert.String(t, "err\n", r.ErrorString)
+	assert.String(t, "err", r.ErrorString)
 }
 
 func TestRunWritersStderr(t *testing.T) {
@@ -161,8 +161,8 @@ func TestRunWritersStderr(t *testing.T) {
 		constant.ShellCommand,
 		"echo out; echo err >&2",
 	)
-	assert.String(t, "out\n", output)
-	assert.String(t, "out\n", r.OutputString)
+	assert.String(t, "out", output)
+	assert.String(t, "out", r.OutputString)
 	assert.String(t, "err\n", stderr.String())
 	assert.String(t, "", r.ErrorString)
 }

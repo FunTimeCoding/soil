@@ -22,5 +22,5 @@ func (s *Server) GetIssue(
 		return s.captureDetail(e)
 	}
 
-	return response.SuccessAny(result)
+	return s.succeed(result)
 }

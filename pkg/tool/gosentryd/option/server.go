@@ -4,4 +4,5 @@ type Server struct {
 	Address       string
 	ServiceTokens []string
 	Organization  string
+	Host          string
 }

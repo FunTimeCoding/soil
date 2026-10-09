@@ -3,6 +3,7 @@ package watcher
 import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/reacher"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/digest/event"
 	mattermostFace "github.com/funtimecoding/soil/pkg/tool/gomattermostd/face"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/notifier"
@@ -24,6 +25,8 @@ func New(
 		notifier: n,
 		logger:   l,
 		reporter: r,
+		reacher:  reacher.New(),
+		host:     c.Host(),
 		window:   window,
 		index:    map[string]string{},
 		buffer:   map[string][]*event.Event{},

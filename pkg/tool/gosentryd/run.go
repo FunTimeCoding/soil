@@ -29,6 +29,7 @@ func Run(
 					Mount(
 						sentry.NewEnvironment(),
 						o.Organization,
+						o.Host,
 						r,
 						s.Recorder(),
 						guard.New(m, o.ServiceTokens),

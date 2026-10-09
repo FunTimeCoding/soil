@@ -2,13 +2,17 @@ package mattermost
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/user_map"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/mattermost/mattermost/server/public/model"
 )
 
 func New(o ...Option) *Client {
-	result := &Client{context: context.Background()}
+	result := &Client{
+		context:   context.Background(),
+		keepAlive: constant.MattermostKeepAlive,
+	}
 
 	for _, p := range o {
 		p(result)
