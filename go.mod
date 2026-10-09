@@ -93,7 +93,7 @@ require (
 	golang.org/x/mod v0.41.0
 	golang.org/x/net v0.59.0
 	golang.org/x/oauth2 v0.37.0
-	golang.org/x/sys v0.48.0
+	golang.org/x/sys v0.49.0
 	golang.org/x/time v0.16.0
 	golang.org/x/tools v0.51.0
 	gonum.org/v1/gonum v0.17.0
