@@ -10,14 +10,14 @@ import (
 func Outage() {
 	r := reacher.New()
 	script := []*step.Step{
-		step.New("sentry2.rz.adition.net", constant.Refused),
-		step.New("sentry2.rz.adition.net", constant.Refused),
-		step.New("netbox.v10s.net", constant.NoRoute),
-		step.New("sentry2.rz.adition.net", constant.TimedOut),
-		step.New("netbox.v10s.net", constant.NoRoute),
-		step.New("sentry2.rz.adition.net", ""),
-		step.New("sentry2.rz.adition.net", ""),
-		step.New("netbox.v10s.net", ""),
+		step.New("alfa.example", constant.Refused),
+		step.New("alfa.example", constant.Refused),
+		step.New("bravo.example", constant.NoRoute),
+		step.New("alfa.example", constant.TimedOut),
+		step.New("bravo.example", constant.NoRoute),
+		step.New("alfa.example", ""),
+		step.New("alfa.example", ""),
+		step.New("bravo.example", ""),
 	}
 
 	for _, s := range script {
