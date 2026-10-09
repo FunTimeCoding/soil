@@ -2,6 +2,7 @@ package ssh
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/errors/connection"
 	"github.com/funtimecoding/soil/pkg/system/constant"
 	"golang.org/x/crypto/ssh"
@@ -14,10 +15,14 @@ func (c *Client) Dial() error {
 		return e
 	}
 
-	method, f := c.authenticate()
+	method, agent, f := c.authenticate()
 
 	if f != nil {
 		return f
+	}
+
+	if agent != nil {
+		defer errors.LogClose(agent)
 	}
 
 	result, g := ssh.Dial(
@@ -32,6 +37,10 @@ func (c *Client) Dial() error {
 
 	if g != nil {
 		if h := connection.Classify(g); h != nil {
+			if h.Host == "" {
+				return connection.New(h.Kind, c.host, h.Path, h.Reason)
+			}
+
 			return h
 		}
 

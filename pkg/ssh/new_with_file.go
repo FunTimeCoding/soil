@@ -1,6 +1,9 @@
 package ssh
 
-import "golang.org/x/crypto/ssh"
+import (
+	"golang.org/x/crypto/ssh"
+	"io"
+)
 
 func NewWithFile(
 	user string,
@@ -13,8 +16,10 @@ func NewWithFile(
 		user:   user,
 		host:   host,
 		secure: secure,
-		authenticate: func() (ssh.AuthMethod, error) {
-			return fileAuthentication(keyPath, keyName)
+		authenticate: func() (ssh.AuthMethod, io.Closer, error) {
+			m, e := fileAuthentication(keyPath, keyName)
+
+			return m, nil, e
 		},
 		Panic: true,
 	}

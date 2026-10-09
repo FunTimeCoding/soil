@@ -6,23 +6,25 @@ import (
 	"github.com/funtimecoding/soil/pkg/ssh/constant"
 	"golang.org/x/crypto/ssh"
 	"golang.org/x/crypto/ssh/agent"
+	"io"
 	"net"
 	"os"
 )
 
-func agentAuthentication() (ssh.AuthMethod, error) {
+func agentAuthentication() (ssh.AuthMethod, io.Closer, error) {
 	socket, e := net.Dial("unix", os.Getenv(constant.SocketEnvironment))
 
 	if e != nil {
-		return nil, fmt.Errorf("dial agent: %w", e)
+		return nil, nil, fmt.Errorf("dial agent: %w", e)
 	}
 
-	defer errors.LogClose(socket)
 	signers, f := agent.NewClient(socket).Signers()
 
 	if f != nil {
-		return nil, fmt.Errorf("list agent keys: %w", f)
+		errors.LogClose(socket)
+
+		return nil, nil, fmt.Errorf("list agent keys: %w", f)
 	}
 
-	return ssh.PublicKeys(signers...), nil
+	return ssh.PublicKeys(signers...), socket, nil
 }

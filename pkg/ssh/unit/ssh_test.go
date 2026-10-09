@@ -50,4 +50,5 @@ func TestNotDialed(t *testing.T) {
 func TestDialUnreachable(t *testing.T) {
 	e := ssh.NewWithPassword("alfa", "unknown.invalid", "", false).Dial()
 	assert.True(t, unreachable.Is(e))
+	assert.String(t, "unknown.invalid: unknown host", e.Error())
 }

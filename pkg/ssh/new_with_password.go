@@ -1,6 +1,9 @@
 package ssh
 
-import "golang.org/x/crypto/ssh"
+import (
+	"golang.org/x/crypto/ssh"
+	"io"
+)
 
 func NewWithPassword(
 	user string,
@@ -12,8 +15,8 @@ func NewWithPassword(
 		user:   user,
 		host:   host,
 		secure: secure,
-		authenticate: func() (ssh.AuthMethod, error) {
-			return ssh.Password(password), nil
+		authenticate: func() (ssh.AuthMethod, io.Closer, error) {
+			return ssh.Password(password), nil, nil
 		},
 		Panic: true,
 	}
