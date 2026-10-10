@@ -3,6 +3,7 @@ package block
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/goreplace/constant"
+	"slices"
 	"strings"
 )
 
@@ -18,29 +19,29 @@ func Parse(input string) ([]*Block, error) {
 			continue
 		}
 
-		if lines[i] != constant.SearchMarker {
+		if !slices.Contains(constant.Openings, lines[i]) {
 			return nil, fmt.Errorf(constant.StrayText, i+1, lines[i])
 		}
 
-		b := &Block{Number: len(result) + 1}
-		search, next, found := collect(lines, i+1, constant.DividerMarker)
+		b := &Block{Number: len(result) + 1, Opening: lines[i]}
+		next, e := b.head(lines, i+1)
 
-		if !found {
-			return nil, fmt.Errorf(constant.MissingDivider, b.Number)
+		if e != nil {
+			return nil, e
 		}
 
-		replace, end, found := collect(lines, next, constant.ReplaceMarker)
+		replace, end, marker := collect(lines, next, constant.ReplaceMarker)
 
-		if !found {
+		if marker == "" {
 			return nil, fmt.Errorf(constant.MissingReplace, b.Number)
 		}
 
-		if search == "" {
-			return nil, fmt.Errorf(constant.EmptySearch, b.Number)
+		b.Replace = replace
+
+		if f := b.validate(); f != nil {
+			return nil, f
 		}
 
-		b.Search = search
-		b.Replace = replace
 		result = append(result, b)
 		i = end
 	}

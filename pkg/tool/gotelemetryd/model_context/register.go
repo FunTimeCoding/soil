@@ -10,7 +10,7 @@ func (s *Server) register() {
 		mcp.NewTool(
 			constant.Query,
 			mcp.WithDescription(
-				"Query recent usage events. Filter by tool name, surface (model_context, command_line, web_service, web), actor, and time range. Returns individual events, newest first.",
+				"Query recent usage events. Filter by tool name, surface (model_context, command_line, web_service, web), actor, and time range. Returns individual events with their detail, newest first.",
 			),
 			mcp.WithString(
 				constant.Tool,
@@ -49,7 +49,15 @@ func (s *Server) register() {
 		mcp.NewTool(
 			constant.Summary,
 			mcp.WithDescription(
-				"Aggregated usage summary - counts per tool, optionally broken down by surface. The heatmap.",
+				"Aggregated usage summary - counts per tool, optionally broken down by surface, kind or outcome, and narrowed to one tool or actor. The heatmap.",
+			),
+			mcp.WithString(
+				constant.Tool,
+				mcp.Description("Filter by tool name."),
+			),
+			mcp.WithString(
+				constant.Actor,
+				mcp.Description("Filter by actor name."),
 			),
 			mcp.WithString(
 				constant.Since,
@@ -61,7 +69,9 @@ func (s *Server) register() {
 			),
 			mcp.WithString(
 				constant.GroupBy,
-				mcp.Description("Group by: tool (default), surface, or kind."),
+				mcp.Description(
+					"Group by: tool (default), surface, kind, or outcome.",
+				),
 			),
 		),
 		s.summary,

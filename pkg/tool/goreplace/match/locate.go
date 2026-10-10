@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goreplace/block"
 	"github.com/funtimecoding/soil/pkg/tool/goreplace/constant"
 	"sort"
-	"strings"
 )
 
 func Locate(
@@ -16,48 +15,32 @@ func Locate(
 	var failures []string
 
 	for _, b := range blocks {
-		offsets := occurrences(content, b.Search)
+		m, failure := region(content, b)
 
-		switch len(offsets) {
-		case 1:
-			result = append(
-				result,
-				&Match{
-					Block:  b,
-					Offset: offsets[0],
-					Line:   lineAt(content, offsets[0]),
-				},
-			)
-		case 0:
-			failures = append(failures, notFound(content, b))
-		default:
-			var lines []string
+		if failure != "" {
+			failures = append(failures, failure)
 
-			for _, o := range offsets {
-				lines = append(lines, fmt.Sprint(lineAt(content, o)))
-			}
-
-			failures = append(
-				failures,
-				fmt.Sprintf(
-					constant.Ambiguous,
-					b.Number,
-					len(offsets),
-					strings.Join(lines, constant.LineSeparator),
-				),
-			)
+			continue
 		}
+
+		result = append(result, m)
 	}
 
-	sort.Slice(
+	sort.SliceStable(
 		result,
-		func(i, j int) bool { return result[i].Offset < result[j].Offset },
+		func(i, j int) bool {
+			if result[i].Offset != result[j].Offset {
+				return result[i].Offset < result[j].Offset
+			}
+
+			return result[i].Length < result[j].Length
+		},
 	)
 
 	for i := 1; i < len(result); i++ {
 		previous := result[i-1]
 
-		if previous.Offset+len(previous.Block.Search) > result[i].Offset {
+		if previous.Offset+previous.Length > result[i].Offset {
 			failures = append(
 				failures,
 				fmt.Sprintf(
@@ -70,5 +53,5 @@ func Locate(
 		}
 	}
 
-	return result, failures
+	return result, append(failures, anchorConflicts(result)...)
 }

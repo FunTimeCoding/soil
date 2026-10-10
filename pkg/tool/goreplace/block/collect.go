@@ -1,17 +1,20 @@
 package block
 
-import "strings"
+import (
+	"slices"
+	"strings"
+)
 
 func collect(
 	lines []string,
 	start int,
-	marker string,
-) (string, int, bool) {
+	markers ...string,
+) (string, int, string) {
 	for i := start; i < len(lines); i++ {
-		if lines[i] == marker {
-			return strings.Join(lines[start:i], "\n"), i + 1, true
+		if slices.Contains(markers, lines[i]) {
+			return strings.Join(lines[start:i], "\n"), i + 1, lines[i]
 		}
 	}
 
-	return "", len(lines), false
+	return "", len(lines), ""
 }

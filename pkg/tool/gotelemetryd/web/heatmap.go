@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/types/summary_option"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -26,7 +27,10 @@ func (s *Server) heatmap(
 		groupBy = "tool"
 	}
 
-	rows, queryError := s.store.Summary(since, "", groupBy)
+	o := summary_option.New()
+	o.Since = since
+	o.GroupBy = groupBy
+	rows, queryError := s.store.Summary(o)
 	errors.PanicOnError(queryError)
 	showSurface := groupBy == "surface"
 	showKind := groupBy == "kind"

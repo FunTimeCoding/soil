@@ -18,6 +18,7 @@ const (
 	Surface = "surface"
 	Actor   = "actor"
 	Kind    = "kind"
+	Outcome = "outcome"
 	Since   = "since"
 	Until   = "until"
 	Limit   = "limit"

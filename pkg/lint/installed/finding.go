@@ -8,12 +8,11 @@ import (
 func finding(
 	key string,
 	text string,
-	directory string,
 	b *Binary,
 ) *concern.Concern {
 	result := concern.NewFile(
 		key,
-		fmt.Sprintf(text, directory, b.Name),
+		fmt.Sprintf(text, b.Directory, b.Name),
 		b.Path,
 		false,
 	)

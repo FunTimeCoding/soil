@@ -41,12 +41,12 @@ func Run(
 
 	for _, m := range matches {
 		result.WriteString(content[previous:m.Offset])
-		result.WriteString(m.Block.Replace)
-		previous = m.Offset + len(m.Block.Search)
+		result.WriteString(m.Replace)
+		previous = m.Offset + m.Length
 	}
 
 	result.WriteString(content[previous:])
-	printDifference(out, matches)
+	printDifference(out, content, matches)
 
 	if dryRun {
 		write(out, constant.DryRunApplied, path, len(matches))

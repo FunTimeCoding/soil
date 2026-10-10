@@ -11,6 +11,7 @@ gobuild                     # build all binaries in cmd/ (except example/)
 gobuild --copy-to-bin       # also install matching-architecture binary to ~/bin
 gobuild --linux-amd64       # build only linux-amd64
 gobuild --native            # enable CGO
+gobuild --rebuild-stale     # rebuild every stale binary on the PATH into ~/bin
 ```
 
 ## What It Does
@@ -54,6 +55,14 @@ macOS kill the next exec of a previously executed binary
 executable on Linux fails with "text file busy". Rename has
 neither problem - running processes keep the old inode.
 
+`--rebuild-stale` installs what golint reports as stale: every binary on the
+PATH whose `cmd/<name>` lives in a repository beside the current one and whose
+version is below that repository's latest tag, or carries none
+(`installed.Outdated`, the same list golint's finding reads). Each builds
+natively from its repository's working tree, dirty or not - a working-tree
+build stamps a pseudo-version past the tag, so a rerun skips what already went
+through. The first build that fails stops the run.
+
 ## Target Architectures
 
 By default, all three are built. Pass flags to select specific ones:
@@ -87,6 +96,7 @@ target is the file's package (`build.Package`).
 ```
 cmd/gobuild/main.go              # entry point
 pkg/tool/gobuild/main.go         # Main(): flags, dispatch
+pkg/tool/gobuild/rebuild_stale.go # rebuildStale(): installs installed.Outdated
 pkg/build/
   go.go                          # Go(): runs go build on the package
   architectures.go               # Architectures(): iterates selected targets

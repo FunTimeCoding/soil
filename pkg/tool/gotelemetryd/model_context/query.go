@@ -2,6 +2,7 @@ package model_context
 
 import (
 	"context"
+	"encoding/json"
 	library "github.com/funtimecoding/soil/pkg/constant"
 	markResponse "github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
@@ -40,6 +41,11 @@ func (s *Server) query(
 			Kind:      v.Kind,
 			Duration:  v.DurationMillisecond,
 			CreatedAt: v.CreatedAt.Format(time.RFC3339),
+		}
+		var detail map[string]string
+
+		if v.Detail != nil && json.Unmarshal([]byte(*v.Detail), &detail) == nil {
+			entries[i].Detail = detail
 		}
 	}
 

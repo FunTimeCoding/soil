@@ -4,29 +4,28 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/generated/server"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/types/summary_option"
 )
 
 func (s *Server) GetSummary(
 	_ context.Context,
 	r server.GetSummaryRequestObject,
 ) (server.GetSummaryResponseObject, error) {
-	since := ""
-	until := ""
-	groupBy := "tool"
+	o := summary_option.New()
 
 	if r.Params.Since != nil {
-		since = *r.Params.Since
+		o.Since = *r.Params.Since
 	}
 
 	if r.Params.Until != nil {
-		until = *r.Params.Until
+		o.Until = *r.Params.Until
 	}
 
 	if r.Params.GroupBy != nil {
-		groupBy = string(*r.Params.GroupBy)
+		o.GroupBy = string(*r.Params.GroupBy)
 	}
 
-	rows, e := s.store.Summary(since, until, groupBy)
+	rows, e := s.store.Summary(o)
 
 	if e != nil {
 		return server.GetSummary500JSONResponse(

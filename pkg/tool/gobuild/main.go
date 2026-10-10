@@ -42,11 +42,23 @@ func Main() {
 		"Module version to build, required with module",
 	)
 	a.Boolean(buildConstant.CopyToBinFlag, false, "Copy to $HOME/bin")
+	a.Boolean(
+		buildConstant.RebuildStaleFlag,
+		false,
+		"Rebuild every binary on the PATH older than its repository's latest tag into $HOME/bin, stopping at the first failure",
+	)
 	a.Boolean(systemConstant.LinuxAMD64, false, "Linux AMD64")
 	a.Boolean(systemConstant.DarwinARM64, false, "Darwin ARM64")
 	a.Boolean(systemConstant.DarwinAMD64, false, "Darwin AMD64")
 	a.Boolean(buildConstant.Native, false, "Enable CGO")
 	a.Parse()
+
+	if a.GetBoolean(buildConstant.RebuildStaleFlag) {
+		rebuildStale()
+
+		return
+	}
+
 	linuxAMD64 := a.GetBoolean(systemConstant.LinuxAMD64)
 	darwinARM64 := a.GetBoolean(systemConstant.DarwinARM64)
 	darwinAMD64 := a.GetBoolean(systemConstant.DarwinAMD64)
