@@ -11,7 +11,7 @@ func (c *Client) LabelValues(
 	matches []string,
 	since time.Time,
 ) (*label_result.Result, error) {
-	v, w, e := c.client.LabelValues(
+	v, w, n, e := c.client.LabelValues(
 		c.context,
 		label,
 		matches,
@@ -23,5 +23,5 @@ func (c *Client) LabelValues(
 		return nil, e
 	}
 
-	return label_result.New(helper.LabelValuesToStrings(v), w), nil
+	return label_result.New(helper.LabelValuesToStrings(v), w, n), nil
 }

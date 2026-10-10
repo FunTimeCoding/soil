@@ -43,9 +43,24 @@ func TestModelContextSummarisesOutcomesForOneActor(t *testing.T) {
 		constant.OutcomeSuccess,
 		`{"step":"alfa"}`,
 	)
-	o.SeedOutcome("deploy_check", "Blair", constant.OutcomeError, `{"step":"bravo"}`)
-	o.SeedOutcome("deploy_check", "Cedar", constant.OutcomeError, `{"step":"bravo"}`)
-	o.SeedOutcome("fleet_deploy", "Blair", constant.OutcomeError, `{"step":"bravo"}`)
+	o.SeedOutcome(
+		"deploy_check",
+		"Blair",
+		constant.OutcomeError,
+		`{"step":"bravo"}`,
+	)
+	o.SeedOutcome(
+		"deploy_check",
+		"Cedar",
+		constant.OutcomeError,
+		`{"step":"bravo"}`,
+	)
+	o.SeedOutcome(
+		"fleet_deploy",
+		"Blair",
+		constant.OutcomeError,
+		`{"step":"bravo"}`,
+	)
 	summary := c.MustCallTool(
 		constant.Summary,
 		map[string]any{

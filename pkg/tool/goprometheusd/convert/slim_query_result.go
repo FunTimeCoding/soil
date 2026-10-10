@@ -6,4 +6,5 @@ type SlimQueryResult struct {
 	Matrix   []SlimStream `json:"matrix,omitempty"`
 	Scalar   *SlimPoint   `json:"scalar,omitempty"`
 	Warnings []string     `json:"warnings,omitempty"`
+	Notices  []string     `json:"notices,omitempty"`
 }

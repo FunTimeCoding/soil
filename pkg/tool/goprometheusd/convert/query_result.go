@@ -11,6 +11,7 @@ func QueryResult(r *query_result.Result) *SlimQueryResult {
 	result := &SlimQueryResult{
 		Type:     r.Value.Type().String(),
 		Warnings: r.Warnings,
+		Notices:  r.Notices,
 	}
 
 	switch t := r.Value.(type) {
