@@ -28,7 +28,7 @@ require (
 	github.com/dave/dst v0.28.0
 	github.com/dimchansky/utfbom v1.1.1
 	github.com/docker/go-units v0.5.0
-	github.com/dustin/go-humanize v1.0.1
+	github.com/dustin/go-humanize v1.1.0
 	github.com/fatih/color v1.19.0
 	github.com/fsnotify/fsnotify v1.10.1
 	github.com/gage-technologies/mistral-go v1.1.0
@@ -96,7 +96,7 @@ require (
 	golang.org/x/oauth2 v0.37.0
 	golang.org/x/sys v0.49.0
 	golang.org/x/time v0.16.0
-	golang.org/x/tools v0.51.0
+	golang.org/x/tools v0.52.0
 	gonum.org/v1/gonum v0.17.0
 	google.golang.org/api v0.301.0
 	google.golang.org/protobuf v1.36.12
