@@ -16,7 +16,7 @@ require (
 	github.com/andygrunwald/go-jira v1.17.0
 	github.com/anthropics/anthropic-sdk-go v1.80.0
 	github.com/apenella/go-ansible/v2 v2.5.0
-	github.com/bmatcuk/doublestar/v4 v4.10.2
+	github.com/bmatcuk/doublestar/v4 v4.10.3
 	github.com/bwmarrin/discordgo v0.29.0
 	github.com/chromedp/cdproto v0.157.9
 	github.com/chromedp/chromedp v0.21.0
@@ -60,9 +60,9 @@ require (
 	github.com/modelcontextprotocol/go-sdk v1.8.0
 	github.com/muesli/termenv v0.16.0
 	github.com/netbox-community/go-netbox/v4 v4.3.0
-	github.com/nwaples/rardecode/v2 v2.4.2
+	github.com/nwaples/rardecode/v2 v2.4.3
 	github.com/oapi-codegen/runtime v1.7.0
-	github.com/ollama/ollama v0.40.2
+	github.com/ollama/ollama v0.40.3
 	github.com/openai/openai-go/v3 v3.76.0
 	github.com/openbao/openbao/api/v2 v2.7.1
 	github.com/openvex/go-vex v0.2.9
@@ -71,7 +71,7 @@ require (
 	github.com/pkg/sftp v1.13.11
 	github.com/prometheus/alertmanager v0.34.1
 	github.com/prometheus/client_golang v1.25.0
-	github.com/prometheus/common v0.72.0
+	github.com/prometheus/common v0.72.1
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/sashabaranov/go-openai v1.43.0
 	github.com/sergi/go-diff v1.4.0
