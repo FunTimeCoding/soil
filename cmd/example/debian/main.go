@@ -1,6 +1,6 @@
 package main
 
-import "github.com/funtimecoding/soil/pkg/system/debian/example"
+import "github.com/funtimecoding/soil/pkg/system/linux/debian/install/example"
 
 func main() {
 	example.Download()

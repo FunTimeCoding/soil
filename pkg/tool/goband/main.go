@@ -19,6 +19,7 @@ func Main() {
 	}
 	o.AddCommand(status(c))
 	o.AddCommand(shutdown(c))
+	o.AddCommand(start(c))
 	o.AddCommand(reboot(c))
 	argument.CobraInstrument(o, s)
 	argument.CobraStamp(o, constant.Identity)

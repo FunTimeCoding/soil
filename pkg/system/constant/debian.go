@@ -1,6 +1,6 @@
 package constant
 
-import "github.com/funtimecoding/soil/pkg/system/debian/release"
+import "github.com/funtimecoding/soil/pkg/system/linux/debian/install/release"
 
 const (
 	DebianPackageConfigurationDirectory = "DEBIAN"
@@ -65,3 +65,29 @@ var SystemdDirectories = []string{
 	"/etc/systemd/system",
 	"/run/systemd/generator",
 }
+
+const (
+	DpkgDeb              = "dpkg-deb"
+	DebianBuildArgument  = "--build"
+	DebianRootOwnerGroup = "--root-owner-group"
+
+	DebianSystemdDirectory = "systemd"
+	DebianSystemDirectory  = "system"
+
+	DebianServiceExtension = "service"
+
+	DebianPostInstallScript = "postinst"
+	DebianPreRemoveScript   = "prerm"
+	DebianPostRemoveScript  = "postrm"
+
+	DebianUpgradeRestart = "restart"
+	DebianUpgradeKeep    = "keep"
+
+	AptlyPackageKeyFields = 3
+
+	AptlyHostEnvironment     = "APTLY_HOST"
+	AptlyPortEnvironment     = "APTLY_PORT"
+	AptlyInsecureEnvironment = "APTLY_INSECURE"
+	AptlyUsernameEnvironment = "APTLY_USERNAME"
+	AptlyPasswordEnvironment = "APTLY_PASSWORD"
+)

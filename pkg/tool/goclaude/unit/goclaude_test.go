@@ -318,11 +318,7 @@ func TestVerdictAllowsRemoteXargs(t *testing.T) {
 }
 
 func TestVerdictAllowsSupportedXargsFlags(t *testing.T) {
-	assert.String(
-		t,
-		"",
-		guard.Verdict("darwin", "xargs git checkout -- < list.txt"),
-	)
+	assert.String(t, "", guard.Verdict("darwin", "xargs wc -l -- < list.txt"))
 	assert.String(
 		t,
 		"",

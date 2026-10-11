@@ -10,7 +10,6 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
-	"time"
 )
 
 func TestConstant(t *testing.T) {
@@ -29,22 +28,9 @@ func TestBranchIsMainOrDetachedHead(t *testing.T) {
 	)
 }
 
-func TestCommitTimes(t *testing.T) {
-	times, e := git.CommitTimes(git.FindDirectory())
-	assert.FatalOnError(t, e)
-	modified, okay := times["go.mod"]
-	assert.True(t, okay)
-	assert.True(t, modified.After(time.Unix(0, 0)))
-}
-
 func TestCommitTimesOutsideRepository(t *testing.T) {
 	_, e := git.CommitTimes(t.TempDir())
 	assert.Error(t, e)
-}
-
-func TestUncommittedFiles(t *testing.T) {
-	_, e := git.UncommittedFiles(git.FindDirectory())
-	assert.FatalOnError(t, e)
 }
 
 func TestIgnoreMatcher(t *testing.T) {

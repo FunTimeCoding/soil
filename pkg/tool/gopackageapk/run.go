@@ -1,7 +1,7 @@
 package gopackageapk
 
 import (
-	"github.com/funtimecoding/soil/pkg/alpine/packager"
+	"github.com/funtimecoding/soil/pkg/system/linux/alpine/packager"
 	"github.com/funtimecoding/soil/pkg/tool/gopackageapk/option"
 )
 

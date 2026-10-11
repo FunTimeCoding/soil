@@ -1,8 +1,7 @@
 package godashboardd
 
 import (
-	"github.com/funtimecoding/soil/pkg/argocd"
-	argocdConstant "github.com/funtimecoding/soil/pkg/argocd/constant"
+	"github.com/funtimecoding/soil/pkg/kubernetes/argocd"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/board/connection"
@@ -20,6 +19,6 @@ func argocdClient(b *board.Board) *argocd.Client {
 		target.Host,
 		connection.Port(target),
 		target.Secure,
-		environment.Required(argocdConstant.TokenEnvironment),
+		environment.Required(constant.ArgocdTokenEnvironment),
 	)
 }

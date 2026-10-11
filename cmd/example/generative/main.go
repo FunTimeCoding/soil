@@ -7,7 +7,6 @@ import (
 	gguf "github.com/funtimecoding/soil/pkg/generative/gguf/example"
 	langchain "github.com/funtimecoding/soil/pkg/generative/langchain/example"
 	"github.com/funtimecoding/soil/pkg/generative/langchain/example/function"
-	mistral "github.com/funtimecoding/soil/pkg/generative/mistral/example"
 	anthropicServer "github.com/funtimecoding/soil/pkg/generative/model_context/example/anthropic"
 	"github.com/funtimecoding/soil/pkg/generative/model_context/example/mark"
 	ollama "github.com/funtimecoding/soil/pkg/generative/ollama/example"
@@ -20,7 +19,6 @@ func main() {
 	if false {
 		usage.Usage()
 		usage.Debug()
-		mistral.Prompt()
 		ollama.Chat()
 		ollama.Benchmark()
 		ollama.ClassifyAlert()

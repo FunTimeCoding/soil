@@ -76,7 +76,7 @@ tasks:
     - cd pkg/tool/gotelemetryd/generated/server && oapi-codegen --config config.yaml openapi.yaml
     silent: true
   build: {cmds: ['go run cmd/gobuild/main.go'], silent: true}
-  update: {cmds: [goupdate], silent: true}
+  update: {cmds: ['gomodule update'], silent: true}
   update-library: {cmds: [true], silent: true}
   tool:
     cmds:
@@ -95,5 +95,5 @@ tasks:
     silent: true
   firefox:
     cmds:
-    - curl -sL "https://raw.githubusercontent.com/mozilla/readability/refs/heads/main/Readability.js" -o js/firefox_bridge/Readability.js
+    - curl -sL "https://raw.githubusercontent.com/mozilla/readability/refs/heads/main/Readability.js" -o graft/js/firefox_bridge/Readability.js
     silent: true

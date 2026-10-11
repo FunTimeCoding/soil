@@ -2,7 +2,7 @@ package constant
 
 import (
 	"github.com/funtimecoding/soil/pkg/console/constant"
-	constant1 "github.com/funtimecoding/soil/pkg/prometheus/constant"
+	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
 )
 
 const (
@@ -51,6 +51,6 @@ var (
 		OpsgeniePriorityP4,
 		OpsgeniePriorityP5,
 	}
-	OpsgenieSkipDetail         = []string{constant1.SeverityLabel}
+	OpsgenieSkipDetail         = []string{prometheus.SeverityLabel}
 	OpsgenieCondenseSkipFields []string
 )

@@ -17,6 +17,7 @@ const (
 
 	EnumerationNamespace = "http://schemas.xmlsoap.org/ws/2004/09/enumeration"
 
+	PowerOn      = 2
 	PowerCycle   = 5
 	PowerOffSoft = 8
 

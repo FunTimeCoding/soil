@@ -15,3 +15,16 @@ const (
 
 	FileAddress = ":8081"
 )
+
+const (
+	HostEnvironment         = "GOALPINE_HOST"
+	PortEnvironment         = "GOALPINE_PORT"
+	InsecureEnvironment     = "GOALPINE_INSECURE"
+	TokenEnvironment        = "GOALPINE_TOKEN"
+	SignatureKeyEnvironment = "ALPINE_SIGNATURE_KEY"
+
+	RoutePrefix = "apk"
+
+	PackageRoot  = "/apk"
+	KeyDirectory = "/key"
+)

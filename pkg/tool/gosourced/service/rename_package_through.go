@@ -112,6 +112,7 @@ func (s *Service) renamePackageThrough(
 		return nil, e
 	}
 
+	reportClauses(r, set, modified, moveDirectory, oldName, newName)
 	renameDecoratedClauses(decorations, modified, oldName, newName)
 	e = decorateQualifiers(r, decorations, set, qualifiers, oldName, newName)
 

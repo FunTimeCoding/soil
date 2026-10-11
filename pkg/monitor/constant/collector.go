@@ -105,7 +105,7 @@ var (
 		DefaultSource,
 	)
 	GoLicense = collector.New(
-		"golicense",
+		"gomodule license",
 		"license",
 		"dependency licenses",
 		time.Hour,
@@ -125,8 +125,15 @@ var (
 		time.Minute,
 		DefaultSource,
 	)
+	GoStale = collector.New(
+		"gomodule stale",
+		"stale",
+		"stale dependencies",
+		time.Hour,
+		DefaultSource,
+	)
 	GoVersion = collector.New(
-		"goversion",
+		"gomodule version",
 		"go",
 		"Go projects",
 		10*time.Minute,

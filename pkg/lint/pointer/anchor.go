@@ -2,7 +2,7 @@ package pointer
 
 import (
 	"github.com/funtimecoding/soil/pkg/lint/constant"
-	constant1 "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"strings"
 )
@@ -14,13 +14,13 @@ func Anchor(
 	n := Normalize(candidate)
 
 	if n == "" ||
-		strings.HasPrefix(n, constant1.Slash) ||
+		strings.HasPrefix(n, stringsConstant.Slash) ||
 		strings.HasPrefix(n, constant.HomePrefix) {
 		return "", ""
 	}
 
-	segment, _, _ := strings.Cut(n, constant1.Slash)
+	segment, _, _ := strings.Cut(n, stringsConstant.Slash)
 
-	return join.Empty(base, constant1.Slash, segment),
-		join.Empty(base, constant1.Slash, n)
+	return join.Empty(base, stringsConstant.Slash, segment),
+		join.Empty(base, stringsConstant.Slash, n)
 }

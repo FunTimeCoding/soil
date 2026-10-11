@@ -4,7 +4,7 @@ import (
 	"github.com/coreos/go-semver/semver"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/system/constant"
-	"github.com/funtimecoding/soil/pkg/system/debian/image"
+	"github.com/funtimecoding/soil/pkg/system/linux/debian/install/image"
 	"testing"
 )
 

@@ -2,9 +2,9 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/keepass/constant"
+	keepassConstant "github.com/funtimecoding/soil/pkg/keepass/constant"
 	"github.com/funtimecoding/soil/pkg/system"
-	constant1 "github.com/funtimecoding/soil/pkg/tool/gocredentiald/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gocredentiald/constant"
 	"github.com/tobischo/gokeepasslib/v3"
 	"github.com/tobischo/gokeepasslib/v3/wrappers"
 	"path/filepath"
@@ -24,17 +24,17 @@ func fixtureDatabase(t *testing.T) string {
 	forge := gokeepasslib.NewEntry()
 	forge.Values = append(
 		forge.Values,
-		value(constant1.TitleKey, "Forge", false),
-		value(constant.UserNameKey, "alfa", false),
-		value(constant1.PasswordKey, "hunter2", true),
-		value(constant1.LocatorKey, "https://forge.example", false),
-		value(constant1.NotesKey, "note text", false),
+		value(constant.TitleKey, "Forge", false),
+		value(keepassConstant.UserNameKey, "alfa", false),
+		value(constant.PasswordKey, "hunter2", true),
+		value(constant.LocatorKey, "https://forge.example", false),
+		value(constant.NotesKey, "note text", false),
 		value("Extra", "extra-value", false),
 	)
 	stale := gokeepasslib.NewEntry()
 	stale.Values = append(
 		stale.Values,
-		value(constant1.TitleKey, "Ancient", false),
+		value(constant.TitleKey, "Ancient", false),
 	)
 	old := wrappers.Now()
 	old.Time = time.Date(2018, 1, 1, 0, 0, 0, 0, time.UTC)
@@ -45,7 +45,7 @@ func fixtureDatabase(t *testing.T) string {
 	group := gokeepasslib.NewEntry()
 	group.Values = append(
 		group.Values,
-		value(constant1.TitleKey, "example", false),
+		value(constant.TitleKey, "example", false),
 		value("EXAMPLE_HOST", "example.test", false),
 		value("EXAMPLE_TOKEN", "token-value", true),
 	)

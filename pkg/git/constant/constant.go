@@ -57,10 +57,11 @@ const (
 	Prune     = "--prune"
 	PruneTags = "--prune-tags"
 
-	Push            = "push"
-	Commit          = "commit"
-	MessageArgument = "-m"
-	Tags            = "--tags"
+	Push                = "push"
+	Commit              = "commit"
+	MessageArgument     = "-m"
+	SetUpstreamArgument = "-u"
+	Tags                = "--tags"
 
 	Describe       = "describe"
 	NoAbbreviation = "--abbrev=0"

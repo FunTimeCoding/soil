@@ -2,11 +2,11 @@ package client
 
 import (
 	"bytes"
-	"github.com/funtimecoding/soil/pkg/alpine/constant"
 	"github.com/funtimecoding/soil/pkg/console/response"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/tool/goalpined/constant"
 	"github.com/funtimecoding/soil/pkg/web"
 	"path/filepath"
 )

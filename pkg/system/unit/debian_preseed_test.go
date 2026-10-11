@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/system/debian/preseed"
+	"github.com/funtimecoding/soil/pkg/system/linux/debian/install/preseed"
 	"testing"
 )
 

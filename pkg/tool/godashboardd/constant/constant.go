@@ -38,3 +38,5 @@ const (
 	SecurePort         = 443
 	InsecurePort       = 80
 )
+
+const ArgocdTokenEnvironment = "ARGOCD_TOKEN"

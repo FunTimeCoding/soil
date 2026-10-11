@@ -2,7 +2,10 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	library "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/go_mod"
+	"github.com/funtimecoding/soil/pkg/go_mod/constant"
+	"github.com/funtimecoding/soil/pkg/system"
 	"testing"
 )
 
@@ -59,5 +62,15 @@ func TestReplaceReplaces(t *testing.T) {
 		t,
 		"replace (\nb\n)\n",
 		go_mod.ReplaceReplaces("replace (\na\n)\n", "replace (\nb\n)\n"),
+	)
+}
+
+func TestReadProjectFromRelativePath(t *testing.T) {
+	t.Chdir(t.TempDir())
+	system.SaveFile(constant.ModFile, "module a\n\ngo 1.25.0\n")
+	assert.String(
+		t,
+		"1.25.0",
+		go_mod.ReadProject(library.CurrentDirectory, "1.27.1").Version,
 	)
 }

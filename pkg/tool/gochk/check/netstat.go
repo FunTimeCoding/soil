@@ -2,9 +2,9 @@ package check
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/linux/constant"
-	"github.com/funtimecoding/soil/pkg/linux/systemd/jc"
 	"github.com/funtimecoding/soil/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/system/linux/systemd/jc"
 )
 
 func Netstat(verbose bool) []*jc.Output {

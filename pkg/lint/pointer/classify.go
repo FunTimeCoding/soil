@@ -1,8 +1,8 @@
 package pointer
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
-	constant1 "github.com/funtimecoding/soil/pkg/lint/constant"
+	library "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"slices"
 	"strings"
 )
@@ -10,71 +10,71 @@ import (
 func Classify(
 	s string,
 	roots []string,
-) constant1.PointerClass {
-	trimmed, plugin := strings.CutPrefix(s, constant1.PluginRootPrefix)
+) constant.PointerClass {
+	trimmed, plugin := strings.CutPrefix(s, constant.PluginRootPrefix)
 
 	if strings.ContainsAny(trimmed, "<>*$") {
-		return constant1.PointerClassPlaceholder
+		return constant.PointerClassPlaceholder
 	}
 
-	if strings.Contains(s, constant1.LocatorSeparator) {
-		return constant1.PointerClassLocator
+	if strings.Contains(s, constant.LocatorSeparator) {
+		return constant.PointerClassLocator
 	}
 
-	if strings.HasPrefix(trimmed, constant1.SchemeGo) {
-		return constant1.PointerClassSymbol
+	if strings.HasPrefix(trimmed, constant.SchemeGo) {
+		return constant.PointerClassSymbol
 	}
 
-	if strings.HasPrefix(trimmed, constant1.SchemeRoute) {
-		return constant1.PointerClassRoute
+	if strings.HasPrefix(trimmed, constant.SchemeRoute) {
+		return constant.PointerClassRoute
 	}
 
-	if strings.HasPrefix(trimmed, constant1.SchemePath) {
-		return constant1.PointerClassPath
+	if strings.HasPrefix(trimmed, constant.SchemePath) {
+		return constant.PointerClassPath
 	}
 
 	if len(trimmed) > 1 &&
-		strings.HasPrefix(trimmed, constant1.Quote) &&
-		strings.HasSuffix(trimmed, constant1.Quote) {
-		return constant1.PointerClassImport
+		strings.HasPrefix(trimmed, constant.Quote) &&
+		strings.HasSuffix(trimmed, constant.Quote) {
+		return constant.PointerClassImport
 	}
 
-	if strings.HasPrefix(trimmed, constant1.CommentPrefix) ||
-		(strings.HasPrefix(trimmed, constant1.SubstitutionPrefix) &&
+	if strings.HasPrefix(trimmed, constant.CommentPrefix) ||
+		(strings.HasPrefix(trimmed, constant.SubstitutionPrefix) &&
 			strings.Count(trimmed, "/") >= 3) {
-		return constant1.PointerClassPattern
+		return constant.PointerClassPattern
 	}
 
 	if plugin {
-		return constant1.PointerClassRepository
+		return constant.PointerClassRepository
 	}
 
 	if strings.HasPrefix(trimmed, "/") {
 		if IsCommand(trimmed) {
-			return constant1.PointerClassCommand
+			return constant.PointerClassCommand
 		}
 
-		if strings.HasPrefix(trimmed, constant1.UserPathPrefix) ||
-			strings.HasPrefix(trimmed, constant1.HomePathPrefix) {
-			return constant1.PointerClassAbsolute
+		if strings.HasPrefix(trimmed, constant.UserPathPrefix) ||
+			strings.HasPrefix(trimmed, constant.HomePathPrefix) {
+			return constant.PointerClassAbsolute
 		}
 
-		return constant1.PointerClassSystem
+		return constant.PointerClassSystem
 	}
 
-	if strings.ContainsAny(trimmed, constant1.BraceCharacters) {
-		return constant1.PointerClassPlaceholder
+	if strings.ContainsAny(trimmed, constant.BraceCharacters) {
+		return constant.PointerClassPlaceholder
 	}
 
-	if strings.HasPrefix(trimmed, constant.ParentDirectory) {
-		return constant1.PointerClassSibling
+	if strings.HasPrefix(trimmed, library.ParentDirectory) {
+		return constant.PointerClassSibling
 	}
 
 	root, _, _ := strings.Cut(strings.TrimPrefix(trimmed, "./"), "/")
 
 	if !slices.Contains(roots, root) {
-		return constant1.PointerClassShort
+		return constant.PointerClassShort
 	}
 
-	return constant1.PointerClassRepository
+	return constant.PointerClassRepository
 }

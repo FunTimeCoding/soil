@@ -13,8 +13,8 @@ jobs:
     - {name: Build, run: 'go run cmd/gobuild/main.go --linux-amd64 goraidparsed'}
     - name: Parser
       run: |
-        git clone https://github.com/Drevarr/arcdps_top_stats_parser.git container/raidparse/parser
-        cp container/raidparse/parser/example_output/TW5_Top_Stat_Parse.html container/raidparse/TW5_Top_Stat_Parse.html
+        git clone https://github.com/Drevarr/arcdps_top_stats_parser.git strata/container/raidparse/parser
+        cp strata/container/raidparse/parser/example_output/TW5_Top_Stat_Parse.html strata/container/raidparse/TW5_Top_Stat_Parse.html
     - name: Lowercase image
       run: echo "IMAGE_LC=${GITHUB_REPOSITORY_OWNER@L}/raidparse" >> $GITHUB_ENV
     - name: Login
@@ -27,6 +27,6 @@ jobs:
       uses: docker/build-push-action@v7
       with:
         context: .
-        file: container/raidparse/Containerfile
+        file: strata/container/raidparse/Containerfile
         push: true
         tags: ${{ env.REGISTRY }}/${{ env.IMAGE_LC }}:latest,${{ env.REGISTRY }}/${{ env.IMAGE_LC }}:${{ github.ref_name }}

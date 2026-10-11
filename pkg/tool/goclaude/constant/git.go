@@ -1,0 +1,40 @@
+package constant
+
+import "regexp"
+
+const (
+	GitHistoryMessage    = "git %s writes history - staging, committing and publishing belong to the user; leave it to them"
+	GitUnreadableMessage = "git %s with a path from an expansion, a glob or stdin, or with nothing after --, cannot be read before it runs - write every path out literally"
+	GitAskReason         = "git %s rewrites the shared index or work tree: %s"
+	GitWholeTree         = "everything it covers"
+
+	PreToolUseEvent = "PreToolUse"
+	AskDecision     = "ask"
+)
+
+var (
+	GitHistoryWriters = []string{
+		"add",
+		"am",
+		"cherry-pick",
+		"commit",
+		"merge",
+		"push",
+		"rebase",
+		"revert",
+		"tag",
+	}
+	GitTreeWriters = []string{
+		"checkout",
+		"clean",
+		"mv",
+		"reset",
+		"restore",
+		"rm",
+		"stash",
+		"update-index",
+	}
+	GitOptionsWithValue = []string{"-C", "-c"}
+
+	GitInvocation = regexp.MustCompile(`(^|[|&;(\s])git(\s|$)`)
+)

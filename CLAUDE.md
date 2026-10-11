@@ -54,6 +54,8 @@ Read the relevant spec before working in that area.
 - `.claude-plugin/` - Claude Code plugin manifest and marketplace catalog
 - `strata/plugin/soil/skills/` - plugin skills, invoked as `/soil:<name>` from
   consuming repositories
+- `strata/container/` - Containerfiles, one directory per image
+- `graft/` - code in languages other than Go, one directory per language
 - `doc/ai/runbook/` - operational runbooks backing the skills
 
 ## Claude Code plugin

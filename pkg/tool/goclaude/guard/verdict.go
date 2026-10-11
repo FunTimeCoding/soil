@@ -1,11 +1,26 @@
 package guard
 
-import "github.com/funtimecoding/soil/pkg/tool/goclaude/constant"
+import (
+	"fmt"
+	"github.com/funtimecoding/soil/pkg/tool/goclaude/constant"
+)
 
 func Verdict(
 	system string,
 	command string,
 ) string {
+	calls, d := gitCalls(command)
+
+	if d != nil && constant.GitInvocation.MatchString(command) {
+		return fmt.Sprintf(constant.GitUnreadableMessage, "command")
+	}
+
+	for _, c := range calls {
+		if b := c.Block(); b != "" {
+			return b
+		}
+	}
+
 	npx, e := localNpx(command)
 
 	if e != nil && constant.NpxInvocation.MatchString(command) {

@@ -3,10 +3,10 @@ package gopackagedeb
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
-	debianConstant "github.com/funtimecoding/soil/pkg/debian/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/semver"
 	"github.com/funtimecoding/soil/pkg/system"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/gopackagedeb/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gopackagedeb/option"
@@ -30,7 +30,7 @@ func Main() {
 	a.Boolean(argumentConstant.Unit, false, "Create systemd unit")
 	a.String(
 		argumentConstant.OnUpgrade,
-		debianConstant.UpgradeRestart,
+		systemConstant.DebianUpgradeRestart,
 		"Systemd service handling on package upgrade: restart or keep",
 	)
 	a.Parse()
@@ -42,14 +42,14 @@ func Main() {
 	o.SystemdUnit = a.GetBoolean(argumentConstant.Unit)
 	o.UpgradeMode = a.GetString(argumentConstant.OnUpgrade)
 
-	if o.UpgradeMode != debianConstant.UpgradeRestart &&
-		o.UpgradeMode != debianConstant.UpgradeKeep {
+	if o.UpgradeMode != systemConstant.DebianUpgradeRestart &&
+		o.UpgradeMode != systemConstant.DebianUpgradeKeep {
 		system.Exitf(
 			1,
 			"unknown upgrade mode: %s\nexpected %s or %s\n",
 			o.UpgradeMode,
-			debianConstant.UpgradeRestart,
-			debianConstant.UpgradeKeep,
+			systemConstant.DebianUpgradeRestart,
+			systemConstant.DebianUpgradeKeep,
 		)
 	}
 

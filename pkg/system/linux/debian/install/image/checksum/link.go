@@ -1,0 +1,19 @@
+package checksum
+
+import (
+	"fmt"
+	"github.com/coreos/go-semver/semver"
+	"github.com/funtimecoding/soil/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/system/linux/debian/install/image"
+)
+
+func Link(
+	v *semver.Version,
+	architecture string,
+) string {
+	return fmt.Sprintf(
+		"%s/%s",
+		image.DirectoryLink(v, architecture),
+		constant.ChecksumFile,
+	)
+}

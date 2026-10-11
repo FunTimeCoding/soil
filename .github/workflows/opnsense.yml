@@ -22,6 +22,6 @@ jobs:
       uses: docker/build-push-action@v7
       with:
         context: .
-        file: container/opnsense/Containerfile
+        file: strata/container/opnsense/Containerfile
         push: true
         tags: ${{ env.REGISTRY }}/${{ env.IMAGE_LC }}:latest,${{ env.REGISTRY }}/${{ env.IMAGE_LC }}:${{ github.ref_name }}

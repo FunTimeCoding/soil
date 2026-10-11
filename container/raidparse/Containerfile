@@ -1,8 +1,0 @@
-FROM python:3.14-slim
-RUN pip install --no-cache-dir playwright xlrd xlutils xlwt xlsxwriter jsons requests && \
-    playwright install --with-deps chromium
-COPY tmp/goraidparsed/linux-amd64/goraidparsed /usr/local/bin
-COPY container/raidparse/parser/ /opt/parser/
-COPY container/raidparse/tiddler_import.py /opt/parser
-COPY container/raidparse/TW5_Top_Stat_Parse.html /opt/template
-ENTRYPOINT ["goraidparsed"]

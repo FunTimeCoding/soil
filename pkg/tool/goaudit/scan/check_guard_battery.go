@@ -20,13 +20,6 @@ func (s *Service) checkGuardBattery(
 			constant.UnitDirectory,
 			constant.GuardTestFile,
 		),
-	) || v.Has(
-		filepath.Join(
-			path,
-			constant.IntegrationDirectory,
-			"guard",
-			constant.GuardTestFile,
-		),
 	) {
 		return
 	}

@@ -2,8 +2,6 @@ package goalpined
 
 import (
 	"context"
-	alpine "github.com/funtimecoding/soil/pkg/alpine/constant"
-	"github.com/funtimecoding/soil/pkg/alpine/package_server"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
@@ -11,6 +9,7 @@ import (
 	strings "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/option"
+	"github.com/funtimecoding/soil/pkg/tool/goalpined/package_server"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -42,7 +41,7 @@ func Run(
 				func(m *http.ServeMux) {
 					m.Handle(
 						strings.Slash,
-						http.FileServer(http.Dir(alpine.PackageRoot)),
+						http.FileServer(http.Dir(constant.PackageRoot)),
 					)
 				},
 			),

@@ -111,6 +111,7 @@ gomattermost
 gomattermostd
 gomemory
 gomemoryd
+gomodule
 gomonitor
 gomonitord
 gonetbox
@@ -142,8 +143,6 @@ gosublimed
 gotelemetry
 gotelemetryd
 goterraformd
-goupdate
-goversion
 govolume
 gowait
 kevt

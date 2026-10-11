@@ -3,7 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/strings/constant"
-	"github.com/funtimecoding/soil/pkg/system/debian/netboot"
+	"github.com/funtimecoding/soil/pkg/system/linux/debian/install/netboot"
 	"testing"
 )
 

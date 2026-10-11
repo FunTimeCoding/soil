@@ -24,6 +24,7 @@ const (
 	VersionArgument  = "-go"
 	ModuleArgument   = "-m"
 	NotationArgument = "-json"
+	UpdateArgument   = "-u"
 
 	LinkerSetVariable = "-X"
 

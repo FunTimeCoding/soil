@@ -32,7 +32,7 @@ func New(t *testing.T) *Tester {
 	Command(
 		result.Clone,
 		constant.Push,
-		"-u",
+		constant.SetUpstreamArgument,
 		constant.OriginRemote,
 		constant.MainBranch,
 	)

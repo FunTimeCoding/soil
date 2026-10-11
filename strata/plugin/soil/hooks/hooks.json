@@ -1,5 +1,5 @@
 {
-  "description": "Session coordination through goclauded: register on start, drain the queue each turn, mark closed on end, and guard Bash against command mistakes and supply-chain installs",
+  "description": "Session coordination through goclauded: register on start, drain the queue each turn, mark closed on end, and guard Bash against command mistakes, supply-chain installs and unreadable git writes",
   "hooks": {
     "PreToolUse": [
       {

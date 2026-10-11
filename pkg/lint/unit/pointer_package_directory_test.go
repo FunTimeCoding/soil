@@ -24,8 +24,8 @@ func TestPackageDirectory(t *testing.T) {
 	)
 	assert.String(
 		t,
-		"container/gopostgres",
-		pointer.PackageDirectory("container/gopostgres/Containerfile"),
+		"strata/container/gopostgres",
+		pointer.PackageDirectory("strata/container/gopostgres/Containerfile"),
 	)
 	assert.String(
 		t,

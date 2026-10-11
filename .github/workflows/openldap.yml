@@ -19,7 +19,7 @@ jobs:
     - name: Container
       uses: docker/build-push-action@v7
       with:
-        context: container/openldap
-        file: container/openldap/Containerfile
+        context: strata/container/openldap
+        file: strata/container/openldap/Containerfile
         push: true
         tags: ${{ env.REGISTRY }}/${{ env.IMAGE_LC }}:latest,${{ env.REGISTRY }}/${{ env.IMAGE_LC }}:${{ github.ref_name }}

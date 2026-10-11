@@ -83,6 +83,14 @@ func (s *Service) renamePackageClauseThrough(
 		return nil, e
 	}
 
+	reportClauses(
+		r,
+		set,
+		modified,
+		filepath.Dir(p.GoFiles[0]),
+		oldName,
+		newName,
+	)
 	renameDecoratedClauses(decorations, modified, oldName, newName)
 	e = decorateQualifiers(r, decorations, set, qualifiers, oldName, newName)
 

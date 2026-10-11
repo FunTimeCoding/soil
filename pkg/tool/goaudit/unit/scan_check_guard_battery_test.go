@@ -22,7 +22,7 @@ func TestGuardTestMissingFlagged(t *testing.T) {
 	assertConcern(t, s[0], constant.MissingGuardTestKey)
 }
 
-func TestGuardTestPresentClean(t *testing.T) {
+func TestGuardTestInIntegrationFlagged(t *testing.T) {
 	v := virtual_file_system.New()
 	v.WriteString(
 		"pkg/tool/gotestd/model_context/new.go",
@@ -36,7 +36,7 @@ func TestGuardTestPresentClean(t *testing.T) {
 	)
 	s := scan.Services(v, "test", audit_configuration.New())
 	assert.Integer(t, 1, len(s))
-	assertNoConcern(t, s[0], constant.MissingGuardTestKey)
+	assertConcern(t, s[0], constant.MissingGuardTestKey)
 }
 
 func TestGuardTestInUnitClean(t *testing.T) {

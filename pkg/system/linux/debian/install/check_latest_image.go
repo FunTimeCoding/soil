@@ -1,0 +1,27 @@
+package install
+
+import (
+	"fmt"
+	"github.com/funtimecoding/soil/pkg/strings"
+	"github.com/funtimecoding/soil/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/system/linux/debian/install/image"
+	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/locator"
+)
+
+func CheckLatestImage() {
+	c := web.Client()
+
+	for _, i := range strings.DeleteDuplicates(
+		image.FindNames(
+			web.GetString(
+				c,
+				locator.New(constant.DebianImage).Path(
+					"/cdimage/release/current/arm64/iso-cd",
+				).Trail().String(),
+			),
+		),
+	) {
+		fmt.Printf("Image: %s\n", i)
+	}
+}

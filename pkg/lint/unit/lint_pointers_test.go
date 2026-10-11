@@ -311,13 +311,13 @@ func TestPointersBasedSeveral(t *testing.T) {
 	l := pointer_tester.Checker(
 		"../github/soil/pkg/tool/goalertlogd",
 		"../github/soil/pkg/tool/goalertlogd/store",
-		"container",
-		"container/alfa",
-		"container/alfa/compose.yaml",
+		"strata/container",
+		"strata/container/alfa",
+		"strata/container/alfa/compose.yaml",
 	)(
 		constant.UpperAlfa,
 		strings.NewReader(
-			"---\nbase: ../github/soil/pkg/tool/goalertlogd, container\n---\nRecords sit in `store/` and the service in `alfa/compose.yaml`.\n",
+			"---\nbase: ../github/soil/pkg/tool/goalertlogd, strata/container\n---\nRecords sit in `store/` and the service in `alfa/compose.yaml`.\n",
 		),
 	)
 	assertReport(t, "Alfa", false, nil, "", l)
@@ -327,14 +327,14 @@ func TestPointersBasedSeveralInteriorDead(t *testing.T) {
 	line := "The service is in `alfa/compose.yml` today."
 	l := pointer_tester.Checker(
 		"pkg/tool/goalertlogd",
-		"container",
-		"container/alfa",
-		"container/alfa/compose.yaml",
+		"strata/container",
+		"strata/container/alfa",
+		"strata/container/alfa/compose.yaml",
 	)(
 		constant.UpperAlfa,
 		strings.NewReader(
 			fmt.Sprintf(
-				"---\nbase: pkg/tool/goalertlogd, container\n---\n%s\n",
+				"---\nbase: pkg/tool/goalertlogd, strata/container\n---\n%s\n",
 				line,
 			),
 		),
@@ -360,7 +360,7 @@ func TestPointersSymbolPlaceholderIgnored(t *testing.T) {
 }
 
 func TestPointersUppercaseFileDead(t *testing.T) {
-	line := "Build from `container/gopostgres/Containerfile` here."
+	line := "Build from `strata/container/gopostgres/Containerfile` here."
 	l := pointer_tester.Checker()(
 		constant.UpperAlfa,
 		strings.NewReader(fmt.Sprintf("%s\n", line)),
@@ -369,10 +369,10 @@ func TestPointersUppercaseFileDead(t *testing.T) {
 }
 
 func TestPointersUppercaseFileExisting(t *testing.T) {
-	l := pointer_tester.Checker("container/gopostgres/Containerfile")(
+	l := pointer_tester.Checker("strata/container/gopostgres/Containerfile")(
 		constant.UpperAlfa,
 		strings.NewReader(
-			"Build from `container/gopostgres/Containerfile` here.\n",
+			"Build from `strata/container/gopostgres/Containerfile` here.\n",
 		),
 	)
 	assertReport(t, "Alfa", false, nil, "", l)

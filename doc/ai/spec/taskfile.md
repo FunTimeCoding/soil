@@ -39,7 +39,7 @@ tasks:
 | `build` | `go run cmd/gobuild/main.go` | Cross-compile all binaries via gobuild |
 | `check` | `gosec -fmt=json ...` | Security scan |
 | `generate` | `oapi-codegen --config config.yaml ...` per service | Regenerate OpenAPI clients and servers (see `generated-api.md`) |
-| `update` | `goupdate` with pinned downgrades | Dependency update with known-bad version pins |
+| `update` | `gomodule update` with pinned downgrades | Dependency update with known-bad version pins |
 | `tool` | installs gotestsum, golint, goanalyze, gofix, goaudit, gobuild, gohook, golangci-lint, oapi-codegen | Dev tooling bootstrap |
 
 ## Git Hook Integration

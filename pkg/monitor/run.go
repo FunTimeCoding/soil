@@ -7,6 +7,7 @@ import (
 	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/report"
 	"github.com/funtimecoding/soil/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/strings/split"
 	"github.com/funtimecoding/soil/pkg/system/run"
 	"log"
 	"time"
@@ -15,7 +16,12 @@ import (
 func Run(name string) *report.Report {
 	r := run.New()
 	r.Panic = false
-	r.Start(name, fmt.Sprintf("--%s", argumentConstant.Notation))
+	r.Start(
+		append(
+			split.Space(name),
+			fmt.Sprintf("--%s", argumentConstant.Notation),
+		)...,
+	)
 	result := report.New()
 
 	if r.Error != nil {

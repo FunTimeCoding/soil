@@ -212,3 +212,13 @@ func TestWithoutKeepsUnmatchedKey(t *testing.T) {
 func TestWithoutScalar(t *testing.T) {
 	assert.Any(t, "a", notation.Without("a", "Raw"))
 }
+
+func TestMustDecodeStream(t *testing.T) {
+	assert.Any(
+		t,
+		[]*map[string]string{{"Path": "a"}, {"Path": "b"}},
+		notation.MustDecodeStream[map[string]string](
+			"{\"Path\": \"a\"}\n{\"Path\": \"b\"}\n",
+		),
+	)
+}

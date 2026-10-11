@@ -71,11 +71,11 @@ Files: subpackage path joined with underscores, plus the concept —
 `store_get_document_test.go`, `alertmanager_alert_filter_alerts_test.go`.
 Root-package tests use the bare concept or the domain name.
 
-Colliding test function names get the subpackage camel prefix
-(`TestPort` in a `<path>/console/server/` file becomes
-`TestConsoleServerPort`). A collision the rule manufactures is
-resolved by naming what the test actually tests — which also
-catches inherited misnomers.
+When consolidation makes two test functions, helpers or files collide, the
+moving side is renamed for what it observes - an MCP `TestGetNodeNotFound`
+beside a REST one becomes `TestGetNodeToolReportsNotFound` - never a
+mechanical prefix, which also catches inherited misnomers. A file name the
+facet prefix would double drops the repeat.
 
 ## The line
 
@@ -85,10 +85,11 @@ boundary or needs the environment.
 In-memory sqlite stores, fixture-file parsers, and in-process HTTP
 servers on dynamic ports stay unit. Shelling out (the go toolchain,
 local binaries) or requiring services, credentials, or a display is
-integration. Loading code with `go/packages` runs `go list`, so analyzer
-tests cross the line. Environment-dependent integration tests additionally
-carry a build tag (`//go:build local`, `ci`, `browser`); hermetic
-ones run untagged. Only `local` reaches the gate — `task test`
+integration. Loading code with `go/packages` runs `go list`, so any test
+that loads packages crosses the line - analyzer tests and the source tools
+alike. Environment-dependent integration tests additionally carry a build
+tag naming the environment (`//go:build local`, `ci` and `browser` among
+them); hermetic ones run untagged. Only `local` reaches the gate — `task test`
 passes that tag alone, so a test under any other tag runs solely
 when invoked explicitly. Choosing the tag chooses whether anything
 will notice the test failing.
@@ -96,19 +97,43 @@ will notice the test failing.
 ## integration/
 
 Only what crosses the line: tests tagged for an environment, tests that
-launch a process, and analyzer tests. Each sits in a subpackage named for
-what it reaches.
+launch a process, and tests that load code through `go/packages`. Each sits
+in a subpackage named for what it reaches - `toolchain`, `repository`,
+`postgres` - or in the root `<path>/integration/` package when the whole
+domain is what it reaches.
 
 Analyzer tests live in their own subpackage with their `<path>/testdata/`
 beside them — relative fixture paths keep working because each
 subpackage binary runs in its own directory.
+
+## Checking the line
+
+A misplaced test runs the same either way, so placement drifts silently.
+Two counts check it, from the repository root.
+
+Untagged tests under `<path>/integration/` - each must launch a process or
+load code:
+
+    find pkg -path '*/integration/*' -name '*_test.go' -not -path '*/testdata/*' -exec grep -L '^//go:build' {} +
+
+Tests under `<path>/unit/` that cross - run every unit package with an
+empty `PATH`, where anything starting a program by name fails:
+
+    go test -count=1 -json -exec '/usr/bin/env PATH=/nonexistent' $(go list ./... | grep '/unit$')
+
+Read the second count as passes, not failures: a test that panics ends its
+binary, and every later test goes unreported rather than failing. Compare
+what passes against a normal run, and rerun a package that lost tests one
+test at a time with `go test -exec ... -run`. Never probe a copied test
+binary - `runtime.RunningFromBinary` reads `os.Args[0]` and fails anywhere
+outside `go-build`. A program started by absolute path does not show.
 
 ## Interactions
 
 - A test package may import a package with the same name as itself
   (the package's own name is not an identifier in its scope), so
   generated-vs-home clashes like a `client` test package importing
-  `<path>/generated/client/` need no alias — golint de-aliases them.
+  `<path>/generated/client/` need no alias — gofix de-aliases them.
 - golint has no stub-test generation; a source package without
   tests is never asked for one.
 - CWD-relative paths in tests anchor via `git.FindDirectory` or

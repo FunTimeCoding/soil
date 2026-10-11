@@ -1,11 +1,11 @@
 package goalpined
 
 import (
-	"github.com/funtimecoding/soil/pkg/alpine/package_server"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/strings/constant"
 	generated "github.com/funtimecoding/soil/pkg/tool/goalpined/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/model_context"
+	"github.com/funtimecoding/soil/pkg/tool/goalpined/package_server"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/server"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"

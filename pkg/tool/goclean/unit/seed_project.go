@@ -1,44 +1,44 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/git/constant"
-	constant1 "github.com/funtimecoding/soil/pkg/gitlab/constant"
+	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
+	gitlabConstant "github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab/mock_client"
-	constant2 "github.com/funtimecoding/soil/pkg/tool/goclean/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclean/constant"
 )
 
 func seedProject() *mock_client.Client {
 	c := mock_client.New()
-	c.SeedBranch(constant.MainBranch, constant2.FixtureMainHash)
+	c.SeedBranch(gitConstant.MainBranch, constant.FixtureMainHash)
 	c.SeedPipeline(
 		1,
-		constant.MainBranch,
-		constant2.FixtureMainHash,
-		constant1.JobSuccess,
+		gitConstant.MainBranch,
+		constant.FixtureMainHash,
+		gitlabConstant.JobSuccess,
 	)
 	c.SeedPipeline(
 		2,
-		constant2.FixtureReleaseName,
-		constant2.FixtureMainHash,
-		constant1.JobSuccess,
+		constant.FixtureReleaseName,
+		constant.FixtureMainHash,
+		gitlabConstant.JobSuccess,
 	)
 	c.SeedPipeline(
 		3,
-		constant2.FixtureFeatureName,
-		constant2.FixtureReleaseHash,
-		constant1.JobSuccess,
+		constant.FixtureFeatureName,
+		constant.FixtureReleaseHash,
+		gitlabConstant.JobSuccess,
 	)
 	c.SeedPipeline(
 		4,
-		constant2.FixtureFeatureName,
-		constant2.FixtureBuildHash,
-		constant1.JobRunning,
+		constant.FixtureFeatureName,
+		constant.FixtureBuildHash,
+		gitlabConstant.JobRunning,
 	)
 	c.SeedPipeline(
 		5,
-		constant2.FixtureFeatureName,
-		constant2.FixtureQueuedHash,
-		constant1.JobPending,
+		constant.FixtureFeatureName,
+		constant.FixtureQueuedHash,
+		gitlabConstant.JobPending,
 	)
 
 	return c

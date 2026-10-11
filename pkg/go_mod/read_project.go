@@ -12,7 +12,7 @@ func ReadProject(
 ) *project.Project {
 	return project.New(
 		path,
-		ReadVersion(join.Absolute(path, constant.ModFile)),
+		ReadVersion(join.Join(path, constant.ModFile)),
 		runtimeVersion,
 	)
 }

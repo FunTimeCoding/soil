@@ -1,7 +1,7 @@
 package gopackagedeb
 
 import (
-	"github.com/funtimecoding/soil/pkg/debian/packager"
+	"github.com/funtimecoding/soil/pkg/system/linux/debian/packager"
 	"github.com/funtimecoding/soil/pkg/tool/gopackagedeb/option"
 )
 

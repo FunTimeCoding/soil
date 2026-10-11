@@ -2,7 +2,6 @@ package check
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
-	linuxConstant "github.com/funtimecoding/soil/pkg/linux/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/strings/split"
 	"github.com/funtimecoding/soil/pkg/system/constant"
@@ -16,13 +15,10 @@ func Check(port string) {
 	case constant.Linux:
 		console.Line("Linux")
 		console.Format("Cores: %d\n", runtime.NumCPU())
-		console.Format(
-			"Failed: %s\n",
-			Execute(linuxConstant.SystemdFailedCommand),
-		)
+		console.Format("Failed: %s\n", Execute(constant.SystemdFailedCommand))
 		diskFull()
 
-		if run.CommandExists(linuxConstant.Jc) {
+		if run.CommandExists(constant.Jc) {
 			if port != "" {
 				ports := split.Comma(port)
 				var found []string

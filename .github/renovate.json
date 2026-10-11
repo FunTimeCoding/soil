@@ -1,4 +1,4 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "ignorePaths": ["py/sublime_bridge/.python-version"]
+  "ignorePaths": ["graft/py/sublime_bridge/.python-version"]
 }

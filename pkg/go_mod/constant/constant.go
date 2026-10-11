@@ -19,6 +19,9 @@ const (
 	WeakCopyleft   = "weak_copyleft"
 	Copyleft       = "copyleft"
 
+	ReleaseStale = "release_stale"
+	Untagged     = "untagged"
+
 	AllPackages          = "./..."
 	RecursivePattern     = "/..."
 	DependenciesArgument = "-deps"

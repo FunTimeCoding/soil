@@ -1,7 +1,7 @@
 package convert
 
 import (
-	"github.com/funtimecoding/soil/pkg/alpine/types/listing"
+	"github.com/funtimecoding/soil/pkg/system/linux/alpine/types/listing"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/generated/server"
 )
 

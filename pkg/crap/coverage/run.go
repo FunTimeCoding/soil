@@ -5,6 +5,8 @@ import (
 	crap "github.com/funtimecoding/soil/pkg/crap/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/strings/join/key_value"
+	"github.com/funtimecoding/soil/pkg/system"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/run"
 	"path/filepath"
 )
@@ -15,7 +17,9 @@ func Run(
 	patterns ...string,
 ) string {
 	if profile == "" {
-		profile = filepath.Join(root, crap.ProfileFile)
+		directory := filepath.Join(root, systemConstant.Temporary)
+		system.MakeDirectory(directory)
+		profile = filepath.Join(directory, crap.ProfileFile)
 	}
 
 	r := run.New()

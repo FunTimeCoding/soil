@@ -142,3 +142,36 @@ func TestOfDay(t *testing.T) {
 func TestToClock(t *testing.T) {
 	assert.String(t, "00:00", second.ToClock(0))
 }
+
+func TestMonthsBetweenAcrossYears(t *testing.T) {
+	assert.Integer(
+		t,
+		16,
+		library.MonthsBetween(
+			day.New(2025, time.May, 24),
+			day.New(2026, time.October, 11),
+		),
+	)
+}
+
+func TestMonthsBetweenCountsOnTheSameDay(t *testing.T) {
+	assert.Integer(
+		t,
+		12,
+		library.MonthsBetween(
+			day.New(2025, time.October, 11),
+			day.New(2026, time.October, 11),
+		),
+	)
+}
+
+func TestMonthsBetweenWaitsForTheDay(t *testing.T) {
+	assert.Integer(
+		t,
+		11,
+		library.MonthsBetween(
+			day.New(2025, time.October, 12),
+			day.New(2026, time.October, 11),
+		),
+	)
+}

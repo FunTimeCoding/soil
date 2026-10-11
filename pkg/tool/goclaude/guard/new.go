@@ -1,6 +1,7 @@
 package guard
 
 import (
+	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goclaude/constant"
@@ -27,13 +28,15 @@ func New(t *terminal.Terminal) *cobra.Command {
 				return
 			}
 
-			v := Verdict(runtime.GOOS, i.ToolInput.Command)
+			if v := Verdict(runtime.GOOS, i.ToolInput.Command); v != "" {
+				t.Blockln(constant.GuardBlockExit, v)
 
-			if v == "" {
 				return
 			}
 
-			t.Blockln(constant.GuardBlockExit, v)
+			if q := Question(i.ToolInput.Command); q != "" {
+				t.Line(string(notation.Marshal(NewAskDecision(q))))
+			}
 		},
 	}
 
