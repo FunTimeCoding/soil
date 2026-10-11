@@ -7,16 +7,15 @@ import (
 
 func (s *Store) PushQueueBroadcast(
 	sessions []session.Session,
-	kind string,
-	body string,
+	template *queue.Entry,
 ) error {
 	var entries []queue.Entry
 
-	for _, e := range sessions {
-		entries = append(
-			entries,
-			*queue.New(e.Identifier, e.CallsignValue(), kind, body),
-		)
+	for _, v := range sessions {
+		e := *template
+		e.SessionIdentifier = v.Identifier
+		e.Callsign = v.CallsignValue()
+		entries = append(entries, e)
 	}
 
 	if len(entries) == 0 {

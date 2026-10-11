@@ -6,6 +6,9 @@ func (s *Store) SendMessage(
 	fromName string,
 	toName string,
 	body string,
-) error {
-	return s.database.Create(message.New(fromName, toName, body)).Error
+) (*message.Message, error) {
+	result := message.New(fromName, toName, body)
+	result.CreatedAt = s.clock().UTC()
+
+	return result, s.database.Create(result).Error
 }

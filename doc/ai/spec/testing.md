@@ -96,8 +96,8 @@ Key helpers:
 
 ## Guard Battery
 
-Every guarded daemon has `<path>/integration/guard/guard_test.go` (package
-`guard`): it starts the production `Mount` on a dynamic port via
+Every guarded daemon has `<path>/unit/guard_test.go` (package
+`unit`): it starts the production `Mount` on a dynamic port via
 `generative/model_context_server.New(t, setup)` and asserts the full
 auth contract with the battery methods, mirroring the mount surface:
 
@@ -122,7 +122,7 @@ interface Mount consumes, daemon-internal dependencies as empty
 constructions (`inventory.New()`, in-memory stores). Nil is never
 passed - mocks exist precisely so nothing downstream needs a nil
 check, and client code checks its dependencies for nil (almost)
-nowhere, ideally nowhere. Daemons with an integration
+nowhere, ideally nowhere. Daemons with a test
 base run the guard test through the base, and bases
 run the full production `Mount` — mock clients flow through it
 because `Mount`, the REST server, and the model_context package all

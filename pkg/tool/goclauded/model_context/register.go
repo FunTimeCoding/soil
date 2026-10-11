@@ -382,4 +382,19 @@ func (s *Server) register() {
 		),
 		mcp.NewTypedToolHandler(s.readConversation),
 	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.ReadMessage,
+			mcp.WithDescription(
+				"Read coordination messages whole by number. Use it when a delivery cut a message or held it as waiting - the delivery line names the number.",
+			),
+			mcp.WithArray(
+				constant.Identifiers,
+				mcp.Required(),
+				mcp.WithNumberItems(),
+				mcp.Description("Message numbers, one or several"),
+			),
+		),
+		mcp.NewTypedToolHandler(s.readMessage),
+	)
 }

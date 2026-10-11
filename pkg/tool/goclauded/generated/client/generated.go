@@ -44,6 +44,7 @@ type ChannelCallsignResponse struct {
 type CheckResponse struct {
 	Callsign string       `json:"callsign"`
 	Changed  bool         `json:"changed"`
+	Context  string       `json:"context"`
 	Entries  []QueueEntry `json:"entries"`
 }
 
@@ -196,6 +197,21 @@ type LabelRequest struct {
 // LabelResponse defines model for LabelResponse.
 type LabelResponse struct {
 	Change string `json:"change"`
+}
+
+// MessageEntry defines model for MessageEntry.
+type MessageEntry struct {
+	Body       string `json:"body"`
+	From       string `json:"from"`
+	Identifier int    `json:"identifier"`
+	Timestamp  string `json:"timestamp"`
+	To         string `json:"to"`
+}
+
+// MessageReadResponse defines model for MessageReadResponse.
+type MessageReadResponse struct {
+	Messages []MessageEntry `json:"messages"`
+	Missing  []int          `json:"missing"`
 }
 
 // MessagesResponse defines model for MessagesResponse.
@@ -507,6 +523,11 @@ type GetCostParams struct {
 	Days *int `form:"days,omitempty" json:"days,omitempty"`
 }
 
+// GetMessagesParams defines parameters for GetMessages.
+type GetMessagesParams struct {
+	Identifier []int `form:"identifier" json:"identifier"`
+}
+
 // GetResolveParams defines parameters for GetResolve.
 type GetResolveParams struct {
 	Query string `form:"query" json:"query"`
@@ -693,6 +714,9 @@ type ClientInterface interface {
 
 	// GetCoverage performs a GET /api/coverage (the `GetCoverage` operationId) request.
 	GetCoverage(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetMessages performs a GET /api/messages (the `GetMessages` operationId) request.
+	GetMessages(ctx context.Context, params *GetMessagesParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// PostNotifyWithBody performs a POST /api/notify (the `PostNotify` operationId) request,
 	// with any type of body and a specified content type.
@@ -934,6 +958,19 @@ func (c *Client) GetCost(ctx context.Context, params *GetCostParams, reqEditors 
 // GetCoverage performs a GET /api/coverage (the `GetCoverage` operationId) request.
 func (c *Client) GetCoverage(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetCoverageRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetMessages performs a GET /api/messages (the `GetMessages` operationId) request.
+func (c *Client) GetMessages(ctx context.Context, params *GetMessagesParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetMessagesRequest(c.Server, params)
 	if err != nil {
 		return nil, err
 	}
@@ -1832,6 +1869,60 @@ func NewGetCoverageRequest(server string) (*http.Request, error) {
 	queryURL, err := serverURL.Parse(operationPath)
 	if err != nil {
 		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetMessagesRequest constructs an http.Request for the GetMessages method
+func NewGetMessagesRequest(server string, params *GetMessagesParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/messages")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if params.Identifier != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "identifier", params.Identifier, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "array", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
 	}
 
 	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
@@ -3315,6 +3406,11 @@ type ClientWithResponsesInterface interface {
 	// Returns a wrapper object for the known response body format(s).
 	GetCoverageWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*GetCoverageResponse, error)
 
+	// GetMessagesWithResponse performs a GET /api/messages (the `GetMessages` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetMessagesWithResponse(ctx context.Context, params *GetMessagesParams, reqEditors ...RequestEditorFn) (*GetMessagesResponse, error)
+
 	// PostNotifyWithBodyWithResponse performs a POST /api/notify (the `PostNotify` operationId) request,
 	// with any type of body and a specified content type.
 	//
@@ -3857,11 +3953,61 @@ func (r GetCoverageResponse) ContentType() string {
 	return ""
 }
 
+type GetMessagesResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *MessageReadResponse
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetMessagesResponse) GetJSON200() *MessageReadResponse {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetMessagesResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetMessagesResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetMessagesResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetMessagesResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetMessagesResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type PostNotifyResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *DeliveryResponse
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
 	// JSON404 the response for an HTTP 404 `application/json` response
 	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
@@ -3871,6 +4017,11 @@ type PostNotifyResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r PostNotifyResponse) GetJSON200() *DeliveryResponse {
 	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r PostNotifyResponse) GetJSON400() *Error {
+	return r.JSON400
 }
 
 // GetJSON404 returns the response for an HTTP 404 `application/json` response
@@ -4932,6 +5083,8 @@ type PostSessionPulseResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *DeliveryResponse
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -4939,6 +5092,11 @@ type PostSessionPulseResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r PostSessionPulseResponse) GetJSON200() *DeliveryResponse {
 	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r PostSessionPulseResponse) GetJSON400() *Error {
+	return r.JSON400
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -5445,6 +5603,17 @@ func (c *ClientWithResponses) GetCoverageWithResponse(ctx context.Context, reqEd
 		return nil, err
 	}
 	return ParseGetCoverageResponse(rsp)
+}
+
+// GetMessagesWithResponse performs a GET /api/messages (the `GetMessages` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetMessagesWithResponse(ctx context.Context, params *GetMessagesParams, reqEditors ...RequestEditorFn) (*GetMessagesResponse, error) {
+	rsp, err := c.GetMessages(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetMessagesResponse(rsp)
 }
 
 // PostNotifyWithBodyWithResponse performs a POST /api/notify (the `PostNotify` operationId) request,
@@ -6135,6 +6304,39 @@ func ParseGetCoverageResponse(rsp *http.Response) (*GetCoverageResponse, error) 
 	return response, nil
 }
 
+// ParseGetMessagesResponse parses an HTTP response from a GetMessagesWithResponse call
+func ParseGetMessagesResponse(rsp *http.Response) (*GetMessagesResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetMessagesResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest MessageReadResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParsePostNotifyResponse parses an HTTP response from a PostNotifyWithResponse call
 func ParsePostNotifyResponse(rsp *http.Response) (*PostNotifyResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -6155,6 +6357,13 @@ func ParsePostNotifyResponse(rsp *http.Response) (*PostNotifyResponse, error) {
 			return nil, err
 		}
 		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
 		var dest Error
@@ -6910,6 +7119,13 @@ func ParsePostSessionPulseResponse(rsp *http.Response) (*PostSessionPulseRespons
 			return nil, err
 		}
 		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse

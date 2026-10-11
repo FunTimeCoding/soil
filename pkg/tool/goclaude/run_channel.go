@@ -13,7 +13,7 @@ func runChannel(
 	interval time.Duration,
 	v *recovery.Recovery,
 ) {
-	s.Resolve(awaitCallsign(c, time.Now(), interval))
+	s.Resolve(channelCallsign(c, time.Now(), interval))
 	callsign := s.Attach()
 	failures := 0
 
@@ -21,7 +21,7 @@ func runChannel(
 		okay := false
 		v.Run(
 			func() {
-				failures = pollChannel(c, s, callsign, failures)
+				failures = PollChannel(c.LongClient(), s, callsign, failures)
 				okay = failures == 0
 			},
 		)

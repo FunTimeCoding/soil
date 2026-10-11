@@ -31,6 +31,14 @@ func (s *Server) checkPreview(
 		), nil
 	}
 
+	text, e := s.service.Render(entries)
+
+	if e != nil {
+		return server.GetCheck500JSONResponse(
+			*s.captureFail(e, constant.UnexpectedError),
+		), nil
+	}
+
 	var result []server.QueueEntry
 
 	for _, entry := range entries {
@@ -51,6 +59,7 @@ func (s *Server) checkPreview(
 	return server.GetCheck200JSONResponse{
 		Callsign: callsign,
 		Changed:  len(result) > 0,
+		Context:  text,
 		Entries:  result,
 	}, nil
 }

@@ -66,3 +66,19 @@ func TestExtract(t *testing.T) {
 	)
 	assert.Any(t, []*pointer.Candidate(nil), pointer.Extract(""))
 }
+
+func TestExtractDecodesAPercentEncodedLinkTarget(t *testing.T) {
+	assert.Any(
+		t,
+		[]*pointer.Candidate{pointer.NewLink("doc/guide/two words.md#part")},
+		pointer.Extract("[two](doc/guide/two%20words.md#part)"),
+	)
+}
+
+func TestExtractKeepsAMalformedEscapeAsWritten(t *testing.T) {
+	assert.Any(
+		t,
+		[]*pointer.Candidate{pointer.NewLink("doc/guide/broken%2.md")},
+		pointer.Extract("[broken](doc/guide/broken%2.md)"),
+	)
+}

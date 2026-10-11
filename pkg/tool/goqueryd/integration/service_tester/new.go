@@ -1,8 +1,8 @@
 package service_tester
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/integration/base"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/base"
 	"testing"
 )
 

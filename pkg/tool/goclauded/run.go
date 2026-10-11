@@ -96,6 +96,7 @@ func Run(
 			r,
 			h,
 			o.SessionExportPath,
+			constant.ChannelHold,
 			t,
 			guard.New(m, o.ServiceTokens),
 		)

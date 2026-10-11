@@ -5,12 +5,11 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/model_context/channel"
-	"github.com/funtimecoding/soil/pkg/tool/goclaude/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 )
 
-func pollChannel(
-	c *command_context.Context,
+func PollChannel(
+	c *client.ClientWithResponses,
 	s *channel.Server,
 	callsign string,
 	failures int,
@@ -18,7 +17,7 @@ func pollChannel(
 	stalled := map[string]string{
 		constant.ChannelKindMeta: constant.ChannelStalledKind,
 	}
-	response, e := c.LongClient().GetChannelWithResponse(
+	response, e := c.GetChannelWithResponse(
 		context.Background(),
 		&client.GetChannelParams{Callsign: callsign},
 	)

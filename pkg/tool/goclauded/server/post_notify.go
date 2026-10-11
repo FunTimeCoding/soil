@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/refusal"
 )
 
 func (s *Server) PostNotify(
@@ -19,6 +20,12 @@ func (s *Server) PostNotify(
 	)
 
 	if e != nil {
+		if refusal.Is(e) {
+			return server.PostNotify400JSONResponse(
+				server.Error{Error: e.Error()},
+			), nil
+		}
+
 		if not_found.Is(e) {
 			return server.PostNotify404JSONResponse(
 				server.Error{Error: e.Error()},

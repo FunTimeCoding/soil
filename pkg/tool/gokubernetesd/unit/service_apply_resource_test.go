@@ -1,0 +1,75 @@
+package unit
+
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/request"
+	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/unit/service_tester"
+	"testing"
+)
+
+func TestApplyResource(t *testing.T) {
+	s := service_tester.New(t)
+	result, e := s.Service.ApplyResource(
+		context.Background(),
+		"test",
+		request.Apply{Manifest: constant.FixtureManifest, Namespace: "default"},
+	)
+	assert.Nil(t, e)
+	assert.String(t, "ConfigMap", result.Kind)
+	assert.String(t, "test-config", result.Name)
+	assert.String(t, "default", result.Namespace)
+}
+
+func TestApplyResourceAlreadyExists(t *testing.T) {
+	s := service_tester.New(t)
+	_, f := s.Service.ApplyResource(
+		context.Background(),
+		"test",
+		request.Apply{Manifest: constant.FixtureManifest, Namespace: "default"},
+	)
+	assert.Nil(t, f)
+	_, e := s.Service.ApplyResource(
+		context.Background(),
+		"test",
+		request.Apply{Manifest: constant.FixtureManifest, Namespace: "default"},
+	)
+	assert.NotNil(t, e)
+}
+
+func TestApplyResourceOverride(t *testing.T) {
+	s := service_tester.New(t)
+	_, f := s.Service.ApplyResource(
+		context.Background(),
+		"test",
+		request.Apply{Manifest: constant.FixtureManifest, Namespace: "default"},
+	)
+	assert.Nil(t, f)
+	result, e := s.Service.ApplyResource(
+		context.Background(),
+		"test",
+		request.Apply{
+			Manifest:  constant.FixtureManifest,
+			Namespace: "default",
+			Override:  true,
+		},
+	)
+	assert.Nil(t, e)
+	assert.String(t, "test-config", result.Name)
+}
+
+func TestApplyResourceDryRun(t *testing.T) {
+	s := service_tester.New(t)
+	result, e := s.Service.ApplyResource(
+		context.Background(),
+		"test",
+		request.Apply{
+			Manifest:  constant.FixtureManifest,
+			Namespace: "default",
+			DryRun:    true,
+		},
+	)
+	assert.Nil(t, e)
+	assert.String(t, "test-config", result.Name)
+}

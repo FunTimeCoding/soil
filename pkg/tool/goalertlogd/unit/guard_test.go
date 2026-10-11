@@ -1,0 +1,18 @@
+package unit
+
+import (
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/unit/base"
+	"testing"
+)
+
+func TestGuard(t *testing.T) {
+	s := base.New(t)
+	c := s.Server
+	c.VerifyBase(t)
+	c.VerifyGuarded(t, "/api/alerts")
+	c.VerifyGuarded(t, "/api/status")
+	c.VerifyOpen(t, constant.DashboardPath)
+	c.VerifyOpen(t, "/alerts")
+	c.VerifyModelContext(t)
+}

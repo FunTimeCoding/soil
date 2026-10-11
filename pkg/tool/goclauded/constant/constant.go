@@ -8,6 +8,7 @@ import (
 const CoverageRecentWindow = 30 * 24 * time.Hour
 const CallsignReleaseWindow = 7 * 24 * time.Hour
 const CompleteTimeoutWindow = 30 * time.Minute
+const ChannelHold = 5 * time.Minute
 const TimestampLayout = "2006-01-02 15:04:05.999999999-07:00"
 const UniversalSuffix = "+00:00"
 
@@ -80,6 +81,7 @@ const (
 	SummaryTable         = "summary"
 	LabelTable           = "label"
 	PulseTable           = "pulse"
+	MessageTable         = "message"
 	RateSnapshotTable    = "rate_snapshot"
 	FableSnapshotTable   = "fable_snapshot"
 	SummaryColumn        = "summary"
@@ -166,6 +168,8 @@ const (
 	FixtureTarget = "target"
 	FixtureBefore = "before"
 )
+
+const FixtureChannelHold = 50 * time.Millisecond
 
 type Action int
 

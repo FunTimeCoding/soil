@@ -39,6 +39,20 @@ func TestGuardTestPresentClean(t *testing.T) {
 	assertNoConcern(t, s[0], constant.MissingGuardTestKey)
 }
 
+func TestGuardTestInUnitClean(t *testing.T) {
+	v := virtual_file_system.New()
+	v.WriteString(
+		"pkg/tool/gotestd/model_context/new.go",
+		"package model_context\n",
+	)
+	v.WriteString("pkg/tool/gotestd/option/o.go", "package option\n")
+	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
+	v.WriteString("pkg/tool/gotestd/unit/guard_test.go", "package unit\n")
+	s := scan.Services(v, "test", audit_configuration.New())
+	assert.Integer(t, 1, len(s))
+	assertNoConcern(t, s[0], constant.MissingGuardTestKey)
+}
+
 func TestGuardTestUnguardedSkipped(t *testing.T) {
 	v := virtual_file_system.New()
 	v.WriteString("pkg/tool/gotestd/worker/w.go", "package worker\n")

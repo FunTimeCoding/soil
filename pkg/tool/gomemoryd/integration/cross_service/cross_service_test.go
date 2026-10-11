@@ -7,7 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/integration/cross_service_tester"
-	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/integration/fixture"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/fixture"
 	goquerydConstant "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"testing"
 )

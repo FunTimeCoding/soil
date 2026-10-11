@@ -3,7 +3,7 @@ package cross_service_tester
 import (
 	"github.com/funtimecoding/soil/pkg/generative/model_context_client"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/integration/base"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/base"
 	"testing"
 )
 

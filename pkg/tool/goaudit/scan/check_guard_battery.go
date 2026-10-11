@@ -14,18 +14,26 @@ func (s *Service) checkGuardBattery(
 		return
 	}
 
-	file := filepath.Join(
-		path,
-		constant.IntegrationDirectory,
-		"guard",
-		"guard_test.go",
-	)
-
-	if !v.Has(file) {
-		s.addConcern(
-			constant.MissingGuardTestKey,
-			constant.MissingGuardTestText,
+	if v.Has(
+		filepath.Join(
 			path,
-		)
+			constant.UnitDirectory,
+			constant.GuardTestFile,
+		),
+	) || v.Has(
+		filepath.Join(
+			path,
+			constant.IntegrationDirectory,
+			"guard",
+			constant.GuardTestFile,
+		),
+	) {
+		return
 	}
+
+	s.addConcern(
+		constant.MissingGuardTestKey,
+		constant.MissingGuardTestText,
+		path,
+	)
 }

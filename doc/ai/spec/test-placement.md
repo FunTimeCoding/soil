@@ -11,8 +11,8 @@ fixtures, not tests.
 Both homes sit directly under a domain root: `pkg/<domain>/`,
 `pkg/tool/<name>/`, or the repository's equivalent top-level
 grouping (an `internal/<domain>/`). Deeper
-subsystems consolidate up — a subsystem's integration facets live
-at `<root>/integration/<facet>/`, not beside the subsystem.
+subsystems consolidate up — a subsystem's tests live in its root's
+homes, not beside the subsystem.
 
 ## unit/
 
@@ -28,6 +28,15 @@ and every `_test.go` file holds at least one test.
 
 All-or-nothing per root: a single in-package `_test.go` left behind
 resurrects that package's test binary.
+
+A daemon's mounted surfaces - REST, MCP, channel, web pages, the guard
+battery - run in-process on a dynamic port, so their tests are unit tests
+too. `<path>/unit/base/` exports the stack constructor (`New(t) *Server`
+with accessors and `Close()`) as plain package source, and helper packages
+sit beside the tests they serve as `<path>/unit/<name>/`
+(`pkg/strings/unit/strings_tester`). Setup constructors compile untagged
+even when a tagged integration test uses them: environment reads happen at
+call time, so tags belong on the test files only.
 
 ### Black-box only
 
@@ -76,7 +85,8 @@ boundary or needs the environment.
 In-memory sqlite stores, fixture-file parsers, and in-process HTTP
 servers on dynamic ports stay unit. Shelling out (the go toolchain,
 local binaries) or requiring services, credentials, or a display is
-integration. Environment-dependent integration tests additionally
+integration. Loading code with `go/packages` runs `go list`, so analyzer
+tests cross the line. Environment-dependent integration tests additionally
 carry a build tag (`//go:build local`, `ci`, `browser`); hermetic
 ones run untagged. Only `local` reaches the gate — `task test`
 passes that tag alone, so a test under any other tag runs solely
@@ -85,24 +95,9 @@ will notice the test failing.
 
 ## integration/
 
-Facet subpackages, one per surface:
-
-```
-integration/
-├── base/                  # shared setup: exported, non-test code
-├── client/                # generated REST client workflows
-├── model_context/         # MCP tools
-├── model_context_tester/  # optional per-facet helper package
-├── web_interface/         # HTML pages and forms
-└── worker/                # poll cycles
-```
-
-`<path>/base/` exports the stack constructor (`New(t) *Server` with
-accessors and `Close()`) as plain package source — the
-`pkg/tool/goalertlogd/integration/base` shape. Setup
-constructors compile untagged even when the tests they serve are
-tagged: environment reads happen at call time, so tags belong on
-the test files only.
+Only what crosses the line: tests tagged for an environment, tests that
+launch a process, and analyzer tests. Each sits in a subpackage named for
+what it reaches.
 
 Analyzer tests live in their own subpackage with their `<path>/testdata/`
 beside them — relative fixture paths keep working because each

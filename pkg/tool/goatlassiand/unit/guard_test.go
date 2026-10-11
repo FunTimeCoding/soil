@@ -1,0 +1,17 @@
+package unit
+
+import (
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/unit/base"
+	"testing"
+)
+
+func TestGuard(t *testing.T) {
+	s := base.New(t)
+	c := s.Server
+	c.VerifyBase(t)
+	c.VerifyInterface(t)
+	c.VerifyOpen(t, constant.PlatePath)
+	c.VerifyOpen(t, "/event")
+	c.VerifyModelContext(t)
+}

@@ -21,10 +21,8 @@ pkg/tool/go<tool>/
 │   ├── <name>.go                   # Option struct (named after tool/domain, not "Option")
 │   └── new.go                      # Factory: New() *<Name>
 ├── unit/
-│   └── option_test.go              # assert.NotNil(t, option.New()) - see test-placement.md
-├── integration/
-│   └── guard/
-│       └── guard_test.go           # Guard battery over Mount - see testing.md
+│   ├── option_test.go              # assert.NotNil(t, option.New()) - see test-placement.md
+│   └── guard_test.go               # Guard battery over Mount - see testing.md
 ├── constant/
 │   └── constant.go                 # Tool constants (bucket names, identity)
 ├── store/                          # Persistence (if needed)
@@ -166,7 +164,7 @@ func Mount(
 ```
 
 `Mount` is the production surface: the guard battery
-(`integration/guard/guard_test.go`, see `testing.md`) starts it on
+(`<path>/unit/guard_test.go`, see `testing.md`) starts it on
 a dynamic port and asserts the full auth contract, and goaudit's
 guard rules enforce that the battery and the mount shape exist. A
 route registered in the run.go callback instead of `Mount` escapes

@@ -207,3 +207,37 @@ func TestPointersHeadingOnLocatorIsLeftAlone(t *testing.T) {
 	)
 	assertReport(t, "doc/index.md", false, nil, "", l)
 }
+
+func TestPointersHeadingEncodedLinkLive(t *testing.T) {
+	l := pointer_tester.Headings(
+		map[string]string{"doc/guide/two words.md": "# Two\n\n## Part\n"},
+		"doc/guide/two words.md",
+	)(
+		"doc/guide/index.md",
+		strings.NewReader("See [two](two%20words.md#part) there.\n"),
+	)
+	assertReport(t, "doc/guide/index.md", false, nil, "", l)
+}
+
+func TestPointersHeadingEncodedLinkDead(t *testing.T) {
+	l := pointer_tester.Headings(
+		map[string]string{"doc/guide/two words.md": "# Two\n\n## Part\n"},
+		"doc/guide/two words.md",
+	)(
+		"doc/guide/index.md",
+		strings.NewReader("See [two](two%20words.md#parts) there.\n"),
+	)
+	assertReport(
+		t,
+		"doc/guide/index.md",
+		true,
+		pointer_tester.DeadHeading(
+			"doc/guide/index.md",
+			1,
+			"See [two](two%20words.md#parts) there.",
+			"Referenced heading does not exist - nearest: #part (\"Part\"), #two (\"Two\")",
+		),
+		"",
+		l,
+	)
+}

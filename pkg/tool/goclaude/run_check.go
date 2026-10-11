@@ -26,5 +26,5 @@ func RunCheck(
 		return ""
 	}
 
-	return formatCheckContext(response.JSON200)
+	return response.JSON200.Context
 }

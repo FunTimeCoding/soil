@@ -203,12 +203,42 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/DeliveryResponse"
+        "400":
+          description: Body over the delivery entry limit.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "404":
           description: Callsign not found.
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/messages:
+    get:
+      operationId: getMessages
+      parameters:
+      - name: identifier
+        in: query
+        required: true
+        schema:
+          type: array
+          items:
+            type: integer
+      responses:
+        "200":
+          description: Messages by identifier, whole.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageReadResponse"
         "500":
           description: Internal error.
           content:
@@ -769,6 +799,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/DeliveryResponse"
+        "400":
+          description: Body over the delivery entry limit.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal error.
           content:
@@ -1057,11 +1093,14 @@ components:
       - callsign
       - changed
       - entries
+      - context
       properties:
         callsign:
           type: string
         changed:
           type: boolean
+        context:
+          type: string
         entries:
           type: array
           items:
@@ -1283,6 +1322,39 @@ components:
       properties:
         immediate:
           type: boolean
+    MessageReadResponse:
+      type: object
+      required:
+      - messages
+      - missing
+      properties:
+        messages:
+          type: array
+          items:
+            $ref: "#/components/schemas/MessageEntry"
+        missing:
+          type: array
+          items:
+            type: integer
+    MessageEntry:
+      type: object
+      required:
+      - identifier
+      - from
+      - to
+      - body
+      - timestamp
+      properties:
+        identifier:
+          type: integer
+        from:
+          type: string
+        to:
+          type: string
+        body:
+          type: string
+        timestamp:
+          type: string
     ReleaseRequest:
       type: object
       required:

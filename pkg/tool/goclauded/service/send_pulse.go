@@ -8,6 +8,12 @@ func (s *Service) SendPulse(
 	body string,
 	immediate bool,
 ) (bool, error) {
+	if fromName == "" {
+		if f := entryRefusal(constant.QueuePulse, body); f != nil {
+			return false, f
+		}
+	}
+
 	if e := s.store.SendPulse(sessionIdentifier, fromName, body); e != nil {
 		return false, e
 	}

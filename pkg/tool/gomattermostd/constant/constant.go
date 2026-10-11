@@ -2,6 +2,7 @@ package constant
 
 import (
 	"github.com/funtimecoding/soil/pkg/identity"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"time"
 )
 
@@ -41,7 +42,7 @@ const (
 	ParameterAlias    = "alias"
 
 	ExcerptLength    = 200
-	DigestBudget     = 700
+	DigestBudget     = constant.DeliveryEntryLimit
 	EnumerateLimit   = 4
 	TruncationMarker = "…+more"
 	DigestIndent     = "    "

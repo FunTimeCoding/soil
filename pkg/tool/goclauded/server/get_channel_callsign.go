@@ -10,7 +10,12 @@ func (s *Server) GetChannelCallsign(
 	x context.Context,
 	r server.GetChannelCallsignRequestObject,
 ) (server.GetChannelCallsignResponseObject, error) {
-	callsign, e := s.service.AwaitCallsign(x, r.Params.Session, r.Params.Since)
+	callsign, e := s.service.AwaitCallsign(
+		x,
+		r.Params.Session,
+		r.Params.Since,
+		s.hold,
+	)
 
 	if e != nil {
 		return server.GetChannelCallsign500JSONResponse(

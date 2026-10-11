@@ -6,4 +6,5 @@ type Result struct {
 	Callsign string
 	Changed  bool
 	Entries  []queue.Entry
+	Context  string
 }

@@ -47,6 +47,7 @@ func Main() {
 		"goclauded port",
 	)
 	o.AddCommand(sessionBranch(c))
+	o.AddCommand(messageBranch(c))
 	o.AddCommand(register(c))
 	o.AddCommand(sessionEnd(c))
 	o.AddCommand(turnEnd(c))

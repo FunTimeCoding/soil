@@ -43,6 +43,7 @@ func (s *Server) GetCheck(
 		server.CheckResponse{
 			Callsign: result.Callsign,
 			Changed:  result.Changed,
+			Context:  result.Context,
 			Entries:  entries,
 		},
 	), nil

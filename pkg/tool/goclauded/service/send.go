@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/queue"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/session"
 )
 
@@ -29,29 +30,27 @@ func (s *Service) Send(
 		holder = found
 	}
 
-	if e := s.store.SendMessage(name, to, body); e != nil {
+	m, e := s.store.SendMessage(name, to, body)
+
+	if e != nil {
 		return false, e
 	}
 
 	formatted := fmt.Sprintf("%s: %s", name, body)
 
 	if holder == nil {
-		return false, s.PushQueueBroadcast(constant.QueueMessage, formatted)
+		template := queue.NewBroadcast(constant.QueueMessage, formatted)
+		template.MessageIdentifier = new(m.Identifier)
+
+		return false, s.pushEntryBroadcast(template)
 	}
+
+	entry := queue.New(holder.Identifier, to, constant.QueueMessage, formatted)
+	entry.MessageIdentifier = new(m.Identifier)
 
 	if immediate {
-		return s.PushQueueImmediate(
-			holder.Identifier,
-			to,
-			constant.QueueMessage,
-			formatted,
-		)
+		return s.pushImmediate(entry)
 	}
 
-	return false, s.PushQueue(
-		holder.Identifier,
-		to,
-		constant.QueueMessage,
-		formatted,
-	)
+	return false, s.pushEntry(entry)
 }

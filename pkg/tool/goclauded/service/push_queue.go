@@ -1,21 +1,12 @@
 package service
 
+import "github.com/funtimecoding/soil/pkg/tool/goclauded/store/queue"
+
 func (s *Service) PushQueue(
 	sessionIdentifier string,
 	callsign string,
 	kind string,
 	body string,
 ) error {
-	if e := s.store.PushQueue(
-		sessionIdentifier,
-		callsign,
-		kind,
-		body,
-	); e != nil {
-		return e
-	}
-
-	s.notify()
-
-	return nil
+	return s.pushEntry(queue.New(sessionIdentifier, callsign, kind, body))
 }

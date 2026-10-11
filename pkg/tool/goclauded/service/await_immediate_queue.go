@@ -3,15 +3,19 @@ package service
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/queue"
+	"time"
 )
 
 func (s *Service) AwaitImmediateQueue(
 	x context.Context,
 	sessionIdentifier string,
 	callsign string,
+	hold time.Duration,
 ) ([]queue.Entry, error) {
 	c := s.notifier.Subscribe()
 	defer s.notifier.Unsubscribe(c)
+	t := time.NewTimer(hold)
+	defer t.Stop()
 
 	for {
 		drained, e := s.DrainImmediateQueue(sessionIdentifier, callsign)
@@ -26,6 +30,8 @@ func (s *Service) AwaitImmediateQueue(
 
 		select {
 		case <-c:
+		case <-t.C:
+			return nil, nil
 		case <-x.Done():
 			return nil, nil
 		case <-s.done:

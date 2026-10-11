@@ -20,8 +20,8 @@ Design and coding specs live in `doc/ai/spec/`:
 - `database.md` - service persistence (storage paths, sqlite/postgres openers,
   lite-as-default selection)
 - `testing.md` - integration testing patterns (mocks, lifecycle HTTP, store)
-- `test-placement.md` - where test files live (unit_test/ and integration_test/
-  homes, black-box rule, facet layout)
+- `test-placement.md` - where test files live (unit/ and integration/ homes,
+  the process-boundary line, black-box rule)
 - `build.md` - gobuild cross-compilation and the build information stamp
 - `taskfile.md` - task runner, git hooks, CI pipeline
 - `locator.md` - fluent URL builder (`pkg/web/locator`)

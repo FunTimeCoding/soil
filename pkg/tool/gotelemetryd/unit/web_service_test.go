@@ -1,0 +1,84 @@
+package unit
+
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/unit/web_service_tester"
+	"net/http"
+	"testing"
+)
+
+func TestWebService(t *testing.T) {
+	o := web_service_tester.New(t)
+	c := o.Client
+	x := context.Background()
+	post, e := c.PostEventWithResponse(
+		x,
+		client.PostEventJSONRequestBody{
+			Tool:    "save_memory",
+			Surface: "model_context",
+			Actor:   "Blair",
+			Outcome: "success",
+		},
+	)
+	assert.FatalOnError(t, e)
+	assert.Integer(t, http.StatusOK, post.StatusCode())
+	assert.NotNil(t, post.JSON200)
+	_, e = c.PostEventWithResponse(
+		x,
+		client.PostEventJSONRequestBody{
+			Tool:    "fleet_deploy",
+			Surface: "command_line",
+			Actor:   "Cedar",
+			Outcome: "success",
+		},
+	)
+	assert.FatalOnError(t, e)
+	events, e := c.GetEventsWithResponse(x, &client.GetEventsParams{})
+	assert.FatalOnError(t, e)
+	assert.Integer(t, http.StatusOK, events.StatusCode())
+	assert.Count(t, 2, *events.JSON200)
+	filtered, e := c.GetEventsWithResponse(
+		x,
+		&client.GetEventsParams{Tool: new("save_memory")},
+	)
+	assert.FatalOnError(t, e)
+	assert.Count(t, 1, *filtered.JSON200)
+	summary, e := c.GetSummaryWithResponse(x, &client.GetSummaryParams{})
+	assert.FatalOnError(t, e)
+	assert.Integer(t, http.StatusOK, summary.StatusCode())
+	assert.NotEmpty(t, *summary.JSON200)
+}
+
+func TestIngestOperationNotRecorded(t *testing.T) {
+	o := web_service_tester.New(t)
+	x := context.Background()
+	_, e := o.Client.PostEventWithResponse(
+		x,
+		client.PostEventJSONRequestBody{
+			Tool:    "save_memory",
+			Surface: "model_context",
+			Actor:   "Blair",
+			Outcome: "success",
+		},
+	)
+	assert.FatalOnError(t, e)
+	summary, e := o.Client.GetSummaryWithResponse(x, &client.GetSummaryParams{})
+	assert.FatalOnError(t, e)
+	assert.Integer(t, http.StatusOK, summary.StatusCode())
+	summaryRecorded := false
+
+	for _, r := range o.Recorder.Calls {
+		if r.Tool == constant.IngestOperation {
+			t.Fatalf("ingest operation recorded: %s", r.Tool)
+		}
+
+		if r.Tool == "GetSummary" {
+			summaryRecorded = true
+		}
+	}
+
+	assert.True(t, summaryRecorded)
+}

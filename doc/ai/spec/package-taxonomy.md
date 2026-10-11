@@ -19,7 +19,8 @@ direction, and the criteria for introducing them.
 | `<path>/model_context/` | MCP tool implementations. Each method is a handler. | `<path>/store/`, `<path>/constant/`, `<path>/convert/`, `<path>/response/` |
 | `<path>/convert/` | Type filtering shared by `<path>/model_context/` and `<path>/server/`. | `<path>/types/`, `<path>/generated/server/` |
 | `<path>/web/` | HTML rendering (gomponents). Holds `*view.View` on Server. Flat; file-prefix grouping. | `<path>/store/`, `<path>/constant/`, `<path>/model/`, `pkg/web/view/` |
-| `<path>/integration/` | Cross-package tests using only the public API. Facet subpackages with shared setup in `<path>/base/` (see `test-placement.md`). | all exported packages |
+| `<path>/unit/` | In-process tests using only the public API, the mounted surfaces included; shared setup in `<path>/unit/base/` (see `test-placement.md`). | all exported packages |
+| `<path>/integration/` | Tests that cross a process boundary or need the environment (see `test-placement.md`). | all exported packages |
 
 ### Shared web packages (soil)
 
@@ -44,7 +45,7 @@ constant/   model/
   |   |       ↑                ↑                    ↑
   |   +-------+-------+-------+----------+----------+
   |           |       |       |          |
-server/  model_context/  web/  client/  integration/
+server/  model_context/  web/  client/  unit/
                           ↑
                     web/view/ → web/layout/ → web/layout/navigation_item/
 ```
@@ -127,12 +128,12 @@ extracting them into a struct with methods in a dedicated package (e.g.
 This keeps `<path>/constant/` purely declarative and gives query logic a named,
 testable home without scattering it across consumer packages.
 
-### Promoting to integration
+### Promoting tests
 
-Introduce `<path>/integration/` when cross-package tests exist. Tests live in
-facet subpackages (`<path>/client/`, `<path>/model_context/`,
-`<path>/web_interface/`, ...) with shared setup exported from `<path>/base/` —
-layout, naming, and the unit/integration line are in `test-placement.md`.
+Tests across a daemon's surfaces consolidate in `<path>/unit/`, with shared
+setup exported from `<path>/unit/base/`. Introduce `<path>/integration/` only
+when a test crosses a process boundary or needs the environment - layout,
+naming, and the unit/integration line are in `test-placement.md`.
 
 ## Flat Package Guidelines
 
@@ -187,7 +188,8 @@ A service tool typically evolves in this order:
    appear
 6. **Query logic extracts** - operations on constant data move to a registry
    struct
-7. **Tests consolidate** - collect cross-package tests in `<path>/integration/`
+7. **Tests consolidate** - collect cross-package tests in `<path>/unit/`, and
+   only process-crossing ones in `<path>/integration/`
 
 Not every service reaches every stage. Promote only when the criteria above
 are met.

@@ -1,0 +1,32 @@
+package unit
+
+import (
+	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/service_tester"
+	"testing"
+)
+
+func TestFindingsReportUnkeyedRows(t *testing.T) {
+	s := service_tester.New(t)
+	assert.FatalOnError(
+		t,
+		s.Store.Store.Database().Exec(
+			`INSERT INTO queue (callsign, kind, body, consumed, created_at)
+			VALUES ('Jade', 'message', 'unkeyed', 0, '2026-09-02 10:00:00+00:00')`,
+		).Error,
+	)
+	result := s.FindingsByKind(constant.MigrationIncomplete)
+	assert.Count(t, 1, result)
+	assert.String(t, "queue", result[0].Subject)
+	assert.Integer(t, 1, result[0].Count)
+	assert.StringContains(t, "backfill", result[0].Detail)
+}
+
+func TestFindingsAreSilentWhenEveryRowCarriesItsSession(t *testing.T) {
+	s := service_tester.New(t)
+	r := s.Check("session-1")
+	_, e := s.Service.Send(r.Callsign, r.Callsign, "hello", false)
+	assert.FatalOnError(t, e)
+	assert.Count(t, 0, s.FindingsByKind(constant.MigrationIncomplete))
+}

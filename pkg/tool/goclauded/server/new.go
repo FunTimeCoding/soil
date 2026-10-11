@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service"
+	"time"
 )
 
 func New(
@@ -12,6 +13,7 @@ func New(
 	r face.Reporter,
 	harborPath string,
 	sessionExportPath string,
+	hold time.Duration,
 ) *Server {
 	return &Server{
 		service:           s,
@@ -19,5 +21,6 @@ func New(
 		reporter:          r,
 		harborPath:        harborPath,
 		sessionExportPath: sessionExportPath,
+		hold:              hold,
 	}
 }

@@ -1,7 +1,7 @@
 package service_tester
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goclauded/integration/mock_notifier"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/mock_notifier"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/service"
 	"testing"
 	"time"

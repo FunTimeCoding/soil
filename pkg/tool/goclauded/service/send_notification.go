@@ -12,6 +12,10 @@ func (s *Service) SendNotification(
 	body string,
 	immediate bool,
 ) (bool, error) {
+	if f := entryRefusal(constant.QueueNotification, body); f != nil {
+		return false, f
+	}
+
 	holder, e := s.store.SessionByCallsign(callsign)
 
 	if e != nil {

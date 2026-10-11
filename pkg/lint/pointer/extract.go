@@ -27,7 +27,7 @@ func Extract(line string) []*Candidate {
 		-1,
 	) {
 		if IsPath(m[1]) || IsBareLink(m[1]) || IsAnchor(m[1]) {
-			result = append(result, NewLink(m[1]))
+			result = append(result, NewLink(unescape(m[1])))
 		}
 	}
 

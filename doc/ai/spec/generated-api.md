@@ -32,8 +32,8 @@ pkg/tool/go<tool>d/
 ├── convert/               # Type filtering shared by model_context/ and server/
 ├── constant/
 ├── option/
-├── integration/
-│   └── guard/             # Guard battery over Mount - see testing.md
+├── unit/
+│   └── guard_test.go      # Guard battery over Mount - see testing.md
 ├── main.go
 ├── mount.go               # Mount(deps..., g *guard.Mux) - the served surface
 └── run.go

@@ -15,7 +15,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/web"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/integration/base"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/base"
 	soilWeb "github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"

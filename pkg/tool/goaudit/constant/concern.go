@@ -38,7 +38,7 @@ const (
 	WebArgumentKey                   = "web_argument"
 	WebArgumentText                  = "main.go registers the port flag directly (use a.Web() or a.Metric())"
 	MissingGuardTestKey              = "missing_guard_test"
-	MissingGuardTestText             = "guarded surface without integration/guard/guard_test.go"
+	MissingGuardTestText             = "guarded surface without unit/guard_test.go"
 	MissingServiceMountKey           = "missing_service_mount"
 	MissingServiceMountText          = "guarded surface without mount.go"
 	StrictMiddlewareKey              = "strict_middleware"

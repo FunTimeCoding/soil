@@ -28,6 +28,7 @@ func (s *Server) GetChannel(
 		x,
 		holder.Identifier,
 		r.Params.Callsign,
+		s.hold,
 	)
 
 	if f != nil {

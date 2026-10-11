@@ -23,6 +23,13 @@ func (s *Service) Check(sessionIdentifier string) (*check_result.Result, error) 
 
 	result.Entries = entries
 	result.Changed = len(entries) > 0
+	result.Context, e = s.Render(entries)
+
+	if e != nil {
+		return nil, e
+	}
+
+	s.watchBudget(result.Context)
 	s.notify()
 
 	return result, nil

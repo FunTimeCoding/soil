@@ -58,6 +58,11 @@ A UserPromptSubmit hook fires every turn and shows:
 - Pending messages (direct or broadcast)
 - Timeout notice if the session was timed out
 
+The whole delivery holds about 2,000 characters. A long message is
+cut, ending with its number and the characters left; when room runs
+out it appears only as a waiting line with its number. read_message
+returns any of them whole, one or several numbers per call.
+
 The hook handles orientation automatically. Call history for
 deeper lookback with limit, offset, since, before, and kind
 filters.

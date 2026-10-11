@@ -12,6 +12,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
+	"time"
 )
 
 func Mount(
@@ -21,6 +22,7 @@ func Mount(
 	r face.Reporter,
 	harborPath string,
 	sessionExportPath string,
+	hold time.Duration,
 	t face.Recorder,
 	g *guard.Mux,
 ) {
@@ -28,7 +30,7 @@ func Mount(
 		constant.InterfacePath,
 		generated.HandlerFromMux(
 			generated.NewStrictHandler(
-				server.New(v, l, r, harborPath, sessionExportPath),
+				server.New(v, l, r, harborPath, sessionExportPath, hold),
 				[]generated.StrictMiddlewareFunc{
 					soilWeb.RecordingMiddleware[generated.StrictHandlerFunc](t),
 				},
