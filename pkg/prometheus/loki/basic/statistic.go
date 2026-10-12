@@ -2,7 +2,7 @@ package basic
 
 import (
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"time"
 )
 
@@ -12,11 +12,11 @@ func (c *Client) Statistic(query string) (string, error) {
 
 	return c.Text(
 		c.base.Copy().Path(constant.LokiStatistic).SetInteger64(
-			web.ParameterStart,
+			webConstant.ParameterStart,
 			oneWeekAgo.UnixNano(),
 		).SetInteger64(
-			web.ParameterEnd,
+			webConstant.ParameterEnd,
 			now.UnixNano(),
-		).Set(web.ParameterQuery, query).String(),
+		).Set(webConstant.ParameterQuery, query).String(),
 	)
 }

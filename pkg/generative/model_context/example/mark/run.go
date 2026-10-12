@@ -3,8 +3,8 @@ package mark
 import (
 	"context"
 	"fmt"
-	library "github.com/funtimecoding/soil/pkg/constant"
-	generative "github.com/funtimecoding/soil/pkg/generative/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/model_context/example/mark/option"
 	"github.com/funtimecoding/soil/pkg/generative/model_context/server"
 	"github.com/funtimecoding/soil/pkg/system"
@@ -20,15 +20,15 @@ import (
 func Run(o *option.Mark) {
 	s := mark.NewMCPServer(
 		"Demo",
-		library.DefaultVersion,
+		soil.DefaultVersion,
 		mark.WithToolCapabilities(false),
 	)
 	s.AddTool(
 		mcp.NewTool(
-			generative.ModelContextGreetTool,
+			constant.ModelContextGreetTool,
 			mcp.WithDescription("Say hello to someone"),
 			mcp.WithString(
-				generative.ModelContextNameParameter,
+				constant.ModelContextNameParameter,
 				mcp.Required(),
 				mcp.Description("Name of the person to greet"),
 			),
@@ -37,7 +37,7 @@ func Run(o *option.Mark) {
 			_ context.Context,
 			r mcp.CallToolRequest,
 		) (*mcp.CallToolResult, error) {
-			name, e := r.RequireString(generative.ModelContextNameParameter)
+			name, e := r.RequireString(constant.ModelContextNameParameter)
 
 			if e != nil {
 				return mcp.NewToolResultError(e.Error()), nil
@@ -48,7 +48,7 @@ func Run(o *option.Mark) {
 	)
 	s.AddResource(
 		mcp.NewResource(
-			generative.MarkReadmeDocument,
+			constant.MarkReadmeDocument,
 			"Project README",
 			mcp.WithResourceDescription("The project's README file"),
 			mcp.WithMIMEType(webConstant.Markdown),
@@ -57,7 +57,7 @@ func Run(o *option.Mark) {
 			_ context.Context,
 			_ mcp.ReadResourceRequest,
 		) ([]mcp.ResourceContents, error) {
-			content, e := os.ReadFile(library.ReadmeFile)
+			content, e := os.ReadFile(soil.ReadmeFile)
 
 			if e != nil {
 				return nil, e
@@ -65,7 +65,7 @@ func Run(o *option.Mark) {
 
 			return []mcp.ResourceContents{
 				mcp.TextResourceContents{
-					URI:      generative.MarkReadmeDocument,
+					URI:      constant.MarkReadmeDocument,
 					MIMEType: webConstant.Markdown,
 					Text:     string(content),
 				},
@@ -106,7 +106,7 @@ func Run(o *option.Mark) {
 		v := server.New(s)
 		m := http.NewServeMux()
 		v.Setup(guard.New(m, web.ServiceTokens()))
-		h := web.Server(m, generative.ModelContextAddress)
+		h := web.Server(m, constant.ModelContextAddress)
 		web.ServeAsynchronous(h)
 		system.KillSignalBlock()
 		web.GracefulShutdown(context.Background(), h, true)

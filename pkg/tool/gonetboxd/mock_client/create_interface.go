@@ -7,9 +7,12 @@ import (
 )
 
 func (c *Client) CreateInterface(
-	_ *device.Device,
-	_ string,
-	_ netbox.InterfaceTypeValue,
+	d *device.Device,
+	name string,
+	t netbox.InterfaceTypeValue,
 ) (*network.Interface, error) {
-	return nil, nil
+	result := c.SeedInterface(d, name)
+	result.Type = t
+
+	return result, nil
 }

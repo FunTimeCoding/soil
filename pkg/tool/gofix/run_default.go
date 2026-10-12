@@ -14,7 +14,7 @@ func RunDefault(
 	w.BeforeCommit(o.BeforeCommit)
 	runFix(o, w, r)
 	parameterThrough(o.Patterns, o.Root, w, r)
-	aliasThrough(o.Patterns, o.Root, w, r)
+	aliasThrough(o.Patterns, o.Root, o.Realias, w, r)
 	formatThrough(o.Patterns, o.Root, w, r)
 	finish(w, r)
 }

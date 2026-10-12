@@ -1,7 +1,7 @@
 package repository_tester
 
 import (
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/git/constant"
 	"path/filepath"
 	"testing"
@@ -27,7 +27,7 @@ func New(t *testing.T) *Tester {
 		constant.HooksPathKey,
 		".git/hooks",
 	)
-	result.Write(library.ReadmeFile, "# base\n")
+	result.Write(soil.ReadmeFile, "# base\n")
 	result.Commit("base")
 	Command(
 		result.Clone,

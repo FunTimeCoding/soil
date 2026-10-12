@@ -1,9 +1,9 @@
 package fixture
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	memoryConstant "github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"strings"
 )
 
@@ -20,7 +20,7 @@ func Section(
 	rest := document[start+len(heading):]
 	next := strings.Index(
 		rest,
-		join.Empty(constant.Unix, memoryConstant.SectionPrefix),
+		join.Empty(stringsConstant.Unix, constant.SectionPrefix),
 	)
 
 	if next < 0 {

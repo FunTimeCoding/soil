@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/kubernetes/client"
-	kubernetes "github.com/funtimecoding/soil/pkg/kubernetes/constant"
+	kubernetesConstant "github.com/funtimecoding/soil/pkg/kubernetes/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gotrivy/constant"
 )
 
@@ -15,13 +15,13 @@ func Main() {
 	a := argument.NewInstance(constant.Identity)
 	a.Parse()
 	k := client.NewEnvironment()
-	f := kubernetes.Format
+	f := kubernetesConstant.Format
 
-	for _, j := range k.CronJobs(kubernetes.TrivyNamespace) {
+	for _, j := range k.CronJobs(kubernetesConstant.TrivyNamespace) {
 		console.Format("CronJob: %s\n", j.Format(f))
 	}
 
-	for _, j := range k.Jobs(kubernetes.TrivyNamespace) {
+	for _, j := range k.Jobs(kubernetesConstant.TrivyNamespace) {
 		console.Format("Job: %s\n", j.Format(f))
 	}
 }

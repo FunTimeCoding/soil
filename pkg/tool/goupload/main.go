@@ -7,7 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/build"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
-	gitlab "github.com/funtimecoding/soil/pkg/gitlab/constant"
+	gitlabConstant "github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab/packages"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/goupload/constant"
@@ -22,26 +22,26 @@ func Main() {
 	defer func() { r.RecoverFlush(recover()) }()
 	locatorDefault := ""
 
-	if s := os.Getenv(gitlab.InterfaceLocator); s != "" {
+	if s := os.Getenv(gitlabConstant.InterfaceLocator); s != "" {
 		locatorDefault = s
 	}
 
 	projectDefault := ""
 
-	if s := os.Getenv(gitlab.ProjectIdentifier); s != "" {
+	if s := os.Getenv(gitlabConstant.ProjectIdentifier); s != "" {
 		projectDefault = s
 	}
 
 	tagDefault := ""
 
-	if s := os.Getenv(gitlab.CommitTag); s != "" {
+	if s := os.Getenv(gitlabConstant.CommitTag); s != "" {
 		tagDefault = s
 	}
 
 	headerDefault := ""
 
-	if s := os.Getenv(gitlab.JobToken); s != "" {
-		headerDefault = fmt.Sprintf("%s=%s", gitlab.JobTokenHeader, s)
+	if s := os.Getenv(gitlabConstant.JobToken); s != "" {
+		headerDefault = fmt.Sprintf("%s=%s", gitlabConstant.JobTokenHeader, s)
 	}
 
 	a := argument.NewInstance(constant.Identity)

@@ -3,7 +3,7 @@ package web
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/service"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/palette"
@@ -19,12 +19,12 @@ func New(s *service.Service) *Server {
 		palette.NewCommand(
 			constant.DashboardTitle,
 			constant.DashboardPath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
 		palette.NewCommand(
 			constant.SessionsTitle,
 			constant.SessionsPath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
 	)
 
@@ -33,9 +33,9 @@ func New(s *service.Service) *Server {
 		registry: r,
 		view: view.New(
 			layout.New(constant.Identity).
-				WithTheme(web.ThemeSprout).
+				WithTheme(webConstant.ThemeSprout).
 				WithStyle(constant.InlineStyle).
-				WithCommandPalette(web.PalettePath).
+				WithCommandPalette(webConstant.PalettePath).
 				WithItems(
 					navigation_item.New(
 						constant.DashboardPath,
@@ -53,7 +53,7 @@ func New(s *service.Service) *Server {
 				WithScript(
 					"https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js",
 				).
-				WithLiveEndpoint(web.LivePath).
+				WithLiveEndpoint(webConstant.LivePath).
 				WithFooter(
 					html.Script(gomponents.Raw(constant.SortableScript)),
 				),

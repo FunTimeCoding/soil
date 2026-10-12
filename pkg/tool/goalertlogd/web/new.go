@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/store"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/worker"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/palette"
@@ -23,12 +23,12 @@ func New(
 		palette.NewCommand(
 			constant.DashboardTitle,
 			constant.DashboardPath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
 		palette.NewCommand(
 			constant.RecentTitle,
 			constant.RecentPath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
 	)
 
@@ -39,10 +39,10 @@ func New(
 		registry: r,
 		view: view.New(
 			layout.New(constant.Identity).
-				WithTheme(web.ThemeSentinel).
+				WithTheme(webConstant.ThemeSentinel).
 				WithStyle(constant.InlineStyle).
-				WithLiveEndpoint(web.LivePath).
-				WithCommandPalette(web.PalettePath).
+				WithLiveEndpoint(webConstant.LivePath).
+				WithCommandPalette(webConstant.PalettePath).
 				WithItems(
 					navigation_item.New(
 						constant.DashboardPath,

@@ -1,11 +1,11 @@
 package job
 
 import (
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab/check/job/option"
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab/job"
-	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
+	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/report"
 )
 
@@ -16,17 +16,17 @@ func printNotation(
 	r := report.New()
 	f := constant.CheckFormat
 
-	for _, e := range report.Trim(v, r, o.All, monitor.GoGitLab) {
-		var s library.Severity
+	for _, e := range report.Trim(v, r, o.All, monitorConstant.GoGitLab) {
+		var s soil.Severity
 
 		if e.Fail() {
-			s = library.Critical
+			s = soil.Critical
 		} else {
-			s = library.Information
+			s = soil.Information
 		}
 
 		r.AddItem(
-			monitor.GoGitLab,
+			monitorConstant.GoGitLab,
 			e.MonitorIdentifier,
 			s,
 			e.Format(f),

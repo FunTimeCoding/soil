@@ -1,47 +1,61 @@
 package goband
 
 import (
-	"github.com/funtimecoding/soil/pkg/band"
-	"github.com/funtimecoding/soil/pkg/band/constant"
-	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/goband/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gobandd/generated/client"
 	"github.com/spf13/cobra"
 )
 
-func shutdown(c *band.Client) *cobra.Command {
+func shutdown(x *Context) *cobra.Command {
+	var instance string
 	var confirmed bool
+	var forced bool
 	result := &cobra.Command{
 		Use:   "shutdown",
-		Short: "Press the power button and let the operating system answer",
+		Short: "Ask the operating system to shut down, or cut power with --force",
+		Args:  cobra.NoArgs,
 		Run: func(
 			_ *cobra.Command,
 			_ []string,
 		) {
-			state := c.MustPowerState()
-			console.Format(
-				"Power state: %s\n",
-				band.PowerStateName(state.State),
-			)
+			description := constant.ShutdownDescription
 
-			if !confirmed {
-				console.Line(
-					"Would assert the power button - a live operating system shuts down cleanly, a wedged one ignores it. Pass --yes to execute.",
-				)
-
-				return
+			if forced {
+				description = constant.ShutdownForceDescription
 			}
 
-			errors.PanicOnError(c.RequestPowerState(constant.PowerOffSoft))
-			console.Line(
-				"Power button asserted. Poll status - if the state stays on, the operating system is not answering and reboot is the remaining option.",
+			requestPower(
+				x,
+				instance,
+				client.PowerRequestOperationShutdown,
+				forced,
+				confirmed,
+				description,
 			)
+
+			if confirmed && !forced {
+				x.Terminal.Line(constant.GracefulFollowUp)
+			}
 		},
 	}
-	result.Flags().BoolVar(
+	f := result.Flags()
+	f.StringVar(
+		&instance,
+		constant.InstanceArgument,
+		"",
+		constant.InstanceUsage,
+	)
+	f.BoolVar(
 		&confirmed,
-		"yes",
+		constant.YesArgument,
 		false,
 		"execute the shutdown instead of describing it",
+	)
+	f.BoolVar(
+		&forced,
+		constant.ForceArgument,
+		false,
+		"cut power below the operating system instead of asking it",
 	)
 
 	return result

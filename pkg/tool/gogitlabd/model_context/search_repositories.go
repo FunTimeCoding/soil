@@ -16,7 +16,7 @@ func (s *Server) SearchRepositories(
 		return response.Fail("query is required")
 	}
 
-	v, e := s.client.SearchProject(a.Query)
+	v, e := s.service.Projects(a.Query)
 
 	if e != nil {
 		return s.captureDetail(e)

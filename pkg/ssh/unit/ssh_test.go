@@ -5,16 +5,16 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unreachable"
 	"github.com/funtimecoding/soil/pkg/ssh"
 	"github.com/funtimecoding/soil/pkg/ssh/command"
-	sshConstant "github.com/funtimecoding/soil/pkg/ssh/constant"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	"github.com/funtimecoding/soil/pkg/ssh/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/system/result"
 	"testing"
 )
 
 func TestConstant(t *testing.T) {
-	assert.String(t, "-T", sshConstant.NoPTYArgument)
-	assert.String(t, "-tt", sshConstant.ForcePTYArgument)
-	assert.String(t, "-v", sshConstant.VerboseArgument)
+	assert.String(t, "-T", constant.NoPTYArgument)
+	assert.String(t, "-tt", constant.ForcePTYArgument)
+	assert.String(t, "-v", constant.VerboseArgument)
 }
 
 func TestResult(t *testing.T) {
@@ -26,12 +26,21 @@ func TestResult(t *testing.T) {
 			Exit:         1,
 			Error:        nil,
 		},
-		result.New(constant.UpperAlfa, constant.UpperBravo, 1, nil),
+		result.New(
+			stringsConstant.UpperAlfa,
+			stringsConstant.UpperBravo,
+			1,
+			nil,
+		),
 	)
 }
 
 func TestEnvironmentPrefix(t *testing.T) {
-	assert.String(t, "", ssh.EnvironmentPrefix(command.New(constant.UpperAlfa)))
+	assert.String(
+		t,
+		"",
+		ssh.EnvironmentPrefix(command.New(stringsConstant.UpperAlfa)),
+	)
 }
 
 func TestPanicDefault(t *testing.T) {

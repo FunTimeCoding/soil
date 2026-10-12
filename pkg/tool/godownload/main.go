@@ -3,7 +3,7 @@ package godownload
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/common"
@@ -19,7 +19,7 @@ func Main() {
 	common.Arguments(a)
 	a.String(
 		argumentConstant.PackageVersion,
-		library.LatestVersion,
+		soil.LatestVersion,
 		"Version to download, falls back to latest if not found",
 	)
 	a.String(

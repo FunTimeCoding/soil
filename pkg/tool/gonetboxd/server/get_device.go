@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 )
@@ -11,20 +10,11 @@ func (s *Server) GetDevice(
 	_ context.Context,
 	r server.GetDeviceRequestObject,
 ) (server.GetDeviceResponseObject, error) {
-	d, e := s.client.DeviceByName(r.Name)
+	d, labels, e := s.service.Device(r.Name)
 
 	if e != nil {
 		return server.GetDevice500JSONResponse(*s.captureDetail(e)), nil
 	}
 
-	labels, e := s.store.Labels(constant.DeviceAddress, d.Identifier)
-
-	if e != nil {
-		return server.GetDevice500JSONResponse(*s.captureDetail(e)), nil
-	}
-
-	result := convert.Device(d)
-	result.Labels = new(convert.Labels(labels))
-
-	return server.GetDevice200JSONResponse(*result), nil
+	return server.GetDevice200JSONResponse(*convert.LabeledDevice(d, labels)), nil
 }

@@ -7,8 +7,16 @@ import (
 )
 
 func (c *GitCall) Block() string {
+	if c.hidden {
+		return constant.GitHiddenMessage
+	}
+
 	if !c.readable {
 		return fmt.Sprintf(constant.GitUnreadableMessage, "subcommand")
+	}
+
+	if c.listsTags() {
+		return ""
 	}
 
 	if slices.Contains(constant.GitHistoryWriters, c.subcommand) {

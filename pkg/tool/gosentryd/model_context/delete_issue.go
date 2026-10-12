@@ -16,7 +16,7 @@ func (s *Server) DeleteIssue(
 		return response.Fail("identifier is required")
 	}
 
-	e := s.client.DeleteIssue(s.organization, a.Identifier)
+	e := s.service.DeleteIssue(a.Identifier)
 
 	if e != nil {
 		return s.captureDetail(e)

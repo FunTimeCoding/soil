@@ -1,7 +1,7 @@
 package model_context
 
 import (
-	generative "github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -210,12 +210,12 @@ func (s *Server) register() {
 				"Search memories by keyword. Returns matching memories ranked by relevance. Optional type and tag filters.",
 			),
 			mcp.WithString(
-				generative.ParameterQuery,
+				generativeConstant.ParameterQuery,
 				mcp.Required(),
 				mcp.Description("Search query"),
 			),
 			mcp.WithNumber(
-				generative.ParameterLimit,
+				generativeConstant.ParameterLimit,
 				mcp.Description("Maximum results (default 10)"),
 			),
 			mcp.WithString(

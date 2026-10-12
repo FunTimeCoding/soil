@@ -2,15 +2,15 @@ package openbao
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/openbao/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/openbao/openbao/api/v2"
-	"time"
 )
 
-func New(host string) *Client {
+func New(l *locator.Locator) *Client {
 	c := api.DefaultConfig()
-	c.Address = locator.New(host).String()
-	c.Timeout = 10 * time.Second
+	c.Address = l.String()
+	c.Timeout = constant.RequestTimeout
 	client, e := api.NewClient(c)
 	errors.PanicOnError(e)
 

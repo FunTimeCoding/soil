@@ -2,9 +2,9 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	docker "github.com/funtimecoding/soil/pkg/docker/constant"
+	"github.com/funtimecoding/soil/pkg/docker/constant"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
 	"net/http"
 	"testing"
@@ -22,8 +22,8 @@ func TestTagsReadsThePage(t *testing.T) {
 	assert.String(t, "1.27-alpine", tags[0].Name)
 	r := last()
 	assert.String(t, "/v2/repositories/library/alfa/tags", r.URL.Path)
-	assert.String(t, "100", r.URL.Query().Get(docker.PageSizeParameter))
-	assert.String(t, "application/json", r.Header.Get(constant.Accept))
+	assert.String(t, "100", r.URL.Query().Get(constant.PageSizeParameter))
+	assert.String(t, "application/json", r.Header.Get(webConstant.Accept))
 }
 
 func TestMissingImageIsNotFound(t *testing.T) {

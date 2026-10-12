@@ -2,6 +2,7 @@ package netbox
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/tenant"
 )
 
@@ -18,5 +19,5 @@ func (c *Client) TenantByName(n string) (*tenant.Tenant, error) {
 		}
 	}
 
-	return nil, not_found.New("tenant", n)
+	return nil, not_found.New(constant.TenantKind, n)
 }

@@ -2,7 +2,7 @@ package web
 
 import (
 	"fmt"
-	argument "github.com/funtimecoding/soil/pkg/argument/constant"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/strings/join/key_value"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
@@ -15,9 +15,9 @@ func (s *Server) pipeline(
 	w http.ResponseWriter,
 	r *http.Request,
 ) {
-	project := queryInteger(r, argument.Project)
-	pipeline := queryInteger(r, argument.Pipeline)
-	requested := queryInteger(r, argument.Job)
+	project := queryInteger(r, argumentConstant.Project)
+	pipeline := queryInteger(r, argumentConstant.Pipeline)
+	requested := queryInteger(r, argumentConstant.Job)
 	detail := s.pipelineDetail(project, pipeline, requested)
 
 	if s.view.IsExtendedRequest(r) {
@@ -34,11 +34,11 @@ func (s *Server) pipeline(
 			[]string{
 				subscription.Query(constant.PipelineEvent),
 				key_value.Equals(
-					argument.Project,
+					argumentConstant.Project,
 					strconv.FormatInt(project, 10),
 				),
 				key_value.Equals(
-					argument.Pipeline,
+					argumentConstant.Pipeline,
 					strconv.FormatInt(pipeline, 10),
 				),
 			},

@@ -3,7 +3,7 @@ package model_context
 import (
 	"context"
 	"fmt"
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
@@ -15,13 +15,13 @@ func (s *Server) status(
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	if _, e := s.resolveCaller(x, constant.Status); e != nil {
-		return s.captureFail(e, library.UnexpectedError)
+		return s.captureFail(e, soil.UnexpectedError)
 	}
 
 	findings, e := s.service.Findings()
 
 	if e != nil {
-		return s.captureFail(e, library.UnexpectedError)
+		return s.captureFail(e, soil.UnexpectedError)
 	}
 
 	if len(findings) == 0 {

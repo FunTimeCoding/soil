@@ -3,7 +3,7 @@ package device
 import (
 	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"slices"
 )
@@ -16,7 +16,7 @@ func (d *Device) formatTags(f *option.Format) string {
 	var toFilter []string
 
 	for _, a := range f.Filters {
-		if a.Key == constant.TagKey {
+		if a.Key == soil.TagKey {
 			toFilter = append(toFilter, a.Value)
 		}
 	}

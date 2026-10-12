@@ -2,9 +2,9 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	library "github.com/funtimecoding/soil/pkg/time"
-	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
+	"github.com/funtimecoding/soil/pkg/time/constant"
 	"github.com/funtimecoding/soil/pkg/time/day"
 	"github.com/funtimecoding/soil/pkg/time/minute"
 	"github.com/funtimecoding/soil/pkg/time/second"
@@ -13,21 +13,21 @@ import (
 )
 
 func TestConstant(t *testing.T) {
-	assert.String(t, "15:04", timeConstant.HourMinute)
-	assert.String(t, "15:04:05", timeConstant.HourMinuteSecond)
+	assert.String(t, "15:04", constant.HourMinute)
+	assert.String(t, "15:04:05", constant.HourMinuteSecond)
 }
 
 func TestTime(t *testing.T) {
-	assert.Integer(t, 3600, timeConstant.HourInSeconds)
-	assert.Integer(t, 86400, timeConstant.DayInSeconds)
-	assert.Integer(t, 604800, timeConstant.WeekInSeconds)
-	assert.Integer(t, 2419200, timeConstant.MonthInSeconds)
-	assert.Integer(t, 29030400, timeConstant.YearInSeconds)
-	assert.Integer(t, 28, timeConstant.MonthInDays)
+	assert.Integer(t, 3600, constant.HourInSeconds)
+	assert.Integer(t, 86400, constant.DayInSeconds)
+	assert.Integer(t, 604800, constant.WeekInSeconds)
+	assert.Integer(t, 2419200, constant.MonthInSeconds)
+	assert.Integer(t, 29030400, constant.YearInSeconds)
+	assert.Integer(t, 28, constant.MonthInDays)
 	assert.String(
 		t,
 		"1970-01-01 00:00:00",
-		constant.StartOfTime.Format(timeConstant.DateSecond),
+		soil.StartOfTime.Format(constant.DateSecond),
 	)
 	now := time.Now()
 	past := now.Add(-time.Minute)
@@ -44,7 +44,7 @@ func TestTime(t *testing.T) {
 }
 
 func TestFormat(t *testing.T) {
-	assert.String(t, "1970-01-01 00:00", library.Format(constant.StartOfTime))
+	assert.String(t, "1970-01-01 00:00", library.Format(soil.StartOfTime))
 }
 
 func TestFormatCompactToday(t *testing.T) {
@@ -62,7 +62,7 @@ func TestFormatCompactOlder(t *testing.T) {
 }
 
 func TestParse(t *testing.T) {
-	result := library.Parse(timeConstant.DateYear, "2019-01-01")
+	result := library.Parse(constant.DateYear, "2019-01-01")
 	assert.Integer(t, 2019, result.Year())
 	assert.Integer(t, 1, int(result.Month()))
 	assert.Integer(t, 1, result.Day())
@@ -72,7 +72,7 @@ func TestMidnight(t *testing.T) {
 	assert.Any(
 		t,
 		time.Date(1970, 1, 1, 0, 0, 0, 0, time.Local),
-		library.Midnight(constant.StartOfTime),
+		library.Midnight(soil.StartOfTime),
 	)
 }
 
@@ -113,10 +113,10 @@ func TestMinuteReadable(t *testing.T) {
 }
 
 func TestSecondReadable(t *testing.T) {
-	minuteSeconds := timeConstant.MinuteInSeconds
-	hourSeconds := timeConstant.HourInSeconds
-	daySeconds := timeConstant.DayInSeconds
-	monthSeconds := timeConstant.MonthInSeconds
+	minuteSeconds := constant.MinuteInSeconds
+	hourSeconds := constant.HourInSeconds
+	daySeconds := constant.DayInSeconds
+	monthSeconds := constant.MonthInSeconds
 	assert.String(t, "1 second", second.Readable(1))
 	assert.String(t, "59 seconds", second.Readable(59))
 	assert.String(t, "1 minute", second.Readable(minuteSeconds))

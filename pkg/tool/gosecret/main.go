@@ -2,60 +2,52 @@ package gosecret
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
-	library "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
+	"github.com/funtimecoding/soil/pkg/instrument"
+	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gosecret/constant"
-	"os"
+	"github.com/spf13/cobra"
 )
 
 func Main() {
-	r := reporter.New(constant.Identity.Name())
-	r.Start()
-	defer func() { r.RecoverFlush(recover()) }()
-	var (
-		checkMode  bool
-		encodeMode bool
-		directory  string
-	)
-	a := argument.NewInstance(constant.Identity)
-	a.BooleanVariable(
-		&checkMode,
-		"check",
-		false,
-		"Check mode: verify decoded files match secrets, exit non-zero if any mismatch",
-	)
-	a.BooleanVariable(
-		&encodeMode,
-		"encode",
-		false,
-		"Encode mode: write decoded file contents back into secret manifests",
-	)
-	a.StringVariable(
-		&directory,
-		"directory",
-		library.CurrentDirectory,
-		"Directory to scan for secret manifests",
-	)
-	a.Parse()
-
-	if checkMode && encodeMode {
-		errors.Printf("Error: --check and --encode are mutually exclusive\n")
-		os.Exit(1)
+	s := instrument.NewCommandLine(constant.Identity)
+	defer func() { s.Flush(recover()) }()
+	t := terminal.New(s)
+	o := &cobra.Command{
+		Use:   constant.Identity.Usage(),
+		Short: constant.Identity.Description(),
 	}
-
-	mode := constant.Decode
-
-	if checkMode {
-		mode = constant.Check
-	}
-
-	if encodeMode {
-		mode = constant.Encode
-	}
-
-	if e := Run(directory, mode); e != nil {
-		errors.Printf("Error: %v\n", e)
-		os.Exit(1)
-	}
+	o.AddCommand(
+		manifestCommand(
+			t,
+			constant.DecodeUsage,
+			"Write a .decoded.txt beside every secret manifest",
+			constant.Decode,
+		),
+	)
+	o.AddCommand(
+		manifestCommand(
+			t,
+			constant.CheckUsage,
+			"Verify every .decoded.txt matches its secret manifest",
+			constant.Check,
+		),
+	)
+	o.AddCommand(
+		manifestCommand(
+			t,
+			constant.EncodeUsage,
+			"Write every .decoded.txt back into its secret manifest",
+			constant.Encode,
+		),
+	)
+	o.AddCommand(statusCommand(t))
+	o.AddCommand(listCommand(t))
+	o.AddCommand(showCommand(t))
+	o.AddCommand(revealCommand(t))
+	o.AddCommand(putCommand(t))
+	o.AddCommand(migrateCommand(t))
+	argument.CobraInstrument(o, s)
+	argument.CobraStamp(o, constant.Identity)
+	errors.PanicOnError(o.Execute())
 }

@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus/loki/basic/response"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"time"
 )
 
@@ -22,10 +22,10 @@ func (c *Client) LabelValues(
 			label,
 			constant.LokiValues,
 		).SetInteger64(
-			web.ParameterStart,
+			webConstant.ParameterStart,
 			start.Unix(),
 		).SetInteger64(
-			web.ParameterEnd,
+			webConstant.ParameterEnd,
 			end.Unix(),
 		).String(),
 		&r,

@@ -8,6 +8,7 @@ import (
 func aliasThrough(
 	patterns []string,
 	directory string,
+	realias bool,
 	w *workspace.Workspace,
 	r *output.Results,
 ) {
@@ -16,7 +17,8 @@ func aliasThrough(
 	}
 
 	all, fileSet := loadThrough(directory, patterns, w)
-	edits := findImportAliasEdits(fileSet, all, r)
+	edits, handled := findImportAliasSuggestions(fileSet, all, realias, r)
+	edits = append(edits, findImportAliasEdits(fileSet, all, handled, r)...)
 
 	if len(edits) == 0 {
 		return

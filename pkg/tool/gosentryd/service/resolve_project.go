@@ -1,0 +1,23 @@
+package service
+
+import "github.com/funtimecoding/soil/pkg/errors/not_found"
+
+func (s *Service) resolveProject(slug string) (string, error) {
+	if slug == "" {
+		return "", nil
+	}
+
+	projects, e := s.client.OrganizationProjects(s.organization)
+
+	if e != nil {
+		return "", e
+	}
+
+	for _, p := range projects {
+		if p.Slug == slug {
+			return p.Identifier, nil
+		}
+	}
+
+	return "", not_found.New("project", slug)
+}

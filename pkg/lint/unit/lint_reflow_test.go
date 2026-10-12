@@ -3,21 +3,21 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
-	lintConstant "github.com/funtimecoding/soil/pkg/lint/constant"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	"github.com/funtimecoding/soil/pkg/lint/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"strings"
 	"testing"
 )
 
 func TestReflowClean(t *testing.T) {
-	l := lint.Reflow(constant.UpperAlfa, strings.NewReader("one two\n"))
+	l := lint.Reflow(stringsConstant.UpperAlfa, strings.NewReader("one two\n"))
 	assertReport(t, "Alfa", false, nil, "", l)
 }
 
 func TestReflowRewrapsAnOverrunningParagraph(t *testing.T) {
 	content := join.Empty(strings.Repeat("word ", 17), "end\n")
-	l := lint.Reflow(constant.UpperAlfa, strings.NewReader(content))
+	l := lint.Reflow(stringsConstant.UpperAlfa, strings.NewReader(content))
 	assertReport(
 		t,
 		"Alfa",
@@ -27,7 +27,7 @@ func TestReflowRewrapsAnOverrunningParagraph(t *testing.T) {
 				Key:      "reflow",
 				Text:     "Line exceeds the column width",
 				Path:     "Alfa",
-				Type:     lintConstant.ConcernLine,
+				Type:     constant.ConcernLine,
 				Line:     1,
 				LineText: strings.TrimSuffix(content, "\n"),
 				Fixed:    true,
@@ -40,7 +40,7 @@ func TestReflowRewrapsAnOverrunningParagraph(t *testing.T) {
 
 func TestReflowRefusesAHardLineBreak(t *testing.T) {
 	content := join.Empty(strings.Repeat("word ", 17), "end  \nnext\n")
-	l := lint.Reflow(constant.UpperAlfa, strings.NewReader(content))
+	l := lint.Reflow(stringsConstant.UpperAlfa, strings.NewReader(content))
 	assertReport(
 		t,
 		"Alfa",
@@ -50,7 +50,7 @@ func TestReflowRefusesAHardLineBreak(t *testing.T) {
 				Key:   "reflow_refused",
 				Text:  "Reflow refused - document structure changed",
 				Path:  "Alfa",
-				Type:  lintConstant.ConcernFile,
+				Type:  constant.ConcernFile,
 				Fixed: false,
 			},
 		},

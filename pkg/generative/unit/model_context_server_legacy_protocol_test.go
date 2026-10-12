@@ -5,7 +5,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/constant"
 	generative "github.com/funtimecoding/soil/pkg/generative/model_context/server"
@@ -17,7 +17,7 @@ import (
 
 func TestModelContextServerLegacyProtocol(t *testing.T) {
 	s := server.NewStdioServer(
-		server.NewMCPServer("probe", library.DefaultVersion),
+		server.NewMCPServer("probe", soil.DefaultVersion),
 	)
 	s.SetContextFunc(generative.LegacyProtocol)
 	inputReader, inputWriter := io.Pipe()

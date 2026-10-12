@@ -2,6 +2,7 @@ package netbox
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/physical_address"
 	"net"
 )
@@ -28,7 +29,7 @@ func (c *Client) PhysicalAddress(a net.HardwareAddr) (*physical_address.Address,
 	}
 
 	if len(result) == 0 {
-		return nil, not_found.New("physical address", a)
+		return nil, not_found.New(constant.PhysicalAddressKind, a)
 	}
 
 	return result[0], nil

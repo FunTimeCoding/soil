@@ -1,7 +1,7 @@
 package service
 
 import (
-	separator "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/types/service_policy"
 	"strings"
@@ -12,16 +12,16 @@ func ParsePolicy(output string) map[string]*service_policy.Policy {
 	var name string
 	var installed bool
 
-	for _, line := range strings.Split(output, separator.Unix) {
+	for _, line := range strings.Split(output, stringsConstant.Unix) {
 		trimmed := strings.TrimSpace(line)
 
 		if trimmed == "" {
 			continue
 		}
 
-		if !strings.HasPrefix(line, separator.Space) &&
-			strings.HasSuffix(trimmed, separator.Colon) {
-			name = strings.TrimSuffix(trimmed, separator.Colon)
+		if !strings.HasPrefix(line, stringsConstant.Space) &&
+			strings.HasSuffix(trimmed, stringsConstant.Colon) {
+			name = strings.TrimSuffix(trimmed, stringsConstant.Colon)
 			result[name] = service_policy.New()
 			installed = false
 

@@ -30,7 +30,7 @@ func (s *Server) CreateMergeRequestNote(
 		return s.captureDetail(e)
 	}
 
-	v, e := s.client.CreateMergeRequestNote(project, a.MergeRequest, a.Body)
+	v, e := s.service.CreateMergeRequestNote(project, a.MergeRequest, a.Body)
 
 	if e != nil {
 		return s.captureDetail(e)

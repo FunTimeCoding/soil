@@ -1,20 +1,20 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/tracker"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	goclaudedConstant "github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"path/filepath"
 )
 
 func (s *Service) EnrichSession(identifier string) {
 	path := filepath.Join(
 		s.harbor,
-		join.Empty(identifier, constant.NotationLogExtension),
+		join.Empty(identifier, soil.NotationLogExtension),
 	)
 	state := s.cache.GetOrCreate(identifier)
-	calls, e := tracker.Read(path, state, goclaudedConstant.FollowedTools)
+	calls, e := tracker.Read(path, state, constant.FollowedTools)
 
 	if e != nil {
 		s.reporter.CaptureException(e)

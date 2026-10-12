@@ -3,15 +3,15 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
-	lintConstant "github.com/funtimecoding/soil/pkg/lint/constant"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	"github.com/funtimecoding/soil/pkg/lint/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 	"testing"
 )
 
 func TestFunctionEmptyBody(t *testing.T) {
 	l := lint.Function(
-		constant.UpperBravo,
+		stringsConstant.UpperBravo,
 		strings.NewReader("package main\n\nfunc main() {\n}\n"),
 	)
 	assertReport(
@@ -23,7 +23,7 @@ func TestFunctionEmptyBody(t *testing.T) {
 				Key:      "empty-function-body",
 				Text:     "Function body with only whitespace",
 				Path:     "Bravo",
-				Type:     lintConstant.ConcernLine,
+				Type:     constant.ConcernLine,
 				Line:     3,
 				LineText: "func main() {\n}",
 				Fixed:    true,
@@ -36,7 +36,7 @@ func TestFunctionEmptyBody(t *testing.T) {
 
 func TestFunctionClean(t *testing.T) {
 	l := lint.Function(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"package example\n\nfunc Example() {\n\tfmt.Println(\"hello\")\n}\n",
 		),

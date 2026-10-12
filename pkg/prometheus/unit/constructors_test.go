@@ -17,8 +17,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/prometheus/result/metric"
 	"github.com/funtimecoding/soil/pkg/prometheus/round_tripper"
 	"github.com/funtimecoding/soil/pkg/prometheus/rule/rule_list"
-	strings "github.com/funtimecoding/soil/pkg/strings/constant"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"testing"
 )
@@ -27,9 +27,9 @@ func TestConstructors(t *testing.T) {
 	assert.NotNil(
 		t,
 		enrichment.New(
-			strings.UpperAlfa,
-			strings.UpperBravo,
-			strings.UpperCharlie,
+			stringsConstant.UpperAlfa,
+			stringsConstant.UpperBravo,
+			stringsConstant.UpperCharlie,
 		),
 	)
 	assert.NotNil(t, alert_enricher.New())
@@ -37,9 +37,9 @@ func TestConstructors(t *testing.T) {
 	assert.NotNil(
 		t,
 		severity.New(
-			strings.UpperAlfa,
-			strings.UpperBravo,
-			strings.UpperCharlie,
+			stringsConstant.UpperAlfa,
+			stringsConstant.UpperBravo,
+			stringsConstant.UpperCharlie,
 		),
 	)
 	assert.NotNil(t, rule_parser.New(nil))
@@ -48,25 +48,36 @@ func TestConstructors(t *testing.T) {
 	assert.NotNil(
 		t,
 		basic.New(
-			locator.New(strings.UpperAlfa),
-			strings.UpperBravo,
-			strings.UpperCharlie,
+			locator.New(stringsConstant.UpperAlfa),
+			stringsConstant.UpperBravo,
+			stringsConstant.UpperCharlie,
 			false,
 		),
 	)
 	assert.NotNil(
 		t,
 		loki.New(
-			strings.UpperAlfa,
-			strings.UpperBravo,
-			strings.UpperCharlie,
+			stringsConstant.UpperAlfa,
+			stringsConstant.UpperBravo,
+			stringsConstant.UpperCharlie,
 			false,
 		),
 	)
-	assert.NotNil(t, prometheus.New(constant.Localhost, 0, false, "", "", ""))
-	assert.NotNil(t, push.New(strings.UpperAlfa, 0, false, strings.UpperBravo))
+	assert.NotNil(
+		t,
+		prometheus.New(webConstant.Localhost, 0, false, "", "", ""),
+	)
+	assert.NotNil(
+		t,
+		push.New(
+			stringsConstant.UpperAlfa,
+			0,
+			false,
+			stringsConstant.UpperBravo,
+		),
+	)
 	assert.NotNil(t, filter.New())
-	assert.NotNil(t, metric.New(strings.UpperAlfa))
+	assert.NotNil(t, metric.New(stringsConstant.UpperAlfa))
 	assert.NotNil(t, round_tripper.New("", ""))
 	assert.NotNil(t, rule_list.New())
 }

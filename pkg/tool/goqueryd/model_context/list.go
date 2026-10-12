@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	generative "github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
@@ -33,8 +33,8 @@ func (s *Server) list(
 	outcome, f := s.service.ListDocuments(
 		collection,
 		metadata,
-		q.GetInt(generative.ParameterLimit, 10),
-		q.GetInt(generative.ParameterOffset, 0),
+		q.GetInt(generativeConstant.ParameterLimit, 10),
+		q.GetInt(generativeConstant.ParameterOffset, 0),
 		q.GetBool(constant.Full, false),
 	)
 

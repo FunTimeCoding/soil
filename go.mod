@@ -64,6 +64,7 @@ require (
 	github.com/oapi-codegen/runtime v1.7.0
 	github.com/ollama/ollama v0.40.3
 	github.com/openai/openai-go/v3 v3.76.0
+	github.com/openbao/openbao/api/auth/kubernetes/v2 v2.7.0
 	github.com/openbao/openbao/api/v2 v2.7.1
 	github.com/openvex/go-vex v0.2.9
 	github.com/opsgenie/opsgenie-go-sdk-v2 v1.2.23

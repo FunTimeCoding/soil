@@ -2,7 +2,7 @@ package gohook
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
-	git "github.com/funtimecoding/soil/pkg/git/constant"
+	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/gohook/configuration"
 	"github.com/funtimecoding/soil/pkg/tool/gohook/constant"
@@ -13,7 +13,7 @@ import (
 func Uninstall(c *configuration.Configuration) {
 	directory := c.HooksDirectory()
 
-	for _, name := range git.Hooks {
+	for _, name := range gitConstant.Hooks {
 		path := filepath.Join(directory, name)
 
 		if !system.FileExists(path) {

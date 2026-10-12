@@ -2,7 +2,7 @@ package package_server_tester
 
 import (
 	"fmt"
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/linux/alpine/packager"
@@ -19,7 +19,7 @@ func CreateTestPackage(
 	p := packager.NewCustom(
 		packager.WithExecutablePath(scriptPath),
 		packager.WithExecutableName("test-binary"),
-		packager.WithPackageVersion(library.DefaultVersion),
+		packager.WithPackageVersion(soil.DefaultVersion),
 		packager.WithWorkDirectory(filepath.Join(directory, "workspace")),
 		packager.WithControlDirectory(
 			filepath.Join(

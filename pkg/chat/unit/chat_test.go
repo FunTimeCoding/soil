@@ -2,53 +2,47 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	chatConstant "github.com/funtimecoding/soil/pkg/chat/constant"
+	"github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/post"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/reaction"
 	"github.com/funtimecoding/soil/pkg/chat/telegram/message"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/mattermost/mattermost/server/public/model"
 	"testing"
 )
 
 func TestClient(t *testing.T) {
-	assert.String(t, "MATTERMOST_HOST", chatConstant.MattermostHostEnvironment)
-	assert.String(
-		t,
-		"MATTERMOST_TOKEN",
-		chatConstant.MattermostTokenEnvironment,
-	)
-	assert.String(t, "MATTERMOST_TEAM", chatConstant.MattermostTeamEnvironment)
+	assert.String(t, "MATTERMOST_HOST", constant.MattermostHostEnvironment)
+	assert.String(t, "MATTERMOST_TOKEN", constant.MattermostTokenEnvironment)
+	assert.String(t, "MATTERMOST_TEAM", constant.MattermostTeamEnvironment)
 	assert.String(
 		t,
 		"MATTERMOST_CHANNEL",
-		chatConstant.MattermostChannelEnvironment,
+		constant.MattermostChannelEnvironment,
 	)
 	assert.String(
 		t,
 		"MATTERMOST_INSECURE",
-		chatConstant.MattermostInsecureEnvironment,
+		constant.MattermostInsecureEnvironment,
 	)
-	assert.String(t, "construction", chatConstant.MattermostProgressReaction)
+	assert.String(t, "construction", constant.MattermostProgressReaction)
 	assert.String(
 		t,
 		"hourglass_flowing_sand",
-		chatConstant.MattermostWaitingReaction,
+		constant.MattermostWaitingReaction,
 	)
-	assert.String(t, "repeat", chatConstant.MattermostForwardedReaction)
-	assert.String(t, "thread", chatConstant.MattermostThreadReaction)
+	assert.String(t, "repeat", constant.MattermostForwardedReaction)
+	assert.String(t, "thread", constant.MattermostThreadReaction)
 }
 
 func TestConstant(t *testing.T) {
-	assert.String(t, "TELEGRAM_TOKEN", chatConstant.TelegramTokenEnvironment)
+	assert.String(t, "TELEGRAM_TOKEN", constant.TelegramTokenEnvironment)
 }
 
 func TestDecode(t *testing.T) {
 	e := &model.WebSocketEvent{}
-	e = e.SetData(
-		map[string]any{chatConstant.MattermostPostField: `{"id":"alfa"}`},
-	)
+	e = e.SetData(map[string]any{constant.MattermostPostField: `{"id":"alfa"}`})
 	assert.Any(t, &model.Post{Id: "alfa"}, post.Decode(e))
 }
 
@@ -76,7 +70,7 @@ func TestMattermostReactionDecode(t *testing.T) {
 	e := &model.WebSocketEvent{}
 	e = e.SetData(
 		map[string]any{
-			chatConstant.MattermostReactionField: `{"post_id":"alfa","emoji_name":"bravo"}`,
+			constant.MattermostReactionField: `{"post_id":"alfa","emoji_name":"bravo"}`,
 		},
 	)
 	assert.Any(
@@ -91,7 +85,7 @@ func TestMessage(t *testing.T) {
 		t,
 		message.New(
 			&tgbotapi.Message{
-				From: &tgbotapi.User{UserName: constant.UpperAlfa},
+				From: &tgbotapi.User{UserName: stringsConstant.UpperAlfa},
 			},
 		),
 	)

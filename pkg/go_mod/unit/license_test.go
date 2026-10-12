@@ -3,10 +3,10 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/assert/fixture"
-	go_mod "github.com/funtimecoding/soil/pkg/go_mod/constant"
+	"github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/go_mod/dependency"
 	"github.com/funtimecoding/soil/pkg/go_mod/license"
-	"github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"testing"
 )
 
@@ -14,12 +14,12 @@ func TestLicenseScanPermissive(t *testing.T) {
 	assert.Strings(
 		t,
 		[]string{"MIT"},
-		license.Scan(fixture.Read(constant.LicensePath, "mit.txt")),
+		license.Scan(fixture.Read(systemConstant.LicensePath, "mit.txt")),
 	)
 	assert.Strings(
 		t,
 		[]string{"Apache-2.0"},
-		license.Scan(fixture.Read(constant.LicensePath, "apache.txt")),
+		license.Scan(fixture.Read(systemConstant.LicensePath, "apache.txt")),
 	)
 }
 
@@ -27,12 +27,12 @@ func TestLicenseScanCopyleft(t *testing.T) {
 	assert.Strings(
 		t,
 		[]string{"MPL-2.0"},
-		license.Scan(fixture.Read(constant.LicensePath, "mozilla.txt")),
+		license.Scan(fixture.Read(systemConstant.LicensePath, "mozilla.txt")),
 	)
 	assert.Strings(
 		t,
 		[]string{"GPL-3.0-or-later"},
-		license.Scan(fixture.Read(constant.LicensePath, "gnu.txt")),
+		license.Scan(fixture.Read(systemConstant.LicensePath, "gnu.txt")),
 	)
 }
 
@@ -40,7 +40,7 @@ func TestLicenseScanFiller(t *testing.T) {
 	assert.Count(
 		t,
 		0,
-		license.Scan(fixture.Read(constant.LicensePath, "filler.txt")),
+		license.Scan(fixture.Read(systemConstant.LicensePath, "filler.txt")),
 	)
 }
 
@@ -72,21 +72,25 @@ func TestLicenseFindFiles(t *testing.T) {
 		t,
 		[]string{"LICENSE"},
 		license.FindFiles(
-			fixture.Path(constant.LicensePath, "module", "with_license"),
+			fixture.Path(systemConstant.LicensePath, "module", "with_license"),
 		),
 	)
 	assert.Count(
 		t,
 		0,
 		license.FindFiles(
-			fixture.Path(constant.LicensePath, "module", "without_license"),
+			fixture.Path(
+				systemConstant.LicensePath,
+				"module",
+				"without_license",
+			),
 		),
 	)
 	assert.Strings(
 		t,
 		[]string{"LICENSE.BSD", "LICENSE.MPL"},
 		license.FindFiles(
-			fixture.Path(constant.LicensePath, "module", "dual_license"),
+			fixture.Path(systemConstant.LicensePath, "module", "dual_license"),
 		),
 	)
 }
@@ -95,7 +99,7 @@ func TestDependencyValidateDualLicense(t *testing.T) {
 	d := dependency.New(
 		"host.example/charlie",
 		"v1.0.0",
-		fixture.Path(constant.LicensePath, "module", "dual_license"),
+		fixture.Path(systemConstant.LicensePath, "module", "dual_license"),
 	)
 	d.Validate()
 	assert.Strings(t, []string{"BSD-3-Clause", "MPL-2.0"}, d.Identifiers)
@@ -107,7 +111,7 @@ func TestDependencyValidateWithLicense(t *testing.T) {
 	d := dependency.New(
 		"host.example/alpha",
 		"v1.0.0",
-		fixture.Path(constant.LicensePath, "module", "with_license"),
+		fixture.Path(systemConstant.LicensePath, "module", "with_license"),
 	)
 	d.Validate()
 	assert.Strings(t, []string{"LICENSE"}, d.Files)
@@ -120,11 +124,11 @@ func TestDependencyValidateWithoutLicense(t *testing.T) {
 	d := dependency.New(
 		"host.example/bravo",
 		"v1.0.0",
-		fixture.Path(constant.LicensePath, "module", "without_license"),
+		fixture.Path(systemConstant.LicensePath, "module", "without_license"),
 	)
 	d.Validate()
 	assert.Count(t, 0, d.Files)
 	assert.String(t, "license_unknown", d.Family)
 	assert.Strings(t, []string{"license_missing"}, d.Concerns())
-	assert.True(t, d.HasConcern(go_mod.LicenseMissing))
+	assert.True(t, d.HasConcern(constant.LicenseMissing))
 }

@@ -3,15 +3,15 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
-	lintConstant "github.com/funtimecoding/soil/pkg/lint/constant"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	"github.com/funtimecoding/soil/pkg/lint/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 	"testing"
 )
 
 func TestVariableErrorAssignment(t *testing.T) {
 	l := lint.Variable(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"package example\n\nfunc Example() {\n\terr := foo()\n}\n",
 		),
@@ -22,10 +22,10 @@ func TestVariableErrorAssignment(t *testing.T) {
 		true,
 		[]*concern.Concern{
 			{
-				Key:      lintConstant.ErrorVariableKey,
+				Key:      constant.ErrorVariableKey,
 				Text:     "Use e instead of err for error variable",
 				Path:     "Alfa",
-				Type:     lintConstant.ConcernLine,
+				Type:     constant.ConcernLine,
 				Line:     4,
 				LineText: "\terr := foo()",
 			},
@@ -37,7 +37,7 @@ func TestVariableErrorAssignment(t *testing.T) {
 
 func TestVariableErrorMultiReturn(t *testing.T) {
 	l := lint.Variable(
-		constant.UpperBravo,
+		stringsConstant.UpperBravo,
 		strings.NewReader(
 			"package example\n\nfunc Example() {\n\tx, err := foo()\n}\n",
 		),
@@ -48,10 +48,10 @@ func TestVariableErrorMultiReturn(t *testing.T) {
 		true,
 		[]*concern.Concern{
 			{
-				Key:      lintConstant.ErrorVariableKey,
+				Key:      constant.ErrorVariableKey,
 				Text:     "Use e instead of err for error variable",
 				Path:     "Bravo",
-				Type:     lintConstant.ConcernLine,
+				Type:     constant.ConcernLine,
 				Line:     4,
 				LineText: "\tx, err := foo()",
 			},
@@ -63,7 +63,7 @@ func TestVariableErrorMultiReturn(t *testing.T) {
 
 func TestVariableErrorComparison(t *testing.T) {
 	l := lint.Variable(
-		constant.UpperCharlie,
+		stringsConstant.UpperCharlie,
 		strings.NewReader(
 			"package example\n\nfunc Example() bool {\n\treturn err == nil\n}\n",
 		),
@@ -73,7 +73,7 @@ func TestVariableErrorComparison(t *testing.T) {
 
 func TestVariableEOkay(t *testing.T) {
 	l := lint.Variable(
-		constant.UpperDelta,
+		stringsConstant.UpperDelta,
 		strings.NewReader(
 			"package example\n\nfunc Example() {\n\te := foo()\n}\n",
 		),
@@ -83,7 +83,7 @@ func TestVariableEOkay(t *testing.T) {
 
 func TestVariableErrorInString(t *testing.T) {
 	l := lint.Variable(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"package example\n\nfunc Example() {\n\ts := \"err := foo()\"\n\t_ = s\n}\n",
 		),
@@ -93,7 +93,7 @@ func TestVariableErrorInString(t *testing.T) {
 
 func TestVariableErrorComment(t *testing.T) {
 	l := lint.Variable(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader("package example\n\n// err := foo()\n"),
 	)
 	assertReport(t, "Alfa", false, nil, "", l)

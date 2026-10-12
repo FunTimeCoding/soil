@@ -7,7 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/types/target"
-	outpostConstant "github.com/funtimecoding/soil/pkg/tool/gooutpostd/constant"
+	gooutpostdConstant "github.com/funtimecoding/soil/pkg/tool/gooutpostd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gooutpostd/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/locator"
@@ -15,14 +15,14 @@ import (
 
 func NewOptional(l *logger.Logger) *Collector {
 	hosts := environment.Optional(constant.OutpostHostsEnvironment)
-	token := environment.Optional(outpostConstant.TokenEnvironment)
+	token := environment.Optional(gooutpostdConstant.TokenEnvironment)
 
 	if hosts == "" || token == "" {
 		return nil
 	}
 
-	port := environment.RequiredInteger(outpostConstant.PortEnvironment)
-	insecure := environment.Exists(outpostConstant.InsecureEnvironment)
+	port := environment.RequiredInteger(gooutpostdConstant.PortEnvironment)
+	insecure := environment.Exists(gooutpostdConstant.InsecureEnvironment)
 	var targets []*target.Target
 
 	for _, host := range split.Comma(hosts) {

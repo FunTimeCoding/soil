@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
-	gogated "github.com/funtimecoding/soil/pkg/tool/gogated/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gogated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/types/result"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/google/uuid"
 	"net/http"
 	"net/url"
@@ -46,8 +46,8 @@ func (o *Tester) Authorize(
 	}
 
 	postForm := url.Values{
-		"mail":     {gogated.FixtureMail},
-		"password": {gogated.FixturePassword},
+		"mail":     {constant.FixtureMail},
+		"password": {constant.FixturePassword},
 	}
 	postRequest, e := http.NewRequest(
 		http.MethodPost,
@@ -55,7 +55,7 @@ func (o *Tester) Authorize(
 		nil,
 	)
 	assert.FatalOnError(t, e)
-	postRequest.Header.Set(constant.ContentType, constant.FormEncoded)
+	postRequest.Header.Set(webConstant.ContentType, webConstant.FormEncoded)
 	postRequest.Body = http.NoBody
 	postRequest.URL.RawQuery = ""
 	formEncoded := postForm.Encode()
@@ -65,7 +65,7 @@ func (o *Tester) Authorize(
 		stringReader(formEncoded),
 	)
 	assert.FatalOnError(t, e)
-	postRequest.Header.Set(constant.ContentType, constant.FormEncoded)
+	postRequest.Header.Set(webConstant.ContentType, webConstant.FormEncoded)
 	postRequest.AddCookie(sessionCookie)
 	postResponse, e := o.client.Do(postRequest)
 	assert.FatalOnError(t, e)
@@ -78,7 +78,7 @@ func (o *Tester) Authorize(
 
 	parsed, e := url.Parse(location)
 	assert.FatalOnError(t, e)
-	code := parsed.Query().Get(gogated.ResponseCode)
+	code := parsed.Query().Get(constant.ResponseCode)
 
 	if code == "" {
 		t.Fatalf("no code in redirect: %s", location)
@@ -88,7 +88,7 @@ func (o *Tester) Authorize(
 	var authenticationCookie *http.Cookie
 
 	for _, c := range postResponse.Cookies() {
-		if c.Name == gogated.AuthenticationCookieName {
+		if c.Name == constant.AuthenticationCookieName {
 			authenticationCookie = c
 		}
 	}

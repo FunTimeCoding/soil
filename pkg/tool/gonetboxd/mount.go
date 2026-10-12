@@ -6,7 +6,7 @@ import (
 	generated "github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/server"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/web"
 	soilWeb "github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/constant"
@@ -16,8 +16,8 @@ import (
 
 func Mount(
 	c netbox.NetboxSource,
+	v *service.Service,
 	b *web.Server,
-	s *store.Store,
 	r face.Reporter,
 	t face.Recorder,
 	g *guard.Mux,
@@ -26,7 +26,7 @@ func Mount(
 		constant.InterfacePath,
 		generated.HandlerFromMux(
 			generated.NewStrictHandler(
-				server.New(c, s, r),
+				server.New(c, v, r),
 				[]generated.StrictMiddlewareFunc{
 					soilWeb.RecordingMiddleware[generated.StrictHandlerFunc](t),
 				},
@@ -34,6 +34,6 @@ func Mount(
 			http.NewServeMux(),
 		),
 	)
-	model_context.New(c, s, r, t).Mount(g)
+	model_context.New(c, v, r, t).Mount(g)
 	b.Mount(g)
 }

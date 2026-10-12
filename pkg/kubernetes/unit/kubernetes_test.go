@@ -4,14 +4,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/kubernetes"
 	"github.com/funtimecoding/soil/pkg/kubernetes/client"
-	kubernetesConstant "github.com/funtimecoding/soil/pkg/kubernetes/constant"
+	"github.com/funtimecoding/soil/pkg/kubernetes/constant"
 	"github.com/funtimecoding/soil/pkg/kubernetes/markup"
 	"github.com/funtimecoding/soil/pkg/kubernetes/notation"
 	"github.com/funtimecoding/soil/pkg/kubernetes/types/native/event"
 	"github.com/funtimecoding/soil/pkg/kubernetes/types/native/namespace"
 	"github.com/funtimecoding/soil/pkg/kubernetes/types/native/node"
 	"github.com/funtimecoding/soil/pkg/kubernetes/types/native/pod"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	core "k8s.io/api/core/v1"
 	events "k8s.io/api/events/v1"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -21,17 +21,13 @@ import (
 )
 
 func TestConstant(t *testing.T) {
-	assert.String(
-		t,
-		"KUBERNETES_CONTEXT",
-		kubernetesConstant.ContextEnvironment,
-	)
-	assert.String(t, "type=Normal", kubernetesConstant.TypeNormal)
-	assert.String(t, "pods", kubernetesConstant.PodsResource)
+	assert.String(t, "KUBERNETES_CONTEXT", constant.ContextEnvironment)
+	assert.String(t, "type=Normal", constant.TypeNormal)
+	assert.String(t, "pods", constant.PodsResource)
 }
 
 func TestValidateName(t *testing.T) {
-	kubernetes.ValidateName(constant.LowerAlfa)
+	kubernetes.ValidateName(stringsConstant.LowerAlfa)
 }
 
 func TestFromConfiguration(t *testing.T) {
@@ -60,7 +56,9 @@ func TestEvent(t *testing.T) {
 	assert.NotNil(
 		t,
 		event.New(
-			&events.Event{ObjectMeta: meta.ObjectMeta{Name: constant.UpperAlfa}},
+			&events.Event{
+				ObjectMeta: meta.ObjectMeta{Name: stringsConstant.UpperAlfa},
+			},
 			"",
 		),
 	)
@@ -71,7 +69,7 @@ func TestNamespace(t *testing.T) {
 		t,
 		namespace.New(
 			&core.Namespace{
-				ObjectMeta: meta.ObjectMeta{Name: constant.UpperAlfa},
+				ObjectMeta: meta.ObjectMeta{Name: stringsConstant.UpperAlfa},
 			},
 			"",
 		),
@@ -82,7 +80,9 @@ func TestNode(t *testing.T) {
 	assert.NotNil(
 		t,
 		node.New(
-			&core.Node{ObjectMeta: meta.ObjectMeta{Name: constant.UpperAlfa}},
+			&core.Node{
+				ObjectMeta: meta.ObjectMeta{Name: stringsConstant.UpperAlfa},
+			},
 			"",
 		),
 	)
@@ -92,7 +92,9 @@ func TestPod(t *testing.T) {
 	assert.NotNil(
 		t,
 		pod.New(
-			&core.Pod{ObjectMeta: meta.ObjectMeta{Name: constant.UpperAlfa}},
+			&core.Pod{
+				ObjectMeta: meta.ObjectMeta{Name: stringsConstant.UpperAlfa},
+			},
 			"",
 		),
 	)

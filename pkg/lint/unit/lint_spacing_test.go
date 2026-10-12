@@ -4,14 +4,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/spacing"
-	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 	"testing"
 )
 
 func TestSpacingRawStringBraceIsNotABlock(t *testing.T) {
 	l := spacing.Check(
-		stringConstant.UpperDelta,
+		stringsConstant.UpperDelta,
 		strings.NewReader(
 			"package example\n\nvar Script = `(function() {\n\treturn 1;\n})()`\n\nvar Pattern = 1\n",
 		),
@@ -28,7 +28,7 @@ func TestSpacingRawStringBraceIsNotABlock(t *testing.T) {
 
 func TestSpacingTopLevelRulesSurviveRawString(t *testing.T) {
 	l := spacing.Check(
-		stringConstant.UpperEcho,
+		stringsConstant.UpperEcho,
 		strings.NewReader(
 			"package example\n\nvar Script = `(function() {\n\treturn 1;\n})()`\n\nvar A = 1\nconst B = 2\n",
 		),
@@ -55,7 +55,7 @@ func TestSpacingTopLevelRulesSurviveRawString(t *testing.T) {
 
 func TestSpacingBlankBeforeControl(t *testing.T) {
 	l := spacing.Check(
-		stringConstant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"package example\n\nfunc Example() {\n\tx := 1\n\tif x > 0 {\n\t\tfmt.Println(x)\n\t}\n}\n",
 		),
@@ -82,7 +82,7 @@ func TestSpacingBlankBeforeControl(t *testing.T) {
 
 func TestSpacingBlankBeforeReturn(t *testing.T) {
 	l := spacing.Check(
-		stringConstant.UpperBravo,
+		stringsConstant.UpperBravo,
 		strings.NewReader(
 			"package example\n\nfunc Example() int {\n\tx := 1\n\treturn x\n}\n",
 		),
@@ -109,7 +109,7 @@ func TestSpacingBlankBeforeReturn(t *testing.T) {
 
 func TestSpacingBlankAfterControl(t *testing.T) {
 	l := spacing.Check(
-		stringConstant.UpperCharlie,
+		stringsConstant.UpperCharlie,
 		strings.NewReader(
 			"package example\n\nfunc Example() {\n\tx := 1\n\n\tif true {\n\t\tfmt.Println(\"a\")\n\t}\n\tfmt.Println(\"b\")\n}\n",
 		),
@@ -136,7 +136,7 @@ func TestSpacingBlankAfterControl(t *testing.T) {
 
 func TestSpacingReturnFirstInBlock(t *testing.T) {
 	l := spacing.Check(
-		stringConstant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"package example\n\nfunc Example() int {\n\treturn 1\n}\n",
 		),
@@ -153,7 +153,7 @@ func TestSpacingReturnFirstInBlock(t *testing.T) {
 
 func TestSpacingControlFirstInBlock(t *testing.T) {
 	l := spacing.Check(
-		stringConstant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"package example\n\nfunc Example() {\n\tif true {\n\t\tfmt.Println(\"a\")\n\t}\n}\n",
 		),
@@ -170,7 +170,7 @@ func TestSpacingControlFirstInBlock(t *testing.T) {
 
 func TestSpacingConsecutiveClosingBraces(t *testing.T) {
 	l := spacing.Check(
-		stringConstant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"package example\n\nfunc Example() {\n\tif true {\n\t\tif true {\n\t\t\tfmt.Println(\"a\")\n\t\t}\n\t}\n}\n",
 		),
@@ -187,7 +187,7 @@ func TestSpacingConsecutiveClosingBraces(t *testing.T) {
 
 func TestSpacingElse(t *testing.T) {
 	l := spacing.Check(
-		stringConstant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"package example\n\nfunc Example() {\n\tif true {\n\t\tfmt.Println(\"a\")\n\t} else {\n\t\tfmt.Println(\"b\")\n\t}\n}\n",
 		),
@@ -204,7 +204,7 @@ func TestSpacingElse(t *testing.T) {
 
 func TestSpacingExtraneousBlanks(t *testing.T) {
 	l := spacing.Check(
-		stringConstant.UpperDelta,
+		stringsConstant.UpperDelta,
 		strings.NewReader(
 			"package example\n\nfunc Example() {\n\tx := 1\n\n\n\ty := 2\n}\n",
 		),
@@ -240,7 +240,7 @@ func TestSpacingExtraneousBlanks(t *testing.T) {
 
 func TestSpacingClean(t *testing.T) {
 	l := spacing.Check(
-		stringConstant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"package example\n\nfunc Example() {\n\tfmt.Println(\"a\")\n}\n",
 		),
@@ -257,7 +257,7 @@ func TestSpacingClean(t *testing.T) {
 
 func TestSpacingClosingBraceBeforeDefault(t *testing.T) {
 	l := spacing.Check(
-		stringConstant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"package example\n\nfunc Example(x int) {\n\tswitch x {\n\tcase 1:\n\t\tif x > 0 {\n\t\t\tfmt.Println(\"a\")\n\t\t}\n\tdefault:\n\t\tfmt.Println(\"b\")\n\t}\n}\n",
 		),
@@ -274,7 +274,7 @@ func TestSpacingClosingBraceBeforeDefault(t *testing.T) {
 
 func TestSpacingClosingBraceBeforeComma(t *testing.T) {
 	l := spacing.Check(
-		stringConstant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"package example\n\nfunc Example(run func()) {\n\trun()\n}\n\nfunc Call() {\n\tExample(func() {\n\t\tif true {\n\t\t\tfmt.Println(\"a\")\n\t\t}\n\t})\n}\n",
 		),
@@ -291,7 +291,7 @@ func TestSpacingClosingBraceBeforeComma(t *testing.T) {
 
 func TestSpacingContinueAsIdentifierPrefix(t *testing.T) {
 	l := spacing.Check(
-		stringConstant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"package example\n\nfunc Example(\n\tcontinueOnError bool,\n) {\n\tfmt.Println(continueOnError)\n}\n",
 		),
@@ -308,7 +308,7 @@ func TestSpacingContinueAsIdentifierPrefix(t *testing.T) {
 
 func TestSpacingCommentBeforeControl(t *testing.T) {
 	l := spacing.Check(
-		stringConstant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"package example\n\nfunc Example() {\n\tx := 1\n\t// Check condition\n\tif x > 0 {\n\t\tfmt.Println(x)\n\t}\n}\n",
 		),
@@ -325,7 +325,7 @@ func TestSpacingCommentBeforeControl(t *testing.T) {
 
 func TestSpacingCompositeLiteralInFunction(t *testing.T) {
 	l := spacing.Check(
-		stringConstant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"package example\n\nfunc Example() {\n\tx := map[string]int{\n\t\t\"a\": 1,\n\t}\n\ty := 2\n}\n",
 		),
@@ -342,7 +342,7 @@ func TestSpacingCompositeLiteralInFunction(t *testing.T) {
 
 func TestSpacingRawStringLiteral(t *testing.T) {
 	l := spacing.Check(
-		stringConstant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"package example\n\nvar Template = `\nif (x) {\n\treturn false;\n}\ny = 1;\n`\n",
 		),
@@ -359,7 +359,7 @@ func TestSpacingRawStringLiteral(t *testing.T) {
 
 func TestSpacingVariableBlockCompositeLiteral(t *testing.T) {
 	l := spacing.Check(
-		stringConstant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"package example\n\nvar (\n\tStatuses = []string{\n\t\t\"open\",\n\t\t\"closed\",\n\t}\n\tOther = \"other\"\n)\n",
 		),
@@ -376,7 +376,7 @@ func TestSpacingVariableBlockCompositeLiteral(t *testing.T) {
 
 func TestSpacingBlankBetweenAssignments(t *testing.T) {
 	l := spacing.Check(
-		stringConstant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"package example\n\nfunc Example() {\n\tx := 1\n\n\ty := 2\n}\n",
 		),
@@ -403,7 +403,7 @@ func TestSpacingBlankBetweenAssignments(t *testing.T) {
 
 func TestSpacingBlankAtStartOfFunction(t *testing.T) {
 	l := spacing.Check(
-		stringConstant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"package example\n\nfunc Example() {\n\n\tx := 1\n}\n",
 		),
@@ -430,7 +430,7 @@ func TestSpacingBlankAtStartOfFunction(t *testing.T) {
 
 func TestSpacingBlankAtEndOfFunction(t *testing.T) {
 	l := spacing.Check(
-		stringConstant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"package example\n\nfunc Example() {\n\tx := 1\n\n}\n",
 		),
@@ -457,7 +457,7 @@ func TestSpacingBlankAtEndOfFunction(t *testing.T) {
 
 func TestSpacingBlankBeforeReturnFirstInBlock(t *testing.T) {
 	l := spacing.Check(
-		stringConstant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"package example\n\nfunc Example() int {\n\n\treturn 1\n}\n",
 		),
@@ -484,7 +484,7 @@ func TestSpacingBlankBeforeReturnFirstInBlock(t *testing.T) {
 
 func TestSpacingBlankBetweenAssignmentsInNestedBlock(t *testing.T) {
 	l := spacing.Check(
-		stringConstant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"package example\n\nfunc Example() {\n\tif true {\n\t\tx := 1\n\n\t\ty := 2\n\t}\n}\n",
 		),
@@ -511,7 +511,7 @@ func TestSpacingBlankBetweenAssignmentsInNestedBlock(t *testing.T) {
 
 func TestSpacingBlankAfterControlBeforeStatement(t *testing.T) {
 	l := spacing.Check(
-		stringConstant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"package example\n\nfunc Example() {\n\tif true {\n\t\tfmt.Println(\"a\")\n\t}\n\n\tfmt.Println(\"b\")\n}\n",
 		),
@@ -528,7 +528,7 @@ func TestSpacingBlankAfterControlBeforeStatement(t *testing.T) {
 
 func TestSpacingBlankBeforeIfInFunction(t *testing.T) {
 	l := spacing.Check(
-		stringConstant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"package example\n\nfunc Example() {\n\tx := 1\n\n\tif x > 0 {\n\t\tfmt.Println(x)\n\t}\n}\n",
 		),
@@ -545,7 +545,7 @@ func TestSpacingBlankBeforeIfInFunction(t *testing.T) {
 
 func TestSpacingBlankInFunctionLiteral(t *testing.T) {
 	l := spacing.Check(
-		stringConstant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"package example\n\nfunc Example() {\n\tf := func() {\n\t\tx := 1\n\n\t\ty := 2\n\t}\n\tf()\n}\n",
 		),
@@ -589,7 +589,7 @@ func TestSpacingCompositeLiteralCloserDoesNotLeakDepth(t *testing.T) {
 
 func TestSpacingBlankBeforeCommentBeforeControl(t *testing.T) {
 	l := spacing.Check(
-		stringConstant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"package example\n\nfunc Example() {\n\tx := 1\n\n\t// check\n\tif x > 0 {\n\t\tfmt.Println(x)\n\t}\n}\n",
 		),
@@ -606,7 +606,7 @@ func TestSpacingBlankBeforeCommentBeforeControl(t *testing.T) {
 
 func TestSpacingBlankBeforeCommentBeforeAssignment(t *testing.T) {
 	l := spacing.Check(
-		stringConstant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"package example\n\nfunc Example() {\n\tx := 1\n\n\t// note\n\ty := 2\n}\n",
 		),
@@ -889,7 +889,7 @@ func TestSpacingMultiLineConditionThreeLineBlankAfterControl(t *testing.T) {
 
 func TestSpacingDoubleBlankAfterClosingBrace(t *testing.T) {
 	l := spacing.Check(
-		stringConstant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"package example\n\nfunc Example() {\n\tif true {\n\t\tfmt.Println(\"a\")\n\t}\n\n\n\tfmt.Println(\"b\")\n}\n",
 		),
@@ -916,6 +916,6 @@ func TestSpacingDoubleBlankAfterClosingBrace(t *testing.T) {
 
 func TestSpacingKeepsBlankAfterRangeWithMultilineLiteral(t *testing.T) {
 	source := "package example\n\nfunc Example() {\n\tvar total int\n\n\tfor _, name := range []string{\n\t\t\"alfa\",\n\t\t\"bravo\",\n\t} {\n\t\ttotal += len(name)\n\t}\n\n\tfmt.Println(total)\n}\n"
-	l := spacing.Check(stringConstant.UpperAlfa, strings.NewReader(source))
+	l := spacing.Check(stringsConstant.UpperAlfa, strings.NewReader(source))
 	assertReport(t, "Alfa", false, nil, source, l)
 }

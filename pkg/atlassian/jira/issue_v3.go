@@ -3,7 +3,7 @@ package jira
 import (
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/console"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 )
 
 func (c *Client) IssueV3(key string) error {
@@ -13,7 +13,7 @@ func (c *Client) IssueV3(key string) error {
 			constant.JiraIssue,
 			key,
 		).Set(
-			web.ParameterFields,
+			webConstant.ParameterFields,
 			constant.JiraAllFields,
 		).String(),
 	)

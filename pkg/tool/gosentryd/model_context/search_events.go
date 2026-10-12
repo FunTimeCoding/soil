@@ -13,26 +13,14 @@ func (s *Server) SearchEvents(
 	_ mcp.CallToolRequest,
 	a argument.SearchEvents,
 ) (*mcp.CallToolResult, error) {
-	project, e := s.resolveProject(a.Project)
+	result, e := s.service.SearchEvents(a.Query, a.Project, a.Limit, a.Cursor)
 
-	if e != nil {
-		if not_found.Is(e) {
-			return response.Fail(e.Error())
-		}
-
-		return s.captureDetail(e)
+	if not_found.Is(e) {
+		return response.Fail(e.Error())
 	}
 
-	result, f := s.client.SearchEvents(
-		s.organization,
-		a.Query,
-		project,
-		a.Limit,
-		a.Cursor,
-	)
-
-	if f != nil {
-		return s.captureDetail(f)
+	if e != nil {
+		return s.captureDetail(e)
 	}
 
 	return s.succeed(result)

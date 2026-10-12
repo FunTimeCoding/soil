@@ -3,7 +3,7 @@ package gocat
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	"github.com/funtimecoding/soil/pkg/console"
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/strings/slice"
 	"github.com/funtimecoding/soil/pkg/strings/split"
@@ -20,8 +20,8 @@ func Main() {
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Parse()
-	pattern := filepath.Join(library.CurrentDirectory, "*.go")
-	files := slice.StripSuffix(system.Glob(pattern), library.TestSuffix)
+	pattern := filepath.Join(soil.CurrentDirectory, "*.go")
+	files := slice.StripSuffix(system.Glob(pattern), soil.TestSuffix)
 
 	if len(files) == 0 {
 		console.Line("No relevant files")

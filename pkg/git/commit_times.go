@@ -1,7 +1,7 @@
 package git
 
 import (
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/strings/split"
 	"github.com/funtimecoding/soil/pkg/system/run"
@@ -19,7 +19,7 @@ func CommitTimes(directory string) (map[string]time.Time, error) {
 		constant.NameOnly,
 		constant.Relative,
 		constant.Pathspec,
-		library.CurrentDirectory,
+		soil.CurrentDirectory,
 	)
 
 	if r.Error != nil {

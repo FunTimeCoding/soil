@@ -3,8 +3,8 @@ package issue
 import (
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/check/issue/option"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
-	"github.com/funtimecoding/soil/pkg/constant"
-	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
+	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/report"
 )
 
@@ -14,11 +14,11 @@ func printNotation(
 ) {
 	r := report.New()
 
-	for _, e := range report.Trim(v, r, o.All, monitor.GoJira) {
+	for _, e := range report.Trim(v, r, o.All, monitorConstant.GoJira) {
 		r.AddItem(
-			monitor.GoJira,
+			monitorConstant.GoJira,
 			e.MonitorIdentifier,
-			constant.Warning,
+			soil.Warning,
 			e.Summary,
 			e.Link,
 			e.Create,

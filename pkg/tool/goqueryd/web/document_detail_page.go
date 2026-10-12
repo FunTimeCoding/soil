@@ -2,7 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -19,7 +19,7 @@ func (s *Server) documentDetailPage(
 		s.view.RenderPage(
 			w,
 			"Error",
-			web.SearchPath,
+			webConstant.SearchPath,
 			html.P(gomponents.Textf("Failed to load document: %s", e.Error())),
 		)
 
@@ -45,7 +45,7 @@ func (s *Server) documentDetailPage(
 			content = append(content, html.Ul(items...))
 		}
 
-		s.view.RenderPage(w, "Not Found", web.SearchPath, content...)
+		s.view.RenderPage(w, "Not Found", webConstant.SearchPath, content...)
 
 		return
 	}

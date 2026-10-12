@@ -2,23 +2,23 @@ package clean
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
-	git "github.com/funtimecoding/soil/pkg/git/constant"
+	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclean/clean/option"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"strings"
 )
 
 func Run(o *option.Clean) {
-	o.GitLabHost = strings.TrimPrefix(o.GitLabHost, constant.SecurePrefix)
+	o.GitLabHost = strings.TrimPrefix(o.GitLabHost, webConstant.SecurePrefix)
 	m := providerMap(o)
 	r := originRemote(o, m)
 
 	switch r.Provider {
-	case git.GitHubProvider:
+	case gitConstant.GitHubProvider:
 		Hub(r)
-	case git.GitLabProvider:
+	case gitConstant.GitLabProvider:
 		Lab(o, r)
-	case git.UnknownProvider:
+	case gitConstant.UnknownProvider:
 		console.Line("Unknown provider, nothing to clean")
 	}
 }

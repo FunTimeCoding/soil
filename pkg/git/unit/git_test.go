@@ -3,9 +3,9 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/git"
-	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
+	"github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/git/remote"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/contains"
 	"os"
 	"path/filepath"
@@ -13,9 +13,9 @@ import (
 )
 
 func TestConstant(t *testing.T) {
-	assert.String(t, "v", gitConstant.VersionPrefix)
-	assert.String(t, "HEAD", gitConstant.HeadReference)
-	assert.Integer(t, 7, gitConstant.HashLength)
+	assert.String(t, "v", constant.VersionPrefix)
+	assert.String(t, "HEAD", constant.HeadReference)
+	assert.Integer(t, 7, constant.HashLength)
 }
 
 func TestBranchIsMainOrDetachedHead(t *testing.T) {
@@ -23,7 +23,7 @@ func TestBranchIsMainOrDetachedHead(t *testing.T) {
 		t,
 		contains.Any(
 			[]string{git.Branch(git.FindDirectory())},
-			[]string{gitConstant.MainBranch, gitConstant.HeadReference},
+			[]string{constant.MainBranch, constant.HeadReference},
 		),
 	)
 }
@@ -74,9 +74,9 @@ func TestRemote(t *testing.T) {
 		t,
 		&remote.Remote{Name: "Alfa", Locator: "Bravo", Provider: "Charlie"},
 		remote.New(
-			constant.UpperAlfa,
-			constant.UpperBravo,
-			constant.UpperCharlie,
+			stringsConstant.UpperAlfa,
+			stringsConstant.UpperBravo,
+			stringsConstant.UpperCharlie,
 		),
 	)
 }

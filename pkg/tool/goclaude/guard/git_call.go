@@ -7,4 +7,5 @@ type GitCall struct {
 	readable   bool
 	arguments  []*syntax.Word
 	fromInput  bool
+	hidden     bool
 }

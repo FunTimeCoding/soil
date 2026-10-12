@@ -1,9 +1,9 @@
 package integration
 
 import (
-	"github.com/funtimecoding/soil/pkg/git/constant"
+	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	system "github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/run"
 	"os"
 )
@@ -17,11 +17,11 @@ func attempt(
 	r.Panic = false
 	r.Directory = directory
 	r.Environment(
-		system.PathEnvironment,
+		systemConstant.PathEnvironment,
 		join.Empty(
 			binaryDirectory(),
 			string(os.PathListSeparator),
-			os.Getenv(system.PathEnvironment),
+			os.Getenv(systemConstant.PathEnvironment),
 		),
 	)
 
@@ -29,7 +29,7 @@ func attempt(
 		r.Environment(k, v)
 	}
 
-	r.Start(append([]string{constant.Command}, arguments...)...)
+	r.Start(append([]string{gitConstant.Command}, arguments...)...)
 
 	return r
 }

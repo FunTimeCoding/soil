@@ -9,12 +9,15 @@ import (
 )
 
 func (c *Client) CreateDevice(
-	_ string,
+	name string,
 	_ *device_role.Role,
-	_ []string,
+	tags []string,
 	_ *device_type.Type,
 	_ *site.Site,
-	_ *tenant.Tenant,
+	n *tenant.Tenant,
 ) (*device.Device, error) {
-	return nil, nil
+	result := newDevice(c.nextIdentifier(), name, tags, n)
+	c.devices = append(c.devices, result)
+
+	return result, nil
 }

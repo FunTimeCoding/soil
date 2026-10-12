@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/fetch"
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/tick"
-	console "github.com/funtimecoding/soil/pkg/console/constant"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status"
 	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 )
@@ -17,7 +17,7 @@ func (m *Model) tickEvent(_ tick.Message) (*Model, tea.Cmd) {
 		result = append(result, fetch.Command())
 	}
 
-	f := console.ExtendedColorFormat.Copy()
+	f := consoleConstant.ExtendedColorFormat.Copy()
 	top := status.New(f).String()
 	top.String(fmt.Sprintf("items: %d", len(m.table.Rows())))
 

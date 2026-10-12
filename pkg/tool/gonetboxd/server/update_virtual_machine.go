@@ -4,93 +4,29 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/types/machine_change"
 )
 
 func (s *Server) UpdateVirtualMachine(
 	_ context.Context,
 	r server.UpdateVirtualMachineRequestObject,
 ) (server.UpdateVirtualMachineResponseObject, error) {
-	if r.Body.PrimaryAddress != nil {
-		if _, e := s.client.SetVirtualMachinePrimaryAddress(
-			r.Name,
-			*r.Body.PrimaryAddress,
-		); e != nil {
-			return server.UpdateVirtualMachine500JSONResponse(
-				*s.captureDetail(e),
-			), nil
-		}
-	}
-
-	if r.Body.Platform != nil {
-		if _, e := s.client.SetVirtualMachinePlatform(
-			r.Name,
-			*r.Body.Platform,
-		); e != nil {
-			return server.UpdateVirtualMachine500JSONResponse(
-				*s.captureDetail(e),
-			), nil
-		}
-	}
-
-	if r.Body.Tenant != nil {
-		if _, e := s.client.SetVirtualMachineTenant(
-			r.Name,
-			*r.Body.Tenant,
-		); e != nil {
-			return server.UpdateVirtualMachine500JSONResponse(
-				*s.captureDetail(e),
-			), nil
-		}
-	}
+	c := machine_change.New()
+	c.Name = r.Body.Name
+	c.PrimaryAddress = r.Body.PrimaryAddress
+	c.Platform = r.Body.Platform
+	c.Tenant = r.Body.Tenant
+	c.Status = r.Body.Status
 
 	if r.Body.Cores != nil {
-		if _, e := s.client.SetVirtualMachineCores(
-			r.Name,
-			float64(*r.Body.Cores),
-		); e != nil {
-			return server.UpdateVirtualMachine500JSONResponse(
-				*s.captureDetail(e),
-			), nil
-		}
+		c.Cores = new(float64(*r.Body.Cores))
 	}
 
 	if r.Body.Memory != nil {
-		if _, e := s.client.SetVirtualMachineMemory(
-			r.Name,
-			int32(*r.Body.Memory),
-		); e != nil {
-			return server.UpdateVirtualMachine500JSONResponse(
-				*s.captureDetail(e),
-			), nil
-		}
+		c.Memory = new(int32(*r.Body.Memory))
 	}
 
-	if r.Body.Status != nil {
-		if _, e := s.client.SetVirtualMachineStatus(
-			r.Name,
-			*r.Body.Status,
-		); e != nil {
-			return server.UpdateVirtualMachine500JSONResponse(
-				*s.captureDetail(e),
-			), nil
-		}
-	}
-
-	name := r.Name
-
-	if r.Body.Name != nil {
-		result, e := s.client.RenameVirtualMachine(r.Name, *r.Body.Name)
-
-		if e != nil {
-			return server.UpdateVirtualMachine500JSONResponse(
-				*s.captureDetail(e),
-			), nil
-		}
-
-		name = result.Name
-	}
-
-	m, e := s.client.VirtualMachineByName(name)
+	m, e := s.service.UpdateVirtualMachine(r.Name, c)
 
 	if e != nil {
 		return server.UpdateVirtualMachine500JSONResponse(*s.captureDetail(e)), nil

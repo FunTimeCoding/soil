@@ -6,7 +6,7 @@ import (
 	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
-	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 )
 
@@ -47,7 +47,7 @@ func (a *Alert) Format(f *option.Format) string {
 	s.String(a.formatConcern(f))
 	s.DetailLink(a.Link, linkLabel, "")
 
-	if a.Runbook != prometheus.None {
+	if a.Runbook != constant.None {
 		s.DetailLink(a.Runbook, "Runbook", "Runbook")
 	}
 
@@ -56,11 +56,11 @@ func (a *Alert) Format(f *option.Format) string {
 	}
 
 	if f.ShowExtended {
-		if a.Summary != prometheus.None {
+		if a.Summary != constant.None {
 			s.Line("  Summary: %s", a.Summary)
 		}
 
-		if a.Message != prometheus.None {
+		if a.Message != constant.None {
 			s.Line("  Message: %s", a.Message)
 		}
 

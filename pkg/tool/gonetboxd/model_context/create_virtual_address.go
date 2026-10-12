@@ -30,22 +30,15 @@ func (s *Server) createVirtualAddress(
 		return response.Fail("address is required: %v", h)
 	}
 
-	vm, i := s.client.VirtualMachineByName(vmName)
+	result, e := s.service.CreateVirtualAddress(
+		vmName,
+		interfaceName,
+		address,
+		r.GetString(constant.Status, ""),
+	)
 
-	if i != nil {
-		return s.captureFail(i, "virtual machine not found")
-	}
-
-	iface, j := s.client.VirtualMachineInterfaceByName(vm, interfaceName)
-
-	if j != nil {
-		return s.captureFail(j, "interface not found on virtual machine")
-	}
-
-	result, k := s.client.CreateVirtualAddress(iface.GetId(), address, "")
-
-	if k != nil {
-		return s.captureFail(k, "address not assigned")
+	if e != nil {
+		return s.serviceFail(e, "address not assigned")
 	}
 
 	return response.SuccessAny(convert.Address(result))

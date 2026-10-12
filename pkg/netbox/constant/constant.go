@@ -23,6 +23,7 @@ const (
 	PageLimit int32 = 1000
 
 	ObjectLinkField  = "url"
+	DeviceField      = "device"
 	InterfaceSegment = "/api/"
 
 	DeviceAddress           = "dcim.device"
@@ -31,6 +32,23 @@ const (
 	VirtualMachineAddress   = "virtualization.virtualmachine"
 
 	PrefixAddress = "ipam.prefix"
+
+	ClusterKind         = "cluster"
+	ClusterTypeKind     = "cluster type"
+	DeviceKind          = "device"
+	DeviceRoleKind      = "device role"
+	DeviceTypeKind      = "device type"
+	LocationKind        = "location"
+	ManufacturerKind    = "manufacturer"
+	PhysicalAddressKind = "physical address"
+	PlatformKind        = "platform"
+	PrefixKind          = "prefix"
+	RackKind            = "rack"
+	SiteKind            = "site"
+	TenantKind          = "tenant"
+	TunnelGroupKind     = "tunnel group"
+	TunnelKind          = "tunnel"
+	VirtualMachineKind  = "virtual machine"
 
 	Interface = "/api"
 

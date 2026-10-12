@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	git "github.com/funtimecoding/soil/pkg/git/constant"
+	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/join"
@@ -26,7 +26,10 @@ func TestDirectoryContent(t *testing.T) {
 		},
 		system.DirectoryContent(
 			join.Absolute(
-				system.FindDirectoryUp(system.WorkDirectory(), git.Directory),
+				system.FindDirectoryUp(
+					system.WorkDirectory(),
+					gitConstant.Directory,
+				),
 				constant.FixturePath,
 			),
 		),

@@ -2,9 +2,9 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/gw2/constant"
+	gw2Constant "github.com/funtimecoding/soil/pkg/gw2/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	goraidd "github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
 	"net/http"
 	"path/filepath"
 	"strings"
@@ -21,10 +21,10 @@ func (s *Server) generate(
 	for _, fileName := range fileNames {
 		base := filepath.Base(fileName)
 		timestamp := strings.TrimSuffix(base, filepath.Ext(base))
-		notationName := join.Empty(timestamp, constant.DetailedWvWKillSuffix)
+		notationName := join.Empty(timestamp, gw2Constant.DetailedWvWKillSuffix)
 		files = append(files, filepath.Join(s.elitePath, notationName))
 	}
 
 	s.parser.MustGenerate(files, nil)
-	http.Redirect(w, r, goraidd.ReportsPath, http.StatusSeeOther)
+	http.Redirect(w, r, constant.ReportsPath, http.StatusSeeOther)
 }

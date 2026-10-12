@@ -3,7 +3,7 @@ package issue
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/console/age_colorer"
-	console "github.com/funtimecoding/soil/pkg/console/constant"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/check/issue/option"
@@ -24,7 +24,7 @@ func Check(o *option.Issue) {
 	f := constant.Format
 
 	if o.Copyable {
-		f.Tag(console.TagCopyable)
+		f.Tag(consoleConstant.TagCopyable)
 	}
 
 	colorer := age_colorer.Default(elements...)

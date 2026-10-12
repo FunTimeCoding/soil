@@ -2,8 +2,8 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
-	queryConstant "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/server"
 )
 
@@ -20,7 +20,7 @@ func (s *Server) PostDocument(
 	}
 
 	if r.Body.SourceType != nil && *r.Body.SourceType != "" {
-		metadata[queryConstant.SourceType] = []string{*r.Body.SourceType}
+		metadata[constant.SourceType] = []string{*r.Body.SourceType}
 	}
 
 	e := s.service.PushDocument(
@@ -32,7 +32,7 @@ func (s *Server) PostDocument(
 
 	if e != nil {
 		return server.PostDocument500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
+			*s.captureFail(e, soil.UnexpectedError),
 		), nil
 	}
 

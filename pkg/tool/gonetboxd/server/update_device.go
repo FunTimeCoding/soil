@@ -4,79 +4,23 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/types/device_change"
 )
 
 func (s *Server) UpdateDevice(
 	_ context.Context,
 	r server.UpdateDeviceRequestObject,
 ) (server.UpdateDeviceResponseObject, error) {
-	if r.Body.PrimaryAddress != nil {
-		if _, e := s.client.SetDevicePrimaryAddress(
-			r.Name,
-			*r.Body.PrimaryAddress,
-		); e != nil {
-			return server.UpdateDevice500JSONResponse(*s.captureDetail(e)), nil
-		}
-	}
-
-	if r.Body.Location != nil {
-		if _, e := s.client.SetDeviceLocation(
-			r.Name,
-			*r.Body.Location,
-		); e != nil {
-			return server.UpdateDevice500JSONResponse(*s.captureDetail(e)), nil
-		}
-	}
-
-	if r.Body.Platform != nil {
-		if _, e := s.client.SetDevicePlatform(
-			r.Name,
-			*r.Body.Platform,
-		); e != nil {
-			return server.UpdateDevice500JSONResponse(*s.captureDetail(e)), nil
-		}
-	}
-
-	if r.Body.Tenant != nil {
-		if _, e := s.client.SetDeviceTenant(r.Name, *r.Body.Tenant); e != nil {
-			return server.UpdateDevice500JSONResponse(*s.captureDetail(e)), nil
-		}
-	}
-
-	if r.Body.Status != nil {
-		if _, e := s.client.SetDeviceStatus(r.Name, *r.Body.Status); e != nil {
-			return server.UpdateDevice500JSONResponse(*s.captureDetail(e)), nil
-		}
-	}
-
-	if r.Body.Serial != nil {
-		if _, e := s.client.SetDeviceSerial(r.Name, *r.Body.Serial); e != nil {
-			return server.UpdateDevice500JSONResponse(*s.captureDetail(e)), nil
-		}
-	}
-
-	if r.Body.Description != nil {
-		if _, e := s.client.SetDeviceDescription(
-			r.Name,
-			*r.Body.Description,
-		); e != nil {
-			return server.UpdateDevice500JSONResponse(*s.captureDetail(e)), nil
-		}
-	}
-
-	name := r.Name
-
-	if r.Body.Name != nil {
-		result, e := s.client.RenameDevice(r.Name, *r.Body.Name)
-
-		if e != nil {
-			return server.UpdateDevice500JSONResponse(*s.captureDetail(e)), nil
-		}
-
-		name = result.Name
-	}
-
-	d, e := s.client.DeviceByName(name)
+	c := device_change.New()
+	c.Name = r.Body.Name
+	c.PrimaryAddress = r.Body.PrimaryAddress
+	c.Location = r.Body.Location
+	c.Platform = r.Body.Platform
+	c.Tenant = r.Body.Tenant
+	c.Status = r.Body.Status
+	c.Serial = r.Body.Serial
+	c.Description = r.Body.Description
+	d, e := s.service.UpdateDevice(r.Name, c)
 
 	if e != nil {
 		return server.UpdateDevice500JSONResponse(*s.captureDetail(e)), nil

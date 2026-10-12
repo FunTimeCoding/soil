@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	generative "github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/convert"
@@ -14,7 +14,12 @@ func (s *Server) firewallLog(
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	result, e := s.opnsense.Log(
-		int(r.GetFloat(generative.ParameterLimit, constant.DefaultLogLimit)),
+		int(
+			r.GetFloat(
+				generativeConstant.ParameterLimit,
+				constant.DefaultLogLimit,
+			),
+		),
 	)
 
 	if e != nil {

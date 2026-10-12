@@ -1,7 +1,7 @@
 package service
 
 import (
-	atlassian "github.com/funtimecoding/soil/pkg/atlassian/constant"
+	atlassianConstant "github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/types/checklist_item"
 )
@@ -16,9 +16,9 @@ func (s *Service) ReadChecklist(key string) ([]*checklist_item.Item, error) {
 	value := i.CustomValue(constant.ChecklistField)
 
 	if value == "" ||
-		value == atlassian.JiraNilValue ||
-		value == atlassian.JiraUnknownField ||
-		value == atlassian.JiraUnknownValue {
+		value == atlassianConstant.JiraNilValue ||
+		value == atlassianConstant.JiraUnknownField ||
+		value == atlassianConstant.JiraUnknownValue {
 		return nil, nil
 	}
 

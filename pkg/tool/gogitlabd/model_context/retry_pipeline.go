@@ -26,7 +26,7 @@ func (s *Server) RetryPipeline(
 		return s.captureDetail(e)
 	}
 
-	v, e := s.client.RetryPipeline(project, a.Pipeline)
+	v, e := s.service.RetryPipeline(project, a.Pipeline)
 
 	if e != nil {
 		return s.captureDetail(e)

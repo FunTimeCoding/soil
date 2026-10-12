@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
 
@@ -19,5 +19,5 @@ func (s *Server) delete(
 			),
 		),
 	)
-	s.view.RenderStatus(w, "Deleted entry", web.LayoutStatusSuccess)
+	s.view.RenderStatus(w, "Deleted entry", webConstant.LayoutStatusSuccess)
 }

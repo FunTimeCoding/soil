@@ -3,7 +3,7 @@ package model_context
 import (
 	"context"
 	"fmt"
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
@@ -33,7 +33,7 @@ func (s *Server) edit(
 	_, g := s.resolveCaller(x, constant.EditEvent)
 
 	if g != nil {
-		return s.captureFail(g, library.UnexpectedError)
+		return s.captureFail(g, soil.UnexpectedError)
 	}
 
 	_, g = s.service.EditEvent(uint(identifier), message)
@@ -43,7 +43,7 @@ func (s *Server) edit(
 			return response.Fail(g.Error())
 		}
 
-		return s.captureFail(g, library.UnexpectedError)
+		return s.captureFail(g, soil.UnexpectedError)
 	}
 
 	return response.Success(fmt.Sprintf("Updated event #%d", int(identifier)))

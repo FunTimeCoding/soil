@@ -16,7 +16,7 @@ func (s *Server) GetIssue(
 		return response.Fail("identifier is required")
 	}
 
-	result, e := s.client.IssueByIdentifier(s.organization, a.Identifier)
+	result, e := s.service.Issue(a.Identifier)
 
 	if e != nil {
 		return s.captureDetail(e)

@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	strings "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
@@ -12,10 +12,10 @@ import (
 
 func TestAuthorization(t *testing.T) {
 	r := web.NewGet(constant.Localhost)
-	web.Bearer(r, strings.UpperAlfa)
+	web.Bearer(r, stringsConstant.UpperAlfa)
 	assert.Any(t, http.Header{"Authorization": {"Bearer Alfa"}}, r.Header)
 	r = web.NewGet(constant.Localhost)
-	web.Token(r, strings.UpperAlfa)
+	web.Token(r, stringsConstant.UpperAlfa)
 	assert.Any(t, http.Header{"Authorization": {"Token Alfa"}}, r.Header)
 }
 

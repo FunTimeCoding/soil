@@ -1,0 +1,23 @@
+package model_context
+
+import (
+	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/generative/mark/server"
+	"github.com/funtimecoding/soil/pkg/tool/gobandd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gobandd/service"
+)
+
+func New(
+	s *service.Service,
+	r face.Reporter,
+	t face.Recorder,
+) *Server {
+	result := &Server{
+		server:   server.New(constant.Identity).WithRecorder(t).Server(),
+		service:  s,
+		reporter: r,
+	}
+	result.register()
+
+	return result
+}

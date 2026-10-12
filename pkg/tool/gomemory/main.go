@@ -7,7 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gomemory/constant"
-	memoryConstant "github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
+	gomemorydConstant "github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
@@ -34,7 +34,7 @@ func Main() {
 				base,
 				client.WithRequestEditorFn(
 					web.BearerEditor(
-						t.Required(memoryConstant.TokenEnvironment),
+						t.Required(gomemorydConstant.TokenEnvironment),
 					),
 				),
 			)
@@ -46,7 +46,7 @@ func Main() {
 		&host,
 		"host",
 		environment.Fallback(
-			memoryConstant.HostEnvironment,
+			gomemorydConstant.HostEnvironment,
 			webConstant.Localhost,
 		),
 		"gomemoryd host",
@@ -55,7 +55,7 @@ func Main() {
 		&port,
 		"port",
 		environment.FallbackInteger(
-			memoryConstant.PortEnvironment,
+			gomemorydConstant.PortEnvironment,
 			webConstant.ListenPort,
 		),
 		"gomemoryd port",

@@ -22,7 +22,7 @@ func (s *Server) ListPipelines(
 		return s.captureDetail(e)
 	}
 
-	v, e := s.client.Pipelines(project, a.Reference, a.Status, 20)
+	v, e := s.service.Pipelines(project, a.Reference, a.Status, 20)
 
 	if e != nil {
 		return s.captureDetail(e)

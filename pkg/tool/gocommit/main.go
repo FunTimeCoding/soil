@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
-	git "github.com/funtimecoding/soil/pkg/git/constant"
+	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/tool/common"
 	"github.com/funtimecoding/soil/pkg/tool/gocommit/commit"
 	"github.com/funtimecoding/soil/pkg/tool/gocommit/commit/option"
@@ -16,7 +16,11 @@ func Main() {
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	common.Arguments(a)
-	a.String(argumentConstant.Branch, git.MainBranch, "Branch to commit to")
+	a.String(
+		argumentConstant.Branch,
+		gitConstant.MainBranch,
+		"Branch to commit to",
+	)
 	a.String(argumentConstant.Path, "", "Path in repository")
 	a.String(argumentConstant.Template, "", "Template file for commit")
 	var replaces []string

@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/web"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/worker"
 	"github.com/funtimecoding/soil/pkg/web/guard"
@@ -18,9 +19,9 @@ import (
 )
 
 func TestGuard(t *testing.T) {
-	c := mock_client.New()
+	s := service_tester.Service(mock_client.New())
 	k := worker.New(
-		c,
+		s,
 		time.Hour,
 		prometheus.NewRegistry(),
 		logger.New(t.Context()),
@@ -33,8 +34,8 @@ func TestGuard(t *testing.T) {
 			g *guard.Mux,
 		) {
 			gogitlabd.Mount(
-				mock_client.New(),
-				web.New(c, k),
+				s,
+				web.New(s, k),
 				memory.New(),
 				mock_recorder.New(),
 				g,

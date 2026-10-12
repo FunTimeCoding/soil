@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	generative "github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/unit/model_context_tester"
 	"testing"
@@ -16,7 +16,7 @@ func TestModelContext(t *testing.T) {
 	assert.StringContains(t, "2", status)
 	alerts := c.MustCallTool(
 		constant.GetAlerts,
-		map[string]any{generative.ParameterName: "HighMemory"},
+		map[string]any{generativeConstant.ParameterName: "HighMemory"},
 	)
 	assert.StringContains(t, "fp1", alerts)
 	assert.StringContains(t, "critical", alerts)

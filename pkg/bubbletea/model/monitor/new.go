@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/claim"
 	"github.com/funtimecoding/soil/pkg/bubbletea/table/item"
-	"github.com/funtimecoding/soil/pkg/monitor/constant"
+	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/gomonitord/client"
-	monitorConstant "github.com/funtimecoding/soil/pkg/tool/gomonitord/constant"
+	gomonitordConstant "github.com/funtimecoding/soil/pkg/tool/gomonitord/constant"
 )
 
 func New(connect bool) *Model {
@@ -18,10 +18,10 @@ func New(connect bool) *Model {
 		claims:   map[string][]string{},
 		user:     system.User().Username,
 		hostname: system.Hostname(),
-		auto:     !environment.Exists(constant.ManualEnvironment),
+		auto:     !environment.Exists(monitorConstant.ManualEnvironment),
 	}
 	result.owner = fmt.Sprintf(
-		constant.OwnerFormat,
+		monitorConstant.OwnerFormat,
 		result.user,
 		result.hostname,
 	)
@@ -30,10 +30,10 @@ func New(connect bool) *Model {
 		return result
 	}
 
-	if !environment.Exists(monitorConstant.TokenEnvironment) {
+	if !environment.Exists(gomonitordConstant.TokenEnvironment) {
 		result.notice = fmt.Sprintf(
 			"%s is not set - claims are off",
-			monitorConstant.TokenEnvironment,
+			gomonitordConstant.TokenEnvironment,
 		)
 
 		return result

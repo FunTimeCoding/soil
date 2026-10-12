@@ -2,7 +2,7 @@ package gosentry
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors/constant"
+	errorsConstant "github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
@@ -10,7 +10,7 @@ import (
 
 func showIssue(shortIdentifier string) {
 	c := sentry.NewEnvironment()
-	o := environment.Required(constant.OrganizationEnvironment)
+	o := environment.Required(errorsConstant.OrganizationEnvironment)
 	i := c.MustIssueByShortIdentifier(o, shortIdentifier)
 
 	if i == nil {

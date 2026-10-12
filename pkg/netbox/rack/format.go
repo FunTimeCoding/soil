@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/console/status"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/time/constant"
+	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 )
 
 func (r *Rack) Format(f *option.Format) string {
@@ -37,8 +37,11 @@ func (r *Rack) Format(f *option.Format) string {
 		s.Line("  Tenant: %s", r.Raw.Tenant.Get().GetName())
 	}
 
-	s.Line("  Created: %s", r.Raw.Created.Get().Format(constant.DateMinute))
-	s.Line("  Updated: %s", r.Raw.LastUpdated.Get().Format(constant.DateMinute))
+	s.Line("  Created: %s", r.Raw.Created.Get().Format(timeConstant.DateMinute))
+	s.Line(
+		"  Updated: %s",
+		r.Raw.LastUpdated.Get().Format(timeConstant.DateMinute),
+	)
 	s.Line("  Devices: %d", r.Raw.GetDeviceCount())
 	s.Line("  Unit height: %d", r.Raw.GetUHeight())
 

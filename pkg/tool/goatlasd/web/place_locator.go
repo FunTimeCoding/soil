@@ -1,9 +1,9 @@
 package web
 
 import (
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	atlas "github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
 )
 
 func placeLocator(
@@ -11,10 +11,10 @@ func placeLocator(
 	name string,
 ) string {
 	return join.Empty(
-		atlas.PlacesPath,
-		constant.Slash,
+		constant.PlacesPath,
+		stringsConstant.Slash,
 		placeSegment(kind),
-		constant.Slash,
+		stringsConstant.Slash,
 		name,
 	)
 }

@@ -4,11 +4,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/instrument"
-	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgres/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/generated/client"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/spf13/cobra"
 )
@@ -18,11 +17,21 @@ func Main() {
 	defer func() { s.Flush(recover()) }()
 	t := terminal.New(s)
 	v, e := client.NewClient(
-		locator.New(
-			environment.Fallback(constant.HostEnvironment, web.Localhost),
-		).Port(web.ListenPort).Insecure().String(),
+		locator.Environment(
+			constant.HostEnvironment,
+			constant.PortEnvironment,
+			constant.InsecureEnvironment,
+		).String(),
+		client.WithHTTPClient(web.StallClient()),
+		client.WithRequestEditorFn(
+			web.DeferredBearerEditor(t.Required, constant.TokenEnvironment),
+		),
 	)
-	errors.PanicOnError(e)
+
+	if e != nil {
+		t.Exitf("client: %v\n", e)
+	}
+
 	o := &cobra.Command{
 		Use:   constant.Identity.Usage(),
 		Short: constant.Identity.Description(),

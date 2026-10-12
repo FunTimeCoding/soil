@@ -1,7 +1,7 @@
 package scan
 
 import (
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
@@ -24,7 +24,7 @@ func IdentityWarnings(
 	toolDirectory := "pkg/tool"
 
 	for _, name := range v.MustReadDirectory(toolDirectory) {
-		if !strings.HasPrefix(name, library.Go) {
+		if !strings.HasPrefix(name, soil.Go) {
 			continue
 		}
 

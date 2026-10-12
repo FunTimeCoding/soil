@@ -1,8 +1,8 @@
 package constant
 
 import (
-	"github.com/funtimecoding/soil/pkg/console/constant"
-	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
+	prometheusConstant "github.com/funtimecoding/soil/pkg/prometheus/constant"
 )
 
 const (
@@ -16,8 +16,8 @@ const (
 	OpsgenieNoKey = "no key"
 )
 
-var OpsgenieFormat = constant.ExtendedColorFormat.Copy().Tag(
-	constant.TagCategory,
+var OpsgenieFormat = consoleConstant.ExtendedColorFormat.Copy().Tag(
+	consoleConstant.TagCategory,
 )
 
 const (
@@ -51,6 +51,6 @@ var (
 		OpsgeniePriorityP4,
 		OpsgeniePriorityP5,
 	}
-	OpsgenieSkipDetail         = []string{prometheus.SeverityLabel}
+	OpsgenieSkipDetail         = []string{prometheusConstant.SeverityLabel}
 	OpsgenieCondenseSkipFields []string
 )

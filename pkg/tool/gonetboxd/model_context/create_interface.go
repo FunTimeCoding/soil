@@ -2,12 +2,11 @@ package model_context
 
 import (
 	"context"
-	generative "github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
 	"github.com/mark3labs/mcp-go/mcp"
-	"github.com/netbox-community/go-netbox/v4"
 )
 
 func (s *Server) createInterface(
@@ -20,7 +19,7 @@ func (s *Server) createInterface(
 		return response.Fail("device is required: %v", f)
 	}
 
-	name, g := r.RequireString(generative.ParameterName)
+	name, g := r.RequireString(generativeConstant.ParameterName)
 
 	if g != nil {
 		return response.Fail("name is required: %v", g)
@@ -32,20 +31,15 @@ func (s *Server) createInterface(
 		return response.Fail("type is required: %v", h)
 	}
 
-	d, i := s.client.DeviceByName(device)
-
-	if i != nil {
-		return s.captureFail(i, "device not found")
-	}
-
-	result, j := s.client.CreateInterface(
-		d,
+	result, e := s.service.CreateInterface(
+		device,
 		name,
-		netbox.InterfaceTypeValue(interfaceType),
+		interfaceType,
+		r.GetString(constant.PhysicalAddress, ""),
 	)
 
-	if j != nil {
-		return s.captureFail(j, "interface not created")
+	if e != nil {
+		return s.serviceFail(e, "interface not created")
 	}
 
 	return response.SuccessAny(convert.Interface(result))

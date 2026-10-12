@@ -1,7 +1,7 @@
 package service
 
 import (
-	kubernetes "github.com/funtimecoding/soil/pkg/kubernetes/constant"
+	kubernetesConstant "github.com/funtimecoding/soil/pkg/kubernetes/constant"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/constant"
 	"strconv"
 )
@@ -29,15 +29,15 @@ func (s *Service) argocdValues() []string {
 	var outOfSync, degraded, missing int
 
 	for _, v := range applications {
-		if v.Sync != kubernetes.ArgocdSyncSynced {
+		if v.Sync != kubernetesConstant.ArgocdSyncSynced {
 			outOfSync++
 		}
 
-		if v.Health == kubernetes.ArgocdHealthDegraded {
+		if v.Health == kubernetesConstant.ArgocdHealthDegraded {
 			degraded++
 		}
 
-		if v.Health == kubernetes.ArgocdHealthMissing {
+		if v.Health == kubernetesConstant.ArgocdHealthMissing {
 			missing++
 		}
 	}

@@ -3,8 +3,8 @@ package worker
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
 	"github.com/funtimecoding/soil/pkg/event/notifier"
-	"github.com/funtimecoding/soil/pkg/gitlab/face"
 	"github.com/funtimecoding/soil/pkg/gitlab/merge_request"
+	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/types/board_entry"
 	"github.com/prometheus/client_golang/prometheus"
 	"sync"
@@ -12,7 +12,7 @@ import (
 )
 
 type Worker struct {
-	client   face.Forge
+	service  *service.Service
 	interval time.Duration
 	gauge    *prometheus.GaugeVec
 	recovery *recovery.Recovery

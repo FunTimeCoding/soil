@@ -2,8 +2,8 @@ package server
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/constant"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
 
@@ -16,7 +16,7 @@ func (s *Server) authenticate(next http.Handler) http.Handler {
 			if !s.authorized(r) {
 				if s.openAuthentication {
 					w.Header().Set(
-						web.Authenticate,
+						webConstant.Authenticate,
 						fmt.Sprintf(
 							`Bearer realm="%s", authorization_uri="%s", scope="openid email"`,
 							s.serverLocator,
@@ -25,7 +25,7 @@ func (s *Server) authenticate(next http.Handler) http.Handler {
 					)
 				}
 
-				http.Error(w, constant.Unauthorized, http.StatusUnauthorized)
+				http.Error(w, soil.Unauthorized, http.StatusUnauthorized)
 
 				return
 			}

@@ -2,7 +2,7 @@ package example
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
-	"github.com/funtimecoding/soil/pkg/argument/constant"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/console"
 	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/tool/common"
@@ -10,20 +10,23 @@ import (
 
 func Alert() {
 	a := argument.NewSimple("opsgenie-alert")
-	a.Boolean(constant.Create, false, "Create alert")
-	a.String(constant.User, "", "User email for alert")
-	a.String(constant.Text, "", "Alert name")
-	a.String(constant.Close, "", "Alert ID")
+	a.Boolean(argumentConstant.Create, false, "Create alert")
+	a.String(argumentConstant.User, "", "User email for alert")
+	a.String(argumentConstant.Text, "", "Alert name")
+	a.String(argumentConstant.Close, "", "Alert ID")
 	a.ParseSimple()
 	c := common.Opsgenie()
 
-	if a.GetBoolean(constant.Create) {
-		c.Create(a.GetString(constant.User), a.GetString(constant.Text))
+	if a.GetBoolean(argumentConstant.Create) {
+		c.Create(
+			a.GetString(argumentConstant.User),
+			a.GetString(argumentConstant.Text),
+		)
 
 		return
 	}
 
-	if i := a.GetString(constant.Close); i != "" {
+	if i := a.GetString(argumentConstant.Close); i != "" {
 		c.Close(i)
 
 		return

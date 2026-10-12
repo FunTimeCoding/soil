@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search_option"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/web/search_cache"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -66,5 +66,9 @@ func (s *Server) searchPage(
 		searchForm(query, collection, status.Collections),
 		html.Div(html.ID("search-results"), gomponents.Group(resultsContent)),
 	)
-	s.view.RenderPage(w, constant.SearchTitle, web.SearchPath, content...)
+	s.view.RenderPage(
+		w,
+		constant.SearchTitle,
+		webConstant.SearchPath,
+		content...)
 }

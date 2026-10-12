@@ -3,7 +3,7 @@ package web
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/palette"
@@ -17,7 +17,7 @@ func New(c face.NetboxSource) *Server {
 		palette.NewCommand(
 			constant.BookmarkTitle,
 			constant.BookmarkPath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
 	)
 
@@ -26,8 +26,8 @@ func New(c face.NetboxSource) *Server {
 		registry: r,
 		view: view.New(
 			layout.New(constant.Identity).
-				WithTheme(web.ThemeAmethyst).
-				WithCommandPalette(web.PalettePath).
+				WithTheme(webConstant.ThemeAmethyst).
+				WithCommandPalette(webConstant.PalettePath).
 				WithItems(
 					navigation_item.New(
 						constant.BookmarkPath,

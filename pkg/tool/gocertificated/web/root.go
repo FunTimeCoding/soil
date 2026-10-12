@@ -3,7 +3,7 @@ package web
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
 
@@ -20,7 +20,7 @@ func (s *Server) root(
 		return
 	}
 
-	w.Header().Set(web.ContentType, web.Text)
+	w.Header().Set(webConstant.ContentType, webConstant.Text)
 	_, f := w.Write([]byte(result.Certificate))
 	errors.PanicOnError(f)
 }

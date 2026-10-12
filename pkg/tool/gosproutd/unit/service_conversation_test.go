@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/unit/service_tester"
 	"testing"
@@ -11,7 +11,7 @@ import (
 func TestClearWithHeardRecordsTheConversationAnswer(t *testing.T) {
 	s := service_tester.New(t)
 	d, e := s.Service.PushDecision(
-		stringConstant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"which entry rule?",
 		"narrow",
 		nil,
@@ -23,7 +23,7 @@ func TestClearWithHeardRecordsTheConversationAnswer(t *testing.T) {
 		"going narrow",
 		"keep it narrow, said in passing",
 	)
-	r := s.Service.Decisions(stringConstant.LowerAlfa)[0]
+	r := s.Service.Decisions(stringsConstant.LowerAlfa)[0]
 	assert.String(t, "answered", string(r.State))
 	assert.String(t, "keep it narrow, said in passing", r.Answer)
 }
@@ -31,7 +31,7 @@ func TestClearWithHeardRecordsTheConversationAnswer(t *testing.T) {
 func TestConversationAnswerIsMarkedAsSuch(t *testing.T) {
 	s := service_tester.New(t)
 	d, e := s.Service.PushDecision(
-		stringConstant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"which entry rule?",
 		"narrow",
 		nil,
@@ -46,14 +46,14 @@ func TestConversationAnswerIsMarkedAsSuch(t *testing.T) {
 	assert.String(
 		t,
 		"conversation",
-		string(s.Service.Decisions(stringConstant.LowerAlfa)[0].AnswerChannel),
+		string(s.Service.Decisions(stringsConstant.LowerAlfa)[0].AnswerChannel),
 	)
 }
 
 func TestConversationAnswerResolvesAsAnswerNotDefault(t *testing.T) {
 	s := service_tester.New(t)
 	d, e := s.Service.PushDecision(
-		stringConstant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"which entry rule?",
 		"narrow",
 		nil,
@@ -68,14 +68,14 @@ func TestConversationAnswerResolvesAsAnswerNotDefault(t *testing.T) {
 	assert.String(
 		t,
 		"answer",
-		string(s.Service.Decisions(stringConstant.LowerAlfa)[0].Resolution),
+		string(s.Service.Decisions(stringsConstant.LowerAlfa)[0].Resolution),
 	)
 }
 
 func TestHeardNeverOverwritesAQueueAnswer(t *testing.T) {
 	s := service_tester.New(t)
 	d, e := s.Service.PushDecision(
-		stringConstant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"which entry rule?",
 		"narrow",
 		nil,
@@ -88,7 +88,7 @@ func TestHeardNeverOverwritesAQueueAnswer(t *testing.T) {
 		"going narrow",
 		"keep it narrow, said in passing",
 	)
-	r := s.Service.Decisions(stringConstant.LowerAlfa)[0]
+	r := s.Service.Decisions(stringsConstant.LowerAlfa)[0]
 	assert.String(t, "wide", r.Answer)
 	assert.String(t, "queue", string(r.AnswerChannel))
 }
@@ -96,7 +96,7 @@ func TestHeardNeverOverwritesAQueueAnswer(t *testing.T) {
 func TestClearWithoutHeardStillTakesTheDefault(t *testing.T) {
 	s := service_tester.New(t)
 	d, e := s.Service.PushDecision(
-		stringConstant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"which entry rule?",
 		"narrow",
 		nil,
@@ -104,7 +104,7 @@ func TestClearWithoutHeardStillTakesTheDefault(t *testing.T) {
 	)
 	assert.FatalOnError(t, e)
 	s.Service.Clear(d.Identifier, "went narrow", "")
-	r := s.Service.Decisions(stringConstant.LowerAlfa)[0]
+	r := s.Service.Decisions(stringsConstant.LowerAlfa)[0]
 	assert.String(t, "default", string(r.Resolution))
 	assert.String(t, "open", string(r.State))
 }

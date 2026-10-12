@@ -1,7 +1,7 @@
 package format
 
 import (
-	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/reference"
@@ -26,6 +26,6 @@ func baseLine(metadata map[string]string) string {
 	return join.Empty(
 		constant.BasePrefix,
 		join.CommaSpace(quoted),
-		stringConstant.Unix,
+		stringsConstant.Unix,
 	)
 }

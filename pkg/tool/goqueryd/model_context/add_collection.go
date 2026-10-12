@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	generative "github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -12,7 +12,7 @@ func (s *Server) addCollection(
 	_ context.Context,
 	q mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	name, e := q.RequireString(generative.ParameterName)
+	name, e := q.RequireString(generativeConstant.ParameterName)
 
 	if e != nil {
 		return response.Fail("name is required: %v", e)

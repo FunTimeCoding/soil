@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/build"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
-	system "github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/join"
 	"github.com/funtimecoding/soil/pkg/tool/gopackage/constant"
 	"os"
@@ -20,7 +20,7 @@ func Main() {
 
 	for _, name := range build.OutputDirectories() {
 		console.Format("Name: %s\n", name)
-		outputDirectory := join.Relative(system.Temporary, name)
+		outputDirectory := join.Relative(systemConstant.Temporary, name)
 		console.Format("Output directory: %s\n", outputDirectory)
 
 		for _, systemArchitecture := range build.SystemArchitectures() {

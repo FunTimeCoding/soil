@@ -1,9 +1,9 @@
 package wireless
 
 import (
-	"github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/run"
-	flight "github.com/funtimecoding/soil/pkg/tool/goflightd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goflightd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/store/snapshot"
 	"time"
 )
@@ -11,10 +11,10 @@ import (
 func (c *Collector) poll() {
 	r := run.New().NoPanic()
 	r.Start(
-		flight.Sudo,
-		flight.SudoNonInteract,
-		constant.Wdutil,
-		constant.WdutilInformation,
+		constant.Sudo,
+		constant.SudoNonInteract,
+		systemConstant.Wdutil,
+		systemConstant.WdutilInformation,
 	)
 
 	if r.Error != nil {
@@ -34,7 +34,7 @@ func (c *Collector) poll() {
 		c.store.MustCreateSnapshot(
 			snapshot.Snapshot{
 				Time:  now,
-				Kind:  flight.WirelessKind,
+				Kind:  constant.WirelessKind,
 				Key:   key,
 				Value: value,
 			},

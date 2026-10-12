@@ -2,11 +2,11 @@ package install
 
 import (
 	"fmt"
-	provision "github.com/funtimecoding/soil/pkg/provision/constant"
+	provisionConstant "github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/packer"
 	"github.com/funtimecoding/soil/pkg/provision/packer/build"
 	"github.com/funtimecoding/soil/pkg/system"
-	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/join"
 	"github.com/funtimecoding/soil/pkg/system/linux/debian/install/image"
 	"github.com/funtimecoding/soil/pkg/system/linux/debian/install/image/checksum"
@@ -20,9 +20,9 @@ func (c *Client) Packer(
 	architecture string,
 ) {
 	switch architecture {
-	case systemConstant.AMD64:
+	case constant.AMD64:
 		// pass
-	case systemConstant.ARM64:
+	case constant.ARM64:
 		// pass
 	default:
 		log.Panicf("unsupported architecture: %s", architecture)
@@ -32,8 +32,8 @@ func (c *Client) Packer(
 	outputImage := build.OutputFilename(v)
 	outputImagePath := join.Absolute(
 		c.workDirectory,
-		provision.PackerDirectory,
-		provision.PackerOutputDirectory,
+		provisionConstant.PackerDirectory,
+		provisionConstant.PackerOutputDirectory,
 		outputImage,
 	)
 

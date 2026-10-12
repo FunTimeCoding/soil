@@ -2,6 +2,7 @@ package cable
 
 import (
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/netbox-community/go-netbox/v4"
 )
 
@@ -18,7 +19,7 @@ func terminationLabel(terminations []netbox.GenericObject) string {
 	}
 
 	name, _ := o["name"].(string)
-	d, okay1 := o["device"].(map[string]any)
+	d, okay1 := o[constant.DeviceField].(map[string]any)
 
 	if !okay1 {
 		return name

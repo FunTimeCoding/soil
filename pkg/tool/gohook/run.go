@@ -3,7 +3,7 @@ package gohook
 import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/git/changed"
-	git "github.com/funtimecoding/soil/pkg/git/constant"
+	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/run"
@@ -37,7 +37,7 @@ func Run(
 	}
 
 	files := r.Files(c.Root)
-	guard := o.Hook == git.HookPreCommit
+	guard := o.Hook == gitConstant.HookPreCommit
 
 	for i, j := range jobs {
 		if !r.All && !j.Matches(files) {

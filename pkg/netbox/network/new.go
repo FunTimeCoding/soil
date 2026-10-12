@@ -1,9 +1,9 @@
 package network
 
 import (
-	netboxConstant "github.com/funtimecoding/soil/pkg/netbox/constant"
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/network"
-	"github.com/funtimecoding/soil/pkg/network/constant"
+	networkConstant "github.com/funtimecoding/soil/pkg/network/constant"
 	"github.com/netbox-community/go-netbox/v4"
 	"net"
 )
@@ -14,7 +14,7 @@ func New(i *netbox.Interface) *Interface {
 	if s := i.GetName(); s != "" {
 		name = i.GetName()
 	} else {
-		name = netboxConstant.NoName
+		name = constant.NoName
 	}
 
 	var h net.HardwareAddr
@@ -22,7 +22,7 @@ func New(i *netbox.Interface) *Interface {
 	if s := i.GetMacAddress(); s != "" {
 		h = network.PhysicalAddress(s)
 	} else {
-		h = constant.NullPhysicalAddress
+		h = networkConstant.NullPhysicalAddress
 	}
 
 	var t netbox.InterfaceTypeValue

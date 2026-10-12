@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"github.com/dave/dst"
 	"github.com/dave/dst/decorator"
+	"github.com/funtimecoding/soil/pkg/source/imports"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
 )
@@ -29,7 +30,7 @@ func restoreDecoratedFile(
 		return e
 	}
 
-	out.Write(path, buffer.Bytes())
+	out.Write(path, imports.JoinBlock(buffer.Bytes()))
 
 	return nil
 }

@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/maps"
-	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/strings/split/key_value"
 	"github.com/funtimecoding/soil/pkg/system"
-	"github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/join"
 	"github.com/funtimecoding/soil/pkg/system/run"
 	"slices"
@@ -17,12 +17,12 @@ import (
 func Run(selected string) {
 	base := join.Absolute(
 		system.Home(),
-		constant.ConfigurationPath,
-		prometheus.AmtoolPath,
+		systemConstant.ConfigurationPath,
+		constant.AmtoolPath,
 	)
-	tool := join.Absolute(base, prometheus.AmtoolConfiguration)
+	tool := join.Absolute(base, constant.AmtoolConfiguration)
 
-	if !run.CommandExists(prometheus.AmtoolCommand) {
+	if !run.CommandExists(constant.AmtoolCommand) {
 		console.Line(
 			"amtool missing: go install github.com/prometheus/alertmanager/cmd/amtool@latest",
 		)
@@ -36,7 +36,7 @@ func Run(selected string) {
 		return
 	}
 
-	active := Read(base, prometheus.AmtoolConfiguration)
+	active := Read(base, constant.AmtoolConfiguration)
 	files := system.Files(base)
 	var contexts []string
 	locatorByContext := make(map[string]string)
@@ -44,10 +44,10 @@ func Run(selected string) {
 	for _, f := range files {
 		name, _ := key_value.Dot(f)
 
-		if strings.HasPrefix(name, prometheus.AmtoolConfigurationPrefix) {
+		if strings.HasPrefix(name, constant.AmtoolConfigurationPrefix) {
 			context := strings.TrimPrefix(
 				name,
-				prometheus.AmtoolConfigurationPrefix,
+				constant.AmtoolConfigurationPrefix,
 			)
 
 			if !slices.Contains(contexts, context) {
@@ -95,7 +95,7 @@ func Run(selected string) {
 			base,
 			fmt.Sprintf(
 				"%s%s.yml",
-				prometheus.AmtoolConfigurationPrefix,
+				constant.AmtoolConfigurationPrefix,
 				selected,
 			),
 		),

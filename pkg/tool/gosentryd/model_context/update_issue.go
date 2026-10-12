@@ -16,12 +16,7 @@ func (s *Server) UpdateIssue(
 		return response.Fail("identifier is required")
 	}
 
-	result, e := s.client.UpdateIssue(
-		s.organization,
-		a.Identifier,
-		a.Status,
-		a.AssignedTo,
-	)
+	result, e := s.service.UpdateIssue(a.Identifier, a.Status, a.AssignedTo)
 
 	if e != nil {
 		return s.captureDetail(e)

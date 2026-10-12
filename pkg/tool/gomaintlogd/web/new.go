@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/store"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/palette"
@@ -21,17 +21,17 @@ func New(
 		palette.NewCommand(
 			constant.DashboardTitle,
 			constant.DashboardPath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
 		palette.NewCommand(
 			constant.EntriesTitle,
 			constant.EntriesPath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
 		palette.NewCommand(
 			constant.AddEntryTitle,
 			constant.AddEntryPath,
-			web.PaletteAction,
+			webConstant.PaletteAction,
 		),
 	)
 
@@ -41,10 +41,10 @@ func New(
 		registry: r,
 		view: view.New(
 			layout.New(constant.Identity).
-				WithTheme(web.ThemeArchive).
+				WithTheme(webConstant.ThemeArchive).
 				WithStyle(constant.InlineStyle).
-				WithLiveEndpoint(web.LivePath).
-				WithCommandPalette(web.PalettePath).
+				WithLiveEndpoint(webConstant.LivePath).
+				WithCommandPalette(webConstant.PalettePath).
 				WithItems(
 					navigation_item.New(
 						constant.DashboardPath,

@@ -27,7 +27,7 @@ func (s *Server) ListPipelineJobs(
 		return s.captureDetail(e)
 	}
 
-	v, e := s.client.PipelineJobs(project, a.Pipeline)
+	v, e := s.service.PipelineJobs(project, a.Pipeline)
 
 	if e != nil {
 		return s.captureDetail(e)

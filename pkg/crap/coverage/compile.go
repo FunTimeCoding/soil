@@ -1,8 +1,8 @@
 package coverage
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
-	crap "github.com/funtimecoding/soil/pkg/crap/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/crap/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/strings/join/key_value"
 	"github.com/funtimecoding/soil/pkg/system/run"
@@ -17,17 +17,17 @@ func Compile(
 ) string {
 	binary := filepath.Join(
 		directory,
-		join.Empty(filepath.Base(testPackage), crap.TestBinarySuffix),
+		join.Empty(filepath.Base(testPackage), constant.TestBinarySuffix),
 	)
 	r := run.New()
 	r.Directory = root
 	r.Start(
-		constant.Go,
-		crap.TestCommand,
-		crap.CompileOnly,
-		crap.CoverFlag,
-		key_value.Equals(crap.CoverPackage, join.Comma(coverPackages)),
-		constant.OutputArgument,
+		soil.Go,
+		constant.TestCommand,
+		constant.CompileOnly,
+		constant.CoverFlag,
+		key_value.Equals(constant.CoverPackage, join.Comma(coverPackages)),
+		soil.OutputArgument,
 		binary,
 		testPackage,
 	)

@@ -3,7 +3,7 @@ package model_context
 import (
 	"context"
 	"fmt"
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
@@ -17,13 +17,13 @@ func (s *Server) readConversation(
 	a argument.ReadConversation,
 ) (*mcp.CallToolResult, error) {
 	if _, e := s.resolveCaller(x, constant.ReadConversation); e != nil {
-		return s.captureFail(e, library.UnexpectedError)
+		return s.captureFail(e, soil.UnexpectedError)
 	}
 
 	blocks, e := s.service.ReadConversation(a.Session, a.Around, int(a.Count))
 
 	if e != nil {
-		return s.captureFail(e, library.UnexpectedError)
+		return s.captureFail(e, soil.UnexpectedError)
 	}
 
 	if len(blocks) == 0 {

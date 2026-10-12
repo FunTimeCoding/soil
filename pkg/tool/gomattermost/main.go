@@ -2,7 +2,7 @@ package gomattermost
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
-	chat "github.com/funtimecoding/soil/pkg/chat/constant"
+	chatConstant "github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/thread"
 	"github.com/funtimecoding/soil/pkg/console"
 	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
@@ -43,7 +43,7 @@ func Main() {
 		relevant = append(relevant, h)
 	}
 
-	f := chat.MattermostFormat
+	f := chatConstant.MattermostFormat
 	o := ollama.NewEnvironment()
 	te := `
 Summarize this tech support chat thread.

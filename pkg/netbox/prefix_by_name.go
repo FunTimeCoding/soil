@@ -3,6 +3,7 @@ package netbox
 import (
 	"github.com/funtimecoding/soil/pkg/errors/ambiguous"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/prefix"
 )
 
@@ -22,7 +23,7 @@ func (c *Client) PrefixByName(n string) (*prefix.Prefix, error) {
 	}
 
 	if len(result) == 0 {
-		return nil, not_found.New("prefix", n)
+		return nil, not_found.New(constant.PrefixKind, n)
 	}
 
 	if len(result) > 1 {

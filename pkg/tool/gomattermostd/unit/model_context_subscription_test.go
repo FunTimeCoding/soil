@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	libraryConstant "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/model_context_tester"
 	"testing"
@@ -136,6 +136,6 @@ func TestListSubscriptionsReturnsLabels(t *testing.T) {
 	assert.Integer(t, 1, len(rows))
 	row, rowOkay := rows[0].(map[string]any)
 	assert.True(t, rowOkay)
-	assert.Any(t, "papa", row[libraryConstant.LabelKey])
+	assert.Any(t, "papa", row[soil.LabelKey])
 	assert.Any(t, "alfa", row[constant.ParameterRoot])
 }

@@ -3,8 +3,8 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/silence"
-	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
-	strings "github.com/funtimecoding/soil/pkg/strings/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/time"
 	"github.com/prometheus/alertmanager/api/v2/models"
 	"testing"
@@ -13,16 +13,16 @@ import (
 func TestSilence(t *testing.T) {
 	actual := silence.New(
 		&models.GettableSilence{
-			ID:     new(strings.UpperAlfa),
-			Status: &models.SilenceStatus{State: new(prometheus.ActiveState)},
+			ID:     new(stringsConstant.UpperAlfa),
+			Status: &models.SilenceStatus{State: new(constant.ActiveState)},
 			Silence: models.Silence{
-				CreatedBy: new(strings.UpperBravo),
-				Comment:   new(strings.UpperCharlie),
+				CreatedBy: new(stringsConstant.UpperBravo),
+				Comment:   new(stringsConstant.UpperCharlie),
 				StartsAt:  new(time.Scan(assert.NewMinute(0))),
 				EndsAt:    new(time.Scan(assert.NewMinute(10))),
 			},
 		},
-		strings.UpperDelta,
+		stringsConstant.UpperDelta,
 	)
 	actual.Start = nil
 	actual.End = nil

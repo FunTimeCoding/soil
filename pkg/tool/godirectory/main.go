@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/godirectory/constant"
-	daemon "github.com/funtimecoding/soil/pkg/tool/godirectoryd/constant"
+	godirectorydConstant "github.com/funtimecoding/soil/pkg/tool/godirectoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/locator"
@@ -19,13 +19,16 @@ func Main() {
 	t := terminal.New(s)
 	c, e := client.NewClientWithResponses(
 		locator.Environment(
-			daemon.HostEnvironment,
-			daemon.PortEnvironment,
-			daemon.InsecureEnvironment,
+			godirectorydConstant.HostEnvironment,
+			godirectorydConstant.PortEnvironment,
+			godirectorydConstant.InsecureEnvironment,
 		).String(),
 		client.WithHTTPClient(web.StallClient()),
 		client.WithRequestEditorFn(
-			web.DeferredBearerEditor(t.Required, daemon.TokenEnvironment),
+			web.DeferredBearerEditor(
+				t.Required,
+				godirectorydConstant.TokenEnvironment,
+			),
 		),
 	)
 	errors.PanicOnError(e)

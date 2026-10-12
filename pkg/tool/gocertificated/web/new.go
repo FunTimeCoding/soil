@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/service"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/store"
 	"github.com/funtimecoding/soil/pkg/web/authorization/client"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/palette"
@@ -23,34 +23,38 @@ func New(
 		palette.NewCommand(
 			constant.DashboardTitle,
 			constant.DashboardPath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
 		palette.NewCommand(
 			constant.AuthoritiesTitle,
 			constant.AuthoritiesPath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
 		palette.NewCommand(
 			constant.CertificatesTitle,
 			constant.CertificatesPath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
 		palette.NewCommand(
 			constant.CreateAuthorityTitle,
 			constant.CreateAuthorityPath,
-			web.PaletteAction,
+			webConstant.PaletteAction,
 		),
 		palette.NewCommand(
 			constant.IssueCertificateTitle,
 			constant.IssueCertificatePath,
-			web.PaletteAction,
+			webConstant.PaletteAction,
 		),
 		palette.NewCommand(
 			constant.RootTitle,
 			constant.RootPath,
-			web.PaletteAction,
+			webConstant.PaletteAction,
 		),
-		palette.NewCommand(web.SignOutTitle, web.SignOutPath, web.PaletteAction),
+		palette.NewCommand(
+			webConstant.SignOutTitle,
+			webConstant.SignOutPath,
+			webConstant.PaletteAction,
+		),
 	)
 
 	return &Server{
@@ -60,8 +64,8 @@ func New(
 		registry:      r,
 		view: view.New(
 			layout.New(constant.Identity).
-				WithTheme(web.ThemeSentinel).
-				WithCommandPalette(web.PalettePath).
+				WithTheme(webConstant.ThemeSentinel).
+				WithCommandPalette(webConstant.PalettePath).
 				WithItems(
 					navigation_item.New(
 						constant.DashboardPath,

@@ -3,7 +3,7 @@ package model_context
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/constant"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
@@ -15,7 +15,7 @@ func (s *Server) registerResources() {
 			mcp.WithResourceDescription(
 				"Non-obvious behaviors: YAML responses, filtered comments, deployment/job log resolution, multi-pod and multi-container disambiguation.",
 			),
-			mcp.WithMIMEType(web.Markdown),
+			mcp.WithMIMEType(webConstant.Markdown),
 		),
 		func(
 			_ context.Context,
@@ -24,7 +24,7 @@ func (s *Server) registerResources() {
 			return []mcp.ResourceContents{
 				mcp.TextResourceContents{
 					URI:      constant.KubernetesWorkflowURI,
-					MIMEType: web.Markdown,
+					MIMEType: webConstant.Markdown,
 					Text:     constant.KubernetesWorkflow,
 				},
 			}, nil

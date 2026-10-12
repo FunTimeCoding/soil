@@ -2,6 +2,7 @@ package netbox
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/device"
 )
 
@@ -27,7 +28,7 @@ func (c *Client) DeviceByName(n string) (*device.Device, error) {
 	}
 
 	if len(result) == 0 {
-		return nil, not_found.New("device", n)
+		return nil, not_found.New(constant.DeviceKind, n)
 	}
 
 	return result[0], nil

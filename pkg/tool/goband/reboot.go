@@ -1,45 +1,61 @@
 package goband
 
 import (
-	"github.com/funtimecoding/soil/pkg/band"
-	"github.com/funtimecoding/soil/pkg/band/constant"
-	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/tool/goband/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gobandd/generated/client"
 	"github.com/spf13/cobra"
 )
 
-func reboot(c *band.Client) *cobra.Command {
+func reboot(x *Context) *cobra.Command {
+	var instance string
 	var confirmed bool
+	var forced bool
 	result := &cobra.Command{
 		Use:   "reboot",
-		Short: "Power cycle the machine below the operating system",
+		Short: "Ask the operating system to restart, or power cycle with --force",
+		Args:  cobra.NoArgs,
 		Run: func(
 			_ *cobra.Command,
 			_ []string,
 		) {
-			state := c.MustPowerState()
-			console.Format(
-				"Power state: %s\n",
-				band.PowerStateName(state.State),
-			)
+			description := constant.RebootDescription
 
-			if !confirmed {
-				console.Line(
-					"Would request a hard power cycle - the operating system gets no chance to shut down. Pass --yes to execute.",
-				)
-
-				return
+			if forced {
+				description = constant.RebootForceDescription
 			}
 
-			errors.PanicOnError(c.RequestPowerState(constant.PowerCycle))
-			console.Line("Power cycle requested.")
+			requestPower(
+				x,
+				instance,
+				client.PowerRequestOperationReboot,
+				forced,
+				confirmed,
+				description,
+			)
+
+			if confirmed && !forced {
+				x.Terminal.Line(constant.GracefulFollowUp)
+			}
 		},
 	}
-	result.Flags().BoolVar(
+	f := result.Flags()
+	f.StringVar(
+		&instance,
+		constant.InstanceArgument,
+		"",
+		constant.InstanceUsage,
+	)
+	f.BoolVar(
 		&confirmed,
-		"yes",
+		constant.YesArgument,
 		false,
-		"execute the power cycle instead of describing it",
+		"execute the restart instead of describing it",
+	)
+	f.BoolVar(
+		&forced,
+		constant.ForceArgument,
+		false,
+		"power cycle below the operating system instead of asking it",
 	)
 
 	return result

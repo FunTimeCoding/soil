@@ -3,10 +3,10 @@ package example
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/console"
-	generative "github.com/funtimecoding/soil/pkg/generative/constant"
+	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/ollama"
 	"github.com/funtimecoding/soil/pkg/system"
-	"github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/join"
 )
 
@@ -31,7 +31,7 @@ func ClassifyAlert() {
 		console.Format("Response: %+v\n", r)
 		response := p.ParseResponse(r.Text)
 		console.Format("To save: %s", response)
-		base := join.Absolute(constant.Temporary, generative.OllamaScheme)
+		base := join.Absolute(systemConstant.Temporary, constant.OllamaScheme)
 		system.EnsurePathExists(base)
 		system.SaveFile(
 			join.Absolute(

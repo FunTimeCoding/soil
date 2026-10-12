@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/technitium"
-	"github.com/funtimecoding/soil/pkg/technitium/constant"
+	technitiumConstant "github.com/funtimecoding/soil/pkg/technitium/constant"
 	"github.com/funtimecoding/soil/pkg/technitium/policy"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/spf13/cobra"
@@ -37,7 +37,10 @@ func allowUpdate(
 			}
 
 			if domain == "" {
-				domain = join.Empty(constant.WildcardPrefix, arguments[0])
+				domain = join.Empty(
+					technitiumConstant.WildcardPrefix,
+					arguments[0],
+				)
 			}
 
 			technitium.AllowUpdate(

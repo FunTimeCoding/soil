@@ -1,8 +1,8 @@
 package alert
 
 import (
-	atlassian "github.com/funtimecoding/soil/pkg/atlassian/constant"
-	"github.com/funtimecoding/soil/pkg/console/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 )
 
@@ -13,13 +13,13 @@ func (a *Alert) formatOwner(f *option.Format) string {
 		result = a.shortenUser(a.Owner)
 
 		if f.UseColor {
-			result = constant.Green("%s", result)
+			result = consoleConstant.Green("%s", result)
 		}
-	} else if !f.HasTag(constant.TagDense) {
-		result = atlassian.OpsgenieNoOwner
+	} else if !f.HasTag(consoleConstant.TagDense) {
+		result = constant.OpsgenieNoOwner
 
 		if f.UseColor {
-			result = constant.Red("%s", result)
+			result = consoleConstant.Red("%s", result)
 		}
 	}
 

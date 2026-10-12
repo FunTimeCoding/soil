@@ -1,59 +1,51 @@
 package goband
 
 import (
-	"github.com/funtimecoding/soil/pkg/band"
-	"github.com/funtimecoding/soil/pkg/console"
+	"fmt"
+	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/tool/goband/constant"
 	"github.com/spf13/cobra"
-	"strings"
 )
 
-func status(c *band.Client) *cobra.Command {
-	return &cobra.Command{
+func status(x *Context) *cobra.Command {
+	var instance string
+	result := &cobra.Command{
 		Use:   "status",
-		Short: "Show provisioning, redirection, and consent state",
+		Short: "Show provisioning, redirection, consent and power state",
+		Args:  cobra.NoArgs,
 		Run: func(
 			_ *cobra.Command,
 			_ []string,
 		) {
-			general := c.MustGeneralSettings()
-			console.Format(
-				"Host: %s.%s\n",
-				general.HostName,
-				general.DomainName,
+			v := readStatus(x, instance)
+			t := x.Terminal
+			t.Line(fmt.Sprintf("Instance: %s", v.Instance))
+			t.Line(fmt.Sprintf("Host: %s", v.Host))
+			t.Line(fmt.Sprintf("Provisioning: %s", v.Provisioning))
+			t.Line(
+				fmt.Sprintf(
+					"Screen redirection: enabled=%v timeout=%dm",
+					v.ScreenEnabled,
+					v.ScreenTimeout,
+				),
 			)
-			console.Format(
-				"Provisioning: %s\n",
-				band.SetupStateName(c.MustSetup().ProvisioningState),
-			)
-			screen := c.MustScreenSettings()
-			console.Format(
-				"Screen redirection: enabled=%v timeout=%dm\n",
-				screen.EnabledInFirmware,
-				screen.SessionTimeout,
-			)
-			console.Format(
-				"Redirection listener: %v\n",
-				c.MustRedirection().ListenerEnabled,
-			)
-			console.Format(
-				"Consent: %s\n",
-				band.ConsentName(c.MustConsent().Required),
-			)
-			state := c.MustPowerState()
-			console.Format(
-				"Power state: %s\n",
-				band.PowerStateName(state.State),
-			)
-			names := make([]string, 0, len(state.Available))
-
-			for _, a := range state.Available {
-				names = append(names, band.PowerStateName(a))
-			}
-
-			console.Format(
-				"Available power operations: %s\n",
-				strings.Join(names, ", "),
+			t.Line(fmt.Sprintf("Redirection listener: %v", v.Listener))
+			t.Line(fmt.Sprintf("Consent: %s", v.Consent))
+			t.Line(fmt.Sprintf("Power state: %s", v.Power))
+			t.Line(
+				fmt.Sprintf(
+					"Available power operations: %s",
+					join.CommaSpace(v.Available),
+				),
 			)
 		},
 	}
+	result.Flags().StringVar(
+		&instance,
+		constant.InstanceArgument,
+		"",
+		constant.InstanceUsage,
+	)
+
+	return result
 }

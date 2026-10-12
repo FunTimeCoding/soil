@@ -2,19 +2,19 @@ package gogitlabd
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
-	gitlabFace "github.com/funtimecoding/soil/pkg/gitlab/face"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/model_context"
+	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 )
 
 func Mount(
-	c gitlabFace.Forge,
+	v *service.Service,
 	b *web.Server,
 	r face.Reporter,
 	t face.Recorder,
 	g *guard.Mux,
 ) {
-	model_context.New(c, r, t).Mount(g)
+	model_context.New(v, r, t).Mount(g)
 	b.Mount(g)
 }

@@ -3,7 +3,7 @@ package model_context
 import (
 	"context"
 	"fmt"
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/time"
@@ -18,13 +18,13 @@ func (s *Server) roster(
 	_, e := s.resolveCaller(x, constant.Roster)
 
 	if e != nil {
-		return s.captureFail(e, library.UnexpectedError)
+		return s.captureFail(e, soil.UnexpectedError)
 	}
 
 	sessions, e := s.service.ListSessions()
 
 	if e != nil {
-		return s.captureFail(e, library.UnexpectedError)
+		return s.captureFail(e, soil.UnexpectedError)
 	}
 
 	if len(sessions) == 0 {
@@ -40,13 +40,13 @@ func (s *Server) roster(
 	labels, f := s.service.LabelsBySessions(identifiers)
 
 	if f != nil {
-		return s.captureFail(f, library.UnexpectedError)
+		return s.captureFail(f, soil.UnexpectedError)
 	}
 
 	pulses, g := s.service.LatestPulsesBySessions(identifiers)
 
 	if g != nil {
-		return s.captureFail(g, library.UnexpectedError)
+		return s.captureFail(g, soil.UnexpectedError)
 	}
 
 	var lines []string

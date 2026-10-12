@@ -1,8 +1,8 @@
 package coverage
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
-	crap "github.com/funtimecoding/soil/pkg/crap/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/crap/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/strings/join/key_value"
 	"github.com/funtimecoding/soil/pkg/system"
@@ -19,7 +19,7 @@ func Run(
 	if profile == "" {
 		directory := filepath.Join(root, systemConstant.Temporary)
 		system.MakeDirectory(directory)
-		profile = filepath.Join(directory, crap.ProfileFile)
+		profile = filepath.Join(directory, constant.ProfileFile)
 	}
 
 	r := run.New()
@@ -27,10 +27,10 @@ func Run(
 	r.Start(
 		append(
 			[]string{
-				constant.Go,
-				crap.TestCommand,
-				key_value.Equals(crap.CoverProfile, profile),
-				key_value.Equals(crap.CoverPackage, join.Comma(patterns)),
+				soil.Go,
+				constant.TestCommand,
+				key_value.Equals(constant.CoverProfile, profile),
+				key_value.Equals(constant.CoverPackage, join.Comma(patterns)),
 			},
 			patterns...,
 		)...,

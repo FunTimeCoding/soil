@@ -4,7 +4,7 @@ import (
 	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
 	library "github.com/funtimecoding/soil/pkg/time"
-	"github.com/funtimecoding/soil/pkg/time/constant"
+	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 	"time"
 )
 
@@ -13,9 +13,9 @@ func (j *Job) formatDate(f *option.Format) string {
 	t := j.Create.Local()
 
 	if f.HasTag(consoleConstant.TagDense) && t.After(library.Midnight(time.Now())) {
-		format = constant.HourMinute
+		format = timeConstant.HourMinute
 	} else {
-		format = constant.DateMinute
+		format = timeConstant.DateMinute
 	}
 
 	return t.Format(format)

@@ -3,8 +3,8 @@ package mock_client
 import "github.com/funtimecoding/soil/pkg/netbox/device"
 
 func (c *Client) SetDevicePrimaryAddress(
-	_ string,
-	_ string,
+	name string,
+	address string,
 ) (*device.Device, error) {
-	return nil, nil
+	return c.changeDevice("SetDevicePrimaryAddress", name, address)
 }

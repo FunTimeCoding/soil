@@ -4,7 +4,6 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/netbox/device"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -13,19 +12,13 @@ func (s *Server) listDevices(
 	_ context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	query := r.GetString(constant.ParameterQuery, "")
-	var result []*device.Device
-	var e error
-
-	if query != "" {
-		result, e = s.client.DevicesByMatch(query)
-	} else {
-		result, e = s.client.Devices()
-	}
+	result, grouped, e := s.service.Devices(
+		r.GetString(constant.ParameterQuery, ""),
+	)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.serviceFail(e, "devices not listed")
 	}
 
-	return response.SuccessAny(convert.Devices(result))
+	return response.SuccessAny(convert.LabeledDevices(result, grouped))
 }

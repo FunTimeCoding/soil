@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/system"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
-	text "github.com/funtimecoding/soil/pkg/text/constant"
+	"github.com/funtimecoding/soil/pkg/text/constant"
 	"path/filepath"
 )
 
 func ResolvePath() string {
 	candidates := []string{
-		text.DictionaryFile,
-		filepath.Join(systemConstant.DocumentPath, text.DictionaryFile),
+		constant.DictionaryFile,
+		filepath.Join(systemConstant.DocumentPath, constant.DictionaryFile),
 	}
 	result := system.FirstFile(candidates...)
 

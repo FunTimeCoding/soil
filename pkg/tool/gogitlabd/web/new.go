@@ -1,10 +1,10 @@
 package web
 
 import (
-	"github.com/funtimecoding/soil/pkg/gitlab/face"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/worker"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/palette"
@@ -13,7 +13,7 @@ import (
 )
 
 func New(
-	c face.Forge,
+	v *service.Service,
 	k *worker.Worker,
 ) *Server {
 	r := registry.New()
@@ -21,20 +21,20 @@ func New(
 		palette.NewCommand(
 			constant.BoardTitle,
 			constant.BoardPath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
 	)
 
 	return &Server{
-		client:   c,
+		service:  v,
 		worker:   k,
 		registry: r,
 		view: view.New(
 			layout.New(constant.Identity).
-				WithTheme(web.ThemeTanuki).
+				WithTheme(webConstant.ThemeTanuki).
 				WithStyle(constant.InlineStyle).
-				WithCommandPalette(web.PalettePath).
-				WithLiveEndpoint(web.LivePath).
+				WithCommandPalette(webConstant.PalettePath).
+				WithLiveEndpoint(webConstant.LivePath).
 				WithItems(
 					navigation_item.New(
 						constant.BoardPath,

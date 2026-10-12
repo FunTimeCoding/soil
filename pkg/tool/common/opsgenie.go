@@ -1,12 +1,12 @@
 package common
 
 import (
-	"github.com/funtimecoding/soil/pkg/atlassian/constant"
+	atlassianConstant "github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/alert/alert_enricher"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/alert/detail"
-	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
-	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
+	prometheusConstant "github.com/funtimecoding/soil/pkg/prometheus/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/split"
 	"github.com/funtimecoding/soil/pkg/strings/split/key_value"
 	"github.com/funtimecoding/soil/pkg/system/environment"
@@ -16,13 +16,13 @@ import (
 func Opsgenie() *opsgenie.Client {
 	result := opsgenie.NewEnvironment().Set(
 		alert_enricher.New().Add(
-			prometheus.HighMemoryUsage,
-			prometheus.EntityMemory,
-			prometheus.CategoryHigh,
+			prometheusConstant.HighMemoryUsage,
+			prometheusConstant.EntityMemory,
+			prometheusConstant.CategoryHigh,
 		),
 	)
 
-	if s := environment.Optional(constant.OpsgenieTeamEnvironment); s != "" {
+	if s := environment.Optional(atlassianConstant.OpsgenieTeamEnvironment); s != "" {
 		for _, pair := range split.Semicolon(s) {
 			if len(pair) == 0 {
 				continue
@@ -42,7 +42,7 @@ func Opsgenie() *opsgenie.Client {
 
 	result.ShortUser(
 		func(s string) string {
-			if strings.Contains(s, stringConstant.At) {
+			if strings.Contains(s, stringsConstant.At) {
 				k, _ := key_value.At(s)
 
 				return k

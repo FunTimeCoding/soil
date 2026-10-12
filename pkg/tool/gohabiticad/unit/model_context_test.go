@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	generative "github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/habitica/tag"
 	"github.com/funtimecoding/soil/pkg/habitica/task"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/constant"
@@ -32,7 +32,7 @@ func TestModelContext(t *testing.T) {
 	score := c.MustCallTool(
 		constant.ScoreTask,
 		map[string]any{
-			generative.ParameterIdentifier: "task-1",
+			generativeConstant.ParameterIdentifier: "task-1",
 			constant.Direction:             "up",
 		},
 	)

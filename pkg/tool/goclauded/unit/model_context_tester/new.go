@@ -3,11 +3,11 @@ package model_context_tester
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
-	generative "github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_client"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/google/uuid"
 	"testing"
@@ -20,11 +20,11 @@ func New(
 	t.Helper()
 	x := context.Background()
 	c := model_context_client.New(t, port)
-	base := locator.New(constant.Localhost).Insecure().Port(port).String()
+	base := locator.New(webConstant.Localhost).Insecure().Port(port).String()
 	restClient, e := client.NewClientWithResponses(
 		base,
 		client.WithRequestEditorFn(
-			web.BearerEditor(generative.ModelContextTestToken),
+			web.BearerEditor(generativeConstant.ModelContextTestToken),
 		),
 	)
 	assert.FatalOnError(t, e)

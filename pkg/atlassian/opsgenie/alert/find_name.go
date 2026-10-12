@@ -1,9 +1,9 @@
 package alert
 
 import (
-	atlassian "github.com/funtimecoding/soil/pkg/atlassian/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/prometheus/constant"
+	prometheusConstant "github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"strings"
 )
 
@@ -22,16 +22,16 @@ func (a *Alert) findName() string {
 		details = a.RawDetail.Details
 	}
 
-	if n, okay := details[constant.AlertnameLabel]; okay {
+	if n, okay := details[prometheusConstant.AlertnameLabel]; okay {
 		return a.shortenAlert(n)
 	}
 
 	result := a.shortenAlert(message)
 
-	if result == atlassian.OpsgenieUnknownName {
+	if result == constant.OpsgenieUnknownName {
 		result = a.nameFromDescription(description)
 
-		if result == atlassian.OpsgenieUnknownName {
+		if result == constant.OpsgenieUnknownName {
 			if a.RawList != nil {
 				console.Format("Unknown name (simple): %+v\n", a.RawList)
 			}

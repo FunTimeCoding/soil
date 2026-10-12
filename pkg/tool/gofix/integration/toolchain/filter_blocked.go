@@ -6,7 +6,7 @@ func filterBlocked(entries []*concern.Concern) []*concern.Concern {
 	var r []*concern.Concern
 
 	for _, c := range entries {
-		if !c.Fixed {
+		if !c.Fixed && !c.Planned {
 			r = append(r, c)
 		}
 	}

@@ -9,28 +9,21 @@ func (s *Server) CreateVirtualAddress(
 	_ context.Context,
 	r server.CreateVirtualAddressRequestObject,
 ) (server.CreateVirtualAddressResponseObject, error) {
-	vm, e := s.client.VirtualMachineByName(r.Name)
-
-	if e != nil {
-		return server.CreateVirtualAddress500JSONResponse(*s.captureDetail(e)), nil
-	}
-
-	i, f := s.client.VirtualMachineInterfaceByName(vm, r.Body.Interface)
-
-	if f != nil {
-		return server.CreateVirtualAddress500JSONResponse(*s.captureDetail(f)), nil
-	}
-
 	status := ""
 
 	if r.Body.Status != nil {
 		status = *r.Body.Status
 	}
 
-	a, g := s.client.CreateVirtualAddress(i.GetId(), r.Body.Address, status)
+	a, e := s.service.CreateVirtualAddress(
+		r.Name,
+		r.Body.Interface,
+		r.Body.Address,
+		status,
+	)
 
-	if g != nil {
-		return server.CreateVirtualAddress500JSONResponse(*s.captureDetail(g)), nil
+	if e != nil {
+		return server.CreateVirtualAddress500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	return server.CreateVirtualAddress201JSONResponse{

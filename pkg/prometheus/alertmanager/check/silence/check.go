@@ -3,12 +3,12 @@ package silence
 import (
 	"github.com/funtimecoding/soil/pkg/console"
 	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
-	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
+	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/advanced_option"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/check/silence/matcher"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/check/silence/option"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/silence"
-	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/tool/common"
 	"time"
 )
@@ -37,7 +37,7 @@ func Check(o *option.Silence) {
 	}
 
 	var relevant int
-	f := prometheus.AlertmanagerFormat
+	f := constant.AlertmanagerFormat
 
 	if o.Copyable {
 		f.Tag(consoleConstant.TagCopyable)
@@ -46,7 +46,7 @@ func Check(o *option.Silence) {
 	t := time.Now()
 
 	for _, e := range silences {
-		if !o.All && e.State != prometheus.ActiveState {
+		if !o.All && e.State != constant.ActiveState {
 			continue
 		}
 
@@ -61,7 +61,7 @@ func Check(o *option.Silence) {
 	if !o.All && relevant == 0 {
 		console.Format(
 			"No relevant %s, %d in total\n",
-			monitor.GoSilence.Plural,
+			monitorConstant.GoSilence.Plural,
 			len(silences),
 		)
 	}

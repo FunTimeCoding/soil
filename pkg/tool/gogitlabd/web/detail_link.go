@@ -2,7 +2,7 @@ package web
 
 import (
 	"fmt"
-	argument "github.com/funtimecoding/soil/pkg/argument/constant"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
 )
 
@@ -14,14 +14,14 @@ func detailLink(
 	result := fmt.Sprintf(
 		"%s?%s=%d&%s=%d",
 		constant.PipelinePath,
-		argument.Project,
+		argumentConstant.Project,
 		project,
-		argument.Pipeline,
+		argumentConstant.Pipeline,
 		pipeline,
 	)
 
 	if job != 0 {
-		result = fmt.Sprintf("%s&%s=%d", result, argument.Job, job)
+		result = fmt.Sprintf("%s&%s=%d", result, argumentConstant.Job, job)
 	}
 
 	return result

@@ -2,7 +2,7 @@ package basic
 
 import (
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"time"
 )
 
@@ -12,10 +12,10 @@ func (c *Client) Series(series string) (string, error) {
 
 	return c.Text(
 		c.base.Copy().Path(constant.LokiSeries).SetInteger64(
-			web.ParameterStart,
+			webConstant.ParameterStart,
 			oneWeekAgo.Unix(),
 		).SetInteger64(
-			web.ParameterEnd,
+			webConstant.ParameterEnd,
 			now.Unix(),
 		).Set("match[]", series).String(),
 	)

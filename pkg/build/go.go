@@ -3,9 +3,9 @@ package build
 import (
 	"github.com/funtimecoding/soil/pkg/build/option"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
-	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/join"
@@ -36,11 +36,11 @@ func Go(o *option.Build) {
 	console.Format("Path: %s\n", path)
 	system.EnsurePathExists(path)
 	s := []string{
-		constant.Go,
-		constant.Build,
-		constant.TagsArgument,
+		soil.Go,
+		soil.Build,
+		soil.TagsArgument,
 		Tags(p.BuildTags),
-		constant.OutputArgument,
+		soil.OutputArgument,
 		p.Output,
 		Package(p.MainPath),
 	}
@@ -49,11 +49,11 @@ func Go(o *option.Build) {
 	r.Panic = false
 
 	if !p.Native {
-		r.Environment(constant.NativeEnabled, stringConstant.BooleanFalse)
+		r.Environment(soil.NativeEnabled, stringsConstant.BooleanFalse)
 	}
 
-	r.Environment(constant.System, p.OperatingSystem)
-	r.Environment(constant.Architecture, p.Architecture)
+	r.Environment(soil.System, p.OperatingSystem)
+	r.Environment(soil.Architecture, p.Architecture)
 
 	if t := r.Start(s...); t != "" {
 		console.Format("Output:\n%s", t)

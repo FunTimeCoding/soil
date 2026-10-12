@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	generative "github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
@@ -13,7 +13,7 @@ func (s *Server) createTunnel(
 	_ context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	name, e := r.RequireString(generative.ParameterName)
+	name, e := r.RequireString(generativeConstant.ParameterName)
 
 	if e != nil {
 		return response.Fail("name is required: %v", e)
@@ -31,16 +31,10 @@ func (s *Server) createTunnel(
 		return response.Fail("group is required: %v", g)
 	}
 
-	group, h := s.client.TunnelGroupByName(groupName)
+	t, h := s.service.CreateTunnel(name, encapsulation, groupName)
 
 	if h != nil {
-		return s.captureDetail(h)
-	}
-
-	t, i := s.client.CreateTunnel(name, encapsulation, group)
-
-	if i != nil {
-		return s.captureDetail(i)
+		return s.serviceFail(h, "tunnel not created")
 	}
 
 	return response.SuccessAny(convert.Tunnel(t))

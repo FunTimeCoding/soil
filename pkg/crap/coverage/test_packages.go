@@ -1,8 +1,8 @@
 package coverage
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
-	crap "github.com/funtimecoding/soil/pkg/crap/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/crap/constant"
 	"github.com/funtimecoding/soil/pkg/strings/slice"
 	"github.com/funtimecoding/soil/pkg/strings/split"
 	"github.com/funtimecoding/soil/pkg/system/run"
@@ -22,10 +22,10 @@ func TestPackages(
 				r.Start(
 					append(
 						[]string{
-							constant.Go,
-							crap.ListCommand,
-							crap.ListFormat,
-							crap.TestPackageTemplate,
+							soil.Go,
+							constant.ListCommand,
+							constant.ListFormat,
+							constant.TestPackageTemplate,
 						},
 						patterns...,
 					)...,

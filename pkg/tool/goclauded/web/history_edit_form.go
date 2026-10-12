@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -30,7 +30,7 @@ func (s *Server) historyEditForm(
 
 	editValue := editableValue(event.Kind, event.Metadata)
 	textareaIdentifier := fmt.Sprintf("edit-body-%d", identifier)
-	w.Header().Set(web.ContentType, "text/html; charset=utf-8")
+	w.Header().Set(webConstant.ContentType, "text/html; charset=utf-8")
 	errors.PanicOnError(
 		gomponents.Group(
 			[]gomponents.Node{

@@ -26,7 +26,7 @@ func (s *Server) GetProjectVariable(
 		return s.captureDetail(e)
 	}
 
-	v, e := s.client.ProjectVariable(project, a.Key)
+	v, e := s.service.ProjectVariable(project, a.Key)
 
 	if e != nil {
 		return s.captureDetail(e)

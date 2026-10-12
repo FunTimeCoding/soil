@@ -2,7 +2,7 @@ package model_context_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert/fixture"
-	system "github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 )
 
@@ -11,7 +11,7 @@ func (t *Tester) IndexFixtures() {
 		constant.AddCollection,
 		map[string]any{
 			"name":        "test",
-			constant.Path: fixture.Path(system.SearchPath),
+			constant.Path: fixture.Path(systemConstant.SearchPath),
 		},
 	)
 	t.MustCallTool(constant.Index, map[string]any{})

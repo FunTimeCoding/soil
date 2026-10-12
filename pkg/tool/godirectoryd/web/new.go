@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/service"
 	"github.com/funtimecoding/soil/pkg/web/authorization/client"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/palette"
@@ -21,14 +21,18 @@ func New(
 		palette.NewCommand(
 			constant.UserTitle,
 			constant.UserPath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
 		palette.NewCommand(
 			constant.GroupTitle,
 			constant.GroupPath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
-		palette.NewCommand(web.SignOutTitle, web.SignOutPath, web.PaletteAction),
+		palette.NewCommand(
+			webConstant.SignOutTitle,
+			webConstant.SignOutPath,
+			webConstant.PaletteAction,
+		),
 	)
 
 	return &Server{
@@ -37,8 +41,8 @@ func New(
 		registry:      r,
 		view: view.New(
 			layout.New(constant.Identity).
-				WithTheme(web.ThemePhosphor).
-				WithCommandPalette(web.PalettePath).
+				WithTheme(webConstant.ThemePhosphor).
+				WithCommandPalette(webConstant.PalettePath).
 				WithItems(
 					navigation_item.New(constant.UserPath, constant.UserTitle),
 					navigation_item.New(

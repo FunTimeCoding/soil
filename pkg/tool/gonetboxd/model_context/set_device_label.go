@@ -3,7 +3,6 @@ package model_context
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	netboxConstant "github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -31,21 +30,10 @@ func (s *Server) setDeviceLabel(
 		return response.Fail("value is required: %v", h)
 	}
 
-	d, resolveFail := s.client.DeviceByName(device)
+	result, e := s.service.SetDeviceLabel(device, key, value)
 
-	if resolveFail != nil {
-		return s.captureFail(resolveFail, "device not found")
-	}
-
-	result, setFail := s.store.SetLabel(
-		netboxConstant.DeviceAddress,
-		d.Identifier,
-		key,
-		value,
-	)
-
-	if setFail != nil {
-		return s.captureFail(setFail, "label not set on device")
+	if e != nil {
+		return s.serviceFail(e, "label not set on device")
 	}
 
 	return response.SuccessAny(convert.Label(result))

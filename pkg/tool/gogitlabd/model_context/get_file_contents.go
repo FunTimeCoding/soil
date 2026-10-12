@@ -26,7 +26,7 @@ func (s *Server) GetFileContents(
 		return s.captureDetail(e)
 	}
 
-	v, e := s.client.File(project, a.Reference, a.Path)
+	v, e := s.service.File(project, a.Reference, a.Path)
 
 	if e != nil {
 		return s.captureDetail(e)

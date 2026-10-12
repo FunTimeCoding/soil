@@ -3,7 +3,7 @@ package model_context
 import (
 	"context"
 	"fmt"
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -16,7 +16,7 @@ func (s *Server) label(
 	c, e := s.resolveCaller(x, constant.Label)
 
 	if e != nil {
-		return s.captureFail(e, library.UnexpectedError)
+		return s.captureFail(e, soil.UnexpectedError)
 	}
 
 	key, e := q.RequireString(constant.Key)
@@ -33,7 +33,7 @@ func (s *Server) label(
 		r, f := s.service.ResolveSessionIdentifier(target)
 
 		if f != nil {
-			return s.captureFail(f, library.UnexpectedError)
+			return s.captureFail(f, soil.UnexpectedError)
 		}
 
 		if r.Ambiguous() {
@@ -67,7 +67,7 @@ func (s *Server) label(
 		value, f := s.service.GetLabel(sessionIdentifier, key)
 
 		if f != nil {
-			return s.captureFail(f, library.UnexpectedError)
+			return s.captureFail(f, soil.UnexpectedError)
 		}
 
 		if value == "" {
@@ -88,7 +88,7 @@ func (s *Server) label(
 		)
 
 		if g != nil {
-			return s.captureFail(g, library.UnexpectedError)
+			return s.captureFail(g, soil.UnexpectedError)
 		}
 
 		return response.Success(change)
@@ -112,7 +112,7 @@ func (s *Server) label(
 	)
 
 	if h != nil {
-		return s.captureFail(h, library.UnexpectedError)
+		return s.captureFail(h, soil.UnexpectedError)
 	}
 
 	return response.Success(

@@ -13,7 +13,7 @@ func (s *Server) job(
 	project := queryInteger(r, constant.Project)
 	pipeline := queryInteger(r, constant.Pipeline)
 	requested := queryInteger(r, constant.Job)
-	jobs, e := s.client.PipelineJobs(project, pipeline)
+	jobs, e := s.service.PipelineJobs(project, pipeline)
 	errors.PanicOnError(e)
 	s.view.RenderFragment(
 		w,

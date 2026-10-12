@@ -1,7 +1,7 @@
 package model_context
 
 import (
-	argument "github.com/funtimecoding/soil/pkg/argument/constant"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/generative/model_context/option"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -13,7 +13,7 @@ func (s *Server) register() {
 			constant.GetProject,
 			mcp.WithDescription("Get a GitLab project by path or ID"),
 			mcp.WithString(
-				argument.Project,
+				argumentConstant.Project,
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
@@ -45,7 +45,7 @@ func (s *Server) register() {
 			constant.GetRepositoryTree,
 			mcp.WithDescription("List files and directories in a repository"),
 			mcp.WithString(
-				argument.Project,
+				argumentConstant.Project,
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
@@ -69,7 +69,7 @@ func (s *Server) register() {
 			constant.GetFileContents,
 			mcp.WithDescription("Read a file from a GitLab repository"),
 			mcp.WithString(
-				argument.Project,
+				argumentConstant.Project,
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
@@ -90,7 +90,7 @@ func (s *Server) register() {
 			constant.ListPipelines,
 			mcp.WithDescription("List pipelines for a GitLab project"),
 			mcp.WithString(
-				argument.Project,
+				argumentConstant.Project,
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
@@ -112,12 +112,12 @@ func (s *Server) register() {
 			constant.GetPipeline,
 			mcp.WithDescription("Get details of a GitLab pipeline"),
 			mcp.WithString(
-				argument.Project,
+				argumentConstant.Project,
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
 			mcp.WithNumber(
-				argument.Pipeline,
+				argumentConstant.Pipeline,
 				mcp.Required(),
 				mcp.Description("Pipeline ID"),
 			),
@@ -129,7 +129,7 @@ func (s *Server) register() {
 			constant.CreatePipeline,
 			mcp.WithDescription("Trigger a new pipeline for a GitLab project"),
 			mcp.WithString(
-				argument.Project,
+				argumentConstant.Project,
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
@@ -152,12 +152,12 @@ func (s *Server) register() {
 			constant.ListPipelineJobs,
 			mcp.WithDescription("List jobs in a GitLab pipeline"),
 			mcp.WithString(
-				argument.Project,
+				argumentConstant.Project,
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
 			mcp.WithNumber(
-				argument.Pipeline,
+				argumentConstant.Pipeline,
 				mcp.Required(),
 				mcp.Description("Pipeline ID"),
 			),
@@ -170,12 +170,12 @@ func (s *Server) register() {
 			constant.GetPipelineJob,
 			mcp.WithDescription("Get details of a pipeline job"),
 			mcp.WithString(
-				argument.Project,
+				argumentConstant.Project,
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
 			mcp.WithNumber(
-				argument.Job,
+				argumentConstant.Job,
 				mcp.Required(),
 				mcp.Description("Job ID"),
 			),
@@ -188,12 +188,12 @@ func (s *Server) register() {
 			constant.GetPipelineJobOutput,
 			mcp.WithDescription("Read the log output of a pipeline job"),
 			mcp.WithString(
-				argument.Project,
+				argumentConstant.Project,
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
 			mcp.WithNumber(
-				argument.Job,
+				argumentConstant.Job,
 				mcp.Required(),
 				mcp.Description("Job ID"),
 			),
@@ -205,12 +205,12 @@ func (s *Server) register() {
 			constant.RetryPipeline,
 			mcp.WithDescription("Retry a failed GitLab pipeline"),
 			mcp.WithString(
-				argument.Project,
+				argumentConstant.Project,
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
 			mcp.WithNumber(
-				argument.Pipeline,
+				argumentConstant.Pipeline,
 				mcp.Required(),
 				mcp.Description("Pipeline ID"),
 			),
@@ -222,12 +222,12 @@ func (s *Server) register() {
 			constant.RetryPipelineJob,
 			mcp.WithDescription("Retry a specific pipeline job"),
 			mcp.WithString(
-				argument.Project,
+				argumentConstant.Project,
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
 			mcp.WithNumber(
-				argument.Job,
+				argumentConstant.Job,
 				mcp.Required(),
 				mcp.Description("Job ID"),
 			),
@@ -240,12 +240,12 @@ func (s *Server) register() {
 			constant.CancelPipeline,
 			mcp.WithDescription("Cancel a running GitLab pipeline"),
 			mcp.WithString(
-				argument.Project,
+				argumentConstant.Project,
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
 			mcp.WithNumber(
-				argument.Pipeline,
+				argumentConstant.Pipeline,
 				mcp.Required(),
 				mcp.Description("Pipeline ID"),
 			),
@@ -257,12 +257,12 @@ func (s *Server) register() {
 			constant.CancelPipelineJob,
 			mcp.WithDescription("Cancel a specific pipeline job"),
 			mcp.WithString(
-				argument.Project,
+				argumentConstant.Project,
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
 			mcp.WithNumber(
-				argument.Job,
+				argumentConstant.Job,
 				mcp.Required(),
 				mcp.Description("Job ID"),
 			),
@@ -275,7 +275,7 @@ func (s *Server) register() {
 			constant.ListMergeRequests,
 			mcp.WithDescription("List merge requests for a GitLab project"),
 			mcp.WithString(
-				argument.Project,
+				argumentConstant.Project,
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
@@ -291,7 +291,7 @@ func (s *Server) register() {
 			constant.GetMergeRequest,
 			mcp.WithDescription("Get details of a merge request"),
 			mcp.WithString(
-				argument.Project,
+				argumentConstant.Project,
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
@@ -308,7 +308,7 @@ func (s *Server) register() {
 			constant.GetMergeRequestDiffs,
 			mcp.WithDescription("Get the diff of a merge request"),
 			mcp.WithString(
-				argument.Project,
+				argumentConstant.Project,
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
@@ -325,7 +325,7 @@ func (s *Server) register() {
 			constant.MergeRequestDiscussions,
 			mcp.WithDescription("List discussion threads on a merge request"),
 			mcp.WithString(
-				argument.Project,
+				argumentConstant.Project,
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
@@ -342,7 +342,7 @@ func (s *Server) register() {
 			constant.CreateMergeRequestNote,
 			mcp.WithDescription("Add a comment to a merge request"),
 			mcp.WithString(
-				argument.Project,
+				argumentConstant.Project,
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
@@ -364,7 +364,7 @@ func (s *Server) register() {
 			constant.ListCommits,
 			mcp.WithDescription("List commits for a GitLab project"),
 			mcp.WithString(
-				argument.Project,
+				argumentConstant.Project,
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
@@ -377,7 +377,7 @@ func (s *Server) register() {
 			constant.GetCommit,
 			mcp.WithDescription("Get details of a commit"),
 			mcp.WithString(
-				argument.Project,
+				argumentConstant.Project,
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
@@ -394,7 +394,7 @@ func (s *Server) register() {
 			constant.GetCommitDiff,
 			mcp.WithDescription("Get the diff of a commit"),
 			mcp.WithString(
-				argument.Project,
+				argumentConstant.Project,
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
@@ -411,7 +411,7 @@ func (s *Server) register() {
 			constant.ListProjectVariables,
 			mcp.WithDescription("List CI/CD variables for a GitLab project"),
 			mcp.WithString(
-				argument.Project,
+				argumentConstant.Project,
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
@@ -423,7 +423,7 @@ func (s *Server) register() {
 			constant.GetProjectVariable,
 			mcp.WithDescription("Get a CI/CD variable by key"),
 			mcp.WithString(
-				argument.Project,
+				argumentConstant.Project,
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
@@ -440,7 +440,7 @@ func (s *Server) register() {
 			constant.CreateProjectVariable,
 			mcp.WithDescription("Create a CI/CD variable"),
 			mcp.WithString(
-				argument.Project,
+				argumentConstant.Project,
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
@@ -476,7 +476,7 @@ func (s *Server) register() {
 			constant.UpdateProjectVariable,
 			mcp.WithDescription("Update a CI/CD variable"),
 			mcp.WithString(
-				argument.Project,
+				argumentConstant.Project,
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
@@ -512,7 +512,7 @@ func (s *Server) register() {
 			constant.DeleteProjectVariable,
 			mcp.WithDescription("Delete a CI/CD variable"),
 			mcp.WithString(
-				argument.Project,
+				argumentConstant.Project,
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
@@ -529,7 +529,7 @@ func (s *Server) register() {
 			constant.CreateBranch,
 			mcp.WithDescription("Create a branch in a GitLab project"),
 			mcp.WithString(
-				argument.Project,
+				argumentConstant.Project,
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
@@ -555,7 +555,7 @@ func (s *Server) register() {
 				"List container registry repositories of a GitLab project",
 			),
 			mcp.WithString(
-				argument.Project,
+				argumentConstant.Project,
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),
@@ -569,7 +569,7 @@ func (s *Server) register() {
 				"Delete a container registry repository and its cache sibling (<path>/cache) when present - the ritual after an image moves to another registry",
 			),
 			mcp.WithString(
-				argument.Project,
+				argumentConstant.Project,
 				mcp.Required(),
 				mcp.Description("Project path (owner/repo) or ID"),
 			),

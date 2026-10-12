@@ -10,6 +10,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/metric"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/option"
+	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/web"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/worker"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
@@ -23,10 +24,10 @@ func Run(
 ) {
 	r := s.Reporter()
 	l := logger.New(context.Background())
-	c := gitlab.NewEnvironment()
+	v := service.New(gitlab.NewEnvironment())
 	m := metric.New()
-	k := worker.New(c, constant.PollInterval, m.Registry(), l, r)
-	b := web.New(c, k)
+	k := worker.New(v, constant.PollInterval, m.Registry(), l, r)
+	b := web.New(v, k)
 	lifecycle.New(
 		l,
 		lifecycle.WithWorker(k),
@@ -44,7 +45,7 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(x *http.ServeMux) {
-					Mount(c, b, r, s.Recorder(), guard.New(x, o.ServiceTokens))
+					Mount(v, b, r, s.Recorder(), guard.New(x, o.ServiceTokens))
 				},
 			).WithMiddleware(b.Recovery(r)),
 		),

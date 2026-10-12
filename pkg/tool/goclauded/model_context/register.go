@@ -1,7 +1,7 @@
 package model_context
 
 import (
-	generative "github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -333,7 +333,7 @@ func (s *Server) register() {
 				"Search every Claude Code conversation in the harbor for literal text - case-insensitive substrings, not meaning (goqueryd searches by meaning). A conversation matches when each term appears somewhere in it; results group by conversation, newest hit first, with up to three snippets each, blocks holding every term first. Searches messages by default; kinds adds edits and tool calls. Tool results are not searched. Read around a hit with read_conversation, passing the conversation's session and the hit's identifier.",
 			),
 			mcp.WithString(
-				generative.ParameterQuery,
+				generativeConstant.ParameterQuery,
 				mcp.Required(),
 				mcp.Description(
 					"Terms separated by spaces, each matched as a substring",

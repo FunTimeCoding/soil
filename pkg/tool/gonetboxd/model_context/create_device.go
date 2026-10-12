@@ -2,9 +2,8 @@ package model_context
 
 import (
 	"context"
-	generative "github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	"github.com/funtimecoding/soil/pkg/netbox/tenant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -14,7 +13,7 @@ func (s *Server) createDevice(
 	_ context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	name, f := r.RequireString(generative.ParameterName)
+	name, f := r.RequireString(generativeConstant.ParameterName)
 
 	if f != nil {
 		return response.Fail("name is required: %v", f)
@@ -38,39 +37,17 @@ func (s *Server) createDevice(
 		return response.Fail("site is required: %v", i)
 	}
 
-	role, j := s.client.DeviceRoleByName(roleName)
+	result, e := s.service.CreateDevice(
+		name,
+		roleName,
+		typeName,
+		siteName,
+		r.GetString(constant.Tenant, ""),
+		r.GetStringSlice(constant.Tags, nil),
+	)
 
-	if j != nil {
-		return s.captureFail(j, "device role not found")
-	}
-
-	deviceType, k := s.client.DeviceTypeByName(typeName)
-
-	if k != nil {
-		return s.captureFail(k, "device type not found")
-	}
-
-	site, l := s.client.SiteByName(siteName)
-
-	if l != nil {
-		return s.captureFail(l, "site not found")
-	}
-
-	var ten *tenant.Tenant
-
-	if t := r.GetString(constant.Tenant, ""); t != "" {
-		var n error
-		ten, n = s.client.TenantByName(t)
-
-		if n != nil {
-			return s.captureFail(n, "tenant not found")
-		}
-	}
-
-	result, m := s.client.CreateDevice(name, role, nil, deviceType, site, ten)
-
-	if m != nil {
-		return s.captureFail(m, "device not created")
+	if e != nil {
+		return s.serviceFail(e, "device not created")
 	}
 
 	return response.SuccessAny(convert.Device(result))

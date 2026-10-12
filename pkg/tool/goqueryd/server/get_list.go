@@ -2,8 +2,8 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
-	queryConstant "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/server"
 )
 
@@ -22,7 +22,7 @@ func (s *Server) GetList(
 			metadata = map[string]string{}
 		}
 
-		metadata[queryConstant.SourceType] = *r.Params.SourceType
+		metadata[constant.SourceType] = *r.Params.SourceType
 	}
 
 	limit := 10
@@ -47,7 +47,7 @@ func (s *Server) GetList(
 
 	if e != nil {
 		return server.GetList500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
+			*s.captureFail(e, soil.UnexpectedError),
 		), nil
 	}
 

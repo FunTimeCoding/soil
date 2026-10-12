@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/unit/store_tester"
 	"testing"
@@ -11,7 +11,7 @@ import (
 func TestTurnsKeepTheirOrder(t *testing.T) {
 	s := store_tester.New(t)
 	d := s.Store.PushDecision(
-		stringConstant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"which entry rule?",
 		"narrow",
 		nil,
@@ -19,7 +19,7 @@ func TestTurnsKeepTheirOrder(t *testing.T) {
 	)
 	s.Store.AddTurn(d.Identifier, constant.AuthorSession, "narrowing it")
 	s.Store.AddTurn(d.Identifier, constant.AuthorUser, "go on")
-	turns := s.Store.Decisions(stringConstant.LowerAlfa)[0].Turns
+	turns := s.Store.Decisions(stringsConstant.LowerAlfa)[0].Turns
 	assert.Count(t, 2, turns)
 	assert.String(t, "narrowing it", turns[0].Content)
 	assert.String(t, "go on", turns[1].Content)
@@ -28,7 +28,7 @@ func TestTurnsKeepTheirOrder(t *testing.T) {
 func TestTurnCountCountsOneAuthor(t *testing.T) {
 	s := store_tester.New(t)
 	d := s.Store.PushDecision(
-		stringConstant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"which entry rule?",
 		"narrow",
 		nil,

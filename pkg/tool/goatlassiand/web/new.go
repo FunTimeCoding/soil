@@ -3,7 +3,7 @@ package web
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/worker"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/palette"
@@ -17,7 +17,7 @@ func New(k *worker.Worker) *Server {
 		palette.NewCommand(
 			constant.PlateTitle,
 			constant.PlatePath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
 	)
 
@@ -26,10 +26,10 @@ func New(k *worker.Worker) *Server {
 		registry: r,
 		view: view.New(
 			layout.New(constant.Identity).
-				WithTheme(web.ThemeAtlas).
+				WithTheme(webConstant.ThemeAtlas).
 				WithStyle(constant.InlineStyle).
-				WithCommandPalette(web.PalettePath).
-				WithLiveEndpoint(web.LivePath).
+				WithCommandPalette(webConstant.PalettePath).
+				WithLiveEndpoint(webConstant.LivePath).
 				WithItems(
 					navigation_item.New(
 						constant.PlatePath,

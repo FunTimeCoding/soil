@@ -6,8 +6,10 @@ import (
 )
 
 func (c *Client) CreateCable(
-	_ *network.Interface,
-	_ *network.Interface,
+	a *network.Interface,
+	b *network.Interface,
 ) (*cable.Cable, error) {
+	c.record("CreateCable", a.Name, b.Name)
+
 	return nil, nil
 }

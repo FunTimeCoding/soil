@@ -1,8 +1,8 @@
 package outdated
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
-	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
+	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/report"
 	"github.com/funtimecoding/soil/pkg/system/macos/brew/formula"
 	"github.com/funtimecoding/soil/pkg/system/macos/check/brew/outdated/option"
@@ -14,11 +14,11 @@ func printNotation(
 ) {
 	r := report.New()
 
-	for _, e := range report.Trim(v, r, o.All, monitor.GoBrew) {
+	for _, e := range report.Trim(v, r, o.All, monitorConstant.GoBrew) {
 		r.AddItem(
-			monitor.GoBrew,
+			monitorConstant.GoBrew,
 			e.MonitorIdentifier,
-			constant.Warning,
+			soil.Warning,
 			e.CurrentVersion,
 			e.Link,
 			nil,

@@ -2,7 +2,7 @@ package scan
 
 import (
 	"fmt"
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/parse"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
@@ -33,7 +33,7 @@ func RegisteredTools(
 
 	for _, file := range v.Files() {
 		if !strings.HasPrefix(file, prefix) ||
-			!strings.HasSuffix(file, library.GoExtension) {
+			!strings.HasSuffix(file, soil.GoExtension) {
 			continue
 		}
 

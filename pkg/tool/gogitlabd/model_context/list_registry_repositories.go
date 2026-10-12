@@ -22,7 +22,7 @@ func (s *Server) ListRegistryRepositories(
 		return s.captureDetail(e)
 	}
 
-	v, e := s.client.RegistryRepositories(project, false)
+	v, e := s.service.RegistryRepositories(project, false)
 
 	if e != nil {
 		return s.captureDetail(e)

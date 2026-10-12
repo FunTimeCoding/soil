@@ -2,10 +2,10 @@ package outdated
 
 import (
 	"fmt"
-	console "github.com/funtimecoding/soil/pkg/console/constant"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/monitor"
 	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
-	system "github.com/funtimecoding/soil/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/macos/check/brew/outdated/option"
 )
 
@@ -18,10 +18,10 @@ func Check(o *option.Outdated) {
 		return
 	}
 
-	f := system.BrewFormat
+	f := constant.BrewFormat
 
 	if o.Copyable {
-		f.Tag(console.TagCopyable)
+		f.Tag(consoleConstant.TagCopyable)
 	}
 
 	for _, e := range elements {

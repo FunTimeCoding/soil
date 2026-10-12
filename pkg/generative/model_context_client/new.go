@@ -3,9 +3,9 @@ package model_context_client
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_client/bearer"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 	"net/http"
@@ -20,15 +20,15 @@ func New(
 	x := context.Background()
 	s, e := mcp.NewClient(
 		&mcp.Implementation{
-			Name:    constant.TestClient,
-			Version: constant.DefaultVersion,
+			Name:    soil.TestClient,
+			Version: soil.DefaultVersion,
 		},
 		nil,
 	).Connect(
 		x,
 		&mcp.StreamableClientTransport{
-			Endpoint: locator.New(web.Localhost).Insecure().Port(port).Path(
-				web.ModelContextPath,
+			Endpoint: locator.New(webConstant.Localhost).Insecure().Port(port).Path(
+				webConstant.ModelContextPath,
 			).String(),
 			HTTPClient: &http.Client{Transport: bearer.Transport{}},
 		},

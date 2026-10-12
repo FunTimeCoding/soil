@@ -4,9 +4,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
-	lintConstant "github.com/funtimecoding/soil/pkg/lint/constant"
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/reflow"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 	"testing"
 )
@@ -65,7 +65,7 @@ func TestFrontMatterIsNeverFlagged(t *testing.T) {
 
 func TestAnInterruptingListIsAConcernThatIsNotFixed(t *testing.T) {
 	l := lint.InterruptingList(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader("one two\n- three four\n"),
 	)
 	assertReport(
@@ -77,7 +77,7 @@ func TestAnInterruptingListIsAConcernThatIsNotFixed(t *testing.T) {
 				Key:      "interrupting_list",
 				Text:     "List starts directly under a paragraph line - join a prose dash back, or put a blank line or a colon before a real list",
 				Path:     "Alfa",
-				Type:     lintConstant.ConcernLine,
+				Type:     constant.ConcernLine,
 				Line:     2,
 				LineText: "- three four",
 				Fixed:    false,

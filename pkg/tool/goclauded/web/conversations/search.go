@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -17,7 +17,7 @@ func (s *Server) search(
 ) {
 	query := r.URL.Query().Get(constant.QueryField)
 	kinds := r.URL.Query()[constant.KindField]
-	w.Header().Set(web.ContentType, "text/html; charset=utf-8")
+	w.Header().Set(webConstant.ContentType, "text/html; charset=utf-8")
 
 	if strings.TrimSpace(query) == "" {
 		errors.PanicOnError(gomponents.Group(s.sidebarNodes(0)).Render(w))

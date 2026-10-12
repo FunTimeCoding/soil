@@ -1,7 +1,7 @@
 package lint
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/lint/option"
@@ -38,7 +38,7 @@ func Walk(
 				errors.PanicOnError(f)
 				relative = filepath.ToSlash(relative)
 
-				if relative == constant.CurrentDirectory {
+				if relative == soil.CurrentDirectory {
 					return nil
 				}
 

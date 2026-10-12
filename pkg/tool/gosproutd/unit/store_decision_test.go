@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/unit/store_tester"
 	"testing"
@@ -11,7 +11,7 @@ import (
 func TestPushedDecisionStartsOpen(t *testing.T) {
 	s := store_tester.New(t)
 	s.Store.PushDecision(
-		stringConstant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"which entry rule?",
 		"take the narrow one",
 		nil,
@@ -20,14 +20,14 @@ func TestPushedDecisionStartsOpen(t *testing.T) {
 	assert.String(
 		t,
 		"open",
-		string(s.Store.Decisions(stringConstant.LowerAlfa)[0].State),
+		string(s.Store.Decisions(stringsConstant.LowerAlfa)[0].State),
 	)
 }
 
 func TestPushedDecisionKeepsItsDefaultAction(t *testing.T) {
 	s := store_tester.New(t)
 	s.Store.PushDecision(
-		stringConstant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"which entry rule?",
 		"take the narrow one",
 		nil,
@@ -36,20 +36,20 @@ func TestPushedDecisionKeepsItsDefaultAction(t *testing.T) {
 	assert.String(
 		t,
 		"take the narrow one",
-		s.Store.Decisions(stringConstant.LowerAlfa)[0].DefaultAction,
+		s.Store.Decisions(stringsConstant.LowerAlfa)[0].DefaultAction,
 	)
 }
 
 func TestChoicesKeepPushOrder(t *testing.T) {
 	s := store_tester.New(t)
 	s.Store.PushDecision(
-		stringConstant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"which entry rule?",
 		"take the narrow one",
 		[]string{"narrow", "wide", "unfiltered"},
 		nil,
 	)
-	choices := s.Store.Decisions(stringConstant.LowerAlfa)[0].Choices
+	choices := s.Store.Decisions(stringsConstant.LowerAlfa)[0].Choices
 	assert.Count(t, 3, choices)
 	assert.String(t, "narrow", choices[0].Label)
 	assert.String(t, "unfiltered", choices[2].Label)
@@ -57,21 +57,27 @@ func TestChoicesKeepPushOrder(t *testing.T) {
 
 func TestDecisionsAreScopedToTheirSession(t *testing.T) {
 	s := store_tester.New(t)
-	s.Store.PushDecision(stringConstant.LowerAlfa, "mine?", "proceed", nil, nil)
 	s.Store.PushDecision(
-		stringConstant.LowerBravo,
+		stringsConstant.LowerAlfa,
+		"mine?",
+		"proceed",
+		nil,
+		nil,
+	)
+	s.Store.PushDecision(
+		stringsConstant.LowerBravo,
 		"theirs?",
 		"proceed",
 		nil,
 		nil,
 	)
-	assert.Count(t, 1, s.Store.Decisions(stringConstant.LowerAlfa))
+	assert.Count(t, 1, s.Store.Decisions(stringsConstant.LowerAlfa))
 }
 
 func TestAnswerMarksTheDecisionAnswered(t *testing.T) {
 	s := store_tester.New(t)
 	d := s.Store.PushDecision(
-		stringConstant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"which entry rule?",
 		"narrow",
 		nil,
@@ -86,14 +92,14 @@ func TestAnswerMarksTheDecisionAnswered(t *testing.T) {
 	assert.String(
 		t,
 		"answered",
-		string(s.Store.Decisions(stringConstant.LowerAlfa)[0].State),
+		string(s.Store.Decisions(stringsConstant.LowerAlfa)[0].State),
 	)
 }
 
 func TestAnswerRecordsKindAndValue(t *testing.T) {
 	s := store_tester.New(t)
 	d := s.Store.PushDecision(
-		stringConstant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"which entry rule?",
 		"narrow",
 		nil,
@@ -105,7 +111,7 @@ func TestAnswerRecordsKindAndValue(t *testing.T) {
 		constant.AnswerChannelQueue,
 		"you rule, stay cheap",
 	)
-	answered := s.Store.Decisions(stringConstant.LowerAlfa)[0]
+	answered := s.Store.Decisions(stringsConstant.LowerAlfa)[0]
 	assert.String(t, "constraint", string(answered.AnswerKind))
 	assert.String(t, "you rule, stay cheap", answered.Answer)
 }
@@ -113,7 +119,7 @@ func TestAnswerRecordsKindAndValue(t *testing.T) {
 func TestDismissKeepsTheGivenState(t *testing.T) {
 	s := store_tester.New(t)
 	d := s.Store.PushDecision(
-		stringConstant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"which entry rule?",
 		"narrow",
 		nil,
@@ -123,14 +129,14 @@ func TestDismissKeepsTheGivenState(t *testing.T) {
 	assert.String(
 		t,
 		"irrelevant",
-		string(s.Store.Decisions(stringConstant.LowerAlfa)[0].State),
+		string(s.Store.Decisions(stringsConstant.LowerAlfa)[0].State),
 	)
 }
 
 func TestBumpAccumulates(t *testing.T) {
 	s := store_tester.New(t)
 	d := s.Store.PushDecision(
-		stringConstant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"which entry rule?",
 		"narrow",
 		nil,
@@ -138,13 +144,13 @@ func TestBumpAccumulates(t *testing.T) {
 	)
 	s.Store.Bump(d.Identifier)
 	s.Store.Bump(d.Identifier)
-	assert.Integer(t, 2, s.Store.Decisions(stringConstant.LowerAlfa)[0].Bumped)
+	assert.Integer(t, 2, s.Store.Decisions(stringsConstant.LowerAlfa)[0].Bumped)
 }
 
 func TestClearRecordsTheUnderstanding(t *testing.T) {
 	s := store_tester.New(t)
 	d := s.Store.PushDecision(
-		stringConstant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"which entry rule?",
 		"narrow",
 		nil,
@@ -155,7 +161,7 @@ func TestClearRecordsTheUnderstanding(t *testing.T) {
 		"narrow, unfiltered entry",
 		constant.ResolutionDefault,
 	)
-	cleared := s.Store.Decisions(stringConstant.LowerAlfa)[0]
+	cleared := s.Store.Decisions(stringsConstant.LowerAlfa)[0]
 	assert.String(t, "narrow, unfiltered entry", cleared.ClearLine)
 	assert.String(t, "default", string(cleared.Resolution))
 }

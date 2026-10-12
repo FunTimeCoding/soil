@@ -3,16 +3,16 @@ package unit
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
-	lintConstant "github.com/funtimecoding/soil/pkg/lint/constant"
+	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/pointer_tester"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 	"testing"
 )
 
 func TestPointersGitignored(t *testing.T) {
 	l := pointer_tester.Gitignored(".claude/notes/alfa.md")(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader("Style guide at `.claude/notes/alfa.md` today.\n"),
 	)
 	assertReport(t, "Alfa", false, nil, "", l)
@@ -20,7 +20,7 @@ func TestPointersGitignored(t *testing.T) {
 
 func TestPointersClean(t *testing.T) {
 	l := pointer_tester.Checker()(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader("Run `task lint` now.\n"),
 	)
 	assertReport(t, "Alfa", false, nil, "", l)
@@ -28,7 +28,7 @@ func TestPointersClean(t *testing.T) {
 
 func TestPointersExisting(t *testing.T) {
 	l := pointer_tester.Checker("doc/ai/runbook/lint.md")(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader("Read `doc/ai/runbook/lint.md` first.\n"),
 	)
 	assertReport(t, "Alfa", false, nil, "", l)
@@ -36,7 +36,7 @@ func TestPointersExisting(t *testing.T) {
 
 func TestPointersDirectory(t *testing.T) {
 	l := pointer_tester.Checker("doc/ai/spec")(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader("Specs live in `doc/ai/spec/`.\n"),
 	)
 	assertReport(t, "Alfa", false, nil, "", l)
@@ -44,7 +44,7 @@ func TestPointersDirectory(t *testing.T) {
 
 func TestPointersIgnored(t *testing.T) {
 	l := pointer_tester.Checker()(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"See `tmp/gosec.json`, `doc/ai/runbook/<name>.md`, and https://example.org/page.\n",
 		),
@@ -55,7 +55,7 @@ func TestPointersIgnored(t *testing.T) {
 func TestPointersDead(t *testing.T) {
 	line := "Read `doc/ai/runbook/ghost.md` first."
 	l := pointer_tester.Checker()(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(fmt.Sprintf("%s\n", line)),
 	)
 	assertReport(t, "Alfa", true, pointer_tester.Dead("Alfa", line, 1), "", l)
@@ -64,7 +64,7 @@ func TestPointersDead(t *testing.T) {
 func TestPointersAbsolute(t *testing.T) {
 	line := "Notes at `/Users/example/notes.md` today."
 	l := pointer_tester.Checker()(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(fmt.Sprintf("%s\n", line)),
 	)
 	assertReport(t, "Alfa", true, pointer_tester.Absolute("Alfa", line), "", l)
@@ -96,7 +96,7 @@ func TestPointersRelativeDead(t *testing.T) {
 
 func TestPointersSymbolIgnored(t *testing.T) {
 	l := pointer_tester.Checker("pkg/provision/salt", "pkg/system/run")(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"Wraps `go:pkg/provision/salt.Client` and `go:pkg/system/run/New()`.\n",
 		),
@@ -107,7 +107,7 @@ func TestPointersSymbolIgnored(t *testing.T) {
 func TestPointersSymbolDeadPackage(t *testing.T) {
 	line := "Wraps `go:pkg/provision/salt.Client` today."
 	l := pointer_tester.Checker()(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(fmt.Sprintf("%s\n", line)),
 	)
 	assertReport(t, "Alfa", true, pointer_tester.Dead("Alfa", line, 1), "", l)
@@ -115,7 +115,7 @@ func TestPointersSymbolDeadPackage(t *testing.T) {
 
 func TestPointersSymbolStdlib(t *testing.T) {
 	l := pointer_tester.Stdlib("crypto/x509", "go/packages")(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"Parses via `go:crypto/x509` and loads with `go:go/packages.Load`.\n",
 		),
@@ -125,7 +125,7 @@ func TestPointersSymbolStdlib(t *testing.T) {
 
 func TestPointersSymbolStdlibSingleSegment(t *testing.T) {
 	l := pointer_tester.Stdlib("fmt", "strings")(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"Prints with `go:fmt.Println` and cuts with `go:strings`.\n",
 		),
@@ -136,7 +136,7 @@ func TestPointersSymbolStdlibSingleSegment(t *testing.T) {
 func TestPointersSymbolSingleSegmentDead(t *testing.T) {
 	line := "Prints with `go:fmt.Println` today."
 	l := pointer_tester.Checker()(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(fmt.Sprintf("%s\n", line)),
 	)
 	assertReport(t, "Alfa", true, pointer_tester.Dead("Alfa", line, 1), "", l)
@@ -145,7 +145,7 @@ func TestPointersSymbolSingleSegmentDead(t *testing.T) {
 func TestPointersSymbolWithoutPackageDead(t *testing.T) {
 	line := "Calls `go:Whatever` today."
 	l := pointer_tester.Checker()(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(fmt.Sprintf("%s\n", line)),
 	)
 	assertReport(t, "Alfa", true, pointer_tester.Dead("Alfa", line, 1), "", l)
@@ -154,7 +154,7 @@ func TestPointersSymbolWithoutPackageDead(t *testing.T) {
 func TestPointersUncheckedEnumerates(t *testing.T) {
 	checker, seen := pointer_tester.Recording()
 	l := checker(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"Serves `route:/health`, reads `etc/hosts`, fetches `example.org/module`, keeps `~/.config/example`, allows `10.0.0.0/24` and mounts `192.0.2.8:/export`.\n",
 		),
@@ -177,7 +177,7 @@ func TestPointersUncheckedEnumerates(t *testing.T) {
 func TestPointersConfiguredRegistry(t *testing.T) {
 	checker, seen := pointer_tester.Registries("registry.example")
 	l := checker(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"Pulls `registry.example/team/image` and `other.example/team/image`.\n",
 		),
@@ -189,7 +189,7 @@ func TestPointersConfiguredRegistry(t *testing.T) {
 func TestPointersConventionWord(t *testing.T) {
 	line := "Constants live in `constant/constant.go` and tests in `unit/`."
 	l := pointer_tester.Checker()(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(fmt.Sprintf("%s\n", line)),
 	)
 	assertReport(
@@ -251,7 +251,7 @@ func TestPointersDependencyLive(t *testing.T) {
 		"github.com/ory/fosite",
 		"gorm.io/driver/sqlite",
 	)(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"Uses `ory/fosite`, `ory/fosite/handler`, `gorm.io/driver/sqlite` and `github.com/ory/fosite`.\n",
 		),
@@ -261,13 +261,13 @@ func TestPointersDependencyLive(t *testing.T) {
 
 func TestPointersImplicitBaseLive(t *testing.T) {
 	l := pointer_tester.Implicit(
-		[]string{lintConstant.PackageDirectory, "../github/soil/pkg"},
-		lintConstant.PackageDirectory,
+		[]string{constant.PackageDirectory, "../github/soil/pkg"},
+		constant.PackageDirectory,
 		"../github/soil/pkg",
 		"../github/soil/pkg/generative",
 		"../github/soil/pkg/generative/constant",
 	)(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader("Vocabulary in `generative/constant`.\n"),
 	)
 	assertReport(t, "Alfa", false, nil, "", l)
@@ -276,12 +276,12 @@ func TestPointersImplicitBaseLive(t *testing.T) {
 func TestPointersImplicitBaseDead(t *testing.T) {
 	line := "Vocabulary in `generative/gone` today."
 	l := pointer_tester.Implicit(
-		[]string{lintConstant.PackageDirectory, "../github/soil/pkg"},
-		lintConstant.PackageDirectory,
+		[]string{constant.PackageDirectory, "../github/soil/pkg"},
+		constant.PackageDirectory,
 		"../github/soil/pkg",
 		"../github/soil/pkg/generative",
 	)(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(fmt.Sprintf("%s\n", line)),
 	)
 	assertReport(t, "Alfa", true, pointer_tester.Dead("Alfa", line, 1), "", l)
@@ -289,7 +289,7 @@ func TestPointersImplicitBaseDead(t *testing.T) {
 
 func TestPointersBracePlaceholderIgnored(t *testing.T) {
 	l := pointer_tester.Checker()(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"Files land in `{zooPath}/vid/` and `{world}/{filename}`.\n",
 		),
@@ -299,7 +299,7 @@ func TestPointersBracePlaceholderIgnored(t *testing.T) {
 
 func TestPointersConventionWordAnchored(t *testing.T) {
 	l := pointer_tester.Checker("pkg/foo", "pkg/foo/constant")(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"---\nbase: pkg/foo\n---\nConstants live in `constant/` here.\n",
 		),
@@ -315,7 +315,7 @@ func TestPointersBasedSeveral(t *testing.T) {
 		"strata/container/alfa",
 		"strata/container/alfa/compose.yaml",
 	)(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"---\nbase: ../github/soil/pkg/tool/goalertlogd, strata/container\n---\nRecords sit in `store/` and the service in `alfa/compose.yaml`.\n",
 		),
@@ -331,7 +331,7 @@ func TestPointersBasedSeveralInteriorDead(t *testing.T) {
 		"strata/container/alfa",
 		"strata/container/alfa/compose.yaml",
 	)(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			fmt.Sprintf(
 				"---\nbase: pkg/tool/goalertlogd, strata/container\n---\n%s\n",
@@ -345,7 +345,7 @@ func TestPointersBasedSeveralInteriorDead(t *testing.T) {
 func TestPointersUnprefixedSymbolIsAPath(t *testing.T) {
 	line := "Wraps `pkg/provision/salt.Client` today."
 	l := pointer_tester.Checker("pkg/provision/salt")(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(fmt.Sprintf("%s\n", line)),
 	)
 	assertReport(t, "Alfa", true, pointer_tester.Dead("Alfa", line, 1), "", l)
@@ -353,7 +353,7 @@ func TestPointersUnprefixedSymbolIsAPath(t *testing.T) {
 
 func TestPointersSymbolPlaceholderIgnored(t *testing.T) {
 	l := pointer_tester.Checker()(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader("Write `go:pkg/<name>/Symbol` in examples.\n"),
 	)
 	assertReport(t, "Alfa", false, nil, "", l)
@@ -362,7 +362,7 @@ func TestPointersSymbolPlaceholderIgnored(t *testing.T) {
 func TestPointersUppercaseFileDead(t *testing.T) {
 	line := "Build from `strata/container/gopostgres/Containerfile` here."
 	l := pointer_tester.Checker()(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(fmt.Sprintf("%s\n", line)),
 	)
 	assertReport(t, "Alfa", true, pointer_tester.Dead("Alfa", line, 1), "", l)
@@ -370,7 +370,7 @@ func TestPointersUppercaseFileDead(t *testing.T) {
 
 func TestPointersUppercaseFileExisting(t *testing.T) {
 	l := pointer_tester.Checker("strata/container/gopostgres/Containerfile")(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"Build from `strata/container/gopostgres/Containerfile` here.\n",
 		),
@@ -380,7 +380,7 @@ func TestPointersUppercaseFileExisting(t *testing.T) {
 
 func TestPointersSiblingSymbolIgnored(t *testing.T) {
 	l := pointer_tester.Checker("../github/soil/pkg/provision/salt")(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"Wraps `go:../github/soil/pkg/provision/salt.Client` today.\n",
 		),
@@ -391,7 +391,7 @@ func TestPointersSiblingSymbolIgnored(t *testing.T) {
 func TestPointersSiblingSymbolDeadPackage(t *testing.T) {
 	line := "Wraps `go:../github/soil/pkg/gone/Thing` today."
 	l := pointer_tester.Checker()(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(fmt.Sprintf("%s\n", line)),
 	)
 	assertReport(t, "Alfa", true, pointer_tester.Dead("Alfa", line, 1), "", l)
@@ -399,7 +399,7 @@ func TestPointersSiblingSymbolDeadPackage(t *testing.T) {
 
 func TestPointersReceiverMethodIgnored(t *testing.T) {
 	l := pointer_tester.Checker("pkg/lint/pointer")(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader("Calls `go:pkg/lint/pointer/Names.ResolvePackage`.\n"),
 	)
 	assertReport(t, "Alfa", false, nil, "", l)
@@ -407,7 +407,7 @@ func TestPointersReceiverMethodIgnored(t *testing.T) {
 
 func TestPointersQualifiedMethodIgnored(t *testing.T) {
 	l := pointer_tester.Checker("pkg/provision/salt")(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader("Calls `go:pkg/provision/salt.Client.Login`.\n"),
 	)
 	assertReport(t, "Alfa", false, nil, "", l)
@@ -415,7 +415,7 @@ func TestPointersQualifiedMethodIgnored(t *testing.T) {
 
 func TestPointersSymbolExpansion(t *testing.T) {
 	l := pointer_tester.Checker("pkg/provision/salt", "pkg/provision/ansible")(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"Both `go:pkg/provision/{salt,ansible}.Client` work.\n",
 		),
@@ -425,7 +425,7 @@ func TestPointersSymbolExpansion(t *testing.T) {
 
 func TestPointersLiveSymbolInLivePackage(t *testing.T) {
 	l := pointer_tester.Checker("pkg/provision/salt")(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader("Renamed away: `go:pkg/provision/salt.Gone`.\n"),
 	)
 	assertReport(t, "Alfa", false, nil, "", l)
@@ -433,7 +433,7 @@ func TestPointersLiveSymbolInLivePackage(t *testing.T) {
 
 func TestPointersBasedAnchorResolves(t *testing.T) {
 	l := pointer_tester.Checker("pkg/provision", "pkg/provision/salt")(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"---\nbase: pkg/provision\n---\nConnectors live in `salt/` today.\n",
 		),
@@ -444,7 +444,7 @@ func TestPointersBasedAnchorResolves(t *testing.T) {
 func TestPointersBasedInteriorDead(t *testing.T) {
 	line := "Connectors live in `salt/gone.go` today."
 	l := pointer_tester.Checker("pkg/provision", "pkg/provision/salt")(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			fmt.Sprintf("---\nbase: pkg/provision\n---\n%s\n", line),
 		),
@@ -454,7 +454,7 @@ func TestPointersBasedInteriorDead(t *testing.T) {
 
 func TestPointersBasedForeignNamespaceIgnored(t *testing.T) {
 	l := pointer_tester.Checker("pkg/provision")(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"---\nbase: pkg/provision\n---\nGroups sit in `keepass/General` outside.\n",
 		),
@@ -467,7 +467,7 @@ func TestPointersBasedSibling(t *testing.T) {
 		"../github/soil/pkg/tool/gomaintlogd",
 		"../github/soil/pkg/tool/gomaintlogd/server",
 	)(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"---\nbase: ../github/soil/pkg/tool/gomaintlogd\n---\nHandlers sit in `server/` today.\n",
 		),
@@ -481,7 +481,7 @@ func TestPointersBasedSiblingFile(t *testing.T) {
 		"../github/soil/pkg/tool/gomaintlogd/face",
 		"../github/soil/pkg/tool/gomaintlogd/face/source.go",
 	)(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"---\nbase: ../github/soil/pkg/tool/gomaintlogd\n---\nThe reader lives in `face/source.go` today.\n",
 		),
@@ -495,7 +495,7 @@ func TestPointersBasedSiblingInteriorDead(t *testing.T) {
 		"../github/soil/pkg/tool/gomaintlogd",
 		"../github/soil/pkg/tool/gomaintlogd/server",
 	)(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			fmt.Sprintf(
 				"---\nbase: ../github/soil/pkg/tool/gomaintlogd\n---\n%s\n",
@@ -509,7 +509,7 @@ func TestPointersBasedSiblingInteriorDead(t *testing.T) {
 func TestPointersCommandResolves(t *testing.T) {
 	checker, count := pointer_tester.Counting(".claude/skills/sign-firefox")
 	l := checker(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader("Invoke `/sign-firefox` before pushing.\n"),
 	)
 	assertReport(t, "Alfa", false, nil, "", l)
@@ -521,7 +521,7 @@ func TestPointersCommandPluginResolves(t *testing.T) {
 		"../soil/strata/plugin/soil/skills/lint",
 	)
 	l := checker(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader("Invoke `/soil:lint` after the scope.\n"),
 	)
 	assertReport(t, "Alfa", false, nil, "", l)
@@ -532,7 +532,7 @@ func TestPointersCommandDead(t *testing.T) {
 	line := "Invoke `/ghost-skill` before pushing."
 	checker, count := pointer_tester.Counting()
 	l := checker(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(fmt.Sprintf("%s\n", line)),
 	)
 	assertReport(t, "Alfa", true, pointer_tester.Dead("Alfa", line, 1), "", l)
@@ -542,7 +542,7 @@ func TestPointersCommandDead(t *testing.T) {
 func TestPointersCommandHarness(t *testing.T) {
 	checker, count := pointer_tester.Counting()
 	l := checker(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader("New tools need a `/mcp` reconnect.\n"),
 	)
 	assertReport(t, "Alfa", false, nil, "", l)
@@ -552,7 +552,7 @@ func TestPointersCommandHarness(t *testing.T) {
 func TestPointersCommandPluginInRepository(t *testing.T) {
 	checker, count := pointer_tester.Counting("strata/plugin/soil/skills/lint")
 	l := checker(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader("Invoke `/soil:lint` after the scope.\n"),
 	)
 	assertReport(t, "Alfa", false, nil, "", l)
@@ -562,7 +562,7 @@ func TestPointersCommandPluginInRepository(t *testing.T) {
 func TestPointersRouteTallies(t *testing.T) {
 	checker, count := pointer_tester.Counting()
 	l := checker(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"The service answers on `route:/health` for probes.\n",
 		),
@@ -574,7 +574,7 @@ func TestPointersRouteTallies(t *testing.T) {
 func TestPointersRouteWithoutSpecificationDead(t *testing.T) {
 	line := "Lists at `route:/api/alerts`."
 	l := pointer_tester.Checker("pkg/tool/alfa")(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			fmt.Sprintf("---\nbase: pkg/tool/alfa\n---\n%s\n", line),
 		),
@@ -589,7 +589,7 @@ func TestPointersRouteLive(t *testing.T) {
 		},
 		"pkg/tool/alfa",
 	)(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"---\nbase: pkg/tool/alfa\n---\nLists at `route:/api/alerts`, one at `route:/api/alerts/{identifier}`, filtered by `route:/api/alerts?name=x` and `route:/api/...`.\n",
 		),
@@ -603,7 +603,7 @@ func TestPointersRouteDead(t *testing.T) {
 		map[string][]string{"pkg/tool/alfa": {"/api/alerts"}},
 		"pkg/tool/alfa",
 	)(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			fmt.Sprintf("---\nbase: pkg/tool/alfa\n---\n%s\n", line),
 		),
@@ -623,7 +623,7 @@ func TestPointersRouteLiteralLive(t *testing.T) {
 		nil,
 		"pkg/tool/alfa",
 	)(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"---\nbase: pkg/tool/alfa\n---\nPages at `route:/widgets` and `route:/memories/{identifier}`.\n",
 		),
@@ -639,7 +639,7 @@ func TestPointersRouteLiteralDead(t *testing.T) {
 		nil,
 		"pkg/tool/alfa",
 	)(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			fmt.Sprintf("---\nbase: pkg/tool/alfa\n---\n%s\n", line),
 		),
@@ -657,7 +657,7 @@ func TestPointersRouteLiteralInSharedTree(t *testing.T) {
 		[]string{"../github/shared/pkg"},
 		"pkg/tool/alfa",
 	)(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"---\nbase: pkg/tool/alfa\n---\nProbes `route:/health`.\n",
 		),
@@ -671,7 +671,7 @@ func TestPointersImageLive(t *testing.T) {
 		nil,
 		nil,
 	)(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader("Runs `ghcr.io/example/alfa`.\n"),
 	)
 	assertReport(t, "Alfa", false, nil, "", l)
@@ -680,7 +680,7 @@ func TestPointersImageLive(t *testing.T) {
 func TestPointersBareSlashDead(t *testing.T) {
 	line := "Lists at `/api/alerts` and `/api/alerts/{name}`."
 	l := pointer_tester.Checker()(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(fmt.Sprintf("%s\n", line)),
 	)
 	assertReport(
@@ -696,7 +696,7 @@ func TestPointersBareSlashDead(t *testing.T) {
 func TestPointersSystemTallies(t *testing.T) {
 	checker, seen := pointer_tester.Recording()
 	l := checker(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"Mounts `/proc/`, reads `/etc/app.conf`, runs `path:/bin/true`, forgets `/bin/false`, pulls `ghcr.io/example/image`, imports `\"github.com/example/module\"`, rewrites with `s/a/b/`.\n",
 		),
@@ -720,7 +720,7 @@ func TestPointersSystemTallies(t *testing.T) {
 func TestPointersBaseDead(t *testing.T) {
 	line := "base: pkg/gone"
 	l := pointer_tester.Checker()(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(fmt.Sprintf("---\n%s\n---\nProse.\n", line)),
 	)
 	assertReport(t, "Alfa", true, pointer_tester.DeadAt("Alfa", 2, line), "", l)
@@ -731,7 +731,7 @@ func TestPointersExpansionExisting(t *testing.T) {
 		"doc/ai/spec/naming.md",
 		"doc/ai/spec/build.md",
 	)(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader("Read `doc/ai/spec/{naming,build}.md` first.\n"),
 	)
 	assertReport(t, "Alfa", false, nil, "", l)
@@ -740,7 +740,7 @@ func TestPointersExpansionExisting(t *testing.T) {
 func TestPointersExpansionDead(t *testing.T) {
 	line := "Read `doc/ai/spec/{naming,ghost}.md` first."
 	l := pointer_tester.Checker("doc/ai/spec/naming.md")(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(fmt.Sprintf("%s\n", line)),
 	)
 	assertReport(t, "Alfa", true, pointer_tester.Dead("Alfa", line, 1), "", l)
@@ -748,7 +748,7 @@ func TestPointersExpansionDead(t *testing.T) {
 
 func TestPointersSiblingExisting(t *testing.T) {
 	l := pointer_tester.Checker("../../github/soil/doc/ai/spec/naming.md")(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"Shared specs at `../../github/soil/doc/ai/spec/naming.md`.\n",
 		),
@@ -759,7 +759,7 @@ func TestPointersSiblingExisting(t *testing.T) {
 func TestPointersSiblingDead(t *testing.T) {
 	line := "Shared specs at `../github/soil/doc/ai/spec/naming.md`."
 	l := pointer_tester.Checker()(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(fmt.Sprintf("%s\n", line)),
 	)
 	assertReport(t, "Alfa", true, pointer_tester.Dead("Alfa", line, 1), "", l)
@@ -768,7 +768,7 @@ func TestPointersSiblingDead(t *testing.T) {
 func TestPointersMultiple(t *testing.T) {
 	line := "Read `doc/ai/spec/ghost.md` and `pkg/gone`."
 	l := pointer_tester.Checker()(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(fmt.Sprintf("%s\n", line)),
 	)
 	assertReport(t, "Alfa", true, pointer_tester.Dead("Alfa", line, 2), "", l)
@@ -776,7 +776,7 @@ func TestPointersMultiple(t *testing.T) {
 
 func TestPointersPluginRoot(t *testing.T) {
 	l := pointer_tester.Checker("doc/ai/runbook/lint.md")(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"Read `${CLAUDE_PLUGIN_ROOT}/doc/ai/runbook/lint.md`.\n",
 		),
@@ -810,7 +810,7 @@ func TestPointersBareLinkExisting(t *testing.T) {
 
 func TestPointersHostDeclared(t *testing.T) {
 	l := pointer_tester.Checker()(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"---\nhosts: alfa.example\n---\nStatus at `https://alfa.example/api/v2/status` and [console](http://alfa.example:8080/console).\n",
 		),
@@ -820,7 +820,7 @@ func TestPointersHostDeclared(t *testing.T) {
 
 func TestPointersHostDeclaredList(t *testing.T) {
 	l := pointer_tester.Checker()(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"---\nhosts:\n- alfa.example\n- bravo.example\n---\nMirrors `https://alfa.example/` and `https://user:secret@bravo.example/`.\n",
 		),
@@ -831,7 +831,7 @@ func TestPointersHostDeclaredList(t *testing.T) {
 func TestPointersHostUndeclared(t *testing.T) {
 	line := "Status at `https://ghost.example/api/v2/status` today."
 	l := pointer_tester.Checker()(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(fmt.Sprintf("%s\n", line)),
 	)
 	assertReport(
@@ -847,7 +847,7 @@ func TestPointersHostUndeclared(t *testing.T) {
 func TestPointersHostUndeclaredLink(t *testing.T) {
 	line := "See [ticket](https://ghost.example/browse/X-1) first."
 	l := pointer_tester.Checker()(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			fmt.Sprintf("---\nhosts: other.example\n---\n%s\n", line),
 		),
@@ -864,7 +864,7 @@ func TestPointersHostUndeclaredLink(t *testing.T) {
 
 func TestPointersHostImplicit(t *testing.T) {
 	l := pointer_tester.Checker()(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"Listens on `http://localhost:8090/mcp` and `http://127.0.0.1:9191`.\n",
 		),
@@ -874,7 +874,7 @@ func TestPointersHostImplicit(t *testing.T) {
 
 func TestPointersHostPlaceholder(t *testing.T) {
 	l := pointer_tester.Checker()(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"Fetch `https://$DD_HOST/api/v2/products/` or `https://<master>:443`.\n",
 		),
@@ -885,7 +885,7 @@ func TestPointersHostPlaceholder(t *testing.T) {
 func TestPointersSchemeTallies(t *testing.T) {
 	checker, seen := pointer_tester.Recording()
 	l := checker(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"Resource `guide://summary`, share `smb://files.example/team`, link `tcp://10.0.0.1:8080`.\n",
 		),
@@ -905,7 +905,7 @@ func TestPointersSchemeTallies(t *testing.T) {
 func TestPointersCommandDeclared(t *testing.T) {
 	checker, count := pointer_tester.Counting()
 	l := checker(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"---\ncommands:\n- /nodes\n- /migration\n---\nThe ACL applies to `/nodes` and the `/migration` znode stays absent.\n",
 		),
@@ -917,7 +917,7 @@ func TestPointersCommandDeclared(t *testing.T) {
 func TestPointersCommandDeclaredScalar(t *testing.T) {
 	checker, count := pointer_tester.Counting()
 	l := checker(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"---\ncommands: /compact\n---\nThe harness handles `/compact` itself and `/ghost` stays dead.\n",
 		),
@@ -940,7 +940,7 @@ func TestPointersCommandDeclaredScalar(t *testing.T) {
 func TestPointersHostMalformed(t *testing.T) {
 	line := "Broken at `https://alfa.example:port/status` today."
 	l := pointer_tester.Checker()(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			fmt.Sprintf("---\nhosts: alfa.example\n---\n%s\n", line),
 		),

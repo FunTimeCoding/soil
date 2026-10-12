@@ -1,8 +1,8 @@
 package model_context
 
 import (
-	libraryConstant "github.com/funtimecoding/soil/pkg/constant"
-	generative "github.com/funtimecoding/soil/pkg/generative/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -41,7 +41,7 @@ func (s *Server) register() {
 				"Execute an instant PromQL query against the active instance.",
 			),
 			mcp.WithString(
-				generative.ParameterQuery,
+				generativeConstant.ParameterQuery,
 				mcp.Required(),
 				mcp.Description("PromQL query expression"),
 			),
@@ -55,7 +55,7 @@ func (s *Server) register() {
 				"Execute a range PromQL query. Returns time series data.",
 			),
 			mcp.WithString(
-				generative.ParameterQuery,
+				generativeConstant.ParameterQuery,
 				mcp.Required(),
 				mcp.Description("PromQL query expression"),
 			),
@@ -89,7 +89,7 @@ func (s *Server) register() {
 				"List values for a label name, optionally filtered by series matchers.",
 			),
 			mcp.WithString(
-				libraryConstant.LabelKey,
+				soil.LabelKey,
 				mcp.Required(),
 				mcp.Description("Label name"),
 			),

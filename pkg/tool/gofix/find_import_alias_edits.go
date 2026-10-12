@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
+	"github.com/funtimecoding/soil/pkg/source/imports"
 	"go/token"
 	"golang.org/x/tools/go/packages"
 	"strings"
@@ -12,6 +13,7 @@ import (
 func findImportAliasEdits(
 	fileSet *token.FileSet,
 	all []*packages.Package,
+	handled map[token.Pos]bool,
 	r *output.Results,
 ) []Edit {
 	var result []Edit
@@ -28,7 +30,7 @@ func findImportAliasEdits(
 					continue
 				}
 
-				if seen[spec.Pos()] {
+				if seen[spec.Pos()] || handled[spec.Pos()] {
 					continue
 				}
 
@@ -40,7 +42,7 @@ func findImportAliasEdits(
 				}
 
 				path := strings.Trim(spec.Path.Value, `"`)
-				imported := findImportedPackage(p, path)
+				imported := imports.ImportedPackage(p, path)
 
 				if imported == nil {
 					continue
@@ -76,7 +78,7 @@ func findImportAliasEdits(
 					continue
 				}
 
-				if hasLocalCollision(p, file, declaredName) {
+				if imports.LocalTaken(p, file, declaredName) {
 					r.AddConcern(
 						concern.NewFile(
 							"import_alias",

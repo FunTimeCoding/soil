@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
-	git "github.com/funtimecoding/soil/pkg/git/constant"
+	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/gorunif/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gorunif/run_if"
@@ -20,7 +20,7 @@ func Main() {
 		"",
 		"Base commit (default: remote tracking branch)",
 	)
-	a.String(argumentConstant.Head, git.HeadReference, "Head commit")
+	a.String(argumentConstant.Head, gitConstant.HeadReference, "Head commit")
 	a.Boolean(constant.Suffix, false, "Match path as suffix instead of prefix")
 	a.Boolean(argumentConstant.Verbose, false, "Verbose output")
 	a.Parse()

@@ -22,7 +22,7 @@ func (s *Server) ListProjectVariables(
 		return s.captureDetail(e)
 	}
 
-	v, e := s.client.Variables(project)
+	v, e := s.service.Variables(project)
 
 	if e != nil {
 		return s.captureDetail(e)

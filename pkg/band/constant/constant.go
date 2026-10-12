@@ -1,10 +1,9 @@
 package constant
 
 const (
-	AddressEnvironment  = "BAND_ADDRESS"
-	UserEnvironment     = "BAND_USER"
-	PasswordEnvironment = "BAND_PASSWORD"
-	DefaultUser         = "admin"
+	DefaultUser = "admin"
+
+	SecurePort = 16993
 
 	Path        = "/wsman"
 	ContentType = "application/soap+xml;charset=UTF-8"
@@ -17,9 +16,11 @@ const (
 
 	EnumerationNamespace = "http://schemas.xmlsoap.org/ws/2004/09/enumeration"
 
-	PowerOn      = 2
-	PowerCycle   = 5
-	PowerOffSoft = 8
+	PowerOn              = 2
+	PowerCycle           = 5
+	PowerOffSoft         = 8
+	PowerOffSoftGraceful = 12
+	PowerResetGraceful   = 14
 
 	AssociatedPowerResource = "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_AssociatedPowerManagementService"
 	PowerServiceResource    = "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_PowerManagementService"

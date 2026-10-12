@@ -12,17 +12,7 @@ func (s *Server) ListProjects(
 	_ mcp.CallToolRequest,
 	a argument.ListProjects,
 ) (*mcp.CallToolResult, error) {
-	if a.Search != "" {
-		v, e := s.client.SearchProject(a.Search)
-
-		if e != nil {
-			return s.captureDetail(e)
-		}
-
-		return response.SuccessAny(v)
-	}
-
-	v, e := s.client.Projects()
+	v, e := s.service.Projects(a.Search)
 
 	if e != nil {
 		return s.captureDetail(e)

@@ -3,12 +3,12 @@ package tracker
 import (
 	"bufio"
 	"encoding/json"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/notation"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/tool_call"
-	generative "github.com/funtimecoding/soil/pkg/generative/constant"
+	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"io"
 	"os"
 )
@@ -47,7 +47,7 @@ func Read(
 
 	var calls []*tool_call.Call
 	scanner := bufio.NewScanner(f)
-	scanner.Buffer(nil, constant.NotationScanBuffer)
+	scanner.Buffer(nil, soil.NotationScanBuffer)
 
 	for scanner.Scan() {
 		s.Lines++
@@ -91,7 +91,7 @@ func Read(
 			}
 
 			for _, b := range blocks(m.Content) {
-				if b.Type == generative.ClaudeToolUseBlock &&
+				if b.Type == constant.ClaudeToolUseBlock &&
 					follow(b.Name, followed) {
 					s.recordCall(&b, line.Timestamp)
 				}
@@ -111,7 +111,7 @@ func Read(
 		}
 
 		for _, b := range blocks(m.Content) {
-			if b.Type != generative.ClaudeToolResultBlock {
+			if b.Type != constant.ClaudeToolResultBlock {
 				continue
 			}
 

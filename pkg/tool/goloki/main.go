@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/prometheus/check/loki"
 	"github.com/funtimecoding/soil/pkg/prometheus/check/loki/option"
-	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
+	prometheusConstant "github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goloki/constant"
 	"time"
@@ -45,7 +45,9 @@ func Main() {
 	o.BodyOnly = a.GetBoolean(argumentConstant.Body)
 	o.Copyable = a.GetBoolean(argumentConstant.Copyable)
 	o.Limit = a.GetInteger(argumentConstant.Limit)
-	o.Namespaces = environment.Slice(prometheus.LokiNamespaceEnvironment)
-	o.Exclude = environment.Slice(prometheus.LokiExcludeEnvironment)
+	o.Namespaces = environment.Slice(
+		prometheusConstant.LokiNamespaceEnvironment,
+	)
+	o.Exclude = environment.Slice(prometheusConstant.LokiExcludeEnvironment)
 	loki.Check(o)
 }

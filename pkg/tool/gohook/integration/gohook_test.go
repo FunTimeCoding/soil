@@ -2,7 +2,7 @@ package integration
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/git"
 	"github.com/funtimecoding/soil/pkg/git/changed"
 	"github.com/funtimecoding/soil/pkg/system"
@@ -63,7 +63,7 @@ func TestExplicitRange(t *testing.T) {
 
 func TestUpstreamWithoutTracking(t *testing.T) {
 	root := t.TempDir()
-	command(root, "init", "--initial-branch=main", library.CurrentDirectory)
+	command(root, "init", "--initial-branch=main", soil.CurrentDirectory)
 	assert.String(t, "", changed.Upstream(root))
 	assert.True(t, changed.NewPush(root).All)
 }

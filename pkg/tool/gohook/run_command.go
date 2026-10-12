@@ -2,7 +2,7 @@ package gohook
 
 import (
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
-	git "github.com/funtimecoding/soil/pkg/git/constant"
+	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gohook/configuration"
 	"github.com/funtimecoding/soil/pkg/tool/gohook/constant"
@@ -38,7 +38,7 @@ func runCommand(t *terminal.Terminal) *cobra.Command {
 	result.Flags().StringVar(
 		&o.Head,
 		argumentConstant.Head,
-		git.HeadReference,
+		gitConstant.HeadReference,
 		"Head commit",
 	)
 	result.Flags().BoolVar(

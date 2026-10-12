@@ -1,7 +1,7 @@
 package goalpine
 
 import (
-	system "github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goalpine/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/client"
@@ -41,7 +41,7 @@ func upload(
 	)
 	result.Flags().String(
 		constant.ArchitectureFlag,
-		system.AlpineArchitecture,
+		systemConstant.AlpineArchitecture,
 		"Package architecture",
 	)
 

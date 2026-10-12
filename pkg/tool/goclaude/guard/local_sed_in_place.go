@@ -7,24 +7,12 @@ import (
 )
 
 func localSedInPlace(command string) (bool, error) {
-	file, e := syntax.NewParser().Parse(strings.NewReader(command), "")
-
-	if e != nil {
-		return false, e
-	}
-
 	found := false
-	syntax.Walk(
-		file,
-		func(node syntax.Node) bool {
-			call, okay := node.(*syntax.CallExpr)
-
-			if !okay || len(call.Args) == 0 {
-				return true
-			}
-
+	e := walkCalls(
+		command,
+		func(call *syntax.CallExpr) {
 			if path.Base(call.Args[0].Lit()) != "sed" {
-				return true
+				return
 			}
 
 			for _, argument := range call.Args[1:] {
@@ -35,10 +23,8 @@ func localSedInPlace(command string) (bool, error) {
 					found = true
 				}
 			}
-
-			return true
 		},
 	)
 
-	return found, nil
+	return found, e
 }

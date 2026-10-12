@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/go_mod"
 	"github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/system"
@@ -71,6 +71,6 @@ func TestReadProjectFromRelativePath(t *testing.T) {
 	assert.String(
 		t,
 		"1.25.0",
-		go_mod.ReadProject(library.CurrentDirectory, "1.27.1").Version,
+		go_mod.ReadProject(soil.CurrentDirectory, "1.27.1").Version,
 	)
 }

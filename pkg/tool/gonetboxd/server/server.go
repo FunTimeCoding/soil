@@ -3,11 +3,11 @@ package server
 import (
 	"github.com/funtimecoding/soil/pkg/face"
 	netbox "github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/service"
 )
 
 type Server struct {
 	client   netbox.NetboxSource
-	store    *store.Store
+	service  *service.Service
 	reporter face.Reporter
 }

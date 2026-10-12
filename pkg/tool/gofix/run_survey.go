@@ -1,9 +1,9 @@
 package gofix
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint/segment"
-	gofix "github.com/funtimecoding/soil/pkg/tool/gofix/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gofix/constant"
 	"path/filepath"
 	"strings"
 )
@@ -34,12 +34,12 @@ func runSurvey(
 				continue
 			}
 
-			if strings.HasSuffix(filepath.Base(f), constant.TestSuffix) {
+			if strings.HasSuffix(filepath.Base(f), soil.TestSuffix) {
 				continue
 			}
 
 			for _, s := range segment.Segments(i.Name) {
-				if gofix.Whitelist[s] {
+				if constant.Whitelist[s] {
 					continue
 				}
 

@@ -3,7 +3,7 @@ package conversations
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"maragu.dev/gomponents"
 	"net/http"
 	"strconv"
@@ -21,6 +21,6 @@ func (s *Server) sidebar(
 		}
 	}
 
-	w.Header().Set(web.ContentType, "text/html; charset=utf-8")
+	w.Header().Set(webConstant.ContentType, "text/html; charset=utf-8")
 	errors.PanicOnError(gomponents.Group(s.sidebarNodes(skip)).Render(w))
 }

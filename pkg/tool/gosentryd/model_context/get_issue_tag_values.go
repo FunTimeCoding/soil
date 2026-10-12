@@ -20,12 +20,7 @@ func (s *Server) GetIssueTagValues(
 		return response.Fail("tag is required")
 	}
 
-	result, e := s.client.IssueTagValues(
-		s.organization,
-		a.Identifier,
-		a.Tag,
-		a.Limit,
-	)
+	result, e := s.service.IssueTagValues(a.Identifier, a.Tag, a.Limit)
 
 	if e != nil {
 		return s.captureDetail(e)

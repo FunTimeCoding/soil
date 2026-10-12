@@ -9,28 +9,21 @@ func (s *Server) CreateAddress(
 	_ context.Context,
 	r server.CreateAddressRequestObject,
 ) (server.CreateAddressResponseObject, error) {
-	d, e := s.client.DeviceByName(r.Name)
-
-	if e != nil {
-		return server.CreateAddress500JSONResponse(*s.captureDetail(e)), nil
-	}
-
-	i, f := s.client.DeviceInterfaceByName(d, r.Body.Interface)
-
-	if f != nil {
-		return server.CreateAddress500JSONResponse(*s.captureDetail(f)), nil
-	}
-
 	status := ""
 
 	if r.Body.Status != nil {
 		status = *r.Body.Status
 	}
 
-	a, g := s.client.CreateAddress(i.Identifier, r.Body.Address, status)
+	a, e := s.service.CreateAddress(
+		r.Name,
+		r.Body.Interface,
+		r.Body.Address,
+		status,
+	)
 
-	if g != nil {
-		return server.CreateAddress500JSONResponse(*s.captureDetail(g)), nil
+	if e != nil {
+		return server.CreateAddress500JSONResponse(*s.captureDetail(e)), nil
 	}
 
 	return server.CreateAddress201JSONResponse{

@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/service"
 	"github.com/funtimecoding/soil/pkg/tool/godashboardd/store"
 	"github.com/funtimecoding/soil/pkg/web/authorization/client"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/palette"
@@ -27,20 +27,26 @@ func New(
 		palette.NewCommand(
 			constant.DashboardTitle,
 			constant.DashboardPath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
 		palette.NewCommand(
 			constant.HeatmapTitle,
 			constant.HeatmapPath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
-		palette.NewCommand(web.SignOutTitle, web.SignOutPath, web.PaletteAction),
+		palette.NewCommand(
+			webConstant.SignOutTitle,
+			webConstant.SignOutPath,
+			webConstant.PaletteAction,
+		),
 	)
 	labels := map[string]bool{}
 
 	for _, entry := range b.Entries() {
 		labels[entry.Label] = true
-		r.Register(palette.NewCommand(entry.Label, entry.Link, web.PaletteLink))
+		r.Register(
+			palette.NewCommand(entry.Label, entry.Link, webConstant.PaletteLink),
+		)
 	}
 
 	return &Server{
@@ -52,10 +58,10 @@ func New(
 		registry:      r,
 		view: view.New(
 			layout.New(constant.Identity).
-				WithTheme(web.ThemeSentinel).
+				WithTheme(webConstant.ThemeSentinel).
 				WithStyle(constant.InlineStyle).
-				WithCommandPalette(web.PalettePath).
-				WithLiveEndpoint(web.LivePath).
+				WithCommandPalette(webConstant.PalettePath).
+				WithLiveEndpoint(webConstant.LivePath).
 				WithItems(
 					navigation_item.New(
 						constant.DashboardPath,

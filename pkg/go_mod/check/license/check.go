@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/go_mod/check/license/option"
 	"github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/monitor"
-	item "github.com/funtimecoding/soil/pkg/monitor/constant"
+	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 )
 
 func Check(o *option.License) {
@@ -24,6 +24,6 @@ func Check(o *option.License) {
 	}
 
 	if len(elements) == 0 {
-		monitor.NoRelevant(item.GoLicense.Plural)
+		monitor.NoRelevant(monitorConstant.GoLicense.Plural)
 	}
 }

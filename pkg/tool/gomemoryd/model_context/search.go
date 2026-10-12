@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	generative "github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
@@ -14,13 +14,13 @@ func (s *Server) search(
 	_ context.Context,
 	q mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	query, e := q.RequireString(generative.ParameterQuery)
+	query, e := q.RequireString(generativeConstant.ParameterQuery)
 
 	if e != nil {
 		return response.Fail("query is required")
 	}
 
-	limit := int(q.GetFloat(generative.ParameterLimit, 10))
+	limit := int(q.GetFloat(generativeConstant.ParameterLimit, 10))
 	memoryType := q.GetString(constant.Type, "")
 	tag := q.GetString(constant.Tag, "")
 	scope := q.GetString(constant.Scope, "")

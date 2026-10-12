@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/web/conversations"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/palette"
@@ -19,42 +19,42 @@ func New(s *service.Service) *Server {
 		palette.NewCommand(
 			constant.DashboardTitle,
 			constant.DashboardPath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
 		palette.NewCommand(
 			constant.SessionsTitle,
 			constant.SessionsPath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
 		palette.NewCommand(
 			constant.MessagesTitle,
 			constant.MessagesPath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
 		palette.NewCommand(
 			constant.HistoryTitle,
 			constant.HistoryPath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
 		palette.NewCommand(
 			constant.CoverageTitle,
 			constant.CoveragePath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
 		palette.NewCommand(
 			constant.UsageTitle,
 			constant.UsagePath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
 		palette.NewCommand(
 			constant.StatusTitle,
 			constant.StatusPath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
 		palette.NewCommand(
 			constant.ConversationsTitle,
 			constant.ConversationsPath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
 	)
 
@@ -65,10 +65,12 @@ func New(s *service.Service) *Server {
 		registry:      r,
 		view: view.New(
 			layout.New(constant.Identity).
-				WithTheme(web.ThemeHearth).
-				WithStyle(join.Empty(constant.InlineStyle, web.ChartStyle)).
-				WithCommandPalette(web.PalettePath).
-				WithLiveEndpoint(web.LivePath).
+				WithTheme(webConstant.ThemeHearth).
+				WithStyle(
+					join.Empty(constant.InlineStyle, webConstant.ChartStyle),
+				).
+				WithCommandPalette(webConstant.PalettePath).
+				WithLiveEndpoint(webConstant.LivePath).
 				WithItems(
 					navigation_item.New(
 						constant.DashboardPath,

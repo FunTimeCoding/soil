@@ -1,7 +1,7 @@
 package pointer
 
 import (
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"slices"
 	"strings"
@@ -66,7 +66,7 @@ func Classify(
 		return constant.PointerClassPlaceholder
 	}
 
-	if strings.HasPrefix(trimmed, library.ParentDirectory) {
+	if strings.HasPrefix(trimmed, soil.ParentDirectory) {
 		return constant.PointerClassSibling
 	}
 

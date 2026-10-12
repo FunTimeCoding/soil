@@ -5,15 +5,15 @@ import (
 	"github.com/coder/websocket"
 	"github.com/coder/websocket/wsjson"
 	"github.com/funtimecoding/soil/pkg/assert"
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/monitor/coder/server"
 	"github.com/funtimecoding/soil/pkg/monitor/collector"
-	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
+	"github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/helper"
 	"github.com/funtimecoding/soil/pkg/monitor/item"
 	"github.com/funtimecoding/soil/pkg/monitor/item/source"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"net/http/httptest"
@@ -51,12 +51,12 @@ func TestServer(t *testing.T) {
 }
 
 func TestConstant(t *testing.T) {
-	assert.Count(t, 3, library.Severities)
-	assert.Count(t, 4, library.Statuses)
+	assert.Count(t, 3, soil.Severities)
+	assert.Count(t, 4, soil.Statuses)
 }
 
 func TestItemConstant(t *testing.T) {
-	assert.Count(t, 16, monitorConstant.Collectors)
+	assert.Count(t, 16, constant.Collectors)
 }
 
 func TestSource(t *testing.T) {
@@ -71,8 +71,8 @@ func TestItem(t *testing.T) {
 		item.New(
 			c,
 			c.IntegerIdentifier(1),
-			library.Critical,
-			constant.UpperAlfa,
+			soil.Critical,
+			stringsConstant.UpperAlfa,
 			locator.New(webConstant.Example).Path("/1").String(),
 			nil,
 		).Identifier,

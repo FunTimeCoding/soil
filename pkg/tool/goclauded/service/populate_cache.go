@@ -1,9 +1,9 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/tracker"
-	goclaudedConstant "github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"os"
 	"path/filepath"
 	"strings"
@@ -25,14 +25,14 @@ func (s *Service) PopulateCache() {
 	for _, entry := range entries {
 		if entry.IsDir() || !strings.HasSuffix(
 			entry.Name(),
-			constant.NotationLogExtension,
+			soil.NotationLogExtension,
 		) {
 			continue
 		}
 
 		identifier := strings.TrimSuffix(
 			entry.Name(),
-			constant.NotationLogExtension,
+			soil.NotationLogExtension,
 		)
 		i, f := entry.Info()
 
@@ -47,7 +47,7 @@ func (s *Service) PopulateCache() {
 		}
 
 		path := filepath.Join(s.harbor, entry.Name())
-		calls, g := tracker.Read(path, state, goclaudedConstant.FollowedTools)
+		calls, g := tracker.Read(path, state, constant.FollowedTools)
 
 		if g != nil && state.Offset == 0 {
 			continue

@@ -26,7 +26,7 @@ func (s *Server) GetCommitDiff(
 		return s.captureDetail(e)
 	}
 
-	v, e := s.client.CommitDiff(project, a.Sha, 0)
+	v, e := s.service.CommitDiff(project, a.Sha, 0)
 
 	if e != nil {
 		return s.captureDetail(e)

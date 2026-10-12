@@ -2,9 +2,9 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab/packages"
-	strings "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"gitlab.com/gitlab-org/api/client-go/v3"
 	"testing"
 )
@@ -15,11 +15,11 @@ func TestFindVersionOrLatest(t *testing.T) {
 		&gitlab.Package{Name: "Alfa", Version: "v1.0.2"},
 		packages.FindVersionOrLatest(
 			[]*gitlab.Package{
-				{Name: strings.UpperAlfa, Version: "v1.0.0"},
-				{Name: strings.UpperAlfa, Version: "v1.0.2"},
-				{Name: strings.UpperAlfa, Version: "v1.0.1"},
+				{Name: stringsConstant.UpperAlfa, Version: "v1.0.0"},
+				{Name: stringsConstant.UpperAlfa, Version: "v1.0.2"},
+				{Name: stringsConstant.UpperAlfa, Version: "v1.0.1"},
 			},
-			constant.LatestVersion,
+			soil.LatestVersion,
 		),
 	)
 	assert.Any(
@@ -27,9 +27,9 @@ func TestFindVersionOrLatest(t *testing.T) {
 		&gitlab.Package{Name: "Alfa", Version: "v1.0.1"},
 		packages.FindVersionOrLatest(
 			[]*gitlab.Package{
-				{Name: strings.UpperAlfa, Version: "v1.0.0"},
-				{Name: strings.UpperAlfa, Version: "v1.0.2"},
-				{Name: strings.UpperAlfa, Version: "v1.0.1"},
+				{Name: stringsConstant.UpperAlfa, Version: "v1.0.0"},
+				{Name: stringsConstant.UpperAlfa, Version: "v1.0.2"},
+				{Name: stringsConstant.UpperAlfa, Version: "v1.0.1"},
 			},
 			"v1.0.1",
 		),

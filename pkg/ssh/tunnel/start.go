@@ -9,7 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/system"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/run"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"log"
 	"net"
 	"time"
@@ -22,7 +22,7 @@ func (t *Tunnel) Start(
 	localPort int,
 ) *tunnel_result.Result {
 	if localPort == 0 {
-		localPort = system.FindUnusedPort(web.ListenPort)
+		localPort = system.FindUnusedPort(webConstant.ListenPort)
 	}
 
 	go func() {
@@ -69,7 +69,7 @@ func (t *Tunnel) Start(
 		if t.Verbose {
 			console.Format(
 				"Forward up: %s:%d to %s:%d\n",
-				web.Localhost,
+				webConstant.Localhost,
 				localPort,
 				targetHost,
 				targetPort,

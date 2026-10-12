@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
-	gitlab "github.com/funtimecoding/soil/pkg/gitlab/constant"
+	gitlabConstant "github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goclean/clean"
 	"github.com/funtimecoding/soil/pkg/tool/goclean/clean/option"
@@ -23,7 +23,7 @@ func Main() {
 	)
 	a.Parse()
 	o := option.New()
-	o.GitLabHost = environment.Required(gitlab.HostEnvironment)
+	o.GitLabHost = environment.Required(gitlabConstant.HostEnvironment)
 	o.Verbose = a.GetBoolean(argumentConstant.Verbose)
 	o.All = a.GetBoolean(argumentConstant.All)
 	clean.Run(o)

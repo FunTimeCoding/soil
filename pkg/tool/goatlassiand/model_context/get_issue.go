@@ -3,8 +3,8 @@ package model_context
 import (
 	"context"
 	"github.com/andygrunwald/go-jira"
-	atlassian "github.com/funtimecoding/soil/pkg/atlassian/constant"
-	generative "github.com/funtimecoding/soil/pkg/generative/constant"
+	atlassianConstant "github.com/funtimecoding/soil/pkg/atlassian/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/convert"
@@ -16,7 +16,7 @@ func (s *Server) getIssue(
 	_ context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	key, f := r.RequireString(generative.ParameterKey)
+	key, f := r.RequireString(generativeConstant.ParameterKey)
 
 	if f != nil {
 		return response.Fail("key is required: %v", f)
@@ -46,9 +46,9 @@ func (s *Server) getIssue(
 	value := i.CustomValue(constant.ChecklistField)
 
 	if value != "" &&
-		value != atlassian.JiraNilValue &&
-		value != atlassian.JiraUnknownField &&
-		value != atlassian.JiraUnknownValue {
+		value != atlassianConstant.JiraNilValue &&
+		value != atlassianConstant.JiraUnknownField &&
+		value != atlassianConstant.JiraUnknownValue {
 		result.Checklist = checklist_item.Parse(value)
 	}
 

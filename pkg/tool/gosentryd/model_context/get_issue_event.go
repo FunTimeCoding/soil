@@ -16,7 +16,7 @@ func (s *Server) GetIssueEvent(
 		return response.Fail("identifier is required")
 	}
 
-	result, e := s.client.LatestEvent(s.organization, a.Identifier)
+	result, e := s.service.LatestEvent(a.Identifier)
 
 	if e != nil {
 		return s.captureDetail(e)

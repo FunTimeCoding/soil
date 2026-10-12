@@ -3,8 +3,8 @@ package wdutil
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/system"
-	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
-	"github.com/funtimecoding/soil/pkg/time/constant"
+	"github.com/funtimecoding/soil/pkg/system/constant"
+	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 	"time"
 )
 
@@ -12,7 +12,7 @@ func Check() {
 	ticker := time.NewTicker(1 * time.Second)
 	done := make(chan bool)
 	go func() {
-		past := systemConstant.NotAvailable
+		past := constant.NotAvailable
 
 		for {
 			select {
@@ -24,7 +24,7 @@ func Check() {
 				if past != r.Sequence {
 					fmt.Printf(
 						"%s change %s\n",
-						t.Format(constant.DateSecond),
+						t.Format(timeConstant.DateSecond),
 						r.Sequence,
 					)
 				}

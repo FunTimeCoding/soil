@@ -1,10 +1,10 @@
 package scan
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/parse"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
-	audit "github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
 	"path/filepath"
 	"strings"
 )
@@ -21,11 +21,11 @@ func (s *Service) checkServerPatterns(
 	wraps := false
 
 	for _, name := range v.MustReadDirectory(serverPath) {
-		if !strings.HasSuffix(name, constant.GoExtension) {
+		if !strings.HasSuffix(name, soil.GoExtension) {
 			continue
 		}
 
-		if strings.HasSuffix(name, constant.TestSuffix) {
+		if strings.HasSuffix(name, soil.TestSuffix) {
 			continue
 		}
 
@@ -40,7 +40,7 @@ func (s *Service) checkServerPatterns(
 		s.checkNilNilReturn(f, filePath)
 		s.checkHttpError(f, filePath)
 
-		if _, found := parse.ImportName(f, audit.DetailErrorImport); found {
+		if _, found := parse.ImportName(f, constant.DetailErrorImport); found {
 			wraps = true
 		}
 	}

@@ -1,11 +1,11 @@
 package stale
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/go_mod/check/stale/option"
-	goModule "github.com/funtimecoding/soil/pkg/go_mod/constant"
+	"github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/go_mod/module"
-	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
+	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/report"
 	"time"
 )
@@ -15,13 +15,13 @@ func printNotation(
 	o *option.Stale,
 ) {
 	r := report.New()
-	f := goModule.Format
+	f := constant.Format
 
-	for _, e := range report.Trim(v, r, o.All, monitor.GoStale) {
-		s := constant.Information
+	for _, e := range report.Trim(v, r, o.All, monitorConstant.GoStale) {
+		s := soil.Information
 
 		if e.HasConcerns() {
-			s = constant.Warning
+			s = soil.Warning
 		}
 
 		create := &time.Time{}
@@ -31,7 +31,7 @@ func printNotation(
 		}
 
 		r.AddItem(
-			monitor.GoStale,
+			monitorConstant.GoStale,
 			e.MonitorIdentifier,
 			s,
 			e.Format(f),

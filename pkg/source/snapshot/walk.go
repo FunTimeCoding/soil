@@ -1,9 +1,9 @@
 package snapshot
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
-	goModule "github.com/funtimecoding/soil/pkg/go_mod/constant"
+	go_modConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/source/module_graph"
 	"github.com/funtimecoding/soil/pkg/source/types/snapshot_stamp"
 	"io/fs"
@@ -33,9 +33,9 @@ func walk(root string) map[string]snapshot_stamp.Stamp {
 					return nil
 				}
 
-				if !strings.HasSuffix(path, constant.GoExtension) &&
-					path != filepath.Join(root, goModule.ModFile) &&
-					path != filepath.Join(root, goModule.SumFile) {
+				if !strings.HasSuffix(path, soil.GoExtension) &&
+					path != filepath.Join(root, go_modConstant.ModFile) &&
+					path != filepath.Join(root, go_modConstant.SumFile) {
 					return nil
 				}
 

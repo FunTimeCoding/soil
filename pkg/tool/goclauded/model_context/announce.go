@@ -3,7 +3,7 @@ package model_context
 import (
 	"context"
 	"fmt"
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/strings/join"
@@ -49,14 +49,14 @@ func (s *Server) announce(
 				return response.Fail(f.Error())
 			}
 
-			return s.captureFail(f, library.UnexpectedError)
+			return s.captureFail(f, soil.UnexpectedError)
 		}
 	}
 
 	c, g := s.resolveCaller(x, constant.Announce)
 
 	if g != nil {
-		return s.captureFail(g, library.UnexpectedError)
+		return s.captureFail(g, soil.UnexpectedError)
 	}
 
 	if f := s.service.Announce(
@@ -69,7 +69,7 @@ func (s *Server) announce(
 			return response.Fail(f.Error())
 		}
 
-		return s.captureFail(f, library.UnexpectedError)
+		return s.captureFail(f, soil.UnexpectedError)
 	}
 
 	return response.Success(

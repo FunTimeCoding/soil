@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/convert"
@@ -18,7 +18,7 @@ func (s *Server) getCertificate(
 	result, e := s.store.BySerial(a.Serial)
 
 	if e != nil {
-		return s.captureFail(e, library.UnexpectedError)
+		return s.captureFail(e, soil.UnexpectedError)
 	}
 
 	if result == nil {

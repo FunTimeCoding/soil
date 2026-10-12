@@ -3,7 +3,7 @@ package model_context
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	provision "github.com/funtimecoding/soil/pkg/provision/constant"
+	provisionConstant "github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/types/trigger"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/constant"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -22,12 +22,12 @@ func (s *Server) triggerRun(
 		request.Parameters = map[string]any{constant.Playbook: playbook}
 	}
 
-	if changes, okay := r.GetArguments()[provision.DownstreamChanges]; okay {
+	if changes, okay := r.GetArguments()[provisionConstant.DownstreamChanges]; okay {
 		if request.Parameters == nil {
 			request.Parameters = map[string]any{}
 		}
 
-		request.Parameters[provision.DownstreamChanges] = changes
+		request.Parameters[provisionConstant.DownstreamChanges] = changes
 	}
 
 	if synchronous {

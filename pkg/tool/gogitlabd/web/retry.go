@@ -13,7 +13,7 @@ func (s *Server) retry(
 	project := queryInteger(r, constant.Project)
 	pipeline := queryInteger(r, constant.Pipeline)
 	requested := queryInteger(r, constant.Job)
-	replacement, e := s.client.Retry(project, requested)
+	replacement, e := s.service.Retry(project, requested)
 	errors.PanicOnError(e)
 	s.view.RenderFragment(
 		w,

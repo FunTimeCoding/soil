@@ -5,8 +5,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/errors/not_configured"
 	"github.com/funtimecoding/soil/pkg/monitor/coder/server"
-	system "github.com/funtimecoding/soil/pkg/system/constant"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"log"
 	"net"
@@ -21,11 +21,11 @@ func Run() error {
 		return not_configured.Format("listen address missing")
 	}
 
-	l, listenFail := net.Listen(system.Transmission, os.Args[1])
+	l, listenFail := net.Listen(systemConstant.Transmission, os.Args[1])
 	errors.PanicOnError(listenFail)
 	log.Printf(
 		"listen on %s",
-		locator.New(l.Addr().String()).Scheme(constant.Socket).String(),
+		locator.New(l.Addr().String()).Scheme(webConstant.Socket).String(),
 	)
 	s := &http.Server{
 		Handler:      server.Server{Logf: log.Printf},

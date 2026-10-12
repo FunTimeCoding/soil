@@ -1,11 +1,11 @@
 package job
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/github/check/job/option"
-	github "github.com/funtimecoding/soil/pkg/github/constant"
+	"github.com/funtimecoding/soil/pkg/github/constant"
 	"github.com/funtimecoding/soil/pkg/github/run"
-	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
+	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/report"
 )
 
@@ -15,20 +15,20 @@ func printNotation(
 ) {
 	r := report.New()
 
-	for _, e := range report.Trim(v, r, o.All, monitor.GoGitHubJob) {
-		var s constant.Severity
+	for _, e := range report.Trim(v, r, o.All, monitorConstant.GoGitHubJob) {
+		var s soil.Severity
 
 		if e.HasConcerns() {
-			s = constant.Critical
+			s = soil.Critical
 		} else {
-			s = constant.Information
+			s = soil.Information
 		}
 
 		r.AddItem(
-			monitor.GoGitHubJob,
+			monitorConstant.GoGitHubJob,
 			e.MonitorIdentifier,
 			s,
-			e.Format(github.NotationFormat),
+			e.Format(constant.NotationFormat),
 			*e.Raw.HTMLURL,
 			&e.Update,
 		)

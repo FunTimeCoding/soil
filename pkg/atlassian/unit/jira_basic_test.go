@@ -2,10 +2,10 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	atlassian "github.com/funtimecoding/soil/pkg/atlassian/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
 	"net/http"
 	"testing"
@@ -18,8 +18,8 @@ func TestGetSendsBasicAuthToTheLocator(t *testing.T) {
 	assert.FatalOnError(
 		t,
 		c.Get(
-			c.Base().Copy().Base(atlassian.JiraBase).Path("search/jql").Set(
-				atlassian.JiraQueryKey,
+			c.Base().Copy().Base(constant.JiraBase).Path("search/jql").Set(
+				constant.JiraQueryKey,
 				"project = ALFA",
 			).String(),
 			&out,
@@ -28,16 +28,12 @@ func TestGetSendsBasicAuthToTheLocator(t *testing.T) {
 	assert.Integer(t, 3, out["total"])
 	r := last()
 	assert.String(t, "/rest/api/3/search/jql", r.URL.Path)
-	assert.String(
-		t,
-		"project = ALFA",
-		r.URL.Query().Get(atlassian.JiraQueryKey),
-	)
+	assert.String(t, "project = ALFA", r.URL.Query().Get(constant.JiraQueryKey))
 	user, password, okay := r.BasicAuth()
 	assert.True(t, okay)
 	assert.String(t, "alfa", user)
 	assert.String(t, "bravo-token", password)
-	assert.String(t, "application/json", r.Header.Get(constant.Accept))
+	assert.String(t, "application/json", r.Header.Get(webConstant.Accept))
 }
 
 func TestGetPathJoinsTheHost(t *testing.T) {

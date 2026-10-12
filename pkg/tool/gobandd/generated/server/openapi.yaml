@@ -1,0 +1,195 @@
+---
+openapi: "3.0.0"
+info:
+  title: gobandd
+  version: 1.0.0
+paths:
+  /api/instances:
+    get:
+      operationId: listInstances
+      responses:
+        "200":
+          description: All configured management engines.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Instance"
+  /api/status:
+    get:
+      operationId: getStatus
+      parameters:
+      - name: instance
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Instance name. Optional when only one instance is configured.
+      responses:
+        "200":
+          description: Provisioning, redirection, consent and power state.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Status"
+        "400":
+          description: Invalid instance.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to read the management engine.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/power:
+    post:
+      operationId: requestPower
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PowerRequest"
+      responses:
+        "200":
+          description: The power state change the firmware accepted.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PowerResult"
+        "400":
+          description: Invalid instance or operation.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: The firmware does not offer the requested state now.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to change the power state.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    Instance:
+      type: object
+      required:
+      - name
+      - host
+      properties:
+        name:
+          type: string
+        host:
+          type: string
+    Status:
+      type: object
+      required:
+      - instance
+      - host
+      - provisioning
+      - screen_enabled
+      - screen_timeout
+      - listener
+      - consent
+      - power
+      - available
+      - operations
+      properties:
+        instance:
+          type: string
+        host:
+          type: string
+          description: Host and domain name the engine reports.
+        provisioning:
+          type: string
+        screen_enabled:
+          type: boolean
+          description: Screen redirection enabled in the firmware.
+        screen_timeout:
+          type: integer
+          description: Screen session timeout in minutes.
+        listener:
+          type: boolean
+          description: Redirection listener enabled.
+        consent:
+          type: string
+        power:
+          type: string
+        available:
+          type: array
+          items:
+            type: string
+          description: Power operations the firmware accepts now.
+        operations:
+          type: array
+          items:
+            $ref: "#/components/schemas/Operation"
+          description: What each power request would do right now, and why it would be refused.
+    Operation:
+      type: object
+      required:
+      - name
+      - force
+      - state
+      properties:
+        name:
+          type: string
+          enum: [start, shutdown, reboot]
+        force:
+          type: boolean
+        state:
+          type: string
+          description: The power state the request would ask the firmware for.
+        refusal:
+          type: string
+          description: Why the request would be refused; absent when it would be accepted.
+    PowerRequest:
+      type: object
+      required:
+      - operation
+      properties:
+        instance:
+          type: string
+          description: Instance name. Optional when only one instance is configured.
+        operation:
+          type: string
+          enum: [start, shutdown, reboot]
+        force:
+          type: boolean
+          default: false
+          description: Cut power or power cycle below the operating system instead of asking it through LMS.
+    PowerResult:
+      type: object
+      required:
+      - instance
+      - requested
+      properties:
+        instance:
+          type: string
+        requested:
+          type: string
+          description: The power state requested from the firmware.
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+    ErrorResponse:
+      type: object
+      required: [error, event_identifier]
+      properties:
+        error:
+          type: string
+        event_identifier:
+          type: string

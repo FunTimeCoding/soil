@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	libraryConstant "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goflightd/generated/server"
 )
@@ -15,7 +15,7 @@ func (s *Server) GetStatus(
 
 	if e != nil {
 		return server.GetStatus500JSONResponse(
-			*s.captureFail(e, libraryConstant.UnexpectedError),
+			*s.captureFail(e, soil.UnexpectedError),
 		), nil
 	}
 
@@ -23,7 +23,7 @@ func (s *Server) GetStatus(
 
 	if f != nil {
 		return server.GetStatus500JSONResponse(
-			*s.captureFail(f, libraryConstant.UnexpectedError),
+			*s.captureFail(f, soil.UnexpectedError),
 		), nil
 	}
 
@@ -31,7 +31,7 @@ func (s *Server) GetStatus(
 
 	if g != nil {
 		return server.GetStatus500JSONResponse(
-			*s.captureFail(g, libraryConstant.UnexpectedError),
+			*s.captureFail(g, soil.UnexpectedError),
 		), nil
 	}
 
@@ -44,7 +44,7 @@ func (s *Server) GetStatus(
 
 	if h != nil {
 		return server.GetStatus500JSONResponse(
-			*s.captureFail(h, libraryConstant.UnexpectedError),
+			*s.captureFail(h, soil.UnexpectedError),
 		), nil
 	}
 

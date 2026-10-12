@@ -19,9 +19,14 @@ func Main() {
 	defer func() { r.RecoverFlush(recover()) }()
 	a := argument.NewInstance(constant.Identity)
 	a.Boolean("diff", false, "Show diff without applying")
-	a.Boolean("survey", false, "Print violations without fixing")
+	a.Boolean("survey", false, "Print identifier-segment frequency report")
 	a.Boolean("rename", false, "Variable letter rename mode")
 	a.Boolean("summary", false, "One line per modified file")
+	a.Boolean(
+		"realias",
+		false,
+		"Rewrite colliding import aliases to the convention instead of suggesting",
+	)
 	a.Boolean(
 		"full",
 		false,
@@ -60,6 +65,7 @@ func Main() {
 		o.Patterns = patterns
 		o.Diff = diff
 		o.Full = a.GetBoolean("full")
+		o.Realias = a.GetBoolean("realias")
 		o.Replacing = inventory.LoadOptional(inventory.DefaultPath()).Replacing(
 			root,
 		)

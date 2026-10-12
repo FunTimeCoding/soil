@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomonitord/client"
 	generated "github.com/funtimecoding/soil/pkg/tool/gomonitord/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gomonitord/unit/base"
@@ -18,7 +18,7 @@ func TestTheClientClaimsReleasesAndStreams(t *testing.T) {
 	s := base.New(t)
 	c := client.New(
 		locator.New(webConstant.Localhost).Port(s.Port).Insecure(),
-		constant.ModelContextTestToken,
+		generativeConstant.ModelContextTestToken,
 	)
 	x, cancel := context.WithCancel(context.Background())
 	t.Cleanup(cancel)
@@ -41,7 +41,7 @@ func TestTheClientClaimsReleasesAndStreams(t *testing.T) {
 func TestStreamReportsAnUnreachableDaemon(t *testing.T) {
 	c := client.New(
 		locator.New(webConstant.Localhost).Port(1).Insecure(),
-		constant.ModelContextTestToken,
+		generativeConstant.ModelContextTestToken,
 	)
 	x, cancel := context.WithTimeout(context.Background(), time.Second)
 	t.Cleanup(cancel)

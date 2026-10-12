@@ -15,14 +15,14 @@ func (w *Worker) Poll() {
 	latest := make(map[[2]string]*pipeline.Pipeline)
 	projects := make(map[string]*project.Project)
 
-	for _, p := range w.client.MustProjects() {
+	for _, p := range w.service.MustProjects() {
 		name := join.Slash([]string{p.Namespace, p.Name})
 		projects[name] = p
 
 		for reference, i := range latest_pipeline.New(
-			w.client.MustBranches(p.Identifier),
-			w.client.MustTags(p.Identifier),
-			w.client.MustPipelines(p.Identifier),
+			w.service.MustBranches(p.Identifier),
+			w.service.MustTags(p.Identifier),
+			w.service.MustPipelines(p.Identifier),
 		) {
 			latest[[2]string{name, reference}] = i
 		}

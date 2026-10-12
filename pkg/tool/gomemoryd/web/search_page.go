@@ -1,10 +1,10 @@
 package web
 
 import (
-	library "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/extended"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"maragu.dev/gomponents"
@@ -27,11 +27,11 @@ func (s *Server) searchPage(
 	s.view.RenderPage(
 		w,
 		constant.SearchTitle,
-		web.SearchPath,
+		webConstant.SearchPath,
 		html.H3(gomponents.Text(constant.SearchTitle)),
 		html.Form(
-			gomponents.Attr(web.FormMethod, http.MethodGet),
-			gomponents.Attr(web.FormAction, web.SearchPath),
+			gomponents.Attr(webConstant.FormMethod, http.MethodGet),
+			gomponents.Attr(webConstant.FormAction, webConstant.SearchPath),
 			html.Input(
 				html.ID(constant.SearchControlMark),
 				html.Type("search"),
@@ -39,18 +39,21 @@ func (s *Server) searchPage(
 				gomponents.Attr("placeholder", constant.SearchPlaceholder),
 				gomponents.Attr("value", query),
 				gomponents.Attr("autocomplete", "off"),
-				extended.Get(web.SearchPath),
-				extended.Trigger(web.TriggerType),
+				extended.Get(webConstant.SearchPath),
+				extended.Trigger(webConstant.TriggerType),
 				extended.Target(
-					join.Empty(library.Hash, constant.SearchResultsMark),
+					join.Empty(stringsConstant.Hash, constant.SearchResultsMark),
 				),
-				extended.Swap(web.SwapInner),
+				extended.Swap(webConstant.SwapInner),
 				extended.Indicator(
-					join.Empty(library.Hash, constant.SearchIndicatorMark),
+					join.Empty(
+						stringsConstant.Hash,
+						constant.SearchIndicatorMark,
+					),
 				),
 			),
 			html.Button(
-				html.Type(web.FormSubmit),
+				html.Type(webConstant.FormSubmit),
 				gomponents.Text(constant.SearchTitle),
 			),
 		),

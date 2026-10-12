@@ -1,7 +1,7 @@
 package reference
 
 import (
-	libraryConstant "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"slices"
@@ -36,7 +36,7 @@ func barePaths(
 			continue
 		}
 
-		if first == libraryConstant.ParentDirectory ||
+		if first == soil.ParentDirectory ||
 			slices.Contains(roots, first) {
 			result = append(result, NewFinding(word, constant.BarePathText))
 		}

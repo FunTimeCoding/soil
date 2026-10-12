@@ -1,108 +1,108 @@
 package constant
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
-	module "github.com/funtimecoding/soil/pkg/go_mod/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
+	go_modConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/measure/language"
-	strings "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 )
 
 var (
 	GoTest = language.New("Go Test").
-		WithSuffix(constant.TestSuffix).
-		WithLineComment(strings.DoubleSlash).
+		WithSuffix(soil.TestSuffix).
+		WithLineComment(stringsConstant.DoubleSlash).
 		WithBlockComment(BlockOpenC, BlockCloseC).
 		WithQuote(QuoteDouble).
 		WithRawQuote(QuoteBacktick)
 	Go = language.New("Go").
-		WithExtension(constant.GoExtension).
-		WithLineComment(strings.DoubleSlash).
+		WithExtension(soil.GoExtension).
+		WithLineComment(stringsConstant.DoubleSlash).
 		WithBlockComment(BlockOpenC, BlockCloseC).
 		WithQuote(QuoteDouble).
 		WithRawQuote(QuoteBacktick)
 	GoModule = language.New("Go Module").
-			WithFilename(module.ModFile, module.SumFile).
-			WithLineComment(strings.DoubleSlash)
+			WithFilename(go_modConstant.ModFile, go_modConstant.SumFile).
+			WithLineComment(stringsConstant.DoubleSlash)
 	C = language.New("C").
 		WithExtension(".c", ".h").
-		WithLineComment(strings.DoubleSlash).
+		WithLineComment(stringsConstant.DoubleSlash).
 		WithBlockComment(BlockOpenC, BlockCloseC).
 		WithQuote(QuoteDouble)
 	CPlusPlus = language.New("C++").
 			WithExtension(".cc", ".cpp", ".cxx", ".hpp", ".hh").
-			WithLineComment(strings.DoubleSlash).
+			WithLineComment(stringsConstant.DoubleSlash).
 			WithBlockComment(BlockOpenC, BlockCloseC).
 			WithQuote(QuoteDouble)
 	Java = language.New("Java").
 		WithExtension(".java").
-		WithLineComment(strings.DoubleSlash).
+		WithLineComment(stringsConstant.DoubleSlash).
 		WithBlockComment(BlockOpenC, BlockCloseC).
 		WithQuote(QuoteDouble)
 	Kotlin = language.New("Kotlin").
 		WithExtension(".kt", ".kts").
-		WithLineComment(strings.DoubleSlash).
+		WithLineComment(stringsConstant.DoubleSlash).
 		WithBlockComment(BlockOpenC, BlockCloseC).
 		WithQuote(QuoteDouble)
 	Rust = language.New("Rust").
 		WithExtension(".rs").
-		WithLineComment(strings.DoubleSlash).
+		WithLineComment(stringsConstant.DoubleSlash).
 		WithBlockComment(BlockOpenC, BlockCloseC).
 		WithQuote(QuoteDouble).
 		WithNested()
 	JavaScript = language.New("JavaScript").
 			WithExtension(".js", ".mjs", ".cjs", ".jsx").
 			WithShebang("node").
-			WithLineComment(strings.DoubleSlash).
+			WithLineComment(stringsConstant.DoubleSlash).
 			WithBlockComment(BlockOpenC, BlockCloseC).
 			WithQuote(QuoteDouble, QuoteSingle).
 			WithRawQuote(QuoteBacktick)
 	TypeScript = language.New("TypeScript").
 			WithExtension(".ts", ".tsx").
-			WithLineComment(strings.DoubleSlash).
+			WithLineComment(stringsConstant.DoubleSlash).
 			WithBlockComment(BlockOpenC, BlockCloseC).
 			WithQuote(QuoteDouble, QuoteSingle).
 			WithRawQuote(QuoteBacktick)
 	Vue = language.New("Vue").
 		WithExtension(".vue").
-		WithLineComment(strings.DoubleSlash).
+		WithLineComment(stringsConstant.DoubleSlash).
 		WithBlockComment(BlockOpenC, BlockCloseC).
 		WithBlockComment(BlockOpenHypertext, BlockCloseHypertext)
 	PHP = language.New("PHP").
 		WithExtension(".php", ".phtml").
 		WithShebang("php").
-		WithLineComment(strings.DoubleSlash, strings.Hash).
+		WithLineComment(stringsConstant.DoubleSlash, stringsConstant.Hash).
 		WithBlockComment(BlockOpenC, BlockCloseC).
 		WithQuote(QuoteDouble, QuoteSingle)
 	Swift = language.New("Swift").
 		WithExtension(".swift").
-		WithLineComment(strings.DoubleSlash).
+		WithLineComment(stringsConstant.DoubleSlash).
 		WithBlockComment(BlockOpenC, BlockCloseC).
 		WithQuote(QuoteDouble).
 		WithNested()
 	Scala = language.New("Scala").
 		WithExtension(".scala", ".sc").
-		WithLineComment(strings.DoubleSlash).
+		WithLineComment(stringsConstant.DoubleSlash).
 		WithBlockComment(BlockOpenC, BlockCloseC).
 		WithQuote(QuoteDouble).
 		WithNested()
 	Groovy = language.New("Groovy").
 		WithExtension(".groovy", ".gradle").
 		WithFilename("Jenkinsfile").
-		WithLineComment(strings.DoubleSlash).
+		WithLineComment(stringsConstant.DoubleSlash).
 		WithBlockComment(BlockOpenC, BlockCloseC).
 		WithQuote(QuoteDouble, QuoteSingle)
 	CSharp = language.New("C#").
 		WithExtension(".cs").
-		WithLineComment(strings.DoubleSlash).
+		WithLineComment(stringsConstant.DoubleSlash).
 		WithBlockComment(BlockOpenC, BlockCloseC).
 		WithQuote(QuoteDouble)
 	Protobuf = language.New("Protocol Buffers").
 			WithExtension(".proto").
-			WithLineComment(strings.DoubleSlash).
+			WithLineComment(stringsConstant.DoubleSlash).
 			WithBlockComment(BlockOpenC, BlockCloseC)
 	Terraform = language.New("Terraform").
 			WithExtension(".tf", ".tfvars", ".hcl").
-			WithLineComment(strings.Hash, strings.DoubleSlash).
+			WithLineComment(stringsConstant.Hash, stringsConstant.DoubleSlash).
 			WithBlockComment(BlockOpenC, BlockCloseC).
 			WithQuote(QuoteDouble)
 	CSS = language.New("CSS").
@@ -110,11 +110,11 @@ var (
 		WithBlockComment(BlockOpenC, BlockCloseC)
 	Less = language.New("Less").
 		WithExtension(".less").
-		WithLineComment(strings.DoubleSlash).
+		WithLineComment(stringsConstant.DoubleSlash).
 		WithBlockComment(BlockOpenC, BlockCloseC)
 	Sass = language.New("Sass").
 		WithExtension(".scss", ".sass").
-		WithLineComment(strings.DoubleSlash).
+		WithLineComment(stringsConstant.DoubleSlash).
 		WithBlockComment(BlockOpenC, BlockCloseC)
 
 	Shell = language.New("Shell").
@@ -127,20 +127,20 @@ var (
 			"PKGBUILD",
 		).
 		WithShebang("sh", "bash", "zsh", "ksh", "dash", "ash").
-		WithLineComment(strings.Hash)
+		WithLineComment(stringsConstant.Hash)
 	Fish = language.New("Fish").
 		WithExtension(".fish").
 		WithShebang("fish").
-		WithLineComment(strings.Hash)
+		WithLineComment(stringsConstant.Hash)
 	PowerShell = language.New("PowerShell").
 			WithExtension(".ps1", ".psm1", ".psd1").
 			WithShebang("pwsh").
-			WithLineComment(strings.Hash).
+			WithLineComment(stringsConstant.Hash).
 			WithBlockComment("<#", "#>")
 	Python = language.New("Python").
 		WithExtension(".py", ".pyi", ".pyw").
 		WithShebang("python").
-		WithLineComment(strings.Hash).
+		WithLineComment(stringsConstant.Hash).
 		WithBlockComment(`"""`, `"""`).
 		WithBlockComment("'''", "'''")
 	Ruby = language.New("Ruby").
@@ -155,44 +155,44 @@ var (
 			"Capfile",
 		).
 		WithShebang("ruby").
-		WithLineComment(strings.Hash).
+		WithLineComment(stringsConstant.Hash).
 		WithBlockComment("=begin", "=end")
 	Perl = language.New("Perl").
 		WithExtension(".pl", ".pm", ".t").
 		WithShebang("perl").
-		WithLineComment(strings.Hash).
+		WithLineComment(stringsConstant.Hash).
 		WithBlockComment("=pod", "=cut")
 	Makefile = language.New("Makefile").
 			WithExtension(".mk").
 			WithFilename("Makefile", "makefile", "GNUmakefile").
-			WithLineComment(strings.Hash)
+			WithLineComment(stringsConstant.Hash)
 	Dockerfile = language.New("Dockerfile").
-			WithFilename(constant.DockerFile, constant.ContainerFile).
+			WithFilename(soil.DockerFile, soil.ContainerFile).
 			WithExtension(".dockerfile").
-			WithLineComment(strings.Hash)
+			WithLineComment(stringsConstant.Hash)
 	Markup = language.New("YAML").
-		WithExtension(constant.MarkupExtension, constant.ShortMarkupExtension).
-		WithLineComment(strings.Hash)
+		WithExtension(soil.MarkupExtension, soil.ShortMarkupExtension).
+		WithLineComment(stringsConstant.Hash)
 	Salt = language.New("Salt").
 		WithExtension(".sls").
-		WithLineComment(strings.Hash).
+		WithLineComment(stringsConstant.Hash).
 		WithBlockComment("{#", "#}")
 	Jinja = language.New("Jinja").
 		WithExtension(".j2", ".jinja", ".jinja2").
 		WithBlockComment("{#", "#}")
 	TOML = language.New("TOML").
 		WithExtension(".toml").
-		WithLineComment(strings.Hash)
+		WithLineComment(stringsConstant.Hash)
 	INI = language.New("INI").
 		WithExtension(".ini", ".cfg", ".conf", ".cnf", ".properties").
-		WithLineComment(strings.Hash, strings.Semicolon)
+		WithLineComment(stringsConstant.Hash, stringsConstant.Semicolon)
 	Systemd = language.New("Systemd").
 		WithExtension(".service", ".timer", ".socket", ".mount", ".target").
-		WithLineComment(strings.Hash, strings.Semicolon)
+		WithLineComment(stringsConstant.Hash, stringsConstant.Semicolon)
 	Cron = language.New("Cron").
 		WithExtension(".cron").
 		WithFilename("crontab").
-		WithLineComment(strings.Hash)
+		WithLineComment(stringsConstant.Hash)
 	GitConfiguration = language.New("Git Configuration").
 				WithFilename(
 			".gitignore",
@@ -202,13 +202,13 @@ var (
 			".helmignore",
 			"chefignore",
 		).
-		WithLineComment(strings.Hash)
+		WithLineComment(stringsConstant.Hash)
 	R = language.New("R").
 		WithExtension(".r", ".R").
-		WithLineComment(strings.Hash)
+		WithLineComment(stringsConstant.Hash)
 	Elixir = language.New("Elixir").
 		WithExtension(".ex", ".exs").
-		WithLineComment(strings.Hash)
+		WithLineComment(stringsConstant.Hash)
 
 	Lua = language.New("Lua").
 		WithExtension(".lua").
@@ -244,11 +244,11 @@ var (
 			".scm",
 			".rkt",
 		).
-		WithLineComment(strings.Semicolon).
+		WithLineComment(stringsConstant.Semicolon).
 		WithBlockComment("#|", "|#")
 	Assembly = language.New("Assembly").
 			WithExtension(".asm", ".s", ".S").
-			WithLineComment(strings.Semicolon, strings.Hash).
+			WithLineComment(stringsConstant.Semicolon, stringsConstant.Hash).
 			WithBlockComment(BlockOpenC, BlockCloseC)
 
 	Erlang = language.New("Erlang").
@@ -263,7 +263,7 @@ var (
 		WithBlockComment(BlockOpenC, BlockCloseC)
 
 	Hypertext = language.New("HTML").
-			WithExtension(constant.HypertextExtension, ".htm", ".xhtml").
+			WithExtension(soil.HypertextExtension, ".htm", ".xhtml").
 			WithBlockComment(BlockOpenHypertext, BlockCloseHypertext)
 	ExtensibleMarkup = language.New("XML").
 				WithExtension(
@@ -278,7 +278,7 @@ var (
 		).
 		WithBlockComment(BlockOpenHypertext, BlockCloseHypertext)
 	Markdown = language.New("Markdown").
-			WithExtension(constant.MarkdownExtension, ".markdown").
+			WithExtension(soil.MarkdownExtension, ".markdown").
 			WithBlockComment(BlockOpenHypertext, BlockCloseHypertext)
 	ERB = language.New("ERB").
 		WithExtension(".erb").

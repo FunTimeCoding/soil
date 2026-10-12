@@ -1,7 +1,7 @@
 package model_context
 
 import (
-	generative "github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -14,12 +14,12 @@ func (s *Server) registerSearch() {
 				"Search indexed documents using hybrid BM25 keyword + vector similarity + cross-encoder reranking. Returns ranked results with snippets.",
 			),
 			mcp.WithString(
-				generative.ParameterQuery,
+				generativeConstant.ParameterQuery,
 				mcp.Required(),
 				mcp.Description("Search query"),
 			),
 			mcp.WithNumber(
-				generative.ParameterLimit,
+				generativeConstant.ParameterLimit,
 				mcp.Description("Maximum number of results (default 10)"),
 			),
 			mcp.WithString(
@@ -96,13 +96,13 @@ func (s *Server) registerSearch() {
 				),
 			),
 			mcp.WithNumber(
-				generative.ParameterLimit,
+				generativeConstant.ParameterLimit,
 				mcp.Description(
 					"Maximum number of results (default 10, 0 for all)",
 				),
 			),
 			mcp.WithNumber(
-				generative.ParameterOffset,
+				generativeConstant.ParameterOffset,
 				mcp.Description("Number of results to skip (default 0)"),
 			),
 			mcp.WithBoolean(

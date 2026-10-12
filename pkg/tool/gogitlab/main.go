@@ -6,13 +6,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/gitlab/check/job"
 	"github.com/funtimecoding/soil/pkg/gitlab/check/job/option"
-	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
+	gogitlabdConstant "github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
 )
 
 func Main() {
-	r := reporter.New(constant.Identity.Name()).Start()
+	r := reporter.New(gogitlabdConstant.Identity.Name()).Start()
 	defer func() { r.RecoverFlush(recover()) }()
-	a := argument.NewInstance(constant.Identity)
+	a := argument.NewInstance(gogitlabdConstant.Identity)
 	a.Boolean(
 		argumentConstant.Copyable,
 		false,

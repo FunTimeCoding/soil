@@ -2,7 +2,7 @@ package web
 
 import (
 	"fmt"
-	argument "github.com/funtimecoding/soil/pkg/argument/constant"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	gitlabConstant "github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab/job"
@@ -25,7 +25,7 @@ func (s *Server) logPane(
 		)
 	}
 
-	trace, e := s.client.Trace(project, j.Identifier)
+	trace, e := s.service.Trace(project, j.Identifier)
 	errors.PanicOnError(e)
 	attributes := []gomponents.Node{html.ID("log-pane"), html.Class("log-pane")}
 
@@ -36,11 +36,11 @@ func (s *Server) logPane(
 				fmt.Sprintf(
 					"%s?%s=%d&%s=%d&%s=%d",
 					constant.JobPath,
-					argument.Project,
+					argumentConstant.Project,
 					project,
-					argument.Pipeline,
+					argumentConstant.Pipeline,
 					pipeline,
-					argument.Job,
+					argumentConstant.Job,
 					j.Identifier,
 				),
 			),
@@ -70,11 +70,11 @@ func (s *Server) logPane(
 					fmt.Sprintf(
 						"%s?%s=%d&%s=%d&%s=%d",
 						constant.RetryPath,
-						argument.Project,
+						argumentConstant.Project,
 						project,
-						argument.Pipeline,
+						argumentConstant.Pipeline,
 						pipeline,
-						argument.Job,
+						argumentConstant.Job,
 						j.Identifier,
 					),
 				),

@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/gitlab/merge_request"
 	"github.com/funtimecoding/soil/pkg/gitlab/pipeline"
 	"github.com/funtimecoding/soil/pkg/gitlab/project"
+	"github.com/funtimecoding/soil/pkg/gitlab/registry_repository"
 	"github.com/funtimecoding/soil/pkg/gitlab/tag"
 	"github.com/funtimecoding/soil/pkg/gitlab/types/recorded_commit"
 )
@@ -21,4 +22,5 @@ type Client struct {
 	deletedPipelines  []int64
 	assignedRequests  []*merge_request.Request
 	reviewingRequests []*merge_request.Request
+	registries        []*registry_repository.Repository
 }

@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	generative "github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
 	"testing"
@@ -16,7 +16,7 @@ func TestSearchConversationsTool(t *testing.T) {
 	a.Announce(a.Name(), "searching")
 	result := a.MustCallTool(
 		constant.SearchConversations,
-		map[string]any{generative.ParameterQuery: "legacy pin"},
+		map[string]any{generativeConstant.ParameterQuery: "legacy pin"},
 	)
 	assert.StringContains(t, "(bravo) - 2 hits", result)
 	assert.StringContains(
@@ -35,7 +35,7 @@ func TestSearchConversationsToolKinds(t *testing.T) {
 	result := a.MustCallTool(
 		constant.SearchConversations,
 		map[string]any{
-			generative.ParameterQuery: "go test",
+			generativeConstant.ParameterQuery: "go test",
 			constant.Kinds:            []string{"call"},
 		},
 	)

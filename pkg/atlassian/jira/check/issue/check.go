@@ -1,7 +1,7 @@
 package issue
 
 import (
-	atlassian "github.com/funtimecoding/soil/pkg/atlassian/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/check/issue/option"
 	"github.com/funtimecoding/soil/pkg/console"
 	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
@@ -18,7 +18,7 @@ func Check(o *option.Issue) {
 		return
 	}
 
-	f := atlassian.JiraFormat
+	f := constant.JiraFormat
 
 	if o.Copyable {
 		f.Tag(consoleConstant.TagCopyable)

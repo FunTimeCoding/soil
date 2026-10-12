@@ -2,13 +2,13 @@ package cross_service_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/event/notifier"
-	generative "github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/connector"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/service"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/store"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"testing"
 	"time"
@@ -27,10 +27,10 @@ func New(t *testing.T) *Tester {
 		),
 		Coordinator: connector.New(
 			locator.New(
-				constant.Localhost,
+				webConstant.Localhost,
 			).Insecure().Port(coordinator.Port).String(),
 			true,
-			generative.ModelContextTestToken,
+			generativeConstant.ModelContextTestToken,
 		),
 		Goclauded: coordinator,
 		now:       &now,

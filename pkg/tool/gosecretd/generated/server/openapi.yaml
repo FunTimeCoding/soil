@@ -1,0 +1,225 @@
+---
+openapi: "3.0.0"
+info:
+  title: gosecretd
+  version: 1.0.0
+paths:
+  /api/status:
+    get:
+      operationId: getStatus
+      responses:
+        "200":
+          description: Seal and initialization state of the secret store.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Status"
+        "500":
+          description: Failed to read the store's health.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/secrets:
+    get:
+      operationId: listSecrets
+      parameters:
+      - name: path
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Folder to list, empty for the top level.
+      responses:
+        "200":
+          description: Secrets and folders below the path; folders end in a slash.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Listing"
+        "400":
+          description: The path is malformed.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to list secrets.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/secret:
+    get:
+      operationId: showSecret
+      parameters:
+      - name: path
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Secret path, such as a namespace and a Secret name.
+      responses:
+        "200":
+          description: The secret's key names; values stay masked.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SecretKeys"
+        "400":
+          description: The path is malformed.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: No secret at the path.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to read the secret.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    put:
+      operationId: putSecret
+      parameters:
+      - name: path
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Secret path, such as a namespace and a Secret name.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SecretValues"
+      responses:
+        "200":
+          description: The secret's key names after the values merged in.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SecretKeys"
+        "400":
+          description: The path is malformed or no values were sent.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to write the secret.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/secret/value:
+    get:
+      operationId: revealSecret
+      parameters:
+      - name: path
+        in: query
+        required: true
+        schema:
+          type: string
+        description: Secret path.
+      - name: key
+        in: query
+        required: true
+        schema:
+          type: string
+        description: The one key to reveal.
+      responses:
+        "200":
+          description: One key's value.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SecretValue"
+        "400":
+          description: The path is malformed.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: No secret at the path, or no such key in it.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to read the secret.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    Status:
+      type: object
+      required: [initialized, sealed, version]
+      properties:
+        initialized:
+          type: boolean
+        sealed:
+          type: boolean
+        version:
+          type: string
+    Listing:
+      type: object
+      required: [path, entries]
+      properties:
+        path:
+          type: string
+        entries:
+          type: array
+          items:
+            type: string
+    SecretKeys:
+      type: object
+      required: [path, keys]
+      properties:
+        path:
+          type: string
+        keys:
+          type: array
+          items:
+            type: string
+    SecretValues:
+      type: object
+      required: [values]
+      properties:
+        values:
+          type: object
+          additionalProperties:
+            type: string
+    SecretValue:
+      type: object
+      required: [path, key, value]
+      properties:
+        path:
+          type: string
+        key:
+          type: string
+        value:
+          type: string
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
+    ErrorResponse:
+      type: object
+      required: [error, event_identifier]
+      properties:
+        error:
+          type: string
+        event_identifier:
+          type: string

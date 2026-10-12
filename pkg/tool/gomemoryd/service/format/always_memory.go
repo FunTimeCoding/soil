@@ -2,7 +2,7 @@ package format
 
 import (
 	"github.com/funtimecoding/soil/pkg/integers64"
-	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
@@ -16,10 +16,10 @@ func AlwaysMemory(m *record.Memory) string {
 		integers64.ToString(m.Identifier),
 		constant.IdentifierClose,
 		tagSuffix(m.Tags),
-		stringConstant.Unix,
+		stringsConstant.Unix,
 		baseLine(m.Metadata),
 		m.Content,
-		stringConstant.Unix,
+		stringsConstant.Unix,
 	)
 
 	if len(m.Children) == 0 {
@@ -30,6 +30,6 @@ func AlwaysMemory(m *record.Memory) string {
 		block,
 		constant.ChildIndent,
 		join.CommaSpace(m.Children),
-		stringConstant.Unix,
+		stringsConstant.Unix,
 	)
 }

@@ -7,6 +7,23 @@ const (
 	GeneratedBytes  = 512
 )
 
+const (
+	KeeperStandard = "stdlib"
+	KeeperOwn      = "own"
+	KeeperDeeper   = "deeper"
+	KeeperPlain    = "already plain"
+	KeeperFirst    = "first by path"
+	KeeperVersion  = "version name"
+)
+
+const ConstantPackage = "constant"
+
+var LayoutRoots = map[string]bool{
+	"cmd":      true,
+	"internal": true,
+	"pkg":      true,
+}
+
 var KnownTags = map[string]bool{
 	"aix":       true,
 	"android":   true,

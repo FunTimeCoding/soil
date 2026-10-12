@@ -11,7 +11,7 @@ func (s *Server) Whoami(
 	_ mcp.CallToolRequest,
 	_ argument.Whoami,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.client.Whoami()
+	result, e := s.service.Whoami()
 
 	if e != nil {
 		return s.captureDetail(e)

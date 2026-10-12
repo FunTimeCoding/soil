@@ -3,8 +3,8 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
-	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
-	strings "github.com/funtimecoding/soil/pkg/strings/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"testing"
 )
 
@@ -12,19 +12,19 @@ func TestFilterAlerts(t *testing.T) {
 	actual := alert.FilterAlerts(
 		[]*alert.Alert{
 			{
-				Name:     strings.UpperAlfa,
-				State:    prometheus.ActiveState,
-				Severity: prometheus.CriticalSeverity,
+				Name:     stringsConstant.UpperAlfa,
+				State:    constant.ActiveState,
+				Severity: constant.CriticalSeverity,
 			},
 			{
-				Name:     strings.UpperBravo,
-				State:    prometheus.SuppressedState,
-				Severity: prometheus.CriticalSeverity,
+				Name:     stringsConstant.UpperBravo,
+				State:    constant.SuppressedState,
+				Severity: constant.CriticalSeverity,
 			},
 			{
-				Name:     strings.UpperCharlie,
-				State:    prometheus.ActiveState,
-				Severity: prometheus.InformationSeverity,
+				Name:     stringsConstant.UpperCharlie,
+				State:    constant.ActiveState,
+				Severity: constant.InformationSeverity,
 			},
 		},
 	)

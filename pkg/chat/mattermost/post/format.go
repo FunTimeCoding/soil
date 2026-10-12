@@ -3,7 +3,7 @@ package post
 import (
 	"github.com/funtimecoding/soil/pkg/console/status"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/strings/split"
 	"github.com/funtimecoding/soil/pkg/text"
 	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
@@ -11,7 +11,7 @@ import (
 
 func (p *Post) Format(f *option.Format) string {
 	lines := split.NewLine(
-		text.OptimizeWhitespace(p.Message, constant.CompactWhitespace),
+		text.OptimizeWhitespace(p.Message, soil.CompactWhitespace),
 	)
 	s := status.New(f).String(
 		p.Create.Format(timeConstant.HourMinute),

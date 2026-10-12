@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	kubernetes "github.com/funtimecoding/soil/pkg/kubernetes/constant"
+	kubernetesConstant "github.com/funtimecoding/soil/pkg/kubernetes/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/argocd_detail"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/resource"
@@ -37,7 +37,7 @@ func (s *Service) ArgocdApplication(
 		"status",
 	)
 
-	if syncStatus == kubernetes.ArgocdSyncSynced && !unfiltered {
+	if syncStatus == kubernetesConstant.ArgocdSyncSynced && !unfiltered {
 		resource.StripArgocdNoise(filtered.Object, &filtered.Filtered)
 	}
 

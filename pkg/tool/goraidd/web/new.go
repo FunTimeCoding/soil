@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/store"
 	"github.com/funtimecoding/soil/pkg/web/authorization/client"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/palette"
@@ -25,24 +25,28 @@ func New(
 		palette.NewCommand(
 			constant.LogsTitle,
 			constant.LogsPath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
 		palette.NewCommand(
 			constant.ReportsTitle,
 			constant.ReportsPath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
 		palette.NewCommand(
 			constant.RaidsTitle,
 			constant.RaidsPath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
 		palette.NewCommand(
 			constant.PlayersTitle,
 			constant.PlayersPath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
-		palette.NewCommand(web.SignOutTitle, web.SignOutPath, web.PaletteAction),
+		palette.NewCommand(
+			webConstant.SignOutTitle,
+			webConstant.SignOutPath,
+			webConstant.PaletteAction,
+		),
 	)
 
 	return &Server{
@@ -54,9 +58,9 @@ func New(
 		registry:      r,
 		view: view.New(
 			layout.New(constant.Identity).
-				WithTheme(web.ThemeTyria).
+				WithTheme(webConstant.ThemeTyria).
 				WithStyle(constant.InlineStyle).
-				WithCommandPalette(web.PalettePath).
+				WithCommandPalette(webConstant.PalettePath).
 				WithItems(
 					navigation_item.New(constant.LogsPath, constant.LogsTitle),
 					navigation_item.New(

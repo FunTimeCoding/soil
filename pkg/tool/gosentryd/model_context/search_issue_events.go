@@ -16,13 +16,7 @@ func (s *Server) SearchIssueEvents(
 		return response.Fail("identifier is required")
 	}
 
-	result, e := s.client.IssueEvents(
-		s.organization,
-		a.Identifier,
-		a.Query,
-		a.Limit,
-		a.Cursor,
-	)
+	result, e := s.service.IssueEvents(a.Identifier, a.Query, a.Limit, a.Cursor)
 
 	if e != nil {
 		return s.captureDetail(e)

@@ -1,14 +1,14 @@
 package model_context
 
 import (
-	generative "github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func (s *Server) register() {
 	query := mcp.WithString(
-		generative.ParameterQuery,
+		generativeConstant.ParameterQuery,
 		mcp.Description("Search phrase to filter results."),
 	)
 	s.server.AddTool(
@@ -99,7 +99,7 @@ func (s *Server) register() {
 				"Read recent firewall log records - matched rule, action, source, and destination.",
 			),
 			mcp.WithNumber(
-				generative.ParameterLimit,
+				generativeConstant.ParameterLimit,
 				mcp.Description("Maximum number of records, default 100."),
 			),
 		),
@@ -162,7 +162,7 @@ func (s *Server) register() {
 				"Update a Dnsmasq host entry. Omitted fields keep their current value; passing an empty one clears it.",
 			),
 			mcp.WithString(
-				generative.ParameterIdentifier,
+				generativeConstant.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Identifier of the entry to update."),
 			),
@@ -201,7 +201,7 @@ func (s *Server) register() {
 				"Delete one Dnsmasq host entry by identifier. Removal is permanent; the entry is not recoverable from here.",
 			),
 			mcp.WithString(
-				generative.ParameterIdentifier,
+				generativeConstant.ParameterIdentifier,
 				mcp.Required(),
 				mcp.Description("Identifier of the entry to delete."),
 			),

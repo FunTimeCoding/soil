@@ -2,10 +2,10 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	atlassian "github.com/funtimecoding/soil/pkg/atlassian/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
 	"io"
 	"net/http"
@@ -17,7 +17,7 @@ func TestGetV2PathSendsBasicAuth(t *testing.T) {
 	var out map[string]any
 	assert.FatalOnError(
 		t,
-		newConfluenceClient(t, s.URL).GetV2Path(atlassian.ConfluenceLabel, &out),
+		newConfluenceClient(t, s.URL).GetV2Path(constant.ConfluenceLabel, &out),
 	)
 	r := last()
 	assert.String(t, "/wiki/api/v2/labels", r.URL.Path)
@@ -25,7 +25,7 @@ func TestGetV2PathSendsBasicAuth(t *testing.T) {
 	assert.True(t, okay)
 	assert.String(t, "alfa", user)
 	assert.String(t, "bravo-token", password)
-	assert.String(t, "application/json", r.Header.Get(constant.Accept))
+	assert.String(t, "application/json", r.Header.Get(webConstant.Accept))
 }
 
 func TestGetPathUsesTheOldBase(t *testing.T) {
@@ -33,7 +33,7 @@ func TestGetPathUsesTheOldBase(t *testing.T) {
 	var out map[string]any
 	assert.FatalOnError(
 		t,
-		newConfluenceClient(t, s.URL).GetPath(atlassian.ConfluenceUser, &out),
+		newConfluenceClient(t, s.URL).GetPath(constant.ConfluenceUser, &out),
 	)
 	assert.String(t, "/wiki/rest/api/user/current", last().URL.Path)
 }
@@ -59,7 +59,7 @@ func TestPostV2PathSendsTheBody(t *testing.T) {
 	assert.FatalOnError(
 		t,
 		newConfluenceClient(t, s.URL).PostV2Path(
-			atlassian.ConfluencePage,
+			constant.ConfluencePage,
 			`{"title":"delta"}`,
 			&out,
 		),
@@ -67,7 +67,7 @@ func TestPostV2PathSendsTheBody(t *testing.T) {
 	assert.String(t, "7", out["id"])
 	r := last()
 	assert.String(t, http.MethodPost, r.Method)
-	assert.String(t, "application/json", r.Header.Get(constant.ContentType))
+	assert.String(t, "application/json", r.Header.Get(webConstant.ContentType))
 	b, e := io.ReadAll(r.Body)
 	assert.FatalOnError(t, e)
 	assert.String(t, `{"title":"delta"}`, string(b))
@@ -122,10 +122,7 @@ func TestRefusalCarriesTheVersionTwoTitle(t *testing.T) {
 		`{"errors":[{"status":400,"title":"Invalid space identifier"}]}`,
 	)
 	var out map[string]any
-	e := newConfluenceClient(t, s.URL).GetV2Path(
-		atlassian.ConfluenceSpace,
-		&out,
-	)
+	e := newConfluenceClient(t, s.URL).GetV2Path(constant.ConfluenceSpace, &out)
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(t, "status: 400: Invalid space identifier", e.Error())
 }
@@ -137,7 +134,7 @@ func TestRefusalCarriesTheOldMessage(t *testing.T) {
 		`{"statusCode":403,"message":"Not permitted to use confluence"}`,
 	)
 	var out map[string]any
-	e := newConfluenceClient(t, s.URL).GetPath(atlassian.ConfluenceUser, &out)
+	e := newConfluenceClient(t, s.URL).GetPath(constant.ConfluenceUser, &out)
 	assert.True(t, unexpected.Is(e))
 	assert.StringContains(
 		t,

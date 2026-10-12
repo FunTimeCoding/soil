@@ -3,7 +3,7 @@ package package_server
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
-	system "github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/run"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/constant"
 	"path/filepath"
@@ -23,7 +23,12 @@ func rebuildIndex(
 		return not_found.Format("no .apk files found in %s", directory)
 	}
 
-	arguments := []string{"index", "-vU", "-o", system.AlpineIndexArchive}
+	arguments := []string{
+		"index",
+		"-vU",
+		"-o",
+		systemConstant.AlpineIndexArchive,
+	}
 
 	for _, f := range packageFiles {
 		arguments = append(arguments, filepath.Base(f))
@@ -42,7 +47,7 @@ func rebuildIndex(
 		"abuild-sign",
 		"-k",
 		filepath.Join(constant.KeyDirectory, keyName),
-		filepath.Join(directory, system.AlpineIndexArchive),
+		filepath.Join(directory, systemConstant.AlpineIndexArchive),
 	)
 
 	if s.Error != nil {

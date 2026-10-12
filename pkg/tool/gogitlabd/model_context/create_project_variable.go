@@ -30,7 +30,7 @@ func (s *Server) CreateProjectVariable(
 		return s.captureDetail(e)
 	}
 
-	v, e := s.client.CreateProjectVariable(
+	v, e := s.service.CreateProjectVariable(
 		project,
 		a.Key,
 		a.Value,

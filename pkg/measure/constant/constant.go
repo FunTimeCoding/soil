@@ -1,8 +1,8 @@
 package constant
 
 import (
-	"github.com/funtimecoding/soil/pkg/git/constant"
-	system "github.com/funtimecoding/soil/pkg/system/constant"
+	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 )
 
 const (
@@ -39,8 +39,8 @@ const (
 )
 
 var DefaultSkips = []string{
-	constant.Directory,
-	system.IdeaPath,
+	gitConstant.Directory,
+	systemConstant.IdeaPath,
 	FinderMetadataFile,
 	VendorDirectory,
 	NodeModulesDirectory,

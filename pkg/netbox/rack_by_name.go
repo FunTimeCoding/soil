@@ -3,6 +3,7 @@ package netbox
 import (
 	"github.com/funtimecoding/soil/pkg/errors/ambiguous"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/rack"
 )
 
@@ -14,7 +15,7 @@ func (c *Client) RackByName(n string) (*rack.Rack, error) {
 	}
 
 	if len(result) == 0 {
-		return nil, not_found.New("rack", n)
+		return nil, not_found.New(constant.RackKind, n)
 	}
 
 	if len(result) > 1 {

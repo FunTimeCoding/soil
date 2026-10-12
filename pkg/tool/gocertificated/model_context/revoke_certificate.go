@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/convert"
@@ -19,7 +19,7 @@ func (s *Server) revokeCertificate(
 	existing, e := s.store.BySerial(a.Serial)
 
 	if e != nil {
-		return s.captureFail(e, library.UnexpectedError)
+		return s.captureFail(e, soil.UnexpectedError)
 	}
 
 	if existing == nil || existing.Revoked != nil {
@@ -33,7 +33,7 @@ func (s *Server) revokeCertificate(
 	result, g := s.store.BySerial(a.Serial)
 
 	if g != nil {
-		return s.captureFail(g, library.UnexpectedError)
+		return s.captureFail(g, soil.UnexpectedError)
 	}
 
 	return response.SuccessAny(convert.Certificate(result))

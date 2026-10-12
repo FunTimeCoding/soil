@@ -27,7 +27,7 @@ func (s *Server) CancelPipelineJob(
 		return s.captureDetail(e)
 	}
 
-	v, e := s.client.CancelJob(project, a.Job)
+	v, e := s.service.CancelJob(project, a.Job)
 
 	if e != nil {
 		return s.captureDetail(e)

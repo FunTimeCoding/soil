@@ -22,7 +22,7 @@ func (s *Server) GetProject(
 		return s.captureDetail(e)
 	}
 
-	v, e := s.client.Project(project)
+	v, e := s.service.Project(project)
 
 	if e != nil {
 		return s.captureDetail(e)

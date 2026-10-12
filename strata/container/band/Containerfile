@@ -1,0 +1,3 @@
+FROM alpine:3.24.2
+COPY tmp/gobandd/linux-amd64/gobandd /usr/local/bin
+ENTRYPOINT ["gobandd"]

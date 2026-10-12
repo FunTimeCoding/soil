@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	generative "github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gohabiticad/convert"
@@ -13,7 +13,7 @@ func (s *Server) scoreTask(
 	_ context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	identifier, f := r.RequireString(generative.ParameterIdentifier)
+	identifier, f := r.RequireString(generativeConstant.ParameterIdentifier)
 
 	if f != nil {
 		return response.Fail("identifier is required: %v", f)

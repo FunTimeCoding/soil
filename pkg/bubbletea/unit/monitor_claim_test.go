@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor"
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/claim"
 	"github.com/funtimecoding/soil/pkg/bubbletea/model/monitor/fetch"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/item"
 	"github.com/funtimecoding/soil/pkg/system"
@@ -39,7 +39,7 @@ func TestAWindowReleasesItsClaimsOnItemsGone(t *testing.T) {
 	present := item.New(
 		monitorConstant.GoJira,
 		"jira-HERE-1",
-		constant.Warning,
+		soil.Warning,
 		"still here",
 		"",
 		nil,

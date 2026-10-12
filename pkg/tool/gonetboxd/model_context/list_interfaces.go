@@ -18,16 +18,10 @@ func (s *Server) listInterfaces(
 		return response.Fail("name is required: %v", f)
 	}
 
-	d, g := s.client.DeviceByName(name)
+	result, e := s.service.DeviceInterfaces(name)
 
-	if g != nil {
-		return s.captureFail(g, "device not found")
-	}
-
-	result, h := s.client.DeviceInterfaces(d.Identifier)
-
-	if h != nil {
-		return s.captureFail(h, "interfaces not retrieved")
+	if e != nil {
+		return s.serviceFail(e, "interfaces not retrieved")
 	}
 
 	return response.SuccessAny(convert.Interfaces(result))

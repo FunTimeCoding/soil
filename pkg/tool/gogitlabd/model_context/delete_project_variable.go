@@ -26,7 +26,7 @@ func (s *Server) DeleteProjectVariable(
 		return s.captureDetail(e)
 	}
 
-	e = s.client.DeleteProjectVariable(project, a.Key)
+	e = s.service.DeleteProjectVariable(project, a.Key)
 
 	if e != nil {
 		return s.captureDetail(e)

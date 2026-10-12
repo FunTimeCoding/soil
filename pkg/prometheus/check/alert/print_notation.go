@@ -1,12 +1,12 @@
 package alert
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
-	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
+	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/report"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
 	"github.com/funtimecoding/soil/pkg/prometheus/check/alert/option"
-	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 )
 
 func printNotation(
@@ -17,24 +17,24 @@ func printNotation(
 	var relevant []*alert.Alert
 
 	for _, e := range v {
-		if !o.All && e.Severity == prometheus.InformationSeverity {
+		if !o.All && e.Severity == constant.InformationSeverity {
 			continue
 		}
 
 		relevant = append(relevant, e)
 	}
 
-	for _, e := range report.Trim(relevant, r, o.All, monitor.GoAlert) {
-		var s constant.Severity
+	for _, e := range report.Trim(relevant, r, o.All, monitorConstant.GoAlert) {
+		var s soil.Severity
 
-		if e.Severity == prometheus.CriticalSeverity {
-			s = constant.Critical
+		if e.Severity == constant.CriticalSeverity {
+			s = soil.Critical
 		} else {
-			s = constant.Warning
+			s = soil.Warning
 		}
 
 		r.AddItem(
-			monitor.GoAlert,
+			monitorConstant.GoAlert,
 			e.MonitorIdentifier,
 			s,
 			e.Name,

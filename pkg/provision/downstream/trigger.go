@@ -2,10 +2,10 @@ package downstream
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
-	provision "github.com/funtimecoding/soil/pkg/provision/constant"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/provision/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
@@ -14,15 +14,15 @@ func (c *Client) Trigger(changes []string) error {
 	x := context.Background()
 	s, e := mcp.NewClient(
 		&mcp.Implementation{
-			Name:    provision.DownstreamClient,
-			Version: constant.DefaultVersion,
+			Name:    constant.DownstreamClient,
+			Version: soil.DefaultVersion,
 		},
 		nil,
 	).Connect(
 		x,
 		&mcp.StreamableClientTransport{
 			Endpoint: locator.New(c.host).Insecure().Port(c.port).Path(
-				web.ModelContextPath,
+				webConstant.ModelContextPath,
 			).String(),
 		},
 		nil,
@@ -36,10 +36,10 @@ func (c *Client) Trigger(changes []string) error {
 	_, f := s.CallTool(
 		x,
 		&mcp.CallToolParams{
-			Name: provision.DownstreamTool,
+			Name: constant.DownstreamTool,
 			Arguments: map[string]any{
-				provision.DownstreamUpdate:  true,
-				provision.DownstreamChanges: changes,
+				constant.DownstreamUpdate:  true,
+				constant.DownstreamChanges: changes,
 			},
 		},
 	)

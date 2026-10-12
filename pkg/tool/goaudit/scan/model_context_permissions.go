@@ -2,7 +2,7 @@ package scan
 
 import (
 	"fmt"
-	generative "github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/system"
@@ -39,10 +39,13 @@ func ModelContextPermissions(
 	servers := make(map[string][]string)
 
 	for _, entry := range permissionEntries(&s) {
-		rest := strings.TrimPrefix(entry, generative.ModelContextToolPrefix)
+		rest := strings.TrimPrefix(
+			entry,
+			generativeConstant.ModelContextToolPrefix,
+		)
 		server, tool, found := strings.Cut(
 			rest,
-			generative.ModelContextToolSeparator,
+			generativeConstant.ModelContextToolSeparator,
 		)
 
 		if !found {
@@ -102,9 +105,9 @@ func ModelContextPermissions(
 					constant.StaleToolPermissionKey,
 					fmt.Sprintf(
 						"%s%s%s%s not registered by %s",
-						generative.ModelContextToolPrefix,
+						generativeConstant.ModelContextToolPrefix,
 						server,
-						generative.ModelContextToolSeparator,
+						generativeConstant.ModelContextToolSeparator,
 						tool,
 						path,
 					),

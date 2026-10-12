@@ -2,39 +2,23 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/network"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
-	"github.com/netbox-community/go-netbox/v4"
 )
 
 func (s *Server) CreateInterface(
 	_ context.Context,
 	r server.CreateInterfaceRequestObject,
 ) (server.CreateInterfaceResponseObject, error) {
-	d, e := s.client.DeviceByName(r.Name)
+	address := ""
+
+	if r.Body.PhysicalAddress != nil {
+		address = *r.Body.PhysicalAddress
+	}
+
+	i, e := s.service.CreateInterface(r.Name, r.Body.Name, r.Body.Type, address)
 
 	if e != nil {
 		return server.CreateInterface500JSONResponse(*s.captureDetail(e)), nil
-	}
-
-	i, f := s.client.CreateInterface(
-		d,
-		r.Body.Name,
-		netbox.InterfaceTypeValue(r.Body.Type),
-	)
-
-	if f != nil {
-		return server.CreateInterface500JSONResponse(*s.captureDetail(f)), nil
-	}
-
-	if r.Body.PhysicalAddress != nil {
-		if _, g := s.client.CreatePhysicalInterface(
-			network.PhysicalAddress(*r.Body.PhysicalAddress),
-			"",
-			i,
-		); g != nil {
-			return server.CreateInterface500JSONResponse(*s.captureDetail(g)), nil
-		}
 	}
 
 	result := server.Interface{Identifier: i.Identifier, Name: i.Name}

@@ -2,7 +2,7 @@ package runner
 
 import (
 	"fmt"
-	provision "github.com/funtimecoding/soil/pkg/provision/constant"
+	provisionConstant "github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/constant"
 	"path/filepath"
 	"time"
@@ -16,7 +16,7 @@ func (r *Runner) apply(
 	head := r.provision.CurrentHead()
 	record := r.store.NewRun()
 	record.TriggerSource = triggerSource
-	record.Status = provision.StoreStatusRunning
+	record.Status = provisionConstant.StoreStatusRunning
 	record.GitHead = head
 	r.store.Create(record)
 	r.logger.Structured("terraform_apply_start")
@@ -41,10 +41,10 @@ func (r *Runner) apply(
 	record.ErrorOutput = c.ErrorString
 
 	if c.Error != nil {
-		record.Status = provision.StoreStatusError
+		record.Status = provisionConstant.StoreStatusError
 		r.logger.Structured("terraform_apply_error", "error", c.Error.Error())
 	} else {
-		record.Status = provision.StoreStatusSuccess
+		record.Status = provisionConstant.StoreStatusSuccess
 		r.metrics.LastSuccess.Set(float64(time.Now().Unix()))
 		r.logger.Structured("terraform_apply_done")
 	}

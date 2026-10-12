@@ -22,7 +22,7 @@ func (s *Server) ListMergeRequests(
 		return s.captureDetail(e)
 	}
 
-	v, e := s.client.ProjectMergeRequests(project, a.State)
+	v, e := s.service.ProjectMergeRequests(project, a.State)
 
 	if e != nil {
 		return s.captureDetail(e)

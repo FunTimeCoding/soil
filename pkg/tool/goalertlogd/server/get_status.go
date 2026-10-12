@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	libraryConstant "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/generated/server"
 )
@@ -15,7 +15,7 @@ func (s *Server) GetStatus(
 
 	if e != nil {
 		return server.GetStatus500JSONResponse(
-			*s.captureFail(e, libraryConstant.UnexpectedError),
+			*s.captureFail(e, soil.UnexpectedError),
 		), nil
 	}
 

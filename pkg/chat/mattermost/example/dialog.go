@@ -51,7 +51,9 @@ func Dialog() {
 			ChannelId: m.DefaultChannel().Id,
 			Message:   "Some message with buttons",
 		}
-		callback := locator.New(constant.Localhost).Port(constant.ListenPort).Insecure().Path(
+		callback := locator.New(constant.Localhost).Port(
+			constant.ListenPort,
+		).Insecure().Path(
 			constant.CallbackPath,
 		).String()
 		model.ParseMessageAttachment(
@@ -130,7 +132,9 @@ func Dialog() {
 		m.MustOpenDialog(
 			model.OpenDialogRequest{
 				TriggerId: "",
-				URL: locator.New(constant.Localhost).Port(constant.ListenPort).Insecure().Path(
+				URL: locator.New(constant.Localhost).Port(
+					constant.ListenPort,
+				).Insecure().Path(
 					constant.DialogPath,
 				).String(),
 				Dialog: model.Dialog{

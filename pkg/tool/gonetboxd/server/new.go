@@ -3,13 +3,13 @@ package server
 import (
 	"github.com/funtimecoding/soil/pkg/face"
 	netbox "github.com/funtimecoding/soil/pkg/tool/gonetboxd/face"
-	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/store"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/service"
 )
 
 func New(
 	c netbox.NetboxSource,
-	s *store.Store,
+	v *service.Service,
 	r face.Reporter,
 ) *Server {
-	return &Server{client: c, store: s, reporter: r}
+	return &Server{client: c, service: v, reporter: r}
 }

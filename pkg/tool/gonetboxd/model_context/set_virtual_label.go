@@ -3,7 +3,6 @@ package model_context
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	netboxConstant "github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -31,21 +30,10 @@ func (s *Server) setVirtualLabel(
 		return response.Fail("value is required: %v", h)
 	}
 
-	m, resolveFail := s.client.VirtualMachineByName(name)
+	result, e := s.service.SetVirtualLabel(name, key, value)
 
-	if resolveFail != nil {
-		return s.captureFail(resolveFail, "virtual machine not found")
-	}
-
-	result, setFail := s.store.SetLabel(
-		netboxConstant.VirtualMachineAddress,
-		m.Identifier,
-		key,
-		value,
-	)
-
-	if setFail != nil {
-		return s.captureFail(setFail, "label not set on virtual machine")
+	if e != nil {
+		return s.serviceFail(e, "label not set on virtual machine")
 	}
 
 	return response.SuccessAny(convert.Label(result))

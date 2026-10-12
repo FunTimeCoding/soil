@@ -1,9 +1,9 @@
 package web
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/system"
-	goraidd "github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 	"net/http"
@@ -20,7 +20,7 @@ func (s *Server) reports(
 	for _, n := range system.ReadDirectory(s.outputPath) {
 		if !n.IsDir() && strings.HasSuffix(
 			n.Name(),
-			constant.HypertextExtension,
+			soil.HypertextExtension,
 		) {
 			reports = append(reports, n)
 		}
@@ -34,8 +34,8 @@ func (s *Server) reports(
 
 	s.view.RenderPage(
 		w,
-		goraidd.ReportsTitle,
-		goraidd.ReportsPath,
+		constant.ReportsTitle,
+		constant.ReportsPath,
 		html.H1(gomponents.Text("Generated Reports")),
 		reportsTable(reports),
 	)

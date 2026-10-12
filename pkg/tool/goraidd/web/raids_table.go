@@ -5,7 +5,7 @@ import (
 	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/store/record"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
@@ -38,7 +38,7 @@ func raidsTable(rows []record.Raid) gomponents.Node {
 							),
 						),
 						html.Td(
-							html.Class(web.LayoutTimeCellClass),
+							html.Class(webConstant.LayoutTimeCellClass),
 							gomponents.Text(
 								r.Date.Format(timeConstant.DateYear),
 							),

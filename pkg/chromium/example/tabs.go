@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/chromium/constant"
 	"github.com/funtimecoding/soil/pkg/chromium/protocol"
 	"github.com/funtimecoding/soil/pkg/console"
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/strings/split/key_value"
 	"github.com/funtimecoding/soil/pkg/system"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
@@ -22,7 +22,7 @@ func Tabs() {
 			continue
 		}
 
-		if !strings.HasSuffix(t.Locator, library.GraphicExtension) {
+		if !strings.HasSuffix(t.Locator, soil.GraphicExtension) {
 			continue
 		}
 

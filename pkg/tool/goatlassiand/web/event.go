@@ -2,7 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/subscription"
 	"net/http"
@@ -22,7 +22,7 @@ func (s *Server) event() http.HandlerFunc {
 			if subs.Has(constant.SummaryEvent) {
 				layout.PushEvent(
 					w,
-					web.LayoutSummaryStrip,
+					webConstant.LayoutSummaryStrip,
 					layout.SummaryStripContent(summary(issues)),
 				)
 			}

@@ -1,7 +1,7 @@
 package service
 
 import (
-	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/chunk"
@@ -37,7 +37,7 @@ func (s *Service) headingFix(
 			if s.reranker.Count(first.Text) <= s.reranker.Allowance() {
 				lines = append(
 					lines,
-					strings.Count(body[:offset], stringConstant.Unix)+1,
+					strings.Count(body[:offset], stringsConstant.Unix)+1,
 				)
 			}
 		}

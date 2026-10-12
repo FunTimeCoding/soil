@@ -1,11 +1,11 @@
 package license
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/go_mod/check/license/option"
-	go_modConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
+	"github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/go_mod/dependency"
-	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
+	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/monitor/report"
 	"time"
 )
@@ -15,19 +15,19 @@ func printNotation(
 	o *option.License,
 ) {
 	r := report.New()
-	f := go_modConstant.Format
+	f := constant.Format
 
-	for _, e := range report.Trim(v, r, o.All, monitor.GoLicense) {
-		var s constant.Severity
+	for _, e := range report.Trim(v, r, o.All, monitorConstant.GoLicense) {
+		var s soil.Severity
 
 		if e.HasConcerns() {
-			s = constant.Warning
+			s = soil.Warning
 		} else {
-			s = constant.Information
+			s = soil.Information
 		}
 
 		r.AddItem(
-			monitor.GoLicense,
+			monitorConstant.GoLicense,
 			e.MonitorIdentifier,
 			s,
 			e.Format(f),

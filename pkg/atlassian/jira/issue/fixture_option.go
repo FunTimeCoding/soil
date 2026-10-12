@@ -2,7 +2,7 @@ package issue
 
 import (
 	"github.com/andygrunwald/go-jira"
-	atlassian "github.com/funtimecoding/soil/pkg/atlassian/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/field_map"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue/option"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
@@ -14,7 +14,7 @@ func FixtureOption() *option.Issue {
 		locator.New(webConstant.Localhost).Insecure().String(),
 		"test",
 		[]string{},
-		[]string{atlassian.JiraClosed},
+		[]string{constant.JiraClosed},
 		field_map.New([]jira.Field{}),
 	)
 }

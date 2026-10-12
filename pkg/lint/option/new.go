@@ -3,12 +3,12 @@ package option
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/console"
-	library "github.com/funtimecoding/soil/pkg/constant"
-	"github.com/funtimecoding/soil/pkg/git/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
+	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/strings/split"
-	system "github.com/funtimecoding/soil/pkg/system/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"slices"
 	"strings"
 )
@@ -31,10 +31,10 @@ func New(
 	}
 
 	for _, skip := range []string{
-		constant.Directory,
-		system.IdeaPath,
-		system.FixturePath,
-		system.Temporary,
+		gitConstant.Directory,
+		systemConstant.IdeaPath,
+		systemConstant.FixturePath,
+		systemConstant.Temporary,
 	} {
 		withSlash := fmt.Sprintf("%s/", skip)
 
@@ -43,8 +43,8 @@ func New(
 		}
 	}
 
-	if !slices.Contains(result.Skips, library.GeneratedFile) {
-		result.Skips = append(result.Skips, library.GeneratedFile)
+	if !slices.Contains(result.Skips, soil.GeneratedFile) {
+		result.Skips = append(result.Skips, soil.GeneratedFile)
 	}
 
 	if verbose {

@@ -2,7 +2,7 @@ package gomodule
 
 import (
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/go_mod/check/license"
 	"github.com/funtimecoding/soil/pkg/go_mod/check/license/option"
 	"github.com/funtimecoding/soil/pkg/tool/gomodule/constant"
@@ -19,7 +19,7 @@ func licenseCommand() *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			o.Path = library.CurrentDirectory
+			o.Path = soil.CurrentDirectory
 
 			if len(arguments) > 0 {
 				o.Path = arguments[0]

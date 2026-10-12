@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
-	provision "github.com/funtimecoding/soil/pkg/provision/constant"
+	provisionConstant "github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/constant"
 	"slices"
 	"strings"
@@ -25,7 +25,7 @@ func (r *Runner) apply(
 	record := r.store.NewRun()
 	record.Scope = target
 	record.TriggerSource = triggerSource
-	record.Status = provision.StoreStatusRunning
+	record.Status = provisionConstant.StoreStatusRunning
 	record.GitHead = head
 	r.store.Create(record)
 	r.logger.Structured("highstate_start", constant.Target, target)
@@ -34,7 +34,7 @@ func (r *Runner) apply(
 	record.DurationMillisecond = time.Since(start).Milliseconds()
 
 	if e != nil {
-		record.Status = provision.StoreStatusError
+		record.Status = provisionConstant.StoreStatusError
 		record.ErrorOutput = e.Error()
 		r.logger.Structured("highstate_error", "error", e.Error())
 	} else {
@@ -51,7 +51,7 @@ func (r *Runner) apply(
 
 		if len(silent) > 0 {
 			slices.Sort(silent)
-			record.Status = provision.StoreStatusError
+			record.Status = provisionConstant.StoreStatusError
 			record.ErrorOutput = fmt.Sprintf(
 				"minion did not respond: %s",
 				strings.Join(silent, ", "),
@@ -62,7 +62,7 @@ func (r *Runner) apply(
 				strings.Join(silent, ", "),
 			)
 		} else {
-			record.Status = provision.StoreStatusSuccess
+			record.Status = provisionConstant.StoreStatusSuccess
 			r.logger.Structured("highstate_done")
 		}
 	}

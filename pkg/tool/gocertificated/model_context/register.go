@@ -1,7 +1,7 @@
 package model_context
 
 import (
-	generative "github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gocertificated/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -23,7 +23,7 @@ func (s *Server) register() {
 				"Create the root or a name-constrained intermediate. Fails when an authority of that name is already live.",
 			),
 			mcp.WithString(
-				generative.ParameterName,
+				generativeConstant.ParameterName,
 				mcp.Required(),
 				mcp.Description(
 					"Short slug identifying the authority - root, cluster, host.",
@@ -85,7 +85,7 @@ func (s *Server) register() {
 			constant.GetAuthority,
 			mcp.WithDescription("Inspect one authority by its slug."),
 			mcp.WithString(
-				generative.ParameterName,
+				generativeConstant.ParameterName,
 				mcp.Required(),
 				mcp.Description("Authority slug."),
 			),
@@ -117,7 +117,7 @@ func (s *Server) register() {
 				mcp.Description("Only revoked certificates."),
 			),
 			mcp.WithNumber(
-				generative.ParameterLimit,
+				generativeConstant.ParameterLimit,
 				mcp.Description("Maximum number of results."),
 			),
 		),

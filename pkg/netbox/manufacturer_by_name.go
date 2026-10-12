@@ -2,6 +2,7 @@ package netbox
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/manufacturer"
 )
 
@@ -18,5 +19,5 @@ func (c *Client) ManufacturerByName(n string) (*manufacturer.Manufacturer, error
 		}
 	}
 
-	return nil, not_found.New("manufacturer", n)
+	return nil, not_found.New(constant.ManufacturerKind, n)
 }

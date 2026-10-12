@@ -3,10 +3,10 @@ package unit
 import (
 	"errors"
 	"github.com/funtimecoding/soil/pkg/assert"
-	library "github.com/funtimecoding/soil/pkg/constant"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/system"
-	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/linux/debian"
 	"github.com/funtimecoding/soil/pkg/system/linux/debian/aptly"
 	"github.com/funtimecoding/soil/pkg/system/linux/debian/aptly/face"
@@ -84,9 +84,9 @@ func TestPackageVersion(t *testing.T) {
 		"example_1.0.0-1_amd64",
 		debian.PackageVersion(
 			"example",
-			library.DefaultVersion,
+			soil.DefaultVersion,
 			1,
-			systemConstant.AMD64,
+			constant.AMD64,
 		),
 	)
 }
@@ -103,8 +103,8 @@ Description: Short stub description.
 `,
 		debian.RenderControl(
 			"goexample",
-			systemConstant.AMD64,
-			library.DefaultVersion,
+			constant.AMD64,
+			soil.DefaultVersion,
 			"John Doe",
 			"john.doe@example.org",
 		),
@@ -129,8 +129,8 @@ systemctl daemon-reload
 systemctl restart Alfa.service
 `,
 		debian.RenderPostInstall(
-			constant.UpperAlfa,
-			systemConstant.DebianUpgradeRestart,
+			stringsConstant.UpperAlfa,
+			constant.DebianUpgradeRestart,
 		),
 	)
 }
@@ -152,8 +152,8 @@ fi
 systemctl daemon-reload
 `,
 		debian.RenderPostInstall(
-			constant.UpperAlfa,
-			systemConstant.DebianUpgradeKeep,
+			stringsConstant.UpperAlfa,
+			constant.DebianUpgradeKeep,
 		),
 	)
 }
@@ -175,7 +175,7 @@ fi
 systemctl stop Alfa.service
 systemctl disable Alfa.service
 `,
-		debian.RenderPreRemove(constant.UpperAlfa),
+		debian.RenderPreRemove(stringsConstant.UpperAlfa),
 	)
 }
 
@@ -213,14 +213,14 @@ ExecStart=/usr/local/bin/Alfa
 [Install]
 WantedBy=multi-user.target
 `,
-		debian.RenderUnit(constant.UpperAlfa),
+		debian.RenderUnit(stringsConstant.UpperAlfa),
 	)
 }
 
 func TestDebianPackager(t *testing.T) {
 	actual := packager.New(
 		"goexample",
-		library.DefaultVersion,
+		soil.DefaultVersion,
 		"John Doe",
 		"john.doe@example.org",
 	)
@@ -254,7 +254,7 @@ func TestDebianPackager(t *testing.T) {
 func TestSubPath(t *testing.T) {
 	actual := packager.New(
 		"tmp/goexample",
-		library.DefaultVersion,
+		soil.DefaultVersion,
 		"John Doe",
 		"john.doe@example.org",
 	)
@@ -291,15 +291,15 @@ func TestMoveBinaryAbsolutePath(t *testing.T) {
 	system.WriteFile(source, []byte("binary"), 0755)
 	p := packager.New(
 		source,
-		library.DefaultVersion,
+		soil.DefaultVersion,
 		"John Doe",
 		"john.doe@example.org",
 	)
 	p.BinaryRoot = filepath.Join(
 		directory,
-		systemConstant.Resources,
-		systemConstant.Local,
-		systemConstant.Binary,
+		constant.Resources,
+		constant.Local,
+		constant.Binary,
 	)
 	p.MoveBinary()
 	assert.True(t, system.FileExists(filepath.Join(p.BinaryRoot, "goexample")))

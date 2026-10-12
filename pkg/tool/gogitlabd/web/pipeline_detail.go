@@ -2,7 +2,7 @@ package web
 
 import (
 	"fmt"
-	argument "github.com/funtimecoding/soil/pkg/argument/constant"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
@@ -17,10 +17,10 @@ func (s *Server) pipelineDetail(
 	pipeline int64,
 	requested int64,
 ) gomponents.Node {
-	jobs, e := s.client.PipelineJobs(project, pipeline)
+	jobs, e := s.service.PipelineJobs(project, pipeline)
 	errors.PanicOnError(e)
 	selected := selectJob(jobs, requested)
-	p, f := s.client.Pipeline(project, pipeline)
+	p, f := s.service.Pipeline(project, pipeline)
 	errors.PanicOnError(f)
 	var ran gomponents.Node
 
@@ -63,9 +63,9 @@ func (s *Server) pipelineDetail(
 					fmt.Sprintf(
 						"%s?%s=%d&%s=%d",
 						constant.DeletePath,
-						argument.Project,
+						argumentConstant.Project,
 						project,
-						argument.Pipeline,
+						argumentConstant.Pipeline,
 						pipeline,
 					),
 				),

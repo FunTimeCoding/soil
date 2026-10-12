@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
@@ -17,7 +17,7 @@ func (s *Server) editSession(
 	c, e := s.resolveCaller(x, constant.EditSession)
 
 	if e != nil {
-		return s.captureFail(e, library.UnexpectedError)
+		return s.captureFail(e, soil.UnexpectedError)
 	}
 
 	target := q.GetString(constant.Target, "")
@@ -27,7 +27,7 @@ func (s *Server) editSession(
 		r, f := s.service.ResolveSessionIdentifier(target)
 
 		if f != nil {
-			return s.captureFail(f, library.UnexpectedError)
+			return s.captureFail(f, soil.UnexpectedError)
 		}
 
 		if r.Ambiguous() {
@@ -85,7 +85,7 @@ func (s *Server) editSession(
 			return response.Fail(e.Error())
 		}
 
-		return s.captureFail(e, library.UnexpectedError)
+		return s.captureFail(e, soil.UnexpectedError)
 	}
 
 	return response.Success("Session updated")

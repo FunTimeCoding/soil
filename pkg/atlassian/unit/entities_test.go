@@ -8,7 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/search_result"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence/space"
 	confluenceUser "github.com/funtimecoding/soil/pkg/atlassian/confluence/user"
-	atlassian "github.com/funtimecoding/soil/pkg/atlassian/constant"
+	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/field_map"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue/issue_enricher"
@@ -21,7 +21,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/team_map"
 	opsgenieUser "github.com/funtimecoding/soil/pkg/atlassian/opsgenie/user"
 	"github.com/funtimecoding/soil/pkg/atlassian/opsgenie/user_map"
-	strings "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	rawSchedule "github.com/opsgenie/opsgenie-go-sdk-v2/schedule"
 	rawTeam "github.com/opsgenie/opsgenie-go-sdk-v2/team"
 	rawUser "github.com/opsgenie/opsgenie-go-sdk-v2/user"
@@ -29,7 +29,7 @@ import (
 )
 
 func TestEntities(t *testing.T) {
-	assert.NotNil(t, page.New(response.NewPage(), strings.UpperAlfa))
+	assert.NotNil(t, page.New(response.NewPage(), stringsConstant.UpperAlfa))
 	assert.NotNil(t, search_result.New(response.NewResult()))
 	assert.NotNil(t, space.New(response.NewSpace()))
 	assert.NotNil(t, confluenceUser.New(response.NewUser()))
@@ -53,16 +53,16 @@ func TestEntities(t *testing.T) {
 	assert.NotNil(
 		t,
 		issueOption.New(
-			strings.UpperAlfa,
-			strings.UpperBravo,
+			stringsConstant.UpperAlfa,
+			stringsConstant.UpperBravo,
 			[]string{},
-			[]string{atlassian.JiraDone},
+			[]string{constant.JiraDone},
 			nil,
 		),
 	)
 	assert.NotNil(
 		t,
-		alertOption.New(nil, nil, strings.UpperAlfa, nil, nil, nil, nil),
+		alertOption.New(nil, nil, stringsConstant.UpperAlfa, nil, nil, nil, nil),
 	)
 	assert.NotNil(t, override.New(&rawSchedule.ScheduleOverride{}))
 	assert.NotNil(t, rotation.New(&rawSchedule.Rotation{}))

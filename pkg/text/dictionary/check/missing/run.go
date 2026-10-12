@@ -2,9 +2,9 @@ package missing
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
-	text "github.com/funtimecoding/soil/pkg/text/constant"
+	"github.com/funtimecoding/soil/pkg/text/constant"
 	"github.com/funtimecoding/soil/pkg/text/dictionary"
 	"io/fs"
 	"path/filepath"
@@ -25,7 +25,7 @@ func Run() {
 	scanned := 0
 	errors.PanicOnError(
 		filepath.WalkDir(
-			library.CurrentDirectory,
+			soil.CurrentDirectory,
 			func(
 				path string,
 				d fs.DirEntry,
@@ -36,7 +36,7 @@ func Run() {
 				}
 
 				if d.IsDir() {
-					if text.DictionarySkip[d.Name()] {
+					if constant.DictionarySkip[d.Name()] {
 						return filepath.SkipDir
 					}
 

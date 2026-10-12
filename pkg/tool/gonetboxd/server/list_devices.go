@@ -10,33 +10,19 @@ func (s *Server) ListDevices(
 	_ context.Context,
 	r server.ListDevicesRequestObject,
 ) (server.ListDevicesResponseObject, error) {
-	if r.Params.Query != nil && *r.Params.Query != "" {
-		devices, e := s.client.DevicesByMatch(*r.Params.Query)
+	query := ""
 
-		if e != nil {
-			return server.ListDevices500JSONResponse(*s.captureDetail(e)), nil
-		}
-
-		result := convert.Devices(devices)
-
-		if f := s.attachDeviceLabels(result); f != nil {
-			return server.ListDevices500JSONResponse(*s.captureDetail(f)), nil
-		}
-
-		return server.ListDevices200JSONResponse(result), nil
+	if r.Params.Query != nil {
+		query = *r.Params.Query
 	}
 
-	devices, e := s.client.Devices()
+	devices, grouped, e := s.service.Devices(query)
 
 	if e != nil {
 		return server.ListDevices500JSONResponse(*s.captureDetail(e)), nil
 	}
 
-	result := convert.Devices(devices)
-
-	if f := s.attachDeviceLabels(result); f != nil {
-		return server.ListDevices500JSONResponse(*s.captureDetail(f)), nil
-	}
-
-	return server.ListDevices200JSONResponse(result), nil
+	return server.ListDevices200JSONResponse(
+		convert.LabeledDevices(devices, grouped),
+	), nil
 }

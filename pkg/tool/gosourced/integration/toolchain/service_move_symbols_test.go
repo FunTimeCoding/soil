@@ -85,8 +85,8 @@ func TestBatchEnum(t *testing.T) {
 	assert.StringContains(t, "return constant.On", run)
 	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
 	assertFormatted(t, caller)
-	assert.StringContains(t, "func Run() constant.Mode", caller)
-	assert.StringContains(t, "constant.Off == 0", caller)
+	assert.StringContains(t, "func Run() targetConstant.Mode", caller)
+	assert.StringContains(t, "targetConstant.Off == 0", caller)
 	assert.False(t, strings.Contains(caller, "target."))
 }
 

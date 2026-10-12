@@ -22,7 +22,7 @@ func (s *Server) ListCommits(
 		return s.captureDetail(e)
 	}
 
-	v, e := s.client.ListCommits(project, a.Reference, 0)
+	v, e := s.service.ListCommits(project, a.Reference, 0)
 
 	if e != nil {
 		return s.captureDetail(e)

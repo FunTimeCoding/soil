@@ -1,7 +1,7 @@
 package model_context
 
 import (
-	generative "github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -58,13 +58,13 @@ func (s *Server) register() {
 				),
 			),
 			mcp.WithNumber(
-				generative.ParameterLimit,
+				generativeConstant.ParameterLimit,
 				mcp.Description(
 					"Maximum locations returned per symbol. Defaults to 25; the exact total is always reported.",
 				),
 			),
 			mcp.WithNumber(
-				generative.ParameterOffset,
+				generativeConstant.ParameterOffset,
 				mcp.Description(
 					"Locations to skip before the limit window - page through large reference lists.",
 				),
@@ -240,7 +240,7 @@ func (s *Server) register() {
 				),
 			),
 			mcp.WithNumber(
-				generative.ParameterLimit,
+				generativeConstant.ParameterLimit,
 				mcp.Description(
 					"Maximum callees returned. Defaults to 100; the exact total is always reported.",
 				),

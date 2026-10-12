@@ -1,7 +1,7 @@
 package chunk
 
 import (
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"strings"
@@ -12,7 +12,7 @@ func Document(
 	filename string,
 	c face.TokenCounter,
 ) []Chunk {
-	if !strings.HasSuffix(filename, library.GoExtension) {
+	if !strings.HasSuffix(filename, soil.GoExtension) {
 		return chunkText(content, c)
 	}
 

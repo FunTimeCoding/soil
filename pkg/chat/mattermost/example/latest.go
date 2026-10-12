@@ -2,10 +2,10 @@ package example
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
-	chat "github.com/funtimecoding/soil/pkg/chat/constant"
+	"github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/time/constant"
+	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 )
 
 func Latest() {
@@ -20,7 +20,7 @@ func Latest() {
 	console.Format("Latest %d posts (%d found)\n", limit, len(posts))
 
 	for _, p := range posts {
-		console.Line(p.Format(chat.MattermostFormat))
-		console.Format("  Time: %s\n", p.Create.Format(constant.DateMinute))
+		console.Line(p.Format(constant.MattermostFormat))
+		console.Format("  Time: %s\n", p.Create.Format(timeConstant.DateMinute))
 	}
 }

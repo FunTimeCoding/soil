@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/generated/server"
@@ -18,7 +18,7 @@ func (s *Server) GetReports(
 	for _, e := range system.ReadDirectory(s.outputPath) {
 		if e.IsDir() || !strings.HasSuffix(
 			e.Name(),
-			constant.HypertextExtension,
+			soil.HypertextExtension,
 		) {
 			continue
 		}
@@ -27,7 +27,7 @@ func (s *Server) GetReports(
 
 		if f != nil {
 			return server.GetReports500JSONResponse(
-				*s.captureFail(f, constant.UnexpectedError),
+				*s.captureFail(f, soil.UnexpectedError),
 			), nil
 		}
 

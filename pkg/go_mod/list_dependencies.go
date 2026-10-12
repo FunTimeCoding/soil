@@ -1,7 +1,7 @@
 package go_mod
 
 import (
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/go_mod/dependency"
 	"github.com/funtimecoding/soil/pkg/strings/split"
@@ -18,8 +18,8 @@ func ListDependencies(
 	r.Directory = path
 	r.Verbose = verbose
 	r.Start(
-		library.Go,
-		library.List,
+		soil.Go,
+		soil.List,
 		constant.DependenciesArgument,
 		constant.FormatArgument,
 		constant.ModuleTemplate,

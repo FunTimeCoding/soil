@@ -9,6 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/option"
+	"github.com/funtimecoding/soil/pkg/tool/gosentryd/service"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -27,8 +28,7 @@ func Run(
 				o.Address,
 				func(m *http.ServeMux) {
 					Mount(
-						sentry.NewEnvironment(),
-						o.Organization,
+						service.New(sentry.NewEnvironment(), o.Organization),
 						o.Host,
 						r,
 						s.Recorder(),

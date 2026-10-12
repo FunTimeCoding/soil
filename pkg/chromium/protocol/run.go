@@ -5,7 +5,7 @@ import (
 	"github.com/chromedp/chromedp"
 	"github.com/funtimecoding/soil/pkg/chromium/constant"
 	"github.com/funtimecoding/soil/pkg/errors/connection"
-	connectionConstant "github.com/funtimecoding/soil/pkg/errors/constant"
+	errorsConstant "github.com/funtimecoding/soil/pkg/errors/constant"
 	"time"
 )
 
@@ -32,7 +32,7 @@ func run[T any](
 		var zero T
 
 		return zero, connection.New(
-			connectionConstant.Timeout,
+			errorsConstant.Timeout,
 			constant.BrowserTab,
 			"",
 			fmt.Sprintf(constant.Asleep, p.timeout),

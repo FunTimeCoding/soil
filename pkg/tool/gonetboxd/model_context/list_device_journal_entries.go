@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	generative "github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -20,8 +20,8 @@ func (s *Server) listDeviceJournalEntries(
 
 	result, g := s.client.DeviceJournalEntries(
 		device,
-		int32(r.GetInt(generative.ParameterLimit, 0)),
-		int32(r.GetInt(generative.ParameterOffset, 0)),
+		int32(r.GetInt(generativeConstant.ParameterLimit, 0)),
+		int32(r.GetInt(generativeConstant.ParameterOffset, 0)),
 	)
 
 	if g != nil {

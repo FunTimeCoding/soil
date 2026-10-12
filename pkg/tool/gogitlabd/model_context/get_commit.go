@@ -26,7 +26,7 @@ func (s *Server) GetCommit(
 		return s.captureDetail(e)
 	}
 
-	v, e := s.client.ReadCommit(project, a.Sha)
+	v, e := s.service.ReadCommit(project, a.Sha)
 
 	if e != nil {
 		return s.captureDetail(e)

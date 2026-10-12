@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/notation"
@@ -28,7 +28,7 @@ func (s *Server) update(
 			return response.Fail("%s", f)
 		}
 
-		return s.captureFail(f, library.UnexpectedError)
+		return s.captureFail(f, soil.UnexpectedError)
 	}
 
 	if v := r.GetString(constant.Action, ""); v != "" {
@@ -62,7 +62,7 @@ func (s *Server) update(
 	}
 
 	if g := s.store.Update(e); g != nil {
-		return s.captureFail(g, library.UnexpectedError)
+		return s.captureFail(g, soil.UnexpectedError)
 	}
 
 	return response.Success(

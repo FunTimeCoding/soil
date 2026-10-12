@@ -1,7 +1,7 @@
 package git
 
 import (
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/strings/split"
 	"github.com/funtimecoding/soil/pkg/system/run"
@@ -17,7 +17,7 @@ func UncommittedFiles(directory string) ([]string, error) {
 		constant.Relative,
 		constant.HeadReference,
 		constant.Pathspec,
-		library.CurrentDirectory,
+		soil.CurrentDirectory,
 	)
 
 	if r.Error != nil {

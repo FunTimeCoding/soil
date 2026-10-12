@@ -26,7 +26,7 @@ func (s *Server) GetMergeRequest(
 		return s.captureDetail(e)
 	}
 
-	v, e := s.client.MergeRequest(project, a.MergeRequest)
+	v, e := s.service.MergeRequest(project, a.MergeRequest)
 
 	if e != nil {
 		return s.captureDetail(e)

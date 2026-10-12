@@ -1,7 +1,7 @@
 package resolver
 
 import (
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"github.com/funtimecoding/soil/pkg/lint/pointer"
 	"strings"
@@ -18,7 +18,7 @@ func (r *Resolver) resolveFragment(
 		return result
 	}
 
-	if !strings.HasSuffix(target, library.MarkdownExtension) {
+	if !strings.HasSuffix(target, soil.MarkdownExtension) {
 		result := pointer.NewResolution(constant.VerdictFragmentTarget)
 		result.Target = target
 

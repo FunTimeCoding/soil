@@ -6,8 +6,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/errors/unreachable"
-	opnsense "github.com/funtimecoding/soil/pkg/opnsense/constant"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/opnsense/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
 	"io"
 	"net/http"
@@ -21,7 +21,7 @@ func TestGetSendsKeyAndQuery(t *testing.T) {
 	assert.FatalOnError(
 		t,
 		newClient(t, s.URL, false).Get(
-			opnsense.LogRead,
+			constant.LogRead,
 			map[string]string{"limit": "5"},
 			&out,
 		),
@@ -34,7 +34,7 @@ func TestGetSendsKeyAndQuery(t *testing.T) {
 	assert.True(t, okay)
 	assert.String(t, "alfa-key", key)
 	assert.String(t, "bravo-secret", secret)
-	assert.String(t, "application/json", r.Header.Get(constant.Accept))
+	assert.String(t, "application/json", r.Header.Get(webConstant.Accept))
 }
 
 func TestPostSendsNotation(t *testing.T) {
@@ -43,7 +43,7 @@ func TestPostSendsNotation(t *testing.T) {
 	assert.FatalOnError(
 		t,
 		newClient(t, s.URL, false).Post(
-			opnsense.HostAdd,
+			constant.HostAdd,
 			map[string]string{"host": "charlie"},
 			&out,
 		),
@@ -51,7 +51,7 @@ func TestPostSendsNotation(t *testing.T) {
 	assert.String(t, "saved", out["result"])
 	r := last()
 	assert.String(t, http.MethodPost, r.Method)
-	assert.String(t, "application/json", r.Header.Get(constant.ContentType))
+	assert.String(t, "application/json", r.Header.Get(webConstant.ContentType))
 	b, e := io.ReadAll(r.Body)
 	assert.FatalOnError(t, e)
 	assert.String(t, `{"host":"charlie"}`, string(b))

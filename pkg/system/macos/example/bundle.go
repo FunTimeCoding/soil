@@ -1,7 +1,7 @@
 package example
 
 import (
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/macos"
 )
@@ -13,6 +13,6 @@ func Bundle() {
 		"tmp/example",
 		"tmp/icon.icns",
 		"com.example",
-		library.DefaultVersion,
+		soil.DefaultVersion,
 	)
 }

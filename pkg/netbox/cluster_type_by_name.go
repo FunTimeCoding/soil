@@ -3,6 +3,7 @@ package netbox
 import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/netbox/cluster_type"
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
 )
 
 func (c *Client) ClusterTypeByName(n string) (*cluster_type.Type, error) {
@@ -18,5 +19,5 @@ func (c *Client) ClusterTypeByName(n string) (*cluster_type.Type, error) {
 		}
 	}
 
-	return nil, not_found.New("cluster type", n)
+	return nil, not_found.New(constant.ClusterTypeKind, n)
 }

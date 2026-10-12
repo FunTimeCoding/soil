@@ -7,7 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/raid_parser"
-	raidParserConstant "github.com/funtimecoding/soil/pkg/raid_parser/constant"
+	raid_parserConstant "github.com/funtimecoding/soil/pkg/raid_parser/constant"
 	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goraidd/constant"
@@ -34,11 +34,11 @@ func Run(
 	)
 	p := raid_parser.New(
 		locator.Environment(
-			raidParserConstant.HostEnvironment,
-			raidParserConstant.PortEnvironment,
-			raidParserConstant.InsecureEnvironment,
+			raid_parserConstant.HostEnvironment,
+			raid_parserConstant.PortEnvironment,
+			raid_parserConstant.InsecureEnvironment,
 		),
-		environment.Required(raidParserConstant.TokenEnvironment),
+		environment.Required(raid_parserConstant.TokenEnvironment),
 	)
 	u := web.New(
 		s,

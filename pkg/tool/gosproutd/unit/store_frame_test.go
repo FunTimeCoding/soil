@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/unit/store_tester"
 	"testing"
@@ -11,70 +11,70 @@ import (
 func TestPushedDecisionCarriesItsFrames(t *testing.T) {
 	s := store_tester.New(t)
 	s.Store.PushDecision(
-		stringConstant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"which entry rule?",
 		"narrow",
 		nil,
 		[]string{"handoff", "counting"},
 	)
-	assert.Count(t, 2, s.Store.Decisions(stringConstant.LowerAlfa)[0].Frames)
+	assert.Count(t, 2, s.Store.Decisions(stringsConstant.LowerAlfa)[0].Frames)
 }
 
 func TestTwoDecisionsShareOneFrameRow(t *testing.T) {
 	s := store_tester.New(t)
 	s.Store.PushDecision(
-		stringConstant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"first?",
 		"narrow",
 		nil,
 		[]string{"handoff"},
 	)
 	s.Store.PushDecision(
-		stringConstant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"second?",
 		"narrow",
 		nil,
 		[]string{"handoff"},
 	)
-	assert.Count(t, 1, s.Store.Frames(stringConstant.LowerAlfa))
+	assert.Count(t, 1, s.Store.Frames(stringsConstant.LowerAlfa))
 }
 
 func TestFramesAreScopedToTheirSession(t *testing.T) {
 	s := store_tester.New(t)
 	s.Store.PushDecision(
-		stringConstant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"mine?",
 		"narrow",
 		nil,
 		[]string{"handoff"},
 	)
 	s.Store.PushDecision(
-		stringConstant.LowerBravo,
+		stringsConstant.LowerBravo,
 		"theirs?",
 		"narrow",
 		nil,
 		[]string{"handoff"},
 	)
-	assert.Count(t, 1, s.Store.Frames(stringConstant.LowerAlfa))
+	assert.Count(t, 1, s.Store.Frames(stringsConstant.LowerAlfa))
 }
 
 func TestOpenDecisionsExcludeAnswered(t *testing.T) {
 	s := store_tester.New(t)
 	first := s.Store.PushDecision(
-		stringConstant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"first?",
 		"narrow",
 		nil,
 		[]string{"handoff"},
 	)
 	s.Store.PushDecision(
-		stringConstant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"second?",
 		"narrow",
 		nil,
 		[]string{"handoff"},
 	)
-	frames := s.Store.Frames(stringConstant.LowerAlfa)
+	frames := s.Store.Frames(stringsConstant.LowerAlfa)
 	assert.Count(t, 2, s.Store.OpenDecisions(frames[0].Identifier))
 	s.Store.Answer(
 		first.Identifier,
@@ -88,13 +88,13 @@ func TestOpenDecisionsExcludeAnswered(t *testing.T) {
 func TestOpenDecisionsExcludeClearedByDefault(t *testing.T) {
 	s := store_tester.New(t)
 	d := s.Store.PushDecision(
-		stringConstant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"first?",
 		"narrow",
 		nil,
 		[]string{"handoff"},
 	)
-	frames := s.Store.Frames(stringConstant.LowerAlfa)
+	frames := s.Store.Frames(stringsConstant.LowerAlfa)
 	s.Store.Clear(d.Identifier, "went narrow", constant.ResolutionDefault)
 	assert.Count(t, 0, s.Store.OpenDecisions(frames[0].Identifier))
 }

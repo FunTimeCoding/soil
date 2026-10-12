@@ -1,6 +1,7 @@
 package gofix
 
 import (
+	"github.com/funtimecoding/soil/pkg/source/imports"
 	"go/ast"
 	"golang.org/x/tools/go/packages"
 	"strings"
@@ -26,7 +27,7 @@ func hasImportCollision(
 				return true
 			}
 
-			imported := findImportedPackage(p, path)
+			imported := imports.ImportedPackage(p, path)
 
 			if imported != nil && imported.Name() == declaredName {
 				count++
@@ -35,7 +36,7 @@ func hasImportCollision(
 			continue
 		}
 
-		imported := findImportedPackage(p, path)
+		imported := imports.ImportedPackage(p, path)
 
 		if imported != nil && imported.Name() == declaredName {
 			return true

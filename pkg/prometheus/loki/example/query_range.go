@@ -3,10 +3,10 @@ package example
 import (
 	"github.com/funtimecoding/soil/pkg/console"
 	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
-	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus/loki"
 	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"strings"
 	"time"
 )
@@ -19,7 +19,7 @@ func QueryRange() {
 		`{namespace="bot"} | json | msg="request_start", http_route="/github"`,
 		start,
 		end,
-		prometheus.LokiMaximumLimit,
+		constant.LokiMaximumLimit,
 	)
 
 	if false {
@@ -28,13 +28,13 @@ func QueryRange() {
 
 	for _, v := range r {
 		if false {
-			if v.Stream != prometheus.Stdout {
+			if v.Stream != constant.Stdout {
 				continue
 			}
 		}
 
-		route := v.Value(constant.TelemetryRoute)
-		body := v.Value(constant.TelemetryBody)
+		route := v.Value(webConstant.TelemetryRoute)
+		body := v.Value(webConstant.TelemetryBody)
 
 		if strings.HasPrefix(route, "/test-") {
 			continue

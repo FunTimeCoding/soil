@@ -6,7 +6,7 @@ import (
 	"github.com/dave/dst/decorator"
 	"github.com/dave/dst/decorator/resolver/goast"
 	"github.com/dave/dst/decorator/resolver/gopackages"
-	libraryConstant "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/lint/output"
@@ -181,7 +181,7 @@ func extractToFileThrough(
 	)
 
 	if countIdentities(file) == 1 {
-		if strings.HasSuffix(fullPath, libraryConstant.TestSuffix) {
+		if strings.HasSuffix(fullPath, soil.TestSuffix) {
 			r.AddConcern(
 				concern.NewFile(
 					"extracted",

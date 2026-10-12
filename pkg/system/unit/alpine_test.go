@@ -8,10 +8,10 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"github.com/funtimecoding/soil/pkg/assert"
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/system"
-	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/linux/alpine/index"
 	"github.com/funtimecoding/soil/pkg/system/linux/alpine/packager"
 	"github.com/funtimecoding/soil/pkg/system/linux/alpine/signature"
@@ -46,7 +46,7 @@ func TestIndexes(t *testing.T) {
 			directory,
 			"rolling",
 			"main",
-			systemConstant.AlpineArchitecture,
+			constant.AlpineArchitecture,
 		),
 	)
 	listings, e := listing.Indexes(directory)
@@ -87,7 +87,7 @@ func TestSign(t *testing.T) {
 	var signature []byte
 
 	for name, content := range signatureFiles {
-		if strings.HasPrefix(name, systemConstant.AlpineSignaturePrefix) {
+		if strings.HasPrefix(name, constant.AlpineSignaturePrefix) {
 			signature = content
 
 			break
@@ -113,7 +113,7 @@ func TestSign(t *testing.T) {
 	)
 	controlFiles := package_server_tester.ReadTarGz(signedSegments[1])
 
-	if _, okay := controlFiles[systemConstant.AlpineMetadataFile]; !okay {
+	if _, okay := controlFiles[constant.AlpineMetadataFile]; !okay {
 		t.Errorf("control segment missing .PKGINFO")
 	}
 
@@ -125,7 +125,7 @@ func TestSign(t *testing.T) {
 }
 
 func TestAlpinePackager(t *testing.T) {
-	actual := packager.New("goexample", library.DefaultVersion)
+	actual := packager.New("goexample", soil.DefaultVersion)
 	packager_tester.StripTemporaryPrefix(actual)
 	assert.Any(
 		t,
@@ -155,12 +155,12 @@ echo "Hello from Alpine package!"
 		),
 		0755,
 	)
-	p := packager.New(scriptPath, library.DefaultVersion)
+	p := packager.New(scriptPath, soil.DefaultVersion)
 	assert.String(t, "hello-1.0.0-r1.apk", p.PackageName)
 	p.WorkDirectory = filepath.Join(d, "workspace")
 	p.ControlDirectory = filepath.Join(
 		p.WorkDirectory,
-		systemConstant.AlpineControlDirectory,
+		constant.AlpineControlDirectory,
 	)
 	p.ArchiveDirectory = filepath.Join(p.WorkDirectory, "data")
 	p.OutputFile = filepath.Join(d, p.PackageName)
@@ -171,14 +171,8 @@ echo "Hello from Alpine package!"
 	p.ConcatenateTars()
 	apkPath := p.OutputFile
 	assert.FileExists(t, apkPath)
-	controlTarPath := filepath.Join(
-		p.WorkDirectory,
-		systemConstant.AlpineControlFile,
-	)
-	archivePath := filepath.Join(
-		p.WorkDirectory,
-		systemConstant.AlpineArchiveFile,
-	)
+	controlTarPath := filepath.Join(p.WorkDirectory, constant.AlpineControlFile)
+	archivePath := filepath.Join(p.WorkDirectory, constant.AlpineArchiveFile)
 	controlFile := system.Open(controlTarPath)
 	defer errors.PanicClose(controlFile)
 	gzr := system.GnuZipReader(controlFile)
@@ -196,7 +190,7 @@ echo "Hello from Alpine package!"
 
 		errors.PanicOnError(e)
 
-		if h.Name == systemConstant.AlpineMetadataFile {
+		if h.Name == constant.AlpineMetadataFile {
 			foundPackageInformation = true
 			content := string(system.ReadAll(tr))
 			assert.StringContains(t, "pkgname = hello", content)

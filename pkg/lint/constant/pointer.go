@@ -1,8 +1,8 @@
 package constant
 
 import (
-	library "github.com/funtimecoding/soil/pkg/constant"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"regexp"
 )
 
@@ -75,14 +75,14 @@ var (
 		VerdictFragmentTarget: FragmentTargetText,
 	}
 
-	ImplicitHosts = []string{constant.Localhost, constant.Loopback}
+	ImplicitHosts = []string{webConstant.Localhost, webConstant.Loopback}
 
 	BareNameExtensions = []string{
-		library.MarkdownExtension,
-		library.GoExtension,
-		library.MarkupExtension,
-		library.ShortMarkupExtension,
-		library.HypertextExtension,
+		soil.MarkdownExtension,
+		soil.GoExtension,
+		soil.MarkupExtension,
+		soil.ShortMarkupExtension,
+		soil.HypertextExtension,
 		".py",
 		".sh",
 		".json",

@@ -2,7 +2,7 @@ package conversations
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/extended"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
@@ -13,10 +13,10 @@ func searchForm() gomponents.Node {
 		html.Class("search-form"),
 		extended.Get("/conversations/search"),
 		extended.Target("#sidebar-entries"),
-		extended.Trigger(web.TriggerForm),
-		extended.Sync(web.SyncReplace),
+		extended.Trigger(webConstant.TriggerForm),
+		extended.Sync(webConstant.SyncReplace),
 		html.Input(
-			html.Type(web.SearchInputType),
+			html.Type(webConstant.SearchInputType),
 			html.Name(constant.QueryField),
 			html.Class("search-input"),
 			gomponents.Attr("placeholder", "Search conversations..."),

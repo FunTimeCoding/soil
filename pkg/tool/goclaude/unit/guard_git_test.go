@@ -59,6 +59,50 @@ func TestVerdictBlocksGitHistoryWriters(t *testing.T) {
 	)
 }
 
+func TestVerdictLetsGitTagListingsThrough(t *testing.T) {
+	assert.String(t, "", guard.Verdict("darwin", "git tag"))
+	assert.String(
+		t,
+		"",
+		guard.Verdict("darwin", "git tag --sort=-v:refname | head -1"),
+	)
+	assert.String(t, "", guard.Verdict("darwin", "git tag -l 'v0.11.*'"))
+	assert.String(
+		t,
+		"",
+		guard.Verdict("darwin", "git -C ../soil tag --contains HEAD"),
+	)
+	assert.String(t, "", guard.Verdict("linux", "git tag -n5 --merged main"))
+}
+
+func TestVerdictBlocksGitTagCreationAndDeletion(t *testing.T) {
+	assert.String(
+		t,
+		"git tag writes history - staging, committing and publishing belong to the user; leave it to them",
+		guard.Verdict("darwin", "git tag v0.11.182"),
+	)
+	assert.String(
+		t,
+		"git tag writes history - staging, committing and publishing belong to the user; leave it to them",
+		guard.Verdict("darwin", "git tag -a v1.0.0 -m 'alfa'"),
+	)
+	assert.String(
+		t,
+		"git tag writes history - staging, committing and publishing belong to the user; leave it to them",
+		guard.Verdict("darwin", "git tag -d v0.11.181"),
+	)
+	assert.String(
+		t,
+		"git tag writes history - staging, committing and publishing belong to the user; leave it to them",
+		guard.Verdict("darwin", "git tag -lf v1.0.0"),
+	)
+	assert.String(
+		t,
+		"git tag writes history - staging, committing and publishing belong to the user; leave it to them",
+		guard.Verdict("darwin", "git tag \"$name\""),
+	)
+}
+
 func TestVerdictLetsGitReadersThrough(t *testing.T) {
 	assert.String(t, "", guard.Verdict("darwin", "git status --short -- pkg"))
 	assert.String(t, "", guard.Verdict("darwin", "git diff --cached --stat"))
@@ -83,6 +127,50 @@ func TestQuestionAsksForALiteralGitTreeWriter(t *testing.T) {
 		"git stash rewrites the shared index or work tree: everything it covers",
 		guard.Question("git stash"),
 	)
+}
+
+func TestVerdictReadsGitInsideAShellString(t *testing.T) {
+	assert.String(
+		t,
+		"git commit writes history - staging, committing and publishing belong to the user; leave it to them",
+		guard.Verdict("darwin", "bash -c 'git commit -m alfa'"),
+	)
+	assert.String(
+		t,
+		"git reset with a path from an expansion, a glob or stdin, or with nothing after --, cannot be read before it runs - write every path out literally",
+		guard.Verdict("darwin", `sh -lc 'git reset -- $paths'`),
+	)
+	assert.String(
+		t,
+		"git push writes history - staging, committing and publishing belong to the user; leave it to them",
+		guard.Verdict("linux", "eval git push origin main"),
+	)
+	assert.String(
+		t,
+		"git rm rewrites the shared index or work tree: pkg/a.go",
+		guard.Question("zsh -c 'cd soil && git rm pkg/a.go'"),
+	)
+}
+
+func TestVerdictBlocksGitHiddenInAnUnreadableString(t *testing.T) {
+	assert.String(
+		t,
+		"git inside a shell string or eval that cannot be read before it runs - run git directly, with every path written out",
+		guard.Verdict("darwin", `bash -c "git reset -- $paths"`),
+	)
+	assert.String(
+		t,
+		"git inside a shell string or eval that cannot be read before it runs - run git directly, with every path written out",
+		guard.Verdict("darwin", `eval "git $action"`),
+	)
+}
+
+func TestVerdictLeavesShellStringsWithoutGit(t *testing.T) {
+	assert.String(t, "", guard.Verdict("darwin", `bash -c "echo $HOME"`))
+	assert.String(t, "", guard.Verdict("darwin", "sh -c 'git status --short'"))
+	assert.String(t, "", guard.Verdict("darwin", "ssh host 'git reset -- $x'"))
+	assert.String(t, "", guard.Verdict("darwin", "bash"))
+	assert.String(t, "", guard.Verdict("darwin", "sh script.sh -c"))
 }
 
 func TestAskDecisionShape(t *testing.T) {

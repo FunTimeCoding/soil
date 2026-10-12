@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/mock_client"
+	"github.com/funtimecoding/soil/pkg/tool/gosentryd/unit/service_tester"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
 	"testing"
@@ -19,8 +20,7 @@ func TestGuard(t *testing.T) {
 			g *guard.Mux,
 		) {
 			gosentryd.Mount(
-				mock_client.New(),
-				"test",
+				service_tester.Service(mock_client.New()),
 				"sentry.test",
 				memory.New(),
 				mock_recorder.New(),

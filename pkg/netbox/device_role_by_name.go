@@ -2,6 +2,7 @@ package netbox
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/device_role"
 )
 
@@ -18,5 +19,5 @@ func (c *Client) DeviceRoleByName(n string) (*device_role.Role, error) {
 		}
 	}
 
-	return nil, not_found.New("device role", n)
+	return nil, not_found.New(constant.DeviceRoleKind, n)
 }

@@ -2,9 +2,9 @@ package alert
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
-	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
+	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/openapi"
-	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/prometheus/alertmanager/api/v2/models"
 	"slices"
 )
@@ -26,9 +26,9 @@ func New(
 	state := *v.Status.State
 
 	if state == "" {
-		state = prometheus.None
+		state = constant.None
 	} else {
-		if !slices.Contains(prometheus.AlertStates, state) {
+		if !slices.Contains(constant.AlertStates, state) {
 			console.Format("Unexpected state: %s\n", state)
 		}
 	}
@@ -53,21 +53,23 @@ func New(
 	}
 
 	result := &Alert{
-		MonitorIdentifier: monitor.GoAlert.StringIdentifier(*v.Fingerprint),
-		Fingerprint:       *v.Fingerprint,
-		State:             state,
-		Labels:            v.Labels,
-		Receivers:         receivers,
-		Remaining:         remaining,
-		Raw:               v,
-		Start:             openapi.ConvertTime(v.StartsAt),
-		instance:          StripColon,
+		MonitorIdentifier: monitorConstant.GoAlert.StringIdentifier(
+			*v.Fingerprint,
+		),
+		Fingerprint: *v.Fingerprint,
+		State:       state,
+		Labels:      v.Labels,
+		Receivers:   receivers,
+		Remaining:   remaining,
+		Raw:         v,
+		Start:       openapi.ConvertTime(v.StartsAt),
+		instance:    StripColon,
 	}
-	extractKey(&remaining, prometheus.AlertnameLabel, &result.Name)
-	extractKey(&remaining, prometheus.SeverityLabel, &result.Severity)
-	extractKey(&remaining, prometheus.SummaryLabel, &result.Summary)
-	extractKey(&remaining, prometheus.MessageLabel, &result.Message)
-	extractKey(&remaining, prometheus.PrometheusLabel, &result.Prometheus)
+	extractKey(&remaining, constant.AlertnameLabel, &result.Name)
+	extractKey(&remaining, constant.SeverityLabel, &result.Severity)
+	extractKey(&remaining, constant.SummaryLabel, &result.Summary)
+	extractKey(&remaining, constant.MessageLabel, &result.Message)
+	extractKey(&remaining, constant.PrometheusLabel, &result.Prometheus)
 	result.Link = result.buildLink(host)
 
 	return result

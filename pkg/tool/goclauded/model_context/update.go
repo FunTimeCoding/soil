@@ -3,7 +3,7 @@ package model_context
 import (
 	"context"
 	"fmt"
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
@@ -17,7 +17,7 @@ func (s *Server) update(
 	c, e := s.resolveCaller(x, constant.Update)
 
 	if e != nil {
-		return s.captureFail(e, library.UnexpectedError)
+		return s.captureFail(e, soil.UnexpectedError)
 	}
 
 	if c.Callsign == "" {
@@ -57,7 +57,7 @@ func (s *Server) update(
 		message,
 		join.NewLine(files),
 	); f != nil {
-		return s.captureFail(f, library.UnexpectedError)
+		return s.captureFail(f, soil.UnexpectedError)
 	}
 
 	return response.Success(fmt.Sprintf("Updated %s: %s", topic, message))

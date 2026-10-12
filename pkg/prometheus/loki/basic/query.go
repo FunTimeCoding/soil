@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/prometheus/loki/basic/query"
 	"github.com/funtimecoding/soil/pkg/prometheus/loki/basic/query_result"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"time"
 )
 
@@ -14,9 +14,9 @@ func (c *Client) Query(q string) (*query_result.Result, error) {
 
 	if e := c.Get(
 		c.base.Copy().Path(constant.LokiQuery).SetInteger64(
-			web.ParameterTime,
+			webConstant.ParameterTime,
 			time.Now().Unix(),
-		).Set(web.ParameterQuery, q).String(),
+		).Set(webConstant.ParameterQuery, q).String(),
 		&r,
 	); e != nil {
 		return nil, e

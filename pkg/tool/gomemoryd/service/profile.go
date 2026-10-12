@@ -3,7 +3,7 @@ package service
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
-	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service/format"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
@@ -131,7 +131,7 @@ func (s *Service) Profile(
 			for _, r := range results {
 				name := r.Path
 
-				if i := strings.LastIndex(name, stringConstant.Slash); i >= 0 {
+				if i := strings.LastIndex(name, stringsConstant.Slash); i >= 0 {
 					name = name[:i]
 				}
 

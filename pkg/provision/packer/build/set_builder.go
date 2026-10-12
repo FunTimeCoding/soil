@@ -3,8 +3,8 @@ package build
 import (
 	"github.com/coreos/go-semver/semver"
 	"github.com/funtimecoding/soil/pkg/provision/packer/build/builder"
-	qemu "github.com/funtimecoding/soil/pkg/qemu/constant"
-	"github.com/funtimecoding/soil/pkg/system/constant"
+	qemuConstant "github.com/funtimecoding/soil/pkg/qemu/constant"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 )
 
 func (b *Build) SetBuilder(
@@ -18,9 +18,9 @@ func (b *Build) SetBuilder(
 	var display string
 
 	switch b.architecture {
-	case constant.AMD64:
+	case systemConstant.AMD64:
 		display = "sdl"
-	case constant.ARM64:
+	case systemConstant.ARM64:
 		display = "cocoa"
 	}
 
@@ -56,12 +56,12 @@ func (b *Build) SetBuilder(
 	}
 
 	switch b.architecture {
-	case constant.AMD64:
-		packerBuilder.QemuBinary = qemu.AMD64Command
-		packerBuilder.Accelerator = qemu.KVMAccelerator
-	case constant.ARM64:
-		packerBuilder.QemuBinary = qemu.ARM64Command
-		packerBuilder.Accelerator = qemu.HVFAccelerator
+	case systemConstant.AMD64:
+		packerBuilder.QemuBinary = qemuConstant.AMD64Command
+		packerBuilder.Accelerator = qemuConstant.KVMAccelerator
+	case systemConstant.ARM64:
+		packerBuilder.QemuBinary = qemuConstant.ARM64Command
+		packerBuilder.Accelerator = qemuConstant.HVFAccelerator
 	}
 
 	b.Builders = []builder.Builder{packerBuilder}

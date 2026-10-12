@@ -22,7 +22,7 @@ func (s *Server) GetRepositoryTree(
 		return s.captureDetail(e)
 	}
 
-	v, e := s.client.Tree(project, a.Path, a.Reference, a.Recursive, 0)
+	v, e := s.service.Tree(project, a.Path, a.Reference, a.Recursive, 0)
 
 	if e != nil {
 		return s.captureDetail(e)

@@ -1,7 +1,7 @@
 package format
 
 import (
-	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 )
@@ -13,8 +13,8 @@ func Completion(
 	return join.Empty(
 		constant.MemoryHeadingPrefix,
 		name,
-		stringConstant.Unix,
+		stringsConstant.Unix,
 		body,
-		stringConstant.Unix,
+		stringsConstant.Unix,
 	)
 }

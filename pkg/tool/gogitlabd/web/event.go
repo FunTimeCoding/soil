@@ -1,10 +1,10 @@
 package web
 
 import (
-	argument "github.com/funtimecoding/soil/pkg/argument/constant"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/subscription"
 	"net/http"
@@ -24,7 +24,7 @@ func (s *Server) event() http.HandlerFunc {
 			if subs.Has(constant.SummaryEvent) {
 				layout.PushEvent(
 					w,
-					web.LayoutSummaryStrip,
+					webConstant.LayoutSummaryStrip,
 					layout.SummaryStripContent(summary(entries)),
 				)
 			}
@@ -42,11 +42,11 @@ func (s *Server) event() http.HandlerFunc {
 			}
 
 			if subs.Has(constant.PipelineEvent) {
-				project := queryInteger(r, argument.Project)
-				pipeline := queryInteger(r, argument.Pipeline)
+				project := queryInteger(r, argumentConstant.Project)
+				pipeline := queryInteger(r, argumentConstant.Pipeline)
 
 				if project != 0 && pipeline != 0 {
-					jobs, e := s.client.PipelineJobs(project, pipeline)
+					jobs, e := s.service.PipelineJobs(project, pipeline)
 					errors.PanicOnError(e)
 					layout.PushEvent(
 						w,

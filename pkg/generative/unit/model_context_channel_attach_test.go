@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/model_context/channel"
 	"github.com/funtimecoding/soil/pkg/generative/model_context/channel/mock_sink"
 	"github.com/funtimecoding/soil/pkg/generative/unit/channel_tester"
-	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"testing"
 	"time"
 )
@@ -16,11 +16,11 @@ func TestChannelAttachKnocksOnceWhenTheSessionAnswers(t *testing.T) {
 	var s *channel.Server
 	s = channel_tester.NewChannelServer().WithSink(k).WithSleep(
 		func(_ time.Duration) {
-			channel_tester.Confirm(s, s.Nonce(), stringConstant.UpperAlfa)
+			channel_tester.Confirm(s, s.Nonce(), stringsConstant.UpperAlfa)
 		},
 	)
 	s.Connected()
-	s.Resolve(stringConstant.UpperAlfa)
+	s.Resolve(stringsConstant.UpperAlfa)
 	assert.String(t, "Alfa", s.Attach())
 	assert.Count(t, 1, k.Kind(constant.ChannelAttachKind))
 }
@@ -30,11 +30,11 @@ func TestChannelAttachCarriesTheNonceItWillAccept(t *testing.T) {
 	var s *channel.Server
 	s = channel_tester.NewChannelServer().WithSink(k).WithSleep(
 		func(_ time.Duration) {
-			channel_tester.Confirm(s, s.Nonce(), stringConstant.UpperAlfa)
+			channel_tester.Confirm(s, s.Nonce(), stringsConstant.UpperAlfa)
 		},
 	)
 	s.Connected()
-	s.Resolve(stringConstant.UpperAlfa)
+	s.Resolve(stringsConstant.UpperAlfa)
 	s.Attach()
 	attach := k.Kind(constant.ChannelAttachKind)
 	assert.Count(t, 1, attach)
@@ -46,7 +46,7 @@ func TestChannelAttachStillKnocksWhenTheCallsignIsUnresolved(t *testing.T) {
 	var s *channel.Server
 	s = channel_tester.NewChannelServer().WithSink(k).WithSleep(
 		func(_ time.Duration) {
-			channel_tester.Confirm(s, s.Nonce(), stringConstant.UpperAlfa)
+			channel_tester.Confirm(s, s.Nonce(), stringsConstant.UpperAlfa)
 		},
 	)
 	s.Connected()
@@ -62,11 +62,11 @@ func TestChannelAttachWaitsAMinuteBeforeKnockingAgain(t *testing.T) {
 	s = channel_tester.NewChannelServer().WithSink(k).WithSleep(
 		func(d time.Duration) {
 			waits = append(waits, d)
-			channel_tester.Confirm(s, s.Nonce(), stringConstant.UpperAlfa)
+			channel_tester.Confirm(s, s.Nonce(), stringsConstant.UpperAlfa)
 		},
 	)
 	s.Connected()
-	s.Resolve(stringConstant.UpperAlfa)
+	s.Resolve(stringsConstant.UpperAlfa)
 	s.Attach()
 	assert.Count(t, 1, waits)
 	assert.Duration(t, time.Minute, waits[0])
@@ -81,12 +81,12 @@ func TestChannelAttachBackoffDoublesToTheMaximum(t *testing.T) {
 			waits = append(waits, d)
 
 			if len(waits) == 6 {
-				channel_tester.Confirm(s, s.Nonce(), stringConstant.UpperAlfa)
+				channel_tester.Confirm(s, s.Nonce(), stringsConstant.UpperAlfa)
 			}
 		},
 	)
 	s.Connected()
-	s.Resolve(stringConstant.UpperAlfa)
+	s.Resolve(stringsConstant.UpperAlfa)
 	s.Attach()
 	assert.Duration(t, time.Minute, waits[0])
 	assert.Duration(t, 2*time.Minute, waits[1])

@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/worker"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/palette"
@@ -21,7 +21,7 @@ func New(
 		palette.NewCommand(
 			constant.FloorTitle,
 			constant.FloorPath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
 	)
 
@@ -31,10 +31,10 @@ func New(
 		registry: r,
 		view: view.New(
 			layout.New(constant.Identity).
-				WithTheme(web.ThemeForge).
+				WithTheme(webConstant.ThemeForge).
 				WithStyle(constant.InlineStyle).
-				WithCommandPalette(web.PalettePath).
-				WithLiveEndpoint(web.LivePath).
+				WithCommandPalette(webConstant.PalettePath).
+				WithLiveEndpoint(webConstant.LivePath).
 				WithItems(
 					navigation_item.New(
 						constant.FloorPath,

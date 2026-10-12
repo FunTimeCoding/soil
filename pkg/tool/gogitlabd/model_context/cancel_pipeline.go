@@ -26,7 +26,7 @@ func (s *Server) CancelPipeline(
 		return s.captureDetail(e)
 	}
 
-	v, e := s.client.CancelPipeline(project, a.Pipeline)
+	v, e := s.service.CancelPipeline(project, a.Pipeline)
 
 	if e != nil {
 		return s.captureDetail(e)

@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	strings "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/option"
 	"github.com/funtimecoding/soil/pkg/tool/goalpined/package_server"
@@ -40,7 +40,7 @@ func Run(
 				constant.FileAddress,
 				func(m *http.ServeMux) {
 					m.Handle(
-						strings.Slash,
+						stringsConstant.Slash,
 						http.FileServer(http.Dir(constant.PackageRoot)),
 					)
 				},

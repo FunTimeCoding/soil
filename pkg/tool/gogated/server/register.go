@@ -2,7 +2,7 @@ package server
 
 import (
 	"encoding/json"
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/types/register"
 	"github.com/funtimecoding/soil/pkg/tool/gogated/types/register_client"
@@ -17,7 +17,7 @@ func (s *Server) register(
 	var body register.Request
 
 	if e := json.NewDecoder(r.Body).Decode(&body); e != nil {
-		http.Error(w, library.InvalidRequestBody, http.StatusBadRequest)
+		http.Error(w, soil.InvalidRequestBody, http.StatusBadRequest)
 
 		return
 	}

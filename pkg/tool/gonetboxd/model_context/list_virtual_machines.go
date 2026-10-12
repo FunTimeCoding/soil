@@ -11,11 +11,11 @@ func (s *Server) listVirtualMachines(
 	_ context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.client.VirtualMachines()
+	result, grouped, e := s.service.VirtualMachines()
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.serviceFail(e, "virtual machines not listed")
 	}
 
-	return response.SuccessAny(convert.VirtualMachines(result))
+	return response.SuccessAny(convert.LabeledVirtualMachines(result, grouped))
 }

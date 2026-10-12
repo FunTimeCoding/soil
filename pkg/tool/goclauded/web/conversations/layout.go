@@ -2,7 +2,7 @@ package conversations
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
@@ -19,9 +19,9 @@ func layout(content ...gomponents.Node) gomponents.Node {
 					html.Content("width=device-width, initial-scale=1"),
 				),
 				html.TitleEl(gomponents.Text("conversations")),
-				html.Link(html.Rel("stylesheet"), html.Href(web.Pico)),
-				html.Script(html.Src(web.Extended)),
-				html.StyleEl(gomponents.Raw(web.ThemeHearth)),
+				html.Link(html.Rel("stylesheet"), html.Href(webConstant.Pico)),
+				html.Script(html.Src(webConstant.Extended)),
+				html.StyleEl(gomponents.Raw(webConstant.ThemeHearth)),
 				html.StyleEl(gomponents.Raw(constant.ConversationStyle)),
 			),
 			html.Body(

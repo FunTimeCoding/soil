@@ -5,23 +5,21 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/server"
 	"github.com/funtimecoding/soil/pkg/reacher"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/constant"
-	sentry "github.com/funtimecoding/soil/pkg/tool/gosentryd/face"
+	"github.com/funtimecoding/soil/pkg/tool/gosentryd/service"
 )
 
 func New(
-	c sentry.SentrySource,
-	organization string,
+	v *service.Service,
 	host string,
 	r face.Reporter,
 	t face.Recorder,
 ) *Server {
 	result := &Server{
-		server:       server.New(constant.Identity).WithRecorder(t).Server(),
-		client:       c,
-		organization: organization,
-		host:         host,
-		reporter:     r,
-		reacher:      reacher.New(),
+		server:   server.New(constant.Identity).WithRecorder(t).Server(),
+		service:  v,
+		host:     host,
+		reporter: r,
+		reacher:  reacher.New(),
 	}
 	result.register()
 

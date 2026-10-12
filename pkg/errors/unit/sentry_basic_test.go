@@ -2,10 +2,10 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	errorsConstant "github.com/funtimecoding/soil/pkg/errors/constant"
+	"github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
 	"io"
 	"net/http"
@@ -27,8 +27,12 @@ func TestGetSendsTokenToTrailingPath(t *testing.T) {
 	assert.String(t, http.MethodGet, r.Method)
 	assert.String(t, "/api/0/organizations/alfa/issues/", r.URL.Path)
 	assert.String(t, "is:unresolved", r.URL.Query().Get("query"))
-	assert.String(t, "Bearer alfa-token", r.Header.Get(constant.Authorization))
-	assert.String(t, "application/json", r.Header.Get(constant.Accept))
+	assert.String(
+		t,
+		"Bearer alfa-token",
+		r.Header.Get(webConstant.Authorization),
+	)
+	assert.String(t, "application/json", r.Header.Get(webConstant.Accept))
 }
 
 func TestGetValuesKeepsRepeatedFields(t *testing.T) {
@@ -52,7 +56,7 @@ func TestPutSendsNotation(t *testing.T) {
 		&out,
 	)
 	assert.FatalOnError(t, e)
-	assert.String(t, "resolved", out[errorsConstant.Status])
+	assert.String(t, "resolved", out[constant.Status])
 	r := last()
 	assert.String(t, http.MethodPut, r.Method)
 	assert.String(t, "/api/0/organizations/alfa/issues/7/", r.URL.Path)

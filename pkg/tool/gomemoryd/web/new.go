@@ -3,7 +3,7 @@ package web
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/service"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/palette"
@@ -16,34 +16,34 @@ func New(s *service.Service) *Server {
 	search := palette.NewCommand(
 		"Search memories",
 		"/palette/memories",
-		web.PaletteSearch,
+		webConstant.PaletteSearch,
 	)
 	search.SwapTarget = ".palette-body"
 	r.Register(
 		palette.NewCommand(
 			constant.DashboardTitle,
 			constant.DashboardPath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
 		palette.NewCommand(
 			constant.MemoriesTitle,
 			constant.MemoriesPath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
 		palette.NewCommand(
 			constant.RelationsTitle,
 			constant.RelationsPath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
 		palette.NewCommand(
 			constant.ImpressionsTitle,
 			constant.ImpressionsPath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
 		palette.NewCommand(
 			constant.SearchTitle,
-			web.SearchPath,
-			web.PaletteNavigate,
+			webConstant.SearchPath,
+			webConstant.PaletteNavigate,
 		),
 		search,
 	)
@@ -53,9 +53,9 @@ func New(s *service.Service) *Server {
 		registry: r,
 		view: view.New(
 			layout.New(constant.Identity).
-				WithTheme(web.ThemeCortex).
+				WithTheme(webConstant.ThemeCortex).
 				WithStyle(constant.InlineStyle).
-				WithCommandPalette(web.PalettePath).
+				WithCommandPalette(webConstant.PalettePath).
 				WithItems(
 					navigation_item.New(
 						constant.DashboardPath,
@@ -77,7 +77,10 @@ func New(s *service.Service) *Server {
 						constant.StatisticPath,
 						constant.StatisticTitle,
 					),
-					navigation_item.New(web.SearchPath, constant.SearchTitle),
+					navigation_item.New(
+						webConstant.SearchPath,
+						constant.SearchTitle,
+					),
 				),
 		),
 	}

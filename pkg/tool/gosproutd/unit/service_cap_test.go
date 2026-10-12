@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/unit/service_tester"
 	"strings"
@@ -12,7 +12,7 @@ import (
 func TestPushRejectsAQuestionOverTheLimit(t *testing.T) {
 	s := service_tester.New(t)
 	_, e := s.Service.PushDecision(
-		stringConstant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		strings.Repeat("x", constant.MaximumTurnLength+1),
 		"narrow",
 		nil,
@@ -24,7 +24,7 @@ func TestPushRejectsAQuestionOverTheLimit(t *testing.T) {
 func TestPushAcceptsAQuestionAtTheLimit(t *testing.T) {
 	s := service_tester.New(t)
 	d, e := s.Service.PushDecision(
-		stringConstant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		strings.Repeat("x", constant.MaximumTurnLength),
 		"narrow",
 		nil,
@@ -37,7 +37,7 @@ func TestPushAcceptsAQuestionAtTheLimit(t *testing.T) {
 func TestPushRejectsAMissingDefaultAction(t *testing.T) {
 	s := service_tester.New(t)
 	_, e := s.Service.PushDecision(
-		stringConstant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"which entry rule?",
 		"",
 		nil,
@@ -49,20 +49,20 @@ func TestPushRejectsAMissingDefaultAction(t *testing.T) {
 func TestRejectedPushIsNotStored(t *testing.T) {
 	s := service_tester.New(t)
 	_, e := s.Service.PushDecision(
-		stringConstant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"which entry rule?",
 		"",
 		nil,
 		nil,
 	)
 	assert.Error(t, e)
-	assert.Count(t, 0, s.Service.Decisions(stringConstant.LowerAlfa))
+	assert.Count(t, 0, s.Service.Decisions(stringsConstant.LowerAlfa))
 }
 
 func TestTurnRejectsContentOverTheLimit(t *testing.T) {
 	s := service_tester.New(t)
 	d, f := s.Service.PushDecision(
-		stringConstant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"which entry rule?",
 		"narrow",
 		nil,
@@ -80,7 +80,7 @@ func TestTurnRejectsContentOverTheLimit(t *testing.T) {
 func TestSessionTurnsStopAtTheLimit(t *testing.T) {
 	s := service_tester.New(t)
 	d, f := s.Service.PushDecision(
-		stringConstant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"which entry rule?",
 		"narrow",
 		nil,
@@ -104,7 +104,7 @@ func TestSessionTurnsStopAtTheLimit(t *testing.T) {
 func TestUserTurnsAreNotCapped(t *testing.T) {
 	s := service_tester.New(t)
 	d, f := s.Service.PushDecision(
-		stringConstant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"which entry rule?",
 		"narrow",
 		nil,
@@ -117,5 +117,5 @@ func TestUserTurnsAreNotCapped(t *testing.T) {
 		assert.Nil(t, e)
 	}
 
-	assert.Count(t, 5, s.Service.Decisions(stringConstant.LowerAlfa)[0].Turns)
+	assert.Count(t, 5, s.Service.Decisions(stringsConstant.LowerAlfa)[0].Turns)
 }

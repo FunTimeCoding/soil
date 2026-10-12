@@ -3,7 +3,7 @@ package format
 import (
 	"github.com/funtimecoding/soil/pkg/floats"
 	"github.com/funtimecoding/soil/pkg/integers64"
-	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
@@ -19,9 +19,9 @@ func RelevantMemory(r *record.SearchResult) string {
 		tagSuffix(r.Tags),
 		constant.RankSeparator,
 		floats.ToStringRounded(r.Rank),
-		stringConstant.Unix,
+		stringsConstant.Unix,
 		baseLine(r.Metadata),
 		r.Content,
-		stringConstant.Unix,
+		stringsConstant.Unix,
 	)
 }

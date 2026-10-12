@@ -9,9 +9,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/metric"
 	metricConstant "github.com/funtimecoding/soil/pkg/metric/constant"
-	strings "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
 
@@ -23,11 +23,11 @@ func main() {
 			server.New(
 				identity.Example(),
 				join.Empty(
-					strings.Colon,
+					stringsConstant.Colon,
 					integers.ToString(metricConstant.Port),
 				),
 				func(x *http.ServeMux) {
-					x.Handle(constant.MetricsPath, m.Exporter())
+					x.Handle(webConstant.MetricsPath, m.Exporter())
 				},
 			),
 		),

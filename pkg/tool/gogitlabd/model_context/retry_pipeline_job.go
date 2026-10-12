@@ -27,7 +27,7 @@ func (s *Server) RetryPipelineJob(
 		return s.captureDetail(e)
 	}
 
-	v, e := s.client.Retry(project, a.Job)
+	v, e := s.service.Retry(project, a.Job)
 
 	if e != nil {
 		return s.captureDetail(e)

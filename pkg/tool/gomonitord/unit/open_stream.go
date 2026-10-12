@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/generative/constant"
-	monitorConstant "github.com/funtimecoding/soil/pkg/tool/gomonitord/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomonitord/constant"
 	"github.com/funtimecoding/soil/pkg/web"
 	"net/http"
 	"testing"
@@ -18,9 +18,9 @@ func openStream(
 ) *bufio.Reader {
 	t.Helper()
 	q := web.NewGet(
-		fmt.Sprintf("http://localhost:%d%s", port, monitorConstant.StreamPath),
+		fmt.Sprintf("http://localhost:%d%s", port, constant.StreamPath),
 	)
-	web.Bearer(q, constant.ModelContextTestToken)
+	web.Bearer(q, generativeConstant.ModelContextTestToken)
 	r, e := web.Client().Do(q)
 	assert.FatalOnError(t, e)
 	t.Cleanup(func() { errors.PanicClose(r.Body) })

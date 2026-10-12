@@ -3,7 +3,7 @@ package go_mod
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/go_mod/constant"
-	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/system"
 	"strings"
@@ -23,7 +23,7 @@ func cleanSum(
 	prefix := fmt.Sprintf("%s %s", mod, version)
 	var lines []string
 
-	for line := range strings.SplitSeq(content, stringConstant.Unix) {
+	for line := range strings.SplitSeq(content, stringsConstant.Unix) {
 		if !strings.HasPrefix(line, prefix) {
 			lines = append(lines, line)
 		}

@@ -24,16 +24,10 @@ func (s *Server) createDeviceType(
 		return response.Fail("manufacturer is required: %v", g)
 	}
 
-	m, h := s.client.ManufacturerByName(manufacturer)
+	result, e := s.service.CreateDeviceType(model, manufacturer)
 
-	if h != nil {
-		return s.captureFail(h, "manufacturer not found")
-	}
-
-	result, i := s.client.CreateDeviceType(model, m)
-
-	if i != nil {
-		return s.captureFail(i, "device type not created")
+	if e != nil {
+		return s.serviceFail(e, "device type not created")
 	}
 
 	return response.SuccessAny(convert.DeviceType(result))

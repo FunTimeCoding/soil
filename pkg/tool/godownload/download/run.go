@@ -2,7 +2,7 @@ package download
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
-	libraryConstant "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/gitlab"
 	"github.com/funtimecoding/soil/pkg/gitlab/packages"
@@ -25,7 +25,7 @@ func Run(o *option.Download) {
 	)
 	var p *library.Package
 
-	if o.PackageVersion == libraryConstant.LatestVersion {
+	if o.PackageVersion == soil.LatestVersion {
 		p = packages.FindLatest(filtered)
 	} else {
 		p = packages.FindVersionOrLatest(filtered, o.PackageVersion)
@@ -36,7 +36,7 @@ func Run(o *option.Download) {
 		os.Exit(1)
 	}
 
-	if o.PackageVersion != libraryConstant.LatestVersion &&
+	if o.PackageVersion != soil.LatestVersion &&
 		p.Version != o.PackageVersion {
 		errors.Warning("version %s not found, using latest\n", o.PackageVersion)
 	}

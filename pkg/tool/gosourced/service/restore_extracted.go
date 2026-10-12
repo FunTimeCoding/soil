@@ -5,6 +5,7 @@ import (
 	"github.com/dave/dst"
 	"github.com/dave/dst/decorator"
 	"github.com/dave/dst/decorator/resolver/gopackages"
+	"github.com/funtimecoding/soil/pkg/source/imports"
 	"github.com/funtimecoding/soil/pkg/source/resolve"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/service/sink"
@@ -31,7 +32,7 @@ func restoreExtracted(
 		return e
 	}
 
-	out.Write(path, buffer.Bytes())
+	out.Write(path, imports.JoinBlock(buffer.Bytes()))
 
 	return nil
 }

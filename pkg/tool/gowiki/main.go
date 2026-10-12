@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/confluence"
-	atlassian "github.com/funtimecoding/soil/pkg/atlassian/constant"
+	atlassianConstant "github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/console"
 	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
@@ -24,7 +24,7 @@ func Main() {
 	a.Boolean(argumentConstant.Favorites, false, "Favorites")
 	a.Parse()
 	c := confluence.NewEnvironment()
-	f := atlassian.ConfluenceFormat.Copy()
+	f := atlassianConstant.ConfluenceFormat.Copy()
 
 	if a.GetBoolean(argumentConstant.Copyable) {
 		f.Tag(consoleConstant.TagCopyable)

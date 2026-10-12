@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/lint/pointer"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
@@ -15,13 +15,13 @@ func (r *Repository) Literal(
 	contents, found := r.contents[directory]
 
 	if !found {
-		if strings.HasPrefix(directory, constant.ParentDirectory) {
+		if strings.HasPrefix(directory, soil.ParentDirectory) {
 			contents = siblingContents(r.Absolute(directory))
 		} else {
 			prefix := join.Empty(directory, stringsConstant.Slash)
 
 			for _, p := range r.Files.Files() {
-				if strings.HasSuffix(p, constant.MarkdownExtension) {
+				if strings.HasSuffix(p, soil.MarkdownExtension) {
 					continue
 				}
 

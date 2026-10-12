@@ -11,7 +11,7 @@ func (s *Server) FindOrganizations(
 	_ mcp.CallToolRequest,
 	_ argument.FindOrganizations,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.client.Organizations()
+	result, e := s.service.Organizations()
 
 	if e != nil {
 		return s.captureDetail(e)

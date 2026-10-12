@@ -96,7 +96,7 @@ func TestMoveCrossPackage(t *testing.T) {
 	assert.StringContains(t, "return constant.Mode", run)
 	caller := service_tester.ReadFixtureFile(t, d, "pkg/caller/run.go")
 	assertFormatted(t, caller)
-	assert.StringContains(t, "return constant.Mode", caller)
+	assert.StringContains(t, "return targetConstant.Mode", caller)
 	assert.StringContains(t, "example/pkg/target/constant", caller)
 	assert.False(t, strings.Contains(caller, "target.Mode"))
 }

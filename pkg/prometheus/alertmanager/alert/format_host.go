@@ -2,27 +2,27 @@ package alert
 
 import (
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/console/constant"
+	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
-	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 )
 
 func (a *Alert) formatHost(f *option.Format) string {
 	result := a.Host()
 
 	if result == "" {
-		result = prometheus.NoHost
+		result = constant.NoHost
 
 		if f.UseColor {
-			result = constant.Yellow(result)
+			result = consoleConstant.Yellow(result)
 		}
 
 		return result
 	}
 
 	if a.HostLink != "" &&
-		!f.HasTag(constant.TagCopyable) &&
-		!f.HasTag(constant.TagMarkdown) {
+		!f.HasTag(consoleConstant.TagCopyable) &&
+		!f.HasTag(consoleConstant.TagMarkdown) {
 		result = console.Link(a.HostLink, result, true)
 	}
 

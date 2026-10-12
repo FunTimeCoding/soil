@@ -8,7 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/golinkace/command_context"
 	"github.com/funtimecoding/soil/pkg/tool/golinkace/constant"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/spf13/cobra"
 )
 
@@ -38,7 +38,10 @@ func Main() {
 	o.PersistentFlags().StringVar(
 		&host,
 		"host",
-		environment.Fallback(constant.DaemonHostEnvironment, web.Localhost),
+		environment.Fallback(
+			constant.DaemonHostEnvironment,
+			webConstant.Localhost,
+		),
 		"golinkaced host",
 	)
 	o.PersistentFlags().IntVar(
@@ -46,7 +49,7 @@ func Main() {
 		"port",
 		environment.FallbackInteger(
 			constant.DaemonPortEnvironment,
-			web.ListenPort,
+			webConstant.ListenPort,
 		),
 		"golinkaced port",
 	)

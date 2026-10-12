@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
@@ -20,7 +20,7 @@ func (s *Server) history(
 	_, e := s.resolveCaller(x, constant.History)
 
 	if e != nil {
-		return s.captureFail(e, library.UnexpectedError)
+		return s.captureFail(e, soil.UnexpectedError)
 	}
 
 	a := argument.Timeline{
@@ -59,7 +59,7 @@ func (s *Server) history(
 	merged, f := s.service.Timeline(a)
 
 	if f != nil {
-		return s.captureFail(f, library.UnexpectedError)
+		return s.captureFail(f, soil.UnexpectedError)
 	}
 
 	if len(merged) == 0 {

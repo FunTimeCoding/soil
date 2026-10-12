@@ -3,15 +3,15 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/lint"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
-	lintConstant "github.com/funtimecoding/soil/pkg/lint/constant"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	"github.com/funtimecoding/soil/pkg/lint/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"strings"
 	"testing"
 )
 
 func TestImportClean(t *testing.T) {
 	l := lint.Import(
-		constant.UpperBravo,
+		stringsConstant.UpperBravo,
 		strings.NewReader(
 			"package example\n\nimport \"fmt\"\n\nfunc Example() {\n\tfmt.Println(\"Hello.\")\n}\n",
 		),
@@ -21,7 +21,7 @@ func TestImportClean(t *testing.T) {
 
 func TestImportBlank(t *testing.T) {
 	l := lint.Import(
-		constant.UpperCharlie,
+		stringsConstant.UpperCharlie,
 		strings.NewReader(
 			"package example\n\nimport (\n\t\"fmt\"\n\n\t\"log\"\n)\n\nfunc Example() {\n\tfmt.Printf(\"test\")\n\tlog.Printf(\"test\")\n}\n",
 		),
@@ -35,7 +35,7 @@ func TestImportBlank(t *testing.T) {
 				Key:      "import_blank",
 				Text:     "Import block contains blank line",
 				Path:     "Charlie",
-				Type:     lintConstant.ConcernLine,
+				Type:     constant.ConcernLine,
 				Line:     3,
 				LineText: "import (",
 				Fixed:    true,
@@ -48,7 +48,7 @@ func TestImportBlank(t *testing.T) {
 
 func TestGo(t *testing.T) {
 	l := lint.Import(
-		constant.UpperAlfa,
+		stringsConstant.UpperAlfa,
 		strings.NewReader(
 			"package example\n\nimport (\n\t\"example.org/example/fmt\"\n)\n\nfunc Example() {\n\tfmt.Println(\"Hello friend.\")\n}\n",
 		),
@@ -62,7 +62,7 @@ func TestGo(t *testing.T) {
 				Key:      "single_multi_import",
 				Text:     "Single multi import",
 				Path:     "Alfa",
-				Type:     lintConstant.ConcernLine,
+				Type:     constant.ConcernLine,
 				Line:     3,
 				LineText: "import (",
 				Fixed:    true,

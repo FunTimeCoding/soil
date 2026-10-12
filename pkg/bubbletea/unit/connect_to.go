@@ -1,8 +1,8 @@
 package unit
 
 import (
-	"github.com/funtimecoding/soil/pkg/generative/constant"
-	monitorConstant "github.com/funtimecoding/soil/pkg/tool/gomonitord/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
+	gomonitordConstant "github.com/funtimecoding/soil/pkg/tool/gomonitord/constant"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"strconv"
 	"testing"
@@ -13,8 +13,11 @@ func connectTo(
 	port int,
 ) {
 	t.Helper()
-	t.Setenv(monitorConstant.HostEnvironment, webConstant.Localhost)
-	t.Setenv(monitorConstant.PortEnvironment, strconv.Itoa(port))
-	t.Setenv(monitorConstant.InsecureEnvironment, "true")
-	t.Setenv(monitorConstant.TokenEnvironment, constant.ModelContextTestToken)
+	t.Setenv(gomonitordConstant.HostEnvironment, webConstant.Localhost)
+	t.Setenv(gomonitordConstant.PortEnvironment, strconv.Itoa(port))
+	t.Setenv(gomonitordConstant.InsecureEnvironment, "true")
+	t.Setenv(
+		gomonitordConstant.TokenEnvironment,
+		generativeConstant.ModelContextTestToken,
+	)
 }

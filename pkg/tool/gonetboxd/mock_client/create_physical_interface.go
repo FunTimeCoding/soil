@@ -7,9 +7,11 @@ import (
 )
 
 func (c *Client) CreatePhysicalInterface(
-	_ net.HardwareAddr,
+	a net.HardwareAddr,
 	_ string,
-	_ *network.Interface,
+	i *network.Interface,
 ) (*physical_address.Address, error) {
+	c.record("CreatePhysicalInterface", i.Name, a.String())
+
 	return nil, nil
 }

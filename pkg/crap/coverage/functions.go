@@ -1,8 +1,8 @@
 package coverage
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
-	crap "github.com/funtimecoding/soil/pkg/crap/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/crap/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join/key_value"
 	"github.com/funtimecoding/soil/pkg/system/run"
 )
@@ -16,10 +16,10 @@ func Functions(
 
 	return Parse(
 		r.Start(
-			constant.Go,
-			crap.Tool,
-			crap.Cover,
-			key_value.Equals(crap.FunctionReport, profile),
+			soil.Go,
+			constant.Tool,
+			constant.Cover,
+			key_value.Equals(constant.FunctionReport, profile),
 		),
 	)
 }

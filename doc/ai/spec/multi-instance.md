@@ -16,7 +16,7 @@ than one deployment of that service to connect to. The inventory
 allows a single daemon deployment to serve all instances.
 
 Services using this pattern: goprometheusd, goalertmanagerd,
-gopostgresd, goproxmoxd.
+gopostgresd, goproxmoxd, gobandd.
 
 ## Inventory
 

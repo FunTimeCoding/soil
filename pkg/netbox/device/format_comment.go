@@ -4,7 +4,7 @@ import (
 	"fmt"
 	consoleConstant "github.com/funtimecoding/soil/pkg/console/constant"
 	"github.com/funtimecoding/soil/pkg/console/status/option"
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/strings"
 	"github.com/funtimecoding/soil/pkg/text"
@@ -15,7 +15,7 @@ func (d *Device) formatComment(f *option.Format) string {
 		return ""
 	}
 
-	o := text.OptimizeWhitespace(d.Comment, library.CompactWhitespace)
+	o := text.OptimizeWhitespace(d.Comment, soil.CompactWhitespace)
 
 	if o == "" {
 		return ""

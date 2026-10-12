@@ -3,6 +3,7 @@ package netbox
 import (
 	"github.com/funtimecoding/soil/pkg/errors/ambiguous"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/device"
 )
 
@@ -14,7 +15,7 @@ func (c *Client) DevicesByCluster(s string) ([]*device.Device, error) {
 	}
 
 	if len(clusters) == 0 {
-		return nil, not_found.New("cluster", s)
+		return nil, not_found.New(constant.ClusterKind, s)
 	}
 
 	if len(clusters) > 1 {

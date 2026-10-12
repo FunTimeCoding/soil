@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	generative "github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
@@ -19,22 +19,16 @@ func (s *Server) createVirtualInterface(
 		return response.Fail("virtual_machine is required: %v", f)
 	}
 
-	name, g := r.RequireString(generative.ParameterName)
+	name, g := r.RequireString(generativeConstant.ParameterName)
 
 	if g != nil {
 		return response.Fail("name is required: %v", g)
 	}
 
-	vm, h := s.client.VirtualMachineByName(vmName)
+	result, e := s.service.CreateVirtualInterface(vmName, name)
 
-	if h != nil {
-		return s.captureFail(h, "virtual machine not found")
-	}
-
-	result, i := s.client.CreateVirtualInterface(vm, name)
-
-	if i != nil {
-		return s.captureFail(i, "virtual interface not created")
+	if e != nil {
+		return s.serviceFail(e, "virtual interface not created")
 	}
 
 	return response.SuccessAny(convert.VirtualInterface(result))

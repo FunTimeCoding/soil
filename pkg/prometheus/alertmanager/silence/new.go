@@ -2,9 +2,9 @@ package silence
 
 import (
 	"fmt"
-	monitor "github.com/funtimecoding/soil/pkg/monitor/constant"
+	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/openapi"
-	prometheus "github.com/funtimecoding/soil/pkg/prometheus/constant"
+	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/prometheus/alertmanager/api/v2/models"
@@ -18,7 +18,7 @@ func New(
 	var rule string
 
 	for _, m := range v.Matchers {
-		if *m.Name == prometheus.AlertnameLabel {
+		if *m.Name == constant.AlertnameLabel {
 			rule = *m.Value
 		}
 
@@ -26,11 +26,11 @@ func New(
 	}
 
 	if rule == "" {
-		rule = prometheus.UnknownRule
+		rule = constant.UnknownRule
 	}
 
 	return &Silence{
-		MonitorIdentifier: monitor.GoSilence.StringIdentifier(*v.ID),
+		MonitorIdentifier: monitorConstant.GoSilence.StringIdentifier(*v.ID),
 		Identifier:        *v.ID,
 		State:             *v.Status.State,
 		Match:             join.Comma(match),

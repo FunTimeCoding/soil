@@ -3,7 +3,7 @@ package web
 import (
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gotelemetryd/store"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/layout"
 	"github.com/funtimecoding/soil/pkg/web/layout/navigation_item"
 	"github.com/funtimecoding/soil/pkg/web/palette"
@@ -17,12 +17,12 @@ func New(s *store.Store) *Server {
 		palette.NewCommand(
 			constant.HeatmapTitle,
 			constant.HeatmapPath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
 		palette.NewCommand(
 			constant.EventsTitle,
 			constant.EventsPath,
-			web.PaletteNavigate,
+			webConstant.PaletteNavigate,
 		),
 	)
 
@@ -31,8 +31,8 @@ func New(s *store.Store) *Server {
 		registry: r,
 		view: view.New(
 			layout.New(constant.Identity).
-				WithTheme(web.ThemeArchive).
-				WithCommandPalette(web.PalettePath).
+				WithTheme(webConstant.ThemeArchive).
+				WithCommandPalette(webConstant.PalettePath).
 				WithItems(
 					navigation_item.New(
 						constant.HeatmapPath,

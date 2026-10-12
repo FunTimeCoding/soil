@@ -6,9 +6,9 @@ import (
 )
 
 func (w *Worker) fetchRequests() []*merge_request.Request {
-	assigned, e := w.client.AssignedMergeRequests(false)
+	assigned, e := w.service.AssignedMergeRequests(false)
 	errors.PanicOnError(e)
-	reviewing, f := w.client.ReviewingMergeRequests(false)
+	reviewing, f := w.service.ReviewingMergeRequests(false)
 	errors.PanicOnError(f)
 
 	return MergeRequests(assigned, reviewing)

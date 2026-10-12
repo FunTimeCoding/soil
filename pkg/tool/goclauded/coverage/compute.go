@@ -2,7 +2,7 @@ package coverage
 
 import (
 	"github.com/funtimecoding/soil/pkg/generative/anthropic/claude/tool_call"
-	generative "github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"sort"
 	"strings"
@@ -51,13 +51,16 @@ func Compute(
 	}
 
 	for _, c := range calls {
-		if !strings.HasPrefix(c.Name, generative.ModelContextToolPrefix) {
+		if !strings.HasPrefix(c.Name, generativeConstant.ModelContextToolPrefix) {
 			continue
 		}
 
 		server, name, found := strings.Cut(
-			strings.TrimPrefix(c.Name, generative.ModelContextToolPrefix),
-			generative.ModelContextToolSeparator,
+			strings.TrimPrefix(
+				c.Name,
+				generativeConstant.ModelContextToolPrefix,
+			),
+			generativeConstant.ModelContextToolSeparator,
 		)
 
 		if !found {

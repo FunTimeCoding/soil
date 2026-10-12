@@ -26,7 +26,7 @@ func (s *Server) GetPipeline(
 		return s.captureDetail(e)
 	}
 
-	v, e := s.client.Pipeline(project, a.Pipeline)
+	v, e := s.service.Pipeline(project, a.Pipeline)
 
 	if e != nil {
 		return s.captureDetail(e)

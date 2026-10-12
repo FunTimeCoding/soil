@@ -8,4 +8,9 @@ var Identity = identity.New(
 	"gopostgres [command]",
 )
 
-const HostEnvironment = "POSTGRES_HOST"
+const (
+	HostEnvironment     = "GOPOSTGRES_HOST"
+	PortEnvironment     = "GOPOSTGRES_PORT"
+	InsecureEnvironment = "GOPOSTGRES_INSECURE"
+	TokenEnvironment    = "GOPOSTGRES_TOKEN"
+)

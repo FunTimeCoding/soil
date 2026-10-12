@@ -4,7 +4,7 @@ import (
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/technitium"
-	"github.com/funtimecoding/soil/pkg/technitium/constant"
+	technitiumConstant "github.com/funtimecoding/soil/pkg/technitium/constant"
 	"github.com/funtimecoding/soil/pkg/technitium/key"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/spf13/cobra"
@@ -42,7 +42,7 @@ func addKey(
 	result.Flags().StringVar(
 		&algorithm,
 		argumentConstant.Algorithm,
-		constant.DefaultAlgorithm,
+		technitiumConstant.DefaultAlgorithm,
 		"TSIG algorithm",
 	)
 

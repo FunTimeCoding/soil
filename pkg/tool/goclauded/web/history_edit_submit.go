@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/timeline"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 	"strconv"
 )
@@ -37,6 +37,6 @@ func (s *Server) historyEditSubmit(
 		event.CreatedAt,
 	)
 	entry.Full = true
-	w.Header().Set(web.ContentType, "text/html; charset=utf-8")
+	w.Header().Set(webConstant.ContentType, "text/html; charset=utf-8")
 	errors.PanicOnError(timelineRow(entry).Render(w))
 }

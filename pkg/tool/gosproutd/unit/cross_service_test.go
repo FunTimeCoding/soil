@@ -2,7 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/pulse"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/unit/cross_service_tester"
@@ -17,15 +17,15 @@ func TestArmedCruiseWakesAnIdleSession(t *testing.T) {
 	a.CheckLive()
 	s.Goclauded.Store.Advance(time.Minute)
 	s.EndTurn(a.UUID)
-	s.AnswerOne(stringConstant.LowerAlfa)
-	s.Service.SetCruise(stringConstant.LowerAlfa, constant.CruiseOn, 0)
+	s.AnswerOne(stringsConstant.LowerAlfa)
+	s.Service.SetCruise(stringsConstant.LowerAlfa, constant.CruiseOn, 0)
 	s.Advance(constant.QuietWindow + time.Minute)
 	assert.String(
 		t,
 		"immediate",
 		string(
 			pulse.Decide(
-				s.Service.Reading(stringConstant.LowerAlfa, s.Target(a.UUID)),
+				s.Service.Reading(stringsConstant.LowerAlfa, s.Target(a.UUID)),
 				s.Now(),
 			),
 		),
@@ -39,14 +39,14 @@ func TestDisarmedCruiseLeavesTheSameStateQueued(t *testing.T) {
 	a.CheckLive()
 	s.Goclauded.Store.Advance(time.Minute)
 	s.EndTurn(a.UUID)
-	s.AnswerOne(stringConstant.LowerAlfa)
+	s.AnswerOne(stringsConstant.LowerAlfa)
 	s.Advance(constant.QuietWindow + time.Minute)
 	assert.String(
 		t,
 		"queue",
 		string(
 			pulse.Decide(
-				s.Service.Reading(stringConstant.LowerAlfa, s.Target(a.UUID)),
+				s.Service.Reading(stringsConstant.LowerAlfa, s.Target(a.UUID)),
 				s.Now(),
 			),
 		),
@@ -60,15 +60,15 @@ func TestArmedCruiseLeavesAWorkingSessionAlone(t *testing.T) {
 	s.EndTurn(a.UUID)
 	s.Goclauded.Store.Advance(time.Minute)
 	a.CheckLive()
-	s.AnswerOne(stringConstant.LowerAlfa)
-	s.Service.SetCruise(stringConstant.LowerAlfa, constant.CruiseOn, 0)
+	s.AnswerOne(stringsConstant.LowerAlfa)
+	s.Service.SetCruise(stringsConstant.LowerAlfa, constant.CruiseOn, 0)
 	s.Advance(constant.QuietWindow + time.Minute)
 	assert.String(
 		t,
 		"queue",
 		string(
 			pulse.Decide(
-				s.Service.Reading(stringConstant.LowerAlfa, s.Target(a.UUID)),
+				s.Service.Reading(stringsConstant.LowerAlfa, s.Target(a.UUID)),
 				s.Now(),
 			),
 		),
@@ -82,16 +82,16 @@ func TestPollingClearsTheBacklogSoNothingFires(t *testing.T) {
 	a.CheckLive()
 	s.Goclauded.Store.Advance(time.Minute)
 	s.EndTurn(a.UUID)
-	s.AnswerOne(stringConstant.LowerAlfa)
-	s.Service.SetCruise(stringConstant.LowerAlfa, constant.CruiseOn, 0)
-	s.Service.MarkSeen(stringConstant.LowerAlfa)
+	s.AnswerOne(stringsConstant.LowerAlfa)
+	s.Service.SetCruise(stringsConstant.LowerAlfa, constant.CruiseOn, 0)
+	s.Service.MarkSeen(stringsConstant.LowerAlfa)
 	s.Advance(constant.QuietWindow + time.Minute)
 	assert.String(
 		t,
 		"drop",
 		string(
 			pulse.Decide(
-				s.Service.Reading(stringConstant.LowerAlfa, s.Target(a.UUID)),
+				s.Service.Reading(stringsConstant.LowerAlfa, s.Target(a.UUID)),
 				s.Now(),
 			),
 		),
@@ -153,7 +153,7 @@ func TestQueueAndCoordinatorKeepSeparateClocks(t *testing.T) {
 	a := s.Goclauded.NewSession(t)
 	defer a.Close()
 	d, e := s.Service.PushDecision(
-		stringConstant.LowerAlfa,
+		stringsConstant.LowerAlfa,
 		"which entry rule?",
 		"narrow",
 		nil,
@@ -162,7 +162,7 @@ func TestQueueAndCoordinatorKeepSeparateClocks(t *testing.T) {
 	assert.Nil(t, e)
 	s.Advance(time.Hour)
 	s.Service.Answer(d.Identifier, constant.AnswerKindChoice, "narrow")
-	answered := s.Service.Decisions(stringConstant.LowerAlfa)[0].AnsweredAt
+	answered := s.Service.Decisions(stringsConstant.LowerAlfa)[0].AnsweredAt
 	assert.True(t, answered != nil)
 	assert.True(
 		t,

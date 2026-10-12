@@ -3,9 +3,9 @@ package anthropic
 import (
 	"context"
 	"fmt"
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
-	generative "github.com/funtimecoding/soil/pkg/generative/constant"
+	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
 
@@ -19,13 +19,13 @@ func Run() {
 		}
 	)
 	s := mcp.NewServer(
-		&mcp.Implementation{Name: "Greeter", Version: library.DefaultVersion},
+		&mcp.Implementation{Name: "Greeter", Version: soil.DefaultVersion},
 		nil,
 	)
 	mcp.AddTool(
 		s,
 		&mcp.Tool{
-			Name:        generative.ModelContextGreetTool,
+			Name:        constant.ModelContextGreetTool,
 			Description: "say hi",
 		},
 		func(

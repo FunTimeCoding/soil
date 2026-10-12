@@ -1,7 +1,7 @@
 package model_context
 
 import (
-	provision "github.com/funtimecoding/soil/pkg/provision/constant"
+	provisionConstant "github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -48,7 +48,7 @@ func (s *Server) register() {
 				),
 			),
 			mcp.WithArray(
-				provision.DownstreamChanges,
+				provisionConstant.DownstreamChanges,
 				mcp.Description(
 					"Changed upstream resource addresses, sent by a provisioning daemon firing its downstream edge. Recorded with the run; does not select playbooks.",
 				),

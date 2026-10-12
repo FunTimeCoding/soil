@@ -5,9 +5,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/build/option"
 	"github.com/funtimecoding/soil/pkg/build/origin"
 	"github.com/funtimecoding/soil/pkg/console"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
-	stringConstant "github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/join"
@@ -35,12 +35,12 @@ func Module(o *option.Build) {
 	r := run.New()
 	r.Verbose = true
 	r.Panic = false
-	r.Environment(constant.NativeEnabled, stringConstant.BooleanFalse)
-	r.Environment(constant.Binary, directory)
+	r.Environment(soil.NativeEnabled, stringsConstant.BooleanFalse)
+	r.Environment(soil.Binary, directory)
 	r.Execute(
-		constant.Go,
-		constant.Install,
-		constant.TagsArgument,
+		soil.Go,
+		soil.Install,
+		soil.TagsArgument,
 		Tags(o.BuildTags),
 		fmt.Sprintf("%s/cmd/%s@%s", o.Module, o.Name, o.Version),
 	)

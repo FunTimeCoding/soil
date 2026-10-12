@@ -3,7 +3,7 @@ package server
 import (
 	"context"
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/run"
 	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
@@ -119,7 +119,7 @@ func (s *Server) PostGenerate(
 	var reportSource string
 
 	for _, entry := range entries {
-		if strings.HasSuffix(entry.Name(), constant.HypertextExtension) &&
+		if strings.HasSuffix(entry.Name(), soil.HypertextExtension) &&
 			entry.Name() != filepath.Base(s.templatePath) {
 			reportSource = filepath.Join(workdir, entry.Name())
 
@@ -131,7 +131,7 @@ func (s *Server) PostGenerate(
 		updated := system.ReadDirectory(workdir)
 
 		for _, entry := range updated {
-			if strings.HasSuffix(entry.Name(), constant.HypertextExtension) &&
+			if strings.HasSuffix(entry.Name(), soil.HypertextExtension) &&
 				entry.Name() != filepath.Base(s.templatePath) {
 				reportSource = filepath.Join(workdir, entry.Name())
 

@@ -9,7 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/notation/fixture"
 	"github.com/funtimecoding/soil/pkg/notation/fixture/user"
 	"github.com/funtimecoding/soil/pkg/notation/loader"
-	"github.com/funtimecoding/soil/pkg/strings/constant"
+	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/join"
@@ -79,7 +79,7 @@ func TestDecodeAny(t *testing.T) {
 	notation.DecodeAny(true, &a)
 	assert.Any(t, a, true)
 	var b any
-	notation.DecodeAny(constant.UpperAlfa, &b)
+	notation.DecodeAny(stringsConstant.UpperAlfa, &b)
 	assert.Any(t, b, "Alfa")
 }
 

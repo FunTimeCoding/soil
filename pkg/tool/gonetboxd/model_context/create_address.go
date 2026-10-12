@@ -30,22 +30,15 @@ func (s *Server) createAddress(
 		return response.Fail("address is required: %v", h)
 	}
 
-	d, i := s.client.DeviceByName(device)
+	result, e := s.service.CreateAddress(
+		device,
+		interfaceName,
+		address,
+		r.GetString(constant.Status, ""),
+	)
 
-	if i != nil {
-		return s.captureFail(i, "device not found")
-	}
-
-	iface, j := s.client.DeviceInterfaceByName(d, interfaceName)
-
-	if j != nil {
-		return s.captureFail(j, "interface not found on device")
-	}
-
-	result, k := s.client.CreateAddress(iface.Identifier, address, "")
-
-	if k != nil {
-		return s.captureFail(k, "address not assigned")
+	if e != nil {
+		return s.serviceFail(e, "address not assigned")
 	}
 
 	return response.SuccessAny(convert.Address(result))

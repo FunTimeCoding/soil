@@ -1,13 +1,13 @@
 package integration
 
 import (
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/git"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/system"
 	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
 	"github.com/funtimecoding/soil/pkg/system/run"
-	tool "github.com/funtimecoding/soil/pkg/tool/gohook/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gohook/constant"
 	"path/filepath"
 	"sync"
 )
@@ -15,19 +15,19 @@ import (
 var binaryDirectory = sync.OnceValue(buildBinary)
 
 func buildBinary() string {
-	directory := system.TemporaryDirectory(tool.Identity.Name())
+	directory := system.TemporaryDirectory(constant.Identity.Name())
 	r := run.New()
 	r.Directory = git.FindDirectory()
 	r.Start(
-		constant.Go,
-		constant.Build,
-		constant.OutputArgument,
-		filepath.Join(directory, tool.Identity.Name()),
+		soil.Go,
+		soil.Build,
+		soil.OutputArgument,
+		filepath.Join(directory, constant.Identity.Name()),
 		join.Slash(
 			[]string{
-				constant.CurrentDirectory,
+				soil.CurrentDirectory,
 				systemConstant.CommandPath,
-				tool.Identity.Name(),
+				constant.Identity.Name(),
 			},
 		),
 	)

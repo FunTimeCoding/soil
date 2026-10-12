@@ -2,8 +2,8 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	library "github.com/funtimecoding/soil/pkg/constant"
-	module "github.com/funtimecoding/soil/pkg/go_mod/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
+	go_modConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/measure/classifier"
 	"github.com/funtimecoding/soil/pkg/measure/constant"
 	"github.com/funtimecoding/soil/pkg/measure/registry"
@@ -41,14 +41,14 @@ func TestTableCensus(t *testing.T) {
 	assert.String(t, "Terraform", r.ByPath("main.tf").Name)
 	assert.String(t, "Salt", r.ByPath("nginx/init.sls").Name)
 	assert.String(t, "YAML", r.ByPath("values.yaml").Name)
-	assert.String(t, "YAML", r.ByPath(library.GitLabFile).Name)
+	assert.String(t, "YAML", r.ByPath(soil.GitLabFile).Name)
 	assert.String(t, "Shell", r.ByPath("deploy.sh").Name)
 	assert.String(t, "Ruby", r.ByPath("recipes/default.rb").Name)
 	assert.String(t, "Ruby", r.ByPath("Berksfile").Name)
 	assert.String(t, "ERB", r.ByPath("nginx.conf.erb").Name)
 	assert.String(t, "INI", r.ByPath("nginx.conf").Name)
 	assert.String(t, "Jinja", r.ByPath("motd.j2").Name)
-	assert.String(t, "Dockerfile", r.ByPath(library.ContainerFile).Name)
+	assert.String(t, "Dockerfile", r.ByPath(soil.ContainerFile).Name)
 	assert.String(t, "Systemd", r.ByPath("app.service").Name)
 	assert.String(t, "Git Configuration", r.ByPath(".gitignore").Name)
 	assert.String(t, "Git Configuration", r.ByPath("chefignore").Name)
@@ -56,7 +56,7 @@ func TestTableCensus(t *testing.T) {
 	assert.String(t, "XML", r.ByPath("schema.avsc").Name)
 	assert.String(t, "Plain Text", r.ByPath("LICENSE").Name)
 	assert.String(t, "Groovy", r.ByPath("Jenkinsfile").Name)
-	assert.String(t, "Go Module", r.ByPath(module.ModFile).Name)
+	assert.String(t, "Go Module", r.ByPath(go_modConstant.ModFile).Name)
 }
 
 func TestClassifyHashFamily(t *testing.T) {

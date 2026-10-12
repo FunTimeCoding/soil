@@ -2,8 +2,8 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
-	memoryConstant "github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/server"
 )
 
@@ -15,7 +15,7 @@ func (s *Server) GetRelations(
 
 	if e != nil {
 		return server.GetRelations500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
+			*s.captureFail(e, soil.UnexpectedError),
 		), nil
 	}
 
@@ -23,7 +23,7 @@ func (s *Server) GetRelations(
 
 	if e != nil {
 		return server.GetRelations500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
+			*s.captureFail(e, soil.UnexpectedError),
 		), nil
 	}
 
@@ -40,7 +40,7 @@ func (s *Server) GetRelations(
 		filterScope = true
 		scopeFilter = *r.Params.Scope
 
-		if scopeFilter == memoryConstant.DefaultScope {
+		if scopeFilter == constant.DefaultScope {
 			scopeFilter = ""
 		}
 	}
@@ -53,13 +53,13 @@ func (s *Server) GetRelations(
 			continue
 		}
 
-		if typeFilter == memoryConstant.UntypedFilter &&
+		if typeFilter == constant.UntypedFilter &&
 			relation.Type != "" {
 			continue
 		}
 
 		if typeFilter != "" &&
-			typeFilter != memoryConstant.UntypedFilter &&
+			typeFilter != constant.UntypedFilter &&
 			relation.Type != typeFilter {
 			continue
 		}

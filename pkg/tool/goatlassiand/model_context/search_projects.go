@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	generative "github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/convert"
@@ -15,13 +15,13 @@ func (s *Server) searchProjects(
 	_ context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	limit, f := r.RequireFloat(generative.ParameterLimit)
+	limit, f := r.RequireFloat(generativeConstant.ParameterLimit)
 
 	if f != nil {
 		return response.Fail("limit is required: %v", f)
 	}
 
-	query := r.GetString(generative.ParameterQuery, "")
+	query := r.GetString(generativeConstant.ParameterQuery, "")
 	includeDescriptions := r.GetBool(constant.IncludeDescriptions, false)
 	projects, h := s.jira.Projects()
 

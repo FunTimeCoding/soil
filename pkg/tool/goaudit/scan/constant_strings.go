@@ -1,7 +1,7 @@
 package scan
 
 import (
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/parse"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
@@ -19,7 +19,7 @@ func constantStrings(v *virtual_file_system.System) map[string]string {
 	}
 
 	for _, name := range v.MustReadDirectory(constant.ConstantDirectory) {
-		if !strings.HasSuffix(name, library.GoExtension) {
+		if !strings.HasSuffix(name, soil.GoExtension) {
 			continue
 		}
 

@@ -7,5 +7,6 @@ import (
 )
 
 func Relative(parts ...string) string {
-	return path.Join(slice.Trim(slice.StripEmpty(parts), constant.Slash)...)
+	return path.Join(
+		slice.Trim(slice.StripEmpty(parts), constant.Slash)...)
 }

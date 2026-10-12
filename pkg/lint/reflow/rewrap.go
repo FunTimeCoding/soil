@@ -29,7 +29,10 @@ func rewrap(
 		return nil
 	}
 
-	if strings.HasPrefix(string(source[first.Start:first.Stop]), constant.Pipe) {
+	if strings.HasPrefix(
+		string(source[first.Start:first.Stop]),
+		constant.Pipe,
+	) {
 		return nil
 	}
 

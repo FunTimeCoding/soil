@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"context"
-	generative "github.com/funtimecoding/soil/pkg/generative/constant"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/constant"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -12,7 +12,7 @@ func (s *Server) deleteChecklistItem(
 	c context.Context,
 	r mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	key, f := r.RequireString(generative.ParameterKey)
+	key, f := r.RequireString(generativeConstant.ParameterKey)
 
 	if f != nil {
 		return response.Fail("key is required: %v", f)

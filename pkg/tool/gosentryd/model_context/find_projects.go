@@ -11,7 +11,7 @@ func (s *Server) FindProjects(
 	_ mcp.CallToolRequest,
 	_ argument.FindProjects,
 ) (*mcp.CallToolResult, error) {
-	result, e := s.client.OrganizationProjects(s.organization)
+	result, e := s.service.Projects()
 
 	if e != nil {
 		return s.captureDetail(e)

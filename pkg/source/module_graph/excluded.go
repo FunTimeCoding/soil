@@ -1,8 +1,8 @@
 package module_graph
 
 import (
-	rootConstant "github.com/funtimecoding/soil/pkg/constant"
-	"github.com/funtimecoding/soil/pkg/go_mod/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
+	go_modConstant "github.com/funtimecoding/soil/pkg/go_mod/constant"
 	"github.com/funtimecoding/soil/pkg/system"
 	"path/filepath"
 	"strings"
@@ -20,7 +20,7 @@ func Excluded(
 
 	return name == "testdata" ||
 		name == "vendor" ||
-		strings.HasPrefix(name, rootConstant.CurrentDirectory) ||
+		strings.HasPrefix(name, soil.CurrentDirectory) ||
 		strings.HasPrefix(name, "_") ||
-		system.FileExists(filepath.Join(directory, constant.ModFile))
+		system.FileExists(filepath.Join(directory, go_modConstant.ModFile))
 }

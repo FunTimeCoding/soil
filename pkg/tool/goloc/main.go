@@ -3,7 +3,7 @@ package goloc
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter"
 	"github.com/funtimecoding/soil/pkg/measure"
 	"github.com/funtimecoding/soil/pkg/measure/option"
@@ -41,7 +41,7 @@ func Main() {
 	o.Paths = a.Positionals()
 
 	if len(o.Paths) == 0 {
-		o.Paths = []string{library.CurrentDirectory}
+		o.Paths = []string{soil.CurrentDirectory}
 	}
 
 	measure.Run(o)

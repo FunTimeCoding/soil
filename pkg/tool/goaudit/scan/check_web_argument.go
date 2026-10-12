@@ -1,7 +1,7 @@
 package scan
 
 import (
-	libraryConstant "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/parse"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/constant"
@@ -13,13 +13,13 @@ func (s *Service) checkWebArgument(
 	v *virtual_file_system.System,
 	path string,
 ) {
-	file := filepath.Join(path, libraryConstant.MainFile)
+	file := filepath.Join(path, soil.MainFile)
 
 	if !v.Has(file) {
 		return
 	}
 
-	f, _, e := parse.Source(libraryConstant.MainFile, v.ReadString(file))
+	f, _, e := parse.Source(soil.MainFile, v.ReadString(file))
 
 	if e != nil {
 		return

@@ -3,7 +3,7 @@ package jira
 import (
 	"github.com/funtimecoding/soil/pkg/atlassian/constant"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/basic/response"
-	web "github.com/funtimecoding/soil/pkg/web/constant"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 )
 
 func (c *Client) searchV3Page(
@@ -16,7 +16,7 @@ func (c *Client) searchV3Page(
 	b := c.basic.Base().Copy().Base(constant.JiraBase).Path(
 		constant.JiraSearch,
 	).Set(
-		web.ParameterFields,
+		webConstant.ParameterFields,
 		fields,
 	).SetInteger(constant.JiraMaximumResultsKey, maximumResults).Set(
 		constant.JiraNextPageTokenKey,

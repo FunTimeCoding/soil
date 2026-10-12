@@ -4,11 +4,11 @@ import (
 	"context"
 	"errors"
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	libraryErrors "github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/relational"
-	relationalConstant "github.com/funtimecoding/soil/pkg/relational/constant"
+	"github.com/funtimecoding/soil/pkg/relational/constant"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
 	"github.com/funtimecoding/soil/pkg/system"
@@ -19,22 +19,18 @@ import (
 )
 
 func TestConstant(t *testing.T) {
-	assert.String(
-		t,
-		"POSTGRES_LOCATOR",
-		relationalConstant.PostgresLocatorEnvironment,
-	)
-	assert.String(t, "psql", relationalConstant.PostgresCommand)
-	assert.String(t, "--username", relationalConstant.PostgresUserArgument)
-	assert.String(t, "--command", relationalConstant.PostgresCommandArgument)
-	assert.String(t, "--file", relationalConstant.PostgresFileArgument)
-	assert.String(t, "--echo-all", relationalConstant.PostgresEchoAllFlag)
-	assert.String(t, "pg_dump", relationalConstant.PostgresDumpCommand)
-	assert.String(t, "postgres", relationalConstant.PostgresDialectName)
+	assert.String(t, "POSTGRES_LOCATOR", constant.PostgresLocatorEnvironment)
+	assert.String(t, "psql", constant.PostgresCommand)
+	assert.String(t, "--username", constant.PostgresUserArgument)
+	assert.String(t, "--command", constant.PostgresCommandArgument)
+	assert.String(t, "--file", constant.PostgresFileArgument)
+	assert.String(t, "--echo-all", constant.PostgresEchoAllFlag)
+	assert.String(t, "pg_dump", constant.PostgresDumpCommand)
+	assert.String(t, "postgres", constant.PostgresDialectName)
 }
 
 func TestNewCreatesParentAndAppliesParameters(t *testing.T) {
-	p := filepath.Join(t.TempDir(), "nested", constant.TestDatabase)
+	p := filepath.Join(t.TempDir(), "nested", soil.TestDatabase)
 	d := connection.New(logger.New(context.Background()), p)
 	defer func() { libraryErrors.PanicOnError(d.Close()) }()
 	var enabled int
@@ -68,7 +64,7 @@ func TestNewMemoryIsolatesCalls(t *testing.T) {
 }
 
 func TestNewCreatesParentDirectory(t *testing.T) {
-	path := filepath.Join(t.TempDir(), "nested", constant.TestDatabase)
+	path := filepath.Join(t.TempDir(), "nested", soil.TestDatabase)
 	m := lite.New(logger.New(context.Background()), path)
 	defer closeMapper(m)
 	assert.True(t, system.FileExists(path))
