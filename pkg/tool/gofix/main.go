@@ -25,7 +25,7 @@ func Main() {
 	a.Boolean(
 		"realias",
 		false,
-		"Rewrite colliding import aliases to the convention instead of suggesting",
+		"Rewrite colliding import aliases to the convention and report every alias decision; without it the alias convention stays silent",
 	)
 	a.Boolean(
 		"full",

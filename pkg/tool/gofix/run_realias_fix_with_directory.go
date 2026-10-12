@@ -12,6 +12,6 @@ func RunRealiasFixWithDirectory(
 	r *output.Results,
 ) {
 	w := workspace.New(diff, directory)
-	aliasThrough(patterns, directory, true, w, r)
+	aliasThrough(patterns, directory, true, true, w, r)
 	finish(w, r)
 }

@@ -12,6 +12,7 @@ func findImportAliasSuggestions(
 	fileSet *token.FileSet,
 	all []*packages.Package,
 	realias bool,
+	report bool,
 	r *output.Results,
 ) ([]Edit, map[token.Pos]bool) {
 	var edits []Edit
@@ -40,7 +41,9 @@ func findImportAliasSuggestions(
 					handled[spec.Pos()] = true
 				}
 
-				reportDecision(d, filePath, realias, r)
+				if report {
+					reportDecision(d, filePath, realias, r)
+				}
 
 				if realias &&
 					d.Rule == constant.RuleConstant &&
