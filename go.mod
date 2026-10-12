@@ -60,10 +60,10 @@ require (
 	github.com/modelcontextprotocol/go-sdk v1.8.0
 	github.com/muesli/termenv v0.16.0
 	github.com/netbox-community/go-netbox/v4 v4.3.0
-	github.com/nwaples/rardecode/v2 v2.4.3
+	github.com/nwaples/rardecode/v2 v2.4.4
 	github.com/oapi-codegen/runtime v1.7.0
 	github.com/ollama/ollama v0.40.3
-	github.com/openai/openai-go/v3 v3.76.0
+	github.com/openai/openai-go/v3 v3.77.0
 	github.com/openbao/openbao/api/auth/kubernetes/v2 v2.7.0
 	github.com/openbao/openbao/api/v2 v2.7.1
 	github.com/openvex/go-vex v0.2.9
