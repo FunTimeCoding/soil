@@ -24,7 +24,7 @@ func (s *Server) Evaluate(
 
 	p := s.client.Page(t.Identifier)
 	var result any
-	e = p.Evaluate(a.Expression, &result)
+	e = p.EvaluatePromise(a.Expression, &result)
 
 	if e != nil {
 		return s.captureDetail(e)
