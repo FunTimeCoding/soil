@@ -27,6 +27,23 @@ func TestWalkSkippedTreeKnownNotRead(t *testing.T) {
 	assert.Strings(t, nil, empty)
 }
 
+func TestWalkStopsAtNestedModule(t *testing.T) {
+	root := t.TempDir()
+	testutil.WriteFile(t, root, "go.mod", "module alfa\n")
+	testutil.WriteFile(t, root, "doc/a.md", "# A\n")
+	testutil.WriteFile(t, root, "graft/bravo/go.mod", "module bravo\n")
+	testutil.WriteFile(t, root, "graft/bravo/doc/b.md", "# Bravo\n")
+	repo, _ := lint.Walk(root, option.New("", false))
+	assert.True(t, repo.Files.Has("doc/a.md"))
+	assert.Boolean(t, false, repo.Files.Has("graft/bravo/go.mod"))
+	assert.Boolean(t, false, repo.Files.Has("graft/bravo/doc/b.md"))
+	nested, _ := lint.Walk(
+		filepath.Join(root, "graft", "bravo"),
+		option.New("", false),
+	)
+	assert.True(t, nested.Files.Has("doc/b.md"))
+}
+
 func TestWalkEmptyDirectoriesOutsideSkips(t *testing.T) {
 	root := t.TempDir()
 	testutil.WriteFile(t, root, "doc/a.md", "# A\n")

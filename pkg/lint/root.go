@@ -15,9 +15,9 @@ func Root(flag string) (string, string) {
 		return root, root
 	}
 
-	root := git.FindDirectory()
+	repository := git.FindDirectory()
 
-	if root == "" {
+	if repository == "" {
 		system.Exitf(
 			1,
 			"no repository found above %s, pass --%s\n",
@@ -26,5 +26,5 @@ func Root(flag string) (string, string) {
 		)
 	}
 
-	return root, work
+	return system.ModuleRoot(work, repository), work
 }

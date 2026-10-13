@@ -3,6 +3,8 @@ package virtual_file_system
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
+	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
+	"github.com/funtimecoding/soil/pkg/system"
 	"os"
 	"path/filepath"
 	"strings"
@@ -22,7 +24,16 @@ func From(directory string) *System {
 					return e
 				}
 
-				if i.IsDir() || i.Mode()&os.ModeSymlink != 0 {
+				if i.IsDir() {
+					if path != directory && (i.Name() == gitConstant.Directory ||
+						system.NestedModule(directory, path)) {
+						return filepath.SkipDir
+					}
+
+					return nil
+				}
+
+				if i.Mode()&os.ModeSymlink != 0 {
 					return nil
 				}
 

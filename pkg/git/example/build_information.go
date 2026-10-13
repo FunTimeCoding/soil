@@ -11,7 +11,7 @@ import (
 
 func BuildInformation() {
 	p := system.WorkDirectory()
-	r := git.Open(p)
+	r := git.MustOpen(p)
 	h := git.Head(r).Hash()
 	console.Format("Short hash: %s\n", h.String()[:constant.HashLength])
 

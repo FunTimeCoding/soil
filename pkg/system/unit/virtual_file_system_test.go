@@ -127,3 +127,32 @@ func TestFromMetadata(t *testing.T) {
 	assert.True(t, f.Size == 5)
 	assert.Boolean(t, false, f.Loaded)
 }
+
+func TestFromStopsAtNestedModule(t *testing.T) {
+	v := virtual_file_system.New()
+	v.WriteString("go.mod", "module alfa\n")
+	v.WriteString("pkg/alfa/alfa.go", "package alfa\n")
+	v.WriteString(".git/HEAD", "ref: refs/heads/main\n")
+	v.WriteString("graft/bravo/go.mod", "module bravo\n")
+	v.WriteString("graft/bravo/pkg/bravo/bravo.go", "package bravo\n")
+	v.WriteString("graft/notes.md", "# Notes\n")
+	d := t.TempDir()
+	v.Flush(d)
+	back := virtual_file_system.From(d)
+	assert.Strings(
+		t,
+		[]string{"go.mod", "graft/notes.md", "pkg/alfa/alfa.go"},
+		back.Files(),
+	)
+}
+
+func TestFromNestedModuleAsRoot(t *testing.T) {
+	v := virtual_file_system.New()
+	v.WriteString("go.mod", "module alfa\n")
+	v.WriteString("graft/bravo/go.mod", "module bravo\n")
+	v.WriteString("graft/bravo/pkg/bravo/bravo.go", "package bravo\n")
+	d := t.TempDir()
+	v.Flush(d)
+	back := virtual_file_system.From(filepath.Join(d, "graft", "bravo"))
+	assert.Strings(t, []string{"go.mod", "pkg/bravo/bravo.go"}, back.Files())
+}

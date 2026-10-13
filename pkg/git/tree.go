@@ -6,7 +6,7 @@ import (
 )
 
 func Tree(path string) *git.Worktree {
-	t, e := Open(path).Worktree()
+	t, e := MustOpen(path).Worktree()
 	errors.PanicOnError(e)
 
 	return t

@@ -33,3 +33,20 @@ func TestRepositoryExistsIndependentOfWorkingDirectory(t *testing.T) {
 	assert.Strings(t, nil, repo.Siblings)
 	assert.Strings(t, nil, repo.ImplicitBases)
 }
+
+func TestRepositoryExistsIntoNestedModule(t *testing.T) {
+	root := t.TempDir()
+	testutil.WriteFile(t, root, "go.mod", "module alfa\n")
+	testutil.WriteFile(t, root, "graft/bravo/go.mod", "module bravo\n")
+	testutil.WriteFile(t, root, "graft/bravo/taskfile.yaml", "version: 3\n")
+	testutil.WriteFile(t, root, "graft/charlie.txt", "charlie\n")
+	repo, _ := lint.Walk(root, option.New("", false))
+	assert.Strings(t, []string{"graft/bravo"}, repo.NestedModules)
+	assert.Boolean(t, false, repo.Files.Has("graft/bravo/taskfile.yaml"))
+	assert.True(t, repo.Exists("graft/bravo"))
+	assert.True(t, repo.Exists("graft/bravo/go.mod"))
+	assert.True(t, repo.Exists("graft/bravo/taskfile.yaml"))
+	assert.Boolean(t, false, repo.Exists("graft/bravo/ghost.yaml"))
+	assert.Boolean(t, false, repo.Exists("graft/bravoghost.txt"))
+	assert.True(t, repo.Exists("graft/charlie.txt"))
+}

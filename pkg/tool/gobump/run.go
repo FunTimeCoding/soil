@@ -14,6 +14,14 @@ import (
 func Run(o *option.Bump) {
 	d := system.WorkDirectory()
 
+	if r := git.FindDirectory(); r != "" && system.ModuleRoot(d, r) != r {
+		system.Exitf(
+			1,
+			"%s is a nested module, its version line is not supported yet\n",
+			system.ModuleRoot(d, r),
+		)
+	}
+
 	if !git.IsCleanCommand() {
 		s := git.Status(d)
 

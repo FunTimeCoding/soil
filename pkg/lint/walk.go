@@ -22,6 +22,7 @@ func Walk(
 ) (*repository.Repository, []string) {
 	v := virtual_file_system.New()
 	var empty []string
+	var nested []string
 	errors.PanicOnError(
 		filepath.WalkDir(
 			root,
@@ -44,6 +45,12 @@ func Walk(
 
 				if d.IsDir() {
 					if d.Name() == gitConstant.Directory {
+						return filepath.SkipDir
+					}
+
+					if system.NestedModule(root, p) {
+						nested = append(nested, relative)
+
 						return filepath.SkipDir
 					}
 
@@ -82,6 +89,8 @@ func Walk(
 			},
 		),
 	)
+	result := repository.New(root, v)
+	result.NestedModules = nested
 
-	return repository.New(root, v), empty
+	return result, empty
 }

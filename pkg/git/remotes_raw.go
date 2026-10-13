@@ -6,7 +6,7 @@ import (
 )
 
 func RemotesRaw(path string) []*git.Remote {
-	result, e := Open(path).Remotes()
+	result, e := MustOpen(path).Remotes()
 	errors.FatalOnError(e)
 
 	return result

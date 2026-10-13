@@ -15,7 +15,7 @@ func TestCommitTimes(t *testing.T) {
 	assert.True(t, modified.After(time.Unix(0, 0)))
 }
 
-func TestUncommittedFiles(t *testing.T) {
-	_, e := git.UncommittedFiles(git.FindDirectory())
+func TestModifiedFiles(t *testing.T) {
+	_, e := git.ModifiedFiles(git.FindDirectory())
 	assert.FatalOnError(t, e)
 }

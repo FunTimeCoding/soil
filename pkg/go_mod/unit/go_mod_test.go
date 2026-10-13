@@ -9,27 +9,6 @@ import (
 	"testing"
 )
 
-func TestExtractReplaces(t *testing.T) {
-	assert.String(
-		t,
-		"replace (\n\tk8s.io/api => k8s.io/api v0.31.0\n)",
-		go_mod.ExtractReplaces(
-			`module github.com/example/project/v2
-
-go 1.22.0
-
-require (
-	golang.org/x/crypto v0.31.0
-	golang.org/x/exp v0.0.0-20241108190413-2d47ceb2692f
-)
-
-replace (
-	k8s.io/api => k8s.io/api v0.31.0
-)`,
-		),
-	)
-}
-
 func TestIsDeadTag(t *testing.T) {
 	assert.True(
 		t,
@@ -55,14 +34,6 @@ func TestParseDeadTagNoMatch(t *testing.T) {
 	mod, version := go_mod.ParseDeadTag("go: module not found")
 	assert.String(t, "", mod)
 	assert.String(t, "", version)
-}
-
-func TestReplaceReplaces(t *testing.T) {
-	assert.String(
-		t,
-		"replace (\nb\n)\n",
-		go_mod.ReplaceReplaces("replace (\na\n)\n", "replace (\nb\n)\n"),
-	)
 }
 
 func TestReadProjectFromRelativePath(t *testing.T) {

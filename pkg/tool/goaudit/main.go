@@ -35,7 +35,7 @@ func Main() {
 			)
 		}
 
-		roots = []string{root}
+		roots = []string{system.ModuleRoot(system.WorkDirectory(), root)}
 	}
 
 	for i, root := range roots {

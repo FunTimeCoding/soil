@@ -7,7 +7,11 @@ func (r *Repository) Exists(path string) bool {
 		return false
 	}
 
-	return r.Files.Has(path) ||
+	if r.Files.Has(path) ||
 		r.Files.DirectoryExists(path) ||
-		system.DirectoryExists(r.Absolute(path))
+		system.DirectoryExists(r.Absolute(path)) {
+		return true
+	}
+
+	return r.inNestedModule(path) && system.FileExists(r.Absolute(path))
 }

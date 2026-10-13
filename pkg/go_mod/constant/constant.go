@@ -9,6 +9,9 @@ const (
 	ModFile = "go.mod"
 	SumFile = "go.sum"
 
+	ReplaceKeyword = "replace"
+	ManagedMarker  = "// managed by replace"
+
 	RuntimeOld    = "runtime_old"
 	RuntimeNewer  = "runtime_newer"
 	PanicOccurred = "panic_occurred"

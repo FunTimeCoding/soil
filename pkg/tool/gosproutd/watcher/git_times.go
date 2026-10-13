@@ -12,7 +12,7 @@ func (w *Watcher) gitTimes() (map[string]time.Time, map[string]bool) {
 		return nil, nil
 	}
 
-	uncommitted, f := git.UncommittedFiles(w.seedDirectory)
+	uncommitted, f := git.ModifiedFiles(w.seedDirectory)
 
 	if f != nil {
 		return nil, nil

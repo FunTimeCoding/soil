@@ -11,6 +11,7 @@ type Repository struct {
 	Modules       []string
 	Siblings      []string
 	ImplicitBases []string
+	NestedModules []string
 	contents      map[string][]string
 	routes        map[string][]string
 	headings      map[string][]*heading.Heading

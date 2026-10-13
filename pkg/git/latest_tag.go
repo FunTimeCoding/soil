@@ -7,7 +7,7 @@ import (
 )
 
 func LatestTag(path string) string {
-	r := Open(path)
+	r := MustOpen(path)
 	var result string
 	var latest time.Time
 	errors.PanicOnError(

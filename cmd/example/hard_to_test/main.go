@@ -55,7 +55,7 @@ func main() {
 	push.Send(nil)
 	relational.NewEnvironment()
 	gitlab.NewGitLabCom("")
-	git.ModifiedFiles("")
+	git.MustModifiedFiles("")
 	secure_shell.Listen(nil, "")
 	client.MustNewContext("")
 	client.NewInCluster("")

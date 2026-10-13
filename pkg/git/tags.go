@@ -7,7 +7,7 @@ import (
 
 func Tags(path string) []string {
 	var result []string
-	tags, e := Open(path).Tags()
+	tags, e := MustOpen(path).Tags()
 	errors.PanicOnError(e)
 	defer tags.Close()
 	errors.PanicOnError(
