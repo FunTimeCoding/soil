@@ -93,13 +93,14 @@ func TestCreateCableResolvesBothEnds(t *testing.T) {
 	c := mock_client.New()
 	c.SeedInterface(c.SeedDevice("core"), "eno1")
 	c.SeedInterface(c.SeedDevice("edge"), "eno2")
-	_, e := service_tester.Service(t, c).CreateCable(
+	created, e := service_tester.Service(t, c).CreateCable(
 		"core",
 		"eno1",
 		"edge",
 		"eno2",
 	)
 	assert.FatalOnError(t, e)
+	assert.NotNil(t, created)
 	assert.Strings(t, []string{"CreateCable eno1 eno2"}, c.Calls())
 }
 

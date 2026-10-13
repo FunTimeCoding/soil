@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/gowait/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gowait/wait/option"
+	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"io"
 	"net/http"
 	"strings"
@@ -20,7 +21,9 @@ func Locator(o *option.Wait) {
 
 	x, cancel := context.WithTimeout(context.Background(), o.Timeout)
 	defer cancel()
-	c := &http.Client{Timeout: 10 * time.Second}
+	p := stall_client.New().Timeout(10 * time.Second).Build()
+	defer p.Close()
+	c := p.Client()
 	attempt := 0
 
 	for {

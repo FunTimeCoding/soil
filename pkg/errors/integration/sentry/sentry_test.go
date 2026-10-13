@@ -13,6 +13,7 @@ import (
 
 func TestWhoamiAndOrganizationsRead(t *testing.T) {
 	c := sentry.NewEnvironment()
+	defer c.Close()
 	u, e := c.Whoami()
 	assert.FatalOnError(t, e)
 	assert.True(t, u.Identifier != "")

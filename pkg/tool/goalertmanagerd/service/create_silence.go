@@ -8,7 +8,7 @@ func (s *Service) CreateSilence(
 	comment string,
 	d time.Duration,
 ) (string, error) {
-	c, e := s.Client(instance)
+	c, e := s.pool.Client(instance)
 
 	if e != nil {
 		return "", e

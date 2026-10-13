@@ -40,22 +40,20 @@ func TestLoadRootBeatsTool(t *testing.T) {
 }
 
 func TestLoadMissingPanics(t *testing.T) {
-	defer func() { assert.NotNil(t, recover()) }()
-	configuration.Load(t.TempDir())
+	root := t.TempDir()
+	assert.Panic(t, func() { configuration.Load(root) })
 }
 
 func TestLoadUnknownHookPanics(t *testing.T) {
 	root := t.TempDir()
 	write(root, constant.RootFile, "pre-psuh:\n  - run: x\n")
-	defer func() { assert.NotNil(t, recover()) }()
-	configuration.Load(root)
+	assert.Panic(t, func() { configuration.Load(root) })
 }
 
 func TestLoadMissingRunPanics(t *testing.T) {
 	root := t.TempDir()
 	write(root, constant.RootFile, "pre-push:\n  - paths: [a/]\n")
-	defer func() { assert.NotNil(t, recover()) }()
-	configuration.Load(root)
+	assert.Panic(t, func() { configuration.Load(root) })
 }
 
 func TestHookNamesSorted(t *testing.T) {

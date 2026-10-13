@@ -10,7 +10,7 @@ func (s *Service) Alerts(
 	instance string,
 	f *alert_filter.Filter,
 ) ([]*alert.Alert, *statistic.Statistic, error) {
-	c, e := s.Client(instance)
+	c, e := s.pool.Client(instance)
 
 	if e != nil {
 		return nil, nil, e

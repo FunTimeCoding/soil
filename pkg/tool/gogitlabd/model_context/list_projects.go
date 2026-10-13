@@ -8,11 +8,17 @@ import (
 )
 
 func (s *Server) ListProjects(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.ListProjects,
 ) (*mcp.CallToolResult, error) {
-	v, e := s.service.Projects(a.Search)
+	instance, e := s.resolveInstance(x)
+
+	if e != nil {
+		return s.captureDetail(e)
+	}
+
+	v, e := s.service.Projects(instance, a.Search)
 
 	if e != nil {
 		return s.captureDetail(e)

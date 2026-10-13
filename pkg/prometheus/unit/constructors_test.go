@@ -15,7 +15,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/prometheus/push"
 	"github.com/funtimecoding/soil/pkg/prometheus/query/filter"
 	"github.com/funtimecoding/soil/pkg/prometheus/result/metric"
-	"github.com/funtimecoding/soil/pkg/prometheus/round_tripper"
 	"github.com/funtimecoding/soil/pkg/prometheus/rule/rule_list"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
@@ -78,6 +77,5 @@ func TestConstructors(t *testing.T) {
 	)
 	assert.NotNil(t, filter.New())
 	assert.NotNil(t, metric.New(stringsConstant.UpperAlfa))
-	assert.NotNil(t, round_tripper.New("", ""))
 	assert.NotNil(t, rule_list.New())
 }

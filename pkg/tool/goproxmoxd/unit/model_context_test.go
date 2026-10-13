@@ -7,6 +7,15 @@ import (
 	"testing"
 )
 
+func TestInstructionsOmitInstancesWithOne(t *testing.T) {
+	o := model_context_tester.New(t)
+	assert.StringNotContains(
+		t,
+		"use_instance",
+		o.Client.InitializeResult().Instructions,
+	)
+}
+
 func TestListNodes(t *testing.T) {
 	o := model_context_tester.New(t)
 	result := o.Client.MustCallTool(constant.ListNodes, nil)

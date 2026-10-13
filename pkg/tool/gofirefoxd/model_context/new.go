@@ -9,13 +9,15 @@ import (
 
 func New(
 	c firefox.FirefoxSource,
+	downloadDirectory string,
 	r face.Reporter,
 	t face.Recorder,
 ) *Server {
 	result := &Server{
-		server:   server.New(constant.Identity).WithRecorder(t).Server(),
-		client:   c,
-		reporter: r,
+		server:            server.New(constant.Identity).WithRecorder(t).Server(),
+		client:            c,
+		downloadDirectory: downloadDirectory,
+		reporter:          r,
 	}
 	result.register()
 

@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) CreateBranch(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.CreateBranch,
 ) (*mcp.CallToolResult, error) {
@@ -24,13 +24,13 @@ func (s *Server) CreateBranch(
 		return response.Fail("reference is required")
 	}
 
-	project, e := s.resolveProject(a.Project)
+	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
 		return s.captureDetail(e)
 	}
 
-	v, e := s.service.CreateBranch(project, a.Branch, a.Reference)
+	v, e := s.service.CreateBranch(instance, project, a.Branch, a.Reference)
 
 	if e != nil {
 		return s.captureDetail(e)

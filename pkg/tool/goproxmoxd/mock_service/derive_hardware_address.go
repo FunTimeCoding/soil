@@ -6,7 +6,7 @@ func (s *Service) DeriveHardwareAddress(
 	instance string,
 	identifier int,
 ) (string, *int, error) {
-	address, e := network_device.Derive(s.inventory.Index(instance), identifier)
+	address, e := network_device.Derive(s.index(instance), identifier)
 
 	if e != nil {
 		return "", nil, e

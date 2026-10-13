@@ -9,6 +9,7 @@ import (
 
 func CleanJob() {
 	c := github.NewEnvironment()
+	defer c.Close()
 	f := consoleConstant.ExtendedColorFormat.Copy()
 	owner := constant.Namespace
 	repository := constant.Repository

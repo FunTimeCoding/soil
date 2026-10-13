@@ -8,6 +8,7 @@ import (
 
 func Packages() {
 	c := github.NewEnvironment()
+	defer c.Close()
 	f := constant.Format
 
 	for _, p := range c.MustPackages(constant.Namespace) {

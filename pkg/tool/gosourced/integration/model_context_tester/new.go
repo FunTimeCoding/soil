@@ -1,7 +1,6 @@
 package model_context_tester
 
 import (
-	"github.com/funtimecoding/soil/pkg/generative/model_context_client"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/unit/base"
 	"testing"
 )
@@ -16,7 +15,7 @@ func New(
 	return &Tester{
 		t:         t,
 		server:    s,
-		Client:    model_context_client.New(t, s.Port),
+		Client:    s.Connect(t),
 		Directory: s.Directory,
 	}
 }

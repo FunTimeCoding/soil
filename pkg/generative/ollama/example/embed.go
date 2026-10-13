@@ -8,6 +8,7 @@ import (
 
 func Embed() {
 	o := ollama.NewEnvironment()
+	defer o.Close()
 
 	for _, e := range o.MustEmbedding(
 		constant.Llama31,

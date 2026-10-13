@@ -9,11 +9,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/generated/client"
 	"github.com/spf13/cobra"
 	"io"
+	"net/http"
 	"os"
 	"strings"
 )
 
-func putCommand(t *terminal.Terminal) *cobra.Command {
+func putCommand(
+	t *terminal.Terminal,
+	h *http.Client,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   constant.PutUsage,
 		Short: "Set one key from standard input, merged into the secret",
@@ -25,7 +29,7 @@ func putCommand(t *terminal.Terminal) *cobra.Command {
 		) {
 			b, e := io.ReadAll(os.Stdin)
 			errors.PanicOnError(e)
-			r, f := interfaceClient(t).PutSecretWithResponse(
+			r, f := interfaceClient(t, h).PutSecretWithResponse(
 				context.Background(),
 				&client.PutSecretParams{Path: arguments[0]},
 				client.PutSecretJSONRequestBody{

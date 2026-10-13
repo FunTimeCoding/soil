@@ -7,5 +7,5 @@ func (s *Server) resolveInstance(instance *string) (string, error) {
 		name = *instance
 	}
 
-	return s.service.ResolveInstance(name)
+	return s.service.Inventory().ResolveInstance(name)
 }

@@ -29,6 +29,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/indexer"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
+	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"net/http"
 	"path/filepath"
 	"time"
@@ -45,8 +46,10 @@ func Run(
 	s := store.New(lite.New(l, o.LitePath), universal)
 	h := claude.New().Base()
 	sweep.Run(h)
-	memoryClient := memory.Wait(l)
-	queryClient := connect.Wait(l)
+	p := stall_client.New().Build()
+	defer p.Close()
+	memoryClient := memory.Wait(l, p.Client())
+	queryClient := connect.Wait(l, p.Client())
 	summaryIdx := indexer.New(queryClient, constant.SummarySourceType)
 	completionIdx := indexer.New(queryClient, constant.CompletionSourceType)
 	x := search_index.New(
@@ -68,6 +71,7 @@ func Run(
 		universal,
 		l,
 	)
+	defer v.Close()
 	v.ClearBindings()
 	v.ReconcileSummaries()
 	v.ReconcileCompletions()

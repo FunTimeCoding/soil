@@ -2,6 +2,7 @@ package proxmox
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/web/stall_client/pool"
 	"github.com/luthermonson/go-proxmox"
 	"time"
 )
@@ -18,4 +19,5 @@ type Client struct {
 	verbose   bool
 	port      int
 	timeout   time.Duration
+	pool      *pool.Pool
 }

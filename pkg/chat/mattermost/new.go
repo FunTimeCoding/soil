@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/chat/constant"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/user_map"
 	"github.com/funtimecoding/soil/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"github.com/mattermost/mattermost/server/public/model"
 )
 
@@ -36,7 +37,15 @@ func New(o ...Option) *Client {
 		l.Insecure()
 	}
 
+	b := stall_client.New()
+
+	if result.verbose {
+		b.Verbose()
+	}
+
+	result.pool = b.Build()
 	result.client = model.NewAPIv4Client(l.String())
+	result.client.HTTPClient = result.pool.Client()
 	result.client.SetOAuthToken(result.token)
 
 	if result.teamName != "" {

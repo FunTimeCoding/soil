@@ -10,7 +10,7 @@ import (
 
 func TestModelContext(t *testing.T) {
 	o := model_context_tester.New(t)
-	assert.Count(t, 9, o.Client.ListTools())
+	assert.Count(t, 16, o.Client.ListTools())
 	b := tab.New()
 	b.Identifier = 100
 	b.Locator = "https://example.com"
@@ -77,6 +77,63 @@ func TestModelContext(t *testing.T) {
 			constant.UngroupTab,
 			map[string]any{"tab_id": 100},
 		),
+	)
+	assert.StringContains(
+		t,
+		"tab_id",
+		o.Client.MustCallTool(
+			constant.WaitFor,
+			map[string]any{"tab_id": 100, "selector": "#results"},
+		),
+	)
+	assert.StringContains(
+		t,
+		"document.title",
+		o.Client.MustCallTool(
+			constant.Evaluate,
+			map[string]any{"tab_id": 100, "expression": "document.title"},
+		),
+	)
+	assert.StringContains(
+		t,
+		"#submit",
+		o.Client.MustCallTool(
+			constant.Click,
+			map[string]any{"tab_id": 100, "selector": "#submit"},
+		),
+	)
+	assert.StringContains(
+		t,
+		"operator",
+		o.Client.MustCallTool(
+			constant.Fill,
+			map[string]any{
+				"tab_id":   100,
+				"selector": "#user",
+				"value":    "operator",
+			},
+		),
+	)
+	assert.StringContains(
+		t,
+		"firefox_100.png",
+		o.Client.MustCallTool(
+			constant.Screenshot,
+			map[string]any{"tab_id": 100},
+		),
+	)
+	assert.StringContains(
+		t,
+		"download_id",
+		o.Client.MustCallTool(
+			constant.DownloadFile,
+			map[string]any{"url": "https://example.com/paper.pdf"},
+		),
+	)
+	assert.StringContains(
+		t,
+		"in_progress",
+		o.Client.MustCallTool(constant.DownloadStatus, map[string]any{}),
 	)
 	assert.StringContains(
 		t,

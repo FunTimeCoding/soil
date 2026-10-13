@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) GetMergeRequestDiffs(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.GetMergeRequestDiffs,
 ) (*mcp.CallToolResult, error) {
@@ -20,13 +20,13 @@ func (s *Server) GetMergeRequestDiffs(
 		return response.Fail("merge_request is required")
 	}
 
-	project, e := s.resolveProject(a.Project)
+	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
 		return s.captureDetail(e)
 	}
 
-	v, e := s.service.MergeRequestDiffs(project, a.MergeRequest)
+	v, e := s.service.MergeRequestDiffs(instance, project, a.MergeRequest)
 
 	if e != nil {
 		return s.captureDetail(e)

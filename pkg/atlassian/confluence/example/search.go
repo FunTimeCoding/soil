@@ -8,6 +8,7 @@ import (
 
 func Search() {
 	c := confluence.NewEnvironment()
+	defer c.Close()
 	f := constant.ConfluenceDense
 
 	if true {

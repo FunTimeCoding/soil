@@ -26,13 +26,13 @@ func CheckRestrictions(
 			ast.Inspect(
 				file,
 				func(n ast.Node) bool {
-					call, okay := n.(*ast.CallExpr)
+					sel, okay := n.(*ast.SelectorExpr)
 
 					if !okay {
 						return true
 					}
 
-					checkCall(p, results, call, rule)
+					checkSelector(p, results, sel, rule)
 
 					return true
 				},

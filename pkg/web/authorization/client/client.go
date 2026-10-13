@@ -5,6 +5,7 @@ import (
 	"github.com/coreos/go-oidc/v3/oidc"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/web/requester"
+	"github.com/funtimecoding/soil/pkg/web/stall_client/pool"
 	"sync"
 )
 
@@ -20,4 +21,5 @@ type Client struct {
 	provider        *oidc.Provider
 	verifier        *oidc.IDTokenVerifier
 	providerMutex   sync.Mutex
+	pool            *pool.Pool
 }

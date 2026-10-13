@@ -10,9 +10,11 @@ func Support() {
 	user1 := common.Mattermost(
 		mattermost.WithToken(environment.Required("MATTERMOST_TOKEN_USER1")),
 	)
+	defer user1.Close()
 	user2 := common.Mattermost(
 		mattermost.WithToken(environment.Required("MATTERMOST_TOKEN_USER2")),
 	)
+	defer user2.Close()
 	h := user1.DefaultChannel()
 	t := user1.MustPostSimple(
 		h,

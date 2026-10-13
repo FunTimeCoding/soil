@@ -8,6 +8,7 @@ import (
 
 func Read() {
 	h := hetzner.NewEnvironment()
+	defer h.Close()
 
 	for _, z := range h.Zones() {
 		console.Format(

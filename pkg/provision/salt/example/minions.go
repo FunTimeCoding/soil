@@ -7,6 +7,7 @@ import (
 
 func Minions() {
 	c := salt.NewEnvironment()
+	defer c.Close()
 	result, e := c.Minions()
 
 	if e != nil {

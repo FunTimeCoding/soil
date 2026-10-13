@@ -74,9 +74,8 @@ func TestRefusalCanBeReadBySite(t *testing.T) {
 
 func TestTransportFailureHidesTheKey(t *testing.T) {
 	s, _ := newScriptedServer(t, "", http.StatusOK)
-	r := newRequester(t, s.URL).WithAuthorizer(
-		query.New(url.Values{"api_key": {"secret"}}),
-	)
+	r := newRequester(t, s.URL)
+	r.WithAuthorizer(query.New(url.Values{"api_key": {"secret"}}))
 	s.Close()
 	_, e := r.Bytes(request.Get("/items"))
 	assert.True(t, unreachable.Is(e))

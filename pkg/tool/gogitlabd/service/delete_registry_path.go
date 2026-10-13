@@ -6,13 +6,20 @@ import (
 )
 
 func (s *Service) DeleteRegistryPath(
+	instance string,
 	project int64,
 	path string,
 ) ([]string, error) {
-	list, e := s.client.RegistryRepositories(project, false)
+	c, e := s.pool.Client(instance)
 
 	if e != nil {
 		return nil, e
+	}
+
+	list, f := c.RegistryRepositories(project, false)
+
+	if f != nil {
+		return nil, f
 	}
 
 	var deleted []string
@@ -23,11 +30,11 @@ func (s *Service) DeleteRegistryPath(
 				continue
 			}
 
-			if f := s.client.DeleteRegistryRepository(
+			if g := c.DeleteRegistryRepository(
 				project,
 				repository.Identifier,
-			); f != nil {
-				return deleted, f
+			); g != nil {
+				return deleted, g
 			}
 
 			deleted = append(deleted, target)

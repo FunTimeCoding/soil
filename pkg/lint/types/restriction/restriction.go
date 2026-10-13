@@ -2,7 +2,7 @@ package restriction
 
 type Restriction struct {
 	Package   string
-	Function  string
+	Symbol    string
 	AllowedIn []string
 	Message   string
 }

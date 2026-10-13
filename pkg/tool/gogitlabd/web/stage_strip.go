@@ -8,6 +8,7 @@ import (
 )
 
 func stageStrip(
+	instance string,
 	project int64,
 	pipeline int64,
 	jobs []*job.Job,
@@ -43,7 +44,9 @@ func stageStrip(
 				chips,
 				html.A(
 					html.Class(class),
-					extended.Get(detailLink(project, pipeline, j.Identifier)),
+					extended.Get(
+						detailLink(instance, project, pipeline, j.Identifier),
+					),
 					extended.Target("#pipeline-detail"),
 					extended.Swap("outerHTML"),
 					html.Img(

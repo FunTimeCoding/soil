@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) CreatePipeline(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.CreatePipeline,
 ) (*mcp.CallToolResult, error) {
@@ -21,7 +21,7 @@ func (s *Server) CreatePipeline(
 		return response.Fail("reference is required")
 	}
 
-	project, e := s.resolveProject(a.Project)
+	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
 		return s.captureDetail(e)
@@ -35,7 +35,7 @@ func (s *Server) CreatePipeline(
 		vars = append(vars, &gitlab.PipelineVariableOptions{Key: &k, Value: &l})
 	}
 
-	v, e := s.service.CreatePipeline(project, a.Reference, vars)
+	v, e := s.service.CreatePipeline(instance, project, a.Reference, vars)
 
 	if e != nil {
 		return s.captureDetail(e)

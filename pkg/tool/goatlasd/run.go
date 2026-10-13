@@ -18,6 +18,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/worker"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
+	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"net/http"
 )
 
@@ -30,7 +31,9 @@ func Run(
 	m := relational.Open(l, o.PostgresLocator, o.LitePath)
 	migrate.AutoMigrate(m)
 	s := store.New(m)
-	n := netbox.NewEnvironment()
+	p := stall_client.New().Build()
+	defer p.Close()
+	n := netbox.NewEnvironment(p.Client())
 	e := metric.New()
 	u := web.New(s, authorizationClient(o).WithReporter(r))
 	lifecycle.New(
@@ -38,8 +41,8 @@ func Run(
 		lifecycle.WithWorker(
 			worker.New(
 				s,
-				collectors(n, l),
-				lease.NewOptional(),
+				collectors(n, l, p.Client()),
+				lease.NewOptional(p.Client()),
 				n,
 				o.Interval,
 				o.Retention,

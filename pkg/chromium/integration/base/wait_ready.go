@@ -10,6 +10,7 @@ import (
 
 func waitReady(
 	t *testing.T,
+	c *http.Client,
 	port int,
 ) {
 	t.Helper()
@@ -17,7 +18,7 @@ func waitReady(
 	deadline := time.Now().Add(20 * time.Second)
 
 	for time.Now().Before(deadline) {
-		response, e := http.Get(locator)
+		response, e := c.Get(locator)
 
 		if e == nil {
 			errors.LogClose(response.Body)

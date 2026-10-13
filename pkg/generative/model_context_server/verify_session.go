@@ -14,13 +14,13 @@ func (s *Server) VerifySession(
 	path string,
 ) {
 	t.Helper()
-	bare, e := web.HaltingClient().Do(web.NewGet(s.address(path)))
+	bare, e := s.pool.Halting().Do(web.NewGet(s.Address(path)))
 	assert.FatalOnError(t, e)
 	errors.PanicClose(bare.Body)
 	assert.Integer(t, http.StatusFound, bare.StatusCode)
-	q := web.NewGet(s.address(path))
+	q := web.NewGet(s.Address(path))
 	web.Bearer(q, constant.ModelContextTestToken)
-	r, f := web.HaltingClient().Do(q)
+	r, f := s.pool.Halting().Do(q)
 	assert.FatalOnError(t, f)
 	defer errors.PanicClose(r.Body)
 	assert.Integer(t, http.StatusOK, r.StatusCode)

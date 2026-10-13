@@ -10,6 +10,7 @@ import (
 
 func showIssue(shortIdentifier string) {
 	c := sentry.NewEnvironment()
+	defer c.Close()
 	o := environment.Required(errorsConstant.OrganizationEnvironment)
 	i := c.MustIssueByShortIdentifier(o, shortIdentifier)
 

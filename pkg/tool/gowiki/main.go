@@ -24,6 +24,7 @@ func Main() {
 	a.Boolean(argumentConstant.Favorites, false, "Favorites")
 	a.Parse()
 	c := confluence.NewEnvironment()
+	defer c.Close()
 	f := atlassianConstant.ConfluenceFormat.Copy()
 
 	if a.GetBoolean(argumentConstant.Copyable) {

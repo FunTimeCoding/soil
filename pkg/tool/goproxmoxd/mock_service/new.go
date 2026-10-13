@@ -1,8 +1,10 @@
 package mock_service
 
 import (
+	"github.com/funtimecoding/soil/pkg/inventory"
+	"github.com/funtimecoding/soil/pkg/inventory/selection"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/inventory"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/instance"
 )
 
 func New(
@@ -11,9 +13,11 @@ func New(
 	snippetClient face.SnippetClient,
 ) *Service {
 	return &Service{
-		inventory:      inventory.NewSingle(instanceName),
-		proxmoxClient:  proxmoxClient,
-		snippetClient:  snippetClient,
-		activeInstance: make(map[string]string),
+		inventory: inventory.New[instance.Instance](
+			instance.Instance{Name: instanceName, Host: "mock"},
+		),
+		selection:     selection.New(),
+		proxmoxClient: proxmoxClient,
+		snippetClient: snippetClient,
 	}
 }

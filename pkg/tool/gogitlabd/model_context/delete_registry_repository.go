@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) DeleteRegistryRepository(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.DeleteRegistryRepository,
 ) (*mcp.CallToolResult, error) {
@@ -21,13 +21,13 @@ func (s *Server) DeleteRegistryRepository(
 		return response.Fail("path is required")
 	}
 
-	project, e := s.resolveProject(a.Project)
+	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
 		return s.captureDetail(e)
 	}
 
-	deleted, e := s.service.DeleteRegistryPath(project, a.Path)
+	deleted, e := s.service.DeleteRegistryPath(instance, project, a.Path)
 
 	if not_found.Is(e) {
 		return response.Fail("no registry repository matches %s", a.Path)

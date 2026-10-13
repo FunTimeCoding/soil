@@ -9,6 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/service_client"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/web/stall_client"
 )
 
 func New(
@@ -20,14 +21,17 @@ func New(
 	errors.FatalOnEmpty(host, "host")
 	errors.FatalOnEmpty(user, "user")
 	errors.FatalOnEmpty(token, "token")
+	p := stall_client.New().Build()
 	result := &Client{
 		context: context.Background(),
 		client: client.New(
 			jira.BasicAuthTransport{Username: user, Password: token},
 			host,
+			p.Client().Transport,
 		),
 		basic:   basic.New(locator.New(host), user, token),
-		service: service_client.New(host, user, token),
+		service: service_client.New(host, user, token, p.Client()),
+		pool:    p,
 		locator: locator.New(host).String(),
 		user:    user,
 	}

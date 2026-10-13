@@ -9,7 +9,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
 	"io"
-	"net/http"
 	"testing"
 )
 
@@ -22,8 +21,8 @@ func TestDeleteHashRendersOnDetailPage(t *testing.T) {
 		map[string]any{"turn_count": 4, "lines": 20},
 	)
 	hash := s.Service.DeleteHash(identifier)
-	response, e := http.Get(
-		fmt.Sprintf("http://localhost:%d/sessions/%s", s.Port, identifier),
+	response, e := s.Server.Client().Get(
+		s.Address(fmt.Sprintf("/sessions/%s", identifier)),
 	)
 	assert.FatalOnError(t, e)
 

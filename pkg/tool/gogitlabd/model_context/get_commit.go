@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) GetCommit(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.GetCommit,
 ) (*mcp.CallToolResult, error) {
@@ -20,13 +20,13 @@ func (s *Server) GetCommit(
 		return response.Fail("sha is required")
 	}
 
-	project, e := s.resolveProject(a.Project)
+	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
 		return s.captureDetail(e)
 	}
 
-	v, e := s.service.ReadCommit(project, a.Sha)
+	v, e := s.service.ReadCommit(instance, project, a.Sha)
 
 	if e != nil {
 		return s.captureDetail(e)

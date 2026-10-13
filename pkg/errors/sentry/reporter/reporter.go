@@ -1,10 +1,14 @@
 package reporter
 
-import "github.com/getsentry/sentry-go"
+import (
+	"github.com/funtimecoding/soil/pkg/web/stall_client/pool"
+	"github.com/getsentry/sentry-go"
+)
 
 type Reporter struct {
 	hub     *sentry.Hub
 	project string
 	locator string
 	version string
+	pool    *pool.Pool
 }

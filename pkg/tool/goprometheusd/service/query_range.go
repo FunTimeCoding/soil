@@ -10,7 +10,7 @@ func (s *Service) QueryRange(
 	query string,
 	r v1.Range,
 ) (*query_result.Result, error) {
-	c, e := s.Client(instance)
+	c, e := s.pool.Client(instance)
 
 	if e != nil {
 		return nil, e

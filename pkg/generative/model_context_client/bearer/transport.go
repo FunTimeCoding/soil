@@ -1,3 +1,7 @@
 package bearer
 
-type Transport struct{}
+import "net/http"
+
+type Transport struct {
+	Base http.RoundTripper
+}

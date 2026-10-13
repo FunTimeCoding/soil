@@ -26,7 +26,7 @@ func (s *Server) board(
 		summary(entries),
 		html.Div(
 			extended.StreamSwap(constant.RequestEvent),
-			requestSection(s.worker.Requests()),
+			s.requestSection(s.worker.Requests()),
 		),
 		html.H3(gomponents.Text(constant.BoardTitle)),
 		html.Div(

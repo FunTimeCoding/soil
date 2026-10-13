@@ -41,6 +41,7 @@ func TestGetPathUsesTheOldBase(t *testing.T) {
 func TestNextFollowsTheCursorWithCredentials(t *testing.T) {
 	s, last := upstream_tester.New(t, http.StatusOK, `{"results":[]}`)
 	c := newConfluenceClient(t, s.URL)
+	defer c.Close()
 	var out map[string]any
 	assert.FatalOnError(
 		t,
@@ -102,6 +103,7 @@ func TestPostOldPathAcceptsAnEmptyAnswer(t *testing.T) {
 func TestDeleteAcceptsNoContent(t *testing.T) {
 	s, last := upstream_tester.New(t, http.StatusNoContent, "")
 	c := newConfluenceClient(t, s.URL)
+	defer c.Close()
 	assert.FatalOnError(t, c.Delete(c.Base().Copy().Path("/pages/7").String()))
 	r := last()
 	assert.String(t, http.MethodDelete, r.Method)

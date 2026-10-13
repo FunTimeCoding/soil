@@ -17,7 +17,7 @@ func (s *Server) ListMachineSnapshots(
 		return response.Fail("identifier is required")
 	}
 
-	instance, e := s.service.ResolveInstance(s.activeInstanceName(x))
+	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
 		return response.Fail("%s", e)

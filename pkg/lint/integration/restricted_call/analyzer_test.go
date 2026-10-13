@@ -38,6 +38,15 @@ func TestCheckRules(t *testing.T) {
 		)
 	}
 
-	testutil.AssertBlocked(t, results, 1)
-	testutil.AssertBlockedContains(t, results, "blessed package")
+	testutil.AssertBlocked(t, results, 2)
+	testutil.AssertBlockedContains(
+		t,
+		results,
+		"open through the blessed package",
+	)
+	testutil.AssertBlockedContains(
+		t,
+		results,
+		"share through the blessed package",
+	)
 }

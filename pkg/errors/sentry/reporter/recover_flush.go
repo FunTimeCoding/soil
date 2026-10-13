@@ -10,6 +10,7 @@ func (r *Reporter) RecoverFlush(v any) {
 	if r.hub != nil {
 		r.hub.Recover(v)
 		sentry.Flush(r.hub)
+		r.pool.Close()
 	}
 
 	if v != nil {

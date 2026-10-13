@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) GetFileContents(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.GetFileContents,
 ) (*mcp.CallToolResult, error) {
@@ -20,13 +20,13 @@ func (s *Server) GetFileContents(
 		return response.Fail("path is required")
 	}
 
-	project, e := s.resolveProject(a.Project)
+	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
 		return s.captureDetail(e)
 	}
 
-	v, e := s.service.File(project, a.Reference, a.Path)
+	v, e := s.service.File(instance, project, a.Reference, a.Path)
 
 	if e != nil {
 		return s.captureDetail(e)

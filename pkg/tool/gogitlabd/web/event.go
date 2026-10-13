@@ -33,7 +33,7 @@ func (s *Server) event() http.HandlerFunc {
 				layout.PushEvent(
 					w,
 					constant.RequestEvent,
-					requestSection(s.worker.Requests()),
+					s.requestSection(s.worker.Requests()),
 				)
 			}
 
@@ -44,14 +44,25 @@ func (s *Server) event() http.HandlerFunc {
 			if subs.Has(constant.PipelineEvent) {
 				project := queryInteger(r, argumentConstant.Project)
 				pipeline := queryInteger(r, argumentConstant.Pipeline)
+				instance, g := s.queryInstance(r)
 
-				if project != 0 && pipeline != 0 {
-					jobs, e := s.service.PipelineJobs(project, pipeline)
+				if g == nil && project != 0 && pipeline != 0 {
+					jobs, e := s.service.PipelineJobs(
+						instance,
+						project,
+						pipeline,
+					)
 					errors.PanicOnError(e)
 					layout.PushEvent(
 						w,
 						constant.PipelineEvent,
-						stageStrip(project, pipeline, jobs, selectJob(jobs, 0)),
+						stageStrip(
+							instance,
+							project,
+							pipeline,
+							jobs,
+							selectJob(jobs, 0),
+						),
 					)
 				}
 			}

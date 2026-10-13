@@ -7,6 +7,7 @@ import (
 
 func Organization() {
 	c := sentry.NewEnvironment()
+	defer c.Close()
 
 	for _, o := range c.MustOrganizations() {
 		console.Format("Organization: %+v\n", o)

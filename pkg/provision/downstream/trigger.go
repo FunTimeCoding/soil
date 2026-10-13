@@ -24,6 +24,7 @@ func (c *Client) Trigger(changes []string) error {
 			Endpoint: locator.New(c.host).Insecure().Port(c.port).Path(
 				webConstant.ModelContextPath,
 			).String(),
+			HTTPClient: c.pool.Client(),
 		},
 		nil,
 	)

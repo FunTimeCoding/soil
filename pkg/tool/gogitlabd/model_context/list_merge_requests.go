@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) ListMergeRequests(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.ListMergeRequests,
 ) (*mcp.CallToolResult, error) {
@@ -16,13 +16,13 @@ func (s *Server) ListMergeRequests(
 		return response.Fail("project is required")
 	}
 
-	project, e := s.resolveProject(a.Project)
+	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
 		return s.captureDetail(e)
 	}
 
-	v, e := s.service.ProjectMergeRequests(project, a.State)
+	v, e := s.service.ProjectMergeRequests(instance, project, a.State)
 
 	if e != nil {
 		return s.captureDetail(e)

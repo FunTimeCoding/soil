@@ -6,7 +6,7 @@ func (s *Service) Silences(
 	instance string,
 	expired bool,
 ) ([]*silence.Silence, error) {
-	c, e := s.Client(instance)
+	c, e := s.pool.Client(instance)
 
 	if e != nil {
 		return nil, e

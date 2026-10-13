@@ -11,7 +11,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/system"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"io"
 	"net/http"
 	"testing"
@@ -70,9 +70,13 @@ func TestRunServerResponds(t *testing.T) {
 	)
 	l.Run()
 	defer l.Stop()
+	o := stall_client.New().Build()
+	defer o.Close()
+	c := o.Client()
 	assert.Listen(t, p)
 	assert.HTTPStatus(
 		t,
+		c,
 		fmt.Sprintf("http://localhost:%d/health", p),
 		http.StatusOK,
 	)
@@ -92,8 +96,11 @@ func TestRunServerVersion(t *testing.T) {
 	)
 	l.Run()
 	defer l.Stop()
+	o := stall_client.New().Build()
+	defer o.Close()
 	assert.Listen(t, p)
-	response := web.BasicGet(fmt.Sprintf("http://localhost:%d/version", p))
+	response, f := o.Client().Get(fmt.Sprintf("http://localhost:%d/version", p))
+	assert.FatalOnError(t, f)
 	defer errors.PanicClose(response.Body)
 	assert.Integer(t, http.StatusOK, response.StatusCode)
 	b, e := io.ReadAll(response.Body)
@@ -146,8 +153,11 @@ func TestRunServerMiddleware(t *testing.T) {
 	)
 	l.Run()
 	defer l.Stop()
+	o := stall_client.New().Build()
+	defer o.Close()
+	c := o.Client()
 	assert.Listen(t, p)
-	r, e := http.Get(fmt.Sprintf("http://localhost:%d/health", p))
+	r, e := c.Get(fmt.Sprintf("http://localhost:%d/health", p))
 	assert.FatalOnError(t, e)
 	defer errors.PanicClose(r.Body)
 	assert.Integer(t, http.StatusOK, r.StatusCode)

@@ -1,15 +1,25 @@
 package worker
 
-import (
-	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/gitlab/merge_request"
-)
+import "github.com/funtimecoding/soil/pkg/tool/gogitlabd/types/request_entry"
 
-func (w *Worker) fetchRequests() []*merge_request.Request {
-	assigned, e := w.service.AssignedMergeRequests(false)
-	errors.PanicOnError(e)
-	reviewing, f := w.service.ReviewingMergeRequests(false)
-	errors.PanicOnError(f)
+func (w *Worker) fetchRequests(instance string) ([]*request_entry.Entry, error) {
+	assigned, e := w.service.AssignedMergeRequests(instance, false)
 
-	return MergeRequests(assigned, reviewing)
+	if e != nil {
+		return nil, e
+	}
+
+	reviewing, f := w.service.ReviewingMergeRequests(instance, false)
+
+	if f != nil {
+		return nil, f
+	}
+
+	var result []*request_entry.Entry
+
+	for _, r := range MergeRequests(assigned, reviewing) {
+		result = append(result, request_entry.New(instance, r))
+	}
+
+	return result, nil
 }

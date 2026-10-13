@@ -9,6 +9,7 @@ import (
 
 func Issue() {
 	g := gitlab.NewEnvironment()
+	defer g.Close()
 
 	for _, i := range g.MustIssues() {
 		p := g.MustProject(i.Project)

@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"net"
 	"net/http"
 	"net/http/httptest"
@@ -34,13 +35,12 @@ func TestConnectionReuse(t *testing.T) {
 	}
 	s.Start()
 	defer s.Close()
+	p := stall_client.New().Build()
+	defer p.Close()
+	c := p.Client()
 
 	for range 4 {
-		assert.String(
-			t,
-			"connection-reuse-payload",
-			web.GetString(web.InsecureClient(), s.URL),
-		)
+		assert.String(t, "connection-reuse-payload", web.GetString(c, s.URL))
 	}
 
 	assert.Integer(t, int64(1), opened.Load())

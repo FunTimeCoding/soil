@@ -23,6 +23,7 @@ func Run(
 ) {
 	r := s.Reporter()
 	v := service.New(o.Inventory)
+	defer v.Close()
 	l := logger.New(context.Background())
 	m := metric.New()
 	k := worker.New(v, constant.PollInterval, m.Registry(), l, r)

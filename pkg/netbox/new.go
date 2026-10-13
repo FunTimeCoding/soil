@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/netbox/cache"
 	"github.com/funtimecoding/soil/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"github.com/netbox-community/go-netbox/v4"
 )
 
@@ -19,7 +20,9 @@ func New(
 		context: context.Background(),
 		client:  netbox.NewAPIClientFor(locator.New(host).String(), token),
 		cache:   cache.New(),
+		pool:    stall_client.New().Build(),
 	}
+	result.client.GetConfig().HTTPClient = result.pool.Client()
 
 	for _, f := range o {
 		f(result)

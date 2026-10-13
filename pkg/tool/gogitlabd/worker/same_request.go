@@ -1,13 +1,14 @@
 package worker
 
-import "github.com/funtimecoding/soil/pkg/gitlab/merge_request"
+import "github.com/funtimecoding/soil/pkg/tool/gogitlabd/types/request_entry"
 
 func sameRequest(
-	a *merge_request.Request,
-	b *merge_request.Request,
+	a *request_entry.Entry,
+	b *request_entry.Entry,
 ) bool {
-	return a.Project == b.Project &&
-		a.Identifier == b.Identifier &&
-		a.Title == b.Title &&
-		a.State == b.State
+	return a.Instance == b.Instance &&
+		a.Request.Project == b.Request.Project &&
+		a.Request.Identifier == b.Request.Identifier &&
+		a.Request.Title == b.Request.Title &&
+		a.Request.State == b.Request.State
 }

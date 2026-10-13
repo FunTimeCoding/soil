@@ -12,7 +12,7 @@ func (s *Stack) tabs() []*tab.Tab {
 	var result []*tab.Tab
 	notation.MustDecode(
 		web.GetString(
-			web.InsecureClient(),
+			s.pool.Client(),
 			locator.New("localhost").
 				Port(s.Port).
 				Path(constant.NotationPath).

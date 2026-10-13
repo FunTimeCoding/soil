@@ -9,11 +9,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/web/stall_client"
 )
 
 func Main() {
 	s := instrument.NewCommandLine(constant.Identity)
 	defer func() { s.Flush(recover()) }()
+	p := stall_client.New().Build()
+	defer p.Close()
 	t := terminal.New(s)
 	c, e := client.NewClientWithResponses(
 		locator.Environment(
@@ -21,7 +24,7 @@ func Main() {
 			constant.PortEnvironment,
 			constant.InsecureEnvironment,
 		).String(),
-		client.WithHTTPClient(web.StallClient()),
+		client.WithHTTPClient(p.Client()),
 		client.WithRequestEditorFn(
 			web.DeferredBearerEditor(t.Required, constant.TokenEnvironment),
 		),

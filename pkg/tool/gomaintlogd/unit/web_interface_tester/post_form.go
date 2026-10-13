@@ -3,10 +3,8 @@ package web_interface_tester
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"io"
-	"net/http"
 	"net/url"
 	"strings"
 )
@@ -16,8 +14,8 @@ func (o *Tester) PostForm(
 	values url.Values,
 ) string {
 	o.t.Helper()
-	r, e := http.Post(
-		join.Empty(o.base, path),
+	r, e := o.server.Client().Post(
+		o.server.Address(path),
 		constant.FormEncoded,
 		strings.NewReader(values.Encode()),
 	)

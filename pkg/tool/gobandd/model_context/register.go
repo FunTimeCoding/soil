@@ -6,32 +6,7 @@ import (
 )
 
 func (s *Server) register() {
-	if len(s.service.Instances()) > 1 {
-		s.server.AddTool(
-			mcp.NewTool(
-				constant.ListInstances,
-				mcp.WithDescription(
-					"List the configured management engines. Shows which instance is currently active.",
-				),
-			),
-			mcp.NewTypedToolHandler(s.listInstances),
-		)
-		s.server.AddTool(
-			mcp.NewTool(
-				constant.UseInstance,
-				mcp.WithDescription(
-					"Set the active management engine for this session. Required before any other tool when more than one is configured.",
-				),
-				mcp.WithString(
-					constant.InstanceParameter,
-					mcp.Required(),
-					mcp.Description("Instance name from list_instances"),
-				),
-			),
-			mcp.NewTypedToolHandler(s.useInstance),
-		)
-	}
-
+	s.instances.Register(s.server)
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.Status,
@@ -79,5 +54,14 @@ func (s *Server) register() {
 			),
 		),
 		mcp.NewTypedToolHandler(s.reboot),
+	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.EnableRedirection,
+			mcp.WithDescription(
+				"Switch on the active engine's redirection listener and screen service where they are off, so an AMT-aware client can open screen and serial sessions. Writes only what is missing.",
+			),
+		),
+		mcp.NewTypedToolHandler(s.enableRedirection),
 	)
 }

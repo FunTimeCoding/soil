@@ -3,30 +3,31 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
+	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"io"
-	"net/http"
 	"testing"
 )
 
 func body(
 	t *testing.T,
-	address string,
+	s *model_context_server.Server,
+	target string,
 	extended bool,
 ) string {
 	t.Helper()
-	q, e := http.NewRequest(http.MethodGet, address, nil)
-	assert.FatalOnError(t, e)
+	q := web.NewGet(s.Address(target))
 
 	if extended {
 		q.Header.Set(constant.ExtendedRequest, "true")
 	}
 
-	r, f := http.DefaultClient.Do(q)
-	assert.FatalOnError(t, f)
+	r, e := s.Client().Do(q)
+	assert.FatalOnError(t, e)
 	defer errors.PanicClose(r.Body)
-	b, g := io.ReadAll(r.Body)
-	assert.FatalOnError(t, g)
+	b, f := io.ReadAll(r.Body)
+	assert.FatalOnError(t, f)
 
 	return string(b)
 }

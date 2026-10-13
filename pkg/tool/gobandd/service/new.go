@@ -1,10 +1,15 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/gobandd/face"
-	"github.com/funtimecoding/soil/pkg/tool/gobandd/inventory"
+	"github.com/funtimecoding/soil/pkg/inventory/pool"
+	"github.com/funtimecoding/soil/pkg/inventory/selection"
+	"github.com/funtimecoding/soil/pkg/tool/gobandd/inventory/instance"
 )
 
-func New(i *inventory.Inventory) *Service {
-	return &Service{inventory: i, engines: make(map[string]face.Engine)}
+func New(i *instance.Inventory) *Service {
+	return &Service{
+		inventory: i,
+		pool:      pool.New(i, newEngine),
+		selection: selection.New(),
+	}
 }

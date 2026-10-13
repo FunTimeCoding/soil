@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/stall_client"
 )
 
 func New(
@@ -11,23 +12,19 @@ func New(
 	untrusted bool,
 	token string,
 ) *Client {
-	c := web.Client()
+	b := stall_client.New()
 
 	if untrusted {
-		c = web.InsecureClient()
+		b.Insecure()
 	}
 
+	p := b.Build()
 	options := []client.ClientOption{
-		client.WithHTTPClient(c),
+		client.WithHTTPClient(p.Client()),
 		client.WithRequestEditorFn(web.BearerEditor(token)),
 	}
 	generated, e := client.NewClientWithResponses(base, options...)
 	errors.PanicOnError(e)
 
-	return &Client{
-		generated: generated,
-		base:      base,
-		token:     token,
-		untrusted: untrusted,
-	}
+	return &Client{generated: generated, base: base, token: token, pool: p}
 }

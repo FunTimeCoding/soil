@@ -11,6 +11,7 @@ import (
 
 func Query() {
 	c := prometheus.NewEnvironment()
+	defer c.Close()
 	t := time.Now()
 
 	for _, k := range maps.StringKeys(c.MustQueryIntegers(constant.Up, t)) {

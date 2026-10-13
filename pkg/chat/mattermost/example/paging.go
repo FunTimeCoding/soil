@@ -17,6 +17,7 @@ func Paging() {
 	a.ParseSimple()
 	channel := a.RequiredPositional(0, "CHANNEL")
 	m := mattermost.NewEnvironment(mattermost.WithVerbose(false))
+	defer m.Close()
 	c := m.MustTeamChannel(channel)
 	console.Format("Channel: %s\n", c.Name)
 	raw := model.NewAPIv4Client(

@@ -9,6 +9,7 @@ import (
 
 func Physical() {
 	n := netbox.NewEnvironment()
+	defer n.Close()
 
 	for _, p := range n.MustPhysicalAddressesByHardware(
 		network.PhysicalAddress(constant.PhysicalTest0),

@@ -39,10 +39,7 @@ func (s *Service) CreateMachine(
 	}
 
 	if m.HardwareAddress == "" {
-		address, e := network_device.Derive(
-			s.inventory.Index(instance),
-			identifier,
-		)
+		address, e := network_device.Derive(s.index(instance), identifier)
 
 		if e != nil {
 			return 0, e

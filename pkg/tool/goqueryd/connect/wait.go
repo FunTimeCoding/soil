@@ -10,10 +10,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/locator"
+	"net/http"
 	"time"
 )
 
-func Wait(l *logger.Logger) *client.Client {
+func Wait(
+	l *logger.Logger,
+	h *http.Client,
+) *client.Client {
 	base := locator.Environment(
 		constant.HostEnvironment,
 		constant.PortEnvironment,
@@ -21,6 +25,7 @@ func Wait(l *logger.Logger) *client.Client {
 	).String()
 	c, e := client.NewClient(
 		base,
+		client.WithHTTPClient(h),
 		client.WithRequestEditorFn(
 			web.BearerEditor(environment.Required(constant.TokenEnvironment)),
 		),

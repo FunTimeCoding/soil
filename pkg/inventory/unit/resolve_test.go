@@ -2,6 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/errors/not_configured"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/not_selected"
 	"github.com/funtimecoding/soil/pkg/inventory"
@@ -34,4 +35,10 @@ func TestResolveManyIsNotSelected(t *testing.T) {
 		"no instance selected - 2 instances configured, selection required",
 		e.Error(),
 	)
+}
+
+func TestResolveEmptyIsNotConfigured(t *testing.T) {
+	_, e := inventory.Resolve("", nil)
+	assert.True(t, not_configured.Is(e))
+	assert.String(t, "no instance configured", e.Error())
 }

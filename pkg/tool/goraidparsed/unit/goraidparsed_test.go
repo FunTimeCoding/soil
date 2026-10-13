@@ -11,6 +11,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/system"
 	generated "github.com/funtimecoding/soil/pkg/tool/goraidparsed/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/goraidparsed/server"
+	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"net/http"
 	"testing"
 )
@@ -37,7 +38,14 @@ func TestRunLifecycle(t *testing.T) {
 	)
 	l.Run()
 	defer l.Stop()
+	p := stall_client.New().Build()
+	defer p.Close()
+	c := p.Client()
 	assert.Listen(t, port)
-	base := fmt.Sprintf("http://localhost:%d", port)
-	assert.HTTPStatus(t, fmt.Sprintf("%s/api/status", base), http.StatusOK)
+	assert.HTTPStatus(
+		t,
+		c,
+		fmt.Sprintf("http://localhost:%d/api/status", port),
+		http.StatusOK,
+	)
 }

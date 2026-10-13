@@ -8,19 +8,21 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/collector/process"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/face"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/client"
+	"net/http"
 )
 
 func collectors(
 	n *client.ClientWithResponses,
 	l *logger.Logger,
+	h *http.Client,
 ) []face.Collector {
 	result := []face.Collector{kubernetes.NewEnvironment(), label.New(n)}
 
-	if p := process.NewOptional(); p != nil {
+	if p := process.NewOptional(h); p != nil {
 		result = append(result, p)
 	}
 
-	if o := outpost.NewOptional(l); o != nil {
+	if o := outpost.NewOptional(l, h); o != nil {
 		result = append(result, o)
 	}
 

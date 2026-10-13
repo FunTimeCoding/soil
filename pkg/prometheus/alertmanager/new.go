@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/prometheus"
 	"github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	transport "github.com/go-openapi/runtime/client"
 	"github.com/prometheus/alertmanager/api/v2/client"
 )
@@ -23,7 +24,9 @@ func New(
 	}
 
 	c := client.NewHTTPClient(nil)
+	o := stall_client.New().Build()
 	t := transport.New(host, client.DefaultBasePath, []string{scheme})
+	t.Transport = o.Client().Transport
 
 	if user != "" && password != "" {
 		t.DefaultAuthentication = transport.BasicAuth(user, password)
@@ -31,5 +34,5 @@ func New(
 
 	c.SetTransport(t)
 
-	return &Client{client: c, host: host, prometheus: p}
+	return &Client{client: c, host: host, prometheus: p, pool: o}
 }

@@ -4,164 +4,138 @@ base: doc/ai/spec
 
 # Multi-Instance Services
 
-Pattern for services that connect to multiple backends of the same
-type (multiple Proxmox hypervisors, multiple Prometheus servers,
-multiple PostgreSQL databases). The service manages a registry of
-named instances and routes requests to the correct backend.
+Pattern for daemons that connect to several backends of the same type -
+several Proxmox hypervisors, Prometheus servers or PostgreSQL databases. One
+deployment serves every instance named in an inventory and routes each
+request to the right backend.
+
+The plumbing lives in `pkg/inventory/` and its subpackages; a daemon supplies
+its instance type and a function that builds a client. The daemons on it are
+the ones that call `inventory.Load`: `grep -rl 'inventory.Load\[' pkg/tool`.
 
 ## When to Use
 
-When a daemon bridges a third-party service and there may be more
-than one deployment of that service to connect to. The inventory
-allows a single daemon deployment to serve all instances.
+When a daemon bridges a third-party service and there may be more than one
+deployment of that service to reach.
 
-Services using this pattern: goprometheusd, goalertmanagerd,
-gopostgresd, goproxmoxd, gobandd.
+## The Instance Type
 
-## Inventory
+The daemon's `instance` package holds the instance struct. Its fields vary by
+service, and credentials belong in the instance - not in environment
+variables - so each instance authenticates independently.
 
-YAML file with named instances. Each instance carries its own
-connection details and credentials. Loaded at startup via
-`--inventory` flag, defaulting to `Identity.InventoryPath()` -
-`~/.local/share/go<tool>d/inventory.yaml`.
+- `InstanceName()` and `InstanceHost()` on the pointer receiver make it an
+  inventory entry. `InstanceHost()` returns what `list_instances` should show,
+  wherever the struct keeps it.
+- An optional `Validate() error` runs per instance at load.
+- `type Inventory = inventory.Inventory[Instance, *Instance]` in the same
+  package, so the rest of the daemon writes `*instance.Inventory`.
 
-```
-pkg/tool/go<tool>d/inventory/
-├── instance.go         # Instance struct with yaml tags
-├── inventory.go        # Inventory struct: Instances []Instance
-└── load.go             # Load(path string) *Inventory
-```
+Rules that span instances - goproxmoxd's unique `Index` per instance - are
+daemon-side functions over the inventory, called in `Main` after `Load`.
 
-The Instance struct fields vary by service but always include
-`Name` and `Host`. Credentials belong in the instance - not in
-environment variables - so each instance authenticates independently.
+## The Inventory File
 
-## Service Layer
+YAML with an `instances` list, read by `inventory.Load` from the `--inventory`
+flag, which defaults to `Identity.InventoryPath()`. A missing file, malformed
+YAML or a failed `Validate` panics at startup. `inventory.New` builds one in
+memory for tests.
 
-The service layer sits between the surfaces (MCP, REST, CLI) and
-the upstream clients. It owns three concerns: lazy client creation,
-session-scoped instance selection, and instance resolution.
+In a deployment the file is mounted read-only, typically from a secret, and
+`--inventory` points at it. It is the single source of instance
+configuration; the environment still carries the daemon's own settings, such
+as error reporting and telemetry.
 
-```
-pkg/tool/go<tool>d/service/
-├── service.go              # struct: inventory, clients map, sessions sync.Map, mu sync.Mutex
-├── new.go                  # New(*Inventory) *Service
-├── client.go               # Client(instance string) - lazy creation with mutex
-├── instance.go             # Instance(name string) - lookup by name
-├── instances.go            # Instances() - full list
-├── resolve_instance.go     # ResolveInstance(explicit string) - delegates to inventory.Resolve
-├── active_instance.go      # ActiveInstance(sessionID string) - MCP session state
-└── set_active_instance.go  # SetActiveInstance(sessionID, instance string)
-```
+## Resolution
 
-### Instance Resolution
+Every surface resolves an instance name through the same rule, in
+`inventory.Resolve`:
 
-`ResolveInstance(explicit string) (string, error)` delegates to
-the shared `pkg/inventory.Resolve(explicit, names)` - the
-per-tool method is a two-liner over the inventory's `Names()`.
-The defaulting rule lives in the shared helper:
+- An explicit name that is not in the inventory is `not_found`
+- No instances configured is `not_configured`
+- Exactly one instance is the default
+- More than one with no selection is `not_selected`
 
-- If `explicit` is non-empty, validate it exists and return it -
-  unknown names are typed `not_found`
-- If exactly one instance is configured, return it
-- Otherwise, return a typed `not_selected` error ("no instance
-  selected - %d instances configured, selection required")
+When there is no ambiguity, selection is not required.
 
-All three surfaces call this instead of doing their own
-resolution. Unknown-instance lookups in `Client`-style methods
-are typed `not_found` as well.
-The rule is: when there's no ambiguity, don't require selection.
+## The Service
 
-### Lazy Client Creation
+The service holds the inventory, a `selection.Selection` and one
+`pool.Pool` per kind of client, and exposes the inventory and selection as
+`Inventory()` and `Selection()`, plus an accessor for each pool something
+outside the service needs. Surfaces use those directly; the service adds no
+wrappers for listing, finding or resolving instances.
 
-`Client(instance string) (*<upstream>.Client, error)` creates
-upstream clients on first use, caching them in a mutex-protected
-map. The client is built from the instance's connection details
-and credential fields.
+A pool builds each instance's client on first use from the daemon's build
+function and caches it. A failed build is not cached, so the next call
+retries; a name outside the inventory is `not_found`. When a pool's clients
+hold connections, `Run` defers that pool's `Close()`, which closes every
+cached client that has a `Close()`. `Set` puts a mock in place for tests.
 
 ## MCP Surface
 
-### Conditional Tool Registration
-
-When exactly one instance is configured, `list_instances` and
-`use_instance` are not registered - there's nothing to list or
-choose. When multiple instances exist, both tools appear.
-
-```go
-func (s *Server) register() {
-    if len(s.service.Instances()) > 1 {
-        s.server.AddTool(/* list_instances */)
-        s.server.AddTool(/* use_instance */)
-    }
-    // register all other tools
-}
-```
-
-### Instance Resolution in Handlers
-
-Every handler resolves the instance before getting a client:
+`instance_tool.New(v.Inventory(), v.Selection())` is held by the MCP server.
+`Register` adds `list_instances` and `use_instance` only when two or more
+instances are configured - with one there is nothing to choose. Handlers
+resolve before touching a client and refuse plainly, without capture:
 
 ```go
-instance, e := s.service.ResolveInstance(s.activeInstanceName(x))
+instance, e := s.instances.Resolve(x)
 
 if e != nil {
     return response.Fail("%s", e)
 }
-
-c, e := s.service.Client(instance)
 ```
 
-`activeInstanceName(x)` returns the session's selected instance or
-empty string if none was selected. With one instance, the empty
-string resolves to the default. With multiple instances and no
-selection, `ResolveInstance` returns an error.
+### Sessions
+
+`use_instance` stores the choice against the MCP session. The server is built
+with `WithSessionEnd(v.Selection().Clear)`, so a session's choice is
+forgotten when it ends - on DELETE, when an SSE stream closes, or when the
+idle sweeper reaps a client that left without either. A client holding its
+event stream open is never reaped; the heartbeat keeps it fresh.
+
+Selection rides on the session of the legacy protocol versions, which soil's
+MCP setup pins. Protocol version 2026-07-28 drops protocol-level sessions, so
+moving to it needs another home for the choice.
 
 ### Server Instructions
 
-The identity's `WithInstructions()` is set at package init before
-the instance count is known. Use a generic instruction that works
-for both cases:
+The identity carries the instance sentence as a conditional paragraph, so a
+single-instance deployment does not tell the model to call tools it does not
+have:
 
-```
-"Proxmox hypervisor bridge. Call list_instances to see available instances."
+```go
+WithInstructions(
+    "Prometheus query interface.",
+    paragraph.New(
+        inventoryConstant.MultiInstance,
+        inventoryConstant.MultiInstanceInstruction,
+    ),
+)
 ```
 
-When there's one instance the tool won't exist, but the instruction
-is still accurate - there's just nothing to list.
+The MCP server renders it with
+`instance_tool.Instructions(constant.Identity, len(v.Inventory().Instances))`.
 
 ## REST Surface
 
-The `instance` query parameter is optional in the OpenAPI spec.
-When omitted, `ResolveInstance("")` applies the same defaulting
-rule. When multiple instances exist, omitting it returns a 400
-`Error` - no Sentry, because it's a caller mistake, not
-an infrastructure failure. See `error-handling/rest.md` for the
-tier 1 vs tier 2 distinction on strict server.
+`instance` is an optional query parameter. The handler resolves it with
+`Inventory().ResolveInstance`, so omitting it follows the same rule. A
+resolution error is a caller mistake: 400 without Sentry, as tier 1 in
+`error-handling/rest.md` describes.
 
 ## CLI Surface
 
-`--instance` is an optional persistent flag. The client wrapper
-stores the value (empty if not provided) and passes it to the
-generated client on every call. The REST server resolves it via
-`ResolveInstance`.
+`--instance` is an optional persistent flag. The client passes it on every
+call, and the REST server resolves it.
 
-## Deployment
+## Testing
 
-The inventory file is mounted as a Kubernetes file secret:
-
-```yaml
-containers:
-- name: <tool>
-  args: [--inventory, /etc/go<tool>/go<tool>d.yaml]
-  volumeMounts:
-  - {name: inventory, mountPath: /etc/go<tool>, readOnly: true}
-volumes: [{name: inventory, secret: {secretName: <tool>-secret}}]
-```
-
-Credentials live inside the inventory YAML, not in environment
-variables. The file secret is the single source for all instance
-configuration.
-
-Sentry and telemetry environment variables remain as ConfigMap
-and Secret envFrom - they configure the daemon itself, not the
-upstream connections.
+A two-instance MCP test drives the real service through `inventory.New`,
+`model_context_server` and `model_context_client`. It covers the refusal
+before `use_instance`, `list_instances` decoded into
+`instance_response.Response` with the active flag on the chosen one, and -
+where the daemon has a mock client - a tool following the selected instance's
+client, with a mock per instance set into the pool. Probe it by dropping
+`Register`: the test must fail.

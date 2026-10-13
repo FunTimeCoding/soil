@@ -11,6 +11,7 @@ import (
 
 func OllamaReply() {
 	o := ollama.NewEnvironment()
+	defer o.Close()
 	t := telegram.NewEnvironment()
 	defer t.Close()
 	f := constant.TelegramFormat

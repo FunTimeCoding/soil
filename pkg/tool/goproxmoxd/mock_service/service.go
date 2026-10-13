@@ -1,15 +1,14 @@
 package mock_service
 
 import (
+	"github.com/funtimecoding/soil/pkg/inventory/selection"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/inventory"
-	"sync"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/instance"
 )
 
 type Service struct {
-	inventory      *inventory.Inventory
-	proxmoxClient  face.ProxmoxClient
-	snippetClient  face.SnippetClient
-	activeInstance map[string]string
-	mutex          sync.Mutex
+	inventory     *instance.Inventory
+	selection     *selection.Selection
+	proxmoxClient face.ProxmoxClient
+	snippetClient face.SnippetClient
 }

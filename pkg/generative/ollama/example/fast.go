@@ -7,6 +7,7 @@ import (
 
 func Fast() {
 	o := ollama.NewEnvironment()
+	defer o.Close()
 	r := o.GenerateFast("One short sentence: What is a car?")
 	console.Line(r.Text)
 	r.Print()

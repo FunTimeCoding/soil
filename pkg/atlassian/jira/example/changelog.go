@@ -12,6 +12,7 @@ import (
 func Changelog() {
 	k := environment.Required(constant.JiraDefaultProjectKeyEnvironment)
 	j := common.Jira()
+	defer j.Close()
 	console.Line("Search (with changelog)...")
 	start := time.Now()
 	issues := j.MustSearch(

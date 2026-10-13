@@ -10,6 +10,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/web/guard"
+	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"net/http"
 	"testing"
 )
@@ -41,5 +42,5 @@ func New(
 	b.Run()
 	assert.Listen(t, p)
 
-	return &Server{Port: p, Lifecycle: b}
+	return &Server{Port: p, Lifecycle: b, pool: stall_client.New().Build()}
 }

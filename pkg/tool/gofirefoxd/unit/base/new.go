@@ -20,7 +20,13 @@ func New(t *testing.T) *Server {
 			m *http.ServeMux,
 			g *guard.Mux,
 		) {
-			gofirefoxd.Mount(c, memory.New(), mock_recorder.New(), g)
+			gofirefoxd.Mount(
+				c,
+				t.TempDir(),
+				memory.New(),
+				mock_recorder.New(),
+				g,
+			)
 		},
 	)
 	result := &Server{MockClient: c, Server: v}

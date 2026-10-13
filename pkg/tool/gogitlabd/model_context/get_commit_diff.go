@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) GetCommitDiff(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.GetCommitDiff,
 ) (*mcp.CallToolResult, error) {
@@ -20,13 +20,13 @@ func (s *Server) GetCommitDiff(
 		return response.Fail("sha is required")
 	}
 
-	project, e := s.resolveProject(a.Project)
+	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
 		return s.captureDetail(e)
 	}
 
-	v, e := s.service.CommitDiff(project, a.Sha, 0)
+	v, e := s.service.CommitDiff(instance, project, a.Sha, 0)
 
 	if e != nil {
 		return s.captureDetail(e)

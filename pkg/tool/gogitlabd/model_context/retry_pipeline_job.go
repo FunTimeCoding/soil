@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) RetryPipelineJob(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.RetryPipelineJob,
 ) (*mcp.CallToolResult, error) {
@@ -21,13 +21,13 @@ func (s *Server) RetryPipelineJob(
 		return response.Fail("job is required")
 	}
 
-	project, e := s.resolveProject(a.Project)
+	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
 		return s.captureDetail(e)
 	}
 
-	v, e := s.service.Retry(project, a.Job)
+	v, e := s.service.Retry(instance, project, a.Job)
 
 	if e != nil {
 		return s.captureDetail(e)

@@ -11,6 +11,7 @@ import (
 
 func TestUserAndSpacesRead(t *testing.T) {
 	c := confluence.NewEnvironment()
+	defer c.Close()
 	u, e := c.User()
 	assert.FatalOnError(t, e)
 	assert.True(t, u != nil)

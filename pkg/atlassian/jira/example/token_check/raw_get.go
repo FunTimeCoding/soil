@@ -3,6 +3,7 @@ package token_check
 import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"io"
 	"net/http"
 )
@@ -15,7 +16,9 @@ func rawGet(
 	r, e := http.NewRequest(http.MethodGet, locator, nil)
 	errors.PanicOnError(e)
 	r.SetBasicAuth(user, token)
-	response, f := http.DefaultClient.Do(r)
+	p := stall_client.New().Build()
+	defer p.Close()
+	response, f := p.Client().Do(r)
 	errors.PanicOnError(f)
 	defer errors.PanicClose(response.Body)
 	body, g := io.ReadAll(response.Body)

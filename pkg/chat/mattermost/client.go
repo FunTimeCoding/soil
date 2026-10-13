@@ -3,6 +3,7 @@ package mattermost
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/chat/mattermost/user_map"
+	"github.com/funtimecoding/soil/pkg/web/stall_client/pool"
 	"github.com/mattermost/mattermost/server/public/model"
 	"time"
 )
@@ -22,4 +23,6 @@ type Client struct {
 	stopPing    chan struct{}
 	meCache     *model.User
 	user        *user_map.Map
+	verbose     bool
+	pool        *pool.Pool
 }

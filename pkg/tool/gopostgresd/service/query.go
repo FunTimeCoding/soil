@@ -10,7 +10,7 @@ func (s *Service) Query(
 	instance string,
 	sql string,
 ) ([]map[string]any, error) {
-	p, e := s.Pool(instance)
+	p, e := s.pool.Client(instance)
 
 	if e != nil {
 		return nil, e

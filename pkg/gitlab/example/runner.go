@@ -8,6 +8,7 @@ import (
 
 func Runner() {
 	g := gitlab.NewEnvironment()
+	defer g.Close()
 	f := constant.ExtendedColorFormat.Copy().Raw()
 
 	for _, r := range g.MustRunners(true) {

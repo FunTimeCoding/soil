@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) GetPipelineJobOutput(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.GetPipelineJobOutput,
 ) (*mcp.CallToolResult, error) {
@@ -20,13 +20,13 @@ func (s *Server) GetPipelineJobOutput(
 		return response.Fail("job is required")
 	}
 
-	project, e := s.resolveProject(a.Project)
+	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
 		return s.captureDetail(e)
 	}
 
-	v, e := s.service.Trace(project, a.Job)
+	v, e := s.service.Trace(instance, project, a.Job)
 
 	if e != nil {
 		return s.captureDetail(e)

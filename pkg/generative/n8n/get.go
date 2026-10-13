@@ -12,5 +12,5 @@ func (c *Client) Get(path string) string {
 	)
 	r.Header.Add(constant.N8nTokenHeader, c.token)
 
-	return web.ReadString(web.Send(web.Client(), r))
+	return web.ReadString(web.Send(c.pool.Client(), r))
 }

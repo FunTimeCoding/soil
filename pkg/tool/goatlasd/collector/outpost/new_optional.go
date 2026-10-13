@@ -11,9 +11,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gooutpostd/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/locator"
+	"net/http"
 )
 
-func NewOptional(l *logger.Logger) *Collector {
+func NewOptional(
+	l *logger.Logger,
+	h *http.Client,
+) *Collector {
 	hosts := environment.Optional(constant.OutpostHostsEnvironment)
 	token := environment.Optional(gooutpostdConstant.TokenEnvironment)
 
@@ -38,7 +42,7 @@ func NewOptional(l *logger.Logger) *Collector {
 
 		c, e := client.NewClientWithResponses(
 			u.String(),
-			client.WithHTTPClient(web.StallClient()),
+			client.WithHTTPClient(h),
 			client.WithRequestEditorFn(web.BearerEditor(token)),
 		)
 		errors.PanicOnError(e)

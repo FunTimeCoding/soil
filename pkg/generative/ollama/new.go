@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/generative/constant"
-	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"github.com/ollama/ollama/api"
 	"net/url"
 )
@@ -34,12 +34,13 @@ func New(o ...Option) *Client {
 		scheme = webConstant.Insecure
 	}
 
+	result.pool = stall_client.New().Long().Build()
 	result.client = api.NewClient(
 		&url.URL{
 			Scheme: scheme,
 			Host:   fmt.Sprintf("%s:%d", result.host, result.port),
 		},
-		web.LongStallClient(),
+		result.pool.Client(),
 	)
 
 	return result

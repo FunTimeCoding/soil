@@ -15,6 +15,7 @@ func BranchRequest() {
 	a.ParseSimple()
 	branch := a.GetString(argumentConstant.Branch)
 	c := github.NewEnvironment()
+	defer c.Close()
 	f := consoleConstant.ExtendedColorFormat.Copy()
 	console.Line(
 		c.MustBranchRequest(

@@ -8,9 +8,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goprocessd/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/locator"
+	"net/http"
 )
 
-func NewOptional() *Collector {
+func NewOptional(h *http.Client) *Collector {
 	place := environment.Optional(constant.PlaceEnvironment)
 	token := environment.Optional(goprocessdConstant.TokenEnvironment)
 
@@ -24,7 +25,7 @@ func NewOptional() *Collector {
 			goprocessdConstant.PortEnvironment,
 			goprocessdConstant.InsecureEnvironment,
 		).String(),
-		client.WithHTTPClient(web.StallClient()),
+		client.WithHTTPClient(h),
 		client.WithRequestEditorFn(web.BearerEditor(token)),
 	)
 	errors.PanicOnError(e)

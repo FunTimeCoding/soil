@@ -19,6 +19,7 @@ func TestHealthNeedsNoLogin(t *testing.T) {
 func TestLoginHappensOnceAndCarriesTheToken(t *testing.T) {
 	u := upstream_tester.New(t)
 	c := client(t, u, "alfa-jwt")
+	defer c.Close()
 	c.MustList("alfa")
 	c.MustRead("alfa/bravo")
 	assert.Integer(t, 1, u.Logins())

@@ -21,6 +21,7 @@ func New(
 	result.AddCommand(start(x))
 	result.AddCommand(shutdown(x))
 	result.AddCommand(reboot(x))
+	result.AddCommand(redirection(x))
 
 	return result
 }

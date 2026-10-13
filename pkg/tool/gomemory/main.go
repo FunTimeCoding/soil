@@ -12,12 +12,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"github.com/spf13/cobra"
 )
 
 func Main() {
 	s := instrument.NewCommandLine(constant.Identity)
 	defer func() { s.Flush(recover()) }()
+	p := stall_client.New().Build()
+	defer p.Close()
 	t := terminal.New(s)
 	var host string
 	var port int
@@ -32,6 +35,7 @@ func Main() {
 			base := locator.New(host).Port(port).Insecure().String()
 			c, e := client.NewClient(
 				base,
+				client.WithHTTPClient(p.Client()),
 				client.WithRequestEditorFn(
 					web.BearerEditor(
 						t.Required(gomemorydConstant.TokenEnvironment),

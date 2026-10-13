@@ -2,7 +2,6 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -20,7 +19,7 @@ func (s *Server) Navigate(
 	e := s.client.Navigate(int(a.TabIdentifier), a.Locator)
 
 	if e != nil {
-		return s.captureFail(e, constant.UnexpectedError)
+		return s.captureDetail(e)
 	}
 
 	return response.Success("navigated to %s", a.Locator)

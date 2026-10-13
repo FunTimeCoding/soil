@@ -30,7 +30,7 @@ func (c *Client) Stream(
 	}
 
 	web.Bearer(q, c.token)
-	r, e := web.Client().Do(q)
+	r, e := c.pool.Client().Do(q)
 
 	if e != nil {
 		return fmt.Errorf("stream: %w", e)

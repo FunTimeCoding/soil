@@ -31,7 +31,7 @@ func (c *Client) Upload(
 		bytes.NewReader(system.ReadBytesUnsafe(path)),
 	)
 	web.Bearer(q, c.token)
-	r, e := web.Client().Do(q)
+	r, e := c.pool.Client().Do(q)
 	errors.PanicOnError(e)
 	defer errors.PanicClose(r.Body)
 

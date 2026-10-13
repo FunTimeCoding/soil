@@ -85,6 +85,8 @@ l := lifecycle.New(
 )
 l.Run()
 defer l.Stop()
+p := stall_client.New().Build()
+defer p.Close()
 assert.Listen(t, port)
 ```
 
@@ -92,7 +94,27 @@ Key helpers:
 - `system.FindUnusedPort(startPort)` - finds an available port
 - `assert.Listen(t, port)` - waits up to 2s for port to accept connections
 - `assert.NotListen(t, port)` - asserts port is closed
-- `assert.HTTPStatus(t, url, expectedStatus)` - GET request + status assertion
+- `assert.HTTPStatus(t, p.Client(), url, expectedStatus)` - GET request +
+  status assertion on the test's own client
+
+## HTTP Clients
+
+The production rule is `http-client.md`; this is the test side. A test talks
+HTTP through a client it owns, never `http.DefaultClient`,
+`http.DefaultTransport` or `http.Get` and its siblings. The owner closes the
+client's idle connections before the server stops: a connection Go's
+transport dialled and parked unused counts as new to the server, and
+`Shutdown` waits five seconds before treating a new connection as idle.
+
+- On `generative/model_context_server`: `Connect(t)` for the MCP client,
+  `Client()` for raw requests and generated REST clients
+  (`client.WithHTTPClient(s.Client())`), `Halting()` where a redirect is the
+  answer, `Address(target)` for the URL - a target may carry a query. `Stop`
+  closes them all, because they share the server's transport. Helpers outside
+  the package take the server, not a port or a URL.
+- On a raw lifecycle server: a `stall_client.New().Build()` pool, its `Close`
+  deferred after the lifecycle's `Stop`, so it runs first.
+- On an `httptest.Server`: its own `Client()`, which `Close` takes care of.
 
 ## Guard Battery
 
@@ -108,7 +130,8 @@ auth contract with the battery methods, mirroring the mount surface:
   — one per guarded route worth naming and per open mount, including
   the dashboard root and live path of web-carrying daemons
 - `VerifySession(path)` — a session page redirects a bare request to sign-on,
-  reported by `web.HaltingClient` without following, and serves the test token
+  reported by the server's `Halting()` client without following, and serves
+  the test token
 - `VerifyModelContext` — 401 bare on `route:/mcp` and `route:/sse`, handshake
   with the test token
 - `VerifyStatus(path, status)` — exact status for a bare request,
@@ -140,10 +163,11 @@ Use a generic helper to parse JSON responses in tests:
 ```go
 func getJSON[T any](
     t *testing.T,
-    locator string,
+    s *model_context_server.Server,
+    target string,
 ) T {
     t.Helper()
-    r, e := http.Get(locator)
+    r, e := s.Client().Get(s.Address(target))
 
     if e != nil {
         t.Fatal(e)
@@ -163,7 +187,7 @@ func getJSON[T any](
 Usage:
 
 ```go
-status := getJSON[route.StatusResponse](t, base+"/api/status")
+status := getJSON[route.StatusResponse](t, s, "/api/status")
 assert.Integer(t, 2, status.TotalRecords)
 ```
 
@@ -175,12 +199,12 @@ behavior changes:
 ```go
 // Initial state: alert firing
 p.Poll()
-alerts := getJSON[[]route.AlertsResponse](t, base+"/api/alerts?name=X")
+alerts := getJSON[[]route.AlertsResponse](t, s, "/api/alerts?name=X")
 assert.String(t, route.Firing, alerts[0].Status)
 
 // Remove alert, poll again: now resolved
 c.Remove("fp1")
 p.Poll()
-alerts = getJSON[[]route.AlertsResponse](t, base+"/api/alerts?name=X")
+alerts = getJSON[[]route.AlertsResponse](t, s, "/api/alerts?name=X")
 assert.String(t, route.Resolved, alerts[0].Status)
 ```

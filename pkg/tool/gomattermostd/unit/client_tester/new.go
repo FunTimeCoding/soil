@@ -46,7 +46,10 @@ func New(
 	)
 	s := httptest.NewServer(m)
 	t.Cleanup(s.Close)
-	c, e := client.NewClientWithResponses(s.URL)
+	c, e := client.NewClientWithResponses(
+		s.URL,
+		client.WithHTTPClient(s.Client()),
+	)
 	errors.PanicOnError(e)
 
 	return &Tester{t: t, Client: c}

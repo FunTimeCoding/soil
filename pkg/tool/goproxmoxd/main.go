@@ -3,10 +3,12 @@ package goproxmoxd
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/instrument"
+	"github.com/funtimecoding/soil/pkg/inventory"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/inventory"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/option"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/instance"
 	"github.com/funtimecoding/soil/pkg/web"
 )
 
@@ -26,6 +28,9 @@ func Main() {
 	o.Address = a.Address()
 	o.ServiceTokens = web.ServiceTokens()
 	o.MetricAddress = a.MetricAddress()
-	o.Inventory = inventory.Load(a.GetString(argumentConstant.Inventory))
+	o.Inventory = inventory.Load[instance.Instance](
+		a.GetString(argumentConstant.Inventory),
+	)
+	errors.PanicOnError(instance.ValidateIndexes(o.Inventory))
 	Run(o, s)
 }

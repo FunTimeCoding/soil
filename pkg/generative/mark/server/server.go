@@ -56,6 +56,18 @@ func (b *Builder) Server() *server.MCPServer {
 		)
 	}
 
+	if b.sessionEnd != nil {
+		sessionEnd := b.sessionEnd
+		hooks.AddOnUnregisterSession(
+			func(
+				_ context.Context,
+				s server.ClientSession,
+			) {
+				sessionEnd(s.SessionID())
+			},
+		)
+	}
+
 	options := []server.ServerOption{
 		server.WithToolCapabilities(true),
 		server.WithInstructions(b.instructions),

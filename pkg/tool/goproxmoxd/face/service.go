@@ -1,6 +1,7 @@
 package face
 
 import (
+	"github.com/funtimecoding/soil/pkg/inventory/selection"
 	"github.com/funtimecoding/soil/pkg/proxmox/node_status"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/model_context/argument/create_machine"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/model_context/argument/update_machine"
@@ -9,14 +10,8 @@ import (
 )
 
 type Service interface {
-	Instances() []instance.Instance
-	Instance(name string) (*instance.Instance, bool)
-	ResolveInstance(explicit string) (string, error)
-	ActiveInstance(sessionIdentifier string) (string, bool)
-	SetActiveInstance(
-		sessionIdentifier string,
-		instance string,
-	)
+	Inventory() *instance.Inventory
+	Selection() *selection.Selection
 	Client(instance string) (ProxmoxClient, error)
 	SSHClient(instance string) (SnippetClient, error)
 	ListNodes(instance string) (proxmox.NodeStatuses, error)

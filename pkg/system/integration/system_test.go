@@ -63,12 +63,12 @@ func TestStartFailureCarriesCommandError(t *testing.T) {
 
 func TestRunPanicMode(t *testing.T) {
 	windowsSkip(t)
-	var recovered any
-	func() {
-		defer func() { recovered = recover() }()
-		run.New().Start(constant.Shell, constant.ShellCommand, "exit 7")
-	}()
-	assert.NotNil(t, recovered)
+	assert.Panic(
+		t,
+		func() {
+			run.New().Start(constant.Shell, constant.ShellCommand, "exit 7")
+		},
+	)
 }
 
 func TestRunDirectory(t *testing.T) {

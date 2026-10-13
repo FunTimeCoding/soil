@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) ListProjectVariables(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.ListProjectVariables,
 ) (*mcp.CallToolResult, error) {
@@ -16,13 +16,13 @@ func (s *Server) ListProjectVariables(
 		return response.Fail("project is required")
 	}
 
-	project, e := s.resolveProject(a.Project)
+	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
 		return s.captureDetail(e)
 	}
 
-	v, e := s.service.Variables(project)
+	v, e := s.service.Variables(instance, project)
 
 	if e != nil {
 		return s.captureDetail(e)

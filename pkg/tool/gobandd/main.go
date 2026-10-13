@@ -4,8 +4,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/instrument"
+	"github.com/funtimecoding/soil/pkg/inventory"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gobandd/inventory"
+	"github.com/funtimecoding/soil/pkg/tool/gobandd/inventory/instance"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/option"
 	"github.com/funtimecoding/soil/pkg/web"
 )
@@ -24,6 +25,8 @@ func Main() {
 	o := option.New()
 	o.Address = a.Address()
 	o.ServiceTokens = web.ServiceTokens()
-	o.Inventory = inventory.Load(a.GetString(argumentConstant.Inventory))
+	o.Inventory = inventory.Load[instance.Instance](
+		a.GetString(argumentConstant.Inventory),
+	)
 	Run(o, s)
 }

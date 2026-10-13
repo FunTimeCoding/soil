@@ -9,6 +9,7 @@ import (
 
 func Issue() {
 	c := sentry.NewEnvironment()
+	defer c.Close()
 	f := consoleConstant.ColorFormat.Copy()
 
 	for _, i := range c.MustIssuesSimple(true) {

@@ -7,6 +7,7 @@ import (
 
 func Whoami() {
 	c := sentry.NewEnvironment()
+	defer c.Close()
 	u := c.MustWhoami()
 	console.Format("User: %+v\n", u)
 }

@@ -8,6 +8,7 @@ import (
 
 func Custom() {
 	o := ollama.NewEnvironment(ollama.WithSecure(true))
+	defer o.Close()
 	console.Format("Version: %s\n", o.MustVersion())
 	r := o.MustGenerate(
 		generate_request.New().Prompt("One short sentence: What is a car?").Model(

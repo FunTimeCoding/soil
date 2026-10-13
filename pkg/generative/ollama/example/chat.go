@@ -9,6 +9,7 @@ import (
 
 func Chat() {
 	o := ollama.NewEnvironment()
+	defer o.Close()
 	r := chat_request.New()
 	f := constant.ColorFormat
 	r.System(

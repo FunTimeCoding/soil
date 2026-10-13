@@ -10,7 +10,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
 	"github.com/funtimecoding/soil/pkg/web"
-	"net/http"
 	"strings"
 	"testing"
 )
@@ -22,16 +21,13 @@ func SubscribeStream(
 	kinds string,
 ) (<-chan Event, func()) {
 	t.Helper()
-	l := fmt.Sprintf(
-		"http://localhost:%d/event-stream?subscriber=%s&kinds=%s",
-		s.Port,
-		name,
-		kinds,
+	r := web.NewGet(
+		s.Address(
+			fmt.Sprintf("/event-stream?subscriber=%s&kinds=%s", name, kinds),
+		),
 	)
-	r, e := http.NewRequest(http.MethodGet, l, nil)
-	assert.FatalOnError(t, e)
 	web.Bearer(r, generativeConstant.ModelContextTestToken)
-	response, e := http.DefaultClient.Do(r)
+	response, e := s.Server.Client().Do(r)
 	assert.FatalOnError(t, e)
 	events := make(chan Event, 50)
 	go func() {

@@ -6,7 +6,7 @@ import (
 )
 
 func (s *Service) Status(instance string) (*status.Status, error) {
-	c, e := s.Engine(instance)
+	c, e := s.pool.Client(instance)
 
 	if e != nil {
 		return nil, e
@@ -19,6 +19,7 @@ func (s *Service) Status(instance string) (*status.Status, error) {
 		readSetup,
 		readScreen,
 		readRedirection,
+		readScreenService,
 		readConsent,
 		readPower,
 	} {

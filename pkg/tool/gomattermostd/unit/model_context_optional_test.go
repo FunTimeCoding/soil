@@ -2,7 +2,6 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
-	"github.com/funtimecoding/soil/pkg/generative/model_context_client"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/base"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/unit/model_context_tester"
@@ -11,7 +10,7 @@ import (
 
 func TestSubscriptionToolsAbsentWithoutGoclauded(t *testing.T) {
 	s := base.NewWithoutSubscription(t, threadUpstream)
-	c := model_context_client.New(t, s.ContextServer.Port)
+	c := s.ContextServer.Connect(t)
 	t.Cleanup(
 		func() {
 			c.Close()

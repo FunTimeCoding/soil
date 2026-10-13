@@ -5,12 +5,12 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/errors/unreachable"
 	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/funtimecoding/soil/pkg/web/requester"
 	"github.com/funtimecoding/soil/pkg/web/requester/authorizer/basic"
 	"github.com/funtimecoding/soil/pkg/web/requester/request"
+	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"io"
 	"net"
 	"net/http"
@@ -23,7 +23,8 @@ import (
 func TestCredentialsStayOnTheirHost(t *testing.T) {
 	own, ownSeen := newScriptedServer(t, "alfa", http.StatusOK)
 	other, otherSeen := newScriptedServer(t, "bravo", http.StatusOK)
-	r := newRequester(t, own.URL).WithAuthorizer(basic.New("charlie", "delta"))
+	r := newRequester(t, own.URL)
+	r.WithAuthorizer(basic.New("charlie", "delta"))
 	_, e := r.Bytes(request.Get("/items"))
 	assert.FatalOnError(t, e)
 	_, e = r.Bytes(request.Absolute(join.Empty(other.URL, "/files/a.png")))
@@ -75,13 +76,17 @@ func TestPatchSendsNotation(t *testing.T) {
 func TestUntrustedCertificateIsUnreachable(t *testing.T) {
 	s := httptest.NewTLSServer(http.NotFoundHandler())
 	t.Cleanup(s.Close)
-	_, e := requester.New(locator.New("unused.example")).
-		Bytes(request.Absolute(s.URL))
+	trusting := requester.New(locator.New("unused.example"))
+	defer trusting.Close()
+	_, e := trusting.Bytes(request.Absolute(s.URL))
 	assert.True(t, unreachable.Is(e))
 	assert.StringContains(t, "untrusted certificate", e.Error())
-	_, e = requester.New(locator.New("unused.example")).
-		WithClient(web.InsecureStallClient()).
-		Bytes(request.Absolute(s.URL))
+	p := stall_client.New().Insecure().Build()
+	defer p.Close()
+	insecure := requester.New(locator.New("unused.example"))
+	defer insecure.Close()
+	insecure.WithClient(p.Client())
+	_, e = insecure.Bytes(request.Absolute(s.URL))
 	assert.True(t, !unreachable.Is(e))
 }
 

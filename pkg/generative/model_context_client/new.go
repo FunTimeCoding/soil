@@ -15,6 +15,7 @@ import (
 func New(
 	t *testing.T,
 	port int,
+	base http.RoundTripper,
 ) *Client {
 	t.Helper()
 	x := context.Background()
@@ -30,7 +31,7 @@ func New(
 			Endpoint: locator.New(webConstant.Localhost).Insecure().Port(port).Path(
 				webConstant.ModelContextPath,
 			).String(),
-			HTTPClient: &http.Client{Transport: bearer.Transport{}},
+			HTTPClient: &http.Client{Transport: bearer.Transport{Base: base}},
 		},
 		nil,
 	)

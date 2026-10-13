@@ -1,11 +1,9 @@
 package unit
 
 import (
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
-	"net/http"
 	"testing"
 )
 
@@ -15,7 +13,7 @@ func pageStatus(
 	path string,
 ) int {
 	t.Helper()
-	response, e := http.Get(fmt.Sprintf("http://localhost:%d%s", s.Port, path))
+	response, e := s.Server.Client().Get(s.Address(path))
 	assert.FatalOnError(t, e)
 
 	defer errors.PanicClose(response.Body)

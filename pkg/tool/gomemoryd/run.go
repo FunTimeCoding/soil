@@ -16,6 +16,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/web"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/connect"
 	"github.com/funtimecoding/soil/pkg/web/guard"
+	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"net/http"
 )
 
@@ -27,7 +28,9 @@ func Run(
 	l := logger.New(context.Background())
 	s := store.New(connection.New(l, o.LitePath))
 	defer s.Close()
-	idx := memory_indexer.New(connect.Wait(l))
+	p := stall_client.New().Build()
+	defer p.Close()
+	idx := memory_indexer.New(connect.Wait(l, p.Client()))
 	v := service.New(s, idx, idx, idx).WithHiddenTag(
 		environment.Fallback(constant.HiddenTagEnvironment, ""),
 	).WithReferenceRoot(

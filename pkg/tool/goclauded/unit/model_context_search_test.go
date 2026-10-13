@@ -36,7 +36,7 @@ func TestSearchConversationsToolKinds(t *testing.T) {
 		constant.SearchConversations,
 		map[string]any{
 			generativeConstant.ParameterQuery: "go test",
-			constant.Kinds:            []string{"call"},
+			constant.Kinds:                    []string{"call"},
 		},
 	)
 	assert.StringContains(

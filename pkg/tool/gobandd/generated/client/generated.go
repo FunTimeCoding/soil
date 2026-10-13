@@ -111,6 +111,19 @@ type PowerResult struct {
 	Requested string `json:"requested"`
 }
 
+// RedirectionRequest defines model for RedirectionRequest.
+type RedirectionRequest struct {
+	// Instance Instance name. Optional when only one instance is configured.
+	Instance *string `json:"instance,omitempty"`
+}
+
+// RedirectionResult defines model for RedirectionResult.
+type RedirectionResult struct {
+	// Enabled What was switched on - listener, screen service - empty when everything already was.
+	Enabled  []string `json:"enabled"`
+	Instance string   `json:"instance"`
+}
+
 // Status defines model for Status.
 type Status struct {
 	// Available Power operations the firmware accepts now.
@@ -129,8 +142,14 @@ type Status struct {
 	Power        string      `json:"power"`
 	Provisioning string      `json:"provisioning"`
 
+	// Redirection Which redirections the service has enabled - serial, storage, both, or disabled.
+	Redirection string `json:"redirection"`
+
 	// ScreenEnabled Screen redirection enabled in the firmware.
 	ScreenEnabled bool `json:"screen_enabled"`
+
+	// ScreenService Network state of the screen redirection service.
+	ScreenService string `json:"screen_service"`
 
 	// ScreenTimeout Screen session timeout in minutes.
 	ScreenTimeout int `json:"screen_timeout"`
@@ -144,6 +163,9 @@ type GetStatusParams struct {
 
 // RequestPowerJSONRequestBody defines body for RequestPower for application/json ContentType.
 type RequestPowerJSONRequestBody = PowerRequest
+
+// EnableRedirectionJSONRequestBody defines body for EnableRedirection for application/json ContentType.
+type EnableRedirectionJSONRequestBody = RedirectionRequest
 
 // RequestEditorFn is the function signature for the RequestEditor callback function
 type RequestEditorFn func(ctx context.Context, req *http.Request) error
@@ -230,6 +252,14 @@ type ClientInterface interface {
 	// Takes a body of the `application/json` content type.
 	RequestPower(ctx context.Context, body RequestPowerJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// EnableRedirectionWithBody performs a POST /api/redirection (the `EnableRedirection` operationId) request,
+	// with any type of body and a specified content type.
+	EnableRedirectionWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// EnableRedirection performs a POST /api/redirection (the `EnableRedirection` operationId) request.
+	// Takes a body of the `application/json` content type.
+	EnableRedirection(ctx context.Context, body EnableRedirectionJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// GetStatus performs a GET /api/status (the `GetStatus` operationId) request.
 	GetStatus(ctx context.Context, params *GetStatusParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 }
@@ -265,6 +295,34 @@ func (c *Client) RequestPowerWithBody(ctx context.Context, contentType string, b
 // Takes a body of the `application/json` content type.
 func (c *Client) RequestPower(ctx context.Context, body RequestPowerJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewRequestPowerRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// EnableRedirectionWithBody performs a POST /api/redirection (the `EnableRedirection` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) EnableRedirectionWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewEnableRedirectionRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// EnableRedirection performs a POST /api/redirection (the `EnableRedirection` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) EnableRedirection(ctx context.Context, body EnableRedirectionJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewEnableRedirectionRequest(c.Server, body)
 	if err != nil {
 		return nil, err
 	}
@@ -336,6 +394,46 @@ func NewRequestPowerRequestWithBody(server string, contentType string, body io.R
 	}
 
 	operationPath := fmt.Sprintf("/api/power")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewEnableRedirectionRequest calls the generic EnableRedirection builder with application/json body
+func NewEnableRedirectionRequest(server string, body EnableRedirectionJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewEnableRedirectionRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewEnableRedirectionRequestWithBody constructs an http.Request for the EnableRedirection method, with any body, and a specified content type
+func NewEnableRedirectionRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/redirection")
 	if operationPath[0] == '/' {
 		operationPath = "." + operationPath
 	}
@@ -468,6 +566,16 @@ type ClientWithResponsesInterface interface {
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	RequestPowerWithResponse(ctx context.Context, body RequestPowerJSONRequestBody, reqEditors ...RequestEditorFn) (*RequestPowerResponse, error)
 
+	// EnableRedirectionWithBodyWithResponse performs a POST /api/redirection (the `EnableRedirection` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	EnableRedirectionWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*EnableRedirectionResponse, error)
+
+	// EnableRedirectionWithResponse performs a POST /api/redirection (the `EnableRedirection` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	EnableRedirectionWithResponse(ctx context.Context, body EnableRedirectionJSONRequestBody, reqEditors ...RequestEditorFn) (*EnableRedirectionResponse, error)
+
 	// GetStatusWithResponse performs a GET /api/status (the `GetStatus` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
@@ -577,6 +685,61 @@ func (r RequestPowerResponse) ContentType() string {
 	return ""
 }
 
+type EnableRedirectionResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *RedirectionResult
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r EnableRedirectionResponse) GetJSON200() *RedirectionResult {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r EnableRedirectionResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r EnableRedirectionResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r EnableRedirectionResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r EnableRedirectionResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r EnableRedirectionResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r EnableRedirectionResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type GetStatusResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -665,6 +828,28 @@ func (c *ClientWithResponses) RequestPowerWithResponse(ctx context.Context, body
 	return ParseRequestPowerResponse(rsp)
 }
 
+// EnableRedirectionWithBodyWithResponse performs a POST /api/redirection (the `EnableRedirection` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) EnableRedirectionWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*EnableRedirectionResponse, error) {
+	rsp, err := c.EnableRedirectionWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseEnableRedirectionResponse(rsp)
+}
+
+// EnableRedirectionWithResponse performs a POST /api/redirection (the `EnableRedirection` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) EnableRedirectionWithResponse(ctx context.Context, body EnableRedirectionJSONRequestBody, reqEditors ...RequestEditorFn) (*EnableRedirectionResponse, error) {
+	rsp, err := c.EnableRedirection(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseEnableRedirectionResponse(rsp)
+}
+
 // GetStatusWithResponse performs a GET /api/status (the `GetStatus` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -736,6 +921,46 @@ func ParseRequestPowerResponse(rsp *http.Response) (*RequestPowerResponse, error
 			return nil, err
 		}
 		response.JSON409 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseEnableRedirectionResponse parses an HTTP response from a EnableRedirectionWithResponse call
+func ParseEnableRedirectionResponse(rsp *http.Response) (*EnableRedirectionResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &EnableRedirectionResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest RedirectionResult
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse

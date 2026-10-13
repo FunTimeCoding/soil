@@ -13,14 +13,9 @@ func TestModelByNameFindsKnownModel(t *testing.T) {
 }
 
 func TestModelByNameUnknownPanicsListingKnownModels(t *testing.T) {
-	defer func() {
-		message, okay := recover().(string)
-		assert.True(t, okay)
-		assert.String(
-			t,
-			`unknown rerank model "bge-reranker-large", known: bge-reranker-base, gte-reranker-modernbert-base`,
-			message,
-		)
-	}()
-	rerank.ModelByName("bge-reranker-large")
+	assert.PanicContains(
+		t,
+		`unknown rerank model "bge-reranker-large", known: bge-reranker-base, gte-reranker-modernbert-base`,
+		func() { rerank.ModelByName("bge-reranker-large") },
+	)
 }

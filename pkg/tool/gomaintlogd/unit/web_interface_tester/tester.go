@@ -8,5 +8,4 @@ import (
 type Tester struct {
 	t      *testing.T
 	server *base.Server
-	base   string
 }

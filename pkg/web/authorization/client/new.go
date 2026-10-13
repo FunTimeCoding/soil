@@ -3,6 +3,7 @@ package client
 import (
 	"crypto/aes"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/web/stall_client"
 )
 
 func New(
@@ -17,6 +18,7 @@ func New(
 	errors.PanicOnError(e)
 	seal, e := newSeal(block)
 	errors.PanicOnError(e)
+	p := stall_client.New().Build()
 
 	return &Client{
 		issuer:          issuer,
@@ -25,6 +27,7 @@ func New(
 		signInPath:      signInPath,
 		callbackLocator: callbackLocator,
 		seal:            seal,
-		requester:       newRequester(issuer),
+		requester:       newRequester(issuer).WithClient(p.Client()),
+		pool:            p,
 	}
 }

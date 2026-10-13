@@ -82,14 +82,17 @@ func TestSessionWithAWrongBearerStillNeedsTheSignIn(t *testing.T) {
 }
 
 func TestSessionWithoutMiddlewarePanics(t *testing.T) {
-	defer func() { assert.NotNil(t, recover()) }()
-	guard.New(http.NewServeMux(), []string{"alfa"}).Session(
-		"GET /target",
-		web_tester.Serve,
+	assert.Panic(
+		t,
+		func() {
+			guard.New(http.NewServeMux(), []string{"alfa"}).Session(
+				"GET /target",
+				web_tester.Serve,
+			)
+		},
 	)
 }
 
 func TestNewWithoutTokensPanics(t *testing.T) {
-	defer func() { assert.NotNil(t, recover()) }()
-	guard.New(http.NewServeMux(), nil)
+	assert.Panic(t, func() { guard.New(http.NewServeMux(), nil) })
 }

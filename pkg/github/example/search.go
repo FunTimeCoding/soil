@@ -7,6 +7,7 @@ import (
 
 func Search() {
 	c := github.NewEnvironment()
+	defer c.Close()
 
 	if false {
 		for _, r := range c.MustSearchRepository("user:%s", c.MustUser().Name) {

@@ -1,10 +1,15 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/inventory"
-	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/funtimecoding/soil/pkg/inventory/pool"
+	"github.com/funtimecoding/soil/pkg/inventory/selection"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/inventory/instance"
 )
 
-func New(i *inventory.Inventory) *Service {
-	return &Service{inventory: i, pools: make(map[string]*pgxpool.Pool)}
+func New(i *instance.Inventory) *Service {
+	return &Service{
+		inventory: i,
+		pool:      pool.New(i, newPool),
+		selection: selection.New(),
+	}
 }

@@ -3,7 +3,6 @@ package client
 import (
 	"context"
 	"github.com/coreos/go-oidc/v3/oidc"
-	"github.com/funtimecoding/soil/pkg/web"
 )
 
 func (c *Client) ensureProvider() error {
@@ -15,7 +14,7 @@ func (c *Client) ensureProvider() error {
 	}
 
 	p, e := oidc.NewProvider(
-		oidc.ClientContext(context.Background(), web.StallClient()),
+		oidc.ClientContext(context.Background(), c.pool.Client()),
 		c.issuer,
 	)
 

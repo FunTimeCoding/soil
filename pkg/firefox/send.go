@@ -6,7 +6,9 @@ import (
 	"github.com/coder/websocket/wsjson"
 	"github.com/funtimecoding/soil/pkg/errors/timeout"
 	"github.com/funtimecoding/soil/pkg/errors/unreachable"
+	"github.com/funtimecoding/soil/pkg/firefox/constant"
 	"github.com/funtimecoding/soil/pkg/firefox/types/message"
+	"github.com/funtimecoding/soil/pkg/web/detail_error"
 	"time"
 )
 
@@ -45,11 +47,11 @@ func (c *Client) send(
 	select {
 	case r := <-channel:
 		if r.Error != "" {
-			return message.NewReply(), fmt.Errorf("%s: %s", method, r.Error)
+			return message.NewReply(), detail_error.New(r.Error, method)
 		}
 
 		return r, nil
-	case <-time.After(10 * time.Second):
+	case <-time.After(constant.SendTimeout):
 		return message.NewReply(), timeout.Format(
 			"%s: timeout waiting for reply",
 			method,

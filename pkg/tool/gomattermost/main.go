@@ -22,6 +22,7 @@ func Main() {
 	a := argument.NewInstance(constant.Identity)
 	a.Parse()
 	c := common.Mattermost()
+	defer c.Close()
 	t := timeLibrary.Midnight(time.Now())
 	console.Format(
 		"Unresolved threads since %s\n",
@@ -45,6 +46,7 @@ func Main() {
 
 	f := chatConstant.MattermostFormat
 	o := ollama.NewEnvironment()
+	defer o.Close()
 	te := `
 Summarize this tech support chat thread.
 Identify:

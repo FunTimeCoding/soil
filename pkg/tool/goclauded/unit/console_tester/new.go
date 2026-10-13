@@ -3,20 +3,21 @@ package console_tester
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
+	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/locator"
 	"testing"
 )
 
 func New(
 	t *testing.T,
-	port int,
+	s *model_context_server.Server,
 ) *Tester {
 	t.Helper()
 	c, e := client.NewClientWithResponses(
-		locator.New(webConstant.Localhost).Insecure().Port(port).String(),
+		s.Address(webConstant.RootPath),
+		client.WithHTTPClient(s.Client()),
 		client.WithRequestEditorFn(
 			web.BearerEditor(generativeConstant.ModelContextTestToken),
 		),

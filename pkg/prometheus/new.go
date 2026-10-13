@@ -4,8 +4,8 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/prometheus/client"
-	"github.com/funtimecoding/soil/pkg/prometheus/round_tripper"
 	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/stall_client"
 )
 
 func New(
@@ -18,13 +18,21 @@ func New(
 	o ...Option,
 ) *Client {
 	errors.FatalOnEmpty(host, "host")
+	b := stall_client.New()
+
+	if user != "" || password != "" {
+		b.BasicAuth(user, password)
+	}
+
+	p := b.Build()
 
 	return &Client{
 		context: context.Background(),
 		client: client.New(
 			web.Link(host, port, secure),
-			round_tripper.New(user, password),
+			p.Client().Transport,
 		),
+		pool:               p,
 		host:               host,
 		alternateGraphHost: alternateGraphHost,
 	}

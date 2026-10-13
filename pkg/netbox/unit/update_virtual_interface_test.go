@@ -14,6 +14,7 @@ func TestUpdateVirtualInterfaceSetsThePrimaryAddress(t *testing.T) {
 	s := fixture.NewServer(r)
 	defer s.Close()
 	c := netbox.New("netbox.example.org", "token", netbox.WithServer(s.URL))
+	defer c.Close()
 	_, e := c.UpdateVirtualInterface(
 		newAlfa(),
 		"ens3",
@@ -29,6 +30,7 @@ func TestUpdateVirtualInterfaceAssignsToTheVirtualInterface(t *testing.T) {
 	s := fixture.NewServer(r)
 	defer s.Close()
 	c := netbox.New("netbox.example.org", "token", netbox.WithServer(s.URL))
+	defer c.Close()
 	_, e := c.UpdateVirtualInterface(
 		newAlfa(),
 		"ens3",

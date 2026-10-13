@@ -27,11 +27,19 @@ func Decide(
 
 	if state == bandConstant.PowerOffSoftGraceful ||
 		state == bandConstant.PowerResetGraceful {
-		return 0, conflict.Format(
-			"%s not offered: %s",
-			name,
-			constant.GracefulRefusal,
-		)
+		hard, f := requestedState(operation, true)
+
+		if f != nil {
+			return 0, f
+		}
+
+		if slices.Contains(available, hard) {
+			return 0, conflict.Format(
+				"%s not offered: %s",
+				name,
+				constant.GracefulRefusal,
+			)
+		}
 	}
 
 	return 0, conflict.Format("%s not offered in the current power state", name)

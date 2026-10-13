@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) SearchRepositories(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.SearchRepositories,
 ) (*mcp.CallToolResult, error) {
@@ -16,7 +16,13 @@ func (s *Server) SearchRepositories(
 		return response.Fail("query is required")
 	}
 
-	v, e := s.service.Projects(a.Query)
+	instance, e := s.resolveInstance(x)
+
+	if e != nil {
+		return s.captureDetail(e)
+	}
+
+	v, e := s.service.Projects(instance, a.Query)
 
 	if e != nil {
 		return s.captureDetail(e)

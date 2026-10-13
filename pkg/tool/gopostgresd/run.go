@@ -19,6 +19,8 @@ func Run(
 	i face.Instrument,
 ) {
 	r := i.Reporter()
+	v := service.New(o.Inventory)
+	defer v.Close()
 	lifecycle.New(
 		logger.New(context.Background()),
 		lifecycle.WithServer(
@@ -26,12 +28,7 @@ func Run(
 				constant.Identity,
 				o.Address,
 				func(m *http.ServeMux) {
-					Mount(
-						service.New(o.Inventory),
-						r,
-						i.Recorder(),
-						guard.New(m, o.ServiceTokens),
-					)
+					Mount(v, r, i.Recorder(), guard.New(m, o.ServiceTokens))
 				},
 			).WithMiddleware(web.RecoveryMiddleware(r)),
 		),

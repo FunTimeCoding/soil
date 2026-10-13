@@ -2,7 +2,7 @@ package telemetry
 
 import (
 	"github.com/funtimecoding/soil/pkg/web/locator"
-	"net/http"
+	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"time"
 )
 
@@ -17,8 +17,7 @@ func New(
 		l.Insecure()
 	}
 
-	return &Client{
-		base:   l.String(),
-		client: &http.Client{Timeout: 5 * time.Second},
-	}
+	p := stall_client.New().Timeout(5 * time.Second).Build()
+
+	return &Client{base: l.String(), client: p.Client(), pool: p}
 }

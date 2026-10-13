@@ -14,6 +14,7 @@ import (
 )
 
 func (s *Server) logPane(
+	instance string,
 	project int64,
 	pipeline int64,
 	j *job.Job,
@@ -25,7 +26,7 @@ func (s *Server) logPane(
 		)
 	}
 
-	trace, e := s.service.Trace(project, j.Identifier)
+	trace, e := s.service.Trace(instance, project, j.Identifier)
 	errors.PanicOnError(e)
 	attributes := []gomponents.Node{html.ID("log-pane"), html.Class("log-pane")}
 
@@ -34,12 +35,9 @@ func (s *Server) logPane(
 			attributes,
 			extended.Get(
 				fmt.Sprintf(
-					"%s?%s=%d&%s=%d&%s=%d",
+					"%s?%s&%s=%d",
 					constant.JobPath,
-					argumentConstant.Project,
-					project,
-					argumentConstant.Pipeline,
-					pipeline,
+					pipelineQuery(instance, project, pipeline),
 					argumentConstant.Job,
 					j.Identifier,
 				),
@@ -68,12 +66,9 @@ func (s *Server) logPane(
 				html.Class("retry"),
 				extended.Post(
 					fmt.Sprintf(
-						"%s?%s=%d&%s=%d&%s=%d",
+						"%s?%s&%s=%d",
 						constant.RetryPath,
-						argumentConstant.Project,
-						project,
-						argumentConstant.Pipeline,
-						pipeline,
+						pipelineQuery(instance, project, pipeline),
 						argumentConstant.Job,
 						j.Identifier,
 					),

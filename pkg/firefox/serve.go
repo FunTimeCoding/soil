@@ -3,6 +3,7 @@ package firefox
 import (
 	"github.com/coder/websocket"
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/firefox/constant"
 	"log"
 	"net/http"
 )
@@ -23,6 +24,7 @@ func (c *Client) ServeHTTP(
 		return
 	}
 
+	connection.SetReadLimit(constant.ReadLimit)
 	log.Printf("firefox bridge: extension connected")
 	c.mutex.Lock()
 	c.connection = connection

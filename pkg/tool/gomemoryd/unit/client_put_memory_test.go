@@ -2,7 +2,6 @@ package unit
 
 import (
 	"context"
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/constant"
@@ -10,6 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/save_option"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/unit/base"
 	"github.com/funtimecoding/soil/pkg/web"
+	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 	"testing"
 )
@@ -23,7 +23,8 @@ func TestPutMemoryWithDescriptionOnly(t *testing.T) {
 	identifier, e := s.Store().CreateMemory(o)
 	assert.FatalOnError(t, e)
 	c, f := client.NewClientWithResponses(
-		fmt.Sprintf("http://localhost:%d", s.Port),
+		s.Address(webConstant.RootPath),
+		client.WithHTTPClient(s.Client()),
 		client.WithRequestEditorFn(
 			web.BearerEditor(constant.ModelContextTestToken),
 		),
@@ -52,7 +53,8 @@ func TestPutMemoryWithEmptyContentSetsIt(t *testing.T) {
 	identifier, e := s.Store().CreateMemory(o)
 	assert.FatalOnError(t, e)
 	c, f := client.NewClientWithResponses(
-		fmt.Sprintf("http://localhost:%d", s.Port),
+		s.Address(webConstant.RootPath),
+		client.WithHTTPClient(s.Client()),
 		client.WithRequestEditorFn(
 			web.BearerEditor(constant.ModelContextTestToken),
 		),

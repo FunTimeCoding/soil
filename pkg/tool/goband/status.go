@@ -29,7 +29,9 @@ func status(x *Context) *cobra.Command {
 					v.ScreenTimeout,
 				),
 			)
+			t.Line(fmt.Sprintf("Redirection: %s", v.Redirection))
 			t.Line(fmt.Sprintf("Redirection listener: %v", v.Listener))
+			t.Line(fmt.Sprintf("Screen service: %s", v.ScreenService))
 			t.Line(fmt.Sprintf("Consent: %s", v.Consent))
 			t.Line(fmt.Sprintf("Power state: %s", v.Power))
 			t.Line(

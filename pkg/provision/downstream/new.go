@@ -2,6 +2,7 @@ package downstream
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"net"
 	"strconv"
 )
@@ -12,5 +13,5 @@ func New(address string) *Client {
 	number, f := strconv.Atoi(port)
 	errors.PanicOnError(f)
 
-	return &Client{host: host, port: number}
+	return &Client{host: host, port: number, pool: stall_client.New().Build()}
 }

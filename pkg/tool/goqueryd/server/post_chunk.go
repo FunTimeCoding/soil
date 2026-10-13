@@ -14,15 +14,15 @@ func (s *Server) PostChunk(
 
 	for i, c := range p.Chunks {
 		chunks[i] = server.PreviewChunk{
-			Index:        c.Index,
-			FirstLine:    c.FirstLine,
-			LastLine:     c.LastLine,
-			Bytes:        c.Bytes,
-			Tokens:       c.Tokens,
-			Piece:        c.Piece,
-			CutChecked:   c.CutChecked,
-			CutLevel:     c.CutLevel,
-			CutLines:     lines(c.CutLines),
+			Index:      c.Index,
+			FirstLine:  c.FirstLine,
+			LastLine:   c.LastLine,
+			Bytes:      c.Bytes,
+			Tokens:     c.Tokens,
+			Piece:      c.Piece,
+			CutChecked: c.CutChecked,
+			CutLevel:   c.CutLevel,
+			CutLines:   lines(c.CutLines),
 		}
 	}
 

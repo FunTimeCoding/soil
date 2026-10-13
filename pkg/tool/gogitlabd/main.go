@@ -2,8 +2,11 @@ package gogitlabd
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
+	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/instrument"
+	"github.com/funtimecoding/soil/pkg/inventory"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/inventory/instance"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/option"
 	"github.com/funtimecoding/soil/pkg/web"
 )
@@ -14,10 +17,18 @@ func Main() {
 	a := argument.NewInstance(constant.Identity)
 	a.Web()
 	a.Metric()
+	a.String(
+		argumentConstant.Inventory,
+		constant.Identity.InventoryPath(),
+		"Inventory file path",
+	)
 	a.Parse()
 	o := option.New()
 	o.Address = a.Address()
 	o.ServiceTokens = web.ServiceTokens()
 	o.MetricAddress = a.MetricAddress()
+	o.Inventory = inventory.Load[instance.Instance](
+		a.GetString(argumentConstant.Inventory),
+	)
 	Run(o, s)
 }

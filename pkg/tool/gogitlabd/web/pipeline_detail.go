@@ -2,7 +2,6 @@ package web
 
 import (
 	"fmt"
-	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	timeConstant "github.com/funtimecoding/soil/pkg/time/constant"
@@ -13,14 +12,15 @@ import (
 )
 
 func (s *Server) pipelineDetail(
+	instance string,
 	project int64,
 	pipeline int64,
 	requested int64,
 ) gomponents.Node {
-	jobs, e := s.service.PipelineJobs(project, pipeline)
+	jobs, e := s.service.PipelineJobs(instance, project, pipeline)
 	errors.PanicOnError(e)
 	selected := selectJob(jobs, requested)
-	p, f := s.service.Pipeline(project, pipeline)
+	p, f := s.service.Pipeline(instance, project, pipeline)
 	errors.PanicOnError(f)
 	var ran gomponents.Node
 
@@ -61,12 +61,9 @@ func (s *Server) pipelineDetail(
 				html.Class("delete"),
 				extended.Post(
 					fmt.Sprintf(
-						"%s?%s=%d&%s=%d",
+						"%s?%s",
 						constant.DeletePath,
-						argumentConstant.Project,
-						project,
-						argumentConstant.Pipeline,
-						pipeline,
+						pipelineQuery(instance, project, pipeline),
 					),
 				),
 				extended.Confirm(fmt.Sprintf("Delete pipeline #%d?", pipeline)),
@@ -75,8 +72,8 @@ func (s *Server) pipelineDetail(
 		),
 		html.Div(
 			extended.StreamSwap(constant.PipelineEvent),
-			stageStrip(project, pipeline, jobs, selected),
+			stageStrip(instance, project, pipeline, jobs, selected),
 		),
-		s.logPane(project, pipeline, selected),
+		s.logPane(instance, project, pipeline, selected),
 	)
 }

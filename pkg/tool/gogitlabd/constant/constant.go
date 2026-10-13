@@ -2,6 +2,8 @@ package constant
 
 import (
 	"github.com/funtimecoding/soil/pkg/identity"
+	"github.com/funtimecoding/soil/pkg/identity/paragraph"
+	inventoryConstant "github.com/funtimecoding/soil/pkg/inventory/constant"
 	"time"
 )
 
@@ -40,6 +42,10 @@ var Identity = identity.New(
 	"gogitlabd",
 ).WithInstructions(
 	"GitLab API - projects, pipelines, merge requests, commits, CI variables. Projects are referenced by path (owner/repo) or numeric ID.",
+	paragraph.New(
+		inventoryConstant.MultiInstance,
+		inventoryConstant.MultiInstanceInstruction,
+	),
 )
 
 const (
@@ -80,4 +86,9 @@ const (
 	DeleteProjectVariable = "delete_project_variable"
 
 	CreateBranch = "create_branch"
+
+	SourceLabel = "source"
+
+	FixtureInstance      = "alfa"
+	FixtureOtherInstance = "bravo"
 )

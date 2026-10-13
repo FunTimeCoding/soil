@@ -17,6 +17,7 @@ type Client struct {
 	branches          []*branch.Branch
 	tags              []*tag.Tag
 	projects          []*project.Project
+	projectFailure    error
 	pipelineFailure   error
 	pipelines         []*pipeline.Pipeline
 	deletedPipelines  []int64

@@ -7,6 +7,7 @@ import (
 
 func Read() {
 	c := opnsense.NewEnvironment()
+	defer c.Close()
 
 	for _, l := range c.MustLeases("") {
 		console.Format(

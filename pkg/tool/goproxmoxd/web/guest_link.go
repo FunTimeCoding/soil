@@ -7,7 +7,7 @@ import (
 )
 
 func (s *Server) guestLink(g guest.Guest) string {
-	i, okay := s.service.Instance(g.Hypervisor)
+	i, okay := s.service.Inventory().Find(g.Hypervisor)
 
 	if !okay {
 		return ""

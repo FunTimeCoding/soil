@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func (*Server) boardTable(entries []*board_entry.Entry) gomponents.Node {
+func (s *Server) boardTable(entries []*board_entry.Entry) gomponents.Node {
 	if len(entries) == 0 {
 		return html.P(
 			gomponents.Text("No pipelines seen yet - first poll pending."),
@@ -17,12 +17,20 @@ func (*Server) boardTable(entries []*board_entry.Entry) gomponents.Node {
 	}
 
 	namespace := sharedNamespace(entries)
+	multiple := s.multiple()
 	rows := make([]gomponents.Node, 0, len(entries))
 
 	for _, entry := range entries {
 		rows = append(
 			rows,
 			html.Tr(
+				gomponents.If(
+					multiple,
+					html.Td(
+						html.Class("reference"),
+						gomponents.Text(entry.Instance),
+					),
+				),
 				html.Td(
 					html.Img(
 						html.Class("status-icon"),
@@ -53,6 +61,7 @@ func (*Server) boardTable(entries []*board_entry.Entry) gomponents.Node {
 					html.A(
 						html.Href(
 							detailLink(
+								entry.Instance,
 								entry.ProjectIdentifier,
 								entry.Identifier,
 								0,
@@ -70,6 +79,7 @@ func (*Server) boardTable(entries []*board_entry.Entry) gomponents.Node {
 		html.Class("board-table"),
 		html.THead(
 			html.Tr(
+				gomponents.If(multiple, html.Th(gomponents.Text("Instance"))),
 				html.Th(),
 				html.Th(gomponents.Text("Project")),
 				html.Th(gomponents.Text("Branch")),

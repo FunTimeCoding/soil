@@ -7,6 +7,7 @@ import (
 
 func Keys() {
 	c := salt.NewEnvironment()
+	defer c.Close()
 	result, e := c.Keys()
 
 	if e != nil {

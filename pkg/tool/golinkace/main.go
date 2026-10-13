@@ -19,6 +19,7 @@ func Main() {
 	var port int
 	var linkaceHost string
 	c := command_context.New(terminal.New(s))
+	defer c.Close()
 	o := &cobra.Command{
 		Use:   constant.Identity.Usage(),
 		Short: constant.Identity.Description(),

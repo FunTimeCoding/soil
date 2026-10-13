@@ -12,6 +12,7 @@ import (
 
 func ClassifyAlert() {
 	o := ollama.NewEnvironment()
+	defer o.Close()
 
 	if false {
 		alert := "ECCMemoryError"

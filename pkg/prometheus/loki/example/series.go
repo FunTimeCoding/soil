@@ -7,5 +7,6 @@ import (
 
 func Series() {
 	c := loki.NewEnvironment(false)
+	defer c.Close()
 	console.Format("Series: %s\n", c.MustSeries(`{namespace="bot"}`))
 }

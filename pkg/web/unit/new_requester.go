@@ -12,8 +12,10 @@ func newRequester(
 	base string,
 ) *requester.Requester {
 	t.Helper()
-
-	return requester.New(
+	result := requester.New(
 		upstream_tester.Locator(t, base),
 	).WithBackoff(time.Millisecond)
+	t.Cleanup(result.Close)
+
+	return result
 }

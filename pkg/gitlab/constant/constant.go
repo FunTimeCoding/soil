@@ -43,6 +43,8 @@ const (
 	ProjectEnvironment     = "GITLAB_PROJECT"
 	ProjectNameEnvironment = "GITLAB_PROJECT_NAME"
 
+	PublicHost = "gitlab.com"
+
 	PrivateTokenHeader = "Private-Token"
 	JobTokenHeader     = "Job-Token"
 

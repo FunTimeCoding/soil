@@ -3,6 +3,7 @@ package constant
 import (
 	"github.com/funtimecoding/soil/pkg/identity"
 	"github.com/funtimecoding/soil/pkg/identity/paragraph"
+	inventoryConstant "github.com/funtimecoding/soil/pkg/inventory/constant"
 	"time"
 )
 
@@ -26,16 +27,13 @@ var Identity = identity.New(
 ).WithInstructions(
 	"Proxmox hypervisor bridge.",
 	paragraph.New(
-		MultiInstance,
-		"Multi-instance - call list_instances and use_instance before querying.",
+		inventoryConstant.MultiInstance,
+		inventoryConstant.MultiInstanceInstruction,
 	),
 )
 
-const MultiInstance = "multi_instance"
 const SnippetDirectory = "/var/lib/vz/snippets"
 const (
-	ListInstances             = "list_instances"
-	UseInstance               = "use_instance"
 	ListNodes                 = "list_nodes"
 	GetNodeStatus             = "get_node_status"
 	ListMachines              = "list_machines"

@@ -13,7 +13,7 @@ func (s *Server) series(
 	_ mcp.CallToolRequest,
 	_ argument.Series,
 ) (*mcp.CallToolResult, error) {
-	instance, e := s.service.ResolveInstance(s.activeInstanceName(x))
+	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
 		return response.Fail("%s", e)

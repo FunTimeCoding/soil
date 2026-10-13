@@ -9,6 +9,7 @@ import (
 
 func Customer() {
 	j := common.Jira()
+	defer j.Close()
 	console.Format("Information: %+v\n", j.MustCustomerInformation())
 
 	if false {

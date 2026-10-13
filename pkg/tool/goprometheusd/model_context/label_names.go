@@ -15,7 +15,7 @@ func (s *Server) labelNames(
 	_ mcp.CallToolRequest,
 	a argument.LabelNames,
 ) (*mcp.CallToolResult, error) {
-	instance, e := s.service.ResolveInstance(s.activeInstanceName(x))
+	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
 		return response.Fail("%s", e)

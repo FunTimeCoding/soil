@@ -7,6 +7,7 @@ import (
 
 func List() {
 	o := ollama.NewEnvironment()
+	defer o.Close()
 
 	for _, m := range o.MustList() {
 		console.Format("Model: %+v\n", m)

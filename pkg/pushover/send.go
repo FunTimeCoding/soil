@@ -12,7 +12,7 @@ import (
 )
 
 func (c *Client) Send(s string) *http.Response {
-	result, e := http.Post(
+	result, e := c.pool.Client().Post(
 		locator.New(constant.Host).Base(constant.Base).Path(constant.Message).String(),
 		webConstant.Object,
 		bytes.NewBuffer(

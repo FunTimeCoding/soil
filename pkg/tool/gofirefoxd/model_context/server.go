@@ -7,7 +7,8 @@ import (
 )
 
 type Server struct {
-	server   *server.MCPServer
-	client   firefox.FirefoxSource
-	reporter face.Reporter
+	server            *server.MCPServer
+	client            firefox.FirefoxSource
+	downloadDirectory string
+	reporter          face.Reporter
 }

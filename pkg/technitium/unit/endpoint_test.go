@@ -141,6 +141,7 @@ func TestUntrustedReachesASelfSignedServer(t *testing.T) {
 	_, e := newClient(t, s.URL).Get("/zones/list")
 	assert.True(t, unreachable.Is(e))
 	c := newClient(t, s.URL)
+	defer c.Close()
 	c.Untrusted()
 	_, f := c.Get("/zones/list")
 	assert.FatalOnError(t, f)

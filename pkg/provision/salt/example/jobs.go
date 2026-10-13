@@ -7,6 +7,7 @@ import (
 
 func Jobs() {
 	c := salt.NewEnvironment()
+	defer c.Close()
 	result, e := c.Jobs()
 
 	if e != nil {

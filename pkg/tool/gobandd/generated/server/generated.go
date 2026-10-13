@@ -117,6 +117,19 @@ type PowerResult struct {
 	Requested string `json:"requested"`
 }
 
+// RedirectionRequest defines model for RedirectionRequest.
+type RedirectionRequest struct {
+	// Instance Instance name. Optional when only one instance is configured.
+	Instance *string `json:"instance,omitempty"`
+}
+
+// RedirectionResult defines model for RedirectionResult.
+type RedirectionResult struct {
+	// Enabled What was switched on - listener, screen service - empty when everything already was.
+	Enabled  []string `json:"enabled"`
+	Instance string   `json:"instance"`
+}
+
 // Status defines model for Status.
 type Status struct {
 	// Available Power operations the firmware accepts now.
@@ -135,8 +148,14 @@ type Status struct {
 	Power        string      `json:"power"`
 	Provisioning string      `json:"provisioning"`
 
+	// Redirection Which redirections the service has enabled - serial, storage, both, or disabled.
+	Redirection string `json:"redirection"`
+
 	// ScreenEnabled Screen redirection enabled in the firmware.
 	ScreenEnabled bool `json:"screen_enabled"`
+
+	// ScreenService Network state of the screen redirection service.
+	ScreenService string `json:"screen_service"`
 
 	// ScreenTimeout Screen session timeout in minutes.
 	ScreenTimeout int `json:"screen_timeout"`
@@ -151,6 +170,9 @@ type GetStatusParams struct {
 // RequestPowerJSONRequestBody defines body for RequestPower for application/json ContentType.
 type RequestPowerJSONRequestBody = PowerRequest
 
+// EnableRedirectionJSONRequestBody defines body for EnableRedirection for application/json ContentType.
+type EnableRedirectionJSONRequestBody = RedirectionRequest
+
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 
@@ -159,6 +181,9 @@ type ServerInterface interface {
 
 	// (POST /api/power)
 	RequestPower(w http.ResponseWriter, r *http.Request)
+
+	// (POST /api/redirection)
+	EnableRedirection(w http.ResponseWriter, r *http.Request)
 
 	// (GET /api/status)
 	GetStatus(w http.ResponseWriter, r *http.Request, params GetStatusParams)
@@ -192,6 +217,20 @@ func (siw *ServerInterfaceWrapper) RequestPower(w http.ResponseWriter, r *http.R
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.RequestPower(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// EnableRedirection operation middleware
+func (siw *ServerInterfaceWrapper) EnableRedirection(w http.ResponseWriter, r *http.Request) {
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.EnableRedirection(w, r)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -357,6 +396,7 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/instances", wrapper.ListInstances)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/status", wrapper.GetStatus)
 	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/power", wrapper.RequestPower)
+	m.HandleFunc(http.MethodPost+" "+options.BaseURL+"/api/redirection", wrapper.EnableRedirection)
 
 	return m
 }
@@ -446,6 +486,56 @@ func (response RequestPower500JSONResponse) VisitRequestPowerResponse(w http.Res
 	return err
 }
 
+type EnableRedirectionRequestObject struct {
+	Body *EnableRedirectionJSONRequestBody
+}
+
+type EnableRedirectionResponseObject interface {
+	VisitEnableRedirectionResponse(w http.ResponseWriter) error
+}
+
+type EnableRedirection200JSONResponse RedirectionResult
+
+func (response EnableRedirection200JSONResponse) VisitEnableRedirectionResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type EnableRedirection400JSONResponse Error
+
+func (response EnableRedirection400JSONResponse) VisitEnableRedirectionResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type EnableRedirection500JSONResponse ErrorResponse
+
+func (response EnableRedirection500JSONResponse) VisitEnableRedirectionResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type GetStatusRequestObject struct {
 	Params GetStatusParams
 }
@@ -504,6 +594,9 @@ type StrictServerInterface interface {
 
 	// (POST /api/power)
 	RequestPower(ctx context.Context, request RequestPowerRequestObject) (RequestPowerResponseObject, error)
+
+	// (POST /api/redirection)
+	EnableRedirection(ctx context.Context, request EnableRedirectionRequestObject) (EnableRedirectionResponseObject, error)
 
 	// (GET /api/status)
 	GetStatus(ctx context.Context, request GetStatusRequestObject) (GetStatusResponseObject, error)
@@ -603,6 +696,37 @@ func (sh *strictHandler) RequestPower(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// EnableRedirection operation middleware
+func (sh *strictHandler) EnableRedirection(w http.ResponseWriter, r *http.Request) {
+	var request EnableRedirectionRequestObject
+
+	var body EnableRedirectionJSONRequestBody
+	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
+		sh.options.RequestErrorHandlerFunc(w, r, fmt.Errorf("can't decode JSON body: %w", err))
+		return
+	}
+	request.Body = &body
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.EnableRedirection(ctx, request.(EnableRedirectionRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "EnableRedirection")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(EnableRedirectionResponseObject); ok {
+		if err := validResponse.VisitEnableRedirectionResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
 // GetStatus operation middleware
 func (sh *strictHandler) GetStatus(w http.ResponseWriter, r *http.Request, params GetStatusParams) {
 	var request GetStatusRequestObject
@@ -634,24 +758,27 @@ func (sh *strictHandler) GetStatus(w http.ResponseWriter, r *http.Request, param
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"xFdNj9s2E/4rBN/3KNjbr0PdU1v0Y4EUWewG6CEIAlocSUwljsIZ2TAC/feCFGVTNte7bTfIyRI95Dzz",
-	"zDMz1CdZYtejBcskN58klQ10Kjz+4hw6/9A77MGxgbAM8zIfepAbSeyMreU4FtLBx8E40HLzNpq9K2Yz",
-	"3H6AkuVYTOfeA/VoCZ5/fiFhB5bfGw2WTWXg2SAyO3O4bi2xsmUGUoPEWURWdfA0imBVTKfkHL/uwSk2",
-	"aC89V+jK1MMWsQVlU99gh857IVaOZSGpGVjj3koPYouY+jwhd1ANpFp/gAYqneknAPLP5iC4AeEDAGKx",
-	"x6HVYusXqoFA/yDUlsCy2DdghUkMVFlCz6BXMuOPWDFcenvTgOhxD04Eg4xnRX+F1cq4bq8ciApdxkOe",
-	"8om+2XuO+zvv/H7yeIV+DZUaWpabSrUExVkUPw8co0AXH8pD2YLYQov7AB+nHNta0IEYOmEsMSgtsPIh",
-	"+j8MC24cDnUjXv3xkMSYJN0kGl1imNUrfOgr8Tqsq3ZKE9r2INCCmPcLQ6JEW5l6cI9kDFNV/huRnaXk",
-	"dN6VPFAg+TwNadQZJYfkeSdPqetoKiqH3UJWT0vqCCJ1mQvlgRUPdBmF2inTqm2bSd7dJJ6ZIVoqfios",
-	"Ehb3HqZh6ChLRVxQzqmDfy99h7X51jX3tCWQ35FYKKuFxk4ZG8QUwICtjfUM9uiYsoK5mqXWEIOdevbS",
-	"5T1o46D0b2K2EmA9UTpfBCeecu1LsQBVNjHxy2aiUThTN+ypLEKc++awaGKxyy14/r+DSm7k/9anUbmO",
-	"c3J96t0Z/gOELB29w50hg9a/5wyodAD2feThMs6H8L9wCXnRVhj7mLITDuP5bDrAgR89n4A8ShHt/Nmd",
-	"sQNDKgFjGWpw1yomqO0s7IsgL1AlsjmJeaa1SApqoYnLmhyDOisMTBv2FShr3CqrvdMdOJqC/mp1s7qJ",
-	"CrOqN3IjvwlLhewVN0EMa9Wb9RxZWKkh8HdEcKvlRr4yxLdHK8/LdN8JO76+ufE/JVqO5an6vjVl2L7+",
-	"QFPPnSQW+t9zlHi8vlwI0Ye/zO6PbZu0f9Epq2ro/FSf6pxWftdYTNEeZdzHnrEMNU7Pu5iVWHE/oT78",
-	"oyCvxbaY0uNSZ+wGGP8jwc/wHSZThsrzGVM2ytaQa+C+q4yF/PYFsU1X9AyqW7tTrdGneY/JeIkwvv/8",
-	"MN6kLGgEP8NYYFWBS696oCN5YcKNhfzupTk6fm5kQP6qjG+bjGnukpQuaoGOwz1b9r8Bx/HvW4ZTHTA4",
-	"kpu3L31dM/6QjwO4g5w/BdJ+e6Lm/FLz7jOWSgw9w/Fd0viLdGoVIvb1MI2XrH+hWvmSCnT+k8Dr76Il",
-	"Tyocx78DAAD//w==",
+	"5FhNb9w2E/4rBN/3qHjdr0O3p7ZIWwNpYzgBcgiCgCuNJCYSRyFHKwiB/nvBD+1SK+7aaePk0JNlmuQ8",
+	"88wzH/RHnmPboQJFhm8/cpPX0Ar3+VRr1Paj09iBJgluGeZlGjvgW25IS1Xxacq4hg+91FDw7euw7U02",
+	"b8PdO8iJT5m/9w5Mh8rAw+/POOxB0VtZgCJZSngwiMTJFK4bZUioPAGpRkNJREq0cD8Ktyvzt6QMP+9A",
+	"C5Ko1pZL1HlsYYfYgFCxbVB9a60YEpp4xk3dU4GD4hbEDjG2eUSuoeyNaOwFBZhcy84D4K/qkVENzDoA",
+	"htiAfVOwnV0oewPFT0zsDChiQw2KyWiDyHPoCIornrBnSBCsrb2sgXU4gGZuQ8KyMO/dail1OwgNrESd",
+	"sJCm3NM3W09xf2uN33mLF+gvoBR9Q3xbisZAduLFrz0FL1CHj3zMG2A7aHBw8NHHWFXMjIagZVIZAlEw",
+	"LK2L9g+SGNUa+6pmz/58EfkYBV1GGl1imNXLrOtX7LlbF40PE6pmZKiAzeeZNCxHVcqq12cihrEq/4nI",
+	"TkJyvO9CHIwj+TQMsdcJJbvgWSP3qeuwlZUa24Ws7pfUAURsMuXKHRRSQ24xnBXWF4vjdB/ANOOgxK5J",
+	"UfqqFsQGYZgZJOU1FAwVe8IaaQgU6IyZXAMoZkDvZQ7sCYO2o9HDhz3okWordtFoEMVor7KoJUFrkuEN",
+	"C0JrMZ5mwIMDNruTCtcLEtSbNQViL2Rjj61JuPW5PgvaLAuUr4OGKRw+zbXcNkSV7jRzC1oC+QMNMaEK",
+	"VmArpHKacWBAVVJZwXeoySTz+2JSzfFcm4zEc4g6C/yma9aRpzNyApHXIU+Xtb9ApmVVk6Uyc34O9bjo",
+	"OaEpLXj+v4aSb/n/NsfJZhPGms2x1Sb4dxCSdHQa99JIVPb3dBE6sJJyUuY1i7Z4wcwpUgszE8ie2FUp",
+	"mowZQi0qyNgOqc5sYymkOWU56q8u7d6ezdsXPi0jEAebUp2rhFEQw/0B8/r+v4AG1O9DocXSe7g2Gi64",
+	"5APJFrCnsz4YMDYULOyz+FupeoJY51IRVKAvFQWXUiexXRG5QhXlxjLsK46OCT1LK4uKyiIv1nVpchla",
+	"olObJFuFeIU7oQqLaQ/aeE6+ubq+ug5ZpkQn+ZZ/55Yy3gmqXUJsRCc3s+NupQJH7wHBTcG3/Jk0dHPY",
+	"ZZ3zI7o78e31tf2Ro6JQokTXNTJ3xzfvjNe9TzPX4B6SjYeJe5WM1v1l8H9umqjTsVYoUUFrB1Ff68yV",
+	"PTVl3ttDKnehbi5dDX35NkQlVJ1fsBg/yclLvi0Gy2kpQ9I9TP+S4AfYdq09QeXpWJTXQlWQamK22EwZ",
+	"//4zYvOvygSqG7UXjSyOow1GLTbA+PHxYbyMWSgQbB8nhmUJOn6dQBHIc11+yvgPn5ujwws5AfI3IW3l",
+	"JoxjF4V0kQsnvSmdEU9dvbtb1LPHSIvEcPyFk2M9/Z5RwaAlgW3VduIFDUwBFJ513x3ixvb18uRrqi/J",
+	"w1F55jBaJxvO70Bh+LbNSosWCLTh29ef+00k7SUfetAjn/9vEg8CR1pOHxRvHlGHwfUEv7fRRJLF5GYs",
+	"TBRuFl7m+39QffYF6SrfahjwKpymvwMAAP//",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

@@ -3,9 +3,10 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
+	"github.com/funtimecoding/soil/pkg/inventory"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd"
-	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/inventory"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/inventory/instance"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/service"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"net/http"
@@ -20,7 +21,7 @@ func TestGuard(t *testing.T) {
 			g *guard.Mux,
 		) {
 			gopostgresd.Mount(
-				service.New(inventory.New()),
+				service.New(inventory.New[instance.Instance]()),
 				memory.New(),
 				mock_recorder.New(),
 				g,

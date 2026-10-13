@@ -8,5 +8,6 @@ import (
 
 func Show() {
 	o := ollama.NewEnvironment()
+	defer o.Close()
 	console.Format("Show: %+v\n", o.MustShow(constant.Llama31))
 }

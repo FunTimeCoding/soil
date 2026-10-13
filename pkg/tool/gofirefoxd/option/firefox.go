@@ -1,7 +1,8 @@
 package option
 
 type Firefox struct {
-	Address       string
-	ServiceTokens []string
-	BridgePort    int
+	Address           string
+	DownloadDirectory string
+	ServiceTokens     []string
+	BridgePort        int
 }

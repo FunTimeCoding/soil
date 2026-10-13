@@ -20,6 +20,7 @@ func TestTheClientClaimsReleasesAndStreams(t *testing.T) {
 		locator.New(webConstant.Localhost).Port(s.Port).Insecure(),
 		generativeConstant.ModelContextTestToken,
 	)
+	defer c.Close()
 	x, cancel := context.WithCancel(context.Background())
 	t.Cleanup(cancel)
 	events := make(chan []generated.Claim, 8)
@@ -43,6 +44,7 @@ func TestStreamReportsAnUnreachableDaemon(t *testing.T) {
 		locator.New(webConstant.Localhost).Port(1).Insecure(),
 		generativeConstant.ModelContextTestToken,
 	)
+	defer c.Close()
 	x, cancel := context.WithTimeout(context.Background(), time.Second)
 	t.Cleanup(cancel)
 	assert.True(t, c.Stream(x, func([]generated.Claim) {}) != nil)

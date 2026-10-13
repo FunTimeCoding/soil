@@ -7,6 +7,7 @@ import (
 
 func Create() {
 	c := common.Alertmanager()
+	defer c.Close()
 	c.MustCreate(
 		constant.HighMemoryUsage,
 		"localhost:9090",

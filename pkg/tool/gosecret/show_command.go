@@ -8,9 +8,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosecret/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/generated/client"
 	"github.com/spf13/cobra"
+	"net/http"
 )
 
-func showCommand(t *terminal.Terminal) *cobra.Command {
+func showCommand(
+	t *terminal.Terminal,
+	h *http.Client,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   constant.ShowUsage,
 		Short: "Show a secret's key names; values stay masked",
@@ -19,7 +23,7 @@ func showCommand(t *terminal.Terminal) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			r, e := interfaceClient(t).ShowSecretWithResponse(
+			r, e := interfaceClient(t, h).ShowSecretWithResponse(
 				context.Background(),
 				&client.ShowSecretParams{Path: arguments[0]},
 			)

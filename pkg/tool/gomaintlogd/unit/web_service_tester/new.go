@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomaintlogd/unit/base"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/locator"
 	"testing"
 )
 
@@ -15,7 +14,8 @@ func New(t *testing.T) *Tester {
 	t.Helper()
 	s := base.New(t)
 	c, e := client.NewClientWithResponses(
-		locator.New(webConstant.Localhost).Insecure().Port(s.Port).String(),
+		s.Address(webConstant.RootPath),
+		client.WithHTTPClient(s.Client()),
 		client.WithRequestEditorFn(
 			web.BearerEditor(generativeConstant.ModelContextTestToken),
 		),

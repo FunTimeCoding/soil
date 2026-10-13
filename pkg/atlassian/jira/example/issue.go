@@ -10,6 +10,7 @@ import (
 
 func Issue() {
 	j := common.Jira()
+	defer j.Close()
 	p := j.DefaultProjectKey()
 	issueType := constant.JiraTaskType
 	summary := "Stub summary"

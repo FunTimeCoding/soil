@@ -20,8 +20,5 @@ func TestFilterEmptyKeepsAll(t *testing.T) {
 }
 
 func TestFilterUnknownPanics(t *testing.T) {
-	defer func() {
-		assert.NotNil(t, recover())
-	}()
-	registry.NewDefault().Filter([]string{"cobol"})
+	assert.Panic(t, func() { registry.NewDefault().Filter([]string{"cobol"}) })
 }

@@ -1,58 +1,52 @@
-const WEBSOCKET_URL = "ws://127.0.0.1:6125";
+const HOST_NAME = "org.funtimecoding.firefox_relay";
 const RECONNECT_INTERVAL = 3000;
 
-let socket = null;
-let connecting = false;
+let port = null;
+
+console.log(
+  "FirefoxBridge: background loaded, permissions",
+  browser.runtime.getManifest().permissions.join(",")
+);
 
 function connect() {
-  if (connecting) {
+  if (port) {
     return;
   }
-
-  connecting = true;
 
   try {
-    socket = new WebSocket(WEBSOCKET_URL);
+    port = browser.runtime.connectNative(HOST_NAME);
   } catch (error) {
-    connecting = false;
+    console.error("FirefoxBridge: connectNative threw:", error.message);
     scheduleReconnect();
+
     return;
   }
 
-  socket.onopen = function () {
-    connecting = false;
-    console.log("FirefoxBridge: connected to", WEBSOCKET_URL);
-  };
+  console.log("FirefoxBridge: port opened to", HOST_NAME);
 
-  socket.onclose = function () {
-    console.log("FirefoxBridge: disconnected");
-    socket = null;
-    connecting = false;
+  port.onDisconnect.addListener(function (p) {
+    const fail = p.error ? p.error.message : "";
+    console.error("FirefoxBridge: port disconnected:", fail || "no reason");
+    port = null;
     scheduleReconnect();
-  };
+  });
 
-  socket.onerror = function () {
-    // onclose will fire after onerror, so don't reconnect here
-  };
-
-  socket.onmessage = async function (event) {
-    let request;
+  port.onMessage.addListener(async function (request) {
+    let reply;
 
     try {
-      request = JSON.parse(event.data);
+      reply = { result: await dispatch(request.method, request.params) };
     } catch (error) {
+      reply = { error: error.message };
+    }
+
+    if (!port) {
       return;
     }
 
-    try {
-      const result = await dispatch(request.method, request.params);
-      socket.send(JSON.stringify({ result: result, id: request.id }));
-    } catch (error) {
-      socket.send(
-        JSON.stringify({ error: error.message, id: request.id })
-      );
-    }
-  };
+    reply.id = request.id;
+    port.postMessage(reply);
+  });
 }
 
 function scheduleReconnect() {

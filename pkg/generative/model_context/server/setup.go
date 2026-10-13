@@ -1,6 +1,7 @@
 package server
 
 import (
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -13,6 +14,7 @@ func (s *Server) Setup(g *guard.Mux) {
 		s.server,
 		server.WithStreamableHTTPLogger(s.Logger()),
 		server.WithHeartbeatInterval(15*time.Second),
+		server.WithSessionIdleTTL(generativeConstant.ModelContextSessionIdle),
 		server.WithStreamableHTTPProtocolVersions(
 			mcp.LegacyProtocolVersions()...,
 		),

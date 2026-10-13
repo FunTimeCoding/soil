@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) ListCommits(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.ListCommits,
 ) (*mcp.CallToolResult, error) {
@@ -16,13 +16,13 @@ func (s *Server) ListCommits(
 		return response.Fail("project is required")
 	}
 
-	project, e := s.resolveProject(a.Project)
+	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
 		return s.captureDetail(e)
 	}
 
-	v, e := s.service.ListCommits(project, a.Reference, 0)
+	v, e := s.service.ListCommits(instance, project, a.Reference, 0)
 
 	if e != nil {
 		return s.captureDetail(e)

@@ -29,6 +29,7 @@ func Main() {
 	}
 
 	c := hub.New()
+	defer c.Close()
 	tags := c.MustTags(image)
 	limit := len(tags)
 

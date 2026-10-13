@@ -3,6 +3,7 @@ package model_context
 import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/generative/mark/server"
+	"github.com/funtimecoding/soil/pkg/inventory/instance_tool"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
 	proxFace "github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
 )
@@ -14,12 +15,14 @@ func New(
 ) *Server {
 	result := &Server{
 		server: server.New(constant.Identity).WithInstructions(
-			constant.Identity.RenderInstructions(
-				map[string]bool{constant.MultiInstance: len(v.Instances()) > 1},
+			instance_tool.Instructions(
+				constant.Identity,
+				len(v.Inventory().Instances),
 			),
-		).WithRecorder(t).Server(),
-		service:  v,
-		reporter: r,
+		).WithRecorder(t).WithSessionEnd(v.Selection().Clear).Server(),
+		service:   v,
+		instances: instance_tool.New(v.Inventory(), v.Selection()),
+		reporter:  r,
 	}
 	result.register()
 

@@ -7,6 +7,7 @@ import (
 
 func PullRequest() {
 	g := github.NewEnvironment()
+	defer g.Close()
 	u := g.MustUser()
 	repositories := g.MustRepositories(u.Name)
 

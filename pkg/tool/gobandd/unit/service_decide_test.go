@@ -53,6 +53,30 @@ func TestGracefulRebootNeverFallsBackToACycle(t *testing.T) {
 	assert.True(t, conflict.Is(e))
 }
 
+func TestGracefulShutdownOfAMachineThatIsOffDoesNotBlameLMS(t *testing.T) {
+	_, e := service.Decide(
+		constant.OperationShutdown,
+		false,
+		[]int{band.PowerOn},
+	)
+	assert.True(t, conflict.Is(e))
+	assert.String(
+		t,
+		"off soft graceful not offered in the current power state",
+		e.Error(),
+	)
+}
+
+func TestGracefulRebootOfAMachineThatIsOffDoesNotBlameLMS(t *testing.T) {
+	_, e := service.Decide(constant.OperationReboot, false, []int{band.PowerOn})
+	assert.True(t, conflict.Is(e))
+	assert.String(
+		t,
+		"reset graceful not offered in the current power state",
+		e.Error(),
+	)
+}
+
 func TestStartIsRefusedWhileTheMachineRuns(t *testing.T) {
 	_, e := service.Decide(constant.OperationStart, false, runningStates())
 	assert.True(t, conflict.Is(e))

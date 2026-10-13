@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) CancelPipeline(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.CancelPipeline,
 ) (*mcp.CallToolResult, error) {
@@ -20,13 +20,13 @@ func (s *Server) CancelPipeline(
 		return response.Fail("pipeline is required")
 	}
 
-	project, e := s.resolveProject(a.Project)
+	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
 		return s.captureDetail(e)
 	}
 
-	v, e := s.service.CancelPipeline(project, a.Pipeline)
+	v, e := s.service.CancelPipeline(instance, project, a.Pipeline)
 
 	if e != nil {
 		return s.captureDetail(e)

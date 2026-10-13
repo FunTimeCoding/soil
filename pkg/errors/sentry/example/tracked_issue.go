@@ -8,6 +8,7 @@ import (
 
 func TrackedIssue() {
 	c := sentry.NewEnvironment()
+	defer c.Close()
 	f := constant.ColorFormat.Copy()
 
 	for _, i := range c.MustTrackedIssues() {

@@ -3,6 +3,7 @@ package service
 import "github.com/funtimecoding/soil/pkg/gitlab/variable"
 
 func (s *Service) CreateProjectVariable(
+	instance string,
 	project int64,
 	key string,
 	value string,
@@ -10,7 +11,13 @@ func (s *Service) CreateProjectVariable(
 	masked bool,
 	literal bool,
 ) (*variable.Variable, error) {
-	return s.client.CreateProjectVariable(
+	c, e := s.pool.Client(instance)
+
+	if e != nil {
+		return nil, e
+	}
+
+	return c.CreateProjectVariable(
 		project,
 		key,
 		value,

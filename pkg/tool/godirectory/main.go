@@ -10,12 +10,15 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/godirectoryd/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"github.com/spf13/cobra"
 )
 
 func Main() {
 	s := instrument.NewCommandLine(constant.Identity)
 	defer func() { s.Flush(recover()) }()
+	p := stall_client.New().Build()
+	defer p.Close()
 	t := terminal.New(s)
 	c, e := client.NewClientWithResponses(
 		locator.Environment(
@@ -23,7 +26,7 @@ func Main() {
 			godirectorydConstant.PortEnvironment,
 			godirectorydConstant.InsecureEnvironment,
 		).String(),
-		client.WithHTTPClient(web.StallClient()),
+		client.WithHTTPClient(p.Client()),
 		client.WithRequestEditorFn(
 			web.DeferredBearerEditor(
 				t.Required,

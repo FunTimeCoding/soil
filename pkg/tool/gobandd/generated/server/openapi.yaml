@@ -79,8 +79,55 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/redirection:
+    post:
+      operationId: enableRedirection
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RedirectionRequest"
+      responses:
+        "200":
+          description: The writes that were needed to enable redirection.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RedirectionResult"
+        "400":
+          description: Invalid instance.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to enable redirection.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
 components:
   schemas:
+    RedirectionRequest:
+      type: object
+      properties:
+        instance:
+          type: string
+          description: Instance name. Optional when only one instance is configured.
+    RedirectionResult:
+      type: object
+      required:
+      - instance
+      - enabled
+      properties:
+        instance:
+          type: string
+        enabled:
+          type: array
+          items:
+            type: string
+          description: What was switched on - listener, screen service - empty when everything already was.
     Instance:
       type: object
       required:
@@ -100,6 +147,8 @@ components:
       - screen_enabled
       - screen_timeout
       - listener
+      - redirection
+      - screen_service
       - consent
       - power
       - available
@@ -121,6 +170,12 @@ components:
         listener:
           type: boolean
           description: Redirection listener enabled.
+        redirection:
+          type: string
+          description: Which redirections the service has enabled - serial, storage, both, or disabled.
+        screen_service:
+          type: string
+          description: Network state of the screen redirection service.
         consent:
           type: string
         power:

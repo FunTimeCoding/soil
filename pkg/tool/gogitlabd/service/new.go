@@ -1,7 +1,15 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/gitlab/face"
+import (
+	"github.com/funtimecoding/soil/pkg/inventory/pool"
+	"github.com/funtimecoding/soil/pkg/inventory/selection"
+	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/inventory/instance"
+)
 
-func New(c face.Forge) *Service {
-	return &Service{client: c}
+func New(i *instance.Inventory) *Service {
+	return &Service{
+		inventory: i,
+		pool:      pool.New(i, newClient),
+		selection: selection.New(),
+	}
 }

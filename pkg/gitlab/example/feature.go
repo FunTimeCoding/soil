@@ -7,6 +7,7 @@ import (
 
 func Feature() {
 	g := gitlab.NewEnvironment()
+	defer g.Close()
 
 	for _, f := range g.MustFeatures() {
 		console.Format("Feature: %+v\n", f)

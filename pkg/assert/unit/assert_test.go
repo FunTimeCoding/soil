@@ -204,7 +204,7 @@ func TestHTTPStatus(t *testing.T) {
 		),
 	)
 	defer server.Close()
-	assert.HTTPStatus(t, server.URL, http.StatusTeapot)
+	assert.HTTPStatus(t, server.Client(), server.URL, http.StatusTeapot)
 }
 
 func TestDeviate(t *testing.T) {

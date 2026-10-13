@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/field_map"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue/issue_enricher"
 	"github.com/funtimecoding/soil/pkg/atlassian/jira/issue/option"
+	"github.com/funtimecoding/soil/pkg/web/stall_client/pool"
 )
 
 type Client struct {
@@ -26,4 +27,5 @@ type Client struct {
 	defaultProjectName string
 	defaultProjectKey  string
 	watchedIssues      bool
+	pool               *pool.Pool
 }

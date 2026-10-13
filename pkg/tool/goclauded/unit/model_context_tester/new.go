@@ -4,25 +4,24 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
-	"github.com/funtimecoding/soil/pkg/generative/model_context_client"
+	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/google/uuid"
 	"testing"
 )
 
 func New(
 	t *testing.T,
-	port int,
+	s *model_context_server.Server,
 ) *Session {
 	t.Helper()
 	x := context.Background()
-	c := model_context_client.New(t, port)
-	base := locator.New(webConstant.Localhost).Insecure().Port(port).String()
+	c := s.Connect(t)
 	restClient, e := client.NewClientWithResponses(
-		base,
+		s.Address(webConstant.RootPath),
+		client.WithHTTPClient(s.Client()),
 		client.WithRequestEditorFn(
 			web.BearerEditor(generativeConstant.ModelContextTestToken),
 		),

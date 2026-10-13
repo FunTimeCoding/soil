@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) CreateProjectVariable(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.CreateProjectVariable,
 ) (*mcp.CallToolResult, error) {
@@ -24,13 +24,14 @@ func (s *Server) CreateProjectVariable(
 		return response.Fail("value is required")
 	}
 
-	project, e := s.resolveProject(a.Project)
+	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
 		return s.captureDetail(e)
 	}
 
 	v, e := s.service.CreateProjectVariable(
+		instance,
 		project,
 		a.Key,
 		a.Value,

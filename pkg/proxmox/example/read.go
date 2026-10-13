@@ -7,6 +7,7 @@ import (
 
 func Read() {
 	p := proxmox.NewEnvironment()
+	defer p.Close()
 	console.Format("Version: %+v\n", p.MustVersion())
 	console.Format("Cluster: %+v\n", p.MustCluster())
 

@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) ListRegistryRepositories(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.ListRegistryRepositories,
 ) (*mcp.CallToolResult, error) {
@@ -16,13 +16,13 @@ func (s *Server) ListRegistryRepositories(
 		return response.Fail("project is required")
 	}
 
-	project, e := s.resolveProject(a.Project)
+	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
 		return s.captureDetail(e)
 	}
 
-	v, e := s.service.RegistryRepositories(project, false)
+	v, e := s.service.RegistryRepositories(instance, project, false)
 
 	if e != nil {
 		return s.captureDetail(e)

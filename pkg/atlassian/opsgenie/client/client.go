@@ -1,6 +1,7 @@
 package client
 
 import (
+	"github.com/funtimecoding/soil/pkg/web/stall_client/pool"
 	"github.com/opsgenie/opsgenie-go-sdk-v2/account"
 	"github.com/opsgenie/opsgenie-go-sdk-v2/alert"
 	"github.com/opsgenie/opsgenie-go-sdk-v2/contact"
@@ -38,4 +39,5 @@ type Client struct {
 	Service      *service.Client
 	Team         *team.Client
 	User         *user.Client
+	pool         *pool.Pool
 }

@@ -28,6 +28,7 @@ func TestFlushWaitsForRecordDelivery(t *testing.T) {
 	defer s.Close()
 	host, port := upstream_tester.HostPort(t, s.URL)
 	c := telemetry.New(host, port, true)
+	defer c.Close()
 	c.Record(
 		record.NewDomain(
 			"alfa_list",

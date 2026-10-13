@@ -7,7 +7,10 @@ type Engine interface {
 	Setup() (*response.Setup, error)
 	ScreenSettings() (*response.ScreenSettings, error)
 	Redirection() (*response.Redirection, error)
+	ScreenService() (*response.ScreenService, error)
 	Consent() (*response.Consent, error)
 	PowerState() (*response.PowerState, error)
 	RequestPowerState(state int) error
+	EnableListener() error
+	EnableScreenService() error
 }

@@ -15,6 +15,7 @@ func Since() {
 	channel := a.RequiredPositional(0, "CHANNEL")
 	since := a.RequiredPositional(1, "SINCE")
 	m := mattermost.NewEnvironment(mattermost.WithVerbose(false))
+	defer m.Close()
 	c := m.MustTeamChannel(channel)
 	console.Format("Channel: %s\n", c.Name)
 	t, e := time.ParseInLocation(

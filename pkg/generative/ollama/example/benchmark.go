@@ -10,6 +10,7 @@ import (
 
 func Benchmark() {
 	o := ollama.NewEnvironment()
+	defer o.Close()
 	base := "Please summarize the following text:\n"
 	chunk := "This is a test paragraph with about 50 tokens of content repeated multiple times."
 

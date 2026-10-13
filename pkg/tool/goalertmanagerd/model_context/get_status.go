@@ -13,7 +13,7 @@ func (s *Server) getStatus(
 	_ mcp.CallToolRequest,
 	a argument.GetStatus,
 ) (*mcp.CallToolResult, error) {
-	instance, e := s.service.ResolveInstance(s.activeInstanceName(x))
+	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
 		return response.Fail("%s", e)

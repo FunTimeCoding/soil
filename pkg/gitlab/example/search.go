@@ -9,6 +9,7 @@ import (
 
 func Search() {
 	g := gitlab.NewEnvironment()
+	defer g.Close()
 
 	for _, p := range g.MustSearchProject("") {
 		console.Format("Project: %s\n", p.Raw.NameWithNamespace)

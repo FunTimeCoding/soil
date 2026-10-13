@@ -10,6 +10,7 @@ import (
 
 func main() {
 	n := nextcloud.NewEnvironment()
+	defer n.Close()
 
 	if false {
 		n.MustStatus()

@@ -11,10 +11,14 @@ import (
 	generated "github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/locator"
+	"net/http"
 	"time"
 )
 
-func Wait(l *logger.Logger) memoryClient.Client {
+func Wait(
+	l *logger.Logger,
+	h *http.Client,
+) memoryClient.Client {
 	base := locator.Environment(
 		constant.HostEnvironment,
 		constant.PortEnvironment,
@@ -22,6 +26,7 @@ func Wait(l *logger.Logger) memoryClient.Client {
 	).String()
 	c, e := generated.NewClient(
 		base,
+		generated.WithHTTPClient(h),
 		generated.WithRequestEditorFn(
 			web.BearerEditor(environment.Required(constant.TokenEnvironment)),
 		),

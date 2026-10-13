@@ -13,8 +13,8 @@ func (s *Server) VerifyOpenPost(
 	path string,
 ) {
 	t.Helper()
-	q := web.NewPost(s.address(path), "{}")
-	r, e := web.Client().Do(q)
+	q := web.NewPost(s.Address(path), "{}")
+	r, e := s.pool.Client().Do(q)
 	assert.FatalOnError(t, e)
 	defer errors.PanicClose(r.Body)
 	assert.True(t, r.StatusCode != http.StatusUnauthorized)

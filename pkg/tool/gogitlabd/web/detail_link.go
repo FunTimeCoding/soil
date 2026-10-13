@@ -7,17 +7,15 @@ import (
 )
 
 func detailLink(
+	instance string,
 	project int64,
 	pipeline int64,
 	job int64,
 ) string {
 	result := fmt.Sprintf(
-		"%s?%s=%d&%s=%d",
+		"%s?%s",
 		constant.PipelinePath,
-		argumentConstant.Project,
-		project,
-		argumentConstant.Pipeline,
-		pipeline,
+		pipelineQuery(instance, project, pipeline),
 	)
 
 	if job != 0 {

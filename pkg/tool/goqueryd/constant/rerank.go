@@ -14,7 +14,7 @@ const (
 )
 
 var (
-	BgeRerankerBase = rerank_model.New("bge-reranker-base", 512, 512)
+	BgeRerankerBase           = rerank_model.New("bge-reranker-base", 512, 512)
 	GteRerankerModernBertBase = rerank_model.New(
 		"gte-reranker-modernbert-base",
 		512,

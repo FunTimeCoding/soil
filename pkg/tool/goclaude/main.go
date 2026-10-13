@@ -19,6 +19,7 @@ func Main() {
 	var host string
 	var port int
 	c := command_context.New(terminal.New(s))
+	defer c.Close()
 	o := &cobra.Command{
 		Use:   constant.Identity.Usage(),
 		Short: constant.Identity.Description(),

@@ -7,6 +7,7 @@ import (
 
 func Running() {
 	o := ollama.NewEnvironment()
+	defer o.Close()
 
 	for _, m := range o.MustRunning() {
 		console.Format("Running: %+v\n", m)

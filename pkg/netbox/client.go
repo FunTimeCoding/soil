@@ -3,6 +3,7 @@ package netbox
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/netbox/cache"
+	"github.com/funtimecoding/soil/pkg/web/stall_client/pool"
 	"github.com/netbox-community/go-netbox/v4"
 )
 
@@ -11,4 +12,5 @@ type Client struct {
 	client  *netbox.APIClient
 	cache   *cache.Cache
 	verbose bool
+	pool    *pool.Pool
 }

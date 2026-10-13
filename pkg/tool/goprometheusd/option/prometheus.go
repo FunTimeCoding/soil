@@ -1,9 +1,9 @@
 package option
 
-import "github.com/funtimecoding/soil/pkg/tool/goprometheusd/inventory"
+import "github.com/funtimecoding/soil/pkg/tool/goprometheusd/types/instance"
 
 type Prometheus struct {
 	Address       string
 	ServiceTokens []string
-	Inventory     *inventory.Inventory
+	Inventory     *instance.Inventory
 }

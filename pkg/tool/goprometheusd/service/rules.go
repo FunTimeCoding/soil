@@ -3,7 +3,7 @@ package service
 import "github.com/funtimecoding/soil/pkg/prometheus/rule"
 
 func (s *Service) Rules(instance string) ([]*rule.Rule, error) {
-	c, e := s.Client(instance)
+	c, e := s.pool.Client(instance)
 
 	if e != nil {
 		return nil, e

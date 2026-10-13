@@ -7,32 +7,7 @@ import (
 )
 
 func (s *Server) register() {
-	if len(s.service.Instances()) > 1 {
-		s.server.AddTool(
-			mcp.NewTool(
-				constant.ListInstances,
-				mcp.WithDescription(
-					"List all configured Proxmox instances. Shows which instance is currently active.",
-				),
-			),
-			mcp.NewTypedToolHandler(s.listInstances),
-		)
-		s.server.AddTool(
-			mcp.NewTool(
-				constant.UseInstance,
-				mcp.WithDescription(
-					"Set the active Proxmox instance for this session. Required before using any other tool.",
-				),
-				mcp.WithString(
-					"instance",
-					mcp.Required(),
-					mcp.Description("Instance name from list_instances"),
-				),
-			),
-			mcp.NewTypedToolHandler(s.useInstance),
-		)
-	}
-
+	s.instances.Register(s.server)
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.ListNodes,

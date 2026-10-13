@@ -9,9 +9,10 @@ import (
 
 func Mount(
 	c firefox.FirefoxSource,
+	downloadDirectory string,
 	r face.Reporter,
 	t face.Recorder,
 	g *guard.Mux,
 ) {
-	model_context.New(c, r, t).Mount(g)
+	model_context.New(c, downloadDirectory, r, t).Mount(g)
 }

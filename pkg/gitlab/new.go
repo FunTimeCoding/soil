@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/gitlab/constant"
 	"github.com/funtimecoding/soil/pkg/gitlab/project"
 	"github.com/funtimecoding/soil/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"gitlab.com/gitlab-org/api/client-go/v3"
 )
 
@@ -23,7 +24,8 @@ func New(
 		p(result)
 	}
 
-	var p []gitlab.ClientOptionFunc
+	result.pool = stall_client.New().Build()
+	p := []gitlab.ClientOptionFunc{gitlab.WithHTTPClient(result.pool.Client())}
 
 	if host != "" {
 		l := locator.New(host).Base(constant.Base)

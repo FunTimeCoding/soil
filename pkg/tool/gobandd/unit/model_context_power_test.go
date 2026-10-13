@@ -3,7 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	band "github.com/funtimecoding/soil/pkg/band/constant"
-	"github.com/funtimecoding/soil/pkg/generative/model_context_client"
+	inventoryConstant "github.com/funtimecoding/soil/pkg/inventory/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/unit/base"
 	"testing"
@@ -12,11 +12,11 @@ import (
 func TestShutdownToolRefusesWithoutSendingAnything(t *testing.T) {
 	s := base.New(t)
 	s.Alfa.SetPower(band.PowerOn, hardStates()...)
-	c := model_context_client.New(t, s.Port)
+	c := s.Connect(t)
 	defer c.Close()
 	c.MustCallTool(
-		constant.UseInstance,
-		map[string]any{constant.InstanceParameter: "alfa"},
+		inventoryConstant.UseInstance,
+		map[string]any{inventoryConstant.InstanceParameter: "alfa"},
 	)
 	assert.StringContains(
 		t,
@@ -29,11 +29,11 @@ func TestShutdownToolRefusesWithoutSendingAnything(t *testing.T) {
 func TestShutdownToolWithForceCutsPower(t *testing.T) {
 	s := base.New(t)
 	s.Alfa.SetPower(band.PowerOn, runningStates()...)
-	c := model_context_client.New(t, s.Port)
+	c := s.Connect(t)
 	defer c.Close()
 	c.MustCallTool(
-		constant.UseInstance,
-		map[string]any{constant.InstanceParameter: "alfa"},
+		inventoryConstant.UseInstance,
+		map[string]any{inventoryConstant.InstanceParameter: "alfa"},
 	)
 	assert.String(
 		t,

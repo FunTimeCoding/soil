@@ -7,9 +7,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gosecret/constant"
 	"github.com/spf13/cobra"
+	"net/http"
 )
 
-func migrateCommand(t *terminal.Terminal) *cobra.Command {
+func migrateCommand(
+	t *terminal.Terminal,
+	h *http.Client,
+) *cobra.Command {
 	var namespace string
 	var store string
 	result := &cobra.Command{
@@ -22,7 +26,7 @@ func migrateCommand(t *terminal.Terminal) *cobra.Command {
 			arguments []string,
 		) {
 			r, e := Migrate(
-				newInterfaceStore(interfaceClient(t)),
+				newInterfaceStore(interfaceClient(t, h)),
 				arguments[0],
 				namespace,
 				store,

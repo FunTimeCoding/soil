@@ -9,6 +9,8 @@ type Status struct {
 	ScreenEnabled bool                   `json:"screen_enabled"`
 	ScreenTimeout int                    `json:"screen_timeout"`
 	Listener      bool                   `json:"listener"`
+	Redirection   string                 `json:"redirection"`
+	ScreenService string                 `json:"screen_service"`
 	Consent       string                 `json:"consent"`
 	Power         string                 `json:"power"`
 	Available     []string               `json:"available"`

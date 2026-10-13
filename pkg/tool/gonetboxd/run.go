@@ -24,6 +24,7 @@ func Run(
 	l := logger.New(context.Background())
 	s := store.New(relational.Open(l, o.PostgresLocator, o.LitePath))
 	defer s.Close()
+	defer o.Client.Close()
 	b := web.New(o.Client)
 	lifecycle.New(
 		l,

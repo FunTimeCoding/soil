@@ -16,6 +16,7 @@ func Alert() {
 	a.String(argumentConstant.Close, "", "Alert ID")
 	a.ParseSimple()
 	c := common.Opsgenie()
+	defer c.Close()
 
 	if a.GetBoolean(argumentConstant.Create) {
 		c.Create(
@@ -27,7 +28,7 @@ func Alert() {
 	}
 
 	if i := a.GetString(argumentConstant.Close); i != "" {
-		c.Close(i)
+		c.CloseAlert(i)
 
 		return
 	}

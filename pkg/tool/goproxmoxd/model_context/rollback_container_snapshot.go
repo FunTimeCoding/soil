@@ -21,7 +21,7 @@ func (s *Server) RollbackContainerSnapshot(
 		return response.Fail("name is required")
 	}
 
-	instance, e := s.service.ResolveInstance(s.activeInstanceName(x))
+	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
 		return response.Fail("%s", e)

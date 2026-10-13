@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/brave/constant"
 	"github.com/funtimecoding/soil/pkg/chromium"
 	"github.com/funtimecoding/soil/pkg/system/run"
+	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -17,6 +18,7 @@ func New(t *testing.T) *Stack {
 		T:    t,
 		Site: httptest.NewServer(http.HandlerFunc(serve)),
 		Port: port,
+		pool: stall_client.New().Build(),
 		process: run.New().Open(
 			constant.BravePath,
 			"--headless=new",
@@ -29,7 +31,7 @@ func New(t *testing.T) *Stack {
 		),
 	}
 	t.Cleanup(result.Close)
-	waitReady(t, port)
+	waitReady(t, result.pool.Client(), port)
 	result.Client = chromium.New("localhost", port)
 
 	return result

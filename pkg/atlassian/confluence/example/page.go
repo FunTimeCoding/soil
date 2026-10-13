@@ -7,6 +7,7 @@ import (
 
 func Page() {
 	c := confluence.NewEnvironment()
+	defer c.Close()
 	s := c.DefaultSpace()
 	p := c.DefaultPage()
 

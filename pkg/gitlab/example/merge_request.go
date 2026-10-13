@@ -8,6 +8,7 @@ import (
 
 func MergeRequest() {
 	g := gitlab.NewEnvironment()
+	defer g.Close()
 	f := constant.Format
 
 	for _, r := range g.MustProjectsMergeRequests() {

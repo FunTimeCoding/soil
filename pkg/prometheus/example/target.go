@@ -8,6 +8,7 @@ import (
 
 func Target() {
 	c := prometheus.NewEnvironment()
+	defer c.Close()
 	r := c.MustTargets()
 
 	for _, t := range r.Active {

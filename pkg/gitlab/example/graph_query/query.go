@@ -8,6 +8,7 @@ import (
 // Reference: https://docs.gitlab.com/api/graphql/
 func Query() {
 	c := gitlab.NewEnvironment()
+	defer c.Close()
 	runner := &RunnerResult{}
 	c.MustQuery(
 		`query {

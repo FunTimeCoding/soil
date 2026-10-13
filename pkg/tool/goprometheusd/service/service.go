@@ -1,14 +1,14 @@
 package service
 
 import (
+	"github.com/funtimecoding/soil/pkg/inventory/pool"
+	"github.com/funtimecoding/soil/pkg/inventory/selection"
 	"github.com/funtimecoding/soil/pkg/prometheus"
-	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/inventory"
-	"sync"
+	"github.com/funtimecoding/soil/pkg/tool/goprometheusd/types/instance"
 )
 
 type Service struct {
-	inventory *inventory.Inventory
-	clients   map[string]*prometheus.Client
-	sessions  sync.Map
-	mutex     sync.Mutex
+	inventory *instance.Inventory
+	pool      *pool.Pool[instance.Instance, *instance.Instance, *prometheus.Client]
+	selection *selection.Selection
 }

@@ -28,6 +28,8 @@ func (s *Server) GetStatus(
 		ScreenEnabled: v.ScreenEnabled,
 		ScreenTimeout: v.ScreenTimeout,
 		Listener:      v.Listener,
+		Redirection:   v.Redirection,
+		ScreenService: v.ScreenService,
 		Consent:       v.Consent,
 		Power:         v.Power,
 		Available:     v.Available,

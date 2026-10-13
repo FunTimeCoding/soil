@@ -2,6 +2,7 @@ package ollama
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/web/stall_client/pool"
 	"github.com/ollama/ollama/api"
 )
 
@@ -11,4 +12,5 @@ type Client struct {
 	host    string
 	port    int
 	secure  bool
+	pool    *pool.Pool
 }

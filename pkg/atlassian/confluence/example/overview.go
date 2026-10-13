@@ -8,6 +8,7 @@ import (
 
 func Overview() {
 	c := confluence.NewEnvironment(confluence.WithVerbose(true))
+	defer c.Close()
 	f := constant.ConfluenceFormat
 	console.Line("Space")
 

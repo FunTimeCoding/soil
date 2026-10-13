@@ -2,12 +2,10 @@ package kestra
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/kestra/transport"
 	"github.com/funtimecoding/soil/pkg/strings/join/key_value"
-	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"github.com/kestra-io/client-sdk/go-sdk/v2/kestra_api_client"
-	"net/http"
 )
 
 // Reference: https://kestra.io/docs/api-reference/open-source
@@ -31,16 +29,14 @@ func New(
 		)
 	}
 
+	b := stall_client.New()
+
 	if result.user != "" && result.password != "" {
-		l := web.Client()
-		l.Transport = transport.New(
-			result.user,
-			result.password,
-			http.DefaultTransport,
-		)
-		c.HTTPClient = l
+		b.BasicAuth(result.user, result.password)
 	}
 
+	result.pool = b.Build()
+	c.HTTPClient = result.pool.Client()
 	result.client = kestra_api_client.NewAPIClient(c)
 
 	return result

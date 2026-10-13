@@ -1,101 +1,42 @@
 package worker
 
-import (
-	"github.com/funtimecoding/soil/pkg/gitlab/pipeline"
-	"github.com/funtimecoding/soil/pkg/gitlab/project"
-	"github.com/funtimecoding/soil/pkg/strings/join"
-	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/types/board_entry"
-	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/types/latest_pipeline"
-	"slices"
-	"strings"
-	"time"
-)
+import "slices"
 
 func (w *Worker) Poll() {
-	latest := make(map[[2]string]*pipeline.Pipeline)
-	projects := make(map[string]*project.Project)
+	changed := false
 
-	for _, p := range w.service.MustProjects() {
-		name := join.Slash([]string{p.Namespace, p.Name})
-		projects[name] = p
+	for _, i := range w.service.Inventory().Instances {
+		entries, e := w.pollInstance(i.Name)
 
-		for reference, i := range latest_pipeline.New(
-			w.service.MustBranches(p.Identifier),
-			w.service.MustTags(p.Identifier),
-			w.service.MustPipelines(p.Identifier),
-		) {
-			latest[[2]string{name, reference}] = i
-		}
-	}
+		if e != nil {
+			w.reporter.CaptureException(e)
 
-	w.gauge.Reset()
-	entries := make([]*board_entry.Entry, 0, len(latest))
-
-	for k, i := range latest {
-		name, reference := k[0], k[1]
-		w.gauge.WithLabelValues(name, reference, i.Status).Set(1)
-		var updated time.Time
-
-		if i.Update != nil {
-			updated = *i.Update
+			continue
 		}
 
-		entries = append(
-			entries,
-			board_entry.New(
-				name,
-				projects[name].Identifier,
-				projects[name].Raw.WebURL,
-				reference,
-				i.Status,
-				i.Identifier,
-				i.Link,
-				updated,
-			),
-		)
+		requests, f := w.fetchRequests(i.Name)
+
+		if f != nil {
+			w.reporter.CaptureException(f)
+
+			continue
+		}
+
+		w.mutex.Lock()
+
+		if !slices.EqualFunc(w.entries[i.Name], entries, sameEntry) ||
+			!slices.EqualFunc(w.requests[i.Name], requests, sameRequest) {
+			changed = true
+		}
+
+		w.entries[i.Name] = entries
+		w.requests[i.Name] = requests
+		w.mutex.Unlock()
 	}
 
-	slices.SortFunc(
-		entries,
-		func(
-			a *board_entry.Entry,
-			b *board_entry.Entry,
-		) int {
-			if c := b.Updated.Compare(a.Updated); c != 0 {
-				return c
-			}
+	w.refreshGauge()
 
-			if c := strings.Compare(a.Project, b.Project); c != 0 {
-				return c
-			}
-
-			return strings.Compare(a.Reference, b.Reference)
-		},
-	)
-	requests := w.fetchRequests()
-	w.mutex.Lock()
-	previous := w.entries
-	previousRequests := w.requests
-	w.entries = entries
-	w.requests = requests
-	w.mutex.Unlock()
-
-	if !slices.EqualFunc(previousRequests, requests, sameRequest) {
-		w.notifier.Notify()
-
-		return
-	}
-
-	if !slices.EqualFunc(
-		previous,
-		entries,
-		func(
-			a *board_entry.Entry,
-			b *board_entry.Entry,
-		) bool {
-			return *a == *b
-		},
-	) {
+	if changed {
 		w.notifier.Notify()
 	}
 }

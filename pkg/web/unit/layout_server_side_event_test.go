@@ -23,7 +23,7 @@ func TestServerSideEventOpensWithoutWrites(t *testing.T) {
 		),
 	)
 	defer server.Close()
-	response, e := http.Get(server.URL)
+	response, e := server.Client().Get(server.URL)
 	errors.PanicOnError(e)
 	defer errors.PanicClose(response.Body)
 	assert.Integer(t, http.StatusOK, response.StatusCode)

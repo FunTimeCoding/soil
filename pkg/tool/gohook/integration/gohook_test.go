@@ -73,8 +73,7 @@ func TestInstallRefusesRedirectedHooksPath(t *testing.T) {
 	write(clone, constant.RootFile, "pre-push:\n  - run: a\n")
 	command(clone, "config", "core.hooksPath", "/dev/null")
 	assert.String(t, "/dev/null", git.HooksPath(clone))
-	defer func() { assert.NotNil(t, recover()) }()
-	gohook.Install(configuration.Load(clone))
+	assert.Panic(t, func() { gohook.Install(configuration.Load(clone)) })
 }
 
 func TestInstallAndUninstall(t *testing.T) {

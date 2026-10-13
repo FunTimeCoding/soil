@@ -26,7 +26,7 @@ func (c *Context) Initialize(
 
 	r, e := client.NewClientWithResponses(
 		l.String(),
-		client.WithHTTPClient(web.StallClient()),
+		client.WithHTTPClient(c.pool.Client()),
 		client.WithRequestEditorFn(web.BearerEditor(token)),
 	)
 	errors.PanicOnError(e)

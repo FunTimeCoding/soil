@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) CancelPipelineJob(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.CancelPipelineJob,
 ) (*mcp.CallToolResult, error) {
@@ -21,13 +21,13 @@ func (s *Server) CancelPipelineJob(
 		return response.Fail("job is required")
 	}
 
-	project, e := s.resolveProject(a.Project)
+	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
 		return s.captureDetail(e)
 	}
 
-	v, e := s.service.CancelJob(project, a.Job)
+	v, e := s.service.CancelJob(instance, project, a.Job)
 
 	if e != nil {
 		return s.captureDetail(e)

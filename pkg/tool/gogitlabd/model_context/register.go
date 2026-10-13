@@ -8,6 +8,7 @@ import (
 )
 
 func (s *Server) register() {
+	s.instances.Register(s.server)
 	s.server.AddTool(
 		mcp.NewTool(
 			constant.GetProject,

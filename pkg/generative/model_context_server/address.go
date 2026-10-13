@@ -5,8 +5,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
-func (s *Server) address(path string) string {
-	return locator.New(constant.Localhost).Insecure().Port(s.Port).Path(
-		path,
+func (s *Server) Address(target string) string {
+	return locator.New(constant.Localhost).Insecure().Port(s.Port).Target(
+		target,
 	).String()
 }

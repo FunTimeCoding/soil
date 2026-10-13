@@ -13,6 +13,7 @@ func DeleteTwice() {
 	a.ParseSimple()
 	channel := a.RequiredPositional(0, "CHANNEL")
 	m := mattermost.NewEnvironment(mattermost.WithVerbose(false))
+	defer m.Close()
 	c := m.MustTeamChannel(channel)
 	p := m.MustPostSimple(c, "delete-twice probe")
 	m.MustDeletePost(p)

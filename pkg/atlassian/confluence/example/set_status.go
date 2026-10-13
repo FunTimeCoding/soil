@@ -9,6 +9,7 @@ import (
 func SetStatus() {
 	if false {
 		c := confluence.NewEnvironment()
+		defer c.Close()
 		result, e := c.SetPageStatus("6717441", constant.ConfluenceDraftStatus)
 
 		if e != nil {

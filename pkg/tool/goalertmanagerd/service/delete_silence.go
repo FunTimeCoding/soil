@@ -4,7 +4,7 @@ func (s *Service) DeleteSilence(
 	instance string,
 	identifier string,
 ) error {
-	c, e := s.Client(instance)
+	c, e := s.pool.Client(instance)
 
 	if e != nil {
 		return e

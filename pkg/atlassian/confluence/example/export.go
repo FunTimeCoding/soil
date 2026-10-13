@@ -9,6 +9,7 @@ import (
 
 func Export() {
 	c := confluence.NewEnvironment()
+	defer c.Close()
 	f := constant.ConfluenceDense
 
 	for _, p := range c.MustChildPages(c.DefaultSpace(), c.DefaultPage()) {

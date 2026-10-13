@@ -14,6 +14,7 @@ func BranchRequest() {
 	a.String(argumentConstant.Branch, "", "Branch name")
 	a.ParseSimple()
 	g := gitlab.NewEnvironment()
+	defer g.Close()
 	f := constant.Format
 	console.Line(
 		g.MustBranchRequest(

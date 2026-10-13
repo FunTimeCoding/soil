@@ -8,9 +8,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosecret/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/generated/client"
 	"github.com/spf13/cobra"
+	"net/http"
 )
 
-func listCommand(t *terminal.Terminal) *cobra.Command {
+func listCommand(
+	t *terminal.Terminal,
+	h *http.Client,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   constant.ListUsage,
 		Short: "List secrets and folders below a path; folders end in a slash",
@@ -25,7 +29,7 @@ func listCommand(t *terminal.Terminal) *cobra.Command {
 				p.Path = &arguments[0]
 			}
 
-			r, e := interfaceClient(t).ListSecretsWithResponse(
+			r, e := interfaceClient(t, h).ListSecretsWithResponse(
 				context.Background(),
 				p,
 			)

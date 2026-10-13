@@ -12,7 +12,13 @@ const (
 	EnumerateAction  = "http://schemas.xmlsoap.org/ws/2004/09/enumeration/Enumerate"
 	PullAction       = "http://schemas.xmlsoap.org/ws/2004/09/enumeration/Pull"
 	PowerStateAction = "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_PowerManagementService/RequestPowerStateChange"
-	AnonymousRole    = "http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous"
+	PutAction        = "http://schemas.xmlsoap.org/ws/2004/09/transfer/Put"
+
+	ScreenServiceStateAction = "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_KVMRedirectionSAP/RequestStateChange"
+	ScreenServiceSelectors   = `<w:SelectorSet><w:Selector Name="CreationClassName">CIM_KVMRedirectionSAP</w:Selector><w:Selector Name="Name">KVM Redirection Service Access Point</w:Selector><w:Selector Name="SystemCreationClassName">CIM_ComputerSystem</w:Selector><w:Selector Name="SystemName">ManagedSystem</w:Selector></w:SelectorSet>`
+	ScreenServiceEnabled     = 2
+	ScreenServiceOffline     = 6
+	AnonymousRole            = "http://schemas.xmlsoap.org/ws/2004/08/addressing/role/anonymous"
 
 	EnumerationNamespace = "http://schemas.xmlsoap.org/ws/2004/09/enumeration"
 
@@ -29,5 +35,6 @@ const (
 	SetupResource           = "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_SetupAndConfigurationService"
 	RedirectionResource     = "http://intel.com/wbem/wscim/1/amt-schema/1/AMT_RedirectionService"
 	ScreenSettingsResource  = "http://intel.com/wbem/wscim/1/ips-schema/1/IPS_KVMRedirectionSettingData"
+	ScreenServiceResource   = "http://schemas.dmtf.org/wbem/wscim/1/cim-schema/2/CIM_KVMRedirectionSAP"
 	ConsentResource         = "http://intel.com/wbem/wscim/1/ips-schema/1/IPS_OptInService"
 )

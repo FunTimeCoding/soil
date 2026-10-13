@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) DeleteProjectVariable(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.DeleteProjectVariable,
 ) (*mcp.CallToolResult, error) {
@@ -20,13 +20,13 @@ func (s *Server) DeleteProjectVariable(
 		return response.Fail("key is required")
 	}
 
-	project, e := s.resolveProject(a.Project)
+	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
 		return s.captureDetail(e)
 	}
 
-	e = s.service.DeleteProjectVariable(project, a.Key)
+	e = s.service.DeleteProjectVariable(instance, project, a.Key)
 
 	if e != nil {
 		return s.captureDetail(e)

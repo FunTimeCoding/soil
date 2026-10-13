@@ -6,4 +6,5 @@ func (s *Stack) Close() {
 	errors.LogOnError(s.process.Kill())
 	s.Site.CloseClientConnections()
 	s.Site.Close()
+	s.pool.Close()
 }

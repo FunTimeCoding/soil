@@ -20,6 +20,7 @@ func Main() {
 	a.Parse()
 	hostname := host.StripDomain(system.Hostname())
 	n := netbox.NewEnvironment()
+	defer n.Close()
 
 	if n.MustDeviceByName(hostname) != nil {
 		return

@@ -101,3 +101,8 @@ var (
 	ErrorPattern  = regexp.MustCompile(`\berr(?:\s*(?::=|=[^=])|,)`)
 	StringLiteral = regexp.MustCompile(`"(?:[^"\\]|\\.)*"`)
 )
+
+const (
+	HTTPPackage        = "net/http"
+	OwnedClientMessage = "build an owned client with web/stall_client and close it (see doc/ai/spec/http-client.md)"
+)

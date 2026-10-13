@@ -3,6 +3,7 @@ package board_entry
 import "time"
 
 func New(
+	instance string,
 	project string,
 	projectIdentifier int64,
 	projectLink string,
@@ -13,6 +14,7 @@ func New(
 	updated time.Time,
 ) *Entry {
 	return &Entry{
+		Instance:          instance,
 		Project:           project,
 		ProjectIdentifier: projectIdentifier,
 		ProjectLink:       projectLink,

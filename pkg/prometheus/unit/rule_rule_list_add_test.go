@@ -63,7 +63,6 @@ func TestRuleListAcceptsIdenticalRecordAcrossEvaluations(t *testing.T) {
 }
 
 func TestRuleListRejectsDriftedDuplicateRecord(t *testing.T) {
-	defer func() { assert.NotNil(t, recover()) }()
 	g := &v1.RuleGroup{Name: constant.UpperBravo}
 	l := rule_list.New()
 	l.Add(
@@ -76,15 +75,20 @@ func TestRuleListRejectsDriftedDuplicateRecord(t *testing.T) {
 			g,
 		),
 	)
-	l.Add(
-		rule.NewRecord(
-			&v1.RecordingRule{
-				Name:   constant.UpperAlfa,
-				Query:  constant.LowerAlfa,
-				Health: v1.RuleHealthBad,
-			},
-			g,
-		),
+	assert.Panic(
+		t,
+		func() {
+			l.Add(
+				rule.NewRecord(
+					&v1.RecordingRule{
+						Name:   constant.UpperAlfa,
+						Query:  constant.LowerAlfa,
+						Health: v1.RuleHealthBad,
+					},
+					g,
+				),
+			)
+		},
 	)
 }
 
@@ -141,7 +145,6 @@ func TestRuleListAcceptsIdenticalAlertAcrossEvaluations(t *testing.T) {
 }
 
 func TestRuleListRejectsDriftedDuplicateAlert(t *testing.T) {
-	defer func() { assert.NotNil(t, recover()) }()
 	g := &v1.RuleGroup{Name: constant.UpperBravo}
 	l := rule_list.New()
 	l.Add(
@@ -154,14 +157,19 @@ func TestRuleListRejectsDriftedDuplicateAlert(t *testing.T) {
 			g,
 		),
 	)
-	l.Add(
-		rule.NewAlert(
-			&v1.AlertingRule{
-				Name:   constant.UpperAlfa,
-				Query:  constant.LowerAlfa,
-				Health: v1.RuleHealthBad,
-			},
-			g,
-		),
+	assert.Panic(
+		t,
+		func() {
+			l.Add(
+				rule.NewAlert(
+					&v1.AlertingRule{
+						Name:   constant.UpperAlfa,
+						Query:  constant.LowerAlfa,
+						Health: v1.RuleHealthBad,
+					},
+					g,
+				),
+			)
+		},
 	)
 }

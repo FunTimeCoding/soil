@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/fritz/constant"
-	"net/http"
+	"github.com/funtimecoding/soil/pkg/web/stall_client"
 )
 
 func New(
@@ -15,11 +15,13 @@ func New(
 	errors.FatalOnEmpty(host, "host")
 	errors.FatalOnEmpty(user, "user")
 	errors.FatalOnEmpty(password, "password")
+	p := stall_client.New().Build()
 
 	return &Client{
 		base:     fmt.Sprintf("http://%s:%d", host, constant.Port),
 		user:     user,
 		password: password,
-		client:   &http.Client{},
+		client:   p.Client(),
+		pool:     p,
 	}
 }

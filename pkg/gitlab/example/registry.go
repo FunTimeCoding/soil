@@ -15,6 +15,7 @@ func Registry() {
 	owner := a.GetString(constant.Owner)
 	repository := a.GetString(constant.Repository)
 	c := gitlab.NewEnvironment()
+	defer c.Close()
 	r := c.MustRegistryRepositories(
 		c.MustProjectByName(owner, repository).Identifier,
 		false,

@@ -7,9 +7,10 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/locator"
+	"net/http"
 )
 
-func NewOptional() *Collector {
+func NewOptional(h *http.Client) *Collector {
 	token := environment.Optional(constant.TokenEnvironment)
 
 	if token == "" {
@@ -22,7 +23,7 @@ func NewOptional() *Collector {
 			constant.PortEnvironment,
 			constant.InsecureEnvironment,
 		).String(),
-		client.WithHTTPClient(web.StallClient()),
+		client.WithHTTPClient(h),
 		client.WithRequestEditorFn(web.BearerEditor(token)),
 	)
 	errors.PanicOnError(e)

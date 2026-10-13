@@ -319,6 +319,5 @@ func TestParsePolicy(t *testing.T) {
 }
 
 func TestParsePolicyUnknownPanics(t *testing.T) {
-	defer func() { assert.NotNil(t, recover()) }()
-	score.ParsePolicy("hopeful")
+	assert.Panic(t, func() { score.ParsePolicy("hopeful") })
 }

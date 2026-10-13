@@ -3,9 +3,11 @@ package gofirefoxd
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	"github.com/funtimecoding/soil/pkg/instrument"
+	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gofirefoxd/option"
 	"github.com/funtimecoding/soil/pkg/web"
+	"os"
 )
 
 func Main() {
@@ -22,6 +24,10 @@ func Main() {
 	o := option.New()
 	o.Address = a.Address()
 	o.ServiceTokens = web.ServiceTokens()
+	o.DownloadDirectory = environment.Fallback(
+		constant.DownloadDirectoryEnvironment,
+		os.TempDir(),
+	)
 	o.BridgePort = a.RequiredInteger(constant.BridgePortFlag)
 	Run(o, s)
 }

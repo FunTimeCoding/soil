@@ -7,15 +7,20 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/locator"
+	"net/http"
 )
 
-func interfaceClient(t *terminal.Terminal) *client.ClientWithResponses {
+func interfaceClient(
+	t *terminal.Terminal,
+	h *http.Client,
+) *client.ClientWithResponses {
 	result, e := client.NewClientWithResponses(
 		locator.Environment(
 			constant.HostEnvironment,
 			constant.PortEnvironment,
 			constant.InsecureEnvironment,
 		).String(),
+		client.WithHTTPClient(h),
 		client.WithRequestEditorFn(
 			web.BearerEditor(t.Required(constant.TokenEnvironment)),
 		),

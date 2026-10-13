@@ -7,6 +7,7 @@ import (
 
 func Series() {
 	c := prometheus.NewEnvironment()
+	defer c.Close()
 	r := c.MustSeries()
 	console.Format("Statistics: %+v\n", r.HeadStats)
 	console.Format(

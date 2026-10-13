@@ -14,6 +14,7 @@ func WatchedState() {
 		environment.Exists(constant.JiraWatchedIssuesEnvironment),
 	)
 	c := jira.NewEnvironment()
+	defer c.Close()
 	o := c.MustIssueOption()
 	console.Format(
 		"Environment client: loaded %v, keys %d\n",
@@ -21,6 +22,7 @@ func WatchedState() {
 		len(o.WatchedIssues),
 	)
 	w := jira.NewEnvironment(jira.WithWatchedIssues())
+	defer w.Close()
 	p := w.MustIssueOption()
 	console.Format(
 		"Explicit option: loaded %v, keys %d\n",

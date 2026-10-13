@@ -8,6 +8,7 @@ import (
 
 func Label() {
 	c := confluence.NewEnvironment()
+	defer c.Close()
 	f := constant.ConfluenceDense
 
 	for _, l := range c.MustLabels() {

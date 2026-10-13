@@ -41,7 +41,7 @@ func (c *Client) streamOnce(
 		r.Header.Set(webConstant.LastEvent, from)
 	}
 
-	response, e := c.streamClient().Do(r)
+	response, e := c.pool.Client().Do(r)
 
 	if e != nil {
 		return false

@@ -2,8 +2,6 @@ package web_interface_tester
 
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/unit/base"
-	"github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/locator"
 	"testing"
 )
 
@@ -14,11 +12,5 @@ func NewWithProject(
 	t.Helper()
 	s := base.NewWithProject(t, project)
 
-	return &Tester{
-		t:      t,
-		server: s,
-		base: locator.New(constant.Localhost).Insecure().Port(
-			s.Port,
-		).String(),
-	}
+	return &Tester{t: t, server: s}
 }

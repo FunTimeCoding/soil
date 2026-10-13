@@ -10,6 +10,7 @@ import (
 
 func Meta() {
 	c := prometheus.NewEnvironment()
+	defer c.Close()
 	console.Line("Metadata")
 	m := make(map[string][]string)
 

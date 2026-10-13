@@ -19,6 +19,8 @@ Design and coding specs live in `doc/ai/spec/`:
 - `console-status.md` - fluent status line builder
 - `database.md` - service persistence (storage paths, sqlite/postgres openers,
   lite-as-default selection)
+- `http-client.md` - outbound HTTP (stall_client builder, pool views, who
+  owns and closes a client, the named exceptions)
 - `testing.md` - integration testing patterns (mocks, lifecycle HTTP, store)
 - `test-placement.md` - where test files live (unit/ and integration/ homes,
   the process-boundary line, black-box rule)
@@ -37,8 +39,8 @@ Design and coding specs live in `doc/ai/spec/`:
   constants)
 - `model-context.md` - MCP tool exposure pattern (model_context/ subpackage,
   HTTP transport)
-- `multi-instance.md` - multi-backend services (inventory, service layer,
-  instance resolution)
+- `multi-instance.md` - multi-backend services on the shared `pkg/inventory`
+  (instance type, resolution, pools, sessions)
 - `package-design.md` - one struct with receivers per package rule (when to
   extract sub-packages)
 - `package-taxonomy.md` - package roles, dependency direction, and promotion

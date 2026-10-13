@@ -14,10 +14,10 @@ func (s *Server) VerifyGuarded(
 	path string,
 ) {
 	t.Helper()
-	assert.HTTPStatus(t, s.address(path), http.StatusUnauthorized)
-	q := web.NewGet(s.address(path))
+	s.VerifyStatus(t, path, http.StatusUnauthorized)
+	q := web.NewGet(s.Address(path))
 	web.Bearer(q, constant.ModelContextTestToken)
-	r, e := web.Client().Do(q)
+	r, e := s.pool.Client().Do(q)
 	assert.FatalOnError(t, e)
 	defer errors.PanicClose(r.Body)
 	assert.True(t, r.StatusCode != http.StatusUnauthorized)

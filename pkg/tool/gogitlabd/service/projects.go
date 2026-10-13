@@ -2,10 +2,19 @@ package service
 
 import "github.com/funtimecoding/soil/pkg/gitlab/project"
 
-func (s *Service) Projects(search string) ([]*project.Project, error) {
-	if search != "" {
-		return s.client.SearchProject(search)
+func (s *Service) Projects(
+	instance string,
+	search string,
+) ([]*project.Project, error) {
+	c, e := s.pool.Client(instance)
+
+	if e != nil {
+		return nil, e
 	}
 
-	return s.client.Projects()
+	if search != "" {
+		return c.SearchProject(search)
+	}
+
+	return c.Projects()
 }

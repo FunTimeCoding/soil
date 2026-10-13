@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) MergeRequestDiscussions(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.MergeRequestDiscussions,
 ) (*mcp.CallToolResult, error) {
@@ -20,13 +20,13 @@ func (s *Server) MergeRequestDiscussions(
 		return response.Fail("merge_request is required")
 	}
 
-	project, e := s.resolveProject(a.Project)
+	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
 		return s.captureDetail(e)
 	}
 
-	v, e := s.service.MergeRequestDiscussions(project, a.MergeRequest)
+	v, e := s.service.MergeRequestDiscussions(instance, project, a.MergeRequest)
 
 	if e != nil {
 		return s.captureDetail(e)

@@ -3,11 +3,9 @@ package proxmox
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/proxmox/constant"
-	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/locator"
-	"github.com/funtimecoding/soil/pkg/web/verbose_transport"
+	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"github.com/luthermonson/go-proxmox"
-	"net/http"
 )
 
 // Reference: https://pve.proxmox.com/pve-docs/api-viewer
@@ -51,26 +49,18 @@ func New(
 		)
 	}
 
-	var c *http.Client
+	b := stall_client.New().Timeout(result.timeout)
+
+	if result.untrusted {
+		b.Insecure()
+	}
 
 	if result.verbose {
-		c = verbose_transport.New(!result.untrusted)
-	} else if result.untrusted {
-		c = web.InsecureClient()
+		b.Verbose()
 	}
 
-	if result.timeout > 0 {
-		if c == nil {
-			c = &http.Client{}
-		}
-
-		c.Timeout = result.timeout
-	}
-
-	if c != nil {
-		option = append(option, proxmox.WithHTTPClient(c))
-	}
-
+	result.pool = b.Build()
+	option = append(option, proxmox.WithHTTPClient(result.pool.Client()))
 	p := constant.Port
 
 	if result.port > 0 {

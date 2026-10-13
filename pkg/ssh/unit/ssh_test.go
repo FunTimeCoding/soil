@@ -52,8 +52,12 @@ func TestPanicDefault(t *testing.T) {
 }
 
 func TestNotDialed(t *testing.T) {
-	defer func() { assert.NotNil(t, recover()) }()
-	ssh.NewWithPassword("alfa", "localhost", "", false).Run("true")
+	assert.Panic(
+		t,
+		func() {
+			ssh.NewWithPassword("alfa", "localhost", "", false).Run("true")
+		},
+	)
 }
 
 func TestDialUnreachable(t *testing.T) {

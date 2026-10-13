@@ -7,7 +7,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/unit/base"
 	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
-	"github.com/funtimecoding/soil/pkg/web/locator"
 	"testing"
 )
 
@@ -17,9 +16,8 @@ func interfaceClient(
 ) *client.ClientWithResponses {
 	t.Helper()
 	result, e := client.NewClientWithResponses(
-		locator.New(webConstant.Localhost).Insecure().Port(
-			s.ContextServer.Port,
-		).String(),
+		s.ContextServer.Address(webConstant.RootPath),
+		client.WithHTTPClient(s.ContextServer.Client()),
 		client.WithRequestEditorFn(
 			web.BearerEditor(generativeConstant.ModelContextTestToken),
 		),

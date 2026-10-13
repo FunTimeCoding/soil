@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/label_filter"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/name_filter"
 	"github.com/funtimecoding/soil/pkg/prometheus/rule/rule_list"
+	"github.com/funtimecoding/soil/pkg/web/stall_client/pool"
 	"github.com/prometheus/alertmanager/api/v2/client"
 )
 
@@ -19,4 +20,5 @@ type Client struct {
 	changer     *field_changer.Changer
 	nameFilter  *name_filter.Filter
 	labelFilter *label_filter.Filter
+	pool        *pool.Pool
 }

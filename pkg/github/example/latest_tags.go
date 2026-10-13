@@ -9,6 +9,7 @@ import (
 
 func LatestTags() {
 	c := github.NewEnvironment()
+	defer c.Close()
 
 	for _, p := range c.MustPackages(constant.Namespace) {
 		var tags []string

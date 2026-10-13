@@ -5,12 +5,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join/key_value"
 	"github.com/getsentry/sentry-go"
+	"net/http"
 )
 
 func Start(
 	projectName string,
 	locator string,
 	version string,
+	c *http.Client,
 ) *sentry.Hub {
 	errors.FatalOnEmpty(projectName, "projectName")
 	errors.FatalOnEmpty(locator, "locator")
@@ -30,6 +32,7 @@ func Start(
 			AttachStacktrace: true,
 			DataCollection:   &sentry.DataCollection{},
 			BeforeSend:       Enrich,
+			HTTPClient:       c,
 		},
 	)
 	errors.FatalOnError(e)

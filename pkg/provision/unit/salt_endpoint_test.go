@@ -18,6 +18,7 @@ func TestNewLogsInAndSendsTheToken(t *testing.T) {
 func TestExpiredTokenRenewsOnce(t *testing.T) {
 	s := newSaltServer(t, "bravo")
 	c := newSaltClient(t, s.URL, "bravo")
+	defer c.Close()
 	s.expire()
 	_, e := c.ListKeys()
 	assert.FatalOnError(t, e)
@@ -38,15 +39,9 @@ func TestRefusalCarriesTheParagraph(t *testing.T) {
 
 func TestWrongPasswordPanicsWithTheReason(t *testing.T) {
 	s := newSaltServer(t, "bravo")
-	defer func() {
-		r := recover()
-		e, okay := r.(error)
-		assert.True(t, okay)
-		assert.StringContains(
-			t,
-			"salt-api status: 401: Could not authenticate using provided credentials",
-			e.Error(),
-		)
-	}()
-	newSaltClient(t, s.URL, "charlie")
+	assert.PanicContains(
+		t,
+		"salt-api status: 401: Could not authenticate using provided credentials",
+		func() { newSaltClient(t, s.URL, "charlie") },
+	)
 }

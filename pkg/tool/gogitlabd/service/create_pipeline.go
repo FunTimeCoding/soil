@@ -6,9 +6,16 @@ import (
 )
 
 func (s *Service) CreatePipeline(
+	instance string,
 	project int64,
 	reference string,
 	v []*gitlab.PipelineVariableOptions,
 ) (*pipeline_detail.Detail, error) {
-	return s.client.CreatePipeline(project, reference, v)
+	c, e := s.pool.Client(instance)
+
+	if e != nil {
+		return nil, e
+	}
+
+	return c.CreatePipeline(project, reference, v)
 }

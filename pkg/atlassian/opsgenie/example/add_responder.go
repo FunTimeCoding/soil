@@ -12,6 +12,7 @@ func AddResponder() {
 	a.ParseSimple()
 	r := a.RequiredPositional(0, "RESPONDER_NAME")
 	c := common.Opsgenie()
+	defer c.Close()
 	f := constant.ExtendedColorFormat.Copy()
 
 	for _, a := range c.Open() {

@@ -8,6 +8,7 @@ import (
 
 func Watch() {
 	c := confluence.NewEnvironment()
+	defer c.Close()
 	f := constant.ConfluenceDense
 	console.Line("Watch")
 

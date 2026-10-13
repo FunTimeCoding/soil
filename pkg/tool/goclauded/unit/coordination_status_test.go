@@ -2,14 +2,12 @@ package unit
 
 import (
 	"context"
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/base"
 	"io"
-	"net/http"
 	"testing"
 )
 
@@ -57,9 +55,7 @@ func TestStatusReportsFindingsAcrossSurfaces(t *testing.T) {
 
 	assert.Count(t, 1, unowned)
 	assert.StringContains(t, "Nobody", unowned[0].Detail)
-	page, f := http.Get(
-		fmt.Sprintf("http://localhost:%d%s", s.Port, constant.StatusPath),
-	)
+	page, f := s.Server.Client().Get(s.Address(constant.StatusPath))
 	assert.FatalOnError(t, f)
 
 	defer errors.PanicClose(page.Body)

@@ -42,7 +42,10 @@ func stubServer(
 		),
 	)
 	t.Cleanup(s.Close)
-	c, e := client.NewClientWithResponses(s.URL)
+	c, e := client.NewClientWithResponses(
+		s.URL,
+		client.WithHTTPClient(s.Client()),
+	)
 	assert.FatalOnError(t, e)
 
 	return c

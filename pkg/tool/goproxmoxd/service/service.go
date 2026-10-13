@@ -1,16 +1,15 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/ssh"
+	"github.com/funtimecoding/soil/pkg/inventory/pool"
+	"github.com/funtimecoding/soil/pkg/inventory/selection"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/inventory"
-	"sync"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/instance"
 )
 
 type Service struct {
-	inventory  *inventory.Inventory
-	clients    map[string]face.ProxmoxClient
-	sshClients map[string]*ssh.Client
-	sessions   sync.Map
-	mutex      sync.Mutex
+	inventory *instance.Inventory
+	pool      *pool.Pool[instance.Instance, *instance.Instance, face.ProxmoxClient]
+	snippets  *pool.Pool[instance.Instance, *instance.Instance, face.SnippetClient]
+	selection *selection.Selection
 }

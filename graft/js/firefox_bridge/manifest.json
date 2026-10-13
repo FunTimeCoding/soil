@@ -1,16 +1,21 @@
 {
   "manifest_version": 2,
   "name": "Browser Bridge",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Bridge for MCP access to Firefox tabs and content",
   "permissions": [
     "tabs",
     "tabGroups",
     "activeTab",
+    "nativeMessaging",
+    "downloads",
     "<all_urls>"
   ],
   "background": {
-    "scripts": ["bridge.js", "background.js"],
+    "scripts": [
+      "bridge.js",
+      "background.js"
+    ],
     "persistent": true
   },
   "browser_specific_settings": {

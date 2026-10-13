@@ -8,9 +8,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gosecret/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosecretd/generated/client"
 	"github.com/spf13/cobra"
+	"net/http"
 )
 
-func revealCommand(t *terminal.Terminal) *cobra.Command {
+func revealCommand(
+	t *terminal.Terminal,
+	h *http.Client,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   constant.RevealUsage,
 		Short: "Print one key's value and nothing else",
@@ -19,7 +23,7 @@ func revealCommand(t *terminal.Terminal) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			r, e := interfaceClient(t).RevealSecretWithResponse(
+			r, e := interfaceClient(t, h).RevealSecretWithResponse(
 				context.Background(),
 				&client.RevealSecretParams{
 					Path: arguments[0],

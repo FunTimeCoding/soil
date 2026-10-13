@@ -10,8 +10,8 @@ import (
 func newFailingClient(failure error) (*http.Client, *atomic.Int32) {
 	var attempts atomic.Int32
 
-	return &http.Client{
-		Transport: &http.Transport{
+	return &http.Client{ // goanalyze:ignore restricted_literal
+		Transport: &http.Transport{ // goanalyze:ignore restricted_literal
 			DialContext: func(
 				context.Context,
 				string,

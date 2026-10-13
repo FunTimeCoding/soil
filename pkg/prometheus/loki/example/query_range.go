@@ -13,6 +13,7 @@ import (
 
 func QueryRange() {
 	c := loki.NewEnvironment(false)
+	defer c.Close()
 	end := time.Now()
 	start := end.Add(-24 * time.Hour)
 	r, m := c.MustQueryRange(

@@ -8,5 +8,6 @@ func (i *Instrument) Flush(v any) {
 	}
 
 	i.recorder.Flush()
+	i.recorder.Close()
 	i.reporter.RecoverFlush(v)
 }

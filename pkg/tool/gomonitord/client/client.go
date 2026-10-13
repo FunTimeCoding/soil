@@ -3,6 +3,7 @@ package client
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/tool/gomonitord/generated/client"
+	"github.com/funtimecoding/soil/pkg/web/stall_client/pool"
 )
 
 type Client struct {
@@ -10,4 +11,5 @@ type Client struct {
 	client  *client.ClientWithResponses
 	base    string
 	token   string
+	pool    *pool.Pool
 }

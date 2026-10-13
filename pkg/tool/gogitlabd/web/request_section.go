@@ -1,13 +1,13 @@
 package web
 
 import (
-	"github.com/funtimecoding/soil/pkg/gitlab/merge_request"
 	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gogitlabd/types/request_entry"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
 
-func requestSection(requests []*merge_request.Request) gomponents.Node {
+func (s *Server) requestSection(requests []*request_entry.Entry) gomponents.Node {
 	if len(requests) == 0 {
 		return gomponents.Group(nil)
 	}
@@ -15,7 +15,7 @@ func requestSection(requests []*merge_request.Request) gomponents.Node {
 	return gomponents.Group(
 		[]gomponents.Node{
 			html.H3(gomponents.Text(constant.RequestTitle)),
-			requestTable(requests),
+			requestTable(requests, s.multiple()),
 		},
 	)
 }

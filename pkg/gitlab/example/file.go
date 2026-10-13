@@ -19,6 +19,7 @@ func File() {
 	branch := a.GetString(constant.Branch)
 	file := a.GetString(constant.File)
 	g := gitlab.NewEnvironment()
+	defer g.Close()
 	p := g.MustProjectByName(owner, repository)
 	f := g.MustFile(p.Identifier, branch, file)
 	console.Format("File: %+v\n", f)

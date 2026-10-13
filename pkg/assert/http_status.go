@@ -7,11 +7,12 @@ import (
 
 func HTTPStatus(
 	t *testing.T,
+	c *http.Client,
 	locator string,
 	expect int,
 ) {
 	t.Helper()
-	r, e := http.Get(locator)
+	r, e := c.Get(locator)
 
 	if e != nil {
 		t.Errorf("GET %s: %s", locator, e)

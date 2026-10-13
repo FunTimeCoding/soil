@@ -1,15 +1,16 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/ssh"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
-	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/inventory"
+	"github.com/funtimecoding/soil/pkg/inventory/pool"
+	"github.com/funtimecoding/soil/pkg/inventory/selection"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/instance"
 )
 
-func New(i *inventory.Inventory) *Service {
+func New(i *instance.Inventory) *Service {
 	return &Service{
-		inventory:  i,
-		clients:    make(map[string]face.ProxmoxClient),
-		sshClients: make(map[string]*ssh.Client),
+		inventory: i,
+		pool:      pool.New(i, newClient),
+		snippets:  pool.New(i, newSnippetClient),
+		selection: selection.New(),
 	}
 }

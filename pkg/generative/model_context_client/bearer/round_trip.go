@@ -7,11 +7,11 @@ import (
 	"net/http"
 )
 
-func (Transport) RoundTrip(q *http.Request) (*http.Response, error) {
+func (t Transport) RoundTrip(q *http.Request) (*http.Response, error) {
 	q.Header.Set(
 		webConstant.Authorization,
 		key_value.Space(webConstant.Bearer, constant.ModelContextTestToken),
 	)
 
-	return http.DefaultTransport.RoundTrip(q)
+	return t.Base.RoundTrip(q)
 }

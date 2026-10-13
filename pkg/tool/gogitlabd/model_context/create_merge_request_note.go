@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) CreateMergeRequestNote(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.CreateMergeRequestNote,
 ) (*mcp.CallToolResult, error) {
@@ -24,13 +24,18 @@ func (s *Server) CreateMergeRequestNote(
 		return response.Fail("body is required")
 	}
 
-	project, e := s.resolveProject(a.Project)
+	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
 		return s.captureDetail(e)
 	}
 
-	v, e := s.service.CreateMergeRequestNote(project, a.MergeRequest, a.Body)
+	v, e := s.service.CreateMergeRequestNote(
+		instance,
+		project,
+		a.MergeRequest,
+		a.Body,
+	)
 
 	if e != nil {
 		return s.captureDetail(e)

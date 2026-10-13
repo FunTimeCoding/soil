@@ -1,9 +1,16 @@
 package client
 
+import (
+	"github.com/funtimecoding/soil/pkg/web/stall_client"
+	"time"
+)
+
 func New(key string) *Client {
-	l := Configuration(key)
+	p := stall_client.New().Timeout(10 * time.Second).Build()
+	l := Configuration(key, p.Client())
 
 	return &Client{
+		pool:         p,
 		Account:      Account(l),
 		Alert:        Alert(l),
 		Contact:      Contact(l),

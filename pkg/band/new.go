@@ -1,9 +1,8 @@
 package band
 
 import (
-	"crypto/tls"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"net/http"
+	"github.com/funtimecoding/soil/pkg/web/stall_client"
 )
 
 func New(
@@ -14,15 +13,13 @@ func New(
 	errors.FatalOnEmpty(address, "address")
 	errors.FatalOnEmpty(user, "user")
 	errors.FatalOnEmpty(password, "password")
+	p := stall_client.New().Insecure().Build()
 
 	return &Client{
 		base:     address,
 		user:     user,
 		password: password,
-		client: &http.Client{
-			Transport: &http.Transport{
-				TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-			},
-		},
+		client:   p.Client(),
+		pool:     p,
 	}
 }

@@ -1,11 +1,11 @@
 package basic
 
 import (
-	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/funtimecoding/soil/pkg/web/requester"
 	"github.com/funtimecoding/soil/pkg/web/requester/authorizer/basic"
+	"github.com/funtimecoding/soil/pkg/web/stall_client"
 )
 
 func New(
@@ -19,7 +19,7 @@ func New(
 		WithHeader(constant.Accept, constant.Object)
 
 	if untrusted {
-		result.WithClient(web.InsecureStallClient())
+		result.WithClient(stall_client.New().Insecure().Build().Client())
 	}
 
 	return &Client{requester: result}

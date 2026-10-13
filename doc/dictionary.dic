@@ -12,18 +12,15 @@ positionals
 renderable
 renderables
 slowloris
-stacktraces
 
 # Names
 Loopsies
 Ollama
 Opsgenie
 Reitzel
-Samsa
 alice
 coolify
 funtimecoding
-gdamore
 grafana
 habitica
 hetzner
@@ -33,7 +30,6 @@ jellyfin
 kaos
 karakeep
 kestra
-lefthook
 linkace
 linkwarden
 mattermost
@@ -77,7 +73,6 @@ goaudit
 gobuild
 gocertificated
 gochk
-gochroma
 gochromed
 goclaude
 goclauded
@@ -156,7 +151,6 @@ linux
 # Unix
 envrc
 unix
-websocat
 whoami
 
 # Linux
@@ -282,7 +276,6 @@ julianday
 rowid
 
 # NetBox
-circuitgroupassignment
 dcim
 ipam
 
@@ -301,7 +294,6 @@ pkgutil
 # libvirt
 libvirt
 virt
-virtlogd
 
 # QEMU
 chardev
@@ -315,7 +307,6 @@ HTTPIP
 qemuargs
 
 # Renovate
-automerge
 datasources
 
 # Anthropic

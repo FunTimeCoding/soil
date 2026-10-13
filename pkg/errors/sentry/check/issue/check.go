@@ -13,6 +13,7 @@ import (
 
 func Check(o *option.Issue) {
 	c := sentry.NewEnvironment()
+	defer c.Close()
 	elements := c.MustIssuesSimple(o.Verbose)
 
 	if o.Notation {

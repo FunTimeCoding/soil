@@ -14,6 +14,7 @@ import (
 func TestGetSendsBasicAuthToTheLocator(t *testing.T) {
 	s, last := upstream_tester.New(t, http.StatusOK, `{"total":3}`)
 	c := newJiraClient(t, s.URL)
+	defer c.Close()
 	var out map[string]int
 	assert.FatalOnError(
 		t,
@@ -53,6 +54,7 @@ func TestRefusalIsNotReadAsAnswer(t *testing.T) {
 		`{"errorMessages":["You are not authenticated."],"errors":{}}`,
 	)
 	c := newJiraClient(t, s.URL)
+	defer c.Close()
 	var out map[string]any
 	e := c.Get(c.Base().Copy().Path("rest/api/2/issue/ALFA-1").String(), &out)
 	assert.True(t, unexpected.Is(e))
@@ -71,6 +73,7 @@ func TestMissingIssueIsNotFound(t *testing.T) {
 		`{"errorMessages":["Issue does not exist"],"errors":{}}`,
 	)
 	c := newJiraClient(t, s.URL)
+	defer c.Close()
 	_, e := c.Bytes(c.Base().Copy().Path("rest/api/3/issue/ALFA-99").String())
 	assert.True(t, not_found.Is(e))
 }
@@ -78,6 +81,7 @@ func TestMissingIssueIsNotFound(t *testing.T) {
 func TestBytesReturnsTheRawAnswer(t *testing.T) {
 	s, _ := upstream_tester.New(t, http.StatusOK, `{"key":"ALFA-1"}`)
 	c := newJiraClient(t, s.URL)
+	defer c.Close()
 	b, e := c.Bytes(c.Base().Copy().Path("rest/api/3/issue/ALFA-1").String())
 	assert.FatalOnError(t, e)
 	assert.String(t, `{"key":"ALFA-1"}`, string(b))

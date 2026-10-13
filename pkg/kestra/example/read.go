@@ -7,6 +7,7 @@ import (
 
 func Read() {
 	k := kestra.NewEnvironment()
+	defer k.Close()
 
 	if true {
 		console.Line("Namespaces")

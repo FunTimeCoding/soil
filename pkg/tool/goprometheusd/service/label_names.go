@@ -10,7 +10,7 @@ func (s *Service) LabelNames(
 	matches []string,
 	since time.Time,
 ) (*label_result.Result, error) {
-	c, e := s.Client(instance)
+	c, e := s.pool.Client(instance)
 
 	if e != nil {
 		return nil, e

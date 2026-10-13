@@ -7,5 +7,6 @@ import (
 
 func Status() {
 	c := prometheus.NewEnvironment()
+	defer c.Close()
 	console.Format("Status: %+v\n", c.MustStatus())
 }

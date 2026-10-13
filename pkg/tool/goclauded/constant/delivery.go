@@ -24,11 +24,11 @@ const (
 )
 
 const (
-	ReadMessage       = "read_message"
-	Identifiers       = "identifiers"
-	MessageHeader     = "[Message %d from %s to %s at %s]"
-	MessageEveryone   = "everyone"
-	MessageNotFound   = "No message with identifier: %s"
+	ReadMessage     = "read_message"
+	Identifiers     = "identifiers"
+	MessageHeader   = "[Message %d from %s to %s at %s]"
+	MessageEveryone = "everyone"
+	MessageNotFound = "No message with identifier: %s"
 )
 
 const (

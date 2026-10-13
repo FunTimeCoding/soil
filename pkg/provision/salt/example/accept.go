@@ -7,6 +7,7 @@ import (
 
 func Accept() {
 	c := salt.NewEnvironment()
+	defer c.Close()
 	result, e := c.AcceptKey("test-minion")
 
 	if e != nil {

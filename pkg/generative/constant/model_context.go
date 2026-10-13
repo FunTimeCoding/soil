@@ -1,5 +1,7 @@
 package constant
 
+import "time"
+
 const (
 	ModelContextGreetTool     = "greet"
 	ModelContextNameParameter = "name"
@@ -38,3 +40,4 @@ const (
 )
 
 const ModelContextAddress = ":10080"
+const ModelContextSessionIdle = time.Hour

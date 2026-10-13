@@ -8,6 +8,7 @@ import (
 
 func Inventory() {
 	c := fritz.NewEnvironment()
+	defer c.Close()
 	device, e := c.Device()
 	errors.PanicOnError(e)
 	fmt.Printf(

@@ -45,6 +45,7 @@ func Dialog() {
 	)
 	s := web.ListenAsynchronous(w)
 	m := common.Mattermost()
+	defer m.Close()
 
 	if true {
 		p := &model.Post{

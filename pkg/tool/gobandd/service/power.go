@@ -7,7 +7,7 @@ func (s *Service) Power(
 	operation string,
 	force bool,
 ) (string, error) {
-	c, e := s.Engine(instance)
+	c, e := s.pool.Client(instance)
 
 	if e != nil {
 		return "", e

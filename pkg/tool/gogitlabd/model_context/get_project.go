@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) GetProject(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.GetProject,
 ) (*mcp.CallToolResult, error) {
@@ -16,13 +16,13 @@ func (s *Server) GetProject(
 		return response.Fail("project is required")
 	}
 
-	project, e := s.resolveProject(a.Project)
+	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
 		return s.captureDetail(e)
 	}
 
-	v, e := s.service.Project(project)
+	v, e := s.service.Project(instance, project)
 
 	if e != nil {
 		return s.captureDetail(e)

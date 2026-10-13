@@ -13,6 +13,7 @@ func Latest() {
 	a.ParseSimple()
 	channel := a.RequiredPositional(0, "CHANNEL")
 	m := mattermost.NewEnvironment(mattermost.WithVerbose(false))
+	defer m.Close()
 	c := m.MustTeamChannel(channel)
 	console.Format("Channel: %s\n", c.Name)
 	limit := 10

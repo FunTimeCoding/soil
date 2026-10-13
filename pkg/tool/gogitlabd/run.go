@@ -3,7 +3,6 @@ package gogitlabd
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/gitlab"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
@@ -24,7 +23,8 @@ func Run(
 ) {
 	r := s.Reporter()
 	l := logger.New(context.Background())
-	v := service.New(gitlab.NewEnvironment())
+	v := service.New(o.Inventory)
+	defer v.Close()
 	m := metric.New()
 	k := worker.New(v, constant.PollInterval, m.Registry(), l, r)
 	b := web.New(v, k)

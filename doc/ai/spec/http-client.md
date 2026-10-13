@@ -1,0 +1,71 @@
+# HTTP Client
+
+Convention for outbound HTTP: every client is built by `stall_client`,
+owned by exactly one holder, and closed by it. No process-wide transport,
+no `http.DefaultClient`.
+
+## Building
+
+`stall_client.New()` returns a builder; `Build()` returns a
+`stall_client/pool.Pool`, which owns one `*http.Transport` and hands out
+views over it:
+
+```go
+p := stall_client.New().Insecure().Long().Timeout(5 * time.Second).Build()
+defer p.Close()
+c := p.Client()
+```
+
+- `Insecure()` - skip TLS verification
+- `Long()` - wait thirty minutes for response headers instead of thirty
+  seconds; bodies are never bounded
+- `Timeout(d)` - an overall client timeout, on every view
+- `Verbose()` - log each request and response
+- `BasicAuth(user, password)` - add basic authentication
+
+`Verbose` always wraps outside `BasicAuth`, so the log never carries the
+credentials.
+
+The transport is the resource: it holds the connections. A client is a
+policy view over it - `Client()` follows redirects, `Halting()` stops at
+the first one and returns it. An SDK that builds its own wrapper and takes a
+base round-tripper gets `p.Client().Transport`, so the switches still apply;
+go-jira's auth transport and gowebdav take it that way, and oauth2 takes
+`p.Client()` through its context. `Transport()` is the bare transport
+underneath.
+
+## Owning
+
+Whoever builds a pool owns it and closes it; whoever is given a client
+never closes it.
+
+- A type that builds a client keeps the pool, or the type wrapping it, and
+  has a `Close()` that closes everything it built. A wrapper around a
+  generated client builds its pool in `New` and passes `p.Client()` through
+  `WithHTTPClient`.
+- A function that would hand out a bare generated or SDK client takes an
+  `*http.Client` from its caller instead, so the caller owns it.
+- `Run` and `main` build the outermost owners and `defer` their `Close()`.
+  A one-shot function owns a local pool for the length of its call.
+
+Closing drops idle connections only; a client closed twice, or used again
+after `Close`, simply dials again.
+
+## Enforcement
+
+goanalyze's `restricted_call` refuses `http.Get`, `Post`, `Head`,
+`PostForm`, `DefaultClient` and `DefaultTransport`; `restricted_literal`
+refuses `http.Client` and `http.Transport` literals outside `stall_client`.
+`unclosed_resource` flags an owner held in a local that is never closed.
+
+## Exceptions
+
+- `generative/model_context_client` wraps the test server's transport in a
+  bearer round-tripper.
+- gokubernetesd's port-forward uses client-go's SPDY upgrade transport, and
+  client-go builds its transport from `rest.Config`, cluster TLS and auth
+  plugins included.
+- A test that needs a transport the builder cannot express - a failing
+  dialer - marks its literal `goanalyze:ignore restricted_literal`.
+
+Test servers own their client too; `testing.md` covers that side.

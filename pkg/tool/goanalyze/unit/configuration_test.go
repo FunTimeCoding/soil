@@ -17,8 +17,7 @@ func TestConfigurationTurnsCommentOn(t *testing.T) {
 }
 
 func TestConfigurationMalformedPanics(t *testing.T) {
-	defer func() { assert.NotNil(t, recover()) }()
 	root := t.TempDir()
 	writeConfiguration(root, "comment: [\n")
-	configuration.Load(root)
+	assert.Panic(t, func() { configuration.Load(root) })
 }

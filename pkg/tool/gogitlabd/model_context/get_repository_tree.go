@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) GetRepositoryTree(
-	_ context.Context,
+	x context.Context,
 	_ mcp.CallToolRequest,
 	a argument.GetRepositoryTree,
 ) (*mcp.CallToolResult, error) {
@@ -16,13 +16,20 @@ func (s *Server) GetRepositoryTree(
 		return response.Fail("project is required")
 	}
 
-	project, e := s.resolveProject(a.Project)
+	instance, project, e := s.resolveProject(x, a.Project)
 
 	if e != nil {
 		return s.captureDetail(e)
 	}
 
-	v, e := s.service.Tree(project, a.Path, a.Reference, a.Recursive, 0)
+	v, e := s.service.Tree(
+		instance,
+		project,
+		a.Path,
+		a.Reference,
+		a.Recursive,
+		0,
+	)
 
 	if e != nil {
 		return s.captureDetail(e)

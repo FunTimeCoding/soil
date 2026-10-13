@@ -1,22 +1,35 @@
 package constant
 
-import "github.com/funtimecoding/soil/pkg/identity"
+import (
+	"github.com/funtimecoding/soil/pkg/identity"
+	"github.com/funtimecoding/soil/pkg/identity/paragraph"
+	inventoryConstant "github.com/funtimecoding/soil/pkg/inventory/constant"
+)
 
 var Identity = identity.New(
 	"gobandd",
 	"Out-of-band power control over Intel AMT, multi-instance",
 	"gobandd",
 ).WithInstructions(
-	"Out-of-band power control for machines carrying Intel AMT. Call list_instances to see the management engines. shutdown and reboot ask the operating system through LMS by default; force cuts power below it.",
+	"Out-of-band power control for machines carrying Intel AMT. shutdown and reboot ask the operating system through LMS by default; force cuts power below it.",
+	paragraph.New(
+		inventoryConstant.MultiInstance,
+		inventoryConstant.MultiInstanceInstruction,
+	),
 )
 
 const (
-	ListInstances = "list_instances"
-	UseInstance   = "use_instance"
-	Status        = "status"
-	Start         = "start"
-	Shutdown      = "shutdown"
-	Reboot        = "reboot"
+	Status   = "status"
+	Start    = "start"
+	Shutdown = "shutdown"
+	Reboot   = "reboot"
+
+	EnableRedirection = "enable_redirection"
+)
+
+const (
+	ListenerWrite      = "listener"
+	ScreenServiceWrite = "screen service"
 )
 
 const (
@@ -27,11 +40,5 @@ const (
 
 var Operations = []string{OperationStart, OperationShutdown, OperationReboot}
 
-const (
-	InstanceParameter = "instance"
-	ForceParameter    = "force"
-
-	InstanceKind = "instance"
-)
-
+const ForceParameter = "force"
 const GracefulRefusal = "LMS on the host registers it; force cuts power instead"

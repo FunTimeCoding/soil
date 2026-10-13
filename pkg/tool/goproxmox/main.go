@@ -15,6 +15,7 @@ func Main() {
 	defer func() { s.Flush(recover()) }()
 	var instance string
 	c := command_context.New(terminal.New(s))
+	defer c.Close()
 	o := &cobra.Command{
 		Use:   constant.Identity.Usage(),
 		Short: constant.Identity.Description(),

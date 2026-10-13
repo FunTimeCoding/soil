@@ -20,6 +20,7 @@ func Run(
 ) {
 	r := s.Reporter()
 	v := service.New(o.Inventory)
+	defer v.Close()
 	lifecycle.New(
 		logger.New(context.Background()),
 		lifecycle.WithServer(

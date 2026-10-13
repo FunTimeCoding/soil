@@ -7,9 +7,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/gosecret/constant"
 	"github.com/spf13/cobra"
+	"net/http"
 )
 
-func statusCommand(t *terminal.Terminal) *cobra.Command {
+func statusCommand(
+	t *terminal.Terminal,
+	h *http.Client,
+) *cobra.Command {
 	return &cobra.Command{
 		Use:   constant.StatusUsage,
 		Short: "Show whether the secret store is initialized and sealed",
@@ -18,7 +22,7 @@ func statusCommand(t *terminal.Terminal) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			r, e := interfaceClient(t).GetStatusWithResponse(
+			r, e := interfaceClient(t, h).GetStatusWithResponse(
 				context.Background(),
 			)
 			errors.PanicOnError(e)

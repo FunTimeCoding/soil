@@ -4,8 +4,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/instrument"
+	"github.com/funtimecoding/soil/pkg/inventory"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/constant"
-	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/inventory"
+	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/inventory/instance"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/option"
 	"github.com/funtimecoding/soil/pkg/web"
 )
@@ -17,13 +18,15 @@ func Main() {
 	a.Web()
 	a.String(
 		argumentConstant.Inventory,
-		"gopostgresd.yaml",
+		constant.Identity.InventoryPath(),
 		"Inventory file path",
 	)
 	a.Parse()
 	o := option.New()
 	o.Address = a.Address()
 	o.ServiceTokens = web.ServiceTokens()
-	o.Inventory = inventory.Load(a.GetString(argumentConstant.Inventory))
+	o.Inventory = inventory.Load[instance.Instance](
+		a.GetString(argumentConstant.Inventory),
+	)
 	Run(o, s)
 }

@@ -32,5 +32,7 @@ func Main() {
 		return
 	}
 
-	bubbletea.Run(monitor.New(o.Connect), true)
+	m := monitor.New(o.Connect)
+	defer m.Close()
+	bubbletea.Run(m, true)
 }

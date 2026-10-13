@@ -15,4 +15,5 @@ type Builder struct {
 	recorder     face.Recorder
 	experimental map[string]any
 	connected    func()
+	sessionEnd   func(session string)
 }

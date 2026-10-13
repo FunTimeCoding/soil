@@ -19,6 +19,7 @@ func TestAWindowReleasesItsClaimsOnItemsGone(t *testing.T) {
 	s := base.New(t)
 	connectTo(t, s.Port)
 	m := monitor.New(true)
+	defer m.Close()
 	owner := fmt.Sprintf(
 		monitorConstant.OwnerFormat,
 		system.User().Username,

@@ -8,6 +8,7 @@ import (
 
 func Label() {
 	c := loki.NewEnvironment(false)
+	defer c.Close()
 	end := time.Now()
 	start := end.AddDate(0, 0, -7)
 

@@ -21,5 +21,17 @@ const (
 	UngroupTab   = "ungroup_tab"
 	UpdateGroup  = "update_group"
 
+	WaitFor        = "wait_for"
+	Evaluate       = "evaluate"
+	Click          = "click"
+	Fill           = "fill"
+	Screenshot     = "screenshot"
+	DownloadFile   = "download_file"
+	DownloadStatus = "download_status"
+
+	Direct = "direct"
+
 	BridgePortFlag = "bridge-port"
+
+	DownloadDirectoryEnvironment = "FIREFOX_DOWNLOAD_DIRECTORY"
 )

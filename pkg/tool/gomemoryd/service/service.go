@@ -7,10 +7,10 @@ import (
 )
 
 type Service struct {
-	store     *store.Store
-	indexer   face.Indexer
-	searcher  face.Searcher
-	lister    face.Lister
+	store         *store.Store
+	indexer       face.Indexer
+	searcher      face.Searcher
+	lister        face.Lister
 	tokenizer     *tokenizer.Encoder
 	hiddenTag     string
 	referenceRoot string
