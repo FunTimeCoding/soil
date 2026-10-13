@@ -18,7 +18,7 @@ require (
 	github.com/apenella/go-ansible/v2 v2.5.0
 	github.com/bmatcuk/doublestar/v4 v4.10.3
 	github.com/bwmarrin/discordgo v0.29.0
-	github.com/chromedp/cdproto v0.157.10
+	github.com/chromedp/cdproto v0.157.11
 	github.com/chromedp/chromedp v0.21.0
 	github.com/coder/websocket v1.8.15
 	github.com/coreos/go-oidc/v3 v3.21.0
@@ -60,7 +60,7 @@ require (
 	github.com/modelcontextprotocol/go-sdk v1.8.0
 	github.com/muesli/termenv v0.16.0
 	github.com/netbox-community/go-netbox/v4 v4.3.0
-	github.com/nwaples/rardecode/v2 v2.4.4
+	github.com/nwaples/rardecode/v2 v2.4.5
 	github.com/oapi-codegen/runtime v1.7.0
 	github.com/ollama/ollama v0.40.3
 	github.com/openai/openai-go/v3 v3.77.0
