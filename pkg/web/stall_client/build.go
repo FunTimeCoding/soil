@@ -3,6 +3,7 @@ package stall_client
 import (
 	"crypto/tls"
 	"github.com/funtimecoding/soil/pkg/web/basic_transport"
+	"github.com/funtimecoding/soil/pkg/web/bearer_transport"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/stall_client/pool"
 	"github.com/funtimecoding/soil/pkg/web/verbose_transport"
@@ -36,6 +37,10 @@ func (b *Builder) Build() *pool.Pool {
 
 	if b.basic {
 		r = basic_transport.New(b.user, b.password, r)
+	}
+
+	if b.bearer {
+		r = bearer_transport.New(b.token, r)
 	}
 
 	if b.verbose {

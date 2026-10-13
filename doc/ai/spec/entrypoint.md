@@ -189,6 +189,24 @@ Offer `NewOptional` from a package whose consumers are not all
 known. A program that controls its own deployment can require
 whatever it likes.
 
+### A spawned binary inherits no environment
+
+`environment.Required` at main scope assumes the invoker supplies a
+shell environment. Three invokers do not: a CI job, a launchd agent,
+and a browser spawning a native messaging host. Each gets a near-empty
+environment - a native messaging host is handed
+`PATH=/usr/bin:/bin:/usr/sbin:/sbin` and nothing else - so a Required
+read exits 1 before the program does anything.
+
+The failure is quiet, because exiting on a missing variable prints one
+line to stderr and the parent rarely shows it. Firefox reports only
+`port disconnected: no reason`.
+
+So a binary that something else spawns takes `NewOptional`, and any
+Required read it needs moves inside the branch that only the serve path
+executes. For a daemon with import or install modes that return before
+serving, the same applies to those modes.
+
 ## Instrument Integration
 
 Programs that carry telemetry - daemons and subcommand CLIs - create

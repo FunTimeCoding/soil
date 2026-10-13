@@ -22,9 +22,10 @@ c := p.Client()
 - `Timeout(d)` - an overall client timeout, on every view
 - `Verbose()` - log each request and response
 - `BasicAuth(user, password)` - add basic authentication
+- `BearerAuth(token)` - add a bearer token
 
-`Verbose` always wraps outside `BasicAuth`, so the log never carries the
-credentials.
+`Verbose` always wraps outside `BasicAuth` and `BearerAuth`, so the log never
+carries the credentials.
 
 The transport is the resource: it holds the connections. A client is a
 policy view over it - `Client()` follows redirects, `Halting()` stops at

@@ -10,4 +10,6 @@ type Builder struct {
 	basic    bool
 	user     string
 	password string
+	bearer   bool
+	token    string
 }
