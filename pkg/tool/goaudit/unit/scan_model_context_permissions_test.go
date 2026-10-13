@@ -2,9 +2,15 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/inventory/instance_tool"
+	"github.com/funtimecoding/soil/pkg/inventory/selection"
+	"github.com/funtimecoding/soil/pkg/inventory/unit/instance_tester"
+	"github.com/funtimecoding/soil/pkg/notation"
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/scan/audit_configuration"
 	"github.com/funtimecoding/soil/pkg/tool/goaudit/unit/scan_tester"
+	"github.com/mark3labs/mcp-go/server"
 	"testing"
 )
 
@@ -108,4 +114,57 @@ func TestModelContextPermissionsNoMap(t *testing.T) {
 	)
 	result := scan.ModelContextPermissions(base, audit_configuration.New())
 	assert.Integer(t, 0, len(result))
+}
+
+func TestModelContextPermissionsInstanceToolCallRegistersSharedTools(
+	t *testing.T,
+) {
+	base := t.TempDir()
+	scan_tester.WriteAlfaService(
+		base,
+		`{"permissions":{"allow":["mcp__alfa__list_instances","mcp__alfa__use_instance"]}}`,
+	)
+	assert.Integer(
+		t,
+		2,
+		len(scan.ModelContextPermissions(base, scan_tester.AlfaConfiguration())),
+	)
+	scan_tester.WriteInstanceToolCall(base)
+	assert.Integer(
+		t,
+		0,
+		len(scan.ModelContextPermissions(base, scan_tester.AlfaConfiguration())),
+	)
+}
+
+func TestModelContextPermissionsCoverEveryInstanceToolRegistration(
+	t *testing.T,
+) {
+	s := server.NewMCPServer("test", "0")
+	instance_tool.New(
+		instance_tester.Inventory("alfa", "bravo"),
+		selection.New(),
+	).Register(s)
+	var allow []string
+
+	for name := range s.ListTools() {
+		allow = append(allow, join.Empty("mcp__alfa__", name))
+	}
+
+	assert.NotEmpty(t, allow)
+	base := t.TempDir()
+	scan_tester.WriteAlfaService(
+		base,
+		string(
+			notation.Marshal(
+				map[string]map[string][]string{"permissions": {"allow": allow}},
+			),
+		),
+	)
+	scan_tester.WriteInstanceToolCall(base)
+	assert.Integer(
+		t,
+		0,
+		len(scan.ModelContextPermissions(base, scan_tester.AlfaConfiguration())),
+	)
 }

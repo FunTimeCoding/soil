@@ -3,6 +3,7 @@ package scan
 import (
 	"fmt"
 	soil "github.com/funtimecoding/soil/pkg/constant"
+	inventoryConstant "github.com/funtimecoding/soil/pkg/inventory/constant"
 	"github.com/funtimecoding/soil/pkg/lint/concern"
 	"github.com/funtimecoding/soil/pkg/parse"
 	"github.com/funtimecoding/soil/pkg/system/virtual_file_system"
@@ -50,6 +51,14 @@ func RegisteredTools(
 			)
 
 			continue
+		}
+
+		if len(parse.FindCalls(f, "instance_tool", "New")) > 0 {
+			names = append(
+				names,
+				inventoryConstant.ListInstances,
+				inventoryConstant.UseInstance,
+			)
 		}
 
 		for _, c := range parse.FindCalls(f, "mcp", "NewTool") {

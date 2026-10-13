@@ -10,10 +10,12 @@ import (
 
 func (s *Server) Connector(t *testing.T) *connector.Client {
 	t.Helper()
-
-	return connector.New(
+	result := connector.New(
 		locator.New(webConstant.Localhost).Insecure().Port(s.Port).String(),
 		false,
 		generativeConstant.ModelContextTestToken,
 	)
+	t.Cleanup(result.Close)
+
+	return result
 }

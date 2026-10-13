@@ -87,7 +87,7 @@ Transport and trust are separate axes and never share a variable:
 - `*_INSECURE` selects http instead of https - a locator concern,
   fed to `locator.Environment`.
 - `*_UNTRUSTED` skips certificate verification - a client concern,
-  fed to `web.InsecureClient`.
+  fed to a stall_client pool built with `Insecure()`.
 
 An endpoint can need one, the other, or both, and a single flag
 cannot express https-with-an-unverifiable-certificate. Where a
