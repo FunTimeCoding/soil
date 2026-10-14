@@ -28,6 +28,67 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+  /api/alerts/after:
+    get:
+      operationId: getAlertsAfter
+      description: Records with an identifier above the given one, ascending - a cursor walk for consumers.
+      parameters:
+      - name: identifier
+        in: query
+        required: true
+        schema:
+          type: integer
+          minimum: 0
+      - name: limit
+        in: query
+        required: false
+        description: Records per page; 5 when omitted, at most 25.
+        schema:
+          type: integer
+          minimum: 1
+      responses:
+        "200":
+          description: The next records after the identifier.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AlertsResponse"
+        "500":
+          description: Failed to query alerts.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/alerts/by-identifier:
+    get:
+      operationId: getAlertsByIdentifier
+      description: Records by identifier, ascending; unknown or pruned identifiers are absent from the result.
+      parameters:
+      - name: identifier
+        in: query
+        required: true
+        description: Repeatable; at most 25 are read.
+        schema:
+          type: array
+          items:
+            type: integer
+      responses:
+        "200":
+          description: The records that exist.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AlertsResponse"
+        "500":
+          description: Failed to query alerts.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
   /api/alerts/recent:
     get:
       operationId: getRecentAlerts
@@ -116,6 +177,7 @@ components:
     AlertsResponse:
       type: object
       required:
+      - identifier
       - fingerprint
       - name
       - severity
@@ -124,6 +186,8 @@ components:
       - start
       - status
       properties:
+        identifier:
+          type: integer
         fingerprint:
           type: string
         name:
@@ -168,8 +232,12 @@ components:
       type: object
       required:
       - totalRecords
+      - latestIdentifier
       properties:
         totalRecords:
+          type: integer
+        latestIdentifier:
+          description: The newest record's identifier, 0 when there are none - where a new consumer starts its cursor.
           type: integer
         lastPoll:
           type: string

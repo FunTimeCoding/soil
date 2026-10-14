@@ -26,40 +26,13 @@ func (s *Server) label(
 	}
 
 	target := q.GetString(constant.Target, "")
-	var sessionIdentifier string
-	var targetName string
+	sessionIdentifier, failed, f := s.targetSession(c, target)
 
-	if target != "" {
-		r, f := s.service.ResolveSessionIdentifier(target)
-
-		if f != nil {
-			return s.captureFail(f, soil.UnexpectedError)
-		}
-
-		if r.Ambiguous() {
-			return response.Fail(
-				"ambiguous: %q matches %d sessions",
-				target,
-				len(r.Matches),
-			)
-		}
-
-		if !r.Found() {
-			return response.Fail("session not found: %s", target)
-		}
-
-		sessionIdentifier = r.Identifier()
-		targetName = target
-	} else if c.Callsign != "" {
-		sessionIdentifier = c.SessionIdentifier
+	if failed != nil || f != nil {
+		return failed, f
 	}
 
-	if sessionIdentifier == "" {
-		return response.Fail(
-			"could not resolve session - announce first or specify a target",
-		)
-	}
-
+	targetName := target
 	arguments := q.GetArguments()
 	raw, hasValue := arguments[constant.Value]
 

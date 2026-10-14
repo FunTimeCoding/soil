@@ -57,7 +57,10 @@ after `Close`, simply dials again.
 goanalyze's `restricted_call` refuses `http.Get`, `Post`, `Head`,
 `PostForm`, `DefaultClient` and `DefaultTransport`; `restricted_literal`
 refuses `http.Client` and `http.Transport` literals outside `stall_client`.
-`unclosed_resource` flags an owner held in a local that is never closed.
+`unclosed_resource` follows ownership: an owner held in a local that is
+never closed, a holder whose `Close` never reaches a field it built, and a
+value handed to a function that only borrows it - the fixtures in
+`pkg/lint/integration/unclosed_resource/` show what it derives.
 
 ## Exceptions
 

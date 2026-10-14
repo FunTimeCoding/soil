@@ -15,7 +15,7 @@ func (s *Server) PostSessionPulse(
 		r.Identifier,
 		"",
 		r.Body.Body,
-		r.Body.Immediate != nil && *r.Body.Immediate,
+		toDelivery(r.Body.Delivery),
 	)
 
 	if e != nil {

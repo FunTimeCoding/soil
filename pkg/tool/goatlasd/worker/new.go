@@ -1,6 +1,7 @@
 package worker
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
 	soilFace "github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
@@ -24,7 +25,11 @@ func New(
 	y *prometheus.Registry,
 	r soilFace.Reporter,
 ) *Worker {
+	x, cancel := context.WithCancel(context.Background())
+
 	return &Worker{
+		context:    x,
+		cancel:     cancel,
 		store:      s,
 		collectors: collectors,
 		lease:      d,

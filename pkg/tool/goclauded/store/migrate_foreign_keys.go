@@ -60,6 +60,9 @@ func migrateForeignKeys(d *gorm.DB) {
 		)`,
 		"identifier, session_identifier, key, value",
 	)
+	d.Exec(
+		"CREATE UNIQUE INDEX IF NOT EXISTS session_key ON label (session_identifier, key)",
+	)
 	recreateWithFK(
 		d,
 		constant.Pulse,

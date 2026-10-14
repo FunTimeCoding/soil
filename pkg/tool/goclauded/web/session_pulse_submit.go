@@ -16,12 +16,13 @@ func (s *Server) sessionPulseSubmit(
 	body := r.FormValue(constant.Body)
 
 	if body != "" {
-		_, e := s.service.SendPulse(
-			identifier,
-			"",
-			body,
-			r.FormValue(constant.Immediate) != "",
-		)
+		d := constant.DeliveryQueued
+
+		if r.FormValue(constant.Immediate) != "" {
+			d = constant.DeliveryImmediate
+		}
+
+		_, e := s.service.SendPulse(identifier, "", body, d)
 		errors.PanicOnError(e)
 	}
 

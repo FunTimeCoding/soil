@@ -15,7 +15,7 @@ func TestSendNotificationRefusesACallsignNobodyHolds(t *testing.T) {
 		"Nobody",
 		"downloader",
 		"a file landed",
-		false,
+		constant.DeliveryQueued,
 	)
 	assert.True(t, e != nil)
 	assert.True(t, not_found.Is(e))
@@ -29,7 +29,7 @@ func TestSendNotificationReachesTheHolder(t *testing.T) {
 		r.Callsign,
 		"downloader",
 		"a file landed",
-		false,
+		constant.DeliveryQueued,
 	)
 	assert.FatalOnError(t, f)
 	drained := s.Check("session-1")

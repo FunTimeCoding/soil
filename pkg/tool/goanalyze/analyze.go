@@ -21,16 +21,19 @@ func Analyze(o *option.Analyze) *output.Results {
 	var reported map[string]bool
 	var faces *face.Set
 	var summaries *unclosed_resource.Summaries
+	directory := o.Index
+
+	if directory == "" {
+		directory = index.DefaultDirectory()
+	}
 
 	if o.Full || resolve.CoversMainModule(patterns) {
-		loaded, reported, faces, summaries = fullIndex(o.Root, patterns)
+		loaded, reported, faces, summaries = fullIndex(
+			directory,
+			o.Root,
+			patterns,
+		)
 	} else {
-		directory := o.Index
-
-		if directory == "" {
-			directory = index.DefaultDirectory()
-		}
-
 		loaded, reported, faces, summaries = persistedIndex(
 			directory,
 			o.Root,

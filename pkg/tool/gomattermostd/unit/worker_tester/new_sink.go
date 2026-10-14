@@ -27,6 +27,8 @@ func NewSink(t *testing.T) (*notify_sink.Sink, *connector.Client) {
 		),
 	)
 	t.Cleanup(server.Close)
+	c := connector.New(server.URL, false, "")
+	t.Cleanup(c.Close)
 
-	return result, connector.New(server.URL, false, "")
+	return result, c
 }

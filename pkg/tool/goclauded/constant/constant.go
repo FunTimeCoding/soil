@@ -144,6 +144,8 @@ const (
 	ImmediateLimit  = 6
 	ImmediateWindow = 5 * time.Minute
 
+	AutocompleteOff = "off"
+
 	DashboardTitle     = "Dashboard"
 	DashboardPath      = "/"
 	SessionsTitle      = "Sessions"

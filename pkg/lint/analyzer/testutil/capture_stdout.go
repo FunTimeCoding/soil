@@ -10,6 +10,7 @@ func CaptureStdout(f func()) string {
 	original := os.Stdout
 	reader, writer, e := os.Pipe()
 	errors.PanicOnError(e)
+	defer errors.PanicClose(reader)
 	os.Stdout = writer
 	f()
 	errors.PanicClose(writer)

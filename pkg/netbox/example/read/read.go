@@ -8,6 +8,7 @@ import (
 
 func Read() {
 	n := netbox.NewEnvironment()
+	defer n.Close()
 	f := constant.Format
 	readTenant(n, f)
 	readDCIM(n, f)

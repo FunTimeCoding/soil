@@ -15,10 +15,9 @@ func checkFunction(
 	s *Summaries,
 ) {
 	for _, c := range candidates(p, body) {
-		if closes(p, body, c.Object) ||
+		if closes(p, body, c.Object, s) ||
 			escapes(p, body, c.Object, carriesFrom) ||
-			isBorrowed(p, body, c) ||
-			s.arrangesFor(calleeOf(p, c.Call)) {
+			s.isUnowned(p, body, c) {
 			continue
 		}
 
@@ -33,5 +32,14 @@ func checkFunction(
 				p.Fset.Position(c.Position),
 			),
 		)
+	}
+
+	owned := ownedLocals(p, body, s)
+
+	for _, t := range transfers(p, body) {
+		if ownsValue(p, body, s, owned, t.Value) &&
+			!fieldReleasedIn(p, body, t, s) {
+			checkTransfer(p, results, s, t)
+		}
 	}
 }

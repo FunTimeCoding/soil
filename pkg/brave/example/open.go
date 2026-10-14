@@ -8,5 +8,7 @@ import (
 func Open() {
 	a := argument.NewSimple("brave-open")
 	a.ParseSimple()
-	site.New().OpenChat(a.RequiredPositional(0, "CHAT"))
+	s := site.New()
+	defer s.Close()
+	s.OpenChat(a.RequiredPositional(0, "CHAT"))
 }

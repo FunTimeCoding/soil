@@ -11,6 +11,7 @@ func toResponse(records []record.Record) []server.AlertsResponse {
 
 	for _, r := range records {
 		entry := server.AlertsResponse{
+			Identifier:  int(r.Identifier),
 			Fingerprint: r.Fingerprint,
 			Name:        r.Name,
 			Severity:    r.Severity,

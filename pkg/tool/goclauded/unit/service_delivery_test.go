@@ -147,7 +147,7 @@ func TestNotificationOverLimitIsRefused(t *testing.T) {
 		r1.Callsign,
 		"mattermost",
 		strings.Repeat("f", 501),
-		false,
+		constant.DeliveryQueued,
 	)
 	assert.True(t, refusal.Is(e))
 	assert.String(
@@ -164,7 +164,7 @@ func TestInboundPulseOverLimitIsRefused(t *testing.T) {
 		"session-1",
 		"",
 		strings.Repeat("g", 501),
-		false,
+		constant.DeliveryQueued,
 	)
 	assert.True(t, refusal.Is(e))
 }
@@ -176,7 +176,7 @@ func TestOutboundPulseIsNotCapped(t *testing.T) {
 		"session-1",
 		r1.Callsign,
 		strings.Repeat("h", 501),
-		false,
+		constant.DeliveryQueued,
 	)
 	assert.FatalOnError(t, e)
 }

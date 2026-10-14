@@ -28,7 +28,7 @@ func TestGuard(t *testing.T) {
 			gosproutd.Mount(s, web.New(s), memory.New(), mock_recorder.New(), g)
 		},
 	)
-	defer v.Stop()
+	defer v.Close()
 	v.VerifyBase(t)
 	v.VerifyOpen(t, constant.DashboardPath)
 	v.VerifyOpen(t, constant.SessionsPath)

@@ -1,15 +1,12 @@
 package worker
 
 import (
-	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goatlasd/constant"
 	"time"
 )
 
 func (w *Worker) Start() {
 	w.logger.Plain(constant.StartMessage)
-	x, cancel := context.WithCancel(context.Background())
-	w.cancel = cancel
 	go func() {
 		t := time.NewTicker(w.interval)
 		defer t.Stop()
@@ -17,7 +14,7 @@ func (w *Worker) Start() {
 
 		for {
 			select {
-			case <-x.Done():
+			case <-w.context.Done():
 				return
 			case <-t.C:
 				w.recovery.Run(w.poll)

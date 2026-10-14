@@ -2,9 +2,12 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/unit/store_tester"
 	"testing"
+	"time"
 )
 
 func TestEveryWriterStoresUniversalTime(t *testing.T) {
@@ -55,6 +58,19 @@ func TestEveryWriterStoresUniversalTime(t *testing.T) {
 		),
 	)
 	s.SendMessage("Someone", r.Callsign, "a message")
+	writeCruise(t, s.Store, "session-1", r.Callsign)
 	assert.FatalOnError(t, s.Store.MarkClosed("session-1", "logout"))
 	assert.True(t, s.Store.UniversalTimestamps())
+}
+
+func TestCruiseWritersStoreUniversalTimeFromALocalClock(t *testing.T) {
+	berlin, e := time.LoadLocation("Europe/Berlin")
+	assert.FatalOnError(t, e)
+	s := store.New(
+		lite.NewMemory(),
+		func() time.Time { return time.Now().In(berlin) },
+	)
+	defer s.Close()
+	writeCruise(t, s, "session-1", "Alfa")
+	assert.True(t, s.UniversalTimestamps())
 }

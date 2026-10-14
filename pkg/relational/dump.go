@@ -20,6 +20,7 @@ func (d *Database) Dump() map[string]any {
 			rowsResult = append(rowsResult, row)
 		}
 
+		rows.Close()
 		result[table] = rowsResult
 	}
 

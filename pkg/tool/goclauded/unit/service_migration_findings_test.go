@@ -26,7 +26,12 @@ func TestFindingsReportUnkeyedRows(t *testing.T) {
 func TestFindingsAreSilentWhenEveryRowCarriesItsSession(t *testing.T) {
 	s := service_tester.New(t)
 	r := s.Check("session-1")
-	_, e := s.Service.Send(r.Callsign, r.Callsign, "hello", false)
+	_, e := s.Service.Send(
+		r.Callsign,
+		r.Callsign,
+		"hello",
+		constant.DeliveryQueued,
+	)
 	assert.FatalOnError(t, e)
 	assert.Count(t, 0, s.FindingsByKind(constant.MigrationIncomplete))
 }

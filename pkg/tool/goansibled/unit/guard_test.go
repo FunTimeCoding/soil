@@ -34,7 +34,7 @@ func TestGuard(t *testing.T) {
 			goansibled.Mount(n, s, memory.New(), mock_recorder.New(), g)
 		},
 	)
-	defer v.Stop()
+	defer v.Close()
 	v.VerifyBase(t)
 	v.VerifyModelContext(t)
 }

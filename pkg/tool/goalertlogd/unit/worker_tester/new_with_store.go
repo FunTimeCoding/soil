@@ -18,8 +18,7 @@ func NewWithStore(
 	c *mock_client.Client,
 ) *Tester {
 	t.Helper()
-
-	return &Tester{
+	result := &Tester{
 		Store: s,
 		Worker: worker.New(
 			c,
@@ -33,4 +32,7 @@ func NewWithStore(
 		),
 		MockClient: c,
 	}
+	t.Cleanup(result.Worker.Close)
+
+	return result
 }

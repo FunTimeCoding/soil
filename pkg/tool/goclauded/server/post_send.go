@@ -16,8 +16,12 @@ func (s *Server) PostSend(
 		to = *r.Body.To
 	}
 
-	immediate := r.Body.Immediate != nil && *r.Body.Immediate
-	delivered, e := s.service.Send(r.Body.Callsign, to, r.Body.Body, immediate)
+	delivered, e := s.service.Send(
+		r.Body.Callsign,
+		to,
+		r.Body.Body,
+		toDelivery(r.Body.Delivery),
+	)
 
 	if e != nil {
 		return server.PostSend500JSONResponse(

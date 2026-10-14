@@ -43,8 +43,8 @@ func TestClientCloseDropsIdleConnections(t *testing.T) {
 		generativeConstant.ModelContextTestToken,
 	)
 	defer c.Close()
-	c.Alerts()
+	c.Alerts("HighMemory")
 	c.Close()
-	c.Alerts()
+	c.Alerts("HighMemory")
 	assert.Integer(t, int64(2), opened.Load())
 }

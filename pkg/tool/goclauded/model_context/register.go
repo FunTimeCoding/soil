@@ -231,10 +231,15 @@ func (s *Server) register() {
 				mcp.Required(),
 				mcp.Description("Message text"),
 			),
-			mcp.WithBoolean(
-				constant.Immediate,
+			mcp.WithString(
+				constant.DeliveryParameter,
+				mcp.Enum(
+					string(constant.DeliveryQueued),
+					string(constant.DeliveryImmediate),
+					string(constant.DeliveryCruise),
+				),
 				mcp.Description(
-					"Wake the recipient now instead of waiting for their next prompt. Only for messages that cannot wait - an immediate message costs the recipient a turn the moment it lands.",
+					"queued (default) waits for the recipient's next prompt. immediate wakes them now - only for messages that cannot wait, it costs the recipient a turn the moment it lands. cruise wakes them only as their cruise setting allows.",
 				),
 			),
 		),
@@ -302,6 +307,36 @@ func (s *Server) register() {
 			),
 		),
 		s.label,
+	)
+	s.server.AddTool(
+		mcp.NewTool(
+			constant.CruiseTool,
+			mcp.WithDescription(
+				"Read or set a session's cruise setting - whether deliveries sent with cruise may wake it while idle. off (default) waits for the next prompt, on wakes it, paced wakes it at most once per pace. Omit mode to read. Setting it on your own session raises your own autonomy and the approval belongs to the person you work with - prefer asking over setting.",
+			),
+			mcp.WithString(
+				constant.Mode,
+				mcp.Enum(
+					string(constant.CruiseOff),
+					string(constant.CruiseOn),
+					string(constant.CruisePaced),
+				),
+				mcp.Description(
+					"Mode to set. Omit to read the current setting.",
+				),
+			),
+			mcp.WithNumber(
+				constant.Pace,
+				mcp.Description("Minutes between wakes, for paced mode."),
+			),
+			mcp.WithString(
+				constant.Target,
+				mcp.Description(
+					"Session (pool name, alias, or UUID). Omit for own session.",
+				),
+			),
+		),
+		s.cruise,
 	)
 	s.server.AddTool(
 		mcp.NewTool(

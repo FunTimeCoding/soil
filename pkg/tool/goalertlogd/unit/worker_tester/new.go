@@ -28,6 +28,8 @@ func New(t *testing.T) *Tester {
 		30*24*time.Hour,
 		nil,
 	)
+	result := &Tester{t: t, Store: s, Worker: w, MockClient: c}
+	t.Cleanup(result.Worker.Close)
 
-	return &Tester{t: t, Store: s, Worker: w, MockClient: c}
+	return result
 }

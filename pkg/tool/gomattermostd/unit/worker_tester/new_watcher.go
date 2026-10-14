@@ -19,8 +19,7 @@ func NewWatcher(
 	sink, c := NewSink(t)
 	s := NewStore(t)
 	r := memory.New()
-
-	return &Watcher{
+	result := &Watcher{
 		Watcher: watcher.New(
 			mock_client.New("selfuser"),
 			s,
@@ -32,4 +31,7 @@ func NewWatcher(
 		Store: s,
 		Sink:  sink,
 	}
+	t.Cleanup(result.Watcher.Close)
+
+	return result
 }

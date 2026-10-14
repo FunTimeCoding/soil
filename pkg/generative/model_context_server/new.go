@@ -24,20 +24,14 @@ func New(
 ) *Server {
 	t.Helper()
 	p, n := system.ClaimPort()
-	b := lifecycle.New(
-		logger.New(context.Background()),
-		lifecycle.WithServer(
-			server.New(
-				identity.Example(),
-				"",
-				func(m *http.ServeMux) {
-					setup(
-						m,
-						guard.New(m, []string{constant.ModelContextTestToken}),
-					)
-				},
-			).WithListener(n),
-		),
+	b := lifecycle.New(logger.New(context.Background())).WithServer(
+		server.New(
+			identity.Example(),
+			"",
+			func(m *http.ServeMux) {
+				setup(m, guard.New(m, []string{constant.ModelContextTestToken}))
+			},
+		).WithListener(n),
 	)
 	b.Run()
 	assert.Listen(t, p)

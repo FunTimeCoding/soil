@@ -17,8 +17,7 @@ func NewDispatchWatcher(t *testing.T) *Watcher {
 	s := NewStore(t)
 	r := memory.New()
 	chat := mock_client.New("selfuser")
-
-	return &Watcher{
+	result := &Watcher{
 		Watcher: watcher.New(
 			chat,
 			s,
@@ -31,4 +30,7 @@ func NewDispatchWatcher(t *testing.T) *Watcher {
 		Client: chat,
 		Sink:   sink,
 	}
+	t.Cleanup(result.Watcher.Close)
+
+	return result
 }

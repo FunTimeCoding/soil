@@ -52,7 +52,7 @@ func New(t *testing.T) *Tester {
 		func() {
 			queryClient.Close()
 			memoryClient.Close()
-			memoryServer.Stop()
+			memoryServer.Close()
 			s.Close()
 			q.Close()
 		},

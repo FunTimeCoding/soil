@@ -20,7 +20,7 @@ func TestGuard(t *testing.T) {
 			goagentd.Mount(runner.New(t.TempDir()), mock_recorder.New(), g)
 		},
 	)
-	defer v.Stop()
+	defer v.Close()
 	v.VerifyBase(t)
 	v.VerifyInterface(t)
 	v.VerifyGuarded(t, "/api/status")

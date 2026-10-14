@@ -27,16 +27,13 @@ func escapes(
 			case *ast.SendStmt:
 				result = match(p, v.Value, o)
 			case *ast.AssignStmt:
-				result = anyMatches(p, v.Rhs, o, match)
+				result = anyMatches(p, appended(p, v.Rhs), o, match)
 			case *ast.CompositeLit:
 				result = anyMatches(p, elementValues(v.Elts), o, match)
 			case *ast.UnaryExpr:
 				result = v.Op == token.AND && match(p, v.X, o)
 			case *ast.FuncLit:
 				result = references(p, v.Body, o)
-			case *ast.CallExpr:
-				result = !isCloseHelperCall(p, v, o) &&
-					anyMatches(p, v.Args, o, match)
 			}
 
 			return !result

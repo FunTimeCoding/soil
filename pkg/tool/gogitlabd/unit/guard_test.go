@@ -9,7 +9,7 @@ import (
 
 func TestGuard(t *testing.T) {
 	v := startServer(t, service_tester.Single(mock_client.New()))
-	defer v.Stop()
+	defer v.Close()
 	v.VerifyBase(t)
 	v.VerifyOpen(t, constant.BoardPath)
 	v.VerifyOpen(t, "/event")

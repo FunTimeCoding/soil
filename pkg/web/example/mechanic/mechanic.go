@@ -20,16 +20,13 @@ func Mechanic(
 ) {
 	r := memory.New()
 	u := New(notifier.New(), extended, serverSide)
-	lifecycle.New(
-		logger.New(context.Background()),
-		lifecycle.WithServer(
-			server.New(
-				identity.Example(),
-				address,
-				func(m *http.ServeMux) {
-					u.Mount(guard.New(m, []string{constant.MechanicToken}))
-				},
-			).WithMiddleware(u.Recovery(r)),
-		),
+	lifecycle.New(logger.New(context.Background())).WithServer(
+		server.New(
+			identity.Example(),
+			address,
+			func(m *http.ServeMux) {
+				u.Mount(guard.New(m, []string{constant.MechanicToken}))
+			},
+		).WithMiddleware(u.Recovery(r)),
 	).RunUntilSignal()
 }

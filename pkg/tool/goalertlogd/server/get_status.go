@@ -19,7 +19,18 @@ func (s *Server) GetStatus(
 		), nil
 	}
 
-	result := server.GetStatus200JSONResponse{TotalRecords: count}
+	latest, f := s.store.LatestIdentifier()
+
+	if f != nil {
+		return server.GetStatus500JSONResponse(
+			*s.captureFail(f, soil.UnexpectedError),
+		), nil
+	}
+
+	result := server.GetStatus200JSONResponse{
+		TotalRecords:     count,
+		LatestIdentifier: int(latest),
+	}
 	lastPoll := s.worker.LastPoll()
 
 	if !lastPoll.IsZero() {

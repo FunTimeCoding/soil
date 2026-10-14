@@ -34,9 +34,9 @@ func New(
 	)
 	t.Cleanup(
 		func() {
-			w.Stop()
+			w.Close()
 			s.Close()
-			claude.Stop()
+			claude.Close()
 		},
 	)
 

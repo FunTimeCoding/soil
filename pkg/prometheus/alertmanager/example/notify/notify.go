@@ -8,6 +8,7 @@ import (
 
 func Notify() {
 	c := common.Alertmanager()
+	defer c.Close()
 	s := &State{}
 	stop := make(chan struct{})
 	go worker(stop, c, s)

@@ -12,6 +12,7 @@ func TestPollGuestLabelSet(t *testing.T) {
 		"pve",
 		worker_tester.PopulatedClient("pve"),
 	)
+	defer w.Close()
 	w.Poll()
 
 	if e := testutil.GatherAndCompare(

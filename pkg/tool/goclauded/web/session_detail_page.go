@@ -212,6 +212,7 @@ func (s *Server) sessionDetailPage(
 			extended.StreamSwap(constant.Pulse),
 			s.pulseSection(d.Identifier),
 		),
+		s.cruiseForm(d.Identifier),
 	)
 	content = append(
 		content,

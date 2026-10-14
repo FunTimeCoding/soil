@@ -57,6 +57,7 @@ func (c *Client) RecentSessions(limit int) ([]*target.Target, error) {
 		t.LastPromptAt = parseMoment(s.LastPromptAt)
 		t.LastTurnEndAt = parseMoment(s.LastTurnEndAt)
 		t.ClosedAt = parseMoment(s.ClosedAt)
+		t.TurnCount = s.TurnCount
 		result = append(result, t)
 	}
 

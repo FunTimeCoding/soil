@@ -38,7 +38,7 @@ func TestGuard(t *testing.T) {
 			goterraformd.Mount(n, s, memory.New(), mock_recorder.New(), g)
 		},
 	)
-	defer v.Stop()
+	defer v.Close()
 	v.VerifyBase(t)
 	v.VerifyModelContext(t)
 }

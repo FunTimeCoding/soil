@@ -17,5 +17,9 @@ func Kind() *kind.Kind {
 			return Extract(p)
 		},
 		nil,
+	).WithSyntaxExternal(
+		func(p *packages.Package) any {
+			return Extract(p)
+		},
 	)
 }

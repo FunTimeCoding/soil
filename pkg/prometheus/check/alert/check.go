@@ -11,6 +11,7 @@ import (
 
 func Check(o *option.Alert) {
 	c := common.Alertmanager()
+	defer c.Close()
 	alerts, statistic := collect(c, o)
 
 	if o.Notation {

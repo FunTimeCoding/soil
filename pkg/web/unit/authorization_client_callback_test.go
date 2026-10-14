@@ -21,6 +21,7 @@ func TestFailedDiscoveryIsRetriedNextLogin(t *testing.T) {
 	s := newFakeIssuer(t)
 	r := memory.New()
 	c := newAuthorizationClient(s.URL, r)
+	defer c.Close()
 	first := signInAndReturn(t, c, "golf")
 	assert.Integer(t, http.StatusBadGateway, first.Code)
 	assert.StringContains(

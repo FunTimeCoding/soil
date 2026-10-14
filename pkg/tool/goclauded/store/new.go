@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/completion"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/context_load"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/cruise_setting"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/event"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/event_metadata"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/fable_snapshot"
@@ -46,6 +47,7 @@ func New(
 			tracker_state.Stub(),
 			context_load.Stub(),
 			subscription.Stub(),
+			cruise_setting.Stub(),
 		),
 	)
 	migrateEventMetadata(d)

@@ -45,6 +45,7 @@ func (e AlertsResponseStatus) Valid() bool {
 type AlertsResponse struct {
 	End         *string              `json:"end,omitempty"`
 	Fingerprint string               `json:"fingerprint"`
+	Identifier  int                  `json:"identifier"`
 	Labels      map[string]string    `json:"labels"`
 	Name        string               `json:"name"`
 	Severity    string               `json:"severity"`
@@ -64,8 +65,11 @@ type ErrorResponse struct {
 
 // StatusResponse defines model for StatusResponse.
 type StatusResponse struct {
-	LastPoll     *string `json:"lastPoll,omitempty"`
-	TotalRecords int     `json:"totalRecords"`
+	LastPoll *string `json:"lastPoll,omitempty"`
+
+	// LatestIdentifier The newest record's identifier, 0 when there are none - where a new consumer starts its cursor.
+	LatestIdentifier int `json:"latestIdentifier"`
+	TotalRecords     int `json:"totalRecords"`
 }
 
 // TopAlertsResponse defines model for TopAlertsResponse.
@@ -80,6 +84,20 @@ type TopAlertsResponse struct {
 // GetAlertsParams defines parameters for GetAlerts.
 type GetAlertsParams struct {
 	Name string `form:"name" json:"name"`
+}
+
+// GetAlertsAfterParams defines parameters for GetAlertsAfter.
+type GetAlertsAfterParams struct {
+	Identifier int `form:"identifier" json:"identifier"`
+
+	// Limit Records per page; 5 when omitted, at most 25.
+	Limit *int `form:"limit,omitempty" json:"limit,omitempty"`
+}
+
+// GetAlertsByIdentifierParams defines parameters for GetAlertsByIdentifier.
+type GetAlertsByIdentifierParams struct {
+	// Identifier Repeatable; at most 25 are read.
+	Identifier []int `form:"identifier" json:"identifier"`
 }
 
 // GetRecentAlertsParams defines parameters for GetRecentAlerts.
@@ -100,6 +118,12 @@ type ServerInterface interface {
 
 	// (GET /api/alerts)
 	GetAlerts(w http.ResponseWriter, r *http.Request, params GetAlertsParams)
+
+	// (GET /api/alerts/after)
+	GetAlertsAfter(w http.ResponseWriter, r *http.Request, params GetAlertsAfterParams)
+
+	// (GET /api/alerts/by-identifier)
+	GetAlertsByIdentifier(w http.ResponseWriter, r *http.Request, params GetAlertsByIdentifierParams)
 
 	// (GET /api/alerts/recent)
 	GetRecentAlerts(w http.ResponseWriter, r *http.Request, params GetRecentAlertsParams)
@@ -144,6 +168,85 @@ func (siw *ServerInterfaceWrapper) GetAlerts(w http.ResponseWriter, r *http.Requ
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.GetAlerts(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetAlertsAfter operation middleware
+func (siw *ServerInterfaceWrapper) GetAlertsAfter(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetAlertsAfterParams
+
+	// ------------- Required query parameter "identifier" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, true, "identifier", r.URL.Query(), &params.Identifier, runtime.BindQueryParameterOptions{Type: "integer", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "identifier"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "identifier", Err: err})
+		}
+		return
+	}
+
+	// ------------- Optional query parameter "limit" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, false, "limit", r.URL.Query(), &params.Limit, runtime.BindQueryParameterOptions{Type: "integer", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "limit"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "limit", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetAlertsAfter(w, r, params)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r)
+}
+
+// GetAlertsByIdentifier operation middleware
+func (siw *ServerInterfaceWrapper) GetAlertsByIdentifier(w http.ResponseWriter, r *http.Request) {
+
+	var err error
+	_ = err
+
+	// Parameter object where we will unmarshal all parameters from the context
+	var params GetAlertsByIdentifierParams
+
+	// ------------- Required query parameter "identifier" -------------
+
+	err = runtime.BindQueryParameterWithOptions("form", true, true, "identifier", r.URL.Query(), &params.Identifier, runtime.BindQueryParameterOptions{Type: "array", Format: ""})
+	if err != nil {
+		var requiredError *runtime.RequiredParameterError
+		if errors.As(err, &requiredError) {
+			siw.ErrorHandlerFunc(w, r, &RequiredParamError{ParamName: "identifier"})
+		} else {
+			siw.ErrorHandlerFunc(w, r, &InvalidParamFormatError{ParamName: "identifier", Err: err})
+		}
+		return
+	}
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetAlertsByIdentifier(w, r, params)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -393,6 +496,8 @@ func HandlerWithOptions(si ServerInterface, options StdHTTPServerOptions) http.H
 	}
 
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/alerts", wrapper.GetAlerts)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/alerts/after", wrapper.GetAlertsAfter)
+	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/alerts/by-identifier", wrapper.GetAlertsByIdentifier)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/alerts/recent", wrapper.GetRecentAlerts)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/alerts/top", wrapper.GetTopAlerts)
 	m.HandleFunc(http.MethodGet+" "+options.BaseURL+"/api/status", wrapper.GetStatus)
@@ -425,6 +530,78 @@ func (response GetAlerts200JSONResponse) VisitGetAlertsResponse(w http.ResponseW
 type GetAlerts500JSONResponse ErrorResponse
 
 func (response GetAlerts500JSONResponse) VisitGetAlertsResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetAlertsAfterRequestObject struct {
+	Params GetAlertsAfterParams
+}
+
+type GetAlertsAfterResponseObject interface {
+	VisitGetAlertsAfterResponse(w http.ResponseWriter) error
+}
+
+type GetAlertsAfter200JSONResponse []AlertsResponse
+
+func (response GetAlertsAfter200JSONResponse) VisitGetAlertsAfterResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetAlertsAfter500JSONResponse ErrorResponse
+
+func (response GetAlertsAfter500JSONResponse) VisitGetAlertsAfterResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(500)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetAlertsByIdentifierRequestObject struct {
+	Params GetAlertsByIdentifierParams
+}
+
+type GetAlertsByIdentifierResponseObject interface {
+	VisitGetAlertsByIdentifierResponse(w http.ResponseWriter) error
+}
+
+type GetAlertsByIdentifier200JSONResponse []AlertsResponse
+
+func (response GetAlertsByIdentifier200JSONResponse) VisitGetAlertsByIdentifierResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetAlertsByIdentifier500JSONResponse ErrorResponse
+
+func (response GetAlertsByIdentifier500JSONResponse) VisitGetAlertsByIdentifierResponse(w http.ResponseWriter) error {
 
 	var buf bytes.Buffer
 	if err := json.NewEncoder(&buf).Encode(response); err != nil {
@@ -549,6 +726,12 @@ type StrictServerInterface interface {
 	// (GET /api/alerts)
 	GetAlerts(ctx context.Context, request GetAlertsRequestObject) (GetAlertsResponseObject, error)
 
+	// (GET /api/alerts/after)
+	GetAlertsAfter(ctx context.Context, request GetAlertsAfterRequestObject) (GetAlertsAfterResponseObject, error)
+
+	// (GET /api/alerts/by-identifier)
+	GetAlertsByIdentifier(ctx context.Context, request GetAlertsByIdentifierRequestObject) (GetAlertsByIdentifierResponseObject, error)
+
 	// (GET /api/alerts/recent)
 	GetRecentAlerts(ctx context.Context, request GetRecentAlertsRequestObject) (GetRecentAlertsResponseObject, error)
 
@@ -617,6 +800,58 @@ func (sh *strictHandler) GetAlerts(w http.ResponseWriter, r *http.Request, param
 		sh.options.ResponseErrorHandlerFunc(w, r, err)
 	} else if validResponse, ok := response.(GetAlertsResponseObject); ok {
 		if err := validResponse.VisitGetAlertsResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetAlertsAfter operation middleware
+func (sh *strictHandler) GetAlertsAfter(w http.ResponseWriter, r *http.Request, params GetAlertsAfterParams) {
+	var request GetAlertsAfterRequestObject
+
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetAlertsAfter(ctx, request.(GetAlertsAfterRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetAlertsAfter")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetAlertsAfterResponseObject); ok {
+		if err := validResponse.VisitGetAlertsAfterResponse(w); err != nil {
+			sh.options.ResponseErrorHandlerFunc(w, r, err)
+		}
+	} else if response != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, fmt.Errorf("unexpected response type: %T", response))
+	}
+}
+
+// GetAlertsByIdentifier operation middleware
+func (sh *strictHandler) GetAlertsByIdentifier(w http.ResponseWriter, r *http.Request, params GetAlertsByIdentifierParams) {
+	var request GetAlertsByIdentifierRequestObject
+
+	request.Params = params
+
+	handler := func(ctx context.Context, w http.ResponseWriter, r *http.Request, request interface{}) (interface{}, error) {
+		return sh.ssi.GetAlertsByIdentifier(ctx, request.(GetAlertsByIdentifierRequestObject))
+	}
+	for _, middleware := range sh.middlewares {
+		handler = middleware(handler, "GetAlertsByIdentifier")
+	}
+
+	response, err := handler(r.Context(), w, r, request)
+
+	if err != nil {
+		sh.options.ResponseErrorHandlerFunc(w, r, err)
+	} else if validResponse, ok := response.(GetAlertsByIdentifierResponseObject); ok {
+		if err := validResponse.VisitGetAlertsByIdentifierResponse(w); err != nil {
 			sh.options.ResponseErrorHandlerFunc(w, r, err)
 		}
 	} else if response != nil {
@@ -705,18 +940,23 @@ func (sh *strictHandler) GetStatus(w http.ResponseWriter, r *http.Request) {
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"5FbBbts4EP0VYXaPWtu7i150K9Cm6C1IcguCgqHG8gQUyYxGLowg/16QVCQ7op2kPTRAc1HM4YzevPc4",
-	"1ANo13pn0UoH1QN0eoOtiv9+NMjSXWDnne0wrHh2HlkIYxxtHR6y8wgVdMJkG3gsYU22QfZMVrJxo27R",
-	"xAqqrknIWWXODyrPUoYFd3uHWsKCVS1md3a4RSbZ5YOiWI5FpB+66luormFNMVYCY+fMFmu4KTN5fdsq",
-	"zr3tMWTe98RYp3ITKQP8PbBToZGeJ7QjtpsMDZ+ZHZ9QKISz/eIWrXyjGq3QmpBfbiDVymTmcF1GyMeB",
-	"GdXJuTMmL7YTZS5QO6733UBWsEGeATvYngNz5fxLVlZbZNXgp55V8GMWlnb9gaFHPCXonhmtmN1ZMk12",
-	"089Y9lmrg20SknKGeg5kr/icmVCd7NrF95KYEGucClQZ19RQwha5i3TAv4vVYhXAOo9WeYIK/o9LJXgl",
-	"m0jiUnlaxvT4s8HIVqA5wvtaQwVfUJIWMZFVi4LcQXX9ABTec99jPASJrKeGJw6EeyyHIZXj6yae16hy",
-	"BPHfahUe2lnBpJ7y3pCOiJZ3XdJ6qkeCbUz8m3ENFfy1nMbjcpiNy2dumuaTYla7RGyNnWbyyU3DKC1a",
-	"JXpDtilkg0VDW7RF6HARSnx4I9JTAA/HQgbPmSKDdSGuiIQXSbVF2PpY7gu5ZNQDnGN6XsQdb1F1HGxj",
-	"M2vHrRKooFaC/whF1WdnIV8tXENvrvW+ffKdZEN2zyWhi4KVbd61V8T5U0YZ5/Arzz5kDvreJfBne2t+",
-	"qb3CXlfOD/IVt7vC6XRdaCzijfIurTV9mB2zVfrWgF8k/VQfz75mMo1cIm9JY5HQ/n4iRxzx70cAAAD/",
-	"/w==",
+	"5FdRb9s2EP4rB27AXpTY7ZAX56nD1iFvRdq3IhjO0llmS5Hs8WTXCPLfB1KKLdmUl2wPM9C8KOaRx+++",
+	"+3hHPqrSNd5ZshLU4lGFck0Npn/fGWIJ9xS8s4HiiGfniUVTspOt4kd2ntRCBWFta/VUqJW2NbFnbSVr",
+	"1xVZ0StNPDBrK1QTR7vBJZm0A1aVFu0smg+jnU9c9gNu+YVKiQMWG8rODLQh1rLLGwVZpizS9lG3jVp8",
+	"ViudbIViCs5sqFIPRWZd2zTIud2e4spvrWaqorsBKWMG+1gGyA9e91w9Q98Dfchw8gez4zPpjOZs8LQh",
+	"K39l0zYRTecrszKH62OCPA3MYJAPzpgsNoNCQe5G2CoKJWsflaMW6tOawNKWggBT6bj6JcABUQFz2K7J",
+	"gqyJCZAJrLMEV3E0DsS1UDob2oYYEs0BtAQoWw6Or1WRkbA4QXOfdgs5kR/RNZqeiSnH2ifn/+mA4oYY",
+	"a/q9Zey4yPBXunZ0TAdBlC0zWTG7953Us5P+zUE7ir7Xd4ekOEF9CmTg/JSZ6F3blUv7ajHRVjuMVBlX",
+	"V6pQG+LQSePN9fx6HsE6Txa9Vgv1axoqlEdZJxJn6PUsLU8/a0psRZoTvLtKLdSfJF0u0kLGhoQ4qMXn",
+	"R6XjPt9aSqe1I+s54AMHwi0VfenN8fWQqkzKcgLxdj6Pn9JZoS576L3RZUI0+xK6XB/8aaEmLfyZaaUW",
+	"6qfZoejP+oo/O1LToaoiM+46Yscnq1sBDUq51raORwhqvSELMcLr6OLmlUjPARzXrwye96gNVSAOEuHQ",
+	"Ze06Tn0qhomc4Uq6UtGnc+ynP4mw1bIGtINqAbh0GxoE6iwVgKEkW0UGrgD7ugBbNF9h5XhfO0IsFRO6",
+	"eZfwvEg8o0YxLaFGW93ETjUvMtVnKmJPDB5ruoWbriq6RotQVQAKNC4IvL2JYeSAGd3o1IFOMbzJYLhQ",
+	"TXfd4vtzrwiQpJIyfmD+kqW93F2NO/VZiS93o164V/IttPardVsLjsFza6kaTAypT+IykBVYsWsSP0yh",
+	"NXJG5b/t7obiPRL7MUBPKLg0dDvQXtqXCaspEb7wdOzFk2ndY4FcsEyfFSprFKDvOsgl65Kp7OFMtdD7",
+	"NOM1jXR/6d0Hs3LcoKiFqlDoSnRqtCfXj7y3+J55ta/Lbs2xg2k76FcxCmC09UW3Z3H+nFD2V98XXrdU",
+	"5m41aoY/srZO3xEvKT/O9+mLHcSV3Q29JEiX+IuU1uEFPyWr7h2q/iPp5+I4eulmAvlIvNElQYf2/ydy",
+	"jyP9/R0AAP//",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

@@ -13,6 +13,7 @@ func TestPollKeepsTheRowsOfAFailingInstance(t *testing.T) {
 	bravo := seededForge(2, "web")
 	r := memory.New()
 	w := newWorker(t, alfa, bravo, r)
+	defer w.Close()
 	w.Poll()
 	assert.Count(t, 2, w.Entries())
 	alfa.FailProjects(errors.New("unreachable"))
@@ -41,6 +42,7 @@ func TestRequestsCarryTheirInstance(t *testing.T) {
 		[]*merge_request.Request{newRequest(2, 1, "bravo change", 2)},
 	)
 	w := newWorker(t, alfa, bravo, memory.New())
+	defer w.Close()
 	w.Poll()
 	requests := w.Requests()
 	assert.Count(t, 2, requests)

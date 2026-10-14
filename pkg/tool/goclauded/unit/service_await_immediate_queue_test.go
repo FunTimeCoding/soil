@@ -70,7 +70,7 @@ func TestAwaitImmediateQueueReleasesWhenTheServiceStops(t *testing.T) {
 		)
 	}()
 	s.AwaitSubscribers(1)
-	s.Service.Stop()
+	s.Service.Close()
 
 	select {
 	case drained := <-result:

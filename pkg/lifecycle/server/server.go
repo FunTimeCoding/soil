@@ -20,4 +20,5 @@ type Server struct {
 	certificate  string
 	key          string
 	profiling    bool
+	verbose      bool
 }

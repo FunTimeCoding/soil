@@ -51,7 +51,7 @@ func (s *Server) pulseSection(identifier string) gomponents.Node {
 				html.Type("text"),
 				html.Name(constant.Body),
 				gomponents.Attr("placeholder", "pulse..."),
-				gomponents.Attr("autocomplete", "off"),
+				gomponents.Attr("autocomplete", constant.AutocompleteOff),
 			),
 			html.Label(
 				html.Input(

@@ -30,17 +30,13 @@ func Run(
 	v := service.New(s, notifier.New())
 	w := watcher.New(v, l, r, o.SeedDirectory)
 	u := web.New(v)
-	lifecycle.New(
-		l,
-		lifecycle.WithWorker(w),
-		lifecycle.WithServer(
-			server.New(
-				constant.Identity,
-				o.Address,
-				func(m *http.ServeMux) {
-					Mount(v, u, r, i.Recorder(), guard.New(m, o.ServiceTokens))
-				},
-			).WithMiddleware(u.Recovery(r)).WithDefaultCertificate(),
-		),
+	lifecycle.New(l).WithWorker(w).WithServer(
+		server.New(
+			constant.Identity,
+			o.Address,
+			func(m *http.ServeMux) {
+				Mount(v, u, r, i.Recorder(), guard.New(m, o.ServiceTokens))
+			},
+		).WithMiddleware(u.Recovery(r)).WithDefaultCertificate(),
 	).RunUntilSignal()
 }

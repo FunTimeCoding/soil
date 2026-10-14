@@ -20,16 +20,13 @@ func Run(
 ) {
 	r := i.Reporter()
 	n := runner.New(o.Workspace)
-	lifecycle.New(
-		logger.New(context.Background()),
-		lifecycle.WithServer(
-			server.New(
-				constant.Identity,
-				o.Address,
-				func(m *http.ServeMux) {
-					Mount(n, i.Recorder(), guard.New(m, o.ServiceTokens))
-				},
-			).WithMiddleware(web.RecoveryMiddleware(r)).WithProtected(),
-		),
+	lifecycle.New(logger.New(context.Background())).WithServer(
+		server.New(
+			constant.Identity,
+			o.Address,
+			func(m *http.ServeMux) {
+				Mount(n, i.Recorder(), guard.New(m, o.ServiceTokens))
+			},
+		).WithMiddleware(web.RecoveryMiddleware(r)).WithProtected(),
 	).RunUntilSignal()
 }

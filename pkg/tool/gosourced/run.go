@@ -21,16 +21,13 @@ func Run(
 	r := i.Reporter()
 	l := logger.New(context.Background())
 	s := service.New(o.Inventory)
-	lifecycle.New(
-		l,
-		lifecycle.WithServer(
-			server.New(
-				constant.Identity,
-				o.Address,
-				func(m *http.ServeMux) {
-					Mount(s, r, i.Recorder(), guard.New(m, o.ServiceTokens))
-				},
-			).WithMiddleware(web.RecoveryMiddleware(r)),
-		),
+	lifecycle.New(l).WithServer(
+		server.New(
+			constant.Identity,
+			o.Address,
+			func(m *http.ServeMux) {
+				Mount(s, r, i.Recorder(), guard.New(m, o.ServiceTokens))
+			},
+		).WithMiddleware(web.RecoveryMiddleware(r)),
 	).RunUntilSignal()
 }

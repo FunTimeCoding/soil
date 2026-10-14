@@ -21,22 +21,19 @@ func Run(
 ) {
 	r := s.Reporter()
 	c := chromium.NewEnvironment()
-	lifecycle.New(
-		logger.New(context.Background()),
-		lifecycle.WithServer(
-			server.New(
-				constant.Identity,
-				o.Address,
-				func(m *http.ServeMux) {
-					Mount(
-						browser.New(c),
-						o.DownloadDirectory,
-						r,
-						s.Recorder(),
-						guard.New(m, o.ServiceTokens),
-					)
-				},
-			).WithMiddleware(web.RecoveryMiddleware(r)),
-		),
+	lifecycle.New(logger.New(context.Background())).WithServer(
+		server.New(
+			constant.Identity,
+			o.Address,
+			func(m *http.ServeMux) {
+				Mount(
+					browser.New(c),
+					o.DownloadDirectory,
+					r,
+					s.Recorder(),
+					guard.New(m, o.ServiceTokens),
+				)
+			},
+		).WithMiddleware(web.RecoveryMiddleware(r)),
 	).RunUntilSignal()
 }

@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/stamp"
 	"github.com/funtimecoding/soil/pkg/system/environment"
+	"github.com/funtimecoding/soil/pkg/web/stall_client"
 )
 
 func NewOptional(project string) *Reporter {
@@ -11,5 +12,6 @@ func NewOptional(project string) *Reporter {
 		project: project,
 		locator: environment.Optional(constant.LocatorEnvironment),
 		version: stamp.New().Tag(),
+		pool:    stall_client.New().Build(),
 	}
 }

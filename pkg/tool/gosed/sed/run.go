@@ -11,6 +11,7 @@ import (
 func Run(o *option.Sed) {
 	validate(o)
 	c := gitlab.New(o.Host, o.Token)
+	defer c.Close()
 	p := common.FindProjectOrExit(c, o.Owner, o.Repository)
 
 	if len(o.RawActions) > 0 {

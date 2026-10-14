@@ -30,6 +30,10 @@ func (s *Server) Mount(g *guard.Mux) {
 		s.sessionPulseSubmit,
 	)
 	g.Open(
+		route.Post(constant.SessionsPath, "/{identifier}/cruise"),
+		s.sessionCruiseSubmit,
+	)
+	g.Open(
 		route.Post(constant.SessionsPath, "/{identifier}/delete"),
 		s.sessionDeleteAction,
 	)

@@ -10,8 +10,9 @@ func (r *Reporter) RecoverFlush(v any) {
 	if r.hub != nil {
 		r.hub.Recover(v)
 		sentry.Flush(r.hub)
-		r.pool.Close()
 	}
+
+	r.Close()
 
 	if v != nil {
 		errors.Printf("Captured panic: %v\n", v)

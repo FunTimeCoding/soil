@@ -56,6 +56,7 @@ func TestCollectKeepsTheFailingSourcePlacements(t *testing.T) {
 		[]face.Collector{healthy},
 		prometheus.NewRegistry(),
 	)
+	defer w.Close()
 	w.Collect(context.Background(), gazetteer_tester.NewGazetteer())
 	healthy.Fail(errors.New("process list status: 500"))
 	w.Collect(context.Background(), gazetteer_tester.NewGazetteer())

@@ -1,5 +1,14 @@
 package constant
 
+type Delivery string
+
+const (
+	DeliveryQueued    Delivery = "queued"
+	DeliveryImmediate Delivery = "immediate"
+	DeliveryCruise    Delivery = "cruise"
+)
+
+const DeliveryParameter = "delivery"
 const (
 	DeliveryBudget     = 2000
 	DeliveryCutFloor   = 300

@@ -14,25 +14,28 @@ func CreateSignatureSegment(
 	signature []byte,
 	keyName string,
 ) []byte {
-	var b bytes.Buffer
-	z := gzip.NewWriter(&b)
-	t := tar.NewWriter(z)
-	system.TarWriteHeader(
-		t,
-		&tar.Header{
-			Name: join.Empty(
-				constant.AlpineSignaturePrefix,
-				keyName,
-				constant.AlpinePublicKeySuffix,
-			),
-			Size: int64(len(signature)),
-			Mode: 0644,
-			Uid:  0,
-			Gid:  0,
+	segment := system.TarSegment(
+		func(t *tar.Writer) {
+			system.TarWriteHeader(
+				t,
+				&tar.Header{
+					Name: join.Empty(
+						constant.AlpineSignaturePrefix,
+						keyName,
+						constant.AlpinePublicKeySuffix,
+					),
+					Size: int64(len(signature)),
+					Mode: 0644,
+					Uid:  0,
+					Gid:  0,
+				},
+			)
+			system.TarWrite(t, signature)
 		},
 	)
-	system.TarWrite(t, signature)
-	errors.PanicFlush(t)
+	var b bytes.Buffer
+	z := gzip.NewWriter(&b)
+	system.Copy(bytes.NewReader(segment), z)
 	errors.PanicClose(z)
 
 	return b.Bytes()

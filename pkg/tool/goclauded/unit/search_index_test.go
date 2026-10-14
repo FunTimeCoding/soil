@@ -2,6 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
 	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
@@ -190,6 +191,7 @@ func TestSearchIndexWindow(t *testing.T) {
 
 func TestSearchIndexVersionRebuild(t *testing.T) {
 	d := connection.NewMemory()
+	defer errors.PanicClose(d)
 	path := filepath.Join(t.TempDir(), "s1.jsonl")
 	system.WriteFile(path, []byte(searchTranscript()), 0644)
 	search_index.New(d).Append("s1", path)

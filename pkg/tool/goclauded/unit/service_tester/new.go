@@ -27,8 +27,7 @@ func New(t *testing.T) *Tester {
 	r := memory.New()
 	harbor := t.TempDir()
 	c.Harbor = harbor
-
-	return &Tester{
+	result := &Tester{
 		Store: s,
 		t:     t,
 		Service: service.New(
@@ -53,4 +52,7 @@ func New(t *testing.T) *Tester {
 		Search:            x,
 		Reporter:          r,
 	}
+	t.Cleanup(result.Service.Close)
+
+	return result
 }

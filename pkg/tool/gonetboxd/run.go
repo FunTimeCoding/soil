@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/netbox"
 	"github.com/funtimecoding/soil/pkg/relational"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/option"
@@ -24,25 +25,23 @@ func Run(
 	l := logger.New(context.Background())
 	s := store.New(relational.Open(l, o.PostgresLocator, o.LitePath))
 	defer s.Close()
-	defer o.Client.Close()
-	b := web.New(o.Client)
-	lifecycle.New(
-		l,
-		lifecycle.WithServer(
-			server.New(
-				constant.Identity,
-				o.Address,
-				func(m *http.ServeMux) {
-					Mount(
-						o.Client,
-						service.New(o.Client, s),
-						b,
-						r,
-						i.Recorder(),
-						guard.New(m, o.ServiceTokens),
-					)
-				},
-			).WithMiddleware(b.Recovery(r)),
-		),
+	c := netbox.NewEnvironment()
+	defer c.Close()
+	b := web.New(c)
+	lifecycle.New(l).WithServer(
+		server.New(
+			constant.Identity,
+			o.Address,
+			func(m *http.ServeMux) {
+				Mount(
+					c,
+					service.New(c, s),
+					b,
+					r,
+					i.Recorder(),
+					guard.New(m, o.ServiceTokens),
+				)
+			},
+		).WithMiddleware(b.Recovery(r)),
 	).RunUntilSignal()
 }

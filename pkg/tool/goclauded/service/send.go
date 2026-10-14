@@ -12,7 +12,7 @@ func (s *Service) Send(
 	name string,
 	to string,
 	body string,
-	immediate bool,
+	d constant.Delivery,
 ) (bool, error) {
 	var holder *session.Session
 
@@ -48,9 +48,5 @@ func (s *Service) Send(
 	entry := queue.New(holder.Identifier, to, constant.QueueMessage, formatted)
 	entry.MessageIdentifier = new(m.Identifier)
 
-	if immediate {
-		return s.pushImmediate(entry)
-	}
-
-	return false, s.pushEntry(entry)
+	return s.pushDelivery(entry, d)
 }

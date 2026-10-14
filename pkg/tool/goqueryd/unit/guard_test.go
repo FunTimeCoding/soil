@@ -19,6 +19,7 @@ import (
 
 func TestGuard(t *testing.T) {
 	s := store.New(connection.NewMemory())
+	defer s.Close()
 	v := service.New(s, ollama.NewEnvironment(), mock_reranker.New())
 	w := model_context_server.New(
 		t,
@@ -29,7 +30,7 @@ func TestGuard(t *testing.T) {
 			goqueryd.Mount(v, web.New(v), memory.New(), mock_recorder.New(), g)
 		},
 	)
-	defer w.Stop()
+	defer w.Close()
 	w.VerifyBase(t)
 	w.VerifyGuarded(t, "/api/status")
 	w.VerifyOpen(t, constant.DashboardPath)

@@ -29,7 +29,7 @@ func Listen() {
 			},
 		),
 	)
-	defer a.Stop()
+	defer a.Close()
 	a.Start()
 	system.KillSignalBlock()
 }

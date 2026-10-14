@@ -144,45 +144,4 @@ func (s *Server) register() {
 		),
 		mcp.NewTypedToolHandler(s.bumpDecision),
 	)
-	s.server.AddTool(
-		mcp.NewTool(
-			constant.CruiseStatus,
-			mcp.WithDescription(
-				"Read whether cruise control is armed for a session, and at what pace. Cruise control decides whether an answer given while you are idle wakes you immediately or waits for the next prompt.",
-			),
-			mcp.WithString(
-				constant.SessionParameter,
-				mcp.Required(),
-				mcp.Description("Coordination callsign"),
-			),
-		),
-		mcp.NewTypedToolHandler(s.cruiseStatus),
-	)
-	s.server.AddTool(
-		mcp.NewTool(
-			constant.SetCruise,
-			mcp.WithDescription(
-				"Arm or disarm cruise control for a session. This changes whether you get woken from idle, so calling it on your own session is raising your own autonomy - every call is visible on the queue and approval belongs to the person answering it. Prefer asking over setting.",
-			),
-			mcp.WithString(
-				constant.SessionParameter,
-				mcp.Required(),
-				mcp.Description("Coordination callsign"),
-			),
-			mcp.WithString(
-				constant.ModeParameter,
-				mcp.Required(),
-				mcp.Description(
-					"off never wakes, on wakes once the quiet window settles, paced waits between wakes",
-				),
-			),
-			mcp.WithNumber(
-				constant.PaceParameter,
-				mcp.Description(
-					"Minutes between wakes in paced mode; 5, 15 and 30 are the offered steps",
-				),
-			),
-		),
-		mcp.NewTypedToolHandler(s.setCruise),
-	)
 }

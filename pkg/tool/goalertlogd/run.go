@@ -42,33 +42,21 @@ func Run(
 		m.Registry(),
 	)
 	u := web.New(s, w, events)
-	lifecycle.New(
-		g,
-		lifecycle.WithWorker(w),
-		lifecycle.WithServer(
-			server.New(
-				constant.Identity,
-				o.MetricAddress,
-				func(x *http.ServeMux) {
-					x.Handle(webConstant.MetricsPath, m.Exporter())
-				},
-			),
+	lifecycle.New(g).WithWorker(w).WithServer(
+		server.New(
+			constant.Identity,
+			o.MetricAddress,
+			func(x *http.ServeMux) {
+				x.Handle(webConstant.MetricsPath, m.Exporter())
+			},
 		),
-		lifecycle.WithServer(
-			server.New(
-				constant.Identity,
-				o.Address,
-				func(m *http.ServeMux) {
-					Mount(
-						s,
-						w,
-						u,
-						r,
-						i.Recorder(),
-						guard.New(m, o.ServiceTokens),
-					)
-				},
-			).WithMiddleware(u.Recovery(r)),
-		),
+	).WithServer(
+		server.New(
+			constant.Identity,
+			o.Address,
+			func(m *http.ServeMux) {
+				Mount(s, w, u, r, i.Recorder(), guard.New(m, o.ServiceTokens))
+			},
+		).WithMiddleware(u.Recovery(r)),
 	).RunUntilSignal()
 }

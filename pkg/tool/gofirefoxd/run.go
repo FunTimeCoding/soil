@@ -20,31 +20,27 @@ func Run(
 ) {
 	r := s.Reporter()
 	c := firefox.NewEnvironment()
-	lifecycle.New(
-		logger.New(context.Background()),
-		lifecycle.WithServer(
-			server.New(
-				constant.Identity,
-				web.AddressPort(o.BridgePort),
-				func(m *http.ServeMux) {
-					m.Handle("/", c)
-				},
-			).WithMiddleware(web.RecoveryMiddleware(r)),
-		),
-		lifecycle.WithServer(
-			server.New(
-				constant.Identity,
-				o.Address,
-				func(m *http.ServeMux) {
-					Mount(
-						c,
-						o.DownloadDirectory,
-						r,
-						s.Recorder(),
-						guard.New(m, o.ServiceTokens),
-					)
-				},
-			).WithMiddleware(web.RecoveryMiddleware(r)),
-		),
+	lifecycle.New(logger.New(context.Background())).WithServer(
+		server.New(
+			constant.Identity,
+			web.AddressPort(o.BridgePort),
+			func(m *http.ServeMux) {
+				m.Handle("/", c)
+			},
+		).WithMiddleware(web.RecoveryMiddleware(r)),
+	).WithServer(
+		server.New(
+			constant.Identity,
+			o.Address,
+			func(m *http.ServeMux) {
+				Mount(
+					c,
+					o.DownloadDirectory,
+					r,
+					s.Recorder(),
+					guard.New(m, o.ServiceTokens),
+				)
+			},
+		).WithMiddleware(web.RecoveryMiddleware(r)),
 	).RunUntilSignal()
 }

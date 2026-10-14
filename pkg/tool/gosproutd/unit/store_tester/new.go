@@ -10,10 +10,12 @@ import (
 func New(t *testing.T) *Tester {
 	t.Helper()
 	now := time.Now().UTC()
-
-	return &Tester{
+	result := &Tester{
 		Store: store.New(lite.NewMemory(), func() time.Time { return now }),
 		t:     t,
 		now:   &now,
 	}
+	t.Cleanup(result.Store.Close)
+
+	return result
 }

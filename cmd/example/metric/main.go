@@ -17,19 +17,16 @@ import (
 
 func main() {
 	m := metric.New()
-	lifecycle.New(
-		logger.New(context.Background()),
-		lifecycle.WithServer(
-			server.New(
-				identity.Example(),
-				join.Empty(
-					stringsConstant.Colon,
-					integers.ToString(metricConstant.Port),
-				),
-				func(x *http.ServeMux) {
-					x.Handle(webConstant.MetricsPath, m.Exporter())
-				},
+	lifecycle.New(logger.New(context.Background())).WithServer(
+		server.New(
+			identity.Example(),
+			join.Empty(
+				stringsConstant.Colon,
+				integers.ToString(metricConstant.Port),
 			),
+			func(x *http.ServeMux) {
+				x.Handle(webConstant.MetricsPath, m.Exporter())
+			},
 		),
 	).RunUntilSignal()
 }

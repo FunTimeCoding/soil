@@ -18,6 +18,7 @@ func newRecordingHub(t *testing.T) (*sentry.Hub, *sentry.MockTransport) {
 		},
 	)
 	assert.FatalOnError(t, e)
+	t.Cleanup(client.Close)
 
 	return sentry.NewHub(client, sentry.NewScope()), transport
 }

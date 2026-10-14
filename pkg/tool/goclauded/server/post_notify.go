@@ -16,7 +16,7 @@ func (s *Server) PostNotify(
 		r.Body.Callsign,
 		r.Body.Source,
 		r.Body.Body,
-		r.Body.Immediate != nil && *r.Body.Immediate,
+		toDelivery(r.Body.Delivery),
 	)
 
 	if e != nil {

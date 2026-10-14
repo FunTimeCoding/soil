@@ -34,17 +34,13 @@ func Run(
 	defer errors.LogClose(a)
 	v := service.New(s, embed.NewEnvironment(), a)
 	u := web.New(v)
-	lifecycle.New(
-		l,
-		lifecycle.WithWorker(worker.New(v, 10*time.Minute, l, r)),
-		lifecycle.WithServer(
-			server.New(
-				constant.Identity,
-				o.Address,
-				func(m *http.ServeMux) {
-					Mount(v, u, r, i.Recorder(), guard.New(m, o.ServiceTokens))
-				},
-			).WithMiddleware(u.Recovery(r)),
-		),
+	lifecycle.New(l).WithWorker(worker.New(v, 10*time.Minute, l, r)).WithServer(
+		server.New(
+			constant.Identity,
+			o.Address,
+			func(m *http.ServeMux) {
+				Mount(v, u, r, i.Recorder(), guard.New(m, o.ServiceTokens))
+			},
+		).WithMiddleware(u.Recovery(r)),
 	).RunUntilSignal()
 }

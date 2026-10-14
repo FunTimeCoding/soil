@@ -61,7 +61,7 @@ func (w *Workspace) compute(
 			w.keep(
 				kindStore(constant.IndexFactsKind, kind),
 				path,
-				kindKey(k, kind),
+				w.kindKey(k, kind),
 				v,
 			)
 			w.facts[kind.Name][path] = v

@@ -28,15 +28,14 @@ func Run(
 	g := logger.New(context.Background())
 	s := store.New(relational.Open(g, o.PostgresLocator, o.LitePath))
 	defer s.Close()
-	options := []lifecycle.Option{
-		lifecycle.WithWorker(stream.New(s, g, r, o.Predicate)),
-		lifecycle.WithWorker(bluetooth.New(s, g, r, 15*time.Second)),
-		lifecycle.WithWorker(janitor.New(s, g, r, time.Hour, 7*24*time.Hour)),
-	}
+	b := lifecycle.New(g).
+		WithWorker(stream.New(s, g, r, o.Predicate)).
+		WithWorker(bluetooth.New(s, g, r, 15*time.Second)).
+		WithWorker(janitor.New(s, g, r, time.Hour, 7*24*time.Hour))
 	w := wireless.New(s, g, r, 5*time.Second)
 
 	if w.Probe() {
-		options = append(options, lifecycle.WithWorker(w))
+		b.WithWorker(w)
 	} else {
 		g.Structured(
 			"wireless collector disabled",
@@ -45,17 +44,13 @@ func Run(
 		)
 	}
 
-	options = append(
-		options,
-		lifecycle.WithServer(
-			server.New(
-				constant.Identity,
-				o.Address,
-				func(m *http.ServeMux) {
-					Mount(s, r, i.Recorder(), guard.New(m, o.ServiceTokens))
-				},
-			).WithMiddleware(web.RecoveryMiddleware(r)),
-		),
-	)
-	lifecycle.New(g, options...).RunUntilSignal()
+	b.WithServer(
+		server.New(
+			constant.Identity,
+			o.Address,
+			func(m *http.ServeMux) {
+				Mount(s, r, i.Recorder(), guard.New(m, o.ServiceTokens))
+			},
+		).WithMiddleware(web.RecoveryMiddleware(r)),
+	).RunUntilSignal()
 }

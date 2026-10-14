@@ -1,5 +1,6 @@
 package base
 
 func (s *Server) Close() {
-	s.Stop()
+	s.Server.Close()
+	s.store.Close()
 }

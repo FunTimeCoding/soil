@@ -28,6 +28,7 @@ func Run(
 	s := store.New(relational.Open(g, o.PostgresLocator, o.LitePath))
 	defer s.Close()
 	f := gitlab.NewEnvironment()
+	defer f.Close()
 	project, e := f.ResolveProject(o.Project)
 	errors.PanicOnError(e)
 	v := service.New(
@@ -42,23 +43,13 @@ func Run(
 		),
 	)
 	i := web.New(s, v, authorizationClient(o).WithReporter(r))
-	lifecycle.New(
-		g,
-		lifecycle.WithServer(
-			server.New(
-				constant.Identity,
-				o.Address,
-				func(m *http.ServeMux) {
-					Mount(
-						s,
-						v,
-						i,
-						r,
-						u.Recorder(),
-						guard.New(m, o.ServiceTokens),
-					)
-				},
-			).WithMiddleware(i.Recovery(r)),
-		),
+	lifecycle.New(g).WithServer(
+		server.New(
+			constant.Identity,
+			o.Address,
+			func(m *http.ServeMux) {
+				Mount(s, v, i, r, u.Recorder(), guard.New(m, o.ServiceTokens))
+			},
+		).WithMiddleware(i.Recovery(r)),
 	).RunUntilSignal()
 }

@@ -28,26 +28,21 @@ func Run(
 	m := metric.New()
 	k := worker.New(v, constant.PollInterval, m.Registry(), l, r)
 	b := web.New(v, k)
-	lifecycle.New(
-		l,
-		lifecycle.WithWorker(k),
-		lifecycle.WithServer(
-			server.New(
-				constant.Identity,
-				o.MetricAddress,
-				func(x *http.ServeMux) {
-					x.Handle(webConstant.MetricsPath, m.Exporter())
-				},
-			),
+	lifecycle.New(l).WithWorker(k).WithServer(
+		server.New(
+			constant.Identity,
+			o.MetricAddress,
+			func(x *http.ServeMux) {
+				x.Handle(webConstant.MetricsPath, m.Exporter())
+			},
 		),
-		lifecycle.WithServer(
-			server.New(
-				constant.Identity,
-				o.Address,
-				func(m *http.ServeMux) {
-					Mount(v, b, r, s.Recorder(), guard.New(m, o.ServiceTokens))
-				},
-			).WithMiddleware(b.Recovery(r)),
-		),
+	).WithServer(
+		server.New(
+			constant.Identity,
+			o.Address,
+			func(m *http.ServeMux) {
+				Mount(v, b, r, s.Recorder(), guard.New(m, o.ServiceTokens))
+			},
+		).WithMiddleware(b.Recovery(r)),
 	).RunUntilSignal()
 }

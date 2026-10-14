@@ -1,6 +1,7 @@
 package lite
 
 import (
+	"database/sql"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/relational/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
@@ -16,9 +17,7 @@ func NewMemory() *gorm.DB {
 		&gorm.Config{},
 	)
 	errors.PanicOnError(e)
-	inner, f := m.DB()
-	errors.PanicOnError(f)
-	inner.SetMaxOpenConns(1)
+	m.ConnPool.(*sql.DB).SetMaxOpenConns(1)
 
 	return m
 }

@@ -39,20 +39,17 @@ func Run(
 		socket.Path(o.ProcfilePath),
 	)
 	r := i.Reporter()
-	l := lifecycle.New(
-		logger.New(context.Background()),
-		lifecycle.WithServer(
-			server.New(
-				constant.Identity,
-				o.Address,
-				func(m *http.ServeMux) {
-					Mount(s, r, i.Recorder(), guard.New(m, o.ServiceTokens))
-				},
-			).WithMiddleware(web.RecoveryMiddleware(r)),
-		),
+	l := lifecycle.New(logger.New(context.Background())).WithServer(
+		server.New(
+			constant.Identity,
+			o.Address,
+			func(m *http.ServeMux) {
+				Mount(s, r, i.Recorder(), guard.New(m, o.ServiceTokens))
+			},
+		).WithMiddleware(web.RecoveryMiddleware(r)),
 	)
 	l.Run()
 
-	defer l.Stop()
+	defer l.Close()
 	errors.PanicOnError(s.Run())
 }

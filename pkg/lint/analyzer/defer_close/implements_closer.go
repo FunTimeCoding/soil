@@ -1,9 +1,17 @@
 package defer_close
 
-import "go/types"
+import (
+	"github.com/funtimecoding/soil/pkg/lint/constant"
+	"go/types"
+)
 
 func implementsCloser(t types.Type) bool {
-	closeMethod, _, _ := types.LookupFieldOrMethod(t, true, nil, "Close")
+	closeMethod, _, _ := types.LookupFieldOrMethod(
+		t,
+		true,
+		nil,
+		constant.CloseMethod,
+	)
 
 	if closeMethod == nil {
 		return false

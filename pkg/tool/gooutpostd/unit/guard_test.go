@@ -20,7 +20,7 @@ func TestGuard(t *testing.T) {
 			gooutpostd.Mount(service.New(), mock_recorder.New(), g)
 		},
 	)
-	defer v.Stop()
+	defer v.Close()
 	v.VerifyBase(t)
 	v.VerifyInterface(t)
 	v.VerifyGuarded(t, "/api/services")

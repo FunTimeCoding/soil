@@ -771,6 +771,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/LabelResponse"
+        "409":
+          description: The label does not hold the expected value; nothing was written.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal error.
           content:
@@ -801,6 +807,61 @@ paths:
                 $ref: "#/components/schemas/DeliveryResponse"
         "400":
           description: Body over the delivery entry limit.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/sessions/{identifier}/cruise:
+    get:
+      operationId: getSessionCruise
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: The session's cruise setting; off for a session that never set one.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CruiseResponse"
+        "500":
+          description: Internal error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: postSessionCruise
+      parameters:
+      - name: identifier
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CruiseRequest"
+      responses:
+        "200":
+          description: Cruise set.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CruiseResponse"
+        "400":
+          description: Unknown mode, or paced without a pace.
           content:
             application/json:
               schema:
@@ -1150,8 +1211,40 @@ components:
       properties:
         body:
           type: string
-        immediate:
-          type: boolean
+        delivery:
+          $ref: "#/components/schemas/Delivery"
+    Delivery:
+      type: string
+      description: queued waits for the next prompt, immediate wakes the session now, cruise follows the session's cruise setting. Absent means queued.
+      enum:
+      - queued
+      - immediate
+      - cruise
+    CruiseRequest:
+      type: object
+      required:
+      - mode
+      properties:
+        mode:
+          type: string
+          enum:
+          - "off"
+          - "on"
+          - paced
+        pace_minutes:
+          type: integer
+    CruiseResponse:
+      type: object
+      required:
+      - mode
+      properties:
+        mode:
+          type: string
+        pace_minutes:
+          type: integer
+        promoted_at:
+          type: string
+          format: date-time
     ContextRequest:
       type: object
       required:
@@ -1187,6 +1280,9 @@ components:
           type: string
         value:
           description: Empty or omitted removes the label.
+          type: string
+        expect:
+          description: Write only while the label currently holds this value; empty means only while the key is absent. Omitted writes unconditionally. A failed condition answers 409.
           type: string
         from:
           description: Actor name for the event log.
@@ -1298,8 +1394,8 @@ components:
           type: string
         body:
           type: string
-        immediate:
-          type: boolean
+        delivery:
+          $ref: "#/components/schemas/Delivery"
     NotifyRequest:
       type: object
       required:
@@ -1313,8 +1409,8 @@ components:
           type: string
         body:
           type: string
-        immediate:
-          type: boolean
+        delivery:
+          $ref: "#/components/schemas/Delivery"
     DeliveryResponse:
       type: object
       required:
@@ -1392,6 +1488,7 @@ components:
       - identifier
       - timestamp
       - lines
+      - turnCount
       properties:
         identifier:
           type: string
@@ -1401,6 +1498,8 @@ components:
           type: string
         timestamp:
           type: string
+        turnCount:
+          type: integer
         lastSeen:
           type: string
         lastPromptAt:

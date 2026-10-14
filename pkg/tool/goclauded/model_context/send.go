@@ -33,8 +33,17 @@ func (s *Server) send(
 	}
 
 	to := q.GetString(constant.To, "")
-	immediate := q.GetBool(constant.Immediate, false)
-	delivered, f := s.service.Send(c.Callsign, to, body, immediate)
+	d := constant.Delivery(
+		q.GetString(constant.DeliveryParameter, string(constant.DeliveryQueued)),
+	)
+
+	switch d {
+	case constant.DeliveryQueued, constant.DeliveryImmediate, constant.DeliveryCruise:
+	default:
+		return response.Fail("delivery must be queued, immediate or cruise")
+	}
+
+	delivered, f := s.service.Send(c.Callsign, to, body, d)
 
 	if f != nil {
 		if not_found.Is(f) {
@@ -48,10 +57,19 @@ func (s *Server) send(
 		return response.Success("Broadcast sent")
 	}
 
-	if immediate && !delivered {
+	if d == constant.DeliveryImmediate && !delivered {
 		return response.Success(
 			fmt.Sprintf(
 				"Sent to %s, deferred to their next prompt - immediate delivery is rate limited for that session right now",
+				to,
+			),
+		)
+	}
+
+	if d == constant.DeliveryCruise && !delivered {
+		return response.Success(
+			fmt.Sprintf(
+				"Sent to %s, held for their cruise setting - it wakes them when the setting allows, or arrives with their next prompt",
 				to,
 			),
 		)

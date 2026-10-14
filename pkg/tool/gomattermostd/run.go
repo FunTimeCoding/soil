@@ -32,27 +32,24 @@ func Run(
 	c := mattermost.NewEnvironment()
 	var d *store.Store
 	var index mattermostFace.Indexer
-	var p []lifecycle.Option
+	b := lifecycle.New(l)
 
 	if claude := connector.NewOptional(); claude != nil {
+		defer claude.Close()
 		d = store.New(relational.Open(l, o.PostgresLocator, o.LitePath))
 		defer d.Close()
 		n := notifier.New(claude, constant.Identity.Name(), r)
 		w := watcher.New(c, d, n, l, r, constant.DebounceWindow)
 		index = w
-		p = append(
-			p,
-			lifecycle.WithWorker(w),
-			lifecycle.WithWorker(
-				sweeper.New(
-					d,
-					n,
-					w,
-					l,
-					r,
-					constant.PurgeWindow,
-					constant.PurgeInterval,
-				),
+		b.WithWorker(w).WithWorker(
+			sweeper.New(
+				d,
+				n,
+				w,
+				l,
+				r,
+				constant.PurgeWindow,
+				constant.PurgeInterval,
 			),
 		)
 	}
@@ -61,30 +58,24 @@ func Run(
 
 	if v := monitorOption.NewEnvironment(); v.Enabled {
 		m = monitor.New(c, v, l, r)
-		p = append(p, lifecycle.WithWorker(m))
+		b.WithWorker(m)
 	}
 
-	lifecycle.New(
-		l,
-		append(
-			p,
-			lifecycle.WithServer(
-				server.New(
-					constant.Identity,
-					o.Address,
-					func(u *http.ServeMux) {
-						Mount(
-							c,
-							m,
-							d,
-							index,
-							r,
-							s.Recorder(),
-							guard.New(u, o.ServiceTokens),
-						)
-					},
-				).WithMiddleware(web.RecoveryMiddleware(r)),
-			),
-		)...,
+	b.WithServer(
+		server.New(
+			constant.Identity,
+			o.Address,
+			func(u *http.ServeMux) {
+				Mount(
+					c,
+					m,
+					d,
+					index,
+					r,
+					s.Recorder(),
+					guard.New(u, o.ServiceTokens),
+				)
+			},
+		).WithMiddleware(web.RecoveryMiddleware(r)),
 	).RunUntilSignal()
 }

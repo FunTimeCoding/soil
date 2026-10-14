@@ -7,6 +7,7 @@ import (
 
 type Reporter struct {
 	hub     *sentry.Hub
+	client  *sentry.Client
 	project string
 	locator string
 	version string

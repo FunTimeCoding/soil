@@ -22,27 +22,22 @@ func Run(
 	r := i.Reporter()
 	l := logger.New(context.Background())
 	m := metric.New()
-	lifecycle.New(
-		l,
-		lifecycle.WithVerbose(o.Verbose),
-		lifecycle.WithServer(
-			server.New(
-				constant.Identity,
-				o.MetricAddress,
-				func(x *http.ServeMux) {
-					x.Handle(webConstant.MetricsPath, m.Exporter())
-				},
-			),
-		),
-		lifecycle.WithWorker(
-			worker.New(
-				github.NewEnvironment(),
-				o.Owner,
-				constant.PollInterval,
-				m.Registry(),
-				l,
-				r,
-			),
+	lifecycle.New(l).WithServer(
+		server.New(
+			constant.Identity,
+			o.MetricAddress,
+			func(x *http.ServeMux) {
+				x.Handle(webConstant.MetricsPath, m.Exporter())
+			},
+		).WithVerbose(o.Verbose),
+	).WithWorker(
+		worker.New(
+			github.NewEnvironment(),
+			o.Owner,
+			constant.PollInterval,
+			m.Registry(),
+			l,
+			r,
 		),
 	).RunUntilSignal()
 }

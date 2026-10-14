@@ -41,7 +41,7 @@ func (w *Workspace) walkExternals(k *kind.Kind) ([]any, []string) {
 		v, held := w.fetch(
 			kindStore(constant.IndexExternalKind, k),
 			path,
-			kindKey(key, k),
+			w.kindKey(key, k),
 			k.Value(),
 		)
 

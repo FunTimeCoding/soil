@@ -111,7 +111,7 @@ func TestAwaitCallsignReleasesWhenTheServiceStops(t *testing.T) {
 		)
 	}()
 	s.AwaitSubscribers(1)
-	s.Service.Stop()
+	s.Service.Close()
 
 	select {
 	case callsign := <-result:

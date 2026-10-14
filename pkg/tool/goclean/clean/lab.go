@@ -29,6 +29,7 @@ func Lab(
 		o.GitLabHost,
 		environment.Required(constant.TokenEnvironment),
 	)
+	defer c.Close()
 	p := c.MustProjectByName(namespace, repository)
 
 	if o.Verbose {

@@ -33,22 +33,19 @@ func Run(
 		os.Exit(1)
 	}
 
-	lifecycle.New(
-		l,
-		lifecycle.WithServer(
-			server.New(
-				constant.Identity,
-				o.Address,
-				func(m *http.ServeMux) {
-					Mount(
-						s,
-						o.ReadOnly,
-						r,
-						i.Recorder(),
-						guard.New(m, o.ServiceTokens),
-					)
-				},
-			).WithMiddleware(web.RecoveryMiddleware(r)),
-		),
+	lifecycle.New(l).WithServer(
+		server.New(
+			constant.Identity,
+			o.Address,
+			func(m *http.ServeMux) {
+				Mount(
+					s,
+					o.ReadOnly,
+					r,
+					i.Recorder(),
+					guard.New(m, o.ServiceTokens),
+				)
+			},
+		).WithMiddleware(web.RecoveryMiddleware(r)),
 	).RunUntilSignal()
 }

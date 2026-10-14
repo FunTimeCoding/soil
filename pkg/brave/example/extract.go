@@ -3,5 +3,7 @@ package example
 import "github.com/funtimecoding/soil/pkg/generative/openai/site"
 
 func Extract() {
-	site.New().ExtractFlow(true)
+	s := site.New()
+	defer s.Close()
+	s.ExtractFlow(true)
 }

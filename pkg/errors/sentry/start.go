@@ -13,7 +13,7 @@ func Start(
 	locator string,
 	version string,
 	c *http.Client,
-) *sentry.Hub {
+) *sentry.Client {
 	errors.FatalOnEmpty(projectName, "projectName")
 	errors.FatalOnEmpty(locator, "locator")
 
@@ -38,5 +38,5 @@ func Start(
 	errors.FatalOnError(e)
 	h.BindClient(client)
 
-	return h
+	return client
 }

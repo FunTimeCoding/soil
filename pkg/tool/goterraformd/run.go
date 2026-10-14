@@ -42,27 +42,21 @@ func Run(
 		m.Registry(),
 		client.NewInCluster(kubernetesConstant.InCluster),
 	)
-	lifecycle.New(
-		l,
-		lifecycle.WithWorker(p),
-		lifecycle.WithWorker(n),
-		lifecycle.WithServer(
-			server.New(
-				constant.Identity,
-				o.MetricAddress,
-				func(x *http.ServeMux) {
-					x.Handle(webConstant.MetricsPath, m.Exporter())
-				},
-			),
+	lifecycle.New(l).WithWorker(p).WithWorker(n).WithServer(
+		server.New(
+			constant.Identity,
+			o.MetricAddress,
+			func(x *http.ServeMux) {
+				x.Handle(webConstant.MetricsPath, m.Exporter())
+			},
 		),
-		lifecycle.WithServer(
-			server.New(
-				constant.Identity,
-				o.Address,
-				func(m *http.ServeMux) {
-					Mount(n, s, r, i.Recorder(), guard.New(m, o.ServiceTokens))
-				},
-			).WithMiddleware(web.RecoveryMiddleware(r)),
-		),
+	).WithServer(
+		server.New(
+			constant.Identity,
+			o.Address,
+			func(m *http.ServeMux) {
+				Mount(n, s, r, i.Recorder(), guard.New(m, o.ServiceTokens))
+			},
+		).WithMiddleware(web.RecoveryMiddleware(r)),
 	).RunUntilSignal()
 }

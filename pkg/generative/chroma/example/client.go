@@ -3,6 +3,7 @@ package example
 import (
 	"github.com/amikos-tech/chroma-go/pkg/api/v2"
 	"github.com/funtimecoding/soil/pkg/console"
+	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/chroma"
 	"github.com/funtimecoding/soil/pkg/generative/constant"
 )
@@ -20,6 +21,7 @@ func Client() {
 			),
 		),
 	)
+	defer errors.PanicClose(l)
 	c.Add(
 		l,
 		v2.WithIDs("1", "2"),

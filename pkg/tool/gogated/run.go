@@ -92,26 +92,24 @@ func Run(
 		join.Empty(o.Issuer, webConstant.CallbackPath),
 		client.DeriveKey(o.Secret),
 	).WithReporter(r)
+	defer authorization.Close()
 	v := server.New(s)
 	administration := web.New(s, authorization, o.SuperUserMail)
 	go runCleanupLoop(s)
-	lifecycle.New(
-		l,
-		lifecycle.WithServer(
-			lifecycleServer.New(
-				constant.Identity,
-				o.Address,
-				func(m *http.ServeMux) {
-					Mount(
-						v,
-						administration,
-						s,
-						r,
-						i.Recorder(),
-						guard.New(m, o.ServiceTokens),
-					)
-				},
-			).WithMiddleware(administration.Recovery(r)),
-		),
+	lifecycle.New(l).WithServer(
+		lifecycleServer.New(
+			constant.Identity,
+			o.Address,
+			func(m *http.ServeMux) {
+				Mount(
+					v,
+					administration,
+					s,
+					r,
+					i.Recorder(),
+					guard.New(m, o.ServiceTokens),
+				)
+			},
+		).WithMiddleware(administration.Recovery(r)),
 	).RunUntilSignal()
 }

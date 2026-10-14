@@ -59,7 +59,7 @@ func TestModelContextNodesFollowTheSelectedInstance(t *testing.T) {
 			)
 		},
 	)
-	defer v.Stop()
+	defer v.Close()
 	c := v.Connect(t)
 	defer c.Close()
 	assert.StringContains(t, "use_instance", c.InitializeResult().Instructions)
@@ -115,7 +115,7 @@ func TestModelContextClosingForgetsTheSelection(t *testing.T) {
 			)
 		},
 	)
-	defer v.Stop()
+	defer v.Close()
 	c := v.Connect(t)
 	c.MustCallTool(
 		inventoryConstant.UseInstance,

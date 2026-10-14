@@ -23,7 +23,7 @@ func TestWebRefusesAnUnresolvableInstanceAsBadRequest(t *testing.T) {
 			},
 		),
 	)
-	defer v.Stop()
+	defer v.Close()
 	unknown := locator.New(webConstant.Localhost).Insecure().Port(v.Port).Path(
 		constant.PipelinePath,
 	).Set(inventoryConstant.InstanceParameter, "charlie").SetInteger(

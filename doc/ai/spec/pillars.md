@@ -55,10 +55,9 @@ func Main() {
 func Run(o *option.Config, i face.Instrument) {
     r := i.Reporter()
     l := logger.New(context.Background())
-    lifecycle.New(
-        l,
-        lifecycle.WithWorker(worker.New(l, r)),
-        lifecycle.WithServer(
+    lifecycle.New(l).
+        WithWorker(worker.New(l, r)).
+        WithServer(
             server.New(
                 constant.Identity,
                 o.Address,
@@ -67,8 +66,8 @@ func Run(o *option.Config, i face.Instrument) {
                     Mount(r, i.Recorder(), o.Version, guard.New(m, o.ServiceTokens))
                 },
             ).WithMiddleware(web.RecoveryMiddleware(r)),
-        ),
-    ).RunUntilSignal()
+        ).
+        RunUntilSignal()
 }
 ```
 

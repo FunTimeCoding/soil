@@ -9,6 +9,7 @@ import (
 func Search() {
 	p := environment.Required(constant.JiraDefaultProjectNameEnvironment)
 	j := common.Jira()
+	defer j.Close()
 	f := constant.JiraFormat
 	searchAndy(j, p, f)
 	searchOwn(j, p)

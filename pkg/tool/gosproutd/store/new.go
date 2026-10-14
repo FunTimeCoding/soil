@@ -3,7 +3,6 @@ package store
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/store/choice"
-	"github.com/funtimecoding/soil/pkg/tool/gosproutd/store/cruise"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/store/decision"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/store/frame"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/store/seed"
@@ -23,7 +22,6 @@ func New(
 			decision.Stub(),
 			choice.Stub(),
 			turn.Stub(),
-			cruise.Stub(),
 		),
 	)
 

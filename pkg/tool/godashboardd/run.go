@@ -44,17 +44,13 @@ func Run(
 		l,
 	)
 	u := web.New(o.Board, v, c, authorizationClient(o).WithReporter(r))
-	lifecycle.New(
-		l,
-		lifecycle.WithWorker(worker.New(v, constant.RefreshInterval, l, r)),
-		lifecycle.WithServer(
-			server.New(
-				constant.Identity,
-				o.Address,
-				func(m *http.ServeMux) {
-					Mount(u, guard.New(m, o.ServiceTokens))
-				},
-			).WithMiddleware(u.Recovery(r)),
-		),
+	lifecycle.New(l).WithWorker(worker.New(v, constant.RefreshInterval, l, r)).WithServer(
+		server.New(
+			constant.Identity,
+			o.Address,
+			func(m *http.ServeMux) {
+				Mount(u, guard.New(m, o.ServiceTokens))
+			},
+		).WithMiddleware(u.Recovery(r)),
 	).RunUntilSignal()
 }

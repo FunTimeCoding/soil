@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/generated/server"
 )
 
@@ -25,9 +26,18 @@ func (s *Server) PostSessionLabel(
 	var change string
 	var e error
 
-	if value == "" {
+	switch {
+	case r.Body.Expect != nil:
+		change, e = s.service.SwapLabel(
+			r.Identifier,
+			from,
+			r.Body.Key,
+			*r.Body.Expect,
+			value,
+		)
+	case value == "":
 		change, e = s.service.DeleteLabel(r.Identifier, from, "", r.Body.Key)
-	} else {
+	default:
 		change, e = s.service.SetLabel(
 			r.Identifier,
 			from,
@@ -38,6 +48,12 @@ func (s *Server) PostSessionLabel(
 	}
 
 	if e != nil {
+		if conflict.Is(e) {
+			return server.PostSessionLabel409JSONResponse(
+				server.Error{Error: e.Error()},
+			), nil
+		}
+
 		return server.PostSessionLabel500JSONResponse(
 			*s.captureFail(e, constant.UnexpectedError),
 		), nil

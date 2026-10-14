@@ -36,38 +36,33 @@ func Run(
 	n := netbox.NewEnvironment(p.Client())
 	e := metric.New()
 	u := web.New(s, authorizationClient(o).WithReporter(r))
-	lifecycle.New(
-		l,
-		lifecycle.WithWorker(
-			worker.New(
-				s,
-				collectors(n, l, p.Client()),
-				lease.NewOptional(p.Client()),
-				n,
-				o.Interval,
-				o.Retention,
-				l,
-				e.Registry(),
-				r,
-			),
+	lifecycle.New(l).WithWorker(
+		worker.New(
+			s,
+			collectors(n, l, p.Client()),
+			lease.NewOptional(p.Client()),
+			n,
+			o.Interval,
+			o.Retention,
+			l,
+			e.Registry(),
+			r,
 		),
-		lifecycle.WithServer(
-			server.New(
-				constant.Identity,
-				o.MetricAddress,
-				func(x *http.ServeMux) {
-					x.Handle(webConstant.MetricsPath, e.Exporter())
-				},
-			),
+	).WithServer(
+		server.New(
+			constant.Identity,
+			o.MetricAddress,
+			func(x *http.ServeMux) {
+				x.Handle(webConstant.MetricsPath, e.Exporter())
+			},
 		),
-		lifecycle.WithServer(
-			server.New(
-				constant.Identity,
-				o.Address,
-				func(x *http.ServeMux) {
-					Mount(s, u, r, i.Recorder(), guard.New(x, o.ServiceTokens))
-				},
-			).WithMiddleware(u.Recovery(r)).WithProtected(),
-		),
+	).WithServer(
+		server.New(
+			constant.Identity,
+			o.Address,
+			func(x *http.ServeMux) {
+				Mount(s, u, r, i.Recorder(), guard.New(x, o.ServiceTokens))
+			},
+		).WithMiddleware(u.Recovery(r)).WithProtected(),
 	).RunUntilSignal()
 }

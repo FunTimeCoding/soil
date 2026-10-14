@@ -17,8 +17,7 @@ func NewSweeper(t *testing.T) *Sweeper {
 	s := NewStore(t)
 	r := memory.New()
 	index := mock_indexer.New()
-
-	return &Sweeper{
+	result := &Sweeper{
 		Sweeper: sweeper.New(
 			s,
 			notifier.New(c, "mattermost", r),
@@ -32,4 +31,7 @@ func NewSweeper(t *testing.T) *Sweeper {
 		Index: index,
 		Sink:  sink,
 	}
+	t.Cleanup(result.Sweeper.Close)
+
+	return result
 }

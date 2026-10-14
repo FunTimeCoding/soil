@@ -15,6 +15,7 @@ func PostFile(
 	password string,
 ) {
 	f := system.Open(name)
+	defer errors.LogReclose(f)
 	r := NewPostBytes(locator, f)
 	r.SetBasicAuth(user, password)
 	r.Header.Set(constant.ContentType, constant.Form)

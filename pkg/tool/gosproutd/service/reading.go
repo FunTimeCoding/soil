@@ -3,7 +3,6 @@ package service
 import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/types/target"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/pulse"
-	"time"
 )
 
 func (s *Service) Reading(
@@ -28,27 +27,7 @@ func (s *Service) Reading(
 		}
 	}
 
-	setting := s.store.CruiseSetting(session)
-	result.Mode = setting.Mode
-	result.Pace = time.Duration(setting.Pace)
-
-	if setting.PromotedAt != nil {
-		result.PromotedAt = *setting.PromotedAt
-	}
-
-	if target == nil {
-		return result
-	}
-
-	result.Closed = target.ClosedAt != nil
-	result.StateKnown = target.LastTurnEndAt != nil
-
-	if result.StateKnown {
-		result.IdleSince = *target.LastTurnEndAt
-		result.Idle = target.LastPromptAt == nil || target.LastTurnEndAt.After(
-			*target.LastPromptAt,
-		)
-	}
+	result.Closed = target != nil && target.ClosedAt != nil
 
 	return result
 }

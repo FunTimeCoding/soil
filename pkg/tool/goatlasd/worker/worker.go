@@ -23,4 +23,5 @@ type Worker struct {
 	metric     *metric.Metric
 	recovery   *recovery.Recovery
 	cancel     context.CancelFunc
+	context    context.Context
 }

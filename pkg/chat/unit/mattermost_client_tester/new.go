@@ -30,6 +30,7 @@ func New(
 			options...,
 		)...,
 	)
+	t.Cleanup(result.Client.Close)
 
 	return result
 }

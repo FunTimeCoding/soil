@@ -12,6 +12,7 @@ import (
 
 func Check(o *option.Request) {
 	c := github.NewEnvironment()
+	defer c.Close()
 	elements := collect(c, o)
 
 	if o.Notation {

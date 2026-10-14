@@ -4,13 +4,14 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/queue"
 )
 
 func (s *Service) SendNotification(
 	callsign string,
 	source string,
 	body string,
-	immediate bool,
+	d constant.Delivery,
 ) (bool, error) {
 	if f := entryRefusal(constant.QueueNotification, body); f != nil {
 		return false, f
@@ -35,21 +36,13 @@ func (s *Service) SendNotification(
 		return false, e
 	}
 
-	formatted := fmt.Sprintf("%s: %s", source, body)
-
-	if immediate {
-		return s.PushQueueImmediate(
+	return s.pushDelivery(
+		queue.New(
 			holder.Identifier,
 			callsign,
 			constant.QueueNotification,
-			formatted,
-		)
-	}
-
-	return false, s.PushQueue(
-		holder.Identifier,
-		callsign,
-		constant.QueueNotification,
-		formatted,
+			fmt.Sprintf("%s: %s", source, body),
+		),
+		d,
 	)
 }

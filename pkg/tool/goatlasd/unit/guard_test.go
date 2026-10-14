@@ -40,7 +40,7 @@ func TestGuard(t *testing.T) {
 			)
 		},
 	)
-	defer v.Stop()
+	defer v.Close()
 	v.VerifyBase(t)
 	v.VerifyInterface(t)
 	v.VerifyGuarded(t, "/api/placements")

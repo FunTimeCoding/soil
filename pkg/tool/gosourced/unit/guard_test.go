@@ -8,7 +8,7 @@ import (
 
 func TestGuard(t *testing.T) {
 	s := base.New(t, service_tester.ServiceTestdata("cross-package/src"))
-	defer s.Stop()
+	defer s.Close()
 	c := s.Server
 	c.VerifyBase(t)
 	c.VerifyModelContext(t)

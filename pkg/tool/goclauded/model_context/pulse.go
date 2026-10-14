@@ -28,7 +28,7 @@ func (s *Server) pulse(
 		c.SessionIdentifier,
 		c.Callsign,
 		line,
-		false,
+		constant.DeliveryQueued,
 	); f != nil {
 		return s.captureFail(f, soil.UnexpectedError)
 	}

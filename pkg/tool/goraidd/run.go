@@ -40,6 +40,7 @@ func Run(
 		),
 		environment.Required(raid_parserConstant.TokenEnvironment),
 	)
+	defer p.Close()
 	u := web.New(
 		s,
 		o.ElitePath,
@@ -47,24 +48,20 @@ func Run(
 		p,
 		authorizationClient(o).WithReporter(r),
 	)
-	lifecycle.New(
-		l,
-		lifecycle.WithWorker(s),
-		lifecycle.WithServer(
-			server.New(
-				constant.Identity,
-				o.Address,
-				func(m *http.ServeMux) {
-					Mount(
-						s,
-						o.OutputPath,
-						u,
-						r,
-						i.Recorder(),
-						guard.New(m, o.ServiceTokens),
-					)
-				},
-			).WithMiddleware(u.Recovery(r)),
-		),
+	lifecycle.New(l).WithWorker(s).WithServer(
+		server.New(
+			constant.Identity,
+			o.Address,
+			func(m *http.ServeMux) {
+				Mount(
+					s,
+					o.OutputPath,
+					u,
+					r,
+					i.Recorder(),
+					guard.New(m, o.ServiceTokens),
+				)
+			},
+		).WithMiddleware(u.Recovery(r)),
 	).RunUntilSignal()
 }

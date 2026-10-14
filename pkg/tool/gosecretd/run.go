@@ -25,26 +25,21 @@ func Run(
 	l := logger.New(context.Background())
 	c := openbao.NewEnvironment()
 	m := metric.New()
-	lifecycle.New(
-		l,
-		lifecycle.WithWorker(watch.New(c, m.Registry(), l, r)),
-		lifecycle.WithServer(
-			server.New(
-				constant.Identity,
-				o.MetricAddress,
-				func(x *http.ServeMux) {
-					x.Handle(webConstant.MetricsPath, m.Exporter())
-				},
-			),
+	lifecycle.New(l).WithWorker(watch.New(c, m.Registry(), l, r)).WithServer(
+		server.New(
+			constant.Identity,
+			o.MetricAddress,
+			func(x *http.ServeMux) {
+				x.Handle(webConstant.MetricsPath, m.Exporter())
+			},
 		),
-		lifecycle.WithServer(
-			server.New(
-				constant.Identity,
-				o.Address,
-				func(x *http.ServeMux) {
-					Mount(c, r, i.Recorder(), guard.New(x, o.ServiceTokens))
-				},
-			).WithMiddleware(web.RecoveryMiddleware(r)),
-		),
+	).WithServer(
+		server.New(
+			constant.Identity,
+			o.Address,
+			func(x *http.ServeMux) {
+				Mount(c, r, i.Recorder(), guard.New(x, o.ServiceTokens))
+			},
+		).WithMiddleware(web.RecoveryMiddleware(r)),
 	).RunUntilSignal()
 }

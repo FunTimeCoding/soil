@@ -20,7 +20,7 @@ func searchForm() gomponents.Node {
 			html.Name(constant.QueryField),
 			html.Class("search-input"),
 			gomponents.Attr("placeholder", "Search conversations..."),
-			gomponents.Attr("autocomplete", "off"),
+			gomponents.Attr("autocomplete", constant.AutocompleteOff),
 		),
 		html.Div(
 			html.Class("search-kinds"),

@@ -38,7 +38,7 @@ func TestSetupReturnsFalseSkipsApply(t *testing.T) {
 		memory.New(),
 	)
 	r.Start()
-	defer r.Stop()
+	defer r.Close()
 	time.Sleep(100 * time.Millisecond)
 	assert.False(t, applied)
 }
@@ -71,6 +71,7 @@ func TestDrainChannelsOnStop(t *testing.T) {
 		logger.New(context.Background()),
 		memory.New(),
 	)
+	defer r.Close()
 	r.Start()
 	response := make(chan *trigger.Result, 1)
 	e := r.Trigger(trigger.Request{Response: response})

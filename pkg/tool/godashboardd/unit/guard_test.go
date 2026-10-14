@@ -44,7 +44,7 @@ func TestGuard(t *testing.T) {
 			godashboardd.Mount(web.New(b, v, c, authorization), g)
 		},
 	)
-	defer s.Stop()
+	defer s.Close()
 	s.VerifyBase(t)
 	s.VerifyOpen(t, "/favicon.ico")
 }

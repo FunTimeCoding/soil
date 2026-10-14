@@ -9,6 +9,8 @@ const RuntimePreemptionSignal = syscall.Signal(23)
 const (
 	Tilde = "~"
 
+	TarFooterSize = 1024
+
 	Linux   = "linux"
 	Darwin  = "darwin"
 	Windows = "windows"

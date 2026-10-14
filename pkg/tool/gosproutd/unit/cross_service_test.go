@@ -10,62 +10,16 @@ import (
 	"time"
 )
 
-func TestArmedCruiseWakesAnIdleSession(t *testing.T) {
+func TestSettledAnswerOfALiveSessionIsSent(t *testing.T) {
 	s := cross_service_tester.New(t)
 	a := s.Goclauded.NewSession(t)
 	defer a.Close()
 	a.CheckLive()
-	s.Goclauded.Store.Advance(time.Minute)
-	s.EndTurn(a.UUID)
-	s.AnswerOne(stringsConstant.LowerAlfa)
-	s.Service.SetCruise(stringsConstant.LowerAlfa, constant.CruiseOn, 0)
-	s.Advance(constant.QuietWindow + time.Minute)
-	assert.String(
-		t,
-		"immediate",
-		string(
-			pulse.Decide(
-				s.Service.Reading(stringsConstant.LowerAlfa, s.Target(a.UUID)),
-				s.Now(),
-			),
-		),
-	)
-}
-
-func TestDisarmedCruiseLeavesTheSameStateQueued(t *testing.T) {
-	s := cross_service_tester.New(t)
-	a := s.Goclauded.NewSession(t)
-	defer a.Close()
-	a.CheckLive()
-	s.Goclauded.Store.Advance(time.Minute)
-	s.EndTurn(a.UUID)
 	s.AnswerOne(stringsConstant.LowerAlfa)
 	s.Advance(constant.QuietWindow + time.Minute)
 	assert.String(
 		t,
-		"queue",
-		string(
-			pulse.Decide(
-				s.Service.Reading(stringsConstant.LowerAlfa, s.Target(a.UUID)),
-				s.Now(),
-			),
-		),
-	)
-}
-
-func TestArmedCruiseLeavesAWorkingSessionAlone(t *testing.T) {
-	s := cross_service_tester.New(t)
-	a := s.Goclauded.NewSession(t)
-	defer a.Close()
-	s.EndTurn(a.UUID)
-	s.Goclauded.Store.Advance(time.Minute)
-	a.CheckLive()
-	s.AnswerOne(stringsConstant.LowerAlfa)
-	s.Service.SetCruise(stringsConstant.LowerAlfa, constant.CruiseOn, 0)
-	s.Advance(constant.QuietWindow + time.Minute)
-	assert.String(
-		t,
-		"queue",
+		"send",
 		string(
 			pulse.Decide(
 				s.Service.Reading(stringsConstant.LowerAlfa, s.Target(a.UUID)),
@@ -83,7 +37,6 @@ func TestPollingClearsTheBacklogSoNothingFires(t *testing.T) {
 	s.Goclauded.Store.Advance(time.Minute)
 	s.EndTurn(a.UUID)
 	s.AnswerOne(stringsConstant.LowerAlfa)
-	s.Service.SetCruise(stringsConstant.LowerAlfa, constant.CruiseOn, 0)
 	s.Service.MarkSeen(stringsConstant.LowerAlfa)
 	s.Advance(constant.QuietWindow + time.Minute)
 	assert.String(

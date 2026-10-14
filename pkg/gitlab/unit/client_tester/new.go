@@ -18,8 +18,7 @@ func New(
 	configure(m)
 	s := httptest.NewServer(m)
 	t.Cleanup(s.Close)
-
-	return &Tester{
+	result := &Tester{
 		t: t,
 		Client: gitlab.New(
 			web.TrimScheme(s.URL),
@@ -27,4 +26,7 @@ func New(
 			gitlab.WithInsecure(),
 		),
 	}
+	t.Cleanup(result.Client.Close)
+
+	return result
 }

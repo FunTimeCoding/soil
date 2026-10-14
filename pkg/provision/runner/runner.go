@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/provision/types/trigger"
 	"github.com/funtimecoding/soil/pkg/provision/types/update"
+	"sync"
 )
 
 type Runner struct {
@@ -29,4 +30,8 @@ type Runner struct {
 	trigger         chan trigger.Request
 	sync            chan update.Request
 	stop            chan struct{}
+	mutex           sync.Mutex
+	started         bool
+	closed          bool
+	finished        chan struct{}
 }

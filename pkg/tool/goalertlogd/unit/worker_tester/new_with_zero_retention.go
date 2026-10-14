@@ -28,6 +28,8 @@ func NewWithZeroRetention(t *testing.T) *Tester {
 		0,
 		nil,
 	)
+	result := &Tester{Store: s, Worker: w, MockClient: c}
+	t.Cleanup(result.Worker.Close)
 
-	return &Tester{Store: s, Worker: w, MockClient: c}
+	return result
 }

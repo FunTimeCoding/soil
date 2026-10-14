@@ -31,5 +31,6 @@ func New(
 		trigger:         make(chan trigger.Request, 1),
 		sync:            make(chan update.Request, 1),
 		stop:            make(chan struct{}),
+		finished:        make(chan struct{}),
 	}
 }

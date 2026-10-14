@@ -44,6 +44,7 @@ func Run(
 	l := logger.New(context.Background())
 	n := notifier.New()
 	s := store.New(lite.New(l, o.LitePath), universal)
+	defer s.Close()
 	h := claude.New().Base()
 	sweep.Run(h)
 	p := stall_client.New().Build()
@@ -88,6 +89,7 @@ func Run(
 	findingGauge := gauge.New(v, l, m.Registry())
 	findingGauge.Poll()
 	gaugeTicker := ticker.New(5*time.Minute, findingGauge.Poll, rec)
+	cruiseTicker := ticker.New(constant.CruiseInterval, v.ReleaseCruise, rec)
 	w := watcher.New(v, l, r, h)
 	address := o.Address
 	t := i.Recorder()
@@ -110,10 +112,10 @@ func Run(
 		WithMiddleware(middleware).
 		WithProfiling().
 		WithDefaultCertificate()
-	options := []lifecycle.Option{
-		lifecycle.WithWorker(w),
-		lifecycle.WithServer(srv),
-		lifecycle.WithServer(
+	b := lifecycle.New(l).
+		WithWorker(w).
+		WithServer(srv).
+		WithServer(
 			server.New(
 				constant.Identity,
 				o.MetricAddress,
@@ -121,28 +123,20 @@ func Run(
 					x.Handle(webConstant.MetricsPath, m.Exporter())
 				},
 			),
-		),
-		lifecycle.WithWorker(timeoutTicker),
-		lifecycle.WithWorker(memoryTicker),
-		lifecycle.WithWorker(gaugeTicker),
-		lifecycle.WithWorker(v),
-	}
+		).
+		WithWorker(timeoutTicker).
+		WithWorker(memoryTicker).
+		WithWorker(gaugeTicker).
+		WithWorker(cruiseTicker).
+		WithWorker(v)
 
 	if environment.Exists(constant.MonitorUsageEnvironment) {
-		options = append(
-			options,
-			lifecycle.WithWorker(ticker.New(time.Minute, v.PollUsage, rec)),
-		)
+		b.WithWorker(ticker.New(time.Minute, v.PollUsage, rec))
 	}
 
 	if v.UtilizationFallback() {
-		options = append(
-			options,
-			lifecycle.WithWorker(
-				ticker.New(5*time.Minute, v.PollUtilization, rec),
-			),
-		)
+		b.WithWorker(ticker.New(5*time.Minute, v.PollUtilization, rec))
 	}
 
-	lifecycle.New(l, options...).RunUntilSignal()
+	b.RunUntilSignal()
 }

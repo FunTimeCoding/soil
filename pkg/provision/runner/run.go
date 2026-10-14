@@ -9,6 +9,7 @@ import (
 )
 
 func (r *Runner) run() {
+	defer close(r.finished)
 	defer r.drainChannels()
 
 	if r.setupFunction != nil && !r.setupFunction() {
@@ -33,7 +34,7 @@ func (r *Runner) run() {
 	cleanupTicker := time.NewTicker(24 * time.Hour)
 	defer cleanupTicker.Stop()
 
-	for {
+	for !r.stopped() {
 		select {
 		case <-r.stop:
 			return

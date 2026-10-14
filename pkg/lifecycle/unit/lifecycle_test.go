@@ -20,10 +20,10 @@ import (
 func TestRunWorkerStartOrder(t *testing.T) {
 	var log []string
 	lifecycle.New(
-		logger.New(context.Background()),
-		lifecycle.WithWorker(mock_worker.New("a", &log)),
-		lifecycle.WithWorker(mock_worker.New("b", &log)),
-		lifecycle.WithWorker(mock_worker.New("c", &log)),
+		logger.New(context.Background())).WithWorker(mock_worker.New("a", &log)).WithWorker(
+		mock_worker.New("b", &log),
+	).WithWorker(
+		mock_worker.New("c", &log),
 	).Run()
 	assert.Count(t, 3, log)
 	assert.String(t, "start:a", log[0])
@@ -33,15 +33,13 @@ func TestRunWorkerStartOrder(t *testing.T) {
 
 func TestStopWorkerReverseOrder(t *testing.T) {
 	var log []string
-	l := lifecycle.New(
-		logger.New(context.Background()),
-		lifecycle.WithWorker(mock_worker.New("a", &log)),
-		lifecycle.WithWorker(mock_worker.New("b", &log)),
-		lifecycle.WithWorker(mock_worker.New("c", &log)),
-	)
+	l := lifecycle.New(logger.New(context.Background())).
+		WithWorker(mock_worker.New("a", &log)).
+		WithWorker(mock_worker.New("b", &log)).
+		WithWorker(mock_worker.New("c", &log))
 	l.Run()
 	log = nil
-	l.Stop()
+	l.Close()
 	assert.Count(t, 3, log)
 	assert.String(t, "stop:c", log[0])
 	assert.String(t, "stop:b", log[1])
@@ -53,23 +51,20 @@ func TestRunEmpty(t *testing.T) {
 }
 
 func TestStopEmpty(t *testing.T) {
-	lifecycle.New(logger.New(context.Background())).Stop()
+	lifecycle.New(logger.New(context.Background())).Close()
 }
 
 func TestRunServerResponds(t *testing.T) {
 	p, n := system.ClaimPort()
-	l := lifecycle.New(
-		logger.New(context.Background()),
-		lifecycle.WithServer(
-			server.New(
-				identity.Example(),
-				"",
-				func(_ *http.ServeMux) {},
-			).WithListener(n),
-		),
+	l := lifecycle.New(logger.New(context.Background())).WithServer(
+		server.New(
+			identity.Example(),
+			"",
+			func(_ *http.ServeMux) {},
+		).WithListener(n),
 	)
 	l.Run()
-	defer l.Stop()
+	defer l.Close()
 	o := stall_client.New().Build()
 	defer o.Close()
 	c := o.Client()
@@ -84,18 +79,15 @@ func TestRunServerResponds(t *testing.T) {
 
 func TestRunServerVersion(t *testing.T) {
 	p, n := system.ClaimPort()
-	l := lifecycle.New(
-		logger.New(context.Background()),
-		lifecycle.WithServer(
-			server.New(
-				identity.Example(),
-				"",
-				func(_ *http.ServeMux) {},
-			).WithListener(n),
-		),
+	l := lifecycle.New(logger.New(context.Background())).WithServer(
+		server.New(
+			identity.Example(),
+			"",
+			func(_ *http.ServeMux) {},
+		).WithListener(n),
 	)
 	l.Run()
-	defer l.Stop()
+	defer l.Close()
 	o := stall_client.New().Build()
 	defer o.Close()
 	assert.Listen(t, p)
@@ -111,48 +103,42 @@ func TestRunServerVersion(t *testing.T) {
 
 func TestStopServerShutsDown(t *testing.T) {
 	p, n := system.ClaimPort()
-	l := lifecycle.New(
-		logger.New(context.Background()),
-		lifecycle.WithServer(
-			server.New(
-				identity.Example(),
-				"",
-				func(_ *http.ServeMux) {},
-			).WithListener(n),
-		),
+	l := lifecycle.New(logger.New(context.Background())).WithServer(
+		server.New(
+			identity.Example(),
+			"",
+			func(_ *http.ServeMux) {},
+		).WithListener(n),
 	)
 	l.Run()
 	assert.Listen(t, p)
-	l.Stop()
+	l.Close()
 	assert.NotListen(t, p)
 }
 
 func TestRunServerMiddleware(t *testing.T) {
 	p := system.FindUnusedPort(19300)
-	l := lifecycle.New(
-		logger.New(context.Background()),
-		lifecycle.WithServer(
-			server.New(
-				identity.Example(),
-				fmt.Sprintf(":%d", p),
-				func(_ *http.ServeMux) {},
-			).WithMiddleware(
-				func(h http.Handler) http.Handler {
-					return http.HandlerFunc(
-						func(
-							w http.ResponseWriter,
-							r *http.Request,
-						) {
-							w.Header().Set("X-Test", "middleware")
-							h.ServeHTTP(w, r)
-						},
-					)
-				},
-			),
+	l := lifecycle.New(logger.New(context.Background())).WithServer(
+		server.New(
+			identity.Example(),
+			fmt.Sprintf(":%d", p),
+			func(_ *http.ServeMux) {},
+		).WithMiddleware(
+			func(h http.Handler) http.Handler {
+				return http.HandlerFunc(
+					func(
+						w http.ResponseWriter,
+						r *http.Request,
+					) {
+						w.Header().Set("X-Test", "middleware")
+						h.ServeHTTP(w, r)
+					},
+				)
+			},
 		),
 	)
 	l.Run()
-	defer l.Stop()
+	defer l.Close()
 	o := stall_client.New().Build()
 	defer o.Close()
 	c := o.Client()
@@ -168,19 +154,15 @@ func TestRunMixedOrder(t *testing.T) {
 	var log []string
 	p, n := system.ClaimPort()
 	l := lifecycle.New(
-		logger.New(context.Background()),
-		lifecycle.WithWorker(mock_worker.New("a", &log)),
-		lifecycle.WithServer(
-			server.New(
-				identity.Example(),
-				"",
-				func(_ *http.ServeMux) {
-					log = append(log, "start:server")
-				},
-			).WithListener(n),
-		),
-		lifecycle.WithWorker(mock_worker.New("b", &log)),
-	)
+		logger.New(context.Background())).WithWorker(mock_worker.New("a", &log)).WithServer(
+		server.New(
+			identity.Example(),
+			"",
+			func(_ *http.ServeMux) {
+				log = append(log, "start:server")
+			},
+		).WithListener(n),
+	).WithWorker(mock_worker.New("b", &log))
 	l.Run()
 	assert.Count(t, 3, log)
 	assert.String(t, "start:a", log[0])
@@ -188,7 +170,7 @@ func TestRunMixedOrder(t *testing.T) {
 	assert.String(t, "start:b", log[2])
 	assert.Listen(t, p)
 	log = nil
-	l.Stop()
+	l.Close()
 	assert.Count(t, 2, log)
 	assert.String(t, "stop:b", log[0])
 	assert.String(t, "stop:a", log[1])

@@ -10,6 +10,7 @@ func closes(
 	p *packages.Package,
 	body *ast.BlockStmt,
 	o *types.Var,
+	s *Summaries,
 ) bool {
 	var result bool
 	ast.Inspect(
@@ -21,10 +22,9 @@ func closes(
 
 			switch v := n.(type) {
 			case *ast.SelectorExpr:
-				result = v.Sel.Name == "Close" &&
-					rootIdentifier(p, v.X) == o
+				result = s.isReleasing(p, v) && s.ownerRoot(p, v.X) == o
 			case *ast.CallExpr:
-				result = isCloseHelperCall(p, v, o)
+				result = s.disposesArgument(p, v, o)
 			}
 
 			return !result

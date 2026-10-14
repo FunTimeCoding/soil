@@ -20,5 +20,6 @@ func New(
 		kinds: kinds,
 		sums:  make(map[string]*file_sum.Sum),
 		memo:  make(map[string]*memo_entry.Entry),
+		build: extractorFingerprint(),
 	}
 }

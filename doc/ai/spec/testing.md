@@ -70,10 +70,9 @@ Spin up a real lifecycle with HTTP server on a dynamic port:
 ```go
 port := system.FindUnusedPort(19400)
 address := fmt.Sprintf(":%d", port)
-l := lifecycle.New(
-    logger.New(context.Background()),
-    lifecycle.WithWorker(p),
-    lifecycle.WithServer(
+l := lifecycle.New(logger.New(context.Background())).
+    WithWorker(w).
+    WithServer(
         server.New(
             constant.Identity,
             address,
@@ -81,10 +80,9 @@ l := lifecycle.New(
                 m.HandleFunc("/api/alerts", route.Alerts(s))
             },
         ),
-    ),
-)
+    )
 l.Run()
-defer l.Stop()
+defer l.Close()
 p := stall_client.New().Build()
 defer p.Close()
 assert.Listen(t, port)

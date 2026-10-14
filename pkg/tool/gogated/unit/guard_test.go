@@ -38,7 +38,7 @@ func TestGuard(t *testing.T) {
 			)
 		},
 	)
-	defer v.Stop()
+	defer v.Close()
 	v.VerifyBase(t)
 	v.VerifyOpen(t, "/jwks")
 	v.VerifyOpenPost(t, "/token")

@@ -31,7 +31,7 @@ func TestMarkServerSessionEndFiresOnClose(t *testing.T) {
 			server.New(s).Setup(g)
 		},
 	)
-	defer v.Stop()
+	defer v.Close()
 	c := v.Connect(t)
 	session := c.SessionIdentifier()
 	assert.True(t, session != "")

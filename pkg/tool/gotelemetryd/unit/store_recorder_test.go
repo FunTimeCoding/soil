@@ -13,6 +13,7 @@ import (
 
 func TestStoreRecorder(t *testing.T) {
 	s := store.New(lite.NewMemory())
+	defer s.Close()
 	r := store_recorder.New(s, memory.New())
 	e := record.NewBaseline(
 		"GetSummary",

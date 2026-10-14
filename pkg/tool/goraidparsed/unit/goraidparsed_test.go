@@ -18,26 +18,23 @@ import (
 
 func TestRunLifecycle(t *testing.T) {
 	port, n := system.ClaimPort()
-	l := lifecycle.New(
-		logger.New(context.Background()),
-		lifecycle.WithServer(
-			lifecycleServer.New(
-				identity.Example(),
-				"",
-				func(m *http.ServeMux) {
-					generated.HandlerFromMux(
-						generated.NewStrictHandler(
-							server.New("", "", t.TempDir(), nil, nil),
-							nil,
-						),
-						m,
-					)
-				},
-			).WithListener(n),
-		),
+	l := lifecycle.New(logger.New(context.Background())).WithServer(
+		lifecycleServer.New(
+			identity.Example(),
+			"",
+			func(m *http.ServeMux) {
+				generated.HandlerFromMux(
+					generated.NewStrictHandler(
+						server.New("", "", t.TempDir(), nil, nil),
+						nil,
+					),
+					m,
+				)
+			},
+		).WithListener(n),
 	)
 	l.Run()
-	defer l.Stop()
+	defer l.Close()
 	p := stall_client.New().Build()
 	defer p.Close()
 	c := p.Client()

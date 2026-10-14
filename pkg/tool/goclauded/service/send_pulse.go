@@ -1,12 +1,15 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+import (
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/queue"
+)
 
 func (s *Service) SendPulse(
 	sessionIdentifier string,
 	fromName string,
 	body string,
-	immediate bool,
+	d constant.Delivery,
 ) (bool, error) {
 	if fromName == "" {
 		if f := entryRefusal(constant.QueuePulse, body); f != nil {
@@ -26,20 +29,14 @@ func (s *Service) SendPulse(
 		}
 
 		if callsign != "" {
-			if immediate {
-				return s.PushQueueImmediate(
+			return s.pushDelivery(
+				queue.New(
 					sessionIdentifier,
 					callsign,
 					constant.QueuePulse,
 					body,
-				)
-			}
-
-			return false, s.PushQueue(
-				sessionIdentifier,
-				callsign,
-				constant.QueuePulse,
-				body,
+				),
+				d,
 			)
 		}
 	}

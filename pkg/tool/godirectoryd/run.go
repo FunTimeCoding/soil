@@ -24,16 +24,13 @@ func Run(
 	l := logger.New(context.Background())
 	s := service.New(directory.NewEnvironment())
 	u := web.New(s, authorizationClient(o).WithReporter(r))
-	lifecycle.New(
-		l,
-		lifecycle.WithServer(
-			server.New(
-				constant.Identity,
-				o.Address,
-				func(m *http.ServeMux) {
-					Mount(s, u, r, t, guard.New(m, o.ServiceTokens))
-				},
-			).WithMiddleware(u.Recovery(r)),
-		),
+	lifecycle.New(l).WithServer(
+		server.New(
+			constant.Identity,
+			o.Address,
+			func(m *http.ServeMux) {
+				Mount(s, u, r, t, guard.New(m, o.ServiceTokens))
+			},
+		).WithMiddleware(u.Recovery(r)),
 	).RunUntilSignal()
 }

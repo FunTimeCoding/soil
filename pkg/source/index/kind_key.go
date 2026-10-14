@@ -8,12 +8,14 @@ import (
 	"reflect"
 )
 
-func kindKey(
+func (w *Workspace) kindKey(
 	key string,
 	k *kind.Kind,
 ) string {
 	sum := sha256.Sum256(
-		[]byte(join.Space(key, k.Name, Shape(reflect.TypeOf(k.Value())))),
+		[]byte(
+			join.Space(key, k.Name, Shape(reflect.TypeOf(k.Value())), w.build),
+		),
 	)
 
 	return hex.EncodeToString(sum[:])

@@ -14,4 +14,6 @@ type Tester struct {
 	remote    string
 	applied   []*apply_call.Call
 	mutex     sync.Mutex
+	gate      chan struct{}
+	release   sync.Once
 }

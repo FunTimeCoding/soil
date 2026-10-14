@@ -17,6 +17,48 @@ import (
 	"github.com/oapi-codegen/runtime"
 )
 
+// Defines values for CruiseRequestMode.
+const (
+	Off   CruiseRequestMode = "off"
+	On    CruiseRequestMode = "on"
+	Paced CruiseRequestMode = "paced"
+)
+
+// Valid indicates whether the value is a known member of the CruiseRequestMode enum.
+func (e CruiseRequestMode) Valid() bool {
+	switch e {
+	case Off:
+		return true
+	case On:
+		return true
+	case Paced:
+		return true
+	default:
+		return false
+	}
+}
+
+// Defines values for Delivery.
+const (
+	Cruise    Delivery = "cruise"
+	Immediate Delivery = "immediate"
+	Queued    Delivery = "queued"
+)
+
+// Valid indicates whether the value is a known member of the Delivery enum.
+func (e Delivery) Valid() bool {
+	switch e {
+	case Cruise:
+		return true
+	case Immediate:
+		return true
+	case Queued:
+		return true
+	default:
+		return false
+	}
+}
+
 // AnnounceRequest defines model for AnnounceRequest.
 type AnnounceRequest struct {
 	Callsign string    `json:"callsign"`
@@ -95,6 +137,22 @@ type CoverageTool struct {
 	Registered  bool    `json:"registered"`
 }
 
+// CruiseRequest defines model for CruiseRequest.
+type CruiseRequest struct {
+	Mode        CruiseRequestMode `json:"mode"`
+	PaceMinutes *int              `json:"pace_minutes,omitempty"`
+}
+
+// CruiseRequestMode defines model for CruiseRequest.Mode.
+type CruiseRequestMode string
+
+// CruiseResponse defines model for CruiseResponse.
+type CruiseResponse struct {
+	Mode        string     `json:"mode"`
+	PaceMinutes *int       `json:"pace_minutes,omitempty"`
+	PromotedAt  *time.Time `json:"promoted_at,omitempty"`
+}
+
 // DeleteReceiptResponse defines model for DeleteReceiptResponse.
 type DeleteReceiptResponse struct {
 	Completions   int       `json:"completions"`
@@ -113,6 +171,9 @@ type DeleteReceiptResponse struct {
 	TrackerStates int       `json:"tracker_states"`
 	Transcript    *string   `json:"transcript,omitempty"`
 }
+
+// Delivery queued waits for the next prompt, immediate wakes the session now, cruise follows the session's cruise setting. Absent means queued.
+type Delivery string
 
 // DeliveryResponse defines model for DeliveryResponse.
 type DeliveryResponse struct {
@@ -186,6 +247,9 @@ type LabelEntry struct {
 
 // LabelRequest defines model for LabelRequest.
 type LabelRequest struct {
+	// Expect Write only while the label currently holds this value; empty means only while the key is absent. Omitted writes unconditionally. A failed condition answers 409.
+	Expect *string `json:"expect,omitempty"`
+
 	// From Actor name for the event log.
 	From *string `json:"from,omitempty"`
 	Key  string  `json:"key"`
@@ -234,10 +298,12 @@ type ModelUsage struct {
 
 // NotifyRequest defines model for NotifyRequest.
 type NotifyRequest struct {
-	Body      string `json:"body"`
-	Callsign  string `json:"callsign"`
-	Immediate *bool  `json:"immediate,omitempty"`
-	Source    string `json:"source"`
+	Body     string `json:"body"`
+	Callsign string `json:"callsign"`
+
+	// Delivery queued waits for the next prompt, immediate wakes the session now, cruise follows the session's cruise setting. Absent means queued.
+	Delivery *Delivery `json:"delivery,omitempty"`
+	Source   string    `json:"source"`
 }
 
 // PeekEntry defines model for PeekEntry.
@@ -264,8 +330,10 @@ type PulseEntry struct {
 
 // PulseRequest defines model for PulseRequest.
 type PulseRequest struct {
-	Body      string `json:"body"`
-	Immediate *bool  `json:"immediate,omitempty"`
+	Body string `json:"body"`
+
+	// Delivery queued waits for the next prompt, immediate wakes the session now, cruise follows the session's cruise setting. Absent means queued.
+	Delivery *Delivery `json:"delivery,omitempty"`
 }
 
 // QueueEntry defines model for QueueEntry.
@@ -335,10 +403,12 @@ type SearchResponse struct {
 
 // SendRequest defines model for SendRequest.
 type SendRequest struct {
-	Body      string  `json:"body"`
-	Callsign  string  `json:"callsign"`
-	Immediate *bool   `json:"immediate,omitempty"`
-	To        *string `json:"to,omitempty"`
+	Body     string `json:"body"`
+	Callsign string `json:"callsign"`
+
+	// Delivery queued waits for the next prompt, immediate wakes the session now, cruise follows the session's cruise setting. Absent means queued.
+	Delivery *Delivery `json:"delivery,omitempty"`
+	To       *string   `json:"to,omitempty"`
 }
 
 // SessionDetail defines model for SessionDetail.
@@ -357,6 +427,7 @@ type SessionDetail struct {
 	Preview       *string       `json:"preview,omitempty"`
 	Slug          *string       `json:"slug,omitempty"`
 	Timestamp     string        `json:"timestamp"`
+	TurnCount     int           `json:"turnCount"`
 	WorkDirectory *string       `json:"workDirectory,omitempty"`
 }
 
@@ -606,6 +677,9 @@ type PostEditSessionJSONRequestBody = EditSessionRequest
 // PostSessionContextJSONRequestBody defines body for PostSessionContext for application/json ContentType.
 type PostSessionContextJSONRequestBody = ContextRequest
 
+// PostSessionCruiseJSONRequestBody defines body for PostSessionCruise for application/json ContentType.
+type PostSessionCruiseJSONRequestBody = CruiseRequest
+
 // PostSessionLabelJSONRequestBody defines body for PostSessionLabel for application/json ContentType.
 type PostSessionLabelJSONRequestBody = LabelRequest
 
@@ -800,6 +874,17 @@ type ClientInterface interface {
 	// PostSessionContext performs a POST /api/sessions/{identifier}/context (the `PostSessionContext` operationId) request.
 	// Takes a body of the `application/json` content type.
 	PostSessionContext(ctx context.Context, identifier string, body PostSessionContextJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetSessionCruise performs a GET /api/sessions/{identifier}/cruise (the `GetSessionCruise` operationId) request.
+	GetSessionCruise(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostSessionCruiseWithBody performs a POST /api/sessions/{identifier}/cruise (the `PostSessionCruise` operationId) request,
+	// with any type of body and a specified content type.
+	PostSessionCruiseWithBody(ctx context.Context, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// PostSessionCruise performs a POST /api/sessions/{identifier}/cruise (the `PostSessionCruise` operationId) request.
+	// Takes a body of the `application/json` content type.
+	PostSessionCruise(ctx context.Context, identifier string, body PostSessionCruiseJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// GetSessionDetail performs a GET /api/sessions/{identifier}/detail (the `GetSessionDetail` operationId) request.
 	GetSessionDetail(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -1284,6 +1369,47 @@ func (c *Client) PostSessionContextWithBody(ctx context.Context, identifier stri
 // Takes a body of the `application/json` content type.
 func (c *Client) PostSessionContext(ctx context.Context, identifier string, body PostSessionContextJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewPostSessionContextRequest(c.Server, identifier, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetSessionCruise performs a GET /api/sessions/{identifier}/cruise (the `GetSessionCruise` operationId) request.
+func (c *Client) GetSessionCruise(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetSessionCruiseRequest(c.Server, identifier)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// PostSessionCruiseWithBody performs a POST /api/sessions/{identifier}/cruise (the `PostSessionCruise` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) PostSessionCruiseWithBody(ctx context.Context, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostSessionCruiseRequestWithBody(c.Server, identifier, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// PostSessionCruise performs a POST /api/sessions/{identifier}/cruise (the `PostSessionCruise` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) PostSessionCruise(ctx context.Context, identifier string, body PostSessionCruiseJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewPostSessionCruiseRequest(c.Server, identifier, body)
 	if err != nil {
 		return nil, err
 	}
@@ -2687,6 +2813,87 @@ func NewPostSessionContextRequestWithBody(server string, identifier string, cont
 	return req, nil
 }
 
+// NewGetSessionCruiseRequest constructs an http.Request for the GetSessionCruise method
+func NewGetSessionCruiseRequest(server string, identifier string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "identifier", identifier, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/sessions/%s/cruise", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewPostSessionCruiseRequest calls the generic PostSessionCruise builder with application/json body
+func NewPostSessionCruiseRequest(server string, identifier string, body PostSessionCruiseJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewPostSessionCruiseRequestWithBody(server, identifier, "application/json", bodyReader)
+}
+
+// NewPostSessionCruiseRequestWithBody constructs an http.Request for the PostSessionCruise method, with any body, and a specified content type
+func NewPostSessionCruiseRequestWithBody(server string, identifier string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "identifier", identifier, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/sessions/%s/cruise", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
 // NewGetSessionDetailRequest constructs an http.Request for the GetSessionDetail method
 func NewGetSessionDetailRequest(server string, identifier string) (*http.Request, error) {
 	var err error
@@ -3525,6 +3732,21 @@ type ClientWithResponsesInterface interface {
 	// PostSessionContextWithResponse performs a POST /api/sessions/{identifier}/context (the `PostSessionContext` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	PostSessionContextWithResponse(ctx context.Context, identifier string, body PostSessionContextJSONRequestBody, reqEditors ...RequestEditorFn) (*PostSessionContextResponse, error)
+
+	// GetSessionCruiseWithResponse performs a GET /api/sessions/{identifier}/cruise (the `GetSessionCruise` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetSessionCruiseWithResponse(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*GetSessionCruiseResponse, error)
+
+	// PostSessionCruiseWithBodyWithResponse performs a POST /api/sessions/{identifier}/cruise (the `PostSessionCruise` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	PostSessionCruiseWithBodyWithResponse(ctx context.Context, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostSessionCruiseResponse, error)
+
+	// PostSessionCruiseWithResponse performs a POST /api/sessions/{identifier}/cruise (the `PostSessionCruise` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	PostSessionCruiseWithResponse(ctx context.Context, identifier string, body PostSessionCruiseJSONRequestBody, reqEditors ...RequestEditorFn) (*PostSessionCruiseResponse, error)
 
 	// GetSessionDetailWithResponse performs a GET /api/sessions/{identifier}/detail (the `GetSessionDetail` operationId) request.
 	//
@@ -4776,6 +4998,109 @@ func (r PostSessionContextResponse) ContentType() string {
 	return ""
 }
 
+type GetSessionCruiseResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *CruiseResponse
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetSessionCruiseResponse) GetJSON200() *CruiseResponse {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetSessionCruiseResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetSessionCruiseResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetSessionCruiseResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetSessionCruiseResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetSessionCruiseResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type PostSessionCruiseResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *CruiseResponse
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r PostSessionCruiseResponse) GetJSON200() *CruiseResponse {
+	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r PostSessionCruiseResponse) GetJSON400() *Error {
+	return r.JSON400
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r PostSessionCruiseResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r PostSessionCruiseResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r PostSessionCruiseResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r PostSessionCruiseResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r PostSessionCruiseResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type GetSessionDetailResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -4939,6 +5264,8 @@ type PostSessionLabelResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *LabelResponse
+	// JSON409 the response for an HTTP 409 `application/json` response
+	JSON409 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -4946,6 +5273,11 @@ type PostSessionLabelResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r PostSessionLabelResponse) GetJSON200() *LabelResponse {
 	return r.JSON200
+}
+
+// GetJSON409 returns the response for an HTTP 409 `application/json` response
+func (r PostSessionLabelResponse) GetJSON409() *Error {
+	return r.JSON409
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -5867,6 +6199,39 @@ func (c *ClientWithResponses) PostSessionContextWithResponse(ctx context.Context
 		return nil, err
 	}
 	return ParsePostSessionContextResponse(rsp)
+}
+
+// GetSessionCruiseWithResponse performs a GET /api/sessions/{identifier}/cruise (the `GetSessionCruise` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetSessionCruiseWithResponse(ctx context.Context, identifier string, reqEditors ...RequestEditorFn) (*GetSessionCruiseResponse, error) {
+	rsp, err := c.GetSessionCruise(ctx, identifier, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetSessionCruiseResponse(rsp)
+}
+
+// PostSessionCruiseWithBodyWithResponse performs a POST /api/sessions/{identifier}/cruise (the `PostSessionCruise` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) PostSessionCruiseWithBodyWithResponse(ctx context.Context, identifier string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*PostSessionCruiseResponse, error) {
+	rsp, err := c.PostSessionCruiseWithBody(ctx, identifier, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostSessionCruiseResponse(rsp)
+}
+
+// PostSessionCruiseWithResponse performs a POST /api/sessions/{identifier}/cruise (the `PostSessionCruise` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) PostSessionCruiseWithResponse(ctx context.Context, identifier string, body PostSessionCruiseJSONRequestBody, reqEditors ...RequestEditorFn) (*PostSessionCruiseResponse, error) {
+	rsp, err := c.PostSessionCruise(ctx, identifier, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParsePostSessionCruiseResponse(rsp)
 }
 
 // GetSessionDetailWithResponse performs a GET /api/sessions/{identifier}/detail (the `GetSessionDetail` operationId) request.
@@ -6887,6 +7252,79 @@ func ParsePostSessionContextResponse(rsp *http.Response) (*PostSessionContextRes
 	return response, nil
 }
 
+// ParseGetSessionCruiseResponse parses an HTTP response from a GetSessionCruiseWithResponse call
+func ParseGetSessionCruiseResponse(rsp *http.Response) (*GetSessionCruiseResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetSessionCruiseResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest CruiseResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParsePostSessionCruiseResponse parses an HTTP response from a PostSessionCruiseWithResponse call
+func ParsePostSessionCruiseResponse(rsp *http.Response) (*PostSessionCruiseResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &PostSessionCruiseResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest CruiseResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseGetSessionDetailResponse parses an HTTP response from a GetSessionDetailWithResponse call
 func ParseGetSessionDetailResponse(rsp *http.Response) (*GetSessionDetailResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -7020,6 +7458,13 @@ func ParsePostSessionLabelResponse(rsp *http.Response) (*PostSessionLabelRespons
 			return nil, err
 		}
 		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON409 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse

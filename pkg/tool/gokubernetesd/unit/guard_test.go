@@ -28,7 +28,7 @@ func TestGuard(t *testing.T) {
 			gokubernetesd.Mount(s, true, memory.New(), mock_recorder.New(), g)
 		},
 	)
-	defer v.Stop()
+	defer v.Close()
 	v.VerifyBase(t)
 	v.VerifyModelContext(t)
 }

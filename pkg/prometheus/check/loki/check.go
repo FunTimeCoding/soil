@@ -8,6 +8,7 @@ import (
 
 func Check(o *option.Loki) {
 	c := loki.NewEnvironment(false)
+	defer c.Close()
 	f := constant.ColorFormat.Copy()
 
 	if o.Copyable {

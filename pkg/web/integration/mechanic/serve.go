@@ -24,20 +24,17 @@ func serve(t *testing.T) string {
 	t.Helper()
 	p, n := system.ClaimPort()
 	u := mechanic.New(notifier.New(), extendedSource(), serverSideSource())
-	b := lifecycle.New(
-		logger.New(context.Background()),
-		lifecycle.WithServer(
-			server.New(
-				identity.Example(),
-				"",
-				func(m *http.ServeMux) {
-					u.Mount(guard.New(m, []string{constant.MechanicToken}))
-				},
-			).WithListener(n).WithMiddleware(u.Recovery(memory.New())),
-		),
+	b := lifecycle.New(logger.New(context.Background())).WithServer(
+		server.New(
+			identity.Example(),
+			"",
+			func(m *http.ServeMux) {
+				u.Mount(guard.New(m, []string{constant.MechanicToken}))
+			},
+		).WithListener(n).WithMiddleware(u.Recovery(memory.New())),
 	)
 	b.Run()
-	t.Cleanup(b.Stop)
+	t.Cleanup(b.Close)
 	assert.Listen(t, p)
 
 	return fmt.Sprintf("http://localhost:%d", p)

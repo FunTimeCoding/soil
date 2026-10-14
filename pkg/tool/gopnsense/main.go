@@ -15,6 +15,7 @@ func Main() {
 	defer func() { s.Flush(recover()) }()
 	t := terminal.New(s)
 	c := client.NewEnvironment()
+	defer c.Close()
 	o := &cobra.Command{
 		Use:   constant.Identity.Usage(),
 		Short: constant.Identity.Description(),

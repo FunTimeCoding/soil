@@ -6,9 +6,18 @@ import (
 	"golang.org/x/tools/go/packages"
 )
 
-func (w *Workspace) loadExternals(paths []string) {
+func (w *Workspace) loadExternals(
+	paths []string,
+	syntax bool,
+) {
+	mode := packages.NeedName | packages.NeedTypes
+
+	if syntax {
+		mode = packages.LoadSyntax
+	}
+
 	c := &packages.Config{
-		Mode:       packages.NeedName | packages.NeedTypes,
+		Mode:       mode,
 		Dir:        w.root,
 		BuildFlags: resolve.BuildFlags(w.root),
 	}
@@ -23,5 +32,9 @@ func (w *Workspace) loadExternals(paths []string) {
 
 		w.storeExternal(p.Types)
 		w.storeExternals(p.Types, seen)
+
+		if syntax && p.TypesInfo != nil {
+			w.storeSyntaxExternal(p)
+		}
 	}
 }

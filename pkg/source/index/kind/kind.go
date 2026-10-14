@@ -6,8 +6,9 @@ import (
 )
 
 type Kind struct {
-	Name     string
-	Value    func() any
-	Extract  func(*packages.Package) any
-	External func(*types.Package) any
+	Name           string
+	Value          func() any
+	Extract        func(*packages.Package) any
+	External       func(*types.Package) any
+	ExternalSyntax func(*packages.Package) any
 }

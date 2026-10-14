@@ -297,7 +297,7 @@ hands it to `Mount` - service tokens thread main - option - run
 via `web.ServiceTokens()`:
 
 ```go
-lifecycle.WithServer(
+lifecycle.New(l).WithServer(
     server.New(
         constant.Identity,
         o.Address,

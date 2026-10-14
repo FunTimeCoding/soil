@@ -26,16 +26,13 @@ func Run(
 	s := store.New(relational.Open(g, o.PostgresLocator, o.LitePath), events)
 	defer s.Close()
 	v := web.New(s, events)
-	lifecycle.New(
-		g,
-		lifecycle.WithServer(
-			server.New(
-				constant.Identity,
-				o.Address,
-				func(m *http.ServeMux) {
-					Mount(s, v, r, i.Recorder(), guard.New(m, o.ServiceTokens))
-				},
-			).WithMiddleware(v.Recovery(r)),
-		),
+	lifecycle.New(g).WithServer(
+		server.New(
+			constant.Identity,
+			o.Address,
+			func(m *http.ServeMux) {
+				Mount(s, v, r, i.Recorder(), guard.New(m, o.ServiceTokens))
+			},
+		).WithMiddleware(v.Recovery(r)),
 	).RunUntilSignal()
 }

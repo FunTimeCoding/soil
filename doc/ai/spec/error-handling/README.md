@@ -9,7 +9,9 @@ required.
 
 The same posture for closing: prefer `errors.PanicClose` over checking
 close errors; use `LogClose` only in loops or uncertain contexts (e.g.
-validation). Eliminate error variables entirely when possible:
+validation), and `LogReclose` for a value handed to something that may
+already have closed it - a file or pipe given to an HTTP request, a
+listener a server shuts down. Eliminate error variables entirely when possible:
 `errors.PanicOnError(someCall())`. Error variable naming (`e`/`f`/`g`
 escalation) lives in `../naming.md`.
 

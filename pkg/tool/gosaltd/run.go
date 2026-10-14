@@ -30,18 +30,13 @@ func Run(
 	)
 	p := reaper.New(r)
 	n := runner.New(o, salt.NewEnvironment, s, l, r, p)
-	lifecycle.New(
-		l,
-		lifecycle.WithWorker(p),
-		lifecycle.WithWorker(n),
-		lifecycle.WithServer(
-			server.New(
-				constant.Identity,
-				o.Address,
-				func(m *http.ServeMux) {
-					Mount(n, s, r, i.Recorder(), guard.New(m, o.ServiceTokens))
-				},
-			).WithMiddleware(web.RecoveryMiddleware(r)),
-		),
+	lifecycle.New(l).WithWorker(p).WithWorker(n).WithServer(
+		server.New(
+			constant.Identity,
+			o.Address,
+			func(m *http.ServeMux) {
+				Mount(n, s, r, i.Recorder(), guard.New(m, o.ServiceTokens))
+			},
+		).WithMiddleware(web.RecoveryMiddleware(r)),
 	).RunUntilSignal()
 }

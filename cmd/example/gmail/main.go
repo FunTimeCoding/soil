@@ -8,6 +8,7 @@ import (
 
 func main() {
 	c := gmail.NewEnvironment().Load()
+	defer c.Close()
 	r := c.Unread()
 	console.Format("Unread (%d):\n", len(r.Messages))
 

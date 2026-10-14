@@ -11,14 +11,14 @@ func alerts(
 	t *terminal.Terminal,
 ) *cobra.Command {
 	return &cobra.Command{
-		Use:   "alerts",
-		Short: "List recent alerts",
-		Args:  cobra.NoArgs,
+		Use:   "alerts <name>",
+		Short: "List every recorded alert with this name",
+		Args:  cobra.ExactArgs(1),
 		Run: func(
 			_ *cobra.Command,
-			_ []string,
+			a []string,
 		) {
-			t.Emit(c.Alerts())
+			t.Emit(c.Alerts(a[0]))
 		},
 	}
 }

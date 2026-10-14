@@ -11,6 +11,7 @@ import (
 func Run(o *option.Commit) {
 	validate(o)
 	c := gitlab.New(o.Host, o.Token)
+	defer c.Close()
 	p := common.FindProjectOrExit(c, o.Owner, o.Repository)
 	c.MustCommit(
 		p.Identifier,

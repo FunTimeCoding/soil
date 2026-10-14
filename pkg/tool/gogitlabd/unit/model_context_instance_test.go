@@ -23,7 +23,7 @@ func TestModelContextWorksOnTheSelectedInstance(t *testing.T) {
 			},
 		),
 	)
-	defer v.Stop()
+	defer v.Close()
 	c := v.Connect(t)
 	defer c.Close()
 	assert.StringContains(

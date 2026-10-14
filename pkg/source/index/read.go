@@ -31,7 +31,7 @@ func (w *Workspace) read(
 		value, found := w.fetch(
 			kindStore(constant.IndexFactsKind, k),
 			path,
-			kindKey(key, k),
+			w.kindKey(key, k),
 			k.Value(),
 		)
 

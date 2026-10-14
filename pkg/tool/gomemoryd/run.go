@@ -38,16 +38,13 @@ func Run(
 	)
 	reconcileMemories(v)
 	u := web.New(v)
-	lifecycle.New(
-		l,
-		lifecycle.WithServer(
-			server.New(
-				constant.Identity,
-				o.Address,
-				func(m *http.ServeMux) {
-					Mount(v, u, r, i.Recorder(), guard.New(m, o.ServiceTokens))
-				},
-			).WithMiddleware(u.Recovery(r)),
-		),
+	lifecycle.New(l).WithServer(
+		server.New(
+			constant.Identity,
+			o.Address,
+			func(m *http.ServeMux) {
+				Mount(v, u, r, i.Recorder(), guard.New(m, o.ServiceTokens))
+			},
+		).WithMiddleware(u.Recovery(r)),
 	).RunUntilSignal()
 }

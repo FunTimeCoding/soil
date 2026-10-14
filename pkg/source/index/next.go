@@ -21,5 +21,6 @@ func Next(
 		kinds: previous.kinds,
 		sums:  sums,
 		memo:  memo,
+		build: previous.build,
 	}
 }

@@ -14,6 +14,7 @@ func TestPollCollectsResources(t *testing.T) {
 		"pve",
 		worker_tester.PopulatedClient("pve"),
 	)
+	defer w.Close()
 	w.Poll()
 	assert.Integer(t, 2, testutil.CollectAndCount(y, "proxmox_guest_status"))
 	assert.Integer(t, 1, testutil.CollectAndCount(y, "proxmox_node_status"))
@@ -40,6 +41,7 @@ func TestPollCollectsResources(t *testing.T) {
 func TestPollFailureClearsResources(t *testing.T) {
 	c := worker_tester.PopulatedClient("pve")
 	w, y := worker_tester.NewPollWorker("pve", c)
+	defer w.Close()
 	w.Poll()
 	c.SetFailure(errors.New("hypervisor unreachable"))
 	w.Poll()

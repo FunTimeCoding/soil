@@ -8,5 +8,7 @@ import (
 func Send() {
 	a := argument.NewSimple("brave-send")
 	a.ParseSimple()
-	site.New().Send(a.RequiredPositional(0, "TEXT"))
+	s := site.New()
+	defer s.Close()
+	s.Send(a.RequiredPositional(0, "TEXT"))
 }

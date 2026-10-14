@@ -21,4 +21,5 @@ type Workspace struct {
 	fingerprints map[string]string
 	facts        map[string]map[string]any
 	references   *xref.Index
+	build        string
 }

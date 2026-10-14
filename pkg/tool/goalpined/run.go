@@ -23,28 +23,24 @@ func Run(
 	t := i.Recorder()
 	l := logger.New(context.Background())
 	s := package_server.NewEnvironment()
-	lifecycle.New(
-		l,
-		lifecycle.WithServer(
-			server.New(
-				constant.Identity,
-				o.Address,
-				func(m *http.ServeMux) {
-					Mount(s, r, t, guard.New(m, o.ServiceTokens))
-				},
-			).WithMiddleware(web.RecoveryMiddleware(r)),
-		),
-		lifecycle.WithServer(
-			server.New(
-				constant.Identity,
-				constant.FileAddress,
-				func(m *http.ServeMux) {
-					m.Handle(
-						stringsConstant.Slash,
-						http.FileServer(http.Dir(constant.PackageRoot)),
-					)
-				},
-			),
+	lifecycle.New(l).WithServer(
+		server.New(
+			constant.Identity,
+			o.Address,
+			func(m *http.ServeMux) {
+				Mount(s, r, t, guard.New(m, o.ServiceTokens))
+			},
+		).WithMiddleware(web.RecoveryMiddleware(r)),
+	).WithServer(
+		server.New(
+			constant.Identity,
+			constant.FileAddress,
+			func(m *http.ServeMux) {
+				m.Handle(
+					stringsConstant.Slash,
+					http.FileServer(http.Dir(constant.PackageRoot)),
+				)
+			},
 		),
 	).RunUntilSignal()
 }

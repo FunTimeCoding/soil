@@ -10,7 +10,13 @@ type holder struct {
 	response *http.Response
 }
 
-func consume(r *http.Response) {}
+func (h *holder) Close() {
+	_ = h.response.Body.Close()
+}
+
+func consume(r *http.Response) {
+	_ = r.Body.Close()
+}
 
 func ClosedDirect() int {
 	r, _ := http.Get("http://example.com")

@@ -2,7 +2,7 @@ package reporter
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry"
-	"github.com/funtimecoding/soil/pkg/web/stall_client"
+	sentryLibrary "github.com/getsentry/sentry-go"
 )
 
 func (r *Reporter) Start() *Reporter {
@@ -10,8 +10,8 @@ func (r *Reporter) Start() *Reporter {
 		return r
 	}
 
-	r.pool = stall_client.New().Build()
-	r.hub = sentry.Start(r.project, r.locator, r.version, r.pool.Client())
+	r.client = sentry.Start(r.project, r.locator, r.version, r.pool.Client())
+	r.hub = sentryLibrary.CurrentHub()
 
 	return r
 }

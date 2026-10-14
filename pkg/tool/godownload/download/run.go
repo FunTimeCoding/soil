@@ -18,6 +18,7 @@ import (
 func Run(o *option.Download) {
 	validate(o)
 	g := gitlab.New(o.Host, o.Token)
+	defer g.Close()
 	project := common.FindProjectOrExit(g, o.Owner, o.Repository)
 	filtered := packages.FilterByName(
 		g.MustPackages(project.Identifier, false),

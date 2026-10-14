@@ -5,8 +5,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/worker"
 )
 
-func WithWorker(w face.Worker) Option {
-	return func(l *Lifecycle) {
-		l.component = append(l.component, worker.New(w))
+func (l *Lifecycle) WithWorker(w face.Worker) *Lifecycle {
+	v := worker.New(w)
+	l.component = append(l.component, v)
+
+	if _, okay := w.(face.Drainer); okay {
+		l.drainer = append(l.drainer, v)
 	}
+
+	return l
 }

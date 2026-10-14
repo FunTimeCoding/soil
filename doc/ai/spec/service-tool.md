@@ -35,7 +35,7 @@ pkg/tool/go<tool>/
 │   ├── worker.go                   # Worker struct
 │   ├── new.go                      # Constructor
 │   ├── start.go                    # Start() - goroutine with ticker
-│   ├── stop.go                     # Stop()
+│   ├── close.go                    # Close()
 │   └── poll.go                     # Poll() - single cycle logic
 └── server/                         # REST implementation (or manual routes)
     ├── <operation>.go              # Route function returning http.HandlerFunc
@@ -103,10 +103,9 @@ func Run(o *option.Log, i face.Instrument) {
     l := logger.New(context.Background())
     s := store.New(o.LitePath)
     defer s.Close()
-    lifecycle.New(
-        l,
-        lifecycle.WithWorker(worker.New(client, s, l, r, 1*time.Minute)),
-        lifecycle.WithServer(
+    lifecycle.New(l).
+        WithWorker(worker.New(client, s, l, r, 1*time.Minute)).
+        WithServer(
             server.New(
                 constant.Identity,
                 o.Address,
@@ -114,8 +113,8 @@ func Run(o *option.Log, i face.Instrument) {
                     Mount(s, r, i.Recorder(), o.Version, guard.New(m, o.ServiceTokens))
                 },
             ).WithMiddleware(web.RecoveryMiddleware(r)),
-        ),
-    ).RunUntilSignal()
+        ).
+        RunUntilSignal()
 }
 ```
 
@@ -365,7 +364,7 @@ Key conventions:
 
 ## Workers
 
-Workers implement `face.Worker` (`Start()` + `Stop()`). See `lifecycle.md` for
+Workers implement `face.Worker` (`Start()` + `Close()`). See `lifecycle.md` for
 details.
 
 ## Daemon and CLI Split

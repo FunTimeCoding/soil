@@ -59,6 +59,7 @@ func (s *Server) GetSessions(
 			Identifier: i.Identifier,
 			Timestamp:  i.Timestamp,
 			Lines:      i.Lines,
+			TurnCount:  i.TurnCount,
 		}
 
 		if !i.LastSeen.IsZero() {

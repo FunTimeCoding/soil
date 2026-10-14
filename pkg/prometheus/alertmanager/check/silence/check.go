@@ -15,6 +15,7 @@ import (
 
 func Check(o *option.Silence) {
 	c := common.Alertmanager()
+	defer c.Close()
 	silences := collect(c)
 
 	if o.Notation {

@@ -19,6 +19,7 @@ func Hub(r *remote.Remote) {
 
 	namespace, repository := git.ParseProject(l.Path)
 	c := github.NewEnvironment()
+	defer c.Close()
 	hub.Tag(c, namespace, repository)
 	hub.Run(c, namespace, repository)
 	hub.Image(c, namespace, repository)

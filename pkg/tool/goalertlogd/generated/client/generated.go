@@ -38,6 +38,7 @@ func (e AlertsResponseStatus) Valid() bool {
 type AlertsResponse struct {
 	End         *string              `json:"end,omitempty"`
 	Fingerprint string               `json:"fingerprint"`
+	Identifier  int                  `json:"identifier"`
 	Labels      map[string]string    `json:"labels"`
 	Name        string               `json:"name"`
 	Severity    string               `json:"severity"`
@@ -57,8 +58,11 @@ type ErrorResponse struct {
 
 // StatusResponse defines model for StatusResponse.
 type StatusResponse struct {
-	LastPoll     *string `json:"lastPoll,omitempty"`
-	TotalRecords int     `json:"totalRecords"`
+	LastPoll *string `json:"lastPoll,omitempty"`
+
+	// LatestIdentifier The newest record's identifier, 0 when there are none - where a new consumer starts its cursor.
+	LatestIdentifier int `json:"latestIdentifier"`
+	TotalRecords     int `json:"totalRecords"`
 }
 
 // TopAlertsResponse defines model for TopAlertsResponse.
@@ -73,6 +77,20 @@ type TopAlertsResponse struct {
 // GetAlertsParams defines parameters for GetAlerts.
 type GetAlertsParams struct {
 	Name string `form:"name" json:"name"`
+}
+
+// GetAlertsAfterParams defines parameters for GetAlertsAfter.
+type GetAlertsAfterParams struct {
+	Identifier int `form:"identifier" json:"identifier"`
+
+	// Limit Records per page; 5 when omitted, at most 25.
+	Limit *int `form:"limit,omitempty" json:"limit,omitempty"`
+}
+
+// GetAlertsByIdentifierParams defines parameters for GetAlertsByIdentifier.
+type GetAlertsByIdentifierParams struct {
+	// Identifier Repeatable; at most 25 are read.
+	Identifier []int `form:"identifier" json:"identifier"`
 }
 
 // GetRecentAlertsParams defines parameters for GetRecentAlerts.
@@ -165,6 +183,16 @@ type ClientInterface interface {
 	// GetAlerts performs a GET /api/alerts (the `GetAlerts` operationId) request.
 	GetAlerts(ctx context.Context, params *GetAlertsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// GetAlertsAfter performs a GET /api/alerts/after (the `GetAlertsAfter` operationId) request.
+	//
+	// Records with an identifier above the given one, ascending - a cursor walk for consumers.
+	GetAlertsAfter(ctx context.Context, params *GetAlertsAfterParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetAlertsByIdentifier performs a GET /api/alerts/by-identifier (the `GetAlertsByIdentifier` operationId) request.
+	//
+	// Records by identifier, ascending; unknown or pruned identifiers are absent from the result.
+	GetAlertsByIdentifier(ctx context.Context, params *GetAlertsByIdentifierParams, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// GetRecentAlerts performs a GET /api/alerts/recent (the `GetRecentAlerts` operationId) request.
 	GetRecentAlerts(ctx context.Context, params *GetRecentAlertsParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -178,6 +206,36 @@ type ClientInterface interface {
 // GetAlerts performs a GET /api/alerts (the `GetAlerts` operationId) request.
 func (c *Client) GetAlerts(ctx context.Context, params *GetAlertsParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewGetAlertsRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetAlertsAfter performs a GET /api/alerts/after (the `GetAlertsAfter` operationId) request.
+//
+// Records with an identifier above the given one, ascending - a cursor walk for consumers.
+func (c *Client) GetAlertsAfter(ctx context.Context, params *GetAlertsAfterParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetAlertsAfterRequest(c.Server, params)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetAlertsByIdentifier performs a GET /api/alerts/by-identifier (the `GetAlertsByIdentifier` operationId) request.
+//
+// Records by identifier, ascending; unknown or pruned identifiers are absent from the result.
+func (c *Client) GetAlertsByIdentifier(ctx context.Context, params *GetAlertsByIdentifierParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetAlertsByIdentifierRequest(c.Server, params)
 	if err != nil {
 		return nil, err
 	}
@@ -261,6 +319,122 @@ func NewGetAlertsRequest(server string, params *GetAlertsParams) (*http.Request,
 			for _, qp := range strings.Split(queryFrag, "&") {
 				rawQueryFragments = append(rawQueryFragments, qp)
 			}
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetAlertsAfterRequest constructs an http.Request for the GetAlertsAfter method
+func NewGetAlertsAfterRequest(server string, params *GetAlertsAfterParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/alerts/after")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if queryFrag, err := runtime.StyleParamWithOptions("form", true, "identifier", params.Identifier, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+			return nil, err
+		} else {
+			for _, qp := range strings.Split(queryFrag, "&") {
+				rawQueryFragments = append(rawQueryFragments, qp)
+			}
+		}
+
+		if params.Limit != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "limit", *params.Limit, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "integer", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetAlertsByIdentifierRequest constructs an http.Request for the GetAlertsByIdentifier method
+func NewGetAlertsByIdentifierRequest(server string, params *GetAlertsByIdentifierParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/alerts/by-identifier")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if params.Identifier != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "identifier", params.Identifier, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "array", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
 		}
 
 		if encoded := queryValues.Encode(); encoded != "" {
@@ -497,6 +671,20 @@ type ClientWithResponsesInterface interface {
 	// Returns a wrapper object for the known response body format(s).
 	GetAlertsWithResponse(ctx context.Context, params *GetAlertsParams, reqEditors ...RequestEditorFn) (*GetAlertsResponse, error)
 
+	// GetAlertsAfterWithResponse performs a GET /api/alerts/after (the `GetAlertsAfter` operationId) request.
+	//
+	// Records with an identifier above the given one, ascending - a cursor walk for consumers.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetAlertsAfterWithResponse(ctx context.Context, params *GetAlertsAfterParams, reqEditors ...RequestEditorFn) (*GetAlertsAfterResponse, error)
+
+	// GetAlertsByIdentifierWithResponse performs a GET /api/alerts/by-identifier (the `GetAlertsByIdentifier` operationId) request.
+	//
+	// Records by identifier, ascending; unknown or pruned identifiers are absent from the result.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetAlertsByIdentifierWithResponse(ctx context.Context, params *GetAlertsByIdentifierParams, reqEditors ...RequestEditorFn) (*GetAlertsByIdentifierResponse, error)
+
 	// GetRecentAlertsWithResponse performs a GET /api/alerts/recent (the `GetRecentAlerts` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
@@ -555,6 +743,102 @@ func (r GetAlertsResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r GetAlertsResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type GetAlertsAfterResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *[]AlertsResponse
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetAlertsAfterResponse) GetJSON200() *[]AlertsResponse {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetAlertsAfterResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetAlertsAfterResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetAlertsAfterResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetAlertsAfterResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetAlertsAfterResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type GetAlertsByIdentifierResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *[]AlertsResponse
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetAlertsByIdentifierResponse) GetJSON200() *[]AlertsResponse {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetAlertsByIdentifierResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetAlertsByIdentifierResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetAlertsByIdentifierResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetAlertsByIdentifierResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetAlertsByIdentifierResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -716,6 +1000,32 @@ func (c *ClientWithResponses) GetAlertsWithResponse(ctx context.Context, params 
 	return ParseGetAlertsResponse(rsp)
 }
 
+// GetAlertsAfterWithResponse performs a GET /api/alerts/after (the `GetAlertsAfter` operationId) request.
+//
+// Records with an identifier above the given one, ascending - a cursor walk for consumers.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetAlertsAfterWithResponse(ctx context.Context, params *GetAlertsAfterParams, reqEditors ...RequestEditorFn) (*GetAlertsAfterResponse, error) {
+	rsp, err := c.GetAlertsAfter(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetAlertsAfterResponse(rsp)
+}
+
+// GetAlertsByIdentifierWithResponse performs a GET /api/alerts/by-identifier (the `GetAlertsByIdentifier` operationId) request.
+//
+// Records by identifier, ascending; unknown or pruned identifiers are absent from the result.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetAlertsByIdentifierWithResponse(ctx context.Context, params *GetAlertsByIdentifierParams, reqEditors ...RequestEditorFn) (*GetAlertsByIdentifierResponse, error) {
+	rsp, err := c.GetAlertsByIdentifier(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetAlertsByIdentifierResponse(rsp)
+}
+
 // GetRecentAlertsWithResponse performs a GET /api/alerts/recent (the `GetRecentAlerts` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -758,6 +1068,72 @@ func ParseGetAlertsResponse(rsp *http.Response) (*GetAlertsResponse, error) {
 	}
 
 	response := &GetAlertsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []AlertsResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetAlertsAfterResponse parses an HTTP response from a GetAlertsAfterWithResponse call
+func ParseGetAlertsAfterResponse(rsp *http.Response) (*GetAlertsAfterResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetAlertsAfterResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []AlertsResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetAlertsByIdentifierResponse parses an HTTP response from a GetAlertsByIdentifierWithResponse call
+func ParseGetAlertsByIdentifierResponse(rsp *http.Response) (*GetAlertsByIdentifierResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetAlertsByIdentifierResponse{
 		Body:         bodyBytes,
 		HTTPResponse: rsp,
 	}

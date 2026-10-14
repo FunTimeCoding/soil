@@ -26,24 +26,13 @@ func Run(
 	l := logger.New(context.Background())
 	k := worker.New(j, c, o.Project, constant.PollInterval, l, r)
 	b := web.New(k)
-	lifecycle.New(
-		l,
-		lifecycle.WithWorker(k),
-		lifecycle.WithServer(
-			server.New(
-				constant.Identity,
-				o.Address,
-				func(m *http.ServeMux) {
-					Mount(
-						j,
-						c,
-						b,
-						r,
-						s.Recorder(),
-						guard.New(m, o.ServiceTokens),
-					)
-				},
-			).WithMiddleware(b.Recovery(r)),
-		),
+	lifecycle.New(l).WithWorker(k).WithServer(
+		server.New(
+			constant.Identity,
+			o.Address,
+			func(m *http.ServeMux) {
+				Mount(j, c, b, r, s.Recorder(), guard.New(m, o.ServiceTokens))
+			},
+		).WithMiddleware(b.Recovery(r)),
 	).RunUntilSignal()
 }

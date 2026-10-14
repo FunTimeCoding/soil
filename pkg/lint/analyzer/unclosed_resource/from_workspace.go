@@ -24,5 +24,7 @@ func FromWorkspace(
 		}
 	}
 
+	summaries = append(summaries, index.Externals[*fact.Summary](w, Kind())...)
+
 	return FromFacts(summaries)
 }

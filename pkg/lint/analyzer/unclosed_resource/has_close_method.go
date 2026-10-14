@@ -1,9 +1,17 @@
 package unclosed_resource
 
-import "go/types"
+import (
+	"github.com/funtimecoding/soil/pkg/lint/constant"
+	"go/types"
+)
 
 func hasCloseMethod(t types.Type) bool {
-	method, _, _ := types.LookupFieldOrMethod(t, true, nil, "Close")
+	method, _, _ := types.LookupFieldOrMethod(
+		t,
+		true,
+		nil,
+		constant.CloseMethod,
+	)
 
 	if method == nil {
 		return false

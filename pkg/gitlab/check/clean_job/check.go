@@ -16,6 +16,7 @@ func Check() {
 	a.String(argumentConstant.Match, "", "Description match")
 	a.ParseSimple()
 	g := gitlab.NewEnvironment()
+	defer g.Close()
 	f := constant.Format.Copy().Tag(consoleConstant.TagDense)
 	m := a.GetString(argumentConstant.Match)
 

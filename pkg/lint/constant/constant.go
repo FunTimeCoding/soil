@@ -3,11 +3,17 @@ package constant
 import "regexp"
 
 const (
-	MemberSeparator  = "."
-	InterfacesKind   = "interfaces"
-	SummaryKind      = "resource_summary"
-	DirectivePrefix  = "//go:"
-	ByValueDirective = "//goanalyze:by-value"
+	MemberSeparator   = "."
+	InterfacesKind    = "interfaces"
+	SummaryKind       = "resource_summary"
+	ReceiverArgument  = -1
+	CloseMethod       = "Close"
+	SyncPackage       = "sync"
+	DisposesCondition = "disposes"
+	ReleasesCondition = "releases"
+	WrapsCondition    = "wraps"
+	DirectivePrefix   = "//go:"
+	ByValueDirective  = "//goanalyze:by-value"
 
 	FrontMatterDelimiterKey  = "front_matter_delimiter"
 	FrontMatterDelimiterText = "No front matter delimiter"

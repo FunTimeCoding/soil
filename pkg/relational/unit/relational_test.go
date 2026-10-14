@@ -2,6 +2,7 @@ package unit
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 	"github.com/funtimecoding/soil/pkg/assert"
 	soil "github.com/funtimecoding/soil/pkg/constant"
@@ -73,9 +74,7 @@ func TestNewCreatesParentDirectory(t *testing.T) {
 func TestNewMemoryPinsPool(t *testing.T) {
 	m := lite.NewMemory()
 	defer closeMapper(m)
-	inner, e := m.DB()
-	libraryErrors.PanicOnError(e)
-	assert.Integer(t, 1, inner.Stats().MaxOpenConnections)
+	assert.Integer(t, 1, m.ConnPool.(*sql.DB).Stats().MaxOpenConnections)
 }
 
 func TestNewMemoryEnforcesForeignKeys(t *testing.T) {

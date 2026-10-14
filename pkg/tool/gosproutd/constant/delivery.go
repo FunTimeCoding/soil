@@ -5,13 +5,12 @@ import "time"
 type Delivery string
 
 const (
-	DeliveryDrop      Delivery = "drop"
-	DeliveryQueue     Delivery = "queue"
-	DeliveryImmediate Delivery = "immediate"
-	DeliveryHold      Delivery = "hold"
+	DeliveryDrop Delivery = "drop"
+	DeliveryHold Delivery = "hold"
+	DeliverySend Delivery = "send"
 )
 
 const (
 	QuietWindow = 3 * time.Minute
-	WakeWindow  = time.Hour
+	MaximumHold = 30 * time.Minute
 )

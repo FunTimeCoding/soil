@@ -34,8 +34,6 @@ const (
 	AddTurn        = "add_turn"
 	ClearDecision  = "clear_decision"
 	BumpDecision   = "bump_decision"
-	CruiseStatus   = "cruise_status"
-	SetCruise      = "set_cruise"
 
 	SessionParameter       = "session"
 	QuestionParameter      = "question"
@@ -46,8 +44,6 @@ const (
 	ContentParameter       = "content"
 	UnderstandingParameter = "understanding"
 	HeardParameter         = "heard"
-	ModeParameter          = "mode"
-	PaceParameter          = "pace"
 	ResolutionParameter    = "resolution"
 
 	IdentifierColumn = "identifier"
