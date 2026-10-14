@@ -14,7 +14,7 @@ require (
 	github.com/amikos-tech/pure-tokenizers v0.1.5
 	github.com/andybrewer/mack v0.0.0-20251024001139-afd410b36447
 	github.com/andygrunwald/go-jira v1.17.0
-	github.com/anthropics/anthropic-sdk-go v1.80.0
+	github.com/anthropics/anthropic-sdk-go v1.81.0
 	github.com/apenella/go-ansible/v2 v2.5.0
 	github.com/bmatcuk/doublestar/v4 v4.10.3
 	github.com/bwmarrin/discordgo v0.29.0
@@ -55,7 +55,7 @@ require (
 	github.com/kestra-io/client-sdk/go-sdk/v2 v2.0.2
 	github.com/liushuangls/go-anthropic/v2 v2.25.0
 	github.com/luthermonson/go-proxmox v0.8.2
-	github.com/mark3labs/mcp-go v1.2.1
+	github.com/mark3labs/mcp-go v1.3.0
 	github.com/mattermost/mattermost/server/public v0.5.0
 	github.com/modelcontextprotocol/go-sdk v1.8.0
 	github.com/muesli/termenv v0.16.0
@@ -87,7 +87,7 @@ require (
 	github.com/trivago/tgo v1.0.7
 	github.com/whilp/git-urls v1.0.0
 	github.com/yuin/goldmark/v2 v2.1.6
-	gitlab.com/gitlab-org/api/client-go/v3 v3.21.0
+	gitlab.com/gitlab-org/api/client-go/v3 v3.22.0
 	go.yaml.in/yaml/v3 v3.0.5
 	golang.org/x/crypto v0.58.0
 	golang.org/x/mod v0.42.0
