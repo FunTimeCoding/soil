@@ -26,6 +26,9 @@ const (
 	Init             = "init"
 	NotationArgument = "-json"
 	UpgradeArgument  = "-upgrade"
+	ForceUnlock      = "force-unlock"
+	ForceArgument    = "-force"
+	LockContext      = "terraform_lock"
 
 	TerraformPathEnvironment  = "TERRAFORM_PATH"
 	DownstreamEnvironment     = "DOWNSTREAM_HOSTS"
@@ -35,6 +38,17 @@ const (
 	StateNamespace = "terraform"
 	StateLease     = "lock-tfstate-default-state"
 	LockAnnotation = "app.terraform.io/lock-info"
+)
 
-	FixtureLockDetail = `{"ID":"11111111-2222-4333-8444-555555555555","Operation":"OperationTypePlan","Info":"","Who":"user@host.example","Version":"1.0.0","Created":"2020-01-02T03:04:05.123456789Z","Path":""}`
+const (
+	FixtureHostname        = "runner-6d4b8c9f7-abcde"
+	FixtureLock            = "11111111-2222-4333-8444-666666666666"
+	FixtureGonePod         = "runner-5c7d9e8f1-fghij"
+	FixtureLaptop          = "user@workstation"
+	FixtureLongOwn         = "a-deployment-name-reaching-the-hostname-cutoff-0987654321-zyxwv"
+	FixtureLongOther       = "a-deployment-name-reaching-the-hostname-cutoff-1234567890-abcde"
+	FixtureGoneHolder      = "root@runner-5c7d9e8f1-fghij"
+	FixtureOwnHolder       = "root@runner-6d4b8c9f7-abcde"
+	FixtureOtherHolder     = "root@service-alfa-7b6c5d4e3-klmno"
+	FixtureLongOtherHolder = "root@a-deployment-name-reaching-the-hostname-cutoff-1234567890-abcde"
 )

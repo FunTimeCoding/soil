@@ -7,6 +7,9 @@ type Terraform struct {
 	Repository      string
 	ClonePath       string
 	TerraformPath   string
+	Executable      string
+	Hostname        string
+	Namespace       string
 	PostgresLocator string
 	LitePath        string
 	StateNamespace  string

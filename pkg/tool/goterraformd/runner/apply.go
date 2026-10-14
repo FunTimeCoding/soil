@@ -12,6 +12,7 @@ func (r *Runner) apply(
 	parameters map[string]any,
 	triggerSource string,
 ) any {
+	r.clearOrphanedLock()
 	directory := filepath.Join(r.clonePath, r.terraformPath)
 	head := r.provision.CurrentHead()
 	record := r.store.NewRun()
@@ -20,12 +21,7 @@ func (r *Runner) apply(
 	record.GitHead = head
 	r.store.Create(record)
 	r.logger.Structured("terraform_apply_start")
-	arguments := []string{
-		constant.Command,
-		"apply",
-		"-auto-approve",
-		"-no-color",
-	}
+	arguments := []string{r.executable, "apply", "-auto-approve", "-no-color"}
 
 	if v, okay := parameters[constant.Target]; okay {
 		record.Scope = v.(string)

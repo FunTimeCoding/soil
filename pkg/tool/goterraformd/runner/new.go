@@ -11,6 +11,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/option"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/types/metric"
 	"github.com/prometheus/client_golang/prometheus"
+	"time"
 )
 
 func New(
@@ -20,12 +21,16 @@ func New(
 	r face.Reporter,
 	registry face.ProcessRegistry,
 	y *prometheus.Registry,
-	k terraformFace.LeaseSource,
+	k terraformFace.Cluster,
 ) *Runner {
 	result := &Runner{
 		store:          s,
 		clonePath:      o.ClonePath,
 		terraformPath:  o.TerraformPath,
+		executable:     o.Executable,
+		hostname:       o.Hostname,
+		namespace:      o.Namespace,
+		started:        time.Now(),
 		logger:         l,
 		reporter:       r,
 		registry:       registry,

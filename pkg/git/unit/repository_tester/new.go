@@ -12,7 +12,7 @@ func New(t *testing.T) *Tester {
 	root := t.TempDir()
 	upstream := filepath.Join(root, "upstream.git")
 	result := &Tester{Clone: filepath.Join(root, constant.Clone)}
-	Command(root, "init", "--bare", "--initial-branch=main", upstream)
+	Command(root, constant.Init, "--bare", "--initial-branch=main", upstream)
 	Command(root, constant.Clone, upstream, result.Clone)
 	Command(
 		result.Clone,

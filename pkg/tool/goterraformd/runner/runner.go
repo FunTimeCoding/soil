@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/provision/store"
 	terraformFace "github.com/funtimecoding/soil/pkg/tool/goterraformd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/types/metric"
+	"time"
 )
 
 type Runner struct {
@@ -14,11 +15,15 @@ type Runner struct {
 	store          *store.Store
 	clonePath      string
 	terraformPath  string
+	executable     string
+	hostname       string
+	namespace      string
+	started        time.Time
 	logger         *logger.Logger
 	reporter       face.Reporter
 	registry       face.ProcessRegistry
 	metrics        *metric.Metric
-	kubernetes     terraformFace.LeaseSource
+	kubernetes     terraformFace.Cluster
 	stateNamespace string
 	stateLeaseName string
 }

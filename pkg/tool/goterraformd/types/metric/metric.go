@@ -6,4 +6,5 @@ type Metric struct {
 	RunsTotal     *prometheus.CounterVec
 	ApplyDuration prometheus.Histogram
 	LastSuccess   prometheus.Gauge
+	LockCleared   prometheus.Counter
 }

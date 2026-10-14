@@ -6,5 +6,5 @@ func (c *Client) Lease(
 	_ string,
 	_ string,
 ) (*lease.Lease, error) {
-	return nil, nil
+	return c.lease, nil
 }

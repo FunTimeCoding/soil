@@ -10,13 +10,13 @@ func (r *Runner) terraformInit() {
 	r.logger.Structured("terraform_init")
 	c := r.newRun().NoPanic()
 	c.Directory = directory
-	c.Start(constant.Command, constant.Init, constant.NotationArgument)
+	c.Start(r.executable, constant.Init, constant.NotationArgument)
 
 	if c.Error != nil && r.needsUpgrade(c.OutputString) {
 		r.logger.Structured("terraform_init_upgrade")
 		u := r.newRun()
 		u.Directory = directory
-		u.Start(constant.Command, constant.Init, constant.UpgradeArgument)
+		u.Start(r.executable, constant.Init, constant.UpgradeArgument)
 
 		return
 	}

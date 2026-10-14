@@ -18,6 +18,7 @@ const (
 	Command = "git"
 	Tag     = "tag"
 	Clone   = "clone"
+	Init    = "init"
 	Status  = "status"
 	Log     = "log"
 	Diff    = "diff"

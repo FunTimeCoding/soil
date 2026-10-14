@@ -4,11 +4,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/argument"
 	argumentConstant "github.com/funtimecoding/soil/pkg/argument/constant"
 	"github.com/funtimecoding/soil/pkg/instrument"
+	kubernetesConstant "github.com/funtimecoding/soil/pkg/kubernetes/constant"
 	"github.com/funtimecoding/soil/pkg/strings/split"
+	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/option"
 	"github.com/funtimecoding/soil/pkg/web"
+	"strings"
 )
 
 func Main() {
@@ -28,6 +31,14 @@ func Main() {
 	o.Repository = a.Required(argumentConstant.Repository)
 	o.ClonePath = a.Required(argumentConstant.ClonePath)
 	o.TerraformPath = environment.Required(constant.TerraformPathEnvironment)
+	o.Hostname = system.Hostname()
+
+	if system.FileExists(kubernetesConstant.NamespacePath) {
+		o.Namespace = strings.TrimSpace(
+			system.ReadFileUnsafe(kubernetesConstant.NamespacePath),
+		)
+	}
+
 	o.PostgresLocator = a.GetString(argumentConstant.Postgres)
 	o.LitePath = a.GetString(argumentConstant.Lite)
 	o.StateNamespace = environment.Fallback(

@@ -33,11 +33,18 @@ func New(
 				Help: "Unix timestamp of the last successful terraform apply.",
 			},
 		),
+		LockCleared: prometheus.NewCounter(
+			prometheus.CounterOpts{
+				Name: "terraform_lock_cleared_total",
+				Help: "Orphaned terraform state locks force-unlocked before an apply.",
+			},
+		),
 	}
 	r.MustRegister(
 		m.RunsTotal,
 		m.ApplyDuration,
 		m.LastSuccess,
+		m.LockCleared,
 		prometheus.NewGaugeFunc(
 			prometheus.GaugeOpts{
 				Name: "terraform_state_locked",

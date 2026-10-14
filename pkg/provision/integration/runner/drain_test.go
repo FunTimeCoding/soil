@@ -6,8 +6,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	lifecycleConstant "github.com/funtimecoding/soil/pkg/lifecycle/constant"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/provision/integration/runner_tester"
 	"github.com/funtimecoding/soil/pkg/provision/types/trigger"
+	"github.com/funtimecoding/soil/pkg/provision/unit/runner_tester"
 	"testing"
 	"time"
 )
