@@ -14,6 +14,8 @@ type Device struct {
 	Serial         string
 	PrimaryAddress string
 	Tags           []string
+	Configuration  map[string]any
+	CustomFields   map[string]any
 	Link           string
 	Raw            *netbox.DeviceWithConfigContext
 }

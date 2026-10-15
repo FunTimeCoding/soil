@@ -3,8 +3,8 @@ package mock_client
 import "github.com/funtimecoding/soil/pkg/netbox/virtual_machine"
 
 func (c *Client) AddVirtualTag(
-	_ string,
-	_ string,
+	name string,
+	tag string,
 ) (*virtual_machine.Machine, error) {
-	return nil, nil
+	return c.changeMachine("AddVirtualTag", name, tag)
 }

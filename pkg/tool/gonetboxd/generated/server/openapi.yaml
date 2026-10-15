@@ -82,6 +82,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Device"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to update device.
           content:
@@ -109,6 +115,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/Interface"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list interfaces.
           content:
@@ -136,6 +148,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/Address"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list addresses.
           content:
@@ -165,6 +183,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Address"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to create address.
           content:
@@ -280,7 +304,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/CreateNameRequest"
+              $ref: "#/components/schemas/CreateDeviceRoleRequest"
       responses:
         "201":
           description: Created device role.
@@ -399,6 +423,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Interface"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to create interface.
           content:
@@ -434,6 +464,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/PhysicalAddress"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to assign the hardware address.
           content:
@@ -620,6 +656,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/VirtualMachine"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to get virtual machine.
           content:
@@ -648,6 +690,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/VirtualMachine"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to update virtual machine.
           content:
@@ -675,6 +723,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/Interface"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list virtual interfaces.
           content:
@@ -702,6 +756,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/Address"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list virtual addresses.
           content:
@@ -737,6 +797,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/PhysicalAddress"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to assign the hardware address.
           content:
@@ -766,6 +832,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/VirtualInterface"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to create virtual interface.
           content:
@@ -795,8 +867,371 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Address"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to create virtual address.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/configuration-contexts:
+    get:
+      operationId: listConfigurationContexts
+      responses:
+        "200":
+          description: All configuration contexts.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/ConfigurationContext"
+        "500":
+          description: Failed to list configuration contexts.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: createConfigurationContext
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateConfigurationContextRequest"
+      responses:
+        "201":
+          description: Created configuration context.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConfigurationContext"
+        "404":
+          description: An assigned role, cluster, platform, site, tenant or tag does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to create configuration context.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/configuration-contexts/{name}:
+    get:
+      operationId: getConfigurationContext
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Configuration context name.
+      responses:
+        "200":
+          description: The configuration context.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConfigurationContext"
+        "404":
+          description: No configuration context by that name.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to read configuration context.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    patch:
+      operationId: updateConfigurationContext
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Configuration context name.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateConfigurationContextRequest"
+      responses:
+        "200":
+          description: Updated configuration context.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConfigurationContext"
+        "404":
+          description: The configuration context, or an assigned object, does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to update configuration context.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteConfigurationContext
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Configuration context name.
+      responses:
+        "204":
+          description: Configuration context deleted.
+        "404":
+          description: No configuration context by that name.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to delete configuration context.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/inventory/ansible:
+    get:
+      operationId: getAnsibleInventory
+      parameters:
+      - name: field
+        in: query
+        required: false
+        schema:
+          type: string
+        description: Custom field whose values become the groups. Default ansible_playbook.
+      responses:
+        "200":
+          description: Ansible YAML inventory, one group per field value.
+          content:
+            text/plain:
+              schema:
+                type: string
+        "500":
+          description: Failed to build the inventory.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/choice-sets:
+    get:
+      operationId: listChoiceSets
+      responses:
+        "200":
+          description: All custom field choice sets.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/ChoiceSet"
+        "500":
+          description: Failed to list choice sets.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: createChoiceSet
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateChoiceSetRequest"
+      responses:
+        "201":
+          description: Created choice set.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChoiceSet"
+        "500":
+          description: Failed to create choice set.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/choice-sets/{name}:
+    get:
+      operationId: getChoiceSet
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Choice set name.
+      responses:
+        "200":
+          description: The choice set.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChoiceSet"
+        "404":
+          description: No choice set by that name.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to read choice set.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    patch:
+      operationId: updateChoiceSet
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Choice set name.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateChoiceSetRequest"
+      responses:
+        "200":
+          description: Updated choice set.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChoiceSet"
+        "404":
+          description: No choice set by that name.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to update choice set.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      operationId: deleteChoiceSet
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Choice set name.
+      responses:
+        "204":
+          description: Choice set deleted.
+        "404":
+          description: No choice set by that name.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to delete choice set.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/custom-fields:
+    get:
+      operationId: listCustomFields
+      responses:
+        "200":
+          description: All custom fields.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  nullable: true
+                  allOf:
+                  - $ref: "#/components/schemas/CustomField"
+        "500":
+          description: Failed to list custom fields.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    post:
+      operationId: createCustomField
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCustomFieldRequest"
+      responses:
+        "201":
+          description: Created multiple-selection custom field on devices and virtual machines.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CustomField"
+        "404":
+          description: The choice set does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to create custom field.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /api/custom-fields/{name}:
+    delete:
+      operationId: deleteCustomField
+      parameters:
+      - name: name
+        in: path
+        required: true
+        schema:
+          type: string
+        description: Custom field name.
+      responses:
+        "204":
+          description: Custom field deleted.
+        "404":
+          description: No custom field by that name.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Failed to delete custom field.
           content:
             application/json:
               schema:
@@ -861,6 +1296,12 @@ paths:
                 type: array
                 items:
                   type: string
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list device tags.
           content:
@@ -890,6 +1331,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Device"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to add tag.
           content:
@@ -918,6 +1365,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Device"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to remove tag.
           content:
@@ -1150,6 +1603,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/VirtualDisk"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list virtual disks.
           content:
@@ -1178,6 +1637,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/VirtualDisk"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to create virtual disk.
           content:
@@ -1350,6 +1815,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/TunnelTermination"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to create tunnel termination.
           content:
@@ -1379,6 +1850,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/TunnelTermination"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to create virtual tunnel termination.
           content:
@@ -1408,6 +1885,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/VirtualMachine"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to add tag.
           content:
@@ -1436,6 +1919,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/VirtualMachine"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to remove tag.
           content:
@@ -1463,6 +1952,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/Label"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list labels.
           content:
@@ -1498,6 +1993,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Label"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to set label.
           content:
@@ -1522,6 +2023,12 @@ paths:
       responses:
         "204":
           description: Label removed.
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to remove label.
           content:
@@ -1549,6 +2056,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/Label"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list labels.
           content:
@@ -1584,6 +2097,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Label"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to set label.
           content:
@@ -1608,6 +2127,12 @@ paths:
       responses:
         "204":
           description: Label removed.
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to remove label.
           content:
@@ -1647,6 +2172,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/JournalEntry"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list journal entries.
           content:
@@ -1675,6 +2206,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/JournalEntry"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to add journal entry.
           content:
@@ -1714,6 +2251,12 @@ paths:
                   nullable: true
                   allOf:
                   - $ref: "#/components/schemas/JournalEntry"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list journal entries.
           content:
@@ -1742,6 +2285,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/JournalEntry"
+        "404":
+          description: The named object does not exist.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to add journal entry.
           content:
@@ -1848,6 +2397,14 @@ components:
           type: array
           items:
             type: string
+        configuration:
+          type: object
+          additionalProperties: true
+          description: Resolved configuration context, every matching context merged.
+        customFields:
+          type: object
+          additionalProperties: true
+          description: Custom field values by field name.
         link:
           type: string
         labels:
@@ -1947,12 +2504,26 @@ components:
       required:
       - identifier
       - name
+      - virtualMachine
       properties:
         identifier:
           type: integer
           format: int32
         name:
           type: string
+        virtualMachine:
+          type: boolean
+          description: Whether virtual machines can take this role.
+    CreateDeviceRoleRequest:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+        virtualMachine:
+          type: boolean
+          description: Allow virtual machines to take this role. Default false.
     Manufacturer:
       type: object
       required:
@@ -2125,12 +2696,22 @@ components:
           type: string
         status:
           type: string
+        role:
+          type: string
         primaryAddress:
           type: string
         tags:
           type: array
           items:
             type: string
+        configuration:
+          type: object
+          additionalProperties: true
+          description: Resolved configuration context, every matching context merged.
+        customFields:
+          type: object
+          additionalProperties: true
+          description: Custom field values by field name.
         labels:
           type: array
           items:
@@ -2164,6 +2745,10 @@ components:
         description:
           type: string
           description: Device description.
+        customFields:
+          type: object
+          additionalProperties: true
+          description: Custom field values to set, by field name; fields not named keep their value.
     UpdateVirtualMachineRequest:
       type: object
       properties:
@@ -2176,6 +2761,9 @@ components:
         platform:
           type: string
           description: Platform name to assign (must already exist).
+        role:
+          type: string
+          description: Role name to assign (must already exist and allow virtual machines).
         tenant:
           type: string
           description: Tenant name to assign (must already exist).
@@ -2188,6 +2776,10 @@ components:
         status:
           type: string
           description: Status (active, offline, planned, staged, failed, decommissioning).
+        customFields:
+          type: object
+          additionalProperties: true
+          description: Custom field values to set, by field name; fields not named keep their value.
     AddressRange:
       type: object
       required:
@@ -2515,6 +3107,165 @@ components:
         role:
           type: string
           description: Termination role (peer, hub, spoke).
+    ConfigurationContext:
+      type: object
+      required:
+      - identifier
+      - name
+      - weight
+      - active
+      - payload
+      - assignment
+      properties:
+        identifier:
+          type: integer
+          format: int32
+        name:
+          type: string
+        weight:
+          type: integer
+          format: int32
+        description:
+          type: string
+        active:
+          type: boolean
+        payload:
+          type: object
+          additionalProperties: true
+          description: The JSON this context contributes to every object it applies to, netbox's data block.
+        assignment:
+          $ref: "#/components/schemas/ConfigurationAssignment"
+    ChoiceSet:
+      type: object
+      required:
+      - identifier
+      - name
+      - choices
+      properties:
+        identifier:
+          type: integer
+          format: int32
+        name:
+          type: string
+        choices:
+          type: array
+          items:
+            type: string
+    CreateChoiceSetRequest:
+      type: object
+      required:
+      - name
+      - choices
+      properties:
+        name:
+          type: string
+        choices:
+          type: array
+          items:
+            type: string
+    UpdateChoiceSetRequest:
+      type: object
+      required:
+      - choices
+      properties:
+        choices:
+          type: array
+          items:
+            type: string
+          description: Replaces every choice.
+    CustomField:
+      type: object
+      required:
+      - identifier
+      - name
+      - kind
+      - objectTypes
+      properties:
+        identifier:
+          type: integer
+          format: int32
+        name:
+          type: string
+        label:
+          type: string
+        kind:
+          type: string
+        objectTypes:
+          type: array
+          items:
+            type: string
+        choiceSet:
+          type: string
+    CreateCustomFieldRequest:
+      type: object
+      required:
+      - name
+      - choiceSet
+      properties:
+        name:
+          type: string
+        label:
+          type: string
+        choiceSet:
+          type: string
+          description: Choice set the field selects from (must already exist).
+    ConfigurationAssignment:
+      type: object
+      description: Objects this context applies to, by name. Empty everywhere applies it to everything.
+      properties:
+        roles:
+          type: array
+          items:
+            type: string
+        clusters:
+          type: array
+          items:
+            type: string
+        platforms:
+          type: array
+          items:
+            type: string
+        sites:
+          type: array
+          items:
+            type: string
+        tenants:
+          type: array
+          items:
+            type: string
+        tags:
+          type: array
+          items:
+            type: string
+    CreateConfigurationContextRequest:
+      type: object
+      required:
+      - name
+      - payload
+      properties:
+        name:
+          type: string
+        weight:
+          type: integer
+          format: int32
+          description: Merge order; higher weights win. Default 1000.
+        payload:
+          type: object
+          additionalProperties: true
+        assignment:
+          $ref: "#/components/schemas/ConfigurationAssignment"
+    UpdateConfigurationContextRequest:
+      type: object
+      properties:
+        weight:
+          type: integer
+          format: int32
+        payload:
+          type: object
+          additionalProperties: true
+          description: Replaces the whole payload.
+        assignment:
+          $ref: "#/components/schemas/ConfigurationAssignment"
     Error:
       type: object
       required: [error]

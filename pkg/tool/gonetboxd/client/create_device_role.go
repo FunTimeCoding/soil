@@ -7,10 +7,16 @@ import (
 	"github.com/funtimecoding/soil/pkg/web"
 )
 
-func (c *Client) CreateDeviceRole(name string) *response.Response {
+func (c *Client) CreateDeviceRole(
+	name string,
+	virtualMachine bool,
+) *response.Response {
 	result, e := c.client.CreateDeviceRole(
 		c.context,
-		client.CreateNameRequest{Name: name},
+		client.CreateDeviceRoleRequest{
+			Name:           name,
+			VirtualMachine: &virtualMachine,
+		},
 	)
 	errors.PanicOnError(e)
 

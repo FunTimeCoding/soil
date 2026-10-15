@@ -20,12 +20,24 @@ func VirtualMachine(m *virtual_machine.Machine) *server.VirtualMachine {
 		result.Status = &m.Status
 	}
 
+	if m.Role != "" {
+		result.Role = &m.Role
+	}
+
 	if m.PrimaryAddress != "" {
 		result.PrimaryAddress = &m.PrimaryAddress
 	}
 
 	if len(m.Tags) > 0 {
 		result.Tags = &m.Tags
+	}
+
+	if len(m.Configuration) > 0 {
+		result.Configuration = &m.Configuration
+	}
+
+	if len(m.CustomFields) > 0 {
+		result.CustomFields = &m.CustomFields
 	}
 
 	return result

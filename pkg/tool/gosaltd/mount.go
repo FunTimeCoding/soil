@@ -2,6 +2,7 @@ package gosaltd
 
 import (
 	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/provision"
 	"github.com/funtimecoding/soil/pkg/provision/store"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/model_context"
 	"github.com/funtimecoding/soil/pkg/tool/gosaltd/runner"
@@ -15,5 +16,6 @@ func Mount(
 	t face.Recorder,
 	g *guard.Mux,
 ) {
+	provision.Mount(n, r, t, g)
 	model_context.New(n, s, r, t).Mount(g)
 }

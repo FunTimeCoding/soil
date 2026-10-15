@@ -44,6 +44,22 @@ func NewServer(r *Recorder) *httptest.Server {
 					respond(w, constant.FixtureVirtualInterface)
 				case path == "/api/virtualization/interfaces/":
 					respond(w, constant.FixtureVirtualInterfaceList)
+				case path == "/api/extras/config-contexts/1/" &&
+					q.Method == http.MethodPatch:
+					r.Patched = decodeBody(q)
+					respond(w, constant.FixtureConfigurationContext)
+				case path == "/api/extras/config-contexts/":
+					respond(w, constant.FixtureConfigurationContextList)
+				case path == "/api/extras/custom-field-choice-sets/" &&
+					q.Method == http.MethodPost:
+					r.Created = decodeBody(q)
+					respond(w, constant.FixtureChoiceSet)
+				case path == "/api/extras/custom-field-choice-sets/":
+					respond(w, constant.FixtureChoiceSetList)
+				case path == "/api/extras/custom-fields/" &&
+					q.Method == http.MethodPost:
+					r.Created = decodeBody(q)
+					respond(w, constant.FixtureCustomField)
 				default:
 					r.Unmatched = append(
 						r.Unmatched,

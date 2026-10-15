@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/types/machine_change"
@@ -15,8 +16,13 @@ func (s *Server) UpdateVirtualMachine(
 	c.Name = r.Body.Name
 	c.PrimaryAddress = r.Body.PrimaryAddress
 	c.Platform = r.Body.Platform
+	c.Role = r.Body.Role
 	c.Tenant = r.Body.Tenant
 	c.Status = r.Body.Status
+
+	if r.Body.CustomFields != nil {
+		c.CustomFields = *r.Body.CustomFields
+	}
 
 	if r.Body.Cores != nil {
 		c.Cores = new(float64(*r.Body.Cores))
@@ -27,6 +33,10 @@ func (s *Server) UpdateVirtualMachine(
 	}
 
 	m, e := s.service.UpdateVirtualMachine(r.Name, c)
+
+	if not_found.Is(e) {
+		return server.UpdateVirtualMachine404JSONResponse(*clientError(e)), nil
+	}
 
 	if e != nil {
 		return server.UpdateVirtualMachine500JSONResponse(*s.captureDetail(e)), nil

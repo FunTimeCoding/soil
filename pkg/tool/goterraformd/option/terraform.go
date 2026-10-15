@@ -15,4 +15,5 @@ type Terraform struct {
 	StateNamespace  string
 	StateLease      string
 	Downstream      []string
+	DownstreamToken string
 }

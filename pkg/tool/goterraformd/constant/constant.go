@@ -30,10 +30,11 @@ const (
 	ForceArgument    = "-force"
 	LockContext      = "terraform_lock"
 
-	TerraformPathEnvironment  = "TERRAFORM_PATH"
-	DownstreamEnvironment     = "DOWNSTREAM_HOSTS"
-	StateNamespaceEnvironment = "TERRAFORM_STATE_NAMESPACE"
-	StateLeaseEnvironment     = "TERRAFORM_STATE_LEASE"
+	TerraformPathEnvironment   = "TERRAFORM_PATH"
+	DownstreamEnvironment      = "DOWNSTREAM_HOSTS"
+	DownstreamTokenEnvironment = "DOWNSTREAM_TOKEN" // #nosec G101 not a hardcoded secret
+	StateNamespaceEnvironment  = "TERRAFORM_STATE_NAMESPACE"
+	StateLeaseEnvironment      = "TERRAFORM_STATE_LEASE"
 
 	StateNamespace = "terraform"
 	StateLease     = "lock-tfstate-default-state"

@@ -42,6 +42,13 @@ type Cable struct {
 	Status     *string `json:"status,omitempty"`
 }
 
+// ChoiceSet defines model for ChoiceSet.
+type ChoiceSet struct {
+	Choices    []string `json:"choices"`
+	Identifier int32    `json:"identifier"`
+	Name       string   `json:"name"`
+}
+
 // Cluster defines model for Cluster.
 type Cluster struct {
 	Identifier int32   `json:"identifier"`
@@ -54,6 +61,31 @@ type Cluster struct {
 type ClusterType struct {
 	Identifier int32  `json:"identifier"`
 	Name       string `json:"name"`
+}
+
+// ConfigurationAssignment Objects this context applies to, by name. Empty everywhere applies it to everything.
+type ConfigurationAssignment struct {
+	Clusters  *[]string `json:"clusters,omitempty"`
+	Platforms *[]string `json:"platforms,omitempty"`
+	Roles     *[]string `json:"roles,omitempty"`
+	Sites     *[]string `json:"sites,omitempty"`
+	Tags      *[]string `json:"tags,omitempty"`
+	Tenants   *[]string `json:"tenants,omitempty"`
+}
+
+// ConfigurationContext defines model for ConfigurationContext.
+type ConfigurationContext struct {
+	Active bool `json:"active"`
+
+	// Assignment Objects this context applies to, by name. Empty everywhere applies it to everything.
+	Assignment  ConfigurationAssignment `json:"assignment"`
+	Description *string                 `json:"description,omitempty"`
+	Identifier  int32                   `json:"identifier"`
+	Name        string                  `json:"name"`
+
+	// Payload The JSON this context contributes to every object it applies to, netbox's data block.
+	Payload map[string]interface{} `json:"payload"`
+	Weight  int32                  `json:"weight"`
 }
 
 // CreateAddressRangeRequest defines model for CreateAddressRangeRequest.
@@ -98,6 +130,12 @@ type CreateCableRequest struct {
 	InterfaceB string `json:"interfaceB"`
 }
 
+// CreateChoiceSetRequest defines model for CreateChoiceSetRequest.
+type CreateChoiceSetRequest struct {
+	Choices []string `json:"choices"`
+	Name    string   `json:"name"`
+}
+
 // CreateClusterRequest defines model for CreateClusterRequest.
 type CreateClusterRequest struct {
 	// Name Cluster name.
@@ -108,6 +146,25 @@ type CreateClusterRequest struct {
 
 	// Type Cluster type name (must already exist).
 	Type string `json:"type"`
+}
+
+// CreateConfigurationContextRequest defines model for CreateConfigurationContextRequest.
+type CreateConfigurationContextRequest struct {
+	// Assignment Objects this context applies to, by name. Empty everywhere applies it to everything.
+	Assignment *ConfigurationAssignment `json:"assignment,omitempty"`
+	Name       string                   `json:"name"`
+	Payload    map[string]interface{}   `json:"payload"`
+
+	// Weight Merge order; higher weights win. Default 1000.
+	Weight *int32 `json:"weight,omitempty"`
+}
+
+// CreateCustomFieldRequest defines model for CreateCustomFieldRequest.
+type CreateCustomFieldRequest struct {
+	// ChoiceSet Choice set the field selects from (must already exist).
+	ChoiceSet string  `json:"choiceSet"`
+	Label     *string `json:"label,omitempty"`
+	Name      string  `json:"name"`
 }
 
 // CreateDeviceRequest defines model for CreateDeviceRequest.
@@ -127,6 +184,14 @@ type CreateDeviceRequest struct {
 
 	// Type Device type model name (must already exist).
 	Type string `json:"type"`
+}
+
+// CreateDeviceRoleRequest defines model for CreateDeviceRoleRequest.
+type CreateDeviceRoleRequest struct {
+	Name string `json:"name"`
+
+	// VirtualMachine Allow virtual machines to take this role. Default false.
+	VirtualMachine *bool `json:"virtualMachine,omitempty"`
 }
 
 // CreateDeviceTypeRequest defines model for CreateDeviceTypeRequest.
@@ -230,26 +295,44 @@ type CreateVirtualMachineRequest struct {
 	Name string `json:"name"`
 }
 
+// CustomField defines model for CustomField.
+type CustomField struct {
+	ChoiceSet   *string  `json:"choiceSet,omitempty"`
+	Identifier  int32    `json:"identifier"`
+	Kind        string   `json:"kind"`
+	Label       *string  `json:"label,omitempty"`
+	Name        string   `json:"name"`
+	ObjectTypes []string `json:"objectTypes"`
+}
+
 // Device defines model for Device.
 type Device struct {
-	Identifier     int32     `json:"identifier"`
-	Labels         *[]*Label `json:"labels,omitempty"`
-	Link           *string   `json:"link,omitempty"`
-	Name           string    `json:"name"`
-	PrimaryAddress *string   `json:"primaryAddress,omitempty"`
-	Role           *string   `json:"role,omitempty"`
-	Serial         *string   `json:"serial,omitempty"`
-	Site           *string   `json:"site,omitempty"`
-	Status         *string   `json:"status,omitempty"`
-	Tags           *[]string `json:"tags,omitempty"`
-	Tenant         *string   `json:"tenant,omitempty"`
-	Type           *string   `json:"type,omitempty"`
+	// Configuration Resolved configuration context, every matching context merged.
+	Configuration *map[string]interface{} `json:"configuration,omitempty"`
+
+	// CustomFields Custom field values by field name.
+	CustomFields   *map[string]interface{} `json:"customFields,omitempty"`
+	Identifier     int32                   `json:"identifier"`
+	Labels         *[]*Label               `json:"labels,omitempty"`
+	Link           *string                 `json:"link,omitempty"`
+	Name           string                  `json:"name"`
+	PrimaryAddress *string                 `json:"primaryAddress,omitempty"`
+	Role           *string                 `json:"role,omitempty"`
+	Serial         *string                 `json:"serial,omitempty"`
+	Site           *string                 `json:"site,omitempty"`
+	Status         *string                 `json:"status,omitempty"`
+	Tags           *[]string               `json:"tags,omitempty"`
+	Tenant         *string                 `json:"tenant,omitempty"`
+	Type           *string                 `json:"type,omitempty"`
 }
 
 // DeviceRole defines model for DeviceRole.
 type DeviceRole struct {
 	Identifier int32  `json:"identifier"`
 	Name       string `json:"name"`
+
+	// VirtualMachine Whether virtual machines can take this role.
+	VirtualMachine bool `json:"virtualMachine"`
 }
 
 // DeviceType defines model for DeviceType.
@@ -386,8 +469,27 @@ type TunnelTermination struct {
 	Tunnel                *string `json:"tunnel,omitempty"`
 }
 
+// UpdateChoiceSetRequest defines model for UpdateChoiceSetRequest.
+type UpdateChoiceSetRequest struct {
+	// Choices Replaces every choice.
+	Choices []string `json:"choices"`
+}
+
+// UpdateConfigurationContextRequest defines model for UpdateConfigurationContextRequest.
+type UpdateConfigurationContextRequest struct {
+	// Assignment Objects this context applies to, by name. Empty everywhere applies it to everything.
+	Assignment *ConfigurationAssignment `json:"assignment,omitempty"`
+
+	// Payload Replaces the whole payload.
+	Payload *map[string]interface{} `json:"payload,omitempty"`
+	Weight  *int32                  `json:"weight,omitempty"`
+}
+
 // UpdateDeviceRequest defines model for UpdateDeviceRequest.
 type UpdateDeviceRequest struct {
+	// CustomFields Custom field values to set, by field name; fields not named keep their value.
+	CustomFields *map[string]interface{} `json:"customFields,omitempty"`
+
 	// Description Device description.
 	Description *string `json:"description,omitempty"`
 
@@ -424,6 +526,9 @@ type UpdateVirtualMachineRequest struct {
 	// Cores Virtual CPU count.
 	Cores *float32 `json:"cores,omitempty"`
 
+	// CustomFields Custom field values to set, by field name; fields not named keep their value.
+	CustomFields *map[string]interface{} `json:"customFields,omitempty"`
+
 	// Memory Memory in megabytes.
 	Memory *int `json:"memory,omitempty"`
 
@@ -435,6 +540,9 @@ type UpdateVirtualMachineRequest struct {
 
 	// PrimaryAddress Address to set as primary (must be assigned to the virtual machine).
 	PrimaryAddress *string `json:"primaryAddress,omitempty"`
+
+	// Role Role name to assign (must already exist and allow virtual machines).
+	Role *string `json:"role,omitempty"`
 
 	// Status Status (active, offline, planned, staged, failed, decommissioning).
 	Status *string `json:"status,omitempty"`
@@ -458,14 +566,21 @@ type VirtualInterface struct {
 
 // VirtualMachine defines model for VirtualMachine.
 type VirtualMachine struct {
-	Cluster        *string   `json:"cluster,omitempty"`
-	Identifier     int32     `json:"identifier"`
-	Labels         *[]*Label `json:"labels,omitempty"`
-	Name           string    `json:"name"`
-	PrimaryAddress *string   `json:"primaryAddress,omitempty"`
-	Site           *string   `json:"site,omitempty"`
-	Status         *string   `json:"status,omitempty"`
-	Tags           *[]string `json:"tags,omitempty"`
+	Cluster *string `json:"cluster,omitempty"`
+
+	// Configuration Resolved configuration context, every matching context merged.
+	Configuration *map[string]interface{} `json:"configuration,omitempty"`
+
+	// CustomFields Custom field values by field name.
+	CustomFields   *map[string]interface{} `json:"customFields,omitempty"`
+	Identifier     int32                   `json:"identifier"`
+	Labels         *[]*Label               `json:"labels,omitempty"`
+	Name           string                  `json:"name"`
+	PrimaryAddress *string                 `json:"primaryAddress,omitempty"`
+	Role           *string                 `json:"role,omitempty"`
+	Site           *string                 `json:"site,omitempty"`
+	Status         *string                 `json:"status,omitempty"`
+	Tags           *[]string               `json:"tags,omitempty"`
 }
 
 // WirelessNetwork defines model for WirelessNetwork.
@@ -489,6 +604,12 @@ type ListDeviceJournalEntriesParams struct {
 	Offset *int32 `form:"offset,omitempty" json:"offset,omitempty"`
 }
 
+// GetAnsibleInventoryParams defines parameters for GetAnsibleInventory.
+type GetAnsibleInventoryParams struct {
+	// Field Custom field whose values become the groups. Default ansible_playbook.
+	Field *string `form:"field,omitempty" json:"field,omitempty"`
+}
+
 // ListVirtualJournalEntriesParams defines parameters for ListVirtualJournalEntries.
 type ListVirtualJournalEntriesParams struct {
 	// Limit Maximum entries to return.
@@ -504,14 +625,29 @@ type CreateAddressRangeJSONRequestBody = CreateAddressRangeRequest
 // CreateCableJSONRequestBody defines body for CreateCable for application/json ContentType.
 type CreateCableJSONRequestBody = CreateCableRequest
 
+// CreateChoiceSetJSONRequestBody defines body for CreateChoiceSet for application/json ContentType.
+type CreateChoiceSetJSONRequestBody = CreateChoiceSetRequest
+
+// UpdateChoiceSetJSONRequestBody defines body for UpdateChoiceSet for application/json ContentType.
+type UpdateChoiceSetJSONRequestBody = UpdateChoiceSetRequest
+
 // CreateClusterTypeJSONRequestBody defines body for CreateClusterType for application/json ContentType.
 type CreateClusterTypeJSONRequestBody = CreateNameRequest
 
 // CreateClusterJSONRequestBody defines body for CreateCluster for application/json ContentType.
 type CreateClusterJSONRequestBody = CreateClusterRequest
 
+// CreateConfigurationContextJSONRequestBody defines body for CreateConfigurationContext for application/json ContentType.
+type CreateConfigurationContextJSONRequestBody = CreateConfigurationContextRequest
+
+// UpdateConfigurationContextJSONRequestBody defines body for UpdateConfigurationContext for application/json ContentType.
+type UpdateConfigurationContextJSONRequestBody = UpdateConfigurationContextRequest
+
+// CreateCustomFieldJSONRequestBody defines body for CreateCustomField for application/json ContentType.
+type CreateCustomFieldJSONRequestBody = CreateCustomFieldRequest
+
 // CreateDeviceRoleJSONRequestBody defines body for CreateDeviceRole for application/json ContentType.
-type CreateDeviceRoleJSONRequestBody = CreateNameRequest
+type CreateDeviceRoleJSONRequestBody = CreateDeviceRoleRequest
 
 // CreateDeviceTypeJSONRequestBody defines body for CreateDeviceType for application/json ContentType.
 type CreateDeviceTypeJSONRequestBody = CreateDeviceTypeRequest
@@ -699,6 +835,31 @@ type ClientInterface interface {
 	// Takes a body of the `application/json` content type.
 	CreateCable(ctx context.Context, body CreateCableJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
 
+	// ListChoiceSets performs a GET /api/choice-sets (the `ListChoiceSets` operationId) request.
+	ListChoiceSets(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateChoiceSetWithBody performs a POST /api/choice-sets (the `CreateChoiceSet` operationId) request,
+	// with any type of body and a specified content type.
+	CreateChoiceSetWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateChoiceSet performs a POST /api/choice-sets (the `CreateChoiceSet` operationId) request.
+	// Takes a body of the `application/json` content type.
+	CreateChoiceSet(ctx context.Context, body CreateChoiceSetJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteChoiceSet performs a DELETE /api/choice-sets/{name} (the `DeleteChoiceSet` operationId) request.
+	DeleteChoiceSet(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetChoiceSet performs a GET /api/choice-sets/{name} (the `GetChoiceSet` operationId) request.
+	GetChoiceSet(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateChoiceSetWithBody performs a PATCH /api/choice-sets/{name} (the `UpdateChoiceSet` operationId) request,
+	// with any type of body and a specified content type.
+	UpdateChoiceSetWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateChoiceSet performs a PATCH /api/choice-sets/{name} (the `UpdateChoiceSet` operationId) request.
+	// Takes a body of the `application/json` content type.
+	UpdateChoiceSet(ctx context.Context, name string, body UpdateChoiceSetJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
 	// ListClusterTypes performs a GET /api/cluster-types (the `ListClusterTypes` operationId) request.
 	ListClusterTypes(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
 
@@ -720,6 +881,45 @@ type ClientInterface interface {
 	// CreateCluster performs a POST /api/clusters (the `CreateCluster` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateCluster(ctx context.Context, body CreateClusterJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ListConfigurationContexts performs a GET /api/configuration-contexts (the `ListConfigurationContexts` operationId) request.
+	ListConfigurationContexts(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateConfigurationContextWithBody performs a POST /api/configuration-contexts (the `CreateConfigurationContext` operationId) request,
+	// with any type of body and a specified content type.
+	CreateConfigurationContextWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateConfigurationContext performs a POST /api/configuration-contexts (the `CreateConfigurationContext` operationId) request.
+	// Takes a body of the `application/json` content type.
+	CreateConfigurationContext(ctx context.Context, body CreateConfigurationContextJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteConfigurationContext performs a DELETE /api/configuration-contexts/{name} (the `DeleteConfigurationContext` operationId) request.
+	DeleteConfigurationContext(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetConfigurationContext performs a GET /api/configuration-contexts/{name} (the `GetConfigurationContext` operationId) request.
+	GetConfigurationContext(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateConfigurationContextWithBody performs a PATCH /api/configuration-contexts/{name} (the `UpdateConfigurationContext` operationId) request,
+	// with any type of body and a specified content type.
+	UpdateConfigurationContextWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// UpdateConfigurationContext performs a PATCH /api/configuration-contexts/{name} (the `UpdateConfigurationContext` operationId) request.
+	// Takes a body of the `application/json` content type.
+	UpdateConfigurationContext(ctx context.Context, name string, body UpdateConfigurationContextJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// ListCustomFields performs a GET /api/custom-fields (the `ListCustomFields` operationId) request.
+	ListCustomFields(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateCustomFieldWithBody performs a POST /api/custom-fields (the `CreateCustomField` operationId) request,
+	// with any type of body and a specified content type.
+	CreateCustomFieldWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// CreateCustomField performs a POST /api/custom-fields (the `CreateCustomField` operationId) request.
+	// Takes a body of the `application/json` content type.
+	CreateCustomField(ctx context.Context, body CreateCustomFieldJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// DeleteCustomField performs a DELETE /api/custom-fields/{name} (the `DeleteCustomField` operationId) request.
+	DeleteCustomField(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// ListDeviceRoles performs a GET /api/device-roles (the `ListDeviceRoles` operationId) request.
 	ListDeviceRoles(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -836,6 +1036,9 @@ type ClientInterface interface {
 	// CreateDeviceTunnelTermination performs a POST /api/devices/{name}/tunnel-terminations/create (the `CreateDeviceTunnelTermination` operationId) request.
 	// Takes a body of the `application/json` content type.
 	CreateDeviceTunnelTermination(ctx context.Context, name string, body CreateDeviceTunnelTerminationJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error)
+
+	// GetAnsibleInventory performs a GET /api/inventory/ansible (the `GetAnsibleInventory` operationId) request.
+	GetAnsibleInventory(ctx context.Context, params *GetAnsibleInventoryParams, reqEditors ...RequestEditorFn) (*http.Response, error)
 
 	// DeleteJournalEntry performs a DELETE /api/journal-entries/{identifier} (the `DeleteJournalEntry` operationId) request.
 	DeleteJournalEntry(ctx context.Context, identifier int32, reqEditors ...RequestEditorFn) (*http.Response, error)
@@ -1162,6 +1365,101 @@ func (c *Client) CreateCable(ctx context.Context, body CreateCableJSONRequestBod
 	return c.Client.Do(req)
 }
 
+// ListChoiceSets performs a GET /api/choice-sets (the `ListChoiceSets` operationId) request.
+func (c *Client) ListChoiceSets(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListChoiceSetsRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// CreateChoiceSetWithBody performs a POST /api/choice-sets (the `CreateChoiceSet` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) CreateChoiceSetWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateChoiceSetRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// CreateChoiceSet performs a POST /api/choice-sets (the `CreateChoiceSet` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) CreateChoiceSet(ctx context.Context, body CreateChoiceSetJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateChoiceSetRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// DeleteChoiceSet performs a DELETE /api/choice-sets/{name} (the `DeleteChoiceSet` operationId) request.
+func (c *Client) DeleteChoiceSet(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteChoiceSetRequest(c.Server, name)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetChoiceSet performs a GET /api/choice-sets/{name} (the `GetChoiceSet` operationId) request.
+func (c *Client) GetChoiceSet(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetChoiceSetRequest(c.Server, name)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// UpdateChoiceSetWithBody performs a PATCH /api/choice-sets/{name} (the `UpdateChoiceSet` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) UpdateChoiceSetWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateChoiceSetRequestWithBody(c.Server, name, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// UpdateChoiceSet performs a PATCH /api/choice-sets/{name} (the `UpdateChoiceSet` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) UpdateChoiceSet(ctx context.Context, name string, body UpdateChoiceSetJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateChoiceSetRequest(c.Server, name, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
 // ListClusterTypes performs a GET /api/cluster-types (the `ListClusterTypes` operationId) request.
 func (c *Client) ListClusterTypes(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewListClusterTypesRequest(c.Server)
@@ -1234,6 +1532,155 @@ func (c *Client) CreateClusterWithBody(ctx context.Context, contentType string, 
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateCluster(ctx context.Context, body CreateClusterJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateClusterRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// ListConfigurationContexts performs a GET /api/configuration-contexts (the `ListConfigurationContexts` operationId) request.
+func (c *Client) ListConfigurationContexts(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListConfigurationContextsRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// CreateConfigurationContextWithBody performs a POST /api/configuration-contexts (the `CreateConfigurationContext` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) CreateConfigurationContextWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateConfigurationContextRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// CreateConfigurationContext performs a POST /api/configuration-contexts (the `CreateConfigurationContext` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) CreateConfigurationContext(ctx context.Context, body CreateConfigurationContextJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateConfigurationContextRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// DeleteConfigurationContext performs a DELETE /api/configuration-contexts/{name} (the `DeleteConfigurationContext` operationId) request.
+func (c *Client) DeleteConfigurationContext(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteConfigurationContextRequest(c.Server, name)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetConfigurationContext performs a GET /api/configuration-contexts/{name} (the `GetConfigurationContext` operationId) request.
+func (c *Client) GetConfigurationContext(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetConfigurationContextRequest(c.Server, name)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// UpdateConfigurationContextWithBody performs a PATCH /api/configuration-contexts/{name} (the `UpdateConfigurationContext` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) UpdateConfigurationContextWithBody(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateConfigurationContextRequestWithBody(c.Server, name, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// UpdateConfigurationContext performs a PATCH /api/configuration-contexts/{name} (the `UpdateConfigurationContext` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) UpdateConfigurationContext(ctx context.Context, name string, body UpdateConfigurationContextJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewUpdateConfigurationContextRequest(c.Server, name, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// ListCustomFields performs a GET /api/custom-fields (the `ListCustomFields` operationId) request.
+func (c *Client) ListCustomFields(ctx context.Context, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewListCustomFieldsRequest(c.Server)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// CreateCustomFieldWithBody performs a POST /api/custom-fields (the `CreateCustomField` operationId) request,
+// with any type of body and a specified content type.
+func (c *Client) CreateCustomFieldWithBody(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateCustomFieldRequestWithBody(c.Server, contentType, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// CreateCustomField performs a POST /api/custom-fields (the `CreateCustomField` operationId) request.
+// Takes a body of the `application/json` content type.
+func (c *Client) CreateCustomField(ctx context.Context, body CreateCustomFieldJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewCreateCustomFieldRequest(c.Server, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// DeleteCustomField performs a DELETE /api/custom-fields/{name} (the `DeleteCustomField` operationId) request.
+func (c *Client) DeleteCustomField(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewDeleteCustomFieldRequest(c.Server, name)
 	if err != nil {
 		return nil, err
 	}
@@ -1670,6 +2117,19 @@ func (c *Client) CreateDeviceTunnelTerminationWithBody(ctx context.Context, name
 // Takes a body of the `application/json` content type.
 func (c *Client) CreateDeviceTunnelTermination(ctx context.Context, name string, body CreateDeviceTunnelTerminationJSONRequestBody, reqEditors ...RequestEditorFn) (*http.Response, error) {
 	req, err := NewCreateDeviceTunnelTerminationRequest(c.Server, name, body)
+	if err != nil {
+		return nil, err
+	}
+	req = req.WithContext(ctx)
+	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
+		return nil, err
+	}
+	return c.Client.Do(req)
+}
+
+// GetAnsibleInventory performs a GET /api/inventory/ansible (the `GetAnsibleInventory` operationId) request.
+func (c *Client) GetAnsibleInventory(ctx context.Context, params *GetAnsibleInventoryParams, reqEditors ...RequestEditorFn) (*http.Response, error) {
+	req, err := NewGetAnsibleInventoryRequest(c.Server, params)
 	if err != nil {
 		return nil, err
 	}
@@ -2707,6 +3167,188 @@ func NewCreateCableRequestWithBody(server string, contentType string, body io.Re
 	return req, nil
 }
 
+// NewListChoiceSetsRequest constructs an http.Request for the ListChoiceSets method
+func NewListChoiceSetsRequest(server string) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/choice-sets")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewCreateChoiceSetRequest calls the generic CreateChoiceSet builder with application/json body
+func NewCreateChoiceSetRequest(server string, body CreateChoiceSetJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreateChoiceSetRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewCreateChoiceSetRequestWithBody constructs an http.Request for the CreateChoiceSet method, with any body, and a specified content type
+func NewCreateChoiceSetRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/choice-sets")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewDeleteChoiceSetRequest constructs an http.Request for the DeleteChoiceSet method
+func NewDeleteChoiceSetRequest(server string, name string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "name", name, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/choice-sets/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodDelete, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetChoiceSetRequest constructs an http.Request for the GetChoiceSet method
+func NewGetChoiceSetRequest(server string, name string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "name", name, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/choice-sets/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewUpdateChoiceSetRequest calls the generic UpdateChoiceSet builder with application/json body
+func NewUpdateChoiceSetRequest(server string, name string, body UpdateChoiceSetJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewUpdateChoiceSetRequestWithBody(server, name, "application/json", bodyReader)
+}
+
+// NewUpdateChoiceSetRequestWithBody constructs an http.Request for the UpdateChoiceSet method, with any body, and a specified content type
+func NewUpdateChoiceSetRequestWithBody(server string, name string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "name", name, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/choice-sets/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPatch, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
 // NewListClusterTypesRequest constructs an http.Request for the ListClusterTypes method
 func NewListClusterTypesRequest(server string) (*http.Request, error) {
 	var err error
@@ -2837,6 +3479,289 @@ func NewCreateClusterRequestWithBody(server string, contentType string, body io.
 	}
 
 	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewListConfigurationContextsRequest constructs an http.Request for the ListConfigurationContexts method
+func NewListConfigurationContextsRequest(server string) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/configuration-contexts")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewCreateConfigurationContextRequest calls the generic CreateConfigurationContext builder with application/json body
+func NewCreateConfigurationContextRequest(server string, body CreateConfigurationContextJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreateConfigurationContextRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewCreateConfigurationContextRequestWithBody constructs an http.Request for the CreateConfigurationContext method, with any body, and a specified content type
+func NewCreateConfigurationContextRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/configuration-contexts")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewDeleteConfigurationContextRequest constructs an http.Request for the DeleteConfigurationContext method
+func NewDeleteConfigurationContextRequest(server string, name string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "name", name, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/configuration-contexts/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodDelete, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewGetConfigurationContextRequest constructs an http.Request for the GetConfigurationContext method
+func NewGetConfigurationContextRequest(server string, name string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "name", name, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/configuration-contexts/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewUpdateConfigurationContextRequest calls the generic UpdateConfigurationContext builder with application/json body
+func NewUpdateConfigurationContextRequest(server string, name string, body UpdateConfigurationContextJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewUpdateConfigurationContextRequestWithBody(server, name, "application/json", bodyReader)
+}
+
+// NewUpdateConfigurationContextRequestWithBody constructs an http.Request for the UpdateConfigurationContext method, with any body, and a specified content type
+func NewUpdateConfigurationContextRequestWithBody(server string, name string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "name", name, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/configuration-contexts/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPatch, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewListCustomFieldsRequest constructs an http.Request for the ListCustomFields method
+func NewListCustomFieldsRequest(server string) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/custom-fields")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
+
+	return req, nil
+}
+
+// NewCreateCustomFieldRequest calls the generic CreateCustomField builder with application/json body
+func NewCreateCustomFieldRequest(server string, body CreateCustomFieldJSONRequestBody) (*http.Request, error) {
+	var bodyReader io.Reader
+	buf, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+	bodyReader = bytes.NewReader(buf)
+	return NewCreateCustomFieldRequestWithBody(server, "application/json", bodyReader)
+}
+
+// NewCreateCustomFieldRequestWithBody constructs an http.Request for the CreateCustomField method, with any body, and a specified content type
+func NewCreateCustomFieldRequestWithBody(server string, contentType string, body io.Reader) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/custom-fields")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodPost, queryURL.String(), body)
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewDeleteCustomFieldRequest constructs an http.Request for the DeleteCustomField method
+func NewDeleteCustomFieldRequest(server string, name string) (*http.Request, error) {
+	var err error
+
+	var pathParam0 string
+
+	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "name", name, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
+	if err != nil {
+		return nil, err
+	}
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/custom-fields/%s", pathParam0)
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest(http.MethodDelete, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
 
 	return req, nil
 }
@@ -3774,6 +4699,60 @@ func NewCreateDeviceTunnelTerminationRequestWithBody(server string, name string,
 	}
 
 	req.Header.Add("Content-Type", contentType)
+
+	return req, nil
+}
+
+// NewGetAnsibleInventoryRequest constructs an http.Request for the GetAnsibleInventory method
+func NewGetAnsibleInventoryRequest(server string, params *GetAnsibleInventoryParams) (*http.Request, error) {
+	var err error
+
+	serverURL, err := url.Parse(server)
+	if err != nil {
+		return nil, err
+	}
+
+	operationPath := fmt.Sprintf("/api/inventory/ansible")
+	if operationPath[0] == '/' {
+		operationPath = "." + operationPath
+	}
+
+	queryURL, err := serverURL.Parse(operationPath)
+	if err != nil {
+		return nil, err
+	}
+
+	if params != nil {
+		// queryValues collects non-styled parameters (passthrough, JSON)
+		// that are safe to round-trip through url.Values.Encode().
+		queryValues := queryURL.Query()
+		// rawQueryFragments collects pre-encoded query fragments from
+		// styled parameters, preserving literal commas as delimiters
+		// per the OpenAPI spec (e.g. "color=blue,black,brown").
+		var rawQueryFragments []string
+
+		if params.Field != nil {
+
+			if queryFrag, err := runtime.StyleParamWithOptions("form", true, "field", *params.Field, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationQuery, Type: "string", Format: ""}); err != nil {
+				return nil, err
+			} else {
+				for _, qp := range strings.Split(queryFrag, "&") {
+					rawQueryFragments = append(rawQueryFragments, qp)
+				}
+			}
+
+		}
+
+		if encoded := queryValues.Encode(); encoded != "" {
+			rawQueryFragments = append(rawQueryFragments, encoded)
+		}
+		queryURL.RawQuery = strings.Join(rawQueryFragments, "&")
+	}
+
+	req, err := http.NewRequest(http.MethodGet, queryURL.String(), nil)
+	if err != nil {
+		return nil, err
+	}
 
 	return req, nil
 }
@@ -5485,6 +6464,41 @@ type ClientWithResponsesInterface interface {
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateCableWithResponse(ctx context.Context, body CreateCableJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateCableResponse, error)
 
+	// ListChoiceSetsWithResponse performs a GET /api/choice-sets (the `ListChoiceSets` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	ListChoiceSetsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListChoiceSetsResponse, error)
+
+	// CreateChoiceSetWithBodyWithResponse performs a POST /api/choice-sets (the `CreateChoiceSet` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	CreateChoiceSetWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateChoiceSetResponse, error)
+
+	// CreateChoiceSetWithResponse performs a POST /api/choice-sets (the `CreateChoiceSet` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	CreateChoiceSetWithResponse(ctx context.Context, body CreateChoiceSetJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateChoiceSetResponse, error)
+
+	// DeleteChoiceSetWithResponse performs a DELETE /api/choice-sets/{name} (the `DeleteChoiceSet` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	DeleteChoiceSetWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*DeleteChoiceSetResponse, error)
+
+	// GetChoiceSetWithResponse performs a GET /api/choice-sets/{name} (the `GetChoiceSet` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetChoiceSetWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*GetChoiceSetResponse, error)
+
+	// UpdateChoiceSetWithBodyWithResponse performs a PATCH /api/choice-sets/{name} (the `UpdateChoiceSet` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	UpdateChoiceSetWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateChoiceSetResponse, error)
+
+	// UpdateChoiceSetWithResponse performs a PATCH /api/choice-sets/{name} (the `UpdateChoiceSet` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	UpdateChoiceSetWithResponse(ctx context.Context, name string, body UpdateChoiceSetJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateChoiceSetResponse, error)
+
 	// ListClusterTypesWithResponse performs a GET /api/cluster-types (the `ListClusterTypes` operationId) request.
 	//
 	// Returns a wrapper object for the known response body format(s).
@@ -5514,6 +6528,61 @@ type ClientWithResponsesInterface interface {
 	// CreateClusterWithResponse performs a POST /api/clusters (the `CreateCluster` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateClusterWithResponse(ctx context.Context, body CreateClusterJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateClusterResponse, error)
+
+	// ListConfigurationContextsWithResponse performs a GET /api/configuration-contexts (the `ListConfigurationContexts` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	ListConfigurationContextsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListConfigurationContextsResponse, error)
+
+	// CreateConfigurationContextWithBodyWithResponse performs a POST /api/configuration-contexts (the `CreateConfigurationContext` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	CreateConfigurationContextWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateConfigurationContextResponse, error)
+
+	// CreateConfigurationContextWithResponse performs a POST /api/configuration-contexts (the `CreateConfigurationContext` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	CreateConfigurationContextWithResponse(ctx context.Context, body CreateConfigurationContextJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateConfigurationContextResponse, error)
+
+	// DeleteConfigurationContextWithResponse performs a DELETE /api/configuration-contexts/{name} (the `DeleteConfigurationContext` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	DeleteConfigurationContextWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*DeleteConfigurationContextResponse, error)
+
+	// GetConfigurationContextWithResponse performs a GET /api/configuration-contexts/{name} (the `GetConfigurationContext` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetConfigurationContextWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*GetConfigurationContextResponse, error)
+
+	// UpdateConfigurationContextWithBodyWithResponse performs a PATCH /api/configuration-contexts/{name} (the `UpdateConfigurationContext` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	UpdateConfigurationContextWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateConfigurationContextResponse, error)
+
+	// UpdateConfigurationContextWithResponse performs a PATCH /api/configuration-contexts/{name} (the `UpdateConfigurationContext` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	UpdateConfigurationContextWithResponse(ctx context.Context, name string, body UpdateConfigurationContextJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateConfigurationContextResponse, error)
+
+	// ListCustomFieldsWithResponse performs a GET /api/custom-fields (the `ListCustomFields` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	ListCustomFieldsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListCustomFieldsResponse, error)
+
+	// CreateCustomFieldWithBodyWithResponse performs a POST /api/custom-fields (the `CreateCustomField` operationId) request,
+	// with any type of body and a specified content type.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	CreateCustomFieldWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateCustomFieldResponse, error)
+
+	// CreateCustomFieldWithResponse performs a POST /api/custom-fields (the `CreateCustomField` operationId) request.
+	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+	CreateCustomFieldWithResponse(ctx context.Context, body CreateCustomFieldJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateCustomFieldResponse, error)
+
+	// DeleteCustomFieldWithResponse performs a DELETE /api/custom-fields/{name} (the `DeleteCustomField` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	DeleteCustomFieldWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*DeleteCustomFieldResponse, error)
 
 	// ListDeviceRolesWithResponse performs a GET /api/device-roles (the `ListDeviceRoles` operationId) request.
 	//
@@ -5674,6 +6743,11 @@ type ClientWithResponsesInterface interface {
 	// CreateDeviceTunnelTerminationWithResponse performs a POST /api/devices/{name}/tunnel-terminations/create (the `CreateDeviceTunnelTermination` operationId) request.
 	// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
 	CreateDeviceTunnelTerminationWithResponse(ctx context.Context, name string, body CreateDeviceTunnelTerminationJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateDeviceTunnelTerminationResponse, error)
+
+	// GetAnsibleInventoryWithResponse performs a GET /api/inventory/ansible (the `GetAnsibleInventory` operationId) request.
+	//
+	// Returns a wrapper object for the known response body format(s).
+	GetAnsibleInventoryWithResponse(ctx context.Context, params *GetAnsibleInventoryParams, reqEditors ...RequestEditorFn) (*GetAnsibleInventoryResponse, error)
 
 	// DeleteJournalEntryWithResponse performs a DELETE /api/journal-entries/{identifier} (the `DeleteJournalEntry` operationId) request.
 	//
@@ -6224,6 +7298,260 @@ func (r CreateCableResponse) ContentType() string {
 	return ""
 }
 
+type ListChoiceSetsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *[]*ChoiceSet
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r ListChoiceSetsResponse) GetJSON200() *[]*ChoiceSet {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r ListChoiceSetsResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r ListChoiceSetsResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r ListChoiceSetsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListChoiceSetsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ListChoiceSetsResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type CreateChoiceSetResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON201 the response for an HTTP 201 `application/json` response
+	JSON201 *ChoiceSet
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON201 returns the response for an HTTP 201 `application/json` response
+func (r CreateChoiceSetResponse) GetJSON201() *ChoiceSet {
+	return r.JSON201
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r CreateChoiceSetResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r CreateChoiceSetResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r CreateChoiceSetResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CreateChoiceSetResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r CreateChoiceSetResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type DeleteChoiceSetResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r DeleteChoiceSetResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r DeleteChoiceSetResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r DeleteChoiceSetResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteChoiceSetResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteChoiceSetResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r DeleteChoiceSetResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type GetChoiceSetResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *ChoiceSet
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetChoiceSetResponse) GetJSON200() *ChoiceSet {
+	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r GetChoiceSetResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetChoiceSetResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetChoiceSetResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetChoiceSetResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetChoiceSetResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetChoiceSetResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type UpdateChoiceSetResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *ChoiceSet
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r UpdateChoiceSetResponse) GetJSON200() *ChoiceSet {
+	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r UpdateChoiceSetResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r UpdateChoiceSetResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r UpdateChoiceSetResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r UpdateChoiceSetResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r UpdateChoiceSetResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r UpdateChoiceSetResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
 type ListClusterTypesResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
@@ -6410,6 +7738,418 @@ func (r CreateClusterResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r CreateClusterResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type ListConfigurationContextsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *[]*ConfigurationContext
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r ListConfigurationContextsResponse) GetJSON200() *[]*ConfigurationContext {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r ListConfigurationContextsResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r ListConfigurationContextsResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r ListConfigurationContextsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListConfigurationContextsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ListConfigurationContextsResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type CreateConfigurationContextResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON201 the response for an HTTP 201 `application/json` response
+	JSON201 *ConfigurationContext
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON201 returns the response for an HTTP 201 `application/json` response
+func (r CreateConfigurationContextResponse) GetJSON201() *ConfigurationContext {
+	return r.JSON201
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r CreateConfigurationContextResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r CreateConfigurationContextResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r CreateConfigurationContextResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r CreateConfigurationContextResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CreateConfigurationContextResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r CreateConfigurationContextResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type DeleteConfigurationContextResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r DeleteConfigurationContextResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r DeleteConfigurationContextResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r DeleteConfigurationContextResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteConfigurationContextResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteConfigurationContextResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r DeleteConfigurationContextResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type GetConfigurationContextResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *ConfigurationContext
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r GetConfigurationContextResponse) GetJSON200() *ConfigurationContext {
+	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r GetConfigurationContextResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetConfigurationContextResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetConfigurationContextResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetConfigurationContextResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetConfigurationContextResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetConfigurationContextResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type UpdateConfigurationContextResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *ConfigurationContext
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r UpdateConfigurationContextResponse) GetJSON200() *ConfigurationContext {
+	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r UpdateConfigurationContextResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r UpdateConfigurationContextResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r UpdateConfigurationContextResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r UpdateConfigurationContextResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r UpdateConfigurationContextResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r UpdateConfigurationContextResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type ListCustomFieldsResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *[]*CustomField
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r ListCustomFieldsResponse) GetJSON200() *[]*CustomField {
+	return r.JSON200
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r ListCustomFieldsResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r ListCustomFieldsResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r ListCustomFieldsResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r ListCustomFieldsResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r ListCustomFieldsResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type CreateCustomFieldResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON201 the response for an HTTP 201 `application/json` response
+	JSON201 *CustomField
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON201 returns the response for an HTTP 201 `application/json` response
+func (r CreateCustomFieldResponse) GetJSON201() *CustomField {
+	return r.JSON201
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r CreateCustomFieldResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r CreateCustomFieldResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r CreateCustomFieldResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r CreateCustomFieldResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r CreateCustomFieldResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r CreateCustomFieldResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type DeleteCustomFieldResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r DeleteCustomFieldResponse) GetJSON404() *Error {
+	return r.JSON404
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r DeleteCustomFieldResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r DeleteCustomFieldResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r DeleteCustomFieldResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r DeleteCustomFieldResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r DeleteCustomFieldResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -6764,6 +8504,8 @@ type UpdateDeviceResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *Device
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -6771,6 +8513,11 @@ type UpdateDeviceResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r UpdateDeviceResponse) GetJSON200() *Device {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r UpdateDeviceResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -6812,6 +8559,8 @@ type ListAddressesResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*Address
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -6819,6 +8568,11 @@ type ListAddressesResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r ListAddressesResponse) GetJSON200() *[]*Address {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r ListAddressesResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -6860,6 +8614,8 @@ type CreateAddressResponse struct {
 	HTTPResponse *http.Response
 	// JSON201 the response for an HTTP 201 `application/json` response
 	JSON201 *Address
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -6867,6 +8623,11 @@ type CreateAddressResponse struct {
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
 func (r CreateAddressResponse) GetJSON201() *Address {
 	return r.JSON201
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r CreateAddressResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -6908,6 +8669,8 @@ type ListInterfacesResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*Interface
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -6915,6 +8678,11 @@ type ListInterfacesResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r ListInterfacesResponse) GetJSON200() *[]*Interface {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r ListInterfacesResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -6956,6 +8724,8 @@ type CreateInterfaceResponse struct {
 	HTTPResponse *http.Response
 	// JSON201 the response for an HTTP 201 `application/json` response
 	JSON201 *Interface
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -6963,6 +8733,11 @@ type CreateInterfaceResponse struct {
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
 func (r CreateInterfaceResponse) GetJSON201() *Interface {
 	return r.JSON201
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r CreateInterfaceResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -7004,6 +8779,8 @@ type SetInterfacePhysicalAddressResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *PhysicalAddress
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -7011,6 +8788,11 @@ type SetInterfacePhysicalAddressResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r SetInterfacePhysicalAddressResponse) GetJSON200() *PhysicalAddress {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r SetInterfacePhysicalAddressResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -7052,6 +8834,8 @@ type ListDeviceJournalEntriesResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*JournalEntry
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -7059,6 +8843,11 @@ type ListDeviceJournalEntriesResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r ListDeviceJournalEntriesResponse) GetJSON200() *[]*JournalEntry {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r ListDeviceJournalEntriesResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -7100,6 +8889,8 @@ type AddDeviceJournalEntryResponse struct {
 	HTTPResponse *http.Response
 	// JSON201 the response for an HTTP 201 `application/json` response
 	JSON201 *JournalEntry
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -7107,6 +8898,11 @@ type AddDeviceJournalEntryResponse struct {
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
 func (r AddDeviceJournalEntryResponse) GetJSON201() *JournalEntry {
 	return r.JSON201
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r AddDeviceJournalEntryResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -7148,6 +8944,8 @@ type ListDeviceLabelsResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*Label
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -7155,6 +8953,11 @@ type ListDeviceLabelsResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r ListDeviceLabelsResponse) GetJSON200() *[]*Label {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r ListDeviceLabelsResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -7194,8 +8997,15 @@ func (r ListDeviceLabelsResponse) ContentType() string {
 type RemoveDeviceLabelResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r RemoveDeviceLabelResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -7237,6 +9047,8 @@ type SetDeviceLabelResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *Label
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -7244,6 +9056,11 @@ type SetDeviceLabelResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r SetDeviceLabelResponse) GetJSON200() *Label {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r SetDeviceLabelResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -7285,6 +9102,8 @@ type ListDeviceTagsResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]string
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -7292,6 +9111,11 @@ type ListDeviceTagsResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r ListDeviceTagsResponse) GetJSON200() *[]string {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r ListDeviceTagsResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -7333,6 +9157,8 @@ type RemoveDeviceTagResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *Device
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -7340,6 +9166,11 @@ type RemoveDeviceTagResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r RemoveDeviceTagResponse) GetJSON200() *Device {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r RemoveDeviceTagResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -7381,6 +9212,8 @@ type AddDeviceTagResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *Device
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -7388,6 +9221,11 @@ type AddDeviceTagResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r AddDeviceTagResponse) GetJSON200() *Device {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r AddDeviceTagResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -7429,6 +9267,8 @@ type CreateDeviceTunnelTerminationResponse struct {
 	HTTPResponse *http.Response
 	// JSON201 the response for an HTTP 201 `application/json` response
 	JSON201 *TunnelTermination
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -7436,6 +9276,11 @@ type CreateDeviceTunnelTerminationResponse struct {
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
 func (r CreateDeviceTunnelTerminationResponse) GetJSON201() *TunnelTermination {
 	return r.JSON201
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r CreateDeviceTunnelTerminationResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -7466,6 +9311,47 @@ func (r CreateDeviceTunnelTerminationResponse) StatusCode() int {
 
 // ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
 func (r CreateDeviceTunnelTerminationResponse) ContentType() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Header.Get("Content-Type")
+	}
+	return ""
+}
+
+type GetAnsibleInventoryResponse struct {
+	Body         []byte
+	HTTPResponse *http.Response
+	// JSON500 the response for an HTTP 500 `application/json` response
+	JSON500 *ErrorResponse
+}
+
+// GetJSON500 returns the response for an HTTP 500 `application/json` response
+func (r GetAnsibleInventoryResponse) GetJSON500() *ErrorResponse {
+	return r.JSON500
+}
+
+// GetBody returns the raw response body bytes
+func (r GetAnsibleInventoryResponse) GetBody() []byte {
+	return r.Body
+}
+
+// Status returns HTTPResponse.Status
+func (r GetAnsibleInventoryResponse) Status() string {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.Status
+	}
+	return http.StatusText(0)
+}
+
+// StatusCode returns HTTPResponse.StatusCode
+func (r GetAnsibleInventoryResponse) StatusCode() int {
+	if r.HTTPResponse != nil {
+		return r.HTTPResponse.StatusCode
+	}
+	return 0
+}
+
+// ContentType is a convenience method to retrieve the Content-Type value from the HTTP response headers
+func (r GetAnsibleInventoryResponse) ContentType() string {
 	if r.HTTPResponse != nil {
 		return r.HTTPResponse.Header.Get("Content-Type")
 	}
@@ -8622,6 +10508,8 @@ type GetVirtualMachineResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *VirtualMachine
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -8629,6 +10517,11 @@ type GetVirtualMachineResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r GetVirtualMachineResponse) GetJSON200() *VirtualMachine {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r GetVirtualMachineResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -8670,6 +10563,8 @@ type UpdateVirtualMachineResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *VirtualMachine
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -8677,6 +10572,11 @@ type UpdateVirtualMachineResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r UpdateVirtualMachineResponse) GetJSON200() *VirtualMachine {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r UpdateVirtualMachineResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -8718,6 +10618,8 @@ type ListVirtualAddressesResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*Address
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -8725,6 +10627,11 @@ type ListVirtualAddressesResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r ListVirtualAddressesResponse) GetJSON200() *[]*Address {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r ListVirtualAddressesResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -8766,6 +10673,8 @@ type CreateVirtualAddressResponse struct {
 	HTTPResponse *http.Response
 	// JSON201 the response for an HTTP 201 `application/json` response
 	JSON201 *Address
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -8773,6 +10682,11 @@ type CreateVirtualAddressResponse struct {
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
 func (r CreateVirtualAddressResponse) GetJSON201() *Address {
 	return r.JSON201
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r CreateVirtualAddressResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -8814,6 +10728,8 @@ type ListVirtualDisksResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*VirtualDisk
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -8821,6 +10737,11 @@ type ListVirtualDisksResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r ListVirtualDisksResponse) GetJSON200() *[]*VirtualDisk {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r ListVirtualDisksResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -8862,6 +10783,8 @@ type CreateVirtualDiskResponse struct {
 	HTTPResponse *http.Response
 	// JSON201 the response for an HTTP 201 `application/json` response
 	JSON201 *VirtualDisk
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -8869,6 +10792,11 @@ type CreateVirtualDiskResponse struct {
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
 func (r CreateVirtualDiskResponse) GetJSON201() *VirtualDisk {
 	return r.JSON201
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r CreateVirtualDiskResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -8910,6 +10838,8 @@ type ListVirtualInterfacesResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*Interface
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -8917,6 +10847,11 @@ type ListVirtualInterfacesResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r ListVirtualInterfacesResponse) GetJSON200() *[]*Interface {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r ListVirtualInterfacesResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -8958,6 +10893,8 @@ type CreateVirtualInterfaceResponse struct {
 	HTTPResponse *http.Response
 	// JSON201 the response for an HTTP 201 `application/json` response
 	JSON201 *VirtualInterface
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -8965,6 +10902,11 @@ type CreateVirtualInterfaceResponse struct {
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
 func (r CreateVirtualInterfaceResponse) GetJSON201() *VirtualInterface {
 	return r.JSON201
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r CreateVirtualInterfaceResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -9006,6 +10948,8 @@ type SetVirtualInterfacePhysicalAddressResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *PhysicalAddress
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -9013,6 +10957,11 @@ type SetVirtualInterfacePhysicalAddressResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r SetVirtualInterfacePhysicalAddressResponse) GetJSON200() *PhysicalAddress {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r SetVirtualInterfacePhysicalAddressResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -9054,6 +11003,8 @@ type ListVirtualJournalEntriesResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*JournalEntry
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -9061,6 +11012,11 @@ type ListVirtualJournalEntriesResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r ListVirtualJournalEntriesResponse) GetJSON200() *[]*JournalEntry {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r ListVirtualJournalEntriesResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -9102,6 +11058,8 @@ type AddVirtualJournalEntryResponse struct {
 	HTTPResponse *http.Response
 	// JSON201 the response for an HTTP 201 `application/json` response
 	JSON201 *JournalEntry
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -9109,6 +11067,11 @@ type AddVirtualJournalEntryResponse struct {
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
 func (r AddVirtualJournalEntryResponse) GetJSON201() *JournalEntry {
 	return r.JSON201
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r AddVirtualJournalEntryResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -9150,6 +11113,8 @@ type ListVirtualLabelsResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *[]*Label
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -9157,6 +11122,11 @@ type ListVirtualLabelsResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r ListVirtualLabelsResponse) GetJSON200() *[]*Label {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r ListVirtualLabelsResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -9196,8 +11166,15 @@ func (r ListVirtualLabelsResponse) ContentType() string {
 type RemoveVirtualLabelResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r RemoveVirtualLabelResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -9239,6 +11216,8 @@ type SetVirtualLabelResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *Label
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -9246,6 +11225,11 @@ type SetVirtualLabelResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r SetVirtualLabelResponse) GetJSON200() *Label {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r SetVirtualLabelResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -9287,6 +11271,8 @@ type RemoveVirtualTagResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *VirtualMachine
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -9294,6 +11280,11 @@ type RemoveVirtualTagResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r RemoveVirtualTagResponse) GetJSON200() *VirtualMachine {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r RemoveVirtualTagResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -9335,6 +11326,8 @@ type AddVirtualTagResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *VirtualMachine
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -9342,6 +11335,11 @@ type AddVirtualTagResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r AddVirtualTagResponse) GetJSON200() *VirtualMachine {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r AddVirtualTagResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -9383,6 +11381,8 @@ type CreateVirtualTunnelTerminationResponse struct {
 	HTTPResponse *http.Response
 	// JSON201 the response for an HTTP 201 `application/json` response
 	JSON201 *TunnelTermination
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -9390,6 +11390,11 @@ type CreateVirtualTunnelTerminationResponse struct {
 // GetJSON201 returns the response for an HTTP 201 `application/json` response
 func (r CreateVirtualTunnelTerminationResponse) GetJSON201() *TunnelTermination {
 	return r.JSON201
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r CreateVirtualTunnelTerminationResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -9599,6 +11604,83 @@ func (c *ClientWithResponses) CreateCableWithResponse(ctx context.Context, body 
 	return ParseCreateCableResponse(rsp)
 }
 
+// ListChoiceSetsWithResponse performs a GET /api/choice-sets (the `ListChoiceSets` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) ListChoiceSetsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListChoiceSetsResponse, error) {
+	rsp, err := c.ListChoiceSets(ctx, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListChoiceSetsResponse(rsp)
+}
+
+// CreateChoiceSetWithBodyWithResponse performs a POST /api/choice-sets (the `CreateChoiceSet` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) CreateChoiceSetWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateChoiceSetResponse, error) {
+	rsp, err := c.CreateChoiceSetWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateChoiceSetResponse(rsp)
+}
+
+// CreateChoiceSetWithResponse performs a POST /api/choice-sets (the `CreateChoiceSet` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) CreateChoiceSetWithResponse(ctx context.Context, body CreateChoiceSetJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateChoiceSetResponse, error) {
+	rsp, err := c.CreateChoiceSet(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateChoiceSetResponse(rsp)
+}
+
+// DeleteChoiceSetWithResponse performs a DELETE /api/choice-sets/{name} (the `DeleteChoiceSet` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) DeleteChoiceSetWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*DeleteChoiceSetResponse, error) {
+	rsp, err := c.DeleteChoiceSet(ctx, name, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteChoiceSetResponse(rsp)
+}
+
+// GetChoiceSetWithResponse performs a GET /api/choice-sets/{name} (the `GetChoiceSet` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetChoiceSetWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*GetChoiceSetResponse, error) {
+	rsp, err := c.GetChoiceSet(ctx, name, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetChoiceSetResponse(rsp)
+}
+
+// UpdateChoiceSetWithBodyWithResponse performs a PATCH /api/choice-sets/{name} (the `UpdateChoiceSet` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) UpdateChoiceSetWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateChoiceSetResponse, error) {
+	rsp, err := c.UpdateChoiceSetWithBody(ctx, name, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateChoiceSetResponse(rsp)
+}
+
+// UpdateChoiceSetWithResponse performs a PATCH /api/choice-sets/{name} (the `UpdateChoiceSet` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) UpdateChoiceSetWithResponse(ctx context.Context, name string, body UpdateChoiceSetJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateChoiceSetResponse, error) {
+	rsp, err := c.UpdateChoiceSet(ctx, name, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateChoiceSetResponse(rsp)
+}
+
 // ListClusterTypesWithResponse performs a GET /api/cluster-types (the `ListClusterTypes` operationId) request.
 //
 // Returns a wrapper object for the known response body format(s).
@@ -9663,6 +11745,127 @@ func (c *ClientWithResponses) CreateClusterWithResponse(ctx context.Context, bod
 		return nil, err
 	}
 	return ParseCreateClusterResponse(rsp)
+}
+
+// ListConfigurationContextsWithResponse performs a GET /api/configuration-contexts (the `ListConfigurationContexts` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) ListConfigurationContextsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListConfigurationContextsResponse, error) {
+	rsp, err := c.ListConfigurationContexts(ctx, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListConfigurationContextsResponse(rsp)
+}
+
+// CreateConfigurationContextWithBodyWithResponse performs a POST /api/configuration-contexts (the `CreateConfigurationContext` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) CreateConfigurationContextWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateConfigurationContextResponse, error) {
+	rsp, err := c.CreateConfigurationContextWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateConfigurationContextResponse(rsp)
+}
+
+// CreateConfigurationContextWithResponse performs a POST /api/configuration-contexts (the `CreateConfigurationContext` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) CreateConfigurationContextWithResponse(ctx context.Context, body CreateConfigurationContextJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateConfigurationContextResponse, error) {
+	rsp, err := c.CreateConfigurationContext(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateConfigurationContextResponse(rsp)
+}
+
+// DeleteConfigurationContextWithResponse performs a DELETE /api/configuration-contexts/{name} (the `DeleteConfigurationContext` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) DeleteConfigurationContextWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*DeleteConfigurationContextResponse, error) {
+	rsp, err := c.DeleteConfigurationContext(ctx, name, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteConfigurationContextResponse(rsp)
+}
+
+// GetConfigurationContextWithResponse performs a GET /api/configuration-contexts/{name} (the `GetConfigurationContext` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetConfigurationContextWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*GetConfigurationContextResponse, error) {
+	rsp, err := c.GetConfigurationContext(ctx, name, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetConfigurationContextResponse(rsp)
+}
+
+// UpdateConfigurationContextWithBodyWithResponse performs a PATCH /api/configuration-contexts/{name} (the `UpdateConfigurationContext` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) UpdateConfigurationContextWithBodyWithResponse(ctx context.Context, name string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*UpdateConfigurationContextResponse, error) {
+	rsp, err := c.UpdateConfigurationContextWithBody(ctx, name, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateConfigurationContextResponse(rsp)
+}
+
+// UpdateConfigurationContextWithResponse performs a PATCH /api/configuration-contexts/{name} (the `UpdateConfigurationContext` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) UpdateConfigurationContextWithResponse(ctx context.Context, name string, body UpdateConfigurationContextJSONRequestBody, reqEditors ...RequestEditorFn) (*UpdateConfigurationContextResponse, error) {
+	rsp, err := c.UpdateConfigurationContext(ctx, name, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseUpdateConfigurationContextResponse(rsp)
+}
+
+// ListCustomFieldsWithResponse performs a GET /api/custom-fields (the `ListCustomFields` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) ListCustomFieldsWithResponse(ctx context.Context, reqEditors ...RequestEditorFn) (*ListCustomFieldsResponse, error) {
+	rsp, err := c.ListCustomFields(ctx, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseListCustomFieldsResponse(rsp)
+}
+
+// CreateCustomFieldWithBodyWithResponse performs a POST /api/custom-fields (the `CreateCustomField` operationId) request,
+// with any type of body and a specified content type.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) CreateCustomFieldWithBodyWithResponse(ctx context.Context, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*CreateCustomFieldResponse, error) {
+	rsp, err := c.CreateCustomFieldWithBody(ctx, contentType, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateCustomFieldResponse(rsp)
+}
+
+// CreateCustomFieldWithResponse performs a POST /api/custom-fields (the `CreateCustomField` operationId) request.
+// Takes a body of the `application/json` content type, and returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) CreateCustomFieldWithResponse(ctx context.Context, body CreateCustomFieldJSONRequestBody, reqEditors ...RequestEditorFn) (*CreateCustomFieldResponse, error) {
+	rsp, err := c.CreateCustomField(ctx, body, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseCreateCustomFieldResponse(rsp)
+}
+
+// DeleteCustomFieldWithResponse performs a DELETE /api/custom-fields/{name} (the `DeleteCustomField` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) DeleteCustomFieldWithResponse(ctx context.Context, name string, reqEditors ...RequestEditorFn) (*DeleteCustomFieldResponse, error) {
+	rsp, err := c.DeleteCustomField(ctx, name, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseDeleteCustomFieldResponse(rsp)
 }
 
 // ListDeviceRolesWithResponse performs a GET /api/device-roles (the `ListDeviceRoles` operationId) request.
@@ -10015,6 +12218,17 @@ func (c *ClientWithResponses) CreateDeviceTunnelTerminationWithResponse(ctx cont
 		return nil, err
 	}
 	return ParseCreateDeviceTunnelTerminationResponse(rsp)
+}
+
+// GetAnsibleInventoryWithResponse performs a GET /api/inventory/ansible (the `GetAnsibleInventory` operationId) request.
+//
+// Returns a wrapper object for the known response body format(s).
+func (c *ClientWithResponses) GetAnsibleInventoryWithResponse(ctx context.Context, params *GetAnsibleInventoryParams, reqEditors ...RequestEditorFn) (*GetAnsibleInventoryResponse, error) {
+	rsp, err := c.GetAnsibleInventory(ctx, params, reqEditors...)
+	if err != nil {
+		return nil, err
+	}
+	return ParseGetAnsibleInventoryResponse(rsp)
 }
 
 // DeleteJournalEntryWithResponse performs a DELETE /api/journal-entries/{identifier} (the `DeleteJournalEntry` operationId) request.
@@ -10871,6 +13085,188 @@ func ParseCreateCableResponse(rsp *http.Response) (*CreateCableResponse, error) 
 	return response, nil
 }
 
+// ParseListChoiceSetsResponse parses an HTTP response from a ListChoiceSetsWithResponse call
+func ParseListChoiceSetsResponse(rsp *http.Response) (*ListChoiceSetsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListChoiceSetsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []*ChoiceSet
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseCreateChoiceSetResponse parses an HTTP response from a CreateChoiceSetWithResponse call
+func ParseCreateChoiceSetResponse(rsp *http.Response) (*CreateChoiceSetResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CreateChoiceSetResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest ChoiceSet
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteChoiceSetResponse parses an HTTP response from a DeleteChoiceSetWithResponse call
+func ParseDeleteChoiceSetResponse(rsp *http.Response) (*DeleteChoiceSetResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteChoiceSetResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case rsp.StatusCode == 204:
+		break // No content-type
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetChoiceSetResponse parses an HTTP response from a GetChoiceSetWithResponse call
+func ParseGetChoiceSetResponse(rsp *http.Response) (*GetChoiceSetResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetChoiceSetResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ChoiceSet
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseUpdateChoiceSetResponse parses an HTTP response from a UpdateChoiceSetWithResponse call
+func ParseUpdateChoiceSetResponse(rsp *http.Response) (*UpdateChoiceSetResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &UpdateChoiceSetResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ChoiceSet
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
 // ParseListClusterTypesResponse parses an HTTP response from a ListClusterTypesWithResponse call
 func ParseListClusterTypesResponse(rsp *http.Response) (*ListClusterTypesResponse, error) {
 	bodyBytes, err := io.ReadAll(rsp.Body)
@@ -10990,6 +13386,304 @@ func ParseCreateClusterResponse(rsp *http.Response) (*CreateClusterResponse, err
 			return nil, err
 		}
 		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListConfigurationContextsResponse parses an HTTP response from a ListConfigurationContextsWithResponse call
+func ParseListConfigurationContextsResponse(rsp *http.Response) (*ListConfigurationContextsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListConfigurationContextsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []*ConfigurationContext
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseCreateConfigurationContextResponse parses an HTTP response from a CreateConfigurationContextWithResponse call
+func ParseCreateConfigurationContextResponse(rsp *http.Response) (*CreateConfigurationContextResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CreateConfigurationContextResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest ConfigurationContext
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteConfigurationContextResponse parses an HTTP response from a DeleteConfigurationContextWithResponse call
+func ParseDeleteConfigurationContextResponse(rsp *http.Response) (*DeleteConfigurationContextResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteConfigurationContextResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case rsp.StatusCode == 204:
+		break // No content-type
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetConfigurationContextResponse parses an HTTP response from a GetConfigurationContextWithResponse call
+func ParseGetConfigurationContextResponse(rsp *http.Response) (*GetConfigurationContextResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetConfigurationContextResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ConfigurationContext
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseUpdateConfigurationContextResponse parses an HTTP response from a UpdateConfigurationContextWithResponse call
+func ParseUpdateConfigurationContextResponse(rsp *http.Response) (*UpdateConfigurationContextResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &UpdateConfigurationContextResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest ConfigurationContext
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseListCustomFieldsResponse parses an HTTP response from a ListCustomFieldsWithResponse call
+func ParseListCustomFieldsResponse(rsp *http.Response) (*ListCustomFieldsResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &ListCustomFieldsResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest []*CustomField
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseCreateCustomFieldResponse parses an HTTP response from a CreateCustomFieldWithResponse call
+func ParseCreateCustomFieldResponse(rsp *http.Response) (*CreateCustomFieldResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &CreateCustomFieldResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 201:
+		var dest CustomField
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseDeleteCustomFieldResponse parses an HTTP response from a DeleteCustomFieldWithResponse call
+func ParseDeleteCustomFieldResponse(rsp *http.Response) (*DeleteCustomFieldResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &DeleteCustomFieldResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
+	case rsp.StatusCode == 204:
+		break // No content-type
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -11262,6 +13956,13 @@ func ParseUpdateDeviceResponse(rsp *http.Response) (*UpdateDeviceResponse, error
 		}
 		response.JSON200 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -11294,6 +13995,13 @@ func ParseListAddressesResponse(rsp *http.Response) (*ListAddressesResponse, err
 			return nil, err
 		}
 		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -11328,6 +14036,13 @@ func ParseCreateAddressResponse(rsp *http.Response) (*CreateAddressResponse, err
 		}
 		response.JSON201 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -11360,6 +14075,13 @@ func ParseListInterfacesResponse(rsp *http.Response) (*ListInterfacesResponse, e
 			return nil, err
 		}
 		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -11394,6 +14116,13 @@ func ParseCreateInterfaceResponse(rsp *http.Response) (*CreateInterfaceResponse,
 		}
 		response.JSON201 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -11426,6 +14155,13 @@ func ParseSetInterfacePhysicalAddressResponse(rsp *http.Response) (*SetInterface
 			return nil, err
 		}
 		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -11460,6 +14196,13 @@ func ParseListDeviceJournalEntriesResponse(rsp *http.Response) (*ListDeviceJourn
 		}
 		response.JSON200 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -11492,6 +14235,13 @@ func ParseAddDeviceJournalEntryResponse(rsp *http.Response) (*AddDeviceJournalEn
 			return nil, err
 		}
 		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -11526,6 +14276,13 @@ func ParseListDeviceLabelsResponse(rsp *http.Response) (*ListDeviceLabelsRespons
 		}
 		response.JSON200 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -11554,6 +14311,13 @@ func ParseRemoveDeviceLabelResponse(rsp *http.Response) (*RemoveDeviceLabelRespo
 	switch {
 	case rsp.StatusCode == 204:
 		break // No content-type
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -11588,6 +14352,13 @@ func ParseSetDeviceLabelResponse(rsp *http.Response) (*SetDeviceLabelResponse, e
 		}
 		response.JSON200 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -11620,6 +14391,13 @@ func ParseListDeviceTagsResponse(rsp *http.Response) (*ListDeviceTagsResponse, e
 			return nil, err
 		}
 		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -11654,6 +14432,13 @@ func ParseRemoveDeviceTagResponse(rsp *http.Response) (*RemoveDeviceTagResponse,
 		}
 		response.JSON200 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -11686,6 +14471,13 @@ func ParseAddDeviceTagResponse(rsp *http.Response) (*AddDeviceTagResponse, error
 			return nil, err
 		}
 		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -11720,6 +14512,39 @@ func ParseCreateDeviceTunnelTerminationResponse(rsp *http.Response) (*CreateDevi
 		}
 		response.JSON201 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
+		var dest ErrorResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON500 = &dest
+
+	}
+
+	return response, nil
+}
+
+// ParseGetAnsibleInventoryResponse parses an HTTP response from a GetAnsibleInventoryWithResponse call
+func ParseGetAnsibleInventoryResponse(rsp *http.Response) (*GetAnsibleInventoryResponse, error) {
+	bodyBytes, err := io.ReadAll(rsp.Body)
+	defer func() { _ = rsp.Body.Close() }()
+	if err != nil {
+		return nil, err
+	}
+
+	response := &GetAnsibleInventoryResponse{
+		Body:         bodyBytes,
+		HTTPResponse: rsp,
+	}
+
+	switch {
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -12541,6 +15366,13 @@ func ParseGetVirtualMachineResponse(rsp *http.Response) (*GetVirtualMachineRespo
 		}
 		response.JSON200 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -12573,6 +15405,13 @@ func ParseUpdateVirtualMachineResponse(rsp *http.Response) (*UpdateVirtualMachin
 			return nil, err
 		}
 		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -12607,6 +15446,13 @@ func ParseListVirtualAddressesResponse(rsp *http.Response) (*ListVirtualAddresse
 		}
 		response.JSON200 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -12639,6 +15485,13 @@ func ParseCreateVirtualAddressResponse(rsp *http.Response) (*CreateVirtualAddres
 			return nil, err
 		}
 		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -12673,6 +15526,13 @@ func ParseListVirtualDisksResponse(rsp *http.Response) (*ListVirtualDisksRespons
 		}
 		response.JSON200 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -12705,6 +15565,13 @@ func ParseCreateVirtualDiskResponse(rsp *http.Response) (*CreateVirtualDiskRespo
 			return nil, err
 		}
 		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -12739,6 +15606,13 @@ func ParseListVirtualInterfacesResponse(rsp *http.Response) (*ListVirtualInterfa
 		}
 		response.JSON200 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -12771,6 +15645,13 @@ func ParseCreateVirtualInterfaceResponse(rsp *http.Response) (*CreateVirtualInte
 			return nil, err
 		}
 		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -12805,6 +15686,13 @@ func ParseSetVirtualInterfacePhysicalAddressResponse(rsp *http.Response) (*SetVi
 		}
 		response.JSON200 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -12837,6 +15725,13 @@ func ParseListVirtualJournalEntriesResponse(rsp *http.Response) (*ListVirtualJou
 			return nil, err
 		}
 		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -12871,6 +15766,13 @@ func ParseAddVirtualJournalEntryResponse(rsp *http.Response) (*AddVirtualJournal
 		}
 		response.JSON201 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -12904,6 +15806,13 @@ func ParseListVirtualLabelsResponse(rsp *http.Response) (*ListVirtualLabelsRespo
 		}
 		response.JSON200 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -12932,6 +15841,13 @@ func ParseRemoveVirtualLabelResponse(rsp *http.Response) (*RemoveVirtualLabelRes
 	switch {
 	case rsp.StatusCode == 204:
 		break // No content-type
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -12966,6 +15882,13 @@ func ParseSetVirtualLabelResponse(rsp *http.Response) (*SetVirtualLabelResponse,
 		}
 		response.JSON200 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -12998,6 +15921,13 @@ func ParseRemoveVirtualTagResponse(rsp *http.Response) (*RemoveVirtualTagRespons
 			return nil, err
 		}
 		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -13032,6 +15962,13 @@ func ParseAddVirtualTagResponse(rsp *http.Response) (*AddVirtualTagResponse, err
 		}
 		response.JSON200 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -13064,6 +16001,13 @@ func ParseCreateVirtualTunnelTerminationResponse(rsp *http.Response) (*CreateVir
 			return nil, err
 		}
 		response.JSON201 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse

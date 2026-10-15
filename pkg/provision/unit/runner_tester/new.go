@@ -5,5 +5,5 @@ import "testing"
 func New(t *testing.T) *Tester {
 	t.Helper()
 
-	return build(t, func() {}, nil)
+	return build(t, func() {}, nil, nil)
 }

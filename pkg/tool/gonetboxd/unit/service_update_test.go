@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/types/device_change"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/types/machine_change"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/unit/service_tester"
 	"testing"
 )
@@ -49,4 +50,15 @@ func TestUpdateDeviceRefusesUnknownDevice(t *testing.T) {
 		v,
 	)
 	assert.True(t, not_found.Is(e))
+}
+
+func TestUpdateVirtualMachineSetsRole(t *testing.T) {
+	c := mock_client.New()
+	c.SeedVirtualMachine("alfa")
+	v := machine_change.New()
+	v.Role = new("bravo")
+	m, e := service_tester.Service(t, c).UpdateVirtualMachine("alfa", v)
+	assert.FatalOnError(t, e)
+	assert.String(t, "alfa", m.Name)
+	assert.Strings(t, []string{"SetVirtualMachineRole alfa bravo"}, c.Calls())
 }

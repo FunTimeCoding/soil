@@ -1,6 +1,9 @@
 package mock_client
 
 import (
+	"github.com/funtimecoding/soil/pkg/netbox/choice_set"
+	"github.com/funtimecoding/soil/pkg/netbox/configuration_context"
+	"github.com/funtimecoding/soil/pkg/netbox/custom_field"
 	"github.com/funtimecoding/soil/pkg/netbox/device"
 	"github.com/funtimecoding/soil/pkg/netbox/device_role"
 	"github.com/funtimecoding/soil/pkg/netbox/device_type"
@@ -19,5 +22,8 @@ type Client struct {
 	sites      []*site.Site
 	tenants    []*tenant.Tenant
 	interfaces map[int32][]*network.Interface
+	contexts   []*configuration_context.Context
+	sets       []*choice_set.Set
+	fields     []*custom_field.Field
 	calls      []string
 }

@@ -50,7 +50,7 @@ func (s *Server) register() {
 			mcp.WithArray(
 				provisionConstant.DownstreamChanges,
 				mcp.Description(
-					"Changed upstream resource addresses, sent by a provisioning daemon firing its downstream edge. Recorded with the run; does not select playbooks.",
+					"Changed upstream resource addresses from a provisioning daemon upstream. Passed into the run's parameters; does not select playbooks.",
 				),
 			),
 		),

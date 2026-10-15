@@ -3,8 +3,12 @@ package face
 import (
 	"github.com/funtimecoding/soil/pkg/netbox/bookmark"
 	"github.com/funtimecoding/soil/pkg/netbox/cable"
+	"github.com/funtimecoding/soil/pkg/netbox/choice_set"
 	"github.com/funtimecoding/soil/pkg/netbox/cluster"
 	"github.com/funtimecoding/soil/pkg/netbox/cluster_type"
+	"github.com/funtimecoding/soil/pkg/netbox/configuration_assignment"
+	"github.com/funtimecoding/soil/pkg/netbox/configuration_context"
+	"github.com/funtimecoding/soil/pkg/netbox/custom_field"
 	"github.com/funtimecoding/soil/pkg/netbox/device"
 	"github.com/funtimecoding/soil/pkg/netbox/device_role"
 	"github.com/funtimecoding/soil/pkg/netbox/device_type"
@@ -55,6 +59,55 @@ type NetboxSource interface {
 	Clusters() ([]*cluster.Cluster, error)
 	ClusterTypeByName(n string) (*cluster_type.Type, error)
 	ClusterTypes() ([]*cluster_type.Type, error)
+	ChoiceSetByName(n string) (*choice_set.Set, error)
+	ChoiceSets() ([]*choice_set.Set, error)
+	CreateChoiceSet(
+		name string,
+		choices []string,
+	) (*choice_set.Set, error)
+	CreateSelectionField(
+		name string,
+		label string,
+		choiceSet string,
+	) (*custom_field.Field, error)
+	CustomFields() ([]*custom_field.Field, error)
+	DeleteChoiceSet(name string) error
+	DeleteCustomField(name string) error
+	SetChoiceSetChoices(
+		name string,
+		choices []string,
+	) (*choice_set.Set, error)
+	SetDeviceCustomFields(
+		name string,
+		fields map[string]any,
+	) (*device.Device, error)
+	SetVirtualMachineCustomFields(
+		name string,
+		fields map[string]any,
+	) (*virtual_machine.Machine, error)
+	ConfigurationContextByName(
+		n string,
+	) (*configuration_context.Context, error)
+	ConfigurationContexts() ([]*configuration_context.Context, error)
+	CreateConfigurationContext(
+		name string,
+		weight int32,
+		payload map[string]any,
+		a *configuration_assignment.Assignment,
+	) (*configuration_context.Context, error)
+	DeleteConfigurationContext(name string) error
+	SetConfigurationContextAssignment(
+		name string,
+		a *configuration_assignment.Assignment,
+	) (*configuration_context.Context, error)
+	SetConfigurationContextPayload(
+		name string,
+		payload map[string]any,
+	) (*configuration_context.Context, error)
+	SetConfigurationContextWeight(
+		name string,
+		weight int32,
+	) (*configuration_context.Context, error)
 	CreateAddress(
 		interfaceIdentifier int32,
 		address string,
@@ -78,7 +131,10 @@ type NetboxSource interface {
 		s *site.Site,
 		n *tenant.Tenant,
 	) (*device.Device, error)
-	CreateDeviceRole(name string) (*device_role.Role, error)
+	CreateDeviceRole(
+		name string,
+		virtualMachine bool,
+	) (*device_role.Role, error)
 	CreateDeviceType(
 		model string,
 		m *manufacturer.Manufacturer,
@@ -242,6 +298,10 @@ type NetboxSource interface {
 	SetVirtualMachinePrimaryAddress(
 		name string,
 		address string,
+	) (*virtual_machine.Machine, error)
+	SetVirtualMachineRole(
+		name string,
+		roleName string,
 	) (*virtual_machine.Machine, error)
 	SetVirtualMachineStatus(
 		name string,

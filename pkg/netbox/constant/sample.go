@@ -41,6 +41,63 @@ const FixtureVirtualInterfaceList = `{
   ]
 }`
 
+const FixtureConfigurationContext = `{
+  "id": 1,
+  "url": "http://example/api/extras/config-contexts/1/",
+  "display": "alfa",
+  "name": "alfa",
+  "data_path": "",
+  "data_file": null,
+  "weight": 1000,
+  "is_active": true,
+  "data": {"bravo": "charlie"}
+}`
+
+const FixtureConfigurationContextList = `{
+  "count": 1,
+  "results": [
+    {
+      "id": 1,
+      "url": "http://example/api/extras/config-contexts/1/",
+      "display": "alfa",
+      "name": "alfa",
+      "data_path": "",
+      "data_file": null,
+      "weight": 1000,
+      "is_active": true,
+      "data": {"bravo": "charlie"}
+    }
+  ]
+}`
+
+const FixtureChoiceSet = `{
+  "id": 1,
+  "name": "alfa",
+  "description": "",
+  "extra_choices": [["bravo", "bravo"], ["charlie", "charlie"]]
+}`
+
+const FixtureChoiceSetList = `{
+  "count": 1,
+  "results": [
+    {
+      "id": 1,
+      "name": "alfa",
+      "description": "",
+      "extra_choices": [["bravo", "bravo"], ["charlie", "charlie"]]
+    }
+  ]
+}`
+
+const FixtureCustomField = `{
+  "id": 2,
+  "name": "delta",
+  "label": "",
+  "type": {"value": "multiselect", "label": "Multiple selection"},
+  "object_types": ["dcim.device", "virtualization.virtualmachine"],
+  "choice_set": {"id": 1, "name": "alfa"}
+}`
+
 const FixtureVirtualInterface = `{
   "id": 1,
   "url": "http://example/api/virtualization/interfaces/1/",

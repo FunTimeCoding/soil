@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 )
 
@@ -18,10 +19,7 @@ func (s *Server) ListDeviceRoles(
 	result := make([]*server.DeviceRole, 0, len(roles))
 
 	for _, r := range roles {
-		result = append(
-			result,
-			&server.DeviceRole{Identifier: r.Identifier, Name: r.Name},
-		)
+		result = append(result, convert.DeviceRole(r))
 	}
 
 	return server.ListDeviceRoles200JSONResponse(result), nil

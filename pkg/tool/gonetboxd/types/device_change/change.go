@@ -9,4 +9,5 @@ type Change struct {
 	Status         *string
 	Serial         *string
 	Description    *string
+	CustomFields   map[string]any
 }

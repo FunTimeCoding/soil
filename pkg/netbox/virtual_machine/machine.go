@@ -8,7 +8,10 @@ type Machine struct {
 	Cluster        string
 	Site           string
 	Status         string
+	Role           string
 	PrimaryAddress string
 	Tags           []string
+	Configuration  map[string]any
+	CustomFields   map[string]any
 	Raw            *netbox.VirtualMachineWithConfigContext
 }

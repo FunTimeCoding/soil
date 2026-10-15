@@ -1,0 +1,61 @@
+---
+openapi: "3.0.0"
+info:
+  title: provision
+  version: 1.0.0
+paths:
+  /api/trigger:
+    post:
+      operationId: postTrigger
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TriggerRequest"
+      responses:
+        "202":
+          description: Run queued.
+        "409":
+          description: A run is already queued.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: The run could not be queued.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+components:
+  schemas:
+    TriggerRequest:
+      type: object
+      required:
+      - update
+      - changes
+      properties:
+        update:
+          type: boolean
+        changes:
+          type: array
+          items:
+            type: string
+    Error:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: string
+    ErrorResponse:
+      type: object
+      required:
+      - error
+      - event_identifier
+      properties:
+        error:
+          type: string
+        event_identifier:
+          type: string

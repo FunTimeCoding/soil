@@ -36,5 +36,7 @@ func TestGuard(t *testing.T) {
 	)
 	defer v.Close()
 	v.VerifyBase(t)
+	v.VerifyInterface(t)
+	v.VerifyGuarded(t, "/api/trigger")
 	v.VerifyModelContext(t)
 }

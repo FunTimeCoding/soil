@@ -5,8 +5,12 @@ import (
 	"github.com/netbox-community/go-netbox/v4"
 )
 
-func (c *Client) CreateDeviceRole(name string) (*device_role.Role, error) {
+func (c *Client) CreateDeviceRole(
+	name string,
+	virtualMachine bool,
+) (*device_role.Role, error) {
 	q := netbox.NewWritableDeviceRoleRequest(name, slug(name))
+	q.SetVmRole(virtualMachine)
 	result, _, e := c.client.DcimAPI.DcimDeviceRolesCreate(c.context).WritableDeviceRoleRequest(
 		*q,
 	).Execute()

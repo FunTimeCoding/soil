@@ -1,11 +1,21 @@
 package netbox
 
-import "github.com/funtimecoding/soil/pkg/netbox/configuration_context"
+import (
+	"github.com/funtimecoding/soil/pkg/netbox/configuration_context"
+	"github.com/funtimecoding/soil/pkg/netbox/configuration_record"
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
+	"net/http"
+)
 
 func (c *Client) ConfigurationContexts() ([]*configuration_context.Context, error) {
-	result, _, e := c.client.ExtrasAPI.ExtrasConfigContextsList(c.context).Execute()
+	var result configuration_record.Page
 
-	if e != nil {
+	if e := c.rawRequest(
+		http.MethodGet,
+		constant.ConfigurationContextListPath,
+		nil,
+		&result,
+	); e != nil {
 		return nil, e
 	}
 

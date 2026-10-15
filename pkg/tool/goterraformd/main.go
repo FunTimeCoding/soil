@@ -52,6 +52,9 @@ func Main() {
 
 	if v := environment.Fallback(constant.DownstreamEnvironment, ""); v != "" {
 		o.Downstream = split.Comma(v)
+		o.DownstreamToken = environment.Required(
+			constant.DownstreamTokenEnvironment,
+		)
 	}
 
 	Run(o, s)

@@ -1,11 +1,21 @@
 package netbox
 
-import "github.com/funtimecoding/soil/pkg/netbox/custom_field"
+import (
+	"github.com/funtimecoding/soil/pkg/netbox/constant"
+	"github.com/funtimecoding/soil/pkg/netbox/custom_field"
+	"github.com/funtimecoding/soil/pkg/netbox/custom_field_record"
+	"net/http"
+)
 
 func (c *Client) CustomFields() ([]*custom_field.Field, error) {
-	result, _, e := c.client.ExtrasAPI.ExtrasCustomFieldsList(c.context).Execute()
+	var result custom_field_record.Page
 
-	if e != nil {
+	if e := c.rawRequest(
+		http.MethodGet,
+		constant.CustomFieldListPath,
+		nil,
+		&result,
+	); e != nil {
 		return nil, e
 	}
 

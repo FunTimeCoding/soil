@@ -124,6 +124,12 @@ func (s *Server) register() {
 				mcp.Required(),
 				mcp.Description("Role name"),
 			),
+			mcp.WithBoolean(
+				constant.VirtualMachineRole,
+				mcp.Description(
+					"Allow virtual machines to take this role. Default: false.",
+				),
+			),
 		),
 		s.createDeviceRole,
 	)
@@ -832,4 +838,6 @@ func (s *Server) register() {
 		),
 		s.createPrefix,
 	)
+	s.registerConfigurationContexts()
+	s.registerCustomFields()
 }

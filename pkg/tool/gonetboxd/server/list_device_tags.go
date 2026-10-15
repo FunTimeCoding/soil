@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 )
 
@@ -10,6 +11,10 @@ func (s *Server) ListDeviceTags(
 	r server.ListDeviceTagsRequestObject,
 ) (server.ListDeviceTagsResponseObject, error) {
 	tags, e := s.client.DeviceTagNames(r.Name)
+
+	if not_found.Is(e) {
+		return server.ListDeviceTags404JSONResponse(*clientError(e)), nil
+	}
 
 	if e != nil {
 		return server.ListDeviceTags500JSONResponse(*s.captureDetail(e)), nil

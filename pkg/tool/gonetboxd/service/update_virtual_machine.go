@@ -27,6 +27,12 @@ func (s *Service) UpdateVirtualMachine(
 		}
 	}
 
+	if c.Role != nil {
+		if _, e := s.client.SetVirtualMachineRole(name, *c.Role); e != nil {
+			return nil, e
+		}
+	}
+
 	if c.Tenant != nil {
 		if _, e := s.client.SetVirtualMachineTenant(name, *c.Tenant); e != nil {
 			return nil, e
@@ -47,6 +53,15 @@ func (s *Service) UpdateVirtualMachine(
 
 	if c.Status != nil {
 		if _, e := s.client.SetVirtualMachineStatus(name, *c.Status); e != nil {
+			return nil, e
+		}
+	}
+
+	if c.CustomFields != nil {
+		if _, e := s.client.SetVirtualMachineCustomFields(
+			name,
+			c.CustomFields,
+		); e != nil {
 			return nil, e
 		}
 	}

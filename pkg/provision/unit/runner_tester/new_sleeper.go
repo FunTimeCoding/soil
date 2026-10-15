@@ -16,6 +16,7 @@ func NewSleeper(t *testing.T) *Tester {
 			run.New().NoPanic().WithRegistry(r).Start("sleep", "30")
 		},
 		r,
+		nil,
 	)
 	t.Cleanup(r.Interrupt)
 

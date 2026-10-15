@@ -57,6 +57,15 @@ func (s *Service) UpdateDevice(
 		}
 	}
 
+	if c.CustomFields != nil {
+		if _, e := s.client.SetDeviceCustomFields(
+			name,
+			c.CustomFields,
+		); e != nil {
+			return nil, e
+		}
+	}
+
 	if c.Name != nil {
 		renamed, e := s.client.RenameDevice(name, *c.Name)
 

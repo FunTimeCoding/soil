@@ -24,14 +24,24 @@ func New(v *netbox.VirtualMachineWithConfigContext) *Machine {
 		address = v.PrimaryIp4.Get().GetDisplay()
 	}
 
+	var role string
+
+	if v.Role.IsSet() && v.Role.Get() != nil {
+		role = v.Role.Get().GetName()
+	}
+
+	configuration, _ := v.ConfigContext.(map[string]any)
 	status := v.GetStatus()
 
 	return &Machine{
+		Configuration:  configuration,
+		CustomFields:   v.CustomFields,
 		Identifier:     v.GetId(),
 		Name:           v.GetName(),
 		Cluster:        cluster,
 		Site:           site,
 		Status:         string(status.GetValue()),
+		Role:           role,
 		PrimaryAddress: address,
 		Tags:           tag.Names(v.Tags),
 		Raw:            v,

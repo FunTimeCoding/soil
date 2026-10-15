@@ -3,7 +3,8 @@ package runner
 import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/provision/downstream"
+	"github.com/funtimecoding/soil/pkg/network"
+	"github.com/funtimecoding/soil/pkg/provision/client"
 	"github.com/funtimecoding/soil/pkg/provision/runner"
 	"github.com/funtimecoding/soil/pkg/provision/store"
 	"github.com/funtimecoding/soil/pkg/provision/types/runner_option"
@@ -43,7 +44,8 @@ func New(
 	var targets []face.Downstream
 
 	for _, address := range o.Downstream {
-		targets = append(targets, downstream.New(address))
+		host, port := network.SplitHostPort(address)
+		targets = append(targets, client.New(host, port, o.DownstreamToken))
 	}
 
 	result.provision = runner.New(

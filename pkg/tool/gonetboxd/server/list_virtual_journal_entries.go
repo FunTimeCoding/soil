@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 )
@@ -22,6 +23,10 @@ func (s *Server) ListVirtualJournalEntries(
 	}
 
 	result, e := s.client.VirtualJournalEntries(r.Name, limit, offset)
+
+	if not_found.Is(e) {
+		return server.ListVirtualJournalEntries404JSONResponse(*clientError(e)), nil
+	}
 
 	if e != nil {
 		return server.ListVirtualJournalEntries500JSONResponse(

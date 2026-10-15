@@ -37,9 +37,12 @@ func New(v *netbox.DeviceWithConfigContext) *Device {
 		comment = v.GetComments()
 	}
 
+	configuration, _ := v.ConfigContext.(map[string]any)
 	status := v.GetStatus()
 
 	return &Device{
+		Configuration:  configuration,
+		CustomFields:   v.CustomFields,
 		Identifier:     v.GetId(),
 		Name:           name,
 		Role:           v.Role.GetName(),

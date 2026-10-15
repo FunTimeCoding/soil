@@ -6,5 +6,9 @@ import (
 )
 
 func DeviceRole(r *device_role.Role) *server.DeviceRole {
-	return &server.DeviceRole{Identifier: r.Identifier, Name: r.Name}
+	return &server.DeviceRole{
+		Identifier:     r.Identifier,
+		Name:           r.Name,
+		VirtualMachine: r.VirtualMachine,
+	}
 }

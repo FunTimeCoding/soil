@@ -40,6 +40,14 @@ func Device(d *device.Device) *server.Device {
 		result.Tags = &d.Tags
 	}
 
+	if len(d.Configuration) > 0 {
+		result.Configuration = &d.Configuration
+	}
+
+	if len(d.CustomFields) > 0 {
+		result.CustomFields = &d.CustomFields
+	}
+
 	if d.Link != "" {
 		result.Link = &d.Link
 	}

@@ -12,10 +12,12 @@ func updateVirtualMachine(
 	t *terminal.Terminal,
 ) *cobra.Command {
 	var platform string
+	var role string
 	var tenant string
 	var cores float32
 	var memory int
 	var status string
+	var customFields func() *map[string]any
 	result := &cobra.Command{
 		Use:   "update-virtual-machine [name]",
 		Short: "Update virtual machine fields",
@@ -28,6 +30,10 @@ func updateVirtualMachine(
 
 			if platform != "" {
 				body.Platform = &platform
+			}
+
+			if role != "" {
+				body.Role = &role
 			}
 
 			if tenant != "" {
@@ -46,14 +52,22 @@ func updateVirtualMachine(
 				body.Status = &status
 			}
 
+			body.CustomFields = customFields()
 			t.Emit(c.UpdateVirtualMachine(arguments[0], body))
 		},
 	}
+	customFields = customFieldFlag(result)
 	result.Flags().StringVar(
 		&platform,
 		"platform",
 		"",
 		"platform name to assign (must already exist)",
+	)
+	result.Flags().StringVar(
+		&role,
+		"role",
+		"",
+		"role name to assign (must already exist and allow virtual machines)",
 	)
 	result.Flags().StringVar(
 		&tenant,

@@ -4,8 +4,10 @@ type Change struct {
 	Name           *string
 	PrimaryAddress *string
 	Platform       *string
+	Role           *string
 	Tenant         *string
 	Cores          *float64
 	Memory         *int32
 	Status         *string
+	CustomFields   map[string]any
 }

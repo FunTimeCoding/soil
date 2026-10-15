@@ -1,7 +1,20 @@
 package custom_field
 
-import "github.com/netbox-community/go-netbox/v4"
+import "github.com/funtimecoding/soil/pkg/netbox/custom_field_record"
 
-func New(v *netbox.CustomField) *Field {
-	return &Field{Identifier: v.GetId(), Name: v.GetName(), Raw: v}
+func New(v *custom_field_record.Record) *Field {
+	result := &Field{
+		Identifier:  v.Identifier,
+		Name:        v.Name,
+		Label:       v.Label,
+		Kind:        v.Kind.Value,
+		ObjectTypes: v.ObjectTypes,
+		Raw:         v,
+	}
+
+	if v.ChoiceSet != nil {
+		result.ChoiceSet = v.ChoiceSet.Name
+	}
+
+	return result
 }

@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 )
@@ -11,6 +12,10 @@ func (s *Server) ListAddresses(
 	r server.ListAddressesRequestObject,
 ) (server.ListAddressesResponseObject, error) {
 	addresses, e := s.client.DeviceAddresses(r.Name)
+
+	if not_found.Is(e) {
+		return server.ListAddresses404JSONResponse(*clientError(e)), nil
+	}
 
 	if e != nil {
 		return server.ListAddresses500JSONResponse(*s.captureDetail(e)), nil

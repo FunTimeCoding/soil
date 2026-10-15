@@ -19,6 +19,7 @@ func build(
 	t *testing.T,
 	hold func(),
 	registry face.ProcessRegistry,
+	downstream face.Downstream,
 ) *Tester {
 	t.Helper()
 	base := t.TempDir()
@@ -44,28 +45,40 @@ func build(
 	c = run.New()
 	c.Directory = clone
 	c.Start("git", "push", "origin", constant.RunnerBranch)
-	result := &Tester{t: t, ClonePath: clone, remote: remote}
-	result.Runner = runner.New(
-		runner_option.Option{
-			Repository: remote,
-			ClonePath:  clone,
-			ToolPath:   ".",
-			ApplyFunction: func(
-				parameters map[string]any,
-				triggerSource string,
-			) any {
-				call := apply_call.New(parameters, triggerSource)
-				result.mutex.Lock()
-				result.applied = append(result.applied, call)
-				result.mutex.Unlock()
-				hold()
+	result := &Tester{
+		t:         t,
+		ClonePath: clone,
+		remote:    remote,
+		Reporter:  memory.New(),
+	}
+	o := runner_option.Option{
+		Repository: remote,
+		ClonePath:  clone,
+		ToolPath:   ".",
+		ApplyFunction: func(
+			parameters map[string]any,
+			triggerSource string,
+		) any {
+			call := apply_call.New(parameters, triggerSource)
+			result.mutex.Lock()
+			result.applied = append(result.applied, call)
+			result.mutex.Unlock()
+			hold()
 
-				return call
-			},
-			Registry: registry,
+			return call
 		},
+		Registry: registry,
+	}
+
+	if downstream != nil {
+		o.Downstream = []face.Downstream{downstream}
+		o.ChangeFunction = func(any) []string { return []string{"alfa"} }
+	}
+
+	result.Runner = runner.New(
+		o,
 		logger.New(context.Background()),
-		memory.New(),
+		result.Reporter,
 	)
 	result.Runner.Start()
 	t.Cleanup(func() { result.Runner.Close() })

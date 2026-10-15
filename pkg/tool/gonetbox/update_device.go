@@ -17,6 +17,7 @@ func updateDevice(
 	var status string
 	var serial string
 	var description string
+	var customFields func() *map[string]any
 	result := &cobra.Command{
 		Use:   "update-device [name]",
 		Short: "Update device fields",
@@ -51,9 +52,11 @@ func updateDevice(
 				body.Description = &description
 			}
 
+			body.CustomFields = customFields()
 			t.Emit(c.UpdateDevice(arguments[0], body))
 		},
 	}
+	customFields = customFieldFlag(result)
 	result.Flags().StringVar(
 		&location,
 		"location",

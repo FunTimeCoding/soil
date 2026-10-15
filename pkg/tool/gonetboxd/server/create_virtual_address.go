@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/generated/server"
 )
 
@@ -21,6 +22,10 @@ func (s *Server) CreateVirtualAddress(
 		r.Body.Address,
 		status,
 	)
+
+	if not_found.Is(e) {
+		return server.CreateVirtualAddress404JSONResponse(*clientError(e)), nil
+	}
 
 	if e != nil {
 		return server.CreateVirtualAddress500JSONResponse(*s.captureDetail(e)), nil

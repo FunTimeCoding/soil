@@ -31,8 +31,8 @@ func Read() {
 		console.Format("CustomField: %s\n", i.Format(f))
 	}
 
-	for _, c := range n.MustCustomFieldChoices() {
-		console.Format("CustomFieldChoice: %s\n", c.Format(f))
+	for _, c := range n.MustChoiceSets() {
+		console.Format("ChoiceSet: %s %v\n", c.Name, c.Choices)
 	}
 
 	for _, l := range n.MustCustomLinks() {

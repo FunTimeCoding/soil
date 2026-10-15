@@ -4,10 +4,13 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/cable"
+	"github.com/funtimecoding/soil/pkg/netbox/choice_set"
+	"github.com/funtimecoding/soil/pkg/netbox/choice_set_record"
 	"github.com/funtimecoding/soil/pkg/netbox/cluster"
 	"github.com/funtimecoding/soil/pkg/netbox/cluster_group"
 	"github.com/funtimecoding/soil/pkg/netbox/cluster_type"
 	"github.com/funtimecoding/soil/pkg/netbox/configuration_context"
+	"github.com/funtimecoding/soil/pkg/netbox/configuration_record"
 	"github.com/funtimecoding/soil/pkg/netbox/configuration_template"
 	"github.com/funtimecoding/soil/pkg/netbox/console_port"
 	"github.com/funtimecoding/soil/pkg/netbox/console_server_port"
@@ -15,7 +18,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/netbox/contact_group"
 	"github.com/funtimecoding/soil/pkg/netbox/contact_role"
 	"github.com/funtimecoding/soil/pkg/netbox/custom_field"
-	"github.com/funtimecoding/soil/pkg/netbox/custom_field_choice"
+	"github.com/funtimecoding/soil/pkg/netbox/custom_field_record"
 	"github.com/funtimecoding/soil/pkg/netbox/custom_link"
 	"github.com/funtimecoding/soil/pkg/netbox/device"
 	"github.com/funtimecoding/soil/pkg/netbox/device_bay_template"
@@ -75,15 +78,15 @@ func TestEntities(t *testing.T) {
 	assert.NotNil(t, cluster_group.New(&netbox.ClusterGroup{}))
 	assert.NotNil(t, cluster.New(&netbox.Cluster{}))
 	assert.NotNil(t, cluster_type.New(&netbox.ClusterType{}))
-	assert.NotNil(t, configuration_context.New(&netbox.ConfigContext{}))
+	assert.NotNil(t, configuration_context.New(configuration_record.New()))
 	assert.NotNil(t, configuration_template.New(&netbox.ConfigTemplate{}))
 	assert.NotNil(t, console_port.New(&netbox.ConsolePort{}))
 	assert.NotNil(t, console_server_port.New(&netbox.ConsoleServerPort{}))
 	assert.NotNil(t, contact_group.New(&netbox.ContactGroup{}))
 	assert.NotNil(t, contact_role.New(&netbox.ContactRole{}))
 	assert.NotNil(t, contact.New(&netbox.Contact{}))
-	assert.NotNil(t, custom_field_choice.New(&netbox.CustomFieldChoiceSet{}))
-	assert.NotNil(t, custom_field.New(&netbox.CustomField{}))
+	assert.NotNil(t, choice_set.New(choice_set_record.New()))
+	assert.NotNil(t, custom_field.New(custom_field_record.New()))
 	assert.NotNil(t, custom_link.New(&netbox.CustomLink{}))
 	assert.NotNil(t, device_bay_template.New(&netbox.DeviceBayTemplate{}))
 	assert.NotNil(t, device_role.New(&netbox.DeviceRole{}))

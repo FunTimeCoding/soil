@@ -1,12 +1,12 @@
 package configuration_context
 
-import "github.com/netbox-community/go-netbox/v4"
+import "github.com/funtimecoding/soil/pkg/netbox/configuration_record"
 
-func NewSlice(v []netbox.ConfigContext) []*Context {
+func NewSlice(v []configuration_record.Record) []*Context {
 	var result []*Context
 
-	for _, e := range v {
-		result = append(result, New(&e))
+	for i := range v {
+		result = append(result, New(&v[i]))
 	}
 
 	return result

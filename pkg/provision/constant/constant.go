@@ -5,9 +5,7 @@ import "time"
 const (
 	AnsibleInventoryEnvironment = "ANSIBLE_INVENTORY"
 
-	DownstreamClient  = "downstream"
-	DownstreamTool    = "trigger"
-	DownstreamUpdate  = "update"
+	DownstreamContext = "downstream"
 	DownstreamChanges = "changes"
 
 	PackerDirectory       = "packer"

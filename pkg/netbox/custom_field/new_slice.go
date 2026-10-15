@@ -1,12 +1,12 @@
 package custom_field
 
-import "github.com/netbox-community/go-netbox/v4"
+import "github.com/funtimecoding/soil/pkg/netbox/custom_field_record"
 
-func NewSlice(v []netbox.CustomField) []*Field {
+func NewSlice(v []custom_field_record.Record) []*Field {
 	var result []*Field
 
-	for _, e := range v {
-		result = append(result, New(&e))
+	for i := range v {
+		result = append(result, New(&v[i]))
 	}
 
 	return result

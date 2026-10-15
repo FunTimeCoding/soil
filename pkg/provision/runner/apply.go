@@ -20,14 +20,20 @@ func (r *Runner) apply(
 
 	for _, d := range r.downstream {
 		if e := d.Trigger(changes); e != nil {
-			r.logger.Structured("downstream_trigger_error", "cause", e.Error())
-		} else {
-			r.logger.Structured(
-				"downstream_trigger",
-				constant.DownstreamChanges,
-				len(changes),
+			r.reporter.CaptureWithContext(
+				e,
+				constant.DownstreamContext,
+				map[string]any{constant.DownstreamChanges: changes},
 			)
+
+			continue
 		}
+
+		r.logger.Structured(
+			"downstream_trigger",
+			constant.DownstreamChanges,
+			len(changes),
+		)
 	}
 
 	return value
