@@ -10,17 +10,25 @@ func New(
 	machines []*virtual_machine.Machine,
 	devices []*device.Device,
 ) *Inventory {
-	result := &Inventory{groups: map[string]map[string]string{}}
+	result := &Inventory{groups: map[string]map[string]map[string]any{}}
 
 	for _, m := range machines {
 		for _, g := range selected(m.CustomFields, field) {
-			result.add(g, m.Name, hostAddress(m.PrimaryAddress))
+			result.add(
+				g,
+				m.Name,
+				hostVariables(m.PrimaryAddress, m.Configuration),
+			)
 		}
 	}
 
 	for _, d := range devices {
 		for _, g := range selected(d.CustomFields, field) {
-			result.add(g, d.Name, hostAddress(d.PrimaryAddress))
+			result.add(
+				g,
+				d.Name,
+				hostVariables(d.PrimaryAddress, d.Configuration),
+			)
 		}
 	}
 

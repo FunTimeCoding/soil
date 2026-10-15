@@ -1025,7 +1025,7 @@ paths:
         description: Custom field whose values become the groups. Default ansible_playbook.
       responses:
         "200":
-          description: Ansible YAML inventory, one group per field value.
+          description: Ansible YAML inventory, one group per field value. Host variables are ansible_host from the primary address and the keys of the ansible object in the host's configuration context, which override it.
           content:
             text/plain:
               schema:

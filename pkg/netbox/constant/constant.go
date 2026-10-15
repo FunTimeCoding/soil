@@ -66,6 +66,7 @@ const (
 	InventoryChildren = "children"
 	InventoryHosts    = "hosts"
 	InventoryAddress  = "ansible_host"
+	InventoryContext  = "ansible"
 
 	MultipleSelection    = "multiselect"
 	DeviceObject         = "dcim.device"

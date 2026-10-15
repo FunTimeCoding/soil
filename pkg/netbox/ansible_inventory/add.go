@@ -3,11 +3,11 @@ package ansible_inventory
 func (i *Inventory) add(
 	group string,
 	host string,
-	address string,
+	variables map[string]any,
 ) {
 	if i.groups[group] == nil {
-		i.groups[group] = map[string]string{}
+		i.groups[group] = map[string]map[string]any{}
 	}
 
-	i.groups[group][host] = address
+	i.groups[group][host] = variables
 }

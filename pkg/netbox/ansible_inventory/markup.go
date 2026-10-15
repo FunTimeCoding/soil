@@ -10,19 +10,7 @@ func (i *Inventory) Markup() string {
 	children := map[string]any{}
 
 	for group, hosts := range i.groups {
-		entries := map[string]any{}
-
-		for host, address := range hosts {
-			variables := map[string]any{}
-
-			if address != "" {
-				variables[constant.InventoryAddress] = address
-			}
-
-			entries[host] = variables
-		}
-
-		children[group] = map[string]any{constant.InventoryHosts: entries}
+		children[group] = map[string]any{constant.InventoryHosts: hosts}
 	}
 
 	m, e := yaml.Marshal(
