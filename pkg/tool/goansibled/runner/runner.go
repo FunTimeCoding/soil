@@ -5,7 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/provision/runner"
 	"github.com/funtimecoding/soil/pkg/provision/store"
-	"github.com/funtimecoding/soil/pkg/tool/goansibled/inventory"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 )
 
 type Runner struct {
@@ -17,5 +17,5 @@ type Runner struct {
 	logger      *logger.Logger
 	reporter    face.Reporter
 	registry    face.ProcessRegistry
-	inventory   *inventory.Inventory
+	inventory   *client.Client
 }

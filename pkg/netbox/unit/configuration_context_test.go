@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/netbox"
 	"github.com/funtimecoding/soil/pkg/netbox/configuration_assignment"
 	"github.com/funtimecoding/soil/pkg/netbox/fixture"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"testing"
 )
 
@@ -13,7 +14,11 @@ func TestConfigurationContextReadsPayload(t *testing.T) {
 	r := fixture.NewRecorder()
 	s := fixture.NewServer(r)
 	defer s.Close()
-	c := netbox.New("netbox.example.org", "token", netbox.WithServer(s.URL))
+	c := netbox.New(
+		locator.New("netbox.example.org"),
+		"token",
+		netbox.WithServer(s.URL),
+	)
 	defer c.Close()
 	v, e := c.ConfigurationContextByName("alfa")
 	assert.FatalOnError(t, e)
@@ -25,7 +30,11 @@ func TestClearedAssignmentSendsEveryListEmpty(t *testing.T) {
 	r := fixture.NewRecorder()
 	s := fixture.NewServer(r)
 	defer s.Close()
-	c := netbox.New("netbox.example.org", "token", netbox.WithServer(s.URL))
+	c := netbox.New(
+		locator.New("netbox.example.org"),
+		"token",
+		netbox.WithServer(s.URL),
+	)
 	defer c.Close()
 	_, e := c.SetConfigurationContextAssignment(
 		"alfa",
@@ -50,7 +59,11 @@ func TestPayloadUpdateLeavesAssignmentAlone(t *testing.T) {
 	r := fixture.NewRecorder()
 	s := fixture.NewServer(r)
 	defer s.Close()
-	c := netbox.New("netbox.example.org", "token", netbox.WithServer(s.URL))
+	c := netbox.New(
+		locator.New("netbox.example.org"),
+		"token",
+		netbox.WithServer(s.URL),
+	)
 	defer c.Close()
 	_, e := c.SetConfigurationContextPayload(
 		"alfa",
@@ -68,7 +81,11 @@ func TestUnknownConfigurationContextIsNotFound(t *testing.T) {
 	r := fixture.NewRecorder()
 	s := fixture.NewServer(r)
 	defer s.Close()
-	c := netbox.New("netbox.example.org", "token", netbox.WithServer(s.URL))
+	c := netbox.New(
+		locator.New("netbox.example.org"),
+		"token",
+		netbox.WithServer(s.URL),
+	)
 	defer c.Close()
 	_, e := c.ConfigurationContextByName("delta")
 	assert.True(t, not_found.Is(e))

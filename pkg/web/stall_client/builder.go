@@ -12,4 +12,6 @@ type Builder struct {
 	password string
 	bearer   bool
 	token    string
+	sendPing time.Duration
+	ping     time.Duration
 }

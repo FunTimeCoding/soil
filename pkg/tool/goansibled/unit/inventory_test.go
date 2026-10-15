@@ -22,6 +22,7 @@ func TestApplyRunsAgainstStaticAndNetboxInventory(t *testing.T) {
 				r *http.Request,
 			) {
 				if r.URL.Path != "/api/inventory/ansible" ||
+					r.URL.Query().Get("field") != "ansible_playbook" ||
 					r.Header.Get(webConstant.Authorization) !=
 						join.Empty("Bearer ", constant.FixtureToken) {
 					w.WriteHeader(http.StatusUnauthorized)
@@ -79,7 +80,7 @@ func TestApplyFailsWhenNetboxInventoryFails(t *testing.T) {
 	r := o.WaitForRun()
 	assert.String(t, "error", r.Status)
 	assert.String(t, "inventory", r.Scope)
-	assert.StringContains(t, "status 500", r.ErrorOutput)
+	assert.String(t, "ansible inventory status: 500", r.ErrorOutput)
 	_, ran := o.Captured(constant.FixtureArguments)
 	assert.False(t, ran)
 	assert.Count(t, 1, o.Reporter.Events())

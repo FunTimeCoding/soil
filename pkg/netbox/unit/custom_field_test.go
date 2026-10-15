@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/netbox"
 	"github.com/funtimecoding/soil/pkg/netbox/fixture"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"testing"
 )
 
@@ -11,7 +12,11 @@ func TestChoiceSetSendsValueLabelPairs(t *testing.T) {
 	r := fixture.NewRecorder()
 	s := fixture.NewServer(r)
 	defer s.Close()
-	c := netbox.New("netbox.example.org", "token", netbox.WithServer(s.URL))
+	c := netbox.New(
+		locator.New("netbox.example.org"),
+		"token",
+		netbox.WithServer(s.URL),
+	)
 	defer c.Close()
 	v, e := c.CreateChoiceSet("alfa", []string{"bravo", "charlie"})
 	assert.FatalOnError(t, e)
@@ -33,7 +38,11 @@ func TestSelectionFieldTargetsDevicesAndVirtualMachines(t *testing.T) {
 	r := fixture.NewRecorder()
 	s := fixture.NewServer(r)
 	defer s.Close()
-	c := netbox.New("netbox.example.org", "token", netbox.WithServer(s.URL))
+	c := netbox.New(
+		locator.New("netbox.example.org"),
+		"token",
+		netbox.WithServer(s.URL),
+	)
 	defer c.Close()
 	v, e := c.CreateSelectionField("delta", "", "alfa")
 	assert.FatalOnError(t, e)

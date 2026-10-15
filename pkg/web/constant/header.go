@@ -14,6 +14,7 @@ const (
 	ExtendedRedirect  = "HX-Redirect"
 	ExtendedRequest   = "HX-Request"
 	ForwardedFor      = "X-Forwarded-For"
+	ForwardedHost     = "X-Forwarded-Host"
 	LastEvent         = "Last-Event-ID"
 	NotificationItem  = "Notification-Item"
 	ForwardedProtocol = "X-Forwarded-Proto"

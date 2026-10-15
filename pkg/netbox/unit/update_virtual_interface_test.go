@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
 	"github.com/funtimecoding/soil/pkg/netbox/fixture"
 	"github.com/funtimecoding/soil/pkg/network"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"testing"
 )
 
@@ -13,7 +14,11 @@ func TestUpdateVirtualInterfaceSetsThePrimaryAddress(t *testing.T) {
 	r := fixture.NewRecorder()
 	s := fixture.NewServer(r)
 	defer s.Close()
-	c := netbox.New("netbox.example.org", "token", netbox.WithServer(s.URL))
+	c := netbox.New(
+		locator.New("netbox.example.org"),
+		"token",
+		netbox.WithServer(s.URL),
+	)
 	defer c.Close()
 	_, e := c.UpdateVirtualInterface(
 		newAlfa(),
@@ -29,7 +34,11 @@ func TestUpdateVirtualInterfaceAssignsToTheVirtualInterface(t *testing.T) {
 	r := fixture.NewRecorder()
 	s := fixture.NewServer(r)
 	defer s.Close()
-	c := netbox.New("netbox.example.org", "token", netbox.WithServer(s.URL))
+	c := netbox.New(
+		locator.New("netbox.example.org"),
+		"token",
+		netbox.WithServer(s.URL),
+	)
 	defer c.Close()
 	_, e := c.UpdateVirtualInterface(
 		newAlfa(),

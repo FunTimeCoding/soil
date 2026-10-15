@@ -6,8 +6,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/provision/runner"
 	"github.com/funtimecoding/soil/pkg/provision/store"
 	"github.com/funtimecoding/soil/pkg/provision/types/runner_option"
-	"github.com/funtimecoding/soil/pkg/tool/goansibled/inventory"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/option"
+	"github.com/funtimecoding/soil/pkg/tool/gonetboxd/client"
 )
 
 func New(
@@ -28,7 +28,7 @@ func New(
 	}
 
 	if o.InventoryLocator != nil {
-		result.inventory = inventory.New(o.InventoryLocator, o.InventoryToken)
+		result.inventory = client.New(o.InventoryLocator, o.InventoryToken)
 	}
 
 	result.provision = runner.New(

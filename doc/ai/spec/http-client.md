@@ -23,9 +23,17 @@ c := p.Client()
 - `Verbose()` - log each request and response
 - `BasicAuth(user, password)` - add basic authentication
 - `BearerAuth(token)` - add a bearer token
+- `Ping(send, wait)` - the HTTP/2 health check below, with other durations
 
 `Verbose` always wraps outside `BasicAuth` and `BearerAuth`, so the log never
 carries the credentials.
+
+Every transport checks its HTTP/2 connections: a connection that has received
+nothing for thirty seconds gets a ping, and one whose ping goes unanswered for
+fifteen is closed. Without it, a connection whose path went silent stays in the
+pool, `ResponseHeaderTimeout` cancels only the request, and every later request
+is multiplexed onto the dead connection and times out in turn
+(`TestStallClientDropsSilentConnection`).
 
 The transport is the resource: it holds the connections. A client is a
 policy view over it - `Client()` follows redirects, `Halting()` stops at

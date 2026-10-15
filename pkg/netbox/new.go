@@ -10,15 +10,14 @@ import (
 )
 
 func New(
-	host string,
+	l *locator.Locator,
 	token string,
 	o ...Option,
 ) *Client {
-	errors.FatalOnEmpty(host, "host")
 	errors.FatalOnEmpty(token, "token")
 	result := &Client{
 		context: context.Background(),
-		client:  netbox.NewAPIClientFor(locator.New(host).String(), token),
+		client:  netbox.NewAPIClientFor(l.String(), token),
 		cache:   cache.New(),
 		pool:    stall_client.New().Build(),
 	}

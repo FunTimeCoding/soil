@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/netbox"
 	"github.com/funtimecoding/soil/pkg/netbox/constant"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"net"
 	"net/http"
 	"net/http/httptest"
@@ -36,7 +37,11 @@ func TestClientCloseDropsIdleConnections(t *testing.T) {
 	}
 	s.Start()
 	defer s.Close()
-	c := netbox.New("netbox.example.org", "token", netbox.WithServer(s.URL))
+	c := netbox.New(
+		locator.New("netbox.example.org"),
+		"token",
+		netbox.WithServer(s.URL),
+	)
 	defer c.Close()
 	a, e := net.ParseMAC(constant.FixturePhysicalAddress)
 	assert.FatalOnError(t, e)

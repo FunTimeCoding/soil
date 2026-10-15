@@ -23,6 +23,10 @@ func (b *Builder) Build() *pool.Pool {
 		ResponseHeaderTimeout: constant.ResponseHeaderTimeout,
 		IdleConnTimeout:       constant.IdleTimeout,
 		MaxIdleConns:          constant.MaximumIdle,
+		HTTP2: &http.HTTP2Config{
+			SendPingTimeout: b.sendPing,
+			PingTimeout:     b.ping,
+		},
 	}
 
 	if b.insecure {

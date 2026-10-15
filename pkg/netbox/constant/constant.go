@@ -7,8 +7,11 @@ import (
 )
 
 const (
-	HostEnvironment  = "NET_BOX_HOST"
-	TokenEnvironment = "NET_BOX_TOKEN" // #nosec G101
+	HostEnvironment       = "NET_BOX_HOST"
+	PortEnvironment       = "NET_BOX_PORT"
+	InsecureEnvironment   = "NET_BOX_INSECURE"
+	PublicHostEnvironment = "NET_BOX_PUBLIC_HOST"
+	TokenEnvironment      = "NET_BOX_TOKEN" // #nosec G101
 
 	NoName           = "no name"
 	NoGroup          = "no group"
