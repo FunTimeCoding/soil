@@ -6,13 +6,28 @@ information - nothing is injected.
 ## Usage
 
 ```
-gobuild goalertlog          # build one binary
-gobuild                     # build all binaries in cmd/ (except example/)
-gobuild --copy-to-bin       # also install matching-architecture binary to ~/bin
-gobuild --linux-amd64       # build only linux-amd64
-gobuild --native            # enable CGO
-gobuild --rebuild-stale     # rebuild every stale binary on the PATH into ~/bin
+gobuild build                        # every cmd/ program except example/
+gobuild build goalertlog golint      # the named programs
+gobuild build goalertlog --linux-amd64
+gobuild build gosed --module github.com/funtimecoding/soil@v0.11.190
+gobuild install goalertlog           # host architecture into ~/bin
+gobuild install gosed --module github.com/funtimecoding/soil
+gobuild stale                        # rebuild every stale binary on the PATH
 ```
+
+Every mistake fails with a non-zero exit: no verb, an unknown verb or flag, a
+name with a comma or a slash, a name without `cmd/<name>/main.go`, `--module`
+without names, `--main` or `--output` with more than one name, and a failed
+`go build`.
+
+| Flag | Verbs | Meaning |
+|------|-------|---------|
+| `--linux-amd64`, `--darwin-arm64`, `--darwin-amd64` | build | Narrow the targets; none means all three |
+| `--module path[@version]` | build, install | Build from a module instead of the work directory; no version means the latest tag |
+| `--native` | build, install | Enable CGO |
+| `--tags` | build, install | Build tags |
+| `--main` | build | Main file, with exactly one name and no `--module` |
+| `--output` | build | Output path, with exactly one name and one target |
 
 ## What It Does
 
@@ -42,12 +57,24 @@ fields when installed from the module proxy. A build without a git checkout
 fails unless `-buildvcs=false` is passed; CI checks out with full history, so
 tags and revision are present.
 
+## Remote Modules
+
+`--module` builds a command of a module that is not the work directory, the
+way a consumer builds soil's tools without vendoring them. The version
+resolves through `go list -m`, `@latest` when none is given, the highest
+released tag. `go install` refuses cross-compilation into `GOBIN`, so
+`build.Module` writes a throwaway module in a temporary directory, requires
+the command at the resolved version there, and runs the same `go build` per
+target with that directory as its working directory. The binary is stamped as
+the remote module at its version, with no version control fields, and lands
+in the same output layout as a local build.
+
 ## Install Semantics
 
-Local tool installation goes through `gobuild --copy-to-bin <name>` -
+Local tool installation goes through `gobuild install <name>` -
 never `go install`. Procfiles use `go run`.
 
-`--copy-to-bin` installs via `system.ReplaceFile` - write to a
+`install` places the binary via `system.ReplaceFile` - write to a
 temporary file beside the destination, then rename over it. The
 destination always gets a fresh inode: in-place overwrite makes
 macOS kill the next exec of a previously executed binary
@@ -55,7 +82,7 @@ macOS kill the next exec of a previously executed binary
 executable on Linux fails with "text file busy". Rename has
 neither problem - running processes keep the old inode.
 
-`--rebuild-stale` installs what golint reports as stale: every binary on the
+`stale` installs what golint reports as stale: every binary on the
 PATH whose `cmd/<name>` lives in a repository beside the current one and whose
 version is below that repository's latest tag, or carries none
 (`installed.Outdated`, the same list golint's finding reads). Each builds
@@ -65,7 +92,8 @@ through. The first build that fails stops the run.
 
 ## Target Architectures
 
-By default, all three are built. Pass flags to select specific ones:
+By default, `build` builds all three; `install` builds the host's. Pass flags
+to `build` to select specific ones:
 
 | Flag             | Target                       |
 |------------------|------------------------------|
@@ -94,15 +122,23 @@ target is the file's package (`build.Package`).
 ## Packages
 
 ```
-cmd/gobuild/main.go              # entry point
-pkg/tool/gobuild/main.go         # Main(): flags, dispatch
-pkg/tool/gobuild/rebuild_stale.go # rebuildStale(): installs installed.Outdated
+cmd/gobuild/main.go               # entry point
+pkg/tool/gobuild/
+  main.go                         # Main(): cobra root, fails without a verb
+  build_command.go                # build verb, target flags
+  install_command.go              # install verb, host architecture
+  stale_command.go                # stale verb
+  validate.go                     # Validate(): the failing rules
+  run.go                          # Run(): local or remote per name
+  rebuild_stale.go                # rebuildStale(): installs installed.Outdated
+  option/                         # command line option
 pkg/build/
-  go.go                          # Go(): runs go build on the package
-  architectures.go               # Architectures(): iterates selected targets
-  guess_main_path.go             # GuessMainPath(): cmd/<name>/main.go
-  package.go                     # Package(): main file to its package
-  option/
-    build.go                     # Build option struct
-    new.go                       # constructor
+  go.go                           # Go(): runs go build on the package
+  architectures.go                # Architectures(): iterates the targets
+  module.go                       # Module(): remote build per target
+  module_origin.go                # ModuleOrigin(): resolves the version
+  throwaway.go                    # the throwaway module a remote build runs in
+  guess_main_path.go              # GuessMainPath(): cmd/<name>/main.go
+  package.go                      # Package(): main file to its package
+  option/                         # build option
 ```

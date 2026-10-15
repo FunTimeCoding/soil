@@ -1,6 +1,7 @@
 package origin
 
 type Origin struct {
-	Hash string
-	Time string
+	Version string
+	Hash    string
+	Time    string
 }

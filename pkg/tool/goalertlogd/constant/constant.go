@@ -35,7 +35,7 @@ const (
 	HostEnvironment     = "GOALERTLOG_HOST"
 	PortEnvironment     = "GOALERTLOG_PORT"
 	InsecureEnvironment = "GOALERTLOG_INSECURE"
-	TokenEnvironment    = "GOALERTLOG_TOKEN" // #nosec G101 not a hardcoded secret
+	TokenEnvironment    = "GOALERTLOG_TOKEN" // #nosec G101
 
 	EventSummary = "summary"
 	EventTop     = "top"

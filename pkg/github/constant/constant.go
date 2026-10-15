@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	TokenEnvironment     = "GITHUB_TOKEN" // #nosec G101 not a hardcoded secret
+	TokenEnvironment     = "GITHUB_TOKEN" // #nosec G101
 	RunEnvironment       = "GITHUB_RUN_ID"
 	ReferenceEnvironment = "GITHUB_REF_NAME"
 

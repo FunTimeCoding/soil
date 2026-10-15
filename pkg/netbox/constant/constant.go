@@ -8,7 +8,7 @@ import (
 
 const (
 	HostEnvironment  = "NET_BOX_HOST"
-	TokenEnvironment = "NET_BOX_TOKEN" // #nosec G101 not a hardcoded secret
+	TokenEnvironment = "NET_BOX_TOKEN" // #nosec G101
 
 	NoName           = "no name"
 	NoGroup          = "no group"

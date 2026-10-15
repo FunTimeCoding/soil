@@ -31,7 +31,7 @@ const (
 	HostEnvironment     = "GOHABITICA_HOST"
 	PortEnvironment     = "GOHABITICA_PORT"
 	InsecureEnvironment = "GOHABITICA_INSECURE"
-	TokenEnvironment    = "GOHABITICA_TOKEN" // #nosec G101 not a hardcoded secret
+	TokenEnvironment    = "GOHABITICA_TOKEN" // #nosec G101
 )
 
 const RequestFailed = "habitica request failed"

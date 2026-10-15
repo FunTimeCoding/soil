@@ -8,6 +8,7 @@ import (
 
 func TestParseOriginReadsTheCommitAndTime(t *testing.T) {
 	v := build.ParseOrigin(originOutput())
+	assert.String(t, "v0.11.156", v.Version)
 	assert.String(t, "72ce25dbd0b797a65759efe648f5838cc9709481", v.Hash)
 	assert.String(t, "2026-09-27T14:17:43Z", v.Time)
 }

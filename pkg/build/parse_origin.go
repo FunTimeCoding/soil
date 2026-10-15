@@ -12,5 +12,5 @@ func ParseOrigin(output string) *origin.Origin {
 		return nil
 	}
 
-	return origin.New(v.Origin.Hash, v.Time)
+	return origin.New(v.Version, v.Origin.Hash, v.Time)
 }

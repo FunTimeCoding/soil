@@ -1,11 +1,8 @@
 package suppress
 
 import (
-	"fmt"
-	"github.com/funtimecoding/soil/pkg/lint/constant"
 	"go/ast"
 	"go/token"
-	"strings"
 )
 
 func IsSuppressed(
@@ -28,14 +25,7 @@ func IsSuppressed(
 					continue
 				}
 
-				text := strings.TrimSpace(
-					strings.TrimPrefix(comment.Text, constant.CommentPrefix),
-				)
-
-				if text == "goanalyze:ignore" || text == fmt.Sprintf(
-					"goanalyze:ignore %s",
-					key,
-				) {
+				if CommentSuppresses(comment.Text, key) {
 					return true
 				}
 			}

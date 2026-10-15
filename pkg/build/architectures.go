@@ -2,25 +2,14 @@ package build
 
 import (
 	"github.com/funtimecoding/soil/pkg/build/option"
-	"github.com/funtimecoding/soil/pkg/system/constant"
+	"github.com/funtimecoding/soil/pkg/strings/split"
 )
 
 func Architectures(o *option.Build) {
-	if o.LinuxAMD64 {
-		o.OperatingSystem = constant.Linux
-		o.Architecture = constant.AMD64
-		Go(o)
-	}
-
-	if o.DarwinARM64 {
-		o.OperatingSystem = constant.Darwin
-		o.Architecture = constant.ARM64
-		Go(o)
-	}
-
-	if o.DarwinAMD64 {
-		o.OperatingSystem = constant.Darwin
-		o.Architecture = constant.AMD64
+	for _, t := range o.Targets {
+		parts := split.Dash(t)
+		o.OperatingSystem = parts[0]
+		o.Architecture = parts[1]
 		Go(o)
 	}
 }

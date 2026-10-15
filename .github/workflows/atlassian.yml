@@ -10,7 +10,7 @@ jobs:
     - {name: Repository, uses: actions/checkout@v4, with: {fetch-depth: 0}}
     - {name: Go, uses: actions/setup-go@v5, with: {go-version-file: go.mod}}
     - name: Build
-      run: go run cmd/gobuild/main.go --linux-amd64 goatlassiand
+      run: go run cmd/gobuild/main.go build goatlassiand --linux-amd64
     - name: Lowercase image
       run: echo "IMAGE_LC=${GITHUB_REPOSITORY_OWNER@L}/atlassian" >> $GITHUB_ENV
     - name: Login

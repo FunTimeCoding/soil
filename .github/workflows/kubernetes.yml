@@ -10,7 +10,7 @@ jobs:
     - {name: Repository, uses: actions/checkout@v4, with: {fetch-depth: 0}}
     - {name: Go, uses: actions/setup-go@v5, with: {go-version-file: go.mod}}
     - name: Build
-      run: go run cmd/gobuild/main.go --linux-amd64 gokubernetesd
+      run: go run cmd/gobuild/main.go build gokubernetesd --linux-amd64
     - name: Lowercase image
       run: echo "IMAGE_LC=${GITHUB_REPOSITORY_OWNER@L}/kubernetes" >> $GITHUB_ENV
     - name: Login

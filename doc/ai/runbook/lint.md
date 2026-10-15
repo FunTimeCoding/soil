@@ -12,7 +12,7 @@ Each tool's first line names the repository it scanned; after that
 the pipeline is silent on success - any further output is a failure.
 Lint has multiple stages - clearing the first may reveal new
 issues from the next. golint also names every installed binary
-older than its repository's latest tag; `gobuild --rebuild-stale`
+older than its repository's latest tag; `gobuild stale`
 installs them all.
 
 Run the full pipeline once per completed code scope - it covers

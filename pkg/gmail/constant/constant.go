@@ -5,7 +5,7 @@ const (
 
 	DefaultDirectory = ".gmail"
 
-	CredentialFile = "credential.json" // #nosec G101 not a hardcoded secret
+	CredentialFile = "credential.json" // #nosec G101
 
 	TokenSuffix = "-token.json"
 

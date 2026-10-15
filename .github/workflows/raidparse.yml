@@ -10,7 +10,7 @@ jobs:
     steps:
     - {name: Repository, uses: actions/checkout@v4, with: {fetch-depth: 0}}
     - {name: Go, uses: actions/setup-go@v5, with: {go-version-file: go.mod}}
-    - {name: Build, run: 'go run cmd/gobuild/main.go --linux-amd64 goraidparsed'}
+    - {name: Build, run: 'go run cmd/gobuild/main.go build goraidparsed --linux-amd64'}
     - name: Parser
       run: |
         git clone https://github.com/Drevarr/arcdps_top_stats_parser.git strata/container/raidparse/parser

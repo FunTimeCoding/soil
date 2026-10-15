@@ -8,4 +8,7 @@ const (
 	ModuleVersionFlag = "module-version"
 
 	ExamplePath = "example"
+
+	ThrowawayModule  = "gobuild.remote"
+	ThrowawayPattern = "gobuild-remote-*"
 )

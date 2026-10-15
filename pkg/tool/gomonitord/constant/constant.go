@@ -12,7 +12,7 @@ const (
 	HostEnvironment     = "GOMONITOR_HOST"
 	PortEnvironment     = "GOMONITOR_PORT"
 	InsecureEnvironment = "GOMONITOR_INSECURE"
-	TokenEnvironment    = "GOMONITOR_TOKEN" // #nosec G101 not a hardcoded secret
+	TokenEnvironment    = "GOMONITOR_TOKEN" // #nosec G101
 	ClaimsPath          = "/api/claims"
 	StreamPath          = "/stream/claims"
 	EventFormat         = "data: %s\n\n"

@@ -20,7 +20,6 @@ tasks:
   check: ...
   generate: ...
   update: ...
-  tool: ...
 ```
 
 ### Pipeline Tasks
@@ -36,11 +35,11 @@ tasks:
 |------|---------|---------|
 | `lint` | `golint --fix` + `golangci-lint run --build-tags local` + `gofix ./...` + `goanalyze ./...` + `goaudit .` | Lint with auto-fix, static analysis, AST fix and check, then compliance audit |
 | `test` | `gotestsum --format dots -- --tags local ./...` | Run tests (including local-tagged) with minimal output |
-| `build` | `go run cmd/gobuild/main.go` | Cross-compile all binaries via gobuild |
+| `build` | `go run cmd/gobuild/main.go build` | Cross-compile all binaries via gobuild |
 | `check` | `gosec -fmt=json ...` | Security scan |
 | `generate` | `oapi-codegen --config config.yaml ...` per service | Regenerate OpenAPI clients and servers (see `generated-api.md`) |
 | `update` | `gomodule update` with pinned downgrades | Dependency update with known-bad version pins |
-| `tool` | installs gotestsum, golint, goanalyze, gofix, goaudit, gobuild, gohook, golangci-lint, oapi-codegen | Dev tooling bootstrap |
+| `tool` | installs the tools the pipeline runs | CI tooling bootstrap, only where a pipeline calls it |
 
 ## Git Hook Integration
 
@@ -82,5 +81,6 @@ Go version is pinned via `go.mod`, not hardcoded in the workflow.
 - All tasks use `silent: true`
 - Multi-line commands use `|` block scalar
 - `build` task delegates to `gobuild` (see `build.md`), not raw `go build`
-- `tool` task is the single source of truth for dev dependencies
+- `tool` task exists only where a CI job runs it, and installs what that job
+  needs; a repository whose pipeline needs no prebuilt tools has none
 - `update` task pins known-incompatible dependency versions with `--downgrade`

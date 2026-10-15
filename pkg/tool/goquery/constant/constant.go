@@ -12,7 +12,7 @@ const (
 	HostEnvironment     = "GOQUERY_HOST"
 	PortEnvironment     = "GOQUERY_PORT"
 	InsecureEnvironment = "GOQUERY_INSECURE"
-	TokenEnvironment    = "GOQUERY_TOKEN" // #nosec G101 not a hardcoded secret
+	TokenEnvironment    = "GOQUERY_TOKEN" // #nosec G101
 
 	SnapshotDirectory = "snapshot"
 	WordListLimit     = 20

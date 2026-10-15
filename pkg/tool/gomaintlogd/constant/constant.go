@@ -40,7 +40,7 @@ const (
 	HostEnvironment     = "GOMAINTLOG_HOST"
 	PortEnvironment     = "GOMAINTLOG_PORT"
 	InsecureEnvironment = "GOMAINTLOG_INSECURE"
-	TokenEnvironment    = "GOMAINTLOG_TOKEN" // #nosec G101 not a hardcoded secret
+	TokenEnvironment    = "GOMAINTLOG_TOKEN" // #nosec G101
 
 	EventSummary = "summary"
 	EventRecent  = "recent"

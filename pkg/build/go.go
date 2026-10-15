@@ -30,6 +30,8 @@ func Go(o *option.Build) {
 		)
 	}
 
+	output, e := filepath.Abs(p.Output)
+	errors.PanicOnError(e)
 	console.Format("Name: %s\n", p.Name)
 	console.Format("Output: %s\n", p.Output)
 	path := filepath.Dir(p.Output)
@@ -41,12 +43,13 @@ func Go(o *option.Build) {
 		soil.TagsArgument,
 		Tags(p.BuildTags),
 		soil.OutputArgument,
-		p.Output,
-		Package(p.MainPath),
+		output,
+		target(&p),
 	}
 	r := run.New()
 	r.Verbose = true
 	r.Panic = false
+	r.Directory = p.Directory
 
 	if !p.Native {
 		r.Environment(soil.NativeEnabled, stringsConstant.BooleanFalse)

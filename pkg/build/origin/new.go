@@ -1,8 +1,9 @@
 package origin
 
 func New(
+	version string,
 	hash string,
 	time string,
 ) *Origin {
-	return &Origin{Hash: hash, Time: time}
+	return &Origin{Version: version, Hash: hash, Time: time}
 }
