@@ -7,7 +7,9 @@ import (
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/option"
+	netboxConstant "github.com/funtimecoding/soil/pkg/tool/gonetboxd/constant"
 	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
 func Main() {
@@ -33,5 +35,15 @@ func Main() {
 	o.Playbook = a.Slice(argumentConstant.Playbook)
 	o.PostgresLocator = a.GetString(argumentConstant.Postgres)
 	o.LitePath = a.GetString(argumentConstant.Lite)
+
+	if environment.Exists(netboxConstant.HostEnvironment) {
+		o.InventoryLocator = locator.Environment(
+			netboxConstant.HostEnvironment,
+			netboxConstant.PortEnvironment,
+			netboxConstant.InsecureEnvironment,
+		)
+		o.InventoryToken = environment.Required(netboxConstant.TokenEnvironment)
+	}
+
 	Run(o, s)
 }

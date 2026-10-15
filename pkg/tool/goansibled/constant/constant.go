@@ -24,4 +24,11 @@ const (
 	Identifier  = "id"
 
 	AnsiblePathEnvironment = "ANSIBLE_PATH"
+
+	Command          = "ansible-playbook"
+	InventoryFlag    = "-i"
+	StaticInventory  = "/etc/ansible/hosts"
+	InventoryPattern = "goansibled-inventory-*"
+	InventoryFile    = "netbox.yaml"
+	InventoryScope   = "inventory"
 )

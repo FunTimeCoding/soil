@@ -3,6 +3,7 @@ package runner
 import (
 	provisionConstant "github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/model/run"
+	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/constant"
 	"path/filepath"
 	"time"
@@ -20,6 +21,16 @@ func (r *Runner) apply(
 		playbooks = []string{v.(string)}
 	}
 
+	inventoryDirectory, e := r.renderInventory()
+
+	if e != nil {
+		return r.failInventory(e, triggerSource, head)
+	}
+
+	if inventoryDirectory != "" {
+		defer system.Remove(inventoryDirectory)
+	}
+
 	var results []*run.Run
 
 	for _, p := range playbooks {
@@ -33,7 +44,7 @@ func (r *Runner) apply(
 		start := time.Now()
 		c := r.newRun().NoPanic()
 		c.Directory = directory
-		c.Start("ansible-playbook", p)
+		c.Start(command(inventoryDirectory, p)...)
 		record.DurationMillisecond = time.Since(start).Milliseconds()
 		record.Output = c.OutputString
 		record.ErrorOutput = c.ErrorString
