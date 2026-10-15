@@ -6,3 +6,8 @@ const (
 	SecureSocket = "wss"
 	Socket       = "ws"
 )
+
+const (
+	InsecurePort = 80
+	SecurePort   = 443
+)

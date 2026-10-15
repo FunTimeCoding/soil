@@ -34,7 +34,7 @@ func New(
 				r *http.Request,
 			) {
 				c := request_context.New(w, r)
-				code := c.Query("code")
+				code := c.Query(constant.CodeParameter)
 
 				if code == "" {
 					result.errorCh <- fmt.Errorf(

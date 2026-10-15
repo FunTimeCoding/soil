@@ -2,6 +2,7 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -19,7 +20,7 @@ func newFakeIssuer(t *testing.T) *FakeIssuer {
 				if r.URL.Path == "/token" {
 					errors.PanicOnError(r.ParseForm())
 
-					if r.Form.Get("code") == "expired" {
+					if r.Form.Get(constant.CodeParameter) == "expired" {
 						w.WriteHeader(http.StatusBadRequest)
 						writeAnswer(
 							w,

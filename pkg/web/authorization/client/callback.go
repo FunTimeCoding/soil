@@ -39,7 +39,7 @@ func (c *Client) Callback(
 		return
 	}
 
-	code := r.URL.Query().Get("code")
+	code := r.URL.Query().Get(constant.CodeParameter)
 
 	if code == "" {
 		http.Error(w, "missing authorization code", http.StatusBadRequest)

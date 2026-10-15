@@ -19,13 +19,20 @@ func New(
 		context: context.Background(),
 		client:  netbox.NewAPIClientFor(l.String(), token),
 		cache:   cache.New(),
-		pool:    stall_client.New().Build(),
 	}
-	result.client.GetConfig().HTTPClient = result.pool.Client()
 
 	for _, f := range o {
 		f(result)
 	}
+
+	b := stall_client.New()
+
+	if result.observer != nil {
+		b.Observe(result.observer)
+	}
+
+	result.pool = b.Build()
+	result.client.GetConfig().HTTPClient = result.pool.Client()
 
 	if result.verbose {
 		result.client.GetConfig().Debug = true

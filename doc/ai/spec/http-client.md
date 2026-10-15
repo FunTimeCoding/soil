@@ -24,6 +24,16 @@ c := p.Client()
 - `BasicAuth(user, password)` - add basic authentication
 - `BearerAuth(token)` - add a bearer token
 - `Ping(send, wait)` - the HTTP/2 health check below, with other durations
+- `Observe(o)` - record every request's duration, labelled `host`, `code`
+  and `method`, into `metric.Upstream(identity)`, the daemon's slice of the
+  shared `upstream_request_duration_seconds`
+
+`code` is the response status, or, when no response arrived, the
+`connection.Classify` kind - `timeout`, `unreachable`, `dropped` - then
+`canceled` when the caller gave up and `error` for the rest. Prometheus's own
+round-tripper instrumentation records none of these. `host` comes from each
+request, so observe only clients with a fixed set of hosts: a client that
+follows arbitrary links would grow a series per site.
 
 `Verbose` always wraps outside `BasicAuth` and `BearerAuth`, so the log never
 carries the credentials.

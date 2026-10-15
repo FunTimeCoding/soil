@@ -1,6 +1,9 @@
 package stall_client
 
-import "time"
+import (
+	"github.com/prometheus/client_golang/prometheus"
+	"time"
+)
 
 type Builder struct {
 	insecure bool
@@ -14,4 +17,5 @@ type Builder struct {
 	token    string
 	sendPing time.Duration
 	ping     time.Duration
+	observer prometheus.ObserverVec
 }
