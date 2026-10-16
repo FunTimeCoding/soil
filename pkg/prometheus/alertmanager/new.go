@@ -3,6 +3,7 @@ package alertmanager
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/prometheus"
+	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	transport "github.com/go-openapi/runtime/client"
@@ -11,6 +12,7 @@ import (
 
 func New(
 	host string,
+	port int,
 	secure bool,
 	user string,
 	password string,
@@ -23,9 +25,10 @@ func New(
 		scheme = constant.Secure
 	}
 
+	address := web.HostPortFromLocator(web.Link(host, port, secure))
 	c := client.NewHTTPClient(nil)
 	o := stall_client.New().Build()
-	t := transport.New(host, client.DefaultBasePath, []string{scheme})
+	t := transport.New(address, client.DefaultBasePath, []string{scheme})
 	t.Transport = o.Client().Transport
 
 	if user != "" && password != "" {
@@ -34,5 +37,5 @@ func New(
 
 	c.SetTransport(t)
 
-	return &Client{client: c, host: host, prometheus: p, pool: o}
+	return &Client{client: c, host: address, prometheus: p, pool: o}
 }

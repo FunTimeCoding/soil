@@ -64,6 +64,7 @@ const (
 	AlertmanagerDefaultDuration = 10 * time.Minute
 
 	AlertmanagerHostEnvironment     = "ALERTMANAGER_HOST"
+	AlertmanagerPortEnvironment     = "ALERTMANAGER_PORT"
 	AlertmanagerUserEnvironment     = "ALERTMANAGER_USER"
 	AlertmanagerPasswordEnvironment = "ALERTMANAGER_PASSWORD"
 	AlertmanagerInsecureEnvironment = "ALERTMANAGER_INSECURE"

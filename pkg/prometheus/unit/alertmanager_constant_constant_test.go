@@ -8,4 +8,5 @@ import (
 
 func TestAlertmanagerConstant(t *testing.T) {
 	assert.String(t, "ALERTMANAGER_HOST", constant.AlertmanagerHostEnvironment)
+	assert.String(t, "ALERTMANAGER_PORT", constant.AlertmanagerPortEnvironment)
 }

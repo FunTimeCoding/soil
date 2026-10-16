@@ -9,6 +9,7 @@ import (
 func newClient(i *instance.Instance) (*alertmanager.Client, error) {
 	return alertmanager.New(
 		i.Alertmanager.Host,
+		i.Alertmanager.Port,
 		i.Alertmanager.Secure,
 		i.Alertmanager.User,
 		i.Alertmanager.Password,
