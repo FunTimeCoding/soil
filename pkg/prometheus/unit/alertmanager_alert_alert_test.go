@@ -6,6 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert"
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/go-openapi/strfmt"
 	"github.com/prometheus/alertmanager/api/v2/models"
 	"testing"
@@ -18,7 +19,7 @@ func TestAlert(t *testing.T) {
 			Status:      &models.AlertStatus{State: new(constant.ActiveState)},
 			StartsAt:    new(strfmt.NewDateTime()),
 		},
-		stringsConstant.UpperBravo,
+		locator.New(stringsConstant.UpperBravo),
 	)
 	actual.Raw = nil
 	assert.Exported(

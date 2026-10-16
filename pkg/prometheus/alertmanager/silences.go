@@ -15,7 +15,7 @@ func (c *Client) Silences(expired bool) ([]*silence.Silence, error) {
 
 	var result []*silence.Silence
 
-	for _, s := range silence.NewSlice(response.GetPayload(), c.host) {
+	for _, s := range silence.NewSlice(response.GetPayload(), c.link) {
 		if !expired && s.Expired() {
 			continue
 		}

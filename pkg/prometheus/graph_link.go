@@ -1,20 +1,9 @@
 package prometheus
 
-import (
-	"github.com/funtimecoding/soil/pkg/prometheus/constant"
-	"github.com/funtimecoding/soil/pkg/web/locator"
-)
+import "github.com/funtimecoding/soil/pkg/prometheus/constant"
 
 func (c *Client) GraphLink(expression string) string {
-	var host string
-
-	if c.alternateGraphHost != "" {
-		host = c.alternateGraphHost
-	} else {
-		host = c.host
-	}
-
-	return locator.New(host).Path(constant.Graph).Set(
+	return c.link.Copy().Path(constant.Graph).Set(
 		constant.Graph0Expression,
 		expression,
 	).String()

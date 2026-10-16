@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/prometheus"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/constant"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	transport "github.com/go-openapi/runtime/client"
 	"github.com/prometheus/alertmanager/api/v2/client"
@@ -17,6 +18,7 @@ func New(
 	user string,
 	password string,
 	p *prometheus.Client,
+	o ...Option,
 ) *Client {
 	errors.FatalOnEmpty(host, "host")
 	scheme := constant.Insecure
@@ -25,17 +27,26 @@ func New(
 		scheme = constant.Secure
 	}
 
-	address := web.HostPortFromLocator(web.Link(host, port, secure))
+	connection := locator.NewEndpoint(host, port, secure)
 	c := client.NewHTTPClient(nil)
-	o := stall_client.New().Build()
-	t := transport.New(address, client.DefaultBasePath, []string{scheme})
-	t.Transport = o.Client().Transport
+	b := stall_client.New().Build()
+	t := transport.New(
+		web.HostPortFromLocator(connection.String()),
+		client.DefaultBasePath,
+		[]string{scheme},
+	)
+	t.Transport = b.Client().Transport
 
 	if user != "" && password != "" {
 		t.DefaultAuthentication = transport.BasicAuth(user, password)
 	}
 
 	c.SetTransport(t)
+	result := &Client{client: c, link: connection, prometheus: p, pool: b}
 
-	return &Client{client: c, host: address, prometheus: p, pool: o}
+	for _, f := range o {
+		f(result)
+	}
+
+	return result
 }

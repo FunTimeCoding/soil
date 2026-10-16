@@ -36,7 +36,6 @@ func Run(
 			o.Board.Connection.Prometheus.Secure,
 			"",
 			"",
-			"",
 		),
 		usageClient(o.Board),
 		argocdClient(o.Board),

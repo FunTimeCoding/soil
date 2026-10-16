@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/prometheus/client"
-	"github.com/funtimecoding/soil/pkg/web"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/funtimecoding/soil/pkg/web/stall_client"
 )
 
@@ -14,7 +14,6 @@ func New(
 	secure bool,
 	user string,
 	password string,
-	alternateGraphHost string,
 	o ...Option,
 ) *Client {
 	errors.FatalOnEmpty(host, "host")
@@ -25,15 +24,17 @@ func New(
 	}
 
 	p := b.Build()
-
-	return &Client{
+	connection := locator.NewEndpoint(host, port, secure)
+	result := &Client{
 		context: context.Background(),
-		client: client.New(
-			web.Link(host, port, secure),
-			p.Client().Transport,
-		),
-		pool:               p,
-		host:               host,
-		alternateGraphHost: alternateGraphHost,
+		client:  client.New(connection.String(), p.Client().Transport),
+		pool:    p,
+		link:    connection.Copy(),
 	}
+
+	for _, f := range o {
+		f(result)
+	}
+
+	return result
 }

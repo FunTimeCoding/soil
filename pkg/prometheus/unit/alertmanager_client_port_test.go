@@ -28,7 +28,7 @@ func TestAlertmanagerClientDialsConfiguredPort(t *testing.T) {
 		),
 	)
 	defer s.Close()
-	p := prometheus.New("127.0.0.1", 0, false, "", "", "")
+	p := prometheus.New("127.0.0.1", 0, false, "", "")
 	defer p.Close()
 	c := alertmanager.New(
 		"127.0.0.1",

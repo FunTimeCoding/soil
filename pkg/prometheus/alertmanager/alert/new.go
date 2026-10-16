@@ -5,13 +5,14 @@ import (
 	monitorConstant "github.com/funtimecoding/soil/pkg/monitor/constant"
 	"github.com/funtimecoding/soil/pkg/openapi"
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/prometheus/alertmanager/api/v2/models"
 	"slices"
 )
 
 func New(
 	v *models.GettableAlert,
-	host string,
+	link *locator.Locator,
 ) *Alert {
 	var remaining models.LabelSet
 
@@ -70,7 +71,7 @@ func New(
 	extractKey(&remaining, constant.SummaryLabel, &result.Summary)
 	extractKey(&remaining, constant.MessageLabel, &result.Message)
 	extractKey(&remaining, constant.PrometheusLabel, &result.Prometheus)
-	result.Link = result.buildLink(host)
+	result.Link = result.buildLink(link)
 
 	return result
 }

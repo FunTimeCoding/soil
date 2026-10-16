@@ -62,10 +62,7 @@ func TestConstructors(t *testing.T) {
 			false,
 		),
 	)
-	assert.NotNil(
-		t,
-		prometheus.New(webConstant.Localhost, 0, false, "", "", ""),
-	)
+	assert.NotNil(t, prometheus.New(webConstant.Localhost, 0, false, "", ""))
 	assert.NotNil(
 		t,
 		push.New(

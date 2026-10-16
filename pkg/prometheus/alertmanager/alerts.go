@@ -39,7 +39,7 @@ func (c *Client) Alerts(
 		return nil, nil, g
 	}
 
-	v, s := proc.Process(alert.NewSlice(result.GetPayload(), c.host))
+	v, s := proc.Process(alert.NewSlice(result.GetPayload(), c.link))
 
 	return v, s, nil
 }

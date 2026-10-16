@@ -34,7 +34,6 @@ func TestClientSendsBasicAuth(t *testing.T) {
 		false,
 		"alfa",
 		"bravo",
-		"",
 	)
 	defer c.Close()
 	labels, e := c.AllLabels()

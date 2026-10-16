@@ -7,13 +7,14 @@ import (
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/label_filter"
 	"github.com/funtimecoding/soil/pkg/prometheus/alertmanager/alert/name_filter"
 	"github.com/funtimecoding/soil/pkg/prometheus/rule/rule_list"
+	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/funtimecoding/soil/pkg/web/stall_client/pool"
 	"github.com/prometheus/alertmanager/api/v2/client"
 )
 
 type Client struct {
 	client      *client.AlertmanagerAPI
-	host        string
+	link        *locator.Locator
 	prometheus  *prometheus.Client
 	rules       *rule_list.List
 	enricher    *alert_enricher.Enricher

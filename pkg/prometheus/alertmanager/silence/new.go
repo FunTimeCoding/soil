@@ -12,7 +12,7 @@ import (
 
 func New(
 	v *models.GettableSilence,
-	host string,
+	link *locator.Locator,
 ) *Silence {
 	var match []string
 	var rule string
@@ -39,7 +39,7 @@ func New(
 		Author:            *v.CreatedBy,
 		Comment:           *v.Comment,
 		Rule:              rule,
-		Link: locator.New(host).Trail().Fragment(
+		Link: link.Copy().Trail().Fragment(
 			"/silences/%s",
 			*v.ID,
 		).String(),

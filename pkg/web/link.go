@@ -7,11 +7,5 @@ func Link(
 	port int,
 	secure bool,
 ) string {
-	l := locator.New(host).Port(port)
-
-	if !secure {
-		l = l.Insecure()
-	}
-
-	return l.String()
+	return locator.NewEndpoint(host, port, secure).String()
 }

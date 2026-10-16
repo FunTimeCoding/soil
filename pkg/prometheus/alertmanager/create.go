@@ -3,7 +3,6 @@ package alertmanager
 import (
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/prometheus/constant"
-	"github.com/funtimecoding/soil/pkg/web/locator"
 	"github.com/go-openapi/strfmt"
 	"github.com/prometheus/alertmanager/api/v2/client/alert"
 	"github.com/prometheus/alertmanager/api/v2/models"
@@ -29,12 +28,7 @@ func (c *Client) Create(
 					constant.SeverityLabel:  constant.CriticalSeverity,
 					constant.InstanceLabel:  instance,
 				},
-				GeneratorURL: strfmt.URI(
-					locator.New(c.prometheus.Host()).Path(constant.Graph).Set(
-						constant.Graph0Expression,
-						expression,
-					).String(),
-				),
+				GeneratorURL: strfmt.URI(c.prometheus.GraphLink(expression)),
 			},
 			Annotations: map[string]string{
 				constant.SummaryLabel:     summary,

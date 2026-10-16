@@ -12,7 +12,6 @@ func NewEnvironment(o ...Option) *Client {
 		!environment.Exists(constant.InsecureEnvironment),
 		environment.Required(constant.UserEnvironment),
 		environment.Required(constant.PasswordEnvironment),
-		"",
 		o...,
 	)
 }

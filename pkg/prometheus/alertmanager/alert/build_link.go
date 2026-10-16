@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/web/locator"
 )
 
-func (a *Alert) buildLink(host string) string {
+func (a *Alert) buildLink(link *locator.Locator) string {
 	var query string
 
 	if i := a.Detail(constant.InstanceLabel); i != "" {
@@ -21,7 +21,7 @@ func (a *Alert) buildLink(host string) string {
 		query = fmt.Sprintf("{%s=\"%s\"}", constant.AlertnameLabel, a.Name)
 	}
 
-	return locator.New(host).Trail().Fragment(constant.Alerts).FragmentSet(
+	return link.Copy().Trail().Fragment(constant.Alerts).FragmentSet(
 		"filter",
 		query,
 	).String()

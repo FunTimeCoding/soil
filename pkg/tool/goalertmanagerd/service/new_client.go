@@ -7,6 +7,18 @@ import (
 )
 
 func newClient(i *instance.Instance) (*alertmanager.Client, error) {
+	var a []alertmanager.Option
+
+	if l := i.Alertmanager.Link; l.Host != "" {
+		a = append(a, alertmanager.WithLink(l.Host, l.Port, l.Secure))
+	}
+
+	var p []prometheus.Option
+
+	if l := i.Prometheus.Link; l.Host != "" {
+		p = append(p, prometheus.WithLink(l.Host, l.Port, l.Secure))
+	}
+
 	return alertmanager.New(
 		i.Alertmanager.Host,
 		i.Alertmanager.Port,
@@ -19,7 +31,8 @@ func newClient(i *instance.Instance) (*alertmanager.Client, error) {
 			i.Prometheus.Secure,
 			i.Prometheus.User,
 			i.Prometheus.Password,
-			"",
+			p...,
 		),
+		a...,
 	), nil
 }

@@ -6,5 +6,5 @@ import (
 )
 
 func newClient(i *instance.Instance) (*prometheus.Client, error) {
-	return prometheus.New(i.Host, i.Port, i.Secure, i.User, i.Password, ""), nil
+	return prometheus.New(i.Host, i.Port, i.Secure, i.User, i.Password), nil
 }
