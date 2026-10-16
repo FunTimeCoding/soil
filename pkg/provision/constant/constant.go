@@ -7,6 +7,12 @@ const (
 
 	DownstreamContext = "downstream"
 	DownstreamChanges = "changes"
+	DownstreamHosts   = "hosts"
+
+	HostCreate  = "create"
+	HostUpdate  = "update"
+	HostReplace = "replace"
+	HostDelete  = "delete"
 
 	PackerDirectory       = "packer"
 	PackerWebDirectory    = "web"

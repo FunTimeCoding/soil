@@ -1,7 +1,7 @@
 package runner_tester
 
 import (
-	"github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/provision/face"
 	"testing"
 )
 

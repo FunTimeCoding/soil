@@ -1,6 +1,7 @@
 package unit
 
 import (
+	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
@@ -8,7 +9,11 @@ import (
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/provision/client"
 	"github.com/funtimecoding/soil/pkg/provision/constant"
+	generated "github.com/funtimecoding/soil/pkg/provision/generated/client"
 	"github.com/funtimecoding/soil/pkg/provision/mock_runner"
+	"github.com/funtimecoding/soil/pkg/provision/types/change"
+	"github.com/funtimecoding/soil/pkg/provision/types/host_event"
+	"github.com/funtimecoding/soil/pkg/web"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"testing"
 )
@@ -22,7 +27,18 @@ func TestClientTriggerQueuesRunWithChanges(t *testing.T) {
 		generativeConstant.ModelContextTestToken,
 	)
 	defer c.Close()
-	assert.FatalOnError(t, c.Trigger([]string{"alfa", "bravo"}))
+	assert.FatalOnError(
+		t,
+		c.Trigger(
+			change.New(
+				[]string{"alfa", "bravo"},
+				[]*host_event.Event{
+					host_event.New("charlie", constant.HostReplace),
+					host_event.New("delta", constant.HostDelete),
+				},
+			),
+		),
+	)
 	requests := n.Requests()
 	assert.Count(t, 1, requests)
 	assert.True(t, requests[0].Update)
@@ -31,6 +47,52 @@ func TestClientTriggerQueuesRunWithChanges(t *testing.T) {
 		[]string{"alfa", "bravo"},
 		requests[0].Parameters[constant.DownstreamChanges],
 	)
+	assert.Any(
+		t,
+		[]*host_event.Event{
+			host_event.New("charlie", "replace"),
+			host_event.New("delta", "delete"),
+		},
+		requests[0].Parameters[constant.DownstreamHosts],
+	)
+}
+
+func TestClientTriggerReachingNoHostSendsEmptyHosts(t *testing.T) {
+	n := mock_runner.New()
+	s := newTriggerServer(t, n, memory.New())
+	c := client.New(
+		webConstant.Localhost,
+		s.Port,
+		generativeConstant.ModelContextTestToken,
+	)
+	defer c.Close()
+	assert.FatalOnError(t, c.Trigger(change.New([]string{"alfa"}, nil)))
+	assert.Any(
+		t,
+		[]*host_event.Event{},
+		n.Requests()[0].Parameters[constant.DownstreamHosts],
+	)
+}
+
+func TestTriggerWithoutHostsFieldCarriesNoHosts(t *testing.T) {
+	n := mock_runner.New()
+	s := newTriggerServer(t, n, memory.New())
+	c, e := generated.NewClientWithResponses(
+		s.Address(""),
+		generated.WithHTTPClient(s.Client()),
+		generated.WithRequestEditorFn(
+			web.BearerEditor(generativeConstant.ModelContextTestToken),
+		),
+	)
+	assert.FatalOnError(t, e)
+	v, f := c.PostTriggerWithResponse(
+		context.Background(),
+		generated.TriggerRequest{Update: true, Changes: []string{"alfa"}},
+	)
+	assert.FatalOnError(t, f)
+	assert.Integer(t, 202, v.StatusCode())
+	_, present := n.Requests()[0].Parameters[constant.DownstreamHosts]
+	assert.False(t, present)
 }
 
 func TestClientTriggerWithoutTokenIsRefused(t *testing.T) {
@@ -38,7 +100,7 @@ func TestClientTriggerWithoutTokenIsRefused(t *testing.T) {
 	s := newTriggerServer(t, n, memory.New())
 	c := client.New(webConstant.Localhost, s.Port, "bravo")
 	defer c.Close()
-	e := c.Trigger([]string{"alfa"})
+	e := c.Trigger(change.New([]string{"alfa"}, nil))
 	assert.NotNil(t, e)
 	assert.StringContains(t, "status 401", e.Error())
 	assert.Count(t, 0, n.Requests())
@@ -57,7 +119,7 @@ func TestClientTriggerReportsQueuedRunAsConflict(t *testing.T) {
 		generativeConstant.ModelContextTestToken,
 	)
 	defer c.Close()
-	e := c.Trigger([]string{"alfa"})
+	e := c.Trigger(change.New([]string{"alfa"}, nil))
 	assert.NotNil(t, e)
 	assert.StringContains(t, "status 409", e.Error())
 	assert.StringContains(t, "run already queued", e.Error())
@@ -73,7 +135,7 @@ func TestClientTriggerFailureIsCaptured(t *testing.T) {
 		generativeConstant.ModelContextTestToken,
 	)
 	defer c.Close()
-	e := c.Trigger([]string{"alfa"})
+	e := c.Trigger(change.New([]string{"alfa"}, nil))
 	assert.NotNil(t, e)
 	assert.StringContains(t, "status 500", e.Error())
 	assert.Count(t, 1, r.Events())

@@ -21,6 +21,14 @@ func (r *Runner) apply(
 		playbooks = []string{v.(string)}
 	}
 
+	hosts, limited := limit(parameters)
+
+	if limited && len(hosts) == 0 {
+		r.logger.Structured("playbook_skip", "reason", "no live host changed")
+
+		return []*run.Run{}
+	}
+
 	inventoryDirectory, e := r.renderInventory()
 
 	if e != nil {
@@ -44,7 +52,7 @@ func (r *Runner) apply(
 		start := time.Now()
 		c := r.newRun().NoPanic()
 		c.Directory = directory
-		c.Start(command(inventoryDirectory, p)...)
+		c.Start(command(inventoryDirectory, p, hosts)...)
 		record.DurationMillisecond = time.Since(start).Milliseconds()
 		record.Output = c.OutputString
 		record.ErrorOutput = c.ErrorString

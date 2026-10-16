@@ -12,5 +12,12 @@ func NewFailingUnlock(
 ) *Tester {
 	t.Helper()
 
-	return build(t, c, constant.FixtureHostname, 1)
+	return build(
+		t,
+		c,
+		constant.FixtureHostname,
+		1,
+		constant.FixtureEmptyPlan,
+		"",
+	)
 }

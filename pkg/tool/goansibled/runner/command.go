@@ -1,6 +1,7 @@
 package runner
 
 import (
+	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/constant"
 	"path/filepath"
 )
@@ -8,17 +9,23 @@ import (
 func command(
 	inventoryDirectory string,
 	playbook string,
+	hosts []string,
 ) []string {
-	if inventoryDirectory == "" {
-		return []string{constant.Command, playbook}
+	result := []string{constant.Command}
+
+	if inventoryDirectory != "" {
+		result = append(
+			result,
+			constant.InventoryFlag,
+			constant.StaticInventory,
+			constant.InventoryFlag,
+			filepath.Join(inventoryDirectory, constant.InventoryFile),
+		)
 	}
 
-	return []string{
-		constant.Command,
-		constant.InventoryFlag,
-		constant.StaticInventory,
-		constant.InventoryFlag,
-		filepath.Join(inventoryDirectory, constant.InventoryFile),
-		playbook,
+	if len(hosts) > 0 {
+		result = append(result, constant.LimitFlag, join.Comma(hosts))
 	}
+
+	return append(result, playbook)
 }

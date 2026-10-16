@@ -47,6 +47,10 @@ func (c *Client) Certificates() []certificate.Certificate {
 				o[constant.ConditionFieldStatus] == constant.ConditionStatusTrue {
 				r.Ready = true
 			}
+
+			if o[constant.ConditionFieldType] == constant.ConditionIssuing {
+				r.Issuing = true
+			}
 		}
 
 		result = append(result, r)

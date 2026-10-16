@@ -3,14 +3,15 @@ package runner
 import (
 	"github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/model/run"
+	"github.com/funtimecoding/soil/pkg/provision/types/change"
 )
 
-func Changes(value any) []string {
+func (r *Runner) changes(value any) *change.Change {
 	record, okay := value.(*run.Run)
 
 	if !okay || record.Status != constant.StoreStatusSuccess {
 		return nil
 	}
 
-	return ParseChanges(record.Output)
+	return r.pending
 }

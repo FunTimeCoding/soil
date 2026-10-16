@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	provisionConstant "github.com/funtimecoding/soil/pkg/provision/constant"
@@ -26,6 +27,8 @@ func build(
 	c *mock_client.Client,
 	hostname string,
 	unlockExit int,
+	plan string,
+	downstream string,
 ) *Tester {
 	t.Helper()
 	base := t.TempDir()
@@ -65,10 +68,22 @@ func build(
 		log:      filepath.Join(base, "calls.log"),
 	}
 	executable := filepath.Join(base, "recorder")
+	planFile := filepath.Join(base, "plan.json")
+
+	if e := os.WriteFile(planFile, []byte(plan), 0o644); e != nil {
+		t.Fatal(e)
+	}
 
 	if e := os.WriteFile(
 		executable,
-		[]byte(fmt.Sprintf(constant.FixtureRecorder, result.log, unlockExit)),
+		[]byte(
+			fmt.Sprintf(
+				constant.FixtureRecorder,
+				result.log,
+				unlockExit,
+				planFile,
+			),
+		),
 		0o755,
 	); e != nil {
 		t.Fatal(e)
@@ -81,6 +96,12 @@ func build(
 	o.Executable = executable
 	o.Hostname = hostname
 	o.Namespace = constant.StateNamespace
+
+	if downstream != "" {
+		o.Downstream = []string{downstream}
+		o.DownstreamToken = generativeConstant.ModelContextTestToken
+	}
+
 	result.Runner = runner.New(
 		o,
 		result.store,

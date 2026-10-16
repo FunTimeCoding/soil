@@ -20,7 +20,9 @@ func TestLockFromGonePodIsCleared(t *testing.T) {
 		[]string{
 			"init -json",
 			"force-unlock -force 11111111-2222-4333-8444-666666666666",
-			"apply -auto-approve -no-color",
+			"plan -out=PLAN -no-color",
+			"show -json PLAN",
+			"apply -auto-approve -no-color PLAN",
 		},
 		o.Calls(),
 	)
@@ -44,7 +46,12 @@ func TestLockFromLivePodIsKept(t *testing.T) {
 	o := terraform_tester.New(t, c)
 	assert.Strings(
 		t,
-		[]string{"init -json", "apply -auto-approve -no-color"},
+		[]string{
+			"init -json",
+			"plan -out=PLAN -no-color",
+			"show -json PLAN",
+			"apply -auto-approve -no-color PLAN",
+		},
 		o.Calls(),
 	)
 	assert.Count(t, 0, o.Messages())
@@ -60,7 +67,12 @@ func TestLockFromOutsideTheClusterIsKept(t *testing.T) {
 	o := terraform_tester.New(t, c)
 	assert.Strings(
 		t,
-		[]string{"init -json", "apply -auto-approve -no-color"},
+		[]string{
+			"init -json",
+			"plan -out=PLAN -no-color",
+			"show -json PLAN",
+			"apply -auto-approve -no-color PLAN",
+		},
 		o.Calls(),
 	)
 	assert.Count(t, 0, c.Lookups())
@@ -73,7 +85,12 @@ func TestLockFromAnotherDeploymentIsKept(t *testing.T) {
 	o := terraform_tester.New(t, c)
 	assert.Strings(
 		t,
-		[]string{"init -json", "apply -auto-approve -no-color"},
+		[]string{
+			"init -json",
+			"plan -out=PLAN -no-color",
+			"show -json PLAN",
+			"apply -auto-approve -no-color PLAN",
+		},
 		o.Calls(),
 	)
 	assert.Count(t, 0, c.Lookups())
@@ -92,7 +109,9 @@ func TestOwnLockFromBeforeStartIsCleared(t *testing.T) {
 		[]string{
 			"init -json",
 			"force-unlock -force 11111111-2222-4333-8444-666666666666",
-			"apply -auto-approve -no-color",
+			"plan -out=PLAN -no-color",
+			"show -json PLAN",
+			"apply -auto-approve -no-color PLAN",
 		},
 		o.Calls(),
 	)
@@ -109,7 +128,12 @@ func TestOwnLockFromAfterStartIsKept(t *testing.T) {
 	o := terraform_tester.New(t, c)
 	assert.Strings(
 		t,
-		[]string{"init -json", "apply -auto-approve -no-color"},
+		[]string{
+			"init -json",
+			"plan -out=PLAN -no-color",
+			"show -json PLAN",
+			"apply -auto-approve -no-color PLAN",
+		},
 		o.Calls(),
 	)
 	assert.Count(t, 0, c.Lookups())
@@ -122,7 +146,12 @@ func TestUnknownHolderIsReportedAndKept(t *testing.T) {
 	o := terraform_tester.New(t, c)
 	assert.Strings(
 		t,
-		[]string{"init -json", "apply -auto-approve -no-color"},
+		[]string{
+			"init -json",
+			"plan -out=PLAN -no-color",
+			"show -json PLAN",
+			"apply -auto-approve -no-color PLAN",
+		},
 		o.Calls(),
 	)
 	assert.Strings(t, []string{"pods is forbidden"}, o.Messages())
@@ -136,7 +165,12 @@ func TestTruncatedHolderIsKept(t *testing.T) {
 	o := terraform_tester.NewAs(t, c, constant.FixtureLongOwn)
 	assert.Strings(
 		t,
-		[]string{"init -json", "apply -auto-approve -no-color"},
+		[]string{
+			"init -json",
+			"plan -out=PLAN -no-color",
+			"show -json PLAN",
+			"apply -auto-approve -no-color PLAN",
+		},
 		o.Calls(),
 	)
 	assert.Count(t, 0, c.Lookups())
@@ -146,7 +180,12 @@ func TestFreeLockSkipsUnlock(t *testing.T) {
 	o := terraform_tester.New(t, mock_client.New())
 	assert.Strings(
 		t,
-		[]string{"init -json", "apply -auto-approve -no-color"},
+		[]string{
+			"init -json",
+			"plan -out=PLAN -no-color",
+			"show -json PLAN",
+			"apply -auto-approve -no-color PLAN",
+		},
 		o.Calls(),
 	)
 	assert.Count(t, 0, o.Messages())
@@ -162,7 +201,9 @@ func TestFailedUnlockIsReported(t *testing.T) {
 		[]string{
 			"init -json",
 			"force-unlock -force 11111111-2222-4333-8444-666666666666",
-			"apply -auto-approve -no-color",
+			"plan -out=PLAN -no-color",
+			"show -json PLAN",
+			"apply -auto-approve -no-color PLAN",
 		},
 		o.Calls(),
 	)
@@ -182,7 +223,12 @@ func TestReleasedLeaseSkipsUnlock(t *testing.T) {
 	o := terraform_tester.New(t, c)
 	assert.Strings(
 		t,
-		[]string{"init -json", "apply -auto-approve -no-color"},
+		[]string{
+			"init -json",
+			"plan -out=PLAN -no-color",
+			"show -json PLAN",
+			"apply -auto-approve -no-color PLAN",
+		},
 		o.Calls(),
 	)
 	assert.Count(t, 0, c.Lookups())

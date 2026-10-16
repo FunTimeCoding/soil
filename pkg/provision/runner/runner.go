@@ -2,8 +2,10 @@ package runner
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
-	"github.com/funtimecoding/soil/pkg/face"
+	library "github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/provision/face"
+	"github.com/funtimecoding/soil/pkg/provision/types/change"
 	"github.com/funtimecoding/soil/pkg/provision/types/trigger"
 	"github.com/funtimecoding/soil/pkg/provision/types/update"
 	"sync"
@@ -20,11 +22,11 @@ type Runner struct {
 	initFunction    func()
 	setupFunction   func() bool
 	cleanupFunction func()
-	changeFunction  func(value any) []string
+	changeFunction  func(value any) *change.Change
 	downstream      []face.Downstream
-	registry        face.ProcessRegistry
+	registry        library.ProcessRegistry
 	logger          *logger.Logger
-	reporter        face.Reporter
+	reporter        library.Reporter
 	recovery        *recovery.Recovery
 	syncFailures    int
 	trigger         chan trigger.Request

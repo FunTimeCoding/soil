@@ -12,18 +12,21 @@ func (r *Runner) apply(
 		return value
 	}
 
-	changes := r.changeFunction(value)
+	c := r.changeFunction(value)
 
-	if len(changes) == 0 {
+	if c == nil || len(c.Addresses) == 0 {
 		return value
 	}
 
 	for _, d := range r.downstream {
-		if e := d.Trigger(changes); e != nil {
+		if e := d.Trigger(c); e != nil {
 			r.reporter.CaptureWithContext(
 				e,
 				constant.DownstreamContext,
-				map[string]any{constant.DownstreamChanges: changes},
+				map[string]any{
+					constant.DownstreamChanges: c.Addresses,
+					constant.DownstreamHosts:   c.Hosts,
+				},
 			)
 
 			continue
@@ -32,7 +35,9 @@ func (r *Runner) apply(
 		r.logger.Structured(
 			"downstream_trigger",
 			constant.DownstreamChanges,
-			len(changes),
+			len(c.Addresses),
+			constant.DownstreamHosts,
+			len(c.Hosts),
 		)
 	}
 

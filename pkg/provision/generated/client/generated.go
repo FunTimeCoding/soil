@@ -14,6 +14,30 @@ import (
 	"strings"
 )
 
+// Defines values for HostEventAction.
+const (
+	Create  HostEventAction = "create"
+	Delete  HostEventAction = "delete"
+	Replace HostEventAction = "replace"
+	Update  HostEventAction = "update"
+)
+
+// Valid indicates whether the value is a known member of the HostEventAction enum.
+func (e HostEventAction) Valid() bool {
+	switch e {
+	case Create:
+		return true
+	case Delete:
+		return true
+	case Replace:
+		return true
+	case Update:
+		return true
+	default:
+		return false
+	}
+}
+
 // Error defines model for Error.
 type Error struct {
 	Error string `json:"error"`
@@ -25,10 +49,22 @@ type ErrorResponse struct {
 	EventIdentifier string `json:"event_identifier"`
 }
 
+// HostEvent defines model for HostEvent.
+type HostEvent struct {
+	Action HostEventAction `json:"action"`
+	Host   string          `json:"host"`
+}
+
+// HostEventAction defines model for HostEvent.Action.
+type HostEventAction string
+
 // TriggerRequest defines model for TriggerRequest.
 type TriggerRequest struct {
 	Changes []string `json:"changes"`
-	Update  bool     `json:"update"`
+
+	// Hosts What happened to each host the changes reach. Absent when the sender cannot tell; empty when the changes reach no host.
+	Hosts  *[]HostEvent `json:"hosts,omitempty"`
+	Update bool         `json:"update"`
 }
 
 // PostTriggerJSONRequestBody defines body for PostTrigger for application/json ContentType.

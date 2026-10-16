@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/network"
 	"github.com/funtimecoding/soil/pkg/provision/client"
+	provisionFace "github.com/funtimecoding/soil/pkg/provision/face"
 	"github.com/funtimecoding/soil/pkg/provision/runner"
 	"github.com/funtimecoding/soil/pkg/provision/store"
 	"github.com/funtimecoding/soil/pkg/provision/types/runner_option"
@@ -41,7 +42,7 @@ func New(
 	}
 	result.metrics = metric.New(y, result.stateLease)
 	result.seedLastSuccess()
-	var targets []face.Downstream
+	var targets []provisionFace.Downstream
 
 	for _, address := range o.Downstream {
 		host, port := network.SplitHostPort(address)
@@ -56,7 +57,7 @@ func New(
 			ApplyFunction:   result.apply,
 			InitFunction:    result.terraformInit,
 			CleanupFunction: s.Cleanup,
-			ChangeFunction:  Changes,
+			ChangeFunction:  result.changes,
 			Downstream:      targets,
 			Registry:        registry,
 		},

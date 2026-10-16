@@ -1,10 +1,8 @@
 package runner
 
 import (
-	"fmt"
 	provisionConstant "github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/constant"
-	"path/filepath"
 	"time"
 )
 
@@ -13,32 +11,22 @@ func (r *Runner) apply(
 	triggerSource string,
 ) any {
 	r.clearOrphanedLock()
-	directory := filepath.Join(r.clonePath, r.terraformPath)
-	head := r.provision.CurrentHead()
+	r.pending = nil
 	record := r.store.NewRun()
 	record.TriggerSource = triggerSource
 	record.Status = provisionConstant.StoreStatusRunning
-	record.GitHead = head
+	record.GitHead = r.provision.CurrentHead()
 	r.store.Create(record)
 	r.logger.Structured("terraform_apply_start")
-	arguments := []string{r.executable, "apply", "-auto-approve", "-no-color"}
-
-	if v, okay := parameters[constant.Target]; okay {
-		record.Scope = v.(string)
-		arguments = append(arguments, fmt.Sprintf("-target=%s", v.(string)))
-	}
-
+	target, _ := parameters[constant.Target].(string)
+	record.Scope = target
 	start := time.Now()
-	c := r.newRun().NoPanic()
-	c.Directory = directory
-	c.Start(arguments...)
+	e := r.planApply(record, target)
 	record.DurationMillisecond = time.Since(start).Milliseconds()
-	record.Output = c.OutputString
-	record.ErrorOutput = c.ErrorString
 
-	if c.Error != nil {
+	if e != nil {
 		record.Status = provisionConstant.StoreStatusError
-		r.logger.Structured("terraform_apply_error", "error", c.Error.Error())
+		r.logger.Structured("terraform_apply_error", "error", e.Error())
 	} else {
 		record.Status = provisionConstant.StoreStatusSuccess
 		r.metrics.LastSuccess.Set(float64(time.Now().Unix()))

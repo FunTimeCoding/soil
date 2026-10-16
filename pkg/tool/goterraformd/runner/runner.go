@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/provision/runner"
 	"github.com/funtimecoding/soil/pkg/provision/store"
+	"github.com/funtimecoding/soil/pkg/provision/types/change"
 	terraformFace "github.com/funtimecoding/soil/pkg/tool/goterraformd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/types/metric"
 	"time"
@@ -26,4 +27,5 @@ type Runner struct {
 	kubernetes     terraformFace.Cluster
 	stateNamespace string
 	stateLeaseName string
+	pending        *change.Change
 }

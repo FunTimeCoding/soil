@@ -20,6 +20,30 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 )
 
+// Defines values for HostEventAction.
+const (
+	Create  HostEventAction = "create"
+	Delete  HostEventAction = "delete"
+	Replace HostEventAction = "replace"
+	Update  HostEventAction = "update"
+)
+
+// Valid indicates whether the value is a known member of the HostEventAction enum.
+func (e HostEventAction) Valid() bool {
+	switch e {
+	case Create:
+		return true
+	case Delete:
+		return true
+	case Replace:
+		return true
+	case Update:
+		return true
+	default:
+		return false
+	}
+}
+
 // Error defines model for Error.
 type Error struct {
 	Error string `json:"error"`
@@ -31,10 +55,22 @@ type ErrorResponse struct {
 	EventIdentifier string `json:"event_identifier"`
 }
 
+// HostEvent defines model for HostEvent.
+type HostEvent struct {
+	Action HostEventAction `json:"action"`
+	Host   string          `json:"host"`
+}
+
+// HostEventAction defines model for HostEvent.Action.
+type HostEventAction string
+
 // TriggerRequest defines model for TriggerRequest.
 type TriggerRequest struct {
 	Changes []string `json:"changes"`
-	Update  bool     `json:"update"`
+
+	// Hosts What happened to each host the changes reach. Absent when the sender cannot tell; empty when the changes reach no host.
+	Hosts  *[]HostEvent `json:"hosts,omitempty"`
+	Update bool         `json:"update"`
 }
 
 // PostTriggerJSONRequestBody defines body for PostTrigger for application/json ContentType.
@@ -321,13 +357,15 @@ func (sh *strictHandler) PostTrigger(w http.ResponseWriter, r *http.Request) {
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"rJO/jtswDMZfxWA7GrF7bYd6a4EO3YrgtqIoFItJeHBIhaICBIe8eyHJuX/JcEO8mP5Mir+PoB5hlF0Q",
-	"RrYIwyPEcYs7V8KfqqI5CCoB1QiLjGfZjgFhgGhKvIHTqQXFfSJFD8OfOe1ve06T1QOOBqe2nrvEGIQj",
-	"vv/8FvCAbP/IIxutCd8NcaXyGte90maDusR9wmiXYOPW8aaGZLiLVxlnwam6Y/5OwTvDF6krkQkdX6DO",
-	"ie1Tm0vEXEK8lnIa2ZT/BZUDRRKGFg6oJRrg06Jf9Lm9BGQXCAb4XKQWgrNtQe9coM6q52JWquls2RkJ",
-	"//IwwG+JNg8GKjBG+yH+WCYibMilyoUw0VjquoeYIc67lKOPimsY4EP3vGzdvGndm7GfXg/GNGER6roU",
-	"8rv+Lr88xlEpWLW8TNzsEyb0i2z8S//tZoT1IhSw1z2/N5q4odi4SdH540uAr31/W4CnG3MF5H6LBWWU",
-	"NPmGxZoVPsOU538AAAD//w==",
+	"rJRBb9s8DIb/isDvOxqx122HeacOKLDdhqLADsMwKNLbWIUjKRSdISjy3wfJTt0sBtpDfSIoinz4ktYj",
+	"mbCNwcNLovaRkumw1cW8YQ6cjcghgsWhuHFyyyGCWkrCzm/oeKyIsRscw1L7cwr7VZ3CwvoBRuhYjXlv",
+	"kWLwCa/PXxH28PLbWXhx9w6vhli4ucT1NSS5yYGXTNqIC77Q+WGbMxuGFlBFQ7SjwYi9Ntmy6CF4VmNu",
+	"oQtJXsYuUdWp6hLrHbvNBnyL3YC0AGw67Tej6QTbtKjn5NDM+nCCK5EWybCLY8/0o9OiOh0jPKySoKBN",
+	"p3Kwkg5qKqU4u1fqep3gRf3p4MtxgrdgZbT3QZSg7z8rbKMc5pCzDMqHkntF1Yz+P+OeWvqvnpe1nja1",
+	"nse20NI0nbn7dQg9tL+Q/GmMJ+UuVc9XnL8PJZuTPp9FDnuXsk4V7cFpVOzdqlk1uXyI8Do6aul9cVUU",
+	"tXSlpVpHV8s4xjK/aTPyFHVW/pullr6HJNOsaQRGki/BHsqQg5dpXXWMvTPlXv2QxlUdBXpJvn826Xgu",
+	"jPCA4hj/1kJ+1VxdLsnt4NVuwAC7yo1/aD69GeH4DhWw85rXigevXFK6Z2h7eA7wsWneFuDpwVoAuetQ",
+	"UEwYeqvynq8xw5TvbwAAAP//",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

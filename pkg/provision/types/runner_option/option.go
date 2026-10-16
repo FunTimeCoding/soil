@@ -1,6 +1,10 @@
 package runner_option
 
-import "github.com/funtimecoding/soil/pkg/face"
+import (
+	library "github.com/funtimecoding/soil/pkg/face"
+	"github.com/funtimecoding/soil/pkg/provision/face"
+	"github.com/funtimecoding/soil/pkg/provision/types/change"
+)
 
 type Option struct {
 	Repository    string
@@ -13,7 +17,7 @@ type Option struct {
 	InitFunction    func()
 	SetupFunction   func() bool
 	CleanupFunction func()
-	ChangeFunction  func(value any) []string
+	ChangeFunction  func(value any) *change.Change
 	Downstream      []face.Downstream
-	Registry        face.ProcessRegistry
+	Registry        library.ProcessRegistry
 }

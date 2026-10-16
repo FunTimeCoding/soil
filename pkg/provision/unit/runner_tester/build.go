@@ -3,12 +3,15 @@ package runner_tester
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
-	"github.com/funtimecoding/soil/pkg/face"
+	library "github.com/funtimecoding/soil/pkg/face"
 	gitConstant "github.com/funtimecoding/soil/pkg/git/constant"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/provision/constant"
+	"github.com/funtimecoding/soil/pkg/provision/face"
 	"github.com/funtimecoding/soil/pkg/provision/runner"
 	"github.com/funtimecoding/soil/pkg/provision/types/apply_call"
+	"github.com/funtimecoding/soil/pkg/provision/types/change"
+	"github.com/funtimecoding/soil/pkg/provision/types/host_event"
 	"github.com/funtimecoding/soil/pkg/provision/types/runner_option"
 	"github.com/funtimecoding/soil/pkg/system/run"
 	"path/filepath"
@@ -18,7 +21,7 @@ import (
 func build(
 	t *testing.T,
 	hold func(),
-	registry face.ProcessRegistry,
+	registry library.ProcessRegistry,
 	downstream face.Downstream,
 ) *Tester {
 	t.Helper()
@@ -72,7 +75,14 @@ func build(
 
 	if downstream != nil {
 		o.Downstream = []face.Downstream{downstream}
-		o.ChangeFunction = func(any) []string { return []string{"alfa"} }
+		o.ChangeFunction = func(any) *change.Change {
+			return change.New(
+				[]string{"alfa"},
+				[]*host_event.Event{
+					host_event.New("bravo", constant.HostUpdate),
+				},
+			)
+		}
 	}
 
 	result.Runner = runner.New(

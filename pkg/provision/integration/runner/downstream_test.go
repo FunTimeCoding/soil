@@ -9,6 +9,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/provision/client"
 	"github.com/funtimecoding/soil/pkg/provision/constant"
 	"github.com/funtimecoding/soil/pkg/provision/mock_runner"
+	"github.com/funtimecoding/soil/pkg/provision/types/host_event"
 	"github.com/funtimecoding/soil/pkg/provision/types/trigger"
 	"github.com/funtimecoding/soil/pkg/provision/unit/runner_tester"
 	"github.com/funtimecoding/soil/pkg/telemetry/mock_recorder"
@@ -47,6 +48,11 @@ func TestApplyWithChangesTriggersDownstream(t *testing.T) {
 		[]string{"alfa"},
 		requests[1].Parameters[constant.DownstreamChanges],
 	)
+	assert.Any(
+		t,
+		[]*host_event.Event{host_event.New("bravo", "update")},
+		requests[1].Parameters[constant.DownstreamHosts],
+	)
 	assert.Count(t, 0, s.Reporter.Events())
 }
 
@@ -76,5 +82,10 @@ func TestRefusedDownstreamIsCaptured(t *testing.T) {
 		t,
 		[]string{"alfa"},
 		events[0].Context[constant.DownstreamChanges],
+	)
+	assert.Any(
+		t,
+		[]*host_event.Event{host_event.New("bravo", "update")},
+		events[0].Context[constant.DownstreamHosts],
 	)
 }

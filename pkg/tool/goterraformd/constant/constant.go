@@ -1,6 +1,10 @@
 package constant
 
-import "github.com/funtimecoding/soil/pkg/identity"
+import (
+	"github.com/funtimecoding/soil/pkg/identity"
+	provisionConstant "github.com/funtimecoding/soil/pkg/provision/constant"
+	"regexp"
+)
 
 var Identity = identity.New(
 	"goterraformd",
@@ -39,6 +43,40 @@ const (
 	StateNamespace = "terraform"
 	StateLease     = "lock-tfstate-default-state"
 	LockAnnotation = "app.terraform.io/lock-info"
+)
+
+const (
+	PlanArgument  = "plan"
+	ShowArgument  = "show"
+	ApplyArgument = "apply"
+	OutArgument   = "-out"
+	PlanPattern   = "goterraformd-plan-*"
+	PlanFile      = "plan"
+
+	PlanCreate = "create"
+	PlanUpdate = "update"
+	PlanDelete = "delete"
+
+	ReferenceKey    = "references"
+	VariableScope   = "var"
+	ModuleScope     = "module"
+	SourceScope     = "data"
+	ModuleSeparator = "."
+)
+
+var HostAttribute = map[string]string{"proxmox_virtual_environment_vm": "name"}
+var HostPrecedence = []string{
+	provisionConstant.HostReplace,
+	provisionConstant.HostCreate,
+	provisionConstant.HostDelete,
+	provisionConstant.HostUpdate,
+}
+
+var (
+	InstanceKey     = regexp.MustCompile(`\[[^\]]*\]`)
+	FixturePlanPath = regexp.MustCompile(
+		`[^\s=]*goterraformd-plan-[^/\s]*/plan`,
+	)
 )
 
 const (

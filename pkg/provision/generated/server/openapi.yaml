@@ -42,6 +42,24 @@ components:
           type: array
           items:
             type: string
+        hosts:
+          description: >-
+            What happened to each host the changes reach. Absent when the
+            sender cannot tell; empty when the changes reach no host.
+          type: array
+          items:
+            $ref: "#/components/schemas/HostEvent"
+    HostEvent:
+      type: object
+      required:
+      - host
+      - action
+      properties:
+        host:
+          type: string
+        action:
+          type: string
+          enum: [create, update, replace, delete]
     Error:
       type: object
       required:

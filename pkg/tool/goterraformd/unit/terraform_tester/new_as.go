@@ -1,6 +1,7 @@
 package terraform_tester
 
 import (
+	"github.com/funtimecoding/soil/pkg/tool/goterraformd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goterraformd/mock_client"
 	"testing"
 )
@@ -12,5 +13,5 @@ func NewAs(
 ) *Tester {
 	t.Helper()
 
-	return build(t, c, hostname, 0)
+	return build(t, c, hostname, 0, constant.FixtureEmptyPlan, "")
 }

@@ -12,5 +12,12 @@ func New(
 ) *Tester {
 	t.Helper()
 
-	return build(t, c, constant.FixtureHostname, 0)
+	return build(
+		t,
+		c,
+		constant.FixtureHostname,
+		0,
+		constant.FixtureEmptyPlan,
+		"",
+	)
 }
