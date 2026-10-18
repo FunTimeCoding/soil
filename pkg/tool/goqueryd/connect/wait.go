@@ -2,16 +2,16 @@ package connect
 
 import (
 	"context"
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goquery/constant"
+	queryd "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/web/peer"
 	"net/http"
-	"time"
 )
 
 func Wait(
@@ -31,19 +31,24 @@ func Wait(
 		),
 	)
 	errors.PanicOnError(e)
-	deadline := time.Now().Add(time.Minute)
+	errors.PanicOnError(
+		peer.Await(
+			l,
+			queryd.Identity.Name(),
+			base,
+			func() error {
+				r, f := c.GetStatus(context.Background())
 
-	for time.Now().Before(deadline) {
-		_, f := c.GetStatus(context.Background())
+				if f != nil {
+					return f
+				}
 
-		if f == nil {
-			l.Structured("goqueryd_connected", "address", base)
+				errors.PanicClose(r.Body)
 
-			return c
-		}
+				return nil
+			},
+		),
+	)
 
-		time.Sleep(time.Second)
-	}
-
-	panic(fmt.Sprintf("goqueryd not reachable at %s after 1 minute", base))
+	return c
 }

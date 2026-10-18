@@ -6,5 +6,9 @@ import (
 )
 
 func New() *Reacher {
-	return &Reacher{hosts: map[string]*host.Host{}, clock: time.Now}
+	return &Reacher{
+		hosts:   map[string]*host.Host{},
+		refused: map[string]bool{},
+		clock:   time.Now,
+	}
 }

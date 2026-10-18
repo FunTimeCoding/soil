@@ -7,7 +7,8 @@ import (
 )
 
 type Reacher struct {
-	hosts map[string]*host.Host
-	clock func() time.Time
-	mutex sync.Mutex
+	hosts   map[string]*host.Host
+	refused map[string]bool
+	clock   func() time.Time
+	mutex   sync.Mutex
 }

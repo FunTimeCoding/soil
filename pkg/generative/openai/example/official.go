@@ -19,7 +19,7 @@ func Official() {
 			Messages: []openai.ChatCompletionMessageParamUnion{
 				openai.UserMessage("Say this is a test"),
 			},
-			Model: openai.ChatModelGPT4o,
+			Model: openai.ChatModelGPT5_5,
 		},
 	)
 	errors.PanicOnError(e)

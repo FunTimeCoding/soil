@@ -2,7 +2,6 @@ package connect
 
 import (
 	"context"
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/system/environment"
@@ -11,8 +10,8 @@ import (
 	generated "github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/locator"
+	"github.com/funtimecoding/soil/pkg/web/peer"
 	"net/http"
-	"time"
 )
 
 func Wait(
@@ -32,23 +31,27 @@ func Wait(
 		),
 	)
 	errors.PanicOnError(e)
-	deadline := time.Now().Add(time.Minute)
+	errors.PanicOnError(
+		peer.Await(
+			l,
+			constant.Identity.Name(),
+			base,
+			func() error {
+				r, f := c.GetVersions(
+					context.Background(),
+					&generated.GetVersionsParams{Since: "2099-01-01T00:00:00Z"},
+				)
 
-	for time.Now().Before(deadline) {
-		r, f := c.GetVersions(
-			context.Background(),
-			&generated.GetVersionsParams{Since: "2099-01-01T00:00:00Z"},
-		)
+				if f != nil {
+					return f
+				}
 
-		if f == nil {
-			errors.PanicClose(r.Body)
-			l.Structured("gomemoryd_connected", "address", base)
+				errors.PanicClose(r.Body)
 
-			return memoryClient.NewRestClient(c)
-		}
+				return nil
+			},
+		),
+	)
 
-		time.Sleep(time.Second)
-	}
-
-	panic(fmt.Sprintf("gomemoryd not reachable at %s after 1 minute", base))
+	return memoryClient.NewRestClient(c)
 }

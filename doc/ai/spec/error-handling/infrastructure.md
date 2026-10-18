@@ -96,6 +96,25 @@ for {
 See `pillars.md` for where this fits in the overall recovery
 layer design.
 
+## Peer Outages and Refusals
+
+A daemon that depends on another service starts with it more often
+than not, so it waits before its first call: `go:pkg/web/peer/Await`
+polls a cheap probe for a minute (`PeerWait`, every `PeerPoll`), logs
+`<name>_connected`, and returns why the peer never came. A caller the
+daemon cannot run without panics on that error; one that can keep
+working logs it and goes on.
+
+After that, every failure talking to the peer goes through one
+`reacher.Reacher` per daemon, by `Handle`. A transport failure -
+refused, dropped, timed out, by `connection.Classify` - is an outage:
+logged once when it begins and once when it ends, never sent to Sentry,
+since the peer's own monitoring is what notices it being down. Anything
+else is a refusal and is reported once per reason - to Sentry where it
+is an anomaly, to the log where it is expected - so a refusal repeating
+on every poll is one report, not a flood. goproxmoxd's worker is the
+shape.
+
 ## HTTP Recovery Middleware
 
 `go:pkg/web/RecoveryMiddleware` is the shared HTTP recovery layer. It wraps

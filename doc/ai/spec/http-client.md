@@ -32,7 +32,9 @@ c := p.Client()
 `connection.Classify` kind - `timeout`, `unreachable`, `dropped` - then
 `canceled` when the caller gave up and `error` for the rest. Prometheus's own
 round-tripper instrumentation records none of these. `host` comes from each
-request, so observe only clients with a fixed set of hosts: a client that
+request, always with a port - the scheme's default when the locator leaves it
+out, so a public and an in-cluster address both read `host:port`. Observe only
+clients with a fixed set of hosts: a client that
 follows arbitrary links would grow a series per site.
 
 `Verbose` always wraps outside `BasicAuth` and `BearerAuth`, so the log never
