@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/strings/shorten"
@@ -194,9 +195,17 @@ func (s *Server) sessionDetailPage(
 		)
 	}
 
-	loads, loadError := s.service.ContextLoadsBySession(d.Identifier)
-	errors.PanicOnError(loadError)
-	content = append(content, contextLoadSection(loads)...)
+	loads, loadError := s.service.ContextLoadsBySession(
+		r.Context(),
+		d.Identifier,
+	)
+
+	if unavailable.Is(loadError) {
+		content = append(content, contextLoadHidden(loadError)...)
+	} else {
+		errors.PanicOnError(loadError)
+		content = append(content, contextLoadSection(loads)...)
+	}
 
 	if d.Summary != "" {
 		content = append(

@@ -4,13 +4,13 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	memoryClient "github.com/funtimecoding/soil/pkg/tool/gomemoryd/client"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	generated "github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
 	"github.com/funtimecoding/soil/pkg/web"
 	"github.com/funtimecoding/soil/pkg/web/locator"
-	"github.com/funtimecoding/soil/pkg/web/peer"
 	"net/http"
 )
 
@@ -23,7 +23,7 @@ func Wait(
 		constant.PortEnvironment,
 		constant.InsecureEnvironment,
 	).String()
-	c, e := generated.NewClient(
+	c, e := generated.NewClientWithResponses(
 		base,
 		generated.WithHTTPClient(h),
 		generated.WithRequestEditorFn(
@@ -31,27 +31,16 @@ func Wait(
 		),
 	)
 	errors.PanicOnError(e)
+	result := memoryClient.NewRestClient(c, base)
 	errors.PanicOnError(
 		peer.Await(
+			context.Background(),
 			l,
 			constant.Identity.Name(),
 			base,
-			func() error {
-				r, f := c.GetVersions(
-					context.Background(),
-					&generated.GetVersionsParams{Since: "2099-01-01T00:00:00Z"},
-				)
-
-				if f != nil {
-					return f
-				}
-
-				errors.PanicClose(r.Body)
-
-				return nil
-			},
+			result.Reachable,
 		),
 	)
 
-	return memoryClient.NewRestClient(c)
+	return result
 }

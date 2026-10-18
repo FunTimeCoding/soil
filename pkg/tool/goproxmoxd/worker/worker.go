@@ -4,7 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
 	"github.com/funtimecoding/soil/pkg/event/notifier"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/reacher"
+	"github.com/funtimecoding/soil/pkg/peer/reacher"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/collector"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/floor"

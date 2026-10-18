@@ -66,6 +66,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: The embedder is unreachable, so a hybrid search cannot run.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnavailableResponse"
   /api/list:
     get:
       operationId: getList
@@ -234,6 +240,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
+        "503":
+          description: The embedder is unreachable.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UnavailableResponse"
   /api/collection:
     post:
       operationId: postCollection
@@ -406,7 +418,11 @@ paths:
                       type: string
       responses:
         "200":
-          description: Document pushed.
+          description: Document stored; a warning says its embedding is pending.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PushOutcome"
         "500":
           description: Failed to push document.
           content:
@@ -605,8 +621,11 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Facet"
-        degraded:
-          type: boolean
+    PushOutcome:
+      type: object
+      properties:
+        warning:
+          type: string
     ListOutcome:
       type: object
       required: [results]
@@ -825,4 +844,10 @@ components:
         error:
           type: string
         event_identifier:
+          type: string
+    UnavailableResponse:
+      type: object
+      required: [error]
+      properties:
+        error:
           type: string

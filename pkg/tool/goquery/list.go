@@ -2,15 +2,15 @@ package goquery
 
 import (
 	"context"
-	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 	"github.com/spf13/cobra"
 	"strings"
 )
 
-func list(c *client.Client) *cobra.Command {
+func list(c *client.ClientWithResponses) *cobra.Command {
 	var limit int
 	var offset int
 	var detail bool
@@ -48,11 +48,10 @@ func list(c *client.Client) *cobra.Command {
 				params.Metadata = &metadata
 			}
 
-			r, e := c.GetList(context.Background(), params)
+			r, e := c.GetListWithResponse(context.Background(), params)
 			errors.PanicOnError(e)
-			defer errors.PanicClose(r.Body)
-			var outcome client.ListOutcome
-			errors.PanicOnError(json.NewDecoder(r.Body).Decode(&outcome))
+			refusal.PanicOnFailure("list documents", r.HTTPResponse, r.Body)
+			outcome := r.JSON200
 
 			for _, v := range outcome.Results {
 				console.Format("%s  %s", v.Path, v.Title)

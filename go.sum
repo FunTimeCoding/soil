@@ -1037,8 +1037,8 @@ github.com/yuin/goldmark/v2 v2.1.6/go.mod h1:G6M4/qOFtfn01/o14BU1UR2Lo5N3S9Qo7xC
 github.com/yusufpapurcu/wmi v1.2.4 h1:zFUKzehAFReQwLys1b/iSMl+JQGSCSjtVqQn9bBrPo0=
 github.com/yusufpapurcu/wmi v1.2.4/go.mod h1:SBZ9tNy3G9/m5Oi98Zks0QjeHVDvuK0qfxQmPyzfmi0=
 github.com/zenazn/goji v0.9.0/go.mod h1:7S9M489iMyHBNxwZnk9/EHS098H4/F6TATF2mIxtB1Q=
-gitlab.com/gitlab-org/api/client-go/v3 v3.27.0 h1:IxoxEsmJRvKvIdjq7Q8V3LjO+MO9YIhw+7siy3EjS6Y=
-gitlab.com/gitlab-org/api/client-go/v3 v3.27.0/go.mod h1:jBFhGkTHLKkgeHEdS/A8yA0tQ6UHq96QVsS5muu6flM=
+gitlab.com/gitlab-org/api/client-go/v3 v3.28.0 h1:KKWy1YFcUyHcqhglJukNMznu/Z5upLdad2kQpFvppqo=
+gitlab.com/gitlab-org/api/client-go/v3 v3.28.0/go.mod h1:jBFhGkTHLKkgeHEdS/A8yA0tQ6UHq96QVsS5muu6flM=
 go.opencensus.io v0.18.0/go.mod h1:vKdFvxhtzZ9onBp9VKHK8z/sRpBMnKAsufL7wlDrCOA=
 go.opentelemetry.io/auto/sdk v1.2.1 h1:jXsnJ4Lmnqd11kwkBV2LgLoFMZKizbCi5fNZ/ipaZ64=
 go.opentelemetry.io/auto/sdk v1.2.1/go.mod h1:KRTj+aOaElaLi+wW1kO/DZRXwkF4C5xPbEe3ZiIhN7Y=

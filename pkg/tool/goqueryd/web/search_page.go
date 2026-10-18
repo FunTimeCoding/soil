@@ -2,6 +2,7 @@ package web
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search_option"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/web/search_cache"
@@ -32,24 +33,37 @@ func (s *Server) searchPage(
 
 	key := search_cache.Key(query, collection, mode)
 	outcome := s.cache.Get(key)
+	var e error
 
 	if outcome == nil {
 		o := search_option.New(query, 20)
 		o.Collection = collection
 		o.Mode = mode
-		outcome = s.service.Search(o)
-		s.cache.Put(key, outcome)
+		outcome, e = s.service.Search(r.Context(), o)
+
+		if e == nil {
+			s.cache.Put(key, outcome)
+		}
 	}
 
-	results, facets := FilterSearchResults(outcome, metadata)
-	resultsContent := s.renderSearchResults(
-		results,
-		facets,
-		outcome.Degraded,
-		query,
-		collection,
-		metadata,
-	)
+	var resultsContent []gomponents.Node
+
+	if unavailable.Is(e) {
+		resultsContent = []gomponents.Node{
+			html.P(html.Em(gomponents.Text(e.Error()))),
+		}
+	} else {
+		errors.PanicOnError(e)
+		results, facets := FilterSearchResults(outcome, metadata)
+		resultsContent = s.renderSearchResults(
+			results,
+			facets,
+			query,
+			collection,
+			metadata,
+		)
+	}
+
 	isHTMX := r.Header.Get("HX-Request") == "true"
 
 	if isHTMX {

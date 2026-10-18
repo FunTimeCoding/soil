@@ -2,13 +2,13 @@ package goquery
 
 import (
 	"context"
-	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 	"github.com/spf13/cobra"
 )
 
-func listMetadata(c *client.Client) *cobra.Command {
+func listMetadata(c *client.ClientWithResponses) *cobra.Command {
 	var key string
 	result := &cobra.Command{
 		Use:   "list-metadata [collection]",
@@ -24,11 +24,15 @@ func listMetadata(c *client.Client) *cobra.Command {
 				params.Key = &key
 			}
 
-			r, e := c.GetMetadata(context.Background(), params)
+			r, e := c.GetMetadataWithResponse(context.Background(), params)
 			errors.PanicOnError(e)
-			defer errors.PanicClose(r.Body)
+			refusal.PanicOnFailure("list metadata", r.HTTPResponse, r.Body)
 			var facets []client.Facet
-			errors.PanicOnError(json.NewDecoder(r.Body).Decode(&facets))
+
+			for _, f := range *r.JSON200 {
+				facets = append(facets, *f)
+			}
+
 			printFacets(&facets)
 		},
 	}

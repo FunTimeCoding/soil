@@ -1,20 +1,24 @@
 package web
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/argument"
 	"maragu.dev/gomponents"
 	"maragu.dev/gomponents/html"
 )
 
-func (s *Server) activitySection(kinds []string) gomponents.Node {
+func (s *Server) activitySection(
+	x context.Context,
+	kinds []string,
+) gomponents.Node {
 	a := argument.Timeline{Limit: 10}
 
 	if len(kinds) > 0 {
 		a.Kinds = kinds
 	}
 
-	entries, e := s.service.Timeline(a)
+	entries, e := s.service.Timeline(x, a)
 	errors.PanicOnError(e)
 
 	if len(entries) == 0 {

@@ -1,32 +1,45 @@
 package service
 
 import (
+	"context"
+	"fmt"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/chunk"
 	"time"
 )
 
 func (s *Service) PushDocument(
+	x context.Context,
 	collection string,
 	path string,
 	body string,
 	metadata map[string][]string,
-) error {
+) string {
 	s.store.EnsurePushCollection(collection)
 	now := time.Now().UTC().Format(time.RFC3339)
 	hash := store.HashContent(body)
+	fresh := s.store.ActiveDocumentHash(collection, path) != hash
 
-	if s.store.ActiveDocumentHash(collection, path) == hash {
-		if len(metadata) > 0 {
-			s.store.SetMetadata(collection, path, metadata)
-		}
-
-		return nil
+	if fresh {
+		s.store.InsertContent(hash, body, now)
+		s.store.InsertDocument(
+			collection,
+			path,
+			store.ExtractTitle(body, path),
+			hash,
+			now,
+		)
 	}
 
-	title := store.ExtractTitle(body, path)
-	s.store.InsertContent(hash, body, now)
-	s.store.InsertDocument(collection, path, title, hash, now)
+	if len(metadata) > 0 {
+		s.store.SetMetadata(collection, path, metadata)
+	}
+
+	if !fresh {
+		return ""
+	}
+
 	chunks := chunk.Document(body, path, s.reranker)
 	texts := make([]string, len(chunks))
 
@@ -34,19 +47,15 @@ func (s *Service) PushDocument(
 		texts[i] = c.Text
 	}
 
-	embeddings, e := s.embedder.Embed(texts)
+	embeddings, e := s.embedTexts(x, texts)
 
 	if e != nil {
-		return e
+		return fmt.Sprintf(constant.EmbeddingPending, e)
 	}
 
 	for i, embedding := range embeddings {
 		s.store.InsertEmbedding(hash, i, chunks[i].Position, embedding, now)
 	}
 
-	if len(metadata) > 0 {
-		s.store.SetMetadata(collection, path, metadata)
-	}
-
-	return nil
+	return ""
 }

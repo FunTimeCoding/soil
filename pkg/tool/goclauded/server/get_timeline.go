@@ -9,7 +9,7 @@ import (
 )
 
 func (s *Server) GetTimeline(
-	_ context.Context,
+	x context.Context,
 	r server.GetTimelineRequestObject,
 ) (server.GetTimelineResponseObject, error) {
 	a := argument.Timeline{Limit: 50}
@@ -26,7 +26,7 @@ func (s *Server) GetTimeline(
 		a.Since = *r.Params.Since
 	}
 
-	merged, timelineError := s.service.Timeline(a)
+	merged, timelineError := s.service.Timeline(x, a)
 
 	if timelineError != nil {
 		return server.GetTimeline500JSONResponse(

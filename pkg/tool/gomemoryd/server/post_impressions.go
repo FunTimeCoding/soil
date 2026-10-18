@@ -16,7 +16,17 @@ func (s *Server) PostImpressions(
 		source = *r.Body.Source
 	}
 
-	identifier, e := s.service.CreateImpression(r.Body.Content, source)
+	capturedAt := ""
+
+	if r.Body.CreatedAt != nil {
+		capturedAt = *r.Body.CreatedAt
+	}
+
+	identifier, e := s.service.CreateImpression(
+		r.Body.Content,
+		source,
+		capturedAt,
+	)
 
 	if e != nil {
 		return server.PostImpressions500JSONResponse(

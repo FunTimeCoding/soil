@@ -2,6 +2,7 @@ package model_context
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/notation"
@@ -11,7 +12,7 @@ import (
 )
 
 func (s *Server) search(
-	_ context.Context,
+	x context.Context,
 	q mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	query, e := q.RequireString(generativeConstant.ParameterQuery)
@@ -38,10 +39,14 @@ func (s *Server) search(
 		o.Metadata[constant.SourceType] = sourceType
 	}
 
-	outcome := s.service.Search(o)
+	outcome, f := s.service.Search(x, o)
 
-	if outcome.Cause != nil {
-		s.reporter.CaptureException(outcome.Cause)
+	if unavailable.Is(f) {
+		return response.Fail("%v", f)
+	}
+
+	if f != nil {
+		return s.captureFail(f, "search failed")
 	}
 
 	return response.Success(notation.MarshalIndent(outcome))

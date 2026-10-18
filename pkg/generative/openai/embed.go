@@ -6,9 +6,12 @@ import (
 	"github.com/openai/openai-go/v3"
 )
 
-func (c *Client) Embed(v []string) ([][]float32, error) {
+func (c *Client) Embed(
+	x context.Context,
+	v []string,
+) ([][]float32, error) {
 	response, e := c.client.Embeddings.New(
-		context.Background(),
+		x,
 		openai.EmbeddingNewParams{
 			Model: constant.OpenAIEmbedModel,
 			Input: openai.EmbeddingNewParamsInputUnion{OfArrayOfStrings: v},

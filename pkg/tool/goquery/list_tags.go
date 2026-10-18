@@ -2,14 +2,14 @@ package goquery
 
 import (
 	"context"
-	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 	"github.com/spf13/cobra"
 )
 
-func listTags(c *client.Client) *cobra.Command {
+func listTags(c *client.ClientWithResponses) *cobra.Command {
 	return &cobra.Command{
 		Use:   "list-tags",
 		Short: "List all source type tags",
@@ -17,13 +17,11 @@ func listTags(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			r, e := c.GetTags(context.Background())
+			r, e := c.GetTagsWithResponse(context.Background())
 			errors.PanicOnError(e)
-			defer errors.PanicClose(r.Body)
-			var results []client.SourceTypeTag
-			errors.PanicOnError(json.NewDecoder(r.Body).Decode(&results))
+			refusal.PanicOnFailure("list tags", r.HTTPResponse, r.Body)
 
-			for _, v := range results {
+			for _, v := range *r.JSON200 {
 				collection := ""
 
 				if v.Collection != nil {

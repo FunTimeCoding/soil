@@ -1,41 +1,22 @@
 package service
 
 import (
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/chunk"
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/embed"
-	"time"
 )
 
-func (s *Service) Embed() (*embed.Embed, error) {
+func (s *Service) Embed(x context.Context) (*embed.Embed, error) {
 	pending := s.store.PendingEmbeddings()
 	r := embed.New(len(pending))
-	now := time.Now().UTC().Format(time.RFC3339)
 
 	for _, p := range pending {
-		chunks := chunk.Document(p.Body, p.Path, s.reranker)
-		texts := make([]string, len(chunks))
-
-		for i, c := range chunks {
-			texts[i] = c.Text
-		}
-
-		embeddings, e := s.embedder.Embed(texts)
+		chunks, e := s.embedDocument(x, p)
 
 		if e != nil {
 			return r, e
 		}
 
-		for i, embedding := range embeddings {
-			s.store.InsertEmbedding(
-				p.Hash,
-				i,
-				chunks[i].Position,
-				embedding,
-				now,
-			)
-		}
-
-		r.Chunks += len(chunks)
+		r.Chunks += chunks
 	}
 
 	return r, nil

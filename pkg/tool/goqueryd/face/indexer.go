@@ -13,7 +13,7 @@ type Indexer interface {
 		body string,
 		metadata map[string][]string,
 	)
-	Existing(collection string) map[string]string
+	Existing(collection string) (map[string]string, error)
 	Delete(
 		collection string,
 		path string,

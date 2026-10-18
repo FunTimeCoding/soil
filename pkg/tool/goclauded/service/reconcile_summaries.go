@@ -2,18 +2,25 @@ package service
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors"
+	"github.com/funtimecoding/soil/pkg/errors/connection"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
 )
 
-func (s *Service) ReconcileSummaries() {
-	existing := s.summaryIndexer.Existing(constant.SummaryCollection)
+func (s *Service) ReconcileSummaries() []error {
+	existing, e := s.summaryIndexer.Existing(constant.SummaryCollection)
+
+	if e != nil {
+		return []error{e}
+	}
+
 	pushed := 0
 	skipped := 0
+	var failed []error
 
 	for _, m := range s.store.ListSummaries() {
-		slug, metadata, e := s.sessionMetadata(m.SessionIdentifier)
-		errors.PanicOnError(e)
+		slug, metadata, f := s.sessionMetadata(m.SessionIdentifier)
+		errors.PanicOnError(f)
 
 		if slug == "" {
 			continue
@@ -25,12 +32,21 @@ func (s *Service) ReconcileSummaries() {
 			continue
 		}
 
-		s.summaryIndexer.MustPush(
+		if g := s.summaryIndexer.Push(
 			constant.SummaryCollection,
 			slug,
 			m.Body,
 			metadata,
-		)
+		); g != nil {
+			failed = append(failed, g)
+
+			if connection.Classify(g) != nil {
+				return failed
+			}
+
+			continue
+		}
+
 		pushed++
 	}
 
@@ -43,4 +59,6 @@ func (s *Service) ReconcileSummaries() {
 			skipped,
 		)
 	}
+
+	return failed
 }

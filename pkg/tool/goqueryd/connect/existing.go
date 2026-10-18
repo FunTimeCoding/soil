@@ -2,23 +2,22 @@ package connect
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func Existing(
-	c *client.Client,
+	c *client.ClientWithResponses,
 	collection string,
-) map[string]string {
-	wrapped := &client.ClientWithResponses{ClientInterface: c}
+) (map[string]string, error) {
 	result := map[string]string{}
 	offset := 0
 
 	for {
 		limit := constant.ListPage
 		currentOffset := offset
-		r, e := wrapped.GetListWithResponse(
+		r, e := c.GetListWithResponse(
 			context.Background(),
 			&client.GetListParams{
 				Collection: collection,
@@ -26,10 +25,13 @@ func Existing(
 				Offset:     &currentOffset,
 			},
 		)
-		errors.PanicOnError(e)
+
+		if e != nil {
+			return nil, e
+		}
 
 		if r.JSON200 == nil {
-			return result
+			return nil, refusal.New("list documents", r.HTTPResponse, r.Body)
 		}
 
 		for _, entry := range r.JSON200.Results {
@@ -37,7 +39,7 @@ func Existing(
 		}
 
 		if len(r.JSON200.Results) < constant.ListPage {
-			return result
+			return result, nil
 		}
 
 		offset += constant.ListPage

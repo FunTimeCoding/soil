@@ -1,3 +1,9 @@
 package unit
 
-type FixedEmbedder struct{}
+import "sync"
+
+type FixedEmbedder struct {
+	mutex   sync.Mutex
+	failure error
+	calls   int
+}

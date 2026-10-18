@@ -142,7 +142,7 @@ and every client authenticates with the daemon's token
 others) via `web.BearerEditor`:
 
 ```go
-v, e := client.NewClient(
+v, e := client.NewClientWithResponses(
     locator.Environment(
         constant.HostEnvironment,
         constant.PortEnvironment,
@@ -160,6 +160,39 @@ Each subcommand builds its typed request and prints the response - a
 hand-written pass-through method per operation would add code without
 behavior. Don't write wrapper methods just to hide generated types
 from the CLI.
+
+### Reading a response
+
+oapi-codegen generates two methods per operation. The plain one
+(`GetItems`) answers the raw `*http.Response` and fails only on
+transport, so a 500 or a 503 arrives as if it were the answer. Every
+response is read in one of two shapes, and a caller that reads the body
+without either is the bug this section exists for.
+
+A pass-through command that prints the daemon's answer as it came keeps
+the plain call and relays the status with the body as a
+`go:pkg/console/response/Response`, and `terminal.Emit` exits with the body on
+any status from 400 - gonetbox's commands are the shape.
+
+Everything that uses the answer - a typed CLI command, the `client/`
+wrapper, a daemon calling another - calls the `…WithResponse` method,
+which parses the body by status into `JSON200`, `JSON404`, `JSON503`.
+It takes the status it expects and turns every other into an error with
+`go:pkg/web/refusal/New`, which reads the body's reason the way the
+requester does, makes a 404 a `not_found` and a 503 an `unavailable`;
+a command that panics on any failure says it in one line with
+`refusal.PanicOnFailure`. A declared status the caller acts on
+differently - a 404 that means "nothing here yet", a 409 to report as a
+conflict - is matched before that:
+
+```go
+r, e := v.GetItemsWithResponse(context.Background(), &client.GetItemsParams{})
+errors.PanicOnError(e)
+
+if r.JSON200 == nil {
+    errors.PanicOnError(refusal.New("list items", r.HTTPResponse, r.Body))
+}
+```
 
 ## Client Wrapper
 
@@ -225,12 +258,24 @@ func NewEnvironment() *Client {
 
 ### Operations
 
-`client/<operation>.go`:
+`client/<operation>.go` returns the error, since a daemon and the CLI
+both call it and each decides what a failure means:
 ```go
-func (c *Client) Alerts() string {
-    result, e := c.client.GetAlerts(c.context, &generated.GetAlertsParams{})
-    errors.PanicOnError(e)
-    return web.ReadString(result)
+func (c *Client) Alerts() ([]generated.Alert, error) {
+    r, e := c.client.GetAlertsWithResponse(
+        c.context,
+        &generated.GetAlertsParams{},
+    )
+
+    if e != nil {
+        return nil, e
+    }
+
+    if r.JSON200 == nil {
+        return nil, refusal.New("alerts", r.HTTPResponse, r.Body)
+    }
+
+    return *r.JSON200, nil
 }
 ```
 

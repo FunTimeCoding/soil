@@ -31,7 +31,7 @@ func main() {
 		ollama.Embed()
 		embed.Target()
 		ollama.Running()
-		ollama.Heartbeat()
+		ollama.Reachable()
 		openai.Token()
 		openai.Official()
 		openai.Alternate()

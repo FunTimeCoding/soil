@@ -1,12 +1,26 @@
 package service
 
 import (
+	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/types/version_entry"
 )
 
 func (s *Service) PollMemory() {
-	versions := s.memory.VersionsSince(s.lastMemoryPoll, 50)
+	var versions []version_entry.Entry
+
+	if s.memoryGuard.Do(
+		context.Background(),
+		func(x context.Context) error {
+			var e error
+			versions, e = s.memory.VersionsSince(x, s.lastMemoryPoll, 50)
+
+			return e
+		},
+	) != nil {
+		return
+	}
 
 	for _, v := range versions {
 		kind := constant.QueueMemoryUpdate

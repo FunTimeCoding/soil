@@ -1,7 +1,7 @@
 package model_context
 
 import (
-	library "github.com/funtimecoding/soil/pkg/constant"
+	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -84,7 +84,7 @@ func (s *Server) register() {
 				mcp.Description("Issue ID or short ID"),
 			),
 			mcp.WithString(
-				library.TagKey,
+				soil.TagKey,
 				mcp.Required(),
 				mcp.Description("Tag key"),
 			),

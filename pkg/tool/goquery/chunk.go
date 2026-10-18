@@ -10,7 +10,7 @@ import (
 )
 
 func chunk(
-	c *client.Client,
+	c *client.ClientWithResponses,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	var snapshot, compare, restructure bool

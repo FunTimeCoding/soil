@@ -2,14 +2,14 @@ package goquery
 
 import (
 	"context"
-	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 	"github.com/spf13/cobra"
 )
 
-func removeContext(c *client.Client) *cobra.Command {
+func removeContext(c *client.ClientWithResponses) *cobra.Command {
 	return &cobra.Command{
 		Use:   "context-remove [collection] [path-prefix]",
 		Short: "Remove context for a path prefix",
@@ -22,13 +22,11 @@ func removeContext(c *client.Client) *cobra.Command {
 				Collection: arguments[0],
 				PathPrefix: arguments[1],
 			}
-			r, e := c.DeleteContext(context.Background(), params)
+			r, e := c.DeleteContextWithResponse(context.Background(), params)
 			errors.PanicOnError(e)
-			defer errors.PanicClose(r.Body)
-			var result map[string]bool
-			errors.PanicOnError(json.NewDecoder(r.Body).Decode(&result))
+			refusal.PanicOnFailure("remove context", r.HTTPResponse, r.Body)
 
-			if result["deleted"] {
+			if r.JSON200.Deleted != nil && *r.JSON200.Deleted {
 				console.Format(
 					"context removed: %s %s\n",
 					arguments[0],

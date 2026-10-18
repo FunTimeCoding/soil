@@ -2,15 +2,15 @@ package goquery
 
 import (
 	"context"
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/terminal"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 	"github.com/spf13/cobra"
 )
 
 func oversize(
-	c *client.Client,
+	c *client.ClientWithResponses,
 	t *terminal.Terminal,
 ) *cobra.Command {
 	var collection string
@@ -27,18 +27,12 @@ func oversize(
 				params.Collection = &collection
 			}
 
-			r, e := c.GetOversize(context.Background(), params)
+			r, e := c.GetOversizeWithResponse(context.Background(), params)
 			errors.PanicOnError(e)
-			p, f := client.ParseGetOversizeResponse(r)
-			errors.PanicOnError(f)
+			refusal.PanicOnFailure("oversize", r.HTTPResponse, r.Body)
+			printOversize(r.JSON200)
 
-			if p.JSON200 == nil {
-				panic(fmt.Sprintf("oversize: %s: %s", p.Status(), p.Body))
-			}
-
-			printOversize(p.JSON200)
-
-			if len(p.JSON200.Files) > 0 {
+			if len(r.JSON200.Files) > 0 {
 				t.Exit(1)
 			}
 		},

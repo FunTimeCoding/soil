@@ -26,7 +26,7 @@ func (s *Server) historyPage(
 	limit := 10
 	offset := (page - 1) * limit
 	a := argument.Timeline{Kinds: kinds, Limit: limit + 1, Offset: offset}
-	entries, e := s.service.Timeline(a)
+	entries, e := s.service.Timeline(r.Context(), a)
 	errors.PanicOnError(e)
 	hasMore := len(entries) > limit
 

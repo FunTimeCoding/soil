@@ -1,9 +1,15 @@
 package ollama
 
-import "github.com/funtimecoding/soil/pkg/errors"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/errors"
+)
 
-func (c *Client) MustEmbed(v []string) [][]float32 {
-	result, e := c.Embed(v)
+func (c *Client) MustEmbed(
+	x context.Context,
+	v []string,
+) [][]float32 {
+	result, e := c.Embed(x, v)
 	errors.PanicOnError(e)
 
 	return result

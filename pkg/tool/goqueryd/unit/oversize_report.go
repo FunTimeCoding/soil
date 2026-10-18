@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/ollama"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/mock_reranker"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service/oversize"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/store_tester"
 	"testing"
@@ -36,7 +35,7 @@ func oversizeReport(
 	s.Index("test")
 	a := mock_reranker.New()
 	a.SetAllowance(5)
-	result, e := service.New(s, ollama.New(), a).Oversize(collection)
+	result, e := newService(s, ollama.New(), a).Oversize(collection)
 	assert.FatalOnError(t, e)
 
 	return result

@@ -2,34 +2,20 @@ package client
 
 import (
 	"context"
-	"encoding/json"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
-	"io"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
-func (c *RestClient) Relations() []client.Relation {
-	r, e := c.http.GetRelations(
-		context.Background(),
-		&client.GetRelationsParams{},
-	)
+func (c *RestClient) Relations(x context.Context) ([]client.Relation, error) {
+	r, e := c.http.GetRelationsWithResponse(x, &client.GetRelationsParams{})
 
 	if e != nil {
-		return nil
+		return nil, e
 	}
 
-	defer errors.PanicClose(r.Body)
-	body, e := io.ReadAll(r.Body)
-
-	if e != nil {
-		return nil
+	if r.JSON200 == nil {
+		return nil, refusal.New("relations", r.HTTPResponse, r.Body)
 	}
 
-	var result []client.Relation
-
-	if json.Unmarshal(body, &result) != nil {
-		return nil
-	}
-
-	return result
+	return *r.JSON200, nil
 }

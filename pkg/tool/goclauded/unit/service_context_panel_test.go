@@ -16,7 +16,7 @@ func TestContextPanelScopeLineCountsLoadedAgainstCorpus(t *testing.T) {
 	assert.String(
 		t,
 		"memory   10/500 loaded, alfa 40",
-		s.Service.ContextPanel("scope-session"),
+		s.Service.ContextPanel(t.Context(), "scope-session"),
 	)
 }
 
@@ -30,7 +30,7 @@ func TestContextPanelTagLineCountsLoadedMembers(t *testing.T) {
 	assert.String(
 		t,
 		"memory   10/500 loaded\ntags     bravo 2/4",
-		s.Service.ContextPanel("tag-session"),
+		s.Service.ContextPanel(t.Context(), "tag-session"),
 	)
 }
 
@@ -41,7 +41,7 @@ func TestContextPanelOmitsTagLineWithoutMembership(t *testing.T) {
 	assert.String(
 		t,
 		"memory   10/500 loaded",
-		s.Service.ContextPanel("bare-tag-session"),
+		s.Service.ContextPanel(t.Context(), "bare-tag-session"),
 	)
 }
 
@@ -54,7 +54,7 @@ func TestContextPanelDoorsReachUnloadedNeighbors(t *testing.T) {
 	assert.String(
 		t,
 		"memory   10/500 loaded\ndoor     301  november   informs <- kilo",
-		s.Service.ContextPanel("door-session"),
+		s.Service.ContextPanel(t.Context(), "door-session"),
 	)
 }
 
@@ -68,7 +68,7 @@ func TestContextPanelDoorsNeedExactlyOneLoadedEnd(t *testing.T) {
 	assert.String(
 		t,
 		"memory   10/500 loaded",
-		s.Service.ContextPanel("closed-session"),
+		s.Service.ContextPanel(t.Context(), "closed-session"),
 	)
 }
 
@@ -86,7 +86,7 @@ func TestContextPanelLabelsRelationsWithoutType(t *testing.T) {
 	assert.String(
 		t,
 		"memory   10/500 loaded\ndoor     301  november   untyped <- kilo",
-		s.Service.ContextPanel("untyped-session"),
+		s.Service.ContextPanel(t.Context(), "untyped-session"),
 	)
 }
 
@@ -100,7 +100,7 @@ func TestContextPanelKeepsFirstDoorToRepeatedNeighbor(t *testing.T) {
 	assert.String(
 		t,
 		"memory   10/500 loaded\ndoor     301  november   informs <- kilo",
-		s.Service.ContextPanel("repeat-session"),
+		s.Service.ContextPanel(t.Context(), "repeat-session"),
 	)
 }
 
@@ -114,11 +114,15 @@ func TestContextPanelSortsDoorsByIdentifier(t *testing.T) {
 	assert.String(
 		t,
 		"memory   10/500 loaded\ndoor     301  november   informs <- lima\ndoor     302  oscar   informs <- kilo",
-		s.Service.ContextPanel("sorted-session"),
+		s.Service.ContextPanel(t.Context(), "sorted-session"),
 	)
 }
 
 func TestContextPanelEmptyWithoutStatistics(t *testing.T) {
 	s := service_tester.NewPanel(t, "statless-session")
-	assert.String(t, "", s.Service.ContextPanel("statless-session"))
+	assert.String(
+		t,
+		"",
+		s.Service.ContextPanel(t.Context(), "statless-session"),
+	)
 }

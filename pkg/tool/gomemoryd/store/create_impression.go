@@ -5,13 +5,13 @@ import "time"
 func (s *Store) CreateImpression(
 	content string,
 	source string,
+	at time.Time,
 ) (int64, error) {
-	now := time.Now().UTC().Format(time.RFC3339)
 	result, e := s.database.Exec(
 		`INSERT INTO impression (content, source, created_at) VALUES (?, ?, ?)`,
 		content,
 		source,
-		now,
+		at.Format(time.RFC3339),
 	)
 
 	if e != nil {

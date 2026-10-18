@@ -1,13 +1,17 @@
 package service
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/event_query"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/service/argument"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/timeline"
 	"time"
 )
 
-func (s *Service) Timeline(a argument.Timeline) ([]*timeline.Entry, error) {
+func (s *Service) Timeline(
+	x context.Context,
+	a argument.Timeline,
+) ([]*timeline.Entry, error) {
 	fetch := a.Limit + a.Offset
 	q := event_query.New().SetLimit(fetch)
 
@@ -63,7 +67,7 @@ func (s *Service) Timeline(a argument.Timeline) ([]*timeline.Entry, error) {
 	}
 
 	if len(a.Kinds) == 0 || hasMemoryKind(a.Kinds) {
-		entries = append(entries, s.FetchVersions(a.Since, fetch)...)
+		entries = append(entries, s.FetchVersions(x, a.Since, fetch)...)
 	}
 
 	return timeline.Merge(entries, a.Limit, a.Offset), nil

@@ -1,6 +1,7 @@
 package example
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/generative/embed"
@@ -8,7 +9,10 @@ import (
 
 func Target() {
 	e := embed.NewEnvironment()
-	result, f := e.Embed([]string{"What are embeddings?", "A second document."})
+	result, f := e.Embed(
+		context.Background(),
+		[]string{"What are embeddings?", "A second document."},
+	)
 	errors.PanicOnError(f)
 
 	for _, vector := range result {

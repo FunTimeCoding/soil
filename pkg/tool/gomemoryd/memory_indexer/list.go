@@ -2,9 +2,9 @@ package memory_indexer
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (i *Indexer) List(
@@ -28,28 +28,19 @@ func (i *Indexer) List(
 		params.Offset = &offset
 	}
 
-	r, e := i.client.GetList(context.Background(), params)
+	r, e := i.client.GetListWithResponse(context.Background(), params)
 
 	if e != nil {
 		return nil, e
 	}
 
-	parsed, e := client.ParseGetListResponse(r)
-
-	if e != nil {
-		return nil, e
-	}
-
-	if parsed.JSON200 == nil {
-		return nil, unexpected.Format(
-			"unexpected response: %s",
-			parsed.Status(),
-		)
+	if r.JSON200 == nil {
+		return nil, refusal.New("list documents", r.HTTPResponse, r.Body)
 	}
 
 	var results []face.SearchResult
 
-	for _, s := range parsed.JSON200.Results {
+	for _, s := range r.JSON200.Results {
 		body := ""
 
 		if s.Body != nil {

@@ -224,8 +224,11 @@ type VersionEntry struct {
 
 // PostImpressionsJSONBody defines parameters for PostImpressions.
 type PostImpressionsJSONBody struct {
-	Content string  `json:"content"`
-	Source  *string `json:"source,omitempty"`
+	Content string `json:"content"`
+
+	// CreatedAt When the impression was captured, RFC 3339; the arrival time when absent.
+	CreatedAt *string `json:"created_at,omitempty"`
+	Source    *string `json:"source,omitempty"`
 }
 
 // GetSourcedMemoriesParams defines parameters for GetSourcedMemories.

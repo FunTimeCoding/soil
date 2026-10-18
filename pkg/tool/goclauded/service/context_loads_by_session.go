@@ -1,8 +1,12 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/goclauded/store/context_load"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/context_load"
+)
 
 func (s *Service) ContextLoadsBySession(
+	x context.Context,
 	sessionIdentifier string,
 ) ([]context_load.Load, error) {
 	loads, e := s.store.ContextLoadsBySession(sessionIdentifier)
@@ -11,5 +15,5 @@ func (s *Service) ContextLoadsBySession(
 		return nil, e
 	}
 
-	return s.redactLoads(loads), nil
+	return s.redactLoads(x, loads)
 }

@@ -2,36 +2,27 @@ package client
 
 import (
 	"context"
-	"encoding/json"
-	"github.com/funtimecoding/soil/pkg/errors"
-	"io"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
-func (c *RestClient) RedactedMemories() map[int64]bool {
-	r, e := c.http.GetRedactedMemories(context.Background())
+func (c *RestClient) RedactedMemories(
+	x context.Context,
+) (map[int64]bool, error) {
+	r, e := c.http.GetRedactedMemoriesWithResponse(x)
 
 	if e != nil {
-		return nil
+		return nil, e
 	}
 
-	defer errors.PanicClose(r.Body)
-	body, e := io.ReadAll(r.Body)
-
-	if e != nil {
-		return nil
-	}
-
-	var identifiers []int64
-
-	if json.Unmarshal(body, &identifiers) != nil {
-		return nil
+	if r.JSON200 == nil {
+		return nil, refusal.New("redacted memories", r.HTTPResponse, r.Body)
 	}
 
 	result := map[int64]bool{}
 
-	for _, identifier := range identifiers {
+	for _, identifier := range *r.JSON200 {
 		result[identifier] = true
 	}
 
-	return result
+	return result, nil
 }

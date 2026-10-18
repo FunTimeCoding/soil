@@ -2,7 +2,7 @@ package model_context
 
 import (
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/reacher/edge"
+	"github.com/funtimecoding/soil/pkg/peer/reacher/edge"
 )
 
 func recovered(e *edge.Edge) error {

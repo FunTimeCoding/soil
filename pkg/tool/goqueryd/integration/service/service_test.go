@@ -13,9 +13,11 @@ import (
 
 func TestCollectionFacets(t *testing.T) {
 	s := service_tester.New(t)
-	assert.FatalOnError(
+	assert.String(
 		t,
+		"",
 		s.Service.PushDocument(
+			t.Context(),
 			"notes",
 			"a.md",
 			"# Alfa\n\nFirst.\n",
@@ -25,9 +27,11 @@ func TestCollectionFacets(t *testing.T) {
 			},
 		),
 	)
-	assert.FatalOnError(
+	assert.String(
 		t,
+		"",
 		s.Service.PushDocument(
+			t.Context(),
 			"notes",
 			"b.md",
 			"# Bravo\n\nSecond.\n",
@@ -37,9 +41,11 @@ func TestCollectionFacets(t *testing.T) {
 			},
 		),
 	)
-	assert.FatalOnError(
+	assert.String(
 		t,
+		"",
 		s.Service.PushDocument(
+			t.Context(),
 			"notes",
 			"c.md",
 			"# Charlie\n\nThird.\n",
@@ -64,9 +70,11 @@ func TestCollectionFacets(t *testing.T) {
 
 func TestCollectionFacetsForKey(t *testing.T) {
 	s := service_tester.New(t)
-	assert.FatalOnError(
+	assert.String(
 		t,
+		"",
 		s.Service.PushDocument(
+			t.Context(),
 			"notes",
 			"a.md",
 			"# Alfa\n\nFirst.\n",
@@ -76,9 +84,11 @@ func TestCollectionFacetsForKey(t *testing.T) {
 			},
 		),
 	)
-	assert.FatalOnError(
+	assert.String(
 		t,
+		"",
 		s.Service.PushDocument(
+			t.Context(),
 			"notes",
 			"b.md",
 			"# Bravo\n\nSecond.\n",
@@ -102,7 +112,7 @@ func TestCollectionFacetsForKey(t *testing.T) {
 func TestEmbedCreatesEmbeddings(t *testing.T) {
 	s := service_tester.New(t)
 	s.IndexFixtures()
-	result, e := s.Service.Embed()
+	result, e := s.Service.Embed(t.Context())
 	assert.FatalOnError(t, e)
 	assert.Greater(t, 0, result.Documents)
 	assert.Greater(t, 0, result.Chunks)
@@ -114,9 +124,9 @@ func TestEmbedCreatesEmbeddings(t *testing.T) {
 func TestEmbedIdempotent(t *testing.T) {
 	s := service_tester.New(t)
 	s.IndexFixtures()
-	first, e := s.Service.Embed()
+	first, e := s.Service.Embed(t.Context())
 	assert.FatalOnError(t, e)
-	second, e := s.Service.Embed()
+	second, e := s.Service.Embed(t.Context())
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 0, second.Documents)
 	assert.Integer(t, 0, second.Chunks)
@@ -126,9 +136,11 @@ func TestEmbedIdempotent(t *testing.T) {
 
 func TestEmbedAfterPush(t *testing.T) {
 	s := service_tester.New(t)
-	assert.FatalOnError(
+	assert.String(
 		t,
+		"",
 		s.Service.PushDocument(
+			t.Context(),
 			"notes",
 			"embed-me.md",
 			"# Embed Test\n\nThis document should get embedded.\n",
@@ -199,9 +211,11 @@ func TestIndexCollectionsFilter(t *testing.T) {
 
 func TestPushDocumentAppearsInList(t *testing.T) {
 	s := service_tester.New(t)
-	assert.FatalOnError(
+	assert.String(
 		t,
+		"",
 		s.Service.PushDocument(
+			t.Context(),
 			"notes",
 			"first.md",
 			"# First Note\n\nPushed directly via API.\n",
@@ -217,9 +231,11 @@ func TestPushDocumentAppearsInList(t *testing.T) {
 
 func TestPushDocumentAppearsInSearch(t *testing.T) {
 	s := service_tester.New(t)
-	assert.FatalOnError(
+	assert.String(
 		t,
+		"",
 		s.Service.PushDocument(
+			t.Context(),
 			"notes",
 			"searchable.md",
 			"# Searchable\n\nThis document contains a unique keyword: platypus.\n",
@@ -228,7 +244,8 @@ func TestPushDocumentAppearsInSearch(t *testing.T) {
 	)
 	o := search_option.New("platypus", 10)
 	o.Mode = "keyword"
-	result := s.Service.Search(o)
+	result, e := s.Service.Search(t.Context(), o)
+	assert.FatalOnError(t, e)
 	assert.Count(t, 1, result.Results)
 	assert.String(t, "Searchable", result.Results[0].Title)
 }
@@ -236,13 +253,15 @@ func TestPushDocumentAppearsInSearch(t *testing.T) {
 func TestPushDocumentDedup(t *testing.T) {
 	s := service_tester.New(t)
 	body := "# Identical\n\nSame content pushed twice.\n"
-	assert.FatalOnError(
+	assert.String(
 		t,
-		s.Service.PushDocument("notes", "first.md", body, nil),
+		"",
+		s.Service.PushDocument(t.Context(), "notes", "first.md", body, nil),
 	)
-	assert.FatalOnError(
+	assert.String(
 		t,
-		s.Service.PushDocument("notes", "first.md", body, nil),
+		"",
+		s.Service.PushDocument(t.Context(), "notes", "first.md", body, nil),
 	)
 	outcome, e := s.Service.ListDocuments("notes", nil, 0, 0, false)
 	assert.FatalOnError(t, e)
@@ -253,18 +272,22 @@ func TestPushDocumentDedup(t *testing.T) {
 
 func TestPushDocumentUpdate(t *testing.T) {
 	s := service_tester.New(t)
-	assert.FatalOnError(
+	assert.String(
 		t,
+		"",
 		s.Service.PushDocument(
+			t.Context(),
 			"notes",
 			"evolving.md",
 			"# Original\n\nFirst version.\n",
 			nil,
 		),
 	)
-	assert.FatalOnError(
+	assert.String(
 		t,
+		"",
 		s.Service.PushDocument(
+			t.Context(),
 			"notes",
 			"evolving.md",
 			"# Updated\n\nSecond version with revised content.\n",
@@ -280,9 +303,11 @@ func TestPushDocumentUpdate(t *testing.T) {
 
 func TestPushDocumentCreatesCollection(t *testing.T) {
 	s := service_tester.New(t)
-	assert.FatalOnError(
+	assert.String(
 		t,
+		"",
 		s.Service.PushDocument(
+			t.Context(),
 			"dynamic",
 			"auto.md",
 			"# Auto\n\nCollection created on first push.\n",
@@ -307,7 +332,8 @@ func TestSearchKeyword(t *testing.T) {
 	s.IndexFixtures()
 	o := search_option.New("hybrid search pipeline", 10)
 	o.Mode = "keyword"
-	outcome := s.Service.Search(o)
+	outcome, e := s.Service.Search(t.Context(), o)
+	assert.FatalOnError(t, e)
 	assert.Greater(t, 0, len(outcome.Results))
 	assert.String(t, "Search Pipeline", outcome.Results[0].Title)
 }
@@ -315,9 +341,13 @@ func TestSearchKeyword(t *testing.T) {
 func TestSearchHybrid(t *testing.T) {
 	s := service_tester.New(t)
 	s.IndexFixtures()
-	_, e := s.Service.Embed()
+	_, e := s.Service.Embed(t.Context())
 	assert.FatalOnError(t, e)
-	outcome := s.Service.Search(search_option.New("semantic meaning", 10))
+	outcome, f := s.Service.Search(
+		t.Context(),
+		search_option.New("semantic meaning", 10),
+	)
+	assert.FatalOnError(t, f)
 	assert.Greater(t, 0, len(outcome.Results))
 }
 
@@ -327,15 +357,19 @@ func TestSearchCollectionFilter(t *testing.T) {
 	o := search_option.New("chunking", 10)
 	o.Collection = "test"
 	o.Mode = "keyword"
-	outcome := s.Service.Search(o)
+	outcome, e := s.Service.Search(t.Context(), o)
+	assert.FatalOnError(t, e)
 	assert.Greater(t, 0, len(outcome.Results))
 	assert.String(t, "test", outcome.Results[0].Collection)
 }
 
-func TestSearchDegradedWithoutEmbeddings(t *testing.T) {
+func TestAHybridSearchWithoutEmbeddingsFindsTheKeywordMatches(t *testing.T) {
 	s := service_tester.New(t)
 	s.IndexFixtures()
-	outcome := s.Service.Search(search_option.New("chunking strategy", 10))
-	assert.True(t, outcome.Degraded)
+	outcome, e := s.Service.Search(
+		t.Context(),
+		search_option.New("chunking strategy", 10),
+	)
+	assert.FatalOnError(t, e)
 	assert.Greater(t, 0, len(outcome.Results))
 }

@@ -1,13 +1,17 @@
 package ollama
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/ollama/ollama/api"
 )
 
-func (c *Client) Embed(v []string) ([][]float32, error) {
+func (c *Client) Embed(
+	x context.Context,
+	v []string,
+) ([][]float32, error) {
 	result, e := c.client.Embed(
-		c.context,
+		x,
 		&api.EmbedRequest{Model: constant.OllamaEmbedModel, Input: v},
 	)
 

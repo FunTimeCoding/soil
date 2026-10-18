@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/chromium"
 	library "github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/peer"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/face"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/search_index"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/session_cache"
@@ -19,6 +20,7 @@ type Service struct {
 	store             *store.Store
 	client            face.ClaudeSource
 	memory            client.Client
+	memoryGuard       *peer.Guard
 	summaryIndexer    queryd.Indexer
 	completionIndexer queryd.Indexer
 	search            *search_index.Index

@@ -4,11 +4,13 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/face"
+	generativeConstant "github.com/funtimecoding/soil/pkg/generative/constant"
 	"github.com/funtimecoding/soil/pkg/generative/embed"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
+	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/option"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/rerank"
@@ -32,9 +34,19 @@ func Run(
 	a, e := rerank.NewEnvironment()
 	errors.PanicOnError(e)
 	defer errors.LogClose(a)
-	v := service.New(s, embed.NewEnvironment(), a)
+	v := service.New(
+		s,
+		embed.NewEnvironment(),
+		a,
+		environment.Required(generativeConstant.EmbedTargetEnvironment),
+		l,
+		r,
+	)
+	defer v.Close()
 	u := web.New(v)
-	lifecycle.New(l).WithWorker(worker.New(v, 10*time.Minute, l, r)).WithServer(
+	lifecycle.New(l).WithWorker(v.Guard()).WithWorker(
+		worker.New(v, 10*time.Minute, l, r),
+	).WithServer(
 		server.New(
 			constant.Identity,
 			o.Address,

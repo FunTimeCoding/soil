@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) push(
-	_ context.Context,
+	x context.Context,
 	q mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	collection, e := q.RequireString(constant.Collection)
@@ -40,8 +40,10 @@ func (s *Server) push(
 		metadata[constant.SourceType] = []string{sourceType}
 	}
 
-	if h := s.service.PushDocument(collection, path, body, metadata); h != nil {
-		return s.captureFail(h, "push failed")
+	warning := s.service.PushDocument(x, collection, path, body, metadata)
+
+	if warning != "" {
+		return response.Success("pushed %s/%s (%s)", collection, path, warning)
 	}
 
 	return response.Success("pushed %s/%s", collection, path)

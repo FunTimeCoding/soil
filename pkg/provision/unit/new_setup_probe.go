@@ -12,7 +12,7 @@ import (
 func newSetupProbe(setup *atomic.Bool) *runner.Runner {
 	return runner.New(
 		runner_option.Option{
-			SetupFunction: func() bool {
+			SetupFunction: func(context.Context) bool {
 				setup.Store(true)
 
 				return false

@@ -6,9 +6,13 @@ import (
 )
 
 func (s *Session) Authorize(r *http.Request) error {
-	s.mutex.Lock()
-	defer s.mutex.Unlock()
-	r.Header.Set(constant.SaltTokenHeader, s.token)
+	if s.Token() == "" {
+		if e := s.Login(r.Context()); e != nil {
+			return e
+		}
+	}
+
+	r.Header.Set(constant.SaltTokenHeader, s.Token())
 
 	return nil
 }

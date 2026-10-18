@@ -29,5 +29,5 @@ func rechunkService(
 		"2024-01-01T00:00:00Z",
 	)
 
-	return service.New(s, ollama.New(), mock_reranker.New()), s
+	return newService(s, ollama.New(), mock_reranker.New()), s
 }

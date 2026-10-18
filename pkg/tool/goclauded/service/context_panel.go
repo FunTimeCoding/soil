@@ -1,12 +1,35 @@
 package service
 
 import (
+	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/strings/join"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
 )
 
-func (s *Service) ContextPanel(sessionIdentifier string) string {
-	statistics := s.memory.Statistics()
+func (s *Service) ContextPanel(
+	x context.Context,
+	sessionIdentifier string,
+) string {
+	var statistics *client.Statistics
+	var relations []client.Relation
+
+	if e := s.memoryGuard.Do(
+		x,
+		func(y context.Context) error {
+			var f error
+
+			if statistics, f = s.memory.Statistics(y); f != nil {
+				return f
+			}
+
+			relations, f = s.memory.Relations(y)
+
+			return f
+		},
+	); e != nil {
+		return e.Error()
+	}
 
 	if statistics == nil {
 		return ""
@@ -20,7 +43,7 @@ func (s *Service) ContextPanel(sessionIdentifier string) string {
 		lines = append(lines, tags)
 	}
 
-	for _, one := range frontier(s.memory.Relations(), loaded) {
+	for _, one := range frontier(relations, loaded) {
 		lines = append(
 			lines,
 			fmt.Sprintf(

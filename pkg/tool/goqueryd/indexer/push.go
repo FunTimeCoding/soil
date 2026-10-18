@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (i *Indexer) Push(
@@ -18,7 +19,7 @@ func (i *Indexer) Push(
 		merged[key] = value
 	}
 
-	r, e := i.client.PostDocument(
+	r, e := i.client.PostDocumentWithResponse(
 		context.Background(),
 		client.PostDocumentJSONRequestBody{
 			Collection: collection,
@@ -32,5 +33,9 @@ func (i *Indexer) Push(
 		return e
 	}
 
-	return r.Body.Close()
+	if r.JSON200 == nil {
+		return refusal.New("push document", r.HTTPResponse, r.Body)
+	}
+
+	return nil
 }

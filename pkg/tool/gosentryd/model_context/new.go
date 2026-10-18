@@ -3,7 +3,7 @@ package model_context
 import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/generative/mark/server"
-	"github.com/funtimecoding/soil/pkg/reacher"
+	"github.com/funtimecoding/soil/pkg/peer/reacher"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/service"
 )

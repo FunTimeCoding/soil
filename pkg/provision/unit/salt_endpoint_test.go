@@ -1,14 +1,22 @@
 package unit
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/errors/connection"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
+	"net/http"
+	"net/http/httptest"
 	"testing"
+	"time"
 )
 
-func TestNewLogsInAndSendsTheToken(t *testing.T) {
+func TestTheFirstCallLogsInAndSendsTheToken(t *testing.T) {
 	s := newSaltServer(t, "bravo")
-	keys, e := newSaltClient(t, s.URL, "bravo").ListKeys()
+	c := newSaltClient(t, s.URL, "bravo")
+	defer c.Close()
+	assert.Integer(t, 0, s.logins)
+	keys, e := c.ListKeys()
 	assert.FatalOnError(t, e)
 	assert.Strings(t, []string{"alfa"}, keys.Minions)
 	assert.Integer(t, 1, s.logins)
@@ -19,11 +27,13 @@ func TestExpiredTokenRenewsOnce(t *testing.T) {
 	s := newSaltServer(t, "bravo")
 	c := newSaltClient(t, s.URL, "bravo")
 	defer c.Close()
-	s.expire()
 	_, e := c.ListKeys()
 	assert.FatalOnError(t, e)
+	s.expire()
+	_, f := c.ListKeys()
+	assert.FatalOnError(t, f)
 	assert.Integer(t, 2, s.logins)
-	assert.Strings(t, []string{"token-1", "token-2"}, s.seen)
+	assert.Strings(t, []string{"token-1", "token-1", "token-2"}, s.seen)
 }
 
 func TestRefusalCarriesTheParagraph(t *testing.T) {
@@ -37,11 +47,49 @@ func TestRefusalCarriesTheParagraph(t *testing.T) {
 	)
 }
 
-func TestWrongPasswordPanicsWithTheReason(t *testing.T) {
+func TestAWrongPasswordIsRefusedWithTheReason(t *testing.T) {
 	s := newSaltServer(t, "bravo")
-	assert.PanicContains(
+	c := newSaltClient(t, s.URL, "charlie")
+	defer c.Close()
+	e := c.Login(t.Context())
+	assert.Nil(t, connection.Classify(e))
+	assert.StringContains(
 		t,
 		"salt-api status: 401: Could not authenticate using provided credentials",
-		func() { newSaltClient(t, s.URL, "charlie") },
+		e.Error(),
 	)
+	_, f := c.ListKeys()
+	assert.StringContains(t, "Could not authenticate", f.Error())
+}
+
+func TestALoginNobodyAnswersIsAConnectionFailure(t *testing.T) {
+	s := newSaltServer(t, "bravo")
+	c := newSaltClient(t, s.URL, "bravo")
+	defer c.Close()
+	s.Close()
+	assert.NotNil(t, connection.Classify(c.Login(t.Context())))
+}
+
+func TestALoginThatHangsEndsWithItsContext(t *testing.T) {
+	release := make(chan struct{})
+	s := httptest.NewServer(
+		http.HandlerFunc(
+			func(
+				http.ResponseWriter,
+				*http.Request,
+			) {
+				<-release
+			},
+		),
+	)
+	defer s.Close()
+	defer close(release)
+	c := newSaltClient(t, s.URL, "bravo")
+	defer c.Close()
+	x, cancel := context.WithTimeout(t.Context(), 50*time.Millisecond)
+	defer cancel()
+	start := time.Now()
+	e := c.Login(x)
+	assert.True(t, time.Since(start) < time.Second)
+	assert.NotNil(t, connection.Classify(e))
 }

@@ -9,7 +9,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/mock_reranker"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/web"
 	"github.com/funtimecoding/soil/pkg/web/guard"
@@ -20,7 +19,7 @@ import (
 func TestGuard(t *testing.T) {
 	s := store.New(connection.NewMemory())
 	defer s.Close()
-	v := service.New(s, ollama.NewEnvironment(), mock_reranker.New())
+	v := newService(s, ollama.NewEnvironment(), mock_reranker.New())
 	w := model_context_server.New(
 		t,
 		func(

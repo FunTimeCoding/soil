@@ -8,6 +8,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/event"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/event_metadata"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/fable_snapshot"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/impression_outbox"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/label"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/message"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/notification"
@@ -48,6 +49,7 @@ func New(
 			context_load.Stub(),
 			subscription.Stub(),
 			cruise_setting.Stub(),
+			impression_outbox.Stub(),
 		),
 	)
 	migrateEventMetadata(d)

@@ -56,7 +56,7 @@ func (s *Server) history(
 		a.Before = time.Now().Add(-beforeDuration).UTC().Format(time.RFC3339)
 	}
 
-	merged, f := s.service.Timeline(a)
+	merged, f := s.service.Timeline(x, a)
 
 	if f != nil {
 		return s.captureFail(f, soil.UnexpectedError)

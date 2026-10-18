@@ -10,4 +10,5 @@ type Client struct {
 	Redacted    map[int64]bool
 	Stats       *client.Statistics
 	Edges       []client.Relation
+	Failure     error
 }

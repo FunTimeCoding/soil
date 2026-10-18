@@ -1,6 +1,7 @@
 package runner
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
 	library "github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
@@ -20,7 +21,7 @@ type Runner struct {
 		triggerSource string,
 	) any
 	initFunction    func()
-	setupFunction   func() bool
+	setupFunction   func(context.Context) bool
 	cleanupFunction func()
 	changeFunction  func(value any) *change.Change
 	downstream      []face.Downstream
@@ -32,6 +33,8 @@ type Runner struct {
 	trigger         chan trigger.Request
 	sync            chan update.Request
 	stop            chan struct{}
+	context         context.Context
+	cancel          context.CancelFunc
 	mutex           sync.Mutex
 	started         bool
 	closed          bool

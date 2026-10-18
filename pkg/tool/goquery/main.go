@@ -19,7 +19,7 @@ func Main() {
 	defer func() { s.Flush(recover()) }()
 	p := stall_client.New().Build()
 	defer p.Close()
-	c, e := client.NewClient(
+	c, e := client.NewClientWithResponses(
 		locator.Environment(
 			constant.HostEnvironment,
 			constant.PortEnvironment,

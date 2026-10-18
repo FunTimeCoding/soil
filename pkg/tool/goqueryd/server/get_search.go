@@ -2,13 +2,15 @@ package server
 
 import (
 	"context"
+	soil "github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors/unavailable"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search_option"
 )
 
 func (s *Server) GetSearch(
-	_ context.Context,
+	x context.Context,
 	r server.GetSearchRequestObject,
 ) (server.GetSearchResponseObject, error) {
 	o := search_option.New(r.Params.Query, 10)
@@ -45,13 +47,20 @@ func (s *Server) GetSearch(
 		o.Exclude = *r.Params.Exclude
 	}
 
-	outcome := s.service.Search(o)
-	result := server.GetSearch200JSONResponse{
-		Results: convertSearchResults(outcome.Results),
+	outcome, e := s.service.Search(x, o)
+
+	if unavailable.Is(e) {
+		return server.GetSearch503JSONResponse{Error: e.Error()}, nil
 	}
 
-	if outcome.Degraded {
-		result.Degraded = new(bool(true))
+	if e != nil {
+		return server.GetSearch500JSONResponse(
+			*s.captureFail(e, soil.UnexpectedError),
+		), nil
+	}
+
+	result := server.GetSearch200JSONResponse{
+		Results: convertSearchResults(outcome.Results),
 	}
 
 	if len(outcome.Facets) > 0 {

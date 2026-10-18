@@ -6,7 +6,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/indexer"
 )
 
-func New(c *client.Client) *Indexer {
+func New(c *client.ClientWithResponses) *Indexer {
 	return &Indexer{
 		Indexer: indexer.New(c, constant.MemorySourceType),
 		client:  c,

@@ -11,6 +11,6 @@ func (s *Server) activityPage(
 	r *http.Request,
 ) {
 	errors.PanicOnError(
-		s.activitySection(r.URL.Query()[constant.Kind]).Render(w),
+		s.activitySection(r.Context(), r.URL.Query()[constant.Kind]).Render(w),
 	)
 }

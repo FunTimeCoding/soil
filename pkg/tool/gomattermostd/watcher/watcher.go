@@ -3,7 +3,7 @@ package watcher
 import (
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
-	"github.com/funtimecoding/soil/pkg/reacher"
+	"github.com/funtimecoding/soil/pkg/peer/reacher"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/digest/event"
 	mattermostFace "github.com/funtimecoding/soil/pkg/tool/gomattermostd/face"
 	"github.com/funtimecoding/soil/pkg/tool/gomattermostd/notifier"

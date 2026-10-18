@@ -12,6 +12,4 @@ const (
 	PingTimeout               = 15 * time.Second
 	KeepAlive                 = 30 * time.Second
 	MaximumIdle               = 100
-	PeerWait                  = time.Minute
-	PeerPoll                  = time.Second
 )

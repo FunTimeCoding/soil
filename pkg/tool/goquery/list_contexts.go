@@ -2,14 +2,14 @@ package goquery
 
 import (
 	"context"
-	"encoding/json"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 	"github.com/spf13/cobra"
 )
 
-func listContexts(c *client.Client) *cobra.Command {
+func listContexts(c *client.ClientWithResponses) *cobra.Command {
 	return &cobra.Command{
 		Use:   "context-list",
 		Short: "List all contexts",
@@ -17,13 +17,11 @@ func listContexts(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			_ []string,
 		) {
-			r, e := c.GetContext(context.Background())
+			r, e := c.GetContextWithResponse(context.Background())
 			errors.PanicOnError(e)
-			defer errors.PanicClose(r.Body)
-			var results []client.ContextEntry
-			errors.PanicOnError(json.NewDecoder(r.Body).Decode(&results))
+			refusal.PanicOnFailure("list contexts", r.HTTPResponse, r.Body)
 
-			for _, v := range results {
+			for _, v := range *r.JSON200 {
 				console.Format(
 					"%s  %s  %s\n",
 					v.Collection,

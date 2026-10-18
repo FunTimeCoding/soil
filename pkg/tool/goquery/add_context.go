@@ -5,10 +5,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 	"github.com/spf13/cobra"
 )
 
-func addContext(c *client.Client) *cobra.Command {
+func addContext(c *client.ClientWithResponses) *cobra.Command {
 	return &cobra.Command{
 		Use:   "context-add [collection] [path-prefix] [description]",
 		Short: "Add context for a path prefix within a collection",
@@ -17,7 +18,7 @@ func addContext(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			r, e := c.PostContext(
+			r, e := c.PostContextWithResponse(
 				context.Background(),
 				client.PostContextJSONRequestBody{
 					Collection:  arguments[0],
@@ -26,7 +27,7 @@ func addContext(c *client.Client) *cobra.Command {
 				},
 			)
 			errors.PanicOnError(e)
-			defer errors.PanicClose(r.Body)
+			refusal.PanicOnFailure("add context", r.HTTPResponse, r.Body)
 			console.Format("context added: %s %s\n", arguments[0], arguments[1])
 		},
 	}

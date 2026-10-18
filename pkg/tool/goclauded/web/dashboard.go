@@ -11,7 +11,7 @@ import (
 
 func (s *Server) dashboard(
 	w http.ResponseWriter,
-	_ *http.Request,
+	r *http.Request,
 ) {
 	s.view.RenderLivePageWithSummary(
 		w,
@@ -28,7 +28,7 @@ func (s *Server) dashboard(
 		html.H3(gomponents.Text("Recent Activity")),
 		html.Div(
 			extended.StreamSwap(constant.Activity),
-			s.activitySection(nil),
+			s.activitySection(r.Context(), nil),
 		),
 	)
 }

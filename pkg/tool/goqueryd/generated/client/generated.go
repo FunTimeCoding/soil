@@ -148,6 +148,11 @@ type PreviewSection struct {
 	Tokens    int            `json:"tokens"`
 }
 
+// PushOutcome defines model for PushOutcome.
+type PushOutcome struct {
+	Warning *string `json:"warning,omitempty"`
+}
+
 // RechunkResult defines model for RechunkResult.
 type RechunkResult struct {
 	Documents []string `json:"documents"`
@@ -155,9 +160,8 @@ type RechunkResult struct {
 
 // SearchOutcome defines model for SearchOutcome.
 type SearchOutcome struct {
-	Degraded *bool          `json:"degraded,omitempty"`
-	Facets   *[]Facet       `json:"facets,omitempty"`
-	Results  []SearchResult `json:"results"`
+	Facets  *[]Facet       `json:"facets,omitempty"`
+	Results []SearchResult `json:"results"`
 }
 
 // SearchResult defines model for SearchResult.
@@ -191,6 +195,11 @@ type Status struct {
 	PendingEmbeddings int                `json:"pending_embeddings"`
 	TotalDocuments    int                `json:"total_documents"`
 	TotalEmbeddings   int                `json:"total_embeddings"`
+}
+
+// UnavailableResponse defines model for UnavailableResponse.
+type UnavailableResponse struct {
+	Error string `json:"error"`
 }
 
 // PostChunkJSONBody defines parameters for PostChunk.
@@ -2397,8 +2406,15 @@ func (r GetDocumentResponse) ContentType() string {
 type PostDocumentResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
+	// JSON200 the response for an HTTP 200 `application/json` response
+	JSON200 *PushOutcome
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+}
+
+// GetJSON200 returns the response for an HTTP 200 `application/json` response
+func (r PostDocumentResponse) GetJSON200() *PushOutcome {
+	return r.JSON200
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -2442,6 +2458,8 @@ type PostEmbedResponse struct {
 	JSON200 *EmbedResult
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *UnavailableResponse
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -2452,6 +2470,11 @@ func (r PostEmbedResponse) GetJSON200() *EmbedResult {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r PostEmbedResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r PostEmbedResponse) GetJSON503() *UnavailableResponse {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -2730,6 +2753,8 @@ type GetSearchResponse struct {
 	JSON200 *SearchOutcome
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+	// JSON503 the response for an HTTP 503 `application/json` response
+	JSON503 *UnavailableResponse
 }
 
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
@@ -2740,6 +2765,11 @@ func (r GetSearchResponse) GetJSON200() *SearchOutcome {
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
 func (r GetSearchResponse) GetJSON500() *ErrorResponse {
 	return r.JSON500
+}
+
+// GetJSON503 returns the response for an HTTP 503 `application/json` response
+func (r GetSearchResponse) GetJSON503() *UnavailableResponse {
+	return r.JSON503
 }
 
 // GetBody returns the raw response body bytes
@@ -3511,8 +3541,12 @@ func ParsePostDocumentResponse(rsp *http.Response) (*PostDocumentResponse, error
 	}
 
 	switch {
-	case rsp.StatusCode == 200:
-		break // No content-type
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 200:
+		var dest PushOutcome
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON200 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -3553,6 +3587,13 @@ func ParsePostEmbedResponse(rsp *http.Response) (*PostEmbedResponse, error) {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest UnavailableResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 
@@ -3751,6 +3792,13 @@ func ParseGetSearchResponse(rsp *http.Response) (*GetSearchResponse, error) {
 			return nil, err
 		}
 		response.JSON500 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 503:
+		var dest UnavailableResponse
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON503 = &dest
 
 	}
 

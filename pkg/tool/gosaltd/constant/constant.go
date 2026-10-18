@@ -33,6 +33,8 @@ const (
 
 	SaltPathEnvironment = "SALT_PATH"
 
+	SaltPeer = "salt"
+
 	ConnectRetryInterval = 30 * time.Second
 	KeySyncInterval      = 30 * time.Second
 )

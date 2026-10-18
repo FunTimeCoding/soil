@@ -3,6 +3,7 @@
 package store
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/generative/ollama"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/mock_reranker"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
@@ -30,7 +31,7 @@ func pushTestDocument(
 		texts[i] = c.Text
 	}
 
-	embeddings, e := o.Embed(texts)
+	embeddings, e := o.Embed(context.Background(), texts)
 
 	if e != nil {
 		return e

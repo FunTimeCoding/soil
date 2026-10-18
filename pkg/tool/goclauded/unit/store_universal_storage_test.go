@@ -53,7 +53,7 @@ func TestEveryWriterStoresUniversalTime(t *testing.T) {
 		s.Store.SendNotification(
 			"session-1",
 			r.Callsign,
-			"source",
+			"relay",
 			"a notification",
 		),
 	)

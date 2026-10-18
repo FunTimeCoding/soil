@@ -1,9 +1,10 @@
 package system
 
 import (
+	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/errors/retry"
+	"github.com/funtimecoding/soil/pkg/peer/retry"
 	"github.com/funtimecoding/soil/pkg/system/constant"
 	"net"
 	"time"
@@ -14,13 +15,15 @@ func WaitForListen(
 	timeout time.Duration,
 ) bool {
 	_, e := retry.Until(
+		context.Background(),
 		timeout,
 		constant.Retry,
-		func() error {
-			c, f := net.DialTimeout(
+		func(x context.Context) error {
+			d := net.Dialer{Timeout: constant.Retry}
+			c, f := d.DialContext(
+				x,
 				constant.Transmission,
 				fmt.Sprintf("localhost:%d", port),
-				constant.Retry,
 			)
 
 			if f != nil {

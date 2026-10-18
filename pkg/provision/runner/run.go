@@ -12,7 +12,7 @@ func (r *Runner) run() {
 	defer close(r.finished)
 	defer r.drainChannels()
 
-	if r.setupFunction != nil && !r.setupFunction() {
+	if r.setupFunction != nil && !r.setupFunction(r.context) {
 		return
 	}
 

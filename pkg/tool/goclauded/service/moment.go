@@ -1,6 +1,9 @@
 package service
 
-import "github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
+)
 
 func (s *Service) Moment(
 	sessionIdentifier string,
@@ -16,7 +19,7 @@ func (s *Service) Moment(
 		return e
 	}
 
-	s.ForwardImpression(line, name)
+	s.ForwardImpression(context.Background(), line, name, s.clock())
 	s.notify()
 
 	return nil

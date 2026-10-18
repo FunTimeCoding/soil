@@ -25,7 +25,7 @@ func New(t *testing.T) *Tester {
 	t.Helper()
 	q := base.New(t)
 	q.SkipUnreachable(t)
-	c, e := client.NewClient(
+	c, e := client.NewClientWithResponses(
 		q.Address(webConstant.RootPath),
 		client.WithHTTPClient(q.Client()),
 		client.WithRequestEditorFn(

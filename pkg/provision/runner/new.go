@@ -1,6 +1,7 @@
 package runner
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
@@ -14,6 +15,8 @@ func New(
 	l *logger.Logger,
 	r face.Reporter,
 ) *Runner {
+	x, cancel := context.WithCancel(context.Background())
+
 	return &Runner{
 		repository:      c.Repository,
 		clonePath:       c.ClonePath,
@@ -31,6 +34,8 @@ func New(
 		trigger:         make(chan trigger.Request, 1),
 		sync:            make(chan update.Request, 1),
 		stop:            make(chan struct{}),
+		context:         x,
+		cancel:          cancel,
 		finished:        make(chan struct{}),
 	}
 }

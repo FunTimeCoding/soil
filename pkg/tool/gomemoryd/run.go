@@ -6,6 +6,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/peer/reacher"
+	"github.com/funtimecoding/soil/pkg/peer/reacher/edge"
 	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
@@ -15,6 +17,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/web"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/connect"
+	queryConstant "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
 	"github.com/funtimecoding/soil/pkg/web/stall_client"
 	"net/http"
@@ -36,7 +39,17 @@ func Run(
 	).WithReferenceRoot(
 		environment.Fallback(constant.ReferenceRootEnvironment, ""),
 	)
-	reconcileMemories(v)
+	index := reacher.New()
+
+	for _, f := range reconcileMemories(v) {
+		index.Handle(
+			queryConstant.Identity.Name(),
+			f,
+			func(x *edge.Edge) { l.Plain("reconcile: %s", x) },
+			func(g error) { r.CaptureException(g) },
+		)
+	}
+
 	u := web.New(v)
 	lifecycle.New(l).WithServer(
 		server.New(

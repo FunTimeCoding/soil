@@ -14,7 +14,12 @@ func (r *Requester) build(q *request.Request) (*http.Request, error) {
 		target = r.base.Copy().Path(q.Path).String()
 	}
 
-	result, e := http.NewRequest(q.Method, target, bytes.NewReader(q.Body))
+	result, e := http.NewRequestWithContext(
+		q.Context,
+		q.Method,
+		target,
+		bytes.NewReader(q.Body),
+	)
 
 	if e != nil {
 		return nil, e

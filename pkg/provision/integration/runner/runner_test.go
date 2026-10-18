@@ -24,7 +24,7 @@ func TestSetupReturnsFalseSkipsApply(t *testing.T) {
 	applied := false
 	r := runner.New(
 		runner_option.Option{
-			SetupFunction: func() bool { return false },
+			SetupFunction: func(context.Context) bool { return false },
 			ApplyFunction: func(
 				_ map[string]any,
 				_ string,
@@ -56,7 +56,7 @@ func TestDrainChannelsOnStop(t *testing.T) {
 	)
 	r := runner.New(
 		runner_option.Option{
-			SetupFunction: func() bool {
+			SetupFunction: func(context.Context) bool {
 				<-gate
 
 				return false

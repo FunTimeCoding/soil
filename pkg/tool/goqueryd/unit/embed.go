@@ -1,6 +1,19 @@
 package unit
 
-func (f *FixedEmbedder) Embed(v []string) ([][]float32, error) {
+import "context"
+
+func (f *FixedEmbedder) Embed(
+	_ context.Context,
+	v []string,
+) ([][]float32, error) {
+	f.mutex.Lock()
+	defer f.mutex.Unlock()
+	f.calls++
+
+	if f.failure != nil {
+		return nil, f.failure
+	}
+
 	result := make([][]float32, len(v))
 
 	for i := range v {

@@ -32,7 +32,10 @@ func TestOversizedLineDoesNotStopExtraction(t *testing.T) {
 		),
 	)
 	s.Service.EnrichSession("oversized-session")
-	loads, e := s.Service.ContextLoadsBySession("oversized-session")
+	loads, e := s.Service.ContextLoadsBySession(
+		t.Context(),
+		"oversized-session",
+	)
 	assert.FatalOnError(t, e)
 	assert.Integer(t, 11, len(loads))
 }

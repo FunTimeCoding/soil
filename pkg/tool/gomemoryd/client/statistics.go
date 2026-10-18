@@ -2,31 +2,20 @@ package client
 
 import (
 	"context"
-	"encoding/json"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
-	"io"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
-func (c *RestClient) Statistics() *client.Statistics {
-	r, e := c.http.GetStatistics(context.Background())
+func (c *RestClient) Statistics(x context.Context) (*client.Statistics, error) {
+	r, e := c.http.GetStatisticsWithResponse(x)
 
 	if e != nil {
-		return nil
+		return nil, e
 	}
 
-	defer errors.PanicClose(r.Body)
-	body, e := io.ReadAll(r.Body)
-
-	if e != nil {
-		return nil
+	if r.JSON200 == nil {
+		return nil, refusal.New("statistics", r.HTTPResponse, r.Body)
 	}
 
-	var result client.Statistics
-
-	if json.Unmarshal(body, &result) != nil {
-		return nil
-	}
-
-	return &result
+	return r.JSON200, nil
 }

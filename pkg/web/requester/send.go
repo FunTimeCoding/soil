@@ -21,7 +21,8 @@ func (r *Requester) Send(q *request.Request) (*http.Response, error) {
 		}
 
 		response, e := r.client.Do(h)
-		retry := q.Idempotent() && attempt < constant.Retries
+		retry := q.Idempotent() && attempt < constant.Retries &&
+			q.Context.Err() == nil
 
 		if e != nil {
 			if retry && healable(e) {

@@ -1,8 +1,12 @@
 package request
 
-import "net/url"
+import (
+	"context"
+	"net/url"
+)
 
 type Request struct {
+	Context     context.Context
 	Method      string
 	Path        string
 	Locator     string

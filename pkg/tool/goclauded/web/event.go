@@ -37,7 +37,11 @@ func (s *Server) event() http.HandlerFunc {
 			}
 
 			if subs.Has(constant.Activity) {
-				layout.PushEvent(w, constant.Activity, s.activitySection(nil))
+				layout.PushEvent(
+					w,
+					constant.Activity,
+					s.activitySection(r.Context(), nil),
+				)
 			}
 
 			if subs.Has(constant.Pulse) {

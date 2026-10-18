@@ -98,12 +98,21 @@ layer design.
 
 ## Peer Outages and Refusals
 
+Everything for talking to another service lives under `pkg/peer/`: the
+wait and the guard at its root, `pkg/peer/reacher/` for outage and
+refusal edges, `pkg/peer/retry/` for the bounded loops, and
+`pkg/peer/constant/` for the timings.
+
 A daemon that depends on another service starts with it more often
-than not, so it waits before its first call: `go:pkg/web/peer/Await`
-polls a cheap probe for a minute (`PeerWait`, every `PeerPoll`), logs
+than not, so it waits before its first call: `go:pkg/peer/Await`
+polls a cheap probe for a minute (`Wait`, every `Poll`), logs
 `<name>_connected`, and returns why the peer never came. A caller the
 daemon cannot run without panics on that error; one that can keep
-working logs it and goes on.
+working logs it and goes on. The probe takes the wait's context and
+passes it to its request, so the minute holds even against a peer that
+accepts and never answers. A wait inside a worker takes the worker's
+context and ends when the worker closes; one before the lifecycle starts
+takes `context.Background()`, since a signal there ends the process.
 
 After that, every failure talking to the peer goes through one
 `reacher.Reacher` per daemon, by `Handle`. A transport failure -
@@ -114,6 +123,17 @@ else is a refusal and is reported once per reason - to Sentry where it
 is an anomaly, to the log where it is expected - so a refusal repeating
 on every poll is one report, not a flood. goproxmoxd's worker is the
 shape.
+
+A peer that several paths call - a worker, request handlers - wants one
+view of whether it answers, so the paths share a `go:pkg/peer/Guard`
+over the peer's `face.Reachable` probe. `Wait` is the start-up wait, and
+`Do` runs a call through the reacher: while the peer is down it fails at
+once with `errors/unavailable` instead of waiting out the dial timeout,
+and the guard, as a lifecycle worker, probes the peer back on a backoff
+(`ProbeMinimum` to `ProbeMaximum`). A caller answers an
+`unavailable` as what it is - 503 over REST, a tool failure naming the
+peer - and never reports it again; the guard has. goqueryd's embedder is
+the shape.
 
 ## HTTP Recovery Middleware
 

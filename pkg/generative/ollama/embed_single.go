@@ -1,7 +1,12 @@
 package ollama
 
-func (c *Client) EmbedSingle(v string) ([]float32, error) {
-	result, e := c.Embed([]string{v})
+import "context"
+
+func (c *Client) EmbedSingle(
+	x context.Context,
+	v string,
+) ([]float32, error) {
+	result, e := c.Embed(x, []string{v})
 
 	if e != nil {
 		return nil, e

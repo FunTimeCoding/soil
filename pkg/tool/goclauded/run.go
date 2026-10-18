@@ -10,6 +10,8 @@ import (
 	"github.com/funtimecoding/soil/pkg/lifecycle/server"
 	"github.com/funtimecoding/soil/pkg/log/logger"
 	"github.com/funtimecoding/soil/pkg/metric"
+	"github.com/funtimecoding/soil/pkg/peer/reacher"
+	"github.com/funtimecoding/soil/pkg/peer/reacher/edge"
 	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/relational/lite/connection"
 	"github.com/funtimecoding/soil/pkg/system/environment"
@@ -26,6 +28,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/web"
 	memory "github.com/funtimecoding/soil/pkg/tool/gomemoryd/connect"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/connect"
+	queryConstant "github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/indexer"
 	webConstant "github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/guard"
@@ -74,8 +77,17 @@ func Run(
 	)
 	defer v.Close()
 	v.ClearBindings()
-	v.ReconcileSummaries()
-	v.ReconcileCompletions()
+	index := reacher.New()
+
+	for _, f := range append(v.ReconcileSummaries(), v.ReconcileCompletions()...) {
+		index.Handle(
+			queryConstant.Identity.Name(),
+			f,
+			func(x *edge.Edge) { l.Plain("reconcile: %s", x) },
+			func(g error) { r.CaptureException(g) },
+		)
+	}
+
 	v.PopulateCache()
 	v.BackfillSessions()
 	v.CheckConsistency()
@@ -85,6 +97,7 @@ func Run(
 	go rec.Run(v.CatchUpSearch)
 	timeoutTicker := ticker.New(5*time.Minute, v.RunTimeoutSweep, rec)
 	memoryTicker := ticker.New(30*time.Second, v.PollMemory, rec)
+	impressionTicker := ticker.New(30*time.Second, v.DeliverImpressions, rec)
 	m := metric.New()
 	findingGauge := gauge.New(v, l, m.Registry())
 	findingGauge.Poll()
@@ -125,7 +138,9 @@ func Run(
 			),
 		).
 		WithWorker(timeoutTicker).
+		WithWorker(v.MemoryGuard()).
 		WithWorker(memoryTicker).
+		WithWorker(impressionTicker).
 		WithWorker(gaugeTicker).
 		WithWorker(cruiseTicker).
 		WithWorker(v)

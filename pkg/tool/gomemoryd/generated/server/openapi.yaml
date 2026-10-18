@@ -329,6 +329,9 @@ paths:
                   type: string
                 source:
                   type: string
+                created_at:
+                  type: string
+                  description: When the impression was captured, RFC 3339; the arrival time when absent.
       responses:
         "200":
           description: Impression created.

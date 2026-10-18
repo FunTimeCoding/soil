@@ -6,7 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/mock_reranker"
-	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/unit/store_tester"
 	"strings"
 	"testing"
@@ -15,7 +14,7 @@ import (
 func TestPreviewReportsLinesTokensAndPieces(t *testing.T) {
 	r := mock_reranker.New()
 	r.SetAllowance(40)
-	p := service.New(
+	p := newService(
 		store_tester.OpenTestStore(t),
 		ollama.New(),
 		r,

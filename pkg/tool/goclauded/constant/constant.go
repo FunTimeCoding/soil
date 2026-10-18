@@ -31,6 +31,14 @@ var (
 )
 
 const (
+	MemoryPeer            = "memory"
+	MemoryLoadsHidden     = "%v; loads hidden"
+	MemoryUnreachableKind = "memory_unreachable"
+	ImpressionContext     = "impression"
+	ImpressionSource      = "source"
+	ImpressionContent     = "content"
+	ImpressionCapturedAt  = "captured_at"
+
 	SessionExportPathEnvironment = "SESSION_EXPORT_PATH"
 	MonitorUsageEnvironment      = "CLAUDE_MONITOR_USAGE"
 	CoverageRootEnvironment      = "CLAUDE_COVERAGE_ROOT"

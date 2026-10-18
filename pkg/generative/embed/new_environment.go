@@ -13,7 +13,7 @@ import (
 	"net/url"
 )
 
-func NewEnvironment() face.Embedder {
+func NewEnvironment() face.ReachableEmbedder {
 	target := environment.Required(constant.EmbedTargetEnvironment)
 	u, e := url.Parse(target)
 	errors.PanicOnError(e)

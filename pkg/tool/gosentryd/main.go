@@ -2,7 +2,7 @@ package gosentryd
 
 import (
 	"github.com/funtimecoding/soil/pkg/argument"
-	errors "github.com/funtimecoding/soil/pkg/errors/constant"
+	errorsConstant "github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/instrument"
 	"github.com/funtimecoding/soil/pkg/system/environment"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/constant"
@@ -19,7 +19,9 @@ func Main() {
 	o := option.New()
 	o.Address = a.Address()
 	o.ServiceTokens = web.ServiceTokens()
-	o.Organization = environment.Required(errors.OrganizationEnvironment)
-	o.Host = environment.Required(errors.HostEnvironment)
+	o.Organization = environment.Required(
+		errorsConstant.OrganizationEnvironment,
+	)
+	o.Host = environment.Required(errorsConstant.HostEnvironment)
 	Run(o, s)
 }

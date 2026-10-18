@@ -1,7 +1,14 @@
 package mock_client
 
-import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
+)
 
-func (c *Client) Statistics() *client.Statistics {
-	return c.Stats
+func (c *Client) Statistics(context.Context) (*client.Statistics, error) {
+	if c.Failure != nil {
+		return nil, c.Failure
+	}
+
+	return c.Stats, nil
 }

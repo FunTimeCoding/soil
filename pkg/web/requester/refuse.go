@@ -3,6 +3,7 @@ package requester
 import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 	"net/http"
 )
 
@@ -30,6 +31,6 @@ func (r *Requester) refuse(
 		q.URL.Host,
 		q.URL.Path,
 		response.StatusCode,
-		reason(body, response.Status),
+		refusal.Reason(body, response.Status),
 	)
 }

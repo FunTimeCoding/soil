@@ -76,7 +76,7 @@ func (s *Server) announce(
 		join.NewLine(
 			[]string{
 				fmt.Sprintf("Announced as %s: %s", name, topic),
-				s.service.ContextPanel(c.SessionIdentifier),
+				s.service.ContextPanel(x, c.SessionIdentifier),
 			},
 		),
 	)

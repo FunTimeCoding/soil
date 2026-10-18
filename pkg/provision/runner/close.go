@@ -10,6 +10,7 @@ func (r *Runner) Close() {
 
 	r.closed = true
 	close(r.stop)
+	r.cancel()
 
 	if !r.started {
 		close(r.finished)

@@ -5,10 +5,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 	"github.com/spf13/cobra"
 )
 
-func addCollection(c *client.Client) *cobra.Command {
+func addCollection(c *client.ClientWithResponses) *cobra.Command {
 	var pattern string
 	result := &cobra.Command{
 		Use:   "add-collection [name] [path]",
@@ -27,9 +28,9 @@ func addCollection(c *client.Client) *cobra.Command {
 				body.Pattern = &pattern
 			}
 
-			r, e := c.PostCollection(context.Background(), body)
+			r, e := c.PostCollectionWithResponse(context.Background(), body)
 			errors.PanicOnError(e)
-			defer errors.PanicClose(r.Body)
+			refusal.PanicOnFailure("add collection", r.HTTPResponse, r.Body)
 			console.Format("collection %s added\n", arguments[0])
 		},
 	}

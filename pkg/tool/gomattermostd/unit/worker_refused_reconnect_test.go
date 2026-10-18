@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func TestWatcherRetriesARefusedReconnect(t *testing.T) {
+func TestWatcherRetriesARefusedReconnectAndReportsItOnce(t *testing.T) {
 	r := cross_service_tester.New(t, notificationUpstream, 10*time.Millisecond)
 	r.Goclauded.Store.HoldCallsign("kilo-session", "kilo")
 	r.Store.MustCreate(subscription.New("kilo", "alfa", "bravo", "papa"))
@@ -50,10 +50,6 @@ func TestWatcherRetriesARefusedReconnect(t *testing.T) {
 	assert.Integer(t, 1, len(result))
 	assert.StringContains(t, "second message", result[0].Body)
 	reported := r.Reporter.Events()
-	assert.Integer(t, 1, len(reported))
-	assert.StringContains(
-		t,
-		"websocket event channel closed, reconnecting",
-		reported[0].Error.Error(),
-	)
+	assert.Count(t, 1, reported)
+	assert.StringContains(t, "bad handshake", reported[0].Error.Error())
 }

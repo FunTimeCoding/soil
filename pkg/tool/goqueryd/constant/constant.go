@@ -32,6 +32,9 @@ const (
 	ListContexts     = "list_contexts"
 	ListMetadata     = "list_metadata"
 
+	EmbedderPeer     = "embedder"
+	EmbeddingPending = "stored; embedding pending: %v"
+
 	Metadata    = "metadata"
 	Collection  = "collection"
 	Mode        = "mode"
@@ -62,6 +65,7 @@ const (
 	FixtureAuthorKey  = "author"
 	FixtureTagKey     = "tag"
 	FixtureBuildValue = "build"
+	FixtureEmbedTarget = "ollama://server.test:11434"
 
 	TestBody = `# Search Pipeline
 

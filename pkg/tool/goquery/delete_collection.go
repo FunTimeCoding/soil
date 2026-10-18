@@ -5,10 +5,11 @@ import (
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 	"github.com/spf13/cobra"
 )
 
-func deleteCollection(c *client.Client) *cobra.Command {
+func deleteCollection(c *client.ClientWithResponses) *cobra.Command {
 	return &cobra.Command{
 		Use:   "delete-collection [name]",
 		Short: "Delete a collection and all its documents",
@@ -17,12 +18,12 @@ func deleteCollection(c *client.Client) *cobra.Command {
 			_ *cobra.Command,
 			arguments []string,
 		) {
-			r, e := c.DeleteCollection(
+			r, e := c.DeleteCollectionWithResponse(
 				context.Background(),
 				&client.DeleteCollectionParams{Name: arguments[0]},
 			)
 			errors.PanicOnError(e)
-			defer errors.PanicClose(r.Body)
+			refusal.PanicOnFailure("delete collection", r.HTTPResponse, r.Body)
 			console.Format("collection %s deleted\n", arguments[0])
 		},
 	}

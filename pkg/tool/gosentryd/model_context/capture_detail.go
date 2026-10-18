@@ -3,7 +3,7 @@ package model_context
 import (
 	"github.com/funtimecoding/soil/pkg/errors/classify"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
-	reacherConstant "github.com/funtimecoding/soil/pkg/reacher/constant"
+	peerConstant "github.com/funtimecoding/soil/pkg/peer/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosentryd/constant"
 	"github.com/mark3labs/mcp-go/mcp"
 )
@@ -14,7 +14,7 @@ func (s *Server) captureDetail(e error) (*mcp.CallToolResult, error) {
 	if edge := s.reacher.Observe(s.host, e); edge != nil {
 		s.reporter.CaptureWithContext(
 			e,
-			reacherConstant.ContextKey,
+			peerConstant.ContextKey,
 			edge.Context(),
 		)
 

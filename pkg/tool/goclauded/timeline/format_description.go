@@ -85,6 +85,8 @@ func FormatDescription(e *Entry) string {
 			"%s removed from roster (idle after completing)",
 			actor,
 		)
+	case constant.MemoryUnreachableKind:
+		return e.meta(constant.Description)
 	default:
 		if name := e.meta(constant.SessionName); name != "" {
 			if actor != "" {

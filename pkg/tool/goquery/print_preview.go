@@ -2,29 +2,23 @@ package goquery
 
 import (
 	"context"
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/console"
 	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/generated/client"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func printPreview(
-	c *client.Client,
+	c *client.ClientWithResponses,
 	name string,
 	body string,
 ) int {
-	r, e := c.PostChunk(
+	p, e := c.PostChunkWithResponse(
 		context.Background(),
 		client.PostChunkJSONRequestBody{Path: name, Body: body},
 	)
 	errors.PanicOnError(e)
-	p, f := client.ParsePostChunkResponse(r)
-	errors.PanicOnError(f)
-
-	if p.JSON200 == nil {
-		panic(fmt.Sprintf("chunk: %s: %s", p.Status(), p.Body))
-	}
-
+	refusal.PanicOnFailure("chunk", p.HTTPResponse, p.Body)
 	printPreviewSections(p.JSON200.Sections, p.JSON200.Allowance)
 	console.Format("windows\n")
 	over := 0

@@ -1,26 +1,18 @@
 package store
 
 import (
-	"github.com/funtimecoding/soil/pkg/face"
-	"github.com/funtimecoding/soil/pkg/generative/embed"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/result"
 	"sort"
 )
 
 func (s *Store) SearchVector(
 	query string,
+	queryVector []float32,
 	limit int,
 	collection string,
 	full bool,
 	metadata map[string]string,
-	m face.Embedder,
-) ([]result.Search, error) {
-	queryVector, e := embed.Single(m, query)
-
-	if e != nil {
-		return nil, e
-	}
-
+) []result.Search {
 	candidates := s.allEmbeddings(collection, withoutSourceType(metadata))
 
 	for i := range candidates {
@@ -72,5 +64,5 @@ func (s *Store) SearchVector(
 		}
 	}
 
-	return u, nil
+	return u
 }

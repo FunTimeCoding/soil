@@ -48,11 +48,5 @@ func TestWatcherResumesAfterDroppedConnection(t *testing.T) {
 	result := waitForNotification(t, r)
 	assert.Integer(t, 1, len(result))
 	assert.StringContains(t, "second message", result[0].Body)
-	reported := r.Reporter.Events()
-	assert.Integer(t, 1, len(reported))
-	assert.StringContains(
-		t,
-		"websocket event channel closed, reconnecting",
-		reported[0].Error.Error(),
-	)
+	assert.Count(t, 0, r.Reporter.Events())
 }

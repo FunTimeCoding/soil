@@ -7,5 +7,5 @@ import (
 
 type Indexer struct {
 	*indexer.Indexer
-	client *client.Client
+	client *client.ClientWithResponses
 }

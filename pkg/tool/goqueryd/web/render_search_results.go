@@ -10,7 +10,6 @@ import (
 func (s *Server) renderSearchResults(
 	results []result.Search,
 	facets []result.Facet,
-	degraded bool,
 	query string,
 	collection string,
 	metadata map[string]string,
@@ -19,18 +18,6 @@ func (s *Server) renderSearchResults(
 	resultCount := searchResultCount(len(results), collection)
 	var content []gomponents.Node
 	content = append(content, activeFilters, resultCount)
-
-	if degraded {
-		content = append(
-			content,
-			html.P(
-				html.Small(
-					html.Em(gomponents.Text("degraded to keyword search")),
-				),
-			),
-		)
-	}
-
 	content = append(content, searchFacets(facets, query, collection, metadata))
 
 	if len(results) == 0 {

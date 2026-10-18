@@ -1,12 +1,16 @@
 package embed
 
-import "github.com/funtimecoding/soil/pkg/face"
+import (
+	"context"
+	"github.com/funtimecoding/soil/pkg/face"
+)
 
 func Single(
+	x context.Context,
 	e face.Embedder,
 	v string,
 ) ([]float32, error) {
-	result, f := e.Embed([]string{v})
+	result, f := e.Embed(x, []string{v})
 
 	if f != nil {
 		return nil, f

@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
 	"github.com/funtimecoding/soil/pkg/generative/ollama"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/rerank"
+	"github.com/funtimecoding/soil/pkg/tool/goqueryd/service"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store"
 	"testing"
 )
@@ -13,5 +14,6 @@ type Server struct {
 	store    *store.Store
 	embedder *ollama.Client
 	reranker *rerank.Reranker
+	service  *service.Service
 	*model_context_server.Server
 }

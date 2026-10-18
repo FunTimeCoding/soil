@@ -1,14 +1,13 @@
 package store
 
 import (
-	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/result"
 	"github.com/funtimecoding/soil/pkg/tool/goqueryd/store/search_option"
 )
 
 func (s *Store) SearchHybrid(
 	o *search_option.Option,
-	m face.Embedder,
+	queryVector []float32,
 ) ([]result.Search, error) {
 	fetchFull := o.Full || o.Reranker != nil
 	keywordResults, e := s.SearchKeyword(
@@ -23,19 +22,14 @@ func (s *Store) SearchHybrid(
 		return nil, e
 	}
 
-	vectorResults, f := s.SearchVector(
+	vectorResults := s.SearchVector(
 		o.Query,
+		queryVector,
 		o.Limit*2,
 		o.Collection,
 		fetchFull,
 		o.Metadata,
-		m,
 	)
-
-	if f != nil {
-		return nil, f
-	}
-
 	merged, bodies := fuse(o.Exclude, keywordResults, vectorResults)
 	candidates := rerankCandidates(
 		o,

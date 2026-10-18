@@ -2,34 +2,32 @@ package client
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/client"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/types/version_entry"
+	"github.com/funtimecoding/soil/pkg/web/refusal"
 )
 
 func (c *RestClient) VersionsSince(
+	x context.Context,
 	since string,
 	limit int,
-) []version_entry.Entry {
-	r, e := c.http.GetVersions(
-		context.Background(),
+) ([]version_entry.Entry, error) {
+	r, e := c.http.GetVersionsWithResponse(
+		x,
 		&client.GetVersionsParams{Since: since, Limit: &limit},
 	)
 
 	if e != nil {
-		return nil
+		return nil, e
 	}
 
-	defer errors.PanicClose(r.Body)
-	parsed, e := client.ParseGetVersionsResponse(r)
-
-	if e != nil || parsed.JSON200 == nil {
-		return nil
+	if r.JSON200 == nil {
+		return nil, refusal.New("versions", r.HTTPResponse, r.Body)
 	}
 
 	var result []version_entry.Entry
 
-	for _, v := range *parsed.JSON200 {
+	for _, v := range *r.JSON200 {
 		result = append(
 			result,
 			version_entry.Entry{
@@ -43,5 +41,5 @@ func (c *RestClient) VersionsSince(
 		)
 	}
 
-	return result
+	return result, nil
 }

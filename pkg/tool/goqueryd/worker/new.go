@@ -1,6 +1,7 @@
 package worker
 
 import (
+	"context"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
@@ -14,10 +15,14 @@ func New(
 	l *logger.Logger,
 	r face.Reporter,
 ) *Worker {
+	x, cancel := context.WithCancel(context.Background())
+
 	return &Worker{
 		service:  v,
 		interval: interval,
 		recovery: recovery.New(l, r),
+		context:  x,
+		cancel:   cancel,
 		stop:     make(chan struct{}),
 	}
 }

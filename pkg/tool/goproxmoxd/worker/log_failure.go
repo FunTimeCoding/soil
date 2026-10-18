@@ -1,6 +1,6 @@
 package worker
 
-import "github.com/funtimecoding/soil/pkg/reacher/edge"
+import "github.com/funtimecoding/soil/pkg/peer/reacher/edge"
 
 func (w *Worker) logFailure(
 	hypervisor string,

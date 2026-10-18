@@ -21,6 +21,18 @@ test files live is `test-placement.md`.
   errors; helpers return only success values.
 - Prefer extracting logic to testable helpers over inline test code.
 
+## Service First
+
+Behaviour is tested where it lives: the service, called directly. A
+surface - MCP tool, REST route, web handler - parses its input, calls the
+service and maps the error, so a test through it repeats what the
+service test already holds. A surface earns a test only for what it alone
+decides: an error it classifies differently (a not-found answered rather
+than captured), a parse no other surface shares, a form round-trip a
+reader would not notice breaking. Logic two surfaces share moves into the
+service, where one test covers both. The guard battery is the standing
+exception - the auth contract belongs to the mount, not the service.
+
 ## Store Testing
 
 Gorm stores test against in-memory sqlite by default - fast, no

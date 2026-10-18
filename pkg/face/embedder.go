@@ -1,5 +1,10 @@
 package face
 
+import "context"
+
 type Embedder interface {
-	Embed(v []string) ([][]float32, error)
+	Embed(
+		x context.Context,
+		v []string,
+	) ([][]float32, error)
 }

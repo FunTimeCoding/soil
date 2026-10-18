@@ -1,13 +1,7 @@
 package ollama
 
-import (
-	"context"
-	"time"
-)
+import "context"
 
-func (c *Client) Reachable() bool {
-	x, cancel := context.WithTimeout(c.context, 5*time.Second)
-	defer cancel()
-
-	return c.client.Heartbeat(x) == nil
+func (c *Client) Reachable(x context.Context) error {
+	return c.client.Heartbeat(x)
 }

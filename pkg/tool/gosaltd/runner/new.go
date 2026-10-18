@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/sentry/recovery"
 	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/log/logger"
+	"github.com/funtimecoding/soil/pkg/peer/reacher"
 	"github.com/funtimecoding/soil/pkg/provision/runner"
 	"github.com/funtimecoding/soil/pkg/provision/salt"
 	"github.com/funtimecoding/soil/pkg/provision/store"
@@ -24,7 +25,9 @@ func New(
 		saltConnector: connector,
 		connected:     make(chan struct{}),
 		logger:        l,
+		reporter:      r,
 		recovery:      recovery.New(l, r),
+		reacher:       reacher.New(),
 	}
 	result.provision = runner.New(
 		runner_option.Option{
