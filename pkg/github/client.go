@@ -3,7 +3,7 @@ package github
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/web/stall_client/pool"
-	"github.com/google/go-github/v92/github"
+	"github.com/google/go-github/v93/github"
 )
 
 type Client struct {

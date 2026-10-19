@@ -1,6 +1,6 @@
 package container
 
-import "github.com/google/go-github/v92/github"
+import "github.com/google/go-github/v93/github"
 
 func New(v *github.Package) *Container {
 	var repository string

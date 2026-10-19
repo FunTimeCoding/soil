@@ -1,6 +1,6 @@
 package image
 
-import "github.com/google/go-github/v92/github"
+import "github.com/google/go-github/v93/github"
 
 func New(v *github.PackageVersion) *Image {
 	var tags []string
