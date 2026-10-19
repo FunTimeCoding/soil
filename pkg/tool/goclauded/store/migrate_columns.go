@@ -1,21 +1,38 @@
 package store
 
 import (
+	"github.com/funtimecoding/soil/pkg/relational/schema"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"gorm.io/gorm"
 )
 
 func migrateColumns(d *gorm.DB) {
-	renameIfExists(d, constant.SessionTable, "cwd", "work_directory")
-	renameIfExists(d, constant.SessionTable, "created_at", "started_at")
-	renameIfExists(d, constant.SessionTable, "updated_at", "last_active_at")
-	renameIfExists(d, "event", constant.Target, "scope")
-	renameIfExists(d, "event", constant.SessionName, "actor")
-	dropIfExists(d, constant.SessionTable, "needs_roster")
-	dropIfExists(d, constant.SessionTable, "needs_reannounce")
-	dropIfExists(d, constant.SessionTable, "listening")
-	dropIfExists(d, constant.MessageTable, "read")
-	dropTableIfExists(d, "snapshots")
-	renameTableIfExists(d, "rate_snapshots", constant.RateSnapshotTable)
-	renameTableIfExists(d, "fable_snapshots", constant.FableSnapshotTable)
+	schema.RenameColumns(
+		d,
+		constant.SessionTable,
+		map[string]string{
+			"cwd":        "work_directory",
+			"created_at": "started_at",
+			"updated_at": "last_active_at",
+		},
+	)
+	schema.RenameColumns(
+		d,
+		"event",
+		map[string]string{
+			constant.Target:      "scope",
+			constant.SessionName: "actor",
+		},
+	)
+	schema.DropColumns(
+		d,
+		constant.SessionTable,
+		"needs_roster",
+		"needs_reannounce",
+		"listening",
+	)
+	schema.DropColumns(d, constant.MessageTable, "read")
+	schema.DropTable(d, "snapshots")
+	schema.RenameTable(d, "rate_snapshots", constant.RateSnapshotTable)
+	schema.RenameTable(d, "fable_snapshots", constant.FableSnapshotTable)
 }

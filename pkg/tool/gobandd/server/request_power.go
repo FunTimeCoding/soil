@@ -3,6 +3,8 @@ package server
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/not_selected"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/generated/server"
 )
@@ -13,8 +15,16 @@ func (s *Server) RequestPower(
 ) (server.RequestPowerResponseObject, error) {
 	instance, e := s.resolveInstance(r.Body.Instance)
 
-	if e != nil {
+	if not_found.Is(e) {
+		return server.RequestPower404JSONResponse(*clientError(e)), nil
+	}
+
+	if not_selected.Is(e) {
 		return server.RequestPower400JSONResponse(*clientError(e)), nil
+	}
+
+	if e != nil {
+		return server.RequestPower500JSONResponse(*s.captureFail(e, e.Error())), nil
 	}
 
 	requested, f := s.service.Power(

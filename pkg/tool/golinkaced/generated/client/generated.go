@@ -67,6 +67,11 @@ type EditTagRequest struct {
 	Name *string `json:"name,omitempty"`
 }
 
+// Error defines model for Error.
+type Error struct {
+	Error string `json:"error"`
+}
+
 // ErrorResponse defines model for ErrorResponse.
 type ErrorResponse struct {
 	Error           string `json:"error"`
@@ -2212,8 +2217,15 @@ func (r AddLinkResponse) ContentType() string {
 type DeleteLinkResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r DeleteLinkResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -2255,6 +2267,8 @@ type EditLinkResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *Link
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -2262,6 +2276,11 @@ type EditLinkResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r EditLinkResponse) GetJSON200() *Link {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r EditLinkResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -2303,6 +2322,8 @@ type AppendListResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *Link
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -2310,6 +2331,11 @@ type AppendListResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r AppendListResponse) GetJSON200() *Link {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r AppendListResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -2351,6 +2377,8 @@ type RemoveListResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *Link
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -2358,6 +2386,11 @@ type RemoveListResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r RemoveListResponse) GetJSON200() *Link {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r RemoveListResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -2399,6 +2432,8 @@ type GetLinkNotesResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *NotePage
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -2406,6 +2441,11 @@ type GetLinkNotesResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r GetLinkNotesResponse) GetJSON200() *NotePage {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r GetLinkNotesResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -2447,6 +2487,8 @@ type AppendTagResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *Link
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -2454,6 +2496,11 @@ type AppendTagResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r AppendTagResponse) GetJSON200() *Link {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r AppendTagResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -2495,6 +2542,8 @@ type RemoveTagResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *Link
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -2502,6 +2551,11 @@ type RemoveTagResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r RemoveTagResponse) GetJSON200() *Link {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r RemoveTagResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -2637,8 +2691,15 @@ func (r CreateListResponse) ContentType() string {
 type DeleteListResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r DeleteListResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -2680,6 +2741,8 @@ type EditListResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *List
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -2687,6 +2750,11 @@ type EditListResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r EditListResponse) GetJSON200() *List {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r EditListResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -2726,8 +2794,15 @@ func (r EditListResponse) ContentType() string {
 type DeleteBranchResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r DeleteBranchResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -2769,6 +2844,8 @@ type AddNoteResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *Note
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -2776,6 +2853,11 @@ type AddNoteResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r AddNoteResponse) GetJSON200() *Note {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r AddNoteResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -2815,8 +2897,15 @@ func (r AddNoteResponse) ContentType() string {
 type DeleteNoteResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r DeleteNoteResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -2858,6 +2947,8 @@ type EditNoteResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *Note
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -2865,6 +2956,11 @@ type EditNoteResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r EditNoteResponse) GetJSON200() *Note {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r EditNoteResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -3048,8 +3144,15 @@ func (r CreateTagResponse) ContentType() string {
 type DeleteTagResponse struct {
 	Body         []byte
 	HTTPResponse *http.Response
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r DeleteTagResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -3091,6 +3194,8 @@ type EditTagResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *Tag
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -3098,6 +3203,11 @@ type EditTagResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r EditTagResponse) GetJSON200() *Tag {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r EditTagResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -3591,6 +3701,13 @@ func ParseDeleteLinkResponse(rsp *http.Response) (*DeleteLinkResponse, error) {
 	case rsp.StatusCode == 200:
 		break // No content-type
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -3623,6 +3740,13 @@ func ParseEditLinkResponse(rsp *http.Response) (*EditLinkResponse, error) {
 			return nil, err
 		}
 		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -3657,6 +3781,13 @@ func ParseAppendListResponse(rsp *http.Response) (*AppendListResponse, error) {
 		}
 		response.JSON200 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -3689,6 +3820,13 @@ func ParseRemoveListResponse(rsp *http.Response) (*RemoveListResponse, error) {
 			return nil, err
 		}
 		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -3723,6 +3861,13 @@ func ParseGetLinkNotesResponse(rsp *http.Response) (*GetLinkNotesResponse, error
 		}
 		response.JSON200 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -3756,6 +3901,13 @@ func ParseAppendTagResponse(rsp *http.Response) (*AppendTagResponse, error) {
 		}
 		response.JSON200 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -3788,6 +3940,13 @@ func ParseRemoveTagResponse(rsp *http.Response) (*RemoveTagResponse, error) {
 			return nil, err
 		}
 		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -3884,6 +4043,13 @@ func ParseDeleteListResponse(rsp *http.Response) (*DeleteListResponse, error) {
 	case rsp.StatusCode == 200:
 		break // No content-type
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -3917,6 +4083,13 @@ func ParseEditListResponse(rsp *http.Response) (*EditListResponse, error) {
 		}
 		response.JSON200 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -3945,6 +4118,13 @@ func ParseDeleteBranchResponse(rsp *http.Response) (*DeleteBranchResponse, error
 	switch {
 	case rsp.StatusCode == 200:
 		break // No content-type
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -3979,6 +4159,13 @@ func ParseAddNoteResponse(rsp *http.Response) (*AddNoteResponse, error) {
 		}
 		response.JSON200 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -4007,6 +4194,13 @@ func ParseDeleteNoteResponse(rsp *http.Response) (*DeleteNoteResponse, error) {
 	switch {
 	case rsp.StatusCode == 200:
 		break // No content-type
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -4040,6 +4234,13 @@ func ParseEditNoteResponse(rsp *http.Response) (*EditNoteResponse, error) {
 			return nil, err
 		}
 		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -4169,6 +4370,13 @@ func ParseDeleteTagResponse(rsp *http.Response) (*DeleteTagResponse, error) {
 	case rsp.StatusCode == 200:
 		break // No content-type
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -4201,6 +4409,13 @@ func ParseEditTagResponse(rsp *http.Response) (*EditTagResponse, error) {
 			return nil, err
 		}
 		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse

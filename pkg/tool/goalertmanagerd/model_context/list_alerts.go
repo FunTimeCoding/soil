@@ -18,7 +18,7 @@ func (s *Server) listAlerts(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return response.Fail("%s", e)
+		return s.captureDetail(e)
 	}
 
 	var f *alert_filter.Filter

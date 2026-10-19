@@ -16,7 +16,7 @@ func (s *Server) ListLists(
 	r, e := s.client.ListsPage(p)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	result := make([]map[string]any, len(r.Items))

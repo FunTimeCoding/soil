@@ -15,12 +15,14 @@ the Must/non-Must pair in `service-tool.md` exists for this.
 Do not add per-handler recover defers as a workaround; the fix is
 in the client or in the server builder.
 
-Two tiers:
+Whether Sentry hears of an error is its class, in the table in
+`README.md` (Answering an error); this leaf is how a handler builds
+each answer.
 
-## Tier 1: input validation
+## Uncaptured answers
 
-Bad params from the model: use `response.Fail`.
-No Sentry - these are model mistakes, not infrastructure failures.
+Bad params from the model, and every class the table answers without
+Sentry: `response.Fail`.
 
 ```go
 id, f := r.RequireString(parameter.Identifier)
@@ -31,18 +33,13 @@ if f != nil {
 ```
 
 `response.Fail` wraps `mcp.NewToolResultError` with `fmt.Sprintf` and returns
-the standard `(*mcp.CallToolResult, error)` tuple. Use it for all input
-validation.
+the standard `(*mcp.CallToolResult, error)` tuple.
 
-## Tier 2: infrastructure failure
+## Captured answers
 
-Store, DB, external call: capture to Sentry and return a structured
-error with the event ID.
-
-Any `error` value from a function call in an MCP handler is worth
-capturing. Even local file I/O errors. `response.Fail` is only for
-validation where the handler constructs the error message itself
-(e.g. "service is required").
+Every other error a handler meets - a store, a database, an external
+call, even local file I/O - is captured to Sentry and answered with a
+structured error carrying the event ID.
 
 Two layers:
 
@@ -63,10 +60,14 @@ func (s *Server) captureFail(
 
 ### Per-service capture
 
-`captureDetail` is the per-service wrapper that whitelists known error
-types. It checks for API-specific typed errors, relays their message
-to the model if recognized, and falls back to `constant.UnexpectedError`
-for anything unknown. Lives in its own file (`capture_detail.go`).
+`captureDetail` is the per-service wrapper that relays the message of
+recognized API-specific typed errors through `captureFail` and hands
+everything else to `response.Answer`, which applies the class table:
+an uncaptured class fails with its own message, a captured class is
+captured with it, and anything unclassified is captured as
+`constant.UnexpectedError`. Lives in its own file (`capture_detail.go`).
+A handler routes every error that did not come from parsing the request
+through it - `return s.captureDetail(e)` - never through `response.Fail`.
 
 ```go
 func (s *Server) captureDetail(e error) (*mcp.CallToolResult, error) {
@@ -74,23 +75,22 @@ func (s *Server) captureDetail(e error) (*mcp.CallToolResult, error) {
         return s.captureFail(e, d.Detail)
     }
 
-    return s.captureFail(e, constant.UnexpectedError)
+    return response.Answer(s.reporter, e)
 }
 ```
 
 Each service's `captureDetail` whitelists the error types its own
 client produces - the inventory is the `capture_detail.go` file in
-every `<path>/model_context/` package, not this list. The shapes
-that recur:
+every `<path>/model_context/` package, not this list. The captured
+shapes that recur:
 
 - a typed detail from the HTTP client, `*detail_error.Detail` from
   `parseDetail` or a `wrapError` - the message field is relayed
-- a caller-contract error, `*validation.Detail` - relayed the same
-  way when the cause is upstream data rather than model input
 - an SDK error type with a message field, such as Mattermost's
   `*model.AppError`
-- sentinel errors matched with `errors.Is` - a driver's not-found,
-  a context deadline, a client's own sentinels
+- a client's own sentinels matched with `errors.Is` - where one is
+  a shared class in disguise (a driver's not-found, a context
+  deadline), its class answers it instead
 - a shared extractor when REST and MCP surfaces need the same
   parsing, as gonetboxd's `common.ExtractMessage`
 

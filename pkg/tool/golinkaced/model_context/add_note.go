@@ -15,7 +15,7 @@ func (s *Server) AddNote(
 	result, e := s.client.CreateNote(a.LinkIdentifier, a.Text)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(

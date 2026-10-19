@@ -1,6 +1,12 @@
 package store
 
-import "github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
+import (
+	"database/sql"
+	"errors"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/record"
+)
 
 func (s *Store) GetMemory(identifier int64) (*record.Memory, error) {
 	row := s.database.QueryRow(
@@ -27,6 +33,10 @@ func (s *Store) GetMemory(identifier int64) (*record.Memory, error) {
 		&m.ProvenanceHash,
 		&m.Ordinal,
 	)
+
+	if errors.Is(e, sql.ErrNoRows) {
+		return nil, not_found.New(constant.MemoryKind, identifier)
+	}
 
 	if e != nil {
 		return nil, e

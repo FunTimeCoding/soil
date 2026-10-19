@@ -20,7 +20,7 @@ func (s *Server) Get(
 	cluster, e := s.activeClusterName(x)
 
 	if e != nil {
-		return response.Fail(e.Error())
+		return s.captureDetail(e)
 	}
 
 	if a.Name != "" {
@@ -39,7 +39,7 @@ func (s *Server) Get(
 			return s.captureFail(f, "get resource")
 		}
 
-		return formatMarkup(result.Object, result.Filtered)
+		return s.formatMarkup(result.Object, result.Filtered)
 	}
 
 	result, f := s.service.ListResources(

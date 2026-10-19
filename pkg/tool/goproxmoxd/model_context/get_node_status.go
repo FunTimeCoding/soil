@@ -19,7 +19,7 @@ func (s *Server) GetNodeStatus(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return response.Fail("%s", e)
+		return s.captureDetail(e)
 	}
 
 	result, e := s.service.GetNodeStatus(instance, a.Node)

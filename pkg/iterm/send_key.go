@@ -5,8 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors"
-	"github.com/funtimecoding/soil/pkg/errors/unexpected"
-	"github.com/funtimecoding/soil/pkg/system"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"net/http"
 )
@@ -31,11 +29,7 @@ func (c *Client) SendKey(
 	defer errors.LogClose(r.Body)
 
 	if r.StatusCode != http.StatusOK {
-		return unexpected.Format(
-			"send key: %d: %s",
-			r.StatusCode,
-			system.ReadAll(r.Body),
-		)
+		return statusError("send key", r)
 	}
 
 	return nil

@@ -14,7 +14,7 @@ func (s *Server) FindOrganizations(
 	result, e := s.service.Organizations()
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return s.succeed(result)

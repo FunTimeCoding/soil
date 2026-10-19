@@ -10,5 +10,8 @@ func (c *Client) Get(
 	v url.Values,
 	out any,
 ) error {
-	return c.requester.Notation(request.Get(path).WithParameters(v), out)
+	return c.requester.Notation(
+		request.Get(path).WithParameters(v).WithRefusal(c.refusal),
+		out,
+	)
 }

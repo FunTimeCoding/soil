@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/server"
 )
 
@@ -16,10 +16,14 @@ func (s *Server) DeleteMemory(
 		source = *r.Params.Source
 	}
 
-	if e := s.service.ForgetMemory(r.Identifier, source); e != nil {
-		return server.DeleteMemory500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
-		), nil
+	e := s.service.ForgetMemory(r.Identifier, source)
+
+	if not_found.Is(e) {
+		return server.DeleteMemory404JSONResponse{Error: e.Error()}, nil
+	}
+
+	if e != nil {
+		return server.DeleteMemory500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.DeleteMemory200JSONResponse{Identifier: r.Identifier}, nil

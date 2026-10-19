@@ -71,7 +71,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UnavailableResponse"
+                $ref: "#/components/schemas/Error"
   /api/list:
     get:
       operationId: getList
@@ -245,7 +245,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UnavailableResponse"
+                $ref: "#/components/schemas/Error"
   /api/collection:
     post:
       operationId: postCollection
@@ -837,6 +837,12 @@ components:
           type: string
         title:
           type: string
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
     ErrorResponse:
       type: object
       required: [error, event_identifier]
@@ -844,10 +850,4 @@ components:
         error:
           type: string
         event_identifier:
-          type: string
-    UnavailableResponse:
-      type: object
-      required: [error]
-      properties:
-        error:
           type: string

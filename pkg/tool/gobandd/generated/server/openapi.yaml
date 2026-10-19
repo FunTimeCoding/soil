@@ -39,6 +39,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "404":
+          description: Instance not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to read the management engine.
           content:
@@ -73,6 +79,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "404":
+          description: Instance not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to change the power state.
           content:
@@ -97,6 +109,12 @@ paths:
                 $ref: "#/components/schemas/RedirectionResult"
         "400":
           description: Invalid instance.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Instance not found.
           content:
             application/json:
               schema:

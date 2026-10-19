@@ -32,7 +32,7 @@ func (s *Server) Play(
 	)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.Success("playback started")

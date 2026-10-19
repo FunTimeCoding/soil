@@ -2,8 +2,9 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
+	"github.com/funtimecoding/soil/pkg/generative/model_context/selection"
 	"github.com/funtimecoding/soil/pkg/inventory/instance_tool"
-	"github.com/funtimecoding/soil/pkg/inventory/selection"
 	"github.com/funtimecoding/soil/pkg/inventory/unit/instance_tester"
 	"github.com/funtimecoding/soil/pkg/notation"
 	"github.com/funtimecoding/soil/pkg/strings/join"
@@ -144,6 +145,7 @@ func TestModelContextPermissionsCoverEveryInstanceToolRegistration(
 	instance_tool.New(
 		instance_tester.Inventory("alfa", "bravo"),
 		selection.New(),
+		memory.New(),
 	).Register(s)
 	var allow []string
 

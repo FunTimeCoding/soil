@@ -27,7 +27,7 @@ func New(
 		logger:        l,
 		reporter:      r,
 		recovery:      recovery.New(l, r),
-		reacher:       reacher.New(),
+		reacher:       reacher.New(r),
 	}
 	result.provision = runner.New(
 		runner_option.Option{

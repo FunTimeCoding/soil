@@ -29,7 +29,7 @@ func (s *Server) Logs(
 	cluster, e := s.activeClusterName(x)
 
 	if e != nil {
-		return response.Fail(e.Error())
+		return s.captureDetail(e)
 	}
 
 	q := request.Logs{

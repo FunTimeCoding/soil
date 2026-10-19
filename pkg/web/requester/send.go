@@ -66,6 +66,6 @@ func (r *Requester) Send(q *request.Request) (*http.Response, error) {
 			continue
 		}
 
-		return nil, r.refuse(h, response, body)
+		return nil, r.refuse(q, h, response, body)
 	}
 }

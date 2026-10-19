@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/server"
 )
 
@@ -13,17 +12,13 @@ func (s *Server) GetStatistics(
 	scopes, e := s.service.ScopeCounts()
 
 	if e != nil {
-		return server.GetStatistics500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
-		), nil
+		return server.GetStatistics500JSONResponse(*s.answer(e)), nil
 	}
 
 	tags, f := s.service.ListTags()
 
 	if f != nil {
-		return server.GetStatistics500JSONResponse(
-			*s.captureFail(f, constant.UnexpectedError),
-		), nil
+		return server.GetStatistics500JSONResponse(*s.answer(f)), nil
 	}
 
 	result := server.Statistics{
@@ -41,9 +36,7 @@ func (s *Server) GetStatistics(
 	membership, g := s.service.TagMembership()
 
 	if g != nil {
-		return server.GetStatistics500JSONResponse(
-			*s.captureFail(g, constant.UnexpectedError),
-		), nil
+		return server.GetStatistics500JSONResponse(*s.answer(g)), nil
 	}
 
 	for _, one := range tags {

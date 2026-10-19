@@ -23,7 +23,7 @@ func (s *Server) GetEvent(
 	result, e := s.service.Event(a.Project, a.Identifier)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return s.succeed(result)

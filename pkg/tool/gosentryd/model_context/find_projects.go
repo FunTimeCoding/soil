@@ -14,7 +14,7 @@ func (s *Server) FindProjects(
 	result, e := s.service.Projects()
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return s.succeed(result)

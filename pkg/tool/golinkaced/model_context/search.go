@@ -15,7 +15,7 @@ func (s *Server) Search(
 	r, e := s.service.Search(a.Query, a.Type)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	result := map[string]any{}

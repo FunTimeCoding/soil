@@ -27,6 +27,7 @@ func (p *Pool[T, P, C]) Client(instance string) (C, error) {
 	}
 
 	p.clients[instance] = result
+	p.built[instance] = true
 
 	return result, nil
 }

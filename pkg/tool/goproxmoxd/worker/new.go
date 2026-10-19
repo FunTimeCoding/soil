@@ -26,7 +26,7 @@ func New(
 		log:       l,
 		recovery:  recovery.New(l, r),
 		notifier:  notifier.New(),
-		reacher:   reacher.New(),
+		reacher:   reacher.New(r),
 		stop:      make(chan struct{}),
 	}
 }

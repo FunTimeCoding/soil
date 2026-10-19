@@ -15,7 +15,7 @@ func (s *Server) listRules(
 	result, e := s.opnsense.Rules(r.GetString(constant.ParameterQuery, ""))
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(convert.Rules(result))

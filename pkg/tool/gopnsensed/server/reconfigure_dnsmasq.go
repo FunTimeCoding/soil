@@ -10,9 +10,7 @@ func (s *Server) ReconfigureDnsmasq(
 	_ server.ReconfigureDnsmasqRequestObject,
 ) (server.ReconfigureDnsmasqResponseObject, error) {
 	if e := s.opnsense.ReconfigureDnsmasq(); e != nil {
-		return server.ReconfigureDnsmasq500JSONResponse(
-			*s.captureDetail(e),
-		), nil
+		return server.ReconfigureDnsmasq500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.ReconfigureDnsmasq204Response{}, nil

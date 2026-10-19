@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/server"
 )
 
@@ -19,9 +18,7 @@ func (s *Server) GetTokens(
 	summary, e := s.service.MemoryTokenSummary(scope)
 
 	if e != nil {
-		return server.GetTokens500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
-		), nil
+		return server.GetTokens500JSONResponse(*s.answer(e)), nil
 	}
 
 	response := server.GetTokens200JSONResponse{

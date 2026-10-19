@@ -21,7 +21,7 @@ func New(
 		name:     name,
 		address:  address,
 		probe:    p,
-		reacher:  reacher.New(),
+		reacher:  reacher.New(r),
 		logger:   l,
 		reporter: r,
 		minimum:  constant.ProbeMinimum,

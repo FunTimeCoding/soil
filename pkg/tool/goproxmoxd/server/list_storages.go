@@ -2,6 +2,8 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/not_selected"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 )
 
@@ -11,8 +13,16 @@ func (s *Server) ListStorages(
 ) (server.ListStoragesResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
 
-	if e != nil {
+	if not_found.Is(e) {
+		return server.ListStorages404JSONResponse(*clientError(e)), nil
+	}
+
+	if not_selected.Is(e) {
 		return server.ListStorages400JSONResponse(*clientError(e)), nil
+	}
+
+	if e != nil {
+		return server.ListStorages500JSONResponse(*s.captureFail(e, e.Error())), nil
 	}
 
 	storages, e := s.service.ListStorages(instance, r.Name)

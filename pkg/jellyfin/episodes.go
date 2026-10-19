@@ -10,7 +10,8 @@ import (
 func (c *Client) Episodes(seriesIdentifier string) ([]*item.Item, error) {
 	v := url.Values{}
 	v.Set("Fields", constant.ItemFields)
-	result, _, e := c.queryItems(
+	result, _, e := queryItems(
+		c.basic.Rejecting(),
 		fmt.Sprintf("/Shows/%s/Episodes", seriesIdentifier),
 		v,
 	)

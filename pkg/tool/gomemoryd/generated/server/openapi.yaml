@@ -115,6 +115,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/MemoryResponse"
+        "404":
+          description: Memory not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "409":
+          description: Memory name already taken in its scope.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to update memory.
           content:
@@ -141,6 +153,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/MemoryResponse"
+        "404":
+          description: Memory not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to forget memory.
           content:

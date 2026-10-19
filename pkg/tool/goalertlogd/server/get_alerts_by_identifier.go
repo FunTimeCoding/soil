@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/generated/server"
 )
@@ -22,9 +21,7 @@ func (s *Server) GetAlertsByIdentifier(
 	records, e := s.store.ByIdentifiers(identifiers)
 
 	if e != nil {
-		return server.GetAlertsByIdentifier500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
-		), nil
+		return server.GetAlertsByIdentifier500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.GetAlertsByIdentifier200JSONResponse(toResponse(records)), nil

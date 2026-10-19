@@ -1,21 +1,19 @@
 package mock_client
 
-import "github.com/luthermonson/go-proxmox"
+import (
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/proxmox/constant"
+	"github.com/luthermonson/go-proxmox"
+)
 
 func (c *Client) Container(
 	n *proxmox.Node,
 	identifier int,
 ) (*proxmox.Container, error) {
-	nodeContainers, okay := c.containers[n.Name]
+	ct, okay := c.containers[n.Name][identifier]
 
 	if !okay {
-		return nil, proxmox.ErrNotFound
-	}
-
-	ct, okay := nodeContainers[identifier]
-
-	if !okay {
-		return nil, proxmox.ErrNotFound
+		return nil, not_found.New(constant.ContainerKind, identifier)
 	}
 
 	return ct, nil

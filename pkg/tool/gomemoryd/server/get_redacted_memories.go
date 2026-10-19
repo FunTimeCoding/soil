@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/server"
 	"slices"
 )
@@ -14,9 +13,7 @@ func (s *Server) GetRedactedMemories(
 	identifiers, e := s.service.HiddenIdentifiers()
 
 	if e != nil {
-		return server.GetRedactedMemories500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
-		), nil
+		return server.GetRedactedMemories500JSONResponse(*s.answer(e)), nil
 	}
 
 	result := make([]int64, 0, len(identifiers))

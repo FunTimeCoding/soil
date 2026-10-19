@@ -4,6 +4,8 @@ const (
 	WebDirectory   = "web"
 	NewFileName    = "new.go"
 	MountFileName  = "mount.go"
+	CaptureFile    = "capture_fail.go"
+	AnswerWithFile = "answer_with.go"
 	FaviconFile    = "favicon.png"
 	ThemeMethod    = "WithTheme"
 	StyleMethod    = "WithStyle"

@@ -18,7 +18,7 @@ func (s *Server) Screenshot(
 	t, e := s.resolveTab(a.TabIdentifier, a.Title, a.Locator)
 
 	if e != nil {
-		return response.Fail(e.Error())
+		return s.captureDetail(e)
 	}
 
 	p := s.client.Page(t.Identifier)

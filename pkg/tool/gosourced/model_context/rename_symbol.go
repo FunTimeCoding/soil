@@ -33,7 +33,7 @@ func (s *Server) renameSymbol(
 	directory, e := s.resolveDirectory(x)
 
 	if e != nil {
-		return response.Fail("%s", e)
+		return s.captureDetail(e)
 	}
 
 	r, e := s.service.Rename(

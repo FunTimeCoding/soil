@@ -12,7 +12,7 @@ func (s *Server) GetStatus(
 	result, e := s.service.Status()
 
 	if e != nil {
-		return server.GetStatus500JSONResponse(*s.captureDetail(e)), nil
+		return server.GetStatus500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.GetStatus200JSONResponse{

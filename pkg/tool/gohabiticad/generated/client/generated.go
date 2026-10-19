@@ -136,6 +136,11 @@ type CronResult struct {
 	RolledOver bool   `json:"rolled_over"`
 }
 
+// Error defines model for Error.
+type Error struct {
+	Error string `json:"error"`
+}
+
 // ErrorResponse defines model for ErrorResponse.
 type ErrorResponse struct {
 	Error           string `json:"error"`
@@ -864,6 +869,8 @@ type AllocateStatResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *Stats
+	// JSON400 the response for an HTTP 400 `application/json` response
+	JSON400 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -871,6 +878,11 @@ type AllocateStatResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r AllocateStatResponse) GetJSON200() *Stats {
 	return r.JSON200
+}
+
+// GetJSON400 returns the response for an HTTP 400 `application/json` response
+func (r AllocateStatResponse) GetJSON400() *Error {
+	return r.JSON400
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -960,6 +972,8 @@ type EquipGearResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *GearResult
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -967,6 +981,11 @@ type EquipGearResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r EquipGearResponse) GetJSON200() *GearResult {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r EquipGearResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -1248,6 +1267,8 @@ type ScoreTaskResponse struct {
 	HTTPResponse *http.Response
 	// JSON200 the response for an HTTP 200 `application/json` response
 	JSON200 *ScoreResult
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -1255,6 +1276,11 @@ type ScoreTaskResponse struct {
 // GetJSON200 returns the response for an HTTP 200 `application/json` response
 func (r ScoreTaskResponse) GetJSON200() *ScoreResult {
 	return r.JSON200
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r ScoreTaskResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -1422,6 +1448,13 @@ func ParseAllocateStatResponse(rsp *http.Response) (*AllocateStatResponse, error
 		}
 		response.JSON200 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 400:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON400 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -1487,6 +1520,13 @@ func ParseEquipGearResponse(rsp *http.Response) (*EquipGearResponse, error) {
 			return nil, err
 		}
 		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -1685,6 +1725,13 @@ func ParseScoreTaskResponse(rsp *http.Response) (*ScoreTaskResponse, error) {
 			return nil, err
 		}
 		response.JSON200 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse

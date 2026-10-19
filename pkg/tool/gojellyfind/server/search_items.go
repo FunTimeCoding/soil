@@ -32,7 +32,7 @@ func (s *Server) SearchItems(
 	items, total, e := s.client.SearchItems(r.Params.Q, types, page, perPage)
 
 	if e != nil {
-		return server.SearchItems500JSONResponse(*s.captureDetail(e)), nil
+		return server.SearchItems500JSONResponse(*s.answer(e)), nil
 	}
 
 	rows := make([]server.Item, 0, len(items))

@@ -15,7 +15,7 @@ func (s *Server) ListSessions(
 	result, e := s.client.Sessions()
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(result)

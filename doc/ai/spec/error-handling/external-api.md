@@ -1,21 +1,19 @@
 # External API error handling
 
 Services that wrap external APIs (NetBox, Jira, Confluence, Alertmanager,
-Proxmox) encounter errors that don't fit cleanly into tier 1 or tier 2.
-A NetBox "name must be unique" is the caller's mistake - but we haven't
-seen enough of these errors to know which are safe to exclude from Sentry.
+Proxmox) meet errors no class answers yet. A NetBox "name must be
+unique" is the caller's mistake - but we haven't seen enough of these
+errors to know which are safe to exclude from Sentry.
 
 ## Default posture: capture everything
 
-Capture everything to Sentry. The 400/500 split
-is for the caller. The Sentry capture is for us. These are independent
-decisions. An error can be a 400 to the caller (they sent a duplicate
-name) AND captured to Sentry (we want visibility into what errors our
-services encounter). Only stop capturing specific errors after they've
-been seen enough to be identified as noise - by adding sentinel-based
-exclusions, not by skipping the tier.
+Capture everything to Sentry. The status is for the caller and the
+capture is for us - independent questions (`README.md`, Answering an
+error). Only stop capturing specific errors after they've been seen
+enough to be identified as noise - by classifying them, never by
+skipping the capture.
 
-## Upstream errors are always 500
+## Upstream errors are 500 until classified
 
 We haven't classified which
 upstream errors are truly client mistakes vs infra failures vs
@@ -33,7 +31,8 @@ message is all we can offer.
 
 A per-service method that checks for the upstream's error types and
 extracts the best message.
-Returns `*server.ErrorResponse` - always 500, always Sentry.
+Returns `*server.ErrorResponse` - always captured; the handler answers
+with the status the class names, 500 for anything unclassified.
 
 ```go
 // gonetboxd - NetBox returns GenericOpenAPIError with parseable bodies
@@ -70,19 +69,14 @@ extract for the caller.
 
 The default posture (500, Sentry, best-effort message) applies to
 errors we haven't classified yet. When a specific error has been
-observed enough in Sentry to understand what it means, classify it
-and route it specifically. What changes depends on what we learned:
+observed enough in Sentry to understand what it means, classify it:
+give it the shared class it turned out to be, and the table in
+`README.md` (Answering an error) answers its status, its capture and
+its message together.
 
-- Status code: route to 404 (resource doesn't exist), 503
-  (dependency down), or 400 (confirmed caller mistake)
-- Sentry capture: skip for errors confirmed as caller noise
-- Message: use the classified error's message instead of
-  extraction
-
-Classification is per-error, not per-tier. The handler checks
-for the classified error before falling through to
-`captureDetail`. The default remains capture-everything until
-proven otherwise.
+Classification is per-error. The handler checks for the classified
+error before falling through to `captureDetail`. The default remains
+capture-everything until proven otherwise.
 
 ### Simple sentinels and typed errors
 
@@ -137,13 +131,17 @@ a per-package sentinel for the same class:
   "kind already exists: identifier" message.
 - `validation` - a caller-shaped request error (`New`);
   `captureDetail` surfaces its message without a Sentry
-  capture.
+  capture. Upstream data failing our own checks is not the
+  caller's mistake and stays unclassified.
 - `not_selected` - a required session selection is missing;
   the message carries the actionable hint.
-- `not_configured` - the deployment lacks the config to serve
-  the operation; only the operator can fix it.
-- `unreachable` - a backing dependency is down, not connected,
-  or not installed. The 503-shaped class.
+- `not_configured` - the deployment lacks the config or the
+  installation to serve the operation (a cluster without the CRD
+  a tool reads); only the operator can fix it, so it is captured.
+- `unreachable` - a backing dependency is down or not connected.
+- `unavailable` - a peer guard's verdict that the peer is down;
+  the guard has reported it, so a caller never does
+  (`infrastructure.md`, Peer Outages and Refusals).
 - `timeout` - waiting ran out. `timeout.Is` also matches
   `context.DeadlineExceeded`.
 - `dropped` - the answer broke off mid-way: an unexpected EOF, a
@@ -160,8 +158,21 @@ a per-package sentinel for the same class:
   this nor `unexpected` - pass it through.
 
 Multi-instance daemons resolve their session-scoped instance
-through `go:pkg/inventory.Resolve`, which produces `not_found`
-and `not_selected`.
+through `go:pkg/inventory.Resolve`, which produces `not_found`,
+`not_selected` and `not_configured`. Every session-scoped choice - an
+instance, a cluster, a module - is held by
+`go:pkg/generative/model_context/selection`, which looks the session up
+once; a context without a session is a broken invariant, never a class.
+
+### Translate at the boundary
+
+A driver's or library's own sentinel - `gorm.ErrRecordNotFound`,
+`proxmox.ErrNotFound`, a Kubernetes `IsNotFound` - is translated into
+its shared class at the call that knows what it was looking for, the
+store or client method, as `not_found.New(kind, identifier)`. No surface
+tests a driver sentinel, and no store returns one it did not receive:
+the surface sees only classes, and the message names the subject and the
+identifier instead of the driver's "record not found".
 
 ## Message format
 

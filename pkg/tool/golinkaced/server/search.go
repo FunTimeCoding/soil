@@ -18,7 +18,7 @@ func (s *Server) Search(
 	v, e := s.service.Search(r.Params.Query, entityType)
 
 	if e != nil {
-		return server.Search500JSONResponse(*s.captureDetail(e)), nil
+		return server.Search500JSONResponse(*s.answer(e)), nil
 	}
 
 	result := server.SearchResult{}

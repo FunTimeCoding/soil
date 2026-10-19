@@ -116,13 +116,21 @@ takes `context.Background()`, since a signal there ends the process.
 
 After that, every failure talking to the peer goes through one
 `reacher.Reacher` per daemon, by `Handle`. A transport failure -
-refused, dropped, timed out, by `connection.Classify` - is an outage:
-logged once when it begins and once when it ends, never sent to Sentry,
-since the peer's own monitoring is what notices it being down. Anything
-else is a refusal and is reported once per reason - to Sentry where it
-is an anomaly, to the log where it is expected - so a refusal repeating
-on every poll is one report, not a flood. goproxmoxd's worker is the
-shape.
+refused, dropped, timed out, by `connection.Classify` - is an outage,
+reported as an episode: logged when it begins, captured to Sentry once
+if it lasts, logged again when it ends. A blip that a restart or a
+deploy explains stays two log lines; a failure arriving once the
+outage has run `Lasting` is captured, once however long it runs, as
+the transport error itself wrapped in `go:pkg/peer/outage/OutageError`.
+The episode rides as context, and Sentry's connection fingerprint
+(kind and host) keeps every episode of one peer in one issue. The
+reacher takes the daemon's reporter so no caller can route the
+capture elsewhere, and it notices time only when a call fails: a path
+that stops calling reports nothing, and nothing is waiting on it.
+Anything else is a refusal and is reported once per reason - to
+Sentry where it is an anomaly, to the log where it is expected - so a
+refusal repeating on every poll is one report, not a flood.
+goproxmoxd's worker is the shape.
 
 A peer that several paths call - a worker, request handlers - wants one
 view of whether it answers, so the paths share a `go:pkg/peer/Guard`
@@ -132,8 +140,11 @@ once with `errors/unavailable` instead of waiting out the dial timeout,
 and the guard, as a lifecycle worker, probes the peer back on a backoff
 (`ProbeMinimum` to `ProbeMaximum`). A caller answers an
 `unavailable` as what it is - 503 over REST, a tool failure naming the
-peer - and never reports it again; the guard has. goqueryd's embedder is
-the shape.
+peer - and never reports it again; the guard has. `Attempt` is `Do` for a
+caller whose every refusal carries its own data and must be reported with
+it: the guard tracks the outage the same way and hands each refusal back
+unreported. goqueryd's embedder is the shape of `Do`, goclauded's
+impression forwarding the shape of `Attempt`.
 
 ## HTTP Recovery Middleware
 

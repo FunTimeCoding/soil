@@ -14,7 +14,7 @@ func (c *Client) Tracks(albumIdentifier string) ([]*item.Item, error) {
 	v.Set("Fields", constant.ItemFields)
 	v.Set("SortBy", "SortName")
 	v.Set("SortOrder", "Ascending")
-	result, _, e := c.queryItems("/Items", v)
+	result, _, e := queryItems(c.basic.Rejecting(), "/Items", v)
 
 	return result, e
 }

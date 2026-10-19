@@ -19,7 +19,7 @@ func (s *Server) ListForwards(
 	result, e := s.opnsense.Forwards(phrase)
 
 	if e != nil {
-		return server.ListForwards500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListForwards500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.ListForwards200JSONResponse(convert.Forwards(result)), nil

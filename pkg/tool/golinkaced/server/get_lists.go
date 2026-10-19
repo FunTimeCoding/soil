@@ -18,7 +18,7 @@ func (s *Server) GetLists(
 	v, e := s.client.ListsPage(page)
 
 	if e != nil {
-		return server.GetLists500JSONResponse(*s.captureDetail(e)), nil
+		return server.GetLists500JSONResponse(*s.answer(e)), nil
 	}
 
 	result := make([]server.List, len(v.Items))

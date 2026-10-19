@@ -13,16 +13,16 @@ func (s *Server) DeleteHost(
 	e := s.opnsense.DeleteHost(r.Identifier)
 
 	if not_found.Is(e) {
-		return server.DeleteHost404JSONResponse(*clientError(e.Error())), nil
+		return server.DeleteHost404JSONResponse{Error: e.Error()}, nil
 	}
 
 	if e != nil {
-		return server.DeleteHost500JSONResponse(*s.captureDetail(e)), nil
+		return server.DeleteHost500JSONResponse(*s.answer(e)), nil
 	}
 
 	if apply(r.Params.Apply) {
 		if f := s.opnsense.ReconfigureDnsmasq(); f != nil {
-			return server.DeleteHost500JSONResponse(*s.captureDetail(f)), nil
+			return server.DeleteHost500JSONResponse(*s.answer(f)), nil
 		}
 	}
 

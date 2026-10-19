@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
-	"github.com/mark3labs/mcp-go/server"
 )
 
 func (s *Server) UseCluster(
@@ -18,16 +17,12 @@ func (s *Server) UseCluster(
 	}
 
 	if _, e := s.service.ClusterByName(a.Cluster); e != nil {
-		return response.Fail(e.Error())
+		return s.captureDetail(e)
 	}
 
-	session := server.ClientSessionFromContext(x)
-
-	if session == nil {
-		return response.Fail("no session")
+	if e := s.selection.Select(x, a.Cluster); e != nil {
+		return s.captureDetail(e)
 	}
-
-	s.sessions.Store(session.SessionID(), a.Cluster)
 
 	return response.Success("active cluster set to %s", a.Cluster)
 }

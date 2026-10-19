@@ -12,7 +12,7 @@ func (s *Server) reconfigureDnsmasq(
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
 	if e := s.opnsense.ReconfigureDnsmasq(); e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.Success(constant.ReconfigureDnsmasq)

@@ -1,7 +1,7 @@
 package mock_service
 
 import (
-	"github.com/funtimecoding/soil/pkg/inventory/selection"
+	"github.com/funtimecoding/soil/pkg/generative/model_context/selection"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/face"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/types/instance"
 )

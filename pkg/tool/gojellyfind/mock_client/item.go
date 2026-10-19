@@ -1,7 +1,8 @@
 package mock_client
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/jellyfin/constant"
 	"github.com/funtimecoding/soil/pkg/jellyfin/item"
 )
 
@@ -12,5 +13,5 @@ func (c *Client) Item(identifier string) (*item.Item, error) {
 		}
 	}
 
-	return nil, fmt.Errorf("item %s not found", identifier)
+	return nil, not_found.New(constant.ItemKind, identifier)
 }

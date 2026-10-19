@@ -21,7 +21,8 @@ func (s *Service) checkModelContext(
 		s.addConcern(constant.MissingMountKey, constant.MissingMountText, path)
 	}
 
-	if !v.Has(filepath.Join(mc, "capture_fail.go")) {
+	if !v.Has(filepath.Join(mc, constant.CaptureFile)) &&
+		!v.Has(filepath.Join(mc, constant.AnswerWithFile)) {
 		s.addConcern(
 			constant.MissingCaptureFailKey,
 			constant.MissingCaptureFailText,

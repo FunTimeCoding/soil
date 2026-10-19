@@ -3,12 +3,13 @@ package example
 import (
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors/constant"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/peer/reacher"
 	"github.com/funtimecoding/soil/pkg/peer/reacher/example/step"
 )
 
 func Outage() {
-	r := reacher.New()
+	r := reacher.New(memory.New())
 	script := []*step.Step{
 		step.New("alfa.example", constant.Refused),
 		step.New("alfa.example", constant.Refused),

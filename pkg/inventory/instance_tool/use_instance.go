@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/inventory/instance_tool/argument"
 	"github.com/mark3labs/mcp-go/mcp"
-	"github.com/mark3labs/mcp-go/server"
 )
 
 func (t *Tool[T, P]) UseInstance(
@@ -21,13 +20,9 @@ func (t *Tool[T, P]) UseInstance(
 		return response.Fail("unknown instance: %s", a.Instance)
 	}
 
-	session := server.ClientSessionFromContext(x)
-
-	if session == nil {
-		return response.Fail("no session")
+	if e := t.selection.Select(x, a.Instance); e != nil {
+		return response.Answer(t.reporter, e)
 	}
-
-	t.selection.Set(session.SessionID(), a.Instance)
 
 	return response.Success("active instance set to %s", a.Instance)
 }

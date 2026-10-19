@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/not_selected"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 )
 
@@ -12,8 +13,18 @@ func (s *Server) StartContainer(
 ) (server.StartContainerResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
 
-	if e != nil {
+	if not_found.Is(e) {
+		return server.StartContainer404JSONResponse(*clientError(e)), nil
+	}
+
+	if not_selected.Is(e) {
 		return server.StartContainer400JSONResponse(*clientError(e)), nil
+	}
+
+	if e != nil {
+		return server.StartContainer500JSONResponse(
+			*s.captureFail(e, e.Error()),
+		), nil
 	}
 
 	node := ""

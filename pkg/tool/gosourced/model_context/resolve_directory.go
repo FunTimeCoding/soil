@@ -2,23 +2,19 @@ package model_context
 
 import (
 	"context"
-	"fmt"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/not_selected"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/constant"
-	"github.com/mark3labs/mcp-go/server"
 )
 
 func (s *Server) resolveDirectory(x context.Context) (string, error) {
-	session := server.ClientSessionFromContext(x)
+	name, e := s.selection.Active(x)
 
-	if session == nil {
-		return "", fmt.Errorf("no session")
+	if e != nil {
+		return "", e
 	}
 
-	name, okay := s.service.ActiveModule(session.SessionID())
-
-	if !okay {
+	if name == "" {
 		return "", not_selected.Format(
 			"no active module - call use_module first",
 		)

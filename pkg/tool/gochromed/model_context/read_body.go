@@ -18,7 +18,7 @@ func (s *Server) ReadBody(
 	t, e := s.resolveTab(a.TabIdentifier, a.Title, a.Locator)
 
 	if e != nil {
-		return response.Fail(e.Error())
+		return s.captureDetail(e)
 	}
 
 	body, e := s.client.Page(t.Identifier).Body()
@@ -34,7 +34,7 @@ func (s *Server) ReadBody(
 	e = os.WriteFile(path, []byte(body), 0644)
 
 	if e != nil {
-		return response.Fail("file write failed: %s", e.Error())
+		return s.captureFail(e, "file write failed")
 	}
 
 	return response.SuccessAny(

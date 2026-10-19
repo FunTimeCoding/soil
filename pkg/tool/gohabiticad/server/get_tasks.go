@@ -19,7 +19,7 @@ func (s *Server) GetTasks(
 	result, e := s.habitica.Tasks(taskType)
 
 	if e != nil {
-		return server.GetTasks500JSONResponse(*s.captureDetail(e)), nil
+		return server.GetTasks500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.GetTasks200JSONResponse(convert.Tasks(result)), nil

@@ -8,6 +8,7 @@ const (
 	StateKey    = "state"
 	ReasonKey   = "reason"
 	DurationKey = "duration"
+	SinceKey    = "since"
 	DownState   = "down"
 	UpState     = "up"
 )
@@ -17,4 +18,5 @@ const (
 	Poll         = time.Second
 	ProbeMinimum = 5 * time.Second
 	ProbeMaximum = 5 * time.Minute
+	Lasting      = 5 * time.Minute
 )

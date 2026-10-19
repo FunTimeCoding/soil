@@ -42,7 +42,7 @@ func (s *Server) getTopAlerts(
 	records, f := s.store.Top(n, start, end)
 
 	if f != nil {
-		return s.captureFail(f, "get top alerts failed")
+		return s.answer(f)
 	}
 
 	return response.Success(

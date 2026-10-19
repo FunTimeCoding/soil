@@ -5,6 +5,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/call_format"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/constant_declaration"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/defer_close"
+	"github.com/funtimecoding/soil/pkg/lint/analyzer/error_answer"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/error_wrap_verb"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/expected_first"
 	"github.com/funtimecoding/soil/pkg/lint/analyzer/file_identity"
@@ -43,6 +44,7 @@ func check(
 	restricted_call.Check(p, results)
 	restricted_literal.Check(p, results)
 	route_guard.Check(p, results)
+	error_answer.Check(p, results)
 	forbidden_import.Check(p, results)
 	string_concatenation.Check(p, results)
 	string_constant.Check(p, results)

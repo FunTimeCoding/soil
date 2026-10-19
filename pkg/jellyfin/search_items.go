@@ -36,5 +36,5 @@ func (c *Client) SearchItems(
 		params.Set("IncludeItemTypes", strings.Join(types, ","))
 	}
 
-	return c.queryItems("/Items", params)
+	return queryItems(c.basic, "/Items", params)
 }

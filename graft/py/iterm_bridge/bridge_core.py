@@ -1,5 +1,15 @@
 import iterm2
 
+NOT_FOUND = 404
+UNUSABLE = 422
+UNAVAILABLE = 503
+
+
+class Failure:
+    def __init__(self, status, message):
+        self.status = status
+        self.message = message
+
 
 async def list_sessions(connection):
     app = await iterm2.async_get_app(connection)
@@ -25,7 +35,7 @@ async def read_screen(connection, session_id):
     session = _find_session(connection, session_id)
 
     if session is None:
-        return None, "session not found"
+        return None, Failure(NOT_FOUND, "session not found")
 
     contents = await session.async_get_screen_contents()
     lines = []
@@ -48,7 +58,7 @@ async def read_history(connection, session_id, count):
     session = _find_session(connection, session_id)
 
     if session is None:
-        return None, "session not found"
+        return None, Failure(NOT_FOUND, "session not found")
 
     contents = await session.async_get_screen_contents()
     total_above = contents.number_of_lines_above_screen
@@ -77,7 +87,7 @@ async def send_text(connection, session_id, text):
     session = _find_session(connection, session_id)
 
     if session is None:
-        return None, "session not found"
+        return None, Failure(NOT_FOUND, "session not found")
 
     await session.async_send_text(text)
 
@@ -110,13 +120,16 @@ async def send_key(connection, session_id, key):
     session = _find_session(connection, session_id)
 
     if session is None:
-        return None, "session not found"
+        return None, Failure(NOT_FOUND, "session not found")
 
     sequence = KEY_MAP.get(key.lower())
 
     if sequence is None:
-        return None, "unknown key: {}. valid keys: {}".format(
-            key, ", ".join(sorted(KEY_MAP.keys()))
+        return None, Failure(
+            UNUSABLE,
+            "unknown key: {}. valid keys: {}".format(
+                key, ", ".join(sorted(KEY_MAP.keys()))
+            ),
         )
 
     await session.async_send_text(sequence)
@@ -142,7 +155,7 @@ async def set_tab_title(connection, tab_id, title):
     tab = _find_tab(connection, tab_id)
 
     if tab is None:
-        return None, "tab not found"
+        return None, Failure(NOT_FOUND, "tab not found")
 
     await tab.async_set_title(title)
 
@@ -153,7 +166,7 @@ async def set_tab_color(connection, session_id, red, green, blue):
     session = _find_session(connection, session_id)
 
     if session is None:
-        return None, "session not found"
+        return None, Failure(NOT_FOUND, "session not found")
 
     change = iterm2.LocalWriteOnlyProfile()
     change.set_tab_color(iterm2.Color(red, green, blue))
@@ -168,7 +181,7 @@ async def create_tab(connection):
     window = app.current_window
 
     if window is None:
-        return None, "no window"
+        return None, Failure(UNAVAILABLE, "no window")
 
     tab = await window.async_create_tab()
     session = tab.current_session

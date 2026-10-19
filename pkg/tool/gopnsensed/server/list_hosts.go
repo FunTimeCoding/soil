@@ -19,7 +19,7 @@ func (s *Server) ListHosts(
 	result, e := s.opnsense.Hosts(phrase)
 
 	if e != nil {
-		return server.ListHosts500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListHosts500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.ListHosts200JSONResponse(convert.Hosts(result)), nil

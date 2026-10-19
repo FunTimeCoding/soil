@@ -19,7 +19,7 @@ func (s *Server) GetTracks(
 	result, e := s.client.Tracks(a.AlbumIdentifier)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(result)

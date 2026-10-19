@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/server"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/types/profile"
 )
@@ -21,9 +20,7 @@ func (s *Server) GetProfile(
 	result, d, e := s.service.Profile(topic, "", showDetail)
 
 	if e != nil {
-		return server.GetProfile500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
-		), nil
+		return server.GetProfile500JSONResponse(*s.answer(e)), nil
 	}
 
 	visible := profile.NewResult(

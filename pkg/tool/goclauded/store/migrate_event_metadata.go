@@ -1,6 +1,7 @@
 package store
 
 import (
+	"github.com/funtimecoding/soil/pkg/relational/schema"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goclauded/store/record"
 	"gorm.io/gorm"
@@ -24,8 +25,8 @@ func migrateEventMetadata(d *gorm.DB) {
 			}
 		}
 
-		dropIfExists(d, "event", constant.Body)
+		schema.DropColumns(d, "event", constant.Body)
 	}
 
-	dropIfExists(d, "event", "scope")
+	schema.DropColumns(d, "event", "scope")
 }

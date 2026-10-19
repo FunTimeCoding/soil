@@ -14,7 +14,7 @@ func (s *Server) cron(
 	result, e := s.habitica.Cron()
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(convert.CronResult(result))

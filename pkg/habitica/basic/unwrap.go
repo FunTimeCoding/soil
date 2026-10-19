@@ -12,7 +12,7 @@ func (c *Client) unwrap(
 ) error {
 	var v envelope.Envelope
 
-	if e := c.requester.Notation(q, &v); e != nil {
+	if e := c.requester.Notation(q.WithRefusal(c.refusal), &v); e != nil {
 		return e
 	}
 

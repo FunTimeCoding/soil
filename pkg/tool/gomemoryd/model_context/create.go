@@ -56,7 +56,7 @@ func (s *Server) create(
 	m, h := s.service.CreateMemory(o)
 
 	if h != nil {
-		return s.captureDetail(h)
+		return s.answer(h)
 	}
 
 	created := s.withReferences(

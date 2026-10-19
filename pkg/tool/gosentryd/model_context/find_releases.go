@@ -14,7 +14,7 @@ func (s *Server) FindReleases(
 	result, e := s.service.Releases(a.Query, a.Limit)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return s.succeed(result)

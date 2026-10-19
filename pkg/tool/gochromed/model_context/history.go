@@ -17,7 +17,7 @@ func (s *Server) History(
 	t, e := s.resolveTab(a.TabIdentifier, a.Title, a.Locator)
 
 	if e != nil {
-		return response.Fail(e.Error())
+		return s.captureDetail(e)
 	}
 
 	h, e := s.client.Page(t.Identifier).History()

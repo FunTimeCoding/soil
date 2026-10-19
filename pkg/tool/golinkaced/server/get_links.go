@@ -19,7 +19,7 @@ func (s *Server) GetLinks(
 		links, e := s.client.LinksByList(int(*r.Params.List))
 
 		if e != nil {
-			return server.GetLinks500JSONResponse(*s.captureDetail(e)), nil
+			return server.GetLinks500JSONResponse(*s.answer(e)), nil
 		}
 
 		result := make([]server.Link, len(links))
@@ -42,7 +42,7 @@ func (s *Server) GetLinks(
 	v, e := s.client.LinksPage(page)
 
 	if e != nil {
-		return server.GetLinks500JSONResponse(*s.captureDetail(e)), nil
+		return server.GetLinks500JSONResponse(*s.answer(e)), nil
 	}
 
 	result := make([]server.Link, len(v.Items))

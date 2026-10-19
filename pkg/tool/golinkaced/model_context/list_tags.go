@@ -16,7 +16,7 @@ func (s *Server) ListTags(
 	r, e := s.client.TagsPage(p)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	result := make([]map[string]any, len(r.Items))

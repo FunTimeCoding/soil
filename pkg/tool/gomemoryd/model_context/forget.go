@@ -24,7 +24,7 @@ func (s *Server) forget(
 	e := s.service.ForgetMemory(identifier, q.GetString(constant.Source, ""))
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.Success("Forgot memory %d", identifier)

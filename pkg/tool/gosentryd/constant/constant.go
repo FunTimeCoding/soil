@@ -26,11 +26,7 @@ const (
 	DeleteIssue       = "delete_issue"
 )
 
-const (
-	RequestFailed = "sentry request failed"
-	SinceFormat   = "15:04:05"
-)
-
+const SinceFormat = "15:04:05"
 const (
 	UnresolvedStatus = "unresolved"
 	ResolvedStatus   = "resolved"

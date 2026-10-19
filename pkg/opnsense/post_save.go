@@ -1,6 +1,7 @@
 package opnsense
 
 import (
+	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/opnsense/constant"
 	"github.com/funtimecoding/soil/pkg/opnsense/response"
@@ -11,6 +12,7 @@ func postSave(
 	subject string,
 	path string,
 	body any,
+	bare error,
 ) (*response.Save, error) {
 	var out response.Save
 
@@ -18,15 +20,21 @@ func postSave(
 		return nil, e
 	}
 
-	if out.Result != constant.SavedResult {
-		detail := formatValidation(out.Validation)
+	if out.Result == constant.SavedResult {
+		return &out, nil
+	}
 
-		if detail == "" {
-			detail = out.Result
-		}
-
+	if detail := formatValidation(out.Validation); detail != "" {
 		return nil, validation.New("%s rejected: %s", subject, detail)
 	}
 
-	return &out, nil
+	if bare != nil {
+		return nil, bare
+	}
+
+	return nil, unexpected.Format(
+		"%s save answered %s without validations",
+		subject,
+		out.Result,
+	)
 }

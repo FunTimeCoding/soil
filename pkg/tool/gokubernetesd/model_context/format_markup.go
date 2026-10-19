@@ -8,14 +8,14 @@ import (
 	"sigs.k8s.io/yaml"
 )
 
-func formatMarkup(
+func (s *Server) formatMarkup(
 	object map[string]any,
 	filtered []string,
 ) (*mcp.CallToolResult, error) {
 	b, e := yaml.Marshal(object)
 
 	if e != nil {
-		return response.Fail("marshal yaml: %s", e)
+		return s.captureFail(e, "marshal yaml")
 	}
 
 	if len(filtered) == 0 {

@@ -1,6 +1,10 @@
 package store
 
 import (
+	"database/sql"
+	"errors"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/save_option"
 	"time"
 )
@@ -22,6 +26,10 @@ func (s *Store) UpdateMemory(
 		`SELECT name, scope FROM memory WHERE identifier = ?`,
 		identifier,
 	).Scan(&name, &scope)
+
+	if errors.Is(e, sql.ErrNoRows) {
+		return nil, not_found.New(constant.MemoryKind, identifier)
+	}
 
 	if e != nil {
 		return nil, e

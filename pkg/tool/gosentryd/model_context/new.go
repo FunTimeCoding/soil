@@ -19,7 +19,7 @@ func New(
 		service:  v,
 		host:     host,
 		reporter: r,
-		reacher:  reacher.New(),
+		reacher:  reacher.New(r),
 	}
 	result.register()
 

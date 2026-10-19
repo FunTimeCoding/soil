@@ -12,7 +12,7 @@ func (s *Server) ListSessions(
 	sessions, e := s.client.Sessions()
 
 	if e != nil {
-		return server.ListSessions500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListSessions500JSONResponse(*s.answer(e)), nil
 	}
 
 	var result server.ListSessions200JSONResponse

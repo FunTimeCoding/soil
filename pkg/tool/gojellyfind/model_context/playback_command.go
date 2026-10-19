@@ -28,7 +28,7 @@ func (s *Server) PlaybackCommand(
 	)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.Success(fmt.Sprintf("%s sent", a.Command))

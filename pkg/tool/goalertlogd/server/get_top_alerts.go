@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/convert"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/generated/server"
 	"time"
@@ -32,9 +31,7 @@ func (s *Server) GetTopAlerts(
 	records, e := s.store.Top(n, start, end)
 
 	if e != nil {
-		return server.GetTopAlerts500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
-		), nil
+		return server.GetTopAlerts500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.GetTopAlerts200JSONResponse(convert.TopAlerts(records)), nil

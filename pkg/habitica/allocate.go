@@ -8,7 +8,7 @@ import (
 
 func (c *Client) Allocate(stat string) (*statistic.Statistic, error) {
 	var result *statistic.Statistic
-	e := c.basic.Post(
+	e := c.basic.Rejecting().Post(
 		"/user/allocate",
 		url.Values{constant.StatParameter: {stat}},
 		nil,

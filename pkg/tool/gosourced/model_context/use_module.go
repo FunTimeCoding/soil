@@ -5,7 +5,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gosourced/model_context/argument"
 	"github.com/mark3labs/mcp-go/mcp"
-	"github.com/mark3labs/mcp-go/server"
 )
 
 func (s *Server) useModule(
@@ -21,13 +20,9 @@ func (s *Server) useModule(
 		return response.Fail("unknown module: %s", a.Module)
 	}
 
-	session := server.ClientSessionFromContext(x)
-
-	if session == nil {
-		return response.Fail("no session")
+	if e := s.selection.Select(x, a.Module); e != nil {
+		return s.captureDetail(e)
 	}
-
-	s.service.SetActiveModule(session.SessionID(), a.Module)
 
 	return response.Success("active module set to %s", a.Module)
 }

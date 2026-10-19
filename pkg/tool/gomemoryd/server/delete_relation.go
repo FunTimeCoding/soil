@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/server"
 )
 
@@ -16,9 +15,7 @@ func (s *Server) DeleteRelation(
 	)
 
 	if e != nil {
-		return server.DeleteRelation500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
-		), nil
+		return server.DeleteRelation500JSONResponse(*s.answer(e)), nil
 	}
 
 	if !removed {

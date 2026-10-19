@@ -22,7 +22,7 @@ pkg/tool/go<tool>d/
 │       └── generated.go   # Generated: ServerInterface, HandlerFromMux, types
 ├── client/                # Domain wrapper for CLI (imports generated/client/)
 │   ├── client.go          # Client struct (wraps generated client)
-│   ├── new.go             # New(host string) *Client
+│   ├── new.go             # New(locator, token) *Client
 │   └── <operation>.go     # One file per operation
 ├── server/                # REST implementation (imports generated/server/)
 │   ├── server.go          # Server struct (holds dependencies)
@@ -383,10 +383,10 @@ ErrorResponse:
       type: string
 ```
 
-`Error` carries tier 1 rejections (400/404, no Sentry event ID),
-`ErrorResponse` carries tier 2/3 failures (500, with the event
-ID) - the tiers and `captureFail` live in
-`doc/ai/spec/error-handling/rest.md`.
+`Error` carries an answer Sentry does not hear of, `ErrorResponse` a
+captured one with its event ID. Which status takes which schema is the
+error's class, in the table in `error-handling/README.md` (Answering
+an error); building each answer is `error-handling/rest.md`.
 
 ### Nullable arrays
 

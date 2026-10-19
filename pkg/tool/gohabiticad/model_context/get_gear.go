@@ -14,7 +14,7 @@ func (s *Server) getGear(
 	result, e := s.habitica.UserGear()
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(convert.Gear(result))

@@ -49,6 +49,20 @@ func TestPoolCloseForgetsItsClients(t *testing.T) {
 	assert.Integer(t, 0, built[1].Closed)
 }
 
+func TestPoolCloseLeavesAGivenClientToItsOwner(t *testing.T) {
+	given := client_tester.New("given.example")
+	defer given.Close()
+	p := pool.New(
+		instance_tester.Inventory("alfa"),
+		func(i *instance_tester.Instance) (*client_tester.Client, error) {
+			return client_tester.New(i.Host), nil
+		},
+	)
+	p.Set("alfa", given)
+	p.Close()
+	assert.Integer(t, 0, given.Closed)
+}
+
 func TestPoolCloseLeavesUnclosableClientsAlone(t *testing.T) {
 	p := pool.New(
 		instance_tester.Inventory("alfa"),

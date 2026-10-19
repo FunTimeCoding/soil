@@ -21,13 +21,13 @@ func (s *Server) equipGear(
 	e := s.habitica.Equip(key)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	result, g := s.habitica.UserGear()
 
 	if g != nil {
-		return s.captureDetail(g)
+		return s.answer(g)
 	}
 
 	return response.SuccessAny(convert.Gear(result))

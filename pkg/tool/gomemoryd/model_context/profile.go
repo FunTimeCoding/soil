@@ -2,7 +2,6 @@ package model_context
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -19,11 +18,7 @@ func (s *Server) profile(
 	)
 
 	if e != nil {
-		if validation.Is(e) {
-			return response.Fail("%s", e.Error())
-		}
-
-		return s.captureFail(e, "load profile")
+		return s.answer(e)
 	}
 
 	return response.Success(result.Text)

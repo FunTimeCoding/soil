@@ -60,8 +60,9 @@ When there is no ambiguity, selection is not required.
 
 ## The Service
 
-The service holds the inventory, a `selection.Selection` and one
-`pool.Pool` per kind of client, and exposes the inventory and selection as
+The service holds the inventory, a `go:pkg/generative/model_context/selection`
+`Selection` and one `pool.Pool` per kind of client, and exposes the inventory
+and selection as
 `Inventory()` and `Selection()`, plus an accessor for each pool something
 outside the service needs. Surfaces use those directly; the service adds no
 wrappers for listing, finding or resolving instances.
@@ -70,20 +71,23 @@ A pool builds each instance's client on first use from the daemon's build
 function and caches it. A failed build is not cached, so the next call
 retries; a name outside the inventory is `not_found`. When a pool's clients
 hold connections, `Run` defers that pool's `Close()`, which closes every
-cached client that has a `Close()`. `Set` puts a mock in place for tests.
+client the pool built that has a `Close()`. `Set` puts a mock in place for
+tests; a client given that way stays its owner's to close.
 
 ## MCP Surface
 
-`instance_tool.New(v.Inventory(), v.Selection())` is held by the MCP server.
+`instance_tool.New(v.Inventory(), v.Selection(), r)` is held by the MCP server.
 `Register` adds `list_instances` and `use_instance` only when two or more
 instances are configured - with one there is nothing to choose. Handlers
-resolve before touching a client and refuse plainly, without capture:
+resolve before touching a client and answer a resolution error by its class
+through `captureDetail` - `not_found` and `not_selected` fail plainly,
+`not_configured` and a context without a session are captured:
 
 ```go
 instance, e := s.instances.Resolve(x)
 
 if e != nil {
-    return response.Fail("%s", e)
+    return s.captureDetail(e)
 }
 ```
 
@@ -122,8 +126,11 @@ The MCP server renders it with
 
 `instance` is an optional query parameter. The handler resolves it with
 `Inventory().ResolveInstance`, so omitting it follows the same rule. A
-resolution error is a caller mistake: 400 without Sentry, as tier 1 in
-`error-handling/rest.md` describes.
+resolution error answers by its class, as the table in
+`error-handling/README.md` gives it: an instance that names nothing is
+`not_found` and answers 404, a missing selection is `not_selected` and
+answers 400, and a deployment with no instance at all is `not_configured`,
+a captured 500. Every resolving operation declares its 404.
 
 ## CLI Surface
 

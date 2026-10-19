@@ -1,7 +1,7 @@
 package gitlab
 
 import (
-	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/gitlab/job"
 )
 
@@ -9,7 +9,7 @@ func (c *Client) enrichJob(j *job.Job) (*job.Job, error) {
 	identifier := j.ProjectIdentifier()
 
 	if identifier == 0 {
-		return nil, validation.New("job %d has no project", j.Identifier)
+		return nil, unexpected.Format("job %d has no project", j.Identifier)
 	}
 
 	p, e := c.Project(identifier)

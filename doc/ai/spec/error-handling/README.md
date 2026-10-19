@@ -92,11 +92,59 @@ This is distinct from the flow control exception - the error doesn't change
 what happens next (both callers abort on error). The difference is how the
 error is surfaced.
 
+## Answering an error
+
+A surface that answers a caller - a REST route, an MCP tool - asks three
+questions of every error, and they are independent:
+
+- **Whose move is it?** The status says what the caller does next: fix the
+  request, accept that nothing is there, see what already is, try again
+  later, or wait while we look.
+- **Do we need to look?** Sentry is the anomaly channel. A caller's mistake
+  is not ours to look at, and neither is a failure something else has
+  already reported; everything else is captured, and nothing captured is
+  also logged.
+- **What can we honestly say?** A known cause is relayed as it is; an
+  unknown one is `constant.UnexpectedError` with the event identifier, never
+  a guessed cause.
+
+The error's class answers all three at once:
+
+| Class | REST | MCP | Sentry | Message |
+|-------|------|-----|--------|---------|
+| `validation`, `ambiguous`, `not_selected` | 400 `Error` | `response.Fail` | no | its own |
+| `not_found` | 404 `Error` | `response.Fail` | no | its own |
+| `conflict` | 409 `Error` | `response.Fail` | no | its own |
+| `unavailable` | 503 `Error` | `response.Fail` | no - the guard reports the outage | its own |
+| `unreachable`, `timeout`, `dropped` | 503 `ErrorResponse` | `captureFail` | yes | its own |
+| `not_configured` | 500 `ErrorResponse` | `captureFail` | yes | its own |
+| anything else | 500 `ErrorResponse` | `captureFail` / `captureDetail` | yes | extracted, or `constant.UnexpectedError` |
+
+The schema follows the Sentry column: a captured answer carries
+`ErrorResponse` with its event identifier, an uncaptured one `Error`.
+
+The table is code: `Answers` in `go:pkg/errors/constant`, read through
+`go:pkg/errors/classify` - `Class` names an error's class, `Answer` its
+row, `Reportable` its Sentry column. The `error_answer` analyzer and the
+MCP answer (`mcp.md`) read the same table.
+
+`unavailable` is a guard's verdict that a peer is down, and the guard
+reports a lasting outage once (`infrastructure.md`, Peer Outages and
+Refusals). A transport failure that reaches a surface without a guard in
+front has nobody else to report it, so the surface captures it - and one
+that keeps arriving names a call path that wants a guard.
+
+The last row is where every error starts. Classifying one moves it into a
+row above it - by a shared class from `pkg/errors` (`external-api.md`,
+Shared error classes), or for a one-off type by answering
+`Expected() true` (`classify/face.Expected`), which `classify.Reportable`
+honours - and only once it has been seen enough to know what it means.
+
 ## Leaves
 
-- [mcp.md](mcp.md) - MCP tiers, captureFail, captureDetail, detail_error,
+- [mcp.md](mcp.md) - response.Fail, captureFail, captureDetail, detail_error,
   parseDetail
-- [rest.md](rest.md) - strict server tiers, clientError, captureFail on REST
+- [rest.md](rest.md) - strict server schemas, clientError, captureFail on REST
 - [external-api.md](external-api.md) - captureDetail pattern, default posture,
   sentinel classification, typed errors, message format
 - [infrastructure.md](infrastructure.md) - store method rule, web handler

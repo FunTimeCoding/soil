@@ -24,7 +24,7 @@ func (s *Server) Fill(
 	t, e := s.resolveTab(a.TabIdentifier, a.Title, a.Locator)
 
 	if e != nil {
-		return response.Fail(e.Error())
+		return s.captureDetail(e)
 	}
 
 	backendIdentifier, okay := s.resolveUID(t.Identifier, a.UID)

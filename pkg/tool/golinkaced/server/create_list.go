@@ -18,7 +18,7 @@ func (s *Server) CreateList(
 	result, f := s.client.CreateList(r.Body.Name, description)
 
 	if f != nil {
-		return server.CreateList500JSONResponse(*s.captureDetail(f)), nil
+		return server.CreateList500JSONResponse(*s.answer(f)), nil
 	}
 
 	return server.CreateList200JSONResponse{

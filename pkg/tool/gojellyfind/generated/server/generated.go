@@ -22,6 +22,11 @@ import (
 	"github.com/oapi-codegen/runtime"
 )
 
+// Error defines model for Error.
+type Error struct {
+	Error string `json:"error"`
+}
+
 // ErrorResponse defines model for ErrorResponse.
 type ErrorResponse struct {
 	Error           string `json:"error"`
@@ -599,6 +604,20 @@ func (response GetItem200JSONResponse) VisitGetItemResponse(w http.ResponseWrite
 	return err
 }
 
+type GetItem404JSONResponse Error
+
+func (response GetItem404JSONResponse) VisitGetItemResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type GetItem500JSONResponse ErrorResponse
 
 func (response GetItem500JSONResponse) VisitGetItemResponse(w http.ResponseWriter) error {
@@ -635,6 +654,34 @@ func (response GetEpisodes200JSONResponse) VisitGetEpisodesResponse(w http.Respo
 	return err
 }
 
+type GetEpisodes400JSONResponse Error
+
+func (response GetEpisodes400JSONResponse) VisitGetEpisodesResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetEpisodes404JSONResponse Error
+
+func (response GetEpisodes404JSONResponse) VisitGetEpisodesResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type GetEpisodes500JSONResponse ErrorResponse
 
 func (response GetEpisodes500JSONResponse) VisitGetEpisodesResponse(w http.ResponseWriter) error {
@@ -667,6 +714,20 @@ func (response GetTracks200JSONResponse) VisitGetTracksResponse(w http.ResponseW
 	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(200)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type GetTracks400JSONResponse Error
+
+func (response GetTracks400JSONResponse) VisitGetTracksResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
 	_, err := buf.WriteTo(w)
 	return err
 }
@@ -772,6 +833,34 @@ func (response PlaybackCommand204Response) VisitPlaybackCommandResponse(w http.R
 	return nil
 }
 
+type PlaybackCommand400JSONResponse Error
+
+func (response PlaybackCommand400JSONResponse) VisitPlaybackCommandResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(400)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
+type PlaybackCommand404JSONResponse Error
+
+func (response PlaybackCommand404JSONResponse) VisitPlaybackCommandResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type PlaybackCommand500JSONResponse ErrorResponse
 
 func (response PlaybackCommand500JSONResponse) VisitPlaybackCommandResponse(w http.ResponseWriter) error {
@@ -803,6 +892,20 @@ func (response Play204Response) VisitPlayResponse(w http.ResponseWriter) error {
 	return nil
 }
 
+type Play404JSONResponse Error
+
+func (response Play404JSONResponse) VisitPlayResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
+}
+
 type Play500JSONResponse ErrorResponse
 
 func (response Play500JSONResponse) VisitPlayResponse(w http.ResponseWriter) error {
@@ -832,6 +935,20 @@ type SetVolume204Response struct {
 func (response SetVolume204Response) VisitSetVolumeResponse(w http.ResponseWriter) error {
 	w.WriteHeader(204)
 	return nil
+}
+
+type SetVolume404JSONResponse Error
+
+func (response SetVolume404JSONResponse) VisitSetVolumeResponse(w http.ResponseWriter) error {
+
+	var buf bytes.Buffer
+	if err := json.NewEncoder(&buf).Encode(response); err != nil {
+		return err
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(404)
+	_, err := buf.WriteTo(w)
+	return err
 }
 
 type SetVolume500JSONResponse ErrorResponse
@@ -1174,25 +1291,26 @@ func (sh *strictHandler) SetVolume(w http.ResponseWriter, r *http.Request, ident
 // const string: with thousands of chunks the chained `+` fold is several
 // times slower for the Go compiler than parsing a slice literal.
 var swaggerSpec = []string{
-	"7FhNb+M2EP0rAtujG6fttgfftsW2WCBFF0nRyyIQaGnkTEKRCjnyQgj83wt+yJYi0krS7LpY9BRHnCHf",
-	"zHszGuqBFapulARJhq0emCluoObu5zutlb4E0yhpwD5otGpAE4JbBrtsf1DXAFsxQxrlhu0WDLYgKccS",
-	"JGGFEDPaLZiG+xY1lGz1MewV8bxe9J5qfQsF2e3fE9RTOIWq61YidbnmZM84HCrbeg3aIWvQqBLy8ORg",
-	"gpJg4202ILXfEglqE40wPOBa887+j2XUDE1eKVGOTlorJYBLuyx5DVE/VVVYIBfTUAY2W9BbhE/RxUar",
-	"si0Ilcw74IlAdStzwhpywuLOxVkpXXPyVj+/YYuIkwFulDyaQAMaweTJ6PyDOUlgyUKGgkdMChe41lx3",
-	"MTUIAT4BieOSpCVwJ+HFcH0QvLuE+xYMTbFZWeVYPlNijeBdbkXOZRy3Ia4pb5RBH/aTSX0cWQ8vFdia",
-	"F3e/eiDJGI8CBbh7BZz9ETGYV8B1cXMJphUJAsY/vtVQsRX7ZnlohsvQCZeu3cQI4RuIFwAp4iK29CgC",
-	"bxd2WgQ08XCMQSUjaRYIkqJZLmGLBeQJkYfVZI2makN9yq0QUW7yJ5gktx8aJevTKd4Qp8RyUFBcY23T",
-	"KE0m11Cr0QaD/tsa0Pkzyn2YtGGCFz0PI8xTEDFq/1airSFZRwK28BQpebvpAdYOZaXcFkjCrm3ULQjR",
-	"VSgt9C1ory32/dn52bl7tTQgeYNsxX50j6xC6cbhWfIGl/uy2YCDbAFzS8X7kq1C7b13NtZT8xoItGGr",
-	"jw+sBFNobDxvwTQj0PWZLQD77L4F3fW9dcXu2TBQ0i0swowSJe3xCa5PfWfAwiAoMws9s14mdaBbZDOH",
-	"xBxDFU/8BpQlHEHn887XNg9+FnO5/+H83DdaSaEF8KYRWDgilrfGF8Zhw2MtbtQunWaiPGlnkFmsZ1Yn",
-	"P70ihPGwGcHwG0cBZUYqMx6NU+GZNd0tBrpcPhzGx11SpL8Dub4+I1Brkx3222vG1sOBwMG8+hyxfk5G",
-	"/UtrmkUXUAnEUZySwg2Q42+GvmWY180xHt/1NrPNxo6l/1k2902VC/Fn5fDPE3y9YLIVgq9tY7cIJ3PK",
-	"lIU+X5mqMrqBzI/rp1ZDz/ScIkjzMC+m9PCXt5hRw1uxbuv/xeCT1UuB26ScWgme4ZEOhLvm4ZE+cIGG",
-	"LvZWXzb7/SX0RQT8ASXybB/gKZMv0NAIyYEA4y8gx/N/1Rt92fT3l6MXpf9tQbiFrAnX2qwP9OQ8DIBM",
-	"aRi3xMFdu1EmQs6jS/v8i9Kd8nmbo7vv/KLK7tUynPg0sRtflYIuHgn0jf0TuTnIMjMg6bTTriyzQPET",
-	"xGCVfFwJXzH9/5bzD/s2QFwTlCfl3ULYN6YnML91XxLS3F8B+Y8NX6kAxl9SXioBv0tm4MRFT5nn0xO/",
-	"2/0TAAD//w==",
+	"7FhNb+M2EP0rAtujGrvttgfftsW2SJGii6ToZREItDRymFCkQo68EAL/94IfsiWLtJw0iYPd3mxySL6Z",
+	"eW805APJZVVLAQI1WTwQnd9ARe3PD0pJZX7UStagkIEdhm4Y2xrIgmhUTKzIZpMSBfcNU1CQxSdvdp12",
+	"ZnJ5CzmSTer2vQRdS6Hh+P1TAmsQmLECBLKSwdEgAitDuM4RqjGcXFZVIxi2maJoztgdKppqCcoiq5mW",
+	"BWR+ZGfCBMLK2axAKLclQ6h00EM/QJWirfnPiqAZ01kpeTE4aSklByrMtKAVBNfJsmQ5o3zsSs9mDWrN",
+	"4HNwslayaHJkUmQt0IijqhEZsgoyZPmd9bOUqqLorH5+R9LAIg1US3EwgBoUA51FvXMDU5RgBfER8itC",
+	"VLhgS0VVG2ID5+ACEDkumrQI7ii8EK6PnLaXcN+AxjE2Q6uMFY+kWM1pmxmSUxHGrZEqzGqpmXP76KTu",
+	"e9bBizm2pPndrw5I1MeDQAHungFnd0QI5hVQld9cgm54JAHDH98qKMmCfDPbFdmZr7AzW25CCaErCAsA",
+	"JVIemtrzwNn5nVKPJuyO1kyKQJg5A4HBKBewZjlkEZL72ahGY9qQnzNDRCZW2REm0e37RlF9WsZrpBiZ",
+	"9gwKc6ypa6lQZwoqOdigV38bDSp7hNz7QesHOO3yMMA8BhFK7T+SNxVEdcRhDcdQydmNDzB2TJTSbsGQ",
+	"m7mVvAXO25IJA30NynGLfH82P5vbT0sNgtaMLMiPdsgwFG8snhmt2WwrmxVYyAYwNak4L8jCa+/c2piV",
+	"ilaAoDRZfHogBehcsdrlzZsmCKo6MwIwY/cNqLarrQtyT/qOomog9b1PMGn7J9g69Z0GAwOhSAz0xKzS",
+	"sQPtJJk4JLTQq3i0rpeyyEJQ2fTiaxMH14vZ2P8wn7tCK9CXAFrXnOU2EbNb7YSx2/BQiRuUS8uZYJ6U",
+	"NUgM1jPDk5+eEcKw2Qxg+I0yDkWCMtEOjWXhmTHdpD1ezh527eMmStLfAW1dnyCosUl2+205Y/SwS2Cv",
+	"X30MWV8yo+6jNY6idagApIzbFL6bv3veFEYPFRKTUjaiOCV1VoCWNxO0mfl7gj7Enw+dzWSRM+3wm2XR",
+	"tphTzv8qLf5pYl2nRDSc06X5oBiEo/5onIUuXoksE7yBxF0TPAvnL8/CP/xHL1Fgvo2GEFsUg+y8liw8",
+	"Md6MMDrST4kDFfUte0wafzuLCWG858um+l8XLlidKqgJyqlFQUeZOS0zHeMGvOT25s8OlOgLpvFia/W6",
+	"bOjeJZ5EiD+hYDTZOnjK4HOmcYBklwDt7qSH43/VGb1u+Lv78pPC/z5Htoak9i8dSefoyfPQAzJOw7BE",
+	"955faqkDydl7x5nuYewpL1us7RX4F1m0zxbhyGvVZnh79rzYI6htAAKXSVEkGgSeukT7DL9mt+Io8Cba",
+	"FQ2i6IVgSg5Gy4e18AUL4L+y/uO2ECJVCF8t5Yz326/CEaRb25e9OO2uAN3j3xfKveHL5lPZ53ZJNOBX",
+	"W+owcVRynNts/g0AAP//",
 }
 
 // decodeSpec returns the embedded OpenAPI spec as raw JSON bytes,

@@ -39,7 +39,7 @@ func (s *Server) PortForward(
 	c, e := s.activeCluster(x)
 
 	if e != nil {
-		return response.Fail(e.Error())
+		return s.captureDetail(e)
 	}
 
 	plural, okay := constant.PortForwardResource[a.ResourceType]

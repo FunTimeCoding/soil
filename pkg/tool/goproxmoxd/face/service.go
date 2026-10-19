@@ -1,7 +1,7 @@
 package face
 
 import (
-	"github.com/funtimecoding/soil/pkg/inventory/selection"
+	"github.com/funtimecoding/soil/pkg/generative/model_context/selection"
 	"github.com/funtimecoding/soil/pkg/proxmox/node_status"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/model_context/argument/create_machine"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/model_context/argument/update_machine"

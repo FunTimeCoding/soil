@@ -25,7 +25,7 @@ func (s *Server) extractToFile(
 	directory, e := s.resolveDirectory(x)
 
 	if e != nil {
-		return response.Fail("%s", e)
+		return s.captureDetail(e)
 	}
 
 	r, e := s.service.ExtractToFile(directory, a.File, a.Symbol, a.DryRun)

@@ -14,4 +14,5 @@ type Request struct {
 	Header      map[string]string
 	Body        []byte
 	ContentType string
+	Refusal     func(int, []byte) error
 }

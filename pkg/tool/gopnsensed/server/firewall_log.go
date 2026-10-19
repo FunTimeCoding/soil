@@ -20,7 +20,7 @@ func (s *Server) FirewallLog(
 	result, e := s.opnsense.Log(limit)
 
 	if e != nil {
-		return server.FirewallLog500JSONResponse(*s.captureDetail(e)), nil
+		return server.FirewallLog500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.FirewallLog200JSONResponse(convert.LogEntries(result)), nil

@@ -19,7 +19,7 @@ func (s *Server) ListBlocklists(
 	result, e := s.opnsense.Blocklists(phrase)
 
 	if e != nil {
-		return server.ListBlocklists500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListBlocklists500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.ListBlocklists200JSONResponse(convert.Blocklists(result)), nil

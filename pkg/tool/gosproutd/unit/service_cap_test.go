@@ -2,6 +2,8 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/errors/conflict"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	stringsConstant "github.com/funtimecoding/soil/pkg/strings/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/unit/service_tester"
@@ -18,7 +20,7 @@ func TestPushRejectsAQuestionOverTheLimit(t *testing.T) {
 		nil,
 		nil,
 	)
-	assert.Error(t, e)
+	assert.True(t, validation.Is(e))
 }
 
 func TestPushAcceptsAQuestionAtTheLimit(t *testing.T) {
@@ -43,7 +45,7 @@ func TestPushRejectsAMissingDefaultAction(t *testing.T) {
 		nil,
 		nil,
 	)
-	assert.Error(t, e)
+	assert.True(t, validation.Is(e))
 }
 
 func TestRejectedPushIsNotStored(t *testing.T) {
@@ -74,7 +76,7 @@ func TestTurnRejectsContentOverTheLimit(t *testing.T) {
 		constant.AuthorSession,
 		strings.Repeat("x", constant.MaximumTurnLength+1),
 	)
-	assert.Error(t, e)
+	assert.True(t, validation.Is(e))
 }
 
 func TestSessionTurnsStopAtTheLimit(t *testing.T) {
@@ -98,7 +100,7 @@ func TestSessionTurnsStopAtTheLimit(t *testing.T) {
 	}
 
 	_, e := s.Service.AddTurn(d.Identifier, constant.AuthorSession, "one more")
-	assert.Error(t, e)
+	assert.True(t, conflict.Is(e))
 }
 
 func TestUserTurnsAreNotCapped(t *testing.T) {

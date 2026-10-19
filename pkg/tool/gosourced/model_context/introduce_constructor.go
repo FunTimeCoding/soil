@@ -24,7 +24,7 @@ func (s *Server) introduceConstructor(
 	directory, e := s.resolveDirectory(x)
 
 	if e != nil {
-		return response.Fail("%s", e)
+		return s.captureDetail(e)
 	}
 
 	r, c, f := s.service.IntroduceConstructor(

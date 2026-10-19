@@ -13,6 +13,7 @@ func (r *Reacher) Succeed(name string) *edge.Edge {
 
 	h.Down = false
 	h.Reason = ""
+	h.Reported = false
 
 	return edge.Up(name, r.clock().Sub(h.Since))
 }

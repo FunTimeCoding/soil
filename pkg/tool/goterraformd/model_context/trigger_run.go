@@ -28,7 +28,7 @@ func (s *Server) triggerRun(
 	e := s.runner.Trigger(request)
 
 	if e != nil {
-		return response.Fail(e.Error())
+		return response.Answer(s.reporter, e)
 	}
 
 	if synchronous {

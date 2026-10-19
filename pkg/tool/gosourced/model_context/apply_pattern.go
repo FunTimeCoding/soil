@@ -32,7 +32,7 @@ func (s *Server) applyPattern(
 	directory, e := s.resolveDirectory(x)
 
 	if e != nil {
-		return response.Fail("%s", e)
+		return s.captureDetail(e)
 	}
 
 	r, apply, f := s.service.ApplyPattern(

@@ -22,6 +22,18 @@ const (
 	ContainerShutdownTimeout = 60
 )
 
+const (
+	NodeKind      = "node"
+	MachineKind   = "machine"
+	ContainerKind = "container"
+	StorageKind   = "storage"
+	DomainKind    = "domain"
+	GroupKind     = "group"
+	PoolKind      = "pool"
+	UserKind      = "user"
+	RoleKind      = "role"
+)
+
 const LocalPrefix byte = 0x02
 const (
 	MaximumInstance = 255

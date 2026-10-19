@@ -35,7 +35,7 @@ func (s *Server) DownloadLocator(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return response.Fail("%s", e)
+		return s.captureDetail(e)
 	}
 
 	e = s.service.DownloadLocator(

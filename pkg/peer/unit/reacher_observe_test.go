@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/constant"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/peer/reacher"
 	"github.com/funtimecoding/soil/pkg/peer/reacher/edge"
 	"syscall"
@@ -11,7 +12,7 @@ import (
 )
 
 func TestObserveClassifiesTransportFailure(t *testing.T) {
-	r := reacher.New()
+	r := reacher.New(memory.New())
 	e := r.Observe("sentry", syscall.ECONNREFUSED)
 	assert.NotNil(t, e)
 	assert.True(t, e.Down)
@@ -23,7 +24,7 @@ func TestObserveClassifiesTransportFailure(t *testing.T) {
 }
 
 func TestObserveIgnoresNonTransportErrors(t *testing.T) {
-	r := reacher.New()
+	r := reacher.New(memory.New())
 	assert.Nil(t, r.Observe("sentry", not_found.New("issue", "GO-1")))
 	down, _ := r.Down("sentry")
 	assert.False(t, down)
@@ -34,7 +35,7 @@ func TestObserveIgnoresNonTransportErrors(t *testing.T) {
 }
 
 func TestTriageHandsBackWhatIsNotAnOutage(t *testing.T) {
-	r := reacher.New()
+	r := reacher.New(memory.New())
 	down, real := r.Triage("sentry", syscall.ECONNREFUSED)
 	assert.NotNil(t, down)
 	assert.Nil(t, real)
@@ -52,7 +53,7 @@ func TestTriageHandsBackWhatIsNotAnOutage(t *testing.T) {
 }
 
 func TestHandleLogsAnOutageOnceAndEachRefusalOncePerReason(t *testing.T) {
-	r := reacher.New()
+	r := reacher.New(memory.New())
 	var crossed []*edge.Edge
 	var refused []error
 	handle := func(e error) {
@@ -78,6 +79,6 @@ func TestHandleLogsAnOutageOnceAndEachRefusalOncePerReason(t *testing.T) {
 }
 
 func TestObserveNilOnUpHostIsSilent(t *testing.T) {
-	r := reacher.New()
+	r := reacher.New(memory.New())
 	assert.Nil(t, r.Observe("sentry", nil))
 }

@@ -2,6 +2,7 @@ package proxmox
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"github.com/funtimecoding/soil/pkg/proxmox/constant"
 	"github.com/luthermonson/go-proxmox"
 )
 
@@ -13,5 +14,11 @@ func (c *Client) Storage(
 		return nil, validation.New("storage name is required")
 	}
 
-	return n.Storage(c.context, name)
+	result, e := n.Storage(c.context, name)
+
+	if e != nil {
+		return nil, notFound(e, constant.StorageKind, name)
+	}
+
+	return result, nil
 }

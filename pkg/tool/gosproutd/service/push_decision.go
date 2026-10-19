@@ -1,7 +1,7 @@
 package service
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/store/decision"
 	"unicode/utf8"
@@ -17,7 +17,7 @@ func (s *Service) PushDecision(
 	if length := utf8.RuneCountInString(
 		question,
 	); length > constant.MaximumTurnLength {
-		return nil, fmt.Errorf(
+		return nil, validation.New(
 			"question is %d characters, the limit is %d - a question that does not fit is not ready to ask",
 			length,
 			constant.MaximumTurnLength,
@@ -25,7 +25,7 @@ func (s *Service) PushDecision(
 	}
 
 	if defaultAction == "" {
-		return nil, fmt.Errorf(
+		return nil, validation.New(
 			"a decision needs a default action - what happens if it is never answered",
 		)
 	}

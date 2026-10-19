@@ -40,7 +40,7 @@ func (s *Server) getRecentAlerts(
 	records, f := s.store.ByTimeRange(start, end)
 
 	if f != nil {
-		return s.captureFail(f, "get recent alerts failed")
+		return s.answer(f)
 	}
 
 	return response.Success(

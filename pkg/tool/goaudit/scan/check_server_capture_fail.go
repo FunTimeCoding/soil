@@ -23,13 +23,14 @@ func (s *Service) checkServerCaptureFail(
 		return
 	}
 
-	captureFailPath := filepath.Join(path, "server", "capture_fail.go")
+	server := filepath.Join(path, "server")
 
-	if v.Has(captureFailPath) {
+	if v.Has(filepath.Join(server, constant.CaptureFile)) ||
+		v.Has(filepath.Join(server, constant.AnswerWithFile)) {
 		return
 	}
 
-	if !hasReporterField(v, filepath.Join(path, "server")) {
+	if !hasReporterField(v, server) {
 		return
 	}
 

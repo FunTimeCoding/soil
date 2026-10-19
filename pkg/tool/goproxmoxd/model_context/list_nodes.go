@@ -16,7 +16,7 @@ func (s *Server) ListNodes(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return response.Fail("%s", e)
+		return s.captureDetail(e)
 	}
 
 	nodes, e := s.service.ListNodes(instance)

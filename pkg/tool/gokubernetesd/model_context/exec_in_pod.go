@@ -34,7 +34,7 @@ func (s *Server) ExecInPod(
 	c, e := s.activeCluster(x)
 
 	if e != nil {
-		return response.Fail(e.Error())
+		return s.captureDetail(e)
 	}
 
 	timeout := time.Duration(a.Timeout) * time.Millisecond

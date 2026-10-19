@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/server"
 )
@@ -14,17 +13,13 @@ func (s *Server) GetRelations(
 	relations, e := s.service.ListRelations()
 
 	if e != nil {
-		return server.GetRelations500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
-		), nil
+		return server.GetRelations500JSONResponse(*s.answer(e)), nil
 	}
 
 	hidden, e := s.service.HiddenIdentifiers()
 
 	if e != nil {
-		return server.GetRelations500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
-		), nil
+		return server.GetRelations500JSONResponse(*s.answer(e)), nil
 	}
 
 	typeFilter := ""

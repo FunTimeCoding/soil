@@ -24,7 +24,7 @@ func (s *Server) SetVolume(
 	e := s.client.SetVolume(a.SessionIdentifier, a.Level)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.Success(fmt.Sprintf("volume set to %d", a.Level))

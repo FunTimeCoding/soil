@@ -26,7 +26,7 @@ func (s *Server) update(
 	existing, f := s.service.GetMemory(int64(identifier))
 
 	if f != nil {
-		return s.captureDetail(f)
+		return s.answer(f)
 	}
 
 	o := save_option.New()
@@ -38,7 +38,7 @@ func (s *Server) update(
 	m, rewritten, h := s.service.UpdateMemory(int64(identifier), o)
 
 	if h != nil {
-		return s.captureDetail(h)
+		return s.answer(h)
 	}
 
 	return response.Success(

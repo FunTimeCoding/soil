@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/server"
 )
 
@@ -13,9 +12,7 @@ func (s *Server) GetSourcedMemories(
 	memories, e := s.service.ListDocumentSourced(r.Params.Scope)
 
 	if e != nil {
-		return server.GetSourcedMemories500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
-		), nil
+		return server.GetSourcedMemories500JSONResponse(*s.answer(e)), nil
 	}
 
 	result := make([]server.SourcedMemory, 0, len(memories))

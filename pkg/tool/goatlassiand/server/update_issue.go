@@ -2,6 +2,9 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/ambiguous"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/not_selected"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/convert"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/server"
 )
@@ -57,7 +60,11 @@ func (s *Server) UpdateIssue(
 	)
 
 	if e != nil {
-		if isClientError(e) {
+		if not_found.Is(e) {
+			return server.UpdateIssue404JSONResponse(*clientError(e)), nil
+		}
+
+		if ambiguous.Is(e) || not_selected.Is(e) {
 			return server.UpdateIssue400JSONResponse(*clientError(e)), nil
 		}
 

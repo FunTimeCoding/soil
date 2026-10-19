@@ -28,13 +28,13 @@ func (s *Server) get(
 	m, e := s.service.GetMemory(identifier)
 
 	if e != nil {
-		return s.captureFail(e, "memory not found")
+		return s.answer(e)
 	}
 
 	related, f := s.service.ListRelated(identifier)
 
 	if f != nil {
-		return s.captureFail(f, "load relations")
+		return s.answerWith(f, "load relations")
 	}
 
 	var history []record.Version
@@ -43,7 +43,7 @@ func (s *Server) get(
 		history, e = s.service.GetMemoryHistory(identifier)
 
 		if e != nil {
-			return s.captureFail(e, "load history")
+			return s.answerWith(e, "load history")
 		}
 	}
 

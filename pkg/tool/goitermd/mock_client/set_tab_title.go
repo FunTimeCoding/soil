@@ -1,6 +1,6 @@
 package mock_client
 
-import "fmt"
+import "github.com/funtimecoding/soil/pkg/errors/not_found"
 
 func (c *Client) SetTabTitle(
 	tabIdentifier string,
@@ -14,5 +14,5 @@ func (c *Client) SetTabTitle(
 		}
 	}
 
-	return fmt.Errorf("tab %s not found", tabIdentifier)
+	return not_found.Format("tab %s not found", tabIdentifier)
 }

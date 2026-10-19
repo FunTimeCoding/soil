@@ -21,7 +21,7 @@ func (s *Server) getAlerts(
 	records, g := s.store.ByName(name)
 
 	if g != nil {
-		return s.captureFail(g, "get alerts failed")
+		return s.answer(g)
 	}
 
 	return response.Success(

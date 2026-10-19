@@ -19,7 +19,7 @@ func (s *Server) ListLeases(
 	result, e := s.opnsense.Leases(phrase)
 
 	if e != nil {
-		return server.ListLeases500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListLeases500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.ListLeases200JSONResponse(convert.Leases(result)), nil

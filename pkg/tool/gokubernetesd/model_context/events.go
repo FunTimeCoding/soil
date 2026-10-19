@@ -16,7 +16,7 @@ func (s *Server) Events(
 	cluster, e := s.activeClusterName(x)
 
 	if e != nil {
-		return response.Fail(e.Error())
+		return s.captureDetail(e)
 	}
 
 	result, f := s.service.Events(

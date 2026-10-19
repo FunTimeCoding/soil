@@ -10,5 +10,7 @@ func (s *Server) syncRepository(
 	_ context.Context,
 	_ mcp.CallToolRequest,
 ) (*mcp.CallToolResult, error) {
-	return model_context.SyncResponse(s.runner.Sync())
+	result, e := s.runner.Sync()
+
+	return model_context.SyncResponse(s.reporter, result, e)
 }

@@ -18,7 +18,7 @@ func (s *Server) GetTags(
 	v, e := s.client.TagsPage(page)
 
 	if e != nil {
-		return server.GetTags500JSONResponse(*s.captureDetail(e)), nil
+		return server.GetTags500JSONResponse(*s.answer(e)), nil
 	}
 
 	result := make([]server.Tag, len(v.Items))

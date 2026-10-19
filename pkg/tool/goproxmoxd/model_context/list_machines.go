@@ -16,7 +16,7 @@ func (s *Server) ListMachines(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return response.Fail("%s", e)
+		return s.captureDetail(e)
 	}
 
 	machines, e := s.service.ListMachines(instance, a.Node)

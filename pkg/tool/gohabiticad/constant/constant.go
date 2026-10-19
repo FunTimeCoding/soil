@@ -33,5 +33,3 @@ const (
 	InsecureEnvironment = "GOHABITICA_INSECURE"
 	TokenEnvironment    = "GOHABITICA_TOKEN" // #nosec G101
 )
-
-const RequestFailed = "habitica request failed"

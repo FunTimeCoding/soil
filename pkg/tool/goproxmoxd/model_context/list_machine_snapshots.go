@@ -20,7 +20,7 @@ func (s *Server) ListMachineSnapshots(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return response.Fail("%s", e)
+		return s.captureDetail(e)
 	}
 
 	snapshots, e := s.service.ListMachineSnapshots(
@@ -31,7 +31,7 @@ func (s *Server) ListMachineSnapshots(
 
 	if e != nil {
 		if not_found.Is(e) {
-			return response.Fail("%s", e)
+			return s.captureDetail(e)
 		}
 
 		return s.captureDetail(e)

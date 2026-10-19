@@ -19,7 +19,7 @@ func (s *Server) DeleteSnippet(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return response.Fail("%s", e)
+		return s.captureDetail(e)
 	}
 
 	c, e := s.service.SSHClient(instance)

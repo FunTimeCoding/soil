@@ -20,7 +20,7 @@ func (s *Server) addTurn(
 	)
 
 	if e != nil {
-		return response.Fail("%s", e)
+		return response.Answer(s.reporter, e)
 	}
 
 	return response.Success("turn added")

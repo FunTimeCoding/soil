@@ -13,7 +13,7 @@ func (s *Server) RunCron(
 	result, e := s.habitica.Cron()
 
 	if e != nil {
-		return server.RunCron500JSONResponse(*s.captureDetail(e)), nil
+		return server.RunCron500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.RunCron200JSONResponse(*convert.CronResult(result)), nil

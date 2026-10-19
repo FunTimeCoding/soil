@@ -25,7 +25,7 @@ func (s *Server) renameModule(
 	directory, e := s.resolveDirectory(x)
 
 	if e != nil {
-		return response.Fail("%s", e)
+		return s.captureDetail(e)
 	}
 
 	r, e := s.service.RenameModule(

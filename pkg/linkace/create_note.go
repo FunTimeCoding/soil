@@ -9,6 +9,10 @@ func (c *Client) CreateNote(
 	linkIdentifier int,
 	text string,
 ) (*note.Note, error) {
+	if _, e := c.LinkByIdentifier(linkIdentifier); e != nil {
+		return nil, e
+	}
+
 	var r response.Note
 
 	if e := c.basic.Post(

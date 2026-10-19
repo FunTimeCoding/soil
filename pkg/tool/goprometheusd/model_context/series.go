@@ -16,7 +16,7 @@ func (s *Server) series(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return response.Fail("%s", e)
+		return s.captureDetail(e)
 	}
 
 	v, e := s.service.Series(instance)

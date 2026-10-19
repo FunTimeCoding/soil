@@ -41,3 +41,4 @@ const (
 
 const ModelContextAddress = ":10080"
 const ModelContextSessionIdle = time.Hour
+const NoSession = "no model context session on the request"

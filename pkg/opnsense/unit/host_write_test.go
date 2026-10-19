@@ -3,6 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/opnsense/request"
 	"testing"
@@ -26,6 +27,40 @@ func TestAddHostRejectionIsValidation(t *testing.T) {
 	s := canned(`{"result":"failed","validations":{"host.ip":"bad address"}}`)
 	defer s.Close()
 	_, e := client(s).AddHost(request.New())
+	assert.True(t, validation.Is(e))
+	assert.StringContains(t, "host.ip: bad address", e.Error())
+}
+
+func TestAddHostFailingWithoutValidationsIsAFault(t *testing.T) {
+	s := canned(`{"result":"failed"}`)
+	defer s.Close()
+	_, e := client(s).AddHost(request.New())
+	assert.True(t, unexpected.Is(e))
+	assert.String(
+		t,
+		"dnsmasq host save answered failed without validations",
+		e.Error(),
+	)
+}
+
+func TestSetHostOnAnUnknownEntryIsNotFound(t *testing.T) {
+	s := canned(`{"result":"failed"}`)
+	defer s.Close()
+	e := client(s).SetHost(
+		"00000000-0000-0000-0000-000000000000",
+		request.New(),
+	)
+	assert.String(
+		t,
+		"dnsmasq host not found: 00000000-0000-0000-0000-000000000000",
+		e.Error(),
+	)
+}
+
+func TestSetHostRejectionIsValidation(t *testing.T) {
+	s := canned(`{"result":"failed","validations":{"host.ip":"bad address"}}`)
+	defer s.Close()
+	e := client(s).SetHost("abc", request.New())
 	assert.True(t, validation.Is(e))
 	assert.StringContains(t, "host.ip: bad address", e.Error())
 }

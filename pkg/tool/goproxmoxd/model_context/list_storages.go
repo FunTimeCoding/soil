@@ -20,7 +20,7 @@ func (s *Server) ListStorages(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return response.Fail("%s", e)
+		return s.captureDetail(e)
 	}
 
 	storages, e := s.service.ListStorages(instance, a.Node)

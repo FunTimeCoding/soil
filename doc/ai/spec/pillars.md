@@ -134,5 +134,5 @@ streaming endpoint decides the timeout choice. Mixed servers
 |-----------|--------|----------|-----------|-----|
 | Lifecycle workers | Yes (constructor param) | Yes (for recovery.New) | No | Workers need both for recovery logging |
 | HTTP route handlers | Via recovery middleware | Via recovery middleware | Via recording middleware | Middleware catches panics and records operations |
-| MCP tool handlers | Not directly | Via Server struct + captureFail | Via WithRecorder hook | Tier 2 errors use captureFail -> response.CaptureFail |
+| MCP tool handlers | Not directly | Via Server struct + captureFail | Via WithRecorder hook | Captured errors use captureFail -> response.CaptureFail |
 | Startup one-shot tasks | Yes (from Run) | Yes (for recovery.New if looping) | No | Same recovery pattern as workers |

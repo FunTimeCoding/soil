@@ -250,7 +250,8 @@ func TestMachineNotFound(t *testing.T) {
 		constant.GetMachine,
 		map[string]any{"identifier": 999, "node": "test"},
 	)
-	assert.StringContains(t, "unable to find", result)
+	assert.StringContains(t, "machine not found: 999", result)
+	assert.StringNotContains(t, "event_identifier", result)
 }
 
 func TestStartContainer(t *testing.T) {

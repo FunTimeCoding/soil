@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/generated/server"
 )
 
@@ -21,8 +22,12 @@ func (s *Server) EditList(
 
 	result, f := s.client.UpdateList(int(r.Identifier), patch)
 
+	if not_found.Is(f) {
+		return server.EditList404JSONResponse{Error: f.Error()}, nil
+	}
+
 	if f != nil {
-		return server.EditList500JSONResponse(*s.captureDetail(f)), nil
+		return server.EditList500JSONResponse(*s.answer(f)), nil
 	}
 
 	return server.EditList200JSONResponse{

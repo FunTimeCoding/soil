@@ -897,6 +897,8 @@ type ExplainResponse struct {
 	JSON200 *QueryResult
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -909,6 +911,11 @@ func (r ExplainResponse) GetJSON200() *QueryResult {
 // GetJSON400 returns the response for an HTTP 400 `application/json` response
 func (r ExplainResponse) GetJSON400() *Error {
 	return r.JSON400
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r ExplainResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -952,6 +959,8 @@ type ListIndexesResponse struct {
 	JSON200 *QueryResult
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -964,6 +973,11 @@ func (r ListIndexesResponse) GetJSON200() *QueryResult {
 // GetJSON400 returns the response for an HTTP 400 `application/json` response
 func (r ListIndexesResponse) GetJSON400() *Error {
 	return r.JSON400
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r ListIndexesResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -1048,6 +1062,8 @@ type QueryResponse struct {
 	JSON200 *QueryResult
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -1060,6 +1076,11 @@ func (r QueryResponse) GetJSON200() *QueryResult {
 // GetJSON400 returns the response for an HTTP 400 `application/json` response
 func (r QueryResponse) GetJSON400() *Error {
 	return r.JSON400
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r QueryResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -1103,6 +1124,8 @@ type ListSchemasResponse struct {
 	JSON200 *QueryResult
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -1115,6 +1138,11 @@ func (r ListSchemasResponse) GetJSON200() *QueryResult {
 // GetJSON400 returns the response for an HTTP 400 `application/json` response
 func (r ListSchemasResponse) GetJSON400() *Error {
 	return r.JSON400
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r ListSchemasResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -1158,6 +1186,8 @@ type TableSizesResponse struct {
 	JSON200 *QueryResult
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -1170,6 +1200,11 @@ func (r TableSizesResponse) GetJSON200() *QueryResult {
 // GetJSON400 returns the response for an HTTP 400 `application/json` response
 func (r TableSizesResponse) GetJSON400() *Error {
 	return r.JSON400
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r TableSizesResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -1213,6 +1248,8 @@ type ListTablesResponse struct {
 	JSON200 *QueryResult
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -1225,6 +1262,11 @@ func (r ListTablesResponse) GetJSON200() *QueryResult {
 // GetJSON400 returns the response for an HTTP 400 `application/json` response
 func (r ListTablesResponse) GetJSON400() *Error {
 	return r.JSON400
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r ListTablesResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -1268,6 +1310,8 @@ type DescribeTableResponse struct {
 	JSON200 *QueryResult
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -1280,6 +1324,11 @@ func (r DescribeTableResponse) GetJSON200() *QueryResult {
 // GetJSON400 returns the response for an HTTP 400 `application/json` response
 func (r DescribeTableResponse) GetJSON400() *Error {
 	return r.JSON400
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r DescribeTableResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -1454,6 +1503,13 @@ func ParseExplainResponse(rsp *http.Response) (*ExplainResponse, error) {
 		}
 		response.JSON400 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -1493,6 +1549,13 @@ func ParseListIndexesResponse(rsp *http.Response) (*ListIndexesResponse, error) 
 			return nil, err
 		}
 		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -1560,6 +1623,13 @@ func ParseQueryResponse(rsp *http.Response) (*QueryResponse, error) {
 		}
 		response.JSON400 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -1599,6 +1669,13 @@ func ParseListSchemasResponse(rsp *http.Response) (*ListSchemasResponse, error) 
 			return nil, err
 		}
 		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -1640,6 +1717,13 @@ func ParseTableSizesResponse(rsp *http.Response) (*TableSizesResponse, error) {
 		}
 		response.JSON400 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -1680,6 +1764,13 @@ func ParseListTablesResponse(rsp *http.Response) (*ListTablesResponse, error) {
 		}
 		response.JSON400 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -1719,6 +1810,13 @@ func ParseDescribeTableResponse(rsp *http.Response) (*DescribeTableResponse, err
 			return nil, err
 		}
 		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse

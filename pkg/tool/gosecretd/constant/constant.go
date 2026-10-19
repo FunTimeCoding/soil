@@ -27,7 +27,6 @@ const (
 )
 
 const (
-	RequestFailed = "secret store request failed"
 	KeyKind       = "secret key"
 	Folder        = "/"
 	ParentSegment = ".."

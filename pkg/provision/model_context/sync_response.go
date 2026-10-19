@@ -1,17 +1,19 @@
 package model_context
 
 import (
+	"github.com/funtimecoding/soil/pkg/face"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/provision/types/update"
 	"github.com/mark3labs/mcp-go/mcp"
 )
 
 func SyncResponse(
+	reporter face.Reporter,
 	result *update.Result,
 	e error,
 ) (*mcp.CallToolResult, error) {
 	if e != nil {
-		return response.Fail(e.Error())
+		return response.Answer(reporter, e)
 	}
 
 	if result.Error != nil {

@@ -191,6 +191,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "404":
+          description: Project, field or user not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to create issue.
           content:
@@ -222,6 +228,12 @@ paths:
                 $ref: "#/components/schemas/IssueUpdateResult"
         "400":
           description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Field or user not found.
           content:
             application/json:
               schema:
@@ -474,6 +486,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "404":
+          description: Checklist field not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to add checklist item.
           content:
@@ -514,7 +532,13 @@ paths:
                   allOf:
                   - $ref: "#/components/schemas/ChecklistItem"
         "400":
-          description: Index out of range.
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Checklist item not found.
           content:
             application/json:
               schema:
@@ -552,7 +576,13 @@ paths:
                   allOf:
                   - $ref: "#/components/schemas/ChecklistItem"
         "400":
-          description: Index out of range.
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Checklist item not found.
           content:
             application/json:
               schema:
@@ -591,7 +621,13 @@ paths:
                   allOf:
                   - $ref: "#/components/schemas/ChecklistItem"
         "400":
-          description: Index out of range.
+          description: Invalid request.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Checklist item not found.
           content:
             application/json:
               schema:

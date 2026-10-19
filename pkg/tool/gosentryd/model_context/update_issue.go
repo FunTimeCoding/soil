@@ -19,7 +19,7 @@ func (s *Server) UpdateIssue(
 	result, e := s.service.UpdateIssue(a.Identifier, a.Status, a.AssignedTo)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return s.succeed(result)

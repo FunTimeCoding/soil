@@ -12,7 +12,7 @@ func (s *Server) CreateTag(
 	result, f := s.client.CreateTag(r.Body.Name)
 
 	if f != nil {
-		return server.CreateTag500JSONResponse(*s.captureDetail(f)), nil
+		return server.CreateTag500JSONResponse(*s.answer(f)), nil
 	}
 
 	return server.CreateTag200JSONResponse{

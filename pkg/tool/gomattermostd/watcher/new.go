@@ -25,7 +25,7 @@ func New(
 		notifier: n,
 		logger:   l,
 		reporter: r,
-		reacher:  reacher.New(),
+		reacher:  reacher.New(r),
 		host:     c.Host(),
 		window:   window,
 		index:    map[string]string{},

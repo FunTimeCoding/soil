@@ -28,7 +28,7 @@ func (s *Server) matchPattern(
 	directory, e := s.resolveDirectory(x)
 
 	if e != nil {
-		return response.Fail("%s", e)
+		return s.captureDetail(e)
 	}
 
 	r, match, f := s.service.MatchPattern(

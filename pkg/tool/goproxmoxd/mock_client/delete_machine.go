@@ -1,6 +1,10 @@
 package mock_client
 
-import "github.com/luthermonson/go-proxmox"
+import (
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/proxmox/constant"
+	"github.com/luthermonson/go-proxmox"
+)
 
 func (c *Client) DeleteMachine(
 	v *proxmox.VirtualMachine,
@@ -11,7 +15,7 @@ func (c *Client) DeleteMachine(
 	nodeMachines, okay := c.machines[v.Node]
 
 	if !okay {
-		return nil, proxmox.ErrNotFound
+		return nil, not_found.New(constant.MachineKind, v.VMID)
 	}
 
 	delete(nodeMachines, int(v.VMID))

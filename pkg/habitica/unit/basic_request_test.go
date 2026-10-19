@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/habitica/constant"
 	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
 	"io"
@@ -88,4 +89,27 @@ func TestMissingTaskIsNotFound(t *testing.T) {
 	var out map[string]string
 	e := newClient(t, s.URL).Post("/tasks/foxtrot/score/up", nil, nil, &out)
 	assert.True(t, not_found.Is(e))
+}
+
+func TestABadRequestIsValidation(t *testing.T) {
+	s, _ := upstream_tester.New(
+		t,
+		http.StatusBadRequest,
+		`{"success":false,"error":"BadRequest","message":"\"bravo\" is not a valid Stat."}`,
+	)
+	var out map[string]string
+	e := newClient(t, s.URL).Rejecting().Post("/user/allocate", nil, nil, &out)
+	assert.True(t, validation.Is(e))
+	assert.String(t, `"bravo" is not a valid Stat.`, e.Error())
+}
+
+func TestABadRequestElsewhereIsAFault(t *testing.T) {
+	s, _ := upstream_tester.New(
+		t,
+		http.StatusBadRequest,
+		`{"success":false,"error":"BadRequest","message":"malformed"}`,
+	)
+	var out map[string]string
+	e := newClient(t, s.URL).Post("/tasks/user", nil, nil, &out)
+	assert.True(t, unexpected.Is(e))
 }

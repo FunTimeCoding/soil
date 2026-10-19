@@ -17,7 +17,7 @@ func (s *Server) listSilences(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return response.Fail("%s", e)
+		return s.captureDetail(e)
 	}
 
 	v, e := s.service.Silences(instance, a.Expired)

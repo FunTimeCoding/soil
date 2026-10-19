@@ -19,7 +19,7 @@ func (s *Server) FirewallStates(
 	result, e := s.opnsense.States(phrase)
 
 	if e != nil {
-		return server.FirewallStates500JSONResponse(*s.captureDetail(e)), nil
+		return server.FirewallStates500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.FirewallStates200JSONResponse(convert.States(result)), nil

@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	soil "github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/generated/server"
 )
@@ -14,17 +13,13 @@ func (s *Server) GetStatus(
 	count, e := s.store.Count()
 
 	if e != nil {
-		return server.GetStatus500JSONResponse(
-			*s.captureFail(e, soil.UnexpectedError),
-		), nil
+		return server.GetStatus500JSONResponse(*s.answer(e)), nil
 	}
 
 	latest, f := s.store.LatestIdentifier()
 
 	if f != nil {
-		return server.GetStatus500JSONResponse(
-			*s.captureFail(f, soil.UnexpectedError),
-		), nil
+		return server.GetStatus500JSONResponse(*s.answer(f)), nil
 	}
 
 	result := server.GetStatus200JSONResponse{

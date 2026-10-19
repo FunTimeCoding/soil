@@ -14,15 +14,15 @@ func (s *Server) ShowSecret(
 	result, e := s.service.Keys(r.Params.Path)
 
 	if validation.Is(e) {
-		return server.ShowSecret400JSONResponse(*clientError(e)), nil
+		return server.ShowSecret400JSONResponse{Error: e.Error()}, nil
 	}
 
 	if not_found.Is(e) {
-		return server.ShowSecret404JSONResponse(*clientError(e)), nil
+		return server.ShowSecret404JSONResponse{Error: e.Error()}, nil
 	}
 
 	if e != nil {
-		return server.ShowSecret500JSONResponse(*s.captureDetail(e)), nil
+		return server.ShowSecret500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.ShowSecret200JSONResponse{

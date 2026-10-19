@@ -17,7 +17,7 @@ func (s *Server) checkReferences(
 	reports, e := s.service.ReferenceCensus()
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	if len(reports) == 0 {

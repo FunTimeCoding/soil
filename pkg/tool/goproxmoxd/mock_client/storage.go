@@ -1,6 +1,10 @@
 package mock_client
 
-import "github.com/luthermonson/go-proxmox"
+import (
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/proxmox/constant"
+	"github.com/luthermonson/go-proxmox"
+)
 
 func (c *Client) Storage(
 	n *proxmox.Node,
@@ -12,5 +16,5 @@ func (c *Client) Storage(
 		}
 	}
 
-	return nil, proxmox.ErrNotFound
+	return nil, not_found.New(constant.StorageKind, name)
 }

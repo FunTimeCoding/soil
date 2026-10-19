@@ -14,7 +14,7 @@ func (s *Server) Whoami(
 	result, e := s.service.Whoami()
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return s.succeed(result)

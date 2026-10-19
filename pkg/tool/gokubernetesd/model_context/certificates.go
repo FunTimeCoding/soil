@@ -15,7 +15,7 @@ func (s *Server) Certificates(
 	cluster, e := s.activeClusterName(x)
 
 	if e != nil {
-		return response.Fail(e.Error())
+		return s.captureDetail(e)
 	}
 
 	if a.Name != "" {
@@ -41,7 +41,7 @@ func (s *Server) Certificates(
 			m["latestRequest"] = result.LatestRequest
 		}
 
-		return formatMarkup(m, result.Filtered)
+		return s.formatMarkup(m, result.Filtered)
 	}
 
 	result, f := s.service.Certificates(x, cluster)

@@ -12,7 +12,7 @@ func (s *Server) ListLibraries(
 	libraries, e := s.client.Libraries()
 
 	if e != nil {
-		return server.ListLibraries500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListLibraries500JSONResponse(*s.answer(e)), nil
 	}
 
 	var result server.ListLibraries200JSONResponse

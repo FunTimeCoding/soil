@@ -44,6 +44,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "404":
+          description: Instance not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to derive the address.
           content:
@@ -66,6 +72,12 @@ paths:
                   $ref: "#/components/schemas/Node"
         "400":
           description: Invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Instance not found.
           content:
             application/json:
               schema:
@@ -138,6 +150,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "404":
+          description: Instance not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal server error.
           content:
@@ -163,6 +181,12 @@ paths:
                 $ref: "#/components/schemas/CreateMachineResult"
         "400":
           description: Invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Instance not found.
           content:
             application/json:
               schema:
@@ -874,6 +898,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "404":
+          description: Instance not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal server error.
           content:
@@ -1189,6 +1219,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "404":
+          description: Instance not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal server error.
           content:
@@ -1227,6 +1263,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "404":
+          description: Instance not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal server error.
           content:
@@ -1249,6 +1291,12 @@ paths:
                   $ref: "#/components/schemas/SnippetItem"
         "400":
           description: Invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Instance not found.
           content:
             application/json:
               schema:
@@ -1278,6 +1326,12 @@ paths:
                 $ref: "#/components/schemas/SnippetCreateResult"
         "400":
           description: Invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Instance not found.
           content:
             application/json:
               schema:
@@ -1312,6 +1366,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "404":
+          description: Instance not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Internal server error.
           content:
@@ -1337,6 +1397,12 @@ paths:
                 $ref: "#/components/schemas/StatusResult"
         "400":
           description: Invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Instance not found.
           content:
             application/json:
               schema:
@@ -1379,6 +1445,12 @@ paths:
                 $ref: "#/components/schemas/StatusResult"
         "400":
           description: Invalid or missing parameters.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Instance not found.
           content:
             application/json:
               schema:

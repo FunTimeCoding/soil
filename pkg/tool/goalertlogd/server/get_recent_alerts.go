@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goalertlogd/generated/server"
 	"time"
 )
@@ -26,9 +25,7 @@ func (s *Server) GetRecentAlerts(
 	records, e := s.store.ByTimeRange(start, end)
 
 	if e != nil {
-		return server.GetRecentAlerts500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
-		), nil
+		return server.GetRecentAlerts500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.GetRecentAlerts200JSONResponse(toResponse(records)), nil

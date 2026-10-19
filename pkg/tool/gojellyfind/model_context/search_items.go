@@ -15,7 +15,7 @@ func (s *Server) SearchItems(
 	items, total, e := s.client.SearchItems(a.Q, a.Types, a.Page, a.PerPage)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(

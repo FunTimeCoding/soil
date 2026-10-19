@@ -8,7 +8,6 @@ import (
 
 type Service struct {
 	inventory    *inventory.Inventory
-	sessions     sync.Map
 	commits      sync.Mutex
 	beforeCommit func()
 	workspaces   *cache.Cache

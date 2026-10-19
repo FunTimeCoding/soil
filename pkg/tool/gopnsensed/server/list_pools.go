@@ -19,7 +19,7 @@ func (s *Server) ListPools(
 	result, e := s.opnsense.Pools(phrase)
 
 	if e != nil {
-		return server.ListPools500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListPools500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.ListPools200JSONResponse(convert.Pools(result)), nil

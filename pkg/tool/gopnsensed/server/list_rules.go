@@ -19,7 +19,7 @@ func (s *Server) ListRules(
 	result, e := s.opnsense.Rules(phrase)
 
 	if e != nil {
-		return server.ListRules500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListRules500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.ListRules200JSONResponse(convert.Rules(result)), nil

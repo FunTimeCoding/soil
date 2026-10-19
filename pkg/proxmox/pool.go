@@ -2,6 +2,7 @@ package proxmox
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"github.com/funtimecoding/soil/pkg/proxmox/constant"
 	"github.com/luthermonson/go-proxmox"
 )
 
@@ -10,5 +11,11 @@ func (c *Client) Pool(name string) (*proxmox.Pool, error) {
 		return nil, validation.New("pool name is required")
 	}
 
-	return c.client.Pool(c.context, name)
+	result, e := c.client.Pool(c.context, name)
+
+	if e != nil {
+		return nil, notFound(e, constant.PoolKind, name)
+	}
+
+	return result, nil
 }

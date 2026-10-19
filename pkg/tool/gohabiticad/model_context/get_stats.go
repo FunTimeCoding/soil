@@ -14,7 +14,7 @@ func (s *Server) getStats(
 	result, e := s.habitica.UserStats()
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(convert.Stats(result))

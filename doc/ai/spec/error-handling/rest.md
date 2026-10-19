@@ -11,21 +11,25 @@ the recovery net. The Must/non-Must pair convention lives in
 `service-tool.md`.
 
 Services using oapi-codegen's strict server mode return typed error
-responses. The OpenAPI spec defines two error schemas:
+responses. Which status, which schema and whether Sentry hears of it
+are the error's class, in the table in `README.md` (Answering an
+error); this leaf is how a handler builds each answer.
 
-- `Error` - just an `error` string
-- `ErrorResponse` - `error` + `event_identifier`
+## Schemas
 
-Three tiers:
+The OpenAPI spec defines two error schemas (`generated-api.md`, Error
+schemas):
 
-## Tier 1: local validation
+- `Error` - just an `error` string, for an answer Sentry does not hear of
+- `ErrorResponse` - `error` + `event_identifier`, for a captured one
 
-400, `Error`, no Sentry. oapi-codegen handles parameter binding validation
-automatically - the strict handler wrapper returns 400 before the handler runs
-if parameters fail binding. For application-level validation (e.g. instance
-resolution in multi-instance services), return the 400 response type with
-`clientError`. No Sentry capture - these are caller mistakes, not infrastructure
-failures.
+## Uncaptured answers
+
+The status the class names, with `Error`. oapi-codegen handles parameter
+binding itself - the strict handler wrapper returns 400 before the
+handler runs if parameters fail binding. For a class the handler
+answers, return the response type with `clientError`, or the message
+inline:
 
 ```go
 instance, e := s.resolveInstance(r.Params.Instance)
@@ -38,23 +42,11 @@ if e != nil {
 `clientError` returns `*server.Error` (pointer - lint
 requires pointer returns for structs).
 
-## Tier 2: upstream parseable
+## Captured answers
 
-500, `ErrorResponse` with extracted message, Sentry. The upstream API
-returned a structured error we can parse. The extracted message goes
-in `ErrorResponse` for diagnostic value, but the status code is 500 -
-we haven't classified which upstream errors are truly client mistakes.
-See [the captureDetail pattern](external-api.md#the-capturedetail-pattern).
-
-## Tier 3: upstream opaque
-
-500, `ErrorResponse` with `constant.UnexpectedError`, Sentry. We
-can't extract anything
-meaningful. The caller gets "unexpected error" plus a Sentry
-event ID for investigation.
-
-For local store services without external APIs, all errors are
-tier 3 via `captureFail`:
+`captureFail` captures the error and returns `*server.ErrorResponse`
+carrying the message it is given and the event identifier. A service
+with only internal stores passes `constant.UnexpectedError`:
 
 ```go
 records, e := s.store.ByName(r.Params.Name)
@@ -66,7 +58,19 @@ if e != nil {
 }
 ```
 
-`captureFail` on REST servers returns `*server.ErrorResponse`.
+A service over an external API extracts the upstream's own message
+where it can, through `captureDetail` (see
+[the captureDetail pattern](external-api.md#the-capturedetail-pattern)).
+A transport failure with no guard in front answers 503 the same way,
+relaying its own message:
+
+```go
+if unreachable.Is(e) {
+    return server.GetTabs503JSONResponse(
+        *s.captureFail(e, e.Error()),
+    ), nil
+}
+```
 
 ## Process failures with context
 

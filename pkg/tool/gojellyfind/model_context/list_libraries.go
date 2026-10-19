@@ -15,7 +15,7 @@ func (s *Server) ListLibraries(
 	result, e := s.client.Libraries()
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(result)

@@ -3,7 +3,6 @@ package model_context
 import (
 	"context"
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/mark3labs/mcp-go/mcp"
@@ -27,12 +26,8 @@ func (s *Server) relate(
 		relationType,
 	)
 
-	if validation.Is(e) {
-		return response.Fail("%s", e.Error())
-	}
-
 	if e != nil {
-		return s.captureFail(e, "create relation")
+		return s.answer(e)
 	}
 
 	if relationType != "" {

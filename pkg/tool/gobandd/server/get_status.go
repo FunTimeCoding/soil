@@ -2,6 +2,8 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/not_selected"
 	"github.com/funtimecoding/soil/pkg/tool/gobandd/generated/server"
 )
 
@@ -11,8 +13,16 @@ func (s *Server) GetStatus(
 ) (server.GetStatusResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
 
-	if e != nil {
+	if not_found.Is(e) {
+		return server.GetStatus404JSONResponse(*clientError(e)), nil
+	}
+
+	if not_selected.Is(e) {
 		return server.GetStatus400JSONResponse(*clientError(e)), nil
+	}
+
+	if e != nil {
+		return server.GetStatus500JSONResponse(*s.captureFail(e, e.Error())), nil
 	}
 
 	v, f := s.service.Status(instance)

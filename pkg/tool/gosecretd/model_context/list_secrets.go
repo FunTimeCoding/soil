@@ -15,7 +15,7 @@ func (s *Server) ListSecrets(
 	result, e := s.service.List(a.Path)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(

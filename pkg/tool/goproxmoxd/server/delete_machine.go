@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/conflict"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/not_selected"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 )
 
@@ -13,8 +14,16 @@ func (s *Server) DeleteMachine(
 ) (server.DeleteMachineResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
 
-	if e != nil {
+	if not_found.Is(e) {
+		return server.DeleteMachine404JSONResponse(*clientError(e)), nil
+	}
+
+	if not_selected.Is(e) {
 		return server.DeleteMachine400JSONResponse(*clientError(e)), nil
+	}
+
+	if e != nil {
+		return server.DeleteMachine500JSONResponse(*s.captureFail(e, e.Error())), nil
 	}
 
 	node := ""

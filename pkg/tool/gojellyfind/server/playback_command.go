@@ -2,6 +2,8 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gojellyfind/generated/server"
 )
 
@@ -15,12 +17,18 @@ func (s *Server) PlaybackCommand(
 		seek = *r.Body.SeekPositionTicks
 	}
 
-	if e := s.client.PlaybackCommand(
-		r.Identifier,
-		r.Body.Command,
-		seek,
-	); e != nil {
-		return server.PlaybackCommand500JSONResponse(*s.captureDetail(e)), nil
+	e := s.client.PlaybackCommand(r.Identifier, r.Body.Command, seek)
+
+	if validation.Is(e) {
+		return server.PlaybackCommand400JSONResponse{Error: e.Error()}, nil
+	}
+
+	if not_found.Is(e) {
+		return server.PlaybackCommand404JSONResponse{Error: e.Error()}, nil
+	}
+
+	if e != nil {
+		return server.PlaybackCommand500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.PlaybackCommand204Response{}, nil

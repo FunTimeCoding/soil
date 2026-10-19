@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/convert"
 	"github.com/funtimecoding/soil/pkg/tool/gopnsensed/generated/server"
 )
@@ -12,13 +13,17 @@ func (s *Server) AddHost(
 ) (server.AddHostResponseObject, error) {
 	identifier, e := s.opnsense.AddHost(convert.HostRequest(r.Body))
 
+	if validation.Is(e) {
+		return server.AddHost400JSONResponse{Error: e.Error()}, nil
+	}
+
 	if e != nil {
-		return server.AddHost500JSONResponse(*s.captureDetail(e)), nil
+		return server.AddHost500JSONResponse(*s.answer(e)), nil
 	}
 
 	if apply(r.Params.Apply) {
 		if f := s.opnsense.ReconfigureDnsmasq(); f != nil {
-			return server.AddHost500JSONResponse(*s.captureDetail(f)), nil
+			return server.AddHost500JSONResponse(*s.answer(f)), nil
 		}
 	}
 

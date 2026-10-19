@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/not_selected"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 )
@@ -13,8 +14,16 @@ func (s *Server) UpdateMachine(
 ) (server.UpdateMachineResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
 
-	if e != nil {
+	if not_found.Is(e) {
+		return server.UpdateMachine404JSONResponse(*clientError(e)), nil
+	}
+
+	if not_selected.Is(e) {
 		return server.UpdateMachine400JSONResponse(*clientError(e)), nil
+	}
+
+	if e != nil {
+		return server.UpdateMachine500JSONResponse(*s.captureFail(e, e.Error())), nil
 	}
 
 	a := convertUpdateMachine(r)

@@ -14,7 +14,7 @@ func (s *Server) listTags(
 	tags, e := s.service.ListTags()
 
 	if e != nil {
-		return s.captureFail(e, "list tags")
+		return s.answer(e)
 	}
 
 	return response.Success(notation.MarshalIndent(tags))

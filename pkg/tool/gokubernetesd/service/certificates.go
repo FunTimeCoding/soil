@@ -3,7 +3,7 @@ package service
 import (
 	"context"
 	"fmt"
-	"github.com/funtimecoding/soil/pkg/errors/unreachable"
+	"github.com/funtimecoding/soil/pkg/errors/not_configured"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/format"
@@ -34,7 +34,7 @@ func (s *Service) Certificates(
 			f.Error(),
 			"could not find the requested resource",
 		) {
-			return nil, unreachable.Format(
+			return nil, not_configured.Format(
 				"cert-manager not installed - Certificate CRD not found",
 			)
 		}

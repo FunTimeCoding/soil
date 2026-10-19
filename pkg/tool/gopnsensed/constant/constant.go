@@ -49,4 +49,3 @@ const (
 )
 
 const DefaultLogLimit = 100
-const RequestFailed = "opnsense request failed"

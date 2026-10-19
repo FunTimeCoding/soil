@@ -15,7 +15,7 @@ func (s *Server) Argocd(
 	cluster, e := s.activeClusterName(x)
 
 	if e != nil {
-		return response.Fail(e.Error())
+		return s.captureDetail(e)
 	}
 
 	if a.Name != "" {
@@ -30,7 +30,7 @@ func (s *Server) Argocd(
 			return s.captureFail(f, "get argocd application")
 		}
 
-		return formatMarkup(result.Application, result.Filtered)
+		return s.formatMarkup(result.Application, result.Filtered)
 	}
 
 	result, f := s.service.ArgocdApplications(x, cluster)

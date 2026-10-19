@@ -16,7 +16,7 @@ func (s *Server) power(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return response.Fail("%s", e)
+		return s.captureDetail(e)
 	}
 
 	requested, f := s.service.Power(instance, operation, force)

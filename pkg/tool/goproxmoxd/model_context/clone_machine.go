@@ -25,7 +25,7 @@ func (s *Server) CloneMachine(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return response.Fail("%s", e)
+		return s.captureDetail(e)
 	}
 
 	options := &proxmox.VirtualMachineCloneOptions{Name: a.Name}
@@ -55,7 +55,7 @@ func (s *Server) CloneMachine(
 
 	if e != nil {
 		if not_found.Is(e) {
-			return response.Fail("%s", e)
+			return s.captureDetail(e)
 		}
 
 		return s.captureDetail(e)

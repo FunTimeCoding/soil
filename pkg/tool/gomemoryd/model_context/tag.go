@@ -45,7 +45,7 @@ func (s *Server) tag(
 		e := s.service.ReplaceTags(identifier, tags)
 
 		if e != nil {
-			return s.captureFail(e, "replace tags")
+			return s.answerWith(e, "replace tags")
 		}
 	}
 
@@ -59,7 +59,7 @@ func (s *Server) tag(
 		e := s.service.AddTags(identifier, tags)
 
 		if e != nil {
-			return s.captureFail(e, "add tags")
+			return s.answerWith(e, "add tags")
 		}
 	}
 
@@ -73,14 +73,14 @@ func (s *Server) tag(
 		e := s.service.RemoveTags(identifier, tags)
 
 		if e != nil {
-			return s.captureFail(e, "remove tags")
+			return s.answerWith(e, "remove tags")
 		}
 	}
 
 	m, e := s.service.GetMemory(identifier)
 
 	if e != nil {
-		return s.captureFail(e, "fetch memory")
+		return s.answer(e)
 	}
 
 	stored := fmt.Sprintf("Memory %d tags: %v", identifier, m.Tags)

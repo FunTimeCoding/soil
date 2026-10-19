@@ -1,7 +1,7 @@
 package mock_client
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/iterm/history"
 )
 
@@ -10,7 +10,10 @@ func (c *Client) ReadHistory(
 	_ int,
 ) (*history.History, error) {
 	if _, okay := c.screens[identifier]; !okay {
-		return history.Stub(), fmt.Errorf("session %s not found", identifier)
+		return history.Stub(), not_found.Format(
+			"session %s not found",
+			identifier,
+		)
 	}
 
 	result := history.Stub()

@@ -630,6 +630,8 @@ type RequestPowerResponse struct {
 	JSON200 *PowerResult
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON409 the response for an HTTP 409 `application/json` response
 	JSON409 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
@@ -644,6 +646,11 @@ func (r RequestPowerResponse) GetJSON200() *PowerResult {
 // GetJSON400 returns the response for an HTTP 400 `application/json` response
 func (r RequestPowerResponse) GetJSON400() *Error {
 	return r.JSON400
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r RequestPowerResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON409 returns the response for an HTTP 409 `application/json` response
@@ -692,6 +699,8 @@ type EnableRedirectionResponse struct {
 	JSON200 *RedirectionResult
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -704,6 +713,11 @@ func (r EnableRedirectionResponse) GetJSON200() *RedirectionResult {
 // GetJSON400 returns the response for an HTTP 400 `application/json` response
 func (r EnableRedirectionResponse) GetJSON400() *Error {
 	return r.JSON400
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r EnableRedirectionResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -747,6 +761,8 @@ type GetStatusResponse struct {
 	JSON200 *Status
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -759,6 +775,11 @@ func (r GetStatusResponse) GetJSON200() *Status {
 // GetJSON400 returns the response for an HTTP 400 `application/json` response
 func (r GetStatusResponse) GetJSON400() *Error {
 	return r.JSON400
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r GetStatusResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -915,6 +936,13 @@ func ParseRequestPowerResponse(rsp *http.Response) (*RequestPowerResponse, error
 		}
 		response.JSON400 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 409:
 		var dest Error
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -962,6 +990,13 @@ func ParseEnableRedirectionResponse(rsp *http.Response) (*EnableRedirectionRespo
 		}
 		response.JSON400 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -1001,6 +1036,13 @@ func ParseGetStatusResponse(rsp *http.Response) (*GetStatusResponse, error) {
 			return nil, err
 		}
 		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse

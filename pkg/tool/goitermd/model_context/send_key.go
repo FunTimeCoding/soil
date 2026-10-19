@@ -2,6 +2,7 @@ package model_context
 
 import (
 	"context"
+	"fmt"
 	"github.com/funtimecoding/soil/pkg/generative/mark/response"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/tool/goitermd/model_context/argument"
@@ -32,7 +33,7 @@ func (s *Server) SendKey(
 		e := s.client.SendKey(a.SessionIdentifier, key)
 
 		if e != nil {
-			return response.Fail("send key %s (step %d): %v", key, i+1, e)
+			return s.answer(fmt.Errorf("step %d: %w", i+1, e))
 		}
 	}
 

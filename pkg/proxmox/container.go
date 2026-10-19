@@ -1,10 +1,19 @@
 package proxmox
 
-import "github.com/luthermonson/go-proxmox"
+import (
+	"github.com/funtimecoding/soil/pkg/proxmox/constant"
+	"github.com/luthermonson/go-proxmox"
+)
 
 func (c *Client) Container(
 	n *proxmox.Node,
 	identifier int,
 ) (*proxmox.Container, error) {
-	return n.Container(c.context, identifier)
+	result, e := n.Container(c.context, identifier)
+
+	if e != nil {
+		return nil, notFound(e, constant.ContainerKind, identifier)
+	}
+
+	return result, nil
 }

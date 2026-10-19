@@ -39,7 +39,7 @@ func Run(
 	).WithReferenceRoot(
 		environment.Fallback(constant.ReferenceRootEnvironment, ""),
 	)
-	index := reacher.New()
+	index := reacher.New(r)
 
 	for _, f := range reconcileMemories(v) {
 		index.Handle(

@@ -73,6 +73,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Identifier"
+        "400":
+          description: OPNsense rejected the host entry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to add the host entry.
           content:
@@ -103,6 +109,18 @@ paths:
       responses:
         "204":
           description: Host entry updated.
+        "400":
+          description: OPNsense rejected the host entry.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: No host entry with that identifier.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to update the host entry.
           content:

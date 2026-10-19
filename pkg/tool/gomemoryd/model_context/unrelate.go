@@ -22,7 +22,7 @@ func (s *Server) unrelate(
 	removed, e := s.service.DeleteRelation(sourceIdentifier, targetIdentifier)
 
 	if e != nil {
-		return s.captureFail(e, "remove relation")
+		return s.answer(e)
 	}
 
 	if !removed {

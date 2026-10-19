@@ -117,6 +117,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Link"
+        "404":
+          description: Link not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to edit link.
           content:
@@ -136,6 +142,12 @@ paths:
       responses:
         "200":
           description: Link deleted.
+        "404":
+          description: Link not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to delete link.
           content:
@@ -167,6 +179,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/NotePage"
+        "404":
+          description: Link not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to fetch notes.
           content:
@@ -197,6 +215,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Link"
+        "404":
+          description: Link not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to append tag.
           content:
@@ -227,6 +251,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Link"
+        "404":
+          description: Link not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to remove tag.
           content:
@@ -257,6 +287,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Link"
+        "404":
+          description: Link not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to append list.
           content:
@@ -287,6 +323,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Link"
+        "404":
+          description: Link not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to remove list.
           content:
@@ -362,6 +404,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/List"
+        "404":
+          description: List not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to edit list.
           content:
@@ -381,6 +429,12 @@ paths:
       responses:
         "200":
           description: List deleted.
+        "404":
+          description: List not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to delete list.
           content:
@@ -401,6 +455,12 @@ paths:
       responses:
         "200":
           description: List and all its links deleted.
+        "404":
+          description: List not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to delete branch.
           content:
@@ -476,6 +536,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Tag"
+        "404":
+          description: Tag not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to edit tag.
           content:
@@ -495,6 +561,12 @@ paths:
       responses:
         "200":
           description: Tag deleted.
+        "404":
+          description: Tag not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to delete tag.
           content:
@@ -517,6 +589,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Note"
+        "404":
+          description: Link not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to add note.
           content:
@@ -547,6 +625,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Note"
+        "404":
+          description: Note not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to edit note.
           content:
@@ -566,6 +650,12 @@ paths:
       responses:
         "200":
           description: Note deleted.
+        "404":
+          description: Note not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to delete note.
           content:
@@ -763,6 +853,12 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Tag"
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
     ErrorResponse:
       type: object
       required: [error, event_identifier]

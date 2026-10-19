@@ -3,6 +3,7 @@ package unit
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/constant"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/peer/reacher"
 	"github.com/funtimecoding/soil/pkg/peer/unit/fake_clock"
 	"testing"
@@ -11,7 +12,7 @@ import (
 
 func TestReacherEdgesOnlyOnTransition(t *testing.T) {
 	c := fake_clock.New()
-	r := reacher.New().WithClock(c.Now)
+	r := reacher.New(memory.New()).WithClock(c.Now)
 	down := r.Fail("sentry", constant.Refused)
 	assert.NotNil(t, down)
 	assert.True(t, down.Down)
@@ -28,7 +29,7 @@ func TestReacherEdgesOnlyOnTransition(t *testing.T) {
 }
 
 func TestReacherKeepsFirstReasonThroughOutage(t *testing.T) {
-	r := reacher.New()
+	r := reacher.New(memory.New())
 	r.Fail("sentry", constant.Refused)
 	r.Fail("sentry", constant.TimedOut)
 	down, h := r.Down("sentry")
@@ -37,7 +38,7 @@ func TestReacherKeepsFirstReasonThroughOutage(t *testing.T) {
 }
 
 func TestReacherHostsAreIndependent(t *testing.T) {
-	r := reacher.New()
+	r := reacher.New(memory.New())
 	assert.NotNil(t, r.Fail("sentry", constant.Refused))
 	assert.NotNil(t, r.Fail("netbox", constant.NoRoute))
 	assert.NotNil(t, r.Succeed("sentry"))
@@ -48,7 +49,7 @@ func TestReacherHostsAreIndependent(t *testing.T) {
 }
 
 func TestReacherSuccessOnUnknownHostIsSilent(t *testing.T) {
-	r := reacher.New()
+	r := reacher.New(memory.New())
 	assert.Nil(t, r.Succeed("sentry"))
 	down, h := r.Down("sentry")
 	assert.False(t, down)
@@ -56,7 +57,7 @@ func TestReacherSuccessOnUnknownHostIsSilent(t *testing.T) {
 }
 
 func TestReacherDownReturnsACopy(t *testing.T) {
-	r := reacher.New()
+	r := reacher.New(memory.New())
 	r.Fail("sentry", constant.Refused)
 	_, h := r.Down("sentry")
 	h.Down = false

@@ -20,7 +20,7 @@ func (s *Server) Top(
 	cluster, e := s.activeClusterName(x)
 
 	if e != nil {
-		return response.Fail(e.Error())
+		return s.captureDetail(e)
 	}
 
 	q := request.Top{Namespace: a.Namespace, AllNamespaces: a.AllNamespaces}

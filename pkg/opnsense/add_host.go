@@ -11,6 +11,7 @@ func (c *Client) AddHost(h *request.Host) (string, error) {
 		constant.HostSubject,
 		constant.HostAdd,
 		request.NewHostWrapper(h),
+		nil,
 	)
 
 	if e != nil {

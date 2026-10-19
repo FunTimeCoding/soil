@@ -23,7 +23,7 @@ func (s *Server) scoreTask(
 	result, g := s.habitica.Score(identifier, direction)
 
 	if g != nil {
-		return s.captureDetail(g)
+		return s.answer(g)
 	}
 
 	return response.SuccessAny(convert.ScoreResult(result))

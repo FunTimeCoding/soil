@@ -14,7 +14,7 @@ func (s *Server) getStatus(
 	totalRecords, e := s.store.Count()
 
 	if e != nil {
-		return s.captureFail(e, "get status failed")
+		return s.answer(e)
 	}
 
 	lastPoll := s.worker.LastPoll()

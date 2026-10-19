@@ -2,6 +2,7 @@ package proxmox
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"github.com/funtimecoding/soil/pkg/proxmox/constant"
 	"github.com/luthermonson/go-proxmox"
 )
 
@@ -13,7 +14,7 @@ func (c *Client) Role(name string) (*proxmox.Permission, error) {
 	result, e := c.client.Role(c.context, name)
 
 	if e != nil {
-		return nil, e
+		return nil, notFound(e, constant.RoleKind, name)
 	}
 
 	return &result, nil

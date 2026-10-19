@@ -13,7 +13,12 @@ func (t *Tool[T, P]) ListInstances(
 	_ mcp.CallToolRequest,
 	_ argument.ListInstances,
 ) (*mcp.CallToolResult, error) {
-	active := t.ActiveName(x)
+	active, e := t.ActiveName(x)
+
+	if e != nil {
+		return response.Answer(t.reporter, e)
+	}
+
 	result := make([]*instance_response.Response, 0, len(t.inventory.Instances))
 
 	for k := range t.inventory.Instances {

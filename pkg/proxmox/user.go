@@ -2,6 +2,7 @@ package proxmox
 
 import (
 	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"github.com/funtimecoding/soil/pkg/proxmox/constant"
 	"github.com/luthermonson/go-proxmox"
 )
 
@@ -10,5 +11,11 @@ func (c *Client) User(name string) (*proxmox.User, error) {
 		return nil, validation.New("user name is required")
 	}
 
-	return c.client.User(c.context, name)
+	result, e := c.client.User(c.context, name)
+
+	if e != nil {
+		return nil, notFound(e, constant.UserKind, name)
+	}
+
+	return result, nil
 }

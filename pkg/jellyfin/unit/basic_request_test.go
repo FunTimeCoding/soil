@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/web/constant"
 	"github.com/funtimecoding/soil/pkg/web/upstream_tester"
 	"io"
@@ -63,20 +64,38 @@ func TestPostWithoutBodySendsNothing(t *testing.T) {
 	assert.String(t, "", string(b))
 }
 
-func TestRefusalCarriesProblemTitle(t *testing.T) {
+func TestABadRequestIsValidation(t *testing.T) {
 	s, _ := upstream_tester.New(
 		t,
 		http.StatusBadRequest,
 		`{"title":"One or more validation errors occurred.","status":400}`,
 	)
 	var out map[string]string
+	e := newClient(t, s.URL).Rejecting().Get("/Items/foxtrot", nil, &out)
+	assert.True(t, validation.Is(e))
+	assert.String(t, "One or more validation errors occurred.", e.Error())
+}
+
+func TestABadRequestElsewhereIsAFault(t *testing.T) {
+	s, _ := upstream_tester.New(
+		t,
+		http.StatusBadRequest,
+		`{"title":"One or more validation errors occurred.","status":400}`,
+	)
+	var out map[string]string
+	e := newClient(t, s.URL).Get("/Items", nil, &out)
+	assert.True(t, unexpected.Is(e))
+}
+
+func TestAnUnauthorizedRequestIsUnexpected(t *testing.T) {
+	s, _ := upstream_tester.New(
+		t,
+		http.StatusUnauthorized,
+		`{"title":"Unauthorized","status":401}`,
+	)
+	var out map[string]string
 	e := newClient(t, s.URL).Get("/Items/foxtrot", nil, &out)
 	assert.True(t, unexpected.Is(e))
-	assert.StringContains(
-		t,
-		"One or more validation errors occurred.",
-		e.Error(),
-	)
 }
 
 func TestMissingItemIsNotFound(t *testing.T) {

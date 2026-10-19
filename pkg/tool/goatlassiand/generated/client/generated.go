@@ -3475,6 +3475,8 @@ type CreateIssueResponse struct {
 	JSON201 *JiraIssue
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -3487,6 +3489,11 @@ func (r CreateIssueResponse) GetJSON201() *JiraIssue {
 // GetJSON400 returns the response for an HTTP 400 `application/json` response
 func (r CreateIssueResponse) GetJSON400() *Error {
 	return r.JSON400
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r CreateIssueResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -3633,6 +3640,8 @@ type AddChecklistItemResponse struct {
 	JSON200 *[]*ChecklistItem
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -3645,6 +3654,11 @@ func (r AddChecklistItemResponse) GetJSON200() *[]*ChecklistItem {
 // GetJSON400 returns the response for an HTTP 400 `application/json` response
 func (r AddChecklistItemResponse) GetJSON400() *Error {
 	return r.JSON400
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r AddChecklistItemResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -3688,6 +3702,8 @@ type DeleteChecklistItemResponse struct {
 	JSON200 *[]*ChecklistItem
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -3700,6 +3716,11 @@ func (r DeleteChecklistItemResponse) GetJSON200() *[]*ChecklistItem {
 // GetJSON400 returns the response for an HTTP 400 `application/json` response
 func (r DeleteChecklistItemResponse) GetJSON400() *Error {
 	return r.JSON400
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r DeleteChecklistItemResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -3743,6 +3764,8 @@ type EditChecklistItemResponse struct {
 	JSON200 *[]*ChecklistItem
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -3755,6 +3778,11 @@ func (r EditChecklistItemResponse) GetJSON200() *[]*ChecklistItem {
 // GetJSON400 returns the response for an HTTP 400 `application/json` response
 func (r EditChecklistItemResponse) GetJSON400() *Error {
 	return r.JSON400
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r EditChecklistItemResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -3798,6 +3826,8 @@ type ToggleChecklistItemResponse struct {
 	JSON200 *[]*ChecklistItem
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -3810,6 +3840,11 @@ func (r ToggleChecklistItemResponse) GetJSON200() *[]*ChecklistItem {
 // GetJSON400 returns the response for an HTTP 400 `application/json` response
 func (r ToggleChecklistItemResponse) GetJSON400() *Error {
 	return r.JSON400
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r ToggleChecklistItemResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -4106,6 +4141,8 @@ type UpdateIssueResponse struct {
 	JSON200 *IssueUpdateResult
 	// JSON400 the response for an HTTP 400 `application/json` response
 	JSON400 *Error
+	// JSON404 the response for an HTTP 404 `application/json` response
+	JSON404 *Error
 	// JSON500 the response for an HTTP 500 `application/json` response
 	JSON500 *ErrorResponse
 }
@@ -4118,6 +4155,11 @@ func (r UpdateIssueResponse) GetJSON200() *IssueUpdateResult {
 // GetJSON400 returns the response for an HTTP 400 `application/json` response
 func (r UpdateIssueResponse) GetJSON400() *Error {
 	return r.JSON400
+}
+
+// GetJSON404 returns the response for an HTTP 404 `application/json` response
+func (r UpdateIssueResponse) GetJSON404() *Error {
+	return r.JSON404
 }
 
 // GetJSON500 returns the response for an HTTP 500 `application/json` response
@@ -5374,6 +5416,13 @@ func ParseCreateIssueResponse(rsp *http.Response) (*CreateIssueResponse, error) 
 		}
 		response.JSON400 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -5487,6 +5536,13 @@ func ParseAddChecklistItemResponse(rsp *http.Response) (*AddChecklistItemRespons
 		}
 		response.JSON400 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -5526,6 +5582,13 @@ func ParseDeleteChecklistItemResponse(rsp *http.Response) (*DeleteChecklistItemR
 			return nil, err
 		}
 		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -5567,6 +5630,13 @@ func ParseEditChecklistItemResponse(rsp *http.Response) (*EditChecklistItemRespo
 		}
 		response.JSON400 = &dest
 
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
+
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
 		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
@@ -5606,6 +5676,13 @@ func ParseToggleChecklistItemResponse(rsp *http.Response) (*ToggleChecklistItemR
 			return nil, err
 		}
 		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse
@@ -5824,6 +5901,13 @@ func ParseUpdateIssueResponse(rsp *http.Response) (*UpdateIssueResponse, error) 
 			return nil, err
 		}
 		response.JSON400 = &dest
+
+	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 404:
+		var dest Error
+		if err := json.Unmarshal(bodyBytes, &dest); err != nil {
+			return nil, err
+		}
+		response.JSON404 = &dest
 
 	case strings.Contains(rsp.Header.Get("Content-Type"), "json") && rsp.StatusCode == 500:
 		var dest ErrorResponse

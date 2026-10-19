@@ -8,9 +8,24 @@ try:
 except ImportError:
     import bridge_core
 
+MALFORMED = 400
+BROKEN = 500
+
 
 class BridgeHandler(BaseHTTPRequestHandler):
     def do_GET(self):
+        try:
+            self._get()
+        except Exception as e:
+            self._error_response(BROKEN, str(e))
+
+    def do_POST(self):
+        try:
+            self._post()
+        except Exception as e:
+            self._error_response(BROKEN, str(e))
+
+    def _get(self):
         path, _, query_string = self.path.partition("?")
 
         if path == "/sessions":
@@ -22,15 +37,10 @@ class BridgeHandler(BaseHTTPRequestHandler):
 
         if match:
             session_id = match.group(1)
-            result, error = self._run(
+            result, failure = self._run(
                 bridge_core.read_screen(self.server.connection, session_id)
             )
-
-            if error:
-                self._error_response(404, error)
-                return
-
-            self._json_response(result)
+            self._answer(result, failure)
             return
 
         match = re.match(r"^/sessions/([^/]+)/history$", path)
@@ -46,22 +56,17 @@ class BridgeHandler(BaseHTTPRequestHandler):
                     if key == "count":
                         count = int(value)
 
-            result, error = self._run(
+            result, failure = self._run(
                 bridge_core.read_history(
                     self.server.connection, session_id, count
                 )
             )
-
-            if error:
-                self._error_response(404, error)
-                return
-
-            self._json_response(result)
+            self._answer(result, failure)
             return
 
-        self._error_response(404, "not found")
+        self._error_response(bridge_core.NOT_FOUND, "not found")
 
-    def do_POST(self):
+    def _post(self):
         match = re.match(r"^/sessions/([^/]+)/send$", self.path)
 
         if match:
@@ -74,18 +79,13 @@ class BridgeHandler(BaseHTTPRequestHandler):
             text = body.get("text", "")
 
             if not text:
-                self._error_response(400, "text is required")
+                self._error_response(bridge_core.UNUSABLE, "text is required")
                 return
 
-            result, error = self._run(
+            result, failure = self._run(
                 bridge_core.send_text(self.server.connection, session_id, text)
             )
-
-            if error:
-                self._error_response(404, error)
-                return
-
-            self._json_response(result)
+            self._answer(result, failure)
             return
 
         match = re.match(r"^/sessions/([^/]+)/key$", self.path)
@@ -100,22 +100,13 @@ class BridgeHandler(BaseHTTPRequestHandler):
             key = body.get("key", "")
 
             if not key:
-                self._error_response(400, "key is required")
+                self._error_response(bridge_core.UNUSABLE, "key is required")
                 return
 
-            result, error = self._run(
+            result, failure = self._run(
                 bridge_core.send_key(self.server.connection, session_id, key)
             )
-
-            if error == "session not found":
-                self._error_response(404, error)
-                return
-
-            if error:
-                self._error_response(400, error)
-                return
-
-            self._json_response(result)
+            self._answer(result, failure)
             return
 
         match = re.match(r"^/tabs/([^/]+)/title$", self.path)
@@ -130,18 +121,13 @@ class BridgeHandler(BaseHTTPRequestHandler):
             title = body.get("title", "")
 
             if not title:
-                self._error_response(400, "title is required")
+                self._error_response(bridge_core.UNUSABLE, "title is required")
                 return
 
-            result, error = self._run(
+            result, failure = self._run(
                 bridge_core.set_tab_title(self.server.connection, tab_id, title)
             )
-
-            if error:
-                self._error_response(404, error)
-                return
-
-            self._json_response(result)
+            self._answer(result, failure)
             return
 
         match = re.match(r"^/sessions/([^/]+)/color$", self.path)
@@ -156,32 +142,29 @@ class BridgeHandler(BaseHTTPRequestHandler):
             red = body.get("red", 0)
             green = body.get("green", 0)
             blue = body.get("blue", 0)
-            result, error = self._run(
+            result, failure = self._run(
                 bridge_core.set_tab_color(
                     self.server.connection, session_id, red, green, blue
                 )
             )
-
-            if error:
-                self._error_response(404, error)
-                return
-
-            self._json_response(result)
+            self._answer(result, failure)
             return
 
         if self.path == "/tabs":
-            result, error = self._run(
+            result, failure = self._run(
                 bridge_core.create_tab(self.server.connection)
             )
-
-            if error:
-                self._error_response(400, error)
-                return
-
-            self._json_response(result, 201)
+            self._answer(result, failure, 201)
             return
 
-        self._error_response(404, "not found")
+        self._error_response(bridge_core.NOT_FOUND, "not found")
+
+    def _answer(self, result, failure, status=200):
+        if failure:
+            self._error_response(failure.status, failure.message)
+            return
+
+        self._json_response(result, status)
 
     def _run(self, coroutine):
         return asyncio.run_coroutine_threadsafe(
@@ -192,13 +175,13 @@ class BridgeHandler(BaseHTTPRequestHandler):
         length = int(self.headers.get("Content-Length", 0))
 
         if length == 0:
-            self._error_response(400, "empty request body")
+            self._error_response(MALFORMED, "empty request body")
             return None
 
         try:
             return json.loads(self.rfile.read(length))
         except json.JSONDecodeError:
-            self._error_response(400, "invalid JSON")
+            self._error_response(MALFORMED, "invalid JSON")
             return None
 
     def _json_response(self, data, status=200):

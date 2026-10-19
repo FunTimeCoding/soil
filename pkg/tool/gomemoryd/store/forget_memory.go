@@ -1,6 +1,12 @@
 package store
 
-import "time"
+import (
+	"database/sql"
+	"errors"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
+	"time"
+)
 
 func (s *Store) ForgetMemory(
 	identifier int64,
@@ -29,6 +35,10 @@ func (s *Store) ForgetMemory(
 		`SELECT name, content, description FROM memory WHERE identifier = ?`,
 		identifier,
 	).Scan(&name, &content, &description)
+
+	if errors.Is(e, sql.ErrNoRows) {
+		return not_found.New(constant.MemoryKind, identifier)
+	}
 
 	if e != nil {
 		return e

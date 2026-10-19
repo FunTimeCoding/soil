@@ -2,6 +2,9 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/ambiguous"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/not_selected"
 	"github.com/funtimecoding/soil/pkg/tool/goatlassiand/generated/server"
 )
 
@@ -12,7 +15,11 @@ func (s *Server) EditChecklistItem(
 	items, e := s.service.EditChecklistItem(r.Key, r.Index, r.Body.Text)
 
 	if e != nil {
-		if isClientError(e) {
+		if not_found.Is(e) {
+			return server.EditChecklistItem404JSONResponse(*clientError(e)), nil
+		}
+
+		if ambiguous.Is(e) || not_selected.Is(e) {
 			return server.EditChecklistItem400JSONResponse(*clientError(e)), nil
 		}
 

@@ -4,14 +4,22 @@ import (
 	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/unexpected"
 	"github.com/funtimecoding/soil/pkg/web/refusal"
+	"github.com/funtimecoding/soil/pkg/web/requester/request"
 	"net/http"
 )
 
 func (r *Requester) refuse(
+	o *request.Request,
 	q *http.Request,
 	response *http.Response,
 	body []byte,
 ) error {
+	if o.Refusal != nil {
+		if e := o.Refusal(response.StatusCode, body); e != nil {
+			return e
+		}
+	}
+
 	if r.refusal != nil {
 		if e := r.refusal(response.StatusCode, body); e != nil {
 			return e

@@ -1,17 +1,19 @@
 package jellyfin
 
 import (
+	"github.com/funtimecoding/soil/pkg/jellyfin/basic"
 	"github.com/funtimecoding/soil/pkg/jellyfin/item"
 	"github.com/funtimecoding/soil/pkg/jellyfin/response"
 	"net/url"
 )
 
-func (c *Client) queryItems(
+func queryItems(
+	b *basic.Client,
 	path string,
 	p url.Values,
 ) ([]*item.Item, int, error) {
 	var out response.Items
-	e := c.basic.Get(path, p, &out)
+	e := b.Get(path, p, &out)
 
 	if e != nil {
 		return nil, 0, e

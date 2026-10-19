@@ -23,7 +23,7 @@ func (s *Server) GetIssueTagValues(
 	result, e := s.service.IssueTagValues(a.Identifier, a.Tag, a.Limit)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return s.succeed(result)

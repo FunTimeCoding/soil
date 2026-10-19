@@ -1,6 +1,7 @@
 package opnsense
 
 import (
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/opnsense/constant"
 	"github.com/funtimecoding/soil/pkg/opnsense/request"
 	"github.com/funtimecoding/soil/pkg/strings/join"
@@ -15,6 +16,7 @@ func (c *Client) SetHost(
 		constant.HostSubject,
 		join.Slash([]string{constant.HostSet, identifier}),
 		request.NewHostWrapper(h),
+		not_found.New(constant.HostSubject, identifier),
 	)
 
 	return e

@@ -19,7 +19,7 @@ func (s *Server) SearchIssueEvents(
 	result, e := s.service.IssueEvents(a.Identifier, a.Query, a.Limit, a.Cursor)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return s.succeed(result)

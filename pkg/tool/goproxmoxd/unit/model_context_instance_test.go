@@ -4,6 +4,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/generative/model_context_server"
+	"github.com/funtimecoding/soil/pkg/generative/unit/session_tester"
 	"github.com/funtimecoding/soil/pkg/inventory"
 	inventoryConstant "github.com/funtimecoding/soil/pkg/inventory/constant"
 	"github.com/funtimecoding/soil/pkg/inventory/instance_tool/instance_response"
@@ -18,6 +19,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/web"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/worker"
 	"github.com/funtimecoding/soil/pkg/web/guard"
+	"github.com/mark3labs/mcp-go/server"
 	"github.com/prometheus/client_golang/prometheus"
 	"net/http"
 	"testing"
@@ -121,10 +123,15 @@ func TestModelContextClosingForgetsTheSelection(t *testing.T) {
 		inventoryConstant.UseInstance,
 		map[string]any{inventoryConstant.InstanceParameter: "bravo"},
 	)
-	session := c.SessionIdentifier()
-	selected, _ := s.Selection().Active(session)
+	x := server.NewMCPServer("test", "0").WithContext(
+		t.Context(),
+		session_tester.New(c.SessionIdentifier()),
+	)
+	selected, e := s.Selection().Active(x)
+	assert.FatalOnError(t, e)
 	assert.String(t, "bravo", selected)
 	c.Close()
-	_, okay := s.Selection().Active(session)
-	assert.False(t, okay)
+	cleared, f := s.Selection().Active(x)
+	assert.FatalOnError(t, f)
+	assert.String(t, "", cleared)
 }

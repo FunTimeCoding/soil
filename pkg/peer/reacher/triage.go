@@ -19,5 +19,5 @@ func (r *Reacher) Triage(
 		return nil, e
 	}
 
-	return r.Fail(name, f.Reason), nil
+	return r.Outage(name, f.Reason, e), nil
 }

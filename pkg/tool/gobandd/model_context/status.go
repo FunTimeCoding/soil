@@ -15,7 +15,7 @@ func (s *Server) status(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return response.Fail("%s", e)
+		return s.captureDetail(e)
 	}
 
 	v, f := s.service.Status(instance)

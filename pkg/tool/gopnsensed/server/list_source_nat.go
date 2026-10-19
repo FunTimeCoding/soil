@@ -19,7 +19,7 @@ func (s *Server) ListSourceNat(
 	result, e := s.opnsense.SourceNatRules(phrase)
 
 	if e != nil {
-		return server.ListSourceNat500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListSourceNat500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.ListSourceNat200JSONResponse(

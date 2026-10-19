@@ -3,6 +3,8 @@ package server
 import (
 	"context"
 	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/not_selected"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/generated/server"
 )
 
@@ -12,8 +14,16 @@ func (s *Server) ListTables(
 ) (server.ListTablesResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
 
-	if e != nil {
+	if not_found.Is(e) {
+		return server.ListTables404JSONResponse(*clientError(e)), nil
+	}
+
+	if not_selected.Is(e) {
 		return server.ListTables400JSONResponse(*clientError(e)), nil
+	}
+
+	if e != nil {
+		return server.ListTables500JSONResponse(*s.captureFail(e, e.Error())), nil
 	}
 
 	schema := "public"

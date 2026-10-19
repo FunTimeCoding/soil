@@ -9,6 +9,7 @@ const (
 	LitePathUsage       = "SQLite database path"
 
 	LiteMemory = ":memory:"
+	DropColumn = "ALTER TABLE ? DROP COLUMN ?"
 
 	LiteMessage = "database: sqlite"
 

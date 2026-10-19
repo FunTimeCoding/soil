@@ -30,7 +30,7 @@ func (s *Server) setParent(
 	}
 
 	if e := s.service.SetParent(identifier, parentIdentifier); e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	if parentIdentifier == nil {

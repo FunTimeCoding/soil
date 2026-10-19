@@ -27,13 +27,13 @@ func (s *Server) getMany(
 		m, f := s.service.GetMemory(identifier)
 
 		if f != nil {
-			return response.Fail("memory %d not found", identifier)
+			return s.answer(f)
 		}
 
 		related, g := s.service.ListRelated(identifier)
 
 		if g != nil {
-			return s.captureFail(g, "load relations")
+			return s.answerWith(g, "load relations")
 		}
 
 		if detail {

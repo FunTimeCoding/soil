@@ -19,7 +19,7 @@ func (s *Server) GetItem(
 	result, e := s.client.Item(a.Identifier)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(result)

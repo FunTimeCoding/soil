@@ -81,6 +81,7 @@ const (
 	VersionTable      = "memory_version"
 	RelationTable     = "memory_relation"
 	MemorySourceType  = "memory"
+	MemoryKind        = "memory"
 
 	FixtureName    = "name"
 	FixtureContent = "content"

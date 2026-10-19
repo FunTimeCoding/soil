@@ -24,7 +24,7 @@ func (s *Server) deleteComment(
 	}
 
 	if e := s.service.DeleteComment(key, identifier); e != nil {
-		return response.Fail("%s", e)
+		return s.captureDetail(e)
 	}
 
 	return response.Success("comment %s deleted", identifier)

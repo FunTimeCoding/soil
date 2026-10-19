@@ -2,6 +2,8 @@ package unit
 
 import (
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/errors/conflict"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/store/save_option"
@@ -372,13 +374,20 @@ func TestServiceRenameFollowsScope(t *testing.T) {
 	)
 }
 
+func TestServiceAMissingMemoryIsNotFound(t *testing.T) {
+	o := service_tester.New(t)
+	_, e := o.Service.GetMemory(999)
+	assert.String(t, "memory not found: 999", e.Error())
+	assert.True(t, not_found.Is(o.Service.ForgetMemory(999, "")))
+}
+
 func TestServiceRenameOntoExistingNameIsRefused(t *testing.T) {
 	o := service_tester.New(t)
 	m := createNamed(t, o, "pace", "", "Original body.")
 	createNamed(t, o, "tempo", "", "Another body.")
 	q := renameOption(m, "tempo")
 	_, _, e := o.Service.UpdateMemory(m.Identifier, q)
-	assert.True(t, validation.Is(e))
+	assert.True(t, conflict.Is(e))
 	reloaded, f := o.Service.GetMemory(m.Identifier)
 	assert.FatalOnError(t, f)
 	assert.String(t, "pace", reloaded.Name)

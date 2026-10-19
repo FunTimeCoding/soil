@@ -20,7 +20,7 @@ func (s *Server) SearchEvents(
 	}
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return s.succeed(result)

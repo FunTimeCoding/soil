@@ -1,6 +1,6 @@
 package mock_client
 
-import "fmt"
+import "github.com/funtimecoding/soil/pkg/errors/not_found"
 
 func (c *Client) SendText(
 	identifier string,
@@ -9,7 +9,7 @@ func (c *Client) SendText(
 	s, okay := c.screens[identifier]
 
 	if !okay {
-		return fmt.Errorf("session %s not found", identifier)
+		return not_found.Format("session %s not found", identifier)
 	}
 
 	s.Lines = append(s.Lines, text)

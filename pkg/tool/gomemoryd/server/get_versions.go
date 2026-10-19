@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/server"
 )
 
@@ -25,17 +24,13 @@ func (s *Server) GetVersions(
 	versions, e := s.service.VersionsSince(r.Params.Since, limit, offset)
 
 	if e != nil {
-		return server.GetVersions500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
-		), nil
+		return server.GetVersions500JSONResponse(*s.answer(e)), nil
 	}
 
 	hidden, e := s.service.HiddenIdentifiers()
 
 	if e != nil {
-		return server.GetVersions500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
-		), nil
+		return server.GetVersions500JSONResponse(*s.answer(e)), nil
 	}
 
 	entries := make([]server.VersionEntry, 0, len(versions))

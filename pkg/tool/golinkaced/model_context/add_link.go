@@ -15,7 +15,7 @@ func (s *Server) AddLink(
 	listIdentifier, e := s.resolveList(a.List)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	name := a.Name
@@ -27,7 +27,7 @@ func (s *Server) AddLink(
 	result, f := s.client.CreateLink(a.Link, name, listIdentifier, a.Tags)
 
 	if f != nil {
-		return s.captureDetail(f)
+		return s.answer(f)
 	}
 
 	return response.SuccessAny(

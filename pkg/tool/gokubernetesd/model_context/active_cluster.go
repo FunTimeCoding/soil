@@ -2,26 +2,15 @@ package model_context
 
 import (
 	"context"
-	"fmt"
-	"github.com/funtimecoding/soil/pkg/errors/not_selected"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/cluster"
-	"github.com/mark3labs/mcp-go/server"
 )
 
 func (s *Server) activeCluster(x context.Context) (*cluster.Cluster, error) {
-	session := server.ClientSessionFromContext(x)
+	name, e := s.activeClusterName(x)
 
-	if session == nil {
-		return nil, fmt.Errorf("no session")
+	if e != nil {
+		return nil, e
 	}
 
-	v, okay := s.sessions.Load(session.SessionID())
-
-	if !okay {
-		return nil, not_selected.Format(
-			"no cluster selected - use use_cluster first",
-		)
-	}
-
-	return s.service.ClusterByName(v.(string))
+	return s.service.ClusterByName(name)
 }

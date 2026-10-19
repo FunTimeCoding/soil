@@ -21,7 +21,7 @@ func (s *Server) query(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return response.Fail("%s", e)
+		return s.captureDetail(e)
 	}
 
 	v, e := s.service.Query(instance, a.Query, time.Now())

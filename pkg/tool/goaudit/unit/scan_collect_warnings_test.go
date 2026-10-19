@@ -80,6 +80,25 @@ func TestWarningMissingCaptureFail(t *testing.T) {
 	)
 }
 
+func TestAnswerWithSatisfiesTheCaptureCheck(t *testing.T) {
+	v := virtual_file_system.New()
+	v.WriteString(
+		"pkg/tool/gotestd/model_context/mount.go",
+		"package model_context\n",
+	)
+	v.WriteString(
+		"pkg/tool/gotestd/model_context/answer_with.go",
+		"package model_context\n",
+	)
+	v.WriteString("pkg/tool/gotestd/option/o.go", "package option\n")
+	v.WriteString("pkg/tool/gotestd/run.go", "package gotestd\n")
+	assertNoConcern(
+		t,
+		scan.Services(v, "test", audit_configuration.New())[0],
+		constant.MissingCaptureFailKey,
+	)
+}
+
 func TestCleanServiceNoConcerns(t *testing.T) {
 	v := virtual_file_system.New()
 	v.WriteString("pkg/tool/gotestd/server/r.go", "package server\n")

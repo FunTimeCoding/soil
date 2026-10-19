@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gomemoryd/generated/server"
 )
 
@@ -29,9 +28,7 @@ func (s *Server) PostImpressions(
 	)
 
 	if e != nil {
-		return server.PostImpressions500JSONResponse(
-			*s.captureFail(e, constant.UnexpectedError),
-		), nil
+		return server.PostImpressions500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.PostImpressions200JSONResponse{Identifier: int(identifier)}, nil

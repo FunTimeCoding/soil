@@ -76,6 +76,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/ScoreResult"
+        "404":
+          description: Task not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to score task.
           content:
@@ -136,6 +142,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Stats"
+        "400":
+          description: Not a valid stat.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to allocate stat.
           content:
@@ -175,6 +187,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/GearResult"
+        "404":
+          description: Gear not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to equip gear.
           content:
@@ -327,6 +345,12 @@ components:
           $ref: "#/components/schemas/Stats"
         after:
           $ref: "#/components/schemas/Stats"
+    Error:
+      type: object
+      required: [error]
+      properties:
+        error:
+          type: string
     ErrorResponse:
       type: object
       required: [error, event_identifier]

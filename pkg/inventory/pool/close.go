@@ -6,11 +6,12 @@ func (p *Pool[T, P, C]) Close() {
 	p.mutex.Lock()
 	defer p.mutex.Unlock()
 
-	for _, c := range p.clients {
-		if v, okay := any(c).(face.Closer); okay {
+	for name := range p.built {
+		if v, okay := any(p.clients[name]).(face.Closer); okay {
 			v.Close()
 		}
 	}
 
 	clear(p.clients)
+	clear(p.built)
 }

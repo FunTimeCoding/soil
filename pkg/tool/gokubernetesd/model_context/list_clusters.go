@@ -6,7 +6,6 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/model_context/argument"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/response"
 	"github.com/mark3labs/mcp-go/mcp"
-	"github.com/mark3labs/mcp-go/server"
 )
 
 func (s *Server) ListClusters(
@@ -14,12 +13,10 @@ func (s *Server) ListClusters(
 	_ mcp.CallToolRequest,
 	_ argument.ListClusters,
 ) (*mcp.CallToolResult, error) {
-	var active string
+	active, e := s.selection.Active(x)
 
-	if session := server.ClientSessionFromContext(x); session != nil {
-		if v, okay := s.sessions.Load(session.SessionID()); okay {
-			active = v.(string)
-		}
+	if e != nil {
+		return s.captureDetail(e)
 	}
 
 	result := []response.ClusterEntry{}

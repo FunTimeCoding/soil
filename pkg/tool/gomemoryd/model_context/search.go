@@ -27,7 +27,7 @@ func (s *Server) search(
 	results, e := s.service.SearchMemories(query, limit, memoryType, tag, scope)
 
 	if e != nil {
-		return s.captureFail(e, "search failed")
+		return s.answer(e)
 	}
 
 	if q.GetBool(constant.Detail, false) {

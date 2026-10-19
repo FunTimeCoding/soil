@@ -15,7 +15,7 @@ func (s *Server) listAliases(
 	result, e := s.opnsense.Aliases(r.GetString(constant.ParameterQuery, ""))
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return response.SuccessAny(convert.Aliases(result))

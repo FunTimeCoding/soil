@@ -17,7 +17,7 @@ func (s *Server) ListLinks(
 		r, e := s.client.LinksByListPage(a.List, p)
 
 		if e != nil {
-			return s.captureDetail(e)
+			return s.answer(e)
 		}
 
 		return s.linkPage(r.Items, r.Total, a.Limit, a.Offset)
@@ -26,7 +26,7 @@ func (s *Server) ListLinks(
 	r, e := s.client.LinksPage(p)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return s.linkPage(r.Items, r.Total, a.Limit, a.Offset)

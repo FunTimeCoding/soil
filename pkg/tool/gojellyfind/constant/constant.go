@@ -21,5 +21,3 @@ const (
 	PlaybackCommand = "playback_command"
 	SetVolume       = "set_volume"
 )
-
-const RequestFailed = "jellyfin request failed"

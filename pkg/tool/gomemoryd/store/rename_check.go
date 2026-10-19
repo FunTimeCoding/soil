@@ -2,7 +2,7 @@ package store
 
 import (
 	"database/sql"
-	"github.com/funtimecoding/soil/pkg/errors/validation"
+	"github.com/funtimecoding/soil/pkg/errors/conflict"
 )
 
 func renameCheck(
@@ -25,7 +25,7 @@ func renameCheck(
 	}
 
 	if count > 0 {
-		return validation.New(
+		return conflict.Format(
 			"memory name already exists in its scope: %s",
 			name,
 		)

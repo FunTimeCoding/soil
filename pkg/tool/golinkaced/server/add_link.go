@@ -18,7 +18,7 @@ func (s *Server) AddLink(
 	listIdentifier, e := s.service.ResolveList(value)
 
 	if e != nil {
-		return server.AddLink500JSONResponse(*s.captureDetail(e)), nil
+		return server.AddLink500JSONResponse(*s.answer(e)), nil
 	}
 
 	name := ""
@@ -34,7 +34,7 @@ func (s *Server) AddLink(
 	result, f := s.client.CreateLink(r.Body.Link, name, listIdentifier, nil)
 
 	if f != nil {
-		return server.AddLink500JSONResponse(*s.captureDetail(f)), nil
+		return server.AddLink500JSONResponse(*s.answer(f)), nil
 	}
 
 	return server.AddLink200JSONResponse{

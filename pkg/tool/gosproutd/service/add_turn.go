@@ -1,7 +1,8 @@
 package service
 
 import (
-	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/conflict"
+	"github.com/funtimecoding/soil/pkg/errors/validation"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gosproutd/store/turn"
 	"unicode/utf8"
@@ -15,7 +16,7 @@ func (s *Service) AddTurn(
 	if length := utf8.RuneCountInString(
 		content,
 	); length > constant.MaximumTurnLength {
-		return nil, fmt.Errorf(
+		return nil, validation.New(
 			"turn is %d characters, the limit is %d",
 			length,
 			constant.MaximumTurnLength,
@@ -29,7 +30,7 @@ func (s *Service) AddTurn(
 		identifier,
 		author,
 	) >= constant.MaximumTurnCount {
-		return nil, fmt.Errorf(
+		return nil, conflict.Format(
 			"this decision has used all %d session turns - clear it or open a new one under a new framing",
 			constant.MaximumTurnCount,
 		)

@@ -20,14 +20,14 @@ func (s *Server) GetContainer(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return response.Fail("%s", e)
+		return s.captureDetail(e)
 	}
 
 	ct, e := s.service.GetContainer(instance, a.Identifier, a.Node)
 
 	if e != nil {
 		if not_found.Is(e) {
-			return response.Fail("%s", e)
+			return s.captureDetail(e)
 		}
 
 		return s.captureDetail(e)

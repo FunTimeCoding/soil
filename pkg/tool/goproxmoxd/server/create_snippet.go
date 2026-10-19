@@ -3,6 +3,8 @@ package server
 import (
 	"context"
 	"fmt"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/not_selected"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/generated/server"
 )
 
@@ -12,8 +14,16 @@ func (s *Server) CreateSnippet(
 ) (server.CreateSnippetResponseObject, error) {
 	instance, e := s.resolveInstance(r.Params.Instance)
 
-	if e != nil {
+	if not_found.Is(e) {
+		return server.CreateSnippet404JSONResponse(*clientError(e)), nil
+	}
+
+	if not_selected.Is(e) {
 		return server.CreateSnippet400JSONResponse(*clientError(e)), nil
+	}
+
+	if e != nil {
+		return server.CreateSnippet500JSONResponse(*s.captureFail(e, e.Error())), nil
 	}
 
 	c, e := s.service.SSHClient(instance)

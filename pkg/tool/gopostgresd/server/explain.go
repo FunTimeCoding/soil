@@ -4,6 +4,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/constant"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
+	"github.com/funtimecoding/soil/pkg/errors/not_selected"
 	"github.com/funtimecoding/soil/pkg/tool/gopostgresd/generated/server"
 )
 
@@ -13,8 +15,16 @@ func (s *Server) Explain(
 ) (server.ExplainResponseObject, error) {
 	instance, e := s.resolveInstance(r.Body.Instance)
 
-	if e != nil {
+	if not_found.Is(e) {
+		return server.Explain404JSONResponse(*clientError(e)), nil
+	}
+
+	if not_selected.Is(e) {
 		return server.Explain400JSONResponse(*clientError(e)), nil
+	}
+
+	if e != nil {
+		return server.Explain500JSONResponse(*s.captureFail(e, e.Error())), nil
 	}
 
 	prefix := "EXPLAIN"

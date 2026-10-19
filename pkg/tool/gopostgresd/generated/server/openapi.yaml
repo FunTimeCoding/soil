@@ -38,6 +38,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "404":
+          description: Instance not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to execute query.
           content:
@@ -62,6 +68,12 @@ paths:
                 $ref: "#/components/schemas/QueryResult"
         "400":
           description: Invalid instance.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Instance not found.
           content:
             application/json:
               schema:
@@ -91,6 +103,12 @@ paths:
                 $ref: "#/components/schemas/QueryResult"
         "400":
           description: Invalid instance.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Instance not found.
           content:
             application/json:
               schema:
@@ -127,6 +145,12 @@ paths:
                 $ref: "#/components/schemas/QueryResult"
         "400":
           description: Invalid instance.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Instance not found.
           content:
             application/json:
               schema:
@@ -173,6 +197,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "404":
+          description: Instance not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to describe table.
           content:
@@ -215,6 +245,12 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        "404":
+          description: Instance not found.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         "500":
           description: Failed to list indexes.
           content:
@@ -247,6 +283,12 @@ paths:
                 $ref: "#/components/schemas/QueryResult"
         "400":
           description: Invalid instance.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Instance not found.
           content:
             application/json:
               schema:

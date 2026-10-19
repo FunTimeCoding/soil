@@ -20,7 +20,7 @@ func (s *Server) ShutdownContainer(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return response.Fail("%s", e)
+		return s.captureDetail(e)
 	}
 
 	taskIdentifier, e := s.service.ShutdownContainer(
@@ -31,7 +31,7 @@ func (s *Server) ShutdownContainer(
 
 	if e != nil {
 		if not_found.Is(e) {
-			return response.Fail("%s", e)
+			return s.captureDetail(e)
 		}
 
 		return s.captureDetail(e)

@@ -111,7 +111,9 @@ And in `Run()`:
 
 ```go
 l := logger.New(context.Background())
-s := store.New(relational.Open(l, o.PostgresLocator, o.LitePath))
+m := relational.Open(l, o.PostgresLocator, o.LitePath)
+migrate.AutoMigrate(m)
+s := store.New(m)
 ```
 
 Every gorm-backed service is dual-backend through this wiring -
@@ -125,21 +127,25 @@ openers are silent - test noise is not essential logging.
 
 ## Store Shape
 
-Backend resolution happens at the edge; the store is backend-agnostic.
-The constructor takes the mapper and owns migration:
+Backend resolution happens at the edge; the store is backend-agnostic
+and takes the mapper it is given. Migration lives beside it, in the
+daemon's `<path>/migrate/` package: one `AutoMigrate(d *gorm.DB)` that `Run`
+calls before building the store, so schema history - renames, drops,
+backfills - stays out of the store:
 
 ```go
-func New(m *gorm.DB) *Store {
-    errors.PanicOnError(m.AutoMigrate(NewClick()))
-
-    return &Store{mapper: m}
+func AutoMigrate(d *gorm.DB) {
+    errors.PanicOnError(d.AutoMigrate(click.New()))
 }
 ```
 
-Tests build the same store over a throwaway file:
+Tests migrate and build the same way, in memory, as `testing.md` sets
+out:
 
 ```go
-s := store.New(lite.New(filepath.Join(t.TempDir(), constant.TestDatabase)))
+m := lite.NewMemory()
+migrate.AutoMigrate(m)
+s := store.New(m)
 ```
 
 ## Migrations
@@ -148,8 +154,18 @@ s := store.New(lite.New(filepath.Join(t.TempDir(), constant.TestDatabase)))
 `column:` tag therefore creates a fresh empty column and leaves the data
 in the old one, silently, until reads come back empty. When a rename
 reaches a model's field, rename the Go field and keep the column tag;
-when the column itself has to change, ship `Migrator().RenameColumn` in
-the same change as the tag.
+when the column itself has to change, rename it in the same change as the
+tag.
+
+Schema changes go through `go:pkg/relational/schema`: `RenameColumns`,
+`RenameTable`, `DropColumns` and `DropTable`. Each acts only while there
+is something to act on, so it runs on every start and passes over a store
+that is already migrated, and each fails loudly - a rename onto a name that
+already exists panics rather than leaving the data behind. A rename runs
+before the `AutoMigrate` of its model; after it, the new name already
+exists as a fresh empty column. Moving data - a backfill, a split table -
+stays the daemon's own code. Once every store a daemon runs against is
+migrated, the call can go.
 
 An upsert through `clause.OnConflict` writes from two lists, and only one
 of them is the struct: identity columns go in `Columns`, and every

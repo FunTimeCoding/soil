@@ -19,7 +19,7 @@ func (s *Server) DeleteIssue(
 	e := s.service.DeleteIssue(a.Identifier)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return s.succeed(nil)

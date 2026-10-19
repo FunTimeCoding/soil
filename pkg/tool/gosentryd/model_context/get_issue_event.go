@@ -19,7 +19,7 @@ func (s *Server) GetIssueEvent(
 	result, e := s.service.LatestEvent(a.Identifier)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	return s.succeed(result)

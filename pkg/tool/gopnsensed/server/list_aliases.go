@@ -19,7 +19,7 @@ func (s *Server) ListAliases(
 	result, e := s.opnsense.Aliases(phrase)
 
 	if e != nil {
-		return server.ListAliases500JSONResponse(*s.captureDetail(e)), nil
+		return server.ListAliases500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.ListAliases200JSONResponse(convert.Aliases(result)), nil

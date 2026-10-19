@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"github.com/funtimecoding/soil/pkg/errors/not_found"
 	"github.com/funtimecoding/soil/pkg/tool/golinkaced/generated/server"
 )
 
@@ -9,8 +10,14 @@ func (s *Server) DeleteList(
 	_ context.Context,
 	r server.DeleteListRequestObject,
 ) (server.DeleteListResponseObject, error) {
-	if e := s.client.DeleteList(int(r.Identifier)); e != nil {
-		return server.DeleteList500JSONResponse(*s.captureDetail(e)), nil
+	e := s.client.DeleteList(int(r.Identifier))
+
+	if not_found.Is(e) {
+		return server.DeleteList404JSONResponse{Error: e.Error()}, nil
+	}
+
+	if e != nil {
+		return server.DeleteList500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.DeleteList200Response{}, nil

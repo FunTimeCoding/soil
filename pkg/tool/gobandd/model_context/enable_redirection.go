@@ -16,7 +16,7 @@ func (s *Server) enableRedirection(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return response.Fail("%s", e)
+		return s.captureDetail(e)
 	}
 
 	enabled, f := s.service.EnableRedirection(instance)

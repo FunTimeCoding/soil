@@ -14,12 +14,12 @@ func (s *Server) addHost(
 	identifier, e := s.opnsense.AddHost(hostRequest(r))
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	if r.GetBool(constant.ParameterApply, true) {
 		if f := s.opnsense.ReconfigureDnsmasq(); f != nil {
-			return s.captureDetail(f)
+			return s.answer(f)
 		}
 	}
 

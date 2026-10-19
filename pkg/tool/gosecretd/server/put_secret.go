@@ -19,11 +19,11 @@ func (s *Server) PutSecret(
 	result, e := s.service.Merge(r.Params.Path, values)
 
 	if validation.Is(e) {
-		return server.PutSecret400JSONResponse(*clientError(e)), nil
+		return server.PutSecret400JSONResponse{Error: e.Error()}, nil
 	}
 
 	if e != nil {
-		return server.PutSecret500JSONResponse(*s.captureDetail(e)), nil
+		return server.PutSecret500JSONResponse(*s.answer(e)), nil
 	}
 
 	return server.PutSecret200JSONResponse{

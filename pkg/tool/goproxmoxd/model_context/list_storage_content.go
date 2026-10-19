@@ -24,7 +24,7 @@ func (s *Server) ListStorageContent(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return response.Fail("%s", e)
+		return s.captureDetail(e)
 	}
 
 	content, e := s.service.ListStorageContent(instance, a.Node, a.Storage)

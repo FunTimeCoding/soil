@@ -77,7 +77,7 @@ func Run(
 	)
 	defer v.Close()
 	v.ClearBindings()
-	index := reacher.New()
+	index := reacher.New(r)
 
 	for _, f := range append(v.ReconcileSummaries(), v.ReconcileCompletions()...) {
 		index.Handle(

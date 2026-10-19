@@ -1,10 +1,19 @@
 package proxmox
 
-import "github.com/luthermonson/go-proxmox"
+import (
+	"github.com/funtimecoding/soil/pkg/proxmox/constant"
+	"github.com/luthermonson/go-proxmox"
+)
 
 func (c *Client) Machine(
 	n *proxmox.Node,
 	identifier int,
 ) (*proxmox.VirtualMachine, error) {
-	return n.VirtualMachine(c.context, identifier)
+	result, e := n.VirtualMachine(c.context, identifier)
+
+	if e != nil {
+		return nil, notFound(e, constant.MachineKind, identifier)
+	}
+
+	return result, nil
 }

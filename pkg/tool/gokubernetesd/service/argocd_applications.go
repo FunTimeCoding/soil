@@ -2,7 +2,7 @@ package service
 
 import (
 	"context"
-	"github.com/funtimecoding/soil/pkg/errors/unreachable"
+	"github.com/funtimecoding/soil/pkg/errors/not_configured"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/resource"
 	"github.com/funtimecoding/soil/pkg/tool/gokubernetesd/service/response"
@@ -30,7 +30,7 @@ func (s *Service) ArgocdApplications(
 			f.Error(),
 			"could not find the requested resource",
 		) {
-			return nil, unreachable.Format(
+			return nil, not_configured.Format(
 				"ArgoCD not installed - Application CRD not found",
 			)
 		}

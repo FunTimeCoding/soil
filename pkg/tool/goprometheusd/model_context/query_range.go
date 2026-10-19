@@ -26,7 +26,7 @@ func (s *Server) queryRange(
 	instance, e := s.instances.Resolve(x)
 
 	if e != nil {
-		return response.Fail("%s", e)
+		return s.captureDetail(e)
 	}
 
 	start, e := parseDurationOrTime(a.Start)

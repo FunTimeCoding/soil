@@ -21,7 +21,7 @@ func New(
 			),
 		).WithRecorder(t).WithSessionEnd(s.Selection().Clear).Server(),
 		service:   s,
-		instances: instance_tool.New(s.Inventory(), s.Selection()),
+		instances: instance_tool.New(s.Inventory(), s.Selection(), r),
 		reporter:  r,
 	}
 	result.register()

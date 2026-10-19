@@ -16,7 +16,7 @@ func (s *Server) ListNotes(
 	r, e := s.client.NotesByLinkPage(a.LinkIdentifier, p)
 
 	if e != nil {
-		return s.captureDetail(e)
+		return s.answer(e)
 	}
 
 	result := make([]map[string]any, len(r.Items))

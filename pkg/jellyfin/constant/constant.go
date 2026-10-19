@@ -8,4 +8,5 @@ const (
 	TokenFormat = "MediaBrowser Token=%q"
 
 	ItemFields = "Name,Overview,Genres,CommunityRating,ProductionYear,RunTimeTicks,OfficialRating,SeriesName,IndexNumber,ParentIndexNumber"
+	ItemKind   = "item"
 )
