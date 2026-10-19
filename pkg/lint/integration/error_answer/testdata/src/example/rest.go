@@ -31,6 +31,21 @@ func (r *rest) item(e error) (any, error) {
 	return server.GetItem404JSONResponse{Error: e.Error()}, nil
 }
 
+func (r *rest) answerWith(
+	e error,
+	_ string,
+) *server.ErrorResponse {
+	return &server.ErrorResponse{Error: e.Error()}
+}
+
+func (r *rest) another(e error) (any, error) {
+	if unreachable.Is(e) {
+		return server.GetOther503JSONResponse(*r.answerWith(e, "")), nil
+	}
+
+	return nil, e
+}
+
 func (r *rest) other(e error) (any, error) {
 	if unreachable.Is(e) {
 		return server.GetOther503JSONResponse(*r.captureFail(e)), nil

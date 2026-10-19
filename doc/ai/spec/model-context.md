@@ -26,7 +26,8 @@ pkg/tool/go<tool>d/
 │   ├── new.go                 # New(deps, r face.Reporter) *Server
 │   ├── mount.go               # Mount(g *guard.Mux) - HTTP transport setup
 │   ├── register.go            # register() - wires all tools to the MCPServer
-│   ├── capture_fail.go        # captureFail(e error, message string)
+│   ├── answer_with.go         # answerWith(e error, message string)
+│   ├── answer.go              # answer(e error) - answerWith without context
 │   └── <tool_name>.go         # One file per tool function (get_alerts.go, etc.)
 └── server/
 ```
@@ -237,7 +238,7 @@ func (s *Server) ListLinks(
     links, e := s.client.Links(int32(a.Collection))
 
     if e != nil {
-        return s.captureFail(e, "failed to list links")
+        return s.answer(e)
     }
 
     return response.SuccessAny(map[string]any{"links": links})
@@ -271,9 +272,9 @@ This works but the typed handler pattern is preferred for new tools.
 
 ## Response Conventions
 
-Tool function files use `response.Fail` for input validation,
-`captureFail` for infrastructure errors, `response.SuccessAny` for
-JSON results, and `response.Success` for plain text results:
+Tool function files use `response.Fail` for request parsing, `answer`
+and `answerWith` for every other error, `response.SuccessAny` for JSON
+results, and `response.Success` for plain text results:
 
 ```go
 func (s *Server) getAlerts(
@@ -284,15 +285,15 @@ func (s *Server) getAlerts(
     result, e := s.store.ByName(a.Name, int(a.Limit))
 
     if e != nil {
-        return s.captureFail(e, "get alerts failed")
+        return s.answer(e)
     }
 
     return response.SuccessAny(convert.Alerts(result))
 }
 ```
 
-`captureFail` lives in `capture_fail.go` - the shape is in
-`error-handling/mcp.md#the-capture-primitive`.
+`answer` and `answerWith` live in their own files - the shape is in
+`error-handling/mcp.md`.
 
 ### Quick reference
 
@@ -304,16 +305,16 @@ func (s *Server) getAlerts(
   `notation.MarshalIndent`, with the entity-wrapper `Raw` field removed at any
   depth
 - Text results: `response.Success("comment added")`
-- Validation errors: `response.Fail("message: %v", err)` - wraps
+- Request parsing errors: `response.Fail("message: %v", err)` - wraps
   `mcp.NewToolResultError`
-- Infrastructure errors: `s.captureFail(e, "message")` - captures to Sentry with
-  event ID
+- Every other error: `s.answer(e)`, or `s.answerWith(e, step)` when the tool
+  does several things and the step tells which failed - answered by class
 - Error variables progress `e`, `f`, `g`, `h`, `i` - never reuse the same
   letter. See `naming.md`.
 - Always convert results through the `convert/` package - never serialize raw
   domain objects
-- Error handling is two-tier - input validation vs infrastructure failures. See
-  `doc/ai/spec/error-handling/mcp.md`.
+- Errors answer by their class - see `doc/ai/spec/error-handling/README.md`
+  and `mcp.md` there.
 
 ## Parameters that widen a response
 
@@ -388,8 +389,8 @@ model knows how much it has not seen.
 
 Services with REST APIs use oapi-codegen's strict server mode.
 The full pattern - configs, handlers, error schemas, recording
-middleware, mounting - lives in `generated-api.md`; the error
-tiers and REST `captureFail` in `doc/ai/spec/error-handling/rest.md`. MCP and
+middleware, mounting - lives in `generated-api.md`; REST error answers in
+`doc/ai/spec/error-handling/rest.md`. MCP and
 REST share the `convert/` layer, the reporter, and the recorder.
 
 MCP mounts through the daemon's top-level `Mount(...)` beside the

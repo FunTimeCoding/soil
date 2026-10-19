@@ -40,10 +40,12 @@ func (w *Watcher) run() {
 			if len(w.changed) > 0 {
 				w.recovery.Run(w.scanChanged)
 			}
-		case _, okay := <-n.Errors:
+		case f, okay := <-n.Errors:
 			if !okay {
 				return
 			}
+
+			w.reporter.CaptureException(f)
 		}
 	}
 }

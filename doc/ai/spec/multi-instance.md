@@ -80,14 +80,14 @@ tests; a client given that way stays its owner's to close.
 `Register` adds `list_instances` and `use_instance` only when two or more
 instances are configured - with one there is nothing to choose. Handlers
 resolve before touching a client and answer a resolution error by its class
-through `captureDetail` - `not_found` and `not_selected` fail plainly,
+through `answer` - `not_found` and `not_selected` fail plainly,
 `not_configured` and a context without a session are captured:
 
 ```go
 instance, e := s.instances.Resolve(x)
 
 if e != nil {
-    return s.captureDetail(e)
+    return s.answer(e)
 }
 ```
 

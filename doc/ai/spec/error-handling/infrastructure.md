@@ -8,8 +8,8 @@ Three caller categories determine how store methods handle errors:
 |--------|-------------|----------------|
 | Web handler (HTML, recovery middleware) | `error` | `PanicOnError` - recovery middleware catches, returns 500 |
 | Worker / sweep | void, `PanicOnError` inside | `recovery.Run` catches, worker continues |
-| MCP handler | `error` | `captureFail` / `captureDetail` → structured tool result |
-| REST handler (strict server) | `error` | `captureFail` → typed 500 response with Sentry event ID |
+| MCP handler | `error` | `answer` / `answerWith` → tool result by class |
+| REST handler (strict server) | `error` | `answer` / `answerWith` → typed 500 response with Sentry event ID |
 
 The default direction is: store methods return `error`. Web callers wrap
 with `PanicOnError`; MCP and REST callers handle explicitly. Worker-only
@@ -27,16 +27,14 @@ func (s *Store) UpdateStatus(identifier string, status string) error {
 // Web caller - panics, caught by recovery middleware
 errors.PanicOnError(s.store.UpdateStatus(id, status))
 
-// MCP caller - captures to Sentry, returns structured error
+// MCP caller - answers by the error's class
 if e := s.store.UpdateStatus(id, status); e != nil {
-    return s.captureFail(e, "update status failed")
+    return s.answer(e)
 }
 
 // REST caller (strict server) - returns typed error response
 if e := s.service.UpdateStatus(id, status); e != nil {
-    return server.PostUpdate500JSONResponse(
-        *s.captureFail(e, constant.UnexpectedError),
-    ), nil
+    return server.PostUpdate500JSONResponse(*s.answer(e)), nil
 }
 ```
 

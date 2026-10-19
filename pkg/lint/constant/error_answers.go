@@ -3,6 +3,8 @@ package constant
 import "regexp"
 
 var CaptureCalls = []string{
+	"answerWith",
+	"answer",
 	"captureFail",
 	"captureDetail",
 	"CaptureException",

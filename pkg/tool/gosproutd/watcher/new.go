@@ -16,6 +16,7 @@ func New(
 	return &Watcher{
 		service:       s,
 		recovery:      recovery.New(l, r),
+		reporter:      r,
 		seedDirectory: seedDirectory,
 		stop:          make(chan struct{}),
 	}

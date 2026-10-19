@@ -19,51 +19,22 @@ We haven't classified which
 upstream errors are truly client mistakes vs infra failures vs
 auth issues. Until a specific error has been observed enough to
 route differently, everything from an external API is 500 with
-`ErrorResponse`. The split is message quality, not status code:
-parseable errors get the extracted message, opaque errors get
-`constant.UnexpectedError`.
+`ErrorResponse`, and the message is the error's own text.
 
-Not all upstream APIs return structured errors. Some return
-opaque errors or HTML error pages. For those, the fallback
-message is all we can offer.
+## The upstream's own message
 
-## The captureDetail pattern
+The message is extracted where the error is made, not at the surface. A
+client on the requester (`pkg/web/requester`) reads the upstream's
+message out of its error body through `refusal.Reason`; a library client
+converts the library's error type into `detail_error.Detail` at the
+boundary. The surface answers what arrives through `answer` and
+`answerWith` (`mcp.md`, `rest.md`) and never parses an upstream body
+itself. Where an upstream answers with an opaque body or an HTML error
+page, its status line is all the message there is.
 
-A per-service method that checks for the upstream's error types and
-extracts the best message.
-Returns `*server.ErrorResponse` - always captured; the handler answers
-with the status the class names, 500 for anything unclassified.
-
-```go
-// gonetboxd - NetBox returns GenericOpenAPIError with parseable bodies
-func (s *Server) captureDetail(e error) *server.ErrorResponse {
-    if m, okay := common.ExtractMessage(e); okay {
-        return s.captureFail(e, m)
-    }
-
-    return s.captureFail(e, constant.UnexpectedError)
-}
-```
-
-The handler returns 500 with the result:
-
-```go
-if e != nil {
-    return server.Foo500JSONResponse(*s.captureDetail(e)), nil
-}
-```
-
-**MCP layer equivalent:** MCP handlers use the same `captureDetail`
-pattern but return `(*mcp.CallToolResult, error)` via `captureFail`
-+ `response.CaptureFail`. The extraction logic is identical - only
-the return type differs.
-
-**When to add captureDetail vs just captureFail:** if the service
-wraps an external API with parseable errors, use `captureDetail`
-to extract the best message. If the service only has internal
-stores (GORM, pgx), use `captureFail` with
-`constant.UnexpectedError` - there's no meaningful message to
-extract for the caller.
+Daemons not yet moved may still carry a `captureDetail` reading a
+library's error type at the surface, as gonetboxd's
+`common.ExtractMessage` does.
 
 ## Sentinel classification
 
@@ -71,11 +42,11 @@ The default posture (500, Sentry, best-effort message) applies to
 errors we haven't classified yet. When a specific error has been
 observed enough in Sentry to understand what it means, classify it:
 give it the shared class it turned out to be, and the table in
-`README.md` (Answering an error) answers its status, its capture and
-its message together.
+`README.md` (Answering an error) answers its status and its capture
+together.
 
 Classification is per-error. The handler checks for the classified
-error before falling through to `captureDetail`. The default remains
+error before falling through to `answer`. The default remains
 capture-everything until proven otherwise.
 
 ### Simple sentinels and typed errors
@@ -129,8 +100,8 @@ a per-package sentinel for the same class:
   already in use, already queued, still running.
   `Exists(kind, identifier)` renders the standard
   "kind already exists: identifier" message.
-- `validation` - a caller-shaped request error (`New`);
-  `captureDetail` surfaces its message without a Sentry
+- `validation` - a caller-shaped request error (`New`),
+  answered as a tool failure or a 400 without a Sentry
   capture. Upstream data failing our own checks is not the
   caller's mistake and stays unclassified.
 - `not_selected` - a required session selection is missing;
@@ -173,6 +144,33 @@ store or client method, as `not_found.New(kind, identifier)`. No surface
 tests a driver sentinel, and no store returns one it did not receive:
 the surface sees only classes, and the message names the subject and the
 identifier instead of the driver's "record not found".
+
+What an upstream answers is checked, not assumed - by a read through
+the deployed tool, a direct call with the daemon's own credentials, or
+an example (`../example.md`) with synthetic values - and the same answer
+can mean different things per call:
+
+- **A status that means the caller on some calls.** An upstream 400 is
+  usually the daemon's own malformed request, so the requester's default
+  reads it as `unexpected`. Where one call's 400 is seen to be the
+  caller's - an invalid value passed straight through - that request
+  carries its own refusal (`request.WithRefusal`) turning it into
+  `validation` with the upstream's message; every other call keeps the
+  default.
+- **An answer that means different things per call.** OPNsense answers
+  a save that failed without validation details: on set that is an
+  unknown identifier, `not_found`; on add it is a request missing its
+  wrapper, the client's own fault, left `unexpected`.
+- **An answer shared with a fault.** LinkAce answers a note for an
+  unknown link with the 403 a token without rights would get, so its
+  client looks the link up first: the lookup's 404 is the caller's
+  mistake, a 403 after it a real fault.
+- **An upstream in the tree.** One we own and that answers imprecisely
+  is fixed at its source rather than worked around in its client - the
+  iTerm bridge (`graft/py/iterm_bridge`) answers 404 for a missing
+  session, 422 for an unusable value, 503 for no window, 400 for a
+  malformed request and 500 for a failed call, and its client maps each
+  status the same way for every call.
 
 ## Message format
 

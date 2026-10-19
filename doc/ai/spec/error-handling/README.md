@@ -80,11 +80,11 @@ func ProcessRecord(path string) (*Result, error) {
 result, e := store.ProcessRecord(path)
 errors.PanicOnError(e)
 
-// MCP caller - captures to reporter, returns structured error
+// MCP caller - answers by the error's class
 result, e := store.ProcessRecord(path)
 
 if e != nil {
-    return s.captureFail(e, "process record failed")
+    return s.answer(e)
 }
 ```
 
@@ -104,29 +104,37 @@ questions of every error, and they are independent:
   is not ours to look at, and neither is a failure something else has
   already reported; everything else is captured, and nothing captured is
   also logged.
-- **What can we honestly say?** A known cause is relayed as it is; an
-  unknown one is `constant.UnexpectedError` with the event identifier, never
-  a guessed cause.
+- **What can we honestly say?** The error's own text, after the step that
+  failed when the caller cannot infer it - never a guessed cause.
 
-The error's class answers all three at once:
+The error's class answers whose move it is and whether we look; the
+message does not depend on it:
 
-| Class | REST | MCP | Sentry | Message |
-|-------|------|-----|--------|---------|
-| `validation`, `ambiguous`, `not_selected` | 400 `Error` | `response.Fail` | no | its own |
-| `not_found` | 404 `Error` | `response.Fail` | no | its own |
-| `conflict` | 409 `Error` | `response.Fail` | no | its own |
-| `unavailable` | 503 `Error` | `response.Fail` | no - the guard reports the outage | its own |
-| `unreachable`, `timeout`, `dropped` | 503 `ErrorResponse` | `captureFail` | yes | its own |
-| `not_configured` | 500 `ErrorResponse` | `captureFail` | yes | its own |
-| anything else | 500 `ErrorResponse` | `captureFail` / `captureDetail` | yes | extracted, or `constant.UnexpectedError` |
+| Class | REST | MCP | Sentry |
+|-------|------|-----|--------|
+| `validation`, `ambiguous`, `not_selected` | 400 `Error` | tool failure | no |
+| `not_found` | 404 `Error` | tool failure | no |
+| `conflict` | 409 `Error` | tool failure | no |
+| `unavailable` | 503 `Error` | tool failure | no - the guard reports the outage |
+| `unreachable`, `timeout`, `dropped` | 503 `ErrorResponse` | captured | yes |
+| `not_configured` | 500 `ErrorResponse` | captured | yes |
+| anything else | 500 `ErrorResponse` | captured | yes |
+
+The message is `context: error`, or the error alone without context. A
+context names a step the caller cannot infer - which of several writes in
+one tool failed - and restating the tool's own name is not one.
 
 The schema follows the Sentry column: a captured answer carries
-`ErrorResponse` with its event identifier, an uncaptured one `Error`.
+`ErrorResponse` with its event identifier, an uncaptured one `Error`. On
+REST, reaching the 500 is always a fault: a quiet class arriving there is
+an operation missing its branch, captured under the title
+`missing <class> branch: <error>`, never logged instead.
 
 The table is code: `Answers` in `go:pkg/errors/constant`, read through
 `go:pkg/errors/classify` - `Class` names an error's class, `Answer` its
-row, `Reportable` its Sentry column. The `error_answer` analyzer and the
-MCP answer (`mcp.md`) read the same table.
+row, `Reportable` its Sentry column, `Message` the text and `Capture` the
+REST answer. The `error_answer` analyzer and both surfaces' answers
+(`mcp.md`, `rest.md`) read the same table.
 
 `unavailable` is a guard's verdict that a peer is down, and the guard
 reports a lasting outage once (`infrastructure.md`, Peer Outages and
@@ -142,11 +150,12 @@ honours - and only once it has been seen enough to know what it means.
 
 ## Leaves
 
-- [mcp.md](mcp.md) - response.Fail, captureFail, captureDetail, detail_error,
-  parseDetail
-- [rest.md](rest.md) - strict server schemas, clientError, captureFail on REST
-- [external-api.md](external-api.md) - captureDetail pattern, default posture,
-  sentinel classification, typed errors, message format
+- [mcp.md](mcp.md) - answer and answerWith on MCP, response.Fail for
+  request parsing, detail_error
+- [rest.md](rest.md) - strict server schemas, the 4xx body, answer and
+  answerWith on REST
+- [external-api.md](external-api.md) - default posture, sentinel
+  classification, translating at the client boundary, message format
 - [infrastructure.md](infrastructure.md) - store method rule, web handler
   panics, worker recovery, HTTP recovery, Sentry enrichment, external process,
   self-healing

@@ -51,10 +51,12 @@ func (w *Watcher) run() {
 				)
 				dirty = false
 			}
-		case _, okay := <-n.Errors:
+		case f, okay := <-n.Errors:
 			if !okay {
 				return
 			}
+
+			w.reporter.CaptureException(f)
 		}
 	}
 }

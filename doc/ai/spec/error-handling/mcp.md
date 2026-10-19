@@ -19,10 +19,12 @@ Whether Sentry hears of an error is its class, in the table in
 `README.md` (Answering an error); this leaf is how a handler builds
 each answer.
 
-## Uncaptured answers
+## Request parsing
 
-Bad params from the model, and every class the table answers without
-Sentry: `response.Fail`.
+Bad parameters from the model are answered on the spot with
+`response.Fail`, which wraps `mcp.NewToolResultError` with
+`fmt.Sprintf` and returns the standard `(*mcp.CallToolResult, error)`
+tuple.
 
 ```go
 id, f := r.RequireString(parameter.Identifier)
@@ -32,126 +34,81 @@ if f != nil {
 }
 ```
 
-`response.Fail` wraps `mcp.NewToolResultError` with `fmt.Sprintf` and returns
-the standard `(*mcp.CallToolResult, error)` tuple.
+## Everything else: answer and answerWith
 
-## Captured answers
-
-Every other error a handler meets - a store, a database, an external
-call, even local file I/O - is captured to Sentry and answered with a
-structured error carrying the event ID.
-
-Two layers:
-
-### The capture primitive
-
-`captureFail` is the primitive - a private method on the Server struct
-that wraps `response.CaptureFail`. Takes the error and a model-facing
-message. The error goes to sentry, the message goes to the model.
+Every other error a handler meets - from a service, a store, a client,
+even local file I/O - goes to one of two private methods on the Server
+struct, each in its own file:
 
 ```go
-func (s *Server) captureFail(
+// answer_with.go
+func (s *Server) answerWith(
     e error,
     message string,
 ) (*mcp.CallToolResult, error) {
-    return response.CaptureFail(s.reporter, e, message)
+    return response.AnswerWith(s.reporter, e, message)
+}
+
+// answer.go
+func (s *Server) answer(e error) (*mcp.CallToolResult, error) {
+    return s.answerWith(e, "")
 }
 ```
 
-### Per-service capture
-
-`captureDetail` is the per-service wrapper that relays the message of
-recognized API-specific typed errors through `captureFail` and hands
-everything else to `response.Answer`, which applies the class table:
-an uncaptured class fails with its own message, a captured class is
-captured with it, and anything unclassified is captured as
-`constant.UnexpectedError`. Lives in its own file (`capture_detail.go`).
-A handler routes every error that did not come from parsing the request
-through it - `return s.captureDetail(e)` - never through `response.Fail`.
+`response.AnswerWith` reads the class table. A quiet class fails the
+tool with the message alone; anything captured goes to Sentry and
+answers structured JSON carrying `error` and `event_identifier`, so the
+model can look the event up through the Sentry tools in the same
+conversation. The message follows the rule in `README.md`: the error's
+own text, after a context only when the context names a step the caller
+cannot infer.
 
 ```go
-func (s *Server) captureDetail(e error) (*mcp.CallToolResult, error) {
-    if d, okay := errors.AsType[*detail_error.Detail](e); okay {
-        return s.captureFail(e, d.Detail)
-    }
-
-    return response.Answer(s.reporter, e)
-}
-```
-
-Each service's `captureDetail` whitelists the error types its own
-client produces - the inventory is the `capture_detail.go` file in
-every `<path>/model_context/` package, not this list. The captured
-shapes that recur:
-
-- a typed detail from the HTTP client, `*detail_error.Detail` from
-  `parseDetail` or a `wrapError` - the message field is relayed
-- an SDK error type with a message field, such as Mattermost's
-  `*model.AppError`
-- a client's own sentinels matched with `errors.Is` - where one is
-  a shared class in disguise (a driver's not-found, a context
-  deadline), its class answers it instead
-- a shared extractor when REST and MCP surfaces need the same
-  parsing, as gonetboxd's `common.ExtractMessage`
-
-### Calling them from a handler
-
-Most handlers call `captureDetail(e)` directly:
-
-```go
-result, e := s.client.SearchIssues(...)
+records, e := s.service.Records(name)
 
 if e != nil {
-    return s.captureDetail(e)
+    return s.answer(e)
 }
 ```
 
-Use `captureFail(e, message)` directly only when the handler knows
-a specific message that `captureDetail` can't derive - e.g. after
-a multi-step operation where the context matters.
+`answerWith` is for a tool that does several things, where the context
+says which one failed - adding, removing or replacing tags in one call.
+A single-step tool answers `answer(e)`; restating the tool's own name is
+not a context.
+
+A step a daemon must run before every answer - gosentryd records the
+reacher's outage episodes - sits in `answer` before it hands over, so a
+site that needs the step never calls `answerWith` directly.
+
+An inline class branch before the answer goes when the answer says the
+same or better; one that re-words or re-classes the error stays.
+
+Daemons not yet moved still carry `captureFail`, which captures every
+error with the message it is given through `response.CaptureFail`, and
+`captureDetail`, which hands to `response.Answer` - the same table,
+under the old names.
 
 ## Shared pieces
 
 ### The detail error type
 
-`detail_error.Detail` (`pkg/web/detail_error/`) is a shared typed
-error carrying a `Detail` string and `Status` string. HTTP clients
-return this from `parseDetail` when the API response contains a
-known error message field. The `Detail` field is what gets relayed
-to the model.
+`detail_error.Detail` (`pkg/web/detail_error/`) is a shared typed error
+carrying a `Detail` string and `Status` string. Library clients convert
+their own error types into it at the boundary (a `wrapError`), and its
+`Detail` is the message a surface relays. It implements
+`ContextProvider`, so Sentry gets the structure through the `BeforeSend`
+hook (`infrastructure.md`, Sentry Enrichment Providers).
 
-### The unexpected-error fallback
+### Upstream messages
 
-`constant.UnexpectedError` (`pkg/constant/`) is the shared fallback
-message - `"unexpected error"`. Honest about not knowing what went
-wrong. The model gets this alongside the sentry event ID and can
-look up the full error if needed. Never lie about the cause - don't
-use "API unreachable" or "database unreachable" as catch-all messages.
+Clients on the requester (`pkg/web/requester`) read an upstream's own
+message out of its error body through `refusal.Reason`, which checks the
+fields APIs commonly use (`message`, `detail`, `title`, `error` and
+others). A client that knows a status means the caller's mistake on one
+call passes a refusal on that request (`external-api.md`, Translate at
+the boundary).
 
-### Parsing upstream error bodies
-
-`parseDetail` in HTTP clients checks the response status code
-and parses the error body for a known message field. Each API has
-its own shape:
-
-- Sentry: `{"detail": "..."}` (JSON)
-- Confluence: `{"message": "..."}` (JSON)
-- Habitica: `{"message": "..."}` (JSON)
-- Jellyfin: `{"title": "..."}` (ASP.NET ProblemDetails JSON),
-  or plain text body, or empty
-- Salt: `<p>...</p>` in CherryPy HTML error pages
-
-If the known field is found, returns `detail_error.New(message, status)`.
-Otherwise returns `fmt.Errorf("%s", status)`.
-
-### Capturing through the reporter
-
-`response.CaptureFail` captures the exception via the reporter and
-returns structured JSON with `error` and `event_identifier` fields via
-`response.FailAny`. The event ID lets the model look up the
-stacktrace via Sentry MCP tools and diagnose the problem in the same
-conversation.
+### The reporter
 
 The reporter is threaded into the MCP server (same pattern as web and
-workers). The reporter is never nil - it always exists, even in noop
-mode.
+workers) and is never nil - it always exists, even in noop mode.

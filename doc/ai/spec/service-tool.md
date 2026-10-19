@@ -412,8 +412,8 @@ in the shared library.
 External API client methods come in pairs:
 
 - `<operation>.go` - returns `(value, error)`. Used by daemon handlers
-  that need to propagate errors gracefully (MCP `captureFail`, REST
-  `http.Error`).
+  that need to propagate errors gracefully (MCP and REST answer them by
+  class through `answer`).
 - `must_<operation>.go` - panics on error. Used by CLI tools and
   background workers running under lifecycle recovery.
 

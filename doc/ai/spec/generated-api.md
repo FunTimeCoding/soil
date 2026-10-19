@@ -100,9 +100,7 @@ func (s *Server) PostDeploy(
     result, e := s.store.TriggerTargets(r.Body.Targets)
 
     if e != nil {
-        return server.PostDeploy500JSONResponse(
-            *s.captureFail(e, constant.UnexpectedError),
-        ), nil
+        return server.PostDeploy500JSONResponse(*s.answer(e)), nil
     }
 
     return server.PostDeploy200JSONResponse{
