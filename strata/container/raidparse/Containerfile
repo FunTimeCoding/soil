@@ -1,4 +1,4 @@
-FROM python:3.14-slim
+FROM python:3.15-slim
 RUN pip install --no-cache-dir playwright xlrd xlutils xlwt xlsxwriter jsons requests && \
     playwright install --with-deps chromium
 COPY tmp/goraidparsed/linux-amd64/goraidparsed /usr/local/bin
