@@ -1,10 +1,13 @@
 package unit
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
 	"github.com/funtimecoding/soil/pkg/assert/fixture"
+	systemConstant "github.com/funtimecoding/soil/pkg/system/constant"
+	"net"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -174,6 +177,79 @@ func TestErrorIs(t *testing.T) {
 
 func TestFatalOnError(t *testing.T) {
 	assert.FatalOnError(t, nil)
+}
+
+func TestSkipOnOutageSkipsATimeout(t *testing.T) {
+	reached := false
+	t.Run(
+		"outage",
+		func(u *testing.T) {
+			assert.SkipOnOutage(u, context.DeadlineExceeded)
+			reached = true
+		},
+	)
+	assert.False(t, reached)
+}
+
+func TestSkipOnOutageLetsOtherErrorsThrough(t *testing.T) {
+	reached := false
+	t.Run(
+		"answered",
+		func(u *testing.T) {
+			assert.SkipOnOutage(u, nil)
+			assert.SkipOnOutage(u, errors.New("unexpected status: 500"))
+			reached = true
+		},
+	)
+	assert.True(t, reached)
+}
+
+func TestSkipUnlessDialableLetsAListeningHostThrough(t *testing.T) {
+	l, e := net.Listen(systemConstant.Transmission, "127.0.0.1:0")
+	assert.FatalOnError(t, e)
+	reached := false
+	t.Run(
+		"listening",
+		func(u *testing.T) {
+			assert.SkipUnlessDialable(u, l.Addr().String())
+			reached = true
+		},
+	)
+	assert.FatalOnError(t, l.Close())
+	assert.True(t, reached)
+}
+
+func TestSkipUnlessDialableSkipsAClosedPort(t *testing.T) {
+	l, e := net.Listen(systemConstant.Transmission, "127.0.0.1:0")
+	assert.FatalOnError(t, e)
+	address := l.Addr().String()
+	assert.FatalOnError(t, l.Close())
+	reached := false
+	t.Run(
+		"refused",
+		func(u *testing.T) {
+			assert.SkipUnlessDialable(u, address)
+			reached = true
+		},
+	)
+	assert.False(t, reached)
+}
+
+func TestSkipUnlessDialableRemembersTheVerdict(t *testing.T) {
+	l, e := net.Listen(systemConstant.Transmission, "127.0.0.1:0")
+	assert.FatalOnError(t, e)
+	address := l.Addr().String()
+	assert.SkipUnlessDialable(t, address)
+	assert.FatalOnError(t, l.Close())
+	reached := false
+	t.Run(
+		"remembered",
+		func(u *testing.T) {
+			assert.SkipUnlessDialable(u, address)
+			reached = true
+		},
+	)
+	assert.True(t, reached)
 }
 
 func TestExported(t *testing.T) {
