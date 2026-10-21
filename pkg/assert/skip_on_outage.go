@@ -6,7 +6,7 @@ import (
 )
 
 func SkipOnOutage(
-	t *testing.T,
+	t testing.TB,
 	e error,
 ) {
 	if connection.Classify(e) != nil {

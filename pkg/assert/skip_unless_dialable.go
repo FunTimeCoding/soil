@@ -10,7 +10,7 @@ import (
 )
 
 func SkipUnlessDialable(
-	t *testing.T,
+	t testing.TB,
 	host string,
 ) {
 	t.Helper()
