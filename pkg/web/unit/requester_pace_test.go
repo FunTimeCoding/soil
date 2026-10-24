@@ -44,10 +44,7 @@ func TestPaceEndsWithItsContext(t *testing.T) {
 	r := newRequester(t, s.URL).WithPace(time.Hour)
 	_, e := r.Bytes(request.Get("/items"))
 	assert.FatalOnError(t, e)
-	x, cancel := context.WithTimeout(
-		context.Background(),
-		50*time.Millisecond,
-	)
+	x, cancel := context.WithTimeout(context.Background(), 50*time.Millisecond)
 	defer cancel()
 	_, e = r.Bytes(request.Get("/items").WithContext(x))
 	assert.True(t, errors.Deadline(e))
