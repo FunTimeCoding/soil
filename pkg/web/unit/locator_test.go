@@ -27,6 +27,19 @@ func TestLocator(t *testing.T) {
 	)
 }
 
+func TestOrigin(t *testing.T) {
+	assert.String(
+		t,
+		"http://127.0.0.1:8080/p",
+		locator.NewOrigin("http://127.0.0.1:8080").Path("/p").String(),
+	)
+	assert.String(
+		t,
+		"https://example.org",
+		locator.NewOrigin("https://example.org").String(),
+	)
+}
+
 func TestUser(t *testing.T) {
 	assert.String(
 		t,

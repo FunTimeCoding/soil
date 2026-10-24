@@ -14,6 +14,10 @@ func (r *Requester) Send(q *request.Request) (*http.Response, error) {
 	renewed := false
 
 	for attempt := 0; ; attempt++ {
+		if e := r.wait(q); e != nil {
+			return nil, e
+		}
+
 		h, e := r.build(q)
 
 		if e != nil {
