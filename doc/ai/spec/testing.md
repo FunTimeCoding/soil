@@ -155,7 +155,10 @@ interface Mount consumes, daemon-internal dependencies as empty
 constructions (`inventory.New()`, in-memory stores). Nil is never
 passed - mocks exist precisely so nothing downstream needs a nil
 check, and client code checks its dependencies for nil (almost)
-nowhere, ideally nowhere. Daemons with a test
+nowhere, ideally nowhere. The `nil_dependency` analyzer holds this for
+`face` interfaces passed to a `New…` constructor; a dependency that is
+genuinely optional is set by a `With…` method rather than passed as nil.
+Daemons with a test
 base run the guard test through the base, and bases
 run the full production `Mount` — mock clients flow through it
 because `Mount`, the REST server, and the model_context package all

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/funtimecoding/soil/pkg/assert"
+	"github.com/funtimecoding/soil/pkg/errors/sentry/reporter/memory"
 	"github.com/funtimecoding/soil/pkg/identity"
 	"github.com/funtimecoding/soil/pkg/lifecycle"
 	lifecycleServer "github.com/funtimecoding/soil/pkg/lifecycle/server"
@@ -25,7 +26,7 @@ func TestRunLifecycle(t *testing.T) {
 			func(m *http.ServeMux) {
 				generated.HandlerFromMux(
 					generated.NewStrictHandler(
-						server.New("", "", t.TempDir(), nil, nil),
+						server.New("", "", t.TempDir(), nil, memory.New()),
 						nil,
 					),
 					m,

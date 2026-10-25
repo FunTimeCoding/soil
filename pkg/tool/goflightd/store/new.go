@@ -12,6 +12,7 @@ func New(d *gorm.DB) *Store {
 	errors.PanicOnError(
 		d.AutoMigrate(event.Stub(), snapshot.Stub(), mark.Stub()),
 	)
+	normalizeTimes(d)
 
 	return &Store{database: d}
 }

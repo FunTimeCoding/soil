@@ -11,6 +11,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/relational/lite"
 	"github.com/funtimecoding/soil/pkg/strings/join"
 	"github.com/funtimecoding/soil/pkg/system"
+	"github.com/funtimecoding/soil/pkg/system/reaper"
 	"github.com/funtimecoding/soil/pkg/system/run"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goansibled/option"
@@ -89,7 +90,13 @@ func New(
 		o.InventoryToken = constant.FixtureToken
 	}
 
-	result.Runner = runner.New(o, result.Store, l, result.Reporter, nil)
+	result.Runner = runner.New(
+		o,
+		result.Store,
+		l,
+		result.Reporter,
+		reaper.New(result.Reporter),
+	)
 	result.Runner.Start()
 	t.Cleanup(func() { result.Runner.Close() })
 

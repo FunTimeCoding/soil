@@ -12,7 +12,7 @@ func (s *Store) EventsByTimeRange(
 ) ([]event.Event, error) {
 	var result []event.Event
 	e := s.database.
-		Where("time >= ? AND time <= ?", start, end).
+		Where("time >= ? AND time <= ?", start.UTC(), end.UTC()).
 		Order("time").
 		Limit(limit).
 		Find(&result).Error

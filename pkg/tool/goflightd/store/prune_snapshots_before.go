@@ -6,7 +6,9 @@ import (
 )
 
 func (s *Store) PruneSnapshotsBefore(cutoff time.Time) (int64, error) {
-	result := s.database.Where("time < ?", cutoff).Delete(snapshot.Stub())
+	result := s.database.
+		Where("time < ?", cutoff.UTC()).
+		Delete(snapshot.Stub())
 
 	return result.RowsAffected, result.Error
 }

@@ -12,7 +12,7 @@ func (s *Store) SnapshotsByTimeRange(
 ) ([]snapshot.Snapshot, error) {
 	var result []snapshot.Snapshot
 	e := s.database.
-		Where("time >= ? AND time <= ?", start, end).
+		Where("time >= ? AND time <= ?", start.UTC(), end.UTC()).
 		Order("time").
 		Limit(limit).
 		Find(&result).Error

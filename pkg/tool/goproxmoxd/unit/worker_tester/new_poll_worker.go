@@ -7,6 +7,7 @@ import (
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/constant"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/mock_client"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/mock_service"
+	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/mock_snippet"
 	"github.com/funtimecoding/soil/pkg/tool/goproxmoxd/worker"
 	"github.com/prometheus/client_golang/prometheus"
 	"time"
@@ -19,7 +20,7 @@ func NewPollWorker(
 	y := prometheus.NewRegistry()
 
 	return worker.New(
-		mock_service.New(name, c, nil),
+		mock_service.New(name, c, mock_snippet.New()),
 		time.Minute,
 		y,
 		logger.New(context.Background()),
