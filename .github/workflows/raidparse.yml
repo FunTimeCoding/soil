@@ -12,9 +12,13 @@ jobs:
     - {name: Go, uses: actions/setup-go@v5, with: {go-version-file: go.mod}}
     - {name: Build, run: 'go run cmd/gobuild/main.go build goraidparsed --linux-amd64'}
     - name: Parser
-      run: |
-        git clone https://github.com/Drevarr/arcdps_top_stats_parser.git strata/container/raidparse/parser
-        cp strata/container/raidparse/parser/example_output/TW5_Top_Stat_Parse.html strata/container/raidparse/TW5_Top_Stat_Parse.html
+      uses: actions/checkout@v4
+      with:
+        repository: FunTimeCoding/arcdps_top_stats_parser
+        ssh-key: ${{ secrets.PARSER_DEPLOY_KEY }}
+        persist-credentials: false
+        path: strata/container/raidparse/parser
+    - {name: Template, run: 'cp strata/container/raidparse/parser/example_output/TW5_Top_Stat_Parse.html strata/container/raidparse/TW5_Top_Stat_Parse.html'}
     - name: Lowercase image
       run: echo "IMAGE_LC=${GITHUB_REPOSITORY_OWNER@L}/raidparse" >> $GITHUB_ENV
     - name: Login
