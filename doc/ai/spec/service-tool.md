@@ -347,11 +347,14 @@ Key conventions:
 - `Server` struct holds dependencies and a `*view.View`
 - `Mount()` takes a `guard.Mux` and registers all routes through its verbs using
   method values: `g.Open(route.Get("/alerts"), s.alerts)` for board routes on
-  non-SSO services; SSO services call `g.WithSession(s.require)` first and
-  register their protected routes with `g.Session` (auth trio and favicon stay
-  `Open`). A session route also answers to the service bearer token, so the
-  tokens that open REST and MCP open the pages too, with the same full access -
-  in the `Authorization` header only, never a cookie or a query string. Bare
+  non-SSO services; SSO services call `s.authorization.Mount(g)` first, which
+  installs the client's session check and opens the auth trio, and register
+  their protected routes with `g.Session` (favicon stays `Open`). A service
+  whose session check differs, the way gogated's admin check does, calls
+  `g.WithSession` itself and opens the client's three methods directly. A
+  session route also answers to the service bearer token, so the tokens that
+  open REST and MCP open the pages too, with the same full access - in the
+  `Authorization` header only, never a cookie or a query string. Bare
   `m.HandleFunc` in a web package is flagged by the `route_guard` analyzer.
 - Handler methods named after the route, no `handle` prefix: `alerts()`,
   `dashboard()`, `addSubmit()`
