@@ -12,7 +12,7 @@ jobs:
     - {name: Go, uses: actions/setup-go@v5, with: {go-version-file: go.mod}}
     - {name: Build, run: 'go run cmd/gobuild/main.go build goraidparsed --linux-amd64'}
     - name: Parser
-      uses: actions/checkout@v4
+      uses: actions/checkout@v7
       with:
         repository: FunTimeCoding/arcdps_top_stats_parser
         ssh-key: ${{ secrets.PARSER_DEPLOY_KEY }}
